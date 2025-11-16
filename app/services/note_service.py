@@ -57,7 +57,9 @@ def create_note(session: Session, note_create: NoteCreate, project_id: int, user
     session.commit()
     session.refresh(note)
     
-    logger.info(f"📝 Note {note.id} créée avec succès (embedding: {'oui' if note.embedding else 'non'})")
+    # Vérifier si l'embedding existe (note.embedding est une liste/array)
+    has_embedding = note.embedding is not None and len(note.embedding) > 0
+    logger.info(f"📝 Note {note.id} créée avec succès (embedding: {'oui' if has_embedding else 'non'})")
     return note
 
 

@@ -2,6 +2,28 @@
 
 {% block title %}Projet - Noton{% endblock %}
 
+{% block extra_head %}
+<!-- Marked.js pour le rendu Markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- DOMPurify pour sécuriser le HTML généré -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<style>
+    /* Styles pour le rendu Markdown dans les messages du chat */
+    .markdown-content h1 { font-size: 1.5em; font-weight: bold; margin: 0.5em 0; }
+    .markdown-content h2 { font-size: 1.3em; font-weight: bold; margin: 0.5em 0; }
+    .markdown-content h3 { font-size: 1.1em; font-weight: bold; margin: 0.5em 0; }
+    .markdown-content p { margin: 0.5em 0; }
+    .markdown-content ul, .markdown-content ol { margin: 0.5em 0; padding-left: 1.5em; }
+    .markdown-content li { margin: 0.25em 0; }
+    .markdown-content strong { font-weight: bold; }
+    .markdown-content em { font-style: italic; }
+    .markdown-content code { background-color: rgba(0,0,0,0.1); padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; }
+    .markdown-content pre { background-color: rgba(0,0,0,0.1); padding: 0.5em; border-radius: 5px; overflow-x: auto; }
+    .markdown-content pre code { background-color: transparent; padding: 0; }
+    .markdown-content blockquote { border-left: 3px solid rgba(0,0,0,0.2); padding-left: 1em; margin: 0.5em 0; font-style: italic; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <!-- Header -->
@@ -368,26 +390,100 @@
             content: formData.get('content') || null,
             note_type: 'written'
         };
-        const response = await apiCall(`/api/projects/${projectId}/notes`, {
-            method: 'POST',
-            body: JSON.stringify(data)
-        });
-        if (response && response.ok) {
-            hideCreateNoteModal();
-            await loadNotes();
-            // Redémarrer le polling après création d'une note
-            stopEmbeddingStatusPolling();
-            startEmbeddingStatusPolling();
+        
+        // Désactiver le bouton pendant la création
+        const submitButton = event.target.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Création...';
+        
+        try {
+            const response = await apiCall(`/api/projects/${projectId}/notes`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            });
+            
+            console.log('Response status:', response?.status);
+            console.log('Response ok:', response?.ok);
+            
+            if (response && response.ok) {
+                try {
+                    const newNote = await response.json();
+                    console.log('Note créée:', newNote);
+                    
+                    // Fermer le modal
+                    hideCreateNoteModal();
+                    
+                    // Recharger les notes
+                    await loadNotes();
+                    
+                    // Redémarrer le polling après création d'une note
+                    stopEmbeddingStatusPolling();
+                    startEmbeddingStatusPolling();
+                    
+                    // Afficher une notification de succès
+                    showNotification('✅ Note créée avec succès !', 'success');
+                } catch (jsonError) {
+                    console.error('Erreur parsing JSON:', jsonError);
+                    // Même si le parsing échoue, la note est créée, donc on recharge
+                    hideCreateNoteModal();
+                    await loadNotes();
+                    stopEmbeddingStatusPolling();
+                    startEmbeddingStatusPolling();
+                    showNotification('✅ Note créée avec succès !', 'success');
+                }
+            } else {
+                console.error('Response not ok:', response);
+                showNotification('❌ Erreur lors de la création de la note', 'error');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la création:', error);
+            showNotification('❌ Erreur lors de la création de la note', 'error');
+        } finally {
+            // Réactiver le bouton
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
         }
+    }
+    
+    // Fonction pour afficher des notifications
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+            type === 'success' ? 'bg-green-500' : 
+            type === 'error' ? 'bg-red-500' : 
+            'bg-blue-500'
+        } text-white`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        // Supprimer après 3 secondes
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.3s';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 
     async function deleteNote(noteId) {
         if (!confirm('Êtes-vous sûr de vouloir supprimer cette note ?')) return;
-        const response = await apiCall(`/api/notes/${noteId}`, {
-            method: 'DELETE'
-        });
-        if (response && response.ok) {
-            loadNotes();
+        
+        try {
+            const response = await apiCall(`/api/notes/${noteId}`, {
+                method: 'DELETE'
+            });
+            
+            if (response && response.ok) {
+                showNotification('✅ Note supprimée avec succès', 'success');
+                await loadNotes();
+                stopEmbeddingStatusPolling();
+                startEmbeddingStatusPolling();
+            } else {
+                showNotification('❌ Erreur lors de la suppression', 'error');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression:', error);
+            showNotification('❌ Erreur lors de la suppression', 'error');
         }
     }
 
@@ -469,11 +565,11 @@
         assistantMessageDiv.className = 'flex justify-start';
         assistantMessageDiv.innerHTML = `
             <div class="max-w-2xl bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
-                <p></p>
+                <div class="markdown-content"></div>
             </div>
         `;
         messagesContainer.appendChild(assistantMessageDiv);
-        const assistantContent = assistantMessageDiv.querySelector('p');
+        const assistantContent = assistantMessageDiv.querySelector('.markdown-content');
         
         let fullResponse = '';
 
@@ -518,7 +614,10 @@
                                 const jsonData = JSON.parse(data);
                                 if (jsonData.message && jsonData.message.content) {
                                     fullResponse += jsonData.message.content;
-                                    assistantContent.textContent = fullResponse;
+                                    // Rendre le Markdown en HTML de façon sécurisée
+                                    const rawHtml = marked.parse(fullResponse);
+                                    const cleanHtml = DOMPurify.sanitize(rawHtml);
+                                    assistantContent.innerHTML = cleanHtml;
                                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
                                 } else if (jsonData.done) {
                                     break;
@@ -564,13 +663,32 @@
 
         const messageDiv = document.createElement('div');
         messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+        
+        // Pour les messages assistant, rendre le Markdown
+        let contentHtml;
+        if (role === 'assistant') {
+            const rawHtml = marked.parse(content);
+            const cleanHtml = DOMPurify.sanitize(rawHtml);
+            contentHtml = `<div class="markdown-content">${cleanHtml}</div>`;
+        } else {
+            // Messages utilisateur en texte brut
+            contentHtml = `<p class="whitespace-pre-wrap">${escapeHtml(content)}</p>`;
+        }
+        
         messageDiv.innerHTML = `
             <div class="max-w-2xl ${role === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'} rounded-lg px-4 py-2">
-                <p class="whitespace-pre-wrap">${content}</p>
+                ${contentHtml}
             </div>
         `;
         messagesContainer.appendChild(messageDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    // Fonction pour échapper le HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     // Démarrer le polling pour vérifier les statuts d'embedding

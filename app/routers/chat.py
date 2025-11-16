@@ -7,7 +7,7 @@ from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.database import get_session
 from app.services.ollama_service import get_available_models, chat, chat_stream
-from app.services.semantic_search_service import search_relevant_notes
+from app.services.semantic_search_service import search_relevant_notes, search_relevant_passages
 import json
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -66,6 +66,55 @@ class ProjectChatRequest(BaseModel):
     context: Optional[List[dict]] = None
 
 
+def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
+    """Construire le contexte enrichi avec les passages pertinents trouvés par recherche sémantique"""
+    system_message = {
+        "role": "system",
+        "content": (
+            "Tu es un assistant IA qui aide à analyser et résumer les notes d'un projet. "
+            "Tu as accès aux PASSAGES les plus pertinents extraits de TOUTES les notes du projet "
+            "(trouvés par recherche sémantique RAG avancée). "
+            "Ces passages proviennent de différentes notes et contiennent les informations les plus pertinentes "
+            "pour répondre à la question de l'utilisateur.\n\n"
+            "Réponds aux questions de l'utilisateur en te basant sur ces passages. "
+            "Tu peux combiner des informations de différents passages pour donner une réponse complète.\n\n"
+            "IMPORTANT - FORMAT DE RÉPONSE :\n"
+            "Tu DOIS TOUJOURS formater tes réponses en Markdown pour une meilleure lisibilité :\n"
+            "- Utilise des **titres** (## pour les sections principales, ### pour les sous-sections)\n"
+            "- Utilise des **listes à puces** (- ou *) ou **listes numérotées** (1. 2. 3.) pour énumérer des éléments\n"
+            "- Utilise **le gras** pour mettre en évidence les points importants\n"
+            "- Utilise *l'italique* pour les termes techniques ou les emphases\n"
+            "- Utilise des `blocs de code` pour les termes spécifiques\n"
+            "- Structure ta réponse avec des paragraphes clairs séparés par des lignes vides\n"
+            "- Pour les résumés longs, utilise des sections avec des titres\n\n"
+        )
+    }
+    
+    passages_content = []
+    
+    if passages:
+        system_message["content"] += "PASSAGES PERTINENTS EXTRAITS DU PROJET :\n\n"
+        
+        for i, passage_data in enumerate(passages, 1):
+            passage = passage_data['passage']
+            score = passage_data.get('score', 0.0)
+            note_title = passage_data.get('note_title', 'Note sans titre')
+            
+            # Construire le passage avec métadonnées
+            passage_text = f"[Passage {i}] (Pertinence: {score:.2f})\n{passage}\n"
+            passages_content.append(passage_text)
+        
+        system_message["content"] += "\n---\n".join(passages_content)
+        system_message["content"] += (
+            f"\n\n📊 Statistiques : {len(passages)} passages pertinents extraits et analysés. "
+            f"Toutes les notes du projet ont été examinées pour trouver les informations les plus pertinentes."
+        )
+    else:
+        system_message["content"] += "Aucun passage pertinent trouvé dans le projet."
+    
+    return [system_message]
+
+
 def build_semantic_context(note_results: List[dict]) -> List[dict]:
     """Construire le contexte enrichi avec les notes pertinentes trouvées par recherche sémantique RAG"""
     system_message = {
@@ -103,19 +152,20 @@ async def stream_project_chat_message(
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Envoyer un message au chatbot Ollama avec streaming et contexte enrichi des notes pertinentes du projet"""
-    # Recherche sémantique RAG au niveau des notes
-    # Retourne les notes les plus pertinentes par rapport à la question
-    note_results = search_relevant_notes(
+    """Envoyer un message au chatbot Ollama avec streaming et contexte enrichi des passages pertinents du projet"""
+    # Recherche sémantique RAG AVANCÉE au niveau des passages
+    # Analyse TOUTES les notes du projet et retourne les PASSAGES les plus pertinents
+    passages = search_relevant_passages(
         session=session,
         project_id=project_id,
         query_text=request.message,
         user_id=current_user.id,
-        k=5  # 5 notes pertinentes (au lieu de 10 chunks)
+        k=15,  # 15 passages pertinents (environ 500 caractères chacun)
+        passage_size=500
     )
     
-    # Construire le contexte enrichi avec les notes pertinentes
-    project_context = build_semantic_context(note_results)
+    # Construire le contexte enrichi avec les passages pertinents
+    project_context = build_semantic_context_from_passages(passages)
     
     # Ajouter le contexte de conversation existant si fourni
     if request.context:
