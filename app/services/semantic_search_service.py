@@ -1,17 +1,14 @@
-from typing import List, Optional, Dict, Tuple
-from sqlmodel import Session, select
+from typing import List, Dict
+from sqlmodel import Session, select, func
 from app.models.note import Note
-from app.models.note_chunk import NoteChunk
 from app.services.embedding_service import generate_embedding
-from app.services.faiss_service import get_faiss_manager
 from app.services.project_service import get_project_by_id
-from app.services.chunk_service import get_chunks_by_ids
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-def search_relevant_chunks(
+def search_relevant_notes(
     session: Session,
     project_id: int,
     query_text: str,
@@ -19,18 +16,18 @@ def search_relevant_chunks(
     k: int = 10
 ) -> List[Dict]:
     """
-    Recherche sémantique RAG au niveau des chunks.
-    Retourne les chunks pertinents avec leur contexte (titre de la note).
+    Recherche sémantique RAG directement sur les notes.
+    Retourne les notes les plus pertinentes par rapport à la requête.
     
     Args:
         session: Session SQLModel
         project_id: ID du projet
         query_text: Texte de la requête
         user_id: ID de l'utilisateur (pour vérification de sécurité)
-        k: Nombre de chunks à retourner
+        k: Nombre de notes à retourner
         
     Returns:
-        Liste de dictionnaires contenant le chunk et son contexte (note)
+        Liste de dictionnaires contenant la note et son score de similarité
     """
     # Vérifier que le projet appartient à l'utilisateur
     project = get_project_by_id(session, project_id, user_id)
@@ -49,72 +46,71 @@ def search_relevant_chunks(
             logger.warning("Impossible de générer l'embedding de la requête")
             return []
         
-        # Obtenir le gestionnaire FAISS
-        faiss_manager = get_faiss_manager()
+        # Recherche directe dans la base de données avec pgvector
+        # On utilise l'opérateur <=> pour la distance cosinus (1 - similarité cosinus)
+        # Plus le score est petit, plus c'est similaire (0 = identique)
+        from sqlalchemy import text
         
-        # Si l'index est vide, charger depuis la DB
-        if faiss_manager.index is None or faiss_manager.index.ntotal == 0:
-            logger.info("Chargement de l'index FAISS depuis la base de données")
-            faiss_manager.load_from_db(session, project_id)
+        # Convertir l'embedding en format PostgreSQL array
+        # Format: '[0.1,0.2,0.3,...]'
+        embedding_str = '[' + ','.join(map(str, query_embedding)) + ']'
         
-        # Rechercher dans FAISS au niveau des chunks
-        search_results = faiss_manager.search(query_embedding, project_id=project_id, k=k)
+        # Utiliser la connexion directement pour exécuter du SQL brut avec pgvector
+        # On insère directement l'embedding dans la requête car c'est une valeur contrôlée
+        # (pas d'entrée utilisateur directe, donc pas de risque d'injection SQL)
+        connection = session.connection()
         
-        if not search_results:
-            logger.info(f"Aucun résultat trouvé pour la requête dans le projet {project_id}")
-            return []
+        # Construire la requête SQL avec pgvector
+        # On utilise <=> pour distance cosinus (0 = identique, 2 = opposé)
+        # Le score retourné sera : 1 - distance (donc 1 = identique, -1 = opposé)
+        # Note: On insère directement les valeurs dans la requête car ce sont des valeurs contrôlées
+        # (project_id, user_id sont des entiers, embedding est généré par notre code)
+        sql_query = f"""
+            SELECT 
+                id, 
+                title, 
+                content, 
+                note_type, 
+                project_id, 
+                user_id, 
+                created_at, 
+                updated_at,
+                1 - (embedding <=> '{embedding_str}'::vector) as similarity_score
+            FROM note
+            WHERE project_id = {project_id}
+                AND user_id = {user_id}
+                AND embedding IS NOT NULL
+            ORDER BY embedding <=> '{embedding_str}'::vector
+            LIMIT {k}
+        """
         
-        # Récupérer les chunks depuis la DB
-        chunk_ids = [chunk_id for chunk_id, _ in search_results]
-        chunks = get_chunks_by_ids(session, chunk_ids)
+        # Exécuter la requête directement
+        result = connection.execute(text(sql_query))
         
-        # Récupérer les notes correspondantes pour le contexte
-        note_ids = list(set(chunk.note_id for chunk in chunks))
-        statement = select(Note).where(
-            Note.id.in_(note_ids),
-            Note.project_id == project_id,
-            Note.user_id == user_id
-        )
-        notes = list(session.exec(statement).all())
-        note_dict = {note.id: note for note in notes}
-        
-        # Créer un mapping chunk_id -> chunk
-        chunk_dict = {chunk.id: chunk for chunk in chunks}
-        
-        # Construire les résultats avec contexte
+        # Convertir les résultats en liste de dictionnaires
         results = []
-        for chunk_id, score in search_results:
-            if chunk_id in chunk_dict:
-                chunk = chunk_dict[chunk_id]
-                note = note_dict.get(chunk.note_id)
-                if note:
-                    results.append({
-                        'chunk': chunk,
-                        'note': note,
-                        'score': score
-                    })
+        for row in result:
+            note = Note(
+                id=row.id,
+                title=row.title,
+                content=row.content,
+                note_type=row.note_type,
+                project_id=row.project_id,
+                user_id=row.user_id,
+                created_at=row.created_at,
+                updated_at=row.updated_at
+            )
+            results.append({
+                'note': note,
+                'score': float(row.similarity_score)
+            })
         
-        logger.info(f"Trouvé {len(results)} chunks pertinents pour la requête")
+        # Formater les scores pour le log
+        score_strs = [f"{r['score']:.3f}" for r in results[:3]]
+        logger.info(f"✅ Trouvé {len(results)} notes pertinentes via recherche sémantique (scores: {score_strs}...)")
         return results
         
     except Exception as e:
-        logger.error(f"Erreur lors de la recherche sémantique: {e}")
-        # Fallback: retourner les chunks des notes les plus récentes
-        logger.info("Fallback sur recherche par date de modification")
-        statement = select(Note).where(
-            Note.project_id == project_id,
-            Note.user_id == user_id
-        ).order_by(Note.updated_at.desc()).limit(5)
-        notes = list(session.exec(statement).all())
-        
-        results = []
-        for note in notes:
-            chunk_statement = select(NoteChunk).where(NoteChunk.note_id == note.id).limit(2)
-            for chunk in session.exec(chunk_statement):
-                results.append({
-                    'chunk': chunk,
-                    'note': note,
-                    'score': 0.0
-                })
-        return results[:k]
+        logger.error(f"❌ Erreur lors de la recherche sémantique: {e}", exc_info=True)
+        return []
 

@@ -12,10 +12,18 @@ from app.services.note_service import (
     update_note,
     delete_note
 )
-from app.services.chunk_service import get_chunks_by_note
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api", tags=["notes"])
+
+
+class EmbeddingStatus(BaseModel):
+    """Statut des embeddings d'une note (compatibilité avec le frontend)"""
+    note_id: int
+    total_chunks: int = 0  # Plus utilisé (ancienne architecture)
+    chunks_with_embeddings: int = 0  # Plus utilisé
+    chunks_without_embeddings: int = 0  # Plus utilisé
+    status: str  # 'completed' si embedding présent, 'none' sinon
 
 
 @router.get("/projects/{project_id}/notes", response_model=List[NoteRead])
@@ -94,22 +102,18 @@ async def delete_existing_note(
         )
 
 
-class EmbeddingStatus(BaseModel):
-    """Statut des embeddings d'une note"""
-    note_id: int
-    total_chunks: int
-    chunks_with_embeddings: int
-    chunks_without_embeddings: int
-    status: str  # 'completed', 'processing', 'pending', 'none'
-
-
 @router.get("/notes/{note_id}/embedding-status", response_model=EmbeddingStatus)
 async def get_note_embedding_status(
     note_id: int,
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Vérifier l'état des embeddings d'une note"""
+    """
+    Vérifier l'état des embeddings d'une note (compatibilité frontend).
+    
+    Dans la nouvelle architecture, les embeddings sont toujours générés immédiatement.
+    Cet endpoint retourne simplement si l'embedding est présent ou non.
+    """
     note = get_note_by_id(session, note_id, current_user.id)
     if not note:
         raise HTTPException(
@@ -117,33 +121,15 @@ async def get_note_embedding_status(
             detail="Note non trouvée"
         )
     
-    # Récupérer tous les chunks de la note
-    chunks = get_chunks_by_note(session, note_id)
-    
-    total_chunks = len(chunks)
-    chunks_with_embeddings = sum(1 for chunk in chunks if chunk.embedding is not None)
-    chunks_without_embeddings = total_chunks - chunks_with_embeddings
-    
-    # Déterminer le statut
-    if total_chunks == 0:
-        status = 'none'
-    elif chunks_without_embeddings == 0:
-        status = 'completed'
-    elif chunks_with_embeddings > 0:
-        status = 'processing'  # En cours, certains embeddings sont déjà générés
-    else:
-        status = 'pending'  # Aucun embedding généré encore
-    
-    # Logger pour déboguer
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.info(f"📊 Statut embedding pour note {note_id}: {status} (chunks: {total_chunks}, avec embeddings: {chunks_with_embeddings}, sans: {chunks_without_embeddings})")
+    # Dans la nouvelle architecture, on vérifie simplement si l'embedding existe
+    has_embedding = note.embedding is not None
+    status_value = 'completed' if has_embedding else 'none'
     
     return EmbeddingStatus(
         note_id=note_id,
-        total_chunks=total_chunks,
-        chunks_with_embeddings=chunks_with_embeddings,
-        chunks_without_embeddings=chunks_without_embeddings,
-        status=status
+        total_chunks=0,
+        chunks_with_embeddings=1 if has_embedding else 0,
+        chunks_without_embeddings=0 if has_embedding else 1,
+        status=status_value
     )
 

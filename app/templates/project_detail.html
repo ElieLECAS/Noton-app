@@ -241,8 +241,8 @@
             case 'completed':
                 return '<i class="ti ti-check text-green-500" title="Embeddings générés"></i>';
             case 'none':
-                // Si aucun chunk n'existe encore, afficher "pending"
-                return '<i class="ti ti-clock text-yellow-500" title="Création des chunks en cours..."></i>';
+                // Si aucun chunk n'existe encore, ne pas afficher d'icône (ou afficher une icône discrète)
+                return '<i class="ti ti-circle-dashed text-gray-400" title="Aucun chunk créé"></i>';
             default:
                 return '<i class="ti ti-clock text-yellow-500" title="Statut inconnu"></i>';
         }
@@ -594,13 +594,13 @@
                     return;
                 }
                 
-                let hasProcessingOrPending = false;
+                    let hasProcessingOrPending = false;
                 let hasChanges = false;
-                
-                // Vérifier le statut pour chaque note
-                for (const note of notes) {
-                    const status = await checkEmbeddingStatus(note.id);
-                    if (status) {
+                    
+                    // Vérifier le statut pour chaque note
+                    for (const note of notes) {
+                        const status = await checkEmbeddingStatus(note.id);
+                        if (status) {
                         const previousStatus = embeddingStatuses.get(note.id);
                         // Détecter si le statut a changé
                         if (!previousStatus || previousStatus.status !== status.status) {
@@ -608,12 +608,13 @@
                         }
                         
                         // Continuer le polling seulement si on a des notes en cours de traitement
+                        // "none" signifie qu'il n'y a pas de chunks, donc pas besoin de continuer à vérifier
                         if (status.status === 'processing' || status.status === 'pending') {
-                            hasProcessingOrPending = true;
+                                hasProcessingOrPending = true;
+                            }
                         }
                     }
-                }
-                
+                    
                 // Si aucun changement depuis plusieurs vérifications, arrêter le polling
                 if (!hasChanges) {
                     consecutiveNoChanges++;
@@ -622,11 +623,12 @@
                 }
                 
                 // Arrêter le polling si :
-                // 1. Toutes les notes sont complètes ou "none" (pas besoin de continuer)
-                // 2. Aucun changement depuis plusieurs vérifications
+                // 1. Aucune note en cours de traitement (processing/pending) ET au moins une vérification sans changement
+                // 2. Aucun changement depuis plusieurs vérifications consécutives
                 if ((!hasProcessingOrPending && consecutiveNoChanges >= 1) || consecutiveNoChanges >= MAX_NO_CHANGES) {
                     console.log('Polling arrêté : aucun changement détecté ou toutes les notes sont stables');
                     stopEmbeddingStatusPolling();
+                    return; // Sortir immédiatement pour éviter d'autres vérifications
                 }
             } catch (error) {
                 console.error('Erreur lors du polling des statuts:', error);

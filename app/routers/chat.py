@@ -7,7 +7,7 @@ from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.database import get_session
 from app.services.ollama_service import get_available_models, chat, chat_stream
-from app.services.semantic_search_service import search_relevant_chunks
+from app.services.semantic_search_service import search_relevant_notes
 import json
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -66,36 +66,32 @@ class ProjectChatRequest(BaseModel):
     context: Optional[List[dict]] = None
 
 
-def build_semantic_context(chunk_results: List[dict]) -> List[dict]:
-    """Construire le contexte enrichi avec les chunks pertinents trouvés par recherche sémantique RAG"""
+def build_semantic_context(note_results: List[dict]) -> List[dict]:
+    """Construire le contexte enrichi avec les notes pertinentes trouvées par recherche sémantique RAG"""
     system_message = {
         "role": "system",
-        "content": "Tu es un assistant IA qui aide à analyser et résumer les notes d'un projet. Tu as accès aux passages les plus pertinents des notes du projet ci-dessous (trouvés par recherche sémantique RAG). Réponds aux questions de l'utilisateur en te basant sur ces passages.\n\n"
+        "content": "Tu es un assistant IA qui aide à analyser et résumer les notes d'un projet. Tu as accès aux notes les plus pertinentes du projet ci-dessous (trouvées par recherche sémantique RAG). Réponds aux questions de l'utilisateur en te basant sur ces notes.\n\n"
     }
     
-    chunks_content = []
-    seen_notes = set()  # Pour éviter de répéter le titre de la note
+    notes_content = []
     
-    for result in chunk_results:
-        chunk = result['chunk']
+    for result in note_results:
         note = result['note']
         score = result.get('score', 0.0)
         
-        # Ajouter le titre de la note seulement la première fois qu'on la voit
-        note_header = ""
-        if note.id not in seen_notes:
-            note_header = f"Note: {note.title}\n"
-            seen_notes.add(note.id)
-        
-        chunk_text = f"{note_header}Passage: {chunk.content}\n"
-        chunk_text += "---\n"
-        chunks_content.append(chunk_text)
+        # Construire le contenu de la note
+        note_text = f"Note: {note.title}\n"
+        if note.content:
+            note_text += f"Contenu: {note.content}\n"
+        note_text += f"Pertinence: {score:.2f}\n"
+        note_text += "---\n"
+        notes_content.append(note_text)
     
-    if chunks_content:
-        system_message["content"] += "\n".join(chunks_content)
-        system_message["content"] += f"\n\n(Note: {len(chunk_results)} passage(s) pertinent(s) trouvé(s) sur la base de votre question parmi {len(seen_notes)} note(s))"
+    if notes_content:
+        system_message["content"] += "\n".join(notes_content)
+        system_message["content"] += f"\n\n(Note: {len(note_results)} note(s) pertinente(s) trouvée(s) sur la base de votre question)"
     else:
-        system_message["content"] += "Aucun passage pertinent trouvé pour votre question."
+        system_message["content"] += "Aucune note pertinente trouvée pour votre question."
     
     return [system_message]
 
@@ -107,19 +103,19 @@ async def stream_project_chat_message(
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Envoyer un message au chatbot Ollama avec streaming et contexte enrichi des chunks pertinents du projet"""
-    # Recherche sémantique RAG au niveau des chunks
-    # Retourne les passages les plus pertinents (chunks) au lieu des notes complètes
-    chunk_results = search_relevant_chunks(
+    """Envoyer un message au chatbot Ollama avec streaming et contexte enrichi des notes pertinentes du projet"""
+    # Recherche sémantique RAG au niveau des notes
+    # Retourne les notes les plus pertinentes par rapport à la question
+    note_results = search_relevant_notes(
         session=session,
         project_id=project_id,
         query_text=request.message,
         user_id=current_user.id,
-        k=10  # 10 chunks pertinents
+        k=5  # 5 notes pertinentes (au lieu de 10 chunks)
     )
     
-    # Construire le contexte enrichi avec seulement les chunks pertinents
-    project_context = build_semantic_context(chunk_results)
+    # Construire le contexte enrichi avec les notes pertinentes
+    project_context = build_semantic_context(note_results)
     
     # Ajouter le contexte de conversation existant si fourni
     if request.context:
