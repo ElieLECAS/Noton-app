@@ -1,57 +1,89 @@
-{% extends "base.html" %}
-
-{% block title %}Mes projets - Noton{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Mes projets - Noton{% endblock %} {%
+block content %}
 <div class="flex-1 flex flex-col">
     <!-- Header -->
-    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+    <header
+        class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between"
+    >
         <h1 class="text-xl font-semibold text-gray-900">Mes projets</h1>
         <div class="flex items-center gap-4">
-            <button onclick="showCreateProjectModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+            <button
+                onclick="toggleChatbot()"
+                class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                title="Afficher/Masquer le chatbot"
+            >
+                <i id="chatbot-toggle-icon" class="ti ti-robot-off text-xl"></i>
+            </button>
+            <button
+                onclick="showCreateProjectModal()"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+            >
                 <i class="ti ti-plus"></i>
                 <span>Nouveau projet</span>
             </button>
+            
         </div>
     </header>
 
     <!-- Main Content Area -->
     <div class="flex-1 flex overflow-hidden">
         <!-- Projects List -->
-        <div id="projects-list-container" class="w-full bg-white border-r-0 p-6 overflow-y-auto transition-all duration-300">
+        <div
+            id="projects-list-container"
+            class="w-1/3 bg-white border-r p-6 overflow-y-auto transition-all duration-300 ease-in-out"
+        >
             <div id="projects-container">
                 <!-- Projets chargés dynamiquement -->
             </div>
         </div>
 
         <!-- Chatbot Area -->
-        <div id="chatbot-area" class="hidden flex-1 flex flex-col bg-white transition-all duration-300">
-            <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+        <div
+            id="chatbot-area"
+            class="flex-1 flex flex-col bg-white transition-all duration-300 ease-in-out"
+            style="transform: translateX(0)"
+        >
+            <div
+                class="p-6 border-b border-gray-200 flex items-center justify-between"
+            >
                 <div>
                     <h2 class="text-lg font-semibold text-gray-900">Chatbot</h2>
-                    <p class="text-sm text-gray-500 mt-1">Posez vos questions à l'assistant IA</p>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Posez vos questions à l'assistant IA
+                    </p>
                 </div>
-                <button onclick="toggleChatbot()" class="text-gray-400 hover:text-gray-600 p-2">
-                    <i class="ti ti-x text-xl"></i>
+                <button
+                    onclick="toggleChatbot()"
+                    class="text-gray-400 hover:text-gray-600 p-2"
+                >
+                    <i class="ti ti-robot-off text-xl"></i>
                 </button>
             </div>
-            
+
             <!-- Model Selection -->
             <div class="px-6 py-4 border-b border-gray-200">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Modèle</label>
-                <select id="model-select" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                    >Modèle</label
+                >
+                <select
+                    id="model-select"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
                     <option value="">Chargement des modèles...</option>
                 </select>
             </div>
 
             <!-- Chat Messages -->
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <div
+                id="chat-messages"
+                class="flex-1 overflow-y-auto p-6 space-y-4"
+            >
                 <div class="text-center text-gray-500 py-8">
                     <i class="ti ti-message-circle text-4xl mb-2"></i>
                     <p>Commencez une conversation avec le chatbot</p>
                 </div>
             </div>
-            
+
             <style>
                 .loading-dots {
                     display: inline-flex;
@@ -72,7 +104,9 @@
                     animation-delay: 0.4s;
                 }
                 @keyframes dot-pulse {
-                    0%, 60%, 100% {
+                    0%,
+                    60%,
+                    100% {
                         opacity: 0.3;
                         transform: scale(1);
                     }
@@ -85,16 +119,20 @@
 
             <!-- Chat Input -->
             <div class="p-6 border-t border-gray-200">
-                <form id="chat-form" onsubmit="sendChatMessage(event)" class="flex gap-2">
-                    <input 
-                        type="text" 
-                        id="chat-input" 
-                        placeholder="Tapez votre message..." 
+                <form
+                    id="chat-form"
+                    onsubmit="sendChatMessage(event)"
+                    class="flex gap-2"
+                >
+                    <input
+                        type="text"
+                        id="chat-input"
+                        placeholder="Tapez votre message..."
                         class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
-                    >
-                    <button 
-                        type="submit" 
+                    />
+                    <button
+                        type="submit"
                         class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
                     >
                         <i class="ti ti-send"></i>
@@ -104,58 +142,98 @@
             </div>
         </div>
     </div>
-
-    <!-- Bouton pour rouvrir le chatbot -->
-    <button 
-        id="open-chatbot-btn"
-        onclick="toggleChatbot()" 
-        class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 flex items-center justify-center transition-transform hover:scale-110 z-40"
-    >
-        <i class="ti ti-robot text-2xl"></i>
-    </button>
 </div>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} {% block extra_scripts %}
 <script>
     let chatHistory = [];
-    let chatbotOpen = false;
+    let chatbotOpen = true; // Par défaut ouvert sur la page d'accueil
 
     // Gérer l'ouverture/fermeture du chatbot
     function toggleChatbot() {
-        const chatbotArea = document.getElementById('chatbot-area');
-        const projectsContainer = document.getElementById('projects-list-container');
-        const openBtn = document.getElementById('open-chatbot-btn');
-        
+        const chatbotArea = document.getElementById("chatbot-area");
+        const projectsContainer = document.getElementById(
+            "projects-list-container"
+        );
+        const toggleIcon = document.getElementById("chatbot-toggle-icon");
+
         chatbotOpen = !chatbotOpen;
-        
+
         if (chatbotOpen) {
-            // Ouvrir le chatbot
-            chatbotArea.classList.remove('hidden');
-            projectsContainer.classList.remove('w-full', 'border-r-0');
-            projectsContainer.classList.add('w-1/3', 'border-r');
-            openBtn.classList.add('hidden');
+            // Ouvrir le chatbot - animation depuis la droite
+            chatbotArea.classList.remove("hidden");
+            chatbotArea.style.flex = "0 0 0%";
+            chatbotArea.style.width = "0";
+            chatbotArea.style.transform = "translateX(100%)";
+
+            projectsContainer.classList.remove("w-full", "border-r-0");
+            projectsContainer.classList.add("w-1/3", "border-r");
+            toggleIcon.classList.remove("ti-robot");
+            toggleIcon.classList.add("ti-robot-off");
+
+            // Forcer le reflow pour déclencher l'animation
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    chatbotArea.style.flex = "";
+                    chatbotArea.style.width = "";
+                    chatbotArea.style.transform = "translateX(0)";
+                });
+            });
         } else {
-            // Fermer le chatbot
-            chatbotArea.classList.add('hidden');
-            projectsContainer.classList.remove('w-1/3', 'border-r');
-            projectsContainer.classList.add('w-full', 'border-r-0');
-            openBtn.classList.remove('hidden');
+            // Fermer le chatbot - animation vers la droite
+            // Synchroniser les animations en utilisant requestAnimationFrame
+            toggleIcon.classList.remove("ti-robot-off");
+            toggleIcon.classList.add("ti-robot");
+
+            requestAnimationFrame(() => {
+                // D'abord réduire la largeur du chatbot et le translate en même temps
+                chatbotArea.style.transform = "translateX(100%)";
+                chatbotArea.style.flex = "0 0 0%";
+                chatbotArea.style.width = "0";
+
+                // En même temps, agrandir le conteneur de projets
+                projectsContainer.classList.remove("w-1/3", "border-r");
+                projectsContainer.classList.add("w-full", "border-r-0");
+
+                setTimeout(() => {
+                    chatbotArea.classList.add("hidden");
+                    chatbotArea.style.transform = "translateX(0)";
+                    chatbotArea.style.flex = "";
+                    chatbotArea.style.width = "";
+                }, 300);
+            });
         }
     }
 
+    // Initialiser l'état par défaut (chatbot ouvert)
+    document.addEventListener("DOMContentLoaded", function () {
+        const chatbotArea = document.getElementById("chatbot-area");
+        const projectsContainer = document.getElementById(
+            "projects-list-container"
+        );
+        const toggleIcon = document.getElementById("chatbot-toggle-icon");
+
+        if (chatbotOpen) {
+            chatbotArea.classList.remove("hidden");
+            chatbotArea.style.transform = "translateX(0)";
+            projectsContainer.classList.remove("w-full", "border-r-0");
+            projectsContainer.classList.add("w-1/3", "border-r");
+            toggleIcon.classList.remove("ti-robot");
+            toggleIcon.classList.add("ti-robot-off");
+        }
+    });
+
     // Charger les modèles Ollama disponibles
     async function loadModels() {
-        const response = await apiCall('/api/ollama/models');
+        const response = await apiCall("/api/ollama/models");
         if (response && response.ok) {
             const models = await response.json();
-            const select = document.getElementById('model-select');
-            select.innerHTML = '';
-            
+            const select = document.getElementById("model-select");
+            select.innerHTML = "";
+
             if (models.length > 0) {
                 // Ajouter tous les modèles
-                models.forEach(model => {
-                    const option = document.createElement('option');
+                models.forEach((model) => {
+                    const option = document.createElement("option");
                     option.value = model;
                     option.textContent = model;
                     select.appendChild(option);
@@ -163,18 +241,19 @@
                 // Sélectionner automatiquement le premier modèle
                 select.value = models[0];
             } else {
-                select.innerHTML = '<option value="">Aucun modèle disponible</option>';
+                select.innerHTML =
+                    '<option value="">Aucun modèle disponible</option>';
             }
         }
     }
 
     // Charger les projets
     async function loadProjectsList() {
-        const response = await apiCall('/api/projects');
+        const response = await apiCall("/api/projects");
         if (response && response.ok) {
             const projects = await response.json();
-            const container = document.getElementById('projects-container');
-            
+            const container = document.getElementById("projects-container");
+
             if (projects.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-12">
@@ -184,25 +263,37 @@
                     </div>
                 `;
             } else {
-                container.innerHTML = projects.map(project => `
-                    <a href="/projects/${project.id}" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition mb-3">
-                        <h3 class="font-semibold text-gray-900 mb-1">${project.title}</h3>
-                        <p class="text-sm text-gray-500">${project.description || 'Aucune description'}</p>
-                        <p class="text-xs text-gray-400 mt-2">Modifié le ${new Date(project.updated_at).toLocaleDateString('fr-FR')}</p>
+                container.innerHTML = projects
+                    .map(
+                        (project) => `
+                    <a href="/projects/${
+                        project.id
+                    }" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition mb-3">
+                        <h3 class="font-semibold text-gray-900 mb-1">${
+                            project.title
+                        }</h3>
+                        <p class="text-sm text-gray-500">${
+                            project.description || "Aucune description"
+                        }</p>
+                        <p class="text-xs text-gray-400 mt-2">Modifié le ${new Date(
+                            project.updated_at
+                        ).toLocaleDateString("fr-FR")}</p>
                     </a>
-                `).join('');
+                `
+                    )
+                    .join("");
             }
         }
     }
 
     // Animation de chargement
     let loadingAnimationInterval = null;
-    
+
     function showLoadingAnimation() {
-        const messagesContainer = document.getElementById('chat-messages');
-        const loadingDiv = document.createElement('div');
-        loadingDiv.id = 'loading-message';
-        loadingDiv.className = 'flex justify-start';
+        const messagesContainer = document.getElementById("chat-messages");
+        const loadingDiv = document.createElement("div");
+        loadingDiv.id = "loading-message";
+        loadingDiv.className = "flex justify-start";
         loadingDiv.innerHTML = `
             <div class="bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
                 <span class="loading-dots">
@@ -212,20 +303,20 @@
         `;
         messagesContainer.appendChild(loadingDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        
+
         // Animation des points
-        const dots = loadingDiv.querySelectorAll('.loading-dots span');
+        const dots = loadingDiv.querySelectorAll(".loading-dots span");
         let dotIndex = 0;
         loadingAnimationInterval = setInterval(() => {
             dots.forEach((dot, index) => {
-                dot.style.opacity = index === dotIndex % 3 ? '1' : '0.3';
+                dot.style.opacity = index === dotIndex % 3 ? "1" : "0.3";
             });
             dotIndex++;
         }, 300);
     }
-    
+
     function hideLoadingAnimation() {
-        const loadingDiv = document.getElementById('loading-message');
+        const loadingDiv = document.getElementById("loading-message");
         if (loadingDiv) {
             loadingDiv.remove();
         }
@@ -238,94 +329,108 @@
     // Envoyer un message au chatbot avec streaming
     async function sendChatMessage(event) {
         event.preventDefault();
-        const input = document.getElementById('chat-input');
+        const input = document.getElementById("chat-input");
         const message = input.value.trim();
-        const modelSelect = document.getElementById('model-select');
+        const modelSelect = document.getElementById("model-select");
         const model = modelSelect.value;
 
         if (!message) return;
         if (!model) {
-            alert('Veuillez sélectionner un modèle');
+            alert("Veuillez sélectionner un modèle");
             return;
         }
 
         // Ajouter le message de l'utilisateur
-        addMessageToChat('user', message);
-        input.value = '';
-        
+        addMessageToChat("user", message);
+        input.value = "";
+
         // Désactiver le bouton et l'input pendant l'envoi
-        const submitButton = event.target.querySelector('button[type="submit"]');
+        const submitButton = event.target.querySelector(
+            'button[type="submit"]'
+        );
         submitButton.disabled = true;
         input.disabled = true;
 
-        // Afficher l'animation de chargement
-        showLoadingAnimation();
-
         // Préparer le contexte
-        const context = chatHistory.map(msg => ({
+        const context = chatHistory.map((msg) => ({
             role: msg.role,
-            content: msg.content
+            content: msg.content,
         }));
 
-        // Créer un message assistant vide pour le streaming
-        const messagesContainer = document.getElementById('chat-messages');
-        const assistantMessageDiv = document.createElement('div');
-        assistantMessageDiv.id = 'assistant-streaming-message';
-        assistantMessageDiv.className = 'flex justify-start';
+        // Créer un message assistant vide pour le streaming (remplace l'animation de chargement)
+        const messagesContainer = document.getElementById("chat-messages");
+        // Supprimer le message vide initial s'il existe
+        if (messagesContainer.querySelector(".text-center")) {
+            messagesContainer.innerHTML = "";
+        }
+
+        const assistantMessageDiv = document.createElement("div");
+        assistantMessageDiv.id = "assistant-streaming-message";
+        assistantMessageDiv.className = "flex justify-start";
         assistantMessageDiv.innerHTML = `
             <div class="max-w-2xl bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
-                <p></p>
+                <p class="text-gray-500 italic">En cours de génération...</p>
             </div>
         `;
         messagesContainer.appendChild(assistantMessageDiv);
-        const assistantContent = assistantMessageDiv.querySelector('p');
-        
-        let fullResponse = '';
+        const assistantContent = assistantMessageDiv.querySelector("p");
+
+        let fullResponse = "";
+        let firstChunkReceived = false;
 
         // Envoyer au backend avec streaming
         try {
-            const token = localStorage.getItem('authToken');
-            const response = await fetch('/api/chat/stream', {
-                method: 'POST',
+            const token = localStorage.getItem("authToken");
+            const response = await fetch("/api/chat/stream", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     message: message,
                     model: model,
-                    context: context
-                })
+                    context: context,
+                }),
             });
 
             if (!response.ok) {
-                throw new Error('Erreur lors de la requête');
+                throw new Error("Erreur lors de la requête");
             }
 
             // Lire le stream SSE
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
-            let buffer = '';
+            let buffer = "";
 
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
 
                 buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop() || ''; // Garder la dernière ligne incomplète dans le buffer
+                const lines = buffer.split("\n");
+                buffer = lines.pop() || ""; // Garder la dernière ligne incomplète dans le buffer
 
                 for (const line of lines) {
-                    if (line.startsWith('data: ')) {
+                    if (line.startsWith("data: ")) {
                         const data = line.slice(6).trim();
                         if (data) {
                             try {
                                 const jsonData = JSON.parse(data);
                                 // Ollama renvoie soit {"message": {"content": "..."}} soit {"done": true}
-                                if (jsonData.message && jsonData.message.content) {
+                                if (
+                                    jsonData.message &&
+                                    jsonData.message.content
+                                ) {
+                                    // Supprimer le texte de chargement au premier chunk
+                                    if (!firstChunkReceived) {
+                                        fullResponse = "";
+                                        firstChunkReceived = true;
+                                    }
                                     fullResponse += jsonData.message.content;
                                     assistantContent.textContent = fullResponse;
-                                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                                    messagesContainer.scrollTop =
+                                        messagesContainer.scrollHeight;
                                 } else if (jsonData.done) {
                                     // Fin du stream
                                     break;
@@ -334,24 +439,26 @@
                                 }
                             } catch (e) {
                                 // Ignorer les erreurs de parsing JSON pour les chunks partiels
-                                console.warn('Erreur parsing JSON:', e, 'Data:', data);
+                                console.warn(
+                                    "Erreur parsing JSON:",
+                                    e,
+                                    "Data:",
+                                    data
+                                );
                             }
                         }
                     }
                 }
             }
 
-            // Cacher l'animation et finaliser
-            hideLoadingAnimation();
-            assistantMessageDiv.removeAttribute('id');
-            chatHistory.push({ role: 'assistant', content: fullResponse });
-
+            // Finaliser le message
+            assistantMessageDiv.removeAttribute("id");
+            chatHistory.push({ role: "assistant", content: fullResponse });
         } catch (error) {
-            hideLoadingAnimation();
-            if (document.getElementById('assistant-streaming-message')) {
-                document.getElementById('assistant-streaming-message').remove();
+            if (document.getElementById("assistant-streaming-message")) {
+                document.getElementById("assistant-streaming-message").remove();
             }
-            addMessageToChat('assistant', `Erreur: ${error.message}`);
+            addMessageToChat("assistant", `Erreur: ${error.message}`);
         } finally {
             // Réactiver le bouton et l'input
             submitButton.disabled = false;
@@ -363,17 +470,23 @@
     // Ajouter un message au chat
     function addMessageToChat(role, content) {
         chatHistory.push({ role, content });
-        const messagesContainer = document.getElementById('chat-messages');
-        
+        const messagesContainer = document.getElementById("chat-messages");
+
         // Supprimer le message vide initial
-        if (messagesContainer.querySelector('.text-center')) {
-            messagesContainer.innerHTML = '';
+        if (messagesContainer.querySelector(".text-center")) {
+            messagesContainer.innerHTML = "";
         }
 
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `flex ${
+            role === "user" ? "justify-end" : "justify-start"
+        }`;
         messageDiv.innerHTML = `
-            <div class="max-w-2xl ${role === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'} rounded-lg px-4 py-2">
+            <div class="max-w-2xl ${
+                role === "user"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-900"
+            } rounded-lg px-4 py-2">
                 <p>${content}</p>
             </div>
         `;
@@ -388,4 +501,3 @@
     }
 </script>
 {% endblock %}
-
