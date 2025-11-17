@@ -6,7 +6,7 @@ from sqlmodel import Session
 import time
 
 from app.database import get_session, create_db_and_tables
-from app.routers import auth, projects, notes, chat
+from app.routers import auth, projects, notes, chat, documents
 from app.models import User, Project, Note
 from app.services.faiss_service import get_faiss_manager
 import logging
@@ -27,6 +27,7 @@ app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(notes.router)
 app.include_router(chat.router)
+app.include_router(documents.router)
 
 # Configuration des templates
 templates = Jinja2Templates(directory="app/templates")
