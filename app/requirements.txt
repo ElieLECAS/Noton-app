@@ -15,8 +15,8 @@ pgvector==0.2.4
 sentence-transformers>=2.7.0
 faiss-cpu==1.7.4
 numpy<2.0.0,>=1.24.0
-torch>=2.0.0
-transformers>=4.30.0
+torch>=2.1.0
+transformers>=4.35.0
 
 # Docling pour parsing intelligent de documents
 # Version spécifique pour éviter les conflits de résolution

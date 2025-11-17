@@ -2,21 +2,31 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Installer les dépendances système
+# --- OS dependencies ---
 RUN apt-get update && apt-get install -y \
+    build-essential \
     libpq-dev \
     gcc \
     libmagic1 \
     poppler-utils \
     tesseract-ocr \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copier et installer les dépendances Python
-# Installer NumPy en premier pour éviter qu'une autre dépendance installe NumPy 2.x
 COPY requirements.txt .
+
+# === STEP 1: Force stable numpy (<2.0) ===
 RUN pip install --no-cache-dir "numpy<2.0.0,>=1.24.0"
 
-# Installer les dépendances de base (sans docling)
+# === STEP 2: Torch + Transformers (bonnes versions) ===
+RUN pip install --no-cache-dir \
+    "torch>=2.1.0" \
+    "transformers>=4.35.0"
+
+# === STEP 3: sentence-transformers (dépend du dessus) ===
+RUN pip install --no-cache-dir "sentence-transformers>=2.7.0"
+
+# === STEP 4: reste des deps FASTAPI & BDD ===
 RUN pip install --no-cache-dir \
     fastapi==0.104.1 \
     uvicorn[standard]==0.24.0 \
@@ -35,23 +45,18 @@ RUN pip install --no-cache-dir \
     faiss-cpu==1.7.4 \
     pillow>=10.0.0 \
     openpyxl>=3.1.0 \
-    aiofiles>=23.2.1
+    aiofiles>=23.2.1 \
+    pandas>=2.1.0 \
+    orjson>=3.9.10
 
-# Installer torch et transformers (dépendent de numpy mais doivent utiliser la version < 2.0)
-RUN pip install --no-cache-dir torch>=2.0.0 transformers>=4.30.0
+# === STEP 5: Installer Docling en dernier ===
+RUN pip install --no-cache-dir "docling>=2.7.0,<3.0.0"
 
-# Installer sentence-transformers (dépend de torch/transformers)
-RUN pip install --no-cache-dir sentence-transformers>=2.7.0
-
-# Installer docling séparément pour éviter les conflits de résolution
-# Forcer numpy<2.0 pour compatibilité avec faiss-cpu
-RUN pip install --no-cache-dir "docling>=2.7.0,<3.0.0" "numpy<2.0.0"
-
-# Pré-télécharger le modèle sentence-transformers pour éviter le téléchargement au runtime
-# Le modèle sera dans l'image Docker, donc pas besoin de re-télécharger à chaque build
-# Note: Le modèle sera téléchargé au premier usage si cette étape échoue
-# Utiliser le modèle léger all-MiniLM-L6-v2 (384 dimensions) par défaut
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')" || echo "Modèle sera téléchargé au runtime"
+# === STEP 6: Pré-télécharger MiniLM ===
+RUN python - << 'EOF'
+from sentence_transformers import SentenceTransformer
+SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+EOF
 
 # Copier le code de l'application
 COPY . .
