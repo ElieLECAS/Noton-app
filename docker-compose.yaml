@@ -21,11 +21,14 @@ services:
         container_name: noton_ollama
         volumes:
             - ollama_data:/root/.ollama
+        ports:
+            - "11434:11434"
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+            test: ["CMD-SHELL", "ollama list || exit 1"]
             interval: 10s
             timeout: 5s
             retries: 5
+            start_period: 10s
 
     web:
         build:
@@ -42,6 +45,8 @@ services:
             - DATABASE_URL=postgresql://postgres:postgres@db:5432/noton
             - SECRET_KEY=your-secret-key-change-in-production
             - OLLAMA_BASE_URL=http://ollama:11434
+            - OPENAI_API_KEY=${OPENAI_API_KEY}
+            - OPENAI_MODEL=${OPENAI_MODEL}
         depends_on:
             db:
                 condition: service_healthy

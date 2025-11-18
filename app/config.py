@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings
+from pydantic import ConfigDict
 from typing import Optional
+from pathlib import Path
 
 
 class Settings(BaseSettings):
@@ -14,9 +16,18 @@ class Settings(BaseSettings):
     # Ollama
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    # OpenAI
+    OPENAI_API_KEY: Optional[str] = None
+    OPENAI_MODEL: Optional[str] = None
+    
+    model_config = ConfigDict(
+        # Chercher le fichier .env à la racine du projet (pour développement local)
+        # En Docker, les variables sont passées via docker-compose.yaml
+        env_file=Path(__file__).parent.parent / ".env",
+        env_file_encoding="utf-8",
+        case_sensitive=True,
+        extra="ignore"  # Ignorer les variables supplémentaires non définies
+    )
 
 
 settings = Settings()

@@ -60,19 +60,6 @@ block content %}
                 </button>
             </div>
 
-            <!-- Model Selection -->
-            <div class="px-6 py-4 border-b border-gray-200">
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                    >Modèle</label
-                >
-                <select
-                    id="model-select"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    <option value="">Chargement des modèles...</option>
-                </select>
-            </div>
-
             <!-- Chat Messages -->
             <div
                 id="chat-messages"
@@ -122,22 +109,38 @@ block content %}
                 <form
                     id="chat-form"
                     onsubmit="sendChatMessage(event)"
-                    class="flex gap-2"
+                    class="flex flex-col gap-2"
                 >
-                    <input
-                        type="text"
-                        id="chat-input"
-                        placeholder="Tapez votre message..."
-                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
-                    <button
-                        type="submit"
-                        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-                    >
-                        <i class="ti ti-send"></i>
-                        <span>Envoyer</span>
-                    </button>
+                    <div class="flex gap-2 items-center">
+                        <select
+                            id="provider-select"
+                            class="px-3 py-1.5 text-sm border border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors whitespace-nowrap"
+                            onchange="onProviderChange()"
+                        >
+                            <option value="ollama">Ollama</option>
+                            <option value="openai">OpenAI</option>
+                        </select>
+                        <select
+                            id="model-select"
+                            class="px-3 py-1.5 text-sm border border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors whitespace-nowrap"
+                        >
+                            <option value="">Chargement des modèles...</option>
+                        </select>
+                        <input
+                            type="text"
+                            id="chat-input"
+                            placeholder="Tapez votre message..."
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                        >
+                            <i class="ti ti-send"></i>
+                            <span>Envoyer</span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -222,9 +225,13 @@ block content %}
         }
     });
 
-    // Charger les modèles Ollama disponibles
+    // Charger les modèles selon le provider sélectionné
     async function loadModels() {
-        const response = await apiCall("/api/ollama/models");
+        const providerSelect = document.getElementById("provider-select");
+        const provider = providerSelect.value;
+        const endpoint = provider === "openai" ? "/api/openai/models" : "/api/ollama/models";
+        
+        const response = await apiCall(endpoint);
         if (response && response.ok) {
             const models = await response.json();
             const select = document.getElementById("model-select");
@@ -245,6 +252,11 @@ block content %}
                     '<option value="">Aucun modèle disponible</option>';
             }
         }
+    }
+
+    // Gérer le changement de provider
+    function onProviderChange() {
+        loadModels();
     }
 
     // Charger les projets
@@ -332,7 +344,9 @@ block content %}
         const input = document.getElementById("chat-input");
         const message = input.value.trim();
         const modelSelect = document.getElementById("model-select");
+        const providerSelect = document.getElementById("provider-select");
         const model = modelSelect.value;
+        const provider = providerSelect.value;
 
         if (!message) return;
         if (!model) {
@@ -390,6 +404,7 @@ block content %}
                 body: JSON.stringify({
                     message: message,
                     model: model,
+                    provider: provider,
                     context: context,
                 }),
             });

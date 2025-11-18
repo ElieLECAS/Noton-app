@@ -6,9 +6,14 @@ from sqlmodel import Session
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.database import get_session
-from app.services.ollama_service import get_available_models, chat, chat_stream
+from app.services.ollama_service import get_available_models as get_ollama_models, chat as ollama_chat, chat_stream as ollama_chat_stream
+from app.services.openai_service import get_available_models as get_openai_models, chat as openai_chat, chat_stream as openai_chat_stream
+from app.config import settings
 from app.services.semantic_search_service import search_relevant_notes, search_relevant_passages
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
@@ -16,14 +21,40 @@ router = APIRouter(prefix="/api", tags=["chat"])
 class ChatRequest(BaseModel):
     message: str
     model: str
+    provider: str = "ollama"  # "ollama" ou "openai"
     context: Optional[List[dict]] = None
 
 
 @router.get("/ollama/models", response_model=List[str])
 async def list_ollama_models():
     """Récupérer la liste des modèles Ollama disponibles"""
-    models = await get_available_models()
+    models = await get_ollama_models()
     return models
+
+
+@router.get("/openai/models", response_model=List[str])
+async def list_openai_models():
+    """Récupérer uniquement le modèle OpenAI configuré dans .env"""
+    # Retourner uniquement le modèle configuré dans le .env si disponible
+    # On retourne le modèle même si seulement OPENAI_MODEL est défini (pour l'affichage)
+    if settings.OPENAI_MODEL:
+        logger.info(f"Modèle OpenAI configuré: {settings.OPENAI_MODEL}")
+        return [settings.OPENAI_MODEL]
+    else:
+        logger.warning("OPENAI_MODEL n'est pas configuré dans les variables d'environnement")
+        return []
+
+
+@router.get("/providers/models")
+async def list_all_models():
+    """Récupérer tous les modèles disponibles par provider"""
+    ollama_models = await get_ollama_models()
+    openai_models = await get_openai_models()
+    
+    return {
+        "ollama": ollama_models,
+        "openai": openai_models
+    }
 
 
 @router.post("/chat")
@@ -31,15 +62,28 @@ async def send_chat_message(
     request: ChatRequest,
     current_user: UserRead = Depends(get_current_user)
 ):
-    """Envoyer un message au chatbot Ollama"""
+    """Envoyer un message au chatbot (Ollama ou OpenAI)"""
     try:
-        response = await chat(request.message, request.model, request.context)
-        # Ollama retourne {"message": {"role": "assistant", "content": "..."}, ...}
-        if "message" in response and "content" in response["message"]:
-            return {"message": {"content": response["message"]["content"]}}
-        return response
+        if request.provider == "openai":
+            if not settings.OPENAI_API_KEY:
+                raise HTTPException(status_code=400, detail="OpenAI API key n'est pas configurée")
+            response = await openai_chat(request.message, request.model, request.context)
+            # OpenAI retourne {"choices": [{"message": {"content": "..."}}]}
+            if "choices" in response and len(response["choices"]) > 0:
+                content = response["choices"][0]["message"].get("content", "")
+                return {"message": {"content": content}}
+            return response
+        else:  # ollama par défaut
+            response = await ollama_chat(request.message, request.model, request.context)
+            # Ollama retourne {"message": {"role": "assistant", "content": "..."}, ...}
+            if "message" in response and "content" in response["message"]:
+                return {"message": {"content": response["message"]["content"]}}
+            return response
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur lors de l'appel à Ollama: {str(e)}")
+        provider_name = "OpenAI" if request.provider == "openai" else "Ollama"
+        raise HTTPException(status_code=500, detail=f"Erreur lors de l'appel à {provider_name}: {str(e)}")
 
 
 @router.post("/chat/stream")
@@ -47,13 +91,23 @@ async def stream_chat_message(
     request: ChatRequest,
     current_user: UserRead = Depends(get_current_user)
 ):
-    """Envoyer un message au chatbot Ollama avec streaming"""
+    """Envoyer un message au chatbot (Ollama ou OpenAI) avec streaming"""
     async def generate():
         try:
-            async for line in chat_stream(request.message, request.model, request.context):
-                if line.strip():
-                    # Ollama renvoie des lignes JSON, on les renvoie telles quelles en SSE
-                    yield f"data: {line}\n\n"
+            if request.provider == "openai":
+                if not settings.OPENAI_API_KEY:
+                    error_msg = "OpenAI API key n'est pas configurée"
+                    yield f"data: {json.dumps({'error': error_msg})}\n\n"
+                    return
+                async for line in openai_chat_stream(request.message, request.model, request.context):
+                    if line.strip():
+                        # OpenAI renvoie déjà au format Ollama via le service
+                        yield f"data: {line}\n\n"
+            else:  # ollama par défaut
+                async for line in ollama_chat_stream(request.message, request.model, request.context):
+                    if line.strip():
+                        # Ollama renvoie des lignes JSON, on les renvoie telles quelles en SSE
+                        yield f"data: {line}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
     
@@ -63,6 +117,7 @@ async def stream_chat_message(
 class ProjectChatRequest(BaseModel):
     message: str
     model: str
+    provider: str = "ollama"  # "ollama" ou "openai"
     context: Optional[List[dict]] = None
 
 
@@ -152,7 +207,7 @@ async def stream_project_chat_message(
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Envoyer un message au chatbot Ollama avec streaming et contexte enrichi des passages pertinents du projet"""
+    """Envoyer un message au chatbot (Ollama ou OpenAI) avec streaming et contexte enrichi des passages pertinents du projet"""
     # Recherche sémantique RAG AVANCÉE au niveau des passages
     # Analyse TOUTES les notes du projet et retourne les PASSAGES les plus pertinents
     passages = search_relevant_passages(
@@ -178,10 +233,20 @@ async def stream_project_chat_message(
     
     async def generate():
         try:
-            # Passer None comme message car il est déjà dans le contexte
-            async for line in chat_stream("", request.model, full_context):
-                if line.strip():
-                    yield f"data: {line}\n\n"
+            if request.provider == "openai":
+                if not settings.OPENAI_API_KEY:
+                    error_msg = "OpenAI API key n'est pas configurée"
+                    yield f"data: {json.dumps({'error': error_msg})}\n\n"
+                    return
+                # Passer None comme message car il est déjà dans le contexte
+                async for line in openai_chat_stream("", request.model, full_context):
+                    if line.strip():
+                        yield f"data: {line}\n\n"
+            else:  # ollama par défaut
+                # Passer None comme message car il est déjà dans le contexte
+                async for line in ollama_chat_stream("", request.model, full_context):
+                    if line.strip():
+                        yield f"data: {line}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
     
