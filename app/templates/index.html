@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block title %}Mes projets - Noton{% endblock %} {%
 block content %}
-<div class="flex-1 flex flex-col">
+<div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <!-- Header -->
     <header
-        class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between"
+        class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0"
     >
         <h1 class="text-xl font-semibold text-gray-900">Mes projets</h1>
         <div class="flex items-center gap-4">
@@ -26,7 +26,7 @@ block content %}
     </header>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex overflow-hidden">
+    <div class="flex-1 flex overflow-hidden min-h-0">
         <!-- Projects List -->
         <div
             id="projects-list-container"
@@ -40,11 +40,11 @@ block content %}
         <!-- Chatbot Area -->
         <div
             id="chatbot-area"
-            class="flex-1 flex flex-col bg-white transition-all duration-300 ease-in-out"
+            class="flex-1 flex flex-col bg-white transition-all duration-300 ease-in-out min-h-0 overflow-hidden"
             style="transform: translateX(0)"
         >
             <div
-                class="p-6 border-b border-gray-200 flex items-center justify-between"
+                class="p-6 border-b border-gray-200 flex items-center justify-between flex-shrink-0"
             >
                 <div>
                     <h2 class="text-lg font-semibold text-gray-900">Chatbot</h2>
@@ -63,7 +63,7 @@ block content %}
             <!-- Chat Messages -->
             <div
                 id="chat-messages"
-                class="flex-1 overflow-y-auto p-6 space-y-4"
+                class="flex-1 overflow-y-auto p-6 space-y-4 min-h-0"
             >
                 <div class="text-center text-gray-500 py-8">
                     <i class="ti ti-message-circle text-4xl mb-2"></i>
@@ -102,10 +102,14 @@ block content %}
                         transform: scale(1.2);
                     }
                 }
+                #chat-messages {
+                    max-height: 100%;
+                    height: 0;
+                }
             </style>
 
             <!-- Chat Input -->
-            <div class="p-6 border-t border-gray-200">
+            <div class="p-6 border-t border-gray-200 flex-shrink-0">
                 <form
                     id="chat-form"
                     onsubmit="sendChatMessage(event)"
@@ -302,6 +306,28 @@ block content %}
     // Animation de chargement
     let loadingAnimationInterval = null;
 
+    // Fonction utilitaire pour vérifier si l'utilisateur est proche du bas
+    function isNearBottom(container, threshold = 100) {
+        const scrollTop = container.scrollTop;
+        const scrollHeight = container.scrollHeight;
+        const clientHeight = container.clientHeight;
+        return scrollHeight - scrollTop - clientHeight < threshold;
+    }
+
+    // Fonction utilitaire pour scroller vers le bas (seulement si l'utilisateur est déjà proche du bas)
+    function scrollChatToBottom(force = false) {
+        const messagesContainer = document.getElementById("chat-messages");
+        if (messagesContainer) {
+            // Utiliser requestAnimationFrame pour s'assurer que le DOM est mis à jour
+            requestAnimationFrame(() => {
+                // Si force est true ou si l'utilisateur est proche du bas, scroller
+                if (force || isNearBottom(messagesContainer)) {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            });
+        }
+    }
+
     function showLoadingAnimation() {
         const messagesContainer = document.getElementById("chat-messages");
         const loadingDiv = document.createElement("div");
@@ -315,7 +341,7 @@ block content %}
             </div>
         `;
         messagesContainer.appendChild(loadingDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        scrollChatToBottom(true); // Forcer le scroll pour l'animation de chargement
 
         // Animation des points
         const dots = loadingDiv.querySelectorAll(".loading-dots span");
@@ -388,6 +414,7 @@ block content %}
             </div>
         `;
         messagesContainer.appendChild(assistantMessageDiv);
+        scrollChatToBottom(true); // Forcer le scroll au début du streaming
         const assistantContent = assistantMessageDiv.querySelector("p");
 
         let fullResponse = "";
@@ -445,8 +472,7 @@ block content %}
                                     }
                                     fullResponse += jsonData.message.content;
                                     assistantContent.textContent = fullResponse;
-                                    messagesContainer.scrollTop =
-                                        messagesContainer.scrollHeight;
+                                    scrollChatToBottom(false); // Ne pas forcer, seulement si proche du bas
                                 } else if (jsonData.done) {
                                     // Fin du stream
                                     break;
@@ -470,6 +496,7 @@ block content %}
             // Finaliser le message
             assistantMessageDiv.removeAttribute("id");
             chatHistory.push({ role: "assistant", content: fullResponse });
+            scrollChatToBottom(false); // Ne pas forcer à la fin, seulement si proche du bas
         } catch (error) {
             if (document.getElementById("assistant-streaming-message")) {
                 document.getElementById("assistant-streaming-message").remove();
@@ -507,7 +534,7 @@ block content %}
             </div>
         `;
         messagesContainer.appendChild(messageDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        scrollChatToBottom(true); // Forcer le scroll pour les nouveaux messages
     }
 
     // Initialisation

@@ -57,7 +57,7 @@
         </div>
 
         <!-- Chatbot Area -->
-        <div id="project-chatbot-area" class="hidden flex-1 flex flex-col bg-white transition-all duration-300 ease-in-out min-h-0"
+        <div id="project-chatbot-area" class="hidden flex-1 flex flex-col bg-white transition-all duration-300 ease-in-out min-h-0 overflow-hidden"
              style="transform: translateX(0);">
             <div class="p-6 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
                 <div>
@@ -156,6 +156,12 @@
     }
     .animate-spin {
         animation: spin 1s linear infinite;
+    }
+    
+    /* Force le scroll de la zone de messages */
+    #project-chat-messages {
+        max-height: 100%;
+        height: 0;
     }
     
     /* Styles pour l'affichage des notes en grille */
@@ -629,6 +635,28 @@
     // Animation de chargement pour le chatbot de projet
     let projectLoadingAnimationInterval = null;
     
+    // Fonction utilitaire pour vérifier si l'utilisateur est proche du bas
+    function isProjectChatNearBottom(container, threshold = 100) {
+        const scrollTop = container.scrollTop;
+        const scrollHeight = container.scrollHeight;
+        const clientHeight = container.clientHeight;
+        return scrollHeight - scrollTop - clientHeight < threshold;
+    }
+
+    // Fonction utilitaire pour scroller vers le bas du chat de projet (seulement si l'utilisateur est déjà proche du bas)
+    function scrollProjectChatToBottom(force = false) {
+        const messagesContainer = document.getElementById('project-chat-messages');
+        if (messagesContainer) {
+            // Utiliser requestAnimationFrame pour s'assurer que le DOM est mis à jour
+            requestAnimationFrame(() => {
+                // Si force est true ou si l'utilisateur est proche du bas, scroller
+                if (force || isProjectChatNearBottom(messagesContainer)) {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            });
+        }
+    }
+    
     function showProjectLoadingAnimation() {
         const messagesContainer = document.getElementById('project-chat-messages');
         const loadingDiv = document.createElement('div');
@@ -642,7 +670,7 @@
             </div>
         `;
         messagesContainer.appendChild(loadingDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        scrollProjectChatToBottom(true); // Forcer le scroll pour l'animation de chargement
         
         const dots = loadingDiv.querySelectorAll('.loading-dots span');
         let dotIndex = 0;
@@ -712,6 +740,7 @@
             </div>
         `;
         messagesContainer.appendChild(assistantMessageDiv);
+        scrollProjectChatToBottom(true); // Forcer le scroll au début du streaming
         const assistantContent = assistantMessageDiv.querySelector('.markdown-content');
         
         let fullResponse = '';
@@ -768,7 +797,7 @@
                                     const rawHtml = marked.parse(fullResponse);
                                     const cleanHtml = DOMPurify.sanitize(rawHtml);
                                     assistantContent.innerHTML = cleanHtml;
-                                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                                    scrollProjectChatToBottom(false); // Ne pas forcer, seulement si proche du bas
                                 } else if (jsonData.done) {
                                     break;
                                 } else if (jsonData.error) {
@@ -785,6 +814,7 @@
             // Finaliser le message
             assistantMessageDiv.removeAttribute('id');
             projectChatHistory.push({ role: 'assistant', content: fullResponse });
+            scrollProjectChatToBottom(false); // Ne pas forcer à la fin, seulement si proche du bas
 
         } catch (error) {
             if (document.getElementById('project-assistant-streaming-message')) {
@@ -829,7 +859,7 @@
             </div>
         `;
         messagesContainer.appendChild(messageDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        scrollProjectChatToBottom(true); // Forcer le scroll pour les nouveaux messages
     }
     
     // Fonction pour échapper le HTML
