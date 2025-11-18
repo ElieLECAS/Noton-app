@@ -476,26 +476,40 @@
                     const statusIcon = getEmbeddingStatusIcon('pending');
                     
                     return `
-                    <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition note-card flex-shrink-0" data-note-id="${note.id}">
-                        <div class="flex items-start justify-between mb-2">
-                            <div class="flex items-center gap-2">
-                                <h3 class="text-lg font-semibold text-gray-900">${note.title}</h3>
-                                <span class="embedding-status-icon">${statusIcon}</span>
+                    <div 
+                        class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200 cursor-pointer note-card flex-shrink-0 group" 
+                        data-note-id="${note.id}"
+                        onclick="window.location.href='/notes/${note.id}/edit'"
+                    >
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center gap-2 flex-1 min-w-0">
+                                <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">${note.title}</h3>
+                                <span class="embedding-status-icon flex-shrink-0">${statusIcon}</span>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <a href="/notes/${note.id}/edit" class="text-gray-400 hover:text-gray-600">
-                                    <i class="ti ti-pencil"></i>
-                                </a>
-                                <button onclick="deleteNote(${note.id})" class="text-gray-400 hover:text-red-600">
-                                    <i class="ti ti-trash"></i>
+                            <div class="flex items-center gap-2 flex-shrink-0" onclick="event.stopPropagation()">
+                                <button 
+                                    onclick="event.stopPropagation(); window.location.href='/notes/${note.id}/edit'" 
+                                    class="text-gray-400 hover:text-blue-600 p-1.5 rounded-md hover:bg-blue-50 transition-colors"
+                                    title="Éditer"
+                                >
+                                    <i class="ti ti-pencil text-lg"></i>
+                                </button>
+                                <button 
+                                    onclick="event.stopPropagation(); deleteNote(${note.id})" 
+                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-red-50 transition-colors"
+                                    title="Supprimer"
+                                >
+                                    <i class="ti ti-trash text-lg"></i>
                                 </button>
                             </div>
                         </div>
-                        <p class="text-gray-600 whitespace-pre-wrap line-clamp-6">${note.content || 'Pas de contenu'}</p>
-                        <p class="text-xs text-gray-400 mt-4">
+                        <p class="text-gray-600 whitespace-pre-wrap line-clamp-6 mb-4 leading-relaxed">${note.content || '<span class="text-gray-400 italic">Pas de contenu</span>'}</p>
+                        <div class="flex items-center gap-2 text-xs text-gray-400 pt-3 border-t border-gray-100">
                             <i class="ti ti-${note.note_type === 'written' ? 'pencil' : 'microphone'}"></i>
-                            Note écrite • Modifiée le ${new Date(note.updated_at).toLocaleDateString('fr-FR')} à ${new Date(note.updated_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                        </p>
+                            <span>Note ${note.note_type === 'written' ? 'écrite' : 'vocale'}</span>
+                            <span>•</span>
+                            <span>Modifiée le ${new Date(note.updated_at).toLocaleDateString('fr-FR')} à ${new Date(note.updated_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
                     </div>
                     `;
                 }).join('');
