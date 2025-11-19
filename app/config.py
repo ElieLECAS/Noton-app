@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     TORCH_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
     OMP_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
     
+    # Document Processing
+    MAX_CONCURRENT_DOCUMENTS: int = 5  # Nombre de documents traités en parallèle
+    
     @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', mode='before')
     @classmethod
     def parse_optional_int(cls, v: Union[str, int, None]) -> Optional[int]:

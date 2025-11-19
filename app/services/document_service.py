@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 # File d'attente pour limiter le nombre de traitements de documents simultanés
 document_queue = Queue()
-MAX_CONCURRENT_DOCUMENTS = 1  # Limiter à 1 traitement à la fois pour éviter 100% CPU
 document_workers = []
 _document_workers_lock = threading.Lock()  # Lock pour la synchronisation des workers
 
@@ -271,7 +270,8 @@ def _ensure_document_workers():
         if not document_workers or not any(w.is_alive() for w in document_workers):
             # Redémarrer les workers s'ils sont morts
             document_workers = []
-            for i in range(MAX_CONCURRENT_DOCUMENTS):
+            num_workers = settings.MAX_CONCURRENT_DOCUMENTS
+            for i in range(num_workers):
                 worker = threading.Thread(target=_process_document_worker, daemon=True)
                 worker.start()
                 document_workers.append(worker)
