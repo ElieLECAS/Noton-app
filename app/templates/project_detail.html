@@ -18,102 +18,111 @@
     .markdown-content strong { font-weight: bold; }
     .markdown-content em { font-style: italic; }
     .markdown-content code { background-color: rgba(0,0,0,0.1); padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; }
+    .dark .markdown-content code { background-color: rgba(255,255,255,0.1); }
     .markdown-content pre { background-color: rgba(0,0,0,0.1); padding: 0.5em; border-radius: 5px; overflow-x: auto; }
+    .dark .markdown-content pre { background-color: rgba(255,255,255,0.1); }
     .markdown-content pre code { background-color: transparent; padding: 0; }
     .markdown-content blockquote { border-left: 3px solid rgba(0,0,0,0.2); padding-left: 1em; margin: 0.5em 0; font-style: italic; }
+    .dark .markdown-content blockquote { border-left-color: rgba(255,255,255,0.2); }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <!-- Header -->
-    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center gap-4">
-            <a href="/" class="text-gray-600 hover:text-gray-900">
-                <i class="ti ti-arrow-left"></i>
+    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 flex-shrink-0">
+        <div class="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+            <a href="/" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2 -ml-2 sm:ml-0 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0">
+                <i class="ti ti-arrow-left text-xl"></i>
             </a>
-            <h1 id="project-title" class="text-xl font-semibold text-gray-900">Chargement...</h1>
+            <h1 id="project-title" class="text-base sm:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">Chargement...</h1>
         </div>
-        <div class="flex items-center gap-2">
-            <button onclick="toggleProjectChatbot()" class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Afficher/Masquer le chatbot">
+        <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="toggleProjectChatbot()" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="Afficher/Masquer le chatbot">
                 <i id="project-chatbot-toggle-icon" class="ti ti-robot text-xl"></i>
             </button>
-            <button onclick="showCreateNoteModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+            <button onclick="showCreateNoteModal()" class="px-3 sm:px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base">
                 <i class="ti ti-plus"></i>
-                <span>Nouvelle note</span>
+                <span class="hidden sm:inline">Nouvelle note</span>
+                <span class="sm:hidden">Note</span>
             </button>
-            <button onclick="showUploadDocumentModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2">
+            <button onclick="showUploadDocumentModal()" class="px-3 sm:px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 flex items-center gap-2 text-sm sm:text-base">
                 <i class="ti ti-upload"></i>
-                <span>Uploader un document</span>
+                <span class="hidden sm:inline">Uploader</span>
+                <span class="sm:hidden">Upload</span>
             </button>
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex overflow-hidden min-h-0">
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
         <!-- Notes List -->
-        <div id="notes-list-container" class="w-full bg-white border-r-0 overflow-y-auto transition-all duration-300 ease-in-out min-h-0">
-            <div class="p-6">
-                <div id="notes-container" class="flex flex-wrap gap-4 notes-grid">
+        <div id="notes-list-container" class="w-full lg:w-1/2 bg-white dark:bg-gray-800 border-r-0 lg:border-r border-gray-200 dark:border-gray-700 border-b lg:border-b-0 overflow-y-auto transition-all duration-300 ease-in-out min-h-0">
+            <div class="p-4 sm:p-6">
+                <div id="notes-container" class="flex flex-wrap gap-3 sm:gap-4 notes-grid">
                     <!-- Notes chargées dynamiquement -->
                 </div>
             </div>
         </div>
 
         <!-- Chatbot Area -->
-        <div id="project-chatbot-area" class="hidden flex-1 flex flex-col bg-white transition-all duration-300 ease-in-out min-h-0 overflow-hidden"
+        <div id="project-chatbot-area" class="hidden fixed lg:relative inset-0 lg:inset-auto z-50 lg:z-auto flex flex-col bg-white dark:bg-gray-800 transition-all duration-300 ease-in-out min-h-0 overflow-hidden lg:w-1/2"
              style="transform: translateX(0);">
-            <div class="p-6 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
+            <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0 bg-white dark:bg-gray-800">
                 <div>
-                    <h2 class="text-lg font-semibold text-gray-900">Assistant IA du projet</h2>
-                    <p class="text-sm text-gray-500 mt-1">Posez des questions sur vos notes</p>
+                    <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">Assistant IA du projet</h2>
+                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">Posez des questions sur vos notes</p>
                 </div>
-                <button onclick="toggleProjectChatbot()" class="text-gray-400 hover:text-gray-600 p-2">
+                <button onclick="toggleProjectChatbot()" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-2" title="Fermer le chatbot">
                     <i class="ti ti-robot-off text-xl"></i>
                 </button>
             </div>
 
             <!-- Chat Messages -->
-            <div id="project-chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 min-h-0">
-                <div class="text-center text-gray-500 py-8">
-                    <i class="ti ti-message-circle text-4xl mb-2"></i>
-                    <p>Posez des questions sur vos notes</p>
+            <div id="project-chat-messages" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 min-h-0 bg-white dark:bg-gray-800">
+                <div class="text-center text-gray-500 dark:text-gray-400 py-8">
+                    <i class="ti ti-message-circle text-3xl sm:text-4xl mb-2"></i>
+                    <p class="text-sm sm:text-base">Posez des questions sur vos notes</p>
                 </div>
             </div>
 
             <!-- Chat Input -->
-            <div class="p-6 border-t border-gray-200 flex-shrink-0">
+            <div class="p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 flex-shrink-0 bg-white dark:bg-gray-800">
                 <form id="project-chat-form" onsubmit="sendProjectChatMessage(event)" class="flex flex-col gap-2">
-                    <div class="flex gap-2 items-center">
-                        <select
-                            id="project-provider-select"
-                            class="px-3 py-1.5 text-sm border border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors whitespace-nowrap"
-                            onchange="onProjectProviderChange()"
-                        >
-                            <option value="ollama">Ollama</option>
-                            <option value="openai">OpenAI</option>
-                        </select>
-                        <select 
-                            id="project-model-select" 
-                            class="px-3 py-1.5 text-sm border border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors whitespace-nowrap"
-                        >
-                            <option value="">Chargement des modèles...</option>
-                        </select>
-                        <input 
-                            type="text" 
-                            id="project-chat-input" 
-                            placeholder="Tapez votre message..." 
-                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            autocomplete="off"
-                            required
-                        >
-                        <button 
-                            type="submit" 
-                            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-                        >
-                            <i class="ti ti-send"></i>
-                            <span>Envoyer</span>
-                        </button>
+                    <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+                        <div class="flex gap-2">
+                            <select
+                                id="project-provider-select"
+                                class="flex-1 sm:flex-none px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100"
+                                onchange="onProjectProviderChange()"
+                            >
+                                <option value="ollama">Ollama</option>
+                                <option value="openai">OpenAI</option>
+                            </select>
+                            <select 
+                                id="project-model-select" 
+                                class="flex-1 sm:flex-none px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100"
+                            >
+                                <option value="">Chargement...</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2 flex-1">
+                            <input 
+                                type="text" 
+                                id="project-chat-input" 
+                                placeholder="Tapez votre message..." 
+                                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                autocomplete="off"
+                                required
+                            >
+                            <button 
+                                type="submit" 
+                                class="px-4 sm:px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base"
+                            >
+                                <i class="ti ti-send"></i>
+                                <span class="hidden sm:inline">Envoyer</span>
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -172,7 +181,7 @@
     .notes-grid .note-card {
         width: calc(33.333% - 0.67rem); /* 3 colonnes avec gap - largeur fixe */
         flex: 0 0 calc(33.333% - 0.67rem); /* Empêcher le flex-grow */
-        min-width: 300px;
+        min-width: 280px;
         max-width: calc(33.333% - 0.67rem);
     }
     
@@ -182,6 +191,7 @@
             width: calc(50% - 0.5rem); /* 2 colonnes avec gap - largeur fixe */
             flex: 0 0 calc(50% - 0.5rem);
             max-width: calc(50% - 0.5rem);
+            min-width: calc(50% - 0.5rem);
         }
     }
     
@@ -212,49 +222,49 @@
 </style>
 
 <!-- Create Note Modal -->
-<div id="create-note-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
-        <h2 class="text-xl font-bold mb-4">Créer une nouvelle note</h2>
+<div id="create-note-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Créer une nouvelle note</h2>
         <form id="create-note-form" onsubmit="createNote(event)">
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Titre</label>
-                <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Titre de la note">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Titre</label>
+                <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Titre de la note">
             </div>
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Contenu</label>
-                <textarea name="content" rows="10" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contenu de la note..."></textarea>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Contenu</label>
+                <textarea name="content" rows="10" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contenu de la note..."></textarea>
             </div>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="hideCreateNoteModal()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Annuler</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Créer la note</button>
+                <button type="button" onclick="hideCreateNoteModal()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Annuler</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600">Créer la note</button>
             </div>
         </form>
     </div>
 </div>
 
 <!-- Upload Document Modal -->
-<div id="upload-document-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
-        <h2 class="text-xl font-bold mb-4">Uploader des documents</h2>
+<div id="upload-document-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Uploader des documents</h2>
         <form id="upload-document-form" onsubmit="uploadDocument(event)">
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Fichiers</label>
-                <input type="file" id="document-file-input" name="files" multiple required accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.txt,.md,.jpg,.jpeg,.png,.csv" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                <p class="text-xs text-gray-500 mt-1">Formats supportés: PDF, DOCX, XLSX, PPTX, CSV, images, texte. Vous pouvez sélectionner plusieurs fichiers.</p>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fichiers</label>
+                <input type="file" id="document-file-input" name="files" multiple required accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.txt,.md,.jpg,.jpeg,.png,.csv" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Formats supportés: PDF, DOCX, XLSX, PPTX, CSV, images, texte. Vous pouvez sélectionner plusieurs fichiers.</p>
             </div>
-            <div id="upload-files-list" class="hidden mb-4 max-h-40 overflow-y-auto border border-gray-200 rounded-lg p-2">
-                <p class="text-xs font-medium text-gray-700 mb-2">Fichiers sélectionnés:</p>
-                <ul id="upload-files-list-items" class="text-xs text-gray-600 space-y-1"></ul>
+            <div id="upload-files-list" class="hidden mb-4 max-h-40 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2 bg-gray-50 dark:bg-gray-700">
+                <p class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">Fichiers sélectionnés:</p>
+                <ul id="upload-files-list-items" class="text-xs text-gray-600 dark:text-gray-400 space-y-1"></ul>
             </div>
             <div id="upload-progress" class="hidden mb-4">
-                <div class="bg-gray-200 rounded-full h-2.5">
-                    <div id="upload-progress-bar" class="bg-green-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div class="bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="upload-progress-bar" class="bg-green-600 dark:bg-green-500 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
-                <p id="upload-status" class="text-sm text-gray-600 mt-2">Traitement en cours...</p>
+                <p id="upload-status" class="text-sm text-gray-600 dark:text-gray-400 mt-2">Traitement en cours...</p>
             </div>
             <div class="flex justify-end gap-2">
-                <button type="button" onclick="hideUploadDocumentModal()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Annuler</button>
-                <button type="submit" id="upload-submit-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Uploader</button>
+                <button type="button" onclick="hideUploadDocumentModal()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Annuler</button>
+                <button type="submit" id="upload-submit-btn" class="px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600">Uploader</button>
             </div>
         </form>
     </div>
@@ -398,15 +408,29 @@
         
         projectChatbotOpen = !projectChatbotOpen;
         
+        const isMobile = window.innerWidth < 1024;
+        
         if (projectChatbotOpen) {
-            // Ouvrir le chatbot - animation depuis la droite
+            // Ouvrir le chatbot
             chatbotArea.classList.remove('hidden');
-            chatbotArea.style.flex = "0 0 0%";
-            chatbotArea.style.width = "0";
-            chatbotArea.style.transform = "translateX(100%)";
+            chatbotArea.style.transform = "translateX(0)";
+            
+            if (isMobile) {
+                // Animation mobile depuis la droite
+                chatbotArea.style.flex = "0 0 0%";
+                chatbotArea.style.width = "0";
+                chatbotArea.style.transform = "translateX(100%)";
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        chatbotArea.style.flex = "";
+                        chatbotArea.style.width = "";
+                        chatbotArea.style.transform = "translateX(0)";
+                    });
+                });
+            }
             
             notesContainer.classList.remove('w-full', 'border-r-0');
-            notesContainer.classList.add('w-1/2', 'border-r');
+            notesContainer.classList.add('lg:w-1/2', 'border-r');
             
             // Changer le layout des notes en mode liste (1 colonne)
             const notesContainerEl = document.getElementById('notes-container');
@@ -417,29 +441,33 @@
             
             toggleIcon.classList.remove('ti-robot');
             toggleIcon.classList.add('ti-robot-off');
-            
-            // Forcer le reflow pour déclencher l'animation
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    chatbotArea.style.flex = "";
-                    chatbotArea.style.width = "";
-                    chatbotArea.style.transform = "translateX(0)";
-                });
-            });
         } else {
-            // Fermer le chatbot - animation vers la droite
-            // Synchroniser les animations en utilisant requestAnimationFrame
+            // Fermer le chatbot
             toggleIcon.classList.remove('ti-robot-off');
             toggleIcon.classList.add('ti-robot');
             
-            requestAnimationFrame(() => {
-                // D'abord réduire la largeur du chatbot et le translate en même temps
-                chatbotArea.style.transform = "translateX(100%)";
-                chatbotArea.style.flex = "0 0 0%";
-                chatbotArea.style.width = "0";
-                
-                // En même temps, agrandir le conteneur de notes
-                notesContainer.classList.remove('w-1/2', 'border-r');
+            if (isMobile) {
+                // Animation mobile vers la droite
+                requestAnimationFrame(() => {
+                    chatbotArea.style.transform = "translateX(100%)";
+                    notesContainer.classList.remove('lg:w-1/2', 'border-r');
+                    notesContainer.classList.add('w-full', 'border-r-0');
+                    
+                    // Changer le layout des notes en mode grille (1-3 colonnes)
+                    const notesContainerEl = document.getElementById('notes-container');
+                    if (notesContainerEl) {
+                        notesContainerEl.classList.remove('notes-list');
+                        notesContainerEl.classList.add('notes-grid');
+                    }
+                    
+                    setTimeout(() => {
+                        chatbotArea.classList.add('hidden');
+                        chatbotArea.style.transform = "translateX(0)";
+                    }, 300);
+                });
+            } else {
+                // Desktop : cacher complètement
+                notesContainer.classList.remove('lg:w-1/2', 'border-r');
                 notesContainer.classList.add('w-full', 'border-r-0');
                 
                 // Changer le layout des notes en mode grille (1-3 colonnes)
@@ -449,13 +477,8 @@
                     notesContainerEl.classList.add('notes-grid');
                 }
                 
-                setTimeout(() => {
-                    chatbotArea.classList.add('hidden');
-                    chatbotArea.style.transform = "translateX(0)";
-                    chatbotArea.style.flex = "";
-                    chatbotArea.style.width = "";
-                }, 300);
-            });
+                chatbotArea.classList.add('hidden');
+            }
         }
     }
 
@@ -468,7 +491,7 @@
         if (!projectChatbotOpen) {
             chatbotArea.classList.add('hidden');
             chatbotArea.style.transform = "translateX(0)";
-            notesContainer.classList.remove('w-1/2', 'border-r');
+            notesContainer.classList.remove('lg:w-1/2', 'border-r');
             notesContainer.classList.add('w-full', 'border-r-0');
             
             // Mode grille par défaut (chatbot fermé)
@@ -647,9 +670,9 @@
             if (notes.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-12">
-                        <i class="ti ti-notes text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500 mb-2">Aucune note</p>
-                        <p class="text-sm text-gray-400">Créez votre première note pour commencer</p>
+                        <i class="ti ti-notes text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                        <p class="text-gray-500 dark:text-gray-400 mb-2">Aucune note</p>
+                        <p class="text-sm text-gray-400 dark:text-gray-500">Créez votre première note pour commencer</p>
                     </div>
                 `;
             } else {
@@ -663,36 +686,36 @@
                     
                     return `
                     <div 
-                        class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200 cursor-pointer note-card flex-shrink-0 group" 
+                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 sm:p-6 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-400 transition-all duration-200 cursor-pointer note-card flex-shrink-0 group active:bg-gray-50 dark:active:bg-gray-700" 
                         data-note-id="${note.id}"
                         ${note.note_type === 'document' && note.processing_status ? `data-processing-status="${note.processing_status}"` : ''}
                         onclick="window.location.href='/notes/${note.id}/edit'"
                     >
-                        <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-start justify-between mb-2 sm:mb-3">
                             <div class="flex items-center gap-2 flex-1 min-w-0">
-                                <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">${note.title}</h3>
+                                <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">${note.title}</h3>
                                 ${note.note_type === 'document' ? `<span class="processing-status-icon flex-shrink-0" title="Statut de traitement">${processingIcon}</span>` : ''}
                                 <span class="embedding-status-icon flex-shrink-0">${statusIcon}</span>
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0" onclick="event.stopPropagation()">
                                 <button 
                                     onclick="event.stopPropagation(); window.location.href='/notes/${note.id}/edit'" 
-                                    class="text-gray-400 hover:text-blue-600 p-1.5 rounded-md hover:bg-blue-50 transition-colors"
+                                    class="text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 p-1.5 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
                                     title="Éditer"
                                 >
                                     <i class="ti ti-pencil text-lg"></i>
                                 </button>
                                 <button 
                                     onclick="event.stopPropagation(); deleteNote(${note.id})" 
-                                    class="text-gray-400 hover:text-red-600 p-1.5 rounded-md hover:bg-red-50 transition-colors"
+                                    class="text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
                                     title="Supprimer"
                                 >
                                     <i class="ti ti-trash text-lg"></i>
                                 </button>
                             </div>
                         </div>
-                        <p class="text-gray-600 whitespace-pre-wrap line-clamp-6 mb-4 leading-relaxed">${note.content || '<span class="text-gray-400 italic">Pas de contenu</span>'}</p>
-                        <div class="flex items-center gap-2 text-xs text-gray-400 pt-3 border-t border-gray-100">
+                        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 whitespace-pre-wrap line-clamp-4 sm:line-clamp-6 mb-3 sm:mb-4 leading-relaxed">${note.content || '<span class="text-gray-400 dark:text-gray-500 italic">Pas de contenu</span>'}</p>
+                        <div class="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500 pt-2 sm:pt-3 border-t border-gray-100 dark:border-gray-700 flex-wrap">
                             <i class="ti ti-${note.note_type === 'written' ? 'pencil' : note.note_type === 'voice' ? 'microphone' : 'file-text'}"></i>
                             <span>${note.note_type === 'written' ? 'Note écrite' : note.note_type === 'voice' ? 'Note vocale' : 'Document'}</span>
                             <span>•</span>
@@ -852,7 +875,7 @@
         loadingDiv.id = 'project-loading-message';
         loadingDiv.className = 'flex justify-start';
         loadingDiv.innerHTML = `
-            <div class="bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
+            <div class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-4 py-2">
                 <span class="loading-dots">
                     <span>.</span><span>.</span><span>.</span>
                 </span>
@@ -924,8 +947,8 @@
         assistantMessageDiv.id = 'project-assistant-streaming-message';
         assistantMessageDiv.className = 'flex justify-start';
         assistantMessageDiv.innerHTML = `
-            <div class="max-w-2xl bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
-                <div class="markdown-content text-gray-500 italic">En cours de génération...</div>
+            <div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-4 py-2">
+                <div class="markdown-content text-gray-500 dark:text-gray-400 italic">En cours de génération...</div>
             </div>
         `;
         messagesContainer.appendChild(assistantMessageDiv);
@@ -1043,7 +1066,7 @@
         }
         
         messageDiv.innerHTML = `
-            <div class="max-w-2xl ${role === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'} rounded-lg px-4 py-2">
+            <div class="max-w-2xl ${role === 'user' ? 'bg-blue-600 dark:bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100'} rounded-lg px-4 py-2">
                 ${contentHtml}
             </div>
         `;
