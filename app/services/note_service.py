@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlmodel import Session, select
 from app.models.note import Note, NoteCreate, NoteUpdate
 from app.services.project_service import get_project_by_id
-from app.services.embedding_service import generate_note_embedding
+from app.services.chunk_service import create_chunks_for_note, delete_chunks_for_note
 import logging
 
 logger = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ def get_note_by_id(session: Session, note_id: int, user_id: int) -> Optional[Not
 
 
 def create_note(session: Session, note_create: NoteCreate, project_id: int, user_id: int) -> Optional[Note]:
-    """Créer une nouvelle note avec embedding généré immédiatement"""
+    """Créer une nouvelle note avec chunks et embeddings générés immédiatement"""
     # Vérifier que le projet appartient à l'utilisateur
     project = get_project_by_id(session, project_id, user_id)
     if not project:
@@ -41,73 +41,75 @@ def create_note(session: Session, note_create: NoteCreate, project_id: int, user
         user_id=user_id
     )
     
-    # Générer l'embedding IMMÉDIATEMENT (synchrone)
-    try:
-        embedding = generate_note_embedding(note.title, note.content)
-        if embedding:
-            note.embedding = embedding
-            logger.info(f"✅ Embedding généré pour la note '{note.title}'")
-        else:
-            logger.warning(f"⚠️ Impossible de générer l'embedding pour la note '{note.title}'")
-    except Exception as e:
-        logger.error(f"❌ Erreur lors de la génération d'embedding pour la note '{note.title}': {e}")
-        # Ne pas bloquer la création si l'embedding échoue
-    
     session.add(note)
     session.commit()
     session.refresh(note)
     
-    # Vérifier si l'embedding existe (note.embedding est une liste/array)
-    has_embedding = note.embedding is not None and len(note.embedding) > 0
-    logger.info(f"📝 Note {note.id} créée avec succès (embedding: {'oui' if has_embedding else 'non'})")
+    # Créer les chunks avec embeddings IMMÉDIATEMENT (synchrone)
+    try:
+        chunks = create_chunks_for_note(session, note, generate_embeddings=True)
+        logger.info(f"✅ {len(chunks)} chunks créés avec embeddings pour la note '{note.title}'")
+    except Exception as e:
+        logger.error(f"❌ Erreur lors de la création des chunks pour la note '{note.title}': {e}", exc_info=True)
+        # Ne pas bloquer la création si les chunks échouent
+    
+    logger.info(f"📝 Note {note.id} créée avec succès")
     return note
 
 
 def update_note(session: Session, note_id: int, note_update: NoteUpdate, user_id: int) -> Optional[Note]:
-    """Mettre à jour une note avec regénération d'embedding si nécessaire"""
+    """Mettre à jour une note avec regénération des chunks et embeddings si nécessaire"""
     note = get_note_by_id(session, note_id, user_id)
     if not note:
         return None
     
-    # Vérifier si le titre ou le contenu changent (nécessite re-génération d'embedding)
+    # Vérifier si le titre ou le contenu changent (nécessite re-création des chunks)
     update_data = note_update.model_dump(exclude_unset=True)
-    needs_reembedding = 'title' in update_data or 'content' in update_data
+    needs_rechunking = 'title' in update_data or 'content' in update_data
     
     for field, value in update_data.items():
         setattr(note, field, value)
     
     note.updated_at = datetime.utcnow()
     
-    # Regénérer l'embedding IMMÉDIATEMENT si le titre ou le contenu ont changé
-    if needs_reembedding:
-        try:
-            embedding = generate_note_embedding(note.title, note.content)
-            if embedding:
-                note.embedding = embedding
-                logger.info(f"✅ Embedding régénéré pour la note {note.id}")
-            else:
-                logger.warning(f"⚠️ Impossible de régénérer l'embedding pour la note {note.id}")
-        except Exception as e:
-            logger.error(f"❌ Erreur lors de la régénération d'embedding pour la note {note.id}: {e}")
-            # Ne pas bloquer la mise à jour si l'embedding échoue
-    
     session.add(note)
     session.commit()
     session.refresh(note)
     
-    logger.info(f"✏️ Note {note.id} mise à jour (embedding regénéré: {'oui' if needs_reembedding else 'non'})")
+    # Regénérer les chunks IMMÉDIATEMENT si le titre ou le contenu ont changé
+    if needs_rechunking:
+        try:
+            chunks = create_chunks_for_note(session, note, generate_embeddings=True)
+            logger.info(f"✅ {len(chunks)} chunks régénérés avec embeddings pour la note {note.id}")
+        except Exception as e:
+            logger.error(f"❌ Erreur lors de la régénération des chunks pour la note {note.id}: {e}", exc_info=True)
+            # Ne pas bloquer la mise à jour si les chunks échouent
+    
+    logger.info(f"✏️ Note {note.id} mise à jour (chunks regénérés: {'oui' if needs_rechunking else 'non'})")
     return note
 
 
 def delete_note(session: Session, note_id: int, user_id: int) -> bool:
-    """Supprimer une note"""
+    """Supprimer une note et ses chunks associés (transaction atomique)"""
     note = get_note_by_id(session, note_id, user_id)
     if not note:
         return False
     
-    session.delete(note)
-    session.commit()
-    
-    logger.info(f"🗑️ Note {note_id} supprimée")
-    return True
+    try:
+        # Supprimer d'abord tous les chunks associés à la note (sans commit)
+        delete_chunks_for_note(session, note_id, commit=False)
+        logger.debug(f"Chunks marqués pour suppression pour la note {note_id}")
+        
+        # Ensuite supprimer la note elle-même
+        session.delete(note)
+        
+        # Commit atomique : soit tout est supprimé, soit rien
+        session.commit()
+        
+        logger.info(f"🗑️ Note {note_id} et ses chunks supprimés avec succès")
+        return True
+    except Exception as e:
+        logger.error(f"Erreur lors de la suppression de la note {note_id}: {e}", exc_info=True)
+        session.rollback()
+        raise
 

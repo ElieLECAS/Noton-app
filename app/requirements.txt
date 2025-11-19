@@ -10,11 +10,13 @@ python-multipart==0.0.6
 httpx==0.25.2
 jinja2==3.1.2
 python-dotenv==1.0.0
-pydantic-settings==2.1.0
+pydantic-settings>=2.3.0,<3.0.0
 pgvector==0.2.4
-sentence-transformers>=2.7.0
+# Pinning compatible versions to avoid dependency conflicts
+numpy==1.26.4
+docling==2.8.3
+python-magic
+pillow
 faiss-cpu==1.7.4
-numpy==1.24.3
-torch>=2.0.0
-transformers>=4.30.0
+fastembed==0.3.6
 

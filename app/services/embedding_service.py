@@ -1,37 +1,34 @@
 from typing import List, Optional
-from sentence_transformers import SentenceTransformer
 import logging
 import os
+import numpy as np
+from fastembed import TextEmbedding
 from app.embedding_config import EMBEDDING_DIMENSION
 
 logger = logging.getLogger(__name__)
 
-# Modèle singleton chargé une seule fois
-_model: Optional[SentenceTransformer] = None
+# Modèle d'embedding FastEmbed par défaut (384 dimensions)
+# Modèle léger et rapide : BAAI/bge-small-en-v1.5
+# Alternatives disponibles : BAAI/bge-base-en-v1.5 (768 dim), BAAI/bge-large-en-v1.5 (1024 dim)
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-small-en-v1.5")
 
-# Modèle léger et rapide : all-MiniLM-L6-v2 (384 dimensions)
-# Alternative plus lourde mais meilleure qualité : all-mpnet-base-v2 (768 dimensions)
-MODEL_NAME = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+# Instance singleton du modèle d'embedding
+_embedder: Optional[TextEmbedding] = None
 
 
-def get_model() -> SentenceTransformer:
-    """Charger le modèle sentence-transformers (singleton) avec optimisations CPU"""
-    global _model
-    if _model is None:
-        logger.info(f"Chargement du modèle d'embedding: {MODEL_NAME} ({EMBEDDING_DIMENSION} dimensions)")
-        # Options pour optimiser sur CPU
-        _model = SentenceTransformer(
-            MODEL_NAME,
-            device='cpu',  # Forcer CPU pour éviter les problèmes GPU
-            model_kwargs={'low_cpu_mem_usage': True}  # Réduire l'utilisation mémoire
-        )
-        logger.info(f"Modèle d'embedding chargé avec succès ({EMBEDDING_DIMENSION} dimensions)")
-    return _model
+def get_embedder() -> TextEmbedding:
+    """Charger le modèle FastEmbed (singleton)"""
+    global _embedder
+    if _embedder is None:
+        logger.info(f"Chargement du modèle d'embedding FastEmbed: {EMBEDDING_MODEL} ({EMBEDDING_DIMENSION} dimensions)")
+        _embedder = TextEmbedding(model_name=EMBEDDING_MODEL)
+        logger.info(f"Modèle d'embedding FastEmbed chargé avec succès ({EMBEDDING_DIMENSION} dimensions)")
+    return _embedder
 
 
 def generate_embedding(text: str) -> Optional[List[float]]:
     """
-    Génère un embedding pour un texte donné.
+    Génère un embedding pour un texte donné en utilisant FastEmbed (modèle local).
     
     Args:
         text: Le texte à encoder
@@ -44,30 +41,36 @@ def generate_embedding(text: str) -> Optional[List[float]]:
         return None
     
     try:
-        model = get_model()
-        # Générer l'embedding avec options optimisées
-        # batch_size=1 pour réduire la mémoire, show_progress_bar=False pour la performance
-        embedding = model.encode(
-            text,
-            convert_to_numpy=True,
-            batch_size=1,
-            show_progress_bar=False,
-            normalize_embeddings=True  # Normaliser pour similarité cosinus
-        )
-        # Convertir en liste de floats
-        return embedding.tolist()
+        embedder = get_embedder()
+        
+        # FastEmbed retourne un générateur, on prend le premier élément
+        # Le modèle génère déjà des embeddings normalisés pour la similarité cosinus
+        embeddings = list(embedder.embed([text.strip()]))
+        
+        if embeddings and len(embeddings) > 0:
+            embedding = embeddings[0]
+            # Convertir en liste de floats
+            if isinstance(embedding, np.ndarray):
+                return embedding.tolist()
+            elif isinstance(embedding, list):
+                return [float(x) for x in embedding]
+            else:
+                return list(embedding)
+        else:
+            logger.error("Aucun embedding généré par FastEmbed")
+            return None
     except Exception as e:
-        logger.error(f"Erreur lors de la génération d'embedding: {e}")
+        logger.error(f"Erreur lors de la génération d'embedding: {e}", exc_info=True)
         return None
 
 
 def generate_embeddings_batch(texts: List[str], batch_size: int = 8) -> List[Optional[List[float]]]:
     """
-    Génère des embeddings pour plusieurs textes en batch (plus efficace).
+    Génère des embeddings pour plusieurs textes en batch via FastEmbed (modèle local).
     
     Args:
         texts: Liste de textes à encoder
-        batch_size: Nombre de textes à traiter en parallèle
+        batch_size: Nombre de textes à traiter par batch (FastEmbed gère automatiquement)
         
     Returns:
         Liste d'embeddings (ou None si erreur pour un texte)
@@ -87,24 +90,31 @@ def generate_embeddings_batch(texts: List[str], batch_size: int = 8) -> List[Opt
         return [None] * len(texts)
     
     try:
-        model = get_model()
-        # Générer les embeddings en batch (beaucoup plus rapide)
-        embeddings = model.encode(
-            valid_texts,
-            convert_to_numpy=True,
-            batch_size=batch_size,
-            show_progress_bar=False,
-            normalize_embeddings=True
-        )
+        embedder = get_embedder()
         
-        # Reconstruire la liste complète avec None pour les textes vides
+        # FastEmbed peut traiter plusieurs textes en une seule passe
+        # Il retourne un générateur d'embeddings
+        embeddings_generator = embedder.embed(valid_texts, batch_size=batch_size)
+        embeddings_list = list(embeddings_generator)
+        
+        # Reconstruire la liste complète avec None pour les textes vides ou en erreur
         result = [None] * len(texts)
-        for idx, embedding in zip(valid_indices, embeddings):
-            result[idx] = embedding.tolist()
+        for idx, embedding in zip(valid_indices, embeddings_list):
+            try:
+                # Convertir en liste de floats
+                if isinstance(embedding, np.ndarray):
+                    result[idx] = embedding.tolist()
+                elif isinstance(embedding, list):
+                    result[idx] = [float(x) for x in embedding]
+                else:
+                    result[idx] = list(embedding)
+            except Exception as e:
+                logger.error(f"Erreur lors de la conversion de l'embedding pour l'index {idx}: {e}")
+                result[idx] = None
         
         return result
     except Exception as e:
-        logger.error(f"Erreur lors de la génération d'embeddings en batch: {e}")
+        logger.error(f"Erreur lors de la génération d'embeddings en batch: {e}", exc_info=True)
         return [None] * len(texts)
 
 

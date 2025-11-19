@@ -26,7 +26,7 @@ wheels/
 # Environment
 .env
 .venv
-
+media/documents/
 # IDE
 .vscode/
 .idea/

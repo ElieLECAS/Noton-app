@@ -56,14 +56,14 @@ async def startup_event():
         logger.error(f"Erreur lors de l'initialisation de FAISS: {e}")
         # Ne pas bloquer le démarrage si FAISS échoue
     
-    # Précharger le modèle d'embedding au démarrage pour éviter le blocage au premier usage
+    # Précharger le modèle FastEmbed au démarrage pour éviter le blocage au premier usage
     try:
-        from app.services.embedding_service import get_model
-        logger.info("Préchargement du modèle d'embedding...")
-        get_model()  # Charger le modèle maintenant pour éviter le blocage plus tard
-        logger.info("Modèle d'embedding préchargé avec succès")
+        from app.services.embedding_service import get_embedder
+        logger.info("Préchargement du modèle FastEmbed...")
+        get_embedder()  # Charger le modèle maintenant pour éviter le blocage plus tard
+        logger.info("Modèle FastEmbed préchargé avec succès")
     except Exception as e:
-        logger.error(f"Erreur lors du préchargement du modèle d'embedding: {e}")
+        logger.error(f"Erreur lors du préchargement du modèle FastEmbed: {e}")
         # Ne pas bloquer le démarrage si le modèle échoue
     
     # Démarrer les workers pour la génération d'embeddings en arrière-plan

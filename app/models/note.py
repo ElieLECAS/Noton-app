@@ -13,7 +13,8 @@ class Note(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str = Field(max_length=200)
     content: Optional[str] = None
-    note_type: str = Field(default="written")  # 'written' ou 'voice'
+    note_type: str = Field(default="written")  # 'written', 'voice', ou 'document'
+    source_file_path: Optional[str] = None  # Chemin du fichier original si document uploadé
     project_id: int = Field(foreign_key="project.id")
     user_id: int = Field(foreign_key="user.id")
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -29,6 +30,7 @@ class NoteCreate(SQLModel):
     title: str
     content: Optional[str] = None
     note_type: str = "written"
+    source_file_path: Optional[str] = None
 
 
 class NoteRead(SQLModel):

@@ -4,7 +4,6 @@ from app.models.note_chunk import NoteChunk
 from app.models.note import Note
 from app.services.chunking_service import chunk_note
 from app.services.embedding_service import generate_embedding
-from app.services.faiss_service import get_faiss_manager
 from app.database import engine
 import logging
 import threading
@@ -118,25 +117,18 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
             
             logger.info(f"Génération des embeddings pour {len(chunks)} chunks de la note {note_id}")
             
-            faiss_manager = get_faiss_manager()
-            
             # Utiliser le batch processing pour générer tous les embeddings en une seule passe (beaucoup plus rapide)
             from app.services.embedding_service import generate_embeddings_batch
             
             chunk_contents = [chunk.content for chunk in chunks]
             embeddings = generate_embeddings_batch(chunk_contents, batch_size=8)
             
-            # Sauvegarder les embeddings et ajouter à FAISS
+            # Sauvegarder les embeddings dans la base de données (pgvector)
             for i, (chunk, embedding) in enumerate(zip(chunks, embeddings), 1):
                 try:
                     if embedding:
                         chunk.embedding = embedding
                         session.add(chunk)
-                        
-                        # Ajouter à FAISS
-                        embedding_list = embedding if isinstance(embedding, list) else embedding.tolist() if hasattr(embedding, 'tolist') else embedding
-                        faiss_manager.add_chunk(chunk.id, embedding_list, project_id, note_id)
-                        
                         logger.debug(f"Embedding généré pour chunk {i}/{len(chunks)} de la note {note_id}")
                     else:
                         logger.warning(f"Impossible de générer l'embedding pour le chunk {chunk.chunk_index} de la note {note_id}")
@@ -178,13 +170,6 @@ def recreate_chunks_for_note_async(note_id: int, project_id: int):
             if not note:
                 logger.error(f"Note {note_id} non trouvée pour re-création des chunks")
                 return
-            
-            # Supprimer les anciens chunks de FAISS
-            try:
-                faiss_manager = get_faiss_manager()
-                faiss_manager.remove_chunks_for_note(note.id)
-            except Exception as e:
-                logger.error(f"Erreur lors de la suppression des chunks de FAISS: {e}")
             
             # Créer les nouveaux chunks SANS embeddings (rapide)
             # create_chunks_for_note supprime déjà les anciens chunks en interne
@@ -234,13 +219,14 @@ def _ensure_embedding_workers():
                 logger.info(f"Worker d'embeddings {i+1} démarré")
 
 
-def delete_chunks_for_note(session: Session, note_id: int):
+def delete_chunks_for_note(session: Session, note_id: int, commit: bool = True):
     """
     Supprimer tous les chunks d'une note.
     
     Args:
         session: Session SQLModel
         note_id: ID de la note
+        commit: Si True, fait un commit après la suppression (par défaut: True)
     """
     statement = select(NoteChunk).where(NoteChunk.note_id == note_id)
     chunks = list(session.exec(statement).all())
@@ -248,7 +234,8 @@ def delete_chunks_for_note(session: Session, note_id: int):
     for chunk in chunks:
         session.delete(chunk)
     
-    session.commit()
+    if commit:
+        session.commit()
     logger.debug(f"Supprimé {len(chunks)} chunks pour la note {note_id}")
 
 

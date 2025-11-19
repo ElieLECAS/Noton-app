@@ -42,6 +42,10 @@
                 <i class="ti ti-plus"></i>
                 <span>Nouvelle note</span>
             </button>
+            <button onclick="showUploadDocumentModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2">
+                <i class="ti ti-upload"></i>
+                <span>Uploader un document</span>
+            </button>
         </div>
     </header>
 
@@ -227,6 +231,30 @@
         </form>
     </div>
 </div>
+
+<!-- Upload Document Modal -->
+<div id="upload-document-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
+        <h2 class="text-xl font-bold mb-4">Uploader un document</h2>
+        <form id="upload-document-form" onsubmit="uploadDocument(event)">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Fichier</label>
+                <input type="file" id="document-file-input" name="file" required accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.txt,.md,.jpg,.jpeg,.png" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                <p class="text-xs text-gray-500 mt-1">Formats supportés: PDF, DOCX, XLSX, PPTX, images, texte</p>
+            </div>
+            <div id="upload-progress" class="hidden mb-4">
+                <div class="bg-gray-200 rounded-full h-2.5">
+                    <div id="upload-progress-bar" class="bg-green-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <p id="upload-status" class="text-sm text-gray-600 mt-2">Traitement en cours...</p>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="hideUploadDocumentModal()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Annuler</button>
+                <button type="submit" id="upload-submit-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Uploader</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}
@@ -242,6 +270,94 @@
     function hideCreateNoteModal() {
         document.getElementById('create-note-modal').classList.add('hidden');
         document.getElementById('create-note-form').reset();
+    }
+
+    function showUploadDocumentModal() {
+        document.getElementById('upload-document-modal').classList.remove('hidden');
+    }
+
+    function hideUploadDocumentModal() {
+        document.getElementById('upload-document-modal').classList.add('hidden');
+        document.getElementById('upload-document-form').reset();
+        document.getElementById('upload-progress').classList.add('hidden');
+        document.getElementById('upload-progress-bar').style.width = '0%';
+    }
+
+    async function uploadDocument(event) {
+        event.preventDefault();
+        const fileInput = document.getElementById('document-file-input');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            showNotification('❌ Veuillez sélectionner un fichier', 'error');
+            return;
+        }
+        
+        // Afficher la barre de progression
+        const progressDiv = document.getElementById('upload-progress');
+        const progressBar = document.getElementById('upload-progress-bar');
+        const statusText = document.getElementById('upload-status');
+        const submitBtn = document.getElementById('upload-submit-btn');
+        
+        progressDiv.classList.remove('hidden');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Upload en cours...';
+        
+        try {
+            // Créer FormData pour l'upload
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            statusText.textContent = 'Upload du fichier...';
+            progressBar.style.width = '30%';
+            
+            const token = localStorage.getItem('authToken');
+            const response = await fetch(`/api/projects/${projectId}/documents`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+            
+            progressBar.style.width = '70%';
+            statusText.textContent = 'Traitement du document...';
+            
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ detail: 'Erreur inconnue' }));
+                throw new Error(errorData.detail || 'Erreur lors de l\'upload');
+            }
+            
+            progressBar.style.width = '100%';
+            statusText.textContent = 'Document traité avec succès !';
+            
+            const newNote = await response.json();
+            console.log('Document uploadé:', newNote);
+            
+            // Attendre un peu pour voir la progression complète
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Fermer le modal
+            hideUploadDocumentModal();
+            
+            // Recharger les notes
+            await loadNotes();
+            
+            // Redémarrer le polling après upload d'un document
+            stopEmbeddingStatusPolling();
+            startEmbeddingStatusPolling();
+            
+            // Afficher une notification de succès
+            showNotification('✅ Document uploadé et traité avec succès !', 'success');
+            
+        } catch (error) {
+            console.error('Erreur lors de l\'upload:', error);
+            showNotification(`❌ Erreur lors de l'upload: ${error.message}`, 'error');
+            progressDiv.classList.add('hidden');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Uploader';
+        }
     }
 
     // Gérer l'ouverture/fermeture du chatbot
@@ -511,8 +627,8 @@
                         </div>
                         <p class="text-gray-600 whitespace-pre-wrap line-clamp-6 mb-4 leading-relaxed">${note.content || '<span class="text-gray-400 italic">Pas de contenu</span>'}</p>
                         <div class="flex items-center gap-2 text-xs text-gray-400 pt-3 border-t border-gray-100">
-                            <i class="ti ti-${note.note_type === 'written' ? 'pencil' : 'microphone'}"></i>
-                            <span>Note ${note.note_type === 'written' ? 'écrite' : 'vocale'}</span>
+                            <i class="ti ti-${note.note_type === 'written' ? 'pencil' : note.note_type === 'voice' ? 'microphone' : 'file-text'}"></i>
+                            <span>${note.note_type === 'written' ? 'Note écrite' : note.note_type === 'voice' ? 'Note vocale' : 'Document'}</span>
                             <span>•</span>
                             <span>Modifiée le ${new Date(note.updated_at).toLocaleDateString('fr-FR')} à ${new Date(note.updated_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
