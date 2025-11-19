@@ -14,6 +14,7 @@ pydantic-settings>=2.3.0,<3.0.0
 pgvector==0.2.4
 # Pinning compatible versions to avoid dependency conflicts
 numpy==1.26.4
+torch  # Version CPU (plus légère que torch avec CUDA)
 docling==2.8.3
 python-magic
 pillow

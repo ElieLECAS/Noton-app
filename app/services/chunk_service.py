@@ -49,13 +49,18 @@ def create_chunks_for_note(session: Session, note: Note, generate_embeddings: bo
                 logger.warning(f"Impossible de générer l'embedding pour le chunk {chunk.chunk_index} de la note {note.id}")
     
     # Sauvegarder les chunks dans la DB
-    for chunk in chunks:
-        session.add(chunk)
-    
-    session.commit()
-    
-    logger.info(f"Créé {len(chunks)} chunks pour la note {note.id} (embeddings: {'oui' if generate_embeddings else 'non, sera fait en arrière-plan'})")
-    return chunks
+    try:
+        for chunk in chunks:
+            session.add(chunk)
+        
+        session.commit()
+        
+        logger.info(f"Créé {len(chunks)} chunks pour la note {note.id} (embeddings: {'oui' if generate_embeddings else 'non, sera fait en arrière-plan'})")
+        return chunks
+    except Exception as e:
+        logger.error(f"Erreur lors de la sauvegarde des chunks pour la note {note.id}: {e}", exc_info=True)
+        session.rollback()
+        raise
 
 
 def _generate_embeddings_worker():

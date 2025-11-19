@@ -46,12 +46,16 @@ def create_note(session: Session, note_create: NoteCreate, project_id: int, user
     session.refresh(note)
     
     # Créer les chunks avec embeddings IMMÉDIATEMENT (synchrone)
-    try:
-        chunks = create_chunks_for_note(session, note, generate_embeddings=True)
-        logger.info(f"✅ {len(chunks)} chunks créés avec embeddings pour la note '{note.title}'")
-    except Exception as e:
-        logger.error(f"❌ Erreur lors de la création des chunks pour la note '{note.title}': {e}", exc_info=True)
-        # Ne pas bloquer la création si les chunks échouent
+    # SAUF si le statut est 'pending' (documents en cours de traitement)
+    if note.processing_status != 'pending':
+        try:
+            chunks = create_chunks_for_note(session, note, generate_embeddings=True)
+            logger.info(f"✅ {len(chunks)} chunks créés avec embeddings pour la note '{note.title}'")
+        except Exception as e:
+            logger.error(f"❌ Erreur lors de la création des chunks pour la note '{note.title}': {e}", exc_info=True)
+            # Ne pas bloquer la création si les chunks échouent
+    else:
+        logger.info(f"⏳ Note '{note.title}' créée avec statut 'pending', chunks seront créés après traitement")
     
     logger.info(f"📝 Note {note.id} créée avec succès")
     return note

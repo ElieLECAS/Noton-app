@@ -235,12 +235,16 @@
 <!-- Upload Document Modal -->
 <div id="upload-document-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
-        <h2 class="text-xl font-bold mb-4">Uploader un document</h2>
+        <h2 class="text-xl font-bold mb-4">Uploader des documents</h2>
         <form id="upload-document-form" onsubmit="uploadDocument(event)">
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Fichier</label>
-                <input type="file" id="document-file-input" name="file" required accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.txt,.md,.jpg,.jpeg,.png" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-                <p class="text-xs text-gray-500 mt-1">Formats supportés: PDF, DOCX, XLSX, PPTX, images, texte</p>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Fichiers</label>
+                <input type="file" id="document-file-input" name="files" multiple required accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.txt,.md,.jpg,.jpeg,.png,.csv" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                <p class="text-xs text-gray-500 mt-1">Formats supportés: PDF, DOCX, XLSX, PPTX, CSV, images, texte. Vous pouvez sélectionner plusieurs fichiers.</p>
+            </div>
+            <div id="upload-files-list" class="hidden mb-4 max-h-40 overflow-y-auto border border-gray-200 rounded-lg p-2">
+                <p class="text-xs font-medium text-gray-700 mb-2">Fichiers sélectionnés:</p>
+                <ul id="upload-files-list-items" class="text-xs text-gray-600 space-y-1"></ul>
             </div>
             <div id="upload-progress" class="hidden mb-4">
                 <div class="bg-gray-200 rounded-full h-2.5">
@@ -281,15 +285,43 @@
         document.getElementById('upload-document-form').reset();
         document.getElementById('upload-progress').classList.add('hidden');
         document.getElementById('upload-progress-bar').style.width = '0%';
+        document.getElementById('upload-files-list').classList.add('hidden');
+        document.getElementById('upload-files-list-items').innerHTML = '';
     }
+
+    // Afficher la liste des fichiers sélectionnés
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('document-file-input');
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                const filesList = document.getElementById('upload-files-list');
+                const filesListItems = document.getElementById('upload-files-list-items');
+                const files = this.files;
+                
+                if (files.length > 0) {
+                    filesList.classList.remove('hidden');
+                    filesListItems.innerHTML = '';
+                    Array.from(files).forEach((file, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'flex items-center gap-2';
+                        li.innerHTML = `<i class="ti ti-file text-gray-400"></i><span>${file.name}</span><span class="text-gray-400">(${(file.size / 1024).toFixed(1)} KB)</span>`;
+                        filesListItems.appendChild(li);
+                    });
+                } else {
+                    filesList.classList.add('hidden');
+                    filesListItems.innerHTML = '';
+                }
+            });
+        }
+    });
 
     async function uploadDocument(event) {
         event.preventDefault();
         const fileInput = document.getElementById('document-file-input');
-        const file = fileInput.files[0];
+        const files = fileInput.files;
         
-        if (!file) {
-            showNotification('❌ Veuillez sélectionner un fichier', 'error');
+        if (!files || files.length === 0) {
+            showNotification('❌ Veuillez sélectionner au moins un fichier', 'error');
             return;
         }
         
@@ -304,11 +336,13 @@
         submitBtn.textContent = 'Upload en cours...';
         
         try {
-            // Créer FormData pour l'upload
+            // Créer FormData pour l'upload de plusieurs fichiers
             const formData = new FormData();
-            formData.append('file', file);
+            Array.from(files).forEach(file => {
+                formData.append('files', file);
+            });
             
-            statusText.textContent = 'Upload du fichier...';
+            statusText.textContent = `Upload de ${files.length} fichier(s)...`;
             progressBar.style.width = '30%';
             
             const token = localStorage.getItem('authToken');
@@ -320,35 +354,31 @@
                 body: formData
             });
             
-            progressBar.style.width = '70%';
-            statusText.textContent = 'Traitement du document...';
-            
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ detail: 'Erreur inconnue' }));
                 throw new Error(errorData.detail || 'Erreur lors de l\'upload');
             }
             
             progressBar.style.width = '100%';
-            statusText.textContent = 'Document traité avec succès !';
+            statusText.textContent = `${files.length} document(s) uploadé(s), traitement en arrière-plan...`;
             
-            const newNote = await response.json();
-            console.log('Document uploadé:', newNote);
+            const result = await response.json();
+            console.log('Documents uploadés:', result);
             
-            // Attendre un peu pour voir la progression complète
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            // Fermer le modal
+            // Fermer immédiatement le modal (le traitement se fait en arrière-plan)
+            await new Promise(resolve => setTimeout(resolve, 300));
             hideUploadDocumentModal();
             
-            // Recharger les notes
+            // Recharger les notes pour afficher les nouvelles notes avec statut "pending"
             await loadNotes();
             
-            // Redémarrer le polling après upload d'un document
+            // Redémarrer le polling après upload de documents
             stopEmbeddingStatusPolling();
             startEmbeddingStatusPolling();
             
-            // Afficher une notification de succès
-            showNotification('✅ Document uploadé et traité avec succès !', 'success');
+            // Afficher une notification
+            const fileCount = files.length;
+            showNotification(`✅ ${fileCount} document(s) uploadé(s) ! Traitement en cours...`, 'success');
             
         } catch (error) {
             console.error('Erreur lors de l\'upload:', error);
@@ -517,6 +547,24 @@
         }
     }
 
+    function getProcessingStatusIcon(status) {
+        if (!status) {
+            return '';
+        }
+        switch(status) {
+            case 'pending':
+                return '<i class="ti ti-clock text-yellow-500" title="Traitement en attente"></i>';
+            case 'processing':
+                return '<i class="ti ti-loader-2 animate-spin text-blue-500" title="Traitement du document en cours..."></i>';
+            case 'completed':
+                return '<i class="ti ti-check text-green-500" title="Document traité"></i>';
+            case 'failed':
+                return '<i class="ti ti-alert-circle text-red-500" title="Erreur lors du traitement"></i>';
+            default:
+                return '';
+        }
+    }
+
     // Vérifier le statut des embeddings pour une note
     async function checkEmbeddingStatus(noteId) {
         try {
@@ -555,6 +603,19 @@
             }
         } else {
             console.warn(`Élément de note non trouvé pour la note ${noteId}`);
+        }
+    }
+
+    // Mettre à jour l'icône de statut de traitement pour une note spécifique
+    function updateNoteProcessingIcon(noteId, status) {
+        const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
+        if (noteElement) {
+            const iconContainer = noteElement.querySelector('.processing-status-icon');
+            if (iconContainer) {
+                const newIcon = getProcessingStatusIcon(status);
+                iconContainer.innerHTML = newIcon;
+                console.log(`Icône de traitement mise à jour pour la note ${noteId}: ${status}`);
+            }
         }
     }
 
@@ -597,15 +658,20 @@
                     // Afficher "pending" par défaut pendant le chargement
                     const statusIcon = getEmbeddingStatusIcon('pending');
                     
+                    // Obtenir l'icône de statut de traitement pour les documents
+                    const processingIcon = getProcessingStatusIcon(note.processing_status);
+                    
                     return `
                     <div 
                         class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200 cursor-pointer note-card flex-shrink-0 group" 
                         data-note-id="${note.id}"
+                        ${note.note_type === 'document' && note.processing_status ? `data-processing-status="${note.processing_status}"` : ''}
                         onclick="window.location.href='/notes/${note.id}/edit'"
                     >
                         <div class="flex items-start justify-between mb-3">
                             <div class="flex items-center gap-2 flex-1 min-w-0">
                                 <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">${note.title}</h3>
+                                ${note.note_type === 'document' ? `<span class="processing-status-icon flex-shrink-0" title="Statut de traitement">${processingIcon}</span>` : ''}
                                 <span class="embedding-status-icon flex-shrink-0">${statusIcon}</span>
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0" onclick="event.stopPropagation()">
@@ -639,6 +705,13 @@
                 // Ensuite, vérifier les statuts d'embedding pour toutes les notes et mettre à jour les icônes
                 const statusPromises = notes.map(note => checkEmbeddingStatus(note.id));
                 await Promise.all(statusPromises);
+                
+                // Mettre à jour les icônes de statut de traitement pour les documents
+                notes.forEach(note => {
+                    if (note.note_type === 'document' && note.processing_status) {
+                        updateNoteProcessingIcon(note.id, note.processing_status);
+                    }
+                });
             }
         }
     }
@@ -1022,6 +1095,24 @@
                         // Continuer le polling seulement si on a des notes en cours de traitement
                         // "none" signifie qu'il n'y a pas de chunks, donc pas besoin de continuer à vérifier
                         if (status.status === 'processing' || status.status === 'pending') {
+                                hasProcessingOrPending = true;
+                            }
+                        }
+                        
+                        // Vérifier aussi le statut de traitement pour les documents
+                        if (note.note_type === 'document' && note.processing_status) {
+                            const noteElement = document.querySelector(`[data-note-id="${note.id}"]`);
+                            const previousProcessingStatus = noteElement?.getAttribute('data-processing-status');
+                            if (previousProcessingStatus !== note.processing_status) {
+                                hasChanges = true;
+                                updateNoteProcessingIcon(note.id, note.processing_status);
+                                if (noteElement) {
+                                    noteElement.setAttribute('data-processing-status', note.processing_status);
+                                }
+                            }
+                            
+                            // Continuer le polling si le document est en cours de traitement
+                            if (note.processing_status === 'pending' || note.processing_status === 'processing') {
                                 hasProcessingOrPending = true;
                             }
                         }

@@ -2,9 +2,64 @@ from typing import Optional
 import logging
 import os
 from pathlib import Path
-from docling.document_converter import DocumentConverter
+import threading
+import time
+from queue import Queue
+from sqlmodel import Session
+from app.config import settings
+from app.database import engine
+from app.models.note import Note
+from app.services.chunk_service import create_chunks_for_note, generate_embeddings_for_chunks_async
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
+
+# File d'attente pour limiter le nombre de traitements de documents simultanés
+document_queue = Queue()
+MAX_CONCURRENT_DOCUMENTS = 1  # Limiter à 1 traitement à la fois pour éviter 100% CPU
+document_workers = []
+_document_workers_lock = threading.Lock()  # Lock pour la synchronisation des workers
+
+# Configurer PyTorch pour CPU avant l'import de docling
+# Cela évite les warnings sur pin_memory et optimise pour CPU
+try:
+    import torch
+    
+    # Désactiver cuDNN (inutile sans GPU)
+    torch.backends.cudnn.enabled = False
+    
+    # Configurer le nombre de threads PyTorch
+    if settings.TORCH_NUM_THREADS is not None:
+        torch.set_num_threads(settings.TORCH_NUM_THREADS)
+        logger.info(f"PyTorch configuré avec {settings.TORCH_NUM_THREADS} threads")
+    else:
+        logger.info("PyTorch configuré pour utiliser tous les cœurs CPU disponibles")
+    
+    # Configurer les variables d'environnement pour OpenMP (utilisé par PyTorch)
+    # Supprimer OMP_NUM_THREADS si elle est définie avec une valeur invalide
+    if 'OMP_NUM_THREADS' in os.environ:
+        omp_value = os.environ['OMP_NUM_THREADS'].strip()
+        # Vérifier si la valeur est vide ou invalide
+        if not omp_value or not omp_value.isdigit() or int(omp_value) <= 0:
+            invalid_value = omp_value
+            del os.environ['OMP_NUM_THREADS']
+            logger.debug(f"OMP_NUM_THREADS supprimé de l'environnement (valeur invalide: '{invalid_value}')")
+    
+    # Configurer OMP_NUM_THREADS depuis les settings
+    if settings.OMP_NUM_THREADS is not None and settings.OMP_NUM_THREADS > 0:
+        os.environ['OMP_NUM_THREADS'] = str(settings.OMP_NUM_THREADS)
+        logger.info(f"OMP_NUM_THREADS configuré à {settings.OMP_NUM_THREADS}")
+    elif 'OMP_NUM_THREADS' not in os.environ:
+        # Si OMP_NUM_THREADS n'est pas défini, docling utilisera sa valeur par défaut
+        logger.debug("OMP_NUM_THREADS non défini, docling utilisera sa valeur par défaut")
+    
+    # Désactiver les optimisations GPU
+    os.environ['CUDA_VISIBLE_DEVICES'] = ''  # Forcer CPU uniquement
+    
+except ImportError:
+    logger.warning("PyTorch non disponible, certaines optimisations CPU ne seront pas appliquées")
+
+from docling.document_converter import DocumentConverter
 
 
 def process_document(file_path: str) -> Optional[str]:
@@ -86,4 +141,139 @@ def save_uploaded_file(file_content: bytes, filename: str, upload_dir: str = "me
     except Exception as e:
         logger.error(f"Erreur lors de la sauvegarde du fichier {filename}: {e}", exc_info=True)
         return None
+
+
+def _process_document_worker():
+    """Worker thread qui traite les documents depuis la file d'attente"""
+    logger.info("Worker de traitement de documents démarré et en attente de tâches...")
+    while True:
+        task = None
+        try:
+            task = document_queue.get()
+            if task is None:  # Signal d'arrêt
+                logger.info("Signal d'arrêt reçu, arrêt du worker de documents")
+                break
+            
+            note_id, file_path = task
+            logger.info(f"Worker traite le document pour la note {note_id}")
+            _process_document_for_note(note_id, file_path)
+            document_queue.task_done()
+            logger.info(f"Worker a terminé le traitement du document pour la note {note_id}")
+            
+            # Délai entre les documents pour éviter de surcharger le CPU
+            time.sleep(0.5)
+            
+        except Exception as e:
+            logger.error(f"Erreur dans le worker de traitement de documents: {e}", exc_info=True)
+            if task:
+                document_queue.task_done()
+
+
+def _process_document_for_note(note_id: int, file_path: str):
+    """
+    Traiter un document pour une note (appelé par le worker).
+    
+    Args:
+        note_id: ID de la note
+        file_path: Chemin vers le fichier à traiter
+    """
+    try:
+        logger.info(f"Démarrage du traitement du document pour la note {note_id}")
+        
+        # Créer une nouvelle session pour ce thread
+        with Session(engine) as session:
+            # Récupérer la note
+            note = session.get(Note, note_id)
+            if not note:
+                logger.error(f"Note {note_id} non trouvée pour traitement de document")
+                return
+            
+            # Mettre à jour le statut à 'processing'
+            note.processing_status = 'processing'
+            note.updated_at = datetime.utcnow()
+            session.add(note)
+            session.commit()
+            
+            # Traiter le document avec docling
+            markdown_content = process_document(file_path)
+            
+            if not markdown_content:
+                # Erreur lors du traitement
+                note.processing_status = 'failed'
+                note.content = "❌ Erreur lors du traitement du document. Le fichier peut être corrompu ou dans un format non supporté."
+                note.updated_at = datetime.utcnow()
+                session.add(note)
+                session.commit()
+                logger.error(f"Échec du traitement du document pour la note {note_id}")
+                return
+            
+            # Mettre à jour la note avec le contenu markdown
+            note.content = markdown_content
+            note.processing_status = 'completed'
+            note.updated_at = datetime.utcnow()
+            session.add(note)
+            session.commit()
+            
+            logger.info(f"Document traité avec succès pour la note {note_id} ({len(markdown_content)} caractères)")
+            
+            # Créer les chunks (sans embeddings, rapide)
+            try:
+                chunks = create_chunks_for_note(session, note, generate_embeddings=False)
+                logger.info(f"Créé {len(chunks)} chunks pour la note {note_id}")
+                
+                # Ajouter la génération d'embeddings à la file d'embeddings
+                if chunks:
+                    generate_embeddings_for_chunks_async(note.id, note.project_id)
+                    logger.info(f"Tâche de génération d'embeddings ajoutée à la file pour la note {note_id}")
+            except Exception as e:
+                logger.error(f"Erreur lors de la création des chunks pour la note {note_id}: {e}", exc_info=True)
+                # Ne pas marquer la note comme failed si les chunks échouent, le contenu est déjà traité
+            
+    except Exception as e:
+        logger.error(f"Erreur lors du traitement du document pour la note {note_id}: {e}", exc_info=True)
+        # Marquer la note comme failed en cas d'erreur
+        try:
+            with Session(engine) as session:
+                note = session.get(Note, note_id)
+                if note:
+                    note.processing_status = 'failed'
+                    note.content = f"❌ Erreur lors du traitement du document: {str(e)}"
+                    note.updated_at = datetime.utcnow()
+                    session.add(note)
+                    session.commit()
+        except Exception as update_error:
+            logger.error(f"Erreur lors de la mise à jour du statut d'erreur pour la note {note_id}: {update_error}")
+
+
+def process_document_async(note_id: int, file_path: str):
+    """
+    Ajouter un document à la file d'attente pour traitement en arrière-plan.
+    Cette fonction est non-bloquante et retourne immédiatement.
+    
+    Args:
+        note_id: ID de la note
+        file_path: Chemin vers le fichier à traiter
+    """
+    # S'assurer que les workers sont démarrés
+    _ensure_document_workers()
+    
+    # Ajouter la tâche à la file d'attente
+    document_queue.put((note_id, file_path))
+    queue_size = document_queue.qsize()
+    logger.info(f"✅ Tâche de traitement de document ajoutée à la file pour la note {note_id} (taille de la file: {queue_size})")
+
+
+def _ensure_document_workers():
+    """S'assurer que les workers de traitement de documents sont démarrés"""
+    global document_workers
+    
+    with _document_workers_lock:
+        if not document_workers or not any(w.is_alive() for w in document_workers):
+            # Redémarrer les workers s'ils sont morts
+            document_workers = []
+            for i in range(MAX_CONCURRENT_DOCUMENTS):
+                worker = threading.Thread(target=_process_document_worker, daemon=True)
+                worker.start()
+                document_workers.append(worker)
+                logger.info(f"Worker de traitement de documents {i+1} démarré")
 

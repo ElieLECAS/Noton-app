@@ -15,6 +15,7 @@ class Note(SQLModel, table=True):
     content: Optional[str] = None
     note_type: str = Field(default="written")  # 'written', 'voice', ou 'document'
     source_file_path: Optional[str] = None  # Chemin du fichier original si document uploadé
+    processing_status: str = Field(default="completed")  # 'pending', 'processing', 'completed', 'failed'
     project_id: int = Field(foreign_key="project.id")
     user_id: int = Field(foreign_key="user.id")
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -31,6 +32,7 @@ class NoteCreate(SQLModel):
     content: Optional[str] = None
     note_type: str = "written"
     source_file_path: Optional[str] = None
+    processing_status: str = "completed"
 
 
 class NoteRead(SQLModel):
@@ -38,6 +40,7 @@ class NoteRead(SQLModel):
     title: str
     content: Optional[str] = None
     note_type: str
+    processing_status: str
     project_id: int
     user_id: int
     created_at: datetime

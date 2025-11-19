@@ -12,7 +12,7 @@ from app.services.note_service import (
     update_note,
     delete_note
 )
-from app.services.document_service import process_document, save_uploaded_file
+from app.services.document_service import process_document, save_uploaded_file, process_document_async
 from pydantic import BaseModel
 import logging
 
@@ -115,67 +115,85 @@ async def delete_existing_note(
         )
 
 
-@router.post("/projects/{project_id}/documents", response_model=NoteRead, status_code=status.HTTP_201_CREATED)
+@router.post("/projects/{project_id}/documents", response_model=List[NoteRead], status_code=status.HTTP_201_CREATED)
 async def upload_document(
     project_id: int,
-    file: UploadFile = File(...),
+    files: List[UploadFile] = File(...),
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
     """
-    Uploader et traiter un document avec docling.
-    Le document est converti en markdown et créé comme une note.
+    Uploader un ou plusieurs documents. Les documents seront traités en arrière-plan.
+    Des notes sont créées immédiatement avec le statut 'pending' et le contenu "Traitement en cours...".
     """
-    try:
-        # Lire le contenu du fichier
-        file_content = await file.read()
-        
-        # Sauvegarder le fichier temporairement
-        file_path = save_uploaded_file(file_content, file.filename)
-        if not file_path:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Erreur lors de la sauvegarde du fichier"
-            )
-        
-        # Traiter le document avec docling
-        markdown_content = process_document(file_path)
-        if not markdown_content:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Erreur lors du traitement du document"
-            )
-        
-        # Créer une note avec le contenu markdown
-        # Utiliser le nom du fichier comme titre (sans l'extension)
-        import os
-        filename_without_ext = os.path.splitext(file.filename)[0]
-        
-        note_create = NoteCreate(
-            title=filename_without_ext,
-            content=markdown_content,
-            note_type="document",
-            source_file_path=file_path
+    if not files:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Aucun fichier fourni"
         )
-        
-        note = create_note(session, note_create, project_id, current_user.id)
-        if not note:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Projet non trouvé"
+    
+    import os
+    created_notes = []
+    errors = []
+    
+    for file in files:
+        filename = file.filename or "fichier_inconnu"
+        try:
+            # Lire le contenu du fichier
+            file_content = await file.read()
+            
+            # Sauvegarder le fichier
+            file_path = save_uploaded_file(file_content, filename)
+            if not file_path:
+                errors.append(f"Erreur lors de la sauvegarde du fichier '{filename}'")
+                continue
+            
+            # Créer une note immédiatement avec statut 'pending'
+            # Utiliser le nom du fichier comme titre (sans l'extension)
+            filename_without_ext = os.path.splitext(filename)[0]
+            
+            note_create = NoteCreate(
+                title=filename_without_ext,
+                content="⏳ Traitement en cours...",
+                note_type="document",
+                source_file_path=file_path,
+                processing_status="pending"
             )
-        
-        logger.info(f"Document '{file.filename}' uploadé et traité avec succès (note ID: {note.id})")
-        return NoteRead.model_validate(note)
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Erreur lors de l'upload du document: {e}", exc_info=True)
+            
+            logger.info(f"Création de la note pour le document '{filename}' dans le projet {project_id}")
+            note = create_note(session, note_create, project_id, current_user.id)
+            if not note:
+                errors.append(f"Projet non trouvé pour le fichier '{filename}'")
+                continue
+            
+            # Ajouter le traitement à la file d'attente (non-bloquant)
+            process_document_async(note.id, file_path)
+            
+            created_notes.append(note)
+            logger.info(f"Document '{filename}' uploadé, traitement en arrière-plan (note ID: {note.id})")
+            
+        except Exception as e:
+            logger.error(f"Erreur lors de l'upload du document '{filename}': {e}", exc_info=True)
+            errors.append(f"Erreur lors de l'upload de '{filename}': {str(e)}")
+            continue
+    
+    # Si aucun fichier n'a pu être traité
+    if not created_notes:
+        if errors:
+            error_message = "; ".join(errors)
+        else:
+            error_message = "Aucun fichier n'a pu être uploadé"
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors du traitement du document: {str(e)}"
+            detail=error_message
         )
+    
+    # Si certains fichiers ont échoué, on retourne quand même les notes créées
+    # mais on log les erreurs
+    if errors:
+        logger.warning(f"Certains fichiers n'ont pas pu être uploadés: {errors}")
+    
+    return [NoteRead.model_validate(note) for note in created_notes]
 
 
 @router.get("/notes/{note_id}/embedding-status", response_model=EmbeddingStatus)

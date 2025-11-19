@@ -73,6 +73,14 @@ async def startup_event():
         logger.info("Workers d'embeddings démarrés")
     except Exception as e:
         logger.error(f"Erreur lors du démarrage des workers d'embeddings: {e}")
+    
+    # Démarrer les workers pour le traitement de documents en arrière-plan
+    try:
+        from app.services.document_service import _ensure_document_workers
+        _ensure_document_workers()
+        logger.info("Workers de traitement de documents démarrés")
+    except Exception as e:
+        logger.error(f"Erreur lors du démarrage des workers de traitement de documents: {e}")
 
 
 @app.get("/", response_class=HTMLResponse)

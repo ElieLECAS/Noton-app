@@ -47,6 +47,14 @@ services:
             - OLLAMA_BASE_URL=http://ollama:11434
             - OPENAI_API_KEY=${OPENAI_API_KEY}
             - OPENAI_MODEL=${OPENAI_MODEL}
+            # Optimisations CPU pour Docling/EasyOCR
+            - DOCLING_CPU_ONLY=${DOCLING_CPU_ONLY:-true}
+            # TORCH_NUM_THREADS et OMP_NUM_THREADS sont optionnelles
+            # Le code Python gérera automatiquement les chaînes vides si définies
+            # Si ces variables ne sont pas définies dans l'environnement hôte,
+            # elles ne seront pas définies dans le conteneur (le code Python les gère correctement)
+            - TORCH_NUM_THREADS=${TORCH_NUM_THREADS}
+            - OMP_NUM_THREADS=${OMP_NUM_THREADS}
         depends_on:
             db:
                 condition: service_healthy
