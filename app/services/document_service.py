@@ -14,8 +14,10 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-# File d'attente pour limiter le nombre de traitements de documents simultanés
-document_queue = Queue()
+# Files d'attente par projet pour traiter les documents séquentiellement par projet
+project_queues: dict[int, Queue] = {}
+project_locks: dict[int, threading.Lock] = {}
+_queues_lock = threading.Lock()  # Lock pour protéger les dictionnaires de queues et locks
 document_workers = []
 _document_workers_lock = threading.Lock()  # Lock pour la synchronisation des workers
 
@@ -143,29 +145,106 @@ def save_uploaded_file(file_content: bytes, filename: str, upload_dir: str = "me
 
 
 def _process_document_worker():
-    """Worker thread qui traite les documents depuis la file d'attente"""
+    """Worker thread qui traite les documents depuis les files d'attente par projet"""
     logger.info("Worker de traitement de documents démarré et en attente de tâches...")
     while True:
         task = None
+        project_id = None
+        project_lock = None
+        lock_acquired = False
         try:
-            task = document_queue.get()
-            if task is None:  # Signal d'arrêt
-                logger.info("Signal d'arrêt reçu, arrêt du worker de documents")
-                break
+            # Parcourir les projets qui ont des documents en attente
+            with _queues_lock:
+                available_projects = [
+                    pid for pid, queue in project_queues.items() 
+                    if not queue.empty()
+                ]
             
-            note_id, file_path = task
-            logger.info(f"Worker traite le document pour la note {note_id}")
-            _process_document_for_note(note_id, file_path)
-            document_queue.task_done()
-            logger.info(f"Worker a terminé le traitement du document pour la note {note_id}")
+            if not available_projects:
+                # Aucun projet avec des documents, attendre un peu avant de réessayer
+                time.sleep(1)
+                continue
             
-            # Délai entre les documents pour éviter de surcharger le CPU
-            time.sleep(0.5)
+            # Essayer d'acquérir le verrou d'un projet disponible
+            for pid in available_projects:
+                with _queues_lock:
+                    if pid not in project_locks:
+                        # Créer le lock si nécessaire
+                        project_locks[pid] = threading.Lock()
+                    project_lock = project_locks[pid]
+                
+                # Essayer d'acquérir le verrou de manière non-bloquante
+                if project_lock.acquire(blocking=False):
+                    lock_acquired = True
+                    try:
+                        # Prendre un document de la queue du projet
+                        with _queues_lock:
+                            if pid not in project_queues or project_queues[pid].empty():
+                                project_lock.release()
+                                lock_acquired = False
+                                continue
+                            try:
+                                task = project_queues[pid].get(block=False)
+                            except Exception:
+                                # Queue vide entre-temps, libérer le lock et continuer
+                                project_lock.release()
+                                lock_acquired = False
+                                continue
+                        
+                        if task is None:  # Signal d'arrêt
+                            project_lock.release()
+                            lock_acquired = False
+                            logger.info("Signal d'arrêt reçu, arrêt du worker de documents")
+                            return
+                        
+                        project_id = pid
+                        note_id, file_path = task
+                        logger.info(f"Worker traite le document pour la note {note_id} (projet {project_id})")
+                        
+                        # Traiter le document
+                        _process_document_for_note(note_id, file_path)
+                        
+                        # Marquer la tâche comme terminée
+                        with _queues_lock:
+                            if project_id in project_queues:
+                                project_queues[project_id].task_done()
+                        
+                        logger.info(f"Worker a terminé le traitement du document pour la note {note_id} (projet {project_id})")
+                        
+                        # Délai entre les documents pour éviter de surcharger le CPU
+                        time.sleep(0.5)
+                        break  # Sortir de la boucle des projets après avoir traité un document
+                        
+                    except Exception as e:
+                        logger.error(f"Erreur dans le worker de traitement de documents: {e}", exc_info=True)
+                        # Marquer la tâche comme terminée même en cas d'erreur
+                        if task and project_id:
+                            try:
+                                with _queues_lock:
+                                    if project_id in project_queues:
+                                        project_queues[project_id].task_done()
+                            except Exception:
+                                pass
+                        raise
+                    finally:
+                        # Libérer le verrou du projet si acquis
+                        if lock_acquired:
+                            try:
+                                project_lock.release()
+                            except Exception:
+                                pass
+                            lock_acquired = False
+                else:
+                    # Le verrou est déjà pris par un autre worker, essayer le projet suivant
+                    continue
             
         except Exception as e:
             logger.error(f"Erreur dans le worker de traitement de documents: {e}", exc_info=True)
-            if task:
-                document_queue.task_done()
+            if lock_acquired and project_lock:
+                try:
+                    project_lock.release()
+                except Exception:
+                    pass
 
 
 def _process_document_for_note(note_id: int, file_path: str):
@@ -228,6 +307,17 @@ def _process_document_for_note(note_id: int, file_path: str):
                 logger.error(f"Erreur lors de la création des chunks pour la note {note_id}: {e}", exc_info=True)
                 # Ne pas marquer la note comme failed si les chunks échouent, le contenu est déjà traité
             
+            # Supprimer le fichier original maintenant que le contenu est extrait et stocké en BDD
+            try:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                    logger.info(f"✅ Fichier original supprimé: {file_path}")
+                else:
+                    logger.warning(f"Fichier déjà supprimé ou introuvable: {file_path}")
+            except Exception as e:
+                logger.error(f"Erreur lors de la suppression du fichier {file_path}: {e}", exc_info=True)
+                # Ne pas faire échouer le traitement si la suppression échoue
+            
     except Exception as e:
         logger.error(f"Erreur lors du traitement du document pour la note {note_id}: {e}", exc_info=True)
         # Marquer la note comme failed en cas d'erreur
@@ -253,13 +343,33 @@ def process_document_async(note_id: int, file_path: str):
         note_id: ID de la note
         file_path: Chemin vers le fichier à traiter
     """
+    # Récupérer le project_id depuis la note en BDD
+    try:
+        with Session(engine) as session:
+            note = session.get(Note, note_id)
+            if not note:
+                logger.error(f"Note {note_id} non trouvée pour ajout à la queue")
+                return
+            project_id = note.project_id
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération du project_id pour la note {note_id}: {e}", exc_info=True)
+        return
+    
     # S'assurer que les workers sont démarrés
     _ensure_document_workers()
     
-    # Ajouter la tâche à la file d'attente
-    document_queue.put((note_id, file_path))
-    queue_size = document_queue.qsize()
-    logger.info(f"✅ Tâche de traitement de document ajoutée à la file pour la note {note_id} (taille de la file: {queue_size})")
+    # Obtenir ou créer la queue et le lock pour ce projet
+    with _queues_lock:
+        if project_id not in project_queues:
+            project_queues[project_id] = Queue()
+            project_locks[project_id] = threading.Lock()
+            logger.debug(f"Queue et lock créés pour le projet {project_id}")
+        
+        # Ajouter la tâche à la queue du projet
+        project_queues[project_id].put((note_id, file_path))
+        queue_size = project_queues[project_id].qsize()
+    
+    logger.info(f"✅ Tâche de traitement de document ajoutée à la file du projet {project_id} pour la note {note_id} (taille de la file: {queue_size})")
 
 
 def _ensure_document_workers():
