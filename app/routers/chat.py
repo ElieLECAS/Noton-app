@@ -34,12 +34,11 @@ async def list_ollama_models():
 
 @router.get("/openai/models", response_model=List[str])
 async def list_openai_models():
-    """Récupérer uniquement le modèle OpenAI configuré dans .env"""
-    # Retourner uniquement le modèle configuré dans le .env si disponible
-    # On retourne le modèle même si seulement OPENAI_MODEL est défini (pour l'affichage)
+    """Récupérer les modèles OpenAI configurés dans .env"""
+    # Retourner les modèles configurés dans le .env si disponibles
     if settings.OPENAI_MODEL:
-        logger.info(f"Modèle OpenAI configuré: {settings.OPENAI_MODEL}")
-        return [settings.OPENAI_MODEL]
+        logger.info(f"Modèles OpenAI configurés: {settings.OPENAI_MODEL}")
+        return settings.OPENAI_MODEL
     else:
         logger.warning("OPENAI_MODEL n'est pas configuré dans les variables d'environnement")
         return []

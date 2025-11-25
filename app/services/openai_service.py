@@ -28,9 +28,11 @@ async def get_available_models() -> List[str]:
                     if model_id.startswith("gpt-") and "instruct" not in model_id.lower():
                         models.append(model_id)
             
-            # Ajouter le modèle depuis les settings s'il est configuré et n'est pas déjà dans la liste
-            if settings.OPENAI_MODEL and settings.OPENAI_MODEL not in models:
-                models.append(settings.OPENAI_MODEL)
+            # Ajouter les modèles depuis les settings s'ils sont configurés et ne sont pas déjà dans la liste
+            if settings.OPENAI_MODEL:
+                for model in settings.OPENAI_MODEL:
+                    if model not in models:
+                        models.append(model)
             
             # Trier et retourner les modèles
             return sorted(models)

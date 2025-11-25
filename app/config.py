@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings
 from pydantic import ConfigDict, field_validator
-from typing import Optional, Union
+from typing import Optional, Union, List
 from pathlib import Path
 
 
@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     
     # OpenAI
     OPENAI_API_KEY: Optional[str] = None
-    OPENAI_MODEL: Optional[str] = None
+    OPENAI_MODEL: Optional[List[str]] = None
     
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
@@ -27,6 +27,24 @@ class Settings(BaseSettings):
     
     # Document Processing
     MAX_CONCURRENT_DOCUMENTS: int = 5  # Nombre de documents traités en parallèle
+    
+    @field_validator('OPENAI_MODEL', mode='before')
+    @classmethod
+    def parse_openai_models(cls, v: Union[str, List[str], None]) -> Optional[List[str]]:
+        """Convertit une chaîne séparée par des virgules en liste de modèles"""
+        if v is None:
+            return None
+        if isinstance(v, str):
+            # Si c'est une chaîne vide, retourner None
+            if not v.strip():
+                return None
+            # Séparer par des virgules et nettoyer les espaces
+            models = [model.strip() for model in v.split(',') if model.strip()]
+            return models if models else None
+        # Si c'est déjà une liste, la retourner telle quelle
+        if isinstance(v, list):
+            return v if v else None
+        return None
     
     @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', mode='before')
     @classmethod
