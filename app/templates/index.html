@@ -1,5 +1,31 @@
-{% extends "base.html" %} {% block title %}Mes projets - Noton{% endblock %} {%
-block content %}
+{% extends "base.html" %} {% block title %}Mes projets - Noton{% endblock %}
+
+{% block extra_head %}
+<!-- Marked.js pour le rendu Markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- DOMPurify pour sécuriser le HTML généré -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<style>
+    /* Styles pour le rendu Markdown dans les messages du chat */
+    .markdown-content h1 { font-size: 1.5em; font-weight: bold; margin: 0.5em 0; }
+    .markdown-content h2 { font-size: 1.3em; font-weight: bold; margin: 0.5em 0; }
+    .markdown-content h3 { font-size: 1.1em; font-weight: bold; margin: 0.5em 0; }
+    .markdown-content p { margin: 0.5em 0; }
+    .markdown-content ul, .markdown-content ol { margin: 0.5em 0; padding-left: 1.5em; }
+    .markdown-content li { margin: 0.25em 0; }
+    .markdown-content strong { font-weight: bold; }
+    .markdown-content em { font-style: italic; }
+    .markdown-content code { background-color: rgba(0,0,0,0.1); padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; }
+    .dark .markdown-content code { background-color: rgba(255,255,255,0.1); }
+    .markdown-content pre { background-color: rgba(0,0,0,0.1); padding: 0.5em; border-radius: 5px; overflow-x: auto; }
+    .dark .markdown-content pre { background-color: rgba(255,255,255,0.1); }
+    .markdown-content pre code { background-color: transparent; padding: 0; }
+    .markdown-content blockquote { border-left: 3px solid rgba(0,0,0,0.2); padding-left: 1em; margin: 0.5em 0; font-style: italic; }
+    .dark .markdown-content blockquote { border-left-color: rgba(255,255,255,0.2); }
+</style>
+{% endblock %}
+
+{% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <!-- Header -->
     <header
@@ -427,12 +453,12 @@ block content %}
         assistantMessageDiv.className = "flex justify-start";
         assistantMessageDiv.innerHTML = `
             <div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-4 py-2">
-                <p class="text-gray-500 dark:text-gray-400 italic">En cours de génération...</p>
+                <div class="markdown-content text-gray-500 dark:text-gray-400 italic">En cours de génération...</div>
             </div>
         `;
         messagesContainer.appendChild(assistantMessageDiv);
         scrollChatToBottom(true); // Forcer le scroll au début du streaming
-        const assistantContent = assistantMessageDiv.querySelector("p");
+        const assistantContent = assistantMessageDiv.querySelector(".markdown-content");
 
         let fullResponse = "";
         let firstChunkReceived = false;
@@ -488,7 +514,10 @@ block content %}
                                         firstChunkReceived = true;
                                     }
                                     fullResponse += jsonData.message.content;
-                                    assistantContent.textContent = fullResponse;
+                                    // Rendre le Markdown en HTML de façon sécurisée
+                                    const rawHtml = marked.parse(fullResponse);
+                                    const cleanHtml = DOMPurify.sanitize(rawHtml);
+                                    assistantContent.innerHTML = cleanHtml;
                                     scrollChatToBottom(false); // Ne pas forcer, seulement si proche du bas
                                 } else if (jsonData.done) {
                                     // Fin du stream
@@ -541,17 +570,36 @@ block content %}
         messageDiv.className = `flex ${
             role === "user" ? "justify-end" : "justify-start"
         }`;
+        
+        // Pour les messages assistant, rendre le Markdown
+        let contentHtml;
+        if (role === "assistant") {
+            const rawHtml = marked.parse(content);
+            const cleanHtml = DOMPurify.sanitize(rawHtml);
+            contentHtml = `<div class="markdown-content">${cleanHtml}</div>`;
+        } else {
+            // Messages utilisateur en texte brut
+            contentHtml = `<p class="whitespace-pre-wrap">${escapeHtml(content)}</p>`;
+        }
+        
         messageDiv.innerHTML = `
             <div class="max-w-2xl ${
                 role === "user"
                     ? "bg-blue-600 dark:bg-blue-500 text-white"
                     : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             } rounded-lg px-4 py-2">
-                <p>${content}</p>
+                ${contentHtml}
             </div>
         `;
         messagesContainer.appendChild(messageDiv);
         scrollChatToBottom(true); // Forcer le scroll pour les nouveaux messages
+    }
+    
+    // Fonction pour échapper le HTML
+    function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     // Initialisation

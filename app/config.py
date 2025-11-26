@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     OMP_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
     
     # Document Processing
-    MAX_CONCURRENT_DOCUMENTS: int = 5  # Nombre de documents traités en parallèle
+    MAX_CONCURRENT_DOCUMENTS: int = 2  # Nombre de documents traités en parallèle (réduit pour garder des ressources pour la navigation)
     
     @field_validator('OPENAI_MODEL', mode='before')
     @classmethod

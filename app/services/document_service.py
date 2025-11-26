@@ -30,11 +30,16 @@ try:
     torch.backends.cudnn.enabled = False
     
     # Configurer le nombre de threads PyTorch
+    # Par défaut, limiter à la moitié des cœurs pour garder des ressources pour FastAPI
     if settings.TORCH_NUM_THREADS is not None:
         torch.set_num_threads(settings.TORCH_NUM_THREADS)
         logger.info(f"PyTorch configuré avec {settings.TORCH_NUM_THREADS} threads")
     else:
-        logger.info("PyTorch configuré pour utiliser tous les cœurs CPU disponibles")
+        # Limiter à la moitié des cœurs disponibles pour isoler le traitement des documents
+        import multiprocessing
+        default_threads = max(1, multiprocessing.cpu_count() // 2)
+        torch.set_num_threads(default_threads)
+        logger.info(f"PyTorch configuré avec {default_threads} threads (moitié des {multiprocessing.cpu_count()} cœurs disponibles pour isoler le traitement)")
     
     # Configurer les variables d'environnement pour OpenMP (utilisé par PyTorch)
     # Supprimer OMP_NUM_THREADS si elle est définie avec une valeur invalide
@@ -51,8 +56,11 @@ try:
         os.environ['OMP_NUM_THREADS'] = str(settings.OMP_NUM_THREADS)
         logger.info(f"OMP_NUM_THREADS configuré à {settings.OMP_NUM_THREADS}")
     elif 'OMP_NUM_THREADS' not in os.environ:
-        # Si OMP_NUM_THREADS n'est pas défini, docling utilisera sa valeur par défaut
-        logger.debug("OMP_NUM_THREADS non défini, docling utilisera sa valeur par défaut")
+        # Si OMP_NUM_THREADS n'est pas défini, limiter à la moitié des cœurs pour isoler le traitement
+        import multiprocessing
+        default_omp_threads = max(1, multiprocessing.cpu_count() // 2)
+        os.environ['OMP_NUM_THREADS'] = str(default_omp_threads)
+        logger.info(f"OMP_NUM_THREADS configuré par défaut à {default_omp_threads} (moitié des {multiprocessing.cpu_count()} cœurs disponibles)")
     
     # Désactiver les optimisations GPU
     os.environ['CUDA_VISIBLE_DEVICES'] = ''  # Forcer CPU uniquement
@@ -145,7 +153,19 @@ def save_uploaded_file(file_content: bytes, filename: str, upload_dir: str = "me
 
 
 def _process_document_worker():
-    """Worker thread qui traite les documents depuis les files d'attente par projet"""
+    """
+    Worker thread qui traite les documents depuis les files d'attente par projet.
+    Ce worker est isolé pour ne pas bloquer la navigation de l'application.
+    """
+    # Essayer de réduire la priorité du thread pour laisser de la place à FastAPI
+    try:
+        import os
+        if hasattr(os, 'nice'):
+            # Réduire la priorité du thread (Linux/Unix)
+            os.nice(5)  # Augmenter la "niceness" (priorité plus basse)
+    except Exception:
+        pass  # Ignorer si non disponible (Windows)
+    
     logger.info("Worker de traitement de documents démarré et en attente de tâches...")
     while True:
         task = None
@@ -162,7 +182,8 @@ def _process_document_worker():
             
             if not available_projects:
                 # Aucun projet avec des documents, attendre un peu avant de réessayer
-                time.sleep(1)
+                # Utiliser un sleep plus long pour réduire la consommation CPU quand il n'y a rien à faire
+                time.sleep(2)
                 continue
             
             # Essayer d'acquérir le verrou d'un projet disponible
@@ -211,8 +232,9 @@ def _process_document_worker():
                         
                         logger.info(f"Worker a terminé le traitement du document pour la note {note_id} (projet {project_id})")
                         
-                        # Délai entre les documents pour éviter de surcharger le CPU
-                        time.sleep(0.5)
+                        # Délai entre les documents pour éviter de surcharger le CPU et laisser de la place pour la navigation
+                        # Augmenter le délai pour mieux isoler le traitement
+                        time.sleep(1.0)
                         break  # Sortir de la boucle des projets après avoir traité un document
                         
                     except Exception as e:

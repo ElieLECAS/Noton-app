@@ -264,6 +264,12 @@
                 }
             }
 
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
             async function loadProjects() {
                 const response = await apiCall("/api/projects");
                 if (response && response.ok) {
@@ -274,14 +280,125 @@
                         projectsList.innerHTML = projects
                             .map(
                                 (p) => `
-                        <a href="/projects/${p.id}" class="block px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors">
-                            ${p.title}
-                        </a>
+                        <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <a href="/projects/${p.id}" class="flex-1 text-gray-700 dark:text-gray-300 cursor-pointer" data-project-title="${escapeHtml(p.title)}">
+                                <span id="project-title-${p.id}">${escapeHtml(p.title)}</span>
+                            </a>
+                            <button
+                                onclick="editProjectName(event, ${p.id})"
+                                class="opacity-0 group-hover:opacity-100 text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-opacity"
+                                title="Renommer le projet"
+                                data-project-title="${escapeHtml(p.title)}"
+                            >
+                                <i class="ti ti-pencil text-sm"></i>
+                            </button>
+                            <button
+                                onclick="deleteProject(event, ${p.id})"
+                                class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity"
+                                title="Supprimer le projet"
+                                data-project-title="${escapeHtml(p.title)}"
+                            >
+                                <i class="ti ti-trash text-sm"></i>
+                            </button>
+                        </div>
                     `
                             )
                             .join("");
                     }
                 }
+            }
+
+            async function deleteProject(event, projectId) {
+                event.stopPropagation();
+                const button = event.target.closest('button');
+                const projectTitle = button ? button.getAttribute('data-project-title') : 'ce projet';
+                if (!confirm(`Êtes-vous sûr de vouloir supprimer le projet "${projectTitle}" ? Cette action est irréversible.`)) {
+                    return;
+                }
+                const response = await apiCall(`/api/projects/${projectId}`, {
+                    method: "DELETE",
+                });
+                if (response && response.ok) {
+                    loadProjects();
+                    if (window.loadProjectsList) window.loadProjectsList();
+                    // Rediriger vers la page d'accueil si on était sur la page du projet supprimé
+                    if (window.location.pathname === `/projects/${projectId}`) {
+                        window.location.href = "/";
+                    }
+                } else {
+                    alert("Erreur lors de la suppression du projet");
+                }
+            }
+
+            function editProjectName(event, projectId) {
+                event.preventDefault();
+                event.stopPropagation();
+                const button = event.target.closest('button');
+                const currentTitle = button ? button.getAttribute('data-project-title') : '';
+                
+                const titleElement = document.getElementById(`project-title-${projectId}`);
+                if (!titleElement) return;
+                
+                const linkElement = titleElement.closest('a');
+                if (!linkElement) return;
+                
+                // Sauvegarder le contenu original du lien
+                const originalContent = linkElement.innerHTML;
+                const originalHref = linkElement.getAttribute('href');
+                
+                // Créer un input pour l'édition
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = currentTitle;
+                input.className = "w-full px-2 py-1 border border-blue-500 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
+                input.style.minWidth = "150px";
+                
+                // Remplacer le contenu du lien par l'input
+                linkElement.innerHTML = "";
+                linkElement.appendChild(input);
+                linkElement.style.pointerEvents = "none"; // Désactiver la navigation pendant l'édition
+                input.focus();
+                input.select();
+                
+                const saveEdit = async () => {
+                    const newTitle = input.value.trim();
+                    if (newTitle === currentTitle || newTitle === "") {
+                        // Annuler si pas de changement ou vide
+                        linkElement.innerHTML = originalContent;
+                        linkElement.style.pointerEvents = "";
+                        return;
+                    }
+                    
+                    const response = await apiCall(`/api/projects/${projectId}`, {
+                        method: "PUT",
+                        body: JSON.stringify({ title: newTitle }),
+                    });
+                    
+                    if (response && response.ok) {
+                        loadProjects();
+                        if (window.loadProjectsList) window.loadProjectsList();
+                    } else {
+                        alert("Erreur lors de la modification du projet");
+                        linkElement.innerHTML = originalContent;
+                        linkElement.style.pointerEvents = "";
+                    }
+                };
+                
+                const cancelEdit = () => {
+                    linkElement.innerHTML = originalContent;
+                    linkElement.style.pointerEvents = "";
+                };
+                
+                input.addEventListener("blur", saveEdit);
+                input.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        input.blur();
+                    } else if (e.key === "Escape") {
+                        e.preventDefault();
+                        cancelEdit();
+                    }
+                });
             }
 
             async function logout() {
