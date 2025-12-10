@@ -7,8 +7,8 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
-                darkMode: 'class',
-            }
+                darkMode: "class",
+            };
         </script>
         <link
             rel="stylesheet"
@@ -24,17 +24,40 @@
     <body class="bg-gray-50 dark:bg-gray-900 transition-colors">
         <div class="flex h-screen relative">
             <!-- Mobile Menu Overlay -->
-            <div id="mobile-menu-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onclick="toggleMobileMenu()"></div>
-            
+            <div
+                id="mobile-menu-overlay"
+                class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+                onclick="toggleMobileMenu()"
+            ></div>
+
             <!-- Sidebar -->
-            <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
-                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                    <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100">Noton</h1>
+            <aside
+                id="sidebar"
+                class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out"
+            >
+                <div
+                    class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between"
+                >
+                    <h1
+                        class="text-xl font-bold text-gray-900 dark:text-gray-100"
+                    >
+                        Noton
+                    </h1>
                     <div class="flex items-center gap-2">
-                        <button onclick="toggleDarkMode()" class="hidden lg:block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2" title="Basculer le thème">
-                            <i id="theme-icon-desktop" class="ti ti-sun text-xl"></i>
+                        <button
+                            onclick="toggleDarkMode()"
+                            class="hidden lg:block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2"
+                            title="Basculer le thème"
+                        >
+                            <i
+                                id="theme-icon-desktop"
+                                class="ti ti-sun text-xl"
+                            ></i>
                         </button>
-                        <button onclick="toggleMobileMenu()" class="lg:hidden text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2">
+                        <button
+                            onclick="toggleMobileMenu()"
+                            class="lg:hidden text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2"
+                        >
                             <i class="ti ti-x text-xl"></i>
                         </button>
                     </div>
@@ -53,18 +76,18 @@
                         >
                             <span
                                 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"
-                                >PROJETS</span
+                                >CONVERSATIONS</span
                             >
                             <button
-                                onclick="showCreateProjectModal()"
+                                onclick="if(typeof projectConversationsManager !== 'undefined') projectConversationsManager.createConversation(); else if(typeof conversationsManager !== 'undefined') conversationsManager.createConversation();"
                                 class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-1"
-                                title="Créer un projet"
+                                title="Nouvelle conversation"
                             >
                                 <i class="ti ti-plus"></i>
                             </button>
                         </div>
-                        <div id="projects-list" class="mt-2">
-                            <!-- Projets chargés dynamiquement -->
+                        <div id="conversations-list" class="mt-2">
+                            <!-- Conversations chargées dynamiquement -->
                         </div>
                     </div>
                 </nav>
@@ -88,12 +111,25 @@
             <!-- Main Content -->
             <main class="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
                 <!-- Mobile Header -->
-                <div class="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0">
-                    <button onclick="toggleMobileMenu()" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2">
+                <div
+                    class="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0"
+                >
+                    <button
+                        onclick="toggleMobileMenu()"
+                        class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2"
+                    >
                         <i class="ti ti-menu-2 text-xl"></i>
                     </button>
-                    <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Noton</h1>
-                    <button onclick="toggleDarkMode()" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2" title="Basculer le thème">
+                    <h1
+                        class="text-lg font-bold text-gray-900 dark:text-gray-100"
+                    >
+                        Noton
+                    </h1>
+                    <button
+                        onclick="toggleDarkMode()"
+                        class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2"
+                        title="Basculer le thème"
+                    >
                         <i id="theme-icon" class="ti ti-sun text-xl"></i>
                     </button>
                 </div>
@@ -106,8 +142,14 @@
             id="create-project-modal"
             class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
         >
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-                <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Créer un nouveau projet</h2>
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
+            >
+                <h2
+                    class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100"
+                >
+                    Créer un nouveau projet
+                </h2>
                 <form id="create-project-form" onsubmit="createProject(event)">
                     <div class="mb-4">
                         <label
@@ -160,29 +202,39 @@
 
             // Gérer le dark mode
             function initDarkMode() {
-                const isDark = localStorage.getItem('darkMode') === 'true' || 
-                              (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                const isDark =
+                    localStorage.getItem("darkMode") === "true" ||
+                    (!localStorage.getItem("darkMode") &&
+                        window.matchMedia("(prefers-color-scheme: dark)")
+                            .matches);
                 if (isDark) {
-                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.add("dark");
                 }
                 updateThemeIcon();
             }
 
             function toggleDarkMode() {
-                const isDark = document.documentElement.classList.toggle('dark');
-                localStorage.setItem('darkMode', isDark);
+                const isDark =
+                    document.documentElement.classList.toggle("dark");
+                localStorage.setItem("darkMode", isDark);
                 updateThemeIcon();
             }
 
             function updateThemeIcon() {
-                const icon = document.getElementById('theme-icon');
-                const iconDesktop = document.getElementById('theme-icon-desktop');
-                const isDark = document.documentElement.classList.contains('dark');
+                const icon = document.getElementById("theme-icon");
+                const iconDesktop =
+                    document.getElementById("theme-icon-desktop");
+                const isDark =
+                    document.documentElement.classList.contains("dark");
                 if (icon) {
-                    icon.className = isDark ? 'ti ti-moon text-xl' : 'ti ti-sun text-xl';
+                    icon.className = isDark
+                        ? "ti ti-moon text-xl"
+                        : "ti ti-sun text-xl";
                 }
                 if (iconDesktop) {
-                    iconDesktop.className = isDark ? 'ti ti-moon text-xl' : 'ti ti-sun text-xl';
+                    iconDesktop.className = isDark
+                        ? "ti ti-moon text-xl"
+                        : "ti ti-sun text-xl";
                 }
             }
 
@@ -195,11 +247,14 @@
             }
 
             // Fermer le menu mobile lors du clic sur un lien
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const sidebar = document.getElementById("sidebar");
                 if (sidebar) {
-                    sidebar.addEventListener("click", function(e) {
-                        if (e.target.tagName === "A" && window.innerWidth < 1024) {
+                    sidebar.addEventListener("click", function (e) {
+                        if (
+                            e.target.tagName === "A" &&
+                            window.innerWidth < 1024
+                        ) {
                             setTimeout(toggleMobileMenu, 100);
                         }
                     });
@@ -265,7 +320,7 @@
             }
 
             function escapeHtml(text) {
-                const div = document.createElement('div');
+                const div = document.createElement("div");
                 div.textContent = text;
                 return div.innerHTML;
             }
@@ -281,8 +336,14 @@
                             .map(
                                 (p) => `
                         <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <a href="/projects/${p.id}" class="flex-1 text-gray-700 dark:text-gray-300 cursor-pointer" data-project-title="${escapeHtml(p.title)}">
-                                <span id="project-title-${p.id}">${escapeHtml(p.title)}</span>
+                            <a href="/projects/${
+                                p.id
+                            }" class="flex-1 text-gray-700 dark:text-gray-300 cursor-pointer" data-project-title="${escapeHtml(
+                                    p.title
+                                )}">
+                                <span id="project-title-${p.id}">${escapeHtml(
+                                    p.title
+                                )}</span>
                             </a>
                             <button
                                 onclick="editProjectName(event, ${p.id})"
@@ -310,9 +371,15 @@
 
             async function deleteProject(event, projectId) {
                 event.stopPropagation();
-                const button = event.target.closest('button');
-                const projectTitle = button ? button.getAttribute('data-project-title') : 'ce projet';
-                if (!confirm(`Êtes-vous sûr de vouloir supprimer le projet "${projectTitle}" ? Cette action est irréversible.`)) {
+                const button = event.target.closest("button");
+                const projectTitle = button
+                    ? button.getAttribute("data-project-title")
+                    : "ce projet";
+                if (
+                    !confirm(
+                        `Êtes-vous sûr de vouloir supprimer le projet "${projectTitle}" ? Cette action est irréversible.`
+                    )
+                ) {
                     return;
                 }
                 const response = await apiCall(`/api/projects/${projectId}`, {
@@ -333,33 +400,38 @@
             function editProjectName(event, projectId) {
                 event.preventDefault();
                 event.stopPropagation();
-                const button = event.target.closest('button');
-                const currentTitle = button ? button.getAttribute('data-project-title') : '';
-                
-                const titleElement = document.getElementById(`project-title-${projectId}`);
+                const button = event.target.closest("button");
+                const currentTitle = button
+                    ? button.getAttribute("data-project-title")
+                    : "";
+
+                const titleElement = document.getElementById(
+                    `project-title-${projectId}`
+                );
                 if (!titleElement) return;
-                
-                const linkElement = titleElement.closest('a');
+
+                const linkElement = titleElement.closest("a");
                 if (!linkElement) return;
-                
+
                 // Sauvegarder le contenu original du lien
                 const originalContent = linkElement.innerHTML;
-                const originalHref = linkElement.getAttribute('href');
-                
+                const originalHref = linkElement.getAttribute("href");
+
                 // Créer un input pour l'édition
                 const input = document.createElement("input");
                 input.type = "text";
                 input.value = currentTitle;
-                input.className = "w-full px-2 py-1 border border-blue-500 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
+                input.className =
+                    "w-full px-2 py-1 border border-blue-500 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
                 input.style.minWidth = "150px";
-                
+
                 // Remplacer le contenu du lien par l'input
                 linkElement.innerHTML = "";
                 linkElement.appendChild(input);
                 linkElement.style.pointerEvents = "none"; // Désactiver la navigation pendant l'édition
                 input.focus();
                 input.select();
-                
+
                 const saveEdit = async () => {
                     const newTitle = input.value.trim();
                     if (newTitle === currentTitle || newTitle === "") {
@@ -368,12 +440,15 @@
                         linkElement.style.pointerEvents = "";
                         return;
                     }
-                    
-                    const response = await apiCall(`/api/projects/${projectId}`, {
-                        method: "PUT",
-                        body: JSON.stringify({ title: newTitle }),
-                    });
-                    
+
+                    const response = await apiCall(
+                        `/api/projects/${projectId}`,
+                        {
+                            method: "PUT",
+                            body: JSON.stringify({ title: newTitle }),
+                        }
+                    );
+
                     if (response && response.ok) {
                         loadProjects();
                         if (window.loadProjectsList) window.loadProjectsList();
@@ -383,12 +458,12 @@
                         linkElement.style.pointerEvents = "";
                     }
                 };
-                
+
                 const cancelEdit = () => {
                     linkElement.innerHTML = originalContent;
                     linkElement.style.pointerEvents = "";
                 };
-                
+
                 input.addEventListener("blur", saveEdit);
                 input.addEventListener("keydown", (e) => {
                     if (e.key === "Enter") {

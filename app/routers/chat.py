@@ -10,6 +10,9 @@ from app.services.ollama_service import get_available_models as get_ollama_model
 from app.services.openai_service import get_available_models as get_openai_models, chat as openai_chat, chat_stream as openai_chat_stream
 from app.config import settings
 from app.services.semantic_search_service import search_relevant_notes, search_relevant_passages
+from app.models.conversation import Conversation
+from app.models.message import Message
+from datetime import datetime
 import json
 import logging
 
@@ -23,6 +26,7 @@ class ChatRequest(BaseModel):
     model: str
     provider: str = "ollama"  # "ollama" ou "openai"
     context: Optional[List[dict]] = None
+    conversation_id: Optional[int] = None  # ID de la conversation (optionnel pour compatibilité)
 
 
 @router.get("/ollama/models", response_model=List[str])
@@ -88,9 +92,28 @@ async def send_chat_message(
 @router.post("/chat/stream")
 async def stream_chat_message(
     request: ChatRequest,
-    current_user: UserRead = Depends(get_current_user)
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session)
 ):
     """Envoyer un message au chatbot (Ollama ou OpenAI) avec streaming"""
+    # Sauvegarder le message utilisateur si conversation_id est fourni
+    if request.conversation_id:
+        try:
+            user_message = Message(
+                conversation_id=request.conversation_id,
+                role="user",
+                content=request.message,
+                model=None,
+                provider=None
+            )
+            session.add(user_message)
+            session.commit()
+        except Exception as e:
+            logger.error(f"Erreur lors de la sauvegarde du message utilisateur: {e}")
+    
+    # Variable pour accumuler la réponse de l'assistant
+    assistant_response = []
+    
     async def generate():
         try:
             if request.provider == "openai":
@@ -100,13 +123,52 @@ async def stream_chat_message(
                     return
                 async for line in openai_chat_stream(request.message, request.model, request.context):
                     if line.strip():
+                        # Accumuler la réponse
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                assistant_response.append(data["message"]["content"])
+                        except:
+                            pass
                         # OpenAI renvoie déjà au format Ollama via le service
                         yield f"data: {line}\n\n"
             else:  # ollama par défaut
                 async for line in ollama_chat_stream(request.message, request.model, request.context):
                     if line.strip():
+                        # Accumuler la réponse
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                assistant_response.append(data["message"]["content"])
+                        except:
+                            pass
                         # Ollama renvoie des lignes JSON, on les renvoie telles quelles en SSE
                         yield f"data: {line}\n\n"
+            
+            # Sauvegarder la réponse de l'assistant si conversation_id est fourni
+            if request.conversation_id and assistant_response:
+                try:
+                    complete_response = "".join(assistant_response)
+                    assistant_message = Message(
+                        conversation_id=request.conversation_id,
+                        role="assistant",
+                        content=complete_response,
+                        model=request.model,
+                        provider=request.provider
+                    )
+                    session.add(assistant_message)
+                    
+                    # Mettre à jour la date de modification de la conversation
+                    conversation = session.get(Conversation, request.conversation_id)
+                    if conversation:
+                        conversation.updated_at = datetime.utcnow()
+                        session.add(conversation)
+                    
+                    session.commit()
+                    logger.info(f"Réponse de l'assistant sauvegardée dans la conversation {request.conversation_id}")
+                except Exception as e:
+                    logger.error(f"Erreur lors de la sauvegarde de la réponse de l'assistant: {e}")
+                    
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
     
@@ -118,6 +180,7 @@ class ProjectChatRequest(BaseModel):
     model: str
     provider: str = "ollama"  # "ollama" ou "openai"
     context: Optional[List[dict]] = None
+    conversation_id: Optional[int] = None  # ID de la conversation (optionnel pour compatibilité)
 
 
 def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
@@ -211,6 +274,21 @@ async def stream_project_chat_message(
     session: Session = Depends(get_session)
 ):
     """Envoyer un message au chatbot (Ollama ou OpenAI) avec streaming et contexte enrichi des passages pertinents du projet"""
+    # Sauvegarder le message utilisateur si conversation_id est fourni
+    if request.conversation_id:
+        try:
+            user_message = Message(
+                conversation_id=request.conversation_id,
+                role="user",
+                content=request.message,
+                model=None,
+                provider=None
+            )
+            session.add(user_message)
+            session.commit()
+        except Exception as e:
+            logger.error(f"Erreur lors de la sauvegarde du message utilisateur: {e}")
+    
     # Recherche sémantique RAG AVANCÉE au niveau des passages
     # Analyse TOUTES les notes du projet et retourne les PASSAGES les plus pertinents
     passages = search_relevant_passages(
@@ -234,6 +312,9 @@ async def stream_project_chat_message(
     # Ajouter le message utilisateur actuel
     full_context.append({"role": "user", "content": request.message})
     
+    # Variable pour accumuler la réponse de l'assistant
+    assistant_response = []
+    
     async def generate():
         try:
             if request.provider == "openai":
@@ -244,12 +325,51 @@ async def stream_project_chat_message(
                 # Passer None comme message car il est déjà dans le contexte
                 async for line in openai_chat_stream("", request.model, full_context):
                     if line.strip():
+                        # Accumuler la réponse
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                assistant_response.append(data["message"]["content"])
+                        except:
+                            pass
                         yield f"data: {line}\n\n"
             else:  # ollama par défaut
                 # Passer None comme message car il est déjà dans le contexte
                 async for line in ollama_chat_stream("", request.model, full_context):
                     if line.strip():
+                        # Accumuler la réponse
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                assistant_response.append(data["message"]["content"])
+                        except:
+                            pass
                         yield f"data: {line}\n\n"
+            
+            # Sauvegarder la réponse de l'assistant si conversation_id est fourni
+            if request.conversation_id and assistant_response:
+                try:
+                    complete_response = "".join(assistant_response)
+                    assistant_message = Message(
+                        conversation_id=request.conversation_id,
+                        role="assistant",
+                        content=complete_response,
+                        model=request.model,
+                        provider=request.provider
+                    )
+                    session.add(assistant_message)
+                    
+                    # Mettre à jour la date de modification de la conversation
+                    conversation = session.get(Conversation, request.conversation_id)
+                    if conversation:
+                        conversation.updated_at = datetime.utcnow()
+                        session.add(conversation)
+                    
+                    session.commit()
+                    logger.info(f"Réponse de l'assistant sauvegardée dans la conversation {request.conversation_id}")
+                except Exception as e:
+                    logger.error(f"Erreur lors de la sauvegarde de la réponse de l'assistant: {e}")
+                    
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
     
