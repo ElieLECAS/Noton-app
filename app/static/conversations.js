@@ -57,6 +57,28 @@ class ConversationsManager {
      * Sélectionner une conversation
      */
     async selectConversation(conversationId) {
+        // Si on quitte une conversation qui a encore le titre par défaut, générer un titre automatiquement
+        if (this.currentConversation && this.currentConversation !== conversationId) {
+            const previousConversation = this.conversations.find(
+                c => c.id === this.currentConversation
+            );
+            console.log("Conversation précédente:", previousConversation);
+            // Générer un titre si c'est "Nouvelle conversation" ou un titre auto-généré (long ou se termine par "...")
+            const shouldGenerateTitle = previousConversation && (
+                previousConversation.title === "Nouvelle conversation" ||
+                previousConversation.title === null ||
+                previousConversation.title.length > 30 ||
+                previousConversation.title.endsWith("...")
+            );
+            if (shouldGenerateTitle) {
+                console.log("Génération du titre pour:", this.currentConversation);
+                // Générer un titre automatiquement en arrière-plan (ne pas bloquer)
+                this.generateTitleForConversation(this.currentConversation).catch(err => {
+                    console.warn("Erreur lors de la génération du titre:", err);
+                });
+            }
+        }
+
         this.currentConversation = conversationId;
 
         // Ouvrir le chatbot s'il est fermé
@@ -72,6 +94,38 @@ class ConversationsManager {
             this.updateActiveConversation(conversationId);
             this.updateChatHistory(messages);
         }
+    }
+
+    /**
+     * Générer automatiquement un titre pour une conversation
+     */
+    async generateTitleForConversation(conversationId) {
+        console.log("Génération du titre pour la conversation:", conversationId);
+        try {
+            const response = await apiCall(
+                `/api/conversations/${conversationId}/generate-title`,
+                {
+                    method: "POST",
+                }
+            );
+            if (response && response.ok) {
+                const updatedConversation = await response.json();
+                console.log("Titre généré:", updatedConversation.title);
+                // Mettre à jour la conversation dans la liste
+                const index = this.conversations.findIndex(c => c.id === conversationId);
+                if (index !== -1) {
+                    this.conversations[index] = updatedConversation;
+                    this.renderConversationsList();
+                }
+                return updatedConversation;
+            } else {
+                const errorText = await response.text();
+                console.error("Erreur lors de la génération du titre:", response.status, errorText);
+            }
+        } catch (error) {
+            console.error("Exception lors de la génération du titre:", error);
+        }
+        return null;
     }
 
     /**

@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Projet - Noton{% endblock %} {% block
+{% extends "base.html" %} {% block title %}Projet - {{ app_name }}{% endblock %} {% block
 extra_head %}
 <!-- Marked.js pour le rendu Markdown -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -126,6 +126,17 @@ extra_head %}
     .assistant-message *:not(code):not(pre) {
         font-style: italic !important;
     }
+
+    /* Style pour le contour violet du chatbot en mode privé */
+    #project-chatbot-area.private-mode {
+        border: 2px solid #9333ea;
+        border-radius: 0.5rem;
+        background-color: rgba(147, 51, 234, 0.05) !important;
+    }
+    .dark #project-chatbot-area.private-mode {
+        border-color: #a855f7;
+        background-color: rgba(168, 85, 247, 0.08) !important;
+    }
 </style>
 {% endblock %} {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -150,13 +161,14 @@ extra_head %}
         <div class="flex items-center gap-2 flex-wrap">
             <button
                 onclick="toggleProjectChatbot()"
-                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
                 title="Afficher/Masquer le chatbot"
             >
                 <i
                     id="project-chatbot-toggle-icon"
                     class="ti ti-robot text-xl"
                 ></i>
+                <span id="project-chatbot-toggle-text" class="text-sm sm:text-base font-medium">Parler à LIA</span>
             </button>
             <button
                 onclick="showCreateNoteModal()"
@@ -704,6 +716,9 @@ extra_head %}
             const toggleIcon = document.getElementById(
                 "project-chatbot-toggle-icon"
             );
+            const toggleText = document.getElementById(
+                "project-chatbot-toggle-text"
+            );
 
             projectChatbotOpen = !projectChatbotOpen;
 
@@ -734,10 +749,40 @@ extra_head %}
 
                 toggleIcon.classList.remove("ti-robot");
                 toggleIcon.classList.add("ti-robot-off");
+                if (toggleText) {
+                    toggleText.textContent = "Fermer LIA";
+                }
             } else {
                 // Fermer le chatbot
+                // Si on quitte une conversation qui a encore le titre par défaut, générer un titre automatiquement
+                if (projectConversationsManager && projectConversationsManager.currentConversation) {
+                    const currentConv = projectConversationsManager.conversations.find(
+                        c => c.id === projectConversationsManager.currentConversation
+                    );
+                    console.log("Fermeture chatbot projet - Conversation actuelle:", currentConv);
+                    // Générer un titre si c'est "Nouvelle conversation" ou un titre auto-généré (long ou se termine par "...")
+                    const shouldGenerateTitle = currentConv && (
+                        currentConv.title === "Nouvelle conversation" ||
+                        currentConv.title === null ||
+                        currentConv.title.length > 30 ||
+                        currentConv.title.endsWith("...")
+                    );
+                    if (shouldGenerateTitle) {
+                        console.log("Génération du titre lors de la fermeture du chatbot projet");
+                        // Générer un titre automatiquement en arrière-plan (ne pas bloquer)
+                        projectConversationsManager.generateTitleForConversation(
+                            projectConversationsManager.currentConversation
+                        ).catch(err => {
+                            console.warn("Erreur lors de la génération du titre:", err);
+                        });
+                    }
+                }
+
                 toggleIcon.classList.remove("ti-robot-off");
                 toggleIcon.classList.add("ti-robot");
+                if (toggleText) {
+                    toggleText.textContent = "Parler à LIA";
+                }
 
                 if (isMobile) {
                     // Animation mobile vers la droite
@@ -758,6 +803,19 @@ extra_head %}
             }
         }
 
+        // Fonction pour mettre à jour le style du chatbot selon le modèle sélectionné
+        function updateProjectChatbotStyle() {
+            const chatbotArea = document.getElementById("project-chatbot-area");
+            const presetSelect = document.getElementById("project-model-preset-select");
+            if (chatbotArea && presetSelect) {
+                if (presetSelect.value === "private") {
+                    chatbotArea.classList.add("private-mode");
+                } else {
+                    chatbotArea.classList.remove("private-mode");
+                }
+            }
+        }
+
         // Initialiser l'état par défaut (chatbot fermé)
         document.addEventListener("DOMContentLoaded", function () {
             const chatbotArea = document.getElementById("project-chatbot-area");
@@ -766,12 +824,24 @@ extra_head %}
             const toggleIcon = document.getElementById(
                 "project-chatbot-toggle-icon"
             );
+            const presetSelect = document.getElementById("project-model-preset-select");
+            
+            // Ajouter l'écouteur d'événement sur le sélecteur de modèles
+            if (presetSelect) {
+                presetSelect.addEventListener("change", updateProjectChatbotStyle);
+                // Initialiser le style au chargement
+                updateProjectChatbotStyle();
+            }
 
             // Initialiser le gestionnaire de conversations pour ce projet
             // Les conversations seront affichées dans la sidebar de base.html
             projectConversationsManager = new ConversationsManager(projectId);
             projectConversationsManager.loadConversations();
 
+            const toggleText = document.getElementById(
+                "project-chatbot-toggle-text"
+            );
+            
             if (!projectChatbotOpen) {
                 chatbotArea.classList.add("hidden");
                 chatbotArea.style.transform = "translateX(0)";
@@ -780,15 +850,22 @@ extra_head %}
 
                 toggleIcon.classList.remove("ti-robot-off");
                 toggleIcon.classList.add("ti-robot");
+                if (toggleText) {
+                    toggleText.textContent = "Parler à LIA";
+                }
+            } else {
+                if (toggleText) {
+                    toggleText.textContent = "Fermer LIA";
+                }
             }
         });
 
         // Fonction pour obtenir le provider et le modèle selon le preset sélectionné
         function getProjectModelFromPreset(preset) {
             const modelMap = {
-                "private": { provider: "ollama", model: "llama3.2:1b" },
-                "fast": { provider: "openai", model: "gpt-5-nano-2025-08-07" },
-                "powerful": { provider: "openai", model: "gpt-5.1-chat-latest" }
+                "private": {{ model_private|tojson }},
+                "fast": {{ model_fast|tojson }},
+                "powerful": {{ model_powerful|tojson }}
             };
             return modelMap[preset] || modelMap["private"];
         }
@@ -1281,11 +1358,31 @@ extra_head %}
             if (!message) return;
 
             // Créer une conversation si aucune n'est sélectionnée
+            let conversationJustCreated = false;
             if (!projectConversationsManager.currentConversation) {
-                await projectConversationsManager.createConversation();
+                // Créer la conversation sans sélectionner automatiquement (pour éviter de vider la zone de chat)
+                const response = await apiCall("/api/conversations", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        title: "Nouvelle conversation",
+                        project_id: projectId,
+                    }),
+                });
+                
+                if (response && response.ok) {
+                    const newConversation = await response.json();
+                    projectConversationsManager.conversations.unshift(newConversation);
+                    projectConversationsManager.currentConversation = newConversation.id;
+                    projectConversationsManager.renderConversationsList();
+                    conversationJustCreated = true;
+                    // Ne pas appeler selectConversation() car cela viderait la zone de chat
+                    // Réinitialiser l'historique local pour correspondre à la conversation vide
+                    projectChatHistory.length = 0;
+                }
             }
 
-            // Ajouter le message de l'utilisateur
+            // Ajouter le message de l'utilisateur visuellement
             addMessageToProjectChat("user", message);
             input.value = "";
 
@@ -1376,20 +1473,24 @@ extra_head %}
                                     const jsonData = JSON.parse(data);
                                     if (
                                         jsonData.message &&
-                                        jsonData.message.content
+                                        jsonData.message.content &&
+                                        jsonData.message.content.trim().length > 0
                                     ) {
-                                        // Supprimer le texte de chargement au premier chunk
-                                        if (!firstChunkReceived) {
-                                            fullResponse = "";
-                                            firstChunkReceived = true;
-                                        }
+                                        // Ajouter le contenu seulement s'il n'est pas vide
                                         fullResponse +=
                                             jsonData.message.content;
+                                        
+                                        // Toujours mettre à jour l'affichage une fois qu'on a du contenu
+                                        // Le message "en cours de génération" sera remplacé par le contenu réel
+                                        if (!firstChunkReceived) {
+                                            firstChunkReceived = true;
+                                        }
                                         // Rendre le Markdown en HTML de façon sécurisée
                                         const rawHtml =
                                             marked.parse(fullResponse);
                                         const cleanHtml =
                                             DOMPurify.sanitize(rawHtml);
+                                        // Mettre à jour le contenu
                                         assistantContent.innerHTML = cleanHtml;
                                         scrollProjectChatToBottom(false); // Ne pas forcer, seulement si proche du bas
                                     } else if (jsonData.done) {
@@ -1418,15 +1519,13 @@ extra_head %}
                 });
                 scrollProjectChatToBottom(false); // Ne pas forcer à la fin, seulement si proche du bas
 
-                // Recharger la liste des conversations (le titre peut avoir été auto-généré)
+                // Attendre un court délai pour s'assurer que le streaming est complètement terminé
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // Recharger uniquement la liste des conversations pour mettre à jour le titre (peut avoir été auto-généré)
+                // Ne pas recharger les messages car ils sont déjà affichés correctement dans la zone de chat
                 if (projectConversationsManager) {
                     await projectConversationsManager.loadConversations();
-                    // Recharger les messages de la conversation pour afficher tous les messages
-                    if (projectConversationsManager.currentConversation) {
-                        await projectConversationsManager.selectConversation(
-                            projectConversationsManager.currentConversation
-                        );
-                    }
                 }
             } catch (error) {
                 if (

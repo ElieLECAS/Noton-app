@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{% block title %}Noton{% endblock %}</title>
+        <title>{% block title %}{{ app_name }}{% endblock %}</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
@@ -41,7 +41,7 @@
                     <h1
                         class="text-xl font-bold text-gray-900 dark:text-gray-100"
                     >
-                        Noton
+                        {{ app_name }}
                     </h1>
                     <div class="flex items-center gap-2">
                         <button
@@ -123,7 +123,7 @@
                     <h1
                         class="text-lg font-bold text-gray-900 dark:text-gray-100"
                     >
-                        Noton
+                        {{ app_name }}
                     </h1>
                     <button
                         onclick="toggleDarkMode()"

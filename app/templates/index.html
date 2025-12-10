@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Mes projets - Noton{% endblock %} {%
+{% extends "base.html" %} {% block title %}Mes projets - {{ app_name }}{% endblock %} {%
 block extra_head %}
 <!-- Marked.js pour le rendu Markdown -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -126,6 +126,17 @@ block extra_head %}
     .assistant-message *:not(code):not(pre) {
         font-style: italic !important;
     }
+
+    /* Style pour le contour violet du chatbot en mode privé */
+    #chatbot-area.private-mode {
+        border: 2px solid #9333ea;
+        border-radius: 0.5rem;
+        background-color: rgba(147, 51, 234, 0.05) !important;
+    }
+    .dark #chatbot-area.private-mode {
+        border-color: #a855f7;
+        background-color: rgba(168, 85, 247, 0.08) !important;
+    }
 </style>
 {% endblock %} {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -141,10 +152,11 @@ block extra_head %}
         <div class="flex items-center gap-2 sm:gap-4">
             <button
                 onclick="toggleChatbot()"
-                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
                 title="Afficher/Masquer le chatbot"
             >
                 <i id="chatbot-toggle-icon" class="ti ti-robot-off text-xl"></i>
+                <span id="chatbot-toggle-text" class="text-sm sm:text-base font-medium">Parler à LIA</span>
             </button>
             <button
                 onclick="showCreateProjectModal()"
@@ -319,6 +331,7 @@ block extra_head %}
             "projects-center-area"
         );
         const toggleIcon = document.getElementById("chatbot-toggle-icon");
+        const toggleText = document.getElementById("chatbot-toggle-text");
 
         chatbotOpen = !chatbotOpen;
 
@@ -349,10 +362,40 @@ block extra_head %}
 
             toggleIcon.classList.remove("ti-robot");
             toggleIcon.classList.add("ti-robot-off");
+            if (toggleText) {
+                toggleText.textContent = "Fermer LIA";
+            }
         } else {
             // Fermer le chatbot
+            // Si on quitte une conversation qui a encore le titre par défaut, générer un titre automatiquement
+            if (conversationsManager && conversationsManager.currentConversation) {
+                const currentConv = conversationsManager.conversations.find(
+                    c => c.id === conversationsManager.currentConversation
+                );
+                console.log("Fermeture chatbot - Conversation actuelle:", currentConv);
+                // Générer un titre si c'est "Nouvelle conversation" ou un titre auto-généré (long ou se termine par "...")
+                const shouldGenerateTitle = currentConv && (
+                    currentConv.title === "Nouvelle conversation" ||
+                    currentConv.title === null ||
+                    currentConv.title.length > 30 ||
+                    currentConv.title.endsWith("...")
+                );
+                if (shouldGenerateTitle) {
+                    console.log("Génération du titre lors de la fermeture du chatbot");
+                    // Générer un titre automatiquement en arrière-plan (ne pas bloquer)
+                    conversationsManager.generateTitleForConversation(
+                        conversationsManager.currentConversation
+                    ).catch(err => {
+                        console.warn("Erreur lors de la génération du titre:", err);
+                    });
+                }
+            }
+
             toggleIcon.classList.remove("ti-robot-off");
             toggleIcon.classList.add("ti-robot");
+            if (toggleText) {
+                toggleText.textContent = "Parler à LIA";
+            }
 
             if (isMobile) {
                 // Animation mobile vers la droite
@@ -386,6 +429,8 @@ block extra_head %}
         conversationsManager = new ConversationsManager(null);
         conversationsManager.loadConversations();
 
+        const toggleText = document.getElementById("chatbot-toggle-text");
+        
         if (chatbotOpen) {
             chatbotArea.classList.remove("hidden");
             chatbotArea.style.transform = "translateX(0)";
@@ -393,8 +438,14 @@ block extra_head %}
             projectsCenterArea.classList.add("lg:w-1/2");
             toggleIcon.classList.remove("ti-robot");
             toggleIcon.classList.add("ti-robot-off");
+            if (toggleText) {
+                toggleText.textContent = "Fermer LIA";
+            }
         } else {
             // Toujours cacher quand fermé
+            if (toggleText) {
+                toggleText.textContent = "Parler à LIA";
+            }
             chatbotArea.classList.add("hidden");
             projectsCenterArea.classList.remove("lg:w-1/2");
             projectsCenterArea.classList.add("lg:w-full");
@@ -406,9 +457,9 @@ block extra_head %}
     // Fonction pour obtenir le provider et le modèle selon le preset sélectionné
     function getModelFromPreset(preset) {
         const modelMap = {
-            "private": { provider: "ollama", model: "llama3.2:1b" },
-            "fast": { provider: "openai", model: "gpt-5-nano-2025-08-07" },
-            "powerful": { provider: "openai", model: "gpt-5.1-chat-latest" }
+            "private": {{ model_private|tojson }},
+            "fast": {{ model_fast|tojson }},
+            "powerful": {{ model_powerful|tojson }}
         };
         return modelMap[preset] || modelMap["private"];
     }
@@ -614,11 +665,31 @@ block extra_head %}
         if (!message) return;
 
         // Créer une conversation si aucune n'est sélectionnée
+        let conversationJustCreated = false;
         if (!conversationsManager.currentConversation) {
-            await conversationsManager.createConversation();
+            // Créer la conversation sans sélectionner automatiquement (pour éviter de vider la zone de chat)
+            const response = await apiCall("/api/conversations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: "Nouvelle conversation",
+                    project_id: null,
+                }),
+            });
+            
+            if (response && response.ok) {
+                const newConversation = await response.json();
+                conversationsManager.conversations.unshift(newConversation);
+                conversationsManager.currentConversation = newConversation.id;
+                conversationsManager.renderConversationsList();
+                conversationJustCreated = true;
+                // Ne pas appeler selectConversation() car cela viderait la zone de chat
+                // Réinitialiser l'historique local pour correspondre à la conversation vide
+                chatHistory.length = 0;
+            }
         }
 
-        // Ajouter le message de l'utilisateur
+        // Ajouter le message de l'utilisateur visuellement
         addMessageToChat("user", message);
         input.value = "";
 
@@ -705,18 +776,22 @@ block extra_head %}
                                 // Ollama renvoie soit {"message": {"content": "..."}} soit {"done": true}
                                 if (
                                     jsonData.message &&
-                                    jsonData.message.content
+                                    jsonData.message.content &&
+                                    jsonData.message.content.trim().length > 0
                                 ) {
-                                    // Supprimer le texte de chargement au premier chunk
+                                    // Ajouter le contenu seulement s'il n'est pas vide
+                                    fullResponse += jsonData.message.content;
+                                    
+                                    // Toujours mettre à jour l'affichage une fois qu'on a du contenu
+                                    // Le message "en cours de génération" sera remplacé par le contenu réel
                                     if (!firstChunkReceived) {
-                                        fullResponse = "";
                                         firstChunkReceived = true;
                                     }
-                                    fullResponse += jsonData.message.content;
                                     // Rendre le Markdown en HTML de façon sécurisée
                                     const rawHtml = marked.parse(fullResponse);
                                     const cleanHtml =
                                         DOMPurify.sanitize(rawHtml);
+                                    // Mettre à jour le contenu
                                     assistantContent.innerHTML = cleanHtml;
                                     scrollChatToBottom(false); // Ne pas forcer, seulement si proche du bas
                                 } else if (jsonData.done) {
@@ -744,15 +819,13 @@ block extra_head %}
             chatHistory.push({ role: "assistant", content: fullResponse });
             scrollChatToBottom(false); // Ne pas forcer à la fin, seulement si proche du bas
 
-            // Recharger la liste des conversations (le titre peut avoir été auto-généré)
+            // Attendre un court délai pour s'assurer que le streaming est complètement terminé
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            // Recharger uniquement la liste des conversations pour mettre à jour le titre (peut avoir été auto-généré)
+            // Ne pas recharger les messages car ils sont déjà affichés correctement dans la zone de chat
             if (conversationsManager) {
                 await conversationsManager.loadConversations();
-                // Recharger les messages de la conversation pour afficher tous les messages
-                if (conversationsManager.currentConversation) {
-                    await conversationsManager.selectConversation(
-                        conversationsManager.currentConversation
-                    );
-                }
             }
         } catch (error) {
             if (document.getElementById("assistant-streaming-message")) {

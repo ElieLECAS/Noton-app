@@ -40,11 +40,18 @@ services:
         ports:
             - "8001:8000"
         environment:
+            - APP_NAME=${APP_NAME}
             - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
             - SECRET_KEY=${SECRET_KEY}
             - OLLAMA_BASE_URL=http://ollama:11434
             - OPENAI_API_KEY=${OPENAI_API_KEY}
             - OPENAI_MODEL=${OPENAI_MODEL}
+            - MODEL_PRIVATE_PROVIDER=${MODEL_PRIVATE_PROVIDER:-ollama}
+            - MODEL_PRIVATE_NAME=${MODEL_PRIVATE_NAME:-llama3.2:1b}
+            - MODEL_FAST_PROVIDER=${MODEL_FAST_PROVIDER:-openai}
+            - MODEL_FAST_NAME=${MODEL_FAST_NAME:-gpt-5-nano-2025-08-07}
+            - MODEL_POWERFUL_PROVIDER=${MODEL_POWERFUL_PROVIDER:-openai}
+            - MODEL_POWERFUL_NAME=${MODEL_POWERFUL_NAME:-gpt-5.1-chat-latest}
             # Optimisations CPU pour Docling/EasyOCR
             - DOCLING_CPU_ONLY=${DOCLING_CPU_ONLY:-true}
             # TORCH_NUM_THREADS et OMP_NUM_THREADS sont optionnelles

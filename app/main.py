@@ -9,6 +9,7 @@ from app.database import get_session, create_db_and_tables
 from app.routers import auth, projects, notes, chat, conversations
 from app.models import User, Project, Note
 from app.services.faiss_service import get_faiss_manager
+from app.config import settings
 import logging
 
 # Configurer le logging pour voir les messages INFO
@@ -20,7 +21,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Noton", description="Application de prise de notes avec chatbot Ollama")
+app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot Ollama")
 
 # Monter les routers
 app.include_router(auth.router)
@@ -31,6 +32,21 @@ app.include_router(conversations.router)
 
 # Configuration des templates
 templates = Jinja2Templates(directory="app/templates")
+
+# Ajouter le contexte global pour tous les templates
+templates.env.globals["app_name"] = settings.APP_NAME
+templates.env.globals["model_private"] = {
+    "provider": settings.MODEL_PRIVATE_PROVIDER,
+    "model": settings.MODEL_PRIVATE_NAME
+}
+templates.env.globals["model_fast"] = {
+    "provider": settings.MODEL_FAST_PROVIDER,
+    "model": settings.MODEL_FAST_NAME
+}
+templates.env.globals["model_powerful"] = {
+    "provider": settings.MODEL_POWERFUL_PROVIDER,
+    "model": settings.MODEL_POWERFUL_NAME
+}
 
 # Servir les fichiers statiques
 try:

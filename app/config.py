@@ -5,6 +5,9 @@ from pathlib import Path
 
 
 class Settings(BaseSettings):
+    # Application
+    APP_NAME: str = "Noton"
+    
     # Database
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/noton"
     
@@ -19,6 +22,14 @@ class Settings(BaseSettings):
     # OpenAI
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: Optional[List[str]] = None
+    
+    # Modèles de chat configurables
+    MODEL_PRIVATE_PROVIDER: str = "ollama"
+    MODEL_PRIVATE_NAME: str = "llama3.2:1b"
+    MODEL_FAST_PROVIDER: str = "openai"
+    MODEL_FAST_NAME: str = "gpt-5-nano-2025-08-07"
+    MODEL_POWERFUL_PROVIDER: str = "openai"
+    MODEL_POWERFUL_NAME: str = "gpt-5.1-chat-latest"
     
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
