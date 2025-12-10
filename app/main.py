@@ -56,15 +56,19 @@ async def startup_event():
         logger.error(f"Erreur lors de l'initialisation de FAISS: {e}")
         # Ne pas bloquer le démarrage si FAISS échoue
     
-    # Précharger le modèle FastEmbed au démarrage pour éviter le blocage au premier usage
+    # Tester la connexion à Ollama pour les embeddings
     try:
-        from app.services.embedding_service import get_embedder
-        logger.info("Préchargement du modèle FastEmbed...")
-        get_embedder()  # Charger le modèle maintenant pour éviter le blocage plus tard
-        logger.info("Modèle FastEmbed préchargé avec succès")
+        from app.services.embedding_service import generate_embedding
+        logger.info("Test de connexion à Ollama pour les embeddings...")
+        # Test rapide avec un texte court
+        test_embedding = generate_embedding("test")
+        if test_embedding:
+            logger.info("✅ Ollama est prêt pour générer les embeddings")
+        else:
+            logger.warning("⚠️ Impossible de générer un embedding de test avec Ollama")
     except Exception as e:
-        logger.error(f"Erreur lors du préchargement du modèle FastEmbed: {e}")
-        # Ne pas bloquer le démarrage si le modèle échoue
+        logger.warning(f"⚠️ Erreur lors du test de connexion à Ollama: {e}")
+        # Ne pas bloquer le démarrage si Ollama n'est pas disponible
     
     # Démarrer les workers pour la génération d'embeddings en arrière-plan
     try:

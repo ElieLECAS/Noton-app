@@ -5,9 +5,9 @@ services:
         image: pgvector/pgvector:pg15
         container_name: noton_db
         environment:
-            POSTGRES_DB: noton
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         volumes:
             - postgres_data:/var/lib/postgresql/data
         healthcheck:
@@ -40,8 +40,8 @@ services:
         ports:
             - "8001:8000"
         environment:
-            - DATABASE_URL=postgresql://postgres:postgres@db:5432/noton
-            - SECRET_KEY=your-secret-key-change-in-production
+            - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+            - SECRET_KEY=${SECRET_KEY}
             - OLLAMA_BASE_URL=http://ollama:11434
             - OPENAI_API_KEY=${OPENAI_API_KEY}
             - OPENAI_MODEL=${OPENAI_MODEL}
