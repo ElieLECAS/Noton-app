@@ -131,11 +131,26 @@ extra_head %}
     #project-chatbot-area.private-mode {
         border: 2px solid #9333ea;
         border-radius: 0.5rem;
-        background-color: rgba(147, 51, 234, 0.05) !important;
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
     }
     .dark #project-chatbot-area.private-mode {
         border-color: #a855f7;
-        background-color: rgba(168, 85, 247, 0.08) !important;
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    /* Appliquer un background violet opaque aux éléments enfants en mode privé */
+    #project-chatbot-area.private-mode > div > div,
+    #project-chatbot-area.private-mode #project-chat-messages {
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #project-chatbot-area.private-mode > div > div,
+    .dark #project-chatbot-area.private-mode #project-chat-messages {
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    #project-chatbot-area.private-mode .bg-white {
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #project-chatbot-area.private-mode .bg-gray-800 {
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
     }
 </style>
 {% endblock %} {% block content %}

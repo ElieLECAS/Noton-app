@@ -131,11 +131,26 @@ block extra_head %}
     #chatbot-area.private-mode {
         border: 2px solid #9333ea;
         border-radius: 0.5rem;
-        background-color: rgba(147, 51, 234, 0.05) !important;
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
     }
     .dark #chatbot-area.private-mode {
         border-color: #a855f7;
-        background-color: rgba(168, 85, 247, 0.08) !important;
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    /* Appliquer un background violet opaque aux éléments enfants en mode privé */
+    #chatbot-area.private-mode > div > div,
+    #chatbot-area.private-mode #chat-messages {
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #chatbot-area.private-mode > div > div,
+    .dark #chatbot-area.private-mode #chat-messages {
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    #chatbot-area.private-mode .bg-white {
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #chatbot-area.private-mode .bg-gray-800 {
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
     }
 </style>
 {% endblock %} {% block content %}
@@ -416,6 +431,19 @@ block extra_head %}
         }
     }
 
+    // Fonction pour mettre à jour le style du chatbot selon le modèle sélectionné
+    function updateChatbotStyle() {
+        const chatbotArea = document.getElementById("chatbot-area");
+        const presetSelect = document.getElementById("model-preset-select");
+        if (chatbotArea && presetSelect) {
+            if (presetSelect.value === "private") {
+                chatbotArea.classList.add("private-mode");
+            } else {
+                chatbotArea.classList.remove("private-mode");
+            }
+        }
+    }
+
     // Initialiser l'état par défaut (chatbot ouvert)
     document.addEventListener("DOMContentLoaded", function () {
         const chatbotArea = document.getElementById("chatbot-area");
@@ -451,6 +479,15 @@ block extra_head %}
             projectsCenterArea.classList.add("lg:w-full");
             toggleIcon.classList.remove("ti-robot-off");
             toggleIcon.classList.add("ti-robot");
+        }
+
+        // Initialiser le style du chatbot selon le preset sélectionné
+        updateChatbotStyle();
+
+        // Ajouter un event listener sur le select pour mettre à jour le style
+        const presetSelect = document.getElementById("model-preset-select");
+        if (presetSelect) {
+            presetSelect.addEventListener("change", updateChatbotStyle);
         }
     });
 
