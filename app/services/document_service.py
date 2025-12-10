@@ -21,13 +21,26 @@ _queues_lock = threading.Lock()  # Lock pour protéger les dictionnaires de queu
 document_workers = []
 _document_workers_lock = threading.Lock()  # Lock pour la synchronisation des workers
 
+# Pool de converters Docling réutilisables (créés une seule fois au démarrage)
+_docling_converter = None
+_docling_converter_lock = threading.Lock()
+
 # Configurer PyTorch pour CPU avant l'import de docling
 # Cela évite les warnings sur pin_memory et optimise pour CPU
 try:
     import torch
+    import warnings
     
     # Désactiver cuDNN (inutile sans GPU)
     torch.backends.cudnn.enabled = False
+    
+    # Filtrer les avertissements PyTorch liés à pin_memory et dataloader
+    # Ces avertissements apparaissent quand pin_memory=True mais pas de GPU disponible
+    warnings.filterwarnings('ignore', message='.*pin_memory.*', category=UserWarning)
+    warnings.filterwarnings('ignore', message='.*dataloader.*pin_memory.*', category=UserWarning)
+    warnings.filterwarnings('ignore', message='.*accelerator.*', category=UserWarning)
+    # Filtrer aussi les avertissements généraux de torch.utils.data.dataloader
+    warnings.filterwarnings('ignore', category=UserWarning, module='torch.utils.data.dataloader')
     
     # Configurer le nombre de threads PyTorch
     # Par défaut, limiter à la moitié des cœurs pour garder des ressources pour FastAPI
@@ -62,58 +75,204 @@ try:
         os.environ['OMP_NUM_THREADS'] = str(default_omp_threads)
         logger.info(f"OMP_NUM_THREADS configuré par défaut à {default_omp_threads} (moitié des {multiprocessing.cpu_count()} cœurs disponibles)")
     
-    # Désactiver les optimisations GPU
-    os.environ['CUDA_VISIBLE_DEVICES'] = ''  # Forcer CPU uniquement
+    # Gérer le GPU optionnel selon la configuration
+    if settings.DOCLING_USE_GPU is False or (settings.DOCLING_CPU_ONLY and settings.DOCLING_USE_GPU is None):
+        # Forcer CPU uniquement
+        os.environ['CUDA_VISIBLE_DEVICES'] = ''
+        logger.info("GPU désactivé pour Docling (mode CPU uniquement)")
+    elif settings.DOCLING_USE_GPU is True:
+        # Forcer GPU - ne pas définir CUDA_VISIBLE_DEVICES pour permettre l'accès GPU
+        if 'CUDA_VISIBLE_DEVICES' in os.environ:
+            del os.environ['CUDA_VISIBLE_DEVICES']
+        logger.info("GPU activé pour Docling")
+    # Si DOCLING_USE_GPU est None et DOCLING_CPU_ONLY est False, auto-détection (ne rien faire)
     
 except ImportError:
     logger.warning("PyTorch non disponible, certaines optimisations CPU ne seront pas appliquées")
 
 from docling.document_converter import DocumentConverter
 
+# Essayer d'importer les options avancées de Docling (peuvent ne pas être disponibles dans toutes les versions)
+DOCLING_OPTIONS_AVAILABLE = False
+PdfPipelineOptions = None
+TableFormerMode = None
+InputFormat = None
+
+try:
+    from docling.datamodel.pipeline_options import PdfPipelineOptions
+    from docling.datamodel.pipeline_options import TableFormerMode
+    from docling.datamodel.base_models import InputFormat
+    DOCLING_OPTIONS_AVAILABLE = True
+except ImportError:
+    # Les options avancées ne sont pas disponibles dans cette version de Docling
+    # On utilisera DocumentConverter avec sa configuration par défaut
+    logger.debug("Options avancées Docling non disponibles, utilisation de la configuration par défaut")
+
+# Import PyMuPDF pour détecter le texte natif dans les PDFs
+try:
+    import fitz  # PyMuPDF
+    PYMUPDF_AVAILABLE = True
+except ImportError:
+    PYMUPDF_AVAILABLE = False
+    logger.warning("PyMuPDF non disponible, la détection de texte natif sera désactivée")
+
+
+def extract_text_from_pdf(file_path: str) -> Optional[str]:
+    """
+    Extrait le texte natif d'un PDF en utilisant PyMuPDF (ultra-rapide).
+    
+    Args:
+        file_path: Chemin vers le fichier PDF
+        
+    Returns:
+        Le texte extrait ou None si le PDF est scanné (pas de texte natif)
+    """
+    if not PYMUPDF_AVAILABLE:
+        logger.debug("PyMuPDF non disponible, utilisation de Docling en fallback")
+        return None
+    
+    doc = None
+    try:
+        doc = fitz.open(file_path)
+        text_content = ""
+        
+        # Extraire le texte de toutes les pages
+        for page_num in range(len(doc)):
+            page = doc[page_num]
+            text = page.get_text()
+            text_content += text + "\n\n"
+        
+        text_content = text_content.strip()
+        
+        # Si on trouve moins de 100 caractères, c'est probablement un PDF scanné
+        if len(text_content) < 100:
+            logger.info(f"PDF scanné détecté (peu de texte natif): {file_path}, utilisation de Docling avec OCR")
+            return None
+        
+        logger.info(f"✅ PDF avec texte natif extrait rapidement: {file_path} ({len(text_content)} caractères)")
+        return text_content
+        
+    except Exception as e:
+        logger.warning(f"Erreur lors de l'extraction de texte du PDF {file_path}: {e}")
+        return None
+    finally:
+        # S'assurer que le document est toujours fermé même en cas d'erreur
+        if doc is not None:
+            try:
+                doc.close()
+            except (Exception, SystemError, RuntimeError):
+                pass
+
+
+def get_docling_converter():
+    """
+    Récupère ou crée le converter Docling partagé (singleton).
+    Le converter est créé une seule fois et réutilisé pour tous les documents.
+    Cela évite de recharger les modèles à chaque document (gain de performance massif).
+    
+    Returns:
+        DocumentConverter partagé
+    """
+    global _docling_converter
+    
+    with _docling_converter_lock:
+        if _docling_converter is None:
+            logger.info("🔧 Initialisation du DocumentConverter Docling (une seule fois)...")
+            _docling_converter = DocumentConverter()
+            logger.info("✅ DocumentConverter Docling initialisé et prêt à être réutilisé")
+        
+        return _docling_converter
+
 
 def process_document(file_path: str) -> Optional[str]:
     """
-    Traite un document avec docling et le convertit en markdown.
+    Traite un document et le convertit en texte/markdown.
+    Stratégie optimisée:
+    - PDF avec texte natif: extraction ultra-rapide avec PyMuPDF (quasi instantané)
+    - PDF scanné: utilise Docling avec OCR (lent mais nécessaire)
+    - DOCX/XLSX/PPTX: utilise Docling (conversion structurée)
+    - Images: utilise Docling avec OCR
     
     Args:
         file_path: Chemin vers le fichier à traiter
         
     Returns:
-        Contenu markdown du document ou None en cas d'erreur
+        Contenu du document ou None en cas d'erreur
     """
     if not os.path.exists(file_path):
         logger.error(f"Fichier non trouvé: {file_path}")
         return None
     
     try:
-        # Créer le convertisseur docling avec configuration par défaut
-        # Docling gère automatiquement différents formats (PDF, DOCX, XLSX, PPTX, images, etc.)
-        converter = DocumentConverter()
+        file_ext = Path(file_path).suffix.lower()
         
-        # Convertir le document en markdown
-        logger.info(f"Traitement du document: {file_path}")
-        result = converter.convert(file_path)
+        # === STRATÉGIE 1: PDF avec texte natif (extraction ultra-rapide) ===
+        if file_ext == '.pdf':
+            # Essayer d'extraire le texte natif directement (très rapide)
+            text_content = extract_text_from_pdf(file_path)
+            
+            if text_content:
+                # Succès! PDF avec texte natif traité en quelques millisecondes
+                return text_content
+            
+            # Sinon, PDF scanné -> fallback sur Docling avec OCR
+            logger.info(f"🔄 PDF scanné détecté, utilisation de Docling avec OCR: {file_path}")
         
-        # Extraire le markdown depuis le résultat
-        # Docling retourne un objet DocumentPipelineOutput avec un attribut document
+        # === STRATÉGIE 2: Utiliser Docling (pour PDF scannés, DOCX, XLSX, PPTX, images) ===
+        logger.info(f"📄 Traitement avec Docling: {file_path}")
+        
+        # Récupérer le converter partagé (créé une seule fois)
+        converter = get_docling_converter()
+        
+        # Désactiver les messages de progression de Docling
+        import sys
+        
+        class ProgressFilter:
+            def __init__(self, original_stream):
+                self.original_stream = original_stream
+            
+            def write(self, text):
+                # Filtrer les messages de progression
+                if 'Progress:' not in text and 'Complete' not in text and '|' not in text[:20]:
+                    self.original_stream.write(text)
+            
+            def flush(self):
+                self.original_stream.flush()
+        
+        progress_filter_stdout = ProgressFilter(sys.stdout)
+        progress_filter_stderr = ProgressFilter(sys.stderr)
+        
+        old_stdout = sys.stdout
+        old_stderr = sys.stderr
+        
+        try:
+            sys.stdout = progress_filter_stdout
+            sys.stderr = progress_filter_stderr
+            
+            # Convertir avec Docling (réutilise le converter existant)
+            result = converter.convert(file_path)
+        finally:
+            sys.stdout = old_stdout
+            sys.stderr = old_stderr
+        
+        # Extraire le contenu depuis le résultat
         if hasattr(result, 'document'):
             markdown_content = result.document.export_to_markdown()
         elif hasattr(result, 'export_to_markdown'):
             markdown_content = result.export_to_markdown()
         else:
-            # Fallback : essayer d'accéder directement au contenu
-            logger.warning("Format de résultat docling inattendu, tentative d'extraction alternative")
+            logger.warning("Format de résultat Docling inattendu, tentative d'extraction alternative")
             markdown_content = str(result)
         
         if not markdown_content or not markdown_content.strip():
-            logger.warning(f"Le document {file_path} a été traité mais le contenu markdown est vide")
+            logger.warning(f"Le document {file_path} a été traité mais le contenu est vide")
             return None
         
-        logger.info(f"Document converti avec succès en markdown ({len(markdown_content)} caractères)")
+        logger.info(f"✅ Document converti avec succès ({len(markdown_content)} caractères)")
         return markdown_content
         
     except Exception as e:
-        logger.error(f"Erreur lors du traitement du document {file_path}: {e}", exc_info=True)
+        logger.error(f"❌ Erreur lors du traitement du document {file_path}: {e}", exc_info=True)
         return None
 
 

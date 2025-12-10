@@ -6,8 +6,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Configuration du chunking
-CHUNK_SIZE = 1000  # Nombre de caractères par chunk (augmenté pour meilleure qualité)
-CHUNK_OVERLAP = 100  # Nombre de caractères de chevauchement entre chunks
+# Taille des chunks : 1000 caractères maximum (≈250 tokens)
+# Overlap de 10% pour maintenir le contexte entre chunks
+CHUNK_SIZE = 1000  # Nombre de caractères par chunk (maximum)
+CHUNK_OVERLAP = 100  # Nombre de caractères de chevauchement entre chunks (10% de overlap)
 
 
 def chunk_note(note: Note) -> List[NoteChunk]:
@@ -168,7 +170,8 @@ def _chunk_large_paragraph(paragraph: str, chunk_size: int, overlap: int) -> Lis
             chunks.append(paragraph[start:])
             break
         
-        # Chercher une fin de phrase dans les 200 derniers caractères
+        # Chercher une fin de phrase dans les derniers caractères (5% de la taille)
+        search_zone = max(50, chunk_size // 20)  # Au moins 50 caractères ou 5% de chunk_size
         chunk_text = paragraph[start:end]
         
         # Chercher la dernière fin de phrase (., !, ?, ou \n)
@@ -180,13 +183,14 @@ def _chunk_large_paragraph(paragraph: str, chunk_size: int, overlap: int) -> Lis
         )
         
         # Si on trouve une fin de phrase dans une zone raisonnable, couper là
-        if last_sentence_end > chunk_size - 200:
+        if last_sentence_end > chunk_size - search_zone:
             chunks.append(paragraph[start:start + last_sentence_end + 1].strip())
             start = start + last_sentence_end + 1 - overlap
         else:
-            # Sinon, chercher le dernier espace
+            # Sinon, chercher le dernier espace dans une zone plus petite (2.5% de la taille)
+            space_search_zone = max(25, chunk_size // 40)
             last_space = chunk_text.rfind(' ')
-            if last_space > chunk_size - 100:
+            if last_space > chunk_size - space_search_zone:
                 chunks.append(paragraph[start:start + last_space].strip())
                 start = start + last_space - overlap
             else:

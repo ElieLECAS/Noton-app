@@ -16,6 +16,7 @@ pgvector==0.2.4
 numpy==1.26.4
 torch  # Version CPU (plus légère que torch avec CUDA)
 docling==2.8.3
+PyMuPDF  # Pour détecter le texte natif dans les PDFs
 python-magic
 pillow
 faiss-cpu==1.7.4

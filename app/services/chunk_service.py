@@ -9,6 +9,9 @@ import logging
 import threading
 import time
 from queue import Queue
+import io
+import psycopg2
+from psycopg2.extras import execute_values
 
 logger = logging.getLogger(__name__)
 
@@ -126,29 +129,87 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
             from app.services.embedding_service import generate_embeddings_batch
             
             chunk_contents = [chunk.content for chunk in chunks]
-            embeddings = generate_embeddings_batch(chunk_contents, batch_size=8)
+            embeddings = generate_embeddings_batch(chunk_contents, batch_size=32)
             
-            # Sauvegarder les embeddings dans la base de données (pgvector)
-            for i, (chunk, embedding) in enumerate(zip(chunks, embeddings), 1):
+            # Filtrer les chunks avec embeddings valides
+            chunks_with_embeddings = []
+            for chunk, embedding in zip(chunks, embeddings):
+                if embedding:
+                    chunks_with_embeddings.append((chunk.id, embedding))
+                else:
+                    logger.warning(f"Impossible de générer l'embedding pour le chunk {chunk.chunk_index} de la note {note_id}")
+            
+            if not chunks_with_embeddings:
+                logger.warning(f"Aucun embedding valide généré pour la note {note_id}")
+                return
+            
+            # Utiliser copy_expert pour insertion batch ultra-rapide (beaucoup plus rapide que inserts un par un)
+            try:
+                # Obtenir la connexion raw psycopg2 depuis SQLAlchemy
+                connection = session.connection()
+                raw_connection = connection.connection
+                
+                # Créer une table temporaire pour le COPY
+                cursor = raw_connection.cursor()
                 try:
+                    cursor.execute("""
+                        CREATE TEMP TABLE temp_chunk_embeddings (
+                            chunk_id INTEGER,
+                            embedding_vector TEXT
+                        ) ON COMMIT DROP
+                    """)
+                    
+                    # Créer un buffer pour COPY avec les données formatées
+                    buffer = io.StringIO()
+                    for chunk_id, embedding in chunks_with_embeddings:
+                        # Formater l'embedding comme un array PostgreSQL
+                        embedding_str = '[' + ','.join(map(str, embedding)) + ']'
+                        buffer.write(f"{chunk_id}\t{embedding_str}\n")
+                    
+                    buffer.seek(0)
+                    
+                    # Utiliser COPY pour copier les données dans la table temporaire (ultra-rapide)
+                    cursor.copy_expert(
+                        "COPY temp_chunk_embeddings FROM STDIN WITH (FORMAT text, DELIMITER E'\\t')",
+                        buffer
+                    )
+                    
+                    # Mettre à jour les chunks avec les embeddings en une seule requête batch
+                    cursor.execute("""
+                        UPDATE notechunk
+                        SET embedding = temp_chunk_embeddings.embedding_vector::vector
+                        FROM temp_chunk_embeddings
+                        WHERE notechunk.id = temp_chunk_embeddings.chunk_id
+                    """)
+                    
+                    raw_connection.commit()
+                    logger.info(f"✅ {len(chunks_with_embeddings)} embeddings sauvegardés avec copy_expert pour la note {note_id}")
+                    
+                    # Informer SQLAlchemy que la transaction a été commitée
+                    session.commit()
+                    
+                except Exception as e:
+                    raw_connection.rollback()
+                    session.rollback()
+                    raise e
+                finally:
+                    cursor.close()
+                    buffer.close()
+                    
+            except Exception as e:
+                logger.error(f"Erreur lors de l'insertion batch avec copy_expert: {e}", exc_info=True)
+                # Fallback sur la méthode classique si copy_expert échoue
+                logger.info("Fallback sur la méthode d'insertion classique")
+                for chunk, embedding in zip(chunks, embeddings):
                     if embedding:
                         chunk.embedding = embedding
                         session.add(chunk)
-                        logger.debug(f"Embedding généré pour chunk {i}/{len(chunks)} de la note {note_id}")
-                    else:
-                        logger.warning(f"Impossible de générer l'embedding pour le chunk {chunk.chunk_index} de la note {note_id}")
-                        
-                except Exception as e:
-                    logger.error(f"Erreur lors de la sauvegarde d'embedding pour chunk {chunk.id}: {e}")
-                    continue
-            
-            # Commit une seule fois pour tous les chunks (plus efficace)
-            try:
-                session.commit()
-                logger.info(f"Tous les embeddings sauvegardés pour la note {note_id}")
-            except Exception as e:
-                logger.error(f"Erreur lors du commit des embeddings: {e}")
-                session.rollback()
+                try:
+                    session.commit()
+                    logger.info(f"Tous les embeddings sauvegardés (méthode fallback) pour la note {note_id}")
+                except Exception as e2:
+                    logger.error(f"Erreur lors du commit des embeddings (fallback): {e2}")
+                    session.rollback()
             
             logger.info(f"Génération des embeddings terminée pour la note {note_id} ({len(chunks)} chunks traités)")
             

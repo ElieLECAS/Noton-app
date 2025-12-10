@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = "your-secret-key-change-in-production"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
     
     # Ollama
     OLLAMA_BASE_URL: str = "http://localhost:11434"
@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
+    DOCLING_USE_GPU: Optional[bool] = None  # None = auto-détection, True/False pour forcer
     TORCH_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
     OMP_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
     
@@ -44,6 +45,24 @@ class Settings(BaseSettings):
         # Si c'est déjà une liste, la retourner telle quelle
         if isinstance(v, list):
             return v if v else None
+        return None
+    
+    @field_validator('DOCLING_USE_GPU', mode='before')
+    @classmethod
+    def parse_optional_bool(cls, v: Union[str, bool, None]) -> Optional[bool]:
+        """Convertit les chaînes en bool pour DOCLING_USE_GPU"""
+        if v is None:
+            return None
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            v_lower = v.strip().lower()
+            if v_lower in ('true', '1', 'yes', 'on'):
+                return True
+            elif v_lower in ('false', '0', 'no', 'off'):
+                return False
+            elif v_lower == '':
+                return None
         return None
     
     @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', mode='before')
