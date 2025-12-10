@@ -267,21 +267,18 @@ block extra_head %}
                         <div
                             class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center"
                         >
-                            <div class="flex gap-2">
+                            <div class="relative flex-1 sm:flex-none">
                                 <select
-                                    id="provider-select"
-                                    class="flex-1 sm:flex-none px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100"
-                                    onchange="onProviderChange()"
+                                    id="model-preset-select"
+                                    class="w-full px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
                                 >
-                                    <option value="ollama">Ollama</option>
-                                    <option value="openai">OpenAI</option>
+                                    <option value="private">🔒 Privé</option>
+                                    <option value="fast" selected>⚡ Rapide</option>
+                                    <option value="powerful">💪 Puissant</option>
                                 </select>
-                                <select
-                                    id="model-select"
-                                    class="flex-1 sm:flex-none px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100"
-                                >
-                                    <option value="">Chargement...</option>
-                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
+                                </div>
                             </div>
                             <div class="flex gap-2 flex-1">
                                 <input
@@ -406,39 +403,83 @@ block extra_head %}
         }
     });
 
-    // Charger les modèles selon le provider sélectionné
-    async function loadModels() {
-        const providerSelect = document.getElementById("provider-select");
-        const provider = providerSelect.value;
-        const endpoint =
-            provider === "openai" ? "/api/openai/models" : "/api/ollama/models";
+    // Fonction pour obtenir le provider et le modèle selon le preset sélectionné
+    function getModelFromPreset(preset) {
+        const modelMap = {
+            "private": { provider: "ollama", model: "llama3.2:1b" },
+            "fast": { provider: "openai", model: "gpt-5-nano-2025-08-07" },
+            "powerful": { provider: "openai", model: "gpt-5.1-chat-latest" }
+        };
+        return modelMap[preset] || modelMap["private"];
+    }
 
-        const response = await apiCall(endpoint);
+    // Fonction utilitaire pour échapper le HTML
+    function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Fonction pour afficher des notifications
+    function showNotification(message, type = "info") {
+        const notification = document.createElement("div");
+        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+            type === "success"
+                ? "bg-green-500"
+                : type === "error"
+                ? "bg-red-500"
+                : "bg-blue-500"
+        } text-white`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        // Supprimer après 3 secondes
+        setTimeout(() => {
+            notification.style.opacity = "0";
+            notification.style.transition = "opacity 0.3s";
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Supprimer un projet
+    async function deleteProject(projectId, projectTitle) {
+        if (!confirm(`Voulez-vous vraiment supprimer le projet "${projectTitle}" ?\n\nCette action est irréversible et supprimera toutes les notes et conversations associées.`)) {
+            return;
+        }
+
+        const response = await apiCall(`/api/projects/${projectId}`, {
+            method: "DELETE",
+        });
+
         if (response && response.ok) {
-            const models = await response.json();
-            const select = document.getElementById("model-select");
-            select.innerHTML = "";
-
-            if (models.length > 0) {
-                // Ajouter tous les modèles
-                models.forEach((model) => {
-                    const option = document.createElement("option");
-                    option.value = model;
-                    option.textContent = model;
-                    select.appendChild(option);
-                });
-                // Sélectionner automatiquement le premier modèle
-                select.value = models[0];
-            } else {
-                select.innerHTML =
-                    '<option value="">Aucun modèle disponible</option>';
-            }
+            showNotification(`✅ Projet "${projectTitle}" supprimé`, "success");
+            await loadProjectsList();
+        } else {
+            const errorData = await response.json().catch(() => ({ detail: "Erreur lors de la suppression" }));
+            showNotification(`❌ Erreur: ${errorData.detail || "Impossible de supprimer le projet"}`, "error");
         }
     }
 
-    // Gérer le changement de provider
-    function onProviderChange() {
-        loadModels();
+    // Renommer un projet
+    async function renameProject(projectId, currentTitle) {
+        const newTitle = prompt("Nouveau nom du projet :", currentTitle);
+        if (!newTitle || !newTitle.trim() || newTitle === currentTitle) {
+            return;
+        }
+
+        const response = await apiCall(`/api/projects/${projectId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: newTitle.trim() }),
+        });
+
+        if (response && response.ok) {
+            showNotification(`✅ Projet renommé en "${newTitle.trim()}"`, "success");
+            await loadProjectsList();
+        } else {
+            const errorData = await response.json().catch(() => ({ detail: "Erreur lors du renommage" }));
+            showNotification(`❌ Erreur: ${errorData.detail || "Impossible de renommer le projet"}`, "error");
+        }
     }
 
     // Charger les projets
@@ -460,19 +501,37 @@ block extra_head %}
                 container.innerHTML = projects
                     .map(
                         (project) => `
-                    <a href="/projects/${
-                        project.id
-                    }" class="block p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition mb-3 active:bg-gray-50 dark:active:bg-gray-700 bg-white dark:bg-gray-800">
-                        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 text-base sm:text-lg">${
-                            project.title
-                        }</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">${
-                            project.description || "Aucune description"
-                        }</p>
-                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Modifié le ${new Date(
-                            project.updated_at
-                        ).toLocaleDateString("fr-FR")}</p>
-                    </a>
+                    <div class="group relative p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-md transition mb-3 bg-white dark:bg-gray-800">
+                        <a href="/projects/${
+                            project.id
+                        }" class="block">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 text-base sm:text-lg pr-8">${
+                                escapeHtml(project.title)
+                            }</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">${
+                                project.description || "Aucune description"
+                            }</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Modifié le ${new Date(
+                                project.updated_at
+                            ).toLocaleDateString("fr-FR")}</p>
+                        </a>
+                        <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                                onclick="event.stopPropagation(); renameProject(${project.id}, '${escapeHtml(project.title).replace(/'/g, "\\'")}')"
+                                class="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-colors"
+                                title="Renommer"
+                            >
+                                <i class="ti ti-pencil text-sm"></i>
+                            </button>
+                            <button
+                                onclick="event.stopPropagation(); deleteProject(${project.id}, '${escapeHtml(project.title).replace(/'/g, "\\'")}')"
+                                class="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-colors"
+                                title="Supprimer"
+                            >
+                                <i class="ti ti-trash text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
                 `
                     )
                     .join("");
@@ -548,16 +607,11 @@ block extra_head %}
         event.preventDefault();
         const input = document.getElementById("chat-input");
         const message = input.value.trim();
-        const modelSelect = document.getElementById("model-select");
-        const providerSelect = document.getElementById("provider-select");
-        const model = modelSelect.value;
-        const provider = providerSelect.value;
+        const presetSelect = document.getElementById("model-preset-select");
+        const preset = presetSelect.value;
+        const { provider, model } = getModelFromPreset(preset);
 
         if (!message) return;
-        if (!model) {
-            alert("Veuillez sélectionner un modèle");
-            return;
-        }
 
         // Créer une conversation si aucune n'est sélectionnée
         if (!conversationsManager.currentConversation) {
@@ -763,7 +817,7 @@ block extra_head %}
 
     // Initialisation
     if (authToken) {
-        loadModels();
+        // Les modèles sont maintenant gérés par les presets, pas besoin de charger
         loadProjectsList();
     }
 </script>

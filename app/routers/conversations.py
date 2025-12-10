@@ -143,6 +143,15 @@ async def delete_conversation(
     if not conversation or conversation.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="Conversation non trouvée")
     
+    # Supprimer explicitement tous les messages de la conversation
+    # Cela évite les problèmes avec SQLAlchemy qui pourrait essayer de mettre conversation_id à None
+    messages = session.exec(
+        select(Message).where(Message.conversation_id == conversation_id)
+    ).all()
+    for message in messages:
+        session.delete(message)
+    
+    # Ensuite supprimer la conversation
     session.delete(conversation)
     session.commit()
     
