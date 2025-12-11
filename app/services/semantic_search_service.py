@@ -121,7 +121,7 @@ def search_relevant_passages(
     project_id: int,
     query_text: str,
     user_id: int,
-    k: int = 15,
+    k: int = 8,
     passage_size: int = 500
 ) -> List[Dict]:
     """

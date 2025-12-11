@@ -296,7 +296,7 @@ async def stream_project_chat_message(
         project_id=project_id,
         query_text=request.message,
         user_id=current_user.id,
-        k=15,  # 15 passages pertinents (environ 500 caractères chacun)
+        k=8,  # 8 passages pertinents (environ 500 caractères chacun)
         passage_size=500
     )
     
