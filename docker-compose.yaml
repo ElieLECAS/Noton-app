@@ -30,13 +30,14 @@ services:
 
     web:
         build:
-            context: ./app
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: ./app/Dockerfile
         container_name: noton_web
         command: sh -c "sleep 5 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
         volumes:
             - ./:/app
-            - ./alembic.ini:/app/alembic.ini
+            - ./app/alembic.ini:/app/alembic.ini
+            - ./app/alembic:/app/alembic
         ports:
             - "8001:8000"
         environment:
