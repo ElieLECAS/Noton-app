@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 import time
 
@@ -22,6 +23,33 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot Ollama")
+
+# Configuration CORS - Debug
+import os
+env_cors = os.getenv("CORS_ALLOWED_ORIGINS")
+logger.info(f"DEBUG CORS - Variable d'environnement brute: {repr(env_cors)}")
+logger.info(f"DEBUG CORS - settings.CORS_ALLOWED_ORIGINS: {repr(settings.CORS_ALLOWED_ORIGINS)}")
+logger.info(f"DEBUG CORS - Type: {type(settings.CORS_ALLOWED_ORIGINS)}")
+
+if settings.CORS_ALLOWED_ORIGINS:
+    logger.info(f"✅ Configuration CORS : origines autorisées = {settings.CORS_ALLOWED_ORIGINS}")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.CORS_ALLOWED_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    # Si aucune origine n'est spécifiée, autoriser toutes les origines (développement uniquement)
+    logger.warning("⚠️ CORS : Aucune origine spécifiée, toutes les origines sont autorisées (mode développement)")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # Monter les routers
 app.include_router(auth.router)

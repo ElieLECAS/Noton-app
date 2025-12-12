@@ -55,11 +55,10 @@ services:
             - MODEL_POWERFUL_NAME=${MODEL_POWERFUL_NAME:-gpt-5.1-chat-latest}
             # Optimisations CPU pour Docling/EasyOCR
             - DOCLING_CPU_ONLY=${DOCLING_CPU_ONLY:-true}
-            # TORCH_NUM_THREADS et OMP_NUM_THREADS sont optionnelles
-            # Si non définies, le code utilisera tous les cœurs disponibles (recommandé)
-            # Pour limiter les threads, définir dans .env (ex: TORCH_NUM_THREADS=4)
+
             - TORCH_NUM_THREADS=${TORCH_NUM_THREADS:-}
             - OMP_NUM_THREADS=${OMP_NUM_THREADS:-}
+            - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-}
         depends_on:
             db:
                 condition: service_healthy

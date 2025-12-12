@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings
 from pydantic import ConfigDict, field_validator
 from typing import Optional, Union, List
 from pathlib import Path
+import os
 
 
 class Settings(BaseSettings):
@@ -9,27 +10,27 @@ class Settings(BaseSettings):
     APP_NAME: str = "Noton"
     
     # Database
-    DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/noton"
+    DATABASE_URL: str = os.getenv("DATABASE_URL")
     
     # Security
-    SECRET_KEY: str = "your-secret-key-change-in-production"
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
     
     # Ollama
-    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL")
     
     # OpenAI
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: Optional[List[str]] = None
     
     # Modèles de chat configurables
-    MODEL_PRIVATE_PROVIDER: str = "ollama"
-    MODEL_PRIVATE_NAME: str = "llama3.2:1b"
-    MODEL_FAST_PROVIDER: str = "openai"
-    MODEL_FAST_NAME: str = "gpt-5-nano-2025-08-07"
-    MODEL_POWERFUL_PROVIDER: str = "openai"
-    MODEL_POWERFUL_NAME: str = "gpt-5.1-chat-latest"
+    MODEL_PRIVATE_PROVIDER: str = os.getenv("MODEL_PRIVATE_PROVIDER")
+    MODEL_PRIVATE_NAME: str = os.getenv("MODEL_PRIVATE_NAME")
+    MODEL_FAST_PROVIDER: str = os.getenv("MODEL_FAST_PROVIDER")
+    MODEL_FAST_NAME: str = os.getenv("MODEL_FAST_NAME")
+    MODEL_POWERFUL_PROVIDER: str = os.getenv("MODEL_POWERFUL_PROVIDER")
+    MODEL_POWERFUL_NAME: str = os.getenv("MODEL_POWERFUL_NAME")
     
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
@@ -39,6 +40,9 @@ class Settings(BaseSettings):
     
     # Document Processing
     MAX_CONCURRENT_DOCUMENTS: int = 2  # Nombre de documents traités en parallèle (réduit pour garder des ressources pour la navigation)
+    
+    # CORS
+    CORS_ALLOWED_ORIGINS: Optional[List[str]] = None  # Liste des origines autorisées (None = toutes les origines)
     
     @field_validator('OPENAI_MODEL', mode='before')
     @classmethod
@@ -51,11 +55,32 @@ class Settings(BaseSettings):
             if not v.strip():
                 return None
             # Séparer par des virgules et nettoyer les espaces
-            models = [model.strip() for model in v.split(',') if model.strip()]
-            return models if models else None
+            items = [item.strip() for item in v.split(',') if item.strip()]
+            return items if items else None
         # Si c'est déjà une liste, la retourner telle quelle
         if isinstance(v, list):
             return v if v else None
+        return None
+    
+    @field_validator('CORS_ALLOWED_ORIGINS', mode='before')
+    @classmethod
+    def parse_cors_origins(cls, v: Union[str, List[str], None]) -> Optional[List[str]]:
+        """Convertit une chaîne séparée par des virgules en liste d'origines CORS, en enlevant les slashes finaux"""
+        if v is None:
+            return None
+        if isinstance(v, str):
+            # Si c'est une chaîne vide, retourner None
+            if not v.strip():
+                return None
+            # Séparer par des virgules et nettoyer les espaces
+            items = [item.strip() for item in v.split(',') if item.strip()]
+            # Enlever les slashes finaux pour normaliser les URLs
+            normalized = [item.rstrip('/') for item in items]
+            return normalized if normalized else None
+        # Si c'est déjà une liste, normaliser les URLs
+        if isinstance(v, list):
+            normalized = [item.rstrip('/') if isinstance(item, str) else item for item in v if item]
+            return normalized if normalized else None
         return None
     
     @field_validator('DOCLING_USE_GPU', mode='before')
