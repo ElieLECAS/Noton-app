@@ -277,13 +277,12 @@ extra_head %}
                         onsubmit="sendProjectChatMessage(event)"
                         class="flex flex-col gap-2"
                     >
-                        <div
-                            class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center"
-                        >
-                            <div class="relative flex-1 sm:flex-none">
+                        <!-- Ligne 1: Selects -->
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="relative">
                                 <select
                                     id="project-model-preset-select"
-                                    class="w-full px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
                                 >
                                     <option value="private">🔒 Privé</option>
                                     <option value="fast" selected>⚡ Rapide</option>
@@ -293,25 +292,35 @@ extra_head %}
                                     <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
                                 </div>
                             </div>
-                            <div class="flex gap-2 flex-1">
-                                <input
-                                    type="text"
-                                    id="project-chat-input"
-                                    placeholder="Tapez votre message..."
-                                    class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
-                                    autocomplete="off"
-                                    required
-                                />
-                                <button
-                                    type="submit"
-                                    class="px-4 sm:px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base"
+                            <div class="relative">
+                                <select
+                                    id="project-agent-select"
+                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
                                 >
-                                    <i class="ti ti-send"></i>
-                                    <span class="hidden sm:inline"
-                                        >Envoyer</span
-                                    >
-                                </button>
+                                    <option value="">🤖 Aucun agent</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
+                                </div>
                             </div>
+                        </div>
+                        <!-- Ligne 2: Input + Bouton Envoyer -->
+                        <div class="flex gap-2">
+                            <input
+                                type="text"
+                                id="project-chat-input"
+                                placeholder="Tapez votre message..."
+                                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                autocomplete="off"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                class="px-4 sm:px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base flex-shrink-0"
+                            >
+                                <i class="ti ti-send"></i>
+                                <span class="hidden sm:inline">Envoyer</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -1369,6 +1378,8 @@ extra_head %}
             const presetSelect = document.getElementById("project-model-preset-select");
             const preset = presetSelect.value;
             const { provider, model } = getProjectModelFromPreset(preset);
+            const agentSelect = document.getElementById("project-agent-select");
+            const agentId = agentSelect.value ? parseInt(agentSelect.value) : null;
 
             if (!message) return;
 
@@ -1459,6 +1470,7 @@ extra_head %}
                             context: context,
                             conversation_id:
                                 projectConversationsManager.currentConversation,
+                            agent_id: agentId,
                         }),
                     }
                 );
@@ -1741,6 +1753,23 @@ extra_head %}
             }
         }
 
+        // Charger les agents pour le sélecteur
+        async function loadAgentsForProjectSelector() {
+            try {
+                const response = await apiCall('/api/agents');
+                if (response && response.ok) {
+                    const agents = await response.json();
+                    const select = document.getElementById('project-agent-select');
+                    if (select) {
+                        select.innerHTML = '<option value="">🤖 Aucun agent</option>' +
+                            agents.map(agent => `<option value="${agent.id}">🤖 ${escapeHtml(agent.name)}</option>`).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des agents:', error);
+            }
+        }
+
         // Initialisation
         if (authToken) {
             loadProject();
@@ -1748,6 +1777,7 @@ extra_head %}
                 // Démarrer le polling après le chargement initial
                 startEmbeddingStatusPolling();
             });
+            loadAgentsForProjectSelector();
             // Les modèles sont maintenant gérés par les presets, pas besoin de charger
         }
 

@@ -300,17 +300,27 @@ block extra_head %}
                         onsubmit="sendChatMessage(event)"
                         class="flex flex-col gap-2"
                     >
-                        <div
-                            class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center"
-                        >
-                            <div class="relative flex-1 sm:flex-none">
+                        <!-- Ligne 1: Selects + Bouton Image -->
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="relative">
                                 <select
                                     id="model-preset-select"
-                                    class="w-full px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
                                 >
                                     <option value="private">🔒 Privé</option>
                                     <option value="fast" selected>⚡ Rapide</option>
                                     <option value="powerful">💪 Puissant</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <select
+                                    id="agent-select"
+                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+                                >
+                                    <option value="">🤖 Aucun agent</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                     <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
@@ -326,25 +336,24 @@ block extra_head %}
                                 <i class="ti ti-photo text-lg"></i>
                                 <span class="hidden sm:inline text-xs font-medium">Image</span>
                             </button>
-                            <div class="flex gap-2 flex-1">
-                                <input
-                                    type="text"
-                                    id="chat-input"
-                                    placeholder="Tapez votre message..."
-                                    class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
-                                    autocomplete="off"
-                                    required
-                                />
-                                <button
-                                    type="submit"
-                                    class="px-4 sm:px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base"
-                                >
-                                    <i class="ti ti-send"></i>
-                                    <span class="hidden sm:inline"
-                                        >Envoyer</span
-                                    >
-                                </button>
-                            </div>
+                        </div>
+                        <!-- Ligne 2: Input + Bouton Envoyer -->
+                        <div class="flex gap-2">
+                            <input
+                                type="text"
+                                id="chat-input"
+                                placeholder="Tapez votre message..."
+                                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                autocomplete="off"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                class="px-4 sm:px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base flex-shrink-0"
+                            >
+                                <i class="ti ti-send"></i>
+                                <span class="hidden sm:inline">Envoyer</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -736,6 +745,8 @@ block extra_head %}
         const presetSelect = document.getElementById("model-preset-select");
         const preset = presetSelect.value;
         const { provider, model } = getModelFromPreset(preset);
+        const agentSelect = document.getElementById("agent-select");
+        const agentId = agentSelect.value ? parseInt(agentSelect.value) : null;
 
         if (!message) return;
 
@@ -870,6 +881,7 @@ block extra_head %}
                     conversation_id: conversationsManager
                         ? conversationsManager.currentConversation
                         : null,
+                    agent_id: agentId,
                 }),
             });
 
@@ -1011,8 +1023,26 @@ block extra_head %}
         return div.innerHTML;
     }
 
+    // Charger les agents pour le sélecteur
+    async function loadAgentsForSelector() {
+        try {
+            const response = await apiCall('/api/agents');
+            if (response && response.ok) {
+                const agents = await response.json();
+                const select = document.getElementById('agent-select');
+                if (select) {
+                    select.innerHTML = '<option value="">🤖 Aucun agent</option>' +
+                        agents.map(agent => `<option value="${agent.id}">🤖 ${escapeHtml(agent.name)}</option>`).join('');
+                }
+            }
+        } catch (error) {
+            console.error('Erreur lors du chargement des agents:', error);
+        }
+    }
+
     // Initialisation
     if (authToken) {
+        loadAgentsForSelector();
         // Les modèles sont maintenant gérés par les presets, pas besoin de charger
         loadProjectsList();
     }

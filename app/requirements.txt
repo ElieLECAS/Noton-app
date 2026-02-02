@@ -21,4 +21,8 @@ python-magic
 pillow
 faiss-cpu==1.7.4
 fastembed==0.3.6
+# LangGraph et APScheduler pour agents et scheduler
+langgraph>=0.2.0
+langchain-core>=0.3.0
+apscheduler>=3.10.0
 

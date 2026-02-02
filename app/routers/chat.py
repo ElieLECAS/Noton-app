@@ -17,6 +17,7 @@ from app.config import settings
 from app.services.semantic_search_service import search_relevant_notes, search_relevant_passages
 from app.models.conversation import Conversation
 from app.models.message import Message
+from app.models.agent import Agent
 from datetime import datetime
 import json
 import logging
@@ -32,6 +33,7 @@ class ChatRequest(BaseModel):
     provider: str = "ollama"  # "ollama" ou "openai"
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None  # ID de la conversation (optionnel pour compatibilité)
+    agent_id: Optional[int] = None  # ID de l'agent (optionnel)
 
 
 class GenerateImageRequest(BaseModel):
@@ -106,6 +108,14 @@ async def stream_chat_message(
     session: Session = Depends(get_session)
 ):
     """Envoyer un message au chatbot (Ollama ou OpenAI) avec streaming"""
+    # Charger l'agent si agent_id est fourni
+    agent = None
+    if request.agent_id:
+        agent = session.get(Agent, request.agent_id)
+        if not agent or agent.user_id != current_user.id:
+            logger.warning(f"Agent {request.agent_id} non trouvé ou non autorisé pour l'utilisateur {current_user.id}")
+            agent = None
+    
     # Sauvegarder le message utilisateur si conversation_id est fourni
     if request.conversation_id:
         try:
@@ -121,6 +131,15 @@ async def stream_chat_message(
         except Exception as e:
             logger.error(f"Erreur lors de la sauvegarde du message utilisateur: {e}")
     
+    # Construire le contexte avec la personnalité de l'agent si disponible
+    full_context = []
+    if agent:
+        full_context.append({"role": "system", "content": agent.personality})
+    
+    # Ajouter le contexte existant
+    if request.context:
+        full_context.extend(request.context)
+    
     # Variable pour accumuler la réponse de l'assistant
     assistant_response = []
     
@@ -131,7 +150,7 @@ async def stream_chat_message(
                     error_msg = "OpenAI API key n'est pas configurée"
                     yield f"data: {json.dumps({'error': error_msg})}\n\n"
                     return
-                async for line in openai_chat_stream(request.message, request.model, request.context):
+                async for line in openai_chat_stream(request.message, request.model, full_context):
                     if line.strip():
                         # Accumuler la réponse
                         try:
@@ -143,7 +162,7 @@ async def stream_chat_message(
                         # OpenAI renvoie déjà au format Ollama via le service
                         yield f"data: {line}\n\n"
             else:  # ollama par défaut
-                async for line in ollama_chat_stream(request.message, request.model, request.context):
+                async for line in ollama_chat_stream(request.message, request.model, full_context):
                     if line.strip():
                         # Accumuler la réponse
                         try:
@@ -262,6 +281,7 @@ class ProjectChatRequest(BaseModel):
     provider: str = "ollama"  # "ollama" ou "openai"
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None  # ID de la conversation (optionnel pour compatibilité)
+    agent_id: Optional[int] = None  # ID de l'agent (optionnel)
 
 
 def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
@@ -355,6 +375,14 @@ async def stream_project_chat_message(
     session: Session = Depends(get_session)
 ):
     """Envoyer un message au chatbot (Ollama ou OpenAI) avec streaming et contexte enrichi des passages pertinents du projet"""
+    # Charger l'agent si agent_id est fourni
+    agent = None
+    if request.agent_id:
+        agent = session.get(Agent, request.agent_id)
+        if not agent or agent.user_id != current_user.id:
+            logger.warning(f"Agent {request.agent_id} non trouvé ou non autorisé pour l'utilisateur {current_user.id}")
+            agent = None
+    
     # Sauvegarder le message utilisateur si conversation_id est fourni
     if request.conversation_id:
         try:
@@ -384,11 +412,15 @@ async def stream_project_chat_message(
     # Construire le contexte enrichi avec les passages pertinents
     project_context = build_semantic_context_from_passages(passages)
     
-    # Ajouter le contexte de conversation existant si fourni
-    if request.context:
-        full_context = project_context + request.context
+    # Préfixer avec la personnalité de l'agent si disponible
+    if agent:
+        full_context = [{"role": "system", "content": agent.personality}] + project_context
     else:
         full_context = project_context
+    
+    # Ajouter le contexte de conversation existant si fourni
+    if request.context:
+        full_context = full_context + request.context
     
     # Ajouter le message utilisateur actuel
     full_context.append({"role": "user", "content": request.message})

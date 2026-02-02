@@ -132,3 +132,14 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
+
+def get_model_for_preset(preset: Optional[str]) -> dict:
+    """Retourne provider et model pour un preset (même logique que le chat / template globals)."""
+    preset = (preset or "").strip().lower()
+    if preset == "powerful":
+        return {"provider": settings.MODEL_POWERFUL_PROVIDER, "model": settings.MODEL_POWERFUL_NAME}
+    if preset == "private":
+        return {"provider": settings.MODEL_PRIVATE_PROVIDER, "model": settings.MODEL_PRIVATE_NAME}
+    # "fast" ou défaut (comme le chat)
+    return {"provider": settings.MODEL_FAST_PROVIDER, "model": settings.MODEL_FAST_NAME}
+

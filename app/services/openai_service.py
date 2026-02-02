@@ -60,7 +60,7 @@ async def chat(message: str, model: str, context: Optional[List[Dict]] = None) -
             "stream": False
         }
         
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        async with httpx.AsyncClient(timeout=120.0) as client:
             response = await client.post(
                 "https://api.openai.com/v1/chat/completions",
                 headers={
@@ -95,7 +95,7 @@ async def chat_stream(message: str, model: str, context: Optional[List[Dict]] = 
             "stream": True
         }
         
-        async with httpx.AsyncClient(timeout=60.0) as client:
+        async with httpx.AsyncClient(timeout=120.0) as client:
             async with client.stream(
                 "POST",
                 "https://api.openai.com/v1/chat/completions",

@@ -10,7 +10,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # Importer les modèles pour qu'Alembic les détecte
-from app.models import User, Project, Note, NoteChunk
+from app.models import User, Project, Note, NoteChunk, Agent, AgentTask, ScheduledJob, TaskRunLog
 from app.config import settings
 
 # this is the Alembic Config object, which provides
