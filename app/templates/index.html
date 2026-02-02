@@ -152,6 +152,15 @@ block extra_head %}
     .dark #chatbot-area.private-mode .bg-gray-800 {
         background-color: #2d1b3d !important; /* Violet foncé moins saturé */
     }
+    /* Bouton mode image actif */
+    #toggle-image-mode.image-mode-active {
+        background-color: #8b5cf6 !important;
+        border-color: #7c3aed;
+        color: white !important;
+    }
+    #toggle-image-mode.image-mode-active:hover {
+        background-color: #7c3aed !important;
+    }
 </style>
 {% endblock %} {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -307,6 +316,16 @@ block extra_head %}
                                     <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
                                 </div>
                             </div>
+                            <button
+                                type="button"
+                                id="toggle-image-mode"
+                                onclick="toggleImageGenerationMode()"
+                                class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors flex items-center gap-2 text-sm"
+                                title="Activer la génération d'image (OpenAI DALL-E 3)"
+                            >
+                                <i class="ti ti-photo text-lg"></i>
+                                <span class="hidden sm:inline text-xs font-medium">Image</span>
+                            </button>
                             <div class="flex gap-2 flex-1">
                                 <input
                                     type="text"
@@ -338,6 +357,25 @@ block extra_head %}
     let chatHistory = [];
     let chatbotOpen = true; // Par défaut ouvert sur la page d'accueil
     let conversationsManager; // Gestionnaire de conversations
+    let imageGenerationEnabled = false; // Mode génération d'image (DALL-E 3)
+
+    // Activer/désactiver le mode génération d'image
+    function toggleImageGenerationMode() {
+        imageGenerationEnabled = !imageGenerationEnabled;
+        const btn = document.getElementById("toggle-image-mode");
+        const input = document.getElementById("chat-input");
+        if (btn) {
+            if (imageGenerationEnabled) {
+                btn.classList.add("image-mode-active");
+                btn.title = "Désactiver la génération d'image";
+                if (input) input.placeholder = "Décrivez l'image à générer...";
+            } else {
+                btn.classList.remove("image-mode-active");
+                btn.title = "Activer la génération d'image (OpenAI DALL-E 3)";
+                if (input) input.placeholder = "Tapez votre message...";
+            }
+        }
+    }
 
     // Gérer l'ouverture/fermeture du chatbot
     function toggleChatbot() {
@@ -730,14 +768,62 @@ block extra_head %}
         addMessageToChat("user", message);
         input.value = "";
 
-        // Désactiver le bouton et l'input pendant l'envoi
         const submitButton = event.target.querySelector(
             'button[type="submit"]'
         );
         submitButton.disabled = true;
         input.disabled = true;
 
-        // Préparer le contexte
+        // Mode génération d'image (OpenAI DALL-E 3)
+        if (imageGenerationEnabled) {
+            const messagesContainer = document.getElementById("chat-messages");
+            const emptyMessage = messagesContainer.querySelector(".text-center");
+            if (emptyMessage) emptyMessage.remove();
+
+            const assistantPlaceholder = document.createElement("div");
+            assistantPlaceholder.id = "assistant-streaming-message";
+            assistantPlaceholder.className = "flex justify-start";
+            assistantPlaceholder.innerHTML = `
+                <div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg px-4 py-2">
+                    <div class="markdown-content italic">Génération de l'image en cours...</div>
+                </div>
+            `;
+            messagesContainer.appendChild(assistantPlaceholder);
+            scrollChatToBottom(true);
+
+            try {
+                const token = localStorage.getItem("authToken");
+                const resp = await fetch("/api/chat/generate-image", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        prompt: message,
+                        conversation_id: conversationsManager ? conversationsManager.currentConversation : null,
+                    }),
+                });
+                const data = await resp.json().catch(() => ({}));
+
+                assistantPlaceholder.remove();
+                if (resp.ok && data.content) {
+                    addMessageToChat("assistant", data.content);
+                } else {
+                    addMessageToChat("assistant", "Erreur : " + (data.detail || "Impossible de générer l'image. Vérifiez que la clé OpenAI est configurée."));
+                }
+                if (conversationsManager) await conversationsManager.loadConversations();
+            } catch (err) {
+                assistantPlaceholder.remove();
+                addMessageToChat("assistant", "Erreur : " + err.message);
+            }
+            submitButton.disabled = false;
+            input.disabled = false;
+            input.focus();
+            return;
+        }
+
+        // Préparer le contexte (mode chat classique)
         const context = chatHistory.map((msg) => ({
             role: msg.role,
             content: msg.content,

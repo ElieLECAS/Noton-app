@@ -7,7 +7,12 @@ from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.database import get_session
 from app.services.ollama_service import get_available_models as get_ollama_models, chat as ollama_chat, chat_stream as ollama_chat_stream
-from app.services.openai_service import get_available_models as get_openai_models, chat as openai_chat, chat_stream as openai_chat_stream
+from app.services.openai_service import (
+    get_available_models as get_openai_models,
+    chat as openai_chat,
+    chat_stream as openai_chat_stream,
+    generate_image as openai_generate_image,
+)
 from app.config import settings
 from app.services.semantic_search_service import search_relevant_notes, search_relevant_passages
 from app.models.conversation import Conversation
@@ -27,6 +32,11 @@ class ChatRequest(BaseModel):
     provider: str = "ollama"  # "ollama" ou "openai"
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None  # ID de la conversation (optionnel pour compatibilité)
+
+
+class GenerateImageRequest(BaseModel):
+    prompt: str
+    conversation_id: Optional[int] = None
 
 
 @router.get("/ollama/models", response_model=List[str])
@@ -173,6 +183,77 @@ async def stream_chat_message(
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
     
     return StreamingResponse(generate(), media_type="text/event-stream")
+
+
+@router.post("/chat/generate-image")
+async def chat_generate_image(
+    request: GenerateImageRequest,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Générer une image via OpenAI DALL-E 3 à partir d'un prompt texte."""
+    if not settings.OPENAI_API_KEY:
+        raise HTTPException(
+            status_code=400,
+            detail="OpenAI API key n'est pas configurée. La génération d'images nécessite une clé OpenAI.",
+        )
+    if not request.prompt or not request.prompt.strip():
+        raise HTTPException(status_code=400, detail="Le prompt ne peut pas être vide.")
+
+    # Sauvegarder le message utilisateur si conversation_id est fourni
+    if request.conversation_id:
+        try:
+            user_message = Message(
+                conversation_id=request.conversation_id,
+                role="user",
+                content=request.prompt.strip(),
+                model=None,
+                provider=None,
+            )
+            session.add(user_message)
+            session.commit()
+        except Exception as e:
+            logger.error(f"Erreur lors de la sauvegarde du message utilisateur: {e}")
+
+    try:
+        images = await openai_generate_image(prompt=request.prompt.strip())
+    except Exception as e:
+        logger.exception("Erreur génération image OpenAI: %s", e)
+        raise HTTPException(
+            status_code=502,
+            detail=f"Erreur lors de la génération d'image: {str(e)}",
+        )
+
+    if not images or "url" not in images[0]:
+        raise HTTPException(
+            status_code=502,
+            detail="Aucune image retournée par l'API OpenAI.",
+        )
+
+    image_url = images[0]["url"]
+    # Contenu markdown pour affichage dans le chat (image cliquable)
+    content = f"![Image générée]({image_url})\n\n*Prompt : {request.prompt.strip()}*"
+
+    # Sauvegarder la réponse assistant si conversation_id est fourni
+    if request.conversation_id:
+        try:
+            assistant_message = Message(
+                conversation_id=request.conversation_id,
+                role="assistant",
+                content=content,
+                model=settings.OPENAI_IMAGE_MODEL,
+                provider="openai",
+            )
+            session.add(assistant_message)
+            conv = session.get(Conversation, request.conversation_id)
+            if conv:
+                conv.updated_at = datetime.utcnow()
+                session.add(conv)
+            session.commit()
+        except Exception as e:
+            logger.error(f"Erreur lors de la sauvegarde du message assistant (image): {e}")
+
+    return {"url": image_url, "content": content}
 
 
 class ProjectChatRequest(BaseModel):

@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     # OpenAI
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: Optional[List[str]] = None
+    OPENAI_IMAGE_MODEL: str = "dall-e-3"  # Modèle de génération d'images (DALL-E 3)
     
     # Modèles de chat configurables
     MODEL_PRIVATE_PROVIDER: str = os.getenv("MODEL_PRIVATE_PROVIDER")
