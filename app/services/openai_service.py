@@ -1,7 +1,8 @@
 import httpx
 import json
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 from app.config import settings
+from app.services.chat_tools import run_tool, get_web_search_system_prompt
 
 
 async def get_available_models() -> List[str]:
@@ -41,39 +42,77 @@ async def get_available_models() -> List[str]:
         return []
 
 
-async def chat(message: str, model: str, context: Optional[List[Dict]] = None) -> Dict:
-    """Envoyer un message au chatbot OpenAI"""
+async def chat(
+    message: str,
+    model: str,
+    context: Optional[List[Dict]] = None,
+    tools: Optional[List[Dict]] = None,
+) -> Dict:
+    """Envoyer un message au chatbot OpenAI, avec boucle tool_calls si des tools sont fournis."""
     if not settings.OPENAI_API_KEY:
         raise ValueError("OPENAI_API_KEY n'est pas configurée")
-    
-    try:
-        # Construire les messages
-        messages = []
-        if context:
-            messages.extend(context)
-        else:
-            messages.append({"role": "user", "content": message})
-        
-        payload = {
-            "model": model,
-            "messages": messages,
-            "stream": False
-        }
-        
-        async with httpx.AsyncClient(timeout=120.0) as client:
-            response = await client.post(
-                "https://api.openai.com/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {settings.OPENAI_API_KEY}",
-                    "Content-Type": "application/json"
-                },
-                json=payload
-            )
-            response.raise_for_status()
-            return response.json()
-    except Exception as e:
-        print(f"Erreur lors de l'appel à OpenAI: {e}")
-        raise
+
+    messages = []
+    if context:
+        messages.extend(context)
+    else:
+        messages.append({"role": "user", "content": message})
+
+    # Message système pour inciter le modèle à utiliser la recherche web quand les tools sont activés
+    web_search_prompt = get_web_search_system_prompt(include_brave_search=bool(tools))
+    if web_search_prompt:
+        messages.insert(0, {"role": "system", "content": web_search_prompt})
+
+    max_tool_rounds = 5
+    for _ in range(max_tool_rounds):
+        try:
+            payload = {
+                "model": model,
+                "messages": messages,
+                "stream": False,
+            }
+            if tools:
+                payload["tools"] = tools
+
+            async with httpx.AsyncClient(timeout=120.0) as client:
+                response = await client.post(
+                    "https://api.openai.com/v1/chat/completions",
+                    headers={
+                        "Authorization": f"Bearer {settings.OPENAI_API_KEY}",
+                        "Content-Type": "application/json",
+                    },
+                    json=payload,
+                )
+                response.raise_for_status()
+                data = response.json()
+        except Exception as e:
+            print(f"Erreur lors de l'appel à OpenAI: {e}")
+            raise
+
+        choice = (data.get("choices") or [{}])[0]
+        msg = choice.get("message") or {}
+        tool_calls = msg.get("tool_calls") or []
+
+        if not tool_calls:
+            return data
+
+        # Ajouter le message assistant (avec tool_calls) à l'historique
+        messages.append(msg)
+
+        # Exécuter chaque tool et ajouter les réponses (format OpenAI: role "tool" + tool_call_id)
+        for tc in tool_calls:
+            tid = tc.get("id", "")
+            fn = tc.get("function") or {}
+            name = fn.get("name", "")
+            args_str = fn.get("arguments") or "{}"
+            try:
+                args = json.loads(args_str)
+            except json.JSONDecodeError:
+                args = {}
+            result = await run_tool(name, args)
+            messages.append({"role": "tool", "tool_call_id": tid, "content": result})
+
+    return data
 
 
 async def chat_stream(message: str, model: str, context: Optional[List[Dict]] = None):

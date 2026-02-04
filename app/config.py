@@ -42,6 +42,9 @@ class Settings(BaseSettings):
     # Document Processing
     MAX_CONCURRENT_DOCUMENTS: int = 2  # Nombre de documents traités en parallèle (réduit pour garder des ressources pour la navigation)
     
+    # Brave Search (recherche web pour function calling)
+    BRAVE_SEARCH_API_KEY: Optional[str] = None
+
     # CORS
     CORS_ALLOWED_ORIGINS: Optional[List[str]] = None  # Liste des origines autorisées (None = toutes les origines)
     

@@ -14,7 +14,10 @@ RUN apt-get update && apt-get install -y \
 
 # Copier et installer les dépendances Python
 COPY app/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# PyTorch + torchvision CPU en premier (versions compatibles), puis le reste sans réinstaller depuis PyPI
+RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu && \
+    grep -v -E '^torch($| )' requirements.txt > requirements-docker.txt && \
+    pip install --no-cache-dir -r requirements-docker.txt
 
 # Copier le code de l'application dans /app/app/ pour correspondre aux imports "from app."
 COPY app/ ./app/
