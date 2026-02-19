@@ -928,19 +928,22 @@ extra_head %}
             }
         }
 
-        function getProcessingStatusIcon(status) {
+        function getProcessingStatusIcon(status, progress = null) {
             if (!status) {
                 return "";
             }
             switch (status) {
                 case "pending":
-                    return '<i class="ti ti-clock text-yellow-500" title="Traitement en attente"></i>';
+                    return '<i class="ti ti-clock text-yellow-500" title="Traitement en attente"></i><span class="text-xs text-yellow-600 dark:text-yellow-400">En attente</span>';
                 case "processing":
-                    return '<i class="ti ti-loader-2 animate-spin text-blue-500" title="Traitement du document en cours..."></i>';
+                    if (typeof progress === "number") {
+                        return `<i class="ti ti-loader-2 animate-spin text-blue-500" title="Traitement du document en cours..."></i><span class="text-xs text-blue-600 dark:text-blue-400">Traitement en cours (${progress}%)</span>`;
+                    }
+                    return '<i class="ti ti-loader-2 animate-spin text-blue-500" title="Traitement du document en cours..."></i><span class="text-xs text-blue-600 dark:text-blue-400">Traitement en cours</span>';
                 case "completed":
-                    return '<i class="ti ti-check text-green-500" title="Document traité"></i>';
+                    return '<i class="ti ti-check text-green-500" title="Document traité"></i><span class="text-xs text-green-600 dark:text-green-400">Traité</span>';
                 case "failed":
-                    return '<i class="ti ti-alert-circle text-red-500" title="Erreur lors du traitement"></i>';
+                    return '<i class="ti ti-alert-circle text-red-500" title="Erreur lors du traitement"></i><span class="text-xs text-red-600 dark:text-red-400">Échec</span>';
                 default:
                     return "";
             }
@@ -1006,7 +1009,7 @@ extra_head %}
         }
 
         // Mettre à jour l'icône de statut de traitement pour une note spécifique
-        function updateNoteProcessingIcon(noteId, status) {
+        function updateNoteProcessingIcon(noteId, status, progress = null) {
             const noteElement = document.querySelector(
                 `[data-note-id="${noteId}"]`
             );
@@ -1015,10 +1018,16 @@ extra_head %}
                     ".processing-status-icon"
                 );
                 if (iconContainer) {
-                    const newIcon = getProcessingStatusIcon(status);
+                    const newIcon = getProcessingStatusIcon(status, progress);
                     iconContainer.innerHTML = newIcon;
+                    if (typeof progress === "number") {
+                        noteElement.setAttribute(
+                            "data-processing-progress",
+                            progress
+                        );
+                    }
                     console.log(
-                        `Icône de traitement mise à jour pour la note ${noteId}: ${status}`
+                        `Icône de traitement mise à jour pour la note ${noteId}: ${status} (${progress ?? "n/a"}%)`
                     );
                 }
             }
@@ -1067,7 +1076,8 @@ extra_head %}
 
                             // Obtenir l'icône de statut de traitement pour les documents
                             const processingIcon = getProcessingStatusIcon(
-                                note.processing_status
+                                note.processing_status,
+                                note.processing_progress
                             );
 
                             return `
@@ -1080,6 +1090,12 @@ extra_head %}
                                 ? `data-processing-status="${note.processing_status}"`
                                 : ""
                         }
+                        ${
+                            note.note_type === "document" &&
+                            typeof note.processing_progress === "number"
+                                ? `data-processing-progress="${note.processing_progress}"`
+                                : ""
+                        }
                         onclick="window.location.href='/notes/${note.id}/edit'"
                     >
                         <div class="flex items-start justify-between mb-2 sm:mb-3">
@@ -1089,7 +1105,7 @@ extra_head %}
                                 }</h3>
                                 ${
                                     note.note_type === "document"
-                                        ? `<span class="processing-status-icon flex-shrink-0" title="Statut de traitement">${processingIcon}</span>`
+                                        ? `<span class="processing-status-icon flex-shrink-0 inline-flex items-center gap-1" title="Statut de traitement">${processingIcon}</span>`
                                         : ""
                                 }
                                 <span class="embedding-status-icon flex-shrink-0">${statusIcon}</span>
@@ -1163,7 +1179,8 @@ extra_head %}
                         ) {
                             updateNoteProcessingIcon(
                                 note.id,
-                                note.processing_status
+                                note.processing_status,
+                                note.processing_progress
                             );
                         }
                     });
@@ -1687,20 +1704,40 @@ extra_head %}
                                 noteElement?.getAttribute(
                                     "data-processing-status"
                                 );
+                            const previousProcessingProgressRaw =
+                                noteElement?.getAttribute(
+                                    "data-processing-progress"
+                                );
+                            const previousProcessingProgress =
+                                previousProcessingProgressRaw !== null
+                                    ? Number(previousProcessingProgressRaw)
+                                    : null;
+                            const currentProgress =
+                                typeof note.processing_progress === "number"
+                                    ? note.processing_progress
+                                    : null;
                             if (
                                 previousProcessingStatus !==
-                                note.processing_status
+                                    note.processing_status ||
+                                previousProcessingProgress !== currentProgress
                             ) {
                                 hasChanges = true;
                                 updateNoteProcessingIcon(
                                     note.id,
-                                    note.processing_status
+                                    note.processing_status,
+                                    currentProgress
                                 );
                                 if (noteElement) {
                                     noteElement.setAttribute(
                                         "data-processing-status",
                                         note.processing_status
                                     );
+                                    if (currentProgress !== null) {
+                                        noteElement.setAttribute(
+                                            "data-processing-progress",
+                                            String(currentProgress)
+                                        );
+                                    }
                                 }
                             }
 

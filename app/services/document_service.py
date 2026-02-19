@@ -21,9 +21,9 @@ _queues_lock = threading.Lock()  # Lock pour protéger les dictionnaires de queu
 document_workers = []
 _document_workers_lock = threading.Lock()  # Lock pour la synchronisation des workers
 
-# Pool de converters Docling réutilisables (créés une seule fois au démarrage)
-_docling_converter = None
-_docling_converter_lock = threading.Lock()
+# Reader Docling LlamaIndex partagé (singleton)
+_docling_reader = None
+_docling_reader_lock = threading.Lock()
 
 # Configurer PyTorch pour CPU avant l'import de docling
 # Cela évite les warnings sur pin_memory et optimise pour CPU
@@ -43,16 +43,22 @@ try:
     warnings.filterwarnings('ignore', category=UserWarning, module='torch.utils.data.dataloader')
     
     # Configurer le nombre de threads PyTorch
-    # Par défaut, limiter à la moitié des cœurs pour garder des ressources pour FastAPI
+    # Par défaut, utiliser tous les cœurs disponibles pour maximiser les performances
     if settings.TORCH_NUM_THREADS is not None:
         torch.set_num_threads(settings.TORCH_NUM_THREADS)
-        logger.info(f"PyTorch configuré avec {settings.TORCH_NUM_THREADS} threads")
+        logger.info(f"PyTorch configuré avec {settings.TORCH_NUM_THREADS} threads (valeur explicite)")
     else:
-        # Limiter à la moitié des cœurs disponibles pour isoler le traitement des documents
+        # Utiliser tous les cœurs disponibles pour maximiser les performances
         import multiprocessing
-        default_threads = max(1, multiprocessing.cpu_count() // 2)
+        cpu_count = multiprocessing.cpu_count()
+        if settings.USE_ALL_CPU_CORES:
+            default_threads = cpu_count
+            logger.info(f"PyTorch configuré avec {default_threads} threads (tous les {cpu_count} cœurs disponibles)")
+        else:
+            # Fallback: limiter à la moitié si USE_ALL_CPU_CORES est False
+            default_threads = max(1, cpu_count // 2)
+            logger.info(f"PyTorch configuré avec {default_threads} threads (moitié des {cpu_count} cœurs disponibles)")
         torch.set_num_threads(default_threads)
-        logger.info(f"PyTorch configuré avec {default_threads} threads (moitié des {multiprocessing.cpu_count()} cœurs disponibles pour isoler le traitement)")
     
     # Configurer les variables d'environnement pour OpenMP (utilisé par PyTorch)
     # Supprimer OMP_NUM_THREADS si elle est définie avec une valeur invalide
@@ -67,13 +73,19 @@ try:
     # Configurer OMP_NUM_THREADS depuis les settings
     if settings.OMP_NUM_THREADS is not None and settings.OMP_NUM_THREADS > 0:
         os.environ['OMP_NUM_THREADS'] = str(settings.OMP_NUM_THREADS)
-        logger.info(f"OMP_NUM_THREADS configuré à {settings.OMP_NUM_THREADS}")
+        logger.info(f"OMP_NUM_THREADS configuré à {settings.OMP_NUM_THREADS} (valeur explicite)")
     elif 'OMP_NUM_THREADS' not in os.environ:
-        # Si OMP_NUM_THREADS n'est pas défini, limiter à la moitié des cœurs pour isoler le traitement
+        # Si OMP_NUM_THREADS n'est pas défini, utiliser tous les cœurs par défaut
         import multiprocessing
-        default_omp_threads = max(1, multiprocessing.cpu_count() // 2)
+        cpu_count = multiprocessing.cpu_count()
+        if settings.USE_ALL_CPU_CORES:
+            default_omp_threads = cpu_count
+            logger.info(f"OMP_NUM_THREADS configuré par défaut à {default_omp_threads} (tous les {cpu_count} cœurs disponibles)")
+        else:
+            # Fallback: limiter à la moitié si USE_ALL_CPU_CORES est False
+            default_omp_threads = max(1, cpu_count // 2)
+            logger.info(f"OMP_NUM_THREADS configuré par défaut à {default_omp_threads} (moitié des {cpu_count} cœurs disponibles)")
         os.environ['OMP_NUM_THREADS'] = str(default_omp_threads)
-        logger.info(f"OMP_NUM_THREADS configuré par défaut à {default_omp_threads} (moitié des {multiprocessing.cpu_count()} cœurs disponibles)")
     
     # Gérer le GPU optionnel selon la configuration
     if settings.DOCLING_USE_GPU is False or (settings.DOCLING_CPU_ONLY and settings.DOCLING_USE_GPU is None):
@@ -90,108 +102,46 @@ try:
 except ImportError:
     logger.warning("PyTorch non disponible, certaines optimisations CPU ne seront pas appliquées")
 
-from docling.document_converter import DocumentConverter
-
-# Essayer d'importer les options avancées de Docling (peuvent ne pas être disponibles dans toutes les versions)
-DOCLING_OPTIONS_AVAILABLE = False
-PdfPipelineOptions = None
-TableFormerMode = None
-InputFormat = None
-
-try:
-    from docling.datamodel.pipeline_options import PdfPipelineOptions
-    from docling.datamodel.pipeline_options import TableFormerMode
-    from docling.datamodel.base_models import InputFormat
-    DOCLING_OPTIONS_AVAILABLE = True
-except ImportError:
-    # Les options avancées ne sont pas disponibles dans cette version de Docling
-    # On utilisera DocumentConverter avec sa configuration par défaut
-    logger.debug("Options avancées Docling non disponibles, utilisation de la configuration par défaut")
-
-# Import PyMuPDF pour détecter le texte natif dans les PDFs
-try:
-    import fitz  # PyMuPDF
-    PYMUPDF_AVAILABLE = True
-except ImportError:
-    PYMUPDF_AVAILABLE = False
-    logger.warning("PyMuPDF non disponible, la détection de texte natif sera désactivée")
+from llama_index.readers.docling import DoclingReader
 
 
-def extract_text_from_pdf(file_path: str) -> Optional[str]:
+def get_docling_reader():
     """
-    Extrait le texte natif d'un PDF en utilisant PyMuPDF (ultra-rapide).
-    
-    Args:
-        file_path: Chemin vers le fichier PDF
-        
-    Returns:
-        Le texte extrait ou None si le PDF est scanné (pas de texte natif)
-    """
-    if not PYMUPDF_AVAILABLE:
-        logger.debug("PyMuPDF non disponible, utilisation de Docling en fallback")
-        return None
-    
-    doc = None
-    try:
-        doc = fitz.open(file_path)
-        text_content = ""
-        
-        # Extraire le texte de toutes les pages
-        for page_num in range(len(doc)):
-            page = doc[page_num]
-            text = page.get_text()
-            text_content += text + "\n\n"
-        
-        text_content = text_content.strip()
-        
-        # Si on trouve moins de 100 caractères, c'est probablement un PDF scanné
-        if len(text_content) < 100:
-            logger.info(f"PDF scanné détecté (peu de texte natif): {file_path}, utilisation de Docling avec OCR")
-            return None
-        
-        logger.info(f"✅ PDF avec texte natif extrait rapidement: {file_path} ({len(text_content)} caractères)")
-        return text_content
-        
-    except Exception as e:
-        logger.warning(f"Erreur lors de l'extraction de texte du PDF {file_path}: {e}")
-        return None
-    finally:
-        # S'assurer que le document est toujours fermé même en cas d'erreur
-        if doc is not None:
-            try:
-                doc.close()
-            except (Exception, SystemError, RuntimeError):
-                pass
-
-
-def get_docling_converter():
-    """
-    Récupère ou crée le converter Docling partagé (singleton).
-    Le converter est créé une seule fois et réutilisé pour tous les documents.
+    Récupère ou crée le reader Docling partagé (singleton).
+    Le reader est créé une seule fois et réutilisé pour tous les documents.
     Cela évite de recharger les modèles à chaque document (gain de performance massif).
     
     Returns:
-        DocumentConverter partagé
+        DoclingReader partagé
     """
-    global _docling_converter
+    global _docling_reader
     
-    with _docling_converter_lock:
-        if _docling_converter is None:
-            logger.info("🔧 Initialisation du DocumentConverter Docling (une seule fois)...")
-            _docling_converter = DocumentConverter()
-            logger.info("✅ DocumentConverter Docling initialisé et prêt à être réutilisé")
+    with _docling_reader_lock:
+        if _docling_reader is None:
+            import time
+            init_start = time.time()
+            logger.info("Initialisation du DoclingReader LlamaIndex avec optimisations (une seule fois)...")
+            try:
+                # DoclingReader peut accepter des paramètres de configuration dans le futur
+                # Pour l'instant, utiliser la configuration par défaut
+                _docling_reader = DoclingReader()
+                init_time = time.time() - init_start
+                logger.info(f"✅ DoclingReader LlamaIndex initialisé en {init_time:.2f}s et prêt à être réutilisé")
+            except Exception as e:
+                logger.warning(f"Impossible de configurer DoclingReader avec optimisations: {e}")
+                _docling_reader = DoclingReader()
+                init_time = time.time() - init_start
+                logger.info(f"DoclingReader initialisé avec configuration par défaut en {init_time:.2f}s")
         
-        return _docling_converter
+        return _docling_reader
 
 
 def process_document(file_path: str) -> Optional[str]:
     """
     Traite un document et le convertit en texte/markdown.
-    Stratégie optimisée:
-    - PDF avec texte natif: extraction ultra-rapide avec PyMuPDF (quasi instantané)
-    - PDF scanné: utilise Docling avec OCR (lent mais nécessaire)
-    - DOCX/XLSX/PPTX: utilise Docling (conversion structurée)
-    - Images: utilise Docling avec OCR
+    Stratégie unifiée:
+    - Tous les formats passent par DoclingReader (LlamaIndex)
+    - Sortie normalisée en markdown/texte exploitable par l'indexation hiérarchique
     
     Args:
         file_path: Chemin vers le fichier à traiter
@@ -199,30 +149,23 @@ def process_document(file_path: str) -> Optional[str]:
     Returns:
         Contenu du document ou None en cas d'erreur
     """
+    import time
+    start_time = time.time()
+    
     if not os.path.exists(file_path):
         logger.error(f"Fichier non trouvé: {file_path}")
         return None
     
     try:
-        file_ext = Path(file_path).suffix.lower()
+        file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
+        logger.info(f"Démarrage du traitement via DoclingReader: {file_path} ({file_size_mb:.2f} MB)")
         
-        # === STRATÉGIE 1: PDF avec texte natif (extraction ultra-rapide) ===
-        if file_ext == '.pdf':
-            # Essayer d'extraire le texte natif directement (très rapide)
-            text_content = extract_text_from_pdf(file_path)
-            
-            if text_content:
-                # Succès! PDF avec texte natif traité en quelques millisecondes
-                return text_content
-            
-            # Sinon, PDF scanné -> fallback sur Docling avec OCR
-            logger.info(f"🔄 PDF scanné détecté, utilisation de Docling avec OCR: {file_path}")
-        
-        # === STRATÉGIE 2: Utiliser Docling (pour PDF scannés, DOCX, XLSX, PPTX, images) ===
-        logger.info(f"📄 Traitement avec Docling: {file_path}")
-        
-        # Récupérer le converter partagé (créé une seule fois)
-        converter = get_docling_converter()
+        # Récupérer le reader partagé (créé une seule fois)
+        reader_init_start = time.time()
+        reader = get_docling_reader()
+        reader_init_time = time.time() - reader_init_start
+        if reader_init_time > 1:
+            logger.info(f"DoclingReader initialisé en {reader_init_time:.2f}s")
         
         # Désactiver les messages de progression de Docling
         import sys
@@ -249,30 +192,36 @@ def process_document(file_path: str) -> Optional[str]:
             sys.stdout = progress_filter_stdout
             sys.stderr = progress_filter_stderr
             
-            # Convertir avec Docling (réutilise le converter existant)
-            result = converter.convert(file_path)
+            # Conversion unifiée via LlamaIndex DoclingReader
+            conversion_start = time.time()
+            docs = reader.load_data(file_path=Path(file_path))
+            conversion_time = time.time() - conversion_start
+            logger.info(f"Conversion Docling terminée en {conversion_time:.2f}s ({conversion_time/60:.2f} min)")
         finally:
             sys.stdout = old_stdout
             sys.stderr = old_stderr
         
-        # Extraire le contenu depuis le résultat
-        if hasattr(result, 'document'):
-            markdown_content = result.document.export_to_markdown()
-        elif hasattr(result, 'export_to_markdown'):
-            markdown_content = result.export_to_markdown()
-        else:
-            logger.warning("Format de résultat Docling inattendu, tentative d'extraction alternative")
-            markdown_content = str(result)
+        markdown_parts = []
+        for doc in docs or []:
+            if hasattr(doc, "get_content"):
+                content = doc.get_content() or ""
+            else:
+                content = str(doc)
+            if content.strip():
+                markdown_parts.append(content.strip())
+        
+        markdown_content = "\n\n".join(markdown_parts).strip()
         
         if not markdown_content or not markdown_content.strip():
             logger.warning(f"Le document {file_path} a été traité mais le contenu est vide")
             return None
         
-        logger.info(f"✅ Document converti avec succès ({len(markdown_content)} caractères)")
+        total_time = time.time() - start_time
+        logger.info(f"✅ Document converti avec succès en {total_time:.2f}s ({total_time/60:.2f} min) - {len(markdown_content)} caractères extraits")
         return markdown_content
         
     except Exception as e:
-        logger.error(f"❌ Erreur lors du traitement du document {file_path}: {e}", exc_info=True)
+        logger.error(f"Erreur lors du traitement du document {file_path}: {e}", exc_info=True)
         return None
 
 
@@ -449,6 +398,7 @@ def _process_document_for_note(note_id: int, file_path: str):
             
             # Mettre à jour le statut à 'processing'
             note.processing_status = 'processing'
+            note.processing_progress = 10
             note.updated_at = datetime.utcnow()
             session.add(note)
             session.commit()
@@ -459,6 +409,7 @@ def _process_document_for_note(note_id: int, file_path: str):
             if not markdown_content:
                 # Erreur lors du traitement
                 note.processing_status = 'failed'
+                note.processing_progress = max(note.processing_progress or 0, 10)
                 note.content = "❌ Erreur lors du traitement du document. Le fichier peut être corrompu ou dans un format non supporté."
                 note.updated_at = datetime.utcnow()
                 session.add(note)
@@ -466,9 +417,10 @@ def _process_document_for_note(note_id: int, file_path: str):
                 logger.error(f"Échec du traitement du document pour la note {note_id}")
                 return
             
-            # Mettre à jour la note avec le contenu markdown
+            # Étape extraction Docling terminée
             note.content = markdown_content
-            note.processing_status = 'completed'
+            note.processing_status = 'processing'
+            note.processing_progress = 55
             note.updated_at = datetime.utcnow()
             session.add(note)
             session.commit()
@@ -479,14 +431,32 @@ def _process_document_for_note(note_id: int, file_path: str):
             try:
                 chunks = create_chunks_for_note(session, note, generate_embeddings=False)
                 logger.info(f"Créé {len(chunks)} chunks pour la note {note_id}")
+                note.processing_progress = 75
+                note.updated_at = datetime.utcnow()
+                session.add(note)
+                session.commit()
                 
                 # Ajouter la génération d'embeddings à la file d'embeddings
                 if chunks:
+                    note.processing_progress = 85
+                    note.updated_at = datetime.utcnow()
+                    session.add(note)
+                    session.commit()
                     generate_embeddings_for_chunks_async(note.id, note.project_id)
                     logger.info(f"Tâche de génération d'embeddings ajoutée à la file pour la note {note_id}")
+                else:
+                    note.processing_status = 'completed'
+                    note.processing_progress = 100
+                    note.updated_at = datetime.utcnow()
+                    session.add(note)
+                    session.commit()
             except Exception as e:
                 logger.error(f"Erreur lors de la création des chunks pour la note {note_id}: {e}", exc_info=True)
-                # Ne pas marquer la note comme failed si les chunks échouent, le contenu est déjà traité
+                note.processing_status = 'failed'
+                note.processing_progress = max(note.processing_progress or 0, 55)
+                note.updated_at = datetime.utcnow()
+                session.add(note)
+                session.commit()
             
             # Supprimer le fichier original maintenant que le contenu est extrait et stocké en BDD
             try:
@@ -507,6 +477,7 @@ def _process_document_for_note(note_id: int, file_path: str):
                 note = session.get(Note, note_id)
                 if note:
                     note.processing_status = 'failed'
+                    note.processing_progress = max(note.processing_progress or 0, 10)
                     note.content = f"❌ Erreur lors du traitement du document: {str(e)}"
                     note.updated_at = datetime.utcnow()
                     session.add(note)

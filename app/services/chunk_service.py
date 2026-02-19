@@ -1,17 +1,16 @@
 from typing import List, Optional
 from sqlmodel import Session, select
+from sqlalchemy import or_
 from app.models.note_chunk import NoteChunk
 from app.models.note import Note
 from app.services.chunking_service import chunk_note
-from app.services.embedding_service import generate_embedding
 from app.database import engine
+from app.config import settings
 import logging
 import threading
 import time
 from queue import Queue
 import io
-import psycopg2
-from psycopg2.extras import execute_values
 
 logger = logging.getLogger(__name__)
 
@@ -42,14 +41,27 @@ def create_chunks_for_note(session: Session, note: Note, generate_embeddings: bo
     # Créer les nouveaux chunks
     chunks = chunk_note(note)
     
-    # Générer les embeddings seulement si demandé (synchrone)
+    # Générer les embeddings seulement sur les feuilles si demandé (synchrone)
     if generate_embeddings:
-        for chunk in chunks:
-            embedding = generate_embedding(chunk.content)
-            if embedding:
-                chunk.embedding = embedding
-            else:
-                logger.warning(f"Impossible de générer l'embedding pour le chunk {chunk.chunk_index} de la note {note.id}")
+        from app.services.embedding_service import generate_embeddings_batch
+
+        leaf_chunks = [chunk for chunk in chunks if chunk.is_leaf]
+        if leaf_chunks:
+            contents = [chunk.content for chunk in leaf_chunks]
+            embeddings = generate_embeddings_batch(contents, batch_size=settings.EMBEDDING_BATCH_SIZE)
+            failed_count = 0
+            for chunk, embedding in zip(leaf_chunks, embeddings):
+                if embedding:
+                    chunk.embedding = embedding
+                else:
+                    failed_count += 1
+            if failed_count:
+                logger.warning(
+                    "Embeddings partiels pour note=%s: %s/%s en échec",
+                    note.id,
+                    failed_count,
+                    len(leaf_chunks),
+                )
     
     # Sauvegarder les chunks dans la DB
     try:
@@ -111,36 +123,48 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
             if not note:
                 logger.error(f"Note {note_id} non trouvée pour génération d'embeddings")
                 return
+            note.processing_status = "processing"
+            note.processing_progress = max(note.processing_progress or 0, 90)
+            session.add(note)
+            session.commit()
             
-            # Récupérer les chunks sans embeddings
+            # Récupérer les chunks feuilles sans embeddings (les parents servent au contexte)
             statement = select(NoteChunk).where(
                 NoteChunk.note_id == note_id,
-                NoteChunk.embedding.is_(None)
+                NoteChunk.embedding.is_(None),
+                or_(NoteChunk.is_leaf.is_(True), NoteChunk.is_leaf.is_(None)),
             )
             chunks = list(session.exec(statement).all())
             
             if not chunks:
                 logger.info(f"Aucun chunk sans embedding trouvé pour la note {note_id}")
+                note.processing_status = "completed"
+                note.processing_progress = 100
+                session.add(note)
+                session.commit()
                 return
             
-            logger.info(f"Génération des embeddings pour {len(chunks)} chunks de la note {note_id}")
+            logger.info(f"Génération des embeddings pour {len(chunks)} chunks feuilles de la note {note_id}")
             
             # Utiliser le batch processing pour générer tous les embeddings en une seule passe (beaucoup plus rapide)
             from app.services.embedding_service import generate_embeddings_batch
             
             chunk_contents = [chunk.content for chunk in chunks]
-            embeddings = generate_embeddings_batch(chunk_contents, batch_size=32)
+            embeddings = generate_embeddings_batch(chunk_contents, batch_size=settings.EMBEDDING_BATCH_SIZE)
             
             # Filtrer les chunks avec embeddings valides
             chunks_with_embeddings = []
             for chunk, embedding in zip(chunks, embeddings):
                 if embedding:
                     chunks_with_embeddings.append((chunk.id, embedding))
-                else:
-                    logger.warning(f"Impossible de générer l'embedding pour le chunk {chunk.chunk_index} de la note {note_id}")
+            failed_count = len(chunks) - len(chunks_with_embeddings)
             
             if not chunks_with_embeddings:
                 logger.warning(f"Aucun embedding valide généré pour la note {note_id}")
+                note.processing_status = "failed"
+                note.processing_progress = max(note.processing_progress or 0, 90)
+                session.add(note)
+                session.commit()
                 return
             
             # Utiliser copy_expert pour insertion batch ultra-rapide (beaucoup plus rapide que inserts un par un)
@@ -212,6 +236,17 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
                     session.rollback()
             
             logger.info(f"Génération des embeddings terminée pour la note {note_id} ({len(chunks)} chunks traités)")
+            if failed_count:
+                logger.warning(
+                    "Embeddings partiels note=%s: %s/%s en échec",
+                    note_id,
+                    failed_count,
+                    len(chunks),
+                )
+            note.processing_status = "completed"
+            note.processing_progress = 100
+            session.add(note)
+            session.commit()
             
     except Exception as e:
         logger.error(f"Erreur lors de la génération des embeddings pour la note {note_id}: {e}")
@@ -336,4 +371,40 @@ def get_chunks_by_ids(session: Session, chunk_ids: List[int]) -> List[NoteChunk]
     
     statement = select(NoteChunk).where(NoteChunk.id.in_(chunk_ids))
     return list(session.exec(statement).all())
+
+
+def reindex_notes(
+    session: Session,
+    note_ids: Optional[List[int]] = None,
+    project_id: Optional[int] = None,
+) -> int:
+    """
+    Réindexer des notes en recréant leurs nœuds hiérarchiques + embeddings.
+
+    Args:
+        session: Session SQLModel
+        note_ids: Liste optionnelle d'IDs de notes à réindexer
+        project_id: ID de projet optionnel (ignoré si note_ids est fourni)
+
+    Returns:
+        Nombre de notes réindexées avec succès
+    """
+    statement = select(Note)
+    if note_ids:
+        statement = statement.where(Note.id.in_(note_ids))
+    elif project_id is not None:
+        statement = statement.where(Note.project_id == project_id)
+
+    notes = list(session.exec(statement).all())
+    reindexed_count = 0
+
+    for note in notes:
+        try:
+            create_chunks_for_note(session, note, generate_embeddings=True)
+            reindexed_count += 1
+        except Exception as exc:
+            logger.error("Erreur de réindexation pour la note %s: %s", note.id, exc, exc_info=True)
+
+    logger.info("Réindexation terminée: %s/%s notes", reindexed_count, len(notes))
+    return reindexed_count
 

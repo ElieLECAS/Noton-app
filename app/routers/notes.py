@@ -172,7 +172,8 @@ async def upload_document(
                 content="⏳ Traitement en cours...",
                 note_type="document",
                 source_file_path=file_path,
-                processing_status="pending"
+                processing_status="pending",
+                processing_progress=0,
             )
             
             logger.info(f"Création de la note pour le document '{filename}' dans le projet {project_id}")

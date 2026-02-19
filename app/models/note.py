@@ -16,6 +16,7 @@ class Note(SQLModel, table=True):
     note_type: str = Field(default="written")  # 'written', 'voice', ou 'document'
     source_file_path: Optional[str] = None  # Chemin du fichier original si document uploadé
     processing_status: str = Field(default="completed")  # 'pending', 'processing', 'completed', 'failed'
+    processing_progress: Optional[int] = Field(default=100)  # Progression de traitement document (0-100)
     project_id: int = Field(foreign_key="project.id")
     user_id: int = Field(foreign_key="user.id")
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -33,6 +34,7 @@ class NoteCreate(SQLModel):
     note_type: str = "written"
     source_file_path: Optional[str] = None
     processing_status: str = "completed"
+    processing_progress: Optional[int] = 100
 
 
 class NoteRead(SQLModel):
@@ -41,6 +43,7 @@ class NoteRead(SQLModel):
     content: Optional[str] = None
     note_type: str
     processing_status: str
+    processing_progress: Optional[int] = None
     project_id: int
     user_id: int
     created_at: datetime
@@ -50,4 +53,5 @@ class NoteRead(SQLModel):
 class NoteUpdate(SQLModel):
     title: Optional[str] = None
     content: Optional[str] = None
+    processing_progress: Optional[int] = None
 

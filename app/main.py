@@ -9,7 +9,6 @@ import time
 from app.database import get_session, create_db_and_tables
 from app.routers import auth, projects, notes, chat, conversations, agents, scheduler
 from app.models import User, Project, Note
-from app.services.faiss_service import get_faiss_manager
 from app.services.scheduler_service import init_scheduler, start_scheduler, stop_scheduler
 from app.config import settings
 import logging
@@ -88,7 +87,7 @@ except:
 
 @app.on_event("startup")
 async def startup_event():
-    """Créer les tables au démarrage et initialiser FAISS et le scheduler"""
+    """Créer les tables au démarrage et initialiser le scheduler"""
     create_db_and_tables()
     
     # Initialiser et démarrer le scheduler
@@ -99,32 +98,19 @@ async def startup_event():
     except Exception as e:
         logger.error(f"Erreur lors de l'initialisation du scheduler: {e}")
     
-    # Initialiser FAISS et charger les embeddings depuis la base de données
-    try:
-        logger.info("Initialisation de FAISS...")
-        faiss_manager = get_faiss_manager()
-        faiss_manager.initialize()
-        
-        # Charger tous les embeddings depuis la DB
-        # On charge à la demande lors de la première recherche pour éviter de bloquer le démarrage
-        logger.info("FAISS initialisé. Les embeddings seront chargés à la demande.")
-    except Exception as e:
-        logger.error(f"Erreur lors de l'initialisation de FAISS: {e}")
-        # Ne pas bloquer le démarrage si FAISS échoue
-    
-    # Tester la connexion à Ollama pour les embeddings
+    # Tester l'initialisation du modèle d'embeddings HuggingFace
     try:
         from app.services.embedding_service import generate_embedding
-        logger.info("Test de connexion à Ollama pour les embeddings...")
+        logger.info("Test d'initialisation du modèle d'embeddings HuggingFace...")
         # Test rapide avec un texte court
         test_embedding = generate_embedding("test")
         if test_embedding:
-            logger.info("✅ Ollama est prêt pour générer les embeddings")
+            logger.info("✅ Modèle d'embeddings HuggingFace initialisé et prêt")
         else:
-            logger.warning("⚠️ Impossible de générer un embedding de test avec Ollama")
+            logger.warning("⚠️ Impossible de générer un embedding de test")
     except Exception as e:
-        logger.warning(f"⚠️ Erreur lors du test de connexion à Ollama: {e}")
-        # Ne pas bloquer le démarrage si Ollama n'est pas disponible
+        logger.warning(f"⚠️ Erreur lors de l'initialisation du modèle d'embeddings: {e}")
+        # Ne pas bloquer le démarrage si le modèle n'est pas disponible
     
     # Démarrer les workers pour la génération d'embeddings en arrière-plan
     try:

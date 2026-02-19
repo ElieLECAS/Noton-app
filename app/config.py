@@ -38,9 +38,12 @@ class Settings(BaseSettings):
     DOCLING_USE_GPU: Optional[bool] = None  # None = auto-détection, True/False pour forcer
     TORCH_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
     OMP_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
+    USE_ALL_CPU_CORES: bool = True  # Utiliser tous les cœurs par défaut (au lieu de la moitié) pour maximiser les performances
     
     # Document Processing
     MAX_CONCURRENT_DOCUMENTS: int = 2  # Nombre de documents traités en parallèle (réduit pour garder des ressources pour la navigation)
+    EMBEDDING_BATCH_SIZE: int = 16  # Taille de batch embedding (CPU-only, éviter la saturation)
+    HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
     
     # Brave Search (recherche web pour function calling)
     BRAVE_SEARCH_API_KEY: Optional[str] = None
@@ -122,6 +125,26 @@ class Settings(BaseSettings):
                 return None
         # Si c'est déjà un int, le retourner tel quel
         return int(v)
+
+    @field_validator('HIERARCHICAL_CHUNK_SIZES', mode='before')
+    @classmethod
+    def parse_chunk_sizes(cls, v: Union[str, List[int], None]) -> Optional[List[int]]:
+        """Convertit une chaîne CSV en liste d'entiers pour le chunking hiérarchique."""
+        if v is None:
+            return None
+        if isinstance(v, str):
+            if not v.strip():
+                return None
+            try:
+                parsed = [int(item.strip()) for item in v.split(",") if item.strip()]
+                parsed = [item for item in parsed if item > 0]
+                return parsed if parsed else None
+            except ValueError:
+                return None
+        if isinstance(v, list):
+            parsed = [int(item) for item in v if int(item) > 0]
+            return parsed if parsed else None
+        return None
     
     model_config = ConfigDict(
         # Chercher le fichier .env à la racine du projet (pour développement local)

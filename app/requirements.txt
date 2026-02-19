@@ -7,22 +7,29 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
 python-multipart==0.0.6
-httpx==0.25.2
+# httpx utilisé par plusieurs intégrations HTTP
+httpx>=0.27
 jinja2==3.1.2
 python-dotenv==1.0.0
 pydantic-settings>=2.3.0,<3.0.0
-pgvector==0.2.4
-# Pinning compatible versions to avoid dependency conflicts
-numpy==1.26.4
+# pgvector>=0.3.6 requis par llama-index-vector-stores-postgres 0.7.3
+pgvector==0.4.2
+# numpy>=2.0 requis par llama-index-readers-docling 0.4.2
+numpy>=2.0,<3.0
 torch  # Version CPU (plus légère que torch avec CUDA)
 docling==2.8.3
-PyMuPDF  # Pour détecter le texte natif dans les PDFs
 python-magic
 pillow
-faiss-cpu==1.7.4
-fastembed==0.3.6
+# fastembed retiré : remplacé par embeddings LlamaIndex
+# LlamaIndex — versions pinnées pour éviter le backtracking
+llama-index-core==0.14.14
+llama-index-readers-docling==0.4.2
+llama-index-vector-stores-postgres==0.7.3
+llama-index-embeddings-huggingface==0.6.1
+# Reranker : FlagEmbedding (BAAI/bge-reranker-base) — local, CPU, FR+EN
+llama-index-postprocessor-flag-embedding-reranker==0.4.1
+FlagEmbedding==1.3.5
 # LangGraph et APScheduler pour agents et scheduler
 langgraph>=0.2.0
 langchain-core>=0.3.0
 apscheduler>=3.10.0
-

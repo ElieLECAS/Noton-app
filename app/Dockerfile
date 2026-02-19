@@ -14,10 +14,55 @@ RUN apt-get update && apt-get install -y \
 
 # Copier et installer les dépendances Python
 COPY app/requirements.txt .
-# PyTorch + torchvision CPU en premier (versions compatibles), puis le reste sans réinstaller depuis PyPI
-RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu && \
-    grep -v -E '^torch($| )' requirements.txt > requirements-docker.txt && \
-    pip install --no-cache-dir -r requirements-docker.txt
+
+# Stratégie d'installation optimisée pour éviter le backtracking (1900s → ~300s) :
+# Installation par étapes pour forcer l'ordre et éviter la résolution globale
+
+# Étape 1: PyTorch CPU (base lourde, stable) - index PyTorch pour éviter conflits
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+# Étape 2: Dépendances système critiques (numpy doit être installé avant docling/llamaindex)
+RUN pip install --no-cache-dir \
+    "numpy>=2.0,<3.0" \
+    "pgvector==0.4.2" \
+    "pydantic-settings>=2.3.0,<3.0.0"
+
+# Étape 3: docling-core explicitement (compatible avec docling 2.8.3 et llama-index-readers-docling 0.4.2)
+# docling==2.8.3 nécessite docling-core>=2.6.1,<3.0.0
+# llama-index-readers-docling==0.4.2 nécessite docling-core>=2.2.0,<3
+# On installe une version compatible pour éviter le backtracking
+RUN pip install --no-cache-dir "docling-core>=2.6.1,<3.0.0"
+
+# Étape 4: Docling (utilise docling-core déjà installé)
+RUN pip install --no-cache-dir "docling==2.8.3"
+
+# Étape 5: LlamaIndex core + dépendances communes
+RUN pip install --no-cache-dir \
+    "llama-index-core==0.14.14"
+
+# Étape 6a: llama-index-readers-docling avec --no-deps (docling/docling-core déjà installés)
+# Évite le backtracking car pip ne résout plus docling-core
+RUN pip install --no-cache-dir --no-deps "llama-index-readers-docling==0.4.2"
+
+# Étape 6b: Autres extensions LlamaIndex (sans docling dans le lot)
+RUN pip install --no-cache-dir \
+    "llama-index-vector-stores-postgres==0.7.3" \
+    "llama-index-embeddings-huggingface==0.6.1" \
+    "llama-index-postprocessor-flag-embedding-reranker==0.4.1" \
+    "FlagEmbedding==1.3.5"
+
+# Étape 7: Reste des dépendances (sans celles déjà installées)
+# Filtrer les packages déjà installés + commentaires
+RUN grep -v -E '^[[:space:]]*#|^[[:space:]]*$$' requirements.txt | \
+    grep -v -E '^(torch|numpy|pgvector|docling|llama-index|FlagEmbedding|pydantic-settings)([[:space:]]|-|==|>=|<|$$)' | \
+    sed 's/#.*$$//' | sed '/^[[:space:]]*$$/d' > requirements-remaining.txt && \
+    pip install --no-cache-dir -r requirements-remaining.txt && \
+    rm requirements-remaining.txt
+
+# Étape 8: Les modèles seront téléchargés au runtime la première fois et persistés
+# via le volume models_cache monté sur /root/.cache dans docker-compose.yaml
+# Cela évite de re-télécharger à chaque rebuild de l'image Docker
 
 # Copier le code de l'application dans /app/app/ pour correspondre aux imports "from app."
 COPY app/ ./app/

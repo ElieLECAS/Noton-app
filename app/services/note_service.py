@@ -40,6 +40,8 @@ def create_note(session: Session, note_create: NoteCreate, project_id: int, user
         project_id=project_id,
         user_id=user_id
     )
+    if note.processing_status != "pending" and note.processing_progress is None:
+        note.processing_progress = 100
     
     session.add(note)
     session.commit()
@@ -50,6 +52,11 @@ def create_note(session: Session, note_create: NoteCreate, project_id: int, user
     if note.processing_status != 'pending':
         try:
             chunks = create_chunks_for_note(session, note, generate_embeddings=True)
+            note.processing_status = "completed"
+            note.processing_progress = 100
+            note.updated_at = datetime.utcnow()
+            session.add(note)
+            session.commit()
             logger.info(f"✅ {len(chunks)} chunks créés avec embeddings pour la note '{note.title}'")
         except Exception as e:
             logger.error(f"❌ Erreur lors de la création des chunks pour la note '{note.title}': {e}", exc_info=True)
@@ -84,6 +91,11 @@ def update_note(session: Session, note_id: int, note_update: NoteUpdate, user_id
     if needs_rechunking:
         try:
             chunks = create_chunks_for_note(session, note, generate_embeddings=True)
+            note.processing_status = "completed"
+            note.processing_progress = 100
+            note.updated_at = datetime.utcnow()
+            session.add(note)
+            session.commit()
             logger.info(f"✅ {len(chunks)} chunks régénérés avec embeddings pour la note {note.id}")
         except Exception as e:
             logger.error(f"❌ Erreur lors de la régénération des chunks pour la note {note.id}: {e}", exc_info=True)
