@@ -24,6 +24,7 @@ pillow
 # LlamaIndex — versions pinnées pour éviter le backtracking
 llama-index-core==0.14.14
 llama-index-readers-docling==0.4.2
+llama-index-node-parser-docling==0.4.2
 llama-index-vector-stores-postgres==0.7.3
 llama-index-embeddings-huggingface==0.6.1
 # Reranker : FlagEmbedding (BAAI/bge-reranker-base) — local, CPU, FR+EN

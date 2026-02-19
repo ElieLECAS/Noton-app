@@ -3,7 +3,7 @@ from sqlmodel import Session, select
 from sqlalchemy import or_
 from app.models.note_chunk import NoteChunk
 from app.models.note import Note
-from app.services.chunking_service import chunk_note
+from app.services.chunking_service import chunk_note, chunk_note_from_docling_docs
 from app.database import engine
 from app.config import settings
 import logging
@@ -250,6 +250,78 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
             
     except Exception as e:
         logger.error(f"Erreur lors de la génération des embeddings pour la note {note_id}: {e}")
+
+
+def create_chunks_for_note_from_docling(
+    session: Session,
+    note: Note,
+    llama_docs: list,
+    generate_embeddings: bool = False,
+) -> List[NoteChunk]:
+    """
+    Créer les chunks pour un document importé via Docling.
+
+    Utilise DoclingNodeParser (chunking sémantique) au lieu de HierarchicalNodeParser.
+    Les llama_docs doivent contenir le JSON sérialisé du DoclingDocument
+    (tel que retourné par document_service.process_document).
+
+    Args:
+        session          : Session SQLModel
+        note             : La note cible
+        llama_docs       : Liste de LlamaIndex Document avec JSON Docling
+        generate_embeddings : Si True, génère les embeddings synchronement
+
+    Returns:
+        Liste des chunks créés
+    """
+    delete_chunks_for_note(session, note.id)
+
+    chunks = chunk_note_from_docling_docs(note, llama_docs)
+
+    if generate_embeddings:
+        from app.services.embedding_service import generate_embeddings_batch
+
+        leaf_chunks = [chunk for chunk in chunks if chunk.is_leaf]
+        if leaf_chunks:
+            contents = [chunk.content for chunk in leaf_chunks]
+            embeddings = generate_embeddings_batch(
+                contents, batch_size=settings.EMBEDDING_BATCH_SIZE
+            )
+            failed_count = 0
+            for chunk, embedding in zip(leaf_chunks, embeddings):
+                if embedding:
+                    chunk.embedding = embedding
+                else:
+                    failed_count += 1
+            if failed_count:
+                logger.warning(
+                    "Embeddings partiels pour note=%s: %s/%s en échec",
+                    note.id,
+                    failed_count,
+                    len(leaf_chunks),
+                )
+
+    try:
+        for chunk in chunks:
+            session.add(chunk)
+        session.commit()
+        logger.info(
+            "Créé %d chunks (Docling) pour la note %d "
+            "(embeddings: %s)",
+            len(chunks),
+            note.id,
+            "oui" if generate_embeddings else "non, sera fait en arrière-plan",
+        )
+        return chunks
+    except Exception as e:
+        logger.error(
+            "Erreur lors de la sauvegarde des chunks Docling pour la note %d: %s",
+            note.id,
+            e,
+            exc_info=True,
+        )
+        session.rollback()
+        raise
 
 
 def recreate_chunks_for_note_async(note_id: int, project_id: int):
