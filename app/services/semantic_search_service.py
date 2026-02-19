@@ -51,7 +51,7 @@ RERANKER_CANDIDATE_MULTIPLIER = 3
 RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 # Optimisations du reranking
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
-MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "20"))
+MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "30"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
 
 # ---------------------------------------------------------------------------
@@ -324,6 +324,26 @@ def _keyword_fallback_passages(
 # Conversion nœud → passage
 # ---------------------------------------------------------------------------
 
+def _enrich_content_with_heading_and_figure(content: str, metadata: dict) -> str:
+    """
+    Préfixe le contenu avec parent_heading et figure_title pour le reranker et le LLM.
+
+    Les chunks avec titres de section et légendes descriptifs sont ainsi mieux
+    priorisés par le reranker et le contexte est plus explicite pour le LLM.
+    """
+    parent_heading = metadata.get("parent_heading") or metadata.get("heading")
+    figure_title = metadata.get("figure_title") or metadata.get("image_anchor")
+    parts = []
+    if parent_heading and str(parent_heading).strip():
+        parts.append(f"[Section: {parent_heading.strip()}]")
+    if figure_title and str(figure_title).strip():
+        parts.append(str(figure_title).strip())
+    if not parts:
+        return content
+    prefix = " ".join(parts) + "\n\n"
+    return prefix + content if content else prefix.strip()
+
+
 def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     metadata = dict(getattr(node, "metadata", {}) or {})
     note_title = metadata.get("note_title", "Note sans titre")
@@ -331,7 +351,9 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     node_id = metadata.get("node_id")
     chunk_index = metadata.get("chunk_index", 0)
     content = node.get_content() if hasattr(node, "get_content") else str(node)
-    passage_text = f"**{note_title}**\n{content}"
+    # Enrichir avec parent_heading et figure_title pour le LLM
+    content_enriched = _enrich_content_with_heading_and_figure(content, metadata)
+    passage_text = f"**{note_title}**\n{content_enriched}"
     return {
         "passage": passage_text,
         "note_title": note_title,
@@ -483,6 +505,18 @@ def search_relevant_passages(
                     max(k * 2, MAX_RERANK_CANDIDATES),
                 )
                 candidates_to_rerank = filtered_candidates[:max_rerank]
+
+                # Enrichir le texte des nœuds avec parent_heading et figure_title
+                # pour que le reranker priorise les chunks à titres descriptifs
+                for nws in candidates_to_rerank:
+                    node = nws.node
+                    meta = dict(getattr(node, "metadata", {}) or {})
+                    content = node.get_content() if hasattr(node, "get_content") else getattr(node, "text", "") or ""
+                    enriched = _enrich_content_with_heading_and_figure(content, meta)
+                    if hasattr(node, "set_content"):
+                        node.set_content(enriched)
+                    else:
+                        setattr(node, "text", enriched)
 
                 logger.info(
                     "Démarrage du reranking sur %d candidats leaves (sur %d filtrés)...",

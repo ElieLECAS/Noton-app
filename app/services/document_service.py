@@ -127,7 +127,76 @@ def get_docling_converter():
             try:
                 from docling.document_converter import DocumentConverter
 
-                _docling_converter = DocumentConverter()
+                format_options = None
+                if getattr(settings, "DOCLING_OCR_ENABLED", False):
+                    try:
+                        from docling.datamodel.base_models import InputFormat
+                        from docling.datamodel.pipeline_options import (
+                            PdfPipelineOptions,
+                        )
+                        from docling.document_converter import PdfFormatOption
+
+                        pipeline_options = PdfPipelineOptions(do_ocr=True)
+
+                        # Langues OCR : EasyOCR utilise ["fr","en"], Tesseract "fra+eng"
+                        ocr_lang = getattr(settings, "DOCLING_OCR_LANG", None)
+                        if ocr_lang:
+                            lang_list = [
+                                x.strip().lower() for x in ocr_lang.replace("+", ",").split(",")
+                                if x.strip()
+                            ]
+                            if lang_list:
+                                try:
+                                    from docling.datamodel.pipeline_options import (
+                                        EasyOcrOptions,
+                                    )
+
+                                    pipeline_options.ocr_options = EasyOcrOptions(
+                                        lang=lang_list,
+                                        use_gpu=settings.DOCLING_USE_GPU is True,
+                                    )
+                                    logger.info(
+                                        "OCR Docling activé (EasyOCR, lang=%s)",
+                                        lang_list,
+                                    )
+                                except ImportError:
+                                    try:
+                                        from docling.datamodel.pipeline_options import (
+                                            TesseractOcrOptions,
+                                        )
+
+                                        pipeline_options.ocr_options = (
+                                            TesseractOcrOptions(lang=ocr_lang)
+                                        )
+                                        logger.info(
+                                            "OCR Docling activé (Tesseract, lang=%s)",
+                                            ocr_lang,
+                                        )
+                                    except ImportError:
+                                        logger.debug(
+                                            "OCR options non disponibles, do_ocr=True sans ocr_options"
+                                        )
+                        else:
+                            logger.info(
+                                "OCR Docling activé (langues par défaut)"
+                            )
+
+                        format_options = {
+                            InputFormat.PDF: PdfFormatOption(
+                                pipeline_options=pipeline_options
+                            ),
+                        }
+                    except Exception as ie:
+                        logger.warning(
+                            "Configuration OCR Docling non disponible (%s), conversion sans OCR",
+                            ie,
+                        )
+
+                _docling_converter = (
+                    DocumentConverter(format_options=format_options)
+                    if format_options
+                    else DocumentConverter()
+                )
                 init_time = time.time() - init_start
                 logger.info(
                     "✅ DocumentConverter Docling initialisé en %.2fs et prêt à être réutilisé",
@@ -222,7 +291,8 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list]]:
             )
             return None, None
 
-        # JSON sérialisé pour DoclingNodeParser (chunking sémantique)
+        # Format JSON obligatoire pour DoclingNodeParser : préserve la structure
+        # hiérarchique des tableaux (colonnes/lignes) ; ne pas remplacer par du Markdown.
         from llama_index.core import Document as LlamaDocument
 
         llama_docs = [

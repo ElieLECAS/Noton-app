@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     MAX_CONCURRENT_DOCUMENTS: int = 2  # Nombre de documents traités en parallèle (réduit pour garder des ressources pour la navigation)
     EMBEDDING_BATCH_SIZE: int = 16  # Taille de batch embedding (CPU-only, éviter la saturation)
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
+
+    # Docling OCR (schémas techniques, cotes, PDF scannés)
+    DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
+    DOCLING_OCR_LANG: Optional[str] = None  # Langues OCR, ex. "fr,en" ou "fra+eng" (None = défaut Docling)
     
     # Brave Search (recherche web pour function calling)
     BRAVE_SEARCH_API_KEY: Optional[str] = None
@@ -90,6 +94,14 @@ class Settings(BaseSettings):
             return normalized if normalized else None
         return None
     
+    @field_validator('DOCLING_OCR_LANG', mode='before')
+    @classmethod
+    def parse_ocr_lang(cls, v: Union[str, None]) -> Optional[str]:
+        """Chaîne vide → None pour DOCLING_OCR_LANG."""
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return None
+        return v.strip() if isinstance(v, str) else v
+
     @field_validator('DOCLING_USE_GPU', mode='before')
     @classmethod
     def parse_optional_bool(cls, v: Union[str, bool, None]) -> Optional[bool]:

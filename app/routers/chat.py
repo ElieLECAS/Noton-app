@@ -22,8 +22,12 @@ from app.models.agent import Agent
 from datetime import datetime
 import json
 import logging
+import os
 
 logger = logging.getLogger(__name__)
+
+# Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K)
+RAG_TOP_K = int(os.getenv("RAG_TOP_K", "10"))
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
@@ -333,6 +337,14 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
             "  * *Italique* pour les termes techniques\n"
             "  * `Blocs de code` pour les termes spécifiques\n"
             "- Pour les réponses courtes ou simples, réponds naturellement sans formatage excessif.\n\n"
+            "PRÉCISION SUR LES DONNÉES NUMÉRIQUES ET TABLEAUX :\n"
+            "- Si tu trouves des valeurs numériques dans un tableau, vérifie scrupuleusement l'en-tête de la colonne correspondante.\n"
+            "- En cas de doute entre deux chiffres, cite la section ou le passage précis du document (ex. titre de section, nom de note).\n"
+            "- Ne confonds pas les colonnes (ex. distance entre fixations vs distance de calage).\n\n"
+            "SCHÉMAS ET LÉGENDES :\n"
+            "- Les documents peuvent contenir des schémas techniques et des tableaux. Tu es un expert technique (ex. menuiserie, construction).\n"
+            "- Si une information provient d'une légende d'image ou d'un tableau extrait, précise-le (ex. « selon la légende de la figure », « d'après le tableau »).\n"
+            "- Si un schéma est mentionné (ex. Fig. 1.2, Figure 4), indique à l'utilisateur qu'il peut s'y référer dans le document pour les détails visuels (pose, cotes, etc.).\n\n"
         )
     }
     
@@ -428,7 +440,7 @@ async def stream_project_chat_message(
         project_id=project_id,
         query_text=request.message,
         user_id=current_user.id,
-        k=8,  # 8 passages pertinents (environ 500 caractères chacun)
+        k=RAG_TOP_K,
         passage_size=500
     )
     

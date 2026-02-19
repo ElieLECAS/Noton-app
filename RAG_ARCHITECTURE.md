@@ -60,15 +60,20 @@ La fonction `process_document()` utilise une stratégie optimisée en deux étap
 
 #### Stratégie 2 : Documents complexes (Docling)
 - **Outil** : Docling DocumentConverter
-- **Méthode** : Conversion structurée en markdown
+- **Méthode** : Conversion structurée en markdown + **JSON** pour le chunking (voir ci-dessous)
 - **Performance** : Plus lent mais nécessaire pour :
   - PDFs scannés (avec OCR)
   - DOCX/XLSX/PPTX (conversion structurée)
   - Images (OCR)
 
+#### OCR (schémas techniques, cotes)
+- **Activation** : Configurable via `DOCLING_OCR_ENABLED` (défaut : `true`) et `DOCLING_OCR_LANG` (ex. `fr,en` ou `fra+eng`).
+- **Moteurs** : EasyOCR ou Tesseract selon les options Docling (`PdfPipelineOptions`, `EasyOcrOptions` / `TesseractOcrOptions`). L’OCR permet de capturer le texte dans les images et schémas (cotes, légendes).
+- **Format de sortie** : Le DocumentConverter produit en une seule passe le **markdown** (pour `note.content`) et le **JSON** du `DoclingDocument` (pour le DoclingNodeParser). Le JSON conserve les coordonnées (bbox) et la hiérarchie (tableaux, pictures, légendes).
+
 ### Résultat
 
-Le contenu extrait est stocké dans `note.content` au format **markdown**, prêt pour le découpage.
+Le contenu extrait est stocké dans `note.content` au format **markdown**, prêt pour l’affichage. Le chunking sémantique utilise exclusivement le **JSON** Docling (jamais le Markdown) pour préserver la structure.
 
 ---
 
@@ -102,6 +107,27 @@ Chaque chunk contient :
 - `start_char` : Position de début dans le texte original
 - `end_char` : Position de fin dans le texte original
 - `content` : Texte du chunk
+
+### Documents importés (Docling) : chunking sémantique et JSON
+
+Pour les documents traités par **Docling** (`document_service.py`), le découpage ne repose pas sur le markdown mais sur la **structure JSON** du document. Le `DocumentConverter` produit un `DoclingDocument` sérialisé en JSON via `model_dump_json()`, transmis au **DoclingNodeParser** (`chunking_service.py`). Ce format préserve la structure hiérarchique des tableaux (colonnes/lignes) et limite les confusions de valeurs numériques. Ne pas remplacer ce flux par du Markdown pour le parser. Voir `app/services/document_service.py` (création des `llama_docs`) et `app/services/chunking_service.py` (`chunk_note_from_docling_docs`).
+
+#### Hiérarchie et étiquetage par section (parent_heading)
+- Chaque chunk est **étiqueté** par le titre de sa section : `parent_heading` est le libellé complet construit à partir de tous les niveaux de headings (ex. « 1.3.1 Montage », « 2 Drainage »).
+- Le regroupement pour les nœuds parents se fait par ce même libellé : tous les blocs (paragraphes, tableaux, schémas) d’une même section sont regroupés sous un parent commun, ce qui garde **texte et schéma ensemble**.
+
+#### Tableaux et schémas comme une seule unité
+- Le **HierarchicalChunker** Docling produit un chunk par élément (paragraphe, tableau, picture). Les tableaux et schémas ne sont pas recoupés ; ils restent une seule unité.
+
+#### Légendes (fusion et injection)
+- Pour les blocs **picture** ou **table**, la légende (ex. « Fig. 4 : Détail du perçage ») est **fusionnée** au texte du chunk.
+- La légende est aussi **injectée** dans les métadonnées de tous les chunks de la même section (`image_anchor`, `figure_title`), afin que le contexte de la section soit disponible pour la recherche et le LLM.
+
+#### Métadonnées stockées (metadata_json)
+- **parent_heading** : titre de section (sujet).
+- **page_no** : numéro de page (fourni par Docling).
+- **figure_title** / **image_anchor** : légende(s) de la figure ou du tableau (section ou chunk).
+- **contains_image** : présent et à `true` lorsque le chunk ou la section contient une image/table avec légende.
 
 ### Stockage initial
 
@@ -206,12 +232,16 @@ class NoteChunk(SQLModel, table=True):
 
 **Processus** :
 1. Génère l'embedding de la requête utilisateur
-2. Recherche directement les k chunks les plus pertinents
-3. Retourne les passages avec :
-   - Le contenu du chunk
-   - Le titre de la note source
-   - Le score de similarité
-   - Les métadonnées (chunk_id, chunk_index, etc.)
+2. Recherche vectorielle SQL (pgvector) sur les leaves → `k * RERANKER_CANDIDATE_MULTIPLIER` candidats
+3. Filtrage pré-reranking (similarité minimale), puis reranking (BGE-reranker-v2-m3) sur au plus `MAX_RERANK_CANDIDATES` candidats
+4. Retourne les **k** passages les plus pertinents (contexte enrichi via résolution des parents)
+5. Passages avec : contenu, titre de note, score, métadonnées (chunk_id, chunk_index, etc.)
+
+**Reranker et titres descriptifs** : Avant le reranking, le texte de chaque candidat est enrichi avec `parent_heading` et `figure_title` (section et légende). Les chunks dont le titre de section ou la légende sont très descriptifs sont ainsi mieux notés par le reranker. Le passage final envoyé au LLM inclut aussi cette en-tête (section + légende) pour un contexte explicite.
+
+**Paramètres** (voir `semantic_search_service.py` et `app/routers/chat.py`) :
+- **k** (nombre de passages envoyés au LLM) : configurable via `RAG_TOP_K` (défaut : 10)
+- **MAX_RERANK_CANDIDATES** : nombre max de candidats rerankés (défaut : 30)
 
 **Utilisation** : Pour enrichir le contexte du chatbot avec des passages précis
 
@@ -397,6 +427,10 @@ Autre chunk pertinent...
 - `MAX_CONCURRENT_DOCUMENTS` : Nombre de workers de documents
 - `TORCH_NUM_THREADS` : Nombre de threads PyTorch pour Docling
 - `DOCLING_USE_GPU` : Activer/désactiver le GPU pour Docling
+- `DOCLING_OCR_ENABLED` : Activer l’OCR pour les schémas et PDF scannés (défaut : true)
+- `DOCLING_OCR_LANG` : Langues OCR (ex. `fr,en` ou `fra+eng`, optionnel)
+- `RAG_TOP_K` : Nombre de passages RAG envoyés au LLM (défaut : 10)
+- `MAX_RERANK_CANDIDATES` : Nombre max de candidats rerankés avant sélection des k passages (défaut : 30)
 
 ### Fichiers de configuration
 
