@@ -345,6 +345,18 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
             "- Les documents peuvent contenir des schémas techniques et des tableaux. Tu es un expert technique (ex. menuiserie, construction).\n"
             "- Si une information provient d'une légende d'image ou d'un tableau extrait, précise-le (ex. « selon la légende de la figure », « d'après le tableau »).\n"
             "- Si un schéma est mentionné (ex. Fig. 1.2, Figure 4), indique à l'utilisateur qu'il peut s'y référer dans le document pour les détails visuels (pose, cotes, etc.).\n\n"
+            "IMAGES DISPONIBLES DANS LES PASSAGES :\n"
+            "- Certains passages peuvent contenir la mention [IMAGE DISPONIBLE] suivie d'une ligne 'URL de l'image : /api/images/...'.\n"
+            "- Quand c'est le cas, tu DOIS afficher cette image dans ta réponse en utilisant la syntaxe Markdown : ![Description de l'image](URL)\n"
+            "- Place l'image juste après la phrase qui la mentionne ou la décrit.\n"
+            "- Utilise la légende ou la description du passage comme texte alternatif.\n"
+            "- N'invente jamais une URL : utilise uniquement les URL fournies dans les passages.\n\n"
+            "CITATIONS :\n"
+            "- Quand tu utilises une information d'un passage, cite-le avec son numéro entre crochets [1], [2], etc.\n"
+            "- Place les citations à la fin de la phrase ou du paragraphe concerné.\n"
+            "- Tu peux citer plusieurs sources pour une même information [1][3].\n"
+            "- Ne cite que les passages que tu utilises réellement.\n"
+            "- Pour les salutations ou questions générales, ne mets pas de citations.\n\n"
         )
     }
     
@@ -359,9 +371,21 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
             passage = passage_data['passage']
             score = passage_data.get('score', 0.0)
             note_title = passage_data.get('note_title', 'Note sans titre')
-            
-            # Construire le passage avec métadonnées
-            passage_text = f"[Passage {i}] (Pertinence: {score:.2f})\n{passage}\n"
+
+            # Pour les chunks image, injecter l'URL accessible par le frontend
+            if (
+                passage_data.get('is_image_chunk')
+                and passage_data.get('image_filename')
+                and passage_data.get('note_id')
+            ):
+                image_url = f"/api/images/{passage_data['note_id']}/{passage_data['image_filename']}"
+                passage_text = (
+                    f"[Passage {i}] (Pertinence: {score:.2f}) [IMAGE DISPONIBLE]\n"
+                    f"{passage}\n"
+                    f"URL de l'image : {image_url}\n"
+                )
+            else:
+                passage_text = f"[Passage {i}] (Pertinence: {score:.2f})\n{passage}\n"
             passages_content.append(passage_text)
         
         system_message["content"] += "\n---\n".join(passages_content)
@@ -517,6 +541,31 @@ async def stream_project_chat_message(
                     logger.info(f"Réponse de l'assistant sauvegardée dans la conversation {request.conversation_id}")
                 except Exception as e:
                     logger.error(f"Erreur lors de la sauvegarde de la réponse de l'assistant: {e}")
+            
+            # Envoyer les sources utilisées pour les citations
+            if passages:
+                sources_data = []
+                for i, p in enumerate(passages, 1):
+                    passage_raw = p.get("passage_raw", p.get("passage", ""))
+                    excerpt = (passage_raw[:200] + "...") if len(passage_raw) > 200 else passage_raw
+                    source_item = {
+                        "index": i,
+                        "note_id": p.get("note_id"),
+                        "note_title": p.get("note_title", "Note sans titre"),
+                        "chunk_id": p.get("chunk_id"),
+                        "excerpt": excerpt,
+                        "passage_full": passage_raw,
+                        "score": round(p.get("score", 0.0), 2),
+                        "page_no": p.get("page_no"),
+                        "section": p.get("section"),
+                    }
+                    # Multimodal : ajouter les infos image si présentes
+                    if p.get("is_image_chunk"):
+                        source_item["is_image_chunk"] = True
+                        source_item["image_path"] = p.get("image_path")
+                        source_item["image_filename"] = p.get("image_filename")
+                    sources_data.append(source_item)
+                yield f"data: {json.dumps({'sources': sources_data})}\n\n"
                     
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"

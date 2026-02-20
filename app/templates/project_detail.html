@@ -152,6 +152,71 @@ extra_head %}
     .dark #project-chatbot-area.private-mode .bg-gray-800 {
         background-color: #2d1b3d !important; /* Violet foncé moins saturé */
     }
+    
+    /* Styles pour les citations inline [1], [2]... */
+    .citation-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.4em;
+        height: 1.4em;
+        font-size: 0.7em;
+        font-weight: bold;
+        background: #3b82f6;
+        color: white !important;
+        border-radius: 9999px;
+        text-decoration: none !important;
+        vertical-align: super;
+        margin: 0 2px;
+        padding: 0 4px;
+        font-style: normal !important;
+        transition: background-color 0.2s, transform 0.1s;
+        border: none;
+        cursor: pointer;
+        line-height: 1;
+    }
+    .citation-link:hover {
+        background: #2563eb;
+        transform: scale(1.1);
+    }
+    .dark .citation-link {
+        background: #60a5fa;
+        color: #1e293b !important;
+    }
+    .dark .citation-link:hover {
+        background: #93c5fd;
+    }
+    
+    /* Styles pour la section sources */
+    .sources-section {
+        font-style: normal !important;
+    }
+    .sources-section * {
+        font-style: normal !important;
+    }
+    .source-badge {
+        text-decoration: none !important;
+        font-style: normal !important;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+    .source-badge:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .source-badge .citation-number {
+        color: #3b82f6;
+        font-style: normal !important;
+    }
+    .dark .source-badge .citation-number {
+        color: #60a5fa;
+    }
+    
+    /* Styles pour la modale de prévisualisation source */
+    #source-preview-modal .prose {
+        font-family: inherit;
+    }
 </style>
 {% endblock %} {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
@@ -568,6 +633,77 @@ extra_head %}
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Source Preview Modal -->
+    <div
+        id="source-preview-modal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        onclick="if(event.target === this) hideSourcePreviewModal()"
+    >
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] flex flex-col"
+        >
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span id="source-preview-badge" class="citation-number font-bold text-blue-600 dark:text-blue-400">[1]</span>
+                    <h3 id="source-preview-title" class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">Titre de la note</h3>
+                </div>
+                <button onclick="hideSourcePreviewModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="ti ti-x text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4 flex-1 overflow-y-auto">
+                <div id="source-preview-meta" class="flex flex-wrap gap-2 mb-3 text-xs text-gray-500 dark:text-gray-400">
+                    <span id="source-preview-page" class="hidden bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                        <i class="ti ti-file-text mr-1"></i>Page <span id="source-preview-page-num">1</span>
+                    </span>
+                    <span id="source-preview-section" class="hidden bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                        <i class="ti ti-bookmark mr-1"></i><span id="source-preview-section-text">Section</span>
+                    </span>
+                    <span id="source-preview-score" class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">
+                        <i class="ti ti-chart-bar mr-1"></i>Pertinence: <span id="source-preview-score-val">85%</span>
+                    </span>
+                    <span id="source-preview-image-badge" class="hidden bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-1 rounded">
+                        <i class="ti ti-photo mr-1"></i>Image/Schéma
+                    </span>
+                </div>
+                <!-- Conteneur pour l'image (multimodal) -->
+                <div id="source-preview-image-container" class="hidden mb-4">
+                    <img 
+                        id="source-preview-image"
+                        src=""
+                        alt="Schéma ou image du document"
+                        class="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:opacity-90 transition-opacity"
+                        onclick="window.open(this.src, '_blank')"
+                        title="Cliquer pour ouvrir en plein écran"
+                    />
+                </div>
+                <div id="source-preview-content" class="prose dark:prose-invert prose-sm max-w-none text-gray-700 dark:text-gray-300 whitespace-pre-wrap bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                    Contenu du passage...
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-2 justify-end">
+                <a 
+                    id="source-preview-edit-link"
+                    href="#"
+                    target="_blank"
+                    class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                >
+                    <i class="ti ti-edit"></i>
+                    Éditer la note
+                </a>
+                <a 
+                    id="source-preview-pdf-link"
+                    href="#"
+                    target="_blank"
+                    class="hidden px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2"
+                >
+                    <i class="ti ti-file-type-pdf"></i>
+                    <span id="source-preview-pdf-text">Ouvrir le PDF</span>
+                </a>
+            </div>
         </div>
     </div>
     {% endblock %} {% block extra_scripts %}
@@ -1468,6 +1604,7 @@ extra_head %}
 
             let fullResponse = "";
             let firstChunkReceived = false;
+            let receivedSources = []; // Sources pour les citations
 
             // Envoyer au backend avec streaming
             try {
@@ -1533,10 +1670,16 @@ extra_head %}
                                         const rawHtml =
                                             marked.parse(fullResponse);
                                         const cleanHtml =
-                                            DOMPurify.sanitize(rawHtml);
+                                            DOMPurify.sanitize(rawHtml, {
+                                                ADD_TAGS: ["img"],
+                                                ADD_ATTR: ["src", "alt", "class", "style", "title"],
+                                            });
                                         // Mettre à jour le contenu
                                         assistantContent.innerHTML = cleanHtml;
                                         scrollProjectChatToBottom(false); // Ne pas forcer, seulement si proche du bas
+                                    } else if (jsonData.sources) {
+                                        // Capturer les sources pour les citations
+                                        receivedSources = jsonData.sources;
                                     } else if (jsonData.done) {
                                         break;
                                     } else if (jsonData.error) {
@@ -1561,6 +1704,24 @@ extra_head %}
                     role: "assistant",
                     content: fullResponse,
                 });
+                
+                // Ajouter la section sources si des sources ont été reçues
+                if (receivedSources && receivedSources.length > 0) {
+                    const sourcesHtml = buildSourcesSection(receivedSources);
+                    const messageContainer = assistantMessageDiv.querySelector('.max-w-2xl');
+                    if (messageContainer) {
+                        messageContainer.insertAdjacentHTML('beforeend', sourcesHtml);
+                    }
+                }
+                
+                // Transformer les citations [1], [2]... en liens cliquables
+                if (receivedSources && receivedSources.length > 0) {
+                    const contentDiv = assistantMessageDiv.querySelector('.markdown-content');
+                    if (contentDiv) {
+                        contentDiv.innerHTML = transformCitationsToLinks(contentDiv.innerHTML, receivedSources);
+                    }
+                }
+                
                 scrollProjectChatToBottom(false); // Ne pas forcer à la fin, seulement si proche du bas
 
                 // Attendre un court délai pour s'assurer que le streaming est complètement terminé
@@ -1614,7 +1775,10 @@ extra_head %}
             let contentHtml;
             if (role === "assistant") {
                 const rawHtml = marked.parse(content);
-                const cleanHtml = DOMPurify.sanitize(rawHtml);
+                const cleanHtml = DOMPurify.sanitize(rawHtml, {
+                    ADD_TAGS: ["img"],
+                    ADD_ATTR: ["src", "alt", "class", "style", "title"],
+                });
                 contentHtml = `<div class="markdown-content">${cleanHtml}</div>`;
             } else {
                 // Messages utilisateur en texte brut
@@ -1641,6 +1805,183 @@ extra_head %}
             const div = document.createElement("div");
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        // Variable globale pour stocker les sources de la dernière réponse
+        let currentMessageSources = [];
+        
+        // Construire la section sources pour les citations
+        function buildSourcesSection(sources) {
+            if (!sources || sources.length === 0) return '';
+            
+            // Stocker les sources pour la modale
+            currentMessageSources = sources;
+            
+            const sourceBadges = sources.map(source => {
+                const title = escapeHtml(source.note_title || 'Note sans titre');
+                const excerpt = escapeHtml(source.excerpt || '');
+                const index = source.index;
+                const pageInfo = source.page_no ? ` (p.${source.page_no})` : '';
+                const isImage = source.is_image_chunk;
+                const imageIcon = isImage ? '<i class="ti ti-photo mr-1 text-purple-500"></i>' : '';
+                const bgClass = isImage 
+                    ? 'bg-purple-100 dark:bg-purple-800 hover:bg-purple-200 dark:hover:bg-purple-700' 
+                    : 'bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800';
+                
+                return `
+                    <button 
+                       onclick="showSourcePreview(${index})"
+                       class="source-badge inline-flex items-center px-2 py-1 text-xs rounded ${bgClass} transition-colors cursor-pointer"
+                       title="${excerpt}"
+                       id="source-ref-${index}">
+                        ${imageIcon}<span class="citation-number font-bold mr-1">[${index}]</span>
+                        <span class="truncate max-w-[150px]">${title}${pageInfo}</span>
+                    </button>
+                `;
+            }).join('');
+            
+            return `
+                <div class="sources-section mt-3 pt-3 border-t border-gray-300 dark:border-gray-600">
+                    <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-2 flex items-center gap-1">
+                        <i class="ti ti-book text-sm"></i>
+                        Sources
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        ${sourceBadges}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Transformer les citations [1], [2]... en liens cliquables
+        function transformCitationsToLinks(html, sources) {
+            if (!sources || sources.length === 0) return html;
+            
+            // Stocker les sources pour la modale
+            currentMessageSources = sources;
+            
+            // Créer un map des sources par index
+            const sourceMap = {};
+            sources.forEach(s => {
+                sourceMap[s.index] = s;
+            });
+            
+            // Remplacer [1], [2], etc. par des liens cliquables
+            const citationRegex = /\[(\d+)\]/g;
+            return html.replace(citationRegex, (match, num) => {
+                const index = parseInt(num);
+                const source = sourceMap[index];
+                if (source) {
+                    return `<button 
+                              class="citation-link" 
+                              title="${escapeHtml(source.note_title || 'Source')}"
+                              onclick="showSourcePreview(${index})">${match}</button>`;
+                }
+                return match;
+            });
+        }
+        
+        // Mettre en surbrillance temporairement une source
+        function highlightSource(index) {
+            const sourceRef = document.getElementById(`source-ref-${index}`);
+            if (sourceRef) {
+                sourceRef.classList.add('ring-2', 'ring-blue-500', 'ring-offset-1');
+                setTimeout(() => {
+                    sourceRef.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-1');
+                }, 2000);
+            }
+        }
+        
+        // Afficher la modale de prévisualisation d'une source
+        async function showSourcePreview(index) {
+            const source = currentMessageSources.find(s => s.index === index);
+            if (!source) return;
+            
+            // Mettre à jour les éléments de la modale
+            document.getElementById('source-preview-badge').textContent = `[${index}]`;
+            document.getElementById('source-preview-title').textContent = source.note_title || 'Note sans titre';
+            document.getElementById('source-preview-content').textContent = source.passage_full || source.excerpt || 'Contenu non disponible';
+            document.getElementById('source-preview-edit-link').href = `/notes/${source.note_id}/edit`;
+            document.getElementById('source-preview-score-val').textContent = `${Math.round(source.score * 100)}%`;
+            
+            // Afficher la page si disponible
+            const pageEl = document.getElementById('source-preview-page');
+            if (source.page_no) {
+                document.getElementById('source-preview-page-num').textContent = source.page_no;
+                pageEl.classList.remove('hidden');
+            } else {
+                pageEl.classList.add('hidden');
+            }
+            
+            // Afficher la section si disponible
+            const sectionEl = document.getElementById('source-preview-section');
+            if (source.section) {
+                document.getElementById('source-preview-section-text').textContent = source.section;
+                sectionEl.classList.remove('hidden');
+            } else {
+                sectionEl.classList.add('hidden');
+            }
+            
+            // Gérer l'affichage de l'image (multimodal)
+            const imageContainer = document.getElementById('source-preview-image-container');
+            const imageEl = document.getElementById('source-preview-image');
+            const imageBadge = document.getElementById('source-preview-image-badge');
+            
+            if (source.is_image_chunk && source.image_filename && source.note_id) {
+                const imageUrl = `/api/images/${source.note_id}/${source.image_filename}`;
+                imageEl.src = imageUrl;
+                imageEl.alt = source.note_title || 'Image du document';
+                imageContainer.classList.remove('hidden');
+                imageBadge.classList.remove('hidden');
+            } else {
+                imageEl.src = '';
+                imageContainer.classList.add('hidden');
+                imageBadge.classList.add('hidden');
+            }
+            
+            // Vérifier si un PDF est disponible
+            const pdfLink = document.getElementById('source-preview-pdf-link');
+            const pdfText = document.getElementById('source-preview-pdf-text');
+            
+            try {
+                const token = localStorage.getItem("authToken");
+                const response = await fetch(`/api/notes/${source.note_id}/info`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const noteInfo = await response.json();
+                    if (noteInfo.note_type === 'document' && noteInfo.has_source_file) {
+                        let pdfUrl = `/api/notes/${source.note_id}/file`;
+                        if (source.page_no) {
+                            pdfUrl += `#page=${source.page_no}`;
+                            pdfText.textContent = `Ouvrir le PDF (page ${source.page_no})`;
+                        } else {
+                            pdfText.textContent = 'Ouvrir le PDF';
+                        }
+                        pdfLink.href = pdfUrl;
+                        pdfLink.classList.remove('hidden');
+                    } else {
+                        pdfLink.classList.add('hidden');
+                    }
+                } else {
+                    pdfLink.classList.add('hidden');
+                }
+            } catch (e) {
+                console.error('Erreur lors de la récupération des infos de la note:', e);
+                pdfLink.classList.add('hidden');
+            }
+            
+            // Mettre en surbrillance la source dans la liste
+            highlightSource(index);
+            
+            // Afficher la modale
+            document.getElementById('source-preview-modal').classList.remove('hidden');
+        }
+        
+        // Cacher la modale de prévisualisation
+        function hideSourcePreviewModal() {
+            document.getElementById('source-preview-modal').classList.add('hidden');
         }
 
         // Démarrer le polling pour vérifier les statuts d'embedding

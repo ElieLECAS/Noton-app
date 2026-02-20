@@ -328,6 +328,7 @@ def create_chunks_for_note_from_docling(
     note: Note,
     llama_docs: list,
     generate_embeddings: bool = False,
+    images_info: list = None,
 ) -> List[NoteChunk]:
     """
     Créer les chunks pour un document importé via Docling.
@@ -341,13 +342,14 @@ def create_chunks_for_note_from_docling(
         note             : La note cible
         llama_docs       : Liste de LlamaIndex Document avec JSON Docling
         generate_embeddings : Si True, génère les embeddings synchronement
+        images_info      : Liste des infos images extraites (multimodal)
 
     Returns:
         Liste des chunks créés
     """
     delete_chunks_for_note(session, note.id)
 
-    chunks = chunk_note_from_docling_docs(note, llama_docs)
+    chunks = chunk_note_from_docling_docs(note, llama_docs, images_info=images_info or [])
 
     if generate_embeddings:
         from app.services.embedding_service import generate_embeddings_batch

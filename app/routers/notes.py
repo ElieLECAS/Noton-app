@@ -1,8 +1,9 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from fastapi.responses import FileResponse
 from sqlmodel import Session
 from app.database import get_session
-from app.models.note import NoteCreate, NoteRead, NoteUpdate
+from app.models.note import NoteCreate, NoteRead, NoteUpdate, Note
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.services.note_service import (
@@ -14,6 +15,7 @@ from app.services.note_service import (
 )
 from app.services.document_service import process_document, save_uploaded_file, process_document_async
 from pydantic import BaseModel
+from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
@@ -72,6 +74,124 @@ async def get_note(
             detail="Note non trouvée"
         )
     return NoteRead.model_validate(note)
+
+
+@router.get("/notes/{note_id}/file")
+async def get_note_file(
+    note_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Récupérer le fichier source d'une note (PDF, etc.)"""
+    note = session.get(Note, note_id)
+    if not note or note.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Note non trouvée"
+        )
+    
+    if note.note_type != "document" or not note.source_file_path:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Cette note n'a pas de fichier source"
+        )
+    
+    file_path = Path(note.source_file_path)
+    if not file_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Le fichier source n'existe plus"
+        )
+    
+    media_type = "application/pdf" if file_path.suffix.lower() == ".pdf" else "application/octet-stream"
+    return FileResponse(
+        path=str(file_path),
+        filename=f"{note.title}{file_path.suffix}",
+        media_type=media_type
+    )
+
+
+class NoteInfoResponse(BaseModel):
+    id: int
+    title: str
+    note_type: str
+    has_source_file: bool
+    source_file_path: Optional[str] = None
+
+
+@router.get("/notes/{note_id}/info", response_model=NoteInfoResponse)
+async def get_note_info(
+    note_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """Récupérer les informations d'une note (type, fichier source)"""
+    note = session.get(Note, note_id)
+    if not note or note.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Note non trouvée"
+        )
+    
+    return NoteInfoResponse(
+        id=note.id,
+        title=note.title,
+        note_type=note.note_type,
+        has_source_file=bool(note.source_file_path),
+        source_file_path=note.source_file_path if note.note_type == "document" else None
+    )
+
+
+@router.get("/images/{note_id}/{filename}")
+async def get_note_image(
+    note_id: int,
+    filename: str,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    """
+    Récupérer une image extraite d'un document (multimodal).
+    
+    Les images sont stockées dans media/images/{note_id}/ lors de l'extraction Docling.
+    """
+    note = session.get(Note, note_id)
+    if not note or note.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Note non trouvée"
+        )
+    
+    # Sécurité : empêcher path traversal
+    safe_filename = Path(filename).name
+    if safe_filename != filename or ".." in filename:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Nom de fichier invalide"
+        )
+    
+    image_path = Path(f"media/images/{note_id}/{safe_filename}")
+    if not image_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Image non trouvée"
+        )
+    
+    # Déterminer le type MIME
+    suffix = image_path.suffix.lower()
+    mime_types = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".gif": "image/gif",
+        ".webp": "image/webp",
+    }
+    media_type = mime_types.get(suffix, "image/png")
+    
+    return FileResponse(
+        path=str(image_path),
+        media_type=media_type,
+        filename=safe_filename
+    )
 
 
 @router.put("/notes/{note_id}", response_model=NoteRead)

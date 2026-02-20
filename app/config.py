@@ -60,6 +60,22 @@ class Settings(BaseSettings):
     KAG_EXTRACTION_PROVIDER: str = "openai"  # "openai" ou "ollama"
     KAG_EXTRACTION_MODEL: str = "gpt-5-nano-2025-08-07"
     
+    # Multimodal - Extraction et description d'images des documents
+    MULTIMODAL_ENABLED: bool = True  # Activer l'extraction et description des images/schémas
+    VISION_MODEL: str = "gpt-4o"  # Modèle pour décrire les images (GPT-4o recommandé)
+    
+    @field_validator('MULTIMODAL_ENABLED', mode='before')
+    @classmethod
+    def parse_multimodal_enabled(cls, v: Union[str, bool, None]) -> bool:
+        """Convertit les chaînes en bool pour MULTIMODAL_ENABLED."""
+        if v is None:
+            return True
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in ('true', '1', 'yes', 'on')
+        return True
+    
     @field_validator('KAG_ENABLED', mode='before')
     @classmethod
     def parse_kag_enabled(cls, v: Union[str, bool, None]) -> bool:

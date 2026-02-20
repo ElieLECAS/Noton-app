@@ -350,17 +350,30 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     note_id = metadata.get("note_id")
     node_id = metadata.get("node_id")
     chunk_index = metadata.get("chunk_index", 0)
+    page_no = metadata.get("page_no")
+    parent_heading = metadata.get("parent_heading")
+    # Multimodal : chemin image si chunk image
+    image_path = metadata.get("image_path")
+    image_filename = metadata.get("image_filename")
+    is_image_chunk = metadata.get("is_image_chunk", False)
+    
     content = node.get_content() if hasattr(node, "get_content") else str(node)
     # Enrichir avec parent_heading et figure_title pour le LLM
     content_enriched = _enrich_content_with_heading_and_figure(content, metadata)
     passage_text = f"**{note_title}**\n{content_enriched}"
     return {
         "passage": passage_text,
+        "passage_raw": content,
         "note_title": note_title,
         "note_id": note_id,
         "chunk_id": node_id,
         "chunk_index": int(chunk_index) if isinstance(chunk_index, (int, str)) else 0,
         "score": float(fallback_score or 0.0),
+        "page_no": int(page_no) if page_no is not None else None,
+        "section": parent_heading,
+        "image_path": image_path,
+        "image_filename": image_filename,
+        "is_image_chunk": is_image_chunk,
     }
 
 

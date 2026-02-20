@@ -41,6 +41,8 @@ services:
             - ./app/alembic.ini:/app/alembic.ini
             # Cache persistant pour les modèles ML (évite re-téléchargement à chaque rebuild)
             - models_cache:/root/.cache
+            # Images extraites par Docling (multimodal) - persistées entre restarts
+            - media_data:/app/media
 
         ports:
             - "8001:8000"
@@ -76,6 +78,8 @@ services:
             - KAG_ENABLED=${KAG_ENABLED:-true}
             - KAG_EXTRACTION_PROVIDER=${KAG_EXTRACTION_PROVIDER:-openai}
             - KAG_EXTRACTION_MODEL=${KAG_EXTRACTION_MODEL:-gpt-4o-mini}
+            - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
+            - VISION_MODEL=${VISION_MODEL:-gpt-4o}
         depends_on:
             db:
                 condition: service_healthy
@@ -86,3 +90,4 @@ volumes:
     postgres_data:
     ollama_data:
     models_cache:  # Cache persistant pour HuggingFace, EasyOCR, Docling
+    media_data:    # Images extraites par Docling (multimodal)

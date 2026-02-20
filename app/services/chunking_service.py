@@ -271,6 +271,7 @@ def _is_picture_or_table_chunk(meta: dict) -> bool:
 def chunk_note_from_docling_docs(
     note: Note,
     llama_docs: Sequence,
+    images_info: List[dict] = None,
 ) -> List[NoteChunk]:
     """
     Découper un document importé via Docling en NoteChunks sémantiques.
@@ -288,13 +289,16 @@ def chunk_note_from_docling_docs(
     dans metadata_json de chaque chunk.
 
     Args:
-        note     : La note cible (déjà enregistrée en base)
+        note       : La note cible (déjà enregistrée en base)
         llama_docs : Liste de LlamaIndex Document dont le .text contient le
                      JSON sérialisé d'un DoclingDocument (model_dump_json)
+        images_info: Liste d'infos images extraites (multimodal), avec
+                     'path', 'caption', 'page_no', 'description' (optionnel)
 
     Returns:
-        Liste de NoteChunk (leaves + parents) prête à être sauvegardée
+        Liste de NoteChunk (leaves + parents + images) prête à être sauvegardée
     """
+    images_info = images_info or []
     try:
         node_parser = _get_docling_node_parser()
     except ImportError:
@@ -474,15 +478,102 @@ def chunk_note_from_docling_docs(
             )
             chunk_index += 1
 
+    # ------------------------------------------------------------------
+    # Créer des chunks pour les images extraites (multimodal)
+    # ------------------------------------------------------------------
+    image_chunks_count = 0
+    if images_info:
+        import asyncio
+        from app.services.vision_service import describe_image
+        from app.config import settings as app_settings
+        
+        for img_info in images_info:
+            image_path = img_info.get("path")
+            if not image_path:
+                continue
+            
+            caption = img_info.get("caption", "")
+            page_no = img_info.get("page_no")
+            img_index = img_info.get("index", 0)
+            filename = img_info.get("filename", f"image_{img_index}.png")
+            
+            # Description déjà fournie ou à générer
+            description = img_info.get("description")
+            if not description and app_settings.MULTIMODAL_ENABLED:
+                try:
+                    description = asyncio.get_event_loop().run_until_complete(
+                        describe_image(image_path, context=caption or "")
+                    )
+                except RuntimeError:
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    try:
+                        description = loop.run_until_complete(
+                            describe_image(image_path, context=caption or "")
+                        )
+                    finally:
+                        loop.close()
+            
+            # Contenu du chunk image : caption + description
+            content_parts = ["[Image]"]
+            if caption:
+                content_parts.append(f"Légende : {caption}")
+            if description:
+                content_parts.append(f"\nDescription : {description}")
+            else:
+                content_parts.append("\n(Description non disponible)")
+            
+            image_content = "\n".join(content_parts)
+            
+            image_node_id = str(uuid.uuid4())
+            image_metadata = dict(doc_metadata_base)
+            image_metadata.update({
+                "node_id": image_node_id,
+                "parent_node_id": None,
+                "hierarchy_level": 1,
+                "is_leaf": "true",
+                "is_image_chunk": True,
+                "image_path": image_path,
+                "image_filename": filename,
+                "page_no": page_no,
+                "caption": caption,
+                "contains_image": True,
+            })
+            
+            chunks.append(
+                NoteChunk(
+                    note_id=note.id,
+                    chunk_index=chunk_index,
+                    content=image_content,
+                    text=image_content,
+                    start_char=0,
+                    end_char=len(image_content),
+                    node_id=image_node_id,
+                    parent_node_id=None,
+                    is_leaf=True,
+                    hierarchy_level=1,
+                    metadata_json=image_metadata,
+                    metadata_=image_metadata,
+                )
+            )
+            chunk_index += 1
+            image_chunks_count += 1
+            
+            logger.debug(
+                "Chunk image créé pour note=%s : %s (page %s)",
+                note.id, filename, page_no
+            )
+
     leaf_count = sum(1 for c in chunks if c.is_leaf)
     parent_count = sum(1 for c in chunks if not c.is_leaf)
     logger.info(
         "Chunking sémantique (DoclingNodeParser) note=%s : "
-        "%d chunks total (%d leaves, %d parents, %d sections)",
+        "%d chunks total (%d leaves, %d parents, %d sections, %d images)",
         note.id,
         len(chunks),
         leaf_count,
         parent_count,
         len(group_order),
+        image_chunks_count,
     )
     return chunks

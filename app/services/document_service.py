@@ -128,7 +128,10 @@ def get_docling_converter():
                 from docling.document_converter import DocumentConverter
 
                 format_options = None
-                if getattr(settings, "DOCLING_OCR_ENABLED", False):
+                ocr_enabled = getattr(settings, "DOCLING_OCR_ENABLED", False)
+                multimodal_enabled = getattr(settings, "MULTIMODAL_ENABLED", False)
+                
+                if ocr_enabled or multimodal_enabled:
                     try:
                         from docling.datamodel.base_models import InputFormat
                         from docling.datamodel.pipeline_options import (
@@ -136,50 +139,58 @@ def get_docling_converter():
                         )
                         from docling.document_converter import PdfFormatOption
 
-                        pipeline_options = PdfPipelineOptions(do_ocr=True)
+                        pipeline_options = PdfPipelineOptions(
+                            do_ocr=ocr_enabled,
+                            generate_picture_images=multimodal_enabled,
+                            images_scale=2.0 if multimodal_enabled else 1.0,
+                        )
+                        
+                        if multimodal_enabled:
+                            logger.info("Multimodal activé : extraction des images/schémas")
 
-                        # Langues OCR : EasyOCR utilise ["fr","en"], Tesseract "fra+eng"
-                        ocr_lang = getattr(settings, "DOCLING_OCR_LANG", None)
-                        if ocr_lang:
-                            lang_list = [
-                                x.strip().lower() for x in ocr_lang.replace("+", ",").split(",")
-                                if x.strip()
-                            ]
-                            if lang_list:
-                                try:
-                                    from docling.datamodel.pipeline_options import (
-                                        EasyOcrOptions,
-                                    )
-
-                                    pipeline_options.ocr_options = EasyOcrOptions(
-                                        lang=lang_list,
-                                        use_gpu=settings.DOCLING_USE_GPU is True,
-                                    )
-                                    logger.info(
-                                        "OCR Docling activé (EasyOCR, lang=%s)",
-                                        lang_list,
-                                    )
-                                except ImportError:
+                        # Configuration OCR si activé
+                        if ocr_enabled:
+                            ocr_lang = getattr(settings, "DOCLING_OCR_LANG", None)
+                            if ocr_lang:
+                                lang_list = [
+                                    x.strip().lower() for x in ocr_lang.replace("+", ",").split(",")
+                                    if x.strip()
+                                ]
+                                if lang_list:
                                     try:
                                         from docling.datamodel.pipeline_options import (
-                                            TesseractOcrOptions,
+                                            EasyOcrOptions,
                                         )
 
-                                        pipeline_options.ocr_options = (
-                                            TesseractOcrOptions(lang=ocr_lang)
+                                        pipeline_options.ocr_options = EasyOcrOptions(
+                                            lang=lang_list,
+                                            use_gpu=settings.DOCLING_USE_GPU is True,
                                         )
                                         logger.info(
-                                            "OCR Docling activé (Tesseract, lang=%s)",
-                                            ocr_lang,
+                                            "OCR Docling activé (EasyOCR, lang=%s)",
+                                            lang_list,
                                         )
                                     except ImportError:
-                                        logger.debug(
-                                            "OCR options non disponibles, do_ocr=True sans ocr_options"
-                                        )
-                        else:
-                            logger.info(
-                                "OCR Docling activé (langues par défaut)"
-                            )
+                                        try:
+                                            from docling.datamodel.pipeline_options import (
+                                                TesseractOcrOptions,
+                                            )
+
+                                            pipeline_options.ocr_options = (
+                                                TesseractOcrOptions(lang=ocr_lang)
+                                            )
+                                            logger.info(
+                                                "OCR Docling activé (Tesseract, lang=%s)",
+                                                ocr_lang,
+                                            )
+                                        except ImportError:
+                                            logger.debug(
+                                                "OCR options non disponibles, do_ocr=True sans ocr_options"
+                                            )
+                            else:
+                                logger.info(
+                                    "OCR Docling activé (langues par défaut)"
+                                )
 
                         format_options = {
                             InputFormat.PDF: PdfFormatOption(
@@ -213,20 +224,21 @@ def get_docling_converter():
         return _docling_converter
 
 
-def process_document(file_path: str) -> tuple[Optional[str], Optional[list]]:
+def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Optional[object]]:
     """
-    Traite un document et retourne (markdown, llama_docs_json).
+    Traite un document et retourne (markdown, llama_docs_json, docling_doc).
 
     Une seule passe Docling produit :
     - markdown : texte lisible stocké dans note.content (pour l'affichage)
     - llama_docs : liste de LlamaIndex Document en format JSON Docling,
       prête à être consommée par DoclingNodeParser pour un chunking sémantique
+    - docling_doc : document Docling original (pour extraction d'images multimodal)
 
     Args:
         file_path: Chemin vers le fichier à traiter
 
     Returns:
-        (markdown_content, llama_docs) ou (None, None) en cas d'erreur
+        (markdown_content, llama_docs, docling_doc) ou (None, None, None) en cas d'erreur
     """
     import time as _time
 
@@ -234,7 +246,7 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list]]:
 
     if not os.path.exists(file_path):
         logger.error("Fichier non trouvé: %s", file_path)
-        return None, None
+        return None, None, None
 
     try:
         file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
@@ -261,6 +273,9 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list]]:
 
             def flush(self):
                 self.original_stream.flush()
+            
+            def fileno(self):
+                return self.original_stream.fileno()
 
         old_stdout, old_stderr = sys.stdout, sys.stderr
         try:
@@ -289,7 +304,7 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list]]:
                 "Le document %s a été traité mais le contenu markdown est vide",
                 file_path,
             )
-            return None, None
+            return None, None, None
 
         # Format JSON obligatoire pour DoclingNodeParser : préserve la structure
         # hiérarchique des tableaux (colonnes/lignes) ; ne pas remplacer par du Markdown.
@@ -311,13 +326,13 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list]]:
             len(markdown_content),
             len(llama_docs),
         )
-        return markdown_content, llama_docs
+        return markdown_content, llama_docs, docling_doc
 
     except Exception as e:
         logger.error(
             "Erreur lors du traitement du document %s: %s", file_path, e, exc_info=True
         )
-        return None, None
+        return None, None, None
 
 
 def save_uploaded_file(
@@ -355,6 +370,102 @@ def save_uploaded_file(
             "Erreur lors de la sauvegarde du fichier %s: %s", filename, e, exc_info=True
         )
         return None
+
+
+def extract_and_save_images(docling_doc, note_id: int) -> list:
+    """
+    Extrait les images du document Docling et les sauvegarde sur disque.
+    
+    Args:
+        docling_doc: Document Docling contenant les images extraites
+        note_id: ID de la note pour organiser les images
+        
+    Returns:
+        Liste de dictionnaires avec les infos de chaque image:
+        - path: chemin du fichier image
+        - page_no: numéro de page
+        - caption: légende de l'image
+        - bbox: bounding box dans le document
+    """
+    if not getattr(settings, "MULTIMODAL_ENABLED", False):
+        return []
+    
+    images_info = []
+    images_dir = Path(f"media/images/{note_id}")
+    
+    try:
+        # Vérifier si le document a des images
+        pictures = getattr(docling_doc, "pictures", None)
+        if not pictures:
+            logger.debug("Aucune image trouvée dans le document pour note_id=%s", note_id)
+            return []
+        
+        images_dir.mkdir(parents=True, exist_ok=True)
+        
+        for idx, picture in enumerate(pictures):
+            try:
+                # Récupérer l'image PIL
+                pil_image = getattr(picture, "image", None)
+                if pil_image is None:
+                    logger.warning("Image %d sans données PIL pour note_id=%s", idx, note_id)
+                    continue
+                
+                # Sauvegarder l'image
+                image_filename = f"image_{idx}.png"
+                image_path = images_dir / image_filename
+                pil_image.save(str(image_path), "PNG")
+                
+                # Extraire les métadonnées
+                prov = getattr(picture, "prov", None)
+                page_no = None
+                bbox = None
+                if prov and len(prov) > 0:
+                    page_no = getattr(prov[0], "page_no", None)
+                    bbox_obj = getattr(prov[0], "bbox", None)
+                    if bbox_obj:
+                        bbox = {
+                            "l": getattr(bbox_obj, "l", 0),
+                            "t": getattr(bbox_obj, "t", 0),
+                            "r": getattr(bbox_obj, "r", 0),
+                            "b": getattr(bbox_obj, "b", 0),
+                        }
+                
+                caption = getattr(picture, "caption", "") or ""
+                
+                images_info.append({
+                    "path": str(image_path),
+                    "filename": image_filename,
+                    "page_no": page_no,
+                    "caption": caption,
+                    "bbox": bbox,
+                    "index": idx,
+                })
+                
+                logger.debug(
+                    "Image %d extraite : %s (page %s)",
+                    idx, image_path, page_no
+                )
+                
+            except Exception as img_err:
+                logger.warning(
+                    "Erreur extraction image %d pour note_id=%s: %s",
+                    idx, note_id, img_err
+                )
+                continue
+        
+        if images_info:
+            logger.info(
+                "✅ %d image(s) extraite(s) pour note_id=%s dans %s",
+                len(images_info), note_id, images_dir
+            )
+        
+    except Exception as e:
+        logger.error(
+            "Erreur lors de l'extraction des images pour note_id=%s: %s",
+            note_id, e, exc_info=True
+        )
+    
+    return images_info
 
 
 def _process_document_worker():
@@ -498,8 +609,8 @@ def _process_document_for_note(note_id: int, file_path: str):
             session.add(note)
             session.commit()
 
-            # Une seule passe Docling → markdown + llama_docs JSON
-            markdown_content, llama_docs = process_document(file_path)
+            # Une seule passe Docling → markdown + llama_docs JSON + docling_doc (pour images)
+            markdown_content, llama_docs, docling_doc = process_document(file_path)
 
             if not markdown_content:
                 note.processing_status = "failed"
@@ -526,13 +637,25 @@ def _process_document_for_note(note_id: int, file_path: str):
                 note_id,
                 len(markdown_content),
             )
+            
+            # Extraction des images si multimodal activé
+            images_info = []
+            if docling_doc and getattr(settings, "MULTIMODAL_ENABLED", False):
+                images_info = extract_and_save_images(docling_doc, note_id)
+                if images_info:
+                    logger.info(
+                        "%d image(s) extraite(s) pour la note %d",
+                        len(images_info), note_id
+                    )
 
             try:
                 # Chunking sémantique via DoclingNodeParser si llama_docs disponibles,
                 # sinon fallback sur HierarchicalNodeParser
                 if llama_docs:
                     chunks = create_chunks_for_note_from_docling(
-                        session, note, llama_docs, generate_embeddings=False
+                        session, note, llama_docs, 
+                        generate_embeddings=False,
+                        images_info=images_info,
                     )
                     logger.info(
                         "Créé %d chunks (DoclingNodeParser) pour la note %d",
