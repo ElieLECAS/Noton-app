@@ -404,10 +404,27 @@ def extract_and_save_images(docling_doc, note_id: int) -> list:
         
         for idx, picture in enumerate(pictures):
             try:
-                # Récupérer l'image PIL
-                pil_image = getattr(picture, "image", None)
+                # Récupérer l'image PIL via l'API Docling
+                pil_image = None
+                
+                # Méthode 1: PictureItem.get_image(document) - API Docling 2.x recommandée
+                if hasattr(picture, "get_image") and callable(getattr(picture, "get_image")):
+                    try:
+                        pil_image = picture.get_image(docling_doc)
+                    except Exception as e:
+                        logger.debug("get_image() a échoué pour image %d: %s", idx, e)
+                
+                # Méthode 2: Accès via picture.image.pil_image
                 if pil_image is None:
-                    logger.warning("Image %d sans données PIL pour note_id=%s", idx, note_id)
+                    image_ref = getattr(picture, "image", None)
+                    if image_ref is not None:
+                        if hasattr(image_ref, "pil_image"):
+                            pil_image = image_ref.pil_image
+                        elif hasattr(image_ref, "save"):
+                            pil_image = image_ref
+                
+                if pil_image is None:
+                    logger.warning("Image %d sans données PIL exploitables pour note_id=%s", idx, note_id)
                     continue
                 
                 # Sauvegarder l'image
