@@ -27,7 +27,7 @@ import os
 logger = logging.getLogger(__name__)
 
 # Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K)
-RAG_TOP_K = int(os.getenv("RAG_TOP_K", "10"))
+RAG_TOP_K = int(os.getenv("RAG_TOP_K", "15"))
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
@@ -340,17 +340,22 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
             "PRÉCISION SUR LES DONNÉES NUMÉRIQUES ET TABLEAUX :\n"
             "- Si tu trouves des valeurs numériques dans un tableau, vérifie scrupuleusement l'en-tête de la colonne correspondante.\n"
             "- En cas de doute entre deux chiffres, cite la section ou le passage précis du document (ex. titre de section, nom de note).\n"
-            "- Ne confonds pas les colonnes (ex. distance entre fixations vs distance de calage).\n\n"
+            "- Ne confonds pas les colonnes (ex. distance entre fixations vs distance de calage).\n"
+            "- Si tu trouves des données chiffrées (Uw, cotes, valeurs techniques, etc.), présente-les toujours sous forme de tableau Markdown pour une meilleure lisibilité.\n\n"
+            "PRIORITÉ DOCUMENT DÉDIÉ AU PRODUIT :\n"
+            "- Si une information spécifique (ex. garantie, Uw, caractéristique) est mentionnée dans le document dédié à un produit ou une gamme (ex. dépliant LUMÉAL), elle annule et remplace l'information générale trouvée dans le catalogue ou les directives générales. Donne toujours la priorité à l'information du document dédié.\n\n"
             "SCHÉMAS ET LÉGENDES :\n"
             "- Les documents peuvent contenir des schémas techniques et des tableaux. Tu es un expert technique (ex. menuiserie, construction).\n"
             "- Si une information provient d'une légende d'image ou d'un tableau extrait, précise-le (ex. « selon la légende de la figure », « d'après le tableau »).\n"
             "- Si un schéma est mentionné (ex. Fig. 1.2, Figure 4), indique à l'utilisateur qu'il peut s'y référer dans le document pour les détails visuels (pose, cotes, etc.).\n\n"
-            "IMAGES DISPONIBLES DANS LES PASSAGES :\n"
-            "- Certains passages peuvent contenir la mention [IMAGE DISPONIBLE] suivie d'une ligne 'URL de l'image : /api/images/...'.\n"
-            "- Quand c'est le cas, tu DOIS afficher cette image dans ta réponse en utilisant la syntaxe Markdown : ![Description de l'image](URL)\n"
-            "- Place l'image juste après la phrase qui la mentionne ou la décrit.\n"
-            "- Utilise la légende ou la description du passage comme texte alternatif.\n"
-            "- N'invente jamais une URL : utilise uniquement les URL fournies dans les passages.\n\n"
+            "IMAGES ET SCHÉMAS DISPONIBLES (TRÈS IMPORTANT) :\n"
+            "- Certains passages sont marqués [IMAGE DISPONIBLE] avec une URL exacte à utiliser.\n"
+            "- Pour CHAQUE passage marqué [IMAGE DISPONIBLE], tu DOIS afficher l'image dans ta réponse avec la syntaxe Markdown exacte fournie (![description](URL)), pas seulement la décrire en texte.\n"
+            "- Copie-colle la ligne ![...](URL) indiquée dans le passage après « INCLURE CETTE IMAGE » ; ajoute la citation [N] après l'image.\n"
+            "- Place l'image juste après la phrase qui décrit ou mentionne le concept qu'elle illustre.\n"
+            "- Si plusieurs passages contiennent [IMAGE DISPONIBLE] et sont pertinents, inclus toutes ces images.\n"
+            "- N'invente JAMAIS d'URL : utilise UNIQUEMENT les URL exactes fournies dans les passages.\n"
+            "- Exemple : « Voici le schéma de montage :\\n  ![Schéma de montage](/api/images/21/image_5.png) [2] »\n\n"
             "CITATIONS :\n"
             "- Quand tu utilises une information d'un passage, cite-le avec son numéro entre crochets [1], [2], etc.\n"
             "- Place les citations à la fin de la phrase ou du paragraphe concerné.\n"
@@ -379,10 +384,12 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
                 and passage_data.get('note_id')
             ):
                 image_url = f"/api/images/{passage_data['note_id']}/{passage_data['image_filename']}"
+                caption = passage_data.get('caption', '') or 'Image du document'
                 passage_text = (
                     f"[Passage {i}] (Pertinence: {score:.2f}) [IMAGE DISPONIBLE]\n"
+                    f"Source: {note_title}\n"
                     f"{passage}\n"
-                    f"URL de l'image : {image_url}\n"
+                    f">>> INCLURE CETTE IMAGE DANS TA RÉPONSE : ![{caption}]({image_url}) [citation: {i}]\n"
                 )
             else:
                 passage_text = f"[Passage {i}] (Pertinence: {score:.2f})\n{passage}\n"
@@ -564,6 +571,7 @@ async def stream_project_chat_message(
                         source_item["is_image_chunk"] = True
                         source_item["image_path"] = p.get("image_path")
                         source_item["image_filename"] = p.get("image_filename")
+                        source_item["caption"] = p.get("caption", "")
                     sources_data.append(source_item)
                 yield f"data: {json.dumps({'sources': sources_data})}\n\n"
                     

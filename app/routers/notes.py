@@ -82,7 +82,12 @@ async def get_note_file(
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Récupérer le fichier source d'une note (PDF, etc.)"""
+    """
+    Récupérer le fichier source d'une note (PDF, etc.)
+    
+    Supporte les requêtes Range pour le chargement progressif (pdf.js).
+    Headers CORS configurés pour permettre l'accès depuis le frontend.
+    """
     note = session.get(Note, note_id)
     if not note or note.user_id != current_user.id:
         raise HTTPException(
@@ -104,11 +109,16 @@ async def get_note_file(
         )
     
     media_type = "application/pdf" if file_path.suffix.lower() == ".pdf" else "application/octet-stream"
-    return FileResponse(
+    
+    response = FileResponse(
         path=str(file_path),
         filename=f"{note.title}{file_path.suffix}",
         media_type=media_type
     )
+    response.headers["Accept-Ranges"] = "bytes"
+    response.headers["Access-Control-Expose-Headers"] = "Content-Length, Content-Range, Accept-Ranges"
+    
+    return response
 
 
 class NoteInfoResponse(BaseModel):

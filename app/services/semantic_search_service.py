@@ -23,10 +23,11 @@ MetadataFilter) ont été supprimés : la recherche SQL directe est plus fiable 
 avec l'architecture de la table notechunk (insertions via SQLModel ORM).
 """
 
-from typing import Dict, List
+from typing import Dict, List, Set
 import os
 import re
 import threading
+import unicodedata
 from sqlmodel import Session, select
 from sqlalchemy import or_
 from app.models.note import Note
@@ -356,6 +357,7 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     image_path = metadata.get("image_path")
     image_filename = metadata.get("image_filename")
     is_image_chunk = metadata.get("is_image_chunk", False)
+    caption = metadata.get("caption", "")
     
     content = node.get_content() if hasattr(node, "get_content") else str(node)
     # Enrichir avec parent_heading et figure_title pour le LLM
@@ -374,6 +376,7 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
         "image_path": image_path,
         "image_filename": image_filename,
         "is_image_chunk": is_image_chunk,
+        "caption": caption,
     }
 
 
@@ -530,6 +533,84 @@ def _merge_with_graph_candidates(
     return merged
 
 
+def _normalize_for_gamme(s: str) -> str:
+    """Lowercase + suppression des accents pour comparaison titre / termes requête."""
+    if not s:
+        return ""
+    n = unicodedata.normalize("NFD", s.lower())
+    return "".join(c for c in n if unicodedata.category(c) != "Mn")
+
+
+def _get_meaningful_words(text: str) -> Set[str]:
+    """
+    Extrait les mots significatifs d'un texte (pour Title-Query Alignment).
+    Normalisation NFD sans accents, mots de plus de 3 caractères, hors stopwords.
+    """
+    if not text or not text.strip():
+        return set()
+    normalized = _normalize_for_gamme(text)
+    tokens = re.findall(r"[a-z0-9]+", normalized)
+    return {
+        w for w in tokens
+        if len(w) > 3 and w not in _FALLBACK_STOPWORDS
+    }
+
+
+# Coefficient et plafond du boost Title-Query (configurables par env)
+# Valeurs par défaut plus agressives pour privilégier fortement les documents dédiés.
+TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
+TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
+
+
+def refine_with_source_authority(
+    passages: List[Dict],
+    query_text: str,
+) -> List[Dict]:
+    """
+    Priorité aux sources (source authority) : priorise les passages dont le titre
+    de la note correspond à la requête, pour que l'IA « lise » d'abord la source
+    spécifique (ex. dépliant LUMÉAL) et non le catalogue général.
+    Corrige la dilution du contexte induite par le KAG quand beaucoup d'entités
+    proviennent de documents génériques. Boost proportionnel aux mots communs
+    (query ∩ titre), plafonné (TITLE_QUERY_BOOST_CAP).
+    """
+    if not passages or not query_text or not query_text.strip():
+        return passages
+    query_words = _get_meaningful_words(query_text)
+    if not query_words:
+        return passages
+    for p in passages:
+        note_title = (p.get("note_title") or "").strip()
+        if not note_title:
+            continue
+        title_words = _get_meaningful_words(note_title)
+        common = query_words & title_words
+        if common:
+            boost = min(
+                TITLE_QUERY_BOOST_PER_MATCH * len(common),
+                TITLE_QUERY_BOOST_CAP,
+            )
+            p["score"] = float(p.get("score") or 0.0) + boost
+    passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
+    return passages
+
+
+def _boost_image_passages(passages: List[Dict], boost: float = 0.07) -> List[Dict]:
+    """
+    Donne un léger boost aux passages image pour qu'ils remontent dans le top-k.
+    Les chunks image ont un contenu texte court ([Image] + légende + description)
+    et sont souvent moins bien classés par la similarité vectorielle ; ce boost
+    augmente les chances qu'au moins quelques images apparaissent dans le contexte.
+    """
+    if not passages:
+        return passages
+    for p in passages:
+        if p.get("is_image_chunk"):
+            p["score"] = float(p.get("score") or 0.0) + boost
+    passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
+    return passages
+
+
 # ---------------------------------------------------------------------------
 # Point d'entrée principal
 # ---------------------------------------------------------------------------
@@ -539,7 +620,7 @@ def search_relevant_passages(
     project_id: int,
     query_text: str,
     user_id: int,
-    k: int = 8,
+    k: int = 15,
     passage_size: int = 500,  # ignoré, conservé pour compatibilité API
 ) -> List[Dict]:
     """
@@ -758,6 +839,9 @@ def search_relevant_passages(
             " [reranked]" if (RERANKER_AVAILABLE and RERANKER_ENABLED) else "",
             score_strs,
         )
+
+        passages = refine_with_source_authority(passages, query_text)
+        passages = _boost_image_passages(passages)
 
         if not passages:
             return _keyword_fallback_passages(

@@ -642,6 +642,18 @@ def _process_document_for_note(note_id: int, file_path: str):
                 logger.error("Échec du traitement du document pour la note %d", note_id)
                 return
 
+            # Renommer le fichier vers media/documents/{note_id}.{extension}
+            file_extension = Path(file_path).suffix.lower()
+            permanent_path = Path(f"media/documents/{note_id}{file_extension}")
+            permanent_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            import shutil
+            shutil.move(file_path, str(permanent_path))
+            note.source_file_path = str(permanent_path)
+            logger.info("PDF déplacé vers chemin permanent: %s", permanent_path)
+            
+            # Garder le markdown dans note.content pour le RAG (chunking, fallback, recherche).
+            # L’UI affiche le PDF via source_file_path, pas le contenu éditable.
             note.content = markdown_content
             note.processing_status = "processing"
             note.processing_progress = 55
@@ -650,7 +662,7 @@ def _process_document_for_note(note_id: int, file_path: str):
             session.commit()
 
             logger.info(
-                "Document traité avec succès pour la note %d (%d caractères)",
+                "Document traité avec succès pour la note %d (%d caractères extraits)",
                 note_id,
                 len(markdown_content),
             )
@@ -724,21 +736,8 @@ def _process_document_for_note(note_id: int, file_path: str):
                 session.add(note)
                 session.commit()
 
-            try:
-                if os.path.exists(file_path):
-                    os.remove(file_path)
-                    logger.info("✅ Fichier original supprimé: %s", file_path)
-                else:
-                    logger.warning(
-                        "Fichier déjà supprimé ou introuvable: %s", file_path
-                    )
-            except Exception as e:
-                logger.error(
-                    "Erreur lors de la suppression du fichier %s: %s",
-                    file_path,
-                    e,
-                    exc_info=True,
-                )
+            # Le fichier PDF est conservé de manière permanente dans media/documents/{note_id}.pdf
+            # pour permettre la visualisation native du PDF
 
     except Exception as e:
         logger.error(

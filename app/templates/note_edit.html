@@ -1,52 +1,146 @@
-{% extends "base.html" %}
-
-{% block title %}Éditer la note - {{ app_name }}{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}Note - {{ app_name }}{% endblock %}
+{% block extra_head %}
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf_viewer.min.css"
+/>
+<style>
+    #pdf-viewer-container {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: #525659;
+    }
+    #pdf-viewer-container canvas {
+        display: block;
+        margin: 10px auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    .pdf-toolbar {
+        background: #323639;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    .pdf-toolbar button {
+        background: #4a4d50;
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .pdf-toolbar button:hover {
+        background: #5a5d60;
+    }
+    .pdf-toolbar button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .pdf-toolbar input {
+        width: 60px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: none;
+        text-align: center;
+    }
+    .pdf-toolbar select {
+        padding: 4px 8px;
+        border-radius: 4px;
+        border: none;
+    }
+    .pdf-page-container {
+        position: relative;
+    }
+    .pdf-page-number {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+</style>
+{% endblock %} {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between flex-shrink-0">
+    <header
+        class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between flex-shrink-0"
+    >
         <div class="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
-            <a id="back-link" href="javascript:history.back()" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0">
+            <a
+                id="back-link"
+                href="javascript:history.back()"
+                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
+            >
                 <i class="ti ti-arrow-left text-xl"></i>
             </a>
-            <h1 class="text-base sm:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">Éditer la note</h1>
+            <h1
+                id="page-title"
+                class="text-base sm:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate"
+            >
+                Note
+            </h1>
         </div>
     </header>
 
-    <!-- Edit Form -->
-    <div class="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50 dark:bg-gray-900">
+    <!-- Edit Form (pour notes textuelles) -->
+    <div
+        id="edit-form-container"
+        class="hidden flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50 dark:bg-gray-900"
+    >
         <div class="max-w-4xl mx-auto">
-            <form id="edit-note-form" onsubmit="updateNote(event)" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-4 sm:p-6 lg:p-8">
+            <form
+                id="edit-note-form"
+                onsubmit="updateNote(event)"
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-4 sm:p-6 lg:p-8"
+            >
                 <div class="mb-4 sm:mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">Titre</label>
-                    <input 
-                        type="text" 
-                        id="note-title" 
-                        required 
-                        class="w-full px-4 py-2.5 sm:py-3 text-base sm:text-lg border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
-                        placeholder="Titre de la note"
+                    <label
+                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3"
+                        >Titre</label
                     >
+                    <input
+                        type="text"
+                        id="note-title"
+                        required
+                        class="w-full px-4 py-2.5 sm:py-3 text-base sm:text-lg border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                        placeholder="Titre de la note"
+                    />
                 </div>
                 <div class="mb-4 sm:mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">Contenu</label>
-                    <textarea 
-                        id="note-content" 
-                        rows="15" 
-                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-y font-sans leading-relaxed text-base" 
+                    <label
+                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3"
+                        >Contenu</label
+                    >
+                    <textarea
+                        id="note-content"
+                        rows="15"
+                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-y font-sans leading-relaxed text-base"
                         placeholder="Contenu de la note..."
                     ></textarea>
                 </div>
-                <div class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <a 
+                <div
+                    class="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-4 border-t border-gray-200 dark:border-gray-700"
+                >
+                    <a
                         id="cancel-link"
-                        href="javascript:history.back()" 
+                        href="javascript:history.back()"
                         class="w-full sm:w-auto px-5 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300 text-center"
                     >
                         Annuler
                     </a>
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors font-medium shadow-sm hover:shadow-md"
                     >
                         Enregistrer
@@ -55,48 +149,311 @@
             </form>
         </div>
     </div>
+
+    <!-- PDF Viewer (pour documents PDF) -->
+    <div
+        id="pdf-viewer-wrapper"
+        class="hidden flex-1 flex flex-col overflow-hidden"
+    >
+        <div class="pdf-toolbar">
+            <button onclick="pdfPrevPage()" id="pdf-prev-btn" disabled>
+                <i class="ti ti-chevron-left"></i> Précédent
+            </button>
+            <div class="flex items-center gap-2">
+                <span>Page</span>
+                <input
+                    type="number"
+                    id="pdf-page-input"
+                    value="1"
+                    min="1"
+                    onchange="pdfGoToPage(this.value)"
+                />
+                <span>/ <span id="pdf-total-pages">1</span></span>
+            </div>
+            <button onclick="pdfNextPage()" id="pdf-next-btn">
+                Suivant <i class="ti ti-chevron-right"></i>
+            </button>
+            <div class="flex items-center gap-2 ml-auto">
+                <button onclick="pdfZoomOut()" title="Zoom arrière">
+                    <i class="ti ti-zoom-out"></i>
+                </button>
+                <select id="pdf-zoom-select" onchange="pdfSetZoom(this.value)">
+                    <option value="0.5">50%</option>
+                    <option value="0.75">75%</option>
+                    <option value="1" selected>100%</option>
+                    <option value="1.25">125%</option>
+                    <option value="1.5">150%</option>
+                    <option value="2">200%</option>
+                    <option value="fit">Ajuster</option>
+                </select>
+                <button onclick="pdfZoomIn()" title="Zoom avant">
+                    <i class="ti ti-zoom-in"></i>
+                </button>
+            </div>
+            <a
+                id="pdf-download-link"
+                href="#"
+                download
+                class="ml-2"
+                title="Télécharger le PDF"
+            >
+                <button type="button">
+                    <i class="ti ti-download"></i>
+                </button>
+            </a>
+        </div>
+        <div id="pdf-viewer-container"></div>
+    </div>
+
+    <!-- Loading state -->
+    <div
+        id="loading-container"
+        class="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900"
+    >
+        <div class="text-center">
+            <i class="ti ti-loader-2 text-4xl text-gray-400 animate-spin"></i>
+            <p class="mt-2 text-gray-500 dark:text-gray-400">Chargement...</p>
+        </div>
+    </div>
 </div>
-{% endblock %}
+{% endblock %} {% block extra_scripts %}
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs"
+    type="module"
+></script>
+<script type="module">
+    import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs";
 
-{% block extra_scripts %}
-<script>
-    const noteId = window.location.pathname.split('/')[2];
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs";
 
+    const noteId = window.location.pathname.split("/")[2];
     let currentProjectId = null;
+    let pdfDoc = null;
+    let currentPage = 1;
+    let currentZoom = 1;
+    let isDocument = false;
+
+    // Récupérer la page depuis l'URL si spécifiée (#page=X)
+    const urlHash = window.location.hash;
+    const pageMatch = urlHash.match(/page=(\d+)/);
+    if (pageMatch) {
+        currentPage = parseInt(pageMatch[1]);
+    }
 
     async function loadNote() {
         const response = await apiCall(`/api/notes/${noteId}`);
         if (response && response.ok) {
             const note = await response.json();
-            document.getElementById('note-title').value = note.title;
-            document.getElementById('note-content').value = note.content || '';
             currentProjectId = note.project_id;
+
             // Mettre à jour les liens de retour
-            const backLink = document.getElementById('back-link');
-            const cancelLink = document.getElementById('cancel-link');
+            const backLink = document.getElementById("back-link");
+            const cancelLink = document.getElementById("cancel-link");
             if (currentProjectId) {
                 if (backLink) backLink.href = `/projects/${currentProjectId}`;
-                if (cancelLink) cancelLink.href = `/projects/${currentProjectId}`;
+                if (cancelLink)
+                    cancelLink.href = `/projects/${currentProjectId}`;
             }
+
+            // Vérifier si c'est un document PDF
+            if (note.note_type === "document") {
+                const infoResponse = await apiCall(`/api/notes/${noteId}/info`);
+                if (infoResponse && infoResponse.ok) {
+                    const noteInfo = await infoResponse.json();
+                    if (noteInfo.has_source_file) {
+                        isDocument = true;
+                        document.getElementById("page-title").textContent =
+                            note.title;
+                        document
+                            .getElementById("loading-container")
+                            .classList.add("hidden");
+                        document
+                            .getElementById("pdf-viewer-wrapper")
+                            .classList.remove("hidden");
+                        document.getElementById("pdf-download-link").href =
+                            `/api/notes/${noteId}/file`;
+                        await loadPdf();
+                        return;
+                    }
+                }
+            }
+
+            // Sinon, afficher l'éditeur de note textuelle
+            document.getElementById("page-title").textContent =
+                "Éditer la note";
+            document
+                .getElementById("loading-container")
+                .classList.add("hidden");
+            document
+                .getElementById("edit-form-container")
+                .classList.remove("hidden");
+            document.getElementById("note-title").value = note.title;
+            document.getElementById("note-content").value = note.content || "";
         }
     }
 
-    async function updateNote(event) {
+    async function loadPdf() {
+        try {
+            const token = localStorage.getItem("authToken");
+            const response = await fetch(`/api/notes/${noteId}/file`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (!response.ok)
+                throw new Error("Erreur lors du chargement du PDF");
+
+            const pdfData = await response.arrayBuffer();
+            pdfDoc = await pdfjsLib.getDocument({ data: pdfData }).promise;
+
+            document.getElementById("pdf-total-pages").textContent =
+                pdfDoc.numPages;
+            document.getElementById("pdf-page-input").max = pdfDoc.numPages;
+
+            // Aller à la page spécifiée dans l'URL
+            if (currentPage > pdfDoc.numPages) currentPage = pdfDoc.numPages;
+            if (currentPage < 1) currentPage = 1;
+
+            await renderPage(currentPage);
+            updateNavButtons();
+        } catch (error) {
+            console.error("Erreur PDF:", error);
+            document.getElementById("pdf-viewer-container").innerHTML = `
+                <div class="text-center text-white p-8">
+                    <i class="ti ti-file-alert text-4xl mb-2"></i>
+                    <p>Erreur lors du chargement du PDF</p>
+                    <p class="text-sm text-gray-400 mt-1">${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    async function renderPage(pageNum) {
+        const page = await pdfDoc.getPage(pageNum);
+        const container = document.getElementById("pdf-viewer-container");
+
+        let scale = currentZoom;
+        if (currentZoom === "fit") {
+            const containerWidth = container.clientWidth - 40;
+            const viewport = page.getViewport({ scale: 1 });
+            scale = containerWidth / viewport.width;
+        }
+
+        const viewport = page.getViewport({ scale: scale });
+
+        container.innerHTML = "";
+
+        const pageContainer = document.createElement("div");
+        pageContainer.className = "pdf-page-container";
+
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        pageContainer.appendChild(canvas);
+
+        const pageNumber = document.createElement("div");
+        pageNumber.className = "pdf-page-number";
+        pageNumber.textContent = `Page ${pageNum} / ${pdfDoc.numPages}`;
+        pageContainer.appendChild(pageNumber);
+
+        container.appendChild(pageContainer);
+
+        await page.render({
+            canvasContext: context,
+            viewport: viewport,
+        }).promise;
+
+        document.getElementById("pdf-page-input").value = pageNum;
+        currentPage = pageNum;
+    }
+
+    function updateNavButtons() {
+        document.getElementById("pdf-prev-btn").disabled = currentPage <= 1;
+        document.getElementById("pdf-next-btn").disabled =
+            currentPage >= pdfDoc.numPages;
+    }
+
+    window.pdfPrevPage = async function () {
+        if (currentPage > 1) {
+            await renderPage(currentPage - 1);
+            updateNavButtons();
+        }
+    };
+
+    window.pdfNextPage = async function () {
+        if (currentPage < pdfDoc.numPages) {
+            await renderPage(currentPage + 1);
+            updateNavButtons();
+        }
+    };
+
+    window.pdfGoToPage = async function (pageNum) {
+        const page = parseInt(pageNum);
+        if (page >= 1 && page <= pdfDoc.numPages) {
+            await renderPage(page);
+            updateNavButtons();
+        }
+    };
+
+    window.pdfSetZoom = async function (zoom) {
+        currentZoom = zoom === "fit" ? "fit" : parseFloat(zoom);
+        await renderPage(currentPage);
+    };
+
+    window.pdfZoomIn = async function () {
+        const select = document.getElementById("pdf-zoom-select");
+        const currentIndex = select.selectedIndex;
+        if (currentIndex < select.options.length - 2) {
+            select.selectedIndex = currentIndex + 1;
+            await pdfSetZoom(select.value);
+        }
+    };
+
+    window.pdfZoomOut = async function () {
+        const select = document.getElementById("pdf-zoom-select");
+        const currentIndex = select.selectedIndex;
+        if (currentIndex > 0) {
+            select.selectedIndex = currentIndex - 1;
+            await pdfSetZoom(select.value);
+        }
+    };
+
+    window.updateNote = async function (event) {
         event.preventDefault();
         const data = {
-            title: document.getElementById('note-title').value,
-            content: document.getElementById('note-content').value || null
+            title: document.getElementById("note-title").value,
+            content: document.getElementById("note-content").value || null,
         };
         const response = await apiCall(`/api/notes/${noteId}`, {
-            method: 'PUT',
-            body: JSON.stringify(data)
+            method: "PUT",
+            body: JSON.stringify(data),
         });
         if (response && response.ok) {
             const note = await response.json();
-            // Rediriger vers la page du projet
             window.location.href = `/projects/${note.project_id}`;
         }
-    }
+    };
+
+    // Raccourcis clavier
+    document.addEventListener("keydown", async (e) => {
+        if (!isDocument || !pdfDoc) return;
+
+        if (e.key === "ArrowLeft" || e.key === "PageUp") {
+            e.preventDefault();
+            await pdfPrevPage();
+        } else if (e.key === "ArrowRight" || e.key === "PageDown") {
+            e.preventDefault();
+            await pdfNextPage();
+        } else if (e.key === "Home") {
+            e.preventDefault();
+            await pdfGoToPage(1);
+        } else if (e.key === "End") {
+            e.preventDefault();
+            await pdfGoToPage(pdfDoc.numPages);
+        }
+    });
 
     // Initialisation
     if (authToken) {
@@ -104,4 +461,3 @@
     }
 </script>
 {% endblock %}
-

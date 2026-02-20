@@ -41,8 +41,8 @@ services:
             - ./app/alembic.ini:/app/alembic.ini
             # Cache persistant pour les modèles ML (évite re-téléchargement à chaque rebuild)
             - models_cache:/root/.cache
-            # Images extraites par Docling (multimodal) - persistées entre restarts
-            - media_data:/app/media
+            # Images extraites par Docling (multimodal) - montées localement pour accès externe
+            - ./media:/app/media
 
         ports:
             - "8001:8000"
