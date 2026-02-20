@@ -397,6 +397,127 @@ def _filter_low_similarity_candidates(
 
 
 # ---------------------------------------------------------------------------
+# KAG - Knowledge Graph Retrieval
+# ---------------------------------------------------------------------------
+
+def _retrieve_via_knowledge_graph(
+    session: Session,
+    project_id: int,
+    user_id: int,
+    query_text: str,
+    limit: int = 10,
+) -> List[NodeWithScore]:
+    """
+    Récupère des chunks via le graphe de connaissances KAG.
+    
+    1. Extrait les entités mentionnées dans la query
+    2. Trouve les chunks liés à ces entités via le graphe
+    3. Retourne les chunks sous forme de NodeWithScore
+    """
+    try:
+        from app.services.kag_extraction_service import normalize_entity_name
+        from app.services.kag_graph_service import get_chunks_by_entity_names
+        
+        query_terms = [t.strip().lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text)]
+        query_terms = [t for t in query_terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS]
+        
+        if not query_terms:
+            return []
+        
+        results = get_chunks_by_entity_names(
+            session=session,
+            entity_names=query_terms,
+            project_id=project_id,
+            user_id=user_id,
+            limit=limit,
+        )
+        
+        nodes_with_scores: List[NodeWithScore] = []
+        for result in results:
+            chunk = result["chunk"]
+            relevance = result.get("relevance_score", 0.5)
+            
+            metadata = dict(chunk.metadata_json or {})
+            metadata.setdefault("note_id", chunk.note_id)
+            metadata.setdefault("node_id", chunk.node_id)
+            metadata.setdefault("parent_node_id", chunk.parent_node_id)
+            metadata["kag_matched_entity"] = result.get("entity_name", "")
+            
+            node = TextNode(
+                id_=chunk.node_id or f"chunk-{chunk.id}",
+                text=chunk.content or chunk.text or "",
+                metadata=metadata,
+            )
+            nodes_with_scores.append(NodeWithScore(node=node, score=float(relevance)))
+        
+        logger.debug(
+            "KAG retrieval: %d chunks via graphe (query_terms=%s)",
+            len(nodes_with_scores),
+            query_terms[:5],
+        )
+        return nodes_with_scores
+        
+    except Exception as e:
+        logger.warning("Erreur KAG retrieval: %s", e)
+        return []
+
+
+def _merge_with_graph_candidates(
+    vector_candidates: List[NodeWithScore],
+    graph_candidates: List[NodeWithScore],
+    graph_boost: float = 0.2,
+) -> List[NodeWithScore]:
+    """
+    Fusionne les candidats vectoriels et KAG.
+    
+    Les candidats KAG reçoivent un boost de score et sont ajoutés
+    s'ils ne sont pas déjà présents dans les candidats vectoriels.
+    
+    Args:
+        vector_candidates: Candidats de la recherche vectorielle
+        graph_candidates: Candidats du graphe KAG
+        graph_boost: Bonus de score pour les candidats KAG (0.0-1.0)
+        
+    Returns:
+        Liste fusionnée et triée par score
+    """
+    seen_node_ids = set()
+    merged: List[NodeWithScore] = []
+    
+    for nws in vector_candidates:
+        node_id = getattr(nws.node, "id_", None) or nws.node.metadata.get("node_id")
+        if node_id:
+            seen_node_ids.add(node_id)
+        merged.append(nws)
+    
+    for nws in graph_candidates:
+        node_id = getattr(nws.node, "id_", None) or nws.node.metadata.get("node_id")
+        if node_id and node_id in seen_node_ids:
+            for existing in merged:
+                existing_id = getattr(existing.node, "id_", None) or existing.node.metadata.get("node_id")
+                if existing_id == node_id:
+                    existing.score = max(existing.score, nws.score + graph_boost)
+                    break
+            continue
+        
+        boosted_score = min(1.0, float(nws.score or 0.0) + graph_boost)
+        nws.score = boosted_score
+        merged.append(nws)
+        if node_id:
+            seen_node_ids.add(node_id)
+    
+    merged.sort(key=lambda x: float(x.score or 0.0), reverse=True)
+    
+    logger.debug(
+        "Fusion KAG: %d vectoriels + %d graphe → %d total",
+        len(vector_candidates),
+        len(graph_candidates),
+        len(merged),
+    )
+    return merged
+
+
+# ---------------------------------------------------------------------------
 # Point d'entrée principal
 # ---------------------------------------------------------------------------
 
@@ -473,6 +594,29 @@ def search_relevant_passages(
                 query_text=query_text,
                 k=k,
             )
+
+        # --- Étape 1b : enrichissement KAG (si activé) ---
+        if settings.KAG_ENABLED:
+            try:
+                graph_candidates = _retrieve_via_knowledge_graph(
+                    session=session,
+                    project_id=project_id,
+                    user_id=user_id,
+                    query_text=query_text,
+                    limit=k,
+                )
+                if graph_candidates:
+                    leaf_candidates = _merge_with_graph_candidates(
+                        vector_candidates=leaf_candidates,
+                        graph_candidates=graph_candidates,
+                        graph_boost=0.15,
+                    )
+                    logger.info(
+                        "KAG enrichissement: +%d candidats graphe fusionnés",
+                        len(graph_candidates),
+                    )
+            except Exception as kag_err:
+                logger.warning("KAG enrichissement échoué: %s", kag_err)
 
         # --- Étape 2 : Optimisations pré-reranking ---
         # Filtrer les candidats avec faible similarité vectorielle

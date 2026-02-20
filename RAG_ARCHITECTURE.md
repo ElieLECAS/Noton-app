@@ -1,6 +1,6 @@
-# Architecture RAG - Noton App
+# Architecture RAG + KAG-Lite - Noton App
 
-Ce document explique le fonctionnement complet du système RAG (Retrieval-Augmented Generation) dans l'application Noton, de la lecture des documents jusqu'à la recherche sémantique.
+Ce document explique le fonctionnement complet du système RAG (Retrieval-Augmented Generation) enrichi par KAG-Lite (Knowledge-Augmented Generation) dans l'application Noton, de la lecture des documents jusqu'à la recherche sémantique intelligente.
 
 ## Table des matières
 
@@ -8,24 +8,38 @@ Ce document explique le fonctionnement complet du système RAG (Retrieval-Augmen
 2. [Lecture des documents](#1-lecture-des-documents)
 3. [Découpage en chunks](#2-découpage-en-chunks)
 4. [Génération des embeddings](#3-génération-des-embeddings)
-5. [Stockage](#4-stockage)
-6. [Recherche sémantique](#5-recherche-sémantique)
-7. [Architecture asynchrone](#6-architecture-asynchrone)
-8. [Utilisation dans le chat](#7-utilisation-dans-le-chat)
+5. [Extraction KAG - Graphe de connaissances](#4-extraction-kag---graphe-de-connaissances) 🆕
+6. [Stockage](#5-stockage)
+7. [Recherche sémantique enrichie KAG](#6-recherche-sémantique-enrichie-kag) ⭐
+8. [Architecture asynchrone](#7-architecture-asynchrone)
+9. [Utilisation dans le chat](#8-utilisation-dans-le-chat)
 
 ---
 
 ## Vue d'ensemble
 
-Le système RAG permet de :
+Le système combine RAG classique avec KAG-Lite (graphe de connaissances) pour :
 - **Extraire** le contenu de documents (PDF, DOCX, images, etc.)
 - **Découper** le contenu en chunks optimisés pour la recherche
 - **Générer** des embeddings vectoriels pour chaque chunk
-- **Stocker** les embeddings dans PostgreSQL avec pgvector
-- **Rechercher** les passages les plus pertinents pour enrichir les réponses du chatbot
+- **🆕 Extraire les entités** techniques (équipements, procédures, paramètres) via LLM
+- **🆕 Créer un graphe** de connaissances entre chunks partageant les mêmes entités
+- **Stocker** embeddings + graphe dans PostgreSQL avec pgvector
+- **Rechercher** via similarité vectorielle **+ traversée du graphe** pour des résultats enrichis
 
-```
-Document Upload → Extraction → Chunking → Embedding → Stockage → Recherche
+```mermaid
+flowchart LR
+    A[Document Upload] --> B[Extraction]
+    B --> C[Chunking]
+    C --> D[Embeddings]
+    D --> E[Extraction KAG]
+    E --> F[Graphe Entités]
+    F --> G[Recherche Hybride]
+    G --> H[Chat enrichi]
+    
+    style E fill:#90EE90
+    style F fill:#90EE90
+    style G fill:#FFD700
 ```
 
 ---
@@ -173,11 +187,123 @@ WHERE notechunk.id = temp_chunk_embeddings.chunk_id
 
 ### Résultat
 
-Chaque chunk reçoit un **embedding vectoriel de 768 dimensions** stocké dans la colonne `embedding` de type `Vector(768)` (pgvector).
+Chaque chunk reçoit un **embedding vectoriel de 1024 dimensions** (BGE-m3) stocké dans la colonne `embedding` de type `Vector(1024)` (pgvector).
 
 ---
 
-## 4. Stockage
+## 4. Extraction KAG - Graphe de connaissances 🆕
+
+**Fichiers principaux** : 
+- `app/services/kag_extraction_service.py` (extraction LLM)
+- `app/services/kag_graph_service.py` (gestion du graphe)
+
+### Qu'est-ce que KAG-Lite ?
+
+KAG-Lite ajoute une **couche de graphe de connaissances** au RAG classique. Au lieu de se fier uniquement à la similarité vectorielle, le système identifie les **entités techniques** mentionnées dans les documents et crée des liens entre chunks qui parlent des mêmes concepts.
+
+### Exemple concret
+
+Imaginez deux documents dans un projet :
+
+**Document A - Guide d'installation** :
+> "La **pompe centrifuge P-101** doit être montée sur un socle béton. Le **débit nominal** est de 150 m³/h."
+
+**Document B - Procédure de maintenance** :
+> "Lors de la maintenance de la **pompe centrifuge**, vérifier le **débit** et remplacer les joints."
+
+Le système KAG va extraire et lier :
+- Entité : `pompe centrifuge` → présente dans Document A et Document B
+- Entité : `débit` → présente dans Document A et Document B
+
+Quand vous cherchez "maintenance pompe", le système trouvera Document B (match direct) **mais aussi** Document A via le graphe (même entité "pompe centrifuge").
+
+```mermaid
+graph LR
+    subgraph DocA [Document A - Installation]
+        CA1[Chunk: pompe P-101]
+        CA2[Chunk: débit 150m³/h]
+    end
+    
+    subgraph DocB [Document B - Maintenance]
+        CB1[Chunk: maintenance pompe]
+        CB2[Chunk: vérifier débit]
+    end
+    
+    subgraph Entities [Entités extraites]
+        E1((pompe<br/>centrifuge))
+        E2((débit))
+    end
+    
+    CA1 -.-> E1
+    CB1 -.-> E1
+    CA2 -.-> E2
+    CB2 -.-> E2
+    
+    style E1 fill:#FFD700
+    style E2 fill:#FFD700
+```
+
+### Types d'entités extraites
+
+| Type | Exemples | Usage |
+|------|----------|-------|
+| `equipement` | pompe, vanne, moteur, capteur | Matériel technique |
+| `procedure` | montage, maintenance, calibration | Actions/processus |
+| `parametre` | débit, pression, température | Valeurs mesurables |
+| `composant` | joint, roulement, axe | Pièces détachées |
+| `reference` | P-101, ISO-9001, REF-2024 | Codes/normes |
+| `lieu` | salle des machines, zone A | Localisations |
+
+### Processus d'extraction
+
+1. **Après les embeddings**, chaque chunk feuille est analysé par un LLM (configurable : OpenAI gpt-4o-mini ou Ollama)
+
+2. **Prompt structuré** :
+```
+Extrais les entités techniques de ce texte.
+Types possibles: equipement, procedure, parametre, composant, reference, lieu
+
+Retourne UNIQUEMENT un JSON valide:
+[{"name": "pompe centrifuge", "type": "equipement", "importance": 0.9}]
+
+Texte: {contenu du chunk}
+```
+
+3. **Le LLM retourne** une liste d'entités avec leur importance (0.0 à 1.0)
+
+4. **Déduplication** : Les entités sont normalisées (minuscules, sans accents) pour éviter les doublons
+
+5. **Stockage** : Les entités et leurs relations aux chunks sont sauvegardées dans PostgreSQL
+
+### Tables du graphe
+
+**Table `knowledgeentity`** :
+- `name` : Nom original ("Pompe Centrifuge")
+- `name_normalized` : Nom normalisé ("pompe centrifuge")
+- `entity_type` : Type d'entité
+- `project_id` : Isolation par projet
+- `mention_count` : Nombre de fois mentionnée
+- `embedding` : Embedding de l'entité (optionnel, future amélioration)
+
+**Table `chunkentityrelation`** :
+- `chunk_id` : Référence au chunk
+- `entity_id` : Référence à l'entité
+- `relevance_score` : Importance (0.0-1.0) retournée par le LLM
+- `project_id` : Pour optimisation des requêtes
+
+### Coût de l'extraction
+
+L'extraction KAG est économique car :
+- **Input** : ~500-2000 tokens (chunk + prompt) → ~0.00008$ avec gpt-4o-mini
+- **Output** : ~50-100 tokens (JSON compact) → ~0.00005$
+- **Total par chunk** : ~0.00013$
+- **Traitement une seule fois** : À l'indexation, pas à chaque recherche
+
+Pour 1000 chunks : ~**0.13$** d'extraction, amorti sur toutes les futures recherches.
+
+---
+
+## 5. Stockage
 
 **Fichier principal** : `app/models/note_chunk.py`
 
@@ -189,26 +315,100 @@ class NoteChunk(SQLModel, table=True):
     note_id: int                         # Référence à la note parente
     chunk_index: int                     # Position dans la note (0, 1, 2...)
     content: str                         # Texte du chunk
-    embedding: Optional[List[float]]     # Vector(768) - embedding pgvector
+    embedding: Optional[List[float]]     # Vector(1024) - embedding pgvector BGE-m3
     start_char: int                      # Position de début dans la note originale
     end_char: int                        # Position de fin dans la note originale
+    node_id: Optional[str]               # ID pour hiérarchie LlamaIndex
+    parent_node_id: Optional[str]        # Parent dans la hiérarchie
+    is_leaf: bool                        # Est-ce un nœud feuille ?
+    hierarchy_level: int                 # Niveau dans l'arbre
+    metadata_json: Optional[dict]        # Métadonnées (headings, page_no, etc.)
+```
+
+### Tables KAG (graphe de connaissances) 🆕
+
+```python
+class KnowledgeEntity(SQLModel, table=True):
+    id: Optional[int]
+    name: str                            # "Pompe Centrifuge"
+    name_normalized: str                 # "pompe centrifuge" (dédupliqué)
+    entity_type: str                     # equipement, procedure, parametre...
+    project_id: int                      # Isolation par projet
+    mention_count: int                   # Fréquence d'apparition
+    created_at: datetime
+    updated_at: datetime
+
+class ChunkEntityRelation(SQLModel, table=True):
+    id: Optional[int]
+    chunk_id: int                        # FK vers NoteChunk
+    entity_id: int                       # FK vers KnowledgeEntity
+    relevance_score: float               # Importance 0.0-1.0 (du LLM)
+    project_id: int                      # Dénormalisé pour perfs
+    created_at: datetime
+```
+
+### Schéma relationnel
+
+```mermaid
+erDiagram
+    NOTE ||--o{ NOTECHUNK : contient
+    NOTECHUNK ||--o{ CHUNKENTITYRELATION : mentionne
+    KNOWLEDGEENTITY ||--o{ CHUNKENTITYRELATION : référencée_par
+    PROJECT ||--o{ NOTE : appartient
+    PROJECT ||--o{ KNOWLEDGEENTITY : contient
+    
+    NOTE {
+        int id
+        string title
+        string content
+        int project_id
+    }
+    
+    NOTECHUNK {
+        int id
+        int note_id
+        string content
+        vector embedding
+        bool is_leaf
+    }
+    
+    KNOWLEDGEENTITY {
+        int id
+        string name
+        string entity_type
+        int project_id
+        int mention_count
+    }
+    
+    CHUNKENTITYRELATION {
+        int id
+        int chunk_id
+        int entity_id
+        float relevance_score
+    }
 ```
 
 ### Base de données
 
 - **SGBD** : PostgreSQL
 - **Extension** : pgvector (pour le stockage et la recherche vectorielle)
-- **Type de colonne** : `Vector(768)` pour les embeddings
+- **Type de colonne** : `Vector(1024)` pour les embeddings (BGE-m3)
+- **Index** : 
+  - HNSW sur les embeddings pour recherche rapide
+  - B-tree sur `project_id`, `entity_type`, `name_normalized` pour KAG
+  - Unique sur `(project_id, name_normalized)` pour déduplication
 
-### Avantages de pgvector
+### Avantages de cette architecture
 
 - **Recherche native** : Opérateurs SQL pour la similarité vectorielle
-- **Performance** : Index HNSW pour des recherches rapides
+- **Performance** : Index HNSW pour recherche vectorielle + index B-tree pour graphe
 - **Intégration** : Fonctionne directement avec SQLModel/SQLAlchemy
+- **Pas de Neo4j** : Le graphe KAG est stocké en relationnel (plus simple à déployer)
+- **Isolation** : Chaque projet a son propre graphe de connaissances
 
 ---
 
-## 5. Recherche sémantique
+## 6. Recherche sémantique enrichie KAG ⭐
 
 **Fichier principal** : `app/services/semantic_search_service.py`
 
@@ -232,40 +432,93 @@ class NoteChunk(SQLModel, table=True):
 
 **Processus** :
 1. Génère l'embedding de la requête utilisateur
-2. Recherche vectorielle SQL (pgvector) sur les leaves → `k * RERANKER_CANDIDATE_MULTIPLIER` candidats
-3. Filtrage pré-reranking (similarité minimale), puis reranking (BGE-reranker-v2-m3) sur au plus `MAX_RERANK_CANDIDATES` candidats
-4. Retourne les **k** passages les plus pertinents (contexte enrichi via résolution des parents)
-5. Passages avec : contenu, titre de note, score, métadonnées (chunk_id, chunk_index, etc.)
+2. **Recherche vectorielle SQL** (pgvector) sur les leaves → `k * 3` candidats
+3. **🆕 Enrichissement KAG** :
+   - Extraction termes de la query (ex: "pompe", "maintenance")
+   - Lookup SQL : `SELECT chunks WHERE entity_name IN (terms)`
+   - Graph boost : +0.15 aux chunks trouvés via entités
+4. **Fusion intelligente** des candidats vectoriels et KAG
+5. **Filtrage pré-reranking** (similarité > 0.25)
+6. **Reranking BGE-reranker-v2-m3** sur max 30 candidats
+7. **Résolution des parents** (contexte enrichi)
+8. Retourne les **k** passages finaux
 
 **Reranker et titres descriptifs** : Avant le reranking, le texte de chaque candidat est enrichi avec `parent_heading` et `figure_title` (section et légende). Les chunks dont le titre de section ou la légende sont très descriptifs sont ainsi mieux notés par le reranker. Le passage final envoyé au LLM inclut aussi cette en-tête (section + légende) pour un contexte explicite.
 
 **Paramètres** (voir `semantic_search_service.py` et `app/routers/chat.py`) :
 - **k** (nombre de passages envoyés au LLM) : configurable via `RAG_TOP_K` (défaut : 10)
 - **MAX_RERANK_CANDIDATES** : nombre max de candidats rerankés (défaut : 30)
+- **graph_boost** : bonus de score pour candidats KAG (défaut : 0.15)
 
 **Utilisation** : Pour enrichir le contexte du chatbot avec des passages précis
 
-### Requête SQL utilisée
+### Exemple de fusion vectoriel + KAG
 
+Query : "maintenance pompe centrifuge"
+
+```
+Candidats vectoriels (similarité cosinus) :
+  ┌──────────────────────────────────────────────┐
+  │ Chunk A: 0.85 - "procédure maintenance..."  │
+  │ Chunk B: 0.72 - "vérifier le débit..."      │
+  │ Chunk D: 0.68 - "remplacer les joints..."   │
+  └──────────────────────────────────────────────┘
+
+Candidats KAG (via entité "pompe centrifuge") :
+  ┌──────────────────────────────────────────────┐
+  │ Chunk A: 0.70 - mentions "pompe centrifuge" │
+  │ Chunk C: 0.65 - "pompe P-101, débit 150..."│
+  │ Chunk E: 0.60 - "montage sur socle béton..." │
+  └──────────────────────────────────────────────┘
+
+Après fusion (graph_boost +0.15) :
+  ┌──────────────────────────────────────────────┐
+  │ Chunk A: 0.85  (déjà max dans les deux)     │
+  │ Chunk C: 0.80  (0.65 + 0.15, nouveau via KAG)│
+  │ Chunk E: 0.75  (0.60 + 0.15, nouveau via KAG)│
+  │ Chunk B: 0.72  (vectoriel uniquement)       │
+  │ Chunk D: 0.68  (vectoriel uniquement)       │
+  └──────────────────────────────────────────────┘
+```
+
+**Impact** : Chunks C et E (trouvés uniquement via le graphe) remontent devant B et D grâce au boost, enrichissant le contexte avec des infos sur les spécifications techniques de la pompe.
+
+### Requêtes SQL utilisées
+
+**1. Recherche vectorielle (pgvector)** :
 ```sql
 SELECT 
     nc.id as chunk_id,
     nc.content as chunk_content,
     nc.chunk_index,
-    nc.start_char,
-    nc.end_char,
     n.id as note_id,
     n.title as note_title,
-    n.note_type,
-    n.project_id,
-    n.user_id,
     1 - (nc.embedding <=> '{query_embedding}'::vector) as similarity_score
 FROM notechunk nc
 INNER JOIN note n ON nc.note_id = n.id
 WHERE n.project_id = {project_id}
     AND n.user_id = {user_id}
     AND nc.embedding IS NOT NULL
+    AND nc.is_leaf = true
 ORDER BY nc.embedding <=> '{query_embedding}'::vector
+LIMIT k
+```
+
+**2. 🆕 Recherche KAG (graphe entités)** :
+```sql
+SELECT 
+    nc.*,
+    ke.name as entity_name,
+    cer.relevance_score
+FROM notechunk nc
+JOIN chunkentityrelation cer ON cer.chunk_id = nc.id
+JOIN knowledgeentity ke ON ke.id = cer.entity_id
+JOIN note n ON n.id = nc.note_id
+WHERE ke.project_id = {project_id}
+    AND ke.name_normalized IN ('pompe', 'maintenance', ...)
+    AND n.user_id = {user_id}
+    AND nc.is_leaf = true
+ORDER BY cer.relevance_score DESC
 LIMIT k
 ```
 
@@ -278,12 +531,13 @@ LIMIT k
 ### Sécurité
 
 - Vérification que le projet appartient à l'utilisateur
-- Filtrage par `project_id` et `user_id`
+- Filtrage par `project_id` et `user_id` sur **toutes** les requêtes (vectoriel + KAG)
 - Seuls les chunks avec embeddings sont recherchés
+- **🆕 Isolation KAG** : Chaque projet a son propre graphe d'entités (pas de fuite cross-projets)
 
 ---
 
-## 6. Architecture asynchrone
+## 7. Architecture asynchrone
 
 ### Workers de documents
 
@@ -296,7 +550,7 @@ LIMIT k
 
 **Flux** :
 ```
-Upload → File d'attente par projet → Worker → Extraction → Chunking → File d'embeddings
+Upload → File d'attente par projet → Worker → Extraction → Chunking → File d'embeddings → File KAG
 ```
 
 ### Workers d'embeddings
@@ -307,10 +561,14 @@ Upload → File d'attente par projet → Worker → Extraction → Chunking → 
 - **Workers** : 1 worker à la fois (`MAX_CONCURRENT_EMBEDDINGS = 1`)
 - **Raison** : Éviter la surcharge CPU (génération d'embeddings intensive)
 
-**Flux** :
+**Flux enrichi KAG** 🆕 :
 ```
 Chunks créés → File d'embeddings → Worker → Génération batch → Stockage optimisé
+                                           ↓
+                                    Extraction KAG (LLM) → Graphe entités
 ```
+
+L'extraction KAG se fait **après** les embeddings, dans le même worker, pour éviter de multiplier les files d'attente.
 
 ### Avantages
 
@@ -318,29 +576,35 @@ Chunks créés → File d'embeddings → Worker → Génération batch → Stock
 - **Scalable** : Traitement en arrière-plan
 - **Robuste** : Gestion d'erreurs et retry automatique
 - **Performant** : Traitement par batch et insertion optimisée
+- **🆕 Économique** : Extraction KAG une seule fois à l'indexation (~0.00013$/chunk)
 
 ---
 
-## 7. Utilisation dans le chat
+## 8. Utilisation dans le chat
 
 **Fichier principal** : `app/routers/chat.py`
 
-### Intégration RAG
+### Intégration RAG + KAG
 
 Lorsqu'un utilisateur pose une question dans le chat :
 
-1. **Recherche sémantique** : `search_relevant_passages()` trouve les k chunks les plus pertinents
-2. **Construction du contexte** : Les passages sont formatés avec le titre de la note
+1. **Recherche hybride** : `search_relevant_passages()` trouve les k chunks les plus pertinents via vectoriel + KAG
+2. **Construction du contexte** : Les passages sont formatés avec titre de note + section + légende
 3. **Enrichissement du prompt** : Les passages sont ajoutés au contexte du LLM
-4. **Génération de la réponse** : Le LLM génère une réponse enrichie par le contexte RAG
+4. **Génération de la réponse** : Le LLM génère une réponse enrichie par le contexte RAG + KAG
 
 ### Format du contexte
 
 ```markdown
 **Titre de la note**
+[Section: 2.1 Maintenance]
+
 Contenu du chunk pertinent...
 
 **Autre note**
+[Section: 1.3 Installation]
+[Figure: Schéma de montage P-101]
+
 Autre chunk pertinent...
 ```
 
@@ -349,6 +613,8 @@ Autre chunk pertinent...
 - **Réponses précises** : Basées sur le contenu réel des documents
 - **Contexte local** : Utilise uniquement les notes du projet
 - **Transparence** : Les sources sont identifiables (titre de la note)
+- **🆕 Connexions sémantiques** : Le graphe KAG ramène des passages liés par les concepts, pas juste par la similarité textuelle
+- **🆕 Couverture élargie** : Les chunks peu similaires lexicalement mais sémantiquement liés sont inclus
 
 ---
 
@@ -436,6 +702,10 @@ Autre chunk pertinent...
 
 - `app/embedding_config.py` : Configuration centralisée des embeddings
 - `app/config.py` : Configuration générale de l'application
+- **🆕** `app/models/knowledge_entity.py` : Modèle des entités KAG
+- **🆕** `app/models/chunk_entity_relation.py` : Modèle des relations KAG
+- **🆕** `app/services/kag_extraction_service.py` : Extraction entités via LLM
+- **🆕** `app/services/kag_graph_service.py` : Gestion du graphe de connaissances
 
 ---
 
@@ -445,27 +715,51 @@ Autre chunk pertinent...
 
 1. **Extraction rapide** : PyMuPDF pour PDFs avec texte natif
 2. **Chunking adaptatif** : Respecte la structure markdown
-3. **Batch processing** : Génération d'embeddings par batch (32 chunks)
+3. **Batch processing** : Génération d'embeddings par batch (16-32 chunks)
 4. **Insertion optimisée** : COPY PostgreSQL pour insertion rapide
 5. **Recherche vectorielle native** : pgvector avec index HNSW
 6. **Traitement asynchrone** : Workers en arrière-plan
+7. **🆕 Extraction KAG économique** : JSON compact, ~0.00013$/chunk, une seule fois
+8. **🆕 Graphe SQL natif** : Pas de Neo4j, lookups optimisés avec index B-tree
+9. **🆕 Graph boost ajustable** : Pondération fine des candidats KAG (+0.15)
+10. **🆕 Filtrage pré-reranking** : Élimine candidats faible similarité (<0.25)
 
 ### Métriques
 
 - **Upload** : Retour immédiat (< 1 seconde)
 - **Extraction PDF natif** : < 100ms
 - **Extraction PDF scanné** : 5-30 secondes (selon la taille)
-- **Génération embeddings** : ~100-500ms par batch de 32 chunks
-- **Recherche** : < 50ms pour trouver les k chunks les plus pertinents
+- **Génération embeddings** : ~100-500ms par batch de 16-32 chunks
+- **🆕 Extraction KAG** : ~200-800ms par chunk (LLM API, en background)
+- **Recherche vectorielle** : < 50ms
+- **🆕 Recherche KAG** : < 30ms (SQL JOIN optimisé)
+- **Fusion + reranking** : ~1-3s pour 30 candidats
+- **Total recherche hybride** : < 5s pour top-10 passages
 
 ---
 
 ## Conclusion
 
-Le système RAG de Noton App est conçu pour être :
+Le système RAG + KAG-Lite de Noton App est conçu pour être :
 - **Performant** : Traitement asynchrone et optimisations multiples
 - **Scalable** : Architecture modulaire avec workers
-- **Précis** : Recherche sémantique basée sur les chunks
+- **Précis** : Recherche sémantique vectorielle + graphe de connaissances
 - **Robuste** : Gestion d'erreurs et fallbacks
+- **🆕 Intelligent** : Connexions sémantiques via entités techniques extraites
+- **🆕 Économique** : Extraction LLM amortie sur toutes les recherches futures
+- **🆕 Simple** : Pas de framework lourd (Neo4j, GNN), tout en PostgreSQL
 
-Le système permet d'enrichir les réponses du chatbot avec le contenu réel des documents uploadés par l'utilisateur, offrant une expérience de chat contextuelle et précise.
+### Avantages du système hybride
+
+**Sans KAG** (vectoriel uniquement) :
+- Query : "maintenance pompe"
+- Résultats : chunks avec les mots "maintenance" et "pompe" proches vectoriellement
+- Limitation : rate les specs techniques, l'installation, les références croisées
+
+**Avec KAG** (vectoriel + graphe) :
+- Query : "maintenance pompe"
+- Résultats vectoriels : procédures de maintenance
+- **+ Résultats KAG** : spécifications de la pompe P-101, schéma d'installation, paramètres de débit
+- Bénéfice : contexte enrichi avec infos connexes via les entités partagées
+
+Le système permet d'enrichir les réponses du chatbot avec le contenu réel des documents uploadés par l'utilisateur, en créant automatiquement des liens sémantiques entre concepts, offrant une expérience de chat contextuelle, précise et intelligente.

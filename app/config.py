@@ -55,6 +55,23 @@ class Settings(BaseSettings):
     # CORS
     CORS_ALLOWED_ORIGINS: Optional[List[str]] = None  # Liste des origines autorisées (None = toutes les origines)
     
+    # KAG - Knowledge Augmented Generation
+    KAG_ENABLED: bool = True
+    KAG_EXTRACTION_PROVIDER: str = "openai"  # "openai" ou "ollama"
+    KAG_EXTRACTION_MODEL: str = "gpt-5-nano-2025-08-07"
+    
+    @field_validator('KAG_ENABLED', mode='before')
+    @classmethod
+    def parse_kag_enabled(cls, v: Union[str, bool, None]) -> bool:
+        """Convertit les chaînes en bool pour KAG_ENABLED."""
+        if v is None:
+            return True
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in ('true', '1', 'yes', 'on')
+        return True
+    
     @field_validator('OPENAI_MODEL', mode='before')
     @classmethod
     def parse_openai_models(cls, v: Union[str, List[str], None]) -> Optional[List[str]]:

@@ -243,6 +243,11 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
                     failed_count,
                     len(chunks),
                 )
+            
+            # Extraction KAG si activée
+            if settings.KAG_ENABLED:
+                _process_kag_extraction_for_note(session, note_id, project_id)
+            
             note.processing_status = "completed"
             note.processing_progress = 100
             session.add(note)
@@ -250,6 +255,72 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
             
     except Exception as e:
         logger.error(f"Erreur lors de la génération des embeddings pour la note {note_id}: {e}")
+
+
+def _process_kag_extraction_for_note(session: Session, note_id: int, project_id: int):
+    """
+    Extraction des entités KAG pour une note (appelé après les embeddings).
+    
+    Args:
+        session: Session SQLModel
+        note_id: ID de la note
+        project_id: ID du projet
+    """
+    try:
+        from app.services.kag_extraction_service import extract_entities_sync
+        from app.services.kag_graph_service import (
+            save_entities_for_chunk,
+            delete_entities_for_note,
+        )
+        
+        logger.info(f"Démarrage extraction KAG pour la note {note_id}")
+        
+        delete_entities_for_note(session, note_id)
+        
+        statement = select(NoteChunk).where(
+            NoteChunk.note_id == note_id,
+            NoteChunk.is_leaf == True,
+        )
+        chunks = list(session.exec(statement).all())
+        
+        if not chunks:
+            logger.info(f"Aucun chunk leaf pour extraction KAG note={note_id}")
+            return
+        
+        total_entities = 0
+        total_relations = 0
+        
+        for chunk in chunks:
+            if not chunk.content or len(chunk.content.strip()) < 20:
+                continue
+            
+            try:
+                entities = extract_entities_sync(chunk.content)
+                if entities:
+                    relations_count = save_entities_for_chunk(
+                        session, chunk, entities, project_id
+                    )
+                    total_entities += len(entities)
+                    total_relations += relations_count
+            except Exception as e:
+                logger.warning(
+                    "Erreur extraction KAG chunk_id=%s: %s",
+                    chunk.id,
+                    e,
+                )
+                continue
+        
+        session.commit()
+        logger.info(
+            "✅ Extraction KAG terminée note=%s: %d entités, %d relations",
+            note_id,
+            total_entities,
+            total_relations,
+        )
+        
+    except Exception as e:
+        logger.error(f"Erreur extraction KAG pour note {note_id}: {e}", exc_info=True)
+        session.rollback()
 
 
 def create_chunks_for_note_from_docling(
@@ -394,13 +465,20 @@ def _ensure_embedding_workers():
 
 def delete_chunks_for_note(session: Session, note_id: int, commit: bool = True):
     """
-    Supprimer tous les chunks d'une note.
+    Supprimer tous les chunks d'une note et les relations KAG associées.
     
     Args:
         session: Session SQLModel
         note_id: ID de la note
         commit: Si True, fait un commit après la suppression (par défaut: True)
     """
+    if settings.KAG_ENABLED:
+        try:
+            from app.services.kag_graph_service import delete_entities_for_note
+            delete_entities_for_note(session, note_id)
+        except Exception as e:
+            logger.warning(f"Erreur suppression relations KAG note={note_id}: {e}")
+    
     statement = select(NoteChunk).where(NoteChunk.note_id == note_id)
     chunks = list(session.exec(statement).all())
     

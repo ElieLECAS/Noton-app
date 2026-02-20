@@ -8,6 +8,8 @@ from .agent import Agent, AgentCreate, AgentRead, AgentUpdate
 from .agent_task import AgentTask, AgentTaskCreate, AgentTaskRead, AgentTaskUpdate
 from .scheduled_job import ScheduledJob, ScheduledJobCreate, ScheduledJobRead, ScheduledJobUpdate
 from .task_run_log import TaskRunLog, TaskRunLogRead
+from .knowledge_entity import KnowledgeEntity, KnowledgeEntityRead
+from .chunk_entity_relation import ChunkEntityRelation, ChunkEntityRelationRead
 
 __all__ = [
     "User",
@@ -45,4 +47,8 @@ __all__ = [
     "ScheduledJobUpdate",
     "TaskRunLog",
     "TaskRunLogRead",
+    "KnowledgeEntity",
+    "KnowledgeEntityRead",
+    "ChunkEntityRelation",
+    "ChunkEntityRelationRead",
 ]
