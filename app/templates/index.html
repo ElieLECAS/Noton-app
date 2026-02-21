@@ -179,18 +179,32 @@ block extra_head %}
         margin: 0;
     }
 
-    /* Tableaux */
+    /* Tableaux : wrapper scrollable + présentation propre */
+    .markdown-content .table-wrapper {
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        -webkit-overflow-scrolling: touch;
+    }
+    .dark .markdown-content .table-wrapper {
+        border-color: #4b5563;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
     .markdown-content table {
         width: 100%;
         border-collapse: collapse;
-        margin: 1rem 0;
         font-size: 0.9rem;
     }
     .markdown-content th,
     .markdown-content td {
         border: 1px solid #e5e7eb;
-        padding: 0.5rem 0.75rem;
+        padding: 0.6rem 0.75rem;
         text-align: left;
+        vertical-align: top;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     .dark .markdown-content th,
     .dark .markdown-content td {
@@ -199,6 +213,7 @@ block extra_head %}
     .markdown-content th {
         background-color: #f9fafb;
         font-weight: 600;
+        white-space: nowrap;
     }
     .dark .markdown-content th {
         background-color: #374151;
@@ -208,6 +223,12 @@ block extra_head %}
     }
     .dark .markdown-content tr:nth-child(even) {
         background-color: #1f2937;
+    }
+    .markdown-content tbody tr:hover {
+        background-color: #f3f4f6;
+    }
+    .dark .markdown-content tbody tr:hover {
+        background-color: #374151;
     }
 
     /* Liens */
@@ -502,6 +523,14 @@ block extra_head %}
         headerIds: false,
         mangle: false,
     });
+    
+    // Envelopper les tableaux dans un conteneur scrollable horizontalement
+    function wrapTablesInResponsive(html) {
+        if (!html || !html.includes('<table')) return html;
+        return html
+            .replace(/<table(\s[^>]*)?>/gi, '<div class="table-wrapper"><table$1>')
+            .replace(/<\/table>/g, '</table></div>');
+    }
     
     // Prétraitement du Markdown pour corriger les problèmes courants
     function preprocessMarkdown(text) {
@@ -1076,8 +1105,8 @@ block extra_head %}
                                     const rawHtml = parseMarkdown(fullResponse);
                                     const cleanHtml =
                                         DOMPurify.sanitize(rawHtml);
-                                    // Mettre à jour le contenu
-                                    assistantContent.innerHTML = cleanHtml;
+                                    // Mettre à jour le contenu (tableaux en wrapper scrollable)
+                                    assistantContent.innerHTML = wrapTablesInResponsive(cleanHtml);
                                     scrollChatToBottom(false); // Ne pas forcer, seulement si proche du bas
                                 } else if (jsonData.done) {
                                     // Fin du stream
@@ -1102,6 +1131,12 @@ block extra_head %}
             // Finaliser le message
             assistantMessageDiv.removeAttribute("id");
             chatHistory.push({ role: "assistant", content: fullResponse });
+            // Re-rendu complet pour que les tableaux (et tout le markdown) soient corrects après le stream
+            if (assistantContent && fullResponse) {
+                const rawHtml = parseMarkdown(fullResponse);
+                const cleanHtml = DOMPurify.sanitize(rawHtml);
+                assistantContent.innerHTML = wrapTablesInResponsive(cleanHtml);
+            }
             scrollChatToBottom(false); // Ne pas forcer à la fin, seulement si proche du bas
 
             // Attendre un court délai pour s'assurer que le streaming est complètement terminé
@@ -1145,7 +1180,7 @@ block extra_head %}
         if (role === "assistant") {
             const rawHtml = parseMarkdown(content);
             const cleanHtml = DOMPurify.sanitize(rawHtml);
-            contentHtml = `<div class="markdown-content">${cleanHtml}</div>`;
+            contentHtml = `<div class="markdown-content">${wrapTablesInResponsive(cleanHtml)}</div>`;
         } else {
             // Messages utilisateur en texte brut
             contentHtml = `<p class="whitespace-pre-wrap">${escapeHtml(

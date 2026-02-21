@@ -182,18 +182,32 @@ extra_head %}
         margin: 0;
     }
 
-    /* Tableaux */
+    /* Tableaux : wrapper scrollable + présentation propre */
+    .markdown-content .table-wrapper {
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        -webkit-overflow-scrolling: touch;
+    }
+    .dark .markdown-content .table-wrapper {
+        border-color: #4b5563;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
     .markdown-content table {
         width: 100%;
         border-collapse: collapse;
-        margin: 1rem 0;
         font-size: 0.9rem;
     }
     .markdown-content th,
     .markdown-content td {
         border: 1px solid #e5e7eb;
-        padding: 0.5rem 0.75rem;
+        padding: 0.6rem 0.75rem;
         text-align: left;
+        vertical-align: top;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     .dark .markdown-content th,
     .dark .markdown-content td {
@@ -202,6 +216,7 @@ extra_head %}
     .markdown-content th {
         background-color: #f9fafb;
         font-weight: 600;
+        white-space: nowrap;
     }
     .dark .markdown-content th {
         background-color: #374151;
@@ -211,6 +226,12 @@ extra_head %}
     }
     .dark .markdown-content tr:nth-child(even) {
         background-color: #1f2937;
+    }
+    .markdown-content tbody tr:hover {
+        background-color: #f3f4f6;
+    }
+    .dark .markdown-content tbody tr:hover {
+        background-color: #374151;
     }
 
     /* Liens */
@@ -308,6 +329,9 @@ extra_head %}
     .citation-link:hover {
         background: #2563eb;
         transform: scale(1.1);
+    }
+    .citation-link[title] {
+        cursor: help;
     }
     .dark .citation-link {
         background: #60a5fa;
@@ -1933,33 +1957,21 @@ extra_head %}
                             if (data) {
                                 try {
                                     const jsonData = JSON.parse(data);
-                                    if (
-                                        jsonData.message &&
-                                        jsonData.message.content &&
-                                        jsonData.message.content.trim().length > 0
-                                    ) {
-                                        // Ajouter le contenu seulement s'il n'est pas vide
-                                        fullResponse +=
-                                            jsonData.message.content;
-                                        
-                                        // Toujours mettre à jour l'affichage une fois qu'on a du contenu
-                                        // Le message "en cours de génération" sera remplacé par le contenu réel
-                                        if (!firstChunkReceived) {
+                                    if (jsonData.message && jsonData.message.content !== undefined) {
+                                        // Toujours accumuler tout le contenu (y compris chunks vides) pour ne pas tronquer la fin
+                                        fullResponse += jsonData.message.content;
+                                        if (!firstChunkReceived && jsonData.message.content.trim().length > 0) {
                                             firstChunkReceived = true;
                                         }
-                                        // Rendre le Markdown en HTML de façon sécurisée
-                                        const rawHtml =
-                                            parseMarkdown(fullResponse);
-                                        const cleanHtml =
-                                            DOMPurify.sanitize(rawHtml, {
-                                                ADD_TAGS: ["img"],
-                                                ADD_ATTR: ["src", "alt", "class", "style", "title"],
-                                            });
-                                        // Mettre à jour le contenu
-                                        assistantContent.innerHTML = cleanHtml;
-                                        scrollProjectChatToBottom(false); // Ne pas forcer, seulement si proche du bas
+                                        // Mise à jour affichage pendant le stream
+                                        const rawHtml = parseMarkdown(fullResponse);
+                                        const cleanHtml = DOMPurify.sanitize(rawHtml, {
+                                            ADD_TAGS: ["img"],
+                                            ADD_ATTR: ["src", "alt", "class", "style", "title"],
+                                        });
+                                        assistantContent.innerHTML = wrapTablesInResponsive(cleanHtml);
+                                        scrollProjectChatToBottom(false);
                                     } else if (jsonData.sources) {
-                                        // Capturer les sources pour les citations
                                         receivedSources = jsonData.sources;
                                     } else if (jsonData.done) {
                                         break;
@@ -1978,6 +1990,24 @@ extra_head %}
                         }
                     }
                 }
+                // Traiter le buffer restant (dernière ligne souvent non traitée)
+                if (buffer.trim()) {
+                    const line = buffer.trim();
+                    if (line.startsWith("data: ")) {
+                        const data = line.slice(6).trim();
+                        if (data) {
+                            try {
+                                const jsonData = JSON.parse(data);
+                                if (jsonData.message && jsonData.message.content !== undefined) {
+                                    fullResponse += jsonData.message.content;
+                                }
+                                if (jsonData.sources) {
+                                    receivedSources = jsonData.sources;
+                                }
+                            } catch (e) { /* ignorer */ }
+                        }
+                    }
+                }
 
                 // Finaliser le message
                 assistantMessageDiv.removeAttribute("id");
@@ -1986,24 +2016,38 @@ extra_head %}
                     content: fullResponse,
                 });
                 
-                // Ajouter la section sources si des sources ont été reçues
-                if (receivedSources && receivedSources.length > 0) {
+                // Re-rendu complet du message à partir du texte final (évite que les tableaux
+                // restent cassés à cause du markdown partiel reçu pendant le stream)
+                const contentDiv = assistantMessageDiv.querySelector('.markdown-content');
+                if (contentDiv && fullResponse) {
+                    const rawHtml = parseMarkdown(fullResponse);
+                    const cleanHtml = DOMPurify.sanitize(rawHtml, {
+                        ADD_TAGS: ["img"],
+                        ADD_ATTR: ["src", "alt", "class", "style", "title"],
+                    });
+                    const withTables = wrapTablesInResponsive(cleanHtml);
+                    const finalHtml = (receivedSources && receivedSources.length > 0)
+                        ? transformCitationsToLinks(withTables, receivedSources)
+                        : withTables;
+                    requestAnimationFrame(() => {
+                        contentDiv.innerHTML = finalHtml;
+                        if (receivedSources && receivedSources.length > 0) {
+                            const sourcesHtml = buildSourcesSection(receivedSources);
+                            const messageContainer = assistantMessageDiv.querySelector('.max-w-2xl');
+                            if (messageContainer) {
+                                messageContainer.insertAdjacentHTML('beforeend', sourcesHtml);
+                            }
+                        }
+                        scrollProjectChatToBottom(false);
+                    });
+                } else if (receivedSources && receivedSources.length > 0) {
                     const sourcesHtml = buildSourcesSection(receivedSources);
                     const messageContainer = assistantMessageDiv.querySelector('.max-w-2xl');
                     if (messageContainer) {
                         messageContainer.insertAdjacentHTML('beforeend', sourcesHtml);
                     }
+                    scrollProjectChatToBottom(false);
                 }
-                
-                // Transformer les citations [1], [2]... en liens cliquables
-                if (receivedSources && receivedSources.length > 0) {
-                    const contentDiv = assistantMessageDiv.querySelector('.markdown-content');
-                    if (contentDiv) {
-                        contentDiv.innerHTML = transformCitationsToLinks(contentDiv.innerHTML, receivedSources);
-                    }
-                }
-                
-                scrollProjectChatToBottom(false); // Ne pas forcer à la fin, seulement si proche du bas
 
                 // Attendre un court délai pour s'assurer que le streaming est complètement terminé
                 await new Promise(resolve => setTimeout(resolve, 300));
@@ -2060,7 +2104,7 @@ extra_head %}
                     ADD_TAGS: ["img"],
                     ADD_ATTR: ["src", "alt", "class", "style", "title"],
                 });
-                contentHtml = `<div class="markdown-content">${cleanHtml}</div>`;
+                contentHtml = `<div class="markdown-content">${wrapTablesInResponsive(cleanHtml)}</div>`;
             } else {
                 // Messages utilisateur en texte brut
                 contentHtml = `<p class="whitespace-pre-wrap">${escapeHtml(
@@ -2107,12 +2151,13 @@ extra_head %}
                 const excerpt = escapeHtml(source.excerpt || '');
                 const index = source.index;
                 const pageInfo = source.page_no ? ` (p.${source.page_no})` : '';
+                const fullTitle = excerpt ? `${title}${pageInfo} — ${excerpt}` : `${title}${pageInfo}`;
                 
                 return `
                     <button 
                        onclick="showSourcePreview(${index})"
                        class="source-badge inline-flex items-center px-2 py-1 text-xs rounded bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors cursor-pointer"
-                       title="${excerpt}"
+                       title="${fullTitle}"
                        id="source-ref-${index}">
                         <span class="citation-number font-bold mr-1">[${index}]</span>
                         <span class="truncate max-w-[150px]">${title}${pageInfo}</span>
@@ -2185,7 +2230,15 @@ extra_head %}
             return html;
         }
         
-        // Transformer les citations [1], [2]... en liens cliquables
+        // Envelopper les tableaux dans un conteneur scrollable horizontalement
+        function wrapTablesInResponsive(html) {
+            if (!html || !html.includes('<table')) return html;
+            return html
+                .replace(/<table(\s[^>]*)?>/gi, '<div class="table-wrapper"><table$1>')
+                .replace(/<\/table>/g, '</table></div>');
+        }
+        
+        // Transformer les citations [1], [2]... en liens cliquables (avec tooltip = titre de la source)
         function transformCitationsToLinks(html, sources) {
             if (!sources || sources.length === 0) return html;
             

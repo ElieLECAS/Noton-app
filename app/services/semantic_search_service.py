@@ -23,7 +23,7 @@ MetadataFilter) ont été supprimés : la recherche SQL directe est plus fiable 
 avec l'architecture de la table notechunk (insertions via SQLModel ORM).
 """
 
-from typing import Dict, List, Set
+from typing import Dict, List, Optional, Set
 import os
 import re
 import threading
@@ -52,7 +52,7 @@ RERANKER_CANDIDATE_MULTIPLIER = 3
 RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 # Optimisations du reranking
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
-MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "30"))
+MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
 
 # ---------------------------------------------------------------------------
@@ -482,23 +482,32 @@ def _merge_with_graph_candidates(
     vector_candidates: List[NodeWithScore],
     graph_candidates: List[NodeWithScore],
     graph_boost: float = 0.2,
+    pivot_entity_names: Optional[List[str]] = None,
 ) -> List[NodeWithScore]:
     """
     Fusionne les candidats vectoriels et KAG.
     
     Les candidats KAG reçoivent un boost de score et sont ajoutés
     s'ils ne sont pas déjà présents dans les candidats vectoriels.
+    Si pivot_entity_names est fourni, les nœuds dont kag_matched_entity
+    est dans cette liste reçoivent un boost doublé (entités pivot requête).
     
     Args:
         vector_candidates: Candidats de la recherche vectorielle
         graph_candidates: Candidats du graphe KAG
         graph_boost: Bonus de score pour les candidats KAG (0.0-1.0)
+        pivot_entity_names: Noms d'entités normalisés issus de la requête (LLM) → boost x2 si match
         
     Returns:
         Liste fusionnée et triée par score
     """
     seen_node_ids = set()
     merged: List[NodeWithScore] = []
+    pivot_set = set(pivot_entity_names or [])
+    normalize_entity_name = None
+    if pivot_set:
+        from app.services.kag_extraction_service import normalize_entity_name as _norm
+        normalize_entity_name = _norm
     
     for nws in vector_candidates:
         node_id = getattr(nws.node, "id_", None) or nws.node.metadata.get("node_id")
@@ -508,15 +517,21 @@ def _merge_with_graph_candidates(
     
     for nws in graph_candidates:
         node_id = getattr(nws.node, "id_", None) or nws.node.metadata.get("node_id")
+        matched_entity = (nws.node.metadata or {}).get("kag_matched_entity", "")
+        is_pivot = bool(
+            pivot_set and matched_entity and normalize_entity_name
+            and normalize_entity_name(matched_entity) in pivot_set
+        )
+        boost = 2.0 * graph_boost if is_pivot else graph_boost
         if node_id and node_id in seen_node_ids:
             for existing in merged:
                 existing_id = getattr(existing.node, "id_", None) or existing.node.metadata.get("node_id")
                 if existing_id == node_id:
-                    existing.score = max(existing.score, nws.score + graph_boost)
+                    existing.score = max(existing.score, nws.score + boost)
                     break
             continue
         
-        boosted_score = min(1.0, float(nws.score or 0.0) + graph_boost)
+        boosted_score = min(1.0, float(nws.score or 0.0) + boost)
         nws.score = boosted_score
         merged.append(nws)
         if node_id:
@@ -690,7 +705,15 @@ def search_relevant_passages(
             )
 
         # --- Étape 1b : enrichissement KAG (si activé) ---
+        pivot_entity_names: List[str] = []
         if settings.KAG_ENABLED:
+            try:
+                from app.services.kag_extraction_service import extract_entities_from_query_sync
+                pivot_entity_names = extract_entities_from_query_sync(query_text)
+                if pivot_entity_names:
+                    logger.debug("Entités pivot requête (LLM): %s", pivot_entity_names[:5])
+            except Exception as ext_err:
+                logger.debug("Extraction entités requête ignorée: %s", ext_err)
             try:
                 graph_candidates = _retrieve_via_knowledge_graph(
                     session=session,
@@ -704,6 +727,7 @@ def search_relevant_passages(
                         vector_candidates=leaf_candidates,
                         graph_candidates=graph_candidates,
                         graph_boost=0.15,
+                        pivot_entity_names=pivot_entity_names or None,
                     )
                     logger.info(
                         "KAG enrichissement: +%d candidats graphe fusionnés",

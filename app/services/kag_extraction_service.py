@@ -103,6 +103,8 @@ def _parse_llm_response(response_text: str) -> List[Dict]:
             if not isinstance(importance, (int, float)):
                 importance = 1.0
             importance = max(0.0, min(1.0, float(importance)))
+            if entity_type == "reference":
+                importance = 1.0
             
             valid_entities.append({
                 "name": name,
@@ -210,3 +212,29 @@ def extract_entities_sync(chunk_content: str) -> List[Dict]:
             return loop.run_until_complete(extract_entities_from_chunk(chunk_content))
     except RuntimeError:
         return asyncio.run(extract_entities_from_chunk(chunk_content))
+
+
+def extract_entities_from_query_sync(query_text: str) -> List[str]:
+    """
+    Version synchrone de extract_entities_from_query.
+    Retourne les noms d'entités normalisés de la requête (pour pivot KAG).
+    """
+    if not query_text or not query_text.strip():
+        return []
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor() as pool:
+                future = pool.submit(
+                    asyncio.run,
+                    extract_entities_from_query(query_text),
+                )
+                return future.result(timeout=30)
+        else:
+            return loop.run_until_complete(extract_entities_from_query(query_text))
+    except RuntimeError:
+        return asyncio.run(extract_entities_from_query(query_text))
+    except Exception as e:
+        logger.warning("Extraction entités requête échouée: %s", e)
+        return []
