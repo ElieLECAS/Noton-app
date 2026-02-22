@@ -129,9 +129,8 @@ def get_docling_converter():
 
                 format_options = None
                 ocr_enabled = getattr(settings, "DOCLING_OCR_ENABLED", False)
-                multimodal_enabled = getattr(settings, "MULTIMODAL_ENABLED", False)
-                
-                if ocr_enabled or multimodal_enabled:
+                # Toujours générer les images pour extraction et stockage (sans Vision/chunks)
+                if True:
                     try:
                         from docling.datamodel.base_models import InputFormat
                         from docling.datamodel.pipeline_options import (
@@ -141,12 +140,9 @@ def get_docling_converter():
 
                         pipeline_options = PdfPipelineOptions(
                             do_ocr=ocr_enabled,
-                            generate_picture_images=multimodal_enabled,
-                            images_scale=2.0 if multimodal_enabled else 1.0,
+                            generate_picture_images=True,
+                            images_scale=2.0,
                         )
-                        
-                        if multimodal_enabled:
-                            logger.info("Multimodal activé : extraction des images/schémas")
 
                         # Configuration OCR si activé
                         if ocr_enabled:
@@ -307,7 +303,8 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Opt
             return None, None, None
 
         # Format JSON obligatoire pour DoclingNodeParser : préserve la structure
-        # hiérarchique des tableaux (colonnes/lignes) ; ne pas remplacer par du Markdown.
+        # hiérarchique des tableaux (colonnes/lignes). Le parser re-parse ce JSON en interne
+        # (double coût connu ; l'API n'accepte pas d'objet DoclingDocument natif).
         from llama_index.core import Document as LlamaDocument
 
         llama_docs = [
@@ -387,9 +384,6 @@ def extract_and_save_images(docling_doc, note_id: int) -> list:
         - caption: légende de l'image
         - bbox: bounding box dans le document
     """
-    if not getattr(settings, "MULTIMODAL_ENABLED", False):
-        return []
-    
     images_info = []
     images_dir = Path(f"media/images/{note_id}")
     
@@ -667,9 +661,8 @@ def _process_document_for_note(note_id: int, file_path: str):
                 len(markdown_content),
             )
             
-            # Extraction des images si multimodal activé
-            images_info = []
-            if docling_doc and getattr(settings, "MULTIMODAL_ENABLED", False):
+            # Extraction et stockage des images (sans Vision ni chunks image)
+            if docling_doc:
                 images_info = extract_and_save_images(docling_doc, note_id)
                 if images_info:
                     logger.info(
@@ -682,9 +675,8 @@ def _process_document_for_note(note_id: int, file_path: str):
                 # sinon fallback sur HierarchicalNodeParser
                 if llama_docs:
                     chunks = create_chunks_for_note_from_docling(
-                        session, note, llama_docs, 
+                        session, note, llama_docs,
                         generate_embeddings=False,
-                        images_info=images_info,
                     )
                     logger.info(
                         "Créé %d chunks (DoclingNodeParser) pour la note %d",

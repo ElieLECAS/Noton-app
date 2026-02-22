@@ -289,6 +289,8 @@ def _keyword_fallback_passages(
     for chunk, note_title in rows:
         if chunk.id in seen_chunk_ids:
             continue
+        if (chunk.metadata_json or {}).get("is_image_chunk"):
+            continue
         seen_chunk_ids.add(chunk.id)
 
         content = (chunk.content or chunk.text or "").strip()
@@ -610,22 +612,6 @@ def refine_with_source_authority(
     return passages
 
 
-def _boost_image_passages(passages: List[Dict], boost: float = 0.07) -> List[Dict]:
-    """
-    Donne un léger boost aux passages image pour qu'ils remontent dans le top-k.
-    Les chunks image ont un contenu texte court ([Image] + légende + description)
-    et sont souvent moins bien classés par la similarité vectorielle ; ce boost
-    augmente les chances qu'au moins quelques images apparaissent dans le contexte.
-    """
-    if not passages:
-        return passages
-    for p in passages:
-        if p.get("is_image_chunk"):
-            p["score"] = float(p.get("score") or 0.0) + boost
-    passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
-    return passages
-
-
 # ---------------------------------------------------------------------------
 # Point d'entrée principal
 # ---------------------------------------------------------------------------
@@ -865,7 +851,7 @@ def search_relevant_passages(
         )
 
         passages = refine_with_source_authority(passages, query_text)
-        passages = _boost_image_passages(passages)
+        passages = [p for p in passages if not p.get("is_image_chunk")]
 
         if not passages:
             return _keyword_fallback_passages(

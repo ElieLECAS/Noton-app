@@ -1,13 +1,18 @@
 from typing import Dict, List, Optional, Sequence
+import logging
+import threading
+import uuid
+
 from app.models.note import Note
 from app.models.note_chunk import NoteChunk
 from app.config import settings
-import logging
-import uuid
 from llama_index.core.schema import Document, NodeRelationship, TextNode
 from llama_index.core.node_parser import HierarchicalNodeParser
 
 logger = logging.getLogger(__name__)
+
+_docling_node_parser = None
+_docling_node_parser_lock = threading.Lock()
 
 DEFAULT_HIERARCHICAL_CHUNK_SIZES = [3072, 1024, 384]
 
@@ -175,40 +180,47 @@ def chunk_note(note: Note) -> List[NoteChunk]:
 
 def _get_docling_node_parser():
     """
-    Crée un DoclingNodeParser optimisé pour les tableaux.
+    Retourne un DoclingNodeParser optimisé pour les tableaux (singleton, thread-safe).
 
     Utilise un HierarchicalChunker avec MarkdownTableSerializer au lieu du
     TripletTableSerializer par défaut : les tableaux sont sérialisés en grille
     Markdown (| Colonne A | Colonne B |) ce qui réduit les confusions
     colonnes/lignes et améliore la précision des valeurs numériques pour le LLM.
     """
-    from llama_index.node_parser.docling import DoclingNodeParser
+    global _docling_node_parser
+    if _docling_node_parser is not None:
+        return _docling_node_parser
+    with _docling_node_parser_lock:
+        if _docling_node_parser is not None:
+            return _docling_node_parser
+        from llama_index.node_parser.docling import DoclingNodeParser
 
-    try:
-        from docling_core.transforms.chunker import HierarchicalChunker
-        from docling_core.transforms.chunker.hierarchical_chunker import (
-            ChunkingDocSerializer,
-            ChunkingSerializerProvider,
-        )
-        from docling_core.transforms.serializer.markdown import MarkdownTableSerializer
+        try:
+            from docling_core.transforms.chunker import HierarchicalChunker
+            from docling_core.transforms.chunker.hierarchical_chunker import (
+                ChunkingDocSerializer,
+                ChunkingSerializerProvider,
+            )
+            from docling_core.transforms.serializer.markdown import MarkdownTableSerializer
 
-        class MDTableSerializerProvider(ChunkingSerializerProvider):
-            """Provider qui sérialise les tableaux en Markdown (grille avec en-têtes explicites)."""
+            class MDTableSerializerProvider(ChunkingSerializerProvider):
+                """Provider qui sérialise les tableaux en Markdown (grille avec en-têtes explicites)."""
 
-            def get_serializer(self, doc):
-                return ChunkingDocSerializer(
-                    doc=doc,
-                    table_serializer=MarkdownTableSerializer(),
-                )
+                def get_serializer(self, doc):
+                    return ChunkingDocSerializer(
+                        doc=doc,
+                        table_serializer=MarkdownTableSerializer(),
+                    )
 
-        chunker = HierarchicalChunker(serializer_provider=MDTableSerializerProvider())
-        return DoclingNodeParser(chunker=chunker)
-    except (ImportError, AttributeError) as e:
-        logger.debug(
-            "MarkdownTableSerializer non disponible (%s), utilisation du parser par défaut",
-            e,
-        )
-        return DoclingNodeParser()
+            chunker = HierarchicalChunker(serializer_provider=MDTableSerializerProvider())
+            _docling_node_parser = DoclingNodeParser(chunker=chunker)
+        except (ImportError, AttributeError) as e:
+            logger.debug(
+                "MarkdownTableSerializer non disponible (%s), utilisation du parser par défaut",
+                e,
+            )
+            _docling_node_parser = DoclingNodeParser()
+        return _docling_node_parser
 
 
 def _get_parent_heading_label(headings: list) -> str:
@@ -271,7 +283,6 @@ def _is_picture_or_table_chunk(meta: dict) -> bool:
 def chunk_note_from_docling_docs(
     note: Note,
     llama_docs: Sequence,
-    images_info: List[dict] = None,
 ) -> List[NoteChunk]:
     """
     Découper un document importé via Docling en NoteChunks sémantiques.
@@ -292,13 +303,10 @@ def chunk_note_from_docling_docs(
         note       : La note cible (déjà enregistrée en base)
         llama_docs : Liste de LlamaIndex Document dont le .text contient le
                      JSON sérialisé d'un DoclingDocument (model_dump_json)
-        images_info: Liste d'infos images extraites (multimodal), avec
-                     'path', 'caption', 'page_no', 'description' (optionnel)
 
     Returns:
-        Liste de NoteChunk (leaves + parents + images) prête à être sauvegardée
+        Liste de NoteChunk (leaves + parents) prête à être sauvegardée
     """
-    images_info = images_info or []
     try:
         node_parser = _get_docling_node_parser()
     except ImportError:
@@ -338,11 +346,13 @@ def chunk_note_from_docling_docs(
     }
 
     # ------------------------------------------------------------------
-    # Grouper les leaves par libellé de section complet (parent_heading)
+    # Une seule passe : grouper les leaves par section et collecter les légendes
     # ------------------------------------------------------------------
-    # Structure : { parent_heading_label: [leaf_node, ...] }
+    # groups[parent_heading_label] = [leaf_node, ...]
+    # section_captions[heading_key] = liste des légendes (picture/table) de la section
     groups: Dict[str, List[TextNode]] = {}
-    group_order: List[str] = []  # ordre d'apparition des sections
+    group_order: List[str] = []
+    section_captions: Dict[str, List[str]] = {}
 
     for node in leaf_nodes:
         headings = (node.metadata or {}).get("headings") or []
@@ -351,20 +361,11 @@ def chunk_note_from_docling_docs(
             groups[key] = []
             group_order.append(key)
         groups[key].append(node)
-
-    # ------------------------------------------------------------------
-    # Par groupe : collecter les légendes (picture/table) pour injection
-    # ------------------------------------------------------------------
-    # section_captions[heading_key] = liste des légendes trouvées dans la section
-    section_captions: Dict[str, List[str]] = {}
-    for heading_key in group_order:
-        captions: List[str] = []
-        for leaf_node in groups[heading_key]:
-            meta = dict(leaf_node.metadata or {})
-            cap = _extract_caption_from_metadata(meta)
-            if cap and cap not in captions:
-                captions.append(cap)
-        section_captions[heading_key] = captions
+        cap = _extract_caption_from_metadata(dict(node.metadata or {}))
+        if cap:
+            captions_list = section_captions.setdefault(key, [])
+            if cap not in captions_list:
+                captions_list.append(cap)
 
     # ------------------------------------------------------------------
     # Construire les NoteChunk leaves + parents (avec parent_heading, légendes)
@@ -478,102 +479,15 @@ def chunk_note_from_docling_docs(
             )
             chunk_index += 1
 
-    # ------------------------------------------------------------------
-    # Créer des chunks pour les images extraites (multimodal)
-    # ------------------------------------------------------------------
-    image_chunks_count = 0
-    if images_info:
-        import asyncio
-        from app.services.vision_service import describe_image
-        from app.config import settings as app_settings
-        
-        for img_info in images_info:
-            image_path = img_info.get("path")
-            if not image_path:
-                continue
-            
-            caption = img_info.get("caption", "")
-            page_no = img_info.get("page_no")
-            img_index = img_info.get("index", 0)
-            filename = img_info.get("filename", f"image_{img_index}.png")
-            
-            # Description déjà fournie ou à générer
-            description = img_info.get("description")
-            if not description and app_settings.MULTIMODAL_ENABLED:
-                try:
-                    description = asyncio.get_event_loop().run_until_complete(
-                        describe_image(image_path, context=caption or "")
-                    )
-                except RuntimeError:
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-                    try:
-                        description = loop.run_until_complete(
-                            describe_image(image_path, context=caption or "")
-                        )
-                    finally:
-                        loop.close()
-            
-            # Contenu du chunk image : caption + description
-            content_parts = ["[Image]"]
-            if caption:
-                content_parts.append(f"Légende : {caption}")
-            if description:
-                content_parts.append(f"\nDescription : {description}")
-            else:
-                content_parts.append("\n(Description non disponible)")
-            
-            image_content = "\n".join(content_parts)
-            
-            image_node_id = str(uuid.uuid4())
-            image_metadata = dict(doc_metadata_base)
-            image_metadata.update({
-                "node_id": image_node_id,
-                "parent_node_id": None,
-                "hierarchy_level": 1,
-                "is_leaf": "true",
-                "is_image_chunk": True,
-                "image_path": image_path,
-                "image_filename": filename,
-                "page_no": page_no,
-                "caption": caption,
-                "contains_image": True,
-            })
-            
-            chunks.append(
-                NoteChunk(
-                    note_id=note.id,
-                    chunk_index=chunk_index,
-                    content=image_content,
-                    text=image_content,
-                    start_char=0,
-                    end_char=len(image_content),
-                    node_id=image_node_id,
-                    parent_node_id=None,
-                    is_leaf=True,
-                    hierarchy_level=1,
-                    metadata_json=image_metadata,
-                    metadata_=image_metadata,
-                )
-            )
-            chunk_index += 1
-            image_chunks_count += 1
-            
-            logger.debug(
-                "Chunk image créé pour note=%s : %s (page %s)",
-                note.id, filename, page_no
-            )
-
     leaf_count = sum(1 for c in chunks if c.is_leaf)
     parent_count = sum(1 for c in chunks if not c.is_leaf)
     logger.info(
         "Chunking sémantique (DoclingNodeParser) note=%s : "
-        "%d chunks total (%d leaves, %d parents, %d sections, %d images)",
+        "%d chunks total (%d leaves, %d parents, %d sections)",
         note.id,
         len(chunks),
         leaf_count,
         parent_count,
         len(group_order),
-        image_chunks_count,
     )
     return chunks

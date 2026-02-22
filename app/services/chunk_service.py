@@ -1,6 +1,6 @@
 from typing import List, Optional
 from sqlmodel import Session, select
-from sqlalchemy import or_
+from sqlalchemy import or_, delete
 from app.models.note_chunk import NoteChunk
 from app.models.note import Note
 from app.services.chunking_service import chunk_note, chunk_note_from_docling_docs
@@ -65,11 +65,8 @@ def create_chunks_for_note(session: Session, note: Note, generate_embeddings: bo
     
     # Sauvegarder les chunks dans la DB
     try:
-        for chunk in chunks:
-            session.add(chunk)
-        
+        session.add_all(chunks)
         session.commit()
-        
         logger.info(f"Créé {len(chunks)} chunks pour la note {note.id} (embeddings: {'oui' if generate_embeddings else 'non, sera fait en arrière-plan'})")
         return chunks
     except Exception as e:
@@ -328,7 +325,6 @@ def create_chunks_for_note_from_docling(
     note: Note,
     llama_docs: list,
     generate_embeddings: bool = False,
-    images_info: list = None,
 ) -> List[NoteChunk]:
     """
     Créer les chunks pour un document importé via Docling.
@@ -342,14 +338,13 @@ def create_chunks_for_note_from_docling(
         note             : La note cible
         llama_docs       : Liste de LlamaIndex Document avec JSON Docling
         generate_embeddings : Si True, génère les embeddings synchronement
-        images_info      : Liste des infos images extraites (multimodal)
 
     Returns:
         Liste des chunks créés
     """
     delete_chunks_for_note(session, note.id)
 
-    chunks = chunk_note_from_docling_docs(note, llama_docs, images_info=images_info or [])
+    chunks = chunk_note_from_docling_docs(note, llama_docs)
 
     if generate_embeddings:
         from app.services.embedding_service import generate_embeddings_batch
@@ -375,8 +370,7 @@ def create_chunks_for_note_from_docling(
                 )
 
     try:
-        for chunk in chunks:
-            session.add(chunk)
+        session.add_all(chunks)
         session.commit()
         logger.info(
             "Créé %d chunks (Docling) pour la note %d "
@@ -480,16 +474,13 @@ def delete_chunks_for_note(session: Session, note_id: int, commit: bool = True):
             delete_entities_for_note(session, note_id)
         except Exception as e:
             logger.warning(f"Erreur suppression relations KAG note={note_id}: {e}")
-    
-    statement = select(NoteChunk).where(NoteChunk.note_id == note_id)
-    chunks = list(session.exec(statement).all())
-    
-    for chunk in chunks:
-        session.delete(chunk)
-    
+
+    result = session.execute(delete(NoteChunk).where(NoteChunk.note_id == note_id))
+    deleted_count = result.rowcount
+
     if commit:
         session.commit()
-    logger.debug(f"Supprimé {len(chunks)} chunks pour la note {note_id}")
+    logger.debug(f"Supprimé {deleted_count} chunks pour la note {note_id}")
 
 
 def get_chunks_by_note(session: Session, note_id: int) -> List[NoteChunk]:
