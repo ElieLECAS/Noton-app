@@ -215,8 +215,10 @@ def _get_docling_node_parser():
             chunker = HierarchicalChunker(serializer_provider=MDTableSerializerProvider())
             _docling_node_parser = DoclingNodeParser(chunker=chunker)
         except (ImportError, AttributeError) as e:
-            logger.debug(
-                "MarkdownTableSerializer non disponible (%s), utilisation du parser par défaut",
+            logger.warning(
+                "MarkdownTableSerializer non disponible (%s) — repli sur le serializer par défaut "
+                "(TripletTableSerializer). Les tableaux seront moins lisibles et leur atomicité "
+                "n'est plus garantie. Vérifier l'installation de docling-core.",
                 e,
             )
             _docling_node_parser = DoclingNodeParser()
@@ -424,23 +426,36 @@ def chunk_note_from_docling_docs(
 
         # Créer les NoteChunk feuilles pour chaque bloc sémantique
         for leaf_node in group_leaves:
-            content = (leaf_node.get_content() or "").strip()
-            if not content:
+            raw_content = (leaf_node.get_content() or "").strip()
+            if not raw_content:
                 continue
 
             leaf_node_id = leaf_node.node_id or str(uuid.uuid4())
             docling_meta = dict(leaf_node.metadata or {})
 
-            # Fusion légende dans le contenu pour picture/table
+            # Fusion légende dans le contenu brut pour picture/table
             caption = _extract_caption_from_metadata(docling_meta)
             if _is_picture_or_table_chunk(docling_meta) and caption:
-                content = f"{content}\n\n{caption}".strip()
+                raw_content = f"{raw_content}\n\n{caption}".strip()
+
+            # Injection du heading de section en préfixe pour l'embedding et la
+            # recherche vectorielle : le vecteur capturera l'intention métier de la
+            # section (ex. "[Finitions Plaxé] Blanc 9016") et non uniquement le
+            # fragment brut. Le texte brut est conservé dans raw_content pour
+            # l'affichage UI.
+            if parent_heading_display:
+                content = f"[{parent_heading_display}] {raw_content}"
+            else:
+                content = raw_content
 
             # Métadonnées : parent_heading, page_no, figure_title / image_anchor
             leaf_metadata = dict(doc_metadata_base)
             leaf_metadata.update(docling_meta)
             leaf_metadata["parent_heading"] = parent_heading_display
             leaf_metadata["heading"] = parent_heading_display
+            # Texte brut sans heading injecté — conservé pour affichage UI propre
+            if parent_heading_display:
+                leaf_metadata["raw_content"] = raw_content
             if section_anchors:
                 leaf_metadata["image_anchor"] = " ; ".join(section_anchors)
                 leaf_metadata["figure_title"] = section_anchors[0]
