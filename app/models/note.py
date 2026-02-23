@@ -50,6 +50,19 @@ class NoteRead(SQLModel):
     updated_at: datetime
 
 
+class NoteListItem(SQLModel):
+    """Schéma pour la liste des notes d'un projet (sans contenu, pour chargement plus rapide)."""
+    id: int
+    title: str
+    note_type: str
+    processing_status: str
+    processing_progress: Optional[int] = None
+    project_id: int
+    user_id: int
+    created_at: datetime
+    updated_at: datetime
+
+
 class NoteUpdate(SQLModel):
     title: Optional[str] = None
     content: Optional[str] = None

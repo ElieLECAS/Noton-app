@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from fastapi.responses import FileResponse
 from sqlmodel import Session
 from app.database import get_session
-from app.models.note import NoteCreate, NoteRead, NoteUpdate, Note
+from app.models.note import NoteCreate, NoteRead, NoteListItem, NoteUpdate, Note
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.services.note_service import (
@@ -32,15 +32,15 @@ class EmbeddingStatus(BaseModel):
     status: str  # 'completed' si embedding présent, 'none' sinon
 
 
-@router.get("/projects/{project_id}/notes", response_model=List[NoteRead])
+@router.get("/projects/{project_id}/notes", response_model=List[NoteListItem])
 async def list_notes(
     project_id: int,
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Liste toutes les notes d'un projet"""
+    """Liste toutes les notes d'un projet (sans contenu, pour chargement plus rapide)."""
     notes = get_notes_by_project(session, project_id, current_user.id)
-    return notes
+    return [NoteListItem.model_validate(n) for n in notes]
 
 
 @router.post("/projects/{project_id}/notes", response_model=NoteRead, status_code=status.HTTP_201_CREATED)
