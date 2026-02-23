@@ -4,6 +4,7 @@ from app.models.project import Project, ProjectCreate, ProjectUpdate
 from app.models.note import Note
 from app.models.user import User
 from app.services.chunk_service import delete_chunks_for_note
+from app.services.kag_graph_service import delete_entities_for_project
 import logging
 
 logger = logging.getLogger(__name__)
@@ -61,6 +62,9 @@ def delete_project(session: Session, project_id: int, user_id: int) -> bool:
         return False
     
     try:
+        # Supprimer les entités et relations KAG du projet (évite la FK knowledgeentity_project_id_fkey)
+        delete_entities_for_project(session, project_id)
+
         # Récupérer toutes les notes du projet
         statement = select(Note).where(Note.project_id == project_id)
         notes = list(session.exec(statement).all())

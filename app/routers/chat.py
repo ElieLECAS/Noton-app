@@ -2,7 +2,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from sqlmodel import Session
+from sqlmodel import Session, select
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.database import get_session
@@ -19,6 +19,7 @@ from app.services.chat_tools import get_available_tools
 from app.models.conversation import Conversation
 from app.models.message import Message
 from app.models.agent import Agent
+from app.models.note import Note
 from datetime import datetime
 import json
 import logging
@@ -552,6 +553,16 @@ async def stream_project_chat_message(
             
             # Envoyer les sources utilisées pour les citations
             if passages:
+                note_ids = list({p.get("note_id") for p in passages if p.get("note_id")})
+                notes = (
+                    session.exec(select(Note).where(Note.id.in_(note_ids))).all()
+                    if note_ids
+                    else []
+                )
+                has_source_file_by_note = {
+                    n.id: (n.note_type == "document" and bool(n.source_file_path))
+                    for n in notes
+                }
                 sources_data = []
                 for i, p in enumerate(passages, 1):
                     passage_raw = p.get("passage_raw", p.get("passage", ""))
@@ -566,6 +577,7 @@ async def stream_project_chat_message(
                         "score": round(p.get("score", 0.0), 2),
                         "page_no": p.get("page_no"),
                         "section": p.get("section"),
+                        "has_source_file": has_source_file_by_note.get(p.get("note_id"), False),
                     }
                     # Multimodal : ajouter les infos image si présentes
                     if p.get("is_image_chunk"):
