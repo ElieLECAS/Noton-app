@@ -314,9 +314,103 @@ def _process_kag_extraction_for_note(session: Session, note_id: int, project_id:
             total_entities,
             total_relations,
         )
-        
+
+        if settings.KAG_PARENT_ENRICHMENT_ENABLED:
+            _process_parent_enrichment_for_note(session, note_id, project_id)
+
     except Exception as e:
         logger.error(f"Erreur extraction KAG pour note {note_id}: {e}", exc_info=True)
+        session.rollback()
+
+
+def _process_parent_enrichment_for_note(session: Session, note_id: int, project_id: int):
+    """
+    Enrichit chaque chunk parent (is_leaf=False) avec un résumé + 3 questions générés par LLM.
+
+    Le résumé capture l'intention métier de la section ; les 3 questions simulent
+    les interrogations réelles d'un technicien ou technico-commercial.
+    Les deux sont stockés dans metadata_json et servent de base à l'extraction
+    d'entités KAG sur le chunk parent, rendant les sections directement
+    accessibles via le graphe de connaissances.
+    """
+    try:
+        from app.services.kag_extraction_service import (
+            generate_parent_summary_questions_sync,
+            extract_entities_sync,
+        )
+        from app.services.kag_graph_service import save_entities_for_chunk
+
+        statement = select(NoteChunk).where(
+            NoteChunk.note_id == note_id,
+            NoteChunk.is_leaf == False,
+        )
+        parent_chunks = list(session.exec(statement).all())
+
+        if not parent_chunks:
+            logger.info("Aucun chunk parent pour enrichissement note=%s", note_id)
+            return
+
+        logger.info(
+            "Démarrage enrichissement parents note=%s: %d parents",
+            note_id,
+            len(parent_chunks),
+        )
+
+        total_parents_enriched = 0
+        total_parent_entities = 0
+        total_parent_relations = 0
+
+        for chunk in parent_chunks:
+            if not chunk.content or len(chunk.content.strip()) < 30:
+                continue
+
+            try:
+                result = generate_parent_summary_questions_sync(chunk.content)
+                if not result:
+                    continue
+
+                metadata = dict(chunk.metadata_json or {})
+                metadata["summary"] = result["summary"]
+                metadata["generated_questions"] = result["generated_questions"]
+                chunk.metadata_json = metadata
+                chunk.metadata_ = metadata
+                session.add(chunk)
+                total_parents_enriched += 1
+
+                enrichment_text = result["summary"]
+                if result["generated_questions"]:
+                    enrichment_text += " " + " ".join(result["generated_questions"])
+
+                entities = extract_entities_sync(enrichment_text)
+                if entities:
+                    relations_count = save_entities_for_chunk(
+                        session, chunk, entities, project_id
+                    )
+                    total_parent_entities += len(entities)
+                    total_parent_relations += relations_count
+
+            except Exception as e:
+                logger.warning(
+                    "Erreur enrichissement parent chunk_id=%s: %s",
+                    chunk.id,
+                    e,
+                )
+                continue
+
+        session.commit()
+        logger.info(
+            "✅ Enrichissement parents terminé note=%s: %d/%d parents enrichis, %d entités, %d relations",
+            note_id,
+            total_parents_enriched,
+            len(parent_chunks),
+            total_parent_entities,
+            total_parent_relations,
+        )
+
+    except Exception as e:
+        logger.error(
+            "Erreur enrichissement parents note=%s: %s", note_id, e, exc_info=True
+        )
         session.rollback()
 
 

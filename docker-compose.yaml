@@ -80,6 +80,7 @@ services:
             - KAG_ENABLED=${KAG_ENABLED:-true}
             - KAG_EXTRACTION_PROVIDER=${KAG_EXTRACTION_PROVIDER:-openai}
             - KAG_EXTRACTION_MODEL=${KAG_EXTRACTION_MODEL:-gpt-4o-mini}
+            - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-true}
             - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
             - VISION_MODEL=${VISION_MODEL:-gpt-4o}
         depends_on:

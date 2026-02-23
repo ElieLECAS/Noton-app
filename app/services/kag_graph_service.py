@@ -209,7 +209,9 @@ def get_chunks_by_entity_names(
             KnowledgeEntity.project_id == project_id,
             KnowledgeEntity.name_normalized.in_(normalized_names),
             Note.user_id == user_id,
-            NoteChunk.is_leaf == True,
+            # Inclut les chunks parents enrichis (is_leaf=False) ET les leaves classiques.
+            # Les parents trouvés via KAG contiennent le résumé + questions de leur section
+            # et sont passés directement au LLM comme contexte de section.
         )
         .order_by(ChunkEntityRelation.relevance_score.desc())
         .limit(limit)
