@@ -437,42 +437,88 @@ extra_head %}
         border-radius: 4px;
         font-size: 12px;
     }
+
+    /* Bouton LIA : style par défaut (Fermer LIA) */
+    #project-chatbot-toggle-btn {
+        background: transparent;
+        color: #6b7280;
+    }
+    #project-chatbot-toggle-btn:hover {
+        background: #f3f4f6;
+        color: #111827;
+    }
+    .dark #project-chatbot-toggle-btn {
+        color: #9ca3af;
+    }
+    .dark #project-chatbot-toggle-btn:hover {
+        background: #374151;
+        color: #f3f4f6;
+    }
+    /* Bouton "Parler à LIA" mis en évidence (état CTA) */
+    #project-chatbot-toggle-btn.lia-cta {
+        background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+        color: white !important;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #project-chatbot-toggle-btn.lia-cta:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        color: white !important;
+        background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
+    }
+    #project-chatbot-toggle-btn.lia-cta .ti {
+        color: white !important;
+    }
+    .dark #project-chatbot-toggle-btn.lia-cta {
+        background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+    }
+    .dark #project-chatbot-toggle-btn.lia-cta:hover {
+        background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45);
+    }
 </style>
 {% endblock %} {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <!-- Header -->
     <header
-        class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 flex-shrink-0"
+        class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 flex-shrink-0 shadow-sm"
     >
         <div class="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
             <a
                 href="/"
-                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2 -ml-2 sm:ml-0 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
+                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2.5 -ml-2 sm:ml-0 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
             >
                 <i class="ti ti-arrow-left text-xl"></i>
             </a>
             <h1
                 id="project-title"
-                class="text-base sm:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate"
+                class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100 truncate tracking-tight"
             >
                 Chargement...
             </h1>
         </div>
-        <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-3 flex-wrap">
             <button
+                id="project-chatbot-toggle-btn"
                 onclick="toggleProjectChatbot()"
-                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
+                class="lia-cta flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm sm:text-base transition-all duration-200 border border-transparent"
                 title="Afficher/Masquer le chatbot"
             >
                 <i
                     id="project-chatbot-toggle-icon"
                     class="ti ti-robot text-xl"
                 ></i>
-                <span id="project-chatbot-toggle-text" class="text-sm sm:text-base font-medium">Parler à LIA</span>
+                <span id="project-chatbot-toggle-text" class="text-sm sm:text-base">Parler à LIA</span>
             </button>
             <button
                 onclick="showCreateNoteModal()"
-                class="px-3 sm:px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base"
+                class="px-4 sm:px-5 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-xl hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base font-medium shadow-sm hover:shadow transition-shadow"
             >
                 <i class="ti ti-plus"></i>
                 <span class="hidden sm:inline">Nouvelle note</span>
@@ -480,11 +526,19 @@ extra_head %}
             </button>
             <button
                 onclick="showUploadDocumentModal()"
-                class="px-3 sm:px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600 flex items-center gap-2 text-sm sm:text-base"
+                class="px-4 sm:px-5 py-2.5 bg-green-600 dark:bg-green-500 text-white rounded-xl hover:bg-green-700 dark:hover:bg-green-600 flex items-center gap-2 text-sm sm:text-base font-medium shadow-sm hover:shadow transition-shadow"
             >
                 <i class="ti ti-upload"></i>
                 <span class="hidden sm:inline">Uploader</span>
                 <span class="sm:hidden">Upload</span>
+            </button>
+            <button
+                onclick="window.location.href = `/projects/${projectId}/kag-graph`"
+                class="px-4 sm:px-5 py-2.5 border border-violet-500/70 text-violet-700 dark:text-violet-200 rounded-xl hover:bg-violet-50 dark:hover:bg-violet-900/30 flex items-center gap-2 text-sm sm:text-base font-medium transition-colors"
+            >
+                <i class="ti ti-graph"></i>
+                <span class="hidden sm:inline">Graphe KAG</span>
+                <span class="sm:hidden">Graphe</span>
             </button>
         </div>
     </header>
@@ -515,17 +569,22 @@ extra_head %}
                 <div
                     class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0 bg-white dark:bg-gray-800"
                 >
-                    <div>
-                        <h2
-                            class="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100"
-                        >
-                            Assistant IA du projet
-                        </h2>
-                        <p
-                            class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1"
-                        >
-                            Posez des questions sur vos notes
-                        </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-sm">
+                            <i class="ti ti-robot text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h2
+                                class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100"
+                            >
+                                LIA
+                            </h2>
+                            <p
+                                class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5"
+                            >
+                                Posez des questions sur vos notes du projet
+                            </p>
+                        </div>
                     </div>
                     <button
                         onclick="toggleProjectChatbot()"
@@ -542,13 +601,16 @@ extra_head %}
                     class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 min-h-0 bg-white dark:bg-gray-800"
                 >
                     <div
-                        class="text-center text-gray-500 dark:text-gray-400 py-8"
+                        class="text-center text-gray-500 dark:text-gray-400 py-12"
                     >
-                        <i
-                            class="ti ti-message-circle text-3xl sm:text-4xl mb-2"
-                        ></i>
-                        <p class="text-sm sm:text-base">
+                        <div class="inline-flex w-14 h-14 rounded-2xl bg-gray-100 dark:bg-gray-700 items-center justify-center mb-4">
+                            <i class="ti ti-message-circle text-2xl text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <p class="text-sm sm:text-base font-medium text-gray-600 dark:text-gray-300">
                             Posez des questions sur vos notes
+                        </p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                            LIA peut chercher dans vos documents et vous répondre
                         </p>
                     </div>
                 </div>
@@ -1217,6 +1279,8 @@ extra_head %}
 
                 toggleIcon.classList.remove("ti-robot");
                 toggleIcon.classList.add("ti-robot-off");
+                const toggleBtn = document.getElementById("project-chatbot-toggle-btn");
+                if (toggleBtn) toggleBtn.classList.remove("lia-cta");
                 if (toggleText) {
                     toggleText.textContent = "Fermer LIA";
                 }
@@ -1248,6 +1312,8 @@ extra_head %}
 
                 toggleIcon.classList.remove("ti-robot-off");
                 toggleIcon.classList.add("ti-robot");
+                const toggleBtnClose = document.getElementById("project-chatbot-toggle-btn");
+                if (toggleBtnClose) toggleBtnClose.classList.add("lia-cta");
                 if (toggleText) {
                     toggleText.textContent = "Parler à LIA";
                 }
@@ -1310,6 +1376,7 @@ extra_head %}
                 "project-chatbot-toggle-text"
             );
             
+            const projectToggleBtn = document.getElementById("project-chatbot-toggle-btn");
             if (!projectChatbotOpen) {
                 chatbotArea.classList.add("hidden");
                 chatbotArea.style.transform = "translateX(0)";
@@ -1318,10 +1385,12 @@ extra_head %}
 
                 toggleIcon.classList.remove("ti-robot-off");
                 toggleIcon.classList.add("ti-robot");
+                if (projectToggleBtn) projectToggleBtn.classList.add("lia-cta");
                 if (toggleText) {
                     toggleText.textContent = "Parler à LIA";
                 }
             } else {
+                if (projectToggleBtn) projectToggleBtn.classList.remove("lia-cta");
                 if (toggleText) {
                     toggleText.textContent = "Fermer LIA";
                 }

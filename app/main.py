@@ -7,7 +7,7 @@ from sqlmodel import Session
 import time
 
 from app.database import get_session, create_db_and_tables
-from app.routers import auth, projects, notes, chat, conversations, agents, scheduler
+from app.routers import auth, projects, notes, chat, conversations, agents, scheduler, kag
 from app.models import User, Project, Note
 from app.services.scheduler_service import init_scheduler, start_scheduler, stop_scheduler
 from app.config import settings
@@ -59,6 +59,7 @@ app.include_router(chat.router)
 app.include_router(conversations.router)
 app.include_router(agents.router)
 app.include_router(scheduler.router)
+app.include_router(kag.router)
 
 # Configuration des templates
 templates = Jinja2Templates(directory="app/templates")
@@ -157,6 +158,12 @@ async def project_detail_page(request: Request, project_id: int):
 async def note_edit_page(request: Request, note_id: int):
     """Page d'édition d'une note"""
     return templates.TemplateResponse("note_edit.html", {"request": request})
+
+
+@app.get("/projects/{project_id}/kag-graph", response_class=HTMLResponse)
+async def project_kag_graph_page(request: Request, project_id: int):
+    """Page de visualisation du graphe KAG d'un projet"""
+    return templates.TemplateResponse("project_kag_graph.html", {"request": request})
 
 
 @app.on_event("shutdown")

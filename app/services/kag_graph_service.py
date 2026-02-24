@@ -343,3 +343,118 @@ def get_kag_stats(session: Session, project_id: int) -> Dict:
         "total_relations": relation_count,
         "entities_by_type": type_counts,
     }
+
+
+def get_project_bipartite_graph(
+    session: Session,
+    project_id: int,
+    user_id: int,
+    max_entities: int = 50,
+    max_relations: int = 400,
+) -> Dict[str, List[Dict]]:
+    """
+    Construit un graphe biparti (entités <-> chunks) pour un projet.
+
+    Le graphe est limité à un nombre raisonnable d'entités et de relations
+    pour rester lisible dans une visualisation front.
+    """
+    # Récupérer les entités les plus mentionnées du projet
+    entities = get_entities_for_project(
+        session=session,
+        project_id=project_id,
+        limit=max_entities,
+    )
+    if not entities:
+        return {"nodes": [], "edges": []}
+
+    entity_ids = [e.id for e in entities]
+    if not entity_ids:
+        return {"nodes": [], "edges": []}
+
+    # Récupérer les relations chunk-entité + note associée, filtrées par utilisateur
+    stmt = (
+        select(
+            ChunkEntityRelation,
+            NoteChunk,
+            KnowledgeEntity,
+            Note,
+        )
+        .join(NoteChunk, NoteChunk.id == ChunkEntityRelation.chunk_id)
+        .join(KnowledgeEntity, KnowledgeEntity.id == ChunkEntityRelation.entity_id)
+        .join(Note, Note.id == NoteChunk.note_id)
+        .where(
+            ChunkEntityRelation.project_id == project_id,
+            Note.user_id == user_id,
+            ChunkEntityRelation.entity_id.in_(entity_ids),
+        )
+        .order_by(ChunkEntityRelation.relevance_score.desc())
+        .limit(max_relations)
+    )
+
+    rows = session.exec(stmt).all()
+    if not rows:
+        return {"nodes": [], "edges": []}
+
+    nodes: Dict[str, Dict] = {}
+    edges: List[Dict] = []
+
+    def add_entity_node(entity: KnowledgeEntity) -> str:
+        node_id = f"entity-{entity.id}"
+        if node_id not in nodes:
+            nodes[node_id] = {
+                "id": node_id,
+                "kind": "entity",
+                "entity_id": entity.id,
+                "label": entity.name,
+                "entity_type": entity.entity_type,
+                "mention_count": entity.mention_count,
+            }
+        return node_id
+
+    def add_chunk_node(chunk: NoteChunk, note: Note) -> str:
+        node_id = f"chunk-{chunk.id}"
+        if node_id not in nodes:
+            title = note.title or f"Note {note.id}"
+            label = title
+            # Prévisualisation courte du contenu du chunk pour l'UI
+            preview = (chunk.content or "").strip()
+            if preview:
+                # On tronque pour éviter un payload trop lourd
+                max_len = 320
+                if len(preview) > max_len:
+                    cut = preview[:max_len]
+                    # Couper proprement sur un espace si possible
+                    last_space = cut.rfind(" ")
+                    if last_space > 40:
+                        cut = cut[:last_space]
+                    preview = cut + "…"
+            nodes[node_id] = {
+                "id": node_id,
+                "kind": "chunk",
+                "chunk_id": chunk.id,
+                "note_id": note.id,
+                "note_title": title,
+                "label": label,
+                "chunk_index": chunk.chunk_index,
+                # On garde seulement un extrait court pour l'UI
+                "preview": preview or None,
+            }
+        return node_id
+
+    for rel, chunk, entity, note in rows:
+        entity_node_id = add_entity_node(entity)
+        chunk_node_id = add_chunk_node(chunk, note)
+
+        edges.append(
+            {
+                "id": f"rel-{rel.id}",
+                "from": entity_node_id,
+                "to": chunk_node_id,
+                "relevance": rel.relevance_score,
+            }
+        )
+
+    return {
+        "nodes": list(nodes.values()),
+        "edges": edges,
+    }

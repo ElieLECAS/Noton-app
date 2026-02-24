@@ -18,6 +18,19 @@
             [x-cloak] {
                 display: none !important;
             }
+            /* UI moderne : sidebar et navigation */
+            #sidebar nav a {
+                border-radius: 0.625rem;
+            }
+            #sidebar nav a:hover {
+                background: rgba(0, 0, 0, 0.04);
+            }
+            .dark #sidebar nav a:hover {
+                background: rgba(255, 255, 255, 0.06);
+            }
+            #sidebar .text-xs.uppercase {
+                letter-spacing: 0.05em;
+            }
         </style>
         {% block extra_head %}{% endblock %}
     </head>
