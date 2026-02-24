@@ -14,7 +14,10 @@ from app.models.knowledge_entity import KnowledgeEntity
 from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.note_chunk import NoteChunk
 from app.models.note import Note
-from app.services.kag_extraction_service import normalize_entity_name
+from app.services.kag_extraction_service import (
+    normalize_entity_name,
+    SUPPORTED_ENTITY_TYPE_IDS,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -165,6 +168,30 @@ def delete_entities_for_project(session: Session, project_id: int) -> Dict[str, 
         relations_deleted,
     )
     return {"entities_deleted": entities_deleted, "relations_deleted": relations_deleted}
+
+
+def rebuild_kag_for_project(session: Session, project_id: int) -> Dict[str, int]:
+    """
+    Purge et reconstruit le graphe KAG pour un projet donné.
+
+    - Supprime toutes les entités et relations existantes du projet
+    - Recrée les chunks + embeddings + entités KAG pour toutes les notes du projet
+    """
+    from app.models.note import Note
+    from app.services.chunk_service import reindex_notes
+
+    # Purge complète des entités / relations KAG
+    deletion_stats = delete_entities_for_project(session, project_id)
+
+    # Réindexer toutes les notes du projet ; le pipeline de chunking ré‑utilise
+    # la configuration actuelle (nouvelle taxonomie KAG)
+    reindexed_notes_count = reindex_notes(session, project_id=project_id)
+
+    return {
+        "entities_deleted": deletion_stats.get("entities_deleted", 0),
+        "relations_deleted": deletion_stats.get("relations_deleted", 0),
+        "notes_reindexed": reindexed_notes_count,
+    }
 
 
 def get_chunks_by_entity_names(
@@ -328,8 +355,8 @@ def get_kag_stats(session: Session, project_id: int) -> Dict:
         )
     ).one()
     
-    type_counts = {}
-    for entity_type in ["equipement", "procedure", "parametre", "composant", "reference", "lieu"]:
+    type_counts: Dict[str, int] = {}
+    for entity_type in SUPPORTED_ENTITY_TYPE_IDS:
         count = session.exec(
             select(func.count(KnowledgeEntity.id)).where(
                 KnowledgeEntity.project_id == project_id,

@@ -7,7 +7,11 @@ from app.database import get_session
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.services.project_service import get_project_by_id
-from app.services.kag_graph_service import get_kag_stats, get_project_bipartite_graph
+from app.services.kag_graph_service import (
+    get_kag_stats,
+    get_project_bipartite_graph,
+    rebuild_kag_for_project,
+)
 
 
 router = APIRouter(prefix="/api/kag", tags=["kag"])
@@ -54,4 +58,20 @@ async def get_project_kag_graph(
         project_id=project_id,
         user_id=current_user.id,
     )
+
+
+@router.post("/projects/{project_id}/rebuild", response_model=Dict)
+async def rebuild_project_kag(
+    project_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """
+    Purge et reconstruit le graphe KAG pour toutes les notes d'un projet.
+
+    Endpoint réservé à un usage admin / maintenance (opération potentiellement coûteuse).
+    """
+    _ensure_project_access(session, project_id, current_user)
+    stats = rebuild_kag_for_project(session, project_id)
+    return stats
 

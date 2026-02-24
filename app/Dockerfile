@@ -41,9 +41,11 @@ RUN pip install --no-cache-dir "docling==2.8.3"
 RUN pip install --no-cache-dir \
     "llama-index-core==0.14.14"
 
-# Étape 6a: llama-index-readers-docling avec --no-deps (docling/docling-core déjà installés)
+# Étape 6a: Extensions Docling pour LlamaIndex avec --no-deps (docling/docling-core déjà installés)
 # Évite le backtracking car pip ne résout plus docling-core
-RUN pip install --no-cache-dir --no-deps "llama-index-readers-docling==0.4.2"
+RUN pip install --no-cache-dir --no-deps \
+    "llama-index-readers-docling==0.4.2" \
+    "llama-index-node-parser-docling==0.4.2"
 
 # Étape 6b: Autres extensions LlamaIndex (sans docling dans le lot)
 RUN pip install --no-cache-dir \

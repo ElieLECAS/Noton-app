@@ -15,7 +15,143 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-ENTITY_TYPES = ["equipement", "procedure", "parametre", "composant", "reference", "lieu"]
+# Nouvelle taxonomie métier des entités KAG.
+# Chaque type a :
+# - id        : valeur technique utilisée dans le champ "entity_type" (DB) et "type" (JSON LLM)
+# - label     : label métier lisible (reprend le tableau fourni)
+# - description : portée de ce que l'IA doit capturer
+# - examples  : quelques exemples clés pour guider le LLM
+ENTITY_TYPES_CONFIG: List[Dict[str, object]] = [
+    {
+        "id": "gamme_systeme",
+        "label": "GAMME_SYSTEME",
+        "description": "Noms commerciaux et systèmes de profils profine/Kömmerling.",
+        "examples": [
+            "76 Advanced",
+            "InnoSlide",
+            "Trocal",
+            "KBE",
+            "Hybride",
+            "Luméal",
+        ],
+    },
+    {
+        "id": "profil_code",
+        "label": "PROFIL_CODE",
+        "description": "Pièces de structure, traverses et leurs numéros techniques.",
+        "examples": [
+            "Dormant 76171",
+            "Ouvrant 76274",
+            "Meneau",
+            "AluClip",
+            "Parclose",
+        ],
+    },
+    {
+        "id": "concept_technique",
+        "label": "CONCEPT_TECHNIQUE",
+        "description": "Procédés spécifiques de fabrication et d'assemblage en usine.",
+        "examples": [
+            "Soudure grain d'ange",
+            "Ébavurage",
+            "Sertissage",
+            "Décompression",
+        ],
+    },
+    {
+        "id": "regle_pose",
+        "label": "REGLE_POSE",
+        "description": "Instructions d'installation et méthodes de mise en œuvre.",
+        "examples": [
+            "Applique",
+            "Tunnel",
+            "Calfeutrement",
+            "Fond de joint",
+            "Fixation",
+        ],
+    },
+    {
+        "id": "performance_test",
+        "label": "PERFORMANCE_TEST",
+        "description": "Valeurs certifiées, unités de mesure et résultats de tests.",
+        "examples": [
+            "Uw 1.2",
+            "A*4 E*9A V*4 3",
+            "dB (acoustique)",
+            "Essai de rupture",
+        ],
+    },
+    {
+        "id": "pathologie_desordre",
+        "label": "PATHOLOGIE_DESORDRE",
+        "description": "Problèmes techniques, sinistres et défauts (CSTB/AQC).",
+        "examples": [
+            "Condensation",
+            "Défaut d'étanchéité",
+            "Déformation",
+            "Corrosion",
+        ],
+    },
+    {
+        "id": "composant_acc",
+        "label": "COMPOSANT_ACC",
+        "description": "Quincaillerie, joints, renforts acier et petits accessoires.",
+        "examples": [
+            "Roto",
+            "SoftClose",
+            "Joint central",
+            "Renfort 194",
+            "Crémone",
+        ],
+    },
+    {
+        "id": "norme_doc",
+        "label": "NORME_DOC",
+        "description": "Références réglementaires, lois et labels de qualité.",
+        "examples": [
+            "DTU 36.5",
+            "DTA 6/16-2334",
+            "NF",
+            "CEKAL",
+            "Avis Technique",
+        ],
+    },
+    {
+        "id": "materiau_finition",
+        "label": "MATERIAU_FINTION",
+        "description": "Nature des profils (PVC/Alu) et leur aspect visuel.",
+        "examples": [
+            "PVC Greenline",
+            "Alu bas carbone",
+            "Plaxé Gris T016",
+            "Laqué",
+        ],
+    },
+    {
+        "id": "garantie_duree",
+        "label": "GARANTIE_DUREE",
+        "description": "Temps de couverture spécifique par type de composant.",
+        "examples": [
+            "15 ans (structure)",
+            "5 ans (plaxage)",
+            "7 ans (laquage)",
+        ],
+    },
+]
+
+SUPPORTED_ENTITY_TYPE_IDS = [t["id"] for t in ENTITY_TYPES_CONFIG]
+
+CRITICAL_ENTITY_TYPES = {
+    "garantie_duree",
+    "performance_test",
+    "norme_doc",
+}
+
+ENTITY_TYPES_PROMPT_BLOCK = "\n".join(
+    f"- {t['id']}: {t['description']} Exemples: {', '.join(t['examples'])}."
+    for t in ENTITY_TYPES_CONFIG
+)
+
 
 PARENT_SUMMARY_PROMPT_TEMPLATE = """Analyse ce passage de document technique et retourne UNIQUEMENT un JSON valide sans markdown.
 
@@ -33,14 +169,18 @@ Passage:
 
 JSON:"""
 
+
 EXTRACTION_PROMPT_TEMPLATE = """Extrais les entités techniques de ce texte.
-Types possibles: {entity_types}
+
+Types possibles pour le champ "type" du JSON (liste exhaustive) :
+{entity_types}
 
 Règles:
 - Retourne UNIQUEMENT un JSON valide, sans markdown ni commentaires
 - Maximum 10 entités par chunk
 - Importance entre 0.0 et 1.0 (1.0 = très important)
 - Noms courts et précis (pas de phrases)
+- Utilise EXACTEMENT l'une des valeurs suivantes pour le champ "type" : {entity_types}
 
 Format attendu:
 [{{"name": "nom_entité", "type": "type", "importance": 0.8}}]
@@ -108,23 +248,24 @@ def _parse_llm_response(response_text: str) -> List[Dict]:
         for e in entities:
             if not isinstance(e, dict):
                 continue
-            name = e.get("name", "").strip()
-            entity_type = e.get("type", "").strip().lower()
+            name = str(e.get("name", "")).strip()
+            raw_type = str(e.get("type", "")).strip().lower()
             importance = e.get("importance", 1.0)
             
             if not name or len(name) < 2:
                 continue
-            if entity_type not in ENTITY_TYPES:
-                entity_type = "composant"
+            if not raw_type or raw_type not in SUPPORTED_ENTITY_TYPE_IDS:
+                # On ignore les entités dont le type n'est pas dans la nouvelle taxonomie
+                continue
             if not isinstance(importance, (int, float)):
                 importance = 1.0
             importance = max(0.0, min(1.0, float(importance)))
-            if entity_type == "reference":
+            if raw_type in CRITICAL_ENTITY_TYPES:
                 importance = 1.0
             
             valid_entities.append({
                 "name": name,
-                "type": entity_type,
+                "type": raw_type,
                 "importance": importance,
             })
         
@@ -277,7 +418,7 @@ async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
     
     content_truncated = chunk_content[:2000]
     prompt = EXTRACTION_PROMPT_TEMPLATE.format(
-        entity_types=", ".join(ENTITY_TYPES),
+        entity_types=", ".join(SUPPORTED_ENTITY_TYPE_IDS),
         chunk_content=content_truncated,
     )
     
