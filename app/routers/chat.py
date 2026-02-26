@@ -13,6 +13,10 @@ from app.services.openai_service import (
     chat_stream as openai_chat_stream,
     generate_image as openai_generate_image,
 )
+from app.services.mistral_service import (
+    chat as mistral_chat,
+    chat_stream as mistral_chat_stream,
+)
 from app.config import settings
 from app.services.semantic_search_service import search_relevant_notes, search_relevant_passages
 from app.services.chat_tools import get_available_tools
@@ -36,7 +40,7 @@ router = APIRouter(prefix="/api", tags=["chat"])
 class ChatRequest(BaseModel):
     message: str
     model: str
-    provider: str = "ollama"  # "ollama" ou "openai"
+    provider: str = "ollama"  # "ollama", "openai" ou "mistral"
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None  # ID de la conversation (optionnel pour compatibilité)
     agent_id: Optional[int] = None  # ID de l'agent (optionnel)
@@ -74,7 +78,9 @@ async def list_all_models():
     
     return {
         "ollama": ollama_models,
-        "openai": openai_models
+        "openai": openai_models,
+        # Les modèles Mistral sont généralement configurés côté client via les presets/env,
+        # on ne récupère donc pas dynamiquement la liste ici.
     }
 
 
@@ -91,6 +97,14 @@ async def send_chat_message(
                 raise HTTPException(status_code=400, detail="OpenAI API key n'est pas configurée")
             response = await openai_chat(request.message, request.model, request.context, tools=tools or None)
             # OpenAI retourne {"choices": [{"message": {"content": "..."}}]}
+            if "choices" in response and len(response["choices"]) > 0:
+                content = response["choices"][0]["message"].get("content", "")
+                return {"message": {"content": content}}
+            return response
+        elif request.provider == "mistral":
+            if not settings.MISTRAL_API_KEY:
+                raise HTTPException(status_code=400, detail="Mistral API key n'est pas configurée")
+            response = await mistral_chat(request.message, request.model, request.context, tools=tools or None)
             if "choices" in response and len(response["choices"]) > 0:
                 content = response["choices"][0]["message"].get("content", "")
                 return {"message": {"content": content}}
@@ -166,6 +180,13 @@ async def stream_chat_message(
                     content = ""
                     if "choices" in response and response["choices"]:
                         content = (response["choices"][0].get("message") or {}).get("content") or ""
+                elif request.provider == "mistral":
+                    if not settings.MISTRAL_API_KEY:
+                        error_msg = "Mistral API key n'est pas configurée"
+                        yield f"data: {json.dumps({'error': error_msg})}\n\n"
+                        return
+                    response = await mistral_chat("", request.model, full_messages, tools=tools)
+                    content = (response.get("choices") or [{}])[0].get("message", {}).get("content") or ""
                 else:
                     response = await ollama_chat("", request.model, full_messages, tools=tools)
                     content = (response.get("message") or {}).get("content") or ""
@@ -191,6 +212,21 @@ async def stream_chat_message(
                             except Exception:
                                 pass
                             yield f"data: {line}\n\n"
+                elif request.provider == "mistral":
+                    if not settings.MISTRAL_API_KEY:
+                        error_msg = "Mistral API key n'est pas configurée"
+                        yield f"data: {json.dumps({'error': error_msg})}\n\n"
+                        return
+                    # Pas d'API streaming dédiée utilisée ici : on simule le stream à partir de la réponse complète
+                    response = await mistral_chat(request.message, request.model, full_context)
+                    content = ""
+                    if "choices" in response and response["choices"]:
+                        content = (response["choices"][0].get("message") or {}).get("content") or ""
+                    chunk_size = 25
+                    for i in range(0, len(content), chunk_size):
+                        chunk = content[i : i + chunk_size]
+                        assistant_response.append(chunk)
+                        yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
                 else:
                     async for line in ollama_chat_stream(request.message, request.model, full_context):
                         if line.strip():
@@ -317,34 +353,18 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
     system_message = {
         "role": "system",
         "content": (
-            """Tu es l'Expert Technico-Commercial PROFERM. Ton rôle est d'aider les clients, artisans et poseurs en analysant la documentation technique avec une précision absolue. Tu es rigoureux, professionnel et tu ne parles qu'au nom de la marque PROFERM.
-
-RÈGLES DE CONVERSATION ET PERSONA :
-- Pour les salutations (bonjour, etc.), réponds de manière brève et professionnelle. 
-- Si la question est générale (non technique), réponds naturellement sans mentionner de passages.
-- INTERDICTION DE CITER LA CONCURRENCE : Ne mentionne jamais de marques tierces (Schüco, Technal, Reynaers, etc.) sauf si elles sont explicitement citées comme partenaires dans les passages fournis.
-- NE JAMAIS INVENTER : Si une information (Uw, prix, cote, garantie) n'est pas dans les passages fournis, réponds : "Désolé, cette information n'est pas précisée dans la documentation technique mise à ma disposition."
-
-HIÉRARCHIE DES SOURCES (CRITIQUE) :
-- PRIORITÉ PRODUIT : Si une information est mentionnée dans un document dédié , elle écrase systématiquement l'information générale du "Catalogue" ou du "Dépliant Général".
-- CONTRADICTIONS : En cas de valeurs divergentes, la source dont le titre contient le nom spécifique de la gamme est la seule vérité.
-
-PRÉCISION TECHNIQUE ET DONNÉES :
-- TABLEAUX : Toute donnée chiffrée (performances AEV, Uw, Sw, dimensions max) doit être présentée sous forme de tableau Markdown.
-- LECTURE DES TABLEAUX : Vérifie scrupuleusement les en-têtes. Ne confonds pas les valeurs (ex: ne pas confondre le Uw d'un double vitrage avec celui d'un triple).
-- GARANTIES : Sois extrêmement précis sur les durées. Vérifie toujours si une finition (ex: plaxage) réduit la durée de garantie par rapport à la structure (ex: 5 ans vs 15 ans).
-
-FORMAT DE RÉPONSE :
-1. Faisabilité : Réponds d'abord si la demande est conforme aux limites techniques (ex: dimensions max).
-2. Détails Techniques : Présente les performances dans un tableau.
-3. Justification : Utilise des termes techniques précis (sertissage, grain d'ange, rupture de pont thermique).
-4. Citations : Ajoute le numéro de la source [1] à la fin de chaque affirmation importante.
-
-CITATIONS :
-- Cite les passages utilisés avec [1], [2], etc.
-- Réponds impérativement au format Markdown en utilisant des titres de niveau 2 pour les sections et des titres de niveau 3 pour les sous-sections.
-- Ne cite pas de passages pour les salutations ou les conclusions de politesse."""
-        )
+            "Tu es l'Expert Technico-Commercial PROFERM. Tu analyses la documentation technique pour répondre "
+            "avec précision, sans jamais inventer d'informations. Si une donnée (Uw, prix, cote, garantie, etc.) "
+            "n'apparaît pas dans les passages fournis, réponds simplement que la documentation mise à disposition "
+            "ne la précise pas.\n\n"
+            "Règles principales :\n"
+            "- Reste bref pour les salutations et poli dans le ton.\n"
+            "- Ne mentionne pas de marques concurrentes sauf si elles sont clairement citées comme partenaires.\n"
+            "- En cas de contradiction entre documents, privilégie toujours la source la plus spécifique à la gamme.\n\n"
+            "Format de réponse :\n"
+            "- Présente les valeurs techniques importantes (performances, dimensions max, etc.) sous forme de tableau Markdown.\n"
+            "- Utilise des citations [1], [2], etc. pour relier tes affirmations aux passages fournis, mais pas pour les salutations."
+        ),
     }
     
     passages_content = []
@@ -389,19 +409,18 @@ def build_semantic_context(note_results: List[dict]) -> List[dict]:
     """Construire le contexte enrichi avec les notes pertinentes trouvées par recherche sémantique RAG"""
     system_message = {
         "role": "system",
-        "content": 
-        """Tu es l'Expert Technique PROFERM. Ton rôle est d'analyser les notes du projet pour fournir "
-            "des réponses précises, fiables et conformes aux standards de fabrication PROFERM.\n\n"
-            
-            "DIRECTIVES DE RÉPONSE :\n"
-            "- BASE DOCUMENTAIRE : Réponds exclusivement en utilisant les notes fournies ci-dessous.\n"
-            "- PRIORITÉ DE SOURCE : Si une note provient d'un dépliant spécifique (ex: INNOSLIDE, LUMÉAL), "
-            "ses informations prévalent sur toute note générale ou catalogue.\n"
-            "- RIGUEUR : Ne devine pas de données techniques. Si une information manque (ex: Uw exact, garantie spécifique), "
-            "indique que la documentation fournie ne le précise pas.\n"
-            "- FORMAT : Utilise le Markdown pour la clarté (tableaux pour les chiffres, gras pour les points clés).\n"
-            "- CITATIONS : Cite systématiquement le titre de la note utilisée pour chaque argument technique.\n\n"
-            "NOTES PERTINENTES DU PROJET (RAG) :"""
+        "content": (
+            "Tu es l'Expert Technique PROFERM. Tu réponds uniquement à partir des notes fournies ci-dessous et "
+            "tu restes fidèle aux standards de fabrication PROFERM.\n\n"
+            "Directives principales :\n"
+            "- Base documentaire : n'utilise que les informations présentes dans ces notes.\n"
+            "- Priorité de source : un dépliant ou document spécifique à une gamme prime toujours sur un document général.\n"
+            "- Rigueur : si une donnée technique manque (Uw exact, garantie spécifique, etc.), indique clairement "
+            "que la documentation fournie ne le précise pas.\n"
+            "- Format : utilise le Markdown (tableaux pour les chiffres, gras pour les points clés) et cite le titre "
+            "de la note à laquelle tu te réfères."
+            "\n\nNOTES PERTINENTES DU PROJET (RAG) :"
+        ),
     }
     
     notes_content = []
@@ -503,9 +522,24 @@ async def stream_project_chat_message(
                             data = json.loads(line)
                             if "message" in data and "content" in data["message"]:
                                 assistant_response.append(data["message"]["content"])
-                        except:
+                        except Exception:
                             pass
                         yield f"data: {line}\n\n"
+            elif request.provider == "mistral":
+                if not settings.MISTRAL_API_KEY:
+                    error_msg = "Mistral API key n'est pas configurée"
+                    yield f"data: {json.dumps({'error': error_msg})}\n\n"
+                    return
+                # Pas d'API streaming dédiée utilisée ici : on simule le stream à partir de la réponse complète
+                response = await mistral_chat("", request.model, full_context)
+                content = ""
+                if "choices" in response and response["choices"]:
+                    content = (response["choices"][0].get("message") or {}).get("content") or ""
+                chunk_size = 25
+                for i in range(0, len(content), chunk_size):
+                    chunk = content[i : i + chunk_size]
+                    assistant_response.append(chunk)
+                    yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
             else:  # ollama par défaut
                 # Passer None comme message car il est déjà dans le contexte
                 async for line in ollama_chat_stream("", request.model, full_context):
@@ -515,7 +549,7 @@ async def stream_project_chat_message(
                             data = json.loads(line)
                             if "message" in data and "content" in data["message"]:
                                 assistant_response.append(data["message"]["content"])
-                        except:
+                        except Exception:
                             pass
                         yield f"data: {line}\n\n"
             

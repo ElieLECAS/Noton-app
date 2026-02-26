@@ -49,6 +49,9 @@ async def chat(
                 "model": model,
                 "messages": messages,
                 "stream": False,
+                "options": {
+                    "num_predict": settings.MAX_COMPLETION_TOKENS,
+                },
             }
             if tools:
                 payload["tools"] = tools
@@ -97,7 +100,10 @@ async def chat_stream(message: str, model: str, context: Optional[List[Dict]] = 
         payload = {
             "model": model,
             "messages": context or [{"role": "user", "content": message}],
-            "stream": True
+            "stream": True,
+            "options": {
+                "num_predict": settings.MAX_COMPLETION_TOKENS,
+            },
         }
         
         async with httpx.AsyncClient(timeout=60.0) as client:

@@ -8,6 +8,7 @@ from app.models.agent import Agent
 from app.models.agent_task import AgentTask
 from app.services.ollama_service import chat as ollama_chat
 from app.services.openai_service import chat as openai_chat
+from app.services.mistral_service import chat as mistral_chat
 from app.config import settings, get_model_for_preset
 import logging
 from datetime import datetime
@@ -84,6 +85,22 @@ async def run_task(state: AgentState) -> AgentState:
                 else:
                     output = "Erreur : réponse OpenAI vide"
                     logger.warning(f"Réponse OpenAI sans choices ou vide: {response}")
+        elif provider == "mistral":
+            if not settings.MISTRAL_API_KEY:
+                output = "Erreur : MISTRAL_API_KEY non configurée. Configurez-la pour utiliser le modèle prédéfini (Mistral)."
+                logger.error(f"MISTRAL_API_KEY manquante pour task {state['task_id']}")
+            else:
+                model_mistral = model or "mistral-small-latest"
+                logger.info(f"Appel Mistral avec modèle: {model_mistral!r}")
+                logger.info(f"Context: {len(context)} messages")
+                response = await mistral_chat("", model_mistral, context)
+                logger.info(f"Réponse Mistral reçue: {response.keys() if isinstance(response, dict) else type(response)}")
+                if "choices" in response and len(response["choices"]) > 0:
+                    output = response["choices"][0]["message"].get("content") or ""
+                    logger.info(f"Content extrait: {len(output)} caractères")
+                else:
+                    output = "Erreur : réponse Mistral vide"
+                    logger.warning(f"Réponse Mistral sans choices ou vide: {response}")
         else:
             # Ollama uniquement quand le provider prédéfini est ollama
             model_ollama = model or settings.MODEL_FAST_NAME or "llama3.2:1b"

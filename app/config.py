@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     # Ollama
     OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL")
     
+    # Mistral
+    MISTRAL_API_KEY: Optional[str] = None
+    MISTRAL_BASE_URL: str = os.getenv("MISTRAL_BASE_URL", "https://api.mistral.ai")
+    
     # OpenAI
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: Optional[List[str]] = None
@@ -32,6 +36,8 @@ class Settings(BaseSettings):
     MODEL_FAST_NAME: str = os.getenv("MODEL_FAST_NAME")
     MODEL_POWERFUL_PROVIDER: str = os.getenv("MODEL_POWERFUL_PROVIDER")
     MODEL_POWERFUL_NAME: str = os.getenv("MODEL_POWERFUL_NAME")
+    # Limite globale par défaut pour la longueur des réponses des LLM
+    MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "512"))
     
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True

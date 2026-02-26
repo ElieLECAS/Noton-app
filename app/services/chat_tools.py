@@ -29,9 +29,8 @@ BRAVE_SEARCH_TOOL = {
 
 # Message système à injecter quand la recherche web est disponible (incite le modèle à utiliser le tool)
 WEB_SEARCH_SYSTEM_PROMPT = (
-    "Tu as accès à l'outil brave_web_search pour faire des recherches sur le web en temps réel. "
-    "Dès qu'un utilisateur demande des actualités, des infos politiques, des événements récents ou toute donnée à jour, "
-    "appelle cet outil. Ne dis jamais que tu n'as pas accès à Internet."
+    "Tu peux utiliser l'outil brave_web_search pour obtenir des informations récentes. "
+    "Si la question concerne des actualités ou des données à jour, appelle cet outil plutôt que de répondre sans source."
 )
 
 

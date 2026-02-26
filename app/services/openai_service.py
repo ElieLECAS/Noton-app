@@ -70,6 +70,7 @@ async def chat(
                 "model": model,
                 "messages": messages,
                 "stream": False,
+                "max_tokens": settings.MAX_COMPLETION_TOKENS,
             }
             if tools:
                 payload["tools"] = tools
@@ -131,7 +132,8 @@ async def chat_stream(message: str, model: str, context: Optional[List[Dict]] = 
         payload = {
             "model": model,
             "messages": messages,
-            "stream": True
+            "stream": True,
+            "max_tokens": settings.MAX_COMPLETION_TOKENS,
         }
         
         async with httpx.AsyncClient(timeout=120.0) as client:
