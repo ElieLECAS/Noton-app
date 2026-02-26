@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     MODEL_POWERFUL_PROVIDER: str = os.getenv("MODEL_POWERFUL_PROVIDER")
     MODEL_POWERFUL_NAME: str = os.getenv("MODEL_POWERFUL_NAME")
     # Limite globale par défaut pour la longueur des réponses des LLM
-    MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "512"))
+    MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
     
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
@@ -63,8 +63,8 @@ class Settings(BaseSettings):
     
     # KAG - Knowledge Augmented Generation
     KAG_ENABLED: bool = True
-    KAG_EXTRACTION_PROVIDER: str = "openai"  # "openai" ou "ollama"
-    KAG_EXTRACTION_MODEL: str = "gpt-5-nano-2025-08-07"
+    KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai" ou "ollama"
+    KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
     
     # Multimodal - Désactivé par défaut (images extraites et stockées par Docling, pas de Vision ni chunks image)

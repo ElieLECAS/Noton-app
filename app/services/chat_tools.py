@@ -3,23 +3,21 @@ import json
 from typing import List, Dict, Any, Optional
 from app.services.brave_search_service import brave_web_search
 
-# Définition du tool Brave Search (format OpenAI/Ollama)
+# Définition du tool Brave Search (format OpenAI/Ollama) — description courte pour limiter les tokens
 BRAVE_SEARCH_TOOL = {
     "type": "function",
     "function": {
         "name": "brave_web_search",
         "description": (
-            "Effectue une recherche web en temps réel pour obtenir des informations à jour. "
-            "Tu DOIS appeler cette fonction dès que l'utilisateur demande : actualités, infos politiques, événements récents, "
-            "données récentes, ou toute information qui nécessite des sources en ligne. "
-            "Ne dis jamais que tu n'as pas accès à Internet : utilise cette fonction à la place."
+            "Recherche web à jour. À appeler pour : actualités, événements récents, données récentes. "
+            "Ne jamais dire que tu n'as pas accès à Internet ; utiliser cette fonction."
         ),
         "parameters": {
             "type": "object",
             "properties": {
                 "query": {
                     "type": "string",
-                    "description": "Requête de recherche (mots-clés en français ou anglais, ex: actualités politique février 2026)",
+                    "description": "Mots-clés (fr/en), ex: actualités février 2026",
                 }
             },
             "required": ["query"],
@@ -27,10 +25,9 @@ BRAVE_SEARCH_TOOL = {
     },
 }
 
-# Message système à injecter quand la recherche web est disponible (incite le modèle à utiliser le tool)
+# Message système court quand la recherche web est disponible
 WEB_SEARCH_SYSTEM_PROMPT = (
-    "Tu peux utiliser l'outil brave_web_search pour obtenir des informations récentes. "
-    "Si la question concerne des actualités ou des données à jour, appelle cet outil plutôt que de répondre sans source."
+    "Utilise brave_web_search pour les actualités ou données à jour."
 )
 
 

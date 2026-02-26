@@ -32,7 +32,7 @@ import os
 logger = logging.getLogger(__name__)
 
 # Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K)
-RAG_TOP_K = int(os.getenv("RAG_TOP_K", "15"))
+RAG_TOP_K = int(os.getenv("RAG_TOP_K", "5"))
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
@@ -350,29 +350,21 @@ class ProjectChatRequest(BaseModel):
 
 def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
     """Construire le contexte enrichi avec les passages pertinents trouvés par recherche sémantique"""
+    # Préprompt court pour limiter les input tokens
     system_message = {
         "role": "system",
         "content": (
-            "Tu es l'Expert Technico-Commercial PROFERM. Tu analyses la documentation technique pour répondre "
-            "avec précision, sans jamais inventer d'informations. Si une donnée (Uw, prix, cote, garantie, etc.) "
-            "n'apparaît pas dans les passages fournis, réponds simplement que la documentation mise à disposition "
-            "ne la précise pas.\n\n"
-            "Règles principales :\n"
-            "- Reste bref pour les salutations et poli dans le ton.\n"
-            "- Ne mentionne pas de marques concurrentes sauf si elles sont clairement citées comme partenaires.\n"
-            "- En cas de contradiction entre documents, privilégie toujours la source la plus spécifique à la gamme.\n\n"
-            "Format de réponse :\n"
-            "- Présente les valeurs techniques importantes (performances, dimensions max, etc.) sous forme de tableau Markdown.\n"
-            "- Utilise des citations [1], [2], etc. pour relier tes affirmations aux passages fournis, mais pas pour les salutations."
+            "Expert Technico-Commercial PROFERM. Réponds uniquement à partir des passages ci-dessous. "
+            "Donnée absente (Uw, prix, garantie…) → indique que la doc ne le précise pas. "
+            "Règles : bref et poli ; pas de marques concurrentes sauf si citées ; contradiction → source la plus spécifique. "
+            "Format : tableaux Markdown pour valeurs techniques ; citations [1], [2] pour les affirmations (pas en salutations)."
         ),
     }
     
     passages_content = []
     
     if passages:
-        system_message["content"] += (
-            "PASSAGES DISPONIBLES DU PROJET (à utiliser uniquement si pertinents pour répondre à la question) :\n\n"
-        )
+        system_message["content"] += "\n\nPASSAGES :\n\n"
         
         for i, passage_data in enumerate(passages, 1):
             passage = passage_data['passage']
@@ -388,38 +380,29 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
                 image_url = f"/api/images/{passage_data['note_id']}/{passage_data['image_filename']}"
                 caption = passage_data.get('caption', '') or 'Image du document'
                 passage_text = (
-                    f"[Passage {i}] (Pertinence: {score:.2f}) [IMAGE DISPONIBLE]\n"
-                    f"Source: {note_title}\n"
-                    f"{passage}\n"
-                    f">>> INCLURE CETTE IMAGE DANS TA RÉPONSE : ![{caption}]({image_url}) [citation: {i}]\n"
+                    f"[{i}] ({score:.2f}) [IMAGE]\n{note_title}\n{passage}\n"
+                    f">>> Image : ![{caption}]({image_url}) [{i}]\n"
                 )
             else:
-                passage_text = f"[Passage {i}] (Pertinence: {score:.2f})\n{passage}\n"
+                passage_text = f"[{i}] ({score:.2f}) {note_title}\n{passage}\n"
             passages_content.append(passage_text)
         
         system_message["content"] += "\n---\n".join(passages_content)
-        system_message["content"] += (
-            f"\n\n(Note : {len(passages)} passages disponibles. Utilise-les uniquement si nécessaire pour répondre à la question.)"
-        )
+        system_message["content"] += f"\n\n({len(passages)} passages.)"
     
     return [system_message]
 
 
 def build_semantic_context(note_results: List[dict]) -> List[dict]:
     """Construire le contexte enrichi avec les notes pertinentes trouvées par recherche sémantique RAG"""
+    # Préprompt court pour limiter les input tokens
     system_message = {
         "role": "system",
         "content": (
-            "Tu es l'Expert Technique PROFERM. Tu réponds uniquement à partir des notes fournies ci-dessous et "
-            "tu restes fidèle aux standards de fabrication PROFERM.\n\n"
-            "Directives principales :\n"
-            "- Base documentaire : n'utilise que les informations présentes dans ces notes.\n"
-            "- Priorité de source : un dépliant ou document spécifique à une gamme prime toujours sur un document général.\n"
-            "- Rigueur : si une donnée technique manque (Uw exact, garantie spécifique, etc.), indique clairement "
-            "que la documentation fournie ne le précise pas.\n"
-            "- Format : utilise le Markdown (tableaux pour les chiffres, gras pour les points clés) et cite le titre "
-            "de la note à laquelle tu te réfères."
-            "\n\nNOTES PERTINENTES DU PROJET (RAG) :"
+            "Expert Technique PROFERM. Réponds uniquement à partir des notes ci-dessous. "
+            "Infos absentes (Uw, garantie…) → doc ne le précise pas. "
+            "Contradiction → privilégie la source la plus spécifique. Markdown (tableaux, gras), cite le titre de la note.\n\n"
+            "NOTES :"
         ),
     }
     
@@ -429,19 +412,17 @@ def build_semantic_context(note_results: List[dict]) -> List[dict]:
         note = result['note']
         score = result.get('score', 0.0)
         
-        # Construire le contenu de la note
-        note_text = f"Note: {note.title}\n"
+        note_text = f"{note.title} ({score:.2f})\n"
         if note.content:
-            note_text += f"Contenu: {note.content}\n"
-        note_text += f"Pertinence: {score:.2f}\n"
+            note_text += f"{note.content}\n"
         note_text += "---\n"
         notes_content.append(note_text)
     
     if notes_content:
         system_message["content"] += "\n".join(notes_content)
-        system_message["content"] += f"\n\n(Note: {len(note_results)} note(s) pertinente(s) trouvée(s) sur la base de votre question)"
+        system_message["content"] += f"\n\n({len(note_results)} note(s))."
     else:
-        system_message["content"] += "Aucune note pertinente trouvée pour votre question."
+        system_message["content"] += "\nAucune note pertinente."
     
     return [system_message]
 
