@@ -1,7 +1,10 @@
 # Schéma de la base de données — Noton-app
 
+_Dernière mise à jour : 2026-03-17_
+
 Documentation table par table, colonne par colonne.  
-Base PostgreSQL avec extension **pgvector** pour les embeddings (dimension par défaut : **1024**, BGE-m3).
+Base PostgreSQL avec extension **pgvector** pour les embeddings (dimension par défaut : **1024**, BGE-m3).  
+Source de vérité : modèles SQLModel et migrations Alembic du projet.
 
 ---
 
@@ -52,7 +55,7 @@ Notes (écrites, vocales ou issues de documents) dans un projet.
 | `user_id`             | INTEGER            | FK → user.id    | Créateur |
 | `created_at`          | TIMESTAMP          | NOT NULL       | Date de création |
 | `updated_at`          | TIMESTAMP          | NOT NULL       | Dernière mise à jour |
-| `embedding`           | VECTOR(1024)      | NULL           | Embedding pgvector (recherche sémantique) |
+| `embedding`           | VECTOR(1024)      | NULL           | Embedding note globale (hérité/optionnel) |
 
 ---
 
@@ -227,3 +230,5 @@ Contrainte unique : `(chunk_id, entity_id)`.
 - **knowledgeentity** → chunkentityrelation  
 
 Les vecteurs (`embedding`) utilisent **pgvector** avec une dimension de **1024** (configurable via `EMBEDDING_DIMENSION`).
+
+Note : la recherche sémantique RAG s’appuie principalement sur `notechunk.embedding` (chunks), pas sur `note.embedding`.

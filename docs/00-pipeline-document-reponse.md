@@ -1,5 +1,7 @@
 # Pipeline document → réponse : vue d’ensemble
 
+_Dernière mise à jour : 2026-03-17_
+
 Ce document décrit le parcours complet d’un document, de son dépôt jusqu’à la réponse du chat, sans entrer dans le détail technique (aucun extrait de code). Chaque étape est détaillée dans un fichier dédié.
 
 ---
@@ -37,7 +39,7 @@ flowchart LR
 
 ---
 
-## Les cinq grandes étapes
+## Les quatre grandes étapes
 
 | Étape | Rôle | Document détaillé |
 |--------|------|-------------------|

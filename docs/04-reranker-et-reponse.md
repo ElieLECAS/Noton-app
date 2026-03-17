@@ -1,5 +1,7 @@
 # Étape 4 : Reranker et construction de la réponse
 
+_Dernière mise à jour : 2026-03-17_
+
 Après la fusion des candidats vectoriels et KAG, le flux applique un **filtrage**, un **reranking** optionnel, une **résolution des parents** pour enrichir le contexte, puis une **priorisation des sources**. Les passages obtenus sont formatés et envoyés au LLM comme contexte RAG pour produire la réponse finale.
 
 ---
@@ -121,7 +123,7 @@ Pour chaque nœud final (leaf ou parent), on construit un **passage** structuré
 - **Section et légende** : comme pour le reranker, le contenu est préfixé par la section et la légende si disponibles (parent_heading, figure_title).
 - **Contenu** : le texte du chunk (ou du parent substitué).
 
-Le passage contient aussi des métadonnées (note_id, chunk_id, score, page_no, section, etc.) utilisées côté applicatif (affichage des sources, liens). Les chunks purement image peuvent être exclus de la liste envoyée au LLM selon la configuration.
+Le passage contient aussi des métadonnées (note_id, chunk_id, score, page_no, section, etc.) utilisées côté applicatif (affichage des sources, liens). Les chunks purement image sont exclus du contexte final envoyé au LLM pour éviter le bruit textuel.
 
 ---
 

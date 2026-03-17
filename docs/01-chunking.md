@@ -1,5 +1,7 @@
 # Étape 1 : Chunking (découpage en blocs)
 
+_Dernière mise à jour : 2026-03-17_
+
 Le chunking transforme le contenu d’une note en une liste de **blocs** (chunks) avec une **hiérarchie** : des nœuds **parents** (sections) et des nœuds **leaves** (fragments). Cette structure est utilisée ensuite pour les embeddings, le graphe KAG et la résolution du contexte envoyé au LLM.
 
 ---

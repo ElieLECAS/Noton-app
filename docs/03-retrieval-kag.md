@@ -1,5 +1,7 @@
 # Étape 3 : Retrieval (recherche vectorielle et KAG)
 
+_Dernière mise à jour : 2026-03-17_
+
 La phase de retrieval a pour but de trouver les **passages** les plus pertinents pour une question utilisateur. Elle combine une **recherche vectorielle** sur les chunks leaves et un **enrichissement via le graphe KAG** (entités et relations), qui peut renvoyer à la fois des leaves et des parents. Les candidats sont ensuite fusionnés puis passés au reranker (étape 4).
 
 ---
@@ -63,8 +65,8 @@ En parallèle (ou juste après) la recherche vectorielle, le système enrichit l
 ### Extraction des entités de la requête
 
 - **Entrée** : texte de la requête utilisateur.
-- **Traitement** : le même type de modèle que pour l’extraction KAG (configurable) est utilisé pour identifier les **entités** ou termes importants dans la requête. Les noms sont normalisés comme côté indexation.
-- **Sortie** : liste de noms d’entités normalisés (ex. « pompe », « drainage », « perçage »). Cette liste sert de **pivot** pour interroger le graphe et, optionnellement, pour augmenter le score des candidats qui matchent une entité pivot.
+- **Traitement** : une extraction d’entités peut être faite via un modèle LLM (même logique de normalisation que côté indexation). En parallèle, des **termes significatifs** sont aussi extraits lexicalement depuis la requête.
+- **Sortie** : liste de noms normalisés (ex. « pompe », « drainage », « perçage »). Les termes servent au lookup graphe ; les entités LLM, quand disponibles, servent d’**entités pivot** pour renforcer certains candidats KAG.
 
 ### Lookup dans le graphe KAG
 

@@ -1,5 +1,7 @@
 # Étape 2 : Embedding et KAG
 
+_Dernière mise à jour : 2026-03-17_
+
 Après le chunking, chaque note est traitée par un worker en arrière-plan qui : (1) génère les **embeddings** pour les chunks **leaves** uniquement ; (2) lance l’**extraction KAG** sur les leaves puis l’**enrichissement des parents** (résumé + questions, puis entités). Les vecteurs et le graphe KAG alimentent ensuite la recherche et la réponse.
 
 ---
