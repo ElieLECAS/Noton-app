@@ -252,7 +252,8 @@ async def get_document_file(
 @router.post("/upload", response_model=List[DocumentRead], status_code=status.HTTP_201_CREATED)
 async def upload_documents(
     files: List[UploadFile] = File(...),
-    space_ids: str = Form(...),
+    space_ids: str = Form("[]"),
+    is_paid: bool = Form(False),
     folder_id: Optional[int] = Form(None),
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
@@ -272,8 +273,8 @@ async def upload_documents(
     
     try:
         space_ids_list = json.loads(space_ids)
-        if not isinstance(space_ids_list, list) or not space_ids_list:
-            raise ValueError("space_ids doit être un tableau non vide")
+        if not isinstance(space_ids_list, list):
+            raise ValueError("space_ids doit être un tableau")
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -316,6 +317,7 @@ async def upload_documents(
                 source_file_path=file_path,
                 processing_status="pending",
                 processing_progress=0,
+                is_paid=is_paid,
                 folder_id=folder_id
             )
             

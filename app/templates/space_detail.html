@@ -8,6 +8,12 @@
 .markdown-content pre { background:#111827; color:#e5e7eb; padding:12px; border-radius:8px; overflow:auto; }
 .markdown-content code { background:#e5e7eb; padding:2px 4px; border-radius:4px; }
 .dark .markdown-content code { background:#374151; }
+.markdown-content table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+.markdown-content th, .markdown-content td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; }
+.dark .markdown-content th, .dark .markdown-content td { border-color: #4b5563; }
+.markdown-content th { background: #f3f4f6; font-weight: 600; }
+.dark .markdown-content th { background: #374151; }
+.table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 8px 0; }
 </style>
 {% endblock %}
 {% block content %}
@@ -41,8 +47,36 @@ const fastModel = {{ model_fast.model|tojson }};
 const fastProvider = {{ model_fast.provider|tojson }};
 let chatHistory = [];
 
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+  headerIds: false,
+  mangle: false,
+});
+
+function preprocessMarkdown(text) {
+  if (!text) return text;
+  text = text.replace(/^(#{1,6})(\d)/gm, "$1 $2");
+  text = text.replace(/^(#{1,6})([A-Za-zÀ-ÿ])/gm, "$1 $2");
+  text = text.replace(/^(\s*)-([A-Za-zÀ-ÿ0-9])/gm, "$1- $2");
+  text = text.replace(/^(\s*\d+\.)([A-Za-zÀ-ÿ])/gm, "$1 $2");
+  return text;
+}
+
+function wrapTablesInResponsive(html) {
+  if (!html || !html.includes("<table")) return html;
+  return html
+    .replace(/<table(\s[^>]*)?>/gi, '<div class="table-wrapper"><table$1>')
+    .replace(/<\/table>/g, "</table></div>");
+}
+
 function parseMarkdown(text) {
-  return DOMPurify.sanitize(marked.parse(text || ""));
+  const rawHtml = marked.parse(preprocessMarkdown(text || ""));
+  const cleanHtml = DOMPurify.sanitize(rawHtml, {
+    ADD_TAGS: ["img"],
+    ADD_ATTR: ["src", "alt", "class", "style", "title"],
+  });
+  return wrapTablesInResponsive(cleanHtml);
 }
 
 async function api(url, options = {}) {
@@ -98,8 +132,16 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   host.appendChild(assistantWrap);
   host.scrollTop = host.scrollHeight;
   const contentEl = assistantWrap.querySelector("#streaming-content");
+  if (!response.ok || !response.body) {
+    const errText = await response.text();
+    contentEl.classList.remove("italic");
+    contentEl.textContent = errText || "Erreur lors de la génération de la réponse.";
+    return;
+  }
 
   let full = "";
+  let streamError = "";
+  let streamDone = false;
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
@@ -119,13 +161,30 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
           full += data.message.content;
           contentEl.classList.remove("italic");
           contentEl.innerHTML = parseMarkdown(full);
+        } else if (data.error) {
+          streamError = String(data.error);
+          contentEl.classList.remove("italic");
+          contentEl.textContent = `Erreur: ${streamError}`;
+          streamDone = true;
+          break;
+        } else if (data.done) {
+          streamDone = true;
+          break;
         }
       } catch (_) {}
     }
+    if (streamDone) {
+      try { await reader.cancel(); } catch (_) {}
+      break;
+    }
     host.scrollTop = host.scrollHeight;
   }
+  if (!full && !streamError) {
+    contentEl.classList.remove("italic");
+    contentEl.textContent = "Aucune réponse générée.";
+  }
   chatHistory.push({ role: "user", content: message });
-  chatHistory.push({ role: "assistant", content: full });
+  chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });
 });
 
 document.addEventListener("DOMContentLoaded", loadSpace);

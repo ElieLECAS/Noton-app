@@ -112,7 +112,7 @@ async def get_space_kag_stats(
     session: Session = Depends(get_session)
 ):
     """Récupère les statistiques KAG d'un espace."""
-    from app.services.kag_graph_service import get_kag_stats
+    from app.services.kag_graph_service import get_space_kag_stats as get_space_kag_stats_service
     
     space = get_space_by_id(session, space_id, current_user.id)
     if not space:
@@ -121,7 +121,7 @@ async def get_space_kag_stats(
             detail="Espace non trouvé"
         )
     
-    stats = get_kag_stats(session, space_id)
+    stats = get_space_kag_stats_service(session, space_id)
     return stats
 
 

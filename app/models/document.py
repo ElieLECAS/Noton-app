@@ -20,6 +20,7 @@ class Document(SQLModel, table=True):
     source_file_path: Optional[str] = None
     processing_status: str = Field(default="completed")
     processing_progress: Optional[int] = Field(default=100)
+    is_paid: bool = Field(default=False)
     folder_id: Optional[int] = Field(default=None, foreign_key="folder.id", index=True)
     library_id: int = Field(foreign_key="library.id", index=True)
     user_id: int = Field(foreign_key="user.id", index=True)
@@ -41,6 +42,7 @@ class DocumentCreate(SQLModel):
     source_file_path: Optional[str] = None
     processing_status: str = "completed"
     processing_progress: Optional[int] = 100
+    is_paid: bool = False
     folder_id: Optional[int] = None
 
 
@@ -52,6 +54,7 @@ class DocumentRead(SQLModel):
     document_type: str
     processing_status: str
     processing_progress: Optional[int] = None
+    is_paid: bool = False
     folder_id: Optional[int] = None
     library_id: int
     user_id: int
@@ -66,6 +69,7 @@ class DocumentListItem(SQLModel):
     document_type: str
     processing_status: str
     processing_progress: Optional[int] = None
+    is_paid: bool = False
     folder_id: Optional[int] = None
     library_id: int
     user_id: int
@@ -78,4 +82,5 @@ class DocumentUpdate(SQLModel):
     title: Optional[str] = None
     content: Optional[str] = None
     processing_progress: Optional[int] = None
+    is_paid: Optional[bool] = None
     folder_id: Optional[int] = None

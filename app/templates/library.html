@@ -52,6 +52,10 @@
                 <label class="block text-sm mb-1 text-gray-700 dark:text-gray-300">Espaces accessibles</label>
                 <div id="spaces-checkboxes" class="grid grid-cols-2 gap-2 text-sm"></div>
             </div>
+            <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <input id="upload-is-paid" type="checkbox" class="rounded" />
+                <span>Document payant</span>
+            </label>
             <div class="flex justify-end gap-2">
                 <button type="button" onclick="closeUploadModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600">Annuler</button>
                 <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Uploader</button>
@@ -100,6 +104,10 @@
                 <label class="block text-sm mb-1 text-gray-700 dark:text-gray-300">Espaces accessibles</label>
                 <div id="edit-document-spaces-checkboxes" class="grid grid-cols-2 gap-2 text-sm"></div>
             </div>
+            <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <input id="edit-document-is-paid" type="checkbox" class="rounded" />
+                <span>Document payant</span>
+            </label>
             <div class="flex justify-end gap-2">
                 <button type="button" onclick="closeEditDocumentModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600">Annuler</button>
                 <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Enregistrer</button>
@@ -184,7 +192,10 @@ async function loadDocuments() {
   document.getElementById("documents-list").innerHTML = docs.map(d => `
     <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center justify-between">
       <div>
-        <div class="font-medium text-gray-900 dark:text-gray-100">${d.title}</div>
+        <div class="font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
+          <span>${d.title}</span>
+          ${d.is_paid ? '<span title="Document payant (acheté fournisseur)" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 text-xs font-medium"><i class="ti ti-coins"></i><span>Document payant</span></span>' : ""}
+        </div>
         <div class="text-xs text-gray-500">Statut: ${d.processing_status} (${d.processing_progress ?? 0}%)</div>
       </div>
       <div class="flex items-center gap-3">
@@ -259,6 +270,7 @@ async function openEditDocumentModal(documentId) {
 
   document.getElementById("edit-document-id").value = String(doc.id);
   document.getElementById("edit-document-title").value = doc.title || "";
+  document.getElementById("edit-document-is-paid").checked = Boolean(doc.is_paid);
 
   const host = document.getElementById("edit-document-spaces-checkboxes");
   host.innerHTML = spaces.map(s => `
@@ -323,11 +335,13 @@ document.getElementById("upload-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const files = document.getElementById("upload-files").files;
   const checked = [...document.querySelectorAll("#spaces-checkboxes input:checked")].map(i => Number(i.value));
-  if (!files.length || !checked.length) return alert("Sélectionnez des fichiers et au moins un espace.");
+  if (!files.length) return alert("Sélectionnez au moins un fichier.");
+  const isPaid = document.getElementById("upload-is-paid").checked;
 
   const fd = new FormData();
   [...files].forEach(f => fd.append("files", f));
   fd.append("space_ids", JSON.stringify(checked));
+  fd.append("is_paid", String(isPaid));
   if (selectedFolderId !== null) fd.append("folder_id", String(selectedFolderId));
 
   const token = localStorage.getItem("authToken");
@@ -369,7 +383,7 @@ document.getElementById("edit-document-form").addEventListener("submit", async (
 
   const selectedSpaceIds = [...document.querySelectorAll("#edit-document-spaces-checkboxes input:checked")]
     .map(i => Number(i.value));
-  if (!selectedSpaceIds.length) return alert("Sélectionnez au moins un espace.");
+  const isPaid = document.getElementById("edit-document-is-paid").checked;
 
   const currentSpacesResp = await api(`/api/library/documents/${documentId}/spaces`);
   if (!currentSpacesResp.ok) {
@@ -387,7 +401,7 @@ document.getElementById("edit-document-form").addEventListener("submit", async (
   const updateResp = await api(`/api/library/documents/${documentId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title })
+    body: JSON.stringify({ title, is_paid: isPaid })
   });
   if (!updateResp.ok) {
     const err = await updateResp.json().catch(() => ({}));

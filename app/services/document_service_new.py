@@ -342,6 +342,7 @@ def create_document(
         source_file_path=document_create.source_file_path,
         processing_status=document_create.processing_status,
         processing_progress=document_create.processing_progress,
+        is_paid=document_create.is_paid,
         folder_id=document_create.folder_id,
         library_id=library_id,
         user_id=user_id

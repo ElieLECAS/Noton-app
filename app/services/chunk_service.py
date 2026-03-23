@@ -808,6 +808,28 @@ def _process_embeddings_for_document(document_id: int):
                     chunk.embedding = embedding
                     session.add(chunk)
 
+            # Après les embeddings, générer le KAG pour tous les espaces liés
+            # afin que le graphe soit prêt dès le premier upload.
+            if settings.KAG_ENABLED:
+                from app.models.document_space import DocumentSpace
+                from app.services.kag_graph_service import process_kag_for_document_space
+
+                space_ids_stmt = select(DocumentSpace.space_id).where(
+                    DocumentSpace.document_id == document_id
+                )
+                space_ids = list(session.exec(space_ids_stmt).all())
+
+                for space_id in space_ids:
+                    try:
+                        process_kag_for_document_space(session, document_id, space_id)
+                    except Exception as kag_exc:
+                        logger.warning(
+                            "KAG auto post-upload échoué document_id=%s space_id=%s: %s",
+                            document_id,
+                            space_id,
+                            kag_exc,
+                        )
+
             document.processing_status = "completed"
             document.processing_progress = 100
             session.add(document)

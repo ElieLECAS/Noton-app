@@ -26,6 +26,64 @@ from app.services.kag_extraction_service import (
 logger = logging.getLogger(__name__)
 
 
+def _canonicalize_entities(entities: List[Dict]) -> List[Dict]:
+    """
+    Normalise/déduplique/sort les entités pour garantir un résultat stable.
+    """
+    canonical: Dict[tuple[str, str], Dict] = {}
+    for entity_data in entities or []:
+        raw_name = (entity_data.get("name") or "").strip()
+        raw_type = (entity_data.get("type") or "concept_technique").strip()
+        if not raw_name or len(raw_name) < 2:
+            continue
+        key = (normalize_entity_name(raw_name), raw_type)
+        if not key[0]:
+            continue
+
+        importance = entity_data.get("importance", 1.0)
+        try:
+            importance = float(importance)
+        except Exception:
+            importance = 1.0
+        importance = max(0.0, min(1.0, importance))
+
+        existing = canonical.get(key)
+        if existing is None or importance > float(existing.get("importance", 0.0)):
+            canonical[key] = {
+                "name": raw_name,
+                "type": raw_type,
+                "importance": importance,
+            }
+
+    return sorted(
+        canonical.values(),
+        key=lambda x: (normalize_entity_name(x.get("name", "")), x.get("type", "")),
+    )
+
+
+def _get_or_compute_chunk_entities(
+    session: Session,
+    chunk: DocumentChunk,
+    content: str,
+) -> List[Dict]:
+    """
+    Récupère les entités canoniques depuis metadata_json si présentes,
+    sinon les calcule une seule fois puis les persiste.
+    """
+    metadata = dict(chunk.metadata_json or {})
+    cached_entities = metadata.get("kag_entities")
+
+    if isinstance(cached_entities, list) and cached_entities:
+        return _canonicalize_entities(cached_entities)
+
+    entities = _canonicalize_entities(extract_entities_sync(content))
+    metadata["kag_entities"] = entities
+    chunk.metadata_json = metadata
+    chunk.metadata_ = metadata
+    session.add(chunk)
+    return entities
+
+
 def get_or_create_entity(
     session: Session,
     name: str,
@@ -570,7 +628,7 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
         if len(content) < 20:
             continue
 
-        entities = extract_entities_sync(content)
+        entities = _get_or_compute_chunk_entities(session, chunk, content)
         if not entities:
             continue
 
@@ -669,3 +727,167 @@ def delete_entities_for_document(session: Session, document_id: int, space_id: i
         deleted_relations,
     )
     return deleted_relations
+
+
+def get_space_kag_stats(session: Session, space_id: int) -> Dict:
+    """
+    Retourne les statistiques KAG pour un espace.
+    """
+    entity_count = session.exec(
+        select(func.count(KnowledgeEntity.id)).where(
+            KnowledgeEntity.space_id == space_id
+        )
+    ).one()
+
+    relation_count = session.exec(
+        select(func.count(ChunkEntityRelation.id)).where(
+            ChunkEntityRelation.space_id == space_id
+        )
+    ).one()
+
+    type_rows = session.exec(
+        select(
+            KnowledgeEntity.entity_type,
+            func.count(KnowledgeEntity.id),
+        )
+        .where(KnowledgeEntity.space_id == space_id)
+        .group_by(KnowledgeEntity.entity_type)
+    ).all()
+    type_counts = {entity_type: count for entity_type, count in type_rows}
+
+    return {
+        "total_entities": entity_count,
+        "total_relations": relation_count,
+        "entities_by_type": type_counts,
+    }
+
+
+def get_space_bipartite_graph(
+    session: Session,
+    space_id: int,
+    max_entities: int = 80,
+    max_relations: int = 600,
+) -> Dict[str, List[Dict]]:
+    """
+    Construit un graphe biparti (entités <-> chunks) pour un espace.
+    """
+    entities_stmt = (
+        select(KnowledgeEntity)
+        .where(KnowledgeEntity.space_id == space_id)
+        .order_by(KnowledgeEntity.mention_count.desc())
+        .limit(max_entities)
+    )
+    entities = list(session.exec(entities_stmt).all())
+    if not entities:
+        return {"nodes": [], "edges": []}
+
+    entity_ids = [e.id for e in entities]
+    if not entity_ids:
+        return {"nodes": [], "edges": []}
+
+    rows = session.exec(
+        select(
+            ChunkEntityRelation,
+            DocumentChunk,
+            KnowledgeEntity,
+            Document,
+        )
+        .join(DocumentChunk, DocumentChunk.id == ChunkEntityRelation.chunk_id)
+        .join(KnowledgeEntity, KnowledgeEntity.id == ChunkEntityRelation.entity_id)
+        .join(Document, Document.id == DocumentChunk.document_id)
+        .where(
+            ChunkEntityRelation.space_id == space_id,
+            ChunkEntityRelation.entity_id.in_(entity_ids),
+        )
+        .order_by(ChunkEntityRelation.relevance_score.desc())
+        .limit(max_relations)
+    ).all()
+
+    if not rows:
+        return {"nodes": [], "edges": []}
+
+    nodes: Dict[str, Dict] = {}
+    edges: List[Dict] = []
+
+    def add_entity_node(entity: KnowledgeEntity) -> str:
+        node_id = f"entity-{entity.id}"
+        if node_id not in nodes:
+            nodes[node_id] = {
+                "id": node_id,
+                "kind": "entity",
+                "entity_id": entity.id,
+                "label": entity.name,
+                "entity_type": entity.entity_type,
+                "mention_count": entity.mention_count,
+            }
+        return node_id
+
+    def add_chunk_node(chunk: DocumentChunk, document: Document) -> str:
+        node_id = f"chunk-{chunk.id}"
+        if node_id not in nodes:
+            title = document.title or f"Document {document.id}"
+            preview = (chunk.content or "").strip()
+            if preview and len(preview) > 320:
+                cut = preview[:320]
+                last_space = cut.rfind(" ")
+                if last_space > 40:
+                    cut = cut[:last_space]
+                preview = cut + "…"
+            nodes[node_id] = {
+                "id": node_id,
+                "kind": "chunk",
+                "chunk_id": chunk.id,
+                "document_id": document.id,
+                "document_title": title,
+                "label": title,
+                "chunk_index": chunk.chunk_index,
+                "preview": preview or None,
+            }
+        return node_id
+
+    for rel, chunk, entity, document in rows:
+        entity_node_id = add_entity_node(entity)
+        chunk_node_id = add_chunk_node(chunk, document)
+        edges.append(
+            {
+                "id": f"rel-{rel.id}",
+                "from": entity_node_id,
+                "to": chunk_node_id,
+                "relevance": rel.relevance_score,
+            }
+        )
+
+    return {
+        "nodes": list(nodes.values()),
+        "edges": edges,
+    }
+
+
+def rebuild_kag_for_space(session: Session, space_id: int) -> Dict[str, int]:
+    """
+    Purge puis reconstruit le KAG pour tous les documents d'un espace.
+    """
+    doc_ids_stmt = select(DocumentSpace.document_id).where(DocumentSpace.space_id == space_id)
+    document_ids = list(session.exec(doc_ids_stmt).all())
+
+    deleted_relations = 0
+    for document_id in document_ids:
+        deleted_relations += delete_entities_for_document(session, document_id, space_id)
+
+    rebuilt_documents = 0
+    total_entities = 0
+    total_relations = 0
+    for document_id in document_ids:
+        stats = process_kag_for_document_space(session, document_id, space_id)
+        if stats.get("chunks", 0) > 0:
+            rebuilt_documents += 1
+        total_entities += stats.get("entities", 0)
+        total_relations += stats.get("relations", 0)
+
+    return {
+        "documents_in_space": len(document_ids),
+        "documents_rebuilt": rebuilt_documents,
+        "relations_deleted": deleted_relations,
+        "entities_extracted": total_entities,
+        "relations_created": total_relations,
+    }

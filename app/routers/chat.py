@@ -28,6 +28,7 @@ from app.models.space import Space
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
+from app.services.space_search_service import search_relevant_passages as search_space_passages
 from datetime import datetime
 import json
 import logging
@@ -361,6 +362,70 @@ class SpaceChatRequest(BaseModel):
     agent_id: Optional[int] = None
 
 
+def build_space_context_from_passages(passages: List[dict]) -> dict:
+    """
+    Construit le contexte système à partir des passages RAG + KAG rerankés.
+    Format unifié pour le LLM (comme build_semantic_context_from_passages).
+    """
+    system_message = {
+        "role": "system",
+        "content": (
+            "Tu es LIA. Réponds uniquement à partir des passages ci-dessous (RAG + KAG). "
+            "Règles : bref et précis ; indique si une info est absente ; "
+            "en cas de conflit, cite les deux sources. "
+            "Format : tableaux Markdown pour valeurs techniques ; citations [1], [2] pour les affirmations."
+        ),
+    }
+
+    if passages:
+        system_message["content"] += "\n\nPASSAGES :\n\n"
+        passages_content = []
+        for i, passage_data in enumerate(passages, 1):
+            passage = passage_data['passage']
+            score = passage_data.get('score', 0.0)
+            document_title = passage_data.get('document_title', 'Document sans titre')
+            passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
+            passages_content.append(passage_text)
+        system_message["content"] += "\n---\n".join(passages_content)
+        system_message["content"] += f"\n\n({len(passages)} passages.)"
+    else:
+        system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
+
+    return system_message
+
+
+def build_space_context_from_passages(passages: List[dict]) -> dict:
+    """
+    Construit le contexte système à partir des passages RAG + KAG rerankés.
+    Format unifié pour le LLM (comme build_semantic_context_from_passages).
+    """
+    system_message = {
+        "role": "system",
+        "content": (
+            "Tu es LIA. Réponds uniquement à partir des passages ci-dessous (RAG + KAG). "
+            "Règles : bref et précis ; indique si une info est absente ; "
+            "en cas de conflit, cite les deux sources. "
+            "Format : tableaux Markdown pour valeurs techniques ; citations [1], [2] pour les affirmations."
+        ),
+    }
+
+    if passages:
+        system_message["content"] += "\n\nPASSAGES :\n\n"
+        passages_content = []
+        for i, passage_data in enumerate(passages, 1):
+            passage = passage_data['passage']
+            score = passage_data.get('score', 0.0)
+            document_title = passage_data.get('document_title', 'Document sans titre')
+            passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
+            passages_content.append(passage_text)
+        system_message["content"] += "\n---\n".join(passages_content)
+        system_message["content"] += f"\n\n({len(passages)} passages.)"
+    else:
+        system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
+
+    return system_message
+
+
 def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
     """Construire le contexte enrichi avec les passages pertinents trouvés par recherche sémantique"""
     # Préprompt court pour limiter les input tokens
@@ -651,53 +716,22 @@ async def stream_space_chat_message(
         except Exception as e:
             logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
 
-    # Retrieval simple lexical sur chunks des documents de l'espace
-    terms = [t.strip().lower() for t in request.message.split() if len(t.strip()) >= 3][:8]
-    chunk_stmt = (
-        select(DocumentChunk, Document.title, Document.id)
-        .join(Document, Document.id == DocumentChunk.document_id)
-        .join(DocumentSpace, DocumentSpace.document_id == Document.id)
-        .where(
-            DocumentSpace.space_id == space_id,
-            Document.user_id == current_user.id,
-            DocumentChunk.is_leaf == True,
-        )
-        .limit(300)
+    # Recherche sémantique RAG + KAG complète (identique au pipeline projet)
+    passages = search_space_passages(
+        session=session,
+        space_id=space_id,
+        query_text=request.message,
+        user_id=current_user.id,
+        k=RAG_TOP_K,
     )
-    rows = session.exec(chunk_stmt).all()
-    passages = []
-    for chunk, document_title, document_id in rows:
-        content = (chunk.content or "").strip()
-        if not content:
-            continue
-        lowered = content.lower()
-        score = sum(1 for t in terms if t in lowered)
-        if terms and score == 0:
-            continue
-        passages.append({
-            "document_id": document_id,
-            "document_title": document_title or "Document sans titre",
-            "passage": content[:1200],
-            "score": float(score),
-        })
-    passages.sort(key=lambda x: x["score"], reverse=True)
-    passages = passages[:RAG_TOP_K]
 
-    rag_system = {
-        "role": "system",
-        "content": "Tu es LIA. Réponds en t'appuyant uniquement sur les passages fournis pour cet espace."
-    }
-    if passages:
-        rag_system["content"] += "\n\nPASSAGES:\n" + "\n\n---\n\n".join(
-            f"[{i+1}] {p['document_title']}\n{p['passage']}" for i, p in enumerate(passages)
-        )
-    else:
-        rag_system["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
+    # Construire le contexte système à partir des passages rerankés
+    space_context = build_space_context_from_passages(passages)
 
     full_context = []
     if agent:
         full_context.append({"role": "system", "content": agent.personality})
-    full_context.append(rag_system)
+    full_context.append(space_context)
     if request.context:
         full_context.extend(request.context)
     full_context.append({"role": "user", "content": request.message})
@@ -768,8 +802,10 @@ async def stream_space_chat_message(
                         "index": i + 1,
                         "document_id": p["document_id"],
                         "document_title": p["document_title"],
-                        "excerpt": (p["passage"][:200] + "...") if len(p["passage"]) > 200 else p["passage"],
-                        "score": p["score"],
+                        "excerpt": (p["passage_raw"][:200] + "...") if len(p.get("passage_raw", "")) > 200 else p.get("passage_raw", p.get("passage", "")),
+                        "score": round(p["score"], 2),
+                        "page_no": p.get("page_no"),
+                        "section": p.get("section"),
                     }
                     for i, p in enumerate(passages)
                 ]
