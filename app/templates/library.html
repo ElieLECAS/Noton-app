@@ -1,0 +1,422 @@
+{% extends "base.html" %}
+{% block title %}Bibliothèque - {{ app_name }}{% endblock %}
+{% block content %}
+<div class="flex-1 overflow-hidden bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
+    <div class="max-w-7xl mx-auto h-full flex flex-col gap-4">
+        <div class="flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Bibliothèque générale</h1>
+            <div class="flex gap-2">
+                <button onclick="openFolderModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">
+                    <i class="ti ti-folder-plus"></i> Dossier
+                </button>
+                <button onclick="openUploadModal()" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+                    <i class="ti ti-upload"></i> Upload
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 flex-1 min-h-0">
+            <section class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-auto">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="font-semibold text-gray-900 dark:text-gray-100">Dossiers</h2>
+                    <button
+                        onclick="openFolderModal()"
+                        class="text-xs px-2 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                        <i class="ti ti-folder-plus"></i> Nouveau
+                    </button>
+                </div>
+                <div id="folders-list" class="space-y-2 text-sm"></div>
+            </section>
+
+            <section class="lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-auto">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="font-semibold text-gray-900 dark:text-gray-100">Documents</h2>
+                    <span id="docs-count" class="text-sm text-gray-500"></span>
+                </div>
+                <div id="documents-list" class="space-y-2"></div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div id="upload-modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Upload multi-espaces</h3>
+        <form id="upload-form" class="space-y-4">
+            <div>
+                <label class="block text-sm mb-1 text-gray-700 dark:text-gray-300">Fichiers</label>
+                <input id="upload-files" type="file" multiple class="w-full text-sm" required />
+            </div>
+            <div>
+                <label class="block text-sm mb-1 text-gray-700 dark:text-gray-300">Espaces accessibles</label>
+                <div id="spaces-checkboxes" class="grid grid-cols-2 gap-2 text-sm"></div>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeUploadModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600">Annuler</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Uploader</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="folder-modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Nouveau sous-dossier</h3>
+        <form id="folder-form" class="space-y-4">
+            <input id="folder-name" type="text" placeholder="Nom du dossier" required class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" />
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeFolderModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600">Annuler</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Créer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="space-modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Nouvel espace</h3>
+        <form id="space-form" class="space-y-4">
+            <input id="space-name" type="text" placeholder="Ex: Interne, Client A..." required class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" />
+            <textarea id="space-description" placeholder="Description (optionnelle)" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent"></textarea>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeCreateSpaceModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600">Annuler</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Créer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="edit-document-modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Modifier le document</h3>
+        <form id="edit-document-form" class="space-y-4">
+            <input id="edit-document-id" type="hidden" />
+            <div>
+                <label class="block text-sm mb-1 text-gray-700 dark:text-gray-300">Titre</label>
+                <input id="edit-document-title" type="text" required class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" />
+            </div>
+            <div>
+                <label class="block text-sm mb-1 text-gray-700 dark:text-gray-300">Espaces accessibles</label>
+                <div id="edit-document-spaces-checkboxes" class="grid grid-cols-2 gap-2 text-sm"></div>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeEditDocumentModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600">Annuler</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let selectedFolderId = null;
+let spaces = [];
+
+async function api(url, options = {}) {
+  const token = localStorage.getItem("authToken");
+  const headers = { ...(options.headers || {}), Authorization: `Bearer ${token}` };
+  const resp = await fetch(url, { ...options, headers });
+  if (resp.status === 401) { localStorage.removeItem("authToken"); location.href = "/login"; }
+  return resp;
+}
+
+async function loadSpaces() {
+  const r = await api("/api/spaces");
+  if (!r.ok) return;
+  spaces = await r.json();
+
+  const sidebarHost = document.getElementById("spaces-list");
+  if (sidebarHost) {
+    sidebarHost.innerHTML = spaces.length
+      ? spaces.map(s => `
+          <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <i class="ti ti-circle-dot text-xs text-gray-400"></i>
+            <a href="/spaces/${s.id}" class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1 hover:underline">${s.name}</a>
+            <button
+              class="opacity-0 group-hover:opacity-100 text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-opacity"
+              onclick="event.stopPropagation(); editSpace(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}', '${(s.description || '').replace(/'/g, "\\'")}')"
+              title="Modifier l'espace"
+            >
+              <i class="ti ti-pencil text-sm"></i>
+            </button>
+            <button
+              class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity"
+              onclick="event.stopPropagation(); deleteSpace(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}')"
+              title="Supprimer l'espace"
+            >
+              <i class="ti ti-trash text-sm"></i>
+            </button>
+          </div>
+        `).join("")
+      : `<div class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400">Aucun espace</div>`;
+  }
+
+  const host = document.getElementById("spaces-checkboxes");
+  host.innerHTML = spaces.map(s => `
+    <label class="flex items-center gap-2">
+      <input type="checkbox" value="${s.id}" />
+      <span>${s.name}</span>
+    </label>
+  `).join("");
+}
+
+async function loadFolders() {
+  const r = await api("/api/library/folders");
+  if (!r.ok) return;
+  const folders = await r.json();
+  const host = document.getElementById("folders-list");
+  host.innerHTML = `
+    <button class="w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedFolderId===null?'bg-gray-100 dark:bg-gray-700':''}" onclick="selectFolder(null)">
+      <i class="ti ti-home-2"></i> Racine
+    </button>
+    ${folders.map(f => `<button class="w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedFolderId===f.id?'bg-gray-100 dark:bg-gray-700':''}" onclick="selectFolder(${f.id})"><i class="ti ti-folder"></i> ${f.name}</button>`).join("")}
+  `;
+}
+
+async function loadDocuments() {
+  const url = selectedFolderId === null ? "/api/library/documents" : `/api/library/documents?folder_id=${selectedFolderId}`;
+  const r = await api(url);
+  if (!r.ok) return;
+  const docs = await r.json();
+  document.getElementById("docs-count").textContent = `${docs.length} document(s)`;
+  document.getElementById("documents-list").innerHTML = docs.map(d => `
+    <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center justify-between">
+      <div>
+        <div class="font-medium text-gray-900 dark:text-gray-100">${d.title}</div>
+        <div class="text-xs text-gray-500">Statut: ${d.processing_status} (${d.processing_progress ?? 0}%)</div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="text-blue-600 text-sm" onclick="openDocumentFile(${d.id})">Ouvrir</button>
+        <button class="text-gray-700 dark:text-gray-300 text-sm" onclick="openEditDocumentModal(${d.id})">Modifier</button>
+        <button class="text-red-600 text-sm" onclick="deleteDocument(${d.id}, '${(d.title || '').replace(/'/g, "\\'")}')">Supprimer</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function openDocumentFile(documentId) {
+  const r = await api(`/api/library/documents/${documentId}/file`);
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    alert(err.detail || "Impossible d'ouvrir le fichier.");
+    return;
+  }
+
+  const blob = await r.blob();
+  const blobUrl = URL.createObjectURL(blob);
+  window.open(blobUrl, "_blank");
+  setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+}
+
+async function deleteDocument(documentId, documentTitle) {
+  const ok = confirm(`Supprimer le document "${documentTitle}" ?\n\nCette action supprime aussi ses chunks et ses données KAG associées.`);
+  if (!ok) return;
+
+  const r = await api(`/api/library/documents/${documentId}`, { method: "DELETE" });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de supprimer le document.");
+  }
+
+  await loadDocuments();
+}
+
+function selectFolder(id) {
+  selectedFolderId = id;
+  loadFolders();
+  loadDocuments();
+}
+
+function openUploadModal(){ document.getElementById("upload-modal").classList.remove("hidden"); }
+function closeUploadModal(){ document.getElementById("upload-modal").classList.add("hidden"); document.getElementById("upload-form").reset(); }
+function openFolderModal(){ document.getElementById("folder-modal").classList.remove("hidden"); }
+function closeFolderModal(){ document.getElementById("folder-modal").classList.add("hidden"); document.getElementById("folder-form").reset(); }
+function openCreateSpaceModal(){ document.getElementById("space-modal").classList.remove("hidden"); }
+function closeCreateSpaceModal(){ document.getElementById("space-modal").classList.add("hidden"); document.getElementById("space-form").reset(); }
+function closeEditDocumentModal(){ document.getElementById("edit-document-modal").classList.add("hidden"); document.getElementById("edit-document-form").reset(); }
+
+async function openEditDocumentModal(documentId) {
+  const [docResp, spacesResp] = await Promise.all([
+    api(`/api/library/documents/${documentId}`),
+    api(`/api/library/documents/${documentId}/spaces`)
+  ]);
+
+  if (!docResp.ok) {
+    const err = await docResp.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de charger le document.");
+  }
+
+  if (!spacesResp.ok) {
+    const err = await spacesResp.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de charger les espaces du document.");
+  }
+
+  const doc = await docResp.json();
+  const linkedSpaces = await spacesResp.json();
+  const linkedSpaceIds = new Set(linkedSpaces.map(s => s.id));
+
+  document.getElementById("edit-document-id").value = String(doc.id);
+  document.getElementById("edit-document-title").value = doc.title || "";
+
+  const host = document.getElementById("edit-document-spaces-checkboxes");
+  host.innerHTML = spaces.map(s => `
+    <label class="flex items-center gap-2">
+      <input type="checkbox" value="${s.id}" ${linkedSpaceIds.has(s.id) ? "checked" : ""} />
+      <span>${s.name}</span>
+    </label>
+  `).join("");
+
+  document.getElementById("edit-document-modal").classList.remove("hidden");
+}
+
+async function editSpace(spaceId, currentName, currentDescription) {
+  const newName = prompt("Nouveau nom de l'espace :", currentName || "");
+  if (newName === null) return;
+  const name = newName.trim();
+  if (!name) return alert("Le nom de l'espace est requis.");
+
+  const newDescription = prompt("Nouvelle description (optionnelle) :", currentDescription || "");
+  if (newDescription === null) return;
+
+  const r = await api(`/api/spaces/${spaceId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      description: newDescription.trim() || null
+    })
+  });
+
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de modifier l'espace.");
+  }
+
+  await loadSpaces();
+}
+
+async function deleteSpace(spaceId, spaceName) {
+  const ok = confirm(`Supprimer l'espace "${spaceName}" ?\n\nLes documents ne seront pas supprimés de la bibliothèque, mais ils ne seront plus accessibles via cet espace.`);
+  if (!ok) return;
+
+  const r = await api(`/api/spaces/${spaceId}`, { method: "DELETE" });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de supprimer l'espace.");
+  }
+
+  await loadSpaces();
+}
+
+document.getElementById("folder-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById("folder-name").value.trim();
+  if (!name) return;
+  const payload = { name, parent_folder_id: selectedFolderId };
+  const r = await api("/api/library/folders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+  if (r.ok) { closeFolderModal(); await loadFolders(); }
+});
+
+document.getElementById("upload-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const files = document.getElementById("upload-files").files;
+  const checked = [...document.querySelectorAll("#spaces-checkboxes input:checked")].map(i => Number(i.value));
+  if (!files.length || !checked.length) return alert("Sélectionnez des fichiers et au moins un espace.");
+
+  const fd = new FormData();
+  [...files].forEach(f => fd.append("files", f));
+  fd.append("space_ids", JSON.stringify(checked));
+  if (selectedFolderId !== null) fd.append("folder_id", String(selectedFolderId));
+
+  const token = localStorage.getItem("authToken");
+  const r = await fetch("/api/library/upload", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    return alert(err.detail || "Upload échoué");
+  }
+  closeUploadModal();
+  await loadDocuments();
+});
+
+document.getElementById("space-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById("space-name").value.trim();
+  const description = document.getElementById("space-description").value.trim();
+  if (!name) return;
+
+  const r = await api("/api/spaces", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, description: description || null })
+  });
+
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de créer l'espace.");
+  }
+
+  closeCreateSpaceModal();
+  await loadSpaces();
+});
+
+document.getElementById("edit-document-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const documentId = Number(document.getElementById("edit-document-id").value);
+  const title = document.getElementById("edit-document-title").value.trim();
+  if (!documentId || !title) return alert("Le titre du document est requis.");
+
+  const selectedSpaceIds = [...document.querySelectorAll("#edit-document-spaces-checkboxes input:checked")]
+    .map(i => Number(i.value));
+  if (!selectedSpaceIds.length) return alert("Sélectionnez au moins un espace.");
+
+  const currentSpacesResp = await api(`/api/library/documents/${documentId}/spaces`);
+  if (!currentSpacesResp.ok) {
+    const err = await currentSpacesResp.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de récupérer les espaces actuels.");
+  }
+
+  const currentSpaces = await currentSpacesResp.json();
+  const currentSpaceIds = new Set(currentSpaces.map(s => s.id));
+  const selectedSet = new Set(selectedSpaceIds);
+
+  const addSpaceIds = selectedSpaceIds.filter(id => !currentSpaceIds.has(id));
+  const removeSpaceIds = [...currentSpaceIds].filter(id => !selectedSet.has(id));
+
+  const updateResp = await api(`/api/library/documents/${documentId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title })
+  });
+  if (!updateResp.ok) {
+    const err = await updateResp.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de modifier le document.");
+  }
+
+  if (addSpaceIds.length || removeSpaceIds.length) {
+    const spacesUpdateResp = await api(`/api/library/documents/${documentId}/spaces`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        add_space_ids: addSpaceIds,
+        remove_space_ids: removeSpaceIds
+      })
+    });
+    if (!spacesUpdateResp.ok) {
+      const err = await spacesUpdateResp.json().catch(() => ({}));
+      return alert(err.detail || "Impossible de mettre à jour les espaces.");
+    }
+  }
+
+  closeEditDocumentModal();
+  await loadDocuments();
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadSpaces();
+  await loadFolders();
+  await loadDocuments();
+});
+</script>
+{% endblock %}

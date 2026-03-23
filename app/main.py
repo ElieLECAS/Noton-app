@@ -7,8 +7,7 @@ from sqlmodel import Session
 import time
 
 from app.database import get_session, create_db_and_tables
-from app.routers import auth, projects, notes, chat, conversations, agents, scheduler, kag
-from app.models import User, Project, Note
+from app.routers import auth, chat, conversations, agents, scheduler, kag, library, spaces
 from app.services.scheduler_service import init_scheduler, start_scheduler, stop_scheduler
 from app.config import settings
 import logging
@@ -53,8 +52,8 @@ else:
 
 # Monter les routers
 app.include_router(auth.router)
-app.include_router(projects.router)
-app.include_router(notes.router)
+app.include_router(library.router)
+app.include_router(spaces.router)
 app.include_router(chat.router)
 app.include_router(conversations.router)
 app.include_router(agents.router)
@@ -123,7 +122,7 @@ async def startup_event():
     
     # Démarrer les workers pour le traitement de documents en arrière-plan
     try:
-        from app.services.document_service import _ensure_document_workers
+        from app.services.document_service_new import _ensure_document_workers
         _ensure_document_workers()
         logger.info("Workers de traitement de documents démarrés")
     except Exception as e:
@@ -132,8 +131,8 @@ async def startup_event():
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    """Page d'accueil - redirige vers login si non authentifié"""
-    return templates.TemplateResponse("index.html", {"request": request})
+    """Page d'accueil bibliothèque."""
+    return templates.TemplateResponse("library.html", {"request": request})
 
 
 @app.get("/login", response_class=HTMLResponse)
@@ -148,22 +147,22 @@ async def register_page(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
 
-@app.get("/projects/{project_id}", response_class=HTMLResponse)
-async def project_detail_page(request: Request, project_id: int):
-    """Page de détail d'un projet"""
-    return templates.TemplateResponse("project_detail.html", {"request": request})
+@app.get("/library", response_class=HTMLResponse)
+async def library_page(request: Request):
+    """Page bibliothèque générale."""
+    return templates.TemplateResponse("library.html", {"request": request})
 
 
-@app.get("/notes/{note_id}/edit", response_class=HTMLResponse)
-async def note_edit_page(request: Request, note_id: int):
-    """Page d'édition d'une note"""
-    return templates.TemplateResponse("note_edit.html", {"request": request})
+@app.get("/spaces/{space_id}", response_class=HTMLResponse)
+async def space_detail_page(request: Request, space_id: int):
+    """Page de discussion dans un espace."""
+    return templates.TemplateResponse("space_detail.html", {"request": request, "space_id": space_id})
 
 
-@app.get("/projects/{project_id}/kag-graph", response_class=HTMLResponse)
-async def project_kag_graph_page(request: Request, project_id: int):
-    """Page de visualisation du graphe KAG d'un projet"""
-    return templates.TemplateResponse("project_kag_graph.html", {"request": request})
+@app.get("/spaces/{space_id}/kag-graph", response_class=HTMLResponse)
+async def space_kag_graph_page(request: Request, space_id: int):
+    """Page de visualisation du graphe KAG d'un espace."""
+    return templates.TemplateResponse("space_kag_graph.html", {"request": request, "space_id": space_id})
 
 
 @app.on_event("shutdown")

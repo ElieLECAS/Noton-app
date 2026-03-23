@@ -24,6 +24,10 @@ from app.models.conversation import Conversation
 from app.models.message import Message
 from app.models.agent import Agent
 from app.models.note import Note
+from app.models.space import Space
+from app.models.document import Document
+from app.models.document_chunk import DocumentChunk
+from app.models.document_space import DocumentSpace
 from datetime import datetime
 import json
 import logging
@@ -348,6 +352,15 @@ class ProjectChatRequest(BaseModel):
     agent_id: Optional[int] = None  # ID de l'agent (optionnel)
 
 
+class SpaceChatRequest(BaseModel):
+    message: str
+    model: str
+    provider: str = "ollama"
+    context: Optional[List[dict]] = None
+    conversation_id: Optional[int] = None
+    agent_id: Optional[int] = None
+
+
 def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
     """Construire le contexte enrichi avec les passages pertinents trouvés par recherche sémantique"""
     # Préprompt court pour limiter les input tokens
@@ -598,5 +611,171 @@ async def stream_project_chat_message(
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
     
+    return StreamingResponse(generate(), media_type="text/event-stream")
+
+
+@router.post("/spaces/{space_id}/chat/stream")
+async def stream_space_chat_message(
+    space_id: int,
+    request: SpaceChatRequest,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Chat streaming scoped aux documents accessibles dans un espace."""
+    # Espace chat: imposer le FastModel configuré en environnement.
+    forced_provider = (settings.MODEL_FAST_PROVIDER or "mistral").strip().lower()
+    forced_model = (settings.MODEL_FAST_NAME or "mistral-small-latest").strip()
+
+    space = session.get(Space, space_id)
+    if not space or space.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Espace non trouvé")
+
+    # Charger l'agent si fourni
+    agent = None
+    if request.agent_id:
+        agent = session.get(Agent, request.agent_id)
+        if not agent or agent.user_id != current_user.id:
+            agent = None
+
+    if request.conversation_id:
+        try:
+            user_message = Message(
+                conversation_id=request.conversation_id,
+                role="user",
+                content=request.message,
+                model=None,
+                provider=None,
+            )
+            session.add(user_message)
+            session.commit()
+        except Exception as e:
+            logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
+
+    # Retrieval simple lexical sur chunks des documents de l'espace
+    terms = [t.strip().lower() for t in request.message.split() if len(t.strip()) >= 3][:8]
+    chunk_stmt = (
+        select(DocumentChunk, Document.title, Document.id)
+        .join(Document, Document.id == DocumentChunk.document_id)
+        .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+        .where(
+            DocumentSpace.space_id == space_id,
+            Document.user_id == current_user.id,
+            DocumentChunk.is_leaf == True,
+        )
+        .limit(300)
+    )
+    rows = session.exec(chunk_stmt).all()
+    passages = []
+    for chunk, document_title, document_id in rows:
+        content = (chunk.content or "").strip()
+        if not content:
+            continue
+        lowered = content.lower()
+        score = sum(1 for t in terms if t in lowered)
+        if terms and score == 0:
+            continue
+        passages.append({
+            "document_id": document_id,
+            "document_title": document_title or "Document sans titre",
+            "passage": content[:1200],
+            "score": float(score),
+        })
+    passages.sort(key=lambda x: x["score"], reverse=True)
+    passages = passages[:RAG_TOP_K]
+
+    rag_system = {
+        "role": "system",
+        "content": "Tu es LIA. Réponds en t'appuyant uniquement sur les passages fournis pour cet espace."
+    }
+    if passages:
+        rag_system["content"] += "\n\nPASSAGES:\n" + "\n\n---\n\n".join(
+            f"[{i+1}] {p['document_title']}\n{p['passage']}" for i, p in enumerate(passages)
+        )
+    else:
+        rag_system["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
+
+    full_context = []
+    if agent:
+        full_context.append({"role": "system", "content": agent.personality})
+    full_context.append(rag_system)
+    if request.context:
+        full_context.extend(request.context)
+    full_context.append({"role": "user", "content": request.message})
+
+    assistant_response: List[str] = []
+
+    async def generate():
+        try:
+            if forced_provider == "openai":
+                if not settings.OPENAI_API_KEY:
+                    yield f"data: {json.dumps({'error': 'OpenAI API key non configurée'})}\n\n"
+                    return
+                async for line in openai_chat_stream("", forced_model, full_context):
+                    if line.strip():
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                assistant_response.append(data["message"]["content"])
+                        except Exception:
+                            pass
+                        yield f"data: {line}\n\n"
+            elif forced_provider == "mistral":
+                if not settings.MISTRAL_API_KEY:
+                    yield f"data: {json.dumps({'error': 'Mistral API key non configurée'})}\n\n"
+                    return
+                response = await mistral_chat("", forced_model, full_context)
+                content = ""
+                if "choices" in response and response["choices"]:
+                    content = (response["choices"][0].get("message") or {}).get("content") or ""
+                for i in range(0, len(content), 25):
+                    chunk = content[i:i+25]
+                    assistant_response.append(chunk)
+                    yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+                yield f"data: {json.dumps({'done': True})}\n\n"
+            else:
+                async for line in ollama_chat_stream("", request.model, full_context):
+                    if line.strip():
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                assistant_response.append(data["message"]["content"])
+                        except Exception:
+                            pass
+                        yield f"data: {line}\n\n"
+
+            if request.conversation_id and assistant_response:
+                try:
+                    complete_response = "".join(assistant_response)
+                    assistant_message = Message(
+                        conversation_id=request.conversation_id,
+                        role="assistant",
+                        content=complete_response,
+                        model=forced_model,
+                        provider=forced_provider,
+                    )
+                    session.add(assistant_message)
+                    conv = session.get(Conversation, request.conversation_id)
+                    if conv:
+                        conv.updated_at = datetime.utcnow()
+                        session.add(conv)
+                    session.commit()
+                except Exception as e:
+                    logger.error(f"Erreur sauvegarde réponse assistant (space chat): {e}")
+
+            if passages:
+                sources_data = [
+                    {
+                        "index": i + 1,
+                        "document_id": p["document_id"],
+                        "document_title": p["document_title"],
+                        "excerpt": (p["passage"][:200] + "...") if len(p["passage"]) > 200 else p["passage"],
+                        "score": p["score"],
+                    }
+                    for i, p in enumerate(passages)
+                ]
+                yield f"data: {json.dumps({'sources': sources_data})}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
     return StreamingResponse(generate(), media_type="text/event-stream")
 

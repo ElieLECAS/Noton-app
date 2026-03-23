@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Graph KAG Espace - {{ app_name }}{% endblock %}
+{% block content %}
+<div class="flex-1 overflow-auto p-6 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Graph KAG de l’espace</h1>
+      <a href="/spaces/{{ space_id }}" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">Retour chat</a>
+    </div>
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+      <pre id="graph-json" class="text-xs text-gray-700 dark:text-gray-200 whitespace-pre-wrap"></pre>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+const spaceId = {{ space_id }};
+async function loadGraph() {
+  const token = localStorage.getItem("authToken");
+  const r = await fetch(`/api/spaces/${spaceId}/kag/graph`, { headers: { Authorization: `Bearer ${token}` }});
+  const data = await r.json().catch(() => ({}));
+  document.getElementById("graph-json").textContent = JSON.stringify(data, null, 2);
+}
+document.addEventListener("DOMContentLoaded", loadGraph);
+</script>
+{% endblock %}

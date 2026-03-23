@@ -10,13 +10,13 @@ class KnowledgeEntity(SQLModel, table=True):
     Entité de connaissance extraite des chunks pour le système KAG.
     
     Représente un concept, équipement, procédure, paramètre, etc.
-    mentionné dans les documents d'un projet.
+    mentionné dans les documents d'un espace.
     """
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(index=True)
     name_normalized: str = Field(index=True)
     entity_type: str = Field(index=True)
-    project_id: int = Field(foreign_key="project.id", index=True)
+    space_id: int = Field(foreign_key="space.id", index=True)
     mention_count: int = Field(default=1)
     embedding: Optional[List[float]] = Field(
         default=None,
@@ -32,7 +32,7 @@ class KnowledgeEntityRead(SQLModel):
     name: str
     name_normalized: str
     entity_type: str
-    project_id: int
+    space_id: int
     mention_count: int
     created_at: datetime
     updated_at: datetime

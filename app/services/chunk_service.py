@@ -3,6 +3,10 @@ from sqlmodel import Session, select
 from sqlalchemy import or_, delete
 from app.models.note_chunk import NoteChunk
 from app.models.note import Note
+from app.models.document_chunk import DocumentChunk
+from app.models.document import Document
+from app.models.chunk_entity_relation import ChunkEntityRelation
+from app.models.knowledge_entity import KnowledgeEntity
 from app.services.chunking_service import chunk_note, chunk_note_from_docling_docs
 from app.database import engine
 from app.config import settings
@@ -577,6 +581,44 @@ def delete_chunks_for_note(session: Session, note_id: int, commit: bool = True):
     logger.debug(f"Supprimé {deleted_count} chunks pour la note {note_id}")
 
 
+def delete_chunks_for_document(
+    session: Session, document_id: int, commit: bool = True
+):
+    """
+    Supprime tous les chunks d'un document et nettoie les données KAG associées.
+    """
+    chunk_ids_stmt = select(DocumentChunk.id).where(DocumentChunk.document_id == document_id)
+    chunk_ids = list(session.exec(chunk_ids_stmt).all())
+
+    if chunk_ids:
+        entity_ids_stmt = select(ChunkEntityRelation.entity_id).where(
+            ChunkEntityRelation.chunk_id.in_(chunk_ids)
+        )
+        entity_ids = set(session.exec(entity_ids_stmt).all())
+
+        session.execute(
+            delete(ChunkEntityRelation).where(ChunkEntityRelation.chunk_id.in_(chunk_ids))
+        )
+        session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
+
+        if entity_ids:
+            remaining_relations_stmt = select(ChunkEntityRelation.entity_id).where(
+                ChunkEntityRelation.entity_id.in_(entity_ids)
+            )
+            used_entity_ids = set(session.exec(remaining_relations_stmt).all())
+            orphan_entity_ids = [entity_id for entity_id in entity_ids if entity_id not in used_entity_ids]
+            if orphan_entity_ids:
+                session.execute(
+                    delete(KnowledgeEntity).where(KnowledgeEntity.id.in_(orphan_entity_ids))
+                )
+    else:
+        session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
+
+    if commit:
+        session.commit()
+    logger.debug("Supprimé chunks + KAG pour document_id=%s", document_id)
+
+
 def get_chunks_by_note(session: Session, note_id: int) -> List[NoteChunk]:
     """
     Récupérer tous les chunks d'une note.
@@ -644,4 +686,169 @@ def reindex_notes(
 
     logger.info("Réindexation terminée: %s/%s notes", reindexed_count, len(notes))
     return reindexed_count
+
+
+# ---------------------------------------------------------------------------
+# Compatibilité architecture "Document"
+# ---------------------------------------------------------------------------
+
+def _split_text_for_document(text: str, chunk_size: int = 1200, overlap: int = 150) -> List[dict]:
+    """Découpe simple d'un texte en chunks avec overlap."""
+    if not text:
+        return []
+    chunks: List[dict] = []
+    start = 0
+    text_len = len(text)
+    while start < text_len:
+        end = min(start + chunk_size, text_len)
+        chunk_text = text[start:end].strip()
+        if chunk_text:
+            chunks.append(
+                {
+                    "content": chunk_text,
+                    "start_char": start,
+                    "end_char": end,
+                }
+            )
+        if end >= text_len:
+            break
+        start = max(0, end - overlap)
+    return chunks
+
+
+def create_chunks_for_document(
+    session: Session, document: Document, generate_embeddings: bool = False
+) -> List[DocumentChunk]:
+    """Créer les chunks pour un document (nouvelle architecture)."""
+    session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document.id))
+    session.commit()
+
+    source_text = f"{document.title}\n\n{document.content or ''}".strip()
+    raw_chunks = _split_text_for_document(source_text)
+    chunks: List[DocumentChunk] = []
+    for idx, item in enumerate(raw_chunks):
+        metadata = {
+            "document_id": document.id,
+            "library_id": document.library_id,
+            "user_id": document.user_id,
+            "document_title": document.title or "",
+            "chunk_index": idx,
+        }
+        chunks.append(
+            DocumentChunk(
+                document_id=document.id,
+                chunk_index=idx,
+                content=item["content"],
+                text=item["content"],
+                start_char=item["start_char"],
+                end_char=item["end_char"],
+                is_leaf=True,
+                hierarchy_level=0,
+                metadata_json=metadata,
+                metadata_=metadata,
+            )
+        )
+
+    if generate_embeddings and chunks:
+        from app.services.embedding_service import generate_embeddings_batch
+        embeddings = generate_embeddings_batch(
+            [c.content for c in chunks], batch_size=settings.EMBEDDING_BATCH_SIZE
+        )
+        for chunk, embedding in zip(chunks, embeddings):
+            if embedding:
+                chunk.embedding = embedding
+
+    if chunks:
+        session.add_all(chunks)
+        session.commit()
+    return chunks
+
+
+def create_chunks_for_document_from_docling(
+    session: Session,
+    document: Document,
+    llama_docs: list,
+    generate_embeddings: bool = False,
+) -> List[DocumentChunk]:
+    """
+    Version Docling pour documents.
+    Pour robustesse, on s'appuie sur le contenu markdown déjà extrait.
+    """
+    return create_chunks_for_document(
+        session=session, document=document, generate_embeddings=generate_embeddings
+    )
+
+
+def _process_embeddings_for_document(document_id: int):
+    """Génère les embeddings des DocumentChunk puis marque le document en completed."""
+    try:
+        with Session(engine) as session:
+            document = session.get(Document, document_id)
+            if not document:
+                return
+
+            statement = select(DocumentChunk).where(
+                DocumentChunk.document_id == document_id,
+                DocumentChunk.embedding.is_(None),
+            )
+            chunks = list(session.exec(statement).all())
+            if not chunks:
+                document.processing_status = "completed"
+                document.processing_progress = 100
+                session.add(document)
+                session.commit()
+                return
+
+            from app.services.embedding_service import generate_embeddings_batch
+            embeddings = generate_embeddings_batch(
+                [c.content for c in chunks], batch_size=settings.EMBEDDING_BATCH_SIZE
+            )
+            for chunk, embedding in zip(chunks, embeddings):
+                if embedding:
+                    chunk.embedding = embedding
+                    session.add(chunk)
+
+            document.processing_status = "completed"
+            document.processing_progress = 100
+            session.add(document)
+            session.commit()
+    except Exception as e:
+        logger.error("Erreur embeddings document %s: %s", document_id, e, exc_info=True)
+
+
+_legacy_generate_embeddings_for_chunks_async = generate_embeddings_for_chunks_async
+
+
+def generate_embeddings_for_chunks_async(note_id: int, project_id: int):
+    """
+    Compatibilité:
+    - si note existe => pipeline legacy notes
+    - sinon, si document existe => pipeline document
+    """
+    try:
+        with Session(engine) as session:
+            note = session.get(Note, note_id)
+            if note:
+                _legacy_generate_embeddings_for_chunks_async(note_id, project_id)
+                return
+            document = session.get(Document, note_id)
+            if document:
+                thread = threading.Thread(
+                    target=_process_embeddings_for_document,
+                    args=(document.id,),
+                    daemon=True,
+                )
+                thread.start()
+                logger.info(
+                    "Tâche embeddings document ajoutée (document_id=%s)",
+                    document.id,
+                )
+                return
+    except Exception as e:
+        logger.error(
+            "Erreur dispatch embeddings async (id=%s): %s", note_id, e, exc_info=True
+        )
+
+    # fallback legacy (comportement historique)
+    _legacy_generate_embeddings_for_chunks_async(note_id, project_id)
 

@@ -14,9 +14,13 @@ from app.models.knowledge_entity import KnowledgeEntity
 from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.note_chunk import NoteChunk
 from app.models.note import Note
+from app.models.document import Document
+from app.models.document_chunk import DocumentChunk
+from app.models.document_space import DocumentSpace
 from app.services.kag_extraction_service import (
     normalize_entity_name,
     SUPPORTED_ENTITY_TYPE_IDS,
+    extract_entities_sync,
 )
 
 logger = logging.getLogger(__name__)
@@ -485,3 +489,183 @@ def get_project_bipartite_graph(
         "nodes": list(nodes.values()),
         "edges": edges,
     }
+
+
+# ---------------------------------------------------------------------------
+# Compatibilité architecture "Document / Space"
+# ---------------------------------------------------------------------------
+
+def _get_or_create_entity_for_space(
+    session: Session,
+    name: str,
+    entity_type: str,
+    space_id: int,
+) -> KnowledgeEntity:
+    """Version espace de get_or_create_entity (déduplication par space_id + name_normalized)."""
+    name_normalized = normalize_entity_name(name)
+    statement = select(KnowledgeEntity).where(
+        KnowledgeEntity.space_id == space_id,
+        KnowledgeEntity.name_normalized == name_normalized,
+    )
+    entity = session.exec(statement).first()
+    if entity:
+        entity.mention_count += 1
+        entity.updated_at = datetime.utcnow()
+        session.add(entity)
+        return entity
+
+    entity = KnowledgeEntity(
+        name=name,
+        name_normalized=name_normalized,
+        entity_type=entity_type,
+        space_id=space_id,
+        mention_count=1,
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow(),
+    )
+    session.add(entity)
+    session.flush()
+    return entity
+
+
+def process_kag_for_document_space(session: Session, document_id: int, space_id: int) -> Dict[str, int]:
+    """
+    Extrait et sauvegarde les entités KAG pour un document dans un espace donné.
+    """
+    document = session.get(Document, document_id)
+    if not document:
+        logger.warning("Document introuvable pour KAG: document_id=%s", document_id)
+        return {"entities": 0, "relations": 0, "chunks": 0}
+
+    association = session.exec(
+        select(DocumentSpace).where(
+            DocumentSpace.document_id == document_id,
+            DocumentSpace.space_id == space_id,
+        )
+    ).first()
+    if not association:
+        logger.info(
+            "Aucune association document-espace, skip KAG document_id=%s space_id=%s",
+            document_id,
+            space_id,
+        )
+        return {"entities": 0, "relations": 0, "chunks": 0}
+
+    delete_entities_for_document(session, document_id, space_id)
+
+    chunks_stmt = select(DocumentChunk).where(
+        DocumentChunk.document_id == document_id,
+        DocumentChunk.is_leaf == True,
+    )
+    chunks = list(session.exec(chunks_stmt).all())
+    if not chunks:
+        return {"entities": 0, "relations": 0, "chunks": 0}
+
+    total_entities = 0
+    total_relations = 0
+    processed_chunks = 0
+
+    for chunk in chunks:
+        content = (chunk.content or "").strip()
+        if len(content) < 20:
+            continue
+
+        entities = extract_entities_sync(content)
+        if not entities:
+            continue
+
+        processed_chunks += 1
+        for entity_data in entities:
+            name = (entity_data.get("name") or "").strip()
+            entity_type = (entity_data.get("type") or "concept_technique").strip()
+            importance = float(entity_data.get("importance", 1.0) or 1.0)
+            if not name or len(name) < 2:
+                continue
+
+            entity = _get_or_create_entity_for_space(
+                session=session,
+                name=name,
+                entity_type=entity_type,
+                space_id=space_id,
+            )
+            total_entities += 1
+
+            existing_rel = session.exec(
+                select(ChunkEntityRelation).where(
+                    ChunkEntityRelation.chunk_id == chunk.id,
+                    ChunkEntityRelation.entity_id == entity.id,
+                    ChunkEntityRelation.space_id == space_id,
+                )
+            ).first()
+            if not existing_rel:
+                relation = ChunkEntityRelation(
+                    chunk_id=chunk.id,
+                    entity_id=entity.id,
+                    relevance_score=importance,
+                    space_id=space_id,
+                    created_at=datetime.utcnow(),
+                )
+                session.add(relation)
+                total_relations += 1
+
+    session.commit()
+    logger.info(
+        "✅ KAG document-space terminé document_id=%s space_id=%s chunks=%s entités=%s relations=%s",
+        document_id,
+        space_id,
+        processed_chunks,
+        total_entities,
+        total_relations,
+    )
+    return {
+        "entities": total_entities,
+        "relations": total_relations,
+        "chunks": processed_chunks,
+    }
+
+
+def delete_entities_for_document(session: Session, document_id: int, space_id: int) -> int:
+    """
+    Supprime les relations/entités KAG liées à un document dans un espace.
+    """
+    chunk_ids_stmt = select(DocumentChunk.id).where(DocumentChunk.document_id == document_id)
+    chunk_ids = list(session.exec(chunk_ids_stmt).all())
+    if not chunk_ids:
+        return 0
+
+    entity_ids_stmt = select(ChunkEntityRelation.entity_id).where(
+        ChunkEntityRelation.chunk_id.in_(chunk_ids),
+        ChunkEntityRelation.space_id == space_id,
+    )
+    entity_ids = set(session.exec(entity_ids_stmt).all())
+
+    deleted_relations = session.execute(
+        delete(ChunkEntityRelation).where(
+            ChunkEntityRelation.chunk_id.in_(chunk_ids),
+            ChunkEntityRelation.space_id == space_id,
+        )
+    ).rowcount or 0
+
+    if entity_ids:
+        remaining_stmt = select(ChunkEntityRelation.entity_id).where(
+            ChunkEntityRelation.entity_id.in_(entity_ids),
+            ChunkEntityRelation.space_id == space_id,
+        )
+        still_used = set(session.exec(remaining_stmt).all())
+        orphan_ids = [eid for eid in entity_ids if eid not in still_used]
+        if orphan_ids:
+            session.execute(
+                delete(KnowledgeEntity).where(
+                    KnowledgeEntity.id.in_(orphan_ids),
+                    KnowledgeEntity.space_id == space_id,
+                )
+            )
+
+    session.commit()
+    logger.debug(
+        "Suppression KAG document-space document_id=%s space_id=%s relations=%s",
+        document_id,
+        space_id,
+        deleted_relations,
+    )
+    return deleted_relations

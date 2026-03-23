@@ -80,8 +80,8 @@
                         href="/"
                         class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
                     >
-                        <i class="ti ti-folder"></i>
-                        <span>Tous les projets</span>
+                        <i class="ti ti-library"></i>
+                        <span>Bibliothèque</span>
                     </a>
                     <a
                         href="/studio"
@@ -91,23 +91,21 @@
                         <span>Studio d'Agents</span>
                     </a>
                     <div class="mt-6">
-                        <div
-                            class="flex items-center justify-between px-3 py-2"
-                        >
+                        <div class="flex items-center justify-between px-3 py-2">
                             <span
                                 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"
-                                >CONVERSATIONS</span
+                                >ESPACES</span
                             >
                             <button
-                                onclick="if(typeof projectConversationsManager !== 'undefined') projectConversationsManager.createConversation(); else if(typeof conversationsManager !== 'undefined') conversationsManager.createConversation();"
+                                onclick="if (typeof openCreateSpaceModal === 'function') openCreateSpaceModal();"
                                 class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-1"
-                                title="Nouvelle conversation"
+                                title="Nouvel espace"
                             >
                                 <i class="ti ti-plus"></i>
                             </button>
                         </div>
-                        <div id="conversations-list" class="mt-2">
-                            <!-- Conversations chargées dynamiquement -->
+                        <div id="spaces-list" class="mt-2">
+                            <!-- Espaces chargés dynamiquement -->
                         </div>
                     </div>
                 </nav>
@@ -520,7 +518,6 @@
             authToken = localStorage.getItem("authToken");
             if (authToken) {
                 loadCurrentUser();
-                loadProjects();
             } else if (
                 !window.location.pathname.includes("/login") &&
                 !window.location.pathname.includes("/register")

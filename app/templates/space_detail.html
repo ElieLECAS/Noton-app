@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Espace - {{ app_name }}{% endblock %}
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<style>
+.markdown-content { line-height: 1.7; }
+.markdown-content pre { background:#111827; color:#e5e7eb; padding:12px; border-radius:8px; overflow:auto; }
+.markdown-content code { background:#e5e7eb; padding:2px 4px; border-radius:4px; }
+.dark .markdown-content code { background:#374151; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="flex-1 flex flex-col min-h-0 overflow-hidden bg-white dark:bg-gray-800">
+  <header class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+    <div>
+      <h1 id="space-title" class="text-xl font-bold text-gray-900 dark:text-gray-100">Espace</h1>
+      <p class="text-sm text-gray-500">Discussion LIA sur les documents de cet espace</p>
+    </div>
+    <a id="kag-link" href="#" class="px-4 py-2 rounded-lg bg-violet-600 text-white hover:bg-violet-700">
+      <i class="ti ti-chart-arcs-3"></i> Voir le Graph KAG
+    </a>
+  </header>
+
+  <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 min-h-0">
+    <div class="text-center text-gray-500 py-12">Posez une question à LIA sur cet espace.</div>
+  </div>
+
+  <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+    <form id="chat-form" class="flex gap-2">
+      <input id="chat-input" class="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" placeholder="Votre question..." required />
+      <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Envoyer</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+const spaceId = {{ space_id }};
+const fastModel = {{ model_fast.model|tojson }};
+const fastProvider = {{ model_fast.provider|tojson }};
+let chatHistory = [];
+
+function parseMarkdown(text) {
+  return DOMPurify.sanitize(marked.parse(text || ""));
+}
+
+async function api(url, options = {}) {
+  const token = localStorage.getItem("authToken");
+  const headers = { ...(options.headers || {}), Authorization: `Bearer ${token}` };
+  const r = await fetch(url, { ...options, headers });
+  if (r.status === 401) { localStorage.removeItem("authToken"); location.href = "/login"; }
+  return r;
+}
+
+function addMessage(role, content) {
+  const host = document.getElementById("chat-messages");
+  if (host.querySelector(".text-center")) host.innerHTML = "";
+  const div = document.createElement("div");
+  div.className = `flex ${role === "user" ? "justify-end" : "justify-start"}`;
+  div.innerHTML = `<div class="max-w-3xl rounded-lg px-4 py-2 ${role === "user" ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"}">${role === "assistant" ? `<div class="markdown-content">${parseMarkdown(content)}</div>` : `<p class="whitespace-pre-wrap">${content}</p>`}</div>`;
+  host.appendChild(div);
+  host.scrollTop = host.scrollHeight;
+}
+
+async function loadSpace() {
+  const r = await api(`/api/spaces/${spaceId}`);
+  if (!r.ok) return;
+  const s = await r.json();
+  document.getElementById("space-title").textContent = s.name;
+  document.getElementById("kag-link").href = `/spaces/${spaceId}/kag-graph`;
+}
+
+document.getElementById("chat-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (!message) return;
+  addMessage("user", message);
+  input.value = "";
+
+  const token = localStorage.getItem("authToken");
+  const response = await fetch(`/api/spaces/${spaceId}/chat/stream`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({
+      message,
+      model: fastModel,
+      provider: fastProvider,
+      context: chatHistory
+    })
+  });
+
+  const host = document.getElementById("chat-messages");
+  const assistantWrap = document.createElement("div");
+  assistantWrap.className = "flex justify-start";
+  assistantWrap.innerHTML = `<div class="max-w-3xl rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"><div id="streaming-content" class="markdown-content italic">En cours...</div></div>`;
+  host.appendChild(assistantWrap);
+  host.scrollTop = host.scrollHeight;
+  const contentEl = assistantWrap.querySelector("#streaming-content");
+
+  let full = "";
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+    for (const line of lines) {
+      if (!line.startsWith("data: ")) continue;
+      const raw = line.slice(6).trim();
+      if (!raw) continue;
+      try {
+        const data = JSON.parse(raw);
+        if (data.message && data.message.content) {
+          full += data.message.content;
+          contentEl.classList.remove("italic");
+          contentEl.innerHTML = parseMarkdown(full);
+        }
+      } catch (_) {}
+    }
+    host.scrollTop = host.scrollHeight;
+  }
+  chatHistory.push({ role: "user", content: message });
+  chatHistory.push({ role: "assistant", content: full });
+});
+
+document.addEventListener("DOMContentLoaded", loadSpace);
+</script>
+{% endblock %}
