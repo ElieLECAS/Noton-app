@@ -1,36 +1,398 @@
-{% extends "base.html" %} {% block title %}Mes projets - Noton{% endblock %} {%
-block content %}
-<div class="flex-1 flex flex-col">
+{% extends "base.html" %} {% block title %}Mes projets - {{ app_name }}{% endblock %} {%
+block extra_head %}
+<!-- Marked.js pour le rendu Markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- DOMPurify pour sécuriser le HTML généré -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<!-- Conversations Manager -->
+<script src="/static/conversations.js"></script>
+<style>
+    /* ===== STYLES MARKDOWN MODERNES POUR LE CHAT ===== */
+    .markdown-content {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #374151;
+    }
+    .dark .markdown-content {
+        color: #e5e7eb;
+    }
+    
+    /* Texte de base en italique pour les réponses assistant */
+    .assistant-message .markdown-content {
+        font-style: italic;
+    }
+    .assistant-message .markdown-content h1,
+    .assistant-message .markdown-content h2,
+    .assistant-message .markdown-content h3,
+    .assistant-message .markdown-content h4,
+    .assistant-message .markdown-content strong,
+    .assistant-message .markdown-content code,
+    .assistant-message .markdown-content pre {
+        font-style: normal;
+    }
+
+    /* Titres */
+    .markdown-content h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 1.5rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e5e7eb;
+        color: #111827;
+    }
+    .dark .markdown-content h1 {
+        border-bottom-color: #4b5563;
+        color: #f9fafb;
+    }
+    .markdown-content h2 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 1.25rem 0 0.75rem 0;
+        color: #1f2937;
+    }
+    .dark .markdown-content h2 {
+        color: #f3f4f6;
+    }
+    .markdown-content h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 1rem 0 0.5rem 0;
+        color: #374151;
+    }
+    .dark .markdown-content h3 {
+        color: #e5e7eb;
+    }
+    .markdown-content h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0.75rem 0 0.5rem 0;
+        color: #4b5563;
+    }
+    .dark .markdown-content h4 {
+        color: #d1d5db;
+    }
+    
+    /* Premier élément sans marge top */
+    .markdown-content > *:first-child {
+        margin-top: 0;
+    }
+
+    /* Paragraphes */
+    .markdown-content p {
+        margin: 0.75rem 0;
+    }
+
+    /* Listes */
+    .markdown-content ul,
+    .markdown-content ol {
+        margin: 0.75rem 0;
+        padding-left: 1.75rem;
+    }
+    .markdown-content ul {
+        list-style-type: disc;
+    }
+    .markdown-content ol {
+        list-style-type: decimal;
+    }
+    .markdown-content li {
+        margin: 0.35rem 0;
+        padding-left: 0.25rem;
+    }
+    .markdown-content li::marker {
+        color: #6b7280;
+    }
+    .dark .markdown-content li::marker {
+        color: #9ca3af;
+    }
+    .markdown-content ul ul,
+    .markdown-content ol ol,
+    .markdown-content ul ol,
+    .markdown-content ol ul {
+        margin: 0.25rem 0;
+    }
+
+    /* Texte en gras et italique */
+    .markdown-content strong {
+        font-weight: 700;
+        color: #111827;
+    }
+    .dark .markdown-content strong {
+        color: #f9fafb;
+    }
+    .markdown-content em {
+        font-style: italic;
+    }
+
+    /* Code inline */
+    .markdown-content code {
+        font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+        font-size: 0.875em;
+        background-color: #f3f4f6;
+        color: #dc2626;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        font-style: normal;
+    }
+    .dark .markdown-content code {
+        background-color: #374151;
+        color: #fca5a5;
+    }
+
+    /* Blocs de code */
+    .markdown-content pre {
+        background-color: #1f2937;
+        color: #e5e7eb;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+    .dark .markdown-content pre {
+        background-color: #111827;
+    }
+    .markdown-content pre code {
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+        font-size: inherit;
+    }
+
+    /* Citations */
+    .markdown-content blockquote {
+        border-left: 4px solid #3b82f6;
+        background-color: #eff6ff;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        border-radius: 0 8px 8px 0;
+        font-style: italic;
+        color: #1e40af;
+    }
+    .dark .markdown-content blockquote {
+        background-color: #1e3a5f;
+        border-left-color: #60a5fa;
+        color: #bfdbfe;
+    }
+    .markdown-content blockquote p {
+        margin: 0;
+    }
+
+    /* Tableaux : wrapper scrollable + présentation propre */
+    .markdown-content .table-wrapper {
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        -webkit-overflow-scrolling: touch;
+    }
+    .dark .markdown-content .table-wrapper {
+        border-color: #4b5563;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .markdown-content table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+    .markdown-content th,
+    .markdown-content td {
+        border: 1px solid #e5e7eb;
+        padding: 0.6rem 0.75rem;
+        text-align: left;
+        vertical-align: top;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    .dark .markdown-content th,
+    .dark .markdown-content td {
+        border-color: #4b5563;
+    }
+    .markdown-content th {
+        background-color: #f9fafb;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .dark .markdown-content th {
+        background-color: #374151;
+    }
+    .markdown-content tr:nth-child(even) {
+        background-color: #f9fafb;
+    }
+    .dark .markdown-content tr:nth-child(even) {
+        background-color: #1f2937;
+    }
+    .markdown-content tbody tr:hover {
+        background-color: #f3f4f6;
+    }
+    .dark .markdown-content tbody tr:hover {
+        background-color: #374151;
+    }
+
+    /* Liens */
+    .markdown-content a {
+        color: #2563eb;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+    .markdown-content a:hover {
+        color: #1d4ed8;
+    }
+    .dark .markdown-content a {
+        color: #60a5fa;
+    }
+    .dark .markdown-content a:hover {
+        color: #93c5fd;
+    }
+
+    /* Ligne horizontale */
+    .markdown-content hr {
+        border: none;
+        border-top: 2px solid #e5e7eb;
+        margin: 1.5rem 0;
+    }
+    .dark .markdown-content hr {
+        border-top-color: #4b5563;
+    }
+
+    /* Images */
+    .markdown-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 1rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .markdown-content img:hover {
+        transform: scale(1.01);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    .dark .markdown-content img {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Style pour le contour violet du chatbot en mode privé */
+    #chatbot-area.private-mode {
+        border: 2px solid #9333ea;
+        border-radius: 0.5rem;
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #chatbot-area.private-mode {
+        border-color: #a855f7;
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    /* Appliquer un background violet opaque aux éléments enfants en mode privé */
+    #chatbot-area.private-mode > div > div,
+    #chatbot-area.private-mode #chat-messages {
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #chatbot-area.private-mode > div > div,
+    .dark #chatbot-area.private-mode #chat-messages {
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    #chatbot-area.private-mode .bg-white {
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #chatbot-area.private-mode .bg-gray-800 {
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    /* Bouton mode image actif */
+    #toggle-image-mode.image-mode-active {
+        background-color: #8b5cf6 !important;
+        border-color: #7c3aed;
+        color: white !important;
+    }
+    #toggle-image-mode.image-mode-active:hover {
+        background-color: #7c3aed !important;
+    }
+
+    /* Bouton LIA : style par défaut (Fermer LIA) */
+    #chatbot-toggle-btn {
+        background: transparent;
+        color: #6b7280;
+    }
+    #chatbot-toggle-btn:hover {
+        background: #f3f4f6;
+        color: #111827;
+    }
+    .dark #chatbot-toggle-btn {
+        color: #9ca3af;
+    }
+    .dark #chatbot-toggle-btn:hover {
+        background: #374151;
+        color: #f3f4f6;
+    }
+    /* Bouton "Parler à LIA" mis en évidence (état CTA) */
+    #chatbot-toggle-btn.lia-cta {
+        background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+        color: white !important;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #chatbot-toggle-btn.lia-cta:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        color: white !important;
+        background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
+    }
+    #chatbot-toggle-btn.lia-cta .ti {
+        color: white !important;
+    }
+    .dark #chatbot-toggle-btn.lia-cta {
+        background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+    }
+    .dark #chatbot-toggle-btn.lia-cta:hover {
+        background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45);
+    }
+</style>
+{% endblock %} {% block content %}
+<div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <!-- Header -->
     <header
-        class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between"
+        class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between flex-shrink-0 shadow-sm"
     >
-        <h1 class="text-xl font-semibold text-gray-900">Mes projets</h1>
-        <div class="flex items-center gap-4">
+        <h1
+            class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight"
+        >
+            Mes projets
+        </h1>
+        <div class="flex items-center gap-3 sm:gap-4">
             <button
+                id="chatbot-toggle-btn"
                 onclick="toggleChatbot()"
-                class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                class="flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm sm:text-base transition-all duration-200 border border-transparent"
                 title="Afficher/Masquer le chatbot"
             >
                 <i id="chatbot-toggle-icon" class="ti ti-robot-off text-xl"></i>
+                <span id="chatbot-toggle-text" class="text-sm sm:text-base">Parler à LIA</span>
             </button>
             <button
                 onclick="showCreateProjectModal()"
-                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                class="px-4 sm:px-5 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-xl hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base font-medium shadow-sm hover:shadow transition-shadow"
             >
                 <i class="ti ti-plus"></i>
-                <span>Nouveau projet</span>
+                <span class="hidden sm:inline">Nouveau projet</span>
+                <span class="sm:hidden">Nouveau</span>
             </button>
-            
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex overflow-hidden">
-        <!-- Projects List -->
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+        <!-- Projects Center Area -->
         <div
-            id="projects-list-container"
-            class="w-1/3 bg-white border-r p-6 overflow-y-auto transition-all duration-300 ease-in-out"
+            id="projects-center-area"
+            class="flex-1 overflow-y-auto p-4 sm:p-6 bg-white dark:bg-gray-800 min-h-0 transition-all duration-300 ease-in-out"
         >
             <div id="projects-container">
                 <!-- Projets chargés dynamiquement -->
@@ -40,105 +402,163 @@ block content %}
         <!-- Chatbot Area -->
         <div
             id="chatbot-area"
-            class="flex-1 flex flex-col bg-white transition-all duration-300 ease-in-out"
+            class="hidden fixed lg:relative inset-0 lg:inset-auto z-50 lg:z-auto flex flex-col bg-white dark:bg-gray-800 transition-all duration-300 ease-in-out min-h-0 overflow-hidden lg:w-1/2"
             style="transform: translateX(0)"
         >
-            <div
-                class="p-6 border-b border-gray-200 flex items-center justify-between"
-            >
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-900">Chatbot</h2>
-                    <p class="text-sm text-gray-500 mt-1">
-                        Posez vos questions à l'assistant IA
-                    </p>
-                </div>
-                <button
-                    onclick="toggleChatbot()"
-                    class="text-gray-400 hover:text-gray-600 p-2"
+            <!-- Zone de chat principale -->
+            <div class="flex-1 flex flex-col min-h-0">
+                <div
+                    class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0 bg-white dark:bg-gray-800"
                 >
-                    <i class="ti ti-robot-off text-xl"></i>
-                </button>
-            </div>
-
-            <!-- Model Selection -->
-            <div class="px-6 py-4 border-b border-gray-200">
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                    >Modèle</label
-                >
-                <select
-                    id="model-select"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    <option value="">Chargement des modèles...</option>
-                </select>
-            </div>
-
-            <!-- Chat Messages -->
-            <div
-                id="chat-messages"
-                class="flex-1 overflow-y-auto p-6 space-y-4"
-            >
-                <div class="text-center text-gray-500 py-8">
-                    <i class="ti ti-message-circle text-4xl mb-2"></i>
-                    <p>Commencez une conversation avec le chatbot</p>
-                </div>
-            </div>
-
-            <style>
-                .loading-dots {
-                    display: inline-flex;
-                    gap: 4px;
-                }
-                .loading-dots span {
-                    animation: dot-pulse 1.4s ease-in-out infinite;
-                    font-size: 20px;
-                    line-height: 1;
-                }
-                .loading-dots span:nth-child(1) {
-                    animation-delay: 0s;
-                }
-                .loading-dots span:nth-child(2) {
-                    animation-delay: 0.2s;
-                }
-                .loading-dots span:nth-child(3) {
-                    animation-delay: 0.4s;
-                }
-                @keyframes dot-pulse {
-                    0%,
-                    60%,
-                    100% {
-                        opacity: 0.3;
-                        transform: scale(1);
-                    }
-                    30% {
-                        opacity: 1;
-                        transform: scale(1.2);
-                    }
-                }
-            </style>
-
-            <!-- Chat Input -->
-            <div class="p-6 border-t border-gray-200">
-                <form
-                    id="chat-form"
-                    onsubmit="sendChatMessage(event)"
-                    class="flex gap-2"
-                >
-                    <input
-                        type="text"
-                        id="chat-input"
-                        placeholder="Tapez votre message..."
-                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    />
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-sm">
+                            <i class="ti ti-robot text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h2
+                                class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100"
+                            >
+                                LIA
+                            </h2>
+                            <p
+                                class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5"
+                            >
+                                Posez vos questions à l'assistant IA
+                            </p>
+                        </div>
+                    </div>
                     <button
-                        type="submit"
-                        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                        onclick="toggleChatbot()"
+                        class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-2"
+                        title="Fermer le chatbot"
                     >
-                        <i class="ti ti-send"></i>
-                        <span>Envoyer</span>
+                        <i class="ti ti-robot-off text-xl"></i>
                     </button>
-                </form>
+                </div>
+
+                <!-- Chat Messages -->
+                <div
+                    id="chat-messages"
+                    class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 min-h-0 bg-white dark:bg-gray-800"
+                >
+                    <div
+                        class="text-center text-gray-500 dark:text-gray-400 py-12"
+                    >
+                        <div class="inline-flex w-14 h-14 rounded-2xl bg-gray-100 dark:bg-gray-700 items-center justify-center mb-4">
+                            <i class="ti ti-message-circle text-2xl text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <p class="text-sm sm:text-base font-medium text-gray-600 dark:text-gray-300">
+                            Commencez une conversation avec LIA
+                        </p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                            Posez une question ou décrivez ce dont vous avez besoin
+                        </p>
+                    </div>
+                </div>
+
+                <style>
+                    .loading-dots {
+                        display: inline-flex;
+                        gap: 4px;
+                    }
+                    .loading-dots span {
+                        animation: dot-pulse 1.4s ease-in-out infinite;
+                        font-size: 20px;
+                        line-height: 1;
+                    }
+                    .loading-dots span:nth-child(1) {
+                        animation-delay: 0s;
+                    }
+                    .loading-dots span:nth-child(2) {
+                        animation-delay: 0.2s;
+                    }
+                    .loading-dots span:nth-child(3) {
+                        animation-delay: 0.4s;
+                    }
+                    @keyframes dot-pulse {
+                        0%,
+                        60%,
+                        100% {
+                            opacity: 0.3;
+                            transform: scale(1);
+                        }
+                        30% {
+                            opacity: 1;
+                            transform: scale(1.2);
+                        }
+                    }
+                    #chat-messages {
+                        max-height: 100%;
+                        height: 0;
+                    }
+                </style>
+
+                <!-- Chat Input -->
+                <div
+                    class="p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 flex-shrink-0 bg-white dark:bg-gray-800"
+                >
+                    <form
+                        id="chat-form"
+                        onsubmit="sendChatMessage(event)"
+                        class="flex flex-col gap-2"
+                    >
+                        <!-- Ligne 1: Selects + Bouton Image -->
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="relative">
+                                <select
+                                    id="model-preset-select"
+                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+                                >
+                                    <option value="private">🔒 Privé</option>
+                                    <option value="fast" selected>⚡ Rapide</option>
+                                    <option value="powerful">💪 Puissant</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <select
+                                    id="agent-select"
+                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+                                >
+                                    <option value="">🤖 Aucun agent</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                id="toggle-image-mode"
+                                onclick="toggleImageGenerationMode()"
+                                class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors flex items-center gap-2 text-sm"
+                                title="Activer la génération d'image (OpenAI DALL-E 3)"
+                            >
+                                <i class="ti ti-photo text-lg"></i>
+                                <span class="hidden sm:inline text-xs font-medium">Image</span>
+                            </button>
+                        </div>
+                        <!-- Ligne 2: Input + Bouton Envoyer -->
+                        <div class="flex gap-2">
+                            <input
+                                type="text"
+                                id="chat-input"
+                                placeholder="Tapez votre message..."
+                                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                autocomplete="off"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                class="px-4 sm:px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base flex-shrink-0"
+                            >
+                                <i class="ti ti-send"></i>
+                                <span class="hidden sm:inline">Envoyer</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -147,103 +567,292 @@ block content %}
 <script>
     let chatHistory = [];
     let chatbotOpen = true; // Par défaut ouvert sur la page d'accueil
+    let conversationsManager; // Gestionnaire de conversations
+    let imageGenerationEnabled = false; // Mode génération d'image (DALL-E 3)
+
+    // Configuration de marked.js pour un meilleur rendu Markdown
+    marked.setOptions({
+        breaks: true,
+        gfm: true,
+        headerIds: false,
+        mangle: false,
+    });
+    
+    // Envelopper les tableaux dans un conteneur scrollable horizontalement
+    function wrapTablesInResponsive(html) {
+        if (!html || !html.includes('<table')) return html;
+        return html
+            .replace(/<table(\s[^>]*)?>/gi, '<div class="table-wrapper"><table$1>')
+            .replace(/<\/table>/g, '</table></div>');
+    }
+    
+    // Prétraitement du Markdown pour corriger les problèmes courants
+    function preprocessMarkdown(text) {
+        if (!text) return text;
+        text = text.replace(/^(#{1,6})(\d)/gm, '$1 $2');
+        text = text.replace(/^(#{1,6})([A-Za-zÀ-ÿ])/gm, '$1 $2');
+        text = text.replace(/^(\s*)-([A-Za-zÀ-ÿ0-9])/gm, '$1- $2');
+        text = text.replace(/^(\s*\d+\.)([A-Za-zÀ-ÿ])/gm, '$1 $2');
+        return text;
+    }
+    
+    function parseMarkdown(text) {
+        const preprocessed = preprocessMarkdown(text);
+        return marked.parse(preprocessed);
+    }
+
+    // Activer/désactiver le mode génération d'image
+    function toggleImageGenerationMode() {
+        imageGenerationEnabled = !imageGenerationEnabled;
+        const btn = document.getElementById("toggle-image-mode");
+        const input = document.getElementById("chat-input");
+        if (btn) {
+            if (imageGenerationEnabled) {
+                btn.classList.add("image-mode-active");
+                btn.title = "Désactiver la génération d'image";
+                if (input) input.placeholder = "Décrivez l'image à générer...";
+            } else {
+                btn.classList.remove("image-mode-active");
+                btn.title = "Activer la génération d'image (OpenAI DALL-E 3)";
+                if (input) input.placeholder = "Tapez votre message...";
+            }
+        }
+    }
 
     // Gérer l'ouverture/fermeture du chatbot
     function toggleChatbot() {
         const chatbotArea = document.getElementById("chatbot-area");
-        const projectsContainer = document.getElementById(
-            "projects-list-container"
+        const projectsCenterArea = document.getElementById(
+            "projects-center-area"
         );
         const toggleIcon = document.getElementById("chatbot-toggle-icon");
+        const toggleText = document.getElementById("chatbot-toggle-text");
 
         chatbotOpen = !chatbotOpen;
 
+        const isMobile = window.innerWidth < 1024;
+
         if (chatbotOpen) {
-            // Ouvrir le chatbot - animation depuis la droite
+            // Ouvrir le chatbot
             chatbotArea.classList.remove("hidden");
-            chatbotArea.style.flex = "0 0 0%";
-            chatbotArea.style.width = "0";
-            chatbotArea.style.transform = "translateX(100%)";
+            chatbotArea.style.transform = "translateX(0)";
 
-            projectsContainer.classList.remove("w-full", "border-r-0");
-            projectsContainer.classList.add("w-1/3", "border-r");
-            toggleIcon.classList.remove("ti-robot");
-            toggleIcon.classList.add("ti-robot-off");
-
-            // Forcer le reflow pour déclencher l'animation
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    chatbotArea.style.flex = "";
-                    chatbotArea.style.width = "";
-                    chatbotArea.style.transform = "translateX(0)";
-                });
-            });
-        } else {
-            // Fermer le chatbot - animation vers la droite
-            // Synchroniser les animations en utilisant requestAnimationFrame
-            toggleIcon.classList.remove("ti-robot-off");
-            toggleIcon.classList.add("ti-robot");
-
-            requestAnimationFrame(() => {
-                // D'abord réduire la largeur du chatbot et le translate en même temps
-                chatbotArea.style.transform = "translateX(100%)";
+            if (isMobile) {
+                // Animation mobile depuis la droite
                 chatbotArea.style.flex = "0 0 0%";
                 chatbotArea.style.width = "0";
+                chatbotArea.style.transform = "translateX(100%)";
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        chatbotArea.style.flex = "";
+                        chatbotArea.style.width = "";
+                        chatbotArea.style.transform = "translateX(0)";
+                    });
+                });
+            } else {
+                // Desktop : ajuster la largeur de la zone projets
+                projectsCenterArea.classList.remove("lg:w-full");
+                projectsCenterArea.classList.add("lg:w-1/2");
+            }
 
-                // En même temps, agrandir le conteneur de projets
-                projectsContainer.classList.remove("w-1/3", "border-r");
-                projectsContainer.classList.add("w-full", "border-r-0");
+            toggleIcon.classList.remove("ti-robot");
+            toggleIcon.classList.add("ti-robot-off");
+            const toggleBtnOpen = document.getElementById("chatbot-toggle-btn");
+            if (toggleBtnOpen) toggleBtnOpen.classList.remove("lia-cta");
+            if (toggleText) {
+                toggleText.textContent = "Fermer LIA";
+            }
+        } else {
+            // Fermer le chatbot
+            // Si on quitte une conversation qui a encore le titre par défaut, générer un titre automatiquement
+            if (conversationsManager && conversationsManager.currentConversation) {
+                const currentConv = conversationsManager.conversations.find(
+                    c => c.id === conversationsManager.currentConversation
+                );
+                console.log("Fermeture chatbot - Conversation actuelle:", currentConv);
+                // Générer un titre si c'est "Nouvelle conversation" ou un titre auto-généré (long ou se termine par "...")
+                const shouldGenerateTitle = currentConv && (
+                    currentConv.title === "Nouvelle conversation" ||
+                    currentConv.title === null ||
+                    currentConv.title.length > 30 ||
+                    currentConv.title.endsWith("...")
+                );
+                if (shouldGenerateTitle) {
+                    console.log("Génération du titre lors de la fermeture du chatbot");
+                    // Générer un titre automatiquement en arrière-plan (ne pas bloquer)
+                    conversationsManager.generateTitleForConversation(
+                        conversationsManager.currentConversation
+                    ).catch(err => {
+                        console.warn("Erreur lors de la génération du titre:", err);
+                    });
+                }
+            }
 
-                setTimeout(() => {
-                    chatbotArea.classList.add("hidden");
-                    chatbotArea.style.transform = "translateX(0)";
-                    chatbotArea.style.flex = "";
-                    chatbotArea.style.width = "";
-                }, 300);
-            });
+            toggleIcon.classList.remove("ti-robot-off");
+            toggleIcon.classList.add("ti-robot");
+            const toggleBtn = document.getElementById("chatbot-toggle-btn");
+            if (toggleBtn) toggleBtn.classList.add("lia-cta");
+            if (toggleText) {
+                toggleText.textContent = "Parler à LIA";
+            }
+
+            if (isMobile) {
+                // Animation mobile vers la droite
+                requestAnimationFrame(() => {
+                    chatbotArea.style.transform = "translateX(100%)";
+
+                    setTimeout(() => {
+                        chatbotArea.classList.add("hidden");
+                        chatbotArea.style.transform = "translateX(0)";
+                    }, 300);
+                });
+            } else {
+                // Desktop : agrandir la zone projets
+                projectsCenterArea.classList.remove("lg:w-1/2");
+                projectsCenterArea.classList.add("lg:w-full");
+                chatbotArea.classList.add("hidden");
+            }
+        }
+    }
+
+    // Fonction pour mettre à jour le style du chatbot selon le modèle sélectionné
+    function updateChatbotStyle() {
+        const chatbotArea = document.getElementById("chatbot-area");
+        const presetSelect = document.getElementById("model-preset-select");
+        if (chatbotArea && presetSelect) {
+            if (presetSelect.value === "private") {
+                chatbotArea.classList.add("private-mode");
+            } else {
+                chatbotArea.classList.remove("private-mode");
+            }
         }
     }
 
     // Initialiser l'état par défaut (chatbot ouvert)
     document.addEventListener("DOMContentLoaded", function () {
         const chatbotArea = document.getElementById("chatbot-area");
-        const projectsContainer = document.getElementById(
-            "projects-list-container"
+        const projectsCenterArea = document.getElementById(
+            "projects-center-area"
         );
         const toggleIcon = document.getElementById("chatbot-toggle-icon");
 
+        // Initialiser le gestionnaire de conversations (sans projet = page d'accueil)
+        // Les conversations seront affichées dans la sidebar de base.html
+        conversationsManager = new ConversationsManager(null);
+        conversationsManager.loadConversations();
+
+        const toggleText = document.getElementById("chatbot-toggle-text");
+        
+        const toggleBtn = document.getElementById("chatbot-toggle-btn");
         if (chatbotOpen) {
             chatbotArea.classList.remove("hidden");
             chatbotArea.style.transform = "translateX(0)";
-            projectsContainer.classList.remove("w-full", "border-r-0");
-            projectsContainer.classList.add("w-1/3", "border-r");
+            projectsCenterArea.classList.remove("lg:w-full");
+            projectsCenterArea.classList.add("lg:w-1/2");
             toggleIcon.classList.remove("ti-robot");
             toggleIcon.classList.add("ti-robot-off");
+            if (toggleBtn) toggleBtn.classList.remove("lia-cta");
+            if (toggleText) {
+                toggleText.textContent = "Fermer LIA";
+            }
+        } else {
+            if (toggleBtn) toggleBtn.classList.add("lia-cta");
+            if (toggleText) {
+                toggleText.textContent = "Parler à LIA";
+            }
+            chatbotArea.classList.add("hidden");
+            projectsCenterArea.classList.remove("lg:w-1/2");
+            projectsCenterArea.classList.add("lg:w-full");
+            toggleIcon.classList.remove("ti-robot-off");
+            toggleIcon.classList.add("ti-robot");
+        }
+
+        // Initialiser le style du chatbot selon le preset sélectionné
+        updateChatbotStyle();
+
+        // Ajouter un event listener sur le select pour mettre à jour le style
+        const presetSelect = document.getElementById("model-preset-select");
+        if (presetSelect) {
+            presetSelect.addEventListener("change", updateChatbotStyle);
         }
     });
 
-    // Charger les modèles Ollama disponibles
-    async function loadModels() {
-        const response = await apiCall("/api/ollama/models");
-        if (response && response.ok) {
-            const models = await response.json();
-            const select = document.getElementById("model-select");
-            select.innerHTML = "";
+    // Fonction pour obtenir le provider et le modèle selon le preset sélectionné
+    function getModelFromPreset(preset) {
+        const modelMap = {
+            "private": {{ model_private|tojson }},
+            "fast": {{ model_fast|tojson }},
+            "powerful": {{ model_powerful|tojson }}
+        };
+        return modelMap[preset] || modelMap["private"];
+    }
 
-            if (models.length > 0) {
-                // Ajouter tous les modèles
-                models.forEach((model) => {
-                    const option = document.createElement("option");
-                    option.value = model;
-                    option.textContent = model;
-                    select.appendChild(option);
-                });
-                // Sélectionner automatiquement le premier modèle
-                select.value = models[0];
-            } else {
-                select.innerHTML =
-                    '<option value="">Aucun modèle disponible</option>';
-            }
+    // Fonction utilitaire pour échapper le HTML
+    function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Fonction pour afficher des notifications
+    function showNotification(message, type = "info") {
+        const notification = document.createElement("div");
+        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+            type === "success"
+                ? "bg-green-500"
+                : type === "error"
+                ? "bg-red-500"
+                : "bg-blue-500"
+        } text-white`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        // Supprimer après 3 secondes
+        setTimeout(() => {
+            notification.style.opacity = "0";
+            notification.style.transition = "opacity 0.3s";
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    // Supprimer un projet
+    async function deleteProject(projectId, projectTitle) {
+        if (!confirm(`Voulez-vous vraiment supprimer le projet "${projectTitle}" ?\n\nCette action est irréversible et supprimera toutes les notes et conversations associées.`)) {
+            return;
+        }
+
+        const response = await apiCall(`/api/projects/${projectId}`, {
+            method: "DELETE",
+        });
+
+        if (response && response.ok) {
+            showNotification(`✅ Projet "${projectTitle}" supprimé`, "success");
+            await loadProjectsList();
+        } else {
+            const errorData = await response.json().catch(() => ({ detail: "Erreur lors de la suppression" }));
+            showNotification(`❌ Erreur: ${errorData.detail || "Impossible de supprimer le projet"}`, "error");
+        }
+    }
+
+    // Renommer un projet
+    async function renameProject(projectId, currentTitle) {
+        const newTitle = prompt("Nouveau nom du projet :", currentTitle);
+        if (!newTitle || !newTitle.trim() || newTitle === currentTitle) {
+            return;
+        }
+
+        const response = await apiCall(`/api/projects/${projectId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: newTitle.trim() }),
+        });
+
+        if (response && response.ok) {
+            showNotification(`✅ Projet renommé en "${newTitle.trim()}"`, "success");
+            await loadProjectsList();
+        } else {
+            const errorData = await response.json().catch(() => ({ detail: "Erreur lors du renommage" }));
+            showNotification(`❌ Erreur: ${errorData.detail || "Impossible de renommer le projet"}`, "error");
         }
     }
 
@@ -257,28 +866,46 @@ block content %}
             if (projects.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-12">
-                        <i class="ti ti-folder-off text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500 mb-2">Aucun projet</p>
-                        <p class="text-sm text-gray-400">Créez votre premier projet pour commencer</p>
+                        <i class="ti ti-folder-off text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                        <p class="text-gray-500 dark:text-gray-400 mb-2">Aucun projet</p>
+                        <p class="text-sm text-gray-400 dark:text-gray-500">Créez votre premier projet pour commencer</p>
                     </div>
                 `;
             } else {
                 container.innerHTML = projects
                     .map(
                         (project) => `
-                    <a href="/projects/${
-                        project.id
-                    }" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md transition mb-3">
-                        <h3 class="font-semibold text-gray-900 mb-1">${
-                            project.title
-                        }</h3>
-                        <p class="text-sm text-gray-500">${
-                            project.description || "Aucune description"
-                        }</p>
-                        <p class="text-xs text-gray-400 mt-2">Modifié le ${new Date(
-                            project.updated_at
-                        ).toLocaleDateString("fr-FR")}</p>
-                    </a>
+                    <div class="group relative p-5 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-lg transition-all duration-200 mb-4 bg-white dark:bg-gray-800">
+                        <a href="/projects/${
+                            project.id
+                        }" class="block">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 text-base sm:text-lg pr-8">${
+                                escapeHtml(project.title)
+                            }</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">${
+                                project.description || "Aucune description"
+                            }</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Modifié le ${new Date(
+                                project.updated_at
+                            ).toLocaleDateString("fr-FR")}</p>
+                        </a>
+                        <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                                onclick="event.stopPropagation(); renameProject(${project.id}, '${escapeHtml(project.title).replace(/'/g, "\\'")}')"
+                                class="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-colors"
+                                title="Renommer"
+                            >
+                                <i class="ti ti-pencil text-sm"></i>
+                            </button>
+                            <button
+                                onclick="event.stopPropagation(); deleteProject(${project.id}, '${escapeHtml(project.title).replace(/'/g, "\\'")}')"
+                                class="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-colors"
+                                title="Supprimer"
+                            >
+                                <i class="ti ti-trash text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
                 `
                     )
                     .join("");
@@ -289,20 +916,43 @@ block content %}
     // Animation de chargement
     let loadingAnimationInterval = null;
 
+    // Fonction utilitaire pour vérifier si l'utilisateur est proche du bas
+    function isNearBottom(container, threshold = 100) {
+        const scrollTop = container.scrollTop;
+        const scrollHeight = container.scrollHeight;
+        const clientHeight = container.clientHeight;
+        return scrollHeight - scrollTop - clientHeight < threshold;
+    }
+
+    // Fonction utilitaire pour scroller vers le bas (seulement si l'utilisateur est déjà proche du bas)
+    function scrollChatToBottom(force = false) {
+        const messagesContainer = document.getElementById("chat-messages");
+        if (messagesContainer) {
+            // Utiliser requestAnimationFrame pour s'assurer que le DOM est mis à jour
+            requestAnimationFrame(() => {
+                // Si force est true ou si l'utilisateur est proche du bas, scroller
+                if (force || isNearBottom(messagesContainer)) {
+                    messagesContainer.scrollTop =
+                        messagesContainer.scrollHeight;
+                }
+            });
+        }
+    }
+
     function showLoadingAnimation() {
         const messagesContainer = document.getElementById("chat-messages");
         const loadingDiv = document.createElement("div");
         loadingDiv.id = "loading-message";
         loadingDiv.className = "flex justify-start";
         loadingDiv.innerHTML = `
-            <div class="bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
+            <div class="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg px-4 py-2">
                 <span class="loading-dots">
                     <span>.</span><span>.</span><span>.</span>
                 </span>
             </div>
         `;
         messagesContainer.appendChild(loadingDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        scrollChatToBottom(true); // Forcer le scroll pour l'animation de chargement
 
         // Animation des points
         const dots = loadingDiv.querySelectorAll(".loading-dots span");
@@ -331,27 +981,99 @@ block content %}
         event.preventDefault();
         const input = document.getElementById("chat-input");
         const message = input.value.trim();
-        const modelSelect = document.getElementById("model-select");
-        const model = modelSelect.value;
+        const presetSelect = document.getElementById("model-preset-select");
+        const preset = presetSelect.value;
+        const { provider, model } = getModelFromPreset(preset);
+        const agentSelect = document.getElementById("agent-select");
+        const agentId = agentSelect.value ? parseInt(agentSelect.value) : null;
 
         if (!message) return;
-        if (!model) {
-            alert("Veuillez sélectionner un modèle");
-            return;
+
+        // Créer une conversation si aucune n'est sélectionnée
+        let conversationJustCreated = false;
+        if (!conversationsManager.currentConversation) {
+            // Créer la conversation sans sélectionner automatiquement (pour éviter de vider la zone de chat)
+            const response = await apiCall("/api/conversations", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: "Nouvelle conversation",
+                    project_id: null,
+                }),
+            });
+            
+            if (response && response.ok) {
+                const newConversation = await response.json();
+                conversationsManager.conversations.unshift(newConversation);
+                conversationsManager.currentConversation = newConversation.id;
+                conversationsManager.renderConversationsList();
+                conversationJustCreated = true;
+                // Ne pas appeler selectConversation() car cela viderait la zone de chat
+                // Réinitialiser l'historique local pour correspondre à la conversation vide
+                chatHistory.length = 0;
+            }
         }
 
-        // Ajouter le message de l'utilisateur
+        // Ajouter le message de l'utilisateur visuellement
         addMessageToChat("user", message);
         input.value = "";
 
-        // Désactiver le bouton et l'input pendant l'envoi
         const submitButton = event.target.querySelector(
             'button[type="submit"]'
         );
         submitButton.disabled = true;
         input.disabled = true;
 
-        // Préparer le contexte
+        // Mode génération d'image (OpenAI DALL-E 3)
+        if (imageGenerationEnabled) {
+            const messagesContainer = document.getElementById("chat-messages");
+            const emptyMessage = messagesContainer.querySelector(".text-center");
+            if (emptyMessage) emptyMessage.remove();
+
+            const assistantPlaceholder = document.createElement("div");
+            assistantPlaceholder.id = "assistant-streaming-message";
+            assistantPlaceholder.className = "flex justify-start";
+            assistantPlaceholder.innerHTML = `
+                <div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg px-4 py-2">
+                    <div class="markdown-content italic">Génération de l'image en cours...</div>
+                </div>
+            `;
+            messagesContainer.appendChild(assistantPlaceholder);
+            scrollChatToBottom(true);
+
+            try {
+                const token = localStorage.getItem("authToken");
+                const resp = await fetch("/api/chat/generate-image", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        prompt: message,
+                        conversation_id: conversationsManager ? conversationsManager.currentConversation : null,
+                    }),
+                });
+                const data = await resp.json().catch(() => ({}));
+
+                assistantPlaceholder.remove();
+                if (resp.ok && data.content) {
+                    addMessageToChat("assistant", data.content);
+                } else {
+                    addMessageToChat("assistant", "Erreur : " + (data.detail || "Impossible de générer l'image. Vérifiez que la clé OpenAI est configurée."));
+                }
+                if (conversationsManager) await conversationsManager.loadConversations();
+            } catch (err) {
+                assistantPlaceholder.remove();
+                addMessageToChat("assistant", "Erreur : " + err.message);
+            }
+            submitButton.disabled = false;
+            input.disabled = false;
+            input.focus();
+            return;
+        }
+
+        // Préparer le contexte (mode chat classique)
         const context = chatHistory.map((msg) => ({
             role: msg.role,
             content: msg.content,
@@ -359,21 +1081,24 @@ block content %}
 
         // Créer un message assistant vide pour le streaming (remplace l'animation de chargement)
         const messagesContainer = document.getElementById("chat-messages");
-        // Supprimer le message vide initial s'il existe
-        if (messagesContainer.querySelector(".text-center")) {
-            messagesContainer.innerHTML = "";
+        // Supprimer uniquement le message vide initial s'il existe, pas tous les messages
+        const emptyMessage = messagesContainer.querySelector(".text-center");
+        if (emptyMessage) {
+            emptyMessage.remove();
         }
 
         const assistantMessageDiv = document.createElement("div");
         assistantMessageDiv.id = "assistant-streaming-message";
         assistantMessageDiv.className = "flex justify-start";
         assistantMessageDiv.innerHTML = `
-            <div class="max-w-2xl bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
-                <p class="text-gray-500 italic">En cours de génération...</p>
+            <div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg px-4 py-2">
+                <div class="markdown-content text-gray-500 dark:text-gray-400 italic">En cours de génération...</div>
             </div>
         `;
         messagesContainer.appendChild(assistantMessageDiv);
-        const assistantContent = assistantMessageDiv.querySelector("p");
+        scrollChatToBottom(true); // Forcer le scroll au début du streaming
+        const assistantContent =
+            assistantMessageDiv.querySelector(".markdown-content");
 
         let fullResponse = "";
         let firstChunkReceived = false;
@@ -390,7 +1115,12 @@ block content %}
                 body: JSON.stringify({
                     message: message,
                     model: model,
+                    provider: provider,
                     context: context,
+                    conversation_id: conversationsManager
+                        ? conversationsManager.currentConversation
+                        : null,
+                    agent_id: agentId,
                 }),
             });
 
@@ -420,17 +1150,24 @@ block content %}
                                 // Ollama renvoie soit {"message": {"content": "..."}} soit {"done": true}
                                 if (
                                     jsonData.message &&
-                                    jsonData.message.content
+                                    jsonData.message.content &&
+                                    jsonData.message.content.trim().length > 0
                                 ) {
-                                    // Supprimer le texte de chargement au premier chunk
+                                    // Ajouter le contenu seulement s'il n'est pas vide
+                                    fullResponse += jsonData.message.content;
+                                    
+                                    // Toujours mettre à jour l'affichage une fois qu'on a du contenu
+                                    // Le message "en cours de génération" sera remplacé par le contenu réel
                                     if (!firstChunkReceived) {
-                                        fullResponse = "";
                                         firstChunkReceived = true;
                                     }
-                                    fullResponse += jsonData.message.content;
-                                    assistantContent.textContent = fullResponse;
-                                    messagesContainer.scrollTop =
-                                        messagesContainer.scrollHeight;
+                                    // Rendre le Markdown en HTML de façon sécurisée
+                                    const rawHtml = parseMarkdown(fullResponse);
+                                    const cleanHtml =
+                                        DOMPurify.sanitize(rawHtml);
+                                    // Mettre à jour le contenu (tableaux en wrapper scrollable)
+                                    assistantContent.innerHTML = wrapTablesInResponsive(cleanHtml);
+                                    scrollChatToBottom(false); // Ne pas forcer, seulement si proche du bas
                                 } else if (jsonData.done) {
                                     // Fin du stream
                                     break;
@@ -454,6 +1191,22 @@ block content %}
             // Finaliser le message
             assistantMessageDiv.removeAttribute("id");
             chatHistory.push({ role: "assistant", content: fullResponse });
+            // Re-rendu complet pour que les tableaux (et tout le markdown) soient corrects après le stream
+            if (assistantContent && fullResponse) {
+                const rawHtml = parseMarkdown(fullResponse);
+                const cleanHtml = DOMPurify.sanitize(rawHtml);
+                assistantContent.innerHTML = wrapTablesInResponsive(cleanHtml);
+            }
+            scrollChatToBottom(false); // Ne pas forcer à la fin, seulement si proche du bas
+
+            // Attendre un court délai pour s'assurer que le streaming est complètement terminé
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            // Recharger uniquement la liste des conversations pour mettre à jour le titre (peut avoir été auto-généré)
+            // Ne pas recharger les messages car ils sont déjà affichés correctement dans la zone de chat
+            if (conversationsManager) {
+                await conversationsManager.loadConversations();
+            }
         } catch (error) {
             if (document.getElementById("assistant-streaming-message")) {
                 document.getElementById("assistant-streaming-message").remove();
@@ -481,22 +1234,61 @@ block content %}
         messageDiv.className = `flex ${
             role === "user" ? "justify-end" : "justify-start"
         }`;
+
+        // Pour les messages assistant, rendre le Markdown
+        let contentHtml;
+        if (role === "assistant") {
+            const rawHtml = parseMarkdown(content);
+            const cleanHtml = DOMPurify.sanitize(rawHtml);
+            contentHtml = `<div class="markdown-content">${wrapTablesInResponsive(cleanHtml)}</div>`;
+        } else {
+            // Messages utilisateur en texte brut
+            contentHtml = `<p class="whitespace-pre-wrap">${escapeHtml(
+                content
+            )}</p>`;
+        }
+
         messageDiv.innerHTML = `
             <div class="max-w-2xl ${
                 role === "user"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-900"
+                    ? "bg-blue-600 dark:bg-blue-500 text-white"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"
             } rounded-lg px-4 py-2">
-                <p>${content}</p>
+                ${contentHtml}
             </div>
         `;
         messagesContainer.appendChild(messageDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        scrollChatToBottom(true); // Forcer le scroll pour les nouveaux messages
+    }
+
+    // Fonction pour échapper le HTML
+    function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Charger les agents pour le sélecteur
+    async function loadAgentsForSelector() {
+        try {
+            const response = await apiCall('/api/agents');
+            if (response && response.ok) {
+                const agents = await response.json();
+                const select = document.getElementById('agent-select');
+                if (select) {
+                    select.innerHTML = '<option value="">🤖 Aucun agent</option>' +
+                        agents.map(agent => `<option value="${agent.id}">🤖 ${escapeHtml(agent.name)}</option>`).join('');
+                }
+            }
+        } catch (error) {
+            console.error('Erreur lors du chargement des agents:', error);
+        }
     }
 
     // Initialisation
     if (authToken) {
-        loadModels();
+        loadAgentsForSelector();
+        // Les modèles sont maintenant gérés par les presets, pas besoin de charger
         loadProjectsList();
     }
 </script>

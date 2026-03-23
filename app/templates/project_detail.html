@@ -1,42 +1,520 @@
-{% extends "base.html" %}
-
-{% block title %}Projet - Noton{% endblock %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% block title %}Projet - {{ app_name }}{% endblock %} {% block
+extra_head %}
 <!-- Marked.js pour le rendu Markdown -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <!-- DOMPurify pour sécuriser le HTML généré -->
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<!-- PDF.js pour la visualisation des PDFs -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf_viewer.min.css">
+<!-- Conversations Manager -->
+<script src="/static/conversations.js"></script>
 <style>
-    /* Styles pour le rendu Markdown dans les messages du chat */
-    .markdown-content h1 { font-size: 1.5em; font-weight: bold; margin: 0.5em 0; }
-    .markdown-content h2 { font-size: 1.3em; font-weight: bold; margin: 0.5em 0; }
-    .markdown-content h3 { font-size: 1.1em; font-weight: bold; margin: 0.5em 0; }
-    .markdown-content p { margin: 0.5em 0; }
-    .markdown-content ul, .markdown-content ol { margin: 0.5em 0; padding-left: 1.5em; }
-    .markdown-content li { margin: 0.25em 0; }
-    .markdown-content strong { font-weight: bold; }
-    .markdown-content em { font-style: italic; }
-    .markdown-content code { background-color: rgba(0,0,0,0.1); padding: 0.2em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.9em; }
-    .markdown-content pre { background-color: rgba(0,0,0,0.1); padding: 0.5em; border-radius: 5px; overflow-x: auto; }
-    .markdown-content pre code { background-color: transparent; padding: 0; }
-    .markdown-content blockquote { border-left: 3px solid rgba(0,0,0,0.2); padding-left: 1em; margin: 0.5em 0; font-style: italic; }
-</style>
-{% endblock %}
+    /* ===== STYLES MARKDOWN MODERNES POUR LE CHAT ===== */
+    .markdown-content {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #374151;
+    }
+    .dark .markdown-content {
+        color: #e5e7eb;
+    }
+    
+    /* Texte de base en italique pour les réponses assistant */
+    .assistant-message .markdown-content {
+        font-style: italic;
+    }
+    .assistant-message .markdown-content h1,
+    .assistant-message .markdown-content h2,
+    .assistant-message .markdown-content h3,
+    .assistant-message .markdown-content h4,
+    .assistant-message .markdown-content strong,
+    .assistant-message .markdown-content code,
+    .assistant-message .markdown-content pre {
+        font-style: normal;
+    }
 
-{% block content %}
+    /* Titres */
+    .markdown-content h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 1.5rem 0 1rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e5e7eb;
+        color: #111827;
+    }
+    .dark .markdown-content h1 {
+        border-bottom-color: #4b5563;
+        color: #f9fafb;
+    }
+    .markdown-content h2 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 1.25rem 0 0.75rem 0;
+        color: #1f2937;
+    }
+    .dark .markdown-content h2 {
+        color: #f3f4f6;
+    }
+    .markdown-content h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 1rem 0 0.5rem 0;
+        color: #374151;
+    }
+    .dark .markdown-content h3 {
+        color: #e5e7eb;
+    }
+    .markdown-content h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0.75rem 0 0.5rem 0;
+        color: #4b5563;
+    }
+    .dark .markdown-content h4 {
+        color: #d1d5db;
+    }
+    
+    /* Premier élément sans marge top */
+    .markdown-content > *:first-child {
+        margin-top: 0;
+    }
+
+    /* Paragraphes */
+    .markdown-content p {
+        margin: 0.75rem 0;
+    }
+
+    /* Listes */
+    .markdown-content ul,
+    .markdown-content ol {
+        margin: 0.75rem 0;
+        padding-left: 1.75rem;
+    }
+    .markdown-content ul {
+        list-style-type: disc;
+    }
+    .markdown-content ol {
+        list-style-type: decimal;
+    }
+    .markdown-content li {
+        margin: 0.35rem 0;
+        padding-left: 0.25rem;
+    }
+    .markdown-content li::marker {
+        color: #6b7280;
+    }
+    .dark .markdown-content li::marker {
+        color: #9ca3af;
+    }
+    /* Sous-listes */
+    .markdown-content ul ul,
+    .markdown-content ol ol,
+    .markdown-content ul ol,
+    .markdown-content ol ul {
+        margin: 0.25rem 0;
+    }
+
+    /* Texte en gras et italique */
+    .markdown-content strong {
+        font-weight: 700;
+        color: #111827;
+    }
+    .dark .markdown-content strong {
+        color: #f9fafb;
+    }
+    .markdown-content em {
+        font-style: italic;
+    }
+
+    /* Code inline */
+    .markdown-content code {
+        font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+        font-size: 0.875em;
+        background-color: #f3f4f6;
+        color: #dc2626;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        font-style: normal;
+    }
+    .dark .markdown-content code {
+        background-color: #374151;
+        color: #fca5a5;
+    }
+
+    /* Blocs de code */
+    .markdown-content pre {
+        background-color: #1f2937;
+        color: #e5e7eb;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+    .dark .markdown-content pre {
+        background-color: #111827;
+    }
+    .markdown-content pre code {
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+        font-size: inherit;
+    }
+
+    /* Citations */
+    .markdown-content blockquote {
+        border-left: 4px solid #3b82f6;
+        background-color: #eff6ff;
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+        border-radius: 0 8px 8px 0;
+        font-style: italic;
+        color: #1e40af;
+    }
+    .dark .markdown-content blockquote {
+        background-color: #1e3a5f;
+        border-left-color: #60a5fa;
+        color: #bfdbfe;
+    }
+    .markdown-content blockquote p {
+        margin: 0;
+    }
+
+    /* Tableaux : wrapper scrollable + présentation propre */
+    .markdown-content .table-wrapper {
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        -webkit-overflow-scrolling: touch;
+    }
+    .dark .markdown-content .table-wrapper {
+        border-color: #4b5563;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    .markdown-content table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+    .markdown-content th,
+    .markdown-content td {
+        border: 1px solid #e5e7eb;
+        padding: 0.6rem 0.75rem;
+        text-align: left;
+        vertical-align: top;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    .dark .markdown-content th,
+    .dark .markdown-content td {
+        border-color: #4b5563;
+    }
+    .markdown-content th {
+        background-color: #f9fafb;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .dark .markdown-content th {
+        background-color: #374151;
+    }
+    .markdown-content tr:nth-child(even) {
+        background-color: #f9fafb;
+    }
+    .dark .markdown-content tr:nth-child(even) {
+        background-color: #1f2937;
+    }
+    .markdown-content tbody tr:hover {
+        background-color: #f3f4f6;
+    }
+    .dark .markdown-content tbody tr:hover {
+        background-color: #374151;
+    }
+
+    /* Liens */
+    .markdown-content a {
+        color: #2563eb;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+    .markdown-content a:hover {
+        color: #1d4ed8;
+    }
+    .dark .markdown-content a {
+        color: #60a5fa;
+    }
+    .dark .markdown-content a:hover {
+        color: #93c5fd;
+    }
+
+    /* Ligne horizontale */
+    .markdown-content hr {
+        border: none;
+        border-top: 2px solid #e5e7eb;
+        margin: 1.5rem 0;
+    }
+    .dark .markdown-content hr {
+        border-top-color: #4b5563;
+    }
+
+    /* Images */
+    .markdown-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 1rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .markdown-content img:hover {
+        transform: scale(1.01);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    .dark .markdown-content img {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Style pour le contour violet du chatbot en mode privé */
+    #project-chatbot-area.private-mode {
+        border: 2px solid #9333ea;
+        border-radius: 0.5rem;
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #project-chatbot-area.private-mode {
+        border-color: #a855f7;
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    /* Appliquer un background violet opaque aux éléments enfants en mode privé */
+    #project-chatbot-area.private-mode > div > div,
+    #project-chatbot-area.private-mode #project-chat-messages {
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #project-chatbot-area.private-mode > div > div,
+    .dark #project-chatbot-area.private-mode #project-chat-messages {
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    #project-chatbot-area.private-mode .bg-white {
+        background-color: #faf5ff !important; /* Violet très pâle opaque */
+    }
+    .dark #project-chatbot-area.private-mode .bg-gray-800 {
+        background-color: #2d1b3d !important; /* Violet foncé moins saturé */
+    }
+    
+    /* Styles pour les citations inline [1], [2]... */
+    .citation-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.4em;
+        height: 1.4em;
+        font-size: 0.7em;
+        font-weight: bold;
+        background: #3b82f6;
+        color: white !important;
+        border-radius: 9999px;
+        text-decoration: none !important;
+        vertical-align: super;
+        margin: 0 2px;
+        padding: 0 4px;
+        font-style: normal !important;
+        transition: background-color 0.2s, transform 0.1s;
+        border: none;
+        cursor: pointer;
+        line-height: 1;
+    }
+    .citation-link:hover {
+        background: #2563eb;
+        transform: scale(1.1);
+    }
+    .citation-link[title] {
+        cursor: help;
+    }
+    .dark .citation-link {
+        background: #60a5fa;
+        color: #1e293b !important;
+    }
+    .dark .citation-link:hover {
+        background: #93c5fd;
+    }
+    
+    /* Styles pour la section sources */
+    .sources-section {
+        font-style: normal !important;
+    }
+    .sources-section * {
+        font-style: normal !important;
+    }
+    .source-badge {
+        text-decoration: none !important;
+        font-style: normal !important;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+    .source-badge:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .source-badge .citation-number {
+        color: #3b82f6;
+        font-style: normal !important;
+    }
+    .dark .source-badge .citation-number {
+        color: #60a5fa;
+    }
+    
+    /* Styles pour la modale de prévisualisation source */
+    #source-preview-modal .prose {
+        font-family: inherit;
+    }
+    
+    /* Styles pour le visualiseur PDF intégré */
+    #pdf-modal-container {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background: #525659;
+    }
+    #pdf-modal-container canvas {
+        display: block;
+        margin: 10px auto;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .pdf-modal-toolbar {
+        background: #323639;
+        color: white;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .pdf-modal-toolbar button {
+        background: #4a4d50;
+        border: none;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+    }
+    .pdf-modal-toolbar button:hover {
+        background: #5a5d60;
+    }
+    .pdf-modal-toolbar button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .pdf-modal-toolbar input {
+        width: 50px;
+        padding: 4px 6px;
+        border-radius: 4px;
+        border: none;
+        text-align: center;
+        font-size: 13px;
+    }
+    .pdf-modal-toolbar select {
+        padding: 4px 6px;
+        border-radius: 4px;
+        border: none;
+        font-size: 13px;
+    }
+    .pdf-page-indicator {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+    /* Bouton LIA : style par défaut (Fermer LIA) */
+    #project-chatbot-toggle-btn {
+        background: transparent;
+        color: #6b7280;
+    }
+    #project-chatbot-toggle-btn:hover {
+        background: #f3f4f6;
+        color: #111827;
+    }
+    .dark #project-chatbot-toggle-btn {
+        color: #9ca3af;
+    }
+    .dark #project-chatbot-toggle-btn:hover {
+        background: #374151;
+        color: #f3f4f6;
+    }
+    /* Bouton "Parler à LIA" mis en évidence (état CTA) */
+    #project-chatbot-toggle-btn.lia-cta {
+        background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+        color: white !important;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #project-chatbot-toggle-btn.lia-cta:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+        color: white !important;
+        background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
+    }
+    #project-chatbot-toggle-btn.lia-cta .ti {
+        color: white !important;
+    }
+    .dark #project-chatbot-toggle-btn.lia-cta {
+        background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.35);
+    }
+    .dark #project-chatbot-toggle-btn.lia-cta:hover {
+        background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45);
+    }
+</style>
+{% endblock %} {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <!-- Header -->
-    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center gap-4">
-            <a href="/" class="text-gray-600 hover:text-gray-900">
-                <i class="ti ti-arrow-left"></i>
+    <header
+        class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 flex-shrink-0 shadow-sm"
+    >
+        <div class="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+            <a
+                href="/"
+                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2.5 -ml-2 sm:ml-0 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
+            >
+                <i class="ti ti-arrow-left text-xl"></i>
             </a>
-            <h1 id="project-title" class="text-xl font-semibold text-gray-900">Chargement...</h1>
+            <h1
+                id="project-title"
+                class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100 truncate tracking-tight"
+            >
+                Chargement...
+            </h1>
         </div>
-        <div class="flex items-center gap-2">
-            <button onclick="toggleProjectChatbot()" class="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-colors" title="Afficher/Masquer le chatbot">
-                <i id="project-chatbot-toggle-icon" class="ti ti-robot text-xl"></i>
+        <div class="flex items-center gap-3 flex-wrap">
+            <button
+                id="project-chatbot-toggle-btn"
+                onclick="toggleProjectChatbot()"
+                class="lia-cta flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm sm:text-base transition-all duration-200 border border-transparent"
+                title="Afficher/Masquer le chatbot"
+            >
+                <i
+                    id="project-chatbot-toggle-icon"
+                    class="ti ti-robot text-xl"
+                ></i>
+                <span id="project-chatbot-toggle-text" class="text-sm sm:text-base">Parler à LIA</span>
             </button>
             <button onclick="showUploadDocumentModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2">
                 <i class="ti ti-upload"></i>
@@ -44,176 +522,527 @@
             </button>
             <button onclick="showCreateNoteModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
                 <i class="ti ti-plus"></i>
-                <span>Nouvelle note</span>
+                <span class="hidden sm:inline">Nouvelle note</span>
+                <span class="sm:hidden">Note</span>
+            </button>
+            <button
+                onclick="showUploadDocumentModal()"
+                class="px-4 sm:px-5 py-2.5 bg-green-600 dark:bg-green-500 text-white rounded-xl hover:bg-green-700 dark:hover:bg-green-600 flex items-center gap-2 text-sm sm:text-base font-medium shadow-sm hover:shadow transition-shadow"
+            >
+                <i class="ti ti-upload"></i>
+                <span class="hidden sm:inline">Uploader</span>
+                <span class="sm:hidden">Upload</span>
+            </button>
+            <button
+                onclick="window.location.href = `/projects/${projectId}/kag-graph`"
+                class="px-4 sm:px-5 py-2.5 border border-violet-500/70 text-violet-700 dark:text-violet-200 rounded-xl hover:bg-violet-50 dark:hover:bg-violet-900/30 flex items-center gap-2 text-sm sm:text-base font-medium transition-colors"
+            >
+                <i class="ti ti-graph"></i>
+                <span class="hidden sm:inline">Graphe KAG</span>
+                <span class="sm:hidden">Graphe</span>
             </button>
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex overflow-hidden min-h-0">
-        <!-- Notes List -->
-        <div id="notes-list-container" class="w-full bg-white border-r-0 overflow-y-auto transition-all duration-300 ease-in-out min-h-0">
-            <div class="p-6">
-                <div id="notes-container" class="flex flex-wrap gap-4 notes-grid">
-                    <!-- Notes chargées dynamiquement -->
-                </div>
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+        <!-- Notes Center Area -->
+        <div
+            id="notes-center-area"
+            class="flex-1 overflow-y-auto p-4 sm:p-6 bg-white dark:bg-gray-800 min-h-0 transition-all duration-300 ease-in-out"
+        >
+            <div
+                id="notes-container"
+                class="flex flex-wrap gap-3 sm:gap-4 notes-grid"
+            >
+                <!-- Notes chargées dynamiquement -->
             </div>
         </div>
 
         <!-- Chatbot Area -->
-        <div id="project-chatbot-area" class="hidden flex-1 flex flex-col bg-white transition-all duration-300 ease-in-out min-h-0"
-             style="transform: translateX(0);">
-            <div class="p-6 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-900">Assistant IA du projet</h2>
-                    <p class="text-sm text-gray-500 mt-1">Posez des questions sur vos notes</p>
-                </div>
-                <button onclick="toggleProjectChatbot()" class="text-gray-400 hover:text-gray-600 p-2">
-                    <i class="ti ti-robot-off text-xl"></i>
-                </button>
-            </div>
-            
-            <!-- Model Selection -->
-            <div class="px-6 py-4 border-b border-gray-200 flex-shrink-0">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Modèle</label>
-                <select id="project-model-select" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Chargement des modèles...</option>
-                </select>
-            </div>
-
-            <!-- Chat Messages -->
-            <div id="project-chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 min-h-0">
-                <div class="text-center text-gray-500 py-8">
-                    <i class="ti ti-message-circle text-4xl mb-2"></i>
-                    <p>Posez des questions sur vos notes</p>
-                </div>
-            </div>
-
-            <!-- Chat Input -->
-            <div class="p-6 border-t border-gray-200 flex-shrink-0">
-                <form id="project-chat-form" onsubmit="sendProjectChatMessage(event)" class="flex gap-2">
-                    <input 
-                        type="text" 
-                        id="project-chat-input" 
-                        placeholder="Tapez votre message..." 
-                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
+        <div
+            id="project-chatbot-area"
+            class="hidden fixed lg:relative inset-0 lg:inset-auto z-50 lg:z-auto flex flex-col bg-white dark:bg-gray-800 transition-all duration-300 ease-in-out min-h-0 overflow-hidden lg:w-1/2"
+            style="transform: translateX(0)"
+        >
+            <!-- Zone de chat principale -->
+            <div class="flex-1 flex flex-col min-h-0">
+                <div
+                    class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between flex-shrink-0 bg-white dark:bg-gray-800"
+                >
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-sm">
+                            <i class="ti ti-robot text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h2
+                                class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100"
+                            >
+                                LIA
+                            </h2>
+                            <p
+                                class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5"
+                            >
+                                Posez des questions sur vos notes du projet
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        onclick="toggleProjectChatbot()"
+                        class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-2"
+                        title="Fermer le chatbot"
                     >
-                    <button 
-                        type="submit" 
-                        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-                    >
-                        <i class="ti ti-send"></i>
-                        <span>Envoyer</span>
+                        <i class="ti ti-robot-off text-xl"></i>
                     </button>
-                </form>
+                </div>
+
+                <!-- Chat Messages -->
+                <div
+                    id="project-chat-messages"
+                    class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 min-h-0 bg-white dark:bg-gray-800"
+                >
+                    <div
+                        class="text-center text-gray-500 dark:text-gray-400 py-12"
+                    >
+                        <div class="inline-flex w-14 h-14 rounded-2xl bg-gray-100 dark:bg-gray-700 items-center justify-center mb-4">
+                            <i class="ti ti-message-circle text-2xl text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <p class="text-sm sm:text-base font-medium text-gray-600 dark:text-gray-300">
+                            Posez des questions sur vos notes
+                        </p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                            LIA peut chercher dans vos documents et vous répondre
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div
+                    class="p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 flex-shrink-0 bg-white dark:bg-gray-800"
+                >
+                    <form
+                        id="project-chat-form"
+                        onsubmit="sendProjectChatMessage(event)"
+                        class="flex flex-col gap-2"
+                    >
+                        <!-- Ligne 1: Selects -->
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="relative">
+                                <select
+                                    id="project-model-preset-select"
+                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+                                >
+                                    <option value="private">🔒 Privé</option>
+                                    <option value="fast" selected>⚡ Rapide</option>
+                                    <option value="powerful">💪 Puissant</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <select
+                                    id="project-agent-select"
+                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
+                                >
+                                    <option value="">🤖 Aucun agent</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Ligne 2: Input + Bouton Envoyer -->
+                        <div class="flex gap-2">
+                            <input
+                                type="text"
+                                id="project-chat-input"
+                                placeholder="Tapez votre message..."
+                                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                                autocomplete="off"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                class="px-4 sm:px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base flex-shrink-0"
+                            >
+                                <i class="ti ti-send"></i>
+                                <span class="hidden sm:inline">Envoyer</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<style>
-    .loading-dots {
-        display: inline-flex;
-        gap: 4px;
-    }
-    .loading-dots span {
-        animation: dot-pulse 1.4s ease-in-out infinite;
-        font-size: 20px;
-        line-height: 1;
-    }
-    .loading-dots span:nth-child(1) {
-        animation-delay: 0s;
-    }
-    .loading-dots span:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-    .loading-dots span:nth-child(3) {
-        animation-delay: 0.4s;
-    }
-    @keyframes dot-pulse {
-        0%, 60%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
+    <style>
+        .loading-dots {
+            display: inline-flex;
+            gap: 4px;
         }
-        30% {
-            opacity: 1;
-            transform: scale(1.2);
+        .loading-dots span {
+            animation: dot-pulse 1.4s ease-in-out infinite;
+            font-size: 20px;
+            line-height: 1;
         }
-    }
-    @keyframes spin {
-        from {
-            transform: rotate(0deg);
+        .loading-dots span:nth-child(1) {
+            animation-delay: 0s;
         }
-        to {
-            transform: rotate(360deg);
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
         }
-    }
-    .animate-spin {
-        animation: spin 1s linear infinite;
-    }
-    
-    /* Styles pour l'affichage des notes en grille */
-    .notes-grid .note-card {
-        width: calc(33.333% - 0.67rem); /* 3 colonnes avec gap - largeur fixe */
-        flex: 0 0 calc(33.333% - 0.67rem); /* Empêcher le flex-grow */
-        min-width: 300px;
-        max-width: calc(33.333% - 0.67rem);
-    }
-    
-    /* Sur les écrans moyens, afficher 2 colonnes */
-    @media (max-width: 1024px) {
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes dot-pulse {
+            0%,
+            60%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Force le scroll de la zone de messages */
+        #project-chat-messages {
+            max-height: 100%;
+            height: 0;
+        }
+
+        /* Styles pour l'affichage des notes en grille */
         .notes-grid .note-card {
-            width: calc(50% - 0.5rem); /* 2 colonnes avec gap - largeur fixe */
-            flex: 0 0 calc(50% - 0.5rem);
-            max-width: calc(50% - 0.5rem);
+            width: calc(
+                33.333% - 0.67rem
+            ); /* 3 colonnes avec gap - largeur fixe */
+            flex: 0 0 calc(33.333% - 0.67rem); /* Empêcher le flex-grow */
+            min-width: 280px;
+            max-width: calc(33.333% - 0.67rem);
         }
-    }
-    
-    /* Sur les petits écrans, afficher 1 colonne */
-    @media (max-width: 640px) {
-        .notes-grid .note-card {
+
+        /* Quand le chatbot est ouvert, afficher 1 note par ligne */
+        #notes-center-area.lg\:w-1\/2 .notes-grid .note-card {
             width: 100%; /* 1 colonne - largeur fixe */
             flex: 0 0 100%;
             min-width: 100%;
             max-width: 100%;
         }
-    }
-    
-    /* Mode liste : toujours 1 colonne */
-    .notes-list .note-card {
-        flex: 1 1 100%;
-        min-width: 100%;
-        max-width: 100%;
-    }
-    
-    /* Limiter la hauteur du contenu avec line-clamp */
-    .line-clamp-6 {
-        display: -webkit-box;
-        -webkit-line-clamp: 6;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-</style>
 
-<!-- Create Note Modal -->
-<div id="create-note-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
-        <h2 class="text-xl font-bold mb-4">Créer une nouvelle note</h2>
-        <form id="create-note-form" onsubmit="createNote(event)">
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Titre</label>
-                <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Titre de la note">
+        /* Sur les écrans moyens, afficher 2 colonnes */
+        @media (max-width: 1024px) {
+            .notes-grid .note-card {
+                width: calc(
+                    50% - 0.5rem
+                ); /* 2 colonnes avec gap - largeur fixe */
+                flex: 0 0 calc(50% - 0.5rem);
+                max-width: calc(50% - 0.5rem);
+                min-width: calc(50% - 0.5rem);
+            }
+        }
+
+        /* Sur les petits écrans, afficher 1 colonne */
+        @media (max-width: 640px) {
+            .notes-grid .note-card {
+                width: 100%; /* 1 colonne - largeur fixe */
+                flex: 0 0 100%;
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Mode liste : toujours 1 colonne */
+        .notes-list .note-card {
+            flex: 1 1 100%;
+            min-width: 100%;
+            max-width: 100%;
+        }
+
+        /* Limiter la hauteur du contenu avec line-clamp */
+        .line-clamp-6 {
+            display: -webkit-box;
+            -webkit-line-clamp: 6;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+
+    <!-- Create Note Modal -->
+    <div
+        id="create-note-modal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+    >
+        <div
+            class="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        >
+            <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                Créer une nouvelle note
+            </h2>
+            <form id="create-note-form" onsubmit="createNote(event)">
+                <div class="mb-4">
+                    <label
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        >Titre</label
+                    >
+                    <input
+                        type="text"
+                        name="title"
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Titre de la note"
+                    />
+                </div>
+                <div class="mb-4">
+                    <label
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        >Contenu</label
+                    >
+                    <textarea
+                        name="content"
+                        rows="10"
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Contenu de la note..."
+                    ></textarea>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button
+                        type="button"
+                        onclick="hideCreateNoteModal()"
+                        class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        type="submit"
+                        class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                    >
+                        Créer la note
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Document Modal -->
+    <div
+        id="upload-document-modal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+    >
+        <div
+            class="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        >
+            <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                Uploader des documents
+            </h2>
+            <form id="upload-document-form" onsubmit="uploadDocument(event)">
+                <div class="mb-4">
+                    <label
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        >Fichiers</label
+                    >
+                    <input
+                        type="file"
+                        id="document-file-input"
+                        name="files"
+                        multiple
+                        required
+                        accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.txt,.md,.jpg,.jpeg,.png,.csv"
+                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Formats supportés: PDF, DOCX, XLSX, PPTX, CSV, images,
+                        texte. Vous pouvez sélectionner plusieurs fichiers.
+                    </p>
+                </div>
+                <div
+                    id="upload-files-list"
+                    class="hidden mb-4 max-h-40 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2 bg-gray-50 dark:bg-gray-700"
+                >
+                    <p
+                        class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2"
+                    >
+                        Fichiers sélectionnés:
+                    </p>
+                    <ul
+                        id="upload-files-list-items"
+                        class="text-xs text-gray-600 dark:text-gray-400 space-y-1"
+                    ></ul>
+                </div>
+                <div id="upload-progress" class="hidden mb-4">
+                    <div
+                        class="bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"
+                    >
+                        <div
+                            id="upload-progress-bar"
+                            class="bg-green-600 dark:bg-green-500 h-2.5 rounded-full transition-all duration-300"
+                            style="width: 0%"
+                        ></div>
+                    </div>
+                    <p
+                        id="upload-status"
+                        class="text-sm text-gray-600 dark:text-gray-400 mt-2"
+                    >
+                        Traitement en cours...
+                    </p>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button
+                        type="button"
+                        onclick="hideUploadDocumentModal()"
+                        class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    >
+                        Annuler
+                    </button>
+                    <button
+                        type="submit"
+                        id="upload-submit-btn"
+                        class="px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-lg hover:bg-green-700 dark:hover:bg-green-600"
+                    >
+                        Uploader
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Source Preview Modal -->
+    <div
+        id="source-preview-modal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        onclick="if(event.target === this) hideSourcePreviewModal()"
+    >
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] flex flex-col"
+        >
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span id="source-preview-badge" class="citation-number font-bold text-blue-600 dark:text-blue-400">[1]</span>
+                    <h3 id="source-preview-title" class="text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">Titre de la note</h3>
+                </div>
+                <button onclick="hideSourcePreviewModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="ti ti-x text-xl"></i>
+                </button>
             </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Contenu</label>
-                <textarea name="content" rows="10" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Contenu de la note..."></textarea>
+            <div class="p-4 flex-1 overflow-y-auto">
+                <div id="source-preview-meta" class="flex flex-wrap gap-2 mb-3 text-xs text-gray-500 dark:text-gray-400">
+                    <span id="source-preview-page" class="hidden bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                        <i class="ti ti-file-text mr-1"></i>Page <span id="source-preview-page-num">1</span>
+                    </span>
+                    <span id="source-preview-section" class="hidden bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                        <i class="ti ti-bookmark mr-1"></i><span id="source-preview-section-text">Section</span>
+                    </span>
+                    <span id="source-preview-score" class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">
+                        <i class="ti ti-chart-bar mr-1"></i>Pertinence: <span id="source-preview-score-val">85%</span>
+                    </span>
+                    <span id="source-preview-image-badge" class="hidden bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-1 rounded">
+                        <i class="ti ti-photo mr-1"></i>Image/Schéma
+                    </span>
+                </div>
+                <!-- Conteneur pour l'image (multimodal) -->
+                <div id="source-preview-image-container" class="hidden mb-4">
+                    <img 
+                        id="source-preview-image"
+                        src=""
+                        alt="Schéma ou image du document"
+                        class="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:opacity-90 transition-opacity"
+                        onclick="window.open(this.src, '_blank')"
+                        title="Cliquer pour ouvrir en plein écran"
+                    />
+                </div>
+                <div id="source-preview-content" class="prose dark:prose-invert prose-sm max-w-none text-gray-700 dark:text-gray-300 whitespace-pre-wrap bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                    Contenu du passage...
+                </div>
             </div>
-            <div class="flex justify-end gap-2">
-                <button type="button" onclick="hideCreateNoteModal()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Annuler</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Créer la note</button>
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-2 justify-end">
+                <a 
+                    id="source-preview-edit-link"
+                    href="#"
+                    target="_blank"
+                    class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center gap-2"
+                >
+                    <i class="ti ti-edit"></i>
+                    Éditer la note
+                </a>
+                <button 
+                    id="source-preview-pdf-btn"
+                    onclick="openPdfViewer()"
+                    class="hidden px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2"
+                >
+                    <i class="ti ti-file-type-pdf"></i>
+                    <span id="source-preview-pdf-text">Voir le PDF</span>
+                </button>
             </div>
-        </form>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Modal -->
+    <div
+        id="pdf-viewer-modal"
+        class="hidden fixed inset-0 bg-black bg-opacity-80 flex flex-col z-[60]"
+    >
+        <div class="pdf-modal-toolbar flex-shrink-0">
+            <button onclick="hidePdfViewerModal()" title="Fermer">
+                <i class="ti ti-x"></i>
+            </button>
+            <span id="pdf-modal-title" class="text-white font-medium truncate max-w-[200px]">Document</span>
+            <div class="h-4 border-l border-gray-500"></div>
+            <button onclick="pdfModalPrevPage()" id="pdf-modal-prev-btn" disabled>
+                <i class="ti ti-chevron-left"></i>
+            </button>
+            <div class="flex items-center gap-1 text-sm">
+                <input type="number" id="pdf-modal-page-input" value="1" min="1" onchange="pdfModalGoToPage(this.value)">
+                <span class="text-gray-300">/ <span id="pdf-modal-total-pages">1</span></span>
+            </div>
+            <button onclick="pdfModalNextPage()" id="pdf-modal-next-btn">
+                <i class="ti ti-chevron-right"></i>
+            </button>
+            <div class="h-4 border-l border-gray-500"></div>
+            <button onclick="pdfModalZoomOut()" title="Zoom arrière">
+                <i class="ti ti-zoom-out"></i>
+            </button>
+            <select id="pdf-modal-zoom-select" onchange="pdfModalSetZoom(this.value)">
+                <option value="0.5">50%</option>
+                <option value="0.75">75%</option>
+                <option value="1" selected>100%</option>
+                <option value="1.25">125%</option>
+                <option value="1.5">150%</option>
+                <option value="2">200%</option>
+                <option value="fit">Ajuster</option>
+            </select>
+            <button onclick="pdfModalZoomIn()" title="Zoom avant">
+                <i class="ti ti-zoom-in"></i>
+            </button>
+            <div class="ml-auto flex items-center gap-2">
+                <button type="button" id="pdf-modal-passage-btn" class="hidden" onclick="showPassageFromPdfViewer()" title="Voir le passage cité">
+                    <i class="ti ti-file-text mr-1"></i>Voir le passage cité
+                </button>
+                <a id="pdf-modal-download-link" href="#" download title="Télécharger">
+                    <button type="button">
+                        <i class="ti ti-download"></i>
+                    </button>
+                </a>
+                <a id="pdf-modal-fullpage-link" href="#" target="_blank" title="Ouvrir en pleine page">
+                    <button type="button">
+                        <i class="ti ti-external-link"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div id="pdf-modal-container" class="flex-1 overflow-auto bg-gray-700"></div>
     </div>
 </div>
 
@@ -261,234 +1090,1594 @@
 </div>
 {% endblock %}
 
-{% block extra_scripts %}
-<script>
-    const projectId = window.location.pathname.split('/').pop();
-    let projectChatHistory = [];
-    let projectChatbotOpen = false; // Par défaut fermé sur la page projet
-
-    function showCreateNoteModal() {
-        document.getElementById('create-note-modal').classList.remove('hidden');
-    }
-
-    function hideCreateNoteModal() {
-        document.getElementById('create-note-modal').classList.add('hidden');
-        document.getElementById('create-note-form').reset();
-    }
-
-    // Gérer l'ouverture/fermeture du chatbot
-    function toggleProjectChatbot() {
-        const chatbotArea = document.getElementById('project-chatbot-area');
-        const notesContainer = document.getElementById('notes-list-container');
-        const toggleIcon = document.getElementById('project-chatbot-toggle-icon');
+        // Configuration de marked.js pour un meilleur rendu Markdown
+        marked.setOptions({
+            breaks: true,           // Convertir les sauts de ligne en <br>
+            gfm: true,              // GitHub Flavored Markdown
+            headerIds: false,       // Pas d'IDs sur les titres
+            mangle: false,          // Ne pas encoder les emails
+        });
         
-        projectChatbotOpen = !projectChatbotOpen;
+        // Prétraitement du Markdown pour corriger les problèmes courants
+        function preprocessMarkdown(text) {
+            if (!text) return text;
+            
+            // Corriger les titres sans espace après # (ex: ###1. -> ### 1.)
+            text = text.replace(/^(#{1,6})(\d)/gm, '$1 $2');
+            
+            // Corriger les titres sans espace avant le texte (ex: ###Titre -> ### Titre)
+            text = text.replace(/^(#{1,6})([A-Za-zÀ-ÿ])/gm, '$1 $2');
+            
+            // S'assurer que les listes ont un espace après le tiret
+            text = text.replace(/^(\s*)-([A-Za-zÀ-ÿ0-9])/gm, '$1- $2');
+            
+            // S'assurer que les listes numérotées ont un espace après le point
+            text = text.replace(/^(\s*\d+\.)([A-Za-zÀ-ÿ])/gm, '$1 $2');
+            
+            return text;
+        }
         
-        if (projectChatbotOpen) {
-            // Ouvrir le chatbot - animation depuis la droite
-            chatbotArea.classList.remove('hidden');
-            chatbotArea.style.flex = "0 0 0%";
-            chatbotArea.style.width = "0";
-            chatbotArea.style.transform = "translateX(100%)";
-            
-            notesContainer.classList.remove('w-full', 'border-r-0');
-            notesContainer.classList.add('w-1/2', 'border-r');
-            
-            // Changer le layout des notes en mode liste (1 colonne)
-            const notesContainerEl = document.getElementById('notes-container');
-            if (notesContainerEl) {
-                notesContainerEl.classList.remove('notes-grid');
-                notesContainerEl.classList.add('notes-list');
-            }
-            
-            toggleIcon.classList.remove('ti-robot');
-            toggleIcon.classList.add('ti-robot-off');
-            
-            // Forcer le reflow pour déclencher l'animation
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    chatbotArea.style.flex = "";
-                    chatbotArea.style.width = "";
-                    chatbotArea.style.transform = "translateX(0)";
+        // Fonction wrapper pour parser le Markdown avec prétraitement
+        function parseMarkdown(text) {
+            const preprocessed = preprocessMarkdown(text);
+            return marked.parse(preprocessed);
+        }
+
+        function showCreateNoteModal() {
+            document
+                .getElementById("create-note-modal")
+                .classList.remove("hidden");
+        }
+
+        function hideCreateNoteModal() {
+            document
+                .getElementById("create-note-modal")
+                .classList.add("hidden");
+            document.getElementById("create-note-form").reset();
+        }
+
+        function showUploadDocumentModal() {
+            document
+                .getElementById("upload-document-modal")
+                .classList.remove("hidden");
+        }
+
+        function hideUploadDocumentModal() {
+            document
+                .getElementById("upload-document-modal")
+                .classList.add("hidden");
+            document.getElementById("upload-document-form").reset();
+            document.getElementById("upload-progress").classList.add("hidden");
+            document.getElementById("upload-progress-bar").style.width = "0%";
+            document
+                .getElementById("upload-files-list")
+                .classList.add("hidden");
+            document.getElementById("upload-files-list-items").innerHTML = "";
+        }
+
+        // Afficher la liste des fichiers sélectionnés
+        document.addEventListener("DOMContentLoaded", function () {
+            const fileInput = document.getElementById("document-file-input");
+            if (fileInput) {
+                fileInput.addEventListener("change", function () {
+                    const filesList =
+                        document.getElementById("upload-files-list");
+                    const filesListItems = document.getElementById(
+                        "upload-files-list-items"
+                    );
+                    const files = this.files;
+
+                    if (files.length > 0) {
+                        filesList.classList.remove("hidden");
+                        filesListItems.innerHTML = "";
+                        Array.from(files).forEach((file, index) => {
+                            const li = document.createElement("li");
+                            li.className = "flex items-center gap-2";
+                            li.innerHTML = `<i class="ti ti-file text-gray-400"></i><span>${
+                                file.name
+                            }</span><span class="text-gray-400">(${(
+                                file.size / 1024
+                            ).toFixed(1)} KB)</span>`;
+                            filesListItems.appendChild(li);
+                        });
+                    } else {
+                        filesList.classList.add("hidden");
+                        filesListItems.innerHTML = "";
+                    }
                 });
-            });
-        } else {
-            // Fermer le chatbot - animation vers la droite
-            // Synchroniser les animations en utilisant requestAnimationFrame
-            toggleIcon.classList.remove('ti-robot-off');
-            toggleIcon.classList.add('ti-robot');
-            
-            requestAnimationFrame(() => {
-                // D'abord réduire la largeur du chatbot et le translate en même temps
-                chatbotArea.style.transform = "translateX(100%)";
-                chatbotArea.style.flex = "0 0 0%";
-                chatbotArea.style.width = "0";
-                
-                // En même temps, agrandir le conteneur de notes
-                notesContainer.classList.remove('w-1/2', 'border-r');
-                notesContainer.classList.add('w-full', 'border-r-0');
-                
-                // Changer le layout des notes en mode grille (1-3 colonnes)
-                const notesContainerEl = document.getElementById('notes-container');
-                if (notesContainerEl) {
-                    notesContainerEl.classList.remove('notes-list');
-                    notesContainerEl.classList.add('notes-grid');
+            }
+        });
+
+        async function uploadDocument(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById("document-file-input");
+            const files = fileInput.files;
+
+            if (!files || files.length === 0) {
+                showNotification(
+                    "❌ Veuillez sélectionner au moins un fichier",
+                    "error"
+                );
+                return;
+            }
+
+            // Afficher la barre de progression
+            const progressDiv = document.getElementById("upload-progress");
+            const progressBar = document.getElementById("upload-progress-bar");
+            const statusText = document.getElementById("upload-status");
+            const submitBtn = document.getElementById("upload-submit-btn");
+
+            progressDiv.classList.remove("hidden");
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Upload en cours...";
+
+            try {
+                // Créer FormData pour l'upload de plusieurs fichiers
+                const formData = new FormData();
+                Array.from(files).forEach((file) => {
+                    formData.append("files", file);
+                });
+
+                statusText.textContent = `Upload de ${files.length} fichier(s)...`;
+                progressBar.style.width = "30%";
+
+                const token = localStorage.getItem("authToken");
+                const response = await fetch(
+                    `/api/projects/${projectId}/documents`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: formData,
+                    }
+                );
+
+                if (!response.ok) {
+                    const errorData = await response
+                        .json()
+                        .catch(() => ({ detail: "Erreur inconnue" }));
+                    throw new Error(
+                        errorData.detail || "Erreur lors de l'upload"
+                    );
                 }
-                
-                setTimeout(() => {
-                    chatbotArea.classList.add('hidden');
-                    chatbotArea.style.transform = "translateX(0)";
-                    chatbotArea.style.flex = "";
-                    chatbotArea.style.width = "";
-                }, 300);
-            });
-        }
-    }
 
-    // Initialiser l'état par défaut (chatbot fermé)
-    document.addEventListener('DOMContentLoaded', function() {
-        const chatbotArea = document.getElementById('project-chatbot-area');
-        const notesContainer = document.getElementById('notes-list-container');
-        const toggleIcon = document.getElementById('project-chatbot-toggle-icon');
-        
-        if (!projectChatbotOpen) {
-            chatbotArea.classList.add('hidden');
-            chatbotArea.style.transform = "translateX(0)";
-            notesContainer.classList.remove('w-1/2', 'border-r');
-            notesContainer.classList.add('w-full', 'border-r-0');
-            
-            // Mode grille par défaut (chatbot fermé)
-            const notesContainerEl = document.getElementById('notes-container');
-            if (notesContainerEl) {
-                notesContainerEl.classList.remove('notes-list');
-                notesContainerEl.classList.add('notes-grid');
+                progressBar.style.width = "100%";
+                statusText.textContent = `${files.length} document(s) uploadé(s), traitement en arrière-plan...`;
+
+                const result = await response.json();
+                console.log("Documents uploadés:", result);
+
+                // Fermer immédiatement le modal (le traitement se fait en arrière-plan)
+                await new Promise((resolve) => setTimeout(resolve, 300));
+                hideUploadDocumentModal();
+
+                // Recharger les notes pour afficher les nouvelles notes avec statut "pending"
+                await loadNotes();
+
+                // Redémarrer le polling après upload de documents
+                stopEmbeddingStatusPolling();
+                startEmbeddingStatusPolling();
+
+                // Afficher une notification
+                const fileCount = files.length;
+                showNotification(
+                    `✅ ${fileCount} document(s) uploadé(s) ! Traitement en cours...`,
+                    "success"
+                );
+            } catch (error) {
+                console.error("Erreur lors de l'upload:", error);
+                showNotification(
+                    `❌ Erreur lors de l'upload: ${error.message}`,
+                    "error"
+                );
+                progressDiv.classList.add("hidden");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Uploader";
             }
-            
-            toggleIcon.classList.remove('ti-robot-off');
-            toggleIcon.classList.add('ti-robot');
         }
-    });
 
-    // Charger les modèles pour le chatbot de projet
-    async function loadProjectModels() {
-        const response = await apiCall('/api/ollama/models');
-        if (response && response.ok) {
-            const models = await response.json();
-            const select = document.getElementById('project-model-select');
-            select.innerHTML = '';
-            
-            if (models.length > 0) {
-                models.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model;
-                    option.textContent = model;
-                    select.appendChild(option);
-                });
-                select.value = models[0];
+        // Gérer l'ouverture/fermeture du chatbot
+        function toggleProjectChatbot() {
+            const chatbotArea = document.getElementById("project-chatbot-area");
+            const notesCenterArea =
+                document.getElementById("notes-center-area");
+            const toggleIcon = document.getElementById(
+                "project-chatbot-toggle-icon"
+            );
+            const toggleText = document.getElementById(
+                "project-chatbot-toggle-text"
+            );
+
+            projectChatbotOpen = !projectChatbotOpen;
+
+            const isMobile = window.innerWidth < 1024;
+
+            if (projectChatbotOpen) {
+                // Ouvrir le chatbot
+                chatbotArea.classList.remove("hidden");
+                chatbotArea.style.transform = "translateX(0)";
+
+                if (isMobile) {
+                    // Animation mobile depuis la droite
+                    chatbotArea.style.flex = "0 0 0%";
+                    chatbotArea.style.width = "0";
+                    chatbotArea.style.transform = "translateX(100%)";
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            chatbotArea.style.flex = "";
+                            chatbotArea.style.width = "";
+                            chatbotArea.style.transform = "translateX(0)";
+                        });
+                    });
+                } else {
+                    // Desktop : ajuster la largeur de la zone notes
+                    notesCenterArea.classList.remove("lg:w-full");
+                    notesCenterArea.classList.add("lg:w-1/2");
+                }
+
+                toggleIcon.classList.remove("ti-robot");
+                toggleIcon.classList.add("ti-robot-off");
+                const toggleBtn = document.getElementById("project-chatbot-toggle-btn");
+                if (toggleBtn) toggleBtn.classList.remove("lia-cta");
+                if (toggleText) {
+                    toggleText.textContent = "Fermer LIA";
+                }
             } else {
-                select.innerHTML = '<option value="">Aucun modèle disponible</option>';
+                // Fermer le chatbot
+                // Si on quitte une conversation qui a encore le titre par défaut, générer un titre automatiquement
+                if (projectConversationsManager && projectConversationsManager.currentConversation) {
+                    const currentConv = projectConversationsManager.conversations.find(
+                        c => c.id === projectConversationsManager.currentConversation
+                    );
+                    console.log("Fermeture chatbot projet - Conversation actuelle:", currentConv);
+                    // Générer un titre si c'est "Nouvelle conversation" ou un titre auto-généré (long ou se termine par "...")
+                    const shouldGenerateTitle = currentConv && (
+                        currentConv.title === "Nouvelle conversation" ||
+                        currentConv.title === null ||
+                        currentConv.title.length > 30 ||
+                        currentConv.title.endsWith("...")
+                    );
+                    if (shouldGenerateTitle) {
+                        console.log("Génération du titre lors de la fermeture du chatbot projet");
+                        // Générer un titre automatiquement en arrière-plan (ne pas bloquer)
+                        projectConversationsManager.generateTitleForConversation(
+                            projectConversationsManager.currentConversation
+                        ).catch(err => {
+                            console.warn("Erreur lors de la génération du titre:", err);
+                        });
+                    }
+                }
+
+                toggleIcon.classList.remove("ti-robot-off");
+                toggleIcon.classList.add("ti-robot");
+                const toggleBtnClose = document.getElementById("project-chatbot-toggle-btn");
+                if (toggleBtnClose) toggleBtnClose.classList.add("lia-cta");
+                if (toggleText) {
+                    toggleText.textContent = "Parler à LIA";
+                }
+
+                if (isMobile) {
+                    // Animation mobile vers la droite
+                    requestAnimationFrame(() => {
+                        chatbotArea.style.transform = "translateX(100%)";
+
+                        setTimeout(() => {
+                            chatbotArea.classList.add("hidden");
+                            chatbotArea.style.transform = "translateX(0)";
+                        }, 300);
+                    });
+                } else {
+                    // Desktop : agrandir la zone notes
+                    notesCenterArea.classList.remove("lg:w-1/2");
+                    notesCenterArea.classList.add("lg:w-full");
+                    chatbotArea.classList.add("hidden");
+                }
             }
         }
-    }
 
-    async function loadProject() {
-        const response = await apiCall(`/api/projects/${projectId}`);
-        if (response && response.ok) {
-            const project = await response.json();
-            document.getElementById('project-title').textContent = project.title;
+        // Fonction pour mettre à jour le style du chatbot selon le modèle sélectionné
+        function updateProjectChatbotStyle() {
+            const chatbotArea = document.getElementById("project-chatbot-area");
+            const presetSelect = document.getElementById("project-model-preset-select");
+            if (chatbotArea && presetSelect) {
+                if (presetSelect.value === "private") {
+                    chatbotArea.classList.add("private-mode");
+                } else {
+                    chatbotArea.classList.remove("private-mode");
+                }
+            }
         }
-    }
 
-    // Stocker les statuts d'embedding pour le polling
-    const embeddingStatuses = new Map();
-    let embeddingStatusInterval = null;
+        // Initialiser l'état par défaut (chatbot fermé)
+        document.addEventListener("DOMContentLoaded", function () {
+            const chatbotArea = document.getElementById("project-chatbot-area");
+            const notesCenterArea =
+                document.getElementById("notes-center-area");
+            const toggleIcon = document.getElementById(
+                "project-chatbot-toggle-icon"
+            );
+            const presetSelect = document.getElementById("project-model-preset-select");
+            
+            // Ajouter l'écouteur d'événement sur le sélecteur de modèles
+            if (presetSelect) {
+                presetSelect.addEventListener("change", updateProjectChatbotStyle);
+                // Initialiser le style au chargement
+                updateProjectChatbotStyle();
+            }
 
-    // Fonction pour obtenir l'icône de statut d'embedding
-    function getEmbeddingStatusIcon(status) {
-        if (!status) {
-            // Par défaut, afficher "pending" si le statut n'est pas encore chargé
-            return '<i class="ti ti-clock text-yellow-500" title="Vérification du statut..."></i>';
+            // Initialiser le gestionnaire de conversations pour ce projet
+            // Les conversations seront affichées dans la sidebar de base.html
+            projectConversationsManager = new ConversationsManager(projectId);
+            projectConversationsManager.loadConversations();
+
+            const toggleText = document.getElementById(
+                "project-chatbot-toggle-text"
+            );
+            
+            const projectToggleBtn = document.getElementById("project-chatbot-toggle-btn");
+            if (!projectChatbotOpen) {
+                chatbotArea.classList.add("hidden");
+                chatbotArea.style.transform = "translateX(0)";
+                notesCenterArea.classList.remove("lg:w-1/2");
+                notesCenterArea.classList.add("lg:w-full");
+
+                toggleIcon.classList.remove("ti-robot-off");
+                toggleIcon.classList.add("ti-robot");
+                if (projectToggleBtn) projectToggleBtn.classList.add("lia-cta");
+                if (toggleText) {
+                    toggleText.textContent = "Parler à LIA";
+                }
+            } else {
+                if (projectToggleBtn) projectToggleBtn.classList.remove("lia-cta");
+                if (toggleText) {
+                    toggleText.textContent = "Fermer LIA";
+                }
+            }
+        });
+
+        // Fonction pour obtenir le provider et le modèle selon le preset sélectionné
+        function getProjectModelFromPreset(preset) {
+            const modelMap = {
+                "private": {{ model_private|tojson }},
+                "fast": {{ model_fast|tojson }},
+                "powerful": {{ model_powerful|tojson }}
+            };
+            return modelMap[preset] || modelMap["private"];
         }
-        switch(status) {
-            case 'processing':
-                return '<i class="ti ti-loader-2 animate-spin text-blue-500" title="Génération des embeddings en cours..."></i>';
-            case 'pending':
-                return '<i class="ti ti-clock text-yellow-500" title="En attente de génération des embeddings"></i>';
-            case 'completed':
-                return '<i class="ti ti-check text-green-500" title="Embeddings générés"></i>';
-            case 'none':
-                // Si aucun chunk n'existe encore, ne pas afficher d'icône (ou afficher une icône discrète)
-                return '<i class="ti ti-circle-dashed text-gray-400" title="Aucun chunk créé"></i>';
-            default:
-                return '<i class="ti ti-clock text-yellow-500" title="Statut inconnu"></i>';
-        }
-    }
 
-    // Vérifier le statut des embeddings pour une note
-    async function checkEmbeddingStatus(noteId) {
-        try {
-            const response = await apiCall(`/api/notes/${noteId}/embedding-status`);
+        async function loadProject() {
+            const response = await apiCall(`/api/projects/${projectId}`);
             if (response && response.ok) {
-                const status = await response.json();
-                const previousStatus = embeddingStatuses.get(noteId);
-                
-                // Mettre à jour le statut
-                embeddingStatuses.set(noteId, status);
-                
-                // Mettre à jour l'icône seulement si le statut a changé
-                if (!previousStatus || previousStatus.status !== status.status) {
-                    updateNoteEmbeddingIcon(noteId, status.status);
+                const project = await response.json();
+                document.getElementById("project-title").textContent =
+                    project.title;
+            }
+        }
+
+        // Stocker les statuts d'embedding pour le polling
+        const embeddingStatuses = new Map();
+        let embeddingStatusInterval = null;
+
+        // Fonction pour obtenir l'icône de statut d'embedding
+        function getEmbeddingStatusIcon(status) {
+            if (!status) {
+                // Par défaut, afficher "pending" si le statut n'est pas encore chargé
+                return '<i class="ti ti-clock text-yellow-500" title="Vérification du statut..."></i>';
+            }
+            switch (status) {
+                case "processing":
+                    return '<i class="ti ti-loader-2 animate-spin text-blue-500" title="Génération des embeddings en cours..."></i>';
+                case "pending":
+                    return '<i class="ti ti-clock text-yellow-500" title="En attente de génération des embeddings"></i>';
+                case "completed":
+                    return '<i class="ti ti-check text-green-500" title="Embeddings générés"></i>';
+                case "none":
+                    // Si aucun chunk n'existe encore, ne pas afficher d'icône (ou afficher une icône discrète)
+                    return '<i class="ti ti-circle-dashed text-gray-400" title="Aucun chunk créé"></i>';
+                default:
+                    return '<i class="ti ti-clock text-yellow-500" title="Statut inconnu"></i>';
+            }
+        }
+
+        function getProcessingStatusIcon(status, progress = null) {
+            if (!status) {
+                return "";
+            }
+            switch (status) {
+                case "pending":
+                    return '<i class="ti ti-clock text-yellow-500" title="Traitement en attente"></i><span class="text-xs text-yellow-600 dark:text-yellow-400">En attente</span>';
+                case "processing":
+                    if (typeof progress === "number") {
+                        return `<i class="ti ti-loader-2 animate-spin text-blue-500" title="Traitement du document en cours..."></i><span class="text-xs text-blue-600 dark:text-blue-400">Traitement en cours (${progress}%)</span>`;
+                    }
+                    return '<i class="ti ti-loader-2 animate-spin text-blue-500" title="Traitement du document en cours..."></i><span class="text-xs text-blue-600 dark:text-blue-400">Traitement en cours</span>';
+                case "completed":
+                    return '<i class="ti ti-check text-green-500" title="Document traité"></i><span class="text-xs text-green-600 dark:text-green-400">Traité</span>';
+                case "failed":
+                    return '<i class="ti ti-alert-circle text-red-500" title="Erreur lors du traitement"></i><span class="text-xs text-red-600 dark:text-red-400">Échec</span>';
+                default:
+                    return "";
+            }
+        }
+
+        // Vérifier le statut des embeddings pour une note
+        async function checkEmbeddingStatus(noteId) {
+            try {
+                const response = await apiCall(
+                    `/api/notes/${noteId}/embedding-status`
+                );
+                if (response && response.ok) {
+                    const status = await response.json();
+                    const previousStatus = embeddingStatuses.get(noteId);
+
+                    // Mettre à jour le statut
+                    embeddingStatuses.set(noteId, status);
+
+                    // Mettre à jour l'icône seulement si le statut a changé
+                    if (
+                        !previousStatus ||
+                        previousStatus.status !== status.status
+                    ) {
+                        updateNoteEmbeddingIcon(noteId, status.status);
+                    }
+
+                    return status;
                 }
-                
-                return status;
+            } catch (error) {
+                console.error(
+                    `Erreur lors de la vérification du statut pour la note ${noteId}:`,
+                    error
+                );
             }
-        } catch (error) {
-            console.error(`Erreur lors de la vérification du statut pour la note ${noteId}:`, error);
+            return null;
         }
-        return null;
-    }
 
-    // Mettre à jour l'icône d'embedding pour une note spécifique
-    function updateNoteEmbeddingIcon(noteId, status) {
-        const noteElement = document.querySelector(`[data-note-id="${noteId}"]`);
-        if (noteElement) {
-            const iconContainer = noteElement.querySelector('.embedding-status-icon');
-            if (iconContainer) {
-                const newIcon = getEmbeddingStatusIcon(status);
-                iconContainer.innerHTML = newIcon;
-                console.log(`Icône mise à jour pour la note ${noteId}: ${status}`);
+        // Mettre à jour l'icône d'embedding pour une note spécifique
+        function updateNoteEmbeddingIcon(noteId, status) {
+            const noteElement = document.querySelector(
+                `[data-note-id="${noteId}"]`
+            );
+            if (noteElement) {
+                const iconContainer = noteElement.querySelector(
+                    ".embedding-status-icon"
+                );
+                if (iconContainer) {
+                    const newIcon = getEmbeddingStatusIcon(status);
+                    iconContainer.innerHTML = newIcon;
+                    console.log(
+                        `Icône mise à jour pour la note ${noteId}: ${status}`
+                    );
+                } else {
+                    console.warn(
+                        `Container d'icône non trouvé pour la note ${noteId}`
+                    );
+                }
             } else {
-                console.warn(`Container d'icône non trouvé pour la note ${noteId}`);
-            }
-        } else {
-            console.warn(`Élément de note non trouvé pour la note ${noteId}`);
-        }
-    }
-
-    // Vérifier le statut des embeddings pour toutes les notes
-    async function checkAllEmbeddingStatuses() {
-        const notes = await loadNotesData();
-        if (notes && notes.length > 0) {
-            // Vérifier le statut pour chaque note
-            for (const note of notes) {
-                await checkEmbeddingStatus(note.id);
+                console.warn(
+                    `Élément de note non trouvé pour la note ${noteId}`
+                );
             }
         }
-    }
 
-    // Charger les données des notes (sans affichage)
-    async function loadNotesData() {
-        const response = await apiCall(`/api/projects/${projectId}/notes`);
-        if (response && response.ok) {
-            return await response.json();
+        // Mettre à jour l'icône de statut de traitement pour une note spécifique
+        function updateNoteProcessingIcon(noteId, status, progress = null) {
+            const noteElement = document.querySelector(
+                `[data-note-id="${noteId}"]`
+            );
+            if (noteElement) {
+                const iconContainer = noteElement.querySelector(
+                    ".processing-status-icon"
+                );
+                if (iconContainer) {
+                    const newIcon = getProcessingStatusIcon(status, progress);
+                    iconContainer.innerHTML = newIcon;
+                    if (typeof progress === "number") {
+                        noteElement.setAttribute(
+                            "data-processing-progress",
+                            progress
+                        );
+                    }
+                    console.log(
+                        `Icône de traitement mise à jour pour la note ${noteId}: ${status} (${progress ?? "n/a"}%)`
+                    );
+                }
+            }
         }
-        return null;
-    }
 
-    async function loadNotes() {
-        const notes = await loadNotesData();
-        if (notes) {
-            const container = document.getElementById('notes-container');
+        // Vérifier le statut des embeddings pour toutes les notes
+        async function checkAllEmbeddingStatuses() {
+            const notes = await loadNotesData();
+            if (notes && notes.length > 0) {
+                // Vérifier le statut pour chaque note
+                for (const note of notes) {
+                    await checkEmbeddingStatus(note.id);
+                }
+            }
+        }
+
+        // Charger les données des notes (sans affichage)
+        async function loadNotesData() {
+            const response = await apiCall(`/api/projects/${projectId}/notes`);
+            if (response && response.ok) {
+                return await response.json();
+            }
+            return null;
+        }
+
+        async function loadNotes() {
+            const notes = await loadNotesData();
+            if (notes) {
+                const container = document.getElementById("notes-container");
+
+                if (notes.length === 0) {
+                    container.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="ti ti-notes text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                        <p class="text-gray-500 dark:text-gray-400 mb-2">Aucune note</p>
+                        <p class="text-sm text-gray-400 dark:text-gray-500">Créez votre première note pour commencer</p>
+                    </div>
+                `;
+                } else {
+                    // Afficher d'abord les notes avec une icône par défaut (pending)
+                    container.innerHTML = notes
+                        .map((note) => {
+                            // Afficher "pending" par défaut pendant le chargement
+                            const statusIcon =
+                                getEmbeddingStatusIcon("pending");
+
+                            // Obtenir l'icône de statut de traitement pour les documents
+                            const processingIcon = getProcessingStatusIcon(
+                                note.processing_status,
+                                note.processing_progress
+                            );
+
+                            return `
+                    <div 
+                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 sm:p-6 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-400 transition-all duration-200 cursor-pointer note-card flex-shrink-0 group active:bg-gray-50 dark:active:bg-gray-700" 
+                        data-note-id="${note.id}"
+                        ${
+                            note.note_type === "document" &&
+                            note.processing_status
+                                ? `data-processing-status="${note.processing_status}"`
+                                : ""
+                        }
+                        ${
+                            note.note_type === "document" &&
+                            typeof note.processing_progress === "number"
+                                ? `data-processing-progress="${note.processing_progress}"`
+                                : ""
+                        }
+                        onclick="window.location.href='/notes/${note.id}/edit'"
+                    >
+                        <div class="flex items-start justify-between mb-2 sm:mb-3">
+                            <div class="flex items-center gap-2 flex-1 min-w-0">
+                                <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">${
+                                    note.title
+                                }</h3>
+                                ${
+                                    note.note_type === "document"
+                                        ? `<span class="processing-status-icon flex-shrink-0 inline-flex items-center gap-1" title="Statut de traitement">${processingIcon}</span>`
+                                        : ""
+                                }
+                                <span class="embedding-status-icon flex-shrink-0">${statusIcon}</span>
+                            </div>
+                            <div class="flex items-center gap-2 flex-shrink-0" onclick="event.stopPropagation()">
+                                <button 
+                                    onclick="event.stopPropagation(); window.location.href='/notes/${
+                                        note.id
+                                    }/edit'" 
+                                    class="text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 p-1.5 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                                    title="Éditer"
+                                >
+                                    <i class="ti ti-pencil text-lg"></i>
+                                </button>
+                                <button 
+                                    onclick="event.stopPropagation(); deleteNote(${
+                                        note.id
+                                    })" 
+                                    class="text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 p-1.5 rounded-md hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                                    title="Supprimer"
+                                >
+                                    <i class="ti ti-trash text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500 pt-2 sm:pt-3 border-t border-gray-100 dark:border-gray-700 flex-wrap">
+                            <i class="ti ti-${
+                                note.note_type === "written"
+                                    ? "pencil"
+                                    : note.note_type === "voice"
+                                    ? "microphone"
+                                    : "file-text"
+                            }"></i>
+                            <span>${
+                                note.note_type === "written"
+                                    ? "Note écrite"
+                                    : note.note_type === "voice"
+                                    ? "Note vocale"
+                                    : "Document"
+                            }</span>
+                            <span>•</span>
+                            <span>Modifiée le ${new Date(
+                                note.updated_at
+                            ).toLocaleDateString("fr-FR")} à ${new Date(
+                                note.updated_at
+                            ).toLocaleTimeString("fr-FR", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            })}</span>
+                        </div>
+                    </div>
+                    `;
+                        })
+                        .join("");
+
+                    // Ensuite, vérifier les statuts d'embedding pour toutes les notes et mettre à jour les icônes
+                    const statusPromises = notes.map((note) =>
+                        checkEmbeddingStatus(note.id)
+                    );
+                    await Promise.all(statusPromises);
+
+                    // Mettre à jour les icônes de statut de traitement pour les documents
+                    notes.forEach((note) => {
+                        if (
+                            note.note_type === "document" &&
+                            note.processing_status
+                        ) {
+                            updateNoteProcessingIcon(
+                                note.id,
+                                note.processing_status,
+                                note.processing_progress
+                            );
+                        }
+                    });
+                }
+            }
+        }
+
+        async function createNote(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                title: formData.get("title"),
+                content: formData.get("content") || null,
+                note_type: "written",
+            };
+
+            // Désactiver le bouton pendant la création
+            const submitButton = event.target.querySelector(
+                'button[type="submit"]'
+            );
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = "Création...";
+
+            try {
+                const response = await apiCall(
+                    `/api/projects/${projectId}/notes`,
+                    {
+                        method: "POST",
+                        body: JSON.stringify(data),
+                    }
+                );
+
+                console.log("Response status:", response?.status);
+                console.log("Response ok:", response?.ok);
+
+                if (response && response.ok) {
+                    try {
+                        const newNote = await response.json();
+                        console.log("Note créée:", newNote);
+
+                        // Fermer le modal
+                        hideCreateNoteModal();
+
+                        // Recharger les notes
+                        await loadNotes();
+
+                        // Redémarrer le polling après création d'une note
+                        stopEmbeddingStatusPolling();
+                        startEmbeddingStatusPolling();
+
+                        // Afficher une notification de succès
+                        showNotification(
+                            "✅ Note créée avec succès !",
+                            "success"
+                        );
+                    } catch (jsonError) {
+                        console.error("Erreur parsing JSON:", jsonError);
+                        // Même si le parsing échoue, la note est créée, donc on recharge
+                        hideCreateNoteModal();
+                        await loadNotes();
+                        stopEmbeddingStatusPolling();
+                        startEmbeddingStatusPolling();
+                        showNotification(
+                            "✅ Note créée avec succès !",
+                            "success"
+                        );
+                    }
+                } else {
+                    console.error("Response not ok:", response);
+                    showNotification(
+                        "❌ Erreur lors de la création de la note",
+                        "error"
+                    );
+                }
+            } catch (error) {
+                console.error("Erreur lors de la création:", error);
+                showNotification(
+                    "❌ Erreur lors de la création de la note",
+                    "error"
+                );
+            } finally {
+                // Réactiver le bouton
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+            }
+        }
+
+        // Fonction pour afficher des notifications
+        function showNotification(message, type = "info") {
+            const notification = document.createElement("div");
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+                type === "success"
+                    ? "bg-green-500"
+                    : type === "error"
+                    ? "bg-red-500"
+                    : "bg-blue-500"
+            } text-white`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Supprimer après 3 secondes
+            setTimeout(() => {
+                notification.style.opacity = "0";
+                notification.style.transition = "opacity 0.3s";
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        async function deleteNote(noteId) {
+            if (!confirm("Êtes-vous sûr de vouloir supprimer cette note ?"))
+                return;
+
+            try {
+                const response = await apiCall(`/api/notes/${noteId}`, {
+                    method: "DELETE",
+                });
+
+                if (response && response.ok) {
+                    showNotification(
+                        "✅ Note supprimée avec succès",
+                        "success"
+                    );
+                    await loadNotes();
+                    stopEmbeddingStatusPolling();
+                    startEmbeddingStatusPolling();
+                } else {
+                    showNotification(
+                        "❌ Erreur lors de la suppression",
+                        "error"
+                    );
+                }
+            } catch (error) {
+                console.error("Erreur lors de la suppression:", error);
+                showNotification("❌ Erreur lors de la suppression", "error");
+            }
+        }
+
+        // Animation de chargement pour le chatbot de projet
+        let projectLoadingAnimationInterval = null;
+
+        // Fonction utilitaire pour vérifier si l'utilisateur est proche du bas
+        function isProjectChatNearBottom(container, threshold = 100) {
+            const scrollTop = container.scrollTop;
+            const scrollHeight = container.scrollHeight;
+            const clientHeight = container.clientHeight;
+            return scrollHeight - scrollTop - clientHeight < threshold;
+        }
+
+        // Fonction utilitaire pour scroller vers le bas du chat de projet (seulement si l'utilisateur est déjà proche du bas)
+        function scrollProjectChatToBottom(force = false) {
+            const messagesContainer = document.getElementById(
+                "project-chat-messages"
+            );
+            if (messagesContainer) {
+                // Utiliser requestAnimationFrame pour s'assurer que le DOM est mis à jour
+                requestAnimationFrame(() => {
+                    // Si force est true ou si l'utilisateur est proche du bas, scroller
+                    if (force || isProjectChatNearBottom(messagesContainer)) {
+                        messagesContainer.scrollTop =
+                            messagesContainer.scrollHeight;
+                    }
+                });
+            }
+        }
+
+        function showProjectLoadingAnimation() {
+            const messagesContainer = document.getElementById(
+                "project-chat-messages"
+            );
+            const loadingDiv = document.createElement("div");
+            loadingDiv.id = "project-loading-message";
+            loadingDiv.className = "flex justify-start";
+            loadingDiv.innerHTML = `
+            <div class="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg px-4 py-2">
+                <span class="loading-dots">
+                    <span>.</span><span>.</span><span>.</span>
+                </span>
+            </div>
+        `;
+            messagesContainer.appendChild(loadingDiv);
+            scrollProjectChatToBottom(true); // Forcer le scroll pour l'animation de chargement
+
+            const dots = loadingDiv.querySelectorAll(".loading-dots span");
+            let dotIndex = 0;
+            projectLoadingAnimationInterval = setInterval(() => {
+                dots.forEach((dot, index) => {
+                    dot.style.opacity = index === dotIndex % 3 ? "1" : "0.3";
+                });
+                dotIndex++;
+            }, 300);
+        }
+
+        function hideProjectLoadingAnimation() {
+            const loadingDiv = document.getElementById(
+                "project-loading-message"
+            );
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
+            if (projectLoadingAnimationInterval) {
+                clearInterval(projectLoadingAnimationInterval);
+                projectLoadingAnimationInterval = null;
+            }
+        }
+
+        // Envoyer un message au chatbot de projet avec streaming
+        async function sendProjectChatMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById("project-chat-input");
+            const message = input.value.trim();
+            const presetSelect = document.getElementById("project-model-preset-select");
+            const preset = presetSelect.value;
+            const { provider, model } = getProjectModelFromPreset(preset);
+            const agentSelect = document.getElementById("project-agent-select");
+            const agentId = agentSelect.value ? parseInt(agentSelect.value) : null;
+
+            if (!message) return;
+
+            // Créer une conversation si aucune n'est sélectionnée
+            let conversationJustCreated = false;
+            if (!projectConversationsManager.currentConversation) {
+                // Créer la conversation sans sélectionner automatiquement (pour éviter de vider la zone de chat)
+                const response = await apiCall("/api/conversations", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        title: "Nouvelle conversation",
+                        project_id: projectId,
+                    }),
+                });
+                
+                if (response && response.ok) {
+                    const newConversation = await response.json();
+                    projectConversationsManager.conversations.unshift(newConversation);
+                    projectConversationsManager.currentConversation = newConversation.id;
+                    projectConversationsManager.renderConversationsList();
+                    conversationJustCreated = true;
+                    // Ne pas appeler selectConversation() car cela viderait la zone de chat
+                    // Réinitialiser l'historique local pour correspondre à la conversation vide
+                    projectChatHistory.length = 0;
+                }
+            }
+
+            // Ajouter le message de l'utilisateur visuellement
+            addMessageToProjectChat("user", message);
+            input.value = "";
+
+            // Désactiver le bouton et l'input pendant l'envoi
+            const submitButton = event.target.querySelector(
+                'button[type="submit"]'
+            );
+            submitButton.disabled = true;
+            input.disabled = true;
+
+            // Préparer le contexte de conversation
+            const context = projectChatHistory.map((msg) => ({
+                role: msg.role,
+                content: msg.content,
+            }));
+
+            // Créer un message assistant vide pour le streaming (remplace l'animation de chargement)
+            const messagesContainer = document.getElementById(
+                "project-chat-messages"
+            );
+            // Supprimer uniquement le message vide initial s'il existe, pas tous les messages
+            const emptyMessage =
+                messagesContainer.querySelector(".text-center");
+            if (emptyMessage) {
+                emptyMessage.remove();
+            }
+
+            const assistantMessageDiv = document.createElement("div");
+            assistantMessageDiv.id = "project-assistant-streaming-message";
+            assistantMessageDiv.className = "flex justify-start";
+            assistantMessageDiv.innerHTML = `
+            <div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg px-4 py-2">
+                <div class="markdown-content text-gray-500 dark:text-gray-400 italic">En cours de génération...</div>
+            </div>
+        `;
+            messagesContainer.appendChild(assistantMessageDiv);
+            scrollProjectChatToBottom(true); // Forcer le scroll au début du streaming
+            const assistantContent =
+                assistantMessageDiv.querySelector(".markdown-content");
+
+            let fullResponse = "";
+            let firstChunkReceived = false;
+            let receivedSources = []; // Sources pour les citations
+
+            // Envoyer au backend avec streaming
+            try {
+                const token = localStorage.getItem("authToken");
+                const response = await fetch(
+                    `/api/projects/${projectId}/chat/stream`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            model: model,
+                            provider: provider,
+                            context: context,
+                            conversation_id:
+                                projectConversationsManager.currentConversation,
+                            agent_id: agentId,
+                        }),
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Erreur lors de la requête");
+                }
+
+                // Lire le stream SSE
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = "";
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split("\n");
+                    buffer = lines.pop() || "";
+
+                    for (const line of lines) {
+                        if (line.startsWith("data: ")) {
+                            const data = line.slice(6).trim();
+                            if (data) {
+                                try {
+                                    const jsonData = JSON.parse(data);
+                                    if (jsonData.message && jsonData.message.content !== undefined) {
+                                        // Toujours accumuler tout le contenu (y compris chunks vides) pour ne pas tronquer la fin
+                                        fullResponse += jsonData.message.content;
+                                        if (!firstChunkReceived && jsonData.message.content.trim().length > 0) {
+                                            firstChunkReceived = true;
+                                        }
+                                        // Mise à jour affichage pendant le stream
+                                        const rawHtml = parseMarkdown(fullResponse);
+                                        const cleanHtml = DOMPurify.sanitize(rawHtml, {
+                                            ADD_TAGS: ["img"],
+                                            ADD_ATTR: ["src", "alt", "class", "style", "title"],
+                                        });
+                                        assistantContent.innerHTML = wrapTablesInResponsive(cleanHtml);
+                                        scrollProjectChatToBottom(false);
+                                    } else if (jsonData.sources) {
+                                        receivedSources = jsonData.sources;
+                                    } else if (jsonData.done) {
+                                        break;
+                                    } else if (jsonData.error) {
+                                        throw new Error(jsonData.error);
+                                    }
+                                } catch (e) {
+                                    console.warn(
+                                        "Erreur parsing JSON:",
+                                        e,
+                                        "Data:",
+                                        data
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+                // Traiter le buffer restant (dernière ligne souvent non traitée)
+                if (buffer.trim()) {
+                    const line = buffer.trim();
+                    if (line.startsWith("data: ")) {
+                        const data = line.slice(6).trim();
+                        if (data) {
+                            try {
+                                const jsonData = JSON.parse(data);
+                                if (jsonData.message && jsonData.message.content !== undefined) {
+                                    fullResponse += jsonData.message.content;
+                                }
+                                if (jsonData.sources) {
+                                    receivedSources = jsonData.sources;
+                                }
+                            } catch (e) { /* ignorer */ }
+                        }
+                    }
+                }
+
+                // Finaliser le message
+                assistantMessageDiv.removeAttribute("id");
+                projectChatHistory.push({
+                    role: "assistant",
+                    content: fullResponse,
+                });
+                
+                // Re-rendu complet du message à partir du texte final (évite que les tableaux
+                // restent cassés à cause du markdown partiel reçu pendant le stream)
+                const contentDiv = assistantMessageDiv.querySelector('.markdown-content');
+                if (contentDiv && fullResponse) {
+                    const rawHtml = parseMarkdown(fullResponse);
+                    const cleanHtml = DOMPurify.sanitize(rawHtml, {
+                        ADD_TAGS: ["img"],
+                        ADD_ATTR: ["src", "alt", "class", "style", "title"],
+                    });
+                    const withTables = wrapTablesInResponsive(cleanHtml);
+                    const finalHtml = (receivedSources && receivedSources.length > 0)
+                        ? transformCitationsToLinks(withTables, receivedSources)
+                        : withTables;
+                    requestAnimationFrame(() => {
+                        contentDiv.innerHTML = finalHtml;
+                        if (receivedSources && receivedSources.length > 0) {
+                            const sourcesHtml = buildSourcesSection(receivedSources);
+                            const messageContainer = assistantMessageDiv.querySelector('.max-w-2xl');
+                            if (messageContainer) {
+                                messageContainer.insertAdjacentHTML('beforeend', sourcesHtml);
+                            }
+                        }
+                        scrollProjectChatToBottom(false);
+                    });
+                } else if (receivedSources && receivedSources.length > 0) {
+                    const sourcesHtml = buildSourcesSection(receivedSources);
+                    const messageContainer = assistantMessageDiv.querySelector('.max-w-2xl');
+                    if (messageContainer) {
+                        messageContainer.insertAdjacentHTML('beforeend', sourcesHtml);
+                    }
+                    scrollProjectChatToBottom(false);
+                }
+
+                // Attendre un court délai pour s'assurer que le streaming est complètement terminé
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // Recharger uniquement la liste des conversations pour mettre à jour le titre (peut avoir été auto-généré)
+                // Ne pas recharger les messages car ils sont déjà affichés correctement dans la zone de chat
+                if (projectConversationsManager) {
+                    await projectConversationsManager.loadConversations();
+                }
+            } catch (error) {
+                if (
+                    document.getElementById(
+                        "project-assistant-streaming-message"
+                    )
+                ) {
+                    document
+                        .getElementById("project-assistant-streaming-message")
+                        .remove();
+                }
+                addMessageToProjectChat(
+                    "assistant",
+                    `Erreur: ${error.message}`
+                );
+            } finally {
+                // Réactiver le bouton et l'input
+                submitButton.disabled = false;
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        // Ajouter un message au chat de projet
+        function addMessageToProjectChat(role, content) {
+            projectChatHistory.push({ role, content });
+            const messagesContainer = document.getElementById(
+                "project-chat-messages"
+            );
+
+            // Supprimer le message vide initial
+            if (messagesContainer.querySelector(".text-center")) {
+                messagesContainer.innerHTML = "";
+            }
+
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `flex ${
+                role === "user" ? "justify-end" : "justify-start"
+            }`;
+
+            // Pour les messages assistant, rendre le Markdown
+            let contentHtml;
+            if (role === "assistant") {
+                const rawHtml = parseMarkdown(content);
+                const cleanHtml = DOMPurify.sanitize(rawHtml, {
+                    ADD_TAGS: ["img"],
+                    ADD_ATTR: ["src", "alt", "class", "style", "title"],
+                });
+                contentHtml = `<div class="markdown-content">${wrapTablesInResponsive(cleanHtml)}</div>`;
+            } else {
+                // Messages utilisateur en texte brut
+                contentHtml = `<p class="whitespace-pre-wrap">${escapeHtml(
+                    content
+                )}</p>`;
+            }
+
+            messageDiv.innerHTML = `
+            <div class="max-w-2xl ${
+                role === "user"
+                    ? "bg-blue-600 dark:bg-blue-500 text-white"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"
+            } rounded-lg px-4 py-2">
+                ${contentHtml}
+            </div>
+        `;
+            messagesContainer.appendChild(messageDiv);
+            scrollProjectChatToBottom(true); // Forcer le scroll pour les nouveaux messages
+        }
+
+        // Fonction pour échapper le HTML
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Variable globale pour stocker les sources de la dernière réponse
+        let currentMessageSources = [];
+        // Index de la source quand on ouvre le PDF depuis un clic source (pour "Voir le passage cité")
+        let currentSourceIndexFromPdfViewer = null;
+        let currentPreviewSourceIndex = null;
+        
+        // Construire la section sources pour les citations
+        function buildSourcesSection(sources) {
+            if (!sources || sources.length === 0) return '';
+            
+            // Stocker les sources pour la modale
+            currentMessageSources = sources;
+            
+            // Séparer les sources textuelles et images
+            const textSources = sources.filter(s => !s.is_image_chunk);
+            const imageSources = sources.filter(s => s.is_image_chunk);
+            
+            const sourceBadges = textSources.map(source => {
+                const title = escapeHtml(source.note_title || 'Note sans titre');
+                const excerpt = escapeHtml(source.excerpt || '');
+                const index = source.index;
+                const pageInfo = source.page_no ? ` (p.${source.page_no})` : '';
+                const fullTitle = excerpt ? `${title}${pageInfo} — ${excerpt}` : `${title}${pageInfo}`;
+                
+                return `
+                    <button 
+                       onclick="showSourcePreview(${index})"
+                       class="source-badge inline-flex items-center px-2 py-1 text-xs rounded bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors cursor-pointer"
+                       title="${fullTitle}"
+                       id="source-ref-${index}">
+                        <span class="citation-number font-bold mr-1">[${index}]</span>
+                        <span class="truncate max-w-[150px]">${title}${pageInfo}</span>
+                    </button>
+                `;
+            }).join('');
+            
+            // Créer les vignettes d'images
+            const imageThumbnails = imageSources.map(source => {
+                const index = source.index;
+                const imageUrl = source.image_filename && source.note_id 
+                    ? `/api/images/${source.note_id}/${source.image_filename}` 
+                    : '';
+                const title = escapeHtml(source.note_title || 'Image');
+                const pageInfo = source.page_no ? `Page ${source.page_no}` : '';
+                
+                if (!imageUrl) return '';
+                
+                return `
+                    <div 
+                        onclick="showSourcePreview(${index})"
+                        class="relative group cursor-pointer rounded-lg overflow-hidden border-2 border-purple-300 dark:border-purple-600 hover:border-purple-500 transition-colors"
+                        style="width: 80px; height: 80px;"
+                        id="source-ref-${index}"
+                    >
+                        <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
+                            <i class="ti ti-zoom-in text-white opacity-0 group-hover:opacity-100 text-xl"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-purple-600 text-white text-xs px-1 py-0.5 text-center">
+                            [${index}]${pageInfo ? ' - ' + pageInfo : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            let html = '<div class="sources-section mt-3 pt-3 border-t border-gray-300 dark:border-gray-600">';
+            
+            // Section images (si présentes)
+            if (imageSources.length > 0) {
+                html += `
+                    <div class="mb-3">
+                        <div class="text-xs text-purple-600 dark:text-purple-400 font-medium mb-2 flex items-center gap-1">
+                            <i class="ti ti-photo text-sm"></i>
+                            Images sources (${imageSources.length})
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            ${imageThumbnails}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Section sources textuelles (si présentes)
+            if (textSources.length > 0) {
+                html += `
+                    <div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-2 flex items-center gap-1">
+                            <i class="ti ti-book text-sm"></i>
+                            Sources textuelles (${textSources.length})
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            ${sourceBadges}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        // Envelopper les tableaux dans un conteneur scrollable horizontalement
+        function wrapTablesInResponsive(html) {
+            if (!html || !html.includes('<table')) return html;
+            return html
+                .replace(/<table(\s[^>]*)?>/gi, '<div class="table-wrapper"><table$1>')
+                .replace(/<\/table>/g, '</table></div>');
+        }
+        
+        // Transformer les citations [1], [2]... en liens cliquables (avec tooltip = titre de la source)
+        function transformCitationsToLinks(html, sources) {
+            if (!sources || sources.length === 0) return html;
+            
+            // Stocker les sources pour la modale
+            currentMessageSources = sources;
+            
+            // Créer un map des sources par index
+            const sourceMap = {};
+            sources.forEach(s => {
+                sourceMap[s.index] = s;
+            });
+            
+            // Remplacer [1], [2], etc. par des liens cliquables
+            const citationRegex = /\[(\d+)\]/g;
+            return html.replace(citationRegex, (match, num) => {
+                const index = parseInt(num);
+                const source = sourceMap[index];
+                if (source) {
+                    return `<button 
+                              class="citation-link" 
+                              title="${escapeHtml(source.note_title || 'Source')}"
+                              onclick="showSourcePreview(${index})">${match}</button>`;
+                }
+                return match;
+            });
+        }
+        
+        // Mettre en surbrillance temporairement une source
+        function highlightSource(index) {
+            const sourceRef = document.getElementById(`source-ref-${index}`);
+            if (sourceRef) {
+                sourceRef.classList.add('ring-2', 'ring-blue-500', 'ring-offset-1');
+                setTimeout(() => {
+                    sourceRef.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-1');
+                }, 2000);
+            }
+        }
+        
+        // Afficher la modale de prévisualisation d'une source
+        // forceTextModal: si true, afficher la modale texte même pour une source PDF (ex. depuis "Voir le passage cité")
+        async function showSourcePreview(index, forceTextModal) {
+            const source = currentMessageSources.find(s => s.index === index);
+            if (!source) return;
+            
+            currentPreviewSourceIndex = index;
+            
+            // Si la source a un PDF, ouvrir directement le visualiseur à la bonne page (sauf si forceTextModal)
+            if (!forceTextModal && source.has_source_file && source.note_id) {
+                currentPdfNoteId = source.note_id;
+                currentPdfPageNo = source.page_no || 1;
+                currentPdfTitle = source.note_title || 'Document';
+                currentSourceIndexFromPdfViewer = index;
+                highlightSource(index);
+                await openPdfViewer();
+                return;
+            }
+            
+            // Mettre à jour les éléments de la modale
+            document.getElementById('source-preview-badge').textContent = `[${index}]`;
+            document.getElementById('source-preview-title').textContent = source.note_title || 'Note sans titre';
+            document.getElementById('source-preview-content').textContent = source.passage_full || source.excerpt || 'Contenu non disponible';
+            document.getElementById('source-preview-edit-link').href = `/notes/${source.note_id}/edit`;
+            document.getElementById('source-preview-score-val').textContent = `${Math.round(source.score * 100)}%`;
+            
+            // Afficher la page si disponible
+            const pageEl = document.getElementById('source-preview-page');
+            if (source.page_no) {
+                document.getElementById('source-preview-page-num').textContent = source.page_no;
+                pageEl.classList.remove('hidden');
+            } else {
+                pageEl.classList.add('hidden');
+            }
+            
+            // Afficher la section si disponible
+            const sectionEl = document.getElementById('source-preview-section');
+            if (source.section) {
+                document.getElementById('source-preview-section-text').textContent = source.section;
+                sectionEl.classList.remove('hidden');
+            } else {
+                sectionEl.classList.add('hidden');
+            }
+            
+            // Gérer l'affichage de l'image (multimodal)
+            const imageContainer = document.getElementById('source-preview-image-container');
+            const imageEl = document.getElementById('source-preview-image');
+            const imageBadge = document.getElementById('source-preview-image-badge');
+            
+            if (source.is_image_chunk && source.image_filename && source.note_id) {
+                const imageUrl = `/api/images/${source.note_id}/${source.image_filename}`;
+                imageEl.src = imageUrl;
+                imageEl.alt = source.note_title || 'Image du document';
+                imageContainer.classList.remove('hidden');
+                imageBadge.classList.remove('hidden');
+            } else {
+                imageEl.src = '';
+                imageContainer.classList.add('hidden');
+                imageBadge.classList.add('hidden');
+            }
+            
+            // Vérifier si un PDF est disponible
+            const pdfBtn = document.getElementById('source-preview-pdf-btn');
+            const pdfText = document.getElementById('source-preview-pdf-text');
+            
+            try {
+                const token = localStorage.getItem("authToken");
+                const response = await fetch(`/api/notes/${source.note_id}/info`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
+                if (response.ok) {
+                    const noteInfo = await response.json();
+                    const editLink = document.getElementById('source-preview-edit-link');
+                    
+                    if (noteInfo.note_type === 'document' && noteInfo.has_source_file) {
+                        // Stocker les infos pour le visualiseur PDF
+                        currentPdfNoteId = source.note_id;
+                        currentPdfPageNo = source.page_no || 1;
+                        currentPdfTitle = source.note_title || 'Document';
+                        
+                        if (source.page_no) {
+                            pdfText.textContent = `Voir le PDF (page ${source.page_no})`;
+                        } else {
+                            pdfText.textContent = 'Voir le PDF';
+                        }
+                        pdfBtn.classList.remove('hidden');
+                        // Cacher le bouton d'édition pour les documents PDF (non éditables)
+                        editLink.classList.add('hidden');
+                    } else {
+                        pdfBtn.classList.add('hidden');
+                        // Afficher le bouton d'édition pour les notes textuelles
+                        editLink.classList.remove('hidden');
+                    }
+                } else {
+                    pdfBtn.classList.add('hidden');
+                }
+            } catch (e) {
+                console.error('Erreur lors de la récupération des infos de la note:', e);
+                pdfBtn.classList.add('hidden');
+            }
+            
+            // Mettre en surbrillance la source dans la liste
+            highlightSource(index);
+            
+            // Afficher la modale
+            document.getElementById('source-preview-modal').classList.remove('hidden');
+        }
+        
+        // Cacher la modale de prévisualisation
+        function hideSourcePreviewModal() {
+            document.getElementById('source-preview-modal').classList.add('hidden');
+        }
+
+        // Démarrer le polling pour vérifier les statuts d'embedding
+        function startEmbeddingStatusPolling() {
+            // Arrêter le polling existant s'il y en a un
+            if (embeddingStatusInterval) {
+                clearInterval(embeddingStatusInterval);
+            }
+
+            console.log("Démarrage du polling des statuts d'embedding");
+
+            let consecutiveNoChanges = 0;
+            const MAX_NO_CHANGES = 3; // Arrêter après 3 vérifications sans changement
+
+            // Vérifier toutes les 3 secondes (moins fréquent pour réduire la charge)
+            embeddingStatusInterval = setInterval(async () => {
+                try {
+                    const notes = await loadNotesData();
+                    if (!notes || notes.length === 0) {
+                        stopEmbeddingStatusPolling();
+                        return;
+                    }
+
+                    let hasProcessingOrPending = false;
+                    let hasChanges = false;
+
+                    // Vérifier le statut pour chaque note
+                    for (const note of notes) {
+                        const status = await checkEmbeddingStatus(note.id);
+                        if (status) {
+                            const previousStatus = embeddingStatuses.get(
+                                note.id
+                            );
+                            // Détecter si le statut a changé
+                            if (
+                                !previousStatus ||
+                                previousStatus.status !== status.status
+                            ) {
+                                hasChanges = true;
+                            }
+
+                            // Continuer le polling seulement si on a des notes en cours de traitement
+                            // "none" signifie qu'il n'y a pas de chunks, donc pas besoin de continuer à vérifier
+                            if (
+                                status.status === "processing" ||
+                                status.status === "pending"
+                            ) {
+                                hasProcessingOrPending = true;
+                            }
+                        }
+
+                        // Vérifier aussi le statut de traitement pour les documents
+                        if (
+                            note.note_type === "document" &&
+                            note.processing_status
+                        ) {
+                            const noteElement = document.querySelector(
+                                `[data-note-id="${note.id}"]`
+                            );
+                            const previousProcessingStatus =
+                                noteElement?.getAttribute(
+                                    "data-processing-status"
+                                );
+                            const previousProcessingProgressRaw =
+                                noteElement?.getAttribute(
+                                    "data-processing-progress"
+                                );
+                            const previousProcessingProgress =
+                                previousProcessingProgressRaw !== null
+                                    ? Number(previousProcessingProgressRaw)
+                                    : null;
+                            const currentProgress =
+                                typeof note.processing_progress === "number"
+                                    ? note.processing_progress
+                                    : null;
+                            if (
+                                previousProcessingStatus !==
+                                    note.processing_status ||
+                                previousProcessingProgress !== currentProgress
+                            ) {
+                                hasChanges = true;
+                                updateNoteProcessingIcon(
+                                    note.id,
+                                    note.processing_status,
+                                    currentProgress
+                                );
+                                if (noteElement) {
+                                    noteElement.setAttribute(
+                                        "data-processing-status",
+                                        note.processing_status
+                                    );
+                                    if (currentProgress !== null) {
+                                        noteElement.setAttribute(
+                                            "data-processing-progress",
+                                            String(currentProgress)
+                                        );
+                                    }
+                                }
+                            }
+
+                            // Continuer le polling si le document est en cours de traitement
+                            if (
+                                note.processing_status === "pending" ||
+                                note.processing_status === "processing"
+                            ) {
+                                hasProcessingOrPending = true;
+                            }
+                        }
+                    }
+
+                    // Si aucun changement depuis plusieurs vérifications, arrêter le polling
+                    if (!hasChanges) {
+                        consecutiveNoChanges++;
+                    } else {
+                        consecutiveNoChanges = 0;
+                    }
+
+                    // Arrêter le polling si :
+                    // 1. Aucune note en cours de traitement (processing/pending) ET au moins une vérification sans changement
+                    // 2. Aucun changement depuis plusieurs vérifications consécutives
+                    if (
+                        (!hasProcessingOrPending &&
+                            consecutiveNoChanges >= 1) ||
+                        consecutiveNoChanges >= MAX_NO_CHANGES
+                    ) {
+                        console.log(
+                            "Polling arrêté : aucun changement détecté ou toutes les notes sont stables"
+                        );
+                        stopEmbeddingStatusPolling();
+                        return; // Sortir immédiatement pour éviter d'autres vérifications
+                    }
+                } catch (error) {
+                    console.error("Erreur lors du polling des statuts:", error);
+                    consecutiveNoChanges++;
+                    if (consecutiveNoChanges >= MAX_NO_CHANGES) {
+                        stopEmbeddingStatusPolling();
+                    }
+                }
+            }, 3000); // Vérifier toutes les 3 secondes (moins fréquent)
+        }
+
+        // Arrêter le polling
+        function stopEmbeddingStatusPolling() {
+            if (embeddingStatusInterval) {
+                clearInterval(embeddingStatusInterval);
+                embeddingStatusInterval = null;
+            }
+        }
+
+        // Charger les agents pour le sélecteur
+        async function loadAgentsForProjectSelector() {
+            try {
+                const response = await apiCall('/api/agents');
+                if (response && response.ok) {
+                    const agents = await response.json();
+                    const select = document.getElementById('project-agent-select');
+                    if (select) {
+                        select.innerHTML = '<option value="">🤖 Aucun agent</option>' +
+                            agents.map(agent => `<option value="${agent.id}">🤖 ${escapeHtml(agent.name)}</option>`).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des agents:', error);
+            }
+        }
+
+        // ========== PDF Viewer Modal ==========
+        let currentPdfNoteId = null;
+        let currentPdfPageNo = 1;
+        let currentPdfTitle = 'Document';
+        let pdfModalDoc = null;
+        let pdfModalCurrentPage = 1;
+        let pdfModalCurrentZoom = 1;
+        let pdfjsLib = null;
+
+        // Charger pdf.js de manière asynchrone
+        async function loadPdfJs() {
+            if (pdfjsLib) return pdfjsLib;
             
             if (notes.length === 0) {
                 container.innerHTML = `
@@ -538,305 +2727,181 @@
                 await Promise.all(statusPromises);
             }
         }
-    }
 
-    async function createNote(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = {
-            title: formData.get('title'),
-            content: formData.get('content') || null,
-            note_type: 'written'
-        };
-        
-        // Désactiver le bouton pendant la création
-        const submitButton = event.target.querySelector('button[type="submit"]');
-        const originalText = submitButton.textContent;
-        submitButton.disabled = true;
-        submitButton.textContent = 'Création...';
-        
-        try {
-            const response = await apiCall(`/api/projects/${projectId}/notes`, {
-                method: 'POST',
-                body: JSON.stringify(data)
-            });
+        async function openPdfViewer() {
+            if (!currentPdfNoteId) return;
             
-            console.log('Response status:', response?.status);
-            console.log('Response ok:', response?.ok);
+            currentSourceIndexFromPdfViewer = currentPreviewSourceIndex;
             
-            if (response && response.ok) {
-                try {
-                    const newNote = await response.json();
-                    console.log('Note créée:', newNote);
-                    
-                    // Fermer le modal
-                    hideCreateNoteModal();
-                    
-                    // Recharger les notes
-                    await loadNotes();
-                    
-                    // Redémarrer le polling après création d'une note
-                    stopEmbeddingStatusPolling();
-                    startEmbeddingStatusPolling();
-                    
-                    // Afficher une notification de succès
-                    showNotification('✅ Note créée avec succès !', 'success');
-                } catch (jsonError) {
-                    console.error('Erreur parsing JSON:', jsonError);
-                    // Même si le parsing échoue, la note est créée, donc on recharge
-                    hideCreateNoteModal();
-                    await loadNotes();
-                    stopEmbeddingStatusPolling();
-                    startEmbeddingStatusPolling();
-                    showNotification('✅ Note créée avec succès !', 'success');
-                }
-            } else {
-                console.error('Response not ok:', response);
-                showNotification('❌ Erreur lors de la création de la note', 'error');
-            }
-        } catch (error) {
-            console.error('Erreur lors de la création:', error);
-            showNotification('❌ Erreur lors de la création de la note', 'error');
-        } finally {
-            // Réactiver le bouton
-            submitButton.disabled = false;
-            submitButton.textContent = originalText;
-        }
-    }
-    
-    // Fonction pour afficher des notifications
-    function showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
-            type === 'success' ? 'bg-green-500' : 
-            type === 'error' ? 'bg-red-500' : 
-            'bg-blue-500'
-        } text-white`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        
-        // Supprimer après 3 secondes
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transition = 'opacity 0.3s';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    }
-
-    async function deleteNote(noteId) {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer cette note ?')) return;
-        
-        try {
-            const response = await apiCall(`/api/notes/${noteId}`, {
-                method: 'DELETE'
-            });
+            // Fermer la modale de preview
+            hideSourcePreviewModal();
             
-            if (response && response.ok) {
-                showNotification('✅ Note supprimée avec succès', 'success');
-                await loadNotes();
-                stopEmbeddingStatusPolling();
-                startEmbeddingStatusPolling();
-            } else {
-                showNotification('❌ Erreur lors de la suppression', 'error');
-            }
-        } catch (error) {
-            console.error('Erreur lors de la suppression:', error);
-            showNotification('❌ Erreur lors de la suppression', 'error');
-        }
-    }
-
-    // Animation de chargement pour le chatbot de projet
-    let projectLoadingAnimationInterval = null;
-    
-    function showProjectLoadingAnimation() {
-        const messagesContainer = document.getElementById('project-chat-messages');
-        const loadingDiv = document.createElement('div');
-        loadingDiv.id = 'project-loading-message';
-        loadingDiv.className = 'flex justify-start';
-        loadingDiv.innerHTML = `
-            <div class="bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
-                <span class="loading-dots">
-                    <span>.</span><span>.</span><span>.</span>
-                </span>
-            </div>
-        `;
-        messagesContainer.appendChild(loadingDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        
-        const dots = loadingDiv.querySelectorAll('.loading-dots span');
-        let dotIndex = 0;
-        projectLoadingAnimationInterval = setInterval(() => {
-            dots.forEach((dot, index) => {
-                dot.style.opacity = index === dotIndex % 3 ? '1' : '0.3';
-            });
-            dotIndex++;
-        }, 300);
-    }
-    
-    function hideProjectLoadingAnimation() {
-        const loadingDiv = document.getElementById('project-loading-message');
-        if (loadingDiv) {
-            loadingDiv.remove();
-        }
-        if (projectLoadingAnimationInterval) {
-            clearInterval(projectLoadingAnimationInterval);
-            projectLoadingAnimationInterval = null;
-        }
-    }
-
-    // Envoyer un message au chatbot de projet avec streaming
-    async function sendProjectChatMessage(event) {
-        event.preventDefault();
-        const input = document.getElementById('project-chat-input');
-        const message = input.value.trim();
-        const modelSelect = document.getElementById('project-model-select');
-        const model = modelSelect.value;
-
-        if (!message) return;
-        if (!model) {
-            alert('Veuillez sélectionner un modèle');
-            return;
-        }
-
-        // Ajouter le message de l'utilisateur
-        addMessageToProjectChat('user', message);
-        input.value = '';
-        
-        // Désactiver le bouton et l'input pendant l'envoi
-        const submitButton = event.target.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        input.disabled = true;
-
-        // Préparer le contexte de conversation
-        const context = projectChatHistory.map(msg => ({
-            role: msg.role,
-            content: msg.content
-        }));
-
-        // Créer un message assistant vide pour le streaming (remplace l'animation de chargement)
-        const messagesContainer = document.getElementById('project-chat-messages');
-        // Supprimer le message vide initial s'il existe
-        if (messagesContainer.querySelector('.text-center')) {
-            messagesContainer.innerHTML = '';
-        }
-        
-        const assistantMessageDiv = document.createElement('div');
-        assistantMessageDiv.id = 'project-assistant-streaming-message';
-        assistantMessageDiv.className = 'flex justify-start';
-        assistantMessageDiv.innerHTML = `
-            <div class="max-w-2xl bg-gray-100 text-gray-900 rounded-lg px-4 py-2">
-                <div class="markdown-content text-gray-500 italic">En cours de génération...</div>
-            </div>
-        `;
-        messagesContainer.appendChild(assistantMessageDiv);
-        const assistantContent = assistantMessageDiv.querySelector('.markdown-content');
-        
-        let fullResponse = '';
-        let firstChunkReceived = false;
-
-        // Envoyer au backend avec streaming
-        try {
-            const token = localStorage.getItem('authToken');
-            const response = await fetch(`/api/projects/${projectId}/chat/stream`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    message: message,
-                    model: model,
-                    context: context
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Erreur lors de la requête');
-            }
-
-            // Lire le stream SSE
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let buffer = '';
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop() || '';
-
-                for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        const data = line.slice(6).trim();
-                        if (data) {
-                            try {
-                                const jsonData = JSON.parse(data);
-                                if (jsonData.message && jsonData.message.content) {
-                                    // Supprimer le texte de chargement au premier chunk
-                                    if (!firstChunkReceived) {
-                                        fullResponse = "";
-                                        firstChunkReceived = true;
-                                    }
-                                    fullResponse += jsonData.message.content;
-                                    // Rendre le Markdown en HTML de façon sécurisée
-                                    const rawHtml = marked.parse(fullResponse);
-                                    const cleanHtml = DOMPurify.sanitize(rawHtml);
-                                    assistantContent.innerHTML = cleanHtml;
-                                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                                } else if (jsonData.done) {
-                                    break;
-                                } else if (jsonData.error) {
-                                    throw new Error(jsonData.error);
-                                }
-                            } catch (e) {
-                                console.warn('Erreur parsing JSON:', e, 'Data:', data);
-                            }
-                        }
-                    }
+            // Afficher la modale PDF
+            document.getElementById('pdf-viewer-modal').classList.remove('hidden');
+            document.getElementById('pdf-modal-title').textContent = currentPdfTitle;
+            document.getElementById('pdf-modal-download-link').href = `/api/notes/${currentPdfNoteId}/file`;
+            document.getElementById('pdf-modal-fullpage-link').href = `/notes/${currentPdfNoteId}/edit#page=${currentPdfPageNo}`;
+            const passageBtn = document.getElementById('pdf-modal-passage-btn');
+            if (passageBtn) {
+                if (currentSourceIndexFromPdfViewer != null) {
+                    passageBtn.classList.remove('hidden');
+                } else {
+                    passageBtn.classList.add('hidden');
                 }
             }
-
-            // Finaliser le message
-            assistantMessageDiv.removeAttribute('id');
-            projectChatHistory.push({ role: 'assistant', content: fullResponse });
-
-        } catch (error) {
-            if (document.getElementById('project-assistant-streaming-message')) {
-                document.getElementById('project-assistant-streaming-message').remove();
+            
+            // Afficher un loader
+            document.getElementById('pdf-modal-container').innerHTML = `
+                <div class="flex items-center justify-center h-full text-white">
+                    <i class="ti ti-loader-2 text-4xl animate-spin"></i>
+                </div>
+            `;
+            
+            try {
+                // Charger pdf.js si nécessaire
+                await loadPdfJs();
+                
+                // Charger le PDF
+                const token = localStorage.getItem("authToken");
+                const response = await fetch(`/api/notes/${currentPdfNoteId}/file`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
+                if (!response.ok) throw new Error('Erreur lors du chargement du PDF');
+                
+                const pdfData = await response.arrayBuffer();
+                pdfModalDoc = await pdfjsLib.getDocument({ data: pdfData }).promise;
+                
+                document.getElementById('pdf-modal-total-pages').textContent = pdfModalDoc.numPages;
+                document.getElementById('pdf-modal-page-input').max = pdfModalDoc.numPages;
+                
+                // Aller à la page spécifiée
+                pdfModalCurrentPage = Math.min(Math.max(1, currentPdfPageNo), pdfModalDoc.numPages);
+                pdfModalCurrentZoom = 1;
+                document.getElementById('pdf-modal-zoom-select').value = '1';
+                
+                await renderPdfModalPage(pdfModalCurrentPage);
+                updatePdfModalNavButtons();
+                
+            } catch (error) {
+                console.error('Erreur PDF:', error);
+                document.getElementById('pdf-modal-container').innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-white">
+                        <i class="ti ti-file-alert text-4xl mb-2"></i>
+                        <p>Erreur lors du chargement du PDF</p>
+                        <p class="text-sm text-gray-400 mt-1">${error.message}</p>
+                    </div>
+                `;
             }
-            addMessageToProjectChat('assistant', `Erreur: ${error.message}`);
-        } finally {
-            // Réactiver le bouton et l'input
-            submitButton.disabled = false;
-            input.disabled = false;
-            input.focus();
-        }
-    }
-
-    // Ajouter un message au chat de projet
-    function addMessageToProjectChat(role, content) {
-        projectChatHistory.push({ role, content });
-        const messagesContainer = document.getElementById('project-chat-messages');
-        
-        // Supprimer le message vide initial
-        if (messagesContainer.querySelector('.text-center')) {
-            messagesContainer.innerHTML = '';
         }
 
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
-        
-        // Pour les messages assistant, rendre le Markdown
-        let contentHtml;
-        if (role === 'assistant') {
-            const rawHtml = marked.parse(content);
-            const cleanHtml = DOMPurify.sanitize(rawHtml);
-            contentHtml = `<div class="markdown-content">${cleanHtml}</div>`;
-        } else {
-            // Messages utilisateur en texte brut
-            contentHtml = `<p class="whitespace-pre-wrap">${escapeHtml(content)}</p>`;
+        async function renderPdfModalPage(pageNum) {
+            if (!pdfModalDoc) return;
+            
+            const page = await pdfModalDoc.getPage(pageNum);
+            const container = document.getElementById('pdf-modal-container');
+            
+            let scale = pdfModalCurrentZoom;
+            if (pdfModalCurrentZoom === 'fit') {
+                const containerWidth = container.clientWidth - 40;
+                const viewport = page.getViewport({ scale: 1 });
+                scale = containerWidth / viewport.width;
+            }
+            
+            const viewport = page.getViewport({ scale: scale });
+            
+            container.innerHTML = '';
+            
+            const pageContainer = document.createElement('div');
+            pageContainer.className = 'relative';
+            pageContainer.style.margin = '10px auto';
+            pageContainer.style.width = 'fit-content';
+            
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            canvas.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
+            
+            pageContainer.appendChild(canvas);
+            
+            const pageIndicator = document.createElement('div');
+            pageIndicator.className = 'pdf-page-indicator';
+            pageIndicator.textContent = `Page ${pageNum} / ${pdfModalDoc.numPages}`;
+            pageContainer.appendChild(pageIndicator);
+            
+            container.appendChild(pageContainer);
+            
+            await page.render({
+                canvasContext: context,
+                viewport: viewport
+            }).promise;
+            
+            document.getElementById('pdf-modal-page-input').value = pageNum;
+            pdfModalCurrentPage = pageNum;
+        }
+
+        function updatePdfModalNavButtons() {
+            document.getElementById('pdf-modal-prev-btn').disabled = pdfModalCurrentPage <= 1;
+            document.getElementById('pdf-modal-next-btn').disabled = pdfModalCurrentPage >= pdfModalDoc.numPages;
+        }
+
+        async function pdfModalPrevPage() {
+            if (pdfModalCurrentPage > 1) {
+                await renderPdfModalPage(pdfModalCurrentPage - 1);
+                updatePdfModalNavButtons();
+            }
+        }
+
+        async function pdfModalNextPage() {
+            if (pdfModalDoc && pdfModalCurrentPage < pdfModalDoc.numPages) {
+                await renderPdfModalPage(pdfModalCurrentPage + 1);
+                updatePdfModalNavButtons();
+            }
+        }
+
+        async function pdfModalGoToPage(pageNum) {
+            const page = parseInt(pageNum);
+            if (pdfModalDoc && page >= 1 && page <= pdfModalDoc.numPages) {
+                await renderPdfModalPage(page);
+                updatePdfModalNavButtons();
+            }
+        }
+
+        async function pdfModalSetZoom(zoom) {
+            pdfModalCurrentZoom = zoom === 'fit' ? 'fit' : parseFloat(zoom);
+            await renderPdfModalPage(pdfModalCurrentPage);
+        }
+
+        async function pdfModalZoomIn() {
+            const select = document.getElementById('pdf-modal-zoom-select');
+            const currentIndex = select.selectedIndex;
+            if (currentIndex < select.options.length - 2) {
+                select.selectedIndex = currentIndex + 1;
+                await pdfModalSetZoom(select.value);
+            }
+        }
+
+        async function pdfModalZoomOut() {
+            const select = document.getElementById('pdf-modal-zoom-select');
+            const currentIndex = select.selectedIndex;
+            if (currentIndex > 0) {
+                select.selectedIndex = currentIndex - 1;
+                await pdfModalSetZoom(select.value);
+            }
+        }
+
+        function hidePdfViewerModal() {
+            document.getElementById('pdf-viewer-modal').classList.add('hidden');
+            pdfModalDoc = null;
+            currentSourceIndexFromPdfViewer = null;
+        }
+
+        function showPassageFromPdfViewer() {
+            if (currentSourceIndexFromPdfViewer == null) return;
+            const index = currentSourceIndexFromPdfViewer;
+            hidePdfViewerModal();
+            showSourcePreview(index, true);
         }
         
         messageDiv.innerHTML = `
@@ -918,87 +2983,44 @@
         return `<div class="mb-2"><span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md border ${badge.color}"><i class="ti ${badge.icon}"></i>${badge.text}</span></div>`;
     }
 
-    // Démarrer le polling pour vérifier les statuts d'embedding
-    function startEmbeddingStatusPolling() {
-        // Arrêter le polling existant s'il y en a un
-        if (embeddingStatusInterval) {
-            clearInterval(embeddingStatusInterval);
-        }
-        
-        console.log('Démarrage du polling des statuts d\'embedding');
-        
-        let consecutiveNoChanges = 0;
-        const MAX_NO_CHANGES = 3; // Arrêter après 3 vérifications sans changement
-        
-        // Vérifier toutes les 3 secondes (moins fréquent pour réduire la charge)
-        embeddingStatusInterval = setInterval(async () => {
-            try {
-                const notes = await loadNotesData();
-                if (!notes || notes.length === 0) {
-                    stopEmbeddingStatusPolling();
-                    return;
-                }
-                
-                    let hasProcessingOrPending = false;
-                let hasChanges = false;
-                    
-                    // Vérifier le statut pour chaque note
-                    for (const note of notes) {
-                        const status = await checkEmbeddingStatus(note.id);
-                        if (status) {
-                        const previousStatus = embeddingStatuses.get(note.id);
-                        // Détecter si le statut a changé
-                        if (!previousStatus || previousStatus.status !== status.status) {
-                            hasChanges = true;
-                        }
-                        
-                        // Continuer le polling seulement si on a des notes en cours de traitement
-                        // "none" signifie qu'il n'y a pas de chunks, donc pas besoin de continuer à vérifier
-                        if (status.status === 'processing' || status.status === 'pending') {
-                                hasProcessingOrPending = true;
-                            }
-                        }
-                    }
-                    
-                // Si aucun changement depuis plusieurs vérifications, arrêter le polling
-                if (!hasChanges) {
-                    consecutiveNoChanges++;
-                } else {
-                    consecutiveNoChanges = 0;
-                }
-                
-                // Arrêter le polling si :
-                // 1. Aucune note en cours de traitement (processing/pending) ET au moins une vérification sans changement
-                // 2. Aucun changement depuis plusieurs vérifications consécutives
-                if ((!hasProcessingOrPending && consecutiveNoChanges >= 1) || consecutiveNoChanges >= MAX_NO_CHANGES) {
-                    console.log('Polling arrêté : aucun changement détecté ou toutes les notes sont stables');
-                    stopEmbeddingStatusPolling();
-                    return; // Sortir immédiatement pour éviter d'autres vérifications
-                }
-            } catch (error) {
-                console.error('Erreur lors du polling des statuts:', error);
-                consecutiveNoChanges++;
-                if (consecutiveNoChanges >= MAX_NO_CHANGES) {
-                    stopEmbeddingStatusPolling();
-                }
+        // Raccourcis clavier pour le PDF viewer
+        document.addEventListener('keydown', async (e) => {
+            const modal = document.getElementById('pdf-viewer-modal');
+            if (modal.classList.contains('hidden') || !pdfModalDoc) return;
+            
+            if (e.key === 'Escape') {
+                hidePdfViewerModal();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                await pdfModalPrevPage();
+            } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+                e.preventDefault();
+                await pdfModalNextPage();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                await pdfModalGoToPage(1);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                await pdfModalGoToPage(pdfModalDoc.numPages);
             }
-        }, 3000); // Vérifier toutes les 3 secondes (moins fréquent)
-    }
+        });
 
-    // Arrêter le polling
-    function stopEmbeddingStatusPolling() {
-        if (embeddingStatusInterval) {
-            clearInterval(embeddingStatusInterval);
-            embeddingStatusInterval = null;
-        }
-    }
-
-    // Initialisation
-    if (authToken) {
-        loadProject();
-        loadNotes().then(() => {
-            // Démarrer le polling après le chargement initial
-            startEmbeddingStatusPolling();
+        // Gestionnaire de clic sur les images dans le chat pour les ouvrir en grand
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('.markdown-content img')) {
+                const imgSrc = e.target.src;
+                // Créer une modale lightbox simple
+                const lightbox = document.createElement('div');
+                lightbox.className = 'fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[70] cursor-zoom-out';
+                lightbox.onclick = () => lightbox.remove();
+                lightbox.innerHTML = `
+                    <img src="${imgSrc}" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl">
+                    <button class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300" onclick="this.parentElement.remove()">
+                        <i class="ti ti-x"></i>
+                    </button>
+                `;
+                document.body.appendChild(lightbox);
+            }
         });
         loadProjectModels();
     }
@@ -1174,4 +3196,21 @@
 </script>
 {% endblock %}
 
+        // Initialisation
+        if (authToken) {
+            loadProject();
+            loadNotes().then(() => {
+                // Démarrer le polling après le chargement initial
+                startEmbeddingStatusPolling();
+            });
+            loadAgentsForProjectSelector();
+            // Les modèles sont maintenant gérés par les presets, pas besoin de charger
+        }
 
+        // Nettoyer le polling quand on quitte la page
+        window.addEventListener("beforeunload", () => {
+            stopEmbeddingStatusPolling();
+        });
+    </script>
+    {% endblock %}
+</div>

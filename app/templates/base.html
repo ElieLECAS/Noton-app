@@ -3,8 +3,13 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{% block title %}Noton{% endblock %}</title>
+        <title>{% block title %}{{ app_name }}{% endblock %}</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+            };
+        </script>
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
@@ -13,53 +18,109 @@
             [x-cloak] {
                 display: none !important;
             }
+            /* UI moderne : sidebar et navigation */
+            #sidebar nav a {
+                border-radius: 0.625rem;
+            }
+            #sidebar nav a:hover {
+                background: rgba(0, 0, 0, 0.04);
+            }
+            .dark #sidebar nav a:hover {
+                background: rgba(255, 255, 255, 0.06);
+            }
+            #sidebar .text-xs.uppercase {
+                letter-spacing: 0.05em;
+            }
         </style>
         {% block extra_head %}{% endblock %}
     </head>
-    <body class="bg-gray-50">
-        <div class="flex h-screen">
+    <body class="bg-gray-50 dark:bg-gray-900 transition-colors">
+        <div class="flex h-screen relative">
+            <!-- Mobile Menu Overlay -->
+            <div
+                id="mobile-menu-overlay"
+                class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+                onclick="toggleMobileMenu()"
+            ></div>
+
             <!-- Sidebar -->
-            <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
-                <div class="p-4 border-b border-gray-200">
-                    <h1 class="text-xl font-bold text-gray-900">Noton</h1>
+            <aside
+                id="sidebar"
+                class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out"
+            >
+                <div
+                    class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between"
+                >
+                    <h1
+                        class="text-xl font-bold text-gray-900 dark:text-gray-100"
+                    >
+                        {{ app_name }}
+                    </h1>
+                    <div class="flex items-center gap-2">
+                        <button
+                            onclick="toggleDarkMode()"
+                            class="hidden lg:block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2"
+                            title="Basculer le thème"
+                        >
+                            <i
+                                id="theme-icon-desktop"
+                                class="ti ti-sun text-xl"
+                            ></i>
+                        </button>
+                        <button
+                            onclick="toggleMobileMenu()"
+                            class="lg:hidden text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2"
+                        >
+                            <i class="ti ti-x text-xl"></i>
+                        </button>
+                    </div>
                 </div>
-                <nav class="flex-1 p-4">
+                <nav class="flex-1 p-4 overflow-y-auto">
                     <a
                         href="/"
-                        class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700"
+                        class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
                     >
                         <i class="ti ti-folder"></i>
                         <span>Tous les projets</span>
+                    </a>
+                    <a
+                        href="/studio"
+                        class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
+                    >
+                        <i class="ti ti-robot"></i>
+                        <span>Studio d'Agents</span>
                     </a>
                     <div class="mt-6">
                         <div
                             class="flex items-center justify-between px-3 py-2"
                         >
                             <span
-                                class="text-xs font-semibold text-gray-500 uppercase"
-                                >PROJETS</span
+                                class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"
+                                >CONVERSATIONS</span
                             >
                             <button
-                                onclick="showCreateProjectModal()"
-                                class="text-gray-400 hover:text-gray-600"
+                                onclick="if(typeof projectConversationsManager !== 'undefined') projectConversationsManager.createConversation(); else if(typeof conversationsManager !== 'undefined') conversationsManager.createConversation();"
+                                class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-1"
+                                title="Nouvelle conversation"
                             >
                                 <i class="ti ti-plus"></i>
                             </button>
                         </div>
-                        <div id="projects-list" class="mt-2">
-                            <!-- Projets chargés dynamiquement -->
+                        <div id="conversations-list" class="mt-2">
+                            <!-- Conversations chargées dynamiquement -->
                         </div>
                     </div>
                 </nav>
-                <div class="p-4 border-t border-gray-200">
+                <div class="p-4 border-t border-gray-200 dark:border-gray-700">
                     <div class="flex items-center justify-between">
                         <span
                             id="current-user"
-                            class="text-sm text-gray-700"
+                            class="text-sm text-gray-700 dark:text-gray-300 truncate"
                         ></span>
                         <button
                             onclick="logout()"
-                            class="text-gray-400 hover:text-gray-600"
+                            class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-1"
+                            title="Déconnexion"
                         >
                             <i class="ti ti-logout"></i>
                         </button>
@@ -68,7 +129,30 @@
             </aside>
 
             <!-- Main Content -->
-            <main class="flex-1 flex flex-col overflow-hidden">
+            <main class="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
+                <!-- Mobile Header -->
+                <div
+                    class="lg:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0"
+                >
+                    <button
+                        onclick="toggleMobileMenu()"
+                        class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2"
+                    >
+                        <i class="ti ti-menu-2 text-xl"></i>
+                    </button>
+                    <h1
+                        class="text-lg font-bold text-gray-900 dark:text-gray-100"
+                    >
+                        {{ app_name }}
+                    </h1>
+                    <button
+                        onclick="toggleDarkMode()"
+                        class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2"
+                        title="Basculer le thème"
+                    >
+                        <i id="theme-icon" class="ti ti-sun text-xl"></i>
+                    </button>
+                </div>
                 {% block content %}{% endblock %}
             </main>
         </div>
@@ -76,33 +160,39 @@
         <!-- Modals -->
         <div
             id="create-project-modal"
-            class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
         >
-            <div class="bg-white rounded-lg p-6 w-full max-w-md">
-                <h2 class="text-xl font-bold mb-4">Créer un nouveau projet</h2>
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
+            >
+                <h2
+                    class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100"
+                >
+                    Créer un nouveau projet
+                </h2>
                 <form id="create-project-form" onsubmit="createProject(event)">
                     <div class="mb-4">
                         <label
-                            class="block text-sm font-medium text-gray-700 mb-2"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                             >Titre</label
                         >
                         <input
                             type="text"
                             name="title"
                             required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Mon projet"
                         />
                     </div>
                     <div class="mb-4">
                         <label
-                            class="block text-sm font-medium text-gray-700 mb-2"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                             >Description (optionnelle)</label
                         >
                         <textarea
                             name="description"
                             rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Décrivez votre projet..."
                         ></textarea>
                     </div>
@@ -110,13 +200,13 @@
                         <button
                             type="button"
                             onclick="hideCreateProjectModal()"
-                            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
                         >
                             Annuler
                         </button>
                         <button
                             type="submit"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                            class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
                         >
                             Créer le projet
                         </button>
@@ -129,6 +219,67 @@
             // Token JWT stocké dans localStorage
             let authToken = localStorage.getItem("authToken");
             let currentUser = null;
+
+            // Gérer le dark mode
+            function initDarkMode() {
+                const isDark =
+                    localStorage.getItem("darkMode") === "true" ||
+                    (!localStorage.getItem("darkMode") &&
+                        window.matchMedia("(prefers-color-scheme: dark)")
+                            .matches);
+                if (isDark) {
+                    document.documentElement.classList.add("dark");
+                }
+                updateThemeIcon();
+            }
+
+            function toggleDarkMode() {
+                const isDark =
+                    document.documentElement.classList.toggle("dark");
+                localStorage.setItem("darkMode", isDark);
+                updateThemeIcon();
+            }
+
+            function updateThemeIcon() {
+                const icon = document.getElementById("theme-icon");
+                const iconDesktop =
+                    document.getElementById("theme-icon-desktop");
+                const isDark =
+                    document.documentElement.classList.contains("dark");
+                if (icon) {
+                    icon.className = isDark
+                        ? "ti ti-moon text-xl"
+                        : "ti ti-sun text-xl";
+                }
+                if (iconDesktop) {
+                    iconDesktop.className = isDark
+                        ? "ti ti-moon text-xl"
+                        : "ti ti-sun text-xl";
+                }
+            }
+
+            // Gérer le menu mobile
+            function toggleMobileMenu() {
+                const sidebar = document.getElementById("sidebar");
+                const overlay = document.getElementById("mobile-menu-overlay");
+                sidebar.classList.toggle("-translate-x-full");
+                overlay.classList.toggle("hidden");
+            }
+
+            // Fermer le menu mobile lors du clic sur un lien
+            document.addEventListener("DOMContentLoaded", function () {
+                const sidebar = document.getElementById("sidebar");
+                if (sidebar) {
+                    sidebar.addEventListener("click", function (e) {
+                        if (
+                            e.target.tagName === "A" &&
+                            window.innerWidth < 1024
+                        ) {
+                            setTimeout(toggleMobileMenu, 100);
+                        }
+                    });
+                }
+            });
 
             // Fonctions utilitaires
             async function apiCall(url, options = {}) {
@@ -188,6 +339,12 @@
                 }
             }
 
+            function escapeHtml(text) {
+                const div = document.createElement("div");
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
             async function loadProjects() {
                 const response = await apiCall("/api/projects");
                 if (response && response.ok) {
@@ -198,14 +355,145 @@
                         projectsList.innerHTML = projects
                             .map(
                                 (p) => `
-                        <a href="/projects/${p.id}" class="block px-3 py-2 rounded-lg hover:bg-gray-100 text-gray-700">
-                            ${p.title}
-                        </a>
+                        <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <a href="/projects/${
+                                p.id
+                            }" class="flex-1 text-gray-700 dark:text-gray-300 cursor-pointer" data-project-title="${escapeHtml(
+                                    p.title
+                                )}">
+                                <span id="project-title-${p.id}">${escapeHtml(
+                                    p.title
+                                )}</span>
+                            </a>
+                            <button
+                                onclick="editProjectName(event, ${p.id})"
+                                class="opacity-0 group-hover:opacity-100 text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-opacity"
+                                title="Renommer le projet"
+                                data-project-title="${escapeHtml(p.title)}"
+                            >
+                                <i class="ti ti-pencil text-sm"></i>
+                            </button>
+                            <button
+                                onclick="deleteProject(event, ${p.id})"
+                                class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity"
+                                title="Supprimer le projet"
+                                data-project-title="${escapeHtml(p.title)}"
+                            >
+                                <i class="ti ti-trash text-sm"></i>
+                            </button>
+                        </div>
                     `
                             )
                             .join("");
                     }
                 }
+            }
+
+            async function deleteProject(event, projectId) {
+                event.stopPropagation();
+                const button = event.target.closest("button");
+                const projectTitle = button
+                    ? button.getAttribute("data-project-title")
+                    : "ce projet";
+                if (
+                    !confirm(
+                        `Êtes-vous sûr de vouloir supprimer le projet "${projectTitle}" ? Cette action est irréversible.`
+                    )
+                ) {
+                    return;
+                }
+                const response = await apiCall(`/api/projects/${projectId}`, {
+                    method: "DELETE",
+                });
+                if (response && response.ok) {
+                    loadProjects();
+                    if (window.loadProjectsList) window.loadProjectsList();
+                    // Rediriger vers la page d'accueil si on était sur la page du projet supprimé
+                    if (window.location.pathname === `/projects/${projectId}`) {
+                        window.location.href = "/";
+                    }
+                } else {
+                    alert("Erreur lors de la suppression du projet");
+                }
+            }
+
+            function editProjectName(event, projectId) {
+                event.preventDefault();
+                event.stopPropagation();
+                const button = event.target.closest("button");
+                const currentTitle = button
+                    ? button.getAttribute("data-project-title")
+                    : "";
+
+                const titleElement = document.getElementById(
+                    `project-title-${projectId}`
+                );
+                if (!titleElement) return;
+
+                const linkElement = titleElement.closest("a");
+                if (!linkElement) return;
+
+                // Sauvegarder le contenu original du lien
+                const originalContent = linkElement.innerHTML;
+                const originalHref = linkElement.getAttribute("href");
+
+                // Créer un input pour l'édition
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = currentTitle;
+                input.className =
+                    "w-full px-2 py-1 border border-blue-500 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
+                input.style.minWidth = "150px";
+
+                // Remplacer le contenu du lien par l'input
+                linkElement.innerHTML = "";
+                linkElement.appendChild(input);
+                linkElement.style.pointerEvents = "none"; // Désactiver la navigation pendant l'édition
+                input.focus();
+                input.select();
+
+                const saveEdit = async () => {
+                    const newTitle = input.value.trim();
+                    if (newTitle === currentTitle || newTitle === "") {
+                        // Annuler si pas de changement ou vide
+                        linkElement.innerHTML = originalContent;
+                        linkElement.style.pointerEvents = "";
+                        return;
+                    }
+
+                    const response = await apiCall(
+                        `/api/projects/${projectId}`,
+                        {
+                            method: "PUT",
+                            body: JSON.stringify({ title: newTitle }),
+                        }
+                    );
+
+                    if (response && response.ok) {
+                        loadProjects();
+                        if (window.loadProjectsList) window.loadProjectsList();
+                    } else {
+                        alert("Erreur lors de la modification du projet");
+                        linkElement.innerHTML = originalContent;
+                        linkElement.style.pointerEvents = "";
+                    }
+                };
+
+                const cancelEdit = () => {
+                    linkElement.innerHTML = originalContent;
+                    linkElement.style.pointerEvents = "";
+                };
+
+                input.addEventListener("blur", saveEdit);
+                input.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        input.blur();
+                    } else if (e.key === "Escape") {
+                        e.preventDefault();
+                        cancelEdit();
+                    }
+                });
             }
 
             async function logout() {
@@ -227,6 +515,7 @@
             }
 
             // Initialisation
+            initDarkMode();
             // Mettre à jour authToken depuis localStorage
             authToken = localStorage.getItem("authToken");
             if (authToken) {

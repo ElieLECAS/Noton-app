@@ -1,0 +1,6 @@
+docker build -t elielecas/LIA:latest ./dashboard
+
+docker tag elielecas/LIA:latest elielecas/LIA:v1.0.0
+
+docker push elielecas/LIA:latest
+docker push elielecas/LIA:v1.0.0

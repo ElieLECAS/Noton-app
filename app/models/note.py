@@ -38,6 +38,9 @@ class NoteCreate(SQLModel):
     title: str
     content: Optional[str] = None
     note_type: str = "written"
+    source_file_path: Optional[str] = None
+    processing_status: str = "completed"
+    processing_progress: Optional[int] = 100
 
 
 class NoteRead(SQLModel):
@@ -45,6 +48,21 @@ class NoteRead(SQLModel):
     title: str
     content: Optional[str] = None
     note_type: str
+    processing_status: str
+    processing_progress: Optional[int] = None
+    project_id: int
+    user_id: int
+    created_at: datetime
+    updated_at: datetime
+
+
+class NoteListItem(SQLModel):
+    """Schéma pour la liste des notes d'un projet (sans contenu, pour chargement plus rapide)."""
+    id: int
+    title: str
+    note_type: str
+    processing_status: str
+    processing_progress: Optional[int] = None
     project_id: int
     user_id: int
     created_at: datetime
@@ -56,4 +74,5 @@ class NoteRead(SQLModel):
 class NoteUpdate(SQLModel):
     title: Optional[str] = None
     content: Optional[str] = None
+    processing_progress: Optional[int] = None
 
