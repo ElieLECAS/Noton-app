@@ -516,10 +516,11 @@ extra_head %}
                 ></i>
                 <span id="project-chatbot-toggle-text" class="text-sm sm:text-base">Parler à LIA</span>
             </button>
-            <button
-                onclick="showCreateNoteModal()"
-                class="px-4 sm:px-5 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-xl hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base font-medium shadow-sm hover:shadow transition-shadow"
-            >
+            <button onclick="showUploadDocumentModal()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2">
+                <i class="ti ti-upload"></i>
+                <span>Importer un document</span>
+            </button>
+            <button onclick="showCreateNoteModal()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
                 <i class="ti ti-plus"></i>
                 <span class="hidden sm:inline">Nouvelle note</span>
                 <span class="sm:hidden">Note</span>
@@ -1043,12 +1044,51 @@ extra_head %}
         </div>
         <div id="pdf-modal-container" class="flex-1 overflow-auto bg-gray-700"></div>
     </div>
-    {% endblock %} {% block extra_scripts %}
-    <script>
-        const projectId = window.location.pathname.split("/").pop();
-        let projectChatHistory = [];
-        let projectChatbotOpen = false; // Par défaut fermé sur la page projet
-        let projectConversationsManager; // Gestionnaire de conversations du projet
+</div>
+
+<!-- Upload Document Modal -->
+<div id="upload-document-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
+        <h2 class="text-xl font-bold mb-4">Importer un document</h2>
+        <form id="upload-document-form" onsubmit="uploadDocument(event)">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Titre (optionnel)</label>
+                <input type="text" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Laisser vide pour utiliser le nom du fichier">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Fichier</label>
+                <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-green-500 transition-colors cursor-pointer">
+                    <input type="file" name="file" id="file-input" class="hidden" required accept=".pdf,.docx,.xlsx,.pptx,.csv,.txt,.md,.json,.png,.jpg,.jpeg">
+                    <div id="drop-zone-content">
+                        <i class="ti ti-upload text-4xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-600 mb-1">Glissez-déposez un fichier ici ou cliquez pour sélectionner</p>
+                        <p class="text-sm text-gray-400">PDF, Word, Excel, PowerPoint, CSV, images (max 50 MB)</p>
+                    </div>
+                    <div id="file-selected" class="hidden">
+                        <i class="ti ti-file text-4xl text-green-600 mb-2"></i>
+                        <p id="file-name" class="text-gray-900 font-medium mb-1"></p>
+                        <p id="file-size" class="text-sm text-gray-500"></p>
+                        <button type="button" onclick="clearFileSelection()" class="mt-2 text-sm text-red-600 hover:text-red-700">Changer de fichier</button>
+                    </div>
+                </div>
+            </div>
+            <div id="upload-progress" class="hidden mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-700">Traitement en cours...</span>
+                    <span id="upload-status" class="text-sm text-gray-500">Parsing du document</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="upload-progress-bar" class="bg-green-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="hideUploadDocumentModal()" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">Annuler</button>
+                <button type="submit" id="upload-submit-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Importer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
 
         // Configuration de marked.js pour un meilleur rendu Markdown
         marked.setOptions({
@@ -2639,25 +2679,53 @@ extra_head %}
         async function loadPdfJs() {
             if (pdfjsLib) return pdfjsLib;
             
-            const script = document.createElement('script');
-            script.type = 'module';
-            script.textContent = `
-                import * as pdfjs from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
-                pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
-                window.pdfjsLib = pdfjs;
-            `;
-            document.head.appendChild(script);
-            
-            // Attendre que pdf.js soit chargé
-            return new Promise((resolve) => {
-                const checkInterval = setInterval(() => {
-                    if (window.pdfjsLib) {
-                        clearInterval(checkInterval);
-                        pdfjsLib = window.pdfjsLib;
-                        resolve(pdfjsLib);
-                    }
-                }, 50);
-            });
+            if (notes.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="ti ti-notes text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 mb-2">Aucune note</p>
+                        <p class="text-sm text-gray-400">Créez votre première note pour commencer</p>
+                    </div>
+                `;
+            } else {
+                // Afficher d'abord les notes avec une icône par défaut (pending)
+                container.innerHTML = notes.map(note => {
+                    // Afficher "pending" par défaut pendant le chargement
+                    const statusIcon = getEmbeddingStatusIcon('pending');
+                    
+                    // Déterminer le badge de type de source
+                    const sourceBadge = getSourceBadge(note);
+                    
+                    return `
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition note-card flex-shrink-0" data-note-id="${note.id}">
+                        <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-lg font-semibold text-gray-900">${note.title}</h3>
+                                <span class="embedding-status-icon">${statusIcon}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a href="/notes/${note.id}/edit" class="text-gray-400 hover:text-gray-600">
+                                    <i class="ti ti-pencil"></i>
+                                </a>
+                                <button onclick="deleteNote(${note.id})" class="text-gray-400 hover:text-red-600">
+                                    <i class="ti ti-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        ${sourceBadge}
+                        <p class="text-gray-600 whitespace-pre-wrap line-clamp-6">${note.content || 'Pas de contenu'}</p>
+                        <p class="text-xs text-gray-400 mt-4">
+                            <i class="ti ti-${note.note_type === 'written' ? 'pencil' : (note.note_type === 'document' ? 'file' : 'microphone')}"></i>
+                            ${note.note_type === 'document' ? 'Document importé' : 'Note écrite'} • Modifiée le ${new Date(note.updated_at).toLocaleDateString('fr-FR')} à ${new Date(note.updated_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                    </div>
+                    `;
+                }).join('');
+                
+                // Ensuite, vérifier les statuts d'embedding pour toutes les notes et mettre à jour les icônes
+                const statusPromises = notes.map(note => checkEmbeddingStatus(note.id));
+                await Promise.all(statusPromises);
+            }
         }
 
         async function openPdfViewer() {
@@ -2835,6 +2903,85 @@ extra_head %}
             hidePdfViewerModal();
             showSourcePreview(index, true);
         }
+        
+        messageDiv.innerHTML = `
+            <div class="max-w-2xl ${role === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'} rounded-lg px-4 py-2">
+                ${contentHtml}
+            </div>
+        `;
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    // Fonction pour échapper le HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    // Fonction pour obtenir le badge de type de source
+    function getSourceBadge(note) {
+        if (note.note_type !== 'document' || !note.source_file_type) {
+            return ''; // Pas de badge pour les notes manuelles
+        }
+        
+        const badges = {
+            'application/pdf': {
+                icon: 'ti-file-type-pdf',
+                text: 'PDF',
+                color: 'bg-red-100 text-red-700 border-red-200'
+            },
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+                icon: 'ti-file-type-doc',
+                text: 'Word',
+                color: 'bg-blue-100 text-blue-700 border-blue-200'
+            },
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                icon: 'ti-file-type-xls',
+                text: 'Excel',
+                color: 'bg-green-100 text-green-700 border-green-200'
+            },
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation': {
+                icon: 'ti-file-type-ppt',
+                text: 'PowerPoint',
+                color: 'bg-orange-100 text-orange-700 border-orange-200'
+            },
+            'text/csv': {
+                icon: 'ti-table',
+                text: 'CSV',
+                color: 'bg-teal-100 text-teal-700 border-teal-200'
+            },
+            'image/png': {
+                icon: 'ti-photo',
+                text: 'PNG',
+                color: 'bg-purple-100 text-purple-700 border-purple-200'
+            },
+            'image/jpeg': {
+                icon: 'ti-photo',
+                text: 'JPEG',
+                color: 'bg-purple-100 text-purple-700 border-purple-200'
+            },
+            'text/plain': {
+                icon: 'ti-file-text',
+                text: 'Texte',
+                color: 'bg-gray-100 text-gray-700 border-gray-200'
+            },
+            'application/json': {
+                icon: 'ti-braces',
+                text: 'JSON',
+                color: 'bg-yellow-100 text-yellow-700 border-yellow-200'
+            }
+        };
+        
+        const badge = badges[note.source_file_type] || {
+            icon: 'ti-file',
+            text: 'Document',
+            color: 'bg-gray-100 text-gray-700 border-gray-200'
+        };
+        
+        return `<div class="mb-2"><span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-md border ${badge.color}"><i class="ti ${badge.icon}"></i>${badge.text}</span></div>`;
+    }
 
         // Raccourcis clavier pour le PDF viewer
         document.addEventListener('keydown', async (e) => {
@@ -2875,6 +3022,179 @@ extra_head %}
                 document.body.appendChild(lightbox);
             }
         });
+        loadProjectModels();
+    }
+    
+    // Nettoyer le polling quand on quitte la page
+    window.addEventListener('beforeunload', () => {
+        stopEmbeddingStatusPolling();
+    });
+    
+    // ===== FONCTIONS POUR L'UPLOAD DE DOCUMENTS =====
+    
+    function showUploadDocumentModal() {
+        document.getElementById('upload-document-modal').classList.remove('hidden');
+    }
+    
+    function hideUploadDocumentModal() {
+        document.getElementById('upload-document-modal').classList.add('hidden');
+        document.getElementById('upload-document-form').reset();
+        clearFileSelection();
+        hideUploadProgress();
+    }
+    
+    // Gestion du drag & drop et sélection de fichier
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    
+    dropZone.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-green-500', 'bg-green-50');
+    });
+    
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-green-500', 'bg-green-50');
+    });
+    
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-green-500', 'bg-green-50');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            showFileSelected(files[0]);
+        }
+    });
+    
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            showFileSelected(e.target.files[0]);
+        }
+    });
+    
+    function showFileSelected(file) {
+        document.getElementById('drop-zone-content').classList.add('hidden');
+        document.getElementById('file-selected').classList.remove('hidden');
+        document.getElementById('file-name').textContent = file.name;
+        document.getElementById('file-size').textContent = formatFileSize(file.size);
+    }
+    
+    function clearFileSelection() {
+        fileInput.value = '';
+        document.getElementById('drop-zone-content').classList.remove('hidden');
+        document.getElementById('file-selected').classList.add('hidden');
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+    
+    function showUploadProgress() {
+        document.getElementById('upload-progress').classList.remove('hidden');
+    }
+    
+    function hideUploadProgress() {
+        document.getElementById('upload-progress').classList.add('hidden');
+        document.getElementById('upload-progress-bar').style.width = '0%';
+    }
+    
+    function updateUploadProgress(percent, status) {
+        document.getElementById('upload-progress-bar').style.width = percent + '%';
+        if (status) {
+            document.getElementById('upload-status').textContent = status;
+        }
+    }
+    
+    async function uploadDocument(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        const file = formData.get('file');
+        
+        if (!file || file.size === 0) {
+            showNotification('❌ Veuillez sélectionner un fichier', 'error');
+            return;
+        }
+        
+        // Vérifier la taille
+        const maxSize = 50 * 1024 * 1024; // 50 MB
+        if (file.size > maxSize) {
+            showNotification('❌ Fichier trop volumineux (max 50 MB)', 'error');
+            return;
+        }
+        
+        // Désactiver le bouton et afficher la progression
+        const submitButton = document.getElementById('upload-submit-btn');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Importation...';
+        showUploadProgress();
+        
+        try {
+            updateUploadProgress(10, 'Envoi du fichier...');
+            
+            const response = await apiCall(`/api/projects/${projectId}/notes/upload`, {
+                method: 'POST',
+                body: formData,
+                isFormData: true
+            });
+            
+            updateUploadProgress(50, 'Parsing du document...');
+            
+            if (response && response.ok) {
+                updateUploadProgress(100, 'Terminé !');
+                
+                const note = await response.json();
+                console.log('Document importé:', note);
+                
+                // Fermer le modal
+                hideUploadDocumentModal();
+                
+                // Recharger les notes
+                await loadNotes();
+                
+                // Redémarrer le polling
+                stopEmbeddingStatusPolling();
+                startEmbeddingStatusPolling();
+                
+                showNotification('✅ Document importé avec succès !', 'success');
+            } else {
+                const error = await response.json();
+                showNotification(`❌ Erreur: ${error.detail || 'Import échoué'}`, 'error');
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'import:', error);
+            showNotification('❌ Erreur lors de l\'import du document', 'error');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Importer';
+            hideUploadProgress();
+        }
+    }
+    
+    // Adapter apiCall pour supporter FormData
+    const originalApiCall = window.apiCall;
+    window.apiCall = async function(url, options = {}) {
+        if (options.isFormData) {
+            const token = localStorage.getItem('authToken');
+            return fetch(url, {
+                method: options.method || 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: options.body
+            });
+        }
+        return originalApiCall(url, options);
+    };
+</script>
+{% endblock %}
 
         // Initialisation
         if (authToken) {

@@ -7,6 +7,7 @@ from app.embedding_config import EMBEDDING_DIMENSION
 if TYPE_CHECKING:
     from .project import Project
     from .note_chunk import NoteChunk
+    from .document_chunk import DocumentChunk
 
 
 class Note(SQLModel, table=True):
@@ -14,18 +15,23 @@ class Note(SQLModel, table=True):
     title: str = Field(max_length=200)
     content: Optional[str] = None
     note_type: str = Field(default="written")  # 'written', 'voice', ou 'document'
-    source_file_path: Optional[str] = None  # Chemin du fichier original si document uploadé
-    processing_status: str = Field(default="completed")  # 'pending', 'processing', 'completed', 'failed'
-    processing_progress: Optional[int] = Field(default=100)  # Progression de traitement document (0-100)
     project_id: int = Field(foreign_key="project.id")
     user_id: int = Field(foreign_key="user.id")
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+    
+    # Champs pour les documents uploadés
+    source_file_path: Optional[str] = None  # Chemin vers le fichier original
+    source_file_type: Optional[str] = None  # Type MIME du fichier (e.g., 'application/pdf')
+    
+    # DEPRECATED: embedding au niveau note (sera remplacé par DocumentChunk.embedding)
+    # Conservé temporairement pour compatibilité, sera supprimé après migration
     embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(EMBEDDING_DIMENSION), nullable=True))
     
     # Relations
     project: Optional["Project"] = Relationship(back_populates="notes")
-    chunks: List["NoteChunk"] = Relationship(back_populates="note")
+    chunks: List["NoteChunk"] = Relationship(back_populates="note")  # DEPRECATED
+    document_chunks: List["DocumentChunk"] = Relationship(back_populates="note")  # Nouveau système
 
 
 class NoteCreate(SQLModel):
@@ -61,6 +67,8 @@ class NoteListItem(SQLModel):
     user_id: int
     created_at: datetime
     updated_at: datetime
+    source_file_path: Optional[str] = None
+    source_file_type: Optional[str] = None
 
 
 class NoteUpdate(SQLModel):

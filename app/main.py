@@ -7,7 +7,7 @@ from sqlmodel import Session
 import time
 
 from app.database import get_session, create_db_and_tables
-from app.routers import auth, projects, notes, chat, conversations, agents, scheduler, kag
+from app.routers import auth, projects, notes, chat, documents
 from app.models import User, Project, Note
 from app.services.scheduler_service import init_scheduler, start_scheduler, stop_scheduler
 from app.config import settings
@@ -56,10 +56,7 @@ app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(notes.router)
 app.include_router(chat.router)
-app.include_router(conversations.router)
-app.include_router(agents.router)
-app.include_router(scheduler.router)
-app.include_router(kag.router)
+app.include_router(documents.router)
 
 # Configuration des templates
 templates = Jinja2Templates(directory="app/templates")
