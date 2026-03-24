@@ -13,6 +13,7 @@ from app.config import settings
 import logging
 import threading
 import time
+from datetime import datetime
 from queue import Queue
 import io
 
@@ -98,8 +99,7 @@ def _generate_embeddings_worker():
             logger.info(f"Worker a terminé la tâche pour la note {note_id}")
             
             # Délai entre les notes pour éviter de surcharger le CPU
-            if settings.EMBEDDING_WORKER_COOLDOWN_SEC > 0:
-                time.sleep(settings.EMBEDDING_WORKER_COOLDOWN_SEC)
+            time.sleep(0.5)
             
         except Exception as e:
             logger.error(f"Erreur dans le worker d'embeddings: {e}", exc_info=True)
@@ -796,22 +796,48 @@ def _process_embeddings_for_document(document_id: int):
             if not chunks:
                 document.processing_status = "completed"
                 document.processing_progress = 100
+                document.updated_at = datetime.utcnow()
                 session.add(document)
                 session.commit()
                 return
+
+            document.processing_progress = max(document.processing_progress or 0, 90)
+            document.updated_at = datetime.utcnow()
+            session.add(document)
+            session.commit()
 
             from app.services.embedding_service import generate_embeddings_batch
             embeddings = generate_embeddings_batch(
                 [c.content for c in chunks], batch_size=settings.EMBEDDING_BATCH_SIZE
             )
+            ok = 0
             for chunk, embedding in zip(chunks, embeddings):
                 if embedding:
                     chunk.embedding = embedding
                     session.add(chunk)
+                    ok += 1
+
+            if ok == 0:
+                logger.warning("Aucun embedding valide pour document_id=%s", document_id)
+                document.processing_status = "failed"
+                document.processing_progress = max(document.processing_progress or 0, 90)
+                document.updated_at = datetime.utcnow()
+                session.add(document)
+                session.commit()
+                return
+
+            session.commit()
+            session.refresh(document)
 
             # Après les embeddings, générer le KAG pour tous les espaces liés
             # afin que le graphe soit prêt dès le premier upload.
             if settings.KAG_ENABLED:
+                document.processing_progress = max(document.processing_progress or 0, 95)
+                document.updated_at = datetime.utcnow()
+                session.add(document)
+                session.commit()
+                session.refresh(document)
+
                 from app.models.document_space import DocumentSpace
                 from app.services.kag_graph_service import process_kag_for_document_space
 
@@ -833,10 +859,33 @@ def _process_embeddings_for_document(document_id: int):
 
             document.processing_status = "completed"
             document.processing_progress = 100
+            document.updated_at = datetime.utcnow()
             session.add(document)
             session.commit()
     except Exception as e:
         logger.error("Erreur embeddings document %s: %s", document_id, e, exc_info=True)
+        try:
+            with Session(engine) as session:
+                document = session.get(Document, document_id)
+                if document:
+                    document.processing_status = "failed"
+                    document.processing_progress = max(document.processing_progress or 0, 85)
+                    document.updated_at = datetime.utcnow()
+                    session.add(document)
+                    session.commit()
+        except Exception as upd:
+            logger.error(
+                "Impossible de marquer le document %s en échec: %s", document_id, upd
+            )
+
+
+def complete_document_embeddings_and_kag_sync(document_id: int) -> None:
+    """
+    Finalise l'indexation d'un document de façon bloquante : embeddings puis KAG.
+    À appeler depuis le worker documents pour garantir qu'aucun autre document
+    ne démarre (Docling, etc.) tant que celui-ci n'est pas entièrement terminé.
+    """
+    _process_embeddings_for_document(document_id)
 
 
 _legacy_generate_embeddings_for_chunks_async = generate_embeddings_for_chunks_async
@@ -846,8 +895,9 @@ def generate_embeddings_for_chunks_async(note_id: int, project_id: int):
     """
     Compatibilité:
     - si note existe => pipeline legacy notes
-    - sinon, si document existe => pipeline document
+    - sinon, si document existe => pipeline document (sync, hors session du dispatch)
     """
+    document_id_sync: Optional[int] = None
     try:
         with Session(engine) as session:
             note = session.get(Note, note_id)
@@ -856,21 +906,15 @@ def generate_embeddings_for_chunks_async(note_id: int, project_id: int):
                 return
             document = session.get(Document, note_id)
             if document:
-                thread = threading.Thread(
-                    target=_process_embeddings_for_document,
-                    args=(document.id,),
-                    daemon=True,
-                )
-                thread.start()
-                logger.info(
-                    "Tâche embeddings document ajoutée (document_id=%s)",
-                    document.id,
-                )
-                return
+                document_id_sync = document.id
     except Exception as e:
         logger.error(
             "Erreur dispatch embeddings async (id=%s): %s", note_id, e, exc_info=True
         )
+
+    if document_id_sync is not None:
+        _process_embeddings_for_document(document_id_sync)
+        return
 
     # fallback legacy (comportement historique)
     _legacy_generate_embeddings_for_chunks_async(note_id, project_id)

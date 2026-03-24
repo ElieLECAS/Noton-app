@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 import threading
 import time
-from queue import Queue
+from queue import Queue, Empty
 from sqlmodel import Session, select
 from app.config import settings
 from app.database import engine
@@ -15,9 +15,9 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-document_queues: dict[int, Queue] = {}
-document_locks: dict[int, threading.Lock] = {}
-_queues_lock = threading.Lock()
+# Une seule file globale : ordre FIFO strict, un document terminé entièrement avant le suivant.
+document_task_queue: Queue = Queue()
+_document_queue_lock = threading.Lock()
 document_workers = []
 _document_workers_lock = threading.Lock()
 
@@ -47,13 +47,6 @@ try:
             default_threads = max(1, cpu_count // 2)
             logger.info("PyTorch configuré avec %d threads (moitié des %d cœurs disponibles)", default_threads, cpu_count)
         torch.set_num_threads(default_threads)
-
-    try:
-        _interop = settings.TORCH_NUM_INTEROP_THREADS
-        torch.set_num_interop_threads(_interop)
-        logger.info("PyTorch interop threads configuré à %d", _interop)
-    except Exception as _e:
-        logger.debug("set_num_interop_threads ignoré: %s", _e)
 
     if "OMP_NUM_THREADS" in os.environ:
         omp_value = os.environ["OMP_NUM_THREADS"].strip()
@@ -562,107 +555,54 @@ def remove_document_from_spaces(
 
 
 def _process_document_worker():
-    """Worker thread qui traite les documents depuis les files d'attente."""
+    """Worker thread : un document à la fois, de bout en bout (pas de chevauchement)."""
     try:
         import os
-        if hasattr(os, "nice") and settings.DOCUMENT_PROCESS_NICE_INCREMENT > 0:
-            os.nice(settings.DOCUMENT_PROCESS_NICE_INCREMENT)
+        if hasattr(os, "nice"):
+            os.nice(5)
     except Exception:
         pass
 
     logger.info("Worker de traitement de documents démarré et en attente de tâches...")
     while True:
-        task = None
-        library_id = None
-        library_lock = None
-        lock_acquired = False
         try:
-            with _queues_lock:
-                available_libraries = [lid for lid, queue in document_queues.items() if not queue.empty()]
+            task = document_task_queue.get(timeout=2)
+        except Empty:
+            continue
 
-            if not available_libraries:
-                time.sleep(settings.DOCUMENT_WORKER_IDLE_POLL_SEC)
-                continue
+        if task is None:
+            document_task_queue.task_done()
+            logger.info("Signal d'arrêt reçu, arrêt du worker de documents")
+            return
 
-            for lid in available_libraries:
-                with _queues_lock:
-                    if lid not in document_locks:
-                        document_locks[lid] = threading.Lock()
-                    library_lock = document_locks[lid]
-
-                if library_lock.acquire(blocking=False):
-                    lock_acquired = True
-                    try:
-                        with _queues_lock:
-                            if lid not in document_queues or document_queues[lid].empty():
-                                library_lock.release()
-                                lock_acquired = False
-                                continue
-                            try:
-                                task = document_queues[lid].get(block=False)
-                            except Exception:
-                                library_lock.release()
-                                lock_acquired = False
-                                continue
-
-                        if task is None:
-                            library_lock.release()
-                            lock_acquired = False
-                            logger.info("Signal d'arrêt reçu, arrêt du worker de documents")
-                            return
-
-                        library_id = lid
-                        document_id, file_path = task
-                        logger.info("Worker traite le document %d (bibliothèque %d)", document_id, library_id)
-
-                        _process_document_for_id(document_id, file_path)
-
-                        with _queues_lock:
-                            if library_id in document_queues:
-                                document_queues[library_id].task_done()
-
-                        logger.info("Worker a terminé le traitement du document %d", document_id)
-                        if settings.DOCUMENT_WORKER_COOLDOWN_SEC > 0:
-                            time.sleep(settings.DOCUMENT_WORKER_COOLDOWN_SEC)
-                        break
-
-                    except Exception as e:
-                        logger.error("Erreur dans le worker de traitement de documents: %s", e, exc_info=True)
-                        if task and library_id:
-                            try:
-                                with _queues_lock:
-                                    if library_id in document_queues:
-                                        document_queues[library_id].task_done()
-                            except Exception:
-                                pass
-                        raise
-                    finally:
-                        if lock_acquired:
-                            try:
-                                library_lock.release()
-                            except Exception:
-                                pass
-                            lock_acquired = False
-                else:
-                    continue
-
+        document_id, file_path = task
+        try:
+            logger.info("Worker traite le document %d (file globale)", document_id)
+            _process_document_for_id(document_id, file_path)
+            logger.info(
+                "Worker a terminé le document %d (toutes étapes incluses)", document_id
+            )
         except Exception as e:
-            logger.error("Erreur dans le worker de traitement de documents: %s", e, exc_info=True)
-            if lock_acquired and library_lock:
-                try:
-                    library_lock.release()
-                except Exception:
-                    pass
+            logger.error(
+                "Erreur dans le worker de traitement de documents: %s", e, exc_info=True
+            )
+        finally:
+            document_task_queue.task_done()
+            time.sleep(0.5)
 
 
 def _process_document_for_id(document_id: int, file_path: str):
     """Traite un document pour un ID donné."""
-    from app.services.chunk_service import create_chunks_for_document, create_chunks_for_document_from_docling, generate_embeddings_for_chunks_async
-    from app.services.document_space_service import get_document_spaces
-    from app.services.kag_graph_service import process_kag_for_document_space
-    
+    from app.services.chunk_service import (
+        complete_document_embeddings_and_kag_sync,
+        create_chunks_for_document,
+        create_chunks_for_document_from_docling,
+    )
+
     try:
         logger.info("Démarrage du traitement du document %d", document_id)
+
+        run_embeddings_sync: bool = False
 
         with Session(engine) as session:
             document = session.get(Document, document_id)
@@ -729,8 +669,7 @@ def _process_document_for_id(document_id: int, file_path: str):
                     document.updated_at = datetime.utcnow()
                     session.add(document)
                     session.commit()
-                    generate_embeddings_for_chunks_async(document.id, document.library_id)
-                    logger.info("Tâche de génération d'embeddings ajoutée à la file pour le document %d", document_id)
+                    run_embeddings_sync = True
                 else:
                     document.processing_status = "completed"
                     document.processing_progress = 100
@@ -745,6 +684,10 @@ def _process_document_for_id(document_id: int, file_path: str):
                 document.updated_at = datetime.utcnow()
                 session.add(document)
                 session.commit()
+                run_embeddings_sync = False
+
+        if run_embeddings_sync:
+            complete_document_embeddings_and_kag_sync(document_id)
 
     except Exception as e:
         logger.error("Erreur lors du traitement du document %d: %s", document_id, e, exc_info=True)
@@ -770,22 +713,21 @@ def process_document_async(document_id: int, file_path: str):
             if not document:
                 logger.error("Document %d non trouvé pour ajout à la queue", document_id)
                 return
-            library_id = document.library_id
     except Exception as e:
-        logger.error("Erreur lors de la récupération du library_id pour le document %d: %s", document_id, e, exc_info=True)
+        logger.error(
+            "Erreur lors de la vérification du document %d: %s", document_id, e, exc_info=True
+        )
         return
 
     _ensure_document_workers()
 
-    with _queues_lock:
-        if library_id not in document_queues:
-            document_queues[library_id] = Queue()
-            document_locks[library_id] = threading.Lock()
+    with _document_queue_lock:
+        document_task_queue.put((document_id, file_path))
+        queue_size = document_task_queue.qsize()
 
-        document_queues[library_id].put((document_id, file_path))
-        queue_size = document_queues[library_id].qsize()
-
-    logger.info("✅ Tâche de traitement de document ajoutée à la file de la bibliothèque %d pour le document %d (taille de la file: %d)", library_id, document_id, queue_size)
+    logger.info(
+        "✅ Document %d ajouté à la file globale (taille: %d)", document_id, queue_size
+    )
 
 
 def _ensure_document_workers():
@@ -795,9 +737,8 @@ def _ensure_document_workers():
     with _document_workers_lock:
         if not document_workers or not any(w.is_alive() for w in document_workers):
             document_workers = []
-            # Par défaut: traitement séquentiel (1 document à la fois).
-            # La valeur est bornée à >= 1 pour éviter toute config invalide.
-            num_workers = max(1, settings.MAX_CONCURRENT_DOCUMENTS)
+            # Toujours 1 worker : un document va au bout (Docling → embeddings → KAG) avant le suivant.
+            num_workers = 1
             for i in range(num_workers):
                 worker = threading.Thread(target=_process_document_worker, daemon=True)
                 worker.start()

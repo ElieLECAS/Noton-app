@@ -71,13 +71,6 @@ try:
             )
         torch.set_num_threads(default_threads)
 
-    try:
-        _interop = settings.TORCH_NUM_INTEROP_THREADS
-        torch.set_num_interop_threads(_interop)
-        logger.info("PyTorch interop threads configuré à %d", _interop)
-    except Exception as _e:
-        logger.debug("set_num_interop_threads ignoré: %s", _e)
-
     if "OMP_NUM_THREADS" in os.environ:
         omp_value = os.environ["OMP_NUM_THREADS"].strip()
         if not omp_value or not omp_value.isdigit() or int(omp_value) <= 0:
@@ -514,8 +507,8 @@ def _process_document_worker():
     try:
         import os
 
-        if hasattr(os, "nice") and settings.DOCUMENT_PROCESS_NICE_INCREMENT > 0:
-            os.nice(settings.DOCUMENT_PROCESS_NICE_INCREMENT)
+        if hasattr(os, "nice"):
+            os.nice(5)
     except Exception:
         pass
 
@@ -534,7 +527,7 @@ def _process_document_worker():
                 ]
 
             if not available_projects:
-                time.sleep(settings.DOCUMENT_WORKER_IDLE_POLL_SEC)
+                time.sleep(2)
                 continue
 
             for pid in available_projects:
@@ -586,8 +579,7 @@ def _process_document_worker():
                             project_id,
                         )
 
-                        if settings.DOCUMENT_WORKER_COOLDOWN_SEC > 0:
-                            time.sleep(settings.DOCUMENT_WORKER_COOLDOWN_SEC)
+                        time.sleep(1.0)
                         break
 
                     except Exception as e:
