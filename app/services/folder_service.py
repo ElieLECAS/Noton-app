@@ -29,10 +29,9 @@ def create_folder(
 
 
 def get_folder_by_id(session: Session, folder_id: int, user_id: int) -> Optional[Folder]:
-    """Récupère un dossier par son ID si il appartient à l'utilisateur."""
+    """Récupère un dossier par son ID (bibliothèque globale partagée)."""
     statement = select(Folder).where(
-        Folder.id == folder_id,
-        Folder.user_id == user_id
+        Folder.id == folder_id
     )
     return session.exec(statement).first()
 
@@ -46,7 +45,6 @@ def get_folders_by_parent(
     """Récupère tous les sous-dossiers d'un dossier parent (ou dossiers racine si parent_folder_id est None)."""
     statement = select(Folder).where(
         Folder.library_id == library_id,
-        Folder.user_id == user_id,
         Folder.parent_folder_id == parent_folder_id
     ).order_by(Folder.name)
     return list(session.exec(statement).all())
@@ -55,8 +53,7 @@ def get_folders_by_parent(
 def get_folders_by_library(session: Session, library_id: int, user_id: int) -> List[Folder]:
     """Récupère tous les dossiers d'une bibliothèque."""
     statement = select(Folder).where(
-        Folder.library_id == library_id,
-        Folder.user_id == user_id
+        Folder.library_id == library_id
     ).order_by(Folder.name)
     return list(session.exec(statement).all())
 
@@ -93,8 +90,7 @@ def get_folder_with_contents(
     
     document_count = session.exec(
         select(Document).where(
-            Document.folder_id == folder_id,
-            Document.user_id == user_id
+            Document.folder_id == folder_id
         )
     ).all()
     

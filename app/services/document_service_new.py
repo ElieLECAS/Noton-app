@@ -456,10 +456,18 @@ def move_document(
         folder = get_folder_by_id(session, new_folder_id, user_id)
         if not folder:
             return None
-        
+
+        # Bibliothèque générale partagée:
+        # autoriser le déplacement entre bibliothèques historiques et
+        # aligner le document sur la bibliothèque du dossier cible.
         if folder.library_id != document.library_id:
-            logger.error(f"Impossible de déplacer le document {document_id} : le dossier n'est pas dans la même bibliothèque")
-            return None
+            logger.info(
+                "Déplacement inter-bibliothèque du document %d: %s -> %s",
+                document_id,
+                document.library_id,
+                folder.library_id,
+            )
+            document.library_id = folder.library_id
     
     document.folder_id = new_folder_id
     document.updated_at = datetime.utcnow()
