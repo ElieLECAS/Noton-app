@@ -138,10 +138,13 @@ def get_docling_converter():
                         )
                         from docling.document_converter import PdfFormatOption
 
+                        # Échelle d'image ajustable pour OCR (3.0 par défaut pour meilleure qualité)
+                        image_scale = getattr(settings, "OCR_IMAGE_SCALE", 3.0)
+                        
                         pipeline_options = PdfPipelineOptions(
                             do_ocr=ocr_enabled,
                             generate_picture_images=True,
-                            images_scale=2.0,
+                            images_scale=image_scale,
                         )
 
                         # Configuration OCR si activé
@@ -294,6 +297,24 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Opt
 
         # Markdown pour note.content (affichage)
         markdown_content = docling_doc.export_to_markdown().strip()
+
+        # Logique de fallback OCR si activée et résultat insuffisant
+        if getattr(settings, "OCR_FALLBACK_ENABLED", True):
+            try:
+                from app.services.ocr_fallback import extract_with_fallback
+                
+                # Appliquer le fallback si nécessaire
+                markdown_content = extract_with_fallback(
+                    file_path=file_path,
+                    docling_result=markdown_content,
+                    docling_doc=docling_doc,
+                    fallback_enabled=True
+                )
+            except Exception as e:
+                logger.warning(
+                    "Erreur lors du fallback OCR, utilisation résultat Docling: %s",
+                    e
+                )
 
         if not markdown_content:
             logger.warning(

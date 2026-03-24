@@ -1,21 +1,21 @@
-# Noton - Application de prise de notes avec chatbot Ollama
+# Noton - Application de prise de notes avec chatbot IA
 
-Application web moderne de prise de notes développée avec FastAPI, PostgreSQL et Ollama.
+Application web moderne de prise de notes développée avec FastAPI, PostgreSQL et Mistral.
 
 ## Fonctionnalités
 
 - ✅ Authentification utilisateur (JWT)
 - ✅ Gestion de projets
 - ✅ Gestion de notes écrites
-- ✅ Chatbot intégré avec Ollama
-- ✅ Sélection dynamique des modèles Ollama disponibles
+- ✅ Chatbot intégré (modèle `MODEL_FAST`)
+- ✅ Configuration simple via `.env`
 
 ## Technologies
 
 - **Backend**: FastAPI (Python 3.11)
 - **Base de données**: PostgreSQL 15
 - **ORM**: SQLModel
-- **IA**: Ollama
+- **IA**: Mistral
 - **Frontend**: HTML/CSS/JS (TailwindCSS)
 - **Déploiement**: Docker Compose
 
@@ -24,7 +24,7 @@ Application web moderne de prise de notes développée avec FastAPI, PostgreSQL 
 ### Prérequis
 
 - Docker et Docker Compose installés
-- Ollama avec au moins un modèle téléchargé (ex: `ollama pull llama2`)
+- Une clé API Mistral valide
 
 ### Démarrage
 
@@ -81,7 +81,7 @@ noton-app/
 - `DELETE /api/notes/{id}` - Supprimer note
 
 ### Chatbot
-- `GET /api/ollama/models` - Liste des modèles disponibles
+- `GET /api/providers/models` - Modèle configuré
 - `POST /api/chat` - Envoyer un message
 - `POST /api/chat/stream` - Stream de réponse
 
@@ -106,7 +106,7 @@ docker-compose logs -f web
 
 ## Notes
 
-- Les modèles Ollama doivent être téléchargés manuellement dans le container Ollama
+- Le modèle chat est configuré via `MODEL_FAST` dans le `.env`
 - L'authentification utilise JWT stocké dans localStorage côté client
 - Les notes audio ne sont pas encore implémentées (prévu pour plus tard)
 

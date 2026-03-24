@@ -21,7 +21,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot Ollama")
+app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot IA")
 
 # Configuration CORS - Debug
 import os
@@ -65,17 +65,9 @@ templates = Jinja2Templates(directory="app/templates")
 
 # Ajouter le contexte global pour tous les templates
 templates.env.globals["app_name"] = settings.APP_NAME
-templates.env.globals["model_private"] = {
-    "provider": settings.MODEL_PRIVATE_PROVIDER,
-    "model": settings.MODEL_PRIVATE_NAME
-}
 templates.env.globals["model_fast"] = {
-    "provider": settings.MODEL_FAST_PROVIDER,
-    "model": settings.MODEL_FAST_NAME
-}
-templates.env.globals["model_powerful"] = {
-    "provider": settings.MODEL_POWERFUL_PROVIDER,
-    "model": settings.MODEL_POWERFUL_NAME
+    "provider": "mistral",
+    "model": settings.MODEL_FAST
 }
 
 # Servir les fichiers statiques

@@ -14,7 +14,7 @@ class Message(SQLModel, table=True):
     role: str = Field(max_length=50)  # "user", "assistant", "system"
     content: str = Field(sa_column=Column(Text))  # Contenu du message (peut être long)
     model: Optional[str] = Field(default=None, max_length=100)  # Modèle utilisé (pour les réponses assistant)
-    provider: Optional[str] = Field(default=None, max_length=50)  # Provider (ollama/openai)
+    provider: Optional[str] = Field(default=None, max_length=50)  # Provider (mistral/openai)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
     # Relations

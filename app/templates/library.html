@@ -29,12 +29,27 @@
                 <div id="folders-list" class="space-y-2 text-sm"></div>
             </section>
 
-            <section class="lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-auto">
+            <section id="document-drop-zone" class="relative lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-auto transition-colors">
                 <div class="flex items-center justify-between mb-3">
                     <h2 class="font-semibold text-gray-900 dark:text-gray-100">Documents</h2>
                     <span id="docs-count" class="text-sm text-gray-500"></span>
                 </div>
+                <div id="drop-hint" class="pointer-events-none absolute inset-0 flex items-center justify-center px-6">
+                    <div class="text-center text-gray-400 dark:text-gray-500">
+                        <div class="mb-2">
+                            <i class="ti ti-file-upload text-3xl"></i>
+                        </div>
+                        <div class="text-sm font-medium">Glissez-déposez vos documents ici</div>
+                        <div class="text-xs mt-1">ou utilisez le bouton Upload</div>
+                    </div>
+                </div>
                 <div id="documents-list" class="space-y-2"></div>
+                <div id="drop-overlay" class="hidden absolute inset-3 rounded-xl border-2 border-dashed border-blue-400 bg-blue-50/90 dark:bg-blue-900/25 pointer-events-none flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="text-blue-700 dark:text-blue-300 font-semibold">Déposez vos documents ici</div>
+                        <div class="text-sm text-blue-600 dark:text-blue-400">La modale d'upload s'ouvrira pour choisir les espaces</div>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
@@ -121,6 +136,8 @@
 <script>
 let selectedFolderId = null;
 let spaces = [];
+let droppedUploadFiles = null;
+let dragDepth = 0;
 
 async function api(url, options = {}) {
   const token = localStorage.getItem("authToken");
@@ -205,6 +222,11 @@ async function loadDocuments() {
       </div>
     </div>
   `).join("");
+  const dropHint = document.getElementById("drop-hint");
+  if (dropHint) {
+    // Afficher l'aide visuelle surtout quand la liste est vide
+    dropHint.classList.toggle("hidden", docs.length > 0);
+  }
 }
 
 async function openDocumentFile(documentId) {
@@ -240,8 +262,14 @@ function selectFolder(id) {
   loadDocuments();
 }
 
-function openUploadModal(){ document.getElementById("upload-modal").classList.remove("hidden"); }
-function closeUploadModal(){ document.getElementById("upload-modal").classList.add("hidden"); document.getElementById("upload-form").reset(); }
+function openUploadModal(){
+  document.getElementById("upload-modal").classList.remove("hidden");
+}
+function closeUploadModal(){
+  document.getElementById("upload-modal").classList.add("hidden");
+  document.getElementById("upload-form").reset();
+  droppedUploadFiles = null;
+}
 function openFolderModal(){ document.getElementById("folder-modal").classList.remove("hidden"); }
 function closeFolderModal(){ document.getElementById("folder-modal").classList.add("hidden"); document.getElementById("folder-form").reset(); }
 function openCreateSpaceModal(){ document.getElementById("space-modal").classList.remove("hidden"); }
@@ -333,7 +361,8 @@ document.getElementById("folder-form").addEventListener("submit", async (e) => {
 
 document.getElementById("upload-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const files = document.getElementById("upload-files").files;
+  const fileInput = document.getElementById("upload-files");
+  const files = droppedUploadFiles && droppedUploadFiles.length ? droppedUploadFiles : fileInput.files;
   const checked = [...document.querySelectorAll("#spaces-checkboxes input:checked")].map(i => Number(i.value));
   if (!files.length) return alert("Sélectionnez au moins un fichier.");
   const isPaid = document.getElementById("upload-is-paid").checked;
@@ -353,6 +382,76 @@ document.getElementById("upload-form").addEventListener("submit", async (e) => {
   closeUploadModal();
   await loadDocuments();
 });
+
+document.getElementById("upload-files").addEventListener("change", () => {
+  // Si l'utilisateur choisit des fichiers manuellement, on ignore le dernier drop.
+  droppedUploadFiles = null;
+});
+
+function showDropOverlay(show) {
+  const overlay = document.getElementById("drop-overlay");
+  const dropZone = document.getElementById("document-drop-zone");
+  if (!overlay || !dropZone) return;
+  overlay.classList.toggle("hidden", !show);
+  dropZone.classList.toggle("border-blue-400", show);
+  dropZone.classList.toggle("bg-blue-50/40", show);
+  dropZone.classList.toggle("dark:bg-blue-900/10", show);
+}
+
+function openUploadModalWithDroppedFiles(files) {
+  if (!files || !files.length) return;
+
+  // Conserver les fichiers en mémoire pour l'envoi.
+  droppedUploadFiles = files;
+
+  const input = document.getElementById("upload-files");
+  // Pré-remplir l'input quand possible (DataTransfer supporté).
+  try {
+    const dt = new DataTransfer();
+    [...files].forEach((f) => dt.items.add(f));
+    input.files = dt.files;
+  } catch (_) {
+    // Si non supporté, l'upload utilisera quand même droppedUploadFiles.
+  }
+
+  openUploadModal();
+}
+
+function setupDragAndDropUpload() {
+  const dropZone = document.getElementById("document-drop-zone");
+  if (!dropZone) return;
+
+  const preventDefaults = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    dropZone.addEventListener(eventName, preventDefaults);
+  });
+
+  dropZone.addEventListener("dragenter", () => {
+    dragDepth += 1;
+    showDropOverlay(true);
+  });
+
+  dropZone.addEventListener("dragover", () => {
+    showDropOverlay(true);
+  });
+
+  dropZone.addEventListener("dragleave", () => {
+    dragDepth = Math.max(0, dragDepth - 1);
+    if (dragDepth === 0) showDropOverlay(false);
+  });
+
+  dropZone.addEventListener("drop", (event) => {
+    dragDepth = 0;
+    showDropOverlay(false);
+    const dropped = event.dataTransfer?.files;
+    if (!dropped || !dropped.length) return;
+    openUploadModalWithDroppedFiles(dropped);
+  });
+}
 
 document.getElementById("space-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -438,6 +537,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadSpaces();
   await loadFolders();
   await loadDocuments();
+  setupDragAndDropUpload();
 });
 </script>
 {% endblock %}

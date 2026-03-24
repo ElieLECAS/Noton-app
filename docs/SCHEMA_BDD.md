@@ -108,7 +108,7 @@ Messages d’une conversation (tour par tour user / assistant).
 | `role`            | VARCHAR(50)   | NOT NULL                  | `user`, `assistant` ou `system` |
 | `content`         | TEXT          | NOT NULL                  | Contenu du message             |
 | `model`           | VARCHAR(100)  | NULL                      | Modèle utilisé (réponses assistant) |
-| `provider`        | VARCHAR(50)   | NULL                      | Fournisseur (ollama, openai…)  |
+| `provider`        | VARCHAR(50)   | NULL                      | Fournisseur (mistral, openai…) |
 | `created_at`      | TIMESTAMP     | NOT NULL                  | Date d’envoi                   |
 
 ---
@@ -123,7 +123,7 @@ Agents IA personnalisés (system prompt / personnalité) par utilisateur.
 | `user_id`     | INTEGER       | FK → user.id   | Propriétaire                   |
 | `name`        | VARCHAR(200)  | NOT NULL       | Nom de l’agent                 |
 | `personality` | TEXT          | NOT NULL       | System prompt / personnalité   |
-| `model_preset`| VARCHAR(50)   | NULL           | Ex. `private`, `fast`, `powerful` |
+| `model_preset`| VARCHAR(50)   | NULL           | Legacy (utiliser `fast`) |
 | `created_at`  | TIMESTAMP     | NOT NULL       | Date de création               |
 | `updated_at`  | TIMESTAMP     | NOT NULL       | Dernière mise à jour           |
 

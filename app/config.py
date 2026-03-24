@@ -17,9 +17,6 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
     
-    # Ollama
-    OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL")
-    
     # Mistral
     MISTRAL_API_KEY: Optional[str] = None
     MISTRAL_BASE_URL: str = os.getenv("MISTRAL_BASE_URL", "https://api.mistral.ai")
@@ -29,13 +26,8 @@ class Settings(BaseSettings):
     OPENAI_MODEL: Optional[List[str]] = None
     OPENAI_IMAGE_MODEL: str = "dall-e-3"  # Modèle de génération d'images (DALL-E 3)
     
-    # Modèles de chat configurables
-    MODEL_PRIVATE_PROVIDER: str = os.getenv("MODEL_PRIVATE_PROVIDER")
-    MODEL_PRIVATE_NAME: str = os.getenv("MODEL_PRIVATE_NAME")
-    MODEL_FAST_PROVIDER: str = os.getenv("MODEL_FAST_PROVIDER")
-    MODEL_FAST_NAME: str = os.getenv("MODEL_FAST_NAME")
-    MODEL_POWERFUL_PROVIDER: str = os.getenv("MODEL_POWERFUL_PROVIDER")
-    MODEL_POWERFUL_NAME: str = os.getenv("MODEL_POWERFUL_NAME")
+    # Modèle de chat unique (plus de presets private/fast/powerful)
+    MODEL_FAST: str = os.getenv("MODEL_FAST", "mistral-small-latest")
     # Limite globale par défaut pour la longueur des réponses des LLM
     MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
     
@@ -55,6 +47,13 @@ class Settings(BaseSettings):
     DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
     DOCLING_OCR_LANG: Optional[str] = None  # Langues OCR, ex. "fr,en" ou "fra+eng" (None = défaut Docling)
     
+    # Paramètres OCR avancés
+    OCR_IMAGE_SCALE: float = 3.0  # Échelle pour images PDF (2.0 → 3.0 pour meilleure résolution OCR)
+    OCR_PREPROCESS_ENABLED: bool = True  # Activer prétraitement adaptatif des images
+    OCR_FALLBACK_ENABLED: bool = True  # Activer fallback Tesseract si Docling insuffisant
+    OCR_MIN_TEXT_LENGTH: int = 50  # Seuil min caractères/page pour considérer OCR valide
+    OCR_TESSERACT_CONFIG: str = "--oem 3 --psm 6 -l fra+eng"  # Config Tesseract (LSTM, bloc uniforme, fr+en)
+    
     # Brave Search (recherche web pour function calling)
     BRAVE_SEARCH_API_KEY: Optional[str] = None
 
@@ -63,7 +62,7 @@ class Settings(BaseSettings):
     
     # KAG - Knowledge Augmented Generation
     KAG_ENABLED: bool = True
-    KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai" ou "ollama"
+    KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai" ou "mistral"
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
     
@@ -212,12 +211,6 @@ settings = Settings()
 
 
 def get_model_for_preset(preset: Optional[str]) -> dict:
-    """Retourne provider et model pour un preset (même logique que le chat / template globals)."""
-    preset = (preset or "").strip().lower()
-    if preset == "powerful":
-        return {"provider": settings.MODEL_POWERFUL_PROVIDER, "model": settings.MODEL_POWERFUL_NAME}
-    if preset == "private":
-        return {"provider": settings.MODEL_PRIVATE_PROVIDER, "model": settings.MODEL_PRIVATE_NAME}
-    # "fast" ou défaut (comme le chat)
-    return {"provider": settings.MODEL_FAST_PROVIDER, "model": settings.MODEL_FAST_NAME}
+    """Compatibilité: retourne toujours le modèle fast unique configuré."""
+    return {"provider": "mistral", "model": settings.MODEL_FAST}
 

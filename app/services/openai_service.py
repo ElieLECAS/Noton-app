@@ -156,17 +156,16 @@ async def chat_stream(message: str, model: str, context: Optional[List[Dict]] = 
                                 break
                             try:
                                 data = json.loads(data_str)
-                                # Convertir au format Ollama pour compatibilité
+                                # Convertir au format interne attendu par le frontend
                                 if "choices" in data and len(data["choices"]) > 0:
                                     delta = data["choices"][0].get("delta", {})
                                     if "content" in delta:
-                                        # Formater comme Ollama: {"message": {"content": "..."}}
-                                        ollama_format = {
+                                        stream_payload = {
                                             "message": {
                                                 "content": delta["content"]
                                             }
                                         }
-                                        yield json.dumps(ollama_format)
+                                        yield json.dumps(stream_payload)
                             except json.JSONDecodeError:
                                 pass
     except Exception as e:

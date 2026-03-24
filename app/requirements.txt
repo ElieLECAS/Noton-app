@@ -20,6 +20,11 @@ torch  # Version CPU (plus légère que torch avec CUDA)
 docling==2.8.3
 python-magic
 pillow
+# Dépendances OCR avancées
+opencv-python-headless>=4.8.0  # Prétraitement image pour OCR
+pytesseract>=0.3.10  # Wrapper Python pour Tesseract OCR
+pdf2image>=1.16.3  # Conversion PDF → images pour fallback OCR
+PyPDF2>=3.0.0  # Lecture métadonnées PDF (comptage pages)
 # fastembed retiré : remplacé par embeddings LlamaIndex
 # LlamaIndex — versions pinnées pour éviter le backtracking
 llama-index-core==0.14.14

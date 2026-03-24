@@ -14,7 +14,7 @@ class Agent(SQLModel, table=True):
     user_id: int = Field(foreign_key="user.id")
     name: str = Field(max_length=200)
     personality: str = Field(sa_column=Column(Text))  # System prompt / personnalité de l'agent
-    model_preset: Optional[str] = Field(default=None, max_length=50)  # "private", "fast", "powerful"
+    model_preset: Optional[str] = Field(default=None, max_length=50)  # legacy, "fast" recommandé
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     

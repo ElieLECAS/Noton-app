@@ -6,8 +6,6 @@ from langgraph.graph import StateGraph, END
 from sqlmodel import Session
 from app.models.agent import Agent
 from app.models.agent_task import AgentTask
-from app.services.ollama_service import chat as ollama_chat
-from app.services.openai_service import chat as openai_chat
 from app.services.mistral_service import chat as mistral_chat
 from app.config import settings, get_model_for_preset
 import logging
@@ -56,67 +54,31 @@ async def run_task(state: AgentState) -> AgentState:
         if state.get("input"):
             context.append({"role": "user", "content": f"Contexte supplémentaire : {state['input']}"})
         
-        # Même logique que le chat : provider/model du state (définis depuis get_model_for_preset)
-        provider = (state.get("provider") or "ollama")
-        if not isinstance(provider, str):
-            provider = "ollama"
-        provider = provider.strip().lower()
+        # Modèle unique: provider forcé à mistral
+        provider = "mistral"
         model = state.get("model")
         if model is None or (isinstance(model, str) and not model.strip()):
-            model = (settings.MODEL_FAST_NAME or "").strip()
+            model = (settings.MODEL_FAST or "").strip()
         else:
             model = str(model).strip()
         
         logger.info(f"run_task: provider={provider!r} model={model!r}")
         
-        if provider == "openai":
-            if not settings.OPENAI_API_KEY:
-                output = "Erreur : OPENAI_API_KEY non configurée. Configurez-la pour utiliser le modèle prédéfini (OpenAI)."
-                logger.error(f"OPENAI_API_KEY manquante pour task {state['task_id']}")
-            else:
-                model_openai = model or (settings.OPENAI_MODEL[0] if settings.OPENAI_MODEL else "gpt-4o-mini")
-                logger.info(f"Appel OpenAI avec modèle: {model_openai!r}")
-                logger.info(f"Context: {len(context)} messages")
-                response = await openai_chat("", model_openai, context)
-                logger.info(f"Réponse OpenAI reçue: {response.keys() if isinstance(response, dict) else type(response)}")
-                if "choices" in response and len(response["choices"]) > 0:
-                    output = response["choices"][0]["message"].get("content") or ""
-                    logger.info(f"Content extrait: {len(output)} caractères")
-                else:
-                    output = "Erreur : réponse OpenAI vide"
-                    logger.warning(f"Réponse OpenAI sans choices ou vide: {response}")
-        elif provider == "mistral":
-            if not settings.MISTRAL_API_KEY:
-                output = "Erreur : MISTRAL_API_KEY non configurée. Configurez-la pour utiliser le modèle prédéfini (Mistral)."
-                logger.error(f"MISTRAL_API_KEY manquante pour task {state['task_id']}")
-            else:
-                model_mistral = model or "mistral-small-latest"
-                logger.info(f"Appel Mistral avec modèle: {model_mistral!r}")
-                logger.info(f"Context: {len(context)} messages")
-                response = await mistral_chat("", model_mistral, context)
-                logger.info(f"Réponse Mistral reçue: {response.keys() if isinstance(response, dict) else type(response)}")
-                if "choices" in response and len(response["choices"]) > 0:
-                    output = response["choices"][0]["message"].get("content") or ""
-                    logger.info(f"Content extrait: {len(output)} caractères")
-                else:
-                    output = "Erreur : réponse Mistral vide"
-                    logger.warning(f"Réponse Mistral sans choices ou vide: {response}")
+        if not settings.MISTRAL_API_KEY:
+            output = "Erreur : MISTRAL_API_KEY non configurée. Configurez-la pour utiliser le modèle fast."
+            logger.error(f"MISTRAL_API_KEY manquante pour task {state['task_id']}")
         else:
-            # Ollama uniquement quand le provider prédéfini est ollama
-            model_ollama = model or settings.MODEL_FAST_NAME or "llama3.2:1b"
-            logger.info(f"Appel Ollama avec modèle: {model_ollama!r}")
-            response = await ollama_chat("", model_ollama, context)
-            logger.info(f"Réponse Ollama reçue: {response.keys() if isinstance(response, dict) else type(response)}")
-            msg = response.get("message") or {}
-            output = msg.get("content")
-            if output is None:
-                output = response.get("response") or ""
-            if output is None:
-                output = "Erreur : réponse Ollama vide"
-                logger.warning(f"Réponse Ollama vide: {response}")
+            model_mistral = model or settings.MODEL_FAST
+            logger.info(f"Appel Mistral avec modèle: {model_mistral!r}")
+            logger.info(f"Context: {len(context)} messages")
+            response = await mistral_chat("", model_mistral, context)
+            logger.info(f"Réponse Mistral reçue: {response.keys() if isinstance(response, dict) else type(response)}")
+            if "choices" in response and len(response["choices"]) > 0:
+                output = response["choices"][0]["message"].get("content") or ""
+                logger.info(f"Content extrait: {len(output)} caractères")
             else:
-                output = str(output).strip() or ""
-                logger.info(f"Content Ollama: {len(output)} caractères")
+                output = "Erreur : réponse Mistral vide"
+                logger.warning(f"Réponse Mistral sans choices ou vide: {response}")
         
         state["output"] = output or ""
         logger.info(f"State output final: {len(state['output'])} caractères")
@@ -192,10 +154,10 @@ async def execute_agent_task(
     preset_config = get_model_for_preset(agent.model_preset)
     provider_raw = preset_config.get("provider")
     model_raw = preset_config.get("model")
-    provider = (provider_raw if provider_raw is not None else "ollama").strip().lower()
+    provider = "mistral"
     model = (model_raw if model_raw is not None else "").strip()
-    if not model and provider == "ollama":
-        model = (settings.MODEL_FAST_NAME or "llama3.2:1b").strip()
+    if not model:
+        model = (settings.MODEL_FAST or "mistral-small-latest").strip()
     
     logger.info(f"Agent preset={preset!r} → provider={provider!r} model={model!r}")
     

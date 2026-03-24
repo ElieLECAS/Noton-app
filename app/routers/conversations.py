@@ -7,8 +7,7 @@ from app.models.message import Message, MessageCreate, MessageRead
 from app.models.project import Project
 from app.routers.auth import get_current_user
 from app.database import get_session
-from app.services.ollama_service import chat as ollama_chat
-from app.services.openai_service import chat as openai_chat
+from app.services.mistral_service import chat as mistral_chat
 from app.config import settings
 from datetime import datetime
 import logging
@@ -283,19 +282,12 @@ Conversation:
 Réponds UNIQUEMENT avec le titre, sans explication, sans guillemets, sans ponctuation finale. Maximum 2 mots."""
 
     try:
-        # Utiliser le modèle rapide (OpenAI si disponible, sinon Ollama)
-        if settings.OPENAI_API_KEY and settings.OPENAI_MODEL:
-            model = settings.OPENAI_MODEL[0] if isinstance(settings.OPENAI_MODEL, list) else settings.OPENAI_MODEL
-            response = await openai_chat(prompt, model, [{"role": "user", "content": prompt}])
+        if not settings.MISTRAL_API_KEY:
+            generated_title = None
+        else:
+            response = await mistral_chat(prompt, settings.MODEL_FAST, [{"role": "user", "content": prompt}])
             if "choices" in response and len(response["choices"]) > 0:
                 generated_title = response["choices"][0]["message"].get("content", "").strip()
-            else:
-                generated_title = None
-        else:
-            # Utiliser Ollama avec un modèle léger
-            response = await ollama_chat(prompt, "llama3.2:1b", [{"role": "user", "content": prompt}])
-            if "message" in response and "content" in response["message"]:
-                generated_title = response["message"]["content"].strip()
             else:
                 generated_title = None
         
