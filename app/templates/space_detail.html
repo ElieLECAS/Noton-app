@@ -4,16 +4,259 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 <style>
-.markdown-content { line-height: 1.7; }
-.markdown-content pre { background:#111827; color:#e5e7eb; padding:12px; border-radius:8px; overflow:auto; }
-.markdown-content code { background:#e5e7eb; padding:2px 4px; border-radius:4px; }
-.dark .markdown-content code { background:#374151; }
-.markdown-content table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-.markdown-content th, .markdown-content td { border: 1px solid #d1d5db; padding: 8px 10px; text-align: left; }
-.dark .markdown-content th, .dark .markdown-content td { border-color: #4b5563; }
-.markdown-content th { background: #f3f4f6; font-weight: 600; }
-.dark .markdown-content th { background: #374151; }
-.table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 8px 0; }
+/* ===== STYLES MARKDOWN MODERNES POUR LE CHAT ===== */
+.markdown-content {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #374151;
+}
+.dark .markdown-content {
+  color: #e5e7eb;
+}
+
+/* Texte de base en italique pour les réponses assistant */
+.assistant-message .markdown-content {
+  font-style: italic;
+}
+.assistant-message .markdown-content h1,
+.assistant-message .markdown-content h2,
+.assistant-message .markdown-content h3,
+.assistant-message .markdown-content h4,
+.assistant-message .markdown-content strong,
+.assistant-message .markdown-content code,
+.assistant-message .markdown-content pre {
+  font-style: normal;
+}
+
+/* Titres */
+.markdown-content h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  color: #111827;
+}
+.dark .markdown-content h1 {
+  border-bottom-color: #4b5563;
+  color: #f9fafb;
+}
+.markdown-content h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem 0;
+  color: #1f2937;
+}
+.dark .markdown-content h2 {
+  color: #f3f4f6;
+}
+.markdown-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem 0;
+  color: #374151;
+}
+.dark .markdown-content h3 {
+  color: #e5e7eb;
+}
+.markdown-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.5rem 0;
+  color: #4b5563;
+}
+.dark .markdown-content h4 {
+  color: #d1d5db;
+}
+
+.markdown-content > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-content p {
+  margin: 0.75rem 0;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 0.75rem 0;
+  padding-left: 1.75rem;
+}
+.markdown-content ul { list-style-type: disc; }
+.markdown-content ol { list-style-type: decimal; }
+.markdown-content li {
+  margin: 0.35rem 0;
+  padding-left: 0.25rem;
+}
+.markdown-content li::marker { color: #6b7280; }
+.dark .markdown-content li::marker { color: #9ca3af; }
+.markdown-content ul ul,
+.markdown-content ol ol,
+.markdown-content ul ol,
+.markdown-content ol ul { margin: 0.25rem 0; }
+
+.markdown-content strong {
+  font-weight: 700;
+  color: #111827;
+}
+.dark .markdown-content strong { color: #f9fafb; }
+.markdown-content em { font-style: italic; }
+
+.markdown-content code {
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 0.875em;
+  background-color: #f3f4f6;
+  color: #dc2626;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-style: normal;
+}
+.dark .markdown-content code {
+  background-color: #374151;
+  color: #fca5a5;
+}
+
+.markdown-content pre {
+  background-color: #1f2937;
+  color: #e5e7eb;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.dark .markdown-content pre { background-color: #111827; }
+.markdown-content pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid #3b82f6;
+  background-color: #eff6ff;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: #1e40af;
+}
+.dark .markdown-content blockquote {
+  background-color: #1e3a5f;
+  border-left-color: #60a5fa;
+  color: #bfdbfe;
+}
+.markdown-content blockquote p { margin: 0; }
+
+/* Tableaux : wrapper scrollable + présentation propre */
+.markdown-content .table-wrapper {
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  -webkit-overflow-scrolling: touch;
+}
+.dark .markdown-content .table-wrapper {
+  border-color: #4b5563;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.dark .markdown-content th,
+.dark .markdown-content td { border-color: #4b5563; }
+.markdown-content th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.dark .markdown-content th { background-color: #374151; }
+.markdown-content tr:nth-child(even) { background-color: #f9fafb; }
+.dark .markdown-content tr:nth-child(even) { background-color: #1f2937; }
+.markdown-content tbody tr:hover { background-color: #f3f4f6; }
+.dark .markdown-content tbody tr:hover { background-color: #374151; }
+
+.markdown-content a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.markdown-content a:hover { color: #1d4ed8; }
+.dark .markdown-content a { color: #60a5fa; }
+.dark .markdown-content a:hover { color: #93c5fd; }
+
+.markdown-content hr {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 1.5rem 0;
+}
+.dark .markdown-content hr { border-top-color: #4b5563; }
+
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 0.75rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.dark .markdown-content img {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Citations et sources (aligné avec projets) */
+.citation-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.7em;
+  height: 1.7em;
+  padding: 0 0.35em;
+  margin: 0 0.1em;
+  border-radius: 9999px;
+  border: 1px solid #93c5fd;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: baseline;
+  cursor: pointer;
+}
+.citation-link:hover {
+  background: #bfdbfe;
+  border-color: #60a5fa;
+}
+.dark .citation-link {
+  background: #1e3a8a;
+  border-color: #3b82f6;
+  color: #bfdbfe;
+}
+.dark .citation-link:hover {
+  background: #1d4ed8;
+}
+.sources-section { font-style: normal !important; }
+.source-badge .citation-number {
+  color: #1e40af;
+  font-weight: 700;
+}
+.dark .source-badge .citation-number {
+  color: #93c5fd;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -39,6 +282,51 @@
     </form>
   </div>
 </div>
+
+<!-- Modale preview source (version espaces) -->
+<div id="source-preview-modal" class="hidden fixed inset-0 z-[110] bg-black/50 flex items-center justify-center p-4">
+  <div class="w-full max-w-2xl rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+      <div class="flex items-center gap-2 min-w-0">
+        <span id="source-preview-badge" class="font-bold text-blue-600 dark:text-blue-400">[1]</span>
+        <h3 id="source-preview-title" class="text-base font-semibold text-gray-900 dark:text-gray-100 truncate">Source</h3>
+      </div>
+      <button type="button" onclick="closeSourcePreview()" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100">
+        <i class="ti ti-x text-xl"></i>
+      </button>
+    </div>
+    <div class="p-4">
+      <div id="source-preview-meta" class="flex flex-wrap gap-2 mb-3 text-xs text-gray-500 dark:text-gray-400">
+        <span id="source-preview-page" class="hidden bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+          <i class="ti ti-file-text mr-1"></i>Page <span id="source-preview-page-num">1</span>
+        </span>
+        <span id="source-preview-section" class="hidden bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+          <i class="ti ti-bookmark mr-1"></i><span id="source-preview-section-text">Section</span>
+        </span>
+        <span id="source-preview-score" class="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded">
+          <i class="ti ti-chart-bar mr-1"></i>Pertinence: <span id="source-preview-score-val">0%</span>
+        </span>
+        <span id="source-preview-image-badge" class="hidden bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-1 rounded">
+          <i class="ti ti-photo mr-1"></i>Source image
+        </span>
+      </div>
+      <div id="source-preview-image-container" class="hidden mb-4">
+        <img
+          id="source-preview-image"
+          src=""
+          alt="Image source"
+          class="w-full max-h-[40vh] object-contain rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+        />
+      </div>
+      <div id="source-preview-content" class="whitespace-pre-wrap bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 max-h-[45vh] overflow-auto"></div>
+      <div class="mt-4 flex justify-end">
+        <a id="source-preview-edit-link" href="#" target="_blank" class="inline-flex items-center px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm">
+          <i class="ti ti-external-link mr-1"></i>Ouvrir la note
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block extra_scripts %}
 <script>
@@ -46,6 +334,7 @@ const spaceId = {{ space_id }};
 const fastModel = {{ model_fast.model|tojson }};
 const fastProvider = {{ model_fast.provider|tojson }};
 let chatHistory = [];
+let currentMessageSources = [];
 
 marked.setOptions({
   breaks: true,
@@ -79,6 +368,150 @@ function parseMarkdown(text) {
   return wrapTablesInResponsive(cleanHtml);
 }
 
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text ?? "";
+  return div.innerHTML;
+}
+
+function buildSourcesSection(sources) {
+  if (!sources || sources.length === 0) return "";
+  currentMessageSources = sources;
+  const textSources = sources.filter((s) => !s.is_image_chunk);
+  const imageSources = sources.filter((s) => s.is_image_chunk);
+
+  const sourceBadges = textSources.map((source) => {
+    const title = escapeHtml(source.note_title || "Note sans titre");
+    const index = source.index;
+    const pageInfo = source.page_no ? ` (p.${source.page_no})` : "";
+    const excerpt = escapeHtml(source.excerpt || "");
+    const fullTitle = excerpt ? `${title}${pageInfo} - ${excerpt}` : `${title}${pageInfo}`;
+    return `
+      <button
+        onclick="showSourcePreview(${index})"
+        class="source-badge inline-flex items-center px-2 py-1 text-xs rounded bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors cursor-pointer"
+        title="${fullTitle}"
+        id="source-ref-${index}">
+        <span class="citation-number font-bold mr-1">[${index}]</span>
+        <span class="truncate max-w-[180px]">${title}${pageInfo}</span>
+      </button>
+    `;
+  }).join("");
+
+  const imageThumbnails = imageSources.map((source) => {
+    const index = source.index;
+    const title = escapeHtml(source.note_title || "Image");
+    const pageInfo = source.page_no ? `Page ${source.page_no}` : "";
+    const imageUrl = source.image_filename && source.note_id
+      ? `/api/images/${source.note_id}/${source.image_filename}`
+      : "";
+    if (!imageUrl) return "";
+
+    return `
+      <div
+        onclick="showSourcePreview(${index})"
+        class="relative group cursor-pointer rounded-lg overflow-hidden border-2 border-purple-300 dark:border-purple-600 hover:border-purple-500 transition-colors"
+        style="width: 84px; height: 84px;"
+        title="${title}"
+        id="source-ref-${index}">
+        <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
+          <i class="ti ti-zoom-in text-white opacity-0 group-hover:opacity-100 text-xl"></i>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 bg-purple-600 text-white text-[10px] px-1 py-0.5 text-center">
+          [${index}]${pageInfo ? ` - ${pageInfo}` : ""}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <div class="sources-section mt-3 pt-3 border-t border-gray-300 dark:border-gray-600">
+      ${imageSources.length > 0 ? `
+        <div class="mb-3">
+          <div class="text-xs text-purple-600 dark:text-purple-400 font-medium mb-2 flex items-center gap-1">
+            <i class="ti ti-photo text-sm"></i>
+            Images sources (${imageSources.length})
+          </div>
+          <div class="flex flex-wrap gap-2">${imageThumbnails}</div>
+        </div>
+      ` : ""}
+      ${textSources.length > 0 ? `
+        <div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-2 flex items-center gap-1">
+            <i class="ti ti-book text-sm"></i>
+            Sources textuelles (${textSources.length})
+          </div>
+          <div class="flex flex-wrap gap-2">${sourceBadges}</div>
+        </div>
+      ` : ""}
+    </div>
+  `;
+}
+
+function transformCitationsToLinks(html, sources) {
+  if (!sources || sources.length === 0) return html;
+  currentMessageSources = sources;
+  const sourceMap = {};
+  sources.forEach((s) => { sourceMap[s.index] = s; });
+  return html.replace(/\[((?:\d+\s*(?:,\s*\d+\s*)*))\]/g, (match, group) => {
+    const nums = group.split(",").map((n) => parseInt(n.trim(), 10)).filter(Number.isFinite);
+    const rendered = nums.map((index) => {
+      if (!sourceMap[index]) return String(index);
+      return `<button class="citation-link" title="${escapeHtml(sourceMap[index].note_title || "Source")}" onclick="showSourcePreview(${index})">[${index}]</button>`;
+    });
+    if (rendered.length === 0) return match;
+    return rendered.join(" ");
+  });
+}
+
+function showSourcePreview(index) {
+  const source = currentMessageSources.find((s) => s.index === index);
+  if (!source) return;
+  document.getElementById("source-preview-badge").textContent = `[${index}]`;
+  document.getElementById("source-preview-title").textContent = source.note_title || "Note sans titre";
+  document.getElementById("source-preview-content").textContent = source.passage_full || source.excerpt || "Contenu non disponible";
+  document.getElementById("source-preview-edit-link").href = source.note_id ? `/notes/${source.note_id}/edit` : "#";
+  document.getElementById("source-preview-score-val").textContent = `${Math.round((source.score || 0) * 100)}%`;
+
+  const pageEl = document.getElementById("source-preview-page");
+  if (source.page_no) {
+    document.getElementById("source-preview-page-num").textContent = source.page_no;
+    pageEl.classList.remove("hidden");
+  } else {
+    pageEl.classList.add("hidden");
+  }
+
+  const sectionEl = document.getElementById("source-preview-section");
+  if (source.section) {
+    document.getElementById("source-preview-section-text").textContent = source.section;
+    sectionEl.classList.remove("hidden");
+  } else {
+    sectionEl.classList.add("hidden");
+  }
+
+  const imageContainer = document.getElementById("source-preview-image-container");
+  const imageEl = document.getElementById("source-preview-image");
+  const imageBadge = document.getElementById("source-preview-image-badge");
+  if (source.is_image_chunk && source.image_filename && source.note_id) {
+    imageEl.src = `/api/images/${source.note_id}/${source.image_filename}`;
+    imageEl.alt = source.note_title || "Image source";
+    imageContainer.classList.remove("hidden");
+    imageBadge.classList.remove("hidden");
+  } else {
+    imageEl.src = "";
+    imageEl.alt = "";
+    imageContainer.classList.add("hidden");
+    imageBadge.classList.add("hidden");
+  }
+
+  document.getElementById("source-preview-modal").classList.remove("hidden");
+}
+
+function closeSourcePreview() {
+  document.getElementById("source-preview-modal").classList.add("hidden");
+}
+
 async function api(url, options = {}) {
   const token = localStorage.getItem("authToken");
   const headers = { ...(options.headers || {}), Authorization: `Bearer ${token}` };
@@ -92,7 +525,7 @@ function addMessage(role, content) {
   if (host.querySelector(".text-center")) host.innerHTML = "";
   const div = document.createElement("div");
   div.className = `flex ${role === "user" ? "justify-end" : "justify-start"}`;
-  div.innerHTML = `<div class="max-w-3xl rounded-lg px-4 py-2 ${role === "user" ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"}">${role === "assistant" ? `<div class="markdown-content">${parseMarkdown(content)}</div>` : `<p class="whitespace-pre-wrap">${content}</p>`}</div>`;
+  div.innerHTML = `<div class="${role === "user" ? "max-w-3xl bg-blue-600 text-white" : "max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"} rounded-lg px-4 py-2">${role === "assistant" ? `<div class="markdown-content">${parseMarkdown(content)}</div>` : `<p class="whitespace-pre-wrap">${content}</p>`}</div>`;
   host.appendChild(div);
   host.scrollTop = host.scrollHeight;
 }
@@ -128,7 +561,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   const host = document.getElementById("chat-messages");
   const assistantWrap = document.createElement("div");
   assistantWrap.className = "flex justify-start";
-  assistantWrap.innerHTML = `<div class="max-w-3xl rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"><div id="streaming-content" class="markdown-content italic">En cours...</div></div>`;
+  assistantWrap.innerHTML = `<div class="max-w-2xl rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"><div id="streaming-content" class="markdown-content italic">En cours...</div></div>`;
   host.appendChild(assistantWrap);
   host.scrollTop = host.scrollHeight;
   const contentEl = assistantWrap.querySelector("#streaming-content");
@@ -141,6 +574,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
   let full = "";
   let streamError = "";
+  let receivedSources = [];
   let streamDone = false;
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
@@ -160,7 +594,14 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
         if (data.message && data.message.content) {
           full += data.message.content;
           contentEl.classList.remove("italic");
-          contentEl.innerHTML = parseMarkdown(full);
+          const withMarkdown = parseMarkdown(full);
+          contentEl.innerHTML = transformCitationsToLinks(withMarkdown, receivedSources);
+        } else if (data.sources) {
+          receivedSources = data.sources;
+          if (full) {
+            const withMarkdown = parseMarkdown(full);
+            contentEl.innerHTML = transformCitationsToLinks(withMarkdown, receivedSources);
+          }
         } else if (data.error) {
           streamError = String(data.error);
           contentEl.classList.remove("italic");
@@ -182,6 +623,13 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   if (!full && !streamError) {
     contentEl.classList.remove("italic");
     contentEl.textContent = "Aucune réponse générée.";
+  } else if (full && !streamError) {
+    const withMarkdown = parseMarkdown(full);
+    const withCitations = transformCitationsToLinks(withMarkdown, receivedSources);
+    const finalHtml = receivedSources.length > 0
+      ? `${withCitations}${buildSourcesSection(receivedSources)}`
+      : withCitations;
+    contentEl.innerHTML = finalHtml;
   }
   chatHistory.push({ role: "user", content: message });
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });

@@ -755,7 +755,8 @@ def _ensure_document_workers():
     with _document_workers_lock:
         if not document_workers or not any(w.is_alive() for w in document_workers):
             document_workers = []
-            num_workers = settings.MAX_CONCURRENT_DOCUMENTS
+            # Traitement volontairement séquentiel: 1 seul worker global.
+            num_workers = 1
             for i in range(num_workers):
                 worker = threading.Thread(target=_process_document_worker, daemon=True)
                 worker.start()

@@ -264,39 +264,28 @@ async def upload_document(
         )
     
     import os
-    import asyncio
-    from concurrent.futures import ThreadPoolExecutor
     
     created_notes = []
     errors = []
     
-    # Utiliser un pool de threads pour les opérations I/O lourdes (sauvegarde de fichiers)
-    # Cela permet de ne pas bloquer le thread principal FastAPI
-    loop = asyncio.get_event_loop()
-    executor = ThreadPoolExecutor(max_workers=min(len(files), 4))  # Limiter à 4 workers max pour l'upload
-    
-    async def process_single_file(file: UploadFile):
-        """Traiter un seul fichier de manière asynchrone"""
+    # Traitement strictement séquentiel, fichier par fichier.
+    for file in files:
         filename = file.filename or "fichier_inconnu"
         try:
             # Lire le contenu du fichier (déjà asynchrone)
             file_content = await file.read()
-            
-            # Sauvegarder le fichier dans un thread séparé pour ne pas bloquer
-            file_path = await loop.run_in_executor(
-                executor,
-                save_uploaded_file,
-                file_content,
-                filename
-            )
-            
+
+            # Sauvegarde synchrone, un seul fichier à la fois
+            file_path = save_uploaded_file(file_content, filename)
+
             if not file_path:
-                return (None, f"Erreur lors de la sauvegarde du fichier '{filename}'")
-            
+                errors.append(f"Erreur lors de la sauvegarde du fichier '{filename}'")
+                continue
+
             # Créer une note immédiatement avec statut 'pending'
             # Utiliser le nom du fichier comme titre (sans l'extension)
             filename_without_ext = os.path.splitext(filename)[0]
-            
+
             note_create = NoteCreate(
                 title=filename_without_ext,
                 content="⏳ Traitement en cours...",
@@ -305,38 +294,7 @@ async def upload_document(
                 processing_status="pending",
                 processing_progress=0,
             )
-            
-            logger.info(f"Création de la note pour le document '{filename}' dans le projet {project_id}")
-            # La création de note doit être faite dans le thread principal pour éviter les problèmes de session
-            # On retourne les données nécessaires et on créera la note dans le thread principal
-            return (file_path, note_create, filename)
-            
-        except Exception as e:
-            logger.error(f"Erreur lors de l'upload du document '{filename}': {e}", exc_info=True)
-            return (None, f"Erreur lors de l'upload de '{filename}': {str(e)}")
-    
-    # Traiter tous les fichiers en parallèle (mais avec une limite)
-    tasks = [process_single_file(file) for file in files]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    
-    # Nettoyer l'executor
-    executor.shutdown(wait=False)
-    
-    # Créer les notes dans le thread principal (rapide, pas besoin de paralléliser)
-    for result in results:
-        if isinstance(result, Exception):
-            logger.error(f"Exception lors du traitement d'un fichier: {result}", exc_info=True)
-            errors.append(f"Exception: {str(result)}")
-            continue
-        
-        if result[0] is None:  # Erreur
-            errors.append(result[1])
-            continue
-        
-        # Résultat valide : (file_path, note_create, filename)
-        file_path, note_create, filename = result
-        
-        try:
+
             note = create_note(session, note_create, project_id, current_user.id)
             if not note:
                 errors.append(f"Projet non trouvé pour le fichier '{filename}'")
@@ -349,8 +307,11 @@ async def upload_document(
             created_notes.append(note)
             logger.info(f"Document '{filename}' uploadé, traitement en arrière-plan (note ID: {note.id})")
         except Exception as e:
-            logger.error(f"Erreur lors de la création de la note pour '{filename}': {e}", exc_info=True)
-            errors.append(f"Erreur lors de la création de la note pour '{filename}': {str(e)}")
+            logger.error(
+                f"Erreur lors du traitement du fichier '{filename}': {e}",
+                exc_info=True,
+            )
+            errors.append(f"Erreur lors du traitement de '{filename}': {str(e)}")
     
     # Si aucun fichier n'a pu être traité
     if not created_notes:

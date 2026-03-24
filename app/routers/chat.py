@@ -37,7 +37,7 @@ import os
 logger = logging.getLogger(__name__)
 
 # Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K)
-RAG_TOP_K = int(os.getenv("RAG_TOP_K", "5"))
+RAG_TOP_K = int(os.getenv("RAG_TOP_K", "1"))
 
 router = APIRouter(prefix="/api", tags=["chat"])
 

@@ -384,47 +384,54 @@ document.getElementById("edit-document-form").addEventListener("submit", async (
   const selectedSpaceIds = [...document.querySelectorAll("#edit-document-spaces-checkboxes input:checked")]
     .map(i => Number(i.value));
   const isPaid = document.getElementById("edit-document-is-paid").checked;
-
-  const currentSpacesResp = await api(`/api/library/documents/${documentId}/spaces`);
-  if (!currentSpacesResp.ok) {
-    const err = await currentSpacesResp.json().catch(() => ({}));
-    return alert(err.detail || "Impossible de récupérer les espaces actuels.");
-  }
-
-  const currentSpaces = await currentSpacesResp.json();
-  const currentSpaceIds = new Set(currentSpaces.map(s => s.id));
-  const selectedSet = new Set(selectedSpaceIds);
-
-  const addSpaceIds = selectedSpaceIds.filter(id => !currentSpaceIds.has(id));
-  const removeSpaceIds = [...currentSpaceIds].filter(id => !selectedSet.has(id));
-
-  const updateResp = await api(`/api/library/documents/${documentId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, is_paid: isPaid })
-  });
-  if (!updateResp.ok) {
-    const err = await updateResp.json().catch(() => ({}));
-    return alert(err.detail || "Impossible de modifier le document.");
-  }
-
-  if (addSpaceIds.length || removeSpaceIds.length) {
-    const spacesUpdateResp = await api(`/api/library/documents/${documentId}/spaces`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        add_space_ids: addSpaceIds,
-        remove_space_ids: removeSpaceIds
-      })
-    });
-    if (!spacesUpdateResp.ok) {
-      const err = await spacesUpdateResp.json().catch(() => ({}));
-      return alert(err.detail || "Impossible de mettre à jour les espaces.");
-    }
-  }
-
+  // UX: fermer immédiatement la modale, puis traiter en arrière-plan.
   closeEditDocumentModal();
-  await loadDocuments();
+  loadDocuments();
+
+  (async () => {
+    const currentSpacesResp = await api(`/api/library/documents/${documentId}/spaces`);
+    if (!currentSpacesResp.ok) {
+      const err = await currentSpacesResp.json().catch(() => ({}));
+      return alert(err.detail || "Impossible de récupérer les espaces actuels.");
+    }
+
+    const currentSpaces = await currentSpacesResp.json();
+    const currentSpaceIds = new Set(currentSpaces.map(s => s.id));
+    const selectedSet = new Set(selectedSpaceIds);
+
+    const addSpaceIds = selectedSpaceIds.filter(id => !currentSpaceIds.has(id));
+    const removeSpaceIds = [...currentSpaceIds].filter(id => !selectedSet.has(id));
+
+    const updateResp = await api(`/api/library/documents/${documentId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, is_paid: isPaid })
+    });
+    if (!updateResp.ok) {
+      const err = await updateResp.json().catch(() => ({}));
+      return alert(err.detail || "Impossible de modifier le document.");
+    }
+
+    if (addSpaceIds.length || removeSpaceIds.length) {
+      const spacesUpdateResp = await api(`/api/library/documents/${documentId}/spaces`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          add_space_ids: addSpaceIds,
+          remove_space_ids: removeSpaceIds
+        })
+      });
+      if (!spacesUpdateResp.ok) {
+        const err = await spacesUpdateResp.json().catch(() => ({}));
+        return alert(err.detail || "Impossible de mettre à jour les espaces.");
+      }
+    }
+
+    await loadDocuments();
+  })().catch((err) => {
+    console.error("Erreur lors de la modification du document:", err);
+    alert("Impossible de modifier le document.");
+  });
 });
 
 document.addEventListener("DOMContentLoaded", async () => {

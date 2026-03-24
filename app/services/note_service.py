@@ -3,8 +3,13 @@ from datetime import datetime
 from sqlmodel import Session, select
 from app.models.note import Note, NoteCreate, NoteUpdate
 from app.services.project_service import get_project_by_id
-from app.services.chunk_service import create_chunks_for_note, delete_chunks_for_note
+from app.services.chunk_service import (
+    create_chunks_for_note,
+    delete_chunks_for_note,
+    recreate_chunks_for_note_async,
+)
 import logging
+import threading
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +74,7 @@ def create_note(session: Session, note_create: NoteCreate, project_id: int, user
 
 
 def update_note(session: Session, note_id: int, note_update: NoteUpdate, user_id: int) -> Optional[Note]:
-    """Mettre à jour une note avec regénération des chunks et embeddings si nécessaire"""
+    """Mettre à jour une note et lancer la réindexation en arrière-plan si nécessaire."""
     note = get_note_by_id(session, note_id, user_id)
     if not note:
         return None
@@ -87,21 +92,35 @@ def update_note(session: Session, note_id: int, note_update: NoteUpdate, user_id
     session.commit()
     session.refresh(note)
     
-    # Regénérer les chunks IMMÉDIATEMENT si le titre ou le contenu ont changé
+    # Recréer chunks + embeddings en arrière-plan si le titre/contenu a changé.
+    # On ne bloque pas la requête HTTP.
     if needs_rechunking:
         try:
-            chunks = create_chunks_for_note(session, note, generate_embeddings=True)
-            note.processing_status = "completed"
-            note.processing_progress = 100
+            note.processing_status = "pending"
+            note.processing_progress = 0
             note.updated_at = datetime.utcnow()
             session.add(note)
             session.commit()
-            logger.info(f"✅ {len(chunks)} chunks régénérés avec embeddings pour la note {note.id}")
+
+            worker = threading.Thread(
+                target=recreate_chunks_for_note_async,
+                args=(note.id, note.project_id),
+                daemon=True,
+            )
+            worker.start()
+            logger.info(
+                "⏳ Note %s mise à jour: réindexation lancée en arrière-plan",
+                note.id,
+            )
         except Exception as e:
-            logger.error(f"❌ Erreur lors de la régénération des chunks pour la note {note.id}: {e}", exc_info=True)
-            # Ne pas bloquer la mise à jour si les chunks échouent
+            logger.error(
+                f"❌ Erreur lors du lancement de la régénération asynchrone des chunks pour la note {note.id}: {e}",
+                exc_info=True,
+            )
     
-    logger.info(f"✏️ Note {note.id} mise à jour (chunks regénérés: {'oui' if needs_rechunking else 'non'})")
+    logger.info(
+        f"✏️ Note {note.id} mise à jour (réindexation asynchrone: {'oui' if needs_rechunking else 'non'})"
+    )
     return note
 
 

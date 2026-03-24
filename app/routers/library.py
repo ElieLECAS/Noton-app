@@ -286,30 +286,22 @@ async def upload_documents(
     created_documents = []
     errors = []
     
-    import asyncio
-    from concurrent.futures import ThreadPoolExecutor
     import os
-    
-    loop = asyncio.get_event_loop()
-    executor = ThreadPoolExecutor(max_workers=min(len(files), 4))
-    
-    async def process_single_file(file: UploadFile):
+
+    # Traitement strictement séquentiel, fichier par fichier.
+    for file in files:
         filename = file.filename or "fichier_inconnu"
         try:
             file_content = await file.read()
-            
-            file_path = await loop.run_in_executor(
-                executor,
-                save_uploaded_file,
-                file_content,
-                filename
-            )
-            
+
+            file_path = save_uploaded_file(file_content, filename)
+
             if not file_path:
-                return (None, f"Erreur lors de la sauvegarde du fichier '{filename}'")
-            
+                errors.append(f"Erreur lors de la sauvegarde du fichier '{filename}'")
+                continue
+
             filename_without_ext = os.path.splitext(filename)[0]
-            
+
             document_create = DocumentCreate(
                 title=filename_without_ext,
                 content="⏳ Traitement en cours...",
@@ -321,30 +313,6 @@ async def upload_documents(
                 folder_id=folder_id
             )
             
-            return (file_path, document_create, filename)
-            
-        except Exception as e:
-            logger.error(f"Erreur lors de l'upload du document '{filename}': {e}", exc_info=True)
-            return (None, f"Erreur lors de l'upload de '{filename}': {str(e)}")
-    
-    tasks = [process_single_file(file) for file in files]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    
-    executor.shutdown(wait=False)
-    
-    for result in results:
-        if isinstance(result, Exception):
-            logger.error(f"Exception lors du traitement d'un fichier: {result}", exc_info=True)
-            errors.append(f"Exception: {str(result)}")
-            continue
-        
-        if result[0] is None:
-            errors.append(result[1])
-            continue
-        
-        file_path, document_create, filename = result
-        
-        try:
             document = create_document(
                 session,
                 document_create,
@@ -362,8 +330,11 @@ async def upload_documents(
             created_documents.append(document)
             logger.info(f"Document '{filename}' uploadé, traitement en arrière-plan (document ID: {document.id})")
         except Exception as e:
-            logger.error(f"Erreur lors de la création du document pour '{filename}': {e}", exc_info=True)
-            errors.append(f"Erreur lors de la création du document pour '{filename}': {str(e)}")
+            logger.error(
+                f"Erreur lors du traitement du document '{filename}': {e}",
+                exc_info=True,
+            )
+            errors.append(f"Erreur lors du traitement de '{filename}': {str(e)}")
     
     if not created_documents:
         error_message = "; ".join(errors) if errors else "Aucun fichier n'a pu être uploadé"
