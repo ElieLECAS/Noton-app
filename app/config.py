@@ -32,13 +32,20 @@ class Settings(BaseSettings):
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
     DOCLING_USE_GPU: Optional[bool] = None  # None = auto-détection, True/False pour forcer
-    TORCH_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
-    OMP_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
-    USE_ALL_CPU_CORES: bool = True  # Utiliser tous les cœurs par défaut (au lieu de la moitié) pour maximiser les performances
+    TORCH_NUM_THREADS: Optional[int] = None  # None = moitié des cœurs si USE_ALL_CPU_CORES=False
+    OMP_NUM_THREADS: Optional[int] = None  # Idem ; sinon suit la même logique que PyTorch
+    TORCH_NUM_INTEROP_THREADS: int = 1  # Limite la parallélisation interne (moins de pic CPU, un peu plus lent)
+    USE_ALL_CPU_CORES: bool = False  # False = moitié des cœurs par défaut (moins de risque de surcharge thermique)
     
     # Document Processing
-    MAX_CONCURRENT_DOCUMENTS: int = 2  # Nombre de documents traités en parallèle (réduit pour garder des ressources pour la navigation)
-    EMBEDDING_BATCH_SIZE: int = 16  # Taille de batch embedding (CPU-only, éviter la saturation)
+    MAX_CONCURRENT_DOCUMENTS: int = 1  # Traitement strictement séquentiel: 1 document à la fois
+    EMBEDDING_BATCH_SIZE: int = 8  # Batch plus petit = pics mémoire/CPU plus bas (plus lent)
+    # Pauses entre jobs pour laisser respirer le CPU (secondes, 0 = désactivé)
+    DOCUMENT_WORKER_COOLDOWN_SEC: float = 2.5
+    DOCUMENT_WORKER_IDLE_POLL_SEC: float = 3.0  # Quand la file est vide
+    EMBEDDING_WORKER_COOLDOWN_SEC: float = 2.0
+    # Linux : incrémente la « nice » du thread worker (plus élevé = moins prioritaire), typ. 5–15
+    DOCUMENT_PROCESS_NICE_INCREMENT: int = 10
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
 
     # Docling OCR (schémas techniques, cotes, PDF scannés)
@@ -46,7 +53,7 @@ class Settings(BaseSettings):
     DOCLING_OCR_LANG: Optional[str] = None  # Langues OCR, ex. "fr,en" ou "fra+eng" (None = défaut Docling)
     
     # Paramètres OCR avancés
-    OCR_IMAGE_SCALE: float = 3.0  # Échelle pour images PDF (2.0 → 3.0 pour meilleure résolution OCR)
+    OCR_IMAGE_SCALE: float = 2.0  # 2.0 = moins de charge mémoire/CPU que 3.0 ; monter si qualité OCR insuffisante
     OCR_PREPROCESS_ENABLED: bool = True  # Activer prétraitement adaptatif des images
     OCR_FALLBACK_ENABLED: bool = True  # Activer fallback Tesseract si Docling insuffisant
     OCR_MIN_TEXT_LENGTH: int = 50  # Seuil min caractères/page pour considérer OCR valide
@@ -177,6 +184,26 @@ class Settings(BaseSettings):
                 return None
         # Si c'est déjà un int, le retourner tel quel
         return int(v)
+
+    @field_validator('TORCH_NUM_INTEROP_THREADS', mode='after')
+    @classmethod
+    def clamp_torch_interop_threads(cls, v: int) -> int:
+        return max(1, min(16, v))
+
+    @field_validator('DOCUMENT_PROCESS_NICE_INCREMENT', mode='after')
+    @classmethod
+    def clamp_document_nice_increment(cls, v: int) -> int:
+        return max(0, min(19, v))
+
+    @field_validator(
+        'DOCUMENT_WORKER_COOLDOWN_SEC',
+        'DOCUMENT_WORKER_IDLE_POLL_SEC',
+        'EMBEDDING_WORKER_COOLDOWN_SEC',
+        mode='after',
+    )
+    @classmethod
+    def clamp_non_negative_float(cls, v: float) -> float:
+        return max(0.0, float(v))
 
     @field_validator('HIERARCHICAL_CHUNK_SIZES', mode='before')
     @classmethod

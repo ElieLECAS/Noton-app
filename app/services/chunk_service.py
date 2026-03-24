@@ -98,7 +98,8 @@ def _generate_embeddings_worker():
             logger.info(f"Worker a terminé la tâche pour la note {note_id}")
             
             # Délai entre les notes pour éviter de surcharger le CPU
-            time.sleep(0.5)
+            if settings.EMBEDDING_WORKER_COOLDOWN_SEC > 0:
+                time.sleep(settings.EMBEDDING_WORKER_COOLDOWN_SEC)
             
         except Exception as e:
             logger.error(f"Erreur dans le worker d'embeddings: {e}", exc_info=True)

@@ -48,6 +48,13 @@ try:
             logger.info("PyTorch configuré avec %d threads (moitié des %d cœurs disponibles)", default_threads, cpu_count)
         torch.set_num_threads(default_threads)
 
+    try:
+        _interop = settings.TORCH_NUM_INTEROP_THREADS
+        torch.set_num_interop_threads(_interop)
+        logger.info("PyTorch interop threads configuré à %d", _interop)
+    except Exception as _e:
+        logger.debug("set_num_interop_threads ignoré: %s", _e)
+
     if "OMP_NUM_THREADS" in os.environ:
         omp_value = os.environ["OMP_NUM_THREADS"].strip()
         if not omp_value or not omp_value.isdigit() or int(omp_value) <= 0:
@@ -558,8 +565,8 @@ def _process_document_worker():
     """Worker thread qui traite les documents depuis les files d'attente."""
     try:
         import os
-        if hasattr(os, "nice"):
-            os.nice(5)
+        if hasattr(os, "nice") and settings.DOCUMENT_PROCESS_NICE_INCREMENT > 0:
+            os.nice(settings.DOCUMENT_PROCESS_NICE_INCREMENT)
     except Exception:
         pass
 
@@ -574,7 +581,7 @@ def _process_document_worker():
                 available_libraries = [lid for lid, queue in document_queues.items() if not queue.empty()]
 
             if not available_libraries:
-                time.sleep(2)
+                time.sleep(settings.DOCUMENT_WORKER_IDLE_POLL_SEC)
                 continue
 
             for lid in available_libraries:
@@ -615,7 +622,8 @@ def _process_document_worker():
                                 document_queues[library_id].task_done()
 
                         logger.info("Worker a terminé le traitement du document %d", document_id)
-                        time.sleep(1.0)
+                        if settings.DOCUMENT_WORKER_COOLDOWN_SEC > 0:
+                            time.sleep(settings.DOCUMENT_WORKER_COOLDOWN_SEC)
                         break
 
                     except Exception as e:
@@ -787,8 +795,9 @@ def _ensure_document_workers():
     with _document_workers_lock:
         if not document_workers or not any(w.is_alive() for w in document_workers):
             document_workers = []
-            # Traitement volontairement séquentiel: 1 seul worker global.
-            num_workers = 1
+            # Par défaut: traitement séquentiel (1 document à la fois).
+            # La valeur est bornée à >= 1 pour éviter toute config invalide.
+            num_workers = max(1, settings.MAX_CONCURRENT_DOCUMENTS)
             for i in range(num_workers):
                 worker = threading.Thread(target=_process_document_worker, daemon=True)
                 worker.start()

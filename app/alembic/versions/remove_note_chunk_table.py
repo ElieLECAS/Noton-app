@@ -16,6 +16,7 @@ Pour l'appliquer:
 """
 from typing import Sequence, Union
 
+import os
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
@@ -35,24 +36,45 @@ def upgrade() -> None:
     Assurez-vous d'avoir exécuté le script de régénération des embeddings avant:
         python -m app.scripts.regenerate_all_embeddings
     """
-    # Supprimer l'index HNSW sur les embeddings
-    op.execute('DROP INDEX IF EXISTS notechunk_embedding_idx')
-    
-    # Supprimer l'index sur note_id
-    op.execute('DROP INDEX IF EXISTS ix_notechunk_note_id')
-    
-    # Supprimer la table note_chunk
-    op.drop_table('notechunk')
-    
+    conn = op.get_bind()
+    notechunk_exists = conn.execute(
+        sa.text(
+            """
+            SELECT EXISTS (
+                SELECT 1
+                FROM information_schema.tables
+                WHERE table_schema = 'public'
+                  AND table_name = 'notechunk'
+            )
+            """
+        )
+    ).scalar()
+
+    # Sécurité : cette migration est "optionnelle".
+    # Par défaut, on ne supprime plus notechunk pour éviter de casser
+    # les branches de migration qui la manipulent ensuite.
+    force_drop = os.getenv("ALEMBIC_FORCE_DROP_NOTECHUNK", "false").lower() == "true"
+    if not force_drop:
+        print(
+            "remove_note_chunk_table: skip (set ALEMBIC_FORCE_DROP_NOTECHUNK=true to force drop)."
+        )
+        return
+
+    if not notechunk_exists:
+        print("remove_note_chunk_table: notechunk absente, rien à supprimer.")
+        return
+
+    op.execute("DROP INDEX IF EXISTS notechunk_embedding_idx")
+    op.execute("DROP INDEX IF EXISTS ix_notechunk_note_id")
+    op.drop_table("notechunk")
+
     print("""
 ╔══════════════════════════════════════════════════════════════╗
 ║  Table note_chunk supprimée avec succès                      ║
 ╠══════════════════════════════════════════════════════════════╣
-║  La nouvelle architecture RAG utilise maintenant un          ║
-║  embedding par note au lieu du système de chunking.          ║
-║                                                              ║
-║  Si vous n'avez pas encore régénéré les embeddings :        ║
-║    python -m app.scripts.regenerate_all_embeddings          ║
+║  Suppression forcée (ALEMBIC_FORCE_DROP_NOTECHUNK=true).     ║
+║  Vérifiez que votre branche de migrations ne dépend pas      ║
+║  ensuite de la table notechunk.                              ║
 ╚══════════════════════════════════════════════════════════════╝
     """)
 
