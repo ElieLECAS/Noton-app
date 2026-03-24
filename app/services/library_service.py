@@ -11,32 +11,36 @@ logger = logging.getLogger(__name__)
 
 def get_or_create_user_library(session: Session, user_id: int) -> Library:
     """
-    Récupère ou crée la bibliothèque de l'utilisateur.
-    Pour l'instant, un utilisateur a une seule bibliothèque.
+    Récupère ou crée la bibliothèque globale partagée (commune à tous).
+    Si elle n'existe pas, elle est créée.
     """
-    statement = select(Library).where(Library.user_id == user_id)
+    statement = select(Library).where(Library.is_global == True)
     library = session.exec(statement).first()
     
     if not library:
         library = Library(
-            name="Ma Bibliothèque",
-            user_id=user_id
+            name="Bibliothèque commune",
+            user_id=None,
+            is_global=True
         )
         session.add(library)
         session.commit()
         session.refresh(library)
-        logger.info(f"Bibliothèque créée pour l'utilisateur {user_id}")
+        logger.info("Bibliothèque globale créée")
     
     return library
 
 
 def get_library_by_id(session: Session, library_id: int, user_id: int) -> Optional[Library]:
-    """Récupère une bibliothèque par son ID si elle appartient à l'utilisateur."""
-    statement = select(Library).where(
-        Library.id == library_id,
-        Library.user_id == user_id
-    )
-    return session.exec(statement).first()
+    """Récupère une bibliothèque par son ID (toujours accessible si globale)."""
+    library = session.get(Library, library_id)
+    if not library:
+        return None
+    if library.is_global:
+        return library
+    if library.user_id == user_id:
+        return library
+    return None
 
 
 def get_library_stats(session: Session, library_id: int, user_id: int) -> Optional[LibraryStats]:

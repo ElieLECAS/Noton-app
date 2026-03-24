@@ -534,10 +534,9 @@ function closeSourcePreview() {
 }
 
 async function api(url, options = {}) {
-  const token = localStorage.getItem("authToken");
-  const headers = { ...(options.headers || {}), Authorization: `Bearer ${token}` };
-  const r = await fetch(url, { ...options, headers });
-  if (r.status === 401) { localStorage.removeItem("authToken"); location.href = "/login"; }
+  const headers = { ...(options.headers || {}) };
+  const r = await fetch(url, { ...options, headers, credentials: "include" });
+  if (r.status === 401) { location.href = "/login"; }
   return r;
 }
 
@@ -576,10 +575,10 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   const contentEl = assistantWrap.querySelector("#streaming-content");
   let response;
   try {
-    const token = localStorage.getItem("authToken");
     response = await fetch(`/api/spaces/${spaceId}/chat/stream`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({
         message,
         model: fastModel,

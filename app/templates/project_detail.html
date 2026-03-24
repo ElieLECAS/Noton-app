@@ -1154,14 +1154,11 @@ extra_head %}
                 statusText.textContent = `Upload de ${files.length} fichier(s)...`;
                 progressBar.style.width = "30%";
 
-                const token = localStorage.getItem("authToken");
                 const response = await fetch(
                     `/api/projects/${projectId}/documents`,
                     {
                         method: "POST",
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
+                        credentials: "include",
                         body: formData,
                     }
                 );
@@ -1923,15 +1920,14 @@ extra_head %}
 
             // Envoyer au backend avec streaming
             try {
-                const token = localStorage.getItem("authToken");
                 const response = await fetch(
                     `/api/projects/${projectId}/chat/stream`,
                     {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`,
                         },
+                        credentials: "include",
                         body: JSON.stringify({
                             message: message,
                             model: model,
@@ -2355,9 +2351,8 @@ extra_head %}
             const pdfText = document.getElementById('source-preview-pdf-text');
             
             try {
-                const token = localStorage.getItem("authToken");
                 const response = await fetch(`/api/notes/${source.note_id}/info`, {
-                    headers: { Authorization: `Bearer ${token}` }
+                    credentials: "include"
                 });
                 
                 if (response.ok) {
@@ -2618,9 +2613,8 @@ extra_head %}
                 await loadPdfJs();
                 
                 // Charger le PDF
-                const token = localStorage.getItem("authToken");
                 const response = await fetch(`/api/notes/${currentPdfNoteId}/file`, {
-                    headers: { Authorization: `Bearer ${token}` }
+                    credentials: "include"
                 });
                 
                 if (!response.ok) throw new Error('Erreur lors du chargement du PDF');
@@ -2801,14 +2795,12 @@ extra_head %}
         });
 
         // Initialisation
-        if (authToken) {
-            loadProject();
-            loadNotes().then(() => {
-                // Démarrer le polling après le chargement initial
-                startEmbeddingStatusPolling();
-            });
-            // Les modèles sont maintenant gérés par les presets, pas besoin de charger
-        }
+        loadProject();
+        loadNotes().then(() => {
+            // Démarrer le polling après le chargement initial
+            startEmbeddingStatusPolling();
+        });
+        // Les modèles sont maintenant gérés par les presets, pas besoin de charger
 
         // Nettoyer le polling quand on quitte la page
         window.addEventListener("beforeunload", () => {

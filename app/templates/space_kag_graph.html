@@ -125,17 +125,16 @@
 {% block extra_scripts %}
 <script src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
 <script>
-    const kagAuthToken = window.authToken || localStorage.getItem("authToken");
-    if (!kagAuthToken) {
-        window.location.href = "/login";
-    }
-
     const spaceId = {{ space_id }};
 
     async function fetchJson(url) {
         const response = await fetch(url, {
-            headers: { "Authorization": `Bearer ${kagAuthToken}` },
+            credentials: "include",
         });
+        if (response.status === 401) {
+            window.location.href = "/login";
+            throw new Error("Non authentifié");
+        }
         if (!response.ok) {
             const detail = await response.json().catch(() => ({}));
             throw new Error(detail.detail || `Erreur HTTP ${response.status}`);

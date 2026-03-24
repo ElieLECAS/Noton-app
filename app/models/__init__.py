@@ -1,4 +1,8 @@
 from .user import User, UserCreate, UserRead, UserLogin
+from .role import Role, RoleCreate, RoleRead, RoleUpdate
+from .permission import Permission, PermissionCreate, PermissionRead
+from .user_role import UserRole, UserRoleCreate, UserRoleRead
+from .role_permission import RolePermission, RolePermissionCreate, RolePermissionRead
 from .project import Project, ProjectCreate, ProjectRead, ProjectUpdate
 from .note import Note, NoteCreate, NoteRead, NoteUpdate
 from .note_chunk import NoteChunk, NoteChunkRead
@@ -18,6 +22,19 @@ __all__ = [
     "UserCreate",
     "UserRead",
     "UserLogin",
+    "Role",
+    "RoleCreate",
+    "RoleRead",
+    "RoleUpdate",
+    "Permission",
+    "PermissionCreate",
+    "PermissionRead",
+    "UserRole",
+    "UserRoleCreate",
+    "UserRoleRead",
+    "RolePermission",
+    "RolePermissionCreate",
+    "RolePermissionRead",
     "Project",
     "ProjectCreate",
     "ProjectRead",

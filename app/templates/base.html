@@ -83,6 +83,14 @@
                         <i class="ti ti-library"></i>
                         <span>Bibliothèque</span>
                     </a>
+                    <a
+                        id="admin-link"
+                        href="/admin"
+                        class="hidden flex items-center gap-2 px-3 py-2 mt-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
+                    >
+                        <i class="ti ti-settings"></i>
+                        <span>Administration</span>
+                    </a>
                     <div class="mt-6">
                         <div class="flex items-center justify-between px-3 py-2">
                             <span
@@ -207,8 +215,6 @@
         </div>
 
         <script>
-            // Token JWT stocké dans localStorage
-            let authToken = localStorage.getItem("authToken");
             let currentUser = null;
 
             // Gérer le dark mode
@@ -274,25 +280,19 @@
 
             // Fonctions utilitaires
             async function apiCall(url, options = {}) {
-                // Récupérer le token à chaque appel depuis localStorage
-                const token = localStorage.getItem("authToken");
                 const headers = {
-                    "Content-Type": "application/json",
                     ...options.headers,
                 };
-                if (token) {
-                    headers["Authorization"] = `Bearer ${token}`;
-                } else {
-                    console.warn("No auth token found for request to:", url);
+                if (!headers["Content-Type"] && !(options.body instanceof FormData)) {
+                    headers["Content-Type"] = "application/json";
                 }
                 const response = await fetch(url, {
                     ...options,
                     headers,
+                    credentials: "include",
                 });
                 if (response.status === 401) {
                     console.error("401 Unauthorized for:", url);
-                    localStorage.removeItem("authToken");
-                    authToken = null;
                     window.location.href = "/login";
                     return null;
                 }
@@ -488,7 +488,10 @@
             }
 
             async function logout() {
-                localStorage.removeItem("authToken");
+                await fetch("/api/auth/logout", {
+                    method: "POST",
+                    credentials: "include",
+                });
                 window.location.href = "/login";
             }
 
@@ -500,6 +503,17 @@
                     if (userElement) {
                         userElement.textContent = currentUser.username;
                     }
+                    
+                    // Afficher le lien admin si l'utilisateur a la permission
+                    if (currentUser.permissions && (
+                        currentUser.permissions.includes('config.manage_users') ||
+                        currentUser.permissions.includes('config.manage_roles')
+                    )) {
+                        const adminLink = document.getElementById('admin-link');
+                        if (adminLink) {
+                            adminLink.classList.remove('hidden');
+                        }
+                    }
                 } else {
                     window.location.href = "/login";
                 }
@@ -507,16 +521,7 @@
 
             // Initialisation
             initDarkMode();
-            // Mettre à jour authToken depuis localStorage
-            authToken = localStorage.getItem("authToken");
-            if (authToken) {
-                loadCurrentUser();
-            } else if (
-                !window.location.pathname.includes("/login") &&
-                !window.location.pathname.includes("/register")
-            ) {
-                window.location.href = "/login";
-            }
+            loadCurrentUser();
         </script>
         {% block extra_scripts %}{% endblock %}
     </body>

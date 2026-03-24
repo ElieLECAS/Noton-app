@@ -58,6 +58,9 @@ class Settings(BaseSettings):
     # CORS
     CORS_ALLOWED_ORIGINS: Optional[List[str]] = None  # Liste des origines autorisées (None = toutes les origines)
     
+    # RBAC Admin Bootstrap
+    ADMIN_EMAIL: Optional[str] = None  # Email de l'utilisateur qui sera automatiquement admin
+    
     # KAG - Knowledge Augmented Generation
     KAG_ENABLED: bool = True
     KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai" ou "mistral"

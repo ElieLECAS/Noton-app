@@ -65,6 +65,12 @@ def create_user(session: Session, user_create: UserCreate) -> User:
     session.add(user)
     session.commit()
     session.refresh(user)
+    
+    # Attribution automatique admin si ADMIN_EMAIL correspond
+    from app.services.authorization_service import ensure_user_has_admin_role, ensure_user_has_default_role
+    ensure_user_has_admin_role(session, user)
+    ensure_user_has_default_role(session, user)
+    
     return user
 
 
@@ -75,6 +81,12 @@ def authenticate_user(session: Session, username: str, password: str) -> Optiona
         return None
     if not verify_password(password, user.password_hash):
         return None
+    
+    # Attribution automatique admin si ADMIN_EMAIL correspond (au cas où l'email serait changé)
+    from app.services.authorization_service import ensure_user_has_admin_role, ensure_user_has_default_role
+    ensure_user_has_admin_role(session, user)
+    ensure_user_has_default_role(session, user)
+    
     return user
 
 

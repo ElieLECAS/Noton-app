@@ -141,10 +141,9 @@ let dragDepth = 0;
 let draggedDocumentId = null;
 
 async function api(url, options = {}) {
-  const token = localStorage.getItem("authToken");
-  const headers = { ...(options.headers || {}), Authorization: `Bearer ${token}` };
-  const resp = await fetch(url, { ...options, headers });
-  if (resp.status === 401) { localStorage.removeItem("authToken"); location.href = "/login"; }
+  const headers = { ...(options.headers || {}) };
+  const resp = await fetch(url, { ...options, headers, credentials: "include" });
+  if (resp.status === 401) { location.href = "/login"; }
   return resp;
 }
 
@@ -455,8 +454,7 @@ document.getElementById("upload-form").addEventListener("submit", async (e) => {
   fd.append("is_paid", String(isPaid));
   if (selectedFolderId !== null) fd.append("folder_id", String(selectedFolderId));
 
-  const token = localStorage.getItem("authToken");
-  const r = await fetch("/api/library/upload", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd });
+  const r = await fetch("/api/library/upload", { method: "POST", body: fd, credentials: "include" });
   if (!r.ok) {
     const err = await r.json().catch(() => ({}));
     return alert(err.detail || "Upload échoué");

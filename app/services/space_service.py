@@ -29,18 +29,21 @@ def create_space(session: Session, space_create: SpaceCreate, user_id: int) -> S
 
 
 def get_spaces_by_user(session: Session, user_id: int) -> List[Space]:
-    """Récupère tous les espaces d'un utilisateur."""
-    statement = select(Space).where(Space.user_id == user_id).order_by(Space.name)
+    """Récupère tous les espaces accessibles (partagés ou personnels de l'utilisateur)."""
+    statement = select(Space).where(
+        (Space.is_shared == True) | (Space.user_id == user_id)
+    ).order_by(Space.name)
     return list(session.exec(statement).all())
 
 
 def get_space_by_id(session: Session, space_id: int, user_id: int) -> Optional[Space]:
-    """Récupère un espace par son ID si il appartient à l'utilisateur."""
-    statement = select(Space).where(
-        Space.id == space_id,
-        Space.user_id == user_id
-    )
-    return session.exec(statement).first()
+    """Récupère un espace par son ID si il est partagé ou appartient à l'utilisateur."""
+    space = session.get(Space, space_id)
+    if not space:
+        return None
+    if space.is_shared or space.user_id == user_id:
+        return space
+    return None
 
 
 def update_space(

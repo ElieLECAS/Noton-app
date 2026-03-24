@@ -5,7 +5,7 @@ from app.database import get_session
 from app.models.space import SpaceCreate, SpaceRead, SpaceUpdate
 from app.models.document import DocumentListItem
 from app.models.user import UserRead
-from app.routers.auth import get_current_user
+from app.routers.auth import get_current_user, require_permission
 from app.services.space_service import (
     create_space, get_spaces_by_user, get_space_by_id,
     update_space, delete_space
@@ -31,7 +31,7 @@ async def list_spaces(
 @router.post("", response_model=SpaceRead, status_code=status.HTTP_201_CREATED)
 async def create_new_space(
     space_create: SpaceCreate,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("space.create")),
     session: Session = Depends(get_session)
 ):
     """Crée un nouvel espace."""
@@ -59,7 +59,7 @@ async def get_space(
 async def update_existing_space(
     space_id: int,
     space_update: SpaceUpdate,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("space.update")),
     session: Session = Depends(get_session)
 ):
     """Met à jour un espace."""
@@ -75,7 +75,7 @@ async def update_existing_space(
 @router.delete("/{space_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_existing_space(
     space_id: int,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("space.delete")),
     session: Session = Depends(get_session)
 ):
     """Supprime un espace et ses associations."""

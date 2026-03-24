@@ -14,13 +14,40 @@ from pathlib import Path
 # Ajouter le répertoire parent au path pour les imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from sqlmodel import Session
+from sqlmodel import Session, select
 from app.database import engine
 from app.services.auth_service import create_user
 from app.models.user import UserCreate
+from app.models.role import Role
+from app.models.user_role import UserRole
 
 
-def create_user_cli(username: str = None, email: str = None, password: str = None):
+def _assign_role(session: Session, user_id: int, role_name: str) -> bool:
+    """Assigne un rôle à un utilisateur (idempotent)."""
+    role = session.exec(select(Role).where(Role.name == role_name)).first()
+    if not role:
+        return False
+
+    existing = session.exec(
+        select(UserRole).where(
+            UserRole.user_id == user_id,
+            UserRole.role_id == role.id,
+        )
+    ).first()
+    if existing:
+        return True
+
+    session.add(UserRole(user_id=user_id, role_id=role.id))
+    session.commit()
+    return True
+
+
+def create_user_cli(
+    username: str = None,
+    email: str = None,
+    password: str = None,
+    admin: bool = None,
+):
     """Créer un utilisateur via CLI"""
     
     # Mode interactif si les arguments ne sont pas fournis
@@ -34,6 +61,9 @@ def create_user_cli(username: str = None, email: str = None, password: str = Non
         if password != password_confirm:
             print("❌ Les mots de passe ne correspondent pas!", file=sys.stderr)
             sys.exit(1)
+    if admin is None:
+        admin_input = input("Administrateur ? (Y/N): ").strip().lower()
+        admin = admin_input in ("y", "yes", "o", "oui")
     
     # Validation basique
     if not username:
@@ -58,10 +88,20 @@ def create_user_cli(username: str = None, email: str = None, password: str = Non
                 password=password
             )
             user = create_user(session, user_create)
+
+            target_role = "admin" if admin else "member"
+            assigned = _assign_role(session, user.id, target_role)
+            if not assigned:
+                print(
+                    f"⚠️ Utilisateur créé mais rôle '{target_role}' introuvable.",
+                    file=sys.stderr,
+                )
+
             print(f"✅ Utilisateur créé avec succès!")
             print(f"   ID: {user.id}")
             print(f"   Username: {user.username}")
             print(f"   Email: {user.email}")
+            print(f"   Rôle demandé: {target_role}")
             print(f"   Créé le: {user.created_at}")
     except ValueError as e:
         print(f"❌ Erreur: {e}", file=sys.stderr)
@@ -83,6 +123,9 @@ Exemples:
   # Mode avec arguments
   python -m app.scripts.create_user --username monuser --email mon@email.com --password monpass
   
+  # Création d'un administrateur
+  python -m app.scripts.create_user --username admin --email admin@email.com --admin
+  
   # Avec mot de passe demandé de manière sécurisée
   python -m app.scripts.create_user --username monuser --email mon@email.com
         """
@@ -103,13 +146,19 @@ Exemples:
         type=str,
         help="Mot de passe (non recommandé en ligne de commande pour des raisons de sécurité)"
     )
+    parser.add_argument(
+        "--admin",
+        action="store_true",
+        help="Créer l'utilisateur avec le rôle admin"
+    )
     
     args = parser.parse_args()
     
     create_user_cli(
         username=args.username,
         email=args.email,
-        password=args.password
+        password=args.password,
+        admin=args.admin if args.admin else None
     )
 
 

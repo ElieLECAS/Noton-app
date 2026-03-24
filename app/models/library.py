@@ -11,7 +11,8 @@ class Library(SQLModel, table=True):
     """Bibliothèque générale d'un utilisateur contenant tous ses documents organisés en dossiers."""
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(max_length=200, default="Ma Bibliothèque")
-    user_id: int = Field(foreign_key="user.id", index=True)
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id", index=True)
+    is_global: bool = Field(default=False)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
@@ -23,7 +24,8 @@ class LibraryRead(SQLModel):
     """Schéma de lecture pour une bibliothèque."""
     id: int
     name: str
-    user_id: int
+    user_id: Optional[int]
+    is_global: bool
     created_at: datetime
     updated_at: datetime
 
