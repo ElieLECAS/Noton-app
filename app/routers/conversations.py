@@ -4,7 +4,7 @@ from sqlmodel import Session, select, func
 from app.models.user import UserRead
 from app.models.conversation import Conversation, ConversationCreate, ConversationRead, ConversationUpdate
 from app.models.message import Message, MessageCreate, MessageRead
-from app.models.project import Project
+from app.services.space_service import get_space_by_id
 from app.routers.auth import get_current_user
 from app.database import get_session
 from app.services.mistral_service import chat as mistral_chat
@@ -24,16 +24,15 @@ async def create_conversation(
     session: Session = Depends(get_session)
 ):
     """Créer une nouvelle conversation"""
-    # Vérifier que le projet appartient à l'utilisateur si project_id est fourni
-    if conversation.project_id:
-        project = session.get(Project, conversation.project_id)
-        if not project or project.user_id != current_user.id:
-            raise HTTPException(status_code=404, detail="Projet non trouvé")
+    # Vérifier que l'espace est accessible (partagé ou appartenant à l'utilisateur)
+    space = get_space_by_id(session, conversation.space_id, current_user.id)
+    if not space:
+        raise HTTPException(status_code=404, detail="Espace non trouvé")
     
     db_conversation = Conversation(
         title=conversation.title or "Nouvelle conversation",
         user_id=current_user.id,
-        project_id=conversation.project_id
+        space_id=conversation.space_id
     )
     session.add(db_conversation)
     session.commit()
@@ -49,11 +48,11 @@ async def create_conversation(
 
 @router.get("", response_model=List[ConversationRead])
 async def list_conversations(
-    project_id: int = None,
+    space_id: int = None,
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Lister les conversations de l'utilisateur (optionnellement filtrées par projet)"""
+    """Lister les conversations de l'utilisateur (optionnellement filtrées par espace)."""
     query = select(
         Conversation,
         func.count(Message.id).label("message_count")
@@ -61,11 +60,8 @@ async def list_conversations(
         Conversation.user_id == current_user.id
     )
     
-    if project_id is not None:
-        query = query.where(Conversation.project_id == project_id)
-    else:
-        # Si project_id n'est pas fourni, on veut les conversations sans projet (page d'accueil)
-        query = query.where(Conversation.project_id.is_(None))
+    if space_id is not None:
+        query = query.where(Conversation.space_id == space_id)
     
     query = query.group_by(Conversation.id).order_by(Conversation.updated_at.desc())
     

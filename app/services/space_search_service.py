@@ -26,6 +26,7 @@ from app.models.document_space import DocumentSpace
 from app.models.knowledge_entity import KnowledgeEntity
 from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.space import Space
+from app.services.space_service import get_space_by_id
 from app.config import settings
 import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
@@ -125,7 +126,6 @@ def _retrieve_leaves_sql(
         INNER JOIN document d ON dc.document_id = d.id
         INNER JOIN document_space ds ON ds.document_id = d.id
         WHERE ds.space_id = :space_id
-          AND d.user_id = :user_id
           AND dc.embedding IS NOT NULL
           AND dc.is_leaf = true
         ORDER BY dc.embedding <=> '{query_embedding_str}'::vector
@@ -134,7 +134,7 @@ def _retrieve_leaves_sql(
 
     result = session.execute(
         sql_query,
-        {"space_id": space_id, "user_id": user_id, "limit_k": candidate_k},
+        {"space_id": space_id, "limit_k": candidate_k},
     )
 
     nodes_with_scores: List[NodeWithScore] = []
@@ -173,7 +173,6 @@ def _build_parent_node_dict(
         .join(DocumentSpace, DocumentSpace.document_id == Document.id)
         .where(
             DocumentSpace.space_id == space_id,
-            Document.user_id == user_id,
             DocumentChunk.is_leaf.is_(False),
         )
     )
@@ -220,7 +219,6 @@ def _keyword_fallback_passages(
         .join(DocumentSpace, DocumentSpace.document_id == Document.id)
         .where(
             DocumentSpace.space_id == space_id,
-            Document.user_id == user_id,
         )
         .order_by(DocumentChunk.is_leaf.desc(), Document.updated_at.desc(), DocumentChunk.chunk_index)
     )
@@ -358,7 +356,6 @@ def _retrieve_via_knowledge_graph(
             .join(DocumentSpace, DocumentSpace.document_id == Document.id)
             .where(
                 DocumentSpace.space_id == space_id,
-                Document.user_id == user_id,
                 DocumentChunk.is_leaf == True,
                 KnowledgeEntity.space_id == space_id,
                 KnowledgeEntity.name_normalized.in_(query_terms),
@@ -528,9 +525,9 @@ def search_relevant_passages(
     Returns:
         Liste de dicts { passage, document_title, document_id, chunk_index, score }
     """
-    space = session.get(Space, space_id)
-    if not space or space.user_id != user_id:
-        logger.warning("Espace %d non trouvé ou n'appartient pas à l'utilisateur %d", space_id, user_id)
+    space = get_space_by_id(session, space_id, user_id)
+    if not space:
+        logger.warning("Espace %d non trouvé ou non accessible pour l'utilisateur %d", space_id, user_id)
         return []
 
     if not query_text or not query_text.strip():

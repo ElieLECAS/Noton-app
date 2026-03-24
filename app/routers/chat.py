@@ -21,6 +21,7 @@ from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.space_search_service import search_relevant_passages as search_space_passages
+from app.services.space_service import get_space_by_id
 from datetime import datetime
 import json
 import logging
@@ -477,11 +478,18 @@ async def stream_space_chat_message(
     forced_provider = "mistral"
     forced_model = settings.MODEL_FAST
 
-    space = session.get(Space, space_id)
-    if not space or space.user_id != current_user.id:
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
         raise HTTPException(status_code=404, detail="Espace non trouvé")
 
     if request.conversation_id:
+        conversation = session.get(Conversation, request.conversation_id)
+        if (
+            not conversation
+            or conversation.user_id != current_user.id
+            or conversation.space_id != space_id
+        ):
+            raise HTTPException(status_code=404, detail="Conversation non trouvée")
         try:
             user_message = Message(
                 conversation_id=request.conversation_id,

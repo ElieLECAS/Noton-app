@@ -2,11 +2,12 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
-from sqlmodel import Session
+from sqlmodel import Session, select
 from app.database import get_session
 from app.models.library import LibraryRead, LibraryStats
 from app.models.folder import FolderCreate, FolderRead, FolderUpdate, FolderWithContents
-from app.models.document import DocumentRead, DocumentListItem, DocumentCreate, DocumentUpdate
+from app.models.document import DocumentRead, DocumentListItem, DocumentCreate, DocumentUpdate, Document
+from app.models.folder import Folder
 from app.models.space import SpaceRead
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
@@ -70,7 +71,12 @@ async def list_root_folders(
 ):
     """Liste tous les dossiers racine de la bibliothèque."""
     library = get_or_create_user_library(session, current_user.id)
-    folders = get_folders_by_parent(session, None, library.id, current_user.id)
+    folders = session.exec(
+        select(Folder).where(
+            Folder.library_id == library.id,
+            Folder.parent_folder_id.is_(None),
+        ).order_by(Folder.name)
+    ).all()
     return [FolderRead.model_validate(f) for f in folders]
 
 
@@ -170,7 +176,12 @@ async def list_documents(
 ):
     """Liste les documents d'un dossier (ou racine si folder_id est None)."""
     library = get_or_create_user_library(session, current_user.id)
-    documents = get_documents_by_folder(session, folder_id, library.id, current_user.id)
+    documents = session.exec(
+        select(Document).where(
+            Document.library_id == library.id,
+            Document.folder_id == folder_id,
+        ).order_by(Document.created_at.desc())
+    ).all()
     return [DocumentListItem.model_validate(d) for d in documents]
 
 
@@ -181,8 +192,14 @@ async def get_document(
     session: Session = Depends(get_session)
 ):
     """Récupère un document par son ID."""
-    document = get_document_by_id(session, document_id, current_user.id)
-    if not document:
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if document is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Document non trouvé"
@@ -214,10 +231,14 @@ async def get_document_file(
     session: Session = Depends(get_session)
 ):
     """Récupère le fichier source d'un document."""
-    from app.models.document import Document
-    
-    document = session.get(Document, document_id)
-    if not document or document.user_id != current_user.id:
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if document is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Document non trouvé"
