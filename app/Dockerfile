@@ -19,7 +19,7 @@ COPY app/requirements.txt .
 # Installation par étapes pour forcer l'ordre et éviter la résolution globale
 
 # Étape 1: PyTorch CPU (base lourde, stable) - index PyTorch pour éviter conflits
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+RUN pip install --no-cache-dir --upgrade pip "setuptools<82" wheel && \
     pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
 # Étape 2: Dépendances système critiques (numpy doit être installé avant docling/llamaindex)
@@ -61,6 +61,11 @@ RUN grep -v -E '^[[:space:]]*#|^[[:space:]]*$$' requirements.txt | \
     sed 's/#.*$$//' | sed '/^[[:space:]]*$$/d' > requirements-remaining.txt && \
     pip install --no-cache-dir -r requirements-remaining.txt && \
     rm requirements-remaining.txt
+
+# Étape 7b: Forcer les versions finales compatibles (évite les upgrades transitifs).
+RUN pip install --no-cache-dir \
+    "pydantic>=2.0.0,<2.10" \
+    "setuptools<82"
 
 # Étape 8: Les modèles seront téléchargés au runtime la première fois et persistés
 # via le volume models_cache monté sur /root/.cache dans docker-compose.yaml

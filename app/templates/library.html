@@ -138,6 +138,7 @@ let selectedFolderId = null;
 let spaces = [];
 let droppedUploadFiles = null;
 let dragDepth = 0;
+let draggedDocumentId = null;
 
 async function api(url, options = {}) {
   const token = localStorage.getItem("authToken");
@@ -193,10 +194,26 @@ async function loadFolders() {
   const folders = await r.json();
   const host = document.getElementById("folders-list");
   host.innerHTML = `
-    <button class="w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedFolderId===null?'bg-gray-100 dark:bg-gray-700':''}" onclick="selectFolder(null)">
+    <button
+      class="w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedFolderId===null?'bg-gray-100 dark:bg-gray-700':''}"
+      onclick="selectFolder(null)"
+      ondragover="handleFolderDragOver(event)"
+      ondragleave="handleFolderDragLeave(event)"
+      ondrop="handleFolderDrop(event, null)"
+    >
       <i class="ti ti-home-2"></i> Racine
     </button>
-    ${folders.map(f => `<button class="w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedFolderId===f.id?'bg-gray-100 dark:bg-gray-700':''}" onclick="selectFolder(${f.id})"><i class="ti ti-folder"></i> ${f.name}</button>`).join("")}
+    ${folders.map(f => `
+      <button
+        class="w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedFolderId===f.id?'bg-gray-100 dark:bg-gray-700':''}"
+        onclick="selectFolder(${f.id})"
+        ondragover="handleFolderDragOver(event)"
+        ondragleave="handleFolderDragLeave(event)"
+        ondrop="handleFolderDrop(event, ${f.id})"
+      >
+        <i class="ti ti-folder"></i> ${f.name}
+      </button>
+    `).join("")}
   `;
 }
 
@@ -207,7 +224,12 @@ async function loadDocuments() {
   const docs = await r.json();
   document.getElementById("docs-count").textContent = `${docs.length} document(s)`;
   document.getElementById("documents-list").innerHTML = docs.map(d => `
-    <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center justify-between">
+    <div
+      class="p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center justify-between cursor-grab active:cursor-grabbing"
+      draggable="true"
+      ondragstart="handleDocumentDragStart(event, ${d.id})"
+      ondragend="handleDocumentDragEnd(event)"
+    >
       <div>
         <div class="font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
           <span>${d.title}</span>
@@ -260,6 +282,66 @@ function selectFolder(id) {
   selectedFolderId = id;
   loadFolders();
   loadDocuments();
+}
+
+function handleDocumentDragStart(event, documentId) {
+  draggedDocumentId = documentId;
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", String(documentId));
+  }
+}
+
+function handleDocumentDragEnd() {
+  draggedDocumentId = null;
+  clearFolderDragHighlights();
+}
+
+function handleFolderDragOver(event) {
+  if (draggedDocumentId === null) return;
+  event.preventDefault();
+  event.currentTarget.classList.add("ring-2", "ring-blue-400");
+  if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+}
+
+function handleFolderDragLeave(event) {
+  event.currentTarget.classList.remove("ring-2", "ring-blue-400");
+}
+
+function clearFolderDragHighlights() {
+  document.querySelectorAll("#folders-list button").forEach((button) => {
+    button.classList.remove("ring-2", "ring-blue-400");
+  });
+}
+
+async function moveDocumentToFolder(documentId, folderId) {
+  const query = folderId === null ? "" : `?new_folder_id=${folderId}`;
+  const r = await api(`/api/library/documents/${documentId}/move${query}`, { method: "POST" });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    throw new Error(err.detail || "Impossible de déplacer le document.");
+  }
+}
+
+async function handleFolderDrop(event, targetFolderId) {
+  event.preventDefault();
+  const rawId = event.dataTransfer?.getData("text/plain") || String(draggedDocumentId ?? "");
+  const documentId = Number(rawId);
+  handleFolderDragLeave(event);
+
+  if (!documentId) return;
+  if (selectedFolderId === targetFolderId) return;
+
+  try {
+    await moveDocumentToFolder(documentId, targetFolderId);
+    await Promise.all([loadFolders(), loadDocuments()]);
+  } catch (err) {
+    console.error("Erreur lors du déplacement du document:", err);
+    alert(err.message || "Impossible de déplacer le document.");
+  } finally {
+    draggedDocumentId = null;
+    clearFolderDragHighlights();
+  }
 }
 
 function openUploadModal(){

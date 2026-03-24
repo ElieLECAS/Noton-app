@@ -12,6 +12,7 @@ httpx>=0.27
 jinja2==3.1.2
 python-dotenv==1.0.0
 pydantic-settings>=2.3.0,<3.0.0
+pydantic>=2.0.0,<2.10
 # pgvector>=0.3.6 requis par llama-index-vector-stores-postgres 0.7.3
 pgvector==0.4.2
 # numpy>=2.0 requis par llama-index-readers-docling 0.4.2
@@ -35,7 +36,3 @@ llama-index-embeddings-huggingface==0.6.1
 # Reranker : FlagEmbedding (BAAI/bge-reranker-base) — local, CPU, FR+EN
 llama-index-postprocessor-flag-embedding-reranker==0.4.1
 FlagEmbedding==1.3.5
-# LangGraph et APScheduler pour agents et scheduler
-langgraph>=0.2.0
-langchain-core>=0.3.0
-apscheduler>=3.10.0

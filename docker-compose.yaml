@@ -45,7 +45,6 @@ services:
             - MISTRAL_BASE_URL=${MISTRAL_BASE_URL:-https://api.mistral.ai}
             - OPENAI_API_KEY=${OPENAI_API_KEY}
             - OPENAI_MODEL=${OPENAI_MODEL}
-            - OPENAI_IMAGE_MODEL=${OPENAI_IMAGE_MODEL:-dall-e-3}
             - BRAVE_SEARCH_API_KEY=${BRAVE_SEARCH_API_KEY:-}
             - MODEL_FAST=${MODEL_FAST:-mistral-small-latest}
             # Optimisations CPU pour Docling/EasyOCR

@@ -257,6 +257,27 @@
 .dark .source-badge .citation-number {
   color: #93c5fd;
 }
+
+.loading-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin-left: 0.25rem;
+}
+
+.loading-dots span {
+  opacity: 0.3;
+  animation: dot-pulse 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: 0s; }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dot-pulse {
+  0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -546,25 +567,31 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   addMessage("user", message);
   input.value = "";
 
-  const token = localStorage.getItem("authToken");
-  const response = await fetch(`/api/spaces/${spaceId}/chat/stream`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({
-      message,
-      model: fastModel,
-      provider: fastProvider,
-      context: chatHistory
-    })
-  });
-
   const host = document.getElementById("chat-messages");
   const assistantWrap = document.createElement("div");
   assistantWrap.className = "flex justify-start";
-  assistantWrap.innerHTML = `<div class="max-w-2xl rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"><div id="streaming-content" class="markdown-content italic">En cours...</div></div>`;
+  assistantWrap.innerHTML = `<div class="max-w-2xl rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"><div id="streaming-content" class="markdown-content italic">LIA réfléchit<span class="loading-dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></div></div>`;
   host.appendChild(assistantWrap);
   host.scrollTop = host.scrollHeight;
   const contentEl = assistantWrap.querySelector("#streaming-content");
+  let response;
+  try {
+    const token = localStorage.getItem("authToken");
+    response = await fetch(`/api/spaces/${spaceId}/chat/stream`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        message,
+        model: fastModel,
+        provider: fastProvider,
+        context: chatHistory
+      })
+    });
+  } catch (_) {
+    contentEl.classList.remove("italic");
+    contentEl.textContent = "Erreur réseau lors de la génération de la réponse.";
+    return;
+  }
   if (!response.ok || !response.body) {
     const errText = await response.text();
     contentEl.classList.remove("italic");

@@ -624,20 +624,6 @@ extra_head %}
                         onsubmit="sendProjectChatMessage(event)"
                         class="flex flex-col gap-2"
                     >
-                        <!-- Ligne 1: Agent -->
-                        <div class="flex flex-wrap gap-2 items-center">
-                            <div class="relative">
-                                <select
-                                    id="project-agent-select"
-                                    class="w-full sm:w-auto px-4 py-2 pr-8 text-sm border border-gray-300 dark:border-gray-600 rounded-full bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-900 dark:text-gray-100 appearance-none cursor-pointer"
-                                >
-                                    <option value="">🤖 Aucun agent</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <i class="ti ti-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
                         <!-- Ligne 2: Input + Bouton Envoyer -->
                         <div class="flex gap-2">
                             <input
@@ -1862,8 +1848,6 @@ extra_head %}
             const input = document.getElementById("project-chat-input");
             const message = input.value.trim();
             const { provider, model } = getProjectModelFromPreset();
-            const agentSelect = document.getElementById("project-agent-select");
-            const agentId = agentSelect.value ? parseInt(agentSelect.value) : null;
 
             if (!message) return;
 
@@ -1955,7 +1939,6 @@ extra_head %}
                             context: context,
                             conversation_id:
                                 projectConversationsManager.currentConversation,
-                            agent_id: agentId,
                         }),
                     }
                 );
@@ -2567,23 +2550,6 @@ extra_head %}
             }
         }
 
-        // Charger les agents pour le sélecteur
-        async function loadAgentsForProjectSelector() {
-            try {
-                const response = await apiCall('/api/agents');
-                if (response && response.ok) {
-                    const agents = await response.json();
-                    const select = document.getElementById('project-agent-select');
-                    if (select) {
-                        select.innerHTML = '<option value="">🤖 Aucun agent</option>' +
-                            agents.map(agent => `<option value="${agent.id}">🤖 ${escapeHtml(agent.name)}</option>`).join('');
-                    }
-                }
-            } catch (error) {
-                console.error('Erreur lors du chargement des agents:', error);
-            }
-        }
-
         // ========== PDF Viewer Modal ==========
         let currentPdfNoteId = null;
         let currentPdfPageNo = 1;
@@ -2841,7 +2807,6 @@ extra_head %}
                 // Démarrer le polling après le chargement initial
                 startEmbeddingStatusPolling();
             });
-            loadAgentsForProjectSelector();
             // Les modèles sont maintenant gérés par les presets, pas besoin de charger
         }
 

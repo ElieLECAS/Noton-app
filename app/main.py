@@ -7,8 +7,7 @@ from sqlmodel import Session
 import time
 
 from app.database import get_session, create_db_and_tables
-from app.routers import auth, chat, conversations, agents, scheduler, kag, library, spaces
-from app.services.scheduler_service import init_scheduler, start_scheduler, stop_scheduler
+from app.routers import auth, chat, conversations, kag, library, spaces
 from app.config import settings
 import logging
 
@@ -56,8 +55,6 @@ app.include_router(library.router)
 app.include_router(spaces.router)
 app.include_router(chat.router)
 app.include_router(conversations.router)
-app.include_router(agents.router)
-app.include_router(scheduler.router)
 app.include_router(kag.router)
 
 # Configuration des templates
@@ -79,16 +76,8 @@ except:
 
 @app.on_event("startup")
 async def startup_event():
-    """Créer les tables au démarrage et initialiser le scheduler"""
+    """Créer les tables au démarrage."""
     create_db_and_tables()
-    
-    # Initialiser et démarrer le scheduler
-    try:
-        init_scheduler()
-        start_scheduler()
-        logger.info("✅ Scheduler initialisé et démarré")
-    except Exception as e:
-        logger.error(f"Erreur lors de l'initialisation du scheduler: {e}")
     
     # Tester l'initialisation du modèle d'embeddings HuggingFace
     try:
@@ -155,22 +144,6 @@ async def space_detail_page(request: Request, space_id: int):
 async def space_kag_graph_page(request: Request, space_id: int):
     """Page de visualisation du graphe KAG d'un espace."""
     return templates.TemplateResponse("space_kag_graph.html", {"request": request, "space_id": space_id})
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Arrêter le scheduler à l'arrêt de l'application"""
-    try:
-        stop_scheduler()
-        logger.info("Scheduler arrêté proprement")
-    except Exception as e:
-        logger.error(f"Erreur lors de l'arrêt du scheduler: {e}")
-
-
-@app.get("/studio", response_class=HTMLResponse)
-async def studio_page(request: Request):
-    """Page du studio d'agents"""
-    return templates.TemplateResponse("studio.html", {"request": request})
 
 
 @app.get("/health")

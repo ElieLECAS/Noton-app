@@ -5,10 +5,6 @@ from .note_chunk import NoteChunk, NoteChunkRead
 from .space import Space, SpaceCreate, SpaceRead, SpaceUpdate
 from .conversation import Conversation, ConversationCreate, ConversationRead, ConversationUpdate
 from .message import Message, MessageCreate, MessageRead
-from .agent import Agent, AgentCreate, AgentRead, AgentUpdate
-from .agent_task import AgentTask, AgentTaskCreate, AgentTaskRead, AgentTaskUpdate
-from .scheduled_job import ScheduledJob, ScheduledJobCreate, ScheduledJobRead, ScheduledJobUpdate
-from .task_run_log import TaskRunLog, TaskRunLogRead
 from .knowledge_entity import KnowledgeEntity, KnowledgeEntityRead
 from .chunk_entity_relation import ChunkEntityRelation, ChunkEntityRelationRead
 from .library import Library, LibraryRead, LibraryStats
@@ -43,20 +39,6 @@ __all__ = [
     "Message",
     "MessageCreate",
     "MessageRead",
-    "Agent",
-    "AgentCreate",
-    "AgentRead",
-    "AgentUpdate",
-    "AgentTask",
-    "AgentTaskCreate",
-    "AgentTaskRead",
-    "AgentTaskUpdate",
-    "ScheduledJob",
-    "ScheduledJobCreate",
-    "ScheduledJobRead",
-    "ScheduledJobUpdate",
-    "TaskRunLog",
-    "TaskRunLogRead",
     "KnowledgeEntity",
     "KnowledgeEntityRead",
     "ChunkEntityRelation",

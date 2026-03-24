@@ -6,18 +6,15 @@ from sqlmodel import Session, select
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.database import get_session
-from app.services.openai_service import (
-    generate_image as openai_generate_image,
-)
 from app.services.mistral_service import (
     chat as mistral_chat,
+    chat_stream as mistral_chat_stream,
 )
 from app.config import settings
 from app.services.semantic_search_service import search_relevant_notes, search_relevant_passages
 from app.services.chat_tools import get_available_tools
 from app.models.conversation import Conversation
 from app.models.message import Message
-from app.models.agent import Agent
 from app.models.note import Note
 from app.models.space import Space
 from app.models.document import Document
@@ -43,12 +40,6 @@ class ChatRequest(BaseModel):
     provider: str = "mistral"  # Conservé pour compatibilité, ignoré (modèle fast unique)
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None  # ID de la conversation (optionnel pour compatibilité)
-    agent_id: Optional[int] = None  # ID de l'agent (optionnel)
-
-
-class GenerateImageRequest(BaseModel):
-    prompt: str
-    conversation_id: Optional[int] = None
 
 
 @router.get("/providers/models")
@@ -87,13 +78,6 @@ async def stream_chat_message(
     session: Session = Depends(get_session)
 ):
     """Envoyer un message au chatbot avec streaming (modèle fast unique)."""
-    # Charger l'agent si agent_id est fourni
-    agent = None
-    if request.agent_id:
-        agent = session.get(Agent, request.agent_id)
-        if not agent or agent.user_id != current_user.id:
-            logger.warning(f"Agent {request.agent_id} non trouvé ou non autorisé pour l'utilisateur {current_user.id}")
-            agent = None
     
     # Sauvegarder le message utilisateur si conversation_id est fourni
     if request.conversation_id:
@@ -110,11 +94,9 @@ async def stream_chat_message(
         except Exception as e:
             logger.error(f"Erreur lors de la sauvegarde du message utilisateur: {e}")
     
-    # Construire le contexte avec la personnalité de l'agent si disponible
+    # Construire le contexte.
     full_context = []
-    if agent:
-        full_context.append({"role": "system", "content": agent.personality})
-    
+
     # Ajouter le contexte existant
     if request.context:
         full_context.extend(request.context)
@@ -147,15 +129,17 @@ async def stream_chat_message(
                     error_msg = "Mistral API key n'est pas configurée"
                     yield f"data: {json.dumps({'error': error_msg})}\n\n"
                     return
-                response = await mistral_chat(request.message, settings.MODEL_FAST, full_context)
-                content = ""
-                if "choices" in response and response["choices"]:
-                    content = (response["choices"][0].get("message") or {}).get("content") or ""
-                chunk_size = 25
-                for i in range(0, len(content), chunk_size):
-                    chunk = content[i : i + chunk_size]
+                async for raw_chunk in mistral_chat_stream("", settings.MODEL_FAST, full_context):
+                    try:
+                        parsed = json.loads(raw_chunk)
+                    except json.JSONDecodeError:
+                        continue
+                    chunk = (parsed.get("message") or {}).get("content") or ""
+                    if not chunk:
+                        continue
                     assistant_response.append(chunk)
                     yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+                yield f"data: {json.dumps({'done': True})}\n\n"
             
             # Sauvegarder la réponse de l'assistant si conversation_id est fourni
             if request.conversation_id and assistant_response:
@@ -187,84 +171,12 @@ async def stream_chat_message(
     return StreamingResponse(generate(), media_type="text/event-stream")
 
 
-@router.post("/chat/generate-image")
-async def chat_generate_image(
-    request: GenerateImageRequest,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-):
-    """Générer une image via OpenAI DALL-E 3 à partir d'un prompt texte."""
-    if not settings.OPENAI_API_KEY:
-        raise HTTPException(
-            status_code=400,
-            detail="OpenAI API key n'est pas configurée. La génération d'images nécessite une clé OpenAI.",
-        )
-    if not request.prompt or not request.prompt.strip():
-        raise HTTPException(status_code=400, detail="Le prompt ne peut pas être vide.")
-
-    # Sauvegarder le message utilisateur si conversation_id est fourni
-    if request.conversation_id:
-        try:
-            user_message = Message(
-                conversation_id=request.conversation_id,
-                role="user",
-                content=request.prompt.strip(),
-                model=None,
-                provider=None,
-            )
-            session.add(user_message)
-            session.commit()
-        except Exception as e:
-            logger.error(f"Erreur lors de la sauvegarde du message utilisateur: {e}")
-
-    try:
-        images = await openai_generate_image(prompt=request.prompt.strip())
-    except Exception as e:
-        logger.exception("Erreur génération image OpenAI: %s", e)
-        raise HTTPException(
-            status_code=502,
-            detail=f"Erreur lors de la génération d'image: {str(e)}",
-        )
-
-    if not images or "url" not in images[0]:
-        raise HTTPException(
-            status_code=502,
-            detail="Aucune image retournée par l'API OpenAI.",
-        )
-
-    image_url = images[0]["url"]
-    # Contenu markdown pour affichage dans le chat (image cliquable)
-    content = f"![Image générée]({image_url})\n\n*Prompt : {request.prompt.strip()}*"
-
-    # Sauvegarder la réponse assistant si conversation_id est fourni
-    if request.conversation_id:
-        try:
-            assistant_message = Message(
-                conversation_id=request.conversation_id,
-                role="assistant",
-                content=content,
-                model=settings.OPENAI_IMAGE_MODEL,
-                provider="openai",
-            )
-            session.add(assistant_message)
-            conv = session.get(Conversation, request.conversation_id)
-            if conv:
-                conv.updated_at = datetime.utcnow()
-                session.add(conv)
-            session.commit()
-        except Exception as e:
-            logger.error(f"Erreur lors de la sauvegarde du message assistant (image): {e}")
-
-    return {"url": image_url, "content": content}
-
-
 class ProjectChatRequest(BaseModel):
     message: str
     model: str
     provider: str = "mistral"  # Conservé pour compatibilité, ignoré
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None  # ID de la conversation (optionnel pour compatibilité)
-    agent_id: Optional[int] = None  # ID de l'agent (optionnel)
 
 
 class SpaceChatRequest(BaseModel):
@@ -273,7 +185,6 @@ class SpaceChatRequest(BaseModel):
     provider: str = "mistral"
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None
-    agent_id: Optional[int] = None
 
 
 def build_space_context_from_passages(passages: List[dict]) -> dict:
@@ -426,14 +337,7 @@ async def stream_project_chat_message(
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Envoyer un message au chatbot (Ollama ou OpenAI) avec streaming et contexte enrichi des passages pertinents du projet"""
-    # Charger l'agent si agent_id est fourni
-    agent = None
-    if request.agent_id:
-        agent = session.get(Agent, request.agent_id)
-        if not agent or agent.user_id != current_user.id:
-            logger.warning(f"Agent {request.agent_id} non trouvé ou non autorisé pour l'utilisateur {current_user.id}")
-            agent = None
+    """Envoyer un message au chatbot avec streaming et contexte enrichi des passages pertinents du projet."""
     
     # Sauvegarder le message utilisateur si conversation_id est fourni
     if request.conversation_id:
@@ -464,11 +368,7 @@ async def stream_project_chat_message(
     # Construire le contexte enrichi avec les passages pertinents
     project_context = build_semantic_context_from_passages(passages)
     
-    # Préfixer avec la personnalité de l'agent si disponible
-    if agent:
-        full_context = [{"role": "system", "content": agent.personality}] + project_context
-    else:
-        full_context = project_context
+    full_context = project_context
     
     # Ajouter le contexte de conversation existant si fourni
     if request.context:
@@ -486,15 +386,17 @@ async def stream_project_chat_message(
                 error_msg = "Mistral API key n'est pas configurée"
                 yield f"data: {json.dumps({'error': error_msg})}\n\n"
                 return
-            response = await mistral_chat("", settings.MODEL_FAST, full_context)
-            content = ""
-            if "choices" in response and response["choices"]:
-                content = (response["choices"][0].get("message") or {}).get("content") or ""
-            chunk_size = 25
-            for i in range(0, len(content), chunk_size):
-                chunk = content[i : i + chunk_size]
+            async for raw_chunk in mistral_chat_stream("", settings.MODEL_FAST, full_context):
+                try:
+                    parsed = json.loads(raw_chunk)
+                except json.JSONDecodeError:
+                    continue
+                chunk = (parsed.get("message") or {}).get("content") or ""
+                if not chunk:
+                    continue
                 assistant_response.append(chunk)
                 yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+            yield f"data: {json.dumps({'done': True})}\n\n"
             
             # Sauvegarder la réponse de l'assistant si conversation_id est fourni
             if request.conversation_id and assistant_response:
@@ -579,13 +481,6 @@ async def stream_space_chat_message(
     if not space or space.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="Espace non trouvé")
 
-    # Charger l'agent si fourni
-    agent = None
-    if request.agent_id:
-        agent = session.get(Agent, request.agent_id)
-        if not agent or agent.user_id != current_user.id:
-            agent = None
-
     if request.conversation_id:
         try:
             user_message = Message(
@@ -613,8 +508,6 @@ async def stream_space_chat_message(
     space_context = build_space_context_from_passages(passages)
 
     full_context = []
-    if agent:
-        full_context.append({"role": "system", "content": agent.personality})
     full_context.append(space_context)
     if request.context:
         full_context.extend(request.context)
@@ -627,12 +520,14 @@ async def stream_space_chat_message(
             if not settings.MISTRAL_API_KEY:
                 yield f"data: {json.dumps({'error': 'Mistral API key non configurée'})}\n\n"
                 return
-            response = await mistral_chat("", forced_model, full_context)
-            content = ""
-            if "choices" in response and response["choices"]:
-                content = (response["choices"][0].get("message") or {}).get("content") or ""
-            for i in range(0, len(content), 25):
-                chunk = content[i:i+25]
+            async for raw_chunk in mistral_chat_stream("", forced_model, full_context):
+                try:
+                    parsed = json.loads(raw_chunk)
+                except json.JSONDecodeError:
+                    continue
+                chunk = (parsed.get("message") or {}).get("content") or ""
+                if not chunk:
+                    continue
                 assistant_response.append(chunk)
                 yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
             yield f"data: {json.dumps({'done': True})}\n\n"

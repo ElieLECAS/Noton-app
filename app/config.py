@@ -24,8 +24,6 @@ class Settings(BaseSettings):
     # OpenAI
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: Optional[List[str]] = None
-    OPENAI_IMAGE_MODEL: str = "dall-e-3"  # Modèle de génération d'images (DALL-E 3)
-    
     # Modèle de chat unique (plus de presets private/fast/powerful)
     MODEL_FAST: str = os.getenv("MODEL_FAST", "mistral-small-latest")
     # Limite globale par défaut pour la longueur des réponses des LLM
