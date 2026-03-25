@@ -197,9 +197,9 @@ async function loadSpaces() {
   if (sidebarHost) {
     sidebarHost.innerHTML = spaces.length
       ? spaces.map(s => `
-          <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-            <i class="ti ti-circle-dot text-xs text-gray-400"></i>
-            <a href="/spaces/${s.id}" class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1 hover:underline">${s.name}</a>
+          <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <i class="ti ti-circle-dot text-xs text-gray-400 group-hover:text-blue-500 transition-colors"></i>
+            <a href="/spaces/${s.id}" class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1 no-underline group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${s.name}</a>
             ${
               canSpaceUpdate
                 ? `
