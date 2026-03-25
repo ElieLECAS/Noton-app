@@ -223,6 +223,76 @@ def get_docling_converter():
         return _docling_converter
 
 
+def ensure_pdf_for_docling(file_path: str) -> str:
+    """
+    Convertit les formats bureautiques (ODT/DOCX/DOC/...) en PDF via LibreOffice
+    avant de les passer à Docling.
+    """
+    suffix = Path(file_path).suffix.lower()
+    if suffix == ".pdf":
+        return file_path
+
+    convertible_exts = {
+        ".odt",
+        ".odm",
+        ".odg",
+        ".odp",
+        ".ods",
+        ".odf",
+        ".doc",
+        ".docx",
+        ".rtf",
+        ".ppt",
+        ".pptx",
+        ".xls",
+        ".xlsx",
+    }
+
+    if suffix not in convertible_exts:
+        raise ValueError(f"Format non supporté pour conversion vers PDF: {suffix}")
+
+    import subprocess
+
+    pdf_path = Path(file_path).with_suffix(".pdf")
+    try:
+        if pdf_path.exists():
+            pdf_path.unlink()
+    except Exception:
+        pass
+
+    logger.info("Conversion LibreOffice vers PDF: %s", file_path)
+    cmd = [
+        "libreoffice",
+        "--headless",
+        "--nologo",
+        "--nolockcheck",
+        "--convert-to",
+        "pdf",
+        "--outdir",
+        str(pdf_path.parent),
+        str(file_path),
+    ]
+
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if proc.returncode != 0:
+        stderr_tail = (proc.stderr or "").strip()[-2000:]
+        stdout_tail = (proc.stdout or "").strip()[-2000:]
+        details = stderr_tail or stdout_tail or f"code={proc.returncode}"
+        raise RuntimeError(f"LibreOffice a échoué pour {file_path}: {details}")
+
+    if not pdf_path.exists():
+        candidates = sorted(
+            pdf_path.parent.glob(f"{Path(file_path).stem}*.pdf"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+        if not candidates:
+            raise FileNotFoundError(f"Aucun PDF généré pour {file_path}")
+        pdf_path = candidates[0]
+
+    return str(pdf_path)
+
+
 def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Optional[object]]:
     """
     Traite un document et retourne (markdown, llama_docs_json, docling_doc).
@@ -641,8 +711,24 @@ def _process_document_for_note(note_id: int, file_path: str):
             session.add(note)
             session.commit()
 
+            original_ext = Path(file_path).suffix.lower()
+            pdf_input_path = file_path
+            converted_to_pdf = False
+            try:
+                pdf_input_path = ensure_pdf_for_docling(file_path)
+                converted_to_pdf = pdf_input_path != file_path
+            except Exception as e:
+                logger.error(
+                    "Conversion vers PDF impossible pour la note %d (%s): %s",
+                    note_id,
+                    file_path,
+                    e,
+                    exc_info=True,
+                )
+                raise
+
             # Une seule passe Docling → markdown + llama_docs JSON + docling_doc (pour images)
-            markdown_content, llama_docs, docling_doc = process_document(file_path)
+            markdown_content, llama_docs, docling_doc = process_document(pdf_input_path)
 
             if not markdown_content:
                 note.processing_status = "failed"
@@ -657,15 +743,28 @@ def _process_document_for_note(note_id: int, file_path: str):
                 logger.error("Échec du traitement du document pour la note %d", note_id)
                 return
 
-            # Renommer le fichier vers media/documents/{note_id}.{extension}
-            file_extension = Path(file_path).suffix.lower()
-            permanent_path = Path(f"media/documents/{note_id}{file_extension}")
-            permanent_path.parent.mkdir(parents=True, exist_ok=True)
-            
+            permanent_pdf_path = Path(f"media/documents/{note_id}.pdf")
+            permanent_pdf_path.parent.mkdir(parents=True, exist_ok=True)
+
             import shutil
-            shutil.move(file_path, str(permanent_path))
-            note.source_file_path = str(permanent_path)
-            logger.info("PDF déplacé vers chemin permanent: %s", permanent_path)
+
+            # Retenter proprement sur relances/erreurs précédentes
+            if permanent_pdf_path.exists():
+                permanent_pdf_path.unlink()
+
+            # Si conversion effectuée, on conserve aussi l'original dans le dossier du document.
+            if converted_to_pdf:
+                original_permanent_path = Path(
+                    f"media/documents/{note_id}{original_ext}"
+                )
+                original_permanent_path.parent.mkdir(parents=True, exist_ok=True)
+                if original_permanent_path.exists():
+                    original_permanent_path.unlink()
+                shutil.move(file_path, str(original_permanent_path))
+
+            shutil.move(pdf_input_path, str(permanent_pdf_path))
+            note.source_file_path = str(permanent_pdf_path)
+            logger.info("PDF déplacé vers chemin permanent: %s", permanent_pdf_path)
             
             # Garder le markdown dans note.content pour le RAG (chunking, fallback, recherche).
             # L’UI affiche le PDF via source_file_path, pas le contenu éditable.

@@ -28,6 +28,18 @@ class Settings(BaseSettings):
     MODEL_FAST: str = os.getenv("MODEL_FAST", "mistral-small-latest")
     # Limite globale par défaut pour la longueur des réponses des LLM
     MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
+    # Paramètres dédiés au chat "espaces"
+    SPACE_CHAT_MAX_TOKENS: Optional[int] = None
+    SPACE_CHAT_TEMPERATURE: float = 0.55
+    SPACE_CHAT_TOP_P: Optional[float] = None
+    SPACE_CHAT_SYSTEM_PROMPT: str = (
+        "Tu es LIA, assistant conversationnel menuiserie pour collaborateurs et clients. "
+        "Réponds en français, avec un ton humain, professionnel et chaleureux. "
+        "Base-toi uniquement sur les passages fournis. "
+        "Si une information manque, dis-le clairement sans inventer. "
+        "Évite les tableaux sauf si l'utilisateur les demande explicitement. "
+        "Privilégie des phrases naturelles, puis termine par une question utile pour avancer."
+    )
     
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
@@ -160,7 +172,7 @@ class Settings(BaseSettings):
                 return None
         return None
     
-    @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', mode='before')
+    @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', 'SPACE_CHAT_MAX_TOKENS', mode='before')
     @classmethod
     def parse_optional_int(cls, v: Union[str, int, None]) -> Optional[int]:
         """Convertit les chaînes vides en None pour les champs int optionnels"""
@@ -177,6 +189,21 @@ class Settings(BaseSettings):
                 return None
         # Si c'est déjà un int, le retourner tel quel
         return int(v)
+
+    @field_validator('SPACE_CHAT_TOP_P', mode='before')
+    @classmethod
+    def parse_optional_float(cls, v: Union[str, float, int, None]) -> Optional[float]:
+        """Convertit les chaînes vides en None pour les champs float optionnels"""
+        if v is None:
+            return None
+        if isinstance(v, str):
+            if not v.strip():
+                return None
+            try:
+                return float(v)
+            except ValueError:
+                return None
+        return float(v)
 
     @field_validator('HIERARCHICAL_CHUNK_SIZES', mode='before')
     @classmethod

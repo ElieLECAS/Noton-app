@@ -5,7 +5,7 @@ from sqlmodel import Session
 from app.database import get_session
 from app.models.note import NoteCreate, NoteRead, NoteListItem, NoteUpdate, Note
 from app.models.user import UserRead
-from app.routers.auth import get_current_user
+from app.routers.auth import get_current_user, require_permission
 from app.services.note_service import (
     get_notes_by_project,
     get_note_by_id,
@@ -47,7 +47,7 @@ async def list_notes(
 async def create_new_note(
     project_id: int,
     note_create: NoteCreate,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Créer une nouvelle note"""
@@ -208,7 +208,7 @@ async def get_note_image(
 async def update_existing_note(
     note_id: int,
     note_update: NoteUpdate,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Mettre à jour une note"""
@@ -224,7 +224,7 @@ async def update_existing_note(
 @router.delete("/notes/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_existing_note(
     note_id: int,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Supprimer une note et ses chunks associés"""
@@ -249,7 +249,7 @@ async def delete_existing_note(
 async def upload_document(
     project_id: int,
     files: List[UploadFile] = File(...),
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """
