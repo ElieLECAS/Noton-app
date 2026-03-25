@@ -70,9 +70,11 @@ async def list_root_folders(
     session: Session = Depends(get_session)
 ):
     """Liste tous les dossiers racine de la bibliothèque."""
+    library = get_or_create_user_library(session, current_user.id)
     folders = session.exec(
         select(Folder).where(
             Folder.parent_folder_id.is_(None),
+            Folder.library_id == library.id,
         ).order_by(Folder.name)
     ).all()
     return [FolderRead.model_validate(f) for f in folders]
@@ -173,8 +175,10 @@ async def list_documents(
     session: Session = Depends(get_session)
 ):
     """Liste les documents d'un dossier (ou racine si folder_id est None)."""
+    library = get_or_create_user_library(session, current_user.id)
     documents = session.exec(
         select(Document).where(
+            Document.library_id == library.id,
             Document.folder_id == folder_id,
         ).order_by(Document.created_at.desc())
     ).all()
@@ -188,9 +192,11 @@ async def get_document(
     session: Session = Depends(get_session)
 ):
     """Récupère un document par son ID."""
+    library = get_or_create_user_library(session, current_user.id)
     document = session.exec(
         select(Document).where(
             Document.id == document_id,
+            Document.library_id == library.id,
         )
     ).first()
     if document is None:
@@ -225,9 +231,11 @@ async def get_document_file(
     session: Session = Depends(get_session)
 ):
     """Récupère le fichier source d'un document."""
+    library = get_or_create_user_library(session, current_user.id)
     document = session.exec(
         select(Document).where(
             Document.id == document_id,
+            Document.library_id == library.id,
         )
     ).first()
     if document is None:

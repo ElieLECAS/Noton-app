@@ -20,10 +20,45 @@ document_task_queue: Queue = Queue()
 _document_queue_lock = threading.Lock()
 document_workers = []
 _document_workers_lock = threading.Lock()
+_cancelled_document_ids: set[int] = set()
+_cancelled_documents_lock = threading.Lock()
 
 _docling_converter = None
 _docling_converter_generic = None
 _docling_converter_lock = threading.Lock()
+
+
+def _mark_document_processing_cancelled(document_id: int) -> None:
+    """Marque un document comme annulé pour stopper son traitement asynchrone."""
+    with _cancelled_documents_lock:
+        _cancelled_document_ids.add(document_id)
+
+
+def _is_document_processing_cancelled(document_id: int) -> bool:
+    with _cancelled_documents_lock:
+        return document_id in _cancelled_document_ids
+
+
+def _clear_document_processing_cancelled(document_id: int) -> None:
+    with _cancelled_documents_lock:
+        _cancelled_document_ids.discard(document_id)
+
+
+def _should_abort_processing(document_id: int) -> bool:
+    """
+    Indique si le traitement doit être interrompu:
+    - suppression demandée explicitement
+    - document supprimé en base
+    """
+    if _is_document_processing_cancelled(document_id):
+        return True
+
+    try:
+        with Session(engine) as session:
+            return session.get(Document, document_id) is None
+    except Exception:
+        # En cas d'erreur transitoire DB, on n'interrompt pas par défaut.
+        return False
 
 try:
     import torch
@@ -548,10 +583,9 @@ def create_document(
 
 
 def get_document_by_id(session: Session, document_id: int, user_id: int) -> Optional[Document]:
-    """Récupère un document par son ID si il appartient à l'utilisateur."""
+    """Récupère un document par son ID (bibliothèque globale partagée)."""
     statement = select(Document).where(
-        Document.id == document_id,
-        Document.user_id == user_id
+        Document.id == document_id
     )
     return session.exec(statement).first()
 
@@ -560,7 +594,6 @@ def get_documents_by_folder(session: Session, folder_id: Optional[int], library_
     """Récupère tous les documents d'un dossier (ou racine si folder_id est None)."""
     statement = select(Document).where(
         Document.library_id == library_id,
-        Document.user_id == user_id,
         Document.folder_id == folder_id
     ).order_by(Document.created_at.desc())
     return list(session.exec(statement).all())
@@ -569,8 +602,7 @@ def get_documents_by_folder(session: Session, folder_id: Optional[int], library_
 def get_documents_by_library(session: Session, library_id: int, user_id: int) -> List[Document]:
     """Récupère tous les documents d'une bibliothèque."""
     statement = select(Document).where(
-        Document.library_id == library_id,
-        Document.user_id == user_id
+        Document.library_id == library_id
     ).order_by(Document.created_at.desc())
     return list(session.exec(statement).all())
 
@@ -647,14 +679,29 @@ def delete_document(session: Session, document_id: int, user_id: int) -> bool:
     """Supprime un document, ses chunks, et toutes ses associations."""
     from app.services.chunk_service import delete_chunks_for_document
     from app.services.document_space_service import get_document_spaces
-    
+    from app.services.kag_graph_service import delete_entities_for_document
+
+    # Empêche un traitement asynchrone tardif de recréer chunks/KAG.
+    _mark_document_processing_cancelled(document_id)
+
     document = get_document_by_id(session, document_id, user_id)
     if not document:
         return False
     
-    delete_chunks_for_document(session, document_id, commit=False)
-    
     doc_spaces = get_document_spaces(session, document_id, user_id)
+    for doc_space in doc_spaces:
+        try:
+            delete_entities_for_document(session, document_id, doc_space.space_id)
+        except Exception as e:
+            logger.warning(
+                "Nettoyage KAG incomplet pour document=%s espace=%s: %s",
+                document_id,
+                doc_space.space_id,
+                e,
+            )
+
+    delete_chunks_for_document(session, document_id, commit=False)
+
     for doc_space in doc_spaces:
         session.delete(doc_space)
     
@@ -694,13 +741,20 @@ def add_document_to_spaces(
     document = get_document_by_id(session, document_id, user_id)
     if not document:
         return False
-    
+
     for space_id in space_ids:
-        link_document_to_space(session, document_id, space_id, user_id)
-        
+        link = link_document_to_space(session, document_id, space_id, user_id)
+        if link is None:
+            logger.error(
+                "Impossible de lier le document %s à l'espace %s",
+                document_id,
+                space_id,
+            )
+            return False
+
         if document.processing_status == "completed":
             process_kag_for_document_space(session, document_id, space_id)
-    
+
     return True
 
 
@@ -769,6 +823,13 @@ def _process_document_for_id(document_id: int, file_path: str):
 
         run_embeddings_sync: bool = False
 
+        if _should_abort_processing(document_id):
+            logger.info(
+                "Traitement annulé avant démarrage effectif pour document %d",
+                document_id,
+            )
+            return
+
         with Session(engine) as session:
             document = session.get(Document, document_id)
             if not document:
@@ -807,6 +868,13 @@ def _process_document_for_id(document_id: int, file_path: str):
                 session.add(document)
                 session.commit()
                 logger.error("Échec du traitement du document %d", document_id)
+                return
+
+            if _should_abort_processing(document_id):
+                logger.info(
+                    "Traitement annulé après extraction pour document %d",
+                    document_id,
+                )
                 return
 
             output_ext = Path(pdf_input_path).suffix.lower() or ".bin"
@@ -850,6 +918,13 @@ def _process_document_for_id(document_id: int, file_path: str):
                     logger.info("%d image(s) extraite(s) pour le document %d", len(images_info), document_id)
 
             try:
+                if _should_abort_processing(document_id):
+                    logger.info(
+                        "Traitement annulé avant création des chunks pour document %d",
+                        document_id,
+                    )
+                    return
+
                 if llama_docs:
                     chunks = create_chunks_for_document_from_docling(session, document, llama_docs, generate_embeddings=False)
                     logger.info("Créé %d chunks (DoclingNodeParser) pour le document %d", len(chunks), document_id)
@@ -885,6 +960,12 @@ def _process_document_for_id(document_id: int, file_path: str):
                 run_embeddings_sync = False
 
         if run_embeddings_sync:
+            if _should_abort_processing(document_id):
+                logger.info(
+                    "Traitement annulé avant embeddings/KAG pour document %d",
+                    document_id,
+                )
+                return
             complete_document_embeddings_and_kag_sync(document_id)
 
     except Exception as e:
@@ -901,6 +982,14 @@ def _process_document_for_id(document_id: int, file_path: str):
                     session.commit()
         except Exception as update_error:
             logger.error("Erreur lors de la mise à jour du statut d'erreur pour le document %d: %s", document_id, update_error)
+    finally:
+        # Nettoyage défensif: si le document n'existe plus, on retire l'annulation.
+        try:
+            with Session(engine) as session:
+                if session.get(Document, document_id) is None:
+                    _clear_document_processing_cancelled(document_id)
+        except Exception:
+            pass
 
 
 def process_document_async(document_id: int, file_path: str):

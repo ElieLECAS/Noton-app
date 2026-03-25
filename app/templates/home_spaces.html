@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Accueil - {{ app_name }}{% endblock %}
+{% block content %}
+<div class="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Choisissez un espace</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Commencez par un espace, ou allez dans la bibliothèque générale depuis la sidebar.</p>
+            </div>
+            <button
+                onclick="openCreateSpaceModal()"
+                class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+            >
+                <i class="ti ti-plus"></i> Nouvel espace
+            </button>
+        </div>
+
+        <div id="spaces-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6 justify-items-start">
+            <!-- Tuiles des espaces -->
+        </div>
+    </div>
+</div>
+
+<div id="space-modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Nouvel espace</h3>
+        <form id="space-form" class="space-y-4">
+            <input id="space-name" type="text" placeholder="Ex: Interne, Client A..." required class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" />
+            <textarea id="space-description" placeholder="Description (optionnelle)" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent"></textarea>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeCreateSpaceModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600">Annuler</button>
+                <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Créer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let spaces = [];
+
+async function api(url, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  const resp = await fetch(url, { ...options, headers, credentials: "include" });
+  if (resp.status === 401) { location.href = "/login"; }
+  return resp;
+}
+
+function openCreateSpaceModal(){ document.getElementById("space-modal").classList.remove("hidden"); }
+function closeCreateSpaceModal(){ document.getElementById("space-modal").classList.add("hidden"); document.getElementById("space-form").reset(); }
+
+function renderSpacesGrid() {
+  const host = document.getElementById("spaces-grid");
+  if (!host) return;
+
+  if (!spaces.length) {
+    host.innerHTML = `
+      <div class="col-span-full text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+        <i class="ti ti-layout-grid text-5xl text-gray-300 dark:text-gray-600 mb-3"></i>
+        <p class="text-gray-600 dark:text-gray-300 font-medium">Aucun espace pour le moment</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Créez un premier espace pour commencer.</p>
+      </div>
+    `;
+    return;
+  }
+
+  host.innerHTML = spaces.map((s) => `
+    <a
+      href="/spaces/${s.id}"
+      class="group block w-full max-w-[26rem] aspect-square bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 sm:p-6 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+    >
+      <div class="h-full flex flex-col justify-between gap-3">
+        <div class="min-w-0">
+          <div class="flex items-start justify-between gap-3">
+            <h3 class="font-semibold text-xl text-gray-900 dark:text-gray-100 truncate">${escapeHtml(s.name)}</h3>
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300">
+              <i class="ti ti-layout-grid"></i>
+            </span>
+          </div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-3">${escapeHtml(s.description || "Aucune description")}</p>
+        </div>
+        <div class="flex justify-end">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-200 dark:border-gray-600 text-gray-400 group-hover:text-blue-500 group-hover:border-blue-300 dark:group-hover:border-blue-500 transition-colors">
+            <i class="ti ti-arrow-right"></i>
+          </span>
+        </div>
+      </div>
+    </a>
+  `).join("");
+}
+
+async function loadSpaces() {
+  const r = await api("/api/spaces");
+  if (!r.ok) return;
+  spaces = await r.json();
+
+  const sidebarHost = document.getElementById("spaces-list");
+  if (sidebarHost) {
+    sidebarHost.innerHTML = spaces.length
+      ? spaces.map(s => `
+          <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <i class="ti ti-circle-dot text-xs text-gray-400"></i>
+            <a href="/spaces/${s.id}" class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1 hover:underline">${escapeHtml(s.name)}</a>
+          </div>
+        `).join("")
+      : `<div class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400">Aucun espace</div>`;
+  }
+
+  renderSpacesGrid();
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+document.getElementById("space-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById("space-name").value.trim();
+  const description = document.getElementById("space-description").value.trim();
+  if (!name) return;
+
+  const r = await api("/api/spaces", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, description: description || null })
+  });
+
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de créer l'espace.");
+  }
+
+  closeCreateSpaceModal();
+  await loadSpaces();
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadSpaces();
+});
+</script>
+{% endblock %}

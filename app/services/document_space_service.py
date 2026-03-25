@@ -17,28 +17,26 @@ def link_document_to_space(
 ) -> Optional[DocumentSpace]:
     """
     Lie un document à un espace.
-    Vérifie que l'utilisateur possède à la fois le document et l'espace.
+    Vérifie que le document et l'espace existent.
     """
     document = session.exec(
         select(Document).where(
-            Document.id == document_id,
-            Document.user_id == user_id
+            Document.id == document_id
         )
     ).first()
     
     if not document:
-        logger.error(f"Document {document_id} non trouvé ou n'appartient pas à l'utilisateur {user_id}")
+        logger.error(f"Document {document_id} non trouvé")
         return None
     
     space = session.exec(
         select(Space).where(
-            Space.id == space_id,
-            Space.user_id == user_id
+            Space.id == space_id
         )
     ).first()
     
     if not space:
-        logger.error(f"Espace {space_id} non trouvé ou n'appartient pas à l'utilisateur {user_id}")
+        logger.error(f"Espace {space_id} non trouvé")
         return None
     
     existing = session.exec(
@@ -80,8 +78,7 @@ def unlink_document_from_space(
     doc_space = session.exec(
         select(DocumentSpace).where(
             DocumentSpace.document_id == document_id,
-            DocumentSpace.space_id == space_id,
-            DocumentSpace.user_id == user_id
+            DocumentSpace.space_id == space_id
         )
     ).first()
     
@@ -105,8 +102,7 @@ def get_spaces_for_document(
 ) -> List[Space]:
     """Récupère tous les espaces ayant accès à un document."""
     statement = select(Space).join(DocumentSpace).where(
-        DocumentSpace.document_id == document_id,
-        Space.user_id == user_id
+        DocumentSpace.document_id == document_id
     ).order_by(Space.name)
     
     return list(session.exec(statement).all())
@@ -119,8 +115,7 @@ def get_documents_for_space(
 ) -> List[Document]:
     """Récupère tous les documents accessibles dans un espace."""
     statement = select(Document).join(DocumentSpace).where(
-        DocumentSpace.space_id == space_id,
-        Document.user_id == user_id
+        DocumentSpace.space_id == space_id
     ).order_by(Document.created_at.desc())
     
     return list(session.exec(statement).all())
@@ -133,7 +128,6 @@ def get_document_spaces(
 ) -> List[DocumentSpace]:
     """Récupère toutes les associations espace pour un document."""
     statement = select(DocumentSpace).where(
-        DocumentSpace.document_id == document_id,
-        DocumentSpace.user_id == user_id
+        DocumentSpace.document_id == document_id
     )
     return list(session.exec(statement).all())

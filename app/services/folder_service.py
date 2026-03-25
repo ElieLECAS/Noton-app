@@ -177,8 +177,7 @@ def delete_folder(session: Session, folder_id: int, user_id: int) -> bool:
     
     documents = session.exec(
         select(Document).where(
-            Document.folder_id == folder_id,
-            Document.user_id == user_id
+            Document.folder_id == folder_id
         )
     ).all()
     

@@ -123,10 +123,10 @@ async def startup_event():
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request, session: Session = Depends(get_session)):
-    """Page d'accueil bibliothèque."""
+    """Page d'accueil (choix des espaces)."""
     if _redirect_if_unauthenticated(request, session):
         return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("library.html", {"request": request})
+    return templates.TemplateResponse("home_spaces.html", {"request": request})
 
 
 @app.get("/login", response_class=HTMLResponse)
