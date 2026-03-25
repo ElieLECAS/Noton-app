@@ -10,7 +10,7 @@ from app.models.document import DocumentRead, DocumentListItem, DocumentCreate, 
 from app.models.folder import Folder
 from app.models.space import SpaceRead
 from app.models.user import UserRead
-from app.routers.auth import get_current_user
+from app.routers.auth import get_current_user, require_permission
 from app.services.library_service import get_or_create_user_library, get_library_stats
 from app.services.folder_service import (
     create_folder, get_folder_by_id, get_folders_by_parent,
@@ -81,7 +81,7 @@ async def list_root_folders(
 @router.post("/folders", response_model=FolderRead, status_code=status.HTTP_201_CREATED)
 async def create_new_folder(
     folder_create: FolderCreate,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Crée un nouveau dossier."""
@@ -121,7 +121,7 @@ async def get_folder_breadcrumb(
 async def update_folder(
     folder_id: int,
     folder_update: FolderUpdate,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Renomme un dossier."""
@@ -138,7 +138,7 @@ async def update_folder(
 async def move_folder_to_parent(
     folder_id: int,
     new_parent_id: Optional[int] = None,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Déplace un dossier vers un nouveau parent."""
@@ -154,7 +154,7 @@ async def move_folder_to_parent(
 @router.delete("/folders/{folder_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_folder_recursive(
     folder_id: int,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Supprime un dossier et tout son contenu (récursif)."""
@@ -205,7 +205,7 @@ async def get_document(
 async def update_library_document(
     document_id: int,
     document_update: DocumentUpdate,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Met à jour les métadonnées d'un document."""
@@ -268,7 +268,7 @@ async def upload_documents(
     space_ids: str = Form("[]"),
     is_paid: bool = Form(False),
     folder_id: Optional[int] = Form(None),
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """
@@ -384,7 +384,7 @@ async def list_document_spaces(
 async def manage_document_spaces(
     document_id: int,
     payload: DocumentSpacesManageRequest,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Ajoute ou retire un document de plusieurs espaces."""
@@ -418,7 +418,7 @@ async def manage_document_spaces(
 async def move_document_to_folder(
     document_id: int,
     new_folder_id: Optional[int] = None,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Déplace un document vers un nouveau dossier."""
@@ -434,7 +434,7 @@ async def move_document_to_folder(
 @router.delete("/documents/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_library_document(
     document_id: int,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """Supprime un document de la bibliothèque et ses données associées."""

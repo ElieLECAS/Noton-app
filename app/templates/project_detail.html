@@ -517,6 +517,7 @@ extra_head %}
                 <span id="project-chatbot-toggle-text" class="text-sm sm:text-base">Parler à LIA</span>
             </button>
             <button
+                id="project-create-note-btn"
                 onclick="showCreateNoteModal()"
                 class="px-4 sm:px-5 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-xl hover:bg-blue-700 dark:hover:bg-blue-600 flex items-center gap-2 text-sm sm:text-base font-medium shadow-sm hover:shadow transition-shadow"
             >
@@ -525,6 +526,7 @@ extra_head %}
                 <span class="sm:hidden">Note</span>
             </button>
             <button
+                id="project-upload-document-btn"
                 onclick="showUploadDocumentModal()"
                 class="px-4 sm:px-5 py-2.5 bg-green-600 dark:bg-green-500 text-white rounded-xl hover:bg-green-700 dark:hover:bg-green-600 flex items-center gap-2 text-sm sm:text-base font-medium shadow-sm hover:shadow transition-shadow"
             >
@@ -832,7 +834,7 @@ extra_head %}
                         name="files"
                         multiple
                         required
-                        accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.txt,.md,.jpg,.jpeg,.png,.csv"
+                        accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.odt,.ods,.odp,.txt,.md,.jpg,.jpeg,.png,.csv"
                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -1022,6 +1024,35 @@ extra_head %}
         let projectChatHistory = [];
         let projectChatbotOpen = false; // Par défaut fermé sur la page projet
         let projectConversationsManager; // Gestionnaire de conversations du projet
+        let canLibraryWrite = false;
+
+        async function initProjectPermissions() {
+            try {
+                // `currentUser` est chargé par `base.html` via `/api/auth/me`.
+                if (!currentUser || !currentUser.permissions) {
+                    const r = await apiCall("/api/auth/me");
+                    if (r && r.ok) currentUser = await r.json();
+                }
+
+                const perms = currentUser?.permissions || [];
+                canLibraryWrite = perms.includes("library.write");
+            } catch (_) {
+                canLibraryWrite = false;
+            }
+
+            // Masquer création/upload quand on n'a pas `library.write`.
+            const createBtn = document.getElementById("project-create-note-btn");
+            if (createBtn) createBtn.classList.toggle("hidden", !canLibraryWrite);
+            const uploadBtn = document.getElementById("project-upload-document-btn");
+            if (uploadBtn)
+                uploadBtn.classList.toggle("hidden", !canLibraryWrite);
+
+            // Masquer les liens d'édition dans les modales.
+            const editLink = document.getElementById("source-preview-edit-link");
+            if (editLink) editLink.classList.toggle("hidden", !canLibraryWrite);
+            const pdfFull = document.getElementById("pdf-modal-fullpage-link");
+            if (pdfFull) pdfFull.classList.toggle("hidden", !canLibraryWrite);
+        }
 
         // Configuration de marked.js pour un meilleur rendu Markdown
         marked.setOptions({
@@ -1566,7 +1597,7 @@ extra_head %}
                                 }
                                 <span class="embedding-status-icon flex-shrink-0">${statusIcon}</span>
                             </div>
-                            <div class="flex items-center gap-2 flex-shrink-0" onclick="event.stopPropagation()">
+                            <div class="flex items-center gap-2 flex-shrink-0 requires-library-write" onclick="event.stopPropagation()">
                                 <button 
                                     onclick="event.stopPropagation(); window.location.href='/notes/${
                                         note.id
@@ -1616,6 +1647,13 @@ extra_head %}
                     `;
                         })
                         .join("");
+
+                    // Si lecture seule: retirer les icônes d'édition/suppression des cartes
+                    if (!canLibraryWrite) {
+                        container
+                            .querySelectorAll(".requires-library-write")
+                            .forEach((el) => el.remove());
+                    }
 
                     // Ensuite, vérifier les statuts d'embedding pour toutes les notes et mettre à jour les icônes
                     const statusPromises = notes.map((note) =>
@@ -2795,10 +2833,12 @@ extra_head %}
         });
 
         // Initialisation
-        loadProject();
-        loadNotes().then(() => {
-            // Démarrer le polling après le chargement initial
-            startEmbeddingStatusPolling();
+        initProjectPermissions().finally(() => {
+            loadProject();
+            loadNotes().then(() => {
+                // Démarrer le polling après le chargement initial
+                startEmbeddingStatusPolling();
+            });
         });
         // Les modèles sont maintenant gérés par les presets, pas besoin de charger
 

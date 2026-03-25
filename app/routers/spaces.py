@@ -148,7 +148,7 @@ async def get_space_kag_graph(
 @router.post("/{space_id}/kag/rebuild", status_code=status.HTTP_202_ACCEPTED)
 async def rebuild_space_kag(
     space_id: int,
-    current_user: UserRead = Depends(get_current_user),
+    current_user: UserRead = Depends(require_permission("space.update")),
     session: Session = Depends(get_session)
 ):
     """Reconstruit le KAG d'un espace."""

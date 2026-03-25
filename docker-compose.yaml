@@ -46,6 +46,11 @@ services:
             - OPENAI_MODEL=${OPENAI_MODEL}
             - BRAVE_SEARCH_API_KEY=${BRAVE_SEARCH_API_KEY:-}
             - MODEL_FAST=${MODEL_FAST:-mistral-small-latest}
+            - MAX_COMPLETION_TOKENS=${MAX_COMPLETION_TOKENS:-1024}
+            - SPACE_CHAT_MAX_TOKENS=${SPACE_CHAT_MAX_TOKENS:-}
+            - SPACE_CHAT_TEMPERATURE=${SPACE_CHAT_TEMPERATURE:-0.55}
+            - SPACE_CHAT_TOP_P=${SPACE_CHAT_TOP_P:-}
+            - SPACE_CHAT_SYSTEM_PROMPT=${SPACE_CHAT_SYSTEM_PROMPT:-}
             # Optimisations CPU pour Docling/EasyOCR
             - DOCLING_CPU_ONLY=${DOCLING_CPU_ONLY:-true}
             - DOCLING_OCR_ENABLED=${DOCLING_OCR_ENABLED:-true}

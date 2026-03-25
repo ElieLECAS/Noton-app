@@ -6,10 +6,10 @@
         <div class="flex items-center justify-between">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Bibliothèque générale</h1>
             <div class="flex gap-2">
-                <button onclick="openFolderModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">
+                <button id="library-create-folder-btn" onclick="openFolderModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">
                     <i class="ti ti-folder-plus"></i> Dossier
                 </button>
-                <button onclick="openUploadModal()" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
+                <button id="library-upload-btn" onclick="openUploadModal()" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
                     <i class="ti ti-upload"></i> Upload
                 </button>
             </div>
@@ -20,13 +20,14 @@
                 <div class="flex items-center justify-between mb-3">
                     <h2 class="font-semibold text-gray-900 dark:text-gray-100">Dossiers</h2>
                     <button
+                        id="library-create-folder-btn-sidebar"
                         onclick="openFolderModal()"
                         class="text-xs px-2 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                         <i class="ti ti-folder-plus"></i> Nouveau
                     </button>
                 </div>
-                <div id="folders-list" class="space-y-2 text-sm"></div>
+                <div id="folders-list" class="space-y-2 text-sm text-gray-700 dark:text-gray-200"></div>
             </section>
 
             <section id="document-drop-zone" class="relative lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-auto transition-colors">
@@ -34,6 +35,7 @@
                     <h2 class="font-semibold text-gray-900 dark:text-gray-100">Documents</h2>
                     <span id="docs-count" class="text-sm text-gray-500"></span>
                 </div>
+                <div id="folder-current-path" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></div>
                 <div id="drop-hint" class="pointer-events-none absolute inset-0 flex items-center justify-center px-6">
                     <div class="text-center text-gray-400 dark:text-gray-500">
                         <div class="mb-2">
@@ -61,7 +63,14 @@
         <form id="upload-form" class="space-y-4">
             <div>
                 <label class="block text-sm mb-1 text-gray-700 dark:text-gray-300">Fichiers</label>
-                <input id="upload-files" type="file" multiple class="w-full text-sm" required />
+                <input
+                    id="upload-files"
+                    type="file"
+                    multiple
+                    class="w-full text-sm"
+                    required
+                    accept=".pdf,.docx,.xlsx,.pptx,.doc,.xls,.ppt,.odt,.ods,.odp,.txt,.md,.jpg,.jpeg,.png,.csv"
+                />
             </div>
             <div>
                 <label class="block text-sm mb-1 text-gray-700 dark:text-gray-300">Espaces accessibles</label>
@@ -81,7 +90,7 @@
 
 <div id="folder-modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Nouveau sous-dossier</h3>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Nouveau dossier (racine)</h3>
         <form id="folder-form" class="space-y-4">
             <input id="folder-name" type="text" placeholder="Nom du dossier" required class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" />
             <div class="flex justify-end gap-2">
@@ -139,12 +148,44 @@ let spaces = [];
 let droppedUploadFiles = null;
 let dragDepth = 0;
 let draggedDocumentId = null;
+let canLibraryWrite = false;
+let canSpaceUpdate = false;
+let canSpaceDelete = false;
 
 async function api(url, options = {}) {
   const headers = { ...(options.headers || {}) };
   const resp = await fetch(url, { ...options, headers, credentials: "include" });
   if (resp.status === 401) { location.href = "/login"; }
   return resp;
+}
+
+async function loadPermissions() {
+  // `currentUser` est injecté par `base.html` (appel à `/api/auth/me`).
+  if (!currentUser || !currentUser.permissions) {
+    const r = await api("/api/auth/me");
+    if (r.ok) {
+      currentUser = await r.json();
+    }
+  }
+
+  const perms = currentUser?.permissions || [];
+  canLibraryWrite = perms.includes("library.write");
+  canSpaceUpdate = perms.includes("space.update");
+  canSpaceDelete = perms.includes("space.delete");
+}
+
+function applyPermissionUI() {
+  // Masquer les actions de création/upload si pas de droit.
+  const folderBtnTop = document.getElementById("library-create-folder-btn");
+  const folderBtnSidebar = document.getElementById("library-create-folder-btn-sidebar");
+  const uploadBtn = document.getElementById("library-upload-btn");
+  if (folderBtnTop) folderBtnTop.classList.toggle("hidden", !canLibraryWrite);
+  if (folderBtnSidebar) folderBtnSidebar.classList.toggle("hidden", !canLibraryWrite);
+  if (uploadBtn) uploadBtn.classList.toggle("hidden", !canLibraryWrite);
+
+  // Masquer l'indication visuelle "upload" (icône) quand on est en lecture seule.
+  const dropHint = document.getElementById("drop-hint");
+  if (dropHint) dropHint.classList.toggle("hidden", !canLibraryWrite);
 }
 
 async function loadSpaces() {
@@ -159,20 +200,32 @@ async function loadSpaces() {
           <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
             <i class="ti ti-circle-dot text-xs text-gray-400"></i>
             <a href="/spaces/${s.id}" class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1 hover:underline">${s.name}</a>
-            <button
-              class="opacity-0 group-hover:opacity-100 text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-opacity"
-              onclick="event.stopPropagation(); editSpace(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}', '${(s.description || '').replace(/'/g, "\\'")}')"
-              title="Modifier l'espace"
-            >
-              <i class="ti ti-pencil text-sm"></i>
-            </button>
-            <button
-              class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity"
-              onclick="event.stopPropagation(); deleteSpace(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}')"
-              title="Supprimer l'espace"
-            >
-              <i class="ti ti-trash text-sm"></i>
-            </button>
+            ${
+              canSpaceUpdate
+                ? `
+                  <button
+                    class="opacity-0 group-hover:opacity-100 text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-opacity"
+                    onclick="event.stopPropagation(); editSpace(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}', '${(s.description || '').replace(/'/g, "\\'")}')"
+                    title="Modifier l'espace"
+                  >
+                    <i class="ti ti-pencil text-sm"></i>
+                  </button>
+                `
+                : ``
+            }
+            ${
+              canSpaceDelete
+                ? `
+                  <button
+                    class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity"
+                    onclick="event.stopPropagation(); deleteSpace(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}')"
+                    title="Supprimer l'espace"
+                  >
+                    <i class="ti ti-trash text-sm"></i>
+                  </button>
+                `
+                : ``
+            }
           </div>
         `).join("")
       : `<div class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400">Aucun espace</div>`;
@@ -193,27 +246,74 @@ async function loadFolders() {
   const folders = await r.json();
   const host = document.getElementById("folders-list");
   host.innerHTML = `
-    <button
-      class="w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedFolderId===null?'bg-gray-100 dark:bg-gray-700':''}"
+    <div
+      class="folder-item w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 ${selectedFolderId===null?'bg-gray-100 dark:bg-gray-700':''} flex items-center justify-between gap-2"
       onclick="selectFolder(null)"
       ondragover="handleFolderDragOver(event)"
       ondragleave="handleFolderDragLeave(event)"
       ondrop="handleFolderDrop(event, null)"
     >
-      <i class="ti ti-home-2"></i> Racine
-    </button>
+      <div class="flex items-center gap-2 min-w-0">
+        <i class="ti ti-home-2"></i> <span>Racine</span>
+      </div>
+    </div>
     ${folders.map(f => `
-      <button
-        class="w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${selectedFolderId===f.id?'bg-gray-100 dark:bg-gray-700':''}"
+      <div
+        class="folder-item w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 ${selectedFolderId===f.id?'bg-gray-100 dark:bg-gray-700':''} flex items-center justify-between gap-2"
         onclick="selectFolder(${f.id})"
         ondragover="handleFolderDragOver(event)"
         ondragleave="handleFolderDragLeave(event)"
         ondrop="handleFolderDrop(event, ${f.id})"
       >
-        <i class="ti ti-folder"></i> ${f.name}
-      </button>
+        <div class="flex items-center gap-2 min-w-0">
+          <i class="ti ti-folder"></i>
+          <span class="truncate">${f.name}</span>
+        </div>
+        ${
+          canLibraryWrite
+            ? `
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs"
+                  onclick="event.stopPropagation(); renameFolder(${f.id}, '${(f.name || '').replace(/'/g, "\\'")}')"
+                  title="Renommer"
+                >
+                  <i class="ti ti-pencil"></i>
+                </button>
+                <button
+                  type="button"
+                  class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs"
+                  onclick="event.stopPropagation(); deleteFolder(${f.id}, '${(f.name || '').replace(/'/g, "\\'")}')"
+                  title="Supprimer"
+                >
+                  <i class="ti ti-trash"></i>
+                </button>
+              </div>
+            `
+            : ``
+        }
+      </div>
     `).join("")}
   `;
+}
+
+async function loadFolderContext() {
+  const host = document.getElementById("folder-current-path");
+  if (!host) return;
+
+  if (selectedFolderId === null) {
+    host.textContent = "Dans: Racine";
+    return;
+  }
+
+  const r = await api(`/api/library/folders/${selectedFolderId}/path`);
+  if (!r.ok) {
+    host.textContent = "Dans: (dossier introuvable)";
+    return;
+  }
+  const path = await r.json();
+  host.textContent = `Dans: ${path.map(p => p.name).join(" / ")}`;
 }
 
 async function loadDocuments() {
@@ -238,15 +338,21 @@ async function loadDocuments() {
       </div>
       <div class="flex items-center gap-3">
         <button class="text-blue-600 text-sm" onclick="openDocumentFile(${d.id})">Ouvrir</button>
-        <button class="text-gray-700 dark:text-gray-300 text-sm" onclick="openEditDocumentModal(${d.id})">Modifier</button>
-        <button class="text-red-600 text-sm" onclick="deleteDocument(${d.id}, '${(d.title || '').replace(/'/g, "\\'")}')">Supprimer</button>
+        ${
+          canLibraryWrite
+            ? `
+              <button class="text-gray-700 dark:text-gray-300 text-sm" onclick="openEditDocumentModal(${d.id})">Modifier</button>
+              <button class="text-red-600 text-sm" onclick="deleteDocument(${d.id}, '${(d.title || '').replace(/'/g, "\\'")}')">Supprimer</button>
+            `
+            : ``
+        }
       </div>
     </div>
   `).join("");
   const dropHint = document.getElementById("drop-hint");
   if (dropHint) {
     // Afficher l'aide visuelle surtout quand la liste est vide
-    dropHint.classList.toggle("hidden", docs.length > 0);
+    dropHint.classList.toggle("hidden", !canLibraryWrite || docs.length > 0);
   }
 }
 
@@ -281,6 +387,7 @@ function selectFolder(id) {
   selectedFolderId = id;
   loadFolders();
   loadDocuments();
+  loadFolderContext();
 }
 
 function handleDocumentDragStart(event, documentId) {
@@ -308,9 +415,42 @@ function handleFolderDragLeave(event) {
 }
 
 function clearFolderDragHighlights() {
-  document.querySelectorAll("#folders-list button").forEach((button) => {
-    button.classList.remove("ring-2", "ring-blue-400");
+  document.querySelectorAll("#folders-list .folder-item").forEach((el) => {
+    el.classList.remove("ring-2", "ring-blue-400");
   });
+}
+
+async function renameFolder(folderId, currentName) {
+  const newName = prompt("Nouveau nom de dossier :", currentName || "");
+  if (newName === null) return;
+  const name = newName.trim();
+  if (!name) return alert("Le nom du dossier est requis.");
+
+  const r = await api(`/api/library/folders/${folderId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de renommer le dossier.");
+  }
+
+  await Promise.all([loadFolders(), loadDocuments(), loadFolderContext()]);
+}
+
+async function deleteFolder(folderId, folderName) {
+  const ok = confirm(`Supprimer le dossier "${folderName}" ?\n\nCette action supprime aussi ses sous-dossiers et les documents associés.`);
+  if (!ok) return;
+
+  const r = await api(`/api/library/folders/${folderId}`, { method: "DELETE" });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    return alert(err.detail || "Impossible de supprimer le dossier.");
+  }
+
+  if (selectedFolderId === folderId) selectedFolderId = null;
+  await Promise.all([loadFolders(), loadDocuments(), loadFolderContext()]);
 }
 
 async function moveDocumentToFolder(documentId, folderId) {
@@ -435,9 +575,17 @@ document.getElementById("folder-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("folder-name").value.trim();
   if (!name) return;
-  const payload = { name, parent_folder_id: selectedFolderId };
+  // UX: la page "Bibliothèque générale" n'affiche que les dossiers racines.
+  // On crée donc toujours un dossier racine pour qu'il apparaisse immédiatement.
+  const payload = { name, parent_folder_id: null };
   const r = await api("/api/library/folders", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-  if (r.ok) { closeFolderModal(); await loadFolders(); }
+  if (r.ok) {
+    closeFolderModal();
+    await loadFolders();
+    return;
+  }
+  const err = await r.json().catch(() => ({}));
+  alert(err.detail || "Impossible de créer le dossier.");
 });
 
 document.getElementById("upload-form").addEventListener("submit", async (e) => {
@@ -614,10 +762,13 @@ document.getElementById("edit-document-form").addEventListener("submit", async (
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
+  await loadPermissions();
+  applyPermissionUI();
   await loadSpaces();
   await loadFolders();
   await loadDocuments();
-  setupDragAndDropUpload();
+  await loadFolderContext();
+  if (canLibraryWrite) setupDragAndDropUpload();
 });
 </script>
 {% endblock %}

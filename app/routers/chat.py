@@ -31,6 +31,18 @@ logger = logging.getLogger(__name__)
 
 # Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K)
 RAG_TOP_K = int(os.getenv("RAG_TOP_K", "1"))
+# Paramétrage en dur du chat "espaces"
+SPACE_CHAT_MAX_TOKENS = 900
+SPACE_CHAT_TEMPERATURE = 0.55
+SPACE_CHAT_TOP_P = None
+SPACE_CHAT_SYSTEM_PROMPT = (
+    "Tu es LIA, assistant conversationnel menuiserie pour collaborateurs et clients. "
+    "Reponds en francais avec un ton humain, professionnel et chaleureux. "
+    "Base-toi uniquement sur les passages fournis. "
+    "Si une information manque, dis-le clairement sans inventer. "
+    "Evite les tableaux sauf demande explicite. "
+    "Termine par une question utile pour avancer."
+)
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
@@ -195,44 +207,7 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
     """
     system_message = {
         "role": "system",
-        "content": (
-            "Tu es LIA. Réponds uniquement à partir des passages ci-dessous (RAG + KAG). "
-            "Règles : bref et précis ; indique si une info est absente ; "
-            "en cas de conflit, cite les deux sources. "
-            "Format : tableaux Markdown pour valeurs techniques ; citations [1], [2] pour les affirmations."
-        ),
-    }
-
-    if passages:
-        system_message["content"] += "\n\nPASSAGES :\n\n"
-        passages_content = []
-        for i, passage_data in enumerate(passages, 1):
-            passage = passage_data['passage']
-            score = passage_data.get('score', 0.0)
-            document_title = passage_data.get('document_title', 'Document sans titre')
-            passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
-            passages_content.append(passage_text)
-        system_message["content"] += "\n---\n".join(passages_content)
-        system_message["content"] += f"\n\n({len(passages)} passages.)"
-    else:
-        system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
-
-    return system_message
-
-
-def build_space_context_from_passages(passages: List[dict]) -> dict:
-    """
-    Construit le contexte système à partir des passages RAG + KAG rerankés.
-    Format unifié pour le LLM (comme build_semantic_context_from_passages).
-    """
-    system_message = {
-        "role": "system",
-        "content": (
-            "Tu es LIA. Réponds uniquement à partir des passages ci-dessous (RAG + KAG). "
-            "Règles : bref et précis ; indique si une info est absente ; "
-            "en cas de conflit, cite les deux sources. "
-            "Format : tableaux Markdown pour valeurs techniques ; citations [1], [2] pour les affirmations."
-        ),
+        "content": SPACE_CHAT_SYSTEM_PROMPT,
     }
 
     if passages:
@@ -528,7 +503,14 @@ async def stream_space_chat_message(
             if not settings.MISTRAL_API_KEY:
                 yield f"data: {json.dumps({'error': 'Mistral API key non configurée'})}\n\n"
                 return
-            async for raw_chunk in mistral_chat_stream("", forced_model, full_context):
+            async for raw_chunk in mistral_chat_stream(
+                "",
+                forced_model,
+                full_context,
+                max_tokens=SPACE_CHAT_MAX_TOKENS,
+                temperature=SPACE_CHAT_TEMPERATURE,
+                top_p=SPACE_CHAT_TOP_P,
+            ):
                 try:
                     parsed = json.loads(raw_chunk)
                 except json.JSONDecodeError:

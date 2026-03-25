@@ -163,7 +163,9 @@ def delete_folder(session: Session, folder_id: int, user_id: int) -> bool:
     Supprime un dossier et tout son contenu (récursif).
     Supprime également tous les documents du dossier et de ses sous-dossiers.
     """
-    from app.services.document_service import delete_document
+    # On utilise le service "new" qui gère aussi la suppression des chunks,
+    # des associations et des fichiers source.
+    from app.services.document_service_new import delete_document
     
     folder = get_folder_by_id(session, folder_id, user_id)
     if not folder:
