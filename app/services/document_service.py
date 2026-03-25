@@ -27,6 +27,7 @@ _document_workers_lock = threading.Lock()
 
 # DocumentConverter Docling partagé (singleton) — remplace DoclingReader
 _docling_converter = None
+_docling_converter_generic = None
 _docling_converter_lock = threading.Lock()
 
 # Configurer PyTorch pour CPU avant l'import de docling
@@ -107,7 +108,7 @@ except ImportError:
     )
 
 
-def get_docling_converter():
+def get_docling_converter(file_path: Optional[str] = None):
     """
     Récupère ou crée le DocumentConverter Docling partagé (singleton).
 
@@ -116,9 +117,38 @@ def get_docling_converter():
     - le markdown pour note.content (export_to_markdown)
     - le JSON sérialisé pour DoclingNodeParser (model_dump_json)
     """
-    global _docling_converter
+    global _docling_converter, _docling_converter_generic
 
     with _docling_converter_lock:
+        # Utiliser un convertisseur générique pour les formats non-PDF
+        # afin d'éviter de restreindre Docling aux seules options PDF.
+        suffix = Path(file_path).suffix.lower() if file_path else ""
+        use_generic_converter = suffix and suffix != ".pdf"
+
+        if use_generic_converter:
+            if _docling_converter_generic is None:
+                init_start = time.time()
+                logger.info(
+                    "Initialisation du DocumentConverter Docling (générique)..."
+                )
+                try:
+                    from docling.document_converter import DocumentConverter
+
+                    _docling_converter_generic = DocumentConverter()
+                    init_time = time.time() - init_start
+                    logger.info(
+                        "✅ DocumentConverter Docling générique initialisé en %.2fs",
+                        init_time,
+                    )
+                except Exception as e:
+                    logger.error(
+                        "Erreur lors de l'initialisation du DocumentConverter générique: %s",
+                        e,
+                        exc_info=True,
+                    )
+                    raise
+            return _docling_converter_generic
+
         if _docling_converter is None:
             init_start = time.time()
             logger.info(
@@ -248,8 +278,14 @@ def ensure_pdf_for_docling(file_path: str) -> str:
         ".xlsx",
     }
 
+    # Pour tout autre format (ex: EPUB), on laisse Docling gérer nativement.
     if suffix not in convertible_exts:
-        raise ValueError(f"Format non supporté pour conversion vers PDF: {suffix}")
+        logger.info(
+            "Format %s traité directement par Docling sans conversion PDF: %s",
+            suffix or "(sans extension)",
+            file_path,
+        )
+        return file_path
 
     import subprocess
 
@@ -323,7 +359,7 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Opt
             "Démarrage du traitement Docling: %s (%.2f MB)", file_path, file_size_mb
         )
 
-        converter = get_docling_converter()
+        converter = get_docling_converter(file_path)
 
         # Filtrer les messages de progression Docling
         import sys
@@ -417,10 +453,68 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Opt
         return markdown_content, llama_docs, docling_doc
 
     except Exception as e:
+        suffix = Path(file_path).suffix.lower()
+        if suffix == ".epub":
+            logger.warning(
+                "Docling n'a pas pu traiter l'EPUB (%s). Fallback extraction texte EPUB.",
+                e,
+            )
+            fallback_markdown = extract_text_from_epub(file_path)
+            if fallback_markdown:
+                logger.info(
+                    "✅ Fallback EPUB réussi: %d caractères extraits",
+                    len(fallback_markdown),
+                )
+                return fallback_markdown, None, None
+
         logger.error(
             "Erreur lors du traitement du document %s: %s", file_path, e, exc_info=True
         )
         return None, None, None
+
+
+def extract_text_from_epub(file_path: str) -> Optional[str]:
+    """
+    Extrait le texte brut d'un EPUB via stdlib (zip+xml/html), sans dépendance externe.
+    """
+    import re
+    import zipfile
+    from html import unescape
+
+    try:
+        chunks: list[str] = []
+        with zipfile.ZipFile(file_path, "r") as zf:
+            names = [
+                n for n in zf.namelist()
+                if n.lower().endswith((".xhtml", ".html", ".htm"))
+            ]
+            for name in sorted(names):
+                try:
+                    raw = zf.read(name)
+                    text = raw.decode("utf-8", errors="ignore")
+                except Exception:
+                    continue
+
+                # Retirer scripts/styles puis balises HTML.
+                text = re.sub(
+                    r"<(script|style)\b[^>]*>.*?</\1>",
+                    " ",
+                    text,
+                    flags=re.IGNORECASE | re.DOTALL,
+                )
+                text = re.sub(r"<[^>]+>", " ", text)
+                text = unescape(text)
+                text = re.sub(r"\s+", " ", text).strip()
+                if text:
+                    chunks.append(text)
+
+        if not chunks:
+            return None
+
+        return "\n\n".join(chunks)
+    except Exception as e:
+        logger.error("Fallback EPUB échoué pour %s: %s", file_path, e, exc_info=True)
+        return None
 
 
 def save_uploaded_file(
@@ -743,14 +837,15 @@ def _process_document_for_note(note_id: int, file_path: str):
                 logger.error("Échec du traitement du document pour la note %d", note_id)
                 return
 
-            permanent_pdf_path = Path(f"media/documents/{note_id}.pdf")
-            permanent_pdf_path.parent.mkdir(parents=True, exist_ok=True)
+            output_ext = Path(pdf_input_path).suffix.lower() or ".bin"
+            permanent_output_path = Path(f"media/documents/{note_id}{output_ext}")
+            permanent_output_path.parent.mkdir(parents=True, exist_ok=True)
 
             import shutil
 
             # Retenter proprement sur relances/erreurs précédentes
-            if permanent_pdf_path.exists():
-                permanent_pdf_path.unlink()
+            if permanent_output_path.exists():
+                permanent_output_path.unlink()
 
             # Si conversion effectuée, on conserve aussi l'original dans le dossier du document.
             if converted_to_pdf:
@@ -762,9 +857,12 @@ def _process_document_for_note(note_id: int, file_path: str):
                     original_permanent_path.unlink()
                 shutil.move(file_path, str(original_permanent_path))
 
-            shutil.move(pdf_input_path, str(permanent_pdf_path))
-            note.source_file_path = str(permanent_pdf_path)
-            logger.info("PDF déplacé vers chemin permanent: %s", permanent_pdf_path)
+            shutil.move(pdf_input_path, str(permanent_output_path))
+            note.source_file_path = str(permanent_output_path)
+            logger.info(
+                "Fichier traité déplacé vers chemin permanent: %s",
+                permanent_output_path,
+            )
             
             # Garder le markdown dans note.content pour le RAG (chunking, fallback, recherche).
             # L’UI affiche le PDF via source_file_path, pas le contenu éditable.
@@ -848,8 +946,8 @@ def _process_document_for_note(note_id: int, file_path: str):
                 session.add(note)
                 session.commit()
 
-            # Le fichier PDF est conservé de manière permanente dans media/documents/{note_id}.pdf
-            # pour permettre la visualisation native du PDF
+            # Le fichier traité est conservé de manière permanente dans media/documents/{note_id}{ext}
+            # (PDF converti ou format natif Docling selon le type d'entrée).
 
     except Exception as e:
         logger.error(
