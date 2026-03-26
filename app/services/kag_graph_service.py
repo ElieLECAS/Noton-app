@@ -9,7 +9,7 @@ import logging
 from datetime import datetime
 from typing import List, Dict, Optional, Set
 from sqlmodel import Session, select
-from sqlalchemy import func, delete
+from sqlalchemy import func, delete, text
 from app.models.knowledge_entity import KnowledgeEntity
 from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.note_chunk import NoteChunk
@@ -17,6 +17,7 @@ from app.models.note import Note
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
+from app.config import settings
 from app.services.kag_extraction_service import (
     normalize_entity_name,
     SUPPORTED_ENTITY_TYPE_IDS,
@@ -265,6 +266,7 @@ def get_chunks_by_entity_names(
 ) -> List[Dict]:
     """
     Récupère les chunks liés aux entités spécifiées.
+    Utilise matching exact puis fallback ILIKE partiel si peu de résultats.
     
     Args:
         session: Session SQLModel
@@ -285,6 +287,7 @@ def get_chunks_by_entity_names(
     if not normalized_names:
         return []
     
+    # Matching exact sur name_normalized
     statement = (
         select(
             NoteChunk,
@@ -298,15 +301,54 @@ def get_chunks_by_entity_names(
             KnowledgeEntity.project_id == project_id,
             KnowledgeEntity.name_normalized.in_(normalized_names),
             Note.user_id == user_id,
-            # Inclut les chunks parents enrichis (is_leaf=False) ET les leaves classiques.
-            # Les parents trouvés via KAG contiennent le résumé + questions de leur section
-            # et sont passés directement au LLM comme contexte de section.
         )
         .order_by(ChunkEntityRelation.relevance_score.desc())
         .limit(limit)
     )
     
-    results = session.exec(statement).all()
+    results = list(session.exec(statement).all())
+    
+    # Fallback ILIKE partiel si peu de résultats exacts
+    if len(results) < limit // 2 and normalized_names:
+        logger.debug(
+            "KAG retrieval (projet): fallback ILIKE (résultats exacts=%d)", 
+            len(results)
+        )
+        from sqlalchemy import or_
+        
+        # Limiter aux 5 premiers termes
+        ilike_terms = normalized_names[:5]
+        ilike_conditions = [
+            KnowledgeEntity.name_normalized.ilike(f"%{term}%") 
+            for term in ilike_terms
+        ]
+        
+        stmt_ilike = (
+            select(
+                NoteChunk,
+                KnowledgeEntity.name,
+                ChunkEntityRelation.relevance_score,
+            )
+            .join(ChunkEntityRelation, ChunkEntityRelation.chunk_id == NoteChunk.id)
+            .join(KnowledgeEntity, KnowledgeEntity.id == ChunkEntityRelation.entity_id)
+            .join(Note, Note.id == NoteChunk.note_id)
+            .where(
+                KnowledgeEntity.project_id == project_id,
+                or_(*ilike_conditions),
+                Note.user_id == user_id,
+            )
+            .order_by(ChunkEntityRelation.relevance_score.desc())
+            .limit(limit - len(results))
+        )
+        
+        ilike_results = list(session.exec(stmt_ilike).all())
+        
+        # Déduplication par chunk.id
+        existing_chunk_ids = {chunk.id for chunk, _, _ in results}
+        for chunk, entity_name, score in ilike_results:
+            if chunk.id not in existing_chunk_ids:
+                results.append((chunk, entity_name, score))
+                existing_chunk_ids.add(chunk.id)
     
     return [
         {
@@ -559,8 +601,13 @@ def _get_or_create_entity_for_space(
     entity_type: str,
     space_id: int,
 ) -> KnowledgeEntity:
-    """Version espace de get_or_create_entity (déduplication par space_id + name_normalized)."""
+    """
+    Version espace de get_or_create_entity (déduplication par space_id + name_normalized).
+    Résolution avancée par embedding si disponible.
+    """
     name_normalized = normalize_entity_name(name)
+    
+    # Déduplication par name_normalized exact
     statement = select(KnowledgeEntity).where(
         KnowledgeEntity.space_id == space_id,
         KnowledgeEntity.name_normalized == name_normalized,
@@ -572,6 +619,72 @@ def _get_or_create_entity_for_space(
         session.add(entity)
         return entity
 
+    # Résolution par embedding sémantique (cosine > 0.92)
+    try:
+        from app.services.embedding_service import generate_embeddings_batch
+        
+        entity_embeddings = generate_embeddings_batch([name], batch_size=1)
+        if entity_embeddings and entity_embeddings[0]:
+            new_entity_embedding = entity_embeddings[0]
+            embedding_str = "[" + ",".join(map(str, new_entity_embedding)) + "]"
+            
+            # Chercher entités existantes similaires (même type, même espace)
+            similar_query = text(f"""
+                SELECT id, name, name_normalized, mention_count,
+                       1 - (embedding <=> '{embedding_str}'::vector) AS similarity
+                FROM knowledgeentity
+                WHERE space_id = :space_id
+                  AND entity_type = :entity_type
+                  AND embedding IS NOT NULL
+                  AND 1 - (embedding <=> '{embedding_str}'::vector) > 0.92
+                ORDER BY similarity DESC
+                LIMIT 1
+            """)
+            
+            result = session.execute(
+                similar_query,
+                {"space_id": space_id, "entity_type": entity_type},
+            ).first()
+            
+            if result:
+                # Entité similaire trouvée → fusionner
+                existing_entity = session.get(KnowledgeEntity, result.id)
+                if existing_entity:
+                    existing_entity.mention_count += 1
+                    existing_entity.updated_at = datetime.utcnow()
+                    session.add(existing_entity)
+                    logger.debug(
+                        "Entité fusionnée (embedding): '%s' → '%s' (sim=%.3f)",
+                        name,
+                        existing_entity.name,
+                        result.similarity,
+                    )
+                    return existing_entity
+            
+            # Créer nouvelle entité avec embedding
+            entity = KnowledgeEntity(
+                name=name,
+                name_normalized=name_normalized,
+                entity_type=entity_type,
+                space_id=space_id,
+                mention_count=1,
+                embedding=new_entity_embedding,
+                created_at=datetime.utcnow(),
+                updated_at=datetime.utcnow(),
+            )
+            session.add(entity)
+            session.flush()
+            logger.debug("Nouvelle entité créée avec embedding: '%s'", name)
+            return entity
+    
+    except Exception as emb_err:
+        logger.warning(
+            "Erreur résolution embedding entité '%s': %s", 
+            name, 
+            emb_err,
+        )
+    
+    # Fallback: création sans embedding
     entity = KnowledgeEntity(
         name=name,
         name_normalized=name_normalized,
@@ -589,6 +702,7 @@ def _get_or_create_entity_for_space(
 def process_kag_for_document_space(session: Session, document_id: int, space_id: int) -> Dict[str, int]:
     """
     Extrait et sauvegarde les entités KAG pour un document dans un espace donné.
+    Enrichit aussi les chunks parents avec summary+questions+embedding.
     """
     document = session.get(Document, document_id)
     if not document:
@@ -667,6 +781,11 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
                 total_relations += 1
 
     session.commit()
+    
+    # Enrichissement des parents avec summary+questions+embedding si activé
+    if settings.KAG_PARENT_ENRICHMENT_ENABLED:
+        _process_parent_enrichment_for_document_space(session, document_id, space_id)
+
     logger.info(
         "✅ KAG document-space terminé document_id=%s space_id=%s chunks=%s entités=%s relations=%s",
         document_id,
@@ -891,3 +1010,137 @@ def rebuild_kag_for_space(session: Session, space_id: int) -> Dict[str, int]:
         "entities_extracted": total_entities,
         "relations_created": total_relations,
     }
+
+
+def _process_parent_enrichment_for_document_space(
+    session: Session, document_id: int, space_id: int
+):
+    """
+    Enrichit les chunks parents (is_leaf=False) d'un document avec summary+questions+embedding.
+    
+    Génère via LLM puis embedde le texte combiné pour créer un signal sémantique
+    représentant l'intention de la section (utilisable lors du retrieval).
+    """
+    try:
+        from app.services.kag_extraction_service import (
+            generate_parent_summary_questions_sync,
+            extract_entities_sync,
+        )
+        from app.services.embedding_service import generate_embeddings_batch
+
+        statement = select(DocumentChunk).where(
+            DocumentChunk.document_id == document_id,
+            DocumentChunk.is_leaf == False,
+        )
+        parent_chunks = list(session.exec(statement).all())
+
+        if not parent_chunks:
+            logger.debug(
+                "Aucun chunk parent pour enrichissement document_id=%s",
+                document_id,
+            )
+            return
+
+        logger.info(
+            "Démarrage enrichissement parents document_id=%s: %d parents",
+            document_id,
+            len(parent_chunks),
+        )
+
+        total_parents_enriched = 0
+        total_parent_entities = 0
+        total_parent_relations = 0
+
+        for chunk in parent_chunks:
+            if not chunk.content or len(chunk.content.strip()) < 30:
+                continue
+
+            try:
+                result = generate_parent_summary_questions_sync(chunk.content)
+                if not result:
+                    continue
+
+                metadata = dict(chunk.metadata_json or {})
+                metadata["summary"] = result["summary"]
+                metadata["generated_questions"] = result["generated_questions"]
+                chunk.metadata_json = metadata
+                chunk.metadata_ = metadata
+
+                # Embedder le summary+questions et stocker dans l'embedding du parent
+                enrichment_text = result["summary"]
+                if result["generated_questions"]:
+                    enrichment_text += " " + " ".join(result["generated_questions"])
+
+                # Générer l'embedding pour ce parent (intention de section)
+                parent_embeddings = generate_embeddings_batch([enrichment_text], batch_size=1)
+                if parent_embeddings and parent_embeddings[0]:
+                    chunk.embedding = parent_embeddings[0]
+                    logger.debug(
+                        "Embedding parent généré pour chunk_id=%s (summary+questions)",
+                        chunk.id,
+                    )
+
+                session.add(chunk)
+                total_parents_enriched += 1
+
+                # Extraction d'entités sur le summary+questions
+                entities = extract_entities_sync(enrichment_text)
+                if entities:
+                    for entity_data in entities:
+                        name = (entity_data.get("name") or "").strip()
+                        entity_type = (entity_data.get("type") or "concept_technique").strip()
+                        importance = float(entity_data.get("importance", 1.0) or 1.0)
+                        if not name or len(name) < 2:
+                            continue
+
+                        entity = _get_or_create_entity_for_space(
+                            session=session,
+                            name=name,
+                            entity_type=entity_type,
+                            space_id=space_id,
+                        )
+                        total_parent_entities += 1
+
+                        existing_rel = session.exec(
+                            select(ChunkEntityRelation).where(
+                                ChunkEntityRelation.chunk_id == chunk.id,
+                                ChunkEntityRelation.entity_id == entity.id,
+                                ChunkEntityRelation.space_id == space_id,
+                            )
+                        ).first()
+                        if not existing_rel:
+                            relation = ChunkEntityRelation(
+                                chunk_id=chunk.id,
+                                entity_id=entity.id,
+                                relevance_score=importance,
+                                space_id=space_id,
+                                created_at=datetime.utcnow(),
+                            )
+                            session.add(relation)
+                            total_parent_relations += 1
+
+            except Exception as e:
+                logger.warning(
+                    "Erreur enrichissement parent chunk_id=%s: %s",
+                    chunk.id,
+                    e,
+                )
+                continue
+
+        session.commit()
+        logger.info(
+            "✅ Enrichissement parents terminé document_id=%s: %d/%d parents enrichis, %d entités, %d relations",
+            document_id,
+            total_parents_enriched,
+            len(parent_chunks),
+            total_parent_entities,
+            total_parent_relations,
+        )
+
+    except Exception as e:
+        logger.error(
+            "Erreur enrichissement parents document_id=%s: %s",
+            document_id,
+            e,
+            exc_info=True,
+        )

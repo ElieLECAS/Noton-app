@@ -536,6 +536,127 @@ def extract_and_save_images(docling_doc, document_id: int) -> list:
     return images_info
 
 
+def reindex_library_document(document_id: int, user_id: int) -> dict:
+    """
+    Re-extrait le texte (Docling), rechunke (hiérarchie Docling ou fallback fixe),
+    ré-embed les feuilles et relance le KAG pour les espaces liés — sans réupload.
+
+    Utilise ``document.source_file_path`` (fichier déjà stocké sous media/documents).
+    """
+    from app.services.chunk_service import (
+        complete_document_embeddings_and_kag_sync,
+        create_chunks_for_document,
+        create_chunks_for_document_from_docling,
+    )
+
+    with Session(engine) as session:
+        document = session.get(Document, document_id)
+        if not document or document.user_id != user_id:
+            raise ValueError("Document introuvable ou accès refusé")
+        if not document.source_file_path:
+            raise ValueError("Aucun fichier source enregistré pour ce document")
+        src = Path(document.source_file_path)
+        if not src.is_file():
+            raise ValueError("Fichier source introuvable sur le disque")
+
+        document.processing_status = "processing"
+        document.processing_progress = 15
+        document.updated_at = datetime.utcnow()
+        session.add(document)
+        session.commit()
+
+    try:
+        pdf_input = ensure_pdf_for_docling(str(src))
+        t0 = time.perf_counter()
+        markdown_content, llama_docs, docling_doc = process_document_file(pdf_input)
+        logger.info(
+            "reindex: document_id=%s extraction %.2fs llama_docs=%s",
+            document_id,
+            time.perf_counter() - t0,
+            bool(llama_docs),
+        )
+    except Exception as e:
+        logger.error(
+            "reindex: échec process_document_file document_id=%s: %s",
+            document_id,
+            e,
+            exc_info=True,
+        )
+        with Session(engine) as session:
+            d = session.get(Document, document_id)
+            if d:
+                d.processing_status = "failed"
+                d.processing_progress = max(d.processing_progress or 0, 15)
+                d.updated_at = datetime.utcnow()
+                session.add(d)
+                session.commit()
+        raise ValueError(f"Échec lecture ou conversion du document: {e}") from e
+
+    if not markdown_content:
+        with Session(engine) as session:
+            d = session.get(Document, document_id)
+            if d:
+                d.processing_status = "failed"
+                d.processing_progress = max(d.processing_progress or 0, 15)
+                d.updated_at = datetime.utcnow()
+                session.add(d)
+                session.commit()
+        raise ValueError("Extraction vide (markdown)")
+
+    chunk_count = 0
+    with Session(engine) as session:
+        document = session.get(Document, document_id)
+        document.content = markdown_content
+        document.processing_progress = 55
+        document.updated_at = datetime.utcnow()
+        session.add(document)
+        session.commit()
+
+        if docling_doc:
+            try:
+                extract_and_save_images(docling_doc, document_id)
+            except Exception as img_e:
+                logger.warning("reindex: extraction images partielle: %s", img_e)
+
+        document = session.get(Document, document_id)
+        if llama_docs:
+            chunks = create_chunks_for_document_from_docling(
+                session, document, llama_docs, generate_embeddings=False
+            )
+            logger.info(
+                "reindex: document_id=%s chunking=docling_hierarchical chunks=%s",
+                document_id,
+                len(chunks) if chunks else 0,
+            )
+        else:
+            chunks = create_chunks_for_document(
+                session, document, generate_embeddings=False
+            )
+            logger.info(
+                "reindex: document_id=%s chunking=fallback_markdown_ou_fenêtre_fixe chunks=%s",
+                document_id,
+                len(chunks) if chunks else 0,
+            )
+        chunk_count = len(chunks) if chunks else 0
+        document.processing_progress = 85
+        document.updated_at = datetime.utcnow()
+        session.add(document)
+        session.commit()
+
+    complete_document_embeddings_and_kag_sync(document_id)
+
+    logger.info(
+        "reindex_library_document terminé document_id=%s chunks=%s",
+        document_id,
+        chunk_count,
+    )
+    return {
+        "document_id": document_id,
+        "chunks": chunk_count,
+        "status": "completed",
+    }
+
+
 def create_document(
     session: Session,
     document_create: DocumentCreate,
@@ -858,7 +979,16 @@ def _process_document_for_id(document_id: int, file_path: str):
                 )
                 raise
 
+            t_extract = time.perf_counter()
             markdown_content, llama_docs, docling_doc = process_document_file(pdf_input_path)
+            extract_s = time.perf_counter() - t_extract
+            logger.info(
+                "document_id=%s extraction Docling %.2fs markdown_len=%s llama_docs=%s",
+                document_id,
+                extract_s,
+                len(markdown_content) if markdown_content else 0,
+                bool(llama_docs),
+            )
 
             if not markdown_content:
                 document.processing_status = "failed"
@@ -925,12 +1055,25 @@ def _process_document_for_id(document_id: int, file_path: str):
                     )
                     return
 
+                t_chunk = time.perf_counter()
                 if llama_docs:
                     chunks = create_chunks_for_document_from_docling(session, document, llama_docs, generate_embeddings=False)
-                    logger.info("Créé %d chunks (DoclingNodeParser) pour le document %d", len(chunks), document_id)
+                    chunk_s = time.perf_counter() - t_chunk
+                    logger.info(
+                        "document_id=%s chunks=%s stratégie=docling_hierarchical durée_chunking=%.2fs",
+                        document_id,
+                        len(chunks),
+                        chunk_s,
+                    )
                 else:
                     chunks = create_chunks_for_document(session, document, generate_embeddings=False)
-                    logger.info("Créé %d chunks (HierarchicalNodeParser fallback) pour le document %d", len(chunks), document_id)
+                    chunk_s = time.perf_counter() - t_chunk
+                    logger.info(
+                        "document_id=%s chunks=%s stratégie=fallback_markdown_ou_fenêtre_fixe durée_chunking=%.2fs",
+                        document_id,
+                        len(chunks),
+                        chunk_s,
+                    )
 
                 document.processing_progress = 75
                 document.updated_at = datetime.utcnow()

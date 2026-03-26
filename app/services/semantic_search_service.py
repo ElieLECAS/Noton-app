@@ -424,20 +424,29 @@ def _retrieve_via_knowledge_graph(
     user_id: int,
     query_text: str,
     limit: int = 10,
+    pivot_entity_names: Optional[List[str]] = None,
 ) -> List[NodeWithScore]:
     """
     Récupère des chunks via le graphe de connaissances KAG.
     
-    1. Extrait les entités mentionnées dans la query
-    2. Trouve les chunks liés à ces entités via le graphe
-    3. Retourne les chunks sous forme de NodeWithScore
+    Args:
+        pivot_entity_names: Entités normalisées extraites de la requête par LLM (prioritaires)
     """
     try:
         from app.services.kag_extraction_service import normalize_entity_name
         from app.services.kag_graph_service import get_chunks_by_entity_names
         
-        query_terms = [t.strip().lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text)]
-        query_terms = [t for t in query_terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS]
+        # Stratégie 1: utiliser les entités pivot LLM si disponibles
+        if pivot_entity_names:
+            query_terms = pivot_entity_names
+            logger.debug(
+                "KAG retrieval (projet): utilisation de %d entités pivot LLM", 
+                len(query_terms)
+            )
+        else:
+            # Fallback: split naïf de la requête
+            query_terms = [t.strip().lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text)]
+            query_terms = [t for t in query_terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS]
         
         if not query_terms:
             return []
@@ -469,7 +478,7 @@ def _retrieve_via_knowledge_graph(
             nodes_with_scores.append(NodeWithScore(node=node, score=float(relevance)))
         
         logger.debug(
-            "KAG retrieval: %d chunks via graphe (query_terms=%s)",
+            "KAG retrieval (projet): %d chunks via graphe (query_terms=%s)",
             len(nodes_with_scores),
             query_terms[:5],
         )
@@ -707,6 +716,7 @@ def search_relevant_passages(
                     user_id=user_id,
                     query_text=query_text,
                     limit=k,
+                    pivot_entity_names=pivot_entity_names or None,
                 )
                 if graph_candidates:
                     leaf_candidates = _merge_with_graph_candidates(

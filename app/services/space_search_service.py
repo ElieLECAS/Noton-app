@@ -329,20 +329,33 @@ def _retrieve_via_knowledge_graph(
     user_id: int,
     query_text: str,
     limit: int = 10,
+    pivot_entity_names: Optional[List[str]] = None,
 ) -> List[NodeWithScore]:
     """
     Récupère des chunks via le graphe de connaissances KAG de l'espace.
+    
+    Args:
+        pivot_entity_names: Entités normalisées extraites de la requête par LLM (prioritaires)
     """
     try:
         from app.services.kag_extraction_service import normalize_entity_name
 
-        query_terms = [t.strip().lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text)]
-        query_terms = [t for t in query_terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS]
+        # Stratégie 1: utiliser les entités pivot LLM si disponibles
+        if pivot_entity_names:
+            query_terms = pivot_entity_names
+            logger.debug(
+                "KAG retrieval (space): utilisation de %d entités pivot LLM", 
+                len(query_terms)
+            )
+        else:
+            # Fallback: split naïf de la requête
+            query_terms = [t.strip().lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text)]
+            query_terms = [t for t in query_terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS]
 
         if not query_terms:
             return []
 
-        # Récupérer les chunks liés aux entités via le graphe
+        # Matching exact sur name_normalized
         stmt = (
             select(
                 DocumentChunk,
@@ -363,7 +376,47 @@ def _retrieve_via_knowledge_graph(
             .order_by(ChunkEntityRelation.relevance_score.desc())
             .limit(limit)
         )
-        results = session.exec(stmt).all()
+        results = list(session.exec(stmt).all())
+
+        # Fallback ILIKE partiel si peu de résultats exacts
+        if len(results) < limit // 2 and query_terms:
+            logger.debug(
+                "KAG retrieval (space): fallback ILIKE (résultats exacts=%d)", 
+                len(results)
+            )
+            # Limiter aux 5 premiers termes pour éviter des requêtes trop larges
+            ilike_terms = query_terms[:5]
+            ilike_conditions = [
+                KnowledgeEntity.name_normalized.ilike(f"%{term}%") 
+                for term in ilike_terms
+            ]
+            stmt_ilike = (
+                select(
+                    DocumentChunk,
+                    Document.title,
+                    KnowledgeEntity.name,
+                    ChunkEntityRelation.relevance_score,
+                )
+                .join(ChunkEntityRelation, ChunkEntityRelation.chunk_id == DocumentChunk.id)
+                .join(KnowledgeEntity, KnowledgeEntity.id == ChunkEntityRelation.entity_id)
+                .join(Document, Document.id == DocumentChunk.document_id)
+                .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+                .where(
+                    DocumentSpace.space_id == space_id,
+                    DocumentChunk.is_leaf == True,
+                    KnowledgeEntity.space_id == space_id,
+                    or_(*ilike_conditions),
+                )
+                .order_by(ChunkEntityRelation.relevance_score.desc())
+                .limit(limit - len(results))
+            )
+            ilike_results = list(session.exec(stmt_ilike).all())
+            # Déduplication par chunk.id
+            existing_chunk_ids = {row[0].id for row in results}
+            for row in ilike_results:
+                if row[0].id not in existing_chunk_ids:
+                    results.append(row)
+                    existing_chunk_ids.add(row[0].id)
 
         nodes_with_scores: List[NodeWithScore] = []
         for chunk, document_title, entity_name, relevance in results:
@@ -389,6 +442,172 @@ def _retrieve_via_knowledge_graph(
 
     except Exception as e:
         logger.warning("Erreur KAG retrieval (space): %s", e)
+        return []
+
+
+def _retrieve_via_parent_summaries(
+    session: Session,
+    space_id: int,
+    query_text: str,
+    query_embedding: List[float],
+    limit: int = 10,
+) -> List[NodeWithScore]:
+    """
+    Récupère des chunks leaves via matching sémantique sur les summaries des parents.
+    
+    Recherche les parents (is_leaf=False) dont l'embedding (summary+questions)
+    est proche de la requête, puis retourne leurs leaves enfants.
+    
+    Args:
+        session: Session SQLModel
+        space_id: ID de l'espace
+        query_text: Texte de la requête (pour logs)
+        query_embedding: Embedding vectoriel de la requête
+        limit: Nombre max de leaves à retourner
+    
+    Returns:
+        Liste de NodeWithScore (leaves dont le parent matche)
+    """
+    try:
+        query_embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
+        
+        # SQL: chercher les parents avec embedding proche, récupérer leurs leaves enfants
+        sql_query = text(f"""
+            SELECT DISTINCT
+                dc_leaf.id,
+                dc_leaf.content,
+                dc_leaf.text,
+                dc_leaf.chunk_index,
+                dc_leaf.document_id,
+                dc_leaf.metadata_json,
+                dc_leaf.metadata_,
+                d.title AS document_title,
+                1 - (dc_parent.embedding <=> '{query_embedding_str}'::vector) AS parent_similarity
+            FROM documentchunk dc_parent
+            JOIN documentchunk dc_leaf ON dc_leaf.parent_node_id = dc_parent.node_id
+            JOIN document d ON d.id = dc_leaf.document_id
+            JOIN document_space ds ON ds.document_id = d.id
+            WHERE ds.space_id = :space_id
+              AND dc_parent.is_leaf = false
+              AND dc_parent.embedding IS NOT NULL
+              AND dc_leaf.is_leaf = true
+            ORDER BY dc_parent.embedding <=> '{query_embedding_str}'::vector
+            LIMIT :limit_k
+        """)
+        
+        result = session.execute(
+            sql_query,
+            {"space_id": space_id, "limit_k": limit},
+        )
+        
+        nodes_with_scores: List[NodeWithScore] = []
+        for row in result:
+            metadata = dict(row.metadata_json or row.metadata_ or {})
+            metadata.setdefault("document_id", row.document_id)
+            metadata.setdefault("document_title", row.document_title or "Document sans titre")
+            metadata.setdefault("chunk_index", row.chunk_index)
+            metadata["parent_summary_match"] = True
+            
+            node = TextNode(
+                id_=f"chunk-{row.id}",
+                text=row.content or row.text or "",
+                metadata=metadata,
+            )
+            nodes_with_scores.append(
+                NodeWithScore(node=node, score=float(row.parent_similarity))
+            )
+        
+        logger.debug(
+            "Parent summary retrieval (space): %d leaves via parents matchés",
+            len(nodes_with_scores),
+        )
+        return nodes_with_scores
+    
+    except Exception as e:
+        logger.warning("Erreur parent summary retrieval (space): %s", e)
+        return []
+
+
+def _retrieve_via_parent_summaries(
+    session: Session,
+    space_id: int,
+    query_text: str,
+    query_embedding: List[float],
+    limit: int = 10,
+) -> List[NodeWithScore]:
+    """
+    Récupère des chunks leaves via matching sémantique sur les summaries des parents.
+    
+    Recherche les parents (is_leaf=False) dont l'embedding (summary+questions)
+    est proche de la requête, puis retourne leurs leaves enfants.
+    
+    Args:
+        session: Session SQLModel
+        space_id: ID de l'espace
+        query_text: Texte de la requête (pour logs)
+        query_embedding: Embedding vectoriel de la requête
+        limit: Nombre max de leaves à retourner
+    
+    Returns:
+        Liste de NodeWithScore (leaves dont le parent matche)
+    """
+    try:
+        query_embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
+        
+        # SQL: chercher les parents avec embedding proche, récupérer leurs leaves enfants
+        sql_query = text(f"""
+            SELECT DISTINCT
+                dc_leaf.id,
+                dc_leaf.content,
+                dc_leaf.text,
+                dc_leaf.chunk_index,
+                dc_leaf.document_id,
+                dc_leaf.metadata_json,
+                dc_leaf.metadata_,
+                d.title AS document_title,
+                1 - (dc_parent.embedding <=> '{query_embedding_str}'::vector) AS parent_similarity
+            FROM documentchunk dc_parent
+            JOIN documentchunk dc_leaf ON dc_leaf.parent_node_id = dc_parent.node_id
+            JOIN document d ON d.id = dc_leaf.document_id
+            JOIN document_space ds ON ds.document_id = d.id
+            WHERE ds.space_id = :space_id
+              AND dc_parent.is_leaf = false
+              AND dc_parent.embedding IS NOT NULL
+              AND dc_leaf.is_leaf = true
+            ORDER BY dc_parent.embedding <=> '{query_embedding_str}'::vector
+            LIMIT :limit_k
+        """)
+        
+        result = session.execute(
+            sql_query,
+            {"space_id": space_id, "limit_k": limit},
+        )
+        
+        nodes_with_scores: List[NodeWithScore] = []
+        for row in result:
+            metadata = dict(row.metadata_json or row.metadata_ or {})
+            metadata.setdefault("document_id", row.document_id)
+            metadata.setdefault("document_title", row.document_title or "Document sans titre")
+            metadata.setdefault("chunk_index", row.chunk_index)
+            metadata["parent_summary_match"] = True
+            
+            node = TextNode(
+                id_=f"chunk-{row.id}",
+                text=row.content or row.text or "",
+                metadata=metadata,
+            )
+            nodes_with_scores.append(
+                NodeWithScore(node=node, score=float(row.parent_similarity))
+            )
+        
+        logger.debug(
+            "Parent summary retrieval (space): %d leaves via parents matchés",
+            len(nodes_with_scores),
+        )
+        return nodes_with_scores
+    
+    except Exception as e:
+        logger.warning("Erreur parent summary retrieval (space): %s", e)
         return []
 
 
@@ -562,7 +781,10 @@ def search_relevant_passages(
 
         # --- Étape 1b : enrichissement KAG ---
         pivot_entity_names: List[str] = []
+        query_embedding = None
+        
         if settings.KAG_ENABLED:
+            # Extraction entités pivot
             try:
                 from app.services.kag_extraction_service import extract_entities_from_query_sync
                 pivot_entity_names = extract_entities_from_query_sync(query_text)
@@ -570,6 +792,12 @@ def search_relevant_passages(
                     logger.debug("Entités pivot requête (space): %s", pivot_entity_names[:5])
             except Exception as ext_err:
                 logger.debug("Extraction entités requête ignorée (space): %s", ext_err)
+            
+            # Récupérer l'embedding de la requête (réutilisé pour parents et graphe)
+            embed_model = _get_embed_model()
+            query_embedding = embed_model.get_query_embedding(query_text)
+            
+            # Retrieval via graphe KAG (entités)
             try:
                 graph_candidates = _retrieve_via_knowledge_graph(
                     session=session,
@@ -577,6 +805,7 @@ def search_relevant_passages(
                     user_id=user_id,
                     query_text=query_text,
                     limit=k,
+                    pivot_entity_names=pivot_entity_names or None,
                 )
                 if graph_candidates:
                     leaf_candidates = _merge_with_graph_candidates(
@@ -591,6 +820,30 @@ def search_relevant_passages(
                     )
             except Exception as kag_err:
                 logger.warning("KAG enrichissement échoué (space): %s", kag_err)
+            
+            # Retrieval via parents summaries
+            if settings.KAG_PARENT_ENRICHMENT_ENABLED:
+                try:
+                    parent_summary_candidates = _retrieve_via_parent_summaries(
+                        session=session,
+                        space_id=space_id,
+                        query_text=query_text,
+                        query_embedding=query_embedding,
+                        limit=k,
+                    )
+                    if parent_summary_candidates:
+                        leaf_candidates = _merge_with_graph_candidates(
+                            vector_candidates=leaf_candidates,
+                            graph_candidates=parent_summary_candidates,
+                            graph_boost=0.15,
+                            pivot_entity_names=None,
+                        )
+                        logger.info(
+                            "Parent summary enrichissement (space): +%d candidats fusionnés",
+                            len(parent_summary_candidates),
+                        )
+                except Exception as parent_err:
+                    logger.warning("Parent summary enrichissement échoué (space): %s", parent_err)
 
         # --- Étape 2 : Filtrage pré-reranking ---
         filtered_candidates = _filter_low_similarity_candidates(

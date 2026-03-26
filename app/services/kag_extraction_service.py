@@ -197,6 +197,7 @@ def normalize_entity_name(name: str) -> str:
     
     - Lowercase
     - Suppression des accents
+    - Remplacement des tirets/underscores par espaces
     - Suppression des caractères spéciaux
     - Trim des espaces
     """
@@ -205,7 +206,8 @@ def normalize_entity_name(name: str) -> str:
     normalized = name.lower().strip()
     normalized = unicodedata.normalize("NFD", normalized)
     normalized = "".join(c for c in normalized if unicodedata.category(c) != "Mn")
-    normalized = re.sub(r"[^a-z0-9\s-]", "", normalized)
+    normalized = re.sub(r"[-_]", " ", normalized)
+    normalized = re.sub(r"[^a-z0-9\s]", "", normalized)
     normalized = re.sub(r"\s+", " ", normalized).strip()
     return normalized
 

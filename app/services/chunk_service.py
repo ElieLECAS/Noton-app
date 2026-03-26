@@ -1,3 +1,4 @@
+import os
 from typing import List, Optional
 from sqlmodel import Session, select
 from sqlalchemy import or_, delete
@@ -7,7 +8,13 @@ from app.models.document_chunk import DocumentChunk
 from app.models.document import Document
 from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.knowledge_entity import KnowledgeEntity
-from app.services.chunking_service import chunk_note, chunk_note_from_docling_docs
+from app.services.chunking_service import (
+    chunk_note,
+    chunk_note_from_docling_docs,
+    chunk_document_from_docling_docs,
+    CHUNKING_VERSION_FIXED_WINDOW,
+    CHUNKING_VERSION_MARKDOWN_H2,
+)
 from app.database import engine
 from app.config import settings
 import logging
@@ -379,13 +386,26 @@ def _process_parent_enrichment_for_note(session: Session, note_id: int, project_
                 metadata["generated_questions"] = result["generated_questions"]
                 chunk.metadata_json = metadata
                 chunk.metadata_ = metadata
-                session.add(chunk)
-                total_parents_enriched += 1
-
+                
+                # Embedder le summary+questions et stocker dans l'embedding du parent
                 enrichment_text = result["summary"]
                 if result["generated_questions"]:
                     enrichment_text += " " + " ".join(result["generated_questions"])
+                
+                # Générer l'embedding pour ce parent (intention de section)
+                from app.services.embedding_service import generate_embeddings_batch
+                parent_embeddings = generate_embeddings_batch([enrichment_text], batch_size=1)
+                if parent_embeddings and parent_embeddings[0]:
+                    chunk.embedding = parent_embeddings[0]
+                    logger.debug(
+                        "Embedding parent généré pour chunk_id=%s (summary+questions)",
+                        chunk.id,
+                    )
+                
+                session.add(chunk)
+                total_parents_enriched += 1
 
+                # Extraction d'entités sur le summary+questions
                 entities = extract_entities_sync(enrichment_text)
                 if entities:
                     relations_count = save_entities_for_chunk(
@@ -693,6 +713,29 @@ def reindex_notes(
 # Compatibilité architecture "Document"
 # ---------------------------------------------------------------------------
 
+def _try_markdown_h2_sections(text: str) -> Optional[List[dict]]:
+    """
+    Découpe intermédiaire par sections Markdown (##) si le texte en contient plusieurs.
+    Retourne None si non applicable (meilleur que la seule fenêtre glissante).
+    """
+    if not text or "\n## " not in text:
+        return None
+    parts = text.split("\n## ")
+    if len(parts) < 2:
+        return None
+    chunks: List[dict] = []
+    offset = 0
+    for i, part in enumerate(parts):
+        block = (f"## {part}" if i else part).strip()
+        if not block:
+            continue
+        start = offset
+        end = offset + len(block)
+        chunks.append({"content": block, "start_char": start, "end_char": end})
+        offset = end + 2
+    return chunks if len(chunks) >= 2 else None
+
+
 def _split_text_for_document(text: str, chunk_size: int = 1200, overlap: int = 150) -> List[dict]:
     """Découpe simple d'un texte en chunks avec overlap."""
     if not text:
@@ -725,7 +768,11 @@ def create_chunks_for_document(
     session.commit()
 
     source_text = f"{document.title}\n\n{document.content or ''}".strip()
-    raw_chunks = _split_text_for_document(source_text)
+    raw_chunks = _try_markdown_h2_sections(source_text)
+    chunking_version = CHUNKING_VERSION_MARKDOWN_H2
+    if raw_chunks is None:
+        raw_chunks = _split_text_for_document(source_text)
+        chunking_version = CHUNKING_VERSION_FIXED_WINDOW
     chunks: List[DocumentChunk] = []
     for idx, item in enumerate(raw_chunks):
         metadata = {
@@ -734,6 +781,7 @@ def create_chunks_for_document(
             "user_id": document.user_id,
             "document_title": document.title or "",
             "chunk_index": idx,
+            "chunking_version": chunking_version,
         }
         chunks.append(
             DocumentChunk(
@@ -755,9 +803,14 @@ def create_chunks_for_document(
         embeddings = generate_embeddings_batch(
             [c.content for c in chunks], batch_size=settings.EMBEDDING_BATCH_SIZE
         )
+        model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
         for chunk, embedding in zip(chunks, embeddings):
             if embedding:
                 chunk.embedding = embedding
+                meta = dict(chunk.metadata_json or {})
+                meta["embedding_model"] = model_name
+                chunk.metadata_json = meta
+                chunk.metadata_ = meta
 
     if chunks:
         session.add_all(chunks)
@@ -772,25 +825,77 @@ def create_chunks_for_document_from_docling(
     generate_embeddings: bool = False,
 ) -> List[DocumentChunk]:
     """
-    Version Docling pour documents.
-    Pour robustesse, on s'appuie sur le contenu markdown déjà extrait.
+    Chunking sémantique via DoclingNodeParser (parents + leaves, métadonnées Docling).
+    Si échec ou aucun chunk, repli sur create_chunks_for_document (fenêtre fixe).
     """
-    return create_chunks_for_document(
-        session=session, document=document, generate_embeddings=generate_embeddings
-    )
+    session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document.id))
+    session.commit()
+
+    chunks: List[DocumentChunk] = []
+    try:
+        if llama_docs:
+            t0 = time.perf_counter()
+            chunks = chunk_document_from_docling_docs(document, llama_docs)
+            logger.info(
+                "document_id=%s DoclingNodeParser+hiérarchie %.2fs → %s chunks",
+                document.id,
+                time.perf_counter() - t0,
+                len(chunks),
+            )
+    except Exception as e:
+        logger.warning(
+            "chunk_document_from_docling_docs échoué document_id=%s: %s",
+            document.id,
+            e,
+            exc_info=True,
+        )
+        chunks = []
+
+    if not chunks:
+        logger.info(
+            "Fallback chunking taille fixe (pas de chunks Docling) document_id=%s",
+            document.id,
+        )
+        return create_chunks_for_document(
+            session=session, document=document, generate_embeddings=generate_embeddings
+        )
+
+    if generate_embeddings and chunks:
+        from app.services.embedding_service import generate_embeddings_batch
+
+        leafs = [c for c in chunks if c.is_leaf]
+        if leafs:
+            embeddings = generate_embeddings_batch(
+                [c.content for c in leafs], batch_size=settings.EMBEDDING_BATCH_SIZE
+            )
+            model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
+            for chunk, embedding in zip(leafs, embeddings):
+                if embedding:
+                    chunk.embedding = embedding
+                    meta = dict(chunk.metadata_json or {})
+                    meta["embedding_model"] = model_name
+                    chunk.metadata_json = meta
+                    chunk.metadata_ = meta
+
+    session.add_all(chunks)
+    session.commit()
+    return chunks
 
 
 def _process_embeddings_for_document(document_id: int):
-    """Génère les embeddings des DocumentChunk puis marque le document en completed."""
+    """Génère les embeddings des seuls chunks feuilles (parents exclus), puis KAG si activé."""
+    t_embed = time.perf_counter()
     try:
         with Session(engine) as session:
             document = session.get(Document, document_id)
             if not document:
                 return
 
+            # Feuilles uniquement (is_leaf=False = parents hiérarchiques Docling, sans vecteur)
             statement = select(DocumentChunk).where(
                 DocumentChunk.document_id == document_id,
                 DocumentChunk.embedding.is_(None),
+                or_(DocumentChunk.is_leaf == True, DocumentChunk.is_leaf.is_(None)),
             )
             chunks = list(session.exec(statement).all())
             if not chunks:
@@ -806,14 +911,24 @@ def _process_embeddings_for_document(document_id: int):
             session.add(document)
             session.commit()
 
+            logger.info(
+                "document_id=%s génération embeddings pour %s chunks feuilles",
+                document_id,
+                len(chunks),
+            )
             from app.services.embedding_service import generate_embeddings_batch
             embeddings = generate_embeddings_batch(
                 [c.content for c in chunks], batch_size=settings.EMBEDDING_BATCH_SIZE
             )
+            model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
             ok = 0
             for chunk, embedding in zip(chunks, embeddings):
                 if embedding:
                     chunk.embedding = embedding
+                    meta = dict(chunk.metadata_json or {})
+                    meta["embedding_model"] = model_name
+                    chunk.metadata_json = meta
+                    chunk.metadata_ = meta
                     session.add(chunk)
                     ok += 1
 
@@ -828,6 +943,12 @@ def _process_embeddings_for_document(document_id: int):
 
             session.commit()
             session.refresh(document)
+            logger.info(
+                "document_id=%s embeddings OK en %.2fs (%s vecteurs)",
+                document_id,
+                time.perf_counter() - t_embed,
+                ok,
+            )
 
             # Après les embeddings, générer le KAG pour tous les espaces liés
             # afin que le graphe soit prêt dès le premier upload.

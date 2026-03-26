@@ -21,7 +21,7 @@ from app.services.document_service_new import (
     create_document, get_document_by_id, get_documents_by_folder,
     get_documents_by_library, save_uploaded_file, process_document_async,
     add_document_to_spaces, remove_document_from_spaces, move_document, delete_document,
-    update_document
+    update_document, reindex_library_document,
 )
 from app.services.document_space_service import get_spaces_for_document
 from pathlib import Path
@@ -171,17 +171,21 @@ async def delete_folder_recursive(
 @router.get("/documents", response_model=List[DocumentListItem])
 async def list_documents(
     folder_id: Optional[int] = None,
+    include_all: bool = False,
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Liste les documents d'un dossier (ou racine si folder_id est None)."""
+    """Liste les documents d'un dossier, de la racine, ou de toute la bibliothèque."""
     library = get_or_create_user_library(session, current_user.id)
-    documents = session.exec(
-        select(Document).where(
-            Document.library_id == library.id,
-            Document.folder_id == folder_id,
-        ).order_by(Document.created_at.desc())
-    ).all()
+    if include_all:
+        documents = get_documents_by_library(session, library.id, current_user.id)
+    else:
+        documents = session.exec(
+            select(Document).where(
+                Document.library_id == library.id,
+                Document.folder_id == folder_id,
+            ).order_by(Document.created_at.desc())
+        ).all()
     return [DocumentListItem.model_validate(d) for d in documents]
 
 
@@ -222,6 +226,24 @@ async def update_library_document(
             detail="Document non trouvé"
         )
     return DocumentRead.model_validate(document)
+
+
+@router.post("/documents/{document_id}/reindex", status_code=status.HTTP_200_OK)
+async def reindex_library_document_endpoint(
+    document_id: int,
+    current_user: UserRead = Depends(require_permission("library.write")),
+):
+    """
+    Re-extrait le texte, rechunke (Docling hiérarchique ou fallback) et ré-embed
+    sans réupload — le fichier source doit exister (media/documents).
+    """
+    try:
+        return reindex_library_document(document_id, current_user.id)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
 
 
 @router.get("/documents/{document_id}/file")

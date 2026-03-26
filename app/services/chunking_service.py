@@ -5,11 +5,18 @@ import uuid
 
 from app.models.note import Note
 from app.models.note_chunk import NoteChunk
+from app.models.document import Document as LibraryDocument
+from app.models.document_chunk import DocumentChunk
 from app.config import settings
-from llama_index.core.schema import Document, NodeRelationship, TextNode
+from llama_index.core.schema import Document as LlamaDocument, NodeRelationship, TextNode
 from llama_index.core.node_parser import HierarchicalNodeParser
 
 logger = logging.getLogger(__name__)
+
+# Versions de chunking stockées dans metadata_json (traçabilité / reindex sélectif)
+CHUNKING_VERSION_DOCLING_HIERARCHICAL = "docling_hierarchical_v1"
+CHUNKING_VERSION_FIXED_WINDOW = "fixed_window_v1"
+CHUNKING_VERSION_MARKDOWN_H2 = "markdown_h2_sections_v1"
 
 _docling_node_parser = None
 _docling_node_parser_lock = threading.Lock()
@@ -92,7 +99,7 @@ def chunk_note(note: Note) -> List[NoteChunk]:
 
     chunk_sizes = _resolve_chunk_sizes(len(full_text))
     parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
-    document = Document(
+    llama_doc = LlamaDocument(
         text=full_text,
         metadata={
             "note_id": note.id,
@@ -102,7 +109,7 @@ def chunk_note(note: Note) -> List[NoteChunk]:
         },
     )
 
-    nodes = parser.get_nodes_from_documents([document])
+    nodes = parser.get_nodes_from_documents([llama_doc])
     if not nodes:
         return []
 
@@ -119,7 +126,7 @@ def chunk_note(note: Note) -> List[NoteChunk]:
         ),
     )
 
-    doc_metadata = dict(document.metadata or {})
+    doc_metadata = dict(llama_doc.metadata or {})
     chunks: List[NoteChunk] = []
 
     for idx, node in enumerate(nodes_sorted):
@@ -282,6 +289,144 @@ def _is_picture_or_table_chunk(meta: dict) -> bool:
     return False
 
 
+def _build_docling_hierarchical_specs(
+    doc_metadata_base: dict,
+    leaf_nodes: List[TextNode],
+) -> List[dict]:
+    """
+    Groupe les nœuds Docling par section et produit une liste de specs agnostiques
+    (NoteChunk ou DocumentChunk). Même logique que l'ancien chunk_note_from_docling_docs.
+    """
+    base_meta = dict(doc_metadata_base)
+    base_meta["chunking_version"] = CHUNKING_VERSION_DOCLING_HIERARCHICAL
+
+    groups: Dict[str, List[TextNode]] = {}
+    group_order: List[str] = []
+    section_captions: Dict[str, List[str]] = {}
+
+    for node in leaf_nodes:
+        headings = (node.metadata or {}).get("headings") or []
+        key = _get_parent_heading_label(headings)
+        if key not in groups:
+            groups[key] = []
+            group_order.append(key)
+        groups[key].append(node)
+        cap = _extract_caption_from_metadata(dict(node.metadata or {}))
+        if cap:
+            captions_list = section_captions.setdefault(key, [])
+            if cap not in captions_list:
+                captions_list.append(cap)
+
+    specs: List[dict] = []
+    chunk_index = 0
+
+    for heading_key in group_order:
+        group_leaves = groups[heading_key]
+        parent_heading_display = (
+            heading_key if heading_key != "__no_heading__" else ""
+        )
+        section_anchors = section_captions.get(heading_key) or []
+
+        parent_text = "\n\n".join(
+            (n.get_content() or "").strip() for n in group_leaves
+        ).strip()
+        if not parent_text:
+            continue
+
+        parent_node_id = str(uuid.uuid4())
+        parent_metadata = dict(base_meta)
+        parent_metadata.update(
+            {
+                "node_id": parent_node_id,
+                "parent_node_id": None,
+                "hierarchy_level": 0,
+                "is_leaf": "false",
+                "heading": parent_heading_display,
+                "parent_heading": parent_heading_display,
+            }
+        )
+        if section_anchors:
+            parent_metadata["image_anchor"] = " ; ".join(section_anchors)
+            parent_metadata["figure_title"] = section_anchors[0]
+            parent_metadata["contains_image"] = True
+
+        specs.append(
+            {
+                "chunk_index": chunk_index,
+                "is_leaf": False,
+                "content": parent_text,
+                "text": parent_text,
+                "start_char": 0,
+                "end_char": len(parent_text),
+                "node_id": parent_node_id,
+                "parent_node_id": None,
+                "hierarchy_level": 0,
+                "metadata_json": parent_metadata,
+            }
+        )
+        chunk_index += 1
+
+        for leaf_node in group_leaves:
+            raw_content = (leaf_node.get_content() or "").strip()
+            if not raw_content:
+                continue
+
+            leaf_node_id = leaf_node.node_id or str(uuid.uuid4())
+            docling_meta = dict(leaf_node.metadata or {})
+
+            caption = _extract_caption_from_metadata(docling_meta)
+            if _is_picture_or_table_chunk(docling_meta) and caption:
+                raw_content = f"{raw_content}\n\n{caption}".strip()
+
+            if parent_heading_display:
+                content = f"[{parent_heading_display}] {raw_content}"
+            else:
+                content = raw_content
+
+            leaf_metadata = dict(base_meta)
+            leaf_metadata.update(docling_meta)
+            leaf_metadata["parent_heading"] = parent_heading_display
+            leaf_metadata["heading"] = parent_heading_display
+            if parent_heading_display:
+                leaf_metadata["raw_content"] = raw_content
+            if section_anchors:
+                leaf_metadata["image_anchor"] = " ; ".join(section_anchors)
+                leaf_metadata["figure_title"] = section_anchors[0]
+            elif caption:
+                leaf_metadata["image_anchor"] = caption
+                leaf_metadata["figure_title"] = caption
+            leaf_metadata.update(
+                {
+                    "node_id": leaf_node_id,
+                    "parent_node_id": parent_node_id,
+                    "hierarchy_level": 1,
+                    "is_leaf": "true",
+                }
+            )
+            if docling_meta.get("page_no") is not None:
+                leaf_metadata["page_no"] = docling_meta["page_no"]
+            if section_anchors or _is_picture_or_table_chunk(docling_meta):
+                leaf_metadata["contains_image"] = True
+
+            specs.append(
+                {
+                    "chunk_index": chunk_index,
+                    "is_leaf": True,
+                    "content": content,
+                    "text": content,
+                    "start_char": 0,
+                    "end_char": len(content),
+                    "node_id": leaf_node_id,
+                    "parent_node_id": parent_node_id,
+                    "hierarchy_level": 1,
+                    "metadata_json": leaf_metadata,
+                }
+            )
+            chunk_index += 1
+
+    return specs
+
+
 def chunk_note_from_docling_docs(
     note: Note,
     llama_docs: Sequence,
@@ -347,152 +492,26 @@ def chunk_note_from_docling_docs(
         "note_title": note.title or "",
     }
 
-    # ------------------------------------------------------------------
-    # Une seule passe : grouper les leaves par section et collecter les légendes
-    # ------------------------------------------------------------------
-    # groups[parent_heading_label] = [leaf_node, ...]
-    # section_captions[heading_key] = liste des légendes (picture/table) de la section
-    groups: Dict[str, List[TextNode]] = {}
-    group_order: List[str] = []
-    section_captions: Dict[str, List[str]] = {}
-
-    for node in leaf_nodes:
-        headings = (node.metadata or {}).get("headings") or []
-        key = _get_parent_heading_label(headings)
-        if key not in groups:
-            groups[key] = []
-            group_order.append(key)
-        groups[key].append(node)
-        cap = _extract_caption_from_metadata(dict(node.metadata or {}))
-        if cap:
-            captions_list = section_captions.setdefault(key, [])
-            if cap not in captions_list:
-                captions_list.append(cap)
-
-    # ------------------------------------------------------------------
-    # Construire les NoteChunk leaves + parents (avec parent_heading, légendes)
-    # ------------------------------------------------------------------
+    specs = _build_docling_hierarchical_specs(doc_metadata_base, leaf_nodes)
     chunks: List[NoteChunk] = []
-    chunk_index = 0
-
-    for heading_key in group_order:
-        group_leaves = groups[heading_key]
-        parent_heading_display = (
-            heading_key if heading_key != "__no_heading__" else ""
-        )
-        section_anchors = section_captions.get(heading_key) or []
-
-        # Créer le nœud parent pour ce groupe
-        parent_text = "\n\n".join(
-            (n.get_content() or "").strip() for n in group_leaves
-        ).strip()
-        if not parent_text:
-            continue
-
-        parent_node_id = str(uuid.uuid4())
-        parent_metadata = dict(doc_metadata_base)
-        parent_metadata.update(
-            {
-                "node_id": parent_node_id,
-                "parent_node_id": None,
-                "hierarchy_level": 0,
-                "is_leaf": "false",
-                "heading": parent_heading_display,
-                "parent_heading": parent_heading_display,
-            }
-        )
-        if section_anchors:
-            parent_metadata["image_anchor"] = " ; ".join(section_anchors)
-            parent_metadata["figure_title"] = section_anchors[0]
-            parent_metadata["contains_image"] = True
-
+    for spec in specs:
+        meta = spec["metadata_json"]
         chunks.append(
             NoteChunk(
                 note_id=note.id,
-                chunk_index=chunk_index,
-                content=parent_text,
-                text=parent_text,
-                start_char=0,
-                end_char=len(parent_text),
-                node_id=parent_node_id,
-                parent_node_id=None,
-                is_leaf=False,
-                hierarchy_level=0,
-                metadata_json=parent_metadata,
-                metadata_=parent_metadata,
+                chunk_index=spec["chunk_index"],
+                content=spec["content"],
+                text=spec["text"],
+                start_char=spec["start_char"],
+                end_char=spec["end_char"],
+                node_id=spec["node_id"],
+                parent_node_id=spec["parent_node_id"],
+                is_leaf=spec["is_leaf"],
+                hierarchy_level=spec["hierarchy_level"],
+                metadata_json=meta,
+                metadata_=meta,
             )
         )
-        chunk_index += 1
-
-        # Créer les NoteChunk feuilles pour chaque bloc sémantique
-        for leaf_node in group_leaves:
-            raw_content = (leaf_node.get_content() or "").strip()
-            if not raw_content:
-                continue
-
-            leaf_node_id = leaf_node.node_id or str(uuid.uuid4())
-            docling_meta = dict(leaf_node.metadata or {})
-
-            # Fusion légende dans le contenu brut pour picture/table
-            caption = _extract_caption_from_metadata(docling_meta)
-            if _is_picture_or_table_chunk(docling_meta) and caption:
-                raw_content = f"{raw_content}\n\n{caption}".strip()
-
-            # Injection du heading de section en préfixe pour l'embedding et la
-            # recherche vectorielle : le vecteur capturera l'intention métier de la
-            # section (ex. "[Finitions Plaxé] Blanc 9016") et non uniquement le
-            # fragment brut. Le texte brut est conservé dans raw_content pour
-            # l'affichage UI.
-            if parent_heading_display:
-                content = f"[{parent_heading_display}] {raw_content}"
-            else:
-                content = raw_content
-
-            # Métadonnées : parent_heading, page_no, figure_title / image_anchor
-            leaf_metadata = dict(doc_metadata_base)
-            leaf_metadata.update(docling_meta)
-            leaf_metadata["parent_heading"] = parent_heading_display
-            leaf_metadata["heading"] = parent_heading_display
-            # Texte brut sans heading injecté — conservé pour affichage UI propre
-            if parent_heading_display:
-                leaf_metadata["raw_content"] = raw_content
-            if section_anchors:
-                leaf_metadata["image_anchor"] = " ; ".join(section_anchors)
-                leaf_metadata["figure_title"] = section_anchors[0]
-            elif caption:
-                leaf_metadata["image_anchor"] = caption
-                leaf_metadata["figure_title"] = caption
-            leaf_metadata.update(
-                {
-                    "node_id": leaf_node_id,
-                    "parent_node_id": parent_node_id,
-                    "hierarchy_level": 1,
-                    "is_leaf": "true",
-                }
-            )
-            # page_no conservé depuis Docling si présent
-            if docling_meta.get("page_no") is not None:
-                leaf_metadata["page_no"] = docling_meta["page_no"]
-            if section_anchors or _is_picture_or_table_chunk(docling_meta):
-                leaf_metadata["contains_image"] = True
-
-            chunks.append(
-                NoteChunk(
-                    note_id=note.id,
-                    chunk_index=chunk_index,
-                    content=content,
-                    text=content,
-                    start_char=0,
-                    end_char=len(content),
-                    node_id=leaf_node_id,
-                    parent_node_id=parent_node_id,
-                    is_leaf=True,
-                    hierarchy_level=1,
-                    metadata_json=leaf_metadata,
-                    metadata_=leaf_metadata,
-                )
-            )
-            chunk_index += 1
 
     leaf_count = sum(1 for c in chunks if c.is_leaf)
     parent_count = sum(1 for c in chunks if not c.is_leaf)
@@ -503,6 +522,86 @@ def chunk_note_from_docling_docs(
         len(chunks),
         leaf_count,
         parent_count,
-        len(group_order),
+        parent_count,
+    )
+    return chunks
+
+
+def chunk_document_from_docling_docs(
+    document: LibraryDocument,
+    llama_docs: Sequence,
+) -> List[DocumentChunk]:
+    """
+    Découpe un Document bibliothèque via DoclingNodeParser (même logique que les notes).
+
+    Retourne des DocumentChunk hiérarchiques (parents + leaves) avec métadonnées Docling.
+    En cas d'échec ou liste vide, l'appelant doit retomber sur create_chunks_for_document.
+    """
+    try:
+        node_parser = _get_docling_node_parser()
+    except ImportError:
+        logger.warning(
+            "llama-index-node-parser-docling non installé — "
+            "chunk_document_from_docling_docs indisponible pour document %s",
+            document.id,
+        )
+        return []
+
+    try:
+        leaf_nodes: List[TextNode] = node_parser.get_nodes_from_documents(
+            list(llama_docs)
+        )
+    except Exception as exc:
+        logger.warning(
+            "DoclingNodeParser a échoué pour le document %s (%s)",
+            document.id,
+            exc,
+        )
+        return []
+
+    if not leaf_nodes:
+        logger.warning(
+            "DoclingNodeParser n'a produit aucun nœud pour le document %s",
+            document.id,
+        )
+        return []
+
+    doc_metadata_base = {
+        "document_id": document.id,
+        "library_id": document.library_id,
+        "user_id": document.user_id,
+        "document_title": document.title or "",
+    }
+
+    specs = _build_docling_hierarchical_specs(doc_metadata_base, leaf_nodes)
+    chunks: List[DocumentChunk] = []
+    for spec in specs:
+        meta = spec["metadata_json"]
+        chunks.append(
+            DocumentChunk(
+                document_id=document.id,
+                chunk_index=spec["chunk_index"],
+                content=spec["content"],
+                text=spec["text"],
+                start_char=spec["start_char"],
+                end_char=spec["end_char"],
+                node_id=spec["node_id"],
+                parent_node_id=spec["parent_node_id"],
+                is_leaf=spec["is_leaf"],
+                hierarchy_level=spec["hierarchy_level"],
+                metadata_json=meta,
+                metadata_=meta,
+            )
+        )
+
+    leaf_count = sum(1 for c in chunks if c.is_leaf)
+    parent_count = sum(1 for c in chunks if not c.is_leaf)
+    logger.info(
+        "Chunking sémantique (DoclingNodeParser) document=%s : "
+        "%d chunks total (%d leaves, %d parents)",
+        document.id,
+        len(chunks),
+        leaf_count,
+        parent_count,
     )
     return chunks
