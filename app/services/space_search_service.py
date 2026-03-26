@@ -61,6 +61,9 @@ _FALLBACK_STOPWORDS = {
 
 TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
 TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
+KAG_ENTITY_SIGNAL_BOOST = float(os.getenv("KAG_ENTITY_SIGNAL_BOOST", "0.10"))
+KAG_PARENT_SIGNAL_BOOST = float(os.getenv("KAG_PARENT_SIGNAL_BOOST", "0.08"))
+KAG_SUMMARY_Q_SIGNAL_BOOST = float(os.getenv("KAG_SUMMARY_Q_SIGNAL_BOOST", "0.06"))
 
 
 def _get_reranker():
@@ -738,6 +741,29 @@ def _merge_with_graph_candidates(
     return merged
 
 
+def _apply_signal_weights(candidates: List[NodeWithScore]) -> List[NodeWithScore]:
+    """
+    Ajuste les scores avec des signaux KAG explicites pour un ranking hybride lisible.
+    """
+    weighted: List[NodeWithScore] = []
+    for nws in candidates:
+        score = float(getattr(nws, "score", 0.0) or 0.0)
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+
+        if meta.get("kag_matched_entity"):
+            score += KAG_ENTITY_SIGNAL_BOOST
+        if meta.get("parent_summary_match"):
+            score += KAG_PARENT_SIGNAL_BOOST
+        if meta.get("summary_questions_metadata_match"):
+            score += KAG_SUMMARY_Q_SIGNAL_BOOST
+
+        nws.score = min(1.0, score)
+        weighted.append(nws)
+
+    weighted.sort(key=lambda x: float(x.score or 0.0), reverse=True)
+    return weighted
+
+
 def _normalize_for_gamme(s: str) -> str:
     """Lowercase + suppression des accents."""
     if not s:
@@ -939,7 +965,26 @@ def search_relevant_passages(
                 except Exception as meta_err:
                     logger.warning("Summary/questions metadata enrichissement échoué (space): %s", meta_err)
 
-        # --- Étape 2 : Filtrage pré-reranking ---
+        # --- Étape 2 : pondération multi-signaux + filtrage pré-reranking ---
+        leaf_candidates = _apply_signal_weights(leaf_candidates)
+        entity_signal_count = 0
+        parent_signal_count = 0
+        summary_q_signal_count = 0
+        for nws in leaf_candidates:
+            meta = dict(getattr(nws.node, "metadata", {}) or {})
+            if meta.get("kag_matched_entity"):
+                entity_signal_count += 1
+            if meta.get("parent_summary_match"):
+                parent_signal_count += 1
+            if meta.get("summary_questions_metadata_match"):
+                summary_q_signal_count += 1
+        logger.info(
+            "Signaux retrieval (space): entity=%d, parent_summary=%d, summary_questions=%d",
+            entity_signal_count,
+            parent_signal_count,
+            summary_q_signal_count,
+        )
+
         filtered_candidates = _filter_low_similarity_candidates(
             leaf_candidates, MIN_VECTOR_SIMILARITY_THRESHOLD
         )
