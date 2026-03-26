@@ -204,6 +204,23 @@ def _extract_query_terms(query_text: str) -> List[str]:
     return [t for t in terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS][:8]
 
 
+def _normalize_pivot_entities(pivot_entity_names: Optional[List[str]]) -> List[str]:
+    """Normalise/déduplique les entités pivot extraites côté requête."""
+    if not pivot_entity_names:
+        return []
+    seen: Set[str] = set()
+    normalized: List[str] = []
+    for name in pivot_entity_names:
+        value = (name or "").strip().lower()
+        if not value or value in seen:
+            continue
+        seen.add(value)
+        normalized.append(value)
+        if len(normalized) >= 12:
+            break
+    return normalized
+
+
 def _keyword_fallback_passages(
     session: Session,
     space_id: int,
@@ -341,8 +358,9 @@ def _retrieve_via_knowledge_graph(
         from app.services.kag_extraction_service import normalize_entity_name
 
         # Stratégie 1: utiliser les entités pivot LLM si disponibles
-        if pivot_entity_names:
-            query_terms = pivot_entity_names
+        normalized_pivots = _normalize_pivot_entities(pivot_entity_names)
+        if normalized_pivots:
+            query_terms = normalized_pivots
             logger.debug(
                 "KAG retrieval (space): utilisation de %d entités pivot LLM", 
                 len(query_terms)
@@ -445,34 +463,20 @@ def _retrieve_via_knowledge_graph(
         return []
 
 
-def _retrieve_via_parent_summaries(
+def _retrieve_via_summary_questions_metadata(
     session: Session,
     space_id: int,
     query_text: str,
-    query_embedding: List[float],
     limit: int = 10,
 ) -> List[NodeWithScore]:
-    """
-    Récupère des chunks leaves via matching sémantique sur les summaries des parents.
-    
-    Recherche les parents (is_leaf=False) dont l'embedding (summary+questions)
-    est proche de la requête, puis retourne leurs leaves enfants.
-    
-    Args:
-        session: Session SQLModel
-        space_id: ID de l'espace
-        query_text: Texte de la requête (pour logs)
-        query_embedding: Embedding vectoriel de la requête
-        limit: Nombre max de leaves à retourner
-    
-    Returns:
-        Liste de NodeWithScore (leaves dont le parent matche)
-    """
+    """Récupère des leaves via matching lexical sur metadata parent (summary + questions)."""
     try:
-        query_embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
-        
-        # SQL: chercher les parents avec embedding proche, récupérer leurs leaves enfants
-        sql_query = text(f"""
+        terms = _extract_query_terms(query_text)
+        if not terms:
+            return []
+
+        best_term = sorted(terms, key=len, reverse=True)[0]
+        sql_query = text("""
             SELECT DISTINCT
                 dc_leaf.id,
                 dc_leaf.content,
@@ -481,50 +485,50 @@ def _retrieve_via_parent_summaries(
                 dc_leaf.document_id,
                 dc_leaf.metadata_json,
                 dc_leaf.metadata_,
-                d.title AS document_title,
-                1 - (dc_parent.embedding <=> '{query_embedding_str}'::vector) AS parent_similarity
+                d.title AS document_title
             FROM documentchunk dc_parent
             JOIN documentchunk dc_leaf ON dc_leaf.parent_node_id = dc_parent.node_id
             JOIN document d ON d.id = dc_leaf.document_id
             JOIN document_space ds ON ds.document_id = d.id
             WHERE ds.space_id = :space_id
               AND dc_parent.is_leaf = false
-              AND dc_parent.embedding IS NOT NULL
               AND dc_leaf.is_leaf = true
-            ORDER BY dc_parent.embedding <=> '{query_embedding_str}'::vector
+              AND (
+                lower(COALESCE(dc_parent.metadata_json->>'summary', dc_parent.metadata_->>'summary', '')) LIKE :term
+                OR lower(COALESCE(dc_parent.metadata_json->>'generated_questions', dc_parent.metadata_->>'generated_questions', '')) LIKE :term
+              )
+            ORDER BY dc_leaf.chunk_index ASC
             LIMIT :limit_k
         """)
-        
+
         result = session.execute(
             sql_query,
-            {"space_id": space_id, "limit_k": limit},
+            {"space_id": space_id, "limit_k": limit, "term": f"%{best_term}%"},
         )
-        
+
         nodes_with_scores: List[NodeWithScore] = []
         for row in result:
             metadata = dict(row.metadata_json or row.metadata_ or {})
             metadata.setdefault("document_id", row.document_id)
             metadata.setdefault("document_title", row.document_title or "Document sans titre")
             metadata.setdefault("chunk_index", row.chunk_index)
-            metadata["parent_summary_match"] = True
-            
+            metadata["summary_questions_metadata_match"] = True
+
             node = TextNode(
                 id_=f"chunk-{row.id}",
                 text=row.content or row.text or "",
                 metadata=metadata,
             )
-            nodes_with_scores.append(
-                NodeWithScore(node=node, score=float(row.parent_similarity))
-            )
-        
+            nodes_with_scores.append(NodeWithScore(node=node, score=0.35))
+
         logger.debug(
-            "Parent summary retrieval (space): %d leaves via parents matchés",
+            "Summary/questions metadata retrieval (space): %d leaves (term=%s)",
             len(nodes_with_scores),
+            best_term,
         )
         return nodes_with_scores
-    
     except Exception as e:
-        logger.warning("Erreur parent summary retrieval (space): %s", e)
+        logger.warning("Erreur summary/questions metadata retrieval (space): %s", e)
         return []
 
 
@@ -608,6 +612,75 @@ def _retrieve_via_parent_summaries(
     
     except Exception as e:
         logger.warning("Erreur parent summary retrieval (space): %s", e)
+        return []
+
+
+def _retrieve_via_summary_questions_metadata(
+    session: Session,
+    space_id: int,
+    query_text: str,
+    limit: int = 10,
+) -> List[NodeWithScore]:
+    """Récupère des leaves via matching lexical sur metadata parent (summary + questions)."""
+    try:
+        terms = _extract_query_terms(query_text)
+        if not terms:
+            return []
+
+        best_term = sorted(terms, key=len, reverse=True)[0]
+        sql_query = text("""
+            SELECT DISTINCT
+                dc_leaf.id,
+                dc_leaf.content,
+                dc_leaf.text,
+                dc_leaf.chunk_index,
+                dc_leaf.document_id,
+                dc_leaf.metadata_json,
+                dc_leaf.metadata_,
+                d.title AS document_title
+            FROM documentchunk dc_parent
+            JOIN documentchunk dc_leaf ON dc_leaf.parent_node_id = dc_parent.node_id
+            JOIN document d ON d.id = dc_leaf.document_id
+            JOIN document_space ds ON ds.document_id = d.id
+            WHERE ds.space_id = :space_id
+              AND dc_parent.is_leaf = false
+              AND dc_leaf.is_leaf = true
+              AND (
+                lower(COALESCE(dc_parent.metadata_json->>'summary', dc_parent.metadata_->>'summary', '')) LIKE :term
+                OR lower(COALESCE(dc_parent.metadata_json->>'generated_questions', dc_parent.metadata_->>'generated_questions', '')) LIKE :term
+              )
+            ORDER BY dc_leaf.chunk_index ASC
+            LIMIT :limit_k
+        """)
+
+        result = session.execute(
+            sql_query,
+            {"space_id": space_id, "limit_k": limit, "term": f"%{best_term}%"},
+        )
+
+        nodes_with_scores: List[NodeWithScore] = []
+        for row in result:
+            metadata = dict(row.metadata_json or row.metadata_ or {})
+            metadata.setdefault("document_id", row.document_id)
+            metadata.setdefault("document_title", row.document_title or "Document sans titre")
+            metadata.setdefault("chunk_index", row.chunk_index)
+            metadata["summary_questions_metadata_match"] = True
+
+            node = TextNode(
+                id_=f"chunk-{row.id}",
+                text=row.content or row.text or "",
+                metadata=metadata,
+            )
+            nodes_with_scores.append(NodeWithScore(node=node, score=0.35))
+
+        logger.debug(
+            "Summary/questions metadata retrieval (space): %d leaves (term=%s)",
+            len(nodes_with_scores),
+            best_term,
+        )
+        return nodes_with_scores
+    except Exception as e:
+        logger.warning("Erreur summary/questions metadata retrieval (space): %s", e)
         return []
 
 
@@ -844,6 +917,27 @@ def search_relevant_passages(
                         )
                 except Exception as parent_err:
                     logger.warning("Parent summary enrichissement échoué (space): %s", parent_err)
+
+                try:
+                    metadata_summary_candidates = _retrieve_via_summary_questions_metadata(
+                        session=session,
+                        space_id=space_id,
+                        query_text=query_text,
+                        limit=k,
+                    )
+                    if metadata_summary_candidates:
+                        leaf_candidates = _merge_with_graph_candidates(
+                            vector_candidates=leaf_candidates,
+                            graph_candidates=metadata_summary_candidates,
+                            graph_boost=0.10,
+                            pivot_entity_names=None,
+                        )
+                        logger.info(
+                            "Summary/questions metadata enrichissement (space): +%d candidats fusionnés",
+                            len(metadata_summary_candidates),
+                        )
+                except Exception as meta_err:
+                    logger.warning("Summary/questions metadata enrichissement échoué (space): %s", meta_err)
 
         # --- Étape 2 : Filtrage pré-reranking ---
         filtered_candidates = _filter_low_similarity_candidates(
