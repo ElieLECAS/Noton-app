@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from sqlmodel import Session, select
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
-from app.database import get_session
+from app.database import get_session, engine
 from app.services.mistral_service import (
     chat as mistral_chat,
     chat_stream as mistral_chat_stream,
@@ -29,21 +29,58 @@ import os
 
 logger = logging.getLogger(__name__)
 
-# Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K)
-RAG_TOP_K = int(os.getenv("RAG_TOP_K", "1"))
+
+def _persist_assistant_reply(
+    conversation_id: int,
+    content: str,
+    model: str,
+    provider: str,
+) -> None:
+    """Écrit la réponse assistant hors session de la requête (StreamingResponse ferme souvent la session injectée avant la fin du générateur)."""
+    with Session(engine) as s:
+        s.add(
+            Message(
+                conversation_id=conversation_id,
+                role="assistant",
+                content=content,
+                model=model,
+                provider=provider,
+            )
+        )
+        conv = s.get(Conversation, conversation_id)
+        if conv:
+            conv.updated_at = datetime.utcnow()
+            s.add(conv)
+        s.commit()
+
+
+def _int_env(name: str, default: int) -> int:
+    raw = os.getenv(name)
+    if raw is None or not str(raw).strip():
+        return default
+    try:
+        return max(1, int(raw))
+    except ValueError:
+        return default
+
+
+# Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K).
+# Défaut 8 : avec 1 passage, le modèle comble avec des généralisations faux catalogue (tableaux inventés, ✓/✗).
+RAG_TOP_K = _int_env("RAG_TOP_K", 8)
 # Paramétrage en dur du chat "espaces"
 SPACE_CHAT_MAX_TOKENS = 3000
-SPACE_CHAT_TEMPERATURE = 0.2
+SPACE_CHAT_TEMPERATURE = 0.1
 SPACE_CHAT_TOP_P = None
 SPACE_CHAT_SYSTEM_PROMPT = (
-    "Tu es LIA, l'expert conversationnel de référence pour les solutions de menuiserie PROFERM. "
-    "Ton ton est humain, professionnel et chaleureux. Tu t'adresses avec assurance aux collaborateurs et aux clients. "
-    "Exprime-toi comme si tu possédais une connaissance native de l'ensemble du catalogue et des règles métier. "
-    "INTERDICTION : Ne jamais utiliser de phrases telles que 'selon la documentation', 'd'après les passages fournis' ou 'les sources indiquent'. "
-    "Réponds directement avec autorité. Si une information technique précise manque réellement, indique-le simplement sans inventer. "
-    "FORMATAGE : Utilise des tableaux dès que cela permet de clarifier une comparaison ou de structurer des données techniques (dimensions, garanties, coloris). "
-    "Privilégie la clarté visuelle. "
-    "Termine systématiquement par une question ouverte et pertinente pour guider le projet de l'utilisateur."
+    "Tu es LIA, assistante PROFERM. Tu t'adresses aux collaborateurs et aux clients avec un ton professionnel et clair. "
+    "Tu réponds UNIQUEMENT à partir des passages numérotés ci-dessous (extraits des documents de l'espace). "
+    "Règles strictes : "
+    "(1) Toute affirmation factuelle (coloris, gammes, disponibilité, performances, dimensions, options…) doit être étayée par au moins un passage ; cite avec [1], [2], etc. "
+    "(2) INTERDIT d'inventer des tableaux récapitulatifs par type de produit, des coches ✓/✗, ou des matrices « oui/non » si les passages ne les contiennent pas explicitement. "
+    "(3) Ne déduis pas du catalogue général une règle fine (ex. nuance de noir, porte d'entrée vs fenêtre) sans texte qui le dit : indique alors que ce n'est pas précisé dans les extraits et propose de vérifier le document complet ou un interlocuteur interne — sans supposer. "
+    "(4) Si aucun passage ou des passages peu pertinents : dis-le ; n'utilise pas tes connaissances générales sur la menuiserie pour combler. "
+    "(5) Tableaux Markdown uniquement pour regrouper des informations déjà présentes dans les passages (pas pour structurer de l'inventé). "
+    "(6) Question ou suggestion de suite en fin de message seulement si elle est naturelle et utile, pas obligatoire."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -138,7 +175,6 @@ async def stream_chat_message(
                     chunk = content[i : i + chunk_size]
                     assistant_response.append(chunk)
                     yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
-                yield f"data: {json.dumps({'done': True})}\n\n"
             else:
                 if not settings.MISTRAL_API_KEY:
                     error_msg = "Mistral API key n'est pas configurée"
@@ -154,31 +190,25 @@ async def stream_chat_message(
                         continue
                     assistant_response.append(chunk)
                     yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
-                yield f"data: {json.dumps({'done': True})}\n\n"
-            
-            # Sauvegarder la réponse de l'assistant si conversation_id est fourni
+
             if request.conversation_id and assistant_response:
                 try:
-                    complete_response = "".join(assistant_response)
-                    assistant_message = Message(
-                        conversation_id=request.conversation_id,
-                        role="assistant",
-                        content=complete_response,
-                        model=settings.MODEL_FAST,
-                        provider="mistral"
+                    _persist_assistant_reply(
+                        request.conversation_id,
+                        "".join(assistant_response),
+                        settings.MODEL_FAST,
+                        "mistral",
                     )
-                    session.add(assistant_message)
-                    
-                    # Mettre à jour la date de modification de la conversation
-                    conversation = session.get(Conversation, request.conversation_id)
-                    if conversation:
-                        conversation.updated_at = datetime.utcnow()
-                        session.add(conversation)
-                    
-                    session.commit()
-                    logger.info(f"Réponse de l'assistant sauvegardée dans la conversation {request.conversation_id}")
-                except Exception as e:
-                    logger.error(f"Erreur lors de la sauvegarde de la réponse de l'assistant: {e}")
+                    logger.info(
+                        "Réponse de l'assistant sauvegardée dans la conversation %s",
+                        request.conversation_id,
+                    )
+                except Exception:
+                    logger.exception(
+                        "Erreur lors de la sauvegarde de la réponse de l'assistant"
+                    )
+
+            yield f"data: {json.dumps({'done': True})}\n\n"
                     
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
@@ -374,44 +404,37 @@ async def stream_project_chat_message(
                     continue
                 assistant_response.append(chunk)
                 yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
-            yield f"data: {json.dumps({'done': True})}\n\n"
-            
-            # Sauvegarder la réponse de l'assistant si conversation_id est fourni
+
             if request.conversation_id and assistant_response:
                 try:
-                    complete_response = "".join(assistant_response)
-                    assistant_message = Message(
-                        conversation_id=request.conversation_id,
-                        role="assistant",
-                        content=complete_response,
-                        model=settings.MODEL_FAST,
-                        provider="mistral"
+                    _persist_assistant_reply(
+                        request.conversation_id,
+                        "".join(assistant_response),
+                        settings.MODEL_FAST,
+                        "mistral",
                     )
-                    session.add(assistant_message)
-                    
-                    # Mettre à jour la date de modification de la conversation
-                    conversation = session.get(Conversation, request.conversation_id)
-                    if conversation:
-                        conversation.updated_at = datetime.utcnow()
-                        session.add(conversation)
-                    
-                    session.commit()
-                    logger.info(f"Réponse de l'assistant sauvegardée dans la conversation {request.conversation_id}")
-                except Exception as e:
-                    logger.error(f"Erreur lors de la sauvegarde de la réponse de l'assistant: {e}")
-            
+                    logger.info(
+                        "Réponse de l'assistant sauvegardée dans la conversation %s",
+                        request.conversation_id,
+                    )
+                except Exception:
+                    logger.exception(
+                        "Erreur lors de la sauvegarde de la réponse de l'assistant (projet)"
+                    )
+
             # Envoyer les sources utilisées pour les citations
             if passages:
                 note_ids = list({p.get("note_id") for p in passages if p.get("note_id")})
-                notes = (
-                    session.exec(select(Note).where(Note.id.in_(note_ids))).all()
-                    if note_ids
-                    else []
-                )
-                has_source_file_by_note = {
-                    n.id: (n.note_type == "document" and bool(n.source_file_path))
-                    for n in notes
-                }
+                with Session(engine) as src_session:
+                    notes = (
+                        src_session.exec(select(Note).where(Note.id.in_(note_ids))).all()
+                        if note_ids
+                        else []
+                    )
+                    has_source_file_by_note = {
+                        n.id: (n.note_type == "document" and bool(n.source_file_path))
+                        for n in notes
+                    }
                 sources_data = []
                 for i, p in enumerate(passages, 1):
                     passage_raw = p.get("passage_raw", p.get("passage", ""))
@@ -436,7 +459,8 @@ async def stream_project_chat_message(
                         source_item["caption"] = p.get("caption", "")
                     sources_data.append(source_item)
                 yield f"data: {json.dumps({'sources': sources_data})}\n\n"
-                    
+
+            yield f"data: {json.dumps({'done': True})}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
     
@@ -522,26 +546,23 @@ async def stream_space_chat_message(
                     continue
                 assistant_response.append(chunk)
                 yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
-            yield f"data: {json.dumps({'done': True})}\n\n"
-
+            # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
+            # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
             if request.conversation_id and assistant_response:
                 try:
                     complete_response = "".join(assistant_response)
-                    assistant_message = Message(
-                        conversation_id=request.conversation_id,
-                        role="assistant",
-                        content=complete_response,
-                        model=forced_model,
-                        provider=forced_provider,
+                    _persist_assistant_reply(
+                        request.conversation_id,
+                        complete_response,
+                        forced_model,
+                        forced_provider,
                     )
-                    session.add(assistant_message)
-                    conv = session.get(Conversation, request.conversation_id)
-                    if conv:
-                        conv.updated_at = datetime.utcnow()
-                        session.add(conv)
-                    session.commit()
-                except Exception as e:
-                    logger.error(f"Erreur sauvegarde réponse assistant (space chat): {e}")
+                    logger.info(
+                        "Réponse assistant sauvegardée (space chat), conversation %s",
+                        request.conversation_id,
+                    )
+                except Exception:
+                    logger.exception("Erreur sauvegarde réponse assistant (space chat)")
 
             if passages:
                 sources_data = [
@@ -557,6 +578,7 @@ async def stream_space_chat_message(
                     for i, p in enumerate(passages)
                 ]
                 yield f"data: {json.dumps({'sources': sources_data})}\n\n"
+            yield f"data: {json.dumps({'done': True})}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
 

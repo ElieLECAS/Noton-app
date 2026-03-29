@@ -588,6 +588,16 @@ function renderConversations() {
   `).join("");
 }
 
+async function refreshConversationsSidebar(preferredConversationId = null) {
+  const r = await api(`/api/conversations?space_id=${spaceId}`);
+  if (!r.ok) return;
+  conversations = await r.json();
+  if (preferredConversationId != null) {
+    currentConversationId = preferredConversationId;
+  }
+  renderConversations();
+}
+
 async function loadConversations(preferredConversationId = null) {
   const r = await api(`/api/conversations?space_id=${spaceId}`);
   if (!r.ok) return;
@@ -784,7 +794,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 
   if (currentConversationId) {
     await api(`/api/conversations/${currentConversationId}/generate-title`, { method: "POST" });
-    await loadConversations(currentConversationId);
+    await refreshConversationsSidebar(currentConversationId);
   }
 });
 

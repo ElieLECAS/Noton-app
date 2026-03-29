@@ -1,7 +1,7 @@
 """Add KAG space constraints and indexes.
 
 Revision ID: add_kag_space_constraints
-Revises: add_library_architecture
+Revises: add_shared_flags_space_library
 Create Date: 2026-03-26
 """
 
@@ -10,7 +10,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "add_kag_space_constraints"
-down_revision = "add_library_architecture"
+down_revision = "add_shared_flags_space_library"
 branch_labels = None
 depends_on = None
 
