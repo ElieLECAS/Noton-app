@@ -73,6 +73,19 @@ RAG_HYBRID_GAMMA = 0.15
 HYBRID_MIN_SCORE = 0.06
 
 
+def _merged_chunk_metadata(primary: Optional[dict], legacy: Optional[dict]) -> Dict:
+    """
+    Fusionne les métadonnées modernes + legacy.
+    Les clés de ``primary`` (metadata_json) priment si présentes.
+    """
+    merged: Dict = {}
+    if isinstance(legacy, dict):
+        merged.update(legacy)
+    if isinstance(primary, dict):
+        merged.update(primary)
+    return merged
+
+
 def _get_reranker():
     """Retourne le reranker (singleton)."""
     global _reranker_instance
@@ -237,7 +250,7 @@ def _retrieve_leaves_sql(
 
     nodes_with_scores: List[NodeWithScore] = []
     for row in result:
-        metadata = dict(row.metadata_json or row.metadata_ or {})
+        metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
         metadata.setdefault("document_id", row.document_id)
         metadata.setdefault("document_title", row.document_title or "Document sans titre")
         metadata.setdefault("chunk_index", row.chunk_index)
@@ -329,7 +342,7 @@ def _retrieve_leaves_lexical_sql(
 
     nodes_with_scores: List[NodeWithScore] = []
     for row in result:
-        metadata = dict(row.metadata_json or row.metadata_ or {})
+        metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
         metadata.setdefault("document_id", row.document_id)
         metadata.setdefault("document_title", row.document_title or "Document sans titre")
         metadata.setdefault("chunk_index", row.chunk_index)
@@ -481,7 +494,7 @@ def _build_parent_node_dict(
 
     node_dict: Dict[str, TextNode] = {}
     for chunk, document_title in rows:
-        metadata = dict(chunk.metadata_json or {})
+        metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
         metadata.setdefault("document_id", chunk.document_id)
         metadata.setdefault("document_title", document_title or "Document sans titre")
         metadata.setdefault("chunk_index", chunk.chunk_index)
@@ -572,7 +585,7 @@ def _keyword_fallback_passages(
         match_count = sum(1 for term in terms if term in lowered) if terms else 0
         score = (match_count / max(len(terms), 1)) if terms else 0.05
 
-        node_metadata = dict(chunk.metadata_json or {})
+        node_metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
         node_metadata.setdefault("document_id", chunk.document_id)
         node_metadata.setdefault("document_title", document_title or "Document sans titre")
         node_metadata.setdefault("chunk_index", chunk.chunk_index)
@@ -638,6 +651,10 @@ def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
             m.setdefault("page_end", int(pe))
         except (TypeError, ValueError):
             pass
+    # Traçabilité: conserver l'ID du chunk feuille à l'origine de la citation.
+    leaf_chunk_id = _parse_chunk_id_from_node(leaf_node)
+    if leaf_chunk_id is not None:
+        m["source_leaf_chunk_id"] = leaf_chunk_id
     setattr(target_node, "metadata", m)
 
 
@@ -666,11 +683,15 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     content = node.get_content() if hasattr(node, "get_content") else str(node)
     content_enriched = _enrich_content_with_heading_and_figure(content, metadata)
     passage_text = f"**{document_title}**\n{content_enriched}"
+    chunk_id = _parse_chunk_id_from_node(node)
+    source_leaf_chunk_id = metadata.get("source_leaf_chunk_id")
     out = {
         "passage": passage_text,
         "passage_raw": content,
         "document_title": document_title,
         "document_id": document_id,
+        "chunk_id": chunk_id,
+        "source_leaf_chunk_id": source_leaf_chunk_id,
         "chunk_index": int(chunk_index) if isinstance(chunk_index, (int, str)) else 0,
         "score": float(fallback_score or 0.0),
         "page_no": page_no,
@@ -843,7 +864,7 @@ def _retrieve_via_knowledge_graph(
 
         nodes_with_scores: List[NodeWithScore] = []
         for chunk, document_title, entity_name, _entity_id, relevance in results:
-            metadata = dict(chunk.metadata_json or {})
+            metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
             metadata.setdefault("document_id", chunk.document_id)
             metadata.setdefault("document_title", document_title or "Document sans titre")
             metadata.setdefault("chunk_index", chunk.chunk_index)

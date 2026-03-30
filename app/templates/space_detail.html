@@ -519,13 +519,23 @@ function displayTitle(source) {
   return source.document_title || source.note_title || "Document";
 }
 
+function resolveSpaceSourcePage(source) {
+  if (!source) return 1;
+  const candidates = [source.page_no, source.page_start];
+  for (const value of candidates) {
+    const num = parseInt(value, 10);
+    if (Number.isFinite(num) && num > 0) return num;
+  }
+  return 1;
+}
+
 /** Clic sur une source : PDF à la bonne page si fichier dispo, sinon modale texte. */
 function handleSpaceSourceClick(index) {
   const source = currentMessageSources.find((s) => s.index === index);
   if (!source) return;
   if (source.has_source_file && source.document_id) {
     currentSpacePdfDocumentId = source.document_id;
-    currentSpacePdfPageNo = source.page_no || source.page_start || 1;
+    currentSpacePdfPageNo = resolveSpaceSourcePage(source);
     currentSpacePdfTitle = displayTitle(source);
     currentSourceIndexFromSpacePdf = index;
     openSpacePdfViewer();
@@ -640,7 +650,7 @@ function showSourcePreview(index) {
     pdfBtn.classList.remove("hidden");
     pdfBtn.onclick = () => {
       currentSpacePdfDocumentId = source.document_id;
-      currentSpacePdfPageNo = source.page_no || source.page_start || 1;
+      currentSpacePdfPageNo = resolveSpaceSourcePage(source);
       currentSpacePdfTitle = displayTitle(source);
       currentSourceIndexFromSpacePdf = index;
       closeSourcePreview();
@@ -1083,12 +1093,12 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
         if (data.message && data.message.content) {
           full += data.message.content;
           contentEl.classList.remove("italic");
-          const withMarkdown = parseMarkdown(stripCitationMarkers(full));
+          const withMarkdown = parseMarkdown(full);
           contentEl.innerHTML = withMarkdown;
         } else if (data.sources) {
           receivedSources = data.sources;
           if (full) {
-            const withMarkdown = parseMarkdown(stripCitationMarkers(full));
+            const withMarkdown = parseMarkdown(full);
             contentEl.innerHTML = withMarkdown;
           }
         } else if (data.error) {
@@ -1113,8 +1123,18 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     contentEl.classList.remove("italic");
     contentEl.textContent = "Aucune réponse générée.";
   } else if (full && !streamError) {
-    const withMarkdown = parseMarkdown(stripCitationMarkers(full));
-    contentEl.innerHTML = withMarkdown;
+    const withMarkdown = parseMarkdown(full);
+    const finalHtml = (receivedSources && receivedSources.length > 0)
+      ? transformCitationsToLinks(withMarkdown, receivedSources)
+      : withMarkdown;
+    contentEl.innerHTML = finalHtml;
+    if (receivedSources && receivedSources.length > 0) {
+      const sourcesHtml = buildSourcesSection(receivedSources);
+      const messageContainer = assistantWrap.querySelector(".max-w-2xl");
+      if (messageContainer) {
+        messageContainer.insertAdjacentHTML("beforeend", sourcesHtml);
+      }
+    }
   }
   chatHistory.push({ role: "user", content: message });
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });

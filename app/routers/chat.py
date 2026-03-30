@@ -30,6 +30,39 @@ import os
 logger = logging.getLogger(__name__)
 
 
+def _coerce_positive_int(value) -> Optional[int]:
+    """Convertit une valeur en int de page (>0), sinon None."""
+    if value is None:
+        return None
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed > 0 else None
+
+
+def _resolve_page_from_passage(passage: dict) -> Optional[int]:
+    """Résout la page depuis un passage (page_no prioritaire, sinon page_start)."""
+    return _coerce_positive_int(passage.get("page_no")) or _coerce_positive_int(
+        passage.get("page_start")
+    )
+
+
+def _resolve_page_from_chunk(chunk: DocumentChunk) -> Optional[int]:
+    """
+    Résout la page d'un chunk en fusionnant metadata_json + metadata_.
+    metadata_json prime mais on garde le fallback legacy.
+    """
+    merged_meta = {}
+    if isinstance(chunk.metadata_, dict):
+        merged_meta.update(chunk.metadata_)
+    if isinstance(chunk.metadata_json, dict):
+        merged_meta.update(chunk.metadata_json)
+    return _coerce_positive_int(merged_meta.get("page_no")) or _coerce_positive_int(
+        merged_meta.get("page_start")
+    )
+
+
 def _persist_assistant_reply(
     conversation_id: int,
     content: str,
@@ -575,25 +608,99 @@ async def stream_space_chat_message(
                         d.id: (d.document_type == "document" and bool(d.source_file_path))
                         for d in docs
                     }
+                    # Fallback "profondeur": reconstruire une page fiable depuis les chunks
+                    # si le passage n'a pas de page exploitable.
+                    candidate_chunk_ids = list(
+                        {
+                            cid
+                            for p in passages
+                            for cid in [p.get("source_leaf_chunk_id"), p.get("chunk_id")]
+                            if isinstance(cid, int)
+                        }
+                    )
+                    chunk_by_id = {}
+                    if candidate_chunk_ids:
+                        chunk_rows = src_session.exec(
+                            select(DocumentChunk).where(DocumentChunk.id.in_(candidate_chunk_ids))
+                        ).all()
+                        chunk_by_id = {c.id: c for c in chunk_rows}
+
+                    chunk_by_doc_and_index = {}
+                    doc_chunk_indexes = {
+                        (p.get("document_id"), p.get("chunk_index"))
+                        for p in passages
+                        if p.get("document_id") is not None
+                        and isinstance(p.get("chunk_index"), int)
+                    }
+                    for did, cidx in doc_chunk_indexes:
+                        row = src_session.exec(
+                            select(DocumentChunk)
+                            .where(
+                                DocumentChunk.document_id == did,
+                                DocumentChunk.chunk_index == cidx,
+                            )
+                            .order_by(DocumentChunk.is_leaf.desc(), DocumentChunk.id.desc())
+                        ).first()
+                        if row:
+                            chunk_by_doc_and_index[(did, cidx)] = row
+
                 sources_data = []
                 for i, p in enumerate(passages):
                     did = p.get("document_id")
                     raw = p.get("passage_raw", p.get("passage", ""))
+                    resolved_page = _resolve_page_from_passage(p)
+                    resolved_page_start = _coerce_positive_int(p.get("page_start"))
+                    resolved_page_end = _coerce_positive_int(p.get("page_end"))
+
+                    if resolved_page is None:
+                        fallback_chunk = None
+                        leaf_chunk_id = p.get("source_leaf_chunk_id")
+                        chunk_id = p.get("chunk_id")
+                        if isinstance(leaf_chunk_id, int):
+                            fallback_chunk = chunk_by_id.get(leaf_chunk_id)
+                        if fallback_chunk is None and isinstance(chunk_id, int):
+                            fallback_chunk = chunk_by_id.get(chunk_id)
+                        if fallback_chunk is None:
+                            fallback_chunk = chunk_by_doc_and_index.get(
+                                (did, p.get("chunk_index"))
+                            )
+                        if fallback_chunk is not None:
+                            resolved_page = _resolve_page_from_chunk(fallback_chunk)
+                            if resolved_page_start is None:
+                                resolved_page_start = _resolve_page_from_chunk(fallback_chunk)
+
                     sources_data.append(
                         {
                             "index": i + 1,
                             "document_id": did,
                             "document_title": p["document_title"],
+                            "chunk_id": p.get("chunk_id"),
+                            "source_leaf_chunk_id": p.get("source_leaf_chunk_id"),
+                            "chunk_index": p.get("chunk_index"),
                             "excerpt": (raw[:200] + "...") if len(raw or "") > 200 else raw,
                             "passage_full": raw,
                             "score": round(p["score"], 2),
-                            "page_no": p.get("page_no"),
-                            "page_start": p.get("page_start"),
-                            "page_end": p.get("page_end"),
+                            "page_no": resolved_page,
+                            "page_start": resolved_page_start,
+                            "page_end": resolved_page_end,
                             "section": p.get("section"),
                             "has_source_file": has_file_by_doc.get(did, False),
                         }
                     )
+                logger.info(
+                    "Space chat sources built: %s",
+                    [
+                        {
+                            "idx": s.get("index"),
+                            "doc": s.get("document_id"),
+                            "chunk_index": s.get("chunk_index"),
+                            "page_no": s.get("page_no"),
+                            "page_start": s.get("page_start"),
+                            "page_end": s.get("page_end"),
+                        }
+                        for s in sources_data
+                    ],
+                )
                 yield f"data: {json.dumps({'sources': sources_data})}\n\n"
             yield f"data: {json.dumps({'done': True})}\n\n"
         except Exception as e:
