@@ -8,7 +8,7 @@ import time
 from typing import Optional
 
 from app.database import get_session, create_db_and_tables, engine
-from app.routers import auth, chat, conversations, kag, library, spaces, admin
+from app.routers import auth, chat, conversations, kag, library, spaces, admin, notes, projects
 from app.config import settings
 from app.services.auth_service import decode_token, get_user_by_id
 import logging
@@ -59,6 +59,8 @@ app.include_router(chat.router)
 app.include_router(conversations.router)
 app.include_router(kag.router)
 app.include_router(admin.router)
+app.include_router(notes.router)
+app.include_router(projects.router)
 
 # Configuration des templates
 templates = Jinja2Templates(directory="app/templates")
@@ -104,21 +106,25 @@ async def startup_event():
         logger.warning(f"⚠️ Erreur lors de l'initialisation du modèle d'embeddings: {e}")
         # Ne pas bloquer le démarrage si le modèle n'est pas disponible
     
-    # Démarrer les workers pour la génération d'embeddings en arrière-plan
+    # Workers threads (embeddings + documents) uniquement si thread ou hybrid (repli Celery)
     try:
-        from app.services.chunk_service import _ensure_embedding_workers
-        _ensure_embedding_workers()
-        logger.info("Workers d'embeddings démarrés")
+        from app.services.task_dispatch import should_start_thread_workers
+
+        if should_start_thread_workers():
+            from app.services.chunk_service import _ensure_embedding_workers
+            from app.services.document_service_new import _ensure_document_workers
+
+            _ensure_embedding_workers()
+            logger.info("Workers d'embeddings (threads) démarrés")
+            _ensure_document_workers()
+            logger.info("Workers de traitement de documents (threads) démarrés")
+        else:
+            logger.info(
+                "TASK_BACKEND_MODE=%s : pas de workers threads sur le process web (Celery)",
+                settings.TASK_BACKEND_MODE,
+            )
     except Exception as e:
-        logger.error(f"Erreur lors du démarrage des workers d'embeddings: {e}")
-    
-    # Démarrer les workers pour le traitement de documents en arrière-plan
-    try:
-        from app.services.document_service_new import _ensure_document_workers
-        _ensure_document_workers()
-        logger.info("Workers de traitement de documents démarrés")
-    except Exception as e:
-        logger.error(f"Erreur lors du démarrage des workers de traitement de documents: {e}")
+        logger.error(f"Erreur lors du démarrage des workers threads: {e}")
 
 
 @app.get("/", response_class=HTMLResponse)

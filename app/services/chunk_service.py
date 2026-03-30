@@ -537,7 +537,9 @@ def recreate_chunks_for_note_async(note_id: int, project_id: int):
             # Ajouter à la file d'attente pour génération d'embeddings en arrière-plan
             if chunks:
                 generate_embeddings_for_chunks_async(note.id, project_id)
-                logger.info(f"Tâche de génération d'embeddings ajoutée à la file pour la note {note_id}")
+                logger.info(
+                    "Tâche embeddings dispatchée pour la note %s", note_id
+                )
             else:
                 logger.info(f"Aucun chunk créé pour la note {note_id}")
                 
@@ -545,22 +547,19 @@ def recreate_chunks_for_note_async(note_id: int, project_id: int):
         logger.error(f"Erreur lors de la re-création des chunks pour la note {note_id}: {e}")
 
 
-def generate_embeddings_for_chunks_async(note_id: int, project_id: int):
+def _enqueue_embeddings_thread_queue(note_id: int, project_id: int):
     """
-    Ajouter une note à la file d'attente pour génération d'embeddings en arrière-plan.
-    Cette fonction est non-bloquante et retourne immédiatement.
-    
-    Args:
-        note_id: ID de la note
-        project_id: ID du projet
+    Ajouter une note à la file thread pour génération d'embeddings en arrière-plan.
     """
-    # S'assurer que les workers sont démarrés
     _ensure_embedding_workers()
-    
-    # Ajouter la tâche à la file d'attente
+
     embedding_queue.put((note_id, project_id))
     queue_size = embedding_queue.qsize()
-    logger.info(f"✅ Tâche de génération d'embeddings ajoutée à la file pour la note {note_id} (taille de la file: {queue_size})")
+    logger.info(
+        "✅ Tâche embeddings (thread) note_id=%s (file: %s)",
+        note_id,
+        queue_size,
+    )
 
 
 def _ensure_embedding_workers():
@@ -1009,21 +1008,29 @@ def complete_document_embeddings_and_kag_sync(document_id: int) -> None:
     _process_embeddings_for_document(document_id)
 
 
-_legacy_generate_embeddings_for_chunks_async = generate_embeddings_for_chunks_async
+def complete_note_embeddings_and_kag_sync(note_id: int, project_id: int) -> None:
+    """
+    Finalise l'indexation d'une note de façon bloquante : embeddings puis KAG.
+    À appeler depuis un worker document pour garantir le 100% avant le suivant.
+    """
+    _process_embeddings_for_note(note_id, project_id)
 
 
 def generate_embeddings_for_chunks_async(note_id: int, project_id: int):
     """
-    Compatibilité:
-    - si note existe => pipeline legacy notes
-    - sinon, si document existe => pipeline document (sync, hors session du dispatch)
+    Embeddings en arrière-plan : Celery si activé, sinon thread queue ou sync document.
     """
+    from app.services.task_dispatch import try_dispatch_embeddings_job
+
+    if try_dispatch_embeddings_job(note_id, project_id):
+        return
+
     document_id_sync: Optional[int] = None
     try:
         with Session(engine) as session:
             note = session.get(Note, note_id)
             if note:
-                _legacy_generate_embeddings_for_chunks_async(note_id, project_id)
+                _enqueue_embeddings_thread_queue(note_id, project_id)
                 return
             document = session.get(Document, note_id)
             if document:
@@ -1037,6 +1044,5 @@ def generate_embeddings_for_chunks_async(note_id: int, project_id: int):
         _process_embeddings_for_document(document_id_sync)
         return
 
-    # fallback legacy (comportement historique)
-    _legacy_generate_embeddings_for_chunks_async(note_id, project_id)
+    _enqueue_embeddings_thread_queue(note_id, project_id)
 

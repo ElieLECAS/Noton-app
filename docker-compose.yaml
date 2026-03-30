@@ -16,12 +16,23 @@ services:
             timeout: 5s
             retries: 5
 
+    redis:
+        image: redis:7-alpine
+        container_name: noton_redis
+        ports:
+            - "6379:6379"
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 5s
+            timeout: 3s
+            retries: 5
+
     web:
         build:
             context: .
             dockerfile: ./app/Dockerfile
         container_name: noton_web
-        command: sh -c "sleep 5 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+        command: sh -c "sleep 5 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
         volumes:
             # Monter le code dans /app/app pour que les imports "from app.xxx" fonctionnent
             - ./app:/app/app
@@ -75,8 +86,74 @@ services:
             - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-true}
             - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
             - VISION_MODEL=${VISION_MODEL:-gpt-4o}
+            # Redis + Celery (tâches background hors process web)
+            - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+            - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379/0}
+            - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
+            - TASK_BACKEND_MODE=${TASK_BACKEND_MODE:-hybrid}
         depends_on:
             db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+
+    worker:
+        build:
+            context: .
+            dockerfile: ./app/Dockerfile
+        container_name: noton_worker
+        command: sh -c "sleep 10 && celery -A app.celery_app worker -l INFO -Q documents,embeddings,celery -c 1"
+        volumes:
+            - ./app:/app/app
+            - ./app/alembic:/app/alembic
+            - ./app/alembic.ini:/app/alembic.ini
+            - models_cache:/root/.cache
+            - ./media:/app/media
+        environment:
+            - APP_NAME=${APP_NAME}
+            - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+            - SECRET_KEY=${SECRET_KEY}
+            - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+            - MISTRAL_BASE_URL=${MISTRAL_BASE_URL:-https://api.mistral.ai}
+            - OPENAI_API_KEY=${OPENAI_API_KEY}
+            - OPENAI_MODEL=${OPENAI_MODEL}
+            - BRAVE_SEARCH_API_KEY=${BRAVE_SEARCH_API_KEY:-}
+            - MODEL_FAST=${MODEL_FAST:-mistral-small-latest}
+            - MAX_COMPLETION_TOKENS=${MAX_COMPLETION_TOKENS:-1024}
+            - SPACE_CHAT_MAX_TOKENS=${SPACE_CHAT_MAX_TOKENS:-}
+            - SPACE_CHAT_TEMPERATURE=${SPACE_CHAT_TEMPERATURE:-0.55}
+            - SPACE_CHAT_TOP_P=${SPACE_CHAT_TOP_P:-}
+            - DOCLING_CPU_ONLY=${DOCLING_CPU_ONLY:-true}
+            - DOCLING_OCR_ENABLED=${DOCLING_OCR_ENABLED:-true}
+            - DOCLING_OCR_LANG=${DOCLING_OCR_LANG:-}
+            - USE_ALL_CPU_CORES=${USE_ALL_CPU_CORES:-false}
+            - TORCH_NUM_THREADS=${TORCH_NUM_THREADS:-}
+            - OMP_NUM_THREADS=${OMP_NUM_THREADS:-}
+            - OCR_IMAGE_SCALE=${OCR_IMAGE_SCALE:-3.0}
+            - OCR_PREPROCESS_ENABLED=${OCR_PREPROCESS_ENABLED:-true}
+            - OCR_FALLBACK_ENABLED=${OCR_FALLBACK_ENABLED:-true}
+            - OCR_MIN_TEXT_LENGTH=${OCR_MIN_TEXT_LENGTH:-50}
+            - OCR_TESSERACT_CONFIG=${OCR_TESSERACT_CONFIG:---oem 3 --psm 6 -l fra+eng}
+            - EMBEDDING_BATCH_SIZE=${EMBEDDING_BATCH_SIZE:-16}
+            - EMBEDDING_DIMENSION=${EMBEDDING_DIMENSION:-1024}
+            - EMBEDDING_MODEL=${EMBEDDING_MODEL:-BAAI/bge-m3}
+            - EMBEDDING_DEVICE=${EMBEDDING_DEVICE:-cpu}
+            - HIERARCHICAL_CHUNK_SIZES=${HIERARCHICAL_CHUNK_SIZES:-3072,1024,384}
+            - RAG_TOP_K=${RAG_TOP_K}
+            - KAG_ENABLED=${KAG_ENABLED:-true}
+            - KAG_EXTRACTION_PROVIDER=${KAG_EXTRACTION_PROVIDER}
+            - KAG_EXTRACTION_MODEL=${KAG_EXTRACTION_MODEL}
+            - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-true}
+            - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
+            - VISION_MODEL=${VISION_MODEL:-gpt-4o}
+            - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+            - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379/0}
+            - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
+            - TASK_BACKEND_MODE=celery
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
                 condition: service_healthy
 
 volumes:

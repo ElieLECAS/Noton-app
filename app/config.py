@@ -74,6 +74,12 @@ class Settings(BaseSettings):
     MULTIMODAL_ENABLED: bool = False
     VISION_MODEL: str = "gpt-4o"  # Modèle pour décrire les images si MULTIMODAL_ENABLED
 
+    # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
+    TASK_BACKEND_MODE: str = "thread"
+    REDIS_URL: Optional[str] = None  # ex. redis://redis:6379/0
+    CELERY_BROKER_URL: Optional[str] = None  # défaut: REDIS_URL
+    CELERY_RESULT_BACKEND: Optional[str] = None  # défaut: REDIS_URL
+
     @field_validator('MULTIMODAL_ENABLED', mode='before')
     @classmethod
     def parse_multimodal_enabled(cls, v: Union[str, bool, None]) -> bool:
@@ -86,6 +92,17 @@ class Settings(BaseSettings):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
     
+    @field_validator('TASK_BACKEND_MODE', mode='before')
+    @classmethod
+    def parse_task_backend_mode(cls, v: Union[str, None]) -> str:
+        """thread | celery | hybrid"""
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return "thread"
+        s = str(v).strip().lower()
+        if s in ("thread", "celery", "hybrid"):
+            return s
+        return "thread"
+
     @field_validator('KAG_ENABLED', mode='before')
     @classmethod
     def parse_kag_enabled(cls, v: Union[str, bool, None]) -> bool:

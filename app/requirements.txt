@@ -1,5 +1,7 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
+celery[redis]==5.4.0
+redis>=5.0,<6
 sqlmodel==0.0.14
 psycopg2-binary==2.9.9
 alembic==1.12.1

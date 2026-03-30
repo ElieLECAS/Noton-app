@@ -1135,8 +1135,8 @@ def _process_document_for_id(document_id: int, file_path: str):
             pass
 
 
-def process_document_async(document_id: int, file_path: str):
-    """Ajoute un document à la file d'attente pour traitement en arrière-plan."""
+def enqueue_library_document_thread(document_id: int, file_path: str):
+    """Ajoute un document à la file thread globale (sans Celery)."""
     try:
         with Session(engine) as session:
             document = session.get(Document, document_id)
@@ -1158,6 +1158,13 @@ def process_document_async(document_id: int, file_path: str):
     logger.info(
         "✅ Document %d ajouté à la file globale (taille: %d)", document_id, queue_size
     )
+
+
+def process_document_async(document_id: int, file_path: str):
+    """Délègue à Celery ou à la file thread selon TASK_BACKEND_MODE."""
+    from app.services.task_dispatch import dispatch_library_document
+
+    dispatch_library_document(document_id, file_path)
 
 
 def _ensure_document_workers():

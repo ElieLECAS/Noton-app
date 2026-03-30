@@ -21,8 +21,9 @@ from app.services.document_service_new import (
     create_document, get_document_by_id, get_documents_by_folder,
     get_documents_by_library, save_uploaded_file, process_document_async,
     add_document_to_spaces, remove_document_from_spaces, move_document, delete_document,
-    update_document, reindex_library_document,
+    update_document,
 )
+from app.services.task_dispatch import dispatch_reindex_library
 from app.services.document_space_service import get_spaces_for_document
 from pathlib import Path
 import logging
@@ -238,7 +239,14 @@ async def reindex_library_document_endpoint(
     sans réupload — le fichier source doit exister (media/documents).
     """
     try:
-        return reindex_library_document(document_id, current_user.id)
+        result = dispatch_reindex_library(document_id, current_user.id)
+        if isinstance(result, str):
+            return {
+                "status": "queued",
+                "celery_task_id": result,
+                "document_id": document_id,
+            }
+        return result
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

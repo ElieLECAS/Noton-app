@@ -12,6 +12,7 @@ from app.models.note import Note
 from app.services.chunk_service import (
     create_chunks_for_note,
     create_chunks_for_note_from_docling,
+    complete_note_embeddings_and_kag_sync,
     generate_embeddings_for_chunks_async,
 )
 from datetime import datetime
@@ -781,7 +782,9 @@ def _process_document_worker():
                     pass
 
 
-def _process_document_for_note(note_id: int, file_path: str):
+def _process_document_for_note(
+    note_id: int, file_path: str, sync_embeddings: bool = False
+):
     """
     Traiter un document pour une note (appelé par le worker).
 
@@ -790,6 +793,8 @@ def _process_document_for_note(note_id: int, file_path: str):
     """
     try:
         logger.info("Démarrage du traitement du document pour la note %d", note_id)
+        run_embeddings_sync = False
+        project_id_for_sync = None
 
         with Session(engine) as session:
             note = session.get(Note, note_id)
@@ -921,11 +926,19 @@ def _process_document_for_note(note_id: int, file_path: str):
                     note.updated_at = datetime.utcnow()
                     session.add(note)
                     session.commit()
-                    generate_embeddings_for_chunks_async(note.id, note.project_id)
-                    logger.info(
-                        "Tâche de génération d'embeddings ajoutée à la file pour la note %d",
-                        note_id,
-                    )
+                    if sync_embeddings:
+                        run_embeddings_sync = True
+                        project_id_for_sync = note.project_id
+                        logger.info(
+                            "Embeddings/KAG synchrones activés pour la note %d",
+                            note_id,
+                        )
+                    else:
+                        generate_embeddings_for_chunks_async(note.id, note.project_id)
+                        logger.info(
+                            "Tâche de génération d'embeddings ajoutée à la file pour la note %d",
+                            note_id,
+                        )
                 else:
                     note.processing_status = "completed"
                     note.processing_progress = 100
@@ -948,6 +961,9 @@ def _process_document_for_note(note_id: int, file_path: str):
 
             # Le fichier traité est conservé de manière permanente dans media/documents/{note_id}{ext}
             # (PDF converti ou format natif Docling selon le type d'entrée).
+
+        if run_embeddings_sync and project_id_for_sync is not None:
+            complete_note_embeddings_and_kag_sync(note_id, project_id_for_sync)
 
     except Exception as e:
         logger.error(
@@ -976,11 +992,8 @@ def _process_document_for_note(note_id: int, file_path: str):
             )
 
 
-def process_document_async(note_id: int, file_path: str):
-    """
-    Ajouter un document à la file d'attente pour traitement en arrière-plan.
-    Cette fonction est non-bloquante et retourne immédiatement.
-    """
+def enqueue_project_document_thread(note_id: int, file_path: str):
+    """Ajoute un document à la file thread du projet (sans Celery)."""
     try:
         with Session(engine) as session:
             note = session.get(Note, note_id)
@@ -1016,6 +1029,13 @@ def process_document_async(note_id: int, file_path: str):
         note_id,
         queue_size,
     )
+
+
+def process_document_async(note_id: int, file_path: str):
+    """Délègue à Celery ou file thread selon TASK_BACKEND_MODE."""
+    from app.services.task_dispatch import dispatch_project_document
+
+    dispatch_project_document(note_id, file_path)
 
 
 def _ensure_document_workers():
