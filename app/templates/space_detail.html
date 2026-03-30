@@ -293,22 +293,8 @@
       </a>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 flex-1 min-h-0">
-      <section class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-auto">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="font-semibold text-gray-900 dark:text-gray-100">Conversations</h2>
-          <button
-            type="button"
-            onclick="createNewConversation()"
-            class="text-xs px-2 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <i class="ti ti-plus"></i> Nouvelle
-          </button>
-        </div>
-        <div id="conversations-list" class="space-y-2 text-sm"></div>
-      </section>
-
-      <section class="lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col min-h-0">
+    <div class="grid grid-cols-1 gap-4 flex-1 min-h-0">
+      <section class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col min-h-0">
         <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 min-h-0">
           <div class="text-center text-gray-500 py-12">Sélectionnez ou créez une conversation.</div>
         </div>
@@ -409,6 +395,19 @@ function parseMarkdown(text) {
     ADD_ATTR: ["src", "alt", "class", "style", "title"],
   });
   return wrapTablesInResponsive(cleanHtml);
+}
+
+// Désactivation temporaire de l'affichage des citations [1], [2], etc. dans les espaces.
+function stripCitationMarkers(text) {
+  if (!text) return text;
+  let cleaned = text;
+  // Retire les marqueurs [1], [1, 2], etc.
+  cleaned = cleaned.replace(/\[((?:\d+\s*(?:,\s*\d+\s*)*))\]/g, "");
+  // Retire le bloc de synthèse des sources parfois généré en fin de réponse.
+  cleaned = cleaned.replace(/\n?\s*Sources?\s+textuelles?\s*\(\d+\)[\s\S]*$/i, "");
+  // Retire une éventuelle section "Sources" en fin de réponse.
+  cleaned = cleaned.replace(/\n?\s*Sources?\s*:?\s*[\s\S]*$/i, "");
+  return cleaned.replace(/[ \t]{2,}/g, " ").trim();
 }
 
 function escapeHtml(text) {
@@ -563,7 +562,7 @@ async function api(url, options = {}) {
 }
 
 function renderConversations() {
-  const host = document.getElementById("conversations-list");
+  const host = document.getElementById("spaces-list");
   if (!host) return;
 
   if (!conversations.length) {
@@ -575,7 +574,7 @@ function renderConversations() {
     <button
       type="button"
       onclick="selectConversation(${conv.id})"
-      class="w-full text-left px-3 py-2 rounded-lg border transition-colors ${
+      class="w-full text-left px-3 py-2 mb-2 rounded-lg border transition-colors ${
         currentConversationId === conv.id
           ? "border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-700 dark:bg-blue-900/25 dark:text-blue-200"
           : "border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -586,6 +585,19 @@ function renderConversations() {
       <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${conv.message_count || 0} message(s)</div>
     </button>
   `).join("");
+}
+
+function setupSpaceSidebar() {
+  const title = document.getElementById("sidebar-secondary-title");
+  if (title) {
+    title.textContent = "CONVERSATIONS";
+  }
+
+  const actionButton = document.getElementById("sidebar-secondary-action");
+  if (actionButton) {
+    actionButton.title = "Nouvelle conversation";
+    actionButton.onclick = () => createNewConversation();
+  }
 }
 
 async function refreshConversationsSidebar(preferredConversationId = null) {
@@ -672,7 +684,7 @@ function addMessage(role, content) {
   if (host.querySelector(".text-center")) host.innerHTML = "";
   const div = document.createElement("div");
   div.className = `flex ${role === "user" ? "justify-end" : "justify-start"}`;
-  div.innerHTML = `<div class="${role === "user" ? "max-w-3xl bg-blue-600 text-white" : "max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"} rounded-lg px-4 py-2">${role === "assistant" ? `<div class="markdown-content">${parseMarkdown(content)}</div>` : `<p class="whitespace-pre-wrap">${content}</p>`}</div>`;
+  div.innerHTML = `<div class="${role === "user" ? "max-w-3xl bg-blue-600 text-white" : "max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"} rounded-lg px-4 py-2">${role === "assistant" ? `<div class="markdown-content">${parseMarkdown(stripCitationMarkers(content))}</div>` : `<p class="whitespace-pre-wrap">${content}</p>`}</div>`;
   host.appendChild(div);
   host.scrollTop = host.scrollHeight;
 }
@@ -752,13 +764,13 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
         if (data.message && data.message.content) {
           full += data.message.content;
           contentEl.classList.remove("italic");
-          const withMarkdown = parseMarkdown(full);
-          contentEl.innerHTML = transformCitationsToLinks(withMarkdown, receivedSources);
+          const withMarkdown = parseMarkdown(stripCitationMarkers(full));
+          contentEl.innerHTML = withMarkdown;
         } else if (data.sources) {
           receivedSources = data.sources;
           if (full) {
-            const withMarkdown = parseMarkdown(full);
-            contentEl.innerHTML = transformCitationsToLinks(withMarkdown, receivedSources);
+            const withMarkdown = parseMarkdown(stripCitationMarkers(full));
+            contentEl.innerHTML = withMarkdown;
           }
         } else if (data.error) {
           streamError = String(data.error);
@@ -782,12 +794,8 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     contentEl.classList.remove("italic");
     contentEl.textContent = "Aucune réponse générée.";
   } else if (full && !streamError) {
-    const withMarkdown = parseMarkdown(full);
-    const withCitations = transformCitationsToLinks(withMarkdown, receivedSources);
-    const finalHtml = receivedSources.length > 0
-      ? `${withCitations}${buildSourcesSection(receivedSources)}`
-      : withCitations;
-    contentEl.innerHTML = finalHtml;
+    const withMarkdown = parseMarkdown(stripCitationMarkers(full));
+    contentEl.innerHTML = withMarkdown;
   }
   chatHistory.push({ role: "user", content: message });
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });
@@ -799,6 +807,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
+  setupSpaceSidebar();
   await loadSpace();
   await loadConversations();
 });
