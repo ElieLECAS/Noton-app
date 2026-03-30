@@ -1008,14 +1008,6 @@ def complete_document_embeddings_and_kag_sync(document_id: int) -> None:
     _process_embeddings_for_document(document_id)
 
 
-def complete_note_embeddings_and_kag_sync(note_id: int, project_id: int) -> None:
-    """
-    Finalise l'indexation d'une note de façon bloquante : embeddings puis KAG.
-    À appeler depuis un worker document pour garantir le 100% avant le suivant.
-    """
-    _process_embeddings_for_note(note_id, project_id)
-
-
 def generate_embeddings_for_chunks_async(note_id: int, project_id: int):
     """
     Embeddings en arrière-plan : Celery si activé, sinon thread queue ou sync document.

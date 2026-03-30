@@ -40,7 +40,7 @@ def process_project_document(self, note_id: int, file_path: str) -> None:
         self.request.id,
     )
     try:
-        _process_document_for_note(note_id, file_path, sync_embeddings=True)
+        _process_document_for_note(note_id, file_path)
     except Exception as exc:
         logger.exception("process_project_document échec note_id=%s: %s", note_id, exc)
         raise self.retry(exc=exc)
