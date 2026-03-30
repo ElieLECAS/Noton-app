@@ -1,8 +1,8 @@
-docker build -t elielecas/LIA:latest ./dashboard
+docker build -f ./app/Dockerfile -t elielecas/lia:latest .
 
-docker tag elielecas/LIA:latest elielecas/LIA:v1.0.0
+docker tag elielecas/lia:latest elielecas/lia:v1.1.1
 
-docker push elielecas/LIA:latest
-docker push elielecas/LIA:v1.0.0
+docker push elielecas/lia:latest
+docker push elielecas/lia:v1.1.1
 
 python -m app.scripts.create_user --help

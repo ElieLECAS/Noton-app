@@ -40,7 +40,7 @@ services:
             - ./app/alembic.ini:/app/alembic.ini
             # Tests pytest
             - ./tests:/app/tests
-            - ./pytest.ini:/app/pytest.ini
+            - ./app/pytest.ini:/app/pytest.ini
             # Cache persistant pour les modèles ML (évite re-téléchargement à chaque rebuild)
             - models_cache:/root/.cache
             # Images extraites par Docling (multimodal) - montées localement pour accès externe
@@ -111,7 +111,7 @@ services:
             - ./app/alembic:/app/alembic
             - ./app/alembic.ini:/app/alembic.ini
             - ./tests:/app/tests
-            - ./pytest.ini:/app/pytest.ini
+            - ./app/pytest.ini:/app/pytest.ini
             - models_cache:/root/.cache
             - ./media:/app/media
         environment:

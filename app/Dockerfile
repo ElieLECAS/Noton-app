@@ -78,7 +78,7 @@ COPY app/ ./app/
 COPY app/alembic/ ./alembic/
 COPY app/alembic.ini ./alembic.ini
 COPY tests/ ./tests/
-COPY pytest.ini ./pytest.ini
+COPY app/pytest.ini ./pytest.ini
 
 # Exposer le port
 EXPOSE 8000
