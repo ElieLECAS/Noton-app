@@ -90,10 +90,10 @@ services:
             - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
             - VISION_MODEL=${VISION_MODEL:-gpt-4o}
             # Redis + Celery (tâches background hors process web)
-            - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
-            - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379/0}
-            - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
-            - TASK_BACKEND_MODE=${TASK_BACKEND_MODE:-hybrid}
+            - REDIS_URL=${REDIS_URL}
+            - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+            - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+            - TASK_BACKEND_MODE=${TASK_BACKEND_MODE}
         depends_on:
             db:
                 condition: service_healthy
@@ -151,9 +151,9 @@ services:
             - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-true}
             - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
             - VISION_MODEL=${VISION_MODEL:-gpt-4o}
-            - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
-            - CELERY_BROKER_URL=${CELERY_BROKER_URL:-redis://redis:6379/0}
-            - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
+            - REDIS_URL=${REDIS_URL}
+            - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+            - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
             - TASK_BACKEND_MODE=celery
         depends_on:
             db:
