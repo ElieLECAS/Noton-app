@@ -21,7 +21,7 @@ services:
             context: .
             dockerfile: ./app/Dockerfile
         container_name: noton_web
-        command: sh -c "sleep 5 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+        command: sh -c "sleep 5 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
         volumes:
             # Monter le code dans /app/app pour que les imports "from app.xxx" fonctionnent
             - ./app:/app/app
@@ -48,7 +48,6 @@ services:
             - SPACE_CHAT_MAX_TOKENS=${SPACE_CHAT_MAX_TOKENS:-}
             - SPACE_CHAT_TEMPERATURE=${SPACE_CHAT_TEMPERATURE:-0.55}
             - SPACE_CHAT_TOP_P=${SPACE_CHAT_TOP_P:-}
-            - SPACE_CHAT_SYSTEM_PROMPT=${SPACE_CHAT_SYSTEM_PROMPT:-}
             # Optimisations CPU pour Docling/EasyOCR
             - DOCLING_CPU_ONLY=${DOCLING_CPU_ONLY:-true}
             - DOCLING_OCR_ENABLED=${DOCLING_OCR_ENABLED:-true}

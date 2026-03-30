@@ -32,15 +32,6 @@ class Settings(BaseSettings):
     SPACE_CHAT_MAX_TOKENS: Optional[int] = None
     SPACE_CHAT_TEMPERATURE: float = 0.55
     SPACE_CHAT_TOP_P: Optional[float] = None
-    SPACE_CHAT_SYSTEM_PROMPT: str = (
-        "Tu es LIA, assistant conversationnel menuiserie pour collaborateurs et clients. "
-        "Réponds en français, avec un ton humain, professionnel et chaleureux. "
-        "Base-toi uniquement sur les passages fournis. "
-        "Si une information manque, dis-le clairement sans inventer. "
-        "Évite les tableaux sauf si l'utilisateur les demande explicitement. "
-        "Privilégie des phrases naturelles, puis termine par une question utile pour avancer."
-    )
-    
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
     DOCLING_USE_GPU: Optional[bool] = None  # None = auto-détection, True/False pour forcer
