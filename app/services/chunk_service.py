@@ -8,12 +8,16 @@ from app.models.document_chunk import DocumentChunk
 from app.models.document import Document
 from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.knowledge_entity import KnowledgeEntity
+import re
+
 from app.services.chunking_service import (
     chunk_note,
     chunk_note_from_docling_docs,
     chunk_document_from_docling_docs,
-    CHUNKING_VERSION_FIXED_WINDOW,
     CHUNKING_VERSION_MARKDOWN_H2,
+    CHUNKING_VERSION_ADAPTIVE,
+    resolve_adaptive_chunk_params,
+    _detect_content_type,
 )
 from app.database import engine
 from app.config import settings
@@ -759,6 +763,27 @@ def _split_text_for_document(text: str, chunk_size: int = 1200, overlap: int = 1
     return chunks
 
 
+def _split_text_adaptive_for_document(text: str) -> List[dict]:
+    """
+    Découpe par paragraphe avec taille/overlap selon le type (procédure, normatif, description).
+    """
+    if not text or not text.strip():
+        return []
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n+", text) if p.strip()]
+    if not paragraphs:
+        return _split_text_for_document(text.strip())
+    chunks: List[dict] = []
+    for para in paragraphs:
+        ct = _detect_content_type(para)
+        chunk_size, overlap = resolve_adaptive_chunk_params(ct)
+        sub = _split_text_for_document(para, chunk_size=chunk_size, overlap=overlap)
+        for item in sub:
+            item = dict(item)
+            item["content_type"] = ct
+            chunks.append(item)
+    return chunks if chunks else _split_text_for_document(text.strip())
+
+
 def create_chunks_for_document(
     session: Session, document: Document, generate_embeddings: bool = False
 ) -> List[DocumentChunk]:
@@ -770,10 +795,11 @@ def create_chunks_for_document(
     raw_chunks = _try_markdown_h2_sections(source_text)
     chunking_version = CHUNKING_VERSION_MARKDOWN_H2
     if raw_chunks is None:
-        raw_chunks = _split_text_for_document(source_text)
-        chunking_version = CHUNKING_VERSION_FIXED_WINDOW
+        raw_chunks = _split_text_adaptive_for_document(source_text)
+        chunking_version = CHUNKING_VERSION_ADAPTIVE
     chunks: List[DocumentChunk] = []
     for idx, item in enumerate(raw_chunks):
+        ct = item.get("content_type") or _detect_content_type(item.get("content", ""))
         metadata = {
             "document_id": document.id,
             "library_id": document.library_id,
@@ -781,6 +807,7 @@ def create_chunks_for_document(
             "document_title": document.title or "",
             "chunk_index": idx,
             "chunking_version": chunking_version,
+            "content_type": ct,
         }
         chunks.append(
             DocumentChunk(

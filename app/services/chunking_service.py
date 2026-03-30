@@ -1,5 +1,6 @@
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Tuple
 import logging
+import re
 import threading
 import uuid
 
@@ -17,6 +18,15 @@ logger = logging.getLogger(__name__)
 CHUNKING_VERSION_DOCLING_HIERARCHICAL = "docling_hierarchical_v1"
 CHUNKING_VERSION_FIXED_WINDOW = "fixed_window_v1"
 CHUNKING_VERSION_MARKDOWN_H2 = "markdown_h2_sections_v1"
+CHUNKING_VERSION_ADAPTIVE = "adaptive_window_v1"
+
+# Chunking adaptatif (fallback document) — approx. tokens ≈ chars/4
+ADAPTIVE_CHUNK_CHARS_PROCEDURE = (600, 1200)  # ~150–300 tokens
+ADAPTIVE_OVERLAP_FRAC_PROCEDURE = 0.25
+ADAPTIVE_CHUNK_CHARS_NORMATIVE = (1600, 2400)  # ~400–600 tokens
+ADAPTIVE_OVERLAP_FRAC_NORMATIVE = 0.10
+ADAPTIVE_CHUNK_CHARS_DESCRIPTION = (3200, 4800)  # ~800+ tokens
+ADAPTIVE_OVERLAP_FRAC_DESCRIPTION = 0.15
 
 _docling_node_parser = None
 _docling_node_parser_lock = threading.Lock()
@@ -289,6 +299,149 @@ def _is_picture_or_table_chunk(meta: dict) -> bool:
     return False
 
 
+def _is_markdown_table_text(text: str) -> bool:
+    """Heuristique : grille Markdown présente (| … |)."""
+    if not text or not text.strip():
+        return False
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    if len(lines) < 2:
+        return False
+    return lines[0].startswith("|") and "|" in lines[0]
+
+
+def _parse_markdown_table(text: str) -> Optional[Tuple[List[str], List[List[str]]]]:
+    """
+    Parse un tableau Markdown simple en (en-têtes, lignes de données).
+    Ignore la ligne séparatrice |---|---|.
+    """
+    if not _is_markdown_table_text(text):
+        return None
+    table_lines = [
+        ln.strip()
+        for ln in text.splitlines()
+        if ln.strip() and ln.strip().startswith("|")
+    ]
+    if len(table_lines) < 2:
+        return None
+
+    def _split_row(line: str) -> List[str]:
+        return [c.strip() for c in line.strip().strip("|").split("|")]
+
+    headers = _split_row(table_lines[0])
+    if not headers:
+        return None
+
+    idx = 1
+    if len(table_lines) > 1:
+        sep = table_lines[1].replace("|", "").replace("-", "").replace(":", "").strip()
+        if not sep:
+            idx = 2
+
+    data_rows: List[List[str]] = []
+    for i in range(idx, len(table_lines)):
+        row = _split_row(table_lines[i])
+        if not any(row):
+            continue
+        # Aligner longueur sur les en-têtes
+        while len(row) < len(headers):
+            row.append("")
+        data_rows.append(row[: len(headers)])
+    if not data_rows:
+        return None
+    return headers, data_rows
+
+
+def _table_row_chunk_text(
+    *,
+    headers: List[str],
+    cells: List[str],
+    parent_heading: str,
+    caption: Optional[str],
+    page_no: Optional[int],
+    table_id: str,
+    row_index: int,
+) -> str:
+    """Phrase autonome par ligne avec réinjection des en-têtes de colonnes."""
+    parts = []
+    for h, c in zip(headers, cells):
+        h = (h or "").strip()
+        c = (c or "").strip()
+        if h and c:
+            parts.append(f"{h}: {c}")
+        elif c:
+            parts.append(c)
+    if not parts:
+        return ""
+    ctx = []
+    if caption:
+        ctx.append(f"Tableau ({caption})")
+    if page_no is not None:
+        ctx.append(f"p.{page_no}")
+    prefix = " — ".join(ctx) if ctx else "Tableau"
+    if parent_heading:
+        prefix = f"[{parent_heading}] {prefix}"
+    body = " ; ".join(parts)
+    return (
+        f"{prefix}. Pour cette ligne du tableau (id={table_id}, ligne {row_index + 1}): {body}"
+    )
+
+
+def _should_expand_table_leaf(meta: dict, raw_content: str) -> bool:
+    if meta.get("label") == "table":
+        return True
+    return _is_markdown_table_text(raw_content)
+
+
+def _list_parent_title_from_headings(headings: list) -> Optional[str]:
+    """Dernier titre de la hiérarchie pour préfixer les items de liste."""
+    if not headings or not isinstance(headings, list):
+        return None
+    for h in reversed(headings):
+        if h is not None and str(h).strip():
+            return str(h).strip()
+    return None
+
+
+_NORMATIVE_PAT = re.compile(
+    r"\b(DTU|NF\s|EN\s|CE\b|norme|article|décret|arrêté|conformément|ISO\s)\b",
+    re.IGNORECASE,
+)
+_PROCEDURE_PAT = re.compile(
+    r"(?im)^\s*\d+[\.\)]\s+|^\s*[-•]\s+|\b(visser|régler|monter|poser|contrôler|vérifier|serrer|ajuster)\b",
+)
+
+
+def _detect_content_type(text: str) -> str:
+    """
+    Étiquette grossière pour chunking adaptatif / métadonnées : procédure, normative, description.
+    """
+    if not text or not text.strip():
+        return "description"
+    t = text[:8000]
+    if _NORMATIVE_PAT.search(t):
+        return "normative"
+    if _PROCEDURE_PAT.search(t):
+        return "procedure"
+    return "description"
+
+
+def resolve_adaptive_chunk_params(content_type: str) -> Tuple[int, int]:
+    """
+    Retourne (chunk_size_chars, overlap_chars) selon le type de contenu.
+    """
+    if content_type == "procedure":
+        lo, hi = ADAPTIVE_CHUNK_CHARS_PROCEDURE
+        mid = (lo + hi) // 2
+        return mid, max(80, int(mid * ADAPTIVE_OVERLAP_FRAC_PROCEDURE))
+    if content_type == "normative":
+        lo, hi = ADAPTIVE_CHUNK_CHARS_NORMATIVE
+        mid = (lo + hi) // 2
+        return mid, max(120, int(mid * ADAPTIVE_OVERLAP_FRAC_NORMATIVE))
+    lo, hi = ADAPTIVE_CHUNK_CHARS_DESCRIPTION
+    mid = (lo + hi) // 2
+    return mid, max(200, int(mid * ADAPTIVE_OVERLAP_FRAC_DESCRIPTION))
+
+
 def _build_docling_hierarchical_specs(
     doc_metadata_base: dict,
     leaf_nodes: List[TextNode],
@@ -371,12 +524,97 @@ def _build_docling_hierarchical_specs(
             if not raw_content:
                 continue
 
-            leaf_node_id = leaf_node.node_id or str(uuid.uuid4())
+            leaf_node_id_base = leaf_node.node_id or str(uuid.uuid4())
             docling_meta = dict(leaf_node.metadata or {})
+            headings = (leaf_node.metadata or {}).get("headings") or []
 
             caption = _extract_caption_from_metadata(docling_meta)
             if _is_picture_or_table_chunk(docling_meta) and caption:
                 raw_content = f"{raw_content}\n\n{caption}".strip()
+
+            if docling_meta.get("label") == "list":
+                list_title = _list_parent_title_from_headings(headings) or parent_heading_display
+                if list_title:
+                    raw_content = f"[Liste: {list_title}]\n{raw_content}"
+
+            table_src = raw_content.split("\n\n")[0].strip()
+            parsed_table = None
+            if _should_expand_table_leaf(docling_meta, table_src):
+                parsed_table = _parse_markdown_table(table_src)
+            if parsed_table is None and _should_expand_table_leaf(docling_meta, raw_content):
+                parsed_table = _parse_markdown_table(raw_content)
+
+            if parsed_table:
+                headers, data_rows = parsed_table
+                table_id = str(uuid.uuid4())
+                page_no = docling_meta.get("page_no")
+                cap = caption or _extract_caption_from_metadata(docling_meta)
+
+                for ri, cells in enumerate(data_rows):
+                    row_text = _table_row_chunk_text(
+                        headers=headers,
+                        cells=cells,
+                        parent_heading=parent_heading_display,
+                        caption=cap,
+                        page_no=page_no,
+                        table_id=table_id,
+                        row_index=ri,
+                    )
+                    if not row_text.strip():
+                        continue
+
+                    leaf_rid = str(uuid.uuid4())
+                    leaf_metadata = dict(base_meta)
+                    leaf_metadata.update(docling_meta)
+                    leaf_metadata["parent_heading"] = parent_heading_display
+                    leaf_metadata["heading"] = parent_heading_display
+                    leaf_metadata["content_type"] = "table_row"
+                    leaf_metadata["table_id"] = table_id
+                    leaf_metadata["row_index"] = ri
+                    leaf_metadata["column_headers"] = headers
+                    leaf_metadata["raw_content"] = raw_content
+                    if section_anchors:
+                        leaf_metadata["image_anchor"] = " ; ".join(section_anchors)
+                        leaf_metadata["figure_title"] = section_anchors[0]
+                    elif cap:
+                        leaf_metadata["image_anchor"] = cap
+                        leaf_metadata["figure_title"] = cap
+                    leaf_metadata.update(
+                        {
+                            "node_id": leaf_rid,
+                            "parent_node_id": parent_node_id,
+                            "hierarchy_level": 1,
+                            "is_leaf": "true",
+                        }
+                    )
+                    if page_no is not None:
+                        leaf_metadata["page_no"] = page_no
+                    leaf_metadata["contains_image"] = True
+
+                    content = (
+                        f"[{parent_heading_display}] {row_text}"
+                        if parent_heading_display
+                        else row_text
+                    )
+
+                    specs.append(
+                        {
+                            "chunk_index": chunk_index,
+                            "is_leaf": True,
+                            "content": content,
+                            "text": content,
+                            "start_char": 0,
+                            "end_char": len(content),
+                            "node_id": leaf_rid,
+                            "parent_node_id": parent_node_id,
+                            "hierarchy_level": 1,
+                            "metadata_json": leaf_metadata,
+                        }
+                    )
+                    chunk_index += 1
+                continue
+
+            leaf_node_id = leaf_node_id_base
 
             if parent_heading_display:
                 content = f"[{parent_heading_display}] {raw_content}"
@@ -389,6 +627,7 @@ def _build_docling_hierarchical_specs(
             leaf_metadata["heading"] = parent_heading_display
             if parent_heading_display:
                 leaf_metadata["raw_content"] = raw_content
+            leaf_metadata["content_type"] = _detect_content_type(raw_content)
             if section_anchors:
                 leaf_metadata["image_anchor"] = " ; ".join(section_anchors)
                 leaf_metadata["figure_title"] = section_anchors[0]

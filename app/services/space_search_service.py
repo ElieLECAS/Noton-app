@@ -1,19 +1,19 @@
 """
 Service de recherche sémantique pour les espaces (architecture Document/Space).
 
-Aligné sur semantic_search_service.py (projets) :
+Pipeline principal :
   1. Embedding de la requête via BGE-m3
-  2. Recherche vectorielle SQL (pgvector) sur les DocumentChunk LEAF
-  3. Enrichissement KAG : graphe d'entités uniquement, fusion vectoriel + graphe
-  4. Filtrage pré-reranking (similarité minimale)
-  5. Early stopping si similarité déjà élevée
+  2. Candidats vectoriels (pgvector) + lexicaux (ts_rank_cd) + KAG (graphe)
+  3. Fusion hybride permanente (alpha*vector + beta*lexical + gamma*KAG), normalisation min-max
+  4. Filtrage pré-reranking
+  5. Early stopping si similarité vectorielle déjà élevée
   6. Reranking cross-encoder (BGE-reranker-v2-m3)
-  7. Résolution des parents pour contexte enrichi au LLM
+  7. Résolution des parents (clé ``node_id`` Docling + ``chunk-{id}``)
   8. Source authority (boost titre-requête)
-  9. Fallback lexical si besoin
+  9. Fallback lexical ILIKE si aucun candidat hybride
 """
 
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set, Tuple
 import os
 import re
 import unicodedata
@@ -60,6 +60,13 @@ _FALLBACK_STOPWORDS = {
 
 TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
 TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
+
+# Fusion hybride permanente (vectoriel + BM25-like + KAG) — constantes applicatives
+# (réglage direct dans le code, pas de variables d'environnement)
+RAG_HYBRID_ALPHA = 0.60
+RAG_HYBRID_BETA = 0.25
+RAG_HYBRID_GAMMA = 0.15
+HYBRID_MIN_SCORE = 0.06
 
 
 def _get_reranker():
@@ -160,11 +167,214 @@ def _retrieve_leaves_sql(
     return nodes_with_scores
 
 
+def _parse_chunk_id_from_node(node: TextNode) -> Optional[int]:
+    """Extrait l'ID base du chunk depuis ``chunk-{id}``."""
+    nid = getattr(node, "id_", None) or ""
+    if isinstance(nid, str) and nid.startswith("chunk-"):
+        try:
+            return int(nid.split("-", 1)[1])
+        except ValueError:
+            return None
+    return None
+
+
+def _normalize_min_max(scores: Dict[int, float]) -> Dict[int, float]:
+    """Min-max sur un dict non vide ; si une seule valeur, tout à 1.0."""
+    if not scores:
+        return {}
+    vals = list(scores.values())
+    lo, hi = min(vals), max(vals)
+    if hi - lo < 1e-9:
+        return {k: 1.0 for k in scores}
+    return {k: (v - lo) / (hi - lo) for k, v in scores.items()}
+
+
+def _retrieve_leaves_lexical_sql(
+    session: Session,
+    space_id: int,
+    query_text: str,
+    candidate_k: int,
+) -> List[NodeWithScore]:
+    """
+    Recherche lexicale (ts_rank_cd / type BM25) sur les feuilles de l'espace.
+    """
+    if not query_text or not query_text.strip():
+        return []
+
+    sql_query = text(
+        """
+        SELECT
+            dc.id,
+            dc.content,
+            dc.text,
+            dc.chunk_index,
+            dc.document_id,
+            dc.metadata_json,
+            dc.metadata_,
+            d.title AS document_title,
+            d.id AS document_id,
+            ts_rank_cd(
+                to_tsvector('simple', coalesce(dc.content, dc.text, '')),
+                plainto_tsquery('simple', :q)
+            ) AS lex_score
+        FROM documentchunk dc
+        INNER JOIN document d ON dc.document_id = d.id
+        INNER JOIN document_space ds ON ds.document_id = d.id
+        WHERE ds.space_id = :space_id
+          AND dc.is_leaf = true
+          AND coalesce(dc.content, dc.text, '') <> ''
+          AND to_tsvector('simple', coalesce(dc.content, dc.text, ''))
+              @@ plainto_tsquery('simple', :q)
+        ORDER BY lex_score DESC
+        LIMIT :limit_k
+        """
+    )
+
+    result = session.execute(
+        sql_query,
+        {"space_id": space_id, "q": query_text.strip(), "limit_k": candidate_k},
+    )
+
+    nodes_with_scores: List[NodeWithScore] = []
+    for row in result:
+        metadata = dict(row.metadata_json or row.metadata_ or {})
+        metadata.setdefault("document_id", row.document_id)
+        metadata.setdefault("document_title", row.document_title or "Document sans titre")
+        metadata.setdefault("chunk_index", row.chunk_index)
+
+        node = TextNode(
+            id_=f"chunk-{row.id}",
+            text=row.content or row.text or "",
+            metadata=metadata,
+        )
+        nodes_with_scores.append(
+            NodeWithScore(node=node, score=float(row.lex_score or 0.0))
+        )
+
+    logger.info(
+        "Recherche lexicale tsvector (space): %d feuilles (candidate_k=%d)",
+        len(nodes_with_scores),
+        candidate_k,
+    )
+    return nodes_with_scores
+
+
+def _hybrid_fuse_candidates(
+    vector_candidates: List[NodeWithScore],
+    lexical_candidates: List[NodeWithScore],
+    graph_candidates: List[NodeWithScore],
+) -> List[NodeWithScore]:
+    """
+    Fusionne vectoriel, lexical (BM25-like) et KAG avec normalisation min-max
+    par signal puis score = alpha*v + beta*l + gamma*k.
+    """
+    v_by_id: Dict[int, Tuple[float, TextNode]] = {}
+    for nws in vector_candidates:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is None:
+            continue
+        v_by_id[cid] = (float(nws.score or 0.0), nws.node)
+
+    l_by_id: Dict[int, float] = {}
+    l_nodes: Dict[int, TextNode] = {}
+    for nws in lexical_candidates:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is None:
+            continue
+        l_by_id[cid] = float(nws.score or 0.0)
+        l_nodes[cid] = nws.node
+
+    k_by_id: Dict[int, Tuple[float, TextNode]] = {}
+    for nws in graph_candidates:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is None:
+            continue
+        sc = float(nws.score or 0.0)
+        if cid not in k_by_id or sc > k_by_id[cid][0]:
+            k_by_id[cid] = (sc, nws.node)
+
+    all_ids = set(v_by_id) | set(l_by_id) | set(k_by_id)
+    if not all_ids:
+        return []
+
+    v_raw = {i: v_by_id[i][0] for i in all_ids if i in v_by_id}
+    l_raw = {i: l_by_id[i] for i in all_ids if i in l_by_id}
+    k_raw = {i: k_by_id[i][0] for i in all_ids if i in k_by_id}
+
+    v_nmap = _normalize_min_max(v_raw)
+    l_nmap = _normalize_min_max(l_raw)
+    k_nmap = _normalize_min_max(k_raw)
+
+    fused: List[NodeWithScore] = []
+    for cid in all_ids:
+        v_raw_s = v_by_id[cid][0] if cid in v_by_id else None
+        v_norm = v_nmap.get(cid, 0.0) if cid in v_raw else 0.0
+        l_norm = l_nmap.get(cid, 0.0) if cid in l_raw else 0.0
+        k_norm = k_nmap.get(cid, 0.0) if cid in k_raw else 0.0
+
+        hybrid = (
+            RAG_HYBRID_ALPHA * v_norm
+            + RAG_HYBRID_BETA * l_norm
+            + RAG_HYBRID_GAMMA * k_norm
+        )
+
+        if cid in v_by_id:
+            node = v_by_id[cid][1]
+        elif cid in l_nodes:
+            node = l_nodes[cid]
+        else:
+            node = k_by_id[cid][1]
+
+        meta = dict(getattr(node, "metadata", {}) or {})
+        if v_raw_s is not None:
+            meta["vector_similarity"] = v_raw_s
+        meta["lexical_norm"] = l_norm
+        meta["kag_norm"] = k_norm
+        meta["hybrid_score"] = hybrid
+        meta["retrieval_signal"] = "hybrid"
+        node.metadata = meta
+
+        fused.append(NodeWithScore(node=node, score=hybrid))
+
+    fused.sort(key=lambda x: float(x.score or 0.0), reverse=True)
+    logger.debug(
+        "Fusion hybride (space): %d candidats (vector=%d lexical=%d kag=%d)",
+        len(fused),
+        len(v_raw),
+        len(l_raw),
+        len(k_raw),
+    )
+    return fused
+
+
+def _filter_hybrid_candidates(
+    candidates: List[NodeWithScore],
+) -> List[NodeWithScore]:
+    """
+    Filtre les candidats hybrides : garde si similarité vectorielle suffisante,
+    ou score hybride / lexical / KAG suffisant.
+    """
+    out: List[NodeWithScore] = []
+    for nws in candidates:
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        h = float(nws.score or 0.0)
+        vx = meta.get("vector_similarity")
+        v_ok = vx is not None and float(vx) >= MIN_VECTOR_SIMILARITY_THRESHOLD
+        ln = float(meta.get("lexical_norm", 0) or 0)
+        kn = float(meta.get("kag_norm", 0) or 0)
+        if v_ok or h >= HYBRID_MIN_SCORE or ln >= 0.12 or kn >= 0.12:
+            out.append(nws)
+    return out
+
+
 def _build_parent_node_dict(
     session: Session, space_id: int, user_id: int
 ) -> Dict[str, TextNode]:
     """
     Charge les nœuds parents (DocumentChunk is_leaf=False) pour enrichir le contexte.
+
+    Indexation par ``node_id`` Docling (UUID) lorsque présent : les feuilles référencent
+    ``parent_node_id`` avec cet identifiant, pas ``chunk-{id}``.
     """
     statement = (
         select(DocumentChunk, Document.title)
@@ -183,16 +393,22 @@ def _build_parent_node_dict(
         metadata.setdefault("document_id", chunk.document_id)
         metadata.setdefault("document_title", document_title or "Document sans titre")
         metadata.setdefault("chunk_index", chunk.chunk_index)
-        node_id = f"chunk-{chunk.id}"
-        node_dict[node_id] = TextNode(
-            id_=node_id,
-            text=chunk.content or chunk.text or "",
+        llama_id = f"chunk-{chunk.id}"
+        text = chunk.content or chunk.text or ""
+        node = TextNode(
+            id_=llama_id,
+            text=text,
             metadata=metadata,
         )
+        # Clé principale : UUID Docling / hiérarchie (aligné avec leaf.parent_node_id)
+        if chunk.node_id:
+            node_dict[str(chunk.node_id)] = node
+        # Compatibilité anciens chemins
+        node_dict[llama_id] = node
 
     logger.info(
-        "Chargé %d nœuds parents pour space_id=%d",
-        len(node_dict),
+        "Chargé %d nœuds parents pour space_id=%d (index node_id + chunk-id)",
+        len(rows),
         space_id,
     )
     return node_dict
@@ -574,15 +790,15 @@ def search_relevant_passages(
     """
     Recherche sémantique RAG + KAG sur les documents d'un espace.
 
-    Pipeline (aligné projets) :
-      1. SQL pgvector sur les leaves → k*3 candidats
-      2. KAG : graphe d'entités uniquement ; fusion vectoriel + graphe
-      3. Filtrage pré-reranking (similarité minimale)
-      4. Early stopping si similarité élevée
+    Pipeline :
+      1. Candidats vectoriels (pgvector) + lexicaux (full-text) + KAG
+      2. Fusion hybride pondérée sur les trois signaux
+      3. Filtrage pré-reranking
+      4. Early stopping si similarité vectorielle élevée
       5. Reranking cross-encoder (BGE-reranker-v2-m3)
       6. Résolution des parents pour contexte enrichi
       7. Source authority (boost titre-requête)
-      8. Fallback lexical si besoin
+      8. Fallback lexical ILIKE si aucun candidat hybride
 
     Args:
         session    : Session SQLModel
@@ -610,31 +826,27 @@ def search_relevant_passages(
             else k
         )
 
-        # --- Étape 1 : retrieval vectoriel SQL (leaves) ---
-        leaf_candidates = _retrieve_leaves_sql(
+        # --- Étape 1 : retrieval vectoriel + lexical + KAG puis fusion hybride ---
+        vector_candidates = _retrieve_leaves_sql(
             session=session,
             space_id=space_id,
             user_id=user_id,
             query_text=query_text,
             candidate_k=candidate_k,
         )
+        lexical_candidates = _retrieve_leaves_lexical_sql(
+            session=session,
+            space_id=space_id,
+            query_text=query_text,
+            candidate_k=candidate_k,
+        )
 
-        if not leaf_candidates:
-            logger.info("Aucun résultat vectoriel (space), activation fallback lexical")
-            return _keyword_fallback_passages(
-                session=session,
-                space_id=space_id,
-                user_id=user_id,
-                query_text=query_text,
-                k=k,
-            )
-
-        # --- Étape 1b : enrichissement KAG (graphe d'entités uniquement) ---
+        graph_candidates: List[NodeWithScore] = []
         pivot_entity_names: List[str] = []
-
         if settings.KAG_ENABLED:
             try:
                 from app.services.kag_extraction_service import extract_entities_from_query_sync
+
                 pivot_entity_names = extract_entities_from_query_sync(query_text)
                 if pivot_entity_names:
                     logger.debug("Entités pivot requête (space): %s", pivot_entity_names[:5])
@@ -647,32 +859,49 @@ def search_relevant_passages(
                     space_id=space_id,
                     user_id=user_id,
                     query_text=query_text,
-                    limit=k,
+                    limit=candidate_k,
                     pivot_entity_names=pivot_entity_names or None,
                 )
-                if graph_candidates:
-                    leaf_candidates = _merge_with_graph_candidates(
-                        vector_candidates=leaf_candidates,
-                        graph_candidates=graph_candidates,
-                        graph_boost=0.15,
-                        pivot_entity_names=pivot_entity_names or None,
-                    )
-                    logger.info(
-                        "KAG enrichissement (space): +%d candidats graphe fusionnés",
-                        len(graph_candidates),
-                    )
             except Exception as kag_err:
-                logger.warning("KAG enrichissement échoué (space): %s", kag_err)
+                logger.warning("KAG retrieval échoué (space): %s", kag_err)
 
-        # --- Étape 2 : filtrage pré-reranking ---
-        filtered_candidates = _filter_low_similarity_candidates(
-            leaf_candidates, MIN_VECTOR_SIMILARITY_THRESHOLD
+        leaf_candidates = _hybrid_fuse_candidates(
+            vector_candidates=vector_candidates,
+            lexical_candidates=lexical_candidates,
+            graph_candidates=graph_candidates,
         )
+
+        if not leaf_candidates:
+            logger.info(
+                "Aucun candidat hybride (space), activation fallback lexical ILIKE"
+            )
+            return _keyword_fallback_passages(
+                session=session,
+                space_id=space_id,
+                user_id=user_id,
+                query_text=query_text,
+                k=k,
+            )
+
+        # --- Étape 2 : filtrage pré-reranking (scores hybrides) ---
+        filtered_candidates = _filter_hybrid_candidates(leaf_candidates)
+        if not filtered_candidates:
+            logger.info(
+                "Filtre hybride vide (space) — repli sur candidats fusionnés bruts"
+            )
+            filtered_candidates = leaf_candidates
 
         # Early stopping
         skip_reranking = False
         if len(filtered_candidates) >= k:
-            top_k_scores = [float(c.score or 0.0) for c in filtered_candidates[:k]]
+            top_k_scores = []
+            for c in filtered_candidates[:k]:
+                meta = dict(getattr(c.node, "metadata", {}) or {})
+                vs = meta.get("vector_similarity")
+                if vs is not None:
+                    top_k_scores.append(float(vs))
+                else:
+                    top_k_scores.append(float(c.score or 0.0))
             avg_top_k = sum(top_k_scores) / len(top_k_scores)
 
             if avg_top_k >= SKIP_RERANK_THRESHOLD:
