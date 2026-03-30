@@ -45,6 +45,10 @@ RERANKER_CANDIDATE_MULTIPLIER = 3
 RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
+# Deux étapes : large pool tronqué puis raffinement sur texte complet
+RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
+RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
+RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
 
 # Singletons
@@ -100,6 +104,94 @@ def _get_embed_model() -> HuggingFaceEmbedding:
         )
         logger.info("✅ Modèle d'embedding initialisé")
     return _embed_model_instance
+
+
+def _set_node_text_content(node, text: str) -> None:
+    if hasattr(node, "set_content"):
+        node.set_content(text)
+    else:
+        setattr(node, "text", text)
+
+
+def _two_stage_rerank_leaves(
+    filtered_candidates: List[NodeWithScore],
+    query_text: str,
+    k: int,
+) -> List[NodeWithScore]:
+    """
+    Étape 1 : rerank rapide sur un large pool avec texte tronqué.
+    Étape 2 : rerank sur les meilleurs avec texte enrichi complet.
+    """
+    reranker = _get_reranker()
+    if not reranker:
+        return filtered_candidates[:k]
+    stage1_max = min(
+        len(filtered_candidates),
+        max(RERANK_STAGE1_MAX, k * 2),
+    )
+    pool = filtered_candidates[:stage1_max]
+    backup: Dict[str, str] = {}
+    for nws in pool:
+        node = nws.node
+        nid = str(getattr(node, "id_", None) or "")
+        raw = (
+            node.get_content()
+            if hasattr(node, "get_content")
+            else getattr(node, "text", "") or ""
+        )
+        backup[nid] = raw
+        meta = dict(getattr(node, "metadata", {}) or {})
+        enriched = _enrich_content_with_heading_and_figure(raw, meta)
+        short = (
+            enriched[:RERANK_STAGE1_CHAR_CAP]
+            if len(enriched) > RERANK_STAGE1_CHAR_CAP
+            else enriched
+        )
+        _set_node_text_content(node, short)
+    try:
+        r1 = reranker.postprocess_nodes(
+            pool,
+            query_bundle=QueryBundle(query_str=query_text),
+        )
+    except Exception as e:
+        logger.warning("Rerank étape 1 (space) échoué: %s", e)
+        for nws in pool:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            if nid in backup:
+                _set_node_text_content(nws.node, backup[nid])
+        return filtered_candidates[:k]
+
+    n_stage2 = min(RERANK_STAGE2_POOL, len(r1))
+    for nws in pool:
+        nid = str(getattr(nws.node, "id_", None) or "")
+        if nid in backup:
+            _set_node_text_content(nws.node, backup[nid])
+
+    stage2: List[NodeWithScore] = []
+    for nws in r1[:n_stage2]:
+        node = nws.node
+        nid = str(getattr(node, "id_", None) or "")
+        raw = backup.get(nid, "")
+        meta = dict(getattr(node, "metadata", {}) or {})
+        enriched = _enrich_content_with_heading_and_figure(raw, meta)
+        _set_node_text_content(node, enriched)
+        stage2.append(NodeWithScore(node=node, score=float(nws.score or 0.0)))
+
+    try:
+        r2 = reranker.postprocess_nodes(
+            stage2,
+            query_bundle=QueryBundle(query_str=query_text),
+        )
+        logger.info(
+            "Reranking 2 étapes (space): pool=%d → stage2=%d → final=%d",
+            len(pool),
+            len(stage2),
+            len(r2),
+        )
+        return r2[:k]
+    except Exception as e:
+        logger.warning("Rerank étape 2 (space) échoué: %s", e)
+        return r1[:k]
 
 
 def _retrieve_leaves_sql(
@@ -516,27 +608,85 @@ def _enrich_content_with_heading_and_figure(content: str, metadata: dict) -> str
     return prefix + content if content else prefix.strip()
 
 
+def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
+    """
+    Recopie page_no / plage depuis la feuille matchée vers le nœud cible (ex. parent résolu).
+    Priorité à la page de la feuille pour l'ouverture PDF au bon endroit.
+    """
+    leaf_meta = dict(getattr(leaf_node, "metadata", {}) or {})
+    m = dict(getattr(target_node, "metadata", {}) or {})
+    pn = leaf_meta.get("page_no")
+    if pn is not None:
+        try:
+            m["page_no"] = int(pn)
+        except (TypeError, ValueError):
+            pass
+    elif m.get("page_start") is not None:
+        try:
+            m["page_no"] = int(m["page_start"])
+        except (TypeError, ValueError):
+            pass
+    ps = leaf_meta.get("page_start")
+    pe = leaf_meta.get("page_end")
+    if ps is not None:
+        try:
+            m.setdefault("page_start", int(ps))
+        except (TypeError, ValueError):
+            pass
+    if pe is not None:
+        try:
+            m.setdefault("page_end", int(pe))
+        except (TypeError, ValueError):
+            pass
+    setattr(target_node, "metadata", m)
+
+
 def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     metadata = dict(getattr(node, "metadata", {}) or {})
     document_title = metadata.get("document_title", "Document sans titre")
     document_id = metadata.get("document_id")
     chunk_index = metadata.get("chunk_index", 0)
-    page_no = metadata.get("page_no")
+    page_start = metadata.get("page_start")
+    page_end = metadata.get("page_end")
+    raw_page = metadata.get("page_no")
+    resolved_page = None
+    if raw_page is not None:
+        try:
+            resolved_page = int(raw_page)
+        except (TypeError, ValueError):
+            pass
+    if resolved_page is None and page_start is not None:
+        try:
+            resolved_page = int(page_start)
+        except (TypeError, ValueError):
+            pass
+    page_no = resolved_page
     parent_heading = metadata.get("parent_heading")
 
     content = node.get_content() if hasattr(node, "get_content") else str(node)
     content_enriched = _enrich_content_with_heading_and_figure(content, metadata)
     passage_text = f"**{document_title}**\n{content_enriched}"
-    return {
+    out = {
         "passage": passage_text,
         "passage_raw": content,
         "document_title": document_title,
         "document_id": document_id,
         "chunk_index": int(chunk_index) if isinstance(chunk_index, (int, str)) else 0,
         "score": float(fallback_score or 0.0),
-        "page_no": int(page_no) if page_no is not None else None,
+        "page_no": page_no,
         "section": parent_heading,
     }
+    if page_start is not None:
+        try:
+            out["page_start"] = int(page_start)
+        except (TypeError, ValueError):
+            pass
+    if page_end is not None:
+        try:
+            out["page_end"] = int(page_end)
+        except (TypeError, ValueError):
+            pass
+    return out
 
 
 def _filter_low_similarity_candidates(
@@ -570,15 +720,18 @@ def _retrieve_via_knowledge_graph(
         pivot_entity_names: Entités normalisées extraites de la requête par LLM (prioritaires)
     """
     try:
-        from app.services.kag_extraction_service import normalize_entity_name
+        from app.services.kag_graph_service import (
+            expand_kag_query_terms_for_space,
+            _neighbor_entity_ids_for_entities,
+        )
 
         # Stratégie 1: utiliser les entités pivot LLM si disponibles
         normalized_pivots = _normalize_pivot_entities(pivot_entity_names)
         if normalized_pivots:
             query_terms = normalized_pivots
             logger.debug(
-                "KAG retrieval (space): utilisation de %d entités pivot LLM", 
-                len(query_terms)
+                "KAG retrieval (space): utilisation de %d entités pivot LLM",
+                len(query_terms),
             )
         else:
             # Fallback: split naïf de la requête
@@ -588,12 +741,16 @@ def _retrieve_via_knowledge_graph(
         if not query_terms:
             return []
 
+        query_terms = expand_kag_query_terms_for_space(session, space_id, query_terms)
+        query_terms = query_terms[:120]
+
         # Matching exact sur name_normalized
         stmt = (
             select(
                 DocumentChunk,
                 Document.title,
                 KnowledgeEntity.name,
+                KnowledgeEntity.id,
                 ChunkEntityRelation.relevance_score,
             )
             .join(ChunkEntityRelation, ChunkEntityRelation.chunk_id == DocumentChunk.id)
@@ -614,13 +771,12 @@ def _retrieve_via_knowledge_graph(
         # Fallback ILIKE partiel si peu de résultats exacts
         if len(results) < limit // 2 and query_terms:
             logger.debug(
-                "KAG retrieval (space): fallback ILIKE (résultats exacts=%d)", 
-                len(results)
+                "KAG retrieval (space): fallback ILIKE (résultats exacts=%d)",
+                len(results),
             )
-            # Limiter aux 5 premiers termes pour éviter des requêtes trop larges
             ilike_terms = query_terms[:5]
             ilike_conditions = [
-                KnowledgeEntity.name_normalized.ilike(f"%{term}%") 
+                KnowledgeEntity.name_normalized.ilike(f"%{term}%")
                 for term in ilike_terms
             ]
             stmt_ilike = (
@@ -628,6 +784,7 @@ def _retrieve_via_knowledge_graph(
                     DocumentChunk,
                     Document.title,
                     KnowledgeEntity.name,
+                    KnowledgeEntity.id,
                     ChunkEntityRelation.relevance_score,
                 )
                 .join(ChunkEntityRelation, ChunkEntityRelation.chunk_id == DocumentChunk.id)
@@ -644,27 +801,65 @@ def _retrieve_via_knowledge_graph(
                 .limit(limit - len(results))
             )
             ilike_results = list(session.exec(stmt_ilike).all())
-            # Déduplication par chunk.id
             existing_chunk_ids = {row[0].id for row in results}
             for row in ilike_results:
                 if row[0].id not in existing_chunk_ids:
                     results.append(row)
                     existing_chunk_ids.add(row[0].id)
 
+        neighbor_chunk_ids: Set[int] = set()
+        seed_entity_ids = {row[3] for row in results if row[3] is not None}
+        neighbor_entity_ids = _neighbor_entity_ids_for_entities(
+            session, space_id, seed_entity_ids
+        )
+        if neighbor_entity_ids and len(results) < limit:
+            stmt_neigh = (
+                select(
+                    DocumentChunk,
+                    Document.title,
+                    KnowledgeEntity.name,
+                    KnowledgeEntity.id,
+                    ChunkEntityRelation.relevance_score,
+                )
+                .join(ChunkEntityRelation, ChunkEntityRelation.chunk_id == DocumentChunk.id)
+                .join(KnowledgeEntity, KnowledgeEntity.id == ChunkEntityRelation.entity_id)
+                .join(Document, Document.id == DocumentChunk.document_id)
+                .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+                .where(
+                    DocumentSpace.space_id == space_id,
+                    DocumentChunk.is_leaf == True,
+                    KnowledgeEntity.space_id == space_id,
+                    KnowledgeEntity.id.in_(neighbor_entity_ids),
+                )
+                .order_by(ChunkEntityRelation.relevance_score.desc())
+                .limit(max(0, limit - len(results)))
+            )
+            existing_chunk_ids = {row[0].id for row in results}
+            for row in session.exec(stmt_neigh).all():
+                if row[0].id not in existing_chunk_ids:
+                    results.append(row)
+                    existing_chunk_ids.add(row[0].id)
+                    neighbor_chunk_ids.add(row[0].id)
+
         nodes_with_scores: List[NodeWithScore] = []
-        for chunk, document_title, entity_name, relevance in results:
+        for chunk, document_title, entity_name, _entity_id, relevance in results:
             metadata = dict(chunk.metadata_json or {})
             metadata.setdefault("document_id", chunk.document_id)
             metadata.setdefault("document_title", document_title or "Document sans titre")
             metadata.setdefault("chunk_index", chunk.chunk_index)
             metadata["kag_matched_entity"] = entity_name
+            if chunk.id in neighbor_chunk_ids:
+                metadata["kag_neighbor_match"] = True
+            rel = float(relevance)
+            if chunk.id in neighbor_chunk_ids:
+                rel *= 0.88
 
             node = TextNode(
                 id_=f"chunk-{chunk.id}",
                 text=chunk.content or chunk.text or "",
                 metadata=metadata,
             )
-            nodes_with_scores.append(NodeWithScore(node=node, score=float(relevance)))
+            nodes_with_scores.append(NodeWithScore(node=node, score=rel))
 
         logger.debug(
             "KAG retrieval (space): %d chunks via graphe (query_terms=%s)",
@@ -913,42 +1108,15 @@ def search_relevant_passages(
                 skip_reranking = True
                 top_leaves = filtered_candidates[:k]
 
-        # --- Étape 3 : reranking sur les LEAVES ---
+        # --- Étape 3 : reranking deux étapes sur les LEAVES ---
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
-                max_rerank = min(
-                    len(filtered_candidates),
-                    max(k * 2, MAX_RERANK_CANDIDATES),
-                )
-                candidates_to_rerank = filtered_candidates[:max_rerank]
-
-                for nws in candidates_to_rerank:
-                    node = nws.node
-                    meta = dict(getattr(node, "metadata", {}) or {})
-                    content = node.get_content() if hasattr(node, "get_content") else getattr(node, "text", "") or ""
-                    enriched = _enrich_content_with_heading_and_figure(content, meta)
-                    if hasattr(node, "set_content"):
-                        node.set_content(enriched)
-                    else:
-                        setattr(node, "text", enriched)
-
-                logger.info(
-                    "Démarrage reranking (space) sur %d candidats leaves...",
-                    len(candidates_to_rerank),
-                )
-
-                reranker = _get_reranker()
-                if reranker:
-                    reranked = reranker.postprocess_nodes(
-                        candidates_to_rerank,
-                        query_bundle=QueryBundle(query_str=query_text),
+                if _get_reranker():
+                    top_leaves = _two_stage_rerank_leaves(
+                        filtered_candidates,
+                        query_text,
+                        k,
                     )
-                    logger.info(
-                        "✅ Reranking (space) terminé: %d → %d candidats",
-                        len(candidates_to_rerank),
-                        len(reranked),
-                    )
-                    top_leaves = reranked[:k]
                 else:
                     logger.warning("Reranker non disponible, fallback ordre vectoriel")
                     top_leaves = filtered_candidates[:k]
@@ -984,6 +1152,7 @@ def search_relevant_passages(
                     parents_not_found += 1
             else:
                 parents_resolved += 1
+                _merge_leaf_page_into_node_metadata(nws.node, target_node)
 
             node_id = getattr(target_node, "id_", None)
             if node_id and node_id in seen_node_ids:

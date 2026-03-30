@@ -7,7 +7,7 @@ ainsi que le lookup pour enrichir le retrieval RAG.
 
 import logging
 from datetime import datetime
-from typing import List, Dict, Optional, Set
+from typing import List, Dict, Optional, Set, Tuple
 from sqlmodel import Session, select
 from sqlalchemy import func, delete, text
 from app.models.knowledge_entity import KnowledgeEntity
@@ -17,6 +17,8 @@ from app.models.note import Note
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
+from app.models.entity_alias import EntityAlias
+from app.models.entity_entity_relation import EntityEntityRelation
 from app.config import settings
 from app.services.kag_extraction_service import (
     normalize_entity_name,
@@ -595,6 +597,156 @@ def get_project_bipartite_graph(
 # Compatibilité architecture "Document / Space"
 # ---------------------------------------------------------------------------
 
+def register_entity_alias(
+    session: Session,
+    space_id: int,
+    entity_id: int,
+    alias_normalized: str,
+) -> None:
+    """Enregistre un alias normalisé pour une entité (expansion requête)."""
+    if not alias_normalized or len(alias_normalized) < 2:
+        return
+    ent = session.get(KnowledgeEntity, entity_id)
+    if ent and alias_normalized == ent.name_normalized:
+        return
+    existing = session.exec(
+        select(EntityAlias).where(
+            EntityAlias.space_id == space_id,
+            EntityAlias.alias_normalized == alias_normalized,
+        )
+    ).first()
+    if existing:
+        return
+    session.add(
+        EntityAlias(
+            space_id=space_id,
+            entity_id=entity_id,
+            alias_normalized=alias_normalized,
+            created_at=datetime.utcnow(),
+        )
+    )
+
+
+def expand_kag_query_terms_for_space(
+    session: Session,
+    space_id: int,
+    terms: List[str],
+) -> List[str]:
+    """
+    Étend les termes normalisés avec les alias et formes canoniques liés en base.
+    """
+    if not terms:
+        return []
+    lowered = [t.strip().lower() for t in terms if t and len(t.strip()) >= 2]
+    if not lowered:
+        return []
+    out: Set[str] = set(lowered)
+    alias_rows = session.exec(
+        select(EntityAlias).where(
+            EntityAlias.space_id == space_id,
+            EntityAlias.alias_normalized.in_(lowered),
+        )
+    ).all()
+    entity_ids: Set[int] = {a.entity_id for a in alias_rows}
+    direct = session.exec(
+        select(KnowledgeEntity).where(
+            KnowledgeEntity.space_id == space_id,
+            KnowledgeEntity.name_normalized.in_(lowered),
+        )
+    ).all()
+    entity_ids |= {e.id for e in direct}
+    if not entity_ids:
+        return list(out)
+    all_aliases = session.exec(
+        select(EntityAlias).where(
+            EntityAlias.space_id == space_id,
+            EntityAlias.entity_id.in_(entity_ids),
+        )
+    ).all()
+    for a in all_aliases:
+        out.add(a.alias_normalized)
+    ents = session.exec(
+        select(KnowledgeEntity).where(KnowledgeEntity.id.in_(entity_ids))
+    ).all()
+    for e in ents:
+        out.add(e.name_normalized)
+    return list(out)
+
+
+def refresh_entity_entity_relations_for_space(session: Session, space_id: int) -> int:
+    """
+    Reconstruit les arêtes co_occurs à partir des relations chunk-entité de l'espace.
+    """
+    from collections import defaultdict
+
+    session.execute(
+        delete(EntityEntityRelation).where(
+            EntityEntityRelation.space_id == space_id,
+            EntityEntityRelation.relation_type == "co_occurs",
+        )
+    )
+    stmt = (
+        select(ChunkEntityRelation.chunk_id, ChunkEntityRelation.entity_id)
+        .join(DocumentChunk, DocumentChunk.id == ChunkEntityRelation.chunk_id)
+        .join(DocumentSpace, DocumentSpace.document_id == DocumentChunk.document_id)
+        .where(
+            DocumentSpace.space_id == space_id,
+            ChunkEntityRelation.space_id == space_id,
+        )
+    )
+    chunk_to_entities: Dict[int, List[int]] = defaultdict(list)
+    for chunk_id, eid in session.exec(stmt).all():
+        chunk_to_entities[int(chunk_id)].append(int(eid))
+    pair_weights: Dict[Tuple[int, int], float] = {}
+    for eids in chunk_to_entities.values():
+        uniq = sorted(set(eids))
+        for i in range(len(uniq)):
+            for j in range(i + 1, len(uniq)):
+                a, b = uniq[i], uniq[j]
+                if a > b:
+                    a, b = b, a
+                pair_weights[(a, b)] = pair_weights.get((a, b), 0.0) + 1.0
+    for (a, b), w in pair_weights.items():
+        session.add(
+            EntityEntityRelation(
+                space_id=space_id,
+                entity_a_id=a,
+                entity_b_id=b,
+                relation_type="co_occurs",
+                weight=float(w),
+                created_at=datetime.utcnow(),
+            )
+        )
+    session.commit()
+    return len(pair_weights)
+
+
+def _neighbor_entity_ids_for_entities(
+    session: Session,
+    space_id: int,
+    entity_ids: Set[int],
+    limit: int = 40,
+) -> Set[int]:
+    if not entity_ids:
+        return set()
+    eid_list = list(entity_ids)[:80]
+    n1 = session.exec(
+        select(EntityEntityRelation.entity_b_id).where(
+            EntityEntityRelation.space_id == space_id,
+            EntityEntityRelation.entity_a_id.in_(eid_list),
+        )
+    ).all()
+    n2 = session.exec(
+        select(EntityEntityRelation.entity_a_id).where(
+            EntityEntityRelation.space_id == space_id,
+            EntityEntityRelation.entity_b_id.in_(eid_list),
+        )
+    ).all()
+    out = {int(x) for x in n1 + n2 if x is not None}
+    out -= entity_ids
+    return set(list(out)[:limit])
+
+
 def _get_or_create_entity_for_space(
     session: Session,
     name: str,
@@ -659,6 +811,15 @@ def _get_or_create_entity_for_space(
                         existing_entity.name,
                         result.similarity,
                     )
+                    try:
+                        register_entity_alias(
+                            session,
+                            space_id,
+                            existing_entity.id,
+                            name_normalized,
+                        )
+                    except Exception:
+                        pass
                     return existing_entity
             
             # Créer nouvelle entité avec embedding
@@ -781,6 +942,15 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
                 total_relations += 1
 
     session.commit()
+
+    try:
+        refresh_entity_entity_relations_for_space(session, space_id)
+    except Exception as rel_err:
+        logger.warning(
+            "Rafraîchissement relations entité-entité (space=%s): %s",
+            space_id,
+            rel_err,
+        )
     
     # Enrichissement des parents avec summary+questions+embedding si activé
     if settings.KAG_PARENT_ENRICHMENT_ENABLED:
@@ -874,10 +1044,17 @@ def get_space_kag_stats(session: Session, space_id: int) -> Dict:
     ).all()
     type_counts = {entity_type: count for entity_type, count in type_rows}
 
+    entity_entity_edges = session.exec(
+        select(func.count(EntityEntityRelation.id)).where(
+            EntityEntityRelation.space_id == space_id
+        )
+    ).one()
+
     return {
         "total_entities": entity_count,
         "total_relations": relation_count,
         "entities_by_type": type_counts,
+        "entity_entity_edges": entity_entity_edges,
     }
 
 
@@ -979,6 +1156,80 @@ def get_space_bipartite_graph(
     return {
         "nodes": list(nodes.values()),
         "edges": edges,
+        "graph_mode": "bipartite",
+    }
+
+
+def get_space_entity_relation_graph(
+    session: Session,
+    space_id: int,
+    max_edges: int = 600,
+) -> Dict[str, List[Dict]]:
+    """
+    Graphe entité–entité (co-occurrences et autres relation_type) pour la visualisation.
+    """
+    rows = list(
+        session.exec(
+            select(EntityEntityRelation)
+            .where(EntityEntityRelation.space_id == space_id)
+            .order_by(EntityEntityRelation.weight.desc())
+            .limit(max_edges)
+        ).all()
+    )
+    if not rows:
+        return {"nodes": [], "edges": [], "graph_mode": "entity_links"}
+
+    entity_ids: Set[int] = set()
+    for r in rows:
+        entity_ids.add(int(r.entity_a_id))
+        entity_ids.add(int(r.entity_b_id))
+
+    entities = list(
+        session.exec(
+            select(KnowledgeEntity).where(
+                KnowledgeEntity.space_id == space_id,
+                KnowledgeEntity.id.in_(entity_ids),
+            )
+        ).all()
+    )
+    ent_by_id = {int(e.id): e for e in entities if e.id is not None}
+
+    nodes: List[Dict] = []
+    for eid in sorted(entity_ids):
+        ent = ent_by_id.get(eid)
+        if not ent:
+            continue
+        nodes.append(
+            {
+                "id": f"entity-{eid}",
+                "kind": "entity",
+                "entity_id": eid,
+                "label": ent.name,
+                "entity_type": ent.entity_type,
+                "mention_count": ent.mention_count,
+            }
+        )
+
+    edges: List[Dict] = []
+    for r in rows:
+        if int(r.entity_a_id) not in ent_by_id or int(r.entity_b_id) not in ent_by_id:
+            continue
+        w = float(r.weight or 1.0)
+        edges.append(
+            {
+                "id": f"eer-{r.id}",
+                "from": f"entity-{int(r.entity_a_id)}",
+                "to": f"entity-{int(r.entity_b_id)}",
+                "relevance": min(1.0, w / (w + 5.0)),
+                "relation_type": r.relation_type or "co_occurs",
+                "weight": w,
+            }
+        )
+
+    return {
+        "nodes": nodes,
+        "edges": edges,
+        "graph_mode": "entity_links",
     }
 
 

@@ -442,6 +442,23 @@ def resolve_adaptive_chunk_params(content_type: str) -> Tuple[int, int]:
     return mid, max(200, int(mid * ADAPTIVE_OVERLAP_FRAC_DESCRIPTION))
 
 
+def _page_range_from_docling_leaves(group_leaves: List[TextNode]) -> Tuple[Optional[int], Optional[int]]:
+    """Min / max page_no issus des métadonnées Docling des feuilles d'une section."""
+    pages: List[int] = []
+    for leaf_node in group_leaves:
+        m = dict(leaf_node.metadata or {})
+        p = m.get("page_no")
+        if p is None:
+            continue
+        try:
+            pages.append(int(p))
+        except (TypeError, ValueError):
+            continue
+    if not pages:
+        return None, None
+    return min(pages), max(pages)
+
+
 def _build_docling_hierarchical_specs(
     doc_metadata_base: dict,
     leaf_nodes: List[TextNode],
@@ -502,6 +519,12 @@ def _build_docling_hierarchical_specs(
             parent_metadata["image_anchor"] = " ; ".join(section_anchors)
             parent_metadata["figure_title"] = section_anchors[0]
             parent_metadata["contains_image"] = True
+
+        page_start, page_end = _page_range_from_docling_leaves(group_leaves)
+        if page_start is not None:
+            parent_metadata["page_start"] = page_start
+            parent_metadata["page_end"] = page_end
+            parent_metadata["page_no"] = page_start
 
         specs.append(
             {

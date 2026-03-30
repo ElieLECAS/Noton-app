@@ -249,6 +249,54 @@
 .dark .citation-link:hover {
   background: #1d4ed8;
 }
+.pdf-modal-toolbar {
+  background: #323639;
+  color: white;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pdf-modal-toolbar button {
+  background: #4a4d50;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+}
+.pdf-modal-toolbar button:hover { background: #5a5d60; }
+.pdf-modal-toolbar button:disabled { opacity: 0.5; cursor: not-allowed; }
+.pdf-modal-toolbar input {
+  width: 50px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: none;
+  text-align: center;
+  font-size: 13px;
+}
+.pdf-modal-toolbar select {
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: none;
+  font-size: 13px;
+}
+.pdf-page-indicator {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+}
 .sources-section { font-style: normal !important; }
 .source-badge .citation-number {
   color: #1e40af;
@@ -346,13 +394,64 @@
         />
       </div>
       <div id="source-preview-content" class="whitespace-pre-wrap bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 max-h-[45vh] overflow-auto"></div>
-      <div class="mt-4 flex justify-end">
-        <a id="source-preview-edit-link" href="#" target="_blank" class="inline-flex items-center px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm">
-          <i class="ti ti-external-link mr-1"></i>Ouvrir la note
+      <div class="mt-4 flex flex-wrap justify-end gap-2">
+        <button type="button" id="source-preview-pdf-btn" onclick="openSpacePdfFromPreview()" class="hidden inline-flex items-center px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm">
+          <i class="ti ti-file-type-pdf mr-1"></i>Voir le PDF
+        </button>
+        <a id="source-preview-edit-link" href="#" target="_blank" class="hidden inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm">
+          <i class="ti ti-external-link mr-1"></i>Bibliothèque
         </a>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Visionneuse PDF (documents bibliothèque) -->
+<div id="space-pdf-viewer-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex flex-col z-[120]">
+  <div class="pdf-modal-toolbar flex-shrink-0">
+    <button type="button" onclick="hideSpacePdfViewerModal()" title="Fermer">
+      <i class="ti ti-x"></i>
+    </button>
+    <span id="space-pdf-modal-title" class="text-white font-medium truncate max-w-[240px]">Document</span>
+    <div class="h-4 border-l border-gray-500"></div>
+    <button type="button" onclick="spacePdfModalPrevPage()" id="space-pdf-modal-prev-btn" disabled>
+      <i class="ti ti-chevron-left"></i>
+    </button>
+    <div class="flex items-center gap-1 text-sm">
+      <input type="number" id="space-pdf-modal-page-input" value="1" min="1" onchange="spacePdfModalGoToPage(this.value)">
+      <span class="text-gray-300">/ <span id="space-pdf-modal-total-pages">1</span></span>
+    </div>
+    <button type="button" onclick="spacePdfModalNextPage()" id="space-pdf-modal-next-btn">
+      <i class="ti ti-chevron-right"></i>
+    </button>
+    <div class="h-4 border-l border-gray-500"></div>
+    <button type="button" onclick="spacePdfModalZoomOut()" title="Zoom arrière">
+      <i class="ti ti-zoom-out"></i>
+    </button>
+    <select id="space-pdf-modal-zoom-select" onchange="spacePdfModalSetZoom(this.value)">
+      <option value="0.5">50%</option>
+      <option value="0.75">75%</option>
+      <option value="1" selected>100%</option>
+      <option value="1.25">125%</option>
+      <option value="1.5">150%</option>
+      <option value="2">200%</option>
+      <option value="fit">Ajuster</option>
+    </select>
+    <button type="button" onclick="spacePdfModalZoomIn()" title="Zoom avant">
+      <i class="ti ti-zoom-in"></i>
+    </button>
+    <div class="ml-auto flex items-center gap-2">
+      <button type="button" id="space-pdf-modal-passage-btn" class="hidden" onclick="showPassageFromSpacePdfViewer()" title="Voir le passage">
+        <i class="ti ti-file-text mr-1"></i>Voir le passage
+      </button>
+      <a id="space-pdf-modal-download-link" href="#" download title="Télécharger">
+        <button type="button">
+          <i class="ti ti-download"></i>
+        </button>
+      </a>
+    </div>
+  </div>
+  <div id="space-pdf-modal-container" class="flex-1 overflow-auto bg-gray-700"></div>
 </div>
 {% endblock %}
 {% block extra_scripts %}
@@ -416,6 +515,25 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
+function displayTitle(source) {
+  return source.document_title || source.note_title || "Document";
+}
+
+/** Clic sur une source : PDF à la bonne page si fichier dispo, sinon modale texte. */
+function handleSpaceSourceClick(index) {
+  const source = currentMessageSources.find((s) => s.index === index);
+  if (!source) return;
+  if (source.has_source_file && source.document_id) {
+    currentSpacePdfDocumentId = source.document_id;
+    currentSpacePdfPageNo = source.page_no || source.page_start || 1;
+    currentSpacePdfTitle = displayTitle(source);
+    currentSourceIndexFromSpacePdf = index;
+    openSpacePdfViewer();
+    return;
+  }
+  showSourcePreview(index);
+}
+
 function buildSourcesSection(sources) {
   if (!sources || sources.length === 0) return "";
   currentMessageSources = sources;
@@ -423,14 +541,15 @@ function buildSourcesSection(sources) {
   const imageSources = sources.filter((s) => s.is_image_chunk);
 
   const sourceBadges = textSources.map((source) => {
-    const title = escapeHtml(source.note_title || "Note sans titre");
+    const title = escapeHtml(displayTitle(source));
     const index = source.index;
     const pageInfo = source.page_no ? ` (p.${source.page_no})` : "";
     const excerpt = escapeHtml(source.excerpt || "");
     const fullTitle = excerpt ? `${title}${pageInfo} - ${excerpt}` : `${title}${pageInfo}`;
     return `
       <button
-        onclick="showSourcePreview(${index})"
+        type="button"
+        onclick="handleSpaceSourceClick(${index})"
         class="source-badge inline-flex items-center px-2 py-1 text-xs rounded bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors cursor-pointer"
         title="${fullTitle}"
         id="source-ref-${index}">
@@ -451,7 +570,7 @@ function buildSourcesSection(sources) {
 
     return `
       <div
-        onclick="showSourcePreview(${index})"
+        onclick="handleSpaceSourceClick(${index})"
         class="relative group cursor-pointer rounded-lg overflow-hidden border-2 border-purple-300 dark:border-purple-600 hover:border-purple-500 transition-colors"
         style="width: 84px; height: 84px;"
         title="${title}"
@@ -511,10 +630,28 @@ function showSourcePreview(index) {
   const source = currentMessageSources.find((s) => s.index === index);
   if (!source) return;
   document.getElementById("source-preview-badge").textContent = `[${index}]`;
-  document.getElementById("source-preview-title").textContent = source.note_title || "Note sans titre";
+  document.getElementById("source-preview-title").textContent = displayTitle(source);
   document.getElementById("source-preview-content").textContent = source.passage_full || source.excerpt || "Contenu non disponible";
-  document.getElementById("source-preview-edit-link").href = source.note_id ? `/notes/${source.note_id}/edit` : "#";
   document.getElementById("source-preview-score-val").textContent = `${Math.round((source.score || 0) * 100)}%`;
+
+  const pdfBtn = document.getElementById("source-preview-pdf-btn");
+  const libLink = document.getElementById("source-preview-edit-link");
+  if (source.has_source_file && source.document_id) {
+    pdfBtn.classList.remove("hidden");
+    pdfBtn.onclick = () => {
+      currentSpacePdfDocumentId = source.document_id;
+      currentSpacePdfPageNo = source.page_no || source.page_start || 1;
+      currentSpacePdfTitle = displayTitle(source);
+      currentSourceIndexFromSpacePdf = index;
+      closeSourcePreview();
+      openSpacePdfViewer();
+    };
+    libLink.classList.remove("hidden");
+    libLink.href = "/library";
+  } else {
+    pdfBtn.classList.add("hidden");
+    libLink.classList.add("hidden");
+  }
 
   const pageEl = document.getElementById("source-preview-page");
   if (source.page_no) {
@@ -537,7 +674,7 @@ function showSourcePreview(index) {
   const imageBadge = document.getElementById("source-preview-image-badge");
   if (source.is_image_chunk && source.image_filename && source.note_id) {
     imageEl.src = `/api/images/${source.note_id}/${source.image_filename}`;
-    imageEl.alt = source.note_title || "Image source";
+    imageEl.alt = displayTitle(source);
     imageContainer.classList.remove("hidden");
     imageBadge.classList.remove("hidden");
   } else {
@@ -550,9 +687,191 @@ function showSourcePreview(index) {
   document.getElementById("source-preview-modal").classList.remove("hidden");
 }
 
+function openSpacePdfFromPreview() {
+  const pdfBtn = document.getElementById("source-preview-pdf-btn");
+  if (pdfBtn && pdfBtn.onclick) pdfBtn.onclick();
+}
+
 function closeSourcePreview() {
   document.getElementById("source-preview-modal").classList.add("hidden");
 }
+
+// ——— Visionneuse PDF (fichiers bibliothèque) ———
+let currentSpacePdfDocumentId = null;
+let currentSpacePdfPageNo = 1;
+let currentSpacePdfTitle = "Document";
+let currentSourceIndexFromSpacePdf = null;
+let spacePdfModalDoc = null;
+let spacePdfModalCurrentPage = 1;
+let spacePdfModalCurrentZoom = 1;
+let spacePdfjsLib = null;
+
+async function loadSpacePdfJs() {
+  if (spacePdfjsLib) return spacePdfjsLib;
+  const script = document.createElement("script");
+  script.type = "module";
+  script.textContent = `
+    import * as pdfjs from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
+    pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
+    window.__spacePdfjs = pdfjs;
+  `;
+  document.head.appendChild(script);
+  return new Promise((resolve) => {
+    const t = setInterval(() => {
+      if (window.__spacePdfjs) {
+        clearInterval(t);
+        spacePdfjsLib = window.__spacePdfjs;
+        resolve(spacePdfjsLib);
+      }
+    }, 50);
+  });
+}
+
+async function openSpacePdfViewer() {
+  if (!currentSpacePdfDocumentId) return;
+  document.getElementById("source-preview-modal").classList.add("hidden");
+  document.getElementById("space-pdf-viewer-modal").classList.remove("hidden");
+  document.getElementById("space-pdf-modal-title").textContent = currentSpacePdfTitle;
+  document.getElementById("space-pdf-modal-download-link").href = `/api/library/documents/${currentSpacePdfDocumentId}/file`;
+  const passageBtn = document.getElementById("space-pdf-modal-passage-btn");
+  if (passageBtn) {
+    if (currentSourceIndexFromSpacePdf != null) passageBtn.classList.remove("hidden");
+    else passageBtn.classList.add("hidden");
+  }
+  document.getElementById("space-pdf-modal-container").innerHTML = `
+    <div class="flex items-center justify-center h-full text-white">
+      <i class="ti ti-loader-2 text-4xl animate-spin"></i>
+    </div>`;
+  try {
+    await loadSpacePdfJs();
+    const response = await fetch(`/api/library/documents/${currentSpacePdfDocumentId}/file`, { credentials: "include" });
+    if (!response.ok) throw new Error("Chargement PDF impossible");
+    const pdfData = await response.arrayBuffer();
+    spacePdfModalDoc = await spacePdfjsLib.getDocument({ data: pdfData }).promise;
+    document.getElementById("space-pdf-modal-total-pages").textContent = spacePdfModalDoc.numPages;
+    document.getElementById("space-pdf-modal-page-input").max = spacePdfModalDoc.numPages;
+    spacePdfModalCurrentPage = Math.min(Math.max(1, currentSpacePdfPageNo), spacePdfModalDoc.numPages);
+    spacePdfModalCurrentZoom = 1;
+    document.getElementById("space-pdf-modal-zoom-select").value = "1";
+    await spacePdfRenderModalPage(spacePdfModalCurrentPage);
+    spacePdfUpdateNavButtons();
+  } catch (err) {
+    console.error(err);
+    document.getElementById("space-pdf-modal-container").innerHTML = `
+      <div class="flex flex-col items-center justify-center h-full text-white p-4">
+        <p>Erreur lors du chargement du PDF</p>
+        <p class="text-sm text-gray-400 mt-1">${escapeHtml(String(err.message || err))}</p>
+      </div>`;
+  }
+}
+
+async function spacePdfRenderModalPage(pageNum) {
+  if (!spacePdfModalDoc) return;
+  const page = await spacePdfModalDoc.getPage(pageNum);
+  const container = document.getElementById("space-pdf-modal-container");
+  let scale = spacePdfModalCurrentZoom;
+  if (spacePdfModalCurrentZoom === "fit") {
+    const containerWidth = container.clientWidth - 40;
+    const viewport0 = page.getViewport({ scale: 1 });
+    scale = containerWidth / viewport0.width;
+  }
+  const viewport = page.getViewport({ scale });
+  container.innerHTML = "";
+  const pageContainer = document.createElement("div");
+  pageContainer.className = "relative";
+  pageContainer.style.margin = "10px auto";
+  pageContainer.style.width = "fit-content";
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  canvas.height = viewport.height;
+  canvas.width = viewport.width;
+  canvas.style.boxShadow = "0 2px 10px rgba(0,0,0,0.3)";
+  pageContainer.appendChild(canvas);
+  const pageIndicator = document.createElement("div");
+  pageIndicator.className = "pdf-page-indicator";
+  pageIndicator.textContent = `Page ${pageNum} / ${spacePdfModalDoc.numPages}`;
+  pageContainer.appendChild(pageIndicator);
+  container.appendChild(pageContainer);
+  await page.render({ canvasContext: context, viewport }).promise;
+  document.getElementById("space-pdf-modal-page-input").value = pageNum;
+  spacePdfModalCurrentPage = pageNum;
+}
+
+function spacePdfUpdateNavButtons() {
+  document.getElementById("space-pdf-modal-prev-btn").disabled = spacePdfModalCurrentPage <= 1;
+  document.getElementById("space-pdf-modal-next-btn").disabled =
+    !spacePdfModalDoc || spacePdfModalCurrentPage >= spacePdfModalDoc.numPages;
+}
+
+async function spacePdfModalPrevPage() {
+  if (spacePdfModalCurrentPage > 1) {
+    await spacePdfRenderModalPage(spacePdfModalCurrentPage - 1);
+    spacePdfUpdateNavButtons();
+  }
+}
+
+async function spacePdfModalNextPage() {
+  if (spacePdfModalDoc && spacePdfModalCurrentPage < spacePdfModalDoc.numPages) {
+    await spacePdfRenderModalPage(spacePdfModalCurrentPage + 1);
+    spacePdfUpdateNavButtons();
+  }
+}
+
+async function spacePdfModalGoToPage(pageNum) {
+  const page = parseInt(pageNum, 10);
+  if (spacePdfModalDoc && page >= 1 && page <= spacePdfModalDoc.numPages) {
+    await spacePdfRenderModalPage(page);
+    spacePdfUpdateNavButtons();
+  }
+}
+
+async function spacePdfModalSetZoom(zoom) {
+  spacePdfModalCurrentZoom = zoom === "fit" ? "fit" : parseFloat(zoom);
+  await spacePdfRenderModalPage(spacePdfModalCurrentPage);
+}
+
+async function spacePdfModalZoomIn() {
+  const select = document.getElementById("space-pdf-modal-zoom-select");
+  if (select.selectedIndex < select.options.length - 2) {
+    select.selectedIndex += 1;
+    await spacePdfModalSetZoom(select.value);
+  }
+}
+
+async function spacePdfModalZoomOut() {
+  const select = document.getElementById("space-pdf-modal-zoom-select");
+  if (select.selectedIndex > 0) {
+    select.selectedIndex -= 1;
+    await spacePdfModalSetZoom(select.value);
+  }
+}
+
+function hideSpacePdfViewerModal() {
+  document.getElementById("space-pdf-viewer-modal").classList.add("hidden");
+  spacePdfModalDoc = null;
+  currentSourceIndexFromSpacePdf = null;
+}
+
+function showPassageFromSpacePdfViewer() {
+  if (currentSourceIndexFromSpacePdf == null) return;
+  const idx = currentSourceIndexFromSpacePdf;
+  hideSpacePdfViewerModal();
+  showSourcePreview(idx);
+}
+
+document.addEventListener("keydown", async (e) => {
+  const modal = document.getElementById("space-pdf-viewer-modal");
+  if (!modal || modal.classList.contains("hidden") || !spacePdfModalDoc) return;
+  if (e.key === "Escape") {
+    hideSpacePdfViewerModal();
+  } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+    e.preventDefault();
+    await spacePdfModalPrevPage();
+  } else if (e.key === "ArrowRight" || e.key === "PageDown") {
+    e.preventDefault();
+    await spacePdfModalNextPage();
+  }
+});
 
 async function api(url, options = {}) {
   const headers = { ...(options.headers || {}) };

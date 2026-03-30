@@ -1,5 +1,6 @@
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List, Literal, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlmodel import Session
 from app.database import get_session
 from app.models.space import SpaceCreate, SpaceRead, SpaceUpdate
@@ -128,21 +129,29 @@ async def get_space_kag_stats(
 @router.get("/{space_id}/kag/graph")
 async def get_space_kag_graph(
     space_id: int,
+    mode: Literal["bipartite", "entity_links"] = Query(
+        "bipartite",
+        description="bipartite: entités ↔ passages ; entity_links: relations entre entités",
+    ),
     current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
 ):
-    """Récupère le graphe KAG d'un espace."""
-    from app.services.kag_graph_service import get_space_bipartite_graph
-    
+    """Récupère le graphe KAG d'un espace (vue bipartie ou relations entité–entité)."""
+    from app.services.kag_graph_service import (
+        get_space_bipartite_graph,
+        get_space_entity_relation_graph,
+    )
+
     space = get_space_by_id(session, space_id, current_user.id)
     if not space:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Espace non trouvé"
         )
-    
-    graph = get_space_bipartite_graph(session, space_id)
-    return graph
+
+    if mode == "entity_links":
+        return get_space_entity_relation_graph(session, space_id)
+    return get_space_bipartite_graph(session, space_id)
 
 
 @router.post("/{space_id}/kag/rebuild", status_code=status.HTTP_202_ACCEPTED)

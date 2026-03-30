@@ -1,6 +1,6 @@
-from typing import Dict
+from typing import Dict, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlmodel import Session
 
 from app.database import get_session
@@ -8,6 +8,7 @@ from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.services.kag_graph_service import (
     get_space_bipartite_graph,
+    get_space_entity_relation_graph,
     get_space_kag_stats,
     rebuild_kag_for_space,
 )
@@ -40,11 +41,14 @@ async def get_space_kag_stats_route(
 @router.get("/spaces/{space_id}/graph", response_model=Dict)
 async def get_space_kag_graph_route(
     space_id: int,
+    mode: Literal["bipartite", "entity_links"] = Query("bipartite"),
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
-    """Graphe biparti KAG (entités <-> chunks) pour un espace."""
+    """Graphe KAG : bipartite (entités ↔ chunks) ou entity_links (co-occurrences)."""
     _ensure_space_access(session, space_id, current_user)
+    if mode == "entity_links":
+        return get_space_entity_relation_graph(session, space_id)
     return get_space_bipartite_graph(session=session, space_id=space_id)
 
 

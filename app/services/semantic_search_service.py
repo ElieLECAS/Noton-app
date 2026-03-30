@@ -53,6 +53,9 @@ RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 # Optimisations du reranking
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
+RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
+RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
+RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
 
 # ---------------------------------------------------------------------------
@@ -347,13 +350,142 @@ def _enrich_content_with_heading_and_figure(content: str, metadata: dict) -> str
     return prefix + content if content else prefix.strip()
 
 
+def _set_node_text_content(node, text: str) -> None:
+    if hasattr(node, "set_content"):
+        node.set_content(text)
+    else:
+        setattr(node, "text", text)
+
+
+def _two_stage_rerank_leaves(
+    filtered_candidates: List[NodeWithScore],
+    query_text: str,
+    k: int,
+) -> List[NodeWithScore]:
+    """Rerank large pool (texte tronqué) puis raffinement sur texte enrichi complet."""
+    reranker = _get_reranker()
+    if not reranker:
+        return filtered_candidates[:k]
+    stage1_max = min(
+        len(filtered_candidates),
+        max(RERANK_STAGE1_MAX, k * 2),
+    )
+    pool = filtered_candidates[:stage1_max]
+    backup: Dict[str, str] = {}
+    for nws in pool:
+        node = nws.node
+        nid = str(getattr(node, "id_", None) or "")
+        raw = (
+            node.get_content()
+            if hasattr(node, "get_content")
+            else getattr(node, "text", "") or ""
+        )
+        backup[nid] = raw
+        meta = dict(getattr(node, "metadata", {}) or {})
+        enriched = _enrich_content_with_heading_and_figure(raw, meta)
+        short = (
+            enriched[:RERANK_STAGE1_CHAR_CAP]
+            if len(enriched) > RERANK_STAGE1_CHAR_CAP
+            else enriched
+        )
+        _set_node_text_content(node, short)
+    try:
+        r1 = reranker.postprocess_nodes(
+            pool,
+            query_bundle=QueryBundle(query_str=query_text),
+        )
+    except Exception as e:
+        logger.warning("Rerank étape 1 échoué: %s", e)
+        for nws in pool:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            if nid in backup:
+                _set_node_text_content(nws.node, backup[nid])
+        return filtered_candidates[:k]
+
+    n_stage2 = min(RERANK_STAGE2_POOL, len(r1))
+    for nws in pool:
+        nid = str(getattr(nws.node, "id_", None) or "")
+        if nid in backup:
+            _set_node_text_content(nws.node, backup[nid])
+
+    stage2: List[NodeWithScore] = []
+    for nws in r1[:n_stage2]:
+        node = nws.node
+        nid = str(getattr(node, "id_", None) or "")
+        raw = backup.get(nid, "")
+        meta = dict(getattr(node, "metadata", {}) or {})
+        enriched = _enrich_content_with_heading_and_figure(raw, meta)
+        _set_node_text_content(node, enriched)
+        stage2.append(NodeWithScore(node=node, score=float(nws.score or 0.0)))
+
+    try:
+        r2 = reranker.postprocess_nodes(
+            stage2,
+            query_bundle=QueryBundle(query_str=query_text),
+        )
+        logger.info(
+            "Reranking 2 étapes: pool=%d → stage2=%d → final=%d",
+            len(pool),
+            len(stage2),
+            len(r2),
+        )
+        return r2[:k]
+    except Exception as e:
+        logger.warning("Rerank étape 2 échoué: %s", e)
+        return r1[:k]
+
+
+def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
+    """Recopie page_no / plage depuis la feuille vers le parent résolu."""
+    leaf_meta = dict(getattr(leaf_node, "metadata", {}) or {})
+    m = dict(getattr(target_node, "metadata", {}) or {})
+    pn = leaf_meta.get("page_no")
+    if pn is not None:
+        try:
+            m["page_no"] = int(pn)
+        except (TypeError, ValueError):
+            pass
+    elif m.get("page_start") is not None:
+        try:
+            m["page_no"] = int(m["page_start"])
+        except (TypeError, ValueError):
+            pass
+    ps = leaf_meta.get("page_start")
+    pe = leaf_meta.get("page_end")
+    if ps is not None:
+        try:
+            m.setdefault("page_start", int(ps))
+        except (TypeError, ValueError):
+            pass
+    if pe is not None:
+        try:
+            m.setdefault("page_end", int(pe))
+        except (TypeError, ValueError):
+            pass
+    setattr(target_node, "metadata", m)
+
+
 def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     metadata = dict(getattr(node, "metadata", {}) or {})
     note_title = metadata.get("note_title", "Note sans titre")
     note_id = metadata.get("note_id")
     node_id = metadata.get("node_id")
     chunk_index = metadata.get("chunk_index", 0)
-    page_no = metadata.get("page_no")
+    page_start = metadata.get("page_start")
+    page_end = metadata.get("page_end")
+    raw_page = metadata.get("page_no")
+    resolved_page = None
+    if raw_page is not None:
+        try:
+            resolved_page = int(raw_page)
+        except (TypeError, ValueError):
+            pass
+    if resolved_page is None and page_start is not None:
+        try:
+            resolved_page = int(page_start)
+        except (TypeError, ValueError):
+            pass
+    page_no = resolved_page
     parent_heading = metadata.get("parent_heading")
     # Multimodal : chemin image si chunk image
     image_path = metadata.get("image_path")
@@ -365,7 +497,7 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     # Enrichir avec parent_heading et figure_title pour le LLM
     content_enriched = _enrich_content_with_heading_and_figure(content, metadata)
     passage_text = f"**{note_title}**\n{content_enriched}"
-    return {
+    out = {
         "passage": passage_text,
         "passage_raw": content,
         "note_title": note_title,
@@ -373,13 +505,24 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
         "chunk_id": node_id,
         "chunk_index": int(chunk_index) if isinstance(chunk_index, (int, str)) else 0,
         "score": float(fallback_score or 0.0),
-        "page_no": int(page_no) if page_no is not None else None,
+        "page_no": page_no,
         "section": parent_heading,
         "image_path": image_path,
         "image_filename": image_filename,
         "is_image_chunk": is_image_chunk,
         "caption": caption,
     }
+    if page_start is not None:
+        try:
+            out["page_start"] = int(page_start)
+        except (TypeError, ValueError):
+            pass
+    if page_end is not None:
+        try:
+            out["page_end"] = int(page_end)
+        except (TypeError, ValueError):
+            pass
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -754,46 +897,15 @@ def search_relevant_passages(
                 skip_reranking = True
                 top_leaves = filtered_candidates[:k]
 
-        # --- Étape 3 : reranking sur les LEAVES (courts → rapide) ---
+        # --- Étape 3 : reranking deux étapes sur les LEAVES ---
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
-                # Ajuster dynamiquement le nombre de candidats à reranker
-                max_rerank = min(
-                    len(filtered_candidates),
-                    max(k * 2, MAX_RERANK_CANDIDATES),
-                )
-                candidates_to_rerank = filtered_candidates[:max_rerank]
-
-                # Enrichir le texte des nœuds avec parent_heading et figure_title
-                # pour que le reranker priorise les chunks à titres descriptifs
-                for nws in candidates_to_rerank:
-                    node = nws.node
-                    meta = dict(getattr(node, "metadata", {}) or {})
-                    content = node.get_content() if hasattr(node, "get_content") else getattr(node, "text", "") or ""
-                    enriched = _enrich_content_with_heading_and_figure(content, meta)
-                    if hasattr(node, "set_content"):
-                        node.set_content(enriched)
-                    else:
-                        setattr(node, "text", enriched)
-
-                logger.info(
-                    "Démarrage du reranking sur %d candidats leaves (sur %d filtrés)...",
-                    len(candidates_to_rerank),
-                    len(filtered_candidates),
-                )
-
-                reranker = _get_reranker()
-                if reranker:
-                    reranked = reranker.postprocess_nodes(
-                        candidates_to_rerank,
-                        query_bundle=QueryBundle(query_str=query_text),
+                if _get_reranker():
+                    top_leaves = _two_stage_rerank_leaves(
+                        filtered_candidates,
+                        query_text,
+                        k,
                     )
-                    logger.info(
-                        "✅ Reranking terminé: %d → %d candidats",
-                        len(candidates_to_rerank),
-                        len(reranked),
-                    )
-                    top_leaves = reranked[:k]
                 else:
                     logger.warning("Reranker non disponible, fallback sur ordre vectoriel")
                     top_leaves = filtered_candidates[:k]
@@ -830,6 +942,7 @@ def search_relevant_passages(
                     parents_not_found += 1
             else:
                 parents_resolved += 1
+                _merge_leaf_page_into_node_metadata(nws.node, target_node)
 
             node_id = getattr(target_node, "node_id", None) or leaf_meta.get("node_id")
             if node_id and node_id in seen_node_ids:

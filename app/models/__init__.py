@@ -16,6 +16,8 @@ from .folder import Folder, FolderCreate, FolderRead, FolderUpdate, FolderWithCo
 from .document import Document, DocumentCreate, DocumentRead, DocumentListItem, DocumentUpdate
 from .document_chunk import DocumentChunk, DocumentChunkRead
 from .document_space import DocumentSpace, DocumentSpaceRead
+from .entity_alias import EntityAlias
+from .entity_entity_relation import EntityEntityRelation
 
 __all__ = [
     "User",
@@ -77,4 +79,6 @@ __all__ = [
     "DocumentChunkRead",
     "DocumentSpace",
     "DocumentSpaceRead",
+    "EntityAlias",
+    "EntityEntityRelation",
 ]

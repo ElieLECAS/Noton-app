@@ -564,18 +564,36 @@ async def stream_space_chat_message(
                     logger.exception("Erreur sauvegarde réponse assistant (space chat)")
 
             if passages:
-                sources_data = [
-                    {
-                        "index": i + 1,
-                        "document_id": p["document_id"],
-                        "document_title": p["document_title"],
-                        "excerpt": (p["passage_raw"][:200] + "...") if len(p.get("passage_raw", "")) > 200 else p.get("passage_raw", p.get("passage", "")),
-                        "score": round(p["score"], 2),
-                        "page_no": p.get("page_no"),
-                        "section": p.get("section"),
+                doc_ids = list({p.get("document_id") for p in passages if p.get("document_id")})
+                with Session(engine) as src_session:
+                    docs = (
+                        src_session.exec(select(Document).where(Document.id.in_(doc_ids))).all()
+                        if doc_ids
+                        else []
+                    )
+                    has_file_by_doc = {
+                        d.id: (d.document_type == "document" and bool(d.source_file_path))
+                        for d in docs
                     }
-                    for i, p in enumerate(passages)
-                ]
+                sources_data = []
+                for i, p in enumerate(passages):
+                    did = p.get("document_id")
+                    raw = p.get("passage_raw", p.get("passage", ""))
+                    sources_data.append(
+                        {
+                            "index": i + 1,
+                            "document_id": did,
+                            "document_title": p["document_title"],
+                            "excerpt": (raw[:200] + "...") if len(raw or "") > 200 else raw,
+                            "passage_full": raw,
+                            "score": round(p["score"], 2),
+                            "page_no": p.get("page_no"),
+                            "page_start": p.get("page_start"),
+                            "page_end": p.get("page_end"),
+                            "section": p.get("section"),
+                            "has_source_file": has_file_by_doc.get(did, False),
+                        }
+                    )
                 yield f"data: {json.dumps({'sources': sources_data})}\n\n"
             yield f"data: {json.dumps({'done': True})}\n\n"
         except Exception as e:
