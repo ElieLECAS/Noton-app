@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/conversations", tags=["conversations"])
 
 
-@router.post("", response_model=ConversationRead)
+@router.post("", response_model=ConversationRead, status_code=201)
 async def create_conversation(
     conversation: ConversationCreate,
     current_user: UserRead = Depends(get_current_user),

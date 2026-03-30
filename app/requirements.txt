@@ -9,8 +9,8 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
 python-multipart==0.0.6
-# httpx utilisé par plusieurs intégrations HTTP
-httpx>=0.27
+# httpx: 0.28 casse TestClient Starlette/FastAPI (kwarg `app` retiré côté Client)
+httpx>=0.27,<0.28
 jinja2==3.1.2
 python-dotenv==1.0.0
 pydantic-settings>=2.3.0,<3.0.0
@@ -38,3 +38,8 @@ llama-index-embeddings-huggingface==0.6.1
 # Reranker : FlagEmbedding (BAAI/bge-reranker-base) — local, CPU, FR+EN
 llama-index-postprocessor-flag-embedding-reranker==0.4.1
 FlagEmbedding==1.3.5
+
+# Tests (pytest dans l’image Docker / même environnement que l’app)
+pytest>=8.0,<9
+pytest-asyncio>=0.24,<1
+pytest-cov>=4.0,<7

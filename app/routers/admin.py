@@ -131,7 +131,7 @@ async def assign_role_to_user(
     current_user: UserRead = Depends(require_permission("config.manage_users")),
     session: Session = Depends(get_session)
 ):
-    """Assigner un rôle à un utilisateur."""
+    """Assigner un rôle unique à un utilisateur (remplace les rôles existants)."""
     user = session.get(User, request.user_id)
     if not user:
         raise HTTPException(
@@ -146,17 +146,15 @@ async def assign_role_to_user(
             detail="Rôle non trouvé"
         )
     
-    # Vérifier si l'association existe déjà
-    existing = session.exec(
-        select(UserRole).where(
-            UserRole.user_id == request.user_id,
-            UserRole.role_id == request.role_id
-        )
-    ).first()
-    
-    if existing:
-        return UserRoleRead.model_validate(existing)
-    
+    existing_roles = session.exec(
+        select(UserRole).where(UserRole.user_id == request.user_id)
+    ).all()
+
+    for existing_role in existing_roles:
+        if existing_role.role_id == request.role_id:
+            return UserRoleRead.model_validate(existing_role)
+        session.delete(existing_role)
+
     user_role = UserRole(
         user_id=request.user_id,
         role_id=request.role_id,

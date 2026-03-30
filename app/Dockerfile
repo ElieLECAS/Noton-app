@@ -77,6 +77,8 @@ COPY app/ ./app/
 # Copier alembic/ et alembic.ini à la racine /app/ pour que la commande alembic fonctionne depuis le WORKDIR
 COPY app/alembic/ ./alembic/
 COPY app/alembic.ini ./alembic.ini
+COPY tests/ ./tests/
+COPY pytest.ini ./pytest.ini
 
 # Exposer le port
 EXPOSE 8000

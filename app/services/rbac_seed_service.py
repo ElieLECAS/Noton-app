@@ -74,8 +74,8 @@ ROLES_CATALOG = {
             "space.read",
         ]
     },
-    "member": {
-        "description": "Membre standard avec droits d'édition",
+    "responsable": {
+        "description": "Responsable avec droits d'édition",
         "permissions": [
             "library.read",
             "library.write",
@@ -85,7 +85,7 @@ ROLES_CATALOG = {
             "space.read",
         ]
     },
-    "viewer": {
+    "lecteur": {
         "description": "Lecteur avec accès en lecture seule",
         "permissions": [
             "library.read",
@@ -126,14 +126,39 @@ def seed_permissions(session: Session) -> Dict[str, Permission]:
 def seed_roles(session: Session, permissions_map: Dict[str, Permission]) -> Dict[str, Role]:
     """Crée ou met à jour tous les rôles du catalogue."""
     roles_map = {}
+    legacy_role_mapping = {
+        "member": "responsable",
+        "viewer": "lecteur",
+    }
     
     for role_name, role_data in ROLES_CATALOG.items():
         statement = select(Role).where(Role.name == role_name)
         existing_role = session.exec(statement).first()
+        legacy_name = next(
+            (old_name for old_name, new_name in legacy_role_mapping.items() if new_name == role_name),
+            None
+        )
+        legacy_role = (
+            session.exec(select(Role).where(Role.name == legacy_name)).first()
+            if legacy_name
+            else None
+        )
         
         if existing_role:
             role = existing_role
+            role.description = role_data["description"]
+            session.add(role)
+            session.commit()
             logger.debug(f"Rôle existant: {role_name}")
+        elif legacy_role:
+            legacy_role.name = role_name
+            legacy_role.description = role_data["description"]
+            legacy_role.is_system = True
+            session.add(legacy_role)
+            session.commit()
+            session.refresh(legacy_role)
+            role = legacy_role
+            logger.info(f"Rôle renommé: {legacy_name} -> {role_name}")
         else:
             role = Role(
                 name=role_name,

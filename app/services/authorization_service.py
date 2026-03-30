@@ -20,28 +20,23 @@ def ensure_user_has_admin_role(session: Session, user: User) -> bool:
     if user.email.lower() != settings.ADMIN_EMAIL.lower():
         return False
     
-    # Vérifier si l'utilisateur a déjà le rôle admin
     admin_role = session.exec(select(Role).where(Role.name == "admin")).first()
     if not admin_role:
         logger.warning("Rôle admin introuvable dans la base")
         return False
-    
-    existing_user_role = session.exec(
-        select(UserRole).where(
-            UserRole.user_id == user.id,
-            UserRole.role_id == admin_role.id
-        )
-    ).first()
-    
-    if existing_user_role:
+
+    # Un utilisateur ne peut avoir qu'un seul rôle: admin remplace les autres.
+    existing_roles = session.exec(
+        select(UserRole).where(UserRole.user_id == user.id)
+    ).all()
+    already_admin_only = len(existing_roles) == 1 and existing_roles[0].role_id == admin_role.id
+    if already_admin_only:
         return True
-    
-    # Attribuer le rôle admin
-    user_role = UserRole(
-        user_id=user.id,
-        role_id=admin_role.id
-    )
-    session.add(user_role)
+
+    for user_role in existing_roles:
+        session.delete(user_role)
+
+    session.add(UserRole(user_id=user.id, role_id=admin_role.id))
     session.commit()
     
     logger.info(f"Rôle admin attribué automatiquement à {user.email}")
@@ -50,7 +45,7 @@ def ensure_user_has_admin_role(session: Session, user: User) -> bool:
 
 def ensure_user_has_default_role(session: Session, user: User) -> bool:
     """
-    Attribue le rôle 'member' par défaut à un utilisateur s'il n'a aucun rôle.
+    Attribue le rôle 'lecteur' par défaut à un utilisateur s'il n'a aucun rôle.
     Retourne True si un rôle a été attribué, False sinon.
     """
     existing_roles = session.exec(
@@ -60,19 +55,19 @@ def ensure_user_has_default_role(session: Session, user: User) -> bool:
     if existing_roles:
         return False
     
-    member_role = session.exec(select(Role).where(Role.name == "member")).first()
-    if not member_role:
-        logger.warning("Rôle member introuvable dans la base")
+    lecteur_role = session.exec(select(Role).where(Role.name == "lecteur")).first()
+    if not lecteur_role:
+        logger.warning("Rôle lecteur introuvable dans la base")
         return False
     
     user_role = UserRole(
         user_id=user.id,
-        role_id=member_role.id
+        role_id=lecteur_role.id
     )
     session.add(user_role)
     session.commit()
     
-    logger.info(f"Rôle member attribué par défaut à {user.email}")
+    logger.info(f"Rôle lecteur attribué par défaut à {user.email}")
     return True
 
 

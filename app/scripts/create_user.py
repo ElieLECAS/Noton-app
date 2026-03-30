@@ -89,7 +89,7 @@ def create_user_cli(
             )
             user = create_user(session, user_create)
 
-            target_role = "admin" if admin else "member"
+            target_role = "admin" if admin else "lecteur"
             assigned = _assign_role(session, user.id, target_role)
             if not assigned:
                 print(
