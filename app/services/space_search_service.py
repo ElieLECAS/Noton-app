@@ -3,16 +3,19 @@ Service de recherche sémantique pour les espaces (architecture Document/Space).
 
 Pipeline principal :
   1. Embedding de la requête via BGE-m3
-  2. Candidats vectoriels (pgvector) + lexicaux (ts_rank_cd) + KAG (graphe)
-  3. Fusion hybride permanente (alpha*vector + beta*lexical + gamma*KAG), normalisation min-max
-  4. Filtrage pré-reranking
-  5. Early stopping si similarité vectorielle déjà élevée
-  6. Reranking cross-encoder (BGE-reranker-v2-m3)
-  7. Résolution des parents (clé ``node_id`` Docling + ``chunk-{id}``)
-  8. Source authority (boost titre-requête)
-  9. Fallback lexical ILIKE si aucun candidat hybride
+  2. Détection multi-hop (heuristique : mots-clés + entités pivot)
+  3a. [Standard] Candidats vectoriels (pgvector) + lexicaux (ts_rank_cd) + KAG (graphe)
+  3b. [Multi-hop]  Orchestrateur max 3 sauts : hop0 hybride → expansion graphe → sauts suivants
+  4. Fusion hybride pondérée + scoring par profondeur (pénalité par hop)
+  5. Filtrage pré-reranking
+  6. Early stopping si similarité vectorielle déjà élevée
+  7. Reranking cross-encoder (BGE-reranker-v2-m3)
+  8. Résolution des parents (clé ``node_id`` Docling + ``chunk-{id}``)
+  9. Source authority (boost titre-requête)
+  10. Fallback lexical ILIKE si aucun candidat hybride
 """
 
+from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Set, Tuple
 import os
 import re
@@ -71,6 +74,51 @@ RAG_HYBRID_ALPHA = 0.60
 RAG_HYBRID_BETA = 0.25
 RAG_HYBRID_GAMMA = 0.15
 HYBRID_MIN_SCORE = 0.06
+
+# ---------------------------------------------------------------------------
+# Multi-hop — constantes en dur (pas de variables d'environnement)
+# ---------------------------------------------------------------------------
+MULTI_HOP_ENABLED = True
+MULTI_HOP_MAX_HOPS = 3
+MULTI_HOP_CANDIDATE_BUDGET = 80   # plafond global de candidats (tous hops confondus)
+MULTI_HOP_PER_HOP_LIMIT = 20      # candidats KAG max par hop d'expansion
+MULTI_HOP_PATIENCE = 1            # sauts consécutifs sans nouveaux chunks avant arrêt
+MULTI_HOP_MIN_DELTA_NEW_CHUNKS = 1  # nb minimum de nouveaux chunks pour continuer
+
+# Scoring multi-hop unifié : score = 0.55*v + 0.20*l + 0.20*k + 0.05*evidence - penalty
+MH_WEIGHT_VECTOR = 0.55
+MH_WEIGHT_LEXICAL = 0.20
+MH_WEIGHT_KAG = 0.20
+MH_WEIGHT_EVIDENCE = 0.05
+# Pénalité par profondeur : hop0→0.00, hop1→0.05, hop2→0.10, hop3→0.15
+MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
+
+# Mots-clés heuristiques indiquant une requête multi-hop
+_MH_TRIGGER_PATTERNS = re.compile(
+    r"\b(et\b|comparaison|impact|cause|depend|dépend|influence|relation|lien"
+    r"|si\b|alors\b|pourquoi|comment|implique|nécessite|necessite|versus|vs\b"
+    r"|différence|difference|avantage|inconvénient|inconvenient)\b",
+    re.IGNORECASE,
+)
+
+
+# ---------------------------------------------------------------------------
+# Structure d'état multi-hop
+# ---------------------------------------------------------------------------
+
+@dataclass
+class _MultiHopState:
+    """État de recherche conservé entre les sauts d'un pipeline multi-hop."""
+    seen_chunk_ids: Set[int] = field(default_factory=set)
+    seen_entity_ids: Set[int] = field(default_factory=set)
+    seen_entity_names: Set[str] = field(default_factory=set)
+    # chunk_id → {"vector": float, "lexical": float, "kag": float,
+    #              "evidence": float, "hop": int, "path": str}
+    chunk_signals: Dict[int, Dict] = field(default_factory=dict)
+    # hop → nombre de nouveaux chunks apportés
+    new_chunks_count_by_hop: Dict[int, int] = field(default_factory=dict)
+    # hop_traces : chunk_id → liste des entités qui ont amené ce chunk
+    hop_traces: Dict[int, List[str]] = field(default_factory=dict)
 
 
 def _merged_chunk_metadata(primary: Optional[dict], legacy: Optional[dict]) -> Dict:
@@ -996,6 +1044,414 @@ def refine_with_source_authority(
     return passages
 
 
+def _needs_multi_hop(query_text: str, pivot_entity_names: List[str]) -> bool:
+    """
+    Détecte si la requête nécessite un retrieval multi-hop.
+
+    Critères (OR) :
+    - La requête contient au moins un mot-clé indicateur multi-hop.
+    - Au moins 2 entités pivot distinctes ont été extraites de la requête.
+    """
+    if not query_text:
+        return False
+    if _MH_TRIGGER_PATTERNS.search(query_text):
+        return True
+    if len(pivot_entity_names) >= 2:
+        return True
+    return False
+
+
+def _extract_top_entity_names_from_candidates(
+    candidates: List[NodeWithScore],
+    top_n: int = 10,
+) -> List[str]:
+    """
+    Extrait les noms d'entités KAG dominantes des meilleurs candidats courants.
+    Utilisé entre deux hops pour définir les seeds du saut suivant.
+    """
+    entity_counter: Dict[str, int] = {}
+    for nws in candidates:
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        entity = meta.get("kag_matched_entity")
+        if entity and isinstance(entity, str):
+            key = entity.strip().lower()
+            if key:
+                entity_counter[key] = entity_counter.get(key, 0) + 1
+    sorted_entities = sorted(entity_counter, key=lambda e: entity_counter[e], reverse=True)
+    return sorted_entities[:top_n]
+
+
+def _retrieve_kag_for_entity_seeds(
+    session: Session,
+    space_id: int,
+    entity_names: List[str],
+    limit: int,
+    seen_chunk_ids: Set[int],
+    seen_entity_ids: Set[int],
+) -> List[NodeWithScore]:
+    """
+    Retrieval KAG ciblé à partir d'une liste de noms d'entités seeds.
+    Exclut les chunks et entités déjà vus dans les hops précédents.
+    Retourne uniquement des chunks nouveaux.
+    """
+    try:
+        from app.services.kag_graph_service import (
+            expand_kag_query_terms_for_space,
+            _neighbor_entity_ids_for_entities,
+        )
+        from app.services.kag_extraction_service import normalize_entity_name
+
+        normalized = [normalize_entity_name(n) for n in entity_names if n]
+        normalized = [n for n in normalized if n]
+        if not normalized:
+            return []
+
+        expanded = expand_kag_query_terms_for_space(session, space_id, normalized)
+        expanded = expanded[:80]
+
+        stmt = (
+            select(
+                DocumentChunk,
+                Document.title,
+                KnowledgeEntity.name,
+                KnowledgeEntity.id,
+                ChunkEntityRelation.relevance_score,
+            )
+            .join(ChunkEntityRelation, ChunkEntityRelation.chunk_id == DocumentChunk.id)
+            .join(KnowledgeEntity, KnowledgeEntity.id == ChunkEntityRelation.entity_id)
+            .join(Document, Document.id == DocumentChunk.document_id)
+            .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+            .where(
+                DocumentSpace.space_id == space_id,
+                DocumentChunk.is_leaf == True,
+                KnowledgeEntity.space_id == space_id,
+                KnowledgeEntity.name_normalized.in_(expanded),
+            )
+            .order_by(ChunkEntityRelation.relevance_score.desc())
+            .limit(limit * 2)
+        )
+        rows = list(session.exec(stmt).all())
+
+        # Expansion voisins graphe depuis les entités seeds
+        seed_entity_ids = {row[3] for row in rows if row[3] is not None} - seen_entity_ids
+        if seed_entity_ids:
+            neighbor_ids = _neighbor_entity_ids_for_entities(
+                session, space_id, seed_entity_ids
+            ) - seen_entity_ids
+            if neighbor_ids:
+                stmt_n = (
+                    select(
+                        DocumentChunk,
+                        Document.title,
+                        KnowledgeEntity.name,
+                        KnowledgeEntity.id,
+                        ChunkEntityRelation.relevance_score,
+                    )
+                    .join(ChunkEntityRelation, ChunkEntityRelation.chunk_id == DocumentChunk.id)
+                    .join(KnowledgeEntity, KnowledgeEntity.id == ChunkEntityRelation.entity_id)
+                    .join(Document, Document.id == DocumentChunk.document_id)
+                    .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+                    .where(
+                        DocumentSpace.space_id == space_id,
+                        DocumentChunk.is_leaf == True,
+                        KnowledgeEntity.space_id == space_id,
+                        KnowledgeEntity.id.in_(neighbor_ids),
+                    )
+                    .order_by(ChunkEntityRelation.relevance_score.desc())
+                    .limit(limit)
+                )
+                existing_ids = {row[0].id for row in rows}
+                for row in session.exec(stmt_n).all():
+                    if row[0].id not in existing_ids:
+                        rows.append(row)
+                        existing_ids.add(row[0].id)
+
+        nodes: List[NodeWithScore] = []
+        seen_in_batch: Set[int] = set()
+        for chunk, doc_title, entity_name, _eid, relevance in rows:
+            if chunk.id in seen_chunk_ids or chunk.id in seen_in_batch:
+                continue
+            seen_in_batch.add(chunk.id)
+            metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
+            metadata.setdefault("document_id", chunk.document_id)
+            metadata.setdefault("document_title", doc_title or "Document sans titre")
+            metadata.setdefault("chunk_index", chunk.chunk_index)
+            metadata["kag_matched_entity"] = entity_name
+            node = TextNode(
+                id_=f"chunk-{chunk.id}",
+                text=chunk.content or chunk.text or "",
+                metadata=metadata,
+            )
+            nodes.append(NodeWithScore(node=node, score=float(relevance)))
+            if len(nodes) >= limit:
+                break
+
+        return nodes
+
+    except Exception as exc:
+        logger.warning("KAG ciblé (multi-hop) échoué: %s", exc)
+        return []
+
+
+def _apply_multihop_depth_scoring(
+    state: _MultiHopState,
+    all_nodes: Dict[int, NodeWithScore],
+) -> List[NodeWithScore]:
+    """
+    Calcule le score unifié multi-hop pour chaque chunk en tenant compte
+    des signaux par source (vector, lexical, kag, evidence) et de la pénalité
+    de profondeur (hop d'origine du chunk).
+
+    Formule : score = 0.55*v + 0.20*l + 0.20*k + 0.05*evidence - hop_penalty
+    """
+    if not state.chunk_signals:
+        return list(all_nodes.values())
+
+    v_raw = {cid: sig.get("vector", 0.0) for cid, sig in state.chunk_signals.items()}
+    l_raw = {cid: sig.get("lexical", 0.0) for cid, sig in state.chunk_signals.items()}
+    k_raw = {cid: sig.get("kag", 0.0) for cid, sig in state.chunk_signals.items()}
+    e_raw = {cid: sig.get("evidence", 0.0) for cid, sig in state.chunk_signals.items()}
+
+    v_norm = _normalize_min_max(v_raw)
+    l_norm = _normalize_min_max(l_raw)
+    k_norm = _normalize_min_max(k_raw)
+    e_norm = _normalize_min_max(e_raw)
+
+    scored: List[NodeWithScore] = []
+    for cid, sig in state.chunk_signals.items():
+        nws = all_nodes.get(cid)
+        if nws is None:
+            continue
+        hop = sig.get("hop", 0)
+        penalty = MH_HOP_PENALTIES.get(hop, MH_HOP_PENALTIES[MULTI_HOP_MAX_HOPS])
+        mh_score = (
+            MH_WEIGHT_VECTOR * v_norm.get(cid, 0.0)
+            + MH_WEIGHT_LEXICAL * l_norm.get(cid, 0.0)
+            + MH_WEIGHT_KAG * k_norm.get(cid, 0.0)
+            + MH_WEIGHT_EVIDENCE * e_norm.get(cid, 0.0)
+            - penalty
+        )
+        mh_score = max(0.0, mh_score)
+
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        meta["retrieval_hop"] = hop
+        meta["hop_penalty"] = penalty
+        meta["evidence_score"] = sig.get("evidence", 0.0)
+        meta["retrieval_path"] = sig.get("path", f"hop{hop}")
+        meta["mh_score"] = mh_score
+        nws.node.metadata = meta
+        scored.append(NodeWithScore(node=nws.node, score=mh_score))
+
+    scored.sort(key=lambda x: float(x.score or 0.0), reverse=True)
+    return scored
+
+
+def multi_hop_retrieve_space(
+    session: Session,
+    space_id: int,
+    user_id: int,
+    query_text: str,
+    pivot_entity_names: List[str],
+    candidate_k: int,
+) -> List[NodeWithScore]:
+    """
+    Orchestrateur multi-hop pour la recherche dans un espace.
+
+    Enchaîne jusqu'à MULTI_HOP_MAX_HOPS sauts :
+    - Hop 0 : retrieval hybride standard (vector + lexical + KAG pivot).
+    - Hop N : expansion graphe à partir des entités dominantes des meilleurs
+              chunks du saut précédent + retrieval KAG ciblé.
+    Applique le scoring par profondeur et retourne les candidats fusionnés
+    triés, prêts pour le filtre pré-rerank et le reranker existants.
+    """
+    state = _MultiHopState()
+    all_nodes: Dict[int, NodeWithScore] = {}
+
+    # --- Hop 0 : retrieval hybride complet ---
+    vector_candidates = _retrieve_leaves_sql(
+        session=session,
+        space_id=space_id,
+        user_id=user_id,
+        query_text=query_text,
+        candidate_k=candidate_k,
+    )
+    lexical_candidates = _retrieve_leaves_lexical_sql(
+        session=session,
+        space_id=space_id,
+        query_text=query_text,
+        candidate_k=candidate_k,
+    )
+    graph_candidates_hop0 = _retrieve_via_knowledge_graph(
+        session=session,
+        space_id=space_id,
+        user_id=user_id,
+        query_text=query_text,
+        limit=candidate_k,
+        pivot_entity_names=pivot_entity_names or None,
+    )
+
+    # Indexer les signaux bruts du hop 0
+    v_by_id: Dict[int, float] = {}
+    for nws in vector_candidates:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None:
+            v_by_id[cid] = float(nws.score or 0.0)
+
+    l_by_id: Dict[int, float] = {}
+    for nws in lexical_candidates:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None:
+            l_by_id[cid] = float(nws.score or 0.0)
+
+    k_by_id: Dict[int, float] = {}
+    for nws in graph_candidates_hop0:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None:
+            sc = float(nws.score or 0.0)
+            if cid not in k_by_id or sc > k_by_id[cid]:
+                k_by_id[cid] = sc
+
+    hop0_ids = set(v_by_id) | set(l_by_id) | set(k_by_id)
+    new_at_hop0 = 0
+
+    # Fusionner dans l'état global
+    for cid in hop0_ids:
+        state.seen_chunk_ids.add(cid)
+        state.chunk_signals[cid] = {
+            "vector": v_by_id.get(cid, 0.0),
+            "lexical": l_by_id.get(cid, 0.0),
+            "kag": k_by_id.get(cid, 0.0),
+            "evidence": 0.0,
+            "hop": 0,
+            "path": "hop0:hybrid",
+        }
+        new_at_hop0 += 1
+
+    # Conserver les nœuds en utilisant la fusion hybride pour le nœud de référence
+    fused_hop0 = _hybrid_fuse_candidates(
+        vector_candidates=vector_candidates,
+        lexical_candidates=lexical_candidates,
+        graph_candidates=graph_candidates_hop0,
+    )
+    for nws in fused_hop0:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None:
+            all_nodes[cid] = nws
+
+    state.new_chunks_count_by_hop[0] = new_at_hop0
+    logger.info(
+        "Multi-hop (space) hop0: %d candidats hybrides (space_id=%d)",
+        len(all_nodes),
+        space_id,
+    )
+
+    # Enregistrer les entités vues en hop 0
+    for nws in graph_candidates_hop0:
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        entity = meta.get("kag_matched_entity")
+        if entity:
+            state.seen_entity_names.add(entity.strip().lower())
+
+    # --- Hops 1..N ---
+    stagnation_count = 0
+
+    for hop in range(1, MULTI_HOP_MAX_HOPS + 1):
+        if len(state.seen_chunk_ids) >= MULTI_HOP_CANDIDATE_BUDGET:
+            logger.info(
+                "Multi-hop (space) arrêt budget (%d >= %d) au hop %d",
+                len(state.seen_chunk_ids),
+                MULTI_HOP_CANDIDATE_BUDGET,
+                hop,
+            )
+            break
+
+        # Extraire les entités seeds des meilleurs candidats actuels
+        top_current = sorted(
+            all_nodes.values(),
+            key=lambda x: float(x.score or 0.0),
+            reverse=True,
+        )[:MULTI_HOP_PER_HOP_LIMIT]
+        seed_entity_names = _extract_top_entity_names_from_candidates(top_current, top_n=12)
+
+        # Exclure les entités déjà explorées
+        new_seeds = [n for n in seed_entity_names if n not in state.seen_entity_names]
+        if not new_seeds:
+            logger.info(
+                "Multi-hop (space) arrêt saturation entités au hop %d (toutes vues)",
+                hop,
+            )
+            break
+
+        state.seen_entity_names.update(new_seeds)
+
+        hop_candidates = _retrieve_kag_for_entity_seeds(
+            session=session,
+            space_id=space_id,
+            entity_names=new_seeds,
+            limit=MULTI_HOP_PER_HOP_LIMIT,
+            seen_chunk_ids=state.seen_chunk_ids,
+            seen_entity_ids=state.seen_entity_ids,
+        )
+
+        new_count = 0
+        for nws in hop_candidates:
+            cid = _parse_chunk_id_from_node(nws.node)
+            if cid is None or cid in state.seen_chunk_ids:
+                continue
+            state.seen_chunk_ids.add(cid)
+            kag_score = float(nws.score or 0.0)
+            meta = dict(getattr(nws.node, "metadata", {}) or {})
+            entity_name = meta.get("kag_matched_entity", "")
+            # L'evidence = nombre d'entités pivot déjà connues dans ce chunk
+            evidence = sum(
+                1 for e in pivot_entity_names
+                if e and e.lower() in (meta.get("kag_matched_entity") or "").lower()
+            )
+            state.chunk_signals[cid] = {
+                "vector": 0.0,
+                "lexical": 0.0,
+                "kag": kag_score,
+                "evidence": float(evidence),
+                "hop": hop,
+                "path": f"hop{hop}:{','.join(new_seeds[:3])}",
+            }
+            if entity_name:
+                state.hop_traces.setdefault(cid, []).append(entity_name)
+            all_nodes[cid] = nws
+            new_count += 1
+
+        state.new_chunks_count_by_hop[hop] = new_count
+
+        logger.info(
+            "Multi-hop (space) hop%d: +%d nouveaux chunks (seeds=%s)",
+            hop,
+            new_count,
+            new_seeds[:3],
+        )
+
+        if new_count < MULTI_HOP_MIN_DELTA_NEW_CHUNKS:
+            stagnation_count += 1
+            if stagnation_count >= MULTI_HOP_PATIENCE:
+                logger.info(
+                    "Multi-hop (space) arrêt stagnation après hop %d (%d saut(s) vide(s))",
+                    hop,
+                    stagnation_count,
+                )
+                break
+        else:
+            stagnation_count = 0
+
+    # --- Scoring final par profondeur ---
+    scored_candidates = _apply_multihop_depth_scoring(state, all_nodes)
+
+    logger.info(
+        "Multi-hop (space) terminé: %d candidats finaux (hops=%s)",
+        len(scored_candidates),
+        dict(state.new_chunks_count_by_hop),
+    )
+    return scored_candidates
+
+
 def search_relevant_passages(
     session: Session,
     space_id: int,
@@ -1007,8 +1463,9 @@ def search_relevant_passages(
     Recherche sémantique RAG + KAG sur les documents d'un espace.
 
     Pipeline :
-      1. Candidats vectoriels (pgvector) + lexicaux (full-text) + KAG
-      2. Fusion hybride pondérée sur les trois signaux
+      1. Extraction entités pivot (KAG) + détection multi-hop heuristique
+      2a. [Multi-hop] Orchestrateur max 3 sauts avec scoring par profondeur
+      2b. [Standard]  Fusion hybride vectoriel + lexical + KAG
       3. Filtrage pré-reranking
       4. Early stopping si similarité vectorielle élevée
       5. Reranking cross-encoder (BGE-reranker-v2-m3)
@@ -1042,22 +1499,7 @@ def search_relevant_passages(
             else k
         )
 
-        # --- Étape 1 : retrieval vectoriel + lexical + KAG puis fusion hybride ---
-        vector_candidates = _retrieve_leaves_sql(
-            session=session,
-            space_id=space_id,
-            user_id=user_id,
-            query_text=query_text,
-            candidate_k=candidate_k,
-        )
-        lexical_candidates = _retrieve_leaves_lexical_sql(
-            session=session,
-            space_id=space_id,
-            query_text=query_text,
-            candidate_k=candidate_k,
-        )
-
-        graph_candidates: List[NodeWithScore] = []
+        # --- Étape 1 : extraction entités pivot (KAG) ---
         pivot_entity_names: List[str] = []
         if settings.KAG_ENABLED:
             try:
@@ -1069,27 +1511,67 @@ def search_relevant_passages(
             except Exception as ext_err:
                 logger.debug("Extraction entités requête ignorée (space): %s", ext_err)
 
-            try:
-                graph_candidates = _retrieve_via_knowledge_graph(
-                    session=session,
-                    space_id=space_id,
-                    user_id=user_id,
-                    query_text=query_text,
-                    limit=candidate_k,
-                    pivot_entity_names=pivot_entity_names or None,
-                )
-            except Exception as kag_err:
-                logger.warning("KAG retrieval échoué (space): %s", kag_err)
-
-        leaf_candidates = _hybrid_fuse_candidates(
-            vector_candidates=vector_candidates,
-            lexical_candidates=lexical_candidates,
-            graph_candidates=graph_candidates,
+        # --- Étape 2 : sélection du mode retrieval ---
+        use_multi_hop = (
+            MULTI_HOP_ENABLED
+            and settings.KAG_ENABLED
+            and _needs_multi_hop(query_text, pivot_entity_names)
         )
+
+        if use_multi_hop:
+            logger.info(
+                "Multi-hop activé (space_id=%d) — pivots=%s",
+                space_id,
+                pivot_entity_names[:4],
+            )
+            leaf_candidates = multi_hop_retrieve_space(
+                session=session,
+                space_id=space_id,
+                user_id=user_id,
+                query_text=query_text,
+                pivot_entity_names=pivot_entity_names,
+                candidate_k=candidate_k,
+            )
+        else:
+            # Pipeline hybride standard
+            vector_candidates = _retrieve_leaves_sql(
+                session=session,
+                space_id=space_id,
+                user_id=user_id,
+                query_text=query_text,
+                candidate_k=candidate_k,
+            )
+            lexical_candidates = _retrieve_leaves_lexical_sql(
+                session=session,
+                space_id=space_id,
+                query_text=query_text,
+                candidate_k=candidate_k,
+            )
+
+            graph_candidates: List[NodeWithScore] = []
+            if settings.KAG_ENABLED:
+                try:
+                    graph_candidates = _retrieve_via_knowledge_graph(
+                        session=session,
+                        space_id=space_id,
+                        user_id=user_id,
+                        query_text=query_text,
+                        limit=candidate_k,
+                        pivot_entity_names=pivot_entity_names or None,
+                    )
+                except Exception as kag_err:
+                    logger.warning("KAG retrieval échoué (space): %s", kag_err)
+
+            leaf_candidates = _hybrid_fuse_candidates(
+                vector_candidates=vector_candidates,
+                lexical_candidates=lexical_candidates,
+                graph_candidates=graph_candidates,
+            )
 
         if not leaf_candidates:
             logger.info(
-                "Aucun candidat hybride (space), activation fallback lexical ILIKE"
+                "Aucun candidat (space, multi_hop=%s), activation fallback lexical ILIKE",
+                use_multi_hop,
             )
             return _keyword_fallback_passages(
                 session=session,
@@ -1099,7 +1581,7 @@ def search_relevant_passages(
                 k=k,
             )
 
-        # --- Étape 2 : filtrage pré-reranking (scores hybrides) ---
+        # --- Étape 3 : filtrage pré-reranking ---
         filtered_candidates = _filter_hybrid_candidates(leaf_candidates)
         if not filtered_candidates:
             logger.info(
