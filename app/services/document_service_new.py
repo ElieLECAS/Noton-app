@@ -894,6 +894,37 @@ def remove_document_from_spaces(
     return True
 
 
+def apply_document_spaces_update(
+    document_id: int,
+    add_space_ids: List[int],
+    remove_space_ids: List[int],
+    user_id: int,
+) -> bool:
+    """
+    Applique les changements d'association document/espaces dans une session dédiée.
+    Utilisé par les workers (Celery/thread) pour ne pas bloquer le process web.
+    """
+    with Session(engine) as session:
+        document = get_document_by_id(session, document_id, user_id)
+        if not document:
+            logger.error("Document %s non trouvé pour mise à jour des espaces", document_id)
+            return False
+
+        if add_space_ids:
+            success = add_document_to_spaces(session, document_id, add_space_ids, user_id)
+            if not success:
+                return False
+
+        if remove_space_ids:
+            success = remove_document_from_spaces(
+                session, document_id, remove_space_ids, user_id
+            )
+            if not success:
+                return False
+
+        return True
+
+
 def _process_document_worker():
     """Worker thread : un document à la fois, de bout en bout (pas de chevauchement)."""
     try:

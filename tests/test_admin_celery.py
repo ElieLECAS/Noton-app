@@ -68,3 +68,26 @@ def test_dispatch_library_document_enqueues_celery():
         args=[42, "/data/file.pdf"],
         queue="documents",
     )
+
+
+def test_dispatch_document_spaces_update_enqueues_celery():
+    mock_result = mock.MagicMock()
+    mock_result.id = "celery-task-doc-spaces"
+
+    with mock.patch.object(settings, "TASK_BACKEND_MODE", "celery"):
+        with mock.patch(
+            "app.tasks.documents.update_document_spaces_task.apply_async",
+            return_value=mock_result,
+        ) as apply_async:
+            task_id = task_dispatch.dispatch_document_spaces_update(
+                document_id=77,
+                add_space_ids=[1, 2],
+                remove_space_ids=[3],
+                user_id=9,
+            )
+
+    assert task_id == "celery-task-doc-spaces"
+    apply_async.assert_called_once_with(
+        args=[77, [1, 2], [3], 9],
+        queue="documents",
+    )

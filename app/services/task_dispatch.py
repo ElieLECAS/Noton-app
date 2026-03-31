@@ -5,6 +5,7 @@ Modes : thread | celery | hybrid (Celery prioritaire, repli threads si échec co
 from __future__ import annotations
 
 import logging
+import threading
 from typing import Literal, Optional
 
 from sqlmodel import Session
@@ -111,6 +112,54 @@ def _send_document_embeddings(document_id: int) -> bool:
     return True
 
 
+def _send_document_spaces_update(
+    document_id: int,
+    add_space_ids: list[int],
+    remove_space_ids: list[int],
+    user_id: int,
+) -> str:
+    from app.tasks.documents import update_document_spaces_task
+
+    async_result = update_document_spaces_task.apply_async(
+        args=[document_id, add_space_ids, remove_space_ids, user_id],
+        queue="documents",
+    )
+    logger.info(
+        "task_dispatch update_document_spaces document_id=%s celery_task_id=%s",
+        document_id,
+        async_result.id,
+    )
+    return async_result.id
+
+
+def _run_document_spaces_update_thread(
+    document_id: int,
+    add_space_ids: list[int],
+    remove_space_ids: list[int],
+    user_id: int,
+) -> None:
+    from app.services.document_service_new import apply_document_spaces_update
+
+    def _runner():
+        try:
+            apply_document_spaces_update(
+                document_id=document_id,
+                add_space_ids=add_space_ids,
+                remove_space_ids=remove_space_ids,
+                user_id=user_id,
+            )
+        except Exception:
+            logger.exception(
+                "Thread update_document_spaces échec document_id=%s", document_id
+            )
+
+    threading.Thread(
+        target=_runner,
+        name=f"document-spaces-{document_id}",
+        daemon=True,
+    ).start()
+
+
 def dispatch_library_document(document_id: int, file_path: str) -> None:
     """Enqueue traitement document bibliothèque (Celery ou thread)."""
     mode = get_task_backend_mode()
@@ -176,6 +225,50 @@ def dispatch_reindex_library(document_id: int, user_id: int):
             from app.services.document_service_new import reindex_library_document
 
             return reindex_library_document(document_id, user_id)
+        raise RuntimeError(_celery_only_failure_message()) from exc
+
+
+def dispatch_document_spaces_update(
+    document_id: int,
+    add_space_ids: list[int],
+    remove_space_ids: list[int],
+    user_id: int,
+) -> str:
+    """
+    Ajout/retrait des espaces d'un document via worker.
+    Retourne un identifiant de tâche (Celery id ou id logique thread).
+    """
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        _run_document_spaces_update_thread(
+            document_id=document_id,
+            add_space_ids=add_space_ids,
+            remove_space_ids=remove_space_ids,
+            user_id=user_id,
+        )
+        return f"thread-document-spaces-{document_id}"
+
+    try:
+        return _send_document_spaces_update(
+            document_id=document_id,
+            add_space_ids=add_space_ids,
+            remove_space_ids=remove_space_ids,
+            user_id=user_id,
+        )
+    except Exception as exc:
+        logger.warning(
+            "Celery indisponible pour update_document_spaces document_id=%s: %s",
+            document_id,
+            exc,
+        )
+        if mode == "hybrid":
+            _run_document_spaces_update_thread(
+                document_id=document_id,
+                add_space_ids=add_space_ids,
+                remove_space_ids=remove_space_ids,
+                user_id=user_id,
+            )
+            return f"thread-document-spaces-{document_id}"
         raise RuntimeError(_celery_only_failure_message()) from exc
 
 

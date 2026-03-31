@@ -20,10 +20,13 @@ from app.services.folder_service import (
 from app.services.document_service_new import (
     create_document, get_document_by_id, get_documents_by_folder,
     get_documents_by_library, save_uploaded_file, process_document_async,
-    add_document_to_spaces, remove_document_from_spaces, move_document, delete_document,
+    move_document, delete_document,
     update_document,
 )
-from app.services.task_dispatch import dispatch_reindex_library
+from app.services.task_dispatch import (
+    dispatch_document_spaces_update,
+    dispatch_reindex_library,
+)
 from app.services.document_space_service import get_spaces_for_document
 from pathlib import Path
 import logging
@@ -425,31 +428,30 @@ async def manage_document_spaces(
     current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
-    """Ajoute ou retire un document de plusieurs espaces."""
+    """Ajoute ou retire un document de plusieurs espaces via worker."""
     document = get_document_by_id(session, document_id, current_user.id)
     if not document:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Document non trouvé"
         )
-    
-    if payload.add_space_ids:
-        success = add_document_to_spaces(session, document_id, payload.add_space_ids, current_user.id)
-        if not success:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Erreur lors de l'ajout aux espaces"
-            )
-    
-    if payload.remove_space_ids:
-        success = remove_document_from_spaces(session, document_id, payload.remove_space_ids, current_user.id)
-        if not success:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Erreur lors du retrait des espaces"
-            )
-    
-    return {"message": "Espaces mis à jour avec succès"}
+
+    if not payload.add_space_ids and not payload.remove_space_ids:
+        return {"status": "noop", "message": "Aucun changement à appliquer"}
+
+    task_id = dispatch_document_spaces_update(
+        document_id=document_id,
+        add_space_ids=payload.add_space_ids,
+        remove_space_ids=payload.remove_space_ids,
+        user_id=current_user.id,
+    )
+
+    return {
+        "status": "queued",
+        "message": "Mise à jour des espaces planifiée",
+        "task_id": task_id,
+        "document_id": document_id,
+    }
 
 
 @router.post("/documents/{document_id}/move", response_model=DocumentRead)

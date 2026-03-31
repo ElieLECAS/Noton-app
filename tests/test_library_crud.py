@@ -189,27 +189,76 @@ def test_document_add_and_remove_space(mock_save, mock_proc, client, responsable
     assert up.status_code == 201
     doc_id = up.json()[0]["id"]
 
-    r = client.post(
-        f"/api/library/documents/{doc_id}/spaces",
-        headers=responsable_headers,
-        json={"add_space_ids": [space_id], "remove_space_ids": []},
-    )
+    with mock.patch(
+        "app.routers.library.dispatch_document_spaces_update",
+        return_value="celery-task-doc-spaces-1",
+    ) as dispatch_mock:
+        r = client.post(
+            f"/api/library/documents/{doc_id}/spaces",
+            headers=responsable_headers,
+            json={"add_space_ids": [space_id], "remove_space_ids": []},
+        )
     assert r.status_code == 200
-
-    lst = client.get(f"/api/library/documents/{doc_id}/spaces", headers=responsable_headers)
-    assert lst.status_code == 200
-    ids = {s["id"] for s in lst.json()}
-    assert space_id in ids
-
-    r = client.post(
-        f"/api/library/documents/{doc_id}/spaces",
-        headers=responsable_headers,
-        json={"add_space_ids": [], "remove_space_ids": [space_id]},
+    payload = r.json()
+    assert payload["status"] == "queued"
+    assert payload["task_id"] == "celery-task-doc-spaces-1"
+    dispatch_mock.assert_called_once_with(
+        document_id=doc_id,
+        add_space_ids=[space_id],
+        remove_space_ids=[],
+        user_id=mock.ANY,
     )
-    assert r.status_code == 200
 
-    lst2 = client.get(f"/api/library/documents/{doc_id}/spaces", headers=responsable_headers)
-    assert space_id not in {s["id"] for s in lst2.json()}
+    with mock.patch(
+        "app.routers.library.dispatch_document_spaces_update",
+        return_value="celery-task-doc-spaces-2",
+    ) as dispatch_mock:
+        r = client.post(
+            f"/api/library/documents/{doc_id}/spaces",
+            headers=responsable_headers,
+            json={"add_space_ids": [], "remove_space_ids": [space_id]},
+        )
+    assert r.status_code == 200
+    payload = r.json()
+    assert payload["status"] == "queued"
+    assert payload["task_id"] == "celery-task-doc-spaces-2"
+    dispatch_mock.assert_called_once_with(
+        document_id=doc_id,
+        add_space_ids=[],
+        remove_space_ids=[space_id],
+        user_id=mock.ANY,
+    )
 
     client.delete(f"/api/library/documents/{doc_id}", headers=responsable_headers)
     client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)
+
+
+@mock.patch("app.routers.library.process_document_async")
+@mock.patch(
+    "app.routers.library.save_uploaded_file",
+    return_value="media/documents/spaces_noop_doc.pdf",
+)
+def test_document_spaces_noop_does_not_dispatch(
+    mock_save, mock_proc, client, responsable_headers
+):
+    up = client.post(
+        "/api/library/upload",
+        headers=responsable_headers,
+        files=[("files", ("linked.txt", b"t", "text/plain"))],
+        data={"space_ids": "[]", "is_paid": "false"},
+    )
+    assert up.status_code == 201
+    doc_id = up.json()[0]["id"]
+
+    with mock.patch("app.routers.library.dispatch_document_spaces_update") as dispatch_mock:
+        r = client.post(
+            f"/api/library/documents/{doc_id}/spaces",
+            headers=responsable_headers,
+            json={"add_space_ids": [], "remove_space_ids": []},
+        )
+
+    assert r.status_code == 200
+    assert r.json()["status"] == "noop"
+    dispatch_mock.assert_not_called()
+
+    client.delete(f"/api/library/documents/{doc_id}", headers=responsable_headers)

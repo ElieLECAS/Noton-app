@@ -31,9 +31,30 @@ os.environ.setdefault(
     "SECRET_KEY",
     "pytest-secret-key-do-not-use-in-production-min-32-chars",
 )
-if os.environ.get("PYTEST_DATABASE_URL"):
-    os.environ["DATABASE_URL"] = os.environ["PYTEST_DATABASE_URL"]
-else:
+
+def _is_test_db_name(name: str | None) -> bool:
+    if not name:
+        return False
+    lowered = name.lower()
+    return lowered.endswith("_test") or "_pytest_" in lowered
+
+
+def _build_isolated_test_url() -> str:
+    """
+    Force une DB de tests isolée, différente de la DB de l'app.
+    Si PYTEST_DATABASE_URL est défini, on l'utilise uniquement si son nom contient
+    un marqueur de test explicite.
+    """
+    explicit_pytest_url = os.environ.get("PYTEST_DATABASE_URL")
+    if explicit_pytest_url:
+        parsed = make_url(explicit_pytest_url)
+        if not _is_test_db_name(parsed.database):
+            raise RuntimeError(
+                "PYTEST_DATABASE_URL doit cibler une base de test "
+                "(nom finissant par _test ou contenant _pytest_)."
+            )
+        return explicit_pytest_url
+
     base_url = os.environ.get(
         "DATABASE_URL",
         "postgresql+psycopg2://postgres:postgres@127.0.0.1:5432/noton",
@@ -41,11 +62,15 @@ else:
     try:
         parsed = make_url(base_url)
         db_name = parsed.database or "noton"
-        test_db_name = db_name if db_name.endswith("_test") else f"{db_name}_test"
-        test_url = parsed.set(database=test_db_name).render_as_string(hide_password=False)
+        test_name = db_name if db_name.endswith("_test") else f"{db_name}_test"
+        # PostgreSQL limite les noms d'objets à 63 caractères.
+        test_name = test_name[:63]
+        return parsed.set(database=test_name).render_as_string(hide_password=False)
     except Exception:
-        test_url = "postgresql+psycopg2://postgres:postgres@127.0.0.1:5432/noton_test"
-    os.environ["DATABASE_URL"] = test_url
+        return "postgresql+psycopg2://postgres:postgres@127.0.0.1:5432/noton_test"
+
+
+os.environ["DATABASE_URL"] = _build_isolated_test_url()
 os.environ.setdefault("TASK_BACKEND_MODE", "celery")
 os.environ.setdefault("MISTRAL_API_KEY", "pytest-mistral-key")
 
@@ -146,6 +171,12 @@ def _patch_embedding_startup() -> Generator[None, None, None]:
 
 @pytest.fixture(scope="session", autouse=True)
 def _init_db() -> Generator[None, None, None]:
+    parsed = make_url(os.environ["DATABASE_URL"])
+    if not _is_test_db_name(parsed.database):
+        raise RuntimeError(
+            "Refus d'exécuter les tests sur une base non identifiée comme base de test."
+        )
+
     _ensure_database_exists()
     try:
         with engine.connect() as conn:

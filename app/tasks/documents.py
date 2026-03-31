@@ -103,3 +103,36 @@ def process_document_embeddings(self, document_id: int) -> None:
             "process_document_embeddings échec document_id=%s: %s", document_id, exc
         )
         raise self.retry(exc=exc)
+
+
+@celery_app.task(bind=True, max_retries=0)
+def update_document_spaces_task(
+    self,
+    document_id: int,
+    add_space_ids: list[int],
+    remove_space_ids: list[int],
+    user_id: int,
+) -> dict:
+    """Ajout/retrait d'un document à des espaces via worker."""
+    from app.services.document_service_new import apply_document_spaces_update
+
+    logger.info(
+        "Celery update_document_spaces_task document_id=%s user_id=%s add=%s remove=%s task_id=%s",
+        document_id,
+        user_id,
+        add_space_ids,
+        remove_space_ids,
+        self.request.id,
+    )
+    success = apply_document_spaces_update(
+        document_id=document_id,
+        add_space_ids=add_space_ids,
+        remove_space_ids=remove_space_ids,
+        user_id=user_id,
+    )
+    return {
+        "status": "success" if success else "failed",
+        "document_id": document_id,
+        "add_space_ids": add_space_ids,
+        "remove_space_ids": remove_space_ids,
+    }
