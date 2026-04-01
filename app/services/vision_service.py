@@ -1,20 +1,335 @@
 """
-Service de description d'images avec GPT-4o Vision.
+Service de description d'images : OpenAI (async) et Mistral Pixtral (sync) pour le RAG.
 
-Ce module permet de générer des descriptions textuelles des images/schémas
-extraits des documents, afin de les indexer dans le système RAG.
+Les descriptions Pixtral enrichissent les chunks feuilles « picture » après Docling.
 """
 
 import base64
 import logging
+from collections import defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional, Sequence
 
 import httpx
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
+
+_CHUNK_LIKE = Any  # NoteChunk | DocumentChunk (SQLModel, champs homogènes)
+
+
+def _technical_vision_prompt_parts(context: str = "", caption: str = "") -> list[str]:
+    parts = [
+        "Décris ce schéma, graphique ou image technique de manière détaillée et structurée.",
+        "Inclus :",
+        "- Les éléments visuels principaux (formes, connexions, flux, axes, légendes)",
+        "- Le texte visible dans l'image (OCR factuel)",
+        "- Les relations entre les éléments et l'idée illustrée",
+    ]
+    if context:
+        parts.append(f"\nContexte du document (section) : {context}")
+    if caption:
+        parts.append(f"\nLégende ou titre fourni par le document : {caption}")
+    parts.append("\nRéponds en français, de façon concise mais complète, pour faciliter la recherche sémantique.")
+    return parts
+
+
+def describe_image_with_mistral_sync(
+    image_path: str,
+    context: str = "",
+    caption: str = "",
+) -> Optional[str]:
+    """
+    Appel synchrone à l'API Mistral Chat Completions (Pixtral) pour décrire une image.
+    """
+    if not settings.MISTRAL_API_KEY:
+        logger.warning("MISTRAL_API_KEY non configurée, analyse Pixtral ignorée")
+        return None
+
+    path = Path(image_path)
+    if not path.exists():
+        logger.error("Image non trouvée: %s", image_path)
+        return None
+
+    try:
+        with open(path, "rb") as f:
+            image_data = f.read()
+        image_b64 = base64.b64encode(image_data).decode("utf-8")
+
+        suffix = path.suffix.lower()
+        mime_types = {
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".gif": "image/gif",
+            ".webp": "image/webp",
+        }
+        mime_type = mime_types.get(suffix, "image/png")
+
+        prompt = "\n".join(_technical_vision_prompt_parts(context, caption))
+        data_uri = f"data:{mime_type};base64,{image_b64}"
+
+        messages = [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": data_uri},
+                    },
+                ],
+            }
+        ]
+
+        base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
+        model = settings.VISION_MODEL or "pixtral-12b-2409"
+        max_tokens = getattr(settings, "VISION_MAX_TOKENS", 1500) or 1500
+
+        with httpx.Client(timeout=120.0) as client:
+            response = client.post(
+                f"{base_url}/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {settings.MISTRAL_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": model,
+                    "messages": messages,
+                    "max_tokens": max_tokens,
+                    "temperature": 0.3,
+                },
+            )
+
+        if response.status_code != 200:
+            logger.error(
+                "Erreur API Mistral vision (%d): %s",
+                response.status_code,
+                response.text[:2000],
+            )
+            return None
+
+        data = response.json()
+        choice0 = (data.get("choices") or [{}])[0]
+        msg = choice0.get("message") or {}
+        content = msg.get("content")
+        if isinstance(content, list):
+            text_parts = []
+            for block in content:
+                if isinstance(block, dict) and block.get("type") == "text":
+                    text_parts.append(block.get("text") or "")
+            description = "\n".join(text_parts).strip()
+        elif isinstance(content, str):
+            description = content.strip()
+        else:
+            description = ""
+
+        if not description:
+            logger.warning("Réponse Pixtral vide pour %s", image_path)
+            return None
+
+        logger.debug(
+            "Pixtral OK: %s (%d caractères)",
+            image_path,
+            len(description),
+        )
+        return description
+
+    except httpx.TimeoutException:
+        logger.error("Timeout Pixtral pour l'image: %s", image_path)
+        return None
+    except Exception as e:
+        logger.error(
+            "Erreur Pixtral pour l'image %s: %s",
+            image_path,
+            e,
+            exc_info=True,
+        )
+        return None
+
+
+def _meta_page(meta: dict) -> int:
+    p = meta.get("page_no")
+    if p is None:
+        return 10**9
+    try:
+        return int(p)
+    except (TypeError, ValueError):
+        return 10**9
+
+
+def _image_sort_key(img: dict) -> tuple:
+    p = img.get("page_no")
+    try:
+        pn = int(p) if p is not None else 10**9
+    except (TypeError, ValueError):
+        pn = 10**9
+    bbox = img.get("bbox") or {}
+    try:
+        top = float(bbox.get("t", 0))
+    except (TypeError, ValueError):
+        top = 0.0
+    idx = img.get("index")
+    try:
+        iidx = int(idx) if idx is not None else 0
+    except (TypeError, ValueError):
+        iidx = 0
+    return (pn, top, iidx)
+
+
+def _pair_visual_leaves_with_images(
+    picture_leaves: Sequence[_CHUNK_LIKE],
+    images_info: list[dict],
+) -> list[tuple[_CHUNK_LIKE, dict]]:
+    """Apparie feuilles picture/figure et images Docling par page (ordre chunk_index vs bbox.t)."""
+    leaves_by_page: dict[int, list] = defaultdict(list)
+    for leaf in picture_leaves:
+        meta = dict(leaf.metadata_json or {})
+        pg = _meta_page(meta)
+        leaves_by_page[pg].append(leaf)
+
+    for pg in leaves_by_page:
+        leaves_by_page[pg].sort(key=lambda c: (c.chunk_index, c.node_id or ""))
+
+    imgs_by_page: dict[int, list] = defaultdict(list)
+    for img in images_info:
+        k = _image_sort_key(img)
+        pg = k[0]
+        imgs_by_page[pg].append(img)
+
+    for pg in imgs_by_page:
+        imgs_by_page[pg].sort(key=_image_sort_key)
+
+    all_pages = sorted(set(leaves_by_page.keys()) | set(imgs_by_page.keys()))
+    pairs: list[tuple[_CHUNK_LIKE, dict]] = []
+
+    for pg in all_pages:
+        L = leaves_by_page.get(pg, [])
+        I = imgs_by_page.get(pg, [])
+        n = min(len(L), len(I))
+        for i in range(n):
+            pairs.append((L[i], I[i]))
+        if len(L) != len(I):
+            logger.warning(
+                "Appariement visuel page %s: %d feuilles picture vs %d images Docling "
+                "(appariement 1:1 partiel)",
+                pg if pg < 10**9 else "inconnue",
+                len(L),
+                len(I),
+            )
+    return pairs
+
+
+def rebuild_docling_parent_chunk_contents(chunks: Sequence[_CHUNK_LIKE]) -> None:
+    """Recalcule content/text des parents à partir des feuilles enrichies."""
+    children_by_parent: dict[str, list] = defaultdict(list)
+    parents_by_id: dict[str, _CHUNK_LIKE] = {}
+
+    for c in chunks:
+        if getattr(c, "is_leaf", True):
+            pid = getattr(c, "parent_node_id", None)
+            if pid:
+                children_by_parent[pid].append(c)
+        else:
+            nid = getattr(c, "node_id", None)
+            if nid:
+                parents_by_id[nid] = c
+
+    for pid, parent in parents_by_id.items():
+        kids = children_by_parent.get(pid, [])
+        kids.sort(key=lambda x: (x.chunk_index, x.node_id or ""))
+        merged = "\n\n".join(
+            (k.content or "").strip() for k in kids if (k.content or "").strip()
+        )
+        if merged:
+            parent.content = merged
+            parent.text = merged
+
+
+def enrich_visual_chunks_with_pixtral(
+    chunks: Sequence[_CHUNK_LIKE],
+    images_info: Optional[list[dict]],
+) -> None:
+    """
+    Enrichit les feuilles Docling « picture » / « figure » avec une description Pixtral (Mistral).
+
+    Mutate chunk.content, chunk.text, chunk.metadata_json / metadata_ en place.
+    """
+    if not images_info:
+        return
+    if not getattr(settings, "MULTIMODAL_ENABLED", False):
+        return
+    if not settings.MISTRAL_API_KEY:
+        logger.info("MULTIMODAL activé mais pas de MISTRAL_API_KEY — skip Pixtral")
+        return
+
+    picture_leaves: list = []
+    for c in chunks:
+        if not getattr(c, "is_leaf", True):
+            continue
+        meta = dict(c.metadata_json or {})
+        if meta.get("content_type") == "table_row":
+            continue
+        lbl = meta.get("label")
+        if lbl not in ("picture", "figure"):
+            continue
+        picture_leaves.append(c)
+
+    if not picture_leaves:
+        return
+
+    pairs = _pair_visual_leaves_with_images(picture_leaves, images_info)
+    cap = getattr(settings, "VISION_MAX_IMAGES_PER_DOCUMENT", None)
+    if cap is not None and cap > 0 and len(pairs) > cap:
+        logger.info(
+            "VISION_MAX_IMAGES_PER_DOCUMENT=%s — analyse de %d/%d paires",
+            cap,
+            cap,
+            len(pairs),
+        )
+        pairs = pairs[:cap]
+
+    model = settings.VISION_MODEL or "pixtral-12b-2409"
+    ts = datetime.now(timezone.utc).isoformat()
+
+    for leaf, img in pairs:
+        path = img.get("path")
+        if not path:
+            continue
+        meta = dict(leaf.metadata_json or {})
+        context = (meta.get("parent_heading") or meta.get("heading") or "").strip()
+        raw_cap = img.get("caption") or meta.get("caption") or ""
+        caption = str(raw_cap).strip() if raw_cap is not None else ""
+
+        description = describe_image_with_mistral_sync(
+            image_path=path,
+            context=context,
+            caption=caption,
+        )
+        if not description:
+            continue
+
+        block = f"\n\n## Analyse visuelle (Pixtral)\n{description.strip()}"
+        base = (leaf.content or "").rstrip()
+        leaf.content = f"{base}{block}".strip()
+        leaf.text = leaf.content
+
+        meta["vision_provider"] = "mistral"
+        meta["vision_model"] = model
+        meta["vision_enriched_at"] = ts
+        meta["image_path"] = str(Path(path).name)
+        leaf.metadata_json = meta
+        leaf.metadata_ = meta
+
+        logger.info(
+            "Chunk feuille enrichi Pixtral (node_id=%s, image=%s)",
+            meta.get("node_id") or leaf.node_id,
+            Path(path).name,
+        )
+
+    rebuild_docling_parent_chunk_contents(chunks)
 
 
 async def describe_image(
@@ -107,7 +422,7 @@ async def describe_image(
                 json={
                     "model": vision_model,
                     "messages": messages,
-                    "max_tokens": 1500,
+                    "max_tokens": getattr(settings, "VISION_MAX_TOKENS", 1500),
                     "temperature": 0.3,
                 },
             )

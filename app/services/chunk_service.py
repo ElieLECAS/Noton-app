@@ -448,6 +448,7 @@ def create_chunks_for_note_from_docling(
     note: Note,
     llama_docs: list,
     generate_embeddings: bool = False,
+    images_info: Optional[list] = None,
 ) -> List[NoteChunk]:
     """
     Créer les chunks pour un document importé via Docling.
@@ -461,6 +462,7 @@ def create_chunks_for_note_from_docling(
         note             : La note cible
         llama_docs       : Liste de LlamaIndex Document avec JSON Docling
         generate_embeddings : Si True, génère les embeddings synchronement
+        images_info      : Sortie extract_and_save_images (Docling) pour enrichissement Pixtral
 
     Returns:
         Liste des chunks créés
@@ -468,6 +470,19 @@ def create_chunks_for_note_from_docling(
     delete_chunks_for_note(session, note.id)
 
     chunks = chunk_note_from_docling_docs(note, llama_docs)
+
+    if images_info:
+        try:
+            from app.services.vision_service import enrich_visual_chunks_with_pixtral
+
+            enrich_visual_chunks_with_pixtral(chunks, images_info)
+        except Exception as e:
+            logger.warning(
+                "Enrichissement Pixtral ignoré pour la note %s: %s",
+                note.id,
+                e,
+                exc_info=True,
+            )
 
     if generate_embeddings:
         from app.services.embedding_service import generate_embeddings_batch
@@ -849,6 +864,7 @@ def create_chunks_for_document_from_docling(
     document: Document,
     llama_docs: list,
     generate_embeddings: bool = False,
+    images_info: Optional[list] = None,
 ) -> List[DocumentChunk]:
     """
     Chunking sémantique via DoclingNodeParser (parents + leaves, métadonnées Docling).
@@ -885,6 +901,19 @@ def create_chunks_for_document_from_docling(
         return create_chunks_for_document(
             session=session, document=document, generate_embeddings=generate_embeddings
         )
+
+    if images_info:
+        try:
+            from app.services.vision_service import enrich_visual_chunks_with_pixtral
+
+            enrich_visual_chunks_with_pixtral(chunks, images_info)
+        except Exception as e:
+            logger.warning(
+                "Enrichissement Pixtral ignoré document_id=%s: %s",
+                document.id,
+                e,
+                exc_info=True,
+            )
 
     if generate_embeddings and chunks:
         from app.services.embedding_service import generate_embeddings_batch

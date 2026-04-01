@@ -612,16 +612,21 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         session.add(document)
         session.commit()
 
+        images_info: list = []
         if docling_doc:
             try:
-                extract_and_save_images(docling_doc, document_id)
+                images_info = extract_and_save_images(docling_doc, document_id) or []
             except Exception as img_e:
                 logger.warning("reindex: extraction images partielle: %s", img_e)
 
         document = session.get(Document, document_id)
         if llama_docs:
             chunks = create_chunks_for_document_from_docling(
-                session, document, llama_docs, generate_embeddings=False
+                session,
+                document,
+                llama_docs,
+                generate_embeddings=False,
+                images_info=images_info or None,
             )
             logger.info(
                 "reindex: document_id=%s chunking=docling_hierarchical chunks=%s",
@@ -1072,9 +1077,10 @@ def _process_document_for_id(document_id: int, file_path: str):
             session.commit()
 
             logger.info("Document traité avec succès pour document_id %d (%d caractères extraits)", document_id, len(markdown_content))
-            
+
+            images_info: list = []
             if docling_doc:
-                images_info = extract_and_save_images(docling_doc, document_id)
+                images_info = extract_and_save_images(docling_doc, document_id) or []
                 if images_info:
                     logger.info("%d image(s) extraite(s) pour le document %d", len(images_info), document_id)
 
@@ -1088,7 +1094,13 @@ def _process_document_for_id(document_id: int, file_path: str):
 
                 t_chunk = time.perf_counter()
                 if llama_docs:
-                    chunks = create_chunks_for_document_from_docling(session, document, llama_docs, generate_embeddings=False)
+                    chunks = create_chunks_for_document_from_docling(
+                        session,
+                        document,
+                        llama_docs,
+                        generate_embeddings=False,
+                        images_info=images_info or None,
+                    )
                     chunk_s = time.perf_counter() - t_chunk
                     logger.info(
                         "document_id=%s chunks=%s stratégie=docling_hierarchical durée_chunking=%.2fs",

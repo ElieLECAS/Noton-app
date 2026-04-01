@@ -70,9 +70,14 @@ class Settings(BaseSettings):
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
     
-    # Multimodal - Désactivé par défaut (images extraites et stockées par Docling, pas de Vision ni chunks image)
+    # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
+    # False = défaut si la variable est absente (voir parse_multimodal_enabled).
     MULTIMODAL_ENABLED: bool = False
-    VISION_MODEL: str = "gpt-4o"  # Modèle pour décrire les images si MULTIMODAL_ENABLED
+    # Pixtral via API Mistral (ex. pixtral-12b-2409) pour enrichir les chunks feuilles « picture »
+    VISION_MODEL: str = "pixtral-12b-2409"
+    VISION_MAX_TOKENS: int = 1500
+    # Plafond d’appels vision par document (None = illimité)
+    VISION_MAX_IMAGES_PER_DOCUMENT: Optional[int] = None
 
     # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
     TASK_BACKEND_MODE: str = "thread"
@@ -180,7 +185,23 @@ class Settings(BaseSettings):
                 return None
         return None
     
-    @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', 'SPACE_CHAT_MAX_TOKENS', mode='before')
+    @field_validator('VISION_MAX_TOKENS', mode='before')
+    @classmethod
+    def parse_vision_max_tokens(cls, v: Union[str, int, None]) -> int:
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return 1500
+        try:
+            return max(64, int(v))
+        except (TypeError, ValueError):
+            return 1500
+
+    @field_validator(
+        'TORCH_NUM_THREADS',
+        'OMP_NUM_THREADS',
+        'SPACE_CHAT_MAX_TOKENS',
+        'VISION_MAX_IMAGES_PER_DOCUMENT',
+        mode='before',
+    )
     @classmethod
     def parse_optional_int(cls, v: Union[str, int, None]) -> Optional[int]:
         """Convertit les chaînes vides en None pour les champs int optionnels"""
