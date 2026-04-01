@@ -4,8 +4,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Créer le moteur de base de données
-engine = create_engine(settings.DATABASE_URL, echo=True)
+# echo=False par défaut : echo=True rejoue chaque SQL dans les logs (INSERT/UPDATE d'embeddings = milliers de floats).
+engine = create_engine(settings.DATABASE_URL, echo=settings.DATABASE_ECHO)
 
 
 def get_session():

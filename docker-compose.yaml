@@ -45,6 +45,8 @@ services:
             - models_cache:/root/.cache
             # Images extraites par Docling (multimodal) - montées localement pour accès externe
             - ./media:/app/media
+            # Journal dédié pipeline bibliothèque/espaces (library_document_processing.log)
+            - ./logs:/app/logs
 
         ports:
             - "8001:8000"
@@ -116,6 +118,7 @@ services:
             - ./app/pytest.ini:/app/pytest.ini
             - models_cache:/root/.cache
             - ./media:/app/media
+            - ./logs:/app/logs
         environment:
             - APP_NAME=${APP_NAME}
             - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}

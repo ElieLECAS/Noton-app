@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL")
-    
+    # echo=True journalise chaque SQL (UPDATE/INSERT d'embeddings = vecteurs énormes dans les logs)
+    DATABASE_ECHO: bool = False
+
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     ALGORITHM: str = "HS256"
@@ -84,6 +86,18 @@ class Settings(BaseSettings):
     REDIS_URL: Optional[str] = None  # ex. redis://redis:6379/0
     CELERY_BROKER_URL: Optional[str] = None  # défaut: REDIS_URL
     CELERY_RESULT_BACKEND: Optional[str] = None  # défaut: REDIS_URL
+
+    @field_validator('DATABASE_ECHO', mode='before')
+    @classmethod
+    def parse_database_echo(cls, v: Union[str, bool, None]) -> bool:
+        """SQLAlchemy echo : désactivé par défaut (évite de logger les vecteurs d'embedding)."""
+        if v is None:
+            return False
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in ('true', '1', 'yes', 'on')
+        return False
 
     @field_validator('MULTIMODAL_ENABLED', mode='before')
     @classmethod

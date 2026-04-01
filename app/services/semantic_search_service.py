@@ -292,8 +292,6 @@ def _keyword_fallback_passages(
     for chunk, note_title in rows:
         if chunk.id in seen_chunk_ids:
             continue
-        if (chunk.metadata_json or {}).get("is_image_chunk"):
-            continue
         seen_chunk_ids.add(chunk.id)
 
         content = (chunk.content or chunk.text or "").strip()
@@ -974,7 +972,6 @@ def search_relevant_passages(
         )
 
         passages = refine_with_source_authority(passages, query_text)
-        passages = [p for p in passages if not p.get("is_image_chunk")]
 
         if not passages:
             return _keyword_fallback_passages(

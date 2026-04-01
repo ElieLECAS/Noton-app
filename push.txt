@@ -6,3 +6,4 @@ docker push elielecas/lia:latest
 docker push elielecas/lia:v1.1.3
 
 python -m app.scripts.create_user --help
+python -m app.scripts.create_user

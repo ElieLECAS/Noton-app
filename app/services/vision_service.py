@@ -36,6 +36,54 @@ def _technical_vision_prompt_parts(context: str = "", caption: str = "") -> list
     return parts
 
 
+def _build_visual_neighbor_context(
+    leaf: _CHUNK_LIKE,
+    chunks: Sequence[_CHUNK_LIKE],
+    window: int = 2,
+    max_chars: int = 900,
+) -> str:
+    """
+    Construit un contexte local autour d'un chunk image à partir des chunks voisins.
+    Le but est d'éviter une analyse "hors sol" de l'image.
+    """
+    parent_node_id = getattr(leaf, "parent_node_id", None)
+    leaf_index = getattr(leaf, "chunk_index", None)
+    if parent_node_id is None or leaf_index is None:
+        return ""
+
+    sibling_candidates: list[_CHUNK_LIKE] = []
+    for c in chunks:
+        if not getattr(c, "is_leaf", True):
+            continue
+        if getattr(c, "parent_node_id", None) != parent_node_id:
+            continue
+        cidx = getattr(c, "chunk_index", None)
+        if not isinstance(cidx, int):
+            continue
+        if abs(cidx - leaf_index) <= window and cidx != leaf_index:
+            sibling_candidates.append(c)
+
+    sibling_candidates.sort(key=lambda c: c.chunk_index)
+    snippets: list[str] = []
+    total = 0
+    for sib in sibling_candidates:
+        raw = (getattr(sib, "content", "") or "").strip()
+        if not raw:
+            continue
+        meta = dict(getattr(sib, "metadata_json", {}) or {})
+        label = str(meta.get("label") or "texte").strip()
+        excerpt = raw[:260]
+        if len(raw) > 260:
+            excerpt += "..."
+        block = f"[voisin:{label}] {excerpt}"
+        if total + len(block) > max_chars:
+            break
+        snippets.append(block)
+        total += len(block)
+
+    return "\n".join(snippets)
+
+
 def describe_image_with_mistral_sync(
     image_path: str,
     context: str = "",
@@ -300,6 +348,14 @@ def enrich_visual_chunks_with_pixtral(
             continue
         meta = dict(leaf.metadata_json or {})
         context = (meta.get("parent_heading") or meta.get("heading") or "").strip()
+        if meta.get("figure_title"):
+            context = f"{context} | figure: {meta.get('figure_title')}".strip(" |")
+        local_neighbor_context = _build_visual_neighbor_context(leaf, chunks)
+        if local_neighbor_context:
+            context = (
+                f"{context}\nContexte textuel voisin (même section):\n"
+                f"{local_neighbor_context}"
+            ).strip()
         raw_cap = img.get("caption") or meta.get("caption") or ""
         caption = str(raw_cap).strip() if raw_cap is not None else ""
 

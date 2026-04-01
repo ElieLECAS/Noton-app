@@ -2,6 +2,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 import logging
 import re
 import threading
+import traceback
 import uuid
 
 from app.models.note import Note
@@ -9,6 +10,7 @@ from app.models.note_chunk import NoteChunk
 from app.models.document import Document as LibraryDocument
 from app.models.document_chunk import DocumentChunk
 from app.config import settings
+from app.library_document_logging import get_library_document_logger
 from llama_index.core.schema import Document as LlamaDocument, NodeRelationship, TextNode
 from llama_index.core.node_parser import HierarchicalNodeParser
 
@@ -718,11 +720,18 @@ def chunk_note_from_docling_docs(
     """
     try:
         node_parser = _get_docling_node_parser()
-    except ImportError:
+    except ImportError as exc:
+        tb = traceback.format_exc()
         logger.warning(
             "llama-index-node-parser-docling non installé — "
             "fallback sur HierarchicalNodeParser pour la note %s",
             note.id,
+        )
+        logger.error(
+            "Import DoclingNodeParser (note %s): %r\n%s",
+            note.id,
+            exc,
+            tb,
         )
         return chunk_note(note)
 
@@ -779,11 +788,10 @@ def chunk_note_from_docling_docs(
     parent_count = sum(1 for c in chunks if not c.is_leaf)
     logger.info(
         "Chunking sémantique (DoclingNodeParser) note=%s : "
-        "%d chunks total (%d leaves, %d parents, %d sections)",
+        "%d chunks total (%d leaves, %d parents)",
         note.id,
         len(chunks),
         leaf_count,
-        parent_count,
         parent_count,
     )
     return chunks
@@ -799,13 +807,34 @@ def chunk_document_from_docling_docs(
     Retourne des DocumentChunk hiérarchiques (parents + leaves) avec métadonnées Docling.
     En cas d'échec ou liste vide, l'appelant doit retomber sur create_chunks_for_document.
     """
+    ld = get_library_document_logger()
+    ld.info(
+        "[DoclingNodeParser] document_id=%s — étape : chargement du parser + "
+        "get_nodes_from_documents(JSON Docling).",
+        document.id,
+    )
     try:
         node_parser = _get_docling_node_parser()
-    except ImportError:
+    except ImportError as exc:
+        tb = traceback.format_exc()
         logger.warning(
             "llama-index-node-parser-docling non installé — "
             "chunk_document_from_docling_docs indisponible pour document %s",
             document.id,
+        )
+        logger.error(
+            "Import DoclingNodeParser (document %s): %r\n%s",
+            document.id,
+            exc,
+            tb,
+        )
+        ld.error(
+            "[DoclingNodeParser] document_id=%s — ÉCHEC : import du parser : %r. "
+            "Traceback (voir aussi logs applicatifs) :\n%s"
+            "→ repli chunking markdown prévu.",
+            document.id,
+            exc,
+            tb,
         )
         return []
 
@@ -819,6 +848,13 @@ def chunk_document_from_docling_docs(
             document.id,
             exc,
         )
+        ld.error(
+            "[DoclingNodeParser] document_id=%s — ÉCHEC : exception dans get_nodes_from_documents "
+            "(JSON incompatible, version docling/llama-index, etc.) : %s. → repli markdown.",
+            document.id,
+            exc,
+            exc_info=True,
+        )
         return []
 
     if not leaf_nodes:
@@ -826,7 +862,19 @@ def chunk_document_from_docling_docs(
             "DoclingNodeParser n'a produit aucun nœud pour le document %s",
             document.id,
         )
+        ld.error(
+            "[DoclingNodeParser] document_id=%s — ÉCHEC : 0 nœud feuille retourné "
+            "(document vide côté parser ou filtre trop strict). → repli markdown.",
+            document.id,
+        )
         return []
+
+    ld.info(
+        "[DoclingNodeParser] document_id=%s — %d nœud(s) feuille(s) LlamaIndex reçus ; "
+        "construction des specs parent/feuille (_build_docling_hierarchical_specs).",
+        document.id,
+        len(leaf_nodes),
+    )
 
     doc_metadata_base = {
         "document_id": document.id,
@@ -861,6 +909,15 @@ def chunk_document_from_docling_docs(
     logger.info(
         "Chunking sémantique (DoclingNodeParser) document=%s : "
         "%d chunks total (%d leaves, %d parents)",
+        document.id,
+        len(chunks),
+        leaf_count,
+        parent_count,
+    )
+    ld.info(
+        "[DoclingNodeParser] document_id=%s — succès : %d chunks SQL "
+        "(%d feuilles is_leaf=True, %d parents is_leaf=False). "
+        "Les parents permettent la résolution de contexte en recherche RAG.",
         document.id,
         len(chunks),
         leaf_count,
