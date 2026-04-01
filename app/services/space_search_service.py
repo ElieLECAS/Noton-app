@@ -53,6 +53,7 @@ RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
 RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
+_FLAG_RERANK_TOP_N = int(os.getenv("RERANKER_TOP_N", "4096"))
 
 # Singletons
 _reranker_instance = None
@@ -140,14 +141,19 @@ def _get_reranker():
     if not RERANKER_AVAILABLE:
         return None
     if _reranker_instance is None:
-        device = os.getenv("RERANKER_DEVICE", "cpu")
-        logger.info("Initialisation reranker %s sur %s...", RERANKER_MODEL, device)
+        use_fp16 = os.getenv("RERANKER_USE_FP16", "false").lower() == "true"
+        logger.info(
+            "Initialisation reranker %s (top_n=%s, use_fp16=%s)...",
+            RERANKER_MODEL,
+            _FLAG_RERANK_TOP_N,
+            use_fp16,
+        )
         _reranker_instance = FlagEmbeddingReranker(
             model=RERANKER_MODEL,
-            top_n=None,
-            device=device,
+            top_n=_FLAG_RERANK_TOP_N,
+            use_fp16=use_fp16,
         )
-        logger.info("✅ Reranker initialisé (device=%s)", device)
+        logger.info("✅ Reranker initialisé")
     return _reranker_instance
 
 

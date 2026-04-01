@@ -16,7 +16,7 @@ Optimisations :
   - Filtrage pré-reranking : évite de reranker des candidats peu pertinents (-20 à -40% de temps)
   - Early stopping : skip le reranking si similarité vectorielle déjà élevée (~10-20% des cas)
   - Limite dynamique : ajuste le nombre de candidats selon les besoins (max MAX_RERANK_CANDIDATES)
-  - Device configurable : possibilité d'utiliser GPU via RERANKER_DEVICE
+  - Reranker : GPU si PyTorch voit CUDA ; ``RERANKER_USE_FP16`` / ``RERANKER_TOP_N`` en option
 
 Les anciens composants LlamaIndex (PGVectorStore, VectorStoreIndex, RecursiveRetriever,
 MetadataFilter) ont été supprimés : la recherche SQL directe est plus fiable et cohérente
@@ -57,6 +57,8 @@ RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
 RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
+# FlagEmbeddingReranker tronque à top_n (pas de device= dans llama-index 0.4.x).
+_FLAG_RERANK_TOP_N = int(os.getenv("RERANKER_TOP_N", "4096"))
 
 # ---------------------------------------------------------------------------
 # Singletons — chargement unique des modèles lourds
@@ -71,29 +73,30 @@ _embed_model_lock = threading.Lock()
 
 def _get_reranker():
     """
-    Retourne le reranker (singleton) avec configuration optimisée.
-    
-    Configuration :
-    - top_n=None : pas de limite fixe, ajusté dynamiquement selon les besoins
-    - device : configurable via RERANKER_DEVICE (défaut: cpu)
+    Retourne le reranker (singleton).
+
+    FlagEmbeddingReranker n'accepte pas ``device=`` ; le device suit PyTorch
+    (CUDA si disponible). ``RERANKER_TOP_N`` borne la sortie du postprocessor ;
+    le pipeline tronque ensuite à ``k`` via ``_two_stage_rerank_leaves``.
     """
     global _reranker_instance
     if not RERANKER_AVAILABLE:
         return None
     with _reranker_lock:
         if _reranker_instance is None:
-            device = os.getenv("RERANKER_DEVICE", "cpu")
+            use_fp16 = os.getenv("RERANKER_USE_FP16", "false").lower() == "true"
             logger.info(
-                "Initialisation du reranker %s sur %s (une seule fois)...",
+                "Initialisation du reranker %s (top_n=%s, use_fp16=%s)...",
                 RERANKER_MODEL,
-                device,
+                _FLAG_RERANK_TOP_N,
+                use_fp16,
             )
             _reranker_instance = FlagEmbeddingReranker(
                 model=RERANKER_MODEL,
-                top_n=None,  # Pas de limite fixe, ajusté dynamiquement
-                device=device,
+                top_n=_FLAG_RERANK_TOP_N,
+                use_fp16=use_fp16,
             )
-            logger.info("✅ Reranker initialisé et prêt (device=%s)", device)
+            logger.info("✅ Reranker initialisé et prêt")
         return _reranker_instance
 
 
