@@ -27,6 +27,7 @@ _document_workers_lock = threading.Lock()
 
 # DocumentConverter Docling partagé (singleton) — remplace DoclingReader
 _docling_converter = None
+_docling_converter_generic = None
 _docling_converter_lock = threading.Lock()
 
 # Configurer PyTorch pour CPU avant l'import de docling
@@ -107,7 +108,7 @@ except ImportError:
     )
 
 
-def get_docling_converter():
+def get_docling_converter(file_path: Optional[str] = None):
     """
     Récupère ou crée le DocumentConverter Docling partagé (singleton).
 
@@ -116,9 +117,38 @@ def get_docling_converter():
     - le markdown pour note.content (export_to_markdown)
     - le JSON sérialisé pour DoclingNodeParser (model_dump_json)
     """
-    global _docling_converter
+    global _docling_converter, _docling_converter_generic
 
     with _docling_converter_lock:
+        # Utiliser un convertisseur générique pour les formats non-PDF
+        # afin d'éviter de restreindre Docling aux seules options PDF.
+        suffix = Path(file_path).suffix.lower() if file_path else ""
+        use_generic_converter = suffix and suffix != ".pdf"
+
+        if use_generic_converter:
+            if _docling_converter_generic is None:
+                init_start = time.time()
+                logger.info(
+                    "Initialisation du DocumentConverter Docling (générique)..."
+                )
+                try:
+                    from docling.document_converter import DocumentConverter
+
+                    _docling_converter_generic = DocumentConverter()
+                    init_time = time.time() - init_start
+                    logger.info(
+                        "✅ DocumentConverter Docling générique initialisé en %.2fs",
+                        init_time,
+                    )
+                except Exception as e:
+                    logger.error(
+                        "Erreur lors de l'initialisation du DocumentConverter générique: %s",
+                        e,
+                        exc_info=True,
+                    )
+                    raise
+            return _docling_converter_generic
+
         if _docling_converter is None:
             init_start = time.time()
             logger.info(
@@ -138,10 +168,13 @@ def get_docling_converter():
                         )
                         from docling.document_converter import PdfFormatOption
 
+                        # Échelle d'image ajustable pour OCR (3.0 par défaut pour meilleure qualité)
+                        image_scale = getattr(settings, "OCR_IMAGE_SCALE", 3.0)
+                        
                         pipeline_options = PdfPipelineOptions(
                             do_ocr=ocr_enabled,
                             generate_picture_images=True,
-                            images_scale=2.0,
+                            images_scale=image_scale,
                         )
 
                         # Configuration OCR si activé
@@ -220,6 +253,82 @@ def get_docling_converter():
         return _docling_converter
 
 
+def ensure_pdf_for_docling(file_path: str) -> str:
+    """
+    Convertit les formats bureautiques (ODT/DOCX/DOC/...) en PDF via LibreOffice
+    avant de les passer à Docling.
+    """
+    suffix = Path(file_path).suffix.lower()
+    if suffix == ".pdf":
+        return file_path
+
+    convertible_exts = {
+        ".odt",
+        ".odm",
+        ".odg",
+        ".odp",
+        ".ods",
+        ".odf",
+        ".doc",
+        ".docx",
+        ".rtf",
+        ".ppt",
+        ".pptx",
+        ".xls",
+        ".xlsx",
+    }
+
+    # Pour tout autre format (ex: EPUB), on laisse Docling gérer nativement.
+    if suffix not in convertible_exts:
+        logger.info(
+            "Format %s traité directement par Docling sans conversion PDF: %s",
+            suffix or "(sans extension)",
+            file_path,
+        )
+        return file_path
+
+    import subprocess
+
+    pdf_path = Path(file_path).with_suffix(".pdf")
+    try:
+        if pdf_path.exists():
+            pdf_path.unlink()
+    except Exception:
+        pass
+
+    logger.info("Conversion LibreOffice vers PDF: %s", file_path)
+    cmd = [
+        "libreoffice",
+        "--headless",
+        "--nologo",
+        "--nolockcheck",
+        "--convert-to",
+        "pdf",
+        "--outdir",
+        str(pdf_path.parent),
+        str(file_path),
+    ]
+
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if proc.returncode != 0:
+        stderr_tail = (proc.stderr or "").strip()[-2000:]
+        stdout_tail = (proc.stdout or "").strip()[-2000:]
+        details = stderr_tail or stdout_tail or f"code={proc.returncode}"
+        raise RuntimeError(f"LibreOffice a échoué pour {file_path}: {details}")
+
+    if not pdf_path.exists():
+        candidates = sorted(
+            pdf_path.parent.glob(f"{Path(file_path).stem}*.pdf"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+        if not candidates:
+            raise FileNotFoundError(f"Aucun PDF généré pour {file_path}")
+        pdf_path = candidates[0]
+
+    return str(pdf_path)
+
+
 def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Optional[object]]:
     """
     Traite un document et retourne (markdown, llama_docs_json, docling_doc).
@@ -250,7 +359,7 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Opt
             "Démarrage du traitement Docling: %s (%.2f MB)", file_path, file_size_mb
         )
 
-        converter = get_docling_converter()
+        converter = get_docling_converter(file_path)
 
         # Filtrer les messages de progression Docling
         import sys
@@ -295,6 +404,24 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Opt
         # Markdown pour note.content (affichage)
         markdown_content = docling_doc.export_to_markdown().strip()
 
+        # Logique de fallback OCR si activée et résultat insuffisant
+        if getattr(settings, "OCR_FALLBACK_ENABLED", True):
+            try:
+                from app.services.ocr_fallback import extract_with_fallback
+                
+                # Appliquer le fallback si nécessaire
+                markdown_content = extract_with_fallback(
+                    file_path=file_path,
+                    docling_result=markdown_content,
+                    docling_doc=docling_doc,
+                    fallback_enabled=True
+                )
+            except Exception as e:
+                logger.warning(
+                    "Erreur lors du fallback OCR, utilisation résultat Docling: %s",
+                    e
+                )
+
         if not markdown_content:
             logger.warning(
                 "Le document %s a été traité mais le contenu markdown est vide",
@@ -326,10 +453,68 @@ def process_document(file_path: str) -> tuple[Optional[str], Optional[list], Opt
         return markdown_content, llama_docs, docling_doc
 
     except Exception as e:
+        suffix = Path(file_path).suffix.lower()
+        if suffix == ".epub":
+            logger.warning(
+                "Docling n'a pas pu traiter l'EPUB (%s). Fallback extraction texte EPUB.",
+                e,
+            )
+            fallback_markdown = extract_text_from_epub(file_path)
+            if fallback_markdown:
+                logger.info(
+                    "✅ Fallback EPUB réussi: %d caractères extraits",
+                    len(fallback_markdown),
+                )
+                return fallback_markdown, None, None
+
         logger.error(
             "Erreur lors du traitement du document %s: %s", file_path, e, exc_info=True
         )
         return None, None, None
+
+
+def extract_text_from_epub(file_path: str) -> Optional[str]:
+    """
+    Extrait le texte brut d'un EPUB via stdlib (zip+xml/html), sans dépendance externe.
+    """
+    import re
+    import zipfile
+    from html import unescape
+
+    try:
+        chunks: list[str] = []
+        with zipfile.ZipFile(file_path, "r") as zf:
+            names = [
+                n for n in zf.namelist()
+                if n.lower().endswith((".xhtml", ".html", ".htm"))
+            ]
+            for name in sorted(names):
+                try:
+                    raw = zf.read(name)
+                    text = raw.decode("utf-8", errors="ignore")
+                except Exception:
+                    continue
+
+                # Retirer scripts/styles puis balises HTML.
+                text = re.sub(
+                    r"<(script|style)\b[^>]*>.*?</\1>",
+                    " ",
+                    text,
+                    flags=re.IGNORECASE | re.DOTALL,
+                )
+                text = re.sub(r"<[^>]+>", " ", text)
+                text = unescape(text)
+                text = re.sub(r"\s+", " ", text).strip()
+                if text:
+                    chunks.append(text)
+
+        if not chunks:
+            return None
+
+        return "\n\n".join(chunks)
+    except Exception as e:
+        logger.error("Fallback EPUB échoué pour %s: %s", file_path, e, exc_info=True)
+        return None
 
 
 def save_uploaded_file(
@@ -620,8 +805,24 @@ def _process_document_for_note(note_id: int, file_path: str):
             session.add(note)
             session.commit()
 
+            original_ext = Path(file_path).suffix.lower()
+            pdf_input_path = file_path
+            converted_to_pdf = False
+            try:
+                pdf_input_path = ensure_pdf_for_docling(file_path)
+                converted_to_pdf = pdf_input_path != file_path
+            except Exception as e:
+                logger.error(
+                    "Conversion vers PDF impossible pour la note %d (%s): %s",
+                    note_id,
+                    file_path,
+                    e,
+                    exc_info=True,
+                )
+                raise
+
             # Une seule passe Docling → markdown + llama_docs JSON + docling_doc (pour images)
-            markdown_content, llama_docs, docling_doc = process_document(file_path)
+            markdown_content, llama_docs, docling_doc = process_document(pdf_input_path)
 
             if not markdown_content:
                 note.processing_status = "failed"
@@ -636,15 +837,32 @@ def _process_document_for_note(note_id: int, file_path: str):
                 logger.error("Échec du traitement du document pour la note %d", note_id)
                 return
 
-            # Renommer le fichier vers media/documents/{note_id}.{extension}
-            file_extension = Path(file_path).suffix.lower()
-            permanent_path = Path(f"media/documents/{note_id}{file_extension}")
-            permanent_path.parent.mkdir(parents=True, exist_ok=True)
-            
+            output_ext = Path(pdf_input_path).suffix.lower() or ".bin"
+            permanent_output_path = Path(f"media/documents/{note_id}{output_ext}")
+            permanent_output_path.parent.mkdir(parents=True, exist_ok=True)
+
             import shutil
-            shutil.move(file_path, str(permanent_path))
-            note.source_file_path = str(permanent_path)
-            logger.info("PDF déplacé vers chemin permanent: %s", permanent_path)
+
+            # Retenter proprement sur relances/erreurs précédentes
+            if permanent_output_path.exists():
+                permanent_output_path.unlink()
+
+            # Si conversion effectuée, on conserve aussi l'original dans le dossier du document.
+            if converted_to_pdf:
+                original_permanent_path = Path(
+                    f"media/documents/{note_id}{original_ext}"
+                )
+                original_permanent_path.parent.mkdir(parents=True, exist_ok=True)
+                if original_permanent_path.exists():
+                    original_permanent_path.unlink()
+                shutil.move(file_path, str(original_permanent_path))
+
+            shutil.move(pdf_input_path, str(permanent_output_path))
+            note.source_file_path = str(permanent_output_path)
+            logger.info(
+                "Fichier traité déplacé vers chemin permanent: %s",
+                permanent_output_path,
+            )
             
             # Garder le markdown dans note.content pour le RAG (chunking, fallback, recherche).
             # L’UI affiche le PDF via source_file_path, pas le contenu éditable.
@@ -728,8 +946,8 @@ def _process_document_for_note(note_id: int, file_path: str):
                 session.add(note)
                 session.commit()
 
-            # Le fichier PDF est conservé de manière permanente dans media/documents/{note_id}.pdf
-            # pour permettre la visualisation native du PDF
+            # Le fichier traité est conservé de manière permanente dans media/documents/{note_id}{ext}
+            # (PDF converti ou format natif Docling selon le type d'entrée).
 
     except Exception as e:
         logger.error(
@@ -758,11 +976,8 @@ def _process_document_for_note(note_id: int, file_path: str):
             )
 
 
-def process_document_async(note_id: int, file_path: str):
-    """
-    Ajouter un document à la file d'attente pour traitement en arrière-plan.
-    Cette fonction est non-bloquante et retourne immédiatement.
-    """
+def enqueue_project_document_thread(note_id: int, file_path: str):
+    """Ajoute un document à la file thread du projet (sans Celery)."""
     try:
         with Session(engine) as session:
             note = session.get(Note, note_id)
@@ -800,6 +1015,13 @@ def process_document_async(note_id: int, file_path: str):
     )
 
 
+def process_document_async(note_id: int, file_path: str):
+    """Délègue à Celery ou file thread selon TASK_BACKEND_MODE."""
+    from app.services.task_dispatch import dispatch_project_document
+
+    dispatch_project_document(note_id, file_path)
+
+
 def _ensure_document_workers():
     """S'assurer que les workers de traitement de documents sont démarrés."""
     global document_workers
@@ -807,7 +1029,9 @@ def _ensure_document_workers():
     with _document_workers_lock:
         if not document_workers or not any(w.is_alive() for w in document_workers):
             document_workers = []
-            num_workers = settings.MAX_CONCURRENT_DOCUMENTS
+            # Par défaut: traitement séquentiel (1 document à la fois).
+            # La valeur est bornée à >= 1 pour éviter toute config invalide.
+            num_workers = max(1, settings.MAX_CONCURRENT_DOCUMENTS)
             for i in range(num_workers):
                 worker = threading.Thread(
                     target=_process_document_worker, daemon=True

@@ -5,12 +5,14 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 import time
+from typing import Optional
 
 from app.database import get_session, create_db_and_tables
 from app.routers import auth, projects, notes, chat, documents
 from app.models import User, Project, Note
 from app.services.scheduler_service import init_scheduler, start_scheduler, stop_scheduler
 from app.config import settings
+from app.services.auth_service import decode_token, get_user_by_id
 import logging
 
 # Configurer le logging pour voir les messages INFO
@@ -22,7 +24,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot Ollama")
+app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot IA")
 
 # Configuration CORS - Debug
 import os
@@ -53,8 +55,8 @@ else:
 
 # Monter les routers
 app.include_router(auth.router)
-app.include_router(projects.router)
-app.include_router(notes.router)
+app.include_router(library.router)
+app.include_router(spaces.router)
 app.include_router(chat.router)
 app.include_router(documents.router)
 
@@ -63,17 +65,9 @@ templates = Jinja2Templates(directory="app/templates")
 
 # Ajouter le contexte global pour tous les templates
 templates.env.globals["app_name"] = settings.APP_NAME
-templates.env.globals["model_private"] = {
-    "provider": settings.MODEL_PRIVATE_PROVIDER,
-    "model": settings.MODEL_PRIVATE_NAME
-}
 templates.env.globals["model_fast"] = {
-    "provider": settings.MODEL_FAST_PROVIDER,
-    "model": settings.MODEL_FAST_NAME
-}
-templates.env.globals["model_powerful"] = {
-    "provider": settings.MODEL_POWERFUL_PROVIDER,
-    "model": settings.MODEL_POWERFUL_NAME
+    "provider": "mistral",
+    "model": settings.MODEL_FAST
 }
 
 # Servir les fichiers statiques
@@ -85,16 +79,16 @@ except:
 
 @app.on_event("startup")
 async def startup_event():
-    """Créer les tables au démarrage et initialiser le scheduler"""
+    """Créer les tables au démarrage."""
     create_db_and_tables()
     
-    # Initialiser et démarrer le scheduler
+    # Initialiser le système RBAC (permissions + rôles)
     try:
-        init_scheduler()
-        start_scheduler()
-        logger.info("✅ Scheduler initialisé et démarré")
+        from app.services.rbac_seed_service import seed_rbac_system
+        with Session(engine) as session:
+            seed_rbac_system(session)
     except Exception as e:
-        logger.error(f"Erreur lors de l'initialisation du scheduler: {e}")
+        logger.error(f"Erreur lors de l'initialisation RBAC: {e}")
     
     # Tester l'initialisation du modèle d'embeddings HuggingFace
     try:
@@ -110,77 +104,113 @@ async def startup_event():
         logger.warning(f"⚠️ Erreur lors de l'initialisation du modèle d'embeddings: {e}")
         # Ne pas bloquer le démarrage si le modèle n'est pas disponible
     
-    # Démarrer les workers pour la génération d'embeddings en arrière-plan
+    # Workers threads (embeddings + documents) uniquement si thread ou hybrid (repli Celery)
     try:
-        from app.services.chunk_service import _ensure_embedding_workers
-        _ensure_embedding_workers()
-        logger.info("Workers d'embeddings démarrés")
+        from app.services.task_dispatch import should_start_thread_workers
+
+        if should_start_thread_workers():
+            from app.services.chunk_service import _ensure_embedding_workers
+            from app.services.document_service_new import _ensure_document_workers
+
+            _ensure_embedding_workers()
+            logger.info("Workers d'embeddings (threads) démarrés")
+            _ensure_document_workers()
+            logger.info("Workers de traitement de documents (threads) démarrés")
+        else:
+            logger.info(
+                "TASK_BACKEND_MODE=%s : pas de workers threads sur le process web (Celery)",
+                settings.TASK_BACKEND_MODE,
+            )
     except Exception as e:
-        logger.error(f"Erreur lors du démarrage des workers d'embeddings: {e}")
-    
-    # Démarrer les workers pour le traitement de documents en arrière-plan
-    try:
-        from app.services.document_service import _ensure_document_workers
-        _ensure_document_workers()
-        logger.info("Workers de traitement de documents démarrés")
-    except Exception as e:
-        logger.error(f"Erreur lors du démarrage des workers de traitement de documents: {e}")
+        logger.error(f"Erreur lors du démarrage des workers threads: {e}")
 
 
 @app.get("/", response_class=HTMLResponse)
-async def root(request: Request):
-    """Page d'accueil - redirige vers login si non authentifié"""
-    return templates.TemplateResponse("index.html", {"request": request})
+async def root(request: Request, session: Session = Depends(get_session)):
+    """Page d'accueil (choix des espaces)."""
+    if _redirect_if_unauthenticated(request, session):
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("home_spaces.html", {"request": request})
 
 
 @app.get("/login", response_class=HTMLResponse)
-async def login_page(request: Request):
+async def login_page(request: Request, session: Session = Depends(get_session)):
     """Page de connexion"""
+    if not _redirect_if_unauthenticated(request, session):
+        return RedirectResponse(url="/", status_code=303)
     return templates.TemplateResponse("login.html", {"request": request})
 
 
 @app.get("/register", response_class=HTMLResponse)
-async def register_page(request: Request):
+async def register_page(request: Request, session: Session = Depends(get_session)):
     """Page d'inscription"""
+    if not _redirect_if_unauthenticated(request, session):
+        return RedirectResponse(url="/", status_code=303)
     return templates.TemplateResponse("register.html", {"request": request})
 
 
-@app.get("/projects/{project_id}", response_class=HTMLResponse)
-async def project_detail_page(request: Request, project_id: int):
-    """Page de détail d'un projet"""
-    return templates.TemplateResponse("project_detail.html", {"request": request})
+@app.get("/library", response_class=HTMLResponse)
+async def library_page(request: Request, session: Session = Depends(get_session)):
+    """Page bibliothèque générale."""
+    if _redirect_if_unauthenticated(request, session):
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("library.html", {"request": request})
 
 
-@app.get("/notes/{note_id}/edit", response_class=HTMLResponse)
-async def note_edit_page(request: Request, note_id: int):
-    """Page d'édition d'une note"""
-    return templates.TemplateResponse("note_edit.html", {"request": request})
+@app.get("/spaces/{space_id}", response_class=HTMLResponse)
+async def space_detail_page(request: Request, space_id: int, session: Session = Depends(get_session)):
+    """Page de discussion dans un espace."""
+    if _redirect_if_unauthenticated(request, session):
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("space_detail.html", {"request": request, "space_id": space_id})
 
 
-@app.get("/projects/{project_id}/kag-graph", response_class=HTMLResponse)
-async def project_kag_graph_page(request: Request, project_id: int):
-    """Page de visualisation du graphe KAG d'un projet"""
-    return templates.TemplateResponse("project_kag_graph.html", {"request": request})
+@app.get("/spaces/{space_id}/kag-graph", response_class=HTMLResponse)
+async def space_kag_graph_page(request: Request, space_id: int, session: Session = Depends(get_session)):
+    """Page de visualisation du graphe KAG d'un espace."""
+    if _redirect_if_unauthenticated(request, session):
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("space_kag_graph.html", {"request": request, "space_id": space_id})
 
 
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Arrêter le scheduler à l'arrêt de l'application"""
-    try:
-        stop_scheduler()
-        logger.info("Scheduler arrêté proprement")
-    except Exception as e:
-        logger.error(f"Erreur lors de l'arrêt du scheduler: {e}")
-
-
-@app.get("/studio", response_class=HTMLResponse)
-async def studio_page(request: Request):
-    """Page du studio d'agents"""
-    return templates.TemplateResponse("studio.html", {"request": request})
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_page(request: Request, session: Session = Depends(get_session)):
+    """Page d'administration (gestion users/rôles)."""
+    if _redirect_if_unauthenticated(request, session):
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("admin.html", {"request": request})
 
 
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
     return {"status": "ok", "timestamp": time.time()}
+
+
+def _extract_bearer_token_from_request(request: Request) -> Optional[str]:
+    auth_header = request.headers.get("Authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        return auth_header.split(" ", 1)[1].strip()
+    return request.cookies.get("authToken")
+
+
+def _is_request_authenticated(request: Request, session: Session) -> bool:
+    token = _extract_bearer_token_from_request(request)
+    if not token:
+        return False
+    payload = decode_token(token)
+    if payload is None:
+        return False
+    user_id_str = payload.get("sub")
+    if user_id_str is None:
+        return False
+    try:
+        user_id = int(user_id_str)
+    except (ValueError, TypeError):
+        return False
+    return get_user_by_id(session, user_id) is not None
+
+
+def _redirect_if_unauthenticated(request: Request, session: Session) -> bool:
+    return not _is_request_authenticated(request, session)
 

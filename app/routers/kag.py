@@ -1,77 +1,63 @@
-from typing import Dict
+from typing import Dict, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlmodel import Session
 
 from app.database import get_session
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
-from app.services.project_service import get_project_by_id
 from app.services.kag_graph_service import (
-    get_kag_stats,
-    get_project_bipartite_graph,
-    rebuild_kag_for_project,
+    get_space_bipartite_graph,
+    get_space_entity_relation_graph,
+    get_space_kag_stats,
+    rebuild_kag_for_space,
 )
+from app.services.space_service import get_space_by_id
 
 
 router = APIRouter(prefix="/api/kag", tags=["kag"])
 
 
-def _ensure_project_access(
-    session: Session,
-    project_id: int,
-    current_user: UserRead,
-):
-    project = get_project_by_id(session, project_id, current_user.id)
-    if not project:
+def _ensure_space_access(session: Session, space_id: int, current_user: UserRead):
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Projet non trouvé",
+            detail="Espace non trouvé",
         )
 
 
-@router.get("/projects/{project_id}/stats", response_model=Dict)
-async def get_project_kag_stats(
-    project_id: int,
+@router.get("/spaces/{space_id}/stats", response_model=Dict)
+async def get_space_kag_stats_route(
+    space_id: int,
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
-    """
-    Statistiques KAG pour un projet (nombre d'entités, de relations, etc.).
-    """
-    _ensure_project_access(session, project_id, current_user)
-    return get_kag_stats(session, project_id)
+    """Statistiques KAG d'un espace (entités, relations, types)."""
+    _ensure_space_access(session, space_id, current_user)
+    return get_space_kag_stats(session, space_id)
 
 
-@router.get("/projects/{project_id}/graph", response_model=Dict)
-async def get_project_kag_graph(
-    project_id: int,
+@router.get("/spaces/{space_id}/graph", response_model=Dict)
+async def get_space_kag_graph_route(
+    space_id: int,
+    mode: Literal["bipartite", "entity_links"] = Query("bipartite"),
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
-    """
-    Graphe biparti (entités <-> chunks) pour visualisation front.
-    """
-    _ensure_project_access(session, project_id, current_user)
-    return get_project_bipartite_graph(
-        session=session,
-        project_id=project_id,
-        user_id=current_user.id,
-    )
+    """Graphe KAG : bipartite (entités ↔ chunks) ou entity_links (co-occurrences)."""
+    _ensure_space_access(session, space_id, current_user)
+    if mode == "entity_links":
+        return get_space_entity_relation_graph(session, space_id)
+    return get_space_bipartite_graph(session=session, space_id=space_id)
 
 
-@router.post("/projects/{project_id}/rebuild", response_model=Dict)
-async def rebuild_project_kag(
-    project_id: int,
+@router.post("/spaces/{space_id}/rebuild", response_model=Dict)
+async def rebuild_space_kag_route(
+    space_id: int,
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
-    """
-    Purge et reconstruit le graphe KAG pour toutes les notes d'un projet.
-
-    Endpoint réservé à un usage admin / maintenance (opération potentiellement coûteuse).
-    """
-    _ensure_project_access(session, project_id, current_user)
-    stats = rebuild_kag_for_project(session, project_id)
-    return stats
-
+    """Purge puis reconstruit le KAG pour tous les documents de l'espace."""
+    _ensure_space_access(session, space_id, current_user)
+    return rebuild_kag_for_space(session, space_id)

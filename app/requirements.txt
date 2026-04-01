@@ -1,5 +1,7 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
+celery[redis]==5.4.0
+redis>=5.0,<6
 sqlmodel==0.0.14
 psycopg2-binary==2.9.9
 alembic==1.12.1
@@ -7,8 +9,8 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
 python-multipart==0.0.6
-# httpx utilisé par plusieurs intégrations HTTP
-httpx>=0.27
+# httpx: 0.28 casse TestClient Starlette/FastAPI (kwarg `app` retiré côté Client)
+httpx>=0.27,<0.28
 jinja2==3.1.2
 python-dotenv==1.0.0
 pydantic-settings>=2.3.0

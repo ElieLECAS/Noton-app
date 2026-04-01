@@ -59,7 +59,7 @@ SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 EOF
 
 # Étape 1: PyTorch CPU (base lourde, stable) - index PyTorch pour éviter conflits
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+RUN pip install --no-cache-dir --upgrade pip "setuptools<82" wheel && \
     pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
 
 # Étape 2: Dépendances système critiques (numpy doit être installé avant docling/llamaindex)
@@ -102,6 +102,11 @@ RUN grep -v -E '^[[:space:]]*#|^[[:space:]]*$$' requirements.txt | \
     pip install --no-cache-dir -r requirements-remaining.txt && \
     rm requirements-remaining.txt
 
+# Étape 7b: Forcer les versions finales compatibles (évite les upgrades transitifs).
+RUN pip install --no-cache-dir \
+    "pydantic>=2.0.0,<2.10" \
+    "setuptools<82"
+
 # Étape 8: Les modèles seront téléchargés au runtime la première fois et persistés
 # via le volume models_cache monté sur /root/.cache dans docker-compose.yaml
 # Cela évite de re-télécharger à chaque rebuild de l'image Docker
@@ -112,6 +117,8 @@ COPY app/ ./app/
 # Copier alembic/ et alembic.ini à la racine /app/ pour que la commande alembic fonctionne depuis le WORKDIR
 COPY app/alembic/ ./alembic/
 COPY app/alembic.ini ./alembic.ini
+COPY tests/ ./tests/
+COPY app/pytest.ini ./pytest.ini
 
 # Exposer le port
 EXPOSE 8000

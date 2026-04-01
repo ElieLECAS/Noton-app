@@ -54,6 +54,9 @@ RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 # Optimisations du reranking
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
+RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
+RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
+RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
 
 # ---------------------------------------------------------------------------
@@ -348,13 +351,142 @@ def _enrich_content_with_heading_and_figure(content: str, metadata: dict) -> str
     return prefix + content if content else prefix.strip()
 
 
+def _set_node_text_content(node, text: str) -> None:
+    if hasattr(node, "set_content"):
+        node.set_content(text)
+    else:
+        setattr(node, "text", text)
+
+
+def _two_stage_rerank_leaves(
+    filtered_candidates: List[NodeWithScore],
+    query_text: str,
+    k: int,
+) -> List[NodeWithScore]:
+    """Rerank large pool (texte tronqué) puis raffinement sur texte enrichi complet."""
+    reranker = _get_reranker()
+    if not reranker:
+        return filtered_candidates[:k]
+    stage1_max = min(
+        len(filtered_candidates),
+        max(RERANK_STAGE1_MAX, k * 2),
+    )
+    pool = filtered_candidates[:stage1_max]
+    backup: Dict[str, str] = {}
+    for nws in pool:
+        node = nws.node
+        nid = str(getattr(node, "id_", None) or "")
+        raw = (
+            node.get_content()
+            if hasattr(node, "get_content")
+            else getattr(node, "text", "") or ""
+        )
+        backup[nid] = raw
+        meta = dict(getattr(node, "metadata", {}) or {})
+        enriched = _enrich_content_with_heading_and_figure(raw, meta)
+        short = (
+            enriched[:RERANK_STAGE1_CHAR_CAP]
+            if len(enriched) > RERANK_STAGE1_CHAR_CAP
+            else enriched
+        )
+        _set_node_text_content(node, short)
+    try:
+        r1 = reranker.postprocess_nodes(
+            pool,
+            query_bundle=QueryBundle(query_str=query_text),
+        )
+    except Exception as e:
+        logger.warning("Rerank étape 1 échoué: %s", e)
+        for nws in pool:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            if nid in backup:
+                _set_node_text_content(nws.node, backup[nid])
+        return filtered_candidates[:k]
+
+    n_stage2 = min(RERANK_STAGE2_POOL, len(r1))
+    for nws in pool:
+        nid = str(getattr(nws.node, "id_", None) or "")
+        if nid in backup:
+            _set_node_text_content(nws.node, backup[nid])
+
+    stage2: List[NodeWithScore] = []
+    for nws in r1[:n_stage2]:
+        node = nws.node
+        nid = str(getattr(node, "id_", None) or "")
+        raw = backup.get(nid, "")
+        meta = dict(getattr(node, "metadata", {}) or {})
+        enriched = _enrich_content_with_heading_and_figure(raw, meta)
+        _set_node_text_content(node, enriched)
+        stage2.append(NodeWithScore(node=node, score=float(nws.score or 0.0)))
+
+    try:
+        r2 = reranker.postprocess_nodes(
+            stage2,
+            query_bundle=QueryBundle(query_str=query_text),
+        )
+        logger.info(
+            "Reranking 2 étapes: pool=%d → stage2=%d → final=%d",
+            len(pool),
+            len(stage2),
+            len(r2),
+        )
+        return r2[:k]
+    except Exception as e:
+        logger.warning("Rerank étape 2 échoué: %s", e)
+        return r1[:k]
+
+
+def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
+    """Recopie page_no / plage depuis la feuille vers le parent résolu."""
+    leaf_meta = dict(getattr(leaf_node, "metadata", {}) or {})
+    m = dict(getattr(target_node, "metadata", {}) or {})
+    pn = leaf_meta.get("page_no")
+    if pn is not None:
+        try:
+            m["page_no"] = int(pn)
+        except (TypeError, ValueError):
+            pass
+    elif m.get("page_start") is not None:
+        try:
+            m["page_no"] = int(m["page_start"])
+        except (TypeError, ValueError):
+            pass
+    ps = leaf_meta.get("page_start")
+    pe = leaf_meta.get("page_end")
+    if ps is not None:
+        try:
+            m.setdefault("page_start", int(ps))
+        except (TypeError, ValueError):
+            pass
+    if pe is not None:
+        try:
+            m.setdefault("page_end", int(pe))
+        except (TypeError, ValueError):
+            pass
+    setattr(target_node, "metadata", m)
+
+
 def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     metadata = dict(getattr(node, "metadata", {}) or {})
     note_title = metadata.get("note_title", "Note sans titre")
     note_id = metadata.get("note_id")
     node_id = metadata.get("node_id")
     chunk_index = metadata.get("chunk_index", 0)
-    page_no = metadata.get("page_no")
+    page_start = metadata.get("page_start")
+    page_end = metadata.get("page_end")
+    raw_page = metadata.get("page_no")
+    resolved_page = None
+    if raw_page is not None:
+        try:
+            resolved_page = int(raw_page)
+        except (TypeError, ValueError):
+            pass
+    if resolved_page is None and page_start is not None:
+        try:
+            resolved_page = int(page_start)
+        except (TypeError, ValueError):
+            pass
+    page_no = resolved_page
     parent_heading = metadata.get("parent_heading")
     # Multimodal : chemin image si chunk image
     image_path = metadata.get("image_path")
@@ -366,7 +498,7 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     # Enrichir avec parent_heading et figure_title pour le LLM
     content_enriched = _enrich_content_with_heading_and_figure(content, metadata)
     passage_text = f"**{note_title}**\n{content_enriched}"
-    return {
+    out = {
         "passage": passage_text,
         "passage_raw": content,
         "note_title": note_title,
@@ -374,13 +506,24 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
         "chunk_id": node_id,
         "chunk_index": int(chunk_index) if isinstance(chunk_index, (int, str)) else 0,
         "score": float(fallback_score or 0.0),
-        "page_no": int(page_no) if page_no is not None else None,
+        "page_no": page_no,
         "section": parent_heading,
         "image_path": image_path,
         "image_filename": image_filename,
         "is_image_chunk": is_image_chunk,
         "caption": caption,
     }
+    if page_start is not None:
+        try:
+            out["page_start"] = int(page_start)
+        except (TypeError, ValueError):
+            pass
+    if page_end is not None:
+        try:
+            out["page_end"] = int(page_end)
+        except (TypeError, ValueError):
+            pass
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -425,20 +568,29 @@ def _retrieve_via_knowledge_graph(
     user_id: int,
     query_text: str,
     limit: int = 10,
+    pivot_entity_names: Optional[List[str]] = None,
 ) -> List[NodeWithScore]:
     """
     Récupère des chunks via le graphe de connaissances KAG.
     
-    1. Extrait les entités mentionnées dans la query
-    2. Trouve les chunks liés à ces entités via le graphe
-    3. Retourne les chunks sous forme de NodeWithScore
+    Args:
+        pivot_entity_names: Entités normalisées extraites de la requête par LLM (prioritaires)
     """
     try:
         from app.services.kag_extraction_service import normalize_entity_name
         from app.services.kag_graph_service import get_chunks_by_entity_names
         
-        query_terms = [t.strip().lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text)]
-        query_terms = [t for t in query_terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS]
+        # Stratégie 1: utiliser les entités pivot LLM si disponibles
+        if pivot_entity_names:
+            query_terms = pivot_entity_names
+            logger.debug(
+                "KAG retrieval (projet): utilisation de %d entités pivot LLM", 
+                len(query_terms)
+            )
+        else:
+            # Fallback: split naïf de la requête
+            query_terms = [t.strip().lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text)]
+            query_terms = [t for t in query_terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS]
         
         if not query_terms:
             return []
@@ -470,7 +622,7 @@ def _retrieve_via_knowledge_graph(
             nodes_with_scores.append(NodeWithScore(node=node, score=float(relevance)))
         
         logger.debug(
-            "KAG retrieval: %d chunks via graphe (query_terms=%s)",
+            "KAG retrieval (projet): %d chunks via graphe (query_terms=%s)",
             len(nodes_with_scores),
             query_terms[:5],
         )

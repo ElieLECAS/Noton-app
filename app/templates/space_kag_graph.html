@@ -1,0 +1,600 @@
+{% extends "base.html" %}
+
+{% block title %}Graph KAG Espace - {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/vis-network@9.1.2/styles/vis-network.min.css"
+/>
+<style>
+    #kag-graph-container {
+        height: auto;
+        min-height: 0;
+    }
+    #kag-network {
+        width: 100%;
+        height: calc(100vh - 7.5rem);
+        min-height: 0;
+        border-radius: 1rem;
+        background: radial-gradient(circle at top left, #eef2ff 0, #ffffff 55%, #f9fafb 100%);
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+    .dark #kag-network {
+        background: radial-gradient(circle at top left, #1f2937 0, #020617 55%, #020617 100%);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col min-h-0 overflow-hidden">
+    <header
+        class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 flex-shrink-0 shadow-sm"
+    >
+        <div class="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+            <a
+                href="/spaces/{{ space_id }}"
+                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2.5 -ml-2 sm:ml-0 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
+            >
+                <i class="ti ti-arrow-left text-xl"></i>
+            </a>
+            <div class="min-w-0">
+                <h1
+                    class="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100 truncate tracking-tight"
+                >
+                    Graphe de connaissances de l'espace
+                </h1>
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5" id="kag-subtitle">
+                    Choisissez une vue ci-dessous : entités liées aux passages, ou relations entre entités (co-occurrences).
+                </p>
+            </div>
+        </div>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-wrap w-full sm:w-auto">
+            <div
+                class="inline-flex rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-900/80 p-0.5"
+                role="group"
+                aria-label="Mode d'affichage du graphe"
+            >
+                <button
+                    type="button"
+                    id="kag-mode-bipartite"
+                    class="kag-mode-btn px-3 py-1.5 text-xs font-medium rounded-md transition-colors bg-white dark:bg-gray-700 text-violet-700 dark:text-violet-200 shadow-sm"
+                >
+                    Entités ↔ passages
+                </button>
+                <button
+                    type="button"
+                    id="kag-mode-entity-links"
+                    class="kag-mode-btn px-3 py-1.5 text-xs font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                >
+                    Relations entités
+                </button>
+            </div>
+            <span
+                id="kag-stats-pill"
+                class="inline-flex items-center gap-2 rounded-full border border-violet-200 dark:border-violet-700/60 bg-violet-50/80 dark:bg-violet-900/40 px-3 py-1 text-xs text-violet-700 dark:text-violet-200"
+            >
+                <span class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+                <span id="kag-stats-text">Chargement du graphe...</span>
+            </span>
+        </div>
+    </header>
+
+    <div class="flex-1 flex flex-col lg:flex-row min-h-0 overflow-hidden">
+        <div
+            id="kag-graph-container"
+            class="flex-1 min-h-0 p-4 sm:p-6 bg-gray-50 dark:bg-gray-900/95 flex flex-col gap-4"
+        >
+            <div class="flex flex-col lg:flex-row gap-4 min-h-0">
+                <div class="flex-1 min-h-[320px] lg:min-h-[500px]">
+                    <div
+                        id="kag-network"
+                        class="shadow-sm border border-gray-200 dark:border-gray-800"
+                    ></div>
+                </div>
+                <aside
+                    class="w-full lg:w-80 flex-shrink-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex flex-col gap-3"
+                >
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                        <i class="ti ti-info-circle text-base text-violet-500"></i>
+                        Details du noeud
+                    </h2>
+                    <div
+                        id="kag-details"
+                        class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 space-y-2"
+                    >
+                        <p class="text-gray-500 dark:text-gray-400">
+                            Survolez ou cliquez un noeud pour afficher le detail de l'entite
+                            ou du passage de document associe.
+                        </p>
+                    </div>
+                    <div class="mt-2 border-t border-gray-100 dark:border-gray-700 pt-2 space-y-2">
+                        <div>
+                            <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+                                Legende
+                            </h3>
+                            <div id="kag-legend-bipartite" class="flex flex-wrap gap-2 text-xs">
+                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-violet-50 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200 border border-violet-200 dark:border-violet-700/50">
+                                    <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                                    Entite
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-sky-50 dark:bg-sky-900/40 text-sky-700 dark:text-sky-200 border border-sky-200 dark:border-sky-700/50">
+                                    <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                                    Passage document
+                                </span>
+                            </div>
+                            <div id="kag-legend-entity-links" class="hidden flex flex-wrap gap-2 text-xs">
+                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-violet-50 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200 border border-violet-200 dark:border-violet-700/50">
+                                    <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                                    Entite
+                                </span>
+                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-700/50">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                    Lien (epaisseur ~ co-occurrences)
+                                </span>
+                            </div>
+                        </div>
+                        <label id="toggle-chunk-labels-wrap" class="flex items-center gap-2 text-[11px] text-gray-500 dark:text-gray-400 mt-1 select-none cursor-pointer">
+                            <input
+                                id="toggle-chunk-labels"
+                                type="checkbox"
+                                class="h-3.5 w-3.5 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                            />
+                            <span>Afficher le nom des passages</span>
+                        </label>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+<script>
+    const spaceId = {{ space_id }};
+    let currentGraphMode = "bipartite";
+    let lastGraphPayload = null;
+
+    const MODE_BTN_ACTIVE =
+        "kag-mode-btn px-3 py-1.5 text-xs font-medium rounded-md transition-colors bg-white dark:bg-gray-700 text-violet-700 dark:text-violet-200 shadow-sm";
+    const MODE_BTN_INACTIVE =
+        "kag-mode-btn px-3 py-1.5 text-xs font-medium rounded-md transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200";
+
+    async function fetchJson(url) {
+        const response = await fetch(url, {
+            credentials: "include",
+        });
+        if (response.status === 401) {
+            window.location.href = "/login";
+            throw new Error("Non authentifié");
+        }
+        if (!response.ok) {
+            const detail = await response.json().catch(() => ({}));
+            throw new Error(detail.detail || `Erreur HTTP ${response.status}`);
+        }
+        return response.json();
+    }
+
+    function updateStatsPill(stats) {
+        const pillText = document.getElementById("kag-stats-text");
+        if (!pillText) return;
+        if (!stats) {
+            pillText.textContent = "Aucune donnee KAG disponible pour cet espace.";
+            return;
+        }
+        const ee =
+            stats.entity_entity_edges != null ? stats.entity_entity_edges : 0;
+        pillText.textContent = `${stats.total_entities} entites · ${stats.total_relations} liaisons passage · ${ee} liens entite-entite`;
+    }
+
+    function updateModeButtonStyles() {
+        const bi = document.getElementById("kag-mode-bipartite");
+        const el = document.getElementById("kag-mode-entity-links");
+        if (!bi || !el) return;
+        if (currentGraphMode === "bipartite") {
+            bi.className = MODE_BTN_ACTIVE;
+            el.className = MODE_BTN_INACTIVE;
+        } else {
+            el.className = MODE_BTN_ACTIVE;
+            bi.className = MODE_BTN_INACTIVE;
+        }
+    }
+
+    function setGraphModeUI(mode) {
+        const lb = document.getElementById("kag-legend-bipartite");
+        const le = document.getElementById("kag-legend-entity-links");
+        const wrap = document.getElementById("toggle-chunk-labels-wrap");
+        if (lb) lb.classList.toggle("hidden", mode !== "bipartite");
+        if (le) le.classList.toggle("hidden", mode !== "entity_links");
+        if (wrap) wrap.classList.toggle("hidden", mode !== "bipartite");
+    }
+
+    function renderDetails(node, kindLabel) {
+        const details = document.getElementById("kag-details");
+        if (!details || !node) return;
+
+        if (node.kind === "entity") {
+            details.innerHTML = `
+                <div>
+                    <p class="text-[11px] uppercase tracking-wide text-violet-500 font-semibold mb-1">${kindLabel}</p>
+                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">${node.label}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        Type : <span class="font-medium">${node.entity_type || "generique"}</span>
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        Mentions : <span class="font-medium">${node.mention_count || 1}</span>
+                    </p>
+                </div>
+            `;
+        } else {
+            const title = node.document_title || node.label || `Chunk ${node.chunk_id}`;
+            const chunkIndex = (node.chunk_index ?? null) !== null ? ` · chunk #${node.chunk_index}` : "";
+            const preview = node.preview || null;
+            details.innerHTML = `
+                <div class="space-y-2">
+                    <div>
+                        <p class="text-[11px] uppercase tracking-wide text-sky-500 font-semibold mb-1">${kindLabel}</p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">${title}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                            Document ID : <span class="font-medium">${node.document_id}</span>${chunkIndex}
+                        </p>
+                    </div>
+                    ${preview ? `
+                        <div class="mt-1 pt-2 border-t border-gray-100 dark:border-gray-700 max-h-40 overflow-y-auto">
+                            <p class="text-[11px] uppercase tracking-wide text-gray-400 dark:text-gray-500 font-semibold mb-1">
+                                Extrait
+                            </p>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+                                ${preview}
+                            </p>
+                        </div>
+                    ` : `
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                            Ce noeud represente un passage de document relie a une ou plusieurs entites KAG.
+                        </p>
+                    `}
+                </div>
+            `;
+        }
+    }
+
+    function renderEdgeDetails(edge, graph) {
+        const details = document.getElementById("kag-details");
+        if (!details || !edge || !graph) return;
+        const mode = graph.graph_mode || "bipartite";
+        const nodes = graph.nodes || [];
+        const fromNode = nodes.find((n) => n.id === edge.from);
+        const toNode = nodes.find((n) => n.id === edge.to);
+        const fromLabel = fromNode ? fromNode.label : edge.from;
+        const toLabel = toNode ? toNode.label : edge.to;
+
+        if (mode === "entity_links") {
+            const rt = edge.relation_type || "relation";
+            const w = edge.weight != null ? edge.weight : "—";
+            details.innerHTML = `
+                <div class="space-y-2">
+                    <p class="text-[11px] uppercase tracking-wide text-amber-600 dark:text-amber-400 font-semibold mb-1">Lien entre entites</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">
+                        <span class="font-semibold text-gray-900 dark:text-gray-100">${fromLabel}</span>
+                        <span class="mx-1 text-gray-400">↔</span>
+                        <span class="font-semibold text-gray-900 dark:text-gray-100">${toLabel}</span>
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        Type : <span class="font-medium">${rt}</span>
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                        Poids (co-occurrences dans un meme passage) : <span class="font-medium">${w}</span>
+                    </p>
+                </div>
+            `;
+            return;
+        }
+
+        const rel =
+            edge.relevance != null
+                ? Math.round(Number(edge.relevance) * 100)
+                : "—";
+        details.innerHTML = `
+            <div class="space-y-2">
+                <p class="text-[11px] uppercase tracking-wide text-sky-500 font-semibold mb-1">Liaison entite ↔ passage</p>
+                <p class="text-xs text-gray-600 dark:text-gray-300">
+                    <span class="font-semibold">${fromLabel}</span>
+                    <span class="mx-1 text-gray-400">—</span>
+                    <span class="font-semibold">${toLabel}</span>
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Score de pertinence : <span class="font-medium">${rel}${typeof rel === "number" ? "%" : ""}</span>
+                </p>
+            </div>
+        `;
+    }
+
+    let kagVisNodes = null;
+    let kagNetwork = null;
+
+    function renderKagGraph(graph) {
+        const container = document.getElementById("kag-network");
+        if (!container) return;
+
+        lastGraphPayload = graph;
+        const mode = graph && graph.graph_mode ? graph.graph_mode : "bipartite";
+
+        if (kagNetwork) {
+            kagNetwork.destroy();
+            kagNetwork = null;
+        }
+        kagVisNodes = null;
+
+        if (!graph || !graph.nodes || graph.nodes.length === 0) {
+            const emptyMsg =
+                mode === "entity_links"
+                    ? "Aucune relation entite-entite a afficher (executez l'indexation KAG sur les documents)."
+                    : "Aucune entite KAG a afficher pour cet espace pour le moment.";
+            container.innerHTML = `
+                <div class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm px-4 text-center">
+                    ${emptyMsg}
+                </div>
+            `;
+            return;
+        }
+
+        const visNodes = new vis.DataSet(
+            graph.nodes.map((n) => {
+                const origLabel = n.label;
+                const base = {
+                    id: n.id,
+                    label: n.kind === "chunk" ? "" : n.label,
+                    kind: n.kind,
+                    origLabel: origLabel,
+                };
+                if (n.kind === "entity") {
+                    return {
+                        ...base,
+                        group: `entity-${n.entity_type || "generic"}`,
+                        value: Math.max(1, n.mention_count || 1),
+                        title: `${n.label} (${n.entity_type || "entite"})`,
+                    };
+                }
+                return {
+                    ...base,
+                    group: "chunk",
+                    value: 2,
+                    title: n.document_title || n.label || "Chunk",
+                };
+            })
+        );
+
+        const visEdges = new vis.DataSet(
+            (graph.edges || []).map((e) => {
+                const base = {
+                    id: e.id,
+                    from: e.from,
+                    to: e.to,
+                    smooth: true,
+                };
+                if (mode === "entity_links") {
+                    const w = e.weight != null ? Number(e.weight) : 1;
+                    return {
+                        ...base,
+                        value: Math.min(10, Math.log(1 + w) + 0.4),
+                        title: `${e.relation_type || "relation"} · poids ${w}`,
+                    };
+                }
+                return {
+                    ...base,
+                    value: e.relevance || 0.6,
+                    title: "Lien entite ↔ passage",
+                };
+            })
+        );
+
+        const data = { nodes: visNodes, edges: visEdges };
+        const edgeOptions =
+            mode === "entity_links"
+                ? {
+                      color: {
+                          color: "rgba(245,158,11,0.42)",
+                          highlight: "rgba(217,119,6,0.95)",
+                          hover: "rgba(251,191,36,0.9)",
+                      },
+                      width: 0.5,
+                      selectionWidth: 2.8,
+                      hoverWidth: 1.8,
+                      smooth: { type: "continuous", roundness: 0.5 },
+                      scaling: { min: 0.35, max: 4.5 },
+                  }
+                : {
+                      color: {
+                          color: "rgba(148,163,184,0.28)",
+                          highlight: "rgba(56,189,248,0.95)",
+                          hover: "rgba(129,140,248,0.8)",
+                      },
+                      width: 0.35,
+                      selectionWidth: 2.3,
+                      hoverWidth: 1.4,
+                      smooth: { type: "continuous", roundness: 0.64 },
+                      scaling: { min: 0.2, max: 2.0 },
+                  };
+
+        const physicsOptions =
+            mode === "entity_links"
+                ? {
+                      enabled: true,
+                      stabilization: { iterations: 260, fit: true },
+                      solver: "forceAtlas2Based",
+                      forceAtlas2Based: {
+                          gravitationalConstant: -42,
+                          springLength: 95,
+                          springConstant: 0.055,
+                          damping: 0.45,
+                      },
+                      minVelocity: 0.75,
+                  }
+                : {
+                      enabled: true,
+                      stabilization: { iterations: 220, fit: true },
+                      solver: "forceAtlas2Based",
+                      forceAtlas2Based: {
+                          gravitationalConstant: -55,
+                          springLength: 120,
+                          springConstant: 0.045,
+                          damping: 0.42,
+                      },
+                      minVelocity: 0.75,
+                  };
+
+        const options = {
+            layout: {
+                improvedLayout: true,
+                randomSeed: mode === "entity_links" ? 11 : 9,
+            },
+            nodes: {
+                shape: "dot",
+                borderWidth: 0,
+                scaling: { min: 2, max: mode === "entity_links" ? 28 : 22 },
+                font: {
+                    size: mode === "entity_links" ? 10 : 9,
+                    face: "system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+                    color: "#0f172a",
+                },
+            },
+            groups: {
+                chunk: {
+                    color: { background: "#0ea5e9", border: "#0284c7" },
+                },
+                "entity-equipement": { color: { background: "#a855f7", border: "#7e22ce" } },
+                "entity-procedure": { color: { background: "#22c55e", border: "#15803d" } },
+                "entity-parametre": { color: { background: "#f97316", border: "#ea580c" } },
+                "entity-composant": { color: { background: "#6366f1", border: "#4f46e5" } },
+                "entity-reference": { color: { background: "#facc15", border: "#eab308" } },
+                "entity-lieu": { color: { background: "#ec4899", border: "#db2777" } },
+                "entity-concept_technique": { color: { background: "#a1a1aa", border: "#71717a" } },
+                "entity-generic": { color: { background: "#a1a1aa", border: "#71717a" } },
+            },
+            edges: edgeOptions,
+            physics: physicsOptions,
+            interaction: {
+                hover: true,
+                tooltipDelay: 120,
+                zoomView: true,
+                dragView: true,
+                dragNodes: true,
+            },
+        };
+
+        kagVisNodes = visNodes;
+        kagNetwork = new vis.Network(container, data, options);
+        kagNetwork.once("stabilizationIterationsDone", function () {
+            kagNetwork.setOptions({ physics: { enabled: false } });
+        });
+
+        kagNetwork.on("selectNode", function (params) {
+            if (!params.nodes || params.nodes.length === 0) return;
+            const nodeId = params.nodes[0];
+            const rawNode = (lastGraphPayload.nodes || []).find((n) => n.id === nodeId);
+            if (!rawNode) return;
+            const kindLabel = rawNode.kind === "entity" ? "Entite KAG" : "Passage document";
+            renderDetails(rawNode, kindLabel);
+        });
+
+        kagNetwork.on("selectEdge", function (params) {
+            if (!params.edges || params.edges.length === 0) return;
+            const edgeId = params.edges[0];
+            const rawEdge = (lastGraphPayload.edges || []).find((e) => e.id === edgeId);
+            if (rawEdge) renderEdgeDetails(rawEdge, lastGraphPayload);
+        });
+    }
+
+    async function loadKagGraphData() {
+        const modeParam =
+            currentGraphMode === "entity_links" ? "entity_links" : "bipartite";
+        const details = document.getElementById("kag-details");
+        if (details) {
+            const hint =
+                modeParam === "entity_links"
+                    ? "Cliquez un noeud ou une arete pour voir le detail."
+                    : "Survolez ou cliquez un noeud ou une arete pour le detail.";
+            details.innerHTML = `<p class="text-gray-500 dark:text-gray-400">${hint}</p>`;
+        }
+        const graph = await fetchJson(
+            `/api/spaces/${spaceId}/kag/graph?mode=${modeParam}`
+        );
+        setGraphModeUI(currentGraphMode);
+        renderKagGraph(graph);
+    }
+
+    async function initKagGraph() {
+        try {
+            updateModeButtonStyles();
+            const stats = await fetchJson(`/api/spaces/${spaceId}/kag/stats`);
+            updateStatsPill(stats);
+            await loadKagGraphData();
+        } catch (error) {
+            console.error("Erreur chargement graphe KAG:", error);
+            updateStatsPill(null);
+            const container = document.getElementById("kag-network");
+            if (container) {
+                container.innerHTML = `
+                    <div class="w-full h-full flex items-center justify-center text-red-500 text-sm">
+                        Erreur lors du chargement du graphe KAG : ${error.message}
+                    </div>
+                `;
+            }
+        }
+    }
+
+    function setupChunkLabelsToggle() {
+        const checkbox = document.getElementById("toggle-chunk-labels");
+        if (!checkbox) return;
+        checkbox.addEventListener("change", function (event) {
+            if (!kagVisNodes) return;
+            const visible = event.target.checked;
+            const updates = [];
+            kagVisNodes.forEach((node) => {
+                if (node.kind === "chunk") {
+                    updates.push({
+                        id: node.id,
+                        label: visible ? (node.origLabel || "") : "",
+                    });
+                }
+            });
+            if (updates.length) kagVisNodes.update(updates);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        setupChunkLabelsToggle();
+        const bi = document.getElementById("kag-mode-bipartite");
+        const el = document.getElementById("kag-mode-entity-links");
+        if (bi) {
+            bi.addEventListener("click", async function () {
+                if (currentGraphMode === "bipartite") return;
+                currentGraphMode = "bipartite";
+                updateModeButtonStyles();
+                try {
+                    await loadKagGraphData();
+                } catch (e) {
+                    console.error(e);
+                }
+            });
+        }
+        if (el) {
+            el.addEventListener("click", async function () {
+                if (currentGraphMode === "entity_links") return;
+                currentGraphMode = "entity_links";
+                updateModeButtonStyles();
+                try {
+                    await loadKagGraphData();
+                } catch (e) {
+                    console.error(e);
+                }
+            });
+        }
+        initKagGraph();
+    });
+</script>
+{% endblock %}

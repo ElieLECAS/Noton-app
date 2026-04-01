@@ -1,10 +1,10 @@
 from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
 from typing import Optional, List, TYPE_CHECKING
+from .space import Space
 
 if TYPE_CHECKING:
     from .message import Message
-    from .project import Project
     from .user import User
 
 
@@ -13,18 +13,18 @@ class Conversation(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str = Field(max_length=200, default="Nouvelle conversation")
     user_id: int = Field(foreign_key="user.id")
-    project_id: Optional[int] = Field(default=None, foreign_key="project.id")
+    space_id: int = Field(foreign_key="space.id", index=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
-    # Relations
+    space: Optional[Space] = Relationship(back_populates="conversations")
     messages: List["Message"] = Relationship(back_populates="conversation")
 
 
 class ConversationCreate(SQLModel):
     """Schéma pour créer une conversation"""
     title: Optional[str] = "Nouvelle conversation"
-    project_id: Optional[int] = None
+    space_id: int
 
 
 class ConversationRead(SQLModel):
@@ -32,7 +32,7 @@ class ConversationRead(SQLModel):
     id: int
     title: str
     user_id: int
-    project_id: Optional[int] = None
+    space_id: int
     created_at: datetime
     updated_at: datetime
     message_count: Optional[int] = 0

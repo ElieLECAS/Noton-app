@@ -20,6 +20,21 @@ depends_on = None
 def upgrade() -> None:
     conn = op.get_bind()
 
+    table_exists = conn.execute(
+        sa.text(
+            """
+            SELECT EXISTS (
+                SELECT 1
+                FROM information_schema.tables
+                WHERE table_schema = 'public' AND table_name = 'notechunk'
+            )
+            """
+        )
+    ).scalar()
+    if not table_exists:
+        print("add_notechunk_hierarchy: table notechunk absente, migration ignorée.")
+        return
+
     result = conn.execute(
         sa.text(
             """
@@ -56,6 +71,21 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    conn = op.get_bind()
+    table_exists = conn.execute(
+        sa.text(
+            """
+            SELECT EXISTS (
+                SELECT 1
+                FROM information_schema.tables
+                WHERE table_schema = 'public' AND table_name = 'notechunk'
+            )
+            """
+        )
+    ).scalar()
+    if not table_exists:
+        return
+
     op.execute("DROP INDEX IF EXISTS ix_notechunk_hierarchy_level")
     op.execute("DROP INDEX IF EXISTS ix_notechunk_is_leaf")
     op.execute("DROP INDEX IF EXISTS ix_notechunk_parent_node_id")

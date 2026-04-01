@@ -92,6 +92,7 @@
 
             const response = await fetch('/api/auth/register', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -101,7 +102,6 @@
             const result = await response.json();
 
             if (response.ok) {
-                localStorage.setItem('authToken', result.access_token);
                 window.location.href = '/';
             } else {
                 const errorDiv = document.getElementById('error-message');

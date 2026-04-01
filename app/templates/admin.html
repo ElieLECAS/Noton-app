@@ -1,0 +1,601 @@
+{% extends "base.html" %}
+
+{% block title %}Administration - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="flex-1 overflow-y-auto p-6">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+            Administration
+        </h1>
+
+        <!-- Tabs Navigation -->
+        <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
+            <nav class="-mb-px flex space-x-8">
+                <button
+                    onclick="showTab('users')"
+                    id="tab-users"
+                    class="tab-button border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600 dark:text-blue-400"
+                >
+                    Utilisateurs
+                </button>
+                <button
+                    onclick="showTab('roles')"
+                    id="tab-roles"
+                    class="tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
+                >
+                    Rôles
+                </button>
+                <button
+                    onclick="showTab('permissions')"
+                    id="tab-permissions"
+                    class="tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
+                >
+                    Permissions
+                </button>
+            </nav>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="tab-content-users" class="tab-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    Gestion des utilisateurs
+                </h2>
+                <button
+                    onclick="openCreateUserModal()"
+                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                >
+                    <i class="ti ti-plus mr-2"></i>Nouvel utilisateur
+                </button>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Utilisateur
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Email
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Rôles
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <!-- Chargé dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Roles Tab -->
+        <div id="tab-content-roles" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    Gestion des rôles
+                </h2>
+                <button
+                    onclick="openCreateRoleModal()"
+                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                >
+                    <i class="ti ti-plus mr-2"></i>Nouveau rôle
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="roles-grid">
+                <!-- Chargé dynamiquement -->
+            </div>
+        </div>
+
+        <!-- Permissions Tab -->
+        <div id="tab-content-permissions" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    Permissions disponibles
+                </h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="permissions-grid">
+                <!-- Chargé dynamiquement -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Create User -->
+<div id="create-user-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+            Nouvel utilisateur
+        </h2>
+        <form id="create-user-form" onsubmit="createUser(event)">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Nom d'utilisateur
+                </label>
+                <input
+                    type="text"
+                    name="username"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Email
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Mot de passe
+                </label>
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                />
+            </div>
+            <div class="flex justify-end gap-2">
+                <button
+                    type="button"
+                    onclick="closeCreateUserModal()"
+                    class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                >
+                    Annuler
+                </button>
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                >
+                    Créer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Create Role -->
+<div id="create-role-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+            Nouveau rôle
+        </h2>
+        <form id="create-role-form" onsubmit="createRole(event)">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Nom du rôle
+                </label>
+                <input
+                    type="text"
+                    name="name"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                />
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Description
+                </label>
+                <textarea
+                    name="description"
+                    rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                ></textarea>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button
+                    type="button"
+                    onclick="closeCreateRoleModal()"
+                    class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                >
+                    Annuler
+                </button>
+                <button
+                    type="submit"
+                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                >
+                    Créer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Manage User Roles -->
+<div id="manage-roles-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+            Gérer les rôles de <span id="manage-roles-username"></span>
+        </h2>
+        <div id="manage-roles-content" class="space-y-2 mb-4">
+            <!-- Chargé dynamiquement -->
+        </div>
+        <div class="flex justify-end">
+            <button
+                onclick="closeManageRolesModal()"
+                class="px-4 py-2 bg-gray-600 dark:bg-gray-500 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
+            >
+                Fermer
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Manage Role Permissions -->
+<div id="manage-permissions-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+            Gérer les permissions du rôle <span id="manage-permissions-rolename"></span>
+        </h2>
+        <div id="manage-permissions-content" class="space-y-2 mb-4">
+            <!-- Chargé dynamiquement -->
+        </div>
+        <div class="flex justify-end">
+            <button
+                onclick="closeManagePermissionsModal()"
+                class="px-4 py-2 bg-gray-600 dark:bg-gray-500 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
+            >
+                Fermer
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let allUsers = [];
+let allRoles = [];
+let allPermissions = [];
+let currentManageUserId = null;
+let currentManageRoleId = null;
+
+// Tab Management
+function showTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.tab-button').forEach(el => {
+        el.classList.remove('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+        el.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+    });
+    
+    document.getElementById(`tab-content-${tabName}`).classList.remove('hidden');
+    const button = document.getElementById(`tab-${tabName}`);
+    button.classList.add('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+    button.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+}
+
+// Load Data
+async function loadUsers() {
+    const response = await apiCall('/api/admin/users');
+    if (response && response.ok) {
+        allUsers = await response.json();
+        renderUsers();
+    }
+}
+
+async function loadRoles() {
+    const response = await apiCall('/api/admin/roles');
+    if (response && response.ok) {
+        allRoles = await response.json();
+        renderRoles();
+    }
+}
+
+async function loadPermissions() {
+    const response = await apiCall('/api/admin/permissions');
+    if (response && response.ok) {
+        allPermissions = await response.json();
+        renderPermissions();
+    }
+}
+
+// Render Users
+function renderUsers() {
+    const tbody = document.getElementById('users-table-body');
+    tbody.innerHTML = allUsers.map(user => `
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                ${escapeHtml(user.username)}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                ${escapeHtml(user.email)}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                ${user.roles.map(r => `<span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded text-xs mr-1">${escapeHtml(r)}</span>`).join('')}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button onclick="openManageRolesModal(${user.id})" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-3">
+                    Rôles
+                </button>
+                <button onclick="deleteUser(${user.id})" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">
+                    Supprimer
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Render Roles
+function renderRoles() {
+    const grid = document.getElementById('roles-grid');
+    grid.innerHTML = allRoles.map(role => `
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    ${escapeHtml(role.name)}
+                    ${role.is_system ? '<span class="text-xs text-gray-500 ml-2">(système)</span>' : ''}
+                </h3>
+                ${!role.is_system ? `
+                    <button onclick="deleteRole(${role.id})" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">
+                        <i class="ti ti-trash"></i>
+                    </button>
+                ` : ''}
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">${escapeHtml(role.description || '')}</p>
+            <div class="mb-3">
+                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Permissions:</div>
+                <div class="flex flex-wrap gap-1">
+                    ${role.permissions.map(p => `<span class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded text-xs">${escapeHtml(p)}</span>`).join('')}
+                </div>
+            </div>
+            <button onclick="openManagePermissionsModal(${role.id})" class="w-full px-3 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded hover:bg-blue-700 dark:hover:bg-blue-600 text-sm">
+                Gérer les permissions
+            </button>
+        </div>
+    `).join('');
+}
+
+// Render Permissions
+function renderPermissions() {
+    const grid = document.getElementById('permissions-grid');
+    const byCategory = {};
+    allPermissions.forEach(perm => {
+        if (!byCategory[perm.category]) byCategory[perm.category] = [];
+        byCategory[perm.category].push(perm);
+    });
+    
+    grid.innerHTML = Object.entries(byCategory).map(([category, perms]) => `
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 capitalize">${escapeHtml(category)}</h3>
+            <div class="space-y-2">
+                ${perms.map(perm => `
+                    <div class="border-l-4 border-blue-500 pl-3 py-1">
+                        <div class="font-mono text-sm text-gray-900 dark:text-gray-100">${escapeHtml(perm.code)}</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">${escapeHtml(perm.name)}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Create User
+function openCreateUserModal() {
+    document.getElementById('create-user-modal').classList.remove('hidden');
+}
+
+function closeCreateUserModal() {
+    document.getElementById('create-user-modal').classList.add('hidden');
+    document.getElementById('create-user-form').reset();
+}
+
+async function createUser(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = {
+        username: formData.get('username'),
+        email: formData.get('email'),
+        password: formData.get('password')
+    };
+    
+    const response = await apiCall('/api/admin/users', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    });
+    
+    if (response && response.ok) {
+        closeCreateUserModal();
+        loadUsers();
+    }
+}
+
+// Delete User
+async function deleteUser(userId) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) return;
+    
+    const response = await apiCall(`/api/admin/users/${userId}`, {
+        method: 'DELETE'
+    });
+    
+    if (response && response.ok) {
+        loadUsers();
+    }
+}
+
+// Manage User Roles
+async function openManageRolesModal(userId) {
+    currentManageUserId = userId;
+    const user = allUsers.find(u => u.id === userId);
+    document.getElementById('manage-roles-username').textContent = user.username;
+    
+    const content = document.getElementById('manage-roles-content');
+    content.innerHTML = allRoles.map(role => {
+        const hasRole = user.roles.includes(role.name);
+        return `
+            <div class="flex items-center justify-between p-2 border border-gray-200 dark:border-gray-700 rounded">
+                <span class="text-gray-900 dark:text-gray-100">${escapeHtml(role.name)}</span>
+                ${hasRole ? `
+                    <button onclick="removeRoleFromUser(${userId}, ${role.id})" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                        Retirer
+                    </button>
+                ` : `
+                    <button onclick="assignRoleToUser(${userId}, ${role.id})" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
+                        Assigner
+                    </button>
+                `}
+            </div>
+        `;
+    }).join('');
+    
+    document.getElementById('manage-roles-modal').classList.remove('hidden');
+}
+
+function closeManageRolesModal() {
+    document.getElementById('manage-roles-modal').classList.add('hidden');
+    currentManageUserId = null;
+}
+
+async function assignRoleToUser(userId, roleId) {
+    const response = await apiCall('/api/admin/users/assign-role', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId, role_id: roleId })
+    });
+    
+    if (response && response.ok) {
+        await loadUsers();
+        openManageRolesModal(userId);
+    }
+}
+
+async function removeRoleFromUser(userId, roleId) {
+    const response = await apiCall(`/api/admin/users/${userId}/roles/${roleId}`, {
+        method: 'DELETE'
+    });
+    
+    if (response && response.ok) {
+        await loadUsers();
+        openManageRolesModal(userId);
+    }
+}
+
+// Create Role
+function openCreateRoleModal() {
+    document.getElementById('create-role-modal').classList.remove('hidden');
+}
+
+function closeCreateRoleModal() {
+    document.getElementById('create-role-modal').classList.add('hidden');
+    document.getElementById('create-role-form').reset();
+}
+
+async function createRole(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = {
+        name: formData.get('name'),
+        description: formData.get('description') || null
+    };
+    
+    const response = await apiCall('/api/admin/roles', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    });
+    
+    if (response && response.ok) {
+        closeCreateRoleModal();
+        loadRoles();
+    }
+}
+
+// Delete Role
+async function deleteRole(roleId) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce rôle ?')) return;
+    
+    const response = await apiCall(`/api/admin/roles/${roleId}`, {
+        method: 'DELETE'
+    });
+    
+    if (response && response.ok) {
+        loadRoles();
+    }
+}
+
+// Manage Role Permissions
+async function openManagePermissionsModal(roleId) {
+    currentManageRoleId = roleId;
+    const role = allRoles.find(r => r.id === roleId);
+    document.getElementById('manage-permissions-rolename').textContent = role.name;
+    
+    const content = document.getElementById('manage-permissions-content');
+    const byCategory = {};
+    allPermissions.forEach(perm => {
+        if (!byCategory[perm.category]) byCategory[perm.category] = [];
+        byCategory[perm.category].push(perm);
+    });
+    
+    content.innerHTML = Object.entries(byCategory).map(([category, perms]) => `
+        <div class="mb-4">
+            <h4 class="font-semibold text-gray-900 dark:text-gray-100 mb-2 capitalize">${escapeHtml(category)}</h4>
+            <div class="space-y-2">
+                ${perms.map(perm => {
+                    const hasPermission = role.permissions.includes(perm.code);
+                    return `
+                        <div class="flex items-center justify-between p-2 border border-gray-200 dark:border-gray-700 rounded">
+                            <div>
+                                <div class="font-mono text-sm text-gray-900 dark:text-gray-100">${escapeHtml(perm.code)}</div>
+                                <div class="text-xs text-gray-600 dark:text-gray-400">${escapeHtml(perm.name)}</div>
+                            </div>
+                            ${hasPermission ? `
+                                <button onclick="removePermissionFromRole(${roleId}, ${perm.id})" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                                    Retirer
+                                </button>
+                            ` : `
+                                <button onclick="assignPermissionToRole(${roleId}, ${perm.id})" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
+                                    Assigner
+                                </button>
+                            `}
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>
+    `).join('');
+    
+    document.getElementById('manage-permissions-modal').classList.remove('hidden');
+}
+
+function closeManagePermissionsModal() {
+    document.getElementById('manage-permissions-modal').classList.add('hidden');
+    currentManageRoleId = null;
+}
+
+async function assignPermissionToRole(roleId, permissionId) {
+    const response = await apiCall('/api/admin/roles/assign-permission', {
+        method: 'POST',
+        body: JSON.stringify({ role_id: roleId, permission_id: permissionId })
+    });
+    
+    if (response && response.ok) {
+        await loadRoles();
+        openManagePermissionsModal(roleId);
+    }
+}
+
+async function removePermissionFromRole(roleId, permissionId) {
+    const response = await apiCall(`/api/admin/roles/${roleId}/permissions/${permissionId}`, {
+        method: 'DELETE'
+    });
+    
+    if (response && response.ok) {
+        await loadRoles();
+        openManagePermissionsModal(roleId);
+    }
+}
+
+// Init
+loadUsers();
+loadRoles();
+loadPermissions();
+</script>
+{% endblock %}

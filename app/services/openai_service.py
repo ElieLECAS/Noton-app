@@ -156,57 +156,20 @@ async def chat_stream(message: str, model: str, context: Optional[List[Dict]] = 
                                 break
                             try:
                                 data = json.loads(data_str)
-                                # Convertir au format Ollama pour compatibilité
+                                # Convertir au format interne attendu par le frontend
                                 if "choices" in data and len(data["choices"]) > 0:
                                     delta = data["choices"][0].get("delta", {})
                                     if "content" in delta:
-                                        # Formater comme Ollama: {"message": {"content": "..."}}
-                                        ollama_format = {
+                                        stream_payload = {
                                             "message": {
                                                 "content": delta["content"]
                                             }
                                         }
-                                        yield json.dumps(ollama_format)
+                                        yield json.dumps(stream_payload)
                             except json.JSONDecodeError:
                                 pass
     except Exception as e:
         print(f"Erreur lors du streaming OpenAI: {e}")
         raise
 
-
-async def generate_image(
-    prompt: str,
-    model: Optional[str] = None,
-    size: str = "1024x1024",
-    quality: str = "standard",
-) -> List[Dict]:
-    """
-    Générer une ou plusieurs images via l'API OpenAI (DALL-E 3).
-    Retourne une liste de dicts avec 'url' (ou 'b64_json' selon response_format).
-    """
-    if not settings.OPENAI_API_KEY:
-        raise ValueError("OPENAI_API_KEY n'est pas configurée")
-
-    model = model or settings.OPENAI_IMAGE_MODEL
-    payload = {
-        "model": model,
-        "prompt": prompt,
-        "n": 1,
-        "size": size,
-        "quality": quality,
-        "response_format": "url",
-    }
-
-    async with httpx.AsyncClient(timeout=120.0) as client:
-        response = await client.post(
-            "https://api.openai.com/v1/images/generations",
-            headers={
-                "Authorization": f"Bearer {settings.OPENAI_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json=payload,
-        )
-        response.raise_for_status()
-        data = response.json()
-        return data.get("data", [])
 

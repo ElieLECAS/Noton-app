@@ -295,9 +295,8 @@
 
     async function loadPdf() {
         try {
-            const token = localStorage.getItem("authToken");
             const response = await fetch(`/api/notes/${noteId}/file`, {
-                headers: { Authorization: `Bearer ${token}` },
+                credentials: "include",
             });
 
             if (!response.ok)
@@ -456,8 +455,6 @@
     });
 
     // Initialisation
-    if (authToken) {
-        loadNote();
-    }
+    loadNote();
 </script>
 {% endblock %}

@@ -17,9 +17,6 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
     
-    # Ollama
-    OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL")
-    
     # Mistral
     MISTRAL_API_KEY: Optional[str] = None
     MISTRAL_BASE_URL: str = os.getenv("MISTRAL_BASE_URL", "https://api.mistral.ai")
@@ -27,27 +24,23 @@ class Settings(BaseSettings):
     # OpenAI
     OPENAI_API_KEY: Optional[str] = None
     OPENAI_MODEL: Optional[List[str]] = None
-    OPENAI_IMAGE_MODEL: str = "dall-e-3"  # Modèle de génération d'images (DALL-E 3)
-    
-    # Modèles de chat configurables
-    MODEL_PRIVATE_PROVIDER: str = os.getenv("MODEL_PRIVATE_PROVIDER")
-    MODEL_PRIVATE_NAME: str = os.getenv("MODEL_PRIVATE_NAME")
-    MODEL_FAST_PROVIDER: str = os.getenv("MODEL_FAST_PROVIDER")
-    MODEL_FAST_NAME: str = os.getenv("MODEL_FAST_NAME")
-    MODEL_POWERFUL_PROVIDER: str = os.getenv("MODEL_POWERFUL_PROVIDER")
-    MODEL_POWERFUL_NAME: str = os.getenv("MODEL_POWERFUL_NAME")
+    # Modèle de chat unique (plus de presets private/fast/powerful)
+    MODEL_FAST: str = os.getenv("MODEL_FAST", "mistral-small-latest")
     # Limite globale par défaut pour la longueur des réponses des LLM
     MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
-    
+    # Paramètres dédiés au chat "espaces"
+    SPACE_CHAT_MAX_TOKENS: Optional[int] = None
+    SPACE_CHAT_TEMPERATURE: float = 0.55
+    SPACE_CHAT_TOP_P: Optional[float] = None
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
     DOCLING_USE_GPU: Optional[bool] = None  # None = auto-détection, True/False pour forcer
     TORCH_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
     OMP_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
-    USE_ALL_CPU_CORES: bool = True  # Utiliser tous les cœurs par défaut (au lieu de la moitié) pour maximiser les performances
+    USE_ALL_CPU_CORES: bool = False  # False = ~moitié des cœurs (Torch/OMP) pour limiter la charge CPU
     
     # Document Processing
-    MAX_CONCURRENT_DOCUMENTS: int = 2  # Nombre de documents traités en parallèle (réduit pour garder des ressources pour la navigation)
+    MAX_CONCURRENT_DOCUMENTS: int = 1  # Ignoré pour la bibliothèque : 1 worker global (voir document_service_new)
     EMBEDDING_BATCH_SIZE: int = 16  # Taille de batch embedding (CPU-only, éviter la saturation)
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
 
@@ -55,21 +48,37 @@ class Settings(BaseSettings):
     DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
     DOCLING_OCR_LANG: Optional[str] = None  # Langues OCR, ex. "fr,en" ou "fra+eng" (None = défaut Docling)
     
+    # Paramètres OCR avancés
+    OCR_IMAGE_SCALE: float = 3.0  # Échelle pour images PDF (2.0 → 3.0 pour meilleure résolution OCR)
+    OCR_PREPROCESS_ENABLED: bool = True  # Activer prétraitement adaptatif des images
+    OCR_FALLBACK_ENABLED: bool = True  # Activer fallback Tesseract si Docling insuffisant
+    OCR_MIN_TEXT_LENGTH: int = 50  # Seuil min caractères/page pour considérer OCR valide
+    OCR_TESSERACT_CONFIG: str = "--oem 3 --psm 6 -l fra+eng"  # Config Tesseract (LSTM, bloc uniforme, fr+en)
+    
     # Brave Search (recherche web pour function calling)
     BRAVE_SEARCH_API_KEY: Optional[str] = None
 
     # CORS
     CORS_ALLOWED_ORIGINS: Optional[List[str]] = None  # Liste des origines autorisées (None = toutes les origines)
     
+    # RBAC Admin Bootstrap
+    ADMIN_EMAIL: Optional[str] = None  # Email de l'utilisateur qui sera automatiquement admin
+    
     # KAG - Knowledge Augmented Generation
     KAG_ENABLED: bool = True
-    KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai" ou "ollama"
+    KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai" ou "mistral"
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
     
     # Multimodal - Désactivé par défaut (images extraites et stockées par Docling, pas de Vision ni chunks image)
     MULTIMODAL_ENABLED: bool = False
     VISION_MODEL: str = "gpt-4o"  # Modèle pour décrire les images si MULTIMODAL_ENABLED
+
+    # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
+    TASK_BACKEND_MODE: str = "thread"
+    REDIS_URL: Optional[str] = None  # ex. redis://redis:6379/0
+    CELERY_BROKER_URL: Optional[str] = None  # défaut: REDIS_URL
+    CELERY_RESULT_BACKEND: Optional[str] = None  # défaut: REDIS_URL
 
     @field_validator('MULTIMODAL_ENABLED', mode='before')
     @classmethod
@@ -83,6 +92,17 @@ class Settings(BaseSettings):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
     
+    @field_validator('TASK_BACKEND_MODE', mode='before')
+    @classmethod
+    def parse_task_backend_mode(cls, v: Union[str, None]) -> str:
+        """thread | celery | hybrid"""
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return "thread"
+        s = str(v).strip().lower()
+        if s in ("thread", "celery", "hybrid"):
+            return s
+        return "thread"
+
     @field_validator('KAG_ENABLED', mode='before')
     @classmethod
     def parse_kag_enabled(cls, v: Union[str, bool, None]) -> bool:
@@ -160,7 +180,7 @@ class Settings(BaseSettings):
                 return None
         return None
     
-    @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', mode='before')
+    @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', 'SPACE_CHAT_MAX_TOKENS', mode='before')
     @classmethod
     def parse_optional_int(cls, v: Union[str, int, None]) -> Optional[int]:
         """Convertit les chaînes vides en None pour les champs int optionnels"""
@@ -177,6 +197,21 @@ class Settings(BaseSettings):
                 return None
         # Si c'est déjà un int, le retourner tel quel
         return int(v)
+
+    @field_validator('SPACE_CHAT_TOP_P', mode='before')
+    @classmethod
+    def parse_optional_float(cls, v: Union[str, float, int, None]) -> Optional[float]:
+        """Convertit les chaînes vides en None pour les champs float optionnels"""
+        if v is None:
+            return None
+        if isinstance(v, str):
+            if not v.strip():
+                return None
+            try:
+                return float(v)
+            except ValueError:
+                return None
+        return float(v)
 
     @field_validator('HIERARCHICAL_CHUNK_SIZES', mode='before')
     @classmethod
@@ -212,12 +247,6 @@ settings = Settings()
 
 
 def get_model_for_preset(preset: Optional[str]) -> dict:
-    """Retourne provider et model pour un preset (même logique que le chat / template globals)."""
-    preset = (preset or "").strip().lower()
-    if preset == "powerful":
-        return {"provider": settings.MODEL_POWERFUL_PROVIDER, "model": settings.MODEL_POWERFUL_NAME}
-    if preset == "private":
-        return {"provider": settings.MODEL_PRIVATE_PROVIDER, "model": settings.MODEL_PRIVATE_NAME}
-    # "fast" ou défaut (comme le chat)
-    return {"provider": settings.MODEL_FAST_PROVIDER, "model": settings.MODEL_FAST_NAME}
+    """Compatibilité: retourne toujours le modèle fast unique configuré."""
+    return {"provider": "mistral", "model": settings.MODEL_FAST}
 

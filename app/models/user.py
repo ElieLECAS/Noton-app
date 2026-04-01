@@ -1,6 +1,9 @@
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .user_role import UserRole
 
 
 class User(SQLModel, table=True):
@@ -10,6 +13,11 @@ class User(SQLModel, table=True):
     password_hash: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
+    
+    user_roles: List["UserRole"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={"foreign_keys": "[UserRole.user_id]"},
+    )
 
 
 class UserCreate(SQLModel):
@@ -23,6 +31,8 @@ class UserRead(SQLModel):
     username: str
     email: str
     created_at: datetime
+    roles: List[str] = []
+    permissions: List[str] = []
 
 
 class UserLogin(SQLModel):

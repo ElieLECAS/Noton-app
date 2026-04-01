@@ -8,6 +8,7 @@ from app.services.embedding_service import generate_note_embedding
 from app.services.document_chunking_service import get_chunking_service
 from app.services.file_storage_service import get_file_storage_service
 import logging
+import threading
 
 logger = logging.getLogger(__name__)
 
