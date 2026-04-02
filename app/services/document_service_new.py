@@ -12,6 +12,7 @@ from app.library_document_logging import get_library_document_logger
 from app.models.document import Document, DocumentCreate, DocumentUpdate
 from app.models.document_space import DocumentSpace
 from app.models.document_chunk import DocumentChunk
+from app.tracing import trace_run, trace_pipeline
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -1085,9 +1086,27 @@ def _process_document_for_id(document_id: int, file_path: str):
                 )
                 raise
 
+            file_size_mb = round(Path(pdf_input_path).stat().st_size / (1024 * 1024), 2) if Path(pdf_input_path).exists() else 0
             t_extract = time.perf_counter()
-            markdown_content, llama_docs, docling_doc = process_document_file(pdf_input_path)
-            extract_s = time.perf_counter() - t_extract
+            with trace_run(
+                "docling_conversion",
+                run_type="chain",
+                inputs={
+                    "document_id": document_id,
+                    "file_path": pdf_input_path,
+                    "file_size_mb": file_size_mb,
+                    "converted_to_pdf": converted_to_pdf,
+                },
+                tags=["ingestion", "docling", "ocr"],
+            ) as docling_run:
+                markdown_content, llama_docs, docling_doc = process_document_file(pdf_input_path)
+                extract_s = time.perf_counter() - t_extract
+                docling_run.end(outputs={
+                    "markdown_len": len(markdown_content) if markdown_content else 0,
+                    "has_llama_docs": bool(llama_docs),
+                    "has_docling_doc": docling_doc is not None,
+                    "duration_s": round(extract_s, 2),
+                })
             logger.info(
                 "document_id=%s extraction Docling %.2fs markdown_len=%s llama_docs=%s",
                 document_id,
@@ -1195,15 +1214,36 @@ def _process_document_for_id(document_id: int, file_path: str):
                     return
 
                 t_chunk = time.perf_counter()
+                nb_images = len(images_info) if images_info else 0
                 if llama_docs:
-                    chunks = create_chunks_for_document_from_docling(
-                        session,
-                        document,
-                        llama_docs,
-                        generate_embeddings=False,
-                        images_info=images_info or None,
-                    )
-                    chunk_s = time.perf_counter() - t_chunk
+                    with trace_run(
+                        "chunking",
+                        run_type="chain",
+                        inputs={
+                            "document_id": document_id,
+                            "strategy": "docling_hierarchical",
+                            "nb_llama_docs": len(llama_docs),
+                            "nb_images": nb_images,
+                            "chunk_sizes": settings.HIERARCHICAL_CHUNK_SIZES,
+                        },
+                        tags=["ingestion", "chunking", "docling", "hierarchical"],
+                    ) as chunk_run:
+                        chunks = create_chunks_for_document_from_docling(
+                            session,
+                            document,
+                            llama_docs,
+                            generate_embeddings=False,
+                            images_info=images_info or None,
+                        )
+                        chunk_s = time.perf_counter() - t_chunk
+                        nb_leaves = sum(1 for c in chunks if getattr(c, "is_leaf", True))
+                        nb_parents = len(chunks) - nb_leaves
+                        chunk_run.end(outputs={
+                            "nb_chunks": len(chunks),
+                            "nb_leaves": nb_leaves,
+                            "nb_parents": nb_parents,
+                            "duration_s": round(chunk_s, 2),
+                        })
                     logger.info(
                         "document_id=%s chunks=%s stratégie=docling_hierarchical durée_chunking=%.2fs",
                         document_id,
@@ -1219,8 +1259,21 @@ def _process_document_for_id(document_id: int, file_path: str):
                         len(chunks),
                     )
                 else:
-                    chunks = create_chunks_for_document(session, document, generate_embeddings=False)
-                    chunk_s = time.perf_counter() - t_chunk
+                    with trace_run(
+                        "chunking",
+                        run_type="chain",
+                        inputs={
+                            "document_id": document_id,
+                            "strategy": "fallback_markdown",
+                        },
+                        tags=["ingestion", "chunking", "fallback"],
+                    ) as chunk_run:
+                        chunks = create_chunks_for_document(session, document, generate_embeddings=False)
+                        chunk_s = time.perf_counter() - t_chunk
+                        chunk_run.end(outputs={
+                            "nb_chunks": len(chunks),
+                            "duration_s": round(chunk_s, 2),
+                        })
                     logger.info(
                         "document_id=%s chunks=%s stratégie=fallback_markdown_ou_fenêtre_fixe durée_chunking=%.2fs",
                         document_id,
@@ -1288,7 +1341,20 @@ def _process_document_for_id(document_id: int, file_path: str):
                 "[Upload/Pipeline] document_id=%s — enchaînement embeddings + KAG.",
                 document_id,
             )
-            complete_document_embeddings_and_kag_sync(document_id)
+            with trace_run(
+                "embedding_and_kag",
+                run_type="chain",
+                inputs={
+                    "document_id": document_id,
+                    "kag_enabled": settings.KAG_ENABLED,
+                    "embedding_model": settings.EMBEDDING_MODEL,
+                },
+                tags=["ingestion", "embeddings", "kag"],
+            ) as emb_run:
+                t_emb = time.perf_counter()
+                complete_document_embeddings_and_kag_sync(document_id)
+                emb_s = time.perf_counter() - t_emb
+                emb_run.end(outputs={"duration_s": round(emb_s, 2)})
             ld.info(
                 "[Upload/Pipeline] document_id=%s — FIN pipeline bibliothèque (succès attendu si pas d'erreur amont).",
                 document_id,

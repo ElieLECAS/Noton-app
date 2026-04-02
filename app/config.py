@@ -87,6 +87,11 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: Optional[str] = None  # défaut: REDIS_URL
     CELERY_RESULT_BACKEND: Optional[str] = None  # défaut: REDIS_URL
 
+    # LangSmith — observabilité RAG/KAG
+    LANGSMITH_API_KEY: Optional[str] = None
+    LANGCHAIN_TRACING_V2: bool = False
+    LANGCHAIN_PROJECT: str = "noton-rag-kag"
+
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod
     def parse_database_echo(cls, v: Union[str, bool, None]) -> bool:

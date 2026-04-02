@@ -98,6 +98,11 @@ services:
             - CELERY_BROKER_URL=${CELERY_BROKER_URL}
             - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
             - TASK_BACKEND_MODE=${TASK_BACKEND_MODE}
+            # LangSmith observabilité
+            - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
+            - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-}
+            - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
+            - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
         depends_on:
             db:
                 condition: service_healthy
@@ -162,6 +167,11 @@ services:
             - CELERY_BROKER_URL=${CELERY_BROKER_URL}
             - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
             - TASK_BACKEND_MODE=celery
+            # LangSmith observabilité
+            - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
+            - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-}
+            - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
+            - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
         depends_on:
             db:
                 condition: service_healthy

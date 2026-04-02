@@ -37,6 +37,7 @@ import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from app.config import settings
+from app.tracing import trace_run
 
 logger = logging.getLogger(__name__)
 
@@ -825,13 +826,21 @@ def search_relevant_passages(
         )
 
         # --- Étape 1 : retrieval vectoriel SQL (leaves seulement) ---
-        leaf_candidates = _retrieve_leaves_sql(
-            session=session,
-            project_id=project_id,
-            user_id=user_id,
-            query_text=query_text,
-            candidate_k=candidate_k,
-        )
+        with trace_run(
+            "vector_retrieval",
+            run_type="retriever",
+            inputs={"query": query_text, "project_id": project_id, "candidate_k": candidate_k},
+            tags=["retrieval", "vector", "pgvector"],
+        ) as vr_run:
+            leaf_candidates = _retrieve_leaves_sql(
+                session=session,
+                project_id=project_id,
+                user_id=user_id,
+                query_text=query_text,
+                candidate_k=candidate_k,
+            )
+            top3_scores = [round(float(c.score or 0), 4) for c in leaf_candidates[:3]]
+            vr_run.end(outputs={"nb_candidates": len(leaf_candidates), "top3_scores": top3_scores})
 
         if not leaf_candidates:
             logger.info("Aucun résultat vectoriel, activation du fallback lexical")
@@ -854,21 +863,41 @@ def search_relevant_passages(
             except Exception as ext_err:
                 logger.debug("Extraction entités requête ignorée: %s", ext_err)
             try:
-                graph_candidates = _retrieve_via_knowledge_graph(
-                    session=session,
-                    project_id=project_id,
-                    user_id=user_id,
-                    query_text=query_text,
-                    limit=k,
-                    pivot_entity_names=pivot_entity_names or None,
-                )
-                if graph_candidates:
-                    leaf_candidates = _merge_with_graph_candidates(
-                        vector_candidates=leaf_candidates,
-                        graph_candidates=graph_candidates,
-                        graph_boost=0.15,
+                with trace_run(
+                    "kag_graph_retrieval",
+                    run_type="retriever",
+                    inputs={"query": query_text, "pivot_entities": pivot_entity_names[:10], "limit": k},
+                    tags=["retrieval", "kag", "graph"],
+                ) as kag_run:
+                    graph_candidates = _retrieve_via_knowledge_graph(
+                        session=session,
+                        project_id=project_id,
+                        user_id=user_id,
+                        query_text=query_text,
+                        limit=k,
                         pivot_entity_names=pivot_entity_names or None,
                     )
+                    matched_entities = list({
+                        (c.node.metadata or {}).get("kag_matched_entity", "")
+                        for c in graph_candidates
+                        if (c.node.metadata or {}).get("kag_matched_entity")
+                    })
+                    kag_run.end(outputs={"nb_chunks": len(graph_candidates), "matched_entities": matched_entities[:10]})
+
+                if graph_candidates:
+                    with trace_run(
+                        "hybrid_fusion",
+                        run_type="chain",
+                        inputs={"nb_vector": len(leaf_candidates), "nb_kag": len(graph_candidates), "graph_boost": 0.15},
+                        tags=["fusion", "kag"],
+                    ) as fusion_run:
+                        leaf_candidates = _merge_with_graph_candidates(
+                            vector_candidates=leaf_candidates,
+                            graph_candidates=graph_candidates,
+                            graph_boost=0.15,
+                            pivot_entity_names=pivot_entity_names or None,
+                        )
+                        fusion_run.end(outputs={"nb_merged": len(leaf_candidates)})
                     logger.info(
                         "KAG enrichissement: +%d candidats graphe fusionnés",
                         len(graph_candidates),
@@ -902,11 +931,24 @@ def search_relevant_passages(
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
                 if _get_reranker():
-                    top_leaves = _two_stage_rerank_leaves(
-                        filtered_candidates,
-                        query_text,
-                        k,
-                    )
+                    with trace_run(
+                        "reranking",
+                        run_type="chain",
+                        inputs={
+                            "nb_candidates": len(filtered_candidates),
+                            "stage1_max": RERANK_STAGE1_MAX,
+                            "stage2_pool": RERANK_STAGE2_POOL,
+                            "k": k,
+                        },
+                        tags=["reranking", "bge-reranker"],
+                    ) as rerank_run:
+                        top_leaves = _two_stage_rerank_leaves(
+                            filtered_candidates,
+                            query_text,
+                            k,
+                        )
+                        top_scores = [round(float(n.score or 0), 4) for n in top_leaves[:5]]
+                        rerank_run.end(outputs={"nb_final": len(top_leaves), "top5_scores": top_scores})
                 else:
                     logger.warning("Reranker non disponible, fallback sur ordre vectoriel")
                     top_leaves = filtered_candidates[:k]
@@ -922,36 +964,48 @@ def search_relevant_passages(
 
         # --- Étape 3 : résolution des parents (contexte enrichi pour le LLM) ---
         # On charge les parents UNE SEULE FOIS, après le reranking (pas avant).
-        parent_node_dict = _build_parent_node_dict(session, project_id, user_id)
+        with trace_run(
+            "parent_resolution",
+            run_type="chain",
+            inputs={"project_id": project_id, "nb_top_leaves": len(top_leaves)},
+            tags=["parent", "context"],
+        ) as parent_run:
+            parent_node_dict = _build_parent_node_dict(session, project_id, user_id)
 
-        final_nodes: List[NodeWithScore] = []
-        seen_node_ids: set = set()
-        parents_resolved = 0
-        parents_not_found = 0
+            final_nodes: List[NodeWithScore] = []
+            seen_node_ids: set = set()
+            parents_resolved = 0
+            parents_not_found = 0
 
-        for nws in top_leaves:
-            score = float(getattr(nws, "score", 0.0) or 0.0)
-            leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
-            parent_node_id = leaf_meta.get("parent_node_id")
+            for nws in top_leaves:
+                score = float(getattr(nws, "score", 0.0) or 0.0)
+                leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
+                parent_node_id = leaf_meta.get("parent_node_id")
 
-            target_node = (
-                parent_node_dict.get(parent_node_id) if parent_node_id else None
-            )
-            if target_node is None:
-                target_node = nws.node
-                if parent_node_id:
-                    parents_not_found += 1
-            else:
-                parents_resolved += 1
-                _merge_leaf_page_into_node_metadata(nws.node, target_node)
+                target_node = (
+                    parent_node_dict.get(parent_node_id) if parent_node_id else None
+                )
+                if target_node is None:
+                    target_node = nws.node
+                    if parent_node_id:
+                        parents_not_found += 1
+                else:
+                    parents_resolved += 1
+                    _merge_leaf_page_into_node_metadata(nws.node, target_node)
 
-            node_id = getattr(target_node, "node_id", None) or leaf_meta.get("node_id")
-            if node_id and node_id in seen_node_ids:
-                continue
-            if node_id:
-                seen_node_ids.add(node_id)
+                node_id = getattr(target_node, "node_id", None) or leaf_meta.get("node_id")
+                if node_id and node_id in seen_node_ids:
+                    continue
+                if node_id:
+                    seen_node_ids.add(node_id)
 
-            final_nodes.append(NodeWithScore(node=target_node, score=score))
+                final_nodes.append(NodeWithScore(node=target_node, score=score))
+
+            parent_run.end(outputs={
+                "nb_final_passages": len(final_nodes),
+                "parents_resolved": parents_resolved,
+                "parents_not_found": parents_not_found,
+            })
 
         logger.info(
             "Résolution parents: %d passages finaux "

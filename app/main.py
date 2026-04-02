@@ -31,6 +31,13 @@ try:
 except Exception as e:
     logger.warning("Initialisation journal bibliothèque/espaces ignorée : %s", e)
 
+# LangSmith — observabilité RAG/KAG
+try:
+    from app.tracing import init_langsmith
+    init_langsmith()
+except Exception as e:
+    logger.warning("Initialisation LangSmith ignorée : %s", e)
+
 app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot IA")
 
 # Configuration CORS - Debug

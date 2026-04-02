@@ -12,6 +12,7 @@ import logging
 import asyncio
 from typing import List, Dict, Optional
 from app.config import settings
+from app.tracing import trace_run
 
 logger = logging.getLogger(__name__)
 
@@ -426,42 +427,64 @@ async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
     
     provider = settings.KAG_EXTRACTION_PROVIDER.lower()
     model = settings.KAG_EXTRACTION_MODEL
-    
-    try:
-        if provider == "openai":
-            from app.services import openai_service
-            response = await openai_service.chat(
-                message=prompt,
-                model=model,
-                context=[{"role": "user", "content": prompt}],
+
+    with trace_run(
+        "kag_entity_extraction",
+        run_type="llm",
+        inputs={
+            "provider": provider,
+            "model": model,
+            "content_preview": chunk_content[:200],
+            "content_len": len(chunk_content),
+        },
+        tags=["kag", "extraction", "llm", provider],
+    ) as kag_run:
+        try:
+            if provider == "openai":
+                from app.services import openai_service
+                response = await openai_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+
+            elif provider == "mistral":
+                from app.services import mistral_service
+                response = await mistral_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+
+            else:
+                logger.error("Provider KAG inconnu: %s", provider)
+                kag_run.end(error=f"Provider KAG inconnu: {provider}")
+                return []
+
+            entities = _parse_llm_response(content)
+            entity_types_found = list({e.get("type", "") for e in entities if e.get("type")})
+            kag_run.end(outputs={
+                "nb_entities": len(entities),
+                "entity_types_found": entity_types_found,
+                "entities_preview": [
+                    {"name": e.get("name"), "type": e.get("type"), "importance": e.get("importance")}
+                    for e in entities[:10]
+                ],
+            })
+            logger.debug(
+                "Extraction KAG: %d entités extraites (provider=%s, model=%s)",
+                len(entities),
+                provider,
+                model,
             )
-            content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
-        
-        elif provider == "mistral":
-            from app.services import mistral_service
-            response = await mistral_service.chat(
-                message=prompt,
-                model=model,
-                context=[{"role": "user", "content": prompt}],
-            )
-            content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
-        
-        else:
-            logger.error("Provider KAG inconnu: %s", provider)
+            return entities
+
+        except Exception as e:
+            logger.error("Erreur extraction KAG: %s", e, exc_info=True)
+            kag_run.end(error=str(e))
             return []
-        
-        entities = _parse_llm_response(content)
-        logger.debug(
-            "Extraction KAG: %d entités extraites (provider=%s, model=%s)",
-            len(entities),
-            provider,
-            model,
-        )
-        return entities
-    
-    except Exception as e:
-        logger.error("Erreur extraction KAG: %s", e, exc_info=True)
-        return []
 
 
 async def extract_entities_from_query(query_text: str) -> List[str]:
