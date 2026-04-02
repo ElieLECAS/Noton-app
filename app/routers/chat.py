@@ -102,18 +102,22 @@ def _int_env(name: str, default: int) -> int:
 # Défaut 8 : avec 1 passage, le modèle comble avec des généralisations faux catalogue (tableaux inventés, ✓/✗).
 RAG_TOP_K = _int_env("RAG_TOP_K", 8)
 # Paramétrage en dur du chat "espaces"
-SPACE_CHAT_MAX_TOKENS = 3000
+SPACE_CHAT_MAX_TOKENS = 1200
 SPACE_CHAT_TEMPERATURE = 0.1
 SPACE_CHAT_TOP_P = None
+TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_CHAT_SYSTEM_PROMPT = (
     "Tu es LIA, assistante PROFERM pour les collaborateurs et les clients. "
     "Tu reponds en francais, avec un ton humain, professionnel, clair et orienté solution. "
     "Tu donnes des reponses directes, concretes et operationnelles, sans mentionner le fonctionnement interne de recherche ni la provenance des informations. "
-    "Tu peux utiliser des tableaux Markdown quand cela aide la lisibilite (comparatif, synthese, options, dimensions, performances, disponibilite). "
+    "Par defaut, fais une reponse courte et utile (3 a 6 lignes max), centree strictement sur la question. "
+    "N'ajoute pas de contexte inutile, d'introduction longue, ni de repetition. "
+    "Si la question est complexe ou si l'utilisateur le demande, tu peux etendre avec une structure claire (etapes courtes, liste, ou tableau Markdown). "
+    "Tu peux utiliser un tableau Markdown uniquement quand il apporte un vrai gain de lisibilite (comparatif, synthese, options, dimensions, performances, disponibilite). "
     "N'invente jamais de caracteristique, prix, delai, compatibilite ou disponibilite. "
     "Si une information n'est pas disponible ou reste incertaine, dis-le simplement en une phrase courte et propose la meilleure action de verification. "
     "Evite les formulations defensives, les avertissements inutiles et les redites. "
-    "Structure par defaut en sections courtes avec listes a puces, et termine par une question utile uniquement si cela fait avancer l'echange."
+    "Termine par une question uniquement si c'est necessaire pour avancer."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -486,7 +490,11 @@ async def stream_project_chat_message(
                         "model": settings.MODEL_FAST,
                         "provider": "mistral",
                         "messages": [
-                            {"role": m.get("role"), "content_preview": str(m.get("content", ""))[:300]}
+                            (
+                                {"role": m.get("role"), "content": str(m.get("content", ""))}
+                                if TRACE_VERBOSE_TEXT
+                                else {"role": m.get("role"), "content_preview": str(m.get("content", ""))[:300]}
+                            )
                             for m in full_context
                         ],
                     },
@@ -682,7 +690,11 @@ async def stream_space_chat_message(
                         "max_tokens": SPACE_CHAT_MAX_TOKENS,
                         "temperature": SPACE_CHAT_TEMPERATURE,
                         "messages": [
-                            {"role": m.get("role"), "content_preview": str(m.get("content", ""))[:300]}
+                            (
+                                {"role": m.get("role"), "content": str(m.get("content", ""))}
+                                if TRACE_VERBOSE_TEXT
+                                else {"role": m.get("role"), "content_preview": str(m.get("content", ""))[:300]}
+                            )
                             for m in full_context
                         ],
                     },

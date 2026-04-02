@@ -103,6 +103,8 @@ services:
             - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-}
             - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
             - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
+            - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
+            - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
         depends_on:
             db:
                 condition: service_healthy
@@ -158,7 +160,7 @@ services:
             - KAG_ENABLED=${KAG_ENABLED:-true}
             - KAG_EXTRACTION_PROVIDER=${KAG_EXTRACTION_PROVIDER}
             - KAG_EXTRACTION_MODEL=${KAG_EXTRACTION_MODEL}
-            - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-true}
+            - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-false}
             - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
             - VISION_MODEL=${VISION_MODEL:-pixtral-12b-2409}
             - VISION_MAX_TOKENS=${VISION_MAX_TOKENS:-1500}
@@ -172,6 +174,8 @@ services:
             - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-}
             - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
             - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
+            - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
+            - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
         depends_on:
             db:
                 condition: service_healthy

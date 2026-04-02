@@ -60,6 +60,8 @@ RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
 # FlagEmbeddingReranker tronque à top_n (pas de device= dans llama-index 0.4.x).
 _FLAG_RERANK_TOP_N = int(os.getenv("RERANKER_TOP_N", "4096"))
+TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
+TRACE_TEXT_MAX_CHARS = int(os.getenv("TRACE_TEXT_MAX_CHARS", "12000"))
 
 # ---------------------------------------------------------------------------
 # Singletons — chargement unique des modèles lourds
@@ -70,6 +72,35 @@ _reranker_lock = threading.Lock() if RERANKER_AVAILABLE else None
 
 _embed_model_instance = None
 _embed_model_lock = threading.Lock()
+
+
+def _text_for_trace(node: TextNode) -> str:
+    raw = (
+        node.get_content()
+        if hasattr(node, "get_content")
+        else getattr(node, "text", "") or ""
+    )
+    if not isinstance(raw, str):
+        raw = str(raw)
+    if TRACE_TEXT_MAX_CHARS > 0 and len(raw) > TRACE_TEXT_MAX_CHARS:
+        return raw[:TRACE_TEXT_MAX_CHARS]
+    return raw
+
+
+def _nodes_for_trace(candidates: List[NodeWithScore], limit: int = 80) -> List[Dict]:
+    rows: List[Dict] = []
+    for nws in candidates[:limit]:
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        rows.append(
+            {
+                "score": round(float(nws.score or 0.0), 4),
+                "note_title": meta.get("note_title"),
+                "section": meta.get("parent_heading") or meta.get("heading"),
+                "kag_entity": meta.get("kag_matched_entity"),
+                "text": _text_for_trace(nws.node),
+            }
+        )
+    return rows
 
 
 def _get_reranker():
@@ -840,7 +871,10 @@ def search_relevant_passages(
                 candidate_k=candidate_k,
             )
             top3_scores = [round(float(c.score or 0), 4) for c in leaf_candidates[:3]]
-            vr_run.end(outputs={"nb_candidates": len(leaf_candidates), "top3_scores": top3_scores})
+            vr_outputs = {"nb_candidates": len(leaf_candidates), "top3_scores": top3_scores}
+            if TRACE_VERBOSE_TEXT:
+                vr_outputs["candidates_text"] = _nodes_for_trace(leaf_candidates)
+            vr_run.end(outputs=vr_outputs)
 
         if not leaf_candidates:
             logger.info("Aucun résultat vectoriel, activation du fallback lexical")
@@ -882,7 +916,10 @@ def search_relevant_passages(
                         for c in graph_candidates
                         if (c.node.metadata or {}).get("kag_matched_entity")
                     })
-                    kag_run.end(outputs={"nb_chunks": len(graph_candidates), "matched_entities": matched_entities[:10]})
+                    kag_outputs = {"nb_chunks": len(graph_candidates), "matched_entities": matched_entities[:10]}
+                    if TRACE_VERBOSE_TEXT:
+                        kag_outputs["candidates_text"] = _nodes_for_trace(graph_candidates)
+                    kag_run.end(outputs=kag_outputs)
 
                 if graph_candidates:
                     with trace_run(
@@ -897,7 +934,10 @@ def search_relevant_passages(
                             graph_boost=0.15,
                             pivot_entity_names=pivot_entity_names or None,
                         )
-                        fusion_run.end(outputs={"nb_merged": len(leaf_candidates)})
+                        fusion_outputs = {"nb_merged": len(leaf_candidates)}
+                        if TRACE_VERBOSE_TEXT:
+                            fusion_outputs["merged_text"] = _nodes_for_trace(leaf_candidates)
+                        fusion_run.end(outputs=fusion_outputs)
                     logger.info(
                         "KAG enrichissement: +%d candidats graphe fusionnés",
                         len(graph_candidates),
@@ -948,7 +988,11 @@ def search_relevant_passages(
                             k,
                         )
                         top_scores = [round(float(n.score or 0), 4) for n in top_leaves[:5]]
-                        rerank_run.end(outputs={"nb_final": len(top_leaves), "top5_scores": top_scores})
+                        rerank_outputs = {"nb_final": len(top_leaves), "top5_scores": top_scores}
+                        if TRACE_VERBOSE_TEXT:
+                            rerank_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
+                            rerank_outputs["filtered_candidates_text"] = _nodes_for_trace(filtered_candidates)
+                        rerank_run.end(outputs=rerank_outputs)
                 else:
                     logger.warning("Reranker non disponible, fallback sur ordre vectoriel")
                     top_leaves = filtered_candidates[:k]
@@ -1001,11 +1045,15 @@ def search_relevant_passages(
 
                 final_nodes.append(NodeWithScore(node=target_node, score=score))
 
-            parent_run.end(outputs={
+            parent_outputs = {
                 "nb_final_passages": len(final_nodes),
                 "parents_resolved": parents_resolved,
                 "parents_not_found": parents_not_found,
-            })
+            }
+            if TRACE_VERBOSE_TEXT:
+                parent_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
+                parent_outputs["final_nodes_text"] = _nodes_for_trace(final_nodes)
+            parent_run.end(outputs=parent_outputs)
 
         logger.info(
             "Résolution parents: %d passages finaux "

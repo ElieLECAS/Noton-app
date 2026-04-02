@@ -44,6 +44,9 @@ class Settings(BaseSettings):
     # Document Processing
     MAX_CONCURRENT_DOCUMENTS: int = 1  # Ignoré pour la bibliothèque : 1 worker global (voir document_service_new)
     EMBEDDING_BATCH_SIZE: int = 16  # Taille de batch embedding (CPU-only, éviter la saturation)
+    EMBEDDING_DIMENSION: int = 1024
+    EMBEDDING_MODEL: str = "BAAI/bge-m3"
+    EMBEDDING_DEVICE: str = "cpu"
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
 
     # Docling OCR (schémas techniques, cotes, PDF scannés)
