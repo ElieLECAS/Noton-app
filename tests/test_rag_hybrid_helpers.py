@@ -207,9 +207,57 @@ def test_docling_specs_table_expands_to_rows():
         _FakeLeaf("t1", md, ["1 Drainage"], label="table"),
     ]
     specs = _build_docling_hierarchical_specs({"document_id": 1}, leaves)
-    # 1 parent + 2 lignes de données
-    assert len(specs) == 3
-    row_specs = [s for s in specs if s["is_leaf"]]
+    # 1 parent section + table_full + table_summary (2 col) + 2 lignes table_row
+    assert len(specs) == 5
+    full_spec = next(s for s in specs if s["metadata_json"].get("content_type") == "table_full")
+    summary_spec = next(s for s in specs if s["metadata_json"].get("content_type") == "table_summary")
+    row_specs = [s for s in specs if s["metadata_json"].get("content_type") == "table_row"]
     assert len(row_specs) == 2
-    assert row_specs[0]["metadata_json"].get("content_type") == "table_row"
     assert row_specs[0]["metadata_json"].get("column_headers") == ["Col1", "Col2"]
+    assert row_specs[0]["parent_node_id"] == full_spec["node_id"]
+    assert summary_spec["parent_node_id"] == full_spec["node_id"]
+
+
+def test_resolve_space_parent_multihop_no_document_id():
+    """Smoke : sans document_id la chaîne multi-saut ne peut pas charger les chunks."""
+    from unittest.mock import MagicMock
+
+    from app.services.space_search_service import _resolve_space_parent_with_multihop
+
+    session = MagicMock()
+    assert (
+        _resolve_space_parent_with_multihop(session, 1, 1, None, "some-uuid", {})
+        is None
+    )
+
+
+def test_resolve_space_parent_multihop_delegates_when_parent_in_dict():
+    """Si le parent section est déjà dans le dict, le multi-saut ne s'applique pas (appelant)."""
+    from app.services.space_search_service import _resolve_space_parent_with_multihop
+
+    fake = TextNode(id_="p1", text="section", metadata={})
+    assert (
+        _resolve_space_parent_with_multihop(
+            None, 1, 1, 42, "p1", {"p1": fake}
+        )
+        is None
+    )
+
+
+def test_resolve_note_parent_multihop_no_note_id():
+    from unittest.mock import MagicMock
+
+    from app.services.semantic_search_service import _resolve_note_parent_with_multihop
+
+    session = MagicMock()
+    assert (
+        _resolve_note_parent_with_multihop(session, 1, 1, None, "some-uuid", {})
+        is None
+    )
+
+
+def test_resolve_note_parent_multihop_skips_when_parent_in_dict():
+    from app.services.semantic_search_service import _resolve_note_parent_with_multihop
+
+    fake = TextNode(id_="p1", text="section", metadata={})
+    assert _resolve_note_parent_with_multihop(None, 1, 1, 1, "p1", {"p1": fake}) is None

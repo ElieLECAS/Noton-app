@@ -605,6 +605,72 @@ def _build_parent_node_dict(
     return node_dict
 
 
+_PARENT_MULTIHOP_MAX = 4
+
+
+def _resolve_space_parent_with_multihop(
+    session: Session,
+    space_id: int,
+    user_id: int,
+    document_id: Optional[int],
+    parent_node_id: Optional[str],
+    parent_node_dict: Dict[str, TextNode],
+) -> Optional[TextNode]:
+    """
+    Si le parent direct n'est pas un chunk section (is_leaf=False), remonte la chaîne
+    parent_node_id (text_full, table_full, …) jusqu'au premier parent section et fusionne
+    les textes intermédiaires devant le corps du parent section.
+    """
+    if not parent_node_id or document_id is None:
+        return None
+    if parent_node_id in parent_node_dict:
+        return None
+
+    intermediates: List[str] = []
+    current_pid: Optional[str] = parent_node_id
+    hops = 0
+
+    while current_pid and hops < _PARENT_MULTIHOP_MAX:
+        hops += 1
+        stmt = (
+            select(DocumentChunk, Document.title)
+            .join(Document, Document.id == DocumentChunk.document_id)
+            .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+            .where(
+                DocumentSpace.space_id == space_id,
+                DocumentChunk.document_id == document_id,
+                Document.user_id == user_id,
+                DocumentChunk.node_id == current_pid,
+            )
+        )
+        row = session.exec(stmt).first()
+        if not row:
+            break
+        chunk, document_title = row
+        metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
+        metadata.setdefault("document_id", chunk.document_id)
+        metadata.setdefault("document_title", document_title or "Document sans titre")
+        metadata.setdefault("chunk_index", chunk.chunk_index)
+        llama_id = f"chunk-{chunk.id}"
+        text = (chunk.content or chunk.text or "").strip()
+
+        if not chunk.is_leaf:
+            if intermediates:
+                prefix = "\n\n---\n\n".join(reversed(intermediates))
+                text = f"{prefix}\n\n---\n\n{text}"
+            return TextNode(
+                id_=llama_id,
+                text=text,
+                metadata=metadata,
+            )
+
+        if text:
+            intermediates.append(text)
+        current_pid = chunk.parent_node_id
+
+    return None
+
+
 def _extract_query_terms(query_text: str) -> List[str]:
     terms = [t.lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text or "")]
     return [t for t in terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS][:8]
@@ -1784,9 +1850,23 @@ def search_relevant_passages(
                 leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
                 parent_node_id = leaf_meta.get("parent_node_id")
 
-                target_node = (
-                    parent_node_dict.get(parent_node_id) if parent_node_id else None
-                )
+                target_node = None
+                if parent_node_id:
+                    target_node = parent_node_dict.get(parent_node_id)
+                    if target_node is None:
+                        doc_id = leaf_meta.get("document_id")
+                        try:
+                            doc_id_int = int(doc_id) if doc_id is not None else None
+                        except (TypeError, ValueError):
+                            doc_id_int = None
+                        target_node = _resolve_space_parent_with_multihop(
+                            session,
+                            space_id,
+                            user_id,
+                            doc_id_int,
+                            parent_node_id,
+                            parent_node_dict,
+                        )
                 if target_node is None:
                     target_node = nws.node
                     if parent_node_id:

@@ -276,6 +276,70 @@ def _build_parent_node_dict(
     return node_dict
 
 
+_PARENT_MULTIHOP_MAX = 4
+
+
+def _resolve_note_parent_with_multihop(
+    session: Session,
+    project_id: int,
+    user_id: int,
+    note_id: Optional[int],
+    parent_node_id: Optional[str],
+    parent_node_dict: Dict[str, TextNode],
+) -> Optional[TextNode]:
+    """
+    Remonte la chaîne parent_node_id (text_full, table_full, …) jusqu'au chunk section
+    (is_leaf=False) et fusionne les textes intermédiaires.
+    """
+    if not parent_node_id or note_id is None:
+        return None
+    if parent_node_id in parent_node_dict:
+        return None
+
+    intermediates: List[str] = []
+    current_pid: Optional[str] = parent_node_id
+    hops = 0
+
+    while current_pid and hops < _PARENT_MULTIHOP_MAX:
+        hops += 1
+        stmt = (
+            select(NoteChunk, Note.title)
+            .join(Note, Note.id == NoteChunk.note_id)
+            .where(
+                Note.project_id == project_id,
+                Note.user_id == user_id,
+                NoteChunk.note_id == note_id,
+                NoteChunk.node_id == current_pid,
+            )
+        )
+        row = session.exec(stmt).first()
+        if not row:
+            break
+        chunk, note_title = row
+        metadata = dict(chunk.metadata_json or {})
+        metadata.setdefault("note_id", chunk.note_id)
+        metadata.setdefault("note_title", note_title or "Note sans titre")
+        metadata.setdefault("node_id", chunk.node_id)
+        metadata.setdefault("parent_node_id", chunk.parent_node_id)
+        text = (chunk.content or chunk.text or "").strip()
+
+        if not chunk.is_leaf:
+            if intermediates:
+                prefix = "\n\n---\n\n".join(reversed(intermediates))
+                text = f"{prefix}\n\n---\n\n{text}"
+            return TextNode(
+                id_=chunk.node_id,
+                text=text,
+                metadata=metadata,
+            )
+
+        if text:
+            intermediates.append(text)
+        current_pid = chunk.parent_node_id
+
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Fallback lexical
 # ---------------------------------------------------------------------------
@@ -1026,9 +1090,23 @@ def search_relevant_passages(
                 leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
                 parent_node_id = leaf_meta.get("parent_node_id")
 
-                target_node = (
-                    parent_node_dict.get(parent_node_id) if parent_node_id else None
-                )
+                target_node = None
+                if parent_node_id:
+                    target_node = parent_node_dict.get(parent_node_id)
+                    if target_node is None:
+                        nid = leaf_meta.get("note_id")
+                        try:
+                            note_id_int = int(nid) if nid is not None else None
+                        except (TypeError, ValueError):
+                            note_id_int = None
+                        target_node = _resolve_note_parent_with_multihop(
+                            session,
+                            project_id,
+                            user_id,
+                            note_id_int,
+                            parent_node_id,
+                            parent_node_dict,
+                        )
                 if target_node is None:
                     target_node = nws.node
                     if parent_node_id:

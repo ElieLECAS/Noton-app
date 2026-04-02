@@ -48,6 +48,9 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str = "BAAI/bge-m3"
     EMBEDDING_DEVICE: str = "cpu"
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
+    # Blocs texte Docling : si longueur > seuil, chunks text_window (parent = text_full). 0 = désactivé.
+    DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 0
+    DOCLING_TEXT_WINDOW_OVERLAP: int = 200
 
     # Docling OCR (schémas techniques, cotes, PDF scannés)
     DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
