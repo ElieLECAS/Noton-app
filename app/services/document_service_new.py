@@ -17,6 +17,9 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+# En file d’attente de réindexation : chunks et embeddings actuels restent servis jusqu’au début effectif du worker.
+DOCUMENT_STATUS_REINDEX_QUEUED = "reindex_queued"
+
 # Une seule file globale : ordre FIFO strict, un document terminé entièrement avant le suivant.
 document_task_queue: Queue = Queue()
 _document_queue_lock = threading.Lock()
@@ -556,6 +559,7 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         complete_document_embeddings_and_kag_sync,
         create_chunks_for_document,
         create_chunks_for_document_from_docling,
+        delete_chunks_for_document,
     )
 
     with Session(engine) as session:
@@ -572,6 +576,11 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
             document_id,
             src,
         )
+
+        delete_chunks_for_document(session, document_id, commit=True)
+        document = session.get(Document, document_id)
+        if not document:
+            raise ValueError("Document introuvable après nettoyage des chunks")
 
         document.processing_status = "processing"
         document.processing_progress = 15
@@ -704,6 +713,110 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         "chunks": chunk_count,
         "status": "completed",
     }
+
+
+def mark_document_reindex_queued(session: Session, document_id: int, user_id: int) -> bool:
+    """Marque un document en attente de réindexation sans toucher aux chunks."""
+    from app.services.library_service import get_or_create_user_library
+
+    library = get_or_create_user_library(session, user_id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if not document:
+        return False
+    document.processing_status = DOCUMENT_STATUS_REINDEX_QUEUED
+    document.processing_progress = 0
+    document.updated_at = datetime.utcnow()
+    session.add(document)
+    session.commit()
+    return True
+
+
+def mark_all_eligible_documents_reindex_queued(user_id: int) -> int:
+    """
+    Marque tous les documents fichier éligibles en reindex_queued (chunks inchangés).
+    Appelé au début de reindex_all_library_documents dans le worker.
+    """
+    from app.services.library_service import get_or_create_user_library
+
+    n = 0
+    with Session(engine) as session:
+        library = get_or_create_user_library(session, user_id)
+        docs = get_documents_by_library(session, library.id, user_id)
+        for doc in docs:
+            if doc.document_type != "document" or not doc.source_file_path:
+                continue
+            if not Path(doc.source_file_path).is_file():
+                continue
+            doc.processing_status = DOCUMENT_STATUS_REINDEX_QUEUED
+            doc.processing_progress = 0
+            doc.updated_at = datetime.utcnow()
+            session.add(doc)
+            n += 1
+        if n:
+            session.commit()
+    return n
+
+
+def reindex_all_library_documents(user_id: int) -> dict:
+    """
+    Réindexe séquentiellement tous les documents fichier de la bibliothèque utilisateur.
+    Réservé au worker Celery (tâche reindex_all_library_documents_task).
+    Marque d'abord tous les éligibles en reindex_queued (chunks conservés), puis traite un par un.
+    """
+    from app.services.library_service import get_or_create_user_library
+
+    ld = get_library_document_logger()
+    ld.info(
+        "[Réindex tous] user_id=%s — marquage reindex_queued puis boucle.",
+        user_id,
+    )
+    marked = mark_all_eligible_documents_reindex_queued(user_id)
+    ld.info("[Réindex tous] user_id=%s — %s document(s) marqués en attente.", user_id, marked)
+
+    with Session(engine) as session:
+        library = get_or_create_user_library(session, user_id)
+        docs = get_documents_by_library(session, library.id, user_id)
+
+    results: dict = {"ok": 0, "failed": [], "skipped": 0, "marked_queued": marked}
+    for doc in docs:
+        if doc.document_type != "document" or not doc.source_file_path:
+            results["skipped"] += 1
+            continue
+        src = Path(doc.source_file_path)
+        if not src.is_file():
+            logger.warning(
+                "reindex_all: fichier absent, doc_id=%s path=%s",
+                doc.id,
+                doc.source_file_path,
+            )
+            results["skipped"] += 1
+            continue
+        try:
+            reindex_library_document(doc.id, user_id)
+            results["ok"] += 1
+        except Exception as e:
+            logger.exception("reindex_all: échec document_id=%s: %s", doc.id, e)
+            results["failed"].append(
+                {
+                    "document_id": doc.id,
+                    "title": doc.title,
+                    "error": str(e),
+                }
+            )
+
+    ld.info(
+        "[Réindex tous] user_id=%s — fin ok=%s skipped=%s failed=%s",
+        user_id,
+        results["ok"],
+        results["skipped"],
+        len(results["failed"]),
+    )
+    return results
 
 
 def create_document(
@@ -922,7 +1035,7 @@ def add_document_to_spaces(
             )
             return False
 
-        if document.processing_status == "completed":
+        if document.processing_status in ("completed", DOCUMENT_STATUS_REINDEX_QUEUED):
             process_kag_for_document_space(session, document_id, space_id)
 
     return True

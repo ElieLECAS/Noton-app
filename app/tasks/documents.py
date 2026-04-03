@@ -80,6 +80,25 @@ def reindex_library_document_task(self, document_id: int, user_id: int) -> dict:
         raise
 
 
+@celery_app.task(bind=True, max_retries=0)
+def reindex_all_library_documents_task(self, user_id: int) -> dict:
+    """Réindexation séquentielle de tous les documents fichier de la bibliothèque."""
+    from app.library_document_logging import get_library_document_logger
+    from app.services.document_service_new import reindex_all_library_documents
+
+    get_library_document_logger().info(
+        "[Celery] reindex_all_library_documents_task user_id=%s task_id=%s",
+        user_id,
+        self.request.id,
+    )
+    logger.info(
+        "Celery reindex_all_library_documents_task user_id=%s task_id=%s",
+        user_id,
+        self.request.id,
+    )
+    return reindex_all_library_documents(user_id)
+
+
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
 def process_note_embeddings(self, note_id: int, project_id: int) -> None:
     """Embeddings + KAG pour les chunks d'une note projet."""

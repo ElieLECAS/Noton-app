@@ -9,6 +9,9 @@
                 <button id="library-create-folder-btn" onclick="openFolderModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200">
                     <i class="ti ti-folder-plus"></i> Dossier
                 </button>
+                <button id="library-reindex-all-btn" onclick="reindexAllLibraryDocuments()" class="px-4 py-2 rounded-lg border border-amber-600 text-amber-800 dark:text-amber-300 dark:border-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40" title="Réindexer tous les documents fichier (Celery)">
+                    <i class="ti ti-refresh"></i> Tout retraiter
+                </button>
                 <button id="library-upload-btn" onclick="openUploadModal()" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
                     <i class="ti ti-upload"></i> Upload
                 </button>
@@ -193,9 +196,11 @@ function applyPermissionUI() {
   // Masquer les actions de création/upload si pas de droit.
   const folderBtnTop = document.getElementById("library-create-folder-btn");
   const folderBtnSidebar = document.getElementById("library-create-folder-btn-sidebar");
+  const reindexAllBtn = document.getElementById("library-reindex-all-btn");
   const uploadBtn = document.getElementById("library-upload-btn");
   if (folderBtnTop) folderBtnTop.classList.toggle("hidden", !canLibraryWrite);
   if (folderBtnSidebar) folderBtnSidebar.classList.toggle("hidden", !canLibraryWrite);
+  if (reindexAllBtn) reindexAllBtn.classList.toggle("hidden", !canLibraryWrite);
   if (uploadBtn) uploadBtn.classList.toggle("hidden", !canLibraryWrite);
 
   // Masquer l'indication visuelle "upload" (icône) quand on est en lecture seule.
@@ -349,13 +354,28 @@ async function loadDocuments() {
           <span>${d.title}</span>
           ${d.is_paid ? '<span title="Document payant (acheté fournisseur)" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 text-xs font-medium"><i class="ti ti-coins"></i><span>Document payant</span></span>' : ""}
         </div>
-        <div class="text-xs text-gray-500">Statut: ${d.processing_status} (${d.processing_progress ?? 0}%)</div>
+        <div class="text-xs text-gray-500">${
+          d.processing_status === "reindex_queued"
+            ? `<span class="text-amber-700 dark:text-amber-400">En attente de retraitement</span> — index actuel conservé (${d.processing_progress ?? 0}%)`
+            : `Statut: ${d.processing_status} (${d.processing_progress ?? 0}%)`
+        }</div>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 flex-wrap justify-end">
         <button class="text-blue-600 text-sm" onclick="openDocumentFile(${d.id})">Ouvrir</button>
         ${
           canLibraryWrite
             ? `
+              ${
+                d.document_type === "document"
+                  ? `<button
+                      type="button"
+                      class="text-amber-700 dark:text-amber-400 text-sm disabled:opacity-40 disabled:pointer-events-none"
+                      ${d.processing_status === "processing" || d.processing_status === "reindex_queued" ? "disabled" : ""}
+                      onclick="reindexDocument(${d.id}, '${(d.title || '').replace(/'/g, "\\'")}')"
+                      title="Re-extraire et réindexer (chunks, embeddings, KAG)"
+                    >Retraiter</button>`
+                  : ""
+              }
               <button class="text-gray-700 dark:text-gray-300 text-sm" onclick="openEditDocumentModal(${d.id})">Modifier</button>
               <button class="text-red-600 text-sm" onclick="deleteDocument(${d.id}, '${(d.title || '').replace(/'/g, "\\'")}')">Supprimer</button>
             `
@@ -395,6 +415,54 @@ async function deleteDocument(documentId, documentTitle) {
     return alert(err.detail || "Impossible de supprimer le document.");
   }
 
+  await loadDocuments();
+}
+
+async function reindexDocument(documentId, documentTitle) {
+  const ok = confirm(
+    `Retraiter le document « ${documentTitle} » ?\n\n` +
+      "Les chunks, embeddings et entités (KAG) seront régénérés à partir du fichier source. " +
+      "Le traitement s’exécute en arrière-plan (Celery) et peut prendre plusieurs minutes."
+  );
+  if (!ok) return;
+
+  const r = await api(`/api/library/documents/${documentId}/reindex`, { method: "POST" });
+  const err = await r.json().catch(() => ({}));
+
+  if (r.status === 503) {
+    return alert(err.detail || "Service de tâches indisponible. Réessayez plus tard.");
+  }
+  if (!r.ok) {
+    return alert(err.detail || "Impossible de lancer le retraitement.");
+  }
+
+  const data = err;
+  if (data.status === "queued" && data.celery_task_id) {
+    alert("Retraitement lancé en arrière-plan. Le statut du document va se mettre à jour.");
+  }
+  await loadDocuments();
+}
+
+async function reindexAllLibraryDocuments() {
+  const ok = confirm(
+    "Retraiter tous les documents fichier de la bibliothèque ?\n\n" +
+      "Chaque document avec un fichier source sera ré-extrait puis réindexé (chunks, embeddings, KAG), " +
+      "un par un dans une tâche Celery. Cela peut prendre longtemps."
+  );
+  if (!ok) return;
+
+  const r = await api("/api/library/reindex-all", { method: "POST" });
+  const body = await r.json().catch(() => ({}));
+
+  if (r.status === 503) {
+    return alert(body.detail || "Service de tâches indisponible. Réessayez plus tard.");
+  }
+  if (!r.ok) {
+    return alert(body.detail || "Impossible de lancer le retraitement global.");
+  }
+  if (body.status === "queued" && body.celery_task_id) {
+    alert("Retraitement global lancé en arrière-plan. Les statuts des documents vont se mettre à jour.");
+  }
   await loadDocuments();
 }
 

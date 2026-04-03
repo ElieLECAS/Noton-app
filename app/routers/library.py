@@ -20,11 +20,13 @@ from app.services.folder_service import (
 from app.services.document_service_new import (
     create_document, get_document_by_id, get_documents_by_folder,
     get_documents_by_library, save_uploaded_file, process_document_async,
+    mark_document_reindex_queued,
     move_document, delete_document,
     update_document,
 )
 from app.services.task_dispatch import (
     dispatch_document_spaces_update,
+    dispatch_reindex_all_library,
     dispatch_reindex_library,
 )
 from app.services.document_space_service import get_spaces_for_document
@@ -236,23 +238,62 @@ async def update_library_document(
 async def reindex_library_document_endpoint(
     document_id: int,
     current_user: UserRead = Depends(require_permission("library.write")),
+    session: Session = Depends(get_session),
 ):
     """
-    Re-extrait le texte, rechunke (Docling hiérarchique ou fallback) et ré-embed
-    sans réupload — le fichier source doit exister (media/documents).
+    Enfile la réindexation sur Celery : re-extraction, chunks, embeddings, KAG
+    dans le worker — pas de traitement lourd dans FastAPI.
+    Marque le document en reindex_queued (chunks encore disponibles pour le RAG).
     """
-    try:
-        result = dispatch_reindex_library(document_id, current_user.id)
-        if isinstance(result, str):
-            return {
-                "status": "queued",
-                "celery_task_id": result,
-                "document_id": document_id,
-            }
-        return result
-    except ValueError as e:
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document non trouvé",
+        )
+    if document.document_type != "document" or not document.source_file_path:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Réindexation réservée aux documents avec fichier source.",
+        )
+    try:
+        celery_task_id = dispatch_reindex_library(document_id, current_user.id)
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(e),
+        )
+    mark_document_reindex_queued(session, document_id, current_user.id)
+    return {
+        "status": "queued",
+        "celery_task_id": celery_task_id,
+        "document_id": document_id,
+    }
+
+
+@router.post("/reindex-all", status_code=status.HTTP_200_OK)
+async def reindex_all_library_endpoint(
+    current_user: UserRead = Depends(require_permission("library.write")),
+):
+    """
+    Enfile sur Celery la réindexation de tous les documents fichier de la bibliothèque
+    (traitement séquentiel dans le worker).
+    """
+    try:
+        celery_task_id = dispatch_reindex_all_library(current_user.id)
+        return {
+            "status": "queued",
+            "celery_task_id": celery_task_id,
+        }
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=str(e),
         )
 
