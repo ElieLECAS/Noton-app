@@ -10,6 +10,7 @@ from app.config import settings
 from app.database import engine
 from app.library_document_logging import get_library_document_logger
 from app.models.document import Document, DocumentCreate, DocumentUpdate
+from app.models.library import Library
 from app.models.document_space import DocumentSpace
 from app.models.document_chunk import DocumentChunk
 from app.tracing import trace_run, trace_pipeline
@@ -564,7 +565,18 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
 
     with Session(engine) as session:
         document = session.get(Document, document_id)
-        if not document or document.user_id != user_id:
+        if not document:
+            raise ValueError("Document introuvable ou accès refusé")
+        library = session.get(Library, document.library_id)
+        if not library:
+            raise ValueError("Document introuvable ou accès refusé")
+        # Bibliothèque globale : tout document listé côté API est réindexable par un
+        # utilisateur autorisé (library.write) ; user_id du document = auteur upload.
+        if library.is_global:
+            pass
+        elif library.user_id == user_id or document.user_id == user_id:
+            pass
+        else:
             raise ValueError("Document introuvable ou accès refusé")
         if not document.source_file_path:
             raise ValueError("Aucun fichier source enregistré pour ce document")
