@@ -37,6 +37,7 @@ def _celery_only_failure_message() -> str:
 
 
 def _send_library_document(document_id: int, file_path: str) -> bool:
+    from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import process_library_document
 
     res = process_library_document.apply_async(
@@ -47,6 +48,13 @@ def _send_library_document(document_id: int, file_path: str) -> bool:
         "task_dispatch library_document document_id=%s celery_task_id=%s",
         document_id,
         res.id,
+    )
+    get_library_document_logger().info(
+        "[Dispatch] document_id=%s — tâche Celery process_library_document file documents queue, "
+        "task_id=%s fichier=%s",
+        document_id,
+        res.id,
+        file_path,
     )
     return True
 
@@ -67,6 +75,7 @@ def _send_project_document(note_id: int, file_path: str) -> bool:
 
 
 def _send_reindex_library(document_id: int, user_id: int) -> str:
+    from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import reindex_library_document_task
 
     async_result = reindex_library_document_task.apply_async(
@@ -77,6 +86,33 @@ def _send_reindex_library(document_id: int, user_id: int) -> str:
         "task_dispatch reindex_library document_id=%s celery_task_id=%s",
         document_id,
         async_result.id,
+    )
+    get_library_document_logger().info(
+        "[Dispatch] document_id=%s — reindex Celery task_id=%s user_id=%s",
+        document_id,
+        async_result.id,
+        user_id,
+    )
+    return async_result.id
+
+
+def _send_reindex_all_library(user_id: int) -> str:
+    from app.library_document_logging import get_library_document_logger
+    from app.tasks.documents import reindex_all_library_documents_task
+
+    async_result = reindex_all_library_documents_task.apply_async(
+        args=[user_id],
+        queue="documents",
+    )
+    logger.info(
+        "task_dispatch reindex_all_library user_id=%s celery_task_id=%s",
+        user_id,
+        async_result.id,
+    )
+    get_library_document_logger().info(
+        "[Dispatch] reindex_all_library — task_id=%s user_id=%s",
+        async_result.id,
+        user_id,
     )
     return async_result.id
 
@@ -162,7 +198,15 @@ def _run_document_spaces_update_thread(
 
 def dispatch_library_document(document_id: int, file_path: str) -> None:
     """Enqueue traitement document bibliothèque (Celery ou thread)."""
+    from app.library_document_logging import get_library_document_logger
+
     mode = get_task_backend_mode()
+    get_library_document_logger().info(
+        "[Dispatch] document_id=%s — dispatch_library_document mode=%s fichier=%s",
+        document_id,
+        mode,
+        file_path,
+    )
     if mode == "thread":
         from app.services.document_service_new import enqueue_library_document_thread
 
@@ -175,10 +219,20 @@ def dispatch_library_document(document_id: int, file_path: str) -> None:
         logger.warning(
             "Celery indisponible pour library document_id=%s: %s", document_id, exc
         )
+        get_library_document_logger().warning(
+            "[Dispatch] document_id=%s — Celery indisponible (%s), mode=%s",
+            document_id,
+            exc,
+            mode,
+        )
         if mode == "hybrid":
             from app.services.document_service_new import enqueue_library_document_thread
 
             enqueue_library_document_thread(document_id, file_path)
+            get_library_document_logger().info(
+                "[Dispatch] document_id=%s — repli hybrid vers file thread.",
+                document_id,
+            )
             return
         raise RuntimeError(_celery_only_failure_message()) from exc
 
@@ -204,28 +258,43 @@ def dispatch_project_document(note_id: int, file_path: str) -> None:
         raise RuntimeError(_celery_only_failure_message()) from exc
 
 
-def dispatch_reindex_library(document_id: int, user_id: int):
+def dispatch_reindex_library(document_id: int, user_id: int) -> str:
     """
-    Réindexation : Celery si activé, sinon exécution synchrone.
-    Retourne str (celery_task_id) si file async, ou dict résultat si synchrone.
+    Enfile la réindexation sur la queue Celery « documents » uniquement.
+    Docling, chunks, embeddings et KAG s'exécutent dans le worker, pas dans l'API.
+    Retourne l'identifiant de tâche Celery.
     """
-    mode = get_task_backend_mode()
-    if mode == "thread":
-        from app.services.document_service_new import reindex_library_document
-
-        return reindex_library_document(document_id, user_id)
-
     try:
         return _send_reindex_library(document_id, user_id)
     except Exception as exc:
         logger.warning(
-            "Celery indisponible pour reindex document_id=%s: %s", document_id, exc
+            "Échec enqueue reindex document_id=%s user_id=%s: %s",
+            document_id,
+            user_id,
+            exc,
+            exc_info=True,
         )
-        if mode == "hybrid":
-            from app.services.document_service_new import reindex_library_document
+        raise RuntimeError(
+            "Impossible d'enfiler la réindexation : le service de tâches (Celery) est indisponible."
+        ) from exc
 
-            return reindex_library_document(document_id, user_id)
-        raise RuntimeError(_celery_only_failure_message()) from exc
+
+def dispatch_reindex_all_library(user_id: int) -> str:
+    """
+    Enfile la réindexation globale de la bibliothèque sur la queue Celery « documents ».
+    """
+    try:
+        return _send_reindex_all_library(user_id)
+    except Exception as exc:
+        logger.warning(
+            "Échec enqueue reindex_all_library user_id=%s: %s",
+            user_id,
+            exc,
+            exc_info=True,
+        )
+        raise RuntimeError(
+            "Impossible d'enfiler la réindexation globale : le service de tâches (Celery) est indisponible."
+        ) from exc
 
 
 def dispatch_document_spaces_update(

@@ -11,8 +11,15 @@ logger = logging.getLogger(__name__)
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
 def process_library_document(self, document_id: int, file_path: str) -> None:
     """Pipeline Docling → chunks → embeddings/KAG pour un document bibliothèque."""
+    from app.library_document_logging import get_library_document_logger
     from app.services.document_service_new import _process_document_for_id
 
+    get_library_document_logger().info(
+        "[Celery] Tâche process_library_document démarrée document_id=%s fichier=%s task_id=%s",
+        document_id,
+        file_path,
+        self.request.id,
+    )
     logger.info(
         "Celery process_library_document document_id=%s file_path=%s task_id=%s",
         document_id,
@@ -49,8 +56,15 @@ def process_project_document(self, note_id: int, file_path: str) -> None:
 @celery_app.task(bind=True, max_retries=0)
 def reindex_library_document_task(self, document_id: int, user_id: int) -> dict:
     """Réindexation complète d'un document bibliothèque."""
+    from app.library_document_logging import get_library_document_logger
     from app.services.document_service_new import reindex_library_document
 
+    get_library_document_logger().info(
+        "[Celery] Tâche reindex_library_document_task démarrée document_id=%s user_id=%s task_id=%s",
+        document_id,
+        user_id,
+        self.request.id,
+    )
     logger.info(
         "Celery reindex_library_document_task document_id=%s user_id=%s task_id=%s",
         document_id,
@@ -64,6 +78,25 @@ def reindex_library_document_task(self, document_id: int, user_id: int) -> dict:
             "reindex_library_document_task échec document_id=%s", document_id
         )
         raise
+
+
+@celery_app.task(bind=True, max_retries=0)
+def reindex_all_library_documents_task(self, user_id: int) -> dict:
+    """Réindexation séquentielle de tous les documents fichier de la bibliothèque."""
+    from app.library_document_logging import get_library_document_logger
+    from app.services.document_service_new import reindex_all_library_documents
+
+    get_library_document_logger().info(
+        "[Celery] reindex_all_library_documents_task user_id=%s task_id=%s",
+        user_id,
+        self.request.id,
+    )
+    logger.info(
+        "Celery reindex_all_library_documents_task user_id=%s task_id=%s",
+        user_id,
+        self.request.id,
+    )
+    return reindex_all_library_documents(user_id)
 
 
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
@@ -89,8 +122,14 @@ def process_note_embeddings(self, note_id: int, project_id: int) -> None:
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
 def process_document_embeddings(self, document_id: int) -> None:
     """Embeddings + KAG pour un document bibliothèque (post-chunking)."""
+    from app.library_document_logging import get_library_document_logger
     from app.services.chunk_service import _process_embeddings_for_document
 
+    get_library_document_logger().info(
+        "[Celery] Tâche process_document_embeddings démarrée document_id=%s task_id=%s",
+        document_id,
+        self.request.id,
+    )
     logger.info(
         "Celery process_document_embeddings document_id=%s task_id=%s",
         document_id,

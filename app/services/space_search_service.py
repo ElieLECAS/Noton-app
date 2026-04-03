@@ -30,6 +30,7 @@ from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.space import Space
 from app.services.space_service import get_space_by_id
 from app.config import settings
+from app.tracing import trace_run
 import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -53,10 +54,42 @@ RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
 RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
+_FLAG_RERANK_TOP_N = int(os.getenv("RERANKER_TOP_N", "4096"))
+TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
+TRACE_TEXT_MAX_CHARS = int(os.getenv("TRACE_TEXT_MAX_CHARS", "12000"))
 
 # Singletons
 _reranker_instance = None
 _embed_model_instance = None
+
+
+def _text_for_trace(node: TextNode) -> str:
+    raw = (
+        node.get_content()
+        if hasattr(node, "get_content")
+        else getattr(node, "text", "") or ""
+    )
+    if not isinstance(raw, str):
+        raw = str(raw)
+    if TRACE_TEXT_MAX_CHARS > 0 and len(raw) > TRACE_TEXT_MAX_CHARS:
+        return raw[:TRACE_TEXT_MAX_CHARS]
+    return raw
+
+
+def _nodes_for_trace(candidates: List[NodeWithScore], limit: int = 80) -> List[Dict]:
+    rows: List[Dict] = []
+    for nws in candidates[:limit]:
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        rows.append(
+            {
+                "score": round(float(nws.score or 0.0), 4),
+                "document_title": meta.get("document_title"),
+                "section": meta.get("parent_heading") or meta.get("heading"),
+                "kag_entity": meta.get("kag_matched_entity"),
+                "text": _text_for_trace(nws.node),
+            }
+        )
+    return rows
 
 _FALLBACK_STOPWORDS = {
     "the", "and", "for", "with", "dans", "avec", "pour", "une", "des", "les",
@@ -140,14 +173,19 @@ def _get_reranker():
     if not RERANKER_AVAILABLE:
         return None
     if _reranker_instance is None:
-        device = os.getenv("RERANKER_DEVICE", "cpu")
-        logger.info("Initialisation reranker %s sur %s...", RERANKER_MODEL, device)
+        use_fp16 = os.getenv("RERANKER_USE_FP16", "false").lower() == "true"
+        logger.info(
+            "Initialisation reranker %s (top_n=%s, use_fp16=%s)...",
+            RERANKER_MODEL,
+            _FLAG_RERANK_TOP_N,
+            use_fp16,
+        )
         _reranker_instance = FlagEmbeddingReranker(
             model=RERANKER_MODEL,
-            top_n=None,
-            device=device,
+            top_n=_FLAG_RERANK_TOP_N,
+            use_fp16=use_fp16,
         )
-        logger.info("✅ Reranker initialisé (device=%s)", device)
+        logger.info("✅ Reranker initialisé")
     return _reranker_instance
 
 
@@ -565,6 +603,72 @@ def _build_parent_node_dict(
         space_id,
     )
     return node_dict
+
+
+_PARENT_MULTIHOP_MAX = 4
+
+
+def _resolve_space_parent_with_multihop(
+    session: Session,
+    space_id: int,
+    user_id: int,
+    document_id: Optional[int],
+    parent_node_id: Optional[str],
+    parent_node_dict: Dict[str, TextNode],
+) -> Optional[TextNode]:
+    """
+    Si le parent direct n'est pas un chunk section (is_leaf=False), remonte la chaîne
+    parent_node_id (text_full, table_full, …) jusqu'au premier parent section et fusionne
+    les textes intermédiaires devant le corps du parent section.
+    """
+    if not parent_node_id or document_id is None:
+        return None
+    if parent_node_id in parent_node_dict:
+        return None
+
+    intermediates: List[str] = []
+    current_pid: Optional[str] = parent_node_id
+    hops = 0
+
+    while current_pid and hops < _PARENT_MULTIHOP_MAX:
+        hops += 1
+        stmt = (
+            select(DocumentChunk, Document.title)
+            .join(Document, Document.id == DocumentChunk.document_id)
+            .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+            .where(
+                DocumentSpace.space_id == space_id,
+                DocumentChunk.document_id == document_id,
+                Document.user_id == user_id,
+                DocumentChunk.node_id == current_pid,
+            )
+        )
+        row = session.exec(stmt).first()
+        if not row:
+            break
+        chunk, document_title = row
+        metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
+        metadata.setdefault("document_id", chunk.document_id)
+        metadata.setdefault("document_title", document_title or "Document sans titre")
+        metadata.setdefault("chunk_index", chunk.chunk_index)
+        llama_id = f"chunk-{chunk.id}"
+        text = (chunk.content or chunk.text or "").strip()
+
+        if not chunk.is_leaf:
+            if intermediates:
+                prefix = "\n\n---\n\n".join(reversed(intermediates))
+                text = f"{prefix}\n\n---\n\n{text}"
+            return TextNode(
+                id_=llama_id,
+                text=text,
+                metadata=metadata,
+            )
+
+        if text:
+            intermediates.append(text)
+        current_pid = chunk.parent_node_id
+
+    return None
 
 
 def _extract_query_terms(query_text: str) -> List[str]:
@@ -1524,49 +1628,125 @@ def search_relevant_passages(
                 space_id,
                 pivot_entity_names[:4],
             )
-            leaf_candidates = multi_hop_retrieve_space(
-                session=session,
-                space_id=space_id,
-                user_id=user_id,
-                query_text=query_text,
-                pivot_entity_names=pivot_entity_names,
-                candidate_k=candidate_k,
-            )
+            with trace_run(
+                "multi_hop_retrieval",
+                run_type="retriever",
+                inputs={
+                    "query": query_text,
+                    "space_id": space_id,
+                    "pivot_entities": pivot_entity_names[:10],
+                    "candidate_k": candidate_k,
+                    "max_hops": MULTI_HOP_MAX_HOPS,
+                },
+                tags=["retrieval", "multi-hop", "kag", "space"],
+            ) as mh_run:
+                leaf_candidates = multi_hop_retrieve_space(
+                    session=session,
+                    space_id=space_id,
+                    user_id=user_id,
+                    query_text=query_text,
+                    pivot_entity_names=pivot_entity_names,
+                    candidate_k=candidate_k,
+                )
+                top3_scores = [round(float(c.score or 0), 4) for c in leaf_candidates[:3]]
+                mh_outputs = {
+                    "nb_candidates": len(leaf_candidates),
+                    "top3_scores": top3_scores,
+                }
+                if TRACE_VERBOSE_TEXT:
+                    mh_outputs["candidates_text"] = _nodes_for_trace(leaf_candidates)
+                mh_run.end(outputs=mh_outputs)
         else:
             # Pipeline hybride standard
-            vector_candidates = _retrieve_leaves_sql(
-                session=session,
-                space_id=space_id,
-                user_id=user_id,
-                query_text=query_text,
-                candidate_k=candidate_k,
-            )
-            lexical_candidates = _retrieve_leaves_lexical_sql(
-                session=session,
-                space_id=space_id,
-                query_text=query_text,
-                candidate_k=candidate_k,
-            )
+            with trace_run(
+                "vector_retrieval",
+                run_type="retriever",
+                inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+                tags=["retrieval", "vector", "pgvector", "space"],
+            ) as vr_run:
+                vector_candidates = _retrieve_leaves_sql(
+                    session=session,
+                    space_id=space_id,
+                    user_id=user_id,
+                    query_text=query_text,
+                    candidate_k=candidate_k,
+                )
+                vr_outputs = {
+                    "nb_candidates": len(vector_candidates),
+                    "top3_scores": [round(float(c.score or 0), 4) for c in vector_candidates[:3]],
+                }
+                if TRACE_VERBOSE_TEXT:
+                    vr_outputs["candidates_text"] = _nodes_for_trace(vector_candidates)
+                vr_run.end(outputs=vr_outputs)
+
+            with trace_run(
+                "lexical_retrieval",
+                run_type="retriever",
+                inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+                tags=["retrieval", "lexical", "tsvector", "space"],
+            ) as lr_run:
+                lexical_candidates = _retrieve_leaves_lexical_sql(
+                    session=session,
+                    space_id=space_id,
+                    query_text=query_text,
+                    candidate_k=candidate_k,
+                )
+                lr_outputs = {"nb_candidates": len(lexical_candidates)}
+                if TRACE_VERBOSE_TEXT:
+                    lr_outputs["candidates_text"] = _nodes_for_trace(lexical_candidates)
+                lr_run.end(outputs=lr_outputs)
 
             graph_candidates: List[NodeWithScore] = []
             if settings.KAG_ENABLED:
                 try:
-                    graph_candidates = _retrieve_via_knowledge_graph(
-                        session=session,
-                        space_id=space_id,
-                        user_id=user_id,
-                        query_text=query_text,
-                        limit=candidate_k,
-                        pivot_entity_names=pivot_entity_names or None,
-                    )
+                    with trace_run(
+                        "kag_graph_retrieval",
+                        run_type="retriever",
+                        inputs={"query": query_text, "pivot_entities": pivot_entity_names[:10], "space_id": space_id},
+                        tags=["retrieval", "kag", "graph", "space"],
+                    ) as kag_run:
+                        graph_candidates = _retrieve_via_knowledge_graph(
+                            session=session,
+                            space_id=space_id,
+                            user_id=user_id,
+                            query_text=query_text,
+                            limit=candidate_k,
+                            pivot_entity_names=pivot_entity_names or None,
+                        )
+                        matched = list({
+                            (c.node.metadata or {}).get("kag_matched_entity", "")
+                            for c in graph_candidates
+                            if (c.node.metadata or {}).get("kag_matched_entity")
+                        })
+                        kag_outputs = {"nb_chunks": len(graph_candidates), "matched_entities": matched[:10]}
+                        if TRACE_VERBOSE_TEXT:
+                            kag_outputs["candidates_text"] = _nodes_for_trace(graph_candidates)
+                        kag_run.end(outputs=kag_outputs)
                 except Exception as kag_err:
                     logger.warning("KAG retrieval échoué (space): %s", kag_err)
 
-            leaf_candidates = _hybrid_fuse_candidates(
-                vector_candidates=vector_candidates,
-                lexical_candidates=lexical_candidates,
-                graph_candidates=graph_candidates,
-            )
+            with trace_run(
+                "hybrid_fusion",
+                run_type="chain",
+                inputs={
+                    "nb_vector": len(vector_candidates),
+                    "nb_lexical": len(lexical_candidates),
+                    "nb_kag": len(graph_candidates),
+                    "alpha": RAG_HYBRID_ALPHA,
+                    "beta": RAG_HYBRID_BETA,
+                    "gamma": RAG_HYBRID_GAMMA,
+                },
+                tags=["fusion", "hybrid", "space"],
+            ) as fusion_run:
+                leaf_candidates = _hybrid_fuse_candidates(
+                    vector_candidates=vector_candidates,
+                    lexical_candidates=lexical_candidates,
+                    graph_candidates=graph_candidates,
+                )
+                fusion_outputs = {"nb_fused": len(leaf_candidates)}
+                if TRACE_VERBOSE_TEXT:
+                    fusion_outputs["fused_text"] = _nodes_for_trace(leaf_candidates)
+                fusion_run.end(outputs=fusion_outputs)
 
         if not leaf_candidates:
             logger.info(
@@ -1615,11 +1795,29 @@ def search_relevant_passages(
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
                 if _get_reranker():
-                    top_leaves = _two_stage_rerank_leaves(
-                        filtered_candidates,
-                        query_text,
-                        k,
-                    )
+                    with trace_run(
+                        "reranking",
+                        run_type="chain",
+                        inputs={
+                            "nb_candidates": len(filtered_candidates),
+                            "stage1_max": RERANK_STAGE1_MAX,
+                            "stage2_pool": RERANK_STAGE2_POOL,
+                            "k": k,
+                            "multi_hop": use_multi_hop,
+                        },
+                        tags=["reranking", "bge-reranker", "space"],
+                    ) as rerank_run:
+                        top_leaves = _two_stage_rerank_leaves(
+                            filtered_candidates,
+                            query_text,
+                            k,
+                        )
+                        top_scores = [round(float(n.score or 0), 4) for n in top_leaves[:5]]
+                        rerank_outputs = {"nb_final": len(top_leaves), "top5_scores": top_scores}
+                        if TRACE_VERBOSE_TEXT:
+                            rerank_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
+                            rerank_outputs["filtered_candidates_text"] = _nodes_for_trace(filtered_candidates)
+                        rerank_run.end(outputs=rerank_outputs)
                 else:
                     logger.warning("Reranker non disponible, fallback ordre vectoriel")
                     top_leaves = filtered_candidates[:k]
@@ -1634,36 +1832,66 @@ def search_relevant_passages(
             top_leaves = filtered_candidates[:k]
 
         # --- Étape 4 : résolution des parents ---
-        parent_node_dict = _build_parent_node_dict(session, space_id, user_id)
+        with trace_run(
+            "parent_resolution",
+            run_type="chain",
+            inputs={"space_id": space_id, "nb_top_leaves": len(top_leaves)},
+            tags=["parent", "context", "space"],
+        ) as parent_run:
+            parent_node_dict = _build_parent_node_dict(session, space_id, user_id)
 
-        final_nodes: List[NodeWithScore] = []
-        seen_node_ids: set = set()
-        parents_resolved = 0
-        parents_not_found = 0
+            final_nodes: List[NodeWithScore] = []
+            seen_node_ids: set = set()
+            parents_resolved = 0
+            parents_not_found = 0
 
-        for nws in top_leaves:
-            score = float(getattr(nws, "score", 0.0) or 0.0)
-            leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
-            parent_node_id = leaf_meta.get("parent_node_id")
+            for nws in top_leaves:
+                score = float(getattr(nws, "score", 0.0) or 0.0)
+                leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
+                parent_node_id = leaf_meta.get("parent_node_id")
 
-            target_node = (
-                parent_node_dict.get(parent_node_id) if parent_node_id else None
-            )
-            if target_node is None:
-                target_node = nws.node
+                target_node = None
                 if parent_node_id:
-                    parents_not_found += 1
-            else:
-                parents_resolved += 1
-                _merge_leaf_page_into_node_metadata(nws.node, target_node)
+                    target_node = parent_node_dict.get(parent_node_id)
+                    if target_node is None:
+                        doc_id = leaf_meta.get("document_id")
+                        try:
+                            doc_id_int = int(doc_id) if doc_id is not None else None
+                        except (TypeError, ValueError):
+                            doc_id_int = None
+                        target_node = _resolve_space_parent_with_multihop(
+                            session,
+                            space_id,
+                            user_id,
+                            doc_id_int,
+                            parent_node_id,
+                            parent_node_dict,
+                        )
+                if target_node is None:
+                    target_node = nws.node
+                    if parent_node_id:
+                        parents_not_found += 1
+                else:
+                    parents_resolved += 1
+                    _merge_leaf_page_into_node_metadata(nws.node, target_node)
 
-            node_id = getattr(target_node, "id_", None)
-            if node_id and node_id in seen_node_ids:
-                continue
-            if node_id:
-                seen_node_ids.add(node_id)
+                node_id = getattr(target_node, "id_", None)
+                if node_id and node_id in seen_node_ids:
+                    continue
+                if node_id:
+                    seen_node_ids.add(node_id)
 
-            final_nodes.append(NodeWithScore(node=target_node, score=score))
+                final_nodes.append(NodeWithScore(node=target_node, score=score))
+
+            parent_outputs = {
+                "nb_final_passages": len(final_nodes),
+                "parents_resolved": parents_resolved,
+                "parents_not_found": parents_not_found,
+            }
+            if TRACE_VERBOSE_TEXT:
+                parent_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
+                parent_outputs["final_nodes_text"] = _nodes_for_trace(final_nodes)
+            parent_run.end(outputs=parent_outputs)
 
         logger.info(
             "Résolution parents (space): %d passages finaux (%d parents résolus, %d non trouvés)",

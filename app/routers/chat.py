@@ -22,6 +22,7 @@ from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.space_search_service import search_relevant_passages as search_space_passages
 from app.services.space_service import get_space_by_id
+from app.tracing import trace_run, trace_pipeline
 from datetime import datetime
 import json
 import logging
@@ -101,18 +102,22 @@ def _int_env(name: str, default: int) -> int:
 # Défaut 8 : avec 1 passage, le modèle comble avec des généralisations faux catalogue (tableaux inventés, ✓/✗).
 RAG_TOP_K = _int_env("RAG_TOP_K", 8)
 # Paramétrage en dur du chat "espaces"
-SPACE_CHAT_MAX_TOKENS = 3000
+SPACE_CHAT_MAX_TOKENS = 1200
 SPACE_CHAT_TEMPERATURE = 0.1
 SPACE_CHAT_TOP_P = None
+TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_CHAT_SYSTEM_PROMPT = (
     "Tu es LIA, assistante PROFERM pour les collaborateurs et les clients. "
     "Tu reponds en francais, avec un ton humain, professionnel, clair et orienté solution. "
     "Tu donnes des reponses directes, concretes et operationnelles, sans mentionner le fonctionnement interne de recherche ni la provenance des informations. "
-    "Tu peux utiliser des tableaux Markdown quand cela aide la lisibilite (comparatif, synthese, options, dimensions, performances, disponibilite). "
+    "Par defaut, fais une reponse courte et utile (3 a 6 lignes max), centree strictement sur la question. "
+    "N'ajoute pas de contexte inutile, d'introduction longue, ni de repetition. "
+    "Si la question est complexe ou si l'utilisateur le demande, tu peux etendre avec une structure claire (etapes courtes, liste, ou tableau Markdown). "
+    "Tu peux utiliser un tableau Markdown uniquement quand il apporte un vrai gain de lisibilite (comparatif, synthese, options, dimensions, performances, disponibilite). "
     "N'invente jamais de caracteristique, prix, delai, compatibilite ou disponibilite. "
     "Si une information n'est pas disponible ou reste incertaine, dis-le simplement en une phrase courte et propose la meilleure action de verification. "
     "Evite les formulations defensives, les avertissements inutiles et les redites. "
-    "Structure par defaut en sections courtes avec listes a puces, et termine par une question utile uniquement si cela fait avancer l'echange."
+    "Termine par une question uniquement si c'est necessaire pour avancer."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -396,15 +401,35 @@ async def stream_project_chat_message(
     
     # Recherche sémantique RAG AVANCÉE au niveau des passages
     # Analyse TOUTES les notes du projet et retourne les PASSAGES les plus pertinents
-    passages = search_relevant_passages(
-        session=session,
-        project_id=project_id,
-        query_text=request.message,
-        user_id=current_user.id,
-        k=RAG_TOP_K,
-        passage_size=500
-    )
-    
+    with trace_run(
+        "rag_retrieval",
+        run_type="retriever",
+        inputs={"query": request.message, "project_id": project_id, "k": RAG_TOP_K},
+        tags=["rag", "project"],
+    ) as retrieval_run:
+        passages = search_relevant_passages(
+            session=session,
+            project_id=project_id,
+            query_text=request.message,
+            user_id=current_user.id,
+            k=RAG_TOP_K,
+            passage_size=500,
+        )
+        retrieval_run.end(outputs={
+            "nb_passages": len(passages),
+            "passages": [
+                {
+                    "note_title": p.get("note_title"),
+                    "chunk_id": p.get("chunk_id"),
+                    "score": round(float(p.get("score", 0)), 4),
+                    "page_no": p.get("page_no"),
+                    "section": p.get("section"),
+                    "passage_preview": (p.get("passage_raw") or p.get("passage", ""))[:300],
+                }
+                for p in passages
+            ],
+        })
+
     # Construire le contexte enrichi avec les passages pertinents
     project_context = build_semantic_context_from_passages(passages)
     
@@ -416,85 +441,145 @@ async def stream_project_chat_message(
     
     # Ajouter le message utilisateur actuel
     full_context.append({"role": "user", "content": request.message})
+
+    # Trace root pipeline projet
+    _pipeline_inputs = {
+        "query": request.message,
+        "project_id": project_id,
+        "user_id": current_user.id,
+        "model": settings.MODEL_FAST,
+        "nb_passages": len(passages),
+    }
     
     # Variable pour accumuler la réponse de l'assistant
     assistant_response = []
     
     async def generate():
-        try:
-            if not settings.MISTRAL_API_KEY:
-                error_msg = "Mistral API key n'est pas configurée"
-                yield f"data: {json.dumps({'error': error_msg})}\n\n"
-                return
-            async for raw_chunk in mistral_chat_stream("", settings.MODEL_FAST, full_context):
-                try:
-                    parsed = json.loads(raw_chunk)
-                except json.JSONDecodeError:
-                    continue
-                chunk = (parsed.get("message") or {}).get("content") or ""
-                if not chunk:
-                    continue
-                assistant_response.append(chunk)
-                yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+        with trace_pipeline(
+            "project_chat_pipeline",
+            inputs=_pipeline_inputs,
+            tags=["chat", "project", "rag"],
+        ) as pipeline_run:
+            try:
+                if not settings.MISTRAL_API_KEY:
+                    error_msg = "Mistral API key n'est pas configurée"
+                    pipeline_run.end(error=error_msg)
+                    yield f"data: {json.dumps({'error': error_msg})}\n\n"
+                    return
 
-            if request.conversation_id and assistant_response:
-                try:
-                    _persist_assistant_reply(
-                        request.conversation_id,
-                        "".join(assistant_response),
-                        settings.MODEL_FAST,
-                        "mistral",
-                    )
-                    logger.info(
-                        "Réponse de l'assistant sauvegardée dans la conversation %s",
-                        request.conversation_id,
-                    )
-                except Exception:
-                    logger.exception(
-                        "Erreur lors de la sauvegarde de la réponse de l'assistant (projet)"
-                    )
+                # Trace context building
+                with trace_run(
+                    "context_building",
+                    run_type="chain",
+                    inputs={
+                        "nb_passages": len(passages),
+                        "system_prompt_preview": (full_context[0].get("content", "") if full_context else "")[:200],
+                    },
+                    tags=["context"],
+                ) as ctx_run:
+                    ctx_run.end(outputs={
+                        "nb_messages_context": len(full_context),
+                        "context_chars": sum(len(str(m.get("content", ""))) for m in full_context),
+                    })
 
-            # Envoyer les sources utilisées pour les citations
-            if passages:
-                note_ids = list({p.get("note_id") for p in passages if p.get("note_id")})
-                with Session(engine) as src_session:
-                    notes = (
-                        src_session.exec(select(Note).where(Note.id.in_(note_ids))).all()
-                        if note_ids
-                        else []
-                    )
-                    has_source_file_by_note = {
-                        n.id: (n.note_type == "document" and bool(n.source_file_path))
-                        for n in notes
-                    }
-                sources_data = []
-                for i, p in enumerate(passages, 1):
-                    passage_raw = p.get("passage_raw", p.get("passage", ""))
-                    excerpt = (passage_raw[:200] + "...") if len(passage_raw) > 200 else passage_raw
-                    source_item = {
-                        "index": i,
-                        "note_id": p.get("note_id"),
-                        "note_title": p.get("note_title", "Note sans titre"),
-                        "chunk_id": p.get("chunk_id"),
-                        "excerpt": excerpt,
-                        "passage_full": passage_raw,
-                        "score": round(p.get("score", 0.0), 2),
-                        "page_no": p.get("page_no"),
-                        "section": p.get("section"),
-                        "has_source_file": has_source_file_by_note.get(p.get("note_id"), False),
-                    }
-                    # Multimodal : ajouter les infos image si présentes
-                    if p.get("is_image_chunk"):
-                        source_item["is_image_chunk"] = True
-                        source_item["image_path"] = p.get("image_path")
-                        source_item["image_filename"] = p.get("image_filename")
-                        source_item["caption"] = p.get("caption", "")
-                    sources_data.append(source_item)
-                yield f"data: {json.dumps({'sources': sources_data})}\n\n"
+                # Trace LLM generation
+                with trace_run(
+                    "llm_generation",
+                    run_type="llm",
+                    inputs={
+                        "model": settings.MODEL_FAST,
+                        "provider": "mistral",
+                        "messages": [
+                            (
+                                {"role": m.get("role"), "content": str(m.get("content", ""))}
+                                if TRACE_VERBOSE_TEXT
+                                else {"role": m.get("role"), "content_preview": str(m.get("content", ""))[:300]}
+                            )
+                            for m in full_context
+                        ],
+                    },
+                    tags=["llm", "mistral", "streaming"],
+                ) as llm_run:
+                    async for raw_chunk in mistral_chat_stream("", settings.MODEL_FAST, full_context):
+                        try:
+                            parsed = json.loads(raw_chunk)
+                        except json.JSONDecodeError:
+                            continue
+                        chunk = (parsed.get("message") or {}).get("content") or ""
+                        if not chunk:
+                            continue
+                        assistant_response.append(chunk)
+                        yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
 
-            yield f"data: {json.dumps({'done': True})}\n\n"
-        except Exception as e:
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+                    full_response = "".join(assistant_response)
+                    llm_run.end(outputs={
+                        "response_chars": len(full_response),
+                        "response_preview": full_response[:500],
+                    })
+
+                pipeline_run.end(outputs={
+                    "nb_passages_used": len(passages),
+                    "response_chars": len("".join(assistant_response)),
+                })
+
+                if request.conversation_id and assistant_response:
+                    try:
+                        _persist_assistant_reply(
+                            request.conversation_id,
+                            "".join(assistant_response),
+                            settings.MODEL_FAST,
+                            "mistral",
+                        )
+                        logger.info(
+                            "Réponse de l'assistant sauvegardée dans la conversation %s",
+                            request.conversation_id,
+                        )
+                    except Exception:
+                        logger.exception(
+                            "Erreur lors de la sauvegarde de la réponse de l'assistant (projet)"
+                        )
+
+                # Envoyer les sources utilisées pour les citations
+                if passages:
+                    note_ids = list({p.get("note_id") for p in passages if p.get("note_id")})
+                    with Session(engine) as src_session:
+                        notes = (
+                            src_session.exec(select(Note).where(Note.id.in_(note_ids))).all()
+                            if note_ids
+                            else []
+                        )
+                        has_source_file_by_note = {
+                            n.id: (n.note_type == "document" and bool(n.source_file_path))
+                            for n in notes
+                        }
+                    sources_data = []
+                    for i, p in enumerate(passages, 1):
+                        passage_raw = p.get("passage_raw", p.get("passage", ""))
+                        excerpt = (passage_raw[:200] + "...") if len(passage_raw) > 200 else passage_raw
+                        source_item = {
+                            "index": i,
+                            "note_id": p.get("note_id"),
+                            "note_title": p.get("note_title", "Note sans titre"),
+                            "chunk_id": p.get("chunk_id"),
+                            "excerpt": excerpt,
+                            "passage_full": passage_raw,
+                            "score": round(p.get("score", 0.0), 2),
+                            "page_no": p.get("page_no"),
+                            "section": p.get("section"),
+                            "has_source_file": has_source_file_by_note.get(p.get("note_id"), False),
+                        }
+                        # Multimodal : ajouter les infos image si présentes
+                        if p.get("is_image_chunk"):
+                            source_item["is_image_chunk"] = True
+                            source_item["image_path"] = p.get("image_path")
+                            source_item["image_filename"] = p.get("image_filename")
+                            source_item["caption"] = p.get("caption", "")
+                        sources_data.append(source_item)
+                    yield f"data: {json.dumps({'sources': sources_data})}\n\n"
+
+                yield f"data: {json.dumps({'done': True})}\n\n"
+            except Exception as e:
+                yield f"data: {json.dumps({'error': str(e)})}\n\n"
     
     return StreamingResponse(generate(), media_type="text/event-stream")
 
@@ -537,13 +622,33 @@ async def stream_space_chat_message(
             logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
 
     # Recherche sémantique RAG + KAG complète (identique au pipeline projet)
-    passages = search_space_passages(
-        session=session,
-        space_id=space_id,
-        query_text=request.message,
-        user_id=current_user.id,
-        k=RAG_TOP_K,
-    )
+    with trace_run(
+        "rag_kag_retrieval",
+        run_type="retriever",
+        inputs={"query": request.message, "space_id": space_id, "k": RAG_TOP_K},
+        tags=["rag", "kag", "space"],
+    ) as retrieval_run:
+        passages = search_space_passages(
+            session=session,
+            space_id=space_id,
+            query_text=request.message,
+            user_id=current_user.id,
+            k=RAG_TOP_K,
+        )
+        retrieval_run.end(outputs={
+            "nb_passages": len(passages),
+            "passages": [
+                {
+                    "document_title": p.get("document_title"),
+                    "chunk_id": p.get("chunk_id"),
+                    "score": round(float(p.get("score", 0)), 4),
+                    "page_no": p.get("page_no"),
+                    "section": p.get("section"),
+                    "passage_preview": (p.get("passage_raw") or p.get("passage", ""))[:300],
+                }
+                for p in passages
+            ],
+        })
 
     # Construire le contexte système à partir des passages rerankés
     space_context = build_space_context_from_passages(passages)
@@ -554,157 +659,203 @@ async def stream_space_chat_message(
         full_context.extend(request.context)
     full_context.append({"role": "user", "content": request.message})
 
+    _pipeline_inputs_space = {
+        "query": request.message,
+        "space_id": space_id,
+        "user_id": current_user.id,
+        "model": forced_model,
+        "nb_passages": len(passages),
+    }
+
     assistant_response: List[str] = []
 
     async def generate():
-        try:
-            if not settings.MISTRAL_API_KEY:
-                yield f"data: {json.dumps({'error': 'Mistral API key non configurée'})}\n\n"
-                return
-            async for raw_chunk in mistral_chat_stream(
-                "",
-                forced_model,
-                full_context,
-                max_tokens=SPACE_CHAT_MAX_TOKENS,
-                temperature=SPACE_CHAT_TEMPERATURE,
-                top_p=SPACE_CHAT_TOP_P,
-            ):
-                try:
-                    parsed = json.loads(raw_chunk)
-                except json.JSONDecodeError:
-                    continue
-                chunk = (parsed.get("message") or {}).get("content") or ""
-                if not chunk:
-                    continue
-                assistant_response.append(chunk)
-                yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
-            # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
-            # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
-            if request.conversation_id and assistant_response:
-                try:
-                    complete_response = "".join(assistant_response)
-                    _persist_assistant_reply(
-                        request.conversation_id,
-                        complete_response,
+        with trace_pipeline(
+            "space_chat_pipeline",
+            inputs=_pipeline_inputs_space,
+            tags=["chat", "space", "rag", "kag"],
+        ) as pipeline_run:
+            try:
+                if not settings.MISTRAL_API_KEY:
+                    pipeline_run.end(error="Mistral API key non configurée")
+                    yield f"data: {json.dumps({'error': 'Mistral API key non configurée'})}\n\n"
+                    return
+
+                with trace_run(
+                    "llm_generation",
+                    run_type="llm",
+                    inputs={
+                        "model": forced_model,
+                        "provider": "mistral",
+                        "max_tokens": SPACE_CHAT_MAX_TOKENS,
+                        "temperature": SPACE_CHAT_TEMPERATURE,
+                        "messages": [
+                            (
+                                {"role": m.get("role"), "content": str(m.get("content", ""))}
+                                if TRACE_VERBOSE_TEXT
+                                else {"role": m.get("role"), "content_preview": str(m.get("content", ""))[:300]}
+                            )
+                            for m in full_context
+                        ],
+                    },
+                    tags=["llm", "mistral", "streaming", "space"],
+                ) as llm_run:
+                    async for raw_chunk in mistral_chat_stream(
+                        "",
                         forced_model,
-                        forced_provider,
-                    )
-                    logger.info(
-                        "Réponse assistant sauvegardée (space chat), conversation %s",
-                        request.conversation_id,
-                    )
-                except Exception:
-                    logger.exception("Erreur sauvegarde réponse assistant (space chat)")
+                        full_context,
+                        max_tokens=SPACE_CHAT_MAX_TOKENS,
+                        temperature=SPACE_CHAT_TEMPERATURE,
+                        top_p=SPACE_CHAT_TOP_P,
+                    ):
+                        try:
+                            parsed = json.loads(raw_chunk)
+                        except json.JSONDecodeError:
+                            continue
+                        chunk = (parsed.get("message") or {}).get("content") or ""
+                        if not chunk:
+                            continue
+                        assistant_response.append(chunk)
+                        yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
 
-            if passages:
-                doc_ids = list({p.get("document_id") for p in passages if p.get("document_id")})
-                with Session(engine) as src_session:
-                    docs = (
-                        src_session.exec(select(Document).where(Document.id.in_(doc_ids))).all()
-                        if doc_ids
-                        else []
-                    )
-                    has_file_by_doc = {
-                        d.id: (d.document_type == "document" and bool(d.source_file_path))
-                        for d in docs
-                    }
-                    # Fallback "profondeur": reconstruire une page fiable depuis les chunks
-                    # si le passage n'a pas de page exploitable.
-                    candidate_chunk_ids = list(
-                        {
-                            cid
+                    full_response = "".join(assistant_response)
+                    llm_run.end(outputs={
+                        "response_chars": len(full_response),
+                        "response_preview": full_response[:500],
+                    })
+
+                pipeline_run.end(outputs={
+                    "nb_passages_used": len(passages),
+                    "response_chars": len("".join(assistant_response)),
+                })
+
+                # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
+                # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
+                if request.conversation_id and assistant_response:
+                    try:
+                        complete_response = "".join(assistant_response)
+                        _persist_assistant_reply(
+                            request.conversation_id,
+                            complete_response,
+                            forced_model,
+                            forced_provider,
+                        )
+                        logger.info(
+                            "Réponse assistant sauvegardée (space chat), conversation %s",
+                            request.conversation_id,
+                        )
+                    except Exception:
+                        logger.exception("Erreur sauvegarde réponse assistant (space chat)")
+
+                if passages:
+                    doc_ids = list({p.get("document_id") for p in passages if p.get("document_id")})
+                    with Session(engine) as src_session:
+                        docs = (
+                            src_session.exec(select(Document).where(Document.id.in_(doc_ids))).all()
+                            if doc_ids
+                            else []
+                        )
+                        has_file_by_doc = {
+                            d.id: (d.document_type == "document" and bool(d.source_file_path))
+                            for d in docs
+                        }
+                        # Fallback "profondeur": reconstruire une page fiable depuis les chunks
+                        # si le passage n'a pas de page exploitable.
+                        candidate_chunk_ids = list(
+                            {
+                                cid
+                                for p in passages
+                                for cid in [p.get("source_leaf_chunk_id"), p.get("chunk_id")]
+                                if isinstance(cid, int)
+                            }
+                        )
+                        chunk_by_id = {}
+                        if candidate_chunk_ids:
+                            chunk_rows = src_session.exec(
+                                select(DocumentChunk).where(DocumentChunk.id.in_(candidate_chunk_ids))
+                            ).all()
+                            chunk_by_id = {c.id: c for c in chunk_rows}
+
+                        chunk_by_doc_and_index = {}
+                        doc_chunk_indexes = {
+                            (p.get("document_id"), p.get("chunk_index"))
                             for p in passages
-                            for cid in [p.get("source_leaf_chunk_id"), p.get("chunk_id")]
-                            if isinstance(cid, int)
+                            if p.get("document_id") is not None
+                            and isinstance(p.get("chunk_index"), int)
                         }
+                        for did, cidx in doc_chunk_indexes:
+                            row = src_session.exec(
+                                select(DocumentChunk)
+                                .where(
+                                    DocumentChunk.document_id == did,
+                                    DocumentChunk.chunk_index == cidx,
+                                )
+                                .order_by(DocumentChunk.is_leaf.desc(), DocumentChunk.id.desc())
+                            ).first()
+                            if row:
+                                chunk_by_doc_and_index[(did, cidx)] = row
+
+                    sources_data = []
+                    for i, p in enumerate(passages):
+                        did = p.get("document_id")
+                        raw = p.get("passage_raw", p.get("passage", ""))
+                        resolved_page = _resolve_page_from_passage(p)
+                        resolved_page_start = _coerce_positive_int(p.get("page_start"))
+                        resolved_page_end = _coerce_positive_int(p.get("page_end"))
+
+                        if resolved_page is None:
+                            fallback_chunk = None
+                            leaf_chunk_id = p.get("source_leaf_chunk_id")
+                            chunk_id = p.get("chunk_id")
+                            if isinstance(leaf_chunk_id, int):
+                                fallback_chunk = chunk_by_id.get(leaf_chunk_id)
+                            if fallback_chunk is None and isinstance(chunk_id, int):
+                                fallback_chunk = chunk_by_id.get(chunk_id)
+                            if fallback_chunk is None:
+                                fallback_chunk = chunk_by_doc_and_index.get(
+                                    (did, p.get("chunk_index"))
+                                )
+                            if fallback_chunk is not None:
+                                resolved_page = _resolve_page_from_chunk(fallback_chunk)
+                                if resolved_page_start is None:
+                                    resolved_page_start = _resolve_page_from_chunk(fallback_chunk)
+
+                        sources_data.append(
+                            {
+                                "index": i + 1,
+                                "document_id": did,
+                                "document_title": p["document_title"],
+                                "chunk_id": p.get("chunk_id"),
+                                "source_leaf_chunk_id": p.get("source_leaf_chunk_id"),
+                                "chunk_index": p.get("chunk_index"),
+                                "excerpt": (raw[:200] + "...") if len(raw or "") > 200 else raw,
+                                "passage_full": raw,
+                                "score": round(p["score"], 2),
+                                "page_no": resolved_page,
+                                "page_start": resolved_page_start,
+                                "page_end": resolved_page_end,
+                                "section": p.get("section"),
+                                "has_source_file": has_file_by_doc.get(did, False),
+                            }
+                        )
+                    logger.info(
+                        "Space chat sources built: %s",
+                        [
+                            {
+                                "idx": s.get("index"),
+                                "doc": s.get("document_id"),
+                                "chunk_index": s.get("chunk_index"),
+                                "page_no": s.get("page_no"),
+                                "page_start": s.get("page_start"),
+                                "page_end": s.get("page_end"),
+                            }
+                            for s in sources_data
+                        ],
                     )
-                    chunk_by_id = {}
-                    if candidate_chunk_ids:
-                        chunk_rows = src_session.exec(
-                            select(DocumentChunk).where(DocumentChunk.id.in_(candidate_chunk_ids))
-                        ).all()
-                        chunk_by_id = {c.id: c for c in chunk_rows}
-
-                    chunk_by_doc_and_index = {}
-                    doc_chunk_indexes = {
-                        (p.get("document_id"), p.get("chunk_index"))
-                        for p in passages
-                        if p.get("document_id") is not None
-                        and isinstance(p.get("chunk_index"), int)
-                    }
-                    for did, cidx in doc_chunk_indexes:
-                        row = src_session.exec(
-                            select(DocumentChunk)
-                            .where(
-                                DocumentChunk.document_id == did,
-                                DocumentChunk.chunk_index == cidx,
-                            )
-                            .order_by(DocumentChunk.is_leaf.desc(), DocumentChunk.id.desc())
-                        ).first()
-                        if row:
-                            chunk_by_doc_and_index[(did, cidx)] = row
-
-                sources_data = []
-                for i, p in enumerate(passages):
-                    did = p.get("document_id")
-                    raw = p.get("passage_raw", p.get("passage", ""))
-                    resolved_page = _resolve_page_from_passage(p)
-                    resolved_page_start = _coerce_positive_int(p.get("page_start"))
-                    resolved_page_end = _coerce_positive_int(p.get("page_end"))
-
-                    if resolved_page is None:
-                        fallback_chunk = None
-                        leaf_chunk_id = p.get("source_leaf_chunk_id")
-                        chunk_id = p.get("chunk_id")
-                        if isinstance(leaf_chunk_id, int):
-                            fallback_chunk = chunk_by_id.get(leaf_chunk_id)
-                        if fallback_chunk is None and isinstance(chunk_id, int):
-                            fallback_chunk = chunk_by_id.get(chunk_id)
-                        if fallback_chunk is None:
-                            fallback_chunk = chunk_by_doc_and_index.get(
-                                (did, p.get("chunk_index"))
-                            )
-                        if fallback_chunk is not None:
-                            resolved_page = _resolve_page_from_chunk(fallback_chunk)
-                            if resolved_page_start is None:
-                                resolved_page_start = _resolve_page_from_chunk(fallback_chunk)
-
-                    sources_data.append(
-                        {
-                            "index": i + 1,
-                            "document_id": did,
-                            "document_title": p["document_title"],
-                            "chunk_id": p.get("chunk_id"),
-                            "source_leaf_chunk_id": p.get("source_leaf_chunk_id"),
-                            "chunk_index": p.get("chunk_index"),
-                            "excerpt": (raw[:200] + "...") if len(raw or "") > 200 else raw,
-                            "passage_full": raw,
-                            "score": round(p["score"], 2),
-                            "page_no": resolved_page,
-                            "page_start": resolved_page_start,
-                            "page_end": resolved_page_end,
-                            "section": p.get("section"),
-                            "has_source_file": has_file_by_doc.get(did, False),
-                        }
-                    )
-                logger.info(
-                    "Space chat sources built: %s",
-                    [
-                        {
-                            "idx": s.get("index"),
-                            "doc": s.get("document_id"),
-                            "chunk_index": s.get("chunk_index"),
-                            "page_no": s.get("page_no"),
-                            "page_start": s.get("page_start"),
-                            "page_end": s.get("page_end"),
-                        }
-                        for s in sources_data
-                    ],
-                )
-                yield f"data: {json.dumps({'sources': sources_data})}\n\n"
-            yield f"data: {json.dumps({'done': True})}\n\n"
-        except Exception as e:
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+                    yield f"data: {json.dumps({'sources': sources_data})}\n\n"
+                yield f"data: {json.dumps({'done': True})}\n\n"
+            except Exception as e:
+                yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 

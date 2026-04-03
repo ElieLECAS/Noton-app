@@ -24,6 +24,22 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+# Fichier dédié : logs/library_document_processing.log (pipeline bibliothèque / espaces)
+try:
+    from app.library_document_logging import setup_library_document_file_logging
+
+    _lib_log_path = setup_library_document_file_logging()
+    logger.info("Journal documents bibliothèque/espaces : %s", _lib_log_path)
+except Exception as e:
+    logger.warning("Initialisation journal bibliothèque/espaces ignorée : %s", e)
+
+# LangSmith — observabilité RAG/KAG
+try:
+    from app.tracing import init_langsmith
+    init_langsmith()
+except Exception as e:
+    logger.warning("Initialisation LangSmith ignorée : %s", e)
+
 app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot IA")
 
 # Configuration CORS - Debug

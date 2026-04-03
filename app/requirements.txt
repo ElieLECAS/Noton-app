@@ -13,18 +13,40 @@ python-multipart==0.0.6
 httpx>=0.27,<0.28
 jinja2==3.1.2
 python-dotenv==1.0.0
-pydantic-settings>=2.3.0
-pgvector==0.2.4
-sentence-transformers>=2.7.0
-faiss-cpu==1.7.4
-numpy<2.0.0,>=1.24.0
-torch>=2.1.0
-transformers>=4.35.0
+pydantic-settings>=2.3.0,<3.0.0
+pydantic>=2.0.0,<2.10
+# pgvector>=0.3.6 requis par llama-index-vector-stores-postgres 0.7.3
+pgvector==0.4.2
+# numpy>=2.0 requis par llama-index-readers-docling 0.4.2
+numpy>=2.0,<3.0
+torch  # Version CPU (plus légère que torch avec CUDA)
+# [chunking] : semchunk + deps pour hybrid_chunker (docling-core lève RuntimeError sans cet extra)
+docling-core[chunking]>=2.18.0,<3
+docling==2.8.3
+# chunker code → tree_sitter (souvent pas tiré seul par [chunking])
+tree-sitter>=0.21.0,<1.0.0
+python-magic
+pillow
+# Dépendances OCR avancées
+opencv-python-headless>=4.8.0  # Prétraitement image pour OCR
+pytesseract>=0.3.10  # Wrapper Python pour Tesseract OCR
+pdf2image>=1.16.3  # Conversion PDF → images pour fallback OCR
+PyPDF2>=3.0.0  # Lecture métadonnées PDF (comptage pages)
+# fastembed retiré : remplacé par embeddings LlamaIndex
+# LlamaIndex — versions pinnées pour éviter le backtracking
+llama-index-core==0.14.14
+llama-index-readers-docling==0.4.2
+llama-index-node-parser-docling==0.4.2
+llama-index-vector-stores-postgres==0.7.3
+llama-index-embeddings-huggingface==0.6.1
+# Reranker : FlagEmbedding (BAAI/bge-reranker-base) — local, CPU, FR+EN
+llama-index-postprocessor-flag-embedding-reranker==0.4.1
+FlagEmbedding==1.3.5
 
-# Docling pour parsing intelligent de documents
-# Version spécifique pour éviter les conflits de résolution
-docling>=2.7.0,<3.0.0
-pillow>=10.0.0
-openpyxl>=3.1.0
-aiofiles>=23.2.1  # Pour gestion asynchrone des fichiers
+# LangSmith — observabilité RAG/KAG
+langsmith>=0.1.0
 
+# Tests (pytest dans l’image Docker / même environnement que l’app)
+pytest>=8.0,<9
+pytest-asyncio>=0.24,<1
+pytest-cov>=4.0,<7

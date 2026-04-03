@@ -45,6 +45,8 @@ services:
             - models_cache:/root/.cache
             # Images extraites par Docling (multimodal) - montées localement pour accès externe
             - ./media:/app/media
+            # Journal dédié pipeline bibliothèque/espaces (library_document_processing.log)
+            - ./logs:/app/logs
 
         ports:
             - "8001:8000"
@@ -88,12 +90,21 @@ services:
             - KAG_EXTRACTION_MODEL=${KAG_EXTRACTION_MODEL}
             - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-true}
             - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
-            - VISION_MODEL=${VISION_MODEL:-gpt-4o}
+            - VISION_MODEL=${VISION_MODEL:-pixtral-12b-2409}
+            - VISION_MAX_TOKENS=${VISION_MAX_TOKENS:-1500}
+            - VISION_MAX_IMAGES_PER_DOCUMENT=${VISION_MAX_IMAGES_PER_DOCUMENT:-}
             # Redis + Celery (tâches background hors process web)
             - REDIS_URL=${REDIS_URL}
             - CELERY_BROKER_URL=${CELERY_BROKER_URL}
             - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
             - TASK_BACKEND_MODE=${TASK_BACKEND_MODE}
+            # LangSmith observabilité
+            - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
+            - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-}
+            - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
+            - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
+            - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
+            - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
         depends_on:
             db:
                 condition: service_healthy
@@ -114,6 +125,7 @@ services:
             - ./app/pytest.ini:/app/pytest.ini
             - models_cache:/root/.cache
             - ./media:/app/media
+            - ./logs:/app/logs
         environment:
             - APP_NAME=${APP_NAME}
             - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
@@ -148,13 +160,22 @@ services:
             - KAG_ENABLED=${KAG_ENABLED:-true}
             - KAG_EXTRACTION_PROVIDER=${KAG_EXTRACTION_PROVIDER}
             - KAG_EXTRACTION_MODEL=${KAG_EXTRACTION_MODEL}
-            - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-true}
+            - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-false}
             - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
-            - VISION_MODEL=${VISION_MODEL:-gpt-4o}
+            - VISION_MODEL=${VISION_MODEL:-pixtral-12b-2409}
+            - VISION_MAX_TOKENS=${VISION_MAX_TOKENS:-1500}
+            - VISION_MAX_IMAGES_PER_DOCUMENT=${VISION_MAX_IMAGES_PER_DOCUMENT:-}
             - REDIS_URL=${REDIS_URL}
             - CELERY_BROKER_URL=${CELERY_BROKER_URL}
             - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
             - TASK_BACKEND_MODE=celery
+            # LangSmith observabilité
+            - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
+            - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-}
+            - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
+            - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
+            - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
+            - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
         depends_on:
             db:
                 condition: service_healthy

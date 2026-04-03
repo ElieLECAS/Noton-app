@@ -68,23 +68,28 @@ RUN pip install --no-cache-dir \
     "pgvector==0.4.2" \
     "pydantic-settings>=2.3.0,<3.0.0"
 
-# Étape 3: docling-core explicitement (compatible avec docling 2.8.3 et llama-index-readers-docling 0.4.2)
-# docling==2.8.3 nécessite docling-core>=2.6.1,<3.0.0
-# llama-index-readers-docling==0.4.2 nécessite docling-core>=2.2.0,<3
-# On installe une version compatible pour éviter le backtracking
-RUN pip install --no-cache-dir "docling-core>=2.6.1,<3.0.0"
+# Étape 3: docling-core[chunking] — extra requis pour HybridChunker (semchunk, etc.) sinon import DoclingNodeParser échoue
+# docling==2.8.3 : docling-core>=2.6.1,<3.0.0 | llama-index-node-parser-docling 0.4.2 : docling-core>=2.18.0,<3
+RUN pip install --no-cache-dir "docling-core[chunking]>=2.18.0,<3.0.0"
+
+# docling-core>=2.18 charge le chunker code qui importe tree_sitter (non toujours installé en transitif)
+RUN pip install --no-cache-dir "tree-sitter>=0.21.0,<1.0.0"
 
 # Étape 4: Docling (utilise docling-core déjà installé)
 RUN pip install --no-cache-dir "docling==2.8.3"
+# docling peut résoudre docling-core sans extras — réappliquer [chunking] pour semchunk / HybridChunker
+RUN pip install --no-cache-dir "docling-core[chunking]>=2.18.0,<3.0.0"
 
 # Étape 5: LlamaIndex core + dépendances communes
 RUN pip install --no-cache-dir \
     "llama-index-core==0.14.14"
 
-# Étape 6a: Extensions Docling pour LlamaIndex avec --no-deps (docling/docling-core déjà installés)
-# Évite le backtracking car pip ne résout plus docling-core
+# Étape 6a: Extensions Docling pour LlamaIndex
+# readers-docling : --no-deps (docling/docling-core déjà installés)
+# node-parser-docling : avec deps pour que pip valide docling-core>=2.18 (déjà satisfait à l'étape 3)
 RUN pip install --no-cache-dir --no-deps \
-    "llama-index-readers-docling==0.4.2" \
+    "llama-index-readers-docling==0.4.2"
+RUN pip install --no-cache-dir \
     "llama-index-node-parser-docling==0.4.2"
 
 # Étape 6b: Autres extensions LlamaIndex (sans docling dans le lot)
@@ -106,6 +111,9 @@ RUN grep -v -E '^[[:space:]]*#|^[[:space:]]*$$' requirements.txt | \
 RUN pip install --no-cache-dir \
     "pydantic>=2.0.0,<2.10" \
     "setuptools<82"
+
+# Étape 7c: Vérifier que le chunking hiérarchique Docling est importable (sinon build échoue).
+RUN python -c "from llama_index.node_parser.docling import DoclingNodeParser; print('DoclingNodeParser OK')"
 
 # Étape 8: Les modèles seront téléchargés au runtime la première fois et persistés
 # via le volume models_cache monté sur /root/.cache dans docker-compose.yaml

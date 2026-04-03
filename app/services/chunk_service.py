@@ -21,6 +21,7 @@ from app.services.chunking_service import (
 )
 from app.database import engine
 from app.config import settings
+from app.library_document_logging import get_library_document_logger, log_chunk_inventory
 import logging
 import threading
 import time
@@ -448,6 +449,7 @@ def create_chunks_for_note_from_docling(
     note: Note,
     llama_docs: list,
     generate_embeddings: bool = False,
+    images_info: Optional[list] = None,
 ) -> List[NoteChunk]:
     """
     Créer les chunks pour un document importé via Docling.
@@ -461,6 +463,7 @@ def create_chunks_for_note_from_docling(
         note             : La note cible
         llama_docs       : Liste de LlamaIndex Document avec JSON Docling
         generate_embeddings : Si True, génère les embeddings synchronement
+        images_info      : Sortie extract_and_save_images (Docling) pour enrichissement Pixtral
 
     Returns:
         Liste des chunks créés
@@ -468,6 +471,19 @@ def create_chunks_for_note_from_docling(
     delete_chunks_for_note(session, note.id)
 
     chunks = chunk_note_from_docling_docs(note, llama_docs)
+
+    if images_info:
+        try:
+            from app.services.vision_service import enrich_visual_chunks_with_pixtral
+
+            enrich_visual_chunks_with_pixtral(chunks, images_info)
+        except Exception as e:
+            logger.warning(
+                "Enrichissement Pixtral ignoré pour la note %s: %s",
+                note.id,
+                e,
+                exc_info=True,
+            )
 
     if generate_embeddings:
         from app.services.embedding_service import generate_embeddings_batch
@@ -788,6 +804,13 @@ def create_chunks_for_document(
     session: Session, document: Document, generate_embeddings: bool = False
 ) -> List[DocumentChunk]:
     """Créer les chunks pour un document (nouvelle architecture)."""
+    ld = get_library_document_logger()
+    ld.info(
+        "[Chunking] document_id=%s — stratégie FALLBACK (markdown H2 ou fenêtre adaptative). "
+        "Raison typique : pas de JSON Docling (llama_docs vide), ou échec DoclingNodeParser. "
+        "Conséquence : is_leaf=True partout, node_id/parent_node_id NULL, pas de parents RAG.",
+        document.id,
+    )
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document.id))
     session.commit()
 
@@ -841,6 +864,7 @@ def create_chunks_for_document(
     if chunks:
         session.add_all(chunks)
         session.commit()
+    log_chunk_inventory(ld, document.id, chunks, "Chunking fallback terminé")
     return chunks
 
 
@@ -849,11 +873,18 @@ def create_chunks_for_document_from_docling(
     document: Document,
     llama_docs: list,
     generate_embeddings: bool = False,
+    images_info: Optional[list] = None,
 ) -> List[DocumentChunk]:
     """
     Chunking sémantique via DoclingNodeParser (parents + leaves, métadonnées Docling).
     Si échec ou aucun chunk, repli sur create_chunks_for_document (fenêtre fixe).
     """
+    ld = get_library_document_logger()
+    ld.info(
+        "[Chunking] document_id=%s — étape Docling hiérarchique : tentative DoclingNodeParser "
+        "(attendu : parents is_leaf=False + feuilles avec parent_node_id / node_id).",
+        document.id,
+    )
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document.id))
     session.commit()
 
@@ -868,9 +899,26 @@ def create_chunks_for_document_from_docling(
                 time.perf_counter() - t0,
                 len(chunks),
             )
+            ld.info(
+                "[Chunking] document_id=%s — DoclingNodeParser a retourné %d chunk(s) en %.2fs.",
+                document.id,
+                len(chunks),
+                time.perf_counter() - t0,
+            )
+        else:
+            ld.warning(
+                "[Chunking] document_id=%s — llama_docs absent : impossible d'appeler DoclingNodeParser.",
+                document.id,
+            )
     except Exception as e:
         logger.warning(
             "chunk_document_from_docling_docs échoué document_id=%s: %s",
+            document.id,
+            e,
+            exc_info=True,
+        )
+        ld.error(
+            "[Chunking] document_id=%s — exception pendant chunk_document_from_docling_docs : %s",
             document.id,
             e,
             exc_info=True,
@@ -882,9 +930,43 @@ def create_chunks_for_document_from_docling(
             "Fallback chunking taille fixe (pas de chunks Docling) document_id=%s",
             document.id,
         )
+        ld.warning(
+            "[Chunking] document_id=%s — REPLI vers create_chunks_for_document : "
+            "aucun chunk Docling (parser vide, import raté, ou exception). Voir logs ci-dessus.",
+            document.id,
+        )
         return create_chunks_for_document(
             session=session, document=document, generate_embeddings=generate_embeddings
         )
+
+    ld.info(
+        "[Chunking] document_id=%s — stratégie RÉELLE : docling_hiérarchique (pas de repli markdown).",
+        document.id,
+    )
+    log_chunk_inventory(ld, document.id, chunks, "Chunking Docling avant Pixtral")
+
+    if images_info:
+        try:
+            from app.services.vision_service import enrich_visual_chunks_with_pixtral
+
+            enrich_visual_chunks_with_pixtral(chunks, images_info)
+            ld.info(
+                "[Pixtral] document_id=%s — enrichissement visuel terminé (ou ignoré si MULTIMODAL off / pas de paires).",
+                document.id,
+            )
+        except Exception as e:
+            logger.warning(
+                "Enrichissement Pixtral ignoré document_id=%s: %s",
+                document.id,
+                e,
+                exc_info=True,
+            )
+            ld.warning(
+                "[Pixtral] document_id=%s — enrichissement échoué ou ignoré : %s",
+                document.id,
+                e,
+                exc_info=True,
+            )
 
     if generate_embeddings and chunks:
         from app.services.embedding_service import generate_embeddings_batch
@@ -905,16 +987,27 @@ def create_chunks_for_document_from_docling(
 
     session.add_all(chunks)
     session.commit()
+    log_chunk_inventory(ld, document.id, chunks, "Chunking Docling final (persisté)")
     return chunks
 
 
 def _process_embeddings_for_document(document_id: int):
     """Génère les embeddings des seuls chunks feuilles (parents exclus), puis KAG si activé."""
+    ld = get_library_document_logger()
+    ld.info(
+        "[Embeddings] document_id=%s — début : vectorisation des feuilles uniquement "
+        "(is_leaf=True ; les parents ne reçoivent pas d'embedding).",
+        document_id,
+    )
     t_embed = time.perf_counter()
     try:
         with Session(engine) as session:
             document = session.get(Document, document_id)
             if not document:
+                ld.warning(
+                    "[Embeddings] document_id=%s — document introuvable, arrêt.",
+                    document_id,
+                )
                 return
 
             # Feuilles uniquement (is_leaf=False = parents hiérarchiques Docling, sans vecteur)
@@ -924,12 +1017,21 @@ def _process_embeddings_for_document(document_id: int):
                 or_(DocumentChunk.is_leaf == True, DocumentChunk.is_leaf.is_(None)),
             )
             chunks = list(session.exec(statement).all())
+            ld.info(
+                "[Embeddings] document_id=%s — %d chunk(s) feuille sans embedding à traiter.",
+                document_id,
+                len(chunks),
+            )
             if not chunks:
                 document.processing_status = "completed"
                 document.processing_progress = 100
                 document.updated_at = datetime.utcnow()
                 session.add(document)
                 session.commit()
+                ld.info(
+                    "[Embeddings] document_id=%s — rien à embedder (déjà fait ou aucune feuille), statut completed.",
+                    document_id,
+                )
                 return
 
             document.processing_progress = max(document.processing_progress or 0, 90)
@@ -960,6 +1062,10 @@ def _process_embeddings_for_document(document_id: int):
 
             if ok == 0:
                 logger.warning("Aucun embedding valide pour document_id=%s", document_id)
+                ld.error(
+                    "[Embeddings] document_id=%s — aucun vecteur valide écrit, statut failed.",
+                    document_id,
+                )
                 document.processing_status = "failed"
                 document.processing_progress = max(document.processing_progress or 0, 90)
                 document.updated_at = datetime.utcnow()
@@ -974,6 +1080,12 @@ def _process_embeddings_for_document(document_id: int):
                 document_id,
                 time.perf_counter() - t_embed,
                 ok,
+            )
+            ld.info(
+                "[Embeddings] document_id=%s — %d vecteur(s) écrits en %.2fs.",
+                document_id,
+                ok,
+                time.perf_counter() - t_embed,
             )
 
             # Après les embeddings, générer le KAG pour tous les espaces liés
@@ -992,10 +1104,25 @@ def _process_embeddings_for_document(document_id: int):
                     DocumentSpace.document_id == document_id
                 )
                 space_ids = list(session.exec(space_ids_stmt).all())
+                if not space_ids:
+                    ld.info(
+                        "[KAG] document_id=%s — aucun espace lié (document_space vide), KAG ignoré.",
+                        document_id,
+                    )
 
                 for space_id in space_ids:
                     try:
+                        ld.info(
+                            "[KAG] document_id=%s space_id=%s — extraction / graphe en cours…",
+                            document_id,
+                            space_id,
+                        )
                         process_kag_for_document_space(session, document_id, space_id)
+                        ld.info(
+                            "[KAG] document_id=%s space_id=%s — terminé.",
+                            document_id,
+                            space_id,
+                        )
                     except Exception as kag_exc:
                         logger.warning(
                             "KAG auto post-upload échoué document_id=%s space_id=%s: %s",
@@ -1003,14 +1130,35 @@ def _process_embeddings_for_document(document_id: int):
                             space_id,
                             kag_exc,
                         )
+                        ld.warning(
+                            "[KAG] document_id=%s space_id=%s — échec : %s",
+                            document_id,
+                            space_id,
+                            kag_exc,
+                        )
+            else:
+                ld.info(
+                    "[KAG] document_id=%s — KAG désactivé (KAG_ENABLED=false), pas d'extraction graphe.",
+                    document_id,
+                )
 
             document.processing_status = "completed"
             document.processing_progress = 100
             document.updated_at = datetime.utcnow()
             session.add(document)
             session.commit()
+            ld.info(
+                "[Pipeline] document_id=%s — traitement terminé (completed), progress=100.",
+                document_id,
+            )
     except Exception as e:
         logger.error("Erreur embeddings document %s: %s", document_id, e, exc_info=True)
+        get_library_document_logger().error(
+            "[Embeddings/KAG] document_id=%s — erreur globale : %s",
+            document_id,
+            e,
+            exc_info=True,
+        )
         try:
             with Session(engine) as session:
                 document = session.get(Document, document_id)

@@ -11,7 +11,9 @@ class Settings(BaseSettings):
     
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL")
-    
+    # echo=True journalise chaque SQL (UPDATE/INSERT d'embeddings = vecteurs énormes dans les logs)
+    DATABASE_ECHO: bool = False
+
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     ALGORITHM: str = "HS256"
@@ -42,7 +44,13 @@ class Settings(BaseSettings):
     # Document Processing
     MAX_CONCURRENT_DOCUMENTS: int = 1  # Ignoré pour la bibliothèque : 1 worker global (voir document_service_new)
     EMBEDDING_BATCH_SIZE: int = 16  # Taille de batch embedding (CPU-only, éviter la saturation)
+    EMBEDDING_DIMENSION: int = 1024
+    EMBEDDING_MODEL: str = "BAAI/bge-m3"
+    EMBEDDING_DEVICE: str = "cpu"
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
+    # Blocs texte Docling : si longueur > seuil, chunks text_window (parent = text_full). 0 = désactivé.
+    DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 0
+    DOCLING_TEXT_WINDOW_OVERLAP: int = 200
 
     # Docling OCR (schémas techniques, cotes, PDF scannés)
     DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
@@ -70,15 +78,37 @@ class Settings(BaseSettings):
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
     
-    # Multimodal - Désactivé par défaut (images extraites et stockées par Docling, pas de Vision ni chunks image)
+    # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
+    # False = défaut si la variable est absente (voir parse_multimodal_enabled).
     MULTIMODAL_ENABLED: bool = False
-    VISION_MODEL: str = "gpt-4o"  # Modèle pour décrire les images si MULTIMODAL_ENABLED
+    # Pixtral via API Mistral (ex. pixtral-12b-2409) pour enrichir les chunks feuilles « picture »
+    VISION_MODEL: str = "pixtral-12b-2409"
+    VISION_MAX_TOKENS: int = 1500
+    # Plafond d’appels vision par document (None = illimité)
+    VISION_MAX_IMAGES_PER_DOCUMENT: Optional[int] = None
 
     # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
     TASK_BACKEND_MODE: str = "thread"
     REDIS_URL: Optional[str] = None  # ex. redis://redis:6379/0
     CELERY_BROKER_URL: Optional[str] = None  # défaut: REDIS_URL
     CELERY_RESULT_BACKEND: Optional[str] = None  # défaut: REDIS_URL
+
+    # LangSmith — observabilité RAG/KAG
+    LANGSMITH_API_KEY: Optional[str] = None
+    LANGCHAIN_TRACING_V2: bool = False
+    LANGCHAIN_PROJECT: str = "noton-rag-kag"
+
+    @field_validator('DATABASE_ECHO', mode='before')
+    @classmethod
+    def parse_database_echo(cls, v: Union[str, bool, None]) -> bool:
+        """SQLAlchemy echo : désactivé par défaut (évite de logger les vecteurs d'embedding)."""
+        if v is None:
+            return False
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in ('true', '1', 'yes', 'on')
+        return False
 
     @field_validator('MULTIMODAL_ENABLED', mode='before')
     @classmethod
@@ -180,7 +210,23 @@ class Settings(BaseSettings):
                 return None
         return None
     
-    @field_validator('TORCH_NUM_THREADS', 'OMP_NUM_THREADS', 'SPACE_CHAT_MAX_TOKENS', mode='before')
+    @field_validator('VISION_MAX_TOKENS', mode='before')
+    @classmethod
+    def parse_vision_max_tokens(cls, v: Union[str, int, None]) -> int:
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return 1500
+        try:
+            return max(64, int(v))
+        except (TypeError, ValueError):
+            return 1500
+
+    @field_validator(
+        'TORCH_NUM_THREADS',
+        'OMP_NUM_THREADS',
+        'SPACE_CHAT_MAX_TOKENS',
+        'VISION_MAX_IMAGES_PER_DOCUMENT',
+        mode='before',
+    )
     @classmethod
     def parse_optional_int(cls, v: Union[str, int, None]) -> Optional[int]:
         """Convertit les chaînes vides en None pour les champs int optionnels"""

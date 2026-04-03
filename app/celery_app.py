@@ -65,3 +65,7 @@ celery_app.conf.update(
     task_acks_late=True,
     worker_prefetch_multiplier=1,
 )
+
+# Import explicite : enregistre toutes les @celery_app.task sur l’instance (évite « unregistered task »
+# si le worker n’a pas rechargé le module après ajout d’une tâche — redémarrer le worker reste obligatoire).
+import app.tasks.documents  # noqa: F401

@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from unittest import mock
 
+import pytest
+
 from app.config import settings
 from app.services import task_dispatch
 
@@ -89,5 +91,48 @@ def test_dispatch_document_spaces_update_enqueues_celery():
     assert task_id == "celery-task-doc-spaces"
     apply_async.assert_called_once_with(
         args=[77, [1, 2], [3], 9],
+        queue="documents",
+    )
+
+
+def test_dispatch_reindex_library_enqueues_celery():
+    mock_result = mock.MagicMock()
+    mock_result.id = "celery-reindex-pytest"
+
+    with mock.patch(
+        "app.tasks.documents.reindex_library_document_task.apply_async",
+        return_value=mock_result,
+    ) as apply_async:
+        task_id = task_dispatch.dispatch_reindex_library(5, 9)
+
+    assert task_id == "celery-reindex-pytest"
+    apply_async.assert_called_once_with(
+        args=[5, 9],
+        queue="documents",
+    )
+
+
+def test_dispatch_reindex_library_raises_runtime_when_celery_unavailable():
+    with mock.patch(
+        "app.tasks.documents.reindex_library_document_task.apply_async",
+        side_effect=ConnectionError("broker down"),
+    ):
+        with pytest.raises(RuntimeError, match="Celery"):
+            task_dispatch.dispatch_reindex_library(1, 2)
+
+
+def test_dispatch_reindex_all_library_enqueues_celery():
+    mock_result = mock.MagicMock()
+    mock_result.id = "celery-reindex-all-pytest"
+
+    with mock.patch(
+        "app.tasks.documents.reindex_all_library_documents_task.apply_async",
+        return_value=mock_result,
+    ) as apply_async:
+        task_id = task_dispatch.dispatch_reindex_all_library(3)
+
+    assert task_id == "celery-reindex-all-pytest"
+    apply_async.assert_called_once_with(
+        args=[3],
         queue="documents",
     )

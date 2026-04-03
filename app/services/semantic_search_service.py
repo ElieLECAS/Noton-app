@@ -16,7 +16,7 @@ Optimisations :
   - Filtrage pré-reranking : évite de reranker des candidats peu pertinents (-20 à -40% de temps)
   - Early stopping : skip le reranking si similarité vectorielle déjà élevée (~10-20% des cas)
   - Limite dynamique : ajuste le nombre de candidats selon les besoins (max MAX_RERANK_CANDIDATES)
-  - Device configurable : possibilité d'utiliser GPU via RERANKER_DEVICE
+  - Reranker : GPU si PyTorch voit CUDA ; ``RERANKER_USE_FP16`` / ``RERANKER_TOP_N`` en option
 
 Les anciens composants LlamaIndex (PGVectorStore, VectorStoreIndex, RecursiveRetriever,
 MetadataFilter) ont été supprimés : la recherche SQL directe est plus fiable et cohérente
@@ -38,6 +38,7 @@ import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from app.config import settings
+from app.tracing import trace_run
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +59,10 @@ RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
 RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
+# FlagEmbeddingReranker tronque à top_n (pas de device= dans llama-index 0.4.x).
+_FLAG_RERANK_TOP_N = int(os.getenv("RERANKER_TOP_N", "4096"))
+TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
+TRACE_TEXT_MAX_CHARS = int(os.getenv("TRACE_TEXT_MAX_CHARS", "12000"))
 
 # ---------------------------------------------------------------------------
 # Singletons — chargement unique des modèles lourds
@@ -70,31 +75,61 @@ _embed_model_instance = None
 _embed_model_lock = threading.Lock()
 
 
+def _text_for_trace(node: TextNode) -> str:
+    raw = (
+        node.get_content()
+        if hasattr(node, "get_content")
+        else getattr(node, "text", "") or ""
+    )
+    if not isinstance(raw, str):
+        raw = str(raw)
+    if TRACE_TEXT_MAX_CHARS > 0 and len(raw) > TRACE_TEXT_MAX_CHARS:
+        return raw[:TRACE_TEXT_MAX_CHARS]
+    return raw
+
+
+def _nodes_for_trace(candidates: List[NodeWithScore], limit: int = 80) -> List[Dict]:
+    rows: List[Dict] = []
+    for nws in candidates[:limit]:
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        rows.append(
+            {
+                "score": round(float(nws.score or 0.0), 4),
+                "note_title": meta.get("note_title"),
+                "section": meta.get("parent_heading") or meta.get("heading"),
+                "kag_entity": meta.get("kag_matched_entity"),
+                "text": _text_for_trace(nws.node),
+            }
+        )
+    return rows
+
+
 def _get_reranker():
     """
-    Retourne le reranker (singleton) avec configuration optimisée.
-    
-    Configuration :
-    - top_n=None : pas de limite fixe, ajusté dynamiquement selon les besoins
-    - device : configurable via RERANKER_DEVICE (défaut: cpu)
+    Retourne le reranker (singleton).
+
+    FlagEmbeddingReranker n'accepte pas ``device=`` ; le device suit PyTorch
+    (CUDA si disponible). ``RERANKER_TOP_N`` borne la sortie du postprocessor ;
+    le pipeline tronque ensuite à ``k`` via ``_two_stage_rerank_leaves``.
     """
     global _reranker_instance
     if not RERANKER_AVAILABLE:
         return None
     with _reranker_lock:
         if _reranker_instance is None:
-            device = os.getenv("RERANKER_DEVICE", "cpu")
+            use_fp16 = os.getenv("RERANKER_USE_FP16", "false").lower() == "true"
             logger.info(
-                "Initialisation du reranker %s sur %s (une seule fois)...",
+                "Initialisation du reranker %s (top_n=%s, use_fp16=%s)...",
                 RERANKER_MODEL,
-                device,
+                _FLAG_RERANK_TOP_N,
+                use_fp16,
             )
             _reranker_instance = FlagEmbeddingReranker(
                 model=RERANKER_MODEL,
-                top_n=None,  # Pas de limite fixe, ajusté dynamiquement
-                device=device,
+                top_n=_FLAG_RERANK_TOP_N,
+                use_fp16=use_fp16,
             )
-            logger.info("✅ Reranker initialisé et prêt (device=%s)", device)
+            logger.info("✅ Reranker initialisé et prêt")
         return _reranker_instance
 
 
@@ -242,6 +277,70 @@ def _build_parent_node_dict(
     return node_dict
 
 
+_PARENT_MULTIHOP_MAX = 4
+
+
+def _resolve_note_parent_with_multihop(
+    session: Session,
+    project_id: int,
+    user_id: int,
+    note_id: Optional[int],
+    parent_node_id: Optional[str],
+    parent_node_dict: Dict[str, TextNode],
+) -> Optional[TextNode]:
+    """
+    Remonte la chaîne parent_node_id (text_full, table_full, …) jusqu'au chunk section
+    (is_leaf=False) et fusionne les textes intermédiaires.
+    """
+    if not parent_node_id or note_id is None:
+        return None
+    if parent_node_id in parent_node_dict:
+        return None
+
+    intermediates: List[str] = []
+    current_pid: Optional[str] = parent_node_id
+    hops = 0
+
+    while current_pid and hops < _PARENT_MULTIHOP_MAX:
+        hops += 1
+        stmt = (
+            select(NoteChunk, Note.title)
+            .join(Note, Note.id == NoteChunk.note_id)
+            .where(
+                Note.project_id == project_id,
+                Note.user_id == user_id,
+                NoteChunk.note_id == note_id,
+                NoteChunk.node_id == current_pid,
+            )
+        )
+        row = session.exec(stmt).first()
+        if not row:
+            break
+        chunk, note_title = row
+        metadata = dict(chunk.metadata_json or {})
+        metadata.setdefault("note_id", chunk.note_id)
+        metadata.setdefault("note_title", note_title or "Note sans titre")
+        metadata.setdefault("node_id", chunk.node_id)
+        metadata.setdefault("parent_node_id", chunk.parent_node_id)
+        text = (chunk.content or chunk.text or "").strip()
+
+        if not chunk.is_leaf:
+            if intermediates:
+                prefix = "\n\n---\n\n".join(reversed(intermediates))
+                text = f"{prefix}\n\n---\n\n{text}"
+            return TextNode(
+                id_=chunk.node_id,
+                text=text,
+                metadata=metadata,
+            )
+
+        if text:
+            intermediates.append(text)
+        current_pid = chunk.parent_node_id
+
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Fallback lexical
 # ---------------------------------------------------------------------------
@@ -292,8 +391,6 @@ def _keyword_fallback_passages(
     seen_chunk_ids: set = set()
     for chunk, note_title in rows:
         if chunk.id in seen_chunk_ids:
-            continue
-        if (chunk.metadata_json or {}).get("is_image_chunk"):
             continue
         seen_chunk_ids.add(chunk.id)
 
@@ -671,68 +768,259 @@ def search_relevant_chunks(
         return []
 
     try:
-        # Générer l'embedding de la requête
-        query_embedding = generate_embedding(query_text)
-        if query_embedding is None:
-            logger.warning("Impossible de générer l'embedding de la requête")
-            return []
-        
-        from sqlalchemy import text
-        
-        # Convertir l'embedding en format PostgreSQL array
-        embedding_str = '[' + ','.join(map(str, query_embedding)) + ']'
-        
-        # Rechercher dans les DocumentChunk via join avec Note pour filtrer par projet
-        connection = session.connection()
-        
-        sql_query = f"""
-            SELECT 
-                dc.id,
-                dc.note_id,
-                dc.chunk_index,
-                dc.content,
-                dc.chunk_type,
-                dc.page_number,
-                dc.section_title,
-                dc.start_char,
-                dc.end_char,
-                dc.created_at,
-                n.title as note_title,
-                n.note_type as note_type,
-                n.source_file_type as source_file_type,
-                1 - (dc.embedding <=> '{embedding_str}'::vector) as similarity_score
-            FROM document_chunk dc
-            INNER JOIN note n ON dc.note_id = n.id
-            WHERE n.project_id = {project_id}
-                AND n.user_id = {user_id}
-                AND dc.embedding IS NOT NULL
-            ORDER BY dc.embedding <=> '{embedding_str}'::vector
-            LIMIT {k}
-        """
-        
-        result = connection.execute(text(sql_query))
-        
-        # Convertir les résultats
-        chunks_results = []
-        for row in result:
-            chunk_dict = {
-                'chunk_id': row.id,
-                'note_id': row.note_id,
-                'note_title': row.note_title,
-                'note_type': row.note_type,
-                'source_file_type': row.source_file_type,
-                'content': row.content,
-                'chunk_type': row.chunk_type,
-                'page_number': row.page_number,
-                'section_title': row.section_title,
-                'score': float(row.similarity_score)
+        candidate_k = (
+            k * RERANKER_CANDIDATE_MULTIPLIER
+            if (RERANKER_AVAILABLE and RERANKER_ENABLED)
+            else k
+        )
+
+        # --- Étape 1 : retrieval vectoriel SQL (leaves seulement) ---
+        with trace_run(
+            "vector_retrieval",
+            run_type="retriever",
+            inputs={"query": query_text, "project_id": project_id, "candidate_k": candidate_k},
+            tags=["retrieval", "vector", "pgvector"],
+        ) as vr_run:
+            leaf_candidates = _retrieve_leaves_sql(
+                session=session,
+                project_id=project_id,
+                user_id=user_id,
+                query_text=query_text,
+                candidate_k=candidate_k,
+            )
+            top3_scores = [round(float(c.score or 0), 4) for c in leaf_candidates[:3]]
+            vr_outputs = {"nb_candidates": len(leaf_candidates), "top3_scores": top3_scores}
+            if TRACE_VERBOSE_TEXT:
+                vr_outputs["candidates_text"] = _nodes_for_trace(leaf_candidates)
+            vr_run.end(outputs=vr_outputs)
+
+        if not leaf_candidates:
+            logger.info("Aucun résultat vectoriel, activation du fallback lexical")
+            return _keyword_fallback_passages(
+                session=session,
+                project_id=project_id,
+                user_id=user_id,
+                query_text=query_text,
+                k=k,
+            )
+
+        # --- Étape 1b : enrichissement KAG (si activé) ---
+        pivot_entity_names: List[str] = []
+        if settings.KAG_ENABLED:
+            try:
+                from app.services.kag_extraction_service import extract_entities_from_query_sync
+                pivot_entity_names = extract_entities_from_query_sync(query_text)
+                if pivot_entity_names:
+                    logger.debug("Entités pivot requête (LLM): %s", pivot_entity_names[:5])
+            except Exception as ext_err:
+                logger.debug("Extraction entités requête ignorée: %s", ext_err)
+            try:
+                with trace_run(
+                    "kag_graph_retrieval",
+                    run_type="retriever",
+                    inputs={"query": query_text, "pivot_entities": pivot_entity_names[:10], "limit": k},
+                    tags=["retrieval", "kag", "graph"],
+                ) as kag_run:
+                    graph_candidates = _retrieve_via_knowledge_graph(
+                        session=session,
+                        project_id=project_id,
+                        user_id=user_id,
+                        query_text=query_text,
+                        limit=k,
+                        pivot_entity_names=pivot_entity_names or None,
+                    )
+                    matched_entities = list({
+                        (c.node.metadata or {}).get("kag_matched_entity", "")
+                        for c in graph_candidates
+                        if (c.node.metadata or {}).get("kag_matched_entity")
+                    })
+                    kag_outputs = {"nb_chunks": len(graph_candidates), "matched_entities": matched_entities[:10]}
+                    if TRACE_VERBOSE_TEXT:
+                        kag_outputs["candidates_text"] = _nodes_for_trace(graph_candidates)
+                    kag_run.end(outputs=kag_outputs)
+
+                if graph_candidates:
+                    with trace_run(
+                        "hybrid_fusion",
+                        run_type="chain",
+                        inputs={"nb_vector": len(leaf_candidates), "nb_kag": len(graph_candidates), "graph_boost": 0.15},
+                        tags=["fusion", "kag"],
+                    ) as fusion_run:
+                        leaf_candidates = _merge_with_graph_candidates(
+                            vector_candidates=leaf_candidates,
+                            graph_candidates=graph_candidates,
+                            graph_boost=0.15,
+                            pivot_entity_names=pivot_entity_names or None,
+                        )
+                        fusion_outputs = {"nb_merged": len(leaf_candidates)}
+                        if TRACE_VERBOSE_TEXT:
+                            fusion_outputs["merged_text"] = _nodes_for_trace(leaf_candidates)
+                        fusion_run.end(outputs=fusion_outputs)
+                    logger.info(
+                        "KAG enrichissement: +%d candidats graphe fusionnés",
+                        len(graph_candidates),
+                    )
+            except Exception as kag_err:
+                logger.warning("KAG enrichissement échoué: %s", kag_err)
+
+        # --- Étape 2 : Optimisations pré-reranking ---
+        # Filtrer les candidats avec faible similarité vectorielle
+        filtered_candidates = _filter_low_similarity_candidates(
+            leaf_candidates, MIN_VECTOR_SIMILARITY_THRESHOLD
+        )
+
+        # Early stopping : si les top-k candidats ont déjà une très haute similarité,
+        # skip le reranking (gain de temps significatif)
+        skip_reranking = False
+        if len(filtered_candidates) >= k:
+            top_k_scores = [float(c.score or 0.0) for c in filtered_candidates[:k]]
+            avg_top_k = sum(top_k_scores) / len(top_k_scores)
+
+            if avg_top_k >= SKIP_RERANK_THRESHOLD:
+                logger.info(
+                    "Similarité vectorielle élevée (%.3f >= %.2f), skip reranking",
+                    avg_top_k,
+                    SKIP_RERANK_THRESHOLD,
+                )
+                skip_reranking = True
+                top_leaves = filtered_candidates[:k]
+
+        # --- Étape 3 : reranking deux étapes sur les LEAVES ---
+        if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
+            try:
+                if _get_reranker():
+                    with trace_run(
+                        "reranking",
+                        run_type="chain",
+                        inputs={
+                            "nb_candidates": len(filtered_candidates),
+                            "stage1_max": RERANK_STAGE1_MAX,
+                            "stage2_pool": RERANK_STAGE2_POOL,
+                            "k": k,
+                        },
+                        tags=["reranking", "bge-reranker"],
+                    ) as rerank_run:
+                        top_leaves = _two_stage_rerank_leaves(
+                            filtered_candidates,
+                            query_text,
+                            k,
+                        )
+                        top_scores = [round(float(n.score or 0), 4) for n in top_leaves[:5]]
+                        rerank_outputs = {"nb_final": len(top_leaves), "top5_scores": top_scores}
+                        if TRACE_VERBOSE_TEXT:
+                            rerank_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
+                            rerank_outputs["filtered_candidates_text"] = _nodes_for_trace(filtered_candidates)
+                        rerank_run.end(outputs=rerank_outputs)
+                else:
+                    logger.warning("Reranker non disponible, fallback sur ordre vectoriel")
+                    top_leaves = filtered_candidates[:k]
+            except Exception as rerank_err:
+                logger.warning(
+                    "Reranking échoué, fallback sur ordre vectoriel: %s", rerank_err
+                )
+                top_leaves = filtered_candidates[:k]
+        elif not skip_reranking:
+            if not RERANKER_ENABLED:
+                logger.debug("Reranker désactivé (RERANKER_ENABLED=false)")
+            top_leaves = filtered_candidates[:k]
+
+        # --- Étape 3 : résolution des parents (contexte enrichi pour le LLM) ---
+        # On charge les parents UNE SEULE FOIS, après le reranking (pas avant).
+        with trace_run(
+            "parent_resolution",
+            run_type="chain",
+            inputs={"project_id": project_id, "nb_top_leaves": len(top_leaves)},
+            tags=["parent", "context"],
+        ) as parent_run:
+            parent_node_dict = _build_parent_node_dict(session, project_id, user_id)
+
+            final_nodes: List[NodeWithScore] = []
+            seen_node_ids: set = set()
+            parents_resolved = 0
+            parents_not_found = 0
+
+            for nws in top_leaves:
+                score = float(getattr(nws, "score", 0.0) or 0.0)
+                leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
+                parent_node_id = leaf_meta.get("parent_node_id")
+
+                target_node = None
+                if parent_node_id:
+                    target_node = parent_node_dict.get(parent_node_id)
+                    if target_node is None:
+                        nid = leaf_meta.get("note_id")
+                        try:
+                            note_id_int = int(nid) if nid is not None else None
+                        except (TypeError, ValueError):
+                            note_id_int = None
+                        target_node = _resolve_note_parent_with_multihop(
+                            session,
+                            project_id,
+                            user_id,
+                            note_id_int,
+                            parent_node_id,
+                            parent_node_dict,
+                        )
+                if target_node is None:
+                    target_node = nws.node
+                    if parent_node_id:
+                        parents_not_found += 1
+                else:
+                    parents_resolved += 1
+                    _merge_leaf_page_into_node_metadata(nws.node, target_node)
+
+                node_id = getattr(target_node, "node_id", None) or leaf_meta.get("node_id")
+                if node_id and node_id in seen_node_ids:
+                    continue
+                if node_id:
+                    seen_node_ids.add(node_id)
+
+                final_nodes.append(NodeWithScore(node=target_node, score=score))
+
+            parent_outputs = {
+                "nb_final_passages": len(final_nodes),
+                "parents_resolved": parents_resolved,
+                "parents_not_found": parents_not_found,
             }
-            chunks_results.append(chunk_dict)
-        
-        top_scores = [f"{c['score']:.3f}" for c in chunks_results[:3]]
-        logger.info(f"✅ Trouvé {len(chunks_results)} chunks pertinents (scores: {top_scores})")
-        return chunks_results
-        
+            if TRACE_VERBOSE_TEXT:
+                parent_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
+                parent_outputs["final_nodes_text"] = _nodes_for_trace(final_nodes)
+            parent_run.end(outputs=parent_outputs)
+
+        logger.info(
+            "Résolution parents: %d passages finaux "
+            "(%d parents résolus, %d parents non trouvés)",
+            len(final_nodes),
+            parents_resolved,
+            parents_not_found,
+        )
+
+        passages = [
+            _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))
+            for nws in final_nodes
+        ]
+
+        score_strs = [f"{p['score']:.3f}" for p in passages[:3]]
+        logger.info(
+            "Trouvé %d passages pertinents%s (scores: %s...)",
+            len(passages),
+            " [reranked]" if (RERANKER_AVAILABLE and RERANKER_ENABLED) else "",
+            score_strs,
+        )
+
+        passages = refine_with_source_authority(passages, query_text)
+
+        if not passages:
+            return _keyword_fallback_passages(
+                session=session,
+                project_id=project_id,
+                user_id=user_id,
+                query_text=query_text,
+                k=k,
+            )
+
+        return passages
+
     except Exception as e:
         logger.error(f"❌ Erreur lors de la recherche dans les chunks: {e}", exc_info=True)
         return []

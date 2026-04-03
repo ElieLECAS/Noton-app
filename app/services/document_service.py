@@ -879,13 +879,14 @@ def _process_document_for_note(note_id: int, file_path: str):
                 len(markdown_content),
             )
             
-            # Extraction et stockage des images (sans Vision ni chunks image)
+            images_info: list = []
             if docling_doc:
-                images_info = extract_and_save_images(docling_doc, note_id)
+                images_info = extract_and_save_images(docling_doc, note_id) or []
                 if images_info:
                     logger.info(
                         "%d image(s) extraite(s) pour la note %d",
-                        len(images_info), note_id
+                        len(images_info),
+                        note_id,
                     )
 
             try:
@@ -893,8 +894,11 @@ def _process_document_for_note(note_id: int, file_path: str):
                 # sinon fallback sur HierarchicalNodeParser
                 if llama_docs:
                     chunks = create_chunks_for_note_from_docling(
-                        session, note, llama_docs,
+                        session,
+                        note,
+                        llama_docs,
                         generate_embeddings=False,
+                        images_info=images_info or None,
                     )
                     logger.info(
                         "Créé %d chunks (DoclingNodeParser) pour la note %d",

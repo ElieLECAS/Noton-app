@@ -8,12 +8,17 @@ from queue import Queue, Empty
 from sqlmodel import Session, select
 from app.config import settings
 from app.database import engine
+from app.library_document_logging import get_library_document_logger
 from app.models.document import Document, DocumentCreate, DocumentUpdate
 from app.models.document_space import DocumentSpace
 from app.models.document_chunk import DocumentChunk
+from app.tracing import trace_run, trace_pipeline
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
+
+# En file d’attente de réindexation : chunks et embeddings actuels restent servis jusqu’au début effectif du worker.
+DOCUMENT_STATUS_REINDEX_QUEUED = "reindex_queued"
 
 # Une seule file globale : ordre FIFO strict, un document terminé entièrement avant le suivant.
 document_task_queue: Queue = Queue()
@@ -543,10 +548,18 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
 
     Utilise ``document.source_file_path`` (fichier déjà stocké sous media/documents).
     """
+    ld = get_library_document_logger()
+    ld.info(
+        "[Réindex] Démarrage document_id=%s user_id=%s — pipeline : PDF/Docling → "
+        "markdown + llama_docs → chunks → embeddings → KAG (espaces liés).",
+        document_id,
+        user_id,
+    )
     from app.services.chunk_service import (
         complete_document_embeddings_and_kag_sync,
         create_chunks_for_document,
         create_chunks_for_document_from_docling,
+        delete_chunks_for_document,
     )
 
     with Session(engine) as session:
@@ -558,6 +571,16 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         src = Path(document.source_file_path)
         if not src.is_file():
             raise ValueError("Fichier source introuvable sur le disque")
+        ld.info(
+            "[Réindex] document_id=%s — fichier source : %s",
+            document_id,
+            src,
+        )
+
+        delete_chunks_for_document(session, document_id, commit=True)
+        document = session.get(Document, document_id)
+        if not document:
+            raise ValueError("Document introuvable après nettoyage des chunks")
 
         document.processing_status = "processing"
         document.processing_progress = 15
@@ -567,6 +590,11 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
 
     try:
         pdf_input = ensure_pdf_for_docling(str(src))
+        ld.info(
+            "[Réindex] document_id=%s — conversion/entrée Docling : %s",
+            document_id,
+            pdf_input,
+        )
         t0 = time.perf_counter()
         markdown_content, llama_docs, docling_doc = process_document_file(pdf_input)
         logger.info(
@@ -574,6 +602,16 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
             document_id,
             time.perf_counter() - t0,
             bool(llama_docs),
+        )
+        ld.info(
+            "[Réindex] document_id=%s — extraction Docling terminée en %.2fs : "
+            "markdown_len=%s llama_docs_présent=%s docling_doc_présent=%s. "
+            "Sans llama_docs, le chunking hiérarchique Docling est impossible.",
+            document_id,
+            time.perf_counter() - t0,
+            len(markdown_content) if markdown_content else 0,
+            bool(llama_docs),
+            docling_doc is not None,
         )
     except Exception as e:
         logger.error(
@@ -612,16 +650,27 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         session.add(document)
         session.commit()
 
+        images_info: list = []
         if docling_doc:
             try:
-                extract_and_save_images(docling_doc, document_id)
+                images_info = extract_and_save_images(docling_doc, document_id) or []
             except Exception as img_e:
                 logger.warning("reindex: extraction images partielle: %s", img_e)
+        ld.info(
+            "[Réindex] document_id=%s — images pour Pixtral : %d entrée(s), docling_doc=%s.",
+            document_id,
+            len(images_info) if images_info else 0,
+            docling_doc is not None,
+        )
 
         document = session.get(Document, document_id)
         if llama_docs:
             chunks = create_chunks_for_document_from_docling(
-                session, document, llama_docs, generate_embeddings=False
+                session,
+                document,
+                llama_docs,
+                generate_embeddings=False,
+                images_info=images_info or None,
             )
             logger.info(
                 "reindex: document_id=%s chunking=docling_hierarchical chunks=%s",
@@ -643,10 +692,19 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         session.add(document)
         session.commit()
 
+    ld.info(
+        "[Réindex] document_id=%s — lancement embeddings + KAG (synchrone).",
+        document_id,
+    )
     complete_document_embeddings_and_kag_sync(document_id)
 
     logger.info(
         "reindex_library_document terminé document_id=%s chunks=%s",
+        document_id,
+        chunk_count,
+    )
+    ld.info(
+        "[Réindex] document_id=%s — FIN OK chunks=%s (voir inventaire chunking dans les lignes [Chunking]).",
         document_id,
         chunk_count,
     )
@@ -655,6 +713,110 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         "chunks": chunk_count,
         "status": "completed",
     }
+
+
+def mark_document_reindex_queued(session: Session, document_id: int, user_id: int) -> bool:
+    """Marque un document en attente de réindexation sans toucher aux chunks."""
+    from app.services.library_service import get_or_create_user_library
+
+    library = get_or_create_user_library(session, user_id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if not document:
+        return False
+    document.processing_status = DOCUMENT_STATUS_REINDEX_QUEUED
+    document.processing_progress = 0
+    document.updated_at = datetime.utcnow()
+    session.add(document)
+    session.commit()
+    return True
+
+
+def mark_all_eligible_documents_reindex_queued(user_id: int) -> int:
+    """
+    Marque tous les documents fichier éligibles en reindex_queued (chunks inchangés).
+    Appelé au début de reindex_all_library_documents dans le worker.
+    """
+    from app.services.library_service import get_or_create_user_library
+
+    n = 0
+    with Session(engine) as session:
+        library = get_or_create_user_library(session, user_id)
+        docs = get_documents_by_library(session, library.id, user_id)
+        for doc in docs:
+            if doc.document_type != "document" or not doc.source_file_path:
+                continue
+            if not Path(doc.source_file_path).is_file():
+                continue
+            doc.processing_status = DOCUMENT_STATUS_REINDEX_QUEUED
+            doc.processing_progress = 0
+            doc.updated_at = datetime.utcnow()
+            session.add(doc)
+            n += 1
+        if n:
+            session.commit()
+    return n
+
+
+def reindex_all_library_documents(user_id: int) -> dict:
+    """
+    Réindexe séquentiellement tous les documents fichier de la bibliothèque utilisateur.
+    Réservé au worker Celery (tâche reindex_all_library_documents_task).
+    Marque d'abord tous les éligibles en reindex_queued (chunks conservés), puis traite un par un.
+    """
+    from app.services.library_service import get_or_create_user_library
+
+    ld = get_library_document_logger()
+    ld.info(
+        "[Réindex tous] user_id=%s — marquage reindex_queued puis boucle.",
+        user_id,
+    )
+    marked = mark_all_eligible_documents_reindex_queued(user_id)
+    ld.info("[Réindex tous] user_id=%s — %s document(s) marqués en attente.", user_id, marked)
+
+    with Session(engine) as session:
+        library = get_or_create_user_library(session, user_id)
+        docs = get_documents_by_library(session, library.id, user_id)
+
+    results: dict = {"ok": 0, "failed": [], "skipped": 0, "marked_queued": marked}
+    for doc in docs:
+        if doc.document_type != "document" or not doc.source_file_path:
+            results["skipped"] += 1
+            continue
+        src = Path(doc.source_file_path)
+        if not src.is_file():
+            logger.warning(
+                "reindex_all: fichier absent, doc_id=%s path=%s",
+                doc.id,
+                doc.source_file_path,
+            )
+            results["skipped"] += 1
+            continue
+        try:
+            reindex_library_document(doc.id, user_id)
+            results["ok"] += 1
+        except Exception as e:
+            logger.exception("reindex_all: échec document_id=%s: %s", doc.id, e)
+            results["failed"].append(
+                {
+                    "document_id": doc.id,
+                    "title": doc.title,
+                    "error": str(e),
+                }
+            )
+
+    ld.info(
+        "[Réindex tous] user_id=%s — fin ok=%s skipped=%s failed=%s",
+        user_id,
+        results["ok"],
+        results["skipped"],
+        len(results["failed"]),
+    )
+    return results
 
 
 def create_document(
@@ -873,7 +1035,7 @@ def add_document_to_spaces(
             )
             return False
 
-        if document.processing_status == "completed":
+        if document.processing_status in ("completed", DOCUMENT_STATUS_REINDEX_QUEUED):
             process_kag_for_document_space(session, document_id, space_id)
 
     return True
@@ -970,8 +1132,15 @@ def _process_document_for_id(document_id: int, file_path: str):
         create_chunks_for_document_from_docling,
     )
 
+    ld = get_library_document_logger()
     try:
         logger.info("Démarrage du traitement du document %d", document_id)
+        ld.info(
+            "[Upload/Pipeline] document_id=%s — DÉBUT traitement bibliothèque fichier=%s "
+            "(worker thread ou Celery). Étapes : PDF → Docling → stockage → images → chunks → embeddings → KAG.",
+            document_id,
+            file_path,
+        )
 
         run_embeddings_sync: bool = False
 
@@ -980,12 +1149,20 @@ def _process_document_for_id(document_id: int, file_path: str):
                 "Traitement annulé avant démarrage effectif pour document %d",
                 document_id,
             )
+            ld.info(
+                "[Upload/Pipeline] document_id=%s — annulé avant démarrage (cancel flag).",
+                document_id,
+            )
             return
 
         with Session(engine) as session:
             document = session.get(Document, document_id)
             if not document:
                 logger.error("Document %d non trouvé pour traitement", document_id)
+                ld.error(
+                    "[Upload/Pipeline] document_id=%s — document introuvable en base, arrêt.",
+                    document_id,
+                )
                 return
 
             document.processing_status = "processing"
@@ -1000,6 +1177,12 @@ def _process_document_for_id(document_id: int, file_path: str):
             try:
                 pdf_input_path = ensure_pdf_for_docling(file_path)
                 converted_to_pdf = pdf_input_path != file_path
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — préparation Docling : entrée=%s converti_pdf=%s",
+                    document_id,
+                    pdf_input_path,
+                    converted_to_pdf,
+                )
             except Exception as e:
                 logger.error(
                     "Conversion vers PDF impossible pour le document %d (%s): %s",
@@ -1008,17 +1191,51 @@ def _process_document_for_id(document_id: int, file_path: str):
                     e,
                     exc_info=True,
                 )
+                ld.error(
+                    "[Upload/Pipeline] document_id=%s — échec ensure_pdf_for_docling : %s",
+                    document_id,
+                    e,
+                    exc_info=True,
+                )
                 raise
 
+            file_size_mb = round(Path(pdf_input_path).stat().st_size / (1024 * 1024), 2) if Path(pdf_input_path).exists() else 0
             t_extract = time.perf_counter()
-            markdown_content, llama_docs, docling_doc = process_document_file(pdf_input_path)
-            extract_s = time.perf_counter() - t_extract
+            with trace_run(
+                "docling_conversion",
+                run_type="chain",
+                inputs={
+                    "document_id": document_id,
+                    "file_path": pdf_input_path,
+                    "file_size_mb": file_size_mb,
+                    "converted_to_pdf": converted_to_pdf,
+                },
+                tags=["ingestion", "docling", "ocr"],
+            ) as docling_run:
+                markdown_content, llama_docs, docling_doc = process_document_file(pdf_input_path)
+                extract_s = time.perf_counter() - t_extract
+                docling_run.end(outputs={
+                    "markdown_len": len(markdown_content) if markdown_content else 0,
+                    "has_llama_docs": bool(llama_docs),
+                    "has_docling_doc": docling_doc is not None,
+                    "duration_s": round(extract_s, 2),
+                })
             logger.info(
                 "document_id=%s extraction Docling %.2fs markdown_len=%s llama_docs=%s",
                 document_id,
                 extract_s,
                 len(markdown_content) if markdown_content else 0,
                 bool(llama_docs),
+            )
+            ld.info(
+                "[Upload/Pipeline] document_id=%s — Docling terminé en %.2fs : markdown_len=%s "
+                "llama_docs=%s docling_doc=%s. "
+                "Si llama_docs=False après succès markdown, vérifier process_document_file (ex. EPUB fallback).",
+                document_id,
+                extract_s,
+                len(markdown_content) if markdown_content else 0,
+                bool(llama_docs),
+                docling_doc is not None,
             )
 
             if not markdown_content:
@@ -1029,11 +1246,19 @@ def _process_document_for_id(document_id: int, file_path: str):
                 session.add(document)
                 session.commit()
                 logger.error("Échec du traitement du document %d", document_id)
+                ld.error(
+                    "[Upload/Pipeline] document_id=%s — markdown vide après Docling, statut failed.",
+                    document_id,
+                )
                 return
 
             if _should_abort_processing(document_id):
                 logger.info(
                     "Traitement annulé après extraction pour document %d",
+                    document_id,
+                )
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — annulé après extraction.",
                     document_id,
                 )
                 return
@@ -1063,7 +1288,12 @@ def _process_document_for_id(document_id: int, file_path: str):
                 "Fichier traité déplacé vers chemin permanent: %s",
                 permanent_output_path,
             )
-            
+            ld.info(
+                "[Upload/Pipeline] document_id=%s — fichier enregistré sous %s",
+                document_id,
+                permanent_output_path,
+            )
+
             document.content = markdown_content
             document.processing_status = "processing"
             document.processing_progress = 55
@@ -1072,11 +1302,17 @@ def _process_document_for_id(document_id: int, file_path: str):
             session.commit()
 
             logger.info("Document traité avec succès pour document_id %d (%d caractères extraits)", document_id, len(markdown_content))
-            
+
+            images_info: list = []
             if docling_doc:
-                images_info = extract_and_save_images(docling_doc, document_id)
+                images_info = extract_and_save_images(docling_doc, document_id) or []
                 if images_info:
                     logger.info("%d image(s) extraite(s) pour le document %d", len(images_info), document_id)
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — extraction images : %d fichier(s) pour appariement Pixtral.",
+                    document_id,
+                    len(images_info) if images_info else 0,
+                )
 
             try:
                 if _should_abort_processing(document_id):
@@ -1084,26 +1320,85 @@ def _process_document_for_id(document_id: int, file_path: str):
                         "Traitement annulé avant création des chunks pour document %d",
                         document_id,
                     )
+                    ld.info(
+                        "[Upload/Pipeline] document_id=%s — annulé avant chunking.",
+                        document_id,
+                    )
                     return
 
                 t_chunk = time.perf_counter()
+                nb_images = len(images_info) if images_info else 0
                 if llama_docs:
-                    chunks = create_chunks_for_document_from_docling(session, document, llama_docs, generate_embeddings=False)
-                    chunk_s = time.perf_counter() - t_chunk
+                    with trace_run(
+                        "chunking",
+                        run_type="chain",
+                        inputs={
+                            "document_id": document_id,
+                            "strategy": "docling_hierarchical",
+                            "nb_llama_docs": len(llama_docs),
+                            "nb_images": nb_images,
+                            "chunk_sizes": settings.HIERARCHICAL_CHUNK_SIZES,
+                        },
+                        tags=["ingestion", "chunking", "docling", "hierarchical"],
+                    ) as chunk_run:
+                        chunks = create_chunks_for_document_from_docling(
+                            session,
+                            document,
+                            llama_docs,
+                            generate_embeddings=False,
+                            images_info=images_info or None,
+                        )
+                        chunk_s = time.perf_counter() - t_chunk
+                        nb_leaves = sum(1 for c in chunks if getattr(c, "is_leaf", True))
+                        nb_parents = len(chunks) - nb_leaves
+                        chunk_run.end(outputs={
+                            "nb_chunks": len(chunks),
+                            "nb_leaves": nb_leaves,
+                            "nb_parents": nb_parents,
+                            "duration_s": round(chunk_s, 2),
+                        })
                     logger.info(
                         "document_id=%s chunks=%s stratégie=docling_hierarchical durée_chunking=%.2fs",
                         document_id,
                         len(chunks),
                         chunk_s,
                     )
+                    ld.info(
+                        "[Upload/Pipeline] document_id=%s — branche chunking : llama_docs présent "
+                        "(voir [Chunking]/[DoclingNodeParser] pour stratégie réelle et inventaire). "
+                        "durée_chunking=%.2fs chunks_retournés=%d",
+                        document_id,
+                        chunk_s,
+                        len(chunks),
+                    )
                 else:
-                    chunks = create_chunks_for_document(session, document, generate_embeddings=False)
-                    chunk_s = time.perf_counter() - t_chunk
+                    with trace_run(
+                        "chunking",
+                        run_type="chain",
+                        inputs={
+                            "document_id": document_id,
+                            "strategy": "fallback_markdown",
+                        },
+                        tags=["ingestion", "chunking", "fallback"],
+                    ) as chunk_run:
+                        chunks = create_chunks_for_document(session, document, generate_embeddings=False)
+                        chunk_s = time.perf_counter() - t_chunk
+                        chunk_run.end(outputs={
+                            "nb_chunks": len(chunks),
+                            "duration_s": round(chunk_s, 2),
+                        })
                     logger.info(
                         "document_id=%s chunks=%s stratégie=fallback_markdown_ou_fenêtre_fixe durée_chunking=%.2fs",
                         document_id,
                         len(chunks),
                         chunk_s,
+                    )
+                    ld.warning(
+                        "[Upload/Pipeline] document_id=%s — llama_docs absent : chunking FALLBACK uniquement "
+                        "(pas de DoclingNodeParser). durée=%.2fs chunks=%d",
+                        document_id,
+                        chunk_s,
+                        len(chunks),
                     )
 
                 document.processing_progress = 75
@@ -1123,9 +1418,20 @@ def _process_document_for_id(document_id: int, file_path: str):
                     document.updated_at = datetime.utcnow()
                     session.add(document)
                     session.commit()
+                    ld.warning(
+                        "[Upload/Pipeline] document_id=%s — aucun chunk produit : pas d'embeddings/KAG, "
+                        "document marqué completed.",
+                        document_id,
+                    )
 
             except Exception as e:
                 logger.error("Erreur lors de la création des chunks pour le document %d: %s", document_id, e, exc_info=True)
+                ld.error(
+                    "[Upload/Pipeline] document_id=%s — erreur lors de la création des chunks : %s",
+                    document_id,
+                    e,
+                    exc_info=True,
+                )
                 document.processing_status = "failed"
                 document.processing_progress = max(document.processing_progress or 0, 55)
                 document.updated_at = datetime.utcnow()
@@ -1139,11 +1445,42 @@ def _process_document_for_id(document_id: int, file_path: str):
                     "Traitement annulé avant embeddings/KAG pour document %d",
                     document_id,
                 )
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — annulé avant embeddings/KAG.",
+                    document_id,
+                )
                 return
-            complete_document_embeddings_and_kag_sync(document_id)
+            ld.info(
+                "[Upload/Pipeline] document_id=%s — enchaînement embeddings + KAG.",
+                document_id,
+            )
+            with trace_run(
+                "embedding_and_kag",
+                run_type="chain",
+                inputs={
+                    "document_id": document_id,
+                    "kag_enabled": settings.KAG_ENABLED,
+                    "embedding_model": settings.EMBEDDING_MODEL,
+                },
+                tags=["ingestion", "embeddings", "kag"],
+            ) as emb_run:
+                t_emb = time.perf_counter()
+                complete_document_embeddings_and_kag_sync(document_id)
+                emb_s = time.perf_counter() - t_emb
+                emb_run.end(outputs={"duration_s": round(emb_s, 2)})
+            ld.info(
+                "[Upload/Pipeline] document_id=%s — FIN pipeline bibliothèque (succès attendu si pas d'erreur amont).",
+                document_id,
+            )
 
     except Exception as e:
         logger.error("Erreur lors du traitement du document %d: %s", document_id, e, exc_info=True)
+        ld.error(
+            "[Upload/Pipeline] document_id=%s — ERREUR non gérée : %s",
+            document_id,
+            e,
+            exc_info=True,
+        )
         try:
             with Session(engine) as session:
                 document = session.get(Document, document_id)
@@ -1188,6 +1525,12 @@ def enqueue_library_document_thread(document_id: int, file_path: str):
 
     logger.info(
         "✅ Document %d ajouté à la file globale (taille: %d)", document_id, queue_size
+    )
+    get_library_document_logger().info(
+        "[Queue] document_id=%s — entrée file thread worker (position file ~%d) fichier=%s",
+        document_id,
+        queue_size,
+        file_path,
     )
 
 
