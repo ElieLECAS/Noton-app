@@ -31,7 +31,8 @@ import unicodedata
 from sqlmodel import Session, select
 from sqlalchemy import or_
 from app.models.note import Note
-from app.models.note_chunk import NoteChunk
+from app.models.document_chunk import DocumentChunk
+from app.services.embedding_service import generate_embedding
 from app.services.project_service import get_project_by_id
 import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
@@ -729,176 +730,29 @@ def _retrieve_via_knowledge_graph(
         return []
 
 
-def _merge_with_graph_candidates(
-    vector_candidates: List[NodeWithScore],
-    graph_candidates: List[NodeWithScore],
-    graph_boost: float = 0.2,
-    pivot_entity_names: Optional[List[str]] = None,
-) -> List[NodeWithScore]:
-    """
-    Fusionne les candidats vectoriels et KAG.
-    
-    Les candidats KAG reçoivent un boost de score et sont ajoutés
-    s'ils ne sont pas déjà présents dans les candidats vectoriels.
-    Si pivot_entity_names est fourni, les nœuds dont kag_matched_entity
-    est dans cette liste reçoivent un boost doublé (entités pivot requête).
-    
-    Args:
-        vector_candidates: Candidats de la recherche vectorielle
-        graph_candidates: Candidats du graphe KAG
-        graph_boost: Bonus de score pour les candidats KAG (0.0-1.0)
-        pivot_entity_names: Noms d'entités normalisés issus de la requête (LLM) → boost x2 si match
-        
-    Returns:
-        Liste fusionnée et triée par score
-    """
-    seen_node_ids = set()
-    merged: List[NodeWithScore] = []
-    pivot_set = set(pivot_entity_names or [])
-    normalize_entity_name = None
-    if pivot_set:
-        from app.services.kag_extraction_service import normalize_entity_name as _norm
-        normalize_entity_name = _norm
-    
-    for nws in vector_candidates:
-        node_id = getattr(nws.node, "id_", None) or nws.node.metadata.get("node_id")
-        if node_id:
-            seen_node_ids.add(node_id)
-        merged.append(nws)
-    
-    for nws in graph_candidates:
-        node_id = getattr(nws.node, "id_", None) or nws.node.metadata.get("node_id")
-        matched_entity = (nws.node.metadata or {}).get("kag_matched_entity", "")
-        is_pivot = bool(
-            pivot_set and matched_entity and normalize_entity_name
-            and normalize_entity_name(matched_entity) in pivot_set
-        )
-        boost = 2.0 * graph_boost if is_pivot else graph_boost
-        if node_id and node_id in seen_node_ids:
-            for existing in merged:
-                existing_id = getattr(existing.node, "id_", None) or existing.node.metadata.get("node_id")
-                if existing_id == node_id:
-                    existing.score = max(existing.score, nws.score + boost)
-                    break
-            continue
-        
-        boosted_score = min(1.0, float(nws.score or 0.0) + boost)
-        nws.score = boosted_score
-        merged.append(nws)
-        if node_id:
-            seen_node_ids.add(node_id)
-    
-    merged.sort(key=lambda x: float(x.score or 0.0), reverse=True)
-    
-    logger.debug(
-        "Fusion KAG: %d vectoriels + %d graphe → %d total",
-        len(vector_candidates),
-        len(graph_candidates),
-        len(merged),
-    )
-    return merged
-
-
-def _normalize_for_gamme(s: str) -> str:
-    """Lowercase + suppression des accents pour comparaison titre / termes requête."""
-    if not s:
-        return ""
-    n = unicodedata.normalize("NFD", s.lower())
-    return "".join(c for c in n if unicodedata.category(c) != "Mn")
-
-
-def _get_meaningful_words(text: str) -> Set[str]:
-    """
-    Extrait les mots significatifs d'un texte (pour Title-Query Alignment).
-    Normalisation NFD sans accents, mots de plus de 3 caractères, hors stopwords.
-    """
-    if not text or not text.strip():
-        return set()
-    normalized = _normalize_for_gamme(text)
-    tokens = re.findall(r"[a-z0-9]+", normalized)
-    return {
-        w for w in tokens
-        if len(w) > 3 and w not in _FALLBACK_STOPWORDS
-    }
-
-
-# Coefficient et plafond du boost Title-Query (configurables par env)
-# Valeurs par défaut plus agressives pour privilégier fortement les documents dédiés.
-TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
-TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
-
-
-def refine_with_source_authority(
-    passages: List[Dict],
-    query_text: str,
-) -> List[Dict]:
-    """
-    Priorité aux sources (source authority) : priorise les passages dont le titre
-    de la note correspond à la requête, pour que l'IA « lise » d'abord la source
-    spécifique (ex. dépliant LUMÉAL) et non le catalogue général.
-    Corrige la dilution du contexte induite par le KAG quand beaucoup d'entités
-    proviennent de documents génériques. Boost proportionnel aux mots communs
-    (query ∩ titre), plafonné (TITLE_QUERY_BOOST_CAP).
-    """
-    if not passages or not query_text or not query_text.strip():
-        return passages
-    query_words = _get_meaningful_words(query_text)
-    if not query_words:
-        return passages
-    for p in passages:
-        note_title = (p.get("note_title") or "").strip()
-        if not note_title:
-            continue
-        title_words = _get_meaningful_words(note_title)
-        common = query_words & title_words
-        if common:
-            boost = min(
-                TITLE_QUERY_BOOST_PER_MATCH * len(common),
-                TITLE_QUERY_BOOST_CAP,
-            )
-            p["score"] = float(p.get("score") or 0.0) + boost
-    passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
-    return passages
-
-
-# ---------------------------------------------------------------------------
-# Point d'entrée principal
-# ---------------------------------------------------------------------------
-
-def search_relevant_passages(
+def search_relevant_chunks(
     session: Session,
     project_id: int,
     query_text: str,
     user_id: int,
-    k: int = 15,
-    passage_size: int = 500,  # ignoré, conservé pour compatibilité API
+    k: int = 15
 ) -> List[Dict]:
     """
-    Recherche sémantique RAG optimisée sur les chunks de notes.
-
-    Pipeline optimisé :
-      1. SQL pgvector sur les leaves → k*3 candidats (rapides à reranker car courts)
-      2. Filtrage pré-reranking : élimine les candidats avec similarité < MIN_VECTOR_SIMILARITY_THRESHOLD
-      3. Early stopping : skip le reranking si similarité moyenne top-k >= SKIP_RERANK_THRESHOLD
-      4. BGE-reranker-v2-m3 sur les leaves filtrés (~5s vs ~56s sur les parents)
-      5. Résolution des parents pour fournir un contexte plus large au LLM
-      6. Fallback lexical si aucun résultat vectoriel
-
-    Optimisations appliquées :
-      - Filtrage pré-reranking réduit le nombre de candidats à traiter (-20 à -40% de temps)
-      - Early stopping évite le reranking dans ~10-20% des cas (similarité déjà élevée)
-      - Limite dynamique ajustée selon les besoins (max MAX_RERANK_CANDIDATES)
-
+    Recherche sémantique dans les DocumentChunk du projet.
+    Utilise le nouveau système de chunking intelligent basé sur Docling.
+    
+    Cette fonction remplace search_relevant_passages() en utilisant
+    directement les chunks précalculés avec leurs embeddings.
+    
     Args:
-        session      : Session SQLModel
-        project_id   : ID du projet
-        query_text   : Texte de la requête
-        user_id      : ID de l'utilisateur
-        k            : Nombre de passages à retourner
-        passage_size : Ignoré (les chunks ont déjà une taille optimale)
-
+        session: Session SQLModel
+        project_id: ID du projet
+        query_text: Texte de la requête
+        user_id: ID de l'utilisateur (pour vérification de sécurité)
+        k: Nombre de chunks à retourner
+        
     Returns:
-        Liste de dicts { passage, note_title, note_id, chunk_id, chunk_index, score }
+        Liste de dictionnaires contenant le chunk, la note source et le score
     """
     project = get_project_by_id(session, project_id, user_id)
     if not project:
@@ -1168,38 +1022,67 @@ def search_relevant_passages(
         return passages
 
     except Exception as e:
-        logger.error("Erreur lors de la recherche de passages: %s", e, exc_info=True)
+        logger.error(f"❌ Erreur lors de la recherche dans les chunks: {e}", exc_info=True)
         return []
 
 
-def search_relevant_notes(
+def search_relevant_passages(
     session: Session,
     project_id: int,
     query_text: str,
     user_id: int,
-    k: int = 10,
+    k: int = 15,
+    passage_size: int = 500
 ) -> List[Dict]:
     """
-    Recherche sémantique sur les notes (agrégation depuis les passages).
-
+    DEPRECATED: Utiliser search_relevant_chunks() à la place.
+    
+    Recherche sémantique avancée qui cherche dans TOUTES les notes du projet
+    et retourne les PASSAGES les plus pertinents (pas les notes complètes).
+    
+    Cette fonction est conservée pour compatibilité mais redirige vers
+    search_relevant_chunks() qui utilise le nouveau système.
+    
     Args:
-        session    : Session SQLModel
-        project_id : ID du projet
-        query_text : Texte de la requête
-        user_id    : ID de l'utilisateur
-        k          : Nombre de notes à retourner
-
+        session: Session SQLModel
+        project_id: ID du projet
+        query_text: Texte de la requête
+        user_id: ID de l'utilisateur (pour vérification de sécurité)
+        k: Nombre de passages à retourner
+        passage_size: Taille approximative des passages en caractères (ignoré)
+        
     Returns:
-        Liste de dicts { note, score }
+        Liste de dictionnaires contenant le passage, la note source et le score
     """
-    project = get_project_by_id(session, project_id, user_id)
-    if not project:
-        logger.warning(
-            "Projet %d non trouvé ou n'appartient pas à l'utilisateur %d",
-            project_id,
-            user_id,
-        )
-        return []
+    # Rediriger vers la nouvelle fonction
+    chunks = search_relevant_chunks(session, project_id, query_text, user_id, k)
+    
+    # Convertir au format attendu par l'ancien système
+    passages = []
+    for chunk in chunks:
+        # Formater le contenu en markdown si nécessaire
+        passage_content = chunk['content']
+        
+        # Ajouter les métadonnées au passage
+        meta_parts = []
+        if chunk.get('page_number'):
+            meta_parts.append(f"Page {chunk['page_number']}")
+        if chunk.get('section_title'):
+            meta_parts.append(f"Section: {chunk['section_title']}")
+        if chunk.get('chunk_type') and chunk['chunk_type'] != 'text':
+            meta_parts.append(f"Type: {chunk['chunk_type']}")
+        
+        if meta_parts:
+            passage_content = f"*[{', '.join(meta_parts)}]*\n\n{passage_content}"
+        
+        passages.append({
+            'passage': f"**{chunk['note_title']}**\n{passage_content}",
+            'note_title': chunk['note_title'],
+            'note_id': chunk['note_id'],
+            'score': chunk['score']
+        })
+    
+    return passages
 
     if not query_text or not query_text.strip():
         logger.warning("Requête vide fournie")
