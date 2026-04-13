@@ -171,6 +171,47 @@ Passage:
 JSON:"""
 
 
+# Relations typées autorisées (hors co_occurs mécanique)
+TYPED_RELATION_TYPE_IDS = frozenset(
+    {
+        "cause",
+        "contrainte",
+        "compatible_avec",
+        "depend_de",
+        "reference",
+        "co_occurs",
+    }
+)
+
+RELATION_EXTRACTION_PROMPT_TEMPLATE = """Tu analyses un passage technique et les entités déjà identifiées dans ce passage.
+
+Entités extraites (noms exacts à utiliser pour entity_a / entity_b) :
+{entity_names}
+
+Types de relation autorisés pour le champ "relation_type" :
+- cause : une entité est cause, origine ou facteur déclenchant de l'autre
+- contrainte : incompatibilité, interdiction, limite réglementaire ou technique
+- compatible_avec : compatibilité, association permise, fonctionnement conjoint
+- depend_de : dépendance, prérequis, nécessité pour atteindre un résultat
+- reference : renvoi, citation, renvoi normatif sans causalité directe
+- co_occurs : les deux sont mentionnées ensemble sans lien sémantique clair entre elles
+
+Règles :
+- Retourne UNIQUEMENT un JSON valide (tableau), sans markdown
+- Une entrée par paire d'entités DISTINCTES pour laquelle le texte permet d'inférer un lien
+- entity_a et entity_b doivent être repris EXACTEMENT depuis la liste ci-dessus (même orthographe)
+- confidence entre 0.0 et 1.0
+- Si le lien est incertain, utilise relation_type "co_occurs" avec confidence <= 0.5 ou omets la paire
+
+Format attendu :
+[{{"entity_a": "...", "entity_b": "...", "relation_type": "depend_de", "confidence": 0.82}}]
+
+Texte :
+{chunk_content}
+
+JSON :"""
+
+
 EXTRACTION_PROMPT_TEMPLATE = """Extrais les entités techniques de ce texte.
 
 Types possibles pour le champ "type" du JSON (liste exhaustive) :
@@ -211,6 +252,60 @@ def normalize_entity_name(name: str) -> str:
     normalized = re.sub(r"[^a-z0-9\s]", "", normalized)
     normalized = re.sub(r"\s+", " ", normalized).strip()
     return normalized
+
+
+def _parse_typed_relations_response(response_text: str) -> List[Dict]:
+    """Parse la réponse LLM en liste de relations typées."""
+    if not response_text:
+        return []
+    text = response_text.strip()
+    if text.startswith("```"):
+        lines = text.split("\n")
+        json_lines = []
+        in_json = False
+        for line in lines:
+            if line.startswith("```") and not in_json:
+                in_json = True
+                continue
+            elif line.startswith("```") and in_json:
+                break
+            elif in_json:
+                json_lines.append(line)
+        text = "\n".join(json_lines)
+    json_match = re.search(r"\[.*\]", text, re.DOTALL)
+    if json_match:
+        text = json_match.group()
+    try:
+        data = json.loads(text)
+        if not isinstance(data, list):
+            return []
+        out: List[Dict] = []
+        for item in data:
+            if not isinstance(item, dict):
+                continue
+            ea = str(item.get("entity_a", "")).strip()
+            eb = str(item.get("entity_b", "")).strip()
+            rt = str(item.get("relation_type", "")).strip().lower()
+            conf = item.get("confidence", 0.7)
+            if not ea or not eb or ea.lower() == eb.lower():
+                continue
+            if rt not in TYPED_RELATION_TYPE_IDS:
+                continue
+            if not isinstance(conf, (int, float)):
+                conf = 0.7
+            conf = max(0.0, min(1.0, float(conf)))
+            out.append(
+                {
+                    "entity_a": ea,
+                    "entity_b": eb,
+                    "relation_type": rt,
+                    "confidence": conf,
+                }
+            )
+        return out
+    except json.JSONDecodeError as e:
+        logger.warning("Erreur parsing JSON relations typées: %s - %s", e, text[:200])
+        return []
 
 
 def _parse_llm_response(response_text: str) -> List[Dict]:
@@ -501,6 +596,124 @@ async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
             logger.error("Erreur extraction KAG: %s", e, exc_info=True)
             kag_run.end(error=str(e))
             return []
+
+
+async def extract_typed_relations_from_chunk(
+    chunk_content: str,
+    entities: List[Dict],
+) -> List[Dict]:
+    """
+    Extrait des relations typées entre entités déjà listées, pour un même passage.
+
+    Args:
+        chunk_content: Texte du chunk
+        entities: Liste d'entités canoniques {name, type, importance}
+
+    Returns:
+        Liste de dicts entity_a, entity_b, relation_type, confidence
+    """
+    if not chunk_content or len(chunk_content.strip()) < 20:
+        return []
+    if not entities or len(entities) < 2:
+        return []
+
+    names = []
+    for e in entities:
+        n = (e.get("name") or "").strip()
+        if n and len(n) >= 2:
+            names.append(n)
+    if len(names) < 2:
+        return []
+
+    content_truncated = chunk_content[:3500]
+    entity_names_block = "\n".join(f"- {n}" for n in names)
+    prompt = RELATION_EXTRACTION_PROMPT_TEMPLATE.format(
+        entity_names=entity_names_block,
+        chunk_content=content_truncated,
+    )
+
+    provider = settings.KAG_EXTRACTION_PROVIDER.lower()
+    model = settings.KAG_EXTRACTION_MODEL
+
+    with trace_run(
+        "kag_typed_relation_extraction",
+        run_type="llm",
+        inputs={
+            "provider": provider,
+            "model": model,
+            "nb_entities": len(names),
+            "content_len": len(chunk_content),
+        },
+        tags=["kag", "relations", "llm", provider],
+    ) as rel_run:
+        try:
+            if provider == "openai":
+                from app.services import openai_service
+                response = await openai_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+            elif provider == "mistral":
+                from app.services import mistral_service
+                response = await mistral_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+            elif provider == "ollama":
+                from app.services import ollama_service
+                response = await ollama_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+            else:
+                logger.error("Provider KAG inconnu (relations typées): %s", provider)
+                rel_run.end(error=f"Provider inconnu: {provider}")
+                return []
+
+            parsed = _parse_typed_relations_response(content)
+            rel_run.end(
+                outputs={
+                    "nb_relations": len(parsed),
+                    "preview": parsed[:8],
+                }
+            )
+            return parsed
+        except Exception as e:
+            logger.error("Erreur extraction relations typées KAG: %s", e, exc_info=True)
+            rel_run.end(error=str(e))
+            return []
+
+
+def extract_typed_relations_sync(chunk_content: str, entities: List[Dict]) -> List[Dict]:
+    """Version synchrone pour workers / pipeline document."""
+    if not chunk_content or not entities or len(entities) < 2:
+        return []
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            import concurrent.futures
+
+            with concurrent.futures.ThreadPoolExecutor() as pool:
+                future = pool.submit(
+                    asyncio.run,
+                    extract_typed_relations_from_chunk(chunk_content, entities),
+                )
+                return future.result(timeout=90)
+        else:
+            return loop.run_until_complete(
+                extract_typed_relations_from_chunk(chunk_content, entities)
+            )
+    except RuntimeError:
+        return asyncio.run(extract_typed_relations_from_chunk(chunk_content, entities))
+    except Exception as e:
+        logger.warning("extract_typed_relations_sync échoué: %s", e)
+        return []
 
 
 async def extract_entities_from_query(query_text: str) -> List[str]:

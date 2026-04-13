@@ -18,6 +18,8 @@ class KnowledgeEntity(SQLModel, table=True):
     entity_type: str = Field(index=True)
     space_id: int = Field(foreign_key="space.id", index=True)
     mention_count: int = Field(default=1)
+    # Score calibré (importance moyenne × renforcement mentions) pour filtrer retrieval
+    confidence_score: Optional[float] = Field(default=None, index=True)
     embedding: Optional[List[float]] = Field(
         default=None,
         sa_column=Column(Vector(EMBEDDING_DIMENSION), nullable=True)
@@ -34,5 +36,6 @@ class KnowledgeEntityRead(SQLModel):
     entity_type: str
     space_id: int
     mention_count: int
+    confidence_score: Optional[float] = None
     created_at: datetime
     updated_at: datetime

@@ -80,6 +80,7 @@ class Settings(BaseSettings):
     KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai", "mistral" ou "ollama"
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
+    KAG_TYPED_RELATIONS_ENABLED: bool = True  # Extraction LLM des relations entité-entité (cause, depend_de, …)
     
     # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
     # False = défaut si la variable est absente (voir parse_multimodal_enabled).

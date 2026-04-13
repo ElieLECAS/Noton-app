@@ -113,6 +113,9 @@ RRF_MIN_SCORE = float(os.getenv("RRF_MIN_SCORE", "0.018"))
 RRF_MIN_CHANNEL = float(os.getenv("RRF_MIN_CHANNEL", "0.010"))
 HYBRID_MIN_SCORE = RRF_MIN_SCORE  # compat. nom interne
 
+# Filtrage entités KAG par score de confiance calibré (KnowledgeEntity.confidence_score)
+MIN_ENTITY_CONFIDENCE = float(os.getenv("MIN_ENTITY_CONFIDENCE", "0.30"))
+
 # ---------------------------------------------------------------------------
 # Multi-hop — constantes en dur (pas de variables d'environnement)
 # ---------------------------------------------------------------------------
@@ -1108,6 +1111,10 @@ def _retrieve_via_knowledge_graph(
                 DocumentChunk.is_leaf == True,
                 KnowledgeEntity.space_id == space_id,
                 KnowledgeEntity.name_normalized.in_(query_terms),
+                or_(
+                    KnowledgeEntity.confidence_score.is_(None),
+                    KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
+                ),
             )
             .order_by(ChunkEntityRelation.relevance_score.desc())
             .limit(limit)
@@ -1142,6 +1149,10 @@ def _retrieve_via_knowledge_graph(
                     DocumentChunk.is_leaf == True,
                     KnowledgeEntity.space_id == space_id,
                     or_(*ilike_conditions),
+                    or_(
+                        KnowledgeEntity.confidence_score.is_(None),
+                        KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
+                    ),
                 )
                 .order_by(ChunkEntityRelation.relevance_score.desc())
                 .limit(limit - len(results))
@@ -1176,6 +1187,10 @@ def _retrieve_via_knowledge_graph(
                     DocumentChunk.is_leaf == True,
                     KnowledgeEntity.space_id == space_id,
                     KnowledgeEntity.id.in_(neighbor_entity_ids),
+                    or_(
+                        KnowledgeEntity.confidence_score.is_(None),
+                        KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
+                    ),
                 )
                 .order_by(ChunkEntityRelation.relevance_score.desc())
                 .limit(max(0, limit - len(results)))
@@ -1404,6 +1419,10 @@ def _retrieve_kag_for_entity_seeds(
                 DocumentChunk.is_leaf == True,
                 KnowledgeEntity.space_id == space_id,
                 KnowledgeEntity.name_normalized.in_(expanded),
+                or_(
+                    KnowledgeEntity.confidence_score.is_(None),
+                    KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
+                ),
             )
             .order_by(ChunkEntityRelation.relevance_score.desc())
             .limit(limit * 2)
@@ -1442,6 +1461,10 @@ def _retrieve_kag_for_entity_seeds(
                         DocumentChunk.is_leaf == True,
                         KnowledgeEntity.space_id == space_id,
                         KnowledgeEntity.id.in_(neighbor_ids),
+                        or_(
+                            KnowledgeEntity.confidence_score.is_(None),
+                            KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
+                        ),
                     )
                     .order_by(ChunkEntityRelation.relevance_score.desc())
                     .limit(limit)

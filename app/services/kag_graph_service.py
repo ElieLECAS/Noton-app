@@ -6,6 +6,7 @@ ainsi que le lookup pour enrichir le retrieval RAG.
 """
 
 import logging
+import math
 from datetime import datetime
 from typing import List, Dict, Optional, Set, Tuple
 from sqlmodel import Session, select
@@ -24,6 +25,7 @@ from app.services.kag_extraction_service import (
     normalize_entity_name,
     SUPPORTED_ENTITY_TYPE_IDS,
     extract_entities_sync,
+    extract_typed_relations_sync,
 )
 
 logger = logging.getLogger(__name__)
@@ -860,6 +862,124 @@ def _get_or_create_entity_for_space(
     return entity
 
 
+def _resolve_entity_id_for_space(
+    session: Session,
+    space_id: int,
+    name: str,
+) -> Optional[int]:
+    """Résout un nom d'entité vers l'ID KnowledgeEntity (canonique ou alias)."""
+    nn = normalize_entity_name(name)
+    if not nn:
+        return None
+    ent = session.exec(
+        select(KnowledgeEntity).where(
+            KnowledgeEntity.space_id == space_id,
+            KnowledgeEntity.name_normalized == nn,
+        )
+    ).first()
+    if ent and ent.id is not None:
+        return int(ent.id)
+    alias = session.exec(
+        select(EntityAlias).where(
+            EntityAlias.space_id == space_id,
+            EntityAlias.alias_normalized == nn,
+        )
+    ).first()
+    if alias:
+        return int(alias.entity_id)
+    return None
+
+
+def _update_entity_confidence_score(
+    session: Session,
+    entity_id: int,
+    space_id: int,
+) -> None:
+    """
+    Met à jour confidence_score = min(1, avg_importance * (1 + 0.15 * log1p(mention_count))).
+    """
+    rows = list(
+        session.exec(
+            select(ChunkEntityRelation.relevance_score).where(
+                ChunkEntityRelation.entity_id == entity_id,
+                ChunkEntityRelation.space_id == space_id,
+            )
+        ).all()
+    )
+    if not rows:
+        return
+    scores = [float(r) for r in rows]
+    avg = sum(scores) / len(scores)
+    entity = session.get(KnowledgeEntity, entity_id)
+    if not entity:
+        return
+    mc = max(1, int(entity.mention_count or 1))
+    conf = min(1.0, avg * (1.0 + 0.15 * math.log1p(float(mc))))
+    entity.confidence_score = conf
+    entity.updated_at = datetime.utcnow()
+    session.add(entity)
+
+
+def save_typed_relations_for_chunk(
+    session: Session,
+    space_id: int,
+    chunk_id: int,
+    relations: List[Dict],
+    min_confidence: float = 0.35,
+) -> int:
+    """
+    Persiste les relations entité-entité typées extraites par LLM pour un chunk feuille.
+
+    Les arêtes ``co_occurs`` globales restent gérées par ``refresh_entity_entity_relations_for_space`` ;
+    on n'enregistre pas ici les lignes ``relation_type == co_occurs`` pour éviter les doublons.
+    """
+    if not relations:
+        return 0
+    saved = 0
+    for rel in relations:
+        rt = str(rel.get("relation_type", "")).strip().lower()
+        if not rt or rt == "co_occurs":
+            continue
+        conf = float(rel.get("confidence", 0) or 0)
+        if conf < min_confidence:
+            continue
+        ea = _resolve_entity_id_for_space(session, space_id, str(rel.get("entity_a", "")))
+        eb = _resolve_entity_id_for_space(session, space_id, str(rel.get("entity_b", "")))
+        if ea is None or eb is None or ea == eb:
+            continue
+        existing = session.exec(
+            select(EntityEntityRelation).where(
+                EntityEntityRelation.space_id == space_id,
+                EntityEntityRelation.entity_a_id == ea,
+                EntityEntityRelation.entity_b_id == eb,
+                EntityEntityRelation.relation_type == rt,
+            )
+        ).first()
+        if existing:
+            prev = float(existing.confidence or 0.0)
+            if conf > prev:
+                existing.confidence = conf
+                existing.weight = float(conf)
+                existing.source_chunk_id = chunk_id
+                session.add(existing)
+                saved += 1
+        else:
+            session.add(
+                EntityEntityRelation(
+                    space_id=space_id,
+                    entity_a_id=ea,
+                    entity_b_id=eb,
+                    relation_type=rt,
+                    weight=float(conf),
+                    confidence=conf,
+                    source_chunk_id=chunk_id,
+                    created_at=datetime.utcnow(),
+                )
+            )
+            saved += 1
+    return saved
+
+
 def process_kag_for_document_space(session: Session, document_id: int, space_id: int) -> Dict[str, int]:
     """
     Extrait et sauvegarde les entités KAG pour un document dans un espace donné.
@@ -868,7 +988,7 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
     document = session.get(Document, document_id)
     if not document:
         logger.warning("Document introuvable pour KAG: document_id=%s", document_id)
-        return {"entities": 0, "relations": 0, "chunks": 0}
+        return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
 
     association = session.exec(
         select(DocumentSpace).where(
@@ -882,7 +1002,7 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
             document_id,
             space_id,
         )
-        return {"entities": 0, "relations": 0, "chunks": 0}
+        return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
 
     delete_entities_for_document(session, document_id, space_id)
 
@@ -892,10 +1012,11 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
     )
     chunks = list(session.exec(chunks_stmt).all())
     if not chunks:
-        return {"entities": 0, "relations": 0, "chunks": 0}
+        return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
 
     total_entities = 0
     total_relations = 0
+    total_typed_relations = 0
     processed_chunks = 0
 
     for chunk in chunks:
@@ -908,6 +1029,7 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
             continue
 
         processed_chunks += 1
+        entity_ids_touched: Set[int] = set()
         for entity_data in entities:
             name = (entity_data.get("name") or "").strip()
             entity_type = (entity_data.get("type") or "concept_technique").strip()
@@ -922,6 +1044,8 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
                 space_id=space_id,
             )
             total_entities += 1
+            if entity.id is not None:
+                entity_ids_touched.add(int(entity.id))
 
             existing_rel = session.exec(
                 select(ChunkEntityRelation).where(
@@ -941,6 +1065,24 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
                 session.add(relation)
                 total_relations += 1
 
+        for eid in entity_ids_touched:
+            _update_entity_confidence_score(session, eid, space_id)
+
+        if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
+            try:
+                typed = extract_typed_relations_sync(content, entities)
+                if typed:
+                    n = save_typed_relations_for_chunk(
+                        session, space_id, int(chunk.id), typed
+                    )
+                    total_typed_relations += n
+            except Exception as tre:
+                logger.warning(
+                    "Relations typées KAG ignorées chunk_id=%s: %s",
+                    chunk.id,
+                    tre,
+                )
+
     session.commit()
 
     try:
@@ -957,17 +1099,19 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
         _process_parent_enrichment_for_document_space(session, document_id, space_id)
 
     logger.info(
-        "✅ KAG document-space terminé document_id=%s space_id=%s chunks=%s entités=%s relations=%s",
+        "✅ KAG document-space terminé document_id=%s space_id=%s chunks=%s entités=%s relations=%s typed_eer=%s",
         document_id,
         space_id,
         processed_chunks,
         total_entities,
         total_relations,
+        total_typed_relations,
     )
     return {
         "entities": total_entities,
         "relations": total_relations,
         "chunks": processed_chunks,
+        "typed_entity_relations": total_typed_relations,
     }
 
 
@@ -979,6 +1123,12 @@ def delete_entities_for_document(session: Session, document_id: int, space_id: i
     chunk_ids = list(session.exec(chunk_ids_stmt).all())
     if not chunk_ids:
         return 0
+
+    session.execute(
+        delete(EntityEntityRelation).where(
+            EntityEntityRelation.source_chunk_id.in_(chunk_ids)
+        )
+    )
 
     entity_ids_stmt = select(ChunkEntityRelation.entity_id).where(
         ChunkEntityRelation.chunk_id.in_(chunk_ids),
@@ -1337,6 +1487,7 @@ def _process_parent_enrichment_for_document_space(
                 # Extraction d'entités sur le summary+questions
                 entities = extract_entities_sync(enrichment_text)
                 if entities:
+                    parent_entity_ids: Set[int] = set()
                     for entity_data in entities:
                         name = (entity_data.get("name") or "").strip()
                         entity_type = (entity_data.get("type") or "concept_technique").strip()
@@ -1351,6 +1502,8 @@ def _process_parent_enrichment_for_document_space(
                             space_id=space_id,
                         )
                         total_parent_entities += 1
+                        if entity.id is not None:
+                            parent_entity_ids.add(int(entity.id))
 
                         existing_rel = session.exec(
                             select(ChunkEntityRelation).where(
@@ -1369,6 +1522,22 @@ def _process_parent_enrichment_for_document_space(
                             )
                             session.add(relation)
                             total_parent_relations += 1
+                    for peid in parent_entity_ids:
+                        _update_entity_confidence_score(session, peid, space_id)
+
+                    if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
+                        try:
+                            typed = extract_typed_relations_sync(enrichment_text, entities)
+                            if typed:
+                                save_typed_relations_for_chunk(
+                                    session, space_id, int(chunk.id), typed
+                                )
+                        except Exception as tre:
+                            logger.warning(
+                                "Relations typées KAG (parent) chunk_id=%s: %s",
+                                chunk.id,
+                                tre,
+                            )
 
             except Exception as e:
                 logger.warning(
