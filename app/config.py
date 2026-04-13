@@ -72,9 +72,12 @@ class Settings(BaseSettings):
     # RBAC Admin Bootstrap
     ADMIN_EMAIL: Optional[str] = None  # Email de l'utilisateur qui sera automatiquement admin
     
+    # Ollama (utilisé notamment pour l'extraction KAG)
+    OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
+
     # KAG - Knowledge Augmented Generation
     KAG_ENABLED: bool = True
-    KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai" ou "mistral"
+    KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai", "mistral" ou "ollama"
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
     

@@ -27,6 +27,12 @@ services:
             timeout: 3s
             retries: 5
 
+    ollama:
+        image: ollama/ollama:latest
+        container_name: noton_ollama
+        volumes:
+            - ollama_data:/root/.ollama
+
     web:
         build:
             context: .
@@ -56,6 +62,7 @@ services:
             - SECRET_KEY=${SECRET_KEY}
             - MISTRAL_API_KEY=${MISTRAL_API_KEY}
             - MISTRAL_BASE_URL=${MISTRAL_BASE_URL:-https://api.mistral.ai}
+            - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
             - OPENAI_API_KEY=${OPENAI_API_KEY}
             - OPENAI_MODEL=${OPENAI_MODEL}
             - BRAVE_SEARCH_API_KEY=${BRAVE_SEARCH_API_KEY:-}
@@ -110,6 +117,8 @@ services:
                 condition: service_healthy
             redis:
                 condition: service_healthy
+            ollama:
+                condition: service_started
 
     worker:
         build:
@@ -132,6 +141,7 @@ services:
             - SECRET_KEY=${SECRET_KEY}
             - MISTRAL_API_KEY=${MISTRAL_API_KEY}
             - MISTRAL_BASE_URL=${MISTRAL_BASE_URL:-https://api.mistral.ai}
+            - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
             - OPENAI_API_KEY=${OPENAI_API_KEY}
             - OPENAI_MODEL=${OPENAI_MODEL}
             - BRAVE_SEARCH_API_KEY=${BRAVE_SEARCH_API_KEY:-}
@@ -181,8 +191,11 @@ services:
                 condition: service_healthy
             redis:
                 condition: service_healthy
+            ollama:
+                condition: service_started
 
 volumes:
     postgres_data:
     models_cache: # Cache persistant pour HuggingFace, EasyOCR, Docling
     media_data: # Images extraites par Docling (multimodal)
+    ollama_data:

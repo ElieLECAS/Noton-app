@@ -1,7 +1,7 @@
 """
 Service d'extraction d'entités KAG (Knowledge Augmented Generation).
 
-Extrait les entités techniques des chunks via LLM configurable (OpenAI ou Mistral)
+Extrait les entités techniques des chunks via LLM configurable (OpenAI, Mistral ou Ollama)
 pour enrichir le graphe de connaissances et améliorer le RAG.
 """
 
@@ -363,6 +363,14 @@ async def generate_parent_summary_questions(content: str) -> Optional[Dict]:
                 context=[{"role": "user", "content": prompt}],
             )
             raw = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+        elif provider == "ollama":
+            from app.services import ollama_service
+            response = await ollama_service.chat(
+                message=prompt,
+                model=model,
+                context=[{"role": "user", "content": prompt}],
+            )
+            raw = response.get("choices", [{}])[0].get("message", {}).get("content", "")
         else:
             logger.error("Provider KAG inconnu pour enrichissement parent: %s", provider)
             return None
@@ -452,6 +460,14 @@ async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
             elif provider == "mistral":
                 from app.services import mistral_service
                 response = await mistral_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+            elif provider == "ollama":
+                from app.services import ollama_service
+                response = await ollama_service.chat(
                     message=prompt,
                     model=model,
                     context=[{"role": "user", "content": prompt}],
