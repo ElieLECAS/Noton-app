@@ -106,8 +106,24 @@ def test_apply_multihop_depth_scoring_penalizes_deep_hops():
 
     state = _MultiHopState()
     state.chunk_signals = {
-        1: {"vector": 0.8, "lexical": 0.5, "kag": 0.9, "evidence": 1.0, "hop": 0, "path": "hop0"},
-        2: {"vector": 0.8, "lexical": 0.5, "kag": 0.9, "evidence": 1.0, "hop": 2, "path": "hop2"},
+        1: {
+            "vector": 0.8,
+            "lexical": 0.5,
+            "kag": 0.9,
+            "evidence": 1.0,
+            "parent": 0.0,
+            "hop": 0,
+            "path": "hop0",
+        },
+        2: {
+            "vector": 0.8,
+            "lexical": 0.5,
+            "kag": 0.9,
+            "evidence": 1.0,
+            "parent": 0.0,
+            "hop": 2,
+            "path": "hop2",
+        },
     }
     n1 = TextNode(id_="chunk-1", text="a", metadata={})
     n2 = TextNode(id_="chunk-2", text="b", metadata={})
@@ -132,7 +148,15 @@ def test_apply_multihop_depth_scoring_metadata_populated():
 
     state = _MultiHopState()
     state.chunk_signals = {
-        5: {"vector": 0.5, "lexical": 0.3, "kag": 0.7, "evidence": 0.0, "hop": 1, "path": "hop1:ent"},
+        5: {
+            "vector": 0.5,
+            "lexical": 0.3,
+            "kag": 0.7,
+            "evidence": 0.0,
+            "parent": 0.0,
+            "hop": 1,
+            "path": "hop1:ent",
+        },
     }
     node = TextNode(id_="chunk-5", text="x", metadata={})
     all_nodes = {5: NodeWithScore(node=node, score=0.5)}
@@ -152,7 +176,15 @@ def test_apply_multihop_depth_scoring_score_non_negative():
 
     state = _MultiHopState()
     state.chunk_signals = {
-        9: {"vector": 0.0, "lexical": 0.0, "kag": 0.0, "evidence": 0.0, "hop": 3, "path": "hop3"},
+        9: {
+            "vector": 0.0,
+            "lexical": 0.0,
+            "kag": 0.0,
+            "evidence": 0.0,
+            "parent": 0.0,
+            "hop": 3,
+            "path": "hop3",
+        },
     }
     node = TextNode(id_="chunk-9", text="z", metadata={})
     all_nodes = {9: NodeWithScore(node=node, score=0.0)}

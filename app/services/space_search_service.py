@@ -5,8 +5,9 @@ Pipeline principal :
   1. Embedding de la requête via BGE-m3
   2. Détection multi-hop (heuristique : mots-clés + entités pivot)
   3a. [Standard] Candidats vectoriels (pgvector) + lexicaux (ts_rank_cd) + KAG (graphe)
-  3b. [Multi-hop]  Orchestrateur max 3 sauts : hop0 hybride → expansion graphe → sauts suivants
-  4. Fusion hybride pondérée + scoring par profondeur (pénalité par hop)
+      + parents enrichis (embedding section) → feuilles descendantes
+  3b. [Multi-hop]  Orchestrateur max 3 sauts : hop0 hybride RRF → expansion graphe → sauts suivants
+  4. Fusion RRF (vector, lexical, KAG, parent) + scoring multi-hop par RRF sur signaux + pénalité par hop
   5. Filtrage pré-reranking
   6. Early stopping si similarité vectorielle déjà élevée
   7. Reranking cross-encoder (BGE-reranker-v2-m3)
@@ -101,12 +102,16 @@ _FALLBACK_STOPWORDS = {
 TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
 TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
 
-# Fusion hybride permanente (vectoriel + BM25-like + KAG) — constantes applicatives
-# (réglage direct dans le code, pas de variables d'environnement)
-RAG_HYBRID_ALPHA = 0.60
-RAG_HYBRID_BETA = 0.25
-RAG_HYBRID_GAMMA = 0.15
-HYBRID_MIN_SCORE = 0.06
+# Fusion hybride : RRF (Reciprocal Rank Fusion) sur vectoriel, lexical, KAG, parents enrichis
+RRF_K = 60
+# Poids du canal « parent enrichi » dans la somme RRF (modéré, ne domine pas le vectoriel leaf)
+RRF_PARENT_LIST_WEIGHT = 0.50
+# Seuil minimal de similarité parent (embedding summary+questions) pour descendre vers les feuilles
+PARENT_ENRICHED_MIN_SIMILARITY = float(os.getenv("PARENT_ENRICHED_MIN_SIMILARITY", "0.65"))
+# Filtrage post-fusion : scores RRF sont plus petits qu’une somme min-max sur [0,1]
+RRF_MIN_SCORE = float(os.getenv("RRF_MIN_SCORE", "0.018"))
+RRF_MIN_CHANNEL = float(os.getenv("RRF_MIN_CHANNEL", "0.010"))
+HYBRID_MIN_SCORE = RRF_MIN_SCORE  # compat. nom interne
 
 # ---------------------------------------------------------------------------
 # Multi-hop — constantes en dur (pas de variables d'environnement)
@@ -116,13 +121,9 @@ MULTI_HOP_MAX_HOPS = 3
 MULTI_HOP_CANDIDATE_BUDGET = 80   # plafond global de candidats (tous hops confondus)
 MULTI_HOP_PER_HOP_LIMIT = 20      # candidats KAG max par hop d'expansion
 MULTI_HOP_PATIENCE = 1            # sauts consécutifs sans nouveaux chunks avant arrêt
-MULTI_HOP_MIN_DELTA_NEW_CHUNKS = 1  # nb minimum de nouveaux chunks pour continuer
-
-# Scoring multi-hop unifié : score = 0.55*v + 0.20*l + 0.20*k + 0.05*evidence - penalty
-MH_WEIGHT_VECTOR = 0.55
-MH_WEIGHT_LEXICAL = 0.20
-MH_WEIGHT_KAG = 0.20
-MH_WEIGHT_EVIDENCE = 0.05
+MULTI_HOP_MIN_DELTA_NEW_CHUNKS = int(os.getenv("MULTI_HOP_MIN_DELTA_NEW_CHUNKS", "2"))
+# Poids canal parent dans le RRF multi-hop (aligné sur RRF_PARENT_LIST_WEIGHT)
+MH_RRF_PARENT_WEIGHT = RRF_PARENT_LIST_WEIGHT
 # Pénalité par profondeur : hop0→0.00, hop1→0.05, hop2→0.10, hop3→0.15
 MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
@@ -369,17 +370,6 @@ def _parse_chunk_id_from_node(node: TextNode) -> Optional[int]:
     return None
 
 
-def _normalize_min_max(scores: Dict[int, float]) -> Dict[int, float]:
-    """Min-max sur un dict non vide ; si une seule valeur, tout à 1.0."""
-    if not scores:
-        return {}
-    vals = list(scores.values())
-    lo, hi = min(vals), max(vals)
-    if hi - lo < 1e-9:
-        return {k: 1.0 for k in scores}
-    return {k: (v - lo) / (hi - lo) for k, v in scores.items()}
-
-
 def _retrieve_leaves_lexical_sql(
     session: Session,
     space_id: int,
@@ -450,15 +440,154 @@ def _retrieve_leaves_lexical_sql(
     return nodes_with_scores
 
 
+def _rrf_contrib(rank_zero_based: int, k: int = RRF_K) -> float:
+    """Contribution RRF classique : 1 / (k + rank), rank 0 = meilleur."""
+    return 1.0 / (float(k) + float(rank_zero_based))
+
+
+def _retrieve_parent_enriched_sql(
+    session: Session,
+    space_id: int,
+    user_id: int,
+    query_text: str,
+    candidate_k: int,
+    min_parent_sim: float = PARENT_ENRICHED_MIN_SIMILARITY,
+) -> List[NodeWithScore]:
+    """
+    Recherche vectorielle sur les chunks parents enrichis (is_leaf=False, métadonnées LLM),
+    puis propagation vers les feuilles dont ``parent_node_id`` pointe vers le parent.
+
+    Le score des feuilles reflète la similarité requête↔embedding parent (signal assist).
+    """
+    embed_model = _get_embed_model()
+    query_embedding = embed_model.get_query_embedding(query_text)
+    query_embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
+
+    parent_limit = max(24, min(candidate_k, 80))
+    sql_parents = text(f"""
+        SELECT
+            dc.id,
+            dc.node_id,
+            dc.content,
+            dc.text,
+            dc.chunk_index,
+            dc.document_id,
+            dc.metadata_json,
+            dc.metadata_,
+            d.title AS document_title,
+            d.id AS document_id,
+            1 - (dc.embedding <=> '{query_embedding_str}'::vector) AS similarity_score
+        FROM documentchunk dc
+        INNER JOIN document d ON dc.document_id = d.id
+        INNER JOIN document_space ds ON ds.document_id = d.id
+        WHERE ds.space_id = :space_id
+          AND dc.embedding IS NOT NULL
+          AND dc.is_leaf = false
+          AND dc.metadata_json IS NOT NULL
+        ORDER BY dc.embedding <=> '{query_embedding_str}'::vector
+        LIMIT :limit_k
+    """)
+
+    result = session.execute(
+        sql_parents,
+        {"space_id": space_id, "limit_k": parent_limit},
+    )
+    parent_rows = list(result)
+    if not parent_rows:
+        logger.info("Parent enrichi (space): 0 parents candidats")
+        return []
+
+    parent_node_ids: List[str] = []
+    parent_sim_by_node_id: Dict[str, float] = {}
+    for row in parent_rows:
+        sim = float(row.similarity_score or 0.0)
+        if sim < min_parent_sim:
+            continue
+        nid = row.node_id
+        if nid is None:
+            continue
+        ns = str(nid)
+        parent_node_ids.append(ns)
+        # Meilleur score si plusieurs parents partagent un même enfant théorique
+        prev = parent_sim_by_node_id.get(ns)
+        if prev is None or sim > prev:
+            parent_sim_by_node_id[ns] = sim
+
+    if not parent_node_ids:
+        logger.info(
+            "Parent enrichi (space): 0 parents au-dessus du seuil %.2f",
+            min_parent_sim,
+        )
+        return []
+
+    # Feuilles rattachées à ces sections (parent_node_id = UUID Docling du parent)
+    stmt = (
+        select(DocumentChunk, Document.title)
+        .join(Document, Document.id == DocumentChunk.document_id)
+        .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+        .where(
+            DocumentSpace.space_id == space_id,
+            DocumentChunk.is_leaf.is_(True),
+            DocumentChunk.parent_node_id.in_(parent_node_ids),
+        )
+    )
+    leaf_rows = session.exec(stmt).all()
+
+    best_leaf: Dict[int, Tuple[float, DocumentChunk, str]] = {}
+    for chunk, document_title in leaf_rows:
+        pnid = chunk.parent_node_id
+        if not pnid:
+            continue
+        pns = str(pnid)
+        psim = parent_sim_by_node_id.get(pns)
+        if psim is None:
+            continue
+        prev = best_leaf.get(chunk.id)
+        if prev is None or psim > prev[0]:
+            best_leaf[chunk.id] = (psim, chunk, document_title or "Document sans titre")
+
+    nodes_with_scores: List[NodeWithScore] = []
+    for _cid, (psim, chunk, doc_title) in best_leaf.items():
+        metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
+        metadata.setdefault("document_id", chunk.document_id)
+        metadata.setdefault("document_title", doc_title)
+        metadata.setdefault("chunk_index", chunk.chunk_index)
+        metadata["parent_enrichment_score"] = psim
+        metadata["retrieval_signal"] = "parent_enriched_assist"
+
+        node = TextNode(
+            id_=f"chunk-{chunk.id}",
+            text=chunk.content or chunk.text or "",
+            metadata=metadata,
+        )
+        nodes_with_scores.append(NodeWithScore(node=node, score=float(psim)))
+
+    nodes_with_scores.sort(key=lambda x: float(x.score or 0.0), reverse=True)
+    nodes_with_scores = nodes_with_scores[:candidate_k]
+
+    logger.info(
+        "Parent enrichi (space): %d feuilles via %d parents (seuil sim≥%.2f)",
+        len(nodes_with_scores),
+        len(parent_sim_by_node_id),
+        min_parent_sim,
+    )
+    return nodes_with_scores
+
+
 def _hybrid_fuse_candidates(
     vector_candidates: List[NodeWithScore],
     lexical_candidates: List[NodeWithScore],
     graph_candidates: List[NodeWithScore],
+    parent_candidates: Optional[List[NodeWithScore]] = None,
 ) -> List[NodeWithScore]:
     """
-    Fusionne vectoriel, lexical (BM25-like) et KAG avec normalisation min-max
-    par signal puis score = alpha*v + beta*l + gamma*k.
+    Fusion RRF : vectoriel, lexical (BM25-like), KAG, et optionnellement parents enrichis.
+
+    Listes ordonnées par pertinence décroissante ; chaque canal contribue 1/(RRF_K+rank),
+    le canal parent est pondéré par ``RRF_PARENT_LIST_WEIGHT``.
     """
+    parent_candidates = parent_candidates or []
+
     v_by_id: Dict[int, Tuple[float, TextNode]] = {}
     for nws in vector_candidates:
         cid = _parse_chunk_id_from_node(nws.node)
@@ -484,56 +613,88 @@ def _hybrid_fuse_candidates(
         if cid not in k_by_id or sc > k_by_id[cid][0]:
             k_by_id[cid] = (sc, nws.node)
 
-    all_ids = set(v_by_id) | set(l_by_id) | set(k_by_id)
+    p_by_id: Dict[int, Tuple[float, TextNode]] = {}
+    for nws in parent_candidates:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is None:
+            continue
+        sc = float(nws.score or 0.0)
+        if cid not in p_by_id or sc > p_by_id[cid][0]:
+            p_by_id[cid] = (sc, nws.node)
+
+    all_ids = set(v_by_id) | set(l_by_id) | set(k_by_id) | set(p_by_id)
     if not all_ids:
         return []
 
-    v_raw = {i: v_by_id[i][0] for i in all_ids if i in v_by_id}
-    l_raw = {i: l_by_id[i] for i in all_ids if i in l_by_id}
-    k_raw = {i: k_by_id[i][0] for i in all_ids if i in k_by_id}
-
-    v_nmap = _normalize_min_max(v_raw)
-    l_nmap = _normalize_min_max(l_raw)
-    k_nmap = _normalize_min_max(k_raw)
+    rank_v: Dict[int, int] = {}
+    for r, nws in enumerate(vector_candidates):
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None and cid not in rank_v:
+            rank_v[cid] = r
+    rank_l: Dict[int, int] = {}
+    for r, nws in enumerate(lexical_candidates):
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None and cid not in rank_l:
+            rank_l[cid] = r
+    rank_k: Dict[int, int] = {}
+    for r, nws in enumerate(graph_candidates):
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None and cid not in rank_k:
+            rank_k[cid] = r
+    rank_p: Dict[int, int] = {}
+    for r, nws in enumerate(parent_candidates):
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None and cid not in rank_p:
+            rank_p[cid] = r
 
     fused: List[NodeWithScore] = []
     for cid in all_ids:
         v_raw_s = v_by_id[cid][0] if cid in v_by_id else None
-        v_norm = v_nmap.get(cid, 0.0) if cid in v_raw else 0.0
-        l_norm = l_nmap.get(cid, 0.0) if cid in l_raw else 0.0
-        k_norm = k_nmap.get(cid, 0.0) if cid in k_raw else 0.0
 
-        hybrid = (
-            RAG_HYBRID_ALPHA * v_norm
-            + RAG_HYBRID_BETA * l_norm
-            + RAG_HYBRID_GAMMA * k_norm
-        )
+        rv = rank_v.get(cid, 10_000)
+        rl = rank_l.get(cid, 10_000)
+        rk = rank_k.get(cid, 10_000)
+        rp = rank_p.get(cid, 10_000)
+
+        c_v = _rrf_contrib(rv) if cid in rank_v else 0.0
+        c_l = _rrf_contrib(rl) if cid in rank_l else 0.0
+        c_k = _rrf_contrib(rk) if cid in rank_k else 0.0
+        c_p = RRF_PARENT_LIST_WEIGHT * _rrf_contrib(rp) if cid in rank_p else 0.0
+
+        hybrid = c_v + c_l + c_k + c_p
 
         if cid in v_by_id:
             node = v_by_id[cid][1]
         elif cid in l_nodes:
             node = l_nodes[cid]
-        else:
+        elif cid in k_by_id:
             node = k_by_id[cid][1]
+        else:
+            node = p_by_id[cid][1]
 
         meta = dict(getattr(node, "metadata", {}) or {})
         if v_raw_s is not None:
             meta["vector_similarity"] = v_raw_s
-        meta["lexical_norm"] = l_norm
-        meta["kag_norm"] = k_norm
+        meta["lexical_rrf"] = c_l
+        meta["kag_rrf"] = c_k
+        meta["vector_rrf"] = c_v
+        meta["parent_rrf"] = c_p
+        meta["lexical_norm"] = c_l  # compat. filtres / logs
+        meta["kag_norm"] = c_k
         meta["hybrid_score"] = hybrid
-        meta["retrieval_signal"] = "hybrid"
+        meta["retrieval_signal"] = "hybrid_rrf"
         node.metadata = meta
 
         fused.append(NodeWithScore(node=node, score=hybrid))
 
     fused.sort(key=lambda x: float(x.score or 0.0), reverse=True)
     logger.debug(
-        "Fusion hybride (space): %d candidats (vector=%d lexical=%d kag=%d)",
+        "Fusion RRF (space): %d candidats (vector=%d lexical=%d kag=%d parent=%d)",
         len(fused),
-        len(v_raw),
-        len(l_raw),
-        len(k_raw),
+        len(rank_v),
+        len(rank_l),
+        len(rank_k),
+        len(rank_p),
     )
     return fused
 
@@ -542,8 +703,8 @@ def _filter_hybrid_candidates(
     candidates: List[NodeWithScore],
 ) -> List[NodeWithScore]:
     """
-    Filtre les candidats hybrides : garde si similarité vectorielle suffisante,
-    ou score hybride / lexical / KAG suffisant.
+    Filtre les candidats après fusion RRF : similarité vectorielle brute,
+    score RRF total, ou contribution suffisante sur un canal.
     """
     out: List[NodeWithScore] = []
     for nws in candidates:
@@ -553,7 +714,19 @@ def _filter_hybrid_candidates(
         v_ok = vx is not None and float(vx) >= MIN_VECTOR_SIMILARITY_THRESHOLD
         ln = float(meta.get("lexical_norm", 0) or 0)
         kn = float(meta.get("kag_norm", 0) or 0)
-        if v_ok or h >= HYBRID_MIN_SCORE or ln >= 0.12 or kn >= 0.12:
+        pr = float(meta.get("parent_rrf", 0) or 0)
+        vr = float(meta.get("vector_rrf", 0) or 0)
+        parent_sim = float(meta.get("parent_enrichment_score", 0) or 0)
+        parent_sim_ok = parent_sim >= PARENT_ENRICHED_MIN_SIMILARITY * 0.85
+        if (
+            v_ok
+            or h >= RRF_MIN_SCORE
+            or ln >= RRF_MIN_CHANNEL
+            or kn >= RRF_MIN_CHANNEL
+            or pr >= RRF_MIN_CHANNEL
+            or vr >= RRF_MIN_CHANNEL
+            or parent_sim_ok
+        ):
             out.append(nws)
     return out
 
@@ -1192,11 +1365,12 @@ def _retrieve_kag_for_entity_seeds(
     limit: int,
     seen_chunk_ids: Set[int],
     seen_entity_ids: Set[int],
-) -> List[NodeWithScore]:
+) -> Tuple[List[NodeWithScore], Set[int]]:
     """
     Retrieval KAG ciblé à partir d'une liste de noms d'entités seeds.
     Exclut les chunks et entités déjà vus dans les hops précédents.
-    Retourne uniquement des chunks nouveaux.
+    Retourne uniquement des chunks nouveaux et l'ensemble des IDs d'entités
+    touchées (seeds + voisins) pour alimenter ``seen_entity_ids``.
     """
     try:
         from app.services.kag_graph_service import (
@@ -1208,7 +1382,7 @@ def _retrieve_kag_for_entity_seeds(
         normalized = [normalize_entity_name(n) for n in entity_names if n]
         normalized = [n for n in normalized if n]
         if not normalized:
-            return []
+            return [], set()
 
         expanded = expand_kag_query_terms_for_space(session, space_id, normalized)
         expanded = expanded[:80]
@@ -1236,12 +1410,20 @@ def _retrieve_kag_for_entity_seeds(
         )
         rows = list(session.exec(stmt).all())
 
+        entities_touched: Set[int] = set()
+        for row in rows:
+            eid = row[3]
+            if eid is not None:
+                entities_touched.add(int(eid))
+
         # Expansion voisins graphe depuis les entités seeds
         seed_entity_ids = {row[3] for row in rows if row[3] is not None} - seen_entity_ids
         if seed_entity_ids:
             neighbor_ids = _neighbor_entity_ids_for_entities(
                 session, space_id, seed_entity_ids
             ) - seen_entity_ids
+            for nid in neighbor_ids:
+                entities_touched.add(int(nid))
             if neighbor_ids:
                 stmt_n = (
                     select(
@@ -1266,6 +1448,9 @@ def _retrieve_kag_for_entity_seeds(
                 )
                 existing_ids = {row[0].id for row in rows}
                 for row in session.exec(stmt_n).all():
+                    eid = row[3]
+                    if eid is not None:
+                        entities_touched.add(int(eid))
                     if row[0].id not in existing_ids:
                         rows.append(row)
                         existing_ids.add(row[0].id)
@@ -1290,11 +1475,11 @@ def _retrieve_kag_for_entity_seeds(
             if len(nodes) >= limit:
                 break
 
-        return nodes
+        return nodes, entities_touched
 
     except Exception as exc:
         logger.warning("KAG ciblé (multi-hop) échoué: %s", exc)
-        return []
+        return [], set()
 
 
 def _apply_multihop_depth_scoring(
@@ -1302,24 +1487,27 @@ def _apply_multihop_depth_scoring(
     all_nodes: Dict[int, NodeWithScore],
 ) -> List[NodeWithScore]:
     """
-    Calcule le score unifié multi-hop pour chaque chunk en tenant compte
-    des signaux par source (vector, lexical, kag, evidence) et de la pénalité
-    de profondeur (hop d'origine du chunk).
-
-    Formule : score = 0.55*v + 0.20*l + 0.20*k + 0.05*evidence - hop_penalty
+    Score unifié multi-hop : RRF sur les classements par signal brut
+    (vector, lexical, kag, evidence, parent) puis pénalité par profondeur.
     """
     if not state.chunk_signals:
         return list(all_nodes.values())
 
-    v_raw = {cid: sig.get("vector", 0.0) for cid, sig in state.chunk_signals.items()}
-    l_raw = {cid: sig.get("lexical", 0.0) for cid, sig in state.chunk_signals.items()}
-    k_raw = {cid: sig.get("kag", 0.0) for cid, sig in state.chunk_signals.items()}
-    e_raw = {cid: sig.get("evidence", 0.0) for cid, sig in state.chunk_signals.items()}
+    cids = list(state.chunk_signals.keys())
 
-    v_norm = _normalize_min_max(v_raw)
-    l_norm = _normalize_min_max(l_raw)
-    k_norm = _normalize_min_max(k_raw)
-    e_norm = _normalize_min_max(e_raw)
+    def _rank_by(key: str) -> Dict[int, int]:
+        sorted_c = sorted(
+            cids,
+            key=lambda c: float(state.chunk_signals[c].get(key, 0.0) or 0.0),
+            reverse=True,
+        )
+        return {c: i for i, c in enumerate(sorted_c)}
+
+    rv = _rank_by("vector")
+    rl = _rank_by("lexical")
+    rk = _rank_by("kag")
+    re_e = _rank_by("evidence")
+    rp = _rank_by("parent")
 
     scored: List[NodeWithScore] = []
     for cid, sig in state.chunk_signals.items():
@@ -1328,11 +1516,13 @@ def _apply_multihop_depth_scoring(
             continue
         hop = sig.get("hop", 0)
         penalty = MH_HOP_PENALTIES.get(hop, MH_HOP_PENALTIES[MULTI_HOP_MAX_HOPS])
+
         mh_score = (
-            MH_WEIGHT_VECTOR * v_norm.get(cid, 0.0)
-            + MH_WEIGHT_LEXICAL * l_norm.get(cid, 0.0)
-            + MH_WEIGHT_KAG * k_norm.get(cid, 0.0)
-            + MH_WEIGHT_EVIDENCE * e_norm.get(cid, 0.0)
+            _rrf_contrib(rv[cid])
+            + _rrf_contrib(rl[cid])
+            + _rrf_contrib(rk[cid])
+            + _rrf_contrib(re_e[cid])
+            + MH_RRF_PARENT_WEIGHT * _rrf_contrib(rp[cid])
             - penalty
         )
         mh_score = max(0.0, mh_score)
@@ -1394,6 +1584,21 @@ def multi_hop_retrieve_space(
         pivot_entity_names=pivot_entity_names or None,
     )
 
+    parent_candidates_hop0 = _retrieve_parent_enriched_sql(
+        session=session,
+        space_id=space_id,
+        user_id=user_id,
+        query_text=query_text,
+        candidate_k=candidate_k,
+    )
+    p_by_id_map: Dict[int, float] = {}
+    for nws in parent_candidates_hop0:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None:
+            sc = float(nws.score or 0.0)
+            if cid not in p_by_id_map or sc > p_by_id_map[cid]:
+                p_by_id_map[cid] = sc
+
     # Indexer les signaux bruts du hop 0
     v_by_id: Dict[int, float] = {}
     for nws in vector_candidates:
@@ -1415,7 +1620,7 @@ def multi_hop_retrieve_space(
             if cid not in k_by_id or sc > k_by_id[cid]:
                 k_by_id[cid] = sc
 
-    hop0_ids = set(v_by_id) | set(l_by_id) | set(k_by_id)
+    hop0_ids = set(v_by_id) | set(l_by_id) | set(k_by_id) | set(p_by_id_map)
     new_at_hop0 = 0
 
     # Fusionner dans l'état global
@@ -1426,16 +1631,18 @@ def multi_hop_retrieve_space(
             "lexical": l_by_id.get(cid, 0.0),
             "kag": k_by_id.get(cid, 0.0),
             "evidence": 0.0,
+            "parent": p_by_id_map.get(cid, 0.0),
             "hop": 0,
             "path": "hop0:hybrid",
         }
         new_at_hop0 += 1
 
-    # Conserver les nœuds en utilisant la fusion hybride pour le nœud de référence
+    # Conserver les nœuds en utilisant la fusion RRF pour le nœud de référence
     fused_hop0 = _hybrid_fuse_candidates(
         vector_candidates=vector_candidates,
         lexical_candidates=lexical_candidates,
         graph_candidates=graph_candidates_hop0,
+        parent_candidates=parent_candidates_hop0,
     )
     for nws in fused_hop0:
         cid = _parse_chunk_id_from_node(nws.node)
@@ -1488,7 +1695,7 @@ def multi_hop_retrieve_space(
 
         state.seen_entity_names.update(new_seeds)
 
-        hop_candidates = _retrieve_kag_for_entity_seeds(
+        hop_candidates, entities_touched = _retrieve_kag_for_entity_seeds(
             session=session,
             space_id=space_id,
             entity_names=new_seeds,
@@ -1496,6 +1703,7 @@ def multi_hop_retrieve_space(
             seen_chunk_ids=state.seen_chunk_ids,
             seen_entity_ids=state.seen_entity_ids,
         )
+        state.seen_entity_ids.update(entities_touched)
 
         new_count = 0
         for nws in hop_candidates:
@@ -1516,6 +1724,7 @@ def multi_hop_retrieve_space(
                 "lexical": 0.0,
                 "kag": kag_score,
                 "evidence": float(evidence),
+                "parent": 0.0,
                 "hop": hop,
                 "path": f"hop{hop}:{','.join(new_seeds[:3])}",
             }
@@ -1569,7 +1778,7 @@ def search_relevant_passages(
     Pipeline :
       1. Extraction entités pivot (KAG) + détection multi-hop heuristique
       2a. [Multi-hop] Orchestrateur max 3 sauts avec scoring par profondeur
-      2b. [Standard]  Fusion hybride vectoriel + lexical + KAG
+      2b. [Standard]  Fusion RRF vectoriel + lexical + KAG + parents enrichis
       3. Filtrage pré-reranking
       4. Early stopping si similarité vectorielle élevée
       5. Reranking cross-encoder (BGE-reranker-v2-m3)
@@ -1725,6 +1934,14 @@ def search_relevant_passages(
                 except Exception as kag_err:
                     logger.warning("KAG retrieval échoué (space): %s", kag_err)
 
+            parent_candidates = _retrieve_parent_enriched_sql(
+                session=session,
+                space_id=space_id,
+                user_id=user_id,
+                query_text=query_text,
+                candidate_k=candidate_k,
+            )
+
             with trace_run(
                 "hybrid_fusion",
                 run_type="chain",
@@ -1732,16 +1949,17 @@ def search_relevant_passages(
                     "nb_vector": len(vector_candidates),
                     "nb_lexical": len(lexical_candidates),
                     "nb_kag": len(graph_candidates),
-                    "alpha": RAG_HYBRID_ALPHA,
-                    "beta": RAG_HYBRID_BETA,
-                    "gamma": RAG_HYBRID_GAMMA,
+                    "nb_parent": len(parent_candidates),
+                    "rrf_k": RRF_K,
+                    "parent_list_weight": RRF_PARENT_LIST_WEIGHT,
                 },
-                tags=["fusion", "hybrid", "space"],
+                tags=["fusion", "hybrid", "rrf", "space"],
             ) as fusion_run:
                 leaf_candidates = _hybrid_fuse_candidates(
                     vector_candidates=vector_candidates,
                     lexical_candidates=lexical_candidates,
                     graph_candidates=graph_candidates,
+                    parent_candidates=parent_candidates,
                 )
                 fusion_outputs = {"nb_fused": len(leaf_candidates)}
                 if TRACE_VERBOSE_TEXT:
