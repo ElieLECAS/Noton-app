@@ -600,23 +600,11 @@ def _format_text_full_chunk_text(
     page_no: Optional[int],
 ) -> str:
     """
-    Texte canonique pour embedding : fil d'Ariane explicite, page, puis corps du bloc.
+    Texte canonique pour embedding : contenu brut du chunk, sans préfixe.
+
+    Le contexte (heading_path, page_no, etc.) est conservé uniquement dans metadata_json.
     """
-    lines: List[str] = []
-    path = _heading_path_list(headings)
-    if path:
-        lines.append("Fil d'Ariane : " + " > ".join(path))
-    elif parent_heading_display:
-        lines.append("Fil d'Ariane : " + parent_heading_display)
-    if page_no is not None:
-        try:
-            lines.append(f"p.{int(page_no)}")
-        except (TypeError, ValueError):
-            pass
-    if lines:
-        lines.append("")
-    lines.append(raw_body.strip())
-    return "\n".join(lines)
+    return (raw_body or "").strip()
 
 
 def _split_text_into_windows(text: str, max_chars: int, overlap: int) -> List[str]:
