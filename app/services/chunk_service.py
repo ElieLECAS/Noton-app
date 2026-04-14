@@ -996,7 +996,19 @@ def run_kag_for_library_document(document_id: int) -> None:
     Phase KAG uniquement (après embeddings) : extraction graphe par espace, puis document completed/100.
     Appelée depuis la queue Celery « kag » ou un thread en mode TASK_BACKEND_MODE=thread.
     """
+    from app.services.document_service_new import (
+        _finalize_pipeline_abort,
+        _should_abort_processing,
+    )
+
     ld = get_library_document_logger()
+    if _should_abort_processing(document_id):
+        ld.info(
+            "[KAG] document_id=%s — annulé avant démarrage (stop/skip).",
+            document_id,
+        )
+        _finalize_pipeline_abort(document_id)
+        return
     if not settings.KAG_ENABLED:
         ld.info(
             "[KAG] document_id=%s — KAG désactivé, finalisation sans graphe.",
@@ -1021,6 +1033,14 @@ def run_kag_for_library_document(document_id: int) -> None:
             document = session.get(Document, document_id)
             if not document:
                 ld.warning("[KAG] document_id=%s — document introuvable, arrêt.", document_id)
+                return
+
+            if document.processing_status in ("cancelled", "skipped"):
+                ld.info(
+                    "[KAG] document_id=%s — statut %s, arrêt.",
+                    document_id,
+                    document.processing_status,
+                )
                 return
 
             from app.models.document_space import DocumentSpace
@@ -1049,6 +1069,14 @@ def run_kag_for_library_document(document_id: int) -> None:
             session.refresh(document)
 
             for space_id in space_ids:
+                if _should_abort_processing(document_id):
+                    ld.info(
+                        "[KAG] document_id=%s — interrompu entre espaces (space_id=%s).",
+                        document_id,
+                        space_id,
+                    )
+                    _finalize_pipeline_abort(document_id)
+                    return
                 try:
                     ld.info(
                         "[KAG] document_id=%s space_id=%s — extraction / graphe en cours…",
@@ -1097,7 +1125,7 @@ def run_kag_for_library_document(document_id: int) -> None:
         try:
             with Session(engine) as session:
                 document = session.get(Document, document_id)
-                if document:
+                if document and document.processing_status not in ("cancelled", "skipped"):
                     document.processing_status = "failed"
                     document.processing_progress = max(document.processing_progress or 0, 95)
                     document.updated_at = datetime.utcnow()
@@ -1109,6 +1137,11 @@ def run_kag_for_library_document(document_id: int) -> None:
 
 def _process_embeddings_for_document(document_id: int):
     """Génère les embeddings des seuls chunks feuilles (parents exclus) ; enfile KAG si activé et espaces liés."""
+    from app.services.document_service_new import (
+        _finalize_pipeline_abort,
+        _should_abort_processing,
+    )
+
     ld = get_library_document_logger()
     ld.info(
         "[Embeddings] document_id=%s — début : vectorisation des feuilles uniquement "
@@ -1124,6 +1157,10 @@ def _process_embeddings_for_document(document_id: int):
                     "[Embeddings] document_id=%s — document introuvable, arrêt.",
                     document_id,
                 )
+                return
+
+            if _should_abort_processing(document_id):
+                _finalize_pipeline_abort(document_id)
                 return
 
             # Feuilles uniquement (is_leaf=False = parents hiérarchiques Docling, sans vecteur)
@@ -1161,20 +1198,34 @@ def _process_embeddings_for_document(document_id: int):
                 len(chunks),
             )
             from app.services.embedding_service import generate_embeddings_batch
-            embeddings = generate_embeddings_batch(
-                [c.content for c in chunks], batch_size=settings.EMBEDDING_BATCH_SIZE
-            )
+
             model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
             ok = 0
-            for chunk, embedding in zip(chunks, embeddings):
-                if embedding:
-                    chunk.embedding = embedding
-                    meta = dict(chunk.metadata_json or {})
-                    meta["embedding_model"] = model_name
-                    chunk.metadata_json = meta
-                    chunk.metadata_ = meta
-                    session.add(chunk)
-                    ok += 1
+            batch_size = max(1, settings.EMBEDDING_BATCH_SIZE)
+            for i in range(0, len(chunks), batch_size):
+                if _should_abort_processing(document_id):
+                    ld.warning(
+                        "[Embeddings] document_id=%s — interrompu pendant embeddings (lot %s/%s).",
+                        document_id,
+                        i // batch_size + 1,
+                        (len(chunks) + batch_size - 1) // batch_size,
+                    )
+                    _finalize_pipeline_abort(document_id)
+                    return
+                batch = chunks[i : i + batch_size]
+                embeddings = generate_embeddings_batch(
+                    [c.content for c in batch], batch_size=len(batch)
+                )
+                for chunk, embedding in zip(batch, embeddings):
+                    if embedding:
+                        chunk.embedding = embedding
+                        meta = dict(chunk.metadata_json or {})
+                        meta["embedding_model"] = model_name
+                        chunk.metadata_json = meta
+                        chunk.metadata_ = meta
+                        session.add(chunk)
+                        ok += 1
+                session.commit()
 
             if ok == 0:
                 logger.warning("Aucun embedding valide pour document_id=%s", document_id)
@@ -1189,7 +1240,6 @@ def _process_embeddings_for_document(document_id: int):
                 session.commit()
                 return
 
-            session.commit()
             session.refresh(document)
             logger.info(
                 "document_id=%s embeddings OK en %.2fs (%s vecteurs)",
@@ -1257,7 +1307,7 @@ def _process_embeddings_for_document(document_id: int):
         try:
             with Session(engine) as session:
                 document = session.get(Document, document_id)
-                if document:
+                if document and document.processing_status not in ("cancelled", "skipped"):
                     document.processing_status = "failed"
                     document.processing_progress = max(document.processing_progress or 0, 85)
                     document.updated_at = datetime.utcnow()

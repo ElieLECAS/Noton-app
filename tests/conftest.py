@@ -125,6 +125,39 @@ def _truncate_all_tables() -> None:
             conn.commit()
 
 
+def _sync_knowledgeentity_confidence_score_column() -> None:
+    """
+    create_all ne modifie pas les tables existantes : une base déjà peuplée peut
+    manquer des colonnes ajoutées après coup (ex. migration add_ke_confidence).
+    """
+    try:
+        with engine.connect() as conn:
+            has_table = conn.execute(
+                text(
+                    "SELECT 1 FROM information_schema.tables "
+                    "WHERE table_schema = 'public' AND table_name = 'knowledgeentity'"
+                )
+            ).scalar()
+            if not has_table:
+                return
+            conn.execute(
+                text(
+                    "ALTER TABLE knowledgeentity "
+                    "ADD COLUMN IF NOT EXISTS confidence_score DOUBLE PRECISION"
+                )
+            )
+            conn.execute(
+                text(
+                    "CREATE INDEX IF NOT EXISTS ix_knowledgeentity_confidence_score "
+                    "ON knowledgeentity (confidence_score)"
+                )
+            )
+            conn.commit()
+    except Exception:
+        # Ne pas bloquer la suite si le schéma diffère (SQLite, etc.)
+        pass
+
+
 def assign_role(session: Session, user_id: int, role_name: str) -> None:
     for ur in session.exec(select(UserRole).where(UserRole.user_id == user_id)).all():
         session.delete(ur)
@@ -185,6 +218,7 @@ def _init_db() -> Generator[None, None, None]:
     except Exception:
         pass
     SQLModel.metadata.create_all(engine)
+    _sync_knowledgeentity_confidence_score_column()
     _truncate_all_tables()
     with Session(engine) as session:
         seed_rbac_system(session)

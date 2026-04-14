@@ -18,7 +18,7 @@ class Document(SQLModel, table=True):
     content: Optional[str] = None
     document_type: str = Field(default="written")
     source_file_path: Optional[str] = None
-    # completed | pending | processing | failed | reindex_queued (file d’attente réindexation, chunks inchangés)
+    # completed | pending | processing | failed | reindex_queued | cancelled | skipped
     processing_status: str = Field(default="completed")
     processing_progress: Optional[int] = Field(default=100)
     is_paid: bool = Field(default=False)

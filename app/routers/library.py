@@ -11,18 +11,31 @@ from app.models.folder import Folder
 from app.models.space import SpaceRead
 from app.models.user import UserRead
 from app.routers.auth import get_current_user, require_permission, require_role
-from app.services.library_service import get_or_create_user_library, get_library_stats
+from app.services.library_service import (
+    get_or_create_user_library,
+    get_library_stats,
+)
 from app.services.folder_service import (
     create_folder, get_folder_by_id, get_folders_by_parent,
     get_folder_path, get_folder_with_contents, rename_folder,
     move_folder, delete_folder
 )
 from app.services.document_service_new import (
-    create_document, get_document_by_id, get_documents_by_folder,
-    get_documents_by_library, save_uploaded_file, process_document_async,
+    LIBRARY_QUEUE_ACTIVE_STATUSES,
+    create_document,
+    get_document_by_id,
+    get_documents_by_folder,
+    get_documents_by_library,
+    save_uploaded_file,
+    process_document_async,
     mark_document_reindex_queued,
-    move_document, delete_document,
+    move_document,
+    delete_document,
     update_document,
+    skip_all_library_documents_processing,
+    skip_library_document_processing,
+    stop_all_library_documents_processing,
+    stop_library_document_processing,
 )
 from app.services.task_dispatch import (
     dispatch_document_spaces_update,
@@ -195,6 +208,24 @@ async def list_documents(
     return [DocumentListItem.model_validate(d) for d in documents]
 
 
+@router.post("/documents/stop-all", status_code=status.HTTP_200_OK)
+async def stop_all_library_documents_endpoint(
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Annule tous les documents en file (admin uniquement)."""
+    return stop_all_library_documents_processing(session, current_user.id)
+
+
+@router.post("/documents/skip-all", status_code=status.HTTP_200_OK)
+async def skip_all_library_documents_endpoint(
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Ignore les documents en attente et arrête celui en cours (admin uniquement)."""
+    return skip_all_library_documents_processing(session, current_user.id)
+
+
 @router.get("/documents/{document_id}", response_model=DocumentRead)
 async def get_document(
     document_id: int,
@@ -217,6 +248,72 @@ async def get_document(
     return DocumentRead.model_validate(document)
 
 
+@router.post("/documents/{document_id}/stop", response_model=DocumentRead)
+async def stop_single_library_document(
+    document_id: int,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Arrête le traitement d'un document sans le supprimer (admin uniquement)."""
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if document is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document non trouvé",
+        )
+    if document.processing_status not in LIBRARY_QUEUE_ACTIVE_STATUSES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Aucun traitement en cours ou en attente pour ce document",
+        )
+    updated = stop_library_document_processing(session, document_id, current_user.id)
+    if not updated:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Impossible d'arrêter le traitement",
+        )
+    return DocumentRead.model_validate(updated)
+
+
+@router.post("/documents/{document_id}/skip", response_model=DocumentRead)
+async def skip_single_library_document(
+    document_id: int,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Ignore un document en attente ou arrête s'il est déjà en cours (admin uniquement)."""
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if document is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document non trouvé",
+        )
+    if document.processing_status not in LIBRARY_QUEUE_ACTIVE_STATUSES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Aucun traitement en cours ou en attente pour ce document",
+        )
+    updated = skip_library_document_processing(session, document_id, current_user.id)
+    if not updated:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Impossible d'ignorer le document",
+        )
+    return DocumentRead.model_validate(updated)
+
+
 @router.put("/documents/{document_id}", response_model=DocumentRead)
 async def update_library_document(
     document_id: int,
@@ -237,7 +334,7 @@ async def update_library_document(
 @router.post("/documents/{document_id}/reindex", status_code=status.HTTP_200_OK)
 async def reindex_library_document_endpoint(
     document_id: int,
-    current_user: UserRead = Depends(require_permission("library.write")),
+    current_user: UserRead = Depends(require_role("admin")),
     session: Session = Depends(get_session),
 ):
     """

@@ -334,7 +334,8 @@ def test_non_table_leaf_unaffected():
     assert len(leaf_specs) == 1
     assert leaf_specs[0]["metadata_json"].get("content_type") == "text_full"
     assert leaf_specs[0]["metadata_json"].get("heading_path") == ["2 Corps"]
-    assert "Fil d'Ariane" in leaf_specs[0]["content"]
+    # Corps seul pour l’embedding ; le contexte est dans metadata_json.
+    assert leaf_specs[0]["content"] == "Un paragraphe quelconque."
 
 
 def test_existing_specs_one_heading_two_leaves():
@@ -369,10 +370,7 @@ def test_format_text_full_chunk_text():
         "Chapitre 1 Section A",
         3,
     )
-    assert "Fil d'Ariane" in t
-    assert "Chapitre 1 > Section A" in t
-    assert "p.3" in t
-    assert "Corps du texte." in t
+    assert t == "Corps du texte."
 
 
 def test_text_windows_when_threshold_enabled(monkeypatch):

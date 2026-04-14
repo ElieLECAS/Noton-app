@@ -1,8 +1,5 @@
-{% extends "base.html" %}
-
-{% block title %}Graph KAG Espace - {{ app_name }}{% endblock %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% block title %}Graph KAG Espace - {{ app_name }}{%
+endblock %} {% block extra_head %}
 <link
     rel="stylesheet"
     href="https://unpkg.com/vis-network@9.1.2/styles/vis-network.min.css"
@@ -17,18 +14,26 @@
         height: calc(100vh - 7.5rem);
         min-height: 0;
         border-radius: 1rem;
-        background: radial-gradient(circle at top left, #eef2ff 0, #ffffff 55%, #f9fafb 100%);
+        background: radial-gradient(
+            circle at top left,
+            #eef2ff 0,
+            #ffffff 55%,
+            #f9fafb 100%
+        );
         box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
         padding: 1rem;
         box-sizing: border-box;
     }
     .dark #kag-network {
-        background: radial-gradient(circle at top left, #1f2937 0, #020617 55%, #020617 100%);
+        background: radial-gradient(
+            circle at top left,
+            #1f2937 0,
+            #020617 55%,
+            #020617 100%
+        );
     }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
     <header
         class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 flex-shrink-0 shadow-sm"
@@ -46,12 +51,18 @@
                 >
                     Graphe de connaissances de l'espace
                 </h1>
-                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5" id="kag-subtitle">
-                    Choisissez une vue ci-dessous : entités liées aux passages, ou relations entre entités (co-occurrences).
+                <p
+                    class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5"
+                    id="kag-subtitle"
+                >
+                    Choisissez une vue ci-dessous : entités liées aux passages,
+                    ou relations entre entités (co-occurrences).
                 </p>
             </div>
         </div>
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-wrap w-full sm:w-auto">
+        <div
+            class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-wrap w-full sm:w-auto"
+        >
             <div
                 class="inline-flex rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-900/80 p-0.5"
                 role="group"
@@ -76,7 +87,9 @@
                 id="kag-stats-pill"
                 class="inline-flex items-center gap-2 rounded-full border border-violet-200 dark:border-violet-700/60 bg-violet-50/80 dark:bg-violet-900/40 px-3 py-1 text-xs text-violet-700 dark:text-violet-200"
             >
-                <span class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+                <span
+                    class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"
+                ></span>
                 <span id="kag-stats-text">Chargement du graphe...</span>
             </span>
         </div>
@@ -97,8 +110,12 @@
                 <aside
                     class="w-full lg:w-80 flex-shrink-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 flex flex-col gap-3"
                 >
-                    <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                        <i class="ti ti-info-circle text-base text-violet-500"></i>
+                    <h2
+                        class="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2"
+                    >
+                        <i
+                            class="ti ti-info-circle text-base text-violet-500"
+                        ></i>
                         Details du noeud
                     </h2>
                     <div
@@ -106,37 +123,66 @@
                         class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 space-y-2"
                     >
                         <p class="text-gray-500 dark:text-gray-400">
-                            Survolez ou cliquez un noeud pour afficher le detail de l'entite
-                            ou du passage de document associe.
+                            Survolez ou cliquez un noeud pour afficher le detail
+                            de l'entite ou du passage de document associe.
                         </p>
                     </div>
-                    <div class="mt-2 border-t border-gray-100 dark:border-gray-700 pt-2 space-y-2">
+                    <div
+                        class="mt-2 border-t border-gray-100 dark:border-gray-700 pt-2 space-y-2"
+                    >
                         <div>
-                            <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+                            <h3
+                                class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1"
+                            >
                                 Legende
                             </h3>
-                            <div id="kag-legend-bipartite" class="flex flex-wrap gap-2 text-xs">
-                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-violet-50 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200 border border-violet-200 dark:border-violet-700/50">
-                                    <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                            <div
+                                id="kag-legend-bipartite"
+                                class="flex flex-wrap gap-2 text-xs"
+                            >
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-violet-50 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200 border border-violet-200 dark:border-violet-700/50"
+                                >
+                                    <span
+                                        class="w-2 h-2 rounded-full bg-violet-500"
+                                    ></span>
                                     Entite
                                 </span>
-                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-sky-50 dark:bg-sky-900/40 text-sky-700 dark:text-sky-200 border border-sky-200 dark:border-sky-700/50">
-                                    <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-sky-50 dark:bg-sky-900/40 text-sky-700 dark:text-sky-200 border border-sky-200 dark:border-sky-700/50"
+                                >
+                                    <span
+                                        class="w-2 h-2 rounded-full bg-sky-500"
+                                    ></span>
                                     Passage document
                                 </span>
                             </div>
-                            <div id="kag-legend-entity-links" class="hidden flex flex-wrap gap-2 text-xs">
-                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-violet-50 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200 border border-violet-200 dark:border-violet-700/50">
-                                    <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+                            <div
+                                id="kag-legend-entity-links"
+                                class="hidden flex flex-wrap gap-2 text-xs"
+                            >
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-violet-50 dark:bg-violet-900/40 text-violet-700 dark:text-violet-200 border border-violet-200 dark:border-violet-700/50"
+                                >
+                                    <span
+                                        class="w-2 h-2 rounded-full bg-violet-500"
+                                    ></span>
                                     Entite
                                 </span>
-                                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-700/50">
-                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200 border border-amber-200 dark:border-amber-700/50"
+                                >
+                                    <span
+                                        class="w-2 h-2 rounded-full bg-amber-500"
+                                    ></span>
                                     Lien (epaisseur ~ co-occurrences)
                                 </span>
                             </div>
                         </div>
-                        <label id="toggle-chunk-labels-wrap" class="flex items-center gap-2 text-[11px] text-gray-500 dark:text-gray-400 mt-1 select-none cursor-pointer">
+                        <label
+                            id="toggle-chunk-labels-wrap"
+                            class="flex items-center gap-2 text-[11px] text-gray-500 dark:text-gray-400 mt-1 select-none cursor-pointer"
+                        >
                             <input
                                 id="toggle-chunk-labels"
                                 type="checkbox"
@@ -150,9 +196,7 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_scripts %}
+{% endblock %} {% block extra_scripts %}
 <script src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
 <script>
     const spaceId = {{ space_id }};

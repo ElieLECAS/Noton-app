@@ -19,7 +19,7 @@ from app.services.document_service_new import (
 from tests.conftest import create_test_user
 
 
-def test_reindex_endpoint_returns_queued(client, responsable_headers):
+def test_reindex_endpoint_returns_queued(client, responsable_headers, admin_headers):
     with (
         mock.patch("app.routers.library.process_document_async"),
         mock.patch(
@@ -44,7 +44,7 @@ def test_reindex_endpoint_returns_queued(client, responsable_headers):
     ):
         r2 = client.post(
             f"/api/library/documents/{doc_id}/reindex",
-            headers=responsable_headers,
+            headers=admin_headers,
         )
 
     assert r2.status_code == 200
@@ -89,7 +89,9 @@ def test_reindex_all_forbidden_non_admin_responsable(client, responsable_headers
     assert "admin" in (r.json().get("detail") or "").lower()
 
 
-def test_reindex_service_unavailable_returns_503(client, responsable_headers):
+def test_reindex_service_unavailable_returns_503(
+    client, responsable_headers, admin_headers
+):
     with (
         mock.patch("app.routers.library.process_document_async"),
         mock.patch(
@@ -112,14 +114,14 @@ def test_reindex_service_unavailable_returns_503(client, responsable_headers):
     ):
         r2 = client.post(
             f"/api/library/documents/{doc_id}/reindex",
-            headers=responsable_headers,
+            headers=admin_headers,
         )
 
     assert r2.status_code == 503
     assert "Celery" in (r2.json().get("detail") or "")
 
 
-def test_post_reindex_sets_reindex_queued_status(client, responsable_headers):
+def test_post_reindex_sets_reindex_queued_status(client, responsable_headers, admin_headers):
     with (
         mock.patch("app.routers.library.process_document_async"),
         mock.patch(
@@ -144,7 +146,7 @@ def test_post_reindex_sets_reindex_queued_status(client, responsable_headers):
     ):
         r2 = client.post(
             f"/api/library/documents/{doc_id}/reindex",
-            headers=responsable_headers,
+            headers=admin_headers,
         )
     assert r2.status_code == 200
 
@@ -153,10 +155,10 @@ def test_post_reindex_sets_reindex_queued_status(client, responsable_headers):
     assert gr.json()["processing_status"] == DOCUMENT_STATUS_REINDEX_QUEUED
 
 
-def test_reindex_document_not_found_returns_404(client, responsable_headers):
+def test_reindex_document_not_found_returns_404(client, admin_headers):
     r = client.post(
         "/api/library/documents/999999999/reindex",
-        headers=responsable_headers,
+        headers=admin_headers,
     )
     assert r.status_code == 404
 

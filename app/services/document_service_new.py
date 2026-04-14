@@ -20,6 +20,18 @@ logger = logging.getLogger(__name__)
 
 # En file d’attente de réindexation : chunks et embeddings actuels restent servis jusqu’au début effectif du worker.
 DOCUMENT_STATUS_REINDEX_QUEUED = "reindex_queued"
+# Arrêt explicite (sans suppression) ou file ignorée.
+DOCUMENT_STATUS_CANCELLED = "cancelled"
+DOCUMENT_STATUS_SKIPPED = "skipped"
+
+# Documents susceptibles d’occuper la file de traitement ou d’être en attente.
+LIBRARY_QUEUE_ACTIVE_STATUSES = frozenset(
+    {
+        "pending",
+        "processing",
+        DOCUMENT_STATUS_REINDEX_QUEUED,
+    }
+)
 
 # Pipeline images Docling (bibliothèque) : désactivé en dur — texte/OCR uniquement, pas d’extraction disque ni Pixtral.
 # Mettre à True pour réactiver le corps de ``extract_and_save_images`` sans toucher au reste du pipeline.
@@ -57,7 +69,8 @@ def _clear_document_processing_cancelled(document_id: int) -> None:
 def _should_abort_processing(document_id: int) -> bool:
     """
     Indique si le traitement doit être interrompu:
-    - suppression demandée explicitement
+    - drapeau d’annulation (stop/skip/suppression)
+    - statut final cancelled/skipped en base
     - document supprimé en base
     """
     if _is_document_processing_cancelled(document_id):
@@ -65,10 +78,154 @@ def _should_abort_processing(document_id: int) -> bool:
 
     try:
         with Session(engine) as session:
-            return session.get(Document, document_id) is None
+            doc = session.get(Document, document_id)
+            if doc is None:
+                return True
+            if doc.processing_status in (DOCUMENT_STATUS_CANCELLED, DOCUMENT_STATUS_SKIPPED):
+                return True
     except Exception:
         # En cas d'erreur transitoire DB, on n'interrompt pas par défaut.
         return False
+    return False
+
+
+def _finalize_pipeline_abort(document_id: int) -> None:
+    """
+    Après sortie anticipée du pipeline : évite de laisser le document en « processing »
+    si l’arrêt n’a pas encore été persisté (ex. annulation par drapeau uniquement).
+    """
+    try:
+        with Session(engine) as session:
+            document = session.get(Document, document_id)
+            if document is None:
+                _clear_document_processing_cancelled(document_id)
+                return
+            if document.processing_status in (DOCUMENT_STATUS_CANCELLED, DOCUMENT_STATUS_SKIPPED):
+                _clear_document_processing_cancelled(document_id)
+                return
+            if _is_document_processing_cancelled(document_id):
+                document.processing_status = DOCUMENT_STATUS_CANCELLED
+                document.processing_progress = 0
+                document.updated_at = datetime.utcnow()
+                session.add(document)
+                session.commit()
+            _clear_document_processing_cancelled(document_id)
+    except Exception:
+        logger.debug(
+            "finalize_pipeline_abort document_id=%s (ignoré)", document_id, exc_info=True
+        )
+
+
+def stop_library_document_processing(
+    session: Session, document_id: int, user_id: int
+) -> Optional[Document]:
+    """
+    Arrête le traitement pour un document (sans suppression) : statut cancelled + drapeau worker.
+    """
+    document = get_document_by_id(session, document_id, user_id)
+    if not document:
+        return None
+    if document.processing_status not in LIBRARY_QUEUE_ACTIVE_STATUSES:
+        return None
+    document.processing_status = DOCUMENT_STATUS_CANCELLED
+    document.processing_progress = 0
+    document.updated_at = datetime.utcnow()
+    session.add(document)
+    session.commit()
+    session.refresh(document)
+    _mark_document_processing_cancelled(document_id)
+    logger.info(
+        "Traitement bibliothèque arrêté (cancelled) pour document_id=%s", document_id
+    )
+    return document
+
+
+def skip_library_document_processing(
+    session: Session, document_id: int, user_id: int
+) -> Optional[Document]:
+    """
+    Ignore un document en attente (skipped) ; si déjà en cours, équivalent à un stop (cancelled).
+    """
+    document = get_document_by_id(session, document_id, user_id)
+    if not document:
+        return None
+    st = document.processing_status
+    if st == "processing":
+        return stop_library_document_processing(session, document_id, user_id)
+    if st in ("pending", DOCUMENT_STATUS_REINDEX_QUEUED):
+        document.processing_status = DOCUMENT_STATUS_SKIPPED
+        document.processing_progress = 0
+        document.updated_at = datetime.utcnow()
+        session.add(document)
+        session.commit()
+        session.refresh(document)
+        _mark_document_processing_cancelled(document_id)
+        logger.info(
+            "Document bibliothèque ignoré (skipped) pour document_id=%s", document_id
+        )
+        return document
+    return None
+
+
+def stop_all_library_documents_processing(session: Session, user_id: int) -> dict:
+    """Annule tous les documents encore en file (pending / processing / reindex_queued)."""
+    from app.services.library_service import get_or_create_user_library
+
+    library = get_or_create_user_library(session, user_id)
+    docs = list(
+        session.exec(
+            select(Document).where(
+                Document.library_id == library.id,
+                Document.processing_status.in_(LIBRARY_QUEUE_ACTIVE_STATUSES),
+            )
+        ).all()
+    )
+    n = 0
+    for doc in docs:
+        doc.processing_status = DOCUMENT_STATUS_CANCELLED
+        doc.processing_progress = 0
+        doc.updated_at = datetime.utcnow()
+        session.add(doc)
+        _mark_document_processing_cancelled(doc.id)
+        n += 1
+    if n:
+        session.commit()
+    return {"cancelled": n}
+
+
+def skip_all_library_documents_processing(session: Session, user_id: int) -> dict:
+    """
+    Ignore les documents en attente (skipped) et arrête celui en cours (cancelled).
+    """
+    from app.services.library_service import get_or_create_user_library
+
+    library = get_or_create_user_library(session, user_id)
+    docs = list(
+        session.exec(
+            select(Document).where(
+                Document.library_id == library.id,
+                Document.processing_status.in_(LIBRARY_QUEUE_ACTIVE_STATUSES),
+            )
+        ).all()
+    )
+    skipped = 0
+    cancelled = 0
+    for doc in docs:
+        if doc.processing_status == "processing":
+            doc.processing_status = DOCUMENT_STATUS_CANCELLED
+            cancelled += 1
+        elif doc.processing_status in ("pending", DOCUMENT_STATUS_REINDEX_QUEUED):
+            doc.processing_status = DOCUMENT_STATUS_SKIPPED
+            skipped += 1
+        else:
+            continue
+        doc.processing_progress = 0
+        doc.updated_at = datetime.utcnow()
+        session.add(doc)
+        _mark_document_processing_cancelled(doc.id)
+    if skipped or cancelled:
+        session.commit()
+    return {"skipped": skipped, "cancelled_running": cancelled}
 
 try:
     import torch
@@ -1171,6 +1328,7 @@ def _process_document_for_id(document_id: int, file_path: str):
                 "[Upload/Pipeline] document_id=%s — annulé avant démarrage (cancel flag).",
                 document_id,
             )
+            _finalize_pipeline_abort(document_id)
             return
 
         with Session(engine) as session:
@@ -1181,6 +1339,19 @@ def _process_document_for_id(document_id: int, file_path: str):
                     "[Upload/Pipeline] document_id=%s — document introuvable en base, arrêt.",
                     document_id,
                 )
+                _clear_document_processing_cancelled(document_id)
+                return
+
+            if document.processing_status in (
+                DOCUMENT_STATUS_CANCELLED,
+                DOCUMENT_STATUS_SKIPPED,
+            ):
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — statut final %s, pas de traitement.",
+                    document_id,
+                    document.processing_status,
+                )
+                _clear_document_processing_cancelled(document_id)
                 return
 
             document.processing_status = "processing"
@@ -1279,6 +1450,7 @@ def _process_document_for_id(document_id: int, file_path: str):
                     "[Upload/Pipeline] document_id=%s — annulé après extraction.",
                     document_id,
                 )
+                _finalize_pipeline_abort(document_id)
                 return
 
             output_ext = Path(pdf_input_path).suffix.lower() or ".bin"
@@ -1342,6 +1514,7 @@ def _process_document_for_id(document_id: int, file_path: str):
                         "[Upload/Pipeline] document_id=%s — annulé avant chunking.",
                         document_id,
                     )
+                    _finalize_pipeline_abort(document_id)
                     return
 
                 t_chunk = time.perf_counter()
@@ -1467,6 +1640,7 @@ def _process_document_for_id(document_id: int, file_path: str):
                     "[Upload/Pipeline] document_id=%s — annulé avant embeddings/KAG.",
                     document_id,
                 )
+                _finalize_pipeline_abort(document_id)
                 return
             ld.info(
                 "[Upload/Pipeline] document_id=%s — enchaînement embeddings + KAG.",
@@ -1502,7 +1676,10 @@ def _process_document_for_id(document_id: int, file_path: str):
         try:
             with Session(engine) as session:
                 document = session.get(Document, document_id)
-                if document:
+                if document and document.processing_status not in (
+                    DOCUMENT_STATUS_CANCELLED,
+                    DOCUMENT_STATUS_SKIPPED,
+                ):
                     document.processing_status = "failed"
                     document.processing_progress = max(document.processing_progress or 0, 10)
                     document.content = f"❌ Erreur lors du traitement du document: {str(e)}"
@@ -1512,11 +1689,8 @@ def _process_document_for_id(document_id: int, file_path: str):
         except Exception as update_error:
             logger.error("Erreur lors de la mise à jour du statut d'erreur pour le document %d: %s", document_id, update_error)
     finally:
-        # Nettoyage défensif: si le document n'existe plus, on retire l'annulation.
         try:
-            with Session(engine) as session:
-                if session.get(Document, document_id) is None:
-                    _clear_document_processing_cancelled(document_id)
+            _clear_document_processing_cancelled(document_id)
         except Exception:
             pass
 
@@ -1528,6 +1702,20 @@ def enqueue_library_document_thread(document_id: int, file_path: str):
             document = session.get(Document, document_id)
             if not document:
                 logger.error("Document %d non trouvé pour ajout à la queue", document_id)
+                return
+            if document.processing_status in (
+                DOCUMENT_STATUS_CANCELLED,
+                DOCUMENT_STATUS_SKIPPED,
+            ):
+                logger.info(
+                    "Document %d non ajouté à la file (statut final %s)",
+                    document_id,
+                    document.processing_status,
+                )
+                get_library_document_logger().info(
+                    "[Queue] document_id=%s — ignoré (cancelled/skipped), pas d’enqueue.",
+                    document_id,
+                )
                 return
     except Exception as e:
         logger.error(

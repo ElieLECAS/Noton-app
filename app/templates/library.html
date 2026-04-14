@@ -12,6 +12,12 @@
                 <button id="library-reindex-all-btn" onclick="reindexAllLibraryDocuments()" class="px-4 py-2 rounded-lg border border-amber-600 text-amber-800 dark:text-amber-300 dark:border-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40" title="Réindexer tous les documents fichier (Celery)">
                     <i class="ti ti-refresh"></i> Tout retraiter
                 </button>
+                <button type="button" id="library-stop-all-btn" onclick="stopAllQueueDocuments()" class="hidden px-4 py-2 rounded-lg border border-red-600 text-red-800 dark:text-red-300 dark:border-red-500 hover:bg-red-50 dark:hover:bg-red-950/40" title="Arrêter tous les traitements en cours ou en attente (admin)">
+                    <i class="ti ti-player-stop"></i> Stop tout
+                </button>
+                <button type="button" id="library-skip-all-btn" onclick="skipAllQueueDocuments()" class="hidden px-4 py-2 rounded-lg border border-orange-600 text-orange-800 dark:text-orange-300 dark:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/40" title="Ignorer les documents en attente et arrêter celui en cours (admin)">
+                    <i class="ti ti-player-skip-forward"></i> Ignorer tout
+                </button>
                 <button id="library-upload-btn" onclick="openUploadModal()" class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
                     <i class="ti ti-upload"></i> Upload
                 </button>
@@ -204,6 +210,10 @@ function applyPermissionUI() {
   if (folderBtnTop) folderBtnTop.classList.toggle("hidden", !canLibraryWrite);
   if (folderBtnSidebar) folderBtnSidebar.classList.toggle("hidden", !canLibraryWrite);
   if (reindexAllBtn) reindexAllBtn.classList.toggle("hidden", !canLibraryWrite || !isAdminUser);
+  const stopAllBtn = document.getElementById("library-stop-all-btn");
+  const skipAllBtn = document.getElementById("library-skip-all-btn");
+  if (stopAllBtn) stopAllBtn.classList.toggle("hidden", !isAdminUser);
+  if (skipAllBtn) skipAllBtn.classList.toggle("hidden", !isAdminUser);
   if (uploadBtn) uploadBtn.classList.toggle("hidden", !canLibraryWrite);
 
   // Masquer l'indication visuelle "upload" (icône) quand on est en lecture seule.
@@ -360,16 +370,20 @@ async function loadDocuments() {
         <div class="text-xs text-gray-500">${
           d.processing_status === "reindex_queued"
             ? `<span class="text-amber-700 dark:text-amber-400">En attente de retraitement</span> — index actuel conservé (${d.processing_progress ?? 0}%)`
+            : d.processing_status === "cancelled"
+            ? `<span class="text-red-700 dark:text-red-400">Traitement arrêté</span>`
+            : d.processing_status === "skipped"
+            ? `<span class="text-orange-700 dark:text-orange-400">Ignoré (non traité)</span>`
             : `Statut: ${d.processing_status} (${d.processing_progress ?? 0}%)`
         }</div>
       </div>
-      <div class="flex items-center gap-3 flex-wrap justify-end">
+        <div class="flex items-center gap-3 flex-wrap justify-end">
         <button class="text-blue-600 text-sm" onclick="openDocumentFile(${d.id})">Ouvrir</button>
         ${
           canLibraryWrite
             ? `
               ${
-                d.document_type === "document"
+                d.document_type === "document" && isAdminUser
                   ? `<button
                       type="button"
                       class="text-amber-700 dark:text-amber-400 text-sm disabled:opacity-40 disabled:pointer-events-none"
@@ -377,6 +391,22 @@ async function loadDocuments() {
                       onclick="reindexDocument(${d.id}, '${(d.title || '').replace(/'/g, "\\'")}')"
                       title="Re-extraire et réindexer (chunks, embeddings, KAG)"
                     >Retraiter</button>`
+                  : ""
+              }
+              ${
+                isAdminUser &&
+                (d.processing_status === "pending" ||
+                  d.processing_status === "processing" ||
+                  d.processing_status === "reindex_queued")
+                  ? `<button type="button" class="text-red-700 dark:text-red-400 text-sm" onclick="stopQueueDocument(${d.id}, '${(d.title || '').replace(/'/g, "\\'")}')" title="Arrêter le traitement sans supprimer le document">Stop</button>`
+                  : ""
+              }
+              ${
+                isAdminUser &&
+                (d.processing_status === "pending" ||
+                  d.processing_status === "processing" ||
+                  d.processing_status === "reindex_queued")
+                  ? `<button type="button" class="text-orange-700 dark:text-orange-400 text-sm" onclick="skipQueueDocument(${d.id}, '${(d.title || '').replace(/'/g, "\\'")}')" title="Ignorer en attente ou arrêter si en cours">Ignorer</button>`
                   : ""
               }
               <button class="text-gray-700 dark:text-gray-300 text-sm" onclick="openEditDocumentModal(${d.id})">Modifier</button>
@@ -466,6 +496,60 @@ async function reindexAllLibraryDocuments() {
   if (body.status === "queued" && body.celery_task_id) {
     alert("Retraitement global lancé en arrière-plan. Les statuts des documents vont se mettre à jour.");
   }
+  await loadDocuments();
+}
+
+async function stopQueueDocument(documentId, documentTitle) {
+  const ok = confirm(
+    `Arrêter le traitement de « ${documentTitle} » ?\n\n` +
+      "Le document reste dans la bibliothèque avec le statut « annulé »."
+  );
+  if (!ok) return;
+  const r = await api(`/api/library/documents/${documentId}/stop`, { method: "POST" });
+  const err = await r.json().catch(() => ({}));
+  if (r.status === 403) return alert("Action réservée aux administrateurs.");
+  if (!r.ok) return alert(err.detail || "Impossible d'arrêter le traitement.");
+  await loadDocuments();
+}
+
+async function skipQueueDocument(documentId, documentTitle) {
+  const ok = confirm(
+    `Ignorer « ${documentTitle} » ?\n\n` +
+      "En attente : marqué comme ignoré. En cours : arrêté comme pour « Stop »."
+  );
+  if (!ok) return;
+  const r = await api(`/api/library/documents/${documentId}/skip`, { method: "POST" });
+  const err = await r.json().catch(() => ({}));
+  if (r.status === 403) return alert("Action réservée aux administrateurs.");
+  if (!r.ok) return alert(err.detail || "Impossible d'ignorer le document.");
+  await loadDocuments();
+}
+
+async function stopAllQueueDocuments() {
+  const ok = confirm(
+    "Arrêter tous les traitements en cours ou en attente dans la bibliothèque ?\n\nLes documents ne seront pas supprimés."
+  );
+  if (!ok) return;
+  const r = await api("/api/library/documents/stop-all", { method: "POST" });
+  const body = await r.json().catch(() => ({}));
+  if (r.status === 403) return alert("Action réservée aux administrateurs.");
+  if (!r.ok) return alert(body.detail || "Impossible d'arrêter la file.");
+  alert(`Documents annulés : ${body.cancelled ?? 0}`);
+  await loadDocuments();
+}
+
+async function skipAllQueueDocuments() {
+  const ok = confirm(
+    "Ignorer tous les documents en attente et arrêter celui en cours ?"
+  );
+  if (!ok) return;
+  const r = await api("/api/library/documents/skip-all", { method: "POST" });
+  const body = await r.json().catch(() => ({}));
+  if (r.status === 403) return alert("Action réservée aux administrateurs.");
+  if (!r.ok) return alert(body.detail || "Impossible d'appliquer.");
+  alert(
+    `Ignorés : ${body.skipped ?? 0}, arrêtés (en cours) : ${body.cancelled_running ?? 0}`
+  );
   await loadDocuments();
 }
 
