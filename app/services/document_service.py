@@ -18,6 +18,9 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+# Pipeline images Docling (notes projet) : désactivé en dur — aligné sur la bibliothèque.
+_PROJECT_DOCLING_IMAGES_ENABLED = False
+
 # Files d'attente par projet pour traiter les documents séquentiellement par projet
 project_queues: dict[int, Queue] = {}
 project_locks: dict[int, threading.Lock] = {}
@@ -159,7 +162,7 @@ def get_docling_converter(file_path: Optional[str] = None):
 
                 format_options = None
                 ocr_enabled = getattr(settings, "DOCLING_OCR_ENABLED", False)
-                # Toujours générer les images pour extraction et stockage (sans Vision/chunks)
+                # Images Docling désactivées en dur (generate_picture_images=False) ; OCR/texte inchangé.
                 if True:
                     try:
                         from docling.datamodel.base_models import InputFormat
@@ -173,7 +176,7 @@ def get_docling_converter(file_path: Optional[str] = None):
                         
                         pipeline_options = PdfPipelineOptions(
                             do_ocr=ocr_enabled,
-                            generate_picture_images=True,
+                            generate_picture_images=False,
                             images_scale=image_scale,
                         )
 
@@ -569,6 +572,8 @@ def extract_and_save_images(docling_doc, note_id: int) -> list:
         - caption: légende de l'image
         - bbox: bounding box dans le document
     """
+    if not _PROJECT_DOCLING_IMAGES_ENABLED:
+        return []
     images_info = []
     images_dir = Path(f"media/images/{note_id}")
     

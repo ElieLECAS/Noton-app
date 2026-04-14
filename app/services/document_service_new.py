@@ -21,6 +21,10 @@ logger = logging.getLogger(__name__)
 # En file d’attente de réindexation : chunks et embeddings actuels restent servis jusqu’au début effectif du worker.
 DOCUMENT_STATUS_REINDEX_QUEUED = "reindex_queued"
 
+# Pipeline images Docling (bibliothèque) : désactivé en dur — texte/OCR uniquement, pas d’extraction disque ni Pixtral.
+# Mettre à True pour réactiver le corps de ``extract_and_save_images`` sans toucher au reste du pipeline.
+_LIBRARY_DOCLING_IMAGES_ENABLED = False
+
 # Une seule file globale : ordre FIFO strict, un document terminé entièrement avant le suivant.
 document_task_queue: Queue = Queue()
 _document_queue_lock = threading.Lock()
@@ -465,6 +469,8 @@ def save_uploaded_file(file_content: bytes, filename: str, upload_dir: str = "me
 
 def extract_and_save_images(docling_doc, document_id: int) -> list:
     """Extrait les images du document Docling et les sauvegarde sur disque."""
+    if not _LIBRARY_DOCLING_IMAGES_ENABLED:
+        return []
     images_info = []
     images_dir = Path(f"media/images/{document_id}")
     
