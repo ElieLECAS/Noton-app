@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 import threading
+import ast
 from typing import Literal, Optional
 
 from sqlmodel import Session
@@ -34,6 +35,100 @@ def _use_celery_first() -> bool:
 
 def _celery_only_failure_message() -> str:
     return "Celery indisponible alors que TASK_BACKEND_MODE=celery"
+
+
+def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
+    """Extrait le document_id d'une tâche Celery document/reindex si possible."""
+    if not isinstance(task, dict):
+        return None
+
+    task_name = task.get("name")
+    if task_name not in {
+        "app.tasks.documents.process_library_document",
+        "app.tasks.documents.reindex_library_document_task",
+    }:
+        return None
+
+    args = task.get("args", ())
+    first_arg: object | None = None
+
+    if isinstance(args, (list, tuple)):
+        if args:
+            first_arg = args[0]
+    elif isinstance(args, str):
+        try:
+            parsed = ast.literal_eval(args)
+        except Exception:
+            parsed = None
+        if isinstance(parsed, (list, tuple)) and parsed:
+            first_arg = parsed[0]
+
+    try:
+        return int(first_arg) if first_arg is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
+def revoke_library_document_tasks(document_id: int) -> int:
+    """
+    Révoque les tâches Celery actives/réservées liées à un document.
+    Retourne le nombre de tâches révoquées.
+    """
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        return 0
+
+    try:
+        from app.celery_app import celery_app
+
+        inspector = celery_app.control.inspect()
+        task_groups = [
+            inspector.active() or {},
+            inspector.reserved() or {},
+            inspector.scheduled() or {},
+        ]
+    except Exception as exc:
+        logger.warning(
+            "Impossible d'inspecter Celery pour revoke document_id=%s: %s",
+            document_id,
+            exc,
+        )
+        return 0
+
+    revoked_count = 0
+    revoked_ids: set[str] = set()
+    for group in task_groups:
+        for tasks in group.values():
+            for raw_task in tasks or []:
+                task = raw_task.get("request", raw_task) if isinstance(raw_task, dict) else raw_task
+                if not isinstance(task, dict):
+                    continue
+
+                current_document_id = _extract_document_id_from_celery_task(task)
+                task_id = task.get("id")
+                if current_document_id != document_id or not task_id:
+                    continue
+                if task_id in revoked_ids:
+                    continue
+
+                try:
+                    celery_app.control.revoke(task_id, terminate=True, signal="SIGTERM")
+                    revoked_ids.add(task_id)
+                    revoked_count += 1
+                    logger.info(
+                        "Tâche Celery révoquée pour document_id=%s task_id=%s",
+                        document_id,
+                        task_id,
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        "Échec revoke task Celery document_id=%s task_id=%s: %s",
+                        document_id,
+                        task_id,
+                        exc,
+                    )
+
+    return revoked_count
 
 
 def _send_library_document(document_id: int, file_path: str) -> bool:

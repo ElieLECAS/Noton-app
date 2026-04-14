@@ -134,6 +134,14 @@ def stop_library_document_processing(
     session.commit()
     session.refresh(document)
     _mark_document_processing_cancelled(document_id)
+    try:
+        from app.services.task_dispatch import revoke_library_document_tasks
+
+        revoke_library_document_tasks(document_id)
+    except Exception:
+        logger.debug(
+            "Révocation Celery ignorée pour document_id=%s", document_id, exc_info=True
+        )
     logger.info(
         "Traitement bibliothèque arrêté (cancelled) pour document_id=%s", document_id
     )
@@ -187,6 +195,14 @@ def stop_all_library_documents_processing(session: Session, user_id: int) -> dic
         doc.updated_at = datetime.utcnow()
         session.add(doc)
         _mark_document_processing_cancelled(doc.id)
+        try:
+            from app.services.task_dispatch import revoke_library_document_tasks
+
+            revoke_library_document_tasks(doc.id)
+        except Exception:
+            logger.debug(
+                "Révocation Celery ignorée pour document_id=%s", doc.id, exc_info=True
+            )
         n += 1
     if n:
         session.commit()
@@ -223,6 +239,14 @@ def skip_all_library_documents_processing(session: Session, user_id: int) -> dic
         doc.updated_at = datetime.utcnow()
         session.add(doc)
         _mark_document_processing_cancelled(doc.id)
+        try:
+            from app.services.task_dispatch import revoke_library_document_tasks
+
+            revoke_library_document_tasks(doc.id)
+        except Exception:
+            logger.debug(
+                "Révocation Celery ignorée pour document_id=%s", doc.id, exc_info=True
+            )
     if skipped or cancelled:
         session.commit()
     return {"skipped": skipped, "cancelled_running": cancelled}
