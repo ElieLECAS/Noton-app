@@ -4,7 +4,8 @@
 
 - **FastAPI (service `web`)** : API, upload des fichiers, création des enregistrements DB, envoi des jobs.
 - **Redis** : broker et backend de résultats pour Celery.
-- **Worker (`worker`)** : exécute Docling, chunking, embeddings et KAG hors du process Uvicorn.
+- **Worker (`worker`)** : exécute Docling, chunking et embeddings sur les files `documents` / `embeddings` (un job lourd à la fois avec `-c 1`).
+- **Worker KAG (`worker-kag`)** : consomme la file `kag` pour l’extraction d’entités / graphe après les embeddings, en parallèle du worker principal.
 
 ## Variables d'environnement
 
@@ -21,7 +22,7 @@ Dans `docker-compose.yaml`, le service `web` utilise par défaut `TASK_BACKEND_M
 
 ```bash
 docker compose up -d db redis
-docker compose up -d web worker
+docker compose up -d web worker worker-kag
 ```
 
 Sans worker actif et avec `TASK_BACKEND_MODE=celery`, les uploads restent en attente côté queue Redis jusqu’à consommation.
@@ -30,7 +31,8 @@ Sans worker actif et avec `TASK_BACKEND_MODE=celery`, les uploads restent en att
 
 1. Lancer Redis localement (`redis://localhost:6379/0`).
 2. Terminal 1 : `uvicorn app.main:app --reload`
-3. Terminal 2 : `celery -A app.celery_app worker -l INFO -Q documents,embeddings,celery -c 2`
+3. Terminal 2 : `celery -A app.celery_app worker -l INFO -Q documents,embeddings,celery -c 1 -n main@%h`
+4. Terminal 3 : `celery -A app.celery_app worker -l INFO -Q kag -c 1 -n kag@%h` (phase KAG en parallèle du traitement documents/embeddings)
 
 ## Réindexation bibliothèque
 
@@ -43,6 +45,6 @@ Passer `TASK_BACKEND_MODE=thread` et redémarrer le `web` : les workers threads 
 
 ## Files Celery
 
-- `app/celery_app.py` — application Celery.
-- `app/tasks/documents.py` — tâches (documents bibliothèque/projet, embeddings, réindex).
-- `app/services/task_dispatch.py` — routage Celery vs threads.
+- `app/celery_app.py` — application Celery (files `documents`, `embeddings`, `kag`, `celery`).
+- `app/tasks/documents.py` — tâches (dont `process_library_document_kag` sur la file `kag`).
+- `app/services/task_dispatch.py` — routage Celery vs threads (`dispatch_library_document_kag` pour la phase graphe post-embeddings).

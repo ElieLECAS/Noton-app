@@ -991,8 +991,124 @@ def create_chunks_for_document_from_docling(
     return chunks
 
 
+def run_kag_for_library_document(document_id: int) -> None:
+    """
+    Phase KAG uniquement (après embeddings) : extraction graphe par espace, puis document completed/100.
+    Appelée depuis la queue Celery « kag » ou un thread en mode TASK_BACKEND_MODE=thread.
+    """
+    ld = get_library_document_logger()
+    if not settings.KAG_ENABLED:
+        ld.info(
+            "[KAG] document_id=%s — KAG désactivé, finalisation sans graphe.",
+            document_id,
+        )
+        try:
+            with Session(engine) as session:
+                document = session.get(Document, document_id)
+                if document:
+                    document.processing_status = "completed"
+                    document.processing_progress = 100
+                    document.updated_at = datetime.utcnow()
+                    session.add(document)
+                    session.commit()
+        except Exception as e:
+            logger.error("KAG noop finalisation document %s: %s", document_id, e, exc_info=True)
+        return
+
+    ld.info("[KAG] document_id=%s — démarrage tâche KAG (post-embeddings).", document_id)
+    try:
+        with Session(engine) as session:
+            document = session.get(Document, document_id)
+            if not document:
+                ld.warning("[KAG] document_id=%s — document introuvable, arrêt.", document_id)
+                return
+
+            from app.models.document_space import DocumentSpace
+            from app.services.kag_graph_service import process_kag_for_document_space
+
+            space_ids_stmt = select(DocumentSpace.space_id).where(
+                DocumentSpace.document_id == document_id
+            )
+            space_ids = list(session.exec(space_ids_stmt).all())
+            if not space_ids:
+                ld.info(
+                    "[KAG] document_id=%s — aucun espace lié, finalisation sans extraction.",
+                    document_id,
+                )
+                document.processing_status = "completed"
+                document.processing_progress = 100
+                document.updated_at = datetime.utcnow()
+                session.add(document)
+                session.commit()
+                return
+
+            document.processing_progress = max(document.processing_progress or 0, 95)
+            document.updated_at = datetime.utcnow()
+            session.add(document)
+            session.commit()
+            session.refresh(document)
+
+            for space_id in space_ids:
+                try:
+                    ld.info(
+                        "[KAG] document_id=%s space_id=%s — extraction / graphe en cours…",
+                        document_id,
+                        space_id,
+                    )
+                    process_kag_for_document_space(session, document_id, space_id)
+                    ld.info(
+                        "[KAG] document_id=%s space_id=%s — terminé.",
+                        document_id,
+                        space_id,
+                    )
+                except Exception as kag_exc:
+                    logger.warning(
+                        "KAG post-upload échoué document_id=%s space_id=%s: %s",
+                        document_id,
+                        space_id,
+                        kag_exc,
+                    )
+                    ld.warning(
+                        "[KAG] document_id=%s space_id=%s — échec : %s",
+                        document_id,
+                        space_id,
+                        kag_exc,
+                    )
+
+            document = session.get(Document, document_id)
+            if document:
+                document.processing_status = "completed"
+                document.processing_progress = 100
+                document.updated_at = datetime.utcnow()
+                session.add(document)
+                session.commit()
+                ld.info(
+                    "[Pipeline] document_id=%s — traitement terminé (completed), progress=100.",
+                    document_id,
+                )
+    except Exception as e:
+        logger.error("Erreur KAG document %s: %s", document_id, e, exc_info=True)
+        get_library_document_logger().error(
+            "[KAG] document_id=%s — erreur globale : %s",
+            document_id,
+            e,
+            exc_info=True,
+        )
+        try:
+            with Session(engine) as session:
+                document = session.get(Document, document_id)
+                if document:
+                    document.processing_status = "failed"
+                    document.processing_progress = max(document.processing_progress or 0, 95)
+                    document.updated_at = datetime.utcnow()
+                    session.add(document)
+                    session.commit()
+        except Exception as upd:
+            logger.error("Impossible de marquer le document %s en échec KAG: %s", document_id, upd)
+
+
 def _process_embeddings_for_document(document_id: int):
-    """Génère les embeddings des seuls chunks feuilles (parents exclus), puis KAG si activé."""
+    """Génère les embeddings des seuls chunks feuilles (parents exclus) ; enfile KAG si activé et espaces liés."""
     ld = get_library_document_logger()
     ld.info(
         "[Embeddings] document_id=%s — début : vectorisation des feuilles uniquement "
@@ -1088,54 +1204,33 @@ def _process_embeddings_for_document(document_id: int):
                 time.perf_counter() - t_embed,
             )
 
-            # Après les embeddings, générer le KAG pour tous les espaces liés
-            # afin que le graphe soit prêt dès le premier upload.
             if settings.KAG_ENABLED:
-                document.processing_progress = max(document.processing_progress or 0, 95)
-                document.updated_at = datetime.utcnow()
-                session.add(document)
-                session.commit()
-                session.refresh(document)
-
                 from app.models.document_space import DocumentSpace
-                from app.services.kag_graph_service import process_kag_for_document_space
 
                 space_ids_stmt = select(DocumentSpace.space_id).where(
                     DocumentSpace.document_id == document_id
                 )
                 space_ids = list(session.exec(space_ids_stmt).all())
-                if not space_ids:
+                if space_ids:
+                    document.processing_progress = max(document.processing_progress or 0, 95)
+                    document.processing_status = "processing"
+                    document.updated_at = datetime.utcnow()
+                    session.add(document)
+                    session.commit()
                     ld.info(
-                        "[KAG] document_id=%s — aucun espace lié (document_space vide), KAG ignoré.",
+                        "[Embeddings] document_id=%s — embeddings OK, file KAG (%d espace(s)).",
                         document_id,
+                        len(space_ids),
                     )
+                    from app.services.task_dispatch import dispatch_library_document_kag
 
-                for space_id in space_ids:
-                    try:
-                        ld.info(
-                            "[KAG] document_id=%s space_id=%s — extraction / graphe en cours…",
-                            document_id,
-                            space_id,
-                        )
-                        process_kag_for_document_space(session, document_id, space_id)
-                        ld.info(
-                            "[KAG] document_id=%s space_id=%s — terminé.",
-                            document_id,
-                            space_id,
-                        )
-                    except Exception as kag_exc:
-                        logger.warning(
-                            "KAG auto post-upload échoué document_id=%s space_id=%s: %s",
-                            document_id,
-                            space_id,
-                            kag_exc,
-                        )
-                        ld.warning(
-                            "[KAG] document_id=%s space_id=%s — échec : %s",
-                            document_id,
-                            space_id,
-                            kag_exc,
-                        )
+                    dispatch_library_document_kag(document_id)
+                    return
+
+                ld.info(
+                    "[KAG] document_id=%s — aucun espace lié (document_space vide), KAG ignoré.",
+                    document_id,
+                )
             else:
                 ld.info(
                     "[KAG] document_id=%s — KAG désactivé (KAG_ENABLED=false), pas d'extraction graphe.",
@@ -1176,9 +1271,8 @@ def _process_embeddings_for_document(document_id: int):
 
 def complete_document_embeddings_and_kag_sync(document_id: int) -> None:
     """
-    Finalise l'indexation d'un document de façon bloquante : embeddings puis KAG.
-    À appeler depuis le worker documents pour garantir qu'aucun autre document
-    ne démarre (Docling, etc.) tant que celui-ci n'est pas entièrement terminé.
+    Finalise l'indexation : embeddings (bloquant), puis enfile la phase KAG sur une file dédiée
+    (Celery « kag » ou thread) pour permettre au worker documents de traiter un autre fichier.
     """
     _process_embeddings_for_document(document_id)
 

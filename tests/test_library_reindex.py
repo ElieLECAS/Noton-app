@@ -62,14 +62,14 @@ def test_reindex_forbidden_without_library_write(client, lecteur_headers):
     assert r.status_code == 403
 
 
-def test_reindex_all_endpoint_returns_queued(client, responsable_headers):
+def test_reindex_all_endpoint_returns_queued(client, admin_headers):
     mock_result = mock.MagicMock()
     mock_result.id = "task-reindex-all-abc"
     with mock.patch(
         "app.tasks.documents.reindex_all_library_documents_task.apply_async",
         return_value=mock_result,
     ):
-        r = client.post("/api/library/reindex-all", headers=responsable_headers)
+        r = client.post("/api/library/reindex-all", headers=admin_headers)
 
     assert r.status_code == 200
     body = r.json()
@@ -80,6 +80,13 @@ def test_reindex_all_endpoint_returns_queued(client, responsable_headers):
 def test_reindex_all_forbidden_lecteur(client, lecteur_headers):
     r = client.post("/api/library/reindex-all", headers=lecteur_headers)
     assert r.status_code == 403
+
+
+def test_reindex_all_forbidden_non_admin_responsable(client, responsable_headers):
+    """Réindexation globale : réservée au rôle admin (pas seulement library.write)."""
+    r = client.post("/api/library/reindex-all", headers=responsable_headers)
+    assert r.status_code == 403
+    assert "admin" in (r.json().get("detail") or "").lower()
 
 
 def test_reindex_service_unavailable_returns_503(client, responsable_headers):

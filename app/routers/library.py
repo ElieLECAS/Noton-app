@@ -10,7 +10,7 @@ from app.models.document import DocumentRead, DocumentListItem, DocumentCreate, 
 from app.models.folder import Folder
 from app.models.space import SpaceRead
 from app.models.user import UserRead
-from app.routers.auth import get_current_user, require_permission
+from app.routers.auth import get_current_user, require_permission, require_role
 from app.services.library_service import get_or_create_user_library, get_library_stats
 from app.services.folder_service import (
     create_folder, get_folder_by_id, get_folders_by_parent,
@@ -279,7 +279,7 @@ async def reindex_library_document_endpoint(
 
 @router.post("/reindex-all", status_code=status.HTTP_200_OK)
 async def reindex_all_library_endpoint(
-    current_user: UserRead = Depends(require_permission("library.write")),
+    current_user: UserRead = Depends(require_role("admin")),
 ):
     """
     Enfile sur Celery la réindexation de tous les documents fichier de la bibliothèque

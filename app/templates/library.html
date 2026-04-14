@@ -169,6 +169,7 @@ let draggedDocumentId = null;
 let canLibraryWrite = false;
 let canSpaceUpdate = false;
 let canSpaceDelete = false;
+let isAdminUser = false;
 
 async function api(url, options = {}) {
   const headers = { ...(options.headers || {}) };
@@ -190,6 +191,8 @@ async function loadPermissions() {
   canLibraryWrite = perms.includes("library.write");
   canSpaceUpdate = perms.includes("space.update");
   canSpaceDelete = perms.includes("space.delete");
+  const roles = currentUser?.roles || [];
+  isAdminUser = roles.includes("admin");
 }
 
 function applyPermissionUI() {
@@ -200,7 +203,7 @@ function applyPermissionUI() {
   const uploadBtn = document.getElementById("library-upload-btn");
   if (folderBtnTop) folderBtnTop.classList.toggle("hidden", !canLibraryWrite);
   if (folderBtnSidebar) folderBtnSidebar.classList.toggle("hidden", !canLibraryWrite);
-  if (reindexAllBtn) reindexAllBtn.classList.toggle("hidden", !canLibraryWrite);
+  if (reindexAllBtn) reindexAllBtn.classList.toggle("hidden", !canLibraryWrite || !isAdminUser);
   if (uploadBtn) uploadBtn.classList.toggle("hidden", !canLibraryWrite);
 
   // Masquer l'indication visuelle "upload" (icône) quand on est en lecture seule.

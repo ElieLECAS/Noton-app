@@ -199,6 +199,81 @@ services:
             ollama:
                 condition: service_started
 
+    worker-kag:
+        build:
+            context: .
+            dockerfile: ./app/Dockerfile
+        container_name: noton_worker_kag
+        command: sh -c "sleep 12 && celery -A app.celery_app worker -l INFO -Q kag -c 1 -n kag@%h"
+        volumes:
+            - ./app:/app/app
+            - ./app/alembic:/app/alembic
+            - ./app/alembic.ini:/app/alembic.ini
+            - ./tests:/app/tests
+            - ./app/pytest.ini:/app/pytest.ini
+            - models_cache:/root/.cache
+            - ./media:/app/media
+            - ./logs:/app/logs
+        environment:
+            - APP_NAME=${APP_NAME}
+            - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+            - SECRET_KEY=${SECRET_KEY}
+            - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+            - MISTRAL_BASE_URL=${MISTRAL_BASE_URL:-https://api.mistral.ai}
+            - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+            - OPENAI_API_KEY=${OPENAI_API_KEY}
+            - OPENAI_MODEL=${OPENAI_MODEL}
+            - BRAVE_SEARCH_API_KEY=${BRAVE_SEARCH_API_KEY:-}
+            - MODEL_FAST=${MODEL_FAST:-mistral-small-latest}
+            - MAX_COMPLETION_TOKENS=${MAX_COMPLETION_TOKENS:-1024}
+            - SPACE_CHAT_MAX_TOKENS=${SPACE_CHAT_MAX_TOKENS:-}
+            - SPACE_CHAT_TEMPERATURE=${SPACE_CHAT_TEMPERATURE:-0.55}
+            - SPACE_CHAT_TOP_P=${SPACE_CHAT_TOP_P:-}
+            - DOCLING_CPU_ONLY=${DOCLING_CPU_ONLY:-true}
+            - DOCLING_OCR_ENABLED=${DOCLING_OCR_ENABLED:-true}
+            - DOCLING_OCR_LANG=${DOCLING_OCR_LANG:-}
+            - USE_ALL_CPU_CORES=${USE_ALL_CPU_CORES:-false}
+            - TORCH_NUM_THREADS=${TORCH_NUM_THREADS:-}
+            - OMP_NUM_THREADS=${OMP_NUM_THREADS:-}
+            - OCR_IMAGE_SCALE=${OCR_IMAGE_SCALE:-3.0}
+            - OCR_PREPROCESS_ENABLED=${OCR_PREPROCESS_ENABLED:-true}
+            - OCR_FALLBACK_ENABLED=${OCR_FALLBACK_ENABLED:-true}
+            - OCR_MIN_TEXT_LENGTH=${OCR_MIN_TEXT_LENGTH:-50}
+            - OCR_TESSERACT_CONFIG=${OCR_TESSERACT_CONFIG:---oem 3 --psm 6 -l fra+eng}
+            - EMBEDDING_BATCH_SIZE=${EMBEDDING_BATCH_SIZE:-16}
+            - EMBEDDING_DIMENSION=${EMBEDDING_DIMENSION:-1024}
+            - EMBEDDING_MODEL=${EMBEDDING_MODEL:-BAAI/bge-m3}
+            - EMBEDDING_DEVICE=${EMBEDDING_DEVICE:-cpu}
+            - HIERARCHICAL_CHUNK_SIZES=${HIERARCHICAL_CHUNK_SIZES:-3072,1024,384}
+            - RAG_TOP_K=${RAG_TOP_K}
+            - KAG_ENABLED=${KAG_ENABLED:-true}
+            - KAG_EXTRACTION_PROVIDER=${KAG_EXTRACTION_PROVIDER}
+            - KAG_EXTRACTION_MODEL=${KAG_EXTRACTION_MODEL}
+            - KAG_PARENT_ENRICHMENT_ENABLED=${KAG_PARENT_ENRICHMENT_ENABLED:-false}
+            - KAG_TYPED_RELATIONS_ENABLED=${KAG_TYPED_RELATIONS_ENABLED:-true}
+            - MIN_ENTITY_CONFIDENCE=${MIN_ENTITY_CONFIDENCE:-0.30}
+            - MULTIMODAL_ENABLED=${MULTIMODAL_ENABLED:-true}
+            - VISION_MODEL=${VISION_MODEL:-pixtral-12b-2409}
+            - VISION_MAX_TOKENS=${VISION_MAX_TOKENS:-1500}
+            - VISION_MAX_IMAGES_PER_DOCUMENT=${VISION_MAX_IMAGES_PER_DOCUMENT:-}
+            - REDIS_URL=${REDIS_URL}
+            - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+            - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+            - TASK_BACKEND_MODE=celery
+            - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
+            - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-}
+            - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
+            - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
+            - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
+            - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            ollama:
+                condition: service_started
+
 volumes:
     postgres_data:
     models_cache: # Cache persistant pour HuggingFace, EasyOCR, Docling

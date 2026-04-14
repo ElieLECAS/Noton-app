@@ -120,8 +120,33 @@ def process_note_embeddings(self, note_id: int, project_id: int) -> None:
 
 
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
+def process_library_document_kag(self, document_id: int) -> None:
+    """Extraction KAG / entités pour un document bibliothèque (après embeddings)."""
+    from app.library_document_logging import get_library_document_logger
+    from app.services.chunk_service import run_kag_for_library_document
+
+    get_library_document_logger().info(
+        "[Celery] Tâche process_library_document_kag démarrée document_id=%s task_id=%s",
+        document_id,
+        self.request.id,
+    )
+    logger.info(
+        "Celery process_library_document_kag document_id=%s task_id=%s",
+        document_id,
+        self.request.id,
+    )
+    try:
+        run_kag_for_library_document(document_id)
+    except Exception as exc:
+        logger.exception(
+            "process_library_document_kag échec document_id=%s: %s", document_id, exc
+        )
+        raise self.retry(exc=exc)
+
+
+@celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
 def process_document_embeddings(self, document_id: int) -> None:
-    """Embeddings + KAG pour un document bibliothèque (post-chunking)."""
+    """Embeddings feuilles pour un document bibliothèque ; enfile la file `kag` si KAG activé et espaces liés."""
     from app.library_document_logging import get_library_document_logger
     from app.services.chunk_service import _process_embeddings_for_document
 

@@ -167,3 +167,20 @@ def require_permission(permission_code: str):
         return current_user
     return permission_checker
 
+
+def require_role(role_name: str):
+    """
+    Dépendance pour vérifier qu'un utilisateur possède un rôle donné (ex. « admin »).
+    Usage: current_user: UserRead = Depends(require_role("admin"))
+    """
+    def role_checker(current_user: UserRead = Depends(get_current_user)) -> UserRead:
+        roles = current_user.roles or []
+        if role_name not in roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Rôle requis: {role_name}",
+            )
+        return current_user
+
+    return role_checker
+

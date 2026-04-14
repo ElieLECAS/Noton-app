@@ -148,6 +148,55 @@ def _send_document_embeddings(document_id: int) -> bool:
     return True
 
 
+def _send_library_document_kag(document_id: int) -> bool:
+    from app.tasks.documents import process_library_document_kag
+
+    res = process_library_document_kag.apply_async(
+        args=[document_id],
+        queue="kag",
+    )
+    logger.info(
+        "task_dispatch library_kag document_id=%s celery_task_id=%s",
+        document_id,
+        res.id,
+    )
+    return True
+
+
+def _run_kag_thread(document_id: int) -> None:
+    from app.services.chunk_service import run_kag_for_library_document
+
+    def _runner():
+        try:
+            run_kag_for_library_document(document_id)
+        except Exception:
+            logger.exception("Thread KAG échoué document_id=%s", document_id)
+
+    threading.Thread(
+        target=_runner,
+        name=f"kag-doc-{document_id}",
+        daemon=True,
+    ).start()
+
+
+def dispatch_library_document_kag(document_id: int) -> None:
+    """Enqueue la phase KAG bibliothèque après embeddings (Celery queue « kag » ou thread)."""
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        _run_kag_thread(document_id)
+        return
+    try:
+        _send_library_document_kag(document_id)
+    except Exception as exc:
+        logger.warning(
+            "Celery indisponible pour KAG document_id=%s: %s", document_id, exc
+        )
+        if mode == "hybrid":
+            _run_kag_thread(document_id)
+            return
+        raise RuntimeError(_celery_only_failure_message()) from exc
+
+
 def _send_document_spaces_update(
     document_id: int,
     add_space_ids: list[int],

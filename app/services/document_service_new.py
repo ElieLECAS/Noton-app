@@ -169,7 +169,7 @@ def get_docling_converter(file_path: Optional[str] = None):
                         
                         pipeline_options = PdfPipelineOptions(
                             do_ocr=ocr_enabled,
-                            generate_picture_images=True,
+                            generate_picture_images=False,
                             images_scale=image_scale,
                         )
 
