@@ -43,9 +43,12 @@ def _coerce_positive_int(value) -> Optional[int]:
 
 
 def _resolve_page_from_passage(passage: dict) -> Optional[int]:
-    """Résout la page depuis un passage (page_no prioritaire, sinon page_start)."""
-    return _coerce_positive_int(passage.get("page_no")) or _coerce_positive_int(
-        passage.get("page_start")
+    """Résout la page depuis un passage (page_no, page_start, page_label, page_idx)."""
+    return (
+        _coerce_positive_int(passage.get("page_no"))
+        or _coerce_positive_int(passage.get("page_start"))
+        or _coerce_positive_int(passage.get("page_label"))
+        or _coerce_positive_int(passage.get("page_idx"))
     )
 
 
@@ -59,8 +62,11 @@ def _resolve_page_from_chunk(chunk: DocumentChunk) -> Optional[int]:
         merged_meta.update(chunk.metadata_)
     if isinstance(chunk.metadata_json, dict):
         merged_meta.update(chunk.metadata_json)
-    return _coerce_positive_int(merged_meta.get("page_no")) or _coerce_positive_int(
-        merged_meta.get("page_start")
+    return (
+        _coerce_positive_int(merged_meta.get("page_no"))
+        or _coerce_positive_int(merged_meta.get("page_start"))
+        or _coerce_positive_int(merged_meta.get("page_label"))
+        or _coerce_positive_int(merged_meta.get("page_idx"))
     )
 
 

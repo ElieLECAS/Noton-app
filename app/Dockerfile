@@ -59,6 +59,12 @@ RUN pip install --no-cache-dir \
     "llama-index-postprocessor-flag-embedding-reranker==0.4.1" \
     "FlagEmbedding==1.3.5"
 
+# FlagEmbedding 1.3.5 requiert transformers<5.0 (XLMRobertaTokenizer.prepare_for_model supprimé en 5.x)
+# huggingface-hub est downgrade par transformers 4.x → on l'épingle explicitement
+RUN pip install --no-cache-dir \
+    "transformers>=4.41.0,<5.0.0" \
+    "huggingface-hub>=0.23.0,<1.0.0"
+
 # Étape 7: Reste des dépendances (sans celles déjà installées)
 # Filtrer les packages déjà installés + commentaires
 RUN grep -v -E '^[[:space:]]*#|^[[:space:]]*$$' requirements.txt | \
@@ -70,7 +76,8 @@ RUN grep -v -E '^[[:space:]]*#|^[[:space:]]*$$' requirements.txt | \
 # Étape 7b: Forcer les versions finales compatibles (évite les upgrades transitifs).
 RUN pip install --no-cache-dir \
     "pydantic>=2.0.0,<2.10" \
-    "setuptools<82"
+    "setuptools<82" \
+    "transformers>=4.41.0,<5.0.0"
 
 # Étape 7c: Vérifier que le chunking hiérarchique Docling est importable (sinon build échoue).
 RUN python -c "from llama_index.node_parser.docling import DoclingNodeParser; print('DoclingNodeParser OK')"

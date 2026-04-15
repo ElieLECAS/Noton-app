@@ -22,6 +22,17 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+# --- PATCH FLAGEMBEDDING / TRANSFORMERS ---
+# FlagEmbedding importe 'is_torch_fx_available' depuis 'transformers.utils.import_utils'
+# Ce module a été retiré, ce qui fait crasher le reranker FlagEmbeddingReranker.
+try:
+    import transformers.utils.import_utils
+    if not hasattr(transformers.utils.import_utils, 'is_torch_fx_available'):
+        transformers.utils.import_utils.is_torch_fx_available = lambda: False
+except ImportError:
+    pass
+# ------------------------------------------
+
 # Fichier dédié : logs/library_document_processing.log (pipeline bibliothèque / espaces)
 try:
     from app.library_document_logging import setup_library_document_file_logging

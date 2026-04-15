@@ -46,7 +46,7 @@ except ImportError:
     RERANKER_AVAILABLE = False
     logger.warning("FlagEmbeddingReranker non disponible, reranking désactivé")
 
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
+RERANKER_MODEL = os.getenv("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")
 RERANKER_CANDIDATE_MULTIPLIER = 3
 RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
@@ -132,7 +132,7 @@ MH_RRF_PARENT_WEIGHT = RRF_PARENT_LIST_WEIGHT
 MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
 # Configuration MMR (Maximum Marginal Relevance)
-MMR_K = 15  # Nombre de passages finaux à renvoyer au LLM
+MMR_K = int(os.getenv("MMR_K", "15"))  # Nombre de passages finaux à renvoyer au LLM
 MMR_LAMBDA = 0.5  # Équilibre entre pertinence (1.0) et diversité (0.0)
 
 # Mots-clés heuristiques indiquant une requête multi-hop
@@ -233,10 +233,15 @@ def _fetch_embeddings_for_chunks(
     result = session.execute(stmt, {"ids": chunk_ids})
     
     embeddings = {}
+    import json
     for row in result:
-        # Conversion du format pgvector (list[float]) en numpy array
         if row.embedding:
-            embeddings[row.id] = np.array(row.embedding, dtype=np.float32)
+            try:
+                # Si pgvector retourne une str (via raw text), on la parse
+                emb_data = json.loads(row.embedding) if isinstance(row.embedding, str) else row.embedding
+                embeddings[row.id] = np.array(emb_data, dtype=np.float32)
+            except Exception as e:
+                logger.warning("Impossible de parser l'embedding pour le chunk %s : %s", row.id, e)
             
     return embeddings
 
@@ -379,7 +384,7 @@ def _two_stage_rerank_leaves(
         return filtered_candidates[:k]
     stage1_max = min(
         len(filtered_candidates),
-        max(RERANK_STAGE1_MAX, k * 2),
+        RERANK_STAGE1_MAX,
     )
     pool = filtered_candidates[:stage1_max]
     backup: Dict[str, str] = {}
@@ -400,6 +405,8 @@ def _two_stage_rerank_leaves(
             else enriched
         )
         _set_node_text_content(node, short)
+    
+    logger.info("Reranking (space) Stage 1 : traitement de %d candidats (texte tronqué)...", len(pool))
     try:
         r1 = reranker.postprocess_nodes(
             pool,
@@ -429,6 +436,7 @@ def _two_stage_rerank_leaves(
         _set_node_text_content(node, enriched)
         stage2.append(NodeWithScore(node=node, score=float(nws.score or 0.0)))
 
+    logger.info("Reranking (space) Stage 2 : raffinement de %d candidats (texte complet)...", len(stage2))
     try:
         r2 = reranker.postprocess_nodes(
             stage2,
@@ -1149,11 +1157,18 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
             resolved_page = int(raw_page)
         except (TypeError, ValueError):
             pass
-    if resolved_page is None and page_start is not None:
-        try:
-            resolved_page = int(page_start)
-        except (TypeError, ValueError):
-            pass
+            
+    if resolved_page is None:
+        # Fallbacks successifs
+        for key in ["page_start", "page_label", "page_idx"]:
+            val = metadata.get(key)
+            if val is not None:
+                try:
+                    resolved_page = int(val)
+                    break
+                except (TypeError, ValueError):
+                    continue
+                    
     page_no = resolved_page
     parent_heading = metadata.get("parent_heading")
 

@@ -115,6 +115,13 @@ services:
             - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
             - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
             - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
+            # Reranking Performance
+            - RERANKER_MODEL=${RERANKER_MODEL:-BAAI/bge-reranker-base}
+            - RERANK_STAGE1_MAX=${RERANK_STAGE1_MAX:-40}
+            - RERANK_STAGE2_POOL=${RERANK_STAGE2_POOL:-15}
+            - MAX_RERANK_CANDIDATES=${MAX_RERANK_CANDIDATES:-40}
+            - MMR_K=${MMR_K:-15}
+            - RERANKER_TOP_N=${RERANKER_TOP_N:-60}
         depends_on:
             db:
                 condition: service_healthy
@@ -191,6 +198,13 @@ services:
             - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-noton-rag-kag}
             - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
             - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
+            # Reranking Performance
+            - RERANKER_MODEL=${RERANKER_MODEL:-BAAI/bge-reranker-base}
+            - RERANK_STAGE1_MAX=${RERANK_STAGE1_MAX:-40}
+            - RERANK_STAGE2_POOL=${RERANK_STAGE2_POOL:-15}
+            - MAX_RERANK_CANDIDATES=${MAX_RERANK_CANDIDATES:-40}
+            - MMR_K=${MMR_K:-15}
+            - RERANKER_TOP_N=${RERANKER_TOP_N:-60}
         depends_on:
             db:
                 condition: service_healthy
