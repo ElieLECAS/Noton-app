@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Any, Optional, List
 import logging
 import os
 from pathlib import Path
@@ -21,8 +21,20 @@ logger = logging.getLogger(__name__)
 # En file d’attente de réindexation : chunks et embeddings actuels restent servis jusqu’au début effectif du worker.
 DOCUMENT_STATUS_REINDEX_QUEUED = "reindex_queued"
 # Arrêt explicite (sans suppression) ou file ignorée.
-DOCUMENT_STATUS_CANCELLED = "cancelled"
+DOCUMENT_STATUS_CANCELLED_BY_USER = "cancelled_by_user"
 DOCUMENT_STATUS_SKIPPED = "skipped"
+DOCUMENT_STATUS_PARTIAL_KAG_DONE = "partial_kag_done"
+DOCUMENT_STATUS_FAILED_RETRY_EXHAUSTED = "failed_retry_exhausted"
+# Compat lecture anciennes données / code tiers
+DOCUMENT_STATUS_CANCELLED = DOCUMENT_STATUS_CANCELLED_BY_USER
+
+LIBRARY_USER_STOPPED_STATUSES = frozenset(
+    {
+        DOCUMENT_STATUS_CANCELLED_BY_USER,
+        "cancelled",  # legacy avant migration
+        DOCUMENT_STATUS_SKIPPED,
+    }
+)
 
 # Documents susceptibles d’occuper la file de traitement ou d’être en attente.
 LIBRARY_QUEUE_ACTIVE_STATUSES = frozenset(
@@ -81,7 +93,7 @@ def _should_abort_processing(document_id: int) -> bool:
             doc = session.get(Document, document_id)
             if doc is None:
                 return True
-            if doc.processing_status in (DOCUMENT_STATUS_CANCELLED, DOCUMENT_STATUS_SKIPPED):
+            if doc.processing_status in LIBRARY_USER_STOPPED_STATUSES:
                 return True
     except Exception:
         # En cas d'erreur transitoire DB, on n'interrompt pas par défaut.
@@ -100,11 +112,11 @@ def _finalize_pipeline_abort(document_id: int) -> None:
             if document is None:
                 _clear_document_processing_cancelled(document_id)
                 return
-            if document.processing_status in (DOCUMENT_STATUS_CANCELLED, DOCUMENT_STATUS_SKIPPED):
+            if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
                 _clear_document_processing_cancelled(document_id)
                 return
             if _is_document_processing_cancelled(document_id):
-                document.processing_status = DOCUMENT_STATUS_CANCELLED
+                document.processing_status = DOCUMENT_STATUS_CANCELLED_BY_USER
                 document.processing_progress = 0
                 document.updated_at = datetime.utcnow()
                 session.add(document)
@@ -118,68 +130,95 @@ def _finalize_pipeline_abort(document_id: int) -> None:
 
 def stop_library_document_processing(
     session: Session, document_id: int, user_id: int
-) -> Optional[Document]:
+) -> tuple[Optional[Document], dict[str, Any]]:
     """
-    Arrête le traitement pour un document (sans suppression) : statut cancelled + drapeau worker.
+    Arrête le traitement pour un document (sans suppression) : cancelled_by_user + invalidation run + revoke Celery.
     """
+    from app.services.document_run import refresh_document_processing_run_id
+
     document = get_document_by_id(session, document_id, user_id)
     if not document:
-        return None
+        return None, {}
     if document.processing_status not in LIBRARY_QUEUE_ACTIVE_STATUSES:
-        return None
-    document.processing_status = DOCUMENT_STATUS_CANCELLED
+        return None, {}
+    document.processing_status = DOCUMENT_STATUS_CANCELLED_BY_USER
     document.processing_progress = 0
+    refresh_document_processing_run_id(document)
     document.updated_at = datetime.utcnow()
     session.add(document)
     session.commit()
     session.refresh(document)
     _mark_document_processing_cancelled(document_id)
+    revoke_info: dict[str, Any] = {"revoked_count": 0, "revoked_task_ids": []}
     try:
         from app.services.task_dispatch import revoke_library_document_tasks
 
-        revoke_library_document_tasks(document_id)
+        revoke_info = revoke_library_document_tasks(document_id)
     except Exception:
         logger.debug(
             "Révocation Celery ignorée pour document_id=%s", document_id, exc_info=True
         )
     logger.info(
-        "Traitement bibliothèque arrêté (cancelled) pour document_id=%s", document_id
+        "Traitement bibliothèque arrêté (cancelled_by_user) pour document_id=%s",
+        document_id,
     )
-    return document
+    return document, revoke_info
 
 
 def skip_library_document_processing(
     session: Session, document_id: int, user_id: int
-) -> Optional[Document]:
+) -> tuple[Optional[Document], dict[str, Any]]:
     """
-    Ignore un document en attente (skipped) ; si déjà en cours, équivalent à un stop (cancelled).
+    Ignore un document en attente (skipped) ; si déjà en cours, équivalent à un stop (cancelled_by_user).
     """
     document = get_document_by_id(session, document_id, user_id)
     if not document:
-        return None
+        return None, {}
     st = document.processing_status
     if st == "processing":
         return stop_library_document_processing(session, document_id, user_id)
     if st in ("pending", DOCUMENT_STATUS_REINDEX_QUEUED):
+        from app.services.document_run import refresh_document_processing_run_id
+
         document.processing_status = DOCUMENT_STATUS_SKIPPED
         document.processing_progress = 0
+        refresh_document_processing_run_id(document)
         document.updated_at = datetime.utcnow()
         session.add(document)
         session.commit()
         session.refresh(document)
         _mark_document_processing_cancelled(document_id)
+        revoke_info: dict[str, Any] = {"revoked_count": 0, "revoked_task_ids": []}
+        try:
+            from app.services.task_dispatch import revoke_library_document_tasks
+
+            revoke_info = revoke_library_document_tasks(document_id)
+        except Exception:
+            logger.debug(
+                "Révocation Celery ignorée pour document_id=%s", document_id, exc_info=True
+            )
         logger.info(
             "Document bibliothèque ignoré (skipped) pour document_id=%s", document_id
         )
-        return document
-    return None
+        return document, revoke_info
+    return None, {}
 
 
 def stop_all_library_documents_processing(session: Session, user_id: int) -> dict:
     """Annule tous les documents encore en file (pending / processing / reindex_queued)."""
     from app.services.library_service import get_or_create_user_library
+    from app.services.document_run import refresh_document_processing_run_id
 
     library = get_or_create_user_library(session, user_id)
+    # On révoque sur TOUTE la bibliothèque (même si statut local non actif),
+    # pour s'assurer qu'aucune tâche zombie ne reste en queue.
+    all_library_docs = list(
+        session.exec(
+            select(Document).where(
+                Document.library_id == library.id,
+            )
+        ).all()
+    )
     docs = list(
         session.exec(
             select(Document).where(
@@ -189,31 +228,38 @@ def stop_all_library_documents_processing(session: Session, user_id: int) -> dic
         ).all()
     )
     n = 0
+    all_revoked: list[str] = []
+    doc_ids_all = {int(d.id) for d in all_library_docs if d.id is not None}
+    try:
+        from app.services.task_dispatch import revoke_library_tasks_bulk
+
+        bulk_info = revoke_library_tasks_bulk(doc_ids_all, user_id=user_id)
+        all_revoked.extend(bulk_info.get("revoked_task_ids") or [])
+    except Exception:
+        logger.debug("Révocation bulk stop-all ignorée", exc_info=True)
     for doc in docs:
-        doc.processing_status = DOCUMENT_STATUS_CANCELLED
+        doc.processing_status = DOCUMENT_STATUS_CANCELLED_BY_USER
         doc.processing_progress = 0
+        refresh_document_processing_run_id(doc)
         doc.updated_at = datetime.utcnow()
         session.add(doc)
         _mark_document_processing_cancelled(doc.id)
-        try:
-            from app.services.task_dispatch import revoke_library_document_tasks
-
-            revoke_library_document_tasks(doc.id)
-        except Exception:
-            logger.debug(
-                "Révocation Celery ignorée pour document_id=%s", doc.id, exc_info=True
-            )
         n += 1
     if n:
         session.commit()
-    return {"cancelled": n}
+    return {
+        "cancelled": n,
+        "revoked_count": len(all_revoked),
+        "revoked_task_ids": all_revoked,
+    }
 
 
 def skip_all_library_documents_processing(session: Session, user_id: int) -> dict:
     """
-    Ignore les documents en attente (skipped) et arrête celui en cours (cancelled).
+    Ignore les documents en attente (skipped) et arrête celui en cours (cancelled_by_user).
     """
     from app.services.library_service import get_or_create_user_library
+    from app.services.document_run import refresh_document_processing_run_id
 
     library = get_or_create_user_library(session, user_id)
     docs = list(
@@ -226,9 +272,10 @@ def skip_all_library_documents_processing(session: Session, user_id: int) -> dic
     )
     skipped = 0
     cancelled = 0
+    all_revoked: list[str] = []
     for doc in docs:
         if doc.processing_status == "processing":
-            doc.processing_status = DOCUMENT_STATUS_CANCELLED
+            doc.processing_status = DOCUMENT_STATUS_CANCELLED_BY_USER
             cancelled += 1
         elif doc.processing_status in ("pending", DOCUMENT_STATUS_REINDEX_QUEUED):
             doc.processing_status = DOCUMENT_STATUS_SKIPPED
@@ -236,20 +283,27 @@ def skip_all_library_documents_processing(session: Session, user_id: int) -> dic
         else:
             continue
         doc.processing_progress = 0
+        refresh_document_processing_run_id(doc)
         doc.updated_at = datetime.utcnow()
         session.add(doc)
         _mark_document_processing_cancelled(doc.id)
         try:
             from app.services.task_dispatch import revoke_library_document_tasks
 
-            revoke_library_document_tasks(doc.id)
+            info = revoke_library_document_tasks(doc.id)
+            all_revoked.extend(info.get("revoked_task_ids") or [])
         except Exception:
             logger.debug(
                 "Révocation Celery ignorée pour document_id=%s", doc.id, exc_info=True
             )
     if skipped or cancelled:
         session.commit()
-    return {"skipped": skipped, "cancelled_running": cancelled}
+    return {
+        "skipped": skipped,
+        "cancelled_running": cancelled,
+        "revoked_count": len(all_revoked),
+        "revoked_task_ids": all_revoked,
+    }
 
 try:
     import torch
@@ -729,13 +783,17 @@ def extract_and_save_images(docling_doc, document_id: int) -> list:
     return images_info
 
 
-def reindex_library_document(document_id: int, user_id: int) -> dict:
+def reindex_library_document(
+    document_id: int, user_id: int, run_id: Optional[str] = None
+) -> dict:
     """
     Re-extrait le texte (Docling), rechunke (hiérarchie Docling ou fallback fixe),
     ré-embed les feuilles et relance le KAG pour les espaces liés — sans réupload.
 
     Utilise ``document.source_file_path`` (fichier déjà stocké sous media/documents).
     """
+    from app.services.document_run import is_processing_run_current
+
     ld = get_library_document_logger()
     ld.info(
         "[Réindex] Démarrage document_id=%s user_id=%s — pipeline : PDF/Docling → "
@@ -743,6 +801,17 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         document_id,
         user_id,
     )
+    if run_id is not None and not is_processing_run_current(document_id, run_id):
+        ld.info(
+            "[Réindex] document_id=%s — abandon : run_id obsolète (stop utilisateur).",
+            document_id,
+        )
+        return {
+            "document_id": document_id,
+            "status": "aborted",
+            "reason": "stale_run",
+        }
+
     from app.services.chunk_service import (
         complete_document_embeddings_and_kag_sync,
         create_chunks_for_document,
@@ -895,7 +964,14 @@ def reindex_library_document(document_id: int, user_id: int) -> dict:
         "[Réindex] document_id=%s — lancement embeddings + KAG (synchrone).",
         document_id,
     )
-    complete_document_embeddings_and_kag_sync(document_id)
+    if run_id is not None and not is_processing_run_current(document_id, run_id):
+        return {
+            "document_id": document_id,
+            "status": "aborted",
+            "reason": "stale_run",
+            "chunks": chunk_count,
+        }
+    complete_document_embeddings_and_kag_sync(document_id, run_id)
 
     logger.info(
         "reindex_library_document terminé document_id=%s chunks=%s",
@@ -1307,10 +1383,17 @@ def _process_document_worker():
             logger.info("Signal d'arrêt reçu, arrêt du worker de documents")
             return
 
-        document_id, file_path = task
+        if not isinstance(task, tuple):
+            document_task_queue.task_done()
+            continue
+        if len(task) >= 3:
+            document_id, file_path, run_id = task[0], task[1], task[2]
+        else:
+            document_id, file_path = task[0], task[1]
+            run_id = None
         try:
             logger.info("Worker traite le document %d (file globale)", document_id)
-            _process_document_for_id(document_id, file_path)
+            _process_document_for_id(document_id, file_path, run_id)
             logger.info(
                 "Worker a terminé le document %d (toutes étapes incluses)", document_id
             )
@@ -1323,13 +1406,16 @@ def _process_document_worker():
             time.sleep(0.5)
 
 
-def _process_document_for_id(document_id: int, file_path: str):
+def _process_document_for_id(
+    document_id: int, file_path: str, run_id: Optional[str] = None
+):
     """Traite un document pour un ID donné."""
     from app.services.chunk_service import (
         complete_document_embeddings_and_kag_sync,
         create_chunks_for_document,
         create_chunks_for_document_from_docling,
     )
+    from app.services.document_run import is_processing_run_current
 
     ld = get_library_document_logger()
     try:
@@ -1342,6 +1428,16 @@ def _process_document_for_id(document_id: int, file_path: str):
         )
 
         run_embeddings_sync: bool = False
+
+        if run_id is not None and not is_processing_run_current(document_id, run_id):
+            logger.info(
+                "Traitement ignoré (run_id obsolète) pour document_id=%s", document_id
+            )
+            ld.info(
+                "[Upload/Pipeline] document_id=%s — abandon : run_id ne correspond plus (stop/reprise).",
+                document_id,
+            )
+            return
 
         if _should_abort_processing(document_id):
             logger.info(
@@ -1366,10 +1462,7 @@ def _process_document_for_id(document_id: int, file_path: str):
                 _clear_document_processing_cancelled(document_id)
                 return
 
-            if document.processing_status in (
-                DOCUMENT_STATUS_CANCELLED,
-                DOCUMENT_STATUS_SKIPPED,
-            ):
+            if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
                 ld.info(
                     "[Upload/Pipeline] document_id=%s — statut final %s, pas de traitement.",
                     document_id,
@@ -1681,7 +1774,7 @@ def _process_document_for_id(document_id: int, file_path: str):
                 tags=["ingestion", "embeddings", "kag"],
             ) as emb_run:
                 t_emb = time.perf_counter()
-                complete_document_embeddings_and_kag_sync(document_id)
+                complete_document_embeddings_and_kag_sync(document_id, run_id)
                 emb_s = time.perf_counter() - t_emb
                 emb_run.end(outputs={"duration_s": round(emb_s, 2)})
             ld.info(
@@ -1700,10 +1793,7 @@ def _process_document_for_id(document_id: int, file_path: str):
         try:
             with Session(engine) as session:
                 document = session.get(Document, document_id)
-                if document and document.processing_status not in (
-                    DOCUMENT_STATUS_CANCELLED,
-                    DOCUMENT_STATUS_SKIPPED,
-                ):
+                if document and document.processing_status not in LIBRARY_USER_STOPPED_STATUSES:
                     document.processing_status = "failed"
                     document.processing_progress = max(document.processing_progress or 0, 10)
                     document.content = f"❌ Erreur lors du traitement du document: {str(e)}"
@@ -1719,7 +1809,9 @@ def _process_document_for_id(document_id: int, file_path: str):
             pass
 
 
-def enqueue_library_document_thread(document_id: int, file_path: str):
+def enqueue_library_document_thread(
+    document_id: int, file_path: str, run_id: Optional[str] = None
+):
     """Ajoute un document à la file thread globale (sans Celery)."""
     try:
         with Session(engine) as session:
@@ -1727,10 +1819,7 @@ def enqueue_library_document_thread(document_id: int, file_path: str):
             if not document:
                 logger.error("Document %d non trouvé pour ajout à la queue", document_id)
                 return
-            if document.processing_status in (
-                DOCUMENT_STATUS_CANCELLED,
-                DOCUMENT_STATUS_SKIPPED,
-            ):
+            if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
                 logger.info(
                     "Document %d non ajouté à la file (statut final %s)",
                     document_id,
@@ -1750,7 +1839,7 @@ def enqueue_library_document_thread(document_id: int, file_path: str):
     _ensure_document_workers()
 
     with _document_queue_lock:
-        document_task_queue.put((document_id, file_path))
+        document_task_queue.put((document_id, file_path, run_id))
         queue_size = document_task_queue.qsize()
 
     logger.info(
@@ -1767,8 +1856,17 @@ def enqueue_library_document_thread(document_id: int, file_path: str):
 def process_document_async(document_id: int, file_path: str):
     """Délègue à Celery ou à la file thread selon TASK_BACKEND_MODE."""
     from app.services.task_dispatch import dispatch_library_document
+    from app.services.document_run import refresh_document_processing_run_id
 
-    dispatch_library_document(document_id, file_path)
+    with Session(engine) as session:
+        doc = session.get(Document, document_id)
+        if not doc:
+            return
+        rid = refresh_document_processing_run_id(doc)
+        doc.updated_at = datetime.utcnow()
+        session.add(doc)
+        session.commit()
+    dispatch_library_document(document_id, file_path, rid)
 
 
 def _ensure_document_workers():

@@ -7,7 +7,8 @@ from __future__ import annotations
 import logging
 import threading
 import ast
-from typing import Literal, Optional
+from datetime import datetime
+from typing import Any, Literal, Optional
 
 from sqlmodel import Session
 
@@ -37,8 +38,22 @@ def _celery_only_failure_message() -> str:
     return "Celery indisponible alors que TASK_BACKEND_MODE=celery"
 
 
+def _parse_task_args(task: dict) -> tuple[Any, ...]:
+    args = task.get("args", ())
+    if isinstance(args, (list, tuple)):
+        return tuple(args)
+    if isinstance(args, str):
+        try:
+            parsed = ast.literal_eval(args)
+        except Exception:
+            return ()
+        if isinstance(parsed, (list, tuple)):
+            return tuple(parsed)
+    return ()
+
+
 def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
-    """Extrait le document_id d'une tâche Celery document/reindex si possible."""
+    """Extrait le document_id des tâches Celery liées à un document bibliothèque."""
     if not isinstance(task, dict):
         return None
 
@@ -46,37 +61,30 @@ def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
     if task_name not in {
         "app.tasks.documents.process_library_document",
         "app.tasks.documents.reindex_library_document_task",
+        "app.tasks.documents.process_library_document_kag",
+        "app.tasks.documents.process_document_embeddings",
+        "app.tasks.documents.update_document_spaces_task",
     }:
         return None
 
-    args = task.get("args", ())
-    first_arg: object | None = None
-
-    if isinstance(args, (list, tuple)):
-        if args:
-            first_arg = args[0]
-    elif isinstance(args, str):
-        try:
-            parsed = ast.literal_eval(args)
-        except Exception:
-            parsed = None
-        if isinstance(parsed, (list, tuple)) and parsed:
-            first_arg = parsed[0]
-
+    args = _parse_task_args(task)
+    if not args:
+        return None
+    first_arg = args[0]
     try:
         return int(first_arg) if first_arg is not None else None
     except (TypeError, ValueError):
         return None
 
 
-def revoke_library_document_tasks(document_id: int) -> int:
+def revoke_library_document_tasks(document_id: int) -> dict[str, Any]:
     """
-    Révoque les tâches Celery actives/réservées liées à un document.
-    Retourne le nombre de tâches révoquées.
+    Révoque les tâches Celery actives/réservées liées à un document (files documents, embeddings, kag).
+    Retourne preuve d'opération pour l'API admin.
     """
     mode = get_task_backend_mode()
     if mode == "thread":
-        return 0
+        return {"revoked_count": 0, "revoked_task_ids": []}
 
     try:
         from app.celery_app import celery_app
@@ -93,10 +101,11 @@ def revoke_library_document_tasks(document_id: int) -> int:
             document_id,
             exc,
         )
-        return 0
+        return {"revoked_count": 0, "revoked_task_ids": []}
 
     revoked_count = 0
-    revoked_ids: set[str] = set()
+    revoked_ids: list[str] = []
+    seen: set[str] = set()
     for group in task_groups:
         for tasks in group.values():
             for raw_task in tasks or []:
@@ -108,12 +117,13 @@ def revoke_library_document_tasks(document_id: int) -> int:
                 task_id = task.get("id")
                 if current_document_id != document_id or not task_id:
                     continue
-                if task_id in revoked_ids:
+                if task_id in seen:
                     continue
 
                 try:
                     celery_app.control.revoke(task_id, terminate=True, signal="SIGTERM")
-                    revoked_ids.add(task_id)
+                    seen.add(task_id)
+                    revoked_ids.append(task_id)
                     revoked_count += 1
                     logger.info(
                         "Tâche Celery révoquée pour document_id=%s task_id=%s",
@@ -128,15 +138,94 @@ def revoke_library_document_tasks(document_id: int) -> int:
                         exc,
                     )
 
-    return revoked_count
+    return {"revoked_count": revoked_count, "revoked_task_ids": revoked_ids}
 
 
-def _send_library_document(document_id: int, file_path: str) -> bool:
+def revoke_library_tasks_bulk(
+    document_ids: set[int], user_id: Optional[int] = None
+) -> dict[str, Any]:
+    """
+    Révoque en masse les tâches liées à la bibliothèque:
+    - tasks document (documents/embeddings/kag) par document_id
+    - task globale reindex_all_library_documents_task par user_id (si fourni)
+    """
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        return {"revoked_count": 0, "revoked_task_ids": []}
+
+    if not document_ids and user_id is None:
+        return {"revoked_count": 0, "revoked_task_ids": []}
+
+    try:
+        from app.celery_app import celery_app
+
+        inspector = celery_app.control.inspect()
+        task_groups = [
+            inspector.active() or {},
+            inspector.reserved() or {},
+            inspector.scheduled() or {},
+        ]
+    except Exception as exc:
+        logger.warning("Impossible d'inspecter Celery pour revoke bulk: %s", exc)
+        return {"revoked_count": 0, "revoked_task_ids": []}
+
+    revoked_ids: list[str] = []
+    seen: set[str] = set()
+    for group in task_groups:
+        for tasks in group.values():
+            for raw_task in tasks or []:
+                task = (
+                    raw_task.get("request", raw_task)
+                    if isinstance(raw_task, dict)
+                    else raw_task
+                )
+                if not isinstance(task, dict):
+                    continue
+
+                task_id = task.get("id")
+                if not task_id or task_id in seen:
+                    continue
+
+                name = str(task.get("name") or "")
+                should_revoke = False
+
+                doc_id = _extract_document_id_from_celery_task(task)
+                if doc_id is not None and doc_id in document_ids:
+                    should_revoke = True
+
+                if (
+                    not should_revoke
+                    and user_id is not None
+                    and name == "app.tasks.documents.reindex_all_library_documents_task"
+                ):
+                    args = _parse_task_args(task)
+                    first_arg = args[0] if args else None
+                    try:
+                        should_revoke = int(first_arg) == int(user_id)
+                    except Exception:
+                        should_revoke = False
+
+                if not should_revoke:
+                    continue
+
+                try:
+                    celery_app.control.revoke(task_id, terminate=True, signal="SIGTERM")
+                    seen.add(task_id)
+                    revoked_ids.append(task_id)
+                except Exception as exc:
+                    logger.warning("Échec revoke bulk task_id=%s: %s", task_id, exc)
+
+    return {"revoked_count": len(revoked_ids), "revoked_task_ids": revoked_ids}
+
+
+def _send_library_document(
+    document_id: int, file_path: str, run_id: Optional[str]
+) -> bool:
     from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import process_library_document
 
     res = process_library_document.apply_async(
-        args=[document_id, file_path],
+        args=[document_id, file_path, run_id],
         queue="documents",
     )
     logger.info(
@@ -169,12 +258,14 @@ def _send_project_document(note_id: int, file_path: str) -> bool:
     return True
 
 
-def _send_reindex_library(document_id: int, user_id: int) -> str:
+def _send_reindex_library(
+    document_id: int, user_id: int, run_id: Optional[str]
+) -> str:
     from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import reindex_library_document_task
 
     async_result = reindex_library_document_task.apply_async(
-        args=[document_id, user_id],
+        args=[document_id, user_id, run_id],
         queue="documents",
     )
     logger.info(
@@ -228,11 +319,11 @@ def _send_note_embeddings(note_id: int, project_id: int) -> bool:
     return True
 
 
-def _send_document_embeddings(document_id: int) -> bool:
+def _send_document_embeddings(document_id: int, run_id: Optional[str]) -> bool:
     from app.tasks.documents import process_document_embeddings
 
     res = process_document_embeddings.apply_async(
-        args=[document_id],
+        args=[document_id, run_id],
         queue="embeddings",
     )
     logger.info(
@@ -243,11 +334,11 @@ def _send_document_embeddings(document_id: int) -> bool:
     return True
 
 
-def _send_library_document_kag(document_id: int) -> bool:
+def _send_library_document_kag(document_id: int, run_id: Optional[str]) -> bool:
     from app.tasks.documents import process_library_document_kag
 
     res = process_library_document_kag.apply_async(
-        args=[document_id],
+        args=[document_id, run_id],
         queue="kag",
     )
     logger.info(
@@ -258,12 +349,12 @@ def _send_library_document_kag(document_id: int) -> bool:
     return True
 
 
-def _run_kag_thread(document_id: int) -> None:
+def _run_kag_thread(document_id: int, run_id: Optional[str]) -> None:
     from app.services.chunk_service import run_kag_for_library_document
 
     def _runner():
         try:
-            run_kag_for_library_document(document_id)
+            run_kag_for_library_document(document_id, run_id)
         except Exception:
             logger.exception("Thread KAG échoué document_id=%s", document_id)
 
@@ -277,17 +368,22 @@ def _run_kag_thread(document_id: int) -> None:
 def dispatch_library_document_kag(document_id: int) -> None:
     """Enqueue la phase KAG bibliothèque après embeddings (Celery queue « kag » ou thread)."""
     mode = get_task_backend_mode()
+    run_id: Optional[str] = None
+    with Session(engine) as session:
+        doc = session.get(Document, document_id)
+        if doc:
+            run_id = doc.processing_run_id
     if mode == "thread":
-        _run_kag_thread(document_id)
+        _run_kag_thread(document_id, run_id)
         return
     try:
-        _send_library_document_kag(document_id)
+        _send_library_document_kag(document_id, run_id)
     except Exception as exc:
         logger.warning(
             "Celery indisponible pour KAG document_id=%s: %s", document_id, exc
         )
         if mode == "hybrid":
-            _run_kag_thread(document_id)
+            _run_kag_thread(document_id, run_id)
             return
         raise RuntimeError(_celery_only_failure_message()) from exc
 
@@ -340,7 +436,9 @@ def _run_document_spaces_update_thread(
     ).start()
 
 
-def dispatch_library_document(document_id: int, file_path: str) -> None:
+def dispatch_library_document(
+    document_id: int, file_path: str, run_id: Optional[str] = None
+) -> None:
     """Enqueue traitement document bibliothèque (Celery ou thread)."""
     from app.library_document_logging import get_library_document_logger
 
@@ -354,11 +452,11 @@ def dispatch_library_document(document_id: int, file_path: str) -> None:
     if mode == "thread":
         from app.services.document_service_new import enqueue_library_document_thread
 
-        enqueue_library_document_thread(document_id, file_path)
+        enqueue_library_document_thread(document_id, file_path, run_id)
         return
 
     try:
-        _send_library_document(document_id, file_path)
+        _send_library_document(document_id, file_path, run_id)
     except Exception as exc:
         logger.warning(
             "Celery indisponible pour library document_id=%s: %s", document_id, exc
@@ -372,7 +470,7 @@ def dispatch_library_document(document_id: int, file_path: str) -> None:
         if mode == "hybrid":
             from app.services.document_service_new import enqueue_library_document_thread
 
-            enqueue_library_document_thread(document_id, file_path)
+            enqueue_library_document_thread(document_id, file_path, run_id)
             get_library_document_logger().info(
                 "[Dispatch] document_id=%s — repli hybrid vers file thread.",
                 document_id,
@@ -408,8 +506,18 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
     Docling, chunks, embeddings et KAG s'exécutent dans le worker, pas dans l'API.
     Retourne l'identifiant de tâche Celery.
     """
+    run_id: Optional[str] = None
+    with Session(engine) as session:
+        doc = session.get(Document, document_id)
+        if doc:
+            from app.services.document_run import refresh_document_processing_run_id
+
+            run_id = refresh_document_processing_run_id(doc)
+            doc.updated_at = datetime.utcnow()
+            session.add(doc)
+            session.commit()
     try:
-        return _send_reindex_library(document_id, user_id)
+        return _send_reindex_library(document_id, user_id, run_id)
     except Exception as exc:
         logger.warning(
             "Échec enqueue reindex document_id=%s user_id=%s: %s",
@@ -500,7 +608,7 @@ def try_dispatch_embeddings_job(note_id: int, project_id: int) -> bool:
                 return True
             doc = session.get(Document, note_id)
             if doc is not None:
-                _send_document_embeddings(doc.id)
+                _send_document_embeddings(doc.id, doc.processing_run_id)
                 return True
     except Exception as exc:
         logger.warning(

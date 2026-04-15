@@ -7,7 +7,7 @@ from app.models.role import Role, RoleCreate, RoleRead, RoleUpdate
 from app.models.permission import Permission, PermissionCreate, PermissionRead
 from app.models.user_role import UserRole, UserRoleCreate, UserRoleRead
 from app.models.role_permission import RolePermission, RolePermissionCreate, RolePermissionRead
-from app.routers.auth import get_current_user, require_permission
+from app.routers.auth import get_current_user, require_permission, require_role
 from app.services.auth_service import get_password_hash
 from pydantic import BaseModel
 import logging
@@ -421,3 +421,37 @@ async def create_permission(
     session.refresh(permission)
     
     return PermissionRead.model_validate(permission)
+
+
+# ==================== QUEUES / OPS (admin rôle) ====================
+
+
+@router.get("/queues/health")
+async def admin_queues_health(
+    current_user: UserRead = Depends(require_role("admin")),
+):
+    """Santé des files Celery et workers (best-effort)."""
+    from app.services.celery_queue_health import get_queue_health_payload
+
+    return get_queue_health_payload()
+
+
+@router.get("/queues/workers-documents")
+async def admin_workers_documents_view(
+    current_user: UserRead = Depends(require_role("admin")),
+):
+    """Vue workers: documents en cours/en attente (worker + worker-kag)."""
+    from app.services.celery_queue_health import get_workers_document_tasks_view
+
+    return get_workers_document_tasks_view()
+
+
+@router.get("/documents/stuck-processing")
+async def admin_stuck_processing_documents(
+    minutes: int = 30,
+    current_user: UserRead = Depends(require_role("admin")),
+):
+    """Documents en traitement depuis plus de N minutes (heuristique ``updated_at``)."""
+    from app.services.celery_queue_health import list_stuck_processing_documents
+
+    return list_stuck_processing_documents(minutes)

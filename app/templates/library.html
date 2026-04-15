@@ -349,8 +349,23 @@ async function loadFolderContext() {
   host.textContent = `Dans: ${path.map(p => p.name).join(" / ")}`;
 }
 
+function formatProcessingSnapshotLine(d) {
+  const snap = d.processing_snapshot;
+  if (!snap) return "";
+  const bits = [];
+  if (snap.chunk_count) bits.push(`${snap.chunk_count} chunk(s)`);
+  if (snap.chunks_with_embedding_count) bits.push(`${snap.chunks_with_embedding_count} avec embeddings`);
+  if (snap.knowledge_entity_count) bits.push(`${snap.knowledge_entity_count} entités KAG`);
+  if (snap.entity_relation_count) bits.push(`${snap.entity_relation_count} relations`);
+  if (bits.length === 0) return "";
+  return ` <span class="text-emerald-700 dark:text-emerald-400">· ${bits.join(" · ")} · ${snap.readiness_label || ""}</span>`;
+}
+
 async function loadDocuments() {
-  const url = selectedFolderId === null ? "/api/library/documents" : `/api/library/documents?folder_id=${selectedFolderId}`;
+  const params = new URLSearchParams();
+  params.set("include_processing_snapshot", "true");
+  if (selectedFolderId !== null) params.set("folder_id", String(selectedFolderId));
+  const url = `/api/library/documents?${params.toString()}`;
   const r = await api(url);
   if (!r.ok) return;
   const docs = await r.json();
@@ -370,11 +385,11 @@ async function loadDocuments() {
         <div class="text-xs text-gray-500">${
           d.processing_status === "reindex_queued"
             ? `<span class="text-amber-700 dark:text-amber-400">En attente de retraitement</span> — index actuel conservé (${d.processing_progress ?? 0}%)`
-            : d.processing_status === "cancelled"
-            ? `<span class="text-red-700 dark:text-red-400">Traitement arrêté</span>`
+            : d.processing_status === "cancelled" || d.processing_status === "cancelled_by_user"
+            ? `<span class="text-red-700 dark:text-red-400">Traitement arrêté</span>${formatProcessingSnapshotLine(d)}`
             : d.processing_status === "skipped"
-            ? `<span class="text-orange-700 dark:text-orange-400">Ignoré (non traité)</span>`
-            : `Statut: ${d.processing_status} (${d.processing_progress ?? 0}%)`
+            ? `<span class="text-orange-700 dark:text-orange-400">Ignoré (non traité)</span>${formatProcessingSnapshotLine(d)}`
+            : `Statut: ${d.processing_status} (${d.processing_progress ?? 0}%)${formatProcessingSnapshotLine(d)}`
         }</div>
       </div>
         <div class="flex items-center gap-3 flex-wrap justify-end">
@@ -509,6 +524,15 @@ async function stopQueueDocument(documentId, documentTitle) {
   const err = await r.json().catch(() => ({}));
   if (r.status === 403) return alert("Action réservée aux administrateurs.");
   if (!r.ok) return alert(err.detail || "Impossible d'arrêter le traitement.");
+  const s = err.processing_snapshot;
+  if (s) {
+    alert(
+      `Traitement arrêté.\n\n` +
+        `Chunks: ${s.chunk_count ?? 0}, feuilles avec embeddings: ${s.chunks_with_embedding_count ?? 0}, ` +
+        `entités KAG: ${s.knowledge_entity_count ?? 0}, relations: ${s.entity_relation_count ?? 0}.\n` +
+        `Indicateur: ${s.readiness_label ?? "—"}.`
+    );
+  }
   await loadDocuments();
 }
 
@@ -522,6 +546,15 @@ async function skipQueueDocument(documentId, documentTitle) {
   const err = await r.json().catch(() => ({}));
   if (r.status === 403) return alert("Action réservée aux administrateurs.");
   if (!r.ok) return alert(err.detail || "Impossible d'ignorer le document.");
+  const s = err.processing_snapshot;
+  if (s) {
+    alert(
+      `Document ignoré ou arrêté.\n\n` +
+        `Chunks: ${s.chunk_count ?? 0}, feuilles avec embeddings: ${s.chunks_with_embedding_count ?? 0}, ` +
+        `entités KAG: ${s.knowledge_entity_count ?? 0}, relations: ${s.entity_relation_count ?? 0}.\n` +
+        `Indicateur: ${s.readiness_label ?? "—"}.`
+    );
+  }
   await loadDocuments();
 }
 
@@ -534,7 +567,10 @@ async function stopAllQueueDocuments() {
   const body = await r.json().catch(() => ({}));
   if (r.status === 403) return alert("Action réservée aux administrateurs.");
   if (!r.ok) return alert(body.detail || "Impossible d'arrêter la file.");
-  alert(`Documents annulés : ${body.cancelled ?? 0}`);
+  alert(
+    `Documents annulés : ${body.cancelled ?? 0}` +
+      (body.revoked_count != null ? `\nTâches Celery révoquées : ${body.revoked_count}` : "")
+  );
   await loadDocuments();
 }
 

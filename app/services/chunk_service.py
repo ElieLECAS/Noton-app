@@ -991,17 +991,24 @@ def create_chunks_for_document_from_docling(
     return chunks
 
 
-def run_kag_for_library_document(document_id: int) -> None:
+def run_kag_for_library_document(
+    document_id: int, run_id: Optional[str] = None
+) -> None:
     """
     Phase KAG uniquement (après embeddings) : extraction graphe par espace, puis document completed/100.
     Appelée depuis la queue Celery « kag » ou un thread en mode TASK_BACKEND_MODE=thread.
     """
     from app.services.document_service_new import (
+        LIBRARY_USER_STOPPED_STATUSES,
         _finalize_pipeline_abort,
         _should_abort_processing,
     )
+    from app.services.document_run import is_processing_run_current
 
     ld = get_library_document_logger()
+    if run_id is not None and not is_processing_run_current(document_id, run_id):
+        ld.info("[KAG] document_id=%s — abandon run_id obsolète.", document_id)
+        return
     if _should_abort_processing(document_id):
         ld.info(
             "[KAG] document_id=%s — annulé avant démarrage (stop/skip).",
@@ -1035,7 +1042,7 @@ def run_kag_for_library_document(document_id: int) -> None:
                 ld.warning("[KAG] document_id=%s — document introuvable, arrêt.", document_id)
                 return
 
-            if document.processing_status in ("cancelled", "skipped"):
+            if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
                 ld.info(
                     "[KAG] document_id=%s — statut %s, arrêt.",
                     document_id,
@@ -1125,7 +1132,7 @@ def run_kag_for_library_document(document_id: int) -> None:
         try:
             with Session(engine) as session:
                 document = session.get(Document, document_id)
-                if document and document.processing_status not in ("cancelled", "skipped"):
+                if document and document.processing_status not in LIBRARY_USER_STOPPED_STATUSES:
                     document.processing_status = "failed"
                     document.processing_progress = max(document.processing_progress or 0, 95)
                     document.updated_at = datetime.utcnow()
@@ -1135,14 +1142,24 @@ def run_kag_for_library_document(document_id: int) -> None:
             logger.error("Impossible de marquer le document %s en échec KAG: %s", document_id, upd)
 
 
-def _process_embeddings_for_document(document_id: int):
+def _process_embeddings_for_document(
+    document_id: int, run_id: Optional[str] = None
+):
     """Génère les embeddings des seuls chunks feuilles (parents exclus) ; enfile KAG si activé et espaces liés."""
     from app.services.document_service_new import (
+        LIBRARY_USER_STOPPED_STATUSES,
         _finalize_pipeline_abort,
         _should_abort_processing,
     )
+    from app.services.document_run import is_processing_run_current
 
     ld = get_library_document_logger()
+    if run_id is not None and not is_processing_run_current(document_id, run_id):
+        ld.info(
+            "[Embeddings] document_id=%s — abandon : run_id obsolète.",
+            document_id,
+        )
+        return
     ld.info(
         "[Embeddings] document_id=%s — début : vectorisation des feuilles uniquement "
         "(is_leaf=True ; les parents ne reçoivent pas d'embedding).",
@@ -1307,7 +1324,7 @@ def _process_embeddings_for_document(document_id: int):
         try:
             with Session(engine) as session:
                 document = session.get(Document, document_id)
-                if document and document.processing_status not in ("cancelled", "skipped"):
+                if document and document.processing_status not in LIBRARY_USER_STOPPED_STATUSES:
                     document.processing_status = "failed"
                     document.processing_progress = max(document.processing_progress or 0, 85)
                     document.updated_at = datetime.utcnow()
@@ -1319,12 +1336,14 @@ def _process_embeddings_for_document(document_id: int):
             )
 
 
-def complete_document_embeddings_and_kag_sync(document_id: int) -> None:
+def complete_document_embeddings_and_kag_sync(
+    document_id: int, run_id: Optional[str] = None
+) -> None:
     """
     Finalise l'indexation : embeddings (bloquant), puis enfile la phase KAG sur une file dédiée
     (Celery « kag » ou thread) pour permettre au worker documents de traiter un autre fichier.
     """
-    _process_embeddings_for_document(document_id)
+    _process_embeddings_for_document(document_id, run_id)
 
 
 def generate_embeddings_for_chunks_async(note_id: int, project_id: int):

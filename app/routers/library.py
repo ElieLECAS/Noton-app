@@ -6,7 +6,14 @@ from sqlmodel import Session, select
 from app.database import get_session
 from app.models.library import LibraryRead, LibraryStats
 from app.models.folder import FolderCreate, FolderRead, FolderUpdate, FolderWithContents
-from app.models.document import DocumentRead, DocumentListItem, DocumentCreate, DocumentUpdate, Document
+from app.models.document import (
+    DocumentRead,
+    DocumentListItem,
+    DocumentListItemWithSnapshot,
+    DocumentCreate,
+    DocumentUpdate,
+    Document,
+)
 from app.models.folder import Folder
 from app.models.space import SpaceRead
 from app.models.user import UserRead
@@ -43,6 +50,11 @@ from app.services.task_dispatch import (
     dispatch_reindex_library,
 )
 from app.services.document_space_service import get_spaces_for_document
+from app.services.document_processing_snapshot import (
+    build_document_diagnostic,
+    build_document_processing_snapshot,
+)
+from app.services.admin_audit_service import log_admin_action
 from pathlib import Path
 import logging
 import json
@@ -50,6 +62,15 @@ import json
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/library", tags=["library"])
+
+
+class LibraryStopDocumentResponse(BaseModel):
+    """Réponse enrichie après stop/skip sur un document."""
+    document: DocumentRead
+    processing_snapshot: dict
+    revoked_count: int = 0
+    revoked_task_ids: List[str] = Field(default_factory=list)
+    processing_run_id: Optional[str] = None
 
 
 class DocumentSpacesManageRequest(BaseModel):
@@ -187,12 +208,13 @@ async def delete_folder_recursive(
         )
 
 
-@router.get("/documents", response_model=List[DocumentListItem])
+@router.get("/documents", response_model=List[DocumentListItemWithSnapshot])
 async def list_documents(
     folder_id: Optional[int] = None,
     include_all: bool = False,
+    include_processing_snapshot: bool = False,
     current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
 ):
     """Liste les documents d'un dossier, de la racine, ou de toute la bibliothèque."""
     library = get_or_create_user_library(session, current_user.id)
@@ -205,7 +227,19 @@ async def list_documents(
                 Document.folder_id == folder_id,
             ).order_by(Document.created_at.desc())
         ).all()
-    return [DocumentListItem.model_validate(d) for d in documents]
+    out: list[DocumentListItemWithSnapshot] = []
+    for d in documents:
+        base = DocumentListItem.model_validate(d)
+        snap = None
+        if include_processing_snapshot:
+            snap = build_document_processing_snapshot(session, d.id)
+        out.append(
+            DocumentListItemWithSnapshot(
+                **base.model_dump(),
+                processing_snapshot=snap,
+            )
+        )
+    return out
 
 
 @router.post("/documents/stop-all", status_code=status.HTTP_200_OK)
@@ -214,7 +248,13 @@ async def stop_all_library_documents_endpoint(
     session: Session = Depends(get_session),
 ):
     """Annule tous les documents en file (admin uniquement)."""
-    return stop_all_library_documents_processing(session, current_user.id)
+    body = stop_all_library_documents_processing(session, current_user.id)
+    log_admin_action(
+        user_id=current_user.id,
+        action="library.stop_all",
+        detail=body,
+    )
+    return body
 
 
 @router.post("/documents/skip-all", status_code=status.HTTP_200_OK)
@@ -223,7 +263,13 @@ async def skip_all_library_documents_endpoint(
     session: Session = Depends(get_session),
 ):
     """Ignore les documents en attente et arrête celui en cours (admin uniquement)."""
-    return skip_all_library_documents_processing(session, current_user.id)
+    body = skip_all_library_documents_processing(session, current_user.id)
+    log_admin_action(
+        user_id=current_user.id,
+        action="library.skip_all",
+        detail=body,
+    )
+    return body
 
 
 @router.get("/documents/{document_id}", response_model=DocumentRead)
@@ -248,7 +294,10 @@ async def get_document(
     return DocumentRead.model_validate(document)
 
 
-@router.post("/documents/{document_id}/stop", response_model=DocumentRead)
+@router.post(
+    "/documents/{document_id}/stop",
+    response_model=LibraryStopDocumentResponse,
+)
 async def stop_single_library_document(
     document_id: int,
     current_user: UserRead = Depends(require_role("admin")),
@@ -272,16 +321,37 @@ async def stop_single_library_document(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Aucun traitement en cours ou en attente pour ce document",
         )
-    updated = stop_library_document_processing(session, document_id, current_user.id)
+    updated, revoke_info = stop_library_document_processing(
+        session, document_id, current_user.id
+    )
     if not updated:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Impossible d'arrêter le traitement",
         )
-    return DocumentRead.model_validate(updated)
+    session.refresh(updated)
+    snap = build_document_processing_snapshot(session, document_id)
+    log_admin_action(
+        user_id=current_user.id,
+        action="library.stop_document",
+        detail={
+            "document_id": document_id,
+            **revoke_info,
+        },
+    )
+    return LibraryStopDocumentResponse(
+        document=DocumentRead.model_validate(updated),
+        processing_snapshot=snap,
+        revoked_count=int(revoke_info.get("revoked_count") or 0),
+        revoked_task_ids=list(revoke_info.get("revoked_task_ids") or []),
+        processing_run_id=updated.processing_run_id,
+    )
 
 
-@router.post("/documents/{document_id}/skip", response_model=DocumentRead)
+@router.post(
+    "/documents/{document_id}/skip",
+    response_model=LibraryStopDocumentResponse,
+)
 async def skip_single_library_document(
     document_id: int,
     current_user: UserRead = Depends(require_role("admin")),
@@ -305,13 +375,66 @@ async def skip_single_library_document(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Aucun traitement en cours ou en attente pour ce document",
         )
-    updated = skip_library_document_processing(session, document_id, current_user.id)
+    updated, revoke_info = skip_library_document_processing(
+        session, document_id, current_user.id
+    )
     if not updated:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Impossible d'ignorer le document",
         )
-    return DocumentRead.model_validate(updated)
+    session.refresh(updated)
+    snap = build_document_processing_snapshot(session, document_id)
+    log_admin_action(
+        user_id=current_user.id,
+        action="library.skip_document",
+        detail={"document_id": document_id, **revoke_info},
+    )
+    return LibraryStopDocumentResponse(
+        document=DocumentRead.model_validate(updated),
+        processing_snapshot=snap,
+        revoked_count=int(revoke_info.get("revoked_count") or 0),
+        revoked_task_ids=list(revoke_info.get("revoked_task_ids") or []),
+        processing_run_id=updated.processing_run_id,
+    )
+
+
+@router.get("/documents/{document_id}/processing-health")
+async def get_document_processing_health(
+    document_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Statut pipeline : chunks, embeddings, compteurs KAG (lecture seule)."""
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if document is None:
+        raise HTTPException(status_code=404, detail="Document non trouvé")
+    return build_document_processing_snapshot(session, document_id)
+
+
+@router.get("/documents/{document_id}/diagnostic")
+async def get_document_diagnostic(
+    document_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Diagnostic : checks chunks, embeddings, entités, relations."""
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if document is None:
+        raise HTTPException(status_code=404, detail="Document non trouvé")
+    return build_document_diagnostic(session, document_id)
 
 
 @router.put("/documents/{document_id}", response_model=DocumentRead)
@@ -359,6 +482,7 @@ async def reindex_library_document_endpoint(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Réindexation réservée aux documents avec fichier source.",
         )
+    mark_document_reindex_queued(session, document_id, current_user.id)
     try:
         celery_task_id = dispatch_reindex_library(document_id, current_user.id)
     except RuntimeError as e:
@@ -366,7 +490,11 @@ async def reindex_library_document_endpoint(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=str(e),
         )
-    mark_document_reindex_queued(session, document_id, current_user.id)
+    log_admin_action(
+        user_id=current_user.id,
+        action="library.reindex_document",
+        detail={"document_id": document_id, "celery_task_id": celery_task_id},
+    )
     return {
         "status": "queued",
         "celery_task_id": celery_task_id,
@@ -384,6 +512,11 @@ async def reindex_all_library_endpoint(
     """
     try:
         celery_task_id = dispatch_reindex_all_library(current_user.id)
+        log_admin_action(
+            user_id=current_user.id,
+            action="library.reindex_all",
+            detail={"celery_task_id": celery_task_id},
+        )
         return {
             "status": "queued",
             "celery_task_id": celery_task_id,

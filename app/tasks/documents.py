@@ -9,7 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
-def process_library_document(self, document_id: int, file_path: str) -> None:
+def process_library_document(
+    self, document_id: int, file_path: str, run_id: str | None = None
+) -> None:
     """Pipeline Docling → chunks → embeddings/KAG pour un document bibliothèque."""
     from app.library_document_logging import get_library_document_logger
     from app.services.document_service_new import _process_document_for_id
@@ -27,7 +29,7 @@ def process_library_document(self, document_id: int, file_path: str) -> None:
         self.request.id,
     )
     try:
-        _process_document_for_id(document_id, file_path)
+        _process_document_for_id(document_id, file_path, run_id)
     except Exception as exc:
         logger.exception(
             "process_library_document échec document_id=%s: %s", document_id, exc
@@ -54,7 +56,9 @@ def process_project_document(self, note_id: int, file_path: str) -> None:
 
 
 @celery_app.task(bind=True, max_retries=0)
-def reindex_library_document_task(self, document_id: int, user_id: int) -> dict:
+def reindex_library_document_task(
+    self, document_id: int, user_id: int, run_id: str | None = None
+) -> dict:
     """Réindexation complète d'un document bibliothèque."""
     from app.library_document_logging import get_library_document_logger
     from app.services.document_service_new import reindex_library_document
@@ -72,7 +76,7 @@ def reindex_library_document_task(self, document_id: int, user_id: int) -> dict:
         self.request.id,
     )
     try:
-        return reindex_library_document(document_id, user_id)
+        return reindex_library_document(document_id, user_id, run_id)
     except Exception:
         logger.exception(
             "reindex_library_document_task échec document_id=%s", document_id
@@ -120,7 +124,9 @@ def process_note_embeddings(self, note_id: int, project_id: int) -> None:
 
 
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
-def process_library_document_kag(self, document_id: int) -> None:
+def process_library_document_kag(
+    self, document_id: int, run_id: str | None = None
+) -> None:
     """Extraction KAG / entités pour un document bibliothèque (après embeddings)."""
     from app.library_document_logging import get_library_document_logger
     from app.services.chunk_service import run_kag_for_library_document
@@ -136,7 +142,7 @@ def process_library_document_kag(self, document_id: int) -> None:
         self.request.id,
     )
     try:
-        run_kag_for_library_document(document_id)
+        run_kag_for_library_document(document_id, run_id)
     except Exception as exc:
         logger.exception(
             "process_library_document_kag échec document_id=%s: %s", document_id, exc
@@ -145,7 +151,9 @@ def process_library_document_kag(self, document_id: int) -> None:
 
 
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
-def process_document_embeddings(self, document_id: int) -> None:
+def process_document_embeddings(
+    self, document_id: int, run_id: str | None = None
+) -> None:
     """Embeddings feuilles pour un document bibliothèque ; enfile la file `kag` si KAG activé et espaces liés."""
     from app.library_document_logging import get_library_document_logger
     from app.services.chunk_service import _process_embeddings_for_document
@@ -161,7 +169,7 @@ def process_document_embeddings(self, document_id: int) -> None:
         self.request.id,
     )
     try:
-        _process_embeddings_for_document(document_id)
+        _process_embeddings_for_document(document_id, run_id)
     except Exception as exc:
         logger.exception(
             "process_document_embeddings échec document_id=%s: %s", document_id, exc

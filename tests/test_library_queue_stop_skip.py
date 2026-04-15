@@ -70,8 +70,9 @@ def test_stop_document_admin_ok(client, admin_headers):
     )
     assert r.status_code == 200
     data = r.json()
-    assert data["id"] == doc_id
-    assert data["processing_status"] == DOCUMENT_STATUS_CANCELLED
+    assert data["document"]["id"] == doc_id
+    assert data["document"]["processing_status"] == DOCUMENT_STATUS_CANCELLED
+    assert "processing_snapshot" in data
 
 
 def test_skip_document_admin_pending_ok(client, admin_headers):
@@ -81,7 +82,7 @@ def test_skip_document_admin_pending_ok(client, admin_headers):
         headers=admin_headers,
     )
     assert r.status_code == 200
-    assert r.json()["processing_status"] == DOCUMENT_STATUS_SKIPPED
+    assert r.json()["document"]["processing_status"] == DOCUMENT_STATUS_SKIPPED
 
 
 def test_skip_document_while_processing_is_cancelled_like_stop(
@@ -100,7 +101,7 @@ def test_skip_document_while_processing_is_cancelled_like_stop(
         headers=admin_headers,
     )
     assert r.status_code == 200
-    assert r.json()["processing_status"] == DOCUMENT_STATUS_CANCELLED
+    assert r.json()["document"]["processing_status"] == DOCUMENT_STATUS_CANCELLED
 
 
 def test_should_abort_processing_true_after_document_cancelled_via_api(

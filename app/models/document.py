@@ -1,7 +1,8 @@
 from sqlmodel import SQLModel, Field, Relationship, Column
 from datetime import datetime
-from typing import Optional, List, TYPE_CHECKING
+from typing import Any, Optional, List, TYPE_CHECKING
 from pgvector.sqlalchemy import Vector
+from sqlalchemy.dialects.postgresql import JSONB
 from app.embedding_config import EMBEDDING_DIMENSION
 
 if TYPE_CHECKING:
@@ -18,9 +19,16 @@ class Document(SQLModel, table=True):
     content: Optional[str] = None
     document_type: str = Field(default="written")
     source_file_path: Optional[str] = None
-    # completed | pending | processing | failed | reindex_queued | cancelled | skipped
+    # completed | pending | processing | failed | reindex_queued |
+    # cancelled_by_user | skipped | partial_kag_done | failed_retry_exhausted
     processing_status: str = Field(default="completed")
     processing_progress: Optional[int] = Field(default=100)
+    processing_run_id: Optional[str] = Field(default=None, max_length=36, index=True)
+    phase_status_json: Optional[dict[str, Any]] = Field(
+        default=None,
+        sa_column=Column(JSONB, nullable=True),
+    )
+    last_processing_error: Optional[str] = Field(default=None)
     is_paid: bool = Field(default=False)
     folder_id: Optional[int] = Field(default=None, foreign_key="folder.id", index=True)
     library_id: int = Field(foreign_key="library.id", index=True)
@@ -76,6 +84,11 @@ class DocumentListItem(SQLModel):
     user_id: int
     created_at: datetime
     updated_at: datetime
+
+
+class DocumentListItemWithSnapshot(DocumentListItem):
+    """Liste enrichie (option requête) : maturité embedding / KAG."""
+    processing_snapshot: Optional[dict[str, Any]] = None
 
 
 class DocumentUpdate(SQLModel):

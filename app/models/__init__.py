@@ -18,6 +18,7 @@ from .document_chunk import DocumentChunk, DocumentChunkRead
 from .document_space import DocumentSpace, DocumentSpaceRead
 from .entity_alias import EntityAlias
 from .entity_entity_relation import EntityEntityRelation
+from .admin_audit_log import AdminAuditLog
 
 __all__ = [
     "User",
@@ -81,4 +82,5 @@ __all__ = [
     "DocumentSpaceRead",
     "EntityAlias",
     "EntityEntityRelation",
+    "AdminAuditLog",
 ]

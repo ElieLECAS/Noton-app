@@ -67,7 +67,7 @@ def test_dispatch_library_document_enqueues_celery():
             task_dispatch.dispatch_library_document(42, "/data/file.pdf")
 
     apply_async.assert_called_once_with(
-        args=[42, "/data/file.pdf"],
+        args=[42, "/data/file.pdf", mock.ANY],
         queue="documents",
     )
 
@@ -107,7 +107,7 @@ def test_dispatch_reindex_library_enqueues_celery():
 
     assert task_id == "celery-reindex-pytest"
     apply_async.assert_called_once_with(
-        args=[5, 9],
+        args=[5, 9, mock.ANY],
         queue="documents",
     )
 
