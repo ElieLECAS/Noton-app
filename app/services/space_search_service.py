@@ -16,6 +16,7 @@ Pipeline principal :
   10. Fallback lexical ILIKE si aucun candidat hybride
 """
 
+import numpy as np
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Set, Tuple
 import os
@@ -130,6 +131,10 @@ MH_RRF_PARENT_WEIGHT = RRF_PARENT_LIST_WEIGHT
 # Pénalité par profondeur : hop0→0.00, hop1→0.05, hop2→0.10, hop3→0.15
 MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
+# Configuration MMR (Maximum Marginal Relevance)
+MMR_K = 15  # Nombre de passages finaux à renvoyer au LLM
+MMR_LAMBDA = 0.5  # Équilibre entre pertinence (1.0) et diversité (0.0)
+
 # Mots-clés heuristiques indiquant une requête multi-hop
 _MH_TRIGGER_PATTERNS = re.compile(
     r"\b(et\b|comparaison|impact|cause|depend|dépend|influence|relation|lien"
@@ -209,14 +214,158 @@ def _get_embed_model() -> HuggingFaceEmbedding:
     return _embed_model_instance
 
 
+def _fetch_embeddings_for_chunks(
+    session: Session,
+    chunk_ids: List[int],
+) -> Dict[int, np.ndarray]:
+    """
+    Récupère les embeddings bruts de la base pour un pool d'IDs.
+    Utile pour la MMR sans surcharge de la requête initiale.
+    """
+    if not chunk_ids:
+        return {}
+    
+    # Construction de la requête SQL directe pour les vecteurs
+    stmt = text("""
+        SELECT id, embedding FROM documentchunk 
+        WHERE id = ANY(:ids) AND embedding IS NOT NULL
+    """)
+    result = session.execute(stmt, {"ids": chunk_ids})
+    
+    embeddings = {}
+    for row in result:
+        # Conversion du format pgvector (list[float]) en numpy array
+        if row.embedding:
+            embeddings[row.id] = np.array(row.embedding, dtype=np.float32)
+            
+    return embeddings
+
+
 def _set_node_text_content(node, text: str) -> None:
+
     if hasattr(node, "set_content"):
         node.set_content(text)
     else:
         setattr(node, "text", text)
 
 
+def _compute_mmr_with_parent_constraint(
+    query_embedding: np.ndarray,
+    candidates: List[NodeWithScore],
+    candidate_embeddings: Dict[int, np.ndarray],
+    target_k: int = MMR_K,
+    lambda_param: float = MMR_LAMBDA,
+) -> List[NodeWithScore]:
+    """
+    Sélectionne target_k candidats parmi le pool en maximisant la MMR et la diversité de sources.
+    
+    Formule MMR = argmax [ lambda * sim(d, q) - (1-lambda) * max_sim(d, selected) ]
+    Contrainte additionnelle : 1 seul chunk par parent_node_id.
+    """
+    if not candidates or target_k <= 0:
+        return []
+        
+    if len(candidates) <= 1:
+        return candidates[:target_k]
+
+    # Préparation des données
+    selected_indices: List[int] = []
+    candidates_pool = candidates[:]
+    
+    # On garde une trace des parents déjà sélectionnés
+    selected_parent_ids: Set[str] = set()
+    
+    # Le premier est toujours le meilleur score (déjà trié par reranker)
+    # Sauf s'il n'a pas d'embedding (fallback improbable)
+    first_idx = 0
+    while first_idx < len(candidates_pool):
+        cid = _parse_chunk_id_from_node(candidates_pool[first_idx].node)
+        if cid in candidate_embeddings:
+            break
+        first_idx += 1
+    
+    if first_idx >= len(candidates_pool):
+        logger.warning("Aucun embedding trouvé pour le pool MMR, fallback tri simple")
+        return candidates[:target_k]
+        
+    # Initialisation avec le premier
+    selected_indices.append(first_idx)
+    first_node = candidates_pool[first_idx].node
+    p_id = (first_node.metadata or {}).get("parent_node_id")
+    if p_id:
+        selected_parent_ids.add(str(p_id))
+    
+    # Matrices pour calcul vectorisé
+    query_embedding = query_embedding / np.linalg.norm(query_embedding)
+    
+    # On boucle jusqu'à avoir target_k ou épuisé le pool
+    while len(selected_indices) < target_k and len(selected_indices) < len(candidates_pool):
+        best_mmr = -1e9
+        best_idx = -1
+        
+        # Embeddings des déjà sélectionnés
+        sel_embeds = []
+        for idx in selected_indices:
+            cid = _parse_chunk_id_from_node(candidates_pool[idx].node)
+            emb = candidate_embeddings[cid]
+            sel_embeds.append(emb / np.linalg.norm(emb))
+        sel_matrix = np.stack(sel_embeds)
+        
+        for i, nws in enumerate(candidates_pool):
+            if i in selected_indices:
+                continue
+                
+            cid = _parse_chunk_id_from_node(nws.node)
+            if cid not in candidate_embeddings:
+                continue
+                
+            # --- Contrainte Parent ---
+            parent_id = (nws.node.metadata or {}).get("parent_node_id")
+            if parent_id and str(parent_id) in selected_parent_ids:
+                # On ignore/pénalise les candidats du même parent
+                continue
+                
+            # --- Calcul MMR ---
+            d_emb = candidate_embeddings[cid]
+            d_emb = d_emb / np.linalg.norm(d_emb)
+            
+            # Similarité à la requête
+            sim_q = np.dot(d_emb, query_embedding)
+            
+            # Similarité max aux déjà sélectionnés
+            sim_selected = np.max(np.dot(sel_matrix, d_emb))
+            
+            mmr_score = lambda_param * sim_q - (1 - lambda_param) * sim_selected
+            
+            if mmr_score > best_mmr:
+                best_mmr = mmr_score
+                best_idx = i
+                
+        if best_idx == -1:
+            # Plus de candidats respectant la contrainte parent unique
+            # On pourrait arrêter là (diversité stricte) ou relâcher la contrainte
+            # L'utilisateur a dit "interdiction stricte", donc on s'arrête.
+            logger.info("MMR arrêt : plus de parents uniques disponibles (%d/15 trouvés)", len(selected_indices))
+            break
+            
+        selected_indices.append(best_idx)
+        p_id = (candidates_pool[best_idx].node.metadata or {}).get("parent_node_id")
+        if p_id:
+            selected_parent_ids.add(str(p_id))
+            
+    final_selection = [candidates_pool[i] for i in selected_indices]
+    logger.info(
+        "MMR (space) : %d candidats sélectionnés sur %d (lambda=%.1f, parents_uniques=%d)",
+        len(final_selection),
+        len(candidates_pool),
+        lambda_param,
+        len(selected_parent_ids)
+    )
+    return final_selection
+
+
 def _two_stage_rerank_leaves(
+
     filtered_candidates: List[NodeWithScore],
     query_text: str,
     k: int,
@@ -2071,6 +2220,49 @@ def search_relevant_passages(
             if not RERANKER_ENABLED:
                 logger.debug("Reranker désactivé (RERANKER_ENABLED=false)")
             top_leaves = filtered_candidates[:k]
+
+        # --- Étape 3.1 : Filtrage MMR (Maximum Marginal Relevance) ---
+        # Si k est grand (pool de candidats), on utilise MMR pour sélectionner target_k passages diversifiés.
+        if len(top_leaves) > MMR_K:
+            try:
+                with trace_run(
+                    "mmr_selection",
+                    run_type="chain",
+                    inputs={
+                        "nb_pool": len(top_leaves),
+                        "target_k": MMR_K,
+                        "lambda": MMR_LAMBDA,
+                    },
+                    tags=["mmr", "diversity", "space"],
+                ) as mmr_run:
+                    # 1. Récupération de l'embedding de la requête
+                    query_embedding = np.array(
+                        _get_embed_model().get_query_embedding(query_text), 
+                        dtype=np.float32
+                    )
+                    
+                    # 2. Récupération des embeddings des candidats du pool
+                    chunk_ids = []
+                    for n in top_leaves:
+                        cid = _parse_chunk_id_from_node(n.node)
+                        if cid is not None:
+                            chunk_ids.append(cid)
+                    
+                    candidate_embeddings = _fetch_embeddings_for_chunks(session, chunk_ids)
+                    
+                    # 3. Calcul MMR
+                    top_leaves = _compute_mmr_with_parent_constraint(
+                        query_embedding=query_embedding,
+                        candidates=top_leaves,
+                        candidate_embeddings=candidate_embeddings,
+                        target_k=MMR_K,
+                        lambda_param=MMR_LAMBDA
+                    )
+                    
+                    mmr_run.end(outputs={"nb_final": len(top_leaves)})
+            except Exception as mmr_err:
+                logger.warning("Sélection MMR échouée (space), fallback top_k : %s", mmr_err)
+                top_leaves = top_leaves[:MMR_K]
 
         # --- Étape 4 : résolution des parents ---
         with trace_run(
