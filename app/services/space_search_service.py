@@ -32,6 +32,12 @@ from app.models.space import Space
 from app.services.space_service import get_space_by_id
 from app.config import settings
 from app.tracing import trace_run
+from app.services.mmr import (
+    MMR_ENABLED,
+    MMR_LAMBDA,
+    MMR_POOL,
+    mmr_select,
+)
 import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -373,6 +379,35 @@ def _parse_chunk_id_from_node(node: TextNode) -> Optional[int]:
     return None
 
 
+_LEXICAL_MIN_TOKEN_LEN = 3
+
+
+def _build_lexical_tsquery(q: str) -> Optional[str]:
+    """
+    Construit une tsquery OR préfixée à partir d'une requête utilisateur.
+
+    - normalise (NFKD + retrait accents + lowercase)
+    - garde les tokens alphanumériques de longueur >= 3
+    - produit "tok1:* | tok2:* | tok3:*" (OR + préfixes pour tolérer les flexions)
+    """
+    if not q:
+        return None
+    normalized = (
+        unicodedata.normalize("NFKD", q).encode("ascii", "ignore").decode("ascii").lower()
+    )
+    tokens = re.findall(r"[a-z0-9]+", normalized)
+    tokens = [t for t in tokens if len(t) >= _LEXICAL_MIN_TOKEN_LEN]
+    if not tokens:
+        return None
+    seen: Set[str] = set()
+    unique_tokens: List[str] = []
+    for t in tokens:
+        if t not in seen:
+            seen.add(t)
+            unique_tokens.append(t)
+    return " | ".join(f"{t}:*" for t in unique_tokens)
+
+
 def _retrieve_leaves_lexical_sql(
     session: Session,
     space_id: int,
@@ -381,11 +416,17 @@ def _retrieve_leaves_lexical_sql(
 ) -> List[NodeWithScore]:
     """
     Recherche lexicale (ts_rank_cd / type BM25) sur les feuilles de l'espace.
+
+    Deux stratégies en séquence pour maximiser le rappel :
+      1. ``to_tsquery('french', :tsq)`` avec une tsquery OR préfixée construite
+         côté Python (normalisation accents + tokens >= 3)
+      2. repli sur ``websearch_to_tsquery('french', :q)`` si la stratégie 1
+         échoue au parsing ou ne renvoie rien
     """
     if not query_text or not query_text.strip():
         return []
 
-    sql_query = text(
+    sql_tsq = text(
         """
         SELECT
             dc.id,
@@ -398,8 +439,8 @@ def _retrieve_leaves_lexical_sql(
             d.title AS document_title,
             d.id AS document_id,
             ts_rank_cd(
-                to_tsvector('simple', coalesce(dc.content, dc.text, '')),
-                plainto_tsquery('simple', :q)
+                to_tsvector('french', coalesce(dc.content, dc.text, '')),
+                to_tsquery('french', :tsq)
             ) AS lex_score
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
@@ -407,20 +448,82 @@ def _retrieve_leaves_lexical_sql(
         WHERE ds.space_id = :space_id
           AND dc.is_leaf = true
           AND coalesce(dc.content, dc.text, '') <> ''
-          AND to_tsvector('simple', coalesce(dc.content, dc.text, ''))
-              @@ plainto_tsquery('simple', :q)
+          AND to_tsvector('french', coalesce(dc.content, dc.text, ''))
+              @@ to_tsquery('french', :tsq)
         ORDER BY lex_score DESC
         LIMIT :limit_k
         """
     )
 
-    result = session.execute(
-        sql_query,
-        {"space_id": space_id, "q": query_text.strip(), "limit_k": candidate_k},
+    sql_websearch = text(
+        """
+        SELECT
+            dc.id,
+            dc.content,
+            dc.text,
+            dc.chunk_index,
+            dc.document_id,
+            dc.metadata_json,
+            dc.metadata_,
+            d.title AS document_title,
+            d.id AS document_id,
+            ts_rank_cd(
+                to_tsvector('french', coalesce(dc.content, dc.text, '')),
+                websearch_to_tsquery('french', :q)
+            ) AS lex_score
+        FROM documentchunk dc
+        INNER JOIN document d ON dc.document_id = d.id
+        INNER JOIN document_space ds ON ds.document_id = d.id
+        WHERE ds.space_id = :space_id
+          AND dc.is_leaf = true
+          AND coalesce(dc.content, dc.text, '') <> ''
+          AND to_tsvector('french', coalesce(dc.content, dc.text, ''))
+              @@ websearch_to_tsquery('french', :q)
+        ORDER BY lex_score DESC
+        LIMIT :limit_k
+        """
     )
 
+    rows: List = []
+    strategy = "none"
+
+    tsq = _build_lexical_tsquery(query_text)
+    if tsq:
+        try:
+            rows = list(
+                session.execute(
+                    sql_tsq,
+                    {"space_id": space_id, "tsq": tsq, "limit_k": candidate_k},
+                )
+            )
+            if rows:
+                strategy = "ts_or_prefix"
+        except Exception as exc:
+            logger.debug(
+                "to_tsquery('french', %r) invalide, repli websearch : %s", tsq, exc
+            )
+            rows = []
+
+    if not rows:
+        try:
+            rows = list(
+                session.execute(
+                    sql_websearch,
+                    {
+                        "space_id": space_id,
+                        "q": query_text.strip(),
+                        "limit_k": candidate_k,
+                    },
+                )
+            )
+            if rows:
+                strategy = "websearch"
+        except Exception as exc:
+            logger.debug("websearch_to_tsquery('french') a échoué : %s", exc)
+            rows = []
+
     nodes_with_scores: List[NodeWithScore] = []
-    for row in result:
+    for row in rows:
         metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
         metadata.setdefault("document_id", row.document_id)
         metadata.setdefault("document_title", row.document_title or "Document sans titre")
@@ -436,9 +539,10 @@ def _retrieve_leaves_lexical_sql(
         )
 
     logger.info(
-        "Recherche lexicale tsvector (space): %d feuilles (candidate_k=%d)",
+        "Recherche lexicale tsvector (space): %d feuilles (candidate_k=%d, strategy=%s)",
         len(nodes_with_scores),
         candidate_k,
+        strategy,
     )
     return nodes_with_scores
 
@@ -731,6 +835,35 @@ def _filter_hybrid_candidates(
             or parent_sim_ok
         ):
             out.append(nws)
+    return out
+
+
+def _load_document_chunk_embeddings(
+    session: Session, chunk_ids: List[int]
+) -> Dict[int, List[float]]:
+    """
+    Charge les embeddings déjà stockés (pgvector) pour un lot de chunk_ids.
+
+    Lecture pure : pas de ré-embedding. Utilisé par MMR pour calculer la
+    similarité inter-candidats sans relancer le modèle d'embedding.
+    """
+    if not chunk_ids:
+        return {}
+    stmt = select(DocumentChunk.id, DocumentChunk.embedding).where(
+        DocumentChunk.id.in_(chunk_ids),
+        DocumentChunk.embedding.is_not(None),
+    )
+    rows = session.exec(stmt).all()
+    out: Dict[int, List[float]] = {}
+    for row in rows:
+        cid = row[0]
+        emb = row[1]
+        if cid is None or emb is None:
+            continue
+        try:
+            out[int(cid)] = list(emb)
+        except TypeError:
+            continue
     return out
 
 
@@ -2009,6 +2142,47 @@ def search_relevant_passages(
                 "Filtre hybride vide (space) — repli sur candidats fusionnés bruts"
             )
             filtered_candidates = leaf_candidates
+
+        # --- MMR : diversification gloutonne des leaves ---
+        if MMR_ENABLED and filtered_candidates and len(filtered_candidates) > k:
+            pool = filtered_candidates[:MMR_POOL]
+            chunk_ids_pool = [
+                cid
+                for cid in (_parse_chunk_id_from_node(n.node) for n in pool)
+                if cid is not None
+            ]
+            with trace_run(
+                "mmr_diversification",
+                run_type="chain",
+                inputs={
+                    "space_id": space_id,
+                    "pool_size": len(pool),
+                    "k": k,
+                    "lambda": MMR_LAMBDA,
+                },
+                tags=["mmr", "diversification", "space"],
+            ) as mmr_run:
+                emb_by_cid = _load_document_chunk_embeddings(session, chunk_ids_pool)
+                mmr_selected = mmr_select(
+                    pool,
+                    emb_by_cid,
+                    k,
+                    _parse_chunk_id_from_node,
+                )
+                logger.info(
+                    "MMR leaves (space): pool=%d → selected=%d (λ=%.2f, embeddings=%d)",
+                    len(pool),
+                    len(mmr_selected),
+                    MMR_LAMBDA,
+                    len(emb_by_cid),
+                )
+                mmr_run.end(
+                    outputs={
+                        "nb_selected": len(mmr_selected),
+                        "nb_embeddings_loaded": len(emb_by_cid),
+                    }
+                )
+            filtered_candidates = mmr_selected
 
         # Early stopping
         skip_reranking = False

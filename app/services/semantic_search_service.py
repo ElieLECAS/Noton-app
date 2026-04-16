@@ -38,6 +38,12 @@ from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from app.config import settings
 from app.tracing import trace_run
+from app.services.mmr import (
+    MMR_ENABLED,
+    MMR_LAMBDA,
+    MMR_POOL,
+    mmr_select,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -213,6 +219,7 @@ def _retrieve_leaves_sql(
         metadata.setdefault("note_title", row.note_title or "Note sans titre")
         metadata.setdefault("node_id", row.node_id)
         metadata.setdefault("parent_node_id", row.parent_node_id)
+        metadata["chunk_id"] = row.id
 
         node = TextNode(
             id_=row.node_id or f"chunk-{row.id}",
@@ -229,6 +236,61 @@ def _retrieve_leaves_sql(
         candidate_k,
     )
     return nodes_with_scores
+
+
+# ---------------------------------------------------------------------------
+# MMR — helpers de chargement (pgvector) et d'extraction d'identifiants
+# ---------------------------------------------------------------------------
+
+def _parse_note_chunk_id_from_node(node) -> Optional[int]:
+    """
+    Retourne l'``id`` SQL du NoteChunk associé au node.
+
+    Priorité à ``metadata['chunk_id']`` (posé à la construction du node) ;
+    fallback au format ``chunk-{id}`` si ``id_`` n'est pas un UUID node_id.
+    """
+    meta = dict(getattr(node, "metadata", {}) or {})
+    cid = meta.get("chunk_id")
+    if isinstance(cid, int):
+        return cid
+    if isinstance(cid, str) and cid.isdigit():
+        return int(cid)
+    nid = getattr(node, "id_", None) or ""
+    if isinstance(nid, str) and nid.startswith("chunk-"):
+        try:
+            return int(nid.split("-", 1)[1])
+        except ValueError:
+            return None
+    return None
+
+
+def _load_note_chunk_embeddings(
+    session: Session, chunk_ids: List[int]
+) -> Dict[int, List[float]]:
+    """
+    Charge les embeddings déjà stockés (pgvector) pour un lot de chunk_ids.
+
+    Lecture pure : pas de ré-embedding. Utilisé par MMR pour calculer la
+    similarité inter-candidats sans relancer le modèle d'embedding.
+    """
+    if not chunk_ids:
+        return {}
+    stmt = select(NoteChunk.id, NoteChunk.embedding).where(
+        NoteChunk.id.in_(chunk_ids),
+        NoteChunk.embedding.is_not(None),
+    )
+    rows = session.exec(stmt).all()
+    out: Dict[int, List[float]] = {}
+    for row in rows:
+        cid = row[0]
+        emb = row[1]
+        if cid is None or emb is None:
+            continue
+        try:
+            out[int(cid)] = list(emb)
+        except TypeError:
+            continue
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -709,7 +771,8 @@ def _retrieve_via_knowledge_graph(
             metadata.setdefault("node_id", chunk.node_id)
             metadata.setdefault("parent_node_id", chunk.parent_node_id)
             metadata["kag_matched_entity"] = result.get("entity_name", "")
-            
+            metadata["chunk_id"] = chunk.id
+
             node = TextNode(
                 id_=chunk.node_id or f"chunk-{chunk.id}",
                 text=chunk.content or chunk.text or "",
@@ -1014,6 +1077,47 @@ def search_relevant_passages(
         filtered_candidates = _filter_low_similarity_candidates(
             leaf_candidates, MIN_VECTOR_SIMILARITY_THRESHOLD
         )
+
+        # --- MMR : diversification gloutonne des leaves ---
+        if MMR_ENABLED and filtered_candidates and len(filtered_candidates) > k:
+            pool = filtered_candidates[:MMR_POOL]
+            chunk_ids_pool = [
+                cid
+                for cid in (_parse_note_chunk_id_from_node(n.node) for n in pool)
+                if cid is not None
+            ]
+            with trace_run(
+                "mmr_diversification",
+                run_type="chain",
+                inputs={
+                    "project_id": project_id,
+                    "pool_size": len(pool),
+                    "k": k,
+                    "lambda": MMR_LAMBDA,
+                },
+                tags=["mmr", "diversification", "library"],
+            ) as mmr_run:
+                emb_by_cid = _load_note_chunk_embeddings(session, chunk_ids_pool)
+                mmr_selected = mmr_select(
+                    pool,
+                    emb_by_cid,
+                    k,
+                    _parse_note_chunk_id_from_node,
+                )
+                logger.info(
+                    "MMR leaves (library): pool=%d → selected=%d (λ=%.2f, embeddings=%d)",
+                    len(pool),
+                    len(mmr_selected),
+                    MMR_LAMBDA,
+                    len(emb_by_cid),
+                )
+                mmr_run.end(
+                    outputs={
+                        "nb_selected": len(mmr_selected),
+                        "nb_embeddings_loaded": len(emb_by_cid),
+                    }
+                )
+            filtered_candidates = mmr_selected
 
         # Early stopping : si les top-k candidats ont déjà une très haute similarité,
         # skip le reranking (gain de temps significatif)
