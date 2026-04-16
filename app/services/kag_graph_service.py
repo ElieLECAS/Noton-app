@@ -26,7 +26,15 @@ from app.services.kag_extraction_service import (
     SUPPORTED_ENTITY_TYPE_IDS,
     extract_entities_sync,
     extract_typed_relations_sync,
+    extract_entities_batch_async,
+    extract_typed_relations_batch_async,
 )
+from app.services.document_service_new import (
+    LIBRARY_USER_STOPPED_STATUSES,
+    _should_abort_processing,
+    _finalize_pipeline_abort,
+)
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -983,7 +991,7 @@ def save_typed_relations_for_chunk(
 def process_kag_for_document_space(session: Session, document_id: int, space_id: int) -> Dict[str, int]:
     """
     Extrait et sauvegarde les entités KAG pour un document dans un espace donné.
-    Enrichit aussi les chunks parents avec summary+questions+embedding.
+    VERSION OPTIMISÉE : Extraction LLM parallélisée.
     """
     document = session.get(Document, document_id)
     if not document:
@@ -997,14 +1005,15 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
         )
     ).first()
     if not association:
-        logger.info(
-            "Aucune association document-espace, skip KAG document_id=%s space_id=%s",
-            document_id,
-            space_id,
-        )
+        return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
+
+    # Status guard before starting
+    if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
+        logger.info("[KAG] document_id=%s space_id=%s — abandon : déjà arrêté.", document_id, space_id)
         return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
 
     delete_entities_for_document(session, document_id, space_id)
+    session.flush()
 
     chunks_stmt = select(DocumentChunk).where(
         DocumentChunk.document_id == document_id,
@@ -1014,47 +1023,80 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
     if not chunks:
         return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
 
+    # --- ÉTAPE 1 : Extraction des entités en parallèle ---
+    valid_chunks = [c for c in chunks if (c.content or "").strip()]
+    contents = [c.content for c in valid_chunks]
+
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor() as pool:
+                future = pool.submit(asyncio.run, extract_entities_batch_async(contents))
+                all_entities = future.result(timeout=300)
+        else:
+            all_entities = loop.run_until_complete(extract_entities_batch_async(contents))
+    except Exception as e:
+        logger.error("Erreur extraction entités batch: %s", e)
+        all_entities = [[] for _ in valid_chunks]
+
     total_entities = 0
     total_relations = 0
     total_typed_relations = 0
     processed_chunks = 0
+    
+    # Stockage pour l'étape 2 (relations)
+    chunks_for_relations = []
 
-    for chunk in chunks:
-        content = (chunk.content or "").strip()
-        if len(content) < 20:
-            continue
-
-        entities = _get_or_compute_chunk_entities(session, chunk, content)
-        if not entities:
-            continue
-
-        processed_chunks += 1
-        entity_ids_touched: Set[int] = set()
-        for entity_data in entities:
-            name = (entity_data.get("name") or "").strip()
-            entity_type = (entity_data.get("type") or "concept_technique").strip()
-            importance = float(entity_data.get("importance", 1.0) or 1.0)
-            if not name or len(name) < 2:
+    # --- ÉTAPE 2 : Sauvegarde des entités et préparation des relations ---
+    with session.no_autoflush:
+        for chunk, entities in zip(valid_chunks, all_entities):
+            if _should_abort_processing(document_id):
+                logger.info("[KAG] document_id=%s — interrompu pendant sauvegarde entités.", document_id)
+                session.rollback()
+                return {"entities": total_entities, "relations": total_relations, "chunks": processed_chunks, "typed_entity_relations": 0}
+            
+            if not entities:
                 continue
+                
+            processed_chunks += 1
+            entity_ids_touched: Set[int] = set()
+            
+            # Déduplication locale des entités pour ce chunk unique (évite UniqueViolation)
+            unique_entities_for_chunk = {}
+            for ed in entities:
+                 # Utilisation du nom normalisé comme clé de déduplication pour ce chunk
+                 norm_name = normalize_entity_name(ed.get("name", ""))
+                 etype = (ed.get("type") or "concept_technique").strip()
+                 key = (norm_name, etype)
+                 if key not in unique_entities_for_chunk or ed.get("importance", 0) > unique_entities_for_chunk[key].get("importance", 0):
+                     unique_entities_for_chunk[key] = ed
 
-            entity = _get_or_create_entity_for_space(
-                session=session,
-                name=name,
-                entity_type=entity_type,
-                space_id=space_id,
-            )
-            total_entities += 1
-            if entity.id is not None:
-                entity_ids_touched.add(int(entity.id))
+            # On persiste les entités dédupliquées
+            relation_entity_ids = set() # Pour éviter les doublons ID réels apres lookup DB
+            for entity_data in unique_entities_for_chunk.values():
+                name = (entity_data.get("name") or "").strip()
+                entity_type = (entity_data.get("type") or "concept_technique").strip()
+                importance = float(entity_data.get("importance", 1.0) or 1.0)
+                if not name or len(name) < 2:
+                    continue
 
-            existing_rel = session.exec(
-                select(ChunkEntityRelation).where(
-                    ChunkEntityRelation.chunk_id == chunk.id,
-                    ChunkEntityRelation.entity_id == entity.id,
-                    ChunkEntityRelation.space_id == space_id,
+                entity = _get_or_create_entity_for_space(
+                    session=session,
+                    name=name,
+                    entity_type=entity_type,
+                    space_id=space_id,
                 )
-            ).first()
-            if not existing_rel:
+                total_entities += 1
+                
+                # Ultra-safe check : si cet ID d'entité est déjà lié à ce chunk, on skip
+                eid = int(entity.id)
+                if eid in relation_entity_ids:
+                    continue
+                
+                relation_entity_ids.add(eid)
+                entity_ids_touched.add(eid)
+
                 relation = ChunkEntityRelation(
                     chunk_id=chunk.id,
                     entity_id=entity.id,
@@ -1065,47 +1107,50 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
                 session.add(relation)
                 total_relations += 1
 
-        for eid in entity_ids_touched:
-            _update_entity_confidence_score(session, eid, space_id)
+            for eid in entity_ids_touched:
+                _update_entity_confidence_score(session, eid, space_id)
+                
+            if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
+                chunks_for_relations.append({"chunk_id": chunk.id, "content": chunk.content, "entities": entities})
 
-        if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
-            try:
-                typed = extract_typed_relations_sync(content, entities)
-                if typed:
+    session.flush()
+
+    # --- ÉTAPE 3 : Extraction des relations typées en parallèle ---
+    if chunks_for_relations:
+        if _should_abort_processing(document_id):
+             logger.info("[KAG] document_id=%s — interrompu avant relations typées.", document_id)
+             session.commit() # Commit entités déjà sauvegardées? Ou rollback? 
+             # L'utilisateur préfère généralement garder ce qui est fait si c'est cohérent, 
+             # mais ici on veut arrêter le blocage.
+             return {"entities": total_entities, "relations": total_relations, "chunks": processed_chunks, "typed_entity_relations": 0}
+
+        try:
+            if loop.is_running():
+                with concurrent.futures.ThreadPoolExecutor() as pool:
+                    future = pool.submit(asyncio.run, extract_typed_relations_batch_async(chunks_for_relations))
+                    all_typed = future.result(timeout=300)
+            else:
+                all_typed = loop.run_until_complete(extract_typed_relations_batch_async(chunks_for_relations))
+                
+            for fr, typed_rels in zip(chunks_for_relations, all_typed):
+                if typed_rels:
                     n = save_typed_relations_for_chunk(
-                        session, space_id, int(chunk.id), typed
+                        session, space_id, int(fr["chunk_id"]), typed_rels
                     )
                     total_typed_relations += n
-            except Exception as tre:
-                logger.warning(
-                    "Relations typées KAG ignorées chunk_id=%s: %s",
-                    chunk.id,
-                    tre,
-                )
+        except Exception as e:
+            logger.error("Erreur extraction relations batch: %s", e)
 
     session.commit()
 
     try:
         refresh_entity_entity_relations_for_space(session, space_id)
     except Exception as rel_err:
-        logger.warning(
-            "Rafraîchissement relations entité-entité (space=%s): %s",
-            space_id,
-            rel_err,
-        )
+        logger.warning("Rafraîchissement relations co_occurs échoué: %s", rel_err)
     
-    # Enrichissement des parents avec summary+questions+embedding si activé
-    if settings.KAG_PARENT_ENRICHMENT_ENABLED:
-        _process_parent_enrichment_for_document_space(session, document_id, space_id)
-
     logger.info(
-        "✅ KAG document-space terminé document_id=%s space_id=%s chunks=%s entités=%s relations=%s typed_eer=%s",
-        document_id,
-        space_id,
-        processed_chunks,
-        total_entities,
-        total_relations,
-        total_typed_relations,
+        "✅ KAG parallélisé terminé : %d chunks, %d entités, %d relations, %d typed",
+        processed_chunks, total_entities, total_relations, total_typed_relations
     )
     return {
         "entities": total_entities,
@@ -1417,11 +1462,9 @@ def _process_parent_enrichment_for_document_space(
     session: Session, document_id: int, space_id: int
 ):
     """
-    Enrichit les chunks parents (is_leaf=False) d'un document avec summary+questions+embedding.
-    
-    Génère via LLM puis embedde le texte combiné pour créer un signal sémantique
-    représentant l'intention de la section (utilisable lors du retrieval).
+    DÉSACTIVÉ : L'enrichissement des parents est désactivé pour optimiser la performance KAG.
     """
+    return
     try:
         from app.services.kag_extraction_service import (
             generate_parent_summary_questions_sync,

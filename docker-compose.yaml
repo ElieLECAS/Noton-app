@@ -204,7 +204,7 @@ services:
             context: .
             dockerfile: ./app/Dockerfile
         container_name: noton_worker_kag
-        command: sh -c "sleep 12 && celery -A app.celery_app worker -l INFO -Q kag -c 1 -n kag@%h"
+        command: sh -c "sleep 12 && celery -A app.celery_app worker -l INFO -Q kag -c 4 -n kag@%h"
         volumes:
             - ./app:/app/app
             - ./app/alembic:/app/alembic

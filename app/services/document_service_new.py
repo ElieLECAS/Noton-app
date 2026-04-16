@@ -849,6 +849,19 @@ def reindex_library_document(
         document = session.get(Document, document_id)
         if not document:
             raise ValueError("Document introuvable après nettoyage des chunks")
+        
+        # Statut guard: éviter l'écrasement post-annulation
+        if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
+            ld.info(
+                "[Réindex] document_id=%s — abandon : marqué %s, arrêt réindexation.",
+                document_id,
+                document.processing_status,
+            )
+            return {
+                "document_id": document_id,
+                "status": "aborted",
+                "reason": "user_cancelled",
+            }
 
         document.processing_status = "processing"
         document.processing_progress = 15
@@ -1602,6 +1615,13 @@ def _process_document_for_id(
             )
 
             document.content = markdown_content
+            
+            # Statut guard avant passage à l'étape suivante
+            if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
+                ld.info("[Upload/Pipeline] document_id=%s — abandon post-extraction (stop).", document_id)
+                session.commit() # Save markdown anyway? Maybe better to just return.
+                return
+
             document.processing_status = "processing"
             document.processing_progress = 55
             document.updated_at = datetime.utcnow()

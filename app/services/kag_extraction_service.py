@@ -16,6 +16,9 @@ from app.tracing import trace_run
 
 logger = logging.getLogger(__name__)
 
+# Limite de concurrence pour les appels LLM KAG (fixée en dur à 5)
+KAG_EXTRACTION_SEMAPHORE = asyncio.Semaphore(5)
+
 # Nouvelle taxonomie métier des entités KAG.
 # Chaque type a :
 # - id        : valeur technique utilisée dans le champ "entity_type" (DB) et "type" (JSON LLM)
@@ -542,60 +545,61 @@ async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
         },
         tags=["kag", "extraction", "llm", provider],
     ) as kag_run:
-        try:
-            if provider == "openai":
-                from app.services import openai_service
-                response = await openai_service.chat(
-                    message=prompt,
-                    model=model,
-                    context=[{"role": "user", "content": prompt}],
-                )
-                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+        async with KAG_EXTRACTION_SEMAPHORE:
+            try:
+                if provider == "openai":
+                    from app.services import openai_service
+                    response = await openai_service.chat(
+                        message=prompt,
+                        model=model,
+                        context=[{"role": "user", "content": prompt}],
+                    )
+                    content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
 
-            elif provider == "mistral":
-                from app.services import mistral_service
-                response = await mistral_service.chat(
-                    message=prompt,
-                    model=model,
-                    context=[{"role": "user", "content": prompt}],
-                )
-                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
-            elif provider == "ollama":
-                from app.services import ollama_service
-                response = await ollama_service.chat(
-                    message=prompt,
-                    model=model,
-                    context=[{"role": "user", "content": prompt}],
-                )
-                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+                elif provider == "mistral":
+                    from app.services import mistral_service
+                    response = await mistral_service.chat(
+                        message=prompt,
+                        model=model,
+                        context=[{"role": "user", "content": prompt}],
+                    )
+                    content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+                elif provider == "ollama":
+                    from app.services import ollama_service
+                    response = await ollama_service.chat(
+                        message=prompt,
+                        model=model,
+                        context=[{"role": "user", "content": prompt}],
+                    )
+                    content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
 
-            else:
-                logger.error("Provider KAG inconnu: %s", provider)
-                kag_run.end(error=f"Provider KAG inconnu: {provider}")
+                else:
+                    logger.error("Provider KAG inconnu: %s", provider)
+                    kag_run.end(error=f"Provider KAG inconnu: {provider}")
+                    return []
+
+                entities = _parse_llm_response(content)
+                entity_types_found = list({e.get("type", "") for e in entities if e.get("type")})
+                kag_run.end(outputs={
+                    "nb_entities": len(entities),
+                    "entity_types_found": entity_types_found,
+                    "entities_preview": [
+                        {"name": e.get("name"), "type": e.get("type"), "importance": e.get("importance")}
+                        for e in entities[:10]
+                    ],
+                })
+                logger.debug(
+                    "Extraction KAG: %d entités extraites (provider=%s, model=%s)",
+                    len(entities),
+                    provider,
+                    model,
+                )
+                return entities
+
+            except Exception as e:
+                logger.error("Erreur extraction KAG: %s", e, exc_info=True)
+                kag_run.end(error=str(e))
                 return []
-
-            entities = _parse_llm_response(content)
-            entity_types_found = list({e.get("type", "") for e in entities if e.get("type")})
-            kag_run.end(outputs={
-                "nb_entities": len(entities),
-                "entity_types_found": entity_types_found,
-                "entities_preview": [
-                    {"name": e.get("name"), "type": e.get("type"), "importance": e.get("importance")}
-                    for e in entities[:10]
-                ],
-            })
-            logger.debug(
-                "Extraction KAG: %d entités extraites (provider=%s, model=%s)",
-                len(entities),
-                provider,
-                model,
-            )
-            return entities
-
-        except Exception as e:
-            logger.error("Erreur extraction KAG: %s", e, exc_info=True)
-            kag_run.end(error=str(e))
-            return []
 
 
 async def extract_typed_relations_from_chunk(
@@ -646,48 +650,49 @@ async def extract_typed_relations_from_chunk(
         },
         tags=["kag", "relations", "llm", provider],
     ) as rel_run:
-        try:
-            if provider == "openai":
-                from app.services import openai_service
-                response = await openai_service.chat(
-                    message=prompt,
-                    model=model,
-                    context=[{"role": "user", "content": prompt}],
-                )
-                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
-            elif provider == "mistral":
-                from app.services import mistral_service
-                response = await mistral_service.chat(
-                    message=prompt,
-                    model=model,
-                    context=[{"role": "user", "content": prompt}],
-                )
-                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
-            elif provider == "ollama":
-                from app.services import ollama_service
-                response = await ollama_service.chat(
-                    message=prompt,
-                    model=model,
-                    context=[{"role": "user", "content": prompt}],
-                )
-                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
-            else:
-                logger.error("Provider KAG inconnu (relations typées): %s", provider)
-                rel_run.end(error=f"Provider inconnu: {provider}")
-                return []
+        async with KAG_EXTRACTION_SEMAPHORE:
+            try:
+                if provider == "openai":
+                    from app.services import openai_service
+                    response = await openai_service.chat(
+                        message=prompt,
+                        model=model,
+                        context=[{"role": "user", "content": prompt}],
+                    )
+                    content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+                elif provider == "mistral":
+                    from app.services import mistral_service
+                    response = await mistral_service.chat(
+                        message=prompt,
+                        model=model,
+                        context=[{"role": "user", "content": prompt}],
+                    )
+                    content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+                elif provider == "ollama":
+                    from app.services import ollama_service
+                    response = await ollama_service.chat(
+                        message=prompt,
+                        model=model,
+                        context=[{"role": "user", "content": prompt}],
+                    )
+                    content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+                else:
+                    logger.error("Provider KAG inconnu (relations typées): %s", provider)
+                    rel_run.end(error=f"Provider inconnu: {provider}")
+                    return []
 
-            parsed = _parse_typed_relations_response(content)
-            rel_run.end(
-                outputs={
-                    "nb_relations": len(parsed),
-                    "preview": parsed[:8],
-                }
-            )
-            return parsed
-        except Exception as e:
-            logger.error("Erreur extraction relations typées KAG: %s", e, exc_info=True)
-            rel_run.end(error=str(e))
-            return []
+                parsed = _parse_typed_relations_response(content)
+                rel_run.end(
+                    outputs={
+                        "nb_relations": len(parsed),
+                        "preview": parsed[:8],
+                    }
+                )
+                return parsed
+            except Exception as e:
+                logger.error("Erreur extraction relations typées KAG: %s", e, exc_info=True)
+                rel_run.end(error=str(e))
+                return []
 
 
 def extract_typed_relations_sync(chunk_content: str, entities: List[Dict]) -> List[Dict]:
@@ -776,3 +781,29 @@ def extract_entities_from_query_sync(query_text: str) -> List[str]:
     except Exception as e:
         logger.warning("Extraction entités requête échouée: %s", e)
         return []
+
+
+async def extract_entities_batch_async(contents: List[str]) -> List[List[Dict]]:
+    """
+    Extrait les entités pour une liste de contenus en parallèle avec parallélisme limité.
+    """
+    if not contents:
+        return []
+    tasks = [extract_entities_from_chunk(c) for c in contents]
+    return await asyncio.gather(*tasks)
+
+
+async def extract_typed_relations_batch_async(
+    inputs: List[Dict]
+) -> List[List[Dict]]:
+    """
+    Extrait les relations typées pour plusieurs chunks en parallèle.
+    Chaque input doit être {"content": str, "entities": List[Dict]}.
+    """
+    if not inputs:
+        return []
+    tasks = [
+        extract_typed_relations_from_chunk(i["content"], i["entities"])
+        for i in inputs
+    ]
+    return await asyncio.gather(*tasks)

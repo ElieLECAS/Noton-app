@@ -28,6 +28,7 @@ import time
 from datetime import datetime
 from queue import Queue
 import io
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -274,20 +275,16 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
 def _process_kag_extraction_for_note(session: Session, note_id: int, project_id: int):
     """
     Extraction des entités KAG pour une note (appelé après les embeddings).
-    
-    Args:
-        session: Session SQLModel
-        note_id: ID de la note
-        project_id: ID du projet
+    VERSION OPTIMISÉE : Extraction LLM parallélisée.
     """
     try:
-        from app.services.kag_extraction_service import extract_entities_sync
+        from app.services.kag_extraction_service import extract_entities_batch_async
         from app.services.kag_graph_service import (
             save_entities_for_chunk,
             delete_entities_for_note,
         )
         
-        logger.info(f"Démarrage extraction KAG pour la note {note_id}")
+        logger.info(f"Démarrage extraction KAG parallélisée pour la note {note_id}")
         
         delete_entities_for_note(session, note_id)
         
@@ -298,42 +295,48 @@ def _process_kag_extraction_for_note(session: Session, note_id: int, project_id:
         chunks = list(session.exec(statement).all())
         
         if not chunks:
-            logger.info(f"Aucun chunk leaf pour extraction KAG note={note_id}")
             return
+            
+        valid_chunks = [c for c in chunks if (c.content or "").strip()]
+        contents = [c.content for c in valid_chunks]
+        
+        # --- Parallélisation LLM ---
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                import concurrent.futures
+                with concurrent.futures.ThreadPoolExecutor() as pool:
+                    future = pool.submit(asyncio.run, extract_entities_batch_async(contents))
+                    all_entities = future.result(timeout=300)
+            else:
+                all_entities = loop.run_until_complete(extract_entities_batch_async(contents))
+        except Exception as e:
+            logger.error("Erreur extraction KAG batch note=%s: %s", note_id, e)
+            all_entities = [[] for _ in valid_chunks]
         
         total_entities = 0
         total_relations = 0
         
-        for chunk in chunks:
-            if not chunk.content or len(chunk.content.strip()) < 20:
-                continue
-            
-            try:
-                entities = extract_entities_sync(chunk.content)
-                if entities:
+        # --- Sauvegarde synchronisée ---
+        for chunk, entities in zip(valid_chunks, all_entities):
+            if entities:
+                try:
                     relations_count = save_entities_for_chunk(
                         session, chunk, entities, project_id
                     )
                     total_entities += len(entities)
                     total_relations += relations_count
-            except Exception as e:
-                logger.warning(
-                    "Erreur extraction KAG chunk_id=%s: %s",
-                    chunk.id,
-                    e,
-                )
-                continue
+                except Exception as e:
+                    logger.warning("Erreur sauvegarde KAG chunk=%s: %s", chunk.id, e)
         
         session.commit()
         logger.info(
-            "✅ Extraction KAG terminée note=%s: %d entités, %d relations",
-            note_id,
-            total_entities,
-            total_relations,
+            "✅ KAG terminé note=%s: %d entités, %d relations",
+            note_id, total_entities, total_relations
         )
 
-        if settings.KAG_PARENT_ENRICHMENT_ENABLED:
-            _process_parent_enrichment_for_note(session, note_id, project_id)
+        # L'enrichissement parents est ignoré car settings.KAG_PARENT_ENRICHMENT_ENABLED est désactivé
+        # et la fonction est neutralisée.
 
     except Exception as e:
         logger.error(f"Erreur extraction KAG pour note {note_id}: {e}", exc_info=True)
@@ -342,14 +345,9 @@ def _process_kag_extraction_for_note(session: Session, note_id: int, project_id:
 
 def _process_parent_enrichment_for_note(session: Session, note_id: int, project_id: int):
     """
-    Enrichit chaque chunk parent (is_leaf=False) avec un résumé + 3 questions générés par LLM.
-
-    Le résumé capture l'intention métier de la section ; les 3 questions simulent
-    les interrogations réelles d'un technicien ou technico-commercial.
-    Les deux sont stockés dans metadata_json et servent de base à l'extraction
-    d'entités KAG sur le chunk parent, rendant les sections directement
-    accessibles via le graphe de connaissances.
+    DÉSACTIVÉ : L'enrichissement des parents est désactivé pour optimiser la performance KAG.
     """
+    return
     try:
         from app.services.kag_extraction_service import (
             generate_parent_summary_questions_sync,
@@ -1044,7 +1042,7 @@ def run_kag_for_library_document(
 
             if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
                 ld.info(
-                    "[KAG] document_id=%s — statut %s, arrêt.",
+                    "[KAG] document_id=%s — déjà marqué %s, arrêt.",
                     document_id,
                     document.processing_status,
                 )
@@ -1176,8 +1174,12 @@ def _process_embeddings_for_document(
                 )
                 return
 
-            if _should_abort_processing(document_id):
-                _finalize_pipeline_abort(document_id)
+            if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
+                ld.info(
+                    "[Embeddings] document_id=%s — déjà marqué %s, arrêt.",
+                    document_id,
+                    document.processing_status,
+                )
                 return
 
             # Feuilles uniquement (is_leaf=False = parents hiérarchiques Docling, sans vecteur)
@@ -1279,6 +1281,11 @@ def _process_embeddings_for_document(
                 )
                 space_ids = list(session.exec(space_ids_stmt).all())
                 if space_ids:
+                    # Status guard before switching to KAG
+                    if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
+                        ld.info("[Embeddings] document_id=%s — annulé avant transition KAG.", document_id)
+                        return
+
                     document.processing_progress = max(document.processing_progress or 0, 95)
                     document.processing_status = "processing"
                     document.updated_at = datetime.utcnow()
