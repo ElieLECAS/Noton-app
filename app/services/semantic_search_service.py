@@ -42,11 +42,11 @@ from app.tracing import trace_run
 logger = logging.getLogger(__name__)
 
 try:
-    from llama_index.postprocessor.flag_embedding_reranker import FlagEmbeddingReranker
+    from llama_index.postprocessor.sbert_rerank import SentenceTransformerRerank
     RERANKER_AVAILABLE = True
 except ImportError:
     RERANKER_AVAILABLE = False
-    logger.warning("FlagEmbeddingReranker non disponible, reranking désactivé")
+    logger.warning("SentenceTransformerRerank non disponible, reranking désactivé")
 
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
 RERANKER_CANDIDATE_MULTIPLIER = 3
@@ -123,10 +123,10 @@ def _get_reranker():
                 _FLAG_RERANK_TOP_N,
                 use_fp16,
             )
-            _reranker_instance = FlagEmbeddingReranker(
+            _reranker_instance = SentenceTransformerRerank(
                 model=RERANKER_MODEL,
                 top_n=_FLAG_RERANK_TOP_N,
-                use_fp16=use_fp16,
+                device=os.getenv("EMBEDDING_DEVICE", "cpu"),
             )
             logger.info("✅ Reranker initialisé et prêt")
         return _reranker_instance

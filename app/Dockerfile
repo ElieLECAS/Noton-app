@@ -56,8 +56,9 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir \
     "llama-index-vector-stores-postgres==0.7.3" \
     "llama-index-embeddings-huggingface==0.6.1" \
-    "llama-index-postprocessor-flag-embedding-reranker==0.4.1" \
-    "FlagEmbedding==1.3.5"
+    "llama-index-postprocessor-sbert-rerank==0.5.0" \
+    "accelerate" \
+    "sentence-transformers"
 
 # Étape 7: Reste des dépendances (sans celles déjà installées)
 # Filtrer les packages déjà installés + commentaires
