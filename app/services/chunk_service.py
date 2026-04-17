@@ -1097,6 +1097,7 @@ def run_kag_for_library_document(
                         space_id,
                     )
                 except Exception as kag_exc:
+                    session.rollback()
                     logger.warning(
                         "KAG post-upload échoué document_id=%s space_id=%s: %s",
                         document_id,

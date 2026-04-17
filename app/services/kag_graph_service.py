@@ -611,6 +611,17 @@ def register_entity_alias(
     ent = session.get(KnowledgeEntity, entity_id)
     if ent and alias_normalized == ent.name_normalized:
         return
+        
+    # Vérifier d'abord dans les objets nouveaux de la session (pas encore en DB)
+    for obj in session.new:
+        if (
+            isinstance(obj, EntityAlias) 
+            and obj.space_id == space_id 
+            and obj.alias_normalized == alias_normalized
+        ):
+            return
+
+    # Puis vérifier en base de données
     existing = session.exec(
         select(EntityAlias).where(
             EntityAlias.space_id == space_id,
@@ -619,6 +630,7 @@ def register_entity_alias(
     ).first()
     if existing:
         return
+        
     session.add(
         EntityAlias(
             space_id=space_id,
@@ -841,6 +853,14 @@ def _get_or_create_entity_for_space(
             return entity
     
     except Exception as emb_err:
+        # Si c'est une erreur DB (ex: UniqueViolation déjà présente dans la session),
+        # il ne faut pas essayer de continuer avec ce session.flush() car il va échouer.
+        # On relance l'erreur si elle est critique pour la session.
+        import sqlalchemy.exc
+        if isinstance(emb_err, (sqlalchemy.exc.DBAPIError, sqlalchemy.exc.SQLAlchemyError)):
+             logger.error("Erreur DB critique dans _get_or_create_entity_for_space: %s", emb_err)
+             raise
+             
         logger.warning(
             "Erreur résolution embedding entité '%s': %s", 
             name, 
