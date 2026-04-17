@@ -56,9 +56,13 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir \
     "llama-index-vector-stores-postgres==0.7.3" \
     "llama-index-embeddings-huggingface==0.6.1" \
-    "llama-index-postprocessor-sbert-rerank==0.5.0" \
+    "llama-index-postprocessor-flashrank-rerank==0.2.1" \
+    "flashrank==0.2.10" \
     "accelerate" \
     "sentence-transformers"
+
+# Configuration par défaut du reranker
+ENV RERANKER_MODEL=ms-marco-MultiBERT-L-12
 
 # Étape 7: Reste des dépendances (sans celles déjà installées)
 # Filtrer les packages déjà installés + commentaires

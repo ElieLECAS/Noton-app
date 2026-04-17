@@ -1107,6 +1107,7 @@ def run_kag_for_library_document(
                         space_id,
                         kag_exc,
                     )
+                    session.rollback()
 
             document = session.get(Document, document_id)
             if document:

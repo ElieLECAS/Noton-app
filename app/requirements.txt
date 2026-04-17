@@ -39,8 +39,10 @@ llama-index-readers-docling==0.4.2
 llama-index-node-parser-docling==0.4.2
 llama-index-vector-stores-postgres==0.7.3
 llama-index-embeddings-huggingface==0.6.1
-# Reranker : BGE-reranker (Cross-Encoder) — local, CPU, FR+EN
-llama-index-postprocessor-sbert-rerank==0.5.0
+# Reranker : FlashRank (Multilingual) — ultra-léger (ONNX), CPU
+llama-index-postprocessor-flashrank-rerank==0.2.1
+flashrank==0.2.10
+# accelerate et sentence-transformers restent utiles pour les embeddings BGE-m3
 accelerate
 sentence-transformers
 

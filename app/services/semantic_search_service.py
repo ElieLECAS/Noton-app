@@ -42,13 +42,13 @@ from app.tracing import trace_run
 logger = logging.getLogger(__name__)
 
 try:
-    from llama_index.postprocessor.sbert_rerank import SentenceTransformerRerank
+    from llama_index.postprocessor.flashrank_rerank import FlashRankRerank
     RERANKER_AVAILABLE = True
 except ImportError:
     RERANKER_AVAILABLE = False
-    logger.warning("SentenceTransformerRerank non disponible, reranking désactivé")
+    logger.warning("FlashRankRerank non disponible, reranking désactivé")
 
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
+RERANKER_MODEL = os.getenv("RERANKER_MODEL", "ms-marco-MultiBERT-L-12")
 RERANKER_CANDIDATE_MULTIPLIER = 3
 RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 # Optimisations du reranking
@@ -105,10 +105,10 @@ def _nodes_for_trace(candidates: List[NodeWithScore], limit: int = 80) -> List[D
 
 def _get_reranker():
     """
-    Retourne le reranker (singleton).
+    Retourne le reranker (singleton) FlashRank.
 
-    FlagEmbeddingReranker n'accepte pas ``device=`` ; le device suit PyTorch
-    (CUDA si disponible). ``RERANKER_TOP_N`` borne la sortie du postprocessor ;
+    FlashRank est ultra-léger et s'exécute sur CPU via ONNX.
+    ``RERANKER_TOP_N`` borne la sortie du postprocessor ;
     le pipeline tronque ensuite à ``k`` via ``_two_stage_rerank_leaves``.
     """
     global _reranker_instance
@@ -116,19 +116,21 @@ def _get_reranker():
         return None
     with _reranker_lock:
         if _reranker_instance is None:
-            use_fp16 = os.getenv("RERANKER_USE_FP16", "false").lower() == "true"
+            # FlashRank utilise ~/.cache/flashrank par défaut. 
+            # On force le cache_dir vers le volume persistant /root/.cache
+            cache_dir = os.getenv("MODELS_CACHE_DIR", "/root/.cache")
             logger.info(
-                "Initialisation du reranker %s (top_n=%s, use_fp16=%s)...",
+                "Initialisation du reranker FlashRank %s (top_n=%s, cache_dir=%s)...",
                 RERANKER_MODEL,
                 _FLAG_RERANK_TOP_N,
-                use_fp16,
+                cache_dir,
             )
-            _reranker_instance = SentenceTransformerRerank(
+            _reranker_instance = FlashRankRerank(
                 model=RERANKER_MODEL,
                 top_n=_FLAG_RERANK_TOP_N,
-                device=os.getenv("EMBEDDING_DEVICE", "cpu"),
+                cache_dir=cache_dir,
             )
-            logger.info("✅ Reranker initialisé et prêt")
+            logger.info("✅ Reranker FlashRank initialisé et prêt")
         return _reranker_instance
 
 

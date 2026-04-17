@@ -11,6 +11,7 @@ from datetime import datetime
 from typing import List, Dict, Optional, Set, Tuple
 from sqlmodel import Session, select
 from sqlalchemy import func, delete, text
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from app.models.knowledge_entity import KnowledgeEntity
 from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.note_chunk import NoteChunk
@@ -619,22 +620,17 @@ def register_entity_alias(
     ent = session.get(KnowledgeEntity, entity_id)
     if ent and alias_normalized == ent.name_normalized:
         return
-    existing = session.exec(
-        select(EntityAlias).where(
-            EntityAlias.space_id == space_id,
-            EntityAlias.alias_normalized == alias_normalized,
-        )
-    ).first()
-    if existing:
-        return
-    session.add(
-        EntityAlias(
+    stmt = (
+        pg_insert(EntityAlias)
+        .values(
             space_id=space_id,
             entity_id=entity_id,
             alias_normalized=alias_normalized,
             created_at=datetime.utcnow(),
         )
+        .on_conflict_do_nothing(index_elements=["space_id", "alias_normalized"])
     )
+    session.execute(stmt)
 
 
 def expand_kag_query_terms_for_space(
@@ -1118,11 +1114,18 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
     # --- ÉTAPE 3 : Extraction des relations typées en parallèle ---
     if chunks_for_relations:
         if _should_abort_processing(document_id):
-             logger.info("[KAG] document_id=%s — interrompu avant relations typées.", document_id)
-             session.commit() # Commit entités déjà sauvegardées? Ou rollback? 
-             # L'utilisateur préfère généralement garder ce qui est fait si c'est cohérent, 
-             # mais ici on veut arrêter le blocage.
-             return {"entities": total_entities, "relations": total_relations, "chunks": processed_chunks, "typed_entity_relations": 0}
+            logger.info(
+                "[KAG] document_id=%s — interrompu avant relations typées.",
+                document_id,
+            )
+            # Persister entités / relations chunk déjà flushées dans cette transaction.
+            session.commit()
+            return {
+                "entities": total_entities,
+                "relations": total_relations,
+                "chunks": processed_chunks,
+                "typed_entity_relations": 0,
+            }
 
         try:
             if loop.is_running():

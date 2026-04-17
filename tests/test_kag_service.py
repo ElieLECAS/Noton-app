@@ -1,10 +1,52 @@
 import pytest
 import asyncio
 from unittest.mock import patch, AsyncMock
+from sqlmodel import select
+
 from app.services.kag_extraction_service import (
     extract_entities_batch_async,
     extract_typed_relations_batch_async,
 )
+
+
+def test_register_entity_alias_idempotent_same_transaction(db_session):
+    """
+    Deux appels avec le même alias dans une transaction + no_autoflush ne doivent pas
+    violer uq_entityalias_space_alias (régression doublon ORM avant flush).
+    """
+    from app.models.space import Space
+    from app.models.knowledge_entity import KnowledgeEntity
+    from app.models.entity_alias import EntityAlias
+    from app.services.kag_graph_service import register_entity_alias
+
+    space = Space(name="pytest-kag-alias", user_id=None)
+    db_session.add(space)
+    db_session.commit()
+    db_session.refresh(space)
+
+    ent = KnowledgeEntity(
+        name="canon",
+        name_normalized="canon",
+        entity_type="concept_technique",
+        space_id=space.id,
+    )
+    db_session.add(ent)
+    db_session.commit()
+    db_session.refresh(ent)
+
+    alias_norm = "175 mm"
+    with db_session.no_autoflush:
+        register_entity_alias(db_session, space.id, ent.id, alias_norm)
+        register_entity_alias(db_session, space.id, ent.id, alias_norm)
+    db_session.commit()
+
+    rows = db_session.exec(
+        select(EntityAlias).where(
+            EntityAlias.space_id == space.id,
+            EntityAlias.alias_normalized == alias_norm,
+        )
+    ).all()
+    assert len(rows) == 1
 
 @pytest.mark.asyncio
 async def test_extract_entities_batch_async():
