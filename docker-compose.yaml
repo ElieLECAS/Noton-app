@@ -122,6 +122,7 @@ services:
             - MAX_RERANK_CANDIDATES=${MAX_RERANK_CANDIDATES:-40}
             - MMR_K=${MMR_K:-15}
             - RERANKER_TOP_N=${RERANKER_TOP_N:-60}
+            - RERANKER_ENABLED=${RERANKER_ENABLED:-false}
         depends_on:
             db:
                 condition: service_healthy

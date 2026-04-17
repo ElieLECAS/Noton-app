@@ -848,7 +848,7 @@ def _build_docling_hierarchical_specs(
                         "node_id": table_full_node_id,
                         "parent_node_id": parent_node_id,
                         "hierarchy_level": 1,
-                        "is_leaf": "true",
+                        "is_leaf": "false",
                     }
                 )
                 if page_no is not None:
@@ -857,7 +857,7 @@ def _build_docling_hierarchical_specs(
                 specs.append(
                     {
                         "chunk_index": chunk_index,
-                        "is_leaf": True,
+                        "is_leaf": False,
                         "content": full_text,
                         "text": full_text,
                         "start_char": 0,
