@@ -33,6 +33,7 @@ media/documents/
 *.swp
 *.swo
 documentations/
+generale/
 *~
 
 # Database
