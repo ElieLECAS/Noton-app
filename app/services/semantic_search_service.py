@@ -23,7 +23,7 @@ MetadataFilter) ont été supprimés : la recherche SQL directe est plus fiable 
 avec l'architecture de la table notechunk (insertions via SQLModel ORM).
 """
 
-from typing import Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 import os
 import re
 import threading
@@ -357,7 +357,7 @@ def _extract_query_terms(query_text: str) -> List[str]:
     return [t for t in terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS][:8]
 
 
-def _keyword_fallback_passages(
+async def _keyword_fallback_passages(
     session: Session,
     project_id: int,
     user_id: int,
@@ -831,32 +831,44 @@ TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
 def refine_with_source_authority(
     passages: List[Dict],
     query_text: str,
+    reasoning_result: Optional[Any] = None,
 ) -> List[Dict]:
     """
-    Priorité aux sources (source authority) : priorise les passages dont le titre
-    de la note correspond à la requête, pour que l'IA « lise » d'abord la source
-    spécifique (ex. dépliant LUMÉAL) et non le catalogue général.
-    Corrige la dilution du contexte induite par le KAG quand beaucoup d'entités
-    proviennent de documents génériques. Boost proportionnel aux mots communs
-    (query ∩ titre), plafonné (TITLE_QUERY_BOOST_CAP).
+    Source authority : boost les passages dont le titre correspond à la requête,
+    OU qui correspondent à la source privilégiée déterminée par le raisonnement (CQR).
     """
-    if not passages or not query_text or not query_text.strip():
+    if not passages:
         return passages
-    query_words = _get_meaningful_words(query_text)
-    if not query_words:
-        return passages
-    for p in passages:
-        note_title = (p.get("note_title") or "").strip()
-        if not note_title:
-            continue
-        title_words = _get_meaningful_words(note_title)
-        common = query_words & title_words
-        if common:
-            boost = min(
-                TITLE_QUERY_BOOST_PER_MATCH * len(common),
-                TITLE_QUERY_BOOST_CAP,
-            )
-            p["score"] = float(p.get("score") or 0.0) + boost
+
+    # 1. Boost basé sur le raisonnement (CQR)
+    if reasoning_result and hasattr(reasoning_result, 'primary_source') and reasoning_result.primary_source:
+        source_to_boost = reasoning_result.primary_source.lower()
+        boost_value = 0.8
+        for p in passages:
+            # Pour les notes, la 'source' peut ne pas être présente de la même façon, 
+            # mais on peut vérifier si le titre contient la marque ou si un champ source existe.
+            doc_source = (p.get("source") or "").lower()
+            note_title = (p.get("note_title") or "").lower()
+            if doc_source == source_to_boost or source_to_boost in note_title:
+                p["score"] = float(p.get("score") or 0.0) + boost_value
+
+    # 2. Boost basé sur les mots du titre (Existant)
+    if query_text and query_text.strip():
+        query_words = _get_meaningful_words(query_text)
+        if query_words:
+            for p in passages:
+                note_title = (p.get("note_title") or "").strip()
+                if not note_title:
+                    continue
+                title_words = _get_meaningful_words(note_title)
+                common = query_words & title_words
+                if common:
+                    boost = min(
+                        TITLE_QUERY_BOOST_PER_MATCH * len(common),
+                        TITLE_QUERY_BOOST_CAP,
+                    )
+                    p["score"] = float(p.get("score") or 0.0) + boost
+
     passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
     return passages
 
@@ -865,7 +877,7 @@ def refine_with_source_authority(
 # Point d'entrée principal
 # ---------------------------------------------------------------------------
 
-def search_relevant_passages(
+async def search_relevant_passages(
     session: Session,
     project_id: int,
     query_text: str,
@@ -875,14 +887,16 @@ def search_relevant_passages(
 ) -> List[Dict]:
     """
     Recherche sémantique RAG optimisée sur les chunks de notes.
+    Intègre désormais un système de raisonnement cognitif (CQR) pour la priorisation des sources.
 
     Pipeline optimisé :
-      1. SQL pgvector sur les leaves → k*3 candidats (rapides à reranker car courts)
-      2. Filtrage pré-reranking : élimine les candidats avec similarité < MIN_VECTOR_SIMILARITY_THRESHOLD
-      3. Early stopping : skip le reranking si similarité moyenne top-k >= SKIP_RERANK_THRESHOLD
-      4. BGE-reranker-v2-m3 sur les leaves filtrés (~5s vs ~56s sur les parents)
-      5. Résolution des parents pour fournir un contexte plus large au LLM
-      6. Fallback lexical si aucun résultat vectoriel
+      1. Inférence d'intention (CQR) pour booster la source appropriée
+      2. SQL pgvector sur les leaves → k*3 candidats (rapides à reranker car courts)
+      3. Filtrage pré-reranking : élimine les candidats avec similarité < MIN_VECTOR_SIMILARITY_THRESHOLD
+      4. Early stopping : skip le reranking si similarité moyenne top-k >= SKIP_RERANK_THRESHOLD
+      5. BGE-reranker-v2-m3 sur les leaves filtrés (~5s vs ~56s sur les parents)
+      6. Résolution des parents pour fournir un contexte plus large au LLM
+      7. Fallback lexical si aucun résultat vectoriel
 
     Optimisations appliquées :
       - Filtrage pré-reranking réduit le nombre de candidats à traiter (-20 à -40% de temps)
@@ -900,6 +914,8 @@ def search_relevant_passages(
     Returns:
         Liste de dicts { passage, note_title, note_id, chunk_id, chunk_index, score }
     """
+    from app.services.query_reasoning_service import reason_query_intent
+    reasoning_result = await reason_query_intent(query_text)
     project = get_project_by_id(session, project_id, user_id)
     if not project:
         logger.warning(
@@ -942,7 +958,7 @@ def search_relevant_passages(
 
         if not leaf_candidates:
             logger.info("Aucun résultat vectoriel, activation du fallback lexical")
-            return _keyword_fallback_passages(
+            return await _keyword_fallback_passages(
                 session=session,
                 project_id=project_id,
                 user_id=user_id,
@@ -1154,10 +1170,10 @@ def search_relevant_passages(
             score_strs,
         )
 
-        passages = refine_with_source_authority(passages, query_text)
+        passages = refine_with_source_authority(passages, query_text, reasoning_result=reasoning_result)
 
         if not passages:
-            return _keyword_fallback_passages(
+            return await _keyword_fallback_passages(
                 session=session,
                 project_id=project_id,
                 user_id=user_id,
@@ -1172,7 +1188,7 @@ def search_relevant_passages(
         return []
 
 
-def search_relevant_notes(
+async def search_relevant_notes(
     session: Session,
     project_id: int,
     query_text: str,
@@ -1206,7 +1222,7 @@ def search_relevant_notes(
         return []
 
     try:
-        passages = search_relevant_passages(
+        passages = await search_relevant_passages(
             session=session,
             project_id=project_id,
             query_text=query_text,

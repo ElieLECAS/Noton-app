@@ -836,6 +836,7 @@ def create_chunks_for_document(
             DocumentChunk(
                 document_id=document.id,
                 chunk_index=idx,
+                source=document.source,
                 content=item["content"],
                 text=item["content"],
                 start_char=item["start_char"],
@@ -984,6 +985,10 @@ def create_chunks_for_document_from_docling(
                     meta["embedding_model"] = model_name
                     chunk.metadata_json = meta
                     chunk.metadata_ = meta
+
+    # Denormaliser la source de la métadonnée document vers chaque chunk pour accélération retrieval
+    for c in chunks:
+        c.source = document.source
 
     session.add_all(chunks)
     session.commit()

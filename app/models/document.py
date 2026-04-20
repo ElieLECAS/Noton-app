@@ -19,6 +19,7 @@ class Document(SQLModel, table=True):
     content: Optional[str] = None
     document_type: str = Field(default="written")
     source_file_path: Optional[str] = None
+    source: Optional[str] = Field(default=None, index=True)  # Brand/Origin (Proferm, Technal, etc.)
     # completed | pending | processing | failed | reindex_queued |
     # cancelled_by_user | skipped | partial_kag_done | failed_retry_exhausted
     processing_status: str = Field(default="completed")

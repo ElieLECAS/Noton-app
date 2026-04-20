@@ -61,6 +61,49 @@ _docling_converter = None
 _docling_converter_generic = None
 _docling_converter_lock = threading.Lock()
 
+# Liste des marques connues pour l'inférence de source
+KNOWN_BRANDS = [
+    "Proferm",
+    "Technal",
+    "Askey",
+    "Profine",
+    "Roto",
+    "Somfy",
+    "Maco",
+    "Gu",
+    "VBH",
+    "KBE",
+]
+
+
+def infer_document_source(
+    file_path: Optional[str] = None, content: Optional[str] = None
+) -> str:
+    """
+    Infère la source (marque/origine) d'un document.
+    1. Regarde d'abord le chemin du fichier (signal fort).
+    2. Regarde ensuite le contenu sémantique pour des mots-clés.
+    """
+    # 1. Analyse du chemin
+    if file_path:
+        path_str = file_path.lower()
+        for brand in KNOWN_BRANDS:
+            if brand.lower() in path_str:
+                return brand
+
+    # 2. Analyse du contenu (premiers 5000 caractères)
+    if content:
+        content_sample = content[:5000].lower()
+        # Priorité Proferm si présent dans le texte
+        if "proferm" in content_sample:
+            return "Proferm"
+        # Autres marques
+        for brand in KNOWN_BRANDS:
+            if brand.lower() in content_sample:
+                return brand
+
+    return "Inconnu"
+
 
 def _mark_document_processing_cancelled(document_id: int) -> None:
     """Marque un document comme annulé pour stopper son traitement asynchrone."""
@@ -913,6 +956,14 @@ def reindex_library_document(
     with Session(engine) as session:
         document = session.get(Document, document_id)
         document.content = markdown_content
+        
+        # Inférence de la source (Proferm, Technal, etc.)
+        inferred_source = infer_document_source(
+            file_path=document.source_file_path, 
+            content=markdown_content
+        )
+        document.source = inferred_source
+        
         document.processing_progress = 55
         document.updated_at = datetime.utcnow()
         session.add(document)

@@ -113,17 +113,12 @@ SPACE_CHAT_TEMPERATURE = 0.1
 SPACE_CHAT_TOP_P = None
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_CHAT_SYSTEM_PROMPT = (
-    "Tu es LIA, assistante PROFERM pour les collaborateurs et les clients. "
-    "Tu reponds en francais, avec un ton humain, professionnel, clair et orienté solution. "
-    "Tu donnes des reponses directes, concretes et operationnelles, sans mentionner le fonctionnement interne de recherche ni la provenance des informations. "
-    "Par defaut, fais une reponse courte et utile (3 a 6 lignes max), centree strictement sur la question. "
-    "N'ajoute pas de contexte inutile, d'introduction longue, ni de repetition. "
-    "Si la question est complexe ou si l'utilisateur le demande, tu peux etendre avec une structure claire (etapes courtes, liste, ou tableau Markdown). "
-    "Tu peux utiliser un tableau Markdown uniquement quand il apporte un vrai gain de lisibilite (comparatif, synthese, options, dimensions, performances, disponibilite). "
-    "N'invente jamais de caracteristique, prix, delai, compatibilite ou disponibilite. "
-    "Si une information n'est pas disponible ou reste incertaine, dis-le simplement en une phrase courte et propose la meilleure action de verification. "
-    "Evite les formulations defensives, les avertissements inutiles et les redites. "
-    "Termine par une question uniquement si c'est necessaire pour avancer."
+    "Tu es LIA, l'assistante experte de PROFERM. Ton rôle est d'accompagner les collaborateurs et les clients avec précision sur nos produits et services. "
+    "Identité : Tu parles au nom de PROFERM. Quand tu dis 'nous' ou 'nos gammes', tu fais référence aux produits PROFERM. Les documents des fournisseurs (Technal, Profine, Askey, Roto, etc.) concernent nos partenaires et doivent être présentés comme tels. "
+    "Ton ton est humain, professionnel, clair et orienté solution. Tu réponds en français. "
+    "Tu donnes des réponses directes, concrètes et opérationnelles. Ne mentionne jamais le fonctionnement technique de ta recherche. "
+    "Format : Réponse courte et utile (3 à 6 lignes) par défaut. Utilise des listes ou des tableaux Markdown uniquement pour la clarté technique. "
+    "Règle d'or : Ne jamais inventer de données. Si l'information est absente, indique-le clairement et propose une étape de vérification."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -308,10 +303,11 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
     system_message = {
         "role": "system",
         "content": (
-            "Expert Technico-Commercial PROFERM. Réponds uniquement à partir des passages ci-dessous. "
-            "Donnée absente (Uw, prix, garantie…) → indique que la doc ne le précise pas. "
-            "Règles : bref et poli ; pas de marques concurrentes sauf si citées ; contradiction → source la plus spécifique. "
-            "Format : tableaux Markdown pour valeurs techniques ; citations [1], [2] pour les affirmations (pas en salutations)."
+            "Tu es LIA, l'experte PROFERM. Réponds uniquement à partir des passages ci-dessous. "
+            "Priorise toujours les solutions PROFERM si elles sont présentes. "
+            "Donnée absente → indique que la doc ne le précise pas. "
+            "Règles : bref et poli ; cite les citations [1], [2]. "
+            "Identité : 'Nous' = PROFERM. Fournisseurs = partenaires."
         ),
     }
     
@@ -353,9 +349,10 @@ def build_semantic_context(note_results: List[dict]) -> List[dict]:
     system_message = {
         "role": "system",
         "content": (
-            "Expert Technique PROFERM. Réponds uniquement à partir des notes ci-dessous. "
-            "Infos absentes (Uw, garantie…) → doc ne le précise pas. "
-            "Contradiction → privilégie la source la plus spécifique. Markdown (tableaux, gras), cite le titre de la note.\n\n"
+            "Tu es LIA, experte technique PROFERM. Réponds uniquement à partir des notes ci-dessous. "
+            "Privilégie PROFERM. Fournisseurs (Technal, etc.) = partenaires. "
+            "Infos absentes → indique-le. "
+            "Markdown (tableaux), cite le titre de la note.\n\n"
             "NOTES :"
         ),
     }
@@ -413,7 +410,7 @@ async def stream_project_chat_message(
         inputs={"query": request.message, "project_id": project_id, "k": RAG_TOP_K},
         tags=["rag", "project"],
     ) as retrieval_run:
-        passages = search_relevant_passages(
+        passages = await search_relevant_passages(
             session=session,
             project_id=project_id,
             query_text=request.message,
@@ -634,7 +631,7 @@ async def stream_space_chat_message(
         inputs={"query": request.message, "space_id": space_id, "k": RAG_TOP_K},
         tags=["rag", "kag", "space"],
     ) as retrieval_run:
-        passages = search_space_passages(
+        passages = await search_space_passages(
             session=session,
             space_id=space_id,
             query_text=request.message,

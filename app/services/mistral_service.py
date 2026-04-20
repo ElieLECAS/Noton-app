@@ -15,6 +15,7 @@ async def chat(
     max_tokens: Optional[int] = None,
     temperature: Optional[float] = None,
     top_p: Optional[float] = None,
+    **kwargs: Any,
 ) -> Dict:
     """
     Appel au chatbot Mistral (API compatible chat completions).
@@ -49,6 +50,9 @@ async def chat(
                 payload["top_p"] = top_p
             if tools:
                 payload["tools"] = tools
+            
+            # Ajouter les arguments supplémentaires (ex: response_format)
+            payload.update(kwargs)
 
             base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
             async with httpx.AsyncClient(timeout=120.0) as client:
@@ -97,6 +101,7 @@ async def chat_stream(
     max_tokens: Optional[int] = None,
     temperature: Optional[float] = None,
     top_p: Optional[float] = None,
+    **kwargs: Any,
 ):
     """
     Appel au chatbot Mistral avec streaming.
@@ -128,6 +133,9 @@ async def chat_stream(
             payload["temperature"] = temperature
         if top_p is not None:
             payload["top_p"] = top_p
+        
+        # Ajouter les arguments supplémentaires
+        payload.update(kwargs)
 
         base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
         async with httpx.AsyncClient(timeout=120.0) as client:

@@ -32,6 +32,7 @@ media/documents/
 .idea/
 *.swp
 *.swo
+documentations/
 *~
 
 # Database

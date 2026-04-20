@@ -36,6 +36,7 @@ from app.tracing import trace_run
 import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from app.services.query_reasoning_service import QueryIntent, reason_query_intent
 
 logger = logging.getLogger(__name__)
 
@@ -1026,7 +1027,7 @@ def _normalize_pivot_entities(pivot_entity_names: Optional[List[str]]) -> List[s
     return normalized
 
 
-def _keyword_fallback_passages(
+async def _keyword_fallback_passages(
     session: Session,
     space_id: int,
     user_id: int,
@@ -1475,27 +1476,42 @@ def _get_meaningful_words(text: str) -> Set[str]:
 def refine_with_source_authority(
     passages: List[Dict],
     query_text: str,
+    reasoning_result: Optional[QueryIntent] = None,
 ) -> List[Dict]:
     """
-    Source authority : boost les passages dont le titre correspond à la requête.
+    Source authority : boost les passages dont le titre correspond à la requête,
+    OU qui correspondent à la source privilégiée déterminée par le raisonnement (CQR).
     """
-    if not passages or not query_text or not query_text.strip():
+    if not passages:
         return passages
-    query_words = _get_meaningful_words(query_text)
-    if not query_words:
-        return passages
-    for p in passages:
-        document_title = (p.get("document_title") or "").strip()
-        if not document_title:
-            continue
-        title_words = _get_meaningful_words(document_title)
-        common = query_words & title_words
-        if common:
-            boost = min(
-                TITLE_QUERY_BOOST_PER_MATCH * len(common),
-                TITLE_QUERY_BOOST_CAP,
-            )
-            p["score"] = float(p.get("score") or 0.0) + boost
+
+    # 1. Boost basé sur le raisonnement (CQR)
+    if reasoning_result and reasoning_result.primary_source:
+        source_to_boost = reasoning_result.primary_source.lower()
+        boost_value = 0.8  # Boost significatif pour la source voulue
+        for p in passages:
+            # On récupère la source du document (le chunk l'a via la migration/ingestion)
+            doc_source = (p.get("source") or "").lower()
+            if doc_source == source_to_boost:
+                p["score"] = float(p.get("score") or 0.0) + boost_value
+
+    # 2. Boost basé sur les mots du titre (Existant)
+    if query_text and query_text.strip():
+        query_words = _get_meaningful_words(query_text)
+        if query_words:
+            for p in passages:
+                document_title = (p.get("document_title") or "").strip()
+                if not document_title:
+                    continue
+                title_words = _get_meaningful_words(document_title)
+                common = query_words & title_words
+                if common:
+                    boost = min(
+                        TITLE_QUERY_BOOST_PER_MATCH * len(common),
+                        TITLE_QUERY_BOOST_CAP,
+                    )
+                    p["score"] = float(p.get("score") or 0.0) + boost
+
     passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
     return passages
 
@@ -1843,14 +1859,7 @@ def multi_hop_retrieve_space(
         space_id,
     )
 
-    # Enregistrer les entités vues en hop 0
-    for nws in graph_candidates_hop0:
-        meta = dict(getattr(nws.node, "metadata", {}) or {})
-        entity = meta.get("kag_matched_entity")
-        if entity:
-            state.seen_entity_names.add(entity.strip().lower())
-
-    # --- Hops 1..N ---
+    # --- Hop 1..N : Expansion progressive ---
     stagnation_count = 0
 
     for hop in range(1, MULTI_HOP_MAX_HOPS + 1):
@@ -1871,15 +1880,13 @@ def multi_hop_retrieve_space(
         )[:MULTI_HOP_PER_HOP_LIMIT]
         seed_entity_names = _extract_top_entity_names_from_candidates(top_current, top_n=12)
 
-        # Exclure les entités déjà explorées
+        # Exclure les entités déjà explorées pour définir les points de départ du saut
         new_seeds = [n for n in seed_entity_names if n not in state.seen_entity_names]
         if not new_seeds:
-            logger.info(
-                "Multi-hop (space) arrêt saturation entités au hop %d (toutes vues)",
-                hop,
-            )
+            logger.info("Multi-hop (space) arrêt saturation entités au hop %d", hop)
             break
 
+        # Marquer ces entités comme étant désormais expansionnées
         state.seen_entity_names.update(new_seeds)
 
         hop_candidates, entities_touched = _retrieve_kag_for_entity_seeds(
@@ -1952,7 +1959,7 @@ def multi_hop_retrieve_space(
     return scored_candidates
 
 
-def search_relevant_passages(
+async def search_relevant_passages(
     session: Session,
     space_id: int,
     query_text: str,
@@ -1961,27 +1968,7 @@ def search_relevant_passages(
 ) -> List[Dict]:
     """
     Recherche sémantique RAG + KAG sur les documents d'un espace.
-
-    Pipeline :
-      1. Extraction entités pivot (KAG) + détection multi-hop heuristique
-      2a. [Multi-hop] Orchestrateur max 3 sauts avec scoring par profondeur
-      2b. [Standard]  Fusion RRF vectoriel + lexical + KAG + parents enrichis
-      3. Filtrage pré-reranking
-      4. Early stopping si similarité vectorielle élevée
-      5. Reranking cross-encoder (BGE-reranker-v2-m3)
-      6. Résolution des parents pour contexte enrichi
-      7. Source authority (boost titre-requête)
-      8. Fallback lexical ILIKE si aucun candidat hybride
-
-    Args:
-        session    : Session SQLModel
-        space_id   : ID de l'espace
-        query_text : Texte de la requête
-        user_id    : ID de l'utilisateur
-        k          : Nombre de passages à retourner
-
-    Returns:
-        Liste de dicts { passage, document_title, document_id, chunk_index, score }
+    Intègre désormais un système de raisonnement cognitif (CQR) pour la priorisation des sources.
     """
     space = get_space_by_id(session, space_id, user_id)
     if not space:
@@ -1991,6 +1978,16 @@ def search_relevant_passages(
     if not query_text or not query_text.strip():
         logger.warning("Requête vide fournie")
         return []
+
+    # --- Étape 0 : Raisonnement cognitif sur la requête ---
+    reasoning_result = await reason_query_intent(query_text)
+    if reasoning_result.intent != "generic":
+        logger.info(
+            "CQR reasoning [space]: intent=%s primary_source=%s confidence=%.2f",
+            reasoning_result.intent,
+            reasoning_result.primary_source,
+            reasoning_result.confidence
+        )
 
     try:
         candidate_k = (
@@ -2158,7 +2155,7 @@ def search_relevant_passages(
                 "Aucun candidat (space, multi_hop=%s), activation fallback lexical ILIKE",
                 use_multi_hop,
             )
-            return _keyword_fallback_passages(
+            return await _keyword_fallback_passages(
                 session=session,
                 space_id=space_id,
                 user_id=user_id,
@@ -2361,10 +2358,10 @@ def search_relevant_passages(
             score_strs,
         )
 
-        passages = refine_with_source_authority(passages, query_text)
+        passages = refine_with_source_authority(passages, query_text, reasoning_result=reasoning_result)
 
         if not passages:
-            return _keyword_fallback_passages(
+            return await _keyword_fallback_passages(
                 session=session,
                 space_id=space_id,
                 user_id=user_id,

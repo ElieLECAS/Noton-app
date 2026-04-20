@@ -24,6 +24,7 @@ class DocumentChunk(SQLModel, table=True):
     hierarchy_level: int = Field(default=0, index=True)
     metadata_json: Optional[dict] = Field(default=None, sa_column=Column(JSONB, nullable=True))
     metadata_: Optional[dict] = Field(default=None, sa_column=Column(JSONB, nullable=True))
+    source: Optional[str] = Field(default=None, index=True)  # Brand/Origin denormalized for speed
     
     document: Optional["Document"] = Relationship(back_populates="chunks")
 
