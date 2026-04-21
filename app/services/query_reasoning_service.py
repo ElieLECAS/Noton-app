@@ -23,8 +23,9 @@ SOURCES POSSIBLES :
 LOGIQUE DE DÉCISION :
 1. Si l'utilisateur utilise des adjectifs possessifs ('vos' gammes, 'votre' catalogue, chez 'vous'), l'intention est 'Proferm'.
 2. Si l'utilisateur cite une marque spécifique ('catalogue Technal', 'dormant Profine'), la source primaire est cette marque.
-3. Si la question est générique ('comment poser une fenêtre', 'norme DTU'), l'intention est 'generic' et aucune source n'est privilégiée.
-4. En cas de doute entre Proferm et un fournisseur sur un produit générique, privilégie TOUJOURS 'Proferm'.
+3. Attention aux numéros de gammes : Si l'utilisateur mentionne 'Perform 70' ou 'Perform 76', note bien cette distinction dans le raisonnement pour orienter le filtrage.
+4. Si la question est générique ('comment poser une fenêtre', 'norme DTU'), l'intention est 'generic' et aucune source n'est privilégiée.
+5. En cas de doute entre Proferm et un fournisseur sur un produit générique, privilégie TOUJOURS 'Proferm'.
 
 RETOURNE UNIQUEMENT UN JSON avec les champs :
 - intent: (company_info | supplier_info | generic | mixed)
