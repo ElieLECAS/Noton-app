@@ -102,7 +102,56 @@ class _LangSmithRun:
             pass
 
 
-@contextmanager
+class TraceRunContext:
+    def __init__(
+        self,
+        name: str,
+        run_type: str = "chain",
+        inputs: Optional[Dict[str, Any]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        tags: Optional[list] = None,
+        parent_run_id: Optional[str] = None,
+    ):
+        self.name = name
+        self.run_type = run_type
+        self.inputs = inputs
+        self.metadata = metadata
+        self.tags = tags
+        self.parent_run_id = parent_run_id
+        self.wrapper = None
+
+    def __enter__(self) -> _NoOpRun | _LangSmithRun:
+        if not _TRACING_ENABLED:
+            return _NoOpRun()
+
+        try:
+            from langsmith.run_trees import RunTree
+
+            run = RunTree(
+                name=self.name,
+                run_type=self.run_type,
+                inputs=self.inputs or {},
+                extra={"metadata": self.metadata or {}},
+                tags=self.tags or [],
+                parent_run_id=self.parent_run_id,
+            )
+            run.post()
+            self.wrapper = _LangSmithRun(run)
+            return self.wrapper
+        except ImportError:
+            return _NoOpRun()
+        except Exception as exc:
+            logger.debug("trace_run setup échoué (%s), no-op.", exc)
+            return _NoOpRun()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.wrapper:
+            if exc_type:
+                self.wrapper.end(error=str(exc_val))
+            else:
+                self.wrapper.end()
+
+
 def trace_run(
     name: str,
     run_type: str = "chain",
@@ -110,72 +159,63 @@ def trace_run(
     metadata: Optional[Dict[str, Any]] = None,
     tags: Optional[list] = None,
     parent_run_id: Optional[str] = None,
-) -> Generator[_NoOpRun | _LangSmithRun, None, None]:
+) -> TraceRunContext:
     """
-    Context manager qui ouvre un run LangSmith (span) et le ferme automatiquement.
-
-    Args:
-        name:          Nom du run affiché dans LangSmith.
-        run_type:      "chain" | "retriever" | "llm" | "tool" | "embedding".
-        inputs:        Dict des entrées du run (sérialisable JSON).
-        metadata:      Métadonnées supplémentaires (model, threshold, …).
-        tags:          Tags libres (ex. ["rag", "kag", "rerank"]).
-        parent_run_id: ID UUID du run parent pour créer la hiérarchie.
-
-    Yields:
-        Un objet run avec `.end(outputs=…)` et `.add_metadata(…)`.
-        Si le tracing est désactivé, yield un _NoOpRun (aucune opération).
+    Ouvre un run LangSmith (span) et le ferme automatiquement.
+    Version robuste basée sur une classe pour éviter "generator didn't stop after throw()".
     """
-    if not _TRACING_ENABLED:
-        yield _NoOpRun()
-        return
+    return TraceRunContext(
+        name=name,
+        run_type=run_type,
+        inputs=inputs,
+        metadata=metadata,
+        tags=tags,
+        parent_run_id=parent_run_id,
+    )
 
-    try:
-        from langsmith.run_trees import RunTree
 
-        run = RunTree(
-            name=name,
-            run_type=run_type,
-            inputs=inputs or {},
-            extra={"metadata": metadata or {}},
-            tags=tags or [],
-            parent_run_id=parent_run_id,
+class TracePipelineContext:
+    def __init__(
+        self,
+        name: str,
+        inputs: Optional[Dict[str, Any]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        tags: Optional[list] = None,
+    ):
+        self.name = name
+        self.inputs = inputs
+        self.metadata = metadata
+        self.tags = tags
+        self.inner_context = None
+
+    def __enter__(self) -> _NoOpRun | _LangSmithRun:
+        self.inner_context = trace_run(
+            name=self.name,
+            run_type="chain",
+            inputs=self.inputs,
+            metadata=self.metadata,
+            tags=self.tags,
         )
-        run.post()
+        return self.inner_context.__enter__()
 
-        wrapper = _LangSmithRun(run)
-        try:
-            yield wrapper
-        except Exception as exc:
-            wrapper.end(error=str(exc))
-            raise
-        else:
-            if not run.end_time:
-                wrapper.end()
-
-    except ImportError:
-        yield _NoOpRun()
-    except Exception as exc:
-        logger.debug("trace_run setup échoué (%s), no-op.", exc)
-        yield _NoOpRun()
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.inner_context:
+            return self.inner_context.__exit__(exc_type, exc_val, exc_tb)
 
 
-@contextmanager
 def trace_pipeline(
     name: str,
     inputs: Optional[Dict[str, Any]] = None,
     metadata: Optional[Dict[str, Any]] = None,
     tags: Optional[list] = None,
-) -> Generator[_NoOpRun | _LangSmithRun, None, None]:
+) -> TracePipelineContext:
     """
-    Raccourci pour ouvrir une trace root de type 'chain' (pipeline complet).
-    Utiliser comme trace parent, passer son run_id aux runs enfants si besoin.
+    Raccourci pour ouvrir une trace root de type 'chain'.
+    Version robuste basée sur une classe.
     """
-    with trace_run(
+    return TracePipelineContext(
         name=name,
-        run_type="chain",
         inputs=inputs,
         metadata=metadata,
         tags=tags,
-    ) as run:
-        yield run
+    )

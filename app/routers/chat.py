@@ -197,13 +197,13 @@ async def stream_chat_message(
     use_tools = bool(tools)
 
     async def generate():
+        error_msg_to_yield = None
         try:
             if use_tools:
                 # Avec tools : appel non-streaming (boucle tool_calls) puis on simule le stream pour l'UX
                 full_messages = full_context + [{"role": "user", "content": request.message}]
                 if not settings.MISTRAL_API_KEY:
-                    error_msg = "Mistral API key n'est pas configurée"
-                    yield f"data: {json.dumps({'error': error_msg})}\n\n"
+                    error_msg_to_yield = "Mistral API key n'est pas configurée"
                     return
                 response = await mistral_chat("", settings.MODEL_FAST, full_messages, tools=tools)
                 content = (response.get("choices") or [{}])[0].get("message", {}).get("content") or ""
@@ -215,8 +215,7 @@ async def stream_chat_message(
                     yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
             else:
                 if not settings.MISTRAL_API_KEY:
-                    error_msg = "Mistral API key n'est pas configurée"
-                    yield f"data: {json.dumps({'error': error_msg})}\n\n"
+                    error_msg_to_yield = "Mistral API key n'est pas configurée"
                     return
                 async for raw_chunk in mistral_chat_stream("", settings.MODEL_FAST, full_context):
                     try:
@@ -247,9 +246,13 @@ async def stream_chat_message(
                     )
 
             yield f"data: {json.dumps({'done': True})}\n\n"
-                    
+
         except Exception as e:
-            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+            logger.exception("Erreur dans le générateur stream_chat_message")
+            error_msg_to_yield = str(e)
+        
+        if error_msg_to_yield:
+            yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
     
     return StreamingResponse(generate(), media_type="text/event-stream")
 
@@ -458,17 +461,15 @@ async def stream_project_chat_message(
     assistant_response = []
     
     async def generate():
-        with trace_pipeline(
-            "project_chat_pipeline",
-            inputs=_pipeline_inputs,
-            tags=["chat", "project", "rag"],
-        ) as pipeline_run:
-            try:
+        error_msg_to_yield = None
+        try:
+            with trace_pipeline(
+                "project_chat_pipeline",
+                inputs=_pipeline_inputs,
+                tags=["chat", "project", "rag"],
+            ) as pipeline_run:
                 if not settings.MISTRAL_API_KEY:
-                    error_msg = "Mistral API key n'est pas configurée"
-                    pipeline_run.end(error=error_msg)
-                    yield f"data: {json.dumps({'error': error_msg})}\n\n"
-                    return
+                    raise ValueError("Mistral API key n'est pas configurée")
 
                 # Trace context building
                 with trace_run(
@@ -581,8 +582,13 @@ async def stream_project_chat_message(
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
 
                 yield f"data: {json.dumps({'done': True})}\n\n"
-            except Exception as e:
-                yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+        except Exception as e:
+            logger.exception("Erreur dans le générateur stream_project_chat_message")
+            error_msg_to_yield = str(e)
+        
+        if error_msg_to_yield:
+            yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
     
     return StreamingResponse(generate(), media_type="text/event-stream")
 
@@ -673,16 +679,15 @@ async def stream_space_chat_message(
     assistant_response: List[str] = []
 
     async def generate():
-        with trace_pipeline(
-            "space_chat_pipeline",
-            inputs=_pipeline_inputs_space,
-            tags=["chat", "space", "rag", "kag"],
-        ) as pipeline_run:
-            try:
+        error_msg_to_yield = None
+        try:
+            with trace_pipeline(
+                "space_chat_pipeline",
+                inputs=_pipeline_inputs_space,
+                tags=["chat", "space", "rag", "kag"],
+            ) as pipeline_run:
                 if not settings.MISTRAL_API_KEY:
-                    pipeline_run.end(error="Mistral API key non configurée")
-                    yield f"data: {json.dumps({'error': 'Mistral API key non configurée'})}\n\n"
-                    return
+                    raise ValueError("Mistral API key non configurée")
 
                 with trace_run(
                     "llm_generation",
@@ -857,8 +862,13 @@ async def stream_space_chat_message(
                     )
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
                 yield f"data: {json.dumps({'done': True})}\n\n"
-            except Exception as e:
-                yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+        except Exception as e:
+            logger.exception("Erreur dans le générateur stream_space_chat_message")
+            error_msg_to_yield = str(e)
+        
+        if error_msg_to_yield:
+            yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 
