@@ -1859,7 +1859,14 @@ def multi_hop_retrieve_space(
         space_id,
     )
 
-    # --- Hop 1..N : Expansion progressive ---
+    # Enregistrer les entités vues en hop 0
+    for nws in graph_candidates_hop0:
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        entity = meta.get("kag_matched_entity")
+        if entity:
+            state.seen_entity_names.add(entity.strip().lower())
+
+    # --- Hops 1..N ---
     stagnation_count = 0
 
     for hop in range(1, MULTI_HOP_MAX_HOPS + 1):
@@ -1880,13 +1887,15 @@ def multi_hop_retrieve_space(
         )[:MULTI_HOP_PER_HOP_LIMIT]
         seed_entity_names = _extract_top_entity_names_from_candidates(top_current, top_n=12)
 
-        # Exclure les entités déjà explorées pour définir les points de départ du saut
+        # Exclure les entités déjà explorées
         new_seeds = [n for n in seed_entity_names if n not in state.seen_entity_names]
         if not new_seeds:
-            logger.info("Multi-hop (space) arrêt saturation entités au hop %d", hop)
+            logger.info(
+                "Multi-hop (space) arrêt saturation entités au hop %d (toutes vues)",
+                hop,
+            )
             break
 
-        # Marquer ces entités comme étant désormais expansionnées
         state.seen_entity_names.update(new_seeds)
 
         hop_candidates, entities_touched = _retrieve_kag_for_entity_seeds(

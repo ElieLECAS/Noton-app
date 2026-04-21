@@ -11,20 +11,11 @@ from app.services.kag_graph_service import (
     get_space_entity_relation_graph,
     get_space_kag_stats,
     rebuild_kag_for_space,
-    refresh_entity_entity_relations_for_space,
 )
 from app.services.space_service import get_space_by_id
 
 
 router = APIRouter(prefix="/api/kag", tags=["kag"])
-
-
-def _ensure_admin(current_user: UserRead):
-    if "admin" not in (current_user.roles or []):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Droits administrateur requis pour cette opération",
-        )
 
 
 def _ensure_space_access(session: Session, space_id: int, current_user: UserRead):
@@ -70,16 +61,3 @@ async def rebuild_space_kag_route(
     """Purge puis reconstruit le KAG pour tous les documents de l'espace."""
     _ensure_space_access(session, space_id, current_user)
     return rebuild_kag_for_space(session, space_id)
-
-
-@router.post("/spaces/{space_id}/refresh-links", response_model=Dict)
-async def refresh_space_kag_links_route(
-    space_id: int,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-):
-    """Recalcule uniquement les liens entre entités (hiérarchie) sans ré-extraction LLM."""
-    _ensure_admin(current_user)
-    _ensure_space_access(session, space_id, current_user)
-    count = refresh_entity_entity_relations_for_space(session, space_id)
-    return {"status": "ok", "relations_count": count}

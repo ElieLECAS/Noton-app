@@ -11,7 +11,6 @@ from datetime import datetime
 from typing import List, Dict, Optional, Set, Tuple
 from sqlmodel import Session, select
 from sqlalchemy import func, delete, text
-from sqlalchemy.exc import IntegrityError
 from app.models.knowledge_entity import KnowledgeEntity
 from app.models.chunk_entity_relation import ChunkEntityRelation
 from app.models.note_chunk import NoteChunk
@@ -30,13 +29,6 @@ from app.services.kag_extraction_service import (
 )
 
 logger = logging.getLogger(__name__)
-
-# Poids pour les relations hiérarchiques KAG
-KAG_WEIGHT_CHUNK = 5.0
-KAG_WEIGHT_PARENT = 2.0
-KAG_WEIGHT_DOCUMENT = 0.5
-KAG_WEIGHT_INTER_DOC_BOOST = 0.2
-
 
 
 def _canonicalize_entities(entities: List[Dict]) -> List[Dict]:
@@ -639,20 +631,14 @@ def register_entity_alias(
     if existing:
         return
         
-    try:
-        with session.begin_nested():
-            session.add(
-                EntityAlias(
-                    space_id=space_id,
-                    entity_id=entity_id,
-                    alias_normalized=alias_normalized,
-                    created_at=datetime.utcnow(),
-                )
-            )
-            session.flush()
-    except IntegrityError:
-        # Déjà inséré par un autre processus
-        pass
+    session.add(
+        EntityAlias(
+            space_id=space_id,
+            entity_id=entity_id,
+            alias_normalized=alias_normalized,
+            created_at=datetime.utcnow(),
+        )
+    )
 
 
 def expand_kag_query_terms_for_space(
@@ -703,31 +689,18 @@ def expand_kag_query_terms_for_space(
 
 def refresh_entity_entity_relations_for_space(session: Session, space_id: int) -> int:
     """
-    Reconstruit les arêtes du graphe KAG à partir des relations chunk-entité de l'espace.
-    Prend en compte la hiérarchie : Chunk (étroit), Parent/Section (moyen), Document (large).
+    Reconstruit les arêtes co_occurs à partir des relations chunk-entité de l'espace.
     """
     from collections import defaultdict
 
-    # Nettoyage des anciennes relations structurelles
     session.execute(
         delete(EntityEntityRelation).where(
             EntityEntityRelation.space_id == space_id,
-            EntityEntityRelation.relation_type.in_(["co_occurs", "intra_parent", "intra_document"]),
+            EntityEntityRelation.relation_type == "co_occurs",
         )
     )
-
-    # 1. Récupérer toutes les associations entité <-> structure
-    # (entity_id, chunk_id, parent_node_id, node_id, document_id, importance, is_leaf)
     stmt = (
-        select(
-            ChunkEntityRelation.entity_id,
-            ChunkEntityRelation.chunk_id,
-            DocumentChunk.parent_node_id,
-            DocumentChunk.node_id,
-            DocumentChunk.document_id,
-            ChunkEntityRelation.relevance_score,
-            DocumentChunk.is_leaf
-        )
+        select(ChunkEntityRelation.chunk_id, ChunkEntityRelation.entity_id)
         .join(DocumentChunk, DocumentChunk.id == ChunkEntityRelation.chunk_id)
         .join(DocumentSpace, DocumentSpace.document_id == DocumentChunk.document_id)
         .where(
@@ -735,107 +708,31 @@ def refresh_entity_entity_relations_for_space(session: Session, space_id: int) -
             ChunkEntityRelation.space_id == space_id,
         )
     )
-    
-    # Structures de données pour le groupement
-    chunk_to_entities = defaultdict(set)        # Leaf chunks -> co_occurs (Blue)
-    parent_to_entities = defaultdict(set)       # Sections/Parents -> intra_parent (Green)
-    doc_to_entities = defaultdict(set)          # Documents -> intra_document (Yellow)
-    
-    # Pour le boost inter-document, on garde trace de quels documents contiennent chaque couple
-    pair_docs = defaultdict(set)
-    
-    # Store top entities per document to avoid N^2 explosion on large docs
-    doc_entity_importance = defaultdict(list)
-
-    for eid, cid, pid, nid, did, importance, is_leaf in session.exec(stmt).all():
-        eid, cid, did = int(eid), int(cid), int(did)
-        
-        if is_leaf:
-            # Co-occurrence directe uniquement dans les chunks feuilles (fins)
-            chunk_to_entities[cid].add(eid)
-            # Ajout au pool du parent direct
-            if pid:
-                parent_to_entities[(did, str(pid))].add(eid)
-        else:
-            # Co-occurrence dans un résumé de section/parent -> compte comme contexte de section
-            if nid:
-                parent_to_entities[(did, str(nid))].add(eid)
-        
-        doc_to_entities[did].add(eid)
-        doc_entity_importance[did].append((eid, float(importance or 0.0)))
-
-    # 2. Calculer les poids accumulés par paire
-    # pair_id (tuple trié) -> {"weight": float, "best_type": str}
-    # Plus le type est spécifique, plus il l'emporte pour la couleur
-    pair_stats = defaultdict(lambda: {"weight": 0.0, "best_type": "intra_document"})
-
-    # Niveau Chunk (Poids 5.0)
+    chunk_to_entities: Dict[int, List[int]] = defaultdict(list)
+    for chunk_id, eid in session.exec(stmt).all():
+        chunk_to_entities[int(chunk_id)].append(int(eid))
+    pair_weights: Dict[Tuple[int, int], float] = {}
     for eids in chunk_to_entities.values():
-        uniq = sorted(list(eids))
+        uniq = sorted(set(eids))
         for i in range(len(uniq)):
             for j in range(i + 1, len(uniq)):
-                pair = (uniq[i], uniq[j])
-                pair_stats[pair]["weight"] += KAG_WEIGHT_CHUNK
-                pair_stats[pair]["best_type"] = "co_occurs"
-
-    # Niveau Parent/Section (Poids 2.0)
-    for eids in parent_to_entities.values():
-        uniq = sorted(list(eids))
-        for i in range(len(uniq)):
-            for j in range(i + 1, len(uniq)):
-                pair = (uniq[i], uniq[j])
-                pair_stats[pair]["weight"] += KAG_WEIGHT_PARENT
-                if pair_stats[pair]["best_type"] == "intra_document":
-                    pair_stats[pair]["best_type"] = "intra_parent"
-
-    # Niveau Document (Poids 0.5) - Filtré au Top 150 par document pour voir les liens globaux
-    for did, entities in doc_to_entities.items():
-        # On augmente la limite pour capturer plus de liens transverses (Jaunes)
-        importance_list = sorted(doc_entity_importance[did], key=lambda x: x[1], reverse=True)
-        # Déduplication par entity_id car une entité peut être présente plusieurs fois
-        unique_eids = []
-        seen_eid = set()
-        for eid, imp in importance_list:
-            if eid not in seen_eid:
-                unique_eids.append(eid)
-                seen_eid.add(eid)
-                if len(unique_eids) >= 150:
-                    break
-        
-        uniq = sorted(unique_eids)
-        for i in range(len(uniq)):
-            for j in range(i + 1, len(uniq)):
-                pair = (uniq[i], uniq[j])
-                pair_stats[pair]["weight"] += KAG_WEIGHT_DOCUMENT
-                # On note la présence dans ce document pour le boost inter-doc
-                pair_docs[pair].add(did)
-
-    # 3. Appliquer le boost Inter-Document
-    for pair, docs in pair_docs.items():
-        if len(docs) > 1:
-            pair_stats[pair]["weight"] += (len(docs) - 1) * KAG_WEIGHT_INTER_DOC_BOOST
-
-    # 4. Sauvegarder les nouvelles relations
-    for (a, b), stats in pair_stats.items():
+                a, b = uniq[i], uniq[j]
+                if a > b:
+                    a, b = b, a
+                pair_weights[(a, b)] = pair_weights.get((a, b), 0.0) + 1.0
+    for (a, b), w in pair_weights.items():
         session.add(
             EntityEntityRelation(
                 space_id=space_id,
                 entity_a_id=a,
                 entity_b_id=b,
-                relation_type=stats["best_type"],
-                weight=float(stats["weight"]),
+                relation_type="co_occurs",
+                weight=float(w),
                 created_at=datetime.utcnow(),
             )
         )
-    
     session.commit()
-    logger.info(
-        "Graphe KAG rafraîchi pour l'espace %d : %d relations créées (hiérarchie activée)",
-        space_id,
-        len(pair_stats)
-    )
-    return len(pair_stats)
-
+    return len(pair_weights)
 
 
 def _neighbor_entity_ids_for_entities(
@@ -876,17 +773,7 @@ def _get_or_create_entity_for_space(
     """
     name_normalized = normalize_entity_name(name)
     
-    # 1. Déduplication locale à la session (objets ajoutés mais pas encore flushés)
-    for obj in session.new:
-        if (
-            isinstance(obj, KnowledgeEntity) 
-            and obj.space_id == space_id 
-            and obj.name_normalized == name_normalized
-        ):
-            obj.mention_count += 1
-            return obj
-
-    # 2. Déduplication par name_normalized exact en base
+    # Déduplication par name_normalized exact
     statement = select(KnowledgeEntity).where(
         KnowledgeEntity.space_id == space_id,
         KnowledgeEntity.name_normalized == name_normalized,
@@ -960,26 +847,10 @@ def _get_or_create_entity_for_space(
                 created_at=datetime.utcnow(),
                 updated_at=datetime.utcnow(),
             )
-            try:
-                with session.begin_nested():
-                    session.add(entity)
-                    session.flush()
-                logger.debug("Nouvelle entité créée avec embedding: '%s'", name)
-                return entity
-            except IntegrityError:
-                # Gérer accès concurrent : une autre tâche a inséré l'entité juste avant nous
-                # Le savepoint a déjà été rollbacké par le manager contextuel
-                logger.debug("Collision d'entité (concurrent): '%s', récupération existante", name)
-                statement = select(KnowledgeEntity).where(
-                    KnowledgeEntity.space_id == space_id,
-                    KnowledgeEntity.name_normalized == name_normalized,
-                )
-                existing = session.exec(statement).first()
-                if existing:
-                    existing.mention_count += 1
-                    session.add(existing)
-                    return existing
-                raise
+            session.add(entity)
+            session.flush()
+            logger.debug("Nouvelle entité créée avec embedding: '%s'", name)
+            return entity
     
     except Exception as emb_err:
         # Si c'est une erreur DB (ex: UniqueViolation déjà présente dans la session),
@@ -1006,22 +877,9 @@ def _get_or_create_entity_for_space(
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow(),
     )
-    try:
-        with session.begin_nested():
-            session.add(entity)
-            session.flush()
-        return entity
-    except IntegrityError:
-        statement = select(KnowledgeEntity).where(
-            KnowledgeEntity.space_id == space_id,
-            KnowledgeEntity.name_normalized == name_normalized,
-        )
-        existing = session.exec(statement).first()
-        if existing:
-            existing.mention_count += 1
-            session.add(existing)
-            return existing
-        return entity # Devrait être unreachable
+    session.add(entity)
+    session.flush()
+    return entity
 
 
 def _resolve_entity_id_for_space(
@@ -1142,172 +1000,7 @@ def save_typed_relations_for_chunk(
     return saved
 
 
-
-def _try_cloning_kag_from_another_space(
-    session: Session,
-    document_id: int,
-    target_space_id: int
-) -> bool:
-    """
-    Tente de copier les entités et relations KAG depuis un autre espace 
-    où ce document a déjà été traité.
-    """
-    try:
-        # 1. Rechercher un espace source (un espace où ce document a déjà des relations KAG)
-        source_space_stmt = (
-            select(ChunkEntityRelation.space_id)
-            .join(DocumentChunk, DocumentChunk.id == ChunkEntityRelation.chunk_id)
-            .where(
-                DocumentChunk.document_id == document_id,
-                ChunkEntityRelation.space_id != target_space_id
-            )
-            .limit(1)
-        )
-        source_space_id = session.exec(source_space_stmt).first()
-
-        if source_space_id is None:
-            return False
-        
-        logger.info(
-            "[KAG-Clone] Début clonage document_id=%s : source_space=%s -> target_space=%s",
-            document_id,
-            source_space_id,
-            target_space_id,
-        )
-
-        # 2. Récupérer toutes les relations chunk-entité existantes pour ce document dans l'espace source
-        source_relations = list(session.exec(
-            select(ChunkEntityRelation)
-            .join(DocumentChunk, DocumentChunk.id == ChunkEntityRelation.chunk_id)
-            .where(
-                DocumentChunk.document_id == document_id,
-                ChunkEntityRelation.space_id == source_space_id
-            )
-        ).all())
-
-        if not source_relations:
-            return False
-
-        # 3. Collecter toutes les entités sources impliquées
-        source_entity_ids = list(set(r.entity_id for r in source_relations))
-        source_entities = list(session.exec(
-            select(KnowledgeEntity).where(KnowledgeEntity.id.in_(source_entity_ids))
-        ).all())
-
-        # 4. Mapper ou créer les entités dans l'espace cible
-        entity_mapping: Dict[int, int] = {} # source_entity_id -> target_entity_id
-        
-        for src_ent in source_entities:
-            # Sécuriser par _get_or_create_entity_for_space pour gérer les accès concurrents
-            target_ent = _get_or_create_entity_for_space(
-                session=session,
-                name=src_ent.name,
-                entity_type=src_ent.entity_type,
-                space_id=target_space_id
-            )
-            
-            if target_ent.id is not None:
-                entity_mapping[int(src_ent.id)] = int(target_ent.id)
-
-        # 5. Créer les relations ChunkEntityRelation dans l'espace cible
-        for src_rel in source_relations:
-            if src_rel.entity_id in entity_mapping:
-                target_rel = ChunkEntityRelation(
-                    chunk_id=src_rel.chunk_id,
-                    entity_id=entity_mapping[src_rel.entity_id],
-                    relevance_score=src_rel.relevance_score,
-                    space_id=target_space_id,
-                    created_at=datetime.utcnow(),
-                )
-                session.add(target_rel)
-
-        # 6. Copier les EntityEntityRelation (relations typées transversales entre entités)
-        # On ne copie que celles liées aux chunks du document actuel
-        source_chunk_ids = [r.chunk_id for r in source_relations]
-        source_ee_rels = list(session.exec(
-            select(EntityEntityRelation).where(
-                EntityEntityRelation.space_id == source_space_id,
-                EntityEntityRelation.source_chunk_id.in_(source_chunk_ids)
-            )
-        ).all())
-
-        for src_ee in source_ee_rels:
-            # Vérifier que les deux entités sont présentes dans notre mapping
-            if src_ee.entity_a_id in entity_mapping and src_ee.entity_b_id in entity_mapping:
-                # Vérifier si la relation existe déjà dans la cible
-                existing_ee = session.exec(
-                    select(EntityEntityRelation).where(
-                        EntityEntityRelation.space_id == target_space_id,
-                        EntityEntityRelation.entity_a_id == entity_mapping[src_ee.entity_a_id],
-                        EntityEntityRelation.entity_b_id == entity_mapping[src_ee.entity_b_id],
-                        EntityEntityRelation.relation_type == src_ee.relation_type,
-                    )
-                ).first()
-
-                if not existing_ee:
-                    target_ee = EntityEntityRelation(
-                        space_id=target_space_id,
-                        entity_a_id=entity_mapping[src_ee.entity_a_id],
-                        entity_b_id=entity_mapping[src_ee.entity_b_id],
-                        relation_type=src_ee.relation_type,
-                        weight=src_ee.weight,
-                        confidence=src_ee.confidence,
-                        source_chunk_id=src_ee.source_chunk_id,
-                        created_at=datetime.utcnow(),
-                    )
-                    session.add(target_ee)
-
-        # 7. Copier les EntityAlias
-        source_aliases = list(session.exec(
-            select(EntityAlias).where(
-                EntityAlias.space_id == source_space_id,
-                EntityAlias.entity_id.in_(source_entity_ids)
-            )
-        ).all())
-
-        for src_alias in source_aliases:
-            if src_alias.entity_id in entity_mapping:
-                existing_alias = session.exec(
-                    select(EntityAlias).where(
-                        EntityAlias.space_id == target_space_id,
-                        EntityAlias.entity_id == entity_mapping[src_alias.entity_id],
-                        EntityAlias.alias_normalized == src_alias.alias_normalized
-                    )
-                ).first()
-
-                if not existing_alias:
-                    target_alias = EntityAlias(
-                        space_id=target_space_id,
-                        entity_id=entity_mapping[src_alias.entity_id],
-                        alias_normalized=src_alias.alias_normalized,
-                        created_at=datetime.utcnow()
-                    )
-                    session.add(target_alias)
-
-        session.commit()
-        logger.info(
-            "✅ [KAG-Clone] Clonage réussi document_id=%s vers space_id=%s (%d entités, %d relations)",
-            document_id,
-            target_space_id,
-            len(source_entities),
-            len(source_relations),
-        )
-        return True
-
-    except Exception as e:
-        session.rollback()
-        logger.error(
-            "❌ [KAG-Clone] Échec du clonage document_id=%s vers space_id=%s : %s",
-            document_id,
-            target_space_id,
-            e,
-            exc_info=True,
-        )
-        return False
-
-
 def process_kag_for_document_space(session: Session, document_id: int, space_id: int) -> Dict[str, int]:
-
     """
     Extrait et sauvegarde les entités KAG pour un document dans un espace donné.
     Enrichit aussi les chunks parents avec summary+questions+embedding.
@@ -1333,15 +1026,10 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
 
     delete_entities_for_document(session, document_id, space_id)
 
-    # Tentative de clonage depuis un autre espace pour éviter la re-extraction
-    if _try_cloning_kag_from_another_space(session, document_id, space_id):
-        return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0, "cloned": 1}
-
     chunks_stmt = select(DocumentChunk).where(
         DocumentChunk.document_id == document_id,
         DocumentChunk.is_leaf == True,
     )
-
     chunks = list(session.exec(chunks_stmt).all())
     if not chunks:
         return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
@@ -1401,27 +1089,18 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
             _update_entity_confidence_score(session, eid, space_id)
 
         if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
-            metadata = dict(chunk.metadata_json or {})
-            typed = metadata.get("kag_typed_relations")
-            
-            if not typed:
-                try:
-                    typed = extract_typed_relations_sync(content, entities)
-                    if typed:
-                        metadata["kag_typed_relations"] = typed
-                        chunk.metadata_json = metadata
-                        chunk.metadata_ = metadata
-                        session.add(chunk)
-                except Exception as tre:
-                    logger.warning(
-                        "Relations typées KAG ignorées chunk_id=%s: %s",
-                        chunk.id,
-                        tre,
+            try:
+                typed = extract_typed_relations_sync(content, entities)
+                if typed:
+                    n = save_typed_relations_for_chunk(
+                        session, space_id, int(chunk.id), typed
                     )
-
-            if typed:
-                save_typed_relations_for_chunk(
-                    session, space_id, int(chunk.id), typed
+                    total_typed_relations += n
+            except Exception as tre:
+                logger.warning(
+                    "Relations typées KAG ignorées chunk_id=%s: %s",
+                    chunk.id,
+                    tre,
                 )
 
     session.commit()
@@ -1654,47 +1333,24 @@ def get_space_bipartite_graph(
 def get_space_entity_relation_graph(
     session: Session,
     space_id: int,
+    max_edges: int = 600,
 ) -> Dict[str, List[Dict]]:
     """
     Graphe entité–entité (co-occurrences et autres relation_type) pour la visualisation.
-    Utilise un échantillonnage par catégorie pour garantir la visibilité des 4 types
-    (Direct, Section, Global, Logique) même si les poids sont très disparates.
     """
-    all_rows = []
-    
-    # 1. Quotas pour les relations hiérarchiques (structurelles)
-    hierarchical_quotas = {
-        "co_occurs": 500,       # Bleu (Direct)
-        "intra_parent": 400,    # Vert (Section)
-        "intra_document": 400,  # Jaune (Global)
-    }
-    
-    for rtype, quota in hierarchical_quotas.items():
-        rows = session.exec(
+    rows = list(
+        session.exec(
             select(EntityEntityRelation)
             .where(EntityEntityRelation.space_id == space_id)
-            .where(EntityEntityRelation.relation_type == rtype)
             .order_by(EntityEntityRelation.weight.desc())
-            .limit(quota)
+            .limit(max_edges)
         ).all()
-        all_rows.extend(rows)
-        
-    # 2. Quota pour les relations typées LLM (Logique / Rouge)
-    # On prend tout ce qui n'est pas dans les types hiérarchiques standards
-    typed_rows = session.exec(
-        select(EntityEntityRelation)
-        .where(EntityEntityRelation.space_id == space_id)
-        .where(EntityEntityRelation.relation_type.notin_(list(hierarchical_quotas.keys())))
-        .order_by(EntityEntityRelation.weight.desc())
-        .limit(300)
-    ).all()
-    all_rows.extend(typed_rows)
-
-    if not all_rows:
+    )
+    if not rows:
         return {"nodes": [], "edges": [], "graph_mode": "entity_links"}
 
     entity_ids: Set[int] = set()
-    for r in all_rows:
+    for r in rows:
         entity_ids.add(int(r.entity_a_id))
         entity_ids.add(int(r.entity_b_id))
 
@@ -1725,7 +1381,7 @@ def get_space_entity_relation_graph(
         )
 
     edges: List[Dict] = []
-    for r in all_rows:
+    for r in rows:
         if int(r.entity_a_id) not in ent_by_id or int(r.entity_b_id) not in ent_by_id:
             continue
         w = float(r.weight or 1.0)
@@ -1817,103 +1473,91 @@ def _process_parent_enrichment_for_document_space(
         total_parent_relations = 0
 
         for chunk in parent_chunks:
+            if not chunk.content or len(chunk.content.strip()) < 30:
+                continue
+
             try:
-                if not chunk.content or len(chunk.content.strip()) < 30:
+                result = generate_parent_summary_questions_sync(chunk.content)
+                if not result:
                     continue
 
                 metadata = dict(chunk.metadata_json or {})
-                result = None
+                metadata["summary"] = result["summary"]
+                metadata["generated_questions"] = result["generated_questions"]
+                chunk.metadata_json = metadata
+                chunk.metadata_ = metadata
 
-                # Vérifier si déjà enrichi (cache)
-                if metadata.get("summary"):
-                    result = {
-                        "summary": metadata["summary"],
-                        "generated_questions": metadata.get("generated_questions", [])
-                    }
-                else:
-                    try:
-                        result = generate_parent_summary_questions_sync(chunk.content)
-                        if result:
-                            metadata["summary"] = result["summary"]
-                            metadata["generated_questions"] = result["generated_questions"]
-                            chunk.metadata_json = metadata
-                            chunk.metadata_ = metadata
-                    except Exception as e:
-                        logger.warning("Erreur enrichissement parent %s: %s", chunk.id, e)
-                        continue
+                # Embedder le summary+questions et stocker dans l'embedding du parent
+                enrichment_text = result["summary"]
+                if result["generated_questions"]:
+                    enrichment_text += " " + " ".join(result["generated_questions"])
 
-                if result:
-                    # Embedder le summary+questions et stocker dans l'embedding du parent
-                    enrichment_text = result["summary"]
-                    if result["generated_questions"]:
-                        enrichment_text += " " + " ".join(result["generated_questions"])
+                # Générer l'embedding pour ce parent (intention de section)
+                parent_embeddings = generate_embeddings_batch([enrichment_text], batch_size=1)
+                if parent_embeddings and parent_embeddings[0]:
+                    chunk.embedding = parent_embeddings[0]
+                    logger.debug(
+                        "Embedding parent généré pour chunk_id=%s (summary+questions)",
+                        chunk.id,
+                    )
 
-                    # Générer l'embedding pour ce parent (intention de section)
-                    parent_embeddings = generate_embeddings_batch([enrichment_text], batch_size=1)
-                    if parent_embeddings and parent_embeddings[0]:
-                        chunk.embedding = parent_embeddings[0]
-                        logger.debug(
-                            "Embedding parent généré pour chunk_id=%s (summary+questions)",
-                            chunk.id,
+                session.add(chunk)
+                total_parents_enriched += 1
+
+                # Extraction d'entités sur le summary+questions
+                entities = extract_entities_sync(enrichment_text)
+                if entities:
+                    parent_entity_ids: Set[int] = set()
+                    for entity_data in entities:
+                        name = (entity_data.get("name") or "").strip()
+                        entity_type = (entity_data.get("type") or "concept_technique").strip()
+                        importance = float(entity_data.get("importance", 1.0) or 1.0)
+                        if not name or len(name) < 2:
+                            continue
+
+                        entity = _get_or_create_entity_for_space(
+                            session=session,
+                            name=name,
+                            entity_type=entity_type,
+                            space_id=space_id,
                         )
+                        total_parent_entities += 1
+                        if entity.id is not None:
+                            parent_entity_ids.add(int(entity.id))
 
-                    session.add(chunk)
-                    total_parents_enriched += 1
-
-                    # Extraction d'entités sur le summary+questions
-                    entities = extract_entities_sync(enrichment_text)
-                    if entities:
-                        parent_entity_ids: Set[int] = set()
-                        for entity_data in entities:
-                            name = (entity_data.get("name") or "").strip()
-                            entity_type = (entity_data.get("type") or "concept_technique").strip()
-                            importance = float(entity_data.get("importance", 1.0) or 1.0)
-                            if not name or len(name) < 2:
-                                continue
-
-                            entity = _get_or_create_entity_for_space(
-                                session=session,
-                                name=name,
-                                entity_type=entity_type,
-                                space_id=space_id,
+                        existing_rel = session.exec(
+                            select(ChunkEntityRelation).where(
+                                ChunkEntityRelation.chunk_id == chunk.id,
+                                ChunkEntityRelation.entity_id == entity.id,
+                                ChunkEntityRelation.space_id == space_id,
                             )
-                            total_parent_entities += 1
-                            if entity.id is not None:
-                                parent_entity_ids.add(int(entity.id))
+                        ).first()
+                        if not existing_rel:
+                            relation = ChunkEntityRelation(
+                                chunk_id=chunk.id,
+                                entity_id=entity.id,
+                                relevance_score=importance,
+                                space_id=space_id,
+                                created_at=datetime.utcnow(),
+                            )
+                            session.add(relation)
+                            total_parent_relations += 1
+                    for peid in parent_entity_ids:
+                        _update_entity_confidence_score(session, peid, space_id)
 
-                            existing_rel = session.exec(
-                                select(ChunkEntityRelation).where(
-                                    ChunkEntityRelation.chunk_id == chunk.id,
-                                    ChunkEntityRelation.entity_id == entity.id,
-                                    ChunkEntityRelation.space_id == space_id,
+                    if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
+                        try:
+                            typed = extract_typed_relations_sync(enrichment_text, entities)
+                            if typed:
+                                save_typed_relations_for_chunk(
+                                    session, space_id, int(chunk.id), typed
                                 )
-                            ).first()
-                            if not existing_rel:
-                                relation = ChunkEntityRelation(
-                                    chunk_id=chunk.id,
-                                    entity_id=entity.id,
-                                    relevance_score=importance,
-                                    space_id=space_id,
-                                    created_at=datetime.utcnow(),
-                                )
-                                session.add(relation)
-                                total_parent_relations += 1
-                        for peid in parent_entity_ids:
-                            _update_entity_confidence_score(session, peid, space_id)
-
-                        if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
-                            try:
-                                typed = extract_typed_relations_sync(enrichment_text, entities)
-                                if typed:
-                                    save_typed_relations_for_chunk(
-                                        session, space_id, int(chunk.id), typed
-                                    )
-                            except Exception as tre:
-                                logger.warning(
-                                    "Relations typées KAG (parent) chunk_id=%s: %s",
-                                    chunk.id,
-                                    tre,
-                                )
+                        except Exception as tre:
+                            logger.warning(
+                                "Relations typées KAG (parent) chunk_id=%s: %s",
+                                chunk.id,
+                                tre,
+                            )
 
             except Exception as e:
                 logger.warning(

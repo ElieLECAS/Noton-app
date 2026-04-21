@@ -11,7 +11,6 @@ from app.database import get_session, create_db_and_tables, engine
 from app.routers import auth, chat, conversations, kag, library, spaces, admin, notes, projects
 from app.config import settings
 from app.services.auth_service import decode_token, get_user_by_id
-from app.models.user import UserRead
 import logging
 
 # Configurer le logging pour voir les messages INFO
@@ -182,28 +181,25 @@ async def register_page(request: Request, session: Session = Depends(get_session
 @app.get("/library", response_class=HTMLResponse)
 async def library_page(request: Request, session: Session = Depends(get_session)):
     """Page bibliothèque générale."""
-    user = _get_authenticated_user(request, session)
-    if not user:
+    if _redirect_if_unauthenticated(request, session):
         return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("library.html", {"request": request, "user": user})
+    return templates.TemplateResponse("library.html", {"request": request})
 
 
 @app.get("/spaces/{space_id}", response_class=HTMLResponse)
 async def space_detail_page(request: Request, space_id: int, session: Session = Depends(get_session)):
     """Page de discussion dans un espace."""
-    user = _get_authenticated_user(request, session)
-    if not user:
+    if _redirect_if_unauthenticated(request, session):
         return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("space_detail.html", {"request": request, "space_id": space_id, "user": user})
+    return templates.TemplateResponse("space_detail.html", {"request": request, "space_id": space_id})
 
 
 @app.get("/spaces/{space_id}/kag-graph", response_class=HTMLResponse)
 async def space_kag_graph_page(request: Request, space_id: int, session: Session = Depends(get_session)):
     """Page de visualisation du graphe KAG d'un espace."""
-    user = _get_authenticated_user(request, session)
-    if not user:
+    if _redirect_if_unauthenticated(request, session):
         return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("space_kag_graph.html", {"request": request, "space_id": space_id, "user": user})
+    return templates.TemplateResponse("space_kag_graph.html", {"request": request, "space_id": space_id})
 
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -227,38 +223,21 @@ def _extract_bearer_token_from_request(request: Request) -> Optional[str]:
     return request.cookies.get("authToken")
 
 
-def _get_authenticated_user(request: Request, session: Session) -> Optional[UserRead]:
+def _is_request_authenticated(request: Request, session: Session) -> bool:
     token = _extract_bearer_token_from_request(request)
     if not token:
-        return None
+        return False
     payload = decode_token(token)
     if payload is None:
-        return None
+        return False
     user_id_str = payload.get("sub")
     if user_id_str is None:
-        return None
+        return False
     try:
         user_id = int(user_id_str)
     except (ValueError, TypeError):
-        return None
-    
-    user = get_user_by_id(session, user_id)
-    if not user:
-        return None
-    
-    # Mapper les rôles pour le template
-    roles = [ur.role.name for ur in user.user_roles] if hasattr(user, "user_roles") else []
-    return UserRead(
-        id=user.id,
-        username=user.username,
-        email=user.email,
-        created_at=user.created_at,
-        roles=roles
-    )
-
-
-def _is_request_authenticated(request: Request, session: Session) -> bool:
-    return _get_authenticated_user(request, session) is not None
+        return False
+    return get_user_by_id(session, user_id) is not None
 
 
 def _redirect_if_unauthenticated(request: Request, session: Session) -> bool:
