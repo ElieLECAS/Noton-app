@@ -188,9 +188,9 @@ async def stream_chat_message(
     # Construire le contexte.
     full_context = []
 
-    # Ajouter le contexte existant
+    # Ajouter le contexte existant (limité aux 10 derniers messages pour la performance)
     if request.context:
-        full_context.extend(request.context)
+        full_context.extend(request.context[-10:])
     
     # Variable pour accumuler la réponse de l'assistant
     assistant_response = []
@@ -444,9 +444,9 @@ async def stream_project_chat_message(
     
     full_context = project_context
     
-    # Ajouter le contexte de conversation existant si fourni
+    # Ajouter le contexte de conversation existant si fourni (limité aux 10 derniers messages)
     if request.context:
-        full_context = full_context + request.context
+        full_context = full_context + request.context[-10:]
     
     # Ajouter le message utilisateur actuel
     full_context.append({"role": "user", "content": request.message})
@@ -668,7 +668,7 @@ async def stream_space_chat_message(
     full_context = []
     full_context.append(space_context)
     if request.context:
-        full_context.extend(request.context)
+        full_context.extend(request.context[-10:])
     full_context.append({"role": "user", "content": request.message})
 
     _pipeline_inputs_space = {

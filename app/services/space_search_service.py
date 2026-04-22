@@ -2271,54 +2271,46 @@ async def search_relevant_passages(
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
                 if _get_reranker():
+                    # Pour MMR, on demande au reranker un pool un peu plus large (ex: 2x k)
+                    # afin de pouvoir diversifier ensuite.
+                    rerank_pool_size = max(k, MMR_K) if MMR_K > k else (k * 2)
+                    # Plafond de sécurité pour la performance CPU
+                    rerank_pool_size = min(rerank_pool_size, RERANK_STAGE2_POOL, 40)
+
                     with trace_run(
                         "reranking",
                         run_type="chain",
                         inputs={
                             "nb_candidates": len(filtered_candidates),
-                            "stage1_max": RERANK_STAGE1_MAX,
-                            "stage2_pool": RERANK_STAGE2_POOL,
-                            "k": k,
+                            "target_k": k,
+                            "pool_size": rerank_pool_size,
                             "multi_hop": use_multi_hop,
                         },
-                        tags=["reranking", "bge-reranker", "space"],
+                        tags=["reranking", "space"],
                     ) as rerank_run:
                         top_leaves = _two_stage_rerank_leaves(
                             filtered_candidates,
                             query_text,
-                            k,
+                            rerank_pool_size,
                         )
-                        top_scores = [round(float(n.score or 0), 4) for n in top_leaves[:5]]
-                        rerank_outputs = {"nb_final": len(top_leaves), "top5_scores": top_scores}
-                        if TRACE_VERBOSE_TEXT:
-                            rerank_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
-                            rerank_outputs["filtered_candidates_text"] = _nodes_for_trace(filtered_candidates)
-                        rerank_run.end(outputs=rerank_outputs)
+                        rerank_run.end(outputs={"nb_pool": len(top_leaves)})
                 else:
-                    logger.warning("Reranker non disponible, fallback ordre vectoriel")
+                    logger.warning("Reranker non disponible, fallback order")
                     top_leaves = filtered_candidates[:k]
             except Exception as rerank_err:
-                logger.warning(
-                    "Reranking échoué (space), fallback ordre vectoriel: %s", rerank_err
-                )
+                logger.warning("Reranking échoué : %s", rerank_err)
                 top_leaves = filtered_candidates[:k]
         elif not skip_reranking:
-            if not RERANKER_ENABLED:
-                logger.debug("Reranker désactivé (RERANKER_ENABLED=false)")
             top_leaves = filtered_candidates[:k]
 
-        # --- Étape 3.1 : Filtrage MMR (Maximum Marginal Relevance) ---
-        # Si k est grand (pool de candidats), on utilise MMR pour sélectionner target_k passages diversifiés.
-        if len(top_leaves) > MMR_K:
+        # --- Étape 3.1 : Diversification MMR ---
+        # On applique MMR si on a un pool plus grand que k
+        if len(top_leaves) > k:
             try:
                 with trace_run(
                     "mmr_selection",
                     run_type="chain",
-                    inputs={
-                        "nb_pool": len(top_leaves),
-                        "target_k": MMR_K,
-                        "lambda": MMR_LAMBDA,
-                    },
+                    inputs={"nb_pool": len(top_leaves), "target_k": k, "lambda": MMR_LAMBDA},
                     tags=["mmr", "diversity", "space"],
                 ) as mmr_run:
                     # 1. Récupération de l'embedding de la requête
@@ -2336,15 +2328,14 @@ async def search_relevant_passages(
                     
                     candidate_embeddings = _fetch_embeddings_for_chunks(session, chunk_ids)
                     
-                    # 3. Calcul MMR
+                    # 3. Calcul MMR pour réduire le pool à k
                     top_leaves = _compute_mmr_with_parent_constraint(
                         query_embedding=query_embedding,
                         candidates=top_leaves,
                         candidate_embeddings=candidate_embeddings,
-                        target_k=MMR_K,
+                        target_k=k,
                         lambda_param=MMR_LAMBDA
                     )
-                    
                     mmr_run.end(outputs={"nb_final": len(top_leaves)})
             except Exception as mmr_err:
                 logger.warning("Sélection MMR échouée (space), fallback top_k : %s", mmr_err)
