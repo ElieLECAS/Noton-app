@@ -42,10 +42,19 @@ logger = logging.getLogger(__name__)
 
 try:
     from llama_index.postprocessor.flag_embedding_reranker import FlagEmbeddingReranker
-    RERANKER_AVAILABLE = True
+    FLAG_RERANKER_AVAILABLE = True
 except ImportError:
-    RERANKER_AVAILABLE = False
-    logger.warning("FlagEmbeddingReranker non disponible, reranking désactivé")
+    FLAG_RERANKER_AVAILABLE = False
+
+try:
+    from llama_index.core.postprocessor import SentenceTransformersRerank
+    ST_RERANKER_AVAILABLE = True
+except ImportError:
+    ST_RERANKER_AVAILABLE = False
+
+RERANKER_AVAILABLE = FLAG_RERANKER_AVAILABLE or ST_RERANKER_AVAILABLE
+if not RERANKER_AVAILABLE:
+    logger.warning("Aucun composant de reranking (FlagEmbedding ou SentenceTransformers) disponible")
 
 RERANKER_MODEL = os.getenv("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")
 RERANKER_CANDIDATE_MULTIPLIER = 3
@@ -184,17 +193,44 @@ def _get_reranker():
         return None
     if _reranker_instance is None:
         use_fp16 = os.getenv("RERANKER_USE_FP16", "false").lower() == "true"
+        # Utilisation de FlagEmbedding pour les modèles BGE, sinon SentenceTransformers
+        is_bge = "bge-reranker" in RERANKER_MODEL.lower()
+        
         logger.info(
-            "Initialisation reranker %s (top_n=%s, use_fp16=%s)...",
+            "Initialisation reranker %s (top_n=%s, type=%s, use_fp16=%s)...",
             RERANKER_MODEL,
             _FLAG_RERANK_TOP_N,
+            "BGE" if is_bge else "SentenceTransformer",
             use_fp16,
         )
-        _reranker_instance = FlagEmbeddingReranker(
-            model=RERANKER_MODEL,
-            top_n=_FLAG_RERANK_TOP_N,
-            use_fp16=use_fp16,
-        )
+        
+        try:
+            if is_bge and FLAG_RERANKER_AVAILABLE:
+                _reranker_instance = FlagEmbeddingReranker(
+                    model=RERANKER_MODEL,
+                    top_n=_FLAG_RERANK_TOP_N,
+                    use_fp16=use_fp16,
+                )
+            elif ST_RERANKER_AVAILABLE:
+                _reranker_instance = SentenceTransformersRerank(
+                    model=RERANKER_MODEL,
+                    top_n=_FLAG_RERANK_TOP_N,
+                    device=os.getenv("EMBEDDING_DEVICE", "cpu")
+                )
+            elif FLAG_RERANKER_AVAILABLE:
+                # Fallback sur FlagEmbeddingReranker (peut parfois charger d'autres modèles)
+                _reranker_instance = FlagEmbeddingReranker(
+                    model=RERANKER_MODEL,
+                    top_n=_FLAG_RERANK_TOP_N,
+                    use_fp16=use_fp16,
+                )
+            else:
+                logger.error("Aucune classe de reranking disponible pour %s", RERANKER_MODEL)
+                return None
+        except Exception as e:
+            logger.error("Erreur lors de l'instanciation du reranker %s : %s", RERANKER_MODEL, e)
+            return None
+
         logger.info("✅ Reranker initialisé")
     return _reranker_instance
 
@@ -531,6 +567,40 @@ def _parse_chunk_id_from_node(node: TextNode) -> Optional[int]:
     return None
 
 
+
+def _prepare_flexible_tsquery(query_text: str) -> str:
+    """
+    Transforme une requête brute en tsquery flexible:
+    1. Nettoyage (minuscule, retrait ponctuations simples)
+    2. Filtrage des stopwords basiques (pour éviter le bruit avec le OR)
+    3. Ajout de préfixes :* sur chaque terme
+    4. Jointure avec OR (|) au lieu de AND (&)
+    """
+    if not query_text:
+        return ""
+    
+    # Nettoyage: on garde lettres, chiffres et espaces
+    cleaned = re.sub(r"[^\w\s]", " ", query_text.lower())
+    # Découpage en mots
+    words = [w.strip() for w in cleaned.split() if len(w.strip()) > 1]
+    
+    # Filtrage stopwords si plusieurs mots
+    if len(words) > 1:
+        words = [w for w in words if w not in _FALLBACK_STOPWORDS]
+    
+    if not words:
+        # Fallback si tout a été filtré ou si requête courte
+        words = [w.strip() for w in cleaned.split() if w.strip()]
+        
+    if not words:
+        return ""
+    
+    # Construction de la chaîne pour to_tsquery : "word1:* | word2:* ..."
+    # Le rank ts_rank_cd se chargera de donner plus de poids aux matches multiples.
+    safe_words = [w.replace("'", "''") for w in words]
+    return " | ".join(f"{w}:*" for w in safe_words)
+
+
 def _retrieve_leaves_lexical_sql(
     session: Session,
     space_id: int,
@@ -541,6 +611,10 @@ def _retrieve_leaves_lexical_sql(
     Recherche lexicale (ts_rank_cd / type BM25) sur les feuilles de l'espace.
     """
     if not query_text or not query_text.strip():
+        return []
+
+    flexible_q = _prepare_flexible_tsquery(query_text)
+    if not flexible_q:
         return []
 
     sql_query = text(
@@ -557,7 +631,7 @@ def _retrieve_leaves_lexical_sql(
             d.id AS document_id,
             ts_rank_cd(
                 to_tsvector('simple', coalesce(dc.content, dc.text, '')),
-                plainto_tsquery('simple', :q)
+                to_tsquery('simple', :q)
             ) AS lex_score
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
@@ -566,7 +640,7 @@ def _retrieve_leaves_lexical_sql(
           AND dc.is_leaf = true
           AND coalesce(dc.content, dc.text, '') <> ''
           AND to_tsvector('simple', coalesce(dc.content, dc.text, ''))
-              @@ plainto_tsquery('simple', :q)
+              @@ to_tsquery('simple', :q)
         ORDER BY lex_score DESC
         LIMIT :limit_k
         """
@@ -574,7 +648,7 @@ def _retrieve_leaves_lexical_sql(
 
     result = session.execute(
         sql_query,
-        {"space_id": space_id, "q": query_text.strip(), "limit_k": candidate_k},
+        {"space_id": space_id, "q": flexible_q, "limit_k": candidate_k},
     )
 
     nodes_with_scores: List[NodeWithScore] = []
