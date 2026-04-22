@@ -57,7 +57,7 @@ if not RERANKER_AVAILABLE:
     logger.warning("Aucun composant de reranking (FlagEmbedding ou SentenceTransformers) disponible")
 
 RERANKER_MODEL = os.getenv("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")
-RERANKER_CANDIDATE_MULTIPLIER = 3
+RERANKER_CANDIDATE_MULTIPLIER = int(os.getenv("RERANKER_CANDIDATE_MULTIPLIER", "5"))
 RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
@@ -2273,9 +2273,8 @@ async def search_relevant_passages(
                 if _get_reranker():
                     # Pour MMR, on demande au reranker un pool un peu plus large (ex: 2x k)
                     # afin de pouvoir diversifier ensuite.
-                    rerank_pool_size = max(k, MMR_K) if MMR_K > k else (k * 2)
-                    # Plafond de sécurité pour la performance CPU
-                    rerank_pool_size = min(rerank_pool_size, RERANK_STAGE2_POOL, 40)
+                    # Pool de reranking basé sur MMR_K (taille du pool de diversification)
+                    rerank_pool_size = min(MMR_K, RERANK_STAGE2_POOL)
 
                     with trace_run(
                         "reranking",

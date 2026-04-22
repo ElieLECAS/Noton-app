@@ -1038,13 +1038,46 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   addMessage("user", message);
   input.value = "";
 
+  function startFakeReasoning(el) {
+    const pool = [
+      "Je lis attentivement votre demande...",
+      "Je parcours vos documents pour vous répondre...",
+      "Je rassemble les points les plus importants...",
+      "Je vérifie la précision des détails...",
+      "Je croise différentes sources pour être complète...",
+      "J'analyse le contexte de votre question...",
+      "Je cherche les informations les plus pertinentes...",
+      "Je synthétise les connaissances à ma disposition...",
+      "Je mets de l'ordre dans mes idées...",
+      "Je structure ma réponse...",
+      "J'examine les détails techniques...",
+      "Je prépare une petite synthèse..."
+    ];
+    // Mélange et sélectionne 5 phrases au hasard
+    const shuffled = pool.sort(() => 0.5 - Math.random()).slice(0, 5);
+    shuffled.push("Un instant, je finalise la réponse...");
+    
+    let stepIdx = 0;
+    el.innerHTML = `<div class="flex items-center gap-2"><i class="ti ti-loader-2 animate-spin"></i> <span>${shuffled[0]}</span></div>`;
+    return setInterval(() => {
+      stepIdx = (stepIdx + 1) % shuffled.length;
+      const span = el.querySelector("span");
+      if (span) span.textContent = shuffled[stepIdx];
+    }, 2000);
+  }
+
   const host = document.getElementById("chat-messages");
   const assistantWrap = document.createElement("div");
   assistantWrap.className = "flex justify-start";
-  assistantWrap.innerHTML = `<div class="max-w-2xl rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"><div id="streaming-content" class="markdown-content italic">LIA réfléchit<span class="loading-dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></div></div>`;
+  assistantWrap.innerHTML = `
+    <div class="max-w-2xl rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message">
+      <div id="streaming-content" class="markdown-content italic"></div>
+    </div>`;
   host.appendChild(assistantWrap);
   host.scrollTop = host.scrollHeight;
   const contentEl = assistantWrap.querySelector("#streaming-content");
+  const reasoningInterval = startFakeReasoning(contentEl);
+  
   let response;
   try {
     response = await fetch(`/api/spaces/${spaceId}/chat/stream`, {
@@ -1060,11 +1093,13 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
       })
     });
   } catch (_) {
+    if (reasoningInterval) clearInterval(reasoningInterval);
     contentEl.classList.remove("italic");
     contentEl.textContent = "Erreur réseau lors de la génération de la réponse.";
     return;
   }
   if (!response.ok || !response.body) {
+    if (reasoningInterval) clearInterval(reasoningInterval);
     const errText = await response.text();
     contentEl.classList.remove("italic");
     contentEl.textContent = errText || "Erreur lors de la génération de la réponse.";
@@ -1091,6 +1126,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
       try {
         const data = JSON.parse(raw);
         if (data.message && data.message.content) {
+          if (reasoningInterval) clearInterval(reasoningInterval);
           full += data.message.content;
           contentEl.classList.remove("italic");
           const withMarkdown = parseMarkdown(full);
@@ -1102,12 +1138,14 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
             contentEl.innerHTML = withMarkdown;
           }
         } else if (data.error) {
+          if (reasoningInterval) clearInterval(reasoningInterval);
           streamError = String(data.error);
           contentEl.classList.remove("italic");
           contentEl.textContent = `Erreur: ${streamError}`;
           streamDone = true;
           break;
         } else if (data.done) {
+          if (reasoningInterval) clearInterval(reasoningInterval);
           streamDone = true;
           break;
         }
@@ -1119,6 +1157,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     }
     host.scrollTop = host.scrollHeight;
   }
+  if (reasoningInterval) clearInterval(reasoningInterval);
   if (!full && !streamError) {
     contentEl.classList.remove("italic");
     contentEl.textContent = "Aucune réponse générée.";

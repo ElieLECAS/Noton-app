@@ -1837,31 +1837,36 @@ extra_head %}
             }
         }
 
-        function showProjectLoadingAnimation() {
-            const messagesContainer = document.getElementById(
-                "project-chat-messages"
-            );
-            const loadingDiv = document.createElement("div");
-            loadingDiv.id = "project-loading-message";
-            loadingDiv.className = "flex justify-start";
-            loadingDiv.innerHTML = `
-            <div class="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg px-4 py-2">
-                <span class="loading-dots">
-                    <span>.</span><span>.</span><span>.</span>
-                </span>
-            </div>
-        `;
-            messagesContainer.appendChild(loadingDiv);
-            scrollProjectChatToBottom(true); // Forcer le scroll pour l'animation de chargement
+        async function startProjectFakeReasoning(el) {
+            const pool = [
+                "Je lis attentivement votre demande...",
+                "Je parcours vos notes pour vous répondre...",
+                "Je rassemble les points les plus importants...",
+                "Je vérifie la précision des détails...",
+                "Je croise vos connaissances pour être complète...",
+                "J'analyse le contexte de votre question...",
+                "Je cherche les informations les plus pertinentes...",
+                "Je synthétise les notes à ma disposition...",
+                "Je mets de l'ordre dans mes idées...",
+                "Je structure ma réponse...",
+                "J'examine les points principaux...",
+                "Je prépare une petite synthèse..."
+            ];
+            // Mélange et sélectionne 5 phrases au hasard
+            const shuffled = pool.sort(() => 0.5 - Math.random()).slice(0, 5);
+            shuffled.push("Un instant, je finalise la réponse...");
 
-            const dots = loadingDiv.querySelectorAll(".loading-dots span");
-            let dotIndex = 0;
-            projectLoadingAnimationInterval = setInterval(() => {
-                dots.forEach((dot, index) => {
-                    dot.style.opacity = index === dotIndex % 3 ? "1" : "0.3";
-                });
-                dotIndex++;
-            }, 300);
+            let stepIdx = 0;
+            el.innerHTML = `<div class="flex items-center gap-2"><i class="ti ti-loader-2 animate-spin"></i> <span>${shuffled[0]}</span></div>`;
+            return setInterval(() => {
+                stepIdx = (stepIdx + 1) % shuffled.length;
+                const span = el.querySelector("span");
+                if (span) span.textContent = shuffled[stepIdx];
+            }, 2000);
+        }
+
+        function showProjectLoadingAnimation() {
+            // Cette fonction est maintenant gérée directement dans sendProjectChatMessage
         }
 
         function hideProjectLoadingAnimation() {
@@ -1951,6 +1956,9 @@ extra_head %}
             scrollProjectChatToBottom(true); // Forcer le scroll au début du streaming
             const assistantContent =
                 assistantMessageDiv.querySelector(".markdown-content");
+            assistantContent.textContent = "";
+
+            const reasoningInterval = await startProjectFakeReasoning(assistantContent);
 
             let fullResponse = "";
             let firstChunkReceived = false;
@@ -1978,6 +1986,7 @@ extra_head %}
                 );
 
                 if (!response.ok) {
+                    if (reasoningInterval) clearInterval(reasoningInterval);
                     throw new Error("Erreur lors de la requête");
                 }
 
@@ -2001,10 +2010,12 @@ extra_head %}
                                 try {
                                     const jsonData = JSON.parse(data);
                                     if (jsonData.message && jsonData.message.content !== undefined) {
+                                        if (reasoningInterval) clearInterval(reasoningInterval);
                                         // Toujours accumuler tout le contenu (y compris chunks vides) pour ne pas tronquer la fin
                                         fullResponse += jsonData.message.content;
                                         if (!firstChunkReceived && jsonData.message.content.trim().length > 0) {
                                             firstChunkReceived = true;
+                                            assistantContent.classList.remove("italic");
                                         }
                                         // Mise à jour affichage pendant le stream
                                         const rawHtml = parseMarkdown(fullResponse);
@@ -2017,8 +2028,10 @@ extra_head %}
                                     } else if (jsonData.sources) {
                                         receivedSources = jsonData.sources;
                                     } else if (jsonData.done) {
+                                        if (reasoningInterval) clearInterval(reasoningInterval);
                                         break;
                                     } else if (jsonData.error) {
+                                        if (reasoningInterval) clearInterval(reasoningInterval);
                                         throw new Error(jsonData.error);
                                     }
                                 } catch (e) {
@@ -2033,6 +2046,7 @@ extra_head %}
                         }
                     }
                 }
+                if (reasoningInterval) clearInterval(reasoningInterval);
                 // Traiter le buffer restant (dernière ligne souvent non traitée)
                 if (buffer.trim()) {
                     const line = buffer.trim();
@@ -2101,6 +2115,7 @@ extra_head %}
                     await projectConversationsManager.loadConversations();
                 }
             } catch (error) {
+                if (reasoningInterval) clearInterval(reasoningInterval);
                 if (
                     document.getElementById(
                         "project-assistant-streaming-message"
