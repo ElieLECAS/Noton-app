@@ -22,6 +22,9 @@ from typing import Dict, List, Optional, Set, Tuple
 import os
 import re
 import unicodedata
+import time
+import hashlib
+from pathlib import Path
 from sqlmodel import Session, select
 from sqlalchemy import or_, text
 from app.models.document import Document
@@ -35,8 +38,8 @@ from app.config import settings
 from app.tracing import trace_run
 import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from app.services.query_reasoning_service import QueryIntent, reason_query_intent
+from app.services import embedding_service
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +87,13 @@ SPACE_EMPTY_ON_NO_MATCH = os.getenv("SPACE_EMPTY_ON_NO_MATCH", "true").lower() =
 SPACE_PAGE_SUMMARY_ENABLED = os.getenv("SPACE_PAGE_SUMMARY_ENABLED", "true").lower() == "true"
 SPACE_PAGE_SUMMARY_PER_PAGE_LEAVES = int(os.getenv("SPACE_PAGE_SUMMARY_PER_PAGE_LEAVES", "2"))
 SPACE_MAX_CONTEXT_LEAVES_PER_PAGE = int(os.getenv("SPACE_MAX_CONTEXT_LEAVES_PER_PAGE", "2"))
+SPACE_SMALL_SPACE_MAX_DOCS = int(os.getenv("SPACE_SMALL_SPACE_MAX_DOCS", "3"))
+SPACE_SMALL_SPACE_MAX_CHUNKS = int(os.getenv("SPACE_SMALL_SPACE_MAX_CHUNKS", "50"))
+SPACE_QUERY_REWRITE_ENABLED = os.getenv("SPACE_QUERY_REWRITE_ENABLED", "true").lower() == "true"
+SPACE_QUERY_DECOMPOSE_ENABLED = os.getenv("SPACE_QUERY_DECOMPOSE_ENABLED", "true").lower() == "true"
+SPACE_KAG_GRAPH_ENABLED = os.getenv("SPACE_KAG_GRAPH_ENABLED", "true").lower() == "true"
+SPACE_FAQ_LAYER_ENABLED = os.getenv("SPACE_FAQ_LAYER_ENABLED", "true").lower() == "true"
+SPACE_FAQ_BASE_DIR = os.getenv("SPACE_FAQ_BASE_DIR", "docs/faq_spaces")
 # Deux étapes : large pool tronqué puis raffinement sur texte complet
 RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
@@ -96,6 +106,11 @@ TRACE_TEXT_MAX_CHARS = int(os.getenv("TRACE_TEXT_MAX_CHARS", "12000"))
 # Singletons
 _reranker_instance = None
 _embed_model_instance = None
+
+# Cache retrieval C10: (space_id, query_hash) -> (expires_at, passages)
+_RETRIEVAL_CACHE: Dict[Tuple[int, str], Tuple[float, List[Dict]]] = {}
+RETRIEVAL_CACHE_TTL_SECONDS = int(os.getenv("SPACE_RETRIEVAL_CACHE_TTL_SECONDS", "90"))
+RETRIEVAL_CACHE_MAX_ITEMS = int(os.getenv("SPACE_RETRIEVAL_CACHE_MAX_ITEMS", "256"))
 
 
 def _text_for_trace(node: TextNode) -> str:
@@ -126,6 +141,126 @@ def _nodes_for_trace(candidates: List[NodeWithScore], limit: int = 80) -> List[D
         )
     return rows
 
+
+def _cache_key(space_id: int, query_text: str, k: int) -> Tuple[int, str]:
+    payload = f"{space_id}|{k}|{query_text.strip().lower()}".encode("utf-8", errors="ignore")
+    return (space_id, hashlib.sha256(payload).hexdigest())
+
+
+def _cache_get(space_id: int, query_text: str, k: int) -> Optional[List[Dict]]:
+    if RETRIEVAL_CACHE_TTL_SECONDS <= 0:
+        return None
+    key = _cache_key(space_id, query_text, k)
+    hit = _RETRIEVAL_CACHE.get(key)
+    if not hit:
+        return None
+    expires_at, payload = hit
+    if time.time() > expires_at:
+        _RETRIEVAL_CACHE.pop(key, None)
+        return None
+    return [dict(p) for p in payload]
+
+
+def _cache_set(space_id: int, query_text: str, k: int, passages: List[Dict]) -> None:
+    if RETRIEVAL_CACHE_TTL_SECONDS <= 0 or not passages:
+        return
+    if len(_RETRIEVAL_CACHE) >= RETRIEVAL_CACHE_MAX_ITEMS:
+        # simple eviction FIFO-ish
+        oldest_key = next(iter(_RETRIEVAL_CACHE.keys()), None)
+        if oldest_key:
+            _RETRIEVAL_CACHE.pop(oldest_key, None)
+    key = _cache_key(space_id, query_text, k)
+    _RETRIEVAL_CACHE[key] = (
+        time.time() + RETRIEVAL_CACHE_TTL_SECONDS,
+        [dict(p) for p in passages],
+    )
+
+
+async def _rewrite_query_llm(query_text: str) -> str:
+    """
+    B7: reformulation légère via LLM pour améliorer le rappel des requêtes floues.
+    Retourne la requête d'origine si indisponible/erreur.
+    """
+    if not SPACE_QUERY_REWRITE_ENABLED or not query_text or len(query_text.strip()) < 8:
+        return query_text
+    try:
+        from app.services.mistral_service import chat as mistral_chat
+        prompt = (
+            "Reformule la requête suivante en 1 phrase technique concise pour retrieval documentaire. "
+            "Conserve le sens exact, pas d'invention. Retourne uniquement la reformulation.\n\n"
+            f"Requête: {query_text}"
+        )
+        resp = await mistral_chat(
+            message=prompt,
+            model=settings.MODEL_FAST,
+            context=[{"role": "user", "content": prompt}],
+        )
+        rewritten = (
+            ((resp.get("choices") or [{}])[0].get("message") or {}).get("content") or ""
+        ).strip()
+        if rewritten and len(rewritten) >= 6:
+            return rewritten[:280]
+    except Exception as exc:
+        logger.debug("Query rewrite ignoré: %s", exc)
+    return query_text
+
+
+def _decompose_query(query_text: str) -> List[str]:
+    """
+    C3: décomposition simple en sous-questions sur connecteurs explicites.
+    """
+    if not SPACE_QUERY_DECOMPOSE_ENABLED or not query_text:
+        return [query_text]
+    q = query_text.strip()
+    # split léger sur comparaisons / conjonctions majeures
+    parts = re.split(r"\b(?:et|ainsi que|versus|vs|ou)\b", q, flags=re.IGNORECASE)
+    sub = [p.strip(" ,;:.") for p in parts if p and len(p.strip()) >= 10]
+    if len(sub) < 2:
+        return [q]
+    return sub[:3]
+
+
+def _retrieve_faq_candidates(space_id: int, query_text: str, limit: int = 6) -> List[NodeWithScore]:
+    """
+    C5: mini knowledge layer FAQ (file-based) par espace.
+    Fichier attendu: docs/faq_spaces/space_<id>.md avec blocs Q:/R:.
+    """
+    if not SPACE_FAQ_LAYER_ENABLED:
+        return []
+    faq_path = Path(SPACE_FAQ_BASE_DIR) / f"space_{space_id}.md"
+    if not faq_path.exists():
+        return []
+    try:
+        content = faq_path.read_text(encoding="utf-8")
+    except Exception:
+        return []
+    blocks = re.split(r"\n\s*\n+", content)
+    terms = [t.lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]{3,}", query_text or "")]
+    terms = [t for t in terms if t not in _FALLBACK_STOPWORDS][:10]
+    out: List[NodeWithScore] = []
+    for idx, b in enumerate(blocks):
+        bt = b.strip()
+        if not bt:
+            continue
+        low = bt.lower()
+        hit = sum(1 for t in terms if t in low) if terms else 0
+        if hit <= 0:
+            continue
+        score = min(1.0, 0.15 + (hit / max(1, len(terms))) * 0.85)
+        node = TextNode(
+            id_=f"faq-{space_id}-{idx}",
+            text=bt,
+            metadata={
+                "document_title": f"FAQ espace {space_id}",
+                "document_id": None,
+                "chunk_index": idx,
+                "retrieval_signal": "faq_layer",
+            },
+        )
+        out.append(NodeWithScore(node=node, score=float(score)))
+    out.sort(key=lambda x: float(x.score or 0.0), reverse=True)
+    return out[:limit]
+
 _FALLBACK_STOPWORDS = {
     "the", "and", "for", "with", "dans", "avec", "pour", "une", "des", "les",
     "est", "sur", "pas", "plus", "que", "qui", "this", "that", "what", "how",
@@ -147,7 +282,8 @@ RRF_PARENT_LIST_WEIGHT = 0.50
 # Poids du canal page_summary (assist retrieval de page, puis feuilles de preuve)
 RRF_PAGE_LIST_WEIGHT = float(os.getenv("RRF_PAGE_LIST_WEIGHT", "0.65"))
 # Seuil minimal de similarité parent (embedding summary+questions) pour descendre vers les feuilles
-PARENT_ENRICHED_MIN_SIMILARITY = float(os.getenv("PARENT_ENRICHED_MIN_SIMILARITY", "0.65"))
+PARENT_ENRICHED_MIN_SIMILARITY = float(os.getenv("PARENT_ENRICHED_MIN_SIMILARITY", "0.78"))
+PARENT_ENRICHED_MAX_LEAVES_PER_PARENT = int(os.getenv("PARENT_ENRICHED_MAX_LEAVES_PER_PARENT", "2"))
 # Filtrage post-fusion : scores RRF sont plus petits qu’une somme min-max sur [0,1]
 RRF_MIN_SCORE = float(os.getenv("RRF_MIN_SCORE", "0.018"))
 RRF_MIN_CHANNEL = float(os.getenv("RRF_MIN_CHANNEL", "0.010"))
@@ -272,19 +408,13 @@ def _get_reranker():
     return _reranker_instance
 
 
-def _get_embed_model() -> HuggingFaceEmbedding:
-    """Retourne le modèle d'embedding BGE-m3 (singleton)."""
+def _get_embed_model():
+    """Retourne le modèle d'embedding partagé (singleton global service)."""
     global _embed_model_instance
     if _embed_model_instance is None:
-        model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
-        device = os.getenv("EMBEDDING_DEVICE", "cpu")
-        logger.info("Initialisation embedding %s sur %s...", model_name, device)
-        _embed_model_instance = HuggingFaceEmbedding(
-            model_name=model_name,
-            device=device,
-            embed_batch_size=settings.EMBEDDING_BATCH_SIZE,
-        )
-        logger.info("✅ Modèle d'embedding initialisé")
+        logger.info("Initialisation embedding partagé via embedding_service...")
+        _embed_model_instance = embedding_service._get_embed_model()
+        logger.info("✅ Modèle d'embedding partagé initialisé")
     return _embed_model_instance
 
 
@@ -326,6 +456,33 @@ def _set_node_text_content(node, text: str) -> None:
         node.set_content(text)
     else:
         setattr(node, "text", text)
+
+
+def _window_text_for_query(content: str, query_text: str, window_chars: int = 1800) -> str:
+    """
+    C4: sélectionne une fenêtre textuelle locale la plus pertinente pour la requête
+    sur les chunks longs afin d'éviter d'injecter trop de bruit au reranker.
+    """
+    if not content or len(content) <= window_chars:
+        return content
+    q_terms = [
+        t.lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]{3,}", query_text or "")
+        if t.lower() not in _FALLBACK_STOPWORDS
+    ][:10]
+    if not q_terms:
+        return content[:window_chars]
+    low = content.lower()
+    hits = []
+    for term in q_terms:
+        idx = low.find(term)
+        if idx >= 0:
+            hits.append(idx)
+    if not hits:
+        return content[:window_chars]
+    center = int(sum(hits) / len(hits))
+    start = max(0, center - (window_chars // 2))
+    end = min(len(content), start + window_chars)
+    return content[start:end]
 
 
 def _compute_mmr_with_parent_constraint(
@@ -471,6 +628,7 @@ def _two_stage_rerank_leaves(
         backup[nid] = raw
         meta = dict(getattr(node, "metadata", {}) or {})
         enriched = _enrich_content_with_heading_and_figure(raw, meta)
+        enriched = _window_text_for_query(enriched, query_text, window_chars=2200)
         short = (
             enriched[:RERANK_STAGE1_CHAR_CAP]
             if len(enriched) > RERANK_STAGE1_CHAR_CAP
@@ -505,6 +663,7 @@ def _two_stage_rerank_leaves(
         raw = backup.get(nid, "")
         meta = dict(getattr(node, "metadata", {}) or {})
         enriched = _enrich_content_with_heading_and_figure(raw, meta)
+        enriched = _window_text_for_query(enriched, query_text, window_chars=2400)
         _set_node_text_content(node, enriched)
         stage2.append(NodeWithScore(node=node, score=float(nws.score or 0.0)))
 
@@ -665,9 +824,21 @@ def _retrieve_leaves_lexical_sql(
             dc.metadata_,
             d.title AS document_title,
             d.id AS document_id,
-            ts_rank_cd(
+            (
+              0.70 * ts_rank_cd(
                 to_tsvector('simple', coalesce(dc.content, dc.text, '')),
                 to_tsquery('simple', :q)
+              )
+              +
+              0.20 * ts_rank_cd(
+                to_tsvector('simple', coalesce(d.title, '')),
+                to_tsquery('simple', :q)
+              )
+              +
+              0.10 * ts_rank_cd(
+                to_tsvector('simple', coalesce(dc.metadata_json->>'parent_heading', dc.metadata_json->>'heading', '')),
+                to_tsquery('simple', :q)
+              )
             ) AS lex_score
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
@@ -715,6 +886,26 @@ def _retrieve_leaves_lexical_sql(
 def _rrf_contrib(rank_zero_based: int, k: int = RRF_K) -> float:
     """Contribution RRF classique : 1 / (k + rank), rank 0 = meilleur."""
     return 1.0 / (float(k) + float(rank_zero_based))
+
+
+def _zscore_map(scores_by_id: Dict[int, float]) -> Dict[int, float]:
+    """
+    B6: normalise un canal par z-score (borné [-2,2] puis [0,1]) pour limiter
+    les effets d'échelle arbitraires.
+    """
+    if not scores_by_id:
+        return {}
+    vals = np.array(list(scores_by_id.values()), dtype=np.float32)
+    mu = float(np.mean(vals))
+    sigma = float(np.std(vals))
+    if sigma <= 1e-9:
+        return {cid: 0.5 for cid in scores_by_id.keys()}
+    out: Dict[int, float] = {}
+    for cid, sc in scores_by_id.items():
+        z = (float(sc) - mu) / sigma
+        z = max(-2.0, min(2.0, z))
+        out[cid] = (z + 2.0) / 4.0
+    return out
 
 
 def _retrieve_parent_enriched_sql(
@@ -792,47 +983,86 @@ def _retrieve_parent_enriched_sql(
         )
         return []
 
-    # Feuilles rattachées à ces sections (parent_node_id = UUID Docling du parent)
-    stmt = (
-        select(DocumentChunk, Document.title)
-        .join(Document, Document.id == DocumentChunk.document_id)
-        .join(DocumentSpace, DocumentSpace.document_id == Document.id)
-        .where(
-            DocumentSpace.space_id == space_id,
-            DocumentChunk.is_leaf.is_(True),
-            DocumentChunk.parent_node_id.in_(parent_node_ids),
+    # B3/B11: ne prendre que 1..N feuilles représentatives par parent,
+    # triées par similarité LEAF->query (pas juste héritage du score parent).
+    sql_leaves = text(f"""
+        WITH parent_seed AS (
+            SELECT
+                dc.node_id AS parent_node_id,
+                1 - (dc.embedding <=> '{query_embedding_str}'::vector) AS parent_sim
+            FROM documentchunk dc
+            INNER JOIN document d ON dc.document_id = d.id
+            INNER JOIN document_space ds ON ds.document_id = d.id
+            WHERE ds.space_id = :space_id
+              AND dc.embedding IS NOT NULL
+              AND dc.is_leaf = false
+              AND dc.node_id IS NOT NULL
+              AND (1 - (dc.embedding <=> '{query_embedding_str}'::vector)) >= :min_parent_sim
+            ORDER BY dc.embedding <=> '{query_embedding_str}'::vector
+            LIMIT :parent_limit
+        ),
+        ranked_leaf AS (
+            SELECT
+                dc_leaf.id,
+                dc_leaf.content,
+                dc_leaf.text,
+                dc_leaf.chunk_index,
+                dc_leaf.document_id,
+                dc_leaf.metadata_json,
+                dc_leaf.metadata_,
+                d.title AS document_title,
+                ps.parent_sim,
+                1 - (dc_leaf.embedding <=> '{query_embedding_str}'::vector) AS leaf_sim,
+                row_number() OVER (
+                    PARTITION BY dc_leaf.parent_node_id
+                    ORDER BY dc_leaf.embedding <=> '{query_embedding_str}'::vector
+                ) AS rn
+            FROM documentchunk dc_leaf
+            INNER JOIN document d ON d.id = dc_leaf.document_id
+            INNER JOIN document_space ds ON ds.document_id = d.id
+            INNER JOIN parent_seed ps ON ps.parent_node_id = dc_leaf.parent_node_id
+            WHERE ds.space_id = :space_id
+              AND dc_leaf.is_leaf = true
+              AND dc_leaf.embedding IS NOT NULL
+              AND coalesce(dc_leaf.metadata_json->>'content_type', '') <> 'page_summary'
+        )
+        SELECT *
+        FROM ranked_leaf
+        WHERE rn <= :per_parent_limit
+        ORDER BY leaf_sim DESC
+        LIMIT :candidate_k
+    """)
+    leaf_rows = list(
+        session.execute(
+            sql_leaves,
+            {
+                "space_id": space_id,
+                "min_parent_sim": float(min_parent_sim),
+                "parent_limit": max(24, min(candidate_k, 80)),
+                "per_parent_limit": max(1, PARENT_ENRICHED_MAX_LEAVES_PER_PARENT),
+                "candidate_k": candidate_k,
+            },
         )
     )
-    leaf_rows = session.exec(stmt).all()
-
-    best_leaf: Dict[int, Tuple[float, DocumentChunk, str]] = {}
-    for chunk, document_title in leaf_rows:
-        pnid = chunk.parent_node_id
-        if not pnid:
-            continue
-        pns = str(pnid)
-        psim = parent_sim_by_node_id.get(pns)
-        if psim is None:
-            continue
-        prev = best_leaf.get(chunk.id)
-        if prev is None or psim > prev[0]:
-            best_leaf[chunk.id] = (psim, chunk, document_title or "Document sans titre")
 
     nodes_with_scores: List[NodeWithScore] = []
-    for _cid, (psim, chunk, doc_title) in best_leaf.items():
-        metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        metadata.setdefault("document_id", chunk.document_id)
-        metadata.setdefault("document_title", doc_title)
-        metadata.setdefault("chunk_index", chunk.chunk_index)
+    for row in leaf_rows:
+        psim = float(row.parent_sim or 0.0)
+        lsim = float(row.leaf_sim or 0.0)
+        metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
+        metadata.setdefault("document_id", row.document_id)
+        metadata.setdefault("document_title", row.document_title or "Document sans titre")
+        metadata.setdefault("chunk_index", row.chunk_index)
         metadata["parent_enrichment_score"] = psim
+        metadata["parent_enrichment_leaf_similarity"] = lsim
         metadata["retrieval_signal"] = "parent_enriched_assist"
 
         node = TextNode(
-            id_=f"chunk-{chunk.id}",
-            text=chunk.content or chunk.text or "",
+            id_=f"chunk-{row.id}",
+            text=row.content or row.text or "",
             metadata=metadata,
         )
-        nodes_with_scores.append(NodeWithScore(node=node, score=float(psim)))
+        nodes_with_scores.append(NodeWithScore(node=node, score=float((0.55 * lsim) + (0.45 * psim))))
 
     nodes_with_scores.sort(key=lambda x: float(x.score or 0.0), reverse=True)
     nodes_with_scores = nodes_with_scores[:candidate_k]
@@ -1020,6 +1250,16 @@ def _hybrid_fuse_candidates(
         if cid not in pg_by_id or sc > pg_by_id[cid][0]:
             pg_by_id[cid] = (sc, nws.node)
 
+    v_raw_map = {cid: score_node[0] for cid, score_node in v_by_id.items()}
+    k_raw_map = {cid: score_node[0] for cid, score_node in k_by_id.items()}
+    p_raw_map = {cid: score_node[0] for cid, score_node in p_by_id.items()}
+    pg_raw_map = {cid: score_node[0] for cid, score_node in pg_by_id.items()}
+    zv = _zscore_map(v_raw_map)
+    zl = _zscore_map(l_by_id)
+    zk = _zscore_map(k_raw_map)
+    zp = _zscore_map(p_raw_map)
+    zpg = _zscore_map(pg_raw_map)
+
     all_ids = set(v_by_id) | set(l_by_id) | set(k_by_id) | set(p_by_id) | set(pg_by_id)
     if not all_ids:
         return []
@@ -1066,7 +1306,14 @@ def _hybrid_fuse_candidates(
         c_p = RRF_PARENT_LIST_WEIGHT * _rrf_contrib(rp) if cid in rank_p else 0.0
         c_pg = RRF_PAGE_LIST_WEIGHT * _rrf_contrib(rpg) if cid in rank_pg else 0.0
 
-        hybrid = c_v + c_l + c_k + c_p + c_pg
+        z_component = (
+            0.20 * zv.get(cid, 0.0)
+            + 0.15 * zl.get(cid, 0.0)
+            + 0.20 * zk.get(cid, 0.0)
+            + 0.10 * zp.get(cid, 0.0)
+            + 0.20 * zpg.get(cid, 0.0)
+        )
+        hybrid = c_v + c_l + c_k + c_p + c_pg + z_component
 
         if cid in v_by_id:
             node = v_by_id[cid][1]
@@ -1090,6 +1337,7 @@ def _hybrid_fuse_candidates(
         meta["lexical_norm"] = c_l  # compat. filtres / logs
         meta["kag_norm"] = c_k
         meta["hybrid_score"] = hybrid
+        meta["zscore_component"] = z_component
         meta["retrieval_signal"] = "hybrid_rrf"
         node.metadata = meta
 
@@ -2286,13 +2534,23 @@ async def search_relevant_passages(
         logger.warning("Requête vide fournie")
         return []
 
+    cached = _cache_get(space_id, query_text, k)
+    if cached is not None:
+        logger.debug("Cache retrieval hit (space_id=%s, k=%s)", space_id, k)
+        return cached
+
+    effective_query = await _rewrite_query_llm(query_text)
+    sub_queries = _decompose_query(effective_query)
+    if not sub_queries:
+        sub_queries = [effective_query]
+
     # --- Étape 0 : Raisonnement cognitif sur la requête ---
     # Plan A : CQR désactivé par défaut (1 appel LLM par requête, biais marque).
     # Réactivable via SPACE_USE_CQR=true.
     reasoning_result: Optional[QueryIntent] = None
     if SPACE_USE_CQR:
         try:
-            reasoning_result = await reason_query_intent(query_text)
+            reasoning_result = await reason_query_intent(effective_query)
             if reasoning_result.intent != "generic":
                 logger.info(
                     "CQR reasoning [space]: intent=%s primary_source=%s confidence=%.2f",
@@ -2310,13 +2568,49 @@ async def search_relevant_passages(
             else k
         )
 
+        # B2 : mode small-space (moins de bruit: pas de KAG graphe / multi-hop / parent)
+        doc_count = (
+            session.execute(
+                text(
+                    """
+                    SELECT count(DISTINCT d.id)
+                    FROM document d
+                    JOIN document_space ds ON ds.document_id = d.id
+                    WHERE ds.space_id = :space_id
+                    """
+                ),
+                {"space_id": space_id},
+            ).scalar()
+            or 0
+        )
+        chunk_count = (
+            session.execute(
+                text(
+                    """
+                    SELECT count(dc.id)
+                    FROM documentchunk dc
+                    JOIN document_space ds ON ds.document_id = dc.document_id
+                    WHERE ds.space_id = :space_id
+                      AND dc.is_leaf = true
+                    """
+                ),
+                {"space_id": space_id},
+            ).scalar()
+            or 0
+        )
+        is_small_space = (
+            int(doc_count or 0) <= SPACE_SMALL_SPACE_MAX_DOCS
+            or int(chunk_count or 0) <= SPACE_SMALL_SPACE_MAX_CHUNKS
+        )
+        kag_enabled_for_query = settings.KAG_ENABLED and SPACE_KAG_GRAPH_ENABLED and not is_small_space
+
         # --- Étape 1 : extraction entités pivot (KAG) ---
         pivot_entity_names: List[str] = []
-        if settings.KAG_ENABLED:
+        if kag_enabled_for_query:
             try:
                 from app.services.kag_extraction_service import extract_entities_from_query_sync
 
-                pivot_entity_names = extract_entities_from_query_sync(query_text)
+                pivot_entity_names = extract_entities_from_query_sync(effective_query)
                 if pivot_entity_names:
                     logger.debug("Entités pivot requête (space): %s", pivot_entity_names[:5])
             except Exception as ext_err:
@@ -2325,77 +2619,83 @@ async def search_relevant_passages(
         # --- Étape 2 : sélection du mode retrieval ---
         use_multi_hop = (
             MULTI_HOP_ENABLED
-            and settings.KAG_ENABLED
-            and _needs_multi_hop(query_text, pivot_entity_names)
+            and kag_enabled_for_query
+            and _needs_multi_hop(effective_query, pivot_entity_names)
         )
 
-        if use_multi_hop:
-            logger.info(
-                "Multi-hop activé (space_id=%d) — pivots=%s",
-                space_id,
-                pivot_entity_names[:4],
-            )
-            with trace_run(
-                "multi_hop_retrieval",
-                run_type="retriever",
-                inputs={
-                    "query": query_text,
-                    "space_id": space_id,
-                    "pivot_entities": pivot_entity_names[:10],
-                    "candidate_k": candidate_k,
-                    "max_hops": MULTI_HOP_MAX_HOPS,
-                },
-                tags=["retrieval", "multi-hop", "kag", "space"],
-            ) as mh_run:
-                leaf_candidates = multi_hop_retrieve_space(
-                    session=session,
-                    space_id=space_id,
-                    user_id=user_id,
-                    query_text=query_text,
-                    pivot_entity_names=pivot_entity_names,
-                    candidate_k=candidate_k,
+        aggregate_leaf_candidates: List[NodeWithScore] = []
+        for sq_idx, sub_query in enumerate(sub_queries, start=1):
+            if use_multi_hop:
+                logger.info(
+                    "Multi-hop activé (space_id=%d) — pivots=%s (sq=%d/%d)",
+                    space_id,
+                    pivot_entity_names[:4],
+                    sq_idx,
+                    len(sub_queries),
                 )
-                top3_scores = [round(float(c.score or 0), 4) for c in leaf_candidates[:3]]
-                mh_outputs = {
-                    "nb_candidates": len(leaf_candidates),
-                    "top3_scores": top3_scores,
-                }
-                if TRACE_VERBOSE_TEXT:
-                    mh_outputs["candidates_text"] = _nodes_for_trace(leaf_candidates)
-                mh_run.end(outputs=mh_outputs)
-        else:
-            # Pipeline hybride standard
-            with trace_run(
-                "vector_retrieval",
-                run_type="retriever",
-                inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
-                tags=["retrieval", "vector", "pgvector", "space"],
-            ) as vr_run:
-                vector_candidates = _retrieve_leaves_sql(
-                    session=session,
-                    space_id=space_id,
-                    user_id=user_id,
-                    query_text=query_text,
-                    candidate_k=candidate_k,
-                )
-                vr_outputs = {
-                    "nb_candidates": len(vector_candidates),
-                    "top3_scores": [round(float(c.score or 0), 4) for c in vector_candidates[:3]],
-                }
-                if TRACE_VERBOSE_TEXT:
-                    vr_outputs["candidates_text"] = _nodes_for_trace(vector_candidates)
-                vr_run.end(outputs=vr_outputs)
+                with trace_run(
+                    "multi_hop_retrieval",
+                    run_type="retriever",
+                    inputs={
+                        "query": sub_query,
+                        "space_id": space_id,
+                        "pivot_entities": pivot_entity_names[:10],
+                        "candidate_k": candidate_k,
+                        "max_hops": MULTI_HOP_MAX_HOPS,
+                    },
+                    tags=["retrieval", "multi-hop", "kag", "space"],
+                ) as mh_run:
+                    leaf_candidates = multi_hop_retrieve_space(
+                        session=session,
+                        space_id=space_id,
+                        user_id=user_id,
+                        query_text=sub_query,
+                        pivot_entity_names=pivot_entity_names,
+                        candidate_k=candidate_k,
+                    )
+                    top3_scores = [round(float(c.score or 0), 4) for c in leaf_candidates[:3]]
+                    mh_outputs = {
+                        "nb_candidates": len(leaf_candidates),
+                        "top3_scores": top3_scores,
+                    }
+                    if TRACE_VERBOSE_TEXT:
+                        mh_outputs["candidates_text"] = _nodes_for_trace(leaf_candidates)
+                    mh_run.end(outputs=mh_outputs)
+                aggregate_leaf_candidates.extend(leaf_candidates[:candidate_k])
+                continue
+            else:
+                # Pipeline hybride standard
+                with trace_run(
+                    "vector_retrieval",
+                    run_type="retriever",
+                    inputs={"query": sub_query, "space_id": space_id, "candidate_k": candidate_k},
+                    tags=["retrieval", "vector", "pgvector", "space"],
+                ) as vr_run:
+                    vector_candidates = _retrieve_leaves_sql(
+                        session=session,
+                        space_id=space_id,
+                        user_id=user_id,
+                        query_text=sub_query,
+                        candidate_k=candidate_k,
+                    )
+                    vr_outputs = {
+                        "nb_candidates": len(vector_candidates),
+                        "top3_scores": [round(float(c.score or 0), 4) for c in vector_candidates[:3]],
+                    }
+                    if TRACE_VERBOSE_TEXT:
+                        vr_outputs["candidates_text"] = _nodes_for_trace(vector_candidates)
+                    vr_run.end(outputs=vr_outputs)
 
             with trace_run(
                 "lexical_retrieval",
                 run_type="retriever",
-                inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+                inputs={"query": sub_query, "space_id": space_id, "candidate_k": candidate_k},
                 tags=["retrieval", "lexical", "tsvector", "space"],
             ) as lr_run:
                 lexical_candidates = _retrieve_leaves_lexical_sql(
                     session=session,
                     space_id=space_id,
-                    query_text=query_text,
+                    query_text=sub_query,
                     candidate_k=candidate_k,
                 )
                 lr_outputs = {"nb_candidates": len(lexical_candidates)}
@@ -2404,19 +2704,19 @@ async def search_relevant_passages(
                 lr_run.end(outputs=lr_outputs)
 
             graph_candidates: List[NodeWithScore] = []
-            if settings.KAG_ENABLED:
+            if kag_enabled_for_query:
                 try:
                     with trace_run(
                         "kag_graph_retrieval",
                         run_type="retriever",
-                        inputs={"query": query_text, "pivot_entities": pivot_entity_names[:10], "space_id": space_id},
+                        inputs={"query": sub_query, "pivot_entities": pivot_entity_names[:10], "space_id": space_id},
                         tags=["retrieval", "kag", "graph", "space"],
                     ) as kag_run:
                         graph_candidates = _retrieve_via_knowledge_graph(
                             session=session,
                             space_id=space_id,
                             user_id=user_id,
-                            query_text=query_text,
+                            query_text=sub_query,
                             limit=candidate_k,
                             pivot_entity_names=pivot_entity_names or None,
                         )
@@ -2436,13 +2736,13 @@ async def search_relevant_passages(
                 session=session,
                 space_id=space_id,
                 user_id=user_id,
-                query_text=query_text,
+                query_text=sub_query,
                 candidate_k=candidate_k,
-            ) if settings.KAG_PARENT_ENRICHMENT_ENABLED else []
+            ) if (settings.KAG_PARENT_ENRICHMENT_ENABLED and not is_small_space) else []
             page_candidates = _retrieve_via_page_summaries(
                 session=session,
                 space_id=space_id,
-                query_text=query_text,
+                query_text=sub_query,
                 candidate_k=candidate_k,
             )
 
@@ -2473,6 +2773,24 @@ async def search_relevant_passages(
                     fusion_outputs["fused_text"] = _nodes_for_trace(leaf_candidates)
                 fusion_run.end(outputs=fusion_outputs)
 
+            aggregate_leaf_candidates.extend(leaf_candidates[:candidate_k])
+
+        # C3: fusion inter sous-questions
+        if aggregate_leaf_candidates:
+            dedup_by_id: Dict[int, NodeWithScore] = {}
+            for nws in aggregate_leaf_candidates:
+                cid = _parse_chunk_id_from_node(nws.node)
+                if cid is None:
+                    continue
+                prev = dedup_by_id.get(cid)
+                if prev is None or float(nws.score or 0.0) > float(prev.score or 0.0):
+                    dedup_by_id[cid] = nws
+            leaf_candidates = sorted(
+                dedup_by_id.values(),
+                key=lambda x: float(x.score or 0.0),
+                reverse=True,
+            )[: max(candidate_k, k * 2)]
+
         if not leaf_candidates:
             logger.info(
                 "Aucun candidat (space, multi_hop=%s), activation fallback lexical ILIKE",
@@ -2482,7 +2800,7 @@ async def search_relevant_passages(
                 session=session,
                 space_id=space_id,
                 user_id=user_id,
-                query_text=query_text,
+                query_text=effective_query,
                 k=k,
             )
 
@@ -2538,7 +2856,7 @@ async def search_relevant_passages(
                     ) as rerank_run:
                         top_leaves = _two_stage_rerank_leaves(
                             filtered_candidates,
-                            query_text,
+                            effective_query,
                             rerank_pool_size,
                         )
                         rerank_run.end(outputs={"nb_pool": len(top_leaves)})
@@ -2563,7 +2881,7 @@ async def search_relevant_passages(
                 ) as mmr_run:
                     # 1. Récupération de l'embedding de la requête
                     query_embedding = np.array(
-                        _get_embed_model().get_query_embedding(query_text), 
+                        _get_embed_model().get_query_embedding(effective_query),
                         dtype=np.float32
                     )
                     
@@ -2727,6 +3045,11 @@ async def search_relevant_passages(
             _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))
             for nws in final_nodes
         ]
+        # C5: mini knowledge layer FAQ (si disponible pour l'espace)
+        faq_candidates = _retrieve_faq_candidates(space_id, effective_query, limit=3)
+        if faq_candidates:
+            for faq in faq_candidates:
+                passages.append(_node_to_passage(faq.node, fallback_score=float(faq.score or 0.0)))
 
         score_strs = [f"{p['score']:.3f}" for p in passages[:3]]
         logger.info(
@@ -2736,17 +3059,27 @@ async def search_relevant_passages(
             score_strs,
         )
 
-        passages = refine_with_source_authority(passages, query_text, reasoning_result=reasoning_result)
+        passages = refine_with_source_authority(passages, effective_query, reasoning_result=reasoning_result)
+        if passages:
+            logger.info(
+                "Retrieval summary (space=%s): q='%s' docs=%s chunks=%s top_scores=%s",
+                space_id,
+                effective_query[:80],
+                len({p.get("document_id") for p in passages if p.get("document_id") is not None}),
+                len(passages),
+                [round(float(p.get("score") or 0.0), 3) for p in passages[:5]],
+            )
 
         if not passages:
             return await _keyword_fallback_passages(
                 session=session,
                 space_id=space_id,
                 user_id=user_id,
-                query_text=query_text,
+                query_text=effective_query,
                 k=k,
             )
 
+        _cache_set(space_id, query_text, k, passages)
         return passages
 
     except Exception as e:

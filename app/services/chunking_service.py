@@ -467,6 +467,33 @@ def _build_table_json(
     }
 
 
+def _build_table_facts(headers: List[str], data_rows: List[List[str]], max_facts: int = 120) -> List[dict]:
+    """
+    C8: faits tabulaires atomiques pour requêtes valeur->colonne.
+    """
+    facts: List[dict] = []
+    for ridx, row in enumerate(data_rows):
+        for cidx, value in enumerate(row):
+            if cidx >= len(headers):
+                continue
+            header = (headers[cidx] or "").strip()
+            val = (value or "").strip()
+            if not header or not val:
+                continue
+            facts.append(
+                {
+                    "row": ridx + 1,
+                    "column": cidx + 1,
+                    "header": header,
+                    "value": val,
+                    "fact_text": f"{header}: {val}",
+                }
+            )
+            if len(facts) >= max_facts:
+                return facts
+    return facts
+
+
 def _table_full_chunk_text(
     *,
     headers: List[str],
@@ -907,6 +934,7 @@ def _build_docling_hierarchical_specs(
                 full_metadata["suspicious_rows"] = suspicious_row_indices
                 full_metadata["column_headers"] = headers
                 full_metadata["table_json"] = table_json_obj
+                full_metadata["table_facts"] = _build_table_facts(headers, data_rows)
                 full_metadata["raw_content"] = raw_content
                 if section_anchors:
                     full_metadata["image_anchor"] = " ; ".join(section_anchors)
