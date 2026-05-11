@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -109,9 +109,46 @@ def _int_env(name: str, default: int) -> int:
 # Plan A : 8 → 4. Avec la correction A1 (feuille au lieu du parent entier),
 # 4 passages bien ciblés suffisent et le LLM hallucine beaucoup moins.
 RAG_TOP_K = _int_env("RAG_TOP_K", 4)
-# Paramétrage en dur du chat "espaces" — Plan A : température basse forcée
-SPACE_CHAT_MAX_TOKENS = int(os.getenv("SPACE_CHAT_MAX_TOKENS_OVERRIDE", "1200"))
-SPACE_CHAT_TEMPERATURE = float(os.getenv("SPACE_CHAT_TEMPERATURE_OVERRIDE", "0.1"))
+
+
+def _space_chat_max_tokens() -> int:
+    """Priorité : OVERRIDE → variable compose → settings → défaut plan qualité."""
+    o = os.getenv("SPACE_CHAT_MAX_TOKENS_OVERRIDE")
+    if o and str(o).strip():
+        try:
+            return max(1, int(o))
+        except ValueError:
+            pass
+    o = os.getenv("SPACE_CHAT_MAX_TOKENS")
+    if o and str(o).strip():
+        try:
+            return max(1, int(o))
+        except ValueError:
+            pass
+    if settings.SPACE_CHAT_MAX_TOKENS is not None:
+        return max(1, int(settings.SPACE_CHAT_MAX_TOKENS))
+    return 1500
+
+
+def _space_chat_temperature() -> float:
+    o = os.getenv("SPACE_CHAT_TEMPERATURE_OVERRIDE")
+    if o and str(o).strip():
+        try:
+            return float(o)
+        except ValueError:
+            pass
+    o = os.getenv("SPACE_CHAT_TEMPERATURE")
+    if o and str(o).strip():
+        try:
+            return float(o)
+        except ValueError:
+            pass
+    return float(settings.SPACE_CHAT_TEMPERATURE)
+
+
+# Paramétrage chat "espaces" (docker-compose / .env / settings)
+SPACE_CHAT_MAX_TOKENS = _space_chat_max_tokens()
+SPACE_CHAT_TEMPERATURE = _space_chat_temperature()
 SPACE_CHAT_TOP_P = None
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_AGENTIC_STEPBACK_ENABLED = os.getenv("SPACE_AGENTIC_STEPBACK_ENABLED", "true").lower() == "true"
@@ -155,7 +192,11 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "5) Distingue rigoureusement les références techniques proches "
     "(ex. Perform 70 vs Perform 76, version A vs B). En cas de doute, "
     "demande une précision plutôt que d'extrapoler.\n"
-    "6) Format : réponse courte (3 à 8 lignes) par défaut, listes ou "
+    "6) Lorsque l'information est dans un tableau ou une liste du passage, "
+    "reprends-la telle quelle (cellules, colonnes, intitulés de lignes). "
+    "Pour les marques, gammes et désignations fournisseurs, cite exactement "
+    "le libellé des passages sans le généraliser.\n"
+    "7) Format : réponse courte (3 à 8 lignes) par défaut, listes ou "
     "tableaux Markdown uniquement quand cela ajoute de la clarté technique. "
     "Ne mentionne jamais le fonctionnement interne de la recherche, du RAG, "
     "des chunks, du reranker, etc."

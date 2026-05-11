@@ -51,8 +51,8 @@ class Settings(BaseSettings):
     # Limite globale par défaut pour la longueur des réponses des LLM
     MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
     # Paramètres dédiés au chat "espaces"
-    SPACE_CHAT_MAX_TOKENS: Optional[int] = None
-    SPACE_CHAT_TEMPERATURE: float = 0.55
+    SPACE_CHAT_MAX_TOKENS: Optional[int] = 1500
+    SPACE_CHAT_TEMPERATURE: float = 0.3
     SPACE_CHAT_TOP_P: Optional[float] = None
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
@@ -69,8 +69,8 @@ class Settings(BaseSettings):
     EMBEDDING_DEVICE: str = "cpu"
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
     # Blocs texte Docling : si longueur > seuil, chunks text_window (parent = text_full). 0 = désactivé.
-    DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 0
-    DOCLING_TEXT_WINDOW_OVERLAP: int = 200
+    DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 2000
+    DOCLING_TEXT_WINDOW_OVERLAP: int = 400
 
     # Docling OCR (schémas techniques, cotes, PDF scannés)
     DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas

@@ -6,6 +6,7 @@ pour enrichir le graphe de connaissances et améliorer le RAG.
 """
 
 import json
+import os
 import re
 import unicodedata
 import logging
@@ -220,7 +221,7 @@ Types possibles pour le champ "type" du JSON (liste exhaustive) :
 
 Règles:
 - Retourne UNIQUEMENT un JSON valide, sans markdown ni commentaires
-- Maximum 10 entités par chunk
+- Maximum {max_entities} entités par chunk
 - Importance entre 0.0 et 1.0 (1.0 = très important)
 - Noms courts et précis (pas de phrases)
 - Utilise EXACTEMENT l'une des valeurs suivantes pour le champ "type" : {entity_types}
@@ -375,7 +376,7 @@ def _parse_llm_response(response_text: str) -> List[Dict]:
                 "importance": importance,
             })
         
-        return valid_entities[:10]
+        return valid_entities[:KAG_EXTRACTION_MAX_ENTITIES]
     
     except json.JSONDecodeError as e:
         logger.warning("Erreur parsing JSON LLM: %s - Réponse: %s", e, text[:200])
@@ -530,9 +531,10 @@ async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
     if not chunk_content or len(chunk_content.strip()) < 20:
         return []
     
-    content_truncated = chunk_content[:2000]
+    content_truncated = chunk_content[:KAG_EXTRACTION_TEXT_CHAR_CAP]
     prompt = EXTRACTION_PROMPT_TEMPLATE.format(
         entity_types=", ".join(SUPPORTED_ENTITY_TYPE_IDS),
+        max_entities=KAG_EXTRACTION_MAX_ENTITIES,
         chunk_content=content_truncated,
     )
     
@@ -589,7 +591,7 @@ async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
                 "entity_types_found": entity_types_found,
                 "entities_preview": [
                     {"name": e.get("name"), "type": e.get("type"), "importance": e.get("importance")}
-                    for e in entities[:10]
+                    for e in entities[:KAG_EXTRACTION_MAX_ENTITIES]
                 ],
             })
             logger.debug(
