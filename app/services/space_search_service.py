@@ -61,6 +61,25 @@ RERANKER_CANDIDATE_MULTIPLIER = int(os.getenv("RERANKER_CANDIDATE_MULTIPLIER", "
 RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
+
+# --- Plan A : qualité ---
+# A1 — Si False (défaut), le contenu envoyé au LLM reste la FEUILLE (avec heading/page
+# en préfixe) au lieu d'être remplacé par tout le parent. La résolution parent est
+# toujours utilisée pour les métadonnées (page, sources UI) mais pas pour le contenu.
+# Mettre à True pour retrouver l'ancien comportement (parent entier injecté).
+SPACE_INJECT_PARENT_CONTENT = os.getenv("SPACE_INJECT_PARENT_CONTENT", "false").lower() == "true"
+# Plafond de caractères du contexte parent ajouté en bonus si la feuille est très courte.
+SPACE_PARENT_CONTEXT_MAX_CHARS = int(os.getenv("SPACE_PARENT_CONTEXT_MAX_CHARS", "600"))
+SPACE_LEAF_SHORT_THRESHOLD = int(os.getenv("SPACE_LEAF_SHORT_THRESHOLD", "180"))
+# A5 — Désactivation du raisonnement CQR (1 appel LLM par requête, biais marque)
+SPACE_USE_CQR = os.getenv("SPACE_USE_CQR", "false").lower() == "true"
+# A3 — Multi-hop désactivé par défaut (trop bruyant sur espaces réduits)
+SPACE_MULTI_HOP_ENABLED = os.getenv("SPACE_MULTI_HOP_ENABLED", "false").lower() == "true"
+# A7 — Fallback ILIKE wildcard du KAG retrieval désactivé par défaut
+SPACE_KAG_ILIKE_FALLBACK = os.getenv("SPACE_KAG_ILIKE_FALLBACK", "false").lower() == "true"
+# A6 — Si le fallback lexical ne trouve rien de pertinent, ne pas injecter de chunks
+# "au hasard" : retourner liste vide pour laisser le prompt dire "info non disponible".
+SPACE_EMPTY_ON_NO_MATCH = os.getenv("SPACE_EMPTY_ON_NO_MATCH", "true").lower() == "true"
 # Deux étapes : large pool tronqué puis raffinement sur texte complet
 RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
@@ -110,8 +129,12 @@ _FALLBACK_STOPWORDS = {
     "sans", "mais", "donc", "car", "you", "your", "not", "are", "was", "were",
 }
 
-TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
-TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
+# A4 — Boosts arbitraires plafonnés très bas (étaient 0.5/match et cap 2.0,
+# ils écrasaient totalement les scores RRF qui sont de l'ordre de 0.02-0.05).
+TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.02"))
+TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "0.08"))
+# Boost CQR (source privilégiée) — désactivé par défaut (cf. SPACE_USE_CQR)
+SOURCE_AUTHORITY_BOOST = float(os.getenv("SOURCE_AUTHORITY_BOOST", "0.05"))
 
 # Fusion hybride : RRF (Reciprocal Rank Fusion) sur vectoriel, lexical, KAG, parents enrichis
 RRF_K = 60
@@ -128,9 +151,10 @@ HYBRID_MIN_SCORE = RRF_MIN_SCORE  # compat. nom interne
 MIN_ENTITY_CONFIDENCE = float(os.getenv("MIN_ENTITY_CONFIDENCE", "0.30"))
 
 # ---------------------------------------------------------------------------
-# Multi-hop — constantes en dur (pas de variables d'environnement)
+# Multi-hop — désactivé par défaut (Plan A : trop bruyant sur petits espaces).
+# Réactivable via SPACE_MULTI_HOP_ENABLED=true.
 # ---------------------------------------------------------------------------
-MULTI_HOP_ENABLED = True
+MULTI_HOP_ENABLED = SPACE_MULTI_HOP_ENABLED
 MULTI_HOP_MAX_HOPS = 3
 MULTI_HOP_CANDIDATE_BUDGET = 80   # plafond global de candidats (tous hops confondus)
 MULTI_HOP_PER_HOP_LIMIT = 20      # candidats KAG max par hop d'expansion
@@ -142,14 +166,21 @@ MH_RRF_PARENT_WEIGHT = RRF_PARENT_LIST_WEIGHT
 MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
 # Configuration MMR (Maximum Marginal Relevance)
-MMR_K = int(os.getenv("MMR_K", "15"))  # Nombre de passages finaux à renvoyer au LLM
-MMR_LAMBDA = 0.5  # Équilibre entre pertinence (1.0) et diversité (0.0)
+MMR_K = int(os.getenv("MMR_K", "8"))  # Plan A : 15 → 8 (cohérent avec RAG_TOP_K=4)
+MMR_LAMBDA = float(os.getenv("MMR_LAMBDA", "0.6"))  # 0.5 → 0.6 : un peu plus de pertinence
+# Plan A : pénalité douce à la place d'un blocage strict pour les chunks du même
+# parent. À 0.0 = aucune pénalité (cas d'1 seul PDF, indispensable). À 0.2 =
+# pénalise modérément la redondance. Ne JAMAIS exclure totalement, sinon MMR
+# s'arrête prématurément quand le corpus est petit.
+MMR_SAME_PARENT_PENALTY = float(os.getenv("MMR_SAME_PARENT_PENALTY", "0.15"))
 
-# Mots-clés heuristiques indiquant une requête multi-hop
+# Mots-clés heuristiques indiquant une requête multi-hop.
+# Durci (Plan A) : les anciens triggers ("et", "comment", "pourquoi", "pour")
+# matchaient quasi toutes les requêtes utilisateur et lançaient une expansion
+# graphe coûteuse et bruyante. On ne garde que des marqueurs de relation explicites.
 _MH_TRIGGER_PATTERNS = re.compile(
-    r"\b(et\b|comparaison|impact|cause|depend|dépend|influence|relation|lien"
-    r"|si\b|alors\b|pourquoi|comment|implique|nécessite|necessite|versus|vs\b"
-    r"|différence|difference|avantage|inconvénient|inconvenient)\b",
+    r"\b(comparaison|impact|cause|caus(é|es)|depend|dépend|influence"
+    r"|versus|vs\b|différence|difference)\b",
     re.IGNORECASE,
 )
 
@@ -299,10 +330,13 @@ def _compute_mmr_with_parent_constraint(
     lambda_param: float = MMR_LAMBDA,
 ) -> List[NodeWithScore]:
     """
-    Sélectionne target_k candidats parmi le pool en maximisant la MMR et la diversité de sources.
-    
-    Formule MMR = argmax [ lambda * sim(d, q) - (1-lambda) * max_sim(d, selected) ]
-    Contrainte additionnelle : 1 seul chunk par parent_node_id.
+    Sélectionne target_k candidats parmi le pool en maximisant la MMR.
+
+    Formule MMR = argmax [ lambda * sim(d, q) - (1-lambda) * max_sim(d, selected) ].
+
+    Plan A — La contrainte "1 chunk par parent_node_id" est remplacée par une
+    pénalité douce ``MMR_SAME_PARENT_PENALTY`` : sur un espace contenant un seul
+    PDF (= un seul parent), MMR ne s'arrêtait sinon qu'à 1 passage final.
     """
     if not candidates or target_k <= 0:
         return []
@@ -356,38 +390,33 @@ def _compute_mmr_with_parent_constraint(
         for i, nws in enumerate(candidates_pool):
             if i in selected_indices:
                 continue
-                
+
             cid = _parse_chunk_id_from_node(nws.node)
             if cid not in candidate_embeddings:
                 continue
-                
-            # --- Contrainte Parent ---
-            parent_id = (nws.node.metadata or {}).get("parent_node_id")
-            if parent_id and str(parent_id) in selected_parent_ids:
-                # On ignore/pénalise les candidats du même parent
-                continue
-                
-            # --- Calcul MMR ---
+
+            # --- Calcul MMR avec pénalité douce sur le même parent ---
             d_emb = candidate_embeddings[cid]
             d_emb = d_emb / np.linalg.norm(d_emb)
-            
-            # Similarité à la requête
+
             sim_q = np.dot(d_emb, query_embedding)
-            
-            # Similarité max aux déjà sélectionnés
             sim_selected = np.max(np.dot(sel_matrix, d_emb))
-            
+
             mmr_score = lambda_param * sim_q - (1 - lambda_param) * sim_selected
-            
+
+            parent_id = (nws.node.metadata or {}).get("parent_node_id")
+            if parent_id and str(parent_id) in selected_parent_ids:
+                mmr_score -= MMR_SAME_PARENT_PENALTY
+
             if mmr_score > best_mmr:
                 best_mmr = mmr_score
                 best_idx = i
-                
+
         if best_idx == -1:
-            # Plus de candidats respectant la contrainte parent unique
-            # On pourrait arrêter là (diversité stricte) ou relâcher la contrainte
-            # L'utilisateur a dit "interdiction stricte", donc on s'arrête.
-            logger.info("MMR arrêt : plus de parents uniques disponibles (%d/15 trouvés)", len(selected_indices))
+            logger.info(
+                "MMR arrêt : plus de candidats disponibles (%d sélectionnés)",
+                len(selected_indices),
+            )
             break
             
         selected_indices.append(best_idx)
@@ -1108,7 +1137,14 @@ async def _keyword_fallback_passages(
     query_text: str,
     k: int,
 ) -> List[Dict]:
-    """Fallback lexical si aucun embedding disponible."""
+    """
+    Fallback lexical de dernier recours.
+
+    Plan A — Si SPACE_EMPTY_ON_NO_MATCH=true (défaut) et qu'aucun terme de la
+    requête ne matche, on retourne une liste vide pour laisser le system prompt
+    indiquer "information non disponible" au lieu d'injecter des chunks au
+    hasard que le LLM va interpréter comme valides.
+    """
     terms = _extract_query_terms(query_text)
     base_stmt = (
         select(DocumentChunk, Document.title)
@@ -1127,8 +1163,14 @@ async def _keyword_fallback_passages(
         ).limit(max(k * 4, 12))
         rows = session.exec(stmt).all()
 
-    if not rows:
+    if not rows and not SPACE_EMPTY_ON_NO_MATCH:
         rows = session.exec(base_stmt.limit(max(k * 2, 8))).all()
+    elif not rows:
+        logger.info(
+            "Fallback lexical (space): aucun terme ne matche, retour liste vide "
+            "(SPACE_EMPTY_ON_NO_MATCH=true) — le LLM indiquera l'absence d'info."
+        )
+        return []
 
     passages: List[Dict] = []
     seen_chunk_ids: set = set()
@@ -1360,17 +1402,32 @@ def _retrieve_via_knowledge_graph(
         )
         results = list(session.exec(stmt).all())
 
-        # Fallback ILIKE partiel si peu de résultats exacts
-        if len(results) < limit // 2 and query_terms:
+        # Fallback ILIKE partiel — désactivé par défaut (Plan A) car ramène
+        # beaucoup de bruit (un wildcard "%poser%" matche n'importe quelle entité
+        # contenant "poser", "imposer", "déposer", …). Réactivable via env.
+        if (
+            SPACE_KAG_ILIKE_FALLBACK
+            and len(results) < limit // 2
+            and query_terms
+        ):
             logger.debug(
                 "KAG retrieval (space): fallback ILIKE (résultats exacts=%d)",
                 len(results),
             )
-            ilike_terms = query_terms[:5]
+            # Restreint aux entités multi-tokens d'au moins 5 caractères pour
+            # éviter les wildcards trop génériques.
+            ilike_terms = [
+                t for t in query_terms[:5]
+                if len(t) >= 5 and " " in t
+            ]
             ilike_conditions = [
                 KnowledgeEntity.name_normalized.ilike(f"%{term}%")
                 for term in ilike_terms
             ]
+        else:
+            ilike_terms = []
+            ilike_conditions = []
+        if ilike_conditions:
             stmt_ilike = (
                 select(
                     DocumentChunk,
@@ -1553,23 +1610,25 @@ def refine_with_source_authority(
     reasoning_result: Optional[QueryIntent] = None,
 ) -> List[Dict]:
     """
-    Source authority : boost les passages dont le titre correspond à la requête,
-    OU qui correspondent à la source privilégiée déterminée par le raisonnement (CQR).
+    Source authority : léger boost basé sur le titre du document et,
+    optionnellement, sur une source privilégiée par le CQR.
+
+    Plan A — boosts plafonnés très bas pour ne plus écraser la pertinence
+    sémantique. Étaient 0.5/match (cap 2.0) et 0.8 pour la source CQR ;
+    sont désormais 0.02/match (cap 0.08) et SOURCE_AUTHORITY_BOOST=0.05.
     """
     if not passages:
         return passages
 
-    # 1. Boost basé sur le raisonnement (CQR)
-    if reasoning_result and reasoning_result.primary_source:
+    # 1. Boost basé sur le raisonnement (CQR) — appliqué uniquement si activé
+    if SPACE_USE_CQR and reasoning_result and reasoning_result.primary_source:
         source_to_boost = reasoning_result.primary_source.lower()
-        boost_value = 0.8  # Boost significatif pour la source voulue
         for p in passages:
-            # On récupère la source du document (le chunk l'a via la migration/ingestion)
             doc_source = (p.get("source") or "").lower()
             if doc_source == source_to_boost:
-                p["score"] = float(p.get("score") or 0.0) + boost_value
+                p["score"] = float(p.get("score") or 0.0) + SOURCE_AUTHORITY_BOOST
 
-    # 2. Boost basé sur les mots du titre (Existant)
+    # 2. Boost basé sur les mots du titre (plafonné)
     if query_text and query_text.strip():
         query_words = _get_meaningful_words(query_text)
         if query_words:
@@ -1594,17 +1653,18 @@ def _needs_multi_hop(query_text: str, pivot_entity_names: List[str]) -> bool:
     """
     Détecte si la requête nécessite un retrieval multi-hop.
 
-    Critères (OR) :
-    - La requête contient au moins un mot-clé indicateur multi-hop.
-    - Au moins 2 entités pivot distinctes ont été extraites de la requête.
+    Plan A — durci : on exige À LA FOIS un marqueur de relation explicite
+    (cause/dépend/comparaison/différence/…) ET au moins 2 entités pivot
+    distinctes. Évite de déclencher l'expansion graphe sur des requêtes
+    "comment…" qui sont la majorité du trafic.
     """
     if not query_text:
         return False
-    if _MH_TRIGGER_PATTERNS.search(query_text):
-        return True
-    if len(pivot_entity_names) >= 2:
-        return True
-    return False
+    if not _MH_TRIGGER_PATTERNS.search(query_text):
+        return False
+    if len(pivot_entity_names) < 2:
+        return False
+    return True
 
 
 def _extract_top_entity_names_from_candidates(
@@ -2054,14 +2114,21 @@ async def search_relevant_passages(
         return []
 
     # --- Étape 0 : Raisonnement cognitif sur la requête ---
-    reasoning_result = await reason_query_intent(query_text)
-    if reasoning_result.intent != "generic":
-        logger.info(
-            "CQR reasoning [space]: intent=%s primary_source=%s confidence=%.2f",
-            reasoning_result.intent,
-            reasoning_result.primary_source,
-            reasoning_result.confidence
-        )
+    # Plan A : CQR désactivé par défaut (1 appel LLM par requête, biais marque).
+    # Réactivable via SPACE_USE_CQR=true.
+    reasoning_result: Optional[QueryIntent] = None
+    if SPACE_USE_CQR:
+        try:
+            reasoning_result = await reason_query_intent(query_text)
+            if reasoning_result.intent != "generic":
+                logger.info(
+                    "CQR reasoning [space]: intent=%s primary_source=%s confidence=%.2f",
+                    reasoning_result.intent,
+                    reasoning_result.primary_source,
+                    reasoning_result.confidence,
+                )
+        except Exception as cqr_err:
+            logger.debug("CQR reasoning ignoré (space): %s", cqr_err)
 
     try:
         candidate_k = (
@@ -2359,16 +2426,16 @@ async def search_relevant_passages(
                 leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
                 parent_node_id = leaf_meta.get("parent_node_id")
 
-                target_node = None
+                parent_node = None
                 if parent_node_id:
-                    target_node = parent_node_dict.get(parent_node_id)
-                    if target_node is None:
+                    parent_node = parent_node_dict.get(parent_node_id)
+                    if parent_node is None:
                         doc_id = leaf_meta.get("document_id")
                         try:
                             doc_id_int = int(doc_id) if doc_id is not None else None
                         except (TypeError, ValueError):
                             doc_id_int = None
-                        target_node = _resolve_space_parent_with_multihop(
+                        parent_node = _resolve_space_parent_with_multihop(
                             session,
                             space_id,
                             user_id,
@@ -2376,13 +2443,56 @@ async def search_relevant_passages(
                             parent_node_id,
                             parent_node_dict,
                         )
-                if target_node is None:
-                    target_node = nws.node
-                    if parent_node_id:
-                        parents_not_found += 1
-                else:
+
+                # Plan A : par défaut on garde la FEUILLE comme contenu envoyé
+                # au LLM. Le parent ne sert qu'à enrichir les métadonnées
+                # (parent_heading, pages) et — en option — à ajouter un court
+                # contexte si la feuille est très courte. Sinon le LLM recevait
+                # tout le contenu du parent (parfois = tout le PDF) et piochait
+                # des infos non pertinentes.
+                if SPACE_INJECT_PARENT_CONTENT and parent_node is not None:
+                    target_node = parent_node
                     parents_resolved += 1
                     _merge_leaf_page_into_node_metadata(nws.node, target_node)
+                else:
+                    target_node = nws.node
+                    leaf_text = (
+                        target_node.get_content()
+                        if hasattr(target_node, "get_content")
+                        else getattr(target_node, "text", "") or ""
+                    )
+                    if parent_node is not None:
+                        parents_resolved += 1
+                        # Propager heading / page du parent dans les métadonnées
+                        # de la feuille pour l'enrichissement de prompt.
+                        merged_meta = dict(target_node.metadata or {})
+                        parent_meta = dict(getattr(parent_node, "metadata", {}) or {})
+                        for k in ("parent_heading", "heading", "heading_path"):
+                            if not merged_meta.get(k) and parent_meta.get(k):
+                                merged_meta[k] = parent_meta[k]
+                        target_node.metadata = merged_meta
+                        # Bonus : si la feuille est trop courte (ex. ligne de
+                        # tableau ou puce de liste), on lui colle un extrait
+                        # court du parent en préfixe contextuel.
+                        if (
+                            SPACE_PARENT_CONTEXT_MAX_CHARS > 0
+                            and len(leaf_text.strip()) < SPACE_LEAF_SHORT_THRESHOLD
+                        ):
+                            parent_text = (
+                                parent_node.get_content()
+                                if hasattr(parent_node, "get_content")
+                                else getattr(parent_node, "text", "") or ""
+                            )
+                            parent_excerpt = (parent_text or "").strip()
+                            if parent_excerpt and parent_excerpt != leaf_text.strip():
+                                parent_excerpt = parent_excerpt[:SPACE_PARENT_CONTEXT_MAX_CHARS]
+                                enriched = (
+                                    f"[Contexte de section] {parent_excerpt}\n\n"
+                                    f"[Extrait]\n{leaf_text}"
+                                )
+                                _set_node_text_content(target_node, enriched)
+                    elif parent_node_id:
+                        parents_not_found += 1
 
                 node_id = getattr(target_node, "id_", None)
                 if node_id and node_id in seen_node_ids:

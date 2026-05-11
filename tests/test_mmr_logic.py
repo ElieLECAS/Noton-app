@@ -70,36 +70,46 @@ def test_mmr_selection_diversifies_redundant_results():
     assert "chunk-3" in selected_ids
     assert "chunk-2" not in selected_ids
 
-def test_mmr_respects_strict_parent_constraint():
-    """Vérifie qu'un seul chunk par parent est sélectionné."""
+def test_mmr_soft_penalty_on_same_parent():
+    """
+    Plan A : la contrainte "1 chunk par parent" est devenue une pénalité douce.
+
+    Conséquence : sur un espace mono-parent (ex. 1 seul PDF) MMR peut désormais
+    renvoyer plusieurs passages — indispensable pour ne pas réduire le contexte
+    à 1 chunk unique. On vérifie :
+      - tous les candidats peuvent sortir (len = nb candidats),
+      - le chunk différent (PARENT_B) sort avant le chunk redondant du même
+        parent (PARENT_A bis), grâce à la pénalité.
+    """
     query_emb = np.array([1.0, 1.0])
-    
+
     candidates = [
         NodeWithScore(node=TextNode(id_="chunk-1", metadata={"parent_node_id": "PARENT_A"}), score=0.9),
         NodeWithScore(node=TextNode(id_="chunk-2", metadata={"parent_node_id": "PARENT_A"}), score=0.8),
         NodeWithScore(node=TextNode(id_="chunk-3", metadata={"parent_node_id": "PARENT_B"}), score=0.7),
     ]
-    
+
     embeddings = {
         1: np.array([1.0, 1.0]),
         2: np.array([1.0, 0.9]),
         3: np.array([0.1, 0.1]),
     }
-    
+
     selected = _compute_mmr_with_parent_constraint(
         query_embedding=query_emb,
         candidates=candidates,
         candidate_embeddings=embeddings,
-        target_k=5, # Plus que le nombre de parents
-        lambda_param=0.5
+        target_k=5,
+        lambda_param=0.5,
     )
-    
-    # On ne doit avoir que 2 résultats car il n'y a que 2 parents uniques
-    assert len(selected) == 2
-    parent_ids = [n.node.metadata["parent_node_id"] for n in selected]
-    assert len(set(parent_ids)) == 2
-    assert "PARENT_A" in parent_ids
-    assert "PARENT_B" in parent_ids
+
+    # Désormais tous les candidats peuvent sortir
+    assert len(selected) == 3
+    selected_ids = [n.node.id_ for n in selected]
+    assert selected_ids[0] == "chunk-1"
+    # PARENT_B (différent) doit passer devant chunk-2 (même parent que chunk-1)
+    # grâce à la pénalité MMR_SAME_PARENT_PENALTY.
+    assert selected_ids.index("chunk-3") < selected_ids.index("chunk-2")
 
 def test_mmr_fallback_missing_embeddings():
     """Vérifie que le système ne plante pas si des embeddings manquent."""

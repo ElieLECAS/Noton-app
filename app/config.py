@@ -79,7 +79,12 @@ class Settings(BaseSettings):
     KAG_ENABLED: bool = True
     KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai", "mistral" ou "ollama"
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
-    KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
+    # Plan A : désactivé par défaut. L'enrichissement (résumé + 3 questions LLM
+    # + embedding) sur chaque parent est très coûteux à l'ingestion et a un
+    # impact limité sur la qualité du retrieval (parfois négatif : embedding
+    # de questions hors-sujet). À réactiver uniquement après mise en place du
+    # type `page_summary` (Plan B).
+    KAG_PARENT_ENRICHMENT_ENABLED: bool = False
     KAG_TYPED_RELATIONS_ENABLED: bool = True  # Extraction LLM des relations entité-entité (cause, depend_de, …)
     
     # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;

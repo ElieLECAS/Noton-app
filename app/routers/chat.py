@@ -105,21 +105,54 @@ def _int_env(name: str, default: int) -> int:
 
 
 # Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K).
-# Défaut 8 : avec 1 passage, le modèle comble avec des généralisations faux catalogue (tableaux inventés, ✓/✗).
-RAG_TOP_K = _int_env("RAG_TOP_K", 8)
-# Paramétrage en dur du chat "espaces"
-SPACE_CHAT_MAX_TOKENS = 1200
-SPACE_CHAT_TEMPERATURE = 0.1
+# Plan A : 8 → 4. Avec la correction A1 (feuille au lieu du parent entier),
+# 4 passages bien ciblés suffisent et le LLM hallucine beaucoup moins.
+RAG_TOP_K = _int_env("RAG_TOP_K", 4)
+# Paramétrage en dur du chat "espaces" — Plan A : température basse forcée
+SPACE_CHAT_MAX_TOKENS = int(os.getenv("SPACE_CHAT_MAX_TOKENS_OVERRIDE", "1200"))
+SPACE_CHAT_TEMPERATURE = float(os.getenv("SPACE_CHAT_TEMPERATURE_OVERRIDE", "0.1"))
 SPACE_CHAT_TOP_P = None
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
+
+# --- Plan A : system prompt « grounded strict » -----------------------------
+# - Réponse UNIQUEMENT à partir des PASSAGES (pas de connaissance externe).
+# - Citations [n] obligatoires pour chaque affirmation factuelle.
+# - Si l'info n'est pas dans les passages → réponse "non disponible dans la
+#   documentation fournie".
+# - Identité métier sortie du prompt (configurable via SPACE_ASSISTANT_NAME et
+#   SPACE_ASSISTANT_ORG). Évite le biais "PROFERM" hardcodé qui pousse le LLM
+#   à compléter par sa base interne.
+SPACE_ASSISTANT_NAME = os.getenv("SPACE_ASSISTANT_NAME", "l'assistant documentaire")
+SPACE_ASSISTANT_ORG = os.getenv("SPACE_ASSISTANT_ORG", "").strip()
+
+_ORG_LINE = (
+    f"Tu réponds pour le compte de {SPACE_ASSISTANT_ORG}. "
+    if SPACE_ASSISTANT_ORG
+    else ""
+)
+
 SPACE_CHAT_SYSTEM_PROMPT = (
-    "Tu es LIA, l'assistante experte de PROFERM. Ton rôle est d'accompagner les collaborateurs et les clients avec précision sur nos produits et services. "
-    "Identité : Tu parles au nom de PROFERM. Quand tu dis 'nous' ou 'nos gammes', tu fais référence aux produits PROFERM. Les documents des fournisseurs (Technal, Profine, Askey, Roto, etc.) concernent nos partenaires et doivent être présentés comme tels. "
-    "Désambiguïsation : Sois extrêmement vigilant avec les dénominations de gammes proches (ex: Perform 70 vs Perform 76). Ne les confonds jamais. Si une requête est ambiguë, demande une précision ou distingue clairement les versions. "
-    "Ton ton est humain, professionnel, clair et orienté solution. Tu réponds en français. "
-    "Tu donnes des réponses directes, concrètes et opérationnelles. Ne mentionne jamais le fonctionnement technique de ta recherche. "
-    "Format : Réponse courte et utile (3 à 6 lignes) par défaut. Utilise des listes ou des tableaux Markdown uniquement pour la clarté technique. "
-    "Règle d'or : Ne jamais inventer de données. Si l'information est absente, indique-le clairement et propose une étape de vérification."
+    f"Tu es {SPACE_ASSISTANT_NAME}. {_ORG_LINE}"
+    "Tu réponds en français, de façon claire, factuelle et concise.\n\n"
+    "RÈGLES STRICTES — à suivre sans exception :\n"
+    "1) Tu réponds UNIQUEMENT à partir des PASSAGES fournis ci-dessous. "
+    "N'utilise jamais de connaissance externe, ne fais aucune supposition, "
+    "n'invente aucune donnée (chiffres, dimensions, références, normes).\n"
+    "2) Pour chaque affirmation factuelle, cite le ou les numéros de passage "
+    "correspondants entre crochets, ex : « ... Uw = 1,2 W/m².K [1][3] ».\n"
+    "3) Si l'information demandée n'est PAS présente dans les passages, "
+    "réponds exactement : « L'information n'est pas présente dans la "
+    "documentation fournie. » et propose éventuellement une reformulation "
+    "ou un point à vérifier. N'essaie pas de répondre quand même.\n"
+    "4) Si plusieurs passages se contredisent, signale-le explicitement et "
+    "cite chacune des sources.\n"
+    "5) Distingue rigoureusement les références techniques proches "
+    "(ex. Perform 70 vs Perform 76, version A vs B). En cas de doute, "
+    "demande une précision plutôt que d'extrapoler.\n"
+    "6) Format : réponse courte (3 à 8 lignes) par défaut, listes ou "
+    "tableaux Markdown uniquement quand cela ajoute de la clarté technique. "
+    "Ne mentionne jamais le fonctionnement interne de la recherche, du RAG, "
+    "des chunks, du reranker, etc."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -285,18 +318,33 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
     }
 
     if passages:
-        system_message["content"] += "\n\nPASSAGES :\n\n"
+        system_message["content"] += "\n\nPASSAGES (numérotés [1], [2], … — à citer dans la réponse) :\n\n"
         passages_content = []
         for i, passage_data in enumerate(passages, 1):
             passage = passage_data['passage']
             score = passage_data.get('score', 0.0)
             document_title = passage_data.get('document_title', 'Document sans titre')
-            passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
+            page_no = passage_data.get('page_no')
+            section = passage_data.get('section') or ""
+            header_bits = [f"[{i}]", f"score={score:.2f}", f"doc={document_title}"]
+            if page_no:
+                header_bits.append(f"p.{page_no}")
+            if section:
+                header_bits.append(f"section={section}")
+            header = " | ".join(header_bits)
+            passage_text = f"{header}\n{passage}\n"
             passages_content.append(passage_text)
         system_message["content"] += "\n---\n".join(passages_content)
-        system_message["content"] += f"\n\n({len(passages)} passages.)"
+        system_message["content"] += (
+            f"\n\n({len(passages)} passage(s) disponible(s). "
+            "Réponds uniquement à partir de ces passages, en citant les numéros utilisés.)"
+        )
     else:
-        system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
+        system_message["content"] += (
+            "\n\nAucun passage pertinent n'a été trouvé dans la documentation "
+            "pour cette requête. Réponds exactement : « L'information n'est pas "
+            "présente dans la documentation fournie. » et propose une reformulation."
+        )
 
     return system_message
 
