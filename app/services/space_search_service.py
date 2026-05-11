@@ -346,6 +346,31 @@ class _MultiHopState:
     hop_traces: Dict[int, List[str]] = field(default_factory=dict)
 
 
+def _space_settings(space: Space) -> Dict:
+    raw = getattr(space, "settings_json", None)
+    if isinstance(raw, dict):
+        return raw
+    return {}
+
+
+def _space_allowed_entity_types(space: Space) -> Optional[Set[str]]:
+    cfg = _space_settings(space)
+    raw = cfg.get("kag_entity_types")
+    if not isinstance(raw, list):
+        return None
+    vals = {str(v).strip().lower() for v in raw if str(v).strip()}
+    return vals or None
+
+
+def _space_enabled_sources(space: Space) -> Optional[Set[str]]:
+    cfg = _space_settings(space)
+    raw = cfg.get("enabled_sources")
+    if not isinstance(raw, list):
+        return None
+    vals = {str(v).strip().lower() for v in raw if str(v).strip()}
+    return vals or None
+
+
 def _merged_chunk_metadata(primary: Optional[dict], legacy: Optional[dict]) -> Dict:
     """
     Fusionne les métadonnées modernes + legacy.
@@ -706,6 +731,7 @@ def _retrieve_leaves_sql(
             dc.text,
             dc.chunk_index,
             dc.document_id,
+            dc.source,
             dc.metadata_json,
             dc.metadata_,
             d.title AS document_title,
@@ -733,6 +759,7 @@ def _retrieve_leaves_sql(
         metadata.setdefault("document_id", row.document_id)
         metadata.setdefault("document_title", row.document_title or "Document sans titre")
         metadata.setdefault("chunk_index", row.chunk_index)
+        metadata.setdefault("source", row.source)
 
         node = TextNode(
             id_=f"chunk-{row.id}",
@@ -820,6 +847,7 @@ def _retrieve_leaves_lexical_sql(
             dc.text,
             dc.chunk_index,
             dc.document_id,
+            dc.source,
             dc.metadata_json,
             dc.metadata_,
             d.title AS document_title,
@@ -865,6 +893,7 @@ def _retrieve_leaves_lexical_sql(
         metadata.setdefault("document_id", row.document_id)
         metadata.setdefault("document_title", row.document_title or "Document sans titre")
         metadata.setdefault("chunk_index", row.chunk_index)
+        metadata.setdefault("source", row.source)
 
         node = TextNode(
             id_=f"chunk-{row.id}",
@@ -1008,6 +1037,7 @@ def _retrieve_parent_enriched_sql(
                 dc_leaf.text,
                 dc_leaf.chunk_index,
                 dc_leaf.document_id,
+                dc_leaf.source,
                 dc_leaf.metadata_json,
                 dc_leaf.metadata_,
                 d.title AS document_title,
@@ -1053,6 +1083,7 @@ def _retrieve_parent_enriched_sql(
         metadata.setdefault("document_id", row.document_id)
         metadata.setdefault("document_title", row.document_title or "Document sans titre")
         metadata.setdefault("chunk_index", row.chunk_index)
+        metadata.setdefault("source", row.source)
         metadata["parent_enrichment_score"] = psim
         metadata["parent_enrichment_leaf_similarity"] = lsim
         metadata["retrieval_signal"] = "parent_enriched_assist"
@@ -1148,6 +1179,7 @@ def _retrieve_via_page_summaries(
                 dc.text,
                 dc.chunk_index,
                 dc.document_id,
+                dc.source,
                 dc.metadata_json,
                 dc.metadata_,
                 d.title AS document_title
@@ -1178,6 +1210,7 @@ def _retrieve_via_page_summaries(
             metadata.setdefault("document_id", lr.document_id)
             metadata.setdefault("document_title", lr.document_title or "Document sans titre")
             metadata.setdefault("chunk_index", lr.chunk_index)
+            metadata.setdefault("source", lr.source)
             metadata["page_summary_score"] = page_score
             metadata["retrieval_signal"] = "page_summary_assist"
             node = TextNode(
@@ -1708,6 +1741,7 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
         "score": float(fallback_score or 0.0),
         "page_no": page_no,
         "section": parent_heading,
+        "source": metadata.get("source") or metadata.get("document_source"),
     }
     if page_start is not None:
         try:
@@ -1745,6 +1779,7 @@ def _retrieve_via_knowledge_graph(
     query_text: str,
     limit: int = 10,
     pivot_entity_names: Optional[List[str]] = None,
+    allowed_entity_types: Optional[Set[str]] = None,
 ) -> List[NodeWithScore]:
     """
     Récupère des chunks via le graphe de connaissances KAG de l'espace.
@@ -1778,6 +1813,19 @@ def _retrieve_via_knowledge_graph(
         query_terms = query_terms[:120]
 
         # Matching exact sur name_normalized
+        where_filters = [
+            DocumentSpace.space_id == space_id,
+            DocumentChunk.is_leaf == True,
+            KnowledgeEntity.space_id == space_id,
+            KnowledgeEntity.name_normalized.in_(query_terms),
+            or_(
+                KnowledgeEntity.confidence_score.is_(None),
+                KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
+            ),
+        ]
+        if allowed_entity_types:
+            where_filters.append(KnowledgeEntity.entity_type.in_(list(allowed_entity_types)))
+
         stmt = (
             select(
                 DocumentChunk,
@@ -1790,16 +1838,7 @@ def _retrieve_via_knowledge_graph(
             .join(KnowledgeEntity, KnowledgeEntity.id == ChunkEntityRelation.entity_id)
             .join(Document, Document.id == DocumentChunk.document_id)
             .join(DocumentSpace, DocumentSpace.document_id == Document.id)
-            .where(
-                DocumentSpace.space_id == space_id,
-                DocumentChunk.is_leaf == True,
-                KnowledgeEntity.space_id == space_id,
-                KnowledgeEntity.name_normalized.in_(query_terms),
-                or_(
-                    KnowledgeEntity.confidence_score.is_(None),
-                    KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
-                ),
-            )
+            .where(*where_filters)
             .order_by(ChunkEntityRelation.relevance_score.desc())
             .limit(limit)
         )
@@ -1890,6 +1929,7 @@ def _retrieve_via_knowledge_graph(
                         KnowledgeEntity.confidence_score.is_(None),
                         KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
                     ),
+                    *( [KnowledgeEntity.entity_type.in_(list(allowed_entity_types))] if allowed_entity_types else [] ),
                 )
                 .order_by(ChunkEntityRelation.relevance_score.desc())
                 .limit(max(0, limit - len(results)))
@@ -1907,6 +1947,7 @@ def _retrieve_via_knowledge_graph(
             metadata.setdefault("document_id", chunk.document_id)
             metadata.setdefault("document_title", document_title or "Document sans titre")
             metadata.setdefault("chunk_index", chunk.chunk_index)
+            metadata.setdefault("source", getattr(chunk, "source", None))
             metadata["kag_matched_entity"] = entity_name
             if chunk.id in neighbor_chunk_ids:
                 metadata["kag_neighbor_match"] = True
@@ -2567,6 +2608,8 @@ async def search_relevant_passages(
             if (RERANKER_AVAILABLE and RERANKER_ENABLED)
             else k
         )
+        allowed_entity_types = _space_allowed_entity_types(space)
+        enabled_sources = _space_enabled_sources(space)
 
         # B2 : mode small-space (moins de bruit: pas de KAG graphe / multi-hop / parent)
         doc_count = (
@@ -2719,6 +2762,7 @@ async def search_relevant_passages(
                             query_text=sub_query,
                             limit=candidate_k,
                             pivot_entity_names=pivot_entity_names or None,
+                            allowed_entity_types=allowed_entity_types,
                         )
                         matched = list({
                             (c.node.metadata or {}).get("kag_matched_entity", "")
@@ -3060,6 +3104,13 @@ async def search_relevant_passages(
         )
 
         passages = refine_with_source_authority(passages, effective_query, reasoning_result=reasoning_result)
+        if enabled_sources:
+            source_filtered = [
+                p for p in passages
+                if (str(p.get("source") or "").strip().lower() in enabled_sources)
+            ]
+            if source_filtered:
+                passages = source_filtered
         if passages:
             logger.info(
                 "Retrieval summary (space=%s): q='%s' docs=%s chunks=%s top_scores=%s",

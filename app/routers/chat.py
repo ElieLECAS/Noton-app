@@ -117,6 +117,8 @@ TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_AGENTIC_STEPBACK_ENABLED = os.getenv("SPACE_AGENTIC_STEPBACK_ENABLED", "true").lower() == "true"
 SPACE_AGENTIC_MIN_SCORE = float(os.getenv("SPACE_AGENTIC_MIN_SCORE", "0.12"))
 SPACE_AGENTIC_MIN_CITED_PASSAGES = int(os.getenv("SPACE_AGENTIC_MIN_CITED_PASSAGES", "2"))
+SPACE_AGENTIC_MAX_TURNS = max(1, int(os.getenv("SPACE_AGENTIC_MAX_TURNS", "2")))
+SPACE_AGENTIC_DECOMPOSE_MAX_SUBQS = max(1, int(os.getenv("SPACE_AGENTIC_DECOMPOSE_MAX_SUBQS", "3")))
 
 # --- Plan A : system prompt « grounded strict » -----------------------------
 # - Réponse UNIQUEMENT à partir des PASSAGES (pas de connaissance externe).
@@ -311,14 +313,39 @@ class SpaceChatRequest(BaseModel):
     conversation_id: Optional[int] = None
 
 
-def build_space_context_from_passages(passages: List[dict]) -> dict:
+def _build_space_system_prompt_from_settings(space: Optional[Space]) -> str:
+    """
+    B4/B5: construit le prompt système à partir des settings d'espace stockés en BDD.
+    """
+    prompt = SPACE_CHAT_SYSTEM_PROMPT
+    if space is None:
+        return prompt
+    cfg = getattr(space, "settings_json", None)
+    if not isinstance(cfg, dict):
+        return prompt
+    persona = str(cfg.get("system_prompt_persona") or "").strip()
+    if persona:
+        prompt = persona
+    enabled_sources = cfg.get("enabled_sources")
+    if isinstance(enabled_sources, list) and enabled_sources:
+        src = [str(s).strip() for s in enabled_sources if str(s).strip()]
+        if src:
+            prompt += (
+                "\n\nContraintes de source (espace): "
+                + ", ".join(src)
+                + ". Si une source est hors liste, indique qu'elle n'est pas autorisée dans cet espace."
+            )
+    return prompt
+
+
+def build_space_context_from_passages(passages: List[dict], system_prompt: Optional[str] = None) -> dict:
     """
     Construit le contexte système à partir des passages RAG + KAG rerankés.
     Format unifié pour le LLM (comme build_semantic_context_from_passages).
     """
     system_message = {
         "role": "system",
-        "content": SPACE_CHAT_SYSTEM_PROMPT,
+        "content": system_prompt or SPACE_CHAT_SYSTEM_PROMPT,
     }
 
     if passages:
@@ -411,6 +438,131 @@ def _merge_agentic_passages(primary: List[dict], secondary: List[dict], k: int) 
 
     merged.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
     return merged[:k]
+
+
+def _plan_agentic_strategy(query: str) -> str:
+    q = (query or "").lower()
+    if any(tok in q for tok in [" vs ", " versus ", " comparer ", "différence", "difference"]):
+        return "decompose"
+    if any(tok in q for tok in [" impact ", " dépend", "depend", "cause", "lien entre"]):
+        return "decompose"
+    return "step_back"
+
+
+def _decompose_subqueries(query: str) -> List[str]:
+    if not query:
+        return []
+    parts = re.split(r"\b(?:et|ainsi que|versus|vs|ou)\b", query, flags=re.IGNORECASE)
+    sub = [p.strip(" ,;:.") for p in parts if p and len(p.strip()) >= 10]
+    if len(sub) < 2:
+        return [query]
+    return sub[:SPACE_AGENTIC_DECOMPOSE_MAX_SUBQS]
+
+
+async def _agentic_retrieve_space_passages(
+    *,
+    session: Session,
+    space_id: int,
+    user_id: int,
+    original_query: str,
+    k: int,
+) -> tuple[List[dict], Dict]:
+    """
+    C1/C3: state machine agentique courte:
+      Plan -> Retrieve -> Critique -> Refine (max 2 tours) -> stop.
+    """
+    if not SPACE_AGENTIC_STEPBACK_ENABLED:
+        base = await search_space_passages(
+            session=session,
+            space_id=space_id,
+            query_text=original_query,
+            user_id=user_id,
+            k=k,
+        )
+        return base[:k], {
+            "iteration": 1,
+            "query_current": original_query,
+            "strategy": "single",
+            "evidence_grade": _estimate_evidence_quality(base).get("grade"),
+            "stop_reason": "agentic_disabled",
+            "history": [],
+        }
+
+    state = {
+        "iteration": 1,
+        "query_current": original_query,
+        "strategy": _plan_agentic_strategy(original_query),
+        "evidence_grade": "weak",
+        "stop_reason": None,
+        "history": [],
+    }
+    aggregate: List[dict] = []
+    seen_turn_queries = set()
+
+    while state["iteration"] <= SPACE_AGENTIC_MAX_TURNS:
+        q = (state["query_current"] or "").strip()
+        if not q:
+            state["stop_reason"] = "empty_query"
+            break
+        if q.lower() in seen_turn_queries:
+            state["stop_reason"] = "no_new_evidence"
+            break
+        seen_turn_queries.add(q.lower())
+
+        # Retrieve
+        if state["strategy"] == "decompose":
+            sub_passages: List[dict] = []
+            for sq in _decompose_subqueries(q):
+                p = await search_space_passages(
+                    session=session,
+                    space_id=space_id,
+                    query_text=sq,
+                    user_id=user_id,
+                    k=k,
+                )
+                sub_passages = _merge_agentic_passages(sub_passages, p, k)
+            turn_passages = sub_passages
+        else:
+            turn_passages = await search_space_passages(
+                session=session,
+                space_id=space_id,
+                query_text=q,
+                user_id=user_id,
+                k=k,
+            )
+
+        aggregate = _merge_agentic_passages(aggregate, turn_passages, k)
+        evidence = _estimate_evidence_quality(aggregate)
+        state["evidence_grade"] = evidence["grade"]
+        state["history"].append(
+            {
+                "iteration": state["iteration"],
+                "query": q,
+                "strategy": state["strategy"],
+                "nb_passages": len(turn_passages),
+                "evidence": evidence,
+            }
+        )
+
+        # Critique + stop criteria
+        if evidence["grade"] == "strong":
+            state["stop_reason"] = "enough_evidence"
+            break
+        if state["iteration"] >= SPACE_AGENTIC_MAX_TURNS:
+            state["stop_reason"] = "max_turns"
+            break
+
+        # Refine
+        if state["strategy"] == "decompose":
+            # Après une décomposition, on fait un step-back court.
+            state["strategy"] = "step_back"
+            state["query_current"] = _build_stepback_query(q)
+        else:
+            state["strategy"] = "decompose" if _plan_agentic_strategy(q) == "decompose" else "step_back"
+            state["query_current"] = _build_stepback_query(q)
+        state["iteration"] += 1
+
+    return aggregate[:k], state
 
 
 def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
@@ -752,15 +904,22 @@ async def stream_space_chat_message(
         inputs={"query": request.message, "space_id": space_id, "k": RAG_TOP_K},
         tags=["rag", "kag", "space"],
     ) as retrieval_run:
-        passages = await search_space_passages(
+        passages, agentic_state = await _agentic_retrieve_space_passages(
             session=session,
             space_id=space_id,
-            query_text=request.message,
             user_id=current_user.id,
+            original_query=request.message,
             k=RAG_TOP_K,
         )
         retrieval_run.end(outputs={
             "nb_passages": len(passages),
+            "agentic_state": {
+                "iteration": agentic_state.get("iteration"),
+                "strategy": agentic_state.get("strategy"),
+                "evidence_grade": agentic_state.get("evidence_grade"),
+                "stop_reason": agentic_state.get("stop_reason"),
+                "history": agentic_state.get("history", [])[-3:],
+            },
             "passages": [
                 {
                     "document_title": p.get("document_title"),
@@ -774,46 +933,9 @@ async def stream_space_chat_message(
             ],
         })
 
-    # ------------------------------------------------------------------
-    # Plan C (agentic léger) : step-back automatique si preuves faibles
-    # ------------------------------------------------------------------
-    evidence = _estimate_evidence_quality(passages)
-    if SPACE_AGENTIC_STEPBACK_ENABLED and evidence["grade"] == "weak":
-        stepback_query = _build_stepback_query(request.message)
-        if stepback_query and stepback_query != request.message:
-            with trace_run(
-                "rag_kag_stepback_retrieval",
-                run_type="retriever",
-                inputs={
-                    "query_original": request.message,
-                    "query_stepback": stepback_query,
-                    "space_id": space_id,
-                    "k": RAG_TOP_K,
-                },
-                tags=["rag", "kag", "space", "agentic", "stepback"],
-            ) as sb_run:
-                sb_passages = await search_space_passages(
-                    session=session,
-                    space_id=space_id,
-                    query_text=stepback_query,
-                    user_id=current_user.id,
-                    k=RAG_TOP_K,
-                )
-                # Dégrade légèrement les scores step-back pour garder la requête
-                # originale prioritaire quand elle a trouvé des signaux forts.
-                for p in sb_passages:
-                    p["score"] = float(p.get("score") or 0.0) * 0.92
-                passages = _merge_agentic_passages(passages, sb_passages, RAG_TOP_K)
-                sb_run.end(
-                    outputs={
-                        "nb_stepback_passages": len(sb_passages),
-                        "nb_merged_passages": len(passages),
-                    }
-                )
-            evidence = _estimate_evidence_quality(passages)
-
     # Construire le contexte système à partir des passages rerankés
-    space_context = build_space_context_from_passages(passages)
+    system_prompt = _build_space_system_prompt_from_settings(space)
+    space_context = build_space_context_from_passages(passages, system_prompt=system_prompt)
 
     full_context = []
     full_context.append(space_context)
