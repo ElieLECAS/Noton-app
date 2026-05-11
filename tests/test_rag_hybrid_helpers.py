@@ -27,6 +27,18 @@ def test_hybrid_fuse_candidates_vector_and_lexical():
     assert "hybrid_score" in meta
 
 
+def test_hybrid_fuse_candidates_with_page_channel():
+    from app.services.space_search_service import _hybrid_fuse_candidates
+
+    v = [NodeWithScore(node=TextNode(id_="chunk-1", text="a"), score=0.8)]
+    pg = [NodeWithScore(node=TextNode(id_="chunk-1", text="a"), score=0.7)]
+    merged = _hybrid_fuse_candidates(v, [], [], page_candidates=pg)
+    assert len(merged) == 1
+    meta = merged[0].node.metadata or {}
+    assert "page_rrf" in meta
+    assert meta["page_rrf"] > 0
+
+
 # ---------------------------------------------------------------------------
 # Tests multi-hop
 # ---------------------------------------------------------------------------
@@ -34,16 +46,18 @@ def test_hybrid_fuse_candidates_vector_and_lexical():
 def test_needs_multi_hop_trigger_keyword():
     from app.services.space_search_service import _needs_multi_hop
 
-    assert _needs_multi_hop("Quel est l'impact de X sur Y ?", []) is True
-    assert _needs_multi_hop("Comparaison entre A et B", []) is True
-    assert _needs_multi_hop("Quelle est la cause du problème ?", []) is True
-    assert _needs_multi_hop("Si X alors que se passe-t-il pour Y ?", []) is True
+    # Plan A/B: déclenchement durci => trigger explicite + >=2 pivots.
+    assert _needs_multi_hop("Quel est l'impact de X sur Y ?", ["x", "y"]) is True
+    assert _needs_multi_hop("Comparaison entre A et B", ["a", "b"]) is True
+    assert _needs_multi_hop("Quelle est la cause du problème ?", ["a", "b"]) is True
+    assert _needs_multi_hop("Si X alors que se passe-t-il pour Y ?", ["x", "y"]) is False
 
 
 def test_needs_multi_hop_two_pivots():
     from app.services.space_search_service import _needs_multi_hop
 
-    assert _needs_multi_hop("Donne moi les caractéristiques", ["entite_a", "entite_b"]) is True
+    # Deux pivots seuls ne suffisent plus sans trigger relationnel explicite.
+    assert _needs_multi_hop("Donne moi les caractéristiques", ["entite_a", "entite_b"]) is False
 
 
 def test_needs_multi_hop_false_simple_query():
@@ -202,7 +216,8 @@ def test_multihop_constants_values():
         MH_HOP_PENALTIES,
     )
 
-    assert MULTI_HOP_ENABLED is True
+    # Désactivé par défaut (Plan A), réactivable via env.
+    assert MULTI_HOP_ENABLED is False
     assert MULTI_HOP_MAX_HOPS == 3
     assert MULTI_HOP_CANDIDATE_BUDGET >= MULTI_HOP_PER_HOP_LIMIT
     assert MULTI_HOP_PATIENCE >= 1

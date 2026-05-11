@@ -80,6 +80,10 @@ SPACE_KAG_ILIKE_FALLBACK = os.getenv("SPACE_KAG_ILIKE_FALLBACK", "false").lower(
 # A6 — Si le fallback lexical ne trouve rien de pertinent, ne pas injecter de chunks
 # "au hasard" : retourner liste vide pour laisser le prompt dire "info non disponible".
 SPACE_EMPTY_ON_NO_MATCH = os.getenv("SPACE_EMPTY_ON_NO_MATCH", "true").lower() == "true"
+# Plan B — canal dédié page_summary (chunks dérivés de page)
+SPACE_PAGE_SUMMARY_ENABLED = os.getenv("SPACE_PAGE_SUMMARY_ENABLED", "true").lower() == "true"
+SPACE_PAGE_SUMMARY_PER_PAGE_LEAVES = int(os.getenv("SPACE_PAGE_SUMMARY_PER_PAGE_LEAVES", "2"))
+SPACE_MAX_CONTEXT_LEAVES_PER_PAGE = int(os.getenv("SPACE_MAX_CONTEXT_LEAVES_PER_PAGE", "2"))
 # Deux étapes : large pool tronqué puis raffinement sur texte complet
 RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
@@ -140,6 +144,8 @@ SOURCE_AUTHORITY_BOOST = float(os.getenv("SOURCE_AUTHORITY_BOOST", "0.05"))
 RRF_K = 60
 # Poids du canal « parent enrichi » dans la somme RRF (modéré, ne domine pas le vectoriel leaf)
 RRF_PARENT_LIST_WEIGHT = 0.50
+# Poids du canal page_summary (assist retrieval de page, puis feuilles de preuve)
+RRF_PAGE_LIST_WEIGHT = float(os.getenv("RRF_PAGE_LIST_WEIGHT", "0.65"))
 # Seuil minimal de similarité parent (embedding summary+questions) pour descendre vers les feuilles
 PARENT_ENRICHED_MIN_SIMILARITY = float(os.getenv("PARENT_ENRICHED_MIN_SIMILARITY", "0.65"))
 # Filtrage post-fusion : scores RRF sont plus petits qu’une somme min-max sur [0,1]
@@ -552,6 +558,7 @@ def _retrieve_leaves_sql(
         WHERE ds.space_id = :space_id
           AND dc.embedding IS NOT NULL
           AND dc.is_leaf = true
+          AND coalesce(dc.metadata_json->>'content_type', '') <> 'page_summary'
         ORDER BY dc.embedding <=> '{query_embedding_str}'::vector
         LIMIT :limit_k
     """)
@@ -667,6 +674,7 @@ def _retrieve_leaves_lexical_sql(
         INNER JOIN document_space ds ON ds.document_id = d.id
         WHERE ds.space_id = :space_id
           AND dc.is_leaf = true
+          AND coalesce(dc.metadata_json->>'content_type', '') <> 'page_summary'
           AND coalesce(dc.content, dc.text, '') <> ''
           AND to_tsvector('simple', coalesce(dc.content, dc.text, ''))
               @@ to_tsquery('simple', :q)
@@ -838,11 +846,127 @@ def _retrieve_parent_enriched_sql(
     return nodes_with_scores
 
 
+def _retrieve_via_page_summaries(
+    session: Session,
+    space_id: int,
+    query_text: str,
+    candidate_k: int,
+) -> List[NodeWithScore]:
+    """
+    Plan B — retrieval par `page_summary`:
+      1) match vectoriel sur les chunks `content_type=page_summary`
+      2) projection vers 1..N feuilles de la même page (preuves injectées au LLM)
+
+    Les `page_summary` servent de signal de rappel, mais on renvoie des feuilles
+    documentaires pour conserver un contexte factuel.
+    """
+    if not SPACE_PAGE_SUMMARY_ENABLED:
+        return []
+
+    embed_model = _get_embed_model()
+    query_embedding = embed_model.get_query_embedding(query_text)
+    query_embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
+    page_limit = max(8, min(candidate_k, 30))
+
+    sql_pages = text(f"""
+        SELECT
+            dc.id,
+            dc.document_id,
+            d.title AS document_title,
+            dc.metadata_json,
+            1 - (dc.embedding <=> '{query_embedding_str}'::vector) AS similarity_score
+        FROM documentchunk dc
+        INNER JOIN document d ON dc.document_id = d.id
+        INNER JOIN document_space ds ON ds.document_id = d.id
+        WHERE ds.space_id = :space_id
+          AND dc.is_leaf = true
+          AND dc.embedding IS NOT NULL
+          AND coalesce(dc.metadata_json->>'content_type', '') = 'page_summary'
+        ORDER BY dc.embedding <=> '{query_embedding_str}'::vector
+        LIMIT :limit_k
+    """)
+    page_rows = list(session.execute(sql_pages, {"space_id": space_id, "limit_k": page_limit}))
+    if not page_rows:
+        return []
+
+    best_by_doc_page: Dict[Tuple[int, int], float] = {}
+    for row in page_rows:
+        meta = dict(row.metadata_json or {})
+        p = meta.get("page_no")
+        if p is None:
+            continue
+        try:
+            page_no = int(p)
+            key = (int(row.document_id), page_no)
+            sc = float(row.similarity_score or 0.0)
+            if key not in best_by_doc_page or sc > best_by_doc_page[key]:
+                best_by_doc_page[key] = sc
+        except (TypeError, ValueError):
+            continue
+
+    if not best_by_doc_page:
+        return []
+
+    page_candidates: List[NodeWithScore] = []
+    per_page_limit = max(1, SPACE_PAGE_SUMMARY_PER_PAGE_LEAVES)
+    # projection page -> feuilles
+    for (document_id, page_no), page_score in best_by_doc_page.items():
+        sql_leaves = text("""
+            SELECT
+                dc.id,
+                dc.content,
+                dc.text,
+                dc.chunk_index,
+                dc.document_id,
+                dc.metadata_json,
+                dc.metadata_,
+                d.title AS document_title
+            FROM documentchunk dc
+            INNER JOIN document d ON dc.document_id = d.id
+            INNER JOIN document_space ds ON ds.document_id = d.id
+            WHERE ds.space_id = :space_id
+              AND dc.document_id = :document_id
+              AND dc.is_leaf = true
+              AND coalesce(dc.metadata_json->>'content_type', '') <> 'page_summary'
+              AND coalesce(dc.metadata_json->>'page_no', '') = :page_no
+            ORDER BY dc.chunk_index ASC
+            LIMIT :leaf_limit
+        """)
+        leaf_rows = list(
+            session.execute(
+                sql_leaves,
+                {
+                    "space_id": space_id,
+                    "document_id": document_id,
+                    "page_no": str(page_no),
+                    "leaf_limit": per_page_limit,
+                },
+            )
+        )
+        for lr in leaf_rows:
+            metadata = _merged_chunk_metadata(lr.metadata_json, lr.metadata_)
+            metadata.setdefault("document_id", lr.document_id)
+            metadata.setdefault("document_title", lr.document_title or "Document sans titre")
+            metadata.setdefault("chunk_index", lr.chunk_index)
+            metadata["page_summary_score"] = page_score
+            metadata["retrieval_signal"] = "page_summary_assist"
+            node = TextNode(
+                id_=f"chunk-{lr.id}",
+                text=lr.content or lr.text or "",
+                metadata=metadata,
+            )
+            page_candidates.append(NodeWithScore(node=node, score=float(page_score)))
+
+    page_candidates.sort(key=lambda x: float(x.score or 0.0), reverse=True)
+    return page_candidates[:candidate_k]
+
+
 def _hybrid_fuse_candidates(
     vector_candidates: List[NodeWithScore],
     lexical_candidates: List[NodeWithScore],
     graph_candidates: List[NodeWithScore],
     parent_candidates: Optional[List[NodeWithScore]] = None,
+    page_candidates: Optional[List[NodeWithScore]] = None,
 ) -> List[NodeWithScore]:
     """
     Fusion RRF : vectoriel, lexical (BM25-like), KAG, et optionnellement parents enrichis.
@@ -851,6 +975,7 @@ def _hybrid_fuse_candidates(
     le canal parent est pondéré par ``RRF_PARENT_LIST_WEIGHT``.
     """
     parent_candidates = parent_candidates or []
+    page_candidates = page_candidates or []
 
     v_by_id: Dict[int, Tuple[float, TextNode]] = {}
     for nws in vector_candidates:
@@ -886,7 +1011,16 @@ def _hybrid_fuse_candidates(
         if cid not in p_by_id or sc > p_by_id[cid][0]:
             p_by_id[cid] = (sc, nws.node)
 
-    all_ids = set(v_by_id) | set(l_by_id) | set(k_by_id) | set(p_by_id)
+    pg_by_id: Dict[int, Tuple[float, TextNode]] = {}
+    for nws in page_candidates:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is None:
+            continue
+        sc = float(nws.score or 0.0)
+        if cid not in pg_by_id or sc > pg_by_id[cid][0]:
+            pg_by_id[cid] = (sc, nws.node)
+
+    all_ids = set(v_by_id) | set(l_by_id) | set(k_by_id) | set(p_by_id) | set(pg_by_id)
     if not all_ids:
         return []
 
@@ -910,6 +1044,11 @@ def _hybrid_fuse_candidates(
         cid = _parse_chunk_id_from_node(nws.node)
         if cid is not None and cid not in rank_p:
             rank_p[cid] = r
+    rank_pg: Dict[int, int] = {}
+    for r, nws in enumerate(page_candidates):
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None and cid not in rank_pg:
+            rank_pg[cid] = r
 
     fused: List[NodeWithScore] = []
     for cid in all_ids:
@@ -919,13 +1058,15 @@ def _hybrid_fuse_candidates(
         rl = rank_l.get(cid, 10_000)
         rk = rank_k.get(cid, 10_000)
         rp = rank_p.get(cid, 10_000)
+        rpg = rank_pg.get(cid, 10_000)
 
         c_v = _rrf_contrib(rv) if cid in rank_v else 0.0
         c_l = _rrf_contrib(rl) if cid in rank_l else 0.0
         c_k = _rrf_contrib(rk) if cid in rank_k else 0.0
         c_p = RRF_PARENT_LIST_WEIGHT * _rrf_contrib(rp) if cid in rank_p else 0.0
+        c_pg = RRF_PAGE_LIST_WEIGHT * _rrf_contrib(rpg) if cid in rank_pg else 0.0
 
-        hybrid = c_v + c_l + c_k + c_p
+        hybrid = c_v + c_l + c_k + c_p + c_pg
 
         if cid in v_by_id:
             node = v_by_id[cid][1]
@@ -933,6 +1074,8 @@ def _hybrid_fuse_candidates(
             node = l_nodes[cid]
         elif cid in k_by_id:
             node = k_by_id[cid][1]
+        elif cid in pg_by_id:
+            node = pg_by_id[cid][1]
         else:
             node = p_by_id[cid][1]
 
@@ -943,6 +1086,7 @@ def _hybrid_fuse_candidates(
         meta["kag_rrf"] = c_k
         meta["vector_rrf"] = c_v
         meta["parent_rrf"] = c_p
+        meta["page_rrf"] = c_pg
         meta["lexical_norm"] = c_l  # compat. filtres / logs
         meta["kag_norm"] = c_k
         meta["hybrid_score"] = hybrid
@@ -959,6 +1103,11 @@ def _hybrid_fuse_candidates(
         len(rank_l),
         len(rank_k),
         len(rank_p),
+        # page summaries
+    )
+    logger.debug(
+        "Fusion RRF (space): canal page_summary=%d",
+        len(rank_pg),
     )
     return fused
 
@@ -979,6 +1128,7 @@ def _filter_hybrid_candidates(
         ln = float(meta.get("lexical_norm", 0) or 0)
         kn = float(meta.get("kag_norm", 0) or 0)
         pr = float(meta.get("parent_rrf", 0) or 0)
+        pgr = float(meta.get("page_rrf", 0) or 0)
         vr = float(meta.get("vector_rrf", 0) or 0)
         parent_sim = float(meta.get("parent_enrichment_score", 0) or 0)
         parent_sim_ok = parent_sim >= PARENT_ENRICHED_MIN_SIMILARITY * 0.85
@@ -988,6 +1138,7 @@ def _filter_hybrid_candidates(
             or ln >= RRF_MIN_CHANNEL
             or kn >= RRF_MIN_CHANNEL
             or pr >= RRF_MIN_CHANNEL
+            or pgr >= RRF_MIN_CHANNEL
             or vr >= RRF_MIN_CHANNEL
             or parent_sim_ok
         ):
@@ -1152,6 +1303,10 @@ async def _keyword_fallback_passages(
         .join(DocumentSpace, DocumentSpace.document_id == Document.id)
         .where(
             DocumentSpace.space_id == space_id,
+            or_(
+                DocumentChunk.metadata_json.is_(None),
+                DocumentChunk.metadata_json["content_type"].astext != "page_summary",
+            ),
         )
         .order_by(DocumentChunk.is_leaf.desc(), Document.updated_at.desc(), DocumentChunk.chunk_index)
     )
@@ -1825,7 +1980,7 @@ def _apply_multihop_depth_scoring(
 ) -> List[NodeWithScore]:
     """
     Score unifié multi-hop : RRF sur les classements par signal brut
-    (vector, lexical, kag, evidence, parent) puis pénalité par profondeur.
+    (vector, lexical, kag, evidence, parent, page) puis pénalité par profondeur.
     """
     if not state.chunk_signals:
         return list(all_nodes.values())
@@ -1845,6 +2000,7 @@ def _apply_multihop_depth_scoring(
     rk = _rank_by("kag")
     re_e = _rank_by("evidence")
     rp = _rank_by("parent")
+    rpg = _rank_by("page")
 
     scored: List[NodeWithScore] = []
     for cid, sig in state.chunk_signals.items():
@@ -1860,6 +2016,7 @@ def _apply_multihop_depth_scoring(
             + _rrf_contrib(rk[cid])
             + _rrf_contrib(re_e[cid])
             + MH_RRF_PARENT_WEIGHT * _rrf_contrib(rp[cid])
+            + RRF_PAGE_LIST_WEIGHT * _rrf_contrib(rpg[cid])
             - penalty
         )
         mh_score = max(0.0, mh_score)
@@ -1927,6 +2084,12 @@ def multi_hop_retrieve_space(
         user_id=user_id,
         query_text=query_text,
         candidate_k=candidate_k,
+    ) if settings.KAG_PARENT_ENRICHMENT_ENABLED else []
+    page_candidates_hop0 = _retrieve_via_page_summaries(
+        session=session,
+        space_id=space_id,
+        query_text=query_text,
+        candidate_k=candidate_k,
     )
     p_by_id_map: Dict[int, float] = {}
     for nws in parent_candidates_hop0:
@@ -1957,7 +2120,15 @@ def multi_hop_retrieve_space(
             if cid not in k_by_id or sc > k_by_id[cid]:
                 k_by_id[cid] = sc
 
-    hop0_ids = set(v_by_id) | set(l_by_id) | set(k_by_id) | set(p_by_id_map)
+    pg_by_id_map: Dict[int, float] = {}
+    for nws in page_candidates_hop0:
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None:
+            sc = float(nws.score or 0.0)
+            if cid not in pg_by_id_map or sc > pg_by_id_map[cid]:
+                pg_by_id_map[cid] = sc
+
+    hop0_ids = set(v_by_id) | set(l_by_id) | set(k_by_id) | set(p_by_id_map) | set(pg_by_id_map)
     new_at_hop0 = 0
 
     # Fusionner dans l'état global
@@ -1969,6 +2140,7 @@ def multi_hop_retrieve_space(
             "kag": k_by_id.get(cid, 0.0),
             "evidence": 0.0,
             "parent": p_by_id_map.get(cid, 0.0),
+            "page": pg_by_id_map.get(cid, 0.0),
             "hop": 0,
             "path": "hop0:hybrid",
         }
@@ -1980,6 +2152,7 @@ def multi_hop_retrieve_space(
         lexical_candidates=lexical_candidates,
         graph_candidates=graph_candidates_hop0,
         parent_candidates=parent_candidates_hop0,
+        page_candidates=page_candidates_hop0,
     )
     for nws in fused_hop0:
         cid = _parse_chunk_id_from_node(nws.node)
@@ -2265,6 +2438,12 @@ async def search_relevant_passages(
                 user_id=user_id,
                 query_text=query_text,
                 candidate_k=candidate_k,
+            ) if settings.KAG_PARENT_ENRICHMENT_ENABLED else []
+            page_candidates = _retrieve_via_page_summaries(
+                session=session,
+                space_id=space_id,
+                query_text=query_text,
+                candidate_k=candidate_k,
             )
 
             with trace_run(
@@ -2275,8 +2454,10 @@ async def search_relevant_passages(
                     "nb_lexical": len(lexical_candidates),
                     "nb_kag": len(graph_candidates),
                     "nb_parent": len(parent_candidates),
+                    "nb_page": len(page_candidates),
                     "rrf_k": RRF_K,
                     "parent_list_weight": RRF_PARENT_LIST_WEIGHT,
+                    "page_list_weight": RRF_PAGE_LIST_WEIGHT,
                 },
                 tags=["fusion", "hybrid", "rrf", "space"],
             ) as fusion_run:
@@ -2285,6 +2466,7 @@ async def search_relevant_passages(
                     lexical_candidates=lexical_candidates,
                     graph_candidates=graph_candidates,
                     parent_candidates=parent_candidates,
+                    page_candidates=page_candidates,
                 )
                 fusion_outputs = {"nb_fused": len(leaf_candidates)}
                 if TRACE_VERBOSE_TEXT:
@@ -2418,6 +2600,7 @@ async def search_relevant_passages(
 
             final_nodes: List[NodeWithScore] = []
             seen_node_ids: set = set()
+            per_doc_page_counts: Dict[Tuple[int, int], int] = {}
             parents_resolved = 0
             parents_not_found = 0
 
@@ -2497,6 +2680,27 @@ async def search_relevant_passages(
                 node_id = getattr(target_node, "id_", None)
                 if node_id and node_id in seen_node_ids:
                     continue
+                # Plan B: déduplication légère du contexte final, max N extraits
+                # par document/page pour éviter la redondance en prompt.
+                meta_for_limit = dict(getattr(target_node, "metadata", {}) or {})
+                did = meta_for_limit.get("document_id")
+                pno = meta_for_limit.get("page_no")
+                try:
+                    did_i = int(did) if did is not None else None
+                    pno_i = int(pno) if pno is not None else None
+                except (TypeError, ValueError):
+                    did_i = None
+                    pno_i = None
+                if (
+                    did_i is not None
+                    and pno_i is not None
+                    and SPACE_MAX_CONTEXT_LEAVES_PER_PAGE > 0
+                ):
+                    key = (did_i, pno_i)
+                    cnt = per_doc_page_counts.get(key, 0)
+                    if cnt >= SPACE_MAX_CONTEXT_LEAVES_PER_PAGE:
+                        continue
+                    per_doc_page_counts[key] = cnt + 1
                 if node_id:
                     seen_node_ids.add(node_id)
 

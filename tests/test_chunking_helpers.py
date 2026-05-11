@@ -361,6 +361,28 @@ def test_existing_specs_one_heading_two_leaves():
     assert specs[2]["parent_node_id"] == specs[0]["node_id"]
 
 
+def test_page_summary_chunk_generated_per_page():
+    """
+    Plan B: un chunk dérivé `page_summary` doit être généré par page.
+    """
+    from app.services.chunking_service import _build_docling_hierarchical_specs
+
+    leaves = [
+        _FakeLeaf("leaf-a", "Le dormant est en PVC renforcé acier. Uw = 1.2.", ["1 Intro"], page_no=3),
+        _FakeLeaf("leaf-b", "Pose en applique recommandée avec joint compressif.", ["1 Intro"], page_no=3),
+    ]
+    specs = _build_docling_hierarchical_specs({"document_id": 42}, leaves)
+    page_specs = [
+        s for s in specs
+        if s["metadata_json"].get("content_type") == "page_summary"
+    ]
+    assert len(page_specs) == 1
+    ps = page_specs[0]
+    assert ps["metadata_json"].get("page_no") == 3
+    assert ps["is_leaf"] is True
+    assert "[PAGE_SUMMARY p.3]" in ps["content"]
+
+
 def test_format_text_full_chunk_text():
     from app.services.chunking_service import _format_text_full_chunk_text
 
