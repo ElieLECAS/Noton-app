@@ -27,6 +27,7 @@ from datetime import datetime
 import json
 import logging
 import os
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -113,6 +114,9 @@ SPACE_CHAT_MAX_TOKENS = int(os.getenv("SPACE_CHAT_MAX_TOKENS_OVERRIDE", "1200"))
 SPACE_CHAT_TEMPERATURE = float(os.getenv("SPACE_CHAT_TEMPERATURE_OVERRIDE", "0.1"))
 SPACE_CHAT_TOP_P = None
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
+SPACE_AGENTIC_STEPBACK_ENABLED = os.getenv("SPACE_AGENTIC_STEPBACK_ENABLED", "true").lower() == "true"
+SPACE_AGENTIC_MIN_SCORE = float(os.getenv("SPACE_AGENTIC_MIN_SCORE", "0.12"))
+SPACE_AGENTIC_MIN_CITED_PASSAGES = int(os.getenv("SPACE_AGENTIC_MIN_CITED_PASSAGES", "2"))
 
 # --- Plan A : system prompt « grounded strict » -----------------------------
 # - Réponse UNIQUEMENT à partir des PASSAGES (pas de connaissance externe).
@@ -347,6 +351,66 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
         )
 
     return system_message
+
+
+def _estimate_evidence_quality(passages: List[dict]) -> dict:
+    """
+    Heuristique légère de suffisance des preuves (Plan C).
+    """
+    if not passages:
+        return {"grade": "weak", "top_score": 0.0, "strong_count": 0}
+    scores = [float(p.get("score") or 0.0) for p in passages]
+    top = max(scores) if scores else 0.0
+    strong_count = sum(1 for s in scores if s >= SPACE_AGENTIC_MIN_SCORE)
+    if top >= (SPACE_AGENTIC_MIN_SCORE + 0.10) and strong_count >= SPACE_AGENTIC_MIN_CITED_PASSAGES:
+        grade = "strong"
+    elif strong_count >= 1:
+        grade = "medium"
+    else:
+        grade = "weak"
+    return {"grade": grade, "top_score": top, "strong_count": strong_count}
+
+
+def _build_stepback_query(query: str) -> str:
+    """
+    Reformulation « step-back » sans LLM (Plan C pragmatique).
+    Retire les identifiants ultra-spécifiques et garde l'intention métier.
+    """
+    if not query or not query.strip():
+        return query
+    q = query.strip()
+    # Supprime ponctuation forte et normalise espaces
+    q = re.sub(r"[\(\)\[\]\{\}:;,_]", " ", q)
+    # Retire les codes très spécifiques type "76171", "A*4", refs alphanum longues
+    q = re.sub(r"\b[A-Za-z]*\d{3,}[A-Za-z0-9\-_/]*\b", " ", q)
+    q = re.sub(r"\s+", " ", q).strip()
+    if len(q) < 12:
+        return query
+    return q
+
+
+def _merge_agentic_passages(primary: List[dict], secondary: List[dict], k: int) -> List[dict]:
+    """
+    Fusionne deux jeux de passages en conservant les meilleurs et en dédupliquant
+    sur (document_id, chunk_id/source_leaf_chunk_id).
+    """
+    merged = []
+    seen = set()
+
+    def _key(p: dict):
+        did = p.get("document_id")
+        cid = p.get("source_leaf_chunk_id") or p.get("chunk_id")
+        return (did, cid, p.get("chunk_index"))
+
+    for p in primary + secondary:
+        key = _key(p)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(p)
+
+    merged.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
+    return merged[:k]
 
 
 def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
@@ -709,6 +773,44 @@ async def stream_space_chat_message(
                 for p in passages
             ],
         })
+
+    # ------------------------------------------------------------------
+    # Plan C (agentic léger) : step-back automatique si preuves faibles
+    # ------------------------------------------------------------------
+    evidence = _estimate_evidence_quality(passages)
+    if SPACE_AGENTIC_STEPBACK_ENABLED and evidence["grade"] == "weak":
+        stepback_query = _build_stepback_query(request.message)
+        if stepback_query and stepback_query != request.message:
+            with trace_run(
+                "rag_kag_stepback_retrieval",
+                run_type="retriever",
+                inputs={
+                    "query_original": request.message,
+                    "query_stepback": stepback_query,
+                    "space_id": space_id,
+                    "k": RAG_TOP_K,
+                },
+                tags=["rag", "kag", "space", "agentic", "stepback"],
+            ) as sb_run:
+                sb_passages = await search_space_passages(
+                    session=session,
+                    space_id=space_id,
+                    query_text=stepback_query,
+                    user_id=current_user.id,
+                    k=RAG_TOP_K,
+                )
+                # Dégrade légèrement les scores step-back pour garder la requête
+                # originale prioritaire quand elle a trouvé des signaux forts.
+                for p in sb_passages:
+                    p["score"] = float(p.get("score") or 0.0) * 0.92
+                passages = _merge_agentic_passages(passages, sb_passages, RAG_TOP_K)
+                sb_run.end(
+                    outputs={
+                        "nb_stepback_passages": len(sb_passages),
+                        "nb_merged_passages": len(passages),
+                    }
+                )
+            evidence = _estimate_evidence_quality(passages)
 
     # Construire le contexte système à partir des passages rerankés
     space_context = build_space_context_from_passages(passages)
