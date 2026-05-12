@@ -118,7 +118,8 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "Désambiguïsation : Sois extrêmement vigilant avec les dénominations de gammes proches (ex: Perform 70 vs Perform 76). Ne les confonds jamais. Si une requête est ambiguë, demande une précision ou distingue clairement les versions. "
     "Ton ton est humain, professionnel, clair et orienté solution. Tu réponds en français. "
     "Tu donnes des réponses directes, concrètes et opérationnelles. Ne mentionne jamais le fonctionnement technique de ta recherche. "
-    "Format : Réponse courte et utile (3 à 6 lignes) par défaut. Utilise des listes ou des tableaux Markdown uniquement pour la clarté technique. "
+    "Format : Réponds de manière concise mais complète, en donnant les détails techniques nécessaires. Utilise des listes ou des tableaux Markdown pour la clarté technique. "
+    "Priorise les passages avec les scores les plus élevés. "
     "Règle d'or : Ne jamais inventer de données. Si l'information est absente, indique-le clairement et propose une étape de vérification."
 )
 
@@ -285,16 +286,21 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
     }
 
     if passages:
-        system_message["content"] += "\n\nPASSAGES :\n\n"
+        system_message["content"] += "\n\nPASSAGES (classés par pertinence décroissante) :\n\n"
         passages_content = []
         for i, passage_data in enumerate(passages, 1):
             passage = passage_data['passage']
             score = passage_data.get('score', 0.0)
             document_title = passage_data.get('document_title', 'Document sans titre')
-            passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
+            section = passage_data.get('section', '')
+            # Format enrichi avec section pour donner du contexte structurel au LLM
+            header = f"[{i}] (score: {score:.2f}) \ud83d\udcc4 {document_title}"
+            if section:
+                header += f" | Section: {section}"
+            passage_text = f"{header}\n{passage}\n"
             passages_content.append(passage_text)
         system_message["content"] += "\n---\n".join(passages_content)
-        system_message["content"] += f"\n\n({len(passages)} passages.)"
+        system_message["content"] += f"\n\n({len(passages)} passages classés par pertinence. Priorise les premiers.)"
     else:
         system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
 

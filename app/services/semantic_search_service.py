@@ -54,9 +54,9 @@ RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 # Optimisations du reranking
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
-RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
-RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
-RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
+# Reranking single-stage : texte enrichi avec cap raisonnable
+RERANK_POOL = int(os.getenv("RERANK_POOL", "30"))
+RERANK_CHAR_CAP = int(os.getenv("RERANK_CHAR_CAP", "4000"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
 # FlagEmbeddingReranker tronque à top_n (pas de device= dans llama-index 0.4.x).
 _FLAG_RERANK_TOP_N = int(os.getenv("RERANKER_TOP_N", "4096"))
@@ -454,20 +454,23 @@ def _set_node_text_content(node, text: str) -> None:
         setattr(node, "text", text)
 
 
-def _two_stage_rerank_leaves(
+def _single_stage_rerank_leaves(
     filtered_candidates: List[NodeWithScore],
     query_text: str,
     k: int,
 ) -> List[NodeWithScore]:
-    """Rerank large pool (texte tronqué) puis raffinement sur texte enrichi complet."""
+    """
+    Reranking single-stage : envoie le texte enrichi complet (heading + contenu)
+    au cross-encoder BGE-reranker-v2-m3 (fenêtre 8192 tokens).
+    """
     reranker = _get_reranker()
     if not reranker:
         return filtered_candidates[:k]
-    stage1_max = min(
-        len(filtered_candidates),
-        max(RERANK_STAGE1_MAX, k * 2),
-    )
-    pool = filtered_candidates[:stage1_max]
+
+    pool_size = min(len(filtered_candidates), RERANK_POOL)
+    pool = filtered_candidates[:pool_size]
+
+    # Sauvegarde du texte original + enrichissement avec cap raisonnable
     backup: Dict[str, str] = {}
     for nws in pool:
         node = nws.node
@@ -480,56 +483,39 @@ def _two_stage_rerank_leaves(
         backup[nid] = raw
         meta = dict(getattr(node, "metadata", {}) or {})
         enriched = _enrich_content_with_heading_and_figure(raw, meta)
-        short = (
-            enriched[:RERANK_STAGE1_CHAR_CAP]
-            if len(enriched) > RERANK_STAGE1_CHAR_CAP
-            else enriched
-        )
-        _set_node_text_content(node, short)
+        if len(enriched) > RERANK_CHAR_CAP:
+            enriched = enriched[:RERANK_CHAR_CAP]
+        _set_node_text_content(node, enriched)
+
+    logger.info(
+        "Reranking single-stage : %d candidats (texte enrichi complet)...",
+        len(pool),
+    )
     try:
-        r1 = reranker.postprocess_nodes(
+        reranked = reranker.postprocess_nodes(
             pool,
             query_bundle=QueryBundle(query_str=query_text),
         )
+        logger.info(
+            "Reranking single-stage : pool=%d → final=%d",
+            len(pool),
+            len(reranked),
+        )
+        # Restaurer le texte original
+        for nws in pool:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            if nid in backup:
+                _set_node_text_content(nws.node, backup[nid])
+        # On retourne toute la liste rerankée (la sélection finale
+        # s'occupera de tronquer à k).
+        return reranked
     except Exception as e:
-        logger.warning("Rerank étape 1 échoué: %s", e)
+        logger.warning("Rerank single-stage échoué: %s", e)
         for nws in pool:
             nid = str(getattr(nws.node, "id_", None) or "")
             if nid in backup:
                 _set_node_text_content(nws.node, backup[nid])
         return filtered_candidates[:k]
-
-    n_stage2 = min(RERANK_STAGE2_POOL, len(r1))
-    for nws in pool:
-        nid = str(getattr(nws.node, "id_", None) or "")
-        if nid in backup:
-            _set_node_text_content(nws.node, backup[nid])
-
-    stage2: List[NodeWithScore] = []
-    for nws in r1[:n_stage2]:
-        node = nws.node
-        nid = str(getattr(node, "id_", None) or "")
-        raw = backup.get(nid, "")
-        meta = dict(getattr(node, "metadata", {}) or {})
-        enriched = _enrich_content_with_heading_and_figure(raw, meta)
-        _set_node_text_content(node, enriched)
-        stage2.append(NodeWithScore(node=node, score=float(nws.score or 0.0)))
-
-    try:
-        r2 = reranker.postprocess_nodes(
-            stage2,
-            query_bundle=QueryBundle(query_str=query_text),
-        )
-        logger.info(
-            "Reranking 2 étapes: pool=%d → stage2=%d → final=%d",
-            len(pool),
-            len(stage2),
-            len(r2),
-        )
-        return r2[:k]
-    except Exception as e:
-        logger.warning("Rerank étape 2 échoué: %s", e)
-        return r1[:k]
 
 
 def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
@@ -1047,7 +1033,7 @@ async def search_relevant_passages(
                 skip_reranking = True
                 top_leaves = filtered_candidates[:k]
 
-        # --- Étape 3 : reranking deux étapes sur les LEAVES ---
+        # --- Étape 3 : reranking single-stage sur les LEAVES (texte enrichi complet) ---
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
                 if _get_reranker():
@@ -1056,13 +1042,12 @@ async def search_relevant_passages(
                         run_type="chain",
                         inputs={
                             "nb_candidates": len(filtered_candidates),
-                            "stage1_max": RERANK_STAGE1_MAX,
-                            "stage2_pool": RERANK_STAGE2_POOL,
+                            "pool_size": RERANK_POOL,
                             "k": k,
                         },
                         tags=["reranking", "bge-reranker"],
                     ) as rerank_run:
-                        top_leaves = _two_stage_rerank_leaves(
+                        top_leaves = _single_stage_rerank_leaves(
                             filtered_candidates,
                             query_text,
                             k,
@@ -1097,25 +1082,34 @@ async def search_relevant_passages(
             parent_node_dict = _build_parent_node_dict(session, project_id, user_id)
 
             final_nodes: List[NodeWithScore] = []
-            seen_node_ids: set = set()
+            seen_leaf_ids: set = set()
             parents_resolved = 0
             parents_not_found = 0
 
             for nws in top_leaves:
                 score = float(getattr(nws, "score", 0.0) or 0.0)
-                leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
+                leaf_node = nws.node
+                leaf_meta = dict(getattr(leaf_node, "metadata", {}) or {})
                 parent_node_id = leaf_meta.get("parent_node_id")
 
-                target_node = None
+                # Dédup par leaf id (on garde le leaf, pas le parent)
+                leaf_id = getattr(leaf_node, "id_", None) or leaf_meta.get("node_id")
+                if leaf_id and leaf_id in seen_leaf_ids:
+                    continue
+                if leaf_id:
+                    seen_leaf_ids.add(leaf_id)
+
+                # Enrichir le leaf avec le heading du parent (contexte section)
+                # au lieu de REMPLACER le leaf par le parent entier
                 if parent_node_id:
-                    target_node = parent_node_dict.get(parent_node_id)
-                    if target_node is None:
+                    parent_node = parent_node_dict.get(parent_node_id)
+                    if parent_node is None:
                         nid = leaf_meta.get("note_id")
                         try:
                             note_id_int = int(nid) if nid is not None else None
                         except (TypeError, ValueError):
                             note_id_int = None
-                        target_node = _resolve_note_parent_with_multihop(
+                        parent_node = _resolve_note_parent_with_multihop(
                             session,
                             project_id,
                             user_id,
@@ -1123,21 +1117,24 @@ async def search_relevant_passages(
                             parent_node_id,
                             parent_node_dict,
                         )
-                if target_node is None:
-                    target_node = nws.node
-                    if parent_node_id:
+                    if parent_node is not None:
+                        parents_resolved += 1
+                        _merge_leaf_page_into_node_metadata(leaf_node, parent_node)
+                        # Extraire le heading du parent pour contextualiser le leaf
+                        parent_meta = dict(getattr(parent_node, "metadata", {}) or {})
+                        section_heading = parent_meta.get("heading") or parent_meta.get("section") or ""
+                        parent_summary = parent_meta.get("summary") or ""
+                        if section_heading and section_heading not in (leaf_meta.get("heading") or ""):
+                            leaf_meta["section"] = section_heading
+                        if parent_summary:
+                            leaf_meta["parent_summary"] = parent_summary
+                        # Mettre à jour les metadata du leaf sans toucher au texte
+                        if hasattr(leaf_node, "metadata"):
+                            leaf_node.metadata = leaf_meta
+                    else:
                         parents_not_found += 1
-                else:
-                    parents_resolved += 1
-                    _merge_leaf_page_into_node_metadata(nws.node, target_node)
 
-                node_id = getattr(target_node, "node_id", None) or leaf_meta.get("node_id")
-                if node_id and node_id in seen_node_ids:
-                    continue
-                if node_id:
-                    seen_node_ids.add(node_id)
-
-                final_nodes.append(NodeWithScore(node=target_node, score=score))
+                final_nodes.append(NodeWithScore(node=leaf_node, score=score))
 
             parent_outputs = {
                 "nb_final_passages": len(final_nodes),

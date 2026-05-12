@@ -61,10 +61,10 @@ RERANKER_CANDIDATE_MULTIPLIER = int(os.getenv("RERANKER_CANDIDATE_MULTIPLIER", "
 RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
-# Deux étapes : large pool tronqué puis raffinement sur texte complet
-RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
-RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
-RERANK_STAGE1_CHAR_CAP = int(os.getenv("RERANK_STAGE1_CHAR_CAP", "800"))
+# Reranking single-stage : texte enrichi avec cap raisonnable (pas 800 chars !)
+# 4000 chars ≈ 1000 tokens : capture 95% des chunks tout en restant rapide sur CPU
+RERANK_POOL = int(os.getenv("RERANK_POOL", "30"))
+RERANK_CHAR_CAP = int(os.getenv("RERANK_CHAR_CAP", "4000"))
 SKIP_RERANK_THRESHOLD = float(os.getenv("SKIP_RERANK_THRESHOLD", "0.85"))
 _FLAG_RERANK_TOP_N = int(os.getenv("RERANKER_TOP_N", "4096"))
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
@@ -142,13 +142,23 @@ MH_RRF_PARENT_WEIGHT = RRF_PARENT_LIST_WEIGHT
 MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
 # Configuration MMR (Maximum Marginal Relevance)
-MMR_K = int(os.getenv("MMR_K", "15"))  # Nombre de passages finaux à renvoyer au LLM
-MMR_LAMBDA = 0.5  # Équilibre entre pertinence (1.0) et diversité (0.0)
+MMR_K = int(os.getenv("MMR_K", "12"))  # Nombre de passages finaux à renvoyer au LLM
+MMR_LAMBDA = float(os.getenv("MMR_LAMBDA", "0.7"))  # Favorise la pertinence (1.0) sur la diversité (0.0)
+MMR_MAX_PER_PARENT = int(os.getenv("MMR_MAX_PER_PARENT", "3"))
+
+logger.info(
+    "Configuration RAG : RERANKER_ENABLED=%s, RERANK_POOL=%d, RERANK_CHAR_CAP=%d, MMR_MAX_PER_PARENT=%d",
+    RERANKER_ENABLED,
+    RERANK_POOL,
+    RERANK_CHAR_CAP,
+    MMR_MAX_PER_PARENT,
+)  # Max chunks par section/parent
 
 # Mots-clés heuristiques indiquant une requête multi-hop
+# Note: "et" retiré car il déclenche le multi-hop sur quasi toutes les requêtes françaises
 _MH_TRIGGER_PATTERNS = re.compile(
-    r"\b(et\b|comparaison|impact|cause|depend|dépend|influence|relation|lien"
-    r"|si\b|alors\b|pourquoi|comment|implique|nécessite|necessite|versus|vs\b"
+    r"\b(comparaison|impact|cause|depend|dépend|influence|relation|lien"
+    r"|si\b|alors\b|pourquoi|implique|nécessite|necessite|versus|vs\b"
     r"|différence|difference|avantage|inconvénient|inconvenient)\b",
     re.IGNORECASE,
 )
@@ -297,12 +307,13 @@ def _compute_mmr_with_parent_constraint(
     candidate_embeddings: Dict[int, np.ndarray],
     target_k: int = MMR_K,
     lambda_param: float = MMR_LAMBDA,
+    max_per_parent: int = MMR_MAX_PER_PARENT,
 ) -> List[NodeWithScore]:
     """
     Sélectionne target_k candidats parmi le pool en maximisant la MMR et la diversité de sources.
     
     Formule MMR = argmax [ lambda * sim(d, q) - (1-lambda) * max_sim(d, selected) ]
-    Contrainte additionnelle : 1 seul chunk par parent_node_id.
+    Contrainte souple : max_per_parent chunks par parent_node_id (défaut 3).
     """
     if not candidates or target_k <= 0:
         return []
@@ -314,11 +325,10 @@ def _compute_mmr_with_parent_constraint(
     selected_indices: List[int] = []
     candidates_pool = candidates[:]
     
-    # On garde une trace des parents déjà sélectionnés
-    selected_parent_ids: Set[str] = set()
+    # Compteur par parent (quota souple au lieu d'exclusion stricte)
+    parent_count: Dict[str, int] = {}
     
     # Le premier est toujours le meilleur score (déjà trié par reranker)
-    # Sauf s'il n'a pas d'embedding (fallback improbable)
     first_idx = 0
     while first_idx < len(candidates_pool):
         cid = _parse_chunk_id_from_node(candidates_pool[first_idx].node)
@@ -335,7 +345,7 @@ def _compute_mmr_with_parent_constraint(
     first_node = candidates_pool[first_idx].node
     p_id = (first_node.metadata or {}).get("parent_node_id")
     if p_id:
-        selected_parent_ids.add(str(p_id))
+        parent_count[str(p_id)] = parent_count.get(str(p_id), 0) + 1
     
     # Matrices pour calcul vectorisé
     query_embedding = query_embedding / np.linalg.norm(query_embedding)
@@ -361,11 +371,12 @@ def _compute_mmr_with_parent_constraint(
             if cid not in candidate_embeddings:
                 continue
                 
-            # --- Contrainte Parent ---
+            # --- Contrainte Parent souple (quota) ---
             parent_id = (nws.node.metadata or {}).get("parent_node_id")
-            if parent_id and str(parent_id) in selected_parent_ids:
-                # On ignore/pénalise les candidats du même parent
-                continue
+            if parent_id:
+                current_count = parent_count.get(str(parent_id), 0)
+                if current_count >= max_per_parent:
+                    continue
                 
             # --- Calcul MMR ---
             d_emb = candidate_embeddings[cid]
@@ -384,46 +395,49 @@ def _compute_mmr_with_parent_constraint(
                 best_idx = i
                 
         if best_idx == -1:
-            # Plus de candidats respectant la contrainte parent unique
-            # On pourrait arrêter là (diversité stricte) ou relâcher la contrainte
-            # L'utilisateur a dit "interdiction stricte", donc on s'arrête.
-            logger.info("MMR arrêt : plus de parents uniques disponibles (%d/15 trouvés)", len(selected_indices))
+            logger.info("MMR arrêt : quota parents épuisé (%d/%d trouvés)", len(selected_indices), target_k)
             break
             
         selected_indices.append(best_idx)
         p_id = (candidates_pool[best_idx].node.metadata or {}).get("parent_node_id")
         if p_id:
-            selected_parent_ids.add(str(p_id))
+            parent_count[str(p_id)] = parent_count.get(str(p_id), 0) + 1
             
     final_selection = [candidates_pool[i] for i in selected_indices]
+    unique_parents = len({k for k, v in parent_count.items() if v > 0})
     logger.info(
-        "MMR (space) : %d candidats sélectionnés sur %d (lambda=%.1f, parents_uniques=%d)",
+        "MMR (space) : %d candidats sélectionnés sur %d (lambda=%.2f, parents_uniques=%d, max/parent=%d)",
         len(final_selection),
         len(candidates_pool),
         lambda_param,
-        len(selected_parent_ids)
+        unique_parents,
+        max_per_parent,
     )
     return final_selection
 
 
-def _two_stage_rerank_leaves(
-
+def _single_stage_rerank_leaves(
     filtered_candidates: List[NodeWithScore],
     query_text: str,
     k: int,
 ) -> List[NodeWithScore]:
     """
-    Étape 1 : rerank rapide sur un large pool avec texte tronqué.
-    Étape 2 : rerank sur les meilleurs avec texte enrichi complet.
+    Reranking single-stage : envoie le texte enrichi complet (heading + contenu)
+    au cross-encoder BGE-reranker-v2-m3 (fenêtre 8192 tokens).
+
+    L'ancien pipeline en 2 étapes tronquait le texte à 800 caractères au stage 1,
+    ce qui détruisait l'intégrité sémantique et éliminait les bons passages.
     """
     reranker = _get_reranker()
     if not reranker:
         return filtered_candidates[:k]
-    stage1_max = min(
-        len(filtered_candidates),
-        RERANK_STAGE1_MAX,
-    )
-    pool = filtered_candidates[:stage1_max]
+
+    pool_size = min(len(filtered_candidates), RERANK_POOL)
+    pool = filtered_candidates[:pool_size]
+
+    # Sauvegarde du texte original + enrichissement avec cap raisonnable
+    # L'ancien cap de 800 chars détruisait le contenu. 4000 chars capture
+    # ~95% des chunks et reste tractable sur CPU (~15-30s au lieu de 3min).
     backup: Dict[str, str] = {}
     for nws in pool:
         node = nws.node
@@ -436,59 +450,40 @@ def _two_stage_rerank_leaves(
         backup[nid] = raw
         meta = dict(getattr(node, "metadata", {}) or {})
         enriched = _enrich_content_with_heading_and_figure(raw, meta)
-        short = (
-            enriched[:RERANK_STAGE1_CHAR_CAP]
-            if len(enriched) > RERANK_STAGE1_CHAR_CAP
-            else enriched
-        )
-        _set_node_text_content(node, short)
-    
-    logger.info("Reranking (space) Stage 1 : traitement de %d candidats (texte tronqué)...", len(pool))
+        if len(enriched) > RERANK_CHAR_CAP:
+            enriched = enriched[:RERANK_CHAR_CAP]
+        _set_node_text_content(node, enriched)
+
+    logger.info(
+        "Reranking single-stage (space) : %d candidats (texte enrichi complet)...",
+        len(pool),
+    )
     try:
-        r1 = reranker.postprocess_nodes(
+        reranked = reranker.postprocess_nodes(
             pool,
             query_bundle=QueryBundle(query_str=query_text),
         )
+        logger.info(
+            "Reranking single-stage (space) : pool=%d → final=%d",
+            len(pool),
+            len(reranked),
+        )
+        # Restaurer le texte original pour les nœuds (le passage final sera
+        # re-enrichi dans _node_to_passage)
+        for nws in pool:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            if nid in backup:
+                _set_node_text_content(nws.node, backup[nid])
+        # On retourne toute la liste rerankée (le MMR ou la sélection finale
+        # s'occupera de tronquer à k).
+        return reranked
     except Exception as e:
-        logger.warning("Rerank étape 1 (space) échoué: %s", e)
+        logger.warning("Rerank single-stage (space) échoué: %s", e)
         for nws in pool:
             nid = str(getattr(nws.node, "id_", None) or "")
             if nid in backup:
                 _set_node_text_content(nws.node, backup[nid])
         return filtered_candidates[:k]
-
-    n_stage2 = min(RERANK_STAGE2_POOL, len(r1))
-    for nws in pool:
-        nid = str(getattr(nws.node, "id_", None) or "")
-        if nid in backup:
-            _set_node_text_content(nws.node, backup[nid])
-
-    stage2: List[NodeWithScore] = []
-    for nws in r1[:n_stage2]:
-        node = nws.node
-        nid = str(getattr(node, "id_", None) or "")
-        raw = backup.get(nid, "")
-        meta = dict(getattr(node, "metadata", {}) or {})
-        enriched = _enrich_content_with_heading_and_figure(raw, meta)
-        _set_node_text_content(node, enriched)
-        stage2.append(NodeWithScore(node=node, score=float(nws.score or 0.0)))
-
-    logger.info("Reranking (space) Stage 2 : raffinement de %d candidats (texte complet)...", len(stage2))
-    try:
-        r2 = reranker.postprocess_nodes(
-            stage2,
-            query_bundle=QueryBundle(query_str=query_text),
-        )
-        logger.info(
-            "Reranking 2 étapes (space): pool=%d → stage2=%d → final=%d",
-            len(pool),
-            len(stage2),
-            len(r2),
-        )
-        return r2[:k]
-    except Exception as e:
-        logger.warning("Rerank étape 2 (space) échoué: %s", e)
-        return r1[:k]
 
 
 def _retrieve_leaves_sql(
@@ -1602,7 +1597,9 @@ def _needs_multi_hop(query_text: str, pivot_entity_names: List[str]) -> bool:
         return False
     if _MH_TRIGGER_PATTERNS.search(query_text):
         return True
-    if len(pivot_entity_names) >= 2:
+    # Exiger au moins 3 entités pivot distinctes (au lieu de 2) pour
+    # éviter les faux positifs multi-hop sur des requêtes simples
+    if len(pivot_entity_names) >= 3:
         return True
     return False
 
@@ -2053,15 +2050,10 @@ async def search_relevant_passages(
         logger.warning("Requête vide fournie")
         return []
 
-    # --- Étape 0 : Raisonnement cognitif sur la requête ---
-    reasoning_result = await reason_query_intent(query_text)
-    if reasoning_result.intent != "generic":
-        logger.info(
-            "CQR reasoning [space]: intent=%s primary_source=%s confidence=%.2f",
-            reasoning_result.intent,
-            reasoning_result.primary_source,
-            reasoning_result.confidence
-        )
+    # --- Étape 0 : Raisonnement cognitif désactivé ---
+    # Le CQR ajoutait 500ms-1s de latence pour un boost basé sur le champ
+    # "source" des passages, mais ce champ n'est jamais peuplé → aucun effet.
+    reasoning_result = None
 
     try:
         candidate_k = (
@@ -2267,14 +2259,13 @@ async def search_relevant_passages(
                 skip_reranking = True
                 top_leaves = filtered_candidates[:k]
 
-        # --- Étape 3 : reranking deux étapes sur les LEAVES ---
+        # --- Étape 3 : reranking single-stage sur les LEAVES (texte enrichi complet) ---
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
                 if _get_reranker():
-                    # Pour MMR, on demande au reranker un pool un peu plus large (ex: 2x k)
-                    # afin de pouvoir diversifier ensuite.
-                    # Pool de reranking basé sur MMR_K (taille du pool de diversification)
-                    rerank_pool_size = min(MMR_K, RERANK_STAGE2_POOL)
+                    # Pool pour le reranker puis MMR : on demande un pool plus grand
+                    # que k pour que MMR puisse diversifier ensuite.
+                    rerank_pool_size = min(max(MMR_K, k * 2), RERANK_POOL)
 
                     with trace_run(
                         "reranking",
@@ -2287,7 +2278,7 @@ async def search_relevant_passages(
                         },
                         tags=["reranking", "space"],
                     ) as rerank_run:
-                        top_leaves = _two_stage_rerank_leaves(
+                        top_leaves = _single_stage_rerank_leaves(
                             filtered_candidates,
                             query_text,
                             rerank_pool_size,
@@ -2350,25 +2341,34 @@ async def search_relevant_passages(
             parent_node_dict = _build_parent_node_dict(session, space_id, user_id)
 
             final_nodes: List[NodeWithScore] = []
-            seen_node_ids: set = set()
+            seen_leaf_ids: set = set()
             parents_resolved = 0
             parents_not_found = 0
 
             for nws in top_leaves:
                 score = float(getattr(nws, "score", 0.0) or 0.0)
-                leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
+                leaf_node = nws.node
+                leaf_meta = dict(getattr(leaf_node, "metadata", {}) or {})
                 parent_node_id = leaf_meta.get("parent_node_id")
 
-                target_node = None
+                # Dédup par leaf id (on garde le leaf, pas le parent)
+                leaf_id = getattr(leaf_node, "id_", None)
+                if leaf_id and leaf_id in seen_leaf_ids:
+                    continue
+                if leaf_id:
+                    seen_leaf_ids.add(leaf_id)
+
+                # Enrichir le leaf avec le heading du parent (contexte section)
+                # au lieu de REMPLACER le leaf par le parent entier
                 if parent_node_id:
-                    target_node = parent_node_dict.get(parent_node_id)
-                    if target_node is None:
+                    parent_node = parent_node_dict.get(parent_node_id)
+                    if parent_node is None:
                         doc_id = leaf_meta.get("document_id")
                         try:
                             doc_id_int = int(doc_id) if doc_id is not None else None
                         except (TypeError, ValueError):
                             doc_id_int = None
-                        target_node = _resolve_space_parent_with_multihop(
+                        parent_node = _resolve_space_parent_with_multihop(
                             session,
                             space_id,
                             user_id,
@@ -2376,21 +2376,24 @@ async def search_relevant_passages(
                             parent_node_id,
                             parent_node_dict,
                         )
-                if target_node is None:
-                    target_node = nws.node
-                    if parent_node_id:
+                    if parent_node is not None:
+                        parents_resolved += 1
+                        _merge_leaf_page_into_node_metadata(leaf_node, parent_node)
+                        # Extraire le heading du parent pour contextualiser le leaf
+                        parent_meta = dict(getattr(parent_node, "metadata", {}) or {})
+                        section_heading = parent_meta.get("heading") or parent_meta.get("section") or ""
+                        parent_summary = parent_meta.get("summary") or ""
+                        if section_heading and section_heading not in (leaf_meta.get("heading") or ""):
+                            leaf_meta["section"] = section_heading
+                        if parent_summary:
+                            leaf_meta["parent_summary"] = parent_summary
+                        # Mettre à jour les metadata du leaf sans toucher au texte
+                        if hasattr(leaf_node, "metadata"):
+                            leaf_node.metadata = leaf_meta
+                    else:
                         parents_not_found += 1
-                else:
-                    parents_resolved += 1
-                    _merge_leaf_page_into_node_metadata(nws.node, target_node)
 
-                node_id = getattr(target_node, "id_", None)
-                if node_id and node_id in seen_node_ids:
-                    continue
-                if node_id:
-                    seen_node_ids.add(node_id)
-
-                final_nodes.append(NodeWithScore(node=target_node, score=score))
+                final_nodes.append(NodeWithScore(node=leaf_node, score=score))
 
             parent_outputs = {
                 "nb_final_passages": len(final_nodes),
