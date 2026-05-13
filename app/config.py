@@ -52,6 +52,15 @@ class Settings(BaseSettings):
     DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 0
     DOCLING_TEXT_WINDOW_OVERLAP: int = 200
 
+    # HybridChunker — remplacement du HierarchicalChunker (agrège les petits items adjacents)
+    # Nombre maximum de tokens BGE-m3 par feuille (512 = fenêtre de contexte recommandée pour bge-m3).
+    DOCLING_CHUNKER_MAX_TOKENS: int = 512
+    # Injecte le fil d'Ariane de section dans le texte embeddé des feuilles text_full/text_window.
+    # Ex : "[PRÉSENTATION DU PRODUIT] Nom du produit : TEXTURAL®" → meilleure similarité cosinus.
+    DOCLING_LEAF_INJECT_HEADING: bool = True
+    # Taille minimale (chars) d'une feuille text_full ; en dessous, fusion avec la feuille suivante.
+    DOCLING_LEAF_MIN_CHARS: int = 200
+
     # Docling OCR (schémas techniques, cotes, PDF scannés)
     DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
     DOCLING_OCR_LANG: Optional[str] = None  # Langues OCR, ex. "fr,en" ou "fra+eng" (None = défaut Docling)

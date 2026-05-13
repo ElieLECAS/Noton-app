@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 # Versions de chunking stockées dans metadata_json (traçabilité / reindex sélectif)
 CHUNKING_VERSION_DOCLING_HIERARCHICAL = "docling_hierarchical_v1"
 CHUNKING_VERSION_DOCLING_HIERARCHICAL_V2 = "docling_hierarchical_v2"
+CHUNKING_VERSION_DOCLING_HIERARCHICAL_V3 = "docling_hierarchical_v3"
 CHUNKING_VERSION_FIXED_WINDOW = "fixed_window_v1"
 CHUNKING_VERSION_MARKDOWN_H2 = "markdown_h2_sections_v1"
 CHUNKING_VERSION_ADAPTIVE = "adaptive_window_v1"
@@ -200,14 +201,51 @@ def chunk_note(note: Note) -> List[NoteChunk]:
 # Stratégie 2 : documents importés — DoclingNodeParser (structure sémantique)
 # ---------------------------------------------------------------------------
 
+def _find_embedding_tokenizer_path(model_name: str) -> str:
+    """
+    Résout le chemin local du tokenizer pour un modèle HuggingFace.
+
+    Cherche d'abord dans le cache LlamaIndex (~/.cache/llama_index) puis dans
+    le cache HF standard (~/.cache/huggingface/hub).  Retourne le premier
+    snapshot qui contient un fichier tokenizer.json (contenu réel), ou le nom
+    du modèle en dernier recours (téléchargement depuis HF Hub).
+    """
+    import glob as _glob
+    import os as _os
+
+    model_slug = model_name.replace("/", "--")
+    search_roots = [
+        "/root/.cache/llama_index",
+        _os.path.expanduser("~/.cache/huggingface/hub"),
+    ]
+    for root in search_roots:
+        pattern = _os.path.join(root, f"models--{model_slug}", "snapshots", "*")
+        candidates = []
+        for snap in _glob.glob(pattern):
+            if _os.path.isfile(_os.path.join(snap, "tokenizer.json")):
+                candidates.append((_os.path.getmtime(snap), snap))
+        if candidates:
+            return sorted(candidates, reverse=True)[0][1]
+    return model_name
+
+
 def _get_docling_node_parser():
     """
-    Retourne un DoclingNodeParser optimisé pour les tableaux (singleton, thread-safe).
+    Retourne un DoclingNodeParser optimisé (singleton, thread-safe).
 
-    Utilise un HierarchicalChunker avec MarkdownTableSerializer au lieu du
-    TripletTableSerializer par défaut : les tableaux sont sérialisés en grille
-    Markdown (| Colonne A | Colonne B |) ce qui réduit les confusions
-    colonnes/lignes et améliore la précision des valeurs numériques pour le LLM.
+    Utilise HybridChunker (tokenizer-aware, agrège les petits items adjacents)
+    avec MarkdownTableSerializer pour une sérialisation lisible des tableaux.
+
+    HybridChunker vs HierarchicalChunker :
+    - merge_peers=True : fusionne les puces/paragraphes courts partageant le
+      même heading jusqu'à max_tokens → élimine les feuilles miniatures.
+    - repeat_table_header=True : répète les en-têtes de colonnes sur les chunks
+      de tableau qui débordent.
+    - Taille cible par feuille : settings.DOCLING_CHUNKER_MAX_TOKENS (défaut 512
+      tokens BGE-m3).
+
+    Fallback : si HybridChunker ou HuggingFaceTokenizer ne sont pas disponibles,
+    repli sur HierarchicalChunker (comportement v2).
     """
     global _docling_node_parser
     if _docling_node_parser is not None:
@@ -218,7 +256,6 @@ def _get_docling_node_parser():
         from llama_index.node_parser.docling import DoclingNodeParser
 
         try:
-            from docling_core.transforms.chunker import HierarchicalChunker
             from docling_core.transforms.chunker.hierarchical_chunker import (
                 ChunkingDocSerializer,
                 ChunkingSerializerProvider,
@@ -234,8 +271,43 @@ def _get_docling_node_parser():
                         table_serializer=MarkdownTableSerializer(),
                     )
 
-            chunker = HierarchicalChunker(serializer_provider=MDTableSerializerProvider())
-            _docling_node_parser = DoclingNodeParser(chunker=chunker)
+            # Tenter HybridChunker (tokenizer-aware, merge_peers) — disponible depuis docling-core ≥ 2.18
+            try:
+                from docling_core.transforms.chunker import HybridChunker
+                from docling_core.transforms.chunker.tokenizer.huggingface import (
+                    HuggingFaceTokenizer,
+                )
+
+                tokenizer_path = _find_embedding_tokenizer_path(settings.EMBEDDING_MODEL)
+                tokenizer = HuggingFaceTokenizer.from_pretrained(
+                    tokenizer_path,
+                    max_tokens=settings.DOCLING_CHUNKER_MAX_TOKENS,
+                )
+                chunker = HybridChunker(
+                    tokenizer=tokenizer,
+                    serializer_provider=MDTableSerializerProvider(),
+                    merge_peers=True,
+                    repeat_table_header=True,
+                )
+                _docling_node_parser = DoclingNodeParser(chunker=chunker)
+                logger.info(
+                    "DoclingNodeParser initialisé avec HybridChunker "
+                    "(tokenizer=%s, max_tokens=%d, merge_peers=True)",
+                    settings.EMBEDDING_MODEL,
+                    settings.DOCLING_CHUNKER_MAX_TOKENS,
+                )
+            except (ImportError, AttributeError, Exception) as hybrid_err:
+                # Repli sur HierarchicalChunker (v2) si HybridChunker ou tokenizer indisponible
+                from docling_core.transforms.chunker import HierarchicalChunker
+
+                chunker = HierarchicalChunker(serializer_provider=MDTableSerializerProvider())
+                _docling_node_parser = DoclingNodeParser(chunker=chunker)
+                logger.warning(
+                    "HybridChunker indisponible (%s) — repli sur HierarchicalChunker. "
+                    "Les petits items Docling ne seront pas fusionnés.",
+                    hybrid_err,
+                )
+
         except (ImportError, AttributeError) as e:
             logger.warning(
                 "MarkdownTableSerializer non disponible (%s) — repli sur le serializer par défaut "
@@ -600,11 +672,27 @@ def _format_text_full_chunk_text(
     page_no: Optional[int],
 ) -> str:
     """
-    Texte canonique pour embedding : contenu brut du chunk, sans préfixe.
+    Texte canonique pour embedding : contenu brut avec injection optionnelle du fil d'Ariane.
 
-    Le contexte (heading_path, page_no, etc.) est conservé uniquement dans metadata_json.
+    Quand settings.DOCLING_LEAF_INJECT_HEADING est True, le chemin de section est
+    préfixé entre crochets pour ancrer sémantiquement le vecteur dense :
+    - Feuille courte (< 300 chars) : "[Section > Sous-section] contenu" sur une ligne
+    - Feuille longue : "[Section > Sous-section]\n\ncontenu" (BGE-m3 gère bien la séparation)
+
+    Le raw_content pur reste disponible dans metadata_json["raw_content"] pour
+    l'affichage et le LLM downstream (non altéré par cette fonction).
     """
-    return (raw_body or "").strip()
+    body = (raw_body or "").strip()
+    if not body:
+        return body
+    if not getattr(settings, "DOCLING_LEAF_INJECT_HEADING", True):
+        return body
+    path = " > ".join(_heading_path_list(headings)) or parent_heading_display
+    if not path:
+        return body
+    if len(body) < 300:
+        return f"[{path}] {body}"
+    return f"[{path}]\n\n{body}"
 
 
 def _split_text_into_windows(text: str, max_chars: int, overlap: int) -> List[str]:
@@ -690,6 +778,75 @@ def _page_range_from_docling_leaves(group_leaves: List[TextNode]) -> Tuple[Optio
     return min(pages), max(pages)
 
 
+def _coalesce_small_text_leaves(specs: List[dict], min_chars: int, max_chars: int) -> List[dict]:
+    """
+    Fusionne les feuilles text_full consécutives trop courtes au sein du même parent.
+
+    Après que HybridChunker ait déjà fait le travail principal de fusion, cette passe
+    "ceinture et bretelles" élimine les derniers micro-chunks qui n'ont pas pu être
+    fusionnés (ex. : dernier item d'une liste isolé, titre de sous-section seul).
+
+    Règles :
+    - Ne touche qu'aux specs is_leaf=True dont content_type == "text_full".
+    - Deux specs consécutives sont fusionnées si leur content combiné est ≤ max_chars
+      ET que la première a len(content) < min_chars.
+    - La spec résultante garde le node_id de la première ; end_char et content/text
+      sont recalculés. chunk_index est réattribué à la fin.
+    - Les specs table_* / text_window / is_leaf=False ne sont jamais touchées.
+    """
+    if min_chars <= 0 or not specs:
+        return specs
+
+    out: List[dict] = []
+    i = 0
+    while i < len(specs):
+        spec = specs[i]
+        ct = (spec.get("metadata_json") or {}).get("content_type", "")
+        is_leaf = spec.get("is_leaf", False)
+
+        if not is_leaf or ct != "text_full":
+            out.append(spec)
+            i += 1
+            continue
+
+        # Tenter de fusionner avec les suivantes tant que :
+        # - la spec courante est trop courte
+        # - la suivante est text_full, même parent, et la taille combinée est OK
+        merged = dict(spec)
+        merged_meta = dict(merged.get("metadata_json") or {})
+        while (
+            len(merged["content"]) < min_chars
+            and i + 1 < len(specs)
+        ):
+            nxt = specs[i + 1]
+            nxt_ct = (nxt.get("metadata_json") or {}).get("content_type", "")
+            nxt_leaf = nxt.get("is_leaf", False)
+            same_parent = (
+                merged.get("parent_node_id") == nxt.get("parent_node_id")
+            )
+            combined_len = len(merged["content"]) + 1 + len(nxt["content"])
+
+            if not (nxt_leaf and nxt_ct == "text_full" and same_parent and combined_len <= max_chars):
+                break
+
+            combined_content = merged["content"] + "\n" + nxt["content"]
+            merged["content"] = combined_content
+            merged["text"] = combined_content
+            merged["end_char"] = merged["start_char"] + len(combined_content)
+            merged_meta["coalesced_node_ids"] = merged_meta.get("coalesced_node_ids", []) + [nxt["node_id"]]
+            merged["metadata_json"] = merged_meta
+            i += 1
+
+        out.append(merged)
+        i += 1
+
+    # Réattribuer les chunk_index consécutifs
+    for idx, s in enumerate(out):
+        s["chunk_index"] = idx
+
+    return out
+
+
 def _build_docling_hierarchical_specs(
     doc_metadata_base: dict,
     leaf_nodes: List[TextNode],
@@ -699,7 +856,7 @@ def _build_docling_hierarchical_specs(
     (NoteChunk ou DocumentChunk). Même logique que l'ancien chunk_note_from_docling_docs.
     """
     base_meta = dict(doc_metadata_base)
-    base_meta["chunking_version"] = CHUNKING_VERSION_DOCLING_HIERARCHICAL_V2
+    base_meta["chunking_version"] = CHUNKING_VERSION_DOCLING_HIERARCHICAL_V3
 
     groups: Dict[str, List[TextNode]] = {}
     group_order: List[str] = []
@@ -1099,6 +1256,12 @@ def _build_docling_hierarchical_specs(
                     )
                     chunk_index += 1
 
+    # Passe de coalescence : fusionne les feuilles text_full consécutives trop courtes
+    # (ceinture et bretelles par rapport à merge_peers de HybridChunker).
+    min_chars = int(getattr(settings, "DOCLING_LEAF_MIN_CHARS", 200))
+    max_chars = int(getattr(settings, "DOCLING_CHUNKER_MAX_TOKENS", 512)) * 4
+    specs = _coalesce_small_text_leaves(specs, min_chars=min_chars, max_chars=max_chars)
+
     return specs
 
 
@@ -1197,6 +1360,23 @@ def chunk_note_from_docling_docs(
 
     leaf_count = sum(1 for c in chunks if c.is_leaf)
     parent_count = sum(1 for c in chunks if not c.is_leaf)
+
+    text_leaf_lengths = sorted(
+        len(c.content or "")
+        for c in chunks
+        if c.is_leaf
+        and (c.metadata_json or {}).get("content_type", "").startswith("text")
+    )
+    if text_leaf_lengths:
+        n = len(text_leaf_lengths)
+        p50 = text_leaf_lengths[n // 2]
+        p95 = text_leaf_lengths[min(int(n * 0.95), n - 1)]
+        tiny_pct = round(100 * sum(1 for v in text_leaf_lengths if v < 100) / n, 1)
+        logger.info(
+            "Chunking note=%s inventaire feuilles text : n=%d min=%d p50=%d p95=%d max=%d <100chars=%.1f%%",
+            note.id, n, text_leaf_lengths[0], p50, p95, text_leaf_lengths[-1], tiny_pct,
+        )
+
     logger.info(
         "Chunking sémantique (DoclingNodeParser) note=%s : "
         "%d chunks total (%d leaves, %d parents)",
@@ -1317,6 +1497,32 @@ def chunk_document_from_docling_docs(
 
     leaf_count = sum(1 for c in chunks if c.is_leaf)
     parent_count = sum(1 for c in chunks if not c.is_leaf)
+
+    # Mini-inventaire pour mesurer la qualité du chunking (tailles des feuilles text_*)
+    text_leaf_lengths = sorted(
+        len(c.content or "")
+        for c in chunks
+        if c.is_leaf
+        and (c.metadata_json or {}).get("content_type", "").startswith("text")
+    )
+    if text_leaf_lengths:
+        n = len(text_leaf_lengths)
+        p50 = text_leaf_lengths[n // 2]
+        p95 = text_leaf_lengths[min(int(n * 0.95), n - 1)]
+        tiny_pct = round(100 * sum(1 for v in text_leaf_lengths if v < 100) / n, 1)
+        ld.info(
+            "[DoclingNodeParser] document_id=%s — inventaire feuilles text : "
+            "n=%d min=%d p50=%d p95=%d max=%d feuilles<100chars=%.1f%%  "
+            "(v3: HybridChunker+heading+coalesce)",
+            document.id,
+            n,
+            text_leaf_lengths[0],
+            p50,
+            p95,
+            text_leaf_lengths[-1],
+            tiny_pct,
+        )
+
     logger.info(
         "Chunking sémantique (DoclingNodeParser) document=%s : "
         "%d chunks total (%d leaves, %d parents)",
