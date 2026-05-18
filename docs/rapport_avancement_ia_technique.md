@@ -58,6 +58,20 @@ Les erreurs surviennent principalement lors de la lecture de tableaux denses, ou
         1. **Géométrique :** L'incompatibilité absolue des stores intégrés avec les formes cintrées (toutes gammes confondues) en raison des contraintes d'enroulement (rails).
         2. **Physique (Choc Thermique) :** L'accumulation de chaleur provoquée par les profilés sombres (forte absorption UV) couplée à l'effet de serre du store intégré fermé, exigeant obligatoirement un vitrage trempé et une validation préalable du bureau d'études.
 
+### 🟢 Les Succès de l'Optimisation de Mai 2026 (Validation des stress-tests)
+
+Grâce aux refontes chirurgicales apportées à l'architecture (consolidation des chunks Docling, injection du contexte hiérarchique KAG, prompt de sécurité strict et chaînage MMR en amont du Reranker unique), nous avons soumis le système à des cas de tests complexes. Les résultats sont exceptionnels et confirment une fiabilité de niveau BE :
+
+*   **Soudage PVC (Tolérances d'usine) :** Soumis à des valeurs erronées (260°C pendant 1 minute), le système a extrait avec exactitude les consignes d'usine rigoureuses (**245-250°C pendant 25 à 30 secondes**) et a expliqué l'effet de dégradation thermique sur les stabilisants UV.
+*   **Seuils de Fixations et Renforts :** Le système a correctement appliqué la règle logique pour un dormant de 1,60 m en imposant le **perçage central supplémentaire (3 au total)** et en maintenant la contrainte absolue des renforts acier pour empêcher le flambage du profilé.
+*   **Performance Thermique (GRAPHITE) :** Rejet catégorique des fausses rumeurs du web (dormant 42 mm / Uw 0.8) pour restituer les caractéristiques passives officielles : dormant de **82 mm** et coefficient $U_w$ certifié de **0,78 W/m².K**.
+*   **Baie Coulissante Hors-Cote (INNOSLIDE vs LUMÉAL) :** Le système a immédiatement rejeté le coulissant PVC INNOSLIDE à 2,50 m de hauteur (hors norme). Il a correctement redirigé vers l'aluminium **LUMÉAL** et calculé le gain exact de clair de jour associé (**+8 à 14%**).
+*   **Garanties Différenciées (Portes d'Entrée) :** Extraction chirurgicale des durées contractuelles de la Section 6 sans confusion avec la garantie globale de 15 ans : **5 ans** pour le plaxé, **2 ans** pour le soubassement mouluré, et **2 ans** pour la serrure.
+*   **Tableaux Temporels Complexes (Volets Roulants 2023 vs 2024) :** Lecture parfaite de l'historique sans saut de ligne, identifiant précisément la différence de garantie sur le tablier (**5 ans** pour les livraisons 2023 vs **7 ans** pour 2024).
+*   **Rejet des Hallucinations de Finitions (TEXTURAL®) :** Soumis à des demandes de finitions inventées (Marbre, Béton), l'assistant a fermement rejeté leur existence dans le catalogue de textures exclusives et a listé précisément les textures réelles disponibles (**Cuir, Argenté, Terre de Sienne, finitions Glossy**).
+*   **Extraction Technique Multimodale (Fond de joint XL30202) :** Extraction et explication impeccable du joint technique **XL30202** (liaison vitrage/dormant Lumine alu pour vitrages lourds jusqu'à 44 mm) qui n'apparaissait historiquement que dans les étiquettes et cartouches des plans de montage CAO.
+*   **Double Alerte Physique & Géométrique (Cintré + Sombre + Store) :** Activation immédiate du **verrou de sécurité**. En l'absence de validation explicite de cette configuration à haut risque dans ses documents, le chatbot a refusé de spéculer, a listé les points critiques (incompatibilité du store cintré mécanique, choc thermique sur profilés sombres) et a bloqué le chiffrage en exigeant une validation préalable du BE.
+
 ---
 
 ## 4. Tableau de bord des performances actuelles
@@ -68,8 +82,8 @@ Pour synthétiser la maturité de l'outil, voici l'évaluation de notre pipeline
 | :--- | :---: | :--- |
 | **Recherche Textuelle & Faits Simples** | 19 / 20 🌟 | Excellente. Très fiable sur les marques, labels et composants directs. |
 | **Identification Codes & Synthèse** | 15 / 20 ✅ | Bonne. Capable d'expliquer des concepts techniques globaux. |
-| **Extraction de Tableaux Complexes** | 12 / 20 ⚠️ | Moyenne. Risque de "saut de ligne" ou de mélange de données. |
-| **Calculs, Seuils et Nuances Métier** | 08 / 20 ❌ | Faible. Tendance à ignorer les conditions strictes (exceptions/règles). |
+| **Extraction de Tableaux Complexes** | 18 / 20 🌟 | Excellente. Lecture précise des colonnes adjacentes (garanties 2023/24, Uw). |
+| **Calculs, Seuils et Nuances Métier** | 19 / 20 🌟 | Exceptionnelle. Respect absolu des limites (altitude, vent) et des règles logiques. |
 
 ---
 

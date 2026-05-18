@@ -301,7 +301,8 @@ def _compute_mmr_with_parent_constraint(
     """
     Sélectionne target_k candidats parmi le pool en maximisant la MMR et la diversité de sources.
     
-    Formule MMR = argmax [ lambda * sim(d, q) - (1-lambda) * max_sim(d, selected) ]
+    Formule MMR = argmax [ lambda * sim_q - (1-lambda) * max_sim(d, selected) ]
+    Où sim_q est le score hybride de pertinence normalisé (score / max_score).
     Contrainte additionnelle : 1 seul chunk par parent_node_id.
     """
     if not candidates or target_k <= 0:
@@ -310,6 +311,11 @@ def _compute_mmr_with_parent_constraint(
     if len(candidates) <= 1:
         return candidates[:target_k]
 
+    # Déterminer le score maximum pour la normalisation
+    max_score = float(candidates[0].score or 1.0)
+    if max_score <= 0.0:
+        max_score = 1.0
+
     # Préparation des données
     selected_indices: List[int] = []
     candidates_pool = candidates[:]
@@ -317,7 +323,7 @@ def _compute_mmr_with_parent_constraint(
     # On garde une trace des parents déjà sélectionnés
     selected_parent_ids: Set[str] = set()
     
-    # Le premier est toujours le meilleur score (déjà trié par reranker)
+    # Le premier est toujours le meilleur score (déjà trié)
     # Sauf s'il n'a pas d'embedding (fallback improbable)
     first_idx = 0
     while first_idx < len(candidates_pool):
@@ -336,9 +342,6 @@ def _compute_mmr_with_parent_constraint(
     p_id = (first_node.metadata or {}).get("parent_node_id")
     if p_id:
         selected_parent_ids.add(str(p_id))
-    
-    # Matrices pour calcul vectorisé
-    query_embedding = query_embedding / np.linalg.norm(query_embedding)
     
     # On boucle jusqu'à avoir target_k ou épuisé le pool
     while len(selected_indices) < target_k and len(selected_indices) < len(candidates_pool):
@@ -371,8 +374,8 @@ def _compute_mmr_with_parent_constraint(
             d_emb = candidate_embeddings[cid]
             d_emb = d_emb / np.linalg.norm(d_emb)
             
-            # Similarité à la requête
-            sim_q = np.dot(d_emb, query_embedding)
+            # Similarité à la requête : score hybride normalisé
+            sim_q = float(nws.score or 0.0) / max_score
             
             # Similarité max aux déjà sélectionnés
             sim_selected = np.max(np.dot(sel_matrix, d_emb))
@@ -385,9 +388,7 @@ def _compute_mmr_with_parent_constraint(
                 
         if best_idx == -1:
             # Plus de candidats respectant la contrainte parent unique
-            # On pourrait arrêter là (diversité stricte) ou relâcher la contrainte
-            # L'utilisateur a dit "interdiction stricte", donc on s'arrête.
-            logger.info("MMR arrêt : plus de parents uniques disponibles (%d/15 trouvés)", len(selected_indices))
+            logger.info("MMR arrêt : plus de parents uniques disponibles (%d/%d trouvés)", len(selected_indices), target_k)
             break
             
         selected_indices.append(best_idx)
@@ -406,24 +407,21 @@ def _compute_mmr_with_parent_constraint(
     return final_selection
 
 
-def _two_stage_rerank_leaves(
-
+def _single_stage_rerank_leaves(
     filtered_candidates: List[NodeWithScore],
     query_text: str,
     k: int,
+    char_cap: int = 2000,
 ) -> List[NodeWithScore]:
     """
-    Étape 1 : rerank rapide sur un large pool avec texte tronqué.
-    Étape 2 : rerank sur les meilleurs avec texte enrichi complet.
+    Rerank unique (Single-Stage) sur le pool présélectionné par le MMR.
+    Limite le texte envoyé au reranker à char_cap pour le ms-marco-MiniLM-L-6-v2 (512 tokens).
     """
     reranker = _get_reranker()
     if not reranker:
         return filtered_candidates[:k]
-    stage1_max = min(
-        len(filtered_candidates),
-        RERANK_STAGE1_MAX,
-    )
-    pool = filtered_candidates[:stage1_max]
+
+    pool = filtered_candidates
     backup: Dict[str, str] = {}
     for nws in pool:
         node = nws.node
@@ -436,59 +434,46 @@ def _two_stage_rerank_leaves(
         backup[nid] = raw
         meta = dict(getattr(node, "metadata", {}) or {})
         enriched = _enrich_content_with_heading_and_figure(raw, meta)
-        short = (
-            enriched[:RERANK_STAGE1_CHAR_CAP]
-            if len(enriched) > RERANK_STAGE1_CHAR_CAP
-            else enriched
-        )
+        
+        # Tronquage au niveau du cap de caractères
+        short = enriched[:char_cap] if len(enriched) > char_cap else enriched
         _set_node_text_content(node, short)
     
-    logger.info("Reranking (space) Stage 1 : traitement de %d candidats (texte tronqué)...", len(pool))
+    logger.info("Reranking (space) Single-Stage : traitement de %d candidats (cap %d chars)...", len(pool), char_cap)
     try:
-        r1 = reranker.postprocess_nodes(
+        r = reranker.postprocess_nodes(
             pool,
             query_bundle=QueryBundle(query_str=query_text),
         )
+        # Rétablir les textes d'origine complets pour la suite
+        for nws in pool:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            if nid in backup:
+                _set_node_text_content(nws.node, backup[nid])
+                
+        # On s'assure de réaffecter les textes complets enrichis sur les candidats du résultat final
+        for nws in r:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            raw = backup.get(nid, "")
+            meta = dict(getattr(nws.node, "metadata", {}) or {})
+            enriched = _enrich_content_with_heading_and_figure(raw, meta)
+            _set_node_text_content(nws.node, enriched)
+            
+        logger.info(
+            "Reranking Single-Stage terminé : pool=%d → final=%d (top-k=%d)",
+            len(pool),
+            len(r),
+            k,
+        )
+        return r[:k]
     except Exception as e:
-        logger.warning("Rerank étape 1 (space) échoué: %s", e)
+        logger.warning("Rerank Single-Stage (space) échoué: %s", e)
+        # Rétablir les textes d'origine complets en cas d'erreur
         for nws in pool:
             nid = str(getattr(nws.node, "id_", None) or "")
             if nid in backup:
                 _set_node_text_content(nws.node, backup[nid])
         return filtered_candidates[:k]
-
-    n_stage2 = min(RERANK_STAGE2_POOL, len(r1))
-    for nws in pool:
-        nid = str(getattr(nws.node, "id_", None) or "")
-        if nid in backup:
-            _set_node_text_content(nws.node, backup[nid])
-
-    stage2: List[NodeWithScore] = []
-    for nws in r1[:n_stage2]:
-        node = nws.node
-        nid = str(getattr(node, "id_", None) or "")
-        raw = backup.get(nid, "")
-        meta = dict(getattr(node, "metadata", {}) or {})
-        enriched = _enrich_content_with_heading_and_figure(raw, meta)
-        _set_node_text_content(node, enriched)
-        stage2.append(NodeWithScore(node=node, score=float(nws.score or 0.0)))
-
-    logger.info("Reranking (space) Stage 2 : raffinement de %d candidats (texte complet)...", len(stage2))
-    try:
-        r2 = reranker.postprocess_nodes(
-            stage2,
-            query_bundle=QueryBundle(query_str=query_text),
-        )
-        logger.info(
-            "Reranking 2 étapes (space): pool=%d → stage2=%d → final=%d",
-            len(pool),
-            len(stage2),
-            len(r2),
-        )
-        return r2[:k]
-    except Exception as e:
-        logger.warning("Rerank étape 2 (space) échoué: %s", e)
-        return r1[:k]
 
 
 def _retrieve_leaves_sql(
@@ -2267,30 +2252,61 @@ async def search_relevant_passages(
                 skip_reranking = True
                 top_leaves = filtered_candidates[:k]
 
-        # --- Étape 3 : reranking deux étapes sur les LEAVES ---
+        # --- Étape 3 : Reranking unique précédé de diversification MMR ---
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
                 if _get_reranker():
-                    # Pour MMR, on demande au reranker un pool un peu plus large (ex: 2x k)
-                    # afin de pouvoir diversifier ensuite.
-                    # Pool de reranking basé sur MMR_K (taille du pool de diversification)
-                    rerank_pool_size = min(MMR_K, RERANK_STAGE2_POOL)
+                    rerank_pool_size = min(MAX_RERANK_CANDIDATES, len(filtered_candidates))
+                    
+                    # 1. Sélection par MMR en amont pour diversifier les candidats envoyés au reranker
+                    if len(filtered_candidates) > k:
+                        try:
+                            with trace_run(
+                                "mmr_selection",
+                                run_type="chain",
+                                inputs={"nb_pool": len(filtered_candidates), "target_k": rerank_pool_size, "lambda": MMR_LAMBDA},
+                                tags=["mmr", "diversity", "space"],
+                            ) as mmr_run:
+                                query_embedding = np.array(
+                                    _get_embed_model().get_query_embedding(query_text), 
+                                    dtype=np.float32
+                                )
+                                chunk_ids = [
+                                    cid for nws in filtered_candidates
+                                    if (cid := _parse_chunk_id_from_node(nws.node)) is not None
+                                ]
+                                candidate_embeddings = _fetch_embeddings_for_chunks(session, chunk_ids)
+                                
+                                mmr_pool = _compute_mmr_with_parent_constraint(
+                                    query_embedding=query_embedding,
+                                    candidates=filtered_candidates,
+                                    candidate_embeddings=candidate_embeddings,
+                                    target_k=rerank_pool_size,
+                                    lambda_param=MMR_LAMBDA
+                                )
+                                mmr_run.end(outputs={"nb_final": len(mmr_pool)})
+                        except Exception as mmr_err:
+                            logger.warning("Sélection MMR pré-rerank échouée (space), fallback : %s", mmr_err)
+                            mmr_pool = filtered_candidates[:rerank_pool_size]
+                    else:
+                        mmr_pool = filtered_candidates
 
+                    # 2. Passage unique au reranker cross-encoder MiniLM (cap 2000 chars)
                     with trace_run(
                         "reranking",
                         run_type="chain",
                         inputs={
-                            "nb_candidates": len(filtered_candidates),
+                            "nb_candidates": len(mmr_pool),
                             "target_k": k,
-                            "pool_size": rerank_pool_size,
                             "multi_hop": use_multi_hop,
                         },
                         tags=["reranking", "space"],
                     ) as rerank_run:
-                        top_leaves = _two_stage_rerank_leaves(
-                            filtered_candidates,
+                        top_leaves = _single_stage_rerank_leaves(
+                            mmr_pool,
                             query_text,
-                            rerank_pool_size,
+                            k,
+                            char_cap=2000,
                         )
                         rerank_run.end(outputs={"nb_pool": len(top_leaves)})
                 else:
@@ -2302,43 +2318,6 @@ async def search_relevant_passages(
         elif not skip_reranking:
             top_leaves = filtered_candidates[:k]
 
-        # --- Étape 3.1 : Diversification MMR ---
-        # On applique MMR si on a un pool plus grand que k
-        if len(top_leaves) > k:
-            try:
-                with trace_run(
-                    "mmr_selection",
-                    run_type="chain",
-                    inputs={"nb_pool": len(top_leaves), "target_k": k, "lambda": MMR_LAMBDA},
-                    tags=["mmr", "diversity", "space"],
-                ) as mmr_run:
-                    # 1. Récupération de l'embedding de la requête
-                    query_embedding = np.array(
-                        _get_embed_model().get_query_embedding(query_text), 
-                        dtype=np.float32
-                    )
-                    
-                    # 2. Récupération des embeddings des candidats du pool
-                    chunk_ids = []
-                    for n in top_leaves:
-                        cid = _parse_chunk_id_from_node(n.node)
-                        if cid is not None:
-                            chunk_ids.append(cid)
-                    
-                    candidate_embeddings = _fetch_embeddings_for_chunks(session, chunk_ids)
-                    
-                    # 3. Calcul MMR pour réduire le pool à k
-                    top_leaves = _compute_mmr_with_parent_constraint(
-                        query_embedding=query_embedding,
-                        candidates=top_leaves,
-                        candidate_embeddings=candidate_embeddings,
-                        target_k=k,
-                        lambda_param=MMR_LAMBDA
-                    )
-                    mmr_run.end(outputs={"nb_final": len(top_leaves)})
-            except Exception as mmr_err:
-                logger.warning("Sélection MMR échouée (space), fallback top_k : %s", mmr_err)
-                top_leaves = top_leaves[:MMR_K]
 
         # --- Étape 4 : résolution des parents ---
         with trace_run(
