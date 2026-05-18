@@ -326,6 +326,10 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
             score = passage_data.get('score', 0.0)
             note_title = passage_data.get('note_title', 'Note sans titre')
 
+            # Récupérer la section (heading) si présente
+            section = passage_data.get('section') or passage_data.get('parent_heading') or passage_data.get('heading')
+            section_str = f" > Section : {section}" if section else ""
+
             # Pour les chunks image, injecter l'URL accessible par le frontend
             if (
                 passage_data.get('is_image_chunk')
@@ -335,11 +339,11 @@ def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
                 image_url = f"/api/images/{passage_data['note_id']}/{passage_data['image_filename']}"
                 caption = passage_data.get('caption', '') or 'Image du document'
                 passage_text = (
-                    f"[{i}] ({score:.2f}) [IMAGE]\n{note_title}\n{passage}\n"
+                    f"[{i}] ({score:.2f}) [IMAGE] {note_title}{section_str}\n{passage}\n"
                     f">>> Image : ![{caption}]({image_url}) [{i}]\n"
                 )
             else:
-                passage_text = f"[{i}] ({score:.2f}) {note_title}\n{passage}\n"
+                passage_text = f"[{i}] ({score:.2f}) {note_title}{section_str}\n{passage}\n"
             passages_content.append(passage_text)
         
         system_message["content"] += "\n---\n".join(passages_content)

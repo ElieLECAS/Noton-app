@@ -256,6 +256,23 @@ def normalize_entity_name(name: str) -> str:
     return normalized
 
 
+def _repair_truncated_json_array(text: str) -> str:
+    """Tente de réparer un tableau JSON tronqué en supprimant le dernier élément incomplet."""
+    text = text.strip()
+    if not text.startswith("["):
+        return text
+    if text.endswith("]"):
+        return text
+
+    # Chercher la dernière accolade fermante d'un objet complet
+    last_brace = text.rfind("}")
+    if last_brace != -1:
+        # On coupe juste après le dernier objet complet et on ferme proprement le tableau
+        repaired = text[:last_brace + 1] + "\n]"
+        return repaired
+    return text
+
+
 def _parse_typed_relations_response(response_text: str) -> List[Dict]:
     """Parse la réponse LLM en liste de relations typées."""
     if not response_text:
@@ -279,35 +296,42 @@ def _parse_typed_relations_response(response_text: str) -> List[Dict]:
         text = json_match.group()
     try:
         data = json.loads(text)
-        if not isinstance(data, list):
-            return []
-        out: List[Dict] = []
-        for item in data:
-            if not isinstance(item, dict):
-                continue
-            ea = str(item.get("entity_a", "")).strip()
-            eb = str(item.get("entity_b", "")).strip()
-            rt = str(item.get("relation_type", "")).strip().lower()
-            conf = item.get("confidence", 0.7)
-            if not ea or not eb or ea.lower() == eb.lower():
-                continue
-            if rt not in TYPED_RELATION_TYPE_IDS:
-                continue
-            if not isinstance(conf, (int, float)):
-                conf = 0.7
-            conf = max(0.0, min(1.0, float(conf)))
-            out.append(
-                {
-                    "entity_a": ea,
-                    "entity_b": eb,
-                    "relation_type": rt,
-                    "confidence": conf,
-                }
-            )
-        return out
     except json.JSONDecodeError as e:
-        logger.warning("Erreur parsing JSON relations typées: %s - %s", e, text[:200])
+        logger.info("JSON des relations typées potentiellement tronqué, tentative de réparation...")
+        repaired = _repair_truncated_json_array(text)
+        try:
+            data = json.loads(repaired)
+            logger.info("JSON des relations typées réparé avec succès !")
+        except json.JSONDecodeError:
+            logger.warning("Erreur parsing JSON relations typées: %s - %s", e, text[:200])
+            return []
+
+    if not isinstance(data, list):
         return []
+    out: List[Dict] = []
+    for item in data:
+        if not isinstance(item, dict):
+            continue
+        ea = str(item.get("entity_a", "")).strip()
+        eb = str(item.get("entity_b", "")).strip()
+        rt = str(item.get("relation_type", "")).strip().lower()
+        conf = item.get("confidence", 0.7)
+        if not ea or not eb or ea.lower() == eb.lower():
+            continue
+        if rt not in TYPED_RELATION_TYPE_IDS:
+            continue
+        if not isinstance(conf, (int, float)):
+            conf = 0.7
+        conf = max(0.0, min(1.0, float(conf)))
+        out.append(
+            {
+                "entity_a": ea,
+                "entity_b": eb,
+                "relation_type": rt,
+                "confidence": conf,
+            }
+        )
+    return out
 
 
 def _parse_llm_response(response_text: str) -> List[Dict]:
@@ -340,40 +364,46 @@ def _parse_llm_response(response_text: str) -> List[Dict]:
     
     try:
         entities = json.loads(text)
-        if not isinstance(entities, list):
-            logger.warning("Réponse LLM n'est pas une liste: %s", type(entities))
+    except json.JSONDecodeError as e:
+        logger.info("JSON des entités potentiellement tronqué, tentative de réparation...")
+        repaired = _repair_truncated_json_array(text)
+        try:
+            entities = json.loads(repaired)
+            logger.info("JSON des entités réparé avec succès !")
+        except json.JSONDecodeError:
+            logger.warning("Erreur parsing JSON LLM: %s - Réponse: %s", e, text[:200])
             return []
         
-        valid_entities = []
-        for e in entities:
-            if not isinstance(e, dict):
-                continue
-            name = str(e.get("name", "")).strip()
-            raw_type = str(e.get("type", "")).strip().lower()
-            importance = e.get("importance", 1.0)
-            
-            if not name or len(name) < 2:
-                continue
-            if not raw_type or raw_type not in SUPPORTED_ENTITY_TYPE_IDS:
-                # On ignore les entités dont le type n'est pas dans la nouvelle taxonomie
-                continue
-            if not isinstance(importance, (int, float)):
-                importance = 1.0
-            importance = max(0.0, min(1.0, float(importance)))
-            if raw_type in CRITICAL_ENTITY_TYPES:
-                importance = 1.0
-            
-            valid_entities.append({
-                "name": name,
-                "type": raw_type,
-                "importance": importance,
-            })
-        
-        return valid_entities[:10]
-    
-    except json.JSONDecodeError as e:
-        logger.warning("Erreur parsing JSON LLM: %s - Réponse: %s", e, text[:200])
+    if not isinstance(entities, list):
+        logger.warning("Réponse LLM n'est pas une liste: %s", type(entities))
         return []
+    
+    valid_entities = []
+    for e in entities:
+        if not isinstance(e, dict):
+            continue
+        name = str(e.get("name", "")).strip()
+        raw_type = str(e.get("type", "")).strip().lower()
+        importance = e.get("importance", 1.0)
+        
+        if not name or len(name) < 2:
+            continue
+        if not raw_type or raw_type not in SUPPORTED_ENTITY_TYPE_IDS:
+            # On ignore les entités dont le type n'est pas dans la nouvelle taxonomie
+            continue
+        if not isinstance(importance, (int, float)):
+            importance = 1.0
+        importance = max(0.0, min(1.0, float(importance)))
+        if raw_type in CRITICAL_ENTITY_TYPES:
+            importance = 1.0
+        
+        valid_entities.append({
+            "name": name,
+            "type": raw_type,
+            "importance": importance,
+        })
+    
+    return valid_entities[:10]
 
 
 def _parse_summary_questions_response(response_text: str) -> Optional[Dict]:
@@ -554,6 +584,7 @@ async def extract_entities_from_chunk(chunk_content: str, context_hint: Optional
                     message=prompt,
                     model=model,
                     context=[{"role": "user", "content": prompt}],
+                    max_tokens=3000,
                 )
                 content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
 
@@ -563,6 +594,7 @@ async def extract_entities_from_chunk(chunk_content: str, context_hint: Optional
                     message=prompt,
                     model=model,
                     context=[{"role": "user", "content": prompt}],
+                    max_tokens=3000,
                 )
                 content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
             elif provider == "ollama":
@@ -658,6 +690,7 @@ async def extract_typed_relations_from_chunk(
                     message=prompt,
                     model=model,
                     context=[{"role": "user", "content": prompt}],
+                    max_tokens=3000,
                 )
                 content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
             elif provider == "mistral":
@@ -666,6 +699,7 @@ async def extract_typed_relations_from_chunk(
                     message=prompt,
                     model=model,
                     context=[{"role": "user", "content": prompt}],
+                    max_tokens=3000,
                 )
                 content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
             elif provider == "ollama":

@@ -600,9 +600,9 @@ def _format_text_full_chunk_text(
     page_no: Optional[int],
 ) -> str:
     """
-    Texte canonique pour embedding : contenu brut du chunk, sans préfixe.
-
-    Le contexte (heading_path, page_no, etc.) est conservé uniquement dans metadata_json.
+    Texte canonique pour embedding : contenu brut du chunk.
+    Le préfixe est injecté uniquement pendant la vectorisation
+    pour éviter de polluer le texte affiché dans la base et l'interface utilisateur.
     """
     return (raw_body or "").strip()
 

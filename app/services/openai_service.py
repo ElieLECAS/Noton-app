@@ -47,6 +47,7 @@ async def chat(
     model: str,
     context: Optional[List[Dict]] = None,
     tools: Optional[List[Dict]] = None,
+    max_tokens: Optional[int] = None,
 ) -> Dict:
     """Envoyer un message au chatbot OpenAI, avec boucle tool_calls si des tools sont fournis."""
     if not settings.OPENAI_API_KEY:
@@ -70,7 +71,7 @@ async def chat(
                 "model": model,
                 "messages": messages,
                 "stream": False,
-                "max_tokens": settings.MAX_COMPLETION_TOKENS,
+                "max_tokens": max_tokens if max_tokens is not None else settings.MAX_COMPLETION_TOKENS,
             }
             if tools:
                 payload["tools"] = tools

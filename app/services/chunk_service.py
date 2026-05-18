@@ -513,9 +513,19 @@ def create_chunks_for_note_from_docling(
 
         leaf_chunks = [chunk for chunk in chunks if chunk.is_leaf]
         if leaf_chunks:
-            contents = [chunk.content for chunk in leaf_chunks]
+            # Pour l'embedding, on injecte le heading pour de meilleures performances vectorielles, 
+            # mais on garde chunk.content propre pour la base de données et l'affichage UI
+            embedding_inputs = []
+            for chunk in leaf_chunks:
+                meta = dict(chunk.metadata_json or {})
+                heading = meta.get("parent_heading") or meta.get("heading")
+                if heading and heading != "__no_heading__":
+                    embedding_inputs.append(f"[{heading}]\n{chunk.content}")
+                else:
+                    embedding_inputs.append(chunk.content)
+
             embeddings = generate_embeddings_batch(
-                contents, batch_size=settings.EMBEDDING_BATCH_SIZE
+                embedding_inputs, batch_size=settings.EMBEDDING_BATCH_SIZE
             )
             failed_count = 0
             for chunk, embedding in zip(leaf_chunks, embeddings):
@@ -997,8 +1007,17 @@ def create_chunks_for_document_from_docling(
 
         leafs = [c for c in chunks if c.is_leaf]
         if leafs:
+            embedding_inputs = []
+            for chunk in leafs:
+                meta = dict(chunk.metadata_json or {})
+                heading = meta.get("parent_heading") or meta.get("heading")
+                if heading and heading != "__no_heading__":
+                    embedding_inputs.append(f"[{heading}]\n{chunk.content}")
+                else:
+                    embedding_inputs.append(chunk.content)
+
             embeddings = generate_embeddings_batch(
-                [c.content for c in leafs], batch_size=settings.EMBEDDING_BATCH_SIZE
+                embedding_inputs, batch_size=settings.EMBEDDING_BATCH_SIZE
             )
             model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
             for chunk, embedding in zip(leafs, embeddings):
@@ -1259,8 +1278,17 @@ def _process_embeddings_for_document(
                     _finalize_pipeline_abort(document_id)
                     return
                 batch = chunks[i : i + batch_size]
+                embedding_inputs = []
+                for chunk in batch:
+                    meta = dict(chunk.metadata_json or {})
+                    heading = meta.get("parent_heading") or meta.get("heading")
+                    if heading and heading != "__no_heading__":
+                        embedding_inputs.append(f"[{heading}]\n{chunk.content}")
+                    else:
+                        embedding_inputs.append(chunk.content)
+
                 embeddings = generate_embeddings_batch(
-                    [c.content for c in batch], batch_size=len(batch)
+                    embedding_inputs, batch_size=len(batch)
                 )
                 for chunk, embedding in zip(batch, embeddings):
                     if embedding:
