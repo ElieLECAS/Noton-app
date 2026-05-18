@@ -1340,6 +1340,15 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
         )
         return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
 
+    # 1. Suppression des anciens chunks d'enrichissement (is_leaf=False)
+    session.execute(
+        delete(DocumentChunk).where(
+            DocumentChunk.document_id == document_id,
+            DocumentChunk.is_leaf == False,
+        )
+    )
+    session.commit()
+
     delete_entities_for_document(session, document_id, space_id)
 
     # Tentative de clonage depuis un autre espace pour éviter la re-extraction
@@ -1351,87 +1360,199 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
         DocumentChunk.is_leaf == True,
     )
 
-    chunks = list(session.exec(chunks_stmt).all())
-    if not chunks:
+    leaf_chunks = list(session.exec(chunks_stmt).all())
+    if not leaf_chunks:
         return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0}
+
+    # 2. Récupérer le titre du document pour le contexte sémantique
+    doc = session.get(Document, document_id)
+    doc_title = doc.title if doc else "Document sans titre"
+
+    # 3. Regrouper les feuilles par page
+    from collections import defaultdict
+    chunks_by_page = defaultdict(list)
+    for chunk in leaf_chunks:
+        meta = chunk.metadata_json or {}
+        p = meta.get("page_no") or meta.get("page_start") or 1
+        chunks_by_page[int(p)].append(chunk)
 
     total_entities = 0
     total_relations = 0
     total_typed_relations = 0
-    processed_chunks = 0
+    processed_pages = 0
 
-    for chunk in chunks:
-        content = (chunk.content or "").strip()
-        if len(content) < 20:
+    from app.services.kag_extraction_service import (
+        generate_page_enrichment_and_entities_sync,
+        extract_typed_relations_sync,
+    )
+    from app.services.embedding_service import generate_embeddings_batch
+
+    # Nous collecterons tous les nouveaux chunks créés pour générer leurs embeddings en batch
+    new_chunks_to_embed = []
+
+    for page_no, page_chunks in sorted(chunks_by_page.items()):
+        # Concaténer le texte de la page
+        page_content = "\n\n".join((c.content or c.text or "").strip() for c in page_chunks).strip()
+        if len(page_content) < 30:
             continue
 
-        entities = _get_or_compute_chunk_entities(session, chunk, content)
-        if not entities:
+        context_hint = f"Document : {doc_title} | Page : {page_no}"
+
+        # Unique appel LLM par page !
+        enrichment = generate_page_enrichment_and_entities_sync(page_content, context_hint=context_hint)
+        if not enrichment:
+            logger.warning("Échec de la génération de l'enrichissement unifié pour la page %d", page_no)
             continue
 
-        processed_chunks += 1
-        entity_ids_touched: Set[int] = set()
-        for entity_data in entities:
-            name = (entity_data.get("name") or "").strip()
-            entity_type = (entity_data.get("type") or "concept_technique").strip()
-            importance = float(entity_data.get("importance", 1.0) or 1.0)
-            if not name or len(name) < 2:
+        processed_pages += 1
+        summary = enrichment.get("summary")
+        qas = enrichment.get("qas") or []
+        entities = enrichment.get("entities") or []
+
+        # A. Créer le chunk page_summary
+        summary_chunk = DocumentChunk(
+            document_id=document_id,
+            content=summary,
+            text=summary,
+            is_leaf=False,
+            hierarchy_level=1,
+            metadata_json={
+                "chunk_type": "page_summary",
+                "page_no": page_no,
+                "page_number": page_no,
+                "document_title": doc_title,
+                "document_id": document_id
+            },
+            metadata_={
+                "chunk_type": "page_summary",
+                "page_no": page_no,
+                "page_number": page_no,
+                "document_title": doc_title,
+                "document_id": document_id
+            }
+        )
+        session.add(summary_chunk)
+        new_chunks_to_embed.append(summary_chunk)
+
+        # B. Créer les chunks page_qa
+        for idx, qa in enumerate(qas):
+            q_text = qa.get("question", "").strip()
+            a_text = qa.get("answer", "").strip()
+            if not q_text or not a_text:
                 continue
-
-            entity = _get_or_create_entity_for_space(
-                session=session,
-                name=name,
-                entity_type=entity_type,
-                space_id=space_id,
-            )
-            total_entities += 1
-            if entity.id is not None:
-                entity_ids_touched.add(int(entity.id))
-
-            existing_rel = session.exec(
-                select(ChunkEntityRelation).where(
-                    ChunkEntityRelation.chunk_id == chunk.id,
-                    ChunkEntityRelation.entity_id == entity.id,
-                    ChunkEntityRelation.space_id == space_id,
-                )
-            ).first()
-            if not existing_rel:
-                relation = ChunkEntityRelation(
-                    chunk_id=chunk.id,
-                    entity_id=entity.id,
-                    relevance_score=importance,
-                    space_id=space_id,
-                    created_at=datetime.utcnow(),
-                )
-                session.add(relation)
-                total_relations += 1
-
-        for eid in entity_ids_touched:
-            _update_entity_confidence_score(session, eid, space_id)
-
-        if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
-            metadata = dict(chunk.metadata_json or {})
-            typed = metadata.get("kag_typed_relations")
+            qa_content = f"Question : {q_text}\nRéponse : {a_text}"
             
-            if not typed:
-                try:
-                    typed = extract_typed_relations_sync(content, entities)
-                    if typed:
-                        metadata["kag_typed_relations"] = typed
-                        chunk.metadata_json = metadata
-                        chunk.metadata_ = metadata
-                        session.add(chunk)
-                except Exception as tre:
-                    logger.warning(
-                        "Relations typées KAG ignorées chunk_id=%s: %s",
-                        chunk.id,
-                        tre,
-                    )
+            qa_chunk = DocumentChunk(
+                document_id=document_id,
+                content=qa_content,
+                text=qa_content,
+                is_leaf=False,
+                hierarchy_level=2,
+                metadata_json={
+                    "chunk_type": "page_qa",
+                    "page_no": page_no,
+                    "page_number": page_no,
+                    "qa_index": idx,
+                    "document_title": doc_title,
+                    "document_id": document_id
+                },
+                metadata_={
+                    "chunk_type": "page_qa",
+                    "page_no": page_no,
+                    "page_number": page_no,
+                    "qa_index": idx,
+                    "document_title": doc_title,
+                    "document_id": document_id
+                }
+            )
+            session.add(qa_chunk)
+            new_chunks_to_embed.append(qa_chunk)
 
-            if typed:
-                save_typed_relations_for_chunk(
-                    session, space_id, int(chunk.id), typed
+        # C. Flush pour obtenir les IDs réels des chunks créés pour lier les entités
+        session.flush()
+
+        # D. Enregistrer les entités et relations pour la page
+        if entities:
+            page_entity_ids = set()
+            for entity_data in entities:
+                name = (entity_data.get("name") or "").strip()
+                entity_type = (entity_data.get("type") or "concept_technique").strip()
+                importance = float(entity_data.get("importance", 1.0) or 1.0)
+                if not name or len(name) < 2:
+                    continue
+
+                entity = _get_or_create_entity_for_space(
+                    session=session,
+                    name=name,
+                    entity_type=entity_type,
+                    space_id=space_id,
                 )
+                total_entities += 1
+                if entity.id is not None:
+                    page_entity_ids.add(int(entity.id))
+
+                # Lier l'entité à TOUTES les feuilles de cette page
+                for leaf in page_chunks:
+                    existing_rel = session.exec(
+                        select(ChunkEntityRelation).where(
+                            ChunkEntityRelation.chunk_id == leaf.id,
+                            ChunkEntityRelation.entity_id == entity.id,
+                            ChunkEntityRelation.space_id == space_id,
+                        )
+                    ).first()
+                    if not existing_rel:
+                        relation = ChunkEntityRelation(
+                            chunk_id=leaf.id,
+                            entity_id=entity.id,
+                            relevance_score=importance,
+                            space_id=space_id,
+                            created_at=datetime.utcnow(),
+                        )
+                        session.add(relation)
+                        total_relations += 1
+
+                # Lier également l'entité au chunk page_summary
+                existing_rel_sum = session.exec(
+                    select(ChunkEntityRelation).where(
+                        ChunkEntityRelation.chunk_id == summary_chunk.id,
+                        ChunkEntityRelation.entity_id == entity.id,
+                        ChunkEntityRelation.space_id == space_id,
+                    )
+                ).first()
+                if not existing_rel_sum:
+                    relation_sum = ChunkEntityRelation(
+                        chunk_id=summary_chunk.id,
+                        entity_id=entity.id,
+                        relevance_score=importance,
+                        space_id=space_id,
+                        created_at=datetime.utcnow(),
+                    )
+                    session.add(relation_sum)
+                    total_relations += 1
+
+            for eid in page_entity_ids:
+                _update_entity_confidence_score(session, eid, space_id)
+
+            # E. Relations typées KAG
+            if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
+                try:
+                    typed = extract_typed_relations_sync(page_content, entities)
+                    if typed:
+                        save_typed_relations_for_chunk(
+                            session, space_id, int(summary_chunk.id), typed
+                        )
+                        total_typed_relations += len(typed)
+                except Exception as tre:
+                    logger.warning("Relations typées KAG ignorées page=%d: %s", page_no, tre)
+
+    # 4. Générer les embeddings en batch pour tous les nouveaux chunks d'enrichissement créés
+    if new_chunks_to_embed:
+        texts_to_embed = [c.content for c in new_chunks_to_embed]
+        embeddings = generate_embeddings_batch(texts_to_embed, batch_size=16)
+        for i, chunk in enumerate(new_chunks_to_embed):
+            if i < len(embeddings) and embeddings[i]:
+                chunk.embedding = embeddings[i]
+                session.add(chunk)
 
     session.commit()
 
@@ -1443,16 +1564,12 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
             space_id,
             rel_err,
         )
-    
-    # Enrichissement des parents avec summary+questions+embedding si activé
-    if settings.KAG_PARENT_ENRICHMENT_ENABLED:
-        _process_parent_enrichment_for_document_space(session, document_id, space_id)
 
     logger.info(
-        "✅ KAG document-space terminé document_id=%s space_id=%s chunks=%s entités=%s relations=%s typed_eer=%s",
+        "✅ KAG document-space terminé document_id=%s space_id=%s pages_traitees=%d entités=%s relations=%s typed_eer=%s",
         document_id,
         space_id,
-        processed_chunks,
+        processed_pages,
         total_entities,
         total_relations,
         total_typed_relations,
@@ -1460,7 +1577,7 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
     return {
         "entities": total_entities,
         "relations": total_relations,
-        "chunks": processed_chunks,
+        "chunks": processed_pages,
         "typed_entity_relations": total_typed_relations,
     }
 

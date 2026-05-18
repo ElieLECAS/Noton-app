@@ -719,52 +719,102 @@ def _retrieve_parent_enriched_sql(
 
     parent_node_ids: List[str] = []
     parent_sim_by_node_id: Dict[str, float] = {}
+    
+    # Gestion de l'enrichissement par page
+    page_sim_by_doc_page: Dict[Tuple[int, int], float] = {}
+
     for row in parent_rows:
         sim = float(row.similarity_score or 0.0)
         if sim < min_parent_sim:
             continue
+
+        meta = row.metadata_json or {}
+        p_type = meta.get("chunk_type")
+        p_no = meta.get("page_no") or meta.get("page_number") or meta.get("page_start")
+
+        # A. Si c'est un chunk d'enrichissement par page (nouveau format)
+        if p_type in ("page_summary", "page_qa") or p_no is not None:
+            if p_no is not None:
+                try:
+                    page_no = int(p_no)
+                    doc_id = int(row.document_id)
+                    key = (doc_id, page_no)
+                    if key not in page_sim_by_doc_page or sim > page_sim_by_doc_page[key]:
+                        page_sim_by_doc_page[key] = sim
+                except Exception:
+                    pass
+
+        # B. Fallback : si c'est un ancien chunk parent de section
         nid = row.node_id
-        if nid is None:
-            continue
-        ns = str(nid)
-        parent_node_ids.append(ns)
-        # Meilleur score si plusieurs parents partagent un même enfant théorique
-        prev = parent_sim_by_node_id.get(ns)
-        if prev is None or sim > prev:
-            parent_sim_by_node_id[ns] = sim
-
-    if not parent_node_ids:
-        logger.info(
-            "Parent enrichi (space): 0 parents au-dessus du seuil %.2f",
-            min_parent_sim,
-        )
-        return []
-
-    # Feuilles rattachées à ces sections (parent_node_id = UUID Docling du parent)
-    stmt = (
-        select(DocumentChunk, Document.title)
-        .join(Document, Document.id == DocumentChunk.document_id)
-        .join(DocumentSpace, DocumentSpace.document_id == Document.id)
-        .where(
-            DocumentSpace.space_id == space_id,
-            DocumentChunk.is_leaf.is_(True),
-            DocumentChunk.parent_node_id.in_(parent_node_ids),
-        )
-    )
-    leaf_rows = session.exec(stmt).all()
+        if nid is not None:
+            ns = str(nid)
+            parent_node_ids.append(ns)
+            prev = parent_sim_by_node_id.get(ns)
+            if prev is None or sim > prev:
+                parent_sim_by_node_id[ns] = sim
 
     best_leaf: Dict[int, Tuple[float, DocumentChunk, str]] = {}
-    for chunk, document_title in leaf_rows:
-        pnid = chunk.parent_node_id
-        if not pnid:
-            continue
-        pns = str(pnid)
-        psim = parent_sim_by_node_id.get(pns)
-        if psim is None:
-            continue
-        prev = best_leaf.get(chunk.id)
-        if prev is None or psim > prev[0]:
-            best_leaf[chunk.id] = (psim, chunk, document_title or "Document sans titre")
+
+    # --- Hydratation via les pages matchées ---
+    if page_sim_by_doc_page:
+        doc_ids = list({d for d, p in page_sim_by_doc_page.keys()})
+        stmt_pages = (
+            select(DocumentChunk, Document.title)
+            .join(Document, Document.id == DocumentChunk.document_id)
+            .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+            .where(
+                DocumentSpace.space_id == space_id,
+                DocumentChunk.is_leaf.is_(True),
+                DocumentChunk.document_id.in_(doc_ids),
+            )
+        )
+        all_doc_leaves = session.exec(stmt_pages).all()
+
+        for chunk, doc_title in all_doc_leaves:
+            meta = chunk.metadata_json or {}
+            chunk_p = meta.get("page_no") or meta.get("page_start")
+            if chunk_p is None:
+                continue
+            try:
+                c_p_no = int(chunk_p)
+            except Exception:
+                continue
+
+            key = (chunk.document_id, c_p_no)
+            if key in page_sim_by_doc_page:
+                psim = page_sim_by_doc_page[key]
+                prev = best_leaf.get(chunk.id)
+                if prev is None or psim > prev[0]:
+                    best_leaf[chunk.id] = (psim, chunk, doc_title or "Document sans titre")
+
+    # --- Hydratation via l'ancienne hiérarchie de sections ---
+    if parent_node_ids:
+        stmt_sections = (
+            select(DocumentChunk, Document.title)
+            .join(Document, Document.id == DocumentChunk.document_id)
+            .join(DocumentSpace, DocumentSpace.document_id == Document.id)
+            .where(
+                DocumentSpace.space_id == space_id,
+                DocumentChunk.is_leaf.is_(True),
+                DocumentChunk.parent_node_id.in_(parent_node_ids),
+            )
+        )
+        section_leaf_rows = session.exec(stmt_sections).all()
+        for chunk, doc_title in section_leaf_rows:
+            pnid = chunk.parent_node_id
+            if not pnid:
+                continue
+            pns = str(pnid)
+            psim = parent_sim_by_node_id.get(pns)
+            if psim is None:
+                continue
+            prev = best_leaf.get(chunk.id)
+            if prev is None or psim > prev[0]:
+                best_leaf[chunk.id] = (psim, chunk, doc_title or "Document sans titre")
+
+    if not best_leaf:
+        logger.info("Enrichissement page/parent : aucune feuille trouvée pour les pages/parents correspondants.")
+        return []
 
     nodes_with_scores: List[NodeWithScore] = []
     for _cid, (psim, chunk, doc_title) in best_leaf.items():
@@ -786,8 +836,9 @@ def _retrieve_parent_enriched_sql(
     nodes_with_scores = nodes_with_scores[:candidate_k]
 
     logger.info(
-        "Parent enrichi (space): %d feuilles via %d parents (seuil sim≥%.2f)",
+        "Page/Parent enrichi (space) : %d feuilles via %d pages et %d parents (seuil sim≥%.2f)",
         len(nodes_with_scores),
+        len(page_sim_by_doc_page),
         len(parent_sim_by_node_id),
         min_parent_sim,
     )
