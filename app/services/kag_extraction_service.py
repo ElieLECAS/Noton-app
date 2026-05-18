@@ -217,6 +217,8 @@ EXTRACTION_PROMPT_TEMPLATE = """Extrais les entités techniques de ce texte.
 Types possibles pour le champ "type" du JSON (liste exhaustive) :
 {entity_types}
 
+{context_section}
+
 Règles:
 - Retourne UNIQUEMENT un JSON valide, sans markdown ni commentaires
 - Maximum 10 entités par chunk
@@ -509,12 +511,13 @@ def generate_parent_summary_questions_sync(content: str) -> Optional[Dict]:
         return None
 
 
-async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
+async def extract_entities_from_chunk(chunk_content: str, context_hint: Optional[str] = None) -> List[Dict]:
     """
     Extrait les entités d'un chunk via LLM.
     
     Args:
         chunk_content: Contenu textuel du chunk
+        context_hint: Contexte additionnel (ex: titre du doc, section)
         
     Returns:
         Liste de dicts {"name": str, "type": str, "importance": float}
@@ -523,8 +526,10 @@ async def extract_entities_from_chunk(chunk_content: str) -> List[Dict]:
         return []
     
     content_truncated = chunk_content[:2000]
+    context_section = f"Contexte du document : {context_hint}" if context_hint else ""
     prompt = EXTRACTION_PROMPT_TEMPLATE.format(
         entity_types=", ".join(SUPPORTED_ENTITY_TYPE_IDS),
+        context_section=context_section,
         chunk_content=content_truncated,
     )
     
@@ -731,7 +736,7 @@ async def extract_entities_from_query(query_text: str) -> List[str]:
     return [normalize_entity_name(e["name"]) for e in entities if e.get("name")]
 
 
-def extract_entities_sync(chunk_content: str) -> List[Dict]:
+def extract_entities_sync(chunk_content: str, context_hint: Optional[str] = None) -> List[Dict]:
     """
     Version synchrone de extract_entities_from_chunk.
     Utile pour les workers de background.
@@ -743,13 +748,13 @@ def extract_entities_sync(chunk_content: str) -> List[Dict]:
             with concurrent.futures.ThreadPoolExecutor() as pool:
                 future = pool.submit(
                     asyncio.run,
-                    extract_entities_from_chunk(chunk_content)
+                    extract_entities_from_chunk(chunk_content, context_hint)
                 )
                 return future.result(timeout=60)
         else:
-            return loop.run_until_complete(extract_entities_from_chunk(chunk_content))
+            return loop.run_until_complete(extract_entities_from_chunk(chunk_content, context_hint))
     except RuntimeError:
-        return asyncio.run(extract_entities_from_chunk(chunk_content))
+        return asyncio.run(extract_entities_from_chunk(chunk_content, context_hint))
 
 
 def extract_entities_from_query_sync(query_text: str) -> List[str]:

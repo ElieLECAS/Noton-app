@@ -690,6 +690,56 @@ def _page_range_from_docling_leaves(group_leaves: List[TextNode]) -> Tuple[Optio
     return min(pages), max(pages)
 
 
+def _split_text_semantically(text: str, max_chars: int = 1800, overlap: int = 200) -> List[str]:
+    """Découpe sémantiquement un long paragraphe ou document par paragraphes puis phrases si besoin."""
+    if len(text) <= max_chars:
+        return [text]
+    
+    paragraphs = text.split("\n\n")
+    chunks = []
+    current_chunk = []
+    current_len = 0
+    
+    for para in paragraphs:
+        para_len = len(para)
+        if para_len > max_chars:
+            if current_chunk:
+                chunks.append("\n\n".join(current_chunk))
+                current_chunk = []
+                current_len = 0
+            
+            sentences = re.split(r"(?<=\.)\s+", para)
+            sub_chunk = []
+            sub_len = 0
+            for sent in sentences:
+                if sub_len + len(sent) > max_chars:
+                    if sub_chunk:
+                        chunks.append(" ".join(sub_chunk))
+                    sub_chunk = [sent]
+                    sub_len = len(sent)
+                else:
+                    sub_chunk.append(sent)
+                    sub_len += len(sent) + 1
+            if sub_chunk:
+                chunks.append(" ".join(sub_chunk))
+        else:
+            if current_len + para_len > max_chars:
+                chunks.append("\n\n".join(current_chunk))
+                if current_chunk and len(current_chunk[-1]) < overlap:
+                    current_chunk = [current_chunk[-1], para]
+                    current_len = len(current_chunk[0]) + 2 + para_len
+                else:
+                    current_chunk = [para]
+                    current_len = para_len
+            else:
+                current_chunk.append(para)
+                current_len += para_len + 2
+                
+    if current_chunk:
+        chunks.append("\n\n".join(current_chunk))
+    return chunks
+
+
 def _build_docling_hierarchical_specs(
     doc_metadata_base: dict,
     leaf_nodes: List[TextNode],
@@ -773,16 +823,17 @@ def _build_docling_hierarchical_specs(
         )
         chunk_index += 1
 
+        # Phase 1: Pré-conversion des feuilles en structures de blocs simplifiés
+        raw_blocks = []
         for leaf_node in group_leaves:
             raw_content = (leaf_node.get_content() or "").strip()
             if not raw_content:
                 continue
 
-            leaf_node_id_base = leaf_node.node_id or str(uuid.uuid4())
             docling_meta = dict(leaf_node.metadata or {})
             headings = (leaf_node.metadata or {}).get("headings") or []
-
             caption = _extract_caption_from_metadata(docling_meta)
+
             if _is_picture_or_table_chunk(docling_meta) and caption:
                 raw_content = f"{raw_content}\n\n{caption}".strip()
 
@@ -792,11 +843,87 @@ def _build_docling_hierarchical_specs(
                     raw_content = f"[Liste: {list_title}]\n{raw_content}"
 
             table_src = raw_content.split("\n\n")[0].strip()
-            parsed_table_result: Optional[TableParseResult] = None
-            if _should_expand_table_leaf(docling_meta, table_src):
-                parsed_table_result = _parse_markdown_table_robust(table_src)
-            if parsed_table_result is None and _should_expand_table_leaf(docling_meta, raw_content):
-                parsed_table_result = _parse_markdown_table_robust(raw_content)
+            is_table = _should_expand_table_leaf(docling_meta, table_src) or _should_expand_table_leaf(docling_meta, raw_content)
+
+            raw_blocks.append({
+                "node_id": leaf_node.node_id or str(uuid.uuid4()),
+                "raw_content": raw_content,
+                "docling_meta": docling_meta,
+                "headings": headings,
+                "caption": caption,
+                "is_table": is_table,
+            })
+
+        # Phase 2: Consolidation des petits blocs consécutifs (taille < 150)
+        consolidated_blocks = []
+        current_block = None
+
+        for b in raw_blocks:
+            if b["is_table"]:
+                if current_block:
+                    consolidated_blocks.append(current_block)
+                    current_block = None
+                consolidated_blocks.append(b)
+            else:
+                if current_block is None:
+                    current_block = b
+                else:
+                    len_current = len(current_block["raw_content"])
+                    len_next = len(b["raw_content"])
+                    
+                    # Merge si l'un d'eux est très court ou si leur cumul est petit
+                    should_merge = (len_current < 150 or len_next < 150 or (len_current + len_next < 800)) and (len_current + len_next < 2000)
+                    if should_merge:
+                        current_block["raw_content"] = current_block["raw_content"] + "\n\n" + b["raw_content"]
+                        p1 = current_block["docling_meta"].get("page_no")
+                        p2 = b["docling_meta"].get("page_no")
+                        if p1 and p2 and p1 != p2:
+                            current_block["docling_meta"]["page_no"] = min(p1, p2)
+                            current_block["docling_meta"]["page_end"] = max(p1, p2)
+                    else:
+                        consolidated_blocks.append(current_block)
+                        current_block = b
+        if current_block:
+            consolidated_blocks.append(current_block)
+
+        # Phase 3: Découpage sémantique des blocs consolidés trop grands (> 2000)
+        final_blocks = []
+        for b in consolidated_blocks:
+            if b["is_table"]:
+                final_blocks.append(b)
+            else:
+                sub_texts = _split_text_semantically(b["raw_content"], max_chars=2000, overlap=250)
+                if len(sub_texts) <= 1:
+                    final_blocks.append(b)
+                else:
+                    for idx, sub_text in enumerate(sub_texts):
+                        sub_b = {
+                            "node_id": f"{b['node_id']}-part{idx}",
+                            "raw_content": sub_text,
+                            "docling_meta": dict(b["docling_meta"]),
+                            "headings": list(b["headings"]),
+                            "caption": b["caption"],
+                            "is_table": False,
+                            "split_index": idx,
+                            "split_count": len(sub_texts),
+                        }
+                        final_blocks.append(sub_b)
+
+        # Phase 4: Création effective des specs (Tableaux et Textes)
+        for b in final_blocks:
+            raw_content = b["raw_content"]
+            leaf_node_id_base = b["node_id"]
+            docling_meta = b["docling_meta"]
+            headings = b["headings"]
+            caption = b["caption"]
+            
+            table_src = raw_content.split("\n\n")[0].strip()
+            parsed_table_result = None
+            if b["is_table"]:
+                if _should_expand_table_leaf(docling_meta, table_src):
+                    parsed_table_result = _parse_markdown_table_robust(table_src)
+                if parsed_table_result is None and _should_expand_table_leaf(docling_meta, raw_content):
+                    parsed_table_result = _parse_markdown_table_robust(raw_content)
 
             if parsed_table_result:
                 headers = parsed_table_result.headers
@@ -982,6 +1109,7 @@ def _build_docling_hierarchical_specs(
                     chunk_index += 1
                 continue
 
+            # Nœud Texte Standard
             page_no_val = docling_meta.get("page_no")
             heading_path = _heading_path_list(headings)
             heading_depth = len(heading_path)
@@ -994,7 +1122,7 @@ def _build_docling_hierarchical_specs(
                 page_no_val,
             )
 
-            text_full_node_id = str(uuid.uuid4())
+            text_full_node_id = leaf_node_id_base
             text_full_metadata = dict(base_meta)
             text_full_metadata.update(docling_meta)
             text_full_metadata["parent_heading"] = parent_heading_display
@@ -1003,6 +1131,11 @@ def _build_docling_hierarchical_specs(
             text_full_metadata["heading_depth"] = heading_depth
             text_full_metadata["content_type"] = "text_full"
             text_full_metadata["semantic_content_kind"] = semantic_kind
+            
+            if "split_index" in b:
+                text_full_metadata["split_index"] = b["split_index"]
+                text_full_metadata["split_count"] = b["split_count"]
+                
             if parent_heading_display:
                 text_full_metadata["raw_content"] = raw_content
             if section_anchors:
@@ -1040,11 +1173,11 @@ def _build_docling_hierarchical_specs(
             )
             chunk_index += 1
 
-            tw_threshold = int(
-                getattr(settings, "DOCLING_TEXT_WINDOW_CHAR_THRESHOLD", 0) or 0
-            )
+            # On n'applique la fenêtre glissante que si spécifiquement requis et que le chunk
+            # n'a pas déjà été découpé sémantiquement
+            tw_threshold = int(getattr(settings, "DOCLING_TEXT_WINDOW_CHAR_THRESHOLD", 0) or 0)
             tw_overlap = int(getattr(settings, "DOCLING_TEXT_WINDOW_OVERLAP", 200) or 0)
-            if tw_threshold > 0 and len(raw_content) > tw_threshold:
+            if tw_threshold > 0 and len(raw_content) > tw_threshold and "split_index" not in b:
                 windows = _split_text_into_windows(raw_content, tw_threshold, tw_overlap)
                 n_win = len(windows)
                 for wi, wtext in enumerate(windows):

@@ -301,6 +301,9 @@ def _process_kag_extraction_for_note(session: Session, note_id: int, project_id:
             logger.info(f"Aucun chunk leaf pour extraction KAG note={note_id}")
             return
         
+        note = session.get(Note, note_id)
+        note_title = note.title if note else None
+        
         total_entities = 0
         total_relations = 0
         
@@ -309,7 +312,16 @@ def _process_kag_extraction_for_note(session: Session, note_id: int, project_id:
                 continue
             
             try:
-                entities = extract_entities_sync(chunk.content)
+                metadata = dict(chunk.metadata_json or {})
+                parent_heading = metadata.get("parent_heading") or metadata.get("heading")
+                context_hints = []
+                if note_title:
+                    context_hints.append(f"Note : {note_title}")
+                if parent_heading:
+                    context_hints.append(f"Section : {parent_heading}")
+                context_hint = " | ".join(context_hints) if context_hints else None
+
+                entities = extract_entities_sync(chunk.content, context_hint=context_hint)
                 if entities:
                     relations_count = save_entities_for_chunk(
                         session, chunk, entities, project_id
@@ -373,6 +385,9 @@ def _process_parent_enrichment_for_note(session: Session, note_id: int, project_
             len(parent_chunks),
         )
 
+        note = session.get(Note, note_id)
+        note_title = note.title if note else None
+
         total_parents_enriched = 0
         total_parent_entities = 0
         total_parent_relations = 0
@@ -410,8 +425,16 @@ def _process_parent_enrichment_for_note(session: Session, note_id: int, project_
                 session.add(chunk)
                 total_parents_enriched += 1
 
+                parent_heading = metadata.get("parent_heading") or metadata.get("heading")
+                context_hints = []
+                if note_title:
+                    context_hints.append(f"Note : {note_title}")
+                if parent_heading:
+                    context_hints.append(f"Section : {parent_heading}")
+                context_hint = " | ".join(context_hints) if context_hints else None
+
                 # Extraction d'entités sur le summary+questions
-                entities = extract_entities_sync(enrichment_text)
+                entities = extract_entities_sync(enrichment_text, context_hint=context_hint)
                 if entities:
                     relations_count = save_entities_for_chunk(
                         session, chunk, entities, project_id

@@ -89,7 +89,16 @@ def _get_or_compute_chunk_entities(
     if isinstance(cached_entities, list) and cached_entities:
         return _canonicalize_entities(cached_entities)
 
-    entities = _canonicalize_entities(extract_entities_sync(content))
+    doc_title = metadata.get("document_title")
+    parent_heading = metadata.get("parent_heading") or metadata.get("heading")
+    context_hints = []
+    if doc_title:
+        context_hints.append(f"Document : {doc_title}")
+    if parent_heading:
+        context_hints.append(f"Section : {parent_heading}")
+    context_hint = " | ".join(context_hints) if context_hints else None
+
+    entities = _canonicalize_entities(extract_entities_sync(content, context_hint=context_hint))
     metadata["kag_entities"] = entities
     chunk.metadata_json = metadata
     chunk.metadata_ = metadata
@@ -1860,8 +1869,17 @@ def _process_parent_enrichment_for_document_space(
                     session.add(chunk)
                     total_parents_enriched += 1
 
+                    doc_title = metadata.get("document_title")
+                    parent_heading = metadata.get("parent_heading") or metadata.get("heading")
+                    context_hints = []
+                    if doc_title:
+                        context_hints.append(f"Document : {doc_title}")
+                    if parent_heading:
+                        context_hints.append(f"Section : {parent_heading}")
+                    context_hint = " | ".join(context_hints) if context_hints else None
+
                     # Extraction d'entités sur le summary+questions
-                    entities = extract_entities_sync(enrichment_text)
+                    entities = extract_entities_sync(enrichment_text, context_hint=context_hint)
                     if entities:
                         parent_entity_ids: Set[int] = set()
                         for entity_data in entities:
