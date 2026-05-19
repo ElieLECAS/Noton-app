@@ -158,6 +158,11 @@ MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
 MMR_K = int(settings.MMR_K)
 MMR_LAMBDA = float(os.getenv("MMR_LAMBDA", str(settings.MMR_LAMBDA)))
+MMR_LAMBDA_COMPARATIVE = float(os.getenv("MMR_LAMBDA_COMPARATIVE", "0.55"))
+MMR_LAMBDA_DEFAULT = MMR_LAMBDA
+
+AMBIGUITY_GAP_THRESHOLD = float(os.getenv("RERANK_AMBIGUITY_GAP_THRESHOLD", "0.03"))
+AMBIGUITY_STD_THRESHOLD = float(os.getenv("RERANK_AMBIGUITY_STD_THRESHOLD", "0.015"))
 
 # Déclenchement multi-hop : triggers forts / faibles + exclusion FAQ
 _MH_FAQ_PROCEDURE = re.compile(
@@ -436,6 +441,63 @@ def _compute_mmr_with_parent_constraint(
         len(selected_diversity_keys),
     )
     return final_selection
+
+
+def _infer_adaptive_mmr_lambda(query_text: str, intent: Optional[QueryIntent]) -> float:
+    """Calibre lambda MMR selon l'intention et des marqueurs comparatifs légers."""
+    q = (query_text or "").lower()
+    comparative_cues = (
+        "comparaison", "compare", "versus", " vs ", "différence", "difference", "entre"
+    )
+    is_comparative = any(cue in q for cue in comparative_cues)
+    if intent and isinstance(intent.intent, str):
+        is_comparative = is_comparative or (intent.intent == "mixed")
+    if is_comparative:
+        return max(0.0, min(1.0, MMR_LAMBDA_COMPARATIVE))
+    return max(0.0, min(1.0, MMR_LAMBDA_DEFAULT))
+
+
+def _infer_parent_rrf_weight(query_text: str, intent: Optional[QueryIntent]) -> float:
+    """Poids parent adaptatif: plus haut pour synthèse/procédure, sinon base."""
+    q = (query_text or "").lower()
+    explain_like = (
+        "comment", "pourquoi", "étapes", "etapes", "procédure", "procedure", "résume", "resume"
+    )
+    if any(tok in q for tok in explain_like):
+        return min(1.0, RRF_PARENT_LIST_WEIGHT + 0.15)
+    if intent and getattr(intent, "intent", "") == "generic":
+        return min(1.0, RRF_PARENT_LIST_WEIGHT + 0.05)
+    return RRF_PARENT_LIST_WEIGHT
+
+
+def _should_skip_reranking_adaptive(
+    filtered_candidates: List[NodeWithScore],
+    k: int,
+    query_text: str,
+    intent: Optional[QueryIntent],
+) -> Tuple[bool, float]:
+    """Skip rerank seulement si confiance élevée ET requête non ambiguë."""
+    if len(filtered_candidates) < k:
+        return False, 0.0
+    scores = []
+    for c in filtered_candidates[:k]:
+        meta = dict(getattr(c.node, "metadata", {}) or {})
+        vs = meta.get("vector_similarity")
+        scores.append(float(vs) if vs is not None else float(c.score or 0.0))
+    avg_top_k = sum(scores) / len(scores)
+    if avg_top_k < SKIP_RERANK_THRESHOLD:
+        return False, avg_top_k
+
+    sorted_scores = sorted(scores, reverse=True)
+    top_gap = (sorted_scores[0] - sorted_scores[1]) if len(sorted_scores) > 1 else 1.0
+    std = float(np.std(sorted_scores)) if len(sorted_scores) > 1 else 0.0
+    q = (query_text or "").lower()
+    ambiguity_tokens = ("ou", "ou bien", "vs", "versus", "comparaison", "différence", "difference")
+    query_ambiguous = any(t in q for t in ambiguity_tokens)
+    intent_ambiguous = bool(intent and getattr(intent, "intent", "") == "mixed")
+    score_ambiguous = top_gap <= AMBIGUITY_GAP_THRESHOLD or std <= AMBIGUITY_STD_THRESHOLD
+    ambiguous = query_ambiguous or intent_ambiguous or score_ambiguous
+    return (not ambiguous), avg_top_k
 
 
 def _single_stage_rerank_leaves(
@@ -844,12 +906,13 @@ def _hybrid_fuse_candidates(
     lexical_candidates: List[NodeWithScore],
     graph_candidates: List[NodeWithScore],
     parent_candidates: Optional[List[NodeWithScore]] = None,
+    parent_weight: float = RRF_PARENT_LIST_WEIGHT,
 ) -> List[NodeWithScore]:
     """
     Fusion RRF : vectoriel, lexical (BM25-like), KAG, et optionnellement parents enrichis.
 
     Listes ordonnées par pertinence décroissante ; chaque canal contribue 1/(RRF_K+rank),
-    le canal parent est pondéré par ``RRF_PARENT_LIST_WEIGHT``.
+    le canal parent est pondéré par ``parent_weight``.
     """
     parent_candidates = parent_candidates or []
 
@@ -924,7 +987,7 @@ def _hybrid_fuse_candidates(
         c_v = _rrf_contrib(rv) if cid in rank_v else 0.0
         c_l = _rrf_contrib(rl) if cid in rank_l else 0.0
         c_k = _rrf_contrib(rk) if cid in rank_k else 0.0
-        c_p = RRF_PARENT_LIST_WEIGHT * _rrf_contrib(rp) if cid in rank_p else 0.0
+        c_p = parent_weight * _rrf_contrib(rp) if cid in rank_p else 0.0
 
         hybrid = c_v + c_l + c_k + c_p
 
@@ -1708,6 +1771,31 @@ def _needs_multi_hop(query_text: str, pivot_entity_names: List[str]) -> bool:
     return False
 
 
+def _need_multi_hop_classifier_score(
+    query_text: str,
+    pivot_entity_names: List[str],
+    intent: Optional[QueryIntent] = None,
+) -> float:
+    """
+    Classifieur heuristique léger [0,1] pour activer le multi-hop (Phase B).
+    """
+    q = (query_text or "").strip()
+    if not q:
+        return 0.0
+    score = 0.0
+    if len(pivot_entity_names) >= 2:
+        score += 0.40
+    if _match_strong_multihop_trigger(q):
+        score += 0.35
+    if _match_weak_multihop_trigger(q, pivot_entity_names):
+        score += 0.20
+    if intent and getattr(intent, "intent", "") == "mixed":
+        score += 0.15
+    if _MH_FAQ_PROCEDURE.search(q):
+        score -= 0.50
+    return max(0.0, min(1.0, score))
+
+
 def _rank_entity_seeds_for_hop(
     entity_names: List[str],
     query_text: str,
@@ -2222,11 +2310,17 @@ async def search_relevant_passages(
                 logger.debug("Extraction entités requête ignorée (space): %s", ext_err)
 
         # --- Étape 2 : sélection du mode retrieval ---
+        mh_score = _need_multi_hop_classifier_score(
+            query_text=query_text,
+            pivot_entity_names=pivot_entity_names,
+            intent=reasoning_result,
+        )
         use_multi_hop = (
             MULTI_HOP_ENABLED
             and settings.KAG_ENABLED
-            and _needs_multi_hop(query_text, pivot_entity_names)
+            and (_needs_multi_hop(query_text, pivot_entity_names) or mh_score >= 0.55)
         )
+        parent_rrf_weight = _infer_parent_rrf_weight(query_text, reasoning_result)
 
         if use_multi_hop:
             logger.info(
@@ -2348,7 +2442,7 @@ async def search_relevant_passages(
                     "nb_kag": len(graph_candidates),
                     "nb_parent": len(parent_candidates),
                     "rrf_k": RRF_K,
-                    "parent_list_weight": RRF_PARENT_LIST_WEIGHT,
+                    "parent_list_weight": parent_rrf_weight,
                 },
                 tags=["fusion", "hybrid", "rrf", "space"],
             ) as fusion_run:
@@ -2357,6 +2451,7 @@ async def search_relevant_passages(
                     lexical_candidates=lexical_candidates,
                     graph_candidates=graph_candidates,
                     parent_candidates=parent_candidates,
+                    parent_weight=parent_rrf_weight,
                 )
                 fusion_outputs = {"nb_fused": len(leaf_candidates)}
                 if TRACE_VERBOSE_TEXT:
@@ -2386,25 +2481,19 @@ async def search_relevant_passages(
 
         # Early stopping
         skip_reranking = False
-        if len(filtered_candidates) >= k:
-            top_k_scores = []
-            for c in filtered_candidates[:k]:
-                meta = dict(getattr(c.node, "metadata", {}) or {})
-                vs = meta.get("vector_similarity")
-                if vs is not None:
-                    top_k_scores.append(float(vs))
-                else:
-                    top_k_scores.append(float(c.score or 0.0))
-            avg_top_k = sum(top_k_scores) / len(top_k_scores)
-
-            if avg_top_k >= SKIP_RERANK_THRESHOLD:
-                logger.info(
-                    "Similarité élevée (space) (%.3f >= %.2f), skip reranking",
-                    avg_top_k,
-                    SKIP_RERANK_THRESHOLD,
-                )
-                skip_reranking = True
-                top_leaves = filtered_candidates[:k]
+        skip_reranking, avg_top_k = _should_skip_reranking_adaptive(
+            filtered_candidates=filtered_candidates,
+            k=k,
+            query_text=query_text,
+            intent=reasoning_result,
+        )
+        if skip_reranking:
+            logger.info(
+                "Similarité élevée et non ambiguë (space) (%.3f >= %.2f), skip reranking",
+                avg_top_k,
+                SKIP_RERANK_THRESHOLD,
+            )
+            top_leaves = filtered_candidates[:k]
 
         # --- Étape 3 : Reranking unique précédé de diversification MMR ---
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
@@ -2418,7 +2507,7 @@ async def search_relevant_passages(
                             with trace_run(
                                 "mmr_selection",
                                 run_type="chain",
-                                inputs={"nb_pool": len(filtered_candidates), "target_k": rerank_pool_size, "lambda": MMR_LAMBDA},
+                                inputs={"nb_pool": len(filtered_candidates), "target_k": rerank_pool_size, "lambda": _infer_adaptive_mmr_lambda(query_text, reasoning_result)},
                                 tags=["mmr", "diversity", "space"],
                             ) as mmr_run:
                                 query_embedding = np.array(
@@ -2441,7 +2530,7 @@ async def search_relevant_passages(
                                     candidates=filtered_candidates,
                                     candidate_embeddings=candidate_embeddings,
                                     target_k=mmr_target_k,
-                                    lambda_param=MMR_LAMBDA,
+                                    lambda_param=_infer_adaptive_mmr_lambda(query_text, reasoning_result),
                                     primary_subject_key=primary_subject,
                                 )
                                 mmr_run.end(outputs={"nb_final": len(mmr_pool)})

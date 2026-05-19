@@ -27,6 +27,17 @@ def test_hybrid_fuse_candidates_vector_and_lexical():
     assert "hybrid_score" in meta
 
 
+def test_hybrid_fuse_parent_weight_affects_score():
+    from app.services.space_search_service import _hybrid_fuse_candidates
+
+    v = [NodeWithScore(node=TextNode(id_="chunk-1", text="a"), score=0.8)]
+    p = [NodeWithScore(node=TextNode(id_="chunk-1", text="a"), score=0.9)]
+    low = _hybrid_fuse_candidates(v, [], [], parent_candidates=p, parent_weight=0.1)
+    high = _hybrid_fuse_candidates(v, [], [], parent_candidates=p, parent_weight=0.9)
+    assert len(low) == 1 and len(high) == 1
+    assert high[0].score > low[0].score
+
+
 # ---------------------------------------------------------------------------
 # Tests multi-hop
 # ---------------------------------------------------------------------------
@@ -53,6 +64,23 @@ def test_needs_multi_hop_two_pivots():
     from app.services.space_search_service import _needs_multi_hop
 
     assert _needs_multi_hop("Donne moi les caractéristiques", ["entite_a", "entite_b"]) is True
+
+
+def test_need_multi_hop_classifier_score_behaviour():
+    from app.services.space_search_service import _need_multi_hop_classifier_score
+
+    score_high = _need_multi_hop_classifier_score(
+        "Comparaison entre gamme alpha et gamme beta",
+        ["gamme alpha", "gamme beta"],
+        None,
+    )
+    score_low = _need_multi_hop_classifier_score(
+        "Comment installer la fenêtre",
+        [],
+        None,
+    )
+    assert score_high >= 0.55
+    assert score_low < 0.55
 
 
 def test_needs_multi_hop_false_simple_query():
