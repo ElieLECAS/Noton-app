@@ -37,6 +37,16 @@ import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from app.services.query_reasoning_service import QueryIntent, reason_query_intent
+from app.services.chunk_metadata_utils import (
+    apply_row_metadata_defaults,
+    content_type_score_multiplier,
+    enrich_passage_content_for_llm,
+    infer_primary_subject_key,
+    merged_chunk_metadata as _merged_chunk_metadata,
+    mmr_diversity_key,
+    mmr_subject_key,
+    table_citation_hint,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -127,31 +137,50 @@ HYBRID_MIN_SCORE = RRF_MIN_SCORE  # compat. nom interne
 # Filtrage entités KAG par score de confiance calibré (KnowledgeEntity.confidence_score)
 MIN_ENTITY_CONFIDENCE = float(os.getenv("MIN_ENTITY_CONFIDENCE", "0.30"))
 
+
+def _kag_entity_confidence_filter():
+    """Entités sans score calibré exclues du retrieval KAG."""
+    return KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE
+
 # ---------------------------------------------------------------------------
-# Multi-hop — constantes en dur (pas de variables d'environnement)
+# Multi-hop — constantes (budget/hops) + réglages via settings
 # ---------------------------------------------------------------------------
 MULTI_HOP_ENABLED = True
 MULTI_HOP_MAX_HOPS = 3
-MULTI_HOP_CANDIDATE_BUDGET = 80   # plafond global de candidats (tous hops confondus)
-MULTI_HOP_PER_HOP_LIMIT = 20      # candidats KAG max par hop d'expansion
-MULTI_HOP_PATIENCE = 1            # sauts consécutifs sans nouveaux chunks avant arrêt
+MULTI_HOP_CANDIDATE_BUDGET = 80
+MULTI_HOP_PER_HOP_LIMIT = 20
+MULTI_HOP_PATIENCE = 1
 MULTI_HOP_MIN_DELTA_NEW_CHUNKS = int(os.getenv("MULTI_HOP_MIN_DELTA_NEW_CHUNKS", "2"))
-# Poids canal parent dans le RRF multi-hop (aligné sur RRF_PARENT_LIST_WEIGHT)
 MH_RRF_PARENT_WEIGHT = RRF_PARENT_LIST_WEIGHT
-# Pénalité par profondeur : hop0→0.00, hop1→0.05, hop2→0.10, hop3→0.15
 MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
-# Configuration MMR (Maximum Marginal Relevance)
-MMR_K = int(os.getenv("MMR_K", "15"))  # Nombre de passages finaux à renvoyer au LLM
-MMR_LAMBDA = 0.5  # Équilibre entre pertinence (1.0) et diversité (0.0)
+MMR_K = int(os.getenv("MMR_K", "15"))
+MMR_LAMBDA = float(os.getenv("MMR_LAMBDA", str(settings.MMR_LAMBDA)))
 
-# Mots-clés heuristiques indiquant une requête multi-hop
-_MH_TRIGGER_PATTERNS = re.compile(
-    r"\b(et\b|comparaison|impact|cause|depend|dépend|influence|relation|lien"
-    r"|si\b|alors\b|pourquoi|comment|implique|nécessite|necessite|versus|vs\b"
-    r"|différence|difference|avantage|inconvénient|inconvenient)\b",
+# Déclenchement multi-hop : triggers forts / faibles + exclusion FAQ
+_MH_FAQ_PROCEDURE = re.compile(
+    r"^(?:comment|how)\s+(?:installer|monter|fixer|régler|regler|choisir|commander|"
+    r"mesurer|utiliser|poser|remplacer|démonter|demonter|ajuster)\b",
     re.IGNORECASE,
 )
+_MH_STRONG_PATTERNS: List[Tuple[str, re.Pattern]] = [
+    ("comparaison", re.compile(r"\bcomparaison\b", re.IGNORECASE)),
+    ("versus", re.compile(r"\b(?:versus|vs)\b", re.IGNORECASE)),
+    ("difference", re.compile(r"\b(?:différence|difference)\b", re.IGNORECASE)),
+    ("impact_sur", re.compile(r"\bimpact\b.+\bsur\b", re.IGNORECASE)),
+    ("depend", re.compile(r"\b(?:dépend|depend)\b", re.IGNORECASE)),
+    ("influence", re.compile(r"\binfluence\b", re.IGNORECASE)),
+    ("implique", re.compile(r"\bimplique\b", re.IGNORECASE)),
+    ("necessite", re.compile(r"\b(?:nécessite|necessite)\b", re.IGNORECASE)),
+    ("incompatible", re.compile(r"\bincompatible\b", re.IGNORECASE)),
+    ("remplace", re.compile(r"\bremplace\b", re.IGNORECASE)),
+    ("entre_et", re.compile(r"\bentre\b.+\bet\b", re.IGNORECASE)),
+    ("lien_entre", re.compile(r"\blien\s+entre\b", re.IGNORECASE)),
+]
+_MH_ENTRE_ET = re.compile(r"\bentre\b.+\bet\b", re.IGNORECASE)
+_MH_WEAK_COMMENT = re.compile(r"\b(?:comment|pourquoi)\b", re.IGNORECASE)
+_MH_WEAK_SI = re.compile(r"\bsi\b", re.IGNORECASE)
+_MH_WEAK_ALORS = re.compile(r"\balors\b", re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -171,19 +200,6 @@ class _MultiHopState:
     new_chunks_count_by_hop: Dict[int, int] = field(default_factory=dict)
     # hop_traces : chunk_id → liste des entités qui ont amené ce chunk
     hop_traces: Dict[int, List[str]] = field(default_factory=dict)
-
-
-def _merged_chunk_metadata(primary: Optional[dict], legacy: Optional[dict]) -> Dict:
-    """
-    Fusionne les métadonnées modernes + legacy.
-    Les clés de ``primary`` (metadata_json) priment si présentes.
-    """
-    merged: Dict = {}
-    if isinstance(legacy, dict):
-        merged.update(legacy)
-    if isinstance(primary, dict):
-        merged.update(primary)
-    return merged
 
 
 def _get_reranker():
@@ -297,13 +313,14 @@ def _compute_mmr_with_parent_constraint(
     candidate_embeddings: Dict[int, np.ndarray],
     target_k: int = MMR_K,
     lambda_param: float = MMR_LAMBDA,
+    primary_subject_key: Optional[str] = None,
 ) -> List[NodeWithScore]:
     """
     Sélectionne target_k candidats parmi le pool en maximisant la MMR et la diversité de sources.
-    
-    Formule MMR = argmax [ lambda * sim_q - (1-lambda) * max_sim(d, selected) ]
-    Où sim_q est le score hybride de pertinence normalisé (score / max_score).
-    Contrainte additionnelle : 1 seul chunk par parent_node_id.
+
+    sim_q = blend(score hybride, cosinus query/doc).
+    Contrainte dure : 1 chunk par table_id ou parent_node_id.
+    Pénalité souple si hors sujet primaire (gamme / pivot).
     """
     if not candidates or target_k <= 0:
         return []
@@ -320,8 +337,8 @@ def _compute_mmr_with_parent_constraint(
     selected_indices: List[int] = []
     candidates_pool = candidates[:]
     
-    # On garde une trace des parents déjà sélectionnés
-    selected_parent_ids: Set[str] = set()
+    # Diversité : un chunk par tableau ou par parent section
+    selected_diversity_keys: Set[str] = set()
     
     # Le premier est toujours le meilleur score (déjà trié)
     # Sauf s'il n'a pas d'embedding (fallback improbable)
@@ -339,9 +356,9 @@ def _compute_mmr_with_parent_constraint(
     # Initialisation avec le premier
     selected_indices.append(first_idx)
     first_node = candidates_pool[first_idx].node
-    p_id = (first_node.metadata or {}).get("parent_node_id")
-    if p_id:
-        selected_parent_ids.add(str(p_id))
+    div_key = mmr_diversity_key(dict(first_node.metadata or {}))
+    if div_key:
+        selected_diversity_keys.add(div_key)
     
     # On boucle jusqu'à avoir target_k ou épuisé le pool
     while len(selected_indices) < target_k and len(selected_indices) < len(candidates_pool):
@@ -364,45 +381,55 @@ def _compute_mmr_with_parent_constraint(
             if cid not in candidate_embeddings:
                 continue
                 
-            # --- Contrainte Parent ---
-            parent_id = (nws.node.metadata or {}).get("parent_node_id")
-            if parent_id and str(parent_id) in selected_parent_ids:
-                # On ignore/pénalise les candidats du même parent
+            # --- Contrainte diversité (table_id ou parent section) ---
+            div_key = mmr_diversity_key(dict(nws.node.metadata or {}))
+            if div_key and div_key in selected_diversity_keys:
                 continue
                 
             # --- Calcul MMR ---
             d_emb = candidate_embeddings[cid]
             d_emb = d_emb / np.linalg.norm(d_emb)
             
-            # Similarité à la requête : score hybride normalisé
-            sim_q = float(nws.score or 0.0) / max_score
-            
-            # Similarité max aux déjà sélectionnés
-            sim_selected = np.max(np.dot(sel_matrix, d_emb))
-            
+            hybrid_sim = float(nws.score or 0.0) / max_score
+            embed_sim = float(np.dot(query_embedding / (np.linalg.norm(query_embedding) + 1e-9), d_emb))
+            embed_sim = max(0.0, min(1.0, embed_sim))
+            sim_q = (
+                settings.MMR_SIMQ_HYBRID_WEIGHT * hybrid_sim
+                + settings.MMR_SIMQ_EMBED_WEIGHT * embed_sim
+            )
+
+            sim_selected = float(np.max(np.dot(sel_matrix, d_emb)))
             mmr_score = lambda_param * sim_q - (1 - lambda_param) * sim_selected
-            
+
+            if primary_subject_key:
+                cand_subject = mmr_subject_key(dict(nws.node.metadata or {}))
+                if cand_subject and cand_subject != primary_subject_key:
+                    mmr_score -= settings.MULTI_HOP_SUBJECT_MISMATCH_PENALTY
+
             if mmr_score > best_mmr:
                 best_mmr = mmr_score
                 best_idx = i
                 
         if best_idx == -1:
-            # Plus de candidats respectant la contrainte parent unique
-            logger.info("MMR arrêt : plus de parents uniques disponibles (%d/%d trouvés)", len(selected_indices), target_k)
+            logger.info(
+                "MMR arrêt : plus de clés diversité disponibles (%d/%d trouvés)",
+                len(selected_indices),
+                target_k,
+            )
             break
             
         selected_indices.append(best_idx)
-        p_id = (candidates_pool[best_idx].node.metadata or {}).get("parent_node_id")
-        if p_id:
-            selected_parent_ids.add(str(p_id))
+        div_key = mmr_diversity_key(dict(candidates_pool[best_idx].node.metadata or {}))
+        if div_key:
+            selected_diversity_keys.add(div_key)
             
     final_selection = [candidates_pool[i] for i in selected_indices]
     logger.info(
-        "MMR (space) : %d candidats sélectionnés sur %d (lambda=%.1f, parents_uniques=%d)",
+        "MMR (space) : %d candidats sélectionnés sur %d (lambda=%.1f, diversité=%d)",
         len(final_selection),
         len(candidates_pool),
         lambda_param,
-        len(selected_parent_ids)
+        len(selected_diversity_keys),
     )
     return final_selection
 
@@ -499,6 +526,7 @@ def _retrieve_leaves_sql(
             dc.document_id,
             dc.metadata_json,
             dc.metadata_,
+            dc.source AS chunk_source,
             d.title AS document_title,
             d.id AS document_id,
             1 - (dc.embedding <=> '{query_embedding_str}'::vector) AS similarity_score
@@ -520,9 +548,13 @@ def _retrieve_leaves_sql(
     nodes_with_scores: List[NodeWithScore] = []
     for row in result:
         metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
-        metadata.setdefault("document_id", row.document_id)
-        metadata.setdefault("document_title", row.document_title or "Document sans titre")
-        metadata.setdefault("chunk_index", row.chunk_index)
+        apply_row_metadata_defaults(
+            metadata,
+            document_id=row.document_id,
+            document_title=row.document_title or "Document sans titre",
+            chunk_index=row.chunk_index,
+            source=getattr(row, "chunk_source", None),
+        )
 
         node = TextNode(
             id_=f"chunk-{row.id}",
@@ -612,6 +644,7 @@ def _retrieve_leaves_lexical_sql(
             dc.document_id,
             dc.metadata_json,
             dc.metadata_,
+            dc.source AS chunk_source,
             d.title AS document_title,
             d.id AS document_id,
             ts_rank_cd(
@@ -639,9 +672,13 @@ def _retrieve_leaves_lexical_sql(
     nodes_with_scores: List[NodeWithScore] = []
     for row in result:
         metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
-        metadata.setdefault("document_id", row.document_id)
-        metadata.setdefault("document_title", row.document_title or "Document sans titre")
-        metadata.setdefault("chunk_index", row.chunk_index)
+        apply_row_metadata_defaults(
+            metadata,
+            document_id=row.document_id,
+            document_title=row.document_title or "Document sans titre",
+            chunk_index=row.chunk_index,
+            source=getattr(row, "chunk_source", None),
+        )
 
         node = TextNode(
             id_=f"chunk-{row.id}",
@@ -769,9 +806,13 @@ def _retrieve_parent_enriched_sql(
     nodes_with_scores: List[NodeWithScore] = []
     for _cid, (psim, chunk, doc_title) in best_leaf.items():
         metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        metadata.setdefault("document_id", chunk.document_id)
-        metadata.setdefault("document_title", doc_title)
-        metadata.setdefault("chunk_index", chunk.chunk_index)
+        apply_row_metadata_defaults(
+            metadata,
+            document_id=chunk.document_id,
+            document_title=doc_title,
+            chunk_index=chunk.chunk_index,
+            source=chunk.source,
+        )
         metadata["parent_enrichment_score"] = psim
         metadata["retrieval_signal"] = "parent_enriched_assist"
 
@@ -903,6 +944,8 @@ def _hybrid_fuse_candidates(
         meta["kag_norm"] = c_k
         meta["hybrid_score"] = hybrid
         meta["retrieval_signal"] = "hybrid_rrf"
+        meta["content_type_boost"] = content_type_score_multiplier(meta)
+        hybrid *= meta["content_type_boost"]
         node.metadata = meta
 
         fused.append(NodeWithScore(node=node, score=hybrid))
@@ -974,9 +1017,14 @@ def _build_parent_node_dict(
     node_dict: Dict[str, TextNode] = {}
     for chunk, document_title in rows:
         metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        metadata.setdefault("document_id", chunk.document_id)
-        metadata.setdefault("document_title", document_title or "Document sans titre")
-        metadata.setdefault("chunk_index", chunk.chunk_index)
+        apply_row_metadata_defaults(
+            metadata,
+            document_id=chunk.document_id,
+            document_title=document_title or "Document sans titre",
+            chunk_index=chunk.chunk_index,
+            node_id=chunk.node_id,
+            source=chunk.source,
+        )
         llama_id = f"chunk-{chunk.id}"
         text = chunk.content or chunk.text or ""
         node = TextNode(
@@ -1041,9 +1089,14 @@ def _resolve_space_parent_with_multihop(
             break
         chunk, document_title = row
         metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        metadata.setdefault("document_id", chunk.document_id)
-        metadata.setdefault("document_title", document_title or "Document sans titre")
-        metadata.setdefault("chunk_index", chunk.chunk_index)
+        apply_row_metadata_defaults(
+            metadata,
+            document_id=chunk.document_id,
+            document_title=document_title or "Document sans titre",
+            chunk_index=chunk.chunk_index,
+            node_id=chunk.node_id,
+            source=chunk.source,
+        )
         llama_id = f"chunk-{chunk.id}"
         text = (chunk.content or chunk.text or "").strip()
 
@@ -1131,9 +1184,13 @@ async def _keyword_fallback_passages(
         score = (match_count / max(len(terms), 1)) if terms else 0.05
 
         node_metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        node_metadata.setdefault("document_id", chunk.document_id)
-        node_metadata.setdefault("document_title", document_title or "Document sans titre")
-        node_metadata.setdefault("chunk_index", chunk.chunk_index)
+        apply_row_metadata_defaults(
+            node_metadata,
+            document_id=chunk.document_id,
+            document_title=document_title or "Document sans titre",
+            chunk_index=chunk.chunk_index,
+            source=chunk.source,
+        )
         node = TextNode(
             id_=f"chunk-{chunk.id}",
             text=content,
@@ -1152,18 +1209,8 @@ async def _keyword_fallback_passages(
 
 
 def _enrich_content_with_heading_and_figure(content: str, metadata: dict) -> str:
-    """Préfixe le contenu avec parent_heading et figure_title."""
-    parent_heading = metadata.get("parent_heading") or metadata.get("heading")
-    figure_title = metadata.get("figure_title") or metadata.get("image_anchor")
-    parts = []
-    if parent_heading and str(parent_heading).strip():
-        parts.append(f"[Section: {parent_heading.strip()}]")
-    if figure_title and str(figure_title).strip():
-        parts.append(str(figure_title).strip())
-    if not parts:
-        return content
-    prefix = " ".join(parts) + "\n\n"
-    return prefix + content if content else prefix.strip()
+    """Préfixe le contenu avec section, figure et résumé parent KAG."""
+    return enrich_passage_content_for_llm(content, metadata)
 
 
 def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
@@ -1230,13 +1277,14 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
                     continue
                     
     page_no = resolved_page
-    parent_heading = metadata.get("parent_heading")
+    parent_heading = metadata.get("parent_heading") or metadata.get("heading")
 
     content = node.get_content() if hasattr(node, "get_content") else str(node)
     content_enriched = _enrich_content_with_heading_and_figure(content, metadata)
     passage_text = f"**{document_title}**\n{content_enriched}"
     chunk_id = _parse_chunk_id_from_node(node)
     source_leaf_chunk_id = metadata.get("source_leaf_chunk_id")
+    table_hint = table_citation_hint(metadata)
     out = {
         "passage": passage_text,
         "passage_raw": content,
@@ -1248,7 +1296,15 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
         "score": float(fallback_score or 0.0),
         "page_no": page_no,
         "section": parent_heading,
+        "source": metadata.get("source"),
+        "content_type": metadata.get("content_type"),
+        "is_image_chunk": bool(metadata.get("is_image_chunk")),
+        "image_path": metadata.get("image_path"),
+        "image_filename": metadata.get("image_filename"),
+        "caption": metadata.get("caption") or metadata.get("figure_title"),
     }
+    if table_hint:
+        out["table_citation"] = table_hint
     if page_start is not None:
         try:
             out["page_start"] = int(page_start)
@@ -1295,7 +1351,7 @@ def _retrieve_via_knowledge_graph(
     try:
         from app.services.kag_graph_service import (
             expand_kag_query_terms_for_space,
-            _neighbor_entity_ids_for_entities,
+            rank_neighbor_entities_for_query,
         )
 
         # Stratégie 1: utiliser les entités pivot LLM si disponibles
@@ -1335,10 +1391,7 @@ def _retrieve_via_knowledge_graph(
                 DocumentChunk.is_leaf == True,
                 KnowledgeEntity.space_id == space_id,
                 KnowledgeEntity.name_normalized.in_(query_terms),
-                or_(
-                    KnowledgeEntity.confidence_score.is_(None),
-                    KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
-                ),
+                _kag_entity_confidence_filter(),
             )
             .order_by(ChunkEntityRelation.relevance_score.desc())
             .limit(limit)
@@ -1373,10 +1426,7 @@ def _retrieve_via_knowledge_graph(
                     DocumentChunk.is_leaf == True,
                     KnowledgeEntity.space_id == space_id,
                     or_(*ilike_conditions),
-                    or_(
-                        KnowledgeEntity.confidence_score.is_(None),
-                        KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
-                    ),
+                    _kag_entity_confidence_filter(),
                 )
                 .order_by(ChunkEntityRelation.relevance_score.desc())
                 .limit(limit - len(results))
@@ -1390,9 +1440,10 @@ def _retrieve_via_knowledge_graph(
 
         neighbor_chunk_ids: Set[int] = set()
         seed_entity_ids = {row[3] for row in results if row[3] is not None}
-        neighbor_entity_ids = _neighbor_entity_ids_for_entities(
-            session, space_id, seed_entity_ids
+        ranked_neighbors = rank_neighbor_entities_for_query(
+            session, space_id, seed_entity_ids, query_text=query_text
         )
+        neighbor_entity_ids = {nid for nid, _ in ranked_neighbors}
         if neighbor_entity_ids and len(results) < limit:
             stmt_neigh = (
                 select(
@@ -1411,10 +1462,7 @@ def _retrieve_via_knowledge_graph(
                     DocumentChunk.is_leaf == True,
                     KnowledgeEntity.space_id == space_id,
                     KnowledgeEntity.id.in_(neighbor_entity_ids),
-                    or_(
-                        KnowledgeEntity.confidence_score.is_(None),
-                        KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
-                    ),
+                    _kag_entity_confidence_filter(),
                 )
                 .order_by(ChunkEntityRelation.relevance_score.desc())
                 .limit(max(0, limit - len(results)))
@@ -1429,9 +1477,13 @@ def _retrieve_via_knowledge_graph(
         nodes_with_scores: List[NodeWithScore] = []
         for chunk, document_title, entity_name, _entity_id, relevance in results:
             metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-            metadata.setdefault("document_id", chunk.document_id)
-            metadata.setdefault("document_title", document_title or "Document sans titre")
-            metadata.setdefault("chunk_index", chunk.chunk_index)
+            apply_row_metadata_defaults(
+                metadata,
+                document_id=chunk.document_id,
+                document_title=document_title or "Document sans titre",
+                chunk_index=chunk.chunk_index,
+                source=chunk.source,
+            )
             metadata["kag_matched_entity"] = entity_name
             if chunk.id in neighbor_chunk_ids:
                 metadata["kag_neighbor_match"] = True
@@ -1575,21 +1627,99 @@ def refine_with_source_authority(
     return passages
 
 
+def _match_strong_multihop_trigger(query_text: str) -> Optional[str]:
+    for name, pattern in _MH_STRONG_PATTERNS:
+        if pattern.search(query_text):
+            return name
+    return None
+
+
+def _match_weak_multihop_trigger(
+    query_text: str,
+    pivot_entity_names: List[str],
+) -> Optional[str]:
+    """Triggers faibles : nécessitent un contexte (pivot, entre X et Y, si+alors)."""
+    has_pivot = len(pivot_entity_names) >= 1
+    two_pivots = len(pivot_entity_names) >= 2
+    strong = _match_strong_multihop_trigger(query_text)
+    entre_et = bool(_MH_ENTRE_ET.search(query_text))
+
+    if _MH_WEAK_COMMENT.search(query_text):
+        if strong or entre_et or two_pivots:
+            return "comment_pourquoi+context"
+        if has_pivot and settings.MULTI_HOP_REQUIRE_PIVOT_FOR_WEAK:
+            return "comment_pourquoi+pivot"
+
+    if _MH_WEAK_SI.search(query_text) and _MH_WEAK_ALORS.search(query_text):
+        if strong or (has_pivot and settings.MULTI_HOP_REQUIRE_PIVOT_FOR_WEAK):
+            return "si_alors+context"
+
+    if entre_et and re.search(r"\b(?:comparaison|versus|vs)\b", query_text, re.IGNORECASE):
+        return "et+comparaison"
+
+    return None
+
+
 def _needs_multi_hop(query_text: str, pivot_entity_names: List[str]) -> bool:
     """
     Détecte si la requête nécessite un retrieval multi-hop.
 
-    Critères (OR) :
-    - La requête contient au moins un mot-clé indicateur multi-hop.
-    - Au moins 2 entités pivot distinctes ont été extraites de la requête.
+    - ≥2 pivots CQR → oui
+    - Trigger fort (comparaison, impact sur, entre X et Y, …) → oui
+    - Trigger faible (comment, si/alors) → seulement avec contexte
+    - FAQ procédurale (« comment installer… ») → non
     """
-    if not query_text:
+    if not query_text or not query_text.strip():
         return False
-    if _MH_TRIGGER_PATTERNS.search(query_text):
-        return True
+
+    q = query_text.strip()
+    if _MH_FAQ_PROCEDURE.search(q):
+        logger.debug("Multi-hop skipped: faq_procedure")
+        return False
+
     if len(pivot_entity_names) >= 2:
+        logger.debug("Multi-hop trigger: pivots:%d", len(pivot_entity_names))
         return True
+
+    strong = _match_strong_multihop_trigger(q)
+    if strong:
+        logger.debug("Multi-hop trigger: strong:%s", strong)
+        return True
+
+    token_count = len(re.findall(r"\S+", q))
+    if token_count < settings.MULTI_HOP_KEYWORD_MIN_TOKENS:
+        return False
+
+    weak = _match_weak_multihop_trigger(q, pivot_entity_names)
+    if weak:
+        logger.debug("Multi-hop trigger: weak:%s", weak)
+        return True
+
     return False
+
+
+def _rank_entity_seeds_for_hop(
+    entity_names: List[str],
+    query_text: str,
+    pivot_entity_names: List[str],
+) -> List[str]:
+    """Priorise les seeds d'expansion (match pivot / requête)."""
+    from app.services.kag_extraction_service import normalize_entity_name
+
+    pivot_norm = {normalize_entity_name(p) for p in pivot_entity_names if p}
+    q_lower = query_text.lower()
+
+    def _score(name: str) -> float:
+        norm = normalize_entity_name(name)
+        sc = 0.0
+        if norm in pivot_norm:
+            sc += 2.0
+        if name.lower() in q_lower or norm in q_lower:
+            sc += 1.0
+        return sc
+
+    ranked = sorted(set(entity_names), key=lambda n: _score(n), reverse=True)
+    return ranked[: settings.MULTI_HOP_MAX_SEEDS_PER_HOP]
 
 
 def _extract_top_entity_names_from_candidates(
@@ -1619,6 +1749,7 @@ def _retrieve_kag_for_entity_seeds(
     limit: int,
     seen_chunk_ids: Set[int],
     seen_entity_ids: Set[int],
+    query_text: str = "",
 ) -> Tuple[List[NodeWithScore], Set[int]]:
     """
     Retrieval KAG ciblé à partir d'une liste de noms d'entités seeds.
@@ -1629,7 +1760,7 @@ def _retrieve_kag_for_entity_seeds(
     try:
         from app.services.kag_graph_service import (
             expand_kag_query_terms_for_space,
-            _neighbor_entity_ids_for_entities,
+            rank_neighbor_entities_for_query,
         )
         from app.services.kag_extraction_service import normalize_entity_name
 
@@ -1658,10 +1789,7 @@ def _retrieve_kag_for_entity_seeds(
                 DocumentChunk.is_leaf == True,
                 KnowledgeEntity.space_id == space_id,
                 KnowledgeEntity.name_normalized.in_(expanded),
-                or_(
-                    KnowledgeEntity.confidence_score.is_(None),
-                    KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
-                ),
+                _kag_entity_confidence_filter(),
             )
             .order_by(ChunkEntityRelation.relevance_score.desc())
             .limit(limit * 2)
@@ -1675,11 +1803,17 @@ def _retrieve_kag_for_entity_seeds(
                 entities_touched.add(int(eid))
 
         # Expansion voisins graphe depuis les entités seeds
+        neighbor_edge_scores: Dict[int, float] = {}
         seed_entity_ids = {row[3] for row in rows if row[3] is not None} - seen_entity_ids
         if seed_entity_ids:
-            neighbor_ids = _neighbor_entity_ids_for_entities(
-                session, space_id, seed_entity_ids
-            ) - seen_entity_ids
+            ranked_neighbors = rank_neighbor_entities_for_query(
+                session,
+                space_id,
+                seed_entity_ids,
+                query_text=query_text,
+            )
+            neighbor_edge_scores = {nid: sc for nid, sc in ranked_neighbors}
+            neighbor_ids = set(neighbor_edge_scores.keys()) - seen_entity_ids
             for nid in neighbor_ids:
                 entities_touched.add(int(nid))
             if neighbor_ids:
@@ -1700,10 +1834,7 @@ def _retrieve_kag_for_entity_seeds(
                         DocumentChunk.is_leaf == True,
                         KnowledgeEntity.space_id == space_id,
                         KnowledgeEntity.id.in_(neighbor_ids),
-                        or_(
-                            KnowledgeEntity.confidence_score.is_(None),
-                            KnowledgeEntity.confidence_score >= MIN_ENTITY_CONFIDENCE,
-                        ),
+                        _kag_entity_confidence_filter(),
                     )
                     .order_by(ChunkEntityRelation.relevance_score.desc())
                     .limit(limit)
@@ -1719,15 +1850,23 @@ def _retrieve_kag_for_entity_seeds(
 
         nodes: List[NodeWithScore] = []
         seen_in_batch: Set[int] = set()
-        for chunk, doc_title, entity_name, _eid, relevance in rows:
+        for chunk, doc_title, entity_name, eid, relevance in rows:
             if chunk.id in seen_chunk_ids or chunk.id in seen_in_batch:
                 continue
             seen_in_batch.add(chunk.id)
             metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-            metadata.setdefault("document_id", chunk.document_id)
-            metadata.setdefault("document_title", doc_title or "Document sans titre")
-            metadata.setdefault("chunk_index", chunk.chunk_index)
+            apply_row_metadata_defaults(
+                metadata,
+                document_id=chunk.document_id,
+                document_title=doc_title or "Document sans titre",
+                chunk_index=chunk.chunk_index,
+                source=chunk.source,
+            )
             metadata["kag_matched_entity"] = entity_name
+            if eid is not None and int(eid) in neighbor_edge_scores:
+                metadata["kag_neighbor_edge_score"] = round(
+                    float(neighbor_edge_scores[int(eid)]), 4
+                )
             node = TextNode(
                 id_=f"chunk-{chunk.id}",
                 text=chunk.content or chunk.text or "",
@@ -1938,8 +2077,10 @@ def multi_hop_retrieve_space(
             reverse=True,
         )[:MULTI_HOP_PER_HOP_LIMIT]
         seed_entity_names = _extract_top_entity_names_from_candidates(top_current, top_n=12)
+        seed_entity_names = _rank_entity_seeds_for_hop(
+            seed_entity_names, query_text, pivot_entity_names
+        )
 
-        # Exclure les entités déjà explorées pour définir les points de départ du saut
         new_seeds = [n for n in seed_entity_names if n not in state.seen_entity_names]
         if not new_seeds:
             logger.info("Multi-hop (space) arrêt saturation entités au hop %d", hop)
@@ -1955,6 +2096,7 @@ def multi_hop_retrieve_space(
             limit=MULTI_HOP_PER_HOP_LIMIT,
             seen_chunk_ids=state.seen_chunk_ids,
             seen_entity_ids=state.seen_entity_ids,
+            query_text=query_text,
         )
         state.seen_entity_ids.update(entities_touched)
 
@@ -1972,6 +2114,8 @@ def multi_hop_retrieve_space(
                 1 for e in pivot_entity_names
                 if e and e.lower() in (meta.get("kag_matched_entity") or "").lower()
             )
+            edge_sc = meta.get("kag_neighbor_edge_score")
+            path_suffix = f",e={edge_sc}" if edge_sc is not None else ""
             state.chunk_signals[cid] = {
                 "vector": 0.0,
                 "lexical": 0.0,
@@ -1979,7 +2123,7 @@ def multi_hop_retrieve_space(
                 "evidence": float(evidence),
                 "parent": 0.0,
                 "hop": hop,
-                "path": f"hop{hop}:{','.join(new_seeds[:3])}",
+                "path": f"hop{hop}:{','.join(new_seeds[:3])}{path_suffix}",
             }
             if entity_name:
                 state.hop_traces.setdefault(cid, []).append(entity_name)
@@ -2277,12 +2421,17 @@ async def search_relevant_passages(
                                 ]
                                 candidate_embeddings = _fetch_embeddings_for_chunks(session, chunk_ids)
                                 
+                                primary_subject = infer_primary_subject_key(
+                                    pivot_entity_names,
+                                    filtered_candidates,
+                                )
                                 mmr_pool = _compute_mmr_with_parent_constraint(
                                     query_embedding=query_embedding,
                                     candidates=filtered_candidates,
                                     candidate_embeddings=candidate_embeddings,
                                     target_k=rerank_pool_size,
-                                    lambda_param=MMR_LAMBDA
+                                    lambda_param=MMR_LAMBDA,
+                                    primary_subject_key=primary_subject,
                                 )
                                 mmr_run.end(outputs={"nb_final": len(mmr_pool)})
                         except Exception as mmr_err:

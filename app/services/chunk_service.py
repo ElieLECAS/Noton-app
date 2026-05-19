@@ -19,6 +19,7 @@ from app.services.chunking_service import (
     resolve_adaptive_chunk_params,
     _detect_content_type,
 )
+from app.services.chunk_metadata_utils import build_embedding_input_text
 from app.database import engine
 from app.config import settings
 from app.library_document_logging import get_library_document_logger, log_chunk_inventory
@@ -30,6 +31,33 @@ from queue import Queue
 import io
 
 logger = logging.getLogger(__name__)
+
+
+def _should_embed_library_chunk(metadata: dict) -> bool:
+    """Exclut les feuilles context_only (text_full doublonné par text_window)."""
+    return not bool(metadata.get("embed_skip"))
+
+
+def _partition_embeddable_document_chunks(
+    chunks: List[DocumentChunk],
+) -> tuple[List[DocumentChunk], int]:
+    """
+    Sépare les feuilles à vectoriser de celles marquées embed_skip (contexte hiérarchique).
+    Retourne (à_embedder, nombre_ignorées).
+    """
+    to_embed: List[DocumentChunk] = []
+    skipped = 0
+    for chunk in chunks:
+        meta = dict(chunk.metadata_json or {})
+        if not _should_embed_library_chunk(meta):
+            meta["embedding_skipped"] = True
+            chunk.metadata_json = meta
+            chunk.metadata_ = meta
+            skipped += 1
+        else:
+            to_embed.append(chunk)
+    return to_embed, skipped
+
 
 # File d'attente pour limiter le nombre de générations simultanées
 embedding_queue = Queue()
@@ -517,12 +545,11 @@ def create_chunks_for_note_from_docling(
             # mais on garde chunk.content propre pour la base de données et l'affichage UI
             embedding_inputs = []
             for chunk in leaf_chunks:
-                meta = dict(chunk.metadata_json or {})
-                heading = meta.get("parent_heading") or meta.get("heading")
-                if heading and heading != "__no_heading__":
-                    embedding_inputs.append(f"[{heading}]\n{chunk.content}")
-                else:
-                    embedding_inputs.append(chunk.content)
+                embedding_inputs.append(
+                    build_embedding_input_text(
+                        chunk.content or "", dict(chunk.metadata_json or {})
+                    )
+                )
 
             embeddings = generate_embeddings_batch(
                 embedding_inputs, batch_size=settings.EMBEDDING_BATCH_SIZE
@@ -1006,15 +1033,12 @@ def create_chunks_for_document_from_docling(
         from app.services.embedding_service import generate_embeddings_batch
 
         leafs = [c for c in chunks if c.is_leaf]
+        leafs, _embed_skipped = _partition_embeddable_document_chunks(leafs)
         if leafs:
-            embedding_inputs = []
-            for chunk in leafs:
-                meta = dict(chunk.metadata_json or {})
-                heading = meta.get("parent_heading") or meta.get("heading")
-                if heading and heading != "__no_heading__":
-                    embedding_inputs.append(f"[{heading}]\n{chunk.content}")
-                else:
-                    embedding_inputs.append(chunk.content)
+            embedding_inputs = [
+                build_embedding_input_text(chunk.content or "", dict(chunk.metadata_json or {}))
+                for chunk in leafs
+            ]
 
             embeddings = generate_embeddings_batch(
                 embedding_inputs, batch_size=settings.EMBEDDING_BATCH_SIZE
@@ -1234,13 +1258,17 @@ def _process_embeddings_for_document(
                 DocumentChunk.embedding.is_(None),
                 or_(DocumentChunk.is_leaf == True, DocumentChunk.is_leaf.is_(None)),
             )
-            chunks = list(session.exec(statement).all())
+            chunks_raw = list(session.exec(statement).all())
+            chunks, embed_skipped_count = _partition_embeddable_document_chunks(chunks_raw)
+            if embed_skipped_count:
+                session.commit()
             ld.info(
-                "[Embeddings] document_id=%s — %d chunk(s) feuille sans embedding à traiter.",
+                "[Embeddings] document_id=%s — %d chunk(s) feuille sans embedding à traiter (%d ignorés embed_skip).",
                 document_id,
                 len(chunks),
+                embed_skipped_count,
             )
-            if not chunks:
+            if not chunks and not embed_skipped_count:
                 document.processing_status = "completed"
                 document.processing_progress = 100
                 document.updated_at = datetime.utcnow()
@@ -1278,14 +1306,12 @@ def _process_embeddings_for_document(
                     _finalize_pipeline_abort(document_id)
                     return
                 batch = chunks[i : i + batch_size]
-                embedding_inputs = []
-                for chunk in batch:
-                    meta = dict(chunk.metadata_json or {})
-                    heading = meta.get("parent_heading") or meta.get("heading")
-                    if heading and heading != "__no_heading__":
-                        embedding_inputs.append(f"[{heading}]\n{chunk.content}")
-                    else:
-                        embedding_inputs.append(chunk.content)
+                embedding_inputs = [
+                    build_embedding_input_text(
+                        chunk.content or "", dict(chunk.metadata_json or {})
+                    )
+                    for chunk in batch
+                ]
 
                 embeddings = generate_embeddings_batch(
                     embedding_inputs, batch_size=len(batch)
@@ -1301,7 +1327,7 @@ def _process_embeddings_for_document(
                         ok += 1
                 session.commit()
 
-            if ok == 0:
+            if ok == 0 and len(chunks) > 0:
                 logger.warning("Aucun embedding valide pour document_id=%s", document_id)
                 ld.error(
                     "[Embeddings] document_id=%s — aucun vecteur valide écrit, statut failed.",

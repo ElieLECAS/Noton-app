@@ -38,6 +38,12 @@ from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from app.config import settings
 from app.tracing import trace_run
+from app.services.chunk_metadata_utils import (
+    apply_row_metadata_defaults,
+    enrich_passage_content_for_llm,
+    merged_chunk_metadata,
+    table_citation_hint,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -208,11 +214,14 @@ def _retrieve_leaves_sql(
 
     nodes_with_scores: List[NodeWithScore] = []
     for row in result:
-        metadata = dict(row.metadata_json or row.metadata_ or {})
-        metadata.setdefault("note_id", row.note_id)
-        metadata.setdefault("note_title", row.note_title or "Note sans titre")
-        metadata.setdefault("node_id", row.node_id)
-        metadata.setdefault("parent_node_id", row.parent_node_id)
+        metadata = merged_chunk_metadata(row.metadata_json, row.metadata_)
+        apply_row_metadata_defaults(
+            metadata,
+            note_id=row.note_id,
+            note_title=row.note_title or "Note sans titre",
+            node_id=row.node_id,
+            parent_node_id=row.parent_node_id,
+        )
 
         node = TextNode(
             id_=row.node_id or f"chunk-{row.id}",
@@ -256,7 +265,7 @@ def _build_parent_node_dict(
 
     node_dict: Dict[str, TextNode] = {}
     for chunk, note_title in rows:
-        metadata = dict(chunk.metadata_json or {})
+        metadata = merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
         metadata.setdefault("note_id", chunk.note_id)
         metadata.setdefault("note_title", note_title or "Note sans titre")
         metadata.setdefault("node_id", chunk.node_id)
@@ -316,7 +325,7 @@ def _resolve_note_parent_with_multihop(
         if not row:
             break
         chunk, note_title = row
-        metadata = dict(chunk.metadata_json or {})
+        metadata = merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
         metadata.setdefault("note_id", chunk.note_id)
         metadata.setdefault("note_title", note_title or "Note sans titre")
         metadata.setdefault("node_id", chunk.node_id)
@@ -401,7 +410,7 @@ async def _keyword_fallback_passages(
         match_count = sum(1 for term in terms if term in lowered) if terms else 0
         score = (match_count / max(len(terms), 1)) if terms else 0.05
 
-        node_metadata = dict(chunk.metadata_json or {})
+        node_metadata = merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
         node_metadata.setdefault("note_id", chunk.note_id)
         node_metadata.setdefault("note_title", note_title or "Note sans titre")
         node_metadata.setdefault("node_id", chunk.node_id or f"chunk-{chunk.id}")
@@ -428,23 +437,8 @@ async def _keyword_fallback_passages(
 # ---------------------------------------------------------------------------
 
 def _enrich_content_with_heading_and_figure(content: str, metadata: dict) -> str:
-    """
-    Préfixe le contenu avec parent_heading et figure_title pour le reranker et le LLM.
-
-    Les chunks avec titres de section et légendes descriptifs sont ainsi mieux
-    priorisés par le reranker et le contexte est plus explicite pour le LLM.
-    """
-    parent_heading = metadata.get("parent_heading") or metadata.get("heading")
-    figure_title = metadata.get("figure_title") or metadata.get("image_anchor")
-    parts = []
-    if parent_heading and str(parent_heading).strip():
-        parts.append(f"[Section: {parent_heading.strip()}]")
-    if figure_title and str(figure_title).strip():
-        parts.append(str(figure_title).strip())
-    if not parts:
-        return content
-    prefix = " ".join(parts) + "\n\n"
-    return prefix + content if content else prefix.strip()
+    """Préfixe le contenu avec section, figure et résumé parent KAG."""
+    return enrich_passage_content_for_llm(content, metadata)
 
 
 def _set_node_text_content(node, text: str) -> None:
@@ -583,17 +577,19 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
         except (TypeError, ValueError):
             pass
     page_no = resolved_page
-    parent_heading = metadata.get("parent_heading")
-    # Multimodal : chemin image si chunk image
+    parent_heading = metadata.get("parent_heading") or metadata.get("heading")
     image_path = metadata.get("image_path")
     image_filename = metadata.get("image_filename")
-    is_image_chunk = metadata.get("is_image_chunk", False)
-    caption = metadata.get("caption", "")
-    
+    is_image_chunk = bool(metadata.get("is_image_chunk"))
+    if not is_image_chunk and image_path and not image_filename:
+        is_image_chunk = True
+        image_filename = str(image_path).split("/")[-1].split("\\")[-1]
+    caption = metadata.get("caption") or metadata.get("figure_title") or ""
+
     content = node.get_content() if hasattr(node, "get_content") else str(node)
-    # Enrichir avec parent_heading et figure_title pour le LLM
     content_enriched = _enrich_content_with_heading_and_figure(content, metadata)
     passage_text = f"**{note_title}**\n{content_enriched}"
+    table_hint = table_citation_hint(metadata)
     out = {
         "passage": passage_text,
         "passage_raw": content,
@@ -608,7 +604,10 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
         "image_filename": image_filename,
         "is_image_chunk": is_image_chunk,
         "caption": caption,
+        "content_type": metadata.get("content_type"),
     }
+    if table_hint:
+        out["table_citation"] = table_hint
     if page_start is not None:
         try:
             out["page_start"] = int(page_start)
@@ -704,7 +703,7 @@ def _retrieve_via_knowledge_graph(
             chunk = result["chunk"]
             relevance = result.get("relevance_score", 0.5)
             
-            metadata = dict(chunk.metadata_json or {})
+            metadata = merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
             metadata.setdefault("note_id", chunk.note_id)
             metadata.setdefault("node_id", chunk.node_id)
             metadata.setdefault("parent_node_id", chunk.parent_node_id)

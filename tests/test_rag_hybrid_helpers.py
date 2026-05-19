@@ -36,8 +36,17 @@ def test_needs_multi_hop_trigger_keyword():
 
     assert _needs_multi_hop("Quel est l'impact de X sur Y ?", []) is True
     assert _needs_multi_hop("Comparaison entre A et B", []) is True
-    assert _needs_multi_hop("Quelle est la cause du problème ?", []) is True
-    assert _needs_multi_hop("Si X alors que se passe-t-il pour Y ?", []) is True
+    assert _needs_multi_hop("Compatibilité entre Gamme Alpha et Gamme Beta", []) is True
+
+
+def test_needs_multi_hop_false_faq_and_generic():
+    from app.services.space_search_service import _needs_multi_hop
+
+    assert _needs_multi_hop("Comment installer la fenêtre 76 ?", []) is False
+    assert _needs_multi_hop("Prix du profil et du seuil", []) is False
+    assert _needs_multi_hop("Si je prends 60 mm alors quelle côte ?", []) is False
+    assert _needs_multi_hop("Quelle est la cause du problème ?", []) is False
+    assert _needs_multi_hop("Comment choisir une menuiserie ?", []) is False
 
 
 def test_needs_multi_hop_two_pivots():

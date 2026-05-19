@@ -51,6 +51,15 @@ class Settings(BaseSettings):
     # Blocs texte Docling : si longueur > seuil, chunks text_window (parent = text_full). 0 = désactivé.
     DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 0
     DOCLING_TEXT_WINDOW_OVERLAP: int = 200
+    # Plafond de chunks table_row par tableau (le table_full reste la source complète)
+    DOCLING_MAX_TABLE_ROW_CHUNKS: int = 50
+
+    # Fiches techniques par page (bibliothèque) — désactivé tant que non branché au pipeline
+    PAGE_TECHNICAL_SHEET_ENABLED: bool = False
+    PAGE_TECHNICAL_SHEET_MIN_CHARS: int = 80
+    PAGE_TECHNICAL_SHEET_MAX_INPUT_CHARS: int = 12000
+    PAGE_TECHNICAL_SHEET_MAX_PAGES: int = 0  # 0 = toutes les pages
+    PAGE_TECHNICAL_SHEET_MODEL: Optional[str] = None
 
     # Docling OCR (schémas techniques, cotes, PDF scannés)
     DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
@@ -80,7 +89,26 @@ class Settings(BaseSettings):
     KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai", "mistral" ou "ollama"
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
-    KAG_TYPED_RELATIONS_ENABLED: bool = True  # Extraction LLM des relations entité-entité (cause, depend_de, …)
+    KAG_TYPED_RELATIONS_ENABLED: bool = True  # Extraction LLM des relations entité-entité typées
+    KAG_COREFERENCE_ENABLED: bool = True  # Fusion « la gamme » / « cette série » → entité canonique
+    KAG_ENTITY_MERGE_SIMILARITY: float = 0.88  # Seuil fusion embedding (mentions courtes / coréf.)
+    KAG_ENTITY_MERGE_SIMILARITY_STRICT: float = 0.92  # Seuil fusion noms complets proches
+
+    # Multi-hop retrieval (bibliothèque / espaces)
+    MULTI_HOP_TOP_K_EDGES_PER_ENTITY: int = 5
+    MULTI_HOP_EDGE_MIN_WEIGHT: float = 0.15
+    MULTI_HOP_MAX_NEIGHBOR_ENTITIES: int = 25
+    MULTI_HOP_MAX_SEEDS_PER_HOP: int = 6
+    MULTI_HOP_HUB_MENTION_THRESHOLD: int = 40
+    MULTI_HOP_TYPED_EDGE_BOOST: float = 1.25
+    MULTI_HOP_KEYWORD_MIN_TOKENS: int = 5
+    MULTI_HOP_REQUIRE_PIVOT_FOR_WEAK: bool = True
+    MULTI_HOP_SUBJECT_MISMATCH_PENALTY: float = 0.08
+
+    # MMR (diversification pré-rerank)
+    MMR_LAMBDA: float = 0.70
+    MMR_SIMQ_HYBRID_WEIGHT: float = 0.60
+    MMR_SIMQ_EMBED_WEIGHT: float = 0.40
     
     # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
     # False = défaut si la variable est absente (voir parse_multimodal_enabled).

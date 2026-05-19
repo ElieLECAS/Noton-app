@@ -43,6 +43,64 @@ DEFAULT_HIERARCHICAL_CHUNK_SIZES = [3072, 1024, 384]
 # Helpers partagés
 # ---------------------------------------------------------------------------
 
+
+def resolve_page_from_metadata(metadata: Optional[dict]) -> Optional[int]:
+    """
+    Extrait un numéro de page (>0) depuis les métadonnées Docling ou dérivées.
+    Utilisé par les fiches techniques page et le regroupement RAG.
+    """
+    if not metadata:
+        return None
+    for key in ("page_no", "page", "page_number"):
+        val = metadata.get(key)
+        if val is not None:
+            try:
+                page = int(val)
+                if page > 0:
+                    return page
+            except (TypeError, ValueError):
+                continue
+    page_start = metadata.get("page_start")
+    if page_start is not None:
+        try:
+            page = int(page_start)
+            if page > 0:
+                return page
+        except (TypeError, ValueError):
+            pass
+    return None
+
+
+def _resolve_char_offsets(docling_meta: dict, content: str) -> Tuple[int, int]:
+    """
+    Retourne (start_char, end_char) depuis les indices Docling si présents,
+    sinon (0, len(content)) pour au moins borner la longueur du chunk.
+    """
+    meta = docling_meta or {}
+    for start_key, end_key in (
+        ("start_char_idx", "end_char_idx"),
+        ("char_start", "char_end"),
+        ("start_char", "end_char"),
+    ):
+        raw_start = meta.get(start_key)
+        if raw_start is None:
+            continue
+        try:
+            start_i = int(raw_start)
+            raw_end = meta.get(end_key)
+            end_i = (
+                int(raw_end)
+                if raw_end is not None
+                else start_i + len(content)
+            )
+            if end_i < start_i:
+                end_i = start_i + len(content)
+            return start_i, end_i
+        except (TypeError, ValueError):
+            continue
+    return 0, len(content)
+
+
 def _resolve_chunk_sizes(text_length: int) -> List[int]:
     """Calcule les tailles hiérarchiques avec fallback sécurisé pour gros documents."""
     configured = settings.HIERARCHICAL_CHUNK_SIZES or DEFAULT_HIERARCHICAL_CHUNK_SIZES
@@ -981,14 +1039,15 @@ def _build_docling_hierarchical_specs(
                 if page_no is not None:
                     full_metadata["page_no"] = page_no
 
+                tbl_start, tbl_end = _resolve_char_offsets(docling_meta, full_text)
                 specs.append(
                     {
                         "chunk_index": chunk_index,
                         "is_leaf": False,
                         "content": full_text,
                         "text": full_text,
-                        "start_char": 0,
-                        "end_char": len(full_text),
+                        "start_char": tbl_start,
+                        "end_char": tbl_end,
                         "node_id": table_full_node_id,
                         "parent_node_id": parent_node_id,
                         "hierarchy_level": 1,
@@ -1043,7 +1102,17 @@ def _build_docling_hierarchical_specs(
                         chunk_index += 1
 
                 # --- chunks table_row (niveau 2, parent = table_full) ---
-                for ri, cells in enumerate(data_rows):
+                max_table_rows = int(
+                    getattr(settings, "DOCLING_MAX_TABLE_ROW_CHUNKS", 50) or 50
+                )
+                row_pairs = list(enumerate(data_rows))
+                if len(row_pairs) > max_table_rows:
+                    full_metadata["table_row_truncated"] = True
+                    full_metadata["table_row_total"] = len(data_rows)
+                    full_metadata["table_row_indexed"] = max_table_rows
+                    row_pairs = row_pairs[:max_table_rows]
+
+                for ri, cells in row_pairs:
                     is_suspicious = ri in suspicious_row_indices
                     empty_cols = empty_cell_map.get(ri, [])
                     row_text = _table_row_chunk_text(
@@ -1091,6 +1160,7 @@ def _build_docling_hierarchical_specs(
                     if page_no is not None:
                         leaf_metadata["page_no"] = page_no
                     leaf_metadata["contains_image"] = True
+                    row_start, row_end = _resolve_char_offsets(docling_meta, row_text)
 
                     specs.append(
                         {
@@ -1098,8 +1168,8 @@ def _build_docling_hierarchical_specs(
                             "is_leaf": True,
                             "content": row_text,
                             "text": row_text,
-                            "start_char": 0,
-                            "end_char": len(row_text),
+                            "start_char": row_start,
+                            "end_char": row_end,
                             "node_id": leaf_rid,
                             "parent_node_id": table_full_node_id,
                             "hierarchy_level": 2,
@@ -1157,14 +1227,18 @@ def _build_docling_hierarchical_specs(
             if section_anchors or _is_picture_or_table_chunk(docling_meta):
                 text_full_metadata["contains_image"] = True
 
+            text_full_start, text_full_end = _resolve_char_offsets(
+                docling_meta, full_formatted
+            )
+            text_full_spec_index = len(specs)
             specs.append(
                 {
                     "chunk_index": chunk_index,
                     "is_leaf": True,
                     "content": full_formatted,
                     "text": full_formatted,
-                    "start_char": 0,
-                    "end_char": len(full_formatted),
+                    "start_char": text_full_start,
+                    "end_char": text_full_end,
                     "node_id": text_full_node_id,
                     "parent_node_id": parent_node_id,
                     "hierarchy_level": 1,
@@ -1180,6 +1254,11 @@ def _build_docling_hierarchical_specs(
             if tw_threshold > 0 and len(raw_content) > tw_threshold and "split_index" not in b:
                 windows = _split_text_into_windows(raw_content, tw_threshold, tw_overlap)
                 n_win = len(windows)
+                if n_win > 0:
+                    specs[text_full_spec_index]["metadata_json"]["embed_skip"] = True
+                    specs[text_full_spec_index]["metadata_json"][
+                        "embedding_role"
+                    ] = "context_only"
                 for wi, wtext in enumerate(windows):
                     w_formatted = _format_text_full_chunk_text(
                         wtext,
@@ -1216,14 +1295,15 @@ def _build_docling_hierarchical_specs(
                     )
                     if page_no_val is not None:
                         win_meta["page_no"] = page_no_val
+                    win_start, win_end = _resolve_char_offsets(docling_meta, win_body)
                     specs.append(
                         {
                             "chunk_index": chunk_index,
                             "is_leaf": True,
                             "content": win_body,
                             "text": win_body,
-                            "start_char": 0,
-                            "end_char": len(win_body),
+                            "start_char": win_start,
+                            "end_char": win_end,
                             "node_id": win_id,
                             "parent_node_id": text_full_node_id,
                             "hierarchy_level": 2,

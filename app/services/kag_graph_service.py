@@ -24,6 +24,9 @@ from app.models.entity_entity_relation import EntityEntityRelation
 from app.config import settings
 from app.services.kag_extraction_service import (
     normalize_entity_name,
+    normalize_entity_core,
+    is_probably_coreference_mention,
+    normalize_relation_type,
     SUPPORTED_ENTITY_TYPE_IDS,
     extract_entities_sync,
     extract_typed_relations_sync,
@@ -42,15 +45,19 @@ KAG_WEIGHT_INTER_DOC_BOOST = 0.2
 def _canonicalize_entities(entities: List[Dict]) -> List[Dict]:
     """
     Normalise/déduplique/sort les entités pour garantir un résultat stable.
+
+    Déduplication par nom normalisé uniquement (alignée sur l'unicité DB
+    space_id + name_normalized) : en cas de types LLM divergents pour un même
+    libellé, on conserve l'entrée à plus forte importance.
     """
-    canonical: Dict[tuple[str, str], Dict] = {}
+    canonical: Dict[str, Dict] = {}
     for entity_data in entities or []:
         raw_name = (entity_data.get("name") or "").strip()
         raw_type = (entity_data.get("type") or "concept_technique").strip()
         if not raw_name or len(raw_name) < 2:
             continue
-        key = (normalize_entity_name(raw_name), raw_type)
-        if not key[0]:
+        key = normalize_entity_name(raw_name)
+        if not key:
             continue
 
         importance = entity_data.get("importance", 1.0)
@@ -70,7 +77,7 @@ def _canonicalize_entities(entities: List[Dict]) -> List[Dict]:
 
     return sorted(
         canonical.values(),
-        key=lambda x: (normalize_entity_name(x.get("name", "")), x.get("type", "")),
+        key=lambda x: normalize_entity_name(x.get("name", "")),
     )
 
 
@@ -847,30 +854,163 @@ def refresh_entity_entity_relations_for_space(session: Session, space_id: int) -
 
 
 
+_CANONICAL_TYPED_RELATIONS = frozenset(
+    {
+        "appartient_a",
+        "compatible_avec",
+        "remplace",
+        "contrainte",
+        "reference",
+        "cause",
+    }
+)
+_WEAK_STRUCTURAL_RELATIONS = frozenset({"co_occurs", "intra_parent", "intra_document"})
+
+
+def _edge_relation_boost(relation_type: str, typed_boost: float) -> float:
+    rt = (relation_type or "").strip().lower()
+    if rt in _CANONICAL_TYPED_RELATIONS:
+        return typed_boost
+    if rt in _WEAK_STRUCTURAL_RELATIONS:
+        return 0.85
+    return 1.0
+
+
+def _query_lexical_sim(query_text: str, entity_name: str) -> float:
+    import re
+
+    q_tokens = set(re.findall(r"[a-z0-9]+", (query_text or "").lower()))
+    e_tokens = set(re.findall(r"[a-z0-9]+", (entity_name or "").lower()))
+    if not e_tokens:
+        return 0.5
+    if not q_tokens:
+        return 0.5
+    overlap = len(q_tokens & e_tokens)
+    return min(1.0, overlap / max(len(e_tokens), 1))
+
+
+def rank_neighbor_entities_for_query(
+    session: Session,
+    space_id: int,
+    entity_ids: Set[int],
+    query_text: str = "",
+    limit: Optional[int] = None,
+    min_weight: Optional[float] = None,
+    top_k_per_entity: Optional[int] = None,
+    hub_threshold: Optional[int] = None,
+    typed_boost: Optional[float] = None,
+) -> List[Tuple[int, float]]:
+    """
+    Classe les voisins graphe par pertinence (poids arête, type, requête, anti-hub).
+    Retourne [(neighbor_entity_id, edge_score), ...] trié par score décroissant.
+    """
+    from app.config import settings
+
+    if not entity_ids:
+        return []
+
+    limit = limit if limit is not None else settings.MULTI_HOP_MAX_NEIGHBOR_ENTITIES
+    min_weight = min_weight if min_weight is not None else settings.MULTI_HOP_EDGE_MIN_WEIGHT
+    top_k_per_entity = (
+        top_k_per_entity
+        if top_k_per_entity is not None
+        else settings.MULTI_HOP_TOP_K_EDGES_PER_ENTITY
+    )
+    hub_threshold = (
+        hub_threshold
+        if hub_threshold is not None
+        else settings.MULTI_HOP_HUB_MENTION_THRESHOLD
+    )
+    typed_boost = (
+        typed_boost if typed_boost is not None else settings.MULTI_HOP_TYPED_EDGE_BOOST
+    )
+
+    seed_set = set(int(x) for x in entity_ids)
+    eid_list = list(seed_set)[:80]
+
+    rows_a = session.exec(
+        select(
+            EntityEntityRelation.entity_a_id,
+            EntityEntityRelation.entity_b_id,
+            EntityEntityRelation.weight,
+            EntityEntityRelation.relation_type,
+            EntityEntityRelation.confidence,
+            KnowledgeEntity.name,
+            KnowledgeEntity.mention_count,
+        )
+        .join(KnowledgeEntity, KnowledgeEntity.id == EntityEntityRelation.entity_b_id)
+        .where(
+            EntityEntityRelation.space_id == space_id,
+            EntityEntityRelation.entity_a_id.in_(eid_list),
+        )
+    ).all()
+
+    rows_b = session.exec(
+        select(
+            EntityEntityRelation.entity_a_id,
+            EntityEntityRelation.entity_b_id,
+            EntityEntityRelation.weight,
+            EntityEntityRelation.relation_type,
+            EntityEntityRelation.confidence,
+            KnowledgeEntity.name,
+            KnowledgeEntity.mention_count,
+        )
+        .join(KnowledgeEntity, KnowledgeEntity.id == EntityEntityRelation.entity_a_id)
+        .where(
+            EntityEntityRelation.space_id == space_id,
+            EntityEntityRelation.entity_b_id.in_(eid_list),
+        )
+    ).all()
+
+    scored_by_seed: Dict[int, List[Tuple[int, float]]] = {}
+
+    def _add_edge(seed_id: int, neighbor_id: int, weight: float, rtype: str, conf, name: str, mentions: int):
+        if neighbor_id in seed_set or weight < min_weight:
+            return
+        conf_f = float(conf) if conf is not None else 1.0
+        rel_boost = _edge_relation_boost(rtype, typed_boost)
+        q_sim = _query_lexical_sim(query_text, name or "")
+        hub_pen = 1.0
+        if mentions and int(mentions) > hub_threshold:
+            import math
+
+            hub_pen = 1.0 / math.log1p(int(mentions) - hub_threshold + 2)
+        edge_score = float(weight) * rel_boost * conf_f * (0.5 + 0.5 * q_sim) * hub_pen
+        scored_by_seed.setdefault(seed_id, []).append((neighbor_id, edge_score))
+
+    for seed_id, neighbor_id, weight, rtype, conf, name, mentions in rows_a:
+        _add_edge(int(seed_id), int(neighbor_id), float(weight or 0), rtype, conf, name, mentions)
+
+    for seed_id, neighbor_id, weight, rtype, conf, name, mentions in rows_b:
+        _add_edge(int(neighbor_id), int(seed_id), float(weight or 0), rtype, conf, name, mentions)
+
+    merged: Dict[int, float] = {}
+    for seed_id, edges in scored_by_seed.items():
+        edges.sort(key=lambda x: x[1], reverse=True)
+        for nid, sc in edges[:top_k_per_entity]:
+            if nid not in merged or sc > merged[nid]:
+                merged[nid] = sc
+
+    ranked = sorted(merged.items(), key=lambda x: x[1], reverse=True)
+    return ranked[:limit]
+
+
 def _neighbor_entity_ids_for_entities(
     session: Session,
     space_id: int,
     entity_ids: Set[int],
     limit: int = 40,
+    query_text: str = "",
 ) -> Set[int]:
-    if not entity_ids:
-        return set()
-    eid_list = list(entity_ids)[:80]
-    n1 = session.exec(
-        select(EntityEntityRelation.entity_b_id).where(
-            EntityEntityRelation.space_id == space_id,
-            EntityEntityRelation.entity_a_id.in_(eid_list),
-        )
-    ).all()
-    n2 = session.exec(
-        select(EntityEntityRelation.entity_a_id).where(
-            EntityEntityRelation.space_id == space_id,
-            EntityEntityRelation.entity_b_id.in_(eid_list),
-        )
-    ).all()
-    out = {int(x) for x in n1 + n2 if x is not None}
-    out -= entity_ids
-    return set(list(out)[:limit])
+    """Compatibilité : voisins classés, retourne uniquement les IDs."""
+    ranked = rank_neighbor_entities_for_query(
+        session,
+        space_id,
+        entity_ids,
+        query_text=query_text,
+        limit=limit,
+    )
+    return {nid for nid, _ in ranked}
 
 
 def _get_or_create_entity_for_space(
@@ -878,6 +1018,7 @@ def _get_or_create_entity_for_space(
     name: str,
     entity_type: str,
     space_id: int,
+    aliases: Optional[List[str]] = None,
 ) -> KnowledgeEntity:
     """
     Version espace de get_or_create_entity (déduplication par space_id + name_normalized).
@@ -905,57 +1046,93 @@ def _get_or_create_entity_for_space(
         entity.mention_count += 1
         entity.updated_at = datetime.utcnow()
         session.add(entity)
+        _register_entity_aliases(session, space_id, int(entity.id), name, aliases)
         return entity
 
-    # Résolution par embedding sémantique (cosine > 0.92)
+    # Correspondance par clé « core » (sans article) + même type
+    core_key = normalize_entity_core(name)
+    if core_key and len(core_key) >= 3:
+        candidates = session.exec(
+            select(KnowledgeEntity).where(
+                KnowledgeEntity.space_id == space_id,
+                KnowledgeEntity.entity_type == entity_type,
+            )
+        ).all()
+        for cand in candidates:
+            if normalize_entity_core(cand.name) == core_key:
+                cand.mention_count += 1
+                cand.updated_at = datetime.utcnow()
+                session.add(cand)
+                register_entity_alias(session, space_id, int(cand.id), name_normalized)
+                _register_entity_aliases(session, space_id, int(cand.id), name, aliases)
+                logger.debug(
+                    "Entité fusionnée (core_key): '%s' → '%s'",
+                    name,
+                    cand.name,
+                )
+                return cand
+
+    merge_threshold = float(
+        getattr(settings, "KAG_ENTITY_MERGE_SIMILARITY", 0.88) or 0.88
+    )
+    if not is_probably_coreference_mention(name):
+        merge_threshold = float(
+            getattr(settings, "KAG_ENTITY_MERGE_SIMILARITY_STRICT", 0.92) or 0.92
+        )
+
+    # Résolution par embedding sémantique (seuil calibré)
     try:
         from app.services.embedding_service import generate_embeddings_batch
         
         entity_embeddings = generate_embeddings_batch([name], batch_size=1)
         if entity_embeddings and entity_embeddings[0]:
             new_entity_embedding = entity_embeddings[0]
-            embedding_str = "[" + ",".join(map(str, new_entity_embedding)) + "]"
-            
-            # Chercher entités existantes similaires (même type, même espace)
-            similar_query = text(f"""
+            embedding_str = "[" + ",".join(str(float(x)) for x in new_entity_embedding) + "]"
+
+            similar_query = text("""
                 SELECT id, name, name_normalized, mention_count,
-                       1 - (embedding <=> '{embedding_str}'::vector) AS similarity
+                       1 - (embedding <=> CAST(:query_vec AS vector)) AS similarity
                 FROM knowledgeentity
                 WHERE space_id = :space_id
                   AND entity_type = :entity_type
                   AND embedding IS NOT NULL
-                  AND 1 - (embedding <=> '{embedding_str}'::vector) > 0.92
+                  AND 1 - (embedding <=> CAST(:query_vec AS vector)) > :min_sim
                 ORDER BY similarity DESC
                 LIMIT 1
             """)
-            
+
             result = session.execute(
                 similar_query,
-                {"space_id": space_id, "entity_type": entity_type},
+                {
+                    "space_id": space_id,
+                    "entity_type": entity_type,
+                    "query_vec": embedding_str,
+                    "min_sim": merge_threshold,
+                },
             ).first()
             
             if result:
-                # Entité similaire trouvée → fusionner
                 existing_entity = session.get(KnowledgeEntity, result.id)
                 if existing_entity:
                     existing_entity.mention_count += 1
                     existing_entity.updated_at = datetime.utcnow()
                     session.add(existing_entity)
                     logger.debug(
-                        "Entité fusionnée (embedding): '%s' → '%s' (sim=%.3f)",
+                        "Entité fusionnée (embedding): '%s' → '%s' (sim=%.3f, seuil=%.2f)",
                         name,
                         existing_entity.name,
                         result.similarity,
+                        merge_threshold,
                     )
-                    try:
-                        register_entity_alias(
-                            session,
-                            space_id,
-                            existing_entity.id,
-                            name_normalized,
-                        )
-                    except Exception:
-                        pass
+                    register_entity_alias(
+                        session,
+                        space_id,
+                        existing_entity.id,
+                        name_normalized,
+                    )
+                    _register_entity_aliases(
+                        session, space_id, int(existing_entity.id), name, aliases
+                    )
                     return existing_entity
             
             # Créer nouvelle entité avec embedding
@@ -974,6 +1151,8 @@ def _get_or_create_entity_for_space(
                     session.add(entity)
                     session.flush()
                 logger.debug("Nouvelle entité créée avec embedding: '%s'", name)
+                if entity.id is not None:
+                    _register_entity_aliases(session, space_id, int(entity.id), name, aliases)
                 return entity
             except IntegrityError:
                 # Gérer accès concurrent : une autre tâche a inséré l'entité juste avant nous
@@ -1019,6 +1198,8 @@ def _get_or_create_entity_for_space(
         with session.begin_nested():
             session.add(entity)
             session.flush()
+        if entity.id is not None:
+            _register_entity_aliases(session, space_id, int(entity.id), name, aliases)
         return entity
     except IntegrityError:
         statement = select(KnowledgeEntity).where(
@@ -1029,8 +1210,26 @@ def _get_or_create_entity_for_space(
         if existing:
             existing.mention_count += 1
             session.add(existing)
+            _register_entity_aliases(session, space_id, int(existing.id), name, aliases)
             return existing
-        return entity # Devrait être unreachable
+        return entity
+
+
+def _register_entity_aliases(
+    session: Session,
+    space_id: int,
+    entity_id: int,
+    canonical_name: str,
+    aliases: Optional[List[str]] = None,
+) -> None:
+    """Enregistre les variantes textuelles comme alias pour la résolution requête."""
+    seen = {normalize_entity_name(canonical_name)}
+    for raw in aliases or []:
+        nn = normalize_entity_name(raw)
+        if not nn or nn in seen or len(nn) < 2:
+            continue
+        seen.add(nn)
+        register_entity_alias(session, space_id, entity_id, nn)
 
 
 def _resolve_entity_id_for_space(
@@ -1107,16 +1306,21 @@ def save_typed_relations_for_chunk(
     if not relations:
         return 0
     saved = 0
+    unresolved: List[tuple] = []
     for rel in relations:
-        rt = str(rel.get("relation_type", "")).strip().lower()
-        if not rt or rt == "co_occurs":
+        rt = normalize_relation_type(str(rel.get("relation_type", "")))
+        if not rt:
             continue
         conf = float(rel.get("confidence", 0) or 0)
         if conf < min_confidence:
             continue
-        ea = _resolve_entity_id_for_space(session, space_id, str(rel.get("entity_a", "")))
-        eb = _resolve_entity_id_for_space(session, space_id, str(rel.get("entity_b", "")))
+        name_a = str(rel.get("entity_a", "")).strip()
+        name_b = str(rel.get("entity_b", "")).strip()
+        ea = _resolve_entity_id_for_space(session, space_id, name_a)
+        eb = _resolve_entity_id_for_space(session, space_id, name_b)
         if ea is None or eb is None or ea == eb:
+            if ea != eb:
+                unresolved.append((name_a, name_b, rt))
             continue
         existing = session.exec(
             select(EntityEntityRelation).where(
@@ -1148,15 +1352,22 @@ def save_typed_relations_for_chunk(
                 )
             )
             saved += 1
+    if unresolved:
+        logger.debug(
+            "Relations typées non résolues chunk_id=%s space_id=%s (%d): %s",
+            chunk_id,
+            space_id,
+            len(unresolved),
+            unresolved[:5],
+        )
     return saved
-
 
 
 def _try_cloning_kag_from_another_space(
     session: Session,
     document_id: int,
     target_space_id: int
-) -> bool:
+) -> Optional[Dict[str, int]]:
     """
     Tente de copier les entités et relations KAG depuis un autre espace 
     où ce document a déjà été traité.
@@ -1175,8 +1386,8 @@ def _try_cloning_kag_from_another_space(
         source_space_id = session.exec(source_space_stmt).first()
 
         if source_space_id is None:
-            return False
-        
+            return None
+
         logger.info(
             "[KAG-Clone] Début clonage document_id=%s : source_space=%s -> target_space=%s",
             document_id,
@@ -1195,7 +1406,7 @@ def _try_cloning_kag_from_another_space(
         ).all())
 
         if not source_relations:
-            return False
+            return None
 
         # 3. Collecter toutes les entités sources impliquées
         source_entity_ids = list(set(r.entity_id for r in source_relations))
@@ -1240,6 +1451,7 @@ def _try_cloning_kag_from_another_space(
             )
         ).all())
 
+        typed_relations_copied = 0
         for src_ee in source_ee_rels:
             # Vérifier que les deux entités sont présentes dans notre mapping
             if src_ee.entity_a_id in entity_mapping and src_ee.entity_b_id in entity_mapping:
@@ -1265,6 +1477,7 @@ def _try_cloning_kag_from_another_space(
                         created_at=datetime.utcnow(),
                     )
                     session.add(target_ee)
+                    typed_relations_copied += 1
 
         # 7. Copier les EntityAlias
         source_aliases = list(session.exec(
@@ -1298,10 +1511,16 @@ def _try_cloning_kag_from_another_space(
             "✅ [KAG-Clone] Clonage réussi document_id=%s vers space_id=%s (%d entités, %d relations)",
             document_id,
             target_space_id,
-            len(source_entities),
+            len(entity_mapping),
             len(source_relations),
         )
-        return True
+        return {
+            "entities": len(entity_mapping),
+            "relations": len(source_relations),
+            "typed_entity_relations": typed_relations_copied,
+            "chunks": len(set(source_chunk_ids)),
+            "cloned": 1,
+        }
 
     except Exception as e:
         session.rollback()
@@ -1312,7 +1531,7 @@ def _try_cloning_kag_from_another_space(
             e,
             exc_info=True,
         )
-        return False
+        return None
 
 
 def process_kag_for_document_space(session: Session, document_id: int, space_id: int) -> Dict[str, int]:
@@ -1343,8 +1562,9 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
     delete_entities_for_document(session, document_id, space_id)
 
     # Tentative de clonage depuis un autre espace pour éviter la re-extraction
-    if _try_cloning_kag_from_another_space(session, document_id, space_id):
-        return {"entities": 0, "relations": 0, "chunks": 0, "typed_entity_relations": 0, "cloned": 1}
+    clone_stats = _try_cloning_kag_from_another_space(session, document_id, space_id)
+    if clone_stats is not None:
+        return clone_stats
 
     chunks_stmt = select(DocumentChunk).where(
         DocumentChunk.document_id == document_id,
@@ -1383,6 +1603,7 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
                 name=name,
                 entity_type=entity_type,
                 space_id=space_id,
+                aliases=entity_data.get("aliases"),
             )
             total_entities += 1
             if entity.id is not None:
@@ -1429,7 +1650,7 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
                     )
 
             if typed:
-                save_typed_relations_for_chunk(
+                total_typed_relations += save_typed_relations_for_chunk(
                     session, space_id, int(chunk.id), typed
                 )
 

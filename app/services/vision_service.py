@@ -372,10 +372,16 @@ def enrich_visual_chunks_with_pixtral(
         leaf.content = f"{base}{block}".strip()
         leaf.text = leaf.content
 
+        image_name = str(Path(path).name)
         meta["vision_provider"] = "mistral"
         meta["vision_model"] = model
         meta["vision_enriched_at"] = ts
-        meta["image_path"] = str(Path(path).name)
+        meta["image_path"] = image_name
+        meta["image_filename"] = image_name
+        meta["is_image_chunk"] = True
+        if caption:
+            meta["caption"] = caption
+        meta["raw_content"] = leaf.content
         leaf.metadata_json = meta
         leaf.metadata_ = meta
 

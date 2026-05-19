@@ -291,7 +291,33 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
             passage = passage_data['passage']
             score = passage_data.get('score', 0.0)
             document_title = passage_data.get('document_title', 'Document sans titre')
-            passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
+            section = passage_data.get('section') or passage_data.get('parent_heading')
+            section_str = f" > Section : {section}" if section else ""
+            table_hint = passage_data.get("table_citation")
+            table_str = ""
+            if isinstance(table_hint, dict) and table_hint.get("table_id"):
+                row_idx = table_hint.get("row_index")
+                table_str = f" > Tableau : {table_hint.get('table_id')}"
+                if row_idx is not None:
+                    table_str += f" (ligne {int(row_idx) + 1})"
+            if (
+                passage_data.get("is_image_chunk")
+                and passage_data.get("image_filename")
+                and passage_data.get("document_id")
+            ):
+                image_url = (
+                    f"/api/images/{passage_data['document_id']}/"
+                    f"{passage_data['image_filename']}"
+                )
+                caption = passage_data.get("caption") or "Figure du document"
+                passage_text = (
+                    f"[{i}] ({score:.2f}) [IMAGE] {document_title}{section_str}{table_str}\n"
+                    f"{passage}\n>>> Image : ![{caption}]({image_url}) [{i}]\n"
+                )
+            else:
+                passage_text = (
+                    f"[{i}] ({score:.2f}) {document_title}{section_str}{table_str}\n{passage}\n"
+                )
             passages_content.append(passage_text)
         system_message["content"] += "\n---\n".join(passages_content)
         system_message["content"] += f"\n\n({len(passages)} passages.)"
@@ -585,6 +611,8 @@ async def stream_project_chat_message(
                             source_item["image_path"] = p.get("image_path")
                             source_item["image_filename"] = p.get("image_filename")
                             source_item["caption"] = p.get("caption", "")
+                        if p.get("table_citation"):
+                            source_item["table_citation"] = p["table_citation"]
                         sources_data.append(source_item)
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
 
@@ -835,24 +863,30 @@ async def stream_space_chat_message(
                                 if resolved_page_start is None:
                                     resolved_page_start = _resolve_page_from_chunk(fallback_chunk)
 
-                        sources_data.append(
-                            {
-                                "index": i + 1,
-                                "document_id": did,
-                                "document_title": p["document_title"],
-                                "chunk_id": p.get("chunk_id"),
-                                "source_leaf_chunk_id": p.get("source_leaf_chunk_id"),
-                                "chunk_index": p.get("chunk_index"),
-                                "excerpt": (raw[:200] + "...") if len(raw or "") > 200 else raw,
-                                "passage_full": raw,
-                                "score": round(p["score"], 2),
-                                "page_no": resolved_page,
-                                "page_start": resolved_page_start,
-                                "page_end": resolved_page_end,
-                                "section": p.get("section"),
-                                "has_source_file": has_file_by_doc.get(did, False),
-                            }
-                        )
+                        source_item = {
+                            "index": i + 1,
+                            "document_id": did,
+                            "document_title": p["document_title"],
+                            "chunk_id": p.get("chunk_id"),
+                            "source_leaf_chunk_id": p.get("source_leaf_chunk_id"),
+                            "chunk_index": p.get("chunk_index"),
+                            "excerpt": (raw[:200] + "...") if len(raw or "") > 200 else raw,
+                            "passage_full": raw,
+                            "score": round(p["score"], 2),
+                            "page_no": resolved_page,
+                            "page_start": resolved_page_start,
+                            "page_end": resolved_page_end,
+                            "section": p.get("section"),
+                            "has_source_file": has_file_by_doc.get(did, False),
+                        }
+                        if p.get("is_image_chunk"):
+                            source_item["is_image_chunk"] = True
+                            source_item["image_path"] = p.get("image_path")
+                            source_item["image_filename"] = p.get("image_filename")
+                            source_item["caption"] = p.get("caption", "")
+                        if p.get("table_citation"):
+                            source_item["table_citation"] = p["table_citation"]
+                        sources_data.append(source_item)
                     logger.info(
                         "Space chat sources built: %s",
                         [

@@ -119,7 +119,7 @@ ENTITY_TYPES_CONFIG: List[Dict[str, object]] = [
     },
     {
         "id": "materiau_finition",
-        "label": "MATERIAU_FINTION",
+        "label": "MATERIAU_FINITION",
         "description": "Nature des profils (PVC/Alu) et leur aspect visuel.",
         "examples": [
             "PVC Greenline",
@@ -171,40 +171,88 @@ Passage:
 JSON:"""
 
 
-# Relations typées autorisées (hors co_occurs mécanique)
-TYPED_RELATION_TYPE_IDS = frozenset(
+# Relations typées strictes (co_occurs = uniquement mécanique via refresh_entity_entity_relations)
+CANONICAL_RELATION_TYPE_IDS = frozenset(
     {
-        "cause",
-        "contrainte",
+        "appartient_a",
         "compatible_avec",
-        "depend_de",
+        "remplace",
+        "contrainte",
         "reference",
-        "co_occurs",
+        "cause",
     }
+)
+
+# Compatibilité lecture (anciennes arêtes en base)
+LEGACY_RELATION_TYPE_IDS = frozenset({"depend_de", "co_occurs"})
+
+TYPED_RELATION_TYPE_IDS = CANONICAL_RELATION_TYPE_IDS | LEGACY_RELATION_TYPE_IDS
+
+# Types vagues interdits (LLM ne doit pas inventer de libellés génériques)
+VAGUE_RELATION_BLOCKLIST = frozenset(
+    {
+        "co_occurs",
+        "est_lie_a",
+        "lie_a",
+        "lie",
+        "associe_a",
+        "associe",
+        "relie_a",
+        "relie",
+        "est_associe_a",
+        "connexe",
+        "connexe_a",
+        "en_lien_avec",
+        "linked_to",
+        "related_to",
+    }
+)
+
+RELATION_TYPE_ALIASES = {
+    "depend_de": "appartient_a",
+    "fait_partie_de": "appartient_a",
+    "appartient_a": "appartient_a",
+    "compatible_avec": "compatible_avec",
+    "remplace": "remplace",
+    "contrainte": "contrainte",
+    "reference": "reference",
+    "cause": "cause",
+}
+
+_ARTICLE_PREFIX_RE = re.compile(
+    r"^(?:la|le|les|l|un|une|des|du|de la|d|ce|cette|cet|ces|this|the)\s+",
+    re.IGNORECASE,
+)
+
+_COREFERENCE_MENTION_RE = re.compile(
+    r"^(?:la|le|les|l|ce|cette|cet|ces|celle|celui|celle-ci|celui-ci|"
+    r"cette série|ce système|cette gamme|ce profil)\b",
+    re.IGNORECASE,
 )
 
 RELATION_EXTRACTION_PROMPT_TEMPLATE = """Tu analyses un passage technique et les entités déjà identifiées dans ce passage.
 
-Entités extraites (noms exacts à utiliser pour entity_a / entity_b) :
+Entités extraites (noms EXACTS à recopier pour entity_a / entity_b) :
 {entity_names}
 
-Types de relation autorisés pour le champ "relation_type" :
-- cause : une entité est cause, origine ou facteur déclenchant de l'autre
+Types de relation AUTORISÉS UNIQUEMENT (champ "relation_type") :
+- appartient_a : hiérarchie, appartenance, inclusion (gamme > produit, système > composant)
+- compatible_avec : compatibilité technique, association permise, fonctionnement conjoint
+- remplace : substitution, évolution, remplacement d'une référence par une autre
 - contrainte : incompatibilité, interdiction, limite réglementaire ou technique
-- compatible_avec : compatibilité, association permise, fonctionnement conjoint
-- depend_de : dépendance, prérequis, nécessité pour atteindre un résultat
-- reference : renvoi, citation, renvoi normatif sans causalité directe
-- co_occurs : les deux sont mentionnées ensemble sans lien sémantique clair entre elles
+- reference : renvoi normatif, citation documentaire, renvoi sans causalité directe
+- cause : causalité explicite (A provoque / entraîne B)
+
+INTERDIT : relations vagues ("est lié à", "associé à", "en rapport avec") ou co_occurs (géré ailleurs).
+Si le lien n'est pas clair ou pas typable → n'écris PAS la paire.
 
 Règles :
 - Retourne UNIQUEMENT un JSON valide (tableau), sans markdown
-- Une entrée par paire d'entités DISTINCTES pour laquelle le texte permet d'inférer un lien
-- entity_a et entity_b doivent être repris EXACTEMENT depuis la liste ci-dessus (même orthographe)
-- confidence entre 0.0 et 1.0
-- Si le lien est incertain, utilise relation_type "co_occurs" avec confidence <= 0.5 ou omets la paire
+- entity_a et entity_b : orthographe IDENTIQUE à la liste ci-dessus
+- confidence entre 0.0 et 1.0 (>= 0.6 si relation explicite dans le texte)
 
-Format attendu :
-[{{"entity_a": "...", "entity_b": "...", "relation_type": "depend_de", "confidence": 0.82}}]
+Format :
+[{{"entity_a": "...", "entity_b": "...", "relation_type": "appartient_a", "confidence": 0.82}}]
 
 Texte :
 {chunk_content}
@@ -223,11 +271,18 @@ Règles:
 - Retourne UNIQUEMENT un JSON valide, sans markdown ni commentaires
 - Maximum 10 entités par chunk
 - Importance entre 0.0 et 1.0 (1.0 = très important)
-- Noms courts et précis (pas de phrases)
+- Noms courts et précis (pas de phrases entières)
 - Utilise EXACTEMENT l'une des valeurs suivantes pour le champ "type" : {entity_types}
 
+Résolution des coréférences (CRITIQUE) :
+- Si le texte dit « la gamme », « cette série », « ce système » en renvoyant à une entité déjà nommée,
+  utilise le champ "canonical_name" avec le nom complet déjà introduit (ex. "Gamme Alpha").
+- Le champ "name" peut reprendre la forme courte telle qu'écrite ; "canonical_name" pointe vers l'entité mère.
+- Ne crée PAS deux entités pour « Gamme Alpha » et « la gamme » si c'est la même chose.
+- Les acronymes ou abréviations évidentes (ex. « 76 » pour « 76 Advanced ») : canonical_name = forme complète.
+
 Format attendu:
-[{{"name": "nom_entité", "type": "type", "importance": 0.8}}]
+[{{"name": "nom tel qu'écrit", "canonical_name": "nom canonique ou omis", "type": "type", "importance": 0.8}}]
 
 Texte:
 {chunk_content}
@@ -254,6 +309,168 @@ def normalize_entity_name(name: str) -> str:
     normalized = re.sub(r"[^a-z0-9\s]", "", normalized)
     normalized = re.sub(r"\s+", " ", normalized).strip()
     return normalized
+
+
+def normalize_entity_core(name: str) -> str:
+    """Clé de regroupement sans articles définis en tête (coréférences)."""
+    core = normalize_entity_name(name)
+    while core:
+        m = _ARTICLE_PREFIX_RE.match(core)
+        if not m:
+            break
+        core = core[m.end() :].strip()
+    return core
+
+
+def is_probably_coreference_mention(name: str) -> bool:
+    """Détecte les mentions anaphoriques courtes (la gamme, cette série, …)."""
+    if not name or len(name.strip()) < 3:
+        return False
+    raw = name.strip()
+    if _COREFERENCE_MENTION_RE.match(raw):
+        return True
+    lowered = raw.lower()
+    if lowered.startswith(
+        ("la ", "le ", "les ", "l'", "une ", "un ", "des ", "du ", "de la ", "ce ", "cette ", "cet ", "ces ")
+    ):
+        return len(lowered.split()) <= 4
+    return False
+
+
+def normalize_relation_type(relation_type: str) -> Optional[str]:
+    """
+    Normalise un type de relation LLM vers le schéma strict.
+    Retourne None si vague ou non autorisé.
+    """
+    if not relation_type:
+        return None
+    rt = str(relation_type).strip().lower().replace(" ", "_").replace("-", "_")
+    if rt in VAGUE_RELATION_BLOCKLIST:
+        return None
+    mapped = RELATION_TYPE_ALIASES.get(rt, rt)
+    if mapped in CANONICAL_RELATION_TYPE_IDS:
+        return mapped
+    return None
+
+
+def resolve_entities_coreference_in_chunk(entities: List[Dict]) -> List[Dict]:
+    """
+    Fusionne les variantes d'un même chunk avant persistance :
+    - canonical_name explicite (LLM)
+    - déduplication par nom normalisé
+    - rapprochement embedding des mentions anaphoriques vers ancres du chunk
+    """
+    if not entities:
+        return []
+
+    if not getattr(settings, "KAG_COREFERENCE_ENABLED", True):
+        return _dedupe_entities_by_normalized_name(entities)
+
+    working: List[Dict] = []
+    for e in entities:
+        name = (e.get("name") or "").strip()
+        if not name or len(name) < 2:
+            continue
+        canonical = (e.get("canonical_name") or "").strip()
+        aliases: List[str] = list(e.get("aliases") or [])
+        final_name = canonical if canonical and len(canonical) >= 2 else name
+        if canonical and normalize_entity_name(canonical) != normalize_entity_name(name):
+            aliases.append(name)
+        working.append(
+            {
+                "name": final_name,
+                "type": (e.get("type") or "concept_technique").strip(),
+                "importance": float(e.get("importance", 1.0) or 1.0),
+                "aliases": aliases,
+            }
+        )
+
+    working = _dedupe_entities_by_normalized_name(working)
+
+    anchors = [e for e in working if not is_probably_coreference_mention(e["name"])]
+    mentions = [e for e in working if is_probably_coreference_mention(e["name"])]
+    if not mentions or not anchors:
+        return working
+
+    try:
+        from app.services.embedding_service import generate_embeddings_batch
+
+        anchor_texts = [a["name"] for a in anchors]
+        mention_texts = [m["name"] for m in mentions]
+        vectors = generate_embeddings_batch(anchor_texts + mention_texts, batch_size=16)
+        if not vectors or len(vectors) != len(anchor_texts) + len(mention_texts):
+            return working
+
+        import numpy as np
+
+        threshold = float(getattr(settings, "KAG_ENTITY_MERGE_SIMILARITY", 0.88) or 0.88)
+        resolved: List[Dict] = list(anchors)
+        n_a = len(anchors)
+
+        for mi, mention in enumerate(mentions):
+            vec = vectors[n_a + mi]
+            if not vec:
+                resolved.append(mention)
+                continue
+            v = np.array(vec, dtype=np.float32)
+            v = v / (np.linalg.norm(v) + 1e-9)
+            best_idx = -1
+            best_sim = -1.0
+            for ai, anchor in enumerate(anchors):
+                if anchor.get("type") != mention.get("type"):
+                    continue
+                av = vectors[ai]
+                if not av:
+                    continue
+                a = np.array(av, dtype=np.float32)
+                a = a / (np.linalg.norm(a) + 1e-9)
+                sim = float(np.dot(v, a))
+                if sim > best_sim:
+                    best_sim = sim
+                    best_idx = ai
+            if best_idx >= 0 and best_sim >= threshold:
+                anchor = anchors[best_idx]
+                anchor["importance"] = max(
+                    float(anchor.get("importance", 0)),
+                    float(mention.get("importance", 0)),
+                )
+                nn = normalize_entity_name(mention["name"])
+                if nn and nn not in [normalize_entity_name(a) for a in anchor.get("aliases", [])]:
+                    anchor.setdefault("aliases", []).append(mention["name"])
+                logger.debug(
+                    "Coréférence chunk fusionnée: '%s' → '%s' (sim=%.3f)",
+                    mention["name"],
+                    anchor["name"],
+                    best_sim,
+                )
+            else:
+                resolved.append(mention)
+
+        return _dedupe_entities_by_normalized_name(resolved)
+    except Exception as err:
+        logger.warning("Résolution coréférence chunk ignorée: %s", err)
+        return working
+
+
+def _dedupe_entities_by_normalized_name(entities: List[Dict]) -> List[Dict]:
+    """Déduplique par nom normalisé en conservant la plus forte importance."""
+    merged: Dict[str, Dict] = {}
+    for e in entities:
+        key = normalize_entity_name(e.get("name", ""))
+        if not key:
+            continue
+        imp = float(e.get("importance", 1.0) or 1.0)
+        aliases = list(e.get("aliases") or [])
+        if key not in merged or imp > float(merged[key].get("importance", 0)):
+            merged[key] = {
+                "name": e["name"],
+                "type": e.get("type", "concept_technique"),
+                "importance": imp,
+                "aliases": aliases,
+            }
+        else:
+            merged[key]["aliases"].extend(aliases)
+    return list(merged.values())
 
 
 def _repair_truncated_json_array(text: str) -> str:
@@ -314,11 +531,11 @@ def _parse_typed_relations_response(response_text: str) -> List[Dict]:
             continue
         ea = str(item.get("entity_a", "")).strip()
         eb = str(item.get("entity_b", "")).strip()
-        rt = str(item.get("relation_type", "")).strip().lower()
+        rt = normalize_relation_type(str(item.get("relation_type", "")))
         conf = item.get("confidence", 0.7)
         if not ea or not eb or ea.lower() == eb.lower():
             continue
-        if rt not in TYPED_RELATION_TYPE_IDS:
+        if not rt:
             continue
         if not isinstance(conf, (int, float)):
             conf = 0.7
@@ -397,13 +614,18 @@ def _parse_llm_response(response_text: str) -> List[Dict]:
         if raw_type in CRITICAL_ENTITY_TYPES:
             importance = 1.0
         
-        valid_entities.append({
+        canonical_name = str(e.get("canonical_name", "")).strip()
+        entry: Dict = {
             "name": name,
             "type": raw_type,
             "importance": importance,
-        })
-    
-    return valid_entities[:10]
+        }
+        if canonical_name and len(canonical_name) >= 2:
+            entry["canonical_name"] = canonical_name
+        valid_entities.append(entry)
+
+    resolved = resolve_entities_coreference_in_chunk(valid_entities)
+    return resolved[:10]
 
 
 def _parse_summary_questions_response(response_text: str) -> Optional[Dict]:

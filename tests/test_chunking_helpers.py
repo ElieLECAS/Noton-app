@@ -339,7 +339,7 @@ def test_non_table_leaf_unaffected():
 
 
 def test_existing_specs_one_heading_two_leaves():
-    """Non-régression : 2 feuilles texte ordinaires → 3 specs (1 parent + 2 feuilles text_full)."""
+    """Non-régression : 2 feuilles courtes même section → parent + 1 feuille consolidée."""
     from app.services.chunking_service import (
         CHUNKING_VERSION_DOCLING_HIERARCHICAL_V2,
         _build_docling_hierarchical_specs,
@@ -350,15 +350,14 @@ def test_existing_specs_one_heading_two_leaves():
         _FakeLeaf("leaf-b", "Deuxième paragraphe.", ["1 Introduction"]),
     ]
     specs = _build_docling_hierarchical_specs({"document_id": 42}, leaves)
-    assert len(specs) == 3
+    assert len(specs) == 2
     assert specs[0]["is_leaf"] is False
     assert specs[1]["is_leaf"] is True
-    assert specs[2]["is_leaf"] is True
     assert specs[0]["metadata_json"].get("chunking_version") == CHUNKING_VERSION_DOCLING_HIERARCHICAL_V2
     assert specs[1]["metadata_json"].get("content_type") == "text_full"
-    assert specs[2]["metadata_json"].get("content_type") == "text_full"
+    assert "Premier paragraphe" in specs[1]["content"]
+    assert "Deuxième paragraphe" in specs[1]["content"]
     assert specs[1]["parent_node_id"] == specs[0]["node_id"]
-    assert specs[2]["parent_node_id"] == specs[0]["node_id"]
 
 
 def test_format_text_full_chunk_text():
@@ -389,9 +388,50 @@ def test_text_windows_when_threshold_enabled(monkeypatch):
     win_specs = [s for s in specs if s["metadata_json"].get("content_type") == "text_window"]
     assert len(win_specs) >= 2
     full_spec = next(s for s in specs if s["metadata_json"].get("content_type") == "text_full")
+    assert full_spec["metadata_json"].get("embed_skip") is True
     for ws in win_specs:
         assert ws["parent_node_id"] == full_spec["node_id"]
         assert ws["hierarchy_level"] == 2
+
+
+def test_table_row_capped_at_max(monkeypatch):
+    from app.config import settings
+    from app.services.chunking_service import _build_docling_hierarchical_specs
+
+    monkeypatch.setattr(settings, "DOCLING_MAX_TABLE_ROW_CHUNKS", 10)
+    header = "| Ref | Valeur |\n|-----|--------|\n"
+    body = "\n".join(f"| L{i} | V{i} |" for i in range(100))
+    table_text = header + body
+    leaf = _FakeLeaf("leaf-big", table_text, ["1 Données"], label="table")
+    specs = _build_docling_hierarchical_specs({"document_id": 1}, [leaf])
+    row_specs = [s for s in specs if s["metadata_json"].get("content_type") == "table_row"]
+    assert len(row_specs) == 10
+    full_spec = next(s for s in specs if s["metadata_json"].get("content_type") == "table_full")
+    assert full_spec["metadata_json"].get("table_row_truncated") is True
+    assert full_spec["metadata_json"].get("table_row_total") == 100
+
+
+def test_resolve_page_from_metadata():
+    from app.services.chunking_service import resolve_page_from_metadata
+
+    assert resolve_page_from_metadata({"page_no": 3}) == 3
+    assert resolve_page_from_metadata({"page_start": 2}) == 2
+    assert resolve_page_from_metadata({"content_type": "text"}) is None
+    assert resolve_page_from_metadata(None) is None
+
+
+def test_resolve_char_offsets_from_docling_meta():
+    from app.services.chunking_service import _resolve_char_offsets
+
+    start, end = _resolve_char_offsets(
+        {"start_char_idx": 120, "end_char_idx": 450},
+        "contenu",
+    )
+    assert start == 120
+    assert end == 450
+    start2, end2 = _resolve_char_offsets({}, "fallback")
+    assert start2 == 0
+    assert end2 == len("fallback")
 
 
 # ---------------------------------------------------------------------------

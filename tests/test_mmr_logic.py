@@ -2,11 +2,12 @@ import numpy as np
 import pytest
 from unittest.mock import MagicMock, patch
 from llama_index.core.schema import NodeWithScore, TextNode
+from app.config import settings
 from app.services.space_search_service import (
     _compute_mmr_with_parent_constraint,
     _fetch_embeddings_for_chunks,
     MMR_K,
-    MMR_LAMBDA
+    MMR_LAMBDA,
 )
 
 def test_fetch_embeddings_for_chunks_sql_execution():
@@ -120,6 +121,43 @@ def test_mmr_fallback_missing_embeddings():
     # Doit faire un fallback sur le premier candidat du pool
     assert len(selected) == 1
     assert selected[0].node.id_ == "chunk-1"
+
+def test_mmr_lambda_default_from_settings():
+    assert MMR_LAMBDA == settings.MMR_LAMBDA
+    assert settings.MMR_LAMBDA >= 0.65
+
+
+def test_mmr_subject_mismatch_penalty():
+    query_emb = np.array([1.0, 0.0])
+    c1 = NodeWithScore(
+        node=TextNode(
+            id_="chunk-1",
+            metadata={"kag_matched_entity": "Gamme Alpha", "parent_node_id": "P1"},
+        ),
+        score=0.9,
+    )
+    c2 = NodeWithScore(
+        node=TextNode(
+            id_="chunk-2",
+            metadata={"kag_matched_entity": "Gamme Beta", "parent_node_id": "P2"},
+        ),
+        score=0.88,
+    )
+    embeddings = {
+        1: np.array([1.0, 0.0]),
+        2: np.array([0.95, 0.05]),
+    }
+    selected = _compute_mmr_with_parent_constraint(
+        query_embedding=query_emb,
+        candidates=[c1, c2],
+        candidate_embeddings=embeddings,
+        target_k=2,
+        lambda_param=0.7,
+        primary_subject_key="entity:gamme alpha",
+    )
+    assert len(selected) == 2
+    assert selected[0].node.id_ == "chunk-1"
+
 
 def test_mmr_lambda_influence():
     """Vérifie que lambda=1.0 se comporte comme un tri simple."""
