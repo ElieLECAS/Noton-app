@@ -54,9 +54,9 @@ except ImportError:
     RERANKER_AVAILABLE = False
     logger.warning("FlagEmbeddingReranker non disponible, reranking désactivé")
 
-RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
+RERANKER_MODEL = settings.RERANKER_MODEL
 RERANKER_CANDIDATE_MULTIPLIER = 3
-RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
+RERANKER_ENABLED = settings.RERANKER_ENABLED
 # Optimisations du reranking
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))

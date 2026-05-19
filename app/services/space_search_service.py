@@ -21,6 +21,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Set, Tuple
 import os
 import re
+import threading
 import unicodedata
 from sqlmodel import Session, select
 from sqlalchemy import or_, text
@@ -66,9 +67,9 @@ RERANKER_AVAILABLE = FLAG_RERANKER_AVAILABLE or ST_RERANKER_AVAILABLE
 if not RERANKER_AVAILABLE:
     logger.warning("Aucun composant de reranking (FlagEmbedding ou SentenceTransformers) disponible")
 
-RERANKER_MODEL = os.getenv("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")
+RERANKER_MODEL = settings.RERANKER_MODEL
 RERANKER_CANDIDATE_MULTIPLIER = int(os.getenv("RERANKER_CANDIDATE_MULTIPLIER", "5"))
-RERANKER_ENABLED = os.getenv("RERANKER_ENABLED", "true").lower() == "true"
+RERANKER_ENABLED = settings.RERANKER_ENABLED
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
 # Deux étapes : large pool tronqué puis raffinement sur texte complet
@@ -82,6 +83,7 @@ TRACE_TEXT_MAX_CHARS = int(os.getenv("TRACE_TEXT_MAX_CHARS", "12000"))
 
 # Singletons
 _reranker_instance = None
+_reranker_lock = threading.Lock() if RERANKER_AVAILABLE else None
 _embed_model_instance = None
 
 
@@ -135,7 +137,7 @@ RRF_MIN_CHANNEL = float(os.getenv("RRF_MIN_CHANNEL", "0.010"))
 HYBRID_MIN_SCORE = RRF_MIN_SCORE  # compat. nom interne
 
 # Filtrage entités KAG par score de confiance calibré (KnowledgeEntity.confidence_score)
-MIN_ENTITY_CONFIDENCE = float(os.getenv("MIN_ENTITY_CONFIDENCE", "0.30"))
+MIN_ENTITY_CONFIDENCE = float(settings.MIN_ENTITY_CONFIDENCE)
 
 
 def _kag_entity_confidence_filter():
@@ -154,7 +156,7 @@ MULTI_HOP_MIN_DELTA_NEW_CHUNKS = int(os.getenv("MULTI_HOP_MIN_DELTA_NEW_CHUNKS",
 MH_RRF_PARENT_WEIGHT = RRF_PARENT_LIST_WEIGHT
 MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
-MMR_K = int(os.getenv("MMR_K", "15"))
+MMR_K = int(settings.MMR_K)
 MMR_LAMBDA = float(os.getenv("MMR_LAMBDA", str(settings.MMR_LAMBDA)))
 
 # Déclenchement multi-hop : triggers forts / faibles + exclusion FAQ
@@ -207,7 +209,9 @@ def _get_reranker():
     global _reranker_instance
     if not RERANKER_AVAILABLE:
         return None
-    if _reranker_instance is None:
+    with _reranker_lock:
+        if _reranker_instance is not None:
+            return _reranker_instance
         use_fp16 = os.getenv("RERANKER_USE_FP16", "false").lower() == "true"
         # Utilisation de FlagEmbedding pour les modèles BGE, sinon SentenceTransformers
         is_bge = "bge-reranker" in RERANKER_MODEL.lower()
@@ -1305,6 +1309,12 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     }
     if table_hint:
         out["table_citation"] = table_hint
+    if settings.RAG_DEBUG_METADATA:
+        out["retrieval_hop"] = metadata.get("retrieval_hop")
+        out["hop_penalty"] = metadata.get("hop_penalty")
+        out["retrieval_signal"] = metadata.get("retrieval_signal")
+        out["kag_matched_entity"] = metadata.get("kag_matched_entity")
+        out["vector_similarity"] = metadata.get("vector_similarity")
     if page_start is not None:
         try:
             out["page_start"] = int(page_start)
@@ -2425,11 +2435,12 @@ async def search_relevant_passages(
                                     pivot_entity_names,
                                     filtered_candidates,
                                 )
+                                mmr_target_k = min(MMR_K, rerank_pool_size)
                                 mmr_pool = _compute_mmr_with_parent_constraint(
                                     query_embedding=query_embedding,
                                     candidates=filtered_candidates,
                                     candidate_embeddings=candidate_embeddings,
-                                    target_k=rerank_pool_size,
+                                    target_k=mmr_target_k,
                                     lambda_param=MMR_LAMBDA,
                                     primary_subject_key=primary_subject,
                                 )

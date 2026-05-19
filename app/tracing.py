@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import os
 import logging
+import time
 from contextlib import contextmanager
 from typing import Any, Dict, Generator, Optional
 
@@ -219,3 +220,26 @@ def trace_pipeline(
         metadata=metadata,
         tags=tags,
     )
+
+
+@contextmanager
+def trace_timed(
+    name: str,
+    run_type: str = "chain",
+    inputs: Optional[Dict[str, Any]] = None,
+    metadata: Optional[Dict[str, Any]] = None,
+    tags: Optional[list] = None,
+) -> Generator[_NoOpRun | _LangSmithRun, None, None]:
+    """
+    Ouvre une trace et ajoute automatiquement la durée (duration_ms) à la fermeture.
+    """
+    started = time.perf_counter()
+    with trace_run(name=name, run_type=run_type, inputs=inputs, metadata=metadata, tags=tags) as run:
+        try:
+            yield run
+        finally:
+            elapsed_ms = round((time.perf_counter() - started) * 1000, 2)
+            try:
+                run.add_metadata({"duration_ms": elapsed_ms})
+            except Exception:
+                pass
