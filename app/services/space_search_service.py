@@ -41,11 +41,13 @@ from app.services.query_reasoning_service import QueryIntent, reason_query_inten
 from app.services.chunk_metadata_utils import (
     apply_row_metadata_defaults,
     content_type_score_multiplier,
+    enrich_docling_page_metadata,
     enrich_passage_content_for_llm,
     infer_primary_subject_key,
     merged_chunk_metadata as _merged_chunk_metadata,
     mmr_diversity_key,
     mmr_subject_key,
+    resolve_page_range_from_metadata,
     table_citation_hint,
 )
 
@@ -68,10 +70,18 @@ if not RERANKER_AVAILABLE:
     logger.warning("Aucun composant de reranking (FlagEmbedding ou SentenceTransformers) disponible")
 
 RERANKER_MODEL = settings.RERANKER_MODEL
-RERANKER_CANDIDATE_MULTIPLIER = int(os.getenv("RERANKER_CANDIDATE_MULTIPLIER", "5"))
+RERANKER_CANDIDATE_MULTIPLIER = 3
 RERANKER_ENABLED = settings.RERANKER_ENABLED
-MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
-MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
+# Seuils retrieval (espaces / fiches techniques) — valeurs fixes
+MIN_VECTOR_SIMILARITY_THRESHOLD = 0.45
+MIN_VECTOR_SQL_PREFILTER = 0.40
+RERANK_MIN_SCORE = 0.30
+# Pools réduits avant fusion / rerank (évite le bruit lexical massif)
+RETRIEVAL_VECTOR_POOL_MAX = 12
+RETRIEVAL_LEXICAL_POOL_MAX = 6
+MAX_RERANK_POOL_INPUT = 15
+LEXICAL_SKIP_FOR_FACTUAL = True
+MAX_RERANK_CANDIDATES = min(int(os.getenv("MAX_RERANK_CANDIDATES", "50")), MAX_RERANK_POOL_INPUT)
 # Deux étapes : large pool tronqué puis raffinement sur texte complet
 RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
@@ -127,14 +137,25 @@ TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
 
 # Fusion hybride : RRF (Reciprocal Rank Fusion) sur vectoriel, lexical, KAG, parents enrichis
 RRF_K = 60
-# Poids du canal « parent enrichi » dans la somme RRF (modéré, ne domine pas le vectoriel leaf)
-RRF_PARENT_LIST_WEIGHT = 0.50
-# Seuil minimal de similarité parent (embedding summary+questions) pour descendre vers les feuilles
-PARENT_ENRICHED_MIN_SIMILARITY = float(os.getenv("PARENT_ENRICHED_MIN_SIMILARITY", "0.65"))
-# Filtrage post-fusion : scores RRF sont plus petits qu’une somme min-max sur [0,1]
-RRF_MIN_SCORE = float(os.getenv("RRF_MIN_SCORE", "0.018"))
-RRF_MIN_CHANNEL = float(os.getenv("RRF_MIN_CHANNEL", "0.010"))
+RRF_PARENT_LIST_WEIGHT = 0.30
+RRF_LEXICAL_LIST_WEIGHT = 0.50
+PARENT_ENRICHED_MIN_SIMILARITY = 0.70
+RRF_MIN_SCORE = 0.04
+RRF_MIN_CHANNEL = 0.03
+RRF_STRONG_CHANNEL = 0.05
 HYBRID_MIN_SCORE = RRF_MIN_SCORE  # compat. nom interne
+# Parent enrichment désactivé par défaut (bruit sur requêtes factuelles)
+PARENT_ENRICHED_ENABLED = False
+
+_COMPARATIVE_QUERY_KW = frozenset({
+    "comparaison", "différence", "difference", "versus", "vs", "entre", "ou",
+    "impact", "incompatible", "remplace",
+})
+_FACTUAL_QUERY_MAX_TOKENS = 18
+_TECHNICAL_REF_PATTERN = re.compile(
+    r"\b[A-Z]{2,5}\d{3,}[A-Z0-9]*\b|\b\d{2,5}\s*(?:mm|cm|kg|kn)\b",
+    re.IGNORECASE,
+)
 
 # Filtrage entités KAG par score de confiance calibré (KnowledgeEntity.confidence_score)
 MIN_ENTITY_CONFIDENCE = float(settings.MIN_ENTITY_CONFIDENCE)
@@ -148,16 +169,20 @@ def _kag_entity_confidence_filter():
 # Multi-hop — constantes (budget/hops) + réglages via settings
 # ---------------------------------------------------------------------------
 MULTI_HOP_ENABLED = True
-MULTI_HOP_MAX_HOPS = 3
-MULTI_HOP_CANDIDATE_BUDGET = 80
-MULTI_HOP_PER_HOP_LIMIT = 20
+MULTI_HOP_MAX_HOPS = 2
+MULTI_HOP_CANDIDATE_BUDGET = 40
+MULTI_HOP_PER_HOP_LIMIT = 10
 MULTI_HOP_PATIENCE = 1
 MULTI_HOP_MIN_DELTA_NEW_CHUNKS = int(os.getenv("MULTI_HOP_MIN_DELTA_NEW_CHUNKS", "2"))
 MH_RRF_PARENT_WEIGHT = RRF_PARENT_LIST_WEIGHT
 MH_HOP_PENALTIES = {0: 0.00, 1: 0.05, 2: 0.10, 3: 0.15}
 
-MMR_K = int(settings.MMR_K)
-MMR_LAMBDA = float(os.getenv("MMR_LAMBDA", str(settings.MMR_LAMBDA)))
+MMR_ENABLED = False
+MMR_K = 10
+MMR_LAMBDA = 0.85
+MMR_LAMBDA_EXPLORATORY = 0.65
+MMR_SIMQ_HYBRID_WEIGHT = 0.60
+MMR_SIMQ_EMBED_WEIGHT = 0.40
 
 # Déclenchement multi-hop : triggers forts / faibles + exclusion FAQ
 _MH_FAQ_PROCEDURE = re.compile(
@@ -183,6 +208,36 @@ _MH_ENTRE_ET = re.compile(r"\bentre\b.+\bet\b", re.IGNORECASE)
 _MH_WEAK_COMMENT = re.compile(r"\b(?:comment|pourquoi)\b", re.IGNORECASE)
 _MH_WEAK_SI = re.compile(r"\bsi\b", re.IGNORECASE)
 _MH_WEAK_ALORS = re.compile(r"\balors\b", re.IGNORECASE)
+
+
+def classify_query_type(query_text: str) -> str:
+    """
+    Classifie la requête pour adapter le pipeline retrieval.
+    factual : courte, sans marqueurs comparatifs
+    comparative : comparaison / entre / vs
+    exploratory : défaut
+    """
+    if not query_text or not query_text.strip():
+        return "exploratory"
+    q = query_text.strip().lower()
+    if any(kw in q for kw in _COMPARATIVE_QUERY_KW):
+        return "comparative"
+    if _TECHNICAL_REF_PATTERN.search(query_text):
+        return "factual"
+    if len(query_text.split()) <= _FACTUAL_QUERY_MAX_TOKENS:
+        return "factual"
+    return "exploratory"
+
+
+def is_factual_query(query_text: str) -> bool:
+    return classify_query_type(query_text) == "factual"
+
+
+def _effective_mmr_lambda(query_text: str) -> float:
+    """Lambda MMR élevé pour requêtes factuelles (pertinence), modéré pour exploratoires."""
+    if is_factual_query(query_text):
+        return MMR_LAMBDA
+    return MMR_LAMBDA_EXPLORATORY
 
 
 # ---------------------------------------------------------------------------
@@ -397,10 +452,7 @@ def _compute_mmr_with_parent_constraint(
             hybrid_sim = float(nws.score or 0.0) / max_score
             embed_sim = float(np.dot(query_embedding / (np.linalg.norm(query_embedding) + 1e-9), d_emb))
             embed_sim = max(0.0, min(1.0, embed_sim))
-            sim_q = (
-                settings.MMR_SIMQ_HYBRID_WEIGHT * hybrid_sim
-                + settings.MMR_SIMQ_EMBED_WEIGHT * embed_sim
-            )
+            sim_q = MMR_SIMQ_HYBRID_WEIGHT * hybrid_sim + MMR_SIMQ_EMBED_WEIGHT * embed_sim
 
             sim_selected = float(np.max(np.dot(sel_matrix, d_emb)))
             mmr_score = lambda_param * sim_q - (1 - lambda_param) * sim_selected
@@ -505,6 +557,122 @@ def _single_stage_rerank_leaves(
             if nid in backup:
                 _set_node_text_content(nws.node, backup[nid])
         return filtered_candidates[:k]
+
+
+def _apply_rerank_min_score(
+    top_leaves: List[NodeWithScore],
+    k: int,
+) -> List[NodeWithScore]:
+    """Filtre post-reranker ; seuil absolu seulement si scores normalisés (≥ 0)."""
+    if not top_leaves:
+        return []
+    ranked = sorted(top_leaves, key=lambda n: float(n.score or 0), reverse=True)
+    max_score = float(ranked[0].score or 0)
+    if max_score < 0:
+        return ranked[:k]
+    filtered = [nws for nws in ranked if float(nws.score or 0) >= RERANK_MIN_SCORE]
+    if filtered:
+        return filtered[:k]
+    return ranked[:k]
+
+
+def _prefilter_vector_candidates(
+    candidates: List[NodeWithScore],
+    min_sim: float = MIN_VECTOR_SQL_PREFILTER,
+    max_n: int = RETRIEVAL_VECTOR_POOL_MAX,
+) -> List[NodeWithScore]:
+    """Réduit le pool vectoriel SQL avant fusion (similarité + plafond)."""
+    if not candidates:
+        return []
+    ordered = sorted(candidates, key=lambda c: float(c.score or 0.0), reverse=True)
+    strong = [c for c in ordered if float(c.score or 0.0) >= min_sim]
+    if strong:
+        return strong[:max_n]
+    return ordered[: min(max_n, max(6, len(ordered)))]
+
+
+def _restrict_lexical_candidates(
+    lexical: List[NodeWithScore],
+    vector: List[NodeWithScore],
+    max_n: int = RETRIEVAL_LEXICAL_POOL_MAX,
+) -> List[NodeWithScore]:
+    """
+    Limite le lexical aux chunks déjà présents côté vectoriel, puis complète
+    avec les meilleurs scores lexicaux restants (plafonné).
+    """
+    if not lexical:
+        return []
+    vec_ids = {
+        cid
+        for nws in vector
+        if (cid := _parse_chunk_id_from_node(nws.node)) is not None
+    }
+    overlap: List[NodeWithScore] = []
+    rest: List[NodeWithScore] = []
+    for nws in sorted(lexical, key=lambda c: float(c.score or 0.0), reverse=True):
+        cid = _parse_chunk_id_from_node(nws.node)
+        if cid is not None and cid in vec_ids:
+            overlap.append(nws)
+        else:
+            rest.append(nws)
+    merged = overlap + rest
+    return merged[:max_n]
+
+
+def _vector_similarity_from_node(nws: NodeWithScore) -> Optional[float]:
+    meta = dict(getattr(nws.node, "metadata", {}) or {})
+    vx = meta.get("vector_similarity")
+    if vx is None:
+        return float(nws.score) if nws.score is not None else None
+    try:
+        return float(vx)
+    except (TypeError, ValueError):
+        return None
+
+
+def _safe_fallback_after_empty_hybrid_filter(
+    fused: List[NodeWithScore],
+    vector_candidates: List[NodeWithScore],
+    k: int,
+    max_pool: int = MAX_RERANK_POOL_INPUT,
+) -> List[NodeWithScore]:
+    """
+    Ne jamais renvoyer la fusion brute entière : priorité vectoriel fort, sinon top vector SQL.
+    """
+    with_vec_meta = [
+        c for c in fused if _vector_similarity_from_node(c) is not None
+    ]
+    by_vec = sorted(
+        with_vec_meta,
+        key=lambda c: float(_vector_similarity_from_node(c) or 0.0),
+        reverse=True,
+    )
+    strong = [
+        c
+        for c in by_vec
+        if float(_vector_similarity_from_node(c) or 0.0) >= MIN_VECTOR_SQL_PREFILTER
+    ]
+    if strong:
+        logger.info(
+            "Repli filtre hybride : %d candidats (vectoriel ≥ %.2f)",
+            min(len(strong), max_pool),
+            MIN_VECTOR_SQL_PREFILTER,
+        )
+        return strong[:max_pool]
+
+    if vector_candidates:
+        top_vec = _prefilter_vector_candidates(vector_candidates, max_n=max_pool)
+        logger.info(
+            "Repli filtre hybride : %d candidats depuis pool vectoriel SQL",
+            len(top_vec),
+        )
+        return top_vec
+
+    logger.warning(
+        "Repli filtre hybride : top-%d fusion (dernier recours)",
+        min(max_pool, len(fused)),
+    )
+    return sorted(fused, key=lambda x: float(x.score or 0.0), reverse=True)[:max_pool]
 
 
 def _retrieve_leaves_sql(
@@ -922,7 +1090,9 @@ def _hybrid_fuse_candidates(
         rp = rank_p.get(cid, 10_000)
 
         c_v = _rrf_contrib(rv) if cid in rank_v else 0.0
-        c_l = _rrf_contrib(rl) if cid in rank_l else 0.0
+        c_l = (
+            RRF_LEXICAL_LIST_WEIGHT * _rrf_contrib(rl) if cid in rank_l else 0.0
+        )
         c_k = _rrf_contrib(rk) if cid in rank_k else 0.0
         c_p = RRF_PARENT_LIST_WEIGHT * _rrf_contrib(rp) if cid in rank_p else 0.0
 
@@ -970,31 +1140,37 @@ def _filter_hybrid_candidates(
     candidates: List[NodeWithScore],
 ) -> List[NodeWithScore]:
     """
-    Filtre les candidats après fusion RRF : similarité vectorielle brute,
-    score RRF total, ou contribution suffisante sur un canal.
+    Filtre post-fusion : priorité au signal vectoriel (scores RRF souvent < 0.08).
+    Rejette le lexical seul sans similarité vectorielle exploitable.
     """
     out: List[NodeWithScore] = []
+    hybrid_floor = RRF_MIN_SCORE
+    hybrid_floor_relaxed = RRF_MIN_SCORE * 0.5
+
     for nws in candidates:
         meta = dict(getattr(nws.node, "metadata", {}) or {})
         h = float(nws.score or 0.0)
-        vx = meta.get("vector_similarity")
-        v_ok = vx is not None and float(vx) >= MIN_VECTOR_SIMILARITY_THRESHOLD
-        ln = float(meta.get("lexical_norm", 0) or 0)
+        vx = _vector_similarity_from_node(nws)
+        v_strong = vx is not None and vx >= MIN_VECTOR_SIMILARITY_THRESHOLD
+        v_moderate = vx is not None and vx >= MIN_VECTOR_SQL_PREFILTER
         kn = float(meta.get("kag_norm", 0) or 0)
-        pr = float(meta.get("parent_rrf", 0) or 0)
         vr = float(meta.get("vector_rrf", 0) or 0)
-        parent_sim = float(meta.get("parent_enrichment_score", 0) or 0)
-        parent_sim_ok = parent_sim >= PARENT_ENRICHED_MIN_SIMILARITY * 0.85
-        if (
-            v_ok
-            or h >= RRF_MIN_SCORE
-            or ln >= RRF_MIN_CHANNEL
-            or kn >= RRF_MIN_CHANNEL
-            or pr >= RRF_MIN_CHANNEL
-            or vr >= RRF_MIN_CHANNEL
-            or parent_sim_ok
-        ):
+        lexical_only = (
+            vx is None
+            and kn <= 0
+            and vr <= 0
+            and float(meta.get("lexical_norm", 0) or 0) > 0
+        )
+        if lexical_only:
+            continue
+
+        if v_strong or (v_moderate and h >= hybrid_floor_relaxed):
             out.append(nws)
+        elif (vr >= RRF_STRONG_CHANNEL or kn >= RRF_STRONG_CHANNEL) and h >= hybrid_floor_relaxed:
+            out.append(nws)
+        elif v_moderate:
+            out.append(nws)
+
     return out
 
 
@@ -1222,31 +1398,22 @@ def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
     Recopie page_no / plage depuis la feuille matchée vers le nœud cible (ex. parent résolu).
     Priorité à la page de la feuille pour l'ouverture PDF au bon endroit.
     """
-    leaf_meta = dict(getattr(leaf_node, "metadata", {}) or {})
+    leaf_meta = enrich_docling_page_metadata(
+        dict(getattr(leaf_node, "metadata", {}) or {})
+    )
     m = dict(getattr(target_node, "metadata", {}) or {})
-    pn = leaf_meta.get("page_no")
+    pn, ps, pe = resolve_page_range_from_metadata(leaf_meta)
     if pn is not None:
-        try:
-            m["page_no"] = int(pn)
-        except (TypeError, ValueError):
-            pass
+        m["page_no"] = pn
     elif m.get("page_start") is not None:
         try:
             m["page_no"] = int(m["page_start"])
         except (TypeError, ValueError):
             pass
-    ps = leaf_meta.get("page_start")
-    pe = leaf_meta.get("page_end")
     if ps is not None:
-        try:
-            m.setdefault("page_start", int(ps))
-        except (TypeError, ValueError):
-            pass
+        m.setdefault("page_start", ps)
     if pe is not None:
-        try:
-            m.setdefault("page_end", int(pe))
-        except (TypeError, ValueError):
-            pass
+        m.setdefault("page_end", pe)
     # Traçabilité: conserver l'ID du chunk feuille à l'origine de la citation.
     leaf_chunk_id = _parse_chunk_id_from_node(leaf_node)
     if leaf_chunk_id is not None:
@@ -1259,28 +1426,7 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     document_title = metadata.get("document_title", "Document sans titre")
     document_id = metadata.get("document_id")
     chunk_index = metadata.get("chunk_index", 0)
-    page_start = metadata.get("page_start")
-    page_end = metadata.get("page_end")
-    raw_page = metadata.get("page_no")
-    resolved_page = None
-    if raw_page is not None:
-        try:
-            resolved_page = int(raw_page)
-        except (TypeError, ValueError):
-            pass
-            
-    if resolved_page is None:
-        # Fallbacks successifs
-        for key in ["page_start", "page_label", "page_idx"]:
-            val = metadata.get(key)
-            if val is not None:
-                try:
-                    resolved_page = int(val)
-                    break
-                except (TypeError, ValueError):
-                    continue
-                    
-    page_no = resolved_page
+    page_no, page_start, page_end = resolve_page_range_from_metadata(metadata)
     parent_heading = metadata.get("parent_heading") or metadata.get("heading")
 
     content = node.get_content() if hasattr(node, "get_content") else str(node)
@@ -1995,13 +2141,15 @@ def multi_hop_retrieve_space(
         pivot_entity_names=pivot_entity_names or None,
     )
 
-    parent_candidates_hop0 = _retrieve_parent_enriched_sql(
-        session=session,
-        space_id=space_id,
-        user_id=user_id,
-        query_text=query_text,
-        candidate_k=candidate_k,
-    )
+    parent_candidates_hop0: List[NodeWithScore] = []
+    if PARENT_ENRICHED_ENABLED:
+        parent_candidates_hop0 = _retrieve_parent_enriched_sql(
+            session=session,
+            space_id=space_id,
+            user_id=user_id,
+            query_text=query_text,
+            candidate_k=candidate_k,
+        )
     p_by_id_map: Dict[int, float] = {}
     for nws in parent_candidates_hop0:
         cid = _parse_chunk_id_from_node(nws.node)
@@ -2177,7 +2325,7 @@ async def search_relevant_passages(
     space_id: int,
     query_text: str,
     user_id: int,
-    k: int = 15,
+    k: int = 10,
 ) -> List[Dict]:
     """
     Recherche sémantique RAG + KAG sur les documents d'un espace.
@@ -2227,6 +2375,8 @@ async def search_relevant_passages(
             and settings.KAG_ENABLED
             and _needs_multi_hop(query_text, pivot_entity_names)
         )
+        factual_query = is_factual_query(query_text)
+        vector_candidates: List[NodeWithScore] = []
 
         if use_multi_hop:
             logger.info(
@@ -2264,43 +2414,60 @@ async def search_relevant_passages(
                 mh_run.end(outputs=mh_outputs)
         else:
             # Pipeline hybride standard
+            vector_candidates_raw: List[NodeWithScore] = []
             with trace_run(
                 "vector_retrieval",
                 run_type="retriever",
                 inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
                 tags=["retrieval", "vector", "pgvector", "space"],
             ) as vr_run:
-                vector_candidates = _retrieve_leaves_sql(
+                vector_candidates_raw = _retrieve_leaves_sql(
                     session=session,
                     space_id=space_id,
                     user_id=user_id,
                     query_text=query_text,
                     candidate_k=candidate_k,
                 )
+                vector_candidates = _prefilter_vector_candidates(vector_candidates_raw)
                 vr_outputs = {
                     "nb_candidates": len(vector_candidates),
+                    "nb_raw": len(vector_candidates_raw),
                     "top3_scores": [round(float(c.score or 0), 4) for c in vector_candidates[:3]],
                 }
                 if TRACE_VERBOSE_TEXT:
                     vr_outputs["candidates_text"] = _nodes_for_trace(vector_candidates)
                 vr_run.end(outputs=vr_outputs)
 
-            with trace_run(
-                "lexical_retrieval",
-                run_type="retriever",
-                inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
-                tags=["retrieval", "lexical", "tsvector", "space"],
-            ) as lr_run:
-                lexical_candidates = _retrieve_leaves_lexical_sql(
-                    session=session,
-                    space_id=space_id,
-                    query_text=query_text,
-                    candidate_k=candidate_k,
+            lexical_candidates: List[NodeWithScore] = []
+            if not (LEXICAL_SKIP_FOR_FACTUAL and factual_query):
+                with trace_run(
+                    "lexical_retrieval",
+                    run_type="retriever",
+                    inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+                    tags=["retrieval", "lexical", "tsvector", "space"],
+                ) as lr_run:
+                    lexical_raw = _retrieve_leaves_lexical_sql(
+                        session=session,
+                        space_id=space_id,
+                        query_text=query_text,
+                        candidate_k=candidate_k,
+                    )
+                    lexical_candidates = _restrict_lexical_candidates(
+                        lexical_raw, vector_candidates
+                    )
+                    lr_outputs = {
+                        "nb_candidates": len(lexical_candidates),
+                        "nb_raw": len(lexical_raw),
+                        "skipped_factual": factual_query and LEXICAL_SKIP_FOR_FACTUAL,
+                    }
+                    if TRACE_VERBOSE_TEXT:
+                        lr_outputs["candidates_text"] = _nodes_for_trace(lexical_candidates)
+                    lr_run.end(outputs=lr_outputs)
+            else:
+                logger.info(
+                    "Lexical retrieval ignoré (requête factuelle, space_id=%d)",
+                    space_id,
                 )
-                lr_outputs = {"nb_candidates": len(lexical_candidates)}
-                if TRACE_VERBOSE_TEXT:
-                    lr_outputs["candidates_text"] = _nodes_for_trace(lexical_candidates)
-                lr_run.end(outputs=lr_outputs)
 
             graph_candidates: List[NodeWithScore] = []
             if settings.KAG_ENABLED:
@@ -2331,13 +2498,15 @@ async def search_relevant_passages(
                 except Exception as kag_err:
                     logger.warning("KAG retrieval échoué (space): %s", kag_err)
 
-            parent_candidates = _retrieve_parent_enriched_sql(
-                session=session,
-                space_id=space_id,
-                user_id=user_id,
-                query_text=query_text,
-                candidate_k=candidate_k,
-            )
+            parent_candidates: List[NodeWithScore] = []
+            if PARENT_ENRICHED_ENABLED:
+                parent_candidates = _retrieve_parent_enriched_sql(
+                    session=session,
+                    space_id=space_id,
+                    user_id=user_id,
+                    query_text=query_text,
+                    candidate_k=candidate_k,
+                )
 
             with trace_run(
                 "hybrid_fusion",
@@ -2377,12 +2546,23 @@ async def search_relevant_passages(
             )
 
         # --- Étape 3 : filtrage pré-reranking ---
+        vector_for_fallback = (
+            vector_candidates
+            if not use_multi_hop
+            else [
+                c
+                for c in leaf_candidates
+                if _vector_similarity_from_node(c) is not None
+                and float(_vector_similarity_from_node(c) or 0) >= MIN_VECTOR_SQL_PREFILTER
+            ]
+        )
         filtered_candidates = _filter_hybrid_candidates(leaf_candidates)
         if not filtered_candidates:
-            logger.info(
-                "Filtre hybride vide (space) — repli sur candidats fusionnés bruts"
+            filtered_candidates = _safe_fallback_after_empty_hybrid_filter(
+                leaf_candidates,
+                vector_for_fallback,
+                k=k,
             )
-            filtered_candidates = leaf_candidates
 
         # Early stopping
         skip_reranking = False
@@ -2406,64 +2586,81 @@ async def search_relevant_passages(
                 skip_reranking = True
                 top_leaves = filtered_candidates[:k]
 
-        # --- Étape 3 : Reranking unique précédé de diversification MMR ---
+        # --- Étape 3 : Reranking (pool filtré → cross-encoder, sans MMR si désactivé) ---
         if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
             try:
                 if _get_reranker():
-                    rerank_pool_size = min(MAX_RERANK_CANDIDATES, len(filtered_candidates))
-                    
-                    # 1. Sélection par MMR en amont pour diversifier les candidats envoyés au reranker
-                    if len(filtered_candidates) > k:
+                    rerank_pool_size = min(
+                        MAX_RERANK_POOL_INPUT, MAX_RERANK_CANDIDATES, len(filtered_candidates)
+                    )
+                    rerank_input = filtered_candidates[:rerank_pool_size]
+                    logger.info(
+                        "Pool rerank (space): %d candidats (fused=%d, factual=%s)",
+                        len(rerank_input),
+                        len(leaf_candidates),
+                        factual_query,
+                    )
+
+                    if MMR_ENABLED and not factual_query and len(filtered_candidates) > k:
                         try:
+                            mmr_lambda = _effective_mmr_lambda(query_text)
                             with trace_run(
                                 "mmr_selection",
                                 run_type="chain",
-                                inputs={"nb_pool": len(filtered_candidates), "target_k": rerank_pool_size, "lambda": MMR_LAMBDA},
+                                inputs={
+                                    "nb_pool": len(filtered_candidates),
+                                    "target_k": rerank_pool_size,
+                                    "lambda": mmr_lambda,
+                                    "factual_query": factual_query,
+                                },
                                 tags=["mmr", "diversity", "space"],
                             ) as mmr_run:
                                 query_embedding = np.array(
-                                    _get_embed_model().get_query_embedding(query_text), 
-                                    dtype=np.float32
+                                    _get_embed_model().get_query_embedding(query_text),
+                                    dtype=np.float32,
                                 )
                                 chunk_ids = [
                                     cid for nws in filtered_candidates
                                     if (cid := _parse_chunk_id_from_node(nws.node)) is not None
                                 ]
-                                candidate_embeddings = _fetch_embeddings_for_chunks(session, chunk_ids)
-                                
+                                candidate_embeddings = _fetch_embeddings_for_chunks(
+                                    session, chunk_ids
+                                )
                                 primary_subject = infer_primary_subject_key(
                                     pivot_entity_names,
                                     filtered_candidates,
                                 )
                                 mmr_target_k = min(MMR_K, rerank_pool_size)
-                                mmr_pool = _compute_mmr_with_parent_constraint(
+                                rerank_input = _compute_mmr_with_parent_constraint(
                                     query_embedding=query_embedding,
                                     candidates=filtered_candidates,
                                     candidate_embeddings=candidate_embeddings,
                                     target_k=mmr_target_k,
-                                    lambda_param=MMR_LAMBDA,
+                                    lambda_param=mmr_lambda,
                                     primary_subject_key=primary_subject,
                                 )
-                                mmr_run.end(outputs={"nb_final": len(mmr_pool)})
+                                mmr_run.end(outputs={"nb_final": len(rerank_input)})
                         except Exception as mmr_err:
-                            logger.warning("Sélection MMR pré-rerank échouée (space), fallback : %s", mmr_err)
-                            mmr_pool = filtered_candidates[:rerank_pool_size]
-                    else:
-                        mmr_pool = filtered_candidates
+                            logger.warning(
+                                "Sélection MMR pré-rerank échouée (space), fallback : %s",
+                                mmr_err,
+                            )
+                            rerank_input = filtered_candidates[:rerank_pool_size]
 
-                    # 2. Passage unique au reranker cross-encoder MiniLM (cap 2000 chars)
                     with trace_run(
                         "reranking",
                         run_type="chain",
                         inputs={
-                            "nb_candidates": len(mmr_pool),
+                            "nb_candidates": len(rerank_input),
                             "target_k": k,
                             "multi_hop": use_multi_hop,
+                            "factual_query": factual_query,
+                            "skip_mmr": not MMR_ENABLED or factual_query,
                         },
                         tags=["reranking", "space"],
                     ) as rerank_run:
                         top_leaves = _single_stage_rerank_leaves(
-                            mmr_pool,
+                            rerank_input,
                             query_text,
                             k,
                             char_cap=2000,
@@ -2478,6 +2675,7 @@ async def search_relevant_passages(
         elif not skip_reranking:
             top_leaves = filtered_candidates[:k]
 
+        top_leaves = _apply_rerank_min_score(top_leaves, k)
 
         # --- Étape 4 : résolution des parents ---
         with trace_run(
@@ -2572,7 +2770,7 @@ async def search_relevant_passages(
                 k=k,
             )
 
-        return passages
+        return passages[:k]
 
     except Exception as e:
         logger.error("Erreur recherche passages (space): %s", e, exc_info=True)

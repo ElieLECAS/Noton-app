@@ -1,0 +1,23 @@
+{
+  "description": "Jeu minimal pour Precision@K / MRR (sans DB). Étendre avec chunk_id réels après indexation.",
+  "cases": [
+    {
+      "query": "Quelle est la hauteur maximale du châssis ?",
+      "query_type": "factual",
+      "relevant_chunk_id_substrings": ["hauteur", "max"],
+      "irrelevant_keywords": ["installation", "garantie"]
+    },
+    {
+      "query": "Quel est le Uw du vitrage ?",
+      "query_type": "factual",
+      "relevant_chunk_id_substrings": ["uw", "vitrage", "thermique"],
+      "irrelevant_keywords": ["pose", "livraison"]
+    },
+    {
+      "query": "Comparaison entre Perform 70 et Perform 76",
+      "query_type": "comparative",
+      "relevant_chunk_id_substrings": ["perform", "70", "76"],
+      "irrelevant_keywords": []
+    }
+  ]
+}

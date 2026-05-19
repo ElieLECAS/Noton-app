@@ -3,7 +3,192 @@ Utilitaires partagés pour metadata_json / metadata_ (bibliothèque et notes).
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence, Tuple, TypeVar
+
+_CHUNK_T = TypeVar("_CHUNK_T")
+
+PAGE_TECHNICAL_SHEET_CONTENT_TYPE = "page_technical_sheet"
+KAG_ENTITIES_SOURCE_PAGE_SHEET = "page_sheet"
+PAGE_SHEET_NODE_ID_PREFIX = "page-sheet"
+
+
+def _coerce_positive_page(value: Any) -> Optional[int]:
+    """Convertit une valeur en numéro de page (>0), sinon None."""
+    if value is None:
+        return None
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed > 0 else None
+
+
+def _pages_from_provenance_list(prov: Any) -> List[int]:
+    """Extrait les numéros de page d'une liste de provenances Docling."""
+    pages: List[int] = []
+    if not isinstance(prov, list):
+        return pages
+    for item in prov:
+        if not isinstance(item, dict):
+            continue
+        for key in ("page_no", "page_idx", "page", "page_number"):
+            page = _coerce_positive_page(item.get(key))
+            if page is not None:
+                pages.append(page)
+    return pages
+
+
+def extract_page_numbers_from_docling_metadata(meta: Optional[dict]) -> List[int]:
+    """
+    Collecte tous les numéros de page (>0) depuis les métadonnées Docling.
+    Parcourt les clés top-level et doc_items[].prov[].
+    """
+    if not meta:
+        return []
+    pages: List[int] = []
+    for key in ("page_no", "page", "page_number", "page_idx", "page_label"):
+        page = _coerce_positive_page(meta.get(key))
+        if page is not None:
+            pages.append(page)
+    for item in meta.get("doc_items") or meta.get("doc_items_refs") or []:
+        if not isinstance(item, dict):
+            continue
+        pages.extend(_pages_from_provenance_list(item.get("prov")))
+    return pages
+
+
+def resolve_page_range_from_metadata(
+    meta: Optional[dict],
+) -> Tuple[Optional[int], Optional[int], Optional[int]]:
+    """
+    Retourne (page_no, page_start, page_end) à partir des métadonnées Docling ou dérivées.
+    page_no et page_start valent le minimum des pages trouvées ; page_end le maximum.
+    """
+    if not meta:
+        return None, None, None
+
+    existing_start = _coerce_positive_page(meta.get("page_start"))
+    existing_end = _coerce_positive_page(meta.get("page_end"))
+    existing_no = _coerce_positive_page(meta.get("page_no"))
+
+    extracted = extract_page_numbers_from_docling_metadata(meta)
+    if extracted:
+        page_start = min(extracted)
+        page_end = max(extracted)
+        page_no = page_start
+    else:
+        page_start = existing_start
+        page_end = existing_end
+        page_no = existing_no or page_start
+
+    if page_start is None and page_no is not None:
+        page_start = page_no
+    if page_end is None and page_no is not None:
+        page_end = page_no
+    if page_no is None and page_start is not None:
+        page_no = page_start
+
+    return page_no, page_start, page_end
+
+
+def resolve_page_from_metadata(metadata: Optional[dict]) -> Optional[int]:
+    """Première page utile (>0) depuis les métadonnées Docling ou dérivées."""
+    page_no, _, _ = resolve_page_range_from_metadata(metadata)
+    return page_no
+
+
+def enrich_docling_page_metadata(meta: dict) -> dict:
+    """
+    Promouvoit page_no / page_start / page_end au premier niveau si présents
+    dans doc_items[].prov[] (sans écraser des valeurs top-level déjà valides).
+    """
+    if not meta:
+        return meta
+    page_no, page_start, page_end = resolve_page_range_from_metadata(meta)
+    if page_no is not None:
+        meta.setdefault("page_no", page_no)
+    if page_start is not None:
+        meta.setdefault("page_start", page_start)
+    if page_end is not None:
+        meta.setdefault("page_end", page_end)
+    return meta
+
+
+def page_sheet_node_id(document_id: int, page_no: int) -> str:
+    """Identifiant stable d'une fiche technique page (chunk parent KAG)."""
+    return f"{PAGE_SHEET_NODE_ID_PREFIX}-{document_id}-{page_no}"
+
+
+def chunk_page_group_key(metadata: Optional[dict]) -> Optional[int]:
+    """
+    Clé de regroupement par page pour KAG.
+    Utilise page_start (via resolve_page_range) ; les plages multi-pages
+    sont rattachées à la page de début uniquement.
+    """
+    page_no, _, _ = resolve_page_range_from_metadata(metadata)
+    return page_no
+
+
+def _chunk_sort_key(chunk: _CHUNK_T) -> Tuple[int, int, int]:
+    idx = getattr(chunk, "chunk_index", 0) or 0
+    start = getattr(chunk, "start_char", 0) or 0
+    cid = getattr(chunk, "id", 0) or 0
+    return (int(idx), int(start), int(cid))
+
+
+def group_chunks_by_page_no(
+    chunks: Sequence[_CHUNK_T],
+) -> Tuple[Dict[int, List[_CHUNK_T]], List[_CHUNK_T]]:
+    """
+    Regroupe les chunks feuilles par numéro de page (>0).
+
+    Returns:
+        (by_page, without_page) — feuilles triées par chunk_index dans chaque page.
+    """
+    by_page: Dict[int, List[_CHUNK_T]] = {}
+    without_page: List[_CHUNK_T] = []
+
+    for chunk in chunks:
+        meta = merged_chunk_metadata(
+            getattr(chunk, "metadata_json", None),
+            getattr(chunk, "metadata_", None),
+        )
+        page_key = chunk_page_group_key(meta)
+        if page_key is None:
+            without_page.append(chunk)
+            continue
+        by_page.setdefault(page_key, []).append(chunk)
+
+    for page_no in by_page:
+        by_page[page_no] = sorted(by_page[page_no], key=_chunk_sort_key)
+    without_page.sort(key=_chunk_sort_key)
+    return by_page, without_page
+
+
+def assemble_page_text_from_chunks(chunks: Sequence[_CHUNK_T]) -> str:
+    """Concatène le contenu des feuilles d'une page (ordre chunk_index / start_char)."""
+    parts: List[str] = []
+    for chunk in sorted(chunks, key=_chunk_sort_key):
+        text = (getattr(chunk, "content", None) or getattr(chunk, "text", None) or "").strip()
+        if text:
+            parts.append(text)
+    return "\n\n---\n\n".join(parts)
+
+
+def dominant_parent_heading_for_chunks(chunks: Sequence[_CHUNK_T]) -> Optional[str]:
+    """Heading de section le plus fréquent parmi les feuilles d'une page."""
+    counts: Dict[str, int] = {}
+    for chunk in chunks:
+        meta = merged_chunk_metadata(
+            getattr(chunk, "metadata_json", None),
+            getattr(chunk, "metadata_", None),
+        )
+        heading = (meta.get("parent_heading") or meta.get("heading") or "").strip()
+        if heading and heading != "__no_heading__":
+            counts[heading] = counts.get(heading, 0) + 1
+    if not counts:
+        return None
+    return max(counts, key=counts.get)
 
 
 def merged_chunk_metadata(
@@ -74,8 +259,13 @@ def apply_row_metadata_defaults(
 
 def mmr_diversity_key(metadata: dict) -> Optional[str]:
     """
-    Clé de diversité MMR : un chunk par tableau (table_id) ou par parent section.
+    Clé de diversité MMR : un chunk par tableau (table_id), par page KAG, ou par parent section.
     """
+    if metadata.get("kag_matched_entity"):
+        doc_id = metadata.get("document_id")
+        page_no = resolve_page_from_metadata(metadata)
+        if doc_id is not None and page_no is not None:
+            return f"kag_page:{doc_id}:{page_no}"
     table_id = metadata.get("table_id")
     if table_id:
         return f"table:{table_id}"

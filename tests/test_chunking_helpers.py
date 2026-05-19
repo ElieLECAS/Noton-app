@@ -420,6 +420,30 @@ def test_resolve_page_from_metadata():
     assert resolve_page_from_metadata(None) is None
 
 
+def test_docling_specs_materialize_page_from_doc_items_prov():
+    class _FakeLeafProv:
+        def __init__(self):
+            self.node_id = "leaf-prov"
+            self.metadata = {
+                "headings": ["1 Intro"],
+                "doc_items": [{"prov": [{"page_no": 12}]}],
+            }
+
+        def get_content(self):
+            return "Texte sur la page douze."
+
+    from app.services.chunking_service import _build_docling_hierarchical_specs
+
+    specs = _build_docling_hierarchical_specs({"document_id": 1}, [_FakeLeafProv()])
+    leaf_specs = [
+        s
+        for s in specs
+        if s["is_leaf"] and s["metadata_json"].get("content_type") == "text_full"
+    ]
+    assert leaf_specs
+    assert leaf_specs[0]["metadata_json"]["page_no"] == 12
+
+
 def test_resolve_char_offsets_from_docling_meta():
     from app.services.chunking_service import _resolve_char_offsets
 

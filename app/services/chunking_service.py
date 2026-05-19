@@ -13,6 +13,11 @@ from app.models.document import Document as LibraryDocument
 from app.models.document_chunk import DocumentChunk
 from app.config import settings
 from app.library_document_logging import get_library_document_logger
+from app.services.chunk_metadata_utils import (
+    enrich_docling_page_metadata,
+    resolve_page_from_metadata as _resolve_page_from_metadata_central,
+    resolve_page_range_from_metadata,
+)
 from llama_index.core.schema import Document as LlamaDocument, NodeRelationship, TextNode
 from llama_index.core.node_parser import HierarchicalNodeParser
 
@@ -49,26 +54,7 @@ def resolve_page_from_metadata(metadata: Optional[dict]) -> Optional[int]:
     Extrait un numéro de page (>0) depuis les métadonnées Docling ou dérivées.
     Utilisé par les fiches techniques page et le regroupement RAG.
     """
-    if not metadata:
-        return None
-    for key in ("page_no", "page", "page_number"):
-        val = metadata.get(key)
-        if val is not None:
-            try:
-                page = int(val)
-                if page > 0:
-                    return page
-            except (TypeError, ValueError):
-                continue
-    page_start = metadata.get("page_start")
-    if page_start is not None:
-        try:
-            page = int(page_start)
-            if page > 0:
-                return page
-        except (TypeError, ValueError):
-            pass
-    return None
+    return _resolve_page_from_metadata_central(metadata)
 
 
 def _resolve_char_offsets(docling_meta: dict, content: str) -> Tuple[int, int]:
@@ -735,14 +721,13 @@ def _page_range_from_docling_leaves(group_leaves: List[TextNode]) -> Tuple[Optio
     """Min / max page_no issus des métadonnées Docling des feuilles d'une section."""
     pages: List[int] = []
     for leaf_node in group_leaves:
-        m = dict(leaf_node.metadata or {})
-        p = m.get("page_no")
-        if p is None:
-            continue
-        try:
-            pages.append(int(p))
-        except (TypeError, ValueError):
-            continue
+        _, page_start, page_end = resolve_page_range_from_metadata(
+            dict(leaf_node.metadata or {})
+        )
+        if page_start is not None:
+            pages.append(page_start)
+        if page_end is not None and page_end != page_start:
+            pages.append(page_end)
     if not pages:
         return None, None
     return min(pages), max(pages)
@@ -888,7 +873,7 @@ def _build_docling_hierarchical_specs(
             if not raw_content:
                 continue
 
-            docling_meta = dict(leaf_node.metadata or {})
+            docling_meta = enrich_docling_page_metadata(dict(leaf_node.metadata or {}))
             headings = (leaf_node.metadata or {}).get("headings") or []
             caption = _extract_caption_from_metadata(docling_meta)
 

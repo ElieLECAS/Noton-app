@@ -90,6 +90,9 @@ class Settings(BaseSettings):
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
     KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
     KAG_TYPED_RELATIONS_ENABLED: bool = True  # Extraction LLM des relations entité-entité typées
+    KAG_PAGE_SHEET_ENABLED: bool = True  # Fiche technique + entités canoniques par page PDF
+    KAG_PAGE_SHEET_MAX_CHARS: int = 12000  # Texte agrégé max envoyé au LLM par page
+    KAG_CHUNK_ENTITY_EXTRACTION_ENABLED: bool = False  # Si True : extraction LLM par chunk (legacy)
     KAG_COREFERENCE_ENABLED: bool = True  # Fusion « la gamme » / « cette série » → entité canonique
     KAG_ENTITY_MERGE_SIMILARITY: float = 0.88  # Seuil fusion embedding (mentions courtes / coréf.)
     KAG_ENTITY_MERGE_SIMILARITY_STRICT: float = 0.92  # Seuil fusion noms complets proches
@@ -103,14 +106,8 @@ class Settings(BaseSettings):
     MULTI_HOP_TYPED_EDGE_BOOST: float = 1.25
     MULTI_HOP_KEYWORD_MIN_TOKENS: int = 5
     MULTI_HOP_REQUIRE_PIVOT_FOR_WEAK: bool = True
-    MULTI_HOP_SUBJECT_MISMATCH_PENALTY: float = 0.08
+    MULTI_HOP_SUBJECT_MISMATCH_PENALTY: float = 0.12
 
-    # MMR (diversification pré-rerank)
-    MMR_K: int = 15
-    MMR_LAMBDA: float = 0.70
-    MMR_SIMQ_HYBRID_WEIGHT: float = 0.60
-    MMR_SIMQ_EMBED_WEIGHT: float = 0.40
-    
     # Reranking
     RERANKER_ENABLED: bool = True
     RERANKER_MODEL: str = "BAAI/bge-reranker-v2-m3"

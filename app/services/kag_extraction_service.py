@@ -289,6 +289,33 @@ Texte:
 
 JSON:"""
 
+PAGE_SHEET_PROMPT_TEMPLATE = """Tu analyses une page complète d'un document technique (DTA, notice, catalogue).
+
+{context_section}
+
+Produis une fiche technique structurée pour cette page (numéro {page_no}).
+
+Règles:
+- Retourne UNIQUEMENT un objet JSON valide, sans markdown
+- entities: même format que l'extraction chunk (max 15 entités pour toute la page)
+  [{{"name": "...", "canonical_name": "...", "type": "...", "importance": 0.8}}]
+- Types autorisés pour "type": {entity_types}
+- page_summary: résumé technique de la page (3-6 phrases)
+- key_facts: tableau de faits normatifs / valeurs / références (max 12 entrées courtes)
+- Résolution des coréférences comme pour l'extraction standard
+
+Format attendu:
+{{
+  "page_summary": "...",
+  "key_facts": ["...", "..."],
+  "entities": [...]
+}}
+
+Texte de la page:
+{page_content}
+
+JSON:"""
+
 
 def normalize_entity_name(name: str) -> str:
     """
@@ -990,6 +1017,208 @@ async def extract_entities_from_query(query_text: str) -> List[str]:
     """
     entities = await extract_entities_from_chunk(query_text)
     return [normalize_entity_name(e["name"]) for e in entities if e.get("name")]
+
+
+def _parse_page_sheet_response(response_text: str) -> Dict:
+    """Parse la réponse LLM fiche page en dict normalisé."""
+    empty: Dict = {"page_summary": "", "key_facts": [], "entities": []}
+    if not response_text:
+        return empty
+
+    text = response_text.strip()
+    if text.startswith("```"):
+        lines = text.split("\n")
+        json_lines: List[str] = []
+        in_json = False
+        for line in lines:
+            if line.startswith("```") and not in_json:
+                in_json = True
+                continue
+            if line.startswith("```") and in_json:
+                break
+            if in_json:
+                json_lines.append(line)
+        text = "\n".join(json_lines)
+
+    obj_match = re.search(r"\{.*\}", text, re.DOTALL)
+    if obj_match:
+        text = obj_match.group()
+
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as e:
+        logger.warning("Erreur parsing fiche page JSON: %s - %s", e, text[:200])
+        return empty
+
+    if not isinstance(data, dict):
+        return empty
+
+    page_summary = str(data.get("page_summary") or "").strip()
+    key_facts_raw = data.get("key_facts") or []
+    key_facts: List[str] = []
+    if isinstance(key_facts_raw, list):
+        for item in key_facts_raw:
+            s = str(item).strip()
+            if s:
+                key_facts.append(s)
+
+    entities = _parse_llm_response(json.dumps(data.get("entities") or []))
+    return {
+        "page_summary": page_summary,
+        "key_facts": key_facts[:12],
+        "entities": entities,
+    }
+
+
+def format_page_technical_sheet_markdown(
+    page_no: int,
+    sheet: Dict,
+    document_title: Optional[str] = None,
+) -> str:
+    """Corps markdown stocké dans le chunk page_technical_sheet."""
+    lines: List[str] = [f"# Fiche technique — page {page_no}"]
+    if document_title:
+        lines.append(f"**Document :** {document_title}")
+    lines.append("")
+    summary = (sheet.get("page_summary") or "").strip()
+    if summary:
+        lines.append("## Résumé")
+        lines.append(summary)
+        lines.append("")
+    facts = sheet.get("key_facts") or []
+    if facts:
+        lines.append("## Faits clés")
+        for fact in facts:
+            lines.append(f"- {fact}")
+        lines.append("")
+    entities = sheet.get("entities") or []
+    if entities:
+        lines.append("## Entités identifiées")
+        for ent in entities[:15]:
+            name = ent.get("name", "")
+            etype = ent.get("type", "")
+            imp = ent.get("importance", "")
+            if name:
+                lines.append(f"- {name} ({etype}, importance={imp})")
+    return "\n".join(lines).strip()
+
+
+async def extract_page_technical_sheet_from_page(
+    page_content: str,
+    page_no: int,
+    context_hint: Optional[str] = None,
+) -> Dict:
+    """
+    Extrait fiche technique + entités canoniques pour une page agrégée.
+    """
+    if not page_content or len(page_content.strip()) < 20:
+        return {"page_summary": "", "key_facts": [], "entities": []}
+
+    from app.config import settings
+
+    max_chars = max(2000, int(getattr(settings, "KAG_PAGE_SHEET_MAX_CHARS", 12000)))
+    content_truncated = page_content[:max_chars]
+    context_section = f"Contexte : {context_hint}" if context_hint else ""
+    prompt = PAGE_SHEET_PROMPT_TEMPLATE.format(
+        entity_types=", ".join(SUPPORTED_ENTITY_TYPE_IDS),
+        context_section=context_section,
+        page_no=page_no,
+        page_content=content_truncated,
+    )
+
+    provider = settings.KAG_EXTRACTION_PROVIDER.lower()
+    model = settings.KAG_EXTRACTION_MODEL
+
+    with trace_run(
+        "kag_page_technical_sheet",
+        run_type="llm",
+        inputs={
+            "provider": provider,
+            "model": model,
+            "page_no": page_no,
+            "content_len": len(page_content),
+        },
+        tags=["kag", "page_sheet", "llm", provider],
+    ) as sheet_run:
+        try:
+            if provider == "openai":
+                from app.services import openai_service
+                response = await openai_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                    max_tokens=4000,
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+            elif provider == "mistral":
+                from app.services import mistral_service
+                response = await mistral_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                    max_tokens=4000,
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+            elif provider == "ollama":
+                from app.services import ollama_service
+                response = await ollama_service.chat(
+                    message=prompt,
+                    model=model,
+                    context=[{"role": "user", "content": prompt}],
+                )
+                content = response.get("choices", [{}])[0].get("message", {}).get("content", "")
+            else:
+                sheet_run.end(error=f"Provider KAG inconnu: {provider}")
+                return {"page_summary": "", "key_facts": [], "entities": []}
+
+            parsed = _parse_page_sheet_response(content)
+            sheet_run.end(
+                outputs={
+                    "nb_entities": len(parsed.get("entities") or []),
+                    "summary_len": len(parsed.get("page_summary") or ""),
+                }
+            )
+            return parsed
+        except Exception as e:
+            logger.error("Erreur fiche technique page %s: %s", page_no, e, exc_info=True)
+            sheet_run.end(error=str(e))
+            return {"page_summary": "", "key_facts": [], "entities": []}
+
+
+def extract_page_technical_sheet_sync(
+    page_content: str,
+    page_no: int,
+    context_hint: Optional[str] = None,
+) -> Dict:
+    """Version synchrone pour workers / pipeline document."""
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            import concurrent.futures
+
+            with concurrent.futures.ThreadPoolExecutor() as pool:
+                future = pool.submit(
+                    asyncio.run,
+                    extract_page_technical_sheet_from_page(
+                        page_content, page_no, context_hint
+                    ),
+                )
+                return future.result(timeout=120)
+        else:
+            return loop.run_until_complete(
+                extract_page_technical_sheet_from_page(
+                    page_content, page_no, context_hint
+                )
+            )
+    except RuntimeError:
+        return asyncio.run(
+            extract_page_technical_sheet_from_page(
+                page_content, page_no, context_hint
+            )
+        )
+    except Exception as e:
+        logger.warning("extract_page_technical_sheet_sync échoué page %s: %s", page_no, e)
+        return {"page_summary": "", "key_facts": [], "entities": []}
 
 
 def extract_entities_sync(chunk_content: str, context_hint: Optional[str] = None) -> List[Dict]:

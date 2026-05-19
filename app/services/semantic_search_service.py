@@ -40,8 +40,10 @@ from app.config import settings
 from app.tracing import trace_run
 from app.services.chunk_metadata_utils import (
     apply_row_metadata_defaults,
+    enrich_docling_page_metadata,
     enrich_passage_content_for_llm,
     merged_chunk_metadata,
+    resolve_page_range_from_metadata,
     table_citation_hint,
 )
 
@@ -57,8 +59,8 @@ except ImportError:
 RERANKER_MODEL = settings.RERANKER_MODEL
 RERANKER_CANDIDATE_MULTIPLIER = 3
 RERANKER_ENABLED = settings.RERANKER_ENABLED
-# Optimisations du reranking
-MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
+# Seuils retrieval notes (contenu libre, légèrement plus permissif que espaces)
+MIN_VECTOR_SIMILARITY_THRESHOLD = 0.45
 MAX_RERANK_CANDIDATES = int(os.getenv("MAX_RERANK_CANDIDATES", "50"))
 RERANK_STAGE1_MAX = int(os.getenv("RERANK_STAGE1_MAX", "100"))
 RERANK_STAGE2_POOL = int(os.getenv("RERANK_STAGE2_POOL", "25"))
@@ -528,31 +530,22 @@ def _two_stage_rerank_leaves(
 
 def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
     """Recopie page_no / plage depuis la feuille vers le parent résolu."""
-    leaf_meta = dict(getattr(leaf_node, "metadata", {}) or {})
+    leaf_meta = enrich_docling_page_metadata(
+        dict(getattr(leaf_node, "metadata", {}) or {})
+    )
     m = dict(getattr(target_node, "metadata", {}) or {})
-    pn = leaf_meta.get("page_no")
+    pn, ps, pe = resolve_page_range_from_metadata(leaf_meta)
     if pn is not None:
-        try:
-            m["page_no"] = int(pn)
-        except (TypeError, ValueError):
-            pass
+        m["page_no"] = pn
     elif m.get("page_start") is not None:
         try:
             m["page_no"] = int(m["page_start"])
         except (TypeError, ValueError):
             pass
-    ps = leaf_meta.get("page_start")
-    pe = leaf_meta.get("page_end")
     if ps is not None:
-        try:
-            m.setdefault("page_start", int(ps))
-        except (TypeError, ValueError):
-            pass
+        m.setdefault("page_start", ps)
     if pe is not None:
-        try:
-            m.setdefault("page_end", int(pe))
-        except (TypeError, ValueError):
-            pass
+        m.setdefault("page_end", pe)
     setattr(target_node, "metadata", m)
 
 
@@ -562,21 +555,7 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     note_id = metadata.get("note_id")
     node_id = metadata.get("node_id")
     chunk_index = metadata.get("chunk_index", 0)
-    page_start = metadata.get("page_start")
-    page_end = metadata.get("page_end")
-    raw_page = metadata.get("page_no")
-    resolved_page = None
-    if raw_page is not None:
-        try:
-            resolved_page = int(raw_page)
-        except (TypeError, ValueError):
-            pass
-    if resolved_page is None and page_start is not None:
-        try:
-            resolved_page = int(page_start)
-        except (TypeError, ValueError):
-            pass
-    page_no = resolved_page
+    page_no, page_start, page_end = resolve_page_range_from_metadata(metadata)
     parent_heading = metadata.get("parent_heading") or metadata.get("heading")
     image_path = metadata.get("image_path")
     image_filename = metadata.get("image_filename")

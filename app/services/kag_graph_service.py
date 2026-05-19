@@ -22,6 +22,15 @@ from app.models.document_space import DocumentSpace
 from app.models.entity_alias import EntityAlias
 from app.models.entity_entity_relation import EntityEntityRelation
 from app.config import settings
+from app.services.chunk_metadata_utils import (
+    KAG_ENTITIES_SOURCE_PAGE_SHEET,
+    PAGE_TECHNICAL_SHEET_CONTENT_TYPE,
+    assemble_page_text_from_chunks,
+    dominant_parent_heading_for_chunks,
+    group_chunks_by_page_no,
+    merged_chunk_metadata,
+    page_sheet_node_id,
+)
 from app.services.kag_extraction_service import (
     normalize_entity_name,
     normalize_entity_core,
@@ -29,7 +38,9 @@ from app.services.kag_extraction_service import (
     normalize_relation_type,
     SUPPORTED_ENTITY_TYPE_IDS,
     extract_entities_sync,
+    extract_page_technical_sheet_sync,
     extract_typed_relations_sync,
+    format_page_technical_sheet_markdown,
 )
 
 logger = logging.getLogger(__name__)
@@ -87,14 +98,17 @@ def _get_or_compute_chunk_entities(
     content: str,
 ) -> List[Dict]:
     """
-    Récupère les entités canoniques depuis metadata_json si présentes,
-    sinon les calcule une seule fois puis les persiste.
+    Retourne les entités déjà présentes en metadata_json (ex. propagation fiche page).
+    Aucun appel LLM sur le contenu du chunk sauf si KAG_CHUNK_ENTITY_EXTRACTION_ENABLED.
     """
     metadata = dict(chunk.metadata_json or {})
     cached_entities = metadata.get("kag_entities")
 
     if isinstance(cached_entities, list) and cached_entities:
         return _canonicalize_entities(cached_entities)
+
+    if not getattr(settings, "KAG_CHUNK_ENTITY_EXTRACTION_ENABLED", False):
+        return []
 
     doc_title = metadata.get("document_title")
     parent_heading = metadata.get("parent_heading") or metadata.get("heading")
@@ -1534,6 +1548,315 @@ def _try_cloning_kag_from_another_space(
         return None
 
 
+def _next_chunk_index_for_document(session: Session, document_id: int) -> int:
+    row = session.exec(
+        select(func.max(DocumentChunk.chunk_index)).where(
+            DocumentChunk.document_id == document_id
+        )
+    ).first()
+    if row is None:
+        return 0
+    return int(row) + 1
+
+
+def _persist_entities_for_chunk_in_space(
+    session: Session,
+    space_id: int,
+    chunk: DocumentChunk,
+    entities: List[Dict],
+    *,
+    content_for_typed_relations: Optional[str] = None,
+) -> Tuple[int, int, int, Set[int]]:
+    """
+    Crée entités + ChunkEntityRelation (+ relations typées optionnelles) pour un chunk.
+
+    Returns:
+        (entity_mentions, relations_created, typed_relations_created, entity_ids_touched)
+    """
+    entity_mentions = 0
+    relations_created = 0
+    typed_relations_created = 0
+    entity_ids_touched: Set[int] = set()
+
+    if not entities or not chunk.id:
+        return 0, 0, 0, entity_ids_touched
+
+    for entity_data in entities:
+        name = (entity_data.get("name") or "").strip()
+        entity_type = (entity_data.get("type") or "concept_technique").strip()
+        importance = float(entity_data.get("importance", 1.0) or 1.0)
+        if not name or len(name) < 2:
+            continue
+
+        entity = _get_or_create_entity_for_space(
+            session=session,
+            name=name,
+            entity_type=entity_type,
+            space_id=space_id,
+            aliases=entity_data.get("aliases"),
+        )
+        entity_mentions += 1
+        if entity.id is not None:
+            entity_ids_touched.add(int(entity.id))
+
+        existing_rel = session.exec(
+            select(ChunkEntityRelation).where(
+                ChunkEntityRelation.chunk_id == chunk.id,
+                ChunkEntityRelation.entity_id == entity.id,
+                ChunkEntityRelation.space_id == space_id,
+            )
+        ).first()
+        if not existing_rel:
+            session.add(
+                ChunkEntityRelation(
+                    chunk_id=chunk.id,
+                    entity_id=entity.id,
+                    relevance_score=importance,
+                    space_id=space_id,
+                    created_at=datetime.utcnow(),
+                )
+            )
+            relations_created += 1
+
+    for eid in entity_ids_touched:
+        _update_entity_confidence_score(session, eid, space_id)
+
+    rel_content = (content_for_typed_relations or chunk.content or "").strip()
+    if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2 and len(rel_content) >= 20:
+        metadata = dict(chunk.metadata_json or {})
+        typed = metadata.get("kag_typed_relations")
+        if not typed:
+            try:
+                typed = extract_typed_relations_sync(rel_content, entities)
+                if typed:
+                    metadata["kag_typed_relations"] = typed
+                    chunk.metadata_json = metadata
+                    chunk.metadata_ = metadata
+                    session.add(chunk)
+            except Exception as tre:
+                logger.warning(
+                    "Relations typées KAG ignorées chunk_id=%s: %s",
+                    chunk.id,
+                    tre,
+                )
+        if typed:
+            typed_relations_created += save_typed_relations_for_chunk(
+                session, space_id, int(chunk.id), typed
+            )
+
+    return entity_mentions, relations_created, typed_relations_created, entity_ids_touched
+
+
+def _upsert_page_technical_sheet_chunk(
+    session: Session,
+    document: Document,
+    page_no: int,
+    sheet: Dict,
+    entities: List[Dict],
+) -> DocumentChunk:
+    """Crée ou met à jour le chunk parent page_technical_sheet."""
+    node_id = page_sheet_node_id(document.id, page_no)
+    existing = session.exec(
+        select(DocumentChunk).where(
+            DocumentChunk.document_id == document.id,
+            DocumentChunk.node_id == node_id,
+        )
+    ).first()
+
+    doc_title = document.title or ""
+    markdown_body = format_page_technical_sheet_markdown(
+        page_no, {**sheet, "entities": entities}, document_title=doc_title
+    )
+    metadata = {
+        "document_id": document.id,
+        "library_id": document.library_id,
+        "user_id": document.user_id,
+        "document_title": doc_title,
+        "content_type": PAGE_TECHNICAL_SHEET_CONTENT_TYPE,
+        "page_no": page_no,
+        "page_start": page_no,
+        "page_end": page_no,
+        "kag_entities": entities,
+        "kag_entities_source": KAG_ENTITIES_SOURCE_PAGE_SHEET,
+        "page_summary": sheet.get("page_summary") or "",
+        "key_facts": sheet.get("key_facts") or [],
+        "node_id": node_id,
+        "parent_node_id": None,
+        "is_leaf": "false",
+        "hierarchy_level": 0,
+    }
+    if sheet.get("kag_typed_relations"):
+        metadata["kag_typed_relations"] = sheet["kag_typed_relations"]
+
+    if existing:
+        existing.content = markdown_body
+        existing.text = markdown_body
+        existing.metadata_json = metadata
+        existing.metadata_ = metadata
+        existing.is_leaf = False
+        existing.hierarchy_level = 0
+        session.add(existing)
+        return existing
+
+    chunk_index = _next_chunk_index_for_document(session, document.id)
+    page_chunk = DocumentChunk(
+        document_id=document.id,
+        chunk_index=chunk_index,
+        content=markdown_body,
+        text=markdown_body,
+        start_char=0,
+        end_char=len(markdown_body),
+        node_id=node_id,
+        parent_node_id=None,
+        is_leaf=False,
+        hierarchy_level=0,
+        metadata_json=metadata,
+        metadata_=metadata,
+        source=document.source,
+    )
+    session.add(page_chunk)
+    session.flush()
+    return page_chunk
+
+
+def _propagate_page_sheet_to_leaf_chunks(
+    session: Session,
+    page_sheet_chunk: DocumentChunk,
+    leaf_chunks: List[DocumentChunk],
+    entities: List[Dict],
+    sheet: Dict,
+) -> None:
+    """Copie les entités canoniques de la fiche page vers chaque feuille."""
+    sheet_node_id = page_sheet_chunk.node_id
+    typed = sheet.get("kag_typed_relations")
+
+    for chunk in leaf_chunks:
+        meta = dict(chunk.metadata_json or {})
+        meta["kag_entities"] = entities
+        meta["kag_entities_source"] = KAG_ENTITIES_SOURCE_PAGE_SHEET
+        meta["page_sheet_node_id"] = sheet_node_id
+        if typed:
+            meta["kag_typed_relations"] = typed
+        chunk.metadata_json = meta
+        chunk.metadata_ = meta
+        session.add(chunk)
+
+
+def _process_kag_single_chunk_in_space(
+    session: Session,
+    space_id: int,
+    chunk: DocumentChunk,
+) -> Tuple[int, int, int]:
+    """Extraction entités par chunk (fallback sans page)."""
+    content = (chunk.content or "").strip()
+    if len(content) < 20:
+        return 0, 0, 0
+
+    entities = _get_or_compute_chunk_entities(session, chunk, content)
+    if not entities:
+        return 0, 0, 0
+
+    em, rel, typed, _ = _persist_entities_for_chunk_in_space(
+        session,
+        space_id,
+        chunk,
+        entities,
+        content_for_typed_relations=content,
+    )
+    return em, rel, typed
+
+
+def _process_kag_pages_for_document_space(
+    session: Session,
+    document: Document,
+    space_id: int,
+    leaf_chunks: List[DocumentChunk],
+) -> Tuple[int, int, int, int]:
+    """
+    Extraction KAG par page (fiche technique) + propagation vers les feuilles.
+
+    Returns:
+        (pages_processed, entity_mentions, relations, typed_relations)
+    """
+    by_page, without_page = group_chunks_by_page_no(leaf_chunks)
+    total_em = 0
+    total_rel = 0
+    total_typed = 0
+    pages_processed = 0
+
+    for page_no, page_leaves in sorted(by_page.items()):
+        page_text = assemble_page_text_from_chunks(page_leaves)
+        if len(page_text.strip()) < 20:
+            continue
+
+        doc_title = document.title or ""
+        dominant_heading = dominant_parent_heading_for_chunks(page_leaves)
+        context_parts = [f"Document : {doc_title}", f"Page : {page_no}"]
+        if dominant_heading:
+            context_parts.append(f"Section : {dominant_heading}")
+        context_hint = " | ".join(context_parts)
+
+        sheet = extract_page_technical_sheet_sync(page_text, page_no, context_hint)
+        entities = _canonicalize_entities(sheet.get("entities") or [])
+        if not entities:
+            continue
+
+        if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
+            try:
+                typed = extract_typed_relations_sync(page_text, entities)
+                if typed:
+                    sheet["kag_typed_relations"] = typed
+            except Exception as tre:
+                logger.warning(
+                    "Relations typées page %s document_id=%s ignorées: %s",
+                    page_no,
+                    document.id,
+                    tre,
+                )
+
+        page_sheet_chunk = _upsert_page_technical_sheet_chunk(
+            session, document, page_no, sheet, entities
+        )
+        _propagate_page_sheet_to_leaf_chunks(
+            session, page_sheet_chunk, page_leaves, entities, sheet
+        )
+
+        em, rel, typed, _ = _persist_entities_for_chunk_in_space(
+            session,
+            space_id,
+            page_sheet_chunk,
+            entities,
+            content_for_typed_relations=page_text,
+        )
+        total_em += em
+        total_rel += rel
+        total_typed += typed
+
+        for leaf in page_leaves:
+            em_l, rel_l, typed_l, _ = _persist_entities_for_chunk_in_space(
+                session,
+                space_id,
+                leaf,
+                entities,
+                content_for_typed_relations=None,
+            )
+            total_em += em_l
+            total_rel += rel_l
+            total_typed += typed_l
+
+        pages_processed += 1
+
+    if without_page:
+        logger.info(
+            "KAG document_id=%s : %d feuille(s) sans page_no — pas d'extraction LLM "
+            "(entités uniquement via fiches page_technical_sheet).",
+            document.id,
+            len(without_page),
+        )
+
+    return pages_processed, total_em, total_rel, total_typed
+
+
 def process_kag_for_document_space(session: Session, document_id: int, space_id: int) -> Dict[str, int]:
 
     """
@@ -1579,80 +1902,30 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
     total_relations = 0
     total_typed_relations = 0
     processed_chunks = 0
+    pages_processed = 0
 
-    for chunk in chunks:
-        content = (chunk.content or "").strip()
-        if len(content) < 20:
-            continue
-
-        entities = _get_or_compute_chunk_entities(session, chunk, content)
-        if not entities:
-            continue
-
-        processed_chunks += 1
-        entity_ids_touched: Set[int] = set()
-        for entity_data in entities:
-            name = (entity_data.get("name") or "").strip()
-            entity_type = (entity_data.get("type") or "concept_technique").strip()
-            importance = float(entity_data.get("importance", 1.0) or 1.0)
-            if not name or len(name) < 2:
-                continue
-
-            entity = _get_or_create_entity_for_space(
-                session=session,
-                name=name,
-                entity_type=entity_type,
-                space_id=space_id,
-                aliases=entity_data.get("aliases"),
+    if getattr(settings, "KAG_PAGE_SHEET_ENABLED", True):
+        pages_processed, total_entities, total_relations, total_typed_relations = (
+            _process_kag_pages_for_document_space(
+                session, document, space_id, chunks
             )
-            total_entities += 1
-            if entity.id is not None:
-                entity_ids_touched.add(int(entity.id))
-
-            existing_rel = session.exec(
-                select(ChunkEntityRelation).where(
-                    ChunkEntityRelation.chunk_id == chunk.id,
-                    ChunkEntityRelation.entity_id == entity.id,
-                    ChunkEntityRelation.space_id == space_id,
-                )
-            ).first()
-            if not existing_rel:
-                relation = ChunkEntityRelation(
-                    chunk_id=chunk.id,
-                    entity_id=entity.id,
-                    relevance_score=importance,
-                    space_id=space_id,
-                    created_at=datetime.utcnow(),
-                )
-                session.add(relation)
-                total_relations += 1
-
-        for eid in entity_ids_touched:
-            _update_entity_confidence_score(session, eid, space_id)
-
-        if settings.KAG_TYPED_RELATIONS_ENABLED and len(entities) >= 2:
-            metadata = dict(chunk.metadata_json or {})
-            typed = metadata.get("kag_typed_relations")
-            
-            if not typed:
-                try:
-                    typed = extract_typed_relations_sync(content, entities)
-                    if typed:
-                        metadata["kag_typed_relations"] = typed
-                        chunk.metadata_json = metadata
-                        chunk.metadata_ = metadata
-                        session.add(chunk)
-                except Exception as tre:
-                    logger.warning(
-                        "Relations typées KAG ignorées chunk_id=%s: %s",
-                        chunk.id,
-                        tre,
-                    )
-
-            if typed:
-                total_typed_relations += save_typed_relations_for_chunk(
-                    session, space_id, int(chunk.id), typed
-                )
+        )
+        processed_chunks = len(chunks)
+    elif getattr(settings, "KAG_CHUNK_ENTITY_EXTRACTION_ENABLED", False):
+        for chunk in chunks:
+            em, rel, typed = _process_kag_single_chunk_in_space(
+                session, space_id, chunk
+            )
+            if em:
+                processed_chunks += 1
+            total_entities += em
+            total_relations += rel
+            total_typed_relations += typed
+    else:
+        logger.warning(
+            "KAG document_id=%s : page_sheet et extraction chunk désactivés — aucune entité.",
+            document_id,
+        )
 
     session.commit()
 
@@ -1670,10 +1943,11 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
         _process_parent_enrichment_for_document_space(session, document_id, space_id)
 
     logger.info(
-        "✅ KAG document-space terminé document_id=%s space_id=%s chunks=%s entités=%s relations=%s typed_eer=%s",
+        "✅ KAG document-space terminé document_id=%s space_id=%s chunks=%s pages=%s entités=%s relations=%s typed_eer=%s",
         document_id,
         space_id,
         processed_chunks,
+        pages_processed,
         total_entities,
         total_relations,
         total_typed_relations,
@@ -1682,6 +1956,7 @@ def process_kag_for_document_space(session: Session, document_id: int, space_id:
         "entities": total_entities,
         "relations": total_relations,
         "chunks": processed_chunks,
+        "pages": pages_processed,
         "typed_entity_relations": total_typed_relations,
     }
 

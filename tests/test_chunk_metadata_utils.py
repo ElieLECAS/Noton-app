@@ -2,10 +2,14 @@
 from app.services.chunk_metadata_utils import (
     build_embedding_input_text,
     content_type_score_multiplier,
+    enrich_docling_page_metadata,
+    extract_page_numbers_from_docling_metadata,
     merged_chunk_metadata,
     meta_is_leaf,
     mmr_diversity_key,
     parent_llm_context_block,
+    resolve_page_from_metadata,
+    resolve_page_range_from_metadata,
     table_citation_hint,
 )
 
@@ -58,6 +62,47 @@ def test_parent_llm_context_block():
     )
     assert "Résumé de section" in block
     assert "Questions clés" in block
+
+
+def test_extract_page_numbers_from_doc_items_prov():
+    meta = {"doc_items": [{"prov": [{"page_no": 5}, {"page_no": 7}]}]}
+    assert extract_page_numbers_from_docling_metadata(meta) == [5, 7]
+
+
+def test_resolve_page_range_from_doc_items_prov():
+    meta = {"doc_items": [{"prov": [{"page_no": 5}, {"page_no": 7}]}]}
+    page_no, page_start, page_end = resolve_page_range_from_metadata(meta)
+    assert page_no == 5
+    assert page_start == 5
+    assert page_end == 7
+
+
+def test_enrich_docling_page_metadata_promotes_prov_pages():
+    meta = {"doc_items": [{"prov": [{"page_no": 5}, {"page_no": 7}]}]}
+    enriched = enrich_docling_page_metadata(meta)
+    assert enriched["page_no"] == 5
+    assert enriched["page_start"] == 5
+    assert enriched["page_end"] == 7
+
+
+def test_resolve_page_from_metadata_top_level_regression():
+    assert resolve_page_from_metadata({"page_no": 3}) == 3
+    assert resolve_page_from_metadata({"page_start": 2}) == 2
+    assert resolve_page_from_metadata({"content_type": "text"}) is None
+    assert resolve_page_from_metadata(None) is None
+
+
+def test_enrich_does_not_overwrite_existing_top_level_page():
+    meta = {
+        "page_no": 9,
+        "page_start": 9,
+        "page_end": 9,
+        "doc_items": [{"prov": [{"page_no": 1}]}],
+    }
+    enriched = enrich_docling_page_metadata(meta)
+    assert enriched["page_no"] == 9
+    assert enriched["page_start"] == 9
+    assert enriched["page_end"] == 9
 
 
 def test_table_citation_hint_from_table_json():

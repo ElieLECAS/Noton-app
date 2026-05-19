@@ -69,6 +69,31 @@ def test_needs_multi_hop_empty_query():
     assert _needs_multi_hop("", ["a", "b"]) is False
 
 
+def test_classify_query_type_integration():
+    from app.services.space_search_service import classify_query_type, is_factual_query
+
+    assert is_factual_query("Quelle hauteur maximale ?")
+    assert classify_query_type("Comparaison Perform 70 et 76") == "comparative"
+
+
+def test_retrieval_thresholds_hardcoded():
+    from app.services.space_search_service import (
+        MIN_VECTOR_SIMILARITY_THRESHOLD,
+        MMR_ENABLED,
+        PARENT_ENRICHED_ENABLED,
+        RERANK_MIN_SCORE,
+        RRF_MIN_SCORE,
+        RRF_PARENT_LIST_WEIGHT,
+    )
+
+    assert MIN_VECTOR_SIMILARITY_THRESHOLD == 0.45
+    assert RERANK_MIN_SCORE == 0.30
+    assert RRF_MIN_SCORE == 0.08
+    assert RRF_PARENT_LIST_WEIGHT == 0.30
+    assert PARENT_ENRICHED_ENABLED is False
+    assert MMR_ENABLED is False
+
+
 def test_multihop_state_initializes_empty():
     from app.services.space_search_service import _MultiHopState
 

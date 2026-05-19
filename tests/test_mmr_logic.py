@@ -2,7 +2,6 @@ import numpy as np
 import pytest
 from unittest.mock import MagicMock, patch
 from llama_index.core.schema import NodeWithScore, TextNode
-from app.config import settings
 from app.services.space_search_service import (
     _compute_mmr_with_parent_constraint,
     _fetch_embeddings_for_chunks,
@@ -122,9 +121,9 @@ def test_mmr_fallback_missing_embeddings():
     assert len(selected) == 1
     assert selected[0].node.id_ == "chunk-1"
 
-def test_mmr_lambda_default_from_settings():
-    assert MMR_LAMBDA == settings.MMR_LAMBDA
-    assert settings.MMR_LAMBDA >= 0.65
+def test_mmr_lambda_hardcoded():
+    assert MMR_LAMBDA == 0.85
+    assert MMR_LAMBDA >= 0.65
 
 
 def test_mmr_subject_mismatch_penalty():

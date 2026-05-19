@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -21,6 +21,11 @@ from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.space_search_service import search_relevant_passages as search_space_passages
+from app.services.chunk_metadata_utils import (
+    merged_chunk_metadata,
+    resolve_page_from_metadata,
+    resolve_page_range_from_metadata,
+)
 from app.services.space_service import get_space_by_id
 from app.tracing import trace_run, trace_pipeline
 from datetime import datetime
@@ -43,31 +48,22 @@ def _coerce_positive_int(value) -> Optional[int]:
 
 
 def _resolve_page_from_passage(passage: dict) -> Optional[int]:
-    """Résout la page depuis un passage (page_no, page_start, page_label, page_idx)."""
-    return (
-        _coerce_positive_int(passage.get("page_no"))
-        or _coerce_positive_int(passage.get("page_start"))
-        or _coerce_positive_int(passage.get("page_label"))
-        or _coerce_positive_int(passage.get("page_idx"))
-    )
+    """Résout la page depuis un passage (page_no, doc_items/prov, page_start, etc.)."""
+    return resolve_page_from_metadata(passage)
+
+
+def _resolve_page_range_from_chunk(
+    chunk: DocumentChunk,
+) -> tuple[Optional[int], Optional[int], Optional[int]]:
+    """Résout page_no / page_start / page_end depuis metadata_json + metadata_."""
+    merged_meta = merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
+    return resolve_page_range_from_metadata(merged_meta)
 
 
 def _resolve_page_from_chunk(chunk: DocumentChunk) -> Optional[int]:
-    """
-    Résout la page d'un chunk en fusionnant metadata_json + metadata_.
-    metadata_json prime mais on garde le fallback legacy.
-    """
-    merged_meta = {}
-    if isinstance(chunk.metadata_, dict):
-        merged_meta.update(chunk.metadata_)
-    if isinstance(chunk.metadata_json, dict):
-        merged_meta.update(chunk.metadata_json)
-    return (
-        _coerce_positive_int(merged_meta.get("page_no"))
-        or _coerce_positive_int(merged_meta.get("page_start"))
-        or _coerce_positive_int(merged_meta.get("page_label"))
-        or _coerce_positive_int(merged_meta.get("page_idx"))
-    )
+    """Résout la page d'un chunk en fusionnant metadata_json + metadata_."""
+    page_no, _, _ = _resolve_page_range_from_chunk(chunk)
+    return page_no
 
 
 def _persist_assistant_reply(
@@ -104,9 +100,32 @@ def _int_env(name: str, default: int) -> int:
         return default
 
 
-# Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K).
-# Défaut 8 : avec 1 passage, le modèle comble avec des généralisations faux catalogue (tableaux inventés, ✓/✗).
-RAG_TOP_K = _int_env("RAG_TOP_K", 8)
+# Nombre de passages RAG renvoyés au LLM (valeur en dur).
+RAG_TOP_K = 6
+MAX_SOURCES_PER_PAGE = 2
+
+
+def _limit_sources_by_page(
+    sources: List[dict],
+    max_per_page: int = MAX_SOURCES_PER_PAGE,
+) -> List[dict]:
+    """Garde au plus max_per_page sources par (document_id, page_no), meilleurs scores d'abord."""
+    if max_per_page <= 0 or not sources:
+        return sources
+    groups: Dict[tuple, List[dict]] = {}
+    for s in sources:
+        key = (s.get("document_id"), s.get("page_no"))
+        groups.setdefault(key, []).append(s)
+    kept: List[dict] = []
+    for items in groups.values():
+        items.sort(key=lambda x: float(x.get("score") or 0), reverse=True)
+        kept.extend(items[:max_per_page])
+    kept.sort(key=lambda x: float(x.get("score") or 0), reverse=True)
+    for i, s in enumerate(kept):
+        s["index"] = i + 1
+    return kept
+
+
 # Paramétrage en dur du chat "espaces"
 SPACE_CHAT_MAX_TOKENS = 1200
 SPACE_CHAT_TEMPERATURE = 0.1
@@ -842,9 +861,9 @@ async def stream_space_chat_message(
                     for i, p in enumerate(passages):
                         did = p.get("document_id")
                         raw = p.get("passage_raw", p.get("passage", ""))
-                        resolved_page = _resolve_page_from_passage(p)
-                        resolved_page_start = _coerce_positive_int(p.get("page_start"))
-                        resolved_page_end = _coerce_positive_int(p.get("page_end"))
+                        resolved_page, resolved_page_start, resolved_page_end = (
+                            resolve_page_range_from_metadata(p)
+                        )
 
                         if resolved_page is None:
                             fallback_chunk = None
@@ -859,9 +878,11 @@ async def stream_space_chat_message(
                                     (did, p.get("chunk_index"))
                                 )
                             if fallback_chunk is not None:
-                                resolved_page = _resolve_page_from_chunk(fallback_chunk)
-                                if resolved_page_start is None:
-                                    resolved_page_start = _resolve_page_from_chunk(fallback_chunk)
+                                (
+                                    resolved_page,
+                                    resolved_page_start,
+                                    resolved_page_end,
+                                ) = _resolve_page_range_from_chunk(fallback_chunk)
 
                         source_item = {
                             "index": i + 1,
@@ -887,6 +908,7 @@ async def stream_space_chat_message(
                         if p.get("table_citation"):
                             source_item["table_citation"] = p["table_citation"]
                         sources_data.append(source_item)
+                    sources_data = _limit_sources_by_page(sources_data)
                     logger.info(
                         "Space chat sources built: %s",
                         [
