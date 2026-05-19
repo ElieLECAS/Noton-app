@@ -106,9 +106,20 @@ class Settings(BaseSettings):
     MULTI_HOP_SUBJECT_MISMATCH_PENALTY: float = 0.08
 
     # MMR (diversification pré-rerank)
+    MMR_K: int = 15
     MMR_LAMBDA: float = 0.70
     MMR_SIMQ_HYBRID_WEIGHT: float = 0.60
     MMR_SIMQ_EMBED_WEIGHT: float = 0.40
+    
+    # Reranking
+    RERANKER_ENABLED: bool = True
+    RERANKER_MODEL: str = "BAAI/bge-reranker-v2-m3"
+
+    # KAG retrieval tuning
+    MIN_ENTITY_CONFIDENCE: float = 0.30
+
+    # Debug enrichi des passages RAG
+    RAG_DEBUG_METADATA: bool = False
     
     # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
     # False = défaut si la variable est absente (voir parse_multimodal_enabled).
@@ -327,4 +338,3 @@ settings = Settings()
 def get_model_for_preset(preset: Optional[str]) -> dict:
     """Compatibilité: retourne toujours le modèle fast unique configuré."""
     return {"provider": "mistral", "model": settings.MODEL_FAST}
-

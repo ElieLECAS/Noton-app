@@ -122,7 +122,7 @@ services:
             - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
             - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
             # Reranking Performance
-            - RERANKER_MODEL=${RERANKER_MODEL:-BAAI/bge-reranker-base}
+            - RERANKER_MODEL=${RERANKER_MODEL:-BAAI/bge-reranker-v2-m3}
             - RERANK_STAGE1_MAX=${RERANK_STAGE1_MAX:-40}
             - RERANK_STAGE2_POOL=${RERANK_STAGE2_POOL:-15}
             - MAX_RERANK_CANDIDATES=${MAX_RERANK_CANDIDATES:-40}
@@ -137,7 +137,7 @@ services:
             - MULTI_HOP_KEYWORD_MIN_TOKENS=${MULTI_HOP_KEYWORD_MIN_TOKENS:-5}
             - MULTI_HOP_REQUIRE_PIVOT_FOR_WEAK=${MULTI_HOP_REQUIRE_PIVOT_FOR_WEAK:-true}
             - RERANKER_TOP_N=${RERANKER_TOP_N:-60}
-            - RERANKER_ENABLED=${RERANKER_ENABLED:-false}
+            - RERANKER_ENABLED=${RERANKER_ENABLED:-true}
         depends_on:
             db:
                 condition: service_healthy
@@ -221,7 +221,7 @@ services:
             - TRACE_VERBOSE_TEXT=${TRACE_VERBOSE_TEXT:-false}
             - TRACE_TEXT_MAX_CHARS=${TRACE_TEXT_MAX_CHARS:-12000}
             # Reranking Performance
-            - RERANKER_MODEL=${RERANKER_MODEL:-BAAI/bge-reranker-base}
+            - RERANKER_MODEL=${RERANKER_MODEL:-BAAI/bge-reranker-v2-m3}
             - RERANK_STAGE1_MAX=${RERANK_STAGE1_MAX:-40}
             - RERANK_STAGE2_POOL=${RERANK_STAGE2_POOL:-15}
             - MAX_RERANK_CANDIDATES=${MAX_RERANK_CANDIDATES:-40}
