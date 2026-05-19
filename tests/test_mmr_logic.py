@@ -6,6 +6,8 @@ from app.config import settings
 from app.services.space_search_service import (
     _compute_mmr_with_parent_constraint,
     _fetch_embeddings_for_chunks,
+    _infer_adaptive_mmr_lambda,
+    _should_skip_reranking_adaptive,
     MMR_K,
     MMR_LAMBDA,
 )
@@ -180,3 +182,23 @@ def test_mmr_lambda_influence():
     
     assert selected[0].node.id_ == "chunk-1"
     assert selected[1].node.id_ == "chunk-2"
+
+
+def test_infer_adaptive_mmr_lambda_comparative():
+    lam = _infer_adaptive_mmr_lambda("Comparaison entre A et B", None)
+    assert 0.0 <= lam <= 1.0
+    assert lam <= MMR_LAMBDA
+
+
+def test_skip_reranking_adaptive_ambiguous_blocks_skip():
+    candidates = [
+        NodeWithScore(node=TextNode(id_="chunk-1", metadata={"vector_similarity": 0.95}), score=0.95),
+        NodeWithScore(node=TextNode(id_="chunk-2", metadata={"vector_similarity": 0.949}), score=0.949),
+    ]
+    skip, _avg = _should_skip_reranking_adaptive(
+        filtered_candidates=candidates,
+        k=2,
+        query_text="comparaison entre X et Y",
+        intent=None,
+    )
+    assert skip is False
