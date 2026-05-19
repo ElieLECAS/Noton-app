@@ -33,6 +33,18 @@ from sqlalchemy import or_
 from app.models.note import Note
 from app.models.note_chunk import NoteChunk
 from app.services.project_service import get_project_by_id
+from app.services.retrieval_pipeline import (
+    VECTOR_RETRIEVE_MAX,
+    RetrievalStats,
+    adaptive_gate,
+    adaptive_top_n,
+    analyze_query,
+    annotate_kag_matches_note,
+    log_retrieval_stats,
+    merge_vector_and_exact,
+    retrieve_exact_refs_note,
+    smart_parent_or_leaf,
+)
 import logging
 from llama_index.core.schema import TextNode, NodeWithScore, QueryBundle
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -224,6 +236,7 @@ def _retrieve_leaves_sql(
             node_id=row.node_id,
             parent_node_id=row.parent_node_id,
         )
+        metadata["chunk_db_id"] = row.id
 
         node = TextNode(
             id_=row.node_id or f"chunk-{row.id}",
@@ -600,181 +613,67 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     return out
 
 
-# ---------------------------------------------------------------------------
-# Optimisations du reranking
-# ---------------------------------------------------------------------------
-
-def _filter_low_similarity_candidates(
-    candidates: List[NodeWithScore],
-    min_threshold: float = MIN_VECTOR_SIMILARITY_THRESHOLD,
-) -> List[NodeWithScore]:
-    """
-    Filtre les candidats avec une similarité vectorielle trop faible avant le reranking.
-    
-    Évite de reranker des candidats qui ont déjà une très faible pertinence,
-    ce qui réduit le temps de traitement du reranker.
-    
-    Args:
-        candidates: Liste de NodeWithScore avec scores de similarité vectorielle
-        min_threshold: Seuil minimum de similarité (défaut: 0.25)
-    
-    Returns:
-        Liste filtrée de candidats avec similarité >= min_threshold
-    """
-    filtered = [c for c in candidates if float(c.score or 0.0) >= min_threshold]
-    if len(filtered) < len(candidates):
-        logger.debug(
-            "Filtrage similarité vectorielle: %d → %d candidats (seuil=%.2f)",
-            len(candidates),
-            len(filtered),
-            min_threshold,
-        )
-    return filtered
+RERANK_MIN_SCORE = 0.30
 
 
-# ---------------------------------------------------------------------------
-# KAG - Knowledge Graph Retrieval
-# ---------------------------------------------------------------------------
-
-def _retrieve_via_knowledge_graph(
-    session: Session,
-    project_id: int,
-    user_id: int,
+def _single_stage_rerank_leaves(
+    filtered_candidates: List[NodeWithScore],
     query_text: str,
-    limit: int = 10,
-    pivot_entity_names: Optional[List[str]] = None,
+    k: int,
+    char_cap: int = 2000,
 ) -> List[NodeWithScore]:
-    """
-    Récupère des chunks via le graphe de connaissances KAG.
-    
-    Args:
-        pivot_entity_names: Entités normalisées extraites de la requête par LLM (prioritaires)
-    """
+    reranker = _get_reranker()
+    if not reranker:
+        return filtered_candidates[:k]
+    pool = filtered_candidates
+    backup: Dict[str, str] = {}
+    for nws in pool:
+        node = nws.node
+        nid = str(getattr(node, "id_", None) or "")
+        raw = (
+            node.get_content()
+            if hasattr(node, "get_content")
+            else getattr(node, "text", "") or ""
+        )
+        backup[nid] = raw
+        meta = dict(getattr(node, "metadata", {}) or {})
+        enriched = enrich_passage_content_for_llm(raw, meta)
+        short = enriched[:char_cap] if len(enriched) > char_cap else enriched
+        _set_node_text_content(node, short)
     try:
-        from app.services.kag_extraction_service import normalize_entity_name
-        from app.services.kag_graph_service import get_chunks_by_entity_names
-        
-        # Stratégie 1: utiliser les entités pivot LLM si disponibles
-        if pivot_entity_names:
-            query_terms = pivot_entity_names
-            logger.debug(
-                "KAG retrieval (projet): utilisation de %d entités pivot LLM", 
-                len(query_terms)
-            )
-        else:
-            # Fallback: split naïf de la requête
-            query_terms = [t.strip().lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text)]
-            query_terms = [t for t in query_terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS]
-        
-        if not query_terms:
-            return []
-        
-        results = get_chunks_by_entity_names(
-            session=session,
-            entity_names=query_terms,
-            project_id=project_id,
-            user_id=user_id,
-            limit=limit,
+        r = reranker.postprocess_nodes(
+            pool,
+            query_bundle=QueryBundle(query_str=query_text),
         )
-        
-        nodes_with_scores: List[NodeWithScore] = []
-        for result in results:
-            chunk = result["chunk"]
-            relevance = result.get("relevance_score", 0.5)
-            
-            metadata = merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-            metadata.setdefault("note_id", chunk.note_id)
-            metadata.setdefault("node_id", chunk.node_id)
-            metadata.setdefault("parent_node_id", chunk.parent_node_id)
-            metadata["kag_matched_entity"] = result.get("entity_name", "")
-            
-            node = TextNode(
-                id_=chunk.node_id or f"chunk-{chunk.id}",
-                text=chunk.content or chunk.text or "",
-                metadata=metadata,
-            )
-            nodes_with_scores.append(NodeWithScore(node=node, score=float(relevance)))
-        
-        logger.debug(
-            "KAG retrieval (projet): %d chunks via graphe (query_terms=%s)",
-            len(nodes_with_scores),
-            query_terms[:5],
-        )
-        return nodes_with_scores
-        
+        for nws in pool:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            if nid in backup:
+                _set_node_text_content(nws.node, backup[nid])
+        for nws in r:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            raw = backup.get(nid, "")
+            meta = dict(getattr(nws.node, "metadata", {}) or {})
+            enriched = enrich_passage_content_for_llm(raw, meta)
+            _set_node_text_content(nws.node, enriched)
+        return r[:k]
     except Exception as e:
-        logger.warning("Erreur KAG retrieval: %s", e)
+        logger.warning("Rerank (note) échoué: %s", e)
+        for nws in pool:
+            nid = str(getattr(nws.node, "id_", None) or "")
+            if nid in backup:
+                _set_node_text_content(nws.node, backup[nid])
+        return filtered_candidates[:k]
+
+
+def _apply_rerank_min_score(top_leaves: List[NodeWithScore], k: int) -> List[NodeWithScore]:
+    if not top_leaves:
         return []
-
-
-def _merge_with_graph_candidates(
-    vector_candidates: List[NodeWithScore],
-    graph_candidates: List[NodeWithScore],
-    graph_boost: float = 0.2,
-    pivot_entity_names: Optional[List[str]] = None,
-) -> List[NodeWithScore]:
-    """
-    Fusionne les candidats vectoriels et KAG.
-    
-    Les candidats KAG reçoivent un boost de score et sont ajoutés
-    s'ils ne sont pas déjà présents dans les candidats vectoriels.
-    Si pivot_entity_names est fourni, les nœuds dont kag_matched_entity
-    est dans cette liste reçoivent un boost doublé (entités pivot requête).
-    
-    Args:
-        vector_candidates: Candidats de la recherche vectorielle
-        graph_candidates: Candidats du graphe KAG
-        graph_boost: Bonus de score pour les candidats KAG (0.0-1.0)
-        pivot_entity_names: Noms d'entités normalisés issus de la requête (LLM) → boost x2 si match
-        
-    Returns:
-        Liste fusionnée et triée par score
-    """
-    seen_node_ids = set()
-    merged: List[NodeWithScore] = []
-    pivot_set = set(pivot_entity_names or [])
-    normalize_entity_name = None
-    if pivot_set:
-        from app.services.kag_extraction_service import normalize_entity_name as _norm
-        normalize_entity_name = _norm
-    
-    for nws in vector_candidates:
-        node_id = getattr(nws.node, "id_", None) or nws.node.metadata.get("node_id")
-        if node_id:
-            seen_node_ids.add(node_id)
-        merged.append(nws)
-    
-    for nws in graph_candidates:
-        node_id = getattr(nws.node, "id_", None) or nws.node.metadata.get("node_id")
-        matched_entity = (nws.node.metadata or {}).get("kag_matched_entity", "")
-        is_pivot = bool(
-            pivot_set and matched_entity and normalize_entity_name
-            and normalize_entity_name(matched_entity) in pivot_set
-        )
-        boost = 2.0 * graph_boost if is_pivot else graph_boost
-        if node_id and node_id in seen_node_ids:
-            for existing in merged:
-                existing_id = getattr(existing.node, "id_", None) or existing.node.metadata.get("node_id")
-                if existing_id == node_id:
-                    existing.score = max(existing.score, nws.score + boost)
-                    break
-            continue
-        
-        boosted_score = min(1.0, float(nws.score or 0.0) + boost)
-        nws.score = boosted_score
-        merged.append(nws)
-        if node_id:
-            seen_node_ids.add(node_id)
-    
-    merged.sort(key=lambda x: float(x.score or 0.0), reverse=True)
-    
-    logger.debug(
-        "Fusion KAG: %d vectoriels + %d graphe → %d total",
-        len(vector_candidates),
-        len(graph_candidates),
-        len(merged),
-    )
-    return merged
+    ranked = sorted(top_leaves, key=lambda n: float(n.score or 0), reverse=True)
+    max_score = float(ranked[0].score or 0)
+    if max_score < 0:
+        return ranked[:k]
+    filtered = [nws for nws in ranked if float(nws.score or 0) >= RERANK_MIN_SCORE]
+    return (filtered or ranked)[:k]
 
 
 def _normalize_for_gamme(s: str) -> str:
@@ -863,306 +762,136 @@ async def search_relevant_passages(
     k: int = 15,
     passage_size: int = 500,  # ignoré, conservé pour compatibilité API
 ) -> List[Dict]:
-    """
-    Recherche sémantique RAG optimisée sur les chunks de notes.
-    Intègre désormais un système de raisonnement cognitif (CQR) pour la priorisation des sources.
-
-    Pipeline optimisé :
-      1. Inférence d'intention (CQR) pour booster la source appropriée
-      2. SQL pgvector sur les leaves → k*3 candidats (rapides à reranker car courts)
-      3. Filtrage pré-reranking : élimine les candidats avec similarité < MIN_VECTOR_SIMILARITY_THRESHOLD
-      4. Early stopping : skip le reranking si similarité moyenne top-k >= SKIP_RERANK_THRESHOLD
-      5. BGE-reranker-v2-m3 sur les leaves filtrés (~5s vs ~56s sur les parents)
-      6. Résolution des parents pour fournir un contexte plus large au LLM
-      7. Fallback lexical si aucun résultat vectoriel
-
-    Optimisations appliquées :
-      - Filtrage pré-reranking réduit le nombre de candidats à traiter (-20 à -40% de temps)
-      - Early stopping évite le reranking dans ~10-20% des cas (similarité déjà élevée)
-      - Limite dynamique ajustée selon les besoins (max MAX_RERANK_CANDIDATES)
-
-    Args:
-        session      : Session SQLModel
-        project_id   : ID du projet
-        query_text   : Texte de la requête
-        user_id      : ID de l'utilisateur
-        k            : Nombre de passages à retourner
-        passage_size : Ignoré (les chunks ont déjà une taille optimale)
-
-    Returns:
-        Liste de dicts { passage, note_title, note_id, chunk_id, chunk_index, score }
-    """
+    """Recherche lean sur les notes : vector + refs + KAG boost + rerank + K dynamique."""
     from app.services.query_reasoning_service import reason_query_intent
+
     reasoning_result = await reason_query_intent(query_text)
     project = get_project_by_id(session, project_id, user_id)
     if not project:
-        logger.warning(
-            "Projet %d non trouvé ou n'appartient pas à l'utilisateur %d",
-            project_id,
-            user_id,
-        )
+        logger.warning("Projet %d inaccessible (user %d)", project_id, user_id)
         return []
-
     if not query_text or not query_text.strip():
-        logger.warning("Requête vide fournie")
         return []
 
+    stats = RetrievalStats()
     try:
-        candidate_k = (
-            k * RERANKER_CANDIDATE_MULTIPLIER
-            if (RERANKER_AVAILABLE and RERANKER_ENABLED)
-            else k
-        )
-
-        # --- Étape 1 : retrieval vectoriel SQL (leaves seulement) ---
+        qa = analyze_query(query_text)
         with trace_run(
             "vector_retrieval",
             run_type="retriever",
-            inputs={"query": query_text, "project_id": project_id, "candidate_k": candidate_k},
+            inputs={"query": query_text, "project_id": project_id},
             tags=["retrieval", "vector", "pgvector"],
         ) as vr_run:
-            leaf_candidates = _retrieve_leaves_sql(
-                session=session,
-                project_id=project_id,
-                user_id=user_id,
-                query_text=query_text,
-                candidate_k=candidate_k,
+            vector_nodes = _retrieve_leaves_sql(
+                session, project_id, user_id, query_text, VECTOR_RETRIEVE_MAX
             )
-            top3_scores = [round(float(c.score or 0), 4) for c in leaf_candidates[:3]]
-            vr_outputs = {"nb_candidates": len(leaf_candidates), "top3_scores": top3_scores}
-            if TRACE_VERBOSE_TEXT:
-                vr_outputs["candidates_text"] = _nodes_for_trace(leaf_candidates)
-            vr_run.end(outputs=vr_outputs)
+            vr_run.end(
+                outputs={
+                    "nb": len(vector_nodes),
+                    "top3": [round(float(c.score or 0), 4) for c in vector_nodes[:3]],
+                }
+            )
 
-        if not leaf_candidates:
-            logger.info("Aucun résultat vectoriel, activation du fallback lexical")
+        exact_nodes: List[NodeWithScore] = []
+        if qa.product_refs:
+            exact_nodes = retrieve_exact_refs_note(
+                session, project_id, user_id, qa.product_refs
+            )
+            stats.ref_match_used = bool(exact_nodes)
+
+        candidates = merge_vector_and_exact(vector_nodes, exact_nodes, qa)
+        stats.pool_after_merge = len(candidates)
+        stats.top1_vector_similarity = max(
+            (c.vector_similarity for c in candidates), default=0.0
+        )
+
+        if settings.KAG_ENABLED and qa.pivot_entities:
+            stats.kag_boost_used = annotate_kag_matches_note(
+                session, project_id, user_id, candidates, qa.pivot_entities
+            )
+
+        gated = adaptive_gate(candidates)
+        stats.pool_after_gate = len(gated)
+
+        if not gated:
             return await _keyword_fallback_passages(
-                session=session,
-                project_id=project_id,
-                user_id=user_id,
-                query_text=query_text,
-                k=k,
+                session, project_id, user_id, query_text, k
             )
 
-        # --- Étape 1b : enrichissement KAG (si activé) ---
-        pivot_entity_names: List[str] = []
-        if settings.KAG_ENABLED:
-            try:
-                from app.services.kag_extraction_service import extract_entities_from_query_sync
-                pivot_entity_names = extract_entities_from_query_sync(query_text)
-                if pivot_entity_names:
-                    logger.debug("Entités pivot requête (LLM): %s", pivot_entity_names[:5])
-            except Exception as ext_err:
-                logger.debug("Extraction entités requête ignorée: %s", ext_err)
-            try:
-                with trace_run(
-                    "kag_graph_retrieval",
-                    run_type="retriever",
-                    inputs={"query": query_text, "pivot_entities": pivot_entity_names[:10], "limit": k},
-                    tags=["retrieval", "kag", "graph"],
-                ) as kag_run:
-                    graph_candidates = _retrieve_via_knowledge_graph(
-                        session=session,
-                        project_id=project_id,
-                        user_id=user_id,
-                        query_text=query_text,
-                        limit=k,
-                        pivot_entity_names=pivot_entity_names or None,
-                    )
-                    matched_entities = list({
-                        (c.node.metadata or {}).get("kag_matched_entity", "")
-                        for c in graph_candidates
-                        if (c.node.metadata or {}).get("kag_matched_entity")
-                    })
-                    kag_outputs = {"nb_chunks": len(graph_candidates), "matched_entities": matched_entities[:10]}
-                    if TRACE_VERBOSE_TEXT:
-                        kag_outputs["candidates_text"] = _nodes_for_trace(graph_candidates)
-                    kag_run.end(outputs=kag_outputs)
-
-                if graph_candidates:
-                    with trace_run(
-                        "hybrid_fusion",
-                        run_type="chain",
-                        inputs={"nb_vector": len(leaf_candidates), "nb_kag": len(graph_candidates), "graph_boost": 0.15},
-                        tags=["fusion", "kag"],
-                    ) as fusion_run:
-                        leaf_candidates = _merge_with_graph_candidates(
-                            vector_candidates=leaf_candidates,
-                            graph_candidates=graph_candidates,
-                            graph_boost=0.15,
-                            pivot_entity_names=pivot_entity_names or None,
-                        )
-                        fusion_outputs = {"nb_merged": len(leaf_candidates)}
-                        if TRACE_VERBOSE_TEXT:
-                            fusion_outputs["merged_text"] = _nodes_for_trace(leaf_candidates)
-                        fusion_run.end(outputs=fusion_outputs)
-                    logger.info(
-                        "KAG enrichissement: +%d candidats graphe fusionnés",
-                        len(graph_candidates),
-                    )
-            except Exception as kag_err:
-                logger.warning("KAG enrichissement échoué: %s", kag_err)
-
-        # --- Étape 2 : Optimisations pré-reranking ---
-        # Filtrer les candidats avec faible similarité vectorielle
-        filtered_candidates = _filter_low_similarity_candidates(
-            leaf_candidates, MIN_VECTOR_SIMILARITY_THRESHOLD
-        )
-
-        # Early stopping : si les top-k candidats ont déjà une très haute similarité,
-        # skip le reranking (gain de temps significatif)
-        skip_reranking = False
-        if len(filtered_candidates) >= k:
-            top_k_scores = [float(c.score or 0.0) for c in filtered_candidates[:k]]
-            avg_top_k = sum(top_k_scores) / len(top_k_scores)
-
-            if avg_top_k >= SKIP_RERANK_THRESHOLD:
-                logger.info(
-                    "Similarité vectorielle élevée (%.3f >= %.2f), skip reranking",
-                    avg_top_k,
-                    SKIP_RERANK_THRESHOLD,
+        rerank_input = [c.to_node_with_score() for c in gated]
+        if RERANKER_AVAILABLE and RERANKER_ENABLED and _get_reranker():
+            with trace_run(
+                "reranking",
+                run_type="chain",
+                inputs={"nb": len(rerank_input), "k_max": k},
+                tags=["reranking"],
+            ) as rr:
+                reranked = _single_stage_rerank_leaves(
+                    rerank_input, query_text, k=len(rerank_input), char_cap=2000
                 )
-                skip_reranking = True
-                top_leaves = filtered_candidates[:k]
+                reranked = _apply_rerank_min_score(reranked, k=len(rerank_input))
+                rr.end(outputs={"nb": len(reranked)})
+        else:
+            reranked = rerank_input
 
-        # --- Étape 3 : reranking deux étapes sur les LEAVES ---
-        if not skip_reranking and RERANKER_AVAILABLE and RERANKER_ENABLED:
+        top_n = adaptive_top_n(reranked, k_max=k)
+        stats.final_k = len(top_n)
+
+        parent_node_dict = _build_parent_node_dict(session, project_id, user_id)
+
+        def _resolve_parent(parent_node_id: str, leaf_node: TextNode) -> Optional[TextNode]:
+            leaf_meta = dict(getattr(leaf_node, "metadata", {}) or {})
+            nid = leaf_meta.get("note_id")
             try:
-                if _get_reranker():
-                    with trace_run(
-                        "reranking",
-                        run_type="chain",
-                        inputs={
-                            "nb_candidates": len(filtered_candidates),
-                            "stage1_max": RERANK_STAGE1_MAX,
-                            "stage2_pool": RERANK_STAGE2_POOL,
-                            "k": k,
-                        },
-                        tags=["reranking", "bge-reranker"],
-                    ) as rerank_run:
-                        top_leaves = _two_stage_rerank_leaves(
-                            filtered_candidates,
-                            query_text,
-                            k,
-                        )
-                        top_scores = [round(float(n.score or 0), 4) for n in top_leaves[:5]]
-                        rerank_outputs = {"nb_final": len(top_leaves), "top5_scores": top_scores}
-                        if TRACE_VERBOSE_TEXT:
-                            rerank_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
-                            rerank_outputs["filtered_candidates_text"] = _nodes_for_trace(filtered_candidates)
-                        rerank_run.end(outputs=rerank_outputs)
-                else:
-                    logger.warning("Reranker non disponible, fallback sur ordre vectoriel")
-                    top_leaves = filtered_candidates[:k]
-            except Exception as rerank_err:
-                logger.warning(
-                    "Reranking échoué, fallback sur ordre vectoriel: %s", rerank_err
-                )
-                top_leaves = filtered_candidates[:k]
-        elif not skip_reranking:
-            if not RERANKER_ENABLED:
-                logger.debug("Reranker désactivé (RERANKER_ENABLED=false)")
-            top_leaves = filtered_candidates[:k]
+                note_id_int = int(nid) if nid is not None else None
+            except (TypeError, ValueError):
+                note_id_int = None
+            return _resolve_note_parent_with_multihop(
+                session,
+                project_id,
+                user_id,
+                note_id_int,
+                parent_node_id,
+                parent_node_dict,
+            )
 
-        # --- Étape 3 : résolution des parents (contexte enrichi pour le LLM) ---
-        # On charge les parents UNE SEULE FOIS, après le reranking (pas avant).
-        with trace_run(
-            "parent_resolution",
-            run_type="chain",
-            inputs={"project_id": project_id, "nb_top_leaves": len(top_leaves)},
-            tags=["parent", "context"],
-        ) as parent_run:
-            parent_node_dict = _build_parent_node_dict(session, project_id, user_id)
-
-            final_nodes: List[NodeWithScore] = []
-            seen_node_ids: set = set()
-            parents_resolved = 0
-            parents_not_found = 0
-
-            for nws in top_leaves:
-                score = float(getattr(nws, "score", 0.0) or 0.0)
-                leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
-                parent_node_id = leaf_meta.get("parent_node_id")
-
-                target_node = None
-                if parent_node_id:
-                    target_node = parent_node_dict.get(parent_node_id)
-                    if target_node is None:
-                        nid = leaf_meta.get("note_id")
-                        try:
-                            note_id_int = int(nid) if nid is not None else None
-                        except (TypeError, ValueError):
-                            note_id_int = None
-                        target_node = _resolve_note_parent_with_multihop(
-                            session,
-                            project_id,
-                            user_id,
-                            note_id_int,
-                            parent_node_id,
-                            parent_node_dict,
-                        )
-                if target_node is None:
-                    target_node = nws.node
-                    if parent_node_id:
-                        parents_not_found += 1
-                else:
-                    parents_resolved += 1
-                    _merge_leaf_page_into_node_metadata(nws.node, target_node)
-
-                node_id = getattr(target_node, "node_id", None) or leaf_meta.get("node_id")
-                if node_id and node_id in seen_node_ids:
-                    continue
-                if node_id:
-                    seen_node_ids.add(node_id)
-
-                final_nodes.append(NodeWithScore(node=target_node, score=score))
-
-            parent_outputs = {
-                "nb_final_passages": len(final_nodes),
-                "parents_resolved": parents_resolved,
-                "parents_not_found": parents_not_found,
-            }
-            if TRACE_VERBOSE_TEXT:
-                parent_outputs["top_leaves_text"] = _nodes_for_trace(top_leaves)
-                parent_outputs["final_nodes_text"] = _nodes_for_trace(final_nodes)
-            parent_run.end(outputs=parent_outputs)
-
-        logger.info(
-            "Résolution parents: %d passages finaux "
-            "(%d parents résolus, %d parents non trouvés)",
-            len(final_nodes),
-            parents_resolved,
-            parents_not_found,
-        )
+        final_nodes: List[NodeWithScore] = []
+        seen_node_ids: set = set()
+        for nws in top_n:
+            leaf = nws.node
+            target = smart_parent_or_leaf(
+                leaf, parent_node_dict, resolve_parent_fn=_resolve_parent
+            )
+            if target is not leaf:
+                _merge_leaf_page_into_node_metadata(leaf, target)
+            node_id = getattr(target, "id_", None) or (
+                getattr(target, "metadata", {}) or {}
+            ).get("node_id")
+            if node_id and node_id in seen_node_ids:
+                continue
+            if node_id:
+                seen_node_ids.add(node_id)
+            final_nodes.append(
+                NodeWithScore(node=target, score=float(nws.score or 0.0))
+            )
 
         passages = [
             _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))
             for nws in final_nodes
         ]
-
-        score_strs = [f"{p['score']:.3f}" for p in passages[:3]]
-        logger.info(
-            "Trouvé %d passages pertinents%s (scores: %s...)",
-            len(passages),
-            " [reranked]" if (RERANKER_AVAILABLE and RERANKER_ENABLED) else "",
-            score_strs,
+        passages = refine_with_source_authority(
+            passages, query_text, reasoning_result=reasoning_result
         )
-
-        passages = refine_with_source_authority(passages, query_text, reasoning_result=reasoning_result)
+        log_retrieval_stats(stats, "note")
 
         if not passages:
             return await _keyword_fallback_passages(
-                session=session,
-                project_id=project_id,
-                user_id=user_id,
-                query_text=query_text,
-                k=k,
+                session, project_id, user_id, query_text, k
             )
-
         return passages
 
     except Exception as e:
-        logger.error("Erreur lors de la recherche de passages: %s", e, exc_info=True)
+        logger.error("Erreur recherche passages (note): %s", e, exc_info=True)
         return []
 
 
