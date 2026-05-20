@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
@@ -14,6 +14,7 @@ from app.models.document import (
     DocumentUpdate,
     Document,
 )
+from app.models.document_chunk import DocumentChunk
 from app.models.folder import Folder
 from app.models.space import SpaceRead
 from app.models.user import UserRead
@@ -76,6 +77,32 @@ class LibraryStopDocumentResponse(BaseModel):
 class DocumentSpacesManageRequest(BaseModel):
     add_space_ids: List[int] = Field(default_factory=list)
     remove_space_ids: List[int] = Field(default_factory=list)
+
+
+class DocumentPageChunkItem(BaseModel):
+    chunk_id: int
+    chunk_index: int
+    is_leaf: bool
+    node_id: Optional[str] = None
+    parent_node_id: Optional[str] = None
+    start_char: int
+    end_char: int
+    content_preview: str
+    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+
+class DocumentPageChunksCompare(BaseModel):
+    page: int
+    chunk_count: int
+    chunks: List[DocumentPageChunkItem]
+
+
+class DocumentChunksByPageResponse(BaseModel):
+    document_id: int
+    document_title: str
+    filename: Optional[str] = None
+    total_chunks: int
+    pages: List[DocumentPageChunksCompare]
 
 
 @router.get("", response_model=LibraryRead)
@@ -240,6 +267,62 @@ async def list_documents(
             )
         )
     return out
+
+
+@router.get("/documents/{document_id}/chunks-by-page", response_model=DocumentChunksByPageResponse)
+async def get_document_chunks_by_page(
+    document_id: int,
+    include_non_leaf: bool = False,
+    preview_chars: int = 300,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Interface de comparaison page-document vs chunks BDD (groupement par page Docling)."""
+    document = get_document_by_id(session, document_id, current_user.id)
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document non trouvé")
+
+    query = select(DocumentChunk).where(DocumentChunk.document_id == document_id)
+    if not include_non_leaf:
+        query = query.where(DocumentChunk.is_leaf == True)  # noqa: E712
+    query = query.order_by(DocumentChunk.chunk_index.asc())
+
+    chunks = session.exec(query).all()
+    grouped: Dict[int, List[DocumentPageChunkItem]] = {}
+
+    for chunk in chunks:
+        metadata = dict(chunk.metadata_json or chunk.metadata_ or {})
+        page_no = metadata.get("page_no") or metadata.get("page") or metadata.get("page_start") or 0
+        try:
+            page = int(page_no)
+        except (TypeError, ValueError):
+            page = 0
+        preview = (chunk.content or chunk.text or "")[: max(50, preview_chars)]
+        item = DocumentPageChunkItem(
+            chunk_id=chunk.id,
+            chunk_index=chunk.chunk_index,
+            is_leaf=bool(chunk.is_leaf),
+            node_id=chunk.node_id,
+            parent_node_id=chunk.parent_node_id,
+            start_char=chunk.start_char,
+            end_char=chunk.end_char,
+            content_preview=preview,
+            metadata=metadata,
+        )
+        grouped.setdefault(page, []).append(item)
+
+    pages = [
+        DocumentPageChunksCompare(page=page, chunk_count=len(items), chunks=items)
+        for page, items in sorted(grouped.items(), key=lambda x: x[0])
+    ]
+
+    return DocumentChunksByPageResponse(
+        document_id=document.id,
+        document_title=document.title,
+        filename=document.filename,
+        total_chunks=len(chunks),
+        pages=pages,
+    )
 
 
 @router.post("/documents/stop-all", status_code=status.HTTP_200_OK)
