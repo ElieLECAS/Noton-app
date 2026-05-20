@@ -105,6 +105,116 @@ def _retrieve_leaves_sql(
     return nodes
 
 
+def _retrieve_leaves_lexical_sql(
+    session: Session,
+    space_id: int,
+    user_id: int,
+    query_text: str,
+    candidate_k: int,
+) -> List[NodeWithScore]:
+    """Recherche lexicale tsvector sur les feuilles."""
+    terms = _extract_query_terms(query_text)
+    if not terms:
+        logger.info("Lexical tsvector (space): Aucun terme significatif extrait de la requête.")
+        return []
+    
+    # Construction d'une requête OR pour to_tsquery (ex: "vitrage | soleal")
+    or_query = " | ".join(terms)
+
+    sql_query = text("""
+        SELECT
+            dc.id,
+            dc.content,
+            dc.text,
+            dc.chunk_index,
+            dc.document_id,
+            dc.metadata_json,
+            dc.metadata_,
+            dc.source AS chunk_source,
+            d.title AS document_title,
+            d.source AS document_source,
+            d.id AS document_id,
+            ts_rank_cd(dc.tsv_content, to_tsquery('french', :query)) AS similarity_score
+        FROM documentchunk dc
+        INNER JOIN document d ON dc.document_id = d.id
+        INNER JOIN document_space ds ON ds.document_id = d.id
+        WHERE ds.space_id = :space_id
+          AND dc.is_leaf = true
+          AND dc.tsv_content @@ to_tsquery('french', :query)
+        ORDER BY similarity_score DESC
+        LIMIT :limit_k
+    """)
+
+    result = session.execute(
+        sql_query,
+        {"space_id": space_id, "query": or_query, "limit_k": candidate_k}
+    )
+    nodes: List[NodeWithScore] = []
+    for row in result:
+        metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
+        metadata.setdefault("document_id", row.document_id)
+        metadata.setdefault("document_title", row.document_title or "Document sans titre")
+        metadata.setdefault("chunk_index", row.chunk_index)
+        if getattr(row, "document_source", None):
+            metadata.setdefault("source", row.document_source)
+        if getattr(row, "chunk_source", None):
+            metadata.setdefault("source", row.chunk_source)
+        node = TextNode(
+            id_=f"chunk-{row.id}",
+            text=row.content or row.text or "",
+            metadata=metadata,
+        )
+        nodes.append(NodeWithScore(node=node, score=float(row.similarity_score)))
+    logger.info("Lexical tsvector (space): %d feuilles (limit=%d)", len(nodes), candidate_k)
+    return nodes
+
+
+def reciprocal_rank_fusion(
+    vector_results: List[NodeWithScore],
+    lexical_results: List[NodeWithScore],
+    k: int = 60,
+    top_n: int = 15,
+) -> List[NodeWithScore]:
+    """
+    Fusionne les résultats de recherche vectorielle et lexicale avec l'algorithme RRF,
+    puis normalise les scores dans l'intervalle [0.1, 0.9] pour rester compatibles avec les boosts.
+    """
+    rrf_scores: Dict[str, float] = {}
+    nodes_map: Dict[str, NodeWithScore] = {}
+
+    for rank, nws in enumerate(vector_results, start=1):
+        node_id = nws.node.id_
+        nodes_map[node_id] = nws
+        rrf_scores[node_id] = rrf_scores.get(node_id, 0.0) + (1.0 / (k + rank))
+
+    for rank, nws in enumerate(lexical_results, start=1):
+        node_id = nws.node.id_
+        if node_id not in nodes_map:
+            nodes_map[node_id] = nws
+        rrf_scores[node_id] = rrf_scores.get(node_id, 0.0) + (1.0 / (k + rank))
+
+    # Trier par score RRF décroissant
+    sorted_node_ids = sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
+
+    results: List[NodeWithScore] = []
+    for node_id, rrf_score in sorted_node_ids:
+        results.append(NodeWithScore(node=nodes_map[node_id].node, score=rrf_score))
+
+    # Normalisation linéaire dans [0.1, 0.9]
+    if results:
+        scores = [nws.score for nws in results]
+        min_score = min(scores)
+        max_score = max(scores)
+        score_range = max_score - min_score
+        for nws in results:
+            if score_range > 0:
+                nws.score = 0.1 + 0.8 * ((nws.score - min_score) / score_range)
+            else:
+                nws.score = 0.5
+
+    return results
+
+
 def _parse_chunk_id_from_node(node: TextNode) -> Optional[int]:
     nid = getattr(node, "id_", None) or ""
     if isinstance(nid, str) and nid.startswith("chunk-"):
@@ -227,6 +337,54 @@ async def _keyword_fallback_passages(
     k: int,
 ) -> List[Dict]:
     terms = _extract_query_terms(query_text)
+    if not terms:
+        # Pas de termes significatifs
+        return []
+    
+    or_query = " | ".join(terms)
+    
+    # Essayer le tsvector pour une recherche rapide et pertinente
+    try:
+        sql_query = text("""
+            SELECT
+                dc.id,
+                dc.content,
+                dc.text,
+                dc.chunk_index,
+                dc.document_id,
+                dc.metadata_json,
+                dc.metadata_,
+                d.title AS document_title,
+                d.source AS document_source,
+                d.id AS document_id,
+                ts_rank_cd(dc.tsv_content, to_tsquery('french', :query)) AS score
+            FROM documentchunk dc
+            INNER JOIN document d ON dc.document_id = d.id
+            INNER JOIN document_space ds ON ds.document_id = d.id
+            WHERE ds.space_id = :space_id
+              AND dc.is_leaf = true
+              AND dc.tsv_content @@ to_tsquery('french', :query)
+            ORDER BY score DESC
+            LIMIT :limit_k
+        """)
+        result = session.execute(sql_query, {"space_id": space_id, "query": or_query, "limit_k": k})
+        passages: List[Dict] = []
+        for row in result:
+            meta = _merged_chunk_metadata(row.metadata_json, row.metadata_)
+            meta.setdefault("document_id", row.document_id)
+            meta.setdefault("document_title", row.document_title or "Document sans titre")
+            meta.setdefault("chunk_index", row.chunk_index)
+            if getattr(row, "document_source", None):
+                meta.setdefault("source", row.document_source)
+            node = TextNode(id_=f"chunk-{row.id}", text=row.content or row.text or "", metadata=meta)
+            passages.append(_node_to_passage(node, fallback_score=float(row.score or 0.05)))
+        if passages:
+            logger.info("Fallback tsvector (space): %d passages", len(passages))
+            return passages
+    except Exception as e:
+        logger.warning("Le fallback tsvector a échoué (migration non appliquée ?), retour au mode ILIKE : %s", e)
+
+    # Mode dégradé d'origine (ILIKE)
     base_stmt = (
         select(DocumentChunk, Document.title)
         .join(Document, Document.id == DocumentChunk.document_id)
@@ -243,7 +401,7 @@ async def _keyword_fallback_passages(
     if not rows:
         rows = session.exec(base_stmt.limit(max(k * 2, 8))).all()
 
-    passages: List[Dict] = []
+    passages = []
     seen: set = set()
     for chunk, document_title in rows:
         if chunk.id in seen:
@@ -434,7 +592,7 @@ async def search_relevant_passages(
     user_id: int,
     k: int = 15,
 ) -> List[Dict]:
-    """RAG espace : pgvector sur feuilles uniquement, ordre similarité, résolution parent."""
+    """RAG espace : recherche hybride (pgvector + tsvector), ordre similarité fusionné RRF, résolution parent."""
     space = get_space_by_id(session, space_id, user_id)
     if not space:
         logger.warning("Espace %d inaccessible (user %d)", space_id, user_id)
@@ -452,23 +610,45 @@ async def search_relevant_passages(
 
     try:
         candidate_k = max(k, min(k * 4, 80))
+        
+        # 1. Recherche vectorielle dense (pgvector)
         with trace_run(
             "vector_retrieval",
             run_type="retriever",
             inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
             tags=["retrieval", "vector", "space"],
         ) as vr:
-            raw = _retrieve_leaves_sql(session, space_id, user_id, query_text, candidate_k)
-            vr.end(outputs={"nb": len(raw)})
+            raw_vector = _retrieve_leaves_sql(session, space_id, user_id, query_text, candidate_k)
+            vr.end(outputs={"nb": len(raw_vector)})
 
-        if not raw:
+        # 2. Recherche lexicale sparse (tsvector)
+        with trace_run(
+            "lexical_retrieval",
+            run_type="retriever",
+            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+            tags=["retrieval", "lexical", "space"],
+        ) as lr:
+            try:
+                raw_lexical = _retrieve_leaves_lexical_sql(session, space_id, user_id, query_text, candidate_k)
+            except Exception as e:
+                logger.warning("Recherche lexicale échouée (migration probablement non appliquée) : %s", e)
+                raw_lexical = []
+            lr.end(outputs={"nb": len(raw_lexical)})
+
+        if not raw_vector and not raw_lexical:
             return await _keyword_fallback_passages(
                 session, space_id, user_id, query_text, k
             )
 
-        filtered = _filter_by_vector_score(raw)
-        filtered.sort(key=lambda n: float(n.score or 0.0), reverse=True)
-        top_leaves = filtered[:k]
+        # Filtrage par score minimum sur la partie vectorielle uniquement pour éviter le bruit sémantique
+        filtered_vector = _filter_by_vector_score(raw_vector)
+
+        # Fusion RRF (Reciprocal Rank Fusion)
+        fused_results = reciprocal_rank_fusion(filtered_vector, raw_lexical, top_n=candidate_k)
+        
+        # Sélection des meilleurs résultats hybrides (on garde candidate_k candidats pour la résolution
+        # des parents et la déduplication, garantissant qu'on dispose de k résultats uniques à la fin)
+        top_leaves = fused_results[:candidate_k]
 
         with trace_run(
             "parent_resolution",

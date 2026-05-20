@@ -1,7 +1,8 @@
 from sqlmodel import SQLModel, Field, Relationship, Column
-from typing import Optional, List, TYPE_CHECKING
+from typing import Optional, List, TYPE_CHECKING, Any
 from pgvector.sqlalchemy import Vector
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Computed, Index
+from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
 from app.embedding_config import EMBEDDING_DIMENSION
 
 if TYPE_CHECKING:
@@ -25,6 +26,19 @@ class DocumentChunk(SQLModel, table=True):
     metadata_json: Optional[dict] = Field(default=None, sa_column=Column(JSONB, nullable=True))
     metadata_: Optional[dict] = Field(default=None, sa_column=Column(JSONB, nullable=True))
     source: Optional[str] = Field(default=None, index=True)  # Brand/Origin denormalized for speed
+    
+    tsv_content: Optional[Any] = Field(
+        default=None,
+        sa_column=Column(
+            TSVECTOR,
+            Computed("to_tsvector('french', coalesce(content, ''))", persisted=True),
+            nullable=True
+        )
+    )
+
+    __table_args__ = (
+        Index("ix_documentchunk_tsv_content", "tsv_content", postgresql_using="gin"),
+    )
     
     document: Optional["Document"] = Relationship(back_populates="chunks")
 
