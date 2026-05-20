@@ -467,6 +467,33 @@ def _build_table_json(
     }
 
 
+def _build_table_facts(headers: List[str], data_rows: List[List[str]], max_facts: int = 120) -> List[dict]:
+    """
+    C8: faits tabulaires atomiques pour requêtes valeur->colonne.
+    """
+    facts: List[dict] = []
+    for ridx, row in enumerate(data_rows):
+        for cidx, value in enumerate(row):
+            if cidx >= len(headers):
+                continue
+            header = (headers[cidx] or "").strip()
+            val = (value or "").strip()
+            if not header or not val:
+                continue
+            facts.append(
+                {
+                    "row": ridx + 1,
+                    "column": cidx + 1,
+                    "header": header,
+                    "value": val,
+                    "fact_text": f"{header}: {val}",
+                }
+            )
+            if len(facts) >= max_facts:
+                return facts
+    return facts
+
+
 def _table_full_chunk_text(
     *,
     headers: List[str],
@@ -690,6 +717,70 @@ def _page_range_from_docling_leaves(group_leaves: List[TextNode]) -> Tuple[Optio
     return min(pages), max(pages)
 
 
+def _summarize_page_text_extractively(page_no: int, texts: List[str], headings: List[str]) -> str:
+    """
+    Construit un chunk `page_summary` déterministe (sans appel LLM) à partir
+    des feuilles d'une page.
+
+    Objectif Plan B:
+    - produire un signal sémantique de page pour le retrieval (embedding)
+    - rester robuste/coût nul à l'ingestion (pas de génération LLM)
+    - conserver des ancres factuelles (phrases originales courtes)
+    """
+    cleaned = [t.strip() for t in texts if t and t.strip()]
+    if not cleaned:
+        return ""
+
+    full = "\n".join(cleaned)
+    # Extraction simple de phrases (fr/en) ; on garde les plus longues informatives.
+    raw_sentences = [
+        s.strip()
+        for s in re.split(r"(?<=[\.\!\?])\s+|\n+", full)
+        if s and s.strip()
+    ]
+    scored = sorted(
+        raw_sentences,
+        key=lambda s: (len(s), len(re.findall(r"\d", s))),
+        reverse=True,
+    )
+    top_sentences = []
+    seen = set()
+    for s in scored:
+        key = s.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        top_sentences.append(s)
+        if len(top_sentences) >= 5:
+            break
+
+    heading_bits = [h for h in headings if h][:3]
+    heading_line = " > ".join(heading_bits) if heading_bits else "Sans section explicite"
+    # Mots-clés légers (alnum >= 4) pour aider la recherche lexicale/semantic.
+    tokens = re.findall(r"[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9\\-_/]{3,}", full.lower())
+    stop = {"avec", "pour", "dans", "cette", "cela", "sont", "etre", "être", "from", "that", "this"}
+    keywords = []
+    seen_kw = set()
+    for t in tokens:
+        if t in stop:
+            continue
+        if t in seen_kw:
+            continue
+        seen_kw.add(t)
+        keywords.append(t)
+        if len(keywords) >= 12:
+            break
+    kw_line = ", ".join(keywords)
+    bullets = "\n".join(f"- {s}" for s in top_sentences[:5]) if top_sentences else "- (pas de phrase exploitable)"
+
+    return (
+        f"[PAGE_SUMMARY p.{page_no}]\n"
+        f"Section(s): {heading_line}\n"
+        f"Mots-clés: {kw_line}\n\n"
+        f"Points clés extraits:\n{bullets}"
+    ).strip()
+
+
 def _build_docling_hierarchical_specs(
     doc_metadata_base: dict,
     leaf_nodes: List[TextNode],
@@ -704,6 +795,7 @@ def _build_docling_hierarchical_specs(
     groups: Dict[str, List[TextNode]] = {}
     group_order: List[str] = []
     section_captions: Dict[str, List[str]] = {}
+    page_to_leaves: Dict[int, List[TextNode]] = {}
 
     for node in leaf_nodes:
         headings = (node.metadata or {}).get("headings") or []
@@ -717,6 +809,12 @@ def _build_docling_hierarchical_specs(
             captions_list = section_captions.setdefault(key, [])
             if cap not in captions_list:
                 captions_list.append(cap)
+        page_no = (node.metadata or {}).get("page_no")
+        if page_no is not None:
+            try:
+                page_to_leaves.setdefault(int(page_no), []).append(node)
+            except (TypeError, ValueError):
+                pass
 
     specs: List[dict] = []
     chunk_index = 0
@@ -836,6 +934,7 @@ def _build_docling_hierarchical_specs(
                 full_metadata["suspicious_rows"] = suspicious_row_indices
                 full_metadata["column_headers"] = headers
                 full_metadata["table_json"] = table_json_obj
+                full_metadata["table_facts"] = _build_table_facts(headers, data_rows)
                 full_metadata["raw_content"] = raw_content
                 if section_anchors:
                     full_metadata["image_anchor"] = " ; ".join(section_anchors)
@@ -1098,6 +1197,67 @@ def _build_docling_hierarchical_specs(
                         }
                     )
                     chunk_index += 1
+
+    # -----------------------------------------------------------------------
+    # Plan B : chunks dérivés `page_summary` (signal retrieval de page)
+    # -----------------------------------------------------------------------
+    # On ajoute un chunk feuille par page (si contenu suffisant), avec parent
+    # hiérarchique indépendant. Ces chunks sont embeddés comme les feuilles
+    # classiques et servent de porte d'entrée au retrieval de la bonne page.
+    if page_to_leaves:
+        for page_no in sorted(page_to_leaves.keys()):
+            leaves_for_page = page_to_leaves.get(page_no) or []
+            if not leaves_for_page:
+                continue
+            texts = [(n.get_content() or "").strip() for n in leaves_for_page]
+            headings = []
+            for n in leaves_for_page:
+                hs = (n.metadata or {}).get("headings") or []
+                for h in hs:
+                    hv = str(h).strip()
+                    if hv and hv not in headings:
+                        headings.append(hv)
+                    if len(headings) >= 6:
+                        break
+                if len(headings) >= 6:
+                    break
+
+            summary_text = _summarize_page_text_extractively(page_no, texts, headings)
+            if not summary_text or len(summary_text) < 80:
+                continue
+
+            page_summary_node_id = str(uuid.uuid4())
+            page_meta = dict(base_meta)
+            page_meta.update(
+                {
+                    "node_id": page_summary_node_id,
+                    "parent_node_id": None,
+                    "hierarchy_level": 0,
+                    "is_leaf": "true",
+                    "content_type": "page_summary",
+                    "page_no": int(page_no),
+                    "heading_path": headings[:6],
+                    "heading": " > ".join(headings[:3]) if headings else "",
+                    "parent_heading": " > ".join(headings[:3]) if headings else "",
+                    "retrieval_only": True,
+                }
+            )
+
+            specs.append(
+                {
+                    "chunk_index": chunk_index,
+                    "is_leaf": True,
+                    "content": summary_text,
+                    "text": summary_text,
+                    "start_char": 0,
+                    "end_char": len(summary_text),
+                    "node_id": page_summary_node_id,
+                    "parent_node_id": None,
+                    "hierarchy_level": 0,
+                    "metadata_json": page_meta,
+                }
+            )
+            chunk_index += 1
 
     return specs
 

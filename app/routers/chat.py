@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -27,6 +27,7 @@ from datetime import datetime
 import json
 import logging
 import os
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -105,21 +106,100 @@ def _int_env(name: str, default: int) -> int:
 
 
 # Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K).
-# Défaut 8 : avec 1 passage, le modèle comble avec des généralisations faux catalogue (tableaux inventés, ✓/✗).
-RAG_TOP_K = _int_env("RAG_TOP_K", 8)
-# Paramétrage en dur du chat "espaces"
-SPACE_CHAT_MAX_TOKENS = 1200
-SPACE_CHAT_TEMPERATURE = 0.1
+# Plan A : 8 → 4. Avec la correction A1 (feuille au lieu du parent entier),
+# 4 passages bien ciblés suffisent et le LLM hallucine beaucoup moins.
+RAG_TOP_K = _int_env("RAG_TOP_K", 4)
+
+
+def _space_chat_max_tokens() -> int:
+    """Priorité : OVERRIDE → variable compose → settings → défaut plan qualité."""
+    o = os.getenv("SPACE_CHAT_MAX_TOKENS_OVERRIDE")
+    if o and str(o).strip():
+        try:
+            return max(1, int(o))
+        except ValueError:
+            pass
+    o = os.getenv("SPACE_CHAT_MAX_TOKENS")
+    if o and str(o).strip():
+        try:
+            return max(1, int(o))
+        except ValueError:
+            pass
+    if settings.SPACE_CHAT_MAX_TOKENS is not None:
+        return max(1, int(settings.SPACE_CHAT_MAX_TOKENS))
+    return 1500
+
+
+def _space_chat_temperature() -> float:
+    o = os.getenv("SPACE_CHAT_TEMPERATURE_OVERRIDE")
+    if o and str(o).strip():
+        try:
+            return float(o)
+        except ValueError:
+            pass
+    o = os.getenv("SPACE_CHAT_TEMPERATURE")
+    if o and str(o).strip():
+        try:
+            return float(o)
+        except ValueError:
+            pass
+    return float(settings.SPACE_CHAT_TEMPERATURE)
+
+
+# Paramétrage chat "espaces" (docker-compose / .env / settings)
+SPACE_CHAT_MAX_TOKENS = _space_chat_max_tokens()
+SPACE_CHAT_TEMPERATURE = _space_chat_temperature()
 SPACE_CHAT_TOP_P = None
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
+SPACE_AGENTIC_STEPBACK_ENABLED = os.getenv("SPACE_AGENTIC_STEPBACK_ENABLED", "true").lower() == "true"
+SPACE_AGENTIC_MIN_SCORE = float(os.getenv("SPACE_AGENTIC_MIN_SCORE", "0.12"))
+SPACE_AGENTIC_MIN_CITED_PASSAGES = int(os.getenv("SPACE_AGENTIC_MIN_CITED_PASSAGES", "2"))
+SPACE_AGENTIC_MAX_TURNS = max(1, int(os.getenv("SPACE_AGENTIC_MAX_TURNS", "2")))
+SPACE_AGENTIC_DECOMPOSE_MAX_SUBQS = max(1, int(os.getenv("SPACE_AGENTIC_DECOMPOSE_MAX_SUBQS", "3")))
+
+# --- Plan A : system prompt « grounded strict » -----------------------------
+# - Réponse UNIQUEMENT à partir des PASSAGES (pas de connaissance externe).
+# - Citations [n] obligatoires pour chaque affirmation factuelle.
+# - Si l'info n'est pas dans les passages → réponse "non disponible dans la
+#   documentation fournie".
+# - Identité métier sortie du prompt (configurable via SPACE_ASSISTANT_NAME et
+#   SPACE_ASSISTANT_ORG). Évite le biais "PROFERM" hardcodé qui pousse le LLM
+#   à compléter par sa base interne.
+SPACE_ASSISTANT_NAME = os.getenv("SPACE_ASSISTANT_NAME", "l'assistant documentaire")
+SPACE_ASSISTANT_ORG = os.getenv("SPACE_ASSISTANT_ORG", "").strip()
+
+_ORG_LINE = (
+    f"Tu réponds pour le compte de {SPACE_ASSISTANT_ORG}. "
+    if SPACE_ASSISTANT_ORG
+    else ""
+)
+
 SPACE_CHAT_SYSTEM_PROMPT = (
-    "Tu es LIA, l'assistante experte de PROFERM. Ton rôle est d'accompagner les collaborateurs et les clients avec précision sur nos produits et services. "
-    "Identité : Tu parles au nom de PROFERM. Quand tu dis 'nous' ou 'nos gammes', tu fais référence aux produits PROFERM. Les documents des fournisseurs (Technal, Profine, Askey, Roto, etc.) concernent nos partenaires et doivent être présentés comme tels. "
-    "Désambiguïsation : Sois extrêmement vigilant avec les dénominations de gammes proches (ex: Perform 70 vs Perform 76). Ne les confonds jamais. Si une requête est ambiguë, demande une précision ou distingue clairement les versions. "
-    "Ton ton est humain, professionnel, clair et orienté solution. Tu réponds en français. "
-    "Tu donnes des réponses directes, concrètes et opérationnelles. Ne mentionne jamais le fonctionnement technique de ta recherche. "
-    "Format : Réponse courte et utile (3 à 6 lignes) par défaut. Utilise des listes ou des tableaux Markdown uniquement pour la clarté technique. "
-    "Règle d'or : Ne jamais inventer de données. Si l'information est absente, indique-le clairement et propose une étape de vérification."
+    f"Tu es {SPACE_ASSISTANT_NAME}. {_ORG_LINE}"
+    "Tu réponds en français, de façon claire, factuelle et concise.\n\n"
+    "RÈGLES STRICTES — à suivre sans exception :\n"
+    "1) Tu réponds UNIQUEMENT à partir des PASSAGES fournis ci-dessous. "
+    "N'utilise jamais de connaissance externe, ne fais aucune supposition, "
+    "n'invente aucune donnée (chiffres, dimensions, références, normes).\n"
+    "2) Pour chaque affirmation factuelle, cite le ou les numéros de passage "
+    "correspondants entre crochets, ex : « ... Uw = 1,2 W/m².K [1][3] ».\n"
+    "3) Si l'information demandée n'est PAS présente dans les passages, "
+    "réponds exactement : « L'information n'est pas présente dans la "
+    "documentation fournie. » et propose éventuellement une reformulation "
+    "ou un point à vérifier. N'essaie pas de répondre quand même.\n"
+    "4) Si plusieurs passages se contredisent, signale-le explicitement et "
+    "cite chacune des sources.\n"
+    "5) Distingue rigoureusement les références techniques proches "
+    "(ex. Perform 70 vs Perform 76, version A vs B). En cas de doute, "
+    "demande une précision plutôt que d'extrapoler.\n"
+    "6) Lorsque l'information est dans un tableau ou une liste du passage, "
+    "reprends-la telle quelle (cellules, colonnes, intitulés de lignes). "
+    "Pour les marques, gammes et désignations fournisseurs, cite exactement "
+    "le libellé des passages sans le généraliser.\n"
+    "7) Format : réponse courte (3 à 8 lignes) par défaut, listes ou "
+    "tableaux Markdown uniquement quand cela ajoute de la clarté technique. "
+    "Ne mentionne jamais le fonctionnement interne de la recherche, du RAG, "
+    "des chunks, du reranker, etc."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -274,31 +354,256 @@ class SpaceChatRequest(BaseModel):
     conversation_id: Optional[int] = None
 
 
-def build_space_context_from_passages(passages: List[dict]) -> dict:
+def _build_space_system_prompt_from_settings(space: Optional[Space]) -> str:
+    """
+    B4/B5: construit le prompt système à partir des settings d'espace stockés en BDD.
+    """
+    prompt = SPACE_CHAT_SYSTEM_PROMPT
+    if space is None:
+        return prompt
+    cfg = getattr(space, "settings_json", None)
+    if not isinstance(cfg, dict):
+        return prompt
+    persona = str(cfg.get("system_prompt_persona") or "").strip()
+    if persona:
+        prompt = persona
+    enabled_sources = cfg.get("enabled_sources")
+    if isinstance(enabled_sources, list) and enabled_sources:
+        src = [str(s).strip() for s in enabled_sources if str(s).strip()]
+        if src:
+            prompt += (
+                "\n\nContraintes de source (espace): "
+                + ", ".join(src)
+                + ". Si une source est hors liste, indique qu'elle n'est pas autorisée dans cet espace."
+            )
+    return prompt
+
+
+def build_space_context_from_passages(passages: List[dict], system_prompt: Optional[str] = None) -> dict:
     """
     Construit le contexte système à partir des passages RAG + KAG rerankés.
     Format unifié pour le LLM (comme build_semantic_context_from_passages).
     """
     system_message = {
         "role": "system",
-        "content": SPACE_CHAT_SYSTEM_PROMPT,
+        "content": system_prompt or SPACE_CHAT_SYSTEM_PROMPT,
     }
 
     if passages:
-        system_message["content"] += "\n\nPASSAGES :\n\n"
+        system_message["content"] += "\n\nPASSAGES (numérotés [1], [2], … — à citer dans la réponse) :\n\n"
         passages_content = []
         for i, passage_data in enumerate(passages, 1):
             passage = passage_data['passage']
             score = passage_data.get('score', 0.0)
             document_title = passage_data.get('document_title', 'Document sans titre')
-            passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
+            page_no = passage_data.get('page_no')
+            section = passage_data.get('section') or ""
+            header_bits = [f"[{i}]", f"score={score:.2f}", f"doc={document_title}"]
+            if page_no:
+                header_bits.append(f"p.{page_no}")
+            if section:
+                header_bits.append(f"section={section}")
+            header = " | ".join(header_bits)
+            passage_text = f"{header}\n{passage}\n"
             passages_content.append(passage_text)
         system_message["content"] += "\n---\n".join(passages_content)
-        system_message["content"] += f"\n\n({len(passages)} passages.)"
+        system_message["content"] += (
+            f"\n\n({len(passages)} passage(s) disponible(s). "
+            "Réponds uniquement à partir de ces passages, en citant les numéros utilisés.)"
+        )
     else:
-        system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
+        system_message["content"] += (
+            "\n\nAucun passage pertinent n'a été trouvé dans la documentation "
+            "pour cette requête. Réponds exactement : « L'information n'est pas "
+            "présente dans la documentation fournie. » et propose une reformulation."
+        )
 
     return system_message
+
+
+def _estimate_evidence_quality(passages: List[dict]) -> dict:
+    """
+    Heuristique légère de suffisance des preuves (Plan C).
+    """
+    if not passages:
+        return {"grade": "weak", "top_score": 0.0, "strong_count": 0}
+    scores = [float(p.get("score") or 0.0) for p in passages]
+    top = max(scores) if scores else 0.0
+    strong_count = sum(1 for s in scores if s >= SPACE_AGENTIC_MIN_SCORE)
+    if top >= (SPACE_AGENTIC_MIN_SCORE + 0.10) and strong_count >= SPACE_AGENTIC_MIN_CITED_PASSAGES:
+        grade = "strong"
+    elif strong_count >= 1:
+        grade = "medium"
+    else:
+        grade = "weak"
+    return {"grade": grade, "top_score": top, "strong_count": strong_count}
+
+
+def _build_stepback_query(query: str) -> str:
+    """
+    Reformulation « step-back » sans LLM (Plan C pragmatique).
+    Retire les identifiants ultra-spécifiques et garde l'intention métier.
+    """
+    if not query or not query.strip():
+        return query
+    q = query.strip()
+    # Supprime ponctuation forte et normalise espaces
+    q = re.sub(r"[\(\)\[\]\{\}:;,_]", " ", q)
+    # Retire les codes très spécifiques type "76171", "A*4", refs alphanum longues
+    q = re.sub(r"\b[A-Za-z]*\d{3,}[A-Za-z0-9\-_/]*\b", " ", q)
+    q = re.sub(r"\s+", " ", q).strip()
+    if len(q) < 12:
+        return query
+    return q
+
+
+def _merge_agentic_passages(primary: List[dict], secondary: List[dict], k: int) -> List[dict]:
+    """
+    Fusionne deux jeux de passages en conservant les meilleurs et en dédupliquant
+    sur (document_id, chunk_id/source_leaf_chunk_id).
+    """
+    merged = []
+    seen = set()
+
+    def _key(p: dict):
+        did = p.get("document_id")
+        cid = p.get("source_leaf_chunk_id") or p.get("chunk_id")
+        return (did, cid, p.get("chunk_index"))
+
+    for p in primary + secondary:
+        key = _key(p)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(p)
+
+    merged.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
+    return merged[:k]
+
+
+def _plan_agentic_strategy(query: str) -> str:
+    q = (query or "").lower()
+    if any(tok in q for tok in [" vs ", " versus ", " comparer ", "différence", "difference"]):
+        return "decompose"
+    if any(tok in q for tok in [" impact ", " dépend", "depend", "cause", "lien entre"]):
+        return "decompose"
+    return "step_back"
+
+
+def _decompose_subqueries(query: str) -> List[str]:
+    if not query:
+        return []
+    parts = re.split(r"\b(?:et|ainsi que|versus|vs|ou)\b", query, flags=re.IGNORECASE)
+    sub = [p.strip(" ,;:.") for p in parts if p and len(p.strip()) >= 10]
+    if len(sub) < 2:
+        return [query]
+    return sub[:SPACE_AGENTIC_DECOMPOSE_MAX_SUBQS]
+
+
+async def _agentic_retrieve_space_passages(
+    *,
+    session: Session,
+    space_id: int,
+    user_id: int,
+    original_query: str,
+    k: int,
+) -> tuple[List[dict], Dict]:
+    """
+    C1/C3: state machine agentique courte:
+      Plan -> Retrieve -> Critique -> Refine (max 2 tours) -> stop.
+    """
+    if not SPACE_AGENTIC_STEPBACK_ENABLED:
+        base = await search_space_passages(
+            session=session,
+            space_id=space_id,
+            query_text=original_query,
+            user_id=user_id,
+            k=k,
+        )
+        return base[:k], {
+            "iteration": 1,
+            "query_current": original_query,
+            "strategy": "single",
+            "evidence_grade": _estimate_evidence_quality(base).get("grade"),
+            "stop_reason": "agentic_disabled",
+            "history": [],
+        }
+
+    state = {
+        "iteration": 1,
+        "query_current": original_query,
+        "strategy": _plan_agentic_strategy(original_query),
+        "evidence_grade": "weak",
+        "stop_reason": None,
+        "history": [],
+    }
+    aggregate: List[dict] = []
+    seen_turn_queries = set()
+
+    while state["iteration"] <= SPACE_AGENTIC_MAX_TURNS:
+        q = (state["query_current"] or "").strip()
+        if not q:
+            state["stop_reason"] = "empty_query"
+            break
+        if q.lower() in seen_turn_queries:
+            state["stop_reason"] = "no_new_evidence"
+            break
+        seen_turn_queries.add(q.lower())
+
+        # Retrieve
+        if state["strategy"] == "decompose":
+            sub_passages: List[dict] = []
+            for sq in _decompose_subqueries(q):
+                p = await search_space_passages(
+                    session=session,
+                    space_id=space_id,
+                    query_text=sq,
+                    user_id=user_id,
+                    k=k,
+                )
+                sub_passages = _merge_agentic_passages(sub_passages, p, k)
+            turn_passages = sub_passages
+        else:
+            turn_passages = await search_space_passages(
+                session=session,
+                space_id=space_id,
+                query_text=q,
+                user_id=user_id,
+                k=k,
+            )
+
+        aggregate = _merge_agentic_passages(aggregate, turn_passages, k)
+        evidence = _estimate_evidence_quality(aggregate)
+        state["evidence_grade"] = evidence["grade"]
+        state["history"].append(
+            {
+                "iteration": state["iteration"],
+                "query": q,
+                "strategy": state["strategy"],
+                "nb_passages": len(turn_passages),
+                "evidence": evidence,
+            }
+        )
+
+        # Critique + stop criteria
+        if evidence["grade"] == "strong":
+            state["stop_reason"] = "enough_evidence"
+            break
+        if state["iteration"] >= SPACE_AGENTIC_MAX_TURNS:
+            state["stop_reason"] = "max_turns"
+            break
+
+        # Refine
+        if state["strategy"] == "decompose":
+            # Après une décomposition, on fait un step-back court.
+            state["strategy"] = "step_back"
+            state["query_current"] = _build_stepback_query(q)
+        else:
+            state["strategy"] = "decompose" if _plan_agentic_strategy(q) == "decompose" else "step_back"
+            state["query_current"] = _build_stepback_query(q)
+        state["iteration"] += 1
+
+    return aggregate[:k], state
 
 
 def build_semantic_context_from_passages(passages: List[dict]) -> List[dict]:
@@ -640,15 +945,22 @@ async def stream_space_chat_message(
         inputs={"query": request.message, "space_id": space_id, "k": RAG_TOP_K},
         tags=["rag", "kag", "space"],
     ) as retrieval_run:
-        passages = await search_space_passages(
+        passages, agentic_state = await _agentic_retrieve_space_passages(
             session=session,
             space_id=space_id,
-            query_text=request.message,
             user_id=current_user.id,
+            original_query=request.message,
             k=RAG_TOP_K,
         )
         retrieval_run.end(outputs={
             "nb_passages": len(passages),
+            "agentic_state": {
+                "iteration": agentic_state.get("iteration"),
+                "strategy": agentic_state.get("strategy"),
+                "evidence_grade": agentic_state.get("evidence_grade"),
+                "stop_reason": agentic_state.get("stop_reason"),
+                "history": agentic_state.get("history", [])[-3:],
+            },
             "passages": [
                 {
                     "document_title": p.get("document_title"),
@@ -663,7 +975,8 @@ async def stream_space_chat_message(
         })
 
     # Construire le contexte système à partir des passages rerankés
-    space_context = build_space_context_from_passages(passages)
+    system_prompt = _build_space_system_prompt_from_settings(space)
+    space_context = build_space_context_from_passages(passages, system_prompt=system_prompt)
 
     full_context = []
     full_context.append(space_context)

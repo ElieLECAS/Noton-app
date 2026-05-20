@@ -1,6 +1,7 @@
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field, Relationship, Column
 from datetime import datetime
-from typing import Optional, List, TYPE_CHECKING
+from typing import Optional, List, TYPE_CHECKING, Dict, Any
+from sqlalchemy.dialects.postgresql import JSONB
 
 if TYPE_CHECKING:
     from .conversation import Conversation
@@ -16,6 +17,8 @@ class Space(SQLModel, table=True):
     is_shared: bool = Field(default=True)
     color: Optional[str] = Field(default=None, max_length=20)
     icon: Optional[str] = Field(default=None, max_length=50)
+    # B4/B5: paramètres métier par espace (persona/sources/taxonomie KAG...)
+    settings_json: Optional[dict] = Field(default=None, sa_column=Column(JSONB, nullable=True))
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
@@ -29,6 +32,7 @@ class SpaceCreate(SQLModel):
     description: Optional[str] = None
     color: Optional[str] = None
     icon: Optional[str] = None
+    settings_json: Optional[Dict[str, Any]] = None
 
 
 class SpaceRead(SQLModel):
@@ -40,6 +44,7 @@ class SpaceRead(SQLModel):
     is_shared: bool
     color: Optional[str] = None
     icon: Optional[str] = None
+    settings_json: Optional[Dict[str, Any]] = None
     created_at: datetime
     updated_at: datetime
 
@@ -50,3 +55,4 @@ class SpaceUpdate(SQLModel):
     description: Optional[str] = None
     color: Optional[str] = None
     icon: Optional[str] = None
+    settings_json: Optional[Dict[str, Any]] = None

@@ -5,12 +5,32 @@ from pathlib import Path
 import os
 
 
+def _default_database_url() -> str:
+    """
+    Construit une URL DB par défaut robuste si DATABASE_URL n'est pas fourni.
+
+    Cas couverts :
+    - Docker compose (db:5432, vars POSTGRES_*)
+    - Exécution locale rapide (fallback postgres/postgres/noton)
+    """
+    explicit = os.getenv("DATABASE_URL")
+    if explicit and explicit.strip():
+        return explicit.strip()
+
+    user = os.getenv("POSTGRES_USER", "postgres")
+    password = os.getenv("POSTGRES_PASSWORD", "postgres")
+    db_name = os.getenv("POSTGRES_DB", "noton")
+    host = os.getenv("POSTGRES_HOST", "db")
+    port = os.getenv("POSTGRES_PORT", "5432")
+    return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
+
+
 class Settings(BaseSettings):
     # Application
     APP_NAME: str = "Noton"
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
+    DATABASE_URL: str = _default_database_url()
     # echo=True journalise chaque SQL (UPDATE/INSERT d'embeddings = vecteurs énormes dans les logs)
     DATABASE_ECHO: bool = False
 
@@ -31,8 +51,8 @@ class Settings(BaseSettings):
     # Limite globale par défaut pour la longueur des réponses des LLM
     MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
     # Paramètres dédiés au chat "espaces"
-    SPACE_CHAT_MAX_TOKENS: Optional[int] = None
-    SPACE_CHAT_TEMPERATURE: float = 0.55
+    SPACE_CHAT_MAX_TOKENS: Optional[int] = 1500
+    SPACE_CHAT_TEMPERATURE: float = 0.3
     SPACE_CHAT_TOP_P: Optional[float] = None
     # CPU Optimization for Docling/EasyOCR
     DOCLING_CPU_ONLY: bool = True
@@ -49,8 +69,8 @@ class Settings(BaseSettings):
     EMBEDDING_DEVICE: str = "cpu"
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
     # Blocs texte Docling : si longueur > seuil, chunks text_window (parent = text_full). 0 = désactivé.
-    DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 0
-    DOCLING_TEXT_WINDOW_OVERLAP: int = 200
+    DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 2000
+    DOCLING_TEXT_WINDOW_OVERLAP: int = 400
 
     # Docling OCR (schémas techniques, cotes, PDF scannés)
     DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
@@ -79,7 +99,12 @@ class Settings(BaseSettings):
     KAG_ENABLED: bool = True
     KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai", "mistral" ou "ollama"
     KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
-    KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
+    # Plan A : désactivé par défaut. L'enrichissement (résumé + 3 questions LLM
+    # + embedding) sur chaque parent est très coûteux à l'ingestion et a un
+    # impact limité sur la qualité du retrieval (parfois négatif : embedding
+    # de questions hors-sujet). À réactiver uniquement après mise en place du
+    # type `page_summary` (Plan B).
+    KAG_PARENT_ENRICHMENT_ENABLED: bool = False
     KAG_TYPED_RELATIONS_ENABLED: bool = True  # Extraction LLM des relations entité-entité (cause, depend_de, …)
     
     # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
@@ -113,6 +138,18 @@ class Settings(BaseSettings):
         if isinstance(v, str):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
+
+    @field_validator('DATABASE_URL', mode='before')
+    @classmethod
+    def parse_database_url(cls, v: Union[str, None]) -> str:
+        """
+        Garantit une URL DB valide même si DATABASE_URL est absent ou vide.
+        """
+        if v is None:
+            return _default_database_url()
+        if isinstance(v, str) and not v.strip():
+            return _default_database_url()
+        return str(v).strip()
 
     @field_validator('MULTIMODAL_ENABLED', mode='before')
     @classmethod
