@@ -6,18 +6,19 @@ from app.models.note_chunk import NoteChunk
 from app.models.note import Note
 from app.models.document_chunk import DocumentChunk
 from app.models.document import Document
-from app.models.chunk_entity_relation import ChunkEntityRelation
-from app.models.knowledge_entity import KnowledgeEntity
 import re
 
 from app.services.chunking_service import (
     chunk_note,
-    chunk_note_from_docling_docs,
-    chunk_document_from_docling_docs,
+    chunk_markdown_hierarchical_with_tables,
+    specs_to_note_chunks,
+    specs_to_document_chunks,
     CHUNKING_VERSION_MARKDOWN_H2,
     CHUNKING_VERSION_ADAPTIVE,
     resolve_adaptive_chunk_params,
     _detect_content_type,
+    _build_page_marker_index,
+    _page_no_from_char_offset,
 )
 from app.database import engine
 from app.config import settings
@@ -258,10 +259,6 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
                     len(chunks),
                 )
             
-            # Extraction KAG si activée
-            if settings.KAG_ENABLED:
-                _process_kag_extraction_for_note(session, note_id, project_id)
-            
             note.processing_status = "completed"
             note.processing_progress = 100
             session.add(note)
@@ -271,263 +268,48 @@ def _process_embeddings_for_note(note_id: int, project_id: int):
         logger.error(f"Erreur lors de la génération des embeddings pour la note {note_id}: {e}")
 
 
-def _process_kag_extraction_for_note(session: Session, note_id: int, project_id: int):
-    """
-    Extraction des entités KAG pour une note (appelé après les embeddings).
-    
-    Args:
-        session: Session SQLModel
-        note_id: ID de la note
-        project_id: ID du projet
-    """
-    try:
-        from app.services.kag_extraction_service import extract_entities_sync
-        from app.services.kag_graph_service import (
-            save_entities_for_chunk,
-            delete_entities_for_note,
-        )
-        
-        logger.info(f"Démarrage extraction KAG pour la note {note_id}")
-        
-        delete_entities_for_note(session, note_id)
-        
-        statement = select(NoteChunk).where(
-            NoteChunk.note_id == note_id,
-            NoteChunk.is_leaf == True,
-        )
-        chunks = list(session.exec(statement).all())
-        
-        if not chunks:
-            logger.info(f"Aucun chunk leaf pour extraction KAG note={note_id}")
-            return
-        
-        total_entities = 0
-        total_relations = 0
-        
-        for chunk in chunks:
-            if not chunk.content or len(chunk.content.strip()) < 20:
-                continue
-            
-            try:
-                entities = extract_entities_sync(chunk.content)
-                if entities:
-                    relations_count = save_entities_for_chunk(
-                        session, chunk, entities, project_id
-                    )
-                    total_entities += len(entities)
-                    total_relations += relations_count
-            except Exception as e:
-                logger.warning(
-                    "Erreur extraction KAG chunk_id=%s: %s",
-                    chunk.id,
-                    e,
-                )
-                continue
-        
-        session.commit()
-        logger.info(
-            "✅ Extraction KAG terminée note=%s: %d entités, %d relations",
-            note_id,
-            total_entities,
-            total_relations,
-        )
-
-        if settings.KAG_PARENT_ENRICHMENT_ENABLED:
-            _process_parent_enrichment_for_note(session, note_id, project_id)
-
-    except Exception as e:
-        logger.error(f"Erreur extraction KAG pour note {note_id}: {e}", exc_info=True)
-        session.rollback()
-
-
-def _process_parent_enrichment_for_note(session: Session, note_id: int, project_id: int):
-    """
-    Enrichit chaque chunk parent (is_leaf=False) avec un résumé + 3 questions générés par LLM.
-
-    Le résumé capture l'intention métier de la section ; les 3 questions simulent
-    les interrogations réelles d'un technicien ou technico-commercial.
-    Les deux sont stockés dans metadata_json et servent de base à l'extraction
-    d'entités KAG sur le chunk parent, rendant les sections directement
-    accessibles via le graphe de connaissances.
-    """
-    try:
-        from app.services.kag_extraction_service import (
-            generate_parent_summary_questions_sync,
-            extract_entities_sync,
-        )
-        from app.services.kag_graph_service import save_entities_for_chunk
-
-        statement = select(NoteChunk).where(
-            NoteChunk.note_id == note_id,
-            NoteChunk.is_leaf == False,
-        )
-        parent_chunks = list(session.exec(statement).all())
-
-        if not parent_chunks:
-            logger.info("Aucun chunk parent pour enrichissement note=%s", note_id)
-            return
-
-        logger.info(
-            "Démarrage enrichissement parents note=%s: %d parents",
-            note_id,
-            len(parent_chunks),
-        )
-
-        total_parents_enriched = 0
-        total_parent_entities = 0
-        total_parent_relations = 0
-
-        for chunk in parent_chunks:
-            if not chunk.content or len(chunk.content.strip()) < 30:
-                continue
-
-            try:
-                result = generate_parent_summary_questions_sync(chunk.content)
-                if not result:
-                    continue
-
-                metadata = dict(chunk.metadata_json or {})
-                metadata["summary"] = result["summary"]
-                metadata["generated_questions"] = result["generated_questions"]
-                chunk.metadata_json = metadata
-                chunk.metadata_ = metadata
-                
-                # Embedder le summary+questions et stocker dans l'embedding du parent
-                enrichment_text = result["summary"]
-                if result["generated_questions"]:
-                    enrichment_text += " " + " ".join(result["generated_questions"])
-                
-                # Générer l'embedding pour ce parent (intention de section)
-                from app.services.embedding_service import generate_embeddings_batch
-                parent_embeddings = generate_embeddings_batch([enrichment_text], batch_size=1)
-                if parent_embeddings and parent_embeddings[0]:
-                    chunk.embedding = parent_embeddings[0]
-                    logger.debug(
-                        "Embedding parent généré pour chunk_id=%s (summary+questions)",
-                        chunk.id,
-                    )
-                
-                session.add(chunk)
-                total_parents_enriched += 1
-
-                # Extraction d'entités sur le summary+questions
-                entities = extract_entities_sync(enrichment_text)
-                if entities:
-                    relations_count = save_entities_for_chunk(
-                        session, chunk, entities, project_id
-                    )
-                    total_parent_entities += len(entities)
-                    total_parent_relations += relations_count
-
-            except Exception as e:
-                logger.warning(
-                    "Erreur enrichissement parent chunk_id=%s: %s",
-                    chunk.id,
-                    e,
-                )
-                continue
-
-        session.commit()
-        logger.info(
-            "✅ Enrichissement parents terminé note=%s: %d/%d parents enrichis, %d entités, %d relations",
-            note_id,
-            total_parents_enriched,
-            len(parent_chunks),
-            total_parent_entities,
-            total_parent_relations,
-        )
-
-    except Exception as e:
-        logger.error(
-            "Erreur enrichissement parents note=%s: %s", note_id, e, exc_info=True
-        )
-        session.rollback()
-
-
-def create_chunks_for_note_from_docling(
+def create_chunks_for_note_from_markdown(
     session: Session,
     note: Note,
-    llama_docs: list,
+    markdown: str,
     generate_embeddings: bool = False,
-    images_info: Optional[list] = None,
 ) -> List[NoteChunk]:
-    """
-    Créer les chunks pour un document importé via Docling.
+    """Créer les chunks hiérarchiques (HierarchicalNodeParser) à partir du markdown OCR."""
+    delete_chunks_for_note(session, note.id, commit=False)
 
-    Utilise DoclingNodeParser (chunking sémantique) au lieu de HierarchicalNodeParser.
-    Les llama_docs doivent contenir le JSON sérialisé du DoclingDocument
-    (tel que retourné par document_service.process_document).
+    metadata_base = {
+        "note_id": note.id,
+        "project_id": note.project_id,
+        "user_id": note.user_id,
+        "note_title": note.title or "",
+    }
+    specs = chunk_markdown_hierarchical_with_tables(markdown, metadata_base)
+    if not specs:
+        chunks = chunk_note(note)
+    else:
+        chunks = specs_to_note_chunks(note, specs)
 
-    Args:
-        session          : Session SQLModel
-        note             : La note cible
-        llama_docs       : Liste de LlamaIndex Document avec JSON Docling
-        generate_embeddings : Si True, génère les embeddings synchronement
-        images_info      : Sortie extract_and_save_images (Docling) pour enrichissement Pixtral
-
-    Returns:
-        Liste des chunks créés
-    """
-    delete_chunks_for_note(session, note.id)
-
-    chunks = chunk_note_from_docling_docs(note, llama_docs)
-
-    if images_info:
-        try:
-            from app.services.vision_service import enrich_visual_chunks_with_pixtral
-
-            enrich_visual_chunks_with_pixtral(chunks, images_info)
-        except Exception as e:
-            logger.warning(
-                "Enrichissement Pixtral ignoré pour la note %s: %s",
-                note.id,
-                e,
-                exc_info=True,
-            )
-
-    if generate_embeddings:
+    if generate_embeddings and chunks:
         from app.services.embedding_service import generate_embeddings_batch
 
-        leaf_chunks = [chunk for chunk in chunks if chunk.is_leaf]
+        leaf_chunks = [c for c in chunks if c.is_leaf]
         if leaf_chunks:
-            contents = [chunk.content for chunk in leaf_chunks]
             embeddings = generate_embeddings_batch(
-                contents, batch_size=settings.EMBEDDING_BATCH_SIZE
+                [c.content for c in leaf_chunks],
+                batch_size=settings.EMBEDDING_BATCH_SIZE,
             )
-            failed_count = 0
             for chunk, embedding in zip(leaf_chunks, embeddings):
                 if embedding:
                     chunk.embedding = embedding
-                else:
-                    failed_count += 1
-            if failed_count:
-                logger.warning(
-                    "Embeddings partiels pour note=%s: %s/%s en échec",
-                    note.id,
-                    failed_count,
-                    len(leaf_chunks),
-                )
 
-    try:
-        session.add_all(chunks)
-        session.commit()
-        logger.info(
-            "Créé %d chunks (Docling) pour la note %d "
-            "(embeddings: %s)",
-            len(chunks),
-            note.id,
-            "oui" if generate_embeddings else "non, sera fait en arrière-plan",
-        )
-        return chunks
-    except Exception as e:
-        logger.error(
-            "Erreur lors de la sauvegarde des chunks Docling pour la note %d: %s",
-            note.id,
-            e,
-            exc_info=True,
-        )
-        session.rollback()
-        raise
+    session.add_all(chunks)
+    session.commit()
+    logger.info(
+        "Créé %d chunks (markdown hiérarchique) pour la note %d",
+        len(chunks),
+        note.id,
+    )
+    return chunks
 
 
 def recreate_chunks_for_note_async(note_id: int, project_id: int):
@@ -598,21 +380,7 @@ def _ensure_embedding_workers():
 
 
 def delete_chunks_for_note(session: Session, note_id: int, commit: bool = True):
-    """
-    Supprimer tous les chunks d'une note et les relations KAG associées.
-    
-    Args:
-        session: Session SQLModel
-        note_id: ID de la note
-        commit: Si True, fait un commit après la suppression (par défaut: True)
-    """
-    if settings.KAG_ENABLED:
-        try:
-            from app.services.kag_graph_service import delete_entities_for_note
-            delete_entities_for_note(session, note_id)
-        except Exception as e:
-            logger.warning(f"Erreur suppression relations KAG note={note_id}: {e}")
-
+    """Supprimer tous les chunks d'une note."""
     result = session.execute(delete(NoteChunk).where(NoteChunk.note_id == note_id))
     deleted_count = result.rowcount
 
@@ -624,39 +392,11 @@ def delete_chunks_for_note(session: Session, note_id: int, commit: bool = True):
 def delete_chunks_for_document(
     session: Session, document_id: int, commit: bool = True
 ):
-    """
-    Supprime tous les chunks d'un document et nettoie les données KAG associées.
-    """
-    chunk_ids_stmt = select(DocumentChunk.id).where(DocumentChunk.document_id == document_id)
-    chunk_ids = list(session.exec(chunk_ids_stmt).all())
-
-    if chunk_ids:
-        entity_ids_stmt = select(ChunkEntityRelation.entity_id).where(
-            ChunkEntityRelation.chunk_id.in_(chunk_ids)
-        )
-        entity_ids = set(session.exec(entity_ids_stmt).all())
-
-        session.execute(
-            delete(ChunkEntityRelation).where(ChunkEntityRelation.chunk_id.in_(chunk_ids))
-        )
-        session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
-
-        if entity_ids:
-            remaining_relations_stmt = select(ChunkEntityRelation.entity_id).where(
-                ChunkEntityRelation.entity_id.in_(entity_ids)
-            )
-            used_entity_ids = set(session.exec(remaining_relations_stmt).all())
-            orphan_entity_ids = [entity_id for entity_id in entity_ids if entity_id not in used_entity_ids]
-            if orphan_entity_ids:
-                session.execute(
-                    delete(KnowledgeEntity).where(KnowledgeEntity.id.in_(orphan_entity_ids))
-                )
-    else:
-        session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
-
+    """Supprime tous les chunks d'un document bibliothèque."""
+    session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
     if commit:
         session.commit()
-    logger.debug("Supprimé chunks + KAG pour document_id=%s", document_id)
+    logger.debug("Supprimé chunks pour document_id=%s", document_id)
 
 
 def get_chunks_by_note(session: Session, note_id: int) -> List[NoteChunk]:
@@ -807,7 +547,7 @@ def create_chunks_for_document(
     ld = get_library_document_logger()
     ld.info(
         "[Chunking] document_id=%s — stratégie FALLBACK (markdown H2 ou fenêtre adaptative). "
-        "Raison typique : pas de JSON Docling (llama_docs vide), ou échec DoclingNodeParser. "
+        "Raison typique : markdown vide ou échec du chunking hiérarchique. "
         "Conséquence : is_leaf=True partout, node_id/parent_node_id NULL, pas de parents RAG.",
         document.id,
     )
@@ -815,6 +555,7 @@ def create_chunks_for_document(
     session.commit()
 
     source_text = f"{document.title}\n\n{document.content or ''}".strip()
+    page_index = _build_page_marker_index(source_text)
     raw_chunks = _try_markdown_h2_sections(source_text)
     chunking_version = CHUNKING_VERSION_MARKDOWN_H2
     if raw_chunks is None:
@@ -832,6 +573,9 @@ def create_chunks_for_document(
             "chunking_version": chunking_version,
             "content_type": ct,
         }
+        page_no = _page_no_from_char_offset(int(item.get("start_char", 0) or 0), page_index)
+        if page_no is not None:
+            metadata["page_no"] = page_no
         chunks.append(
             DocumentChunk(
                 document_id=document.id,
@@ -853,7 +597,7 @@ def create_chunks_for_document(
         embeddings = generate_embeddings_batch(
             [c.content for c in chunks], batch_size=settings.EMBEDDING_BATCH_SIZE
         )
-        model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
+        model_name = settings.EMBEDDING_MODEL
         for chunk, embedding in zip(chunks, embeddings):
             if embedding:
                 chunk.embedding = embedding
@@ -869,105 +613,34 @@ def create_chunks_for_document(
     return chunks
 
 
-def create_chunks_for_document_from_docling(
+def create_chunks_for_document_from_markdown(
     session: Session,
     document: Document,
-    llama_docs: list,
+    markdown: str,
     generate_embeddings: bool = False,
-    images_info: Optional[list] = None,
 ) -> List[DocumentChunk]:
-    """
-    Chunking sémantique via DoclingNodeParser (parents + leaves, métadonnées Docling).
-    Si échec ou aucun chunk, repli sur create_chunks_for_document (fenêtre fixe).
-    """
+    """Chunking hiérarchique depuis markdown Mistral OCR."""
     ld = get_library_document_logger()
     ld.info(
-        "[Chunking] document_id=%s — étape Docling hiérarchique : tentative DoclingNodeParser "
-        "(attendu : parents is_leaf=False + feuilles avec parent_node_id / node_id).",
+        "[Chunking] document_id=%s — markdown hiérarchique + expansion tableaux.",
         document.id,
     )
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document.id))
     session.commit()
 
-    chunks: List[DocumentChunk] = []
-    try:
-        if llama_docs:
-            t0 = time.perf_counter()
-            chunks = chunk_document_from_docling_docs(document, llama_docs)
-            logger.info(
-                "document_id=%s DoclingNodeParser+hiérarchie %.2fs → %s chunks",
-                document.id,
-                time.perf_counter() - t0,
-                len(chunks),
-            )
-            ld.info(
-                "[Chunking] document_id=%s — DoclingNodeParser a retourné %d chunk(s) en %.2fs.",
-                document.id,
-                len(chunks),
-                time.perf_counter() - t0,
-            )
-        else:
-            ld.warning(
-                "[Chunking] document_id=%s — llama_docs absent : impossible d'appeler DoclingNodeParser.",
-                document.id,
-            )
-    except Exception as e:
-        logger.warning(
-            "chunk_document_from_docling_docs échoué document_id=%s: %s",
-            document.id,
-            e,
-            exc_info=True,
-        )
-        ld.error(
-            "[Chunking] document_id=%s — exception pendant chunk_document_from_docling_docs : %s",
-            document.id,
-            e,
-            exc_info=True,
-        )
-        chunks = []
-
-    if not chunks:
-        logger.info(
-            "Fallback chunking taille fixe (pas de chunks Docling) document_id=%s",
-            document.id,
-        )
-        ld.warning(
-            "[Chunking] document_id=%s — REPLI vers create_chunks_for_document : "
-            "aucun chunk Docling (parser vide, import raté, ou exception). Voir logs ci-dessus.",
-            document.id,
-        )
+    metadata_base = {
+        "document_id": document.id,
+        "library_id": document.library_id,
+        "user_id": document.user_id,
+        "document_title": document.title or "",
+    }
+    specs = chunk_markdown_hierarchical_with_tables(markdown, metadata_base)
+    if not specs:
         return create_chunks_for_document(
             session=session, document=document, generate_embeddings=generate_embeddings
         )
 
-    ld.info(
-        "[Chunking] document_id=%s — stratégie RÉELLE : docling_hiérarchique (pas de repli markdown).",
-        document.id,
-    )
-    log_chunk_inventory(ld, document.id, chunks, "Chunking Docling avant Pixtral")
-
-    if images_info:
-        try:
-            from app.services.vision_service import enrich_visual_chunks_with_pixtral
-
-            enrich_visual_chunks_with_pixtral(chunks, images_info)
-            ld.info(
-                "[Pixtral] document_id=%s — enrichissement visuel terminé (ou ignoré si MULTIMODAL off / pas de paires).",
-                document.id,
-            )
-        except Exception as e:
-            logger.warning(
-                "Enrichissement Pixtral ignoré document_id=%s: %s",
-                document.id,
-                e,
-                exc_info=True,
-            )
-            ld.warning(
-                "[Pixtral] document_id=%s — enrichissement échoué ou ignoré : %s",
-                document.id,
-                e,
-                exc_info=True,
-            )
+    chunks = specs_to_document_chunks(document, specs)
 
     if generate_embeddings and chunks:
         from app.services.embedding_service import generate_embeddings_batch
@@ -977,7 +650,7 @@ def create_chunks_for_document_from_docling(
             embeddings = generate_embeddings_batch(
                 [c.content for c in leafs], batch_size=settings.EMBEDDING_BATCH_SIZE
             )
-            model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
+            model_name = settings.EMBEDDING_MODEL
             for chunk, embedding in zip(leafs, embeddings):
                 if embedding:
                     chunk.embedding = embedding
@@ -986,172 +659,19 @@ def create_chunks_for_document_from_docling(
                     chunk.metadata_json = meta
                     chunk.metadata_ = meta
 
-    # Denormaliser la source de la métadonnée document vers chaque chunk pour accélération retrieval
     for c in chunks:
         c.source = document.source
 
     session.add_all(chunks)
     session.commit()
-    log_chunk_inventory(ld, document.id, chunks, "Chunking Docling final (persisté)")
+    log_chunk_inventory(ld, document.id, chunks, "Chunking markdown hiérarchique (persisté)")
     return chunks
-
-
-def run_kag_for_library_document(
-    document_id: int, run_id: Optional[str] = None
-) -> None:
-    """
-    Phase KAG uniquement (après embeddings) : extraction graphe par espace, puis document completed/100.
-    Appelée depuis la queue Celery « kag » ou un thread en mode TASK_BACKEND_MODE=thread.
-    """
-    from app.services.document_service_new import (
-        LIBRARY_USER_STOPPED_STATUSES,
-        _finalize_pipeline_abort,
-        _should_abort_processing,
-    )
-    from app.services.document_run import is_processing_run_current
-
-    ld = get_library_document_logger()
-    if run_id is not None and not is_processing_run_current(document_id, run_id):
-        ld.info("[KAG] document_id=%s — abandon run_id obsolète.", document_id)
-        return
-    if _should_abort_processing(document_id):
-        ld.info(
-            "[KAG] document_id=%s — annulé avant démarrage (stop/skip).",
-            document_id,
-        )
-        _finalize_pipeline_abort(document_id)
-        return
-    if not settings.KAG_ENABLED:
-        ld.info(
-            "[KAG] document_id=%s — KAG désactivé, finalisation sans graphe.",
-            document_id,
-        )
-        try:
-            with Session(engine) as session:
-                document = session.get(Document, document_id)
-                if document:
-                    document.processing_status = "completed"
-                    document.processing_progress = 100
-                    document.updated_at = datetime.utcnow()
-                    session.add(document)
-                    session.commit()
-        except Exception as e:
-            logger.error("KAG noop finalisation document %s: %s", document_id, e, exc_info=True)
-        return
-
-    ld.info("[KAG] document_id=%s — démarrage tâche KAG (post-embeddings).", document_id)
-    try:
-        with Session(engine) as session:
-            document = session.get(Document, document_id)
-            if not document:
-                ld.warning("[KAG] document_id=%s — document introuvable, arrêt.", document_id)
-                return
-
-            if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
-                ld.info(
-                    "[KAG] document_id=%s — statut %s, arrêt.",
-                    document_id,
-                    document.processing_status,
-                )
-                return
-
-            from app.models.document_space import DocumentSpace
-            from app.services.kag_graph_service import process_kag_for_document_space
-
-            space_ids_stmt = select(DocumentSpace.space_id).where(
-                DocumentSpace.document_id == document_id
-            )
-            space_ids = list(session.exec(space_ids_stmt).all())
-            if not space_ids:
-                ld.info(
-                    "[KAG] document_id=%s — aucun espace lié, finalisation sans extraction.",
-                    document_id,
-                )
-                document.processing_status = "completed"
-                document.processing_progress = 100
-                document.updated_at = datetime.utcnow()
-                session.add(document)
-                session.commit()
-                return
-
-            document.processing_progress = max(document.processing_progress or 0, 95)
-            document.updated_at = datetime.utcnow()
-            session.add(document)
-            session.commit()
-            session.refresh(document)
-
-            for space_id in space_ids:
-                if _should_abort_processing(document_id):
-                    ld.info(
-                        "[KAG] document_id=%s — interrompu entre espaces (space_id=%s).",
-                        document_id,
-                        space_id,
-                    )
-                    _finalize_pipeline_abort(document_id)
-                    return
-                try:
-                    ld.info(
-                        "[KAG] document_id=%s space_id=%s — extraction / graphe en cours…",
-                        document_id,
-                        space_id,
-                    )
-                    process_kag_for_document_space(session, document_id, space_id)
-                    ld.info(
-                        "[KAG] document_id=%s space_id=%s — terminé.",
-                        document_id,
-                        space_id,
-                    )
-                except Exception as kag_exc:
-                    session.rollback()
-                    logger.warning(
-                        "KAG post-upload échoué document_id=%s space_id=%s: %s",
-                        document_id,
-                        space_id,
-                        kag_exc,
-                    )
-                    ld.warning(
-                        "[KAG] document_id=%s space_id=%s — échec : %s",
-                        document_id,
-                        space_id,
-                        kag_exc,
-                    )
-
-            document = session.get(Document, document_id)
-            if document:
-                document.processing_status = "completed"
-                document.processing_progress = 100
-                document.updated_at = datetime.utcnow()
-                session.add(document)
-                session.commit()
-                ld.info(
-                    "[Pipeline] document_id=%s — traitement terminé (completed), progress=100.",
-                    document_id,
-                )
-    except Exception as e:
-        logger.error("Erreur KAG document %s: %s", document_id, e, exc_info=True)
-        get_library_document_logger().error(
-            "[KAG] document_id=%s — erreur globale : %s",
-            document_id,
-            e,
-            exc_info=True,
-        )
-        try:
-            with Session(engine) as session:
-                document = session.get(Document, document_id)
-                if document and document.processing_status not in LIBRARY_USER_STOPPED_STATUSES:
-                    document.processing_status = "failed"
-                    document.processing_progress = max(document.processing_progress or 0, 95)
-                    document.updated_at = datetime.utcnow()
-                    session.add(document)
-                    session.commit()
-        except Exception as upd:
-            logger.error("Impossible de marquer le document %s en échec KAG: %s", document_id, upd)
 
 
 def _process_embeddings_for_document(
     document_id: int, run_id: Optional[str] = None
 ):
-    """Génère les embeddings des seuls chunks feuilles (parents exclus) ; enfile KAG si activé et espaces liés."""
+    """Génère les embeddings des seuls chunks feuilles (parents exclus), puis marque le document completed."""
     from app.services.document_service_new import (
         LIBRARY_USER_STOPPED_STATUSES,
         _finalize_pipeline_abort,
@@ -1186,7 +706,7 @@ def _process_embeddings_for_document(
                 _finalize_pipeline_abort(document_id)
                 return
 
-            # Feuilles uniquement (is_leaf=False = parents hiérarchiques Docling, sans vecteur)
+            # Feuilles uniquement (parents hiérarchiques sans vecteur)
             statement = select(DocumentChunk).where(
                 DocumentChunk.document_id == document_id,
                 DocumentChunk.embedding.is_(None),
@@ -1222,7 +742,7 @@ def _process_embeddings_for_document(
             )
             from app.services.embedding_service import generate_embeddings_batch
 
-            model_name = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
+            model_name = settings.EMBEDDING_MODEL
             ok = 0
             batch_size = max(1, settings.EMBEDDING_BATCH_SIZE)
             for i in range(0, len(chunks), batch_size):
@@ -1277,39 +797,6 @@ def _process_embeddings_for_document(
                 time.perf_counter() - t_embed,
             )
 
-            if settings.KAG_ENABLED:
-                from app.models.document_space import DocumentSpace
-
-                space_ids_stmt = select(DocumentSpace.space_id).where(
-                    DocumentSpace.document_id == document_id
-                )
-                space_ids = list(session.exec(space_ids_stmt).all())
-                if space_ids:
-                    document.processing_progress = max(document.processing_progress or 0, 95)
-                    document.processing_status = "processing"
-                    document.updated_at = datetime.utcnow()
-                    session.add(document)
-                    session.commit()
-                    ld.info(
-                        "[Embeddings] document_id=%s — embeddings OK, file KAG (%d espace(s)).",
-                        document_id,
-                        len(space_ids),
-                    )
-                    from app.services.task_dispatch import dispatch_library_document_kag
-
-                    dispatch_library_document_kag(document_id)
-                    return
-
-                ld.info(
-                    "[KAG] document_id=%s — aucun espace lié (document_space vide), KAG ignoré.",
-                    document_id,
-                )
-            else:
-                ld.info(
-                    "[KAG] document_id=%s — KAG désactivé (KAG_ENABLED=false), pas d'extraction graphe.",
-                    document_id,
-                )
-
             document.processing_status = "completed"
             document.processing_progress = 100
             document.updated_at = datetime.utcnow()
@@ -1322,7 +809,7 @@ def _process_embeddings_for_document(
     except Exception as e:
         logger.error("Erreur embeddings document %s: %s", document_id, e, exc_info=True)
         get_library_document_logger().error(
-            "[Embeddings/KAG] document_id=%s — erreur globale : %s",
+            "[Embeddings] document_id=%s — erreur globale : %s",
             document_id,
             e,
             exc_info=True,
@@ -1342,14 +829,15 @@ def _process_embeddings_for_document(
             )
 
 
-def complete_document_embeddings_and_kag_sync(
+def complete_document_embeddings_sync(
     document_id: int, run_id: Optional[str] = None
 ) -> None:
-    """
-    Finalise l'indexation : embeddings (bloquant), puis enfile la phase KAG sur une file dédiée
-    (Celery « kag » ou thread) pour permettre au worker documents de traiter un autre fichier.
-    """
+    """Finalise l'indexation : embeddings des feuilles puis statut completed."""
     _process_embeddings_for_document(document_id, run_id)
+
+
+# Alias rétrocompatibilité (imports existants)
+complete_document_embeddings_and_kag_sync = complete_document_embeddings_sync
 
 
 def generate_embeddings_for_chunks_async(note_id: int, project_id: int):

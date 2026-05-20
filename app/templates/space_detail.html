@@ -336,9 +336,6 @@
         <h1 id="space-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100">Espace</h1>
         <p class="text-sm text-gray-500">Discussion LIA sur les documents de cet espace</p>
       </div>
-      <a id="kag-link" href="#" class="px-4 py-2 rounded-lg bg-violet-600 text-white hover:bg-violet-700">
-        <i class="ti ti-chart-arcs-3"></i> Voir le Graph KAG
-      </a>
     </div>
 
     <div class="grid grid-cols-1 gap-4 flex-1 min-h-0">
@@ -1023,7 +1020,6 @@ async function loadSpace() {
   if (!r.ok) return;
   const s = await r.json();
   document.getElementById("space-title").textContent = s.name;
-  document.getElementById("kag-link").href = `/spaces/${spaceId}/kag-graph`;
 }
 
 document.getElementById("chat-form").addEventListener("submit", async (e) => {

@@ -4,8 +4,6 @@ from app.models.space import Space, SpaceCreate, SpaceUpdate
 from app.models.document_space import DocumentSpace
 from app.models.conversation import Conversation
 from app.models.message import Message
-from app.models.knowledge_entity import KnowledgeEntity
-from app.models.chunk_entity_relation import ChunkEntityRelation
 from datetime import datetime
 import logging
 
@@ -73,10 +71,7 @@ def update_space(
 def delete_space(session: Session, space_id: int, user_id: int) -> bool:
     """
     Supprime un espace et ses associations.
-    Supprime:
-    - Les associations DocumentSpace (mais pas les documents eux-mêmes)
-    - Les entités KAG de cet espace
-    - Les conversations de cet espace
+    Supprime les associations DocumentSpace et les conversations de cet espace.
     """
     space = get_space_by_id(session, space_id, user_id)
     if not space:
@@ -87,22 +82,7 @@ def delete_space(session: Session, space_id: int, user_id: int) -> bool:
     ).all()
     for doc_space in doc_spaces:
         session.delete(doc_space)
-    
-    # Nettoyer explicitement les données KAG de l'espace.
-    # On évite une dépendance à kag_graph_service car la migration
-    # space_id n'est pas encore homogène dans tous les services.
-    relations = session.exec(
-        select(ChunkEntityRelation).where(ChunkEntityRelation.space_id == space_id)
-    ).all()
-    for relation in relations:
-        session.delete(relation)
 
-    entities = session.exec(
-        select(KnowledgeEntity).where(KnowledgeEntity.space_id == space_id)
-    ).all()
-    for entity in entities:
-        session.delete(entity)
-    
     conversations = session.exec(
         select(Conversation).where(Conversation.space_id == space_id)
     ).all()

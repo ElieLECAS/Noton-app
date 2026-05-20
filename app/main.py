@@ -23,17 +23,6 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-# --- PATCH FLAGEMBEDDING / TRANSFORMERS ---
-# FlagEmbedding importe 'is_torch_fx_available' depuis 'transformers.utils.import_utils'
-# Ce module a été retiré, ce qui fait crasher le reranker FlagEmbeddingReranker.
-try:
-    import transformers.utils.import_utils
-    if not hasattr(transformers.utils.import_utils, 'is_torch_fx_available'):
-        transformers.utils.import_utils.is_torch_fx_available = lambda: False
-except ImportError:
-    pass
-# ------------------------------------------
-
 # Fichier dédié : logs/library_document_processing.log (pipeline bibliothèque / espaces)
 try:
     from app.library_document_logging import setup_library_document_file_logging
@@ -43,7 +32,7 @@ try:
 except Exception as e:
     logger.warning("Initialisation journal bibliothèque/espaces ignorée : %s", e)
 
-# LangSmith — observabilité RAG/KAG
+# LangSmith — observabilité RAG
 try:
     from app.tracing import init_langsmith
     init_langsmith()
@@ -119,19 +108,26 @@ async def startup_event():
     except Exception as e:
         logger.error(f"Erreur lors de l'initialisation RBAC: {e}")
     
-    # Tester l'initialisation du modèle d'embeddings HuggingFace
+    # Tester la connexion API Mistral Embeddings (si clé configurée)
     try:
         from app.services.embedding_service import generate_embedding
-        logger.info("Test d'initialisation du modèle d'embeddings HuggingFace...")
-        # Test rapide avec un texte court
-        test_embedding = generate_embedding("test")
-        if test_embedding:
-            logger.info("✅ Modèle d'embeddings HuggingFace initialisé et prêt")
+        if settings.MISTRAL_API_KEY:
+            logger.info(
+                "Test API Mistral Embeddings (model=%s)...",
+                settings.EMBEDDING_MODEL,
+            )
+            test_embedding = generate_embedding("test")
+            if test_embedding:
+                logger.info(
+                    "✅ Mistral Embeddings OK (dim=%s)",
+                    len(test_embedding),
+                )
+            else:
+                logger.warning("⚠️ Impossible de générer un embedding de test")
         else:
-            logger.warning("⚠️ Impossible de générer un embedding de test")
+            logger.warning("⚠️ MISTRAL_API_KEY absente — embeddings indisponibles")
     except Exception as e:
-        logger.warning(f"⚠️ Erreur lors de l'initialisation du modèle d'embeddings: {e}")
-        # Ne pas bloquer le démarrage si le modèle n'est pas disponible
+        logger.warning("⚠️ Erreur test Mistral Embeddings: %s", e)
     
     # Workers threads (embeddings + documents) uniquement si thread ou hybrid (repli Celery)
     try:
@@ -194,15 +190,6 @@ async def space_detail_page(request: Request, space_id: int, session: Session = 
     if not user:
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("space_detail.html", {"request": request, "space_id": space_id, "user": user})
-
-
-@app.get("/spaces/{space_id}/kag-graph", response_class=HTMLResponse)
-async def space_kag_graph_page(request: Request, space_id: int, session: Session = Depends(get_session)):
-    """Page de visualisation du graphe KAG d'un espace."""
-    user = _get_authenticated_user(request, session)
-    if not user:
-        return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("space_kag_graph.html", {"request": request, "space_id": space_id, "user": user})
 
 
 @app.get("/admin", response_class=HTMLResponse)

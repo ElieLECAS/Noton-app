@@ -61,7 +61,6 @@ def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
     if task_name not in {
         "app.tasks.documents.process_library_document",
         "app.tasks.documents.reindex_library_document_task",
-        "app.tasks.documents.process_library_document_kag",
         "app.tasks.documents.process_document_embeddings",
         "app.tasks.documents.update_document_spaces_task",
     }:
@@ -79,7 +78,7 @@ def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
 
 def revoke_library_document_tasks(document_id: int) -> dict[str, Any]:
     """
-    Révoque les tâches Celery actives/réservées liées à un document (files documents, embeddings, kag).
+    Révoque les tâches Celery actives/réservées liées à un document (files documents, embeddings).
     Retourne preuve d'opération pour l'API admin.
     """
     mode = get_task_backend_mode()
@@ -146,7 +145,7 @@ def revoke_library_tasks_bulk(
 ) -> dict[str, Any]:
     """
     Révoque en masse les tâches liées à la bibliothèque:
-    - tasks document (documents/embeddings/kag) par document_id
+    - tasks document (documents/embeddings) par document_id
     - task globale reindex_all_library_documents_task par user_id (si fourni)
     """
     mode = get_task_backend_mode()
@@ -334,60 +333,6 @@ def _send_document_embeddings(document_id: int, run_id: Optional[str]) -> bool:
     return True
 
 
-def _send_library_document_kag(document_id: int, run_id: Optional[str]) -> bool:
-    from app.tasks.documents import process_library_document_kag
-
-    res = process_library_document_kag.apply_async(
-        args=[document_id, run_id],
-        queue="kag",
-    )
-    logger.info(
-        "task_dispatch library_kag document_id=%s celery_task_id=%s",
-        document_id,
-        res.id,
-    )
-    return True
-
-
-def _run_kag_thread(document_id: int, run_id: Optional[str]) -> None:
-    from app.services.chunk_service import run_kag_for_library_document
-
-    def _runner():
-        try:
-            run_kag_for_library_document(document_id, run_id)
-        except Exception:
-            logger.exception("Thread KAG échoué document_id=%s", document_id)
-
-    threading.Thread(
-        target=_runner,
-        name=f"kag-doc-{document_id}",
-        daemon=True,
-    ).start()
-
-
-def dispatch_library_document_kag(document_id: int) -> None:
-    """Enqueue la phase KAG bibliothèque après embeddings (Celery queue « kag » ou thread)."""
-    mode = get_task_backend_mode()
-    run_id: Optional[str] = None
-    with Session(engine) as session:
-        doc = session.get(Document, document_id)
-        if doc:
-            run_id = doc.processing_run_id
-    if mode == "thread":
-        _run_kag_thread(document_id, run_id)
-        return
-    try:
-        _send_library_document_kag(document_id, run_id)
-    except Exception as exc:
-        logger.warning(
-            "Celery indisponible pour KAG document_id=%s: %s", document_id, exc
-        )
-        if mode == "hybrid":
-            _run_kag_thread(document_id, run_id)
-            return
-        raise RuntimeError(_celery_only_failure_message()) from exc
-
-
 def _send_document_spaces_update(
     document_id: int,
     add_space_ids: list[int],
@@ -503,7 +448,7 @@ def dispatch_project_document(note_id: int, file_path: str) -> None:
 def dispatch_reindex_library(document_id: int, user_id: int) -> str:
     """
     Enfile la réindexation sur la queue Celery « documents » uniquement.
-    Docling, chunks, embeddings et KAG s'exécutent dans le worker, pas dans l'API.
+    Mistral OCR, chunks et embeddings s'exécutent dans le worker, pas dans l'API.
     Retourne l'identifiant de tâche Celery.
     """
     run_id: Optional[str] = None

@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple
 import logging
@@ -24,6 +25,11 @@ CHUNKING_VERSION_DOCLING_HIERARCHICAL_V2 = "docling_hierarchical_v2"
 CHUNKING_VERSION_FIXED_WINDOW = "fixed_window_v1"
 CHUNKING_VERSION_MARKDOWN_H2 = "markdown_h2_sections_v1"
 CHUNKING_VERSION_ADAPTIVE = "adaptive_window_v1"
+CHUNKING_VERSION_MARKDOWN_HIERARCHICAL = "markdown_hierarchical_v1"
+CHUNKING_VERSION_MARKDOWN_HIERARCHICAL_V2 = "markdown_hierarchical_v2"
+
+# Tailles par défaut pour l'ingestion OCR (parents ~1024 tokens, feuilles ~256)
+DEFAULT_OCR_HIERARCHICAL_CHUNK_SIZES = [1024, 256]
 
 # Chunking adaptatif (fallback document) — approx. tokens ≈ chars/4
 ADAPTIVE_CHUNK_CHARS_PROCEDURE = (600, 1200)  # ~150–300 tokens
@@ -1334,4 +1340,736 @@ def chunk_document_from_docling_docs(
         leaf_count,
         parent_count,
     )
+    return chunks
+
+
+# ---------------------------------------------------------------------------
+# Stratégie principale : markdown Mistral OCR → HierarchicalNodeParser
+# ---------------------------------------------------------------------------
+
+_PAGE_MARKER_RE = re.compile(r"<!--\s*page:(\d+)\s*-->", re.IGNORECASE)
+_HEADING_RE = re.compile(r"^(#{1,6})\s+(.+)$", re.MULTILINE)
+
+
+@dataclass
+class MarkdownSegment:
+    """Segment texte ou tableau extrait du markdown OCR."""
+    kind: str  # "text" | "table"
+    content: str
+    start_char: int
+    end_char: int
+    page_no: Optional[int] = None
+    caption: Optional[str] = None
+    parent_heading: Optional[str] = None
+
+
+def _page_no_from_markdown_segment(text: str, fallback: Optional[int] = None) -> Optional[int]:
+    m = _PAGE_MARKER_RE.search(text)
+    if m:
+        try:
+            return int(m.group(1))
+        except (TypeError, ValueError):
+            pass
+    return fallback
+
+
+def _build_page_marker_index(markdown: str) -> List[Tuple[int, int]]:
+    """Index (offset caractère, numéro de page) pour tous les marqueurs <!-- page:N -->."""
+    index: List[Tuple[int, int]] = []
+    for match in _PAGE_MARKER_RE.finditer(markdown or ""):
+        try:
+            page_no = int(match.group(1))
+        except (TypeError, ValueError):
+            continue
+        if page_no > 0:
+            index.append((match.start(), page_no))
+    return index
+
+
+def _page_no_from_char_offset(
+    offset: int,
+    page_index: List[Tuple[int, int]],
+    fallback: Optional[int] = None,
+) -> Optional[int]:
+    """Retourne la page active à un offset (dernier marqueur <= offset)."""
+    page_no = fallback
+    for pos, pno in page_index:
+        if pos <= offset:
+            page_no = pno
+        else:
+            break
+    return page_no
+
+
+def _parent_heading_from_markdown(text: str) -> Optional[str]:
+    headings = _HEADING_RE.findall(text)
+    if not headings:
+        return None
+    return headings[-1][1].strip()
+
+
+def _find_parent_heading_before(full_md: str, end_pos: int) -> Optional[str]:
+    prefix = (full_md or "")[: max(0, end_pos)]
+    return _parent_heading_from_markdown(prefix)
+
+
+def _extract_caption_before_table(full_md: str, table_start: int) -> Optional[str]:
+    prefix = (full_md or "")[: max(0, table_start)].rstrip()
+    if not prefix:
+        return None
+    lines = [ln.strip() for ln in prefix.splitlines() if ln.strip()]
+    if not lines:
+        return None
+    candidate = lines[-1]
+    if _PAGE_MARKER_RE.match(candidate):
+        candidate = lines[-2] if len(lines) > 1 else ""
+    if not candidate or candidate.startswith("#") or candidate.startswith("|"):
+        return None
+    if len(candidate) > 200:
+        return None
+    return candidate
+
+
+def _line_is_table_row(line: str) -> bool:
+    stripped = (line or "").strip()
+    return bool(stripped.startswith("|") and "|" in stripped[1:])
+
+
+def _find_markdown_table_spans(text: str) -> List[Tuple[int, int, str]]:
+    """Retourne (start, end, table_text) pour chaque bloc tableau markdown."""
+    if not text:
+        return []
+    lines = text.split("\n")
+    spans: List[Tuple[int, int, str]] = []
+    offset = 0
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        line_start = offset
+        line_len = len(line)
+        next_offset = offset + line_len + (1 if i < len(lines) - 1 else 0)
+
+        if not _line_is_table_row(line):
+            offset = next_offset
+            i += 1
+            continue
+
+        block_lines = [line]
+        j = i + 1
+        block_end_offset = next_offset
+        while j < len(lines):
+            ln = lines[j]
+            stripped = ln.strip()
+            if _line_is_table_row(ln) or (
+                stripped and _RE_SEPARATOR_LINE.match(stripped.replace(" ", ""))
+            ):
+                block_lines.append(ln)
+                block_end_offset += len(ln) + (1 if j < len(lines) - 1 else 0)
+                j += 1
+            else:
+                break
+
+        block_text = "\n".join(block_lines)
+        if _is_markdown_table_text(block_text):
+            spans.append((line_start, block_end_offset, block_text))
+            offset = block_end_offset
+            i = j
+        else:
+            offset = next_offset
+            i += 1
+    return spans
+
+
+def _split_markdown_into_segments(markdown: str) -> List[MarkdownSegment]:
+    """Découpe le markdown en segments texte / tableau en préservant les offsets."""
+    md = (markdown or "").strip()
+    if not md:
+        return []
+
+    page_index = _build_page_marker_index(md)
+    table_spans = _find_markdown_table_spans(md)
+    if not table_spans:
+        return [
+            MarkdownSegment(
+                kind="text",
+                content=md,
+                start_char=0,
+                end_char=len(md),
+                page_no=_page_no_from_char_offset(0, page_index),
+                parent_heading=_parent_heading_from_markdown(md),
+            )
+        ]
+
+    segments: List[MarkdownSegment] = []
+    cursor = 0
+    for start, end, table_text in table_spans:
+        if start > cursor:
+            text_part = md[cursor:start]
+            stripped = text_part.strip()
+            if stripped:
+                seg_start = cursor + (len(text_part) - len(text_part.lstrip()))
+                seg_end = cursor + len(text_part.rstrip())
+                segments.append(
+                    MarkdownSegment(
+                        kind="text",
+                        content=stripped,
+                        start_char=seg_start,
+                        end_char=seg_end,
+                        page_no=_page_no_from_char_offset(seg_start, page_index),
+                        parent_heading=_find_parent_heading_before(md, seg_start),
+                    )
+                )
+        segments.append(
+            MarkdownSegment(
+                kind="table",
+                content=table_text,
+                start_char=start,
+                end_char=end,
+                page_no=_page_no_from_char_offset(start, page_index),
+                caption=_extract_caption_before_table(md, start),
+                parent_heading=_find_parent_heading_before(md, start),
+            )
+        )
+        cursor = end
+
+    if cursor < len(md):
+        text_part = md[cursor:]
+        stripped = text_part.strip()
+        if stripped:
+            seg_start = cursor + (len(text_part) - len(text_part.lstrip()))
+            seg_end = cursor + len(text_part.rstrip())
+            segments.append(
+                MarkdownSegment(
+                    kind="text",
+                    content=stripped,
+                    start_char=seg_start,
+                    end_char=seg_end,
+                    page_no=_page_no_from_char_offset(seg_start, page_index),
+                    parent_heading=_find_parent_heading_before(md, seg_start),
+                )
+            )
+    return segments
+
+
+def normalize_markdown_tables(text: str) -> str:
+    """Re-sérialise les grilles markdown valides (post-OCR)."""
+    if not text or not text.strip():
+        return text or ""
+    spans = _find_markdown_table_spans(text)
+    if not spans:
+        return text
+    parts: List[str] = []
+    cursor = 0
+    for start, end, table_text in spans:
+        parts.append(text[cursor:start])
+        parsed = _parse_markdown_table_robust(table_text)
+        if parsed is not None:
+            if parsed.suspicious_row_indices:
+                logger.warning(
+                    "Tableau OCR : lignes suspectes aux indices %s",
+                    parsed.suspicious_row_indices,
+                )
+            parts.append(_serialize_markdown_table(parsed.headers, parsed.data_rows))
+        else:
+            parts.append(table_text)
+        cursor = end
+    parts.append(text[cursor:])
+    return "".join(parts)
+
+
+def _propagate_page_metadata_to_parents(specs: List[dict]) -> None:
+    """Propage page_start/page_end/page_no des feuilles vers les parents."""
+    children_by_parent: Dict[str, List[dict]] = defaultdict(list)
+    for spec in specs:
+        parent_id = spec.get("parent_node_id")
+        if parent_id:
+            children_by_parent[parent_id].append(spec)
+
+    def _collect_pages(node_id: str) -> List[int]:
+        pages: List[int] = []
+        for child in children_by_parent.get(node_id, []):
+            meta = child.get("metadata_json") or {}
+            pn = meta.get("page_no")
+            if pn is not None:
+                try:
+                    pages.append(int(pn))
+                except (TypeError, ValueError):
+                    pass
+            pages.extend(_collect_pages(child["node_id"]))
+        return pages
+
+    for spec in specs:
+        if spec.get("is_leaf"):
+            continue
+        node_id = spec.get("node_id")
+        if not node_id:
+            continue
+        pages = _collect_pages(node_id)
+        if not pages:
+            continue
+        meta = dict(spec.get("metadata_json") or {})
+        meta["page_start"] = min(pages)
+        meta["page_end"] = max(pages)
+        meta["page_no"] = min(pages)
+        spec["metadata_json"] = meta
+
+
+def _expand_table_to_specs(
+    *,
+    table_text: str,
+    base_meta: dict,
+    parent_heading: str = "",
+    caption: Optional[str] = None,
+    page_no: Optional[int] = None,
+    section_parent_node_id: Optional[str] = None,
+    hierarchy_base: int = 0,
+    start_char: int = 0,
+    raw_content: Optional[str] = None,
+) -> List[dict]:
+    """Produit table_full + table_row (+ table_summary si 2 colonnes) pour un bloc markdown."""
+    parsed = _parse_markdown_table_robust(table_text)
+    if parsed is None:
+        logger.warning(
+            "Expansion table échouée (parse) — fallback texte, start_char=%s",
+            start_char,
+        )
+        return []
+
+    headers = parsed.headers
+    data_rows = parsed.data_rows
+    suspicious_row_indices = parsed.suspicious_row_indices
+    empty_cell_map = parsed.empty_cell_map
+    parent_heading_display = (parent_heading or "").strip()
+    cap = caption
+    raw = raw_content or table_text
+    table_id = str(uuid.uuid4())
+    total_rows = len(data_rows)
+    parent_node_id = section_parent_node_id
+    specs: List[dict] = []
+
+    table_full_node_id = str(uuid.uuid4())
+    full_text = _table_full_chunk_text(
+        headers=headers,
+        data_rows=data_rows,
+        parent_heading=parent_heading_display,
+        caption=cap,
+        page_no=page_no,
+    )
+    table_json_obj = _build_table_json(
+        headers=headers,
+        data_rows=data_rows,
+        caption=cap,
+        page_no=page_no,
+        suspicious_rows=suspicious_row_indices,
+    )
+    full_metadata = dict(base_meta)
+    full_metadata["parent_heading"] = parent_heading_display
+    full_metadata["heading"] = parent_heading_display
+    full_metadata["content_type"] = "table_full"
+    full_metadata["table_id"] = table_id
+    full_metadata["nb_rows"] = total_rows
+    full_metadata["nb_cols"] = len(headers)
+    full_metadata["suspicious_rows"] = suspicious_row_indices
+    full_metadata["column_headers"] = headers
+    full_metadata["table_json"] = table_json_obj
+    full_metadata["raw_content"] = raw
+    if cap:
+        full_metadata["image_anchor"] = cap
+        full_metadata["figure_title"] = cap
+    full_metadata.update(
+        {
+            "node_id": table_full_node_id,
+            "parent_node_id": parent_node_id,
+            "hierarchy_level": hierarchy_base,
+            "is_leaf": "false",
+        }
+    )
+    if page_no is not None:
+        full_metadata["page_no"] = page_no
+
+    specs.append(
+        {
+            "chunk_index": 0,
+            "is_leaf": False,
+            "content": full_text,
+            "text": full_text,
+            "start_char": start_char,
+            "end_char": start_char + len(full_text),
+            "node_id": table_full_node_id,
+            "parent_node_id": parent_node_id,
+            "hierarchy_level": hierarchy_base,
+            "metadata_json": full_metadata,
+        }
+    )
+
+    row_level = hierarchy_base + 1
+
+    if len(headers) == 2:
+        summary_text = _table_summary_chunk_text(
+            headers=headers,
+            data_rows=data_rows,
+            parent_heading=parent_heading_display,
+            caption=cap,
+            page_no=page_no,
+        )
+        if summary_text.strip():
+            summary_node_id = str(uuid.uuid4())
+            summary_metadata = dict(base_meta)
+            summary_metadata["parent_heading"] = parent_heading_display
+            summary_metadata["heading"] = parent_heading_display
+            summary_metadata["content_type"] = "table_summary"
+            summary_metadata["table_id"] = table_id
+            summary_metadata["column_headers"] = headers
+            summary_metadata.update(
+                {
+                    "node_id": summary_node_id,
+                    "parent_node_id": table_full_node_id,
+                    "hierarchy_level": row_level,
+                    "is_leaf": "true",
+                }
+            )
+            if page_no is not None:
+                summary_metadata["page_no"] = page_no
+            specs.append(
+                {
+                    "chunk_index": 0,
+                    "is_leaf": True,
+                    "content": summary_text,
+                    "text": summary_text,
+                    "start_char": start_char,
+                    "end_char": start_char + len(summary_text),
+                    "node_id": summary_node_id,
+                    "parent_node_id": table_full_node_id,
+                    "hierarchy_level": row_level,
+                    "metadata_json": summary_metadata,
+                }
+            )
+
+    for ri, cells in enumerate(data_rows):
+        is_suspicious = ri in suspicious_row_indices
+        empty_cols = empty_cell_map.get(ri, [])
+        row_text = _table_row_chunk_text(
+            headers=headers,
+            cells=cells,
+            parent_heading=parent_heading_display,
+            caption=cap,
+            page_no=page_no,
+            table_id=table_id,
+            row_index=ri,
+            total_rows=total_rows,
+            suspicious=is_suspicious,
+            empty_col_indices=empty_cols,
+        )
+        if not row_text.strip():
+            continue
+
+        leaf_rid = str(uuid.uuid4())
+        leaf_metadata = dict(base_meta)
+        leaf_metadata["parent_heading"] = parent_heading_display
+        leaf_metadata["heading"] = parent_heading_display
+        leaf_metadata["content_type"] = "table_row"
+        leaf_metadata["table_id"] = table_id
+        leaf_metadata["row_index"] = ri
+        leaf_metadata["column_headers"] = headers
+        leaf_metadata["raw_content"] = raw
+        leaf_metadata["suspicious"] = is_suspicious
+        if empty_cols:
+            leaf_metadata["empty_col_indices"] = empty_cols
+        if cap:
+            leaf_metadata["image_anchor"] = cap
+            leaf_metadata["figure_title"] = cap
+        leaf_metadata.update(
+            {
+                "node_id": leaf_rid,
+                "parent_node_id": table_full_node_id,
+                "hierarchy_level": row_level,
+                "is_leaf": "true",
+            }
+        )
+        if page_no is not None:
+            leaf_metadata["page_no"] = page_no
+
+        specs.append(
+            {
+                "chunk_index": 0,
+                "is_leaf": True,
+                "content": row_text,
+                "text": row_text,
+                "start_char": start_char,
+                "end_char": start_char + len(row_text),
+                "node_id": leaf_rid,
+                "parent_node_id": table_full_node_id,
+                "hierarchy_level": row_level,
+                "metadata_json": leaf_metadata,
+            }
+        )
+    return specs
+
+
+def _chunk_markdown_text_to_specs(
+    text: str,
+    base_meta: dict,
+    *,
+    char_offset: int = 0,
+    page_index: Optional[List[Tuple[int, int]]] = None,
+) -> List[dict]:
+    """Découpe un segment texte via HierarchicalNodeParser avec offsets absolus."""
+    segment = (text or "").strip()
+    if not segment:
+        return []
+    if page_index is None:
+        page_index = _build_page_marker_index(segment)
+
+    chunk_sizes = list(DEFAULT_OCR_HIERARCHICAL_CHUNK_SIZES)
+    parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
+    llama_doc = LlamaDocument(text=segment, metadata=dict(base_meta or {}))
+    nodes = parser.get_nodes_from_documents([llama_doc])
+    if not nodes:
+        return []
+
+    parent_map = _build_parent_map(nodes)
+    level_map = _build_level_map(parent_map)
+    leaf_ids = _detect_leaf_ids(parent_map)
+    nodes_sorted = sorted(
+        nodes,
+        key=lambda n: (
+            level_map.get(n.node_id, 0),
+            int((n.metadata or {}).get("start_char_idx", 0)),
+            n.node_id,
+        ),
+    )
+
+    specs: List[dict] = []
+    for node in nodes_sorted:
+        content = (node.get_content() or "").strip()
+        if not content:
+            continue
+
+        node_id = node.node_id
+        parent_node_id = parent_map.get(node_id)
+        hierarchy_level = level_map.get(node_id, 0)
+        is_leaf = node_id in leaf_ids
+        rel_start = int((node.metadata or {}).get("start_char_idx", 0) or 0)
+        rel_end = int(
+            (node.metadata or {}).get("end_char_idx", rel_start + len(content))
+            or (rel_start + len(content))
+        )
+        start_char = char_offset + rel_start
+        end_char = char_offset + rel_end
+
+        meta = dict(node.metadata or {})
+        meta.update(base_meta)
+        meta.update(
+            {
+                "node_id": node_id,
+                "parent_node_id": parent_node_id,
+                "hierarchy_level": hierarchy_level,
+                "is_leaf": "true" if is_leaf else "false",
+            }
+        )
+        page_no = _page_no_from_char_offset(start_char, page_index)
+        if page_no is None:
+            page_no = _page_no_from_markdown_segment(content)
+        if page_no is not None:
+            meta["page_no"] = page_no
+        parent_heading = _parent_heading_from_markdown(content)
+        if parent_heading:
+            meta["parent_heading"] = parent_heading
+
+        specs.append(
+            {
+                "chunk_index": 0,
+                "is_leaf": is_leaf,
+                "content": content,
+                "text": content,
+                "start_char": start_char,
+                "end_char": end_char,
+                "node_id": node_id,
+                "parent_node_id": parent_node_id,
+                "hierarchy_level": hierarchy_level,
+                "metadata_json": meta,
+            }
+        )
+    return specs
+
+
+def chunk_markdown_hierarchical(markdown: str, metadata_base: dict) -> List[dict]:
+    """
+    Découpe un markdown (Mistral OCR) en specs hiérarchiques parents/feuilles.
+    Compatible DocumentChunk / NoteChunk (node_id, parent_node_id, is_leaf).
+    """
+    text = (markdown or "").strip()
+    if not text:
+        return []
+
+    base_meta = dict(metadata_base or {})
+    base_meta["chunking_version"] = CHUNKING_VERSION_MARKDOWN_HIERARCHICAL
+    page_index = _build_page_marker_index(text)
+    specs = _chunk_markdown_text_to_specs(
+        text, base_meta, char_offset=0, page_index=page_index
+    )
+    for idx, spec in enumerate(specs):
+        spec["chunk_index"] = idx
+
+    logger.info(
+        "Chunking markdown hiérarchique : %d specs (%d feuilles, %d parents) chunk_sizes=%s",
+        len(specs),
+        sum(1 for s in specs if s["is_leaf"]),
+        sum(1 for s in specs if not s["is_leaf"]),
+        DEFAULT_OCR_HIERARCHICAL_CHUNK_SIZES,
+    )
+    return specs
+
+
+def chunk_markdown_hierarchical_with_tables(markdown: str, metadata_base: dict) -> List[dict]:
+    """
+    Chunking markdown OCR avec expansion atomique des tableaux (table_full / table_row).
+    """
+    text = (markdown or "").strip()
+    if not text:
+        return []
+
+    page_index = _build_page_marker_index(text)
+    segments = _split_markdown_into_segments(text)
+    base_meta = dict(metadata_base or {})
+    base_meta["chunking_version"] = CHUNKING_VERSION_MARKDOWN_HIERARCHICAL_V2
+
+    all_specs: List[dict] = []
+
+    for seg in segments:
+        if seg.kind == "text":
+            all_specs.extend(
+                _chunk_markdown_text_to_specs(
+                    seg.content,
+                    base_meta,
+                    char_offset=seg.start_char,
+                    page_index=page_index,
+                )
+            )
+            continue
+
+        parent_heading = seg.parent_heading or ""
+        section_parent_node_id: Optional[str] = None
+        hierarchy_base = 0
+
+        if parent_heading:
+            section_parent_node_id = str(uuid.uuid4())
+            section_meta = dict(base_meta)
+            section_meta.update(
+                {
+                    "node_id": section_parent_node_id,
+                    "parent_node_id": None,
+                    "hierarchy_level": 0,
+                    "is_leaf": "false",
+                    "parent_heading": parent_heading,
+                    "heading": parent_heading,
+                }
+            )
+            if seg.page_no is not None:
+                section_meta["page_no"] = seg.page_no
+            section_content = f"[{parent_heading}]\n\n{seg.content}"
+            all_specs.append(
+                {
+                    "chunk_index": 0,
+                    "is_leaf": False,
+                    "content": section_content,
+                    "text": section_content,
+                    "start_char": seg.start_char,
+                    "end_char": seg.end_char,
+                    "node_id": section_parent_node_id,
+                    "parent_node_id": None,
+                    "hierarchy_level": 0,
+                    "metadata_json": section_meta,
+                }
+            )
+            hierarchy_base = 1
+
+        table_specs = _expand_table_to_specs(
+            table_text=seg.content,
+            base_meta=base_meta,
+            parent_heading=parent_heading,
+            caption=seg.caption,
+            page_no=seg.page_no,
+            section_parent_node_id=section_parent_node_id,
+            hierarchy_base=hierarchy_base,
+            start_char=seg.start_char,
+            raw_content=seg.content,
+        )
+        if table_specs:
+            all_specs.extend(table_specs)
+        else:
+            logger.warning(
+                "Tableau non parsé — segment traité comme texte, start_char=%s",
+                seg.start_char,
+            )
+            all_specs.extend(
+                _chunk_markdown_text_to_specs(
+                    seg.content,
+                    base_meta,
+                    char_offset=seg.start_char,
+                    page_index=page_index,
+                )
+            )
+
+    for idx, spec in enumerate(all_specs):
+        spec["chunk_index"] = idx
+    _propagate_page_metadata_to_parents(all_specs)
+
+    logger.info(
+        "Chunking markdown+tableaux : %d specs (%d feuilles, %d parents, %d table_row)",
+        len(all_specs),
+        sum(1 for s in all_specs if s["is_leaf"]),
+        sum(1 for s in all_specs if not s["is_leaf"]),
+        sum(
+            1
+            for s in all_specs
+            if (s.get("metadata_json") or {}).get("content_type") == "table_row"
+        ),
+    )
+    return all_specs
+
+
+def specs_to_note_chunks(note: Note, specs: List[dict]) -> List[NoteChunk]:
+    chunks: List[NoteChunk] = []
+    for spec in specs:
+        meta = spec["metadata_json"]
+        chunks.append(
+            NoteChunk(
+                note_id=note.id,
+                chunk_index=spec["chunk_index"],
+                content=spec["content"],
+                text=spec["text"],
+                start_char=spec["start_char"],
+                end_char=spec["end_char"],
+                node_id=spec["node_id"],
+                parent_node_id=spec["parent_node_id"],
+                is_leaf=spec["is_leaf"],
+                hierarchy_level=spec["hierarchy_level"],
+                metadata_json=meta,
+                metadata_=meta,
+            )
+        )
+    return chunks
+
+
+def specs_to_document_chunks(document: LibraryDocument, specs: List[dict]) -> List[DocumentChunk]:
+    chunks: List[DocumentChunk] = []
+    for spec in specs:
+        meta = spec["metadata_json"]
+        chunks.append(
+            DocumentChunk(
+                document_id=document.id,
+                chunk_index=spec["chunk_index"],
+                content=spec["content"],
+                text=spec["text"],
+                start_char=spec["start_char"],
+                end_char=spec["end_char"],
+                node_id=spec["node_id"],
+                parent_node_id=spec["parent_node_id"],
+                is_leaf=spec["is_leaf"],
+                hierarchy_level=spec["hierarchy_level"],
+                metadata_json=meta,
+                metadata_=meta,
+            )
+        )
     return chunks

@@ -45,10 +45,6 @@ LIBRARY_QUEUE_ACTIVE_STATUSES = frozenset(
     }
 )
 
-# Pipeline images Docling (bibliothèque) : désactivé en dur — texte/OCR uniquement, pas d’extraction disque ni Pixtral.
-# Mettre à True pour réactiver le corps de ``extract_and_save_images`` sans toucher au reste du pipeline.
-_LIBRARY_DOCLING_IMAGES_ENABLED = False
-
 # Une seule file globale : ordre FIFO strict, un document terminé entièrement avant le suivant.
 document_task_queue: Queue = Queue()
 _document_queue_lock = threading.Lock()
@@ -56,10 +52,6 @@ document_workers = []
 _document_workers_lock = threading.Lock()
 _cancelled_document_ids: set[int] = set()
 _cancelled_documents_lock = threading.Lock()
-
-_docling_converter = None
-_docling_converter_generic = None
-_docling_converter_lock = threading.Lock()
 
 # Liste des marques connues pour l'inférence de source
 KNOWN_BRANDS = [
@@ -348,334 +340,27 @@ def skip_all_library_documents_processing(session: Session, user_id: int) -> dic
         "revoked_task_ids": all_revoked,
     }
 
-try:
-    import torch
-    import warnings
-
-    torch.backends.cudnn.enabled = False
-    warnings.filterwarnings("ignore", message=".*pin_memory.*", category=UserWarning)
-    warnings.filterwarnings("ignore", message=".*dataloader.*pin_memory.*", category=UserWarning)
-    warnings.filterwarnings("ignore", message=".*accelerator.*", category=UserWarning)
-    warnings.filterwarnings("ignore", category=UserWarning, module="torch.utils.data.dataloader")
-
-    if settings.TORCH_NUM_THREADS is not None:
-        torch.set_num_threads(settings.TORCH_NUM_THREADS)
-        logger.info("PyTorch configuré avec %d threads (valeur explicite)", settings.TORCH_NUM_THREADS)
-    else:
-        import multiprocessing
-        cpu_count = multiprocessing.cpu_count()
-        if settings.USE_ALL_CPU_CORES:
-            default_threads = cpu_count
-            logger.info("PyTorch configuré avec %d threads (tous les %d cœurs disponibles)", default_threads, cpu_count)
-        else:
-            default_threads = max(1, cpu_count // 2)
-            logger.info("PyTorch configuré avec %d threads (moitié des %d cœurs disponibles)", default_threads, cpu_count)
-        torch.set_num_threads(default_threads)
-
-    if "OMP_NUM_THREADS" in os.environ:
-        omp_value = os.environ["OMP_NUM_THREADS"].strip()
-        if not omp_value or not omp_value.isdigit() or int(omp_value) <= 0:
-            del os.environ["OMP_NUM_THREADS"]
-
-    if settings.OMP_NUM_THREADS is not None and settings.OMP_NUM_THREADS > 0:
-        os.environ["OMP_NUM_THREADS"] = str(settings.OMP_NUM_THREADS)
-        logger.info("OMP_NUM_THREADS configuré à %d (valeur explicite)", settings.OMP_NUM_THREADS)
-    elif "OMP_NUM_THREADS" not in os.environ:
-        import multiprocessing
-        cpu_count = multiprocessing.cpu_count()
-        if settings.USE_ALL_CPU_CORES:
-            default_omp_threads = cpu_count
-        else:
-            default_omp_threads = max(1, cpu_count // 2)
-        os.environ["OMP_NUM_THREADS"] = str(default_omp_threads)
-
-    if settings.DOCLING_USE_GPU is False or (settings.DOCLING_CPU_ONLY and settings.DOCLING_USE_GPU is None):
-        os.environ["CUDA_VISIBLE_DEVICES"] = ""
-        logger.info("GPU désactivé pour Docling (mode CPU uniquement)")
-    elif settings.DOCLING_USE_GPU is True:
-        if "CUDA_VISIBLE_DEVICES" in os.environ:
-            del os.environ["CUDA_VISIBLE_DEVICES"]
-        logger.info("GPU activé pour Docling")
-
-except ImportError:
-    logger.warning("PyTorch non disponible, certaines optimisations CPU ne seront pas appliquées")
-
-
-def get_docling_converter(file_path: Optional[str] = None):
-    """Récupère le convertisseur Docling adapté au type de fichier."""
-    global _docling_converter, _docling_converter_generic
-
-    with _docling_converter_lock:
-        # Utiliser un convertisseur générique pour les formats non-PDF
-        # afin d'éviter de restreindre Docling aux seules options PDF.
-        suffix = Path(file_path).suffix.lower() if file_path else ""
-        use_generic_converter = suffix and suffix != ".pdf"
-
-        if use_generic_converter:
-            if _docling_converter_generic is None:
-                init_start = time.time()
-                logger.info("Initialisation du DocumentConverter Docling (générique)...")
-                try:
-                    from docling.document_converter import DocumentConverter
-                    _docling_converter_generic = DocumentConverter()
-                    init_time = time.time() - init_start
-                    logger.info(
-                        "✅ DocumentConverter Docling générique initialisé en %.2fs",
-                        init_time,
-                    )
-                except Exception as e:
-                    logger.error(
-                        "Erreur lors de l'initialisation du DocumentConverter générique: %s",
-                        e,
-                        exc_info=True,
-                    )
-                    raise
-            return _docling_converter_generic
-
-        if _docling_converter is None:
-            init_start = time.time()
-            logger.info("Initialisation du DocumentConverter Docling (une seule fois)...")
-            try:
-                from docling.document_converter import DocumentConverter
-
-                format_options = None
-                ocr_enabled = getattr(settings, "DOCLING_OCR_ENABLED", False)
-                if True:
-                    try:
-                        from docling.datamodel.base_models import InputFormat
-                        from docling.datamodel.pipeline_options import PdfPipelineOptions
-                        from docling.document_converter import PdfFormatOption
-
-                        # Échelle d'image ajustable pour OCR (3.0 par défaut pour meilleure qualité)
-                        image_scale = getattr(settings, "OCR_IMAGE_SCALE", 3.0)
-                        
-                        pipeline_options = PdfPipelineOptions(
-                            do_ocr=ocr_enabled,
-                            generate_picture_images=False,
-                            images_scale=image_scale,
-                        )
-
-                        if ocr_enabled:
-                            ocr_lang = getattr(settings, "DOCLING_OCR_LANG", None)
-                            if ocr_lang:
-                                lang_list = [x.strip().lower() for x in ocr_lang.replace("+", ",").split(",") if x.strip()]
-                                if lang_list:
-                                    try:
-                                        from docling.datamodel.pipeline_options import EasyOcrOptions
-                                        pipeline_options.ocr_options = EasyOcrOptions(
-                                            lang=lang_list,
-                                            use_gpu=settings.DOCLING_USE_GPU is True,
-                                        )
-                                        logger.info("OCR Docling activé (EasyOCR, lang=%s)", lang_list)
-                                    except ImportError:
-                                        try:
-                                            from docling.datamodel.pipeline_options import TesseractOcrOptions
-                                            pipeline_options.ocr_options = TesseractOcrOptions(lang=ocr_lang)
-                                            logger.info("OCR Docling activé (Tesseract, lang=%s)", ocr_lang)
-                                        except ImportError:
-                                            logger.debug("OCR options non disponibles, do_ocr=True sans ocr_options")
-                            else:
-                                logger.info("OCR Docling activé (langues par défaut)")
-
-                        format_options = {InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
-                    except Exception as ie:
-                        logger.warning("Configuration OCR Docling non disponible (%s), conversion sans OCR", ie)
-
-                _docling_converter = DocumentConverter(format_options=format_options) if format_options else DocumentConverter()
-                init_time = time.time() - init_start
-                logger.info("✅ DocumentConverter Docling initialisé en %.2fs et prêt à être réutilisé", init_time)
-            except Exception as e:
-                logger.error("Erreur lors de l'initialisation du DocumentConverter: %s", e, exc_info=True)
-                raise
-
-        return _docling_converter
-
-
-def ensure_pdf_for_docling(file_path: str) -> str:
-    """
-    Docling est configuré/optimisé pour traiter le PDF.
-
-    Pour les formats bureautiques (ODT/DOCX/DOC/...), on convertit d'abord en PDF
-    via LibreOffice (headless), puis on traite le PDF résultant.
-    """
-    suffix = Path(file_path).suffix.lower()
-    if suffix == ".pdf":
-        return file_path
-
-    convertible_exts = {
-        ".odt",
-        ".odm",
-        ".odg",
-        ".odp",
-        ".ods",
-        ".odf",
-        ".doc",
-        ".docx",
-        ".rtf",
-        ".ppt",
-        ".pptx",
-        ".xls",
-        ".xlsx",
-    }
-
-    # Pour tout autre format (ex: EPUB), on laisse Docling gérer nativement.
-    if suffix not in convertible_exts:
-        logger.info(
-            "Format %s traité directement par Docling sans conversion PDF: %s",
-            suffix or "(sans extension)",
-            file_path,
-        )
-        return file_path
-
-    import subprocess
-
-    pdf_path = Path(file_path).with_suffix(".pdf")
-    try:
-        if pdf_path.exists():
-            pdf_path.unlink()
-    except Exception:
-        # Si on ne peut pas supprimer, on tentera quand même la conversion
-        pass
-
-    logger.info("Conversion LibreOffice vers PDF: %s", file_path)
-    cmd = [
-        "libreoffice",
-        "--headless",
-        "--nologo",
-        "--nolockcheck",
-        "--convert-to",
-        "pdf",
-        "--outdir",
-        str(pdf_path.parent),
-        str(file_path),
-    ]
-
-    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    if proc.returncode != 0:
-        stderr_tail = (proc.stderr or "").strip()[-2000:]
-        stdout_tail = (proc.stdout or "").strip()[-2000:]
-        details = stderr_tail or stdout_tail or f"code={proc.returncode}"
-        raise RuntimeError(f"LibreOffice a échoué pour {file_path}: {details}")
-
-    if not pdf_path.exists():
-        # LibreOffice peut parfois produire un nom légèrement différent.
-        candidates = sorted(
-            pdf_path.parent.glob(f"{Path(file_path).stem}*.pdf"),
-            key=lambda p: p.stat().st_mtime,
-            reverse=True,
-        )
-        if not candidates:
-            raise FileNotFoundError(f"Aucun PDF généré pour {file_path}")
-        pdf_path = candidates[0]
-
-    return str(pdf_path)
-
-
-def process_document_file(file_path: str) -> tuple[Optional[str], Optional[list], Optional[object]]:
-    """
-    Traite un document et retourne (markdown, llama_docs_json, docling_doc).
-    """
-    import time as _time
-
-    start_time = _time.time()
+def process_document_file(file_path: str) -> Optional[str]:
+    """Extrait le markdown via Mistral OCR (remplace Docling)."""
+    from app.services.mistral_ocr_service import extract_markdown_from_file
 
     if not os.path.exists(file_path):
         logger.error("Fichier non trouvé: %s", file_path)
-        return None, None, None
-
+        return None
     try:
-        file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
-        logger.info("Démarrage du traitement Docling: %s (%.2f MB)", file_path, file_size_mb)
-
-        converter = get_docling_converter(file_path)
-
-        import sys
-
-        class ProgressFilter:
-            def __init__(self, original_stream):
-                self.original_stream = original_stream
-
-            def write(self, text):
-                if "Progress:" not in text and "Complete" not in text and "|" not in text[:20]:
-                    self.original_stream.write(text)
-
-            def flush(self):
-                self.original_stream.flush()
-            
-            def fileno(self):
-                return self.original_stream.fileno()
-
-        old_stdout, old_stderr = sys.stdout, sys.stderr
-        try:
-            sys.stdout = ProgressFilter(sys.stdout)
-            sys.stderr = ProgressFilter(sys.stderr)
-
-            conversion_start = _time.time()
-            result = converter.convert(file_path)
-            conversion_time = _time.time() - conversion_start
-            logger.info("Conversion Docling terminée en %.2fs (%.2f min)", conversion_time, conversion_time / 60)
-        finally:
-            sys.stdout = old_stdout
-            sys.stderr = old_stderr
-
-        docling_doc = result.document
-        markdown_content = docling_doc.export_to_markdown().strip()
-
-        # Logique de fallback OCR si activée et résultat insuffisant
-        if getattr(settings, "OCR_FALLBACK_ENABLED", True):
-            try:
-                from app.services.ocr_fallback import extract_with_fallback
-                
-                # Appliquer le fallback si nécessaire
-                markdown_content = extract_with_fallback(
-                    file_path=file_path,
-                    docling_result=markdown_content,
-                    docling_doc=docling_doc,
-                    fallback_enabled=True
-                )
-            except Exception as e:
-                logger.warning(
-                    "Erreur lors du fallback OCR, utilisation résultat Docling: %s",
-                    e
-                )
-
-        if not markdown_content:
-            logger.warning("Le document %s a été traité mais le contenu markdown est vide", file_path)
-            return None, None, None
-
-        from llama_index.core import Document as LlamaDocument
-
-        llama_docs = [
-            LlamaDocument(
-                text=docling_doc.model_dump_json(),
-                metadata={"source": str(file_path)},
-            )
-        ]
-
-        total_time = _time.time() - start_time
-        logger.info(
-            "✅ Document converti en %.2fs (%.2f min) — %d caractères markdown, %d document(s) JSON Docling",
-            total_time, total_time / 60, len(markdown_content), len(llama_docs)
-        )
-        return markdown_content, llama_docs, docling_doc
-
+        markdown = extract_markdown_from_file(file_path)
+        if not markdown or not markdown.strip():
+            logger.warning("Markdown vide après Mistral OCR: %s", file_path)
+            return None
+        return markdown.strip()
     except Exception as e:
         suffix = Path(file_path).suffix.lower()
         if suffix == ".epub":
-            logger.warning(
-                "Docling n'a pas pu traiter l'EPUB (%s). Fallback extraction texte EPUB.",
-                e,
-            )
             fallback_markdown = extract_text_from_epub(file_path)
             if fallback_markdown:
-                logger.info(
-                    "✅ Fallback EPUB réussi: %d caractères extraits",
-                    len(fallback_markdown),
-                )
-                return fallback_markdown, None, None
-
-        logger.error("Erreur lors du traitement du document %s: %s", file_path, e, exc_info=True)
-        return None, None, None
+                return fallback_markdown.strip()
+        logger.error("Erreur Mistral OCR pour %s: %s", file_path, e, exc_info=True)
+        return None
 
 
 def extract_text_from_epub(file_path: str) -> Optional[str]:
@@ -745,93 +430,11 @@ def save_uploaded_file(file_content: bytes, filename: str, upload_dir: str = "me
         return None
 
 
-def extract_and_save_images(docling_doc, document_id: int) -> list:
-    """Extrait les images du document Docling et les sauvegarde sur disque."""
-    if not _LIBRARY_DOCLING_IMAGES_ENABLED:
-        return []
-    images_info = []
-    images_dir = Path(f"media/images/{document_id}")
-    
-    try:
-        pictures = getattr(docling_doc, "pictures", None)
-        if not pictures:
-            logger.debug("Aucune image trouvée dans le document pour document_id=%s", document_id)
-            return []
-        
-        images_dir.mkdir(parents=True, exist_ok=True)
-        
-        for idx, picture in enumerate(pictures):
-            try:
-                pil_image = None
-                
-                if hasattr(picture, "get_image") and callable(getattr(picture, "get_image")):
-                    try:
-                        pil_image = picture.get_image(docling_doc)
-                    except Exception as e:
-                        logger.debug("get_image() a échoué pour image %d: %s", idx, e)
-                
-                if pil_image is None:
-                    image_ref = getattr(picture, "image", None)
-                    if image_ref is not None:
-                        if hasattr(image_ref, "pil_image"):
-                            pil_image = image_ref.pil_image
-                        elif hasattr(image_ref, "save"):
-                            pil_image = image_ref
-                
-                if pil_image is None:
-                    logger.warning("Image %d sans données PIL exploitables pour document_id=%s", idx, document_id)
-                    continue
-                
-                image_filename = f"image_{idx}.png"
-                image_path = images_dir / image_filename
-                pil_image.save(str(image_path), "PNG")
-                
-                prov = getattr(picture, "prov", None)
-                page_no = None
-                bbox = None
-                if prov and len(prov) > 0:
-                    page_no = getattr(prov[0], "page_no", None)
-                    bbox_obj = getattr(prov[0], "bbox", None)
-                    if bbox_obj:
-                        bbox = {
-                            "l": getattr(bbox_obj, "l", 0),
-                            "t": getattr(bbox_obj, "t", 0),
-                            "r": getattr(bbox_obj, "r", 0),
-                            "b": getattr(bbox_obj, "b", 0),
-                        }
-                
-                caption = getattr(picture, "caption", "") or ""
-                
-                images_info.append({
-                    "path": str(image_path),
-                    "filename": image_filename,
-                    "page_no": page_no,
-                    "caption": caption,
-                    "bbox": bbox,
-                    "index": idx,
-                })
-                
-                logger.debug("Image %d extraite : %s (page %s)", idx, image_path, page_no)
-                
-            except Exception as img_err:
-                logger.warning("Erreur extraction image %d pour document_id=%s: %s", idx, document_id, img_err)
-                continue
-        
-        if images_info:
-            logger.info("✅ %d image(s) extraite(s) pour document_id=%s dans %s", len(images_info), document_id, images_dir)
-        
-    except Exception as e:
-        logger.error("Erreur lors de l'extraction des images pour document_id=%s: %s", document_id, e, exc_info=True)
-    
-    return images_info
-
-
 def reindex_library_document(
     document_id: int, user_id: int, run_id: Optional[str] = None
 ) -> dict:
     """
-    Re-extrait le texte (Docling), rechunke (hiérarchie Docling ou fallback fixe),
-    ré-embed les feuilles et relance le KAG pour les espaces liés — sans réupload.
+    Re-extrait le texte (Mistral OCR), rechunke (hiérarchie markdown) et ré-embed les feuilles — sans réupload.
 
     Utilise ``document.source_file_path`` (fichier déjà stocké sous media/documents).
     """
@@ -839,8 +442,7 @@ def reindex_library_document(
 
     ld = get_library_document_logger()
     ld.info(
-        "[Réindex] Démarrage document_id=%s user_id=%s — pipeline : PDF/Docling → "
-        "markdown + llama_docs → chunks → embeddings → KAG (espaces liés).",
+        "[Réindex] Démarrage document_id=%s user_id=%s — pipeline : PDF → Mistral OCR → chunks → embeddings.",
         document_id,
         user_id,
     )
@@ -856,11 +458,11 @@ def reindex_library_document(
         }
 
     from app.services.chunk_service import (
-        complete_document_embeddings_and_kag_sync,
-        create_chunks_for_document,
-        create_chunks_for_document_from_docling,
+        complete_document_embeddings_sync,
+        create_chunks_for_document_from_markdown,
         delete_chunks_for_document,
     )
+    from app.services.file_conversion import ensure_pdf_for_ocr
 
     with Session(engine) as session:
         document = session.get(Document, document_id)
@@ -900,29 +502,24 @@ def reindex_library_document(
         session.commit()
 
     try:
-        pdf_input = ensure_pdf_for_docling(str(src))
+        pdf_input = ensure_pdf_for_ocr(str(src))
         ld.info(
-            "[Réindex] document_id=%s — conversion/entrée Docling : %s",
+            "[Réindex] document_id=%s — entrée Mistral OCR : %s",
             document_id,
             pdf_input,
         )
         t0 = time.perf_counter()
-        markdown_content, llama_docs, docling_doc = process_document_file(pdf_input)
+        markdown_content = process_document_file(pdf_input)
         logger.info(
-            "reindex: document_id=%s extraction %.2fs llama_docs=%s",
+            "reindex: document_id=%s extraction Mistral OCR %.2fs",
             document_id,
             time.perf_counter() - t0,
-            bool(llama_docs),
         )
         ld.info(
-            "[Réindex] document_id=%s — extraction Docling terminée en %.2fs : "
-            "markdown_len=%s llama_docs_présent=%s docling_doc_présent=%s. "
-            "Sans llama_docs, le chunking hiérarchique Docling est impossible.",
+            "[Réindex] document_id=%s — OCR terminé en %.2fs markdown_len=%s",
             document_id,
             time.perf_counter() - t0,
             len(markdown_content) if markdown_content else 0,
-            bool(llama_docs),
-            docling_doc is not None,
         )
     except Exception as e:
         logger.error(
@@ -969,42 +566,18 @@ def reindex_library_document(
         session.add(document)
         session.commit()
 
-        images_info: list = []
-        if docling_doc:
-            try:
-                images_info = extract_and_save_images(docling_doc, document_id) or []
-            except Exception as img_e:
-                logger.warning("reindex: extraction images partielle: %s", img_e)
-        ld.info(
-            "[Réindex] document_id=%s — images pour Pixtral : %d entrée(s), docling_doc=%s.",
-            document_id,
-            len(images_info) if images_info else 0,
-            docling_doc is not None,
-        )
-
         document = session.get(Document, document_id)
-        if llama_docs:
-            chunks = create_chunks_for_document_from_docling(
-                session,
-                document,
-                llama_docs,
-                generate_embeddings=False,
-                images_info=images_info or None,
-            )
-            logger.info(
-                "reindex: document_id=%s chunking=docling_hierarchical chunks=%s",
-                document_id,
-                len(chunks) if chunks else 0,
-            )
-        else:
-            chunks = create_chunks_for_document(
-                session, document, generate_embeddings=False
-            )
-            logger.info(
-                "reindex: document_id=%s chunking=fallback_markdown_ou_fenêtre_fixe chunks=%s",
-                document_id,
-                len(chunks) if chunks else 0,
-            )
+        chunks = create_chunks_for_document_from_markdown(
+            session,
+            document,
+            markdown_content,
+            generate_embeddings=False,
+        )
+        logger.info(
+            "reindex: document_id=%s chunking=markdown_hierarchical chunks=%s",
+            document_id,
+            len(chunks) if chunks else 0,
+        )
         chunk_count = len(chunks) if chunks else 0
         document.processing_progress = 85
         document.updated_at = datetime.utcnow()
@@ -1012,7 +585,7 @@ def reindex_library_document(
         session.commit()
 
     ld.info(
-        "[Réindex] document_id=%s — lancement embeddings + KAG (synchrone).",
+        "[Réindex] document_id=%s — lancement embeddings (synchrone).",
         document_id,
     )
     if run_id is not None and not is_processing_run_current(document_id, run_id):
@@ -1022,7 +595,7 @@ def reindex_library_document(
             "reason": "stale_run",
             "chunks": chunk_count,
         }
-    complete_document_embeddings_and_kag_sync(document_id, run_id)
+    complete_document_embeddings_sync(document_id, run_id)
 
     logger.info(
         "reindex_library_document terminé document_id=%s chunks=%s",
@@ -1288,9 +861,7 @@ def delete_document(session: Session, document_id: int, user_id: int) -> bool:
     """Supprime un document, ses chunks, et toutes ses associations."""
     from app.services.chunk_service import delete_chunks_for_document
     from app.services.document_space_service import get_document_spaces
-    from app.services.kag_graph_service import delete_entities_for_document
-
-    # Empêche un traitement asynchrone tardif de recréer chunks/KAG.
+    # Empêche un traitement asynchrone tardif de recréer des chunks.
     _mark_document_processing_cancelled(document_id)
 
     document = get_document_by_id(session, document_id, user_id)
@@ -1298,17 +869,6 @@ def delete_document(session: Session, document_id: int, user_id: int) -> bool:
         return False
     
     doc_spaces = get_document_spaces(session, document_id, user_id)
-    for doc_space in doc_spaces:
-        try:
-            delete_entities_for_document(session, document_id, doc_space.space_id)
-        except Exception as e:
-            logger.warning(
-                "Nettoyage KAG incomplet pour document=%s espace=%s: %s",
-                document_id,
-                doc_space.space_id,
-                e,
-            )
-
     delete_chunks_for_document(session, document_id, commit=False)
 
     for doc_space in doc_spaces:
@@ -1343,10 +903,9 @@ def add_document_to_spaces(
     space_ids: List[int],
     user_id: int
 ) -> bool:
-    """Ajoute un document à plusieurs espaces et déclenche l'extraction KAG."""
+    """Ajoute un document à plusieurs espaces."""
     from app.services.document_space_service import link_document_to_space
-    from app.services.kag_graph_service import process_kag_for_document_space
-    
+
     document = get_document_by_id(session, document_id, user_id)
     if not document:
         return False
@@ -1360,9 +919,6 @@ def add_document_to_spaces(
                 space_id,
             )
             return False
-
-        if document.processing_status in ("completed", DOCUMENT_STATUS_REINDEX_QUEUED):
-            process_kag_for_document_space(session, document_id, space_id)
 
     return True
 
@@ -1462,9 +1018,9 @@ def _process_document_for_id(
 ):
     """Traite un document pour un ID donné."""
     from app.services.chunk_service import (
-        complete_document_embeddings_and_kag_sync,
+        complete_document_embeddings_sync,
         create_chunks_for_document,
-        create_chunks_for_document_from_docling,
+        create_chunks_for_document_from_markdown,
     )
     from app.services.document_run import is_processing_run_current
 
@@ -1473,7 +1029,7 @@ def _process_document_for_id(
         logger.info("Démarrage du traitement du document %d", document_id)
         ld.info(
             "[Upload/Pipeline] document_id=%s — DÉBUT traitement bibliothèque fichier=%s "
-            "(worker thread ou Celery). Étapes : PDF → Docling → stockage → images → chunks → embeddings → KAG.",
+            "(worker thread ou Celery). Étapes : PDF → Mistral OCR → stockage → chunks → embeddings.",
             document_id,
             file_path,
         )
@@ -1532,10 +1088,12 @@ def _process_document_for_id(
             pdf_input_path = file_path
             converted_to_pdf = False
             try:
-                pdf_input_path = ensure_pdf_for_docling(file_path)
+                from app.services.file_conversion import ensure_pdf_for_ocr
+
+                pdf_input_path = ensure_pdf_for_ocr(file_path)
                 converted_to_pdf = pdf_input_path != file_path
                 ld.info(
-                    "[Upload/Pipeline] document_id=%s — préparation Docling : entrée=%s converti_pdf=%s",
+                    "[Upload/Pipeline] document_id=%s — préparation OCR : entrée=%s converti_pdf=%s",
                     document_id,
                     pdf_input_path,
                     converted_to_pdf,
@@ -1549,7 +1107,7 @@ def _process_document_for_id(
                     exc_info=True,
                 )
                 ld.error(
-                    "[Upload/Pipeline] document_id=%s — échec ensure_pdf_for_docling : %s",
+                    "[Upload/Pipeline] document_id=%s — échec ensure_pdf_for_ocr : %s",
                     document_id,
                     e,
                     exc_info=True,
@@ -1559,7 +1117,7 @@ def _process_document_for_id(
             file_size_mb = round(Path(pdf_input_path).stat().st_size / (1024 * 1024), 2) if Path(pdf_input_path).exists() else 0
             t_extract = time.perf_counter()
             with trace_run(
-                "docling_conversion",
+                "mistral_ocr",
                 run_type="chain",
                 inputs={
                     "document_id": document_id,
@@ -1567,32 +1125,25 @@ def _process_document_for_id(
                     "file_size_mb": file_size_mb,
                     "converted_to_pdf": converted_to_pdf,
                 },
-                tags=["ingestion", "docling", "ocr"],
-            ) as docling_run:
-                markdown_content, llama_docs, docling_doc = process_document_file(pdf_input_path)
+                tags=["ingestion", "mistral_ocr"],
+            ) as ocr_run:
+                markdown_content = process_document_file(pdf_input_path)
                 extract_s = time.perf_counter() - t_extract
-                docling_run.end(outputs={
+                ocr_run.end(outputs={
                     "markdown_len": len(markdown_content) if markdown_content else 0,
-                    "has_llama_docs": bool(llama_docs),
-                    "has_docling_doc": docling_doc is not None,
                     "duration_s": round(extract_s, 2),
                 })
             logger.info(
-                "document_id=%s extraction Docling %.2fs markdown_len=%s llama_docs=%s",
+                "document_id=%s extraction Mistral OCR %.2fs markdown_len=%s",
                 document_id,
                 extract_s,
                 len(markdown_content) if markdown_content else 0,
-                bool(llama_docs),
             )
             ld.info(
-                "[Upload/Pipeline] document_id=%s — Docling terminé en %.2fs : markdown_len=%s "
-                "llama_docs=%s docling_doc=%s. "
-                "Si llama_docs=False après succès markdown, vérifier process_document_file (ex. EPUB fallback).",
+                "[Upload/Pipeline] document_id=%s — Mistral OCR terminé en %.2fs : markdown_len=%s",
                 document_id,
                 extract_s,
                 len(markdown_content) if markdown_content else 0,
-                bool(llama_docs),
-                docling_doc is not None,
             )
 
             if not markdown_content:
@@ -1604,7 +1155,7 @@ def _process_document_for_id(
                 session.commit()
                 logger.error("Échec du traitement du document %d", document_id)
                 ld.error(
-                    "[Upload/Pipeline] document_id=%s — markdown vide après Docling, statut failed.",
+                    "[Upload/Pipeline] document_id=%s — markdown vide après Mistral OCR, statut failed.",
                     document_id,
                 )
                 return
@@ -1661,17 +1212,6 @@ def _process_document_for_id(
 
             logger.info("Document traité avec succès pour document_id %d (%d caractères extraits)", document_id, len(markdown_content))
 
-            images_info: list = []
-            if docling_doc:
-                images_info = extract_and_save_images(docling_doc, document_id) or []
-                if images_info:
-                    logger.info("%d image(s) extraite(s) pour le document %d", len(images_info), document_id)
-                ld.info(
-                    "[Upload/Pipeline] document_id=%s — extraction images : %d fichier(s) pour appariement Pixtral.",
-                    document_id,
-                    len(images_info) if images_info else 0,
-                )
-
             try:
                 if _should_abort_processing(document_id):
                     logger.info(
@@ -1686,79 +1226,42 @@ def _process_document_for_id(
                     return
 
                 t_chunk = time.perf_counter()
-                nb_images = len(images_info) if images_info else 0
-                if llama_docs:
-                    with trace_run(
-                        "chunking",
-                        run_type="chain",
-                        inputs={
-                            "document_id": document_id,
-                            "strategy": "docling_hierarchical",
-                            "nb_llama_docs": len(llama_docs),
-                            "nb_images": nb_images,
-                            "chunk_sizes": settings.HIERARCHICAL_CHUNK_SIZES,
-                        },
-                        tags=["ingestion", "chunking", "docling", "hierarchical"],
-                    ) as chunk_run:
-                        chunks = create_chunks_for_document_from_docling(
-                            session,
-                            document,
-                            llama_docs,
-                            generate_embeddings=False,
-                            images_info=images_info or None,
-                        )
-                        chunk_s = time.perf_counter() - t_chunk
-                        nb_leaves = sum(1 for c in chunks if getattr(c, "is_leaf", True))
-                        nb_parents = len(chunks) - nb_leaves
-                        chunk_run.end(outputs={
-                            "nb_chunks": len(chunks),
-                            "nb_leaves": nb_leaves,
-                            "nb_parents": nb_parents,
-                            "duration_s": round(chunk_s, 2),
-                        })
-                    logger.info(
-                        "document_id=%s chunks=%s stratégie=docling_hierarchical durée_chunking=%.2fs",
-                        document_id,
-                        len(chunks),
-                        chunk_s,
+                with trace_run(
+                    "chunking",
+                    run_type="chain",
+                    inputs={
+                        "document_id": document_id,
+                        "strategy": "markdown_hierarchical",
+                    },
+                    tags=["ingestion", "chunking", "hierarchical"],
+                ) as chunk_run:
+                    chunks = create_chunks_for_document_from_markdown(
+                        session,
+                        document,
+                        markdown_content,
+                        generate_embeddings=False,
                     )
-                    ld.info(
-                        "[Upload/Pipeline] document_id=%s — branche chunking : llama_docs présent "
-                        "(voir [Chunking]/[DoclingNodeParser] pour stratégie réelle et inventaire). "
-                        "durée_chunking=%.2fs chunks_retournés=%d",
-                        document_id,
-                        chunk_s,
-                        len(chunks),
-                    )
-                else:
-                    with trace_run(
-                        "chunking",
-                        run_type="chain",
-                        inputs={
-                            "document_id": document_id,
-                            "strategy": "fallback_markdown",
-                        },
-                        tags=["ingestion", "chunking", "fallback"],
-                    ) as chunk_run:
-                        chunks = create_chunks_for_document(session, document, generate_embeddings=False)
-                        chunk_s = time.perf_counter() - t_chunk
-                        chunk_run.end(outputs={
-                            "nb_chunks": len(chunks),
-                            "duration_s": round(chunk_s, 2),
-                        })
-                    logger.info(
-                        "document_id=%s chunks=%s stratégie=fallback_markdown_ou_fenêtre_fixe durée_chunking=%.2fs",
-                        document_id,
-                        len(chunks),
-                        chunk_s,
-                    )
-                    ld.warning(
-                        "[Upload/Pipeline] document_id=%s — llama_docs absent : chunking FALLBACK uniquement "
-                        "(pas de DoclingNodeParser). durée=%.2fs chunks=%d",
-                        document_id,
-                        chunk_s,
-                        len(chunks),
-                    )
+                    chunk_s = time.perf_counter() - t_chunk
+                    nb_leaves = sum(1 for c in chunks if getattr(c, "is_leaf", True))
+                    nb_parents = len(chunks) - nb_leaves
+                    chunk_run.end(outputs={
+                        "nb_chunks": len(chunks),
+                        "nb_leaves": nb_leaves,
+                        "nb_parents": nb_parents,
+                        "duration_s": round(chunk_s, 2),
+                    })
+                logger.info(
+                    "document_id=%s chunks=%s stratégie=markdown_hierarchical durée_chunking=%.2fs",
+                    document_id,
+                    len(chunks),
+                    chunk_s,
+                )
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — chunking markdown hiérarchique %.2fs chunks=%d",
+                    document_id,
+                    chunk_s,
+                    len(chunks),
+                )
 
                 document.processing_progress = 75
                 document.updated_at = datetime.utcnow()
@@ -1778,7 +1281,7 @@ def _process_document_for_id(
                     session.add(document)
                     session.commit()
                     ld.warning(
-                        "[Upload/Pipeline] document_id=%s — aucun chunk produit : pas d'embeddings/KAG, "
+                        "[Upload/Pipeline] document_id=%s — aucun chunk produit : pas d'embeddings, "
                         "document marqué completed.",
                         document_id,
                     )
@@ -1801,31 +1304,30 @@ def _process_document_for_id(
         if run_embeddings_sync:
             if _should_abort_processing(document_id):
                 logger.info(
-                    "Traitement annulé avant embeddings/KAG pour document %d",
+                    "Traitement annulé avant embeddings pour document %d",
                     document_id,
                 )
                 ld.info(
-                    "[Upload/Pipeline] document_id=%s — annulé avant embeddings/KAG.",
+                    "[Upload/Pipeline] document_id=%s — annulé avant embeddings.",
                     document_id,
                 )
                 _finalize_pipeline_abort(document_id)
                 return
             ld.info(
-                "[Upload/Pipeline] document_id=%s — enchaînement embeddings + KAG.",
+                "[Upload/Pipeline] document_id=%s — enchaînement embeddings.",
                 document_id,
             )
             with trace_run(
-                "embedding_and_kag",
+                "embeddings",
                 run_type="chain",
                 inputs={
                     "document_id": document_id,
-                    "kag_enabled": settings.KAG_ENABLED,
                     "embedding_model": settings.EMBEDDING_MODEL,
                 },
-                tags=["ingestion", "embeddings", "kag"],
+                tags=["ingestion", "embeddings"],
             ) as emb_run:
                 t_emb = time.perf_counter()
-                complete_document_embeddings_and_kag_sync(document_id, run_id)
+                complete_document_embeddings_sync(document_id, run_id)
                 emb_s = time.perf_counter() - t_emb
                 emb_run.end(outputs={"duration_s": round(emb_s, 2)})
             ld.info(
@@ -1927,7 +1429,7 @@ def _ensure_document_workers():
     with _document_workers_lock:
         if not document_workers or not any(w.is_alive() for w in document_workers):
             document_workers = []
-            # Toujours 1 worker : un document va au bout (Docling → embeddings → KAG) avant le suivant.
+            # Toujours 1 worker : un document va au bout (OCR → chunks → embeddings) avant le suivant.
             num_workers = 1
             for i in range(num_workers):
                 worker = threading.Thread(target=_process_document_worker, daemon=True)

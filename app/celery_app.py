@@ -60,10 +60,6 @@ celery_app.conf.update(
             "exchange": "embeddings",
             "routing_key": "embeddings",
         },
-        "kag": {
-            "exchange": "kag",
-            "routing_key": "kag",
-        },
     },
     broker_connection_retry_on_startup=True,
     task_acks_late=True,

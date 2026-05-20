@@ -14,7 +14,7 @@ from app.models.document import Document
 
 logger = logging.getLogger(__name__)
 
-QUEUE_NAMES = ("documents", "embeddings", "kag")
+QUEUE_NAMES = ("documents", "embeddings")
 
 
 def get_queue_health_payload() -> dict[str, Any]:
@@ -85,7 +85,6 @@ def _extract_doc_task(task: dict[str, Any], state: str, worker_name: str) -> Opt
     if name not in {
         "app.tasks.documents.process_library_document",
         "app.tasks.documents.process_document_embeddings",
-        "app.tasks.documents.process_library_document_kag",
         "app.tasks.documents.reindex_library_document_task",
     }:
         return None
@@ -112,19 +111,17 @@ def _extract_doc_task(task: dict[str, Any], state: str, worker_name: str) -> Opt
 def get_workers_document_tasks_view() -> dict[str, Any]:
     """
     Vue workers demandée: uniquement documents en cours/en attente
-    pour les 2 workers principaux (worker documents, worker-kag).
+    pour le worker documents/embeddings.
     """
     out: dict[str, Any] = {
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "workers": {
             "worker": [],
-            "worker-kag": [],
         },
         "inspect_error": None,
     }
     seen_doc_ids_by_worker: dict[str, set[int]] = {
         "worker": set(),
-        "worker-kag": set(),
     }
     try:
         from app.celery_app import celery_app
@@ -138,7 +135,7 @@ def get_workers_document_tasks_view() -> dict[str, Any]:
 
         for state, by_worker in groups.items():
             for worker_name, tasks in by_worker.items():
-                key = "worker-kag" if "kag" in str(worker_name).lower() else "worker"
+                key = "worker"
                 for raw in tasks or []:
                     task = raw.get("request", raw) if isinstance(raw, dict) else raw
                     if not isinstance(task, dict):
@@ -180,10 +177,6 @@ def get_workers_document_tasks_view() -> dict[str, Any]:
                 target_worker = "worker"
                 queue_name = "documents"
                 task_name = "db_waiting.process_library_document"
-            elif status == "processing" and progress >= 95:
-                target_worker = "worker-kag"
-                queue_name = "kag"
-                task_name = "db_waiting.process_library_document_kag"
             elif status == "processing" and progress >= 90:
                 target_worker = "worker"
                 queue_name = "embeddings"
@@ -213,7 +206,7 @@ def get_workers_document_tasks_view() -> dict[str, Any]:
     # Enrichit aussi les items issus de Celery inspect avec le titre bibliothèque.
     try:
         missing_ids: set[int] = set()
-        for key in ("worker", "worker-kag"):
+        for key in ("worker",):
             for item in out["workers"].get(key, []):
                 if item.get("document_name"):
                     continue
@@ -230,7 +223,7 @@ def get_workers_document_tasks_view() -> dict[str, Any]:
                 for d in docs
                 if d.id is not None
             }
-            for key in ("worker", "worker-kag"):
+            for key in ("worker",):
                 for item in out["workers"].get(key, []):
                     doc_id = item.get("document_id")
                     if isinstance(doc_id, int):
