@@ -1,0 +1,10 @@
+﻿python : Traceback (most recent call last):
+Au caractère C:\Users\elie.lecas\AppData\Local\Temp\ps-script-37004b74-4cc6-4cf3-97d8-25bfd34901c7.ps1:82 : 62
++ ... ts\Code\Noton-app"; python scripts/inspect_chunks_263.py 2>&1 | Out-F ...
++                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\elie.lecas\Documents\Code\Noton-app\scripts\inspect_chunks_263.py", line 20, in <module>
+    from sqlmodel import Session, select
+ModuleNotFoundError: No module named 'sqlmodel'

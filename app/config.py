@@ -40,6 +40,10 @@ class Settings(BaseSettings):
     EMBEDDING_DIMENSION: int = 1024
     EMBEDDING_MODEL: str = "mistral-embed"
     HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # ex. "1024,256" pour override ingestion OCR
+    USE_MARKDOWN_STRUCTURED_CHUNKING: bool = False  # Si True, utilise MarkdownNodeParser au lieu de HierarchicalNodeParser
+    PDF_FORCE_OCR: bool = False  # Si True, skip pymupdf4llm et utilise Mistral OCR pour tous les PDF
+    # Profondeur de titre pour regrouper les parents (1 = ex. tout "CATALOGUE TEXTURES EXTERIEURES")
+    MARKDOWN_STRUCTURED_PARENT_DEPTH: int = 1
 
     # Mistral OCR (ingestion documents)
     MISTRAL_OCR_MODEL: str = "mistral-ocr-latest"

@@ -15,7 +15,7 @@ from app.models.document_chunk import DocumentChunk
 from app.config import settings
 from app.library_document_logging import get_library_document_logger
 from llama_index.core.schema import Document as LlamaDocument, NodeRelationship, TextNode
-from llama_index.core.node_parser import HierarchicalNodeParser
+from llama_index.core.node_parser import HierarchicalNodeParser, MarkdownNodeParser
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +27,10 @@ CHUNKING_VERSION_MARKDOWN_H2 = "markdown_h2_sections_v1"
 CHUNKING_VERSION_ADAPTIVE = "adaptive_window_v1"
 CHUNKING_VERSION_MARKDOWN_HIERARCHICAL = "markdown_hierarchical_v1"
 CHUNKING_VERSION_MARKDOWN_HIERARCHICAL_V2 = "markdown_hierarchical_v2"
+CHUNKING_VERSION_MARKDOWN_STRUCTURED = "markdown_structured_v1"
+CHUNKING_VERSION_MARKDOWN_STRUCTURED_V2 = "markdown_structured_v2"
+
+HEADER_PATH_SEP = " > "
 
 # Tailles par défaut pour l'ingestion OCR (parents ~1024 tokens, feuilles ~256)
 DEFAULT_OCR_HIERARCHICAL_CHUNK_SIZES = [1024, 256]
@@ -1408,6 +1412,226 @@ def _parent_heading_from_markdown(text: str) -> Optional[str]:
     return headings[-1][1].strip()
 
 
+def _strip_heading_markup(title: str) -> str:
+    """Retire le gras markdown (**titre**) pour métadonnées et clés de regroupement."""
+    return re.sub(r"\*+", "", (title or "").strip()).strip()
+
+
+def _heading_path_list_from_meta(meta: dict) -> List[str]:
+    """Extrait le chemin de titres depuis les métadonnées MarkdownNodeParser."""
+    parts: List[str] = []
+    for i in range(1, 10):
+        key = f"Header {i}"
+        val = meta.get(key)
+        if val and str(val).strip():
+            clean = _strip_heading_markup(str(val).strip())
+            if clean:
+                parts.append(clean)
+    if parts:
+        return parts
+    hp = meta.get("header_path")
+    if isinstance(hp, str) and hp.strip() and hp.strip() not in ("/", ""):
+        return [
+            _strip_heading_markup(p.strip())
+            for p in hp.split("/")
+            if p.strip()
+        ] or [
+            _strip_heading_markup(p.strip())
+            for p in re.split(r"\s*>\s*", hp)
+            if p.strip()
+        ]
+    return parts
+
+
+def _format_heading_path(parts: Sequence[str]) -> str:
+    cleaned = [p for p in (_strip_heading_markup(x) for x in parts) if p]
+    return HEADER_PATH_SEP.join(cleaned)
+
+
+_MAJOR_SECTION_MARKERS = (
+    "CATALOGUE",
+    "VITRAGES",
+    "GARANTIES",
+    "QUESTIONS",
+    "RÉSUMÉ",
+    "RESUME",
+    "PRÉSENTATION",
+    "PRESENTATION",
+    "DOCUMENT STRUCTURÉ",
+    "DOCUMENT STRUCTURE",
+    "PERSONNALISATIONS",
+)
+
+
+def _is_major_section_heading(title: str) -> bool:
+    """Repère les sections racine type catalogue (souvent ## seuls dans les plaquettes marketing)."""
+    t = _strip_heading_markup(title).upper()
+    return any(m in t for m in _MAJOR_SECTION_MARKERS)
+
+
+def _infer_heading_stack_from_leaf_content(content: str, stack: List[str]) -> List[str]:
+    """
+    Met à jour la pile de titres à partir du premier header du chunk (ordre document).
+    Gère les plaquettes avec plusieurs ## frères (INTERIEURES / EXTERIEURES / VITRAGES).
+    """
+    first_line = (content or "").strip().split("\n", 1)[0].strip()
+    m = re.match(r"^(#{1,6})\s+(.+)$", first_line)
+    if not m:
+        return list(stack)
+    level = len(m.group(1))
+    title = _strip_heading_markup(m.group(2).strip())
+    if not title:
+        return list(stack)
+    if level <= 2 and _is_major_section_heading(title):
+        return [title]
+    new_stack = stack[: level - 1]
+    new_stack.append(title)
+    return new_stack
+
+
+def _enrich_leaf_specs_heading_paths(leaf_specs: List[dict]) -> None:
+    """Ajoute heading_path / heading_path_list / scope_label sur chaque feuille (in-place)."""
+    stack: List[str] = []
+    for spec in leaf_specs:
+        if not spec.get("is_leaf", True):
+            continue
+        content = spec.get("content") or ""
+        stack = _infer_heading_stack_from_leaf_content(content, stack)
+        meta = dict(spec.get("metadata_json") or {})
+        path_parts = _heading_path_list_from_meta(meta)
+        if not path_parts and stack:
+            path_parts = list(stack)
+        elif path_parts and stack:
+            # Fusionner : préférer la pile document si plus profonde
+            if len(stack) > len(path_parts):
+                path_parts = list(stack)
+        if not path_parts:
+            immediate = _parent_heading_from_markdown(content)
+            if immediate:
+                path_parts = [_strip_heading_markup(immediate)]
+        meta["heading_path_list"] = path_parts
+        meta["heading_path"] = _format_heading_path(path_parts)
+        if path_parts:
+            meta["parent_heading"] = path_parts[-1]
+            meta["scope_label"] = path_parts[0] if len(path_parts) >= 1 else path_parts[-1]
+        spec["metadata_json"] = meta
+
+
+def _parent_group_key(path_parts: List[str], parent_depth: int) -> str:
+    """Clé de regroupement pour les chunks parents (ex. tout le catalogue EXTERIEURES)."""
+    depth = max(1, int(parent_depth or 1))
+    if not path_parts:
+        return "__document__"
+    return _format_heading_path(path_parts[: min(depth, len(path_parts))])
+
+
+def _build_section_parent_chunks(
+    leaf_specs: List[dict],
+    base_meta: dict,
+    *,
+    parent_depth: int = 1,
+) -> List[dict]:
+    """
+    Crée des parents is_leaf=False qui agrègent toutes les feuilles d'une même section.
+    Les feuilles reçoivent parent_node_id et hierarchy_level=1.
+    """
+    from app.config import settings
+
+    depth = int(
+        getattr(settings, "MARKDOWN_STRUCTURED_PARENT_DEPTH", None) or parent_depth or 1
+    )
+    groups: Dict[str, List[dict]] = defaultdict(list)
+    for spec in leaf_specs:
+        if not spec.get("is_leaf", True):
+            continue
+        meta = spec.get("metadata_json") or {}
+        path_parts = meta.get("heading_path_list") or []
+        if isinstance(path_parts, str):
+            path_parts = [p.strip() for p in path_parts.split(HEADER_PATH_SEP) if p.strip()]
+        key = _parent_group_key(path_parts, depth)
+        groups[key].append(spec)
+
+    parent_specs: List[dict] = []
+    for group_key, leaves in groups.items():
+        if not leaves:
+            continue
+        leaves_sorted = sorted(
+            leaves,
+            key=lambda s: (int(s.get("start_char", 0) or 0), int(s.get("chunk_index", 0) or 0)),
+        )
+        path_parts = (leaves_sorted[0].get("metadata_json") or {}).get("heading_path_list") or []
+        if group_key != "__document__" and path_parts:
+            section_title = _format_heading_path(path_parts[:depth])
+        else:
+            section_title = group_key
+
+        body_parts: List[str] = []
+        for leaf in leaves_sorted:
+            body_parts.append((leaf.get("content") or "").strip())
+        body = "\n\n---\n\n".join(p for p in body_parts if p)
+        if not body.strip():
+            continue
+
+        parent_node_id = str(uuid.uuid4())
+        parent_content = f"## {section_title}\n\n{body}" if section_title != "__document__" else body
+
+        start_char = min(int(s.get("start_char", 0) or 0) for s in leaves_sorted)
+        end_char = max(int(s.get("end_char", 0) or 0) for s in leaves_sorted)
+        page_nos = []
+        for s in leaves_sorted:
+            pn = (s.get("metadata_json") or {}).get("page_no")
+            if pn is not None:
+                try:
+                    page_nos.append(int(pn))
+                except (TypeError, ValueError):
+                    pass
+
+        parent_meta = dict(base_meta)
+        parent_meta.update(
+            {
+                "node_id": parent_node_id,
+                "parent_node_id": None,
+                "hierarchy_level": 0,
+                "is_leaf": "false",
+                "heading_path_list": path_parts[:depth] if path_parts else [],
+                "heading_path": section_title,
+                "parent_heading": section_title,
+                "scope_label": path_parts[0] if path_parts else section_title,
+                "content_type": "section_parent",
+                "nb_child_leaves": len(leaves_sorted),
+            }
+        )
+        if page_nos:
+            parent_meta["page_no"] = min(page_nos)
+            parent_meta["page_start"] = min(page_nos)
+            parent_meta["page_end"] = max(page_nos)
+
+        parent_specs.append(
+            {
+                "chunk_index": 0,
+                "is_leaf": False,
+                "content": parent_content,
+                "text": parent_content,
+                "start_char": start_char,
+                "end_char": end_char,
+                "node_id": parent_node_id,
+                "parent_node_id": None,
+                "hierarchy_level": 0,
+                "metadata_json": parent_meta,
+            }
+        )
+
+        for leaf in leaves_sorted:
+            leaf["parent_node_id"] = parent_node_id
+            leaf["hierarchy_level"] = 1
+            lmeta = dict(leaf.get("metadata_json") or {})
+            lmeta["parent_node_id"] = parent_node_id
+            lmeta["section_parent_heading"] = section_title
+            leaf["metadata_json"] = lmeta
+
+    return parent_specs
+
+
 def _find_parent_heading_before(full_md: str, end_pos: int) -> Optional[str]:
     prefix = (full_md or "")[: max(0, end_pos)]
     return _parent_heading_from_markdown(prefix)
@@ -2027,6 +2251,174 @@ def chunk_markdown_hierarchical_with_tables(markdown: str, metadata_base: dict) 
         ),
     )
     return all_specs
+
+
+def _chunk_markdown_with_node_parser(
+    text: str,
+    base_meta: dict,
+    *,
+    char_offset: int = 0,
+    page_index: Optional[List[Tuple[int, int]]] = None,
+) -> List[dict]:
+    """
+    Découpe un segment texte via MarkdownNodeParser (structure headers).
+    Produit des chunks is_leaf=True sans hiérarchie parent/enfant.
+    """
+    segment = (text or "").strip()
+    if not segment:
+        return []
+    if page_index is None:
+        page_index = _build_page_marker_index(segment)
+
+    parser = MarkdownNodeParser.from_defaults(
+        include_metadata=True,
+        include_prev_next_rel=False,
+    )
+    llama_doc = LlamaDocument(text=segment, metadata=dict(base_meta or {}))
+    nodes = parser.get_nodes_from_documents([llama_doc])
+    if not nodes:
+        return []
+
+    specs: List[dict] = []
+    for node in nodes:
+        content = (node.get_content() or "").strip()
+        if not content:
+            continue
+
+        node_id = node.node_id
+        rel_start = int((node.metadata or {}).get("start_char_idx", 0) or 0)
+        rel_end = int(
+            (node.metadata or {}).get("end_char_idx", rel_start + len(content))
+            or (rel_start + len(content))
+        )
+        start_char = char_offset + rel_start
+        end_char = char_offset + rel_end
+
+        meta = dict(node.metadata or {})
+        meta.update(base_meta)
+        meta.update({
+            "node_id": node_id,
+            "parent_node_id": None,
+            "hierarchy_level": 0,
+            "is_leaf": "true",
+        })
+
+        path_parts = _heading_path_list_from_meta(meta)
+        if path_parts:
+            meta["heading_path_list"] = path_parts
+            meta["heading_path"] = _format_heading_path(path_parts)
+            meta["parent_heading"] = path_parts[-1]
+            if len(path_parts) >= 1:
+                meta["scope_label"] = path_parts[0]
+
+        page_no = _page_no_from_char_offset(start_char, page_index)
+        if page_no is None:
+            page_no = _page_no_from_markdown_segment(content)
+        if page_no is not None:
+            meta["page_no"] = page_no
+
+        specs.append({
+            "chunk_index": 0,
+            "is_leaf": True,
+            "content": content,
+            "text": content,
+            "start_char": start_char,
+            "end_char": end_char,
+            "node_id": node_id,
+            "parent_node_id": None,
+            "hierarchy_level": 0,
+            "metadata_json": meta,
+        })
+    return specs
+
+
+def chunk_markdown_structured(markdown: str, metadata_base: dict) -> List[dict]:
+    """
+    Chunking markdown structurel : MarkdownNodeParser (feuilles) + parents de section.
+
+    Pipeline :
+    1. pymupdf4llm / OCR → markdown
+    2. MarkdownNodeParser → feuilles par header
+    3. Enrichissement heading_path (pile de titres document)
+    4. Parents is_leaf=False par section (ex. tout le catalogue EXTERIEURES)
+    5. Retrieval : vectoriel sur feuilles → remplacement par parent (contexte complet)
+    """
+    text = (markdown or "").strip()
+    if not text:
+        return []
+
+    base_meta = dict(metadata_base or {})
+    base_meta["chunking_version"] = CHUNKING_VERSION_MARKDOWN_STRUCTURED_V2
+    page_index = _build_page_marker_index(text)
+
+    segments = _split_markdown_into_segments(text)
+    leaf_specs: List[dict] = []
+
+    for seg in segments:
+        if seg.kind == "text":
+            leaf_specs.extend(
+                _chunk_markdown_with_node_parser(
+                    seg.content,
+                    base_meta,
+                    char_offset=seg.start_char,
+                    page_index=page_index,
+                )
+            )
+            continue
+
+        parent_heading = seg.parent_heading or ""
+        table_specs = _expand_table_to_specs(
+            table_text=seg.content,
+            base_meta=base_meta,
+            parent_heading=parent_heading,
+            caption=seg.caption,
+            page_no=seg.page_no,
+            section_parent_node_id=None,
+            hierarchy_base=0,
+            start_char=seg.start_char,
+            raw_content=seg.content,
+        )
+        if table_specs:
+            for spec in table_specs:
+                spec["parent_node_id"] = None
+                spec["hierarchy_level"] = 0
+                if parent_heading:
+                    ph = _strip_heading_markup(parent_heading)
+                    tmeta = dict(spec.get("metadata_json") or {})
+                    tmeta["heading_path_list"] = [ph]
+                    tmeta["heading_path"] = ph
+                    tmeta["scope_label"] = ph
+                    spec["metadata_json"] = tmeta
+            leaf_specs.extend(table_specs)
+
+    _enrich_leaf_specs_heading_paths(leaf_specs)
+    parent_specs = _build_section_parent_chunks(leaf_specs, base_meta)
+
+    combined: List[dict] = parent_specs + leaf_specs
+    combined.sort(
+        key=lambda s: (
+            int(s.get("start_char", 0) or 0),
+            0 if not s.get("is_leaf", True) else 1,
+        )
+    )
+    for idx, spec in enumerate(combined):
+        spec["chunk_index"] = idx
+
+    n_leaf = sum(1 for s in combined if s.get("is_leaf"))
+    n_parent = sum(1 for s in combined if not s.get("is_leaf"))
+    logger.info(
+        "Chunking markdown structurel v2: %d chunks (%d feuilles, %d parents section, "
+        "%d table_row)",
+        len(combined),
+        n_leaf,
+        n_parent,
+        sum(
+            1
+            for s in leaf_specs
+            if (s.get("metadata_json") or {}).get("content_type") == "table_row"
+        ),
+    )
+    return combined
 
 
 def specs_to_note_chunks(note: Note, specs: List[dict]) -> List[NoteChunk]:

@@ -267,11 +267,17 @@ async def _keyword_fallback_passages(
 
 
 def _enrich_content_with_heading_and_figure(content: str, metadata: dict) -> str:
-    parent_heading = metadata.get("parent_heading") or metadata.get("heading")
+    section_label = (
+        metadata.get("heading_path")
+        or metadata.get("section_parent_heading")
+        or metadata.get("scope_label")
+        or metadata.get("parent_heading")
+        or metadata.get("heading")
+    )
     figure_title = metadata.get("figure_title") or metadata.get("image_anchor")
     parts = []
-    if parent_heading and str(parent_heading).strip():
-        parts.append(f"[Section: {parent_heading.strip()}]")
+    if section_label and str(section_label).strip():
+        parts.append(f"[Section: {section_label.strip()}]")
     if figure_title and str(figure_title).strip():
         parts.append(str(figure_title).strip())
     if not parts:

@@ -198,30 +198,21 @@ def _ocr_file(file_path: str) -> str:
         return _ocr_document_via_api(document_payload=payload)
 
     if suffix in _PDF_EXTENSIONS:
-        # PDF entier via API (plus rapide qu'une image par page si supporté)
-        try:
-            payload = {
-                "type": "document_url",
-                "document_url": _file_to_base64_data_url(file_path, "application/pdf"),
-            }
-            md = _ocr_document_via_api(document_payload=payload)
-            if md:
-                return md
-        except Exception as exc:
-            logger.warning(
-                "OCR PDF direct échoué pour %s (%s), repli page par page",
-                file_path,
-                exc,
-            )
-        return _ocr_pdf_page_by_page(file_path)
+        # Déléguer au service hybride : pymupdf4llm (natif) → Mistral OCR (fallback)
+        from app.services.pdf_extraction_service import extract_markdown_from_pdf
+        md, method = extract_markdown_from_pdf(file_path)
+        return md
 
     raise ValueError(f"Format non supporté pour Mistral OCR: {suffix}")
 
 
 def extract_markdown_from_file(file_path: str) -> str:
     """
-    Extrait le contenu markdown d'un fichier via Mistral OCR.
-    Les formats Office passent par LibreOffice → PDF (ensure_pdf_for_ocr).
+    Extrait le contenu markdown d'un fichier.
+    - PDF : pymupdf4llm (natif, rapide) → fallback Mistral OCR si scanné
+    - Images : Mistral OCR direct
+    - Office (docx, pptx…) : LibreOffice → PDF → pipeline PDF ci-dessus
+    - Texte brut : lecture directe
     """
     from app.services.file_conversion import ensure_pdf_for_ocr
 

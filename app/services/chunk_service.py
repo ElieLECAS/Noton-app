@@ -11,10 +11,12 @@ import re
 from app.services.chunking_service import (
     chunk_note,
     chunk_markdown_hierarchical_with_tables,
+    chunk_markdown_structured,
     specs_to_note_chunks,
     specs_to_document_chunks,
     CHUNKING_VERSION_MARKDOWN_H2,
     CHUNKING_VERSION_ADAPTIVE,
+    CHUNKING_VERSION_MARKDOWN_STRUCTURED,
     resolve_adaptive_chunk_params,
     _detect_content_type,
     _build_page_marker_index,
@@ -619,12 +621,21 @@ def create_chunks_for_document_from_markdown(
     markdown: str,
     generate_embeddings: bool = False,
 ) -> List[DocumentChunk]:
-    """Chunking hiérarchique depuis markdown Mistral OCR."""
+    """Chunking depuis markdown Mistral OCR (hiérarchique ou structurel selon config)."""
     ld = get_library_document_logger()
-    ld.info(
-        "[Chunking] document_id=%s — markdown hiérarchique + expansion tableaux.",
-        document.id,
-    )
+    use_structured = settings.USE_MARKDOWN_STRUCTURED_CHUNKING
+    
+    if use_structured:
+        ld.info(
+            "[Chunking] document_id=%s — markdown structurel (MarkdownNodeParser) + expansion tableaux.",
+            document.id,
+        )
+    else:
+        ld.info(
+            "[Chunking] document_id=%s — markdown hiérarchique (HierarchicalNodeParser) + expansion tableaux.",
+            document.id,
+        )
+    
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document.id))
     session.commit()
 
@@ -634,7 +645,12 @@ def create_chunks_for_document_from_markdown(
         "user_id": document.user_id,
         "document_title": document.title or "",
     }
-    specs = chunk_markdown_hierarchical_with_tables(markdown, metadata_base)
+    
+    if use_structured:
+        specs = chunk_markdown_structured(markdown, metadata_base)
+    else:
+        specs = chunk_markdown_hierarchical_with_tables(markdown, metadata_base)
+    
     if not specs:
         return create_chunks_for_document(
             session=session, document=document, generate_embeddings=generate_embeddings
@@ -664,7 +680,9 @@ def create_chunks_for_document_from_markdown(
 
     session.add_all(chunks)
     session.commit()
-    log_chunk_inventory(ld, document.id, chunks, "Chunking markdown hiérarchique (persisté)")
+    
+    chunking_method = "markdown structurel" if use_structured else "markdown hiérarchique"
+    log_chunk_inventory(ld, document.id, chunks, f"Chunking {chunking_method} (persisté)")
     return chunks
 
 
