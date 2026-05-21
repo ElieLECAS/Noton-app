@@ -331,7 +331,9 @@ def reciprocal_rank_fusion(
 
     results: List[NodeWithScore] = []
     for node_id, rrf_score in sorted_node_ids:
-        results.append(NodeWithScore(node=nodes_map[node_id].node, score=rrf_score))
+        node = nodes_map[node_id].node
+        node.metadata["raw_rrf_score"] = rrf_score
+        results.append(NodeWithScore(node=node, score=rrf_score))
 
     # Normalisation linéaire dans [0.1, 0.9]
     if results:
@@ -625,6 +627,10 @@ def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
     leaf_chunk_id = _parse_chunk_id_from_node(leaf_node)
     if leaf_chunk_id is not None:
         m["source_leaf_chunk_id"] = leaf_chunk_id
+    # Transférer le score RRF brut de la feuille vers le parent
+    raw_rrf = leaf_meta.get("raw_rrf_score")
+    if raw_rrf is not None:
+        m["raw_rrf_score"] = raw_rrf
     setattr(target_node, "metadata", m)
 
 
@@ -687,7 +693,61 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
         out["row_index"] = metadata.get("row_index")
     if metadata.get("table_id"):
         out["table_id"] = metadata.get("table_id")
+    raw_rrf = metadata.get("raw_rrf_score")
+    if raw_rrf is not None:
+        out["raw_rrf_score"] = float(raw_rrf)
     return out
+
+
+def filter_passages_by_rrf_score(
+    passages: List[Dict],
+    *,
+    enabled: bool = True,
+    min_k: int = 1,
+    max_k: int = 10,
+    factor: float = 0.70,
+) -> List[Dict]:
+    """
+    Filtre dynamiquement une liste de passages basée sur leurs scores RRF bruts (Option A).
+    Conserve uniquement les passages ayant un score RRF brut >= max_score * factor.
+    S'il n'y a pas de score brut, utilise la clé 'score' (normalisée).
+    """
+    if not enabled or not passages:
+        return passages
+
+    # Récupérer tous les scores RRF (bruts ou normalisés) pour trouver le maximum absolu
+    all_scores = [p.get("raw_rrf_score", p["score"]) for p in passages]
+    if not all_scores:
+        return passages
+
+    max_score = max(all_scores)
+    threshold = max_score * factor
+
+    # Conserver obligatoirement les min_k premiers passages (les meilleurs après boosts)
+    best_passages = passages[:min_k]
+    
+    # Filtrer le reste des passages
+    other_passages = [
+        p for p in passages[min_k:]
+        if p.get("raw_rrf_score", p["score"]) >= threshold
+    ]
+    
+    filtered = best_passages + other_passages
+    
+    # Limiter à la borne supérieure max_k
+    result = filtered[:max_k]
+    
+    logger.info(
+        "RRF Dynamique (Option A) : %d/%d passages conservés (seuil RRF >= %.4f * %.2f = %.4f, min_k=%d, max_k=%d)",
+        len(result),
+        len(passages),
+        max_score,
+        factor,
+        threshold,
+        min_k,
+        max_k,
+    )
+    return result
 
 
 def _normalize_for_gamme(s: str) -> str:
@@ -904,8 +964,15 @@ async def search_relevant_passages(
                 
                 if should_stop:
                     logger.info("Early stop activé : scores RRF déjà excellents, skip rerank + MMR")
+                    filtered_passages = filter_passages_by_rrf_score(
+                        passages,
+                        enabled=settings.RRF_DYNAMIC_K_ENABLED,
+                        min_k=settings.RRF_MIN_K,
+                        max_k=settings.RRF_MAX_K,
+                        factor=settings.RRF_RELATIVE_THRESHOLD_FACTOR,
+                    )
                     return {
-                        "passages": passages[:k],
+                        "passages": filtered_passages,
                         "status": "early_stopped",
                         "reason": "mean_score_above_threshold",
                     }
@@ -1034,7 +1101,14 @@ async def search_relevant_passages(
             }
         
         # Reranker désactivé : retour simple
-        return {"passages": passages[:k], "status": "disabled", "reason": "reranker_disabled"}
+        filtered_passages = filter_passages_by_rrf_score(
+            passages,
+            enabled=settings.RRF_DYNAMIC_K_ENABLED,
+            min_k=settings.RRF_MIN_K,
+            max_k=settings.RRF_MAX_K,
+            factor=settings.RRF_RELATIVE_THRESHOLD_FACTOR,
+        )
+        return {"passages": filtered_passages, "status": "disabled", "reason": "reranker_disabled"}
         
     except Exception as e:
         logger.error("search_relevant_passages (space): %s", e, exc_info=True)

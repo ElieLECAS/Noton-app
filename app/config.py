@@ -100,6 +100,12 @@ class Settings(BaseSettings):
     MMR_LAMBDA: float = 0.7
     MMR_MAX_PER_PARENT: int = 5
 
+    # RRF (Reciprocal Rank Fusion) dynamique
+    RRF_DYNAMIC_K_ENABLED: bool = True
+    RRF_MIN_K: int = 1
+    RRF_MAX_K: int = 10
+    RRF_RELATIVE_THRESHOLD_FACTOR: float = 0.70
+
     # BM25 Lexical Search (approximation via ts_rank_cd + IDF Python)
     BM25_K1: float = 1.2
     BM25_B: float = 0.75
@@ -129,10 +135,10 @@ class Settings(BaseSettings):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
 
-    @field_validator('RERANKER_ENABLED', 'MMR_ENABLED', mode='before')
+    @field_validator('RERANKER_ENABLED', 'MMR_ENABLED', 'RRF_DYNAMIC_K_ENABLED', mode='before')
     @classmethod
     def parse_bool_flags(cls, v: Union[str, bool, None]) -> bool:
-        """Convertit les chaînes en bool pour les flags reranker/MMR."""
+        """Convertit les chaînes en bool pour les flags reranker/MMR/RRF."""
         if v is None:
             return False
         if isinstance(v, bool):

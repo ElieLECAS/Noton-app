@@ -12,6 +12,7 @@ from typing import Any, Literal, Optional
 
 from sqlmodel import Session
 
+from app.config import settings
 from app.models.document import Document
 
 logger = logging.getLogger(__name__)
