@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Optional, Dict, Any, List
+from typing import Dict, Any, List, Optional
 from pydantic import BaseModel
 from app.config import settings
 from app.services.mistral_service import chat
@@ -12,6 +12,7 @@ class QueryIntent(BaseModel):
     primary_source: Optional[str] = None  # 'Proferm', 'Technal', 'Profine', etc.
     reasoning: str
     confidence: float
+    search_terms: List[str] = []  # Termes de recherche additionnels pour query expansion
 
 SYSTEM_PROMPT = """Tu es un expert en analyse d'intention pour un système RAG industriel (PROFERM).
 Ton rôle est de décoder la question de l'utilisateur pour déterminer quelle source documentaire doit être privilégiée.
@@ -27,11 +28,19 @@ LOGIQUE DE DÉCISION :
 4. Si la question est générique ('comment poser une fenêtre', 'norme DTU'), l'intention est 'generic' et aucune source n'est privilégiée.
 5. En cas de doute entre Proferm et un fournisseur sur un produit générique, privilégie TOUJOURS 'Proferm'.
 
+TERMES DE RECHERCHE ADDITIONNELS :
+Génère une liste de 3-6 termes ou expressions clés pertinents pour enrichir la recherche.
+Inclure : synonymes techniques, termes associés, abréviations, noms complets si abrégé, et inversement.
+Exemple : pour 'dormant Profine', ajouter ['profilé PVC', 'menuiserie PVC', 'châssis', 'Profine Systems'].
+Exemple : pour 'DTU 36.5', ajouter ['norme', 'étanchéité', 'menuiserie extérieure', 'mise en oeuvre'].
+Ne PAS répéter les termes déjà présents dans la question originale.
+
 RETOURNE UNIQUEMENT UN JSON avec les champs :
 - intent: (company_info | supplier_info | generic | mixed)
 - primary_source: (Le nom exact de la marque ou null)
 - reasoning: (Explication courte en français)
 - confidence: (0.0 à 1.0)
+- search_terms: (Liste de 3-6 termes additionnels pour la recherche, ou liste vide si non pertinent)
 """
 
 async def reason_query_intent(query: str, history: Optional[List[Dict[str, str]]] = None) -> QueryIntent:
@@ -56,12 +65,18 @@ async def reason_query_intent(query: str, history: Optional[List[Dict[str, str]]
         content = response["choices"][0]["message"].get("content", "{}")
         data = json.loads(content)
         
+        raw_search_terms = data.get("search_terms", [])
+        if not isinstance(raw_search_terms, list):
+            raw_search_terms = []
+        search_terms = [str(t).strip() for t in raw_search_terms if t and str(t).strip()][:6]
+
         return QueryIntent(
             intent=data.get("intent", "generic"),
             primary_source=data.get("primary_source"),
             reasoning=data.get("reasoning", "Défaut"),
-            confidence=data.get("confidence", 0.5)
+            confidence=data.get("confidence", 0.5),
+            search_terms=search_terms,
         )
     except Exception as e:
         logger.error(f"Erreur lors du raisonnement de la requête: {e}")
-        return QueryIntent(intent="generic", reasoning="Erreur technique", confidence=0.0)
+        return QueryIntent(intent="generic", reasoning="Erreur technique", confidence=0.0, search_terms=[])

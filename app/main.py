@@ -8,7 +8,7 @@ import time
 from typing import Optional
 
 from app.database import get_session, create_db_and_tables, engine
-from app.routers import auth, chat, conversations, library, spaces, admin, notes, projects
+from app.routers import auth, chat, conversations, library, spaces, admin
 from app.config import settings
 from app.services.auth_service import decode_token, get_user_by_id
 from app.models.user import UserRead
@@ -75,8 +75,6 @@ app.include_router(spaces.router)
 app.include_router(chat.router)
 app.include_router(conversations.router)
 app.include_router(admin.router)
-app.include_router(notes.router)
-app.include_router(projects.router)
 
 # Configuration des templates
 templates = Jinja2Templates(directory="app/templates")

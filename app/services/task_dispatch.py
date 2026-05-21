@@ -12,10 +12,7 @@ from typing import Any, Literal, Optional
 
 from sqlmodel import Session
 
-from app.config import settings
-from app.database import engine
 from app.models.document import Document
-from app.models.note import Note
 
 logger = logging.getLogger(__name__)
 
@@ -242,21 +239,6 @@ def _send_library_document(
     return True
 
 
-def _send_project_document(note_id: int, file_path: str) -> bool:
-    from app.tasks.documents import process_project_document
-
-    res = process_project_document.apply_async(
-        args=[note_id, file_path],
-        queue="documents",
-    )
-    logger.info(
-        "task_dispatch project_document note_id=%s celery_task_id=%s",
-        note_id,
-        res.id,
-    )
-    return True
-
-
 def _send_reindex_library(
     document_id: int, user_id: int, run_id: Optional[str]
 ) -> str:
@@ -300,22 +282,6 @@ def _send_reindex_all_library(user_id: int) -> str:
         user_id,
     )
     return async_result.id
-
-
-def _send_note_embeddings(note_id: int, project_id: int) -> bool:
-    from app.tasks.documents import process_note_embeddings
-
-    res = process_note_embeddings.apply_async(
-        args=[note_id, project_id],
-        queue="embeddings",
-    )
-    logger.info(
-        "task_dispatch note_embeddings note_id=%s project_id=%s celery_task_id=%s",
-        note_id,
-        project_id,
-        res.id,
-    )
-    return True
 
 
 def _send_document_embeddings(document_id: int, run_id: Optional[str]) -> bool:
@@ -424,27 +390,6 @@ def dispatch_library_document(
         raise RuntimeError(_celery_only_failure_message()) from exc
 
 
-def dispatch_project_document(note_id: int, file_path: str) -> None:
-    """Enqueue traitement document projet / note document."""
-    mode = get_task_backend_mode()
-    if mode == "thread":
-        from app.services.document_service import enqueue_project_document_thread
-
-        enqueue_project_document_thread(note_id, file_path)
-        return
-
-    try:
-        _send_project_document(note_id, file_path)
-    except Exception as exc:
-        logger.warning("Celery indisponible pour note_id=%s: %s", note_id, exc)
-        if mode == "hybrid":
-            from app.services.document_service import enqueue_project_document_thread
-
-            enqueue_project_document_thread(note_id, file_path)
-            return
-        raise RuntimeError(_celery_only_failure_message()) from exc
-
-
 def dispatch_reindex_library(document_id: int, user_id: int) -> str:
     """
     Enfile la réindexation sur la queue Celery « documents » uniquement.
@@ -536,37 +481,6 @@ def dispatch_document_spaces_update(
             )
             return f"thread-document-spaces-{document_id}"
         raise RuntimeError(_celery_only_failure_message()) from exc
-
-
-def try_dispatch_embeddings_job(note_id: int, project_id: int) -> bool:
-    """
-    Si Celery (ou hybrid avec broker OK), envoie la bonne tâche embeddings.
-    Retourne True si délégué à Celery ; False si l'appelant doit utiliser les threads/sync.
-    """
-    if not _use_celery_first():
-        return False
-
-    try:
-        with Session(engine) as session:
-            if session.get(Note, note_id) is not None:
-                _send_note_embeddings(note_id, project_id)
-                return True
-            doc = session.get(Document, note_id)
-            if doc is not None:
-                _send_document_embeddings(doc.id, doc.processing_run_id)
-                return True
-    except Exception as exc:
-        logger.warning(
-            "Celery indisponible pour embeddings note_id=%s: %s", note_id, exc
-        )
-        if get_task_backend_mode() == "hybrid":
-            return False
-        raise RuntimeError(_celery_only_failure_message()) from exc
-
-    logger.warning(
-        "try_dispatch_embeddings_job: ni Note ni Document pour id=%s", note_id
-    )
-    return False
 
 
 def should_start_thread_workers() -> bool:

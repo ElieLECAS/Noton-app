@@ -37,24 +37,6 @@ def process_library_document(
         raise self.retry(exc=exc)
 
 
-@celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
-def process_project_document(self, note_id: int, file_path: str) -> None:
-    """Pipeline Mistral OCR → chunks → embeddings pour une note document projet."""
-    from app.services.document_service import _process_document_for_note
-
-    logger.info(
-        "Celery process_project_document note_id=%s file_path=%s task_id=%s",
-        note_id,
-        file_path,
-        self.request.id,
-    )
-    try:
-        _process_document_for_note(note_id, file_path)
-    except Exception as exc:
-        logger.exception("process_project_document échec note_id=%s: %s", note_id, exc)
-        raise self.retry(exc=exc)
-
-
 @celery_app.task(bind=True, max_retries=0)
 def reindex_library_document_task(
     self, document_id: int, user_id: int, run_id: str | None = None
@@ -101,26 +83,6 @@ def reindex_all_library_documents_task(self, user_id: int) -> dict:
         self.request.id,
     )
     return reindex_all_library_documents(user_id)
-
-
-@celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
-def process_note_embeddings(self, note_id: int, project_id: int) -> None:
-    """Embeddings pour les chunks feuilles d'une note projet."""
-    from app.services.chunk_service import _process_embeddings_for_note
-
-    logger.info(
-        "Celery process_note_embeddings note_id=%s project_id=%s task_id=%s",
-        note_id,
-        project_id,
-        self.request.id,
-    )
-    try:
-        _process_embeddings_for_note(note_id, project_id)
-    except Exception as exc:
-        logger.exception(
-            "process_note_embeddings échec note_id=%s: %s", note_id, exc
-        )
-        raise self.retry(exc=exc)
 
 
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)

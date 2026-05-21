@@ -38,6 +38,12 @@ class DocumentChunk(SQLModel, table=True):
 
     __table_args__ = (
         Index("ix_documentchunk_tsv_content", "tsv_content", postgresql_using="gin"),
+        Index(
+            "ix_documentchunk_embedding_hnsw",
+            "embedding",
+            postgresql_using="hnsw",
+            postgresql_ops={"embedding": "vector_cosine_ops"},
+        ),
     )
     
     document: Optional["Document"] = Relationship(back_populates="chunks")

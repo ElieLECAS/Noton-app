@@ -8,8 +8,6 @@ import traceback
 import unicodedata
 import uuid
 
-from app.models.note import Note
-from app.models.note_chunk import NoteChunk
 from app.models.document import Document as LibraryDocument
 from app.models.document_chunk import DocumentChunk
 from app.config import settings
@@ -69,11 +67,6 @@ def _resolve_chunk_sizes(text_length: int) -> List[int]:
     return chunk_sizes
 
 
-def _build_full_text(note: Note) -> str:
-    if note.content and note.content.strip():
-        return f"{note.title}\n\n{note.content}" if note.title else note.content
-    return note.title or ""
-
 
 def _build_parent_map(nodes: List) -> Dict[str, Optional[str]]:
     parent_map: Dict[str, Optional[str]] = {}
@@ -108,102 +101,6 @@ def _detect_leaf_ids(parent_map: Dict[str, Optional[str]]) -> set:
     parent_ids = {parent_id for parent_id in parent_map.values() if parent_id}
     return {node_id for node_id in parent_map.keys() if node_id not in parent_ids}
 
-
-# ---------------------------------------------------------------------------
-# Stratégie 1 : notes manuelles — HierarchicalNodeParser (taille de texte)
-# ---------------------------------------------------------------------------
-
-def chunk_note(note: Note) -> List[NoteChunk]:
-    """
-    Découper une note en nœuds hiérarchiques (parents/enfants) via LlamaIndex.
-    Utilisé pour les notes créées manuellement (pas issues de Docling).
-    """
-    full_text = _build_full_text(note)
-    if not full_text.strip():
-        full_text = note.title or "Note sans titre"
-
-    chunk_sizes = _resolve_chunk_sizes(len(full_text))
-    parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
-    llama_doc = LlamaDocument(
-        text=full_text,
-        metadata={
-            "note_id": note.id,
-            "project_id": note.project_id,
-            "user_id": note.user_id,
-            "note_title": note.title or "",
-        },
-    )
-
-    nodes = parser.get_nodes_from_documents([llama_doc])
-    if not nodes:
-        return []
-
-    parent_map = _build_parent_map(nodes)
-    level_map = _build_level_map(parent_map)
-    leaf_ids = _detect_leaf_ids(parent_map)
-
-    nodes_sorted = sorted(
-        nodes,
-        key=lambda n: (
-            level_map.get(n.node_id, 0),
-            int((n.metadata or {}).get("start_char_idx", 0)),
-            n.node_id,
-        ),
-    )
-
-    doc_metadata = dict(llama_doc.metadata or {})
-    chunks: List[NoteChunk] = []
-
-    for idx, node in enumerate(nodes_sorted):
-        metadata = dict(node.metadata or {})
-        content = (node.get_content() or "").strip()
-        if not content:
-            continue
-
-        node_id = node.node_id
-        parent_node_id = parent_map.get(node_id)
-        hierarchy_level = level_map.get(node_id, 0)
-        is_leaf = node_id in leaf_ids
-        start_char = int(metadata.get("start_char_idx", 0) or 0)
-        end_char = int(
-            metadata.get("end_char_idx", start_char + len(content))
-            or (start_char + len(content))
-        )
-
-        metadata.update(doc_metadata)
-        metadata.update(
-            {
-                "node_id": node_id,
-                "parent_node_id": parent_node_id,
-                "hierarchy_level": hierarchy_level,
-                "is_leaf": "true" if is_leaf else "false",
-            }
-        )
-
-        chunks.append(
-            NoteChunk(
-                note_id=note.id,
-                chunk_index=idx,
-                content=content,
-                text=content,
-                start_char=start_char,
-                end_char=end_char,
-                node_id=node_id,
-                parent_node_id=parent_node_id,
-                is_leaf=is_leaf,
-                hierarchy_level=hierarchy_level,
-                metadata_json=metadata,
-                metadata_=metadata,
-            )
-        )
-
-    logger.info(
-        "Chunking hiérarchique (HierarchicalNodeParser) note=%s nodes=%s chunk_sizes=%s",
-        note.id,
-        len(chunks),
-        chunk_sizes,
-    )
-    return chunks
 
 
 # ---------------------------------------------------------------------------
@@ -1111,111 +1008,6 @@ def _build_docling_hierarchical_specs(
 
     return specs
 
-
-def chunk_note_from_docling_docs(
-    note: Note,
-    llama_docs: Sequence,
-) -> List[NoteChunk]:
-    """
-    Découper un document importé via Docling en NoteChunks sémantiques.
-
-    Utilise DoclingNodeParser qui respecte la structure logique du document
-    (paragraphes, tableaux, listes, sections) — contrairement à
-    HierarchicalNodeParser qui découpe uniquement par taille de texte.
-
-    Hiérarchie produite :
-    - Leaves  : blocs sémantiques individuels (paragraphe, tableau, liste…)
-    - Parents : regroupement de blocs consécutifs partageant le même heading
-      de niveau 1 (ex : tous les paragraphes de la section « 2 Résultats »)
-
-    Les métadonnées Docling riches (page_no, bbox, headings) sont propagées
-    dans metadata_json de chaque chunk.
-
-    Args:
-        note       : La note cible (déjà enregistrée en base)
-        llama_docs : Liste de LlamaIndex Document dont le .text contient le
-                     JSON sérialisé d'un DoclingDocument (model_dump_json)
-
-    Returns:
-        Liste de NoteChunk (leaves + parents) prête à être sauvegardée
-    """
-    try:
-        node_parser = _get_docling_node_parser()
-    except ImportError as exc:
-        tb = traceback.format_exc()
-        logger.warning(
-            "llama-index-node-parser-docling non installé — "
-            "fallback sur HierarchicalNodeParser pour la note %s",
-            note.id,
-        )
-        logger.error(
-            "Import DoclingNodeParser (note %s): %r\n%s",
-            note.id,
-            exc,
-            tb,
-        )
-        return chunk_note(note)
-
-    try:
-        leaf_nodes: List[TextNode] = node_parser.get_nodes_from_documents(
-            list(llama_docs)
-        )
-    except Exception as exc:
-        logger.warning(
-            "DoclingNodeParser a échoué pour la note %s (%s) — "
-            "fallback sur HierarchicalNodeParser",
-            note.id,
-            exc,
-        )
-        return chunk_note(note)
-
-    if not leaf_nodes:
-        logger.warning(
-            "DoclingNodeParser n'a produit aucun nœud pour la note %s — "
-            "fallback sur HierarchicalNodeParser",
-            note.id,
-        )
-        return chunk_note(note)
-
-    doc_metadata_base = {
-        "note_id": note.id,
-        "project_id": note.project_id,
-        "user_id": note.user_id,
-        "note_title": note.title or "",
-    }
-
-    specs = _build_docling_hierarchical_specs(doc_metadata_base, leaf_nodes)
-    chunks: List[NoteChunk] = []
-    for spec in specs:
-        meta = spec["metadata_json"]
-        chunks.append(
-            NoteChunk(
-                note_id=note.id,
-                chunk_index=spec["chunk_index"],
-                content=spec["content"],
-                text=spec["text"],
-                start_char=spec["start_char"],
-                end_char=spec["end_char"],
-                node_id=spec["node_id"],
-                parent_node_id=spec["parent_node_id"],
-                is_leaf=spec["is_leaf"],
-                hierarchy_level=spec["hierarchy_level"],
-                metadata_json=meta,
-                metadata_=meta,
-            )
-        )
-
-    leaf_count = sum(1 for c in chunks if c.is_leaf)
-    parent_count = sum(1 for c in chunks if not c.is_leaf)
-    logger.info(
-        "Chunking sémantique (DoclingNodeParser) note=%s : "
-        "%d chunks total (%d leaves, %d parents)",
-        note.id,
-        len(chunks),
-        leaf_count,
-        parent_count,
-    )
-    return chunks
 
 
 def chunk_document_from_docling_docs(
@@ -2420,28 +2212,6 @@ def chunk_markdown_structured(markdown: str, metadata_base: dict) -> List[dict]:
     )
     return combined
 
-
-def specs_to_note_chunks(note: Note, specs: List[dict]) -> List[NoteChunk]:
-    chunks: List[NoteChunk] = []
-    for spec in specs:
-        meta = spec["metadata_json"]
-        chunks.append(
-            NoteChunk(
-                note_id=note.id,
-                chunk_index=spec["chunk_index"],
-                content=spec["content"],
-                text=spec["text"],
-                start_char=spec["start_char"],
-                end_char=spec["end_char"],
-                node_id=spec["node_id"],
-                parent_node_id=spec["parent_node_id"],
-                is_leaf=spec["is_leaf"],
-                hierarchy_level=spec["hierarchy_level"],
-                metadata_json=meta,
-                metadata_=meta,
-            )
-        )
-    return chunks
 
 
 def specs_to_document_chunks(document: LibraryDocument, specs: List[dict]) -> List[DocumentChunk]:

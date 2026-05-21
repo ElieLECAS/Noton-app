@@ -80,6 +80,31 @@ class Settings(BaseSettings):
     LANGCHAIN_TRACING_V2: bool = False
     LANGCHAIN_PROJECT: str = "noton-rag"
 
+    # Reranker cross-encoder (CPU-only)
+    RERANKER_ENABLED: bool = False
+    RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    RERANK_POOL: int = 40
+    RERANK_CHAR_CAP: int = 8000
+    RERANK_BATCH_SIZE: int = 16
+    EARLY_STOP_TOP_N: int = 5
+    EARLY_STOP_MEAN_THRESHOLD: float = 0.78
+    MIN_DYNAMIC_K: int = 2
+    MAX_DYNAMIC_K: int = 12
+    SOFTMAX_CUM_THRESHOLD: float = 0.80
+    STUTTER_GAP: float = 0.05
+    ZSCORE_FLAT_THRESHOLD: float = 0.05
+
+    # MMR (Maximal Marginal Relevance) — diversification du contexte
+    MMR_ENABLED: bool = True
+    MMR_K: int = 12
+    MMR_LAMBDA: float = 0.7
+    MMR_MAX_PER_PARENT: int = 5
+
+    # BM25 Lexical Search (approximation via ts_rank_cd + IDF Python)
+    BM25_K1: float = 1.2
+    BM25_B: float = 0.75
+    BM25_MAX_QUERY_TERMS: int = 15
+
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod
     def parse_database_echo(cls, v: Union[str, bool, None]) -> bool:
@@ -96,6 +121,18 @@ class Settings(BaseSettings):
     @classmethod
     def parse_multimodal_enabled(cls, v: Union[str, bool, None]) -> bool:
         """Convertit les chaînes en bool pour MULTIMODAL_ENABLED."""
+        if v is None:
+            return False
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in ('true', '1', 'yes', 'on')
+        return False
+
+    @field_validator('RERANKER_ENABLED', 'MMR_ENABLED', mode='before')
+    @classmethod
+    def parse_bool_flags(cls, v: Union[str, bool, None]) -> bool:
+        """Convertit les chaînes en bool pour les flags reranker/MMR."""
         if v is None:
             return False
         if isinstance(v, bool):

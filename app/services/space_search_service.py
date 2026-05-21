@@ -1,16 +1,24 @@
 """
-Recherche dans les espaces : chunks feuilles via pgvector (Mistral OCR + chunking hiérarchique).
+Recherche dans les espaces : chunks feuilles via pgvector + tsvector + RRF + rerank + MMR.
 
-Pas de KAG, pas de lexical tsvector, pas de fusion RRF, pas de MMR ni reranker.
+Pipeline RAG :
+1. Retrieval hybride (pgvector dense + tsvector lexical)
+2. Fusion RRF (Reciprocal Rank Fusion)
+3. Résolution parents (contexte hiérarchique)
+4. Early stopping (court-circuite rerank si scores déjà excellents)
+5. Reranker cross-encoder CPU (ms-marco-MiniLM-L-6-v2)
+6. Guardrails statistiques (détection bégaiement → clarification)
+7. MMR (diversification pour éviter redondance)
 """
 
 from __future__ import annotations
 
 import logging
+import math
 import os
 import re
 import unicodedata
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set, Tuple
 
 from llama_index.core.schema import NodeWithScore, TextNode
 from sqlalchemy import or_, text
@@ -24,6 +32,7 @@ from app.services.embedding_service import generate_embedding
 from app.services.query_reasoning_service import QueryIntent, reason_query_intent
 from app.services.space_service import get_space_by_id
 from app.tracing import trace_run
+from app.services import reranker_service, mmr_service
 
 logger = logging.getLogger(__name__)
 
@@ -32,10 +41,18 @@ TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.
 TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
 
 _FALLBACK_STOPWORDS = {
-    "the", "and", "for", "with", "dans", "avec", "pour", "une", "des", "les",
-    "est", "sur", "pas", "plus", "que", "qui", "this", "that", "what", "how",
-    "quoi", "comment", "quel", "quelle", "quels", "quelles", "from", "par",
-    "sans", "mais", "donc", "car", "you", "your", "not", "are", "was", "were",
+    # English
+    "the", "and", "for", "with", "this", "that", "what", "how",
+    "from", "you", "your", "not", "are", "was", "were", "have", "has",
+    "will", "can", "could", "would", "should", "been", "being", "about",
+    # French
+    "dans", "avec", "pour", "une", "des", "les", "est", "sur", "pas",
+    "plus", "que", "qui", "quoi", "comment", "quel", "quelle", "quels",
+    "quelles", "par", "sans", "mais", "donc", "car", "son", "ses",
+    "notre", "nos", "votre", "vos", "leur", "leurs", "tout", "tous",
+    "toute", "toutes", "autre", "autres", "même", "aussi", "très",
+    "bien", "encore", "ici", "entre", "après", "avant", "sous",
+    "chez", "vers", "depuis", "pendant", "comme",
 }
 
 def _merged_chunk_metadata(primary: Optional[dict], legacy: Optional[dict]) -> Dict:
@@ -53,8 +70,16 @@ def _retrieve_leaves_sql(
     user_id: int,
     query_text: str,
     candidate_k: int,
+    query_embedding: Optional[List[float]] = None,
 ) -> List[NodeWithScore]:
-    query_embedding = generate_embedding(query_text)
+    """
+    Recherche vectorielle pgvector sur les feuilles.
+    
+    Args:
+        query_embedding: Embedding pré-calculé (évite un appel API si déjà disponible)
+    """
+    if query_embedding is None:
+        query_embedding = generate_embedding(query_text)
     if not query_embedding:
         logger.warning("Embedding requête vide pour space_id=%s", space_id)
         return []
@@ -105,22 +130,124 @@ def _retrieve_leaves_sql(
     return nodes
 
 
-def _retrieve_leaves_lexical_sql(
+def _compute_term_idfs(
+    session: Session,
+    space_id: int,
+    terms: List[str],
+) -> Tuple[Dict[str, float], int]:
+    """Calcule l'IDF BM25 de chaque terme dans un espace donné.
+
+    Exécute une seule requête SQL groupée pour obtenir le document frequency
+    de chaque terme, puis calcule l'IDF standard BM25 :
+        idf = ln((N - df + 0.5) / (df + 0.5) + 1)
+
+    Returns:
+        (dict[term -> idf], total_docs_in_space)
+    """
+    if not terms:
+        return {}, 0
+
+    # Compter le total de documents-feuilles dans l'espace
+    total_sql = text("""
+        SELECT COUNT(DISTINCT dc.id)
+        FROM documentchunk dc
+        INNER JOIN document_space ds ON ds.document_id = dc.document_id
+        WHERE ds.space_id = :space_id AND dc.is_leaf = true
+    """)
+    total_docs = session.execute(total_sql, {"space_id": space_id}).scalar() or 1
+
+    # Compter le doc frequency de chaque terme en une seule requête
+    # unnest + LATERAL pour éviter N+1
+    idf_sql = text("""
+        SELECT
+            t.term,
+            COUNT(*) AS df
+        FROM unnest(CAST(:terms_array AS text[])) AS t(term)
+        INNER JOIN documentchunk dc ON dc.is_leaf = true
+        INNER JOIN document_space ds ON ds.document_id = dc.document_id
+        WHERE ds.space_id = :space_id
+          AND dc.tsv_content @@ websearch_to_tsquery('french', t.term)
+        GROUP BY t.term
+    """)
+    result = session.execute(idf_sql, {"space_id": space_id, "terms_array": terms})
+
+    idfs: Dict[str, float] = {}
+    for row in result:
+        df = row.df
+        idf = math.log((total_docs - df + 0.5) / (df + 0.5) + 1)
+        idfs[row.term] = idf
+
+    # Termes absents du corpus → IDF maximal (très rares)
+    for term in terms:
+        if term not in idfs:
+            idfs[term] = math.log((total_docs + 0.5) / 0.5 + 1)
+
+    logger.debug(
+        "IDF BM25 (space %d, N=%d): %s",
+        space_id, total_docs,
+        {t: round(v, 3) for t, v in idfs.items()},
+    )
+    return idfs, total_docs
+
+
+def _bm25_rescore(
+    nodes: List[NodeWithScore],
+    terms: List[str],
+    idfs: Dict[str, float],
+) -> List[NodeWithScore]:
+    """Re-score les résultats lexicaux avec une pondération IDF BM25.
+
+    Le score ts_rank_cd (avec flag normalisation longueur) sert de proxy pour
+    le TF normalisé. On le multiplie par la somme pondérée des IDF des termes
+    trouvés dans le contenu du chunk.
+
+    Score final = ts_rank_cd_norm * sum(idf[t] pour t dans termes ∩ contenu)
+    """
+    if not nodes or not idfs:
+        return nodes
+
+    for nws in nodes:
+        content_lower = (nws.node.text or "").lower()
+        # Somme des IDF des termes qui apparaissent dans le contenu
+        idf_sum = sum(
+            idfs.get(t, 0.0)
+            for t in terms
+            if t in content_lower
+        )
+        # Multiplier le score ts_rank_cd par le poids IDF
+        # Plancher à 1.0 pour ne pas réduire les scores si aucun IDF
+        idf_weight = max(idf_sum, 1.0)
+        nws.score = float(nws.score) * idf_weight
+
+    # Re-trier par score décroissant
+    nodes.sort(key=lambda n: n.score, reverse=True)
+    return nodes
+
+
+def _retrieve_leaves_bm25_sql(
     session: Session,
     space_id: int,
     user_id: int,
     query_text: str,
     candidate_k: int,
 ) -> List[NodeWithScore]:
-    """Recherche lexicale tsvector sur les feuilles."""
+    """Recherche lexicale BM25 approximative sur les feuilles.
+
+    Étapes :
+    1. Extraction de termes améliorée (v2)
+    2. Retrieval via ts_rank_cd avec flag 1 (normalisation log-longueur)
+    3. Calcul IDF par terme (requête SQL unique)
+    4. Re-scoring BM25 approximatif : ts_rank_cd_norm × Σ IDF(terme)
+    """
     terms = _extract_query_terms(query_text)
     if not terms:
-        logger.info("Lexical tsvector (space): Aucun terme significatif extrait de la requête.")
+        logger.info("BM25 lexical (space): Aucun terme significatif extrait de la requête.")
         return []
-    
-    # Construction d'une requête OR pour to_tsquery (ex: "vitrage | soleal")
-    or_query = " | ".join(terms)
 
+    # Construction d'une requête OR pour websearch_to_tsquery (ex: "vitrage OR soleal")
+    or_query = " OR ".join(terms)
+
+    # Retrieval avec ts_rank_cd + flag 1 (normalisation par log de la longueur)
     sql_query = text("""
         SELECT
             dc.id,
@@ -134,13 +261,13 @@ def _retrieve_leaves_lexical_sql(
             d.title AS document_title,
             d.source AS document_source,
             d.id AS document_id,
-            ts_rank_cd(dc.tsv_content, to_tsquery('french', :query)) AS similarity_score
+            ts_rank_cd(dc.tsv_content, websearch_to_tsquery('french', :query), 1) AS similarity_score
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         INNER JOIN document_space ds ON ds.document_id = d.id
         WHERE ds.space_id = :space_id
           AND dc.is_leaf = true
-          AND dc.tsv_content @@ to_tsquery('french', :query)
+          AND dc.tsv_content @@ websearch_to_tsquery('french', :query)
         ORDER BY similarity_score DESC
         LIMIT :limit_k
     """)
@@ -165,7 +292,13 @@ def _retrieve_leaves_lexical_sql(
             metadata=metadata,
         )
         nodes.append(NodeWithScore(node=node, score=float(row.similarity_score)))
-    logger.info("Lexical tsvector (space): %d feuilles (limit=%d)", len(nodes), candidate_k)
+
+    # Phase IDF : calculer les poids et re-scorer
+    if nodes:
+        idfs, _ = _compute_term_idfs(session, space_id, terms)
+        nodes = _bm25_rescore(nodes, terms, idfs)
+
+    logger.info("BM25 lexical (space): %d feuilles (limit=%d, terms=%s)", len(nodes), candidate_k, terms)
     return nodes
 
 
@@ -325,8 +458,27 @@ def _resolve_space_parent_with_multihop(
 
 
 def _extract_query_terms(query_text: str) -> List[str]:
-    terms = [t.lower() for t in re.findall(r"[A-Za-zÀ-ÿ0-9]+", query_text or "")]
-    return [t for t in terms if len(t) >= 3 and t not in _FALLBACK_STOPWORDS][:8]
+    """Extrait les termes significatifs de la requête pour la recherche lexicale.
+
+    Améliorations v2 :
+    - Conserve les termes courts (≥ 2 chars) pour les codes produits (76, PF, PVC)
+    - Limite relevée à BM25_MAX_QUERY_TERMS (15 par défaut)
+    - Détecte les termes composés avec tirets/points (DTU-36.5, Perform-70)
+    """
+    if not query_text or not query_text.strip():
+        return []
+    # Extraire tokens alphanumériques + composés avec tirets/points
+    raw_tokens = re.findall(r"[A-Za-zÀ-ÿ0-9]+(?:[.\-][A-Za-zÀ-ÿ0-9]+)*", query_text)
+    terms = []
+    for t in raw_tokens:
+        low = t.lower()
+        if low in _FALLBACK_STOPWORDS:
+            continue
+        if len(low) < 2:
+            continue
+        terms.append(low)
+    max_terms = settings.BM25_MAX_QUERY_TERMS
+    return terms[:max_terms]
 
 
 async def _keyword_fallback_passages(
@@ -341,7 +493,7 @@ async def _keyword_fallback_passages(
         # Pas de termes significatifs
         return []
     
-    or_query = " | ".join(terms)
+    or_query = " OR ".join(terms)
     
     # Essayer le tsvector pour une recherche rapide et pertinente
     try:
@@ -357,13 +509,13 @@ async def _keyword_fallback_passages(
                 d.title AS document_title,
                 d.source AS document_source,
                 d.id AS document_id,
-                ts_rank_cd(dc.tsv_content, to_tsquery('french', :query)) AS score
+                ts_rank_cd(dc.tsv_content, websearch_to_tsquery('french', :query), 1) AS score
             FROM documentchunk dc
             INNER JOIN document d ON dc.document_id = d.id
             INNER JOIN document_space ds ON ds.document_id = d.id
             WHERE ds.space_id = :space_id
               AND dc.is_leaf = true
-              AND dc.tsv_content @@ to_tsquery('french', :query)
+              AND dc.tsv_content @@ websearch_to_tsquery('french', :query)
             ORDER BY score DESC
             LIMIT :limit_k
         """)
@@ -591,14 +743,20 @@ async def search_relevant_passages(
     query_text: str,
     user_id: int,
     k: int = 15,
-) -> List[Dict]:
-    """RAG espace : recherche hybride (pgvector + tsvector), ordre similarité fusionné RRF, résolution parent."""
+) -> Dict:
+    """
+    RAG espace : recherche hybride (pgvector + tsvector) + RRF + rerank + MMR.
+    
+    Returns:
+        Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
+        Status possibles : "ok", "early_stopped", "low_confidence_clarification", "disabled"
+    """
     space = get_space_by_id(session, space_id, user_id)
     if not space:
         logger.warning("Espace %d inaccessible (user %d)", space_id, user_id)
-        return []
+        return {"passages": [], "status": "disabled", "reason": "space_not_found"}
     if not query_text or not query_text.strip():
-        return []
+        return {"passages": [], "status": "disabled", "reason": "empty_query"}
 
     reasoning_result = await reason_query_intent(query_text)
     if reasoning_result.intent != "generic":
@@ -610,6 +768,23 @@ async def search_relevant_passages(
 
     try:
         candidate_k = max(k, min(k * 4, 80))
+
+        # Query expansion : enrichir le texte d'embedding avec les termes du LLM
+        expanded_query = query_text
+        if reasoning_result.search_terms:
+            extra = " ".join(reasoning_result.search_terms)
+            expanded_query = f"{query_text} {extra}"
+            logger.info(
+                "Query expansion [space]: +%d termes → '%s'",
+                len(reasoning_result.search_terms), extra,
+            )
+
+        # Calculer l'embedding une seule fois (réutilisé par retrieval + MMR)
+        # Utilise la query enrichie pour un meilleur rappel vectoriel
+        query_embedding = generate_embedding(expanded_query)
+        if not query_embedding:
+            logger.warning("Embedding requête vide pour space_id=%s", space_id)
+            return {"passages": [], "status": "disabled", "reason": "embedding_failed"}
         
         # 1. Recherche vectorielle dense (pgvector)
         with trace_run(
@@ -618,27 +793,31 @@ async def search_relevant_passages(
             inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
             tags=["retrieval", "vector", "space"],
         ) as vr:
-            raw_vector = _retrieve_leaves_sql(session, space_id, user_id, query_text, candidate_k)
+            raw_vector = _retrieve_leaves_sql(
+                session, space_id, user_id, query_text, candidate_k, query_embedding=query_embedding
+            )
             vr.end(outputs={"nb": len(raw_vector)})
 
-        # 2. Recherche lexicale sparse (tsvector)
+        # 2. Recherche lexicale BM25 approximative (tsvector + IDF)
         with trace_run(
-            "lexical_retrieval",
+            "bm25_lexical_retrieval",
             run_type="retriever",
             inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
-            tags=["retrieval", "lexical", "space"],
+            tags=["retrieval", "bm25", "lexical", "space"],
         ) as lr:
             try:
-                raw_lexical = _retrieve_leaves_lexical_sql(session, space_id, user_id, query_text, candidate_k)
+                raw_lexical = _retrieve_leaves_bm25_sql(session, space_id, user_id, query_text, candidate_k)
             except Exception as e:
-                logger.warning("Recherche lexicale échouée (migration probablement non appliquée) : %s", e)
+                logger.warning("Recherche BM25 lexicale échouée (migration probablement non appliquée) : %s", e)
+                session.rollback()
                 raw_lexical = []
             lr.end(outputs={"nb": len(raw_lexical)})
 
         if not raw_vector and not raw_lexical:
-            return await _keyword_fallback_passages(
+            fallback_passages = await _keyword_fallback_passages(
                 session, space_id, user_id, query_text, k
             )
+            return {"passages": fallback_passages, "status": "ok", "reason": "fallback_keyword"}
 
         # Filtrage par score minimum sur la partie vectorielle uniquement pour éviter le bruit sémantique
         filtered_vector = _filter_by_vector_score(raw_vector)
@@ -704,10 +883,159 @@ async def search_relevant_passages(
             passages, query_text, reasoning_result=reasoning_result
         )
         if not passages:
-            return await _keyword_fallback_passages(
+            fallback_passages = await _keyword_fallback_passages(
                 session, space_id, user_id, query_text, k
             )
-        return passages[:k]
+            return {"passages": fallback_passages, "status": "ok", "reason": "fallback_keyword"}
+
+        # === RERANKER + MMR ===
+        
+        # Early stopping : court-circuite le reranker si scores RRF déjà excellents
+        if settings.RERANKER_ENABLED:
+            with trace_run(
+                "early_stopping",
+                run_type="chain",
+                inputs={"top_n": settings.EARLY_STOP_TOP_N, "threshold": settings.EARLY_STOP_MEAN_THRESHOLD},
+                tags=["rerank", "early_stop"],
+            ) as es:
+                rrf_scores = [p["score"] for p in passages[:settings.EARLY_STOP_TOP_N]]
+                should_stop = reranker_service.should_early_stop(rrf_scores, settings.EARLY_STOP_MEAN_THRESHOLD)
+                es.end(outputs={"triggered": should_stop})
+                
+                if should_stop:
+                    logger.info("Early stop activé : scores RRF déjà excellents, skip rerank + MMR")
+                    return {
+                        "passages": passages[:k],
+                        "status": "early_stopped",
+                        "reason": "mean_score_above_threshold",
+                    }
+        
+        # Reranker cross-encoder (sur le pool, pas sur tout)
+        if settings.RERANKER_ENABLED:
+            pool_size = min(settings.RERANK_POOL, len(final_nodes))
+            pool_nodes = final_nodes[:pool_size]
+            
+            with trace_run(
+                "cross_encoder_rerank",
+                run_type="reranker",
+                inputs={
+                    "pool_size": pool_size,
+                    "char_cap": settings.RERANK_CHAR_CAP,
+                    "batch_size": settings.RERANK_BATCH_SIZE,
+                },
+                tags=["rerank", "cross_encoder"],
+            ) as cer:
+                scored = reranker_service.rerank_nodes(
+                    query_text,
+                    pool_nodes,
+                    char_cap=settings.RERANK_CHAR_CAP,
+                    batch_size=settings.RERANK_BATCH_SIZE,
+                )
+                cer.end(outputs={
+                    "nb_scored": len(scored),
+                    "top3_scores": [round(s, 3) for _, s in scored[:3]] if scored else [],
+                })
+            
+            with trace_run(
+                "rerank_guardrails",
+                run_type="chain",
+                inputs={
+                    "min_k": settings.MIN_DYNAMIC_K,
+                    "max_k": settings.MAX_DYNAMIC_K,
+                    "softmax_cum_threshold": settings.SOFTMAX_CUM_THRESHOLD,
+                },
+                tags=["rerank", "guardrails"],
+            ) as rg:
+                rerank_result = reranker_service.apply_dynamic_filtering(
+                    scored,
+                    min_k=settings.MIN_DYNAMIC_K,
+                    max_k=settings.MAX_DYNAMIC_K,
+                    softmax_cum_threshold=settings.SOFTMAX_CUM_THRESHOLD,
+                    stutter_gap=settings.STUTTER_GAP,
+                    zscore_flat_threshold=settings.ZSCORE_FLAT_THRESHOLD,
+                )
+                rg.end(outputs={
+                    "status": rerank_result.status,
+                    "nb_nodes": len(rerank_result.nodes),
+                    "gap_top1_top2": rerank_result.gap_top1_top2,
+                    "zscore_flatness": rerank_result.zscore_flatness,
+                })
+            
+            # Si bégaiement détecté : top 1-2 seulement pour forcer clarification
+            if rerank_result.status == "low_confidence_clarification":
+                passages_low_conf = [
+                    _node_to_passage(nws.node, fallback_score=1.0 - i * 0.01)
+                    for i, nws in enumerate(rerank_result.nodes)
+                ]
+                logger.warning(
+                    "Low confidence détectée : %d passages seulement (gap=%.4f, zscore=%.4f)",
+                    len(passages_low_conf),
+                    rerank_result.gap_top1_top2 or 0.0,
+                    rerank_result.zscore_flatness or 0.0,
+                )
+                return {
+                    "passages": passages_low_conf,
+                    "status": "low_confidence_clarification",
+                    "reason": rerank_result.reason,
+                }
+            
+            # MMR sur les survivants du rerank
+            if settings.MMR_ENABLED and rerank_result.nodes:
+                # Extraire chunk_ids pour fetch embeddings
+                chunk_ids = []
+                for nws in rerank_result.nodes:
+                    chunk_id = _parse_chunk_id_from_node(nws.node)
+                    if chunk_id:
+                        chunk_ids.append(chunk_id)
+                
+                with trace_run(
+                    "mmr_selection",
+                    run_type="chain",
+                    inputs={
+                        "lambda": settings.MMR_LAMBDA,
+                        "k": settings.MMR_K,
+                        "max_per_parent": settings.MMR_MAX_PER_PARENT,
+                    },
+                    tags=["mmr", "diversification"],
+                ) as mmr_trace:
+                    embeddings_map = mmr_service.fetch_embeddings_for_chunks(session, chunk_ids)
+                    
+                    # Associer chaque nœud à son embedding
+                    candidates = []
+                    for nws in rerank_result.nodes:
+                        chunk_id = _parse_chunk_id_from_node(nws.node)
+                        embedding = embeddings_map.get(chunk_id, []) if chunk_id else []
+                        candidates.append((nws, embedding))
+                    
+                    mmr_nodes = mmr_service.compute_mmr(
+                        query_embedding,
+                        candidates,
+                        lambda_=settings.MMR_LAMBDA,
+                        k=settings.MMR_K,
+                        max_per_parent=settings.MMR_MAX_PER_PARENT,
+                    )
+                    mmr_trace.end(outputs={"selected_count": len(mmr_nodes)})
+                
+                passages = [
+                    _node_to_passage(nws.node, fallback_score=score)
+                    for nws, score in mmr_nodes
+                ]
+            else:
+                # Pas de MMR : utiliser directement les nœuds rerankés
+                passages = [
+                    _node_to_passage(nws.node, fallback_score=1.0 - i * 0.01)
+                    for i, nws in enumerate(rerank_result.nodes)
+                ]
+            
+            return {
+                "passages": passages,
+                "status": "ok",
+                "reason": rerank_result.reason,
+            }
+        
+        # Reranker désactivé : retour simple
+        return {"passages": passages[:k], "status": "disabled", "reason": "reranker_disabled"}
+        
     except Exception as e:
         logger.error("search_relevant_passages (space): %s", e, exc_info=True)
-        return []
+        return {"passages": [], "status": "disabled", "reason": f"error: {str(e)}"}

@@ -63,16 +63,6 @@ def test_resolve_space_parent_multihop_delegates_when_parent_in_dict():
     )
 
 
-def test_resolve_note_parent_multihop_no_note_id():
-    from app.services.semantic_search_service import _resolve_note_parent_with_multihop
-
-    session = MagicMock()
-    assert (
-        _resolve_note_parent_with_multihop(session, 1, 1, None, "some-uuid", {})
-        is None
-    )
-
-
 def test_chunk_markdown_hierarchical_node_parent_ids():
     """Vérifie node_id / parent_node_id pour la résolution parent en recherche."""
     from app.services.chunking_service import chunk_markdown_hierarchical
@@ -89,10 +79,3 @@ def test_chunk_markdown_hierarchical_node_parent_ids():
         pid = leaf.get("parent_node_id")
         if pid:
             assert pid in parent_ids or any(p["node_id"] == pid for p in specs)
-
-
-def test_resolve_note_parent_multihop_skips_when_parent_in_dict():
-    from app.services.semantic_search_service import _resolve_note_parent_with_multihop
-
-    fake = TextNode(id_="p1", text="section", metadata={})
-    assert _resolve_note_parent_with_multihop(None, 1, 1, 1, "p1", {"p1": fake}) is None

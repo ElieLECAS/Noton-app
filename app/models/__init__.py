@@ -3,9 +3,6 @@ from .role import Role, RoleCreate, RoleRead, RoleUpdate
 from .permission import Permission, PermissionCreate, PermissionRead
 from .user_role import UserRole, UserRoleCreate, UserRoleRead
 from .role_permission import RolePermission, RolePermissionCreate, RolePermissionRead
-from .project import Project, ProjectCreate, ProjectRead, ProjectUpdate
-from .note import Note, NoteCreate, NoteRead, NoteUpdate
-from .note_chunk import NoteChunk, NoteChunkRead
 from .space import Space, SpaceCreate, SpaceRead, SpaceUpdate
 from .conversation import Conversation, ConversationCreate, ConversationRead, ConversationUpdate
 from .message import Message, MessageCreate, MessageRead
@@ -34,16 +31,6 @@ __all__ = [
     "RolePermission",
     "RolePermissionCreate",
     "RolePermissionRead",
-    "Project",
-    "ProjectCreate",
-    "ProjectRead",
-    "ProjectUpdate",
-    "Note",
-    "NoteCreate",
-    "NoteRead",
-    "NoteUpdate",
-    "NoteChunk",
-    "NoteChunkRead",
     "Space",
     "SpaceCreate",
     "SpaceRead",
