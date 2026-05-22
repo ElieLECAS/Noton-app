@@ -73,6 +73,7 @@ def _persist_assistant_reply(
     content: str,
     model: str,
     provider: str,
+    sources: Optional[str] = None,
 ) -> None:
     """Écrit la réponse assistant hors session de la requête (StreamingResponse ferme souvent la session injectée avant la fin du générateur)."""
     with Session(engine) as s:
@@ -83,6 +84,7 @@ def _persist_assistant_reply(
                 content=content,
                 model=model,
                 provider=provider,
+                sources=sources,
             )
         )
         conv = s.get(Conversation, conversation_id)
@@ -111,13 +113,14 @@ SPACE_CHAT_TEMPERATURE = 0.1
 SPACE_CHAT_TOP_P = None
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_CHAT_SYSTEM_PROMPT = (
-    "Tu es LIA, l'assistante experte de PROFERM. Ton rôle est d'accompagner les collaborateurs et les clients avec précision sur nos produits et services. "
-    "Identité : Tu parles au nom de PROFERM. Quand tu dis 'nous' ou 'nos gammes', tu fais référence aux produits PROFERM. Les documents des fournisseurs (Technal, Profine, Askey, Roto, etc.) concernent nos partenaires et doivent être présentés comme tels. "
-    "Désambiguïsation : Sois extrêmement vigilant avec les dénominations de gammes proches (ex: Perform 70 vs Perform 76). Ne les confonds jamais. Si une requête est ambiguë, demande une précision ou distingue clairement les versions. "
-    "Ton ton est humain, professionnel, clair et orienté solution. Tu réponds en français. "
-    "Tu donnes des réponses directes, concrètes et opérationnelles. Ne mentionne jamais le fonctionnement technique de ta recherche. "
-    "Format : Réponse courte et utile (3 à 6 lignes) par défaut. Utilise des listes ou des tableaux Markdown uniquement pour la clarté technique. "
-    "Règle d'or : Ne jamais inventer de données. Si l'information est absente, indique-le clairement et propose une étape de vérification."
+    "Tu es LIA, l'assistante experte de PROFERM. Ton rôle est d'accompagner les collaborateurs et les clients de manière chaleureuse, professionnelle et précise sur nos produits et services.\n"
+    "Identité : Tu parles au nom de PROFERM. Quand tu dis 'nous' ou 'nos gammes', tu fais référence aux produits PROFERM. Les documents des fournisseurs (Technal, Profine, Askey, Roto, etc.) concernent nos partenaires et doivent être présentés comme tels.\n"
+    "Ton & Style : Adopte un ton accueillant, poli, professionnel et orienté solution. Sois agréable dans tes échanges. Salue courtoisement l'utilisateur si c'est le début de la conversation, mais évite d'alourdir tes réponses avec des salutations répétées ou des formules de politesse de fin systématiques (ex: évite les signatures répétitives comme 'N'hésitez pas à nous recontacter pour toute autre question...').\n"
+    "Concision & Clarté : Reste synthétique et réponds précisément à la demande de l'utilisateur. Va à l'essentiel tout en restant fluide et agréable à lire. Évite les digressions, les longs paragraphes d'introduction ou de conclusion inutiles.\n"
+    "Filtrage des informations : Réponds exactement au périmètre de la question posée sans proposer d'informations complémentaires non sollicitées (ex: si l'utilisateur demande uniquement les textures extérieures, liste-les de façon claire sans énumérer les options intérieures, sauf si cela apporte un éclairage directement pertinent à sa demande).\n"
+    "Structure : Utilise un formatage Markdown soigné (listes à puces, tableaux, gras) pour rendre les caractéristiques techniques claires, lisibles et faciles à assimiler.\n"
+    "Désambiguïsation : Sois extrêmement vigilante avec les dénominations de gammes proches (ex: Perform 70 vs Perform 76). Ne les confonds jamais. Si une requête est ambiguë, demande poliment une précision.\n"
+    "Règle d'or : Ne jamais inventer de données. Si l'information recherchée est absente du contexte fourni, indique-le avec courtoisie et propose une étape de vérification."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -456,24 +459,7 @@ async def stream_space_chat_message(
                     "response_chars": len("".join(assistant_response)),
                 })
 
-                # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
-                # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
-                if request.conversation_id and assistant_response:
-                    try:
-                        complete_response = "".join(assistant_response)
-                        _persist_assistant_reply(
-                            request.conversation_id,
-                            complete_response,
-                            forced_model,
-                            forced_provider,
-                        )
-                        logger.info(
-                            "Réponse assistant sauvegardée (space chat), conversation %s",
-                            request.conversation_id,
-                        )
-                    except Exception:
-                        logger.exception("Erreur sauvegarde réponse assistant (space chat)")
-
+                sources_data = []
                 if passages:
                     doc_ids = list({p.get("document_id") for p in passages if p.get("document_id")})
                     with Session(engine) as src_session:
@@ -522,7 +508,6 @@ async def stream_space_chat_message(
                             if row:
                                 chunk_by_doc_and_index[(did, cidx)] = row
 
-                    sources_data = []
                     for i, p in enumerate(passages):
                         did = p.get("document_id")
                         raw = p.get("passage_raw", p.get("passage", ""))
@@ -579,6 +564,29 @@ async def stream_space_chat_message(
                             for s in sources_data
                         ],
                     )
+
+                # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
+                # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
+                if request.conversation_id and assistant_response:
+                    try:
+                        complete_response = "".join(assistant_response)
+                        sources_json = json.dumps(sources_data) if sources_data else None
+                        _persist_assistant_reply(
+                            request.conversation_id,
+                            complete_response,
+                            forced_model,
+                            forced_provider,
+                            sources_json,
+                        )
+                        logger.info(
+                            "Réponse assistant sauvegardée (space chat), conversation %s avec %s sources",
+                            request.conversation_id,
+                            len(sources_data) if sources_data else 0,
+                        )
+                    except Exception:
+                        logger.exception("Erreur sauvegarde réponse assistant (space chat)")
+
+                if sources_data:
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
                 yield f"data: {json.dumps({'done': True})}\n\n"
 

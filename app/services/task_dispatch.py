@@ -12,6 +12,7 @@ from typing import Any, Literal, Optional
 
 from sqlmodel import Session
 
+from app.database import engine
 from app.config import settings
 from app.models.document import Document
 
@@ -395,7 +396,7 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
     """
     Enfile la réindexation sur la queue Celery « documents » uniquement.
     Mistral OCR, chunks et embeddings s'exécutent dans le worker, pas dans l'API.
-    Retourne l'identifiant de tâche Celery.
+    Retourne l'identifiant de tâche Celery ou d'un thread.
     """
     run_id: Optional[str] = None
     with Session(engine) as session:
@@ -407,6 +408,14 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
             doc.updated_at = datetime.utcnow()
             session.add(doc)
             session.commit()
+
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        from app.services.document_service_new import enqueue_reindex_library_document_thread
+
+        enqueue_reindex_library_document_thread(document_id, user_id, run_id)
+        return f"thread-reindex-document-{document_id}"
+
     try:
         return _send_reindex_library(document_id, user_id, run_id)
     except Exception as exc:
@@ -417,6 +426,11 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
             exc,
             exc_info=True,
         )
+        if mode == "hybrid":
+            from app.services.document_service_new import enqueue_reindex_library_document_thread
+
+            enqueue_reindex_library_document_thread(document_id, user_id, run_id)
+            return f"thread-reindex-document-{document_id}"
         raise RuntimeError(
             "Impossible d'enfiler la réindexation : le service de tâches (Celery) est indisponible."
         ) from exc
@@ -426,6 +440,13 @@ def dispatch_reindex_all_library(user_id: int) -> str:
     """
     Enfile la réindexation globale de la bibliothèque sur la queue Celery « documents ».
     """
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        from app.services.document_service_new import enqueue_reindex_all_library_documents_thread
+
+        enqueue_reindex_all_library_documents_thread(user_id)
+        return f"thread-reindex-all-library-{user_id}"
+
     try:
         return _send_reindex_all_library(user_id)
     except Exception as exc:
@@ -435,6 +456,11 @@ def dispatch_reindex_all_library(user_id: int) -> str:
             exc,
             exc_info=True,
         )
+        if mode == "hybrid":
+            from app.services.document_service_new import enqueue_reindex_all_library_documents_thread
+
+            enqueue_reindex_all_library_documents_thread(user_id)
+            return f"thread-reindex-all-library-{user_id}"
         raise RuntimeError(
             "Impossible d'enfiler la réindexation globale : le service de tâches (Celery) est indisponible."
         ) from exc

@@ -15,6 +15,7 @@ class Message(SQLModel, table=True):
     content: str = Field(sa_column=Column(Text))  # Contenu du message (peut être long)
     model: Optional[str] = Field(default=None, max_length=100)  # Modèle utilisé (pour les réponses assistant)
     provider: Optional[str] = Field(default=None, max_length=50)  # Provider (mistral/openai)
+    sources: Optional[str] = Field(default=None, sa_column=Column(Text))  # Sources stockées sous format JSON string
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
     # Relations
@@ -28,6 +29,7 @@ class MessageCreate(SQLModel):
     content: str
     model: Optional[str] = None
     provider: Optional[str] = None
+    sources: Optional[str] = None
 
 
 class MessageRead(SQLModel):
@@ -38,5 +40,6 @@ class MessageRead(SQLModel):
     content: str
     model: Optional[str] = None
     provider: Optional[str] = None
+    sources: Optional[str] = None
     created_at: datetime
 

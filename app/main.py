@@ -98,6 +98,22 @@ async def startup_event():
     """Créer les tables au démarrage."""
     create_db_and_tables()
     
+    # Exécuter les migrations Alembic de manière programmatique
+    try:
+        import os
+        from alembic.config import Config
+        from alembic import command
+        logger.info("Exécution des migrations Alembic...")
+        ini_path = "alembic.ini"
+        if not os.path.exists(ini_path):
+            ini_path = "app/alembic.ini"
+        logger.info(f"Fichier de configuration Alembic utilisé : {ini_path}")
+        alembic_cfg = Config(ini_path)
+        command.upgrade(alembic_cfg, "head")
+        logger.info("Migrations Alembic terminées avec succès")
+    except Exception as e:
+        logger.error(f"Erreur lors de l'exécution des migrations Alembic au démarrage: {e}")
+    
     # Initialiser le système RBAC (permissions + rôles)
     try:
         from app.services.rbac_seed_service import seed_rbac_system

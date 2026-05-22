@@ -80,14 +80,39 @@ def extract_markdown_pymupdf4llm(pdf_path: str) -> str:
     """
     import pymupdf4llm
 
-    markdown = pymupdf4llm.to_markdown(
+    chunks = pymupdf4llm.to_markdown(
         pdf_path,
-        page_chunks=False,   # Markdown unifié (pas dict par page)
+        page_chunks=True,    # Récupère une liste de dictionnaires par page
         write_images=False,  # Pas d'export images (RAG texte seul)
         show_progress=False,
     )
 
-    if not isinstance(markdown, str):
+    if isinstance(chunks, list):
+        pages_md = []
+        for i, chunk in enumerate(chunks):
+            page_text = ""
+            page_num = i + 1
+            if isinstance(chunk, dict):
+                page_text = chunk.get("text", "") or ""
+                meta = chunk.get("metadata")
+                if isinstance(meta, dict):
+                    # page_number est 1-based d'après pymupdf4llm
+                    p_num = meta.get("page_number") or meta.get("page")
+                    if p_num is not None:
+                        try:
+                            page_num = int(p_num)
+                        except (TypeError, ValueError):
+                            pass
+            elif isinstance(chunk, str):
+                page_text = chunk
+            
+            # Injection explicite du marqueur standardisé
+            pages_md.append(f"<!-- page:{page_num} -->\n\n{page_text}")
+        
+        markdown = "\n\n".join(pages_md)
+    elif isinstance(chunks, str):
+        markdown = chunks
+    else:
         markdown = ""
 
     markdown = _normalize_page_markers(markdown)

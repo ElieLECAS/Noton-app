@@ -1846,14 +1846,17 @@ def _chunk_markdown_text_to_specs(
     parent_map = _build_parent_map(nodes)
     level_map = _build_level_map(parent_map)
     leaf_ids = _detect_leaf_ids(parent_map)
-    nodes_sorted = sorted(
-        nodes,
-        key=lambda n: (
+    def _sort_key(n):
+        start_idx = getattr(n, "start_char_idx", None)
+        if start_idx is None:
+            start_idx = (n.metadata or {}).get("start_char_idx", 0)
+        return (
             level_map.get(n.node_id, 0),
-            int((n.metadata or {}).get("start_char_idx", 0)),
+            int(start_idx or 0),
             n.node_id,
-        ),
-    )
+        )
+
+    nodes_sorted = sorted(nodes, key=_sort_key)
 
     specs: List[dict] = []
     for node in nodes_sorted:
@@ -1865,11 +1868,16 @@ def _chunk_markdown_text_to_specs(
         parent_node_id = parent_map.get(node_id)
         hierarchy_level = level_map.get(node_id, 0)
         is_leaf = node_id in leaf_ids
-        rel_start = int((node.metadata or {}).get("start_char_idx", 0) or 0)
-        rel_end = int(
-            (node.metadata or {}).get("end_char_idx", rel_start + len(content))
-            or (rel_start + len(content))
-        )
+        
+        start_idx = getattr(node, "start_char_idx", None)
+        if start_idx is None:
+            start_idx = (node.metadata or {}).get("start_char_idx", 0)
+        rel_start = int(start_idx or 0)
+
+        end_idx = getattr(node, "end_char_idx", None)
+        if end_idx is None:
+            end_idx = (node.metadata or {}).get("end_char_idx", rel_start + len(content))
+        rel_end = int(end_idx or (rel_start + len(content)))
         start_char = char_offset + rel_start
         end_char = char_offset + rel_end
 
@@ -2078,11 +2086,15 @@ def _chunk_markdown_with_node_parser(
             continue
 
         node_id = node.node_id
-        rel_start = int((node.metadata or {}).get("start_char_idx", 0) or 0)
-        rel_end = int(
-            (node.metadata or {}).get("end_char_idx", rel_start + len(content))
-            or (rel_start + len(content))
-        )
+        start_idx = getattr(node, "start_char_idx", None)
+        if start_idx is None:
+            start_idx = (node.metadata or {}).get("start_char_idx", 0)
+        rel_start = int(start_idx or 0)
+
+        end_idx = getattr(node, "end_char_idx", None)
+        if end_idx is None:
+            end_idx = (node.metadata or {}).get("end_char_idx", rel_start + len(content))
+        rel_end = int(end_idx or (rel_start + len(content)))
         start_char = char_offset + rel_start
         end_char = char_offset + rel_end
 
@@ -2193,6 +2205,7 @@ def chunk_markdown_structured(markdown: str, metadata_base: dict) -> List[dict]:
             0 if not s.get("is_leaf", True) else 1,
         )
     )
+    _propagate_page_metadata_to_parents(combined)
     for idx, spec in enumerate(combined):
         spec["chunk_index"] = idx
 

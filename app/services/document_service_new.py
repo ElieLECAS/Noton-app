@@ -1436,3 +1436,39 @@ def _ensure_document_workers():
                 worker.start()
                 document_workers.append(worker)
                 logger.info("Worker de traitement de documents %d démarré", i + 1)
+
+
+def enqueue_reindex_library_document_thread(
+    document_id: int, user_id: int, run_id: Optional[str] = None
+) -> None:
+    """Exécute la réindexation d'un document dans un thread d'arrière-plan."""
+    def _runner():
+        try:
+            reindex_library_document(document_id, user_id, run_id)
+        except Exception:
+            logger.exception(
+                "Thread reindex_library_document échec document_id=%s", document_id
+            )
+
+    threading.Thread(
+        target=_runner,
+        name=f"reindex-document-{document_id}",
+        daemon=True,
+    ).start()
+
+
+def enqueue_reindex_all_library_documents_thread(user_id: int) -> None:
+    """Exécute la réindexation globale de la bibliothèque dans un thread d'arrière-plan."""
+    def _runner():
+        try:
+            reindex_all_library_documents(user_id)
+        except Exception:
+            logger.exception(
+                "Thread reindex_all_library_documents échec user_id=%s", user_id
+            )
+
+    threading.Thread(
+        target=_runner,
+        name=f"reindex-all-library-{user_id}",
+        daemon=True,
+    ).start()
