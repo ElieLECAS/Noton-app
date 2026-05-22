@@ -14,6 +14,20 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
+
+class ExtractedMarkdown(str):
+    """
+    Chaîne de caractères enrichie indiquant la méthode d'extraction utilisée.
+    Garde une compatibilité totale avec les signatures attendant un `str`.
+    """
+    method: str
+
+    def __new__(cls, content: str, method: str = "ocr"):
+        obj = super().__new__(cls, content)
+        obj.method = method
+        return obj
+
+
 _TEXT_EXTENSIONS = {".txt", ".md", ".markdown", ".csv", ".json", ".xml", ".html", ".htm"}
 _IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".tiff", ".tif", ".bmp"}
 _PDF_EXTENSIONS = {".pdf"}
@@ -173,12 +187,12 @@ def _ocr_pdf_page_by_page(file_path: str) -> str:
     return result
 
 
-def _ocr_file(file_path: str) -> str:
+def _ocr_file(file_path: str) -> ExtractedMarkdown:
     path = Path(file_path)
     suffix = path.suffix.lower()
 
     if suffix in _TEXT_EXTENSIONS:
-        return _read_text_file(file_path).strip()
+        return ExtractedMarkdown(_read_text_file(file_path).strip(), "text")
 
     if suffix in _IMAGE_EXTENSIONS:
         mime = {
@@ -195,18 +209,18 @@ def _ocr_file(file_path: str) -> str:
             "type": "image_url",
             "image_url": {"url": _file_to_base64_data_url(file_path, mime)},
         }
-        return _ocr_document_via_api(document_payload=payload)
+        return ExtractedMarkdown(_ocr_document_via_api(document_payload=payload), "ocr")
 
     if suffix in _PDF_EXTENSIONS:
         # Déléguer au service hybride : pymupdf4llm (natif) → Mistral OCR (fallback)
         from app.services.pdf_extraction_service import extract_markdown_from_pdf
         md, method = extract_markdown_from_pdf(file_path)
-        return md
+        return ExtractedMarkdown(md, method)
 
     raise ValueError(f"Format non supporté pour Mistral OCR: {suffix}")
 
 
-def extract_markdown_from_file(file_path: str) -> str:
+def extract_markdown_from_file(file_path: str) -> ExtractedMarkdown:
     """
     Extrait le contenu markdown d'un fichier.
     - PDF : pymupdf4llm (natif, rapide) → fallback Mistral OCR si scanné
@@ -235,10 +249,29 @@ def extract_markdown_from_file(file_path: str) -> str:
 
     t0 = time.perf_counter()
     markdown = _ocr_file(ocr_path)
-    logger.info(
-        "Mistral OCR terminé pour %s en %.2fs (%d caractères)",
-        file_path,
-        time.perf_counter() - t0,
-        len(markdown),
-    )
+    elapsed = time.perf_counter() - t0
+    method = getattr(markdown, "method", "ocr")
+
+    if method == "native":
+        logger.info(
+            "Extraction PDF native (pymupdf4llm) terminée pour %s en %.2fs (%d caractères)",
+            file_path,
+            elapsed,
+            len(markdown),
+        )
+    elif method == "text":
+        logger.info(
+            "Lecture de fichier texte terminée pour %s en %.2fs (%d caractères)",
+            file_path,
+            elapsed,
+            len(markdown),
+        )
+    else:
+        logger.info(
+            "Mistral OCR terminé pour %s en %.2fs (%d caractères)",
+            file_path,
+            elapsed,
+            len(markdown),
+        )
+
     return markdown

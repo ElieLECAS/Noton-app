@@ -341,25 +341,27 @@ def skip_all_library_documents_processing(session: Session, user_id: int) -> dic
     }
 
 def process_document_file(file_path: str) -> Optional[str]:
-    """Extrait le markdown via Mistral OCR (remplace Docling)."""
-    from app.services.mistral_ocr_service import extract_markdown_from_file
+    """Extrait le markdown via Mistral OCR ou extraction native."""
+    from app.services.mistral_ocr_service import extract_markdown_from_file, ExtractedMarkdown
 
     if not os.path.exists(file_path):
         logger.error("Fichier non trouvé: %s", file_path)
         return None
     try:
         markdown = extract_markdown_from_file(file_path)
+        method = getattr(markdown, "method", "ocr")
         if not markdown or not markdown.strip():
-            logger.warning("Markdown vide après Mistral OCR: %s", file_path)
+            label = "Mistral OCR" if method == "ocr" else "extraction"
+            logger.warning("Markdown vide après %s: %s", label, file_path)
             return None
-        return markdown.strip()
+        return ExtractedMarkdown(markdown.strip(), method)
     except Exception as e:
         suffix = Path(file_path).suffix.lower()
         if suffix == ".epub":
             fallback_markdown = extract_text_from_epub(file_path)
             if fallback_markdown:
-                return fallback_markdown.strip()
-        logger.error("Erreur Mistral OCR pour %s: %s", file_path, e, exc_info=True)
+                return ExtractedMarkdown(fallback_markdown.strip(), "text")
+        logger.error("Erreur d'extraction pour %s: %s", file_path, e, exc_info=True)
         return None
 
 
@@ -510,17 +512,45 @@ def reindex_library_document(
         )
         t0 = time.perf_counter()
         markdown_content = process_document_file(pdf_input)
-        logger.info(
-            "reindex: document_id=%s extraction Mistral OCR %.2fs",
-            document_id,
-            time.perf_counter() - t0,
-        )
-        ld.info(
-            "[Réindex] document_id=%s — OCR terminé en %.2fs markdown_len=%s",
-            document_id,
-            time.perf_counter() - t0,
-            len(markdown_content) if markdown_content else 0,
-        )
+        elapsed = time.perf_counter() - t0
+        method = getattr(markdown_content, "method", "ocr")
+
+        if method == "native":
+            logger.info(
+                "reindex: document_id=%s extraction native (pymupdf4llm) %.2fs",
+                document_id,
+                elapsed,
+            )
+            ld.info(
+                "[Réindex] document_id=%s — Extraction native terminée en %.2fs markdown_len=%s",
+                document_id,
+                elapsed,
+                len(markdown_content) if markdown_content else 0,
+            )
+        elif method == "text":
+            logger.info(
+                "reindex: document_id=%s lecture texte %.2fs",
+                document_id,
+                elapsed,
+            )
+            ld.info(
+                "[Réindex] document_id=%s — Lecture texte terminée en %.2fs markdown_len=%s",
+                document_id,
+                elapsed,
+                len(markdown_content) if markdown_content else 0,
+            )
+        else:
+            logger.info(
+                "reindex: document_id=%s extraction Mistral OCR %.2fs",
+                document_id,
+                elapsed,
+            )
+            ld.info(
+                "[Réindex] document_id=%s — OCR terminé en %.2fs markdown_len=%s",
+                document_id,
+                elapsed,
+                len(markdown_content) if markdown_content else 0,
+            )
     except Exception as e:
         logger.error(
             "reindex: échec process_document_file document_id=%s: %s",
@@ -1133,18 +1163,47 @@ def _process_document_for_id(
                     "markdown_len": len(markdown_content) if markdown_content else 0,
                     "duration_s": round(extract_s, 2),
                 })
-            logger.info(
-                "document_id=%s extraction Mistral OCR %.2fs markdown_len=%s",
-                document_id,
-                extract_s,
-                len(markdown_content) if markdown_content else 0,
-            )
-            ld.info(
-                "[Upload/Pipeline] document_id=%s — Mistral OCR terminé en %.2fs : markdown_len=%s",
-                document_id,
-                extract_s,
-                len(markdown_content) if markdown_content else 0,
-            )
+            method = getattr(markdown_content, "method", "ocr")
+
+            if method == "native":
+                logger.info(
+                    "document_id=%s extraction native (pymupdf4llm) %.2fs markdown_len=%s",
+                    document_id,
+                    extract_s,
+                    len(markdown_content) if markdown_content else 0,
+                )
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — Extraction native terminée en %.2fs : markdown_len=%s",
+                    document_id,
+                    extract_s,
+                    len(markdown_content) if markdown_content else 0,
+                )
+            elif method == "text":
+                logger.info(
+                    "document_id=%s lecture texte %.2fs markdown_len=%s",
+                    document_id,
+                    extract_s,
+                    len(markdown_content) if markdown_content else 0,
+                )
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — Lecture texte terminée en %.2fs : markdown_len=%s",
+                    document_id,
+                    extract_s,
+                    len(markdown_content) if markdown_content else 0,
+                )
+            else:
+                logger.info(
+                    "document_id=%s extraction Mistral OCR %.2fs markdown_len=%s",
+                    document_id,
+                    extract_s,
+                    len(markdown_content) if markdown_content else 0,
+                )
+                ld.info(
+                    "[Upload/Pipeline] document_id=%s — Mistral OCR terminé en %.2fs : markdown_len=%s",
+                    document_id,
+                    extract_s,
+                    len(markdown_content) if markdown_content else 0,
+                )
 
             if not markdown_content:
                 document.processing_status = "failed"
@@ -1154,9 +1213,11 @@ def _process_document_for_id(
                 session.add(document)
                 session.commit()
                 logger.error("Échec du traitement du document %d", document_id)
+                label = "Mistral OCR" if method == "ocr" else "l'extraction"
                 ld.error(
-                    "[Upload/Pipeline] document_id=%s — markdown vide après Mistral OCR, statut failed.",
+                    "[Upload/Pipeline] document_id=%s — markdown vide après %s, statut failed.",
                     document_id,
+                    label,
                 )
                 return
 
