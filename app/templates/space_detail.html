@@ -907,20 +907,56 @@ function renderConversations() {
   }
 
   host.innerHTML = conversations.map((conv) => `
-    <button
-      type="button"
-      onclick="selectConversation(${conv.id})"
-      class="w-full text-left px-3 py-2 mb-2 rounded-lg border transition-colors ${
+    <div
+      class="group flex items-center gap-2 px-3 py-2 mb-2 rounded-lg border transition-colors cursor-pointer ${
         currentConversationId === conv.id
           ? "border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-700 dark:bg-blue-900/25 dark:text-blue-200"
           : "border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
       }"
+      onclick="selectConversation(${conv.id})"
       title="${escapeHtml(conv.title || "Conversation")}"
     >
-      <div class="font-medium truncate">${escapeHtml(conv.title || "Conversation")}</div>
-      <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${conv.message_count || 0} message(s)</div>
-    </button>
+      <div class="flex-1 min-w-0">
+        <div class="font-medium truncate">${escapeHtml(conv.title || "Conversation")}</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${conv.message_count || 0} message(s)</div>
+      </div>
+      <button
+        type="button"
+        onclick="event.stopPropagation(); deleteConversation(${conv.id})"
+        class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity shrink-0"
+        title="Supprimer"
+      >
+        <i class="ti ti-trash text-sm"></i>
+      </button>
+    </div>
   `).join("");
+}
+
+async function deleteConversation(conversationId) {
+  if (!confirm("Voulez-vous vraiment supprimer cette conversation ?")) {
+    return;
+  }
+
+  const r = await api(`/api/conversations/${conversationId}`, { method: "DELETE" });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    alert(err.detail || "Impossible de supprimer la conversation.");
+    return;
+  }
+
+  conversations = conversations.filter((c) => c.id !== conversationId);
+
+  if (currentConversationId === conversationId) {
+    currentConversationId = null;
+    const nextId = conversations.length ? conversations[0].id : null;
+    if (nextId) {
+      await selectConversation(nextId);
+    } else {
+      resetChatView("Sélectionnez ou créez une conversation.");
+    }
+  }
+
+  renderConversations();
 }
 
 function setupSpaceSidebar() {
