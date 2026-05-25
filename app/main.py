@@ -164,6 +164,7 @@ async def startup_event():
         logger.error(f"Erreur lors du démarrage des workers threads: {e}")
 
 
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request, session: Session = Depends(get_session)):
     """Page d'accueil (choix des espaces)."""
@@ -212,6 +213,16 @@ async def admin_page(request: Request, session: Session = Depends(get_session)):
     if _redirect_if_unauthenticated(request, session):
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("admin.html", {"request": request})
+
+
+@app.get("/feedbacks", response_class=HTMLResponse)
+async def feedbacks_page(request: Request, session: Session = Depends(get_session)):
+    """Page contenant les feedbacks de l'utilisateur."""
+    user = _get_authenticated_user(request, session)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("feedbacks.html", {"request": request, "user": user})
+
 
 
 @app.get("/health")

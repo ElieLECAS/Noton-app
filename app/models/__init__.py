@@ -12,6 +12,7 @@ from .document import Document, DocumentCreate, DocumentRead, DocumentListItem, 
 from .document_chunk import DocumentChunk, DocumentChunkRead
 from .document_space import DocumentSpace, DocumentSpaceRead
 from .admin_audit_log import AdminAuditLog
+from .message_feedback import MessageFeedback, FeedbackCreate, FeedbackRead
 
 __all__ = [
     "User",
@@ -60,4 +61,8 @@ __all__ = [
     "DocumentSpace",
     "DocumentSpaceRead",
     "AdminAuditLog",
+    "MessageFeedback",
+    "FeedbackCreate",
+    "FeedbackRead",
 ]
+

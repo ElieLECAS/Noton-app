@@ -74,24 +74,25 @@ def _persist_assistant_reply(
     model: str,
     provider: str,
     sources: Optional[str] = None,
-) -> None:
-    """Écrit la réponse assistant hors session de la requête (StreamingResponse ferme souvent la session injectée avant la fin du générateur)."""
+) -> int:
+    """Écrit la réponse assistant hors session de la requête (StreamingResponse ferme souvent la session injectée avant la fin du générateur) et retourne son ID."""
     with Session(engine) as s:
-        s.add(
-            Message(
-                conversation_id=conversation_id,
-                role="assistant",
-                content=content,
-                model=model,
-                provider=provider,
-                sources=sources,
-            )
+        msg = Message(
+            conversation_id=conversation_id,
+            role="assistant",
+            content=content,
+            model=model,
+            provider=provider,
+            sources=sources,
         )
+        s.add(msg)
         conv = s.get(Conversation, conversation_id)
         if conv:
             conv.updated_at = datetime.utcnow()
             s.add(conv)
         s.commit()
+        s.refresh(msg)
+        return msg.id
 
 
 def _int_env(name: str, default: int) -> int:
@@ -567,11 +568,12 @@ async def stream_space_chat_message(
 
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
                 # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
+                assistant_message_id = None
                 if request.conversation_id and assistant_response:
                     try:
                         complete_response = "".join(assistant_response)
                         sources_json = json.dumps(sources_data) if sources_data else None
-                        _persist_assistant_reply(
+                        assistant_message_id = _persist_assistant_reply(
                             request.conversation_id,
                             complete_response,
                             forced_model,
@@ -588,7 +590,7 @@ async def stream_space_chat_message(
 
                 if sources_data:
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
-                yield f"data: {json.dumps({'done': True})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
 
         except Exception as e:
             logger.exception("Erreur dans le générateur stream_space_chat_message")

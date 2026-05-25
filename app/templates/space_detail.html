@@ -341,7 +341,7 @@
     <div class="grid grid-cols-1 gap-4 flex-1 min-h-0">
       <section class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col min-h-0">
         <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 min-h-0">
-          <div class="text-center text-gray-500 py-12">Sélectionnez ou créez une conversation.</div>
+          <div id="empty-state-message" class="text-center text-gray-500 py-12">Sélectionnez ou créez une conversation.</div>
         </div>
 
         <div class="p-4 border-t border-gray-200 dark:border-gray-700">
@@ -402,6 +402,34 @@
     </div>
   </div>
 </div>
+
+<!-- Modale feedback négatif (commentaire obligatoire) -->
+<div id="feedback-negative-modal" class="hidden fixed inset-0 z-[110] bg-black/50 flex items-center justify-center p-4">
+  <div class="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-2xl p-5">
+    <div class="flex items-center justify-between pb-3 border-b border-gray-200 dark:border-gray-700 mb-4">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Qu'est-ce qui n'allait pas ?</h3>
+      <button type="button" onclick="closeFeedbackNegativeModal()" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100">
+        <i class="ti ti-x text-xl"></i>
+      </button>
+    </div>
+    <div class="space-y-4">
+      <input type="hidden" id="feedback-negative-msg-id" />
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        Votre commentaire est obligatoire pour nous aider à comprendre et corriger les futures réponses.
+      </p>
+      <textarea id="feedback-negative-comment" rows="4" placeholder="Ex: La réponse confond deux produits, les informations sur les dimensions sont incorrectes..." class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" oninput="validateNegativeFeedbackBtn()"></textarea>
+      <div class="flex justify-end gap-2">
+        <button type="button" onclick="closeFeedbackNegativeModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+          Annuler
+        </button>
+        <button type="button" id="feedback-negative-submit-btn" onclick="submitNegativeFeedback()" disabled class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 text-sm font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none">
+          Envoyer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Visionneuse PDF (documents bibliothèque) -->
 <div id="space-pdf-viewer-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex flex-col z-[120]">
@@ -1026,7 +1054,7 @@ async function createNewConversation() {
 function renderMessages(messages) {
   const host = document.getElementById("chat-messages");
   if (!messages.length) {
-    host.innerHTML = `<div class="text-center text-gray-500 py-12">Posez une question à LIA sur cet espace.</div>`;
+    host.innerHTML = `<div id="empty-state-message" class="text-center text-gray-500 py-12">Posez une question à LIA sur cet espace.</div>`;
     return;
   }
 
@@ -1053,7 +1081,10 @@ async function selectConversation(conversationId) {
 
 function addMessage(role, content, messageId = null, sources = null) {
   const host = document.getElementById("chat-messages");
-  if (host.querySelector(".text-center")) host.innerHTML = "";
+  const emptyState = host.querySelector("#empty-state-message");
+  if (emptyState) {
+    emptyState.remove();
+  }
   const div = document.createElement("div");
   div.className = `flex ${role === "user" ? "justify-end" : "justify-start"}`;
   
@@ -1072,16 +1103,46 @@ function addMessage(role, content, messageId = null, sources = null) {
       }
     }
     
+    let feedbackHtml = "";
+    if (messageId) {
+      feedbackHtml = `
+        <div class="feedback-section mt-2 flex flex-col gap-2 border-t border-gray-200 dark:border-gray-700 pt-2 text-xs">
+          <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
+            <span>Cette réponse vous a été utile ?</span>
+            <div class="flex items-center gap-1">
+              <button onclick="submitFeedback(${messageId}, true)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-green-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-up-${messageId}" title="Utile">
+                <i class="ti ti-thumb-up text-sm"></i>
+              </button>
+              <button onclick="submitFeedback(${messageId}, false)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-down-${messageId}" title="Inutile">
+                <i class="ti ti-thumb-down text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div id="feedback-comment-container-${messageId}" class="hidden flex gap-2 items-center mt-1">
+            <input type="text" id="feedback-comment-input-${messageId}" placeholder="Un commentaire ? (facultatif)" class="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+            <button onclick="saveFeedbackComment(${messageId})" class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold transition-colors">
+              Valider
+            </button>
+          </div>
+          <div id="feedback-success-msg-${messageId}" class="hidden text-green-600 dark:text-green-400 font-medium flex items-center gap-1 mt-1">
+            <i class="ti ti-check text-sm"></i> <span id="feedback-success-text-${messageId}">Merci pour votre retour !</span>
+          </div>
+        </div>
+      `;
+    }
+    
     if (parsedSources && parsedSources.length > 0) {
       parsedHtml = transformCitationsToLinks(parsedHtml, parsedSources, messageKey);
       const sourcesSection = buildSourcesSection(parsedSources, messageKey);
       innerHtml = `<div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message rounded-lg px-4 py-2">
         <div class="markdown-content">${parsedHtml}</div>
         ${sourcesSection}
+        ${feedbackHtml}
       </div>`;
     } else {
       innerHtml = `<div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message rounded-lg px-4 py-2">
         <div class="markdown-content">${parsedHtml}</div>
+        ${feedbackHtml}
       </div>`;
     }
   } else {
@@ -1093,7 +1154,12 @@ function addMessage(role, content, messageId = null, sources = null) {
   div.innerHTML = innerHtml;
   host.appendChild(div);
   host.scrollTop = host.scrollHeight;
+  
+  if (role === "assistant" && messageId) {
+    fetchAndRenderFeedback(messageId);
+  }
 }
+
 
 async function loadSpace() {
   const r = await api(`/api/spaces/${spaceId}`);
@@ -1186,6 +1252,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   let streamError = "";
   let receivedSources = [];
   let streamDone = false;
+  let assistantMessageId = null;
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
@@ -1223,6 +1290,9 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
         } else if (data.done) {
           if (reasoningInterval) clearInterval(reasoningInterval);
           streamDone = true;
+          if (data.message_id) {
+            assistantMessageId = data.message_id;
+          }
           break;
         }
       } catch (_) {}
@@ -1256,13 +1326,156 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   chatHistory.push({ role: "user", content: message });
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });
 
+  if (assistantMessageId) {
+    const feedbackHtml = `
+      <div class="feedback-section mt-2 flex flex-col gap-2 border-t border-gray-200 dark:border-gray-700 pt-2 text-xs">
+        <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
+          <span>Cette réponse vous a été utile ?</span>
+          <div class="flex items-center gap-1">
+            <button onclick="submitFeedback(${assistantMessageId}, true)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-green-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-up-${assistantMessageId}" title="Utile">
+              <i class="ti ti-thumb-up text-sm"></i>
+            </button>
+            <button onclick="submitFeedback(${assistantMessageId}, false)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-down-${assistantMessageId}" title="Inutile">
+              <i class="ti ti-thumb-down text-sm"></i>
+            </button>
+          </div>
+        </div>
+        <div id="feedback-comment-container-${assistantMessageId}" class="hidden flex gap-2 items-center mt-1">
+          <input type="text" id="feedback-comment-input-${assistantMessageId}" placeholder="Un commentaire ? (facultatif)" class="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+          <button onclick="saveFeedbackComment(${assistantMessageId})" class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold transition-colors">
+            Valider
+          </button>
+        </div>
+        <div id="feedback-success-msg-${assistantMessageId}" class="hidden text-green-600 dark:text-green-400 font-medium flex items-center gap-1 mt-1">
+          <i class="ti ti-check text-sm"></i> <span id="feedback-success-text-${assistantMessageId}">Merci pour votre retour !</span>
+        </div>
+      </div>
+    `;
+    const messageContainer = assistantWrap.querySelector(".max-w-2xl");
+    if (messageContainer) {
+      messageContainer.insertAdjacentHTML("beforeend", feedbackHtml);
+    }
+  }
+
   if (currentConversationId) {
     await api(`/api/conversations/${currentConversationId}/generate-title`, { method: "POST" });
     await refreshConversationsSidebar(currentConversationId);
   }
+
 });
 
+// ——— Gestion du Feedback 👍/👎 ———
+async function fetchAndRenderFeedback(messageId) {
+  if (!messageId) return;
+  const r = await api(`/api/conversations/messages/${messageId}/feedback`);
+  if (r.ok) {
+    const feedback = await r.json();
+    if (feedback) {
+      updateFeedbackUI(messageId, feedback.is_positive, feedback.comment);
+    }
+  }
+}
+
+async function submitFeedback(messageId, isPositive) {
+  if (!messageId) return;
+  
+  if (isPositive) {
+    const r = await api(`/api/conversations/messages/${messageId}/feedback`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ is_positive: true })
+    });
+    if (r.ok) {
+      updateFeedbackUI(messageId, true, null);
+      document.getElementById(`feedback-comment-container-${messageId}`).classList.remove("hidden");
+    }
+  } else {
+    document.getElementById("feedback-negative-msg-id").value = messageId;
+    document.getElementById("feedback-negative-comment").value = "";
+    document.getElementById("feedback-negative-submit-btn").disabled = true;
+    document.getElementById("feedback-negative-modal").classList.remove("hidden");
+    setTimeout(() => {
+      document.getElementById("feedback-negative-comment").focus();
+    }, 100);
+  }
+}
+
+function validateNegativeFeedbackBtn() {
+  const comment = document.getElementById("feedback-negative-comment").value.trim();
+  document.getElementById("feedback-negative-submit-btn").disabled = comment.length === 0;
+}
+
+function closeFeedbackNegativeModal() {
+  document.getElementById("feedback-negative-modal").classList.add("hidden");
+}
+
+async function submitNegativeFeedback() {
+  const messageId = document.getElementById("feedback-negative-msg-id").value;
+  const comment = document.getElementById("feedback-negative-comment").value.trim();
+  if (!messageId || !comment) return;
+  
+  const r = await api(`/api/conversations/messages/${messageId}/feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ is_positive: false, comment: comment })
+  });
+  if (r.ok) {
+    closeFeedbackNegativeModal();
+    updateFeedbackUI(messageId, false, comment);
+  } else {
+    const err = await r.json().catch(() => ({}));
+    alert(err.detail || "Erreur lors de la soumission du feedback.");
+  }
+}
+
+async function saveFeedbackComment(messageId) {
+  const comment = document.getElementById(`feedback-comment-input-${messageId}`).value.trim();
+  const r = await api(`/api/conversations/messages/${messageId}/feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ is_positive: true, comment: comment || null })
+  });
+  if (r.ok) {
+    document.getElementById(`feedback-comment-container-${messageId}`).classList.add("hidden");
+    updateFeedbackUI(messageId, true, comment);
+  }
+}
+
+function updateFeedbackUI(messageId, isPositive, comment) {
+  const btnUp = document.getElementById(`feedback-up-${messageId}`);
+  const btnDown = document.getElementById(`feedback-down-${messageId}`);
+  const successMsg = document.getElementById(`feedback-success-msg-${messageId}`);
+  const successText = document.getElementById(`feedback-success-text-${messageId}`);
+  const commentContainer = document.getElementById(`feedback-comment-container-${messageId}`);
+
+  if (!btnUp || !btnDown) return;
+
+  btnUp.className = "feedback-btn px-2 py-1 rounded text-gray-400 hover:text-green-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all";
+  btnDown.className = "feedback-btn px-2 py-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all";
+  
+  if (isPositive) {
+    btnUp.classList.add("text-green-500", "bg-green-50", "dark:bg-green-950/20");
+    btnDown.classList.add("text-gray-300", "dark:text-gray-600", "pointer-events-none");
+    if (successMsg) {
+      successMsg.classList.remove("hidden");
+      successText.textContent = "Merci pour votre retour !";
+    }
+    if (comment && commentContainer) {
+      commentContainer.classList.add("hidden");
+    }
+  } else {
+    btnDown.classList.add("text-red-500", "bg-red-50", "dark:bg-red-950/20");
+    btnUp.classList.add("text-gray-300", "dark:text-gray-600", "pointer-events-none");
+    if (successMsg) {
+      successMsg.classList.remove("hidden");
+      successText.textContent = "Merci, votre retour nous aide à améliorer LIA";
+    }
+    if (commentContainer) commentContainer.classList.add("hidden");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+
   setupSpaceSidebar();
   await loadSpace();
   await loadConversations();

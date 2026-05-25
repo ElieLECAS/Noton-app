@@ -797,6 +797,77 @@ def refine_with_source_authority(
     return passages
 
 
+def apply_feedback_boost(
+    passages: List[Dict],
+    space_id: int,
+    session: Session,
+) -> List[Dict]:
+    """
+    Ajuste les scores des passages basés sur les retours utilisateurs 👍/👎.
+    Boost modéré pour les passages utiles, pénalité pour les passages incorrects.
+    """
+    if not passages:
+        return passages
+
+    from app.models.message_feedback import MessageFeedback
+
+    # 1. Identifier tous les chunk_ids présents dans les passages candidats
+    candidate_chunk_ids = set()
+    for p in passages:
+        cid = p.get("source_leaf_chunk_id") or p.get("chunk_id")
+        if cid:
+            candidate_chunk_ids.add(cid)
+
+    if not candidate_chunk_ids:
+        return passages
+
+    # 2. Récupérer tous les feedbacks pour cet espace
+    feedbacks = session.exec(
+        select(MessageFeedback.is_positive, MessageFeedback.chunk_ids)
+        .where(MessageFeedback.space_id == space_id)
+    ).all()
+
+    # 3. Compter les 👍/👎 par chunk
+    chunk_stats = {}
+    for is_positive, chunk_ids_list in feedbacks:
+        if not chunk_ids_list:
+            continue
+        for cid in chunk_ids_list:
+            if cid in candidate_chunk_ids:
+                if cid not in chunk_stats:
+                    chunk_stats[cid] = {"positive": 0, "negative": 0}
+                if is_positive:
+                    chunk_stats[cid]["positive"] += 1
+                else:
+                    chunk_stats[cid]["negative"] += 1
+
+    # 4. Appliquer le boost/pénalité
+    # Boost : +0.15 * ratio si ratio > 0, Pénalité : -0.10 * |ratio| si ratio < 0
+    for p in passages:
+        cid = p.get("source_leaf_chunk_id") or p.get("chunk_id")
+        if cid and cid in chunk_stats:
+            stats = chunk_stats[cid]
+            pos = stats["positive"]
+            neg = stats["negative"]
+            total = pos + neg
+            if total > 0:
+                ratio = (pos - neg) / total
+                if ratio > 0:
+                    boost = 0.15 * ratio
+                else:
+                    boost = 0.10 * ratio  # ratio est négatif, donc boost sera négatif (pénalité)
+                
+                p["score"] = float(p.get("score") or 0.0) + boost
+                logger.info(
+                    "Feedback boost appliqué au chunk %d : +%d/-%d (ratio=%.2f, boost=%.3f)",
+                    cid, pos, neg, ratio, boost
+                )
+
+    # 5. Re-trier
+    passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
+    return passages
+
+
 async def search_relevant_passages(
     session: Session,
     space_id: int,
@@ -942,6 +1013,7 @@ async def search_relevant_passages(
         passages = refine_with_source_authority(
             passages, query_text, reasoning_result=reasoning_result
         )
+        passages = apply_feedback_boost(passages, space_id, session)
         if not passages:
             fallback_passages = await _keyword_fallback_passages(
                 session, space_id, user_id, query_text, k
@@ -1087,13 +1159,12 @@ async def search_relevant_passages(
                     _node_to_passage(nws.node, fallback_score=score)
                     for nws, score in mmr_nodes
                 ]
-            else:
-                # Pas de MMR : utiliser directement les nœuds rerankés
                 passages = [
                     _node_to_passage(nws.node, fallback_score=1.0 - i * 0.01)
                     for i, nws in enumerate(rerank_result.nodes)
                 ]
             
+            passages = apply_feedback_boost(passages, space_id, session)
             return {
                 "passages": passages,
                 "status": "ok",

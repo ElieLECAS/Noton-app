@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlmodel import Session, select
+from sqlmodel import Session, select, func
 from app.database import get_session
 from app.models.user import User, UserRead, UserCreate
 from app.models.role import Role, RoleCreate, RoleRead, RoleUpdate
@@ -450,8 +450,208 @@ async def admin_workers_documents_view(
 async def admin_stuck_processing_documents(
     minutes: int = 30,
     current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session)
 ):
     """Documents en traitement depuis plus de N minutes (heuristique ``updated_at``)."""
     from app.services.celery_queue_health import list_stuck_processing_documents
 
     return list_stuck_processing_documents(minutes)
+
+
+@router.get("/feedbacks/stats")
+async def get_admin_feedback_stats(
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session)
+):
+    """Statistiques globales et par espace pour les feedbacks."""
+    from app.models.message_feedback import MessageFeedback
+    from app.models.space import Space
+
+    total = session.exec(select(func.count(MessageFeedback.id))).first() or 0
+    positive = session.exec(select(func.count(MessageFeedback.id)).where(MessageFeedback.is_positive == True)).first() or 0
+    negative = session.exec(select(func.count(MessageFeedback.id)).where(MessageFeedback.is_positive == False)).first() or 0
+    ratio = round(positive / total, 2) if total > 0 else 1.0
+
+    # Group by space and positivity in a simple DB-agnostic query
+    space_stats = session.exec(
+        select(
+            Space.id,
+            Space.name,
+            MessageFeedback.is_positive,
+            func.count(MessageFeedback.id)
+        )
+        .join(MessageFeedback, MessageFeedback.space_id == Space.id)
+        .group_by(Space.id, Space.name, MessageFeedback.is_positive)
+    ).all()
+
+    by_space_dict = {}
+    for space_id, space_name, is_positive, count in space_stats:
+        if space_id not in by_space_dict:
+            by_space_dict[space_id] = {
+                "space_id": space_id,
+                "space_name": space_name,
+                "positive": 0,
+                "negative": 0
+            }
+        if is_positive:
+            by_space_dict[space_id]["positive"] = count
+        else:
+            by_space_dict[space_id]["negative"] = count
+
+    return {
+        "total": total,
+        "positive": positive,
+        "negative": negative,
+        "ratio": ratio,
+        "by_space": list(by_space_dict.values())
+    }
+
+
+@router.get("/feedbacks/timeline")
+async def get_admin_feedback_timeline(
+    period: str = "week",
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session)
+):
+    """Timeline des feedbacks (hebdomadaire ou mensuelle)."""
+    from app.models.message_feedback import MessageFeedback
+    from datetime import datetime, timedelta
+
+    if period == "month":
+        # 6 derniers mois
+        start_date = datetime.utcnow() - timedelta(days=180)
+    else:
+        # 8 dernières semaines
+        start_date = datetime.utcnow() - timedelta(days=56)
+
+    feedbacks = session.exec(
+        select(MessageFeedback.is_positive, MessageFeedback.created_at)
+        .where(MessageFeedback.created_at >= start_date)
+        .order_by(MessageFeedback.created_at.asc())
+    ).all()
+
+    timeline_data = {}
+
+    if period == "month":
+        for is_positive, created_at in feedbacks:
+            label = created_at.strftime("%Y-%m")
+            if label not in timeline_data:
+                timeline_data[label] = {"positive": 0, "negative": 0}
+            if is_positive:
+                timeline_data[label]["positive"] += 1
+            else:
+                timeline_data[label]["negative"] += 1
+    else:
+        for is_positive, created_at in feedbacks:
+            label = created_at.strftime("%Y-W%W")
+            if label not in timeline_data:
+                timeline_data[label] = {"positive": 0, "negative": 0}
+            if is_positive:
+                timeline_data[label]["positive"] += 1
+            else:
+                timeline_data[label]["negative"] += 1
+
+    formatted_data = []
+    for label in sorted(timeline_data.keys()):
+        stats = timeline_data[label]
+        if period == "month":
+            try:
+                dt = datetime.strptime(label, "%Y-%m")
+                display_label = dt.strftime("%b %y")
+            except:
+                display_label = label
+        else:
+            parts = label.split("-W")
+            if len(parts) == 2:
+                display_label = f"Sem. {parts[1]}"
+            else:
+                display_label = label
+
+        formatted_data.append({
+            "label": display_label,
+            "positive": stats["positive"],
+            "negative": stats["negative"]
+        })
+
+    return {
+        "period": period,
+        "data": formatted_data
+    }
+
+
+@router.get("/feedbacks/recent")
+async def get_admin_recent_feedbacks(
+    page: int = 1,
+    limit: int = 20,
+    filter_type: Optional[str] = None,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session)
+):
+    """Liste paginée des retours utilisateurs récents."""
+    from app.models.message_feedback import MessageFeedback
+    from app.models.space import Space
+    from app.models.conversation import Conversation
+    from app.models.message import Message
+    from app.models.user import User
+
+    query = select(
+        MessageFeedback,
+        Space.name.label("space_name"),
+        Conversation.title.label("conversation_title"),
+        Conversation.id.label("conversation_id"),
+        User.email.label("user_email")
+    ).outerjoin(
+        Message, MessageFeedback.message_id == Message.id
+    ).outerjoin(
+        Conversation, Message.conversation_id == Conversation.id
+    ).join(
+        Space, MessageFeedback.space_id == Space.id
+    ).join(
+        User, MessageFeedback.user_id == User.id
+    )
+
+    if filter_type == "positive":
+        query = query.where(MessageFeedback.is_positive == True)
+    elif filter_type == "negative":
+        query = query.where(MessageFeedback.is_positive == False)
+
+    query = query.order_by(MessageFeedback.created_at.desc())
+
+    # Total count
+    total_query = select(func.count(MessageFeedback.id))
+    if filter_type == "positive":
+        total_query = total_query.where(MessageFeedback.is_positive == True)
+    elif filter_type == "negative":
+        total_query = total_query.where(MessageFeedback.is_positive == False)
+    total = session.exec(total_query).first() or 0
+
+    # Paged
+    offset = (page - 1) * limit
+    paginated_query = query.offset(offset).limit(limit)
+    results = session.exec(paginated_query).all()
+
+    items = []
+    for feedback, space_name, conversation_title, conversation_id, user_email in results:
+        items.append({
+            "id": feedback.id,
+            "message_id": feedback.message_id,
+            "space_id": feedback.space_id,
+            "space_name": space_name,
+            "conversation_title": conversation_title,
+            "conversation_id": conversation_id,
+            "user_email": user_email,
+            "is_positive": feedback.is_positive,
+            "comment": feedback.comment,
+            "query_text": feedback.query_text,
+            "response_text": feedback.response_text,
+            "chunk_ids": feedback.chunk_ids,
+            "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
+            "updated_at": feedback.updated_at.isoformat() if feedback.updated_at else None
+        })
+
+    return {
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "items": items
+    }
