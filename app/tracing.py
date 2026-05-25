@@ -35,7 +35,7 @@ def init_langsmith() -> None:
     api_key = os.environ.get("LANGSMITH_API_KEY", "").strip()
     tracing_raw = os.environ.get("LANGCHAIN_TRACING_V2", "false").strip().lower()
     tracing_enabled = tracing_raw in ("true", "1", "yes")
-    project = os.environ.get("LANGCHAIN_PROJECT", "noton-rag-kag").strip()
+    project = os.environ.get("LANGCHAIN_PROJECT", "noton-rag").strip()
 
     if not api_key or not tracing_enabled:
         logger.info(

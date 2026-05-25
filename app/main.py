@@ -8,7 +8,7 @@ import time
 from typing import Optional
 
 from app.database import get_session, create_db_and_tables, engine
-from app.routers import auth, chat, conversations, kag, library, spaces, admin, notes, projects
+from app.routers import auth, chat, conversations, library, spaces, admin
 from app.config import settings
 from app.services.auth_service import decode_token, get_user_by_id
 from app.models.user import UserRead
@@ -23,17 +23,6 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-# --- PATCH FLAGEMBEDDING / TRANSFORMERS ---
-# FlagEmbedding importe 'is_torch_fx_available' depuis 'transformers.utils.import_utils'
-# Ce module a été retiré, ce qui fait crasher le reranker FlagEmbeddingReranker.
-try:
-    import transformers.utils.import_utils
-    if not hasattr(transformers.utils.import_utils, 'is_torch_fx_available'):
-        transformers.utils.import_utils.is_torch_fx_available = lambda: False
-except ImportError:
-    pass
-# ------------------------------------------
-
 # Fichier dédié : logs/library_document_processing.log (pipeline bibliothèque / espaces)
 try:
     from app.library_document_logging import setup_library_document_file_logging
@@ -43,7 +32,7 @@ try:
 except Exception as e:
     logger.warning("Initialisation journal bibliothèque/espaces ignorée : %s", e)
 
-# LangSmith — observabilité RAG/KAG
+# LangSmith — observabilité RAG
 try:
     from app.tracing import init_langsmith
     init_langsmith()
@@ -85,10 +74,7 @@ app.include_router(library.router)
 app.include_router(spaces.router)
 app.include_router(chat.router)
 app.include_router(conversations.router)
-app.include_router(kag.router)
 app.include_router(admin.router)
-app.include_router(notes.router)
-app.include_router(projects.router)
 
 # Configuration des templates
 templates = Jinja2Templates(directory="app/templates")
@@ -112,6 +98,22 @@ async def startup_event():
     """Créer les tables au démarrage."""
     create_db_and_tables()
     
+    # Exécuter les migrations Alembic de manière programmatique
+    try:
+        import os
+        from alembic.config import Config
+        from alembic import command
+        logger.info("Exécution des migrations Alembic...")
+        ini_path = "alembic.ini"
+        if not os.path.exists(ini_path):
+            ini_path = "app/alembic.ini"
+        logger.info(f"Fichier de configuration Alembic utilisé : {ini_path}")
+        alembic_cfg = Config(ini_path)
+        command.upgrade(alembic_cfg, "head")
+        logger.info("Migrations Alembic terminées avec succès")
+    except Exception as e:
+        logger.error(f"Erreur lors de l'exécution des migrations Alembic au démarrage: {e}")
+    
     # Initialiser le système RBAC (permissions + rôles)
     try:
         from app.services.rbac_seed_service import seed_rbac_system
@@ -120,19 +122,26 @@ async def startup_event():
     except Exception as e:
         logger.error(f"Erreur lors de l'initialisation RBAC: {e}")
     
-    # Tester l'initialisation du modèle d'embeddings HuggingFace
+    # Tester la connexion API Mistral Embeddings (si clé configurée)
     try:
         from app.services.embedding_service import generate_embedding
-        logger.info("Test d'initialisation du modèle d'embeddings HuggingFace...")
-        # Test rapide avec un texte court
-        test_embedding = generate_embedding("test")
-        if test_embedding:
-            logger.info("✅ Modèle d'embeddings HuggingFace initialisé et prêt")
+        if settings.MISTRAL_API_KEY:
+            logger.info(
+                "Test API Mistral Embeddings (model=%s)...",
+                settings.EMBEDDING_MODEL,
+            )
+            test_embedding = generate_embedding("test")
+            if test_embedding:
+                logger.info(
+                    "✅ Mistral Embeddings OK (dim=%s)",
+                    len(test_embedding),
+                )
+            else:
+                logger.warning("⚠️ Impossible de générer un embedding de test")
         else:
-            logger.warning("⚠️ Impossible de générer un embedding de test")
+            logger.warning("⚠️ MISTRAL_API_KEY absente — embeddings indisponibles")
     except Exception as e:
-        logger.warning(f"⚠️ Erreur lors de l'initialisation du modèle d'embeddings: {e}")
-        # Ne pas bloquer le démarrage si le modèle n'est pas disponible
+        logger.warning("⚠️ Erreur test Mistral Embeddings: %s", e)
     
     # Workers threads (embeddings + documents) uniquement si thread ou hybrid (repli Celery)
     try:
@@ -197,15 +206,6 @@ async def space_detail_page(request: Request, space_id: int, session: Session = 
     return templates.TemplateResponse("space_detail.html", {"request": request, "space_id": space_id, "user": user})
 
 
-@app.get("/spaces/{space_id}/kag-graph", response_class=HTMLResponse)
-async def space_kag_graph_page(request: Request, space_id: int, session: Session = Depends(get_session)):
-    """Page de visualisation du graphe KAG d'un espace."""
-    user = _get_authenticated_user(request, session)
-    if not user:
-        return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("space_kag_graph.html", {"request": request, "space_id": space_id, "user": user})
-
-
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_page(request: Request, session: Session = Depends(get_session)):
     """Page d'administration (gestion users/rôles)."""
@@ -263,4 +263,3 @@ def _is_request_authenticated(request: Request, session: Session) -> bool:
 
 def _redirect_if_unauthenticated(request: Request, session: Session) -> bool:
     return not _is_request_authenticated(request, session)
-

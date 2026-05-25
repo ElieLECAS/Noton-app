@@ -336,9 +336,6 @@
         <h1 id="space-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100">Espace</h1>
         <p class="text-sm text-gray-500">Discussion LIA sur les documents de cet espace</p>
       </div>
-      <a id="kag-link" href="#" class="px-4 py-2 rounded-lg bg-violet-600 text-white hover:bg-violet-700">
-        <i class="ti ti-chart-arcs-3"></i> Voir le Graph KAG
-      </a>
     </div>
 
     <div class="grid grid-cols-1 gap-4 flex-1 min-h-0">
@@ -461,6 +458,8 @@ const fastModel = {{ model_fast.model|tojson }};
 const fastProvider = {{ model_fast.provider|tojson }};
 let chatHistory = [];
 let currentMessageSources = [];
+const messageSourcesRegistry = new Map();
+let currentSourceMessageKeyFromSpacePdf = null;
 let currentConversationId = null;
 let conversations = [];
 
@@ -496,17 +495,14 @@ function parseMarkdown(text) {
   return wrapTablesInResponsive(cleanHtml);
 }
 
-// Désactivation temporaire de l'affichage des citations [1], [2], etc. dans les espaces.
 function stripCitationMarkers(text) {
   if (!text) return text;
   let cleaned = text;
-  // Retire les marqueurs [1], [1, 2], etc.
-  cleaned = cleaned.replace(/\[((?:\d+\s*(?:,\s*\d+\s*)*))\]/g, "");
-  // Retire le bloc de synthèse des sources parfois généré en fin de réponse.
-  cleaned = cleaned.replace(/\n?\s*Sources?\s+textuelles?\s*\(\d+\)[\s\S]*$/i, "");
-  // Retire une éventuelle section "Sources" en fin de réponse.
-  cleaned = cleaned.replace(/\n?\s*Sources?\s*:?\s*[\s\S]*$/i, "");
-  return cleaned.replace(/[ \t]{2,}/g, " ").trim();
+  // Retire le bloc de synthèse des sources parfois généré en fin de réponse
+  cleaned = cleaned.replace(/\n\s*Sources?\s+textuelles?\s*\(\d+\)[\s\S]*$/i, "");
+  // Retire une éventuelle section "Sources:" en fin de réponse
+  cleaned = cleaned.replace(/\n\s*Sources?\s*:[\s\S]*$/i, "");
+  return cleaned.trim();
 }
 
 function escapeHtml(text) {
@@ -530,23 +526,28 @@ function resolveSpaceSourcePage(source) {
 }
 
 /** Clic sur une source : PDF à la bonne page si fichier dispo, sinon modale texte. */
-function handleSpaceSourceClick(index) {
-  const source = currentMessageSources.find((s) => s.index === index);
+function handleSpaceSourceClick(index, messageKey) {
+  const sources = messageSourcesRegistry.get(messageKey) || [];
+  const source = sources.find((s) => s.index === index);
   if (!source) return;
   if (source.has_source_file && source.document_id) {
     currentSpacePdfDocumentId = source.document_id;
     currentSpacePdfPageNo = resolveSpaceSourcePage(source);
     currentSpacePdfTitle = displayTitle(source);
     currentSourceIndexFromSpacePdf = index;
+    currentSourceMessageKeyFromSpacePdf = messageKey;
     openSpacePdfViewer();
     return;
   }
-  showSourcePreview(index);
+  showSourcePreview(index, messageKey);
 }
 
-function buildSourcesSection(sources) {
+function buildSourcesSection(sources, messageKey) {
   if (!sources || sources.length === 0) return "";
-  currentMessageSources = sources;
+  
+  // Enregistrer les sources dans le registre global pour cette clé de message
+  messageSourcesRegistry.set(messageKey, sources);
+  
   const textSources = sources.filter((s) => !s.is_image_chunk);
   const imageSources = sources.filter((s) => s.is_image_chunk);
 
@@ -559,7 +560,7 @@ function buildSourcesSection(sources) {
     return `
       <button
         type="button"
-        onclick="handleSpaceSourceClick(${index})"
+        onclick="handleSpaceSourceClick(${index}, '${messageKey}')"
         class="source-badge inline-flex items-center px-2 py-1 text-xs rounded bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors cursor-pointer"
         title="${fullTitle}"
         id="source-ref-${index}">
@@ -580,7 +581,7 @@ function buildSourcesSection(sources) {
 
     return `
       <div
-        onclick="handleSpaceSourceClick(${index})"
+        onclick="handleSpaceSourceClick(${index}, '${messageKey}')"
         class="relative group cursor-pointer rounded-lg overflow-hidden border-2 border-purple-300 dark:border-purple-600 hover:border-purple-500 transition-colors"
         style="width: 84px; height: 84px;"
         title="${title}"
@@ -620,24 +621,28 @@ function buildSourcesSection(sources) {
   `;
 }
 
-function transformCitationsToLinks(html, sources) {
+function transformCitationsToLinks(html, sources, messageKey) {
   if (!sources || sources.length === 0) return html;
-  currentMessageSources = sources;
+  
+  // Enregistrer les sources dans le registre global pour cette clé de message
+  messageSourcesRegistry.set(messageKey, sources);
+  
   const sourceMap = {};
   sources.forEach((s) => { sourceMap[s.index] = s; });
   return html.replace(/\[((?:\d+\s*(?:,\s*\d+\s*)*))\]/g, (match, group) => {
     const nums = group.split(",").map((n) => parseInt(n.trim(), 10)).filter(Number.isFinite);
     const rendered = nums.map((index) => {
       if (!sourceMap[index]) return String(index);
-      return `<button class="citation-link" title="${escapeHtml(sourceMap[index].note_title || "Source")}" onclick="showSourcePreview(${index})">[${index}]</button>`;
+      return `<button class="citation-link" title="${escapeHtml(sourceMap[index].note_title || "Source")}" onclick="showSourcePreview(${index}, '${messageKey}')">[${index}]</button>`;
     });
     if (rendered.length === 0) return match;
     return rendered.join(" ");
   });
 }
 
-function showSourcePreview(index) {
-  const source = currentMessageSources.find((s) => s.index === index);
+function showSourcePreview(index, messageKey) {
+  const sources = messageSourcesRegistry.get(messageKey) || [];
+  const source = sources.find((s) => s.index === index);
   if (!source) return;
   document.getElementById("source-preview-badge").textContent = `[${index}]`;
   document.getElementById("source-preview-title").textContent = displayTitle(source);
@@ -653,6 +658,7 @@ function showSourcePreview(index) {
       currentSpacePdfPageNo = resolveSpaceSourcePage(source);
       currentSpacePdfTitle = displayTitle(source);
       currentSourceIndexFromSpacePdf = index;
+      currentSourceMessageKeyFromSpacePdf = messageKey;
       closeSourcePreview();
       openSpacePdfViewer();
     };
@@ -865,8 +871,9 @@ function hideSpacePdfViewerModal() {
 function showPassageFromSpacePdfViewer() {
   if (currentSourceIndexFromSpacePdf == null) return;
   const idx = currentSourceIndexFromSpacePdf;
+  const key = currentSourceMessageKeyFromSpacePdf;
   hideSpacePdfViewerModal();
-  showSourcePreview(idx);
+  showSourcePreview(idx, key);
 }
 
 document.addEventListener("keydown", async (e) => {
@@ -900,20 +907,56 @@ function renderConversations() {
   }
 
   host.innerHTML = conversations.map((conv) => `
-    <button
-      type="button"
-      onclick="selectConversation(${conv.id})"
-      class="w-full text-left px-3 py-2 mb-2 rounded-lg border transition-colors ${
+    <div
+      class="group flex items-center gap-2 px-3 py-2 mb-2 rounded-lg border transition-colors cursor-pointer ${
         currentConversationId === conv.id
           ? "border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-700 dark:bg-blue-900/25 dark:text-blue-200"
           : "border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
       }"
+      onclick="selectConversation(${conv.id})"
       title="${escapeHtml(conv.title || "Conversation")}"
     >
-      <div class="font-medium truncate">${escapeHtml(conv.title || "Conversation")}</div>
-      <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${conv.message_count || 0} message(s)</div>
-    </button>
+      <div class="flex-1 min-w-0">
+        <div class="font-medium truncate">${escapeHtml(conv.title || "Conversation")}</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${conv.message_count || 0} message(s)</div>
+      </div>
+      <button
+        type="button"
+        onclick="event.stopPropagation(); deleteConversation(${conv.id})"
+        class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity shrink-0"
+        title="Supprimer"
+      >
+        <i class="ti ti-trash text-sm"></i>
+      </button>
+    </div>
   `).join("");
+}
+
+async function deleteConversation(conversationId) {
+  if (!confirm("Voulez-vous vraiment supprimer cette conversation ?")) {
+    return;
+  }
+
+  const r = await api(`/api/conversations/${conversationId}`, { method: "DELETE" });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    alert(err.detail || "Impossible de supprimer la conversation.");
+    return;
+  }
+
+  conversations = conversations.filter((c) => c.id !== conversationId);
+
+  if (currentConversationId === conversationId) {
+    currentConversationId = null;
+    const nextId = conversations.length ? conversations[0].id : null;
+    if (nextId) {
+      await selectConversation(nextId);
+    } else {
+      resetChatView("Sélectionnez ou créez une conversation.");
+    }
+  }
+
+  renderConversations();
 }
 
 function setupSpaceSidebar() {
@@ -989,7 +1032,7 @@ function renderMessages(messages) {
 
   host.innerHTML = "";
   for (const message of messages) {
-    addMessage(message.role, message.content);
+    addMessage(message.role, message.content, message.id, message.sources);
   }
 }
 
@@ -1008,12 +1051,46 @@ async function selectConversation(conversationId) {
   chatHistory = messages.map((msg) => ({ role: msg.role, content: msg.content }));
 }
 
-function addMessage(role, content) {
+function addMessage(role, content, messageId = null, sources = null) {
   const host = document.getElementById("chat-messages");
   if (host.querySelector(".text-center")) host.innerHTML = "";
   const div = document.createElement("div");
   div.className = `flex ${role === "user" ? "justify-end" : "justify-start"}`;
-  div.innerHTML = `<div class="${role === "user" ? "max-w-3xl bg-blue-600 text-white" : "max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message"} rounded-lg px-4 py-2">${role === "assistant" ? `<div class="markdown-content">${parseMarkdown(stripCitationMarkers(content))}</div>` : `<p class="whitespace-pre-wrap">${content}</p>`}</div>`;
+  
+  let innerHtml = "";
+  if (role === "assistant") {
+    const cleaned = stripCitationMarkers(content);
+    let parsedHtml = parseMarkdown(cleaned);
+    const messageKey = messageId ? `msg-${messageId}` : `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    let parsedSources = null;
+    if (sources) {
+      try {
+        parsedSources = typeof sources === "string" ? JSON.parse(sources) : sources;
+      } catch (e) {
+        console.error("Error parsing message sources:", e);
+      }
+    }
+    
+    if (parsedSources && parsedSources.length > 0) {
+      parsedHtml = transformCitationsToLinks(parsedHtml, parsedSources, messageKey);
+      const sourcesSection = buildSourcesSection(parsedSources, messageKey);
+      innerHtml = `<div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message rounded-lg px-4 py-2">
+        <div class="markdown-content">${parsedHtml}</div>
+        ${sourcesSection}
+      </div>`;
+    } else {
+      innerHtml = `<div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message rounded-lg px-4 py-2">
+        <div class="markdown-content">${parsedHtml}</div>
+      </div>`;
+    }
+  } else {
+    innerHtml = `<div class="max-w-3xl bg-blue-600 text-white rounded-lg px-4 py-2">
+      <p class="whitespace-pre-wrap">${content}</p>
+    </div>`;
+  }
+  
+  div.innerHTML = innerHtml;
   host.appendChild(div);
   host.scrollTop = host.scrollHeight;
 }
@@ -1023,7 +1100,6 @@ async function loadSpace() {
   if (!r.ok) return;
   const s = await r.json();
   document.getElementById("space-title").textContent = s.name;
-  document.getElementById("kag-link").href = `/spaces/${spaceId}/kag-graph`;
 }
 
 document.getElementById("chat-form").addEventListener("submit", async (e) => {
@@ -1162,13 +1238,15 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     contentEl.classList.remove("italic");
     contentEl.textContent = "Aucune réponse générée.";
   } else if (full && !streamError) {
-    const withMarkdown = parseMarkdown(full);
+    const cleaned = stripCitationMarkers(full);
+    const withMarkdown = parseMarkdown(cleaned);
+    const streamingMessageKey = `msg-stream-${Date.now()}`;
     const finalHtml = (receivedSources && receivedSources.length > 0)
-      ? transformCitationsToLinks(withMarkdown, receivedSources)
+      ? transformCitationsToLinks(withMarkdown, receivedSources, streamingMessageKey)
       : withMarkdown;
     contentEl.innerHTML = finalHtml;
     if (receivedSources && receivedSources.length > 0) {
-      const sourcesHtml = buildSourcesSection(receivedSources);
+      const sourcesHtml = buildSourcesSection(receivedSources, streamingMessageKey);
       const messageContainer = assistantWrap.querySelector(".max-w-2xl");
       if (messageContainer) {
         messageContainer.insertAdjacentHTML("beforeend", sourcesHtml);

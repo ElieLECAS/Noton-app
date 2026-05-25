@@ -43,10 +43,12 @@ docker-compose.yaml
 *.md
 README.md
 
-# Tests
+# Tests (non inclus dans l'image Docker)
+tests/
 .pytest_cache/
 .coverage
 htmlcov/
+requirements-dev.txt
 
 # Media files (ne pas inclure dans l'image)
 media/

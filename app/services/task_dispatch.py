@@ -12,10 +12,9 @@ from typing import Any, Literal, Optional
 
 from sqlmodel import Session
 
-from app.config import settings
 from app.database import engine
+from app.config import settings
 from app.models.document import Document
-from app.models.note import Note
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +60,6 @@ def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
     if task_name not in {
         "app.tasks.documents.process_library_document",
         "app.tasks.documents.reindex_library_document_task",
-        "app.tasks.documents.process_library_document_kag",
         "app.tasks.documents.process_document_embeddings",
         "app.tasks.documents.update_document_spaces_task",
     }:
@@ -79,7 +77,7 @@ def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
 
 def revoke_library_document_tasks(document_id: int) -> dict[str, Any]:
     """
-    Révoque les tâches Celery actives/réservées liées à un document (files documents, embeddings, kag).
+    Révoque les tâches Celery actives/réservées liées à un document (files documents, embeddings).
     Retourne preuve d'opération pour l'API admin.
     """
     mode = get_task_backend_mode()
@@ -146,7 +144,7 @@ def revoke_library_tasks_bulk(
 ) -> dict[str, Any]:
     """
     Révoque en masse les tâches liées à la bibliothèque:
-    - tasks document (documents/embeddings/kag) par document_id
+    - tasks document (documents/embeddings) par document_id
     - task globale reindex_all_library_documents_task par user_id (si fourni)
     """
     mode = get_task_backend_mode()
@@ -243,21 +241,6 @@ def _send_library_document(
     return True
 
 
-def _send_project_document(note_id: int, file_path: str) -> bool:
-    from app.tasks.documents import process_project_document
-
-    res = process_project_document.apply_async(
-        args=[note_id, file_path],
-        queue="documents",
-    )
-    logger.info(
-        "task_dispatch project_document note_id=%s celery_task_id=%s",
-        note_id,
-        res.id,
-    )
-    return True
-
-
 def _send_reindex_library(
     document_id: int, user_id: int, run_id: Optional[str]
 ) -> str:
@@ -303,22 +286,6 @@ def _send_reindex_all_library(user_id: int) -> str:
     return async_result.id
 
 
-def _send_note_embeddings(note_id: int, project_id: int) -> bool:
-    from app.tasks.documents import process_note_embeddings
-
-    res = process_note_embeddings.apply_async(
-        args=[note_id, project_id],
-        queue="embeddings",
-    )
-    logger.info(
-        "task_dispatch note_embeddings note_id=%s project_id=%s celery_task_id=%s",
-        note_id,
-        project_id,
-        res.id,
-    )
-    return True
-
-
 def _send_document_embeddings(document_id: int, run_id: Optional[str]) -> bool:
     from app.tasks.documents import process_document_embeddings
 
@@ -332,60 +299,6 @@ def _send_document_embeddings(document_id: int, run_id: Optional[str]) -> bool:
         res.id,
     )
     return True
-
-
-def _send_library_document_kag(document_id: int, run_id: Optional[str]) -> bool:
-    from app.tasks.documents import process_library_document_kag
-
-    res = process_library_document_kag.apply_async(
-        args=[document_id, run_id],
-        queue="kag",
-    )
-    logger.info(
-        "task_dispatch library_kag document_id=%s celery_task_id=%s",
-        document_id,
-        res.id,
-    )
-    return True
-
-
-def _run_kag_thread(document_id: int, run_id: Optional[str]) -> None:
-    from app.services.chunk_service import run_kag_for_library_document
-
-    def _runner():
-        try:
-            run_kag_for_library_document(document_id, run_id)
-        except Exception:
-            logger.exception("Thread KAG échoué document_id=%s", document_id)
-
-    threading.Thread(
-        target=_runner,
-        name=f"kag-doc-{document_id}",
-        daemon=True,
-    ).start()
-
-
-def dispatch_library_document_kag(document_id: int) -> None:
-    """Enqueue la phase KAG bibliothèque après embeddings (Celery queue « kag » ou thread)."""
-    mode = get_task_backend_mode()
-    run_id: Optional[str] = None
-    with Session(engine) as session:
-        doc = session.get(Document, document_id)
-        if doc:
-            run_id = doc.processing_run_id
-    if mode == "thread":
-        _run_kag_thread(document_id, run_id)
-        return
-    try:
-        _send_library_document_kag(document_id, run_id)
-    except Exception as exc:
-        logger.warning(
-            "Celery indisponible pour KAG document_id=%s: %s", document_id, exc
-        )
-        if mode == "hybrid":
-            _run_kag_thread(document_id, run_id)
-            return
-        raise RuntimeError(_celery_only_failure_message()) from exc
 
 
 def _send_document_spaces_update(
@@ -479,32 +392,11 @@ def dispatch_library_document(
         raise RuntimeError(_celery_only_failure_message()) from exc
 
 
-def dispatch_project_document(note_id: int, file_path: str) -> None:
-    """Enqueue traitement document projet / note document."""
-    mode = get_task_backend_mode()
-    if mode == "thread":
-        from app.services.document_service import enqueue_project_document_thread
-
-        enqueue_project_document_thread(note_id, file_path)
-        return
-
-    try:
-        _send_project_document(note_id, file_path)
-    except Exception as exc:
-        logger.warning("Celery indisponible pour note_id=%s: %s", note_id, exc)
-        if mode == "hybrid":
-            from app.services.document_service import enqueue_project_document_thread
-
-            enqueue_project_document_thread(note_id, file_path)
-            return
-        raise RuntimeError(_celery_only_failure_message()) from exc
-
-
 def dispatch_reindex_library(document_id: int, user_id: int) -> str:
     """
     Enfile la réindexation sur la queue Celery « documents » uniquement.
-    Docling, chunks, embeddings et KAG s'exécutent dans le worker, pas dans l'API.
-    Retourne l'identifiant de tâche Celery.
+    Mistral OCR, chunks et embeddings s'exécutent dans le worker, pas dans l'API.
+    Retourne l'identifiant de tâche Celery ou d'un thread.
     """
     run_id: Optional[str] = None
     with Session(engine) as session:
@@ -516,6 +408,14 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
             doc.updated_at = datetime.utcnow()
             session.add(doc)
             session.commit()
+
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        from app.services.document_service_new import enqueue_reindex_library_document_thread
+
+        enqueue_reindex_library_document_thread(document_id, user_id, run_id)
+        return f"thread-reindex-document-{document_id}"
+
     try:
         return _send_reindex_library(document_id, user_id, run_id)
     except Exception as exc:
@@ -526,6 +426,11 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
             exc,
             exc_info=True,
         )
+        if mode == "hybrid":
+            from app.services.document_service_new import enqueue_reindex_library_document_thread
+
+            enqueue_reindex_library_document_thread(document_id, user_id, run_id)
+            return f"thread-reindex-document-{document_id}"
         raise RuntimeError(
             "Impossible d'enfiler la réindexation : le service de tâches (Celery) est indisponible."
         ) from exc
@@ -535,6 +440,13 @@ def dispatch_reindex_all_library(user_id: int) -> str:
     """
     Enfile la réindexation globale de la bibliothèque sur la queue Celery « documents ».
     """
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        from app.services.document_service_new import enqueue_reindex_all_library_documents_thread
+
+        enqueue_reindex_all_library_documents_thread(user_id)
+        return f"thread-reindex-all-library-{user_id}"
+
     try:
         return _send_reindex_all_library(user_id)
     except Exception as exc:
@@ -544,6 +456,11 @@ def dispatch_reindex_all_library(user_id: int) -> str:
             exc,
             exc_info=True,
         )
+        if mode == "hybrid":
+            from app.services.document_service_new import enqueue_reindex_all_library_documents_thread
+
+            enqueue_reindex_all_library_documents_thread(user_id)
+            return f"thread-reindex-all-library-{user_id}"
         raise RuntimeError(
             "Impossible d'enfiler la réindexation globale : le service de tâches (Celery) est indisponible."
         ) from exc
@@ -591,37 +508,6 @@ def dispatch_document_spaces_update(
             )
             return f"thread-document-spaces-{document_id}"
         raise RuntimeError(_celery_only_failure_message()) from exc
-
-
-def try_dispatch_embeddings_job(note_id: int, project_id: int) -> bool:
-    """
-    Si Celery (ou hybrid avec broker OK), envoie la bonne tâche embeddings.
-    Retourne True si délégué à Celery ; False si l'appelant doit utiliser les threads/sync.
-    """
-    if not _use_celery_first():
-        return False
-
-    try:
-        with Session(engine) as session:
-            if session.get(Note, note_id) is not None:
-                _send_note_embeddings(note_id, project_id)
-                return True
-            doc = session.get(Document, note_id)
-            if doc is not None:
-                _send_document_embeddings(doc.id, doc.processing_run_id)
-                return True
-    except Exception as exc:
-        logger.warning(
-            "Celery indisponible pour embeddings note_id=%s: %s", note_id, exc
-        )
-        if get_task_backend_mode() == "hybrid":
-            return False
-        raise RuntimeError(_celery_only_failure_message()) from exc
-
-    logger.warning(
-        "try_dispatch_embeddings_job: ni Note ni Document pour id=%s", note_id
-    )
-    return False
 
 
 def should_start_thread_workers() -> bool:

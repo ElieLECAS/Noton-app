@@ -1,207 +1,159 @@
-from typing import List, Optional
+"""Embeddings via API Mistral (mistral-embed) — pas de PyTorch local."""
+from __future__ import annotations
+
 import logging
-import os
 import time
-from pathlib import Path
 from threading import Lock
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from typing import List, Optional
+
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-m3")
-EMBEDDING_DEVICE = os.getenv("EMBEDDING_DEVICE", "cpu")
 DEFAULT_BATCH_SIZE = 16
 MAX_RETRIES = 3
 RETRY_BACKOFF_SECONDS = 1.5
+# Limite pratique par requête API (éviter payloads trop gros)
+MAX_INPUTS_PER_REQUEST = 64
 
-_embed_model: Optional[HuggingFaceEmbedding] = None
-_embed_model_lock = Lock()
-
-
-def _check_model_cache(model_name: str) -> bool:
-    """Vérifie si le modèle existe déjà dans le cache HuggingFace."""
-    # Vérifier plusieurs emplacements possibles du cache
-    possible_cache_dirs = [
-        os.getenv("HF_HOME"),
-        os.getenv("HUGGINGFACE_HUB_CACHE"),
-        os.path.expanduser("~/.cache/huggingface"),
-        Path("/root/.cache/huggingface"),  # Docker par défaut
-    ]
-    
-    model_slug = model_name.replace("/", "--")
-    
-    for cache_dir in possible_cache_dirs:
-        if not cache_dir:
-            continue
-        cache_path = Path(cache_dir)
-        # Vérifier dans hub/models--{org}--{model}
-        model_path = cache_path / "hub" / f"models--{model_slug}"
-        if model_path.exists() and any(model_path.iterdir()):
-            return True
-        # Vérifier aussi dans sentence_transformers (ancien format)
-        st_path = cache_path / "sentence_transformers" / model_slug
-        if st_path.exists() and any(st_path.iterdir()):
-            return True
-    
-    return False
+_client = None
+_client_lock = Lock()
 
 
-def _get_embed_model() -> HuggingFaceEmbedding:
-    """Retourne un client HuggingFaceEmbedding singleton thread-safe."""
-    global _embed_model
-    if _embed_model is None:
-        with _embed_model_lock:
-            if _embed_model is None:
-                # Vérifier si le modèle est déjà en cache
-                from_cache = _check_model_cache(EMBEDDING_MODEL)
-                cache_status = "depuis le cache" if from_cache else "téléchargement en cours"
-                
-                # Si le modèle est en cache, activer le mode offline pour éviter les vérifications réseau
-                if from_cache and not os.getenv("HF_HUB_OFFLINE"):
-                    os.environ["HF_HUB_OFFLINE"] = "1"
-                    logger.debug("Mode offline activé (modèle en cache)")
-                
-                logger.info(
-                    "Initialisation du modèle d'embeddings HuggingFace (%s): %s",
-                    cache_status,
-                    EMBEDDING_MODEL,
+def _get_mistral_client():
+    global _client
+    if _client is not None:
+        return _client
+    with _client_lock:
+        if _client is not None:
+            return _client
+        if not settings.MISTRAL_API_KEY:
+            raise ValueError("MISTRAL_API_KEY n'est pas configurée pour les embeddings")
+        from mistralai import Mistral
+
+        _client = Mistral(api_key=settings.MISTRAL_API_KEY)
+        logger.info(
+            "Client Mistral Embeddings initialisé (model=%s, dim=%s)",
+            settings.EMBEDDING_MODEL,
+            settings.EMBEDDING_DIMENSION,
+        )
+        return _client
+
+
+def _embed_texts_api(texts: List[str]) -> List[List[float]]:
+    """Appelle POST /v1/embeddings pour une liste de textes non vides."""
+    client = _get_mistral_client()
+    last_err: Optional[Exception] = None
+
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = client.embeddings.create(
+                model=settings.EMBEDDING_MODEL,
+                inputs=texts,
+            )
+            vectors: List[List[float]] = []
+            for item in response.data or []:
+                emb = getattr(item, "embedding", None) or []
+                vectors.append([float(x) for x in emb])
+            if len(vectors) != len(texts):
+                raise RuntimeError(
+                    f"Mistral embeddings: {len(vectors)} vecteurs pour {len(texts)} entrées"
                 )
-                
-                _embed_model = HuggingFaceEmbedding(
-                    model_name=EMBEDDING_MODEL,
-                    device=EMBEDDING_DEVICE,
-                    embed_batch_size=DEFAULT_BATCH_SIZE,
+            return vectors
+        except Exception as exc:
+            last_err = exc
+            if attempt < MAX_RETRIES:
+                wait = RETRY_BACKOFF_SECONDS * attempt
+                logger.warning(
+                    "Mistral embeddings tentative %s/%s échouée (%s), retry dans %.1fs",
+                    attempt,
+                    MAX_RETRIES,
+                    exc,
+                    wait,
                 )
-                logger.info(
-                    "✅ Client HuggingFaceEmbedding initialisé (model=%s, device=%s)",
-                    EMBEDDING_MODEL,
-                    EMBEDDING_DEVICE,
-                )
-    return _embed_model
+                time.sleep(wait)
+    raise RuntimeError(f"Mistral embeddings échoué: {last_err}") from last_err
 
 
 def generate_embedding(text: str) -> Optional[List[float]]:
-    """
-    Génère un embedding pour un texte donné en utilisant HuggingFace (modèle local).
-    
-    Args:
-        text: Le texte à encoder
-        
-    Returns:
-        Liste de floats représentant l'embedding ou None si erreur
-    """
+    """Génère un embedding pour un texte (requête ou passage)."""
     if not text or not text.strip():
         logger.warning("Texte vide fourni pour génération d'embedding")
         return None
-    
     try:
-        embed_model = _get_embed_model()
-        embedding = embed_model.get_text_embedding(text.strip())
-        if not embedding:
-            logger.error("Aucun embedding généré par HuggingFace/LlamaIndex")
-            return None
-        return [float(x) for x in embedding]
+        vectors = _embed_texts_api([text.strip()])
+        return vectors[0] if vectors else None
     except Exception as e:
-        logger.error(f"Erreur lors de la génération d'embedding: {e}", exc_info=True)
+        logger.error("Erreur génération embedding Mistral: %s", e, exc_info=True)
         return None
 
 
-def generate_embeddings_batch(texts: List[str], batch_size: int = DEFAULT_BATCH_SIZE) -> List[Optional[List[float]]]:
+def generate_embeddings_batch(
+    texts: List[str],
+    batch_size: int = DEFAULT_BATCH_SIZE,
+) -> List[Optional[List[float]]]:
     """
-    Génère des embeddings pour plusieurs textes en batch via HuggingFace (modèle local).
-    IMPORTANT: Ne jamais envoyer les chunks un par un, toujours utiliser cette fonction en batch.
-    
-    Args:
-        texts: Liste de textes à encoder
-        batch_size: Nombre de textes à traiter par batch
-        
-    Returns:
-        Liste d'embeddings (ou None si erreur pour un texte)
+    Génère des embeddings en batch via l'API Mistral.
+    Ne pas appeler chunk par chunk : regrouper via cette fonction.
     """
     if not texts:
         return []
-    
-    # Filtrer les textes vides
-    valid_texts = []
-    valid_indices = []
+
+    result: List[Optional[List[float]]] = [None] * len(texts)
+    valid_texts: List[str] = []
+    valid_indices: List[int] = []
+
     for i, text in enumerate(texts):
         if text and text.strip():
             valid_texts.append(text.strip())
             valid_indices.append(i)
-    
-    if not valid_texts:
-        return [None] * len(texts)
-    
-    try:
-        result = [None] * len(texts)
-        embed_model = _get_embed_model()
-        effective_batch_size = max(1, int(batch_size or DEFAULT_BATCH_SIZE))
 
-        for batch_start in range(0, len(valid_texts), effective_batch_size):
-            batch_end = min(batch_start + effective_batch_size, len(valid_texts))
+    if not valid_texts:
+        return result
+
+    effective_batch = max(1, min(int(batch_size or DEFAULT_BATCH_SIZE), MAX_INPUTS_PER_REQUEST))
+
+    try:
+        for batch_start in range(0, len(valid_texts), effective_batch):
+            batch_end = min(batch_start + effective_batch, len(valid_texts))
             batch_texts = valid_texts[batch_start:batch_end]
             batch_indices = valid_indices[batch_start:batch_end]
 
-            embeddings_batch: Optional[List[List[float]]] = None
-            last_error: Optional[Exception] = None
-            for attempt in range(1, MAX_RETRIES + 1):
-                try:
-                    embeddings_batch = embed_model.get_text_embedding_batch(batch_texts)
-                    break
-                except Exception as exc:
-                    last_error = exc
-                    if attempt < MAX_RETRIES:
-                        sleep_time = RETRY_BACKOFF_SECONDS * attempt
-                        logger.warning(
-                            "Echec embedding batch %s-%s tentative %s/%s, retry dans %.1fs: %s",
-                            batch_start,
-                            batch_end,
-                            attempt,
-                            MAX_RETRIES,
-                            sleep_time,
-                            exc,
-                        )
-                        time.sleep(sleep_time)
-
-            if embeddings_batch is None:
+            try:
+                vectors = _embed_texts_api(batch_texts)
+            except Exception as exc:
                 logger.error(
-                    "Echec définitif embedding batch %s-%s: %s",
+                    "Échec batch embeddings Mistral [%s:%s]: %s",
                     batch_start,
                     batch_end,
-                    last_error,
+                    exc,
+                    exc_info=True,
                 )
                 continue
 
-            for idx, embedding in zip(batch_indices, embeddings_batch):
-                result[idx] = [float(x) for x in embedding] if embedding else None
+            for idx, vector in zip(batch_indices, vectors):
+                if vector and len(vector) == settings.EMBEDDING_DIMENSION:
+                    result[idx] = vector
+                elif vector:
+                    logger.warning(
+                        "Dimension embedding inattendue: %s (attendu %s)",
+                        len(vector),
+                        settings.EMBEDDING_DIMENSION,
+                    )
+                    result[idx] = vector
 
         return result
     except Exception as e:
-        logger.error(f"Erreur lors de la génération d'embeddings en batch: {e}", exc_info=True)
+        logger.error("Erreur batch embeddings Mistral: %s", e, exc_info=True)
         return [None] * len(texts)
 
 
 def generate_note_embedding(title: str, content: Optional[str] = None) -> Optional[List[float]]:
-    """
-    Génère un embedding pour une note complète (titre + contenu).
-    
-    Args:
-        title: Le titre de la note
-        content: Le contenu optionnel de la note
-        
-    Returns:
-        Liste de floats représentant l'embedding ou None si erreur
-    """
-    # Combiner titre et contenu pour créer un texte complet
-    text_parts = [title]
+    """Embedding pour une note complète (titre + contenu)."""
+    parts = [title] if title else []
     if content and content.strip():
-        text_parts.append(content.strip())
-    
-    combined_text = " ".join(text_parts)
-    
-    if not combined_text.strip():
-        logger.warning("Note vide (titre et contenu vides)")
+        parts.append(content.strip())
+    combined = " ".join(parts).strip()
+    if not combined:
         return None
-    
-    return generate_embedding(combined_text)
-
+    return generate_embedding(combined)

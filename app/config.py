@@ -34,34 +34,20 @@ class Settings(BaseSettings):
     SPACE_CHAT_MAX_TOKENS: Optional[int] = None
     SPACE_CHAT_TEMPERATURE: float = 0.55
     SPACE_CHAT_TOP_P: Optional[float] = None
-    # CPU Optimization for Docling/EasyOCR
-    DOCLING_CPU_ONLY: bool = True
-    DOCLING_USE_GPU: Optional[bool] = None  # None = auto-détection, True/False pour forcer
-    TORCH_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
-    OMP_NUM_THREADS: Optional[int] = None  # None = utiliser tous les cœurs disponibles
-    USE_ALL_CPU_CORES: bool = False  # False = ~moitié des cœurs (Torch/OMP) pour limiter la charge CPU
-    
     # Document Processing
-    MAX_CONCURRENT_DOCUMENTS: int = 1  # Ignoré pour la bibliothèque : 1 worker global (voir document_service_new)
-    EMBEDDING_BATCH_SIZE: int = 16  # Taille de batch embedding (CPU-only, éviter la saturation)
+    MAX_CONCURRENT_DOCUMENTS: int = 1
+    EMBEDDING_BATCH_SIZE: int = 16
     EMBEDDING_DIMENSION: int = 1024
-    EMBEDDING_MODEL: str = "BAAI/bge-m3"
-    EMBEDDING_DEVICE: str = "cpu"
-    HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # Format attendu: "3072,1024,384"
-    # Blocs texte Docling : si longueur > seuil, chunks text_window (parent = text_full). 0 = désactivé.
-    DOCLING_TEXT_WINDOW_CHAR_THRESHOLD: int = 0
-    DOCLING_TEXT_WINDOW_OVERLAP: int = 200
+    EMBEDDING_MODEL: str = "mistral-embed"
+    HIERARCHICAL_CHUNK_SIZES: Optional[List[int]] = None  # ex. "1024,256" pour override ingestion OCR
+    USE_MARKDOWN_STRUCTURED_CHUNKING: bool = False  # Si True, utilise MarkdownNodeParser au lieu de HierarchicalNodeParser
+    PDF_FORCE_OCR: bool = False  # Si True, skip pymupdf4llm et utilise Mistral OCR pour tous les PDF
+    # Profondeur de titre pour regrouper les parents (1 = ex. tout "CATALOGUE TEXTURES EXTERIEURES")
+    MARKDOWN_STRUCTURED_PARENT_DEPTH: int = 1
 
-    # Docling OCR (schémas techniques, cotes, PDF scannés)
-    DOCLING_OCR_ENABLED: bool = True  # Activer l'OCR pour capturer texte dans les images/schémas
-    DOCLING_OCR_LANG: Optional[str] = None  # Langues OCR, ex. "fr,en" ou "fra+eng" (None = défaut Docling)
-    
-    # Paramètres OCR avancés
-    OCR_IMAGE_SCALE: float = 3.0  # Échelle pour images PDF (2.0 → 3.0 pour meilleure résolution OCR)
-    OCR_PREPROCESS_ENABLED: bool = True  # Activer prétraitement adaptatif des images
-    OCR_FALLBACK_ENABLED: bool = True  # Activer fallback Tesseract si Docling insuffisant
-    OCR_MIN_TEXT_LENGTH: int = 50  # Seuil min caractères/page pour considérer OCR valide
-    OCR_TESSERACT_CONFIG: str = "--oem 3 --psm 6 -l fra+eng"  # Config Tesseract (LSTM, bloc uniforme, fr+en)
+    # Mistral OCR (ingestion documents)
+    MISTRAL_OCR_MODEL: str = "mistral-ocr-latest"
+    MISTRAL_OCR_TIMEOUT: float = 300.0
     
     # Brave Search (recherche web pour function calling)
     BRAVE_SEARCH_API_KEY: Optional[str] = None
@@ -72,16 +58,8 @@ class Settings(BaseSettings):
     # RBAC Admin Bootstrap
     ADMIN_EMAIL: Optional[str] = None  # Email de l'utilisateur qui sera automatiquement admin
     
-    # Ollama (utilisé notamment pour l'extraction KAG)
     OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 
-    # KAG - Knowledge Augmented Generation
-    KAG_ENABLED: bool = True
-    KAG_EXTRACTION_PROVIDER: str = "mistral"  # "openai", "mistral" ou "ollama"
-    KAG_EXTRACTION_MODEL: str = "mistral-large-24b"
-    KAG_PARENT_ENRICHMENT_ENABLED: bool = True  # Génère résumé + 3 questions par chunk parent (section)
-    KAG_TYPED_RELATIONS_ENABLED: bool = True  # Extraction LLM des relations entité-entité (cause, depend_de, …)
-    
     # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
     # False = défaut si la variable est absente (voir parse_multimodal_enabled).
     MULTIMODAL_ENABLED: bool = False
@@ -97,10 +75,41 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: Optional[str] = None  # défaut: REDIS_URL
     CELERY_RESULT_BACKEND: Optional[str] = None  # défaut: REDIS_URL
 
-    # LangSmith — observabilité RAG/KAG
+    # LangSmith — observabilité RAG
     LANGSMITH_API_KEY: Optional[str] = None
     LANGCHAIN_TRACING_V2: bool = False
-    LANGCHAIN_PROJECT: str = "noton-rag-kag"
+    LANGCHAIN_PROJECT: str = "noton-rag"
+
+    # Reranker cross-encoder (CPU-only)
+    RERANKER_ENABLED: bool = False
+    RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    RERANK_POOL: int = 40
+    RERANK_CHAR_CAP: int = 8000
+    RERANK_BATCH_SIZE: int = 16
+    EARLY_STOP_TOP_N: int = 5
+    EARLY_STOP_MEAN_THRESHOLD: float = 0.78
+    MIN_DYNAMIC_K: int = 2
+    MAX_DYNAMIC_K: int = 12
+    SOFTMAX_CUM_THRESHOLD: float = 0.80
+    STUTTER_GAP: float = 0.05
+    ZSCORE_FLAT_THRESHOLD: float = 0.05
+
+    # MMR (Maximal Marginal Relevance) — diversification du contexte
+    MMR_ENABLED: bool = True
+    MMR_K: int = 12
+    MMR_LAMBDA: float = 0.7
+    MMR_MAX_PER_PARENT: int = 5
+
+    # RRF (Reciprocal Rank Fusion) dynamique
+    RRF_DYNAMIC_K_ENABLED: bool = True
+    RRF_MIN_K: int = 1
+    RRF_MAX_K: int = 10
+    RRF_RELATIVE_THRESHOLD_FACTOR: float = 0.70
+
+    # BM25 Lexical Search (approximation via ts_rank_cd + IDF Python)
+    BM25_K1: float = 1.2
+    BM25_B: float = 0.75
+    BM25_MAX_QUERY_TERMS: int = 15
 
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod
@@ -125,6 +134,18 @@ class Settings(BaseSettings):
         if isinstance(v, str):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
+
+    @field_validator('RERANKER_ENABLED', 'MMR_ENABLED', 'RRF_DYNAMIC_K_ENABLED', mode='before')
+    @classmethod
+    def parse_bool_flags(cls, v: Union[str, bool, None]) -> bool:
+        """Convertit les chaînes en bool pour les flags reranker/MMR/RRF."""
+        if v is None:
+            return False
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in ('true', '1', 'yes', 'on')
+        return False
     
     @field_validator('TASK_BACKEND_MODE', mode='before')
     @classmethod
@@ -137,18 +158,6 @@ class Settings(BaseSettings):
             return s
         return "thread"
 
-    @field_validator('KAG_ENABLED', mode='before')
-    @classmethod
-    def parse_kag_enabled(cls, v: Union[str, bool, None]) -> bool:
-        """Convertit les chaînes en bool pour KAG_ENABLED."""
-        if v is None:
-            return True
-        if isinstance(v, bool):
-            return v
-        if isinstance(v, str):
-            return v.strip().lower() in ('true', '1', 'yes', 'on')
-        return True
-    
     @field_validator('OPENAI_MODEL', mode='before')
     @classmethod
     def parse_openai_models(cls, v: Union[str, List[str], None]) -> Optional[List[str]]:
@@ -188,32 +197,6 @@ class Settings(BaseSettings):
             return normalized if normalized else None
         return None
     
-    @field_validator('DOCLING_OCR_LANG', mode='before')
-    @classmethod
-    def parse_ocr_lang(cls, v: Union[str, None]) -> Optional[str]:
-        """Chaîne vide → None pour DOCLING_OCR_LANG."""
-        if v is None or (isinstance(v, str) and not v.strip()):
-            return None
-        return v.strip() if isinstance(v, str) else v
-
-    @field_validator('DOCLING_USE_GPU', mode='before')
-    @classmethod
-    def parse_optional_bool(cls, v: Union[str, bool, None]) -> Optional[bool]:
-        """Convertit les chaînes en bool pour DOCLING_USE_GPU"""
-        if v is None:
-            return None
-        if isinstance(v, bool):
-            return v
-        if isinstance(v, str):
-            v_lower = v.strip().lower()
-            if v_lower in ('true', '1', 'yes', 'on'):
-                return True
-            elif v_lower in ('false', '0', 'no', 'off'):
-                return False
-            elif v_lower == '':
-                return None
-        return None
-    
     @field_validator('VISION_MAX_TOKENS', mode='before')
     @classmethod
     def parse_vision_max_tokens(cls, v: Union[str, int, None]) -> int:
@@ -225,8 +208,6 @@ class Settings(BaseSettings):
             return 1500
 
     @field_validator(
-        'TORCH_NUM_THREADS',
-        'OMP_NUM_THREADS',
         'SPACE_CHAT_MAX_TOKENS',
         'VISION_MAX_IMAGES_PER_DOCUMENT',
         mode='before',

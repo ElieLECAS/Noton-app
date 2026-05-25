@@ -69,12 +69,7 @@ def unlink_document_from_space(
     space_id: int,
     user_id: int
 ) -> bool:
-    """
-    Délie un document d'un espace.
-    Supprime également les entités KAG associées pour cet espace.
-    """
-    from app.services.kag_graph_service import delete_entities_for_document
-    
+    """Délie un document d'un espace."""
     doc_space = session.exec(
         select(DocumentSpace).where(
             DocumentSpace.document_id == document_id,
@@ -85,8 +80,6 @@ def unlink_document_from_space(
     if not doc_space:
         logger.warning(f"Association document {document_id} - espace {space_id} non trouvée")
         return False
-    
-    delete_entities_for_document(session, document_id, space_id)
     
     session.delete(doc_space)
     session.commit()
