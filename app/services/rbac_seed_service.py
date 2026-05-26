@@ -57,6 +57,12 @@ PERMISSIONS_CATALOG = [
         "description": "Voir les espaces et leurs contenus",
         "category": "space"
     },
+    {
+        "code": "feedback.auto_faq",
+        "name": "Auto-générer FAQ",
+        "description": "Générer automatiquement des FAQ correctives depuis les retours utilisateur",
+        "category": "feedback"
+    },
 ]
 
 # Définition des rôles et leurs permissions
@@ -72,6 +78,7 @@ ROLES_CATALOG = {
             "space.update",
             "space.delete",
             "space.read",
+            "feedback.auto_faq",
         ]
     },
     "responsable": {
@@ -83,6 +90,7 @@ ROLES_CATALOG = {
             "space.update",
             "space.delete",
             "space.read",
+            "feedback.auto_faq",
         ]
     },
     "lecteur": {

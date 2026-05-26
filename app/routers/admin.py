@@ -645,6 +645,8 @@ async def get_admin_recent_feedbacks(
             "query_text": feedback.query_text,
             "response_text": feedback.response_text,
             "chunk_ids": feedback.chunk_ids,
+            "auto_faq_generated": feedback.auto_faq_generated,
+            "auto_faq_content": feedback.auto_faq_content,
             "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
             "updated_at": feedback.updated_at.isoformat() if feedback.updated_at else None
         })

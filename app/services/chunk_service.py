@@ -1,5 +1,6 @@
 import logging
 import re
+import threading
 import time
 from typing import List, Optional
 from datetime import datetime
@@ -420,3 +421,23 @@ def complete_document_embeddings_sync(
 
 # Alias rétrocompatibilité (imports existants)
 complete_document_embeddings_and_kag_sync = complete_document_embeddings_sync
+
+_embedding_workers_lock = threading.Lock()
+_embedding_workers_initialized = False
+
+
+def _ensure_embedding_workers() -> None:
+    """
+    Compatibilité démarrage (app.main).
+
+    Les embeddings des documents bibliothèque sont finalisés dans le pipeline
+    du worker document (`complete_document_embeddings_sync`) ou via Celery
+    (`process_document_embeddings`). Il n'y a plus de file thread dédiée aux embeddings.
+    """
+    global _embedding_workers_initialized
+    with _embedding_workers_lock:
+        if not _embedding_workers_initialized:
+            logger.debug(
+                "Workers embeddings (threads) : non requis — pipeline document worker ou Celery"
+            )
+            _embedding_workers_initialized = True

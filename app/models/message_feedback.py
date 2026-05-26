@@ -22,6 +22,8 @@ class MessageFeedback(SQLModel, table=True):
     chunk_ids: Optional[List[int]] = Field(   # [12, 45, 78]
         default=None, sa_column=Column(JSONB)
     )
+    auto_faq_generated: bool = Field(default=False)
+    auto_faq_content: Optional[str] = Field(default=None, sa_column=Column(Text))
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -45,5 +47,7 @@ class FeedbackRead(SQLModel):
     query_text: str
     response_text: Optional[str] = None
     chunk_ids: Optional[List[int]] = None
+    auto_faq_generated: bool = False
+    auto_faq_content: Optional[str] = None
     created_at: datetime
     updated_at: datetime

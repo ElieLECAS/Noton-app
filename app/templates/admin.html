@@ -1050,6 +1050,16 @@ async function loadRecentFeedbacks() {
                                 <div class="font-semibold text-gray-500 dark:text-gray-400 mb-1">Q : <span class="italic font-normal">"${escapeHtml(f.query_text)}"</span></div>
                                 ${f.response_text ? `<div class="mt-1 font-semibold text-gray-500 dark:text-gray-400">R : <div class="font-normal text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/40 p-1.5 rounded border border-gray-100 dark:border-gray-800/50 max-h-24 overflow-y-auto whitespace-pre-line text-[11px]">${escapeHtml(f.response_text)}</div></div>` : ''}
                                 ${f.comment ? `<div class="mt-1 pl-2 border-l-2 border-blue-500 dark:border-blue-400 font-medium">${escapeHtml(f.comment)}</div>` : ''}
+                                ${f.auto_faq_generated ? `
+                                    <div class="mt-2 text-xs bg-blue-50/50 dark:bg-blue-950/15 border border-blue-100 dark:border-blue-900/30 p-2 rounded text-[11px]">
+                                        <span class="font-semibold text-blue-700 dark:text-blue-400 flex items-center gap-1">
+                                            <i class="ti ti-bulb text-[13px]"></i> Correction FAQ :
+                                        </span>
+                                        <div class="mt-1 font-medium whitespace-pre-line text-gray-900 dark:text-gray-200 bg-white/60 dark:bg-gray-900/30 p-1.5 rounded border border-blue-50 dark:border-blue-950/30">
+                                            ${escapeHtml(f.auto_faq_content)}
+                                        </div>
+                                    </div>
+                                ` : ''}
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-600 dark:text-gray-400">
                                 ${escapeHtml(f.user_email)}

@@ -71,12 +71,14 @@ def _retrieve_leaves_sql(
     query_text: str,
     candidate_k: int,
     query_embedding: Optional[List[float]] = None,
+    document_filter: str = "all",
 ) -> List[NodeWithScore]:
     """
     Recherche vectorielle pgvector sur les feuilles.
     
     Args:
         query_embedding: Embedding pré-calculé (évite un appel API si déjà disponible)
+        document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
     """
     if query_embedding is None:
         query_embedding = generate_embedding(query_text)
@@ -84,6 +86,13 @@ def _retrieve_leaves_sql(
         logger.warning("Embedding requête vide pour space_id=%s", space_id)
         return []
     query_embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
+    
+    # Clause de filtre selon le type de document
+    filter_clause = ""
+    if document_filter == "technical":
+        filter_clause = f"AND d.title NOT LIKE '{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%'"
+    elif document_filter == "faq_corrective":
+        filter_clause = f"AND d.title LIKE '{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%'"
 
     sql_query = text(f"""
         SELECT
@@ -105,6 +114,7 @@ def _retrieve_leaves_sql(
         WHERE ds.space_id = :space_id
           AND dc.embedding IS NOT NULL
           AND dc.is_leaf = true
+          {filter_clause}
         ORDER BY dc.embedding <=> '{query_embedding_str}'::vector
         LIMIT :limit_k
     """)
@@ -230,6 +240,7 @@ def _retrieve_leaves_bm25_sql(
     user_id: int,
     query_text: str,
     candidate_k: int,
+    document_filter: str = "all",
 ) -> List[NodeWithScore]:
     """Recherche lexicale BM25 approximative sur les feuilles.
 
@@ -238,6 +249,9 @@ def _retrieve_leaves_bm25_sql(
     2. Retrieval via ts_rank_cd avec flag 1 (normalisation log-longueur)
     3. Calcul IDF par terme (requête SQL unique)
     4. Re-scoring BM25 approximatif : ts_rank_cd_norm × Σ IDF(terme)
+    
+    Args:
+        document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
     """
     terms = _extract_query_terms(query_text)
     if not terms:
@@ -246,9 +260,16 @@ def _retrieve_leaves_bm25_sql(
 
     # Construction d'une requête OR pour websearch_to_tsquery (ex: "vitrage OR soleal")
     or_query = " OR ".join(terms)
+    
+    # Clause de filtre selon le type de document
+    filter_clause = ""
+    if document_filter == "technical":
+        filter_clause = f"AND d.title NOT LIKE '{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%'"
+    elif document_filter == "faq_corrective":
+        filter_clause = f"AND d.title LIKE '{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%'"
 
     # Retrieval avec ts_rank_cd + flag 1 (normalisation par log de la longueur)
-    sql_query = text("""
+    sql_query = text(f"""
         SELECT
             dc.id,
             dc.content,
@@ -268,6 +289,7 @@ def _retrieve_leaves_bm25_sql(
         WHERE ds.space_id = :space_id
           AND dc.is_leaf = true
           AND dc.tsv_content @@ websearch_to_tsquery('french', :query)
+          {filter_clause}
         ORDER BY similarity_score DESC
         LIMIT :limit_k
     """)
@@ -874,9 +896,13 @@ async def search_relevant_passages(
     query_text: str,
     user_id: int,
     k: int = 15,
+    document_filter: str = "all",
 ) -> Dict:
     """
     RAG espace : recherche hybride (pgvector + tsvector) + RRF + rerank + MMR.
+    
+    Args:
+        document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
     
     Returns:
         Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
@@ -933,11 +959,13 @@ async def search_relevant_passages(
         with trace_run(
             "bm25_lexical_retrieval",
             run_type="retriever",
-            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k, "document_filter": document_filter},
             tags=["retrieval", "bm25", "lexical", "space"],
         ) as lr:
             try:
-                raw_lexical = _retrieve_leaves_bm25_sql(session, space_id, user_id, query_text, candidate_k)
+                raw_lexical = _retrieve_leaves_bm25_sql(
+                    session, space_id, user_id, query_text, candidate_k, document_filter=document_filter
+                )
             except Exception as e:
                 logger.warning("Recherche BM25 lexicale échouée (migration probablement non appliquée) : %s", e)
                 session.rollback()
@@ -1159,6 +1187,8 @@ async def search_relevant_passages(
                     _node_to_passage(nws.node, fallback_score=score)
                     for nws, score in mmr_nodes
                 ]
+            else:
+                # MMR désactivé : utiliser le résultat du rerank directement
                 passages = [
                     _node_to_passage(nws.node, fallback_score=1.0 - i * 0.01)
                     for i, nws in enumerate(rerank_result.nodes)
@@ -1184,3 +1214,152 @@ async def search_relevant_passages(
     except Exception as e:
         logger.error("search_relevant_passages (space): %s", e, exc_info=True)
         return {"passages": [], "status": "disabled", "reason": f"error: {str(e)}"}
+
+
+async def search_technical_passages(
+    session: Session,
+    space_id: int,
+    query_text: str,
+    user_id: int,
+    k: int = 15,
+) -> Dict:
+    """
+    Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
+    
+    Wrapper autour de search_relevant_passages avec document_filter="technical".
+    Utilise le pipeline complet : RRF → rerank → MMR → feedback boost.
+    
+    Returns:
+        Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
+    """
+    return await search_relevant_passages(
+        session=session,
+        space_id=space_id,
+        query_text=query_text,
+        user_id=user_id,
+        k=k,
+        document_filter="technical",
+    )
+
+
+async def search_corrective_faq_passages(
+    session: Session,
+    space_id: int,
+    query_text: str,
+    user_id: int,
+    draft_response: str = "",
+    k: Optional[int] = None,
+) -> Dict:
+    """
+    Recherche post-brouillon dédiée aux FAQ correctives issues des feedbacks négatifs.
+    
+    Pipeline léger : vector + BM25 → RRF → filtre score (pas de rerank/MMR coûteux).
+    La requête est enrichie avec le brouillon pour capturer les erreurs concrètes.
+    
+    Args:
+        draft_response: Réponse brouillon générée, ajoutée à la requête pour améliorer le rappel
+        k: Nombre de FAQ à retourner (défaut: FAQ_TOP_K depuis config)
+    
+    Returns:
+        Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
+        Status "below_threshold" si aucune FAQ ne dépasse FAQ_MIN_SIMILARITY
+    """
+    if k is None:
+        k = settings.FAQ_TOP_K
+    
+    if not settings.FAQ_POST_DRAFT_ENABLED:
+        return {"passages": [], "status": "disabled", "reason": "faq_post_draft_disabled"}
+    
+    space = get_space_by_id(session, space_id, user_id)
+    if not space:
+        logger.warning("Espace %d inaccessible (user %d) pour recherche FAQ", space_id, user_id)
+        return {"passages": [], "status": "disabled", "reason": "space_not_found"}
+    
+    # Enrichir la requête avec le brouillon (tronqué) pour capturer les erreurs
+    enriched_query = query_text
+    if draft_response:
+        draft_preview = draft_response[:800]
+        enriched_query = f"{query_text}\n\nRéponse générée: {draft_preview}"
+    
+    try:
+        candidate_k = min(k * 4, 40)  # Pool plus petit que la recherche technique
+        
+        # Embedding de la requête enrichie
+        query_embedding = generate_embedding(enriched_query)
+        if not query_embedding:
+            logger.warning("Embedding requête FAQ vide pour space_id=%s", space_id)
+            return {"passages": [], "status": "disabled", "reason": "embedding_failed"}
+        
+        # Recherche vectorielle FAQ uniquement
+        with trace_run(
+            "faq_vector_retrieval",
+            run_type="retriever",
+            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+            tags=["retrieval", "vector", "faq_corrective"],
+        ) as vr:
+            raw_vector = _retrieve_leaves_sql(
+                session, space_id, user_id, enriched_query, candidate_k,
+                query_embedding=query_embedding, document_filter="faq_corrective"
+            )
+            vr.end(outputs={"nb": len(raw_vector)})
+        
+        # Recherche lexicale FAQ uniquement
+        with trace_run(
+            "faq_bm25_retrieval",
+            run_type="retriever",
+            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+            tags=["retrieval", "bm25", "faq_corrective"],
+        ) as lr:
+            try:
+                raw_lexical = _retrieve_leaves_bm25_sql(
+                    session, space_id, user_id, enriched_query, candidate_k,
+                    document_filter="faq_corrective"
+                )
+            except Exception as e:
+                logger.warning("Recherche BM25 FAQ échouée: %s", e)
+                session.rollback()
+                raw_lexical = []
+            lr.end(outputs={"nb": len(raw_lexical)})
+        
+        if not raw_vector and not raw_lexical:
+            return {"passages": [], "status": "no_faq", "reason": "no_faq_documents_in_space"}
+        
+        # Fusion RRF (léger, pas de filtrage vectoriel minimal ici car FAQ rares)
+        fused_results = reciprocal_rank_fusion(raw_vector, raw_lexical, top_n=candidate_k)
+        
+        # Filtrer par seuil de similarité FAQ dédié
+        filtered_faq = []
+        for nws in fused_results[:k]:
+            score = float(getattr(nws, "score", 0.0) or 0.0)
+            if score >= settings.FAQ_MIN_SIMILARITY:
+                filtered_faq.append(nws)
+        
+        if not filtered_faq:
+            logger.info(
+                "FAQ search: aucune FAQ au-dessus du seuil %.2f (meilleur score: %.3f)",
+                settings.FAQ_MIN_SIMILARITY,
+                fused_results[0].score if fused_results else 0.0,
+            )
+            return {"passages": [], "status": "below_threshold", "reason": "no_faq_above_threshold"}
+        
+        # Conversion en passages (pas de résolution parent ni MMR pour les FAQ)
+        passages = [
+            _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))
+            for nws in filtered_faq
+        ]
+        
+        logger.info(
+            "FAQ corrective search: %d FAQ trouvées (seuil=%.2f, top_score=%.3f)",
+            len(passages), settings.FAQ_MIN_SIMILARITY, passages[0]["score"] if passages else 0.0,
+        )
+        
+        return {
+            "passages": passages,
+            "status": "ok",
+            "reason": "faq_corrective_found",
+        }
+        
+    except Exception as e:
+        logger.error("search_corrective_faq_passages: %s", e, exc_info=True)
+        return {"passages": [], "status": "disabled", "reason": f"error: {str(e)}"}
+

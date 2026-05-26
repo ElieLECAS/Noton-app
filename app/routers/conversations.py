@@ -405,6 +405,14 @@ async def create_or_update_feedback(
     
     now = datetime.utcnow()
     if existing_feedback:
+        # Garde-fou : ne relancer Celery que si commentaire modifié et FAQ pas encore générée
+        comment_changed = existing_feedback.comment != feedback_in.comment
+        should_regenerate_faq = (
+            not existing_feedback.is_positive 
+            and not existing_feedback.auto_faq_generated 
+            and comment_changed
+        )
+        
         existing_feedback.is_positive = feedback_in.is_positive
         existing_feedback.comment = feedback_in.comment
         existing_feedback.query_text = query_text
@@ -414,6 +422,7 @@ async def create_or_update_feedback(
         session.add(existing_feedback)
         db_feedback = existing_feedback
     else:
+        should_regenerate_faq = not feedback_in.is_positive  # Nouveau feedback négatif
         db_feedback = MessageFeedback(
             message_id=message_id,
             user_id=current_user.id,
@@ -430,6 +439,16 @@ async def create_or_update_feedback(
         
     session.commit()
     session.refresh(db_feedback)
+
+    # Déclencher la génération de FAQ corrective si nécessaire et permission OK
+    if should_regenerate_faq and "feedback.auto_faq" in current_user.permissions:
+        try:
+            from app.tasks.documents import generate_faq_from_feedback_task
+            generate_faq_from_feedback_task.delay(db_feedback.id)
+            logger.info(f"Tâche Celery de génération FAQ planifiée pour le feedback {db_feedback.id}")
+        except Exception as e:
+            logger.error(f"Impossible de planifier la tâche Celery de génération FAQ : {e}")
+
     return db_feedback
 
 
@@ -522,6 +541,8 @@ async def get_my_feedbacks(
             "query_text": feedback.query_text,
             "response_text": feedback.response_text,
             "chunk_ids": feedback.chunk_ids,
+            "auto_faq_generated": feedback.auto_faq_generated,
+            "auto_faq_content": feedback.auto_faq_content,
             "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
             "updated_at": feedback.updated_at.isoformat() if feedback.updated_at else None
         })

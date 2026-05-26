@@ -7,6 +7,7 @@ from app.models.user import UserRead
 from app.routers.auth import get_current_user
 from app.database import get_session, engine
 from app.services.mistral_service import (
+    MistralRateLimitError,
     chat as mistral_chat,
     chat_stream as mistral_chat_stream,
 )
@@ -250,6 +251,9 @@ async def stream_chat_message(
 
             yield f"data: {json.dumps({'done': True})}\n\n"
 
+        except MistralRateLimitError as e:
+            logger.warning("Limite de débit Mistral (stream_chat_message): %s", e)
+            error_msg_to_yield = str(e)
         except Exception as e:
             logger.exception("Erreur dans le générateur stream_chat_message")
             error_msg_to_yield = str(e)
@@ -332,28 +336,29 @@ async def stream_space_chat_message(
         except Exception as e:
             logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
 
-    # Recherche sémantique RAG + KAG + rerank + MMR
+    # Pass 1 : Recherche technique (exclut FAQ correctives)
     with trace_run(
-        "rag_kag_retrieval",
+        "technical_retrieval",
         run_type="retriever",
         inputs={"query": request.message, "space_id": space_id, "k": RAG_TOP_K},
-        tags=["rag", "kag", "space"],
+        tags=["rag", "technical", "space"],
     ) as retrieval_run:
-        retrieval = await search_space_passages(
+        from app.services.space_search_service import search_technical_passages
+        retrieval = await search_technical_passages(
             session=session,
             space_id=space_id,
             query_text=request.message,
             user_id=current_user.id,
             k=RAG_TOP_K,
         )
-        passages = retrieval["passages"]
+        doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]
         retrieval_reason = retrieval.get("reason")
         
         retrieval_run.end(outputs={
             "status": retrieval_status,
             "reason": retrieval_reason,
-            "nb_passages": len(passages),
+            "nb_passages": len(doc_passages),
             "passages": [
                 {
                     "document_title": p.get("document_title"),
@@ -363,16 +368,16 @@ async def stream_space_chat_message(
                     "section": p.get("section"),
                     "passage_preview": (p.get("passage_raw") or p.get("passage", ""))[:300],
                 }
-                for p in passages
+                for p in doc_passages
             ],
         })
 
-    # Construire le contexte système à partir des passages rerankés
+    # Construire le contexte système à partir des passages techniques
     # Si low confidence : injecter un prompt spécial pour forcer la clarification
     if retrieval_status == "low_confidence_clarification":
-        space_context = build_space_context_from_passages(passages)
+        space_context_draft = build_space_context_from_passages(doc_passages)
         # Ajouter une instruction de clarification forcée après les passages
-        space_context["content"] += (
+        space_context_draft["content"] += (
             "\n\n⚠️ IMPORTANT : Les passages ci-dessus sont ambigus ou de faible pertinence. "
             "Ne déduis PAS de réponse définitive. Tu dois poser à l'utilisateur une question "
             "précise de clarification basée uniquement sur le contenu de ces 1-2 passages."
@@ -383,20 +388,20 @@ async def stream_space_chat_message(
             retrieval_reason,
         )
     else:
-        space_context = build_space_context_from_passages(passages)
+        space_context_draft = build_space_context_from_passages(doc_passages)
 
-    full_context = []
-    full_context.append(space_context)
+    full_context_draft = []
+    full_context_draft.append(space_context_draft)
     if request.context:
-        full_context.extend(request.context[-10:])
-    full_context.append({"role": "user", "content": request.message})
+        full_context_draft.extend(request.context[-10:])
+    full_context_draft.append({"role": "user", "content": request.message})
 
     _pipeline_inputs_space = {
         "query": request.message,
         "space_id": space_id,
         "user_id": current_user.id,
         "model": forced_model,
-        "nb_passages": len(passages),
+        "nb_doc_passages": len(doc_passages),
     }
 
     assistant_response: List[str] = []
@@ -412,57 +417,128 @@ async def stream_space_chat_message(
                 if not settings.MISTRAL_API_KEY:
                     raise ValueError("Mistral API key non configurée")
 
+                # Étape 1 : Génération du Brouillon de Réponse (sans FAQ)
+                draft_response = ""
                 with trace_run(
-                    "llm_generation",
+                    "draft_generation",
                     run_type="llm",
                     inputs={
                         "model": forced_model,
-                        "provider": "mistral",
-                        "max_tokens": SPACE_CHAT_MAX_TOKENS,
-                        "temperature": SPACE_CHAT_TEMPERATURE,
                         "messages": [
-                            (
-                                {"role": m.get("role"), "content": str(m.get("content", ""))}
-                                if TRACE_VERBOSE_TEXT
-                                else {"role": m.get("role"), "content_preview": str(m.get("content", ""))[:300]}
-                            )
-                            for m in full_context
-                        ],
+                            {"role": m.get("role"), "content": str(m.get("content", ""))}
+                            for m in full_context_draft
+                        ]
                     },
-                    tags=["llm", "mistral", "streaming", "space"],
-                ) as llm_run:
-                    async for raw_chunk in mistral_chat_stream(
+                    tags=["llm", "draft", "space"]
+                ) as draft_run:
+                    draft_res = await mistral_chat(
                         "",
                         forced_model,
-                        full_context,
+                        full_context_draft,
                         max_tokens=SPACE_CHAT_MAX_TOKENS,
                         temperature=SPACE_CHAT_TEMPERATURE,
                         top_p=SPACE_CHAT_TOP_P,
-                    ):
-                        try:
-                            parsed = json.loads(raw_chunk)
-                        except json.JSONDecodeError:
-                            continue
-                        chunk = (parsed.get("message") or {}).get("content") or ""
-                        if not chunk:
-                            continue
-                        assistant_response.append(chunk)
-                        yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+                    )
+                    if "choices" in draft_res and len(draft_res["choices"]) > 0:
+                        draft_response = draft_res["choices"][0]["message"].get("content", "").strip()
+                    draft_run.end(outputs={"draft_response": draft_response})
 
-                    full_response = "".join(assistant_response)
-                    llm_run.end(outputs={
-                        "response_chars": len(full_response),
-                        "response_preview": full_response[:500],
-                    })
+                # Pass 2 : Recherche FAQ correctives post-brouillon (si activée)
+                final_response = draft_response
+                faq_passages = []
+                
+                if draft_response and settings.FAQ_POST_DRAFT_ENABLED:
+                    with trace_run(
+                        "faq_corrective_retrieval",
+                        run_type="retriever",
+                        inputs={
+                            "query": request.message,
+                            "space_id": space_id,
+                            "draft_preview": draft_response[:200],
+                        },
+                        tags=["retrieval", "faq_corrective", "post_draft"],
+                    ) as faq_retrieval_run:
+                        from app.services.space_search_service import search_corrective_faq_passages
+                        faq_result = await search_corrective_faq_passages(
+                            session=session,
+                            space_id=space_id,
+                            query_text=request.message,
+                            user_id=current_user.id,
+                            draft_response=draft_response,
+                            k=settings.FAQ_TOP_K,
+                        )
+                        faq_passages = faq_result.get("passages", [])
+                        faq_status = faq_result.get("status")
+                        faq_reason = faq_result.get("reason")
+                        
+                        faq_retrieval_run.end(outputs={
+                            "status": faq_status,
+                            "reason": faq_reason,
+                            "nb_faq": len(faq_passages),
+                        })
+
+                # Étape 3 : Critique/Correction si FAQ correctives pertinentes trouvées
+                if faq_passages and draft_response:
+                    from app.services.chat_critique_service import (
+                        build_critique_messages,
+                        resolve_critique_final,
+                    )
+
+                    faq_content_list = []
+                    for i, p in enumerate(faq_passages, 1):
+                        raw = p.get("passage_raw") or p.get("passage", "")
+                        faq_content_list.append(f"FAQ {i}:\n{raw}")
+                    faq_formatted_text = "\n---\n".join(faq_content_list)
+                    critique_messages = build_critique_messages(draft_response, faq_formatted_text)
+
+                    with trace_run(
+                        "critique_generation",
+                        run_type="llm",
+                        inputs={
+                            "model": forced_model,
+                            "draft_response": draft_response[:200],
+                            "nb_faq": len(faq_passages),
+                        },
+                        tags=["llm", "critique", "space"]
+                    ) as critique_run:
+                        critique_res = await mistral_chat(
+                            "",
+                            forced_model,
+                            critique_messages,
+                            max_tokens=SPACE_CHAT_MAX_TOKENS,
+                            temperature=0,
+                            response_format={"type": "json_object"},
+                        )
+                        raw_critique = ""
+                        if "choices" in critique_res and len(critique_res["choices"]) > 0:
+                            raw_critique = critique_res["choices"][0]["message"].get("content", "").strip()
+                        final_response = resolve_critique_final(raw_critique, draft_response)
+                        critique_run.end(outputs={
+                            "final_response": final_response,
+                            "raw_critique_preview": raw_critique[:300],
+                        })
+
+                if not final_response:
+                    final_response = "Je n'ai pas pu générer de réponse."
+
+                # Simuler le streaming par chunks pour garder l'effet de frappe côté client
+                chunk_size = 25
+                for i in range(0, len(final_response), chunk_size):
+                    chunk = final_response[i : i + chunk_size]
+                    assistant_response.append(chunk)
+                    yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
 
                 pipeline_run.end(outputs={
-                    "nb_passages_used": len(passages),
-                    "response_chars": len("".join(assistant_response)),
+                    "nb_doc_passages": len(doc_passages),
+                    "nb_faq_passages": len(faq_passages),
+                    "response_chars": len(final_response),
                 })
 
+                # Combiner les passages docs + FAQ pour les sources
+                all_passages = doc_passages + faq_passages
                 sources_data = []
-                if passages:
-                    doc_ids = list({p.get("document_id") for p in passages if p.get("document_id")})
+                if all_passages:
+                    doc_ids = list({p.get("document_id") for p in all_passages if p.get("document_id")})
                     with Session(engine) as src_session:
                         docs = (
                             src_session.exec(select(Document).where(Document.id.in_(doc_ids))).all()
@@ -478,7 +554,7 @@ async def stream_space_chat_message(
                         candidate_chunk_ids = list(
                             {
                                 cid
-                                for p in passages
+                                for p in all_passages
                                 for cid in [p.get("source_leaf_chunk_id"), p.get("chunk_id")]
                                 if isinstance(cid, int)
                             }
@@ -493,7 +569,7 @@ async def stream_space_chat_message(
                         chunk_by_doc_and_index = {}
                         doc_chunk_indexes = {
                             (p.get("document_id"), p.get("chunk_index"))
-                            for p in passages
+                            for p in all_passages
                             if p.get("document_id") is not None
                             and isinstance(p.get("chunk_index"), int)
                         }
@@ -509,7 +585,7 @@ async def stream_space_chat_message(
                             if row:
                                 chunk_by_doc_and_index[(did, cidx)] = row
 
-                    for i, p in enumerate(passages):
+                    for i, p in enumerate(all_passages):
                         did = p.get("document_id")
                         raw = p.get("passage_raw", p.get("passage", ""))
                         resolved_page = _resolve_page_from_passage(p)
@@ -592,6 +668,9 @@ async def stream_space_chat_message(
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
                 yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
 
+        except MistralRateLimitError as e:
+            logger.warning("Limite de débit Mistral (stream_space_chat_message): %s", e)
+            error_msg_to_yield = str(e)
         except Exception as e:
             logger.exception("Erreur dans le générateur stream_space_chat_message")
             error_msg_to_yield = str(e)

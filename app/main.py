@@ -98,21 +98,8 @@ async def startup_event():
     """Créer les tables au démarrage."""
     create_db_and_tables()
     
-    # Exécuter les migrations Alembic de manière programmatique
-    try:
-        import os
-        from alembic.config import Config
-        from alembic import command
-        logger.info("Exécution des migrations Alembic...")
-        ini_path = "alembic.ini"
-        if not os.path.exists(ini_path):
-            ini_path = "app/alembic.ini"
-        logger.info(f"Fichier de configuration Alembic utilisé : {ini_path}")
-        alembic_cfg = Config(ini_path)
-        command.upgrade(alembic_cfg, "head")
-        logger.info("Migrations Alembic terminées avec succès")
-    except Exception as e:
-        logger.error(f"Erreur lors de l'exécution des migrations Alembic au démarrage: {e}")
+    # Les migrations Alembic sont déjà exécutées par le script d'entrée du conteneur (Dockerfile CMD ou docker-compose command)
+    # pour éviter tout conflit de verrous en BDD au démarrage de l'application.
     
     # Initialiser le système RBAC (permissions + rôles)
     try:
@@ -152,7 +139,6 @@ async def startup_event():
             from app.services.document_service_new import _ensure_document_workers
 
             _ensure_embedding_workers()
-            logger.info("Workers d'embeddings (threads) démarrés")
             _ensure_document_workers()
             logger.info("Workers de traitement de documents (threads) démarrés")
         else:
