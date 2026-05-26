@@ -67,6 +67,36 @@ def reindex_library_document_task(
 
 
 @celery_app.task(bind=True, max_retries=0)
+def multimodal_reindex_library_document_task(
+    self, document_id: int, user_id: int, run_id: str | None = None
+) -> dict:
+    """Retraitement multimodal additif (pymupdf + mistral-small, 1 chunk/page)."""
+    from app.library_document_logging import get_library_document_logger
+    from app.services.document_service_new import multimodal_reindex_library_document
+
+    get_library_document_logger().info(
+        "[Celery] multimodal_reindex_library_document_task document_id=%s user_id=%s task_id=%s",
+        document_id,
+        user_id,
+        self.request.id,
+    )
+    logger.info(
+        "Celery multimodal_reindex document_id=%s user_id=%s task_id=%s",
+        document_id,
+        user_id,
+        self.request.id,
+    )
+    try:
+        return multimodal_reindex_library_document(document_id, user_id, run_id)
+    except Exception:
+        logger.exception(
+            "multimodal_reindex_library_document_task échec document_id=%s",
+            document_id,
+        )
+        raise
+
+
+@celery_app.task(bind=True, max_retries=0)
 def reindex_all_library_documents_task(self, user_id: int) -> dict:
     """Réindexation séquentielle de tous les documents fichier de la bibliothèque."""
     from app.library_document_logging import get_library_document_logger

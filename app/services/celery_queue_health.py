@@ -86,6 +86,7 @@ def _extract_doc_task(task: dict[str, Any], state: str, worker_name: str) -> Opt
         "app.tasks.documents.process_library_document",
         "app.tasks.documents.process_document_embeddings",
         "app.tasks.documents.reindex_library_document_task",
+        "app.tasks.documents.multimodal_reindex_library_document_task",
     }:
         return None
 
@@ -161,7 +162,9 @@ def get_workers_document_tasks_view() -> dict[str, Any]:
             }
             waiting_docs = session.exec(
                 select(Document).where(
-                    Document.processing_status.in_(("pending", "reindex_queued", "processing"))
+                    Document.processing_status.in_(
+                        ("pending", "reindex_queued", "multimodal_queued", "processing")
+                    )
                 )
             ).all()
 
@@ -173,7 +176,7 @@ def get_workers_document_tasks_view() -> dict[str, Any]:
             progress = int(d.processing_progress or 0)
 
             # Heuristique de placement worker/queue selon l'état pipeline.
-            if status in ("pending", "reindex_queued"):
+            if status in ("pending", "reindex_queued", "multimodal_queued"):
                 target_worker = "worker"
                 queue_name = "documents"
                 task_name = "db_waiting.process_library_document"

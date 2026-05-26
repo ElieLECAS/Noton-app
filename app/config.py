@@ -74,6 +74,10 @@ class Settings(BaseSettings):
     VISION_MAX_TOKENS: int = 1500
     # Plafond d’appels vision par document (None = illimité)
     VISION_MAX_IMAGES_PER_DOCUMENT: Optional[int] = None
+    # Retraitement multimodal par page (pymupdf + mistral-small vision)
+    MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"
+    MULTIMODAL_PAGE_DPI: int = 200
+    MULTIMODAL_PAGE_MAX_TOKENS: int = 3500
 
     # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
     TASK_BACKEND_MODE: str = "thread"
@@ -212,6 +216,26 @@ class Settings(BaseSettings):
             return max(64, int(v))
         except (TypeError, ValueError):
             return 1500
+
+    @field_validator('MULTIMODAL_PAGE_DPI', mode='before')
+    @classmethod
+    def parse_multimodal_page_dpi(cls, v: Union[str, int, None]) -> int:
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return 200
+        try:
+            return max(72, min(400, int(v)))
+        except (TypeError, ValueError):
+            return 200
+
+    @field_validator('MULTIMODAL_PAGE_MAX_TOKENS', mode='before')
+    @classmethod
+    def parse_multimodal_page_max_tokens(cls, v: Union[str, int, None]) -> int:
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return 3500
+        try:
+            return max(256, int(v))
+        except (TypeError, ValueError):
+            return 3500
 
     @field_validator(
         'SPACE_CHAT_MAX_TOKENS',

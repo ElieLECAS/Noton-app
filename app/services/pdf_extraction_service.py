@@ -13,7 +13,7 @@ import logging
 import re
 import time
 from pathlib import Path
-from typing import Tuple
+from typing import List, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +117,44 @@ def extract_markdown_pymupdf4llm(pdf_path: str) -> str:
 
     markdown = _normalize_page_markers(markdown)
     return markdown.strip()
+
+
+def extract_page_texts_from_pdf(pdf_path: str) -> List[Tuple[int, str]]:
+    """
+    Extrait le markdown pymupdf4llm page par page.
+
+    Returns:
+        Liste de (page_no 1-based, markdown_page).
+    """
+    import pymupdf4llm
+
+    chunks = pymupdf4llm.to_markdown(
+        pdf_path,
+        page_chunks=True,
+        write_images=False,
+        show_progress=False,
+    )
+    pages: List[Tuple[int, str]] = []
+    if not isinstance(chunks, list):
+        return pages
+
+    for i, chunk in enumerate(chunks):
+        page_text = ""
+        page_num = i + 1
+        if isinstance(chunk, dict):
+            page_text = (chunk.get("text") or "").strip()
+            meta = chunk.get("metadata")
+            if isinstance(meta, dict):
+                p_num = meta.get("page_number") or meta.get("page")
+                if p_num is not None:
+                    try:
+                        page_num = int(p_num)
+                    except (TypeError, ValueError):
+                        pass
+        elif isinstance(chunk, str):
+            page_text = chunk.strip()
+        pages.append((page_num, page_text))
+    return pages
 
 
 def extract_markdown_from_pdf(pdf_path: str) -> Tuple[str, str]:

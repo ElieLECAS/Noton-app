@@ -60,6 +60,7 @@ def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
     if task_name not in {
         "app.tasks.documents.process_library_document",
         "app.tasks.documents.reindex_library_document_task",
+        "app.tasks.documents.multimodal_reindex_library_document_task",
         "app.tasks.documents.process_document_embeddings",
         "app.tasks.documents.update_document_spaces_task",
     }:
@@ -239,6 +240,29 @@ def _send_library_document(
         file_path,
     )
     return True
+
+
+def _send_multimodal_reindex_library(
+    document_id: int, user_id: int, run_id: Optional[str]
+) -> str:
+    from app.library_document_logging import get_library_document_logger
+    from app.tasks.documents import multimodal_reindex_library_document_task
+
+    async_result = multimodal_reindex_library_document_task.apply_async(
+        args=[document_id, user_id, run_id],
+        queue="documents",
+    )
+    logger.info(
+        "task_dispatch multimodal_reindex document_id=%s celery_task_id=%s",
+        document_id,
+        async_result.id,
+    )
+    get_library_document_logger().info(
+        "[Dispatch] document_id=%s — multimodal reindex Celery task_id=%s",
+        document_id,
+        async_result.id,
+    )
+    return async_result.id
 
 
 def _send_reindex_library(
@@ -433,6 +457,55 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
             return f"thread-reindex-document-{document_id}"
         raise RuntimeError(
             "Impossible d'enfiler la réindexation : le service de tâches (Celery) est indisponible."
+        ) from exc
+
+
+def dispatch_multimodal_reindex_library(document_id: int, user_id: int) -> str:
+    """
+    Enfile le retraitement multimodal (pymupdf + mistral-small par page).
+    """
+    run_id: Optional[str] = None
+    with Session(engine) as session:
+        doc = session.get(Document, document_id)
+        if doc:
+            from app.services.document_run import refresh_document_processing_run_id
+
+            run_id = refresh_document_processing_run_id(doc)
+            doc.updated_at = datetime.utcnow()
+            session.add(doc)
+            session.commit()
+
+    mode = get_task_backend_mode()
+    if mode == "thread":
+        from app.services.document_service_new import (
+            enqueue_multimodal_reindex_library_document_thread,
+        )
+
+        enqueue_multimodal_reindex_library_document_thread(
+            document_id, user_id, run_id
+        )
+        return f"thread-multimodal-reindex-document-{document_id}"
+
+    try:
+        return _send_multimodal_reindex_library(document_id, user_id, run_id)
+    except Exception as exc:
+        logger.warning(
+            "Échec enqueue multimodal reindex document_id=%s: %s",
+            document_id,
+            exc,
+            exc_info=True,
+        )
+        if mode == "hybrid":
+            from app.services.document_service_new import (
+                enqueue_multimodal_reindex_library_document_thread,
+            )
+
+            enqueue_multimodal_reindex_library_document_thread(
+                document_id, user_id, run_id
+            )
+            return f"thread-multimodal-reindex-document-{document_id}"
+        raise RuntimeError(
+            "Impossible d'enfiler le retraitement multimodal : Celery indisponible."
         ) from exc
 
 

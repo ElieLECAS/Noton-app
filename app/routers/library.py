@@ -37,6 +37,7 @@ from app.services.document_service_new import (
     save_uploaded_file,
     process_document_async,
     mark_document_reindex_queued,
+    mark_document_multimodal_queued,
     move_document,
     delete_document,
     update_document,
@@ -45,8 +46,10 @@ from app.services.document_service_new import (
     stop_all_library_documents_processing,
     stop_library_document_processing,
 )
+from app.config import settings
 from app.services.task_dispatch import (
     dispatch_document_spaces_update,
+    dispatch_multimodal_reindex_library,
     dispatch_reindex_all_library,
     dispatch_reindex_library,
 )
@@ -576,6 +579,65 @@ async def reindex_library_document_endpoint(
     log_admin_action(
         user_id=current_user.id,
         action="library.reindex_document",
+        detail={"document_id": document_id, "celery_task_id": celery_task_id},
+    )
+    return {
+        "status": "queued",
+        "celery_task_id": celery_task_id,
+        "document_id": document_id,
+    }
+
+
+@router.post("/documents/{document_id}/multimodal-reindex", status_code=status.HTTP_200_OK)
+async def multimodal_reindex_library_document_endpoint(
+    document_id: int,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """
+    Enfile le retraitement multimodal : pymupdf + mistral-small, 1 chunk/page additif.
+    Les chunks existants (OCR) sont conservés ; les anciens chunks multimodal sont remplacés.
+    """
+    if not settings.MULTIMODAL_ENABLED:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Retraitement multimodal désactivé (MULTIMODAL_ENABLED=false).",
+        )
+    if not settings.MISTRAL_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="MISTRAL_API_KEY requise pour le retraitement multimodal.",
+        )
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document non trouvé",
+        )
+    if document.document_type != "document" or not document.source_file_path:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Retraitement réservé aux documents avec fichier source.",
+        )
+    mark_document_multimodal_queued(session, document_id, current_user.id)
+    try:
+        celery_task_id = dispatch_multimodal_reindex_library(
+            document_id, current_user.id
+        )
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(e),
+        )
+    log_admin_action(
+        user_id=current_user.id,
+        action="library.multimodal_reindex_document",
         detail={"document_id": document_id, "celery_task_id": celery_task_id},
     )
     return {

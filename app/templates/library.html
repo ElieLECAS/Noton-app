@@ -625,6 +625,8 @@ endblock %} {% block content %}
         <div class="text-xs text-gray-500">${
             d.processing_status === "reindex_queued"
                 ? `<span class="text-amber-700 dark:text-amber-400">En attente de retraitement</span> — index actuel conservé (${d.processing_progress ?? 0}%)`
+                : d.processing_status === "multimodal_queued"
+                  ? `<span class="text-violet-700 dark:text-violet-400">En attente retraitement multimodal</span> — chunks actuels conservés (${d.processing_progress ?? 0}%)`
                 : d.processing_status === "cancelled" ||
                     d.processing_status === "cancelled_by_user"
                   ? `<span class="text-red-700 dark:text-red-400">Traitement arrêté</span>${formatProcessingSnapshotLine(d)}`
@@ -643,17 +645,29 @@ endblock %} {% block content %}
                       ? `<button
                       type="button"
                       class="text-amber-700 dark:text-amber-400 text-sm disabled:opacity-40 disabled:pointer-events-none"
-                      ${d.processing_status === "processing" || d.processing_status === "reindex_queued" ? "disabled" : ""}
+                      ${d.processing_status === "processing" || d.processing_status === "reindex_queued" || d.processing_status === "multimodal_queued" ? "disabled" : ""}
                       onclick="reindexDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')"
                       title="Re-extraire et réindexer (chunks, embeddings, KAG)"
                     >Retraiter</button>`
                       : ""
               }
               ${
+                  d.document_type === "document" && isAdminUser
+                      ? `<button
+                      type="button"
+                      class="text-violet-700 dark:text-violet-400 text-sm disabled:opacity-40 disabled:pointer-events-none"
+                      ${d.processing_status === "processing" || d.processing_status === "reindex_queued" || d.processing_status === "multimodal_queued" ? "disabled" : ""}
+                      onclick="reindexMultimodalDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')"
+                      title="Ajouter 1 chunk/page (pymupdf + Mistral Small) sans supprimer l'index actuel"
+                    >Retraiter multimodal</button>`
+                      : ""
+              }
+              ${
                   isAdminUser &&
                   (d.processing_status === "pending" ||
                       d.processing_status === "processing" ||
-                      d.processing_status === "reindex_queued")
+                      d.processing_status === "reindex_queued" ||
+                      d.processing_status === "multimodal_queued")
                       ? `<button type="button" class="text-red-700 dark:text-red-400 text-sm" onclick="stopQueueDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')" title="Arrêter le traitement sans supprimer le document">Stop</button>`
                       : ""
               }
@@ -661,7 +675,8 @@ endblock %} {% block content %}
                   isAdminUser &&
                   (d.processing_status === "pending" ||
                       d.processing_status === "processing" ||
-                      d.processing_status === "reindex_queued")
+                      d.processing_status === "reindex_queued" ||
+                      d.processing_status === "multimodal_queued")
                       ? `<button type="button" class="text-orange-700 dark:text-orange-400 text-sm" onclick="skipQueueDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')" title="Ignorer en attente ou arrêter si en cours">Ignorer</button>`
                       : ""
               }
@@ -713,6 +728,45 @@ endblock %} {% block content %}
             return alert(err.detail || "Impossible de supprimer le document.");
         }
 
+        await loadDocuments();
+    }
+
+    async function reindexMultimodalDocument(documentId, documentTitle) {
+        const ok = confirm(
+            `Retraiter multimodal « ${documentTitle} » ?\n\n` +
+                "Ajoute 1 chunk synthétique par page (pymupdf + Mistral Small). " +
+                "Les chunks existants sont conservés ; les anciens chunks multimodal seront remplacés. " +
+                "Coût API : 1 appel Mistral par page. Traitement en arrière-plan.",
+        );
+        if (!ok) return;
+
+        const r = await api(
+            `/api/library/documents/${documentId}/multimodal-reindex`,
+            { method: "POST" },
+        );
+        const err = await r.json().catch(() => ({}));
+
+        if (r.status === 503) {
+            return alert(
+                err.detail ||
+                    "Service de tâches indisponible. Réessayez plus tard.",
+            );
+        }
+        if (!r.ok) {
+            return alert(
+                err.detail || "Impossible de lancer le retraitement multimodal.",
+            );
+        }
+
+        const data = err;
+        if (data.status === "queued" && data.celery_task_id) {
+            alert(
+                "Retraitement multimodal en file d’attente.\n" +
+                    `Tâche : ${data.celery_task_id}`,
+            );
+        } else {
+            alert("Retraitement multimodal demandé.");
+        }
         await loadDocuments();
     }
 

@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 # En file d’attente de réindexation : chunks et embeddings actuels restent servis jusqu’au début effectif du worker.
 DOCUMENT_STATUS_REINDEX_QUEUED = "reindex_queued"
+DOCUMENT_STATUS_MULTIMODAL_QUEUED = "multimodal_queued"
 # Arrêt explicite (sans suppression) ou file ignorée.
 DOCUMENT_STATUS_CANCELLED_BY_USER = "cancelled_by_user"
 DOCUMENT_STATUS_SKIPPED = "skipped"
@@ -42,6 +43,7 @@ LIBRARY_QUEUE_ACTIVE_STATUSES = frozenset(
         "pending",
         "processing",
         DOCUMENT_STATUS_REINDEX_QUEUED,
+        DOCUMENT_STATUS_MULTIMODAL_QUEUED,
     }
 )
 
@@ -240,7 +242,7 @@ def skip_library_document_processing(
 
 
 def stop_all_library_documents_processing(session: Session, user_id: int) -> dict:
-    """Annule tous les documents encore en file (pending / processing / reindex_queued)."""
+    """Annule tous les documents encore en file (pending / processing / reindex_queued / multimodal_queued)."""
     from app.services.library_service import get_or_create_user_library
     from app.services.document_run import refresh_document_processing_run_id
 
@@ -663,6 +665,161 @@ def mark_document_reindex_queued(session: Session, document_id: int, user_id: in
     session.add(document)
     session.commit()
     return True
+
+
+def mark_document_multimodal_queued(session: Session, document_id: int, user_id: int) -> bool:
+    """Marque un document en attente de retraitement multimodal (chunks OCR inchangés)."""
+    from app.services.library_service import get_or_create_user_library
+
+    library = get_or_create_user_library(session, user_id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if not document:
+        return False
+    document.processing_status = DOCUMENT_STATUS_MULTIMODAL_QUEUED
+    document.processing_progress = 0
+    document.updated_at = datetime.utcnow()
+    session.add(document)
+    session.commit()
+    return True
+
+
+def multimodal_reindex_library_document(
+    document_id: int, user_id: int, run_id: Optional[str] = None
+) -> dict:
+    """
+    Ajoute des chunks page_multimodal_summary (1/page) via pymupdf + mistral-small.
+    Ne modifie pas les chunks existants ; remplace les anciens chunks multimodal à la relance.
+    """
+    from app.services.document_run import is_processing_run_current
+    from app.services.file_conversion import ensure_pdf_for_ocr
+    from app.services.multimodal_page_service import (
+        append_multimodal_page_chunks,
+        build_multimodal_pages_for_pdf,
+        delete_multimodal_chunks_for_document,
+        embed_new_multimodal_chunks,
+    )
+
+    if not settings.MULTIMODAL_ENABLED:
+        raise ValueError(
+            "Le retraitement multimodal est désactivé (MULTIMODAL_ENABLED=false)."
+        )
+
+    ld = get_library_document_logger()
+    ld.info(
+        "[Multimodal] Démarrage document_id=%s user_id=%s",
+        document_id,
+        user_id,
+    )
+    if run_id is not None and not is_processing_run_current(document_id, run_id):
+        return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
+
+    with Session(engine) as session:
+        document = session.get(Document, document_id)
+        if not document:
+            raise ValueError("Document introuvable ou accès refusé")
+        library = session.get(Library, document.library_id)
+        if not library:
+            raise ValueError("Document introuvable ou accès refusé")
+        if library.is_global:
+            pass
+        elif library.user_id == user_id or document.user_id == user_id:
+            pass
+        else:
+            raise ValueError("Document introuvable ou accès refusé")
+        if not document.source_file_path:
+            raise ValueError("Aucun fichier source enregistré pour ce document")
+        src = Path(document.source_file_path)
+        if not src.is_file():
+            raise ValueError("Fichier source introuvable sur le disque")
+        title = document.title or ""
+
+        delete_multimodal_chunks_for_document(session, document_id, commit=True)
+        document = session.get(Document, document_id)
+        if not document:
+            raise ValueError("Document introuvable après nettoyage multimodal")
+
+        document.processing_status = "processing"
+        document.processing_progress = 10
+        document.updated_at = datetime.utcnow()
+        session.add(document)
+        session.commit()
+
+    try:
+        pdf_input = ensure_pdf_for_ocr(str(src))
+        ld.info("[Multimodal] document_id=%s PDF=%s", document_id, pdf_input)
+
+        page_contents = build_multimodal_pages_for_pdf(pdf_input, title)
+
+        if run_id is not None and not is_processing_run_current(document_id, run_id):
+            return {
+                "document_id": document_id,
+                "status": "aborted",
+                "reason": "stale_run",
+            }
+
+        if not page_contents:
+            raise ValueError("Aucune page synthétisée")
+
+        with Session(engine) as session:
+            document = session.get(Document, document_id)
+            if not document:
+                raise ValueError("Document introuvable")
+            chunks = append_multimodal_page_chunks(session, document, page_contents)
+            document.processing_progress = 90
+            document.updated_at = datetime.utcnow()
+            session.add(document)
+            session.commit()
+            chunk_count = len(chunks)
+
+        if run_id is not None and not is_processing_run_current(document_id, run_id):
+            return {
+                "document_id": document_id,
+                "status": "aborted",
+                "reason": "stale_run",
+                "chunks": chunk_count,
+            }
+
+        embed_new_multimodal_chunks(document_id)
+
+        with Session(engine) as session:
+            document = session.get(Document, document_id)
+            if document:
+                document.processing_status = "completed"
+                document.processing_progress = 100
+                document.updated_at = datetime.utcnow()
+                session.add(document)
+                session.commit()
+
+        ld.info(
+            "[Multimodal] document_id=%s — FIN OK chunks=%s",
+            document_id,
+            chunk_count,
+        )
+        return {
+            "document_id": document_id,
+            "chunks": chunk_count,
+            "status": "completed",
+        }
+    except Exception as e:
+        logger.error(
+            "multimodal_reindex échec document_id=%s: %s",
+            document_id,
+            e,
+            exc_info=True,
+        )
+        with Session(engine) as session:
+            d = session.get(Document, document_id)
+            if d:
+                d.processing_status = "failed"
+                d.updated_at = datetime.utcnow()
+                session.add(d)
+                session.commit()
+        raise
 
 
 def mark_all_eligible_documents_reindex_queued(user_id: int) -> int:
@@ -1531,5 +1688,24 @@ def enqueue_reindex_all_library_documents_thread(user_id: int) -> None:
     threading.Thread(
         target=_runner,
         name=f"reindex-all-library-{user_id}",
+        daemon=True,
+    ).start()
+
+
+def enqueue_multimodal_reindex_library_document_thread(
+    document_id: int, user_id: int, run_id: Optional[str] = None
+) -> None:
+    """Exécute le retraitement multimodal dans un thread d'arrière-plan."""
+    def _runner():
+        try:
+            multimodal_reindex_library_document(document_id, user_id, run_id)
+        except Exception:
+            logger.exception(
+                "Thread multimodal_reindex échec document_id=%s", document_id
+            )
+
+    threading.Thread(
+        target=_runner,
+        name=f"multimodal-reindex-document-{document_id}",
         daemon=True,
     ).start()
