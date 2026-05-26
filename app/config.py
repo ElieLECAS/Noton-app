@@ -117,14 +117,6 @@ class Settings(BaseSettings):
     BM25_B: float = 0.75
     BM25_MAX_QUERY_TERMS: int = 15
 
-    # Exact reference guardrails (intent=exact_reference)
-    EXACT_REF_FORCE_RERANK: bool = True       # Désactive early-stop si intent=exact_reference
-    EXACT_REF_EXACT_MATCH_BONUS: float = 1.5  # Bonus score si chunk contient ref exacte
-    EXACT_REF_PENALTY_COMPETITOR: float = 0.4 # Facteur multiplicatif pénalité gamme concurrente
-
-    # Feedback boost — pondération temporelle
-    FEEDBACK_HALFLIFE_DAYS: int = 30  # Demi-vie en jours (0 = désactivé)
-
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod
     def parse_database_echo(cls, v: Union[str, bool, None]) -> bool:

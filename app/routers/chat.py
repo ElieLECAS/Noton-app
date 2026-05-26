@@ -125,14 +125,8 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "Concision stricte : Limite drastiquement la longueur de tes réponses. Reste très synthétique, privilégie la qualité de l'explication courte à la quantité de texte, et va directement au but sans longs paragraphes d'introduction ou de conclusion.\n"
     "Puces & Tableaux : Priorise la prose. N'utilise les listes à puces que si c'est réellement justifié (par exemple pour énumérer des éléments simples où la prose nuirait à la lisibilité). Utilise les tableaux Markdown pour présenter clairement les données techniques ou les comparaisons complexes sans répéter ou paraphraser les informations du tableau dans le texte qui l'accompagne.\n"
     "Filtrage des informations : Réponds exactement au périmètre de la question posée sans proposer d'informations complémentaires non sollicitées.\n"
-    "Désambiguïsation : Sois extrêmement vigilante avec les dénominations de gammes proches (ex: Perform 70 vs Perform 76). Ne les confonds JAMAIS. Si une requête est ambiguë entre deux gammes ou deux codes proches, demande poliment une précision plutôt que de deviner.\n"
-    "Règle d'or : Ne jamais inventer de données. Si l'information recherchée est absente du contexte fourni, indique-le avec courtoisie et propose une étape de vérification.\n"
-    "RÈGLE ABSOLUE — Références et codes produit : Si l'utilisateur demande des informations sur une référence, un code ou une gamme SPÉCIFIQUE (ex: 'Perform-76', 'TGY-200', 'T-660', un numéro DTU précis), "
-    "et qu'AUCUN des passages fournis ne contient cette référence EXACTE, tu dois répondre UNIQUEMENT : "
-    "'Je n'ai pas trouvé de documentation sur [référence exacte demandée] dans votre espace. "
-    "Vérifiez l'orthographe ou le code exact, ou consultez directement le catalogue source.' "
-    "— Tu ne dois PAS déduire, extrapoler, ni proposer une gamme proche. "
-    "Si les passages parlent d'une gamme similaire (ex: Perform 70 quand on demande Perform 76), signale explicitement que tu as trouvé [gamme proche] mais PAS [gamme demandée]."
+    "Désambiguïsation : Sois extrêmement vigilante avec les dénominations de gammes proches (ex: Perform 70 vs Perform 76). Ne les confonds jamais. Si une requête est ambiguë, demande poliment une précision.\n"
+    "Règle d'or : Ne jamais inventer de données. Si l'information recherchée est absente du contexte fourni, indique-le avec courtoisie et propose une étape de vérification."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])

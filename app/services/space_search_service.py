@@ -827,15 +827,10 @@ def apply_feedback_boost(
     """
     Ajuste les scores des passages basés sur les retours utilisateurs 👍/👎.
     Boost modéré pour les passages utiles, pénalité pour les passages incorrects.
-
-    Pondération temporelle (P1-C) : les feedbacks anciens sont atténués par une
-    décroissance exponentielle de demi-vie FEEDBACK_HALFLIFE_DAYS (défaut: 30 jours).
-    FEEDBACK_HALFLIFE_DAYS=0 désactive la pondération temporelle.
     """
     if not passages:
         return passages
 
-    from datetime import datetime, timezone
     from app.models.message_feedback import MessageFeedback
 
     # 1. Identifier tous les chunk_ids présents dans les passages candidats
@@ -848,42 +843,27 @@ def apply_feedback_boost(
     if not candidate_chunk_ids:
         return passages
 
-    # 2. Récupérer tous les feedbacks pour cet espace (avec created_at pour pondération temporelle)
+    # 2. Récupérer tous les feedbacks pour cet espace
     feedbacks = session.exec(
-        select(MessageFeedback.is_positive, MessageFeedback.chunk_ids, MessageFeedback.created_at)
+        select(MessageFeedback.is_positive, MessageFeedback.chunk_ids)
         .where(MessageFeedback.space_id == space_id)
     ).all()
 
-    halflife = settings.FEEDBACK_HALFLIFE_DAYS
-    now_utc = datetime.now(timezone.utc)
-
-    # 3. Compter les 👍/👎 par chunk avec pondération temporelle
-    chunk_stats: Dict[int, Dict[str, float]] = {}
-    for is_positive, chunk_ids_list, created_at in feedbacks:
+    # 3. Compter les 👍/👎 par chunk
+    chunk_stats = {}
+    for is_positive, chunk_ids_list in feedbacks:
         if not chunk_ids_list:
             continue
-        # Calcul du poids temporel (1.0 si halflife désactivé)
-        if halflife > 0 and created_at is not None:
-            # S'assurer que created_at est timezone-aware
-            if created_at.tzinfo is None:
-                created_at_utc = created_at.replace(tzinfo=timezone.utc)
-            else:
-                created_at_utc = created_at
-            age_days = max(0.0, (now_utc - created_at_utc).total_seconds() / 86400)
-            time_weight = 0.5 ** (age_days / halflife)
-        else:
-            time_weight = 1.0
-
         for cid in chunk_ids_list:
             if cid in candidate_chunk_ids:
                 if cid not in chunk_stats:
-                    chunk_stats[cid] = {"positive": 0.0, "negative": 0.0}
+                    chunk_stats[cid] = {"positive": 0, "negative": 0}
                 if is_positive:
-                    chunk_stats[cid]["positive"] += time_weight
+                    chunk_stats[cid]["positive"] += 1
                 else:
-                    chunk_stats[cid]["negative"] += time_weight
+                    chunk_stats[cid]["negative"] += 1
 
-    # 4. Appliquer le boost/pénalité sur le score normalisé
+    # 4. Appliquer le boost/pénalité
     # Boost : +0.15 * ratio si ratio > 0, Pénalité : -0.10 * |ratio| si ratio < 0
     for p in passages:
         cid = p.get("source_leaf_chunk_id") or p.get("chunk_id")
@@ -897,115 +877,16 @@ def apply_feedback_boost(
                 if ratio > 0:
                     boost = 0.15 * ratio
                 else:
-                    boost = 0.10 * ratio  # ratio négatif → pénalité
+                    boost = 0.10 * ratio  # ratio est négatif, donc boost sera négatif (pénalité)
+                
                 p["score"] = float(p.get("score") or 0.0) + boost
                 logger.info(
-                    "Feedback boost (temporel) chunk %d : +%.2f/-%.2f (ratio=%.2f, boost=%.3f)",
+                    "Feedback boost appliqué au chunk %d : +%d/-%d (ratio=%.2f, boost=%.3f)",
                     cid, pos, neg, ratio, boost
                 )
 
     # 5. Re-trier
     passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
-    return passages
-
-
-def _build_competitor_patterns(
-    detected_refs: List[str],
-) -> List[re.Pattern]:
-    """
-    Construit les patterns regex des gammes "concurrentes" proches des références demandées.
-
-    Exemple : si on cherche "Perform-76", les concurrents sont les autres variantes
-    de Perform (Perform-70, Perform 80, etc.) mais PAS Perform-76 lui-même.
-
-    Stratégie : pour chaque référence, extraire la racine alphanumérique et construire
-    un pattern qui matche la même famille SANS la référence exacte.
-    """
-    if not detected_refs:
-        return []
-
-    competitor_patterns: List[re.Pattern] = []
-    for ref in detected_refs:
-        # Extraire la racine : partie alphabétique avant les chiffres (ex: "Perform" depuis "Perform-76")
-        root_match = re.match(r'^([A-Za-z]+)', ref.strip())
-        if not root_match:
-            continue
-        root = root_match.group(1)
-        if len(root) < 3:  # Trop court = trop de faux positifs
-            continue
-        # Pattern : même racine + séparateur optionnel + chiffres différents du suffix de ref
-        # On extrait le suffix numérique de ref pour l'exclure
-        suffix_match = re.search(r'(\d+)', ref)
-        if not suffix_match:
-            continue
-        exact_suffix = suffix_match.group(1)
-        # Pattern "même famille mais pas le même numéro"
-        # ex: Perform(?:[\s\-]?)(?!76\b)\d{2,3}
-        pattern_str = (
-            rf'\b{re.escape(root)}'
-            rf'[\s\-\.]*'
-            rf'(?!{re.escape(exact_suffix)}\b)'
-            rf'\d{{2,3}}\b'
-        )
-        try:
-            competitor_patterns.append(re.compile(pattern_str, re.IGNORECASE))
-        except re.error:
-            logger.debug("Pattern concurrent invalide pour ref '%s', ignoré", ref)
-    return competitor_patterns
-
-
-def apply_exact_ref_scoring(
-    passages: List[Dict],
-    detected_refs: List[str],
-    *,
-    bonus: float = 1.5,
-    competitor_penalty: float = 0.4,
-) -> List[Dict]:
-    """
-    Pour les requêtes intent=exact_reference :
-    - Bonus massif (+bonus) si le passage contient la référence exacte demandée
-    - Pénalité multiplicative (*competitor_penalty) si le passage contient une
-      référence concurrente de la même famille mais avec un numéro différent.
-
-    Les deux modifications sont cumulatives si un chunk contient les deux (rare).
-    """
-    if not passages or not detected_refs:
-        return passages
-
-    ref_patterns = [
-        re.compile(r'\b' + re.escape(r) + r'\b', re.IGNORECASE)
-        for r in detected_refs
-    ]
-    competitor_patterns = _build_competitor_patterns(detected_refs)
-
-    for p in passages:
-        content = (p.get("passage_raw") or p.get("passage") or "").lower()
-        has_exact = any(pat.search(content) for pat in ref_patterns)
-        has_competitor = bool(competitor_patterns) and any(
-            pat.search(content) for pat in competitor_patterns
-        )
-
-        score = float(p.get("score") or 0.0)
-        if has_exact:
-            score += bonus
-            logger.debug(
-                "exact_ref_scoring: +%.2f bonus (chunk_id=%s, refs=%s)",
-                bonus, p.get("chunk_id"), detected_refs
-            )
-        if has_competitor and not has_exact:
-            # Pénalité uniquement si la ref exacte est absente
-            score *= competitor_penalty
-            logger.debug(
-                "exact_ref_scoring: *%.2f pénalité concurrent (chunk_id=%s)",
-                competitor_penalty, p.get("chunk_id")
-            )
-        p["score"] = score
-
-    passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
-    logger.info(
-        "apply_exact_ref_scoring: %d passages triés (refs=%s, bonus=%.2f, penalty=%.2f)",
-        len(passages), detected_refs, bonus, competitor_penalty
-    )
     return passages
 
 
@@ -1161,20 +1042,6 @@ async def search_relevant_passages(
             passages, query_text, reasoning_result=reasoning_result
         )
         passages = apply_feedback_boost(passages, space_id, session)
-
-        # P0-C : Bonus exact-match + pénalité gamme concurrente si intent=exact_reference
-        is_exact_ref = (
-            reasoning_result.intent == "exact_reference"
-            and bool(getattr(reasoning_result, "detected_refs", None))
-        )
-        if is_exact_ref:
-            passages = apply_exact_ref_scoring(
-                passages,
-                reasoning_result.detected_refs,
-                bonus=settings.EXACT_REF_EXACT_MATCH_BONUS,
-                competitor_penalty=settings.EXACT_REF_PENALTY_COMPETITOR,
-            )
-
         if not passages:
             fallback_passages = await _keyword_fallback_passages(
                 session, space_id, user_id, query_text, k
@@ -1182,35 +1049,19 @@ async def search_relevant_passages(
             return {"passages": fallback_passages, "status": "ok", "reason": "fallback_keyword"}
 
         # === RERANKER + MMR ===
-
-        # P0-B : Pour les requêtes exact_reference, toujours forcer le reranker
-        # (même si les scores RRF sont déjà élevés, le reranker est le seul à détecter
-        # la preuve exacte dans le texte)
-        is_exact_ref_rerank_forced = (
-            is_exact_ref and settings.EXACT_REF_FORCE_RERANK
-        )
-
+        
         # Early stopping : court-circuite le reranker si scores RRF déjà excellents
-        # P1-B : opère sur raw_rrf_score (brut) et non sur le score normalisé+boosté
-        if settings.RERANKER_ENABLED and not is_exact_ref_rerank_forced:
+        if settings.RERANKER_ENABLED:
             with trace_run(
                 "early_stopping",
                 run_type="chain",
-                inputs={
-                    "top_n": settings.EARLY_STOP_TOP_N,
-                    "threshold": settings.EARLY_STOP_MEAN_THRESHOLD,
-                    "exact_ref_forced": is_exact_ref_rerank_forced,
-                },
+                inputs={"top_n": settings.EARLY_STOP_TOP_N, "threshold": settings.EARLY_STOP_MEAN_THRESHOLD},
                 tags=["rerank", "early_stop"],
             ) as es:
-                # P1-B : utiliser raw_rrf_score si disponible (non affecté par boosts amont)
-                rrf_scores = [
-                    p.get("raw_rrf_score", p["score"])
-                    for p in passages[:settings.EARLY_STOP_TOP_N]
-                ]
+                rrf_scores = [p["score"] for p in passages[:settings.EARLY_STOP_TOP_N]]
                 should_stop = reranker_service.should_early_stop(rrf_scores, settings.EARLY_STOP_MEAN_THRESHOLD)
                 es.end(outputs={"triggered": should_stop})
-
+                
                 if should_stop:
                     logger.info("Early stop activé : scores RRF déjà excellents, skip rerank + MMR")
                     filtered_passages = filter_passages_by_rrf_score(
@@ -1225,11 +1076,6 @@ async def search_relevant_passages(
                         "status": "early_stopped",
                         "reason": "mean_score_above_threshold",
                     }
-        elif is_exact_ref_rerank_forced:
-            logger.info(
-                "Early stop DÉSACTIVÉ : intent=exact_reference (refs=%s), reranker forcé",
-                getattr(reasoning_result, 'detected_refs', []),
-            )
         
         # Reranker cross-encoder (sur le pool, pas sur tout)
         if settings.RERANKER_ENABLED:
