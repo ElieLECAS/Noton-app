@@ -106,31 +106,47 @@ def rerank_nodes(
     *,
     char_cap: int,
     batch_size: int,
+    detected_refs: Optional[List[str]] = None,
 ) -> List[Tuple[NodeWithScore, float]]:
     """
     Rerank un pool de nœuds avec le cross-encoder.
-    
+
     Args:
         query_text: Question de l'utilisateur
         nodes_with_score: Pool de candidats à reranker
         char_cap: Limite de caractères par passage (évite over-feeding)
         batch_size: Taille de batch pour CrossEncoder.predict
-        
+        detected_refs: Références produit détectées (P1-D). Si un chunk contient
+            une référence exacte, le préfixe [MATCH_REF] est ajouté au texte de
+            la paire pour sensibiliser le cross-encoder.
+
     Returns:
         Liste (nœud, score_cross_encoder) triée par score décroissant
     """
     if not nodes_with_score:
         return []
-    
+
     model = _get_cross_encoder()
-    
+
+    # Pré-compiler les patterns de référence exacte (P1-D)
+    ref_patterns = []
+    if detected_refs:
+        import re
+        ref_patterns = [
+            re.compile(r'\b' + re.escape(r) + r'\b', re.IGNORECASE)
+            for r in detected_refs
+        ]
+
     # Tronquer le texte de chaque nœud à char_cap
     pairs = []
     for nws in nodes_with_score:
         text = getattr(nws.node, "text", "") or ""
         truncated = text[:char_cap] if len(text) > char_cap else text
+        # P1-D : préfixe [MATCH_REF] si le chunk contient la référence exacte demandée
+        if ref_patterns and any(pat.search(truncated) for pat in ref_patterns):
+            truncated = f"[MATCH_REF] {truncated}"
         pairs.append([query_text, truncated])
-    
+
     # Batch predict
     try:
         raw_scores = model.predict(
@@ -142,19 +158,20 @@ def rerank_nodes(
         logger.exception("Échec rerank cross-encoder : %s", e)
         # Fallback : garder les scores RRF originaux
         return [(nws, float(nws.score or 0.0)) for nws in nodes_with_score]
-    
+
     # Associer chaque nœud à son score cross-encoder
     scored = list(zip(nodes_with_score, raw_scores))
     # Trier par score décroissant
     scored.sort(key=lambda x: x[1], reverse=True)
-    
+
     logger.info(
-        "Rerank cross-encoder : %d candidats → top-1 score=%.3f, top-3 scores=%s",
+        "Rerank cross-encoder : %d candidats → top-1 score=%.3f, top-3 scores=%s%s",
         len(scored),
         scored[0][1] if scored else 0.0,
         [round(s, 3) for _, s in scored[:3]],
+        f" (MATCH_REF actif: {detected_refs})" if detected_refs else "",
     )
-    
+
     return scored
 
 
