@@ -26,6 +26,7 @@ from datetime import datetime
 import json
 import logging
 import os
+import httpx
 
 logger = logging.getLogger(__name__)
 
@@ -113,6 +114,9 @@ RAG_TOP_K = _int_env("RAG_TOP_K", 8)
 SPACE_CHAT_MAX_TOKENS = 1200
 SPACE_CHAT_TEMPERATURE = 0.1
 SPACE_CHAT_TOP_P = None
+SPACE_CONTEXT_MAX_CHARS = _int_env("SPACE_CONTEXT_MAX_CHARS", 18000)
+SPACE_CONTEXT_MAX_PASSAGE_CHARS = _int_env("SPACE_CONTEXT_MAX_PASSAGE_CHARS", 1800)
+SPACE_HISTORY_MAX_CHARS = _int_env("SPACE_HISTORY_MAX_CHARS", 8000)
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_CHAT_SYSTEM_PROMPT = (
     "Tu es LIA, l'assistante experte de PROFERM. Ton rôle est d'accompagner les collaborateurs et les clients de manière chaleureuse, professionnelle et précise sur nos produits et services.\n"
@@ -273,6 +277,67 @@ class SpaceChatRequest(BaseModel):
     conversation_id: Optional[int] = None
 
 
+def _truncate_text(value: str, max_chars: int) -> str:
+    if max_chars <= 0:
+        return ""
+    if len(value) <= max_chars:
+        return value
+    return value[: max_chars - 1] + "…"
+
+
+def _sanitize_context_messages(messages: Optional[List[dict]], *, max_messages: int = 10) -> List[dict]:
+    if not messages:
+        return []
+    cleaned: List[dict] = []
+    used_chars = 0
+    for msg in reversed(messages[-max_messages:]):
+        if not isinstance(msg, dict):
+            continue
+        role = msg.get("role")
+        if role not in {"system", "user", "assistant"}:
+            continue
+        content_raw = msg.get("content", "")
+        if isinstance(content_raw, str):
+            content = content_raw
+        else:
+            content = json.dumps(content_raw, ensure_ascii=False)
+        if not content.strip():
+            continue
+
+        remaining = SPACE_HISTORY_MAX_CHARS - used_chars
+        if remaining <= 0:
+            break
+        if len(content) > remaining:
+            content = _truncate_text(content, remaining)
+        cleaned.append({"role": role, "content": content})
+        used_chars += len(content)
+
+    cleaned.reverse()
+    return cleaned
+
+
+def _load_conversation_context(
+    session: Session,
+    conversation_id: int,
+    *,
+    max_messages: int = 12,
+) -> List[dict]:
+    rows = (
+        session.exec(
+            select(Message)
+            .where(Message.conversation_id == conversation_id)
+            .order_by(Message.id.desc())
+            .limit(max_messages)
+        )
+        .all()
+    )
+    rows = list(reversed(rows))
+    return _sanitize_context_messages(
+        [{"role": r.role, "content": r.content} for r in rows if r.content],
+        max_messages=max_messages,
+    )
+
+
 def build_space_context_from_passages(passages: List[dict]) -> dict:
     """
     Construit le contexte système à partir des passages RAG + KAG rerankés.
@@ -286,14 +351,21 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
     if passages:
         system_message["content"] += "\n\nPASSAGES :\n\n"
         passages_content = []
+        used_chars = 0
         for i, passage_data in enumerate(passages, 1):
-            passage = passage_data['passage']
+            passage = str(passage_data.get("passage") or "")
+            if not passage:
+                continue
+            passage = _truncate_text(passage, SPACE_CONTEXT_MAX_PASSAGE_CHARS)
             score = passage_data.get('score', 0.0)
             document_title = passage_data.get('document_title', 'Document sans titre')
             passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
+            if used_chars + len(passage_text) > SPACE_CONTEXT_MAX_CHARS:
+                break
             passages_content.append(passage_text)
+            used_chars += len(passage_text)
         system_message["content"] += "\n---\n".join(passages_content)
-        system_message["content"] += f"\n\n({len(passages)} passages.)"
+        system_message["content"] += f"\n\n({len(passages_content)} passages.)"
     else:
         system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
 
@@ -392,8 +464,27 @@ async def stream_space_chat_message(
 
     full_context_draft = []
     full_context_draft.append(space_context_draft)
-    if request.context:
-        full_context_draft.extend(request.context[-10:])
+
+    conversation_context: List[dict] = []
+    if request.conversation_id:
+        conversation_context = _load_conversation_context(
+            session,
+            request.conversation_id,
+            max_messages=12,
+        )
+    elif request.context:
+        conversation_context = _sanitize_context_messages(request.context, max_messages=10)
+
+    # Si le dernier message contexte est déjà le user courant (persisté juste avant),
+    # on évite de le dupliquer.
+    if (
+        conversation_context
+        and conversation_context[-1].get("role") == "user"
+        and str(conversation_context[-1].get("content", "")).strip() == request.message.strip()
+    ):
+        conversation_context = conversation_context[:-1]
+
+    full_context_draft.extend(conversation_context)
     full_context_draft.append({"role": "user", "content": request.message})
 
     _pipeline_inputs_space = {
@@ -431,14 +522,56 @@ async def stream_space_chat_message(
                     },
                     tags=["llm", "draft", "space"]
                 ) as draft_run:
-                    draft_res = await mistral_chat(
-                        "",
-                        forced_model,
-                        full_context_draft,
-                        max_tokens=SPACE_CHAT_MAX_TOKENS,
-                        temperature=SPACE_CHAT_TEMPERATURE,
-                        top_p=SPACE_CHAT_TOP_P,
-                    )
+                    try:
+                        draft_res = await mistral_chat(
+                            "",
+                            forced_model,
+                            full_context_draft,
+                            max_tokens=SPACE_CHAT_MAX_TOKENS,
+                            temperature=SPACE_CHAT_TEMPERATURE,
+                            top_p=SPACE_CHAT_TOP_P,
+                        )
+                    except httpx.HTTPStatusError as exc:
+                        # Certains historiques peuvent contenir des messages incompatibles
+                        # avec l'API Mistral (ou trop volumineux) et provoquer un 400.
+                        if exc.response is not None and exc.response.status_code == 400:
+                            logger.warning(
+                                "Mistral 400 en draft_generation, fallback sans historique (space_id=%s, conv_id=%s)",
+                                space_id,
+                                request.conversation_id,
+                            )
+                            fallback_context = [space_context_draft, {"role": "user", "content": request.message}]
+                            try:
+                                draft_res = await mistral_chat(
+                                    "",
+                                    forced_model,
+                                    fallback_context,
+                                    max_tokens=SPACE_CHAT_MAX_TOKENS,
+                                    temperature=SPACE_CHAT_TEMPERATURE,
+                                    top_p=SPACE_CHAT_TOP_P,
+                                )
+                            except httpx.HTTPStatusError as fallback_exc:
+                                if (
+                                    fallback_exc.response is not None
+                                    and fallback_exc.response.status_code == 400
+                                ):
+                                    logger.warning(
+                                        "Mistral 400 persistant, fallback minimal sans RAG (space_id=%s, conv_id=%s)",
+                                        space_id,
+                                        request.conversation_id,
+                                    )
+                                    draft_res = await mistral_chat(
+                                        "",
+                                        forced_model,
+                                        [{"role": "user", "content": request.message}],
+                                        max_tokens=SPACE_CHAT_MAX_TOKENS,
+                                        temperature=SPACE_CHAT_TEMPERATURE,
+                                        top_p=SPACE_CHAT_TOP_P,
+                                    )
+                                else:
+                                    raise
+                        else:
+                            raise
                     if "choices" in draft_res and len(draft_res["choices"]) > 0:
                         draft_response = draft_res["choices"][0]["message"].get("content", "").strip()
                     draft_run.end(outputs={"draft_response": draft_response})

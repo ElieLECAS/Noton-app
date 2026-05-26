@@ -49,6 +49,12 @@ async def _post_json_with_retry(
         response = await client.post(url, headers=headers, json=payload)
         last_response = response
         if response.status_code not in RETRYABLE_STATUS_CODES:
+            if response.status_code >= 400:
+                logger.error(
+                    "Mistral API error (%s): %s",
+                    response.status_code,
+                    response.text[:2000],
+                )
             response.raise_for_status()
             return response
         if attempt >= MAX_RETRIES:
