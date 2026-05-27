@@ -120,36 +120,40 @@ def test_generate_faq_from_feedback_task_success(db_session: Session):
     db_session.refresh(feedback)
     
     # Mock Mistral call inside the task
+    from app.config import settings
+    from app.services.document_service_new import FEEDBACK_CORRECTIVE_DOCUMENT_TYPE
+
+    technical_md = """# Joint PVC menuiserie
+
+Pour le PVC, utiliser le joint XL30202 et non la référence T740023 indiquée par erreur dans la réponse initiale.
+
+**Mots-clés :** PVC, joint, XL30202, T740023, menuiserie
+"""
     mock_mistral_response = {
-        "choices": [
-            {
-                "message": {
-                    "content": "Question: Quel joint utiliser pour le PVC ?\nRéponse: Utiliser le joint XL30202 et non T740023."
-                }
-            }
-        ]
+        "choices": [{"message": {"content": technical_md}}]
     }
-    
+
     async def fake_mistral_chat(*args, **kwargs):
         return mock_mistral_response
-        
-    with mock.patch("app.tasks.documents.mistral_chat", fake_mistral_chat):
-        # Run Celery task synchronously
+
+    with mock.patch(
+        "app.services.feedback_knowledge_service.mistral_chat",
+        fake_mistral_chat,
+    ):
         generate_faq_from_feedback_task(feedback.id)
-        
-    # Refresh feedback from DB
+
     db_session.refresh(feedback)
-    
-    # Assert feedback is updated
+
     assert feedback.auto_faq_generated is True
     assert "XL30202" in feedback.auto_faq_content
-    
-    # Assert virtual document is created
+    assert "Question:" not in feedback.auto_faq_content
+
+    expected_title = f"{settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX} - Manuel Technique Joint"
     virtual_doc = db_session.exec(
-        select(Document).where(Document.title == "FAQ Corrective - Manuel Technique Joint")
+        select(Document).where(Document.title == expected_title)
     ).first()
     assert virtual_doc is not None
-    assert virtual_doc.document_type == "written"
+    assert virtual_doc.document_type == FEEDBACK_CORRECTIVE_DOCUMENT_TYPE
     assert virtual_doc.library_id == library.id
     
     # Assert virtual doc is linked to space
@@ -351,8 +355,10 @@ def test_faq_task_idempotent(db_session: Session):
     async def fake_mistral_chat(*args, **kwargs):
         return mock_mistral_response
         
-    with mock.patch("app.tasks.documents.mistral_chat", fake_mistral_chat):
-        # Première exécution
+    with mock.patch(
+        "app.services.feedback_knowledge_service.mistral_chat",
+        fake_mistral_chat,
+    ):
         generate_faq_from_feedback_task(feedback.id)
         
         db_session.refresh(feedback)
@@ -362,8 +368,8 @@ def test_faq_task_idempotent(db_session: Session):
         from app.config import settings
         faq_doc = db_session.exec(
             select(Document).where(
-                Document.title.like(f"{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%"),
-                Document.library_id == library.id
+                Document.title.like(f"{settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX}%"),
+                Document.library_id == library.id,
             )
         ).first()
         assert faq_doc is not None
@@ -409,12 +415,13 @@ def test_technical_search_excludes_faq(db_session: Session):
     )
     db_session.add(doc_tech)
     
-    # Créer un doc FAQ corrective
     from app.config import settings
+    from app.services.document_service_new import FEEDBACK_CORRECTIVE_DOCUMENT_TYPE
+
     doc_faq = Document(
-        title=f"{settings.FAQ_CORRECTIVE_TITLE_PREFIX} - Test",
-        content="Contenu FAQ",
-        document_type="written",
+        title=f"{settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX} - Test",
+        content="Contenu correctif",
+        document_type=FEEDBACK_CORRECTIVE_DOCUMENT_TYPE,
         processing_status="completed",
         processing_progress=100,
         library_id=library.id,
@@ -464,7 +471,8 @@ def test_technical_search_excludes_faq(db_session: Session):
     
     # Vérifier qu'aucune FAQ n'est dans les résultats
     faq_found = any(
-        settings.FAQ_CORRECTIVE_TITLE_PREFIX in p.get("document_title", "")
+        settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX in p.get("document_title", "")
+        or settings.FAQ_CORRECTIVE_TITLE_PREFIX in p.get("document_title", "")
         for p in passages
     )
     assert not faq_found, "Les FAQ correctives ne doivent pas apparaître dans la recherche technique"
@@ -535,4 +543,180 @@ def test_faq_search_below_threshold_skips_critique(client, db_session: Session):
     assert response.status_code == 200
     # Seul le brouillon appelé, pas de critique
     assert call_count == 1
+
+
+def test_feedback_knowledge_prompt_strict_sources_only():
+    """Le prompt interdit l'enrichissement hors question / réponse / commentaire."""
+    from types import SimpleNamespace
+    from app.services.feedback_knowledge_service import (
+        build_feedback_knowledge_prompt,
+        _strip_code_fences,
+        FEEDBACK_KNOWLEDGE_MAX_TOKENS,
+    )
+
+    fb = SimpleNamespace(
+        query_text="Quelle référence clip SOLEAL FY 55 ?",
+        response_text="Utiliser TGA3608 pour 300 kg.",
+        comment="TGA3608 n'est pas la bonne réf pour ce cas.",
+        is_positive=False,
+    )
+    prompt = build_feedback_knowledge_prompt(fb, mode="corrective")
+    assert "N'invente" in prompt
+    assert "1 à 3 phrases" in prompt
+    assert "Quelle référence clip SOLEAL FY 55" in prompt
+    assert "TGA3608 n'est pas la bonne" in prompt
+    assert "Réponse assistant" in prompt
+    assert "## Réponse à retenir" not in prompt
+    assert "**Mots-clés :**" in prompt
+
+    wrapped = "```markdown\n# Titre court\n\nPhrase technique dense.\n\n**Mots-clés :** a, b\n```"
+    stripped = _strip_code_fences(wrapped)
+    assert stripped.startswith("# Titre court")
+    assert "**Mots-clés :**" in stripped
+
+    assert FEEDBACK_KNOWLEDGE_MAX_TOKENS <= 400
+
+
+def test_feedback_knowledge_calls_mistral_with_low_temperature():
+    from types import SimpleNamespace
+    from app.services.feedback_knowledge_service import generate_feedback_knowledge_content
+
+    fb = SimpleNamespace(
+        query_text="Q",
+        response_text="R",
+        comment="C",
+        is_positive=False,
+    )
+    captured = {}
+
+    async def fake_chat(*args, **kwargs):
+        captured.update(kwargs)
+        return {"choices": [{"message": {"content": "# T\n\n## Question\nQ"}}]}
+
+    with mock.patch(
+        "app.services.feedback_knowledge_service.mistral_chat",
+        fake_chat,
+    ):
+        generate_feedback_knowledge_content(fb)
+
+    assert captured.get("temperature") == 0
+    assert captured.get("max_tokens") == 320
+
+
+def test_positive_feedback_without_comment_does_not_generate(db_session: Session):
+    """Un 👍 sans précision ne déclenche pas la génération."""
+    user = create_test_user(db_session, "responsable")
+    space = Space(name="Space Pos", user_id=user.id)
+    db_session.add(space)
+    db_session.commit()
+    db_session.refresh(space)
+
+    feedback = MessageFeedback(
+        message_id=None,
+        user_id=user.id,
+        space_id=space.id,
+        is_positive=True,
+        comment=None,
+        query_text="Question ?",
+        response_text="Bonne réponse.",
+        chunk_ids=[],
+    )
+    db_session.add(feedback)
+    db_session.commit()
+    db_session.refresh(feedback)
+
+    with mock.patch(
+        "app.services.feedback_knowledge_service.generate_feedback_knowledge_content",
+    ) as mock_gen:
+        generate_faq_from_feedback_task(feedback.id)
+        mock_gen.assert_not_called()
+
+    db_session.refresh(feedback)
+    assert feedback.auto_faq_generated is False
+
+
+def test_positive_feedback_with_comment_generates(db_session: Session):
+    """Un 👍 avec précision déclenche la génération de texte technique."""
+    user = create_test_user(db_session, "responsable")
+    from app.services.library_service import get_or_create_user_library
+
+    library = get_or_create_user_library(db_session, user.id)
+    space = Space(name="Space Pos Comment", user_id=user.id)
+    db_session.add(space)
+    db_session.commit()
+    db_session.refresh(space)
+
+    feedback = MessageFeedback(
+        message_id=None,
+        user_id=user.id,
+        space_id=space.id,
+        is_positive=True,
+        comment="Préciser aussi la référence XL30202 pour l'atelier.",
+        query_text="Quel joint ?",
+        response_text="Utiliser XL30202.",
+        chunk_ids=[],
+    )
+    db_session.add(feedback)
+    db_session.commit()
+    db_session.refresh(feedback)
+
+    md = "# Connaissance technique\n\n## Synthèse technique\nXL30202 pour atelier.\n"
+    with mock.patch(
+        "app.services.feedback_knowledge_service.generate_feedback_knowledge_content",
+        return_value=md,
+    ):
+        generate_faq_from_feedback_task(feedback.id)
+
+    db_session.refresh(feedback)
+    assert feedback.auto_faq_generated is True
+    from app.config import settings
+
+    doc = db_session.exec(
+        select(Document).where(
+            Document.library_id == library.id,
+            Document.title.like(f"{settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX}%"),
+        )
+    ).first()
+    assert doc is not None
+    assert doc.document_type == "feedback_corrective"
+
+
+def test_library_excludes_feedback_corrective_documents(db_session: Session):
+    """Les documents correctifs ne sont pas listés dans la bibliothèque."""
+    from app.config import settings
+    from app.services.document_service_new import (
+        FEEDBACK_CORRECTIVE_DOCUMENT_TYPE,
+        get_documents_by_library,
+    )
+    from app.services.library_service import get_or_create_user_library
+
+    user = create_test_user(db_session, "responsable")
+    library = get_or_create_user_library(db_session, user.id)
+
+    normal = Document(
+        title="Manuel visible",
+        content="",
+        document_type="document",
+        processing_status="completed",
+        processing_progress=100,
+        library_id=library.id,
+        user_id=user.id,
+    )
+    hidden = Document(
+        title=f"{settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX} - Cache",
+        content="",
+        document_type=FEEDBACK_CORRECTIVE_DOCUMENT_TYPE,
+        processing_status="completed",
+        processing_progress=100,
+        library_id=library.id,
+        user_id=user.id,
+    )
+    db_session.add(normal)
+    db_session.add(hidden)
+    db_session.commit()
+
+    docs = get_documents_by_library(db_session, library.id, user.id)
+    titles = {d.title for d in docs}
+    assert "Manuel visible" in titles
+    assert hidden.title not in titles
 

@@ -245,6 +245,10 @@ def _send_library_document(
 def _send_multimodal_reindex_library(
     document_id: int, user_id: int, run_id: Optional[str]
 ) -> str:
+    """
+    DEPRECATED: Le pipeline multimodal est maintenant unifié avec le retraitement classique.
+    Cette fonction est conservée temporairement pour compatibilité.
+    """
     from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import multimodal_reindex_library_document_task
 
@@ -462,6 +466,11 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
 
 def dispatch_multimodal_reindex_library(document_id: int, user_id: int) -> str:
     """
+    DEPRECATED: Le pipeline multimodal est maintenant unifié avec le retraitement classique.
+    Utilisez dispatch_reindex_library à la place.
+    
+    Cette fonction est conservée temporairement pour compatibilité.
+    
     Enfile le retraitement multimodal (pymupdf + mistral-small par page).
     """
     run_id: Optional[str] = None

@@ -32,6 +32,8 @@ x-app-env: &app-env
   REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
   CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
   CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
+  CELERY_WORKER_CONCURRENCY: ${CELERY_WORKER_CONCURRENCY:-1}
+  MULTIMODAL_PAGE_CONCURRENCY: ${MULTIMODAL_PAGE_CONCURRENCY:-3}
   TASK_BACKEND_MODE: ${TASK_BACKEND_MODE:-celery}
   KAG_ENABLED: ${KAG_ENABLED:-false}
   KAG_EXTRACTION_PROVIDER: ${KAG_EXTRACTION_PROVIDER:-mistral}
@@ -39,7 +41,7 @@ x-app-env: &app-env
   MULTIMODAL_ENABLED: ${MULTIMODAL_ENABLED:-false}
   MULTIMODAL_PAGE_MODEL: ${MULTIMODAL_PAGE_MODEL:-mistral-small-latest}
   MULTIMODAL_PAGE_DPI: ${MULTIMODAL_PAGE_DPI:-200}
-  MULTIMODAL_PAGE_MAX_TOKENS: ${MULTIMODAL_PAGE_MAX_TOKENS:-3500}
+  MULTIMODAL_PAGE_MAX_TOKENS: ${MULTIMODAL_PAGE_MAX_TOKENS:-6000}
   VISION_MODEL: ${VISION_MODEL:-pixtral-12b-2409}
   VISION_MAX_TOKENS: ${VISION_MAX_TOKENS:-1500}
   VISION_MAX_IMAGES_PER_DOCUMENT: ${VISION_MAX_IMAGES_PER_DOCUMENT:-}
@@ -147,7 +149,7 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     container_name: noton_worker
-    command: sh -c "sleep 10 && celery -A app.celery_app worker -l INFO -Q documents,embeddings,celery -c 1"
+    command: sh -c "sleep 10 && celery -A app.celery_app worker -l INFO -Q documents,embeddings,celery -c $${CELERY_WORKER_CONCURRENCY:-1}"
     volumes: *app-volumes
     env_file:
       - .env

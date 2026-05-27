@@ -87,12 +87,9 @@ def _retrieve_leaves_sql(
         return []
     query_embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
     
-    # Clause de filtre selon le type de document
-    filter_clause = ""
-    if document_filter == "technical":
-        filter_clause = f"AND d.title NOT LIKE '{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%'"
-    elif document_filter == "faq_corrective":
-        filter_clause = f"AND d.title LIKE '{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%'"
+    from app.services.document_service_new import feedback_corrective_sql_filter
+
+    filter_clause = feedback_corrective_sql_filter(document_filter, "d")
 
     sql_query = text(f"""
         SELECT
@@ -261,12 +258,9 @@ def _retrieve_leaves_bm25_sql(
     # Construction d'une requête OR pour websearch_to_tsquery (ex: "vitrage OR soleal")
     or_query = " OR ".join(terms)
     
-    # Clause de filtre selon le type de document
-    filter_clause = ""
-    if document_filter == "technical":
-        filter_clause = f"AND d.title NOT LIKE '{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%'"
-    elif document_filter == "faq_corrective":
-        filter_clause = f"AND d.title LIKE '{settings.FAQ_CORRECTIVE_TITLE_PREFIX}%'"
+    from app.services.document_service_new import feedback_corrective_sql_filter
+
+    filter_clause = feedback_corrective_sql_filter(document_filter, "d")
 
     # Retrieval avec ts_rank_cd + flag 1 (normalisation par log de la longueur)
     sql_query = text(f"""
@@ -1050,33 +1044,6 @@ async def search_relevant_passages(
 
         # === RERANKER + MMR ===
         
-        # Early stopping : court-circuite le reranker si scores RRF déjà excellents
-        if settings.RERANKER_ENABLED:
-            with trace_run(
-                "early_stopping",
-                run_type="chain",
-                inputs={"top_n": settings.EARLY_STOP_TOP_N, "threshold": settings.EARLY_STOP_MEAN_THRESHOLD},
-                tags=["rerank", "early_stop"],
-            ) as es:
-                rrf_scores = [p["score"] for p in passages[:settings.EARLY_STOP_TOP_N]]
-                should_stop = reranker_service.should_early_stop(rrf_scores, settings.EARLY_STOP_MEAN_THRESHOLD)
-                es.end(outputs={"triggered": should_stop})
-                
-                if should_stop:
-                    logger.info("Early stop activé : scores RRF déjà excellents, skip rerank + MMR")
-                    filtered_passages = filter_passages_by_rrf_score(
-                        passages,
-                        enabled=settings.RRF_DYNAMIC_K_ENABLED,
-                        min_k=settings.RRF_MIN_K,
-                        max_k=settings.RRF_MAX_K,
-                        factor=settings.RRF_RELATIVE_THRESHOLD_FACTOR,
-                    )
-                    return {
-                        "passages": filtered_passages,
-                        "status": "early_stopped",
-                        "reason": "mean_score_above_threshold",
-                    }
-        
         # Reranker cross-encoder (sur le pool, pas sur tout)
         if settings.RERANKER_ENABLED:
             pool_size = min(settings.RERANK_POOL, len(final_nodes))
@@ -1155,33 +1122,40 @@ async def search_relevant_passages(
                     if chunk_id:
                         chunk_ids.append(chunk_id)
                 
-                with trace_run(
-                    "mmr_selection",
-                    run_type="chain",
-                    inputs={
-                        "lambda": settings.MMR_LAMBDA,
-                        "k": settings.MMR_K,
-                        "max_per_parent": settings.MMR_MAX_PER_PARENT,
-                    },
-                    tags=["mmr", "diversification"],
-                ) as mmr_trace:
-                    embeddings_map = mmr_service.fetch_embeddings_for_chunks(session, chunk_ids)
-                    
-                    # Associer chaque nœud à son embedding
-                    candidates = []
-                    for nws in rerank_result.nodes:
-                        chunk_id = _parse_chunk_id_from_node(nws.node)
-                        embedding = embeddings_map.get(chunk_id, []) if chunk_id else []
-                        candidates.append((nws, embedding))
-                    
-                    mmr_nodes = mmr_service.compute_mmr(
-                        query_embedding,
-                        candidates,
-                        lambda_=settings.MMR_LAMBDA,
-                        k=settings.MMR_K,
-                        max_per_parent=settings.MMR_MAX_PER_PARENT,
+                try:
+                    with trace_run(
+                        "mmr_selection",
+                        run_type="chain",
+                        inputs={
+                            "lambda": settings.MMR_LAMBDA,
+                            "k": settings.MMR_K,
+                            "max_per_parent": settings.MMR_MAX_PER_PARENT,
+                        },
+                        tags=["mmr", "diversification"],
+                    ) as mmr_trace:
+                        embeddings_map = mmr_service.fetch_embeddings_for_chunks(session, chunk_ids)
+                        
+                        # Associer chaque nœud à son embedding
+                        candidates = []
+                        for nws in rerank_result.nodes:
+                            chunk_id = _parse_chunk_id_from_node(nws.node)
+                            embedding = embeddings_map.get(chunk_id, []) if chunk_id else []
+                            candidates.append((nws, embedding))
+                        
+                        mmr_nodes = mmr_service.compute_mmr(
+                            query_embedding,
+                            candidates,
+                            lambda_=settings.MMR_LAMBDA,
+                            k=settings.MMR_K,
+                            max_per_parent=settings.MMR_MAX_PER_PARENT,
+                        )
+                        mmr_trace.end(outputs={"selected_count": len(mmr_nodes)})
+                except Exception as mmr_exc:
+                    logger.exception(
+                        "MMR échoué, fallback sur ordre rerank : %s",
+                        mmr_exc,
                     )
-                    mmr_trace.end(outputs={"selected_count": len(mmr_nodes)})
+                    mmr_nodes = [(nws, 1.0 - i * 0.01) for i, nws in enumerate(rerank_result.nodes)]
                 
                 passages = [
                     _node_to_passage(nws.node, fallback_score=score)

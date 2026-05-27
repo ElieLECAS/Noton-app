@@ -88,9 +88,12 @@ def get_folder_with_contents(
     
     subfolders = get_folders_by_parent(session, folder_id, folder.library_id, user_id)
     
+    from app.services.document_service_new import _exclude_feedback_corrective_where
+
     document_count = session.exec(
         select(Document).where(
-            Document.folder_id == folder_id
+            Document.folder_id == folder_id,
+            *_exclude_feedback_corrective_where(),
         )
     ).all()
     

@@ -18,6 +18,50 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+FEEDBACK_CORRECTIVE_DOCUMENT_TYPE = "feedback_corrective"
+LEGACY_FEEDBACK_TITLE_PREFIX = "FAQ Corrective"
+
+
+def is_feedback_corrective_document(doc: Document) -> bool:
+    """Document généré par feedback (masqué de la bibliothèque générale)."""
+    title = doc.title or ""
+    return (
+        doc.document_type == FEEDBACK_CORRECTIVE_DOCUMENT_TYPE
+        or title.startswith(settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX)
+        or title.startswith(LEGACY_FEEDBACK_TITLE_PREFIX)
+    )
+
+
+def feedback_corrective_sql_filter(document_filter: str, table_alias: str = "d") -> str:
+    """
+    Clause SQL brute pour filtrer les documents correctifs (retrieval RAG).
+    document_filter: 'technical' | 'faq_corrective' | autre (vide).
+    """
+    if document_filter not in ("technical", "faq_corrective"):
+        return ""
+    prefix = settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX.replace("'", "''")
+    legacy = LEGACY_FEEDBACK_TITLE_PREFIX.replace("'", "''")
+    t = table_alias
+    include = (
+        f"({t}.document_type = '{FEEDBACK_CORRECTIVE_DOCUMENT_TYPE}' "
+        f"OR {t}.title LIKE '{prefix}%' "
+        f"OR {t}.title LIKE '{legacy}%')"
+    )
+    if document_filter == "technical":
+        return f"AND NOT {include}"
+    return f"AND {include}"
+
+
+def _exclude_feedback_corrective_where():
+    """Conditions SQLModel pour exclure les docs correctifs des listes bibliothèque."""
+    prefix = settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX
+    return (
+        Document.document_type != FEEDBACK_CORRECTIVE_DOCUMENT_TYPE,
+        ~Document.title.like(f"{prefix}%"),
+        ~Document.title.like(f"{LEGACY_FEEDBACK_TITLE_PREFIX}%"),
+    )
+
+
 # En file d’attente de réindexation : chunks et embeddings actuels restent servis jusqu’au début effectif du worker.
 DOCUMENT_STATUS_REINDEX_QUEUED = "reindex_queued"
 DOCUMENT_STATUS_MULTIMODAL_QUEUED = "multimodal_queued"
@@ -343,7 +387,12 @@ def skip_all_library_documents_processing(session: Session, user_id: int) -> dic
     }
 
 def process_document_file(file_path: str) -> Optional[str]:
-    """Extrait le markdown via Mistral OCR ou extraction native."""
+    """
+    DEPRECATED: Cette fonction est conservée temporairement pour compatibilité 
+    mais n'est plus utilisée par le pipeline principal qui a migré vers le multimodal.
+    
+    Extrait le markdown via Mistral OCR ou extraction native.
+    """
     from app.services.mistral_ocr_service import extract_markdown_from_file, ExtractedMarkdown
 
     if not os.path.exists(file_path):
@@ -438,18 +487,22 @@ def reindex_library_document(
     document_id: int, user_id: int, run_id: Optional[str] = None
 ) -> dict:
     """
-    Re-extrait le texte (Mistral OCR), rechunke (hiérarchie markdown) et ré-embed les feuilles — sans réupload.
-
+    Retraite un document en utilisant le pipeline multimodal unifié.
+    
+    Cette fonction remplace l'ancien pipeline PyMuPDF4LLM + MistralOCR par le pipeline
+    multimodal de meilleure qualité. Elle réutilise le fichier déjà stocké en base.
+    
     Utilise ``document.source_file_path`` (fichier déjà stocké sous media/documents).
     """
     from app.services.document_run import is_processing_run_current
 
     ld = get_library_document_logger()
     ld.info(
-        "[Réindex] Démarrage document_id=%s user_id=%s — pipeline : PDF → Mistral OCR → chunks → embeddings.",
+        "[Réindex] Démarrage document_id=%s user_id=%s — pipeline : multimodal page par page → chunks → embeddings.",
         document_id,
         user_id,
     )
+    
     if run_id is not None and not is_processing_run_current(document_id, run_id):
         ld.info(
             "[Réindex] document_id=%s — abandon : run_id obsolète (stop utilisateur).",
@@ -461,13 +514,7 @@ def reindex_library_document(
             "reason": "stale_run",
         }
 
-    from app.services.chunk_service import (
-        complete_document_embeddings_sync,
-        create_chunks_for_document_from_markdown,
-        delete_chunks_for_document,
-    )
-    from app.services.file_conversion import ensure_pdf_for_ocr
-
+    # Récupérer le source_file_path depuis la DB
     with Session(engine) as session:
         document = session.get(Document, document_id)
         if not document:
@@ -488,161 +535,38 @@ def reindex_library_document(
         src = Path(document.source_file_path)
         if not src.is_file():
             raise ValueError("Fichier source introuvable sur le disque")
+        file_path = str(src)
         ld.info(
             "[Réindex] document_id=%s — fichier source : %s",
             document_id,
             src,
         )
-
-        delete_chunks_for_document(session, document_id, commit=True)
-        document = session.get(Document, document_id)
-        if not document:
-            raise ValueError("Document introuvable après nettoyage des chunks")
-
-        document.processing_status = "processing"
-        document.processing_progress = 15
-        document.updated_at = datetime.utcnow()
-        session.add(document)
-        session.commit()
-
-    try:
-        pdf_input = ensure_pdf_for_ocr(str(src))
-        ld.info(
-            "[Réindex] document_id=%s — entrée Mistral OCR : %s",
-            document_id,
-            pdf_input,
-        )
-        t0 = time.perf_counter()
-        markdown_content = process_document_file(pdf_input)
-        elapsed = time.perf_counter() - t0
-        method = getattr(markdown_content, "method", "ocr")
-
-        if method == "native":
-            logger.info(
-                "reindex: document_id=%s extraction native (pymupdf4llm) %.2fs",
-                document_id,
-                elapsed,
-            )
-            ld.info(
-                "[Réindex] document_id=%s — Extraction native terminée en %.2fs markdown_len=%s",
-                document_id,
-                elapsed,
-                len(markdown_content) if markdown_content else 0,
-            )
-        elif method == "text":
-            logger.info(
-                "reindex: document_id=%s lecture texte %.2fs",
-                document_id,
-                elapsed,
-            )
-            ld.info(
-                "[Réindex] document_id=%s — Lecture texte terminée en %.2fs markdown_len=%s",
-                document_id,
-                elapsed,
-                len(markdown_content) if markdown_content else 0,
-            )
-        else:
-            logger.info(
-                "reindex: document_id=%s extraction Mistral OCR %.2fs",
-                document_id,
-                elapsed,
-            )
-            ld.info(
-                "[Réindex] document_id=%s — OCR terminé en %.2fs markdown_len=%s",
-                document_id,
-                elapsed,
-                len(markdown_content) if markdown_content else 0,
-            )
-    except Exception as e:
-        logger.error(
-            "reindex: échec process_document_file document_id=%s: %s",
-            document_id,
-            e,
-            exc_info=True,
-        )
-        with Session(engine) as session:
-            d = session.get(Document, document_id)
-            if d:
-                d.processing_status = "failed"
-                d.processing_progress = max(d.processing_progress or 0, 15)
-                d.updated_at = datetime.utcnow()
-                session.add(d)
-                session.commit()
-        raise ValueError(f"Échec lecture ou conversion du document: {e}") from e
-
-    if not markdown_content:
-        with Session(engine) as session:
-            d = session.get(Document, document_id)
-            if d:
-                d.processing_status = "failed"
-                d.processing_progress = max(d.processing_progress or 0, 15)
-                d.updated_at = datetime.utcnow()
-                session.add(d)
-                session.commit()
-        raise ValueError("Extraction vide (markdown)")
-
-    chunk_count = 0
-    with Session(engine) as session:
-        document = session.get(Document, document_id)
-        document.content = markdown_content
-        
-        # Inférence de la source (Proferm, Technal, etc.)
-        inferred_source = infer_document_source(
-            file_path=document.source_file_path, 
-            content=markdown_content
-        )
-        document.source = inferred_source
-        
-        document.processing_progress = 55
-        document.updated_at = datetime.utcnow()
-        session.add(document)
-        session.commit()
-
-        document = session.get(Document, document_id)
-        chunks = create_chunks_for_document_from_markdown(
-            session,
-            document,
-            markdown_content,
-            generate_embeddings=False,
-        )
-        logger.info(
-            "reindex: document_id=%s chunking=markdown_hierarchical chunks=%s",
-            document_id,
-            len(chunks) if chunks else 0,
-        )
-        chunk_count = len(chunks) if chunks else 0
-        document.processing_progress = 85
-        document.updated_at = datetime.utcnow()
-        session.add(document)
-        session.commit()
-
-    ld.info(
-        "[Réindex] document_id=%s — lancement embeddings (synchrone).",
-        document_id,
+    
+    # Appeler le pipeline multimodal unifié en mode "complet" (supprime tous les chunks)
+    result = process_document_multimodal(
+        document_id=document_id,
+        file_path=file_path,
+        user_id=user_id,
+        run_id=run_id,
+        delete_existing_chunks=True,  # Retraitement complet: on supprime tous les chunks
     )
-    if run_id is not None and not is_processing_run_current(document_id, run_id):
-        return {
-            "document_id": document_id,
-            "status": "aborted",
-            "reason": "stale_run",
-            "chunks": chunk_count,
-        }
-    complete_document_embeddings_sync(document_id, run_id)
-
+    
+    chunk_count = result.get("chunks", 0)
     logger.info(
         "reindex_library_document terminé document_id=%s chunks=%s",
         document_id,
         chunk_count,
     )
     ld.info(
-        "[Réindex] document_id=%s — FIN OK chunks=%s (voir inventaire chunking dans les lignes [Chunking]).",
+        "[Réindex] document_id=%s — FIN OK chunks=%s.",
         document_id,
         chunk_count,
     )
+    
     return {
         "document_id": document_id,
         "chunks": chunk_count,
-        "status": "completed",
+        "status": result.get("status", "completed"),
     }
 
 
@@ -668,7 +592,12 @@ def mark_document_reindex_queued(session: Session, document_id: int, user_id: in
 
 
 def mark_document_multimodal_queued(session: Session, document_id: int, user_id: int) -> bool:
-    """Marque un document en attente de retraitement multimodal (chunks OCR inchangés)."""
+    """
+    DEPRECATED: Utilisé uniquement pour le retraitement multimodal séparé.
+    Le pipeline unifié utilise maintenant mark_document_reindex_queued.
+    
+    Marque un document en attente de retraitement multimodal (chunks OCR inchangés).
+    """
     from app.services.library_service import get_or_create_user_library
 
     library = get_or_create_user_library(session, user_id)
@@ -688,12 +617,26 @@ def mark_document_multimodal_queued(session: Session, document_id: int, user_id:
     return True
 
 
-def multimodal_reindex_library_document(
-    document_id: int, user_id: int, run_id: Optional[str] = None
+def process_document_multimodal(
+    document_id: int,
+    file_path: str,
+    user_id: int,
+    run_id: Optional[str] = None,
+    delete_existing_chunks: bool = False,
 ) -> dict:
     """
-    Ajoute des chunks page_multimodal_summary (1/page) via pymupdf + mistral-small.
-    Ne modifie pas les chunks existants ; remplace les anciens chunks multimodal à la relance.
+    Pipeline multimodal unifié pour import initial et retraitement.
+    
+    Args:
+        document_id: ID du document à traiter
+        file_path: Chemin du fichier source (peut être différent de source_file_path en DB lors de l'import initial)
+        user_id: ID de l'utilisateur
+        run_id: ID de run pour vérification d'annulation
+        delete_existing_chunks: Si True, supprime TOUS les chunks existants (retraitement complet).
+                                Si False, supprime seulement les chunks multimodaux (mode additif).
+    
+    Returns:
+        dict avec document_id, chunks, status
     """
     from app.services.document_run import is_processing_run_current
     from app.services.file_conversion import ensure_pdf_for_ocr
@@ -703,18 +646,22 @@ def multimodal_reindex_library_document(
         delete_multimodal_chunks_for_document,
         embed_new_multimodal_chunks,
     )
+    from app.services.chunk_service import delete_chunks_for_document
 
     if not settings.MULTIMODAL_ENABLED:
         raise ValueError(
-            "Le retraitement multimodal est désactivé (MULTIMODAL_ENABLED=false)."
+            "Le traitement multimodal est désactivé (MULTIMODAL_ENABLED=false)."
         )
 
     ld = get_library_document_logger()
     ld.info(
-        "[Multimodal] Démarrage document_id=%s user_id=%s",
+        "[Multimodal] Démarrage document_id=%s user_id=%s file=%s delete_existing=%s",
         document_id,
         user_id,
+        file_path,
+        delete_existing_chunks,
     )
+    
     if run_id is not None and not is_processing_run_current(document_id, run_id):
         return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
@@ -731,17 +678,20 @@ def multimodal_reindex_library_document(
             pass
         else:
             raise ValueError("Document introuvable ou accès refusé")
-        if not document.source_file_path:
-            raise ValueError("Aucun fichier source enregistré pour ce document")
-        src = Path(document.source_file_path)
-        if not src.is_file():
-            raise ValueError("Fichier source introuvable sur le disque")
+        
         title = document.title or ""
-
-        delete_multimodal_chunks_for_document(session, document_id, commit=True)
+        
+        # Nettoyage des chunks existants selon le mode
+        if delete_existing_chunks:
+            ld.info("[Multimodal] document_id=%s — suppression de TOUS les chunks", document_id)
+            delete_chunks_for_document(session, document_id, commit=True)
+        else:
+            ld.info("[Multimodal] document_id=%s — suppression des chunks multimodaux uniquement", document_id)
+            delete_multimodal_chunks_for_document(session, document_id, commit=True)
+        
         document = session.get(Document, document_id)
         if not document:
-            raise ValueError("Document introuvable après nettoyage multimodal")
+            raise ValueError("Document introuvable après nettoyage des chunks")
 
         document.processing_status = "processing"
         document.processing_progress = 10
@@ -750,10 +700,16 @@ def multimodal_reindex_library_document(
         session.commit()
 
     try:
-        pdf_input = ensure_pdf_for_ocr(str(src))
+        # Vérifier que le fichier existe
+        if not Path(file_path).is_file():
+            raise ValueError(f"Fichier source introuvable: {file_path}")
+        
+        pdf_input = ensure_pdf_for_ocr(str(file_path))
         ld.info("[Multimodal] document_id=%s PDF=%s", document_id, pdf_input)
 
-        page_contents = build_multimodal_pages_for_pdf(pdf_input, title)
+        chunk_specs = build_multimodal_pages_for_pdf(
+            pdf_input, title, document_id
+        )
 
         if run_id is not None and not is_processing_run_current(document_id, run_id):
             return {
@@ -762,14 +718,14 @@ def multimodal_reindex_library_document(
                 "reason": "stale_run",
             }
 
-        if not page_contents:
+        if not chunk_specs:
             raise ValueError("Aucune page synthétisée")
 
         with Session(engine) as session:
             document = session.get(Document, document_id)
             if not document:
                 raise ValueError("Document introuvable")
-            chunks = append_multimodal_page_chunks(session, document, page_contents)
+            chunks = append_multimodal_page_chunks(session, document, chunk_specs)
             document.processing_progress = 90
             document.updated_at = datetime.utcnow()
             session.add(document)
@@ -807,7 +763,7 @@ def multimodal_reindex_library_document(
         }
     except Exception as e:
         logger.error(
-            "multimodal_reindex échec document_id=%s: %s",
+            "process_document_multimodal échec document_id=%s: %s",
             document_id,
             e,
             exc_info=True,
@@ -820,6 +776,44 @@ def multimodal_reindex_library_document(
                 session.add(d)
                 session.commit()
         raise
+
+
+def multimodal_reindex_library_document(
+    document_id: int, user_id: int, run_id: Optional[str] = None
+) -> dict:
+    """
+    Ajoute des chunks multimodal v2 (1–5 sections + synthèse/page) via pymupdf + mistral-small.
+    Ne modifie pas les chunks existants ; remplace les anciens chunks multimodal à la relance.
+    
+    DEPRECATED: Cette fonction est maintenue pour compatibilité mais appelle process_document_multimodal.
+    """
+    ld = get_library_document_logger()
+    ld.info(
+        "[Multimodal Reindex] document_id=%s user_id=%s (appel via wrapper legacy)",
+        document_id,
+        user_id,
+    )
+    
+    # Récupérer le source_file_path depuis la DB
+    with Session(engine) as session:
+        document = session.get(Document, document_id)
+        if not document:
+            raise ValueError("Document introuvable ou accès refusé")
+        if not document.source_file_path:
+            raise ValueError("Aucun fichier source enregistré pour ce document")
+        src = Path(document.source_file_path)
+        if not src.is_file():
+            raise ValueError("Fichier source introuvable sur le disque")
+        file_path = str(src)
+    
+    # Appeler le pipeline unifié en mode "additif" (ne supprime que les chunks multimodaux)
+    return process_document_multimodal(
+        document_id=document_id,
+        file_path=file_path,
+        user_id=user_id,
+        run_id=run_id,
+        delete_existing_chunks=False,
+    )
 
 
 def mark_all_eligible_documents_reindex_queued(user_id: int) -> int:
@@ -960,18 +954,20 @@ def get_document_by_id(session: Session, document_id: int, user_id: int) -> Opti
 
 
 def get_documents_by_folder(session: Session, folder_id: Optional[int], library_id: int, user_id: int) -> List[Document]:
-    """Récupère tous les documents d'un dossier (ou racine si folder_id est None)."""
+    """Récupère tous les documents d'un dossier (ou racine si folder_id est None), hors correctifs feedback."""
     statement = select(Document).where(
         Document.library_id == library_id,
-        Document.folder_id == folder_id
+        Document.folder_id == folder_id,
+        *_exclude_feedback_corrective_where(),
     ).order_by(Document.created_at.desc())
     return list(session.exec(statement).all())
 
 
 def get_documents_by_library(session: Session, library_id: int, user_id: int) -> List[Document]:
-    """Récupère tous les documents d'une bibliothèque."""
+    """Récupère tous les documents visibles d'une bibliothèque (hors correctifs feedback)."""
     statement = select(Document).where(
-        Document.library_id == library_id
+        Document.library_id == library_id,
+        *_exclude_feedback_corrective_where(),
     ).order_by(Document.created_at.desc())
     return list(session.exec(statement).all())
 
@@ -1203,32 +1199,30 @@ def _process_document_worker():
 def _process_document_for_id(
     document_id: int, file_path: str, run_id: Optional[str] = None
 ):
-    """Traite un document pour un ID donné."""
-    from app.services.chunk_service import (
-        complete_document_embeddings_sync,
-        create_chunks_for_document,
-        create_chunks_for_document_from_markdown,
-    )
+    """
+    Traite un document pour un ID donné en utilisant le pipeline multimodal unifié.
+    
+    Ce pipeline remplace l'ancien flux PyMuPDF4LLM + MistralOCR par un traitement
+    multimodal de meilleure qualité (pymupdf + mistral-small vision par page).
+    """
     from app.services.document_run import is_processing_run_current
 
     ld = get_library_document_logger()
     try:
-        logger.info("Démarrage du traitement du document %d", document_id)
+        logger.info("Démarrage du traitement multimodal du document %d", document_id)
         ld.info(
-            "[Upload/Pipeline] document_id=%s — DÉBUT traitement bibliothèque fichier=%s "
-            "(worker thread ou Celery). Étapes : PDF → Mistral OCR → stockage → chunks → embeddings.",
+            "[Upload/Pipeline Multimodal] document_id=%s — DÉBUT traitement bibliothèque fichier=%s "
+            "(worker thread ou Celery). Pipeline : PDF → multimodal page par page → chunks → embeddings.",
             document_id,
             file_path,
         )
-
-        run_embeddings_sync: bool = False
 
         if run_id is not None and not is_processing_run_current(document_id, run_id):
             logger.info(
                 "Traitement ignoré (run_id obsolète) pour document_id=%s", document_id
             )
             ld.info(
-                "[Upload/Pipeline] document_id=%s — abandon : run_id ne correspond plus (stop/reprise).",
+                "[Upload/Pipeline Multimodal] document_id=%s — abandon : run_id ne correspond plus (stop/reprise).",
                 document_id,
             )
             return
@@ -1239,7 +1233,7 @@ def _process_document_for_id(
                 document_id,
             )
             ld.info(
-                "[Upload/Pipeline] document_id=%s — annulé avant démarrage (cancel flag).",
+                "[Upload/Pipeline Multimodal] document_id=%s — annulé avant démarrage (cancel flag).",
                 document_id,
             )
             _finalize_pipeline_abort(document_id)
@@ -1250,7 +1244,7 @@ def _process_document_for_id(
             if not document:
                 logger.error("Document %d non trouvé pour traitement", document_id)
                 ld.error(
-                    "[Upload/Pipeline] document_id=%s — document introuvable en base, arrêt.",
+                    "[Upload/Pipeline Multimodal] document_id=%s — document introuvable en base, arrêt.",
                     document_id,
                 )
                 _clear_document_processing_cancelled(document_id)
@@ -1258,305 +1252,149 @@ def _process_document_for_id(
 
             if document.processing_status in LIBRARY_USER_STOPPED_STATUSES:
                 ld.info(
-                    "[Upload/Pipeline] document_id=%s — statut final %s, pas de traitement.",
+                    "[Upload/Pipeline Multimodal] document_id=%s — statut final %s, pas de traitement.",
                     document_id,
                     document.processing_status,
                 )
                 _clear_document_processing_cancelled(document_id)
                 return
 
-            document.processing_status = "processing"
-            document.processing_progress = 10
-            document.updated_at = datetime.utcnow()
-            session.add(document)
-            session.commit()
+            user_id = document.user_id
 
-            original_ext = Path(file_path).suffix.lower()
-            pdf_input_path = file_path
-            converted_to_pdf = False
-            try:
-                from app.services.file_conversion import ensure_pdf_for_ocr
+        # Avant le traitement multimodal, on doit sauvegarder le fichier de manière permanente
+        # pour que process_document_multimodal puisse y accéder
+        from app.services.file_conversion import ensure_pdf_for_ocr
+        
+        original_ext = Path(file_path).suffix.lower()
+        pdf_input_path = file_path
+        converted_to_pdf = False
+        
+        try:
+            pdf_input_path = ensure_pdf_for_ocr(file_path)
+            converted_to_pdf = pdf_input_path != file_path
+            ld.info(
+                "[Upload/Pipeline Multimodal] document_id=%s — préparation : entrée=%s converti_pdf=%s",
+                document_id,
+                pdf_input_path,
+                converted_to_pdf,
+            )
+        except Exception as e:
+            logger.error(
+                "Conversion vers PDF impossible pour le document %d (%s): %s",
+                document_id,
+                file_path,
+                e,
+                exc_info=True,
+            )
+            ld.error(
+                "[Upload/Pipeline Multimodal] document_id=%s — échec ensure_pdf_for_ocr : %s",
+                document_id,
+                e,
+                exc_info=True,
+            )
+            with Session(engine) as session:
+                doc = session.get(Document, document_id)
+                if doc:
+                    doc.processing_status = "failed"
+                    doc.processing_progress = 10
+                    doc.content = f"❌ Erreur lors de la conversion du document: {str(e)}"
+                    doc.updated_at = datetime.utcnow()
+                    session.add(doc)
+                    session.commit()
+            return
 
-                pdf_input_path = ensure_pdf_for_ocr(file_path)
-                converted_to_pdf = pdf_input_path != file_path
-                ld.info(
-                    "[Upload/Pipeline] document_id=%s — préparation OCR : entrée=%s converti_pdf=%s",
-                    document_id,
-                    pdf_input_path,
-                    converted_to_pdf,
-                )
-            except Exception as e:
-                logger.error(
-                    "Conversion vers PDF impossible pour le document %d (%s): %s",
-                    document_id,
-                    file_path,
-                    e,
-                    exc_info=True,
-                )
-                ld.error(
-                    "[Upload/Pipeline] document_id=%s — échec ensure_pdf_for_ocr : %s",
-                    document_id,
-                    e,
-                    exc_info=True,
-                )
-                raise
+        # Sauvegarder le fichier de manière permanente
+        output_ext = Path(pdf_input_path).suffix.lower() or ".bin"
+        permanent_output_path = Path(f"media/documents/{document_id}{output_ext}")
+        permanent_output_path.parent.mkdir(parents=True, exist_ok=True)
 
-            file_size_mb = round(Path(pdf_input_path).stat().st_size / (1024 * 1024), 2) if Path(pdf_input_path).exists() else 0
-            t_extract = time.perf_counter()
-            with trace_run(
-                "mistral_ocr",
-                run_type="chain",
-                inputs={
-                    "document_id": document_id,
-                    "file_path": pdf_input_path,
-                    "file_size_mb": file_size_mb,
-                    "converted_to_pdf": converted_to_pdf,
-                },
-                tags=["ingestion", "mistral_ocr"],
-            ) as ocr_run:
-                markdown_content = process_document_file(pdf_input_path)
-                extract_s = time.perf_counter() - t_extract
-                ocr_run.end(outputs={
-                    "markdown_len": len(markdown_content) if markdown_content else 0,
-                    "duration_s": round(extract_s, 2),
-                })
-            method = getattr(markdown_content, "method", "ocr")
+        import shutil
 
-            if method == "native":
-                logger.info(
-                    "document_id=%s extraction native (pymupdf4llm) %.2fs markdown_len=%s",
-                    document_id,
-                    extract_s,
-                    len(markdown_content) if markdown_content else 0,
-                )
-                ld.info(
-                    "[Upload/Pipeline] document_id=%s — Extraction native terminée en %.2fs : markdown_len=%s",
-                    document_id,
-                    extract_s,
-                    len(markdown_content) if markdown_content else 0,
-                )
-            elif method == "text":
-                logger.info(
-                    "document_id=%s lecture texte %.2fs markdown_len=%s",
-                    document_id,
-                    extract_s,
-                    len(markdown_content) if markdown_content else 0,
-                )
-                ld.info(
-                    "[Upload/Pipeline] document_id=%s — Lecture texte terminée en %.2fs : markdown_len=%s",
-                    document_id,
-                    extract_s,
-                    len(markdown_content) if markdown_content else 0,
-                )
-            else:
-                logger.info(
-                    "document_id=%s extraction Mistral OCR %.2fs markdown_len=%s",
-                    document_id,
-                    extract_s,
-                    len(markdown_content) if markdown_content else 0,
-                )
-                ld.info(
-                    "[Upload/Pipeline] document_id=%s — Mistral OCR terminé en %.2fs : markdown_len=%s",
-                    document_id,
-                    extract_s,
-                    len(markdown_content) if markdown_content else 0,
-                )
+        # Retenter proprement sur relances/erreurs précédentes
+        if permanent_output_path.exists():
+            permanent_output_path.unlink()
 
-            if not markdown_content:
-                document.processing_status = "failed"
-                document.processing_progress = max(document.processing_progress or 0, 10)
-                document.content = "❌ Erreur lors du traitement du document. Le fichier peut être corrompu ou dans un format non supporté."
+        if converted_to_pdf:
+            original_permanent_path = Path(
+                f"media/documents/{document_id}{original_ext}"
+            )
+            original_permanent_path.parent.mkdir(parents=True, exist_ok=True)
+            if original_permanent_path.exists():
+                original_permanent_path.unlink()
+            shutil.move(file_path, str(original_permanent_path))
+
+        shutil.move(pdf_input_path, str(permanent_output_path))
+        
+        with Session(engine) as session:
+            document = session.get(Document, document_id)
+            if document:
+                document.source_file_path = str(permanent_output_path)
                 document.updated_at = datetime.utcnow()
                 session.add(document)
                 session.commit()
-                logger.error("Échec du traitement du document %d", document_id)
-                label = "Mistral OCR" if method == "ocr" else "l'extraction"
-                ld.error(
-                    "[Upload/Pipeline] document_id=%s — markdown vide après %s, statut failed.",
-                    document_id,
-                    label,
-                )
-                return
+        
+        logger.info(
+            "Fichier traité déplacé vers chemin permanent: %s",
+            permanent_output_path,
+        )
+        ld.info(
+            "[Upload/Pipeline Multimodal] document_id=%s — fichier enregistré sous %s",
+            document_id,
+            permanent_output_path,
+        )
 
-            if _should_abort_processing(document_id):
-                logger.info(
-                    "Traitement annulé après extraction pour document %d",
-                    document_id,
-                )
-                ld.info(
-                    "[Upload/Pipeline] document_id=%s — annulé après extraction.",
-                    document_id,
-                )
-                _finalize_pipeline_abort(document_id)
-                return
-
-            output_ext = Path(pdf_input_path).suffix.lower() or ".bin"
-            permanent_output_path = Path(f"media/documents/{document_id}{output_ext}")
-            permanent_output_path.parent.mkdir(parents=True, exist_ok=True)
-
-            import shutil
-
-            # Retenter proprement sur relances/erreurs précédentes
-            if permanent_output_path.exists():
-                permanent_output_path.unlink()
-
-            if converted_to_pdf:
-                original_permanent_path = Path(
-                    f"media/documents/{document_id}{original_ext}"
-                )
-                original_permanent_path.parent.mkdir(parents=True, exist_ok=True)
-                if original_permanent_path.exists():
-                    original_permanent_path.unlink()
-                shutil.move(file_path, str(original_permanent_path))
-
-            shutil.move(pdf_input_path, str(permanent_output_path))
-            document.source_file_path = str(permanent_output_path)
+        if _should_abort_processing(document_id):
             logger.info(
-                "Fichier traité déplacé vers chemin permanent: %s",
-                permanent_output_path,
-            )
-            ld.info(
-                "[Upload/Pipeline] document_id=%s — fichier enregistré sous %s",
-                document_id,
-                permanent_output_path,
-            )
-
-            document.content = markdown_content
-            document.processing_status = "processing"
-            document.processing_progress = 55
-            document.updated_at = datetime.utcnow()
-            session.add(document)
-            session.commit()
-
-            logger.info("Document traité avec succès pour document_id %d (%d caractères extraits)", document_id, len(markdown_content))
-
-            try:
-                if _should_abort_processing(document_id):
-                    logger.info(
-                        "Traitement annulé avant création des chunks pour document %d",
-                        document_id,
-                    )
-                    ld.info(
-                        "[Upload/Pipeline] document_id=%s — annulé avant chunking.",
-                        document_id,
-                    )
-                    _finalize_pipeline_abort(document_id)
-                    return
-
-                t_chunk = time.perf_counter()
-                with trace_run(
-                    "chunking",
-                    run_type="chain",
-                    inputs={
-                        "document_id": document_id,
-                        "strategy": "markdown_hierarchical",
-                    },
-                    tags=["ingestion", "chunking", "hierarchical"],
-                ) as chunk_run:
-                    chunks = create_chunks_for_document_from_markdown(
-                        session,
-                        document,
-                        markdown_content,
-                        generate_embeddings=False,
-                    )
-                    chunk_s = time.perf_counter() - t_chunk
-                    nb_leaves = sum(1 for c in chunks if getattr(c, "is_leaf", True))
-                    nb_parents = len(chunks) - nb_leaves
-                    chunk_run.end(outputs={
-                        "nb_chunks": len(chunks),
-                        "nb_leaves": nb_leaves,
-                        "nb_parents": nb_parents,
-                        "duration_s": round(chunk_s, 2),
-                    })
-                logger.info(
-                    "document_id=%s chunks=%s stratégie=markdown_hierarchical durée_chunking=%.2fs",
-                    document_id,
-                    len(chunks),
-                    chunk_s,
-                )
-                ld.info(
-                    "[Upload/Pipeline] document_id=%s — chunking markdown hiérarchique %.2fs chunks=%d",
-                    document_id,
-                    chunk_s,
-                    len(chunks),
-                )
-
-                document.processing_progress = 75
-                document.updated_at = datetime.utcnow()
-                session.add(document)
-                session.commit()
-
-                if chunks:
-                    document.processing_progress = 85
-                    document.updated_at = datetime.utcnow()
-                    session.add(document)
-                    session.commit()
-                    run_embeddings_sync = True
-                else:
-                    document.processing_status = "completed"
-                    document.processing_progress = 100
-                    document.updated_at = datetime.utcnow()
-                    session.add(document)
-                    session.commit()
-                    ld.warning(
-                        "[Upload/Pipeline] document_id=%s — aucun chunk produit : pas d'embeddings, "
-                        "document marqué completed.",
-                        document_id,
-                    )
-
-            except Exception as e:
-                logger.error("Erreur lors de la création des chunks pour le document %d: %s", document_id, e, exc_info=True)
-                ld.error(
-                    "[Upload/Pipeline] document_id=%s — erreur lors de la création des chunks : %s",
-                    document_id,
-                    e,
-                    exc_info=True,
-                )
-                document.processing_status = "failed"
-                document.processing_progress = max(document.processing_progress or 0, 55)
-                document.updated_at = datetime.utcnow()
-                session.add(document)
-                session.commit()
-                run_embeddings_sync = False
-
-        if run_embeddings_sync:
-            if _should_abort_processing(document_id):
-                logger.info(
-                    "Traitement annulé avant embeddings pour document %d",
-                    document_id,
-                )
-                ld.info(
-                    "[Upload/Pipeline] document_id=%s — annulé avant embeddings.",
-                    document_id,
-                )
-                _finalize_pipeline_abort(document_id)
-                return
-            ld.info(
-                "[Upload/Pipeline] document_id=%s — enchaînement embeddings.",
+                "Traitement annulé après sauvegarde fichier pour document %d",
                 document_id,
             )
-            with trace_run(
-                "embeddings",
-                run_type="chain",
-                inputs={
-                    "document_id": document_id,
-                    "embedding_model": settings.EMBEDDING_MODEL,
-                },
-                tags=["ingestion", "embeddings"],
-            ) as emb_run:
-                t_emb = time.perf_counter()
-                complete_document_embeddings_sync(document_id, run_id)
-                emb_s = time.perf_counter() - t_emb
-                emb_run.end(outputs={"duration_s": round(emb_s, 2)})
             ld.info(
-                "[Upload/Pipeline] document_id=%s — FIN pipeline bibliothèque (succès attendu si pas d'erreur amont).",
+                "[Upload/Pipeline Multimodal] document_id=%s — annulé après sauvegarde fichier.",
                 document_id,
+            )
+            _finalize_pipeline_abort(document_id)
+            return
+
+        # Appeler le pipeline multimodal unifié
+        with trace_pipeline(
+            "multimodal_import",
+            inputs={
+                "document_id": document_id,
+                "file_path": str(permanent_output_path),
+            },
+            tags=["ingestion", "multimodal"],
+        ):
+            result = process_document_multimodal(
+                document_id=document_id,
+                file_path=str(permanent_output_path),
+                user_id=user_id,
+                run_id=run_id,
+                delete_existing_chunks=True,  # Import initial: on supprime tous les chunks
+            )
+
+        if result.get("status") == "completed":
+            ld.info(
+                "[Upload/Pipeline Multimodal] document_id=%s — FIN OK chunks=%s",
+                document_id,
+                result.get("chunks", 0),
+            )
+        elif result.get("status") == "aborted":
+            ld.info(
+                "[Upload/Pipeline Multimodal] document_id=%s — abandonné (%s)",
+                document_id,
+                result.get("reason", "unknown"),
+            )
+        else:
+            ld.warning(
+                "[Upload/Pipeline Multimodal] document_id=%s — statut inattendu: %s",
+                document_id,
+                result.get("status"),
             )
 
     except Exception as e:
-        logger.error("Erreur lors du traitement du document %d: %s", document_id, e, exc_info=True)
+        logger.error("Erreur lors du traitement multimodal du document %d: %s", document_id, e, exc_info=True)
         ld.error(
-            "[Upload/Pipeline] document_id=%s — ERREUR non gérée : %s",
+            "[Upload/Pipeline Multimodal] document_id=%s — ERREUR non gérée : %s",
             document_id,
             e,
             exc_info=True,
@@ -1695,7 +1533,12 @@ def enqueue_reindex_all_library_documents_thread(user_id: int) -> None:
 def enqueue_multimodal_reindex_library_document_thread(
     document_id: int, user_id: int, run_id: Optional[str] = None
 ) -> None:
-    """Exécute le retraitement multimodal dans un thread d'arrière-plan."""
+    """
+    DEPRECATED: Le pipeline multimodal est maintenant unifié avec le retraitement classique.
+    Cette fonction est conservée temporairement pour compatibilité.
+    
+    Exécute le retraitement multimodal dans un thread d'arrière-plan.
+    """
     def _runner():
         try:
             multimodal_reindex_library_document(document_id, user_id, run_id)

@@ -20,7 +20,7 @@ from llama_index.core.node_parser import HierarchicalNodeParser; \
 from mistralai import Mistral; \
 print('Deps OK')"
 
-# Pré-télécharger le modèle cross-encoder pour éviter le cold-start réseau
+# Pré-télécharger le reranker (aligné sur RERANKER_MODEL par défaut / .env)
 RUN python -c "from sentence_transformers import CrossEncoder; CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')"
 
 COPY app/ ./app/

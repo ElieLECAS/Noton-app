@@ -49,7 +49,9 @@ class Settings(BaseSettings):
     MISTRAL_OCR_MODEL: str = "mistral-ocr-latest"
     MISTRAL_OCR_TIMEOUT: float = 300.0
     
-    # FAQ Correctives (double recherche feedback)
+    # Connaissances correctives issues des feedbacks (double recherche RAG)
+    FEEDBACK_KNOWLEDGE_TITLE_PREFIX: str = "Connaissance technique"
+    # Alias legacy (docs/titres existants « FAQ Corrective - … »)
     FAQ_CORRECTIVE_TITLE_PREFIX: str = "FAQ Corrective"
     FAQ_TOP_K: int = 3
     FAQ_MIN_SIMILARITY: float = 0.30
@@ -77,13 +79,17 @@ class Settings(BaseSettings):
     # Retraitement multimodal par page (pymupdf + mistral-small vision)
     MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"
     MULTIMODAL_PAGE_DPI: int = 200
-    MULTIMODAL_PAGE_MAX_TOKENS: int = 3500
+    MULTIMODAL_PAGE_MAX_TOKENS: int = 8000
+    # Pages traitées en parallèle au sein d’un même document multimodal
+    MULTIMODAL_PAGE_CONCURRENCY: int = 3
 
     # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
     TASK_BACKEND_MODE: str = "thread"
     REDIS_URL: Optional[str] = None  # ex. redis://redis:6379/0
     CELERY_BROKER_URL: Optional[str] = None  # défaut: REDIS_URL
     CELERY_RESULT_BACKEND: Optional[str] = None  # défaut: REDIS_URL
+    # Concurrence worker Celery : 1 job document lourd à la fois (parallélisme pages via MULTIMODAL_PAGE_CONCURRENCY)
+    CELERY_WORKER_CONCURRENCY: int = 1
 
     # LangSmith — observabilité RAG
     LANGSMITH_API_KEY: Optional[str] = None
@@ -93,13 +99,14 @@ class Settings(BaseSettings):
     # Reranker cross-encoder (CPU-only)
     RERANKER_ENABLED: bool = False
     RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-    RERANK_POOL: int = 40
-    RERANK_CHAR_CAP: int = 8000
+    RERANK_POOL: int = 30  # Réduit de 50 → 30 pour MiniLM CPU (latence vs qualité)
+    RERANK_CHAR_CAP: int = 1700  # ~485 tokens (ratio FR 3.5 chars/token, marge vs max_length=512)
     RERANK_BATCH_SIZE: int = 16
+    EARLY_STOP_ENABLED: bool = False  # Early stop désactivé par défaut (latence CPU acceptable)
     EARLY_STOP_TOP_N: int = 5
     EARLY_STOP_MEAN_THRESHOLD: float = 0.78
-    MIN_DYNAMIC_K: int = 2
-    MAX_DYNAMIC_K: int = 12
+    MIN_DYNAMIC_K: int = 1
+    MAX_DYNAMIC_K: int = 8  # Réduit de 10 → 8 pour MiniLM (chunks plus précis)
     SOFTMAX_CUM_THRESHOLD: float = 0.80
     STUTTER_GAP: float = 0.05
     ZSCORE_FLAT_THRESHOLD: float = 0.05
@@ -145,10 +152,10 @@ class Settings(BaseSettings):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
 
-    @field_validator('RERANKER_ENABLED', 'MMR_ENABLED', 'RRF_DYNAMIC_K_ENABLED', mode='before')
+    @field_validator('RERANKER_ENABLED', 'MMR_ENABLED', 'RRF_DYNAMIC_K_ENABLED', 'EARLY_STOP_ENABLED', mode='before')
     @classmethod
     def parse_bool_flags(cls, v: Union[str, bool, None]) -> bool:
-        """Convertit les chaînes en bool pour les flags reranker/MMR/RRF."""
+        """Convertit les chaînes en bool pour les flags reranker/MMR/RRF/early_stop."""
         if v is None:
             return False
         if isinstance(v, bool):
@@ -217,6 +224,26 @@ class Settings(BaseSettings):
         except (TypeError, ValueError):
             return 1500
 
+    @field_validator('CELERY_WORKER_CONCURRENCY', mode='before')
+    @classmethod
+    def parse_celery_worker_concurrency(cls, v: Union[str, int, None]) -> int:
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return 1
+        try:
+            return max(1, min(16, int(v)))
+        except (TypeError, ValueError):
+            return 1
+
+    @field_validator('MULTIMODAL_PAGE_CONCURRENCY', mode='before')
+    @classmethod
+    def parse_multimodal_page_concurrency(cls, v: Union[str, int, None]) -> int:
+        if v is None or (isinstance(v, str) and not v.strip()):
+            return 3
+        try:
+            return max(1, min(8, int(v)))
+        except (TypeError, ValueError):
+            return 3
+
     @field_validator('MULTIMODAL_PAGE_DPI', mode='before')
     @classmethod
     def parse_multimodal_page_dpi(cls, v: Union[str, int, None]) -> int:
@@ -231,11 +258,11 @@ class Settings(BaseSettings):
     @classmethod
     def parse_multimodal_page_max_tokens(cls, v: Union[str, int, None]) -> int:
         if v is None or (isinstance(v, str) and not v.strip()):
-            return 3500
+            return 8000
         try:
             return max(256, int(v))
         except (TypeError, ValueError):
-            return 3500
+            return 8000
 
     @field_validator(
         'SPACE_CHAT_MAX_TOKENS',

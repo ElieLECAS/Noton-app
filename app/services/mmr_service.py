@@ -12,8 +12,10 @@ Contrainte additionnelle : MMR_MAX_PER_PARENT pour éviter qu'une seule section
 
 from __future__ import annotations
 
+import ast
+import json
 import logging
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 from llama_index.core.schema import NodeWithScore
@@ -27,8 +29,11 @@ logger = logging.getLogger(__name__)
 
 def _cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
     """Similarité cosinus entre deux vecteurs."""
-    a = np.array(vec1, dtype=float)
-    b = np.array(vec2, dtype=float)
+    try:
+        a = np.array(vec1, dtype=float)
+        b = np.array(vec2, dtype=float)
+    except Exception:
+        return 0.0
     
     norm_a = np.linalg.norm(a)
     norm_b = np.linalg.norm(b)
@@ -37,6 +42,45 @@ def _cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
         return 0.0
     
     return float(np.dot(a, b) / (norm_a * norm_b))
+
+
+def _ensure_float_vector(vec: Any) -> List[float]:
+    """
+    Convertit vec en liste de floats robuste.
+
+    Cas observé : embeddings récupérées comme string (ex: "[0.1, 0.2, ...]").
+    """
+    if vec is None:
+        return []
+    if isinstance(vec, str):
+        s = vec.strip()
+        if not s:
+            return []
+        # Tentatives dans l'ordre : json puis littéral Python.
+        try:
+            loaded = json.loads(s)
+        except Exception:
+            try:
+                loaded = ast.literal_eval(s)
+            except Exception:
+                return []
+        vec = loaded
+
+    if isinstance(vec, (list, tuple)):
+        out: List[float] = []
+        for x in vec:
+            try:
+                out.append(float(x))
+            except Exception:
+                return []
+        return out
+
+    # Pour objects type pgvector: essayer l'itération.
+    try:
+        as_list = list(vec)
+        return [float(x) for x in as_list]
+    except Exception:
+        return []
 
 
 def fetch_embeddings_for_chunks(
@@ -70,12 +114,7 @@ def fetch_embeddings_for_chunks(
         chunk_id = row.id
         embedding = row.embedding
         
-        # Convertir pgvector en liste Python
-        if embedding is not None:
-            # embedding est un objet pgvector, on peut le cast en liste
-            embeddings[chunk_id] = list(embedding)
-        else:
-            embeddings[chunk_id] = []
+        embeddings[chunk_id] = _ensure_float_vector(embedding)
     
     logger.info(
         "Embeddings récupérés : %d/%d chunks ont un embedding",

@@ -6,6 +6,11 @@ Pipeline :
 2. Rerank cross-encoder : re-scorer paires (query, passage) avec ms-marco-MiniLM-L-6-v2
 3. Guardrails : détection "bégaiement" (scores plats) → low_confidence_clarification
 4. K dynamique : sélection softmax cumulée bornée entre MIN_DYNAMIC_K et MAX_DYNAMIC_K
+
+Métriques de troncature :
+- Longueur chars/tokens avant rerank
+- Ratio de chunks tronqués
+- Latence P50/P95 du rerank
 """
 
 from __future__ import annotations
@@ -24,6 +29,51 @@ logger = logging.getLogger(__name__)
 
 _cross_encoder = None
 _cross_encoder_lock = threading.Lock()
+
+# Métriques de troncature (thread-safe accumulators)
+_truncation_stats = {
+    "total_chunks": 0,
+    "truncated_chunks": 0,
+    "total_chars_before": 0,
+    "total_chars_after": 0,
+    "rerank_latencies": [],
+}
+_stats_lock = threading.Lock()
+
+
+def get_truncation_stats() -> dict:
+    """Retourne les statistiques de troncature accumulées."""
+    with _stats_lock:
+        total = _truncation_stats["total_chunks"]
+        truncated = _truncation_stats["truncated_chunks"]
+        chars_before = _truncation_stats["total_chars_before"]
+        chars_after = _truncation_stats["total_chars_after"]
+        latencies = _truncation_stats["rerank_latencies"].copy()
+        
+        return {
+            "total_chunks": total,
+            "truncated_chunks": truncated,
+            "truncation_ratio": truncated / total if total > 0 else 0.0,
+            "avg_chars_before": chars_before / total if total > 0 else 0,
+            "avg_chars_after": chars_after / total if total > 0 else 0,
+            "avg_reduction_pct": (
+                (1.0 - chars_after / chars_before) * 100 if chars_before > 0 else 0.0
+            ),
+            "rerank_latency_p50_ms": float(np.percentile(latencies, 50)) if latencies else 0.0,
+            "rerank_latency_p95_ms": float(np.percentile(latencies, 95)) if latencies else 0.0,
+            "rerank_latency_p99_ms": float(np.percentile(latencies, 99)) if latencies else 0.0,
+            "rerank_count": len(latencies),
+        }
+
+
+def reset_truncation_stats() -> None:
+    """Réinitialise les statistiques de troncature."""
+    with _stats_lock:
+        _truncation_stats["total_chunks"] = 0
+        _truncation_stats["truncated_chunks"] = 0
+        _truncation_stats["total_chars_before"] = 0
+        _truncation_stats["total_chars_after"] = 0
+        _truncation_stats["rerank_latencies"] = []
 
 
 @dataclass
@@ -71,6 +121,13 @@ def should_early_stop(rrf_scores: List[float], threshold: float) -> bool:
     Early stopping : court-circuite le rerank si la moyenne des top-N scores RRF
     dépasse un seuil de confiance très élevé (questions faciles).
     
+    NOTE: Désactivé par défaut (EARLY_STOP_ENABLED=False) car :
+    - Latence MiniLM CPU acceptable pour RERANK_POOL=30 (~50-100ms)
+    - Risque de skip sur des faux-positifs RRF (fusion ne garantit pas qualité absolue)
+    - Gain latence marginal vs risque de dégradation qualité
+    
+    Pour l'activer : EARLY_STOP_ENABLED=True dans config + appel dans search pipeline.
+    
     Args:
         rrf_scores: Scores RRF normalisés des candidats top-N
         threshold: Seuil moyen au-delà duquel on skip le rerank
@@ -109,6 +166,7 @@ def rerank_nodes(
 ) -> List[Tuple[NodeWithScore, float]]:
     """
     Rerank un pool de nœuds avec le cross-encoder.
+    Collecte des métriques de troncature pour observabilité.
     
     Args:
         query_text: Question de l'utilisateur
@@ -122,13 +180,29 @@ def rerank_nodes(
     if not nodes_with_score:
         return []
     
+    import time
+    t_start = time.perf_counter()
+    
     model = _get_cross_encoder()
     
-    # Tronquer le texte de chaque nœud à char_cap
+    # Tronquer le texte de chaque nœud à char_cap + collecter métriques
     pairs = []
+    truncation_count = 0
+    total_chars_before = 0
+    total_chars_after = 0
+    
     for nws in nodes_with_score:
         text = getattr(nws.node, "text", "") or ""
-        truncated = text[:char_cap] if len(text) > char_cap else text
+        text_len = len(text)
+        total_chars_before += text_len
+        
+        if text_len > char_cap:
+            truncated = text[:char_cap]
+            truncation_count += 1
+        else:
+            truncated = text
+        
+        total_chars_after += len(truncated)
         pairs.append([query_text, truncated])
     
     # Batch predict
@@ -143,16 +217,43 @@ def rerank_nodes(
         # Fallback : garder les scores RRF originaux
         return [(nws, float(nws.score or 0.0)) for nws in nodes_with_score]
     
+    # Collecter latence
+    t_elapsed = (time.perf_counter() - t_start) * 1000  # ms
+    
+    # Mettre à jour statistiques thread-safe
+    with _stats_lock:
+        _truncation_stats["total_chunks"] += len(nodes_with_score)
+        _truncation_stats["truncated_chunks"] += truncation_count
+        _truncation_stats["total_chars_before"] += total_chars_before
+        _truncation_stats["total_chars_after"] += total_chars_after
+        _truncation_stats["rerank_latencies"].append(t_elapsed)
+        # Limiter historique latences à 1000 derniers appels
+        if len(_truncation_stats["rerank_latencies"]) > 1000:
+            _truncation_stats["rerank_latencies"] = _truncation_stats["rerank_latencies"][-1000:]
+    
     # Associer chaque nœud à son score cross-encoder
     scored = list(zip(nodes_with_score, raw_scores))
     # Trier par score décroissant
     scored.sort(key=lambda x: x[1], reverse=True)
     
+    # Log avec métriques de troncature
+    truncation_pct = (truncation_count / len(nodes_with_score)) * 100 if nodes_with_score else 0
+    avg_chars_before = total_chars_before / len(nodes_with_score) if nodes_with_score else 0
+    avg_chars_after = total_chars_after / len(nodes_with_score) if nodes_with_score else 0
+    
     logger.info(
-        "Rerank cross-encoder : %d candidats → top-1 score=%.3f, top-3 scores=%s",
+        "Rerank cross-encoder : %d candidats, %.1fms, top-1=%.3f, top-3=%s | "
+        "Troncature: %d/%d chunks (%.1f%%), avg %d→%d chars (char_cap=%d)",
         len(scored),
+        t_elapsed,
         scored[0][1] if scored else 0.0,
         [round(s, 3) for _, s in scored[:3]],
+        truncation_count,
+        len(nodes_with_score),
+        truncation_pct,
+        int(avg_chars_before),
+        int(avg_chars_after),
+        char_cap,
     )
     
     return scored

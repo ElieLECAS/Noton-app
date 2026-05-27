@@ -403,16 +403,33 @@ async def create_or_update_feedback(
         .where(MessageFeedback.message_id == message_id, MessageFeedback.user_id == current_user.id)
     ).first()
     
+    def _should_generate_feedback_knowledge(
+        comment: Optional[str],
+        *,
+        already_generated: bool,
+        comment_changed: bool,
+        is_new: bool,
+    ) -> bool:
+        if not comment or not str(comment).strip():
+            return False
+        if already_generated:
+            return comment_changed
+        return is_new or comment_changed
+
     now = datetime.utcnow()
     if existing_feedback:
-        # Garde-fou : ne relancer Celery que si commentaire modifié et FAQ pas encore générée
         comment_changed = existing_feedback.comment != feedback_in.comment
-        should_regenerate_faq = (
-            not existing_feedback.is_positive 
-            and not existing_feedback.auto_faq_generated 
-            and comment_changed
+        should_regenerate_faq = _should_generate_feedback_knowledge(
+            feedback_in.comment,
+            already_generated=existing_feedback.auto_faq_generated,
+            comment_changed=comment_changed,
+            is_new=False,
         )
-        
+
+        if should_regenerate_faq and existing_feedback.auto_faq_generated:
+            existing_feedback.auto_faq_generated = False
+            existing_feedback.auto_faq_content = None
+
         existing_feedback.is_positive = feedback_in.is_positive
         existing_feedback.comment = feedback_in.comment
         existing_feedback.query_text = query_text
@@ -422,7 +439,12 @@ async def create_or_update_feedback(
         session.add(existing_feedback)
         db_feedback = existing_feedback
     else:
-        should_regenerate_faq = not feedback_in.is_positive  # Nouveau feedback négatif
+        should_regenerate_faq = _should_generate_feedback_knowledge(
+            feedback_in.comment,
+            already_generated=False,
+            comment_changed=False,
+            is_new=True,
+        )
         db_feedback = MessageFeedback(
             message_id=message_id,
             user_id=current_user.id,
@@ -440,14 +462,20 @@ async def create_or_update_feedback(
     session.commit()
     session.refresh(db_feedback)
 
-    # Déclencher la génération de FAQ corrective si nécessaire et permission OK
+    # Déclencher la génération de texte technique si précision fournie
     if should_regenerate_faq and "feedback.auto_faq" in current_user.permissions:
         try:
             from app.tasks.documents import generate_faq_from_feedback_task
             generate_faq_from_feedback_task.delay(db_feedback.id)
-            logger.info(f"Tâche Celery de génération FAQ planifiée pour le feedback {db_feedback.id}")
+            logger.info(
+                "Tâche Celery texte technique planifiée pour le feedback %s",
+                db_feedback.id,
+            )
         except Exception as e:
-            logger.error(f"Impossible de planifier la tâche Celery de génération FAQ : {e}")
+            logger.error(
+                "Impossible de planifier la tâche Celery texte technique : %s",
+                e,
+            )
 
     return db_feedback
 
