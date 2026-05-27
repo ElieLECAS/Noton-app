@@ -368,6 +368,61 @@ endblock %} {% block content %}
         </form>
     </div>
 </div>
+
+<div
+    id="chunks-monitor-modal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+>
+    <div
+        class="w-full max-w-6xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col"
+    >
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3
+                    id="chunks-monitor-title"
+                    class="text-lg font-semibold text-gray-900 dark:text-gray-100"
+                >
+                    Monitoring des chunks
+                </h3>
+                <p
+                    id="chunks-monitor-subtitle"
+                    class="text-xs text-gray-500 dark:text-gray-400"
+                ></p>
+            </div>
+            <button
+                type="button"
+                onclick="closeChunksMonitorModal()"
+                class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm"
+            >
+                Fermer
+            </button>
+        </div>
+
+        <div class="flex items-center gap-2 mb-3">
+            <button
+                id="chunks-tab-raw"
+                type="button"
+                class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-sm"
+                onclick="switchChunksTab('raw')"
+            >
+                Raw enrichi
+            </button>
+            <button
+                id="chunks-tab-report"
+                type="button"
+                class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-200"
+                onclick="switchChunksTab('report')"
+            >
+                Synthèse / Rapport
+            </button>
+        </div>
+
+        <div class="flex-1 min-h-0 overflow-auto">
+            <div id="chunks-raw-panel" class="space-y-3"></div>
+            <div id="chunks-report-panel" class="space-y-3 hidden"></div>
+        </div>
+    </div>
+</div>
 {% endblock %} {% block extra_scripts %}
 <script>
     let selectedFolderId = null;
@@ -379,6 +434,8 @@ endblock %} {% block content %}
     let canSpaceUpdate = false;
     let canSpaceDelete = false;
     let isAdminUser = false;
+    let chunksMonitorData = null;
+    let chunksActiveTab = "raw";
 
     async function api(url, options = {}) {
         const headers = { ...(options.headers || {}) };
@@ -635,6 +692,7 @@ endblock %} {% block content %}
       </div>
         <div class="flex items-center gap-3 flex-wrap justify-end">
         <button class="text-blue-600 text-sm" onclick="openDocumentFile(${d.id})">Ouvrir</button>
+        <button class="text-indigo-600 text-sm" onclick="openChunksMonitorModal(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')">Chunks</button>
         ${
             canLibraryWrite
                 ? `
@@ -697,6 +755,97 @@ endblock %} {% block content %}
         const blobUrl = URL.createObjectURL(blob);
         window.open(blobUrl, "_blank");
         setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+    }
+
+    function escapeHtml(text) {
+        return String(text || "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
+    }
+
+    function renderChunkCard(chunk) {
+        const token =
+            chunk.token_count != null ? `${chunk.token_count} tok` : "tok ?";
+        const page = Number.isFinite(chunk.page) ? chunk.page : 0;
+        const heading = chunk.metadata?.section_heading || "(sans titre)";
+        return `
+      <article class="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40">
+        <header class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
+          <span class="font-semibold">p.${page}</span>
+          <span>#${chunk.chunk_index}</span>
+          <span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700">${escapeHtml(chunk.content_type)}</span>
+          <span>${escapeHtml(token)}</span>
+          <span class="truncate max-w-[40ch]">${escapeHtml(heading)}</span>
+        </header>
+        <div class="p-3">
+          <pre class="whitespace-pre-wrap break-words text-sm text-gray-800 dark:text-gray-100 leading-relaxed font-sans">${escapeHtml(chunk.content)}</pre>
+        </div>
+      </article>
+    `;
+    }
+
+    function renderChunksPanels() {
+        const rawHost = document.getElementById("chunks-raw-panel");
+        const reportHost = document.getElementById("chunks-report-panel");
+        if (!chunksMonitorData) {
+            rawHost.innerHTML = "";
+            reportHost.innerHTML = "";
+            return;
+        }
+        rawHost.innerHTML = (chunksMonitorData.raw_chunks || []).length
+            ? chunksMonitorData.raw_chunks.map(renderChunkCard).join("")
+            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk raw trouvé.</div>`;
+        reportHost.innerHTML = (chunksMonitorData.report_chunks || []).length
+            ? chunksMonitorData.report_chunks.map(renderChunkCard).join("")
+            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk synthèse/rapport trouvé.</div>`;
+    }
+
+    function switchChunksTab(tab) {
+        chunksActiveTab = tab;
+        const rawPanel = document.getElementById("chunks-raw-panel");
+        const reportPanel = document.getElementById("chunks-report-panel");
+        const rawBtn = document.getElementById("chunks-tab-raw");
+        const reportBtn = document.getElementById("chunks-tab-report");
+        const showRaw = tab === "raw";
+        rawPanel.classList.toggle("hidden", !showRaw);
+        reportPanel.classList.toggle("hidden", showRaw);
+        rawBtn.className = showRaw
+            ? "px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-sm"
+            : "px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-200";
+        reportBtn.className = !showRaw
+            ? "px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-sm"
+            : "px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-200";
+    }
+
+    async function openChunksMonitorModal(documentId, documentTitle) {
+        const modal = document.getElementById("chunks-monitor-modal");
+        const title = document.getElementById("chunks-monitor-title");
+        const subtitle = document.getElementById("chunks-monitor-subtitle");
+        title.textContent = `Monitoring des chunks — ${documentTitle}`;
+        subtitle.textContent = "Chargement...";
+        modal.classList.remove("hidden");
+        const r = await api(
+            `/api/library/documents/${documentId}/chunks-monitor?max_chars=8000`,
+        );
+        if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            subtitle.textContent =
+                err.detail || "Impossible de charger les chunks.";
+            document.getElementById("chunks-raw-panel").innerHTML = "";
+            document.getElementById("chunks-report-panel").innerHTML = "";
+            return;
+        }
+        chunksMonitorData = await r.json();
+        subtitle.textContent = `Raw: ${chunksMonitorData.raw_chunks_count} · Synthèse/Rapport: ${chunksMonitorData.report_chunks_count}`;
+        renderChunksPanels();
+        switchChunksTab(chunksActiveTab || "raw");
+    }
+
+    function closeChunksMonitorModal() {
+        document.getElementById("chunks-monitor-modal").classList.add("hidden");
     }
 
     async function deleteDocument(documentId, documentTitle) {

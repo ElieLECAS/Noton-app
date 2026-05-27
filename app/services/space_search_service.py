@@ -604,14 +604,25 @@ def _enrich_content_with_heading_and_figure(content: str, metadata: dict) -> str
     )
     figure_title = metadata.get("figure_title") or metadata.get("image_anchor")
     parts = []
+    
+    # Injection du résumé de page en contexte additionnel (Pass 2)
+    page_summary = metadata.get("page_summary")
+    if page_summary and str(page_summary).strip():
+        parts.append(f"[Contexte de la page: {page_summary.strip()}]")
+        
     if section_label and str(section_label).strip():
         parts.append(f"[Section: {section_label.strip()}]")
     if figure_title and str(figure_title).strip():
         parts.append(str(figure_title).strip())
     if not parts:
         return content
-    prefix = " ".join(parts) + "\n\n"
-    return prefix + content if content else prefix.strip()
+        
+    if page_summary:
+        prefix = parts[0] + "\n" + " ".join(parts[1:])
+    else:
+        prefix = " ".join(parts)
+        
+    return prefix.strip() + "\n\n" + content if content else prefix.strip()
 
 
 def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
@@ -998,7 +1009,32 @@ async def search_relevant_passages(
                 content_type = leaf_meta.get("content_type")
                 parent_node_id = leaf_meta.get("parent_node_id")
                 target_node = None
+                
+                is_multimodal = content_type in ("page_raw_enriched", "page_section_report")
+
                 if content_type in ("table_row", "table_summary"):
+                    target_node = nws.node
+                elif is_multimodal and parent_node_id:
+                    # Résolution du résumé parent Pass 2 comme contexte additionnel
+                    parent_node = parent_node_dict.get(parent_node_id)
+                    if parent_node is None:
+                        doc_id = leaf_meta.get("document_id")
+                        try:
+                            doc_id_int = int(doc_id) if doc_id is not None else None
+                        except (TypeError, ValueError):
+                            doc_id_int = None
+                        parent_node = _resolve_space_parent_with_multihop(
+                            session,
+                            space_id,
+                            user_id,
+                            doc_id_int,
+                            parent_node_id,
+                            parent_node_dict,
+                        )
+                    if parent_node:
+                        # Assigner le contenu du parent à la métadonnée page_summary
+                        leaf_meta["page_summary"] = parent_node.text
+                        nws.node.metadata = leaf_meta
                     target_node = nws.node
                 elif parent_node_id:
                     target_node = parent_node_dict.get(parent_node_id)
@@ -1018,8 +1054,9 @@ async def search_relevant_passages(
                         )
                 if target_node is None:
                     target_node = nws.node
-                else:
+                elif not is_multimodal:
                     _merge_leaf_page_into_node_metadata(nws.node, target_node)
+                
                 node_id = getattr(target_node, "id_", None)
                 if node_id and node_id in seen_node_ids:
                     continue
@@ -1059,7 +1096,7 @@ async def search_relevant_passages(
                 },
                 tags=["rerank", "cross_encoder"],
             ) as cer:
-                scored = reranker_service.rerank_nodes(
+                scored = await reranker_service.rerank_nodes(
                     query_text,
                     pool_nodes,
                     char_cap=settings.RERANK_CHAR_CAP,

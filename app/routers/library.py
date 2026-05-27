@@ -106,6 +106,28 @@ class DocumentChunksByPageResponse(BaseModel):
     pages: List[DocumentPageChunksCompare]
 
 
+class DocumentChunkMonitorItem(BaseModel):
+    chunk_id: int
+    chunk_index: int
+    page: int
+    content_type: str
+    token_count: Optional[int] = None
+    is_leaf: bool
+    node_id: Optional[str] = None
+    parent_node_id: Optional[str] = None
+    content: str
+    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+
+class DocumentChunksMonitorResponse(BaseModel):
+    document_id: int
+    document_title: str
+    raw_chunks_count: int
+    report_chunks_count: int
+    raw_chunks: List[DocumentChunkMonitorItem]
+    report_chunks: List[DocumentChunkMonitorItem]
+
+
 @router.get("", response_model=LibraryRead)
 async def get_library(
     current_user: UserRead = Depends(get_current_user),
@@ -326,6 +348,76 @@ async def get_document_chunks_by_page(
         filename=document.filename,
         total_chunks=len(chunks),
         pages=pages,
+    )
+
+
+@router.get("/documents/{document_id}/chunks-monitor", response_model=DocumentChunksMonitorResponse)
+async def get_document_chunks_monitor(
+    document_id: int,
+    max_chars: int = 6000,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """
+    Retourne les chunks multimodaux d'un document pour monitoring UI :
+    - raw : page_raw_enriched (+ legacy page_multimodal_section)
+    - report : page_section_report (+ legacy page_multimodal_summary)
+    """
+    document = get_document_by_id(session, document_id, current_user.id)
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document non trouvé")
+
+    safe_max_chars = max(500, min(max_chars, 20000))
+    chunks = session.exec(
+        select(DocumentChunk)
+        .where(DocumentChunk.document_id == document_id, DocumentChunk.is_leaf == True)  # noqa: E712
+        .order_by(DocumentChunk.chunk_index.asc())
+    ).all()
+
+    raw_types = {"page_raw_enriched", "page_multimodal_section"}
+    report_types = {"page_section_report", "page_multimodal_summary"}
+
+    raw_items: List[DocumentChunkMonitorItem] = []
+    report_items: List[DocumentChunkMonitorItem] = []
+
+    for chunk in chunks:
+        metadata = dict(chunk.metadata_json or chunk.metadata_ or {})
+        content_type = str(metadata.get("content_type") or "unknown")
+        if content_type not in raw_types and content_type not in report_types:
+            continue
+        page_no = metadata.get("page_no") or metadata.get("page") or metadata.get("page_start") or 0
+        try:
+            page = int(page_no)
+        except (TypeError, ValueError):
+            page = 0
+        content = (chunk.content or chunk.text or "")[:safe_max_chars]
+        item = DocumentChunkMonitorItem(
+            chunk_id=chunk.id,
+            chunk_index=chunk.chunk_index,
+            page=page,
+            content_type=content_type,
+            token_count=metadata.get("token_count"),
+            is_leaf=bool(chunk.is_leaf),
+            node_id=chunk.node_id,
+            parent_node_id=chunk.parent_node_id,
+            content=content,
+            metadata=metadata,
+        )
+        if content_type in raw_types:
+            raw_items.append(item)
+        else:
+            report_items.append(item)
+
+    raw_items.sort(key=lambda x: (x.page, x.chunk_index))
+    report_items.sort(key=lambda x: (x.page, x.chunk_index))
+
+    return DocumentChunksMonitorResponse(
+        document_id=document.id,
+        document_title=document.title,
+        raw_chunks_count=len(raw_items),
+        report_chunks_count=len(report_items),
+        raw_chunks=raw_items,
+        report_chunks=report_items,
     )
 
 

@@ -98,6 +98,7 @@ class Settings(BaseSettings):
 
     # Reranker cross-encoder (CPU-only)
     RERANKER_ENABLED: bool = False
+    RERANKER_PROVIDER: str = os.getenv("RERANKER_PROVIDER", "local")  # local | mistral
     RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     RERANK_POOL: int = 30  # Réduit de 50 → 30 pour MiniLM CPU (latence vs qualité)
     RERANK_CHAR_CAP: int = 1700  # ~485 tokens (ratio FR 3.5 chars/token, marge vs max_length=512)

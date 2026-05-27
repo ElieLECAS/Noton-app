@@ -157,7 +157,40 @@ def should_early_stop(rrf_scores: List[float], threshold: float) -> bool:
     return should_stop
 
 
-def rerank_nodes(
+async def _rerank_mistral(query: str, documents: List[str]) -> List[float]:
+    """Appelle l'API Mistral Rerank en asynchrone."""
+    if not settings.MISTRAL_API_KEY:
+        raise ValueError("MISTRAL_API_KEY n'est pas configurée")
+        
+    base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
+    headers = {
+        "Authorization": f"Bearer {settings.MISTRAL_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "model": "mistral-rerank-latest",
+        "query": query,
+        "documents": documents,
+        "top_n": len(documents)
+    }
+    
+    import httpx
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.post(f"{base_url}/v1/rerank", headers=headers, json=payload)
+        resp.raise_for_status()
+        data = resp.json()
+        
+    results = data.get("results", [])
+    scores = [0.0] * len(documents)
+    for r in results:
+        idx = r.get("index")
+        score = r.get("relevance_score", 0.0)
+        if 0 <= idx < len(scores):
+            scores[idx] = float(score)
+    return scores
+
+
+async def rerank_nodes(
     query_text: str,
     nodes_with_score: List[NodeWithScore],
     *,
@@ -165,7 +198,7 @@ def rerank_nodes(
     batch_size: int,
 ) -> List[Tuple[NodeWithScore, float]]:
     """
-    Rerank un pool de nœuds avec le cross-encoder.
+    Rerank un pool de nœuds avec le cross-encoder local ou l'API Mistral Rerank.
     Collecte des métriques de troncature pour observabilité.
     
     Args:
@@ -183,10 +216,13 @@ def rerank_nodes(
     import time
     t_start = time.perf_counter()
     
-    model = _get_cross_encoder()
-    
+    provider = getattr(settings, "RERANKER_PROVIDER", "local")
+    if provider == "mistral":
+        char_cap = max(char_cap, 2800)  # Marge de caractères plus élevée pour Mistral (~800 tokens)
+        
     # Tronquer le texte de chaque nœud à char_cap + collecter métriques
     pairs = []
+    truncated_texts = []
     truncation_count = 0
     total_chars_before = 0
     total_chars_after = 0
@@ -204,18 +240,29 @@ def rerank_nodes(
         
         total_chars_after += len(truncated)
         pairs.append([query_text, truncated])
+        truncated_texts.append(truncated)
     
-    # Batch predict
-    try:
-        raw_scores = model.predict(
-            pairs,
-            batch_size=batch_size,
-            show_progress_bar=False,
-        )
-    except Exception as e:
-        logger.exception("Échec rerank cross-encoder : %s", e)
-        # Fallback : garder les scores RRF originaux
-        return [(nws, float(nws.score or 0.0)) for nws in nodes_with_score]
+    raw_scores = None
+    if provider == "mistral":
+        try:
+            raw_scores = await _rerank_mistral(query_text, truncated_texts)
+        except Exception as e:
+            logger.warning("Échec rerank Mistral API, fallback sur cross-encoder local: %s", e)
+            provider = "local"  # Fallback
+            
+    if provider == "local" or raw_scores is None:
+        model = _get_cross_encoder()
+        # Batch predict
+        try:
+            raw_scores = model.predict(
+                pairs,
+                batch_size=batch_size,
+                show_progress_bar=False,
+            )
+        except Exception as e:
+            logger.exception("Échec rerank cross-encoder local : %s", e)
+            # Fallback : garder les scores RRF originaux
+            return [(nws, float(nws.score or 0.0)) for nws in nodes_with_score]
     
     # Collecter latence
     t_elapsed = (time.perf_counter() - t_start) * 1000  # ms
@@ -231,7 +278,7 @@ def rerank_nodes(
         if len(_truncation_stats["rerank_latencies"]) > 1000:
             _truncation_stats["rerank_latencies"] = _truncation_stats["rerank_latencies"][-1000:]
     
-    # Associer chaque nœud à son score cross-encoder
+    # Associer chaque nœud à son score
     scored = list(zip(nodes_with_score, raw_scores))
     # Trier par score décroissant
     scored.sort(key=lambda x: x[1], reverse=True)
@@ -242,8 +289,9 @@ def rerank_nodes(
     avg_chars_after = total_chars_after / len(nodes_with_score) if nodes_with_score else 0
     
     logger.info(
-        "Rerank cross-encoder : %d candidats, %.1fms, top-1=%.3f, top-3=%s | "
+        "Rerank %s : %d candidats, %.1fms, top-1=%.3f, top-3=%s | "
         "Troncature: %d/%d chunks (%.1f%%), avg %d→%d chars (char_cap=%d)",
+        provider,
         len(scored),
         t_elapsed,
         scored[0][1] if scored else 0.0,
