@@ -1,5 +1,6 @@
 """Tests légers : parsing tableaux Docling et résolution parents (sans DB)."""
 
+import pytest
 from unittest.mock import MagicMock
 
 from llama_index.core.schema import TextNode
@@ -119,4 +120,96 @@ def test_reciprocal_rank_fusion_three_channels():
     # Les scores doivent être normalisés dans [0.1, 0.9]
     for r in res:
         assert 0.1 <= r.score <= 0.9
+
+
+@pytest.mark.asyncio
+async def test_space_search_window_aggregation_and_deduplication():
+    from unittest import mock
+    from llama_index.core.schema import TextNode, NodeWithScore
+    from app.services import space_search_service
+
+    session = mock.MagicMock()
+
+    with mock.patch("app.services.space_search_service.get_space_by_id") as mock_get_space, \
+         mock.patch("app.services.space_search_service.generate_embedding") as mock_emb, \
+         mock.patch("app.services.space_search_service._retrieve_leaves_sql") as mock_leaves, \
+         mock.patch("app.services.space_search_service._retrieve_leaves_bm25_sql") as mock_bm25, \
+         mock.patch("app.services.space_search_service._retrieve_leaves_alphanumeric_sql") as mock_alpha, \
+         mock.patch("app.services.space_search_service._build_parent_node_dict") as mock_parents, \
+         mock.patch("app.services.space_search_service.settings") as mock_settings:
+
+        mock_settings.RERANKER_ENABLED = False
+        mock_get_space.return_value = mock.MagicMock()
+        mock_emb.return_value = [0.1] * 384
+
+        n1 = NodeWithScore(
+            node=TextNode(
+                id_="chunk-1",
+                text="Contenu de la page brute.",
+                metadata={"content_type": "page_raw_enriched", "window_id": "win-test-1", "document_title": "Doc1"}
+            ),
+            score=0.9
+        )
+        n2 = NodeWithScore(
+            node=TextNode(
+                id_="chunk-2",
+                text="Rapport de la fenêtre.",
+                metadata={"content_type": "page_window_report", "window_id": "win-test-1", "document_title": "Doc1"}
+            ),
+            score=0.8
+        )
+
+        mock_leaves.return_value = [n1, n2]
+        mock_bm25.return_value = []
+        mock_alpha.return_value = []
+        mock_parents.return_value = {}
+
+        mock_report_chunk = mock.MagicMock()
+        mock_report_chunk.metadata_json = {"window_id": "win-test-1", "content_type": "page_window_report"}
+        mock_report_chunk.metadata_ = None
+        mock_report_chunk.content = "Rapport de la fenêtre récupéré de la DB."
+        mock_report_chunk.text = None
+
+        session.execute.return_value.scalars.return_value.all.return_value = [mock_report_chunk]
+
+        result = await space_search_service.search_relevant_passages(
+            session=session,
+            space_id=1,
+            query_text="test window aggregation",
+            user_id=1,
+            k=15
+        )
+
+        passages = result.get("passages", [])
+        assert len(passages) == 1
+        p = passages[0]
+        assert p["chunk_id"] == 1
+        assert "Rapport de la fenêtre récupéré de la DB." in p["passage"]
+
+
+def test_build_space_context_from_passages_includes_page_info():
+    from app.routers.chat import build_space_context_from_passages
+
+    passages = [
+        {
+            "passage": "Contenu du passage.",
+            "document_title": "Notice Technique",
+            "score": 0.85,
+            "page_no": 8,
+        },
+        {
+            "passage": "Autre contenu.",
+            "document_title": "Guide de Montage",
+            "score": 0.75,
+            "page_start": 10,
+            "page_end": 12,
+        }
+    ]
+
+    system_msg = build_space_context_from_passages(passages)
+    content = system_msg["content"]
+
+    assert "Notice Technique, page 8" in content
+    assert "Guide de Montage, pages 10-12" in content
+
 

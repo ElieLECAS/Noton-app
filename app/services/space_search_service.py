@@ -846,6 +846,32 @@ async def search_relevant_passages(
             final_nodes: List[NodeWithScore] = []
             seen_node_ids: set = set()
 
+            # Option A : Regroupement par fenêtre pour la v4 multimodale
+            window_ids = set()
+            windows_with_raw_chunks = set()
+            for nws in top_leaves:
+                leaf_meta = nws.node.metadata or {}
+                wid = leaf_meta.get("window_id")
+                if wid:
+                    window_ids.add(wid)
+                    ctype = leaf_meta.get("content_type")
+                    if ctype == "page_raw_enriched":
+                        windows_with_raw_chunks.add(wid)
+
+            window_reports_dict = {}
+            if window_ids:
+                stmt = select(DocumentChunk).where(
+                    DocumentChunk.is_leaf.is_(True),
+                    text("(coalesce(metadata_json->>'content_type', metadata_->>'content_type')) = 'page_window_report'"),
+                    text("(coalesce(metadata_json->>'window_id', metadata_->>'window_id')) = ANY(:window_ids)")
+                )
+                db_reports = session.execute(stmt, {"window_ids": list(window_ids)}).scalars().all()
+                for report_chunk in db_reports:
+                    meta = _merged_chunk_metadata(report_chunk.metadata_json, report_chunk.metadata_)
+                    wid = meta.get("window_id")
+                    if wid:
+                        window_reports_dict.setdefault(wid, []).append(report_chunk.content or report_chunk.text or "")
+
             for nws in top_leaves:
                 score = float(getattr(nws, "score", 0.0) or 0.0)
                 leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
@@ -859,10 +885,23 @@ async def search_relevant_passages(
                     "page_window_report",
                 )
 
+                if content_type == "page_window_report":
+                    wid = leaf_meta.get("window_id")
+                    if wid and wid in windows_with_raw_chunks:
+                        logger.info("Deduplication Option A : Exclusion du rapport de fenêtre autonome pour %s car le raw chunk est présent", wid)
+                        continue
+
+                if is_multimodal:
+                    wid = leaf_meta.get("window_id")
+                    if wid and wid in window_reports_dict:
+                        reports_text = "\n\n".join(window_reports_dict[wid])
+                        leaf_meta["page_summary"] = reports_text
+                        nws.node.metadata = leaf_meta
+
                 if content_type in ("table_row", "table_summary"):
                     target_node = nws.node
                 elif is_multimodal and parent_node_id:
-                    # Résolution du résumé parent Pass 2 comme contexte additionnel
+                    # Résolution du résumé parent Pass 2 comme contexte additionnel (compatibilité)
                     parent_node = parent_node_dict.get(parent_node_id)
                     if parent_node is None:
                         doc_id = leaf_meta.get("document_id")

@@ -126,7 +126,9 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "Puces & Tableaux : Priorise la prose. N'utilise les listes à puces que si c'est réellement justifié (par exemple pour énumérer des éléments simples où la prose nuirait à la lisibilité). Utilise les tableaux Markdown pour présenter clairement les données techniques ou les comparaisons complexes sans répéter ou paraphraser les informations du tableau dans le texte qui l'accompagne.\n"
     "Filtrage des informations : Réponds exclusivement à la question posée. Si l'information n'est pas dans le chunk spécifique à la section demandée, ne complète pas avec des données d'autres sections. Réponds exactement au périmètre de la question posée sans proposer d'informations complémentaires non sollicitées.\n"
     "Désambiguïsation & Contextualisation automatique : Sois extrêmement vigilante avec les dénominations de gammes (ex : Perform 70 vs Perform 76), les versions de produits (ex : standard vs renforcée) et les configurations spécifiques (ex : seuil PMR vs seuil standard). Ne les confonds jamais et ne mélange pas leurs composants ou instructions. Si une information ou un composant varie selon la gamme, la version ou la configuration, présente systématiquement et automatiquement la distinction ou les différents cas de figure applicables selon les données du contexte, sans demander de précision ou de clarification à l'utilisateur.\n"
-    "Règle d'or : Hard Grounding strict. Tu dois te limiter exclusivement aux faits décrits dans le contexte fourni (les PASSAGES). Ne fais aucune extrapolation, supposition, spéculation ou généralisation. Si l'information recherchée est absente du contexte fourni (les PASSAGES), indique-le avec courtoisie et propose une étape de vérification sans essayer de deviner. Ne dis jamais de choses fausses ou non vérifiables à partir des extraits fournis."
+    "Citations strictes et obligatoires : Pour chaque fait technique, mesure, tolérance ou instruction que tu mentionnes, cite obligatoirement le nom exact du document et son numéro de page sous la forme [Nom du document, page X] (par exemple : [Notice de pose LUMEAL GA, page 8]). Si l'extrait ne contient pas de numéro de page précis, mentionne simplement le nom du document [Nom du document]. N'invente jamais de numéros de pages ou de noms de documents.\n"
+    "Interdiction d'halluciner et de surinterpréter : Ne fais aucune extrapolation, supposition, spéculation ou généralisation. Ne cherche pas à deviner ou à enjoliver. Ne dis jamais de choses fausses, incertaines ou non vérifiables à partir des extraits fournis. Si le texte ne contient pas l'information ou s'il y a un doute, réponds simplement que tu ne disposes pas de l'information.\n"
+    "Règle d'or : Hard Grounding strict. Tu dois te limiter exclusivement aux faits décrits de manière explicite dans le contexte fourni (les PASSAGES). Si l'information recherchée est absente du contexte fourni (les PASSAGES), indique-le clairement et propose une étape de vérification sans essayer de deviner."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -359,7 +361,20 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
             passage = _truncate_text(passage, SPACE_CONTEXT_MAX_PASSAGE_CHARS)
             score = passage_data.get('score', 0.0)
             document_title = passage_data.get('document_title', 'Document sans titre')
-            passage_text = f"[{i}] ({score:.2f}) {document_title}\n{passage}\n"
+            
+            page_no = passage_data.get("page_no")
+            page_start = passage_data.get("page_start")
+            page_end = passage_data.get("page_end")
+            page_info = ""
+            if page_no is not None:
+                page_info = f", page {page_no}"
+            elif page_start is not None:
+                if page_end is not None and page_end != page_start:
+                    page_info = f", pages {page_start}-{page_end}"
+                else:
+                    page_info = f", page {page_start}"
+            
+            passage_text = f"[{i}] ({score:.2f}) {document_title}{page_info}\n{passage}\n"
             if used_chars + len(passage_text) > SPACE_CONTEXT_MAX_CHARS:
                 break
             passages_content.append(passage_text)
