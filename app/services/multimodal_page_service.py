@@ -242,6 +242,82 @@ def _tokenize_rag_units(text: str) -> List[str]:
     return [u for u in units if u and u.strip()]
 
 
+_CAPTION_RE = re.compile(
+    r"^\s*(?:Figure|Fig\.|Tableau|Table|Schéma|Schema|Photo|Graphe|Graph|Diagramme|Illustration|Plan|Dessin|Légende|Legend)\b",
+    re.IGNORECASE,
+)
+
+
+def _bond_layout_captions(units: List[str]) -> List[str]:
+    """
+    Bonds immediately adjacent captions (e.g. 'Figure 1: ...') with their corresponding [Image: ...] blocks.
+    This prevents the chunker from separating them during RAG packing.
+    Uses a constraint-satisfaction approach to resolve ambiguous captions between two images.
+    """
+    if not units:
+        return []
+
+    # Identify which units are images and which are captions
+    is_image = [bool(_IMAGE_BLOCK_RE.search(u)) for u in units]
+    is_caption = [
+        bool(_CAPTION_RE.match(u.strip())) if not img else False
+        for u, img in zip(units, is_image)
+    ]
+
+    # Maps image index -> list of assigned caption indices
+    image_to_captions = {i: [] for i, img in enumerate(is_image) if img}
+
+    # List of caption indices to process
+    caption_indices = [i for i, cap in enumerate(is_caption) if cap]
+
+    # Pass 1: Assign unambiguous captions (adjacent to exactly one image)
+    ambiguous = []
+    for k in caption_indices:
+        adj_images = []
+        if k - 1 >= 0 and is_image[k - 1]:
+            adj_images.append(k - 1)
+        if k + 1 < len(units) and is_image[k + 1]:
+            adj_images.append(k + 1)
+
+        if len(adj_images) == 1:
+            image_to_captions[adj_images[0]].append(k)
+        elif len(adj_images) > 1:
+            ambiguous.append((k, adj_images))
+
+    # Pass 2: Assign ambiguous captions (adjacent to two images)
+    for k, adj_images in ambiguous:
+        # Prioritize the image that doesn't have any caption assigned yet
+        unassigned_images = [img for img in adj_images if not image_to_captions[img]]
+        if len(unassigned_images) == 1:
+            image_to_captions[unassigned_images[0]].append(k)
+        else:
+            # If both or neither have captions, default to the preceding one
+            image_to_captions[adj_images[0]].append(k)
+
+    # Now rebuild the units list, merging assigned captions into their images
+    merged_caption_indices = set()
+    for img_idx, cap_indices in image_to_captions.items():
+        merged_caption_indices.update(cap_indices)
+
+    new_units = []
+    for i, unit in enumerate(units):
+        if i in merged_caption_indices:
+            continue
+        if is_image[i]:
+            # Merge assigned captions with this image
+            # Sort caption indices so they appear in correct reading order relative to the image
+            caps = sorted(image_to_captions[i])
+            pre_caps = [units[c] for c in caps if c < i]
+            post_caps = [units[c] for c in caps if c > i]
+
+            parts = pre_caps + [unit] + post_caps
+            new_units.append("\n".join(parts))
+        else:
+            new_units.append(unit)
+
+    return new_units
+
+
 def _pack_rag_units(
     units: List[str],
     max_tokens: int = MAX_CHUNK_TOKENS,
@@ -384,7 +460,8 @@ def split_text_rag_friendly(
     units = _tokenize_rag_units(text)
     if not units:
         return split_text_by_tokens(text, max_tokens)
-    return _pack_rag_units(units, max_tokens=max_tokens, overlap_tokens=overlap)
+    bonded_units = _bond_layout_captions(units)
+    return _pack_rag_units(bonded_units, max_tokens=max_tokens, overlap_tokens=overlap)
 
 
 def assert_chunk_rag_quality(

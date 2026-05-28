@@ -147,3 +147,65 @@ def test_tail_sentences_by_tokens():
     res = _tail_sentences_by_tokens(text, 25)
     assert res == "Deuxième phrase. Troisième phrase."
 
+
+def test_bond_layout_captions_basic():
+    from app.services.multimodal_page_service import _bond_layout_captions
+
+    # Test 1: Caption preceding the image
+    units = ["Intro paragraph.", "Figure 1 - Schema text", "[Image: schema_details]", "Outro paragraph."]
+    bonded = _bond_layout_captions(units)
+    assert len(bonded) == 3
+    assert bonded[0] == "Intro paragraph."
+    assert bonded[1] == "Figure 1 - Schema text\n[Image: schema_details]"
+    assert bonded[2] == "Outro paragraph."
+
+    # Test 2: Caption succeeding the image
+    units = ["Intro paragraph.", "[Image: schema_details]", "Figure 1 - Schema text", "Outro paragraph."]
+    bonded = _bond_layout_captions(units)
+    assert len(bonded) == 3
+    assert bonded[0] == "Intro paragraph."
+    assert bonded[1] == "[Image: schema_details]\nFigure 1 - Schema text"
+    assert bonded[2] == "Outro paragraph."
+
+
+def test_bond_layout_captions_ambiguity_resolution():
+    from app.services.multimodal_page_service import _bond_layout_captions
+
+    # Figure 1 is preceding img1. Figure 2 is between img1 and img2.
+    # Figure 2 is adjacent to both, but since img1 already got Figure 1, Figure 2 should bond to img2.
+    units = ["Figure 1", "[Image: img1]", "Figure 2", "[Image: img2]"]
+    bonded = _bond_layout_captions(units)
+    assert len(bonded) == 2
+    assert bonded[0] == "Figure 1\n[Image: img1]"
+    assert bonded[1] == "Figure 2\n[Image: img2]"
+
+    # Conversely: img1 is followed by Figure 1, img2 is followed by Figure 2.
+    # Figure 1 is between img1 and img2, but img2 is followed by Figure 2, so img2 gets Figure 2, leaving Figure 1 to bond to img1.
+    units = ["[Image: img1]", "Figure 1", "[Image: img2]", "Figure 2"]
+    bonded = _bond_layout_captions(units)
+    assert len(bonded) == 2
+    assert bonded[0] == "[Image: img1]\nFigure 1"
+    assert bonded[1] == "[Image: img2]\nFigure 2"
+
+
+def test_split_text_rag_friendly_keeps_caption_with_image():
+    from app.services.multimodal_page_service import split_text_rag_friendly
+
+    text = (
+        "Introductory paragraph that goes here.\n\n"
+        "Figure 42: Layout scheme of the system\n"
+        "[Image: Schema details showing lines and boxes]\n"
+        "Ending paragraph text."
+    )
+    
+    # We specify a small max_tokens that forces splits.
+    # The image + caption together should not be separated.
+    chunks = split_text_rag_friendly(text, max_tokens=60, overlap_tokens=0)
+    
+    # Verify that we split the text, but the image and caption are in the same chunk
+    assert len(chunks) > 1
+    caption_chunk = [c for c in chunks if "Figure 42" in c]
+    assert len(caption_chunk) == 1
+    assert "[Image: Schema details showing lines and boxes]" in caption_chunk[0]
+
+
