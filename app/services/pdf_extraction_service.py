@@ -159,48 +159,16 @@ def extract_page_texts_from_pdf(pdf_path: str) -> List[Tuple[int, str]]:
 
 def extract_markdown_from_pdf(pdf_path: str) -> Tuple[str, str]:
     """
-    Extraction hybride PDF : markdown natif (pymupdf4llm) → fallback Mistral OCR.
+    Extraction PDF : OCR Mistral page par page.
 
     Args:
         pdf_path: Chemin absolu ou relatif vers le fichier PDF.
 
     Returns:
         (markdown, method_used)
-        - method_used: "native" si pymupdf4llm, "ocr" si Mistral OCR
+        - method_used: "ocr"
     """
-    from app.config import settings
-
-    force_ocr = getattr(settings, "PDF_FORCE_OCR", False)
-
-    if not force_ocr:
-        try:
-            t0 = time.perf_counter()
-            markdown = extract_markdown_pymupdf4llm(pdf_path)
-            elapsed = time.perf_counter() - t0
-
-            if len(markdown.strip()) >= MIN_CHARS_THRESHOLD:
-                logger.info(
-                    "PDF texte — pymupdf4llm: %s en %.2fs (%d chars)",
-                    Path(pdf_path).name,
-                    elapsed,
-                    len(markdown),
-                )
-                return markdown, "native"
-
-            logger.info(
-                "pymupdf4llm a extrait peu de texte (%d chars) pour %s, fallback OCR",
-                len(markdown.strip()),
-                Path(pdf_path).name,
-            )
-        except Exception as exc:
-            logger.warning(
-                "pymupdf4llm échoué pour %s: %s — fallback Mistral OCR",
-                Path(pdf_path).name,
-                exc,
-            )
-    else:
-        logger.info("PDF_FORCE_OCR=true — Mistral OCR forcé pour %s", Path(pdf_path).name)
-
+    logger.info("Extraction OCR Mistral démarrée pour %s", Path(pdf_path).name)
     from app.services.mistral_ocr_service import _ocr_pdf_page_by_page
 
     markdown = _ocr_pdf_page_by_page(pdf_path)

@@ -78,6 +78,7 @@ class Settings(BaseSettings):
     VISION_MAX_IMAGES_PER_DOCUMENT: Optional[int] = None
     # Retraitement multimodal par page (pymupdf + mistral-small vision)
     MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"
+    MULTIMODAL_EXTRACT_MODEL: str = "mistral-large-latest"
     MULTIMODAL_PAGE_DPI: int = 200
     MULTIMODAL_PAGE_MAX_TOKENS: int = 8000
     # Pages traitées en parallèle au sein d’un même document multimodal

@@ -552,6 +552,34 @@ def count_image_blocks(text: str) -> int:
     return len(_IMAGE_BLOCK_RE.findall(text or ""))
 
 
+_RAW_SYSTEM_PROMPT_MISTRAL_LARGE = """Tu es un expert en extraction documentaire et en vision par ordinateur pour RAG technique.
+Tu reçois l'image PNG d'une page de document technique. Tu dois en extraire l'intégralité du texte et décrire avec précision tous les éléments visuels présents.
+
+Réponds UNIQUEMENT avec un JSON valide sous cette forme exacte :
+{
+  "page_no": <int>,
+  "raw_text": "<texte brut enrichi de la page>"
+}
+
+Règles absolues pour `raw_text` :
+1. Extraction textuelle ultra clean : Réalise un OCR extrêmement précis et ordonné de tout le texte présent dans la page. Reconstruis les paragraphes dans l'ordre logique de lecture.
+2. Tableaux : Transcris tous les tableaux sous forme de tableaux Markdown avec des séparateurs de colonnes pipe (|) et des lignes d'en-tête claires.
+3. Éléments visuels / schémas / plans : Pour chaque dessin technique, schéma, photo, logo, ou plan présent sur l'image, insère à l'emplacement logique de lecture un bloc explicite formaté ainsi :
+   `[Image: description technique détaillée et exhaustive]`
+   Dans cette description, tu dois :
+   - Transcrire et lister explicitement TOUTES les annotations textuelles, cotes, valeurs numériques, unités, légendes, références de produits ou de normes visibles dans l'élément visuel.
+   - Décrire ce que représente le schéma ou le visuel de manière technique et structurée.
+4. Langue : Rédige le résultat en Français.
+5. Rigueur : N'invente aucune information, ne paraphrase pas les termes techniques. Si un texte est flou ou illisible, écris "[zone illisible]".
+"""
+
+_USER_PROMPT_MISTRAL_LARGE = """Document : {title}
+Page : {page_no}
+
+Analyse le PNG de cette page. Extrais tout le texte au format markdown propre et décris avec précision les visuels/schémas sous forme de blocs `[Image: ...]`.
+Retourne UNIQUEMENT le JSON demandé."""
+
+
 _RAW_SYSTEM_PROMPT_NATIVE = """Tu es un expert en extraction documentaire pour RAG technique.
 Tu reçois le texte pymupdf (source de vérité) et l'image PNG de la même page.
 
@@ -1095,6 +1123,7 @@ def _mistral_chat_completion(
     temperature: float = 0.2,
     response_format_json: bool = True,
     timeout_seconds: Optional[float] = None,
+    model: Optional[str] = None,
 ) -> str:
     """Appel Mistral chat/completions avec retries."""
     api_key = settings.MISTRAL_API_KEY
@@ -1102,7 +1131,7 @@ def _mistral_chat_completion(
         raise ValueError("MISTRAL_API_KEY n'est pas configurée")
 
     payload: dict = {
-        "model": _multimodal_page_model(),
+        "model": model or _multimodal_page_model(),
         "messages": messages,
         "stream": False,
         "max_tokens": max_tokens or settings.MULTIMODAL_PAGE_MAX_TOKENS,
@@ -1163,34 +1192,22 @@ def _mistral_chat_completion(
     raise RuntimeError("Échec appel Mistral après retries")
 
 
-def synthesize_page_with_mistral_small(
+def synthesize_page_with_mistral_large(
     image_png: bytes,
     page_no: int,
-    pymupdf_text: str,
     document_title: str,
     *,
-    extraction_mode: Optional[str] = None,
     pdf_path: Optional[str] = None,
     page_index: Optional[int] = None,
 ) -> dict:
-    """Pass 1 : mistral-small vision → JSON { raw_text } uniquement."""
-    mode = extraction_mode or resolve_extraction_mode(pymupdf_text)
+    """Pass 1 : mistral-large vision → JSON { raw_text } uniquement (OCR direct sur PNG + description visuelle)."""
     b64 = base64.b64encode(image_png).decode("ascii")
 
-    if mode == "native":
-        pymupdf_block = pymupdf_text.strip() if pymupdf_text else "(aucun texte extractible)"
-        user_text = _USER_PROMPT_NATIVE.format(
-            title=document_title or "Document",
-            page_no=page_no,
-            pymupdf_text=pymupdf_block,
-        )
-        system_prompt = _RAW_SYSTEM_PROMPT_NATIVE
-    else:
-        user_text = _USER_PROMPT_SCANNED.format(
-            title=document_title or "Document",
-            page_no=page_no,
-        )
-        system_prompt = _RAW_SYSTEM_PROMPT_SCANNED
+    user_text = _USER_PROMPT_MISTRAL_LARGE.format(
+        title=document_title or "Document",
+        page_no=page_no,
+    )
+    system_prompt = _RAW_SYSTEM_PROMPT_MISTRAL_LARGE
 
     messages = [
         {"role": "system", "content": system_prompt},
@@ -1204,8 +1221,9 @@ def synthesize_page_with_mistral_small(
     ]
 
     parsed_raw: dict = {}
+    model_name = getattr(settings, "MULTIMODAL_EXTRACT_MODEL", "mistral-large-latest") or "mistral-large-latest"
     try:
-        raw_content = _mistral_chat_completion(messages, page_no=page_no)
+        raw_content = _mistral_chat_completion(messages, page_no=page_no, model=model_name)
         parsed_raw = _parse_json_with_repair(raw_content)
     except (ValueError, json.JSONDecodeError) as exc_first:
         logger.warning("page_no=%s JSON invalide (%s), retry strict", page_no, exc_first)
@@ -1224,7 +1242,7 @@ def synthesize_page_with_mistral_small(
         ]
         try:
             retry_raw = _mistral_chat_completion(
-                retry_messages, page_no=page_no, temperature=0.0
+                retry_messages, page_no=page_no, temperature=0.0, model=model_name
             )
             parsed_raw = _parse_json_with_repair(retry_raw)
         except (ValueError, json.JSONDecodeError) as exc_retry:
@@ -1232,18 +1250,18 @@ def synthesize_page_with_mistral_small(
             parsed_raw = {}
 
     parsed = parse_multimodal_page_response(
-        parsed_raw, page_no, pymupdf_text, document_title, extraction_mode=mode
+        parsed_raw, page_no, "", document_title, extraction_mode="ocr"
     )
     parsed, status = validate_raw_page(
         parsed,
-        pymupdf_text,
+        "",
         pdf_path=pdf_path,
         page_index=page_index,
     )
 
-    if status == "retry_schemas" and mode == "native":
+    if status == "retry_schemas":
         schema_messages = [
-            {"role": "system", "content": _RAW_SYSTEM_PROMPT_NATIVE},
+            {"role": "system", "content": system_prompt},
             {
                 "role": "user",
                 "content": [
@@ -1260,7 +1278,7 @@ def synthesize_page_with_mistral_small(
             },
         ]
         try:
-            schema_raw = _mistral_chat_completion(schema_messages, page_no=page_no)
+            schema_raw = _mistral_chat_completion(schema_messages, page_no=page_no, model=model_name)
             schema_parsed = _parse_json_with_repair(schema_raw)
             if schema_parsed.get("raw_text"):
                 parsed["raw_text"] = schema_parsed["raw_text"]
@@ -1341,7 +1359,7 @@ def _process_single_multimodal_page(
     page_idx: int,
     total_pages: int,
 ) -> Tuple[int, dict]:
-    """Traite une page : PNG + mistral-small → JSON dict (appelable en parallèle)."""
+    """Traite une page : PNG + mistral-large → JSON dict (appelable en parallèle)."""
     ld = get_library_document_logger()
     ld.info(
         "[Multimodal] page %s/%s (page_no=%s)",
@@ -1350,14 +1368,11 @@ def _process_single_multimodal_page(
         page_no,
     )
     t0 = time.perf_counter()
-    mode = resolve_extraction_mode(pymupdf_text)
     png = render_pdf_page_png(pdf_path, page_index)
-    parsed = synthesize_page_with_mistral_small(
+    parsed = synthesize_page_with_mistral_large(
         png,
         page_no,
-        pymupdf_text,
         document_title,
-        extraction_mode=mode,
         pdf_path=pdf_path,
         page_index=page_index,
     )
@@ -1653,23 +1668,19 @@ def build_multimodal_pages_for_pdf(
     """
     Pipeline v4 : Pass 1 vision (raw) → merge → fenêtres → Pass 2 rapports → chunks leaves.
     """
-    from app.services.pdf_extraction_service import extract_page_texts_from_pdf
+    import fitz
+    try:
+        doc = fitz.open(pdf_path)
+        total_pages = len(doc)
+        doc.close()
+    except Exception as e:
+        logger.warning("Échec comptage pages avec PyMuPDF pour %s : %s, fallback pdf2image", pdf_path, e)
+        from pdf2image import convert_from_path
+        dpi_val = settings.MULTIMODAL_PAGE_DPI or 200
+        images = convert_from_path(pdf_path, dpi=dpi_val)
+        total_pages = len(images)
 
-    page_texts = extract_page_texts_from_pdf(pdf_path)
-    if not page_texts:
-        import fitz
-        try:
-            doc = fitz.open(pdf_path)
-            total_pages = len(doc)
-            doc.close()
-        except Exception as e:
-            logger.warning("Échec comptage pages avec PyMuPDF pour %s : %s, fallback pdf2image", pdf_path, e)
-            from pdf2image import convert_from_path
-            dpi_val = settings.MULTIMODAL_PAGE_DPI or 200
-            images = convert_from_path(pdf_path, dpi=dpi_val)
-            total_pages = len(images)
-
-        page_texts = [(i + 1, "") for i in range(total_pages)]
+    page_texts = [(i + 1, "") for i in range(total_pages)]
 
     limit = settings.VISION_MAX_IMAGES_PER_DOCUMENT
     if limit is not None and limit > 0:
