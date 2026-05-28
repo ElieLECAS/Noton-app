@@ -1,12 +1,9 @@
 """
-Retraitement multimodal v3 : pymupdf + mistral-small vision (JSON)
-→ par section : chunk texte brut enrichi + chunk rapport pro (≤480 tokens chacun).
+Retraitement multimodal v4 : pymupdf + mistral-small vision (raw) + Pass 2 texte (rapports fenêtre).
 
-STRATÉGIE PARENT/LEAF (Option A - multimodal flat contrôlé):
-- Tous les chunks multimodaux sont des LEAFS autonomes (is_leaf=True, parent_node_id=None, hierarchy_level=0)
-- Pas de hiérarchie parent/leaf pour les chunks multimodaux (optimisé pour MiniLM 512 tokens)
-- Chaque chunk doit être sémantiquement complet et auto-suffisant
-- Compatibilité reranker cross-encoder/ms-marco-MiniLM-L-6-v2 (max_length=512)
+- Pass 1 (vision/page) : raw_text uniquement (native: pymupdf canonique + [Image:…] ; scanned: OCR vision).
+- Pass 2 (texte/fenêtre) : page_window_report explicites multi-pages (≤480 tokens via split_text_rag_friendly).
+- Tous les chunks indexés sont des leaves (is_leaf=True), liés par window_id.
 """
 from __future__ import annotations
 
@@ -18,7 +15,7 @@ import re
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from typing import Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import httpx
 from sqlalchemy import delete, or_
@@ -33,18 +30,22 @@ from app.models.document_chunk import DocumentChunk
 logger = logging.getLogger(__name__)
 
 PAGE_RAW_ENRICHED_CONTENT_TYPE = "page_raw_enriched"
+PAGE_WINDOW_REPORT_CONTENT_TYPE = "page_window_report"
+# Legacy v3 (suppression au reindex, lecture retrieval)
 PAGE_SECTION_REPORT_CONTENT_TYPE = "page_section_report"
 PAGE_GROUP_SUMMARY_CONTENT_TYPE = "page_group_summary"
-# Legacy (retraitement / suppression)
 PAGE_MULTIMODAL_SECTION_CONTENT_TYPE = "page_multimodal_section"
 PAGE_MULTIMODAL_SUMMARY_CONTENT_TYPE = "page_multimodal_summary"
-CHUNKING_VERSION_MULTIMODAL = "multimodal_page_v3"
-MAX_SECTIONS_PER_PAGE = 10
+CHUNKING_VERSION_MULTIMODAL = "multimodal_page_v4"
+MAX_REPORTS_PER_WINDOW = 10
 MAX_CHUNK_CHARS = 1500  # Limite caractères (fallback si token count échoue)
-MAX_CHUNK_TOKENS = 480  # Limite stricte en tokens (marge sécurité vs 512)
+MAX_CHUNK_TOKENS = 450  # Limite stricte en tokens (marge plus conservative vs 512)
 
 MULTIMODAL_CONTENT_TYPES = (
     PAGE_RAW_ENRICHED_CONTENT_TYPE,
+    PAGE_WINDOW_REPORT_CONTENT_TYPE,
+)
+LEGACY_V3_MULTIMODAL_CONTENT_TYPES = (
     PAGE_SECTION_REPORT_CONTENT_TYPE,
     PAGE_GROUP_SUMMARY_CONTENT_TYPE,
 )
@@ -52,7 +53,18 @@ LEGACY_MULTIMODAL_CONTENT_TYPES = (
     PAGE_MULTIMODAL_SECTION_CONTENT_TYPE,
     PAGE_MULTIMODAL_SUMMARY_CONTENT_TYPE,
 )
-ALL_MULTIMODAL_CONTENT_TYPES = MULTIMODAL_CONTENT_TYPES + LEGACY_MULTIMODAL_CONTENT_TYPES
+ALL_MULTIMODAL_CONTENT_TYPES = (
+    MULTIMODAL_CONTENT_TYPES
+    + LEGACY_V3_MULTIMODAL_CONTENT_TYPES
+    + LEGACY_MULTIMODAL_CONTENT_TYPES
+)
+EMBEDDABLE_MULTIMODAL_CONTENT_TYPES = MULTIMODAL_CONTENT_TYPES
+
+_IMAGE_BLOCK_RE = re.compile(r"\[Image:\s*[^\]]*\]", re.IGNORECASE)
+_DEICTIC_RE = re.compile(
+    r"\b(ce profil|ce produit|cette section|ci-dessus|ci-dessous|celui-ci|celle-ci)\b",
+    re.IGNORECASE,
+)
 
 # Tokenizer lazy-loaded pour comptage tokens
 _tokenizer = None
@@ -169,50 +181,373 @@ def split_text_by_tokens(text: str, max_tokens: int = MAX_CHUNK_TOKENS) -> List[
     
     return chunks if chunks else [text]
 
-_SYSTEM_PROMPT = """Tu es un expert en RAG et en analyse technique de documentation industrielle et normative.
-Tu reçois le texte pymupdf d'une page PDF et son image.
 
-Tu dois répondre UNIQUEMENT avec un objet JSON valide (pas de markdown autour), selon ce schéma :
+def _tokenize_rag_units(text: str) -> List[str]:
+    """Découpe le texte en unités atomiques (Image, tableau markdown, paragraphes)."""
+    if not text or not text.strip():
+        return []
+
+    units: List[str] = []
+    pos = 0
+    while pos < len(text):
+        img_match = _IMAGE_BLOCK_RE.search(text, pos)
+        next_pos = len(text)
+        chunk_end = len(text)
+
+        if img_match and img_match.start() == pos:
+            units.append(img_match.group(0))
+            pos = img_match.end()
+            continue
+
+        if img_match:
+            chunk_end = img_match.start()
+        else:
+            chunk_end = len(text)
+
+        segment = text[pos:chunk_end]
+        if segment.strip():
+            lines = segment.split("\n")
+            table_buf: List[str] = []
+            para_buf: List[str] = []
+
+            def flush_table():
+                nonlocal table_buf
+                if table_buf:
+                    units.append("\n".join(table_buf))
+                    table_buf = []
+
+            def flush_para():
+                nonlocal para_buf
+                if para_buf:
+                    units.append("\n".join(para_buf))
+                    para_buf = []
+
+            for line in lines:
+                if "|" in line and line.strip():
+                    flush_para()
+                    table_buf.append(line)
+                else:
+                    flush_table()
+                    if line.strip() == "" and para_buf:
+                        flush_para()
+                    elif line.strip():
+                        para_buf.append(line)
+                    elif not line.strip() and not para_buf:
+                        pass
+            flush_table()
+            flush_para()
+
+        pos = chunk_end if img_match else len(text)
+
+    return [u for u in units if u and u.strip()]
+
+
+def _pack_rag_units(
+    units: List[str],
+    max_tokens: int = MAX_CHUNK_TOKENS,
+    overlap_tokens: int = 0,
+) -> List[str]:
+    """Regroupe les unités atomiques en chunks ≤ max_tokens."""
+    if not units:
+        return []
+
+    overlap_tokens = max(0, overlap_tokens or 0)
+    chunks: List[str] = []
+    current_parts: List[str] = []
+    current_tokens = 0
+
+    def flush():
+        nonlocal current_parts, current_tokens
+        if current_parts:
+            chunks.append("\n\n".join(current_parts))
+            current_parts = []
+            current_tokens = 0
+
+    for unit in units:
+        ut = count_tokens(unit)
+        if ut > max_tokens:
+            flush()
+            if "|" in unit and "\n" in unit:
+                lines = unit.split("\n")
+                line_buf: List[str] = []
+                lt = 0
+                for line in lines:
+                    line_t = count_tokens(line)
+                    if lt + line_t > max_tokens and line_buf:
+                        chunks.append("\n".join(line_buf))
+                        line_buf = [line]
+                        lt = line_t
+                    else:
+                        line_buf.append(line)
+                        lt += line_t
+                if line_buf:
+                    chunks.append("\n".join(line_buf))
+            else:
+                sub = split_text_by_tokens(unit, max_tokens)
+                chunks.extend(sub)
+            continue
+
+        if current_tokens + ut > max_tokens and current_parts:
+            flush()
+        current_parts.append(unit)
+        current_tokens += ut
+
+    flush()
+
+    if overlap_tokens > 0 and len(chunks) > 1:
+        overlapped: List[str] = [chunks[0]]
+        for i in range(1, len(chunks)):
+            prev = overlapped[-1]
+            current = chunks[i]
+            prefix = _tail_sentences_by_tokens(prev, overlap_tokens)
+            if not prefix:
+                overlapped.append(current)
+                continue
+
+            sep = "\n\n"
+            combined = f"{prefix}{sep}{current}"
+            if count_tokens(combined) <= max_tokens:
+                overlapped.append(combined)
+                continue
+
+            # Budget strict: on réduit le préfixe overlap pour garantir <= max_tokens.
+            low, high = 0, overlap_tokens
+            best = current
+            while low <= high:
+                mid = (low + high) // 2
+                test_prefix = _tail_sentences_by_tokens(prev, mid)
+                test_combined = (
+                    f"{test_prefix}{sep}{current}" if test_prefix else current
+                )
+                if count_tokens(test_combined) <= max_tokens:
+                    best = test_combined
+                    low = mid + 1
+                else:
+                    high = mid - 1
+            overlapped.append(best)
+        return overlapped
+
+    return chunks if chunks else ["\n\n".join(units)]
+
+
+def _tail_sentences_by_tokens(text: str, target_tokens: int) -> str:
+    """
+    Extrait un suffixe composé de phrases entières de l'ordre de target_tokens tokens.
+    Évite les coupures de phrases au milieu lors du glissement de l'overlap.
+    """
+    if not text or target_tokens <= 0:
+        return ""
+    
+    # Découper en phrases
+    sentences = re.split(r'(?<=[.!?])\s+', text)
+    if not sentences:
+        return ""
+        
+    collected_sentences = []
+    tokens_count = 0
+    
+    # Parcourir à l'envers depuis la fin
+    for i in range(len(sentences) - 1, -1, -1):
+        sent = sentences[i].strip()
+        if not sent:
+            continue
+        sent_tokens = count_tokens(sent)
+        if not collected_sentences:
+            collected_sentences.insert(0, sent)
+            tokens_count += sent_tokens
+            if tokens_count >= target_tokens:
+                break
+        else:
+            if tokens_count + sent_tokens > target_tokens:
+                break
+            collected_sentences.insert(0, sent)
+            tokens_count += sent_tokens
+            
+    return " ".join(collected_sentences)
+
+
+def split_text_rag_friendly(
+    text: str,
+    max_tokens: int = MAX_CHUNK_TOKENS,
+    overlap_tokens: Optional[int] = None,
+) -> List[str]:
+    """Découpe RAG-friendly : unités Image/tableau indivisibles + overlap optionnel."""
+    if not text or not text.strip():
+        return []
+    if count_tokens(text) <= max_tokens:
+        return [text]
+    overlap = (
+        overlap_tokens
+        if overlap_tokens is not None
+        else getattr(settings, "RAG_CHUNK_OVERLAP_TOKENS", 40)
+    )
+    units = _tokenize_rag_units(text)
+    if not units:
+        return split_text_by_tokens(text, max_tokens)
+    return _pack_rag_units(units, max_tokens=max_tokens, overlap_tokens=overlap)
+
+
+def assert_chunk_rag_quality(
+    content: str,
+    *,
+    max_tokens: int = MAX_CHUNK_TOKENS,
+) -> Tuple[str, dict]:
+    """Valide un chunk leaf ; retourne contenu éventuellement corrigé + flags."""
+    flags: dict = {"split_warning": False}
+    if not content or not content.strip():
+        return content, flags
+
+    if not content.strip().startswith("Document:"):
+        flags["split_warning"] = True
+
+    tc = count_tokens(content)
+    if tc > max_tokens:
+        flags["split_warning"] = True
+        # Troncature token-aware de dernier recours.
+        words = content.split()
+        lo, hi = 0, len(words)
+        best = ""
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            candidate = " ".join(words[:mid])
+            if count_tokens(candidate) <= max_tokens:
+                best = candidate
+                lo = mid + 1
+            else:
+                hi = mid - 1
+        content = best if best else content[: int(max_tokens * 3.5)]
+        logger.warning("Chunk tronqué d'urgence : %d tokens > %d", tc, max_tokens)
+
+    if _IMAGE_BLOCK_RE.search(content) and content.rstrip().endswith("[Image:"):
+        flags["split_warning"] = True
+
+    return content, flags
+
+
+def page_text_quality_score(pymupdf_text: str) -> float:
+    """Score 0–1 de qualité du texte natif extrait."""
+    text = (pymupdf_text or "").strip()
+    if not text:
+        return 0.0
+    length = len(text)
+    alnum = sum(1 for c in text if c.isalnum())
+    ratio = alnum / max(length, 1)
+    has_structure = 1.0 if ("|" in text or re.search(r"^#+\s", text, re.M)) else 0.0
+    length_score = min(1.0, length / 500.0)
+    return min(1.0, 0.5 * length_score + 0.3 * ratio + 0.2 * has_structure)
+
+
+def resolve_extraction_mode(pymupdf_text: str) -> str:
+    """native si assez de texte extractible, sinon scanned."""
+    min_chars = getattr(settings, "MULTIMODAL_NATIVE_TEXT_MIN_CHARS", 100)
+    if len((pymupdf_text or "").strip()) >= min_chars:
+        return "native"
+    return "scanned"
+
+
+def page_has_significant_visuals(pdf_path: str, page_index: int) -> bool:
+    """Heuristique : ratio zone image élevé sur la page."""
+    try:
+        import fitz
+
+        doc = fitz.open(pdf_path)
+        if page_index < 0 or page_index >= len(doc):
+            doc.close()
+            return False
+        page = doc[page_index]
+        img_area = 0.0
+        for img in page.get_images():
+            try:
+                rects = page.get_image_rects(img[0])
+                for r in rects:
+                    img_area += abs(r.width * r.height)
+            except Exception:
+                pass
+        page_area = abs(page.rect.width * page.rect.height) or 1.0
+        doc.close()
+        return (img_area / page_area) > 0.25
+    except Exception as exc:
+        logger.debug("page_has_significant_visuals: %s", exc)
+        return False
+
+
+def count_image_blocks(text: str) -> int:
+    return len(_IMAGE_BLOCK_RE.findall(text or ""))
+
+
+_RAW_SYSTEM_PROMPT_NATIVE = """Tu es un expert en extraction documentaire pour RAG technique.
+Tu reçois le texte pymupdf (source de vérité) et l'image PNG de la même page.
+
+Réponds UNIQUEMENT avec un JSON valide :
+{"page_no": <int>, "raw_text": "<texte brut enrichi>"}
+
+Règles STRICTES pour raw_text :
+- Le bloc pymupdf fourni est la source de vérité pour tout texte déjà extractible : NE PAS le réécrire ni le paraphraser.
+- Parcourir le PNG et insérer à l'emplacement logique des blocs [Image: description technique détaillée] pour chaque schéma, photo, plan, dessin technique ou tableau visuel ABSENT du pymupdf.
+- Pour chaque schéma ou image technique, la description dans `[Image: ...]` doit impérativement transcrire et lister TOUS les textes, légendes, références, valeurs numériques, cotes, cibles et annotations textuelles visibles dans l'image (ex: 'NF EN 1991', '55mm', 'PVC-76', etc.) afin de lier parfaitement le texte et le visuel pour le RAG.
+- Ne pas supprimer de contenu pymupdf. Tableaux texte : markdown pipes.
+- Français ; n'invente rien ; « illisible » si zone floue."""
+
+_RAW_SYSTEM_PROMPT_SCANNED = """Tu es un expert en OCR et extraction documentaire pour RAG technique.
+Tu reçois l'image PNG d'une page PDF scannée ou sans texte extractible.
+
+Réponds UNIQUEMENT avec un JSON valide :
+{"page_no": <int>, "raw_text": "<texte brut enrichi>"}
+
+Règles pour raw_text :
+- OCR complet et ordonné de la page.
+- Pour chaque schéma/image : [Image: description technique détaillée transcrivant toutes les annotations textuelles, cotes, valeurs et unités visibles au sein du dessin/schéma].
+- Tableaux : markdown pipes si possible.
+- Français ; n'invente rien."""
+
+_RAW_SCHEMA_RETRY_PROMPT = """IMPORTANT: Retourne UNIQUEMENT un JSON strict {"page_no": int, "raw_text": "..."}."""
+
+_SCHEMAS_ONLY_PROMPT = """Le texte pymupdf est déjà fourni et doit rester inchangé.
+Analyse UNIQUEMENT le PNG et ajoute les blocs [Image: …] manquants pour schémas/photos non décrits dans le texte actuel.
+Retourne JSON {"page_no": int, "raw_text": "<texte pymupdf + nouveaux [Image:…]>"} sans réécrire le texte existant."""
+
+_WINDOW_PRO_SYSTEM_PROMPT = """Tu es un expert en documentation technique et normative (RAG).
+Tu reçois le texte brut concaténé de plusieurs pages d'une fenêtre.
+
+Réponds UNIQUEMENT avec un JSON valide :
 {
-  "page_no": <int>,
-  "raw_text": "<texte brut enrichi de la page complète>",
+  "window_start": <int>,
+  "window_end": <int>,
   "pro_reports": [
     {
-      "theme": "<titre du thème technique>",
-      "report": "<rapport technique professionnel RAG-friendly pour ce thème>",
-      "references": ["NF EN ...", "DTU ...", ...],
-      "keywords": ["mot-clé", ...],
-      "norms": ["..."],
-      "constraints": ["..."],
+      "theme": "<titre thème>",
+      "report": "<rapport dense, explicite>",
+      "references": ["<référence nommée>", ...],
+      "keywords": ["..."],
+      "norms": ["NF EN ...", "DTU ..."],
+      "constraints": ["<contrainte chiffrée avec unité>", ...],
       "dependencies": ["..."]
     }
   ]
 }
 
-Règles pour le champ raw_text (texte brut enrichi de la page) :
-- Extraire l'intégralité du texte de la page de manière fidèle et ordonnée.
-- Pour chaque image, schéma ou tableau complexe visible, insérer une description technique précise inline à l'endroit correspondant : [Image: description concise avec valeurs, dimensions, composants].
-- Ne pas interpréter, rester fidèle au document. Si tableau textuel simple, le transcrire en tableau markdown standard.
-- Ce champ doit contenir toutes les données brutes cherchables de la page.
-- Vise une extraction complète et claire de toute la page.
+Règles STRICTES :
+- Produire 1 à 6 rapports selon la complexité (thèmes distincts).
+- INTERDIT : « ce profil », « cette section », « ci-dessus », pronoms sans antécédent nommé.
+- OBLIGATION : nommer produits, références catalogue, normes complètes, valeurs + unités + pages sources.
+- Chaque assertion technique doit être explicite et actionnable.
+- Français ; n'invente rien hors du texte fourni."""
 
-Règles pour la liste pro_reports (1 ou plusieurs rapports professionnels par thème) :
-- Découper la page en thèmes ou chapitres logiques (produire entre 1 et 4 rapports selon la complexité). Si la page est simple ou traite d'un sujet unique, produire 1 seul rapport.
-- Pour chaque thème, rédiger un rapport technique professionnel RAG-friendly : réinterpréter et structurer de façon actionnable les normes applicables, contraintes chiffrées, procédures, compatibilités, exigences et risques.
-- Répéter les termes techniques et utiliser un vocabulaire précis.
-- Chaque rapport doit être dense, sans blabla d'introduction.
-
-Général : français ; n'invente rien ; « illisible » si zone floue ; si pymupdf vide, base-toi sur l'image."""
-
-_USER_PROMPT_TEMPLATE = """Document : {title}
+_USER_PROMPT_NATIVE = """Document : {title}
 Page : {page_no}
 
-Texte pymupdf :
+Texte pymupdf (source de vérité — ne pas réécrire) :
 ---
 {pymupdf_text}
 ---
 
-Analyse l'image et le texte de la page. Retourne le JSON structuré contenant l'extraction brute 'raw_text' (avec images inline) et la liste de rapports techniques par thème 'pro_reports'."""
+Analyse le PNG. Retourne JSON avec raw_text = pymupdf inchangé + [Image: …] pour tout visuel absent."""
+
+_USER_PROMPT_SCANNED = """Document : {title}
+Page : {page_no}
+
+Page scannée ou sans texte extractible. Analyse le PNG.
+Retourne JSON avec raw_text = OCR complet + [Image: …] pour schémas."""
 
 
 @dataclass
@@ -361,42 +696,71 @@ def parse_multimodal_page_response(
     page_no: int,
     pymupdf_text: str,
     document_title: str,
+    *,
+    extraction_mode: str = "native",
 ) -> dict:
-    """
-    Valide et normalise la réponse JSON du LLM.
-    """
+    """Valide et normalise la réponse JSON Pass 1 (raw_text uniquement)."""
     raw_text = (data.get("raw_text") or "").strip()
     if not raw_text:
         raw_text = pymupdf_text.strip() or f"(contenu non extractible — page {page_no})"
 
-    reports_in = data.get("pro_reports") or data.get("reports")
-    reports: List[dict] = []
-    
-    if isinstance(reports_in, list) and reports_in:
-        for i, rep in enumerate(reports_in[:MAX_SECTIONS_PER_PAGE]):
-            normalized = _normalize_report_dict(rep, i, document_title, page_no)
-            if normalized:
-                reports.append(normalized)
-
-    if not reports:
-        reports.append({
-            "theme": "Général",
-            "report": (
-                f"Rapport technique page {page_no} — {document_title or 'Document'}. "
-                f"Synthèse documentaire et analyse des contraintes de la page."
-            ),
-            "references": [],
-            "keywords": [],
-            "norms": [],
-            "constraints": [],
-            "dependencies": [],
-        })
-
     return {
         "page_no": page_no,
+        "page_start": page_no,
+        "page_end": page_no,
         "raw_text": raw_text,
-        "pro_reports": reports,
+        "extraction_mode": extraction_mode,
+        "pymupdf_char_count": len((pymupdf_text or "").strip()),
+        "image_block_count": count_image_blocks(raw_text),
     }
+
+
+def validate_raw_page(
+    parsed: dict,
+    pymupdf_text: str,
+    *,
+    pdf_path: Optional[str] = None,
+    page_index: Optional[int] = None,
+) -> Tuple[dict, str]:
+    """
+    Valide le raw_text après Pass 1.
+    Retourne (parsed mis à jour, status: ok|warning|retry_schemas|vision_failed).
+    """
+    mode = parsed.get("extraction_mode", "native")
+    raw = (parsed.get("raw_text") or "").strip()
+    pymupdf = (pymupdf_text or "").strip()
+    status = "ok"
+
+    if mode == "native" and pymupdf:
+        if len(pymupdf) > 20:
+            ratio = len(pymupdf) / max(len(raw), 1)
+            if ratio > 1.1 or ratio < 0.35:
+                status = "warning"
+                logger.warning(
+                    "page %s ratio pymupdf/raw=%.2f (réécriture suspecte)",
+                    parsed.get("page_no"),
+                    ratio,
+                )
+
+    if (
+        pdf_path
+        and page_index is not None
+        and page_has_significant_visuals(pdf_path, page_index)
+        and count_image_blocks(raw) == 0
+    ):
+        return parsed, "retry_schemas"
+
+    if "|" in pymupdf and "|" not in raw and mode == "native":
+        parsed["raw_text"] = pymupdf + ("\n\n" + raw if raw else "")
+        parsed["image_block_count"] = count_image_blocks(parsed["raw_text"])
+        status = "warning"
+
+    if not raw and pymupdf:
+        parsed["raw_text"] = pymupdf
+        status = "vision_failed"
+
+    parsed["raw_validation_status"] = status
+    return parsed, status
 
 
 def _format_raw_enriched_chunk(
@@ -407,13 +771,8 @@ def _format_raw_enriched_chunk(
     page_end: int,
 ) -> str:
     """Formate un chunk de texte brut enrichi (page complète ou plage de pages)."""
-    page_str = f"Page: {page_no}" if page_start == page_end else f"Pages: {page_start}-{page_end}"
-    lines = [
-        f"Document: {document_title or 'Document'} | {page_str}",
-        "",
-        raw_text,
-    ]
-    return "\n".join(lines).strip()
+    page_str = f"Page {page_no}" if page_start == page_end else f"Pages {page_start}-{page_end}"
+    return f"[{page_str}]\n{raw_text}"
 
 
 def _format_pro_report_chunk(
@@ -423,26 +782,31 @@ def _format_pro_report_chunk(
     page_start: int,
     page_end: int,
 ) -> str:
-    """Formate un chunk rapport pro (page complète ou plage de pages)."""
-    page_str = f"Page: {page_no}" if page_start == page_end else f"Pages: {page_start}-{page_end}"
-    lines = [
-        f"Document: {document_title or 'Document'} | {page_str} | Rapport technique",
-    ]
-    if report.get("theme"):
-        lines.append(f"Thème: {report['theme']}")
-    if report.get("references"):
-        lines.append(f"Références: {', '.join(report['references'])}")
-    if report.get("norms"):
-        lines.append(f"Normes: {', '.join(report['norms'])}")
-    if report.get("constraints"):
-        lines.append(f"Contraintes: {', '.join(report['constraints'])}")
-    if report.get("dependencies"):
-        lines.append(f"Dépendances: {', '.join(report['dependencies'])}")
-    if report.get("keywords"):
-        lines.append(f"Mots-clés: {', '.join(report['keywords'])}")
-    lines.append("")
-    lines.append(report.get("report", "").strip())
-    return "\n".join(lines).strip()
+    """Formate un chunk rapport pro en prose naturelle."""
+    page_str = f"page {page_no}" if page_start == page_end else f"pages {page_start} à {page_end}"
+    parts = []
+    theme = (report.get("theme") or "").strip()
+    if theme:
+        parts.append(f"Rapport technique sur le thème : {theme} ({page_str}).")
+    else:
+        parts.append(f"Rapport technique ({page_str}).")
+        
+    refs = report.get("references") or []
+    if refs:
+        parts.append(f"Références : {', '.join(refs)}.")
+    norms = report.get("norms") or []
+    if norms:
+        parts.append(f"Normes applicables : {', '.join(norms)}.")
+    constraints = report.get("constraints") or []
+    if constraints:
+        parts.append(f"Contraintes techniques : {', '.join(constraints)}.")
+    deps = report.get("dependencies") or []
+    if deps:
+        parts.append(f"Dépendances : {', '.join(deps)}.")
+        
+    report_text = (report.get("report") or "").strip()
+    parts.append(f"\n{report_text}")
+    return "\n".join(parts).strip()
 
 
 def _enforce_token_limit(content: str, page_no: int, label: str, sec_idx: int, part_idx: int) -> str:
@@ -462,86 +826,145 @@ def _enforce_token_limit(content: str, page_no: int, label: str, sec_idx: int, p
     return content
 
 
-def build_chunk_specs_from_page(
+def build_raw_chunk_specs_from_page(
     document_id: int,
     page_no: int,
     parsed: dict,
     document_title: str,
 ) -> List[MultimodalChunkSpec]:
-    """
-    Construit les specs de chunks pour une page :
-    - 1 ou plusieurs chunks raw enrichis (texte de la page complète, splitté si >480 tokens)
-    - 1 ou plusieurs chunks rapport pro (un par thème/rapport dans pro_reports)
-    """
+    """Construit les specs page_raw_enriched (split RAG-friendly ≤480 tokens)."""
     specs: List[MultimodalChunkSpec] = []
     model_name = _multimodal_page_model()
+    page_start = int(parsed.get("page_start", page_no))
+    page_end = int(parsed.get("page_end", page_no))
+    raw_text = (parsed.get("raw_text") or "").strip()
+    if not raw_text:
+        return specs
+
+    formatted_raw = _format_raw_enriched_chunk(
+        document_title, page_no, raw_text, page_start, page_end
+    )
+    raw_parts = split_text_rag_friendly(formatted_raw, MAX_CHUNK_TOKENS)
+    for part_idx, part_content in enumerate(raw_parts):
+        part_content, quality_flags = assert_chunk_rag_quality(part_content)
+        node_suffix = "raw" if len(raw_parts) == 1 else f"raw-part{part_idx + 1}"
+        node_id = f"multimodal-page-{document_id}-{page_no}-{node_suffix}"
+        meta = {
+            "content_type": PAGE_RAW_ENRICHED_CONTENT_TYPE,
+            "chunking_version": CHUNKING_VERSION_MULTIMODAL,
+            "page_no": page_no,
+            "page_start": page_start,
+            "page_end": page_end,
+            "generation_method": "pymupdf+mistral_small_v4",
+            "llm_model": model_name,
+            "document_id": document_id,
+            "document_title": document_title or "",
+            "extraction_mode": parsed.get("extraction_mode", "native"),
+            "pymupdf_char_count": parsed.get("pymupdf_char_count", 0),
+            "image_block_count": parsed.get("image_block_count", 0),
+            "raw_validation_status": parsed.get("raw_validation_status", "ok"),
+            "is_leaf": True,
+            "is_split": len(raw_parts) > 1,
+            "split_part": part_idx + 1 if len(raw_parts) > 1 else None,
+            "split_total": len(raw_parts) if len(raw_parts) > 1 else None,
+            "token_count": count_tokens(part_content),
+            **quality_flags,
+        }
+        specs.append(
+            MultimodalChunkSpec(
+                page_no=page_no,
+                content=part_content,
+                content_type=PAGE_RAW_ENRICHED_CONTENT_TYPE,
+                node_id=node_id,
+                metadata=meta,
+            )
+        )
+
+    logger.info(
+        "Page %s : %d raw chunk(s) (≤%d tokens)",
+        page_no,
+        len(specs),
+        MAX_CHUNK_TOKENS,
+    )
+    return specs
+
+
+def _format_window_pro_report_chunk(
+    document_title: str,
+    window_start: int,
+    window_end: int,
+    report: dict,
+    window_id: str,
+) -> str:
+    """Formate un chunk rapport pro fenêtre en prose naturelle pour éviter le bruit d'en-tête."""
+    page_str = (
+        f"pages {window_start} à {window_end}"
+        if window_start != window_end
+        else f"page {window_start}"
+    )
     
-    page_start = parsed.get("page_start", page_no)
-    page_end = parsed.get("page_end", page_no)
+    parts = []
+    theme = (report.get("theme") or "").strip()
+    if theme:
+        parts.append(f"Rapport technique sur le thème : {theme} ({page_str}).")
+    else:
+        parts.append(f"Rapport technique ({page_str}).")
+        
+    refs = report.get("references") or []
+    if refs:
+        parts.append(f"Références : {', '.join(refs)}.")
+        
+    norms = report.get("norms") or []
+    if norms:
+        parts.append(f"Normes applicables : {', '.join(norms)}.")
+        
+    constraints = report.get("constraints") or []
+    if constraints:
+        parts.append(f"Contraintes techniques : {', '.join(constraints)}.")
+        
+    deps = report.get("dependencies") or []
+    if deps:
+        parts.append(f"Dépendances : {', '.join(deps)}.")
+        
+    report_text = (report.get("report") or "").strip()
+    parts.append(f"\n{report_text}")
+    
+    return "\n".join(parts).strip()
 
-    # 1. Traitement du raw_text de la page (si non vide)
-    raw_text = parsed.get("raw_text", "").strip()
-    if raw_text:
-        formatted_raw = _format_raw_enriched_chunk(document_title, page_no, raw_text, page_start, page_end)
-        raw_parts = split_text_by_tokens(formatted_raw, MAX_CHUNK_TOKENS)
-        for part_idx, part_content in enumerate(raw_parts):
-            part_content = _enforce_token_limit(
-                part_content, page_no, "raw", 0, part_idx
-            )
-            
-            node_suffix = "raw"
-            if len(raw_parts) > 1:
-                node_suffix = f"raw-part{part_idx + 1}"
-                
-            node_id = f"multimodal-page-{document_id}-{page_no}-{node_suffix}"
-            
-            meta = {
-                "content_type": PAGE_RAW_ENRICHED_CONTENT_TYPE,
-                "chunking_version": CHUNKING_VERSION_MULTIMODAL,
-                "page_no": page_no,
-                "page_start": page_start,
-                "page_end": page_end,
-                "generation_method": "pymupdf+mistral_small",
-                "llm_model": model_name,
-                "document_id": document_id,
-                "document_title": document_title or "",
-                "is_split": len(raw_parts) > 1,
-                "split_part": part_idx + 1 if len(raw_parts) > 1 else None,
-                "split_total": len(raw_parts) if len(raw_parts) > 1 else None,
-                "token_count": count_tokens(part_content),
-            }
-            
-            specs.append(
-                MultimodalChunkSpec(
-                    page_no=page_no,
-                    content=part_content,
-                    content_type=PAGE_RAW_ENRICHED_CONTENT_TYPE,
-                    node_id=node_id,
-                    metadata=meta,
-                )
-            )
 
-    # 2. Traitement des pro_reports de la page
-    for rep_idx, report in enumerate(parsed.get("pro_reports") or []):
-        formatted_report = _format_pro_report_chunk(document_title, page_no, report, page_start, page_end)
-        report_parts = split_text_by_tokens(formatted_report, MAX_CHUNK_TOKENS)
-        for part_idx, part_content in enumerate(report_parts):
-            part_content = _enforce_token_limit(
-                part_content, page_no, "report", rep_idx + 1, part_idx
-            )
-            
-            node_suffix = f"report-r{rep_idx + 1}"
-            if len(report_parts) > 1:
-                node_suffix = f"report-r{rep_idx + 1}-part{part_idx + 1}"
-                
-            node_id = f"multimodal-page-{document_id}-{page_no}-{node_suffix}"
-            
+def build_window_report_chunk_specs(
+    document_id: int,
+    window: dict,
+    pro_reports: List[dict],
+    document_title: str,
+) -> List[MultimodalChunkSpec]:
+    """Construit les specs page_window_report pour une fenêtre."""
+    specs: List[MultimodalChunkSpec] = []
+    model_name = _multimodal_page_model()
+    window_id = window["window_id"]
+    w_start = int(window["window_start"])
+    w_end = int(window["window_end"])
+
+    for rep_idx, report in enumerate(pro_reports):
+        formatted = _format_window_pro_report_chunk(
+            document_title, w_start, w_end, report, window_id
+        )
+        parts = split_text_rag_friendly(formatted, MAX_CHUNK_TOKENS)
+        for part_idx, part_content in enumerate(parts):
+            part_content, quality_flags = assert_chunk_rag_quality(part_content)
+            suffix = f"win-{w_start}-{w_end}-r{rep_idx + 1}"
+            if len(parts) > 1:
+                suffix = f"{suffix}-part{part_idx + 1}"
+            node_id = f"multimodal-{document_id}-{suffix}"
             meta = {
-                "content_type": PAGE_SECTION_REPORT_CONTENT_TYPE,
+                "content_type": PAGE_WINDOW_REPORT_CONTENT_TYPE,
                 "chunking_version": CHUNKING_VERSION_MULTIMODAL,
-                "page_no": page_no,
-                "page_start": page_start,
-                "page_end": page_end,
+                "window_id": window_id,
+                "window_start": w_start,
+                "window_end": w_end,
+                "page_no": w_start,
+                "page_start": w_start,
+                "page_end": w_end,
                 "report_index": rep_idx + 1,
                 "theme": report.get("theme") or "",
                 "references": report.get("references") or [],
@@ -549,35 +972,118 @@ def build_chunk_specs_from_page(
                 "norms": report.get("norms") or [],
                 "constraints": report.get("constraints") or [],
                 "dependencies": report.get("dependencies") or [],
-                "generation_method": "pymupdf+mistral_small",
+                "generation_method": "mistral_text_window_v4",
                 "llm_model": model_name,
                 "document_id": document_id,
                 "document_title": document_title or "",
-                "is_split": len(report_parts) > 1,
-                "split_part": part_idx + 1 if len(report_parts) > 1 else None,
-                "split_total": len(report_parts) if len(report_parts) > 1 else None,
+                "is_leaf": True,
+                "is_split": len(parts) > 1,
+                "split_part": part_idx + 1 if len(parts) > 1 else None,
+                "split_total": len(parts) if len(parts) > 1 else None,
                 "token_count": count_tokens(part_content),
+                "paired_content_types": [
+                    PAGE_RAW_ENRICHED_CONTENT_TYPE,
+                    PAGE_WINDOW_REPORT_CONTENT_TYPE,
+                ],
+                **quality_flags,
             }
-            
             specs.append(
                 MultimodalChunkSpec(
-                    page_no=page_no,
+                    page_no=w_start,
                     content=part_content,
-                    content_type=PAGE_SECTION_REPORT_CONTENT_TYPE,
+                    content_type=PAGE_WINDOW_REPORT_CONTENT_TYPE,
                     node_id=node_id,
                     metadata=meta,
                 )
             )
-
-    logger.info(
-        "Page %s : %d raw chunk(s) + %d report chunk(s) générés (tous ≤%d tokens)",
-        page_no,
-        len([s for s in specs if s.content_type == PAGE_RAW_ENRICHED_CONTENT_TYPE]),
-        len([s for s in specs if s.content_type == PAGE_SECTION_REPORT_CONTENT_TYPE]),
-        MAX_CHUNK_TOKENS,
-    )
-
     return specs
+
+
+def validate_pro_reports(pro_reports: List[dict]) -> Tuple[List[dict], bool]:
+    """Retourne (reports, needs_retry) si déictiques détectés."""
+    needs_retry = False
+    for rep in pro_reports:
+        text = (rep.get("report") or "") + " ".join(rep.get("references") or [])
+        if _DEICTIC_RE.search(text):
+            needs_retry = True
+            break
+    return pro_reports, needs_retry
+
+
+def _mistral_chat_completion(
+    messages: list,
+    *,
+    page_no: int,
+    max_tokens: Optional[int] = None,
+    temperature: float = 0.2,
+    response_format_json: bool = True,
+    timeout_seconds: Optional[float] = None,
+) -> str:
+    """Appel Mistral chat/completions avec retries."""
+    api_key = settings.MISTRAL_API_KEY
+    if not api_key:
+        raise ValueError("MISTRAL_API_KEY n'est pas configurée")
+
+    payload: dict = {
+        "model": _multimodal_page_model(),
+        "messages": messages,
+        "stream": False,
+        "max_tokens": max_tokens or settings.MULTIMODAL_PAGE_MAX_TOKENS,
+        "temperature": temperature,
+    }
+    if response_format_json:
+        payload["response_format"] = {"type": "json_object"}
+
+    base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
+    timeout = float(
+        timeout_seconds
+        if timeout_seconds is not None
+        else getattr(settings, "MISTRAL_OCR_TIMEOUT", 300) or 300
+    )
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+
+    import random
+
+    max_attempts = 4
+    backoff_base = 2.0
+    retryable_codes = {429, 500, 502, 503, 504}
+    last_exception = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            with httpx.Client(timeout=timeout) as client:
+                resp = client.post(
+                    f"{base_url}/v1/chat/completions",
+                    headers=headers,
+                    json=payload,
+                )
+                resp.raise_for_status()
+                data = resp.json()
+            choice = (data.get("choices") or [{}])[0]
+            msg = choice.get("message") or {}
+            raw_out = (msg.get("content") or "").strip()
+            if not raw_out:
+                raise RuntimeError(f"Réponse vide pour la page {page_no}")
+            return raw_out
+        except httpx.HTTPStatusError as e:
+            last_exception = e
+            if e.response.status_code in retryable_codes and attempt < max_attempts:
+                wait = backoff_base * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
+                time.sleep(wait)
+                continue
+            raise
+        except (httpx.RequestError, RuntimeError) as e:
+            last_exception = e
+            if attempt < max_attempts:
+                wait = backoff_base * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
+                time.sleep(wait)
+                continue
+            raise
+    if last_exception:
+        raise last_exception
+    raise RuntimeError("Échec appel Mistral après retries")
 
 
 def synthesize_page_with_mistral_small(
@@ -585,148 +1091,108 @@ def synthesize_page_with_mistral_small(
     page_no: int,
     pymupdf_text: str,
     document_title: str,
+    *,
+    extraction_mode: Optional[str] = None,
+    pdf_path: Optional[str] = None,
+    page_index: Optional[int] = None,
 ) -> dict:
-    """Appel mistral-small vision → JSON parsé (sections raw_text + pro_report)."""
-    api_key = settings.MISTRAL_API_KEY
-    if not api_key:
-        raise ValueError("MISTRAL_API_KEY n'est pas configurée")
-
+    """Pass 1 : mistral-small vision → JSON { raw_text } uniquement."""
+    mode = extraction_mode or resolve_extraction_mode(pymupdf_text)
     b64 = base64.b64encode(image_png).decode("ascii")
-    pymupdf_block = pymupdf_text.strip() if pymupdf_text else "(aucun texte extractible sur cette page)"
-    user_text = _USER_PROMPT_TEMPLATE.format(
-        title=document_title or "Document",
-        page_no=page_no,
-        pymupdf_text=pymupdf_block,
-    )
+
+    if mode == "native":
+        pymupdf_block = pymupdf_text.strip() if pymupdf_text else "(aucun texte extractible)"
+        user_text = _USER_PROMPT_NATIVE.format(
+            title=document_title or "Document",
+            page_no=page_no,
+            pymupdf_text=pymupdf_block,
+        )
+        system_prompt = _RAW_SYSTEM_PROMPT_NATIVE
+    else:
+        user_text = _USER_PROMPT_SCANNED.format(
+            title=document_title or "Document",
+            page_no=page_no,
+        )
+        system_prompt = _RAW_SYSTEM_PROMPT_SCANNED
 
     messages = [
-        {"role": "system", "content": _SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {
             "role": "user",
             "content": [
                 {"type": "text", "text": user_text},
-                {
-                    "type": "image_url",
-                    "image_url": f"data:image/png;base64,{b64}",
-                },
+                {"type": "image_url", "image_url": f"data:image/png;base64,{b64}"},
             ],
         },
     ]
 
-    payload = {
-        "model": _multimodal_page_model(),
-        "messages": messages,
-        "stream": False,
-        "max_tokens": settings.MULTIMODAL_PAGE_MAX_TOKENS,
-        "temperature": 0.2,
-        "response_format": {"type": "json_object"},
-    }
-    base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
-    timeout = float(getattr(settings, "MISTRAL_OCR_TIMEOUT", 300) or 300)
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    }
-
-    def _call_once(call_payload: dict) -> str:
-        import random
-        max_attempts = 4
-        backoff_base = 2.0
-        retryable_codes = {429, 500, 502, 503, 504}
-        
-        last_exception = None
-        for attempt in range(1, max_attempts + 1):
-            try:
-                with httpx.Client(timeout=timeout) as client:
-                    resp = client.post(
-                        f"{base_url}/v1/chat/completions",
-                        headers=headers,
-                        json=call_payload,
-                    )
-                    resp.raise_for_status()
-                    data = resp.json()
-                choice = (data.get("choices") or [{}])[0]
-                msg = choice.get("message") or {}
-                raw_out = (msg.get("content") or "").strip()
-                if not raw_out:
-                    raise RuntimeError(f"Réponse vide pour la page {page_no}")
-                return raw_out
-            except httpx.HTTPStatusError as e:
-                last_exception = e
-                if e.response.status_code in retryable_codes and attempt < max_attempts:
-                    wait = backoff_base * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
-                    logger.warning(
-                        "Mistral vision page_no=%s tentative %s/%s: HTTP %s, retry dans %.1fs",
-                        page_no, attempt, max_attempts, e.response.status_code, wait
-                    )
-                    time.sleep(wait)
-                    continue
-                raise
-            except (httpx.RequestError, RuntimeError) as e:
-                last_exception = e
-                if attempt < max_attempts:
-                    wait = backoff_base * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
-                    logger.warning(
-                        "Mistral vision page_no=%s tentative %s/%s: Erreur (%s), retry dans %.1fs",
-                        page_no, attempt, max_attempts, e, wait
-                    )
-                    time.sleep(wait)
-                    continue
-                raise
-        if last_exception:
-            raise last_exception
-        raise RuntimeError("Échec appel Mistral après retries")
-
     parsed_raw: dict = {}
-    raw_content = _call_once(payload)
     try:
+        raw_content = _mistral_chat_completion(messages, page_no=page_no)
         parsed_raw = _parse_json_with_repair(raw_content)
     except (ValueError, json.JSONDecodeError) as exc_first:
-        logger.warning(
-            "page_no=%s JSON invalide après réparation (%s), retry strict",
-            page_no,
-            exc_first,
-        )
+        logger.warning("page_no=%s JSON invalide (%s), retry strict", page_no, exc_first)
         retry_messages = [
-            {"role": "system", "content": _SYSTEM_PROMPT},
+            {"role": "system", "content": system_prompt},
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": user_text + "\n\n" + _RAW_SCHEMA_RETRY_PROMPT,
+                    },
+                    {"type": "image_url", "image_url": f"data:image/png;base64,{b64}"},
+                ],
+            },
+        ]
+        try:
+            retry_raw = _mistral_chat_completion(
+                retry_messages, page_no=page_no, temperature=0.0
+            )
+            parsed_raw = _parse_json_with_repair(retry_raw)
+        except (ValueError, json.JSONDecodeError) as exc_retry:
+            logger.warning("page_no=%s JSON invalide après retry (%s)", page_no, exc_retry)
+            parsed_raw = {}
+
+    parsed = parse_multimodal_page_response(
+        parsed_raw, page_no, pymupdf_text, document_title, extraction_mode=mode
+    )
+    parsed, status = validate_raw_page(
+        parsed,
+        pymupdf_text,
+        pdf_path=pdf_path,
+        page_index=page_index,
+    )
+
+    if status == "retry_schemas" and mode == "native":
+        schema_messages = [
+            {"role": "system", "content": _RAW_SYSTEM_PROMPT_NATIVE},
             {
                 "role": "user",
                 "content": [
                     {
                         "type": "text",
                         "text": (
-                            user_text
-                            + "\n\nIMPORTANT: Retourne UNIQUEMENT un JSON strict valide RFC8259. "
-                            "Aucun texte hors JSON, pas de trailing comma, guillemets correctement échappés."
+                            f"Document: {document_title}\nPage: {page_no}\n\n"
+                            f"Texte actuel:\n{parsed.get('raw_text', '')}\n\n"
+                            + _SCHEMAS_ONLY_PROMPT
                         ),
                     },
-                    {
-                        "type": "image_url",
-                        "image_url": f"data:image/png;base64,{b64}",
-                    },
+                    {"type": "image_url", "image_url": f"data:image/png;base64,{b64}"},
                 ],
             },
         ]
-        retry_payload = {
-            **payload,
-            "messages": retry_messages,
-            "temperature": 0.0,
-        }
         try:
-            retry_raw = _call_once(retry_payload)
-            parsed_raw = _parse_json_with_repair(retry_raw)
-        except (ValueError, json.JSONDecodeError) as exc_retry:
-            logger.warning(
-                "page_no=%s JSON invalide après retry strict (%s), fallback section unique",
-                page_no,
-                exc_retry,
-            )
-            parsed_raw = {}
+            schema_raw = _mistral_chat_completion(schema_messages, page_no=page_no)
+            schema_parsed = _parse_json_with_repair(schema_raw)
+            if schema_parsed.get("raw_text"):
+                parsed["raw_text"] = schema_parsed["raw_text"]
+                parsed["image_block_count"] = count_image_blocks(parsed["raw_text"])
+                parsed["raw_validation_status"] = "ok"
+        except Exception as exc:
+            logger.warning("page_no=%s retry schémas échoué: %s", page_no, exc)
 
-    return parse_multimodal_page_response(
-        parsed_raw, page_no, pymupdf_text, document_title
-    )
+    return parsed
 
 
 def _next_chunk_index(session: Session, document_id: int) -> int:
@@ -807,9 +1273,16 @@ def _process_single_multimodal_page(
         page_no,
     )
     t0 = time.perf_counter()
+    mode = resolve_extraction_mode(pymupdf_text)
     png = render_pdf_page_png(pdf_path, page_index)
     parsed = synthesize_page_with_mistral_small(
-        png, page_no, pymupdf_text, document_title
+        png,
+        page_no,
+        pymupdf_text,
+        document_title,
+        extraction_mode=mode,
+        pdf_path=pdf_path,
+        page_index=page_index,
     )
     elapsed = time.perf_counter() - t0
     logger.info(
@@ -822,8 +1295,7 @@ def _process_single_multimodal_page(
 
 def merge_cut_sections_across_pages(parsed_pages: List[dict]) -> List[dict]:
     """
-    Fusionne le raw_text et les pro_reports des pages successives si coupure de paragraphe,
-    de tableau ou de thème.
+    Fusionne le raw_text des pages successives si coupure de paragraphe ou tableau (v4 : raw only).
     """
     if len(parsed_pages) <= 1:
         return parsed_pages
@@ -868,39 +1340,7 @@ def merge_cut_sections_across_pages(parsed_pages: List[dict]) -> List[dict]:
             next_page["raw_text"] = ""
             next_page["page_start"] = curr_page["page_end"]
 
-    # 2. Fusion des pro_reports par thèmes identiques
-    for i in range(len(parsed_pages) - 1):
-        curr_page = parsed_pages[i]
-        next_page = parsed_pages[i + 1]
-
-        reports_curr = curr_page.get("pro_reports") or []
-        reports_next = next_page.get("pro_reports") or []
-
-        if not reports_curr or not reports_next:
-            continue
-
-        last_report = reports_curr[-1]
-        first_report = reports_next[0]
-
-        theme_curr = last_report.get("theme", "").strip().lower()
-        theme_next = first_report.get("theme", "").strip().lower()
-
-        if theme_curr == theme_next and theme_curr != "":
-            logger.info(
-                "Fusion des pro_reports de même thème '%s' entre page %s et %s",
-                last_report.get("theme"),
-                curr_page["page_no"],
-                next_page["page_no"],
-            )
-            last_report["report"] = last_report.get("report", "").strip() + "\n\n" + first_report.get("report", "").strip()
-
-            for key in ("references", "keywords", "norms", "constraints", "dependencies"):
-                combined = list(set(last_report.get(key, []) + first_report.get(key, [])))
-                last_report[key] = combined
-
-            next_page["pro_reports"].pop(0)
-
-    return parsed_pages
+    return [p for p in parsed_pages if (p.get("raw_text") or "").strip()]
 
 
 def _merge_markdown_tables(table_a: str, table_b: str) -> str:
@@ -927,122 +1367,203 @@ def _merge_markdown_tables(table_a: str, table_b: str) -> str:
     return "\n".join(merged_lines)
 
 
-def generate_page_group_summaries(
+def _is_major_heading_line(line: str) -> bool:
+    s = line.strip()
+    return bool(re.match(r"^#{1,2}\s+\S", s)) or bool(re.match(r"^[A-Z][A-Z0-9\s\-]{8,}$", s))
+
+
+def build_dynamic_windows(
     document_id: int,
-    document_title: str,
-    ordered_pages: List[dict]
-) -> List[MultimodalChunkSpec]:
+    ordered_pages: List[dict],
+) -> List[dict]:
     """
-    Pass 2 : Génère des résumés contextuels pour des fenêtres glissantes de 3 pages.
-    Rejoint l'API Mistral en mode texte.
+    Fenêtres dynamiques : tokens max, rupture thème (headings), max pages, overlap 1.
     """
-    specs: List[MultimodalChunkSpec] = []
     if not ordered_pages:
-        return specs
+        return []
 
-    api_key = settings.MISTRAL_API_KEY
-    if not api_key:
-        logger.warning("MISTRAL_API_KEY manquante, Pass 2 résumé ignoré.")
-        return specs
+    max_tokens = getattr(settings, "WINDOW_MAX_INPUT_TOKENS", 7000)
+    max_pages = getattr(settings, "WINDOW_MAX_PAGES", 12)
+    overlap_pages = max(0, getattr(settings, "WINDOW_PAGE_OVERLAP", 1))
 
-    base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    }
-    
-    window_size = 3
-    for i in range(0, len(ordered_pages), window_size):
-        batch = ordered_pages[i : i + window_size]
+    windows: List[dict] = []
+    i = 0
+    while i < len(ordered_pages):
+        batch: List[dict] = []
+        token_acc = 0
+        j = i
+        while j < len(ordered_pages):
+            page = ordered_pages[j]
+            page_text = (page.get("raw_text") or "").strip()
+            part = f"--- PAGE {page['page_no']} ---\n{page_text}" if page_text else ""
+            part_tokens = count_tokens(part) if part else 0
+
+            if batch and (
+                token_acc + part_tokens > max_tokens
+                or len(batch) >= max_pages
+                or (
+                    j > i
+                    and page_text
+                    and any(_is_major_heading_line(ln) for ln in page_text.split("\n")[:3])
+                )
+            ):
+                break
+
+            if page_text:
+                batch.append(page)
+                token_acc += part_tokens
+            j += 1
+
         if not batch:
+            i += 1
             continue
+
         start_page = batch[0]["page_no"]
         end_page = batch[-1]["page_no"]
-        
-        # Concaténer le texte brut de ce batch
-        context_parts = []
-        for page in batch:
-            page_text = page.get("raw_text", "").strip()
-            if page_text:
-                context_parts.append(f"--- PAGE {page['page_no']} ---\n{page_text}")
-        
-        context = "\n\n".join(context_parts).strip()
+        window_id = f"win-{document_id}-{start_page}-{end_page}"
+        context_parts = [
+            f"--- PAGE {p['page_no']} ---\n{p['raw_text'].strip()}"
+            for p in batch
+            if (p.get("raw_text") or "").strip()
+        ]
+        windows.append(
+            {
+                "window_id": window_id,
+                "window_start": start_page,
+                "window_end": end_page,
+                "pages": batch,
+                "raw_concat": "\n\n".join(context_parts),
+            }
+        )
+
+        if j >= len(ordered_pages):
+            break
+        i = max(i + 1, j - overlap_pages)
+
+    return windows
+
+
+def generate_window_pro_reports(
+    document_id: int,
+    document_title: str,
+    windows: List[dict],
+) -> Dict[str, List[dict]]:
+    """
+    Pass 2 texte : rapports pro par fenêtre.
+    Retourne { window_id: [pro_reports...] }.
+    """
+    result: Dict[str, List[dict]] = {}
+    if not windows:
+        return result
+    if not settings.MISTRAL_API_KEY:
+        logger.warning("MISTRAL_API_KEY manquante, Pass 2 fenêtres ignoré.")
+        return result
+
+    max_reports = getattr(settings, "MAX_REPORTS_PER_WINDOW", MAX_REPORTS_PER_WINDOW)
+
+    total_windows = len(windows)
+    logger.info(
+        "Pass 2 démarrage doc=%s fenêtres=%s timeout=%ss",
+        document_id,
+        total_windows,
+        getattr(settings, "MISTRAL_PASS2_TIMEOUT", 90),
+    )
+
+    for idx_window, window in enumerate(windows, start=1):
+        context = (window.get("raw_concat") or "").strip()
         if not context:
+            logger.info(
+                "Pass 2 fenêtre %s/%s ignorée (contexte vide)",
+                idx_window,
+                total_windows,
+            )
             continue
+        w_start = window["window_start"]
+        w_end = window["window_end"]
+        t0_window = time.perf_counter()
+        logger.info(
+            "Pass 2 fenêtre %s/%s start pages=%s-%s",
+            idx_window,
+            total_windows,
+            w_start,
+            w_end,
+        )
+        user_prompt = f"""Document : {document_title}
+Fenêtre pages {w_start} à {w_end}.
 
-        prompt = f"""Tu es un expert en RAG et en analyse technique.
-Résume de manière synthétique et dense le contenu technique des pages {start_page} à {end_page} du document "{document_title}".
-Concentre-toi sur les thèmes principaux, règles, normes, valeurs numériques clés ou tableaux présentés.
-Ce résumé sera utilisé comme contexte additionnel pour aider le RAG à comprendre ce que contient cette section.
-Rédige le résumé en 100 à 150 tokens maximum.
-
-Texte des pages :
+Texte brut des pages :
 {context}
 
-Résumé technique (sois concis, pas de blabla d'introduction, réponds en français) :"""
+Génère des rapports techniques pro_reports explicites et concis pour cette fenêtre (JSON uniquement).
+Maximum {max_reports} thèmes.
+Chaque thème doit nommer explicitement les références/produits/normes, sans tournures vagues."""
 
-        payload = {
-            "model": "mistral-small-latest",
-            "messages": [
-                {"role": "user", "content": prompt}
-            ],
-            "stream": False,
-            "max_tokens": 300,
-            "temperature": 0.1,
-        }
-
-        summary_text = ""
+        messages = [
+            {"role": "system", "content": _WINDOW_PRO_SYSTEM_PROMPT},
+            {"role": "user", "content": user_prompt},
+        ]
+        pro_reports: List[dict] = []
         try:
-            with httpx.Client(timeout=60.0) as client:
-                resp = client.post(
-                    f"{base_url}/v1/chat/completions",
-                    headers=headers,
-                    json=payload,
-                )
-                resp.raise_for_status()
-                res_json = resp.json()
-                choice = (res_json.get("choices") or [{}])[0]
-                summary_text = (choice.get("message", {}).get("content") or "").strip()
-        except Exception as e:
-            logger.warning(
-                "Échec génération résumé Pass 2 pour pages %s-%s du doc %s: %s",
-                start_page, end_page, document_id, e
+            raw = _mistral_chat_completion(
+                messages,
+                page_no=w_start,
+                max_tokens=min(settings.MULTIMODAL_PAGE_MAX_TOKENS, 8000),
+                temperature=0.15,
+                timeout_seconds=float(getattr(settings, "MISTRAL_PASS2_TIMEOUT", 90)),
             )
-            # Fallback simple
-            themes = []
-            for p in batch:
-                for r in p.get("pro_reports") or []:
-                    if r.get("theme"):
-                        themes.append(r.get("theme"))
-            summary_text = (
-                f"Résumé technique des pages {start_page} à {end_page} de {document_title}. "
-                f"Sujets couverts : {', '.join(themes[:10])}."
+            data = _parse_json_with_repair(raw)
+            reports_in = data.get("pro_reports") or []
+            if isinstance(reports_in, list):
+                for idx, rep in enumerate(reports_in[:max_reports]):
+                    normalized = _normalize_report_dict(rep, idx, document_title, w_start)
+                    if normalized:
+                        pro_reports.append(normalized)
+        except Exception as exc:
+            logger.warning(
+                "Pass 2 fenêtre %s-%s doc %s échoué: %s",
+                w_start,
+                w_end,
+                document_id,
+                exc,
             )
 
-        if summary_text:
-            node_id = f"multimodal-parent-{document_id}-p{start_page}-p{end_page}"
-            meta = {
-                "content_type": PAGE_GROUP_SUMMARY_CONTENT_TYPE,
-                "chunking_version": CHUNKING_VERSION_MULTIMODAL,
-                "page_start": start_page,
-                "page_end": end_page,
-                "is_leaf": False,
-                "hierarchy_level": 1,
-                "document_id": document_id,
-                "document_title": document_title,
-                "token_count": count_tokens(summary_text)
-            }
-            specs.append(
-                MultimodalChunkSpec(
-                    page_no=start_page,
-                    content=summary_text,
-                    content_type=PAGE_GROUP_SUMMARY_CONTENT_TYPE,
-                    node_id=node_id,
-                    metadata=meta
-                )
+        if not pro_reports:
+            pro_reports.append(
+                {
+                    "theme": f"Pages {w_start}-{w_end}",
+                    "report": (
+                        f"Synthèse technique des pages {w_start} à {w_end} "
+                        f"du document {document_title or 'Document'}."
+                    ),
+                    "references": [],
+                    "keywords": [],
+                    "norms": [],
+                    "constraints": [],
+                    "dependencies": [],
+                }
             )
-            
-    return specs
+
+        pro_reports, needs_retry = validate_pro_reports(pro_reports)
+        if needs_retry:
+            logger.info(
+                "Pass 2 fenêtre %s-%s: déictiques détectés, conservé sans retry auto (mode light)",
+                w_start,
+                w_end,
+            )
+
+        result[window["window_id"]] = pro_reports
+        elapsed = time.perf_counter() - t0_window
+        logger.info(
+            "Pass 2 fenêtre %s/%s done pages=%s-%s reports=%s elapsed=%.2fs",
+            idx_window,
+            total_windows,
+            w_start,
+            w_end,
+            len(pro_reports),
+            elapsed,
+        )
+
+    return result
 
 
 def build_multimodal_pages_for_pdf(
@@ -1053,9 +1574,7 @@ def build_multimodal_pages_for_pdf(
     max_pages: Optional[int] = None,
 ) -> List[MultimodalChunkSpec]:
     """
-    Pour chaque page : PNG + mistral-small JSON → specs de chunks.
-    Jusqu'à MULTIMODAL_PAGE_CONCURRENCY pages en parallèle par document.
-    Puis fusionne heuristiquement les coupures de page et génère les parents (Pass 2).
+    Pipeline v4 : Pass 1 vision (raw) → merge → fenêtres → Pass 2 rapports → chunks leaves.
     """
     from app.services.pdf_extraction_service import extract_page_texts_from_pdf
 
@@ -1115,37 +1634,58 @@ def build_multimodal_pages_for_pdf(
         if page_no in page_jsons_by_no:
             ordered_pages.append(page_jsons_by_no[page_no])
 
-    # 2. Appliquer la fusion heuristique des sections coupées
     ordered_pages = merge_cut_sections_across_pages(ordered_pages)
 
-    # 3. Générer les résumés parent Pass 2
-    parent_specs = generate_page_group_summaries(document_id, document_title, ordered_pages)
+    windows = build_dynamic_windows(document_id, ordered_pages)
+    logger.info(
+        "Pass 2 préparation doc=%s pages_raw=%s fenêtres=%s",
+        document_id,
+        len(ordered_pages),
+        len(windows),
+    )
+    window_reports = generate_window_pro_reports(
+        document_id, document_title, windows
+    )
 
-    # 4. Générer les specs de chunks feuilles et injecter parent_node_id
-    leaf_specs = []
+    all_specs: List[MultimodalChunkSpec] = []
+
+    window_by_page: Dict[int, str] = {}
+    for w in windows:
+        for p in w.get("pages") or []:
+            window_by_page[int(p["page_no"])] = w["window_id"]
+
     for page_data in ordered_pages:
-        page_no = page_data["page_no"]
-        page_specs = build_chunk_specs_from_page(
+        page_no = int(page_data["page_no"])
+        raw_specs = build_raw_chunk_specs_from_page(
             document_id, page_no, page_data, document_title
         )
-        
-        # Associer les feuilles à leur parent correspondant (contenant page_no dans sa plage)
-        for spec in page_specs:
-            for p_spec in parent_specs:
-                start_p = p_spec.metadata.get("page_start")
-                end_p = p_spec.metadata.get("page_end")
-                if start_p <= page_no <= end_p:
-                    spec.metadata["parent_node_id"] = p_spec.node_id
-                    break
-        
-        leaf_specs.extend(page_specs)
+        wid = window_by_page.get(page_no)
+        if wid:
+            for spec in raw_specs:
+                spec.metadata["window_id"] = wid
+        all_specs.extend(raw_specs)
 
-    # Retourner les parents suivis des feuilles
-    return parent_specs + leaf_specs
+    for window in windows:
+        wid = window["window_id"]
+        reports = window_reports.get(wid) or []
+        all_specs.extend(
+            build_window_report_chunk_specs(
+                document_id, window, reports, document_title
+            )
+        )
+
+    logger.info(
+        "Document %s v4 : %d pages, %d fenêtres, %d chunks",
+        document_id,
+        len(ordered_pages),
+        len(windows),
+        len(all_specs),
+    )
+    return all_specs
 
 
 def embed_new_multimodal_chunks(document_id: int) -> int:
-    """Embeddings mistral-embed pour les chunks multimodal sans vecteur."""
+    """Embeddings mistral-embed pour les feuilles multimodal v4 sans vecteur."""
     from app.services.embedding_service import generate_embeddings_batch
 
     col = _content_type_col()
@@ -1153,7 +1693,8 @@ def embed_new_multimodal_chunks(document_id: int) -> int:
         statement = select(DocumentChunk).where(
             DocumentChunk.document_id == document_id,
             DocumentChunk.embedding.is_(None),
-            or_(*[col == ct for ct in MULTIMODAL_CONTENT_TYPES]),
+            DocumentChunk.is_leaf == True,  # noqa: E712
+            or_(*[col == ct for ct in EMBEDDABLE_MULTIMODAL_CONTENT_TYPES]),
         )
         chunks = list(session.exec(statement).all())
         if not chunks:

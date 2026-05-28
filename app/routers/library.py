@@ -361,7 +361,7 @@ async def get_document_chunks_monitor(
     """
     Retourne les chunks multimodaux d'un document pour monitoring UI :
     - raw : page_raw_enriched (+ legacy page_multimodal_section)
-    - report : page_section_report (+ legacy page_multimodal_summary)
+    - report : page_window_report (+ legacy page_section_report, page_multimodal_summary)
     """
     document = get_document_by_id(session, document_id, current_user.id)
     if not document:
@@ -375,7 +375,11 @@ async def get_document_chunks_monitor(
     ).all()
 
     raw_types = {"page_raw_enriched", "page_multimodal_section"}
-    report_types = {"page_section_report", "page_multimodal_summary"}
+    report_types = {
+        "page_window_report",
+        "page_section_report",
+        "page_multimodal_summary",
+    }
 
     raw_items: List[DocumentChunkMonitorItem] = []
     report_items: List[DocumentChunkMonitorItem] = []

@@ -1,7 +1,7 @@
 # Configuration finale RAG - MiniLM 512 optimisé
 
-**Date**: 2026-05-27  
-**Version**: Multimodal v3 (raw enrichi + rapport pro) + MiniLM 512 optimized  
+**Date**: 2026-05-28  
+**Version**: Multimodal v4 (Pass 1 raw + Pass 2 rapports fenêtre) + MiniLM 512 optimized  
 **Statut**: ✅ PRODUCTION READY
 
 ---
@@ -15,11 +15,13 @@ Cette documentation décrit la configuration optimisée du pipeline RAG pour le 
 ```
 Document upload
     ↓
-Multimodal Processing (pymupdf + mistral-small vision)
+Pass 1 : pymupdf + mistral-small vision (raw_text uniquement)
     ↓
-2 types de chunks par section (≤480 tokens chacun)
-    ├── page_raw_enriched (texte source + [Image N: ...])
-    └── page_section_report (rapport pro RAG-friendly)
+Pass 2 : mistral-small texte (rapports pro par fenêtre dynamique)
+    ↓
+2 types de chunks leaves (≤480 tokens, split_text_rag_friendly)
+    ├── page_raw_enriched (texte source + [Image: ...])
+    └── page_window_report (rapport pro explicite multi-pages)
     ↓
 Mistral Embeddings (mistral-embed, 1024 dim)
     ↓
@@ -44,36 +46,36 @@ MMR Diversification (λ=0.7, k=12)
 Context for LLM
 ```
 
-## 2. Configuration chunking multimodal (v3)
+## 2. Configuration chunking multimodal (v4)
 
-### Deux types de chunks par section
+### Deux appels API, deux types de chunks
 
-Pour chaque page, le LLM produit **1 à 5 sections**. Chaque section génère **2 chunks** :
+| Étape | Appel | Sortie LLM | Chunks BDD |
+| ----- | ----- | ---------- | ---------- |
+| Pass 1 | Vision / page | `raw_text` | `page_raw_enriched` (1–N / page, split code) |
+| Pass 2 | Texte / fenêtre | `pro_reports[]` | `page_window_report` (1–M / thème, split code) |
 
-| Type                   | `content_type`        | Contenu                                                                   | Rôle retrieval                             |
-| ---------------------- | --------------------- | ------------------------------------------------------------------------- | ------------------------------------------ |
-| **Texte brut enrichi** | `page_raw_enriched`   | Texte source fidèle + descriptions inline `[Image N: ...]`                | Retrouver le contenu documentaire exact    |
-| **Rapport pro**        | `page_section_report` | Réinterprétation technique RAG-friendly (normes, contraintes, procédures) | Enrichir la compréhension et la pertinence |
+| Type                   | `content_type`        | Rôle retrieval                             |
+| ---------------------- | --------------------- | ------------------------------------------ |
+| **Texte brut enrichi** | `page_raw_enriched`   | Preuve documentaire (pymupdf + `[Image: …]`) |
+| **Rapport fenêtre**    | `page_window_report`  | Synthèse pro explicite multi-pages         |
 
-Exemple : page avec 3 sections → **6 chunks** (3 raw + 3 report).
+Liaison : `window_id` commun entre raw et rapports d'une même fenêtre.
 
 ### Paramètres (`multimodal_page_service.py`)
 
 ```python
-MAX_SECTIONS_PER_PAGE = 5         # 1-5 sections par page
-MAX_CHUNK_TOKENS = 480            # Limite stricte tokens (marge vs 512)
-CHUNKING_VERSION = "multimodal_page_v3"
-PAGE_RAW_ENRICHED_CONTENT_TYPE = "page_raw_enriched"
-PAGE_SECTION_REPORT_CONTENT_TYPE = "page_section_report"
+MAX_CHUNK_TOKENS = 480
+CHUNKING_VERSION = "multimodal_page_v4"
+WINDOW_MAX_INPUT_TOKENS = 7000
+WINDOW_MAX_PAGES = 12
+RAG_CHUNK_OVERLAP_TOKENS = 40
 ```
 
-### Stratégie parent/leaf
+### Stratégie leaf-only
 
-**Option A** (leaf-only, retenue) :
-
-- Tous les chunks multimodaux sont des **leafs autonomes**
-- `is_leaf=True`, `parent_node_id=None`, `hierarchy_level=0`
-- Aucune hiérarchie artificielle (optimisé pour MiniLM 512)
+- Tous les chunks v4 : `is_leaf=True`, embeddings sur feuilles uniquement
+- Expansion retrieval : `expand_retrieval_groups` (même `window_id`, pages ±1)
 
 ### Schéma JSON LLM (par section)
 

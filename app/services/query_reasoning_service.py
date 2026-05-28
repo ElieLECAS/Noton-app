@@ -13,6 +13,7 @@ class QueryIntent(BaseModel):
     reasoning: str
     confidence: float
     search_terms: List[str] = []  # Termes de recherche additionnels pour query expansion
+    detected_references: List[str] = []  # Références techniques exactes identifiées (CQR)
 
 SYSTEM_PROMPT = """Tu es un expert en analyse d'intention pour un système RAG industriel (PROFERM).
 Ton rôle est de décoder la question de l'utilisateur pour déterminer quelle source documentaire doit être privilégiée.
@@ -35,12 +36,16 @@ Exemple : pour 'dormant Profine', ajouter ['profilé PVC', 'menuiserie PVC', 'ch
 Exemple : pour 'DTU 36.5', ajouter ['norme', 'étanchéité', 'menuiserie extérieure', 'mise en oeuvre'].
 Ne PAS répéter les termes déjà présents dans la question originale.
 
+RÉFÉRENCES ET CODES TECHNIQUES :
+Identifie et extrait sous leur forme exacte toutes les références techniques, codes de produits, modèles de profilés, ou normes cités dans la question (ex: "Perform 70", "DTU 36.5", "NF EN 1991", "Soleal 55", "REF123", "PVC-76").
+
 RETOURNE UNIQUEMENT UN JSON avec les champs :
 - intent: (company_info | supplier_info | generic | mixed)
 - primary_source: (Le nom exact de la marque ou null)
 - reasoning: (Explication courte en français)
 - confidence: (0.0 à 1.0)
 - search_terms: (Liste de 3-6 termes additionnels pour la recherche, ou liste vide si non pertinent)
+- detected_references: (Liste de toutes les références techniques exactes, ou liste vide si aucune)
 """
 
 async def reason_query_intent(query: str, history: Optional[List[Dict[str, str]]] = None) -> QueryIntent:
@@ -70,13 +75,19 @@ async def reason_query_intent(query: str, history: Optional[List[Dict[str, str]]
             raw_search_terms = []
         search_terms = [str(t).strip() for t in raw_search_terms if t and str(t).strip()][:6]
 
+        raw_detected_refs = data.get("detected_references", [])
+        if not isinstance(raw_detected_refs, list):
+            raw_detected_refs = []
+        detected_references = [str(r).strip() for r in raw_detected_refs if r and str(r).strip()]
+
         return QueryIntent(
             intent=data.get("intent", "generic"),
             primary_source=data.get("primary_source"),
             reasoning=data.get("reasoning", "Défaut"),
             confidence=data.get("confidence", 0.5),
             search_terms=search_terms,
+            detected_references=detected_references,
         )
     except Exception as e:
         logger.error(f"Erreur lors du raisonnement de la requête: {e}")
-        return QueryIntent(intent="generic", reasoning="Erreur technique", confidence=0.0, search_terms=[])
+        return QueryIntent(intent="generic", reasoning="Erreur technique", confidence=0.0, search_terms=[], detected_references=[])

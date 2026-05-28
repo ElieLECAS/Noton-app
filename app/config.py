@@ -82,6 +82,20 @@ class Settings(BaseSettings):
     MULTIMODAL_PAGE_MAX_TOKENS: int = 8000
     # Pages traitées en parallèle au sein d’un même document multimodal
     MULTIMODAL_PAGE_CONCURRENCY: int = 3
+    # v4 : seuil caractères pymupdf pour mode native vs scanned
+    MULTIMODAL_NATIVE_TEXT_MIN_CHARS: int = 100
+    # v4 : fenêtres dynamiques Pass 2 (rapports pro multi-pages)
+    WINDOW_MAX_INPUT_TOKENS: int = 7000
+    WINDOW_MAX_PAGES: int = 2
+    WINDOW_PAGE_OVERLAP: int = 0
+    MAX_REPORTS_PER_WINDOW: int = 2
+    MISTRAL_PASS2_TIMEOUT: int = 60
+    # v4 : découpe RAG-friendly (overlap entre parts consécutives)
+    RAG_CHUNK_OVERLAP_TOKENS: int = 40
+    # v4 : expansion retrieval locale (voisins + même window_id)
+    RETRIEVAL_EXPAND_ENABLED: bool = True
+    RETRIEVAL_PAGE_RADIUS: int = 1
+    RERANK_GROUP_CHAR_CAP: int = 2800
 
     # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
     TASK_BACKEND_MODE: str = "thread"

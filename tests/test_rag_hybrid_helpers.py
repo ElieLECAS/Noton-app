@@ -79,3 +79,44 @@ def test_chunk_markdown_hierarchical_node_parent_ids():
         pid = leaf.get("parent_node_id")
         if pid:
             assert pid in parent_ids or any(p["node_id"] == pid for p in specs)
+
+
+def test_extract_alphanumeric_codes():
+    from app.services.space_search_service import _extract_alphanumeric_codes
+    query = "Quelles sont les spécifications pour la gamme Perform-70 et la norme DTU 36.5 chez Soleal ?"
+    codes = _extract_alphanumeric_codes(query)
+    
+    # Doit contenir les codes avec chiffres, acronymes majuscules et noms capitalisés
+    assert "perform-70" in codes
+    assert "36.5" in codes
+    assert "dtu" in codes
+    assert "soleal" in codes
+    
+    # Dédoublonnement
+    assert len(codes) == len(set(codes))
+
+
+def test_reciprocal_rank_fusion_three_channels():
+    from app.services.space_search_service import reciprocal_rank_fusion
+    from llama_index.core.schema import TextNode, NodeWithScore
+    
+    n1 = NodeWithScore(node=TextNode(id_="chunk-1", text="text 1"), score=0.9)
+    n2 = NodeWithScore(node=TextNode(id_="chunk-2", text="text 2"), score=0.8)
+    n3 = NodeWithScore(node=TextNode(id_="chunk-3", text="text 3"), score=0.7)
+    
+    vector = [n1, n2]
+    lexical = [n2, n3]
+    alphanumeric = [n3, n1]
+    
+    res = reciprocal_rank_fusion(vector, lexical, alphanumeric_results=alphanumeric, top_n=3)
+    assert len(res) <= 3
+    # Tous les chunks doivent être présents
+    node_ids = {r.node.id_ for r in res}
+    assert "chunk-1" in node_ids
+    assert "chunk-2" in node_ids
+    assert "chunk-3" in node_ids
+    
+    # Les scores doivent être normalisés dans [0.1, 0.9]
+    for r in res:
+        assert 0.1 <= r.score <= 0.9
+

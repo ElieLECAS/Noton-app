@@ -318,14 +318,137 @@ def _retrieve_leaves_bm25_sql(
     return nodes
 
 
+def _extract_alphanumeric_codes(query_text: str) -> List[str]:
+    """
+    Extrait les codes, normes, modèles et références de la requête pour recherche exacte/substring.
+    """
+    if not query_text:
+        return []
+    
+    # 1. Mots contenant des chiffres (ex: 36.5, perform-70, 1991, v4)
+    with_digits = re.findall(r"\b[a-zA-Z0-9\.\-]*\d+[a-zA-Z0-9\.\-]*\b", query_text)
+    
+    # 2. Acronymes tout en majuscules (ex: DTU, NF, EN, ISO, PVC, RAG)
+    acronyms = re.findall(r"\b[A-Z]{2,}\b", query_text)
+    
+    # 3. Noms propres / modèles capitalisés (ex: Soleal, Perform, Lumeal)
+    capitalized = re.findall(r"\b[A-Z][a-z]{2,}\b", query_text)
+    
+    results = []
+    seen = set()
+    for t in with_digits + acronyms + capitalized:
+        cleaned = t.strip(".-").lower()
+        if len(cleaned) >= 2 and cleaned not in seen:
+            seen.add(cleaned)
+            results.append(cleaned)
+            
+    return results
+
+
+def _retrieve_leaves_alphanumeric_sql(
+    session: Session,
+    space_id: int,
+    user_id: int,
+    query_text: str,
+    candidate_k: int,
+    detected_references: Optional[List[str]] = None,
+    document_filter: str = "all",
+) -> List[NodeWithScore]:
+    """
+    Recherche directe par correspondance de sous-chaîne pour les codes et références alphanumériques
+    afin de fiabiliser les réponses sur des termes techniques complexes (normes, gammes, etc.).
+    Combine l'extraction Regex et les détections du CQR.
+    """
+    regex_terms = _extract_alphanumeric_codes(query_text)
+    
+    cqr_terms = []
+    for ref in (detected_references or []):
+        for part in re.split(r'\s+', ref):
+            cleaned = part.strip(".-").lower()
+            if len(cleaned) >= 2:
+                cqr_terms.append(cleaned)
+                
+    all_terms = list(set(regex_terms + cqr_terms))
+    if not all_terms:
+        return []
+
+    from app.services.document_service_new import feedback_corrective_sql_filter
+    filter_clause = feedback_corrective_sql_filter(document_filter, "d")
+
+    or_clauses = []
+    params = {"space_id": space_id, "limit_k": candidate_k}
+    for idx, term in enumerate(all_terms):
+        param_name = f"term_{idx}"
+        or_clauses.append(f"dc.content ILIKE :{param_name}")
+        params[param_name] = f"%{term}%"
+
+    or_clause_str = " OR ".join(or_clauses)
+
+    sql_query = text(f"""
+        SELECT
+            dc.id,
+            dc.content,
+            dc.text,
+            dc.chunk_index,
+            dc.document_id,
+            dc.metadata_json,
+            dc.metadata_,
+            dc.source AS chunk_source,
+            d.title AS document_title,
+            d.source AS document_source,
+            d.id AS document_id
+        FROM documentchunk dc
+        INNER JOIN document d ON dc.document_id = d.id
+        INNER JOIN document_space ds ON ds.document_id = d.id
+        WHERE ds.space_id = :space_id
+          AND dc.is_leaf = true
+          AND ({or_clause_str})
+          {filter_clause}
+        LIMIT :limit_k
+    """)
+
+    result = session.execute(sql_query, params)
+    nodes: List[NodeWithScore] = []
+    
+    for row in result:
+        content_lower = (row.content or row.text or "").lower()
+        
+        matches = sum(1 for t in all_terms if t in content_lower)
+        if matches == 0:
+            continue
+            
+        base_score = matches / len(all_terms)
+        
+        metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
+        metadata.setdefault("document_id", row.document_id)
+        metadata.setdefault("document_title", row.document_title or "Document sans titre")
+        metadata.setdefault("chunk_index", row.chunk_index)
+        if getattr(row, "document_source", None):
+            metadata.setdefault("source", row.document_source)
+        if getattr(row, "chunk_source", None):
+            metadata.setdefault("source", row.chunk_source)
+            
+        node = TextNode(
+            id_=f"chunk-{row.id}",
+            text=row.content or row.text or "",
+            metadata=metadata,
+        )
+        nodes.append(NodeWithScore(node=node, score=base_score))
+        
+    nodes.sort(key=lambda n: n.score, reverse=True)
+    logger.info("Alphanumeric substring (space): %d feuilles (terms=%s)", len(nodes), all_terms)
+    return nodes
+
+
 def reciprocal_rank_fusion(
     vector_results: List[NodeWithScore],
     lexical_results: List[NodeWithScore],
+    alphanumeric_results: Optional[List[NodeWithScore]] = None,
     k: int = 60,
     top_n: int = 15,
 ) -> List[NodeWithScore]:
     """
-    Fusionne les résultats de recherche vectorielle et lexicale avec l'algorithme RRF,
+    Fusionne les résultats de recherche vectorielle, lexicale et alphanumérique avec l'algorithme RRF,
     puis normalise les scores dans l'intervalle [0.1, 0.9] pour rester compatibles avec les boosts.
     """
     rrf_scores: Dict[str, float] = {}
@@ -337,6 +460,12 @@ def reciprocal_rank_fusion(
         rrf_scores[node_id] = rrf_scores.get(node_id, 0.0) + (1.0 / (k + rank))
 
     for rank, nws in enumerate(lexical_results, start=1):
+        node_id = nws.node.id_
+        if node_id not in nodes_map:
+            nodes_map[node_id] = nws
+        rrf_scores[node_id] = rrf_scores.get(node_id, 0.0) + (1.0 / (k + rank))
+
+    for rank, nws in enumerate(alphanumeric_results or [], start=1):
         node_id = nws.node.id_
         if node_id not in nodes_map:
             nodes_map[node_id] = nws
@@ -661,6 +790,126 @@ def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
     setattr(target_node, "metadata", m)
 
 
+def _chunk_row_to_text_node(row: DocumentChunk, score: float) -> NodeWithScore:
+    meta = _merged_chunk_metadata(row.metadata_json, row.metadata_)
+    meta.setdefault("document_id", row.document_id)
+    meta.setdefault("chunk_index", row.chunk_index)
+    node = TextNode(
+        text=row.content or "",
+        id_=str(row.id),
+        metadata=meta,
+    )
+    return NodeWithScore(node=node, score=score)
+
+
+def _expand_retrieval_groups(
+    session: Session,
+    space_id: int,
+    user_id: int,
+    hits: List[NodeWithScore],
+) -> List[NodeWithScore]:
+    """
+    Expansion locale : même window_id, pages adjacentes, raw + rapport fenêtre.
+    """
+    if not hits:
+        return hits
+
+    radius = max(0, int(getattr(settings, "RETRIEVAL_PAGE_RADIUS", 1)))
+    char_cap = int(getattr(settings, "RERANK_GROUP_CHAR_CAP", 2800))
+    seen_ids: Set[str] = set()
+    expanded: List[NodeWithScore] = []
+
+    raw_doc_ids = session.exec(
+        select(DocumentSpace.document_id).where(
+            DocumentSpace.space_id == space_id
+        )
+    ).all()
+    doc_ids_in_space: Set[int] = set()
+    for r in raw_doc_ids:
+        try:
+            if isinstance(r, (tuple, list)):
+                doc_ids_in_space.add(int(r[0]))
+            else:
+                doc_ids_in_space.add(int(r))
+        except (TypeError, ValueError, IndexError):
+            continue
+
+    for nws in hits:
+        base_score = float(getattr(nws, "score", 0.0) or 0.0)
+        node_id = getattr(nws.node, "id_", None)
+        if node_id and node_id not in seen_ids:
+            seen_ids.add(str(node_id))
+            expanded.append(nws)
+
+        meta = dict(getattr(nws.node, "metadata", {}) or {})
+        doc_id = meta.get("document_id")
+        try:
+            doc_id_int = int(doc_id) if doc_id is not None else None
+        except (TypeError, ValueError):
+            doc_id_int = None
+        if doc_id_int is None or doc_id_int not in doc_ids_in_space:
+            continue
+
+        page_no = meta.get("page_no")
+        try:
+            page_int = int(page_no) if page_no is not None else None
+        except (TypeError, ValueError):
+            page_int = None
+
+        window_id = meta.get("window_id")
+        col = DocumentChunk.metadata_json["content_type"].as_string()
+        multimodal_types = ("page_raw_enriched", "page_window_report", "page_section_report")
+
+        or_clauses = []
+        if window_id:
+            or_clauses.append(
+                DocumentChunk.metadata_json["window_id"].as_string() == str(window_id)
+            )
+        if page_int is not None:
+            for adj in range(page_int - radius, page_int + radius + 1):
+                or_clauses.append(
+                    DocumentChunk.metadata_json["page_no"].as_integer() == adj
+                )
+
+        if not or_clauses:
+            continue
+
+        stmt = (
+            select(DocumentChunk)
+            .where(
+                DocumentChunk.document_id == doc_id_int,
+                DocumentChunk.is_leaf == True,  # noqa: E712
+                or_(*[col == t for t in multimodal_types]),
+                or_(*or_clauses),
+            )
+            .limit(12)
+        )
+        try:
+            rows = list(session.exec(stmt).all())
+        except Exception as exc:
+            logger.debug("expand_retrieval_groups query failed: %s", exc)
+            continue
+
+        group_chars = 0
+        for row in rows:
+            rid = str(row.id)
+            if rid in seen_ids:
+                continue
+            content = (row.content or "").strip()
+            if not content:
+                continue
+            if group_chars + len(content) > char_cap:
+                break
+            group_chars += len(content)
+            seen_ids.add(rid)
+            decay = 0.92
+            expanded.append(_chunk_row_to_text_node(row, base_score * decay))
+
+    expanded.sort(key=lambda x: float(getattr(x, "score", 0.0) or 0.0), reverse=True)
+    pool_cap = min(settings.RERANK_POOL + 10, 50)
+    return expanded[:pool_cap]
+
+
 def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     metadata = dict(getattr(node, "metadata", {}) or {})
     document_title = metadata.get("document_title", "Document sans titre")
@@ -977,7 +1226,25 @@ async def search_relevant_passages(
                 raw_lexical = []
             lr.end(outputs={"nb": len(raw_lexical)})
 
-        if not raw_vector and not raw_lexical:
+        # 3. Recherche directe par correspondances alphanumériques exactes/substrings
+        with trace_run(
+            "alphanumeric_retrieval",
+            run_type="retriever",
+            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
+            tags=["retrieval", "alphanumeric", "space"],
+        ) as ar:
+            raw_alphanumeric = _retrieve_leaves_alphanumeric_sql(
+                session,
+                space_id,
+                user_id,
+                query_text,
+                candidate_k,
+                detected_references=getattr(reasoning_result, "detected_references", None),
+                document_filter=document_filter
+            )
+            ar.end(outputs={"nb": len(raw_alphanumeric)})
+
+        if not raw_vector and not raw_lexical and not raw_alphanumeric:
             fallback_passages = await _keyword_fallback_passages(
                 session, space_id, user_id, query_text, k
             )
@@ -987,7 +1254,12 @@ async def search_relevant_passages(
         filtered_vector = _filter_by_vector_score(raw_vector)
 
         # Fusion RRF (Reciprocal Rank Fusion)
-        fused_results = reciprocal_rank_fusion(filtered_vector, raw_lexical, top_n=candidate_k)
+        fused_results = reciprocal_rank_fusion(
+            filtered_vector,
+            raw_lexical,
+            alphanumeric_results=raw_alphanumeric,
+            top_n=candidate_k
+        )
         
         # Sélection des meilleurs résultats hybrides (on garde candidate_k candidats pour la résolution
         # des parents et la déduplication, garantissant qu'on dispose de k résultats uniques à la fin)
@@ -1010,7 +1282,11 @@ async def search_relevant_passages(
                 parent_node_id = leaf_meta.get("parent_node_id")
                 target_node = None
                 
-                is_multimodal = content_type in ("page_raw_enriched", "page_section_report")
+                is_multimodal = content_type in (
+                    "page_raw_enriched",
+                    "page_section_report",
+                    "page_window_report",
+                )
 
                 if content_type in ("table_row", "table_summary"):
                     target_node = nws.node
@@ -1064,6 +1340,11 @@ async def search_relevant_passages(
                     seen_node_ids.add(node_id)
                 final_nodes.append(NodeWithScore(node=target_node, score=score))
             pr.end(outputs={"nb_final": len(final_nodes)})
+
+        if getattr(settings, "RETRIEVAL_EXPAND_ENABLED", True):
+            final_nodes = _expand_retrieval_groups(
+                session, space_id, user_id, final_nodes
+            )
 
         passages = [
             _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))

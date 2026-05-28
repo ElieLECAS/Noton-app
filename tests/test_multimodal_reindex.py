@@ -1,4 +1,4 @@
-"""Retraitement multimodal bibliothèque v3 : raw enrichi + rapport pro par section."""
+"""Retraitement multimodal bibliothèque v4."""
 from __future__ import annotations
 
 from unittest import mock
@@ -12,122 +12,34 @@ from app.services.document_service_new import multimodal_reindex_library_documen
 from app.services.multimodal_page_service import (
     MultimodalChunkSpec,
     PAGE_RAW_ENRICHED_CONTENT_TYPE,
-    PAGE_SECTION_REPORT_CONTENT_TYPE,
-    PAGE_MULTIMODAL_SUMMARY_CONTENT_TYPE,
-    build_chunk_specs_from_page,
+    PAGE_WINDOW_REPORT_CONTENT_TYPE,
+    build_raw_chunk_specs_from_page,
     parse_multimodal_page_response,
 )
 
 
-def test_parse_multimodal_page_response_multi_sections():
+def test_parse_multimodal_page_response_v4():
     data = {
         "page_no": 2,
-        "sections": [
-            {
-                "section_index": 1,
-                "heading": "2.1 Généralités",
-                "section_kind": "text",
-                "raw_text": "Texte source. [Image 1: schéma avec cote 50mm]",
-                "pro_report": "Rapport : tolérance 50mm selon NF EN 14351-1.",
-                "references": ["NF EN 14351-1"],
-                "keywords": ["baie"],
-                "norms": ["NF EN 14351-1"],
-                "constraints": ["Charge max 120 kg"],
-                "dependencies": [],
-                "linked_figures": [],
-            },
-            {
-                "section_index": 2,
-                "heading": "Tableau 1",
-                "section_kind": "table",
-                "raw_text": "| A | B |\n|---|---|",
-                "pro_report": "Rapport tableau : colonnes A et B avec valeurs Uw.",
-                "references": [],
-                "keywords": ["Uw"],
-                "norms": [],
-                "constraints": [],
-                "dependencies": [],
-                "linked_figures": [],
-            },
-        ],
+        "raw_text": "Texte source. [Image: schéma cote 50mm]",
     }
     parsed = parse_multimodal_page_response(data, 2, "raw pymupdf", "Doc test")
-    assert len(parsed["sections"]) == 2
-    assert "[Image 1:" in parsed["sections"][0]["raw_text"]
-    assert parsed["sections"][0]["pro_report"].startswith("Rapport")
+    assert "[Image:" in parsed["raw_text"]
+    assert parsed.get("pro_reports") is None
 
 
-def test_parse_multimodal_page_response_legacy_content_fallback():
-    """Compatibilité : ancien champ content → raw_text."""
-    data = {
-        "sections": [
-            {
-                "section_index": 1,
-                "heading": "Intro",
-                "content": "Ancien format contenu",
-            }
-        ]
-    }
-    parsed = parse_multimodal_page_response(data, 1, "fallback pymupdf", "Doc")
-    assert parsed["sections"][0]["raw_text"] == "Ancien format contenu"
-    assert parsed["sections"][0]["pro_report"]
-
-
-def test_build_chunk_specs_from_page():
+def test_build_raw_chunk_specs_from_page():
     parsed = parse_multimodal_page_response(
-        {
-            "sections": [
-                {
-                    "section_index": 1,
-                    "heading": "Intro",
-                    "section_kind": "text",
-                    "raw_text": "Corps source",
-                    "pro_report": "Rapport technique intro.",
-                }
-            ],
-        },
+        {"raw_text": "Corps source technique.", "page_no": 1},
         1,
         "",
         "Mon doc",
     )
-    specs = build_chunk_specs_from_page(42, 1, parsed, "Mon doc")
-    assert len(specs) == 2
+    specs = build_raw_chunk_specs_from_page(42, 1, parsed, "Mon doc")
+    assert len(specs) >= 1
     assert specs[0].content_type == PAGE_RAW_ENRICHED_CONTENT_TYPE
-    assert specs[1].content_type == PAGE_SECTION_REPORT_CONTENT_TYPE
     assert "Corps source" in specs[0].content
-    assert "Rapport technique" in specs[1].content
-    assert specs[0].node_id == "multimodal-page-42-1-s1-raw"
-    assert specs[1].node_id == "multimodal-page-42-1-s1-report"
-
-
-def test_build_chunk_specs_two_sections_four_chunks():
-    parsed = parse_multimodal_page_response(
-        {
-            "sections": [
-                {
-                    "section_index": 1,
-                    "heading": "A",
-                    "raw_text": "Texte A",
-                    "pro_report": "Rapport A",
-                },
-                {
-                    "section_index": 2,
-                    "heading": "B",
-                    "raw_text": "Texte B",
-                    "pro_report": "Rapport B",
-                },
-            ],
-        },
-        1,
-        "",
-        "Doc",
-    )
-    specs = build_chunk_specs_from_page(1, 1, parsed, "Doc")
-    assert len(specs) == 4
-    raw_count = sum(1 for s in specs if s.content_type == PAGE_RAW_ENRICHED_CONTENT_TYPE)
-    report_count = sum(1 for s in specs if s.content_type == PAGE_SECTION_REPORT_CONTENT_TYPE)
-    assert raw_count == 2
-    assert report_count == 2
+    assert "multimodal-page-42-1-raw" in specs[0].node_id
 
 
 def test_multimodal_reindex_endpoint_returns_queued(
@@ -176,7 +88,7 @@ def test_multimodal_reindex_disabled_returns_400(client, admin_headers, monkeypa
     assert r.status_code == 400
 
 
-def test_multimodal_service_multi_chunks_replaces_v1_and_v2(
+def test_multimodal_service_v4_chunks(
     session: Session, monkeypatch, tmp_path
 ):
     monkeypatch.setattr(settings, "MULTIMODAL_ENABLED", True)
@@ -212,66 +124,35 @@ def test_multimodal_service_multi_chunks_replaces_v1_and_v2(
         is_leaf=True,
         metadata_json={"content_type": "text_full"},
     )
-    old_v1 = DocumentChunk(
-        document_id=doc.id,
-        chunk_index=1,
-        content="ancien v1 monolithique",
-        is_leaf=True,
-        metadata_json={
-            "content_type": PAGE_MULTIMODAL_SUMMARY_CONTENT_TYPE,
-            "chunking_version": "multimodal_page_v1",
-            "page_no": 1,
-        },
-    )
     session.add(ocr_chunk)
-    session.add(old_v1)
     session.commit()
 
     fake_specs = [
         MultimodalChunkSpec(
             page_no=1,
-            content="Texte brut section A",
+            content="Texte brut page 1",
             content_type=PAGE_RAW_ENRICHED_CONTENT_TYPE,
-            node_id=f"multimodal-page-{doc.id}-1-s1-raw",
+            node_id=f"multimodal-page-{doc.id}-1-raw",
             metadata={
                 "content_type": PAGE_RAW_ENRICHED_CONTENT_TYPE,
                 "page_no": 1,
-                "section_index": 1,
-                "references": ["NF EN 1"],
+                "window_id": "win-1-1-2",
+                "chunking_version": "multimodal_page_v4",
+                "is_leaf": True,
             },
         ),
         MultimodalChunkSpec(
             page_no=1,
-            content="Rapport pro section A",
-            content_type=PAGE_SECTION_REPORT_CONTENT_TYPE,
-            node_id=f"multimodal-page-{doc.id}-1-s1-report",
+            content="Rapport fenêtre pages 1-2 | Perform 70",
+            content_type=PAGE_WINDOW_REPORT_CONTENT_TYPE,
+            node_id=f"multimodal-{doc.id}-win-1-2-r1",
             metadata={
-                "content_type": PAGE_SECTION_REPORT_CONTENT_TYPE,
+                "content_type": PAGE_WINDOW_REPORT_CONTENT_TYPE,
                 "page_no": 1,
-                "section_index": 1,
-                "norms": ["NF EN 1"],
-            },
-        ),
-        MultimodalChunkSpec(
-            page_no=1,
-            content="Texte brut section B",
-            content_type=PAGE_RAW_ENRICHED_CONTENT_TYPE,
-            node_id=f"multimodal-page-{doc.id}-1-s2-raw",
-            metadata={
-                "content_type": PAGE_RAW_ENRICHED_CONTENT_TYPE,
-                "page_no": 1,
-                "section_index": 2,
-            },
-        ),
-        MultimodalChunkSpec(
-            page_no=1,
-            content="Rapport pro section B",
-            content_type=PAGE_SECTION_REPORT_CONTENT_TYPE,
-            node_id=f"multimodal-page-{doc.id}-1-s2-report",
-            metadata={
-                "content_type": PAGE_SECTION_REPORT_CONTENT_TYPE,
-                "page_no": 1,
-                "section_index": 2,
+                "window_id": "win-1-1-2",
+                "theme": "Pose",
+                "chunking_version": "multimodal_page_v4",
+                "is_leaf": True,
             },
         ),
     ]
@@ -287,27 +168,20 @@ def test_multimodal_service_multi_chunks_replaces_v1_and_v2(
         ),
         mock.patch(
             "app.services.multimodal_page_service.embed_new_multimodal_chunks",
-            return_value=4,
+            return_value=2,
         ),
     ):
         result = multimodal_reindex_library_document(doc.id, user.id)
 
     assert result["status"] == "completed"
-    assert result["chunks"] == 4
+    assert result["chunks"] == 2
 
     chunks = list(
         session.exec(
             select(DocumentChunk).where(DocumentChunk.document_id == doc.id)
         ).all()
     )
-    assert len(chunks) == 5  # 1 OCR + 4 multimodal
+    assert len(chunks) == 3
     types = [c.metadata_json.get("content_type") for c in chunks]
-    assert types.count(PAGE_RAW_ENRICHED_CONTENT_TYPE) == 2
-    assert types.count(PAGE_SECTION_REPORT_CONTENT_TYPE) == 2
-    assert "ancien v1 monolithique" not in [c.content for c in chunks]
-    raw_chunks = [
-        c
-        for c in chunks
-        if c.metadata_json.get("content_type") == PAGE_RAW_ENRICHED_CONTENT_TYPE
-    ]
-    assert raw_chunks[0].metadata_json.get("references") == ["NF EN 1"]
+    assert types.count(PAGE_RAW_ENRICHED_CONTENT_TYPE) == 1
+    assert types.count(PAGE_WINDOW_REPORT_CONTENT_TYPE) == 1
