@@ -108,7 +108,7 @@ def test_reciprocal_rank_fusion_three_channels():
     lexical = [n2, n3]
     alphanumeric = [n3, n1]
     
-    res = reciprocal_rank_fusion(vector, lexical, alphanumeric_results=alphanumeric, top_n=3)
+    res = reciprocal_rank_fusion(vector, lexical, alphanumeric_results=alphanumeric, top_n=3, normalize=True)
     assert len(res) <= 3
     # Tous les chunks doivent être présents
     node_ids = {r.node.id_ for r in res}

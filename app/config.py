@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
     # Paramètres dédiés au chat "espaces"
     SPACE_CHAT_MAX_TOKENS: Optional[int] = None
-    SPACE_CHAT_TEMPERATURE: float = 0.55
+    SPACE_CHAT_TEMPERATURE: float = 0.0
     SPACE_CHAT_TOP_P: Optional[float] = None
     # Document Processing
     MAX_CONCURRENT_DOCUMENTS: int = 1
@@ -59,7 +59,7 @@ class Settings(BaseSettings):
     
     # Brave Search (recherche web pour function calling)
     BRAVE_SEARCH_API_KEY: Optional[str] = None
-
+ 
     # CORS
     CORS_ALLOWED_ORIGINS: Optional[List[str]] = None  # Liste des origines autorisées (None = toutes les origines)
     
@@ -92,11 +92,7 @@ class Settings(BaseSettings):
     MAX_REPORTS_PER_WINDOW: int = 2
     MISTRAL_PASS2_TIMEOUT: int = 60
     # v4 : découpe RAG-friendly (overlap entre parts consécutives)
-    RAG_CHUNK_OVERLAP_TOKENS: int = 40
-    # v4 : expansion retrieval locale (voisins + même window_id)
-    RETRIEVAL_EXPAND_ENABLED: bool = True
-    RETRIEVAL_PAGE_RADIUS: int = 1
-    RERANK_GROUP_CHAR_CAP: int = 2800
+    RAG_CHUNK_OVERLAP_TOKENS: int = 100
 
     # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
     TASK_BACKEND_MODE: str = "thread"
@@ -112,8 +108,7 @@ class Settings(BaseSettings):
     LANGCHAIN_PROJECT: str = "noton-rag"
 
     # Reranker cross-encoder (CPU-only)
-    RERANKER_ENABLED: bool = False
-    RERANKER_PROVIDER: str = os.getenv("RERANKER_PROVIDER", "local")  # local | mistral
+    RERANKER_ENABLED: bool = True
     RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     RERANK_POOL: int = 30  # Réduit de 50 → 30 pour MiniLM CPU (latence vs qualité)
     RERANK_CHAR_CAP: int = 1700  # ~485 tokens (ratio FR 3.5 chars/token, marge vs max_length=512)
@@ -126,22 +121,8 @@ class Settings(BaseSettings):
     SOFTMAX_CUM_THRESHOLD: float = 0.80
     STUTTER_GAP: float = 0.05
     ZSCORE_FLAT_THRESHOLD: float = 0.05
+    RERANKER_MIN_SCORE: float = -3.0
 
-    # MMR (Maximal Marginal Relevance) — diversification du contexte
-    MMR_ENABLED: bool = True
-    MMR_K: int = 12
-    MMR_LAMBDA: float = 0.7
-    MMR_MAX_PER_PARENT: int = 5
-
-    # RRF (Reciprocal Rank Fusion) dynamique
-    RRF_DYNAMIC_K_ENABLED: bool = True
-    RRF_MIN_K: int = 1
-    RRF_MAX_K: int = 10
-    RRF_RELATIVE_THRESHOLD_FACTOR: float = 0.70
-
-    # BM25 Lexical Search (approximation via ts_rank_cd + IDF Python)
-    BM25_K1: float = 1.2
-    BM25_B: float = 0.75
     BM25_MAX_QUERY_TERMS: int = 15
 
     @field_validator('DATABASE_ECHO', mode='before')
@@ -168,10 +149,10 @@ class Settings(BaseSettings):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
 
-    @field_validator('RERANKER_ENABLED', 'MMR_ENABLED', 'RRF_DYNAMIC_K_ENABLED', 'EARLY_STOP_ENABLED', mode='before')
+    @field_validator('RERANKER_ENABLED', 'EARLY_STOP_ENABLED', mode='before')
     @classmethod
     def parse_bool_flags(cls, v: Union[str, bool, None]) -> bool:
-        """Convertit les chaînes en bool pour les flags reranker/MMR/RRF/early_stop."""
+        """Convertit les chaînes en bool pour les flags Reranker/Early stop."""
         if v is None:
             return False
         if isinstance(v, bool):

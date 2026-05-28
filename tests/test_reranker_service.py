@@ -187,3 +187,46 @@ def test_apply_dynamic_filtering_empty_candidates():
     assert result.status == "ok"
     assert result.nodes == []
     assert result.reason == "no_candidates"
+
+
+def test_apply_dynamic_filtering_filters_below_threshold():
+    """Vérifier que les candidats sous le seuil RERANKER_MIN_SCORE sont filtrés."""
+    nodes = [
+        NodeWithScore(node=TextNode(id_="chunk-1", text="doc1", metadata={}), score=0.0),
+        NodeWithScore(node=TextNode(id_="chunk-2", text="doc2", metadata={}), score=0.0),
+    ]
+    # chunk-1 a un score supérieur au seuil (-2.5 >= -3.0)
+    # chunk-2 a un score inférieur au seuil (-3.5 < -3.0)
+    scored = [(nodes[0], -2.5), (nodes[1], -3.5)]
+    
+    with patch("app.services.reranker_service.settings") as mock_settings:
+        mock_settings.RERANKER_MIN_SCORE = -3.0
+        result = reranker_service.apply_dynamic_filtering(
+            scored,
+            min_k=1,
+            max_k=12,
+            softmax_cum_threshold=0.80,
+            stutter_gap=0.05,
+            zscore_flat_threshold=0.05,
+        )
+        
+    assert result.status == "ok"
+    assert len(result.nodes) == 1
+    assert result.nodes[0].id_ == "chunk-1"
+    
+    # Test lorsque tous les candidats sont sous le seuil
+    scored_all_low = [(nodes[0], -4.0), (nodes[1], -4.5)]
+    with patch("app.services.reranker_service.settings") as mock_settings:
+        mock_settings.RERANKER_MIN_SCORE = -3.0
+        result_all_low = reranker_service.apply_dynamic_filtering(
+            scored_all_low,
+            min_k=1,
+            max_k=12,
+            softmax_cum_threshold=0.80,
+            stutter_gap=0.05,
+            zscore_flat_threshold=0.05,
+        )
+    assert result_all_low.status == "ok"
+    assert len(result_all_low.nodes) == 0
+    assert result_all_low.reason == "no_candidates_above_threshold"
+

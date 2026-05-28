@@ -18,7 +18,7 @@ import math
 import os
 import re
 import unicodedata
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from llama_index.core.schema import NodeWithScore, TextNode
 from sqlalchemy import or_, text
@@ -29,10 +29,9 @@ from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.embedding_service import generate_embedding
-from app.services.query_reasoning_service import QueryIntent, reason_query_intent
 from app.services.space_service import get_space_by_id
 from app.tracing import trace_run
-from app.services import reranker_service, mmr_service
+from app.services import reranker_service
 
 logger = logging.getLogger(__name__)
 
@@ -137,100 +136,6 @@ def _retrieve_leaves_sql(
     return nodes
 
 
-def _compute_term_idfs(
-    session: Session,
-    space_id: int,
-    terms: List[str],
-) -> Tuple[Dict[str, float], int]:
-    """Calcule l'IDF BM25 de chaque terme dans un espace donné.
-
-    Exécute une seule requête SQL groupée pour obtenir le document frequency
-    de chaque terme, puis calcule l'IDF standard BM25 :
-        idf = ln((N - df + 0.5) / (df + 0.5) + 1)
-
-    Returns:
-        (dict[term -> idf], total_docs_in_space)
-    """
-    if not terms:
-        return {}, 0
-
-    # Compter le total de documents-feuilles dans l'espace
-    total_sql = text("""
-        SELECT COUNT(DISTINCT dc.id)
-        FROM documentchunk dc
-        INNER JOIN document_space ds ON ds.document_id = dc.document_id
-        WHERE ds.space_id = :space_id AND dc.is_leaf = true
-    """)
-    total_docs = session.execute(total_sql, {"space_id": space_id}).scalar() or 1
-
-    # Compter le doc frequency de chaque terme en une seule requête
-    # unnest + LATERAL pour éviter N+1
-    idf_sql = text("""
-        SELECT
-            t.term,
-            COUNT(*) AS df
-        FROM unnest(CAST(:terms_array AS text[])) AS t(term)
-        INNER JOIN documentchunk dc ON dc.is_leaf = true
-        INNER JOIN document_space ds ON ds.document_id = dc.document_id
-        WHERE ds.space_id = :space_id
-          AND dc.tsv_content @@ websearch_to_tsquery('french', t.term)
-        GROUP BY t.term
-    """)
-    result = session.execute(idf_sql, {"space_id": space_id, "terms_array": terms})
-
-    idfs: Dict[str, float] = {}
-    for row in result:
-        df = row.df
-        idf = math.log((total_docs - df + 0.5) / (df + 0.5) + 1)
-        idfs[row.term] = idf
-
-    # Termes absents du corpus → IDF maximal (très rares)
-    for term in terms:
-        if term not in idfs:
-            idfs[term] = math.log((total_docs + 0.5) / 0.5 + 1)
-
-    logger.debug(
-        "IDF BM25 (space %d, N=%d): %s",
-        space_id, total_docs,
-        {t: round(v, 3) for t, v in idfs.items()},
-    )
-    return idfs, total_docs
-
-
-def _bm25_rescore(
-    nodes: List[NodeWithScore],
-    terms: List[str],
-    idfs: Dict[str, float],
-) -> List[NodeWithScore]:
-    """Re-score les résultats lexicaux avec une pondération IDF BM25.
-
-    Le score ts_rank_cd (avec flag normalisation longueur) sert de proxy pour
-    le TF normalisé. On le multiplie par la somme pondérée des IDF des termes
-    trouvés dans le contenu du chunk.
-
-    Score final = ts_rank_cd_norm * sum(idf[t] pour t dans termes ∩ contenu)
-    """
-    if not nodes or not idfs:
-        return nodes
-
-    for nws in nodes:
-        content_lower = (nws.node.text or "").lower()
-        # Somme des IDF des termes qui apparaissent dans le contenu
-        idf_sum = sum(
-            idfs.get(t, 0.0)
-            for t in terms
-            if t in content_lower
-        )
-        # Multiplier le score ts_rank_cd par le poids IDF
-        # Plancher à 1.0 pour ne pas réduire les scores si aucun IDF
-        idf_weight = max(idf_sum, 1.0)
-        nws.score = float(nws.score) * idf_weight
-
-    # Re-trier par score décroissant
-    nodes.sort(key=lambda n: n.score, reverse=True)
-    return nodes
-
-
 def _retrieve_leaves_bm25_sql(
     session: Session,
     space_id: int,
@@ -239,14 +144,8 @@ def _retrieve_leaves_bm25_sql(
     candidate_k: int,
     document_filter: str = "all",
 ) -> List[NodeWithScore]:
-    """Recherche lexicale BM25 approximative sur les feuilles.
+    """Recherche lexicale BM25 native via tsvector sur les feuilles.
 
-    Étapes :
-    1. Extraction de termes améliorée (v2)
-    2. Retrieval via ts_rank_cd avec flag 1 (normalisation log-longueur)
-    3. Calcul IDF par terme (requête SQL unique)
-    4. Re-scoring BM25 approximatif : ts_rank_cd_norm × Σ IDF(terme)
-    
     Args:
         document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
     """
@@ -262,7 +161,7 @@ def _retrieve_leaves_bm25_sql(
 
     filter_clause = feedback_corrective_sql_filter(document_filter, "d")
 
-    # Retrieval avec ts_rank_cd + flag 1 (normalisation par log de la longueur)
+    # Retrieval avec ts_rank_cd + flag 33 (1|32 = normalisation par log de la longueur + division par longueur doc + 1)
     sql_query = text(f"""
         SELECT
             dc.id,
@@ -276,7 +175,7 @@ def _retrieve_leaves_bm25_sql(
             d.title AS document_title,
             d.source AS document_source,
             d.id AS document_id,
-            ts_rank_cd(dc.tsv_content, websearch_to_tsquery('french', :query), 1) AS similarity_score
+            ts_rank_cd(dc.tsv_content, websearch_to_tsquery('french', :query), 33) AS similarity_score
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         INNER JOIN document_space ds ON ds.document_id = d.id
@@ -308,11 +207,6 @@ def _retrieve_leaves_bm25_sql(
             metadata=metadata,
         )
         nodes.append(NodeWithScore(node=node, score=float(row.similarity_score)))
-
-    # Phase IDF : calculer les poids et re-scorer
-    if nodes:
-        idfs, _ = _compute_term_idfs(session, space_id, terms)
-        nodes = _bm25_rescore(nodes, terms, idfs)
 
     logger.info("BM25 lexical (space): %d feuilles (limit=%d, terms=%s)", len(nodes), candidate_k, terms)
     return nodes
@@ -351,24 +245,13 @@ def _retrieve_leaves_alphanumeric_sql(
     user_id: int,
     query_text: str,
     candidate_k: int,
-    detected_references: Optional[List[str]] = None,
     document_filter: str = "all",
 ) -> List[NodeWithScore]:
     """
     Recherche directe par correspondance de sous-chaîne pour les codes et références alphanumériques
     afin de fiabiliser les réponses sur des termes techniques complexes (normes, gammes, etc.).
-    Combine l'extraction Regex et les détections du CQR.
     """
-    regex_terms = _extract_alphanumeric_codes(query_text)
-    
-    cqr_terms = []
-    for ref in (detected_references or []):
-        for part in re.split(r'\s+', ref):
-            cleaned = part.strip(".-").lower()
-            if len(cleaned) >= 2:
-                cqr_terms.append(cleaned)
-                
-    all_terms = list(set(regex_terms + cqr_terms))
+    all_terms = _extract_alphanumeric_codes(query_text)
     if not all_terms:
         return []
 
@@ -446,10 +329,10 @@ def reciprocal_rank_fusion(
     alphanumeric_results: Optional[List[NodeWithScore]] = None,
     k: int = 60,
     top_n: int = 15,
+    normalize: bool = False,
 ) -> List[NodeWithScore]:
     """
-    Fusionne les résultats de recherche vectorielle, lexicale et alphanumérique avec l'algorithme RRF,
-    puis normalise les scores dans l'intervalle [0.1, 0.9] pour rester compatibles avec les boosts.
+    Fusionne les résultats de recherche vectorielle, lexicale et alphanumérique avec l'algorithme RRF.
     """
     rrf_scores: Dict[str, float] = {}
     nodes_map: Dict[str, NodeWithScore] = {}
@@ -480,8 +363,8 @@ def reciprocal_rank_fusion(
         node.metadata["raw_rrf_score"] = rrf_score
         results.append(NodeWithScore(node=node, score=rrf_score))
 
-    # Normalisation linéaire dans [0.1, 0.9]
-    if results:
+    # Normalisation linéaire dans [0.1, 0.9] si demandée
+    if normalize and results:
         scores = [nws.score for nws in results]
         min_score = min(scores)
         max_score = max(scores)
@@ -503,16 +386,6 @@ def _parse_chunk_id_from_node(node: TextNode) -> Optional[int]:
         except ValueError:
             return None
     return None
-
-
-def _filter_by_vector_score(
-    candidates: List[NodeWithScore],
-    min_threshold: float = MIN_VECTOR_SIMILARITY_THRESHOLD,
-) -> List[NodeWithScore]:
-    filtered = [c for c in candidates if float(c.score or 0.0) >= min_threshold]
-    if filtered:
-        return filtered
-    return sorted(candidates, key=lambda c: float(c.score or 0.0), reverse=True)[: max(5, len(candidates) // 2 or 1)]
 
 
 def _build_parent_node_dict(
@@ -802,114 +675,6 @@ def _chunk_row_to_text_node(row: DocumentChunk, score: float) -> NodeWithScore:
     return NodeWithScore(node=node, score=score)
 
 
-def _expand_retrieval_groups(
-    session: Session,
-    space_id: int,
-    user_id: int,
-    hits: List[NodeWithScore],
-) -> List[NodeWithScore]:
-    """
-    Expansion locale : même window_id, pages adjacentes, raw + rapport fenêtre.
-    """
-    if not hits:
-        return hits
-
-    radius = max(0, int(getattr(settings, "RETRIEVAL_PAGE_RADIUS", 1)))
-    char_cap = int(getattr(settings, "RERANK_GROUP_CHAR_CAP", 2800))
-    seen_ids: Set[str] = set()
-    expanded: List[NodeWithScore] = []
-
-    raw_doc_ids = session.exec(
-        select(DocumentSpace.document_id).where(
-            DocumentSpace.space_id == space_id
-        )
-    ).all()
-    doc_ids_in_space: Set[int] = set()
-    for r in raw_doc_ids:
-        try:
-            if isinstance(r, (tuple, list)):
-                doc_ids_in_space.add(int(r[0]))
-            else:
-                doc_ids_in_space.add(int(r))
-        except (TypeError, ValueError, IndexError):
-            continue
-
-    for nws in hits:
-        base_score = float(getattr(nws, "score", 0.0) or 0.0)
-        node_id = getattr(nws.node, "id_", None)
-        if node_id and node_id not in seen_ids:
-            seen_ids.add(str(node_id))
-            expanded.append(nws)
-
-        meta = dict(getattr(nws.node, "metadata", {}) or {})
-        doc_id = meta.get("document_id")
-        try:
-            doc_id_int = int(doc_id) if doc_id is not None else None
-        except (TypeError, ValueError):
-            doc_id_int = None
-        if doc_id_int is None or doc_id_int not in doc_ids_in_space:
-            continue
-
-        page_no = meta.get("page_no")
-        try:
-            page_int = int(page_no) if page_no is not None else None
-        except (TypeError, ValueError):
-            page_int = None
-
-        window_id = meta.get("window_id")
-        col = DocumentChunk.metadata_json["content_type"].as_string()
-        multimodal_types = ("page_raw_enriched", "page_window_report", "page_section_report")
-
-        or_clauses = []
-        if window_id:
-            or_clauses.append(
-                DocumentChunk.metadata_json["window_id"].as_string() == str(window_id)
-            )
-        if page_int is not None:
-            for adj in range(page_int - radius, page_int + radius + 1):
-                or_clauses.append(
-                    DocumentChunk.metadata_json["page_no"].as_integer() == adj
-                )
-
-        if not or_clauses:
-            continue
-
-        stmt = (
-            select(DocumentChunk)
-            .where(
-                DocumentChunk.document_id == doc_id_int,
-                DocumentChunk.is_leaf == True,  # noqa: E712
-                or_(*[col == t for t in multimodal_types]),
-                or_(*or_clauses),
-            )
-            .limit(12)
-        )
-        try:
-            rows = list(session.exec(stmt).all())
-        except Exception as exc:
-            logger.debug("expand_retrieval_groups query failed: %s", exc)
-            continue
-
-        group_chars = 0
-        for row in rows:
-            rid = str(row.id)
-            if rid in seen_ids:
-                continue
-            content = (row.content or "").strip()
-            if not content:
-                continue
-            if group_chars + len(content) > char_cap:
-                break
-            group_chars += len(content)
-            seen_ids.add(rid)
-            decay = 0.92
-            expanded.append(_chunk_row_to_text_node(row, base_score * decay))
-
-    expanded.sort(key=lambda x: float(getattr(x, "score", 0.0) or 0.0), reverse=True)
-    pool_cap = min(settings.RERANK_POOL + 10, 50)
-    return expanded[:pool_cap]
-
-
 def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     metadata = dict(getattr(node, "metadata", {}) or {})
     document_title = metadata.get("document_title", "Document sans titre")
@@ -975,175 +740,6 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     return out
 
 
-def filter_passages_by_rrf_score(
-    passages: List[Dict],
-    *,
-    enabled: bool = True,
-    min_k: int = 1,
-    max_k: int = 10,
-    factor: float = 0.70,
-) -> List[Dict]:
-    """
-    Filtre dynamiquement une liste de passages basée sur leurs scores RRF bruts (Option A).
-    Conserve uniquement les passages ayant un score RRF brut >= max_score * factor.
-    S'il n'y a pas de score brut, utilise la clé 'score' (normalisée).
-    """
-    if not enabled or not passages:
-        return passages
-
-    # Récupérer tous les scores RRF (bruts ou normalisés) pour trouver le maximum absolu
-    all_scores = [p.get("raw_rrf_score", p["score"]) for p in passages]
-    if not all_scores:
-        return passages
-
-    max_score = max(all_scores)
-    threshold = max_score * factor
-
-    # Conserver obligatoirement les min_k premiers passages (les meilleurs après boosts)
-    best_passages = passages[:min_k]
-    
-    # Filtrer le reste des passages
-    other_passages = [
-        p for p in passages[min_k:]
-        if p.get("raw_rrf_score", p["score"]) >= threshold
-    ]
-    
-    filtered = best_passages + other_passages
-    
-    # Limiter à la borne supérieure max_k
-    result = filtered[:max_k]
-    
-    logger.info(
-        "RRF Dynamique (Option A) : %d/%d passages conservés (seuil RRF >= %.4f * %.2f = %.4f, min_k=%d, max_k=%d)",
-        len(result),
-        len(passages),
-        max_score,
-        factor,
-        threshold,
-        min_k,
-        max_k,
-    )
-    return result
-
-
-def _normalize_for_gamme(s: str) -> str:
-    if not s:
-        return ""
-    n = unicodedata.normalize("NFD", s.lower())
-    return "".join(c for c in n if unicodedata.category(c) != "Mn")
-
-
-def _get_meaningful_words(text: str) -> Set[str]:
-    if not text or not text.strip():
-        return set()
-    normalized = _normalize_for_gamme(text)
-    tokens = re.findall(r"[a-z0-9]+", normalized)
-    return {w for w in tokens if len(w) > 3 and w not in _FALLBACK_STOPWORDS}
-
-
-def refine_with_source_authority(
-    passages: List[Dict],
-    query_text: str,
-    reasoning_result: Optional[QueryIntent] = None,
-) -> List[Dict]:
-    if not passages:
-        return passages
-    if reasoning_result and reasoning_result.primary_source:
-        source_to_boost = reasoning_result.primary_source.lower()
-        for p in passages:
-            doc_source = (p.get("source") or "").lower()
-            if doc_source == source_to_boost:
-                p["score"] = float(p.get("score") or 0.0) + 0.8
-    if query_text and query_text.strip():
-        query_words = _get_meaningful_words(query_text)
-        if query_words:
-            for p in passages:
-                document_title = (p.get("document_title") or "").strip()
-                if not document_title:
-                    continue
-                title_words = _get_meaningful_words(document_title)
-                common = query_words & title_words
-                if common:
-                    boost = min(
-                        TITLE_QUERY_BOOST_PER_MATCH * len(common),
-                        TITLE_QUERY_BOOST_CAP,
-                    )
-                    p["score"] = float(p.get("score") or 0.0) + boost
-    passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
-    return passages
-
-
-def apply_feedback_boost(
-    passages: List[Dict],
-    space_id: int,
-    session: Session,
-) -> List[Dict]:
-    """
-    Ajuste les scores des passages basés sur les retours utilisateurs 👍/👎.
-    Boost modéré pour les passages utiles, pénalité pour les passages incorrects.
-    """
-    if not passages:
-        return passages
-
-    from app.models.message_feedback import MessageFeedback
-
-    # 1. Identifier tous les chunk_ids présents dans les passages candidats
-    candidate_chunk_ids = set()
-    for p in passages:
-        cid = p.get("source_leaf_chunk_id") or p.get("chunk_id")
-        if cid:
-            candidate_chunk_ids.add(cid)
-
-    if not candidate_chunk_ids:
-        return passages
-
-    # 2. Récupérer tous les feedbacks pour cet espace
-    feedbacks = session.exec(
-        select(MessageFeedback.is_positive, MessageFeedback.chunk_ids)
-        .where(MessageFeedback.space_id == space_id)
-    ).all()
-
-    # 3. Compter les 👍/👎 par chunk
-    chunk_stats = {}
-    for is_positive, chunk_ids_list in feedbacks:
-        if not chunk_ids_list:
-            continue
-        for cid in chunk_ids_list:
-            if cid in candidate_chunk_ids:
-                if cid not in chunk_stats:
-                    chunk_stats[cid] = {"positive": 0, "negative": 0}
-                if is_positive:
-                    chunk_stats[cid]["positive"] += 1
-                else:
-                    chunk_stats[cid]["negative"] += 1
-
-    # 4. Appliquer le boost/pénalité
-    # Boost : +0.15 * ratio si ratio > 0, Pénalité : -0.10 * |ratio| si ratio < 0
-    for p in passages:
-        cid = p.get("source_leaf_chunk_id") or p.get("chunk_id")
-        if cid and cid in chunk_stats:
-            stats = chunk_stats[cid]
-            pos = stats["positive"]
-            neg = stats["negative"]
-            total = pos + neg
-            if total > 0:
-                ratio = (pos - neg) / total
-                if ratio > 0:
-                    boost = 0.15 * ratio
-                else:
-                    boost = 0.10 * ratio  # ratio est négatif, donc boost sera négatif (pénalité)
-                
-                p["score"] = float(p.get("score") or 0.0) + boost
-                logger.info(
-                    "Feedback boost appliqué au chunk %d : +%d/-%d (ratio=%.2f, boost=%.3f)",
-                    cid, pos, neg, ratio, boost
-                )
-
-    # 5. Re-trier
-    passages.sort(key=lambda x: float(x.get("score") or 0.0), reverse=True)
-    return passages
-
-
 async def search_relevant_passages(
     session: Session,
     space_id: int,
@@ -1153,7 +749,7 @@ async def search_relevant_passages(
     document_filter: str = "all",
 ) -> Dict:
     """
-    RAG espace : recherche hybride (pgvector + tsvector) + RRF + rerank + MMR.
+    RAG espace : recherche hybride (pgvector + tsvector) + RRF + rerank.
     
     Args:
         document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
@@ -1169,30 +765,11 @@ async def search_relevant_passages(
     if not query_text or not query_text.strip():
         return {"passages": [], "status": "disabled", "reason": "empty_query"}
 
-    reasoning_result = await reason_query_intent(query_text)
-    if reasoning_result.intent != "generic":
-        logger.info(
-            "CQR [space]: intent=%s primary_source=%s",
-            reasoning_result.intent,
-            reasoning_result.primary_source,
-        )
-
     try:
         candidate_k = max(k, min(k * 4, 80))
 
-        # Query expansion : enrichir le texte d'embedding avec les termes du LLM
-        expanded_query = query_text
-        if reasoning_result.search_terms:
-            extra = " ".join(reasoning_result.search_terms)
-            expanded_query = f"{query_text} {extra}"
-            logger.info(
-                "Query expansion [space]: +%d termes → '%s'",
-                len(reasoning_result.search_terms), extra,
-            )
-
-        # Calculer l'embedding une seule fois (réutilisé par retrieval + MMR)
-        # Utilise la query enrichie pour un meilleur rappel vectoriel
-        query_embedding = generate_embedding(expanded_query)
+        # Calculer l'embedding une seule fois (réutilisé par retrieval)
+        query_embedding = generate_embedding(query_text)
         if not query_embedding:
             logger.warning("Embedding requête vide pour space_id=%s", space_id)
             return {"passages": [], "status": "disabled", "reason": "embedding_failed"}
@@ -1209,7 +786,7 @@ async def search_relevant_passages(
             )
             vr.end(outputs={"nb": len(raw_vector)})
 
-        # 2. Recherche lexicale BM25 approximative (tsvector + IDF)
+        # 2. Recherche lexicale BM25 native (tsvector + ts_rank_cd 33)
         with trace_run(
             "bm25_lexical_retrieval",
             run_type="retriever",
@@ -1226,7 +803,7 @@ async def search_relevant_passages(
                 raw_lexical = []
             lr.end(outputs={"nb": len(raw_lexical)})
 
-        # 3. Recherche directe par correspondances alphanumériques exactes/substrings
+        # 3. Recherche directe par correspondances alphanumériques exactes/substrings (regex local)
         with trace_run(
             "alphanumeric_retrieval",
             run_type="retriever",
@@ -1239,26 +816,20 @@ async def search_relevant_passages(
                 user_id,
                 query_text,
                 candidate_k,
-                detected_references=getattr(reasoning_result, "detected_references", None),
                 document_filter=document_filter
             )
             ar.end(outputs={"nb": len(raw_alphanumeric)})
 
         if not raw_vector and not raw_lexical and not raw_alphanumeric:
-            fallback_passages = await _keyword_fallback_passages(
-                session, space_id, user_id, query_text, k
-            )
-            return {"passages": fallback_passages, "status": "ok", "reason": "fallback_keyword"}
+            return {"passages": [], "status": "ok", "reason": "no_results"}
 
-        # Filtrage par score minimum sur la partie vectorielle uniquement pour éviter le bruit sémantique
-        filtered_vector = _filter_by_vector_score(raw_vector)
-
-        # Fusion RRF (Reciprocal Rank Fusion)
+        # Fusion RRF (Reciprocal Rank Fusion) - pas de normalisation ici, on garde les scores bruts
         fused_results = reciprocal_rank_fusion(
-            filtered_vector,
+            raw_vector,
             raw_lexical,
             alphanumeric_results=raw_alphanumeric,
-            top_n=candidate_k
+            top_n=candidate_k,
+            normalize=False
         )
         
         # Sélection des meilleurs résultats hybrides (on garde candidate_k candidats pour la résolution
@@ -1341,26 +912,10 @@ async def search_relevant_passages(
                 final_nodes.append(NodeWithScore(node=target_node, score=score))
             pr.end(outputs={"nb_final": len(final_nodes)})
 
-        if getattr(settings, "RETRIEVAL_EXPAND_ENABLED", True):
-            final_nodes = _expand_retrieval_groups(
-                session, space_id, user_id, final_nodes
-            )
+        if not final_nodes:
+            return {"passages": [], "status": "ok", "reason": "no_results_after_resolution"}
 
-        passages = [
-            _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))
-            for nws in final_nodes
-        ]
-        passages = refine_with_source_authority(
-            passages, query_text, reasoning_result=reasoning_result
-        )
-        passages = apply_feedback_boost(passages, space_id, session)
-        if not passages:
-            fallback_passages = await _keyword_fallback_passages(
-                session, space_id, user_id, query_text, k
-            )
-            return {"passages": fallback_passages, "status": "ok", "reason": "fallback_keyword"}
-
-        # === RERANKER + MMR ===
+        # === RERANKER ===
         
         # Reranker cross-encoder (sur le pool, pas sur tout)
         if settings.RERANKER_ENABLED:
@@ -1431,77 +986,23 @@ async def search_relevant_passages(
                     "reason": rerank_result.reason,
                 }
             
-            # MMR sur les survivants du rerank
-            if settings.MMR_ENABLED and rerank_result.nodes:
-                # Extraire chunk_ids pour fetch embeddings
-                chunk_ids = []
-                for nws in rerank_result.nodes:
-                    chunk_id = _parse_chunk_id_from_node(nws.node)
-                    if chunk_id:
-                        chunk_ids.append(chunk_id)
-                
-                try:
-                    with trace_run(
-                        "mmr_selection",
-                        run_type="chain",
-                        inputs={
-                            "lambda": settings.MMR_LAMBDA,
-                            "k": settings.MMR_K,
-                            "max_per_parent": settings.MMR_MAX_PER_PARENT,
-                        },
-                        tags=["mmr", "diversification"],
-                    ) as mmr_trace:
-                        embeddings_map = mmr_service.fetch_embeddings_for_chunks(session, chunk_ids)
-                        
-                        # Associer chaque nœud à son embedding
-                        candidates = []
-                        for nws in rerank_result.nodes:
-                            chunk_id = _parse_chunk_id_from_node(nws.node)
-                            embedding = embeddings_map.get(chunk_id, []) if chunk_id else []
-                            candidates.append((nws, embedding))
-                        
-                        mmr_nodes = mmr_service.compute_mmr(
-                            query_embedding,
-                            candidates,
-                            lambda_=settings.MMR_LAMBDA,
-                            k=settings.MMR_K,
-                            max_per_parent=settings.MMR_MAX_PER_PARENT,
-                        )
-                        mmr_trace.end(outputs={"selected_count": len(mmr_nodes)})
-                except Exception as mmr_exc:
-                    logger.exception(
-                        "MMR échoué, fallback sur ordre rerank : %s",
-                        mmr_exc,
-                    )
-                    mmr_nodes = [(nws, 1.0 - i * 0.01) for i, nws in enumerate(rerank_result.nodes)]
-                
-                passages = [
-                    _node_to_passage(nws.node, fallback_score=score)
-                    for nws, score in mmr_nodes
-                ]
-            else:
-                # MMR désactivé : utiliser le résultat du rerank directement
-                passages = [
-                    _node_to_passage(nws.node, fallback_score=1.0 - i * 0.01)
-                    for i, nws in enumerate(rerank_result.nodes)
-                ]
-            
-            passages = apply_feedback_boost(passages, space_id, session)
+            # Utiliser le résultat du rerank directement (sans MMR et sans feedback boost)
+            passages = [
+                _node_to_passage(nws.node, fallback_score=1.0 - i * 0.01)
+                for i, nws in enumerate(rerank_result.nodes)
+            ]
             return {
                 "passages": passages,
                 "status": "ok",
                 "reason": rerank_result.reason,
             }
         
-        # Reranker désactivé : retour simple
-        filtered_passages = filter_passages_by_rrf_score(
-            passages,
-            enabled=settings.RRF_DYNAMIC_K_ENABLED,
-            min_k=settings.RRF_MIN_K,
-            max_k=settings.RRF_MAX_K,
-            factor=settings.RRF_RELATIVE_THRESHOLD_FACTOR,
-        )
-        return {"passages": filtered_passages, "status": "disabled", "reason": "reranker_disabled"}
+        # Reranker désactivé : retour simple des top-K RRF
+        passages = [
+            _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))
+            for nws in final_nodes[:k]
+        ]
+        return {"passages": passages, "status": "disabled", "reason": "reranker_disabled"}
         
     except Exception as e:
         logger.error("search_relevant_passages (space): %s", e, exc_info=True)
@@ -1519,7 +1020,6 @@ async def search_technical_passages(
     Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
     
     Wrapper autour de search_relevant_passages avec document_filter="technical".
-    Utilise le pipeline complet : RRF → rerank → MMR → feedback boost.
     
     Returns:
         Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
@@ -1545,8 +1045,7 @@ async def search_corrective_faq_passages(
     """
     Recherche post-brouillon dédiée aux FAQ correctives issues des feedbacks négatifs.
     
-    Pipeline léger : vector + BM25 → RRF → filtre score (pas de rerank/MMR coûteux).
-    La requête est enrichie avec le brouillon pour capturer les erreurs concrètes.
+    Pipeline léger : vector + BM25 → RRF (normalisé) → filtre score.
     
     Args:
         draft_response: Réponse brouillon générée, ajoutée à la requête pour améliorer le rappel
@@ -1616,8 +1115,8 @@ async def search_corrective_faq_passages(
         if not raw_vector and not raw_lexical:
             return {"passages": [], "status": "no_faq", "reason": "no_faq_documents_in_space"}
         
-        # Fusion RRF (léger, pas de filtrage vectoriel minimal ici car FAQ rares)
-        fused_results = reciprocal_rank_fusion(raw_vector, raw_lexical, top_n=candidate_k)
+        # Fusion RRF (normalisée pour comparaison avec seuil)
+        fused_results = reciprocal_rank_fusion(raw_vector, raw_lexical, top_n=candidate_k, normalize=True)
         
         # Filtrer par seuil de similarité FAQ dédié
         filtered_faq = []
@@ -1655,3 +1154,34 @@ async def search_corrective_faq_passages(
         logger.error("search_corrective_faq_passages: %s", e, exc_info=True)
         return {"passages": [], "status": "disabled", "reason": f"error: {str(e)}"}
 
+
+def refine_with_source_authority(
+    passages: List[Dict],
+    query: str,
+    reasoning_result: Any,
+) -> List[Dict]:
+    """
+    Optimise l'autorité des sources par rapport à l'intention détectée.
+    Si primary_source correspond à la source du passage, on applique un boost au score.
+    """
+    if not passages or not reasoning_result:
+        return passages
+    
+    primary = getattr(reasoning_result, "primary_source", None)
+    confidence = getattr(reasoning_result, "confidence", 0.0)
+    
+    boost_val = 0.8 * confidence if primary else 0.0
+    
+    refined = []
+    for p in passages:
+        p_copy = dict(p)
+        score = p_copy.get("score", 0.0)
+        source = p_copy.get("source")
+        
+        if primary and source and source.lower() == primary.lower():
+            p_copy["score"] = score + boost_val
+            
+        refined.append(p_copy)
+        
+    refined.sort(key=lambda x: x.get("score", 0.0), reverse=True)
+    return refined

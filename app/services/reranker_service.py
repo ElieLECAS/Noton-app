@@ -157,39 +157,6 @@ def should_early_stop(rrf_scores: List[float], threshold: float) -> bool:
     return should_stop
 
 
-async def _rerank_mistral(query: str, documents: List[str]) -> List[float]:
-    """Appelle l'API Mistral Rerank en asynchrone."""
-    if not settings.MISTRAL_API_KEY:
-        raise ValueError("MISTRAL_API_KEY n'est pas configurée")
-        
-    base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
-    headers = {
-        "Authorization": f"Bearer {settings.MISTRAL_API_KEY}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "model": "mistral-rerank-latest",
-        "query": query,
-        "documents": documents,
-        "top_n": len(documents)
-    }
-    
-    import httpx
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        resp = await client.post(f"{base_url}/v1/rerank", headers=headers, json=payload)
-        resp.raise_for_status()
-        data = resp.json()
-        
-    results = data.get("results", [])
-    scores = [0.0] * len(documents)
-    for r in results:
-        idx = r.get("index")
-        score = r.get("relevance_score", 0.0)
-        if 0 <= idx < len(scores):
-            scores[idx] = float(score)
-    return scores
-
-
 async def rerank_nodes(
     query_text: str,
     nodes_with_score: List[NodeWithScore],
@@ -198,7 +165,7 @@ async def rerank_nodes(
     batch_size: int,
 ) -> List[Tuple[NodeWithScore, float]]:
     """
-    Rerank un pool de nœuds avec le cross-encoder local ou l'API Mistral Rerank.
+    Rerank un pool de nœuds avec le cross-encoder local.
     Collecte des métriques de troncature pour observabilité.
     
     Args:
@@ -216,13 +183,8 @@ async def rerank_nodes(
     import time
     t_start = time.perf_counter()
     
-    provider = getattr(settings, "RERANKER_PROVIDER", "local")
-    if provider == "mistral":
-        char_cap = max(char_cap, 2800)  # Marge de caractères plus élevée pour Mistral (~800 tokens)
-        
     # Tronquer le texte de chaque nœud à char_cap + collecter métriques
     pairs = []
-    truncated_texts = []
     truncation_count = 0
     total_chars_before = 0
     total_chars_after = 0
@@ -240,29 +202,19 @@ async def rerank_nodes(
         
         total_chars_after += len(truncated)
         pairs.append([query_text, truncated])
-        truncated_texts.append(truncated)
     
-    raw_scores = None
-    if provider == "mistral":
-        try:
-            raw_scores = await _rerank_mistral(query_text, truncated_texts)
-        except Exception as e:
-            logger.warning("Échec rerank Mistral API, fallback sur cross-encoder local: %s", e)
-            provider = "local"  # Fallback
-            
-    if provider == "local" or raw_scores is None:
-        model = _get_cross_encoder()
-        # Batch predict
-        try:
-            raw_scores = model.predict(
-                pairs,
-                batch_size=batch_size,
-                show_progress_bar=False,
-            )
-        except Exception as e:
-            logger.exception("Échec rerank cross-encoder local : %s", e)
-            # Fallback : garder les scores RRF originaux
-            return [(nws, float(nws.score or 0.0)) for nws in nodes_with_score]
+    model = _get_cross_encoder()
+    # Batch predict
+    try:
+        raw_scores = model.predict(
+            pairs,
+            batch_size=batch_size,
+            show_progress_bar=False,
+        )
+    except Exception as e:
+        logger.exception("Échec rerank cross-encoder local : %s", e)
+        # Fallback : garder les scores RRF originaux
+        return [(nws, float(nws.score or 0.0)) for nws in nodes_with_score]
     
     # Collecter latence
     t_elapsed = (time.perf_counter() - t_start) * 1000  # ms
@@ -289,9 +241,8 @@ async def rerank_nodes(
     avg_chars_after = total_chars_after / len(nodes_with_score) if nodes_with_score else 0
     
     logger.info(
-        "Rerank %s : %d candidats, %.1fms, top-1=%.3f, top-3=%s | "
+        "Rerank local : %d candidats, %.1fms, top-1=%.3f, top-3=%s | "
         "Troncature: %d/%d chunks (%.1f%%), avg %d→%d chars (char_cap=%d)",
-        provider,
         len(scored),
         t_elapsed,
         scored[0][1] if scored else 0.0,
@@ -350,8 +301,29 @@ def apply_dynamic_filtering(
     
     raw_scores = [s for _, s in scored]
     
-    # Softmax pour normaliser les scores
-    raw_array = np.array(raw_scores, dtype=float)
+    # Filtrer par score cross-encoder minimum
+    min_score = getattr(settings, "RERANKER_MIN_SCORE", -3.0)
+    scored_filtered = [item for item in scored if item[1] >= min_score]
+    
+    if not scored_filtered:
+        logger.info(
+            "Rerank filtrage: aucun candidat au-dessus du seuil %s (meilleur score: %s)",
+            min_score,
+            raw_scores[0] if raw_scores else None,
+        )
+        return RerankResult(
+            nodes=[],
+            status="ok",
+            reason="no_candidates_above_threshold",
+            raw_scores=raw_scores,
+            softmax_scores=[],
+            gap_top1_top2=None,
+            zscore_flatness=None,
+        )
+
+    # Softmax pour normaliser les scores des candidats filtrés
+    filtered_scores = [s for _, s in scored_filtered]
+    raw_array = np.array(filtered_scores, dtype=float)
     # Stabilité numérique : soustraire max
     exp_scores = np.exp(raw_array - np.max(raw_array))
     softmax_scores = (exp_scores / exp_scores.sum()).tolist()
@@ -371,7 +343,7 @@ def apply_dynamic_filtering(
     
     if is_stuttering:
         # Low confidence : garder seulement top 1-2 pour forcer clarification
-        selected_nodes = [nws for nws, _ in scored[:2]]
+        selected_nodes = [nws for nws, _ in scored_filtered[:2]]
         logger.warning(
             "Guardrail bégaiement déclenché : gap_P1-P2=%.4f < %.4f, stdev=%.4f < %.4f → top 1-2 seulement",
             gap_top1_top2,
@@ -398,12 +370,12 @@ def apply_dynamic_filtering(
         k_dynamic = int(indices[0]) + 1
     else:
         # Si même tous les candidats n'atteignent pas le seuil, prendre tous
-        k_dynamic = len(scored)
+        k_dynamic = len(scored_filtered)
     
     # Borner entre min_k et max_k
     k_dynamic = max(min_k, min(k_dynamic, max_k))
     
-    selected_nodes = [nws for nws, _ in scored[:k_dynamic]]
+    selected_nodes = [nws for nws, _ in scored_filtered[:k_dynamic]]
     
     logger.info(
         "K dynamique : %d candidats sélectionnés (cumsum softmax >= %.2f, borné [%d, %d])",

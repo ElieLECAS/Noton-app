@@ -359,8 +359,16 @@ def _pack_rag_units(
                 if line_buf:
                     chunks.append("\n".join(line_buf))
             else:
-                sub = split_text_by_tokens(unit, max_tokens)
-                chunks.extend(sub)
+                cleaned_unit = unit.strip()
+                if cleaned_unit.startswith("[Image:") and cleaned_unit.endswith("]"):
+                    inner_content = cleaned_unit[7:-1].strip()
+                    sub_parts = split_text_by_tokens(inner_content, max_tokens - 15)
+                    for idx, part in enumerate(sub_parts):
+                        prefix = "[Image: (Suite) " if idx > 0 else "[Image: "
+                        chunks.append(f"{prefix}{part.strip()}]")
+                else:
+                    sub = split_text_by_tokens(unit, max_tokens)
+                    chunks.extend(sub)
             continue
 
         if current_tokens + ut > max_tokens and current_parts:
@@ -562,15 +570,17 @@ Réponds UNIQUEMENT avec un JSON valide sous cette forme exacte :
 }
 
 Règles absolues pour `raw_text` :
-1. Extraction textuelle ultra clean : Réalise un OCR extrêmement précis et ordonné de tout le texte présent dans la page. Reconstruis les paragraphes dans l'ordre logique de lecture.
-2. Tableaux : Transcris tous les tableaux sous forme de tableaux Markdown avec des séparateurs de colonnes pipe (|) et des lignes d'en-tête claires.
-3. Éléments visuels / schémas / plans : Pour chaque dessin technique, schéma, photo, logo, ou plan présent sur l'image, insère à l'emplacement logique de lecture un bloc explicite formaté ainsi :
-   `[Image: description technique détaillée et exhaustive]`
-   Dans cette description, tu dois :
+1. Extraction textuelle ultra clean : Réalise un OCR extrêmement précis et ordonné de tout le texte présent dans la page. Transcris le texte de manière strictement littérale. Ne résume pas, ne paraphrase pas et ne modifie pas les termes techniques.
+2. Structure Markdown Propre : Structure le document de manière ultra-propre en utilisant du Markdown standard. Représente la hiérarchie visuelle à l'aide de titres clairs (#, ##, ###) et sépare distinctement les paragraphes et listes à puces.
+3. Tableaux : Transcris SYSTEMATIQUEMENT tous les tableaux sous forme de tableaux Markdown réglementaires (avec séparateurs pipe '|' et ligne d'alignement '|---|---|'). Assure-toi que chaque ligne et colonne soit parfaitement alignée, sans coupure de ligne accidentelle ou perte de données.
+4. Éléments visuels / schémas / plans : Pour chaque dessin technique, schéma, photo, logo, ou plan présent sur l'image, insère à l'emplacement logique de lecture un bloc explicite formaté ainsi :
+   `[Image: description technique détaillée]`
+   Dans cette description, tu dois STRICTEMENT :
    - Transcrire et lister explicitement TOUTES les annotations textuelles, cotes, valeurs numériques, unités, légendes, références de produits ou de normes visibles dans l'élément visuel.
-   - Décrire ce que représente le schéma ou le visuel de manière technique et structurée.
-4. Langue : Rédige le résultat en Français.
-5. Rigueur : N'invente aucune information, ne paraphrase pas les termes techniques. Si un texte est flou ou illisible, écris "[zone illisible]".
+   - Décrire de manière formelle et fonctionnelle l'assemblage, les liaisons géométriques, l'emplacement des pièces et la structure montrée (ex: "La pièce X s'emboîte sur la rainure de la pièce Y", "Le joint d'étanchéité Z est collé sur la lèvre A", "La flèche indique le sens d'insertion du profilé B").
+   - INTERDICTION D'EXTRAPOLER OU DE SUR-INTERPRÉTER : N'invente aucun rôle, fonction ou contexte d'application non écrit. Si une pièce/système n'est pas explicitement nommée ou décrite sur la page comme servant à un usage précis (ex: "cloison de bureau"), ne le mentionne sous aucun prétexte. N'utilise pas tes connaissances externes sur les marques ou produits (ex: Technal, LUMEAL). Reste purement factuel, visuel et littéral.
+5. Langue : Rédige le résultat en Français.
+6. Rigueur : Si un texte est flou ou illisible, écris "[zone illisible]".
 """
 
 _USER_PROMPT_MISTRAL_LARGE = """Document : {title}
@@ -588,9 +598,14 @@ Réponds UNIQUEMENT avec un JSON valide :
 
 Règles STRICTES pour raw_text :
 - Le bloc pymupdf fourni est la source de vérité pour tout texte déjà extractible : NE PAS le réécrire ni le paraphraser.
+- Conserver une structure Markdown ultra-propre : Utilise des titres (#, ##, ###) pour délimiter les sections et organise proprement les textes et listes à puces.
+- Tableaux : Transcris les tableaux sous forme de tableaux Markdown avec séparateurs pipes (|) et ligne d'alignement (|---|---|) en veillant à la propreté de la mise en forme.
 - Parcourir le PNG et insérer à l'emplacement logique des blocs [Image: description technique détaillée] pour chaque schéma, photo, plan, dessin technique ou tableau visuel ABSENT du pymupdf.
-- Pour chaque schéma ou image technique, la description dans `[Image: ...]` doit impérativement transcrire et lister TOUS les textes, légendes, références, valeurs numériques, cotes, cibles et annotations textuelles visibles dans l'image (ex: 'NF EN 1991', '55mm', 'PVC-76', etc.) afin de lier parfaitement le texte et le visuel pour le RAG.
-- Ne pas supprimer de contenu pymupdf. Tableaux texte : markdown pipes.
+- Pour chaque schéma ou image technique, la description dans `[Image: ...]` doit impérativement :
+  - Transcrire et lister explicitement TOUTES les annotations textuelles, cotes, valeurs numériques, unités, légendes, références de produits ou de normes visibles dans l'élément visuel.
+  - Décrire de manière formelle et fonctionnelle l'assemblage, les liaisons géométriques, l'emplacement des pièces et la structure montrée (ex: "La pièce X s'emboîte sur la rainure de la pièce Y", "Le joint d'étanchéité Z est collé sur la lèvre A").
+  - INTERDICTION D'EXTRAPOLER OU DE SUR-INTERPRÉTER : N'invente aucun rôle, fonction ou contexte d'application non écrit. Si une pièce/système n'est pas explicitement nommée ou décrite sur la page comme servant à un usage précis, ne l'invente pas. Ne fais aucune hypothèse basée sur des connaissances externes. Reste purement factuel, visuel et littéral.
+- Ne pas supprimer de contenu pymupdf.
 - Français ; n'invente rien ; « illisible » si zone floue."""
 
 _RAW_SYSTEM_PROMPT_SCANNED = """Tu es un expert en OCR et extraction documentaire pour RAG technique.
@@ -600,9 +615,14 @@ Réponds UNIQUEMENT avec un JSON valide :
 {"page_no": <int>, "raw_text": "<texte brut enrichi>"}
 
 Règles pour raw_text :
-- OCR complet et ordonné de la page.
-- Pour chaque schéma/image : [Image: description technique détaillée transcrivant toutes les annotations textuelles, cotes, valeurs et unités visibles au sein du dessin/schéma].
-- Tableaux : markdown pipes si possible.
+- OCR complet et ordonné de la page. Transcris le texte de manière strictement littérale. Ne résume pas et ne paraphrase pas.
+- Structure Markdown Propre : Utilise des titres (#, ##, ###) pour structurer le document et sépare proprement les paragraphes et listes à puces.
+- Tableaux : Transcris tous les tableaux sous forme de tableaux Markdown réglementaires (avec séparateurs pipe '|' et ligne d'alignement '|---|---|') de manière parfaitement propre et lisible.
+- Pour chaque schéma/image : [Image: description technique détaillée].
+  Dans cette description, tu dois STRICTEMENT :
+  - Transcrire et lister explicitement TOUTES les annotations textuelles, cotes, valeurs numériques, unités, légendes, références de produits ou de normes visibles dans l'élément visuel.
+  - Décrire de manière formelle et fonctionnelle l'assemblage, les liaisons géométriques, l'emplacement des pièces et la structure montrée (ex: "La pièce X s'emboîte sur la rainure de la pièce Y", "Le joint d'étanchéité Z est collé sur la lèvre A").
+  - INTERDICTION D'EXTRAPOLER OU DE SUR-INTERPRÉTER : N'invente aucun rôle, fonction ou contexte d'application non écrit. Si une pièce/système n'est pas explicitement nommée ou décrite sur la page comme servant à un usage précis, ne le mentionne sous aucun prétexte. Reste purement factuel, visuel et littéral.
 - Français ; n'invente rien."""
 
 _RAW_SCHEMA_RETRY_PROMPT = """IMPORTANT: Retourne UNIQUEMENT un JSON strict {"page_no": int, "raw_text": "..."}."""
@@ -1120,7 +1140,7 @@ def _mistral_chat_completion(
     *,
     page_no: int,
     max_tokens: Optional[int] = None,
-    temperature: float = 0.2,
+    temperature: float = 0.0,
     response_format_json: bool = True,
     timeout_seconds: Optional[float] = None,
     model: Optional[str] = None,
@@ -1223,7 +1243,7 @@ def synthesize_page_with_mistral_large(
     parsed_raw: dict = {}
     model_name = getattr(settings, "MULTIMODAL_EXTRACT_MODEL", "mistral-large-latest") or "mistral-large-latest"
     try:
-        raw_content = _mistral_chat_completion(messages, page_no=page_no, model=model_name)
+        raw_content = _mistral_chat_completion(messages, page_no=page_no, temperature=0.0, model=model_name)
         parsed_raw = _parse_json_with_repair(raw_content)
     except (ValueError, json.JSONDecodeError) as exc_first:
         logger.warning("page_no=%s JSON invalide (%s), retry strict", page_no, exc_first)
@@ -1278,7 +1298,7 @@ def synthesize_page_with_mistral_large(
             },
         ]
         try:
-            schema_raw = _mistral_chat_completion(schema_messages, page_no=page_no, model=model_name)
+            schema_raw = _mistral_chat_completion(schema_messages, page_no=page_no, temperature=0.0, model=model_name)
             schema_parsed = _parse_json_with_repair(schema_raw)
             if schema_parsed.get("raw_text"):
                 parsed["raw_text"] = schema_parsed["raw_text"]

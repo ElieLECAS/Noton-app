@@ -209,3 +209,21 @@ def test_split_text_rag_friendly_keeps_caption_with_image():
     assert "[Image: Schema details showing lines and boxes]" in caption_chunk[0]
 
 
+def test_split_text_rag_friendly_large_image_block():
+    from app.services.multimodal_page_service import split_text_rag_friendly
+
+    # An image block that exceeds a low token limit
+    large_image = "[Image: " + "mot " * 200 + "]"
+    chunks = split_text_rag_friendly(large_image, max_tokens=60, overlap_tokens=0)
+
+    assert len(chunks) > 1
+    for i, c in enumerate(chunks):
+        c_stripped = c.strip()
+        if i == 0:
+            assert c_stripped.startswith("[Image:")
+        else:
+            assert c_stripped.startswith("[Image: (Suite)")
+        assert c_stripped.endswith("]")
+
+
+
