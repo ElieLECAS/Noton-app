@@ -136,15 +136,17 @@ def test_count_image_blocks():
 
 
 def test_tail_sentences_by_tokens():
-    from app.services.multimodal_page_service import _tail_sentences_by_tokens
+    from app.services.multimodal_page_service import _tail_sentences_by_tokens, count_tokens
+
     text = "Première phrase. Deuxième phrase. Troisième phrase."
-    
-    # Si target_tokens est petit, on doit renvoyer la dernière phrase complète
-    res = _tail_sentences_by_tokens(text, 10)
+
+    third_tokens = count_tokens("Troisième phrase.")
+    second_tokens = count_tokens("Deuxième phrase.")
+
+    res = _tail_sentences_by_tokens(text, third_tokens)
     assert res == "Troisième phrase."
-    
-    # Si target_tokens est suffisant, on prend plusieurs phrases complètes
-    res = _tail_sentences_by_tokens(text, 25)
+
+    res = _tail_sentences_by_tokens(text, third_tokens + second_tokens)
     assert res == "Deuxième phrase. Troisième phrase."
 
 
@@ -192,17 +194,14 @@ def test_split_text_rag_friendly_keeps_caption_with_image():
     from app.services.multimodal_page_service import split_text_rag_friendly
 
     text = (
-        "Introductory paragraph that goes here.\n\n"
-        "Figure 42: Layout scheme of the system\n"
+        "Introductory paragraph that goes here and adds enough context to exceed limits.\n\n"
+        "Figure 42: Layout scheme of the system with detailed annotations\n"
         "[Image: Schema details showing lines and boxes]\n"
-        "Ending paragraph text."
+        "Ending paragraph text that also contains enough words to force a split."
     )
-    
-    # We specify a small max_tokens that forces splits.
-    # The image + caption together should not be separated.
-    chunks = split_text_rag_friendly(text, max_tokens=60, overlap_tokens=0)
-    
-    # Verify that we split the text, but the image and caption are in the same chunk
+
+    chunks = split_text_rag_friendly(text, max_tokens=20, overlap_tokens=0)
+
     assert len(chunks) > 1
     caption_chunk = [c for c in chunks if "Figure 42" in c]
     assert len(caption_chunk) == 1
@@ -212,9 +211,9 @@ def test_split_text_rag_friendly_keeps_caption_with_image():
 def test_split_text_rag_friendly_large_image_block():
     from app.services.multimodal_page_service import split_text_rag_friendly
 
-    # An image block that exceeds a low token limit
-    large_image = "[Image: " + "mot " * 200 + "]"
-    chunks = split_text_rag_friendly(large_image, max_tokens=60, overlap_tokens=0)
+    # Phrases courtes pour que split_text_by_tokens puisse découper le contenu interne
+    large_image = "[Image: " + ". ".join(["mot"] * 200) + ".]"
+    chunks = split_text_rag_friendly(large_image, max_tokens=20, overlap_tokens=0)
 
     assert len(chunks) > 1
     for i, c in enumerate(chunks):

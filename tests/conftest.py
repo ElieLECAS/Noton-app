@@ -7,6 +7,7 @@ sinon postgresql+psycopg2://postgres:postgres@127.0.0.1:5432/noton_test
 """
 from __future__ import annotations
 
+import json
 import os
 import sys
 import uuid
@@ -20,6 +21,26 @@ from alembic import command
 from alembic.config import Config
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
+
+
+def extract_sse_message_text(response_text: str) -> str:
+    """Recompose le contenu texte d'une réponse chat SSE (data: {...})."""
+    parts: list[str] = []
+    for line in response_text.splitlines():
+        if not line.startswith("data: "):
+            continue
+        payload = line[6:].strip()
+        if not payload or payload == "[DONE]":
+            continue
+        try:
+            data = json.loads(payload)
+        except json.JSONDecodeError:
+            continue
+        chunk = (data.get("message") or {}).get("content")
+        if chunk:
+            parts.append(chunk)
+    return "".join(parts)
+
 
 # Garantit l'import du package "app" en local et dans Docker.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]

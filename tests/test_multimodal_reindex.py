@@ -1,4 +1,4 @@
-"""Retraitement multimodal bibliothèque v4."""
+"""Retraitement multimodal bibliothèque v4 (endpoint /reindex unifié)."""
 from __future__ import annotations
 
 from unittest import mock
@@ -46,6 +46,7 @@ def test_multimodal_reindex_endpoint_returns_queued(
     client, responsable_headers, admin_headers, monkeypatch
 ):
     monkeypatch.setattr(settings, "MULTIMODAL_ENABLED", True)
+    monkeypatch.setattr(settings, "MISTRAL_API_KEY", "test-key")
     with (
         mock.patch("app.routers.library.process_document_async"),
         mock.patch(
@@ -65,11 +66,11 @@ def test_multimodal_reindex_endpoint_returns_queued(
     mock_result = mock.MagicMock()
     mock_result.id = "task-multimodal-xyz"
     with mock.patch(
-        "app.tasks.documents.multimodal_reindex_library_document_task.apply_async",
+        "app.tasks.documents.reindex_library_document_task.apply_async",
         return_value=mock_result,
     ):
         r2 = client.post(
-            f"/api/library/documents/{doc_id}/multimodal-reindex",
+            f"/api/library/documents/{doc_id}/reindex",
             headers=admin_headers,
         )
 
@@ -82,25 +83,25 @@ def test_multimodal_reindex_endpoint_returns_queued(
 def test_multimodal_reindex_disabled_returns_400(client, admin_headers, monkeypatch):
     monkeypatch.setattr(settings, "MULTIMODAL_ENABLED", False)
     r = client.post(
-        "/api/library/documents/1/multimodal-reindex",
+        "/api/library/documents/1/reindex",
         headers=admin_headers,
     )
     assert r.status_code == 400
 
 
 def test_multimodal_service_v4_chunks(
-    session: Session, monkeypatch, tmp_path
+    db_session: Session, monkeypatch, tmp_path
 ):
     monkeypatch.setattr(settings, "MULTIMODAL_ENABLED", True)
     from app.models.document import Document
     from app.models.library import Library
     from tests.conftest import create_test_user
 
-    user = create_test_user(session, "admin")
+    user = create_test_user(db_session, "admin")
     lib = Library(user_id=user.id, name="Lib MM", is_global=True)
-    session.add(lib)
-    session.commit()
-    session.refresh(lib)
+    db_session.add(lib)
+    db_session.commit()
+    db_session.refresh(lib)
 
     pdf = tmp_path / "doc.pdf"
     pdf.write_bytes(b"%PDF-1.4 minimal")
@@ -113,9 +114,9 @@ def test_multimodal_service_v4_chunks(
         source_file_path=str(pdf),
         processing_status="completed",
     )
-    session.add(doc)
-    session.commit()
-    session.refresh(doc)
+    db_session.add(doc)
+    db_session.commit()
+    db_session.refresh(doc)
 
     ocr_chunk = DocumentChunk(
         document_id=doc.id,
@@ -124,8 +125,8 @@ def test_multimodal_service_v4_chunks(
         is_leaf=True,
         metadata_json={"content_type": "text_full"},
     )
-    session.add(ocr_chunk)
-    session.commit()
+    db_session.add(ocr_chunk)
+    db_session.commit()
 
     fake_specs = [
         MultimodalChunkSpec(
@@ -177,7 +178,7 @@ def test_multimodal_service_v4_chunks(
     assert result["chunks"] == 2
 
     chunks = list(
-        session.exec(
+        db_session.exec(
             select(DocumentChunk).where(DocumentChunk.document_id == doc.id)
         ).all()
     )

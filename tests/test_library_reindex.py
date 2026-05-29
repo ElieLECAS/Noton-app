@@ -108,9 +108,12 @@ def test_reindex_service_unavailable_returns_503(
     assert r.status_code == 201
     doc_id = r.json()[0]["id"]
 
-    with mock.patch(
-        "app.tasks.documents.reindex_library_document_task.apply_async",
-        side_effect=ConnectionError("broker down"),
+    with (
+        mock.patch("app.services.task_dispatch.get_task_backend_mode", return_value="celery"),
+        mock.patch(
+            "app.tasks.documents.reindex_library_document_task.apply_async",
+            side_effect=ConnectionError("broker down"),
+        ),
     ):
         r2 = client.post(
             f"/api/library/documents/{doc_id}/reindex",
@@ -274,20 +277,12 @@ def test_reindex_denies_when_private_library_neither_owner_nor_uploader(db_sessi
         reindex_library_document(doc.id, intruder.id)
 
 
-@mock.patch("app.services.chunk_service.complete_document_embeddings_sync")
-@mock.patch("app.services.chunk_service.create_chunks_for_document_from_markdown", return_value=[])
-@mock.patch("app.services.chunk_service.delete_chunks_for_document")
-@mock.patch("app.services.document_service_new.process_document_file", return_value="# titre\n\nx")
 @mock.patch(
-    "app.services.file_conversion.ensure_pdf_for_ocr",
-    side_effect=lambda p: p,
+    "app.services.document_service_new.process_document_multimodal",
+    return_value={"chunks": 1, "status": "completed"},
 )
 def test_reindex_allows_global_library_when_reindexer_differs_from_uploader(
-    _ensure_pdf,
-    _proc,
-    _del_chunks,
-    _create_chunks,
-    _complete_embeddings,
+    _process_multimodal,
     db_session: Session,
     tmp_path,
 ):

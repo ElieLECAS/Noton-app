@@ -14,7 +14,7 @@ from app.models.user import User
 from app.models.conversation import Conversation
 from app.models.message import Message
 from app.tasks.documents import generate_faq_from_feedback_task
-from tests.conftest import create_test_user, bearer_headers
+from tests.conftest import create_test_user, bearer_headers, extract_sse_message_text
 from app.services.chat_critique_service import (
     parse_critique_json,
     sanitize_critique_output,
@@ -252,8 +252,8 @@ def test_two_step_chat_pipeline_with_faq_retrieval(client, db_session: Session):
             return {"choices": [{"message": {"content": critique_json}}]}
         return {"choices": [{"message": {"content": ""}}]}
         
-    with mock.patch("app.routers.chat.search_technical_passages", fake_technical_search):
-        with mock.patch("app.routers.chat.search_corrective_faq_passages", fake_faq_search):
+    with mock.patch("app.services.space_search_service.search_technical_passages", fake_technical_search):
+        with mock.patch("app.services.space_search_service.search_corrective_faq_passages", fake_faq_search):
             with mock.patch("app.routers.chat.mistral_chat", fake_mistral_chat):
                 response = client.post(
                     f"/api/spaces/{space.id}/chat/stream",
@@ -266,7 +266,7 @@ def test_two_step_chat_pipeline_with_faq_retrieval(client, db_session: Session):
                 )
             
     assert response.status_code == 200
-    text_content = response.text
+    text_content = extract_sse_message_text(response.text)
     assert "XL30202" in text_content
     assert "La réponse temporaire" not in text_content
     assert "Voici la réponse" not in text_content
@@ -309,8 +309,8 @@ def test_critique_unchanged_pipeline_uses_draft(client, db_session: Session):
             return {"choices": [{"message": {"content": draft_response}}]}
         return {"choices": [{"message": {"content": critique_json}}]}
 
-    with mock.patch("app.routers.chat.search_technical_passages", fake_technical_search):
-        with mock.patch("app.routers.chat.search_corrective_faq_passages", fake_faq_search):
+    with mock.patch("app.services.space_search_service.search_technical_passages", fake_technical_search):
+        with mock.patch("app.services.space_search_service.search_corrective_faq_passages", fake_faq_search):
             with mock.patch("app.routers.chat.mistral_chat", fake_mistral_chat):
                 response = client.post(
                     f"/api/spaces/{space.id}/chat/stream",
@@ -319,8 +319,9 @@ def test_critique_unchanged_pipeline_uses_draft(client, db_session: Session):
                 )
 
     assert response.status_code == 200
-    assert draft_response in response.text
-    assert "La réponse temporaire" not in response.text
+    text_content = extract_sse_message_text(response.text)
+    assert draft_response in text_content
+    assert "La réponse temporaire" not in text_content
 
 
 def test_faq_task_idempotent(db_session: Session):
@@ -527,8 +528,8 @@ def test_faq_search_below_threshold_skips_critique(client, db_session: Session):
         # Seul le draft devrait être appelé, pas la critique
         return {"choices": [{"message": {"content": draft_response}}]}
     
-    with mock.patch("app.routers.chat.search_technical_passages", fake_technical_search):
-        with mock.patch("app.routers.chat.search_corrective_faq_passages", fake_faq_search):
+    with mock.patch("app.services.space_search_service.search_technical_passages", fake_technical_search):
+        with mock.patch("app.services.space_search_service.search_corrective_faq_passages", fake_faq_search):
             with mock.patch("app.routers.chat.mistral_chat", fake_mistral_chat):
                 response = client.post(
                     f"/api/spaces/{space.id}/chat/stream",

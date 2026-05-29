@@ -374,11 +374,14 @@ def test_format_text_full_chunk_text():
 
 
 def test_text_windows_when_threshold_enabled(monkeypatch):
-    from app.config import settings
+    from app.services import chunking_service
     from app.services.chunking_service import _build_docling_hierarchical_specs
 
-    monkeypatch.setattr(settings, "DOCLING_TEXT_WINDOW_CHAR_THRESHOLD", 80)
-    monkeypatch.setattr(settings, "DOCLING_TEXT_WINDOW_OVERLAP", 10)
+    class _WindowSettings:
+        DOCLING_TEXT_WINDOW_CHAR_THRESHOLD = 80
+        DOCLING_TEXT_WINDOW_OVERLAP = 10
+
+    monkeypatch.setattr(chunking_service, "settings", _WindowSettings())
 
     long_body = "x" * 200
     leaf = _FakeLeaf("leaf-long", long_body, ["1 Intro"])

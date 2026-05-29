@@ -8,6 +8,7 @@ import pytest
 from sqlmodel import select
 
 from app.models.user_role import UserRole
+from tests.conftest import extract_sse_message_text
 
 
 @pytest.fixture
@@ -169,8 +170,12 @@ def test_space_chat_stream_bypass_when_no_passages(client, responsable_headers):
     space_id = sp.json()["id"]
     try:
         # Mock search_technical_passages to return no passages
-        with mock.patch("app.routers.chat.search_technical_passages") as mock_search:
-            mock_search.return_value = {"passages": [], "status": "ok", "reason": "no_results"}
+        with mock.patch(
+            "app.services.space_search_service.search_technical_passages",
+            new=mock.AsyncMock(
+                return_value={"passages": [], "status": "ok", "reason": "no_results"}
+            ),
+        ):
             
             # We don't mock any LLM call because it should be bypassed
             r = client.post(
@@ -185,8 +190,8 @@ def test_space_chat_stream_bypass_when_no_passages(client, responsable_headers):
             )
             
             assert r.status_code == 200
-            # Le message statique doit être retourné
-            assert "seuil minimum de 75%" in r.text
+            text_content = extract_sse_message_text(r.text)
+            assert "seuil minimum de 75%" in text_content
             assert "done" in r.text.lower()
     finally:
         client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)

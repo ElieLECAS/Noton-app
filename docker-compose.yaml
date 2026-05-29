@@ -87,6 +87,9 @@ x-app-volumes: &app-volumes
   - ./app/alembic.ini:/app/alembic.ini
   - ./media:/app/media
   - ./logs:/app/logs
+  # Tests : montés pour pouvoir lancer pytest dans le conteneur
+  - ./tests:/app/tests
+  - ./app/pytest.ini:/app/pytest.ini
 
 services:
   db:

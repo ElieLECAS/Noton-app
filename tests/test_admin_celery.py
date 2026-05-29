@@ -113,12 +113,13 @@ def test_dispatch_reindex_library_enqueues_celery():
 
 
 def test_dispatch_reindex_library_raises_runtime_when_celery_unavailable():
-    with mock.patch(
-        "app.tasks.documents.reindex_library_document_task.apply_async",
-        side_effect=ConnectionError("broker down"),
-    ):
-        with pytest.raises(RuntimeError, match="Celery"):
-            task_dispatch.dispatch_reindex_library(1, 2)
+    with mock.patch.object(task_dispatch, "get_task_backend_mode", return_value="celery"):
+        with mock.patch(
+            "app.tasks.documents.reindex_library_document_task.apply_async",
+            side_effect=ConnectionError("broker down"),
+        ):
+            with pytest.raises(RuntimeError, match="Celery"):
+                task_dispatch.dispatch_reindex_library(1, 2)
 
 
 def test_dispatch_reindex_all_library_enqueues_celery():
