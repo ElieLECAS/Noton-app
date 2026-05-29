@@ -109,27 +109,6 @@ async def startup_event():
     except Exception as e:
         logger.error(f"Erreur lors de l'initialisation RBAC: {e}")
     
-    # Tester la connexion API Mistral Embeddings (si clé configurée)
-    try:
-        from app.services.embedding_service import generate_embedding
-        if settings.MISTRAL_API_KEY:
-            logger.info(
-                "Test API Mistral Embeddings (model=%s)...",
-                settings.EMBEDDING_MODEL,
-            )
-            test_embedding = generate_embedding("test")
-            if test_embedding:
-                logger.info(
-                    "✅ Mistral Embeddings OK (dim=%s)",
-                    len(test_embedding),
-                )
-            else:
-                logger.warning("⚠️ Impossible de générer un embedding de test")
-        else:
-            logger.warning("⚠️ MISTRAL_API_KEY absente — embeddings indisponibles")
-    except Exception as e:
-        logger.warning("⚠️ Erreur test Mistral Embeddings: %s", e)
-    
     # Workers threads (embeddings + documents) uniquement si thread ou hybrid (repli Celery)
     try:
         from app.services.task_dispatch import should_start_thread_workers

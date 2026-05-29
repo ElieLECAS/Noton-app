@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     DATABASE_URL: str = os.getenv("DATABASE_URL")
     # echo=True journalise chaque SQL (UPDATE/INSERT d'embeddings = vecteurs énormes dans les logs)
     DATABASE_ECHO: bool = False
+    
+    # LanceDB
+    LANCED_DB_DIR: str = os.getenv("LANCED_DB_DIR", "./data/lancedb")
 
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY")
@@ -30,6 +33,8 @@ class Settings(BaseSettings):
     OPENAI_MODEL: Optional[List[str]] = None
     # Modèle de chat unique (plus de presets private/fast/powerful)
     MODEL_FAST: str = os.getenv("MODEL_FAST", "mistral-small-latest")
+    # Provider pour le LLM (mistral | ollama)
+    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "mistral")
     # Limite globale par défaut pour la longueur des réponses des LLM
     MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
     # Paramètres dédiés au chat "espaces"
@@ -73,6 +78,10 @@ class Settings(BaseSettings):
     # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
     # False = défaut si la variable est absente (voir parse_multimodal_enabled).
     MULTIMODAL_ENABLED: bool = False
+    
+    # ColPali Settings
+    COLPALI_ENABLED: bool = False
+    COLPALI_MODEL_NAME: str = "vidore/colqwen2-v0.1"
     # Pixtral via API Mistral (ex. pixtral-12b-2409) pour enrichir les chunks feuilles « picture »
     VISION_MODEL: str = "pixtral-12b-2409"
     VISION_MAX_TOKENS: int = 1500
@@ -152,7 +161,7 @@ class Settings(BaseSettings):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
 
-    @field_validator('RERANKER_ENABLED', 'EARLY_STOP_ENABLED', mode='before')
+    @field_validator('RERANKER_ENABLED', 'EARLY_STOP_ENABLED', 'COLPALI_ENABLED', mode='before')
     @classmethod
     def parse_bool_flags(cls, v: Union[str, bool, None]) -> bool:
         """Convertit les chaînes en bool pour les flags Reranker/Early stop."""

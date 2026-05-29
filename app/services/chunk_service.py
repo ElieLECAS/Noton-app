@@ -36,6 +36,12 @@ def delete_chunks_for_document(
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
     if commit:
         session.commit()
+    # Delete from LanceDB
+    try:
+        from app.services.lancedb_service import delete_chunks_lancedb
+        delete_chunks_lancedb(document_id)
+    except Exception as e:
+        logger.error(f"Failed to delete from LanceDB for document_id={document_id}: {e}", exc_info=True)
     logger.debug("Supprimé chunks pour document_id=%s", document_id)
 
 
@@ -176,6 +182,20 @@ def create_chunks_for_document(
     if chunks:
         session.add_all(chunks)
         session.commit()
+        # Sync to LanceDB
+        try:
+            from app.services.lancedb_service import insert_or_update_chunks_lancedb
+            lancedb_data = [
+                {
+                    "id": chunk.id,
+                    "document_id": chunk.document_id,
+                    "vector": chunk.embedding
+                }
+                for chunk in chunks if chunk.embedding
+            ]
+            insert_or_update_chunks_lancedb(lancedb_data)
+        except Exception as e:
+            logger.error(f"Failed to sync to LanceDB for document_id={document.id}: {e}", exc_info=True)
     log_chunk_inventory(ld, document.id, chunks, "Chunking fallback terminé")
     return chunks
 
@@ -245,6 +265,20 @@ def create_chunks_for_document_from_markdown(
 
     session.add_all(chunks)
     session.commit()
+    # Sync to LanceDB
+    try:
+        from app.services.lancedb_service import insert_or_update_chunks_lancedb
+        lancedb_data = [
+            {
+                "id": chunk.id,
+                "document_id": chunk.document_id,
+                "vector": chunk.embedding
+            }
+            for chunk in chunks if chunk.embedding
+        ]
+        insert_or_update_chunks_lancedb(lancedb_data)
+    except Exception as e:
+        logger.error(f"Failed to sync to LanceDB for document_id={document.id}: {e}", exc_info=True)
     
     chunking_method = "markdown structurel" if use_structured else "markdown hiérarchique"
     log_chunk_inventory(ld, document.id, chunks, f"Chunking {chunking_method} (persisté)")
@@ -352,6 +386,20 @@ def _process_embeddings_for_document(
                         session.add(chunk)
                         ok += 1
                 session.commit()
+                # Sync batch to LanceDB
+                try:
+                    from app.services.lancedb_service import insert_or_update_chunks_lancedb
+                    lancedb_data = [
+                        {
+                            "id": chunk.id,
+                            "document_id": chunk.document_id,
+                            "vector": chunk.embedding
+                        }
+                        for chunk in batch if chunk.embedding
+                    ]
+                    insert_or_update_chunks_lancedb(lancedb_data)
+                except Exception as e:
+                    logger.error(f"Failed to sync batch to LanceDB for document_id={document_id}: {e}", exc_info=True)
 
             if ok == 0:
                 logger.warning("Aucun embedding valide pour document_id=%s", document_id)

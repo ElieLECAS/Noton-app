@@ -18,6 +18,8 @@ pydantic>=2.11.5,<3.0.0
 
 # Base de données vectorielle
 pgvector==0.4.2
+lancedb>=0.4.0
+pyarrow>=12.0.0
 
 # Ingestion : Mistral OCR + chunking LlamaIndex + embeddings API
 mistralai>=1.0.0
@@ -30,6 +32,11 @@ llama-index-core==0.14.14
 sentence-transformers>=3.0,<4.0
 torch==2.3.1
 numpy>=1.26
+colpali-engine
+transformers>=4.45.0
+accelerate
+einops
+peft
 
 # Observabilité (optionnel)
 langsmith>=0.1.0

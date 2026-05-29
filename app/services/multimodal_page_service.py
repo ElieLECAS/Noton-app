@@ -714,6 +714,12 @@ def delete_multimodal_chunks_for_document(
     )
     if commit:
         session.commit()
+    # Delete from LanceDB
+    try:
+        from app.services.lancedb_service import delete_chunks_lancedb
+        delete_chunks_lancedb(document_id)
+    except Exception as e:
+        logger.error(f"Failed to delete from LanceDB for document_id={document_id}: {e}", exc_info=True)
     deleted = result.rowcount if result.rowcount is not None else 0
     logger.debug(
         "Supprimé %s chunk(s) multimodal pour document_id=%s",
@@ -1719,144 +1725,62 @@ def build_multimodal_pages_for_pdf(
     max_pages: Optional[int] = None,
 ) -> List[MultimodalChunkSpec]:
     """
-    Pipeline v4 : Pass 1 vision (raw) → merge → fenêtres → Pass 2 rapports → chunks leaves.
+    Pipeline ColPali-only:
+    Determines the pages in the PDF and generates page chunk specifications
+    without extracting any native text.
     """
     import fitz
-    try:
-        doc = fitz.open(pdf_path)
-        total_pages = len(doc)
-        doc.close()
-    except Exception as e:
-        logger.warning("Échec comptage pages avec PyMuPDF pour %s : %s, fallback pdf2image", pdf_path, e)
-        from pdf2image import convert_from_path
-        dpi_val = settings.MULTIMODAL_PAGE_DPI or 200
-        images = convert_from_path(pdf_path, dpi=dpi_val)
-        total_pages = len(images)
-
-    page_texts = [(i + 1, "") for i in range(total_pages)]
-
-    limit = settings.VISION_MAX_IMAGES_PER_DOCUMENT
-    if limit is not None and limit > 0:
-        page_texts = page_texts[:limit]
+    logger.info(f"Setting up ColPali page structures for PDF: {pdf_path}")
+    
+    doc = fitz.open(pdf_path)
+    total_pages = len(doc)
+    
+    pages_to_process = list(range(total_pages))
     if max_pages is not None and max_pages > 0:
-        page_texts = page_texts[:max_pages]
-
-    total = len(page_texts)
-    if total == 0:
-        return []
-
-    workers = max(1, min(settings.MULTIMODAL_PAGE_CONCURRENCY, total))
-    page_jsons_by_no: dict[int, dict] = {}
-
-    with ThreadPoolExecutor(max_workers=workers) as executor:
-        futures = []
-        for idx, (page_no, pymupdf_text) in enumerate(page_texts):
-            page_index = page_no - 1 if page_no > 0 else idx
-            futures.append(
-                executor.submit(
-                    _process_single_multimodal_page,
-                    pdf_path,
-                    page_no,
-                    page_index,
-                    pymupdf_text,
-                    document_title,
-                    document_id,
-                    page_idx=idx,
-                    total_pages=total,
-                )
-            )
-        for future in futures:
-            page_no, parsed = future.result()
-            page_jsons_by_no[page_no] = parsed
-
-    # 1. Trier les pages par ordre chronologique
-    ordered_pages = []
-    for page_no, _ in page_texts:
-        if page_no in page_jsons_by_no:
-            ordered_pages.append(page_jsons_by_no[page_no])
-
-    ordered_pages = merge_cut_sections_across_pages(ordered_pages)
-
-    windows = build_dynamic_windows(document_id, ordered_pages)
-    logger.info(
-        "Pass 2 préparation doc=%s pages_raw=%s fenêtres=%s",
-        document_id,
-        len(ordered_pages),
-        len(windows),
-    )
-    window_reports = generate_window_pro_reports(
-        document_id, document_title, windows
-    )
-
-    all_specs: List[MultimodalChunkSpec] = []
-
-    window_by_page: Dict[int, str] = {}
-    for w in windows:
-        for p in w.get("pages") or []:
-            window_by_page[int(p["page_no"])] = w["window_id"]
-
-    for page_data in ordered_pages:
-        page_no = int(page_data["page_no"])
-        raw_specs = build_raw_chunk_specs_from_page(
-            document_id, page_no, page_data, document_title
-        )
-        wid = window_by_page.get(page_no)
-        if wid:
-            for spec in raw_specs:
-                spec.metadata["window_id"] = wid
-        all_specs.extend(raw_specs)
-
-    for window in windows:
-        wid = window["window_id"]
-        reports = window_reports.get(wid) or []
-        all_specs.extend(
-            build_window_report_chunk_specs(
-                document_id, window, reports, document_title
+        pages_to_process = pages_to_process[:max_pages]
+        
+    specs: List[MultimodalChunkSpec] = []
+    
+    for page_idx in pages_to_process:
+        page_no = page_idx + 1
+        
+        # Omit text extraction entirely - ColPali is vision-only
+        text_content = f"[ColPali Indexed Page {page_no}]"
+            
+        node_id = f"colpali-{document_id}-page-{page_no}"
+        meta = {
+            "content_type": "page_raw_enriched",
+            "chunking_version": "colpali_only",
+            "page_no": page_no,
+            "page_start": page_no,
+            "page_end": page_no,
+            "document_id": document_id,
+            "document_title": document_title or "",
+            "is_leaf": True,
+        }
+        
+        specs.append(
+            MultimodalChunkSpec(
+                page_no=page_no,
+                content=text_content,
+                content_type="page_raw_enriched",
+                node_id=node_id,
+                metadata=meta,
             )
         )
-
-    logger.info(
-        "Document %s v4 : %d pages, %d fenêtres, %d chunks",
-        document_id,
-        len(ordered_pages),
-        len(windows),
-        len(all_specs),
-    )
-    return all_specs
+        
+    doc.close()
+    logger.info(f"Generated {len(specs)} page specs for document {document_id}")
+    return specs
 
 
 def embed_new_multimodal_chunks(document_id: int) -> int:
-    """Embeddings mistral-embed pour les feuilles multimodal v4 sans vecteur."""
-    from app.services.embedding_service import generate_embeddings_batch
-
-    col = _content_type_col()
-    with Session(engine) as session:
-        statement = select(DocumentChunk).where(
-            DocumentChunk.document_id == document_id,
-            DocumentChunk.embedding.is_(None),
-            DocumentChunk.is_leaf == True,  # noqa: E712
-            or_(*[col == ct for ct in EMBEDDABLE_MULTIMODAL_CONTENT_TYPES]),
-        )
-        chunks = list(session.exec(statement).all())
-        if not chunks:
-            return 0
-
-        batch_size = max(1, settings.EMBEDDING_BATCH_SIZE)
-        model_name = settings.EMBEDDING_MODEL
-        ok = 0
-        for i in range(0, len(chunks), batch_size):
-            batch = chunks[i : i + batch_size]
-            embeddings = generate_embeddings_batch(
-                [c.content for c in batch], batch_size=len(batch)
-            )
-            for chunk, embedding in zip(batch, embeddings):
-                if embedding:
-                    chunk.embedding = embedding
-                    meta = dict(chunk.metadata_json or {})
-                    meta["embedding_model"] = model_name
-                    chunk.metadata_json = meta
-                    chunk.metadata_ = meta
-                    ok += 1
-            session.add_all(batch)
-            session.commit()
-        return ok
+    """Génère les embeddings pour les chunks. Si ColPali est activé, on génère les embeddings ColPali uniquement."""
+    # Déclenchement de ColPali
+    try:
+        from app.services.colpali_service import sync_document_colpali_embeddings
+        sync_document_colpali_embeddings(document_id)
+    except Exception as e:
+        logger.error(f"Error generating ColPali embeddings for document {document_id}: {e}", exc_info=True)
+        
+    return 0

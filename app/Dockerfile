@@ -18,6 +18,7 @@ RUN pip install --no-cache-dir -U pip "wheel" "setuptools<82" \
 RUN python -c "\
 from llama_index.core.node_parser import HierarchicalNodeParser; \
 from mistralai import Mistral; \
+import colpali_engine; \
 print('Deps OK')"
 
 # Pré-télécharger le reranker (aligné sur RERANKER_MODEL par défaut / .env)

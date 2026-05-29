@@ -73,24 +73,42 @@ def _retrieve_leaves_sql(
     document_filter: str = "all",
 ) -> List[NodeWithScore]:
     """
-    Recherche vectorielle pgvector sur les feuilles.
+    Recherche vectorielle LanceDB/ColPali sur les feuilles.
     
     Args:
-        query_embedding: Embedding pré-calculé (évite un appel API si déjà disponible)
+        query_embedding: Ignoré (conservé pour compatibilité de signature)
         document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
     """
-    if query_embedding is None:
-        query_embedding = generate_embedding(query_text)
-    if not query_embedding:
-        logger.warning("Embedding requête vide pour space_id=%s", space_id)
-        return []
-    query_embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
-    
     from app.services.document_service_new import feedback_corrective_sql_filter
 
     filter_clause = feedback_corrective_sql_filter(document_filter, "d")
 
-    sql_query = text(f"""
+    # 1. Récupérer la liste des document_ids appartenant à cette space_id et satisfaisant le filter_clause
+    sql_docs = text(f"""
+        SELECT DISTINCT d.id
+        FROM document d
+        INNER JOIN document_space ds ON ds.document_id = d.id
+        WHERE ds.space_id = :space_id
+          {filter_clause}
+    """)
+    doc_ids = [row[0] for row in session.execute(sql_docs, {"space_id": space_id})]
+    if not doc_ids:
+        logger.info("LanceDB (space): aucun document correspondant au filtre dans l'espace %s", space_id)
+        return []
+
+    # 2. Rechercher dans LanceDB avec ColPali
+    from app.services.colpali_service import embed_query_colpali
+    from app.services.lancedb_service import search_colpali_lancedb
+    
+    query_token_embeddings = embed_query_colpali(query_text)
+    search_results = search_colpali_lancedb(query_token_embeddings, doc_ids, limit=candidate_k)
+        
+    if not search_results:
+        return []
+
+    # 3. Récupérer les données textuelles complètes et métadonnées depuis PostgreSQL pour les chunks trouvés
+    chunk_ids = [row["id"] for row in search_results]
+    sql_chunks = text("""
         SELECT
             dc.id,
             dc.content,
@@ -102,22 +120,28 @@ def _retrieve_leaves_sql(
             dc.source AS chunk_source,
             d.title AS document_title,
             d.source AS document_source,
-            d.id AS document_id,
-            1 - (dc.embedding <=> '{query_embedding_str}'::vector) AS similarity_score
+            d.id AS document_id
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
-        INNER JOIN document_space ds ON ds.document_id = d.id
-        WHERE ds.space_id = :space_id
-          AND dc.embedding IS NOT NULL
-          AND dc.is_leaf = true
-          {filter_clause}
-        ORDER BY dc.embedding <=> '{query_embedding_str}'::vector
-        LIMIT :limit_k
+        WHERE dc.id IN :chunk_ids
     """)
+    chunk_rows = session.execute(sql_chunks, {"chunk_ids": tuple(chunk_ids)}).all()
 
-    result = session.execute(sql_query, {"space_id": space_id, "limit_k": candidate_k})
+    # Conserver l'ordre trié retourné par LanceDB
+    rows_map = {row.id: row for row in chunk_rows}
     nodes: List[NodeWithScore] = []
-    for row in result:
+    
+    for row_lancedb in search_results:
+        chunk_id = row_lancedb["id"]
+        row = rows_map.get(chunk_id)
+        if not row:
+            continue
+        
+        # LanceDB retourne '_distance' en tant que distance cosinus (1 - cosine_similarity)
+        # Donc similarity_score = 1.0 - _distance
+        distance = float(row_lancedb.get("_distance", 1.0))
+        similarity_score = 1.0 - distance
+        
         metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
         metadata.setdefault("document_id", row.document_id)
         metadata.setdefault("document_title", row.document_title or "Document sans titre")
@@ -126,13 +150,15 @@ def _retrieve_leaves_sql(
             metadata.setdefault("source", row.document_source)
         if getattr(row, "chunk_source", None):
             metadata.setdefault("source", row.chunk_source)
+            
         node = TextNode(
             id_=f"chunk-{row.id}",
             text=row.content or row.text or "",
             metadata=metadata,
         )
-        nodes.append(NodeWithScore(node=node, score=float(row.similarity_score)))
-    logger.info("Vector pgvector (space): %d feuilles (limit=%d)", len(nodes), candidate_k)
+        nodes.append(NodeWithScore(node=node, score=similarity_score))
+        
+    logger.info("Vector LanceDB/ColPali (space): %d feuilles (limit=%d)", len(nodes), candidate_k)
     return nodes
 
 
@@ -823,14 +849,13 @@ async def search_relevant_passages(
     document_filter: str = "all",
 ) -> Dict:
     """
-    RAG espace : recherche hybride (pgvector + tsvector) + RRF + rerank.
+    RAG espace : recherche ColPali-only via LanceDB.
     
     Args:
         document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
     
     Returns:
         Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
-        Status possibles : "ok", "early_stopped", "low_confidence_clarification", "disabled"
     """
     space = get_space_by_id(session, space_id, user_id)
     if not space:
@@ -843,87 +868,22 @@ async def search_relevant_passages(
         # Augmentation du nombre de candidats pour le reranker
         candidate_k = max(100, k * 6)
 
-        # Calculer l'embedding une seule fois (réutilisé par retrieval)
-        query_embedding = generate_embedding(query_text)
-        if not query_embedding:
-            logger.warning("Embedding requête vide pour space_id=%s", space_id)
-            return {"passages": [], "status": "disabled", "reason": "embedding_failed"}
-        
-        # 1. Recherche vectorielle dense (pgvector)
+        # 1. Recherche vectorielle ColPali (LanceDB)
         with trace_run(
             "vector_retrieval",
             run_type="retriever",
             inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
-            tags=["retrieval", "vector", "space"],
+            tags=["retrieval", "colpali", "space"],
         ) as vr:
-            raw_vector = _retrieve_leaves_sql(
-                session, space_id, user_id, query_text, candidate_k, query_embedding=query_embedding, document_filter=document_filter
+            final_nodes = _retrieve_leaves_sql(
+                session, space_id, user_id, query_text, candidate_k, document_filter=document_filter
             )
-            vr.end(outputs={"nb": len(raw_vector)})
-
-        # 2. Recherche lexicale BM25 native (tsvector + ts_rank_cd 33)
-        with trace_run(
-            "bm25_lexical_retrieval",
-            run_type="retriever",
-            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k, "document_filter": document_filter},
-            tags=["retrieval", "bm25", "lexical", "space"],
-        ) as lr:
-            try:
-                raw_lexical = _retrieve_leaves_bm25_sql(
-                    session, space_id, user_id, query_text, candidate_k, document_filter=document_filter
-                )
-            except Exception as e:
-                logger.warning("Recherche BM25 lexicale échouée (migration probablement non appliquée) : %s", e)
-                session.rollback()
-                raw_lexical = []
-            lr.end(outputs={"nb": len(raw_lexical)})
-
-        # 3. Recherche directe par correspondances alphanumériques exactes/substrings (regex local)
-        with trace_run(
-            "alphanumeric_retrieval",
-            run_type="retriever",
-            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
-            tags=["retrieval", "alphanumeric", "space"],
-        ) as ar:
-            raw_alphanumeric = _retrieve_leaves_alphanumeric_sql(
-                session,
-                space_id,
-                user_id,
-                query_text,
-                candidate_k,
-                document_filter=document_filter
-            )
-            ar.end(outputs={"nb": len(raw_alphanumeric)})
-
-        if not raw_vector and not raw_lexical and not raw_alphanumeric:
-            return {"passages": [], "status": "ok", "reason": "no_results"}
-
-        # Fusion RRF (Reciprocal Rank Fusion) - pas de normalisation ici, on garde les scores bruts
-        fused_results = reciprocal_rank_fusion(
-            raw_vector,
-            raw_lexical,
-            alphanumeric_results=raw_alphanumeric,
-            top_n=candidate_k,
-            normalize=False
-        )
-        
-        # Simple déduplication par ID de nœud pour obtenir des candidats uniques
-        final_nodes: List[NodeWithScore] = []
-        seen_node_ids = set()
-        for nws in fused_results:
-            node_id = getattr(nws.node, "id_", None)
-            if node_id and node_id in seen_node_ids:
-                continue
-            if node_id:
-                seen_node_ids.add(node_id)
-            final_nodes.append(nws)
+            vr.end(outputs={"nb": len(final_nodes)})
 
         if not final_nodes:
-            return {"passages": [], "status": "ok", "reason": "no_results_after_deduplication"}
+            return {"passages": [], "status": "ok", "reason": "no_results"}
 
         # === RERANKER ===
-        
-        # Reranker cross-encoder (sur le pool, pas sur tout)
         if settings.RERANKER_ENABLED:
             pool_size = min(max(50, settings.RERANK_POOL), len(final_nodes))
             pool_nodes = final_nodes[:pool_size]
@@ -974,120 +934,6 @@ async def search_relevant_passages(
                     "zscore_flatness": rerank_result.zscore_flatness,
                 })
             
-            # --- Boucle de recherche élargie si premier essai infructueux ---
-            if not rerank_result.nodes:
-                logger.info("Premier essai RAG infructueux (aucun passage >= 75%%). Lancement de la boucle de recherche élargie...")
-                from app.services.query_reasoning_service import reason_query_intent
-                intent_result = await reason_query_intent(query_text)
-                
-                expanded_terms = []
-                if intent_result.detected_references:
-                    expanded_terms.extend(intent_result.detected_references)
-                if intent_result.search_terms:
-                    expanded_terms.extend(intent_result.search_terms)
-                    
-                # Éliminer les doublons tout en préservant l'ordre
-                seen_terms = {query_text.strip().lower()}
-                unique_terms = []
-                for term in expanded_terms:
-                    t_clean = term.strip()
-                    t_lower = t_clean.lower()
-                    if t_lower and t_lower not in seen_terms:
-                        seen_terms.add(t_lower)
-                        unique_terms.append(t_clean)
-                
-                if unique_terms:
-                    logger.info("Termes d'expansion uniques identifiés : %s", unique_terms)
-                    loop_nodes: List[NodeWithScore] = []
-                    for term in unique_terms:
-                        logger.info("Recherche élargie pour le terme : %s", term)
-                        try:
-                            term_lexical = _retrieve_leaves_bm25_sql(
-                                session, space_id, user_id, term, candidate_k, document_filter=document_filter
-                            )
-                        except Exception as e:
-                            logger.warning("BM25 élargie échouée pour '%s' : %s", term, e)
-                            term_lexical = []
-                            
-                        try:
-                            term_alphanumeric = _retrieve_leaves_alphanumeric_sql(
-                                session, space_id, user_id, term, candidate_k, document_filter=document_filter
-                            )
-                        except Exception as e:
-                            logger.warning("Alphanumérique élargie échouée pour '%s' : %s", term, e)
-                            term_alphanumeric = []
-                        
-                        loop_nodes.extend(term_lexical)
-                        loop_nodes.extend(term_alphanumeric)
-                    
-                    if loop_nodes:
-                        seen_loop_ids = set()
-                        dedup_loop_nodes = []
-                        for nws in loop_nodes:
-                            node_id = getattr(nws.node, "id_", None)
-                            if node_id and node_id in seen_loop_ids:
-                                continue
-                            if node_id:
-                                seen_loop_ids.add(node_id)
-                            dedup_loop_nodes.append(nws)
-                        
-                        pool_size_loop = min(max(50, settings.RERANK_POOL), len(dedup_loop_nodes))
-                        pool_nodes_loop = dedup_loop_nodes[:pool_size_loop]
-                        
-                        with trace_run(
-                            "cross_encoder_rerank_loop",
-                            run_type="reranker",
-                            inputs={
-                                "pool_size": pool_size_loop,
-                                "char_cap": settings.RERANK_CHAR_CAP,
-                                "batch_size": settings.RERANK_BATCH_SIZE,
-                            },
-                            tags=["rerank", "cross_encoder", "loop"],
-                        ) as cer_loop:
-                            scored_loop = await reranker_service.rerank_nodes(
-                                query_text,
-                                pool_nodes_loop,
-                                char_cap=settings.RERANK_CHAR_CAP,
-                                batch_size=settings.RERANK_BATCH_SIZE,
-                            )
-                            cer_loop.end(outputs={
-                                "nb_scored": len(scored_loop),
-                                "top3_scores": [round(s, 3) for _, s in scored_loop[:3]] if scored_loop else [],
-                            })
-                        
-                        with trace_run(
-                            "rerank_guardrails_loop",
-                            run_type="chain",
-                            inputs={
-                                "min_k": settings.MIN_DYNAMIC_K,
-                                "max_k": settings.MAX_DYNAMIC_K,
-                                "softmax_cum_threshold": settings.SOFTMAX_CUM_THRESHOLD,
-                            },
-                            tags=["rerank", "guardrails", "loop"],
-                        ) as rg_loop:
-                            rerank_result_loop = reranker_service.apply_dynamic_filtering(
-                                scored_loop,
-                                min_k=settings.MIN_DYNAMIC_K,
-                                max_k=settings.MAX_DYNAMIC_K,
-                                softmax_cum_threshold=settings.SOFTMAX_CUM_THRESHOLD,
-                                stutter_gap=settings.STUTTER_GAP,
-                                zscore_flat_threshold=settings.ZSCORE_FLAT_THRESHOLD,
-                            )
-                            rg_loop.end(outputs={
-                                "status": rerank_result_loop.status,
-                                "nb_nodes": len(rerank_result_loop.nodes),
-                                "gap_top1_top2": rerank_result_loop.gap_top1_top2,
-                                "zscore_flatness": rerank_result_loop.zscore_flatness,
-                            })
-                        
-                        if rerank_result_loop.nodes:
-                            logger.info("Boucle de recherche élargie réussie : %d passages >= 75%% trouvés", len(rerank_result_loop.nodes))
-                            rerank_result = rerank_result_loop
-                        else:
-                            logger.info("Boucle de recherche élargie infructueuse (aucun passage >= 75%%).")
-                else:
-                    logger.info("Aucun terme additionnel unique pour l'élargissement de recherche.")
-            
             # Si bégaiement détecté : top 1-2 seulement pour forcer clarification
             if rerank_result.status == "low_confidence_clarification":
                 passages_low_conf = _augment_and_format_passages(
@@ -1119,7 +965,7 @@ async def search_relevant_passages(
                 "reason": rerank_result.reason,
             }
         
-        # Reranker désactivé : retour simple des top-K RRF augmentés
+        # Reranker désactivé : retour simple des top-K ColPali augmentés
         passages = _augment_and_format_passages(session, final_nodes, k)
         return {"passages": passages, "status": "disabled", "reason": "reranker_disabled"}
         

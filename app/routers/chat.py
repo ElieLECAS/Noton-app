@@ -12,6 +12,31 @@ from app.services.mistral_service import (
     chat_stream as mistral_chat_stream,
 )
 from app.config import settings
+
+async def chat_wrapper(
+    message: str,
+    model: str,
+    context: Optional[List[dict]] = None,
+    **kwargs
+) -> dict:
+    if settings.LLM_PROVIDER == "ollama":
+        from app.services.ollama_service import chat as ollama_chat
+        return await ollama_chat(message=message, model=model, context=context)
+    else:
+        return await mistral_chat(message=message, model=model, context=context, **kwargs)
+
+async def chat_stream_wrapper(
+    message: str,
+    model: str,
+    context: Optional[List[dict]] = None,
+):
+    if settings.LLM_PROVIDER == "ollama":
+        from app.services.ollama_service import chat_stream as ollama_chat_stream
+        async for chunk in ollama_chat_stream(message=message, model=model, context=context):
+            yield chunk
+    else:
+        async for chunk in mistral_chat_stream(message=message, model=model, context=context):
+            yield chunk
 from app.services.chat_tools import get_available_tools
 from app.models.conversation import Conversation
 from app.models.message import Message
@@ -162,9 +187,9 @@ async def send_chat_message(
     """Envoyer un message au chatbot avec le modèle fast unique."""
     try:
         tools = get_available_tools(include_brave_search=bool(settings.BRAVE_SEARCH_API_KEY))
-        if not settings.MISTRAL_API_KEY:
+        if settings.LLM_PROVIDER != "ollama" and not settings.MISTRAL_API_KEY:
             raise HTTPException(status_code=400, detail="Mistral API key n'est pas configurée")
-        response = await mistral_chat(request.message, settings.MODEL_FAST, request.context, tools=tools or None)
+        response = await chat_wrapper(request.message, settings.MODEL_FAST, request.context, tools=tools or None)
         if "choices" in response and len(response["choices"]) > 0:
             content = response["choices"][0]["message"].get("content", "")
             return {"message": {"content": content}}
@@ -216,10 +241,10 @@ async def stream_chat_message(
             if use_tools:
                 # Avec tools : appel non-streaming (boucle tool_calls) puis on simule le stream pour l'UX
                 full_messages = full_context + [{"role": "user", "content": request.message}]
-                if not settings.MISTRAL_API_KEY:
+                if settings.LLM_PROVIDER != "ollama" and not settings.MISTRAL_API_KEY:
                     error_msg_to_yield = "Mistral API key n'est pas configurée"
                     return
-                response = await mistral_chat("", settings.MODEL_FAST, full_messages, tools=tools)
+                response = await chat_wrapper("", settings.MODEL_FAST, full_messages, tools=tools)
                 content = (response.get("choices") or [{}])[0].get("message", {}).get("content") or ""
                 # Simuler le streaming par chunks pour garder l'effet de frappe côté client
                 chunk_size = 25
@@ -228,10 +253,10 @@ async def stream_chat_message(
                     assistant_response.append(chunk)
                     yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
             else:
-                if not settings.MISTRAL_API_KEY:
+                if settings.LLM_PROVIDER != "ollama" and not settings.MISTRAL_API_KEY:
                     error_msg_to_yield = "Mistral API key n'est pas configurée"
                     return
-                async for raw_chunk in mistral_chat_stream("", settings.MODEL_FAST, full_context):
+                async for raw_chunk in chat_stream_wrapper("", settings.MODEL_FAST, full_context):
                     try:
                         parsed = json.loads(raw_chunk)
                     except json.JSONDecodeError:
@@ -500,7 +525,41 @@ async def stream_space_chat_message(
         conversation_context.pop()
 
     full_context_draft.extend(conversation_context)
-    full_context_draft.append({"role": "user", "content": request.message})
+
+    # Rendre les pages ColPali en images PNG base64 pour Llama3.2-Vision
+    user_images = []
+    if doc_passages:
+        import base64
+        from app.services.multimodal_page_service import render_pdf_page_png
+        from app.models.document import Document
+        
+        unique_pages = []
+        seen_pages = set()
+        for p in doc_passages:
+            did = p.get("document_id")
+            pno = p.get("page_no") or p.get("page_start")
+            if did is not None and pno is not None:
+                page_key = (did, pno)
+                if page_key not in seen_pages:
+                    seen_pages.add(page_key)
+                    unique_pages.append(page_key)
+        
+        # Limiter aux 3 premières pages les plus pertinentes pour éviter de saturer le contexte
+        for did, pno in unique_pages[:3]:
+            try:
+                doc_obj = session.get(Document, did)
+                if doc_obj and doc_obj.source_file_path and os.path.exists(doc_obj.source_file_path):
+                    logger.info(f"Rendu visuel de la page {pno} du document {did} pour Llama3.2-Vision...")
+                    png_bytes = render_pdf_page_png(doc_obj.source_file_path, pno - 1, dpi=150)
+                    base64_img = base64.b64encode(png_bytes).decode("utf-8")
+                    user_images.append(base64_img)
+            except Exception as e:
+                logger.error(f"Erreur lors du rendu de la page {pno} (document {did}) : {e}")
+
+    user_msg = {"role": "user", "content": request.message}
+    if user_images:
+        user_msg["images"] = user_images
+    full_context_draft.append(user_msg)
 
     _pipeline_inputs_space = {
         "query": request.message,
@@ -544,7 +603,7 @@ async def stream_space_chat_message(
                 inputs=_pipeline_inputs_space,
                 tags=["chat", "space", "rag", "kag"],
             ) as pipeline_run:
-                if not settings.MISTRAL_API_KEY:
+                if settings.LLM_PROVIDER != "ollama" and not settings.MISTRAL_API_KEY:
                     raise ValueError("Mistral API key non configurée")
 
                 # Étape 1 : Génération du Brouillon de Réponse (sans FAQ)
@@ -562,7 +621,7 @@ async def stream_space_chat_message(
                     tags=["llm", "draft", "space"]
                 ) as draft_run:
                     try:
-                        draft_res = await mistral_chat(
+                        draft_res = await chat_wrapper(
                             "",
                             forced_model,
                             full_context_draft,
@@ -581,7 +640,7 @@ async def stream_space_chat_message(
                             )
                             fallback_context = [space_context_draft, {"role": "user", "content": request.message}]
                             try:
-                                draft_res = await mistral_chat(
+                                draft_res = await chat_wrapper(
                                     "",
                                     forced_model,
                                     fallback_context,
@@ -599,7 +658,7 @@ async def stream_space_chat_message(
                                         space_id,
                                         request.conversation_id,
                                     )
-                                    draft_res = await mistral_chat(
+                                    draft_res = await chat_wrapper(
                                         "",
                                         forced_model,
                                         [{"role": "user", "content": request.message}],
@@ -620,7 +679,7 @@ async def stream_space_chat_message(
                 faq_passages = []
                 
                 if draft_response and settings.FAQ_POST_DRAFT_ENABLED:
-                    with trace_run(
+                     with trace_run(
                         "faq_corrective_retrieval",
                         run_type="retriever",
                         inputs={
@@ -673,7 +732,7 @@ async def stream_space_chat_message(
                         },
                         tags=["llm", "critique", "space"]
                     ) as critique_run:
-                        critique_res = await mistral_chat(
+                        critique_res = await chat_wrapper(
                             "",
                             forced_model,
                             critique_messages,

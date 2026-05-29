@@ -90,6 +90,7 @@ x-app-volumes: &app-volumes
   # Tests : montés pour pouvoir lancer pytest dans le conteneur
   - ./tests:/app/tests
   - ./app/pytest.ini:/app/pytest.ini
+  - hf_cache:/root/.cache/huggingface
 
 services:
   db:
@@ -120,11 +121,11 @@ services:
       timeout: 3s
       retries: 5
 
-  # Optionnel : LLM local (non requis pour OCR / embeddings / chat Mistral)
   ollama:
-    profiles: ["ollama"]
     image: ollama/ollama:latest
     container_name: noton_ollama
+    ports:
+      - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
 
@@ -169,3 +170,4 @@ services:
 volumes:
   postgres_data:
   ollama_data:
+  hf_cache:
