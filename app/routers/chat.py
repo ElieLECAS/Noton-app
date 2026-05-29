@@ -75,23 +75,6 @@ def _resolve_page_from_passage(passage: dict) -> Optional[int]:
     )
 
 
-def _resolve_page_from_chunk(chunk: DocumentChunk) -> Optional[int]:
-    """
-    Résout la page d'un chunk en fusionnant metadata_json + metadata_.
-    metadata_json prime mais on garde le fallback legacy.
-    """
-    merged_meta = {}
-    if isinstance(chunk.metadata_, dict):
-        merged_meta.update(chunk.metadata_)
-    if isinstance(chunk.metadata_json, dict):
-        merged_meta.update(chunk.metadata_json)
-    return (
-        _coerce_positive_int(merged_meta.get("page_no"))
-        or _coerce_positive_int(merged_meta.get("page_start"))
-        or _coerce_positive_int(merged_meta.get("page_label"))
-        or _coerce_positive_int(merged_meta.get("page_idx"))
-    )
-
 
 def _persist_assistant_reply(
     conversation_id: int,
