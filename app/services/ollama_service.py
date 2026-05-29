@@ -1,8 +1,11 @@
 import httpx
 import json
+import logging
 from typing import List, Dict, Optional, Any
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 async def chat(
@@ -27,6 +30,9 @@ async def chat(
             messages.append(msg_copy)
     else:
         messages.append({"role": "user", "content": message})
+
+    nb_images = sum(len(m.get("images") or []) for m in messages)
+    logger.info("Ollama chat: model=%s, messages=%d, images=%d", model, len(messages), nb_images)
 
     payload: Dict[str, Any] = {
         "model": model,

@@ -570,14 +570,54 @@ function handleSpaceSourceClick(index, messageKey) {
   showSourcePreview(index, messageKey);
 }
 
-function buildSourcesSection(sources, messageKey) {
+function buildVisionBanner(vision) {
+  if (!vision) return "";
+  if (vision.used) {
+    return `
+      <div class="text-xs text-green-700 dark:text-green-400 font-medium mb-2 flex items-center gap-1">
+        <i class="ti ti-eye text-sm"></i>
+        Vision active : ${vision.nb_images} image(s) envoyée(s) à ${escapeHtml(vision.model || "?")} (${escapeHtml(vision.provider || "?")})
+      </div>`;
+  }
+  const failReason = (vision.pages_failed && vision.pages_failed[0] && vision.pages_failed[0].reason) || "rendu PNG impossible";
+  return `
+    <div class="text-xs text-amber-700 dark:text-amber-400 font-medium mb-2 flex items-center gap-1">
+      <i class="ti ti-alert-triangle text-sm"></i>
+      Page ColPali retrouvée mais aucune image envoyée au LLM (${escapeHtml(failReason)})
+    </div>`;
+}
+
+function buildSourcesSection(sources, messageKey, visionMeta = null) {
   if (!sources || sources.length === 0) return "";
   
   // Enregistrer les sources dans le registre global pour cette clé de message
   messageSourcesRegistry.set(messageKey, sources);
   
-  const textSources = sources.filter((s) => !s.is_image_chunk);
+  const textSources = sources.filter((s) => !s.is_image_chunk && !s.is_colpali_page);
+  const colpaliSources = sources.filter((s) => s.is_colpali_page);
   const imageSources = sources.filter((s) => s.is_image_chunk);
+
+  const colpaliBadges = colpaliSources.map((source) => {
+    const title = escapeHtml(displayTitle(source));
+    const index = source.index;
+    const pageInfo = source.page_no ? ` (p.${source.page_no})` : "";
+    const visionHint = source.vision_sent === false
+      ? " — image non envoyée au LLM"
+      : source.vision_sent
+        ? " — image envoyée au LLM"
+        : "";
+    return `
+      <button
+        type="button"
+        onclick="handleSpaceSourceClick(${index}, '${messageKey}')"
+        class="source-badge inline-flex items-center px-2 py-1 text-xs rounded bg-purple-100 dark:bg-purple-900 hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors cursor-pointer"
+        title="${title}${pageInfo}${visionHint}"
+        id="source-ref-${index}">
+        <span class="citation-number font-bold mr-1">[${index}]</span>
+        <span class="truncate max-w-[180px]">${title}${pageInfo}</span>
+      </button>
+    `;
+  }).join("");
 
   const sourceBadges = textSources.map((source) => {
     const title = escapeHtml(displayTitle(source));
@@ -627,6 +667,7 @@ function buildSourcesSection(sources, messageKey) {
 
   return `
     <div class="sources-section mt-3 pt-3 border-t border-gray-300 dark:border-gray-600">
+      ${buildVisionBanner(visionMeta)}
       ${imageSources.length > 0 ? `
         <div class="mb-3">
           <div class="text-xs text-purple-600 dark:text-purple-400 font-medium mb-2 flex items-center gap-1">
@@ -634,6 +675,15 @@ function buildSourcesSection(sources, messageKey) {
             Images sources (${imageSources.length})
           </div>
           <div class="flex flex-wrap gap-2">${imageThumbnails}</div>
+        </div>
+      ` : ""}
+      ${colpaliSources.length > 0 ? `
+        <div class="mb-3">
+          <div class="text-xs text-purple-600 dark:text-purple-400 font-medium mb-2 flex items-center gap-1">
+            <i class="ti ti-scan text-sm"></i>
+            Pages ColPali (${colpaliSources.length})
+          </div>
+          <div class="flex flex-wrap gap-2">${colpaliBadges}</div>
         </div>
       ` : ""}
       ${textSources.length > 0 ? `
@@ -1251,6 +1301,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   let full = "";
   let streamError = "";
   let receivedSources = [];
+  let receivedVision = null;
   let streamDone = false;
   let assistantMessageId = null;
   const reader = response.body.getReader();
@@ -1280,6 +1331,8 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
             const withMarkdown = parseMarkdown(full);
             contentEl.innerHTML = withMarkdown;
           }
+        } else if (data.vision) {
+          receivedVision = data.vision;
         } else if (data.error) {
           if (reasoningInterval) clearInterval(reasoningInterval);
           streamError = String(data.error);

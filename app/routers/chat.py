@@ -336,13 +336,21 @@ def _render_colpali_page_images(
     passages: List[dict],
     *,
     max_images: int,
-) -> List[str]:
-    """Rend les pages PDF ColPali en PNG base64 pour le LLM vision."""
+) -> tuple[List[str], dict]:
+    """
+    Rend les pages PDF ColPali en PNG base64 pour le LLM vision.
+    Retourne (images, meta) avec meta.pages_rendered pour le diagnostic.
+    """
     import base64
     from app.services.multimodal_page_service import render_pdf_page_png
 
     user_images: List[str] = []
     seen_pages: set = set()
+    meta = {
+        "pages_requested": 0,
+        "pages_rendered": [],
+        "pages_failed": [],
+    }
 
     for passage in passages:
         doc_id = passage.get("document_id")
@@ -353,18 +361,44 @@ def _render_colpali_page_images(
         if page_key in seen_pages:
             continue
         seen_pages.add(page_key)
+        meta["pages_requested"] += 1
         if len(user_images) >= max_images:
             break
         try:
             doc_obj = session.get(Document, doc_id)
-            if doc_obj and doc_obj.source_file_path and os.path.exists(doc_obj.source_file_path):
-                logger.info("Rendu ColPali page %s du document %s", page_no, doc_id)
-                png_bytes = render_pdf_page_png(doc_obj.source_file_path, int(page_no) - 1, dpi=150)
-                user_images.append(base64.b64encode(png_bytes).decode("utf-8"))
+            if not doc_obj or not doc_obj.source_file_path:
+                meta["pages_failed"].append(
+                    {"document_id": doc_id, "page_no": page_no, "reason": "missing_source_file_path"}
+                )
+                continue
+            if not os.path.exists(doc_obj.source_file_path):
+                meta["pages_failed"].append(
+                    {
+                        "document_id": doc_id,
+                        "page_no": page_no,
+                        "reason": "file_not_found",
+                        "path": doc_obj.source_file_path,
+                    }
+                )
+                continue
+            logger.info("Rendu ColPali page %s du document %s", page_no, doc_id)
+            png_bytes = render_pdf_page_png(doc_obj.source_file_path, int(page_no) - 1, dpi=150)
+            user_images.append(base64.b64encode(png_bytes).decode("utf-8"))
+            meta["pages_rendered"].append({"document_id": doc_id, "page_no": int(page_no)})
         except Exception as e:
             logger.error("Erreur rendu page %s (document %s): %s", page_no, doc_id, e)
+            meta["pages_failed"].append(
+                {"document_id": doc_id, "page_no": page_no, "reason": str(e)}
+            )
 
-    return user_images
+    if meta["pages_requested"] and not user_images:
+        logger.warning(
+            "ColPali: %d page(s) retrouvée(s) mais 0 image rendue — le LLM ne recevra pas de vision. failures=%s",
+            meta["pages_requested"],
+            meta["pages_failed"],
+        )
+
+    return user_images, meta
 
 
 @router.post("/spaces/{space_id}/chat/stream")
@@ -438,11 +472,14 @@ async def stream_space_chat_message(
             ],
         })
 
-    user_images = _render_colpali_page_images(
+    user_images, vision_render_meta = _render_colpali_page_images(
         session,
         doc_passages,
         max_images=COLPALI_MAX_IMAGES,
     )
+
+    vision_used = len(user_images) > 0
+    llm_provider = settings.LLM_PROVIDER
 
     full_context: List[dict] = []
     if request.conversation_id:
@@ -467,11 +504,22 @@ async def stream_space_chat_message(
 
     llm_model = (
         settings.VISION_MODEL
-        if user_images and settings.LLM_PROVIDER == "mistral"
+        if vision_used and llm_provider == "mistral"
         else settings.MODEL_FAST
-        if user_images and settings.LLM_PROVIDER == "ollama"
+        if vision_used and llm_provider == "ollama"
         else forced_model
     )
+
+    vision_meta = {
+        "used": vision_used,
+        "nb_images": len(user_images),
+        "model": llm_model,
+        "provider": llm_provider,
+        "pages_retrieved": len(doc_passages),
+        "pages_rendered": vision_render_meta.get("pages_rendered", []),
+        "pages_failed": vision_render_meta.get("pages_failed", []),
+    }
+    logger.info("ColPali vision meta: %s", vision_meta)
 
     _pipeline_inputs_space = {
         "query": request.message,
@@ -609,8 +657,15 @@ async def stream_space_chat_message(
                                 "page_start": p.get("page_start"),
                                 "page_end": p.get("page_end"),
                                 "has_source_file": has_file_by_doc.get(did, False),
+                                "content_type": "colpali_page",
+                                "is_colpali_page": True,
+                                "vision_sent": vision_used,
                             }
                         )
+
+                if sources_data:
+                    yield f"data: {json.dumps({'sources': sources_data})}\n\n"
+                yield f"data: {json.dumps({'vision': vision_meta})}\n\n"
 
                 assistant_message_id = None
                 if request.conversation_id and assistant_response:
@@ -627,8 +682,6 @@ async def stream_space_chat_message(
                     except Exception:
                         logger.exception("Erreur sauvegarde réponse assistant (space chat)")
 
-                if sources_data:
-                    yield f"data: {json.dumps({'sources': sources_data})}\n\n"
                 yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
 
         except MistralRateLimitError as e:
