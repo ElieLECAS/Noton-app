@@ -544,21 +544,44 @@ async def stream_space_chat_message(
                     seen_pages.add(page_key)
                     unique_pages.append(page_key)
         
+        logger.info(
+            "[stream_space_chat_message] Unique pages found for rendering base64 images: %s. Limiting to top 3.",
+            unique_pages,
+        )
         # Limiter aux 3 premières pages les plus pertinentes pour éviter de saturer le contexte
         for did, pno in unique_pages[:3]:
             try:
                 doc_obj = session.get(Document, did)
                 if doc_obj and doc_obj.source_file_path and os.path.exists(doc_obj.source_file_path):
-                    logger.info(f"Rendu visuel de la page {pno} du document {did} pour Llama3.2-Vision...")
+                    logger.info(f"Rendu visuel de la page {pno} du document {did} (chemin: {doc_obj.source_file_path}) pour Llama3.2-Vision...")
                     png_bytes = render_pdf_page_png(doc_obj.source_file_path, pno - 1, dpi=150)
                     base64_img = base64.b64encode(png_bytes).decode("utf-8")
                     user_images.append(base64_img)
+                    logger.info(
+                        "[stream_space_chat_message] Successfully rendered page %s as base64 image (length: %d)",
+                        pno,
+                        len(base64_img),
+                    )
+                else:
+                    logger.warning(
+                        "[stream_space_chat_message] Document %s source file path not found or doesn't exist on disk: %s",
+                        did,
+                        doc_obj.source_file_path if doc_obj else None,
+                    )
             except Exception as e:
-                logger.error(f"Erreur lors du rendu de la page {pno} (document {did}) : {e}")
+                logger.error(f"Erreur lors du rendu de la page {pno} (document {did}) : {e}", exc_info=True)
 
     user_msg = {"role": "user", "content": request.message}
     if user_images:
         user_msg["images"] = user_images
+        logger.info(
+            "[stream_space_chat_message] Appending user message with %d rendered base64 images to full_context_draft",
+            len(user_images),
+        )
+    else:
+        logger.info(
+            "[stream_space_chat_message] Appending user message WITHOUT images to full_context_draft"
+        )
     full_context_draft.append(user_msg)
 
     _pipeline_inputs_space = {

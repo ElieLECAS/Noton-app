@@ -79,6 +79,14 @@ def _retrieve_leaves_sql(
         query_embedding: Ignoré (conservé pour compatibilité de signature)
         document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
     """
+    logger.info(
+        "[_retrieve_leaves_sql] Starting retrieval for space_id=%s, user_id=%s, query_text='%s', candidate_k=%d, document_filter='%s'",
+        space_id,
+        user_id,
+        query_text,
+        candidate_k,
+        document_filter,
+    )
     from app.services.document_service_new import feedback_corrective_sql_filter
 
     filter_clause = feedback_corrective_sql_filter(document_filter, "d")
@@ -92,6 +100,11 @@ def _retrieve_leaves_sql(
           {filter_clause}
     """)
     doc_ids = [row[0] for row in session.execute(sql_docs, {"space_id": space_id})]
+    logger.info(
+        "[_retrieve_leaves_sql] Resolved document IDs in space %s: %s",
+        space_id,
+        doc_ids,
+    )
     if not doc_ids:
         logger.info("LanceDB (space): aucun document correspondant au filtre dans l'espace %s", space_id)
         return []
@@ -100,14 +113,28 @@ def _retrieve_leaves_sql(
     from app.services.colpali_service import embed_query_colpali
     from app.services.lancedb_service import search_colpali_lancedb
     
+    logger.info("[_retrieve_leaves_sql] Generating ColPali query token embeddings...")
     query_token_embeddings = embed_query_colpali(query_text)
+    logger.info(
+        "[_retrieve_leaves_sql] Generated %d query token embeddings for ColPali. Querying LanceDB...",
+        len(query_token_embeddings) if query_token_embeddings else 0,
+    )
     search_results = search_colpali_lancedb(query_token_embeddings, doc_ids, limit=candidate_k)
+    logger.info(
+        "[_retrieve_leaves_sql] LanceDB search returned %d raw colpali patch matches.",
+        len(search_results),
+    )
         
     if not search_results:
+        logger.info("[_retrieve_leaves_sql] No search results returned from LanceDB.")
         return []
 
     # 3. Récupérer les données textuelles complètes et métadonnées depuis PostgreSQL pour les chunks trouvés
     chunk_ids = [row["id"] for row in search_results]
+    logger.info(
+        "[_retrieve_leaves_sql] Fetching details from PostgreSQL for chunk IDs: %s",
+        chunk_ids,
+    )
     sql_chunks = text("""
         SELECT
             dc.id,
@@ -126,6 +153,10 @@ def _retrieve_leaves_sql(
         WHERE dc.id IN :chunk_ids
     """)
     chunk_rows = session.execute(sql_chunks, {"chunk_ids": tuple(chunk_ids)}).all()
+    logger.info(
+        "[_retrieve_leaves_sql] PostgreSQL returned %d rows for chunk details.",
+        len(chunk_rows),
+    )
 
     # Conserver l'ordre trié retourné par LanceDB
     rows_map = {row.id: row for row in chunk_rows}
@@ -135,6 +166,10 @@ def _retrieve_leaves_sql(
         chunk_id = row_lancedb["id"]
         row = rows_map.get(chunk_id)
         if not row:
+            logger.warning(
+                "[_retrieve_leaves_sql] Chunk ID %d found in LanceDB but not found in PostgreSQL!",
+                chunk_id,
+            )
             continue
         
         # LanceDB retourne '_distance' en tant que distance cosinus (1 - cosine_similarity)
@@ -158,7 +193,11 @@ def _retrieve_leaves_sql(
         )
         nodes.append(NodeWithScore(node=node, score=similarity_score))
         
-    logger.info("Vector LanceDB/ColPali (space): %d feuilles (limit=%d)", len(nodes), candidate_k)
+    logger.info(
+        "[_retrieve_leaves_sql] Vector LanceDB/ColPali (space): %d feuilles (limit=%d)",
+        len(nodes),
+        candidate_k,
+    )
     return nodes
 
 

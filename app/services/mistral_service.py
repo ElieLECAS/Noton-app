@@ -175,6 +175,10 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     2. Fusionne les messages consécutifs du même rôle (user/user, assistant/assistant).
     3. S'assure que l'ordre est respecté (system? -> user -> assistant -> user...).
     """
+    logger.info(
+        "[_clean_messages] Cleaning %d messages before sending to Mistral API...",
+        len(messages),
+    )
     if not messages:
         return []
     
@@ -185,6 +189,9 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     idx = 0
     while idx < len(messages) and messages[idx].get("role") == "system":
         content = messages[idx].get("content", "")
+        if isinstance(content, list):
+            text_parts = [part["text"] for part in content if isinstance(part, dict) and part.get("type") == "text"]
+            content = "\n\n".join(text_parts)
         if content:
             system_content.append(content)
         idx += 1
@@ -197,14 +204,53 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         msg = messages[i]
         role = msg.get("role")
         content = msg.get("content", "")
-        if not content:
+        
+        # S'assurer que content est une string propre
+        if isinstance(content, list):
+            text_parts = [part["text"] for part in content if isinstance(part, dict) and part.get("type") == "text"]
+            content_str = "\n\n".join(text_parts)
+        else:
+            content_str = str(content)
+            
+        images = msg.get("images") or []
+        
+        if not content_str.strip() and not images:
             continue
             
         if cleaned and cleaned[-1]["role"] == role:
             # Même rôle que le précédent, on fusionne
-            cleaned[-1]["content"] += "\n\n" + content
+            existing_content = cleaned[-1]["content"]
+            existing_is_list = isinstance(existing_content, list)
+            
+            if existing_is_list or images:
+                # Normaliser l'existant en liste de parties
+                if existing_is_list:
+                    parts = list(existing_content)
+                else:
+                    parts = [{"type": "text", "text": str(existing_content)}]
+                
+                # Ajouter la nouvelle partie texte
+                parts.append({"type": "text", "text": "\n\n" + content_str})
+                
+                # Ajouter les nouvelles images
+                for img in images:
+                    url = img if img.startswith("data:") else f"data:image/png;base64,{img}"
+                    parts.append({"type": "image_url", "image_url": {"url": url}})
+                
+                cleaned[-1]["content"] = parts
+            else:
+                # Fusion classique simple en string
+                cleaned[-1]["content"] += "\n\n" + content_str
         else:
-            cleaned.append({"role": role, "content": content})
+            # Nouveau message
+            if images:
+                parts = [{"type": "text", "text": content_str}]
+                for img in images:
+                    url = img if img.startswith("data:") else f"data:image/png;base64,{img}"
+                    parts.append({"type": "image_url", "image_url": {"url": url}})
+                cleaned.append({"role": role, "content": parts})
+            else:
+                cleaned.append({"role": role, "content": content_str})
     
     # Mistral demande que ça commence par user (si pas de system) ou que ça suive system
     # Si le premier après system est un assistant, on l'ignore ou on l'insère après un user vide
@@ -214,7 +260,30 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     elif cleaned and cleaned[0]["role"] == "assistant":
         cleaned.insert(0, {"role": "user", "content": "(Début de la conversation)"})
         
+    # Log the summary of cleaned messages
+    for idx_msg, m in enumerate(cleaned):
+        role = m.get("role")
+        c = m.get("content")
+        if isinstance(c, list):
+            num_images = sum(1 for part in c if part.get("type") == "image_url")
+            text_lens = sum(len(part.get("text", "")) for part in c if part.get("type") == "text")
+            logger.info(
+                "[_clean_messages] Msg #%d: role=%s, content=LIST containing %d images (base64) successfully prepared for LLM vision! (text length: %d)",
+                idx_msg,
+                role,
+                num_images,
+                text_lens,
+            )
+        else:
+            logger.info(
+                "[_clean_messages] Msg #%d: role=%s, content=STRING [len=%d]",
+                idx_msg,
+                role,
+                len(str(c)),
+            )
+        
     return cleaned
+
 
 async def chat_stream(
     message: str,

@@ -38,10 +38,10 @@ def get_lancedb_client():
 
 def get_colpali_table():
     get_lancedb_client()
-    global _colpali_table
-    if _colpali_table is None and _db is not None:
-        _colpali_table = _db.open_table("colpali_patches")
-    return _colpali_table
+    global _db
+    if _db is not None:
+        return _db.open_table("colpali_patches")
+    return None
 
 def insert_colpali_patches_lancedb(document_id: int, chunk_id: int, patch_vectors: List[List[float]]):
     """
@@ -91,7 +91,14 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
     Performs late interaction (MaxSim) search on ColPali patches table.
     query_token_embeddings: List of token embeddings [num_tokens, 128]
     """
+    logger.info(
+        "[search_colpali_lancedb] Starting MaxSim search for %d query tokens, limiting to %d documents (ids: %s)",
+        len(query_token_embeddings) if query_token_embeddings else 0,
+        len(document_ids) if document_ids else 0,
+        document_ids,
+    )
     if not document_ids or not query_token_embeddings:
+        logger.warning("[search_colpali_lancedb] Missing document_ids or query_token_embeddings, aborting.")
         return []
     try:
         table = get_colpali_table()
@@ -106,7 +113,12 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
                 r["query_token_index"] = token_idx
                 candidate_patches.append(r)
                 
+        logger.info(
+            "[search_colpali_lancedb] Retained %d total candidate patches across all query tokens.",
+            len(candidate_patches),
+        )
         if not candidate_patches:
+            logger.info("[search_colpali_lancedb] No candidate patches found in table 'colpali_patches'.")
             return []
             
         # 2. Compute MaxSim per chunk: sum_{query_token} max_{patch} similarity(query_token, patch)
@@ -122,6 +134,10 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
             if token_idx not in chunk_scores[chunk_id] or sim > chunk_scores[chunk_id][token_idx]:
                 chunk_scores[chunk_id][token_idx] = sim
                 
+        logger.info(
+            "[search_colpali_lancedb] Computed MaxSim similarities for %d unique chunks.",
+            len(chunk_scores),
+        )
         # 3. Sum up the maximum similarities and format as list of dicts with calculated distance
         final_results = []
         num_query_tokens = len(query_token_embeddings)
@@ -138,6 +154,10 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
             })
             
         final_results.sort(key=lambda x: x["_distance"])
+        logger.info(
+            "[search_colpali_lancedb] Sorted results. Top 5 match distances: %s",
+            [round(r["_distance"], 4) for r in final_results[:5]],
+        )
         return final_results[:limit]
     except Exception as e:
         logger.error(f"Error executing ColPali MaxSim search in LanceDB: {e}", exc_info=True)

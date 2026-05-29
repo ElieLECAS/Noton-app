@@ -119,7 +119,7 @@ class Settings(BaseSettings):
     LANGCHAIN_PROJECT: str = "noton-rag"
 
     # Reranker cross-encoder (CPU-only)
-    RERANKER_ENABLED: bool = True
+    RERANKER_ENABLED: bool = False
     RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     RERANK_POOL: int = 100  # Augmenté à 100 pour une couverture élargie
     RERANK_CHAR_CAP: int = 1700  # ~485 tokens (ratio FR 3.5 chars/token, marge vs max_length=512)

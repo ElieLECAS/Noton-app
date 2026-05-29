@@ -91,6 +91,7 @@ x-app-volumes: &app-volumes
   - ./tests:/app/tests
   - ./app/pytest.ini:/app/pytest.ini
   - hf_cache:/root/.cache/huggingface
+  - ./data:/app/data
 
 services:
   db:
