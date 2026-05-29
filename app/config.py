@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     # Mistral
     MISTRAL_API_KEY: Optional[str] = None
     MISTRAL_BASE_URL: str = os.getenv("MISTRAL_BASE_URL", "https://api.mistral.ai")
+    MISTRAL_MAX_RETRIES: int = 5
+    MISTRAL_RETRY_BACKOFF_BASE: float = 2.0
     
     # OpenAI
     OPENAI_API_KEY: Optional[str] = None

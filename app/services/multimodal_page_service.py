@@ -1180,8 +1180,8 @@ def _mistral_chat_completion(
 
     import random
 
-    max_attempts = 4
-    backoff_base = 2.0
+    max_attempts = getattr(settings, "MISTRAL_MAX_RETRIES", 5) or 5
+    backoff_base = getattr(settings, "MISTRAL_RETRY_BACKOFF_BASE", 2.0) or 2.0
     retryable_codes = {429, 500, 502, 503, 504}
     last_exception = None
     for attempt in range(1, max_attempts + 1):
@@ -1203,14 +1203,40 @@ def _mistral_chat_completion(
         except httpx.HTTPStatusError as e:
             last_exception = e
             if e.response.status_code in retryable_codes and attempt < max_attempts:
-                wait = backoff_base * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
+                wait = backoff_base * (2 ** (attempt - 1))
+                if e.response.status_code == 429:
+                    retry_after = e.response.headers.get("Retry-After") or e.response.headers.get("x-ratelimit-retry-after-seconds")
+                    if retry_after:
+                        try:
+                            wait = max(float(retry_after), 0.5)
+                            logger.info("429 Too Many Requests pour la page %s: respect du Retry-After = %.2fs", page_no, wait)
+                        except ValueError:
+                            pass
+                    else:
+                        wait = wait * 1.5
+                wait = wait + random.uniform(0.1, 0.9)
+                logger.warning(
+                    "Appel Mistral (page %s) échoué avec statut %s, tentative %s/%s. Attente de %.2fs avant nouvel essai...",
+                    page_no,
+                    e.response.status_code,
+                    attempt,
+                    max_attempts,
+                    wait
+                )
                 time.sleep(wait)
                 continue
             raise
         except (httpx.RequestError, RuntimeError) as e:
             last_exception = e
             if attempt < max_attempts:
-                wait = backoff_base * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
+                wait = backoff_base * (2 ** (attempt - 1)) + random.uniform(0.1, 0.9)
+                logger.warning(
+                    "Appel Mistral (page %s) échoué avec erreur de requête, tentative %s/%s. Attente de %.2fs avant nouvel essai...",
+                    page_no,
+                    attempt,
+                    max_attempts,
+                    wait
+                )
                 time.sleep(wait)
                 continue
             raise

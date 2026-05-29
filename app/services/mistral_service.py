@@ -11,8 +11,8 @@ from app.services.chat_tools import run_tool, get_web_search_system_prompt
 
 logger = logging.getLogger(__name__)
 
-MAX_RETRIES = 4
-RETRY_BACKOFF_BASE_SECONDS = 2.0
+MAX_RETRIES = getattr(settings, "MISTRAL_MAX_RETRIES", 5) or 5
+RETRY_BACKOFF_BASE_SECONDS = getattr(settings, "MISTRAL_RETRY_BACKOFF_BASE", 2.0) or 2.0
 RETRYABLE_STATUS_CODES = frozenset({429, 500, 502, 503, 504})
 
 
