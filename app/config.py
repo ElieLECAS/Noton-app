@@ -55,7 +55,7 @@ class Settings(BaseSettings):
     FAQ_CORRECTIVE_TITLE_PREFIX: str = "FAQ Corrective"
     FAQ_TOP_K: int = 3
     FAQ_MIN_SIMILARITY: float = 0.30
-    FAQ_POST_DRAFT_ENABLED: bool = True
+    FAQ_POST_DRAFT_ENABLED: bool = False
     
     # Brave Search (recherche web pour function calling)
     BRAVE_SEARCH_API_KEY: Optional[str] = None
@@ -110,7 +110,7 @@ class Settings(BaseSettings):
     # Reranker cross-encoder (CPU-only)
     RERANKER_ENABLED: bool = True
     RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-    RERANK_POOL: int = 30  # Réduit de 50 → 30 pour MiniLM CPU (latence vs qualité)
+    RERANK_POOL: int = 100  # Augmenté à 100 pour une couverture élargie
     RERANK_CHAR_CAP: int = 1700  # ~485 tokens (ratio FR 3.5 chars/token, marge vs max_length=512)
     RERANK_BATCH_SIZE: int = 16
     EARLY_STOP_ENABLED: bool = False  # Early stop désactivé par défaut (latence CPU acceptable)
@@ -122,6 +122,7 @@ class Settings(BaseSettings):
     STUTTER_GAP: float = 0.05
     ZSCORE_FLAT_THRESHOLD: float = 0.05
     RERANKER_MIN_SCORE: float = -3.0
+    RAG_MIN_PERTINENCE: float = 0.75
 
     BM25_MAX_QUERY_TERMS: int = 15
 

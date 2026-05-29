@@ -16,6 +16,7 @@ Métriques de troncature :
 from __future__ import annotations
 
 import logging
+import math
 import threading
 from dataclasses import dataclass
 from typing import List, Literal, Optional, Tuple
@@ -157,6 +158,36 @@ def should_early_stop(rrf_scores: List[float], threshold: float) -> bool:
     return should_stop
 
 
+def _extract_strict_constraints(query: str) -> List[str]:
+    import re
+    # 1. Dimensions avec unités comme "300 mm", "2.40 m", "5mm", "-2 mm", "2000 mm"
+    # Matches a number (optionally signed, decimal) followed by optional spaces and a unit (mm, cm, m)
+    dimensions = re.findall(r"\b-?\d+(?:[\.,]\d+)?\s*(?:mm|cm|m)\b", query, re.IGNORECASE)
+    
+    # 2. Codes alphanumériques contenant à la fois des lettres et des chiffres
+    # ex: T141019, DTU36.5, Perform70, etc.
+    alphanumerics = []
+    for word in re.findall(r"\b[A-Za-z0-9\.\-]+\b", query):
+        if any(c.isalpha() for c in word) and any(c.isdigit() for c in word):
+            alphanumerics.append(word)
+            
+    constraints = []
+    for d in dimensions:
+        constraints.append(d.strip())
+    for a in alphanumerics:
+        if a not in constraints:
+            constraints.append(a)
+    return list(set(constraints))
+
+
+def _check_constraint_in_text(constraint: str, text: str) -> bool:
+    import re
+    # Supprimer les espaces pour comparer (ex: "300 mm" -> "300mm")
+    norm_c = re.sub(r"\s+", "", constraint).lower()
+    norm_t = re.sub(r"\s+", "", text).lower()
+    return norm_c in norm_t
+
+
 async def rerank_nodes(
     query_text: str,
     nodes_with_score: List[NodeWithScore],
@@ -230,8 +261,24 @@ async def rerank_nodes(
         if len(_truncation_stats["rerank_latencies"]) > 1000:
             _truncation_stats["rerank_latencies"] = _truncation_stats["rerank_latencies"][-1000:]
     
-    # Associer chaque nœud à son score
-    scored = list(zip(nodes_with_score, raw_scores))
+    # Extraire les contraintes strictes de la requête
+    constraints = _extract_strict_constraints(query_text)
+    
+    # Associer chaque nœud à son score en appliquant la pénalité si des contraintes manquent
+    scored = []
+    for nws, score in zip(nodes_with_score, raw_scores):
+        text = getattr(nws.node, "text", "") or ""
+        final_score = float(score)
+        if constraints:
+            missing = [c for c in constraints if not _check_constraint_in_text(c, text)]
+            if missing:
+                final_score -= 8.0  # Pénalité agressive
+                logger.info(
+                    "Node %s pénalisé (%.3f -> %.3f) par manque de contraintes exactes : %s",
+                    getattr(nws.node, "id_", "unknown"), score, final_score, missing
+                )
+        scored.append((nws, final_score))
+        
     # Trier par score décroissant
     scored.sort(key=lambda x: x[1], reverse=True)
     
@@ -301,14 +348,23 @@ def apply_dynamic_filtering(
     
     raw_scores = [s for _, s in scored]
     
-    # Filtrer par score cross-encoder minimum
+    # Filtrer par score cross-encoder minimum et score de pertinence minimum (sigmoïde)
     min_score = getattr(settings, "RERANKER_MIN_SCORE", -3.0)
-    scored_filtered = [item for item in scored if item[1] >= min_score]
+    min_pertinence = getattr(settings, "RAG_MIN_PERTINENCE", 0.75)
     
+    scored_filtered = []
+    for nws, score_val in scored:
+        # Calibrer le logit en ajoutant +1.5 avant d'appliquer la sigmoïde
+        # pour mapper les logits modérément pertinents (ex: -0.275 -> ~77.3%) au-dessus du seuil de 75%
+        sigmoid_score = 1.0 / (1.0 + math.exp(-(score_val + 1.5)))
+        nws.score = sigmoid_score
+        if score_val >= min_score and sigmoid_score >= min_pertinence:
+            scored_filtered.append((nws, score_val))
+            
     if not scored_filtered:
         logger.info(
-            "Rerank filtrage: aucun candidat au-dessus du seuil %s (meilleur score: %s)",
-            min_score,
+            "Rerank filtrage: aucun candidat au-dessus du seuil de pertinence %s (meilleur score raw: %s)",
+            min_pertinence,
             raw_scores[0] if raw_scores else None,
         )
         return RerankResult(

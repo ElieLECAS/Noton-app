@@ -201,6 +201,7 @@ def test_apply_dynamic_filtering_filters_below_threshold():
     
     with patch("app.services.reranker_service.settings") as mock_settings:
         mock_settings.RERANKER_MIN_SCORE = -3.0
+        mock_settings.RAG_MIN_PERTINENCE = 0.0
         result = reranker_service.apply_dynamic_filtering(
             scored,
             min_k=1,
@@ -218,6 +219,7 @@ def test_apply_dynamic_filtering_filters_below_threshold():
     scored_all_low = [(nodes[0], -4.0), (nodes[1], -4.5)]
     with patch("app.services.reranker_service.settings") as mock_settings:
         mock_settings.RERANKER_MIN_SCORE = -3.0
+        mock_settings.RAG_MIN_PERTINENCE = 0.0
         result_all_low = reranker_service.apply_dynamic_filtering(
             scored_all_low,
             min_k=1,
@@ -229,4 +231,36 @@ def test_apply_dynamic_filtering_filters_below_threshold():
     assert result_all_low.status == "ok"
     assert len(result_all_low.nodes) == 0
     assert result_all_low.reason == "no_candidates_above_threshold"
+
+
+def test_apply_dynamic_filtering_filters_below_rag_min_pertinence():
+    """Vérifier que les candidats sous le seuil RAG_MIN_PERTINENCE sont filtrés et que nws.score est normalisé."""
+    nodes = [
+        NodeWithScore(node=TextNode(id_="chunk-1", text="doc1", metadata={}), score=0.0),
+        NodeWithScore(node=TextNode(id_="chunk-2", text="doc2", metadata={}), score=0.0),
+    ]
+    # logit de -0.2 -> sigmoid(-0.2 + 1.5) = sigmoid(1.3) = 0.785 -> passe le seuil de 0.75
+    # logit de -1.5 -> sigmoid(-1.5 + 1.5) = sigmoid(0) = 0.50 -> filtré par le seuil de 0.75
+    scored = [(nodes[0], -0.2), (nodes[1], -1.5)]
+    
+    with patch("app.services.reranker_service.settings") as mock_settings:
+        mock_settings.RERANKER_MIN_SCORE = -10.0
+        mock_settings.RAG_MIN_PERTINENCE = 0.75
+        result = reranker_service.apply_dynamic_filtering(
+            scored,
+            min_k=1,
+            max_k=12,
+            softmax_cum_threshold=0.80,
+            stutter_gap=0.05,
+            zscore_flat_threshold=0.05,
+        )
+        
+    assert result.status == "ok"
+    assert len(result.nodes) == 1
+    assert result.nodes[0].id_ == "chunk-1"
+    # Vérifier la normalisation sigmoïde calibrée du score
+    import math
+    expected_score = 1.0 / (1.0 + math.exp(-(-0.2 + 1.5)))
+    assert math.isclose(result.nodes[0].score, expected_score)
+
 

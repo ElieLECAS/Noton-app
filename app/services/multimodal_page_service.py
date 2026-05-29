@@ -575,10 +575,12 @@ Règles absolues pour `raw_text` :
 3. Tableaux : Transcris SYSTEMATIQUEMENT tous les tableaux sous forme de tableaux Markdown réglementaires (avec séparateurs pipe '|' et ligne d'alignement '|---|---|'). Assure-toi que chaque ligne et colonne soit parfaitement alignée, sans coupure de ligne accidentelle ou perte de données.
 4. Éléments visuels / schémas / plans : Pour chaque dessin technique, schéma, photo, logo, ou plan présent sur l'image, insère à l'emplacement logique de lecture un bloc explicite formaté ainsi :
    `[Image: description technique détaillée]`
-   Dans cette description, tu dois STRICTEMENT :
-   - Transcrire et lister explicitement TOUTES les annotations textuelles, cotes, valeurs numériques, unités, légendes, références de produits ou de normes visibles dans l'élément visuel.
-   - Décrire de manière formelle et fonctionnelle l'assemblage, les liaisons géométriques, l'emplacement des pièces et la structure montrée (ex: "La pièce X s'emboîte sur la rainure de la pièce Y", "Le joint d'étanchéité Z est collé sur la lèvre A", "La flèche indique le sens d'insertion du profilé B").
-   - INTERDICTION D'EXTRAPOLER OU DE SUR-INTERPRÉTER : N'invente aucun rôle, fonction ou contexte d'application non écrit. Si une pièce/système n'est pas explicitement nommée ou décrite sur la page comme servant à un usage précis (ex: "cloison de bureau"), ne le mentionne sous aucun prétexte. N'utilise pas tes connaissances externes sur les marques ou produits (ex: Technal, LUMEAL). Reste purement factuel, visuel et littéral.
+   Dans cette description, tu dois STRICTEMENT structurer ton analyse selon ce modèle :
+   - TYPE & SUJET : Identifier la nature exacte du visuel (ex: Coupe technique de profilé, schéma de montage éclaté, schéma de principe, logigramme, photo de chantier).
+   - AGENCEMENT SPATIAL (OCR SPATIAL) : Décrire l'organisation géométrique et spatiale de l'image (ex: au centre, en haut à gauche, alignement vertical/horizontal). Segmenter la description pour lister l'agencement relatif des pièces de manière ordonnée (ex: de l'intérieur vers l'extérieur).
+   - GRAPHE DE CONNEXIONS & COTES : Pour CHAQUE cote, annotation de tolérance, unité ou référence visible dans le schéma, tu dois l'extraire littéralement et décrire précisément les deux éléments physiques ou lignes de repère qu'elle relie ou l'élément exact pointé par la flèche (ex: "La cote '5mm' est positionnée horizontalement entre la lèvre du joint et la butée du dormant").
+   - COMPOSANTS & INTERACTIONS : Décrire les composants visibles et leurs interactions physiques/mécaniques (emboîtement, vissage, contact, superposition), de manière purement visuelle et factuelle.
+   - HARD GROUNDING STRICT ET INTERDICTION D'EXTRAPOLER : N'invente aucun rôle, aucune fonction, aucun nom de produit, aucune marque commerciale et aucun contexte d'application non écrit ou non illustré. Ne fais aucune hypothèse basée sur tes connaissances externes. Reste strictement factuel, visuel et littéral.
 5. Langue : Rédige le résultat en Français.
 6. Rigueur : Si un texte est flou ou illisible, écris "[zone illisible]".
 """
@@ -601,10 +603,12 @@ Règles STRICTES pour raw_text :
 - Conserver une structure Markdown ultra-propre : Utilise des titres (#, ##, ###) pour délimiter les sections et organise proprement les textes et listes à puces.
 - Tableaux : Transcris les tableaux sous forme de tableaux Markdown avec séparateurs pipes (|) et ligne d'alignement (|---|---|) en veillant à la propreté de la mise en forme.
 - Parcourir le PNG et insérer à l'emplacement logique des blocs [Image: description technique détaillée] pour chaque schéma, photo, plan, dessin technique ou tableau visuel ABSENT du pymupdf.
-- Pour chaque schéma ou image technique, la description dans `[Image: ...]` doit impérativement :
-  - Transcrire et lister explicitement TOUTES les annotations textuelles, cotes, valeurs numériques, unités, légendes, références de produits ou de normes visibles dans l'élément visuel.
-  - Décrire de manière formelle et fonctionnelle l'assemblage, les liaisons géométriques, l'emplacement des pièces et la structure montrée (ex: "La pièce X s'emboîte sur la rainure de la pièce Y", "Le joint d'étanchéité Z est collé sur la lèvre A").
-  - INTERDICTION D'EXTRAPOLER OU DE SUR-INTERPRÉTER : N'invente aucun rôle, fonction ou contexte d'application non écrit. Si une pièce/système n'est pas explicitement nommée ou décrite sur la page comme servant à un usage précis, ne l'invente pas. Ne fais aucune hypothèse basée sur des connaissances externes. Reste purement factuel, visuel et littéral.
+- Pour chaque schéma ou image technique, la description dans `[Image: ...]` doit impérativement être structurée selon ce modèle :
+  - TYPE & SUJET : Identifier la nature exacte du visuel (ex: Coupe technique de profilé, schéma de montage éclaté, schéma de principe, logigramme, photo de chantier).
+  - AGENCEMENT SPATIAL (OCR SPATIAL) : Décrire l'organisation géométrique et spatiale de l'image (ex: au centre, en haut à gauche, alignement vertical/horizontal). Segmenter la description pour lister l'agencement relatif des pièces de manière ordonnée (ex: de l'intérieur vers l'extérieur).
+  - GRAPHE DE CONNEXIONS & COTES : Pour CHAQUE cote, annotation de tolérance, unité ou référence visible dans le schéma, tu dois l'extraire littéralement et décrire précisément les deux éléments physiques ou lignes de repère qu'elle relie ou l'élément exact pointé par la flèche (ex: "La cote '5mm' est positionnée horizontalement entre la lèvre du joint et la butée du dormant").
+  - COMPOSANTS & INTERACTIONS : Décrire les composants visibles et leurs interactions physiques/mécaniques (emboîtement, vissage, contact, superposition), de manière purement visuelle et factuelle.
+  - HARD GROUNDING STRICT ET INTERDICTION D'EXTRAPOLER : N'invente aucun rôle, aucune fonction, aucun nom de produit, aucune marque commerciale et aucun contexte d'application non écrit ou non illustré. Ne fais aucune hypothèse basée sur tes connaissances externes. Reste strictement factuel, visuel et littéral.
 - Ne pas supprimer de contenu pymupdf.
 - Français ; n'invente rien ; « illisible » si zone floue."""
 
@@ -619,10 +623,12 @@ Règles pour raw_text :
 - Structure Markdown Propre : Utilise des titres (#, ##, ###) pour structurer le document et sépare proprement les paragraphes et listes à puces.
 - Tableaux : Transcris tous les tableaux sous forme de tableaux Markdown réglementaires (avec séparateurs pipe '|' et ligne d'alignement '|---|---|') de manière parfaitement propre et lisible.
 - Pour chaque schéma/image : [Image: description technique détaillée].
-  Dans cette description, tu dois STRICTEMENT :
-  - Transcrire et lister explicitement TOUTES les annotations textuelles, cotes, valeurs numériques, unités, légendes, références de produits ou de normes visibles dans l'élément visuel.
-  - Décrire de manière formelle et fonctionnelle l'assemblage, les liaisons géométriques, l'emplacement des pièces et la structure montrée (ex: "La pièce X s'emboîte sur la rainure de la pièce Y", "Le joint d'étanchéité Z est collé sur la lèvre A").
-  - INTERDICTION D'EXTRAPOLER OU DE SUR-INTERPRÉTER : N'invente aucun rôle, fonction ou contexte d'application non écrit. Si une pièce/système n'est pas explicitement nommée ou décrite sur la page comme servant à un usage précis, ne le mentionne sous aucun prétexte. Reste purement factuel, visuel et littéral.
+  Dans cette description, tu dois STRICTEMENT structurer ton analyse selon ce modèle :
+  - TYPE & SUJET : Identifier la nature exacte du visuel (ex: Coupe technique de profilé, schéma de montage éclaté, schéma de principe, logigramme, photo de chantier).
+  - AGENCEMENT SPATIAL (OCR SPATIAL) : Décrire l'organisation géométrique et spatiale de l'image (ex: au centre, en haut à gauche, alignement vertical/horizontal). Segmenter la description pour lister l'agencement relatif des pièces de manière ordonnée (ex: de l'intérieur vers l'extérieur).
+  - GRAPHE DE CONNEXIONS & COTES : Pour CHAQUE cote, annotation de tolérance, unité ou référence visible dans le schéma, tu dois l'extraire littéralement et décrire précisément les deux éléments physiques ou lignes de repère qu'elle relie ou l'élément exact pointé par la flèche (ex: "La cote '5mm' est positionnée horizontalement entre la lèvre du joint et la butée du dormant").
+  - COMPOSANTS & INTERACTIONS : Décrire les composants visibles et leurs interactions physiques/mécaniques (emboîtement, vissage, contact, superposition), de manière purement visuelle et factuelle.
+  - HARD GROUNDING STRICT ET INTERDICTION D'EXTRAPOLER : N'invente aucun rôle, aucune fonction, aucun nom de produit, aucune marque commerciale et aucun contexte d'application non écrit ou non illustré. Ne fais aucune hypothèse basée sur tes connaissances externes. Reste strictement factuel, visuel et littéral.
 - Français ; n'invente rien."""
 
 _RAW_SCHEMA_RETRY_PROMPT = """IMPORTANT: Retourne UNIQUEMENT un JSON strict {"page_no": int, "raw_text": "..."}."""
@@ -644,7 +650,7 @@ Réponds UNIQUEMENT avec un JSON valide :
       "report": "<rapport dense, explicite>",
       "references": ["<référence nommée>", ...],
       "keywords": ["..."],
-      "norms": ["NF EN ...", "DTU ..."],
+      "norms": ["<norme complète si présente>", ...],
       "constraints": ["<contrainte chiffrée avec unité>", ...],
       "dependencies": ["..."]
     }
@@ -654,9 +660,10 @@ Réponds UNIQUEMENT avec un JSON valide :
 Règles STRICTES :
 - Produire 1 à 6 rapports selon la complexité (thèmes distincts).
 - INTERDIT : « ce profil », « cette section », « ci-dessus », pronoms sans antécédent nommé.
-- OBLIGATION : nommer produits, références catalogue, normes complètes, valeurs + unités + pages sources.
+- OBLIGATION : nommer uniquement les produits, références catalogue, normes complètes, valeurs, unités et pages sources explicitement mentionnés dans le texte fourni. Ne jamais inventer ou extrapoler de telles références.
 - Chaque assertion technique doit être explicite et actionnable.
-- Français ; n'invente rien hors du texte fourni."""
+- HARD GROUNDING STRICT : Interdiction absolue d'inventer, d'extrapoler ou d'introduire des connaissances externes. Toute information présente dans le rapport ou dans les tableaux de métadonnées (références, normes, contraintes) doit provenir directement et exclusivement du texte fourni.
+- Langue : Français."""
 
 _USER_PROMPT_NATIVE = """Document : {title}
 Page : {page_no}

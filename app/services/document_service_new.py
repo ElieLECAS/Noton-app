@@ -35,10 +35,7 @@ def is_feedback_corrective_document(doc: Document) -> bool:
 def feedback_corrective_sql_filter(document_filter: str, table_alias: str = "d") -> str:
     """
     Clause SQL brute pour filtrer les documents correctifs (retrieval RAG).
-    document_filter: 'technical' | 'faq_corrective' | autre (vide).
     """
-    if document_filter not in ("technical", "faq_corrective"):
-        return ""
     prefix = settings.FEEDBACK_KNOWLEDGE_TITLE_PREFIX.replace("'", "''")
     legacy = LEGACY_FEEDBACK_TITLE_PREFIX.replace("'", "''")
     t = table_alias
@@ -47,9 +44,10 @@ def feedback_corrective_sql_filter(document_filter: str, table_alias: str = "d")
         f"OR {t}.title LIKE '{prefix}%' "
         f"OR {t}.title LIKE '{legacy}%')"
     )
-    if document_filter == "technical":
-        return f"AND NOT {include}"
-    return f"AND {include}"
+    if document_filter == "faq_corrective":
+        return f"AND {include}"
+    # Par défaut, on exclut systématiquement les correctifs/feedbacks de toutes les recherches
+    return f"AND NOT {include}"
 
 
 def _exclude_feedback_corrective_where():

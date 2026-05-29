@@ -388,93 +388,167 @@ def _parse_chunk_id_from_node(node: TextNode) -> Optional[int]:
     return None
 
 
-def _build_parent_node_dict(
-    session: Session, space_id: int, user_id: int
-) -> Dict[str, TextNode]:
-    statement = (
-        select(DocumentChunk, Document.title)
-        .join(Document, Document.id == DocumentChunk.document_id)
-        .join(DocumentSpace, DocumentSpace.document_id == Document.id)
-        .where(
-            DocumentSpace.space_id == space_id,
-            DocumentChunk.is_leaf.is_(False),
-        )
-    )
-    rows = session.exec(statement).all()
-    node_dict: Dict[str, TextNode] = {}
-    for chunk, document_title in rows:
-        metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        metadata.setdefault("document_id", chunk.document_id)
-        metadata.setdefault("document_title", document_title or "Document sans titre")
-        metadata.setdefault("chunk_index", chunk.chunk_index)
-        llama_id = f"chunk-{chunk.id}"
-        node = TextNode(
-            id_=llama_id,
-            text=chunk.content or chunk.text or "",
-            metadata=metadata,
-        )
-        if chunk.node_id:
-            node_dict[str(chunk.node_id)] = node
-        node_dict[llama_id] = node
-    logger.info("Parents chargés (space): %d", len(rows))
-    return node_dict
-
-
-_PARENT_MULTIHOP_MAX = 4
-
-
-def _resolve_space_parent_with_multihop(
+def _augment_and_format_passages(
     session: Session,
-    space_id: int,
-    user_id: int,
-    document_id: Optional[int],
-    parent_node_id: Optional[str],
-    parent_node_dict: Dict[str, TextNode],
-) -> Optional[TextNode]:
-    if not parent_node_id or document_id is None:
-        return None
-    if parent_node_id in parent_node_dict:
-        return None
+    nodes: List[NodeWithScore],
+    k: int,
+) -> List[Dict]:
+    """
+    Augmente et formate les passages après reranking / sélection finale.
+    Regroupe et déduplique par window_id (pour la v4) ou par (document_id, chunk_index) pour le reste.
+    Charge tout le contexte de la page/fenêtre ou les chunks adjacents pour ne pas tronquer l'information.
+    """
+    passages: List[Dict] = []
+    seen_windows = set()
+    seen_chunk_ids = set()
 
-    intermediates: List[str] = []
-    current_pid: Optional[str] = parent_node_id
-    hops = 0
-
-    while current_pid and hops < _PARENT_MULTIHOP_MAX:
-        hops += 1
-        stmt = (
-            select(DocumentChunk, Document.title)
-            .join(Document, Document.id == DocumentChunk.document_id)
-            .join(DocumentSpace, DocumentSpace.document_id == Document.id)
-            .where(
-                DocumentSpace.space_id == space_id,
-                DocumentChunk.document_id == document_id,
-                Document.user_id == user_id,
-                DocumentChunk.node_id == current_pid,
+    for nws in nodes:
+        node = nws.node
+        score = nws.score
+        meta = dict(node.metadata or {})
+        
+        doc_id = meta.get("document_id")
+        wid = meta.get("window_id")
+        chunk_id = _parse_chunk_id_from_node(node)
+        
+        # 1. Cas Multimodal v4 (avec window_id)
+        if wid and doc_id is not None:
+            if wid in seen_windows:
+                continue
+            seen_windows.add(wid)
+            
+            # Récupérer tous les chunks de la même fenêtre
+            stmt = select(DocumentChunk).where(
+                DocumentChunk.document_id == doc_id,
+                text("(coalesce(metadata_json->>'window_id', metadata_->>'window_id')) = :window_id")
             )
-        )
-        row = session.exec(stmt).first()
-        if not row:
+            window_chunks = session.execute(stmt, {"window_id": wid}).scalars().all()
+            
+            # Séparer reports et raw text
+            report_contents = []
+            raw_contents = []
+            
+            # Trier pour conserver l'ordre de lecture
+            sorted_chunks = sorted(window_chunks, key=lambda c: (c.chunk_index or 0, c.id or 0))
+            
+            doc_title = meta.get("document_title") or "Document sans titre"
+            page_start = meta.get("page_start") or meta.get("page_no") or 0
+            page_end = meta.get("page_end") or page_start
+            
+            for chunk in sorted_chunks:
+                chunk_meta = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
+                ctype = chunk_meta.get("content_type")
+                content_text = (chunk.content or chunk.text or "").strip()
+                if not content_text:
+                    continue
+                
+                if ctype == "page_window_report":
+                    report_contents.append(content_text)
+                else:
+                    raw_contents.append(content_text)
+            
+            # Si pas de raw trouvé, utiliser le contenu du nœud actuel comme fallback
+            if not raw_contents:
+                raw_contents.append((node.get_content() if hasattr(node, "get_content") else str(node)).strip())
+                
+            joined_reports = "\n\n".join(report_contents).strip()
+            joined_raw = "\n\n".join(raw_contents).strip()
+            
+            # Formatage propre de liaison
+            parts = []
+            if joined_reports:
+                parts.append("--- RAPPORT DE SYNTHÈSE DE LA FENÊTRE ---")
+                parts.append(joined_reports)
+            parts.append("--- TEXTE BRUT DU DOCUMENT ---")
+            parts.append(joined_raw)
+            
+            augmented_content = "\n\n".join(parts)
+            passage_text = f"**{doc_title}**\n{augmented_content}"
+            
+            out = {
+                "passage": passage_text,
+                "passage_raw": joined_raw,
+                "document_title": doc_title,
+                "document_id": doc_id,
+                "chunk_id": chunk_id,
+                "chunk_index": int(meta.get("chunk_index", 0)),
+                "score": float(score),
+                "page_no": page_start,
+                "page_start": page_start,
+                "page_end": page_end,
+                "section": meta.get("parent_heading") or meta.get("heading"),
+                "source": meta.get("source"),
+                "content_type": "augmented_multimodal_window",
+            }
+            if meta.get("row_index") is not None:
+                out["row_index"] = meta.get("row_index")
+            if meta.get("table_id"):
+                out["table_id"] = meta.get("table_id")
+            raw_rrf = meta.get("raw_rrf_score")
+            if raw_rrf is not None:
+                out["raw_rrf_score"] = float(raw_rrf)
+                
+            passages.append(out)
+            
+        # 2. Cas classique / Legacy / FAQ (sans window_id)
+        else:
+            if chunk_id is not None:
+                if chunk_id in seen_chunk_ids:
+                    continue
+                seen_chunk_ids.add(chunk_id)
+            
+            # Essayer d'augmenter avec les chunks adjacents (+/- 1) du même document
+            chunk_index = meta.get("chunk_index")
+            doc_title = meta.get("document_title") or "Document sans titre"
+            node_text = (node.get_content() if hasattr(node, "get_content") else str(node)).strip()
+            
+            if doc_id is not None and chunk_index is not None:
+                # Récupérer chunk_index - 1, chunk_index, chunk_index + 1
+                stmt = select(DocumentChunk).where(
+                    DocumentChunk.document_id == doc_id,
+                    DocumentChunk.chunk_index.in_([chunk_index - 1, chunk_index, chunk_index + 1])
+                )
+                adj_chunks = session.execute(stmt).scalars().all()
+                sorted_adj = sorted(adj_chunks, key=lambda c: c.chunk_index)
+                
+                joined_text = "\n\n".join([(c.content or c.text or "").strip() for c in sorted_adj if (c.content or c.text or "").strip()])
+                if not joined_text:
+                    joined_text = node_text
+            else:
+                joined_text = node_text
+                
+            passage_text = f"**{doc_title}**\n{joined_text}"
+            
+            out = {
+                "passage": passage_text,
+                "passage_raw": node_text,
+                "document_title": doc_title,
+                "document_id": doc_id,
+                "chunk_id": chunk_id,
+                "chunk_index": int(chunk_index or 0),
+                "score": float(score),
+                "page_no": meta.get("page_no") or meta.get("page_start"),
+                "page_start": meta.get("page_start"),
+                "page_end": meta.get("page_end"),
+                "section": meta.get("parent_heading") or meta.get("heading"),
+                "source": meta.get("source"),
+                "content_type": meta.get("content_type", "augmented_legacy_sliding_window"),
+            }
+            if meta.get("row_index") is not None:
+                out["row_index"] = meta.get("row_index")
+            if meta.get("table_id"):
+                out["table_id"] = meta.get("table_id")
+            raw_rrf = meta.get("raw_rrf_score")
+            if raw_rrf is not None:
+                out["raw_rrf_score"] = float(raw_rrf)
+                
+            passages.append(out)
+            
+        # Limiter à k passages finaux
+        if len(passages) >= k:
             break
-        chunk, document_title = row
-        metadata = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        metadata.setdefault("document_id", chunk.document_id)
-        metadata.setdefault("document_title", document_title or "Document sans titre")
-        metadata.setdefault("chunk_index", chunk.chunk_index)
-        llama_id = f"chunk-{chunk.id}"
-        text_body = (chunk.content or chunk.text or "").strip()
-
-        if not chunk.is_leaf:
-            if intermediates:
-                prefix = "\n\n---\n\n".join(reversed(intermediates))
-                text_body = f"{prefix}\n\n---\n\n{text_body}"
-            return TextNode(id_=llama_id, text=text_body, metadata=metadata)
-
-        if text_body:
-            intermediates.append(text_body)
-        current_pid = chunk.parent_node_id
-
-    return None
+            
+    return passages
 
 
 def _extract_query_terms(query_text: str) -> List[str]:
@@ -766,7 +840,8 @@ async def search_relevant_passages(
         return {"passages": [], "status": "disabled", "reason": "empty_query"}
 
     try:
-        candidate_k = max(k, min(k * 4, 80))
+        # Augmentation du nombre de candidats pour le reranker
+        candidate_k = max(100, k * 6)
 
         # Calculer l'embedding une seule fois (réutilisé par retrieval)
         query_embedding = generate_embedding(query_text)
@@ -782,7 +857,7 @@ async def search_relevant_passages(
             tags=["retrieval", "vector", "space"],
         ) as vr:
             raw_vector = _retrieve_leaves_sql(
-                session, space_id, user_id, query_text, candidate_k, query_embedding=query_embedding
+                session, space_id, user_id, query_text, candidate_k, query_embedding=query_embedding, document_filter=document_filter
             )
             vr.end(outputs={"nb": len(raw_vector)})
 
@@ -832,133 +907,25 @@ async def search_relevant_passages(
             normalize=False
         )
         
-        # Sélection des meilleurs résultats hybrides (on garde candidate_k candidats pour la résolution
-        # des parents et la déduplication, garantissant qu'on dispose de k résultats uniques à la fin)
-        top_leaves = fused_results[:candidate_k]
-
-        with trace_run(
-            "parent_resolution",
-            run_type="chain",
-            inputs={"space_id": space_id, "nb": len(top_leaves)},
-            tags=["parent", "space"],
-        ) as pr:
-            parent_node_dict = _build_parent_node_dict(session, space_id, user_id)
-            final_nodes: List[NodeWithScore] = []
-            seen_node_ids: set = set()
-
-            # Option A : Regroupement par fenêtre pour la v4 multimodale
-            window_ids = set()
-            windows_with_raw_chunks = set()
-            for nws in top_leaves:
-                leaf_meta = nws.node.metadata or {}
-                wid = leaf_meta.get("window_id")
-                if wid:
-                    window_ids.add(wid)
-                    ctype = leaf_meta.get("content_type")
-                    if ctype == "page_raw_enriched":
-                        windows_with_raw_chunks.add(wid)
-
-            window_reports_dict = {}
-            if window_ids:
-                stmt = select(DocumentChunk).where(
-                    DocumentChunk.is_leaf.is_(True),
-                    text("(coalesce(metadata_json->>'content_type', metadata_->>'content_type')) = 'page_window_report'"),
-                    text("(coalesce(metadata_json->>'window_id', metadata_->>'window_id')) = ANY(:window_ids)")
-                )
-                db_reports = session.execute(stmt, {"window_ids": list(window_ids)}).scalars().all()
-                for report_chunk in db_reports:
-                    meta = _merged_chunk_metadata(report_chunk.metadata_json, report_chunk.metadata_)
-                    wid = meta.get("window_id")
-                    if wid:
-                        window_reports_dict.setdefault(wid, []).append(report_chunk.content or report_chunk.text or "")
-
-            for nws in top_leaves:
-                score = float(getattr(nws, "score", 0.0) or 0.0)
-                leaf_meta = dict(getattr(nws.node, "metadata", {}) or {})
-                content_type = leaf_meta.get("content_type")
-                parent_node_id = leaf_meta.get("parent_node_id")
-                target_node = None
-                
-                is_multimodal = content_type in (
-                    "page_raw_enriched",
-                    "page_section_report",
-                    "page_window_report",
-                )
-
-                if content_type == "page_window_report":
-                    wid = leaf_meta.get("window_id")
-                    if wid and wid in windows_with_raw_chunks:
-                        logger.info("Deduplication Option A : Exclusion du rapport de fenêtre autonome pour %s car le raw chunk est présent", wid)
-                        continue
-
-                if is_multimodal:
-                    wid = leaf_meta.get("window_id")
-                    if wid and wid in window_reports_dict:
-                        reports_text = "\n\n".join(window_reports_dict[wid])
-                        leaf_meta["page_summary"] = reports_text
-                        nws.node.metadata = leaf_meta
-
-                if content_type in ("table_row", "table_summary"):
-                    target_node = nws.node
-                elif is_multimodal and parent_node_id:
-                    # Résolution du résumé parent Pass 2 comme contexte additionnel (compatibilité)
-                    parent_node = parent_node_dict.get(parent_node_id)
-                    if parent_node is None:
-                        doc_id = leaf_meta.get("document_id")
-                        try:
-                            doc_id_int = int(doc_id) if doc_id is not None else None
-                        except (TypeError, ValueError):
-                            doc_id_int = None
-                        parent_node = _resolve_space_parent_with_multihop(
-                            session,
-                            space_id,
-                            user_id,
-                            doc_id_int,
-                            parent_node_id,
-                            parent_node_dict,
-                        )
-                    if parent_node:
-                        # Assigner le contenu du parent à la métadonnée page_summary
-                        leaf_meta["page_summary"] = parent_node.text
-                        nws.node.metadata = leaf_meta
-                    target_node = nws.node
-                elif parent_node_id:
-                    target_node = parent_node_dict.get(parent_node_id)
-                    if target_node is None:
-                        doc_id = leaf_meta.get("document_id")
-                        try:
-                            doc_id_int = int(doc_id) if doc_id is not None else None
-                        except (TypeError, ValueError):
-                            doc_id_int = None
-                        target_node = _resolve_space_parent_with_multihop(
-                            session,
-                            space_id,
-                            user_id,
-                            doc_id_int,
-                            parent_node_id,
-                            parent_node_dict,
-                        )
-                if target_node is None:
-                    target_node = nws.node
-                elif not is_multimodal:
-                    _merge_leaf_page_into_node_metadata(nws.node, target_node)
-                
-                node_id = getattr(target_node, "id_", None)
-                if node_id and node_id in seen_node_ids:
-                    continue
-                if node_id:
-                    seen_node_ids.add(node_id)
-                final_nodes.append(NodeWithScore(node=target_node, score=score))
-            pr.end(outputs={"nb_final": len(final_nodes)})
+        # Simple déduplication par ID de nœud pour obtenir des candidats uniques
+        final_nodes: List[NodeWithScore] = []
+        seen_node_ids = set()
+        for nws in fused_results:
+            node_id = getattr(nws.node, "id_", None)
+            if node_id and node_id in seen_node_ids:
+                continue
+            if node_id:
+                seen_node_ids.add(node_id)
+            final_nodes.append(nws)
 
         if not final_nodes:
-            return {"passages": [], "status": "ok", "reason": "no_results_after_resolution"}
+            return {"passages": [], "status": "ok", "reason": "no_results_after_deduplication"}
 
         # === RERANKER ===
         
         # Reranker cross-encoder (sur le pool, pas sur tout)
         if settings.RERANKER_ENABLED:
-            pool_size = min(settings.RERANK_POOL, len(final_nodes))
+            pool_size = min(max(50, settings.RERANK_POOL), len(final_nodes))
             pool_nodes = final_nodes[:pool_size]
             
             with trace_run(
@@ -1007,12 +974,127 @@ async def search_relevant_passages(
                     "zscore_flatness": rerank_result.zscore_flatness,
                 })
             
+            # --- Boucle de recherche élargie si premier essai infructueux ---
+            if not rerank_result.nodes:
+                logger.info("Premier essai RAG infructueux (aucun passage >= 75%%). Lancement de la boucle de recherche élargie...")
+                from app.services.query_reasoning_service import reason_query_intent
+                intent_result = await reason_query_intent(query_text)
+                
+                expanded_terms = []
+                if intent_result.detected_references:
+                    expanded_terms.extend(intent_result.detected_references)
+                if intent_result.search_terms:
+                    expanded_terms.extend(intent_result.search_terms)
+                    
+                # Éliminer les doublons tout en préservant l'ordre
+                seen_terms = {query_text.strip().lower()}
+                unique_terms = []
+                for term in expanded_terms:
+                    t_clean = term.strip()
+                    t_lower = t_clean.lower()
+                    if t_lower and t_lower not in seen_terms:
+                        seen_terms.add(t_lower)
+                        unique_terms.append(t_clean)
+                
+                if unique_terms:
+                    logger.info("Termes d'expansion uniques identifiés : %s", unique_terms)
+                    loop_nodes: List[NodeWithScore] = []
+                    for term in unique_terms:
+                        logger.info("Recherche élargie pour le terme : %s", term)
+                        try:
+                            term_lexical = _retrieve_leaves_bm25_sql(
+                                session, space_id, user_id, term, candidate_k, document_filter=document_filter
+                            )
+                        except Exception as e:
+                            logger.warning("BM25 élargie échouée pour '%s' : %s", term, e)
+                            term_lexical = []
+                            
+                        try:
+                            term_alphanumeric = _retrieve_leaves_alphanumeric_sql(
+                                session, space_id, user_id, term, candidate_k, document_filter=document_filter
+                            )
+                        except Exception as e:
+                            logger.warning("Alphanumérique élargie échouée pour '%s' : %s", term, e)
+                            term_alphanumeric = []
+                        
+                        loop_nodes.extend(term_lexical)
+                        loop_nodes.extend(term_alphanumeric)
+                    
+                    if loop_nodes:
+                        seen_loop_ids = set()
+                        dedup_loop_nodes = []
+                        for nws in loop_nodes:
+                            node_id = getattr(nws.node, "id_", None)
+                            if node_id and node_id in seen_loop_ids:
+                                continue
+                            if node_id:
+                                seen_loop_ids.add(node_id)
+                            dedup_loop_nodes.append(nws)
+                        
+                        pool_size_loop = min(max(50, settings.RERANK_POOL), len(dedup_loop_nodes))
+                        pool_nodes_loop = dedup_loop_nodes[:pool_size_loop]
+                        
+                        with trace_run(
+                            "cross_encoder_rerank_loop",
+                            run_type="reranker",
+                            inputs={
+                                "pool_size": pool_size_loop,
+                                "char_cap": settings.RERANK_CHAR_CAP,
+                                "batch_size": settings.RERANK_BATCH_SIZE,
+                            },
+                            tags=["rerank", "cross_encoder", "loop"],
+                        ) as cer_loop:
+                            scored_loop = await reranker_service.rerank_nodes(
+                                query_text,
+                                pool_nodes_loop,
+                                char_cap=settings.RERANK_CHAR_CAP,
+                                batch_size=settings.RERANK_BATCH_SIZE,
+                            )
+                            cer_loop.end(outputs={
+                                "nb_scored": len(scored_loop),
+                                "top3_scores": [round(s, 3) for _, s in scored_loop[:3]] if scored_loop else [],
+                            })
+                        
+                        with trace_run(
+                            "rerank_guardrails_loop",
+                            run_type="chain",
+                            inputs={
+                                "min_k": settings.MIN_DYNAMIC_K,
+                                "max_k": settings.MAX_DYNAMIC_K,
+                                "softmax_cum_threshold": settings.SOFTMAX_CUM_THRESHOLD,
+                            },
+                            tags=["rerank", "guardrails", "loop"],
+                        ) as rg_loop:
+                            rerank_result_loop = reranker_service.apply_dynamic_filtering(
+                                scored_loop,
+                                min_k=settings.MIN_DYNAMIC_K,
+                                max_k=settings.MAX_DYNAMIC_K,
+                                softmax_cum_threshold=settings.SOFTMAX_CUM_THRESHOLD,
+                                stutter_gap=settings.STUTTER_GAP,
+                                zscore_flat_threshold=settings.ZSCORE_FLAT_THRESHOLD,
+                            )
+                            rg_loop.end(outputs={
+                                "status": rerank_result_loop.status,
+                                "nb_nodes": len(rerank_result_loop.nodes),
+                                "gap_top1_top2": rerank_result_loop.gap_top1_top2,
+                                "zscore_flatness": rerank_result_loop.zscore_flatness,
+                            })
+                        
+                        if rerank_result_loop.nodes:
+                            logger.info("Boucle de recherche élargie réussie : %d passages >= 75%% trouvés", len(rerank_result_loop.nodes))
+                            rerank_result = rerank_result_loop
+                        else:
+                            logger.info("Boucle de recherche élargie infructueuse (aucun passage >= 75%%).")
+                else:
+                    logger.info("Aucun terme additionnel unique pour l'élargissement de recherche.")
+            
             # Si bégaiement détecté : top 1-2 seulement pour forcer clarification
             if rerank_result.status == "low_confidence_clarification":
-                passages_low_conf = [
-                    _node_to_passage(nws.node, fallback_score=1.0 - i * 0.01)
-                    for i, nws in enumerate(rerank_result.nodes)
-                ]
+                passages_low_conf = _augment_and_format_passages(
+                    session,
+                    rerank_result.nodes,
+                    len(rerank_result.nodes)
+                )
                 logger.warning(
                     "Low confidence détectée : %d passages seulement (gap=%.4f, zscore=%.4f)",
                     len(passages_low_conf),
@@ -1025,22 +1107,20 @@ async def search_relevant_passages(
                     "reason": rerank_result.reason,
                 }
             
-            # Utiliser le résultat du rerank directement (sans MMR et sans feedback boost)
-            passages = [
-                _node_to_passage(nws.node, fallback_score=1.0 - i * 0.01)
-                for i, nws in enumerate(rerank_result.nodes)
-            ]
+            # Utiliser le résultat du rerank avec augmentation de contexte
+            passages = _augment_and_format_passages(
+                session,
+                rerank_result.nodes,
+                k
+            )
             return {
                 "passages": passages,
                 "status": "ok",
                 "reason": rerank_result.reason,
             }
         
-        # Reranker désactivé : retour simple des top-K RRF
-        passages = [
-            _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))
-            for nws in final_nodes[:k]
-        ]
+        # Reranker désactivé : retour simple des top-K RRF augmentés
+        passages = _augment_and_format_passages(session, final_nodes, k)
         return {"passages": passages, "status": "disabled", "reason": "reranker_disabled"}
         
     except Exception as e:
@@ -1083,115 +1163,9 @@ async def search_corrective_faq_passages(
 ) -> Dict:
     """
     Recherche post-brouillon dédiée aux FAQ correctives issues des feedbacks négatifs.
-    
-    Pipeline léger : vector + BM25 → RRF (normalisé) → filtre score.
-    
-    Args:
-        draft_response: Réponse brouillon générée, ajoutée à la requête pour améliorer le rappel
-        k: Nombre de FAQ à retourner (défaut: FAQ_TOP_K depuis config)
-    
-    Returns:
-        Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
-        Status "below_threshold" si aucune FAQ ne dépasse FAQ_MIN_SIMILARITY
+    Désactivée en dur.
     """
-    if k is None:
-        k = settings.FAQ_TOP_K
-    
-    if not settings.FAQ_POST_DRAFT_ENABLED:
-        return {"passages": [], "status": "disabled", "reason": "faq_post_draft_disabled"}
-    
-    space = get_space_by_id(session, space_id, user_id)
-    if not space:
-        logger.warning("Espace %d inaccessible (user %d) pour recherche FAQ", space_id, user_id)
-        return {"passages": [], "status": "disabled", "reason": "space_not_found"}
-    
-    # Enrichir la requête avec le brouillon (tronqué) pour capturer les erreurs
-    enriched_query = query_text
-    if draft_response:
-        draft_preview = draft_response[:800]
-        enriched_query = f"{query_text}\n\nRéponse générée: {draft_preview}"
-    
-    try:
-        candidate_k = min(k * 4, 40)  # Pool plus petit que la recherche technique
-        
-        # Embedding de la requête enrichie
-        query_embedding = generate_embedding(enriched_query)
-        if not query_embedding:
-            logger.warning("Embedding requête FAQ vide pour space_id=%s", space_id)
-            return {"passages": [], "status": "disabled", "reason": "embedding_failed"}
-        
-        # Recherche vectorielle FAQ uniquement
-        with trace_run(
-            "faq_vector_retrieval",
-            run_type="retriever",
-            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
-            tags=["retrieval", "vector", "faq_corrective"],
-        ) as vr:
-            raw_vector = _retrieve_leaves_sql(
-                session, space_id, user_id, enriched_query, candidate_k,
-                query_embedding=query_embedding, document_filter="faq_corrective"
-            )
-            vr.end(outputs={"nb": len(raw_vector)})
-        
-        # Recherche lexicale FAQ uniquement
-        with trace_run(
-            "faq_bm25_retrieval",
-            run_type="retriever",
-            inputs={"query": query_text, "space_id": space_id, "candidate_k": candidate_k},
-            tags=["retrieval", "bm25", "faq_corrective"],
-        ) as lr:
-            try:
-                raw_lexical = _retrieve_leaves_bm25_sql(
-                    session, space_id, user_id, enriched_query, candidate_k,
-                    document_filter="faq_corrective"
-                )
-            except Exception as e:
-                logger.warning("Recherche BM25 FAQ échouée: %s", e)
-                session.rollback()
-                raw_lexical = []
-            lr.end(outputs={"nb": len(raw_lexical)})
-        
-        if not raw_vector and not raw_lexical:
-            return {"passages": [], "status": "no_faq", "reason": "no_faq_documents_in_space"}
-        
-        # Fusion RRF (normalisée pour comparaison avec seuil)
-        fused_results = reciprocal_rank_fusion(raw_vector, raw_lexical, top_n=candidate_k, normalize=True)
-        
-        # Filtrer par seuil de similarité FAQ dédié
-        filtered_faq = []
-        for nws in fused_results[:k]:
-            score = float(getattr(nws, "score", 0.0) or 0.0)
-            if score >= settings.FAQ_MIN_SIMILARITY:
-                filtered_faq.append(nws)
-        
-        if not filtered_faq:
-            logger.info(
-                "FAQ search: aucune FAQ au-dessus du seuil %.2f (meilleur score: %.3f)",
-                settings.FAQ_MIN_SIMILARITY,
-                fused_results[0].score if fused_results else 0.0,
-            )
-            return {"passages": [], "status": "below_threshold", "reason": "no_faq_above_threshold"}
-        
-        # Conversion en passages (pas de résolution parent ni MMR pour les FAQ)
-        passages = [
-            _node_to_passage(nws.node, fallback_score=float(nws.score or 0.0))
-            for nws in filtered_faq
-        ]
-        
-        logger.info(
-            "FAQ corrective search: %d FAQ trouvées (seuil=%.2f, top_score=%.3f)",
-            len(passages), settings.FAQ_MIN_SIMILARITY, passages[0]["score"] if passages else 0.0,
-        )
-        
-        return {
-            "passages": passages,
-            "status": "ok",
-            "reason": "faq_corrective_found",
-        }
-        
-    except Exception as e:
-        logger.error("search_corrective_faq_passages: %s", e, exc_info=True)
-        return {"passages": [], "status": "disabled", "reason": f"error: {str(e)}"}
+    return {"passages": [], "status": "disabled", "reason": "faq_post_draft_disabled"}
 
 
 def refine_with_source_authority(

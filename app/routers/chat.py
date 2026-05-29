@@ -127,8 +127,12 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "Filtrage des informations : Réponds exclusivement à la question posée. Si l'information n'est pas dans le chunk spécifique à la section demandée, ne complète pas avec des données d'autres sections. Réponds exactement au périmètre de la question posée sans proposer d'informations complémentaires non sollicitées.\n"
     "Désambiguïsation & Contextualisation automatique : Sois extrêmement vigilante avec les dénominations de gammes (ex : Perform 70 vs Perform 76), les versions de produits (ex : standard vs renforcée) et les configurations spécifiques (ex : seuil PMR vs seuil standard). Ne les confonds jamais et ne mélange pas leurs composants ou instructions. Si une information ou un composant varie selon la gamme, la version ou la configuration, présente systématiquement et automatiquement la distinction ou les différents cas de figure applicables selon les données du contexte, sans demander de précision ou de clarification à l'utilisateur.\n"
     "Citations strictes et obligatoires : Pour chaque fait technique, mesure, tolérance ou instruction que tu mentionnes, cite obligatoirement le nom exact du document et son numéro de page sous la forme [Nom du document, page X] (par exemple : [Notice de pose LUMEAL GA, page 8]). Si l'extrait ne contient pas de numéro de page précis, mentionne simplement le nom du document [Nom du document]. N'invente jamais de numéros de pages ou de noms de documents.\n"
-    "Interdiction d'halluciner et de surinterpréter : Ne fais aucune extrapolation, supposition, spéculation ou généralisation. Ne cherche pas à deviner ou à enjoliver. Ne dis jamais de choses fausses, incertaines ou non vérifiables à partir des extraits fournis. Si le texte ne contient pas l'information ou s'il y a un doute, réponds simplement que tu ne disposes pas de l'information.\n"
-    "Règle d'or : Hard Grounding strict. Tu dois te limiter exclusivement aux faits décrits de manière explicite dans le contexte fourni (les PASSAGES). Si l'information recherchée est absente du contexte fourni (les PASSAGES), indique-le clairement et propose une étape de vérification sans essayer de deviner."
+    "Interdiction d'halluciner, de surinterpréter et d'assembler des informations : Ne fais aucune extrapolation, supposition, spéculation ou généralisation. Ne cherche pas à deviner ou à enjoliver. Ne combine/colle JAMAIS des références de produits (ex: T141019), des cotes (ex: 300 mm) ou des dimensions (ex: 2.40 m) issues de phrases ou de sections différentes pour fabriquer une spécification qui n'est pas explicitement écrite telle quelle. Si le texte ne contient pas l'association directe et exacte demandée pour le composant spécifique, réponds obligatoirement : 'La notice ne précise pas [la mesure ou la spécification] pour cette pièce' au lieu d'extrapoler ou de proposer des valeurs standards du bâtiment.\n"
+    "### RÈGLE DE SÉCURITÉ STRICTE : GROUNDING TECHNIQUE ET GESTES\n"
+    "- Interdiction absolue d'enrichir, d'interpréter, de paraphraser ou d'extrapoler les faits, valeurs numériques, cinématiques, gestes techniques ou étapes de montage (ex: imaginer des angles, rotations, clics) à partir de tes propres connaissances ou de ta propre interprétation.\n"
+    "- Si une consigne technique, une cote ou une étape de montage est demandée, tu dois restituer STRICTEMENT et MOT POUR MOT les verbes d'action et les composants textuels fournis dans les chunks (ex: 'Mettre en contact', 'Clipper l'autre côté').\n"
+    "- En l'absence de détails explicites et exacts dans le contexte, n'invente rien, refuse d'extrapoler et dis : 'La notice ne précise pas [ce détail]'. Privilégie une concision totale plutôt que du jargon métier extrapolé.\n"
+    "Règle d'or : Hard Grounding strict. Tu dois te limiter exclusivement aux faits décrits de manière explicite dans le contexte fourni (les PASSAGES) et à leurs liaisons directes. Si l'information recherchée est absente du contexte ou incertaine, indique-le clairement et propose une étape de vérification sans essayer de deviner."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -490,14 +494,10 @@ async def stream_space_chat_message(
     elif request.context:
         conversation_context = _sanitize_context_messages(request.context, max_messages=10)
 
-    # Si le dernier message contexte est déjà le user courant (persisté juste avant),
-    # on évite de le dupliquer.
-    if (
-        conversation_context
-        and conversation_context[-1].get("role") == "user"
-        and str(conversation_context[-1].get("content", "")).strip() == request.message.strip()
-    ):
-        conversation_context = conversation_context[:-1]
+    # Éliminer tout message utilisateur en suspens à la fin de l'historique
+    # pour éviter la duplication de la requête courante (déjà ajoutée à la fin de full_context_draft)
+    while conversation_context and conversation_context[-1].get("role") == "user":
+        conversation_context.pop()
 
     full_context_draft.extend(conversation_context)
     full_context_draft.append({"role": "user", "content": request.message})
@@ -515,6 +515,30 @@ async def stream_space_chat_message(
     async def generate():
         error_msg_to_yield = None
         try:
+            if not doc_passages:
+                static_reply = "Je ne trouve pas de réponse à votre question dans les documents disponibles dans cet espace car aucune source n'est jugée suffisamment pertinente (seuil minimum de 75%)."
+                chunk_size = 25
+                for i in range(0, len(static_reply), chunk_size):
+                    chunk = static_reply[i : i + chunk_size]
+                    assistant_response.append(chunk)
+                    yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+                
+                assistant_message_id = None
+                if request.conversation_id:
+                    try:
+                        assistant_message_id = _persist_assistant_reply(
+                            request.conversation_id,
+                            static_reply,
+                            forced_model,
+                            forced_provider,
+                            None,
+                        )
+                    except Exception:
+                        logger.exception("Erreur sauvegarde réponse statique assistant (space chat)")
+                
+                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+                return
+
             with trace_pipeline(
                 "space_chat_pipeline",
                 inputs=_pipeline_inputs_space,
@@ -543,7 +567,7 @@ async def stream_space_chat_message(
                             forced_model,
                             full_context_draft,
                             max_tokens=SPACE_CHAT_MAX_TOKENS,
-                            temperature=SPACE_CHAT_TEMPERATURE,
+                            temperature=0.0,
                             top_p=SPACE_CHAT_TOP_P,
                         )
                     except httpx.HTTPStatusError as exc:
@@ -562,7 +586,7 @@ async def stream_space_chat_message(
                                     forced_model,
                                     fallback_context,
                                     max_tokens=SPACE_CHAT_MAX_TOKENS,
-                                    temperature=SPACE_CHAT_TEMPERATURE,
+                                    temperature=0.0,
                                     top_p=SPACE_CHAT_TOP_P,
                                 )
                             except httpx.HTTPStatusError as fallback_exc:
@@ -580,7 +604,7 @@ async def stream_space_chat_message(
                                         forced_model,
                                         [{"role": "user", "content": request.message}],
                                         max_tokens=SPACE_CHAT_MAX_TOKENS,
-                                        temperature=SPACE_CHAT_TEMPERATURE,
+                                        temperature=0.0,
                                         top_p=SPACE_CHAT_TOP_P,
                                     )
                                 else:

@@ -158,3 +158,36 @@ def test_space_chat_stream_with_conversation_persists(
     assert msgs.status_code == 200
     roles = [m["role"] for m in msgs.json()]
     assert "user" in roles
+
+
+def test_space_chat_stream_bypass_when_no_passages(client, responsable_headers):
+    sp = client.post(
+        "/api/spaces",
+        headers=responsable_headers,
+        json={"name": "Espace test bypass"},
+    )
+    space_id = sp.json()["id"]
+    try:
+        # Mock search_technical_passages to return no passages
+        with mock.patch("app.routers.chat.search_technical_passages") as mock_search:
+            mock_search.return_value = {"passages": [], "status": "ok", "reason": "no_results"}
+            
+            # We don't mock any LLM call because it should be bypassed
+            r = client.post(
+                f"/api/spaces/{space_id}/chat/stream",
+                headers=responsable_headers,
+                json={
+                    "message": "Question test bypass",
+                    "model": "mistral-small-latest",
+                    "provider": "mistral",
+                    "conversation_id": None,
+                },
+            )
+            
+            assert r.status_code == 200
+            # Le message statique doit être retourné
+            assert "seuil minimum de 75%" in r.text
+            assert "done" in r.text.lower()
+    finally:
+        client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)
+
