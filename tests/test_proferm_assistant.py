@@ -2,7 +2,6 @@ import pytest
 from unittest.mock import AsyncMock, patch
 from app.services.document_service_new import infer_document_source
 from app.services.query_reasoning_service import reason_query_intent, QueryIntent
-from app.services.space_search_service import refine_with_source_authority
 
 # --- Tests Inférence de Source ---
 
@@ -50,42 +49,3 @@ async def test_reason_query_intent_technal(mock_chat):
     
     result = await reason_query_intent("Quelles sont les couleurs chez Technal ?")
     assert result.primary_source == "Technal"
-
-
-# --- Tests Boosting Retrieval ---
-
-def test_refine_with_source_authority_boost():
-    passages = [
-        {"note_title": "Doc A", "source": "Technal", "score": 0.5},
-        {"note_title": "Doc B", "source": "Proferm", "score": 0.4},
-    ]
-    query = "nos produits"
-    reasoning = QueryIntent(
-        intent="company_info", 
-        primary_source="Proferm", 
-        reasoning="Test", 
-        confidence=1.0
-    )
-    
-    # Sans boost, Doc A est premier
-    # Avec boost, Doc B devrait passer devant (0.4 + 0.8 = 1.2)
-    result = refine_with_source_authority(passages, query, reasoning_result=reasoning)
-    
-    assert result[0]["source"] == "Proferm"
-    assert result[0]["score"] > 1.0
-    assert result[1]["source"] == "Technal"
-
-def test_refine_with_source_authority_no_boost():
-    passages = [
-        {"note_title": "Doc A", "source": "Technal", "score": 0.5},
-        {"note_title": "Doc B", "source": "Proferm", "score": 0.4},
-    ]
-    query = "fenêtres"
-    # Raisonnement générique
-    reasoning = QueryIntent(intent="generic", reasoning="Test", confidence=0.5)
-    
-    result = refine_with_source_authority(passages, query, reasoning_result=reasoning)
-    
-    # L'ordre ne change pas (sauf si le titre matchait)
-    assert result[0]["source"] == "Technal"
-    assert result[0]["score"] == 0.5

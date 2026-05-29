@@ -37,6 +37,27 @@ def _rate_limit_user_message() -> str:
     )
 
 
+def _build_mistral_content(msg: Dict[str, Any]) -> Any:
+    """Convertit un message (texte + images base64 optionnelles) au format Mistral/Pixtral."""
+    images = msg.get("images") or []
+    content = msg.get("content", "")
+
+    if not images:
+        return content
+
+    parts: List[Dict[str, Any]] = []
+    if content:
+        parts.append({"type": "text", "text": content})
+    for img_b64 in images:
+        parts.append(
+            {
+                "type": "image_url",
+                "image_url": f"data:image/png;base64,{img_b64}",
+            }
+        )
+    return parts if parts else ""
+
+
 async def _post_json_with_retry(
     client: httpx.AsyncClient,
     url: str,
@@ -89,6 +110,7 @@ async def chat(
     """
     Appel au chatbot Mistral (API compatible chat completions).
     Supporte optionnellement les tools (function calling) avec la même boucle que le service OpenAI.
+    Supporte les images base64 sur les messages user (Pixtral / modèles vision).
     """
     if not settings.MISTRAL_API_KEY:
         raise ValueError("MISTRAL_API_KEY n'est pas configurée")
@@ -99,12 +121,10 @@ async def chat(
     else:
         messages.append({"role": "user", "content": message})
 
-    # Message système pour la recherche web via tools (même logique qu'OpenAI)
     web_search_prompt = get_web_search_system_prompt(include_brave_search=bool(tools))
     if web_search_prompt:
         messages.insert(0, {"role": "system", "content": web_search_prompt})
 
-    # Nettoyage pour conformité API Mistral
     messages = _clean_messages(messages)
 
     max_tool_rounds = 5
@@ -122,8 +142,7 @@ async def chat(
                 payload["top_p"] = top_p
             if tools:
                 payload["tools"] = tools
-            
-            # Ajouter les arguments supplémentaires (ex: response_format)
+
             payload.update(kwargs)
 
             base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
@@ -170,51 +189,52 @@ async def chat(
 
 
 def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Nettoie la liste de messages pour Mistral:
-    1. Fusionne les messages système consécutifs au début.
-    2. Fusionne les messages consécutifs du même rôle (user/user, assistant/assistant).
-    3. S'assure que l'ordre est respecté (system? -> user -> assistant -> user...).
-    """
+    """Nettoie la liste de messages pour Mistral, en préservant les images sur les messages user."""
     if not messages:
         return []
-    
-    cleaned = []
-    
-    # 1. Gérer le système
-    system_content = []
+
+    cleaned: List[Dict[str, Any]] = []
+
+    system_content: List[str] = []
     idx = 0
     while idx < len(messages) and messages[idx].get("role") == "system":
         content = messages[idx].get("content", "")
         if content:
-            system_content.append(content)
+            system_content.append(str(content))
         idx += 1
-    
+
     if system_content:
         cleaned.append({"role": "system", "content": "\n\n".join(system_content)})
-    
-    # 2. Gérer le reste avec fusion des doublons de rôles
+
     for i in range(idx, len(messages)):
         msg = messages[i]
         role = msg.get("role")
         content = msg.get("content", "")
+        images = msg.get("images") or []
+
+        if role == "user" and images:
+            cleaned.append({"role": "user", "content": _build_mistral_content(msg)})
+            continue
+
         if not content:
             continue
-            
-        if cleaned and cleaned[-1]["role"] == role:
-            # Même rôle que le précédent, on fusionne
-            cleaned[-1]["content"] += "\n\n" + content
+
+        content_str = str(content)
+        if cleaned and cleaned[-1]["role"] == role and role != "user":
+            cleaned[-1]["content"] += "\n\n" + content_str
+        elif cleaned and cleaned[-1]["role"] == role and role == "user" and not cleaned[-1].get("_has_images"):
+            cleaned[-1]["content"] += "\n\n" + content_str
         else:
-            cleaned.append({"role": role, "content": content})
-    
-    # Mistral demande que ça commence par user (si pas de system) ou que ça suive system
-    # Si le premier après system est un assistant, on l'ignore ou on l'insère après un user vide
+            cleaned.append({"role": role, "content": content_str})
+
     if cleaned and cleaned[0]["role"] == "system":
         if len(cleaned) > 1 and cleaned[1]["role"] == "assistant":
             cleaned.insert(1, {"role": "user", "content": "(Suite de la conversation)"})
     elif cleaned and cleaned[0]["role"] == "assistant":
         cleaned.insert(0, {"role": "user", "content": "(Début de la conversation)"})
-        
+
     return cleaned
+
 
 async def chat_stream(
     message: str,
@@ -233,7 +253,6 @@ async def chat_stream(
         raise ValueError("MISTRAL_API_KEY n'est pas configurée")
 
     try:
-        # Sécurité anti-boucle infinie
         start_ts = time.monotonic()
         max_duration_seconds = 400
         idle_break_seconds = 90
@@ -245,7 +264,6 @@ async def chat_stream(
         else:
             raw_messages.append({"role": "user", "content": message})
 
-        # Nettoyage pour conformité API Mistral
         messages = _clean_messages(raw_messages)
         role_seq = "-".join([m["role"][0].upper() for m in messages])
 
@@ -259,13 +277,19 @@ async def chat_stream(
             payload["temperature"] = temperature
         if top_p is not None:
             payload["top_p"] = top_p
-        
+
         payload.update(kwargs)
 
-        # Logging pour diagnostic
         total_chars = sum(len(str(m.get("content", ""))) for m in messages)
         prompt_preview = str(messages[-1].get("content", ""))[:100]
-        logger.info(f"Appel Mistral: model={model}, nb_msg={len(messages)}, roles={role_seq}, chars={total_chars}, prompt='{prompt_preview}'...")
+        logger.info(
+            "Appel Mistral: model=%s, nb_msg=%s, roles=%s, chars=%s, prompt='%s'...",
+            model,
+            len(messages),
+            role_seq,
+            total_chars,
+            prompt_preview,
+        )
 
         base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
         timeout = httpx.Timeout(400.0, connect=60.0)

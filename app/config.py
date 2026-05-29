@@ -80,7 +80,7 @@ class Settings(BaseSettings):
     MULTIMODAL_ENABLED: bool = False
     
     # ColPali Settings
-    COLPALI_ENABLED: bool = False
+    COLPALI_ENABLED: bool = True
     COLPALI_MODEL_NAME: str = "vidore/colqwen2-v0.1"
     # Pixtral via API Mistral (ex. pixtral-12b-2409) pour enrichir les chunks feuilles « picture »
     VISION_MODEL: str = "pixtral-12b-2409"
@@ -118,8 +118,8 @@ class Settings(BaseSettings):
     LANGCHAIN_TRACING_V2: bool = False
     LANGCHAIN_PROJECT: str = "noton-rag"
 
-    # Reranker cross-encoder (CPU-only)
-    RERANKER_ENABLED: bool = True
+    # Reranker cross-encoder (CPU-only) — désactivé en mode ColPali-only
+    RERANKER_ENABLED: bool = False
     RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     RERANK_POOL: int = 100  # Augmenté à 100 pour une couverture élargie
     RERANK_CHAR_CAP: int = 1700  # ~485 tokens (ratio FR 3.5 chars/token, marge vs max_length=512)

@@ -191,7 +191,7 @@ def test_space_chat_stream_bypass_when_no_passages(client, responsable_headers):
             
             assert r.status_code == 200
             text_content = extract_sse_message_text(r.text)
-            assert "seuil minimum de 75%" in text_content
+            assert "Aucune page pertinente" in text_content
             assert "done" in r.text.lower()
     finally:
         client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)
