@@ -37,6 +37,7 @@ generale/
 *~
 
 data/
+data/*
 
 # Database
 *.db
