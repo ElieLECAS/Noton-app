@@ -46,28 +46,47 @@ async def _post_json_with_retry(
 ) -> httpx.Response:
     last_response: Optional[httpx.Response] = None
     for attempt in range(1, MAX_RETRIES + 1):
-        response = await client.post(url, headers=headers, json=payload)
-        last_response = response
-        if response.status_code not in RETRYABLE_STATUS_CODES:
-            if response.status_code >= 400:
+        try:
+            response = await client.post(url, headers=headers, json=payload)
+            last_response = response
+            if response.status_code not in RETRYABLE_STATUS_CODES:
+                if response.status_code >= 400:
+                    logger.error(
+                        "Mistral API error (%s): %s",
+                        response.status_code,
+                        response.text[:2000],
+                    )
+                response.raise_for_status()
+                return response
+            
+            wait = _retry_wait_seconds(response, attempt) + random.uniform(0, 0.5)
+            logger.warning(
+                "Mistral chat tentative %s/%s: HTTP %s, retry dans %.1fs",
+                attempt,
+                MAX_RETRIES,
+                response.status_code,
+                wait,
+            )
+        except httpx.RequestError as exc:
+            if attempt >= MAX_RETRIES:
                 logger.error(
-                    "Mistral API error (%s): %s",
-                    response.status_code,
-                    response.text[:2000],
+                    "Mistral chat tentative %s/%s: Erreur réseau %s, fin des tentatives.",
+                    attempt,
+                    MAX_RETRIES,
+                    exc,
                 )
-            response.raise_for_status()
-            return response
-        if attempt >= MAX_RETRIES:
-            break
-        wait = _retry_wait_seconds(response, attempt) + random.uniform(0, 0.5)
-        logger.warning(
-            "Mistral chat tentative %s/%s: HTTP %s, retry dans %.1fs",
-            attempt,
-            MAX_RETRIES,
-            response.status_code,
-            wait,
-        )
-        await asyncio.sleep(wait)
+                raise
+            wait = RETRY_BACKOFF_BASE_SECONDS * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
+            logger.warning(
+                "Mistral chat tentative %s/%s: Erreur réseau %s, retry dans %.1fs",
+                attempt,
+                MAX_RETRIES,
+                exc,
+                wait,
+            )
+        
+        if attempt < MAX_RETRIES:
+            await asyncio.sleep(wait)
 
     assert last_response is not None
     if last_response.status_code == 429:
@@ -348,80 +367,102 @@ async def chat_stream(
         async with httpx.AsyncClient(timeout=timeout) as client:
             try:
                 logger.info(f"Connexion Mistral en cours ({base_url})...")
+                has_yielded = False
                 for attempt in range(1, MAX_RETRIES + 1):
-                    async with client.stream(
-                        "POST",
-                        completions_url,
-                        headers=headers,
-                        json=payload,
-                    ) as response:
-                        logger.info(f"Mistral status: {response.status_code}")
-                        if response.status_code in RETRYABLE_STATUS_CODES:
-                            if attempt < MAX_RETRIES:
-                                wait = _retry_wait_seconds(response, attempt) + random.uniform(
-                                    0, 0.5
-                                )
-                                logger.warning(
-                                    "Mistral stream tentative %s/%s: HTTP %s, retry dans %.1fs",
-                                    attempt,
-                                    MAX_RETRIES,
+                    try:
+                        async with client.stream(
+                            "POST",
+                            completions_url,
+                            headers=headers,
+                            json=payload,
+                        ) as response:
+                            logger.info(f"Mistral status: {response.status_code}")
+                            if response.status_code in RETRYABLE_STATUS_CODES:
+                                if attempt < MAX_RETRIES:
+                                    wait = _retry_wait_seconds(response, attempt) + random.uniform(
+                                        0, 0.5
+                                    )
+                                    logger.warning(
+                                        "Mistral stream tentative %s/%s: HTTP %s, retry dans %.1fs",
+                                        attempt,
+                                        MAX_RETRIES,
+                                        response.status_code,
+                                        wait,
+                                    )
+                                    await asyncio.sleep(wait)
+                                    continue
+                                if response.status_code == 429:
+                                    raise MistralRateLimitError(_rate_limit_user_message())
+                                response.raise_for_status()
+
+                            if response.status_code != 200:
+                                error_body = await response.aread()
+                                logger.error(
+                                    "Mistral API Error (%s): %s",
                                     response.status_code,
-                                    wait,
+                                    error_body.decode(errors="replace"),
                                 )
-                                await asyncio.sleep(wait)
-                                continue
-                            if response.status_code == 429:
-                                raise MistralRateLimitError(_rate_limit_user_message())
-                            response.raise_for_status()
+                                if response.status_code == 429:
+                                    raise MistralRateLimitError(_rate_limit_user_message())
+                                response.raise_for_status()
 
-                        if response.status_code != 200:
-                            error_body = await response.aread()
-                            logger.error(
-                                "Mistral API Error (%s): %s",
-                                response.status_code,
-                                error_body.decode(errors="replace"),
-                            )
-                            if response.status_code == 429:
-                                raise MistralRateLimitError(_rate_limit_user_message())
-                            response.raise_for_status()
+                            async for line in response.aiter_lines():
+                                if not line:
+                                    continue
+                                if line.startswith("data:"):
+                                    data_str = line.split("data:", 1)[1].strip()
+                                    if data_str == "[DONE]":
+                                        break
+                                    if not data_str:
+                                        continue
+                                    try:
+                                        data = json.loads(data_str)
+                                        choices = data.get("choices", [])
+                                        if choices:
+                                            choice0 = choices[0] or {}
+                                            finish_reason = choice0.get("finish_reason")
+                                            delta = choice0.get("delta", {})
+                                            content = delta.get("content")
+                                            if content:
+                                                last_token_ts = time.monotonic()
+                                                yield json.dumps({"message": {"content": content}})
+                                                has_yielded = True
 
-                        async for line in response.aiter_lines():
-                            if not line:
-                                continue
-                            if line.startswith("data:"):
-                                data_str = line.split("data:", 1)[1].strip()
-                                if data_str == "[DONE]":
+                                            if finish_reason:
+                                                break
+                                    except json.JSONDecodeError:
+                                        continue
+
+                                if time.monotonic() - last_token_ts > idle_break_seconds:
+                                    logger.warning(
+                                        f"Mistral stream idle timeout ({idle_break_seconds}s)"
+                                    )
                                     break
-                                if not data_str:
-                                    continue
-                                try:
-                                    data = json.loads(data_str)
-                                    choices = data.get("choices", [])
-                                    if choices:
-                                        choice0 = choices[0] or {}
-                                        finish_reason = choice0.get("finish_reason")
-                                        delta = choice0.get("delta", {})
-                                        content = delta.get("content")
-                                        if content:
-                                            last_token_ts = time.monotonic()
-                                            yield json.dumps({"message": {"content": content}})
-
-                                        if finish_reason:
-                                            break
-                                except json.JSONDecodeError:
-                                    continue
-
-                            if time.monotonic() - last_token_ts > idle_break_seconds:
-                                logger.warning(
-                                    f"Mistral stream idle timeout ({idle_break_seconds}s)"
-                                )
-                                break
-                            if time.monotonic() - start_ts > max_duration_seconds:
-                                logger.warning(
-                                    f"Mistral stream max duration reached ({max_duration_seconds}s)"
-                                )
-                                break
-                    break
+                                if time.monotonic() - start_ts > max_duration_seconds:
+                                    logger.warning(
+                                        f"Mistral stream max duration reached ({max_duration_seconds}s)"
+                                    )
+                                    break
+                        break
+                    except httpx.RequestError as exc:
+                        if has_yielded or attempt >= MAX_RETRIES:
+                            logger.error(
+                                "Mistral stream tentative %s/%s: Exception %s (has_yielded=%s), fin des tentatives.",
+                                attempt,
+                                MAX_RETRIES,
+                                exc,
+                                has_yielded,
+                            )
+                            raise
+                        wait = RETRY_BACKOFF_BASE_SECONDS * (2 ** (attempt - 1)) + random.uniform(0, 0.5)
+                        logger.warning(
+                            "Mistral stream tentative %s/%s: Exception %s, retry dans %.1fs",
+                            attempt,
+                            MAX_RETRIES,
+                            exc,
+                            wait,
+                        )
+                        await asyncio.sleep(wait)
 
             except MistralRateLimitError:
                 raise

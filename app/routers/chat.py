@@ -56,6 +56,12 @@ import httpx
 logger = logging.getLogger(__name__)
 
 
+def _is_vision_model(model_name: str) -> bool:
+    """Helper to detect if a model supports vision/image inputs."""
+    name_lower = model_name.lower()
+    return "pixtral" in name_lower or "vision" in name_lower or "large-latest" in name_lower or "gpt-4o" in name_lower
+
+
 def _coerce_positive_int(value) -> Optional[int]:
     """Convertit une valeur en int de page (>0), sinon None."""
     if value is None:
@@ -530,8 +536,24 @@ async def stream_space_chat_message(
     user_images = []
     if doc_passages:
         import base64
+        import hashlib
+        import asyncio
+        from pathlib import Path
         from app.services.multimodal_page_service import render_pdf_page_png
         from app.models.document import Document
+        
+        # Initialisation du cache
+        cache_dir = Path(settings.LANCED_DB_DIR).parent / "page_cache"
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        
+        async def _get_or_render_page_async(pdf_path: str, pno: int, dpi: int = 150) -> bytes:
+            path_hash = hashlib.md5(pdf_path.encode("utf-8")).hexdigest()
+            cache_file = cache_dir / f"{path_hash}_{pno}_{dpi}.png"
+            if cache_file.exists():
+                return await asyncio.to_thread(cache_file.read_bytes)
+            png = await asyncio.to_thread(render_pdf_page_png, pdf_path, pno - 1, dpi)
+            await asyncio.to_thread(cache_file.write_bytes, png)
+            return png
         
         unique_pages = []
         seen_pages = set()
@@ -554,7 +576,7 @@ async def stream_space_chat_message(
                 doc_obj = session.get(Document, did)
                 if doc_obj and doc_obj.source_file_path and os.path.exists(doc_obj.source_file_path):
                     logger.info(f"Rendu visuel de la page {pno} du document {did} (chemin: {doc_obj.source_file_path}) pour Llama3.2-Vision...")
-                    png_bytes = render_pdf_page_png(doc_obj.source_file_path, pno - 1, dpi=150)
+                    png_bytes = await _get_or_render_page_async(doc_obj.source_file_path, pno, dpi=150)
                     base64_img = base64.b64encode(png_bytes).decode("utf-8")
                     user_images.append(base64_img)
                     logger.info(
@@ -572,15 +594,15 @@ async def stream_space_chat_message(
                 logger.error(f"Erreur lors du rendu de la page {pno} (document {did}) : {e}", exc_info=True)
 
     user_msg = {"role": "user", "content": request.message}
-    if user_images:
+    if user_images and _is_vision_model(forced_model):
         user_msg["images"] = user_images
         logger.info(
-            "[stream_space_chat_message] Appending user message with %d rendered base64 images to full_context_draft",
+            "[stream_space_chat_message] Appending user message with %d rendered base64 images to full_context_draft (model is vision-capable)",
             len(user_images),
         )
     else:
         logger.info(
-            "[stream_space_chat_message] Appending user message WITHOUT images to full_context_draft"
+            "[stream_space_chat_message] Appending user message WITHOUT images to full_context_draft (no images or model not vision-capable)"
         )
     full_context_draft.append(user_msg)
 
@@ -629,10 +651,8 @@ async def stream_space_chat_message(
                 if settings.LLM_PROVIDER != "ollama" and not settings.MISTRAL_API_KEY:
                     raise ValueError("Mistral API key non configurée")
 
-                # Étape 1 : Génération du Brouillon de Réponse (sans FAQ)
-                draft_response = ""
                 with trace_run(
-                    "draft_generation",
+                    "stream_generation",
                     run_type="llm",
                     inputs={
                         "model": forced_model,
@@ -641,155 +661,79 @@ async def stream_space_chat_message(
                             for m in full_context_draft
                         ]
                     },
-                    tags=["llm", "draft", "space"]
-                ) as draft_run:
+                    tags=["llm", "stream", "space"]
+                ) as stream_run:
+                    fallback_triggered = False
                     try:
-                        draft_res = await chat_wrapper(
-                            "",
-                            forced_model,
-                            full_context_draft,
-                            max_tokens=SPACE_CHAT_MAX_TOKENS,
-                            temperature=0.0,
-                            top_p=SPACE_CHAT_TOP_P,
-                        )
-                    except httpx.HTTPStatusError as exc:
-                        # Certains historiques peuvent contenir des messages incompatibles
-                        # avec l'API Mistral (ou trop volumineux) et provoquer un 400.
-                        if exc.response is not None and exc.response.status_code == 400:
-                            logger.warning(
-                                "Mistral 400 en draft_generation, fallback sans historique (space_id=%s, conv_id=%s)",
-                                space_id,
-                                request.conversation_id,
-                            )
-                            fallback_context = [space_context_draft, {"role": "user", "content": request.message}]
+                        async for raw_chunk in chat_stream_wrapper(
+                            message="",
+                            model=forced_model,
+                            context=full_context_draft,
+                        ):
                             try:
-                                draft_res = await chat_wrapper(
-                                    "",
-                                    forced_model,
-                                    fallback_context,
-                                    max_tokens=SPACE_CHAT_MAX_TOKENS,
-                                    temperature=0.0,
-                                    top_p=SPACE_CHAT_TOP_P,
-                                )
-                            except httpx.HTTPStatusError as fallback_exc:
-                                if (
-                                    fallback_exc.response is not None
-                                    and fallback_exc.response.status_code == 400
-                                ):
-                                    logger.warning(
-                                        "Mistral 400 persistant, fallback minimal sans RAG (space_id=%s, conv_id=%s)",
-                                        space_id,
-                                        request.conversation_id,
-                                    )
-                                    draft_res = await chat_wrapper(
-                                        "",
-                                        forced_model,
-                                        [{"role": "user", "content": request.message}],
-                                        max_tokens=SPACE_CHAT_MAX_TOKENS,
-                                        temperature=0.0,
-                                        top_p=SPACE_CHAT_TOP_P,
-                                    )
-                                else:
-                                    raise
+                                parsed = json.loads(raw_chunk)
+                            except json.JSONDecodeError:
+                                continue
+                            content = (parsed.get("message") or {}).get("content") or ""
+                            if not content:
+                                continue
+                            assistant_response.append(content)
+                            yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
+                    except httpx.HTTPStatusError as exc:
+                        if exc.response is not None and exc.response.status_code == 400:
+                            fallback_triggered = True
                         else:
                             raise
-                    if "choices" in draft_res and len(draft_res["choices"]) > 0:
-                        draft_response = draft_res["choices"][0]["message"].get("content", "").strip()
-                    draft_run.end(outputs={"draft_response": draft_response})
-
-                # Pass 2 : Recherche FAQ correctives post-brouillon (si activée)
-                final_response = draft_response
-                faq_passages = []
-                
-                if draft_response and settings.FAQ_POST_DRAFT_ENABLED:
-                     with trace_run(
-                        "faq_corrective_retrieval",
-                        run_type="retriever",
-                        inputs={
-                            "query": request.message,
-                            "space_id": space_id,
-                            "draft_preview": draft_response[:200],
-                        },
-                        tags=["retrieval", "faq_corrective", "post_draft"],
-                    ) as faq_retrieval_run:
-                        from app.services.space_search_service import search_corrective_faq_passages
-                        faq_result = await search_corrective_faq_passages(
-                            session=session,
-                            space_id=space_id,
-                            query_text=request.message,
-                            user_id=current_user.id,
-                            draft_response=draft_response,
-                            k=settings.FAQ_TOP_K,
-                        )
-                        faq_passages = faq_result.get("passages", [])
-                        faq_status = faq_result.get("status")
-                        faq_reason = faq_result.get("reason")
-                        
-                        faq_retrieval_run.end(outputs={
-                            "status": faq_status,
-                            "reason": faq_reason,
-                            "nb_faq": len(faq_passages),
-                        })
-
-                # Étape 3 : Critique/Correction si FAQ correctives pertinentes trouvées
-                if faq_passages and draft_response:
-                    from app.services.chat_critique_service import (
-                        build_critique_messages,
-                        resolve_critique_final,
-                    )
-
-                    faq_content_list = []
-                    for i, p in enumerate(faq_passages, 1):
-                        raw = p.get("passage_raw") or p.get("passage", "")
-                        faq_content_list.append(f"FAQ {i}:\n{raw}")
-                    faq_formatted_text = "\n---\n".join(faq_content_list)
-                    critique_messages = build_critique_messages(draft_response, faq_formatted_text)
-
-                    with trace_run(
-                        "critique_generation",
-                        run_type="llm",
-                        inputs={
-                            "model": forced_model,
-                            "draft_response": draft_response[:200],
-                            "nb_faq": len(faq_passages),
-                        },
-                        tags=["llm", "critique", "space"]
-                    ) as critique_run:
-                        critique_res = await chat_wrapper(
-                            "",
-                            forced_model,
-                            critique_messages,
-                            max_tokens=SPACE_CHAT_MAX_TOKENS,
-                            temperature=0,
-                            response_format={"type": "json_object"},
-                        )
-                        raw_critique = ""
-                        if "choices" in critique_res and len(critique_res["choices"]) > 0:
-                            raw_critique = critique_res["choices"][0]["message"].get("content", "").strip()
-                        final_response = resolve_critique_final(raw_critique, draft_response)
-                        critique_run.end(outputs={
-                            "final_response": final_response,
-                            "raw_critique_preview": raw_critique[:300],
-                        })
-
-                if not final_response:
-                    final_response = "Je n'ai pas pu générer de réponse."
-
-                # Simuler le streaming par chunks pour garder l'effet de frappe côté client
-                chunk_size = 25
-                for i in range(0, len(final_response), chunk_size):
-                    chunk = final_response[i : i + chunk_size]
-                    assistant_response.append(chunk)
-                    yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+                    
+                    if fallback_triggered and not assistant_response:
+                        logger.warning("Mistral 400 on initial stream, falling back without history")
+                        fallback_context = [space_context_draft, {"role": "user", "content": request.message}]
+                        try:
+                            async for raw_chunk in chat_stream_wrapper(
+                                message="",
+                                model=forced_model,
+                                context=fallback_context,
+                            ):
+                                try:
+                                    parsed = json.loads(raw_chunk)
+                                except json.JSONDecodeError:
+                                    continue
+                                content = (parsed.get("message") or {}).get("content") or ""
+                                if not content:
+                                    continue
+                                assistant_response.append(content)
+                                yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
+                        except httpx.HTTPStatusError as fallback_exc:
+                            if fallback_exc.response is not None and fallback_exc.response.status_code == 400:
+                                logger.warning("Mistral 400 persistent, falling back to minimal context without RAG")
+                                async for raw_chunk in chat_stream_wrapper(
+                                    message="",
+                                    model=forced_model,
+                                    context=[{"role": "user", "content": request.message}],
+                                ):
+                                    try:
+                                        parsed = json.loads(raw_chunk)
+                                    except json.JSONDecodeError:
+                                        continue
+                                    content = (parsed.get("message") or {}).get("content") or ""
+                                    if not content:
+                                        continue
+                                    assistant_response.append(content)
+                                    yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
+                            else:
+                                raise
+                    
+                    final_response = "".join(assistant_response)
+                    stream_run.end(outputs={"response": final_response})
 
                 pipeline_run.end(outputs={
                     "nb_doc_passages": len(doc_passages),
-                    "nb_faq_passages": len(faq_passages),
+                    "nb_faq_passages": 0,
                     "response_chars": len(final_response),
                 })
 
-                # Combiner les passages docs + FAQ pour les sources
-                all_passages = doc_passages + faq_passages
+                # Combiner les passages docs pour les sources
+                all_passages = doc_passages
                 sources_data = []
                 if all_passages:
                     doc_ids = list({p.get("document_id") for p in all_passages if p.get("document_id")})

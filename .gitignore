@@ -36,6 +36,8 @@ documentations/
 generale/
 *~
 
+data/
+
 # Database
 *.db
 *.sqlite3

@@ -2,6 +2,7 @@ import os
 import logging
 from typing import List, Optional, Dict, Any
 import lancedb
+import numpy as np
 from lancedb.pydantic import LanceModel, Vector
 from app.config import settings
 
@@ -65,6 +66,19 @@ def insert_colpali_patches_lancedb(document_id: int, chunk_id: int, patch_vector
         ]
         table.add(patches_data)
         logger.info(f"Added {len(patches_data)} ColPali patches for chunk_id={chunk_id}")
+        
+        # Try to build/update IVF_SQ index to optimize storage/search (Option A)
+        try:
+            table.create_index(
+                vector_column_name="vector",
+                index_type="IVF_SQ",
+                metric="cosine"
+            )
+            logger.info("Successfully updated IVF_SQ index on 'colpali_patches'")
+        except Exception as idx_err:
+            # Silence this error because LanceDB requires a minimum number of vectors
+            # to train the IVF partitions (e.g. at least 1,000 or 10,000 vectors).
+            logger.debug(f"Could not build IVF_SQ index yet (normal if database is small): {idx_err}")
     except Exception as e:
         logger.error(f"Error writing ColPali patches to LanceDB: {e}", exc_info=True)
 
@@ -105,52 +119,85 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
         doc_ids_str = ",".join(map(str, document_ids))
         filter_str = f"document_id in ({doc_ids_str})"
         
-        # 1. Search the top matching patches for each query token vector
-        candidate_patches = []
-        for token_idx, token_vec in enumerate(query_token_embeddings):
-            res = table.search(token_vec).metric("cosine").where(filter_str).limit(100).to_list()
-            for r in res:
-                r["query_token_index"] = token_idx
-                candidate_patches.append(r)
+        # 1. Quick check of total patch count by selecting only chunk_id (no vector data loaded)
+        quick_res = table.search().where(filter_str).select(["chunk_id"]).to_list()
+        total_patches = len(quick_res)
+        logger.info("[search_colpali_lancedb] Total patches in space for these documents: %d", total_patches)
+        
+        # 2. Retrieve patches based on scale
+        # 150000 patches is approximately 150 pages.
+        if total_patches <= 150000:
+            logger.info("[search_colpali_lancedb] Small/medium scale space (<= 150 pages). Performing exact MaxSim on all pages.")
+            candidate_patches = table.search().where(filter_str).select(["chunk_id", "document_id", "vector"]).to_list()
+        else:
+            logger.info("[search_colpali_lancedb] Large scale space (> 150 pages). Performing token-level candidate retrieval (limit=250 per token).")
+            candidate_chunk_ids = set()
+            for token_vec in query_token_embeddings:
+                res = table.search(token_vec).metric("cosine").where(filter_str).select(["chunk_id"]).limit(250).to_list()
+                for r in res:
+                    candidate_chunk_ids.add(int(r["chunk_id"]))
+            
+            logger.info("[search_colpali_lancedb] Found %d unique candidate pages. Fetching patch vectors.", len(candidate_chunk_ids))
+            if candidate_chunk_ids:
+                candidate_ids_str = ",".join(map(str, candidate_chunk_ids))
+                patch_filter = f"chunk_id in ({candidate_ids_str})"
+                candidate_patches = table.search().where(patch_filter).select(["chunk_id", "document_id", "vector"]).to_list()
+            else:
+                candidate_patches = []
                 
-        logger.info(
-            "[search_colpali_lancedb] Retained %d total candidate patches across all query tokens.",
-            len(candidate_patches),
-        )
+        logger.info("[search_colpali_lancedb] Loaded %d total patch vectors for MaxSim calculation.", len(candidate_patches))
         if not candidate_patches:
-            logger.info("[search_colpali_lancedb] No candidate patches found in table 'colpali_patches'.")
             return []
             
-        # 2. Compute MaxSim per chunk: sum_{query_token} max_{patch} similarity(query_token, patch)
-        # Cosine similarity = 1.0 - _distance
-        chunk_scores: Dict[int, Dict[int, float]] = {}
-        for patch in candidate_patches:
-            chunk_id = int(patch["chunk_id"])
-            token_idx = patch["query_token_index"]
-            sim = 1.0 - float(patch["_distance"])
+        # 3. Group patches by chunk_id
+        chunk_to_patches = {}
+        chunk_to_doc = {}
+        for p in candidate_patches:
+            chunk_id = int(p["chunk_id"])
+            doc_id = int(p["document_id"])
+            vector = p["vector"]
             
-            if chunk_id not in chunk_scores:
-                chunk_scores[chunk_id] = {}
-            if token_idx not in chunk_scores[chunk_id] or sim > chunk_scores[chunk_id][token_idx]:
-                chunk_scores[chunk_id][token_idx] = sim
-                
-        logger.info(
-            "[search_colpali_lancedb] Computed MaxSim similarities for %d unique chunks.",
-            len(chunk_scores),
-        )
-        # 3. Sum up the maximum similarities and format as list of dicts with calculated distance
+            if chunk_id not in chunk_to_patches:
+                chunk_to_patches[chunk_id] = []
+                chunk_to_doc[chunk_id] = doc_id
+            chunk_to_patches[chunk_id].append(vector)
+            
+        # 4. Compute MaxSim per page using NumPy
+        Q = np.array(query_token_embeddings, dtype=np.float32)  # (T, 128)
+        Q_norms = np.linalg.norm(Q, axis=1, keepdims=True)
+        Q_norms = np.where(Q_norms == 0, 1.0, Q_norms)
+        Q = Q / Q_norms
+        
         final_results = []
-        num_query_tokens = len(query_token_embeddings)
-        for chunk_id, token_sims in chunk_scores.items():
-            maxsim_sum = sum(token_sims.values())
-            # Normalize to [0, 1] similarity
-            avg_similarity = maxsim_sum / num_query_tokens
-            # Convert back to a distance format for compatibility
+        num_tokens = len(query_token_embeddings)
+        
+        for chunk_id, patches_list in chunk_to_patches.items():
+            if not patches_list:
+                continue
+            P = np.array(patches_list, dtype=np.float32)  # (P, 128)
+            P_norms = np.linalg.norm(P, axis=1, keepdims=True)
+            P_norms = np.where(P_norms == 0, 1.0, P_norms)
+            P = P / P_norms
+            
+            # Cosine similarity matrix: shape (T, P)
+            S = np.dot(Q, P.T)
+            # Max similarity for each query token: shape (T,)
+            max_sims = np.max(S, axis=1)
+            # Sum of max similarities
+            maxsim_sum = float(np.sum(max_sims))
+            
+            # Convert score to distance for backward compatibility.
+            # MaxSim sum range: [0, T]
+            # Average similarity: MaxSim_sum / T
+            # Distance = 1.0 - (MaxSim_sum / T)
+            avg_similarity = maxsim_sum / max(num_tokens, 1)
             distance = 1.0 - avg_similarity
+            
             final_results.append({
                 "id": chunk_id,
-                "document_id": next((p["document_id"] for p in candidate_patches if p["chunk_id"] == chunk_id), None),
-                "_distance": distance
+                "document_id": chunk_to_doc[chunk_id],
+                "_distance": distance,
+                "maxsim_score": maxsim_sum
             })
             
         final_results.sort(key=lambda x: x["_distance"])

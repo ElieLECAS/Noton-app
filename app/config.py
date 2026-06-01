@@ -77,10 +77,10 @@ class Settings(BaseSettings):
 
     # Multimodal : lu depuis l’env MULTIMODAL_ENABLED (.env ou docker-compose) ;
     # False = défaut si la variable est absente (voir parse_multimodal_enabled).
-    MULTIMODAL_ENABLED: bool = False
+    MULTIMODAL_ENABLED: bool = True
     
     # ColPali Settings
-    COLPALI_ENABLED: bool = False
+    COLPALI_ENABLED: bool = True
     COLPALI_MODEL_NAME: str = "vidore/colqwen2-v0.1"
     # Pixtral via API Mistral (ex. pixtral-12b-2409) pour enrichir les chunks feuilles « picture »
     VISION_MODEL: str = "pixtral-12b-2409"
@@ -154,14 +154,26 @@ class Settings(BaseSettings):
     def parse_multimodal_enabled(cls, v: Union[str, bool, None]) -> bool:
         """Convertit les chaînes en bool pour MULTIMODAL_ENABLED."""
         if v is None:
-            return False
+            return True
         if isinstance(v, bool):
             return v
         if isinstance(v, str):
             return v.strip().lower() in ('true', '1', 'yes', 'on')
         return False
 
-    @field_validator('RERANKER_ENABLED', 'EARLY_STOP_ENABLED', 'COLPALI_ENABLED', mode='before')
+    @field_validator('COLPALI_ENABLED', mode='before')
+    @classmethod
+    def parse_colpali_enabled(cls, v: Union[str, bool, None]) -> bool:
+        """Convertit les chaînes en bool pour COLPALI_ENABLED."""
+        if v is None:
+            return True
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() in ('true', '1', 'yes', 'on')
+        return False
+
+    @field_validator('RERANKER_ENABLED', 'EARLY_STOP_ENABLED', mode='before')
     @classmethod
     def parse_bool_flags(cls, v: Union[str, bool, None]) -> bool:
         """Convertit les chaînes en bool pour les flags Reranker/Early stop."""
