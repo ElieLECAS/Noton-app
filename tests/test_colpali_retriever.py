@@ -29,6 +29,11 @@ class MockQueryBuilder:
         self.calls.append("to_list")
         return self.to_list_return
 
+    def to_arrow(self):
+        self.calls.append("to_arrow")
+        import pyarrow as pa
+        return pa.Table.from_pylist(self.to_list_return)
+
 
 def test_search_colpali_lancedb_small_scale():
     # Setup test vectors: 2 query tokens of dim 128
@@ -77,12 +82,13 @@ def test_search_colpali_lancedb_small_scale():
         assert pytest.approx(results[0]["_distance"], abs=1e-4) == 0.0
         assert pytest.approx(results[0]["maxsim_score"], abs=1e-4) == 2.0
 
-        # Chunk 2 must be ranked second (distance closest to 2.0, since dot products are -1)
-        # Token 1 matches patch 1 with sim -1.0, Token 2 matches patch 2 with sim -1.0
-        # Sum = -2.0. Average = -2.0 / 2 = -1.0. Distance = 1.0 - (-1.0) = 2.0
+        # Chunk 2 must be ranked second
+        # Token 1 matches patch 1 with sim -1.0 and patch 2 with sim 0.0 -> max is 0.0.
+        # Token 2 matches patch 1 with sim 0.0 and patch 2 with sim -1.0 -> max is 0.0.
+        # Sum = 0.0. Average = 0.0. Distance = 1.0 - 0.0 = 1.0
         assert results[1]["id"] == 2
-        assert pytest.approx(results[1]["_distance"], abs=1e-4) == 2.0
-        assert pytest.approx(results[1]["maxsim_score"], abs=1e-4) == -2.0
+        assert pytest.approx(results[1]["_distance"], abs=1e-4) == 1.0
+        assert pytest.approx(results[1]["maxsim_score"], abs=1e-4) == 0.0
 
         # Verify calls on mock builders
         assert quick_builder.calls[0] == ("where", "document_id in (10)")

@@ -115,6 +115,8 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
         logger.warning("[search_colpali_lancedb] Missing document_ids or query_token_embeddings, aborting.")
         return []
     try:
+        from concurrent.futures import ThreadPoolExecutor
+        
         table = get_colpali_table()
         doc_ids_str = ",".join(map(str, document_ids))
         filter_str = f"document_id in ({doc_ids_str})"
@@ -126,41 +128,62 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
         
         # 2. Retrieve patches based on scale
         # 150000 patches is approximately 150 pages.
+        tbl = None
         if total_patches <= 150000:
             logger.info("[search_colpali_lancedb] Small/medium scale space (<= 150 pages). Performing exact MaxSim on all pages.")
-            candidate_patches = table.search().where(filter_str).select(["chunk_id", "document_id", "vector"]).to_list()
+            tbl = table.search().where(filter_str).select(["chunk_id", "document_id", "vector"]).to_arrow()
         else:
             logger.info("[search_colpali_lancedb] Large scale space (> 150 pages). Performing token-level candidate retrieval (limit=250 per token).")
             candidate_chunk_ids = set()
-            for token_vec in query_token_embeddings:
-                res = table.search(token_vec).metric("cosine").where(filter_str).select(["chunk_id"]).limit(250).to_list()
-                for r in res:
-                    candidate_chunk_ids.add(int(r["chunk_id"]))
+            
+            def search_token(token_vec):
+                try:
+                    res = table.search(token_vec).metric("cosine").where(filter_str).select(["chunk_id"]).limit(250).to_list()
+                    return [int(r["chunk_id"]) for r in res]
+                except Exception as ex:
+                    logger.warning("Error searching token in LanceDB: %s", ex)
+                    return []
+            
+            max_workers = min(16, len(query_token_embeddings))
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                search_results = executor.map(search_token, query_token_embeddings)
+                for chunk_ids in search_results:
+                    candidate_chunk_ids.update(chunk_ids)
             
             logger.info("[search_colpali_lancedb] Found %d unique candidate pages. Fetching patch vectors.", len(candidate_chunk_ids))
             if candidate_chunk_ids:
                 candidate_ids_str = ",".join(map(str, candidate_chunk_ids))
                 patch_filter = f"chunk_id in ({candidate_ids_str})"
-                candidate_patches = table.search().where(patch_filter).select(["chunk_id", "document_id", "vector"]).to_list()
-            else:
-                candidate_patches = []
+                tbl = table.search().where(patch_filter).select(["chunk_id", "document_id", "vector"]).to_arrow()
                 
-        logger.info("[search_colpali_lancedb] Loaded %d total patch vectors for MaxSim calculation.", len(candidate_patches))
-        if not candidate_patches:
+        if tbl is None or len(tbl) == 0:
+            logger.info("[search_colpali_lancedb] No patches found.")
             return []
             
-        # 3. Group patches by chunk_id
-        chunk_to_patches = {}
-        chunk_to_doc = {}
-        for p in candidate_patches:
-            chunk_id = int(p["chunk_id"])
-            doc_id = int(p["document_id"])
-            vector = p["vector"]
+        logger.info("[search_colpali_lancedb] Loaded %d total patch vectors for MaxSim calculation.", len(tbl))
+        
+        # Extract columns to numpy arrays using zero-copy (or direct copies) to bypass Python list/dict conversion
+        chunk_ids = tbl["chunk_id"].to_numpy(zero_copy_only=False)
+        doc_ids = tbl["document_id"].to_numpy(zero_copy_only=False)
+        
+        try:
+            # Flatten/reshape the fixed-size list array of shape (N, 128)
+            combined_vectors = tbl["vector"].combine_chunks()
+            flat_values = combined_vectors.values.to_numpy(zero_copy_only=False)
+            vectors_numpy = flat_values.reshape(-1, 128)
+        except Exception as pyarrow_err:
+            logger.warning("Error converting Arrow vectors directly: %s. Falling back to slow list conversion.", pyarrow_err)
+            vectors_numpy = np.array(tbl["vector"].to_pylist(), dtype=np.float32)
             
-            if chunk_id not in chunk_to_patches:
-                chunk_to_patches[chunk_id] = []
-                chunk_to_doc[chunk_id] = doc_id
-            chunk_to_patches[chunk_id].append(vector)
+        # 3. Group patches by chunk_id
+        from collections import defaultdict
+        chunk_to_indices = defaultdict(list)
+        chunk_to_doc = {}
+        for idx, (c_id, d_id) in enumerate(zip(chunk_ids, doc_ids)):
+            c_id = int(c_id)
+            chunk_to_indices[c_id].append(idx)
+            if c_id not in chunk_to_doc:
+                chunk_to_doc[c_id] = int(d_id)
             
         # 4. Compute MaxSim per page using NumPy
         Q = np.array(query_token_embeddings, dtype=np.float32)  # (T, 128)
@@ -171,10 +194,10 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
         final_results = []
         num_tokens = len(query_token_embeddings)
         
-        for chunk_id, patches_list in chunk_to_patches.items():
-            if not patches_list:
+        for chunk_id, indices in chunk_to_indices.items():
+            if not indices:
                 continue
-            P = np.array(patches_list, dtype=np.float32)  # (P, 128)
+            P = vectors_numpy[indices]  # shape (P, 128)
             P_norms = np.linalg.norm(P, axis=1, keepdims=True)
             P_norms = np.where(P_norms == 0, 1.0, P_norms)
             P = P / P_norms

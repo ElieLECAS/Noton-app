@@ -80,6 +80,7 @@ x-app-env: &app-env
   MMR_K: ${MMR_K:-12}
   MMR_LAMBDA: ${MMR_LAMBDA:-0.7}
   MMR_MAX_PER_PARENT: ${MMR_MAX_PER_PARENT:-5}
+  HF_TOKEN: ${HF_TOKEN:-}
 
 x-app-volumes: &app-volumes
   - ./app:/app/app

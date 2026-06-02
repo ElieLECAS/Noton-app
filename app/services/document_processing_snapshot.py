@@ -72,6 +72,8 @@ def build_document_processing_snapshot(
         "has_document_embedding": has_doc_embedding,
         "chunks_with_embedding_count": leaves_with_emb,
         "readiness_label": readiness,
+        "current_page": doc.phase_status_json.get("current_page") if doc and doc.phase_status_json else None,
+        "total_pages": doc.phase_status_json.get("total_pages") if doc and doc.phase_status_json else None,
     }
 
 

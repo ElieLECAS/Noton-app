@@ -1,5 +1,6 @@
 import os
 import logging
+import threading
 from typing import List, Optional
 from PIL import Image
 import torch
@@ -9,52 +10,45 @@ logger = logging.getLogger(__name__)
 
 _colpali_model = None
 _colpali_processor = None
+_colpali_lock = threading.Lock()
 
 def get_colpali_model():
     """Lazily loads and returns the ColPali/ColQwen2 model and processor."""
     global _colpali_model, _colpali_processor
-    if _colpali_model is None:
-        model_name = settings.COLPALI_MODEL_NAME
-        logger.info(f"Loading ColPali model: {model_name}...")
+    with _colpali_lock:
+        if _colpali_model is None:
+            model_name = settings.COLPALI_MODEL_NAME
+            logger.info(f"Loading ColPali model: {model_name}...")
         
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
-        
-        # Load the correct class based on the model type
-        if "colqwen" in model_name.lower():
-            from colpali_engine.models import ColQwen2, ColQwen2Processor
-            if device == "cuda":
-                _colpali_model = ColQwen2.from_pretrained(
-                    model_name,
-                    torch_dtype=dtype,
-                    device_map="auto"
-                )
-            else:
-                _colpali_model = ColQwen2.from_pretrained(
-                    model_name,
-                    torch_dtype=dtype
-                ).to(device)
-            _colpali_processor = ColQwen2Processor.from_pretrained(model_name)
-        else:
-            from colpali_engine.models import ColPali, ColPaliProcessor
-            if device == "cuda":
-                _colpali_model = ColPali.from_pretrained(
-                    model_name,
-                    torch_dtype=dtype,
-                    device_map="auto"
-                )
-            else:
-                _colpali_model = ColPali.from_pretrained(
-                    model_name,
-                    torch_dtype=dtype
-                ).to(device)
-            _colpali_processor = ColPaliProcessor.from_pretrained(model_name)
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
             
-        logger.info(f"ColPali model loaded on device: {_colpali_model.device}")
+            # Load the correct class based on the model type
+            if "colqwen" in model_name.lower():
+                from colpali_engine.models import ColQwen2, ColQwen2Processor
+                # Pass device_map explicitly to avoid the 'meta' device bug.
+                # On CPU, device_map='cpu' materializes weights directly to RAM.
+                # On CUDA, device_map='cuda' (or 'auto') materializes weights to GPU.
+                _colpali_model = ColQwen2.from_pretrained(
+                    model_name,
+                    torch_dtype=dtype,
+                    device_map=device
+                )
+                _colpali_processor = ColQwen2Processor.from_pretrained(model_name)
+            else:
+                from colpali_engine.models import ColPali, ColPaliProcessor
+                _colpali_model = ColPali.from_pretrained(
+                    model_name,
+                    torch_dtype=dtype,
+                    device_map=device
+                )
+                _colpali_processor = ColPaliProcessor.from_pretrained(model_name)
+                
+            logger.info(f"ColPali model loaded on device: {_colpali_model.device}")
         
     return _colpali_model, _colpali_processor
 
-def embed_pdf_pages_colpali(pdf_path: str) -> List[List[List[float]]]:
+def embed_pdf_pages_colpali(pdf_path: str, document_id: Optional[int] = None) -> List[List[List[float]]]:
     """
     Renders PDF pages as images and extracts multi-vector embeddings using ColPali.
     Returns: List of page-level patch embeddings: [num_pages, num_patches, 128]
@@ -67,9 +61,32 @@ def embed_pdf_pages_colpali(pdf_path: str) -> List[List[List[float]]]:
     
     model, processor = get_colpali_model()
     all_embeddings = []
+    num_pages = len(images)
+    
+    from sqlmodel import Session
+    from app.database import engine
+    from app.models.document import Document
     
     for idx, img in enumerate(images):
-        logger.info(f"ColPali embedding page {idx + 1}/{len(images)}...")
+        logger.info(f"ColPali embedding page {idx + 1}/{num_pages}...")
+        
+        # Update progress and page counters in DB
+        if document_id is not None:
+            try:
+                with Session(engine) as sess:
+                    doc = sess.get(Document, document_id)
+                    if doc:
+                        pct = int((idx + 1) / num_pages * 100)
+                        doc.processing_progress = pct
+                        doc.phase_status_json = {
+                            "current_page": idx + 1,
+                            "total_pages": num_pages
+                        }
+                        sess.add(doc)
+                        sess.commit()
+            except Exception as db_err:
+                logger.warning(f"Failed to update progress in DB for document {document_id}: {db_err}")
+                
         # Process and prepare image tensor using colpali-engine processor interface
         inputs = processor.process_images([img]).to(model.device)
         
@@ -80,7 +97,7 @@ def embed_pdf_pages_colpali(pdf_path: str) -> List[List[List[float]]]:
         page_vectors = embeddings[0].cpu().float().numpy().tolist()
         all_embeddings.append(page_vectors)
         
-    logger.info(f"Completed ColPali embedding for {len(images)} pages")
+    logger.info(f"Completed ColPali embedding for {num_pages} pages")
     return all_embeddings
 
 def embed_query_colpali(query: str) -> List[List[float]]:
@@ -96,7 +113,12 @@ def embed_query_colpali(query: str) -> List[List[float]]:
     with torch.no_grad():
         embeddings = model(**inputs)  # shape: (1, num_query_tokens, dim)
         
-    query_vectors = embeddings[0].cpu().float().numpy().tolist()
+    attention_mask = inputs.get("attention_mask")
+    if attention_mask is not None:
+        mask = attention_mask[0] == 1
+        query_vectors = embeddings[0][mask].cpu().float().numpy().tolist()
+    else:
+        query_vectors = embeddings[0].cpu().float().numpy().tolist()
     return query_vectors
 
 def sync_document_colpali_embeddings(document_id: int):
@@ -125,7 +147,7 @@ def sync_document_colpali_embeddings(document_id: int):
             
         try:
             # 1. Generate ColPali page-level embeddings
-            page_embeddings = embed_pdf_pages_colpali(pdf_path)
+            page_embeddings = embed_pdf_pages_colpali(pdf_path, document_id=document_id)
             
             # 2. Get document chunks
             statement = select(DocumentChunk).where(

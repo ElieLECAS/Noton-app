@@ -680,14 +680,30 @@ endblock %} {% block content %}
           ${d.is_paid ? '<span title="Document payant (acheté fournisseur)" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 text-xs font-medium"><i class="ti ti-coins"></i><span>Document payant</span></span>' : ""}
         </div>
         <div class="text-xs text-gray-500">${
-            d.processing_status === "reindex_queued"
-                ? `<span class="text-amber-700 dark:text-amber-400">En attente retraitement multimodal</span> — chunks actuels conservés (${d.processing_progress ?? 0}%)`
-                : d.processing_status === "cancelled" ||
-                    d.processing_status === "cancelled_by_user"
-                  ? `<span class="text-red-700 dark:text-red-400">Traitement arrêté</span>${formatProcessingSnapshotLine(d)}`
-                  : d.processing_status === "skipped"
-                    ? `<span class="text-orange-700 dark:text-orange-400">Ignoré (non traité)</span>${formatProcessingSnapshotLine(d)}`
-                    : `Statut: ${d.processing_status} (${d.processing_progress ?? 0}%)${formatProcessingSnapshotLine(d)}`
+            (() => {
+                const snap = d.processing_snapshot;
+                let progressText = `${d.processing_progress ?? 0}%`;
+                if (snap && snap.current_page && snap.total_pages) {
+                    const pct = Math.round((snap.current_page / snap.total_pages) * 100);
+                    progressText = `${snap.current_page}/${snap.total_pages} = ${pct}%`;
+                }
+                
+                if (d.processing_status === "reindex_queued") {
+                    return `<span class="text-amber-700 dark:text-amber-400">En attente retraitement multimodal</span> — chunks actuels conservés (${progressText})`;
+                } else if (d.processing_status === "cancelled" || d.processing_status === "cancelled_by_user") {
+                    return `<span class="text-red-700 dark:text-red-400 font-medium">Traitement arrêté</span>${formatProcessingSnapshotLine(d)}`;
+                } else if (d.processing_status === "skipped") {
+                    return `<span class="text-orange-700 dark:text-orange-400 font-medium">Ignoré (non traité)</span>${formatProcessingSnapshotLine(d)}`;
+                } else if (d.processing_status === "processing") {
+                    return `<span class="text-blue-600 dark:text-blue-400 font-medium">Traitement en cours</span> (${progressText})${formatProcessingSnapshotLine(d)}`;
+                } else if (d.processing_status === "pending") {
+                    return `<span class="text-gray-500 dark:text-gray-400 font-medium">En attente</span> (${progressText})${formatProcessingSnapshotLine(d)}`;
+                } else if (d.processing_status === "completed") {
+                    return `<span class="text-emerald-700 dark:text-emerald-400 font-medium">Indexé</span>${formatProcessingSnapshotLine(d)}`;
+                } else {
+                    return `Statut: ${d.processing_status} (${progressText})${formatProcessingSnapshotLine(d)}`;
+                }
+            })()
         }</div>
       </div>
         <div class="flex items-center gap-3 flex-wrap justify-end">
