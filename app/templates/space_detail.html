@@ -329,25 +329,27 @@
 </style>
 {% endblock %}
 {% block content %}
-<div class="flex-1 overflow-hidden bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
-  <div class="max-w-7xl mx-auto h-full flex flex-col gap-4">
+<div class="flex-1 flex flex-col min-h-0 bg-transparent p-4 sm:p-6">
+  <div class="w-full max-w-7xl mx-auto flex-1 flex flex-col min-h-0 gap-4">
     <div class="flex items-center justify-between">
       <div>
-        <h1 id="space-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100">Espace</h1>
+        <h1 id="space-title" class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Espace</h1>
         <p class="text-sm text-gray-500">Discussion LIA sur les documents de cet espace</p>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-4 flex-1 min-h-0">
-      <section class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col min-h-0">
+    <div class="flex flex-col flex-1 min-h-0">
+      <section class="glass-panel rounded-3xl flex flex-col flex-1 min-h-0 border border-black/5 dark:border-white/5 shadow-lg overflow-hidden">
         <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 min-h-0">
           <div id="empty-state-message" class="text-center text-gray-500 py-12">Sélectionnez ou créez une conversation.</div>
         </div>
 
-        <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-          <form id="chat-form" class="flex gap-2">
-            <input id="chat-input" class="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent" placeholder="Votre question..." required />
-            <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white">Envoyer</button>
+        <div class="shrink-0 p-4 border-t border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+          <form id="chat-form" class="flex gap-2 relative max-w-4xl mx-auto">
+            <input id="chat-input" class="w-full pl-4 pr-12 py-3 rounded-2xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm" placeholder="Posez votre question à LIA..." required autocomplete="off" />
+            <button type="submit" class="absolute right-1.5 top-1.5 w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md active:scale-95 transition-all" title="Envoyer">
+              <i class="ti ti-arrow-right text-lg"></i>
+            </button>
           </form>
         </div>
       </section>
@@ -598,23 +600,23 @@ function buildSourcesSection(sources, messageKey) {
     const escapedTitleForJs = escapeHtml(illustration.title).replace(/'/g, "\\'");
     illustrationHtml = `
       <div class="mb-4">
-        <div class="text-xs text-blue-600 dark:text-blue-400 font-semibold mb-2 flex items-center gap-1">
+        <div class="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold mb-2 flex items-center gap-1.5">
           <i class="ti ti-photo text-sm"></i>
           Illustration de la réponse
         </div>
-        <div class="illustration-card rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm max-w-lg transition-all duration-300 hover:shadow-md">
+        <div class="illustration-card rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 bg-white/40 dark:bg-gray-900/40 backdrop-blur-md shadow-sm max-w-lg transition-all duration-300 hover:shadow-md">
           <div class="relative group cursor-pointer" onclick="openIllustrationModal('${illustration.url}', '${escapedTitleForJs}')">
             <img src="${illustration.url}" alt="${escapeHtml(illustration.title)}" class="w-full h-auto object-contain max-h-72">
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all flex items-center justify-center">
               <i class="ti ti-zoom-in text-white drop-shadow opacity-0 group-hover:opacity-100 text-2xl transition-opacity"></i>
             </div>
           </div>
-          <div class="px-3 py-2 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center text-xs">
+          <div class="px-4 py-3 bg-black/[0.02] dark:bg-white/[0.02] border-t border-black/5 dark:border-white/5 flex justify-between items-center text-xs">
             <div class="flex flex-col gap-0.5 min-w-0">
-              <span class="font-semibold text-gray-700 dark:text-gray-200 truncate max-w-[320px]">${escapeHtml(illustration.title)}</span>
-              <span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[320px]">${escapeHtml(illustration.document_title)}</span>
+              <span class="font-bold text-gray-800 dark:text-gray-200 truncate max-w-[320px]">${escapeHtml(illustration.title)}</span>
+              <span class="text-[10px] text-gray-400 dark:text-gray-500 truncate max-w-[320px]">${escapeHtml(illustration.document_title)}</span>
             </div>
-            <span class="text-[10px] font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded-full shrink-0">Page ${illustration.page_no}</span>
+            <span class="text-[10px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-full shrink-0">Page ${illustration.page_no}</span>
           </div>
         </div>
       </div>
@@ -631,10 +633,10 @@ function buildSourcesSection(sources, messageKey) {
       <button
         type="button"
         onclick="handleSpaceSourceClick(${index}, '${messageKey}')"
-        class="source-badge inline-flex items-center px-2 py-1 text-xs rounded bg-gray-200 dark:bg-gray-600 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors cursor-pointer"
+        class="source-badge inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 hover:bg-indigo-500/10 hover:border-indigo-500/20 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all cursor-pointer font-medium"
         title="${fullTitle}"
         id="source-ref-${index}">
-        <span class="citation-number font-bold mr-1">[${index}]</span>
+        <span class="citation-number font-bold text-indigo-600 dark:text-indigo-400">[${index}]</span>
         <span class="truncate max-w-[180px]">${title}${pageInfo}</span>
       </button>
     `;
@@ -652,15 +654,15 @@ function buildSourcesSection(sources, messageKey) {
     return `
       <div
         onclick="handleSpaceSourceClick(${index}, '${messageKey}')"
-        class="relative group cursor-pointer rounded-lg overflow-hidden border-2 border-purple-300 dark:border-purple-600 hover:border-purple-500 transition-colors"
+        class="relative group cursor-pointer rounded-2xl overflow-hidden border-2 border-indigo-500/20 hover:border-indigo-500 hover:shadow-lg transition-all"
         style="width: 84px; height: 84px;"
         title="${title}"
         id="source-ref-${index}">
         <img src="${imageUrl}" alt="${title}" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
-          <i class="ti ti-zoom-in text-white opacity-0 group-hover:opacity-100 text-xl"></i>
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center">
+          <i class="ti ti-zoom-in text-white opacity-0 group-hover:opacity-100 text-xl transition-opacity"></i>
         </div>
-        <div class="absolute bottom-0 left-0 right-0 bg-purple-600 text-white text-[10px] px-1 py-0.5 text-center">
+        <div class="absolute bottom-0 left-0 right-0 bg-indigo-600 text-white text-[10px] px-1 py-0.5 text-center font-semibold">
           [${index}]${pageInfo ? ` - ${pageInfo}` : ""}
         </div>
       </div>
@@ -668,11 +670,11 @@ function buildSourcesSection(sources, messageKey) {
   }).join("");
 
   return `
-    <div class="sources-section mt-3 pt-3 border-t border-gray-300 dark:border-gray-600">
+    <div class="sources-section mt-3 pt-3 border-t border-black/5 dark:border-white/5">
       ${illustrationHtml}
       ${imageSources.length > 0 ? `
         <div class="mb-3">
-          <div class="text-xs text-purple-600 dark:text-purple-400 font-medium mb-2 flex items-center gap-1">
+          <div class="text-[11px] text-purple-600 dark:text-purple-400 font-bold mb-2 flex items-center gap-1.5">
             <i class="ti ti-photo text-sm"></i>
             Images sources (${imageSources.length})
           </div>
@@ -681,7 +683,7 @@ function buildSourcesSection(sources, messageKey) {
       ` : ""}
       ${textSources.length > 0 ? `
         <div>
-          <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-2 flex items-center gap-1">
+          <div class="text-[11px] text-gray-500 dark:text-gray-400 font-bold mb-2 flex items-center gap-1.5">
             <i class="ti ti-book text-sm"></i>
             Sources textuelles (${textSources.length})
           </div>
@@ -997,22 +999,37 @@ function renderConversations() {
 
   host.innerHTML = conversations.map((conv) => `
     <div
-      class="group flex items-center gap-2 px-3 py-2 mb-2 rounded-lg border transition-colors cursor-pointer ${
+      class="group flex items-center gap-3 px-3 py-2.5 mb-1.5 rounded-xl transition-all cursor-pointer ${
         currentConversationId === conv.id
-          ? "border-blue-300 bg-blue-50 text-blue-900 dark:border-blue-700 dark:bg-blue-900/25 dark:text-blue-200"
-          : "border-gray-200 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700"
+          ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/10"
+          : "text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5"
       }"
       onclick="selectConversation(${conv.id})"
       title="${escapeHtml(conv.title || "Conversation")}"
     >
+      <div class="w-7 h-7 rounded-lg bg-gradient-to-br ${
+        currentConversationId === conv.id
+          ? "from-white/20 to-white/5 text-white"
+          : "from-indigo-500/10 to-purple-500/10 text-indigo-600 dark:text-indigo-400"
+      } flex items-center justify-center font-bold text-xs shrink-0">
+        <i class="ti ti-message-circle"></i>
+      </div>
       <div class="flex-1 min-w-0">
-        <div class="font-medium truncate">${escapeHtml(conv.title || "Conversation")}</div>
-        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${conv.message_count || 0} message(s)</div>
+        <div class="font-semibold text-sm truncate">${escapeHtml(conv.title || "Conversation")}</div>
+        <div class="text-[10px] ${
+          currentConversationId === conv.id
+            ? "text-white/70"
+            : "text-gray-400 dark:text-gray-500"
+        } mt-0.5">${conv.message_count || 0} message(s)</div>
       </div>
       <button
         type="button"
         onclick="event.stopPropagation(); deleteConversation(${conv.id})"
-        class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity shrink-0"
+        class="opacity-0 group-hover:opacity-100 ${
+          currentConversationId === conv.id
+            ? "text-white/80 hover:text-white"
+            : "text-gray-400 hover:text-red-500 dark:hover:text-red-400"
+        } p-1 rounded-md transition-all hover:bg-black/5 shrink-0"
         title="Supprimer"
       >
         <i class="ti ti-trash text-sm"></i>
@@ -1041,7 +1058,7 @@ async function deleteConversation(conversationId) {
     if (nextId) {
       await selectConversation(nextId);
     } else {
-      resetChatView("Sélectionnez ou créez une conversation.");
+      resetChatView();
     }
   }
 
@@ -1057,7 +1074,11 @@ function setupSpaceSidebar() {
   const actionButton = document.getElementById("sidebar-secondary-action");
   if (actionButton) {
     actionButton.title = "Nouvelle conversation";
-    actionButton.onclick = () => createNewConversation();
+    actionButton.onclick = () => {
+      currentConversationId = null;
+      resetChatView();
+      renderConversations();
+    };
   }
 }
 
@@ -1077,21 +1098,28 @@ async function loadConversations(preferredConversationId = null) {
   conversations = await r.json();
   renderConversations();
 
-  const nextId =
-    preferredConversationId ||
-    currentConversationId ||
-    (conversations.length ? conversations[0].id : null);
-
-  if (nextId) {
-    await selectConversation(nextId);
+  if (preferredConversationId) {
+    await selectConversation(preferredConversationId);
   } else {
-    resetChatView("Sélectionnez ou créez une conversation.");
+    currentConversationId = null;
+    resetChatView();
   }
 }
 
-function resetChatView(message) {
+function resetChatView() {
   const host = document.getElementById("chat-messages");
-  host.innerHTML = `<div class="text-center text-gray-500 py-12">${message}</div>`;
+  host.innerHTML = `
+     <div id="welcome-chat-state" class="flex-1 flex flex-col items-center justify-center py-12 px-4 max-w-2xl mx-auto text-center h-full my-auto">
+         <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 mb-6 relative group animate-pulse">
+             <i class="ti ti-robot text-3xl"></i>
+             <div class="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
+         </div>
+         <h2 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">Posez vos questions à LIA</h2>
+         <p class="text-sm text-gray-500 dark:text-gray-400 max-w-md leading-relaxed">
+             Je peux analyser tous les documents de cet espace et répondre à vos questions en me basant sur les sources textuelles et visuelles.
+         </p>
+     </div>
+  `;
   chatHistory = [];
 }
 
@@ -1115,7 +1143,7 @@ async function createNewConversation() {
 function renderMessages(messages) {
   const host = document.getElementById("chat-messages");
   if (!messages.length) {
-    host.innerHTML = `<div id="empty-state-message" class="text-center text-gray-500 py-12">Posez une question à LIA sur cet espace.</div>`;
+    resetChatView();
     return;
   }
 
@@ -1142,12 +1170,12 @@ async function selectConversation(conversationId) {
 
 function addMessage(role, content, messageId = null, sources = null) {
   const host = document.getElementById("chat-messages");
-  const emptyState = host.querySelector("#empty-state-message");
+  const emptyState = document.getElementById("welcome-chat-state") || host.querySelector("#empty-state-message");
   if (emptyState) {
     emptyState.remove();
   }
   const div = document.createElement("div");
-  div.className = `flex ${role === "user" ? "justify-end" : "justify-start"}`;
+  div.className = `flex w-full mb-4 ${role === "user" ? "justify-end" : "justify-start"}`;
   
   let innerHtml = "";
   if (role === "assistant") {
@@ -1167,26 +1195,26 @@ function addMessage(role, content, messageId = null, sources = null) {
     let feedbackHtml = "";
     if (messageId) {
       feedbackHtml = `
-        <div class="feedback-section mt-2 flex flex-col gap-2 border-t border-gray-200 dark:border-gray-700 pt-2 text-xs">
-          <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
+        <div class="feedback-section mt-3 flex flex-col gap-2 border-t border-black/5 dark:border-white/5 pt-2.5 text-[11px] font-medium text-gray-400 dark:text-gray-500">
+          <div class="flex items-center justify-between">
             <span>Cette réponse vous a été utile ?</span>
-            <div class="flex items-center gap-1">
-              <button onclick="submitFeedback(${messageId}, true)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-green-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-up-${messageId}" title="Utile">
-                <i class="ti ti-thumb-up text-sm"></i>
+            <div class="flex items-center gap-1.5">
+              <button onclick="submitFeedback(${messageId}, true)" class="feedback-btn w-6 h-6 rounded-md text-gray-400 hover:text-green-500 hover:bg-green-500/10 flex items-center justify-center transition-all" id="feedback-up-${messageId}" title="Utile">
+                <i class="ti ti-thumb-up text-xs"></i>
               </button>
-              <button onclick="submitFeedback(${messageId}, false)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-down-${messageId}" title="Inutile">
-                <i class="ti ti-thumb-down text-sm"></i>
+              <button onclick="submitFeedback(${messageId}, false)" class="feedback-btn w-6 h-6 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-500/10 flex items-center justify-center transition-all" id="feedback-down-${messageId}" title="Inutile">
+                <i class="ti ti-thumb-down text-xs"></i>
               </button>
             </div>
           </div>
           <div id="feedback-comment-container-${messageId}" class="hidden flex gap-2 items-center mt-1">
-            <input type="text" id="feedback-comment-input-${messageId}" placeholder="Un commentaire ? (facultatif)" class="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-            <button onclick="saveFeedbackComment(${messageId})" class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold transition-colors">
+            <input type="text" id="feedback-comment-input-${messageId}" placeholder="Un commentaire ? (facultatif)" class="flex-1 px-2.5 py-1.5 rounded-lg glass-input text-gray-800 dark:text-gray-200 text-xs" />
+            <button onclick="saveFeedbackComment(${messageId})" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold transition-all active:scale-95">
               Valider
             </button>
           </div>
-          <div id="feedback-success-msg-${messageId}" class="hidden text-green-600 dark:text-green-400 font-medium flex items-center gap-1 mt-1">
-            <i class="ti ti-check text-sm"></i> <span id="feedback-success-text-${messageId}">Merci pour votre retour !</span>
+          <div id="feedback-success-msg-${messageId}" class="hidden text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1 mt-1">
+            <i class="ti ti-check text-xs"></i> <span id="feedback-success-text-${messageId}">Merci pour votre retour !</span>
           </div>
         </div>
       `;
@@ -1195,20 +1223,20 @@ function addMessage(role, content, messageId = null, sources = null) {
     if (parsedSources && parsedSources.length > 0) {
       parsedHtml = transformCitationsToLinks(parsedHtml, parsedSources, messageKey);
       const sourcesSection = buildSourcesSection(parsedSources, messageKey);
-      innerHtml = `<div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message rounded-lg px-4 py-2">
+      innerHtml = `<div class="max-w-[85%] glass-panel rounded-2xl rounded-tl-sm px-5 py-4 border border-black/5 dark:border-white/5 assistant-message shadow-sm">
         <div class="markdown-content">${parsedHtml}</div>
         ${sourcesSection}
         ${feedbackHtml}
       </div>`;
     } else {
-      innerHtml = `<div class="max-w-2xl bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message rounded-lg px-4 py-2">
+      innerHtml = `<div class="max-w-[85%] glass-panel rounded-2xl rounded-tl-sm px-5 py-4 border border-black/5 dark:border-white/5 assistant-message shadow-sm">
         <div class="markdown-content">${parsedHtml}</div>
         ${feedbackHtml}
       </div>`;
     }
   } else {
-    innerHtml = `<div class="max-w-3xl bg-blue-600 text-white rounded-lg px-4 py-2">
-      <p class="whitespace-pre-wrap">${content}</p>
+    innerHtml = `<div class="max-w-[75%] bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-md shadow-indigo-500/5">
+      <p class="whitespace-pre-wrap text-sm leading-relaxed">${content}</p>
     </div>`;
   }
   

@@ -3,102 +3,102 @@
 {% block title %}Administration - {{ app_name }}{% endblock %}
 
 {% block content %}
-<div class="flex-1 overflow-y-auto p-6">
-    <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8">
+<div class="flex-1 overflow-y-auto bg-transparent p-4 sm:p-6">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-8">
             Administration
         </h1>
 
         <!-- Tabs Navigation -->
-        <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
-            <nav class="-mb-px flex space-x-8">
-                <button
-                    onclick="showTab('users')"
-                    id="tab-users"
-                    class="tab-button border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600 dark:text-blue-400"
-                >
-                    Utilisateurs
-                </button>
-                <button
-                    onclick="showTab('roles')"
-                    id="tab-roles"
-                    class="tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
-                >
-                    Rôles
-                </button>
-                <button
-                    onclick="showTab('permissions')"
-                    id="tab-permissions"
-                    class="tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
-                >
-                    Permissions
-                </button>
-                <button
-                    onclick="showTab('queues')"
-                    id="tab-queues"
-                    class="tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
-                >
-                    Files &amp; workers
-                </button>
-                <button
-                    onclick="showTab('feedbacks')"
-                    id="tab-feedbacks"
-                    class="tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300"
-                >
-                    Feedbacks
-                </button>
-            </nav>
+        <div class="mb-8 bg-black/5 dark:bg-white/5 p-1 rounded-2xl border border-black/5 dark:border-white/5 backdrop-blur-md w-fit flex gap-1">
+            <button
+                onclick="showTab('users')"
+                id="tab-users"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400"
+            >
+                Utilisateurs
+            </button>
+            <button
+                onclick="showTab('roles')"
+                id="tab-roles"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+                Rôles
+            </button>
+            <button
+                onclick="showTab('permissions')"
+                id="tab-permissions"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+                Permissions
+            </button>
+            <button
+                onclick="showTab('queues')"
+                id="tab-queues"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+                Files &amp; workers
+            </button>
+            <button
+                onclick="showTab('feedbacks')"
+                id="tab-feedbacks"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+                Feedbacks
+            </button>
         </div>
 
         <!-- Users Tab -->
         <div id="tab-content-users" class="tab-content">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">
                     Gestion des utilisateurs
                 </h2>
                 <button
                     onclick="openCreateUserModal()"
-                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2"
                 >
-                    <i class="ti ti-plus mr-2"></i>Nouvel utilisateur
+                    <i class="ti ti-plus text-base"></i>Nouvel utilisateur
                 </button>
             </div>
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-gray-700">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Utilisateur
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Email
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Rôles
-                            </th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="users-table-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        <!-- Chargé dynamiquement -->
-                    </tbody>
-                </table>
+            <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-black/5 dark:divide-white/5">
+                        <thead class="bg-black/5 dark:bg-white/5">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Utilisateur
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Email
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Rôles
+                                </th>
+                                <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body" class="divide-y divide-black/5 dark:divide-white/5">
+                            <!-- Chargé dynamiquement -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- Roles Tab -->
         <div id="tab-content-roles" class="tab-content hidden">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">
                     Gestion des rôles
                 </h2>
                 <button
                     onclick="openCreateRoleModal()"
-                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2"
                 >
-                    <i class="ti ti-plus mr-2"></i>Nouveau rôle
+                    <i class="ti ti-plus text-base"></i>Nouveau rôle
                 </button>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="roles-grid">
@@ -109,7 +109,7 @@
         <!-- Permissions Tab -->
         <div id="tab-content-permissions" class="tab-content hidden">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">
                     Permissions disponibles
                 </h2>
             </div>
@@ -119,72 +119,78 @@
         </div>
 
         <!-- Queues Tab (admin rôle) -->
-        <div id="tab-content-queues" class="tab-content hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Workers documents
-                </h2>
+        <div id="tab-content-queues" class="tab-content hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+                        Workers documents
+                    </h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-semibold">
+                        Liste des documents en cours ou en attente sur les deux workers Celery.
+                    </p>
+                </div>
                 <button
                     type="button"
                     onclick="loadQueueHealth()"
-                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 text-sm"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-1.5"
                 >
-                    Actualiser
+                    <i class="ti ti-refresh text-sm"></i> Actualiser
                 </button>
             </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Liste des documents en cours ou en attente sur les deux workers Celery.
-            </p>
-            <h3 class="text-lg font-medium mt-4 mb-2 text-gray-900 dark:text-gray-100">worker (documents/embeddings)</h3>
-            <div id="queues-worker-docs" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"></div>
-            <h3 class="text-lg font-medium mt-6 mb-2 text-gray-900 dark:text-gray-100">worker-kag</h3>
-            <div id="queues-worker-kag-docs" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"></div>
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">worker (documents/embeddings)</h3>
+                <div id="queues-worker-docs" class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent"></div>
+            </div>
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">worker-kag</h3>
+                <div id="queues-worker-kag-docs" class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent"></div>
+            </div>
         </div>
 
         <!-- Feedbacks Tab -->
         <div id="tab-content-feedbacks" class="tab-content hidden space-y-6">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">
                     Statistiques des feedbacks
                 </h2>
                 <button
                     type="button"
                     onclick="loadAllFeedbackData()"
-                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 text-sm flex items-center gap-1.5 transition-colors"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-1.5"
                 >
-                    <i class="ti ti-refresh text-sm"></i> Actualiser
+                    <i class="ti ti-refresh text-base"></i> Actualiser
                 </button>
             </div>
 
             <!-- KPI Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Feedbacks</span>
-                    <span id="admin-kpi-total" class="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">-</span>
-                    <span class="text-xs text-gray-400 dark:text-gray-500 mt-1">Retours utilisateurs</span>
+                <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Feedbacks</span>
+                    <span id="admin-kpi-total" class="text-3xl font-extrabold text-gray-900 dark:text-white mt-3">-</span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500 mt-1 font-semibold">Retours utilisateurs</span>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Positifs 👍</span>
-                    <span id="admin-kpi-positive" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">-</span>
-                    <div class="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full mt-2 overflow-hidden">
-                        <div id="admin-bar-positive" class="bg-green-500 h-full rounded-full" style="width: 0%"></div>
+                <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Positifs 👍</span>
+                    <span id="admin-kpi-positive" class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-3">-</span>
+                    <div class="w-full bg-black/5 dark:bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
+                        <div id="admin-bar-positive" class="bg-emerald-500 h-full rounded-full" style="width: 0%"></div>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Négatifs 👎</span>
-                    <span id="admin-kpi-negative" class="text-3xl font-bold text-red-600 dark:text-red-400 mt-2">-</span>
-                    <div class="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full mt-2 overflow-hidden">
-                        <div id="admin-bar-negative" class="bg-red-500 h-full rounded-full" style="width: 0%"></div>
+                <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Négatifs 👎</span>
+                    <span id="admin-kpi-negative" class="text-3xl font-extrabold text-rose-600 dark:text-rose-400 mt-3">-</span>
+                    <div class="w-full bg-black/5 dark:bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
+                        <div id="admin-bar-negative" class="bg-rose-500 h-full rounded-full" style="width: 0%"></div>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm flex flex-col justify-between">
-                    <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ratio d'utilité</span>
-                    <div class="flex items-baseline gap-2 mt-2">
-                        <span id="admin-kpi-ratio" class="text-3xl font-bold text-blue-600 dark:text-blue-400">-</span>
-                        <span class="text-xs text-gray-400 dark:text-gray-500">objectif > 80%</span>
+                <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+                    <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ratio d'utilité</span>
+                    <div class="flex items-baseline gap-2 mt-3">
+                        <span id="admin-kpi-ratio" class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400">-</span>
+                        <span class="text-xs text-gray-400 dark:text-gray-500 font-semibold">objectif > 80%</span>
                     </div>
-                    <div class="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full mt-2 overflow-hidden">
-                        <div id="admin-bar-ratio" class="bg-blue-500 h-full rounded-full" style="width: 0%"></div>
+                    <div class="w-full bg-black/5 dark:bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
+                        <div id="admin-bar-ratio" class="bg-indigo-500 h-full rounded-full" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
@@ -192,16 +198,16 @@
             <!-- Timeline Chart & Space breakdown -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Timeline Chart -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm lg:col-span-2 flex flex-col">
+                <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm lg:col-span-2 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
-                            <i class="ti ti-chart-line text-blue-500"></i> Évolution temporelle
+                        <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                            <i class="ti ti-chart-line text-indigo-500 text-lg"></i> Évolution temporelle
                         </h3>
-                        <div class="flex bg-gray-100 dark:bg-gray-700 p-0.5 rounded-lg">
-                            <button onclick="toggleAdminTimelinePeriod('week')" id="btn-period-week" class="px-2.5 py-1 rounded-md text-xs font-medium bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm transition-all">
+                        <div class="flex bg-black/5 dark:bg-white/5 p-0.5 rounded-xl border border-black/5 dark:border-white/5">
+                            <button onclick="toggleAdminTimelinePeriod('week')" id="btn-period-week" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all">
                                 Hebdo
                             </button>
-                            <button onclick="toggleAdminTimelinePeriod('month')" id="btn-period-month" class="px-2.5 py-1 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
+                            <button onclick="toggleAdminTimelinePeriod('month')" id="btn-period-month" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
                                 Mensuel
                             </button>
                         </div>
@@ -212,59 +218,59 @@
                 </div>
 
                 <!-- breakdown by space -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm flex flex-col">
-                    <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-1.5">
-                        <i class="ti ti-folders text-blue-500"></i> Par Espace
+                <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col">
+                    <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-1.5">
+                        <i class="ti ti-folders text-indigo-500 text-lg"></i> Par Espace
                     </h3>
-                    <div class="flex-1 overflow-y-auto space-y-3 pr-1" id="admin-space-breakdown">
-                        <div class="text-center text-sm text-gray-500 dark:text-gray-400 py-8">Chargement...</div>
+                    <div class="flex-1 overflow-y-auto space-y-3.5 pr-1" id="admin-space-breakdown">
+                        <div class="text-center text-sm text-gray-500 dark:text-gray-400 py-8 font-semibold">Chargement...</div>
                     </div>
                 </div>
             </div>
 
             <!-- Recent Feedbacks Table -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <h3 class="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
-                        <i class="ti ti-list text-blue-500"></i> Retours récents
+            <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-black/5 dark:border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                        <i class="ti ti-list text-indigo-500 text-lg"></i> Retours récents
                     </h3>
-                    <div class="flex gap-1 bg-gray-100 dark:bg-gray-700 p-0.5 rounded-lg w-fit">
-                        <button onclick="setAdminFeedbackTableFilter(null)" id="btn-tbl-filter-all" class="px-3 py-1 rounded-md text-xs font-medium bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm transition-all">
+                    <div class="flex gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/5 w-fit">
+                        <button onclick="setAdminFeedbackTableFilter(null)" id="btn-tbl-filter-all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all">
                             Tous
                         </button>
-                        <button onclick="setAdminFeedbackTableFilter('positive')" id="btn-tbl-filter-positive" class="px-3 py-1 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
+                        <button onclick="setAdminFeedbackTableFilter('positive')" id="btn-tbl-filter-positive" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
                             Utiles 👍
                         </button>
-                        <button onclick="setAdminFeedbackTableFilter('negative')" id="btn-tbl-filter-negative" class="px-3 py-1 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
+                        <button onclick="setAdminFeedbackTableFilter('negative')" id="btn-tbl-filter-negative" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
                             Inutiles 👎
                         </button>
                     </div>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead class="bg-gray-50 dark:bg-gray-700/50">
+                    <table class="min-w-full divide-y divide-black/5 dark:divide-white/5">
+                        <thead class="bg-black/5 dark:bg-white/5">
                             <tr>
-                                <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
-                                <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Espace / Convers.</th>
-                                <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Avis</th>
-                                <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Question / Commentaire</th>
-                                <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Utilisateur</th>
-                                <th class="px-5 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
+                                <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
+                                <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Espace / Convers.</th>
+                                <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Avis</th>
+                                <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Question / Commentaire</th>
+                                <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Utilisateur</th>
+                                <th class="px-5 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-feedbacks-table-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody id="admin-feedbacks-table-body" class="divide-y divide-black/5 dark:divide-white/5">
                             <!-- Chargé dynamiquement -->
                         </tbody>
                     </table>
                 </div>
                 <!-- Pagination controls -->
-                <div class="px-5 py-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                    <span class="text-xs text-gray-500 dark:text-gray-400" id="admin-feedback-tbl-count">Chargement...</span>
+                <div class="px-5 py-4 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+                    <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold" id="admin-feedback-tbl-count">Chargement...</span>
                     <div class="flex gap-2">
-                        <button id="admin-feedback-tbl-prev" onclick="changeAdminFeedbackTblPage(-1)" class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-40">
+                        <button id="admin-feedback-tbl-prev" onclick="changeAdminFeedbackTblPage(-1)" class="px-3 py-1.5 rounded-lg border border-black/10 dark:border-white/10 text-xs font-bold hover:bg-black/5 dark:hover:bg-white/5 transition-colors disabled:opacity-40">
                             Précédent
                         </button>
-                        <button id="admin-feedback-tbl-next" onclick="changeAdminFeedbackTblPage(1)" class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-40">
+                        <button id="admin-feedback-tbl-next" onclick="changeAdminFeedbackTblPage(1)" class="px-3 py-1.5 rounded-lg border border-black/10 dark:border-white/10 text-xs font-bold hover:bg-black/5 dark:hover:bg-white/5 transition-colors disabled:opacity-40">
                             Suivant
                         </button>
                     </div>
@@ -275,56 +281,56 @@
 </div>
 
 <!-- Modal: Create User -->
-<div id="create-user-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+<div id="create-user-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="glass-panel rounded-3xl p-6 w-full max-w-md shadow-2xl">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
             Nouvel utilisateur
         </h2>
-        <form id="create-user-form" onsubmit="createUser(event)">
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <form id="create-user-form" onsubmit="createUser(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
                     Nom d'utilisateur
                 </label>
                 <input
                     type="text"
                     name="username"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm"
                 />
             </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
                     Email
                 </label>
                 <input
                     type="email"
                     name="email"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm"
                 />
             </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
                     Mot de passe
                 </label>
                 <input
                     type="password"
                     name="password"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm"
                 />
             </div>
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
                     onclick="closeCreateUserModal()"
-                    class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
                 >
                     Annuler
                 </button>
                 <button
                     type="submit"
-                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-md active:scale-95 transition-all text-sm"
                 >
                     Créer
                 </button>
@@ -334,44 +340,44 @@
 </div>
 
 <!-- Modal: Create Role -->
-<div id="create-role-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+<div id="create-role-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="glass-panel rounded-3xl p-6 w-full max-w-md shadow-2xl">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
             Nouveau rôle
         </h2>
-        <form id="create-role-form" onsubmit="createRole(event)">
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <form id="create-role-form" onsubmit="createRole(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
                     Nom du rôle
                 </label>
                 <input
                     type="text"
                     name="name"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm"
                 />
             </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
                     Description
                 </label>
                 <textarea
                     name="description"
                     rows="3"
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm"
                 ></textarea>
             </div>
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
                     onclick="closeCreateRoleModal()"
-                    class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
                 >
                     Annuler
                 </button>
                 <button
                     type="submit"
-                    class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-md active:scale-95 transition-all text-sm"
                 >
                     Créer
                 </button>
@@ -381,18 +387,18 @@
 </div>
 
 <!-- Modal: Manage User Roles -->
-<div id="manage-roles-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-            Gérer les rôles de <span id="manage-roles-username"></span>
+<div id="manage-roles-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="glass-panel rounded-3xl p-6 w-full max-w-md shadow-2xl flex flex-col max-h-[85vh]">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white shrink-0">
+            Gérer les rôles de <span id="manage-roles-username" class="text-indigo-600 dark:text-indigo-400 font-extrabold"></span>
         </h2>
-        <div id="manage-roles-content" class="space-y-2 mb-4">
+        <div id="manage-roles-content" class="space-y-2 mb-4 overflow-y-auto flex-1 pr-1">
             <!-- Chargé dynamiquement -->
         </div>
-        <div class="flex justify-end">
+        <div class="flex justify-end pt-2 border-t border-black/5 dark:border-white/5 shrink-0">
             <button
                 onclick="closeManageRolesModal()"
-                class="px-4 py-2 bg-gray-600 dark:bg-gray-500 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
+                class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
             >
                 Fermer
             </button>
@@ -401,18 +407,18 @@
 </div>
 
 <!-- Modal: Manage Role Permissions -->
-<div id="manage-permissions-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
-        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-            Gérer les permissions du rôle <span id="manage-permissions-rolename"></span>
+<div id="manage-permissions-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="glass-panel rounded-3xl p-6 w-full max-w-2xl shadow-2xl flex flex-col max-h-[85vh]">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white shrink-0">
+            Permissions du rôle <span id="manage-permissions-rolename" class="text-indigo-600 dark:text-indigo-400 font-extrabold"></span>
         </h2>
-        <div id="manage-permissions-content" class="space-y-2 mb-4">
+        <div id="manage-permissions-content" class="space-y-3 mb-4 overflow-y-auto flex-1 pr-1">
             <!-- Chargé dynamiquement -->
         </div>
-        <div class="flex justify-end">
+        <div class="flex justify-end pt-2 border-t border-black/5 dark:border-white/5 shrink-0">
             <button
                 onclick="closeManagePermissionsModal()"
-                class="px-4 py-2 bg-gray-600 dark:bg-gray-500 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
+                class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
             >
                 Fermer
             </button>
@@ -433,14 +439,12 @@ let currentManageRoleId = null;
 function showTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
     document.querySelectorAll('.tab-button').forEach(el => {
-        el.classList.remove('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
-        el.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+        el.className = "tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200";
     });
     
     document.getElementById(`tab-content-${tabName}`).classList.remove('hidden');
     const button = document.getElementById(`tab-${tabName}`);
-    button.classList.add('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
-    button.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+    button.className = "tab-button px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400";
     if (tabName === 'queues') {
         loadQueueHealth();
     } else if (tabName === 'feedbacks') {
@@ -452,8 +456,8 @@ async function loadQueueHealth() {
     const workerPre = document.getElementById('queues-worker-docs');
     const workerKagPre = document.getElementById('queues-worker-kag-docs');
     if (!workerPre || !workerKagPre) return;
-    workerPre.innerHTML = '<div class="p-4 text-sm text-gray-500 dark:text-gray-400">Chargement…</div>';
-    workerKagPre.innerHTML = '<div class="p-4 text-sm text-gray-500 dark:text-gray-400">Chargement…</div>';
+    workerPre.innerHTML = '<div class="p-4 text-sm font-semibold text-gray-500 dark:text-gray-400">Chargement…</div>';
+    workerKagPre.innerHTML = '<div class="p-4 text-sm font-semibold text-gray-500 dark:text-gray-400">Chargement…</div>';
     try {
         const r = await apiCall('/api/admin/queues/workers-documents');
         if (r && r.ok) {
@@ -464,13 +468,13 @@ async function loadQueueHealth() {
             renderWorkerTasksList(workerKagPre, workerKagDocs);
         } else {
             const msg = r ? `Erreur ${r.status}` : 'Pas de réponse';
-            workerPre.innerHTML = `<div class="p-4 text-sm text-red-600 dark:text-red-400">${escapeHtml(msg)}</div>`;
-            workerKagPre.innerHTML = `<div class="p-4 text-sm text-red-600 dark:text-red-400">${escapeHtml(msg)}</div>`;
+            workerPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${escapeHtml(msg)}</div>`;
+            workerKagPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${escapeHtml(msg)}</div>`;
         }
     } catch (e) {
         const msg = escapeHtml(String(e));
-        workerPre.innerHTML = `<div class="p-4 text-sm text-red-600 dark:text-red-400">${msg}</div>`;
-        workerKagPre.innerHTML = `<div class="p-4 text-sm text-red-600 dark:text-red-400">${msg}</div>`;
+        workerPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${msg}</div>`;
+        workerKagPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${msg}</div>`;
     }
 }
 
@@ -483,30 +487,30 @@ function workerStateLabel(state) {
 
 function renderWorkerTasksList(container, tasks) {
     if (!tasks || tasks.length === 0) {
-        container.innerHTML = '<div class="p-4 text-sm text-gray-500 dark:text-gray-400">Aucun document en cours ou en attente.</div>';
+        container.innerHTML = '<div class="p-4 text-sm font-semibold text-gray-500 dark:text-gray-400">Aucun document en cours ou en attente.</div>';
         return;
     }
 
     const rows = tasks.map(t => `
-        <tr class="border-t border-gray-100 dark:border-gray-700">
-            <td class="px-4 py-2 text-sm text-gray-900 dark:text-gray-100">${escapeHtml(t.document_name || '—')}</td>
-            <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">${escapeHtml(workerStateLabel(t.state))}</td>
-            <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">${escapeHtml(t.queue || '—')}</td>
-            <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300">${escapeHtml(t.task_name || '—')}</td>
+        <tr class="border-t border-black/5 dark:border-white/5 hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
+            <td class="px-4 py-3 text-sm font-bold text-gray-900 dark:text-gray-100">${escapeHtml(t.document_name || '—')}</td>
+            <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">${escapeHtml(workerStateLabel(t.state))}</td>
+            <td class="px-4 py-3 text-sm font-mono text-xs text-indigo-600 dark:text-indigo-400">${escapeHtml(t.queue || '—')}</td>
+            <td class="px-4 py-3 text-sm font-mono text-xs text-gray-500 dark:text-gray-400">${escapeHtml(t.task_name || '—')}</td>
         </tr>
     `).join('');
 
     container.innerHTML = `
         <table class="min-w-full">
-            <thead class="bg-gray-50 dark:bg-gray-700">
+            <thead class="bg-black/5 dark:bg-white/5">
                 <tr>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Document</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">État</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Queue</th>
-                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Tâche</th>
+                    <th class="px-4 py-2 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase">Document</th>
+                    <th class="px-4 py-2 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase">État</th>
+                    <th class="px-4 py-2 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase">Queue</th>
+                    <th class="px-4 py-2 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase">Tâche</th>
                 </tr>
             </thead>
-            <tbody>${rows}</tbody>
+            <tbody class="divide-y divide-black/5 dark:divide-white/5">${rows}</tbody>
         </table>
     `;
 }
@@ -540,21 +544,21 @@ async function loadPermissions() {
 function renderUsers() {
     const tbody = document.getElementById('users-table-body');
     tbody.innerHTML = allUsers.map(user => `
-        <tr>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+        <tr class="hover:bg-white/40 dark:hover:bg-white/5 transition-colors border-b border-black/5 dark:border-white/5 last:border-b-0">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-gray-100">
                 ${escapeHtml(user.username)}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 dark:text-gray-400">
                 ${escapeHtml(user.email)}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                ${user.roles.map(r => `<span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded text-xs mr-1">${escapeHtml(r)}</span>`).join('')}
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                ${user.roles.map(r => `<span class="inline-block bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-lg text-xs font-semibold mr-1">${escapeHtml(r)}</span>`).join('')}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button onclick="openManageRolesModal(${user.id})" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-3">
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold">
+                <button onclick="openManageRolesModal(${user.id})" class="px-3 py-1.5 rounded-xl border border-indigo-500/10 bg-indigo-500/5 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/10 dark:hover:bg-indigo-500/20 active:scale-95 transition-all text-xs font-bold mr-2">
                     Rôles
                 </button>
-                <button onclick="deleteUser(${user.id})" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">
+                <button onclick="deleteUser(${user.id})" class="px-3 py-1.5 rounded-xl border border-red-500/20 bg-red-500/5 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 dark:hover:bg-red-500/30 active:scale-95 transition-all text-xs font-bold">
                     Supprimer
                 </button>
             </td>
@@ -566,26 +570,28 @@ function renderUsers() {
 function renderRoles() {
     const grid = document.getElementById('roles-grid');
     grid.innerHTML = allRoles.map(role => `
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-            <div class="flex justify-between items-start mb-2">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    ${escapeHtml(role.name)}
-                    ${role.is_system ? '<span class="text-xs text-gray-500 ml-2">(système)</span>' : ''}
-                </h3>
-                ${!role.is_system ? `
-                    <button onclick="deleteRole(${role.id})" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">
-                        <i class="ti ti-trash"></i>
-                    </button>
-                ` : ''}
-            </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">${escapeHtml(role.description || '')}</p>
-            <div class="mb-3">
-                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Permissions:</div>
-                <div class="flex flex-wrap gap-1">
-                    ${role.permissions.map(p => `<span class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded text-xs">${escapeHtml(p)}</span>`).join('')}
+        <div class="glass-card rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+            <div>
+                <div class="flex justify-between items-start mb-2 gap-2">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-1">
+                        ${escapeHtml(role.name)}
+                        ${role.is_system ? '<span class="text-xs font-semibold text-gray-400 dark:text-gray-500 ml-2">(système)</span>' : ''}
+                    </h3>
+                    ${!role.is_system ? `
+                        <button onclick="deleteRole(${role.id})" class="p-1.5 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-600 transition-colors" title="Supprimer">
+                            <i class="ti ti-trash text-sm"></i>
+                        </button>
+                    ` : ''}
+                </div>
+                <p class="text-sm font-medium text-gray-600 dark:text-gray-400 mb-4">${escapeHtml(role.description || '')}</p>
+                <div class="mb-4">
+                    <div class="text-xs font-bold text-gray-400 dark:text-gray-500 mb-1.5 uppercase tracking-wider">Permissions:</div>
+                    <div class="flex flex-wrap gap-1">
+                        ${role.permissions.map(p => `<span class="inline-block bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-lg text-xs font-semibold">${escapeHtml(p)}</span>`).join('')}
+                    </div>
                 </div>
             </div>
-            <button onclick="openManagePermissionsModal(${role.id})" class="w-full px-3 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded hover:bg-blue-700 dark:hover:bg-blue-600 text-sm">
+            <button onclick="openManagePermissionsModal(${role.id})" class="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-bold shadow-md active:scale-95 transition-all text-xs mt-2">
                 Gérer les permissions
             </button>
         </div>
@@ -602,13 +608,13 @@ function renderPermissions() {
     });
     
     grid.innerHTML = Object.entries(byCategory).map(([category, perms]) => `
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 capitalize">${escapeHtml(category)}</h3>
-            <div class="space-y-2">
+        <div class="glass-card rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm hover:translate-y-0 hover:scale-100">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 capitalize">${escapeHtml(category)}</h3>
+            <div class="space-y-3">
                 ${perms.map(perm => `
-                    <div class="border-l-4 border-blue-500 pl-3 py-1">
-                        <div class="font-mono text-sm text-gray-900 dark:text-gray-100">${escapeHtml(perm.code)}</div>
-                        <div class="text-xs text-gray-600 dark:text-gray-400">${escapeHtml(perm.name)}</div>
+                    <div class="border-l-2 border-indigo-500 dark:border-indigo-400 pl-3 py-1 bg-black/[0.01] dark:bg-white/[0.01] rounded-r-xl border border-y-transparent border-r-transparent">
+                        <div class="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400">${escapeHtml(perm.code)}</div>
+                        <div class="text-xs font-medium text-gray-600 dark:text-gray-400 mt-0.5">${escapeHtml(perm.name)}</div>
                     </div>
                 `).join('')}
             </div>
@@ -669,14 +675,14 @@ async function openManageRolesModal(userId) {
     content.innerHTML = allRoles.map(role => {
         const hasRole = user.roles.includes(role.name);
         return `
-            <div class="flex items-center justify-between p-2 border border-gray-200 dark:border-gray-700 rounded">
-                <span class="text-gray-900 dark:text-gray-100">${escapeHtml(role.name)}</span>
+            <div class="flex items-center justify-between p-3.5 border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] rounded-2xl">
+                <span class="text-gray-900 dark:text-gray-100 font-bold text-sm">${escapeHtml(role.name)}</span>
                 ${hasRole ? `
-                    <button onclick="removeRoleFromUser(${userId}, ${role.id})" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                    <button onclick="removeRoleFromUser(${userId}, ${role.id})" class="px-3.5 py-2 bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all text-xs font-bold rounded-xl border border-rose-500/10">
                         Retirer
                     </button>
                 ` : `
-                    <button onclick="assignRoleToUser(${userId}, ${role.id})" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
+                    <button onclick="assignRoleToUser(${userId}, ${role.id})" class="px-3.5 py-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 active:scale-95 transition-all text-xs font-bold rounded-xl border border-emerald-500/10">
                         Assigner
                     </button>
                 `}
@@ -772,22 +778,22 @@ async function openManagePermissionsModal(roleId) {
     
     content.innerHTML = Object.entries(byCategory).map(([category, perms]) => `
         <div class="mb-4">
-            <h4 class="font-semibold text-gray-900 dark:text-gray-100 mb-2 capitalize">${escapeHtml(category)}</h4>
+            <h4 class="font-bold text-gray-900 dark:text-white mb-2.5 capitalize text-sm">${escapeHtml(category)}</h4>
             <div class="space-y-2">
                 ${perms.map(perm => {
                     const hasPermission = role.permissions.includes(perm.code);
                     return `
-                        <div class="flex items-center justify-between p-2 border border-gray-200 dark:border-gray-700 rounded">
+                        <div class="flex items-center justify-between p-3 border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] rounded-2xl">
                             <div>
-                                <div class="font-mono text-sm text-gray-900 dark:text-gray-100">${escapeHtml(perm.code)}</div>
-                                <div class="text-xs text-gray-600 dark:text-gray-400">${escapeHtml(perm.name)}</div>
+                                <div class="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400">${escapeHtml(perm.code)}</div>
+                                <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 mt-0.5">${escapeHtml(perm.name)}</div>
                             </div>
                             ${hasPermission ? `
-                                <button onclick="removePermissionFromRole(${roleId}, ${perm.id})" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                                <button onclick="removePermissionFromRole(${roleId}, ${perm.id})" class="px-3.5 py-2 bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all text-xs font-bold rounded-xl border border-rose-500/10">
                                     Retirer
                                 </button>
                             ` : `
-                                <button onclick="assignPermissionToRole(${roleId}, ${perm.id})" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
+                                <button onclick="assignPermissionToRole(${roleId}, ${perm.id})" class="px-3.5 py-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 active:scale-95 transition-all text-xs font-bold rounded-xl border border-emerald-500/10">
                                     Assigner
                                 </button>
                             `}
@@ -1028,45 +1034,45 @@ async function loadRecentFeedbacks() {
                     });
                     
                     const badgeClass = f.is_positive 
-                        ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30" 
-                        : "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/20 dark:text-red-400 dark:border-red-800/30";
+                        ? "bg-green-500/10 text-green-700 border-green-500/20 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30" 
+                        : "bg-red-500/10 text-red-700 border-red-500/20 dark:bg-red-950/20 dark:text-red-400 dark:border-red-800/30";
                     const badgeText = f.is_positive ? "👍 Utile" : "👎 Inutile";
                     
                     return `
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                            <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400">
+                        <tr class="hover:bg-white/40 dark:hover:bg-white/5 border-b border-black/5 dark:border-white/5 last:border-b-0 transition-colors">
+                            <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400 font-semibold">
                                 ${dateStr}
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap text-xs">
-                                <div class="font-medium text-gray-900 dark:text-gray-100 truncate max-w-[120px]" title="${escapeHtml(f.space_name)}">${escapeHtml(f.space_name)}</div>
-                                <div class="text-gray-500 dark:text-gray-400 truncate max-w-[120px] ${!f.conversation_title ? 'text-red-500 dark:text-red-400 italic' : ''}" title="${escapeHtml(f.conversation_title || 'Conversation supprimée')}">${escapeHtml(f.conversation_title || 'Conversation supprimée')}</div>
+                                <div class="font-bold text-gray-900 dark:text-gray-100 truncate max-w-[120px]" title="${escapeHtml(f.space_name)}">${escapeHtml(f.space_name)}</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[120px] font-semibold ${!f.conversation_title ? 'text-rose-500 dark:text-rose-400 italic' : ''}" title="${escapeHtml(f.conversation_title || 'Conversation supprimée')}">${escapeHtml(f.conversation_title || 'Conversation supprimée')}</div>
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap text-xs">
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-semibold border ${badgeClass}">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-semibold border ${badgeClass}">
                                     ${badgeText}
                                 </span>
                             </td>
                             <td class="px-5 py-4 text-xs text-gray-700 dark:text-gray-300 max-w-sm">
-                                <div class="font-semibold text-gray-500 dark:text-gray-400 mb-1">Q : <span class="italic font-normal">"${escapeHtml(f.query_text)}"</span></div>
-                                ${f.response_text ? `<div class="mt-1 font-semibold text-gray-500 dark:text-gray-400">R : <div class="font-normal text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-900/40 p-1.5 rounded border border-gray-100 dark:border-gray-800/50 max-h-24 overflow-y-auto whitespace-pre-line text-[11px]">${escapeHtml(f.response_text)}</div></div>` : ''}
-                                ${f.comment ? `<div class="mt-1 pl-2 border-l-2 border-blue-500 dark:border-blue-400 font-medium">${escapeHtml(f.comment)}</div>` : ''}
+                                <div class="font-bold text-gray-500 dark:text-gray-400 mb-1">Q : <span class="italic font-semibold text-gray-800 dark:text-gray-200">"${escapeHtml(f.query_text)}"</span></div>
+                                ${f.response_text ? `<div class="mt-1.5 font-bold text-gray-500 dark:text-gray-400">R : <div class="font-semibold text-gray-800 dark:text-gray-200 bg-black/5 dark:bg-white/5 p-2 rounded-xl border border-black/5 dark:border-white/5 max-h-24 overflow-y-auto whitespace-pre-line text-[11px] leading-relaxed">${escapeHtml(f.response_text)}</div></div>` : ''}
+                                ${f.comment ? `<div class="mt-1.5 pl-2 border-l-2 border-indigo-500 dark:border-indigo-400 font-bold text-gray-700 dark:text-gray-300">${escapeHtml(f.comment)}</div>` : ''}
                                 ${f.auto_faq_generated ? `
-                                    <div class="mt-2 text-xs bg-blue-50/50 dark:bg-blue-950/15 border border-blue-100 dark:border-blue-900/30 p-2 rounded text-[11px]">
-                                        <span class="font-semibold text-blue-700 dark:text-blue-400 flex items-center gap-1">
+                                    <div class="mt-2 text-xs bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 p-3 rounded-2xl text-[11px]">
+                                        <span class="font-bold text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
                                             <i class="ti ti-bulb text-[13px]"></i> Texte technique généré :
                                         </span>
-                                        <div class="mt-1 font-medium whitespace-pre-line text-gray-900 dark:text-gray-200 bg-white/60 dark:bg-gray-900/30 p-1.5 rounded border border-blue-50 dark:border-blue-950/30">
+                                        <div class="mt-1.5 font-semibold whitespace-pre-line text-gray-900 dark:text-gray-200 bg-white/40 dark:bg-black/20 p-2 rounded-xl border border-blue-500/5 dark:border-blue-500/10">
                                             ${escapeHtml(f.auto_faq_content)}
                                         </div>
                                     </div>
                                 ` : ''}
                             </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-600 dark:text-gray-400">
+                            <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-600 dark:text-gray-400 font-semibold">
                                 ${escapeHtml(f.user_email)}
                             </td>
-                            <td class="px-5 py-4 whitespace-nowrap text-right text-xs font-semibold">
-                                <a href="/spaces/${f.space_id}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
-                                    Ouvrir
+                            <td class="px-5 py-4 whitespace-nowrap text-right text-xs font-bold">
+                                <a href="/spaces/${f.space_id}" class="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                                    Ouvrir <i class="ti ti-arrow-right text-sm"></i>
                                 </a>
                             </td>
                         </tr>
@@ -1075,7 +1081,7 @@ async function loadRecentFeedbacks() {
             } else {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="px-5 py-8 text-center text-xs text-gray-500 dark:text-gray-400">
+                        <td colspan="6" class="px-5 py-8 text-center text-xs font-semibold text-gray-500 dark:text-gray-400">
                             Aucun retour trouvé pour ces critères.
                         </td>
                     </tr>
@@ -1094,11 +1100,11 @@ function toggleAdminTimelinePeriod(period) {
     const btnMonth = document.getElementById('btn-period-month');
     
     if (period === 'week') {
-        btnWeek.className = "px-2.5 py-1 rounded-md text-xs font-medium bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm transition-all";
-        btnMonth.className = "px-2.5 py-1 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
+        btnWeek.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all";
+        btnMonth.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
     } else {
-        btnMonth.className = "px-2.5 py-1 rounded-md text-xs font-medium bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm transition-all";
-        btnWeek.className = "px-2.5 py-1 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
+        btnMonth.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all";
+        btnWeek.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
     }
     
     loadFeedbackTimeline();
@@ -1120,9 +1126,9 @@ function setAdminFeedbackTableFilter(filter) {
         const tab = tabs[key];
         if (!tab) return;
         if (key === activeKey) {
-            tab.className = "px-3 py-1 rounded-md text-xs font-medium bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm transition-all";
+            tab.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all";
         } else {
-            tab.className = "px-3 py-1 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
+            tab.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
         }
     });
     

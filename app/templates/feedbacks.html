@@ -3,81 +3,81 @@
 {% block title %}Mes retours - {{ app_name }}{% endblock %}
 
 {% block content %}
-<div class="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
+<div class="flex-1 overflow-auto bg-transparent p-4 sm:p-6">
     <div class="max-w-5xl mx-auto space-y-6">
         
         <!-- Header -->
         <div class="flex flex-col gap-2">
-            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-xs font-semibold uppercase tracking-wide w-fit">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-semibold uppercase tracking-wide w-fit border border-blue-500/20">
                 <i class="ti ti-message-check text-sm"></i>
                 Historique des retours
             </span>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                 Mes retours
             </h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
                 Retrouvez l'ensemble des réponses assistant sur lesquelles vous avez donné votre avis pour améliorer l'IA.
             </p>
         </div>
 
         <!-- KPI Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm flex flex-col justify-between">
-                <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total retours</span>
-                <span id="kpi-total" class="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-2">-</span>
+            <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total retours</span>
+                <span id="kpi-total" class="text-3xl font-extrabold text-gray-900 dark:text-white mt-3">-</span>
             </div>
-            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm flex flex-col justify-between">
-                <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Positifs 👍</span>
-                <span id="kpi-pos" class="text-2xl font-bold text-green-600 dark:text-green-400 mt-2">-</span>
+            <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Positifs 👍</span>
+                <span id="kpi-pos" class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-3">-</span>
             </div>
-            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm flex flex-col justify-between">
-                <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Négatifs 👎</span>
-                <span id="kpi-neg" class="text-2xl font-bold text-red-600 dark:text-red-400 mt-2">-</span>
+            <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Négatifs 👎</span>
+                <span id="kpi-neg" class="text-3xl font-extrabold text-rose-600 dark:text-rose-400 mt-3">-</span>
             </div>
-            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm flex flex-col justify-between">
-                <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ratio d'utilité</span>
-                <div class="flex items-baseline gap-2 mt-2">
-                    <span id="kpi-ratio" class="text-2xl font-bold text-blue-600 dark:text-blue-400">-</span>
-                    <span class="text-xs text-gray-400 dark:text-gray-500">objectif > 80%</span>
+            <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col justify-between hover:translate-y-0 hover:scale-100">
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ratio d'utilité</span>
+                <div class="flex items-baseline gap-2 mt-3">
+                    <span id="kpi-ratio" class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400">-</span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500 font-medium">objectif > 80%</span>
                 </div>
             </div>
         </div>
 
         <!-- Filters & Navigation -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-700 pb-4">
-            <div class="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-                <button onclick="setFilter(null)" id="filter-all" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-black/5 dark:border-white/5 pb-4">
+            <div class="flex gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-2xl border border-black/5 dark:border-white/5 backdrop-blur-md">
+                <button onclick="setFilter(null)" id="filter-all" class="px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400">
                     Tous
                 </button>
-                <button onclick="setFilter('positive')" id="filter-positive" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+                <button onclick="setFilter('positive')" id="filter-positive" class="px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
                     Utiles 👍
                 </button>
-                <button onclick="setFilter('negative')" id="filter-negative" class="px-3 py-1.5 rounded-md text-sm font-medium transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+                <button onclick="setFilter('negative')" id="filter-negative" class="px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
                     Inutiles 👎
                 </button>
             </div>
-            <div class="text-xs text-gray-500 dark:text-gray-400" id="items-count-display">
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold" id="items-count-display">
                 Chargement...
             </div>
         </div>
 
         <!-- Feedbacks List -->
         <div id="feedbacks-container" class="space-y-4">
-            <div class="flex flex-col items-center justify-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                <span class="text-sm text-gray-500 dark:text-gray-400 mt-3">Chargement de vos retours...</span>
+            <div class="flex flex-col items-center justify-center py-12 glass-panel rounded-3xl border border-black/5 dark:border-white/5 shadow-sm">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+                <span class="text-sm text-gray-500 dark:text-gray-400 mt-3 font-semibold">Chargement de vos retours...</span>
             </div>
         </div>
 
         <!-- Pagination -->
         <div id="pagination-controls" class="flex justify-between items-center hidden pb-8">
-            <button id="btn-prev" onclick="changePage(-1)" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:pointer-events-none">
+            <button id="btn-prev" onclick="changePage(-1)" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-bold disabled:opacity-40 disabled:pointer-events-none">
                 Précédent
             </button>
-            <span id="pagination-info" class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+            <span id="pagination-info" class="text-sm text-gray-500 dark:text-gray-400 font-bold">
                 Page 1 sur 1
             </span>
-            <button id="btn-next" onclick="changePage(1)" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:pointer-events-none">
+            <button id="btn-next" onclick="changePage(1)" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-bold disabled:opacity-40 disabled:pointer-events-none">
                 Suivant
             </button>
         </div>
@@ -238,43 +238,43 @@
         container.innerHTML = data.items.map(f => {
             const dateDisplay = formatDate(f.created_at);
             const badgeClass = f.is_positive 
-                ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30" 
-                : "bg-red-50 text-red-700 border-red-200 dark:bg-red-950/20 dark:text-red-400 dark:border-red-800/30";
+                ? "bg-green-500/10 text-green-700 border-green-500/20 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30" 
+                : "bg-red-500/10 text-red-700 border-red-500/20 dark:bg-red-950/20 dark:text-red-400 dark:border-red-800/30";
             const badgeIcon = f.is_positive ? "👍 Utile" : "👎 Inutile";
 
             return `
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col gap-4">
+                <div class="glass-card p-6 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col gap-4">
                     <div class="flex items-start justify-between gap-4">
                         <div class="flex flex-wrap items-center gap-2">
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badgeClass}">
                                 ${badgeIcon}
                             </span>
                             <span class="text-xs text-gray-400 dark:text-gray-500">•</span>
-                            <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                            <span class="text-xs font-bold text-gray-500 dark:text-gray-400">
                                 Espace : ${escapeHtml(f.space_name)}
                             </span>
                             <span class="text-xs text-gray-400 dark:text-gray-500">•</span>
-                            <span class="text-xs text-gray-400 dark:text-gray-500">
-                                Conversation : <span class="font-semibold ${f.conversation_title ? 'text-gray-600 dark:text-gray-300' : 'text-red-500 dark:text-red-400 italic'}">${escapeHtml(f.conversation_title || 'supprimée')}</span>
+                            <span class="text-xs font-bold text-gray-500 dark:text-gray-400">
+                                Conversation : <span class="font-bold ${f.conversation_title ? 'text-gray-600 dark:text-gray-300' : 'text-rose-500 dark:text-rose-400 italic'}">${escapeHtml(f.conversation_title || 'supprimée')}</span>
                             </span>
                         </div>
-                        <span class="text-xs text-gray-400 dark:text-gray-500 shrink-0">
+                        <span class="text-xs text-gray-400 dark:text-gray-500 font-medium shrink-0">
                             ${dateDisplay}
                         </span>
                     </div>
 
                     <div class="space-y-3">
                         <div class="text-sm">
-                            <span class="font-semibold text-gray-500 dark:text-gray-400">Question :</span>
-                            <p class="text-gray-900 dark:text-gray-100 mt-1 italic font-medium bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded-lg border border-gray-100 dark:border-gray-800">
+                            <span class="font-bold text-gray-500 dark:text-gray-400">Question :</span>
+                            <p class="text-gray-900 dark:text-gray-100 mt-1.5 italic font-medium bg-black/5 dark:bg-white/5 p-3.5 rounded-2xl border border-black/5 dark:border-white/5">
                                 "${escapeHtml(f.query_text || "Non spécifiée")}"
                             </p>
                         </div>
                         
                         ${f.response_text ? `
                             <div class="text-sm">
-                                <span class="font-semibold text-gray-500 dark:text-gray-400">Réponse de l'assistant :</span>
-                                <div class="text-gray-900 dark:text-gray-100 mt-1 bg-gray-50 dark:bg-gray-900/50 p-2.5 rounded-lg border border-gray-100 dark:border-gray-800 text-xs whitespace-pre-line max-h-40 overflow-y-auto">
+                                <span class="font-bold text-gray-500 dark:text-gray-400">Réponse de l'assistant :</span>
+                                <div class="text-gray-900 dark:text-gray-100 mt-1.5 bg-black/5 dark:bg-white/5 p-3.5 rounded-2xl border border-black/5 dark:border-white/5 text-xs leading-relaxed whitespace-pre-line max-h-40 overflow-y-auto font-medium">
                                     ${escapeHtml(f.response_text)}
                                 </div>
                             </div>
@@ -282,28 +282,28 @@
                         
                         ${f.comment ? `
                             <div class="text-sm">
-                                <span class="font-semibold text-gray-500 dark:text-gray-400">Votre commentaire :</span>
-                                <p class="text-gray-800 dark:text-gray-200 mt-1 pl-3 border-l-2 border-blue-500 dark:border-blue-400">
+                                <span class="font-bold text-gray-500 dark:text-gray-400">Votre commentaire :</span>
+                                <p class="text-gray-800 dark:text-gray-200 mt-1.5 pl-3 border-l-2 border-indigo-500 dark:border-indigo-400 font-medium">
                                     ${escapeHtml(f.comment)}
                                 </p>
                             </div>
                         ` : ''}
 
                         ${f.auto_faq_generated ? `
-                            <div class="text-sm bg-blue-50/50 dark:bg-blue-950/10 border border-blue-100 dark:border-blue-900/30 p-3 rounded-lg mt-2">
-                                <span class="font-semibold text-blue-800 dark:text-blue-400 inline-flex items-center gap-1">
+                            <div class="text-sm bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 p-4 rounded-2xl mt-2">
+                                <span class="font-bold text-blue-800 dark:text-blue-400 inline-flex items-center gap-1.5">
                                     <i class="ti ti-bulb text-base"></i> Texte technique généré par IA :
                                 </span>
-                                <div class="text-gray-900 dark:text-gray-100 mt-2 text-xs whitespace-pre-line font-medium leading-relaxed bg-white/60 dark:bg-gray-900/40 p-2 rounded border border-blue-50 dark:border-blue-950/50">
+                                <div class="text-gray-900 dark:text-gray-100 mt-2 text-xs leading-relaxed whitespace-pre-line font-semibold bg-white/40 dark:bg-black/20 p-3 rounded-xl border border-blue-505/5 dark:border-blue-950/50">
                                     ${escapeHtml(f.auto_faq_content)}
                                 </div>
                             </div>
                         ` : ''}
                     </div>
 
-                    <div class="flex justify-end border-t border-gray-100 dark:border-gray-800 pt-3 mt-1">
-                        <a href="/spaces/${f.space_id}" class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
-                            Ouvrir l'espace <i class="ti ti-arrow-right"></i>
+                    <div class="flex justify-end border-t border-black/5 dark:border-white/5 pt-4 mt-1">
+                        <a href="/spaces/${f.space_id}" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 px-3.5 py-2 rounded-xl border border-indigo-500/10 hover:border-indigo-500/20 active:scale-95 transition-all shadow-sm">
+                            Ouvrir l'espace <i class="ti ti-arrow-right text-sm"></i>
                         </a>
                     </div>
                 </div>

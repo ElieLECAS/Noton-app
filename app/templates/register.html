@@ -4,68 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - {{ app_name }}</title>
+    
+    <!-- Outfit font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Outfit", "sans-serif"],
+                    },
+                },
+            },
         }
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    
+    <style>
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+        }
+        .dark .glass-panel {
+            background: rgba(13, 17, 28, 0.45);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .dark .glass-input {
+            background: rgba(15, 20, 32, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.8);
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+        .dark .glass-input:focus {
+            background: rgba(20, 26, 40, 0.85);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
+        
+        /* Animated Mesh Background */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 20s infinite ease-in-out;
+        }
+        .animation-delay-2000 {
+            animation-delay: 4s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 8s;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 flex items-center justify-center min-h-screen p-4 transition-colors">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 sm:p-8 w-full max-w-md">
+<body class="bg-[#f2f4f8] dark:bg-[#07090e] text-gray-800 dark:text-gray-100 flex items-center justify-center min-h-screen p-4 transition-colors font-sans antialiased overflow-hidden relative">
+    
+    <!-- Animated Mesh Background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+        <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tr from-blue-300/30 to-indigo-400/20 dark:from-blue-900/10 dark:to-indigo-900/10 blur-[80px] sm:blur-[120px] animate-blob"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-tr from-purple-300/30 to-pink-400/20 dark:from-purple-900/10 dark:to-pink-900/10 blur-[80px] sm:blur-[120px] animate-blob animation-delay-2000"></div>
+        <div class="absolute top-[30%] right-[30%] w-[45vw] h-[45vw] rounded-full bg-gradient-to-tr from-cyan-300/20 to-blue-400/25 dark:from-cyan-900/5 dark:to-blue-900/10 blur-[80px] sm:blur-[120px] animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- Theme switch button -->
+    <button
+        onclick="toggleDarkMode()"
+        class="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 p-2.5 rounded-2xl glass-panel hover:bg-white/60 dark:hover:bg-white/10 active:scale-95 transition-all z-50"
+        title="Basculer le thème"
+    >
+        <i id="theme-icon" class="ti ti-moon text-lg"></i>
+    </button>
+
+    <div class="glass-panel rounded-3xl p-6 sm:p-8 w-full max-w-md border border-white/20 dark:border-white/5 shadow-2xl relative z-10">
         <div class="text-center mb-6 sm:mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{{ app_name }}</h1>
-            <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400">Créez votre compte</p>
+            <h1 class="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent mb-2 tracking-tight">
+                {{ app_name }}
+            </h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">Créez votre compte</p>
         </div>
 
-        <form id="register-form" onsubmit="register(event)" class="space-y-4">
+        <form id="register-form" onsubmit="register(event)" class="space-y-5">
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nom d'utilisateur</label>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Nom d'utilisateur</label>
                 <input 
                     type="text" 
                     name="username" 
                     required 
-                    class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
+                    class="w-full px-4 py-3 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none text-sm"
                     placeholder="Choisissez un nom d'utilisateur"
                     autocomplete="username"
                 >
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email</label>
                 <input 
                     type="email" 
                     name="email" 
                     required 
-                    class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
+                    class="w-full px-4 py-3 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none text-sm"
                     placeholder="votre@email.com"
                     autocomplete="email"
                 >
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mot de passe</label>
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Mot de passe</label>
                 <input 
                     type="password" 
                     name="password" 
                     required 
-                    class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
+                    class="w-full px-4 py-3 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none text-sm"
                     placeholder="Votre mot de passe"
                     autocomplete="new-password"
                 >
             </div>
-            <div id="error-message" class="text-red-500 dark:text-red-400 text-sm hidden"></div>
+            <div id="error-message" class="text-red-500 dark:text-red-400 text-xs font-semibold px-1 hidden"></div>
             <button 
                 type="submit" 
-                class="w-full px-4 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 font-medium transition-colors text-base"
+                class="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-bold shadow-md shadow-indigo-500/10 active:scale-[0.98] transition-all text-sm"
             >
                 Créer mon compte
             </button>
         </form>
 
         <div class="mt-6 text-center">
-            <p class="text-sm text-gray-500 dark:text-gray-400">
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
                 Déjà un compte ? 
-                <a href="/login" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">Se connecter</a>
+                <a href="/login" class="text-indigo-600 dark:text-indigo-400 hover:underline font-bold">Se connecter</a>
             </p>
         </div>
     </div>
@@ -78,7 +169,24 @@
             if (isDark) {
                 document.documentElement.classList.add('dark');
             }
+            updateThemeIcon();
         }
+        
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', String(isDark));
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const icon = document.getElementById('theme-icon');
+            if (document.documentElement.classList.contains('dark')) {
+                icon.className = 'ti ti-sun text-lg';
+            } else {
+                icon.className = 'ti ti-moon text-lg';
+            }
+        }
+        
         initDarkMode();
 
         async function register(event) {
@@ -112,4 +220,3 @@
     </script>
 </body>
 </html>
-

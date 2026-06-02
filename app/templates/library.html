@@ -1,121 +1,123 @@
 {% extends "base.html" %} {% block title %}Bibliothèque - {{ app_name }}{%
 endblock %} {% block content %}
-<div class="flex-1 overflow-hidden bg-gray-50 dark:bg-gray-900 p-4 sm:p-6">
-    <div class="max-w-7xl mx-auto h-full flex flex-col gap-4">
+<div class="flex-1 flex flex-col min-h-0 bg-transparent p-4 sm:p-6">
+    <div class="w-full max-w-7xl mx-auto flex-1 flex flex-col min-h-0 gap-4">
         <div class="flex items-center justify-between">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
                 Bibliothèque générale
             </h1>
             <div class="flex gap-2">
                 <button
                     id="library-create-folder-btn"
                     onclick="openFolderModal()"
-                    class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-2"
                 >
-                    <i class="ti ti-folder-plus"></i> Dossier
+                    <i class="ti ti-folder-plus text-base"></i> Dossier
                 </button>
                 <button
                     id="library-reindex-all-btn"
                     onclick="reindexAllLibraryDocuments()"
-                    class="px-4 py-2 rounded-lg border border-amber-600 text-amber-800 dark:text-amber-300 dark:border-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40"
+                    class="px-4 py-2 rounded-xl border border-amber-600/30 text-amber-700 hover:bg-amber-500/10 active:scale-95 transition-all text-sm font-semibold flex items-center gap-2"
                     title="Réindexer tous les documents fichier (Celery)"
                 >
-                    <i class="ti ti-refresh"></i> Tout retraiter
+                    <i class="ti ti-refresh text-base"></i> Tout retraiter
                 </button>
                 <button
                     type="button"
                     id="library-stop-all-btn"
                     onclick="stopAllQueueDocuments()"
-                    class="hidden px-4 py-2 rounded-lg border border-red-600 text-red-800 dark:text-red-300 dark:border-red-500 hover:bg-red-50 dark:hover:bg-red-950/40"
+                    class="hidden px-4 py-2 rounded-xl border border-red-600/30 text-red-700 hover:bg-red-500/10 active:scale-95 transition-all text-sm font-semibold flex items-center gap-2"
                     title="Arrêter tous les traitements en cours ou en attente (admin)"
                 >
-                    <i class="ti ti-player-stop"></i> Stop tout
+                    <i class="ti ti-player-stop text-base"></i> Stop tout
                 </button>
                 <button
                     type="button"
                     id="library-skip-all-btn"
                     onclick="skipAllQueueDocuments()"
-                    class="hidden px-4 py-2 rounded-lg border border-orange-600 text-orange-800 dark:text-orange-300 dark:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/40"
+                    class="hidden px-4 py-2 rounded-xl border border-orange-600/30 text-orange-700 hover:bg-orange-500/10 active:scale-95 transition-all text-sm font-semibold flex items-center gap-2"
                     title="Ignorer les documents en attente et arrêter celui en cours (admin)"
                 >
-                    <i class="ti ti-player-skip-forward"></i> Ignorer tout
+                    <i class="ti ti-player-skip-forward text-base"></i> Ignorer tout
                 </button>
                 <button
                     id="library-upload-btn"
                     onclick="openUploadModal()"
-                    class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                    class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md active:scale-95 transition-all text-sm font-semibold flex items-center gap-2"
                 >
-                    <i class="ti ti-upload"></i> Upload
+                    <i class="ti ti-upload text-base"></i> Upload
                 </button>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 flex-1 min-h-0">
             <section
-                class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-auto"
+                class="lg:col-span-1 glass-panel rounded-3xl p-5 overflow-auto shadow-sm border border-black/5 dark:border-white/5"
             >
-                <div class="flex items-center justify-between mb-3">
-                    <h2 class="font-semibold text-gray-900 dark:text-gray-100">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-bold text-gray-900 dark:text-white">
                         Dossiers
                     </h2>
                     <button
                         id="library-create-folder-btn-sidebar"
                         onclick="openFolderModal()"
-                        class="text-xs px-2 py-1 rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        class="text-xs px-2.5 py-1.5 rounded-lg border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 font-semibold transition-colors"
                     >
-                        <i class="ti ti-folder-plus"></i> Nouveau
+                        <i class="ti ti-folder-plus mr-1"></i>Nouveau
                     </button>
                 </div>
                 <div
                     id="folders-list"
-                    class="space-y-2 text-sm text-gray-700 dark:text-gray-200"
+                    class="space-y-1 text-sm text-gray-700 dark:text-gray-200"
                 ></div>
             </section>
 
             <section
                 id="document-drop-zone"
-                class="relative lg:col-span-3 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 overflow-auto transition-colors"
+                class="relative lg:col-span-3 glass-panel rounded-3xl p-5 overflow-auto transition-all shadow-sm border border-black/5 dark:border-white/5 flex flex-col"
             >
-                <div class="flex items-center justify-between mb-3">
-                    <h2 class="font-semibold text-gray-900 dark:text-gray-100">
+                <div class="flex items-center justify-between mb-3 shrink-0">
+                    <h2 class="font-bold text-gray-900 dark:text-white">
                         Documents
                     </h2>
-                    <span id="docs-count" class="text-sm text-gray-500"></span>
+                    <span id="docs-count" class="text-sm font-semibold text-gray-500"></span>
                 </div>
                 <div
                     id="folder-current-path"
-                    class="text-xs text-gray-500 dark:text-gray-400 mb-2"
+                    class="text-xs text-gray-400 dark:text-gray-500 mb-4 shrink-0 font-medium"
                 ></div>
                 <div
                     id="drop-hint"
                     class="pointer-events-none absolute inset-0 flex items-center justify-center px-6"
                 >
                     <div class="text-center text-gray-400 dark:text-gray-500">
-                        <div class="mb-2">
+                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4 shadow-sm">
                             <i class="ti ti-file-upload text-3xl"></i>
                         </div>
-                        <div class="text-sm font-medium">
+                        <div class="text-sm font-bold text-gray-700 dark:text-gray-300">
                             Glissez-déposez vos documents ici
                         </div>
-                        <div class="text-xs mt-1">
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">
                             ou utilisez le bouton Upload
                         </div>
                     </div>
                 </div>
-                <div id="documents-list" class="space-y-2"></div>
+                <div id="documents-list" class="space-y-2 flex-1 overflow-auto min-h-0"></div>
                 <div
                     id="drop-overlay"
-                    class="hidden absolute inset-3 rounded-xl border-2 border-dashed border-blue-400 bg-blue-50/90 dark:bg-blue-900/25 pointer-events-none flex items-center justify-center"
+                    class="hidden absolute inset-3 rounded-3xl border border-dashed border-indigo-500/40 bg-white/80 dark:bg-[#0d111c]/80 backdrop-blur-md pointer-events-none flex items-center justify-center z-10 transition-all duration-300"
                 >
-                    <div class="text-center">
+                    <div class="text-center p-6 rounded-2xl bg-white/50 dark:bg-black/20 shadow-xl border border-white/20">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white mb-4 shadow-lg shadow-indigo-500/25 animate-bounce">
+                            <i class="ti ti-cloud-upload text-3xl"></i>
+                        </div>
                         <div
-                            class="text-blue-700 dark:text-blue-300 font-semibold"
+                            class="text-gray-900 dark:text-white font-extrabold text-lg"
                         >
                             Déposez vos documents ici
                         </div>
-                        <div class="text-sm text-blue-600 dark:text-blue-400">
-                            La modale d'upload s'ouvrira pour choisir les
-                            espaces
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-[280px]">
+                            La modale d'upload s'ouvrira pour choisir les espaces
                         </div>
                     </div>
                 </div>
@@ -126,56 +128,56 @@ endblock %} {% block content %}
 
 <div
     id="upload-modal"
-    class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
 >
     <div
-        class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5"
+        class="w-full max-w-2xl glass-panel rounded-3xl p-6 shadow-2xl"
     >
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-            Upload multi-espaces
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
+            Upload de documents
         </h3>
         <form id="upload-form" class="space-y-4">
             <div>
                 <label
-                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300"
+                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300 font-semibold"
                     >Fichiers</label
                 >
                 <input
                     id="upload-files"
                     type="file"
                     multiple
-                    class="w-full text-sm"
+                    class="w-full text-sm glass-input rounded-xl p-3 text-gray-900 dark:text-white"
                     required
                     accept="*/*"
                 />
             </div>
             <div>
                 <label
-                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300"
+                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300 font-semibold"
                     >Espaces accessibles</label
                 >
                 <div
                     id="spaces-checkboxes"
-                    class="grid grid-cols-2 gap-2 text-sm"
+                    class="grid grid-cols-2 gap-2 text-sm border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4 max-h-40 overflow-y-auto"
                 ></div>
             </div>
             <label
-                class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
+                class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-semibold"
             >
-                <input id="upload-is-paid" type="checkbox" class="rounded" />
+                <input id="upload-is-paid" type="checkbox" class="rounded w-4 h-4 text-indigo-600 border-gray-300 dark:border-gray-600 focus:ring-indigo-500" />
                 <span>Document payant</span>
             </label>
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
                     onclick="closeUploadModal()"
-                    class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
                 >
                     Annuler
                 </button>
                 <button
                     type="submit"
-                    class="px-4 py-2 rounded-lg bg-blue-600 text-white"
+                    class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all text-sm font-semibold"
                 >
                     Uploader
                 </button>
@@ -186,33 +188,35 @@ endblock %} {% block content %}
 
 <div
     id="folder-modal"
-    class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
 >
     <div
-        class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5"
+        class="w-full max-w-md glass-panel rounded-3xl p-6 shadow-2xl"
     >
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
             Nouveau dossier (racine)
         </h3>
         <form id="folder-form" class="space-y-4">
-            <input
-                id="folder-name"
-                type="text"
-                placeholder="Nom du dossier"
-                required
-                class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent"
-            />
-            <div class="flex justify-end gap-2">
+            <div>
+                <input
+                    id="folder-name"
+                    type="text"
+                    placeholder="Nom du dossier"
+                    required
+                    class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+                />
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
                     onclick="closeFolderModal()"
-                    class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
                 >
                     Annuler
                 </button>
                 <button
                     type="submit"
-                    class="px-4 py-2 rounded-lg bg-blue-600 text-white"
+                    class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all text-sm font-semibold"
                 >
                     Créer
                 </button>
@@ -223,38 +227,43 @@ endblock %} {% block content %}
 
 <div
     id="space-modal"
-    class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
 >
     <div
-        class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5"
+        class="w-full max-w-md glass-panel rounded-3xl p-6 shadow-2xl"
     >
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
             Nouvel espace
         </h3>
         <form id="space-form" class="space-y-4">
-            <input
-                id="space-name"
-                type="text"
-                placeholder="Ex: Interne, Client A..."
-                required
-                class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent"
-            />
-            <textarea
-                id="space-description"
-                placeholder="Description (optionnelle)"
-                class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent"
-            ></textarea>
-            <div class="flex justify-end gap-2">
+            <div>
+                <input
+                    id="space-name"
+                    type="text"
+                    placeholder="Ex: Interne, Client A..."
+                    required
+                    class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+                />
+            </div>
+            <div>
+                <textarea
+                    id="space-description"
+                    placeholder="Description (optionnelle)"
+                    rows="3"
+                    class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+                ></textarea>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
                     onclick="closeCreateSpaceModal()"
-                    class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
                 >
                     Annuler
                 </button>
                 <button
                     type="submit"
-                    class="px-4 py-2 rounded-lg bg-blue-600 text-white"
+                    class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all text-sm font-semibold"
                 >
                     Créer
                 </button>
@@ -265,39 +274,44 @@ endblock %} {% block content %}
 
 <div
     id="edit-space-modal"
-    class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
 >
     <div
-        class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5"
+        class="w-full max-w-md glass-panel rounded-3xl p-6 shadow-2xl"
     >
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
             Modifier l'espace
         </h3>
         <form id="edit-space-form" class="space-y-4">
             <input id="edit-space-id" type="hidden" />
-            <input
-                id="edit-space-name"
-                type="text"
-                placeholder="Nom de l'espace"
-                required
-                class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent"
-            />
-            <textarea
-                id="edit-space-description"
-                placeholder="Description (optionnelle)"
-                class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent"
-            ></textarea>
-            <div class="flex justify-end gap-2">
+            <div>
+                <input
+                    id="edit-space-name"
+                    type="text"
+                    placeholder="Nom de l'espace"
+                    required
+                    class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+                />
+            </div>
+            <div>
+                <textarea
+                    id="edit-space-description"
+                    placeholder="Description (optionnelle)"
+                    rows="3"
+                    class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+                ></textarea>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
                     onclick="closeEditSpaceModal()"
-                    class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
                 >
                     Annuler
                 </button>
                 <button
                     type="submit"
-                    class="px-4 py-2 rounded-lg bg-blue-600 text-white"
+                    class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all text-sm font-semibold"
                 >
                     Enregistrer
                 </button>
@@ -308,59 +322,59 @@ endblock %} {% block content %}
 
 <div
     id="edit-document-modal"
-    class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
 >
     <div
-        class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5"
+        class="w-full max-w-2xl glass-panel rounded-3xl p-6 shadow-2xl"
     >
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
             Modifier le document
         </h3>
         <form id="edit-document-form" class="space-y-4">
             <input id="edit-document-id" type="hidden" />
             <div>
                 <label
-                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300"
+                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300 font-semibold"
                     >Titre</label
                 >
                 <input
                     id="edit-document-title"
                     type="text"
                     required
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent"
+                    class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm"
                 />
             </div>
             <div>
                 <label
-                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300"
+                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300 font-semibold"
                     >Espaces accessibles</label
                 >
                 <div
                     id="edit-document-spaces-checkboxes"
-                    class="grid grid-cols-2 gap-2 text-sm"
+                    class="grid grid-cols-2 gap-2 text-sm border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4 max-h-40 overflow-y-auto"
                 ></div>
             </div>
             <label
-                class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
+                class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-semibold"
             >
                 <input
                     id="edit-document-is-paid"
                     type="checkbox"
-                    class="rounded"
+                    class="rounded w-4 h-4 text-indigo-600 border-gray-300 dark:border-gray-600 focus:ring-indigo-500"
                 />
                 <span>Document payant</span>
             </label>
-            <div class="flex justify-end gap-2">
+            <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
                     onclick="closeEditDocumentModal()"
-                    class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
                 >
                     Annuler
                 </button>
                 <button
                     type="submit"
-                    class="px-4 py-2 rounded-lg bg-blue-600 text-white"
+                    class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all text-sm font-semibold"
                 >
                     Enregistrer
                 </button>
@@ -371,38 +385,38 @@ endblock %} {% block content %}
 
 <div
     id="chunks-monitor-modal"
-    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
 >
     <div
-        class="w-full max-w-6xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 flex flex-col"
+        class="w-full max-w-6xl max-h-[90vh] glass-panel rounded-3xl p-6 shadow-2xl flex flex-col"
     >
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center justify-between mb-4 shrink-0">
             <div>
                 <h3
                     id="chunks-monitor-title"
-                    class="text-lg font-semibold text-gray-900 dark:text-gray-100"
+                    class="text-lg font-bold text-gray-900 dark:text-white"
                 >
                     Monitoring des chunks
                 </h3>
                 <p
                     id="chunks-monitor-subtitle"
-                    class="text-xs text-gray-500 dark:text-gray-400"
+                    class="text-xs text-gray-500 dark:text-gray-400 font-medium"
                 ></p>
             </div>
             <button
                 type="button"
                 onclick="closeChunksMonitorModal()"
-                class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm"
+                class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
             >
                 Fermer
             </button>
         </div>
 
-        <div class="flex items-center gap-2 mb-3">
+        <div class="flex items-center gap-2 mb-4 shrink-0">
             <button
                 id="chunks-tab-raw"
                 type="button"
-                class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-sm"
+                class="px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm"
                 onclick="switchChunksTab('raw')"
             >
                 Raw enrichi
@@ -410,14 +424,14 @@ endblock %} {% block content %}
             <button
                 id="chunks-tab-report"
                 type="button"
-                class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-200"
+                class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
                 onclick="switchChunksTab('report')"
             >
                 Synthèse / Rapport
             </button>
         </div>
 
-        <div class="flex-1 min-h-0 overflow-auto">
+        <div class="flex-1 min-h-0 overflow-auto border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4">
             <div id="chunks-raw-panel" class="space-y-3"></div>
             <div id="chunks-report-panel" class="space-y-3 hidden"></div>
         </div>
@@ -510,38 +524,35 @@ endblock %} {% block content %}
                 ? spaces
                       .map(
                           (s) => `
-          <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-            <i class="ti ti-circle-dot text-xs text-gray-400 group-hover:text-blue-500 transition-colors"></i>
-            <a href="/spaces/${s.id}" class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1 no-underline group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${s.name}</a>
-            ${
-                canSpaceUpdate
-                    ? `
-                  <button
-                    class="opacity-0 group-hover:opacity-100 text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-opacity"
-                    onclick="event.stopPropagation(); openEditSpaceModal(${s.id}, '${(s.name || "").replace(/'/g, "\\'")}', '${(s.description || "").replace(/'/g, "\\'")}')"
-                    title="Modifier l'espace"
-                  >
-                    <i class="ti ti-pencil text-sm"></i>
-                  </button>
-                `
-                    : ``
-            }
-            ${
-                canSpaceDelete
-                    ? `
-                  <button
-                    class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity"
-                    onclick="event.stopPropagation(); deleteSpace(${s.id}, '${(s.name || "").replace(/'/g, "\\'")}')"
-                    title="Supprimer l'espace"
-                  >
-                    <i class="ti ti-trash text-sm"></i>
-                  </button>
-                `
-                    : ``
-            }
+          <div class="group flex items-center gap-3 px-3 py-2.5 mb-1 rounded-xl transition-all cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500/10 to-purple-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+              <i class="ti ti-layout-grid text-xs"></i>
+            </div>
+            <a href="/spaces/${s.id}" class="flex-1 min-w-0 no-underline hover:no-underline">
+              <div class="font-semibold text-sm truncate text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">${s.name}</div>
+            </a>
+            <div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+              ${
+                  canSpaceUpdate
+                      ? `<button
+                          class="w-6 h-6 rounded-md text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-500/10 flex items-center justify-center transition-all"
+                          onclick="event.stopPropagation(); openEditSpaceModal(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}'  , '${(s.description || '').replace(/'/g, "\\'")}')"
+                          title="Modifier l'espace"
+                        ><i class="ti ti-pencil text-xs"></i></button>`
+                      : ``
+              }
+              ${
+                  canSpaceDelete
+                      ? `<button
+                          class="w-6 h-6 rounded-md text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10 flex items-center justify-center transition-all"
+                          onclick="event.stopPropagation(); deleteSpace(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}')"
+                          title="Supprimer l'espace"
+                        ><i class="ti ti-trash text-xs"></i></button>`
+                      : ``
+              }
+            </div>
           </div>
-        `,
-                      )
+        `)
                       .join("")
                 : `<div class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400">Aucun espace</div>`;
         }
@@ -566,49 +577,49 @@ endblock %} {% block content %}
         const host = document.getElementById("folders-list");
         host.innerHTML = `
     <div
-      class="folder-item w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 ${selectedFolderId === null ? "bg-gray-100 dark:bg-gray-700" : ""} flex items-center justify-between gap-2"
+      class="folder-item group flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border border-transparent hover:border-black/5 dark:hover:border-white/5 hover:bg-white/40 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 cursor-pointer transition-all active:scale-98 ${selectedFolderId === null ? "bg-white/60 dark:bg-white/10 shadow-sm border-black/5 dark:border-white/5 font-semibold text-indigo-600 dark:text-indigo-400" : ""}"
       onclick="selectFolder(null)"
       ondragover="handleFolderDragOver(event)"
       ondragleave="handleFolderDragLeave(event)"
       ondrop="handleFolderDrop(event, null)"
     >
-      <div class="flex items-center gap-2 min-w-0">
-        <i class="ti ti-home-2"></i> <span>Racine</span>
+      <div class="flex items-center gap-2.5 min-w-0">
+        <i class="ti ti-home text-base text-gray-400 dark:text-gray-500 group-hover:text-indigo-500 transition-colors"></i> <span class="truncate">Racine</span>
       </div>
     </div>
     ${folders
         .map(
             (f) => `
       <div
-        class="folder-item w-full text-left px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 ${selectedFolderId === f.id ? "bg-gray-100 dark:bg-gray-700" : ""} flex items-center justify-between gap-2"
+        class="folder-item group flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border border-transparent hover:border-black/5 dark:hover:border-white/5 hover:bg-white/40 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 cursor-pointer transition-all active:scale-98 ${selectedFolderId === f.id ? "bg-white/60 dark:bg-white/10 shadow-sm border-black/5 dark:border-white/5 font-semibold text-indigo-600 dark:text-indigo-400" : ""}"
         onclick="selectFolder(${f.id})"
         ondragover="handleFolderDragOver(event)"
         ondragleave="handleFolderDragLeave(event)"
         ondrop="handleFolderDrop(event, ${f.id})"
       >
-        <div class="flex items-center gap-2 min-w-0">
-          <i class="ti ti-folder"></i>
+        <div class="flex items-center gap-2.5 min-w-0">
+          <i class="ti ti-folder text-base text-indigo-500/80 dark:text-indigo-400/80 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors"></i>
           <span class="truncate">${f.name}</span>
         </div>
         ${
             canLibraryWrite
                 ? `
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   type="button"
-                  class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-xs"
+                  class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                   onclick="event.stopPropagation(); renameFolder(${f.id}, '${(f.name || "").replace(/'/g, "\\'")}')"
                   title="Renommer"
                 >
-                  <i class="ti ti-pencil"></i>
+                  <i class="ti ti-pencil text-xs"></i>
                 </button>
                 <button
                   type="button"
-                  class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-xs"
+                  class="p-1 rounded-md hover:bg-red-500/10 text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors"
                   onclick="event.stopPropagation(); deleteFolder(${f.id}, '${(f.name || "").replace(/'/g, "\\'")}')"
                   title="Supprimer"
                 >
-                  <i class="ti ti-trash"></i>
+                  <i class="ti ti-trash text-xs"></i>
                 </button>
               </div>
             `
@@ -667,48 +678,78 @@ endblock %} {% block content %}
             `${docs.length} document(s)`;
         document.getElementById("documents-list").innerHTML = docs
             .map(
-                (d) => `
+                (d) => {
+                    const ext = (d.title || "").split(".").pop().toLowerCase();
+                    let iconHtml = "";
+                    if (ext === 'pdf') {
+                        iconHtml = `<div class="w-10 h-10 rounded-xl bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 border border-red-500/10"><i class="ti ti-file-type-pdf text-xl"></i></div>`;
+                    } else if (['doc', 'docx'].includes(ext)) {
+                        iconHtml = `<div class="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/10"><i class="ti ti-file-type-doc text-xl"></i></div>`;
+                    } else if (['xls', 'xlsx', 'csv'].includes(ext)) {
+                        iconHtml = `<div class="w-10 h-10 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/10"><i class="ti ti-file-spreadsheet text-xl"></i></div>`;
+                    } else if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(ext)) {
+                        iconHtml = `<div class="w-10 h-10 rounded-xl bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-500/10"><i class="ti ti-photo text-xl"></i></div>`;
+                    } else if (['txt', 'md'].includes(ext)) {
+                        iconHtml = `<div class="w-10 h-10 rounded-xl bg-gray-500/10 dark:bg-gray-500/20 text-gray-600 dark:text-gray-400 flex items-center justify-center shrink-0 border border-gray-500/10"><i class="ti ti-file-text text-xl"></i></div>`;
+                    } else {
+                        iconHtml = `<div class="w-10 h-10 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-500/10"><i class="ti ti-file-description text-xl"></i></div>`;
+                    }
+
+                    const snap = d.processing_snapshot;
+                    let progressText = `${d.processing_progress ?? 0}%`;
+                    if (snap && snap.current_page && snap.total_pages) {
+                        const pct = Math.round((snap.current_page / snap.total_pages) * 100);
+                        progressText = `${snap.current_page}/${snap.total_pages} (${pct}%)`;
+                    }
+
+                    let statusBadgeHtml = '';
+                    if (d.processing_status === "reindex_queued") {
+                        statusBadgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800/40"><i class="ti ti-loader animate-spin text-xs"></i> En attente retraitement multimodal</span>`;
+                    } else if (d.processing_status === "cancelled" || d.processing_status === "cancelled_by_user") {
+                        statusBadgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/40"><i class="ti ti-circle-x text-xs"></i> Traitement arrêté</span>`;
+                    } else if (d.processing_status === "skipped") {
+                        statusBadgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800/40"><i class="ti ti-player-skip-forward text-xs"></i> Ignoré</span>`;
+                    } else if (d.processing_status === "processing") {
+                        statusBadgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800/40"><i class="ti ti-loader animate-spin text-xs"></i> Traitement en cours (${progressText})</span>`;
+                    } else if (d.processing_status === "pending") {
+                        statusBadgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800/60 dark:text-gray-400 border border-gray-200 dark:border-gray-700/40"><i class="ti ti-hourglass text-xs"></i> En attente (${progressText})</span>`;
+                    } else if (d.processing_status === "completed") {
+                        statusBadgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40"><i class="ti ti-circle-check text-xs"></i> Indexé</span>`;
+                    } else {
+                        statusBadgeHtml = `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800 dark:bg-gray-800/60 dark:text-gray-400 border border-gray-200 dark:border-gray-700/40">${d.processing_status}</span>`;
+                    }
+
+                    const paidBadgeHtml = d.is_paid ? `<span title="Document payant (acheté fournisseur)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 border border-amber-500/10 text-xs font-semibold"><i class="ti ti-coins text-xs"></i><span>Document payant</span></span>` : '';
+
+                    return `
     <div
-      class="p-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center justify-between cursor-grab active:cursor-grabbing"
+      class="glass-card group p-4 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-grab active:cursor-grabbing border border-black/5 dark:border-white/5 transition-all duration-300"
       draggable="true"
       ondragstart="handleDocumentDragStart(event, ${d.id})"
       ondragend="handleDocumentDragEnd(event)"
     >
-      <div>
-        <div class="font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
-          <span>${d.title}</span>
-          ${d.is_paid ? '<span title="Document payant (acheté fournisseur)" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 text-xs font-medium"><i class="ti ti-coins"></i><span>Document payant</span></span>' : ""}
+      <div class="flex items-start gap-3 min-w-0">
+        ${iconHtml}
+        <div class="min-w-0">
+          <div class="font-bold text-gray-900 dark:text-gray-100 flex flex-wrap items-center gap-2">
+            <span class="truncate">${d.title}</span>
+            ${paidBadgeHtml}
+          </div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex flex-wrap items-center gap-1.5 font-medium">
+            ${statusBadgeHtml}
+            ${formatProcessingSnapshotLine(d)}
+          </div>
         </div>
-        <div class="text-xs text-gray-500">${
-            (() => {
-                const snap = d.processing_snapshot;
-                let progressText = `${d.processing_progress ?? 0}%`;
-                if (snap && snap.current_page && snap.total_pages) {
-                    const pct = Math.round((snap.current_page / snap.total_pages) * 100);
-                    progressText = `${snap.current_page}/${snap.total_pages} = ${pct}%`;
-                }
-                
-                if (d.processing_status === "reindex_queued") {
-                    return `<span class="text-amber-700 dark:text-amber-400">En attente retraitement multimodal</span> — chunks actuels conservés (${progressText})`;
-                } else if (d.processing_status === "cancelled" || d.processing_status === "cancelled_by_user") {
-                    return `<span class="text-red-700 dark:text-red-400 font-medium">Traitement arrêté</span>${formatProcessingSnapshotLine(d)}`;
-                } else if (d.processing_status === "skipped") {
-                    return `<span class="text-orange-700 dark:text-orange-400 font-medium">Ignoré (non traité)</span>${formatProcessingSnapshotLine(d)}`;
-                } else if (d.processing_status === "processing") {
-                    return `<span class="text-blue-600 dark:text-blue-400 font-medium">Traitement en cours</span> (${progressText})${formatProcessingSnapshotLine(d)}`;
-                } else if (d.processing_status === "pending") {
-                    return `<span class="text-gray-500 dark:text-gray-400 font-medium">En attente</span> (${progressText})${formatProcessingSnapshotLine(d)}`;
-                } else if (d.processing_status === "completed") {
-                    return `<span class="text-emerald-700 dark:text-emerald-400 font-medium">Indexé</span>${formatProcessingSnapshotLine(d)}`;
-                } else {
-                    return `Statut: ${d.processing_status} (${progressText})${formatProcessingSnapshotLine(d)}`;
-                }
-            })()
-        }</div>
       </div>
-        <div class="flex items-center gap-3 flex-wrap justify-end">
-        <button class="text-blue-600 text-sm" onclick="openDocumentFile(${d.id})">Ouvrir</button>
-        <button class="text-indigo-600 text-sm" onclick="openChunksMonitorModal(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')">Chunks</button>
+      <div class="flex items-center gap-2 flex-wrap justify-end shrink-0">
+        <button class="px-3 py-1.5 rounded-xl border border-blue-500/10 bg-blue-500/5 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/10 dark:hover:bg-blue-500/20 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="openDocumentFile(${d.id})">
+          <i class="ti ti-eye text-sm"></i>
+          <span>Ouvrir</span>
+        </button>
+        <button class="px-3 py-1.5 rounded-xl border border-indigo-500/10 bg-indigo-500/5 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/10 dark:hover:bg-indigo-500/20 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="openChunksMonitorModal(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')">
+          <i class="ti ti-stack text-sm"></i>
+          <span>Chunks</span>
+        </button>
         ${
             canLibraryWrite
                 ? `
@@ -716,11 +757,14 @@ endblock %} {% block content %}
                   d.document_type === "document" && isAdminUser
                       ? `<button
                       type="button"
-                      class="text-amber-700 dark:text-amber-400 text-sm disabled:opacity-40 disabled:pointer-events-none"
+                      class="px-3 py-1.5 rounded-xl border border-amber-500/10 bg-amber-500/5 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 dark:hover:bg-amber-500/20 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5 disabled:opacity-40 disabled:pointer-events-none"
                       ${d.processing_status === "processing" || d.processing_status === "reindex_queued" ? "disabled" : ""}
                       onclick="reindexDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')"
-                      title="Retraiter avec le pipeline multimodal (1-5 sections + synthèse par page)"
-                    >Retraiter</button>`
+                      title="Retraiter avec le pipeline multimodal"
+                    >
+                      <i class="ti ti-refresh text-sm"></i>
+                      <span>Retraiter</span>
+                    </button>`
                       : ""
               }
               ${
@@ -728,7 +772,7 @@ endblock %} {% block content %}
                   (d.processing_status === "pending" ||
                       d.processing_status === "processing" ||
                       d.processing_status === "reindex_queued")
-                      ? `<button type="button" class="text-red-700 dark:text-red-400 text-sm" onclick="stopQueueDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')" title="Arrêter le traitement sans supprimer le document">Stop</button>`
+                      ? `<button type="button" class="px-3 py-1.5 rounded-xl border border-red-500/10 bg-red-500/5 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-500/20 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="stopQueueDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')" title="Arrêter le traitement sans supprimer le document"><i class="ti ti-player-stop text-sm"></i><span>Stop</span></button>`
                       : ""
               }
               ${
@@ -736,17 +780,24 @@ endblock %} {% block content %}
                   (d.processing_status === "pending" ||
                       d.processing_status === "processing" ||
                       d.processing_status === "reindex_queued")
-                      ? `<button type="button" class="text-orange-700 dark:text-orange-400 text-sm" onclick="skipQueueDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')" title="Ignorer en attente ou arrêter si en cours">Ignorer</button>`
+                      ? `<button type="button" class="px-3 py-1.5 rounded-xl border border-orange-500/10 bg-orange-500/5 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 hover:bg-orange-500/10 dark:hover:bg-orange-500/20 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="skipQueueDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')" title="Ignorer en attente ou arrêter si en cours"><i class="ti ti-player-skip-forward text-sm"></i><span>Ignorer</span></button>`
                       : ""
               }
-              <button class="text-gray-700 dark:text-gray-300 text-sm" onclick="openEditDocumentModal(${d.id})">Modifier</button>
-              <button class="text-red-600 text-sm" onclick="deleteDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')">Supprimer</button>
+              <button class="px-3 py-1.5 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-black/10 dark:hover:bg-white/10 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="openEditDocumentModal(${d.id})">
+                <i class="ti ti-pencil text-sm"></i>
+                <span>Modifier</span>
+              </button>
+              <button class="px-3 py-1.5 rounded-xl border border-red-500/20 bg-red-500/5 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 dark:hover:bg-red-500/30 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="deleteDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')">
+                <i class="ti ti-trash text-sm"></i>
+                <span>Supprimer</span>
+              </button>
             `
                 : ``
         }
       </div>
     </div>
-  `,
+  `;
+                }
             )
             .join("");
         const dropHint = document.getElementById("drop-hint");
