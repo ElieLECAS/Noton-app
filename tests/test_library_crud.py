@@ -262,3 +262,221 @@ def test_document_spaces_noop_does_not_dispatch(
     dispatch_mock.assert_not_called()
 
     client.delete(f"/api/library/documents/{doc_id}", headers=responsable_headers)
+
+
+def test_document_export_and_import(client, responsable_headers):
+    import io
+    import zipfile
+    import json
+    import os
+
+    # Ensure media directory exists and write dummy file
+    os.makedirs("media/documents", exist_ok=True)
+    pdf_path = "media/documents/export_test.pdf"
+    with open(pdf_path, "wb") as f:
+        f.write(b"pdfcontent")
+
+    # 1. Create a dummy document
+    with (
+        mock.patch("app.routers.library.process_document_async"),
+        mock.patch(
+            "app.routers.library.save_uploaded_file",
+            return_value=pdf_path,
+        ),
+    ):
+        r = client.post(
+            "/api/library/upload",
+            headers=responsable_headers,
+            files=[("files", ("export_test.pdf", b"pdfcontent", "application/pdf"))],
+            data={"space_ids": "[]", "is_paid": "false"},
+        )
+        assert r.status_code == 201
+        doc_id = r.json()[0]["id"]
+
+        # Create a dummy chunk in the SQL database for this document
+        from app.models.document_chunk import DocumentChunk
+        from sqlmodel import Session
+        from app.database import engine
+
+        with Session(engine) as sess:
+            chunk = DocumentChunk(
+                document_id=doc_id,
+                chunk_index=0,
+                content="dummy chunk text",
+                text="dummy chunk text",
+                is_leaf=True,
+                hierarchy_level=0,
+                node_id="node_1",
+                start_char=0,
+                end_char=16,
+                metadata_json={"page_no": 1}
+            )
+            sess.add(chunk)
+            sess.commit()
+            sess.refresh(chunk)
+            old_chunk_id = chunk.id
+
+        # Mock LanceDB table search results for export
+        mock_table = mock.Mock()
+        mock_table.search.return_value.where.return_value.to_list.return_value = [
+            {"chunk_id": old_chunk_id, "patch_index": 0, "vector": [0.5] * 128}
+        ]
+
+        with mock.patch("app.services.lancedb_service.get_colpali_table", return_value=mock_table):
+            # Request export
+            expr = client.get(f"/api/library/documents/{doc_id}/export", headers=responsable_headers)
+            assert expr.status_code == 200
+            assert expr.headers["content-type"] == "application/zip"
+
+            # Check ZIP contents
+            zip_bytes = expr.content
+            with zipfile.ZipFile(io.BytesIO(zip_bytes)) as z:
+                namelist = z.namelist()
+                assert "metadata.json" in namelist
+                assert "colpali_patches.json" in namelist
+                assert "export_test.pdf" in namelist
+
+                # Read metadata
+                meta = json.loads(z.read("metadata.json").decode("utf-8"))
+                assert meta["document"]["title"] == "export_test"
+                assert len(meta["chunks"]) == 1
+
+            # 2. Test Import using the exported ZIP
+            with (
+                mock.patch("app.routers.library.save_uploaded_file", return_value="media/documents/import_test.pdf"),
+                mock.patch("app.services.lancedb_service.insert_colpali_patches_batch_lancedb") as mock_insert,
+            ):
+                impr = client.post(
+                    "/api/library/documents/import",
+                    headers=responsable_headers,
+                    files={"file": ("export_test.zip", zip_bytes, "application/zip")},
+                )
+                assert impr.status_code == 201
+                imported_doc = impr.json()
+                assert imported_doc["title"] == "export_test"
+
+                # Verify it calls batch insert to LanceDB
+                mock_insert.assert_called_once()
+
+        # Cleanup
+        client.delete(f"/api/library/documents/{doc_id}", headers=responsable_headers)
+        client.delete(f"/api/library/documents/{imported_doc['id']}", headers=responsable_headers)
+        
+        # Delete dummy file
+        try:
+            if os.path.exists(pdf_path):
+                os.remove(pdf_path)
+            if os.path.exists("media/documents/import_test.pdf"):
+                os.remove("media/documents/import_test.pdf")
+        except Exception:
+            pass
+
+
+def test_library_export_all_and_import(client, responsable_headers):
+    import io
+    import zipfile
+    import json
+    import os
+
+    # Ensure media directory exists and write dummy file
+    os.makedirs("media/documents", exist_ok=True)
+    pdf_path = "media/documents/export_all_test.pdf"
+    with open(pdf_path, "wb") as f:
+        f.write(b"pdfcontentall")
+
+    # 1. Create a dummy document
+    with (
+        mock.patch("app.routers.library.process_document_async"),
+        mock.patch(
+            "app.routers.library.save_uploaded_file",
+            return_value=pdf_path,
+        ),
+    ):
+        r = client.post(
+            "/api/library/upload",
+            headers=responsable_headers,
+            files=[("files", ("export_all_test.pdf", b"pdfcontentall", "application/pdf"))],
+            data={"space_ids": "[]", "is_paid": "false"},
+        )
+        assert r.status_code == 201
+        doc_id = r.json()[0]["id"]
+
+        # Create a dummy chunk in the SQL database for this document
+        from app.models.document_chunk import DocumentChunk
+        from sqlmodel import Session
+        from app.database import engine
+
+        with Session(engine) as sess:
+            chunk = DocumentChunk(
+                document_id=doc_id,
+                chunk_index=0,
+                content="dummy chunk text for all",
+                text="dummy chunk text for all",
+                is_leaf=True,
+                hierarchy_level=0,
+                node_id="node_all_1",
+                start_char=0,
+                end_char=24,
+                metadata_json={"page_no": 1}
+            )
+            sess.add(chunk)
+            sess.commit()
+            sess.refresh(chunk)
+            old_chunk_id = chunk.id
+
+        # Mock LanceDB table search results for export
+        mock_table = mock.Mock()
+        mock_table.search.return_value.where.return_value.to_list.return_value = [
+            {"chunk_id": old_chunk_id, "patch_index": 0, "vector": [0.7] * 128}
+        ]
+
+        with mock.patch("app.services.lancedb_service.get_colpali_table", return_value=mock_table):
+            # Request export-all
+            expr = client.get("/api/library/export-all", headers=responsable_headers)
+            assert expr.status_code == 200
+            assert expr.headers["content-type"] == "application/zip"
+
+            # Check ZIP contents
+            zip_bytes = expr.content
+            with zipfile.ZipFile(io.BytesIO(zip_bytes)) as z:
+                namelist = z.namelist()
+                metadata_file = next((f for f in namelist if f.endswith("metadata.json")), None)
+                assert metadata_file is not None
+                assert metadata_file.startswith("doc_")
+                
+                patches_file = next((f for f in namelist if f.endswith("colpali_patches.json")), None)
+                assert patches_file is not None
+
+                # Read metadata
+                meta = json.loads(z.read(metadata_file).decode("utf-8"))
+                assert meta["document"]["title"] == "export_all_test"
+
+            # 2. Test Import using the exported ZIP (bulk mode)
+            with (
+                mock.patch("app.routers.library.save_uploaded_file", return_value="media/documents/import_bulk_test.pdf"),
+                mock.patch("app.services.lancedb_service.insert_colpali_patches_batch_lancedb") as mock_insert,
+            ):
+                impr = client.post(
+                    "/api/library/documents/import",
+                    headers=responsable_headers,
+                    files={"file": ("export_library_all.zip", zip_bytes, "application/zip")},
+                )
+                assert impr.status_code == 201
+                imported_doc = impr.json()
+                assert imported_doc["title"] == "export_all_test"
+
+                # Verify it calls batch insert to LanceDB
+                mock_insert.assert_called_once()
+
+        # Cleanup
+        client.delete(f"/api/library/documents/{doc_id}", headers=responsable_headers)
+        client.delete(f"/api/library/documents/{imported_doc['id']}", headers=responsable_headers)
+        
+        # Delete dummy file
+        try:
+            if os.path.exists(pdf_path):
+                os.remove(pdf_path)
+            if os.path.exists("media/documents/import_bulk_test.pdf"):
+                os.remove("media/documents/import_bulk_test.pdf")
+        except Exception:
+            pass

@@ -952,3 +952,441 @@ async def delete_library_document(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Document non trouvé"
         )
+
+
+@router.get("/documents/{document_id}/export")
+async def export_library_document(
+    document_id: int,
+    current_user: UserRead = Depends(require_permission("library.write")),
+    session: Session = Depends(get_session)
+):
+    """
+    Exporte un document sous forme d'archive ZIP contenant :
+    - Le fichier PDF source.
+    - Les métadonnées Postgres (Document, DocumentChunks) au format JSON.
+    - Les vecteurs d'embeddings de patchs ColPali de LanceDB au format JSON.
+    """
+    import io
+    import zipfile
+    from fastapi.responses import StreamingResponse
+
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document non trouvé"
+        )
+
+    if not document.source_file_path:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Ce document n'a pas de fichier source"
+        )
+
+    file_path = Path(document.source_file_path)
+    if not file_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Le fichier source n'existe plus"
+        )
+
+    chunks = session.exec(
+        select(DocumentChunk).where(DocumentChunk.document_id == document_id)
+    ).all()
+
+    patches_data = []
+    try:
+        from app.services.lancedb_service import get_colpali_table
+        table = get_colpali_table()
+        if table:
+            rows = table.search().where(f"document_id = {document_id}").to_list()
+            for r in rows:
+                patches_data.append({
+                    "chunk_id": int(r["chunk_id"]),
+                    "patch_index": int(r["patch_index"]),
+                    "vector": r["vector"]
+                })
+    except Exception as ex:
+        logger.warning(f"Impossible de récupérer les patchs ColPali pour l'export : {ex}")
+
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+        zip_file.write(file_path, arcname=file_path.name)
+
+        metadata = {
+            "document": {
+                "title": document.title,
+                "filename": Path(document.source_file_path).name if document.source_file_path else None,
+                "document_type": document.document_type,
+                "content": document.content,
+                "processing_status": document.processing_status,
+                "processing_progress": document.processing_progress,
+                "is_paid": document.is_paid,
+            },
+            "chunks": [
+                {
+                    "id": c.id,
+                    "chunk_index": c.chunk_index,
+                    "content": c.content,
+                    "text": c.text,
+                    "is_leaf": c.is_leaf,
+                    "hierarchy_level": c.hierarchy_level,
+                    "node_id": c.node_id,
+                    "parent_node_id": c.parent_node_id,
+                    "start_char": c.start_char,
+                    "end_char": c.end_char,
+                    "metadata_json": c.metadata_json or c.metadata_ or {},
+                    "embedding": c.embedding if c.embedding is not None else None
+                }
+                for c in chunks
+            ]
+        }
+        zip_file.writestr("metadata.json", json.dumps(metadata, ensure_ascii=False, indent=2))
+
+        patches_json = {
+            "patches": patches_data
+        }
+        zip_file.writestr("colpali_patches.json", json.dumps(patches_json, ensure_ascii=False))
+
+    zip_buffer.seek(0)
+    headers = {
+        'Content-Disposition': f'attachment; filename="export_doc_{document_id}.zip"'
+    }
+    return StreamingResponse(zip_buffer, media_type="application/zip", headers=headers)
+
+
+@router.get("/export-all")
+async def export_all_library_documents(
+    current_user: UserRead = Depends(require_permission("library.write")),
+    session: Session = Depends(get_session)
+):
+    """
+    Exporte tous les documents de la bibliothèque sous forme d'une archive ZIP globale.
+    Chaque document est stocké dans un sous-dossier contenant son fichier source, ses métadonnées et ses patchs ColPali.
+    """
+    import io
+    import zipfile
+    from fastapi.responses import StreamingResponse
+    from app.services.lancedb_service import get_colpali_table
+
+    library = get_or_create_user_library(session, current_user.id)
+    documents = get_documents_by_library(session, library.id, current_user.id)
+    
+    zip_buffer = io.BytesIO()
+    table = get_colpali_table()
+    
+    with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+        for document in documents:
+            if not document.source_file_path:
+                continue
+                
+            file_path = Path(document.source_file_path)
+            if not file_path.exists():
+                continue
+                
+            doc_dir = f"doc_{document.id}"
+            
+            # Ecrire le fichier PDF
+            zip_file.write(file_path, arcname=f"{doc_dir}/{file_path.name}")
+            
+            # Récupérer les chunks
+            chunks = session.exec(
+                select(DocumentChunk).where(DocumentChunk.document_id == document.id)
+            ).all()
+            
+            # Récupérer les patchs ColPali
+            patches_data = []
+            if table:
+                try:
+                    rows = table.search().where(f"document_id = {document.id}").to_list()
+                    for r in rows:
+                        patches_data.append({
+                            "chunk_id": int(r["chunk_id"]),
+                            "patch_index": int(r["patch_index"]),
+                            "vector": r["vector"]
+                        })
+                except Exception as ex:
+                    logger.warning(f"Impossible de récupérer les patchs ColPali pour l'export du doc {document.id} : {ex}")
+            
+            # Ecrire metadata.json
+            metadata = {
+                "document": {
+                    "title": document.title,
+                    "filename": file_path.name,
+                    "document_type": document.document_type,
+                    "content": document.content,
+                    "processing_status": document.processing_status,
+                    "processing_progress": document.processing_progress,
+                    "is_paid": document.is_paid,
+                },
+                "chunks": [
+                    {
+                        "id": c.id,
+                        "chunk_index": c.chunk_index,
+                        "content": c.content,
+                        "text": c.text,
+                        "is_leaf": c.is_leaf,
+                        "hierarchy_level": c.hierarchy_level,
+                        "node_id": c.node_id,
+                        "parent_node_id": c.parent_node_id,
+                        "start_char": c.start_char,
+                        "end_char": c.end_char,
+                        "metadata_json": c.metadata_json or c.metadata_ or {},
+                        "embedding": c.embedding if c.embedding is not None else None
+                    }
+                    for c in chunks
+                ]
+            }
+            zip_file.writestr(f"{doc_dir}/metadata.json", json.dumps(metadata, ensure_ascii=False, indent=2))
+            
+            # Ecrire colpali_patches.json
+            patches_json = {"patches": patches_data}
+            zip_file.writestr(f"{doc_dir}/colpali_patches.json", json.dumps(patches_json, ensure_ascii=False))
+            
+    zip_buffer.seek(0)
+    headers = {
+        'Content-Disposition': 'attachment; filename="export_library_all.zip"'
+    }
+    return StreamingResponse(zip_buffer, media_type="application/zip", headers=headers)
+
+
+@router.post("/documents/import", response_model=DocumentRead, status_code=status.HTTP_201_CREATED)
+async def import_library_document(
+    file: UploadFile = File(...),
+    folder_id: Optional[int] = Form(None),
+    current_user: UserRead = Depends(require_permission("library.write")),
+    session: Session = Depends(get_session)
+):
+    """
+    Importe un package ZIP contenant un document ou plusieurs documents (bulk export) :
+    - Recrée l'enregistrement du Document et des DocumentChunks associés dans Postgres.
+    - Sauvegarde le fichier source (PDF) dans le dossier media local.
+    - Ré-injecte les vecteurs d'embeddings ColPali dans LanceDB avec les nouveaux IDs de chunks.
+    """
+    import io
+    import zipfile
+    import os
+
+    zip_contents = await file.read()
+    zip_buffer = io.BytesIO(zip_contents)
+
+    try:
+        with zipfile.ZipFile(zip_buffer, "r") as zip_file:
+            namelist = zip_file.namelist()
+            
+            # Mode 1 : ZIP contenant un seul document à la racine
+            if "metadata.json" in namelist:
+                metadata_str = zip_file.read("metadata.json").decode("utf-8")
+                metadata = json.loads(metadata_str)
+
+                doc_data = metadata["document"]
+                chunks_data = metadata.get("chunks", [])
+
+                pdf_filename = None
+                for name in namelist:
+                    if name != "metadata.json" and name != "colpali_patches.json":
+                        pdf_filename = name
+                        break
+
+                if not pdf_filename:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Archive invalide : fichier source manquant"
+                    )
+
+                pdf_content = zip_file.read(pdf_filename)
+                file_path = save_uploaded_file(pdf_content, pdf_filename)
+                if not file_path:
+                    raise HTTPException(
+                        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                        detail="Impossible de sauvegarder le fichier PDF importé"
+                    )
+
+                library = get_or_create_user_library(session, current_user.id)
+
+                new_doc = Document(
+                    title=doc_data["title"],
+                    filename=doc_data.get("filename") or pdf_filename,
+                    content=doc_data.get("content", ""),
+                    document_type=doc_data.get("document_type", "document"),
+                    source_file_path=file_path,
+                    processing_status=doc_data.get("processing_status", "completed"),
+                    processing_progress=doc_data.get("processing_progress", 100),
+                    is_paid=doc_data.get("is_paid", False),
+                    library_id=library.id,
+                    user_id=current_user.id,
+                    folder_id=folder_id
+                )
+                session.add(new_doc)
+                session.commit()
+                session.refresh(new_doc)
+
+                old_chunk_to_new_chunk_id = {}
+                for chunk_data in chunks_data:
+                    new_chunk = DocumentChunk(
+                        document_id=new_doc.id,
+                        chunk_index=chunk_data["chunk_index"],
+                        content=chunk_data.get("content", ""),
+                        text=chunk_data.get("text", ""),
+                        is_leaf=chunk_data.get("is_leaf", True),
+                        hierarchy_level=chunk_data.get("hierarchy_level", 0),
+                        node_id=chunk_data.get("node_id"),
+                        parent_node_id=chunk_data.get("parent_node_id"),
+                        start_char=chunk_data.get("start_char", 0),
+                        end_char=chunk_data.get("end_char", 0),
+                        metadata_json=chunk_data.get("metadata_json", {}),
+                        embedding=chunk_data.get("embedding")
+                    )
+                    session.add(new_chunk)
+                    session.commit()
+                    session.refresh(new_chunk)
+
+                    old_chunk_to_new_chunk_id[chunk_data["id"]] = new_chunk.id
+
+                if "colpali_patches.json" in namelist:
+                    patches_str = zip_file.read("colpali_patches.json").decode("utf-8")
+                    patches_json = json.loads(patches_str)
+                    patches_list = patches_json.get("patches", [])
+
+                    from collections import defaultdict
+                    chunk_id_to_vectors = defaultdict(list)
+                    for p in patches_list:
+                        chunk_id_to_vectors[p["chunk_id"]].append(p)
+
+                    chunk_patches_list = []
+                    for old_chunk_id, p_items in chunk_id_to_vectors.items():
+                        new_chunk_id = old_chunk_to_new_chunk_id.get(old_chunk_id)
+                        if new_chunk_id:
+                            p_items.sort(key=lambda x: x["patch_index"])
+                            vectors = [item["vector"] for item in p_items]
+                            chunk_patches_list.append((new_chunk_id, vectors))
+
+                    if chunk_patches_list:
+                        from app.services.lancedb_service import insert_colpali_patches_batch_lancedb
+                        insert_colpali_patches_batch_lancedb(new_doc.id, chunk_patches_list)
+
+                logger.info(f"Document ID {new_doc.id} ('{new_doc.title}') importé avec succès.")
+                return new_doc
+
+            # Mode 2 : ZIP global contenant plusieurs dossiers de documents
+            else:
+                from collections import defaultdict
+                folders = defaultdict(list)
+                for name in namelist:
+                    parts = name.split("/")
+                    if len(parts) > 1:
+                        folder_name = parts[0]
+                        folders[folder_name].append(name)
+
+                imported_docs = []
+                for folder, files_in_folder in folders.items():
+                    metadata_file = next((f for f in files_in_folder if f.endswith("metadata.json")), None)
+                    if not metadata_file:
+                        continue
+
+                    metadata_str = zip_file.read(metadata_file).decode("utf-8")
+                    metadata = json.loads(metadata_str)
+
+                    doc_data = metadata["document"]
+                    chunks_data = metadata.get("chunks", [])
+
+                    pdf_filename = None
+                    for name in files_in_folder:
+                        if not name.endswith("metadata.json") and not name.endswith("colpali_patches.json") and not name.endswith("/"):
+                            pdf_filename = name
+                            break
+
+                    if not pdf_filename:
+                        continue
+
+                    pdf_content = zip_file.read(pdf_filename)
+                    base_pdf_name = os.path.basename(pdf_filename)
+                    file_path = save_uploaded_file(pdf_content, base_pdf_name)
+                    if not file_path:
+                        continue
+
+                    library = get_or_create_user_library(session, current_user.id)
+
+                    new_doc = Document(
+                        title=doc_data["title"],
+                        filename=doc_data.get("filename") or base_pdf_name,
+                        content=doc_data.get("content", ""),
+                        document_type=doc_data.get("document_type", "document"),
+                        source_file_path=file_path,
+                        processing_status=doc_data.get("processing_status", "completed"),
+                        processing_progress=doc_data.get("processing_progress", 100),
+                        is_paid=doc_data.get("is_paid", False),
+                        library_id=library.id,
+                        user_id=current_user.id,
+                        folder_id=folder_id
+                    )
+                    session.add(new_doc)
+                    session.commit()
+                    session.refresh(new_doc)
+
+                    old_chunk_to_new_chunk_id = {}
+                    for chunk_data in chunks_data:
+                        new_chunk = DocumentChunk(
+                            document_id=new_doc.id,
+                            chunk_index=chunk_data["chunk_index"],
+                            content=chunk_data.get("content", ""),
+                            text=chunk_data.get("text", ""),
+                            is_leaf=chunk_data.get("is_leaf", True),
+                            hierarchy_level=chunk_data.get("hierarchy_level", 0),
+                            node_id=chunk_data.get("node_id"),
+                            parent_node_id=chunk_data.get("parent_node_id"),
+                            start_char=chunk_data.get("start_char", 0),
+                            end_char=chunk_data.get("end_char", 0),
+                            metadata_json=chunk_data.get("metadata_json", {}),
+                            embedding=chunk_data.get("embedding")
+                        )
+                        session.add(new_chunk)
+                        session.commit()
+                        session.refresh(new_chunk)
+
+                        old_chunk_to_new_chunk_id[chunk_data["id"]] = new_chunk.id
+
+                    patches_file = next((f for f in files_in_folder if f.endswith("colpali_patches.json")), None)
+                    if patches_file:
+                        patches_str = zip_file.read(patches_file).decode("utf-8")
+                        patches_json = json.loads(patches_str)
+                        patches_list = patches_json.get("patches", [])
+
+                        chunk_id_to_vectors = defaultdict(list)
+                        for p in patches_list:
+                            chunk_id_to_vectors[p["chunk_id"]].append(p)
+
+                        chunk_patches_list = []
+                        for old_chunk_id, p_items in chunk_id_to_vectors.items():
+                            new_chunk_id = old_chunk_to_new_chunk_id.get(old_chunk_id)
+                            if new_chunk_id:
+                                p_items.sort(key=lambda x: x["patch_index"])
+                                vectors = [item["vector"] for item in p_items]
+                                chunk_patches_list.append((new_chunk_id, vectors))
+
+                        if chunk_patches_list:
+                            from app.services.lancedb_service import insert_colpali_patches_batch_lancedb
+                            insert_colpali_patches_batch_lancedb(new_doc.id, chunk_patches_list)
+
+                    imported_docs.append(new_doc)
+                    logger.info(f"Document ID {new_doc.id} ('{new_doc.title}') importé avec succès du package global.")
+
+                if not imported_docs:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Aucun document valide n'a pu être importé de l'archive globale."
+                    )
+                return imported_docs[0]
+
+    except Exception as e:
+        logger.error(f"Erreur lors de l'import du document : {e}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Erreur lors de l'import du document : {str(e)}"
+        )

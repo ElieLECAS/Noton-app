@@ -23,6 +23,14 @@ endblock %} {% block content %}
                     <i class="ti ti-refresh text-base"></i> Tout retraiter
                 </button>
                 <button
+                    id="library-export-all-btn"
+                    onclick="exportAllLibrary()"
+                    class="px-4 py-2 rounded-xl border border-emerald-600/30 text-emerald-700 hover:bg-emerald-500/10 active:scale-95 transition-all text-sm font-semibold flex items-center gap-2"
+                    title="Exporter tous les documents en ZIP"
+                >
+                    <i class="ti ti-download text-base"></i> Tout exporter
+                </button>
+                <button
                     type="button"
                     id="library-stop-all-btn"
                     onclick="stopAllQueueDocuments()"
@@ -39,6 +47,14 @@ endblock %} {% block content %}
                     title="Ignorer les documents en attente et arrêter celui en cours (admin)"
                 >
                     <i class="ti ti-player-skip-forward text-base"></i> Ignorer tout
+                </button>
+                <button
+                    id="library-import-btn"
+                    onclick="openImportModal()"
+                    class="px-4 py-2 rounded-xl border border-indigo-600/30 text-indigo-700 hover:bg-indigo-500/10 active:scale-95 transition-all text-sm font-semibold flex items-center gap-2"
+                    title="Importer un document (.zip)"
+                >
+                    <i class="ti ti-download text-base"></i> Importer
                 </button>
                 <button
                     id="library-upload-btn"
@@ -437,6 +453,49 @@ endblock %} {% block content %}
         </div>
     </div>
 </div>
+
+<div
+    id="import-modal"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
+>
+    <div
+        class="w-full max-w-md glass-panel rounded-3xl p-6 shadow-2xl"
+    >
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
+            Importer un document (.zip)
+        </h3>
+        <form id="import-form" class="space-y-4">
+            <div>
+                <label
+                    class="block text-sm mb-1 text-gray-700 dark:text-gray-300 font-semibold"
+                    >Fichier export_doc_xxx.zip</label
+                >
+                <input
+                    id="import-file"
+                    type="file"
+                    class="w-full text-sm glass-input rounded-xl p-3 text-gray-900 dark:text-white"
+                    required
+                    accept=".zip"
+                />
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button
+                    type="button"
+                    onclick="closeImportModal()"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
+                >
+                    Annuler
+                </button>
+                <button
+                    type="submit"
+                    class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white active:scale-95 transition-all text-sm font-semibold"
+                >
+                    Importer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %} {% block extra_scripts %}
 <script>
     let selectedFolderId = null;
@@ -493,6 +552,7 @@ endblock %} {% block content %}
             "library-reindex-all-btn",
         );
         const uploadBtn = document.getElementById("library-upload-btn");
+        const importBtn = document.getElementById("library-import-btn");
         if (folderBtnTop)
             folderBtnTop.classList.toggle("hidden", !canLibraryWrite);
         if (folderBtnSidebar)
@@ -507,6 +567,9 @@ endblock %} {% block content %}
         if (stopAllBtn) stopAllBtn.classList.toggle("hidden", !isAdminUser);
         if (skipAllBtn) skipAllBtn.classList.toggle("hidden", !isAdminUser);
         if (uploadBtn) uploadBtn.classList.toggle("hidden", !canLibraryWrite);
+        if (importBtn) importBtn.classList.toggle("hidden", !canLibraryWrite);
+        const exportAllBtn = document.getElementById("library-export-all-btn");
+        if (exportAllBtn) exportAllBtn.classList.toggle("hidden", !canLibraryWrite);
 
         // Masquer l'indication visuelle "upload" (icône) quand on est en lecture seule.
         const dropHint = document.getElementById("drop-hint");
@@ -783,6 +846,10 @@ endblock %} {% block content %}
                       ? `<button type="button" class="px-3 py-1.5 rounded-xl border border-orange-500/10 bg-orange-500/5 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 hover:bg-orange-500/10 dark:hover:bg-orange-500/20 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="skipQueueDocument(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')" title="Ignorer en attente ou arrêter si en cours"><i class="ti ti-player-skip-forward text-sm"></i><span>Ignorer</span></button>`
                       : ""
               }
+              <button class="px-3 py-1.5 rounded-xl border border-emerald-500/10 bg-emerald-500/5 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10 dark:hover:bg-emerald-500/20 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="exportDocument(${d.id})">
+                <i class="ti ti-download text-sm"></i>
+                <span>Exporter</span>
+              </button>
               <button class="px-3 py-1.5 rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-black/10 dark:hover:bg-white/10 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="openEditDocumentModal(${d.id})">
                 <i class="ti ti-pencil text-sm"></i>
                 <span>Modifier</span>
@@ -1634,6 +1701,49 @@ endblock %} {% block content %}
                 alert("Impossible de modifier le document.");
             });
         });
+
+    function exportDocument(documentId) {
+        window.open(`/api/library/documents/${documentId}/export`, "_blank");
+    }
+
+    function exportAllLibrary() {
+        window.open("/api/library/export-all", "_blank");
+    }
+
+    function openImportModal() {
+        document.getElementById("import-modal").classList.remove("hidden");
+    }
+
+    function closeImportModal() {
+        document.getElementById("import-modal").classList.add("hidden");
+        document.getElementById("import-form").reset();
+    }
+
+    document.getElementById("import-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById("import-file");
+        if (!fileInput.files.length) return alert("Sélectionnez le fichier ZIP à importer.");
+        
+        const fd = new FormData();
+        fd.append("file", fileInput.files[0]);
+        if (selectedFolderId !== null) {
+            fd.append("folder_id", String(selectedFolderId));
+        }
+
+        const r = await fetch("/api/library/documents/import", {
+            method: "POST",
+            body: fd,
+            credentials: "include",
+        });
+        if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            return alert(err.detail || "Import échoué");
+        }
+        
+        closeImportModal();
+        alert("Document importé avec succès !");
+        await loadDocuments();
+    });
 
     document.addEventListener("DOMContentLoaded", async () => {
         await loadPermissions();
