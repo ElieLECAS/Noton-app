@@ -135,7 +135,7 @@ def test_search_colpali_lancedb_large_scale():
         # Check token builder was limited to 250
         assert token_builder.calls[0] == ("metric", "cosine")
         assert token_builder.calls[1] == ("where", "document_id in (10)")
-        assert token_builder.calls[2] == ("select", ["chunk_id"])
+        assert token_builder.calls[2] == ("select", ["chunk_id", "_distance"])
         assert token_builder.calls[3] == ("limit", 250)
 
         # Check final fetch filtered specifically by candidate chunks

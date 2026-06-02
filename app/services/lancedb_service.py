@@ -138,7 +138,7 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
             
             def search_token(token_vec):
                 try:
-                    res = table.search(token_vec).metric("cosine").where(filter_str).select(["chunk_id"]).limit(250).to_list()
+                    res = table.search(token_vec).metric("cosine").where(filter_str).select(["chunk_id", "_distance"]).limit(250).to_list()
                     return [int(r["chunk_id"]) for r in res]
                 except Exception as ex:
                     logger.warning("Error searching token in LanceDB: %s", ex)
