@@ -64,7 +64,7 @@ celery_app.conf.update(
     broker_connection_retry_on_startup=True,
     task_acks_late=True,
     worker_prefetch_multiplier=1,
-    broker_transport_options={"visibility_timeout": 18000},
+    broker_transport_options={"visibility_timeout": 43200},
 )
 
 # Import explicite : enregistre toutes les @celery_app.task sur l’instance (évite « unregistered task »
