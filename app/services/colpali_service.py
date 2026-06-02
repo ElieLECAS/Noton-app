@@ -67,8 +67,11 @@ def embed_pdf_pages_colpali(pdf_path: str, document_id: Optional[int] = None) ->
     from app.database import engine
     from app.models.document import Document
     
-    for idx, img in enumerate(images):
-        logger.info(f"ColPali embedding page {idx + 1}/{num_pages}...")
+    batch_size = 3
+    for i in range(0, num_pages, batch_size):
+        batch_images = images[i : i + batch_size]
+        current_page_last = i + len(batch_images)
+        logger.info(f"ColPali embedding pages {i + 1}-{current_page_last}/{num_pages}...")
         
         # Update progress and page counters in DB
         if document_id is not None:
@@ -76,10 +79,10 @@ def embed_pdf_pages_colpali(pdf_path: str, document_id: Optional[int] = None) ->
                 with Session(engine) as sess:
                     doc = sess.get(Document, document_id)
                     if doc:
-                        pct = int((idx + 1) / num_pages * 100)
+                        pct = int(current_page_last / num_pages * 100)
                         doc.processing_progress = pct
                         doc.phase_status_json = {
-                            "current_page": idx + 1,
+                            "current_page": current_page_last,
                             "total_pages": num_pages
                         }
                         sess.add(doc)
@@ -88,17 +91,19 @@ def embed_pdf_pages_colpali(pdf_path: str, document_id: Optional[int] = None) ->
                 logger.warning(f"Failed to update progress in DB for document {document_id}: {db_err}")
                 
         # Process and prepare image tensor using colpali-engine processor interface
-        inputs = processor.process_images([img]).to(model.device)
+        inputs = processor.process_images(batch_images).to(model.device)
         
         with torch.no_grad():
-            embeddings = model(**inputs)  # shape: (1, num_patches, dim)
+            embeddings = model(**inputs)  # shape: (batch_size, num_patches, dim)
             
-        # Move to CPU, convert to float32 and to lists
-        page_vectors = embeddings[0].cpu().float().numpy().tolist()
-        all_embeddings.append(page_vectors)
+        # Move each page in the batch to CPU, convert to float32 and to lists
+        for idx in range(len(batch_images)):
+            page_vectors = embeddings[idx].cpu().float().numpy().tolist()
+            all_embeddings.append(page_vectors)
         
     logger.info(f"Completed ColPali embedding for {num_pages} pages")
     return all_embeddings
+
 
 def embed_query_colpali(query: str) -> List[List[float]]:
     """
@@ -121,6 +126,7 @@ def embed_query_colpali(query: str) -> List[List[float]]:
         query_vectors = embeddings[0].cpu().float().numpy().tolist()
     return query_vectors
 
+
 def sync_document_colpali_embeddings(document_id: int):
     """
     Checks if ColPali is enabled, reads the document from DB, 
@@ -131,7 +137,7 @@ def sync_document_colpali_embeddings(document_id: int):
         
     from app.models.document import Document
     from app.models.document_chunk import DocumentChunk
-    from app.services.lancedb_service import insert_colpali_patches_lancedb
+    from app.services.lancedb_service import insert_colpali_patches_batch_lancedb
     from sqlmodel import Session, select
     from app.database import engine
     
@@ -156,14 +162,19 @@ def sync_document_colpali_embeddings(document_id: int):
             )
             chunks = list(session.exec(statement).all())
             
-            # Map chunk IDs to page indices
+            # Map chunk IDs to page indices and prepare batch list
+            chunk_patches_list = []
             for chunk in chunks:
                 meta = chunk.metadata_json or {}
                 page_no = meta.get("page_no") or meta.get("page_start")
                 if page_no is not None:
                     page_idx = int(page_no) - 1
                     if 0 <= page_idx < len(page_embeddings):
-                        insert_colpali_patches_lancedb(document_id, chunk.id, page_embeddings[page_idx])
+                        chunk_patches_list.append((chunk.id, page_embeddings[page_idx]))
+            
+            if chunk_patches_list:
+                insert_colpali_patches_batch_lancedb(document_id, chunk_patches_list)
+                
             logger.info(f"ColPali embeddings generated and synced for document {document_id}")
         except Exception as e:
             logger.error(f"Error generating ColPali embeddings for document {document_id}: {e}", exc_info=True)

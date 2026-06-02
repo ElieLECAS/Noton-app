@@ -82,6 +82,44 @@ def insert_colpali_patches_lancedb(document_id: int, chunk_id: int, patch_vector
     except Exception as e:
         logger.error(f"Error writing ColPali patches to LanceDB: {e}", exc_info=True)
 
+def insert_colpali_patches_batch_lancedb(document_id: int, chunk_patches_list: List[tuple[int, List[List[float]]]]):
+    """
+    Inserts ColPali patches in batch for all chunks of a document.
+    chunk_patches_list: List of tuples (chunk_id, patch_vectors)
+    """
+    try:
+        table = get_colpali_table()
+        # Delete existing patches for this document to prevent duplicates
+        table.delete(f"document_id = {document_id}")
+        
+        patches_data = []
+        for chunk_id, patch_vectors in chunk_patches_list:
+            for idx, vec in enumerate(patch_vectors):
+                patches_data.append({
+                    "id": f"{chunk_id}_{idx}",
+                    "chunk_id": chunk_id,
+                    "document_id": document_id,
+                    "patch_index": idx,
+                    "vector": vec
+                })
+        
+        if patches_data:
+            table.add(patches_data)
+            logger.info(f"Added {len(patches_data)} ColPali patches in batch for document_id={document_id}")
+            
+            # Try to build/update IVF_SQ index once for all patches
+            try:
+                table.create_index(
+                    vector_column_name="vector",
+                    index_type="IVF_SQ",
+                    metric="cosine"
+                )
+                logger.info("Successfully updated IVF_SQ index on 'colpali_patches'")
+            except Exception as idx_err:
+                logger.debug(f"Could not build IVF_SQ index yet (normal if database is small): {idx_err}")
+    except Exception as e:
+        logger.error(f"Error writing ColPali patches batch to LanceDB: {e}", exc_info=True)
+
 def delete_chunks_lancedb(document_id: int):
     """Deletes all ColPali patches for a document from LanceDB."""
     try:

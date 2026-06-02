@@ -157,3 +157,27 @@ def test_insert_colpali_patches_index_creation():
             index_type="IVF_SQ",
             metric="cosine"
         )
+
+
+def test_insert_colpali_patches_batch_index_creation():
+    # Test that insert_colpali_patches_batch_lancedb calls table.delete on document level and table.create_index
+    mock_table = mock.Mock()
+    from app.services.lancedb_service import insert_colpali_patches_batch_lancedb
+    
+    with mock.patch("app.services.lancedb_service.get_colpali_table", return_value=mock_table):
+        insert_colpali_patches_batch_lancedb(
+            document_id=123,
+            chunk_patches_list=[
+                (456, [[0.1] * 128]),
+                (457, [[0.2] * 128])
+            ]
+        )
+        
+        # Verify it deleted document-wide, added, and called create_index
+        mock_table.delete.assert_called_once_with("document_id = 123")
+        mock_table.add.assert_called_once()
+        mock_table.create_index.assert_called_once_with(
+            vector_column_name="vector",
+            index_type="IVF_SQ",
+            metric="cosine"
+        )
