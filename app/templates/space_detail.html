@@ -1110,7 +1110,7 @@ function resetChatView() {
   const host = document.getElementById("chat-messages");
   host.innerHTML = `
      <div id="welcome-chat-state" class="flex-1 flex flex-col items-center justify-center py-12 px-4 max-w-2xl mx-auto text-center h-full my-auto">
-         <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 mb-6 relative group animate-pulse">
+         <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 mb-6 relative group" style="animation: pulse 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;">
              <i class="ti ti-robot text-3xl"></i>
              <div class="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
          </div>
@@ -1223,19 +1223,19 @@ function addMessage(role, content, messageId = null, sources = null) {
     if (parsedSources && parsedSources.length > 0) {
       parsedHtml = transformCitationsToLinks(parsedHtml, parsedSources, messageKey);
       const sourcesSection = buildSourcesSection(parsedSources, messageKey);
-      innerHtml = `<div class="max-w-[85%] glass-panel rounded-2xl rounded-tl-sm px-5 py-4 border border-black/5 dark:border-white/5 assistant-message shadow-sm">
+      innerHtml = `<div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
         <div class="markdown-content">${parsedHtml}</div>
         ${sourcesSection}
         ${feedbackHtml}
       </div>`;
     } else {
-      innerHtml = `<div class="max-w-[85%] glass-panel rounded-2xl rounded-tl-sm px-5 py-4 border border-black/5 dark:border-white/5 assistant-message shadow-sm">
+      innerHtml = `<div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
         <div class="markdown-content">${parsedHtml}</div>
         ${feedbackHtml}
       </div>`;
     }
   } else {
-    innerHtml = `<div class="max-w-[75%] bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-md shadow-indigo-500/5">
+    innerHtml = `<div class="max-w-[75%] lg:max-w-[60%] bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-md shadow-indigo-500/5">
       <p class="whitespace-pre-wrap text-sm leading-relaxed">${content}</p>
     </div>`;
   }
@@ -1270,39 +1270,23 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   input.value = "";
 
   function startFakeReasoning(el) {
-    const pool = [
-      "Je lis attentivement votre demande...",
-      "Je parcours vos documents pour vous répondre...",
-      "Je rassemble les points les plus importants...",
-      "Je vérifie la précision des détails...",
-      "Je croise différentes sources pour être complète...",
-      "J'analyse le contexte de votre question...",
-      "Je cherche les informations les plus pertinentes...",
-      "Je synthétise les connaissances à ma disposition...",
-      "Je mets de l'ordre dans mes idées...",
-      "Je structure ma réponse...",
-      "J'examine les détails techniques...",
-      "Je prépare une petite synthèse..."
-    ];
-    // Mélange et sélectionne 5 phrases au hasard
-    const shuffled = pool.sort(() => 0.5 - Math.random()).slice(0, 5);
-    shuffled.push("Un instant, je finalise la réponse...");
-    
-    let stepIdx = 0;
-    el.innerHTML = `<div class="flex items-center gap-2"><i class="ti ti-loader-2 animate-spin"></i> <span>${shuffled[0]}</span></div>`;
-    return setInterval(() => {
-      stepIdx = (stepIdx + 1) % shuffled.length;
-      const span = el.querySelector("span");
-      if (span) span.textContent = shuffled[stepIdx];
-    }, 2000);
+    el.innerHTML = `
+      <div class="flex items-center gap-3 py-1">
+        <div class="lia-loading-icon w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-md shadow-indigo-500/10">
+          <i class="ti ti-robot text-xs"></i>
+        </div>
+        <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase animate-pulse">LIA réfléchit...</span>
+      </div>
+    `;
+    return null;
   }
 
   const host = document.getElementById("chat-messages");
   const assistantWrap = document.createElement("div");
   assistantWrap.className = "flex justify-start";
   assistantWrap.innerHTML = `
-    <div class="max-w-2xl rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 assistant-message">
-      <div id="streaming-content" class="markdown-content italic"></div>
+    <div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
+      <div id="streaming-content" class="markdown-content"></div>
     </div>`;
   host.appendChild(assistantWrap);
   host.scrollTop = host.scrollHeight;

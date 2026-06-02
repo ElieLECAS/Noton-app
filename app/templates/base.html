@@ -41,11 +41,11 @@
                 box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
             }
             .dark .glass-panel {
-                background: rgba(13, 17, 28, 0.45);
+                background: rgba(30, 37, 56, 0.55);
                 backdrop-filter: blur(24px);
                 -webkit-backdrop-filter: blur(24px);
-                border: 1px solid rgba(255, 255, 255, 0.06);
-                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
             }
             .glass-card {
                 background: rgba(255, 255, 255, 0.5);
@@ -56,11 +56,11 @@
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             .dark .glass-card {
-                background: rgba(20, 26, 40, 0.45);
+                background: rgba(38, 47, 71, 0.55);
                 backdrop-filter: blur(16px);
                 -webkit-backdrop-filter: blur(16px);
-                border: 1px solid rgba(255, 255, 255, 0.05);
-                box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.15);
             }
             .glass-card:hover {
                 transform: translateY(-2px) scale(1.01);
@@ -81,10 +81,10 @@
                 transition: all 0.2s ease-in-out;
             }
             .dark .glass-input {
-                background: rgba(15, 20, 32, 0.6);
+                background: rgba(30, 37, 56, 0.7);
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
-                border: 1px solid rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.12);
             }
             .glass-input:focus {
                 outline: none;
@@ -143,6 +143,12 @@
                 background: linear-gradient(135deg, #6366f1, #818cf8);
                 box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
             }
+            #sidebar nav a, 
+            #sidebar nav a:hover,
+            #spaces-list a,
+            #spaces-list a:hover {
+                text-decoration: none !important;
+            }
             #sidebar .text-xs.uppercase {
                 letter-spacing: 0.08em;
             }
@@ -165,7 +171,7 @@
                 .dark .glass-panel {
                     backdrop-filter: blur(8px);
                     -webkit-backdrop-filter: blur(8px);
-                    background: rgba(13, 17, 28, 0.88);
+                    background: rgba(30, 37, 56, 0.92);
                 }
                 .glass-card {
                     backdrop-filter: none;
@@ -175,7 +181,7 @@
                 .dark .glass-card {
                     backdrop-filter: none;
                     -webkit-backdrop-filter: none;
-                    background: rgba(20, 26, 40, 0.85);
+                    background: rgba(38, 47, 71, 0.92);
                 }
                 .glass-input {
                     backdrop-filter: none;
@@ -185,7 +191,7 @@
                 .dark .glass-input {
                     backdrop-filter: none;
                     -webkit-backdrop-filter: none;
-                    background: rgba(15, 20, 32, 0.9);
+                    background: rgba(30, 37, 56, 0.95);
                 }
                 /* Disable hover transforms on touch (no hover on mobile anyway) */
                 .glass-card:hover {
@@ -196,10 +202,96 @@
                     transition-duration: 0.1s;
                 }
             }
+
+            /* ===== HIGH CONTRAST & READABLE MODALS (Light/Dark) ===== */
+            /* 1. Darker & more blurred overlay for better focus */
+            div[id*="modal"], div[id$="-modal"], div[class*="modal"] {
+                background-color: rgba(0, 0, 0, 0.65) !important;
+                backdrop-filter: blur(12px) !important;
+                -webkit-backdrop-filter: blur(12px) !important;
+            }
+            /* 2. Make modal dialogs solid and clear */
+            div[id*="modal"] .glass-panel, div[id$="-modal"] .glass-panel, div[class*="modal"] .glass-panel {
+                background: #ffffff !important;
+                border: 1px solid rgba(0, 0, 0, 0.15) !important;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+            }
+            .dark div[id*="modal"] .glass-panel, .dark div[id$="-modal"] .glass-panel, .dark div[class*="modal"] .glass-panel {
+                background: #232a3f !important;
+                border: 1px solid rgba(255, 255, 255, 0.15) !important;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+            }
+            /* 3. High contrast text colors for modal headers and body text */
+            div[id*="modal"] h3, div[id$="-modal"] h3, div[class*="modal"] h3 {
+                color: #111827 !important; /* text-gray-900 */
+            }
+            .dark div[id*="modal"] h3, .dark div[id$="-modal"] h3, .dark div[class*="modal"] h3 {
+                color: #f9fafb !important; /* text-gray-50 */
+            }
+            div[id*="modal"] label, div[id$="-modal"] label, div[class*="modal"] label {
+                color: #374151 !important; /* text-gray-700 */
+            }
+            .dark div[id*="modal"] label, .dark div[id$="-modal"] label, .dark div[class*="modal"] label {
+                color: #d1d5db !important; /* text-gray-300 */
+            }
+            /* 4. Sharp, highly visible inputs inside modals */
+            div[id*="modal"] .glass-input, div[id$="-modal"] .glass-input, div[class*="modal"] .glass-input {
+                background: #f3f4f6 !important; /* text-gray-100 */
+                border: 1px solid #d1d5db !important; /* border-gray-300 */
+                color: #111827 !important;
+            }
+            .dark div[id*="modal"] .glass-input, .dark div[id$="-modal"] .glass-input, .dark div[class*="modal"] .glass-input {
+                background: #1e2438 !important;
+                border: 1px solid #374151 !important; /* border-gray-700 */
+                color: #ffffff !important;
+            }
+            /* 5. Clear, readable placeholders */
+            div[id*="modal"] .glass-input::placeholder, div[id$="-modal"] .glass-input::placeholder, div[class*="modal"] .glass-input::placeholder {
+                color: #6b7280 !important; /* gray-500 */
+            }
+            .dark div[id*="modal"] .glass-input::placeholder, .dark div[id$="-modal"] .glass-input::placeholder, .dark div[class*="modal"] .glass-input::placeholder {
+                color: #9ca3af !important; /* gray-400 */
+            }
+            /* Focus states */
+            div[id*="modal"] .glass-input:focus, div[id$="-modal"] .glass-input:focus, div[class*="modal"] .glass-input:focus {
+                border-color: #4f46e5 !important;
+                background: #ffffff !important;
+            }
+            .dark div[id*="modal"] .glass-input:focus, .dark div[id$="-modal"] .glass-input:focus, .dark div[class*="modal"] .glass-input:focus {
+                border-color: #6366f1 !important;
+                background: #191e2e !important;
+            }
+
+            /* LIA loading/thinking animation: Idle (up/down) -> 360deg Rotation -> Idle */
+            @keyframes lia-loading {
+                0% { transform: translateY(0) rotate(0deg); }
+                15% { transform: translateY(-6px) rotate(0deg); }
+                30% { transform: translateY(0) rotate(0deg); }
+                45% { transform: translateY(-3px) rotate(0deg); }
+                55% { transform: translateY(0) rotate(0deg); }
+                70% { transform: translateY(0) rotate(180deg); }
+                80% { transform: translateY(0) rotate(360deg); }
+                100% { transform: translateY(0) rotate(360deg); }
+            }
+            .lia-loading-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                animation: lia-loading 3.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+                will-change: transform;
+            }
+            .assistant-message-bubble {
+                background: #f1f5f9 !important;
+                border: 1px solid #e2e8f0 !important;
+            }
+            .dark .assistant-message-bubble {
+                background: #232a3f !important;
+                border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            }
         </style>
         {% block extra_head %}{% endblock %}
     </head>
-    <body class="bg-[#f2f4f8] dark:bg-[#07090e] text-gray-800 dark:text-gray-100 transition-colors duration-300 font-sans antialiased">
+    <body class="bg-[#f2f4f8] dark:bg-[#1a1e2d] text-gray-800 dark:text-gray-100 transition-colors duration-300 font-sans antialiased">
         <!-- Animated Mesh Background (desktop only for performance) -->
         <div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
             <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tr from-blue-300/30 to-indigo-400/20 dark:from-blue-900/10 dark:to-indigo-900/10 sm:blur-[100px] animate-blob hidden sm:block"></div>
