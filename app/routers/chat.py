@@ -1,6 +1,6 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel
 from sqlmodel import Session, select
 from app.models.user import UserRead
@@ -46,12 +46,14 @@ from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.space_search_service import search_relevant_passages as search_space_passages
 from app.services.space_service import get_space_by_id
+from app.services.illustration_service import determine_and_crop_illustration
 from app.tracing import trace_run, trace_pipeline
 from datetime import datetime
 import json
 import logging
 import os
 import httpx
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -183,6 +185,22 @@ async def list_all_models():
     return {
         "mistral": [settings.MODEL_FAST],
     }
+
+
+@router.get("/chats/illustrations/{filename}")
+async def get_illustration(filename: str):
+    """Sert une image d'illustration détourée depuis le cache."""
+    cache_dir = os.path.join(os.path.dirname(settings.LANCED_DB_DIR), "illustration_cache")
+    file_path = os.path.join(cache_dir, filename)
+    
+    # Sécurité basique contre le path traversal
+    if ".." in filename or filename.startswith("/") or filename.startswith("\\"):
+        raise HTTPException(status_code=400, detail="Nom de fichier invalide")
+        
+    if not os.path.exists(file_path) or not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Illustration non trouvée")
+        
+    return FileResponse(file_path, media_type="image/png")
 
 
 @router.post("/chat")
@@ -840,12 +858,83 @@ async def stream_space_chat_message(
                         ],
                     )
 
+                complete_response = "".join(assistant_response)
+                
+                # Détecter si un schéma ou illustration est pertinent pour compléter la réponse
+                target_passage = None
+                
+                # Pattern pour trouver "[Nom du document, page X]" ou "[Nom, pages X-Y]"
+                citation_matches = re.findall(
+                    r"\[([^\]]+?),\s*pages?\s+(\d+)\]",
+                    complete_response,
+                    re.IGNORECASE
+                )
+                
+                if citation_matches:
+                    for doc_title_match, page_no_str in citation_matches:
+                        try:
+                            page_no = int(page_no_str)
+                            # Trouver le passage correspondant dans sources_data
+                            for s in sources_data:
+                                p_no = s.get("page_no") or s.get("page_start")
+                                p_title = s.get("document_title") or ""
+                                if p_no == page_no and (doc_title_match.lower() in p_title.lower() or p_title.lower() in doc_title_match.lower()):
+                                    target_passage = s
+                                    break
+                            if target_passage:
+                                break
+                        except ValueError:
+                            continue
+                            
+                # Fallback : si pas de citation exacte trouvée, on prend le premier passage doc le plus pertinent
+                if not target_passage and sources_data:
+                    # Filtrer pour s'assurer qu'il s'agit bien d'un passage avec un fichier
+                    for s in sources_data:
+                        did = s.get("document_id")
+                        if did and has_file_by_doc.get(did):
+                            target_passage = s
+                            break
+                            
+                # Lancer la détection visuelle et le détourage
+                illustration_data = None
+                if target_passage:
+                    did = target_passage.get("document_id")
+                    pno = target_passage.get("page_no") or target_passage.get("page_start")
+                    doc_title = target_passage.get("document_title") or "Document"
+                    
+                    try:
+                        with Session(engine) as ill_session:
+                            doc_obj = ill_session.get(Document, did)
+                            if doc_obj and doc_obj.source_file_path and os.path.exists(doc_obj.source_file_path):
+                                logger.info(f"Running illustration check on {doc_obj.source_file_path} page {pno}")
+                                illustration_data = await determine_and_crop_illustration(
+                                    query=request.message,
+                                    answer=complete_response,
+                                    pdf_path=doc_obj.source_file_path,
+                                    page_no=pno,
+                                    doc_title=doc_title
+                                )
+                    except Exception as ill_err:
+                        logger.error(f"Failed to check or crop illustration: {ill_err}", exc_info=True)
+                        
+                # Si illustration trouvée, l'injecter dans sources_data
+                if illustration_data:
+                    ill_source = {
+                        "is_cropped_illustration": True,
+                        "url": illustration_data["url"],
+                        "title": illustration_data["title"],
+                        "page_no": illustration_data["page_no"],
+                        "document_title": illustration_data["document_title"],
+                        "document_id": target_passage.get("document_id"),
+                    }
+                    sources_data.append(ill_source)
+                    logger.info(f"Illustration added to sources_data: {ill_source}")
+
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
                 # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
                 assistant_message_id = None
                 if request.conversation_id and assistant_response:
                     try:
-                        complete_response = "".join(assistant_response)
                         sources_json = json.dumps(sources_data) if sources_data else None
                         assistant_message_id = _persist_assistant_reply(
                             request.conversation_id,

@@ -431,6 +431,18 @@
 </div>
 
 
+<!-- Modale d'illustration grand format -->
+<div id="illustration-modal" class="hidden fixed inset-0 z-[130] bg-black/85 flex items-center justify-center p-4" onclick="closeIllustrationModal()">
+  <div class="relative max-w-4xl max-h-[90vh] flex flex-col gap-2 bg-gray-900 rounded-lg p-3" onclick="event.stopPropagation()">
+    <button onclick="closeIllustrationModal()" class="absolute top-2 right-2 text-white hover:text-gray-300 bg-gray-800/80 p-1.5 rounded-full transition-colors z-10">
+      <i class="ti ti-x text-xl"></i>
+    </button>
+    <img id="illustration-modal-img" src="" alt="Illustration" class="max-w-full max-h-[80vh] object-contain rounded">
+    <div id="illustration-modal-title" class="text-white text-sm font-semibold text-center mt-2 px-6"></div>
+  </div>
+</div>
+
+
 <!-- Visionneuse PDF (documents bibliothèque) -->
 <div id="space-pdf-viewer-modal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex flex-col z-[120]">
   <div class="pdf-modal-toolbar flex-shrink-0">
@@ -576,8 +588,38 @@ function buildSourcesSection(sources, messageKey) {
   // Enregistrer les sources dans le registre global pour cette clé de message
   messageSourcesRegistry.set(messageKey, sources);
   
-  const textSources = sources.filter((s) => !s.is_image_chunk);
+  const textSources = sources.filter((s) => !s.is_image_chunk && !s.is_cropped_illustration);
   const imageSources = sources.filter((s) => s.is_image_chunk);
+  const illustrations = sources.filter((s) => s.is_cropped_illustration);
+
+  let illustrationHtml = "";
+  if (illustrations.length > 0) {
+    const illustration = illustrations[0];
+    const escapedTitleForJs = escapeHtml(illustration.title).replace(/'/g, "\\'");
+    illustrationHtml = `
+      <div class="mb-4">
+        <div class="text-xs text-blue-600 dark:text-blue-400 font-semibold mb-2 flex items-center gap-1">
+          <i class="ti ti-photo text-sm"></i>
+          Illustration de la réponse
+        </div>
+        <div class="illustration-card rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm max-w-lg transition-all duration-300 hover:shadow-md">
+          <div class="relative group cursor-pointer" onclick="openIllustrationModal('${illustration.url}', '${escapedTitleForJs}')">
+            <img src="${illustration.url}" alt="${escapeHtml(illustration.title)}" class="w-full h-auto object-contain max-h-72">
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+              <i class="ti ti-zoom-in text-white drop-shadow opacity-0 group-hover:opacity-100 text-2xl transition-opacity"></i>
+            </div>
+          </div>
+          <div class="px-3 py-2 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center text-xs">
+            <div class="flex flex-col gap-0.5 min-w-0">
+              <span class="font-semibold text-gray-700 dark:text-gray-200 truncate max-w-[320px]">${escapeHtml(illustration.title)}</span>
+              <span class="text-[10px] text-gray-500 dark:text-gray-400 truncate max-w-[320px]">${escapeHtml(illustration.document_title)}</span>
+            </div>
+            <span class="text-[10px] font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded-full shrink-0">Page ${illustration.page_no}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   const sourceBadges = textSources.map((source) => {
     const title = escapeHtml(displayTitle(source));
@@ -627,6 +669,7 @@ function buildSourcesSection(sources, messageKey) {
 
   return `
     <div class="sources-section mt-3 pt-3 border-t border-gray-300 dark:border-gray-600">
+      ${illustrationHtml}
       ${imageSources.length > 0 ? `
         <div class="mb-3">
           <div class="text-xs text-purple-600 dark:text-purple-400 font-medium mb-2 flex items-center gap-1">
@@ -656,7 +699,11 @@ function transformCitationsToLinks(html, sources, messageKey) {
   messageSourcesRegistry.set(messageKey, sources);
   
   const sourceMap = {};
-  sources.forEach((s) => { sourceMap[s.index] = s; });
+  sources.forEach((s) => {
+    if (s.index !== undefined) {
+      sourceMap[s.index] = s;
+    }
+  });
   return html.replace(/\[((?:\d+\s*(?:,\s*\d+\s*)*))\]/g, (match, group) => {
     const nums = group.split(",").map((n) => parseInt(n.trim(), 10)).filter(Number.isFinite);
     const rendered = nums.map((index) => {
@@ -666,6 +713,20 @@ function transformCitationsToLinks(html, sources, messageKey) {
     if (rendered.length === 0) return match;
     return rendered.join(" ");
   });
+}
+
+function openIllustrationModal(url, title) {
+  const modal = document.getElementById("illustration-modal");
+  const img = document.getElementById("illustration-modal-img");
+  const titleEl = document.getElementById("illustration-modal-title");
+  
+  img.src = url;
+  titleEl.textContent = title;
+  modal.classList.remove("hidden");
+}
+
+function closeIllustrationModal() {
+  document.getElementById("illustration-modal").classList.add("hidden");
 }
 
 function showSourcePreview(index, messageKey) {
