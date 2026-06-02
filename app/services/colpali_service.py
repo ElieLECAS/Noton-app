@@ -35,6 +35,14 @@ def get_colpali_model():
                     device_map=device
                 )
                 _colpali_processor = ColQwen2Processor.from_pretrained(model_name)
+            elif "colsmol" in model_name.lower() or "idefics" in model_name.lower():
+                from colpali_engine.models import ColIdefics3, ColIdefics3Processor
+                _colpali_model = ColIdefics3.from_pretrained(
+                    model_name,
+                    torch_dtype=dtype,
+                    device_map=device
+                )
+                _colpali_processor = ColIdefics3Processor.from_pretrained(model_name)
             else:
                 from colpali_engine.models import ColPali, ColPaliProcessor
                 _colpali_model = ColPali.from_pretrained(
