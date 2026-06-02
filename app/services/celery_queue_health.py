@@ -87,6 +87,7 @@ def _extract_doc_task(task: dict[str, Any], state: str, worker_name: str) -> Opt
         "app.tasks.documents.process_document_embeddings",
         "app.tasks.documents.reindex_library_document_task",
         "app.tasks.documents.multimodal_reindex_library_document_task",
+        "app.tasks.documents.reindex_all_library_documents_task",
     }:
         return None
 
