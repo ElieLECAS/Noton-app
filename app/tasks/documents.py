@@ -98,11 +98,20 @@ def multimodal_reindex_library_document_task(
 
 @celery_app.task(bind=True, max_retries=0)
 def reindex_all_library_documents_task(self, user_id: int) -> dict:
-    """Réindexation séquentielle de tous les documents fichier de la bibliothèque."""
+    """Tâche Celery pour enfiler individuellement chaque document éligible sous forme de tâche séparée."""
     from app.library_document_logging import get_library_document_logger
-    from app.services.document_service_new import reindex_all_library_documents
+    from app.services.document_service_new import (
+        mark_all_eligible_documents_reindex_queued,
+        get_documents_by_library,
+    )
+    from app.services.library_service import get_or_create_user_library
+    from app.services.task_dispatch import dispatch_reindex_library
+    from app.database import engine
+    from sqlmodel import Session
+    from pathlib import Path
 
-    get_library_document_logger().info(
+    ld = get_library_document_logger()
+    ld.info(
         "[Celery] reindex_all_library_documents_task user_id=%s task_id=%s",
         user_id,
         self.request.id,
@@ -112,7 +121,47 @@ def reindex_all_library_documents_task(self, user_id: int) -> dict:
         user_id,
         self.request.id,
     )
-    return reindex_all_library_documents(user_id)
+
+    marked = mark_all_eligible_documents_reindex_queued(user_id)
+    ld.info("[Celery] reindex_all_library_documents_task — %s document(s) marqués en attente.", marked)
+
+    if marked == 0:
+        return {"ok": 0, "failed": [], "skipped": 0, "marked_queued": 0}
+
+    with Session(engine) as session:
+        library = get_or_create_user_library(session, user_id)
+        docs = get_documents_by_library(session, library.id, user_id)
+
+    results: dict = {"ok": 0, "failed": [], "skipped": 0, "marked_queued": marked}
+    for doc in docs:
+        if doc.document_type != "document" or not doc.source_file_path:
+            results["skipped"] += 1
+            continue
+        src = Path(doc.source_file_path)
+        if not src.is_file():
+            results["skipped"] += 1
+            continue
+
+        try:
+            dispatch_reindex_library(doc.id, user_id)
+            results["ok"] += 1
+        except Exception as e:
+            logger.exception("reindex_all_task: échec enfilage document_id=%s: %s", doc.id, e)
+            results["failed"].append(
+                {
+                    "document_id": doc.id,
+                    "title": doc.title,
+                    "error": str(e),
+                }
+            )
+
+    ld.info(
+        "[Celery] reindex_all_library_documents_task terminé. ok=%s skipped=%s failed=%s",
+        results["ok"],
+        results["skipped"],
+        len(results["failed"]),
+    )
+    return results
 
 
 @celery_app.task(bind=True, max_retries=1, default_retry_delay=60)

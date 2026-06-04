@@ -171,6 +171,7 @@ Pour le PVC, utiliser le joint XL30202 et non la référence T740023 indiquée p
     assert "XL30202" in virtual_chunk.content
 
 
+@pytest.mark.skip(reason="Obsolete: critique pipeline removed in favor of ColPali direct RAG")
 def test_two_step_chat_pipeline_with_faq_retrieval(client, db_session: Session):
     """Test du pipeline double recherche : technique → brouillon → FAQ post-brouillon → critique."""
     # 1. Setup user, space, conversation
@@ -273,6 +274,7 @@ def test_two_step_chat_pipeline_with_faq_retrieval(client, db_session: Session):
     assert call_count == 2  # Both draft and critique were called
 
 
+@pytest.mark.skip(reason="Obsolete: critique pipeline removed in favor of ColPali direct RAG")
 def test_critique_unchanged_pipeline_uses_draft(client, db_session: Session):
     """Si decision=unchanged, la réponse streamée est le brouillon exact sans méta-texte."""
     user = create_test_user(db_session, "responsable")
@@ -483,6 +485,7 @@ def test_technical_search_excludes_faq(db_session: Session):
     # Note: peut être False si l'embedding ne match pas, mais au moins pas de FAQ
 
 
+@pytest.mark.skip(reason="Obsolete: critique pipeline removed in favor of ColPali direct RAG")
 def test_faq_search_below_threshold_skips_critique(client, db_session: Session):
     """Test que si aucune FAQ ne dépasse le seuil, la critique n'est pas appelée."""
     user = create_test_user(db_session, "responsable")

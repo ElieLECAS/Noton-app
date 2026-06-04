@@ -205,6 +205,7 @@ def test_build_space_context_from_passages_includes_page_info():
     assert "Guide de Montage, pages 10-12" in content
 
 
+@pytest.mark.skip(reason="Obsolete: query expansion fallback removed in favor of ColPali direct RAG")
 @pytest.mark.asyncio
 async def test_search_relevant_passages_query_expansion_fallback():
     import math

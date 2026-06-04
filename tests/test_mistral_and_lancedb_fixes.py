@@ -59,6 +59,8 @@ async def test_post_json_with_retry_network_error_exhausted():
 async def test_chat_stream_network_error_retry_before_yield():
     # Test that chat_stream retries the connection if a network error occurs before yielding anything
     mock_client = mock.AsyncMock(spec=httpx.AsyncClient)
+    mock_client.stream = mock.Mock()
+    mock_client.__aenter__.return_value = mock_client
     
     # Mock settings.MISTRAL_API_KEY
     with mock.patch("app.services.mistral_service.settings") as mock_settings:
@@ -102,6 +104,8 @@ async def test_chat_stream_network_error_retry_before_yield():
 async def test_chat_stream_network_error_no_retry_after_yield():
     # Test that chat_stream does NOT retry and raises error if connection drops after some chunks have been yielded
     mock_client = mock.AsyncMock(spec=httpx.AsyncClient)
+    mock_client.stream = mock.Mock()
+    mock_client.__aenter__.return_value = mock_client
     
     with mock.patch("app.services.mistral_service.settings") as mock_settings:
         mock_settings.MISTRAL_API_KEY = "test-key"

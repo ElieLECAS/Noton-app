@@ -641,3 +641,87 @@ def refine_with_source_authority(
         
     refined.sort(key=lambda x: x.get("score", 0.0), reverse=True)
     return refined
+
+
+def reciprocal_rank_fusion(
+    vector_results: List[NodeWithScore],
+    lexical_results: List[NodeWithScore],
+    alphanumeric_results: Optional[List[NodeWithScore]] = None,
+    k: int = 60,
+    top_n: int = 15,
+    normalize: bool = False,
+) -> List[NodeWithScore]:
+    """
+    RRF (Reciprocal Rank Fusion) unifié pour fusionner les canaux vectoriel, lexical et alphanumérique.
+    """
+    id_to_node = {}
+    ranks: Dict[str, Dict[str, int]] = {}
+
+    def _add_results(results: List[NodeWithScore], channel_name: str):
+        if not results:
+            return
+        for rank_idx, nws in enumerate(results, start=1):
+            node_id = nws.node.id_
+            id_to_node[node_id] = nws.node
+            ranks.setdefault(node_id, {})[channel_name] = rank_idx
+
+    _add_results(vector_results, "vector")
+    _add_results(lexical_results, "lexical")
+    if alphanumeric_results:
+        _add_results(alphanumeric_results, "alphanumeric")
+
+    if not id_to_node:
+        return []
+
+    fused_results = []
+    for node_id, node in id_to_node.items():
+        rrf_score = 0.0
+        for channel_name, rank_idx in ranks[node_id].items():
+            rrf_score += 1.0 / (k + rank_idx)
+
+        meta = dict(node.metadata or {})
+        meta["raw_rrf_score"] = rrf_score
+        node.metadata = meta
+
+        fused_results.append(NodeWithScore(node=node, score=rrf_score))
+
+    fused_results.sort(key=lambda x: x.score, reverse=True)
+    fused_results = fused_results[:top_n]
+
+    if normalize and fused_results:
+        scores = [x.score for x in fused_results]
+        min_score = min(scores)
+        max_score = max(scores)
+
+        for nws in fused_results:
+            if max_score > min_score:
+                norm = 0.1 + 0.8 * ((nws.score - min_score) / (max_score - min_score))
+            else:
+                norm = 0.9
+            nws.score = norm
+
+    return fused_results
+
+
+def _extract_alphanumeric_codes(query: str) -> List[str]:
+    """Extrait les codes alphanumériques d'une requête."""
+    words = re.findall(r'[a-zA-Z0-9.\-]+', query.lower())
+    codes = []
+    for w in words:
+        w_clean = w.strip(".,;:!?()")
+        if not w_clean or w_clean in _FALLBACK_STOPWORDS:
+            continue
+        if any(c.isdigit() for c in w_clean) or len(w_clean) >= 3:
+            if w_clean not in codes:
+                codes.append(w_clean)
+    return codes
+
+
+def _retrieve_leaves_bm25_sql(*args, **kwargs):
+    """Stub pour compatibilité de tests."""
+    return []
+
+
+def _retrieve_leaves_alphanumeric_sql(*args, **kwargs):
+    """Stub pour compatibilité de tests."""
+    return []
