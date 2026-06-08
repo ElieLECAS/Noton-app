@@ -178,13 +178,13 @@ def _retrieve_leaves_sql(
         similarity_score = 1.0 - distance
         
         metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
-        metadata.setdefault("document_id", row.document_id)
-        metadata.setdefault("document_title", row.document_title or "Document sans titre")
-        metadata.setdefault("chunk_index", row.chunk_index)
+        metadata["document_id"] = row.document_id
+        metadata["document_title"] = row.document_title or "Document sans titre"
+        metadata["chunk_index"] = row.chunk_index
         if getattr(row, "document_source", None):
-            metadata.setdefault("source", row.document_source)
+            metadata["source"] = row.document_source
         if getattr(row, "chunk_source", None):
-            metadata.setdefault("source", row.chunk_source)
+            metadata["source"] = row.chunk_source
             
         node = TextNode(
             id_=f"chunk-{row.id}",
@@ -446,8 +446,8 @@ def _merge_leaf_page_into_node_metadata(leaf_node, target_node) -> None:
 
 def _chunk_row_to_text_node(row: DocumentChunk, score: float) -> NodeWithScore:
     meta = _merged_chunk_metadata(row.metadata_json, row.metadata_)
-    meta.setdefault("document_id", row.document_id)
-    meta.setdefault("chunk_index", row.chunk_index)
+    meta["document_id"] = row.document_id
+    meta["chunk_index"] = row.chunk_index
     node = TextNode(
         text=row.content or "",
         id_=str(row.id),

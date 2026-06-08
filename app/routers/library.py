@@ -745,7 +745,7 @@ async def get_document_file(
             detail="Document non trouvé"
         )
     
-    if document.document_type != "document" or not document.source_file_path:
+    if not document.source_file_path:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Ce document n'a pas de fichier source"

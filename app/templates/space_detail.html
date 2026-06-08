@@ -710,7 +710,7 @@ function transformCitationsToLinks(html, sources, messageKey) {
     const nums = group.split(",").map((n) => parseInt(n.trim(), 10)).filter(Number.isFinite);
     const rendered = nums.map((index) => {
       if (!sourceMap[index]) return String(index);
-      return `<button class="citation-link" title="${escapeHtml(sourceMap[index].note_title || "Source")}" onclick="showSourcePreview(${index}, '${messageKey}')">[${index}]</button>`;
+      return `<button class="citation-link" title="${escapeHtml(sourceMap[index].note_title || "Source")}" onclick="handleSpaceSourceClick(${index}, '${messageKey}')">[${index}]</button>`;
     });
     if (rendered.length === 0) return match;
     return rendered.join(" ");
@@ -1390,7 +1390,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     contentEl.innerHTML = finalHtml;
     if (receivedSources && receivedSources.length > 0) {
       const sourcesHtml = buildSourcesSection(receivedSources, streamingMessageKey);
-      const messageContainer = assistantWrap.querySelector(".max-w-2xl");
+      const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
       if (messageContainer) {
         messageContainer.insertAdjacentHTML("beforeend", sourcesHtml);
       }
@@ -1424,7 +1424,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
         </div>
       </div>
     `;
-    const messageContainer = assistantWrap.querySelector(".max-w-2xl");
+    const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
     if (messageContainer) {
       messageContainer.insertAdjacentHTML("beforeend", feedbackHtml);
     }

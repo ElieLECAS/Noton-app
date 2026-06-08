@@ -100,6 +100,14 @@ def delete_space(session: Session, space_id: int, user_id: int) -> bool:
     for conversation in conversations:
         session.delete(conversation)
     
+    # Supprimer explicitement les feedbacks associés à cet espace
+    from app.models.message_feedback import MessageFeedback
+    feedbacks = session.exec(
+        select(MessageFeedback).where(MessageFeedback.space_id == space_id)
+    ).all()
+    for feedback in feedbacks:
+        session.delete(feedback)
+
     session.delete(space)
     session.commit()
     

@@ -14,7 +14,9 @@ class MessageFeedback(SQLModel, table=True):
         sa_column=Column(ForeignKey("message.id", ondelete="SET NULL"), index=True, nullable=True),
     )
     user_id: int = Field(foreign_key="user.id", index=True)
-    space_id: int = Field(foreign_key="space.id", index=True)
+    space_id: int = Field(
+        sa_column=Column(ForeignKey("space.id", ondelete="CASCADE"), index=True, nullable=False)
+    )
     is_positive: bool                         # True = 👍, False = 👎
     comment: Optional[str] = Field(default=None, sa_column=Column(Text))
     query_text: str                           # Question originale

@@ -98,6 +98,8 @@ async def startup_event():
     """Créer les tables au démarrage."""
     create_db_and_tables()
     
+
+    
     # Les migrations Alembic sont déjà exécutées par le script d'entrée du conteneur (Dockerfile CMD ou docker-compose command)
     # pour éviter tout conflit de verrous en BDD au démarrage de l'application.
     
@@ -108,6 +110,19 @@ async def startup_event():
             seed_rbac_system(session)
     except Exception as e:
         logger.error(f"Erreur lors de l'initialisation RBAC: {e}")
+    
+    # Précharger le modèle ColPali en arrière-plan si activé
+    if settings.COLPALI_ENABLED:
+        import threading
+        def preload_colpali():
+            try:
+                from app.services.colpali_service import get_colpali_model
+                logger.info("Début du préchargement en arrière-plan du modèle ColPali...")
+                get_colpali_model()
+            except Exception as e:
+                logger.error(f"Erreur lors du préchargement en arrière-plan du modèle ColPali: {e}")
+        
+        threading.Thread(target=preload_colpali, name="colpali-preload", daemon=True).start()
     
     # Workers threads (embeddings + documents) uniquement si thread ou hybrid (repli Celery)
     try:

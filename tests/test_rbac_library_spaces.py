@@ -83,3 +83,46 @@ def test_get_foreign_space_404(client, responsable_headers, db_session):
 
     r = client.get(f"/api/spaces/{space.id}", headers=responsable_headers)
     assert r.status_code == 404
+
+
+def test_delete_space_with_feedback_cascade(client, responsable_headers, db_session):
+    from app.models.user import User
+    from app.models.message_feedback import MessageFeedback
+    from sqlmodel import select
+
+    # 1. Get the user matching the responsable headers
+    user = db_session.exec(
+        select(User).where(User.username.like("u_responsable_%"))
+    ).first()
+    assert user is not None
+
+    # 2. Create a space owned by this user
+    space = Space(name="Pytest cascade space", user_id=user.id)
+    db_session.add(space)
+    db_session.commit()
+    db_session.refresh(space)
+
+    # 3. Create a message feedback inside this space
+    feedback = MessageFeedback(
+        message_id=None,
+        user_id=user.id,
+        space_id=space.id,
+        is_positive=True,
+        comment="Test de suppression en cascade",
+        query_text="Requête",
+        response_text="Réponse",
+        chunk_ids=[]
+    )
+    db_session.add(feedback)
+    db_session.commit()
+    db_session.refresh(feedback)
+
+    # 4. Call delete API to delete the space
+    r = client.delete(f"/api/spaces/{space.id}", headers=responsable_headers)
+    assert r.status_code == 204
+
+    # 5. Verify both the space and feedback have been deleted
+    db_session.expire_all()
+    assert db_session.get(Space, space.id) is None
+    assert db_session.get(MessageFeedback, feedback.id) is None
+

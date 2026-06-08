@@ -762,7 +762,7 @@ async def stream_space_chat_message(
                             else []
                         )
                         has_file_by_doc = {
-                            d.id: (d.document_type == "document" and bool(d.source_file_path))
+                            d.id: bool(d.source_file_path)
                             for d in docs
                         }
                         # Fallback "profondeur": reconstruire une page fiable depuis les chunks
