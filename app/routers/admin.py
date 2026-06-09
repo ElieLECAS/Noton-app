@@ -498,12 +498,28 @@ async def get_admin_feedback_stats(
         else:
             by_space_dict[space_id]["negative"] = count
 
+    # Répartition des classifications pour les retours négatifs
+    class_stats = session.exec(
+        select(
+            MessageFeedback.category,
+            func.count(MessageFeedback.id)
+        )
+        .where(MessageFeedback.is_positive == False)
+        .group_by(MessageFeedback.category)
+    ).all()
+
+    classifications = {}
+    for cat, count in class_stats:
+        label = cat if cat else "Non classifié"
+        classifications[label] = count
+
     return {
         "total": total,
         "positive": positive,
         "negative": negative,
         "ratio": ratio,
-        "by_space": list(by_space_dict.values())
+        "by_space": list(by_space_dict.values()),
+        "classifications": classifications
     }
 
 
@@ -584,6 +600,7 @@ async def get_admin_recent_feedbacks(
     page: int = 1,
     limit: int = 20,
     filter_type: Optional[str] = None,
+    filter_category: Optional[str] = None,
     current_user: UserRead = Depends(require_role("admin")),
     session: Session = Depends(get_session)
 ):
@@ -615,6 +632,12 @@ async def get_admin_recent_feedbacks(
     elif filter_type == "negative":
         query = query.where(MessageFeedback.is_positive == False)
 
+    if filter_category:
+        if filter_category == "Non classifié":
+            query = query.where((MessageFeedback.category == None) | (MessageFeedback.category == ""))
+        else:
+            query = query.where(MessageFeedback.category == filter_category)
+
     query = query.order_by(MessageFeedback.created_at.desc())
 
     # Total count
@@ -623,6 +646,13 @@ async def get_admin_recent_feedbacks(
         total_query = total_query.where(MessageFeedback.is_positive == True)
     elif filter_type == "negative":
         total_query = total_query.where(MessageFeedback.is_positive == False)
+
+    if filter_category:
+        if filter_category == "Non classifié":
+            total_query = total_query.where((MessageFeedback.category == None) | (MessageFeedback.category == ""))
+        else:
+            total_query = total_query.where(MessageFeedback.category == filter_category)
+            
     total = session.exec(total_query).first() or 0
 
     # Paged
@@ -647,6 +677,7 @@ async def get_admin_recent_feedbacks(
             "chunk_ids": feedback.chunk_ids,
             "auto_faq_generated": feedback.auto_faq_generated,
             "auto_faq_content": feedback.auto_faq_content,
+            "category": feedback.category,
             "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
             "updated_at": feedback.updated_at.isoformat() if feedback.updated_at else None
         })
@@ -657,3 +688,20 @@ async def get_admin_recent_feedbacks(
         "limit": limit,
         "items": items
     }
+
+
+@router.delete("/feedbacks/{feedback_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_admin_feedback(
+    feedback_id: int,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session)
+):
+    """Supprimer n'importe quel feedback (réservé aux admins)."""
+    from app.models.message_feedback import MessageFeedback
+    feedback = session.get(MessageFeedback, feedback_id)
+    if not feedback:
+        raise HTTPException(status_code=404, detail="Feedback non trouvé")
+    
+    session.delete(feedback)
+    session.commit()
+    return

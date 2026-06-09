@@ -36,6 +36,12 @@ async def create_new_space(
     session: Session = Depends(get_session)
 ):
     """Crée un nouvel espace."""
+    is_admin = "admin" in (current_user.roles or [])
+    if space_create.is_shared and not is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Seuls les administrateurs peuvent créer des espaces communs."
+        )
     space = create_space(session, space_create, current_user.id)
     return SpaceRead.model_validate(space)
 
@@ -64,12 +70,37 @@ async def update_existing_space(
     session: Session = Depends(get_session)
 ):
     """Met à jour un espace."""
-    space = update_space(session, space_id, space_update, current_user.id)
+    space = get_space_by_id(session, space_id, current_user.id)
     if not space:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Espace non trouvé"
         )
+    
+    is_admin = "admin" in (current_user.roles or [])
+    
+    # Restriction : Seuls les admins peuvent modifier un espace commun
+    if space.is_shared and not is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Seuls les administrateurs peuvent modifier un espace commun."
+        )
+        
+    # Restriction : Un non-admin ne peut pas modifier un espace privé qui ne lui appartient pas
+    if not space.is_shared and space.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Vous n'êtes pas autorisé à modifier cet espace privé."
+        )
+
+    # Restriction : Un non-admin ne peut pas transformer son espace privé en espace commun
+    if space_update.is_shared is True and not is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Seuls les administrateurs peuvent rendre un espace commun."
+        )
+        
+    space = update_space(session, space_id, space_update, current_user.id)
     return SpaceRead.model_validate(space)
 
 
@@ -80,6 +111,29 @@ async def delete_existing_space(
     session: Session = Depends(get_session)
 ):
     """Supprime un espace et ses associations."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé"
+        )
+        
+    is_admin = "admin" in (current_user.roles or [])
+    
+    # Restriction : Seuls les admins peuvent supprimer un espace commun
+    if space.is_shared and not is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Seuls les administrateurs peuvent supprimer un espace commun."
+        )
+        
+    # Restriction : Un non-admin ne peut pas supprimer un espace privé qui ne lui appartient pas
+    if not space.is_shared and space.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Vous n'êtes pas autorisé à supprimer cet espace privé."
+        )
+        
     success = delete_space(session, space_id, current_user.id)
     if not success:
         raise HTTPException(

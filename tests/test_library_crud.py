@@ -295,10 +295,16 @@ def test_document_export_and_import(client, responsable_headers):
 
         # Create a dummy chunk in the SQL database for this document
         from app.models.document_chunk import DocumentChunk
-        from sqlmodel import Session
+        from sqlmodel import Session, select
         from app.database import engine
+        from app.models.document import Document
 
         with Session(engine) as sess:
+            db_doc = sess.get(Document, doc_id)
+            db_doc.source = "Proferm"
+            sess.add(db_doc)
+            sess.commit()
+
             chunk = DocumentChunk(
                 document_id=doc_id,
                 chunk_index=0,
@@ -309,7 +315,8 @@ def test_document_export_and_import(client, responsable_headers):
                 node_id="node_1",
                 start_char=0,
                 end_char=16,
-                metadata_json={"page_no": 1}
+                metadata_json={"page_no": 1},
+                source="Proferm"
             )
             sess.add(chunk)
             sess.commit()
@@ -339,7 +346,9 @@ def test_document_export_and_import(client, responsable_headers):
                 # Read metadata
                 meta = json.loads(z.read("metadata.json").decode("utf-8"))
                 assert meta["document"]["title"] == "export_test"
+                assert meta["document"]["source"] == "Proferm"
                 assert len(meta["chunks"]) == 1
+                assert meta["chunks"][0]["source"] == "Proferm"
 
             # 2. Test Import using the exported ZIP
             with (
@@ -357,6 +366,15 @@ def test_document_export_and_import(client, responsable_headers):
 
                 # Verify it calls batch insert to LanceDB
                 mock_insert.assert_called_once()
+
+                # Verify it persisted source in Postgres
+                with Session(engine) as sess:
+                    imp_doc = sess.get(Document, imported_doc["id"])
+                    assert imp_doc.source == "Proferm"
+                    
+                    imp_chunks = list(sess.exec(select(DocumentChunk).where(DocumentChunk.document_id == imported_doc["id"])).all())
+                    assert len(imp_chunks) == 1
+                    assert imp_chunks[0].source == "Proferm"
 
         # Cleanup
         client.delete(f"/api/library/documents/{doc_id}", headers=responsable_headers)
@@ -403,10 +421,16 @@ def test_library_export_all_and_import(client, responsable_headers):
 
         # Create a dummy chunk in the SQL database for this document
         from app.models.document_chunk import DocumentChunk
-        from sqlmodel import Session
+        from sqlmodel import Session, select
         from app.database import engine
+        from app.models.document import Document
 
         with Session(engine) as sess:
+            db_doc = sess.get(Document, doc_id)
+            db_doc.source = "Technal"
+            sess.add(db_doc)
+            sess.commit()
+
             chunk = DocumentChunk(
                 document_id=doc_id,
                 chunk_index=0,
@@ -417,7 +441,8 @@ def test_library_export_all_and_import(client, responsable_headers):
                 node_id="node_all_1",
                 start_char=0,
                 end_char=24,
-                metadata_json={"page_no": 1}
+                metadata_json={"page_no": 1},
+                source="Technal"
             )
             sess.add(chunk)
             sess.commit()
@@ -450,6 +475,8 @@ def test_library_export_all_and_import(client, responsable_headers):
                 # Read metadata
                 meta = json.loads(z.read(metadata_file).decode("utf-8"))
                 assert meta["document"]["title"] == "export_all_test"
+                assert meta["document"]["source"] == "Technal"
+                assert meta["chunks"][0]["source"] == "Technal"
 
             # 2. Test Import using the exported ZIP (bulk mode)
             with (
@@ -467,6 +494,15 @@ def test_library_export_all_and_import(client, responsable_headers):
 
                 # Verify it calls batch insert to LanceDB
                 mock_insert.assert_called_once()
+
+                # Verify it persisted source in Postgres
+                with Session(engine) as sess:
+                    imp_doc = sess.get(Document, imported_doc["id"])
+                    assert imp_doc.source == "Technal"
+                    
+                    imp_chunks = list(sess.exec(select(DocumentChunk).where(DocumentChunk.document_id == imported_doc["id"])).all())
+                    assert len(imp_chunks) == 1
+                    assert imp_chunks[0].source == "Technal"
 
         # Cleanup
         client.delete(f"/api/library/documents/{doc_id}", headers=responsable_headers)

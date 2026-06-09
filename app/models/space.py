@@ -29,6 +29,7 @@ class SpaceCreate(SQLModel):
     description: Optional[str] = None
     color: Optional[str] = None
     icon: Optional[str] = None
+    is_shared: bool = False
 
 
 class SpaceRead(SQLModel):
@@ -50,3 +51,4 @@ class SpaceUpdate(SQLModel):
     description: Optional[str] = None
     color: Optional[str] = None
     icon: Optional[str] = None
+    is_shared: Optional[bool] = None

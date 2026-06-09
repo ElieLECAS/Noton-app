@@ -26,6 +26,7 @@ class MessageFeedback(SQLModel, table=True):
     )
     auto_faq_generated: bool = Field(default=False)
     auto_faq_content: Optional[str] = Field(default=None, sa_column=Column(Text))
+    category: Optional[str] = Field(default=None, max_length=100)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -37,6 +38,7 @@ class MessageFeedback(SQLModel, table=True):
 class FeedbackCreate(SQLModel):
     is_positive: bool
     comment: Optional[str] = None
+    category: Optional[str] = None
 
 
 class FeedbackRead(SQLModel):
@@ -51,5 +53,6 @@ class FeedbackRead(SQLModel):
     chunk_ids: Optional[List[int]] = None
     auto_faq_generated: bool = False
     auto_faq_content: Optional[str] = None
+    category: Optional[str] = None
     created_at: datetime
     updated_at: datetime

@@ -108,6 +108,9 @@ class Settings(BaseSettings):
     # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
     TASK_BACKEND_MODE: str = "thread"
     REDIS_URL: Optional[str] = None  # ex. redis://redis:6379/0
+    
+    # Discord Webhook Notification
+    DISCORD_WEBHOOK_URL: Optional[str] = None
     CELERY_BROKER_URL: Optional[str] = None  # défaut: REDIS_URL
     CELERY_RESULT_BACKEND: Optional[str] = None  # défaut: REDIS_URL
     # Concurrence worker Celery : 1 job document lourd à la fois (parallélisme pages via MULTIMODAL_PAGE_CONCURRENCY)

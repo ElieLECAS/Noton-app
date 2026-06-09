@@ -17,6 +17,7 @@ def create_space(session: Session, space_create: SpaceCreate, user_id: int) -> S
         description=space_create.description,
         color=space_create.color,
         icon=space_create.icon,
+        is_shared=space_create.is_shared,
         user_id=user_id
     )
     session.add(space)

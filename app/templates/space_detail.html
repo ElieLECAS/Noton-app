@@ -416,11 +416,30 @@
     </div>
     <div class="space-y-4">
       <input type="hidden" id="feedback-negative-msg-id" />
-      <p class="text-xs text-gray-500 dark:text-gray-400">
-        Votre commentaire est obligatoire pour nous aider à comprendre et corriger les futures réponses.
-      </p>
-      <textarea id="feedback-negative-comment" rows="4" placeholder="Ex: La réponse confond deux produits, les informations sur les dimensions sont incorrectes..." class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" oninput="validateNegativeFeedbackBtn()"></textarea>
-      <div class="flex justify-end gap-2">
+      
+      <div>
+        <label for="feedback-negative-category" class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Catégorie du problème</label>
+        <select id="feedback-negative-category" class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" onchange="updateNegativeFeedbackGuide()">
+          <option value="" disabled selected>-- Choisissez une catégorie --</option>
+          <option value="Hallucination">Hallucination</option>
+          <option value="Mauvais document / Mauvaise source">Mauvais document / Mauvaise source</option>
+          <option value="Information obsolète">Information obsolète</option>
+          <option value="Manque de précision / Incomplet">Manque de précision / Incomplet</option>
+          <option value="Raisonnement incorrect">Raisonnement incorrect</option>
+          <option value="Hors-sujet">Hors-sujet</option>
+        </select>
+      </div>
+
+      <!-- Description d'aide dynamique -->
+      <div id="feedback-category-guide" class="hidden p-3 rounded-lg bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/15 text-xs text-gray-600 dark:text-gray-300 font-medium leading-relaxed">
+      </div>
+
+      <div>
+        <label for="feedback-negative-comment" class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Votre correction</label>
+        <textarea id="feedback-negative-comment" rows="4" placeholder="Ex: La réponse confond deux produits, les informations sur les dimensions sont incorrectes..." class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" oninput="validateNegativeFeedbackBtn()"></textarea>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
         <button type="button" onclick="closeFeedbackNegativeModal()" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
           Annuler
         </button>
@@ -1465,6 +1484,8 @@ async function submitFeedback(messageId, isPositive) {
   } else {
     document.getElementById("feedback-negative-msg-id").value = messageId;
     document.getElementById("feedback-negative-comment").value = "";
+    document.getElementById("feedback-negative-category").value = "";
+    document.getElementById("feedback-category-guide").classList.add("hidden");
     document.getElementById("feedback-negative-submit-btn").disabled = true;
     document.getElementById("feedback-negative-modal").classList.remove("hidden");
     setTimeout(() => {
@@ -1473,9 +1494,33 @@ async function submitFeedback(messageId, isPositive) {
   }
 }
 
+function updateNegativeFeedbackGuide() {
+  const select = document.getElementById("feedback-negative-category");
+  const guide = document.getElementById("feedback-category-guide");
+  const value = select.value;
+  
+  const descriptions = {
+    "Hallucination": "LIA a inventé des faits, chiffres ou mesures absents des documents sources.",
+    "Mauvais document / Mauvaise source": "LIA a cherché ou cité un document inapproprié pour cette question.",
+    "Information obsolète": "La réponse s'appuie sur des données de document périmées ou obsolètes.",
+    "Manque de précision / Incomplet": "La réponse est trop vague, manque d'exemples ou de détails essentiels.",
+    "Raisonnement incorrect": "LIA a fait un contresens ou a mal interprété les consignes du document.",
+    "Hors-sujet": "La réponse ne répond pas du tout à la question posée."
+  };
+  
+  if (descriptions[value]) {
+    guide.textContent = descriptions[value];
+    guide.classList.remove("hidden");
+  } else {
+    guide.classList.add("hidden");
+  }
+  validateNegativeFeedbackBtn();
+}
+
 function validateNegativeFeedbackBtn() {
   const comment = document.getElementById("feedback-negative-comment").value.trim();
-  document.getElementById("feedback-negative-submit-btn").disabled = comment.length === 0;
+  const category = document.getElementById("feedback-negative-category").value;
+  document.getElementById("feedback-negative-submit-btn").disabled = (comment.length === 0 || category === "");
 }
 
 function closeFeedbackNegativeModal() {
@@ -1485,12 +1530,13 @@ function closeFeedbackNegativeModal() {
 async function submitNegativeFeedback() {
   const messageId = document.getElementById("feedback-negative-msg-id").value;
   const comment = document.getElementById("feedback-negative-comment").value.trim();
-  if (!messageId || !comment) return;
+  const category = document.getElementById("feedback-negative-category").value;
+  if (!messageId || !comment || !category) return;
   
   const r = await api(`/api/conversations/messages/${messageId}/feedback`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ is_positive: false, comment: comment })
+    body: JSON.stringify({ is_positive: false, comment: comment, category: category })
   });
   if (r.ok) {
     closeFeedbackNegativeModal();

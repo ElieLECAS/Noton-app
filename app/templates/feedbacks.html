@@ -241,6 +241,13 @@
                 ? "bg-green-500/10 text-green-700 border-green-500/20 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30" 
                 : "bg-red-500/10 text-red-700 border-red-500/20 dark:bg-red-950/20 dark:text-red-400 dark:border-red-800/30";
             const badgeIcon = f.is_positive ? "👍 Utile" : "👎 Inutile";
+            
+            const categoryBadge = (!f.is_positive && f.category)
+                ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-indigo-500/10 text-indigo-700 border-indigo-500/20 dark:bg-indigo-950/20 dark:text-indigo-400 dark:border-indigo-800/30 shrink-0">
+                     ${escapeHtml(f.category)}
+                   </span>
+                   <span class="text-xs text-gray-400 dark:text-gray-500">•</span>`
+                : "";
 
             return `
                 <div class="glass-card p-6 rounded-3xl border border-black/5 dark:border-white/5 shadow-sm flex flex-col gap-4">
@@ -249,7 +256,7 @@
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${badgeClass}">
                                 ${badgeIcon}
                             </span>
-                            <span class="text-xs text-gray-400 dark:text-gray-500">•</span>
+                            ${categoryBadge}
                             <span class="text-xs font-bold text-gray-500 dark:text-gray-400">
                                 Espace : ${escapeHtml(f.space_name)}
                             </span>
@@ -301,7 +308,10 @@
                         ` : ''}
                     </div>
 
-                    <div class="flex justify-end border-t border-black/5 dark:border-white/5 pt-4 mt-1">
+                    <div class="flex justify-between items-center border-t border-black/5 dark:border-white/5 pt-4 mt-1">
+                        <button onclick="deleteFeedback(${f.message_id}, this)" class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 transition-colors bg-rose-500/5 hover:bg-rose-500/10 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 px-3.5 py-2 rounded-xl border border-rose-500/10 hover:border-rose-500/20 active:scale-95 transition-all shadow-sm">
+                            <i class="ti ti-trash text-sm"></i> Supprimer
+                        </button>
                         <a href="/spaces/${f.space_id}" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 px-3.5 py-2 rounded-xl border border-indigo-500/10 hover:border-indigo-500/20 active:scale-95 transition-all shadow-sm">
                             Ouvrir l'espace <i class="ti ti-arrow-right text-sm"></i>
                         </a>
@@ -315,6 +325,25 @@
         document.getElementById('pagination-info').textContent = `Page ${currentPage} sur ${totalPages}`;
         document.getElementById('btn-prev').disabled = currentPage === 1;
         document.getElementById('btn-next').disabled = currentPage === totalPages;
+    }
+
+    async function deleteFeedback(messageId, btnEl) {
+        if (!confirm("Êtes-vous sûr de vouloir supprimer ce feedback ?")) return;
+        
+        try {
+            const resp = await api(`/api/conversations/messages/${messageId}/feedback`, {
+                method: "DELETE"
+            });
+            if (resp.ok) {
+                await loadStats();
+                await loadFeedbacks();
+            } else {
+                alert("Une erreur est survenue lors de la suppression du feedback.");
+            }
+        } catch (e) {
+            console.error("Error deleting feedback:", e);
+            alert("Une erreur est survenue lors de la suppression du feedback.");
+        }
     }
 
     document.addEventListener('DOMContentLoaded', async () => {

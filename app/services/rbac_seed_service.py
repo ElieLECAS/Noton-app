@@ -98,6 +98,9 @@ ROLES_CATALOG = {
         "permissions": [
             "library.read",
             "space.read",
+            "space.create",
+            "space.update",
+            "space.delete",
         ]
     },
 }

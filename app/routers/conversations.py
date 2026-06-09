@@ -403,35 +403,11 @@ async def create_or_update_feedback(
         .where(MessageFeedback.message_id == message_id, MessageFeedback.user_id == current_user.id)
     ).first()
     
-    def _should_generate_feedback_knowledge(
-        comment: Optional[str],
-        *,
-        already_generated: bool,
-        comment_changed: bool,
-        is_new: bool,
-    ) -> bool:
-        if not comment or not str(comment).strip():
-            return False
-        if already_generated:
-            return comment_changed
-        return is_new or comment_changed
-
     now = datetime.utcnow()
     if existing_feedback:
-        comment_changed = existing_feedback.comment != feedback_in.comment
-        should_regenerate_faq = _should_generate_feedback_knowledge(
-            feedback_in.comment,
-            already_generated=existing_feedback.auto_faq_generated,
-            comment_changed=comment_changed,
-            is_new=False,
-        )
-
-        if should_regenerate_faq and existing_feedback.auto_faq_generated:
-            existing_feedback.auto_faq_generated = False
-            existing_feedback.auto_faq_content = None
-
         existing_feedback.is_positive = feedback_in.is_positive
         existing_feedback.comment = feedback_in.comment
+        existing_feedback.category = feedback_in.category
         existing_feedback.query_text = query_text
         existing_feedback.response_text = message.content
         existing_feedback.chunk_ids = chunk_ids
@@ -439,18 +415,13 @@ async def create_or_update_feedback(
         session.add(existing_feedback)
         db_feedback = existing_feedback
     else:
-        should_regenerate_faq = _should_generate_feedback_knowledge(
-            feedback_in.comment,
-            already_generated=False,
-            comment_changed=False,
-            is_new=True,
-        )
         db_feedback = MessageFeedback(
             message_id=message_id,
             user_id=current_user.id,
             space_id=conversation.space_id,
             is_positive=feedback_in.is_positive,
             comment=feedback_in.comment,
+            category=feedback_in.category,
             query_text=query_text,
             response_text=message.content,
             chunk_ids=chunk_ids,
@@ -461,21 +432,6 @@ async def create_or_update_feedback(
         
     session.commit()
     session.refresh(db_feedback)
-
-    # Déclencher la génération de texte technique si précision fournie
-    if should_regenerate_faq and "feedback.auto_faq" in current_user.permissions:
-        try:
-            from app.tasks.documents import generate_faq_from_feedback_task
-            generate_faq_from_feedback_task.delay(db_feedback.id)
-            logger.info(
-                "Tâche Celery texte technique planifiée pour le feedback %s",
-                db_feedback.id,
-            )
-        except Exception as e:
-            logger.error(
-                "Impossible de planifier la tâche Celery texte technique : %s",
-                e,
-            )
 
     return db_feedback
 
@@ -571,6 +527,7 @@ async def get_my_feedbacks(
             "chunk_ids": feedback.chunk_ids,
             "auto_faq_generated": feedback.auto_faq_generated,
             "auto_faq_content": feedback.auto_faq_content,
+            "category": feedback.category,
             "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
             "updated_at": feedback.updated_at.isoformat() if feedback.updated_at else None
         })

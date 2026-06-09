@@ -39,6 +39,31 @@
             </div>
         </div>
 
+        <!-- Filtres des espaces -->
+        <div class="flex flex-wrap items-center gap-2 mb-6 border-b border-black/5 dark:border-white/5 pb-4">
+            <button
+                id="filter-all"
+                onclick="setSpaceFilter('all')"
+                class="px-4 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95 bg-indigo-600 text-white shadow-md shadow-indigo-500/10"
+            >
+                Tous
+            </button>
+            <button
+                id="filter-shared"
+                onclick="setSpaceFilter('shared')"
+                class="px-4 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95 border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5"
+            >
+                Espaces communs
+            </button>
+            <button
+                id="filter-private"
+                onclick="setSpaceFilter('private')"
+                class="px-4 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95 border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-200 hover:bg-black/5 dark:hover:bg-white/5"
+            >
+                Espaces privés
+            </button>
+        </div>
+
         <div
             id="spaces-grid"
             class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-items-start"
@@ -75,6 +100,17 @@
                     rows="3"
                     class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
                 ></textarea>
+            </div>
+            <!-- Optionnel pour les admins : Rendre commun -->
+            <div id="space-is-shared-container" class="hidden flex items-center gap-2 px-1">
+                <input
+                    id="space-is-shared"
+                    type="checkbox"
+                    class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"
+                />
+                <label for="space-is-shared" class="text-sm text-gray-700 dark:text-gray-300 font-semibold cursor-pointer">
+                    Rendre cet espace commun (visible par tout le monde)
+                </label>
             </div>
             <div class="flex justify-end gap-2 pt-2">
                 <button
@@ -164,6 +200,17 @@
                     class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
                 ></textarea>
             </div>
+            <!-- Optionnel pour les admins : Rendre commun -->
+            <div id="edit-space-is-shared-container" class="hidden flex items-center gap-2 px-1">
+                <input
+                    id="edit-space-is-shared"
+                    type="checkbox"
+                    class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"
+                />
+                <label for="edit-space-is-shared" class="text-sm text-gray-700 dark:text-gray-300 font-semibold cursor-pointer">
+                    Rendre cet espace commun (visible par tout le monde)
+                </label>
+            </div>
             <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
@@ -190,6 +237,8 @@
     let canLibraryWrite = false;
     let selectedSpaceForDocumentAssign = null;
     let initiallyLinkedDocumentIds = new Set();
+    let activeFilter = 'all';
+    let isAdmin = false;
 
     async function api(url, options = {}) {
         const headers = { ...(options.headers || {}) };
@@ -205,17 +254,21 @@
     }
 
     function openCreateSpaceModal() {
+        const sharedCheckbox = document.getElementById("space-is-shared");
+        if (sharedCheckbox) sharedCheckbox.checked = false;
         document.getElementById("space-modal").classList.remove("hidden");
     }
     function closeCreateSpaceModal() {
         document.getElementById("space-modal").classList.add("hidden");
         document.getElementById("space-form").reset();
     }
-    function openEditSpaceModal(spaceId, currentName, currentDescription) {
+    function openEditSpaceModal(spaceId, currentName, currentDescription, isShared) {
         document.getElementById("edit-space-id").value = String(spaceId);
         document.getElementById("edit-space-name").value = currentName || "";
         document.getElementById("edit-space-description").value =
             currentDescription || "";
+        const sharedCheckbox = document.getElementById("edit-space-is-shared");
+        if (sharedCheckbox) sharedCheckbox.checked = !!isShared;
         document.getElementById("edit-space-modal").classList.remove("hidden");
     }
     function closeEditSpaceModal() {
@@ -229,8 +282,36 @@
         selectedSpaceForDocumentAssign = null;
     }
 
+    function setSpaceFilter(filter) {
+        activeFilter = filter;
+        
+        const btnAll = document.getElementById('filter-all');
+        const btnShared = document.getElementById('filter-shared');
+        const btnPrivate = document.getElementById('filter-private');
+        
+        const activeClasses = ['bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-500/10'];
+        const inactiveClasses = ['border', 'border-black/10', 'dark:border-white/10', 'text-gray-700', 'dark:text-gray-200', 'hover:bg-black/5', 'dark:hover:bg-white/5'];
+        
+        [btnAll, btnShared, btnPrivate].forEach(btn => {
+            if (!btn) return;
+            btn.className = "px-4 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95";
+        });
+        
+        if (filter === 'all') {
+            btnAll.classList.add(...activeClasses);
+            [btnShared, btnPrivate].forEach(btn => btn && btn.classList.add(...inactiveClasses));
+        } else if (filter === 'shared') {
+            btnShared.classList.add(...activeClasses);
+            [btnAll, btnPrivate].forEach(btn => btn && btn.classList.add(...inactiveClasses));
+        } else if (filter === 'private') {
+            btnPrivate.classList.add(...activeClasses);
+            [btnAll, btnShared].forEach(btn => btn && btn.classList.add(...inactiveClasses));
+        }
+        
+        renderSpacesGrid();
+    }
+
     async function loadPermissions() {
-        // `currentUser` est injecté par `base.html`.
         if (!currentUser || !currentUser.permissions) {
             const r = await api("/api/auth/me");
             if (r.ok) currentUser = await r.json();
@@ -239,13 +320,32 @@
         const perms = currentUser?.permissions || [];
         canSpaceUpdate = perms.includes("space.update");
         canLibraryWrite = perms.includes("library.write");
+        isAdmin = currentUser?.roles?.includes("admin") || false;
     }
 
     function applyPermissionUI() {
         const createBtn = document.querySelector(
             'button[onclick="openCreateSpaceModal()"]',
         );
-        if (createBtn && !canSpaceUpdate) createBtn.classList.add("hidden");
+        if (createBtn) {
+            const perms = currentUser?.permissions || [];
+            const canCreate = perms.includes("space.create");
+            if (canCreate) {
+                createBtn.classList.remove("hidden");
+            } else {
+                createBtn.classList.add("hidden");
+            }
+        }
+        
+        const sharedContainer = document.getElementById("space-is-shared-container");
+        const editSharedContainer = document.getElementById("edit-space-is-shared-container");
+        if (isAdmin) {
+            if (sharedContainer) sharedContainer.classList.remove("hidden");
+            if (editSharedContainer) editSharedContainer.classList.remove("hidden");
+        } else {
+            if (sharedContainer) sharedContainer.classList.add("hidden");
+            if (editSharedContainer) editSharedContainer.classList.add("hidden");
+        }
     }
 
     function escapeAttribute(text) {
@@ -256,28 +356,41 @@
         const host = document.getElementById("spaces-grid");
         if (!host) return;
 
-        if (!spaces.length) {
+        let filteredSpaces = spaces;
+        if (activeFilter === 'shared') {
+            filteredSpaces = spaces.filter(s => s.is_shared);
+        } else if (activeFilter === 'private') {
+            filteredSpaces = spaces.filter(s => !s.is_shared);
+        }
+
+        if (!filteredSpaces.length) {
+            let emptyMsg = "Aucun espace pour le moment";
+            let emptyDesc = "Créez votre premier espace pour structurer vos notes, projets et conversations.";
+            if (activeFilter === 'shared') {
+                emptyMsg = "Aucun espace commun";
+                emptyDesc = "Seuls les administrateurs peuvent créer des espaces communs.";
+            } else if (activeFilter === 'private') {
+                emptyMsg = "Aucun espace privé";
+                emptyDesc = "Vous n'avez pas encore créé d'espace privé.";
+            }
             host.innerHTML = `
       <div class="col-span-full w-full text-center py-12 px-6 glass-panel rounded-3xl border border-dashed border-black/10 dark:border-white/10">
         <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4 shadow-sm">
           <i class="ti ti-layout-grid text-3xl"></i>
         </div>
-        <p class="text-gray-800 dark:text-white font-bold text-lg">Aucun espace pour le moment</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-md mx-auto leading-relaxed">Créez votre premier espace pour structurer vos notes, projets et conversations.</p>
+        <p class="text-gray-800 dark:text-white font-bold text-lg">${emptyMsg}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-md mx-auto leading-relaxed">${emptyDesc}</p>
         <div class="mt-6 flex items-center justify-center gap-3">
           <button onclick="openCreateSpaceModal()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md active:scale-95 transition-all text-sm font-semibold flex items-center gap-2">
             <i class="ti ti-plus"></i> Créer un espace
           </button>
-          <a href="/library" class="px-4 py-2.5 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-2">
-            <i class="ti ti-books"></i> Bibliothèque
-          </a>
         </div>
       </div>
     `;
             return;
         }
 
-        host.innerHTML = spaces
+        host.innerHTML = filteredSpaces
             .map(
                 (s) => `
     <a
@@ -289,26 +402,32 @@
           <div class="flex items-center justify-between gap-3">
             <h3 class="font-bold text-xl text-gray-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">${escapeHtml(s.name)}</h3>
             <span class="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 text-indigo-600 dark:text-indigo-400 shadow-sm shrink-0">
-              <i class="ti ti-layout-grid text-lg"></i>
+              <i class="ti ${s.is_shared ? 'ti-users' : 'ti-lock'} text-lg"></i>
             </span>
+          </div>
+          <div class="mt-2">
+            ${s.is_shared 
+              ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"><i class="ti ti-users text-xs"></i> Commun</span>`
+              : `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400"><i class="ti ti-lock text-xs"></i> Privé</span>`
+            }
           </div>
           <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 line-clamp-4 leading-relaxed">${escapeHtml(s.description || "Aucune description")}</p>
         </div>
         <div class="flex items-center justify-end gap-2">
           ${
-              canSpaceUpdate
+              (canSpaceUpdate && (s.is_shared ? isAdmin : s.user_id === currentUser.id))
                   ? `
             <div class="flex items-center gap-2">
               <button
                 type="button"
-                onclick="event.preventDefault(); event.stopPropagation(); openEditSpaceModal(${s.id}, '${escapeAttribute(s.name)}', '${escapeAttribute(s.description || "")}')"
+                onclick="event.preventDefault(); event.stopPropagation(); openEditSpaceModal(${s.id}, '${escapeAttribute(s.name)}', '${escapeAttribute(s.description || "")}', ${s.is_shared})"
                 class="w-9 h-9 flex items-center justify-center rounded-xl border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all animate-all"
                 title="Modifier l'espace"
               >
                 <i class="ti ti-pencil"></i>
               </button>
               ${
-                  canLibraryWrite
+                  (!s.is_shared || canLibraryWrite)
                       ? `
                 <button
                   type="button"
@@ -346,17 +465,17 @@
                           (s) => `
           <div class="group flex items-center gap-3 px-3 py-2.5 mb-1 rounded-xl transition-all cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5">
             <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500/10 to-purple-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-              <i class="ti ti-layout-grid text-xs"></i>
+              <i class="ti ${s.is_shared ? 'ti-users' : 'ti-lock'} text-xs"></i>
             </div>
             <a href="/spaces/${s.id}" class="flex-1 min-w-0 no-underline hover:no-underline">
               <div class="font-semibold text-sm truncate text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">${escapeHtml(s.name)}</div>
             </a>
             <div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
               ${
-                  canSpaceUpdate
+                  (canSpaceUpdate && (s.is_shared ? isAdmin : s.user_id === currentUser.id))
                       ? `<button
                           class="w-6 h-6 rounded-md text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-500/10 flex items-center justify-center transition-all"
-                          onclick="event.stopPropagation(); openEditSpaceModal(${s.id}, '${escapeAttribute(s.name)}', '${escapeAttribute(s.description || '')}')"
+                          onclick="event.stopPropagation(); openEditSpaceModal(${s.id}, '${escapeAttribute(s.name)}', '${escapeAttribute(s.description || '')}', ${s.is_shared})"
                           title="Modifier l'espace"
                         ><i class="ti ti-pencil text-xs"></i></button>`
                       : ``
@@ -511,6 +630,8 @@
             const description = document
                 .getElementById("space-description")
                 .value.trim();
+            const isSharedCheckbox = document.getElementById("space-is-shared");
+            const isShared = isSharedCheckbox ? isSharedCheckbox.checked : false;
             if (!name) return;
 
             const r = await api("/api/spaces", {
@@ -519,6 +640,7 @@
                 body: JSON.stringify({
                     name,
                     description: description || null,
+                    is_shared: isShared,
                 }),
             });
 
@@ -544,6 +666,8 @@
             const description = document
                 .getElementById("edit-space-description")
                 .value.trim();
+            const isSharedCheckbox = document.getElementById("edit-space-is-shared");
+            const isShared = isSharedCheckbox ? isSharedCheckbox.checked : false;
             if (!spaceId || !name)
                 return alert("Le nom de l'espace est requis.");
 
@@ -553,6 +677,7 @@
                 body: JSON.stringify({
                     name,
                     description: description || null,
+                    is_shared: isShared,
                 }),
             });
             if (!r.ok) {

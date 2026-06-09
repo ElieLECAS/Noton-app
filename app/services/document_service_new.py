@@ -512,60 +512,83 @@ def reindex_library_document(
             "reason": "stale_run",
         }
 
-    # Récupérer le source_file_path depuis la DB
-    with Session(engine) as session:
-        document = session.get(Document, document_id)
-        if not document:
-            raise ValueError("Document introuvable ou accès refusé")
-        library = session.get(Library, document.library_id)
-        if not library:
-            raise ValueError("Document introuvable ou accès refusé")
-        # Bibliothèque globale : tout document listé côté API est réindexable par un
-        # utilisateur autorisé (library.write) ; user_id du document = auteur upload.
-        if library.is_global:
-            pass
-        elif library.user_id == user_id or document.user_id == user_id:
-            pass
-        else:
-            raise ValueError("Document introuvable ou accès refusé")
-        if not document.source_file_path:
-            raise ValueError("Aucun fichier source enregistré pour ce document")
-        src = Path(document.source_file_path)
-        if not src.is_file():
-            raise ValueError("Fichier source introuvable sur le disque")
-        file_path = str(src)
-        ld.info(
-            "[Réindex] document_id=%s — fichier source : %s",
-            document_id,
-            src,
+    try:
+        # Récupérer le source_file_path depuis la DB
+        with Session(engine) as session:
+            document = session.get(Document, document_id)
+            if not document:
+                raise ValueError("Document introuvable ou accès refusé")
+            library = session.get(Library, document.library_id)
+            if not library:
+                raise ValueError("Document introuvable ou accès refusé")
+            # Bibliothèque globale : tout document listé côté API est réindexable par un
+            # utilisateur autorisé (library.write) ; user_id du document = auteur upload.
+            if library.is_global:
+                pass
+            elif library.user_id == user_id or document.user_id == user_id:
+                pass
+            else:
+                raise ValueError("Document introuvable ou accès refusé")
+            if not document.source_file_path:
+                raise ValueError("Aucun fichier source enregistré pour ce document")
+            src = Path(document.source_file_path)
+            if not src.is_file():
+                raise ValueError("Fichier source introuvable sur le disque")
+            file_path = str(src)
+            ld.info(
+                "[Réindex] document_id=%s — fichier source : %s",
+                document_id,
+                src,
+            )
+        
+        # Appeler le pipeline multimodal unifié en mode "complet" (supprime tous les chunks)
+        result = process_document_multimodal(
+            document_id=document_id,
+            file_path=file_path,
+            user_id=user_id,
+            run_id=run_id,
+            delete_existing_chunks=True,  # Retraitement complet: on supprime tous les chunks
         )
-    
-    # Appeler le pipeline multimodal unifié en mode "complet" (supprime tous les chunks)
-    result = process_document_multimodal(
-        document_id=document_id,
-        file_path=file_path,
-        user_id=user_id,
-        run_id=run_id,
-        delete_existing_chunks=True,  # Retraitement complet: on supprime tous les chunks
-    )
-    
-    chunk_count = result.get("chunks", 0)
-    logger.info(
-        "reindex_library_document terminé document_id=%s chunks=%s",
-        document_id,
-        chunk_count,
-    )
-    ld.info(
-        "[Réindex] document_id=%s — FIN OK chunks=%s.",
-        document_id,
-        chunk_count,
-    )
-    
-    return {
-        "document_id": document_id,
-        "chunks": chunk_count,
-        "status": result.get("status", "completed"),
-    }
+        
+        chunk_count = result.get("chunks", 0)
+        logger.info(
+            "reindex_library_document terminé document_id=%s chunks=%s",
+            document_id,
+            chunk_count,
+        )
+        ld.info(
+            "[Réindex] document_id=%s — FIN OK chunks=%s.",
+            document_id,
+            chunk_count,
+        )
+        
+        return {
+            "document_id": document_id,
+            "chunks": chunk_count,
+            "status": result.get("status", "completed"),
+        }
+    except Exception as e:
+        try:
+            with Session(engine) as session:
+                doc = session.get(Document, document_id)
+                if doc:
+                    was_already_failed = doc.processing_status == "failed"
+                    if not was_already_failed:
+                        doc.processing_status = "failed"
+                        doc.updated_at = datetime.utcnow()
+                        session.add(doc)
+                        session.commit()
+                        
+                        from app.services.discord_service import notify_document_status
+                        notify_document_status(
+                            document_id=document_id,
+                            document_title=doc.title or "Sans titre",
+                            status="failed",
+                            error_message=str(e),
+                        )
+        except Exception as update_err:
+            logger.error("Failed to update status or notify Discord on reindex failure for doc %d: %s", document_id, update_err)
+        raise
 
 
 def mark_document_reindex_queued(session: Session, document_id: int, user_id: int) -> bool:
@@ -748,6 +771,17 @@ def process_document_multimodal(
                 document.updated_at = datetime.utcnow()
                 session.add(document)
                 session.commit()
+                
+                try:
+                    from app.services.discord_service import notify_document_status
+                    notify_document_status(
+                        document_id=document.id,
+                        document_title=document.title or "Sans titre",
+                        status="completed",
+                        chunks_count=chunk_count,
+                    )
+                except Exception as discord_err:
+                    logger.warning("Failed to queue Discord notification on success: %s", discord_err)
 
         ld.info(
             "[Multimodal] document_id=%s — FIN OK chunks=%s",
@@ -773,6 +807,17 @@ def process_document_multimodal(
                 d.updated_at = datetime.utcnow()
                 session.add(d)
                 session.commit()
+                
+                try:
+                    from app.services.discord_service import notify_document_status
+                    notify_document_status(
+                        document_id=document_id,
+                        document_title=d.title or "Sans titre",
+                        status="failed",
+                        error_message=str(e),
+                    )
+                except Exception as discord_err:
+                    logger.warning("Failed to queue Discord notification on failure: %s", discord_err)
         raise
 
 
@@ -792,26 +837,49 @@ def multimodal_reindex_library_document(
         user_id,
     )
     
-    # Récupérer le source_file_path depuis la DB
-    with Session(engine) as session:
-        document = session.get(Document, document_id)
-        if not document:
-            raise ValueError("Document introuvable ou accès refusé")
-        if not document.source_file_path:
-            raise ValueError("Aucun fichier source enregistré pour ce document")
-        src = Path(document.source_file_path)
-        if not src.is_file():
-            raise ValueError("Fichier source introuvable sur le disque")
-        file_path = str(src)
-    
-    # Appeler le pipeline unifié en mode "additif" (ne supprime que les chunks multimodaux)
-    return process_document_multimodal(
-        document_id=document_id,
-        file_path=file_path,
-        user_id=user_id,
-        run_id=run_id,
-        delete_existing_chunks=False,
-    )
+    try:
+        # Récupérer le source_file_path depuis la DB
+        with Session(engine) as session:
+            document = session.get(Document, document_id)
+            if not document:
+                raise ValueError("Document introuvable ou accès refusé")
+            if not document.source_file_path:
+                raise ValueError("Aucun fichier source enregistré pour ce document")
+            src = Path(document.source_file_path)
+            if not src.is_file():
+                raise ValueError("Fichier source introuvable sur le disque")
+            file_path = str(src)
+        
+        # Appeler le pipeline unifié en mode "additif" (ne supprime que les chunks multimodaux)
+        return process_document_multimodal(
+            document_id=document_id,
+            file_path=file_path,
+            user_id=user_id,
+            run_id=run_id,
+            delete_existing_chunks=False,
+        )
+    except Exception as e:
+        try:
+            with Session(engine) as session:
+                doc = session.get(Document, document_id)
+                if doc:
+                    was_already_failed = doc.processing_status == "failed"
+                    if not was_already_failed:
+                        doc.processing_status = "failed"
+                        doc.updated_at = datetime.utcnow()
+                        session.add(doc)
+                        session.commit()
+                        
+                        from app.services.discord_service import notify_document_status
+                        notify_document_status(
+                            document_id=document_id,
+                            document_title=doc.title or "Sans titre",
+                            status="failed",
+                            error_message=str(e),
+                        )
+        except Exception as update_err:
+            logger.error("Failed to update status or notify Discord on multimodal reindex failure for doc %d: %s", document_id, update_err)
+        raise
 
 
 def mark_all_eligible_documents_reindex_queued(user_id: int) -> int:
@@ -1299,6 +1367,17 @@ def _process_document_for_id(
                     doc.updated_at = datetime.utcnow()
                     session.add(doc)
                     session.commit()
+                    
+                    try:
+                        from app.services.discord_service import notify_document_status
+                        notify_document_status(
+                            document_id=document_id,
+                            document_title=doc.title or "Sans titre",
+                            status="failed",
+                            error_message=str(e),
+                        )
+                    except Exception as discord_err:
+                        logger.warning("Failed to queue Discord notification on PDF conversion failure: %s", discord_err)
             return
 
         # Sauvegarder le fichier de manière permanente
@@ -1401,12 +1480,25 @@ def _process_document_for_id(
             with Session(engine) as session:
                 document = session.get(Document, document_id)
                 if document and document.processing_status not in LIBRARY_USER_STOPPED_STATUSES:
+                    was_already_failed = document.processing_status == "failed"
                     document.processing_status = "failed"
                     document.processing_progress = max(document.processing_progress or 0, 10)
                     document.content = f"❌ Erreur lors du traitement du document: {str(e)}"
                     document.updated_at = datetime.utcnow()
                     session.add(document)
                     session.commit()
+                    
+                    if not was_already_failed:
+                        try:
+                            from app.services.discord_service import notify_document_status
+                            notify_document_status(
+                                document_id=document_id,
+                                document_title=document.title or "Sans titre",
+                                status="failed",
+                                error_message=str(e),
+                            )
+                        except Exception as discord_err:
+                            logger.warning("Failed to queue Discord notification on general failure: %s", discord_err)
         except Exception as update_error:
             logger.error("Erreur lors de la mise à jour du statut d'erreur pour le document %d: %s", document_id, update_error)
     finally:

@@ -195,7 +195,7 @@
                 </div>
             </div>
 
-            <!-- Timeline Chart & Space breakdown -->
+            <!-- Timeline Chart & Pie Chart -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Timeline Chart -->
                 <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm lg:col-span-2 flex flex-col">
@@ -217,14 +217,27 @@
                     </div>
                 </div>
 
-                <!-- breakdown by space -->
+                <!-- Pie Chart (Répartition des classes) -->
                 <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col">
                     <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-1.5">
-                        <i class="ti ti-folders text-indigo-500 text-lg"></i> Par Espace
+                        <i class="ti ti-chart-pie text-indigo-500 text-lg"></i> Répartition des classes
                     </h3>
-                    <div class="flex-1 overflow-y-auto space-y-3.5 pr-1" id="admin-space-breakdown">
-                        <div class="text-center text-sm text-gray-500 dark:text-gray-400 py-8 font-semibold">Chargement...</div>
+                    <div class="flex-1 min-h-[220px] flex items-center justify-center relative">
+                        <canvas id="admin-feedback-classification-chart"></canvas>
+                        <div id="admin-feedback-classification-empty" class="hidden text-xs text-gray-500 dark:text-gray-400 font-semibold text-center">
+                            Aucun retour négatif classifié pour le moment.
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Space breakdown -->
+            <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col">
+                <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-1.5">
+                    <i class="ti ti-folders text-indigo-500 text-lg"></i> Par Espace
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="admin-space-breakdown">
+                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 py-8 font-semibold">Chargement...</div>
                 </div>
             </div>
 
@@ -234,16 +247,31 @@
                     <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
                         <i class="ti ti-list text-indigo-500 text-lg"></i> Retours récents
                     </h3>
-                    <div class="flex gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/5 w-fit">
-                        <button onclick="setAdminFeedbackTableFilter(null)" id="btn-tbl-filter-all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all">
-                            Tous
-                        </button>
-                        <button onclick="setAdminFeedbackTableFilter('positive')" id="btn-tbl-filter-positive" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
-                            Utiles 👍
-                        </button>
-                        <button onclick="setAdminFeedbackTableFilter('negative')" id="btn-tbl-filter-negative" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
-                            Inutiles 👎
-                        </button>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- Filtre classification (caché par défaut, visible uniquement si Inutiles 👎 est sélectionné) -->
+                        <div id="admin-classification-filter-container" class="hidden">
+                            <select id="admin-feedback-category-filter" onchange="setAdminFeedbackCategoryFilter(this.value)" class="text-xs rounded-xl border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/10 text-gray-700 dark:text-gray-300 p-2 font-bold focus:outline-none shadow-sm transition-all">
+                                <option value="">Toutes catégories</option>
+                                <option value="Hallucination">Hallucination</option>
+                                <option value="Mauvais document / Mauvaise source">Mauvais document / Mauvaise source</option>
+                                <option value="Information obsolète">Information obsolète</option>
+                                <option value="Manque de précision / Incomplet">Manque de précision / Incomplet</option>
+                                <option value="Raisonnement incorrect">Raisonnement incorrect</option>
+                                <option value="Hors-sujet">Hors-sujet</option>
+                                <option value="Non classifié">Non classifié</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-xl border border-black/5 dark:border-white/5 w-fit">
+                            <button onclick="setAdminFeedbackTableFilter(null)" id="btn-tbl-filter-all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all">
+                                Tous
+                            </button>
+                            <button onclick="setAdminFeedbackTableFilter('positive')" id="btn-tbl-filter-positive" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
+                                Utiles 👍
+                            </button>
+                            <button onclick="setAdminFeedbackTableFilter('negative')" id="btn-tbl-filter-negative" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">
+                                Inutiles 👎
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="overflow-x-auto">
@@ -836,8 +864,10 @@ async function removePermissionFromRole(roleId, permissionId) {
 }
 
 let chartInstance = null;
+let classificationChartInstance = null;
 let adminFeedbackPeriod = 'week';
 let adminFeedbackTableFilter = null;
+let adminFeedbackTableCategoryFilter = '';
 let adminFeedbackTablePage = 1;
 
 async function loadChartJs() {
@@ -937,6 +967,103 @@ async function renderTimelineChart(data) {
     });
 }
 
+async function renderClassificationPieChart(classifications) {
+    try {
+        await loadChartJs();
+    } catch (e) {
+        console.error("Failed to load Chart.js for classification chart:", e);
+        return;
+    }
+
+    const chartEl = document.getElementById('admin-feedback-classification-chart');
+    if (!chartEl) return;
+    const ctx = chartEl.getContext('2d');
+    if (classificationChartInstance) {
+        classificationChartInstance.destroy();
+    }
+
+    const labels = Object.keys(classifications);
+    const dataValues = Object.values(classifications);
+    const emptyEl = document.getElementById('admin-feedback-classification-empty');
+
+    if (labels.length === 0 || dataValues.reduce((a, b) => a + b, 0) === 0) {
+        if (classificationChartInstance) {
+            classificationChartInstance.destroy();
+            classificationChartInstance = null;
+        }
+        chartEl.classList.add('hidden');
+        if (emptyEl) emptyEl.classList.remove('hidden');
+        return;
+    } else {
+        chartEl.classList.remove('hidden');
+        if (emptyEl) emptyEl.classList.add('hidden');
+    }
+
+    const isDark = document.documentElement.classList.contains('dark');
+    const textColor = isDark ? '#d1d5db' : '#374151';
+
+    const categoryColors = {
+        "Hallucination": {
+            bg: "rgba(239, 68, 68, 0.7)",
+            border: "rgb(239, 68, 68)"
+        },
+        "Mauvais document / Mauvaise source": {
+            bg: "rgba(249, 115, 22, 0.7)",
+            border: "rgb(249, 115, 22)"
+        },
+        "Information obsolète": {
+            bg: "rgba(234, 179, 8, 0.7)",
+            border: "rgb(234, 179, 8)"
+        },
+        "Manque de précision / Incomplet": {
+            bg: "rgba(168, 85, 247, 0.7)",
+            border: "rgb(168, 85, 247)"
+        },
+        "Raisonnement incorrect": {
+            bg: "rgba(59, 130, 246, 0.7)",
+            border: "rgb(59, 130, 246)"
+        },
+        "Hors-sujet": {
+            bg: "rgba(99, 102, 241, 0.7)",
+            border: "rgb(99, 102, 241)"
+        },
+        "Non classifié": {
+            bg: "rgba(107, 114, 128, 0.7)",
+            border: "rgb(107, 114, 128)"
+        }
+    };
+
+    const colors = labels.map(label => (categoryColors[label] || categoryColors["Non classifié"]).bg);
+    const borderColors = labels.map(label => (categoryColors[label] || categoryColors["Non classifié"]).border);
+
+    classificationChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: dataValues,
+                backgroundColor: colors,
+                borderColor: borderColors,
+                borderWidth: 1.5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        color: textColor,
+                        font: { size: 10, weight: 'bold' },
+                        boxWidth: 12
+                    }
+                }
+            }
+        }
+    });
+}
+
 async function loadAllFeedbackData() {
     await Promise.all([
         loadFeedbackStats(),
@@ -969,12 +1096,12 @@ async function loadFeedbackStats() {
                     const spTotal = sp.positive + sp.negative;
                     const spRatio = spTotal > 0 ? Math.round(sp.positive / spTotal * 100) : 100;
                     return `
-                        <div class="border-b border-gray-100 dark:border-gray-700/50 pb-2.5 last:border-0 last:pb-0">
-                            <div class="flex justify-between text-xs font-semibold mb-1">
-                                <span class="text-gray-700 dark:text-gray-300 truncate max-w-[150px]">${escapeHtml(sp.space_name)}</span>
-                                <span class="text-gray-500 dark:text-gray-400">${sp.positive}👍 / ${sp.negative}👎 (${spRatio}%)</span>
+                        <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 rounded-2xl">
+                            <div class="flex justify-between text-xs font-bold mb-2">
+                                <span class="text-gray-800 dark:text-gray-200 truncate max-w-[180px]" title="${escapeHtml(sp.space_name)}">${escapeHtml(sp.space_name)}</span>
+                                <span class="text-gray-500 dark:text-gray-400 font-semibold">${sp.positive}👍 / ${sp.negative}👎 (${spRatio}%)</span>
                             </div>
-                            <div class="w-full bg-gray-100 dark:bg-gray-700 h-2 rounded-full overflow-hidden flex">
+                            <div class="w-full bg-gray-100 dark:bg-gray-800 h-2 rounded-full overflow-hidden flex">
                                 <div class="bg-green-500 h-full" style="width: ${spTotal > 0 ? (sp.positive / spTotal * 100) : 100}%"></div>
                                 <div class="bg-red-500 h-full" style="width: ${spTotal > 0 ? (sp.negative / spTotal * 100) : 0}%"></div>
                             </div>
@@ -982,7 +1109,12 @@ async function loadFeedbackStats() {
                     `;
                 }).join('');
             } else {
-                spaceList.innerHTML = `<div class="text-center text-xs text-gray-500 dark:text-gray-400 py-8">Aucune donnée par espace.</div>`;
+                spaceList.innerHTML = `<div class="text-center text-xs text-gray-500 dark:text-gray-400 py-8 lg:col-span-3">Aucune donnée par espace.</div>`;
+            }
+
+            // Render classification pie chart
+            if (stats.classifications) {
+                await renderClassificationPieChart(stats.classifications);
             }
         }
     } catch (e) {
@@ -1009,6 +1141,9 @@ async function loadRecentFeedbacks() {
         params.set('limit', 10);
         if (adminFeedbackTableFilter) {
             params.set('filter_type', adminFeedbackTableFilter);
+        }
+        if (adminFeedbackTableFilter === 'negative' && adminFeedbackTableCategoryFilter) {
+            params.set('filter_category', adminFeedbackTableCategoryFilter);
         }
         
         const r = await apiCall(`/api/admin/feedbacks/recent?${params.toString()}`);
@@ -1037,6 +1172,12 @@ async function loadRecentFeedbacks() {
                         ? "bg-green-500/10 text-green-700 border-green-500/20 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30" 
                         : "bg-red-500/10 text-red-700 border-red-500/20 dark:bg-red-950/20 dark:text-red-400 dark:border-red-800/30";
                     const badgeText = f.is_positive ? "👍 Utile" : "👎 Inutile";
+
+                    const categoryBadge = (!f.is_positive && f.category)
+                        ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-semibold border bg-indigo-500/10 text-indigo-700 border-indigo-500/20 dark:bg-indigo-950/20 dark:text-indigo-400 dark:border-indigo-800/30 shrink-0 w-fit">
+                             ${escapeHtml(f.category)}
+                           </span>`
+                        : "";
                     
                     return `
                         <tr class="hover:bg-white/40 dark:hover:bg-white/5 border-b border-black/5 dark:border-white/5 last:border-b-0 transition-colors">
@@ -1048,32 +1189,30 @@ async function loadRecentFeedbacks() {
                                 <div class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[120px] font-semibold ${!f.conversation_title ? 'text-rose-500 dark:text-rose-400 italic' : ''}" title="${escapeHtml(f.conversation_title || 'Conversation supprimée')}">${escapeHtml(f.conversation_title || 'Conversation supprimée')}</div>
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap text-xs">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-semibold border ${badgeClass}">
-                                    ${badgeText}
-                                </span>
+                                <div class="flex flex-col gap-1">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-semibold border ${badgeClass} w-fit">
+                                        ${badgeText}
+                                    </span>
+                                    ${categoryBadge}
+                                </div>
                             </td>
                             <td class="px-5 py-4 text-xs text-gray-700 dark:text-gray-300 max-w-sm">
                                 <div class="font-bold text-gray-500 dark:text-gray-400 mb-1">Q : <span class="italic font-semibold text-gray-800 dark:text-gray-200">"${escapeHtml(f.query_text)}"</span></div>
                                 ${f.response_text ? `<div class="mt-1.5 font-bold text-gray-500 dark:text-gray-400">R : <div class="font-semibold text-gray-800 dark:text-gray-200 bg-black/5 dark:bg-white/5 p-2 rounded-xl border border-black/5 dark:border-white/5 max-h-24 overflow-y-auto whitespace-pre-line text-[11px] leading-relaxed">${escapeHtml(f.response_text)}</div></div>` : ''}
                                 ${f.comment ? `<div class="mt-1.5 pl-2 border-l-2 border-indigo-500 dark:border-indigo-400 font-bold text-gray-700 dark:text-gray-300">${escapeHtml(f.comment)}</div>` : ''}
-                                ${f.auto_faq_generated ? `
-                                    <div class="mt-2 text-xs bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 p-3 rounded-2xl text-[11px]">
-                                        <span class="font-bold text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
-                                            <i class="ti ti-bulb text-[13px]"></i> Texte technique généré :
-                                        </span>
-                                        <div class="mt-1.5 font-semibold whitespace-pre-line text-gray-900 dark:text-gray-200 bg-white/40 dark:bg-black/20 p-2 rounded-xl border border-blue-500/5 dark:border-blue-500/10">
-                                            ${escapeHtml(f.auto_faq_content)}
-                                        </div>
-                                    </div>
-                                ` : ''}
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-600 dark:text-gray-400 font-semibold">
                                 ${escapeHtml(f.user_email)}
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap text-right text-xs font-bold">
-                                <a href="/spaces/${f.space_id}" class="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
-                                    Ouvrir <i class="ti ti-arrow-right text-sm"></i>
-                                </a>
+                                <div class="flex items-center justify-end gap-3.5">
+                                    <button onclick="deleteAdminFeedback(${f.id})" class="inline-flex items-center gap-1 text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:underline">
+                                        <i class="ti ti-trash text-sm"></i> Supprimer
+                                    </button>
+                                    <a href="/spaces/${f.space_id}" class="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                                        Ouvrir <i class="ti ti-arrow-right text-sm"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     `;
@@ -1114,6 +1253,20 @@ function setAdminFeedbackTableFilter(filter) {
     adminFeedbackTableFilter = filter;
     adminFeedbackTablePage = 1;
     
+    // Toggle category select container visibility
+    const categoryContainer = document.getElementById('admin-classification-filter-container');
+    if (categoryContainer) {
+        if (filter === 'negative') {
+            categoryContainer.classList.remove('hidden');
+        } else {
+            categoryContainer.classList.add('hidden');
+            // Reset category filter when not viewing negative feedbacks
+            adminFeedbackTableCategoryFilter = "";
+            const selectEl = document.getElementById('admin-feedback-category-filter');
+            if (selectEl) selectEl.value = "";
+        }
+    }
+    
     const tabs = {
         'all': document.getElementById('btn-tbl-filter-all'),
         'positive': document.getElementById('btn-tbl-filter-positive'),
@@ -1135,9 +1288,35 @@ function setAdminFeedbackTableFilter(filter) {
     loadRecentFeedbacks();
 }
 
+function setAdminFeedbackCategoryFilter(category) {
+    adminFeedbackTableCategoryFilter = category;
+    adminFeedbackTablePage = 1;
+    loadRecentFeedbacks();
+}
+
 function changeAdminFeedbackTblPage(delta) {
     adminFeedbackTablePage += delta;
     loadRecentFeedbacks();
+}
+
+async function deleteAdminFeedback(feedbackId) {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce feedback en tant qu'administrateur ?")) return;
+    
+    try {
+        const response = await apiCall(`/api/admin/feedbacks/${feedbackId}`, {
+            method: "DELETE"
+        });
+        
+        if (response && response.ok) {
+            await loadFeedbackStats();
+            await loadRecentFeedbacks();
+        } else {
+            alert("Une erreur est survenue lors de la suppression du feedback.");
+        }
+    } catch (e) {
+        console.error("Error deleting admin feedback:", e);
+        alert("Une erreur est survenue lors de la suppression du feedback.");
+    }
 }
 
 // Init

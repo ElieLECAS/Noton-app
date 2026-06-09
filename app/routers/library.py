@@ -893,7 +893,7 @@ async def list_document_spaces(
 async def manage_document_spaces(
     document_id: int,
     payload: DocumentSpacesManageRequest,
-    current_user: UserRead = Depends(require_permission("library.write")),
+    current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
     """Ajoute ou retire un document de plusieurs espaces via worker."""
@@ -903,6 +903,40 @@ async def manage_document_spaces(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Document non trouvé"
         )
+
+    # Vérification des autorisations sur les espaces concernés
+    is_admin = "admin" in (current_user.roles or [])
+    has_library_write = "library.write" in (current_user.permissions or [])
+    
+    all_target_space_ids = set((payload.add_space_ids or []) + (payload.remove_space_ids or []))
+    if all_target_space_ids:
+        from app.models.space import Space
+        statement = select(Space).where(Space.id.in_(list(all_target_space_ids)))
+        target_spaces = session.exec(statement).all()
+        target_spaces_dict = {s.id: s for s in target_spaces}
+
+        for space_id in all_target_space_ids:
+            space = target_spaces_dict.get(space_id)
+            if not space:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Espace {space_id} non trouvé"
+                )
+            
+            if space.is_shared:
+                # Seuls les utilisateurs avec library.write peuvent modifier les associations des espaces communs
+                if not has_library_write:
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail="Les lecteurs ne peuvent pas ajouter ou retirer de documents dans des espaces communs."
+                    )
+            else:
+                # Pour les espaces privés, l'utilisateur doit en être le propriétaire
+                if space.user_id != current_user.id:
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Vous n'êtes pas autorisé à modifier l'espace privé {space_id}."
+                    )
 
     if not payload.add_space_ids and not payload.remove_space_ids:
         return {"status": "noop", "message": "Aucun changement à appliquer"}
@@ -1007,10 +1041,13 @@ async def export_library_document(
         if table:
             rows = table.search().where(f"document_id = {document_id}").to_list()
             for r in rows:
+                vec = r["vector"]
+                if hasattr(vec, "tolist"):
+                    vec = vec.tolist()
                 patches_data.append({
                     "chunk_id": int(r["chunk_id"]),
                     "patch_index": int(r["patch_index"]),
-                    "vector": r["vector"]
+                    "vector": vec
                 })
     except Exception as ex:
         logger.warning(f"Impossible de récupérer les patchs ColPali pour l'export : {ex}")
@@ -1028,6 +1065,7 @@ async def export_library_document(
                 "processing_status": document.processing_status,
                 "processing_progress": document.processing_progress,
                 "is_paid": document.is_paid,
+                "source": document.source,
             },
             "chunks": [
                 {
@@ -1042,7 +1080,8 @@ async def export_library_document(
                     "start_char": c.start_char,
                     "end_char": c.end_char,
                     "metadata_json": c.metadata_json or c.metadata_ or {},
-                    "embedding": c.embedding if c.embedding is not None else None
+                    "embedding": c.embedding.tolist() if hasattr(c.embedding, "tolist") else c.embedding,
+                    "source": c.source
                 }
                 for c in chunks
             ]
@@ -1106,10 +1145,13 @@ async def export_all_library_documents(
                 try:
                     rows = table.search().where(f"document_id = {document.id}").to_list()
                     for r in rows:
+                        vec = r["vector"]
+                        if hasattr(vec, "tolist"):
+                            vec = vec.tolist()
                         patches_data.append({
                             "chunk_id": int(r["chunk_id"]),
                             "patch_index": int(r["patch_index"]),
-                            "vector": r["vector"]
+                            "vector": vec
                         })
                 except Exception as ex:
                     logger.warning(f"Impossible de récupérer les patchs ColPali pour l'export du doc {document.id} : {ex}")
@@ -1124,6 +1166,7 @@ async def export_all_library_documents(
                     "processing_status": document.processing_status,
                     "processing_progress": document.processing_progress,
                     "is_paid": document.is_paid,
+                    "source": document.source,
                 },
                 "chunks": [
                     {
@@ -1138,7 +1181,8 @@ async def export_all_library_documents(
                         "start_char": c.start_char,
                         "end_char": c.end_char,
                         "metadata_json": c.metadata_json or c.metadata_ or {},
-                        "embedding": c.embedding if c.embedding is not None else None
+                        "embedding": c.embedding.tolist() if hasattr(c.embedding, "tolist") else c.embedding,
+                        "source": c.source
                     }
                     for c in chunks
                 ]
@@ -1209,6 +1253,8 @@ async def import_library_document(
                     )
 
                 library = get_or_create_user_library(session, current_user.id)
+                from app.services.document_service_new import infer_document_source
+                inferred_source = doc_data.get("source") or infer_document_source(file_path, doc_data.get("content"))
 
                 new_doc = Document(
                     title=doc_data["title"],
@@ -1219,6 +1265,7 @@ async def import_library_document(
                     processing_status=doc_data.get("processing_status", "completed"),
                     processing_progress=doc_data.get("processing_progress", 100),
                     is_paid=doc_data.get("is_paid", False),
+                    source=inferred_source,
                     library_id=library.id,
                     user_id=current_user.id,
                     folder_id=folder_id
@@ -1241,7 +1288,9 @@ async def import_library_document(
                         start_char=chunk_data.get("start_char", 0),
                         end_char=chunk_data.get("end_char", 0),
                         metadata_json=chunk_data.get("metadata_json", {}),
-                        embedding=chunk_data.get("embedding")
+                        metadata_=chunk_data.get("metadata_json", {}),
+                        embedding=chunk_data.get("embedding"),
+                        source=chunk_data.get("source") or inferred_source
                     )
                     session.add(new_chunk)
                     session.commit()
@@ -1312,6 +1361,8 @@ async def import_library_document(
                         continue
 
                     library = get_or_create_user_library(session, current_user.id)
+                    from app.services.document_service_new import infer_document_source
+                    inferred_source = doc_data.get("source") or infer_document_source(file_path, doc_data.get("content"))
 
                     new_doc = Document(
                         title=doc_data["title"],
@@ -1322,6 +1373,7 @@ async def import_library_document(
                         processing_status=doc_data.get("processing_status", "completed"),
                         processing_progress=doc_data.get("processing_progress", 100),
                         is_paid=doc_data.get("is_paid", False),
+                        source=inferred_source,
                         library_id=library.id,
                         user_id=current_user.id,
                         folder_id=folder_id
@@ -1344,7 +1396,9 @@ async def import_library_document(
                             start_char=chunk_data.get("start_char", 0),
                             end_char=chunk_data.get("end_char", 0),
                             metadata_json=chunk_data.get("metadata_json", {}),
-                            embedding=chunk_data.get("embedding")
+                            metadata_=chunk_data.get("metadata_json", {}),
+                            embedding=chunk_data.get("embedding"),
+                            source=chunk_data.get("source") or inferred_source
                         )
                         session.add(new_chunk)
                         session.commit()

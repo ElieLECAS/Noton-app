@@ -269,6 +269,17 @@ endblock %} {% block content %}
                     class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
                 ></textarea>
             </div>
+            <!-- Optionnel pour les admins : Rendre commun -->
+            <div id="space-is-shared-container" class="hidden flex items-center gap-2 px-1">
+                <input
+                    id="space-is-shared"
+                    type="checkbox"
+                    class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"
+                />
+                <label for="space-is-shared" class="text-sm text-gray-700 dark:text-gray-300 font-semibold cursor-pointer">
+                    Rendre cet espace commun (visible par tout le monde)
+                </label>
+            </div>
             <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
@@ -316,6 +327,17 @@ endblock %} {% block content %}
                     rows="3"
                     class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
                 ></textarea>
+            </div>
+            <!-- Optionnel pour les admins : Rendre commun -->
+            <div id="edit-space-is-shared-container" class="hidden flex items-center gap-2 px-1">
+                <input
+                    id="edit-space-is-shared"
+                    type="checkbox"
+                    class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"
+                />
+                <label for="edit-space-is-shared" class="text-sm text-gray-700 dark:text-gray-300 font-semibold cursor-pointer">
+                    Rendre cet espace commun (visible par tout le monde)
+                </label>
             </div>
             <div class="flex justify-end gap-2 pt-2">
                 <button
@@ -574,6 +596,16 @@ endblock %} {% block content %}
         // Masquer l'indication visuelle "upload" (icône) quand on est en lecture seule.
         const dropHint = document.getElementById("drop-hint");
         if (dropHint) dropHint.classList.toggle("hidden", !canLibraryWrite);
+        
+        const sharedContainer = document.getElementById("space-is-shared-container");
+        const editSharedContainer = document.getElementById("edit-space-is-shared-container");
+        if (isAdminUser) {
+            if (sharedContainer) sharedContainer.classList.remove("hidden");
+            if (editSharedContainer) editSharedContainer.classList.remove("hidden");
+        } else {
+            if (sharedContainer) sharedContainer.classList.add("hidden");
+            if (editSharedContainer) editSharedContainer.classList.add("hidden");
+        }
     }
 
     async function loadSpaces() {
@@ -589,23 +621,23 @@ endblock %} {% block content %}
                           (s) => `
           <div class="group flex items-center gap-3 px-3 py-2.5 mb-1 rounded-xl transition-all cursor-pointer text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5">
             <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500/10 to-purple-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-              <i class="ti ti-layout-grid text-xs"></i>
+              <i class="ti ${s.is_shared ? 'ti-users' : 'ti-lock'} text-xs"></i>
             </div>
             <a href="/spaces/${s.id}" class="flex-1 min-w-0 no-underline hover:no-underline">
               <div class="font-semibold text-sm truncate text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">${s.name}</div>
             </a>
             <div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
               ${
-                  canSpaceUpdate
+                  (canSpaceUpdate && (s.is_shared ? isAdminUser : s.user_id === currentUser.id))
                       ? `<button
                           class="w-6 h-6 rounded-md text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-500/10 flex items-center justify-center transition-all"
-                          onclick="event.stopPropagation(); openEditSpaceModal(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}'  , '${(s.description || '').replace(/'/g, "\\'")}')"
+                          onclick="event.stopPropagation(); openEditSpaceModal(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}'  , '${(s.description || '').replace(/'/g, "\\'")}', ${s.is_shared})"
                           title="Modifier l'espace"
                         ><i class="ti ti-pencil text-xs"></i></button>`
                       : ``
               }
               ${
-                  canSpaceDelete
+                  (canSpaceDelete && (s.is_shared ? isAdminUser : s.user_id === currentUser.id))
                       ? `<button
                           class="w-6 h-6 rounded-md text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10 flex items-center justify-center transition-all"
                           onclick="event.stopPropagation(); deleteSpace(${s.id}, '${(s.name || '').replace(/'/g, "\\'")}')"
@@ -1329,17 +1361,21 @@ endblock %} {% block content %}
         document.getElementById("folder-form").reset();
     }
     function openCreateSpaceModal() {
+        const sharedCheckbox = document.getElementById("space-is-shared");
+        if (sharedCheckbox) sharedCheckbox.checked = false;
         document.getElementById("space-modal").classList.remove("hidden");
     }
     function closeCreateSpaceModal() {
         document.getElementById("space-modal").classList.add("hidden");
         document.getElementById("space-form").reset();
     }
-    function openEditSpaceModal(spaceId, currentName, currentDescription) {
+    function openEditSpaceModal(spaceId, currentName, currentDescription, isShared) {
         document.getElementById("edit-space-id").value = String(spaceId);
         document.getElementById("edit-space-name").value = currentName || "";
         document.getElementById("edit-space-description").value =
             currentDescription || "";
+        const sharedCheckbox = document.getElementById("edit-space-is-shared");
+        if (sharedCheckbox) sharedCheckbox.checked = !!isShared;
         document.getElementById("edit-space-modal").classList.remove("hidden");
     }
     function closeEditSpaceModal() {
@@ -1550,6 +1586,8 @@ endblock %} {% block content %}
             const description = document
                 .getElementById("space-description")
                 .value.trim();
+            const isSharedCheckbox = document.getElementById("space-is-shared");
+            const isShared = isSharedCheckbox ? isSharedCheckbox.checked : false;
             if (!name) return;
 
             const r = await api("/api/spaces", {
@@ -1558,6 +1596,7 @@ endblock %} {% block content %}
                 body: JSON.stringify({
                     name,
                     description: description || null,
+                    is_shared: isShared,
                 }),
             });
 
@@ -1583,6 +1622,8 @@ endblock %} {% block content %}
             const description = document
                 .getElementById("edit-space-description")
                 .value.trim();
+            const isSharedCheckbox = document.getElementById("edit-space-is-shared");
+            const isShared = isSharedCheckbox ? isSharedCheckbox.checked : false;
             if (!spaceId || !name)
                 return alert("Le nom de l'espace est requis.");
 
@@ -1592,6 +1633,7 @@ endblock %} {% block content %}
                 body: JSON.stringify({
                     name,
                     description: description || null,
+                    is_shared: isShared,
                 }),
             });
 

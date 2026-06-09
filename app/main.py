@@ -98,10 +98,18 @@ async def startup_event():
     """Créer les tables au démarrage."""
     create_db_and_tables()
     
-
-    
-    # Les migrations Alembic sont déjà exécutées par le script d'entrée du conteneur (Dockerfile CMD ou docker-compose command)
-    # pour éviter tout conflit de verrous en BDD au démarrage de l'application.
+    # Exécuter les migrations Alembic par programmation (utile pour le reload automatique en dev)
+    try:
+        from alembic.config import Config
+        from alembic import command
+        import os
+        config_path = "app/alembic.ini" if not os.path.exists("alembic.ini") else "alembic.ini"
+        logger.info(f"Alembic : exécution des migrations en base de données avec {config_path}...")
+        alembic_cfg = Config(config_path)
+        command.upgrade(alembic_cfg, "head")
+        logger.info("Alembic : migrations terminées avec succès.")
+    except Exception as e:
+        logger.error(f"Alembic : erreur lors de l'exécution des migrations : {e}")
     
     # Initialiser le système RBAC (permissions + rôles)
     try:
