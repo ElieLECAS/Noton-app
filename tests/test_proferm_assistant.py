@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import AsyncMock, patch
 from app.services.document_service_new import infer_document_source
-from app.services.query_reasoning_service import reason_query_intent, QueryIntent
+from app.services.query_reasoning_service import reason_query_intent, QueryIntent, decide_retrieval_route, RetrievalDecision
 from app.services.space_search_service import refine_with_source_authority
 
 # --- Tests Inférence de Source ---
@@ -50,6 +50,35 @@ async def test_reason_query_intent_technal(mock_chat):
     
     result = await reason_query_intent("Quelles sont les couleurs chez Technal ?")
     assert result.primary_source == "Technal"
+
+
+@pytest.mark.asyncio
+@patch("app.services.query_reasoning_service.chat")
+async def test_decide_retrieval_route_direct(mock_chat):
+    mock_chat.return_value = {
+        "choices": [{
+            "message": {
+                "content": '{"decision": "direct", "reasoning": "Simple salutation"}'
+            }
+        }]
+    }
+    result = await decide_retrieval_route("bonjour")
+    assert result.decision == "direct"
+    assert result.reasoning == "Simple salutation"
+
+
+@pytest.mark.asyncio
+@patch("app.services.query_reasoning_service.chat")
+async def test_decide_retrieval_route_rag(mock_chat):
+    mock_chat.return_value = {
+        "choices": [{
+            "message": {
+                "content": '{"decision": "rag", "reasoning": "Demande technique sur le dormant Profine"}'
+            }
+        }]
+    }
+    result = await decide_retrieval_route("quel est le dormant Profine ?")
+    assert result.decision == "rag"
 
 
 # --- Tests Boosting Retrieval ---

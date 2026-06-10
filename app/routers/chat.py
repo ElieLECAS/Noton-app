@@ -46,7 +46,7 @@ from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.space_search_service import search_relevant_passages as search_space_passages
 from app.services.space_service import get_space_by_id
-from app.services.illustration_service import determine_and_crop_illustration
+from app.services.illustration_service import determine_and_crop_illustration, has_significant_visuals
 from app.tracing import trace_run, trace_pipeline
 from datetime import datetime
 import json
@@ -476,6 +476,136 @@ async def stream_space_chat_message(
         except Exception as e:
             logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
 
+    # Pass 0 : Decision (direct vs RAG) avec Mistral Small
+    from app.services.query_reasoning_service import decide_retrieval_route
+    
+    with trace_run(
+        "query_routing",
+        run_type="chain",
+        inputs={"query": request.message, "space_id": space_id},
+        tags=["routing", "space"],
+    ) as routing_run:
+        routing_decision = await decide_retrieval_route(request.message)
+        routing_run.end(outputs={
+            "decision": routing_decision.decision,
+            "reasoning": routing_decision.reasoning
+        })
+        logger.info(
+            "Query routing decision: %s (reason: %s)",
+            routing_decision.decision,
+            routing_decision.reasoning,
+        )
+
+    if routing_decision.decision == "direct":
+        conversation_context = []
+        if request.conversation_id:
+            conversation_context = _load_conversation_context(
+                session,
+                request.conversation_id,
+                max_messages=12,
+            )
+        elif request.context:
+            conversation_context = _sanitize_context_messages(request.context, max_messages=10)
+
+        # Éliminer tout message utilisateur en suspens à la fin de l'historique
+        while conversation_context and conversation_context[-1].get("role") == "user":
+            conversation_context.pop()
+
+        system_message = {
+            "role": "system",
+            "content": SPACE_CHAT_SYSTEM_PROMPT + "\n\n(Note : Aucune recherche documentaire n'est nécessaire pour ce message. Réponds de manière polie et directe à la requête de l'utilisateur.)",
+        }
+        
+        full_context_draft = [system_message]
+        full_context_draft.extend(conversation_context)
+        full_context_draft.append({"role": "user", "content": request.message})
+
+        _pipeline_inputs_space = {
+            "query": request.message,
+            "space_id": space_id,
+            "user_id": current_user.id,
+            "model": forced_model,
+            "routing": "direct",
+        }
+
+        assistant_response = []
+
+        async def generate_direct():
+            error_msg_to_yield = None
+            try:
+                with trace_pipeline(
+                    "space_chat_pipeline_direct",
+                    inputs=_pipeline_inputs_space,
+                    tags=["chat", "space", "direct"],
+                ) as pipeline_run:
+                    if settings.LLM_PROVIDER != "ollama" and not settings.MISTRAL_API_KEY:
+                        raise ValueError("Mistral API key non configurée")
+
+                    with trace_run(
+                        "stream_generation_direct",
+                        run_type="llm",
+                        inputs={
+                            "model": forced_model,
+                            "messages": [
+                                {"role": m.get("role"), "content": str(m.get("content", ""))}
+                                for m in full_context_draft
+                            ]
+                        },
+                        tags=["llm", "stream", "space", "direct"]
+                    ) as stream_run:
+                        async for raw_chunk in chat_stream_wrapper(
+                            message="",
+                            model=forced_model,
+                            context=full_context_draft,
+                        ):
+                            try:
+                                parsed = json.loads(raw_chunk)
+                            except json.JSONDecodeError:
+                                continue
+                            content = (parsed.get("message") or {}).get("content") or ""
+                            if not content:
+                                continue
+                            assistant_response.append(content)
+                            yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
+                        
+                        final_response = "".join(assistant_response)
+                        stream_run.end(outputs={"response": final_response})
+
+                    pipeline_run.end(outputs={
+                        "response_chars": len(final_response),
+                    })
+
+                    assistant_message_id = None
+                    if request.conversation_id and assistant_response:
+                        try:
+                            assistant_message_id = _persist_assistant_reply(
+                                request.conversation_id,
+                                final_response,
+                                forced_model,
+                                forced_provider,
+                                None,
+                            )
+                            logger.info(
+                                "Réponse assistant directe sauvegardée (space chat), conversation %s",
+                                request.conversation_id,
+                            )
+                        except Exception:
+                            logger.exception("Erreur sauvegarde réponse directe assistant (space chat)")
+
+                    yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+
+            except MistralRateLimitError as e:
+                logger.warning("Limite de débit Mistral (stream_space_chat_message direct): %s", e)
+                error_msg_to_yield = str(e)
+            except Exception as e:
+                logger.exception("Erreur dans le générateur stream_space_chat_message (direct)")
+                error_msg_to_yield = str(e)
+            
+            if error_msg_to_yield:
+                yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
+
+        return StreamingResponse(generate_direct(), media_type="text/event-stream")
+
     # Pass 1 : Recherche technique (exclut FAQ correctives)
     with trace_run(
         "technical_retrieval",
@@ -861,71 +991,147 @@ async def stream_space_chat_message(
                 complete_response = "".join(assistant_response)
                 
                 # Détecter si un schéma ou illustration est pertinent pour compléter la réponse
-                target_passage = None
+                # Stratégie multi-page : on collecte toutes les pages candidates, on les
+                # pré-filtre (visuels significatifs), puis on itère en ordre de pertinence
+                # et on s'arrête au premier succès. Max 3 tentatives.
+                MAX_ILLUSTRATION_PAGES = 3
+                illustration_data = None
                 
-                # Pattern pour trouver "[Nom du document, page X]" ou "[Nom, pages X-Y]"
-                citation_matches = re.findall(
-                    r"\[([^\]]+?),\s*pages?\s+(\d+)\]",
-                    complete_response,
-                    re.IGNORECASE
-                )
+                # a) Collecter TOUTES les pages citées dans la réponse (regex amélioré)
+                cited_pages: List[Dict[str, Any]] = []  # [{"doc_id": ..., "page_no": ..., "source": ...}]
+                seen_page_keys = set()
                 
-                if citation_matches:
+                # Patterns multiples pour attraper différents formats de citation
+                citation_patterns = [
+                    # "[Nom du document, page X]" ou "[Nom, pages X-Y]"
+                    r"\[([^\]]+?),\s*pages?\s+(\d+)(?:\s*[-–]\s*\d+)?\]",
+                    # "(voir Notice X, p.12)" ou "(Notice X, p. 12)"
+                    r"\((?:voir\s+)?([^\)]+?),\s*p\.?\s*(\d+)\)",
+                    # "[Source, p.12]"
+                    r"\[([^\]]+?),\s*p\.?\s*(\d+)\]",
+                ]
+                
+                for pattern in citation_patterns:
+                    citation_matches = re.findall(pattern, complete_response, re.IGNORECASE)
                     for doc_title_match, page_no_str in citation_matches:
                         try:
-                            page_no = int(page_no_str)
+                            page_no_cited = int(page_no_str)
                             # Trouver le passage correspondant dans sources_data
                             for s in sources_data:
                                 p_no = s.get("page_no") or s.get("page_start")
                                 p_title = s.get("document_title") or ""
-                                if p_no == page_no and (doc_title_match.lower() in p_title.lower() or p_title.lower() in doc_title_match.lower()):
-                                    target_passage = s
+                                if p_no == page_no_cited and (
+                                    doc_title_match.lower() in p_title.lower()
+                                    or p_title.lower() in doc_title_match.lower()
+                                ):
+                                    did = s.get("document_id")
+                                    pk = (did, p_no)
+                                    if pk not in seen_page_keys and did:
+                                        seen_page_keys.add(pk)
+                                        cited_pages.append({
+                                            "doc_id": did,
+                                            "page_no": p_no,
+                                            "document_title": p_title,
+                                            "source": "citation",
+                                            "score": s.get("score", 0.0),
+                                        })
                                     break
-                            if target_passage:
-                                break
                         except ValueError:
                             continue
-                            
-                # Fallback : si pas de citation exacte trouvée, on prend le premier passage doc le plus pertinent
-                if not target_passage and sources_data:
-                    # Filtrer pour s'assurer qu'il s'agit bien d'un passage avec un fichier
-                    for s in sources_data:
-                        did = s.get("document_id")
-                        if did and has_file_by_doc.get(did):
-                            target_passage = s
-                            break
-                            
-                # Lancer la détection visuelle et le détourage
-                illustration_data = None
-                if target_passage:
-                    did = target_passage.get("document_id")
-                    pno = target_passage.get("page_no") or target_passage.get("page_start")
-                    doc_title = target_passage.get("document_title") or "Document"
+                
+                # b) Ajouter les pages de sources_data non encore citées (fallback par score)
+                for s in sources_data:
+                    did = s.get("document_id")
+                    pno = s.get("page_no") or s.get("page_start")
+                    if did and pno and has_file_by_doc.get(did):
+                        pk = (did, pno)
+                        if pk not in seen_page_keys:
+                            seen_page_keys.add(pk)
+                            cited_pages.append({
+                                "doc_id": did,
+                                "page_no": pno,
+                                "document_title": s.get("document_title") or "Document",
+                                "source": "passage_fallback",
+                                "score": s.get("score", 0.0),
+                            })
+                
+                # Trier : citations d'abord, puis par score décroissant
+                cited_pages.sort(key=lambda p: (0 if p["source"] == "citation" else 1, -p["score"]))
+                
+                logger.info(
+                    f"Illustration candidate pages ({len(cited_pages)} total, max {MAX_ILLUSTRATION_PAGES} attempts): "
+                    f"{[(p['doc_id'], p['page_no'], p['source'], p['score']) for p in cited_pages[:MAX_ILLUSTRATION_PAGES+2]]}"
+                )
+                
+                # c) Itérer avec pré-filtre et arrêt au premier succès
+                attempts = 0
+                for page_candidate in cited_pages:
+                    if attempts >= MAX_ILLUSTRATION_PAGES:
+                        logger.info(f"Reached max illustration attempts ({MAX_ILLUSTRATION_PAGES}). Stopping.")
+                        break
+                    
+                    did = page_candidate["doc_id"]
+                    pno = page_candidate["page_no"]
+                    doc_title_ill = page_candidate["document_title"]
                     
                     try:
                         with Session(engine) as ill_session:
                             doc_obj = ill_session.get(Document, did)
-                            if doc_obj and doc_obj.source_file_path and os.path.exists(doc_obj.source_file_path):
-                                logger.info(f"Running illustration check on {doc_obj.source_file_path} page {pno}")
-                                illustration_data = await determine_and_crop_illustration(
-                                    query=request.message,
-                                    answer=complete_response,
-                                    pdf_path=doc_obj.source_file_path,
-                                    page_no=pno,
-                                    doc_title=doc_title
+                            if not doc_obj or not doc_obj.source_file_path or not os.path.exists(doc_obj.source_file_path):
+                                logger.debug(f"Skipping page {pno} of doc {did}: file not found")
+                                continue
+                            
+                            pdf_path = doc_obj.source_file_path
+                            
+                            # Pré-filtre rapide : la page a-t-elle des visuels significatifs ?
+                            if not has_significant_visuals(pdf_path, pno):
+                                logger.info(f"Page {pno} of doc {did} has no significant visuals. Skipping.")
+                                continue
+                            
+                            # Appel au modèle de vision (comptabilisé comme tentative)
+                            attempts += 1
+                            logger.info(
+                                f"Illustration attempt {attempts}/{MAX_ILLUSTRATION_PAGES}: "
+                                f"page {pno} of '{doc_title_ill}' (source: {page_candidate['source']})"
+                            )
+                            
+                            yield f"data: {json.dumps({'status': 'cropping', 'attempt': attempts, 'max_attempts': MAX_ILLUSTRATION_PAGES, 'page_no': pno, 'document_title': doc_title_ill})}\n\n"
+                            
+                            illustration_data = await determine_and_crop_illustration(
+                                query=request.message,
+                                answer=complete_response,
+                                pdf_path=pdf_path,
+                                page_no=pno,
+                                doc_title=doc_title_ill
+                            )
+                            
+                            if illustration_data:
+                                logger.info(
+                                    f"Illustration found on page {pno} of '{doc_title_ill}' "
+                                    f"(attempt {attempts}). Stopping search."
                                 )
+                                break
+                            else:
+                                logger.info(f"Vision model rejected page {pno} of doc {did}. Trying next.")
                     except Exception as ill_err:
-                        logger.error(f"Failed to check or crop illustration: {ill_err}", exc_info=True)
+                        logger.error(f"Failed to check/crop illustration on page {pno} of doc {did}: {ill_err}", exc_info=True)
                         
                 # Si illustration trouvée, l'injecter dans sources_data
                 if illustration_data:
+                    # Trouver le doc_id du candidat qui a produit l'illustration
+                    ill_doc_id = None
+                    for pc in cited_pages:
+                        if pc["page_no"] == illustration_data.get("page_no") and pc["document_title"] == illustration_data.get("document_title"):
+                            ill_doc_id = pc["doc_id"]
+                            break
+                    
                     ill_source = {
                         "is_cropped_illustration": True,
                         "url": illustration_data["url"],
                         "title": illustration_data["title"],
                         "page_no": illustration_data["page_no"],
                         "document_title": illustration_data["document_title"],
-                        "document_id": target_passage.get("document_id"),
+                        "document_id": ill_doc_id,
                     }
                     sources_data.append(ill_source)
                     logger.info(f"Illustration added to sources_data: {ill_source}")

@@ -91,3 +91,67 @@ async def reason_query_intent(query: str, history: Optional[List[Dict[str, str]]
     except Exception as e:
         logger.error(f"Erreur lors du raisonnement de la requête: {e}")
         return QueryIntent(intent="generic", reasoning="Erreur technique", confidence=0.0, search_terms=[], detected_references=[])
+
+
+class RetrievalDecision(BaseModel):
+    decision: str  # 'direct' | 'rag'
+    reasoning: str
+
+
+DECISION_SYSTEM_PROMPT = """Tu es un système d'aiguillage intelligent pour un assistant RAG industriel (PROFERM).
+Ton rôle est d'analyser le message de l'utilisateur pour décider s'il est nécessaire de faire une recherche documentaire (RAG) ou s'il faut répondre directement.
+
+LOGIQUE DE DÉCISION :
+1. Répondre DIRECTEMENT (decision: 'direct') si :
+   - C'est une salutation (ex: "bonjour", "hello", "salut", "bonsoir").
+   - C'est un remerciement ou une clôture (ex: "merci", "merci beaucoup", "au revoir", "bye").
+   - C'est une question sur ton identité, ton rôle ou tes capacités (ex: "qui es-tu ?", "que peux-tu faire ?", "aide-moi").
+   - C'est une phrase de politesse ou de bavardage générique sans lien avec un produit ou document (ex: "comment ça va ?", "bonne journée").
+2. Faire appel au RAG (decision: 'rag') si :
+   - La question porte sur des caractéristiques techniques, des gammes (ex: "Perform 70", "Perform 76", "Soleal", "Lumeal"), des profilés, des dimensions, des tolérances.
+   - La question mentionne un fournisseur ou une marque (ex: Technal, Profine, Somfy, Roto, Maco, Askey, Proferm).
+   - La question demande comment poser, monter, régler, réparer ou utiliser un produit ou un composant.
+   - La question concerne des normes (ex: DTU, NF EN) ou de la documentation technique.
+   - En cas de doute, privilégie TOUJOURS 'rag'.
+
+FORMAT DE RETOUR :
+Retourne UNIQUEMENT un objet JSON avec les champs suivants :
+- decision: (direct | rag)
+- reasoning: (Explication courte en français de la décision)
+"""
+
+
+async def decide_retrieval_route(query: str, history: Optional[List[Dict[str, str]]] = None) -> RetrievalDecision:
+    """
+    Détermine si une requête nécessite une recherche documentaire RAG ou si elle peut être traitée directement.
+    """
+    try:
+        messages = [
+            {"role": "system", "content": DECISION_SYSTEM_PROMPT},
+        ]
+        
+        # Pour l'instant, on se base sur la query principale.
+        messages.append({"role": "user", "content": f"Analyse cette requête : '{query}'"})
+        
+        response = await chat(
+            "", 
+            model=settings.MODEL_FAST, 
+            context=messages,
+            response_format={"type": "json_object"}
+        )
+        
+        content = response["choices"][0]["message"].get("content", "{}")
+        data = json.loads(content)
+        
+        decision = data.get("decision", "rag")
+        if decision not in ("direct", "rag"):
+            decision = "rag"
+            
+        return RetrievalDecision(
+            decision=decision,
+            reasoning=data.get("reasoning", "Défaut"),
+        )
+    except Exception as e:
+        logger.error(f"Erreur lors du choix de routage de la requête: {e}")
+        return RetrievalDecision(decision="rag", reasoning=f"Erreur technique: {e}")
+
