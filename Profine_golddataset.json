@@ -1,0 +1,251 @@
+[
+  {
+    "id": "TC001",
+    "type": "mono",
+    "question": "Quelles sont les dimensions recommandées pour les trous oblongs ou trous cylindriques de décompression et de drainage selon le schéma de la traverse basse ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [42] }
+    ]
+  },
+  {
+    "id": "TC002",
+    "type": "mono",
+    "question": "Quelle est la plage de validité exacte (dates de début et de fin) du Document Technique d'Application n° 6/16-2335_V5 ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC003",
+    "type": "mono",
+    "question": "Quels sont les trois procédés de profilés PVC Profine explicitement couverts par le DTA n° 6/16-2335_V5 ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC004",
+    "type": "mono",
+    "question": "Sur quelle page du DTA n° 6/16-2335_V5 trouve-t-on le plan de détails concernant la mise en œuvre en applique intérieure sur monomur ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [43] }
+    ]
+  },
+  {
+    "id": "TC005",
+    "type": "mono",
+    "question": "Quelle dimension minimale de perçage est requise pour la ventilation en couleur sombre d'après le DTA 6/16-2335_V5 ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [42] }
+    ]
+  },
+  {
+    "id": "TC006",
+    "type": "mono",
+    "question": "L'intervention de rattrapage à l'aide du profilé acier 9708 nécessite-t-elle de dégonder l'ouvrant de la porte ?",
+    "pages_attendues": [
+      { "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC007",
+    "type": "mono",
+    "question": "Quelle tolérance de longueur (en mm) doit-on appliquer par rapport à la longueur de la pare-close lors de la coupe du profilé acier 9708 ?",
+    "pages_attendues": [
+      { "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC008",
+    "type": "mono",
+    "question": "Quelle est la dimension exacte des vis autoforantes préconisées pour fixer le profilé acier 9708 dans la feuillure intérieure ?",
+    "pages_attendues": [
+      { "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC009",
+    "type": "mono",
+    "question": "Dans quel cas spécifique (Cas n°1 ou Cas n°2) doit-on caler le renfort en son centre côté rainure à pare-closes ?",
+    "pages_attendues": [
+      { "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC010",
+    "type": "mono",
+    "question": "Quelle contrainte supplémentaire en millimètres doit être apportée et contrôlée avec une règle de 2 mètres lors du calage du profilé 9708 ?",
+    "pages_attendues": [
+      { "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC011",
+    "type": "mono",
+    "question": "Avec quel type d'éléments ou de configurations horizontales la mise en œuvre du profilé acier 9708 est-elle explicitement déclarée incompatible ?",
+    "pages_attendues": [
+      { "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC012",
+    "type": "mono",
+    "question": "Quelle modification technique majeure a été intégrée lors de la présentation de la version V5 du DTD au GS6 le 13/03/2025 ?",
+    "pages_attendues": [
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [2] }
+    ]
+  },
+  {
+    "id": "TC013",
+    "type": "mono",
+    "question": "À quelle adresse se situe le siège social du Centre Scientifique et Technique du Bâtiment (CSTB) d'après le colophon du DTD ?",
+    "pages_attendues": [
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC014",
+    "type": "mono",
+    "question": "Quelle dimension de plat en aluminium (Plat alu) est visible sur la coupe A-A de la pose en applique extérieure du DTD n° DBV-25-6/16-2334_V5 ?",
+    "pages_attendues": [
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [56] }
+    ]
+  },
+  {
+    "id": "TC015",
+    "type": "mono",
+    "question": "Sur quelle page du Dossier Technique Détaillé (DTD) trouve-t-on le schéma de pose en neuf avec appui décalé et seuil PMR avec capotage ?",
+    "pages_attendues": [
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [55] }
+    ]
+  },
+  {
+    "id": "TC016",
+    "type": "mono",
+    "question": "Quelle est la retombée latérale minimale en millimètres indiquée pour la membrane d'étanchéité dans le cas de la pose en applique extérieure ?",
+    "pages_attendues": [
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [56] }
+    ]
+  },
+  {
+    "id": "TC017",
+    "type": "mono",
+    "question": "Jusqu'à quelle date exacte de l'année 2028 le Document Technique d'Application n° 6/16-2334_V5 reste-t-il valide ?",
+    "pages_attendues": [
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC018",
+    "type": "mono",
+    "question": "Quels sont les trois systèmes de profilés spécifiques de 76 mm visés par le titre du DTA n° 6/16-2334_V5 ?",
+    "pages_attendues": [
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC019",
+    "type": "mono",
+    "question": "Quelle épaisseur de dormant bois existant (en mm) est requise pour l'application du schéma de rénovation avec capotage ?",
+    "pages_attendues": [
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [49] }
+    ]
+  },
+  {
+    "id": "TC020",
+    "type": "mono",
+    "question": "Sur quelle page du DTA 6/16-2334_V5 est illustré le schéma technique de la pose en neuf avec appui décalé et seuil PMR (sans capotage) ?",
+    "pages_attendues": [
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [50] }
+    ]
+  },
+  {
+    "id": "TC021",
+    "type": "mono",
+    "question": "À quelle adresse et dans quelle commune française se situe l'usine / le site de la société titulaire PROFINE France ?",
+    "pages_attendues": [
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC022",
+    "type": "cross",
+    "question": "Quelle est la différence majeure de validité dans le temps (dates limites d'expiration) entre le procédé e.XCLUSIVE (DTA 6/16-2335) et le procédé 76 ADVANCED (DTA 6/16-2334) ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [1] },
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC023",
+    "type": "cross",
+    "question": "Comment l'adresse postale et les informations de contact de Profine France répertoriées dans le document de mise en œuvre du profilé 9708 concordent-elles avec celles figurant sur la page de garde du DTD officiel du CSTB ?",
+    "pages_attendues": [
+      { "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf", "pages": [1] },
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC024",
+    "type": "cross",
+    "question": "En comparant le DTA 6/16-2334_V5 et le DTD associé (n° DBV-25-6/16-2334_V5), à quelles pages respectives se trouvent les détails graphiques de la pose en applique extérieure sur monomur avec capotage ?",
+    "pages_attendues": [
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [53] },
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [57] }
+    ]
+  },
+  {
+    "id": "TC025",
+    "type": "cross",
+    "question": "Quelles sont les différences de dénominations commerciales entre la gamme de profilés du DTA 6/16-2335 (e.XCLUSIVE, e.MOTION, e.VOLUTION) et celle couverte par le DTA 6/16-2334 ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [1] },
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC026",
+    "type": "cross",
+    "question": "Comparez le plan de pose côté extérieur (calfeutrement en tunnel et fixation en tableau) présent dans le DTA 6/16-2335 et celui du DTD 76 ADVANCED : à quelles pages respectives figurent ces schémas ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [45] },
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [58] }
+    ]
+  },
+  {
+    "id": "TC027",
+    "type": "cross",
+    "question": "Comment la préconisation d'exclure les traverses horizontales lors de l'utilisation du profilé acier 9708 s'oppose-t-elle aux schémas de traverses basses et hautes présentés pour le drainage dans les DTA généraux de Profine ?",
+    "pages_attendues": [
+      { "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf", "pages": [1] },
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [42] }
+    ]
+  },
+  {
+    "id": "TC028",
+    "type": "cross",
+    "question": "Les dimensions du plat alu (20x2) et la valeur de débord de 100 mm pour la retombée de membrane d'étanchéité en applique extérieure se retrouvent-elles à l'identique sur la page correspondante du DTA 6/16-2334 et du DTD n° DBV-25-6/16-2334_V5 ?",
+    "pages_attendues": [
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [52] },
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [56] }
+    ]
+  },
+  {
+    "id": "TC029",
+    "type": "cross",
+    "question": "Quelle est la référence exacte de l'avis technique précédent ou lié (DTA) qui fait l'objet de l'instruction détaillée dans le Dossier Technique Détaillé (DTD) édité par la direction Baies et Vitrages du CSTB ?",
+    "pages_attendues": [
+      { "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf", "pages": [1] },
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [1] }
+    ]
+  },
+  {
+    "id": "TC030",
+    "type": "cross",
+    "question": "En analysant le texte d'avant-propos sur la responsabilité des acteurs de la construction et l'aptitude à l'emploi des produits, ce texte est-il identique mot pour mot sur la page de garde du DTA 6/16-2335 et du DTA 6/16-2334 ?",
+    "pages_attendues": [
+      { "document_title": "DTA_6_16-2335_V5 (2).pdf", "pages": [1] },
+      { "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf", "pages": [1] }
+    ]
+  }
+]

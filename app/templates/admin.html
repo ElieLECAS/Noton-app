@@ -46,6 +46,13 @@
             >
                 Feedbacks
             </button>
+            <button
+                onclick="showTab('rag-eval')"
+                id="tab-rag-eval"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+                Qualité RAG
+            </button>
         </div>
 
         <!-- Users Tab -->
@@ -305,6 +312,136 @@
                 </div>
             </div>
         </div>
+
+        <!-- RAG Quality Evaluation Tab -->
+        <div id="tab-content-rag-eval" class="tab-content hidden space-y-6">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+                        Évaluation de la qualité RAG (Retriever ColPali)
+                    </h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Mesure de la pertinence et du bruit de la récupération d'informations sur un dataset de référence (ground truth).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Configuration Panel -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Select Space & K -->
+                <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 space-y-4">
+                    <h3 class="text-md font-bold text-gray-800 dark:text-gray-200">Configuration</h3>
+                    
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
+                            Espace de recherche
+                        </label>
+                        <select id="eval-space-select" class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm bg-white/60 dark:bg-white/10 border border-black/10 dark:border-white/10" onchange="checkRunEvalButtonState()">
+                            <option value="">Chargement des espaces...</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
+                            Nombre de pages à récupérer (K)
+                        </label>
+                        <input type="number" id="eval-k-input" value="15" min="1" max="50" class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm bg-white/60 dark:bg-white/10 border border-black/10 dark:border-white/10" />
+                    </div>
+                </div>
+
+                <!-- Drag and Drop JSON -->
+                <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 md:col-span-2 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-md font-bold text-gray-800 dark:text-gray-200 mb-2">Dataset de questions / réponses</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                            Glissez un fichier JSON contenant les questions et les pages attendues (Ground Truth).
+                        </p>
+                    </div>
+                    
+                    <div id="eval-drop-zone" class="border-2 border-dashed border-black/15 dark:border-white/15 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400 transition-all bg-black/5 dark:bg-white/5">
+                        <svg class="w-10 h-10 text-gray-400 dark:text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <span id="eval-drop-text" class="text-xs font-semibold text-gray-600 dark:text-gray-300 text-center">
+                            Glissez votre fichier .json ici ou cliquez pour parcourir
+                        </span>
+                        <input type="file" id="eval-file-input" class="hidden" accept=".json" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Run Button & Loader -->
+            <div class="flex justify-end gap-3 items-center">
+                <div id="eval-status-message" class="text-sm font-semibold text-gray-500 dark:text-gray-400 hidden"></div>
+                <button id="btn-run-eval" onclick="runRetrieverEval()" disabled class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white rounded-xl font-bold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2">
+                    <span>Lancer l'évaluation du retriever</span>
+                </button>
+            </div>
+
+            <!-- Results Section (Initially Hidden) -->
+            <div id="eval-results-container" class="hidden space-y-6">
+                <!-- Summary Metrics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
+                        <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Precision</span>
+                        <span id="metric-precision" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Mesure du bruit (les pages utiles remontent-elles en premier ?)</span>
+                    </div>
+                    <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
+                        <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Recall</span>
+                        <span id="metric-recall" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Mesure de la couverture (toutes les pages attendues sont-elles trouvées ?)</span>
+                    </div>
+                    <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
+                        <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">MRR (Mean Reciprocal Rank)</span>
+                        <span id="metric-mrr" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Ordonnancement (vitesse à laquelle la 1ère page pertinente arrive)</span>
+                    </div>
+                    <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-transparent">
+                        <span class="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Résumé global</span>
+                        <div class="space-y-1 mt-2">
+                            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+                                <span>Questions évaluées :</span>
+                                <span id="summary-questions-count" class="font-bold">0</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+                                <span>Temps d'exécution :</span>
+                                <span id="summary-time" class="font-bold">0s</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+                                <span>Régime :</span>
+                                <span class="font-bold text-green-600 dark:text-green-400">ColPali Hybrid</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats by Type (Mono vs Cross) -->
+                <div id="eval-type-stats-container" class="hidden glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-transparent">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3">Scores par type de question</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="eval-type-stats-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Detail list -->
+                <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-md font-bold text-gray-900 dark:text-white">Détail par question</h3>
+                        <button onclick="exportEvalReport()" class="px-3 py-1.5 rounded-lg border border-black/10 dark:border-white/10 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Exporter le rapport JSON
+                        </button>
+                    </div>
+
+                    <div class="divide-y divide-black/5 dark:divide-white/5 space-y-4" id="eval-detail-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -470,13 +607,20 @@ function showTab(tabName) {
         el.className = "tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200";
     });
     
-    document.getElementById(`tab-content-${tabName}`).classList.remove('hidden');
+    const contentEl = document.getElementById(`tab-content-${tabName}`);
+    if (contentEl) contentEl.classList.remove('hidden');
+    
     const button = document.getElementById(`tab-${tabName}`);
-    button.className = "tab-button px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400";
+    if (button) {
+        button.className = "tab-button px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400";
+    }
+    
     if (tabName === 'queues') {
         loadQueueHealth();
     } else if (tabName === 'feedbacks') {
         loadAllFeedbackData();
+    } else if (tabName === 'rag-eval') {
+        loadSpacesForEval();
     }
 }
 
@@ -1323,5 +1467,414 @@ async function deleteAdminFeedback(feedbackId) {
 loadUsers();
 loadRoles();
 loadPermissions();
+
+// --- RAG EVALUATION JAVASCRIPT ---
+let uploadedDataset = null;
+let lastEvalResults = null;
+
+async function loadSpacesForEval() {
+    const select = document.getElementById('eval-space-select');
+    if (!select) return;
+    
+    select.innerHTML = '<option value="">Chargement des espaces...</option>';
+    
+    try {
+        const r = await apiCall('/api/spaces');
+        if (r && r.ok) {
+            const spaces = await r.json();
+            if (spaces && spaces.length > 0) {
+                select.innerHTML = spaces.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
+                checkRunEvalButtonState();
+            } else {
+                select.innerHTML = '<option value="">Aucun espace disponible</option>';
+            }
+        } else {
+            select.innerHTML = '<option value="">Erreur de chargement</option>';
+        }
+    } catch (e) {
+        console.error("Error loading spaces for eval", e);
+        select.innerHTML = '<option value="">Erreur de chargement</option>';
+    }
+}
+
+// Drag & drop handlers
+document.addEventListener('DOMContentLoaded', () => {
+    setupEvalDragAndDrop();
+});
+
+// Fallback call
+setTimeout(setupEvalDragAndDrop, 500);
+
+function setupEvalDragAndDrop() {
+    const dropZone = document.getElementById('eval-drop-zone');
+    const fileInput = document.getElementById('eval-file-input');
+    
+    if (!dropZone || !fileInput) return;
+    
+    if (dropZone.dataset.bound) return;
+    dropZone.dataset.bound = "true";
+    
+    dropZone.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleEvalFile(e.target.files[0]);
+        }
+    });
+    
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-indigo-500', 'dark:border-indigo-400', 'bg-indigo-500/5');
+    });
+    
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-indigo-500', 'dark:border-indigo-400', 'bg-indigo-500/5');
+    });
+    
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-indigo-500', 'dark:border-indigo-400', 'bg-indigo-500/5');
+        if (e.dataTransfer.files.length > 0) {
+            handleEvalFile(e.dataTransfer.files[0]);
+        }
+    });
+}
+
+function handleEvalFile(file) {
+    const dropText = document.getElementById('eval-drop-text');
+    const dropZone = document.getElementById('eval-drop-zone');
+    const statusMsg = document.getElementById('eval-status-message');
+    
+    if (!file.name.endsWith('.json')) {
+        showEvalError("Veuillez sélectionner un fichier JSON valide.");
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const json = JSON.parse(e.target.result);
+            const validationError = validateDatasetSchema(json);
+            if (validationError) {
+                showEvalError(validationError);
+                return;
+            }
+            
+            uploadedDataset = json;
+            dropText.innerHTML = `Fichier chargé avec succès : <strong>${escapeHtml(file.name)}</strong> (${json.length} questions)`;
+            dropZone.classList.remove('border-red-500', 'dark:border-red-400');
+            dropZone.classList.add('border-green-500', 'dark:border-green-400', 'bg-green-500/5');
+            
+            if (statusMsg) {
+                statusMsg.classList.add('hidden');
+            }
+            checkRunEvalButtonState();
+        } catch (err) {
+            showEvalError("Erreur de parsing JSON. Assurez-vous que le fichier est valide.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+function validateDatasetSchema(json) {
+    if (!Array.isArray(json)) return "Le dataset doit être un tableau d'objets JSON.";
+    if (json.length === 0) return "Le dataset ne peut pas être vide.";
+    for (let i = 0; i < json.length; i++) {
+        const item = json[i];
+        if (!item.question || typeof item.question !== 'string') {
+            return `L'élément à l'index ${i} doit contenir un champ 'question' (chaîne).`;
+        }
+        if (!item.pages_attendues || !Array.isArray(item.pages_attendues)) {
+            return `L'élément à l'index ${i} doit contenir un tableau 'pages_attendues'.`;
+        }
+        for (let j = 0; j < item.pages_attendues.length; j++) {
+            const exp = item.pages_attendues[j];
+            if (!exp.document_title || typeof exp.document_title !== 'string') {
+                return `L'élément à l'index ${i}, page attendue ${j} doit avoir un 'document_title' (chaîne).`;
+            }
+            if (!exp.pages || !Array.isArray(exp.pages)) {
+                return `L'élément à l'index ${i}, page attendue ${j} doit avoir un tableau 'pages'.`;
+            }
+        }
+    }
+    return null;
+}
+
+function showEvalError(msg) {
+    const dropText = document.getElementById('eval-drop-text');
+    const dropZone = document.getElementById('eval-drop-zone');
+    uploadedDataset = null;
+    
+    dropText.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">${escapeHtml(msg)}</span>`;
+    dropZone.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-500/5');
+    dropZone.classList.add('border-red-500', 'dark:border-red-400', 'bg-red-500/5');
+    checkRunEvalButtonState();
+}
+
+function checkRunEvalButtonState() {
+    const select = document.getElementById('eval-space-select');
+    const btn = document.getElementById('btn-run-eval');
+    if (!btn) return;
+    btn.disabled = !(uploadedDataset && select && select.value);
+}
+
+async function runRetrieverEval() {
+    const select = document.getElementById('eval-space-select');
+    const kInput = document.getElementById('eval-k-input');
+    const btn = document.getElementById('btn-run-eval');
+    const statusMsg = document.getElementById('eval-status-message');
+    const resultsContainer = document.getElementById('eval-results-container');
+    
+    if (!uploadedDataset || !select || !select.value || !btn) return;
+    
+    btn.disabled = true;
+    if (resultsContainer) resultsContainer.classList.add('hidden');
+    
+    const spaceId = parseInt(select.value);
+    const k = parseInt(kInput ? kInput.value : 15);
+    const totalQuestions = uploadedDataset.length;
+    const details = [];
+    const startTime = Date.now();
+    
+    try {
+        for (let i = 0; i < totalQuestions; i++) {
+            const item = uploadedDataset[i];
+            
+            if (statusMsg) {
+                statusMsg.innerHTML = `<span class="flex items-center gap-1.5"><svg class="animate-spin h-4 w-4 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Évaluation : question <strong>${i + 1} / ${totalQuestions}</strong>...</span>`;
+                statusMsg.classList.remove('hidden');
+            }
+            
+            const r = await apiCall('/api/admin/eval/retriever/single', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    space_id: spaceId,
+                    question: item.question,
+                    type: item.type || "mono-document",
+                    pages_attendues: item.pages_attendues,
+                    k: k
+                })
+            });
+            
+            if (r && r.ok) {
+                const singleRes = await r.json();
+                details.push(singleRes);
+            } else {
+                const errorText = r ? await r.text() : 'Pas de réponse';
+                throw new Error(`Erreur à la question ${i + 1} : ${errorText}`);
+            }
+        }
+        
+        const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
+        
+        // Calculer les métriques globales et par type
+        let totalPrecision = 0;
+        let totalRecall = 0;
+        let totalMrr = 0;
+        const typeStats = {};
+        
+        details.forEach(q => {
+            totalPrecision += q.metrics.context_precision;
+            totalRecall += q.metrics.context_recall;
+            totalMrr += q.metrics.mrr;
+            
+            const qType = q.type || "mono-document";
+            if (!typeStats[qType]) {
+                typeStats[qType] = { precision: 0, recall: 0, mrr: 0, count: 0 };
+            }
+            typeStats[qType].precision += q.metrics.context_precision;
+            typeStats[qType].recall += q.metrics.context_recall;
+            typeStats[qType].mrr += q.metrics.mrr;
+            typeStats[qType].count += 1;
+        });
+        
+        const globalMetrics = {
+            context_precision: totalQuestions > 0 ? totalPrecision / totalQuestions : 0,
+            context_recall: totalQuestions > 0 ? totalRecall / totalQuestions : 0,
+            mrr: totalQuestions > 0 ? totalMrr / totalQuestions : 0,
+            total_questions: totalQuestions,
+            execution_time_seconds: parseFloat(elapsedTime)
+        };
+        
+        const formattedTypeStats = {};
+        Object.entries(typeStats).forEach(([type, stats]) => {
+            formattedTypeStats[type] = {
+                count: stats.count,
+                context_precision: stats.precision / stats.count,
+                context_recall: stats.recall / stats.count,
+                mrr: stats.mrr / stats.count
+            };
+        });
+        
+        const data = {
+            global_metrics: globalMetrics,
+            type_stats: formattedTypeStats,
+            details: details
+        };
+        
+        lastEvalResults = data;
+        renderEvalResults(data);
+        
+        if (statusMsg) {
+            statusMsg.innerHTML = '<span class="text-green-600 dark:text-green-400 font-bold">✓ Évaluation terminée avec succès</span>';
+        }
+    } catch (e) {
+        console.error("Error running eval", e);
+        if (statusMsg) {
+            statusMsg.innerHTML = `<span class="text-red-600 dark:text-red-400">Erreur : ${escapeHtml(e.message || String(e))}</span>`;
+        }
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function getMetricColorClass(val) {
+    if (val >= 0.8) return 'text-green-600 dark:text-green-400';
+    if (val >= 0.5) return 'text-amber-600 dark:text-amber-400';
+    return 'text-red-600 dark:text-red-400';
+}
+
+function renderEvalResults(data) {
+    const resultsContainer = document.getElementById('eval-results-container');
+    if (!resultsContainer) return;
+    
+    resultsContainer.classList.remove('hidden');
+    
+    // Set global cards
+    const precEl = document.getElementById('metric-precision');
+    const recEl = document.getElementById('metric-recall');
+    const mrrEl = document.getElementById('metric-mrr');
+    const countEl = document.getElementById('summary-questions-count');
+    const timeEl = document.getElementById('summary-time');
+    
+    const gm = data.global_metrics;
+    precEl.innerText = `${(gm.context_precision * 100).toFixed(1)}%`;
+    precEl.className = `text-3xl font-extrabold ${getMetricColorClass(gm.context_precision)}`;
+    
+    recEl.innerText = `${(gm.context_recall * 100).toFixed(1)}%`;
+    recEl.className = `text-3xl font-extrabold ${getMetricColorClass(gm.context_recall)}`;
+    
+    mrrEl.innerText = gm.mrr.toFixed(2);
+    mrrEl.className = `text-3xl font-extrabold ${getMetricColorClass(gm.mrr)}`;
+    
+    countEl.innerText = gm.total_questions;
+    timeEl.innerText = `${gm.execution_time_seconds}s`;
+    
+    // Set type stats if available
+    const typeStatsGrid = document.getElementById('eval-type-stats-grid');
+    const typeStatsContainer = document.getElementById('eval-type-stats-container');
+    
+    if (typeStatsGrid && typeStatsContainer && data.type_stats && Object.keys(data.type_stats).length > 0) {
+        typeStatsContainer.classList.remove('hidden');
+        typeStatsGrid.innerHTML = Object.entries(data.type_stats).map(([type, stats]) => {
+            const typeClass = type === 'cross-document' 
+                ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400' 
+                : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400';
+                
+            return `
+                <div class="p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${typeClass} mb-2 inline-block capitalize">${escapeHtml(type)}</span>
+                    <div class="grid grid-cols-3 gap-2 mt-1">
+                        <div>
+                            <span class="block text-[10px] uppercase text-gray-500">Precision</span>
+                            <span class="text-md font-bold ${getMetricColorClass(stats.context_precision)}">${(stats.context_precision * 100).toFixed(1)}%</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase text-gray-500">Recall</span>
+                            <span class="text-md font-bold ${getMetricColorClass(stats.context_recall)}">${(stats.context_recall * 100).toFixed(1)}%</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase text-gray-500">MRR</span>
+                            <span class="text-md font-bold ${getMetricColorClass(stats.mrr)}">${stats.mrr.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <span class="block text-[10px] text-gray-500 dark:text-gray-400 mt-2">${stats.count} question(s) de ce type</span>
+                </div>
+            `;
+        }).join('');
+    } else if (typeStatsContainer) {
+        typeStatsContainer.classList.add('hidden');
+    }
+    
+    // Render details list
+    const detailList = document.getElementById('eval-detail-list');
+    if (!detailList) return;
+    
+    detailList.innerHTML = data.details.map((q, idx) => {
+        const typeClass = q.type === 'cross-document' 
+            ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400' 
+            : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400';
+            
+        return `
+            <div class="pt-4 first:pt-0 border-t border-black/5 dark:border-white/5 first:border-t-0 space-y-3">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${typeClass} shrink-0">${escapeHtml(q.type)}</span>
+                        <h4 class="text-sm font-bold text-gray-900 dark:text-white">${escapeHtml(q.question)}</h4>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs font-semibold text-gray-600 dark:text-gray-400 shrink-0">
+                        <span>Precision: <strong class="${getMetricColorClass(q.metrics.context_precision)}">${(q.metrics.context_precision * 100).toFixed(0)}%</strong></span>
+                        <span>Recall: <strong class="${getMetricColorClass(q.metrics.context_recall)}">${(q.metrics.context_recall * 100).toFixed(0)}%</strong></span>
+                        <span>MRR: <strong class="${getMetricColorClass(q.metrics.mrr)}">${q.metrics.mrr.toFixed(2)}</strong></span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Hits -->
+                    <div class="p-3 rounded-2xl bg-green-500/5 dark:bg-green-500/10 border border-green-500/10">
+                        <div class="text-xs font-bold text-green-700 dark:text-green-400 mb-1 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Trouvées (${q.analysis.hits.length})
+                        </div>
+                        <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
+                            ${q.analysis.hits.length > 0 
+                                ? q.analysis.hits.map(h => `<div class="truncate text-gray-600 dark:text-gray-300">• ${escapeHtml(h.document_title)} (Page ${h.page})</div>`).join('') 
+                                : '<div class="text-gray-400 dark:text-gray-500 italic">Aucune page attendue trouvée</div>'}
+                        </div>
+                    </div>
+                    
+                    <!-- Misses -->
+                    <div class="p-3 rounded-2xl bg-red-500/5 dark:bg-red-500/10 border border-red-500/10">
+                        <div class="text-xs font-bold text-red-700 dark:text-red-400 mb-1 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            Manquées (${q.analysis.misses.length})
+                        </div>
+                        <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
+                            ${q.analysis.misses.length > 0 
+                                ? q.analysis.misses.map(m => `<div class="truncate text-gray-700 dark:text-gray-300">• ${escapeHtml(m.document_title)} (Page ${m.page})</div>`).join('') 
+                                : '<div class="text-gray-400 dark:text-gray-500 italic">Aucune page manquée</div>'}
+                        </div>
+                    </div>
+                    
+                    <!-- Noise -->
+                    <div class="p-3 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/10">
+                        <div class="text-xs font-bold text-amber-700 dark:text-amber-400 mb-1 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            Bruit / Pages en trop (${q.analysis.noise.length})
+                        </div>
+                        <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
+                            ${q.analysis.noise.length > 0 
+                                ? q.analysis.noise.map(n => `<div class="truncate text-gray-500 dark:text-gray-400">• ${escapeHtml(n.document_title)} (Page ${n.page})</div>`).join('') 
+                                : '<div class="text-gray-400 dark:text-gray-500 italic">Aucun bruit</div>'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function exportEvalReport() {
+    if (!lastEvalResults) return;
+    
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastEvalResults, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `evaluation_retriever_${new Date().toISOString().split('T')[0]}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
 </script>
 {% endblock %}
