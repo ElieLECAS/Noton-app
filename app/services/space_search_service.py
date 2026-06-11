@@ -39,6 +39,9 @@ MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25
 TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
 TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
 
+COLPALI_MIN_THRESHOLD = float(os.getenv("COLPALI_MIN_THRESHOLD", "0.30"))
+COLPALI_RELATIVE_MARGIN = float(os.getenv("COLPALI_RELATIVE_MARGIN", "0.10"))
+
 _FALLBACK_STOPWORDS = {
     # English
     "the", "and", "for", "with", "this", "that", "what", "how",
@@ -559,6 +562,28 @@ async def search_relevant_passages(
                 session, space_id, user_id, query_text, k, document_filter
             )
             vr.end(outputs={"nb": len(final_nodes)})
+
+        if not final_nodes:
+            return {"passages": [], "status": "ok", "reason": "no_results"}
+
+        # Seuil dynamique (absolu + marge relative)
+        original_count = len(final_nodes)
+        nodes_above_abs = [n for n in final_nodes if n.score >= COLPALI_MIN_THRESHOLD]
+        if nodes_above_abs:
+            max_score = max(n.score for n in nodes_above_abs)
+            cutoff = max_score - COLPALI_RELATIVE_MARGIN
+            final_nodes = [n for n in nodes_above_abs if n.score >= cutoff]
+        else:
+            final_nodes = []
+
+        logger.info(
+            "[search_relevant_passages] Seuil dynamique ColPali : %d -> %d noeuds (Seuil min : %.2f, Max score : %.2f, Cutoff relatif : %.2f)",
+            original_count,
+            len(final_nodes),
+            COLPALI_MIN_THRESHOLD,
+            max_score if nodes_above_abs else 0.0,
+            cutoff if nodes_above_abs else 0.0
+        )
 
         if not final_nodes:
             return {"passages": [], "status": "ok", "reason": "no_results"}
