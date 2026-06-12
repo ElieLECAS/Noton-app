@@ -259,3 +259,125 @@ async def evaluate_retriever_dataset(
         "type_stats": formatted_type_stats,
         "details": results
     }
+
+
+async def generate_rag_response(
+    session: Session,
+    space_id: int,
+    user_id: int,
+    question: str,
+    passages: List[Dict[str, Any]],
+) -> str:
+    """
+    Génère la réponse de l'assistant à partir des passages RAG en mimant le chatbot.
+    """
+    from app.config import settings
+    
+    if not passages:
+        return "Je ne trouve pas de réponse à votre question dans les documents disponibles dans cet espace car aucune source n'est jugée suffisamment pertinente (seuil minimum de 75%)."
+        
+    try:
+        from app.routers.chat import build_space_context_from_passages
+    except ImportError:
+        logger.error("Impossible d'importer build_space_context_from_passages depuis app.routers.chat")
+        return "Erreur d'importation du formateur de contexte."
+        
+    space_context = build_space_context_from_passages(passages)
+    
+    messages = [
+        space_context,
+        {"role": "user", "content": question}
+    ]
+    
+    try:
+        if settings.LLM_PROVIDER == "ollama":
+            from app.services.ollama_service import chat as ollama_chat
+            response = await ollama_chat(
+                message="",
+                model=settings.MODEL_FAST,
+                context=messages
+            )
+        else:
+            from app.services.mistral_service import chat as mistral_chat
+            response = await mistral_chat(
+                message="",
+                model=settings.MODEL_FAST,
+                context=messages
+            )
+        return response["choices"][0]["message"]["content"]
+    except Exception as e:
+        logger.error("Error during evaluation RAG response generation: %s", e)
+        return f"Erreur lors de la génération : {str(e)}"
+
+
+async def run_llm_judge(
+    question: str,
+    generated_response: str,
+    expected_response: str,
+    judge_model: str = "mistral-small-latest"
+) -> Dict[str, Any]:
+    """
+    Évalue la réponse générée par rapport à la réponse attendue en utilisant un LLM juge.
+    """
+    from app.config import settings
+    import json
+
+    JUDGE_SYSTEM_PROMPT = """Tu es un expert en évaluation de systèmes de Questions-Réponses RAG.
+Ton rôle est d'évaluer la pertinence et l'exactitude de la réponse générée par rapport à une réponse attendue de référence (ground truth).
+
+Tu dois attribuer une note de 1 à 5 selon les critères suivants :
+1 : Complètement fausse, hors-sujet ou contenant des hallucinations graves.
+2 : Contient de nombreuses inexactitudes ou omet la quasi-totalité des informations importantes.
+3 : Partiellement correcte, mais manque de précision ou omet des détails clés.
+4 : Presque parfaite, exacte et compréhensible, avec de légères omissions non critiques.
+5 : Excellente, totalement fidèle à la réponse attendue, complète et précise.
+
+Renvoie STRICTEMENT un objet JSON avec cette structure :
+{
+  "score": <int entre 1 et 5>,
+  "justification": "<Explication détaillée en français>"
+}"""
+
+    prompt = f"""Question posée : {question}
+Réponse attendue : {expected_response}
+Réponse générée : {generated_response}"""
+
+    messages = [
+        {"role": "system", "content": JUDGE_SYSTEM_PROMPT},
+        {"role": "user", "content": prompt}
+    ]
+
+    try:
+        if settings.MISTRAL_API_KEY:
+            from app.services.mistral_service import chat as mistral_chat
+            response = await mistral_chat(
+                message="",
+                model=judge_model,
+                context=messages,
+                response_format={"type": "json_object"}
+            )
+        elif settings.LLM_PROVIDER == "ollama":
+            from app.services.ollama_service import chat as ollama_chat
+            response = await ollama_chat(
+                message="",
+                model=settings.MODEL_FAST,
+                context=messages
+            )
+        else:
+            raise ValueError("Aucun fournisseur de LLM configuré.")
+            
+        content = response["choices"][0]["message"]["content"]
+        eval_result = json.loads(content)
+        
+        score = eval_result.get("score")
+        justification = eval_result.get("justification", "")
+        if isinstance(score, (int, float)):
+            score = int(score)
+        else:
+            score = 3
+            
+        return {"score": score, "justification": justification}
+    except Exception as e:
+        logger.error("Error during LLM evaluation judge: %s", e)
+        return {"score": 1, "justification": f"Erreur d'évaluation par le juge : {str(e)}"}
+

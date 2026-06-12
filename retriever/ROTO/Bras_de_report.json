@@ -8,7 +8,8 @@
         "document_title": "Bras de report de charge ROTO NX.pdf",
         "pages": [1]
       }
-    ]
+    ],
+    "reponse_attendue": "Le report de charge d'ouvrant doit être mis et vissé en butée sur le pivot d'angle."
   },
   {
     "id": "TC002",
@@ -19,7 +20,8 @@
         "document_title": "Bras de report de charge ROTO NX.pdf",
         "pages": [1]
       }
-    ]
+    ],
+    "reponse_attendue": "Il faut retirer la vis haute du palier d'angle."
   },
   {
     "id": "TC003",
@@ -30,7 +32,8 @@
         "document_title": "Bras de report de charge ROTO NX.pdf",
         "pages": [1]
       }
-    ]
+    ],
+    "reponse_attendue": "La pièce dormant du report de charge doit être mise et vissée sur le palier d'angle."
   },
   {
     "id": "TC004",
@@ -41,7 +44,8 @@
         "document_title": "Bras de report de charge ROTO NX.pdf",
         "pages": [1]
       }
-    ]
+    ],
+    "reponse_attendue": "Il faut mettre la tringle de soutien du vantail dans le dormant."
   },
   {
     "id": "TC005",
@@ -52,7 +56,8 @@
         "document_title": "Bras de report de charge ROTO NX.pdf",
         "pages": [1]
       }
-    ]
+    ],
+    "reponse_attendue": "Il faut utiliser une clé alén (ou clé Allen) de 4 mm."
   },
   {
     "id": "TC006",
@@ -63,7 +68,8 @@
         "document_title": "Bras de report de charge ROTO NX.pdf",
         "pages": [1]
       }
-    ]
+    ],
+    "reponse_attendue": "Le réglage doit s'effectuer en position d'ouverture à 90°."
   },
   {
     "id": "TC007",
@@ -74,6 +80,7 @@
         "document_title": "Bras de report de charge ROTO NX.pdf",
         "pages": [1]
       }
-    ]
+    ],
+    "reponse_attendue": "Le réglage est correct lorsque le total des 2 arcs du cercle rouge et argent forment un cercle plein."
   }
 ]

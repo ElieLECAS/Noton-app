@@ -841,3 +841,136 @@ async def evaluate_retriever_single_api(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erreur lors de l'évaluation unitaire : {str(e)}"
         )
+
+
+class SingleRAGEvalRequest(BaseModel):
+    space_id: int
+    question: str
+    type: str = "mono-document"
+    pages_attendues: List[dict]
+    reponse_attendue: Optional[str] = None
+    expected_response: Optional[str] = None
+    k: int = 15
+    judge_model: str = "mistral-small-latest"
+
+
+@router.post("/eval/rag/single")
+async def evaluate_rag_single_api(
+    request: SingleRAGEvalRequest,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session)
+):
+    """Évaluer le retriever ColPali et la génération LLM sur une seule question."""
+    from app.services.retriever_evaluator import (
+        match_page, compute_context_precision, compute_context_recall, compute_mrr,
+        generate_rag_response, run_llm_judge
+    )
+    from app.services.space_search_service import search_relevant_passages
+    
+    try:
+        # 1. Recherche Retriever
+        search_res = await search_relevant_passages(
+            session=session,
+            space_id=request.space_id,
+            query_text=request.question,
+            user_id=current_user.id,
+            k=request.k,
+            document_filter="all"
+        )
+        passages = search_res.get("passages", [])
+        
+        # Extraire les couples (titre, page_no)
+        retrieved_pages = []
+        for p in passages:
+            doc_title = p.get("document_title", "")
+            page_no = p.get("page_no")
+            if page_no is None:
+                page_no = p.get("page_start", 1)
+            try:
+                retrieved_pages.append((doc_title, int(page_no)))
+            except (ValueError, TypeError):
+                retrieved_pages.append((doc_title, 1))
+                
+        # Calculer les métriques
+        precision = compute_context_precision(retrieved_pages, request.pages_attendues)
+        recall = compute_context_recall(retrieved_pages, request.pages_attendues)
+        mrr = compute_mrr(retrieved_pages, request.pages_attendues)
+        
+        # Identifier Hits, Misses et Bruit
+        hits_details = []
+        misses_details = []
+        noise_details = []
+        
+        for doc_title, page_no in retrieved_pages:
+            is_hit = match_page(doc_title, page_no, request.pages_attendues)
+            page_info = {"document_title": doc_title, "page": page_no}
+            if is_hit:
+                if page_info not in hits_details:
+                    hits_details.append(page_info)
+            else:
+                if page_info not in noise_details:
+                    noise_details.append(page_info)
+                    
+        for exp in request.pages_attendues:
+            exp_title = exp.get("document_title", "")
+            for p in exp.get("pages", []):
+                try:
+                    target_p = int(p)
+                except (ValueError, TypeError):
+                    continue
+                
+                found = False
+                for hit in hits_details:
+                    if exp_title.lower() in hit["document_title"].lower() or hit["document_title"].lower() in exp_title.lower():
+                        if hit["page"] == target_p:
+                            found = True
+                            break
+                if not found:
+                    misses_details.append({"document_title": exp_title, "page": target_p})
+                    
+        # 2. Génération RAG
+        generated_response = await generate_rag_response(
+            session=session,
+            space_id=request.space_id,
+            user_id=current_user.id,
+            question=request.question,
+            passages=passages
+        )
+        
+        # 3. LLM Judge
+        expected = request.reponse_attendue or request.expected_response
+        judge_eval = None
+        if expected:
+            judge_eval = await run_llm_judge(
+                question=request.question,
+                generated_response=generated_response,
+                expected_response=expected,
+                judge_model=request.judge_model
+            )
+            
+        return {
+            "question": request.question,
+            "type": request.type,
+            "expected_pages": request.pages_attendues,
+            "retrieved_pages": [{"document_title": t, "page": p} for t, p in retrieved_pages],
+            "metrics": {
+                "context_precision": round(precision, 4),
+                "context_recall": round(recall, 4),
+                "mrr": round(mrr, 4)
+            },
+            "analysis": {
+                "hits": hits_details,
+                "misses": misses_details,
+                "noise": noise_details
+            },
+            "generated_response": generated_response,
+            "expected_response": expected,
+            "judge_evaluation": judge_eval
+        }
+    except Exception as e:
+        logger.error("Error during single RAG evaluation API: %s", e, exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erreur lors de l'évaluation RAG unitaire : {str(e)}"
+        )
+

@@ -1,0 +1,748 @@
+[
+  {
+    "id": "TC_CROSS_001",
+    "type": "cross",
+    "question": "Un technicien intervient sur un chantier Proferm pour installer un système de contrôle d'accès 4en1 et régler des ferrures Roto NX standard. À quelle fréquence maximale doit-il planifier la maintenance de sécurité si ce chantier concerne une école ou un hôtel ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [10]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [114]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_002",
+    "type": "cross",
+    "question": "Un menuisier effectue la transformation d'un vantail PVC Roto NX de l'ouverture française (OF) vers l'oscillo-battant (OB). Après avoir suivi l'étape de démontage du compas d'origine, quelle page de la notice générale Roto KSR doit-il ouvrir pour obtenir les abaques de positionnement des gâches de sécurité de base sur le dormant ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [92]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_003",
+    "type": "cross",
+    "question": "Lors du montage d'un bras de report de charge NT Designo II, l'artisan doit insérer la tringle de soutien du vantail. Quel autre document technique Proferm ou notice simplifiée mentionne également le raccordement électrique ou l'utilisation d'un transformateur 24V DC pour la motorisation de la serrure ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [5, 6]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_004",
+    "type": "cross",
+    "question": "Un technicien SAV constate que la tension du ressort sur un report de charge NT Designo II doit être ajustée. Quelle clé spécifique doit-il sortir de sa caisse à outils et retrouve-t-on exactement la même dimension d'outil préconisée pour le réglage latéral d'un palier d'angle standard ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [106]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_005",
+    "type": "cross",
+    "question": "Pour une porte-fenêtre à deux vantaux Proferm, un quincaillier doit configurer une serrure Eneo CC et un système de ferrage symétrique Roto NX. Si la hauteur de la crémone exige des prolongateurs, quels sont les numéros de notices de montage complètes (IMO) communes ou spécifiques citées par les fabricants pour l'Eneo et la ferrure oscillo-battante ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [4]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [2, 4]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_006",
+    "type": "cross",
+    "question": "Un poseur réalise une transformation OF en OB sur la traverse haute d'une fenêtre PVC et cherche à régler la course de son soufflet. Quelle est la dimension d'ouverture maximale du soufflet indiquée sur le schéma de modification de la ferrure, et correspond-elle à la position d'ouverture à soufflet standard détaillée dans le manuel de montage général ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [91]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_007",
+    "type": "cross",
+    "question": "Si un artisan utilise des gâches oscillo-battantes spécifiques pour un ferrage à droite ou à gauche en traverse basse, quel tableau de positionnement du manuel général doit-il croiser pour vérifier les entraxes en mm par rapport au fond de feuillure du dormant ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [92]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_008",
+    "type": "cross",
+    "question": "Un technicien effectue la maintenance annuelle préconisée sur une porte d'entrée Proferm avec contrôle d'accès. Quels types de produits d'entretien doux au pH neutre et dilués sont à la fois recommandés dans les consignes d'entretien SOREX/Eneo et dans le guide de préservation de surface Roto Frank ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [10]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [10]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_009",
+    "type": "cross",
+    "question": "Lors de la pose d'une menuiserie PVC, un menuisier doit installer un bras de report de charge et s'assurer que le réglage de la tension forme un cercle plein rouge et argent. À quel angle précis d'ouverture de l'ouvrant doit se faire cette vérification visuelle selon la fiche technique du bras et les instructions de réglage Designo II du manuel Roto ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [112]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_010",
+    "type": "cross",
+    "question": "Un atelier de fabrication Proferm doit usiner le vantail pour intégrer un boîtier de contrôle d'accès 4en1 ainsi qu'une poignée de fenêtre standard. Quelles sont les profondeurs de fraisage ou de perçage minimales à respecter respectivement pour le système 4en1 et pour le boîtier de crémone avec fouillot de 8/15 mm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [4]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [86]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_011",
+    "type": "cross",
+    "question": "Un poseur installe un dispositif de report de charge d'ouvrant en butée sur un pivot d'angle. En consultant la notice de quincaillerie générale Roto NX, quel est le numéro d'article standard du pivot d'angle P 6/150 sur lequel cette pièce vient s'appuyer ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [36]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_012",
+    "type": "cross",
+    "question": "Dans le cadre d'un dépannage SAV, le client signale que sa porte motorisée Proferm Eneo ne se verrouille pas automatiquement car elle n'est pas complètement fermée. Quelle consigne de sécurité fondamentale du manuel Roto NX rappelle les risques physiques et de blessures si un ouvrant se ferme brusquement ou vibre de manière incontrôlée ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [9]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [14]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_013",
+    "type": "cross",
+    "question": "Un artisan modifie une quincaillerie existante en retirant l'obturateur de manœuvre pour libérer la fonction OB. Dans le manuel Roto général, quelle est l'abréviation officielle utilisée pour désigner ce type de ferrure oscillo-battante et quelle est l'abréviation pour l'anti-fausse manœuvre associée ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [7]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_014",
+    "type": "cross",
+    "question": "Un technicien doit effectuer le câblage d'une gâche côté ouvrant et côté dormant pour une serrure motorisée Eneo CC. Quel outil d'extraction ou d'emboutissage spécifique (avec sa référence Roto) doit-il utiliser s'il doit parallèlement décrocher l'ouvrant pour faciliter le passage des câbles dans la feuillure ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [3]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [106]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_015",
+    "type": "cross",
+    "question": "Quelle est la goupille de verrouillage qu'il ne faut pas faire sortir complètement lors du retournement du pêne sur une serrure Eneo, et quelle est la broche ou goupille qu'il faut pousser du haut vers le bas avec un outil lors du démontage complet de l'ouvrant sur une ferrure Roto NX ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [106]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_016",
+    "type": "cross",
+    "question": "Un menuisier installe une gâche OB droite ou gauche en traverse basse du dormant Proferm. S'il réalise un montage en sécurité de base (SDB) sur un vantail unique, quel est le numéro d'article de la crémone OB KSR à hauteur de poignée fixe qu'il doit commander pour une hauteur en feuillure (HFF) de 1001 à 1200 mm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [36]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_017",
+    "type": "cross",
+    "question": "Pour le câblage d'un interrupteur Jour/Nuit optionnel sur l'unité intérieure Eneo CC, le technicien utilise le fil jaune (Input 2). Quelle note d'information du manuel général Roto NX KSR met pourtant en garde contre l'utilisation ou le raccordement du fil jaune dans le cadre du câblage standard d'un interrupteur d'ouvrant ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [6]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [6]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_018",
+    "type": "cross",
+    "question": "Lors de la pose d'un report de charge d'ouvrant, l'artisan doit retirer la vis haute du palier d'angle. S'il travaille sur une fenêtre de sécurité à retard d'effraction selon la norme DIN EN 1627-1630, quelle consigne de raccordement par vis doit-il appliquer concernant l'ancrage dans le profil de renforcement en acier ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [105]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_019",
+    "type": "cross",
+    "question": "Un menuisier prépare l'installation d'un kit de transformation OF en OB et doit retailler la têtière fournie à dimension. En consultant le catalogue général Roto NX, quel système mécanique de découpe (avec ou sans presse pneumatique) est préconisé pour effectuer le raccordement avec ou sans plaquette de liaison ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [89]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_020",
+    "type": "cross",
+    "question": "Le tableau des erreurs Proferm indique qu'un signal sonore de '3 bips' correspond à un défaut d'alignement de la porte et des gâches ou à un corps étranger. Dans la notice Roto NX, quelle clé dynamométrique ou outil de contrôle fonctionnel permet de mesurer le couple de verrouillage pour s'assurer qu'il ne dépasse pas la valeur maximale tolérée de 10 Nm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [9]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [117]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_021",
+    "type": "cross",
+    "question": "Si le système de contrôle d'accès 4en1 est inséré et collé directement dans le mur ou dans le vantail, quelles sont les dimensions extérieures hors-tout du boîtier (L x H x P) que le poseur doit prévoir en se référant à la fiche des données techniques SOREX ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [5, 7]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_022",
+    "type": "cross",
+    "question": "Un technicien réalise le montage d'un report de charge NT Designo II sur un vantail en position d'ouverture à 90 degrés. Quelle est la page de la notice de quincaillerie générale Roto NX qui détaille spécifiquement les tolérances de réglage en hauteur (+2,0 / -1,5 mm) et latéral applicables au système Designo II après cette opération ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [113]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_023",
+    "type": "cross",
+    "question": "Pour une transformation OF en OB de la gamme Roto NX, l'artisan doit monter le compas OB adéquat sur la têtière. Si la largeur fond de feuillure (LFF) de la fenêtre est comprise entre 801 et 1000 mm, quel est le numéro d'article de la têtière de compas correspondante avec galet excentrique de sécurité V dans le manuel général ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [40]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_024",
+    "type": "cross",
+    "question": "La notice simplifiée Proferm recommande un scellement ou étanchéité supplémentaire pour le boîtier 4en1 sur les surfaces texturées. Dans les consignes d'entretien Roto NX, quel avertissement strict est donné concernant l'utilisation de matériaux d'étanchéité à base d'acide acétique sur les ferrures ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [5]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [10]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_025",
+    "type": "cross",
+    "question": "Un menuisier installe une gâche OB en traverse basse du dormant d'un ouvrant secondaire. S'il doit effectuer le réglage d'un goujon ou galet de type 'V', quelles sont les plages de réglage maximales autorisées en hauteur et en compression d'appui selon les schémas graphiques Roto ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [107]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_026",
+    "type": "cross",
+    "question": "Un technicien SAV Proferm utilise l'application SOREX SmartLock pour contrôler les accès et effacer un utilisateur. Si cet utilisateur manipule parallèlement des fenêtres de type 'Confort' à sécurité de base, quel est le poids maximal de vantail (PV) et la force de fermeture en Newtons admissibles pour cette gamme spécifique ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [64]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_027",
+    "type": "cross",
+    "question": "Lors de l'étape 5 du montage du report de charge, le poseur insère la tringle de soutien du vantail dans le dormant. Quel gabarit de perçage Roto (numéro d'article) doit être positionné sur le dormant pour préparer les trous du palier de compas réglable avec un plot de 3 mm ou 6 mm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [102]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_028",
+    "type": "cross",
+    "question": "Un artisan installe une serrure motorisée Eneo CC connectée à un transformateur (Entrée : 100-240 V AC, Sortie : 24 V DC). S'il doit fixer les ferrures porteuses Roto NX associées, quelles sont les dimensions et types de vis de montage en acier galvanisé et passivé préconisés par la directive technique ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [6]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [108]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_029",
+    "type": "cross",
+    "question": "Le kit de transformation OF en OB comprend une gâche spécifique à visser sur le dormant. Si le menuisier travaille sur un châssis cintré (plein cintre) à sécurité de base, quel est le rayon minimal en millimètres exigé pour l'utilisation d'un verrouilleur médian selon les conseils de traçage Roto ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [101]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_030",
+    "type": "cross",
+    "question": "La notice simplifiée de la serrure Eneo CC indique qu'une goupille de verrouillage ne doit pas sortir complètement du pêne. Dans le manuel Roto NX, quelle note d'avertissement de niveau 'DANGER' rappelle les risques pour la vie ou de blessures graves si les pièces de ferrures ne sont pas vissées de façon conforme ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [109]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_031",
+    "type": "cross",
+    "question": "Un poseur visse le report de charge d'ouvrant en butée sur le pivot d'angle. En consultant la section des gabarits du manuel général Roto, quel est le numéro d'article du gabarit d'ouvrant à utiliser pour préparer le perçage du pivot d'angle standard P 6/150 ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [88]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_032",
+    "type": "cross",
+    "question": "Pour associer une nouvelle télécommande à la serrure Eneo CC, l'artisan doit insérer une tige de diamètre 3 mm max sous la zone du capteur en PVC noir. Quel outil d'extraction (numéro d'article) est quant à lui requis pour extraire la tige d'axe du palier de compas lors d'un démontage Roto NX ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [8]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [106]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_033",
+    "type": "cross",
+    "question": "Lors d'une modification de ferrure, un obturateur de manœuvre est retiré pour libérer le mouvement OB. Sur un ouvrant à deux vantaux avec poignée centrée à sécurité de base, quel adaptateur carré de 7 mm (référence Roto) est nécessaire si l'on utilise un fouillot de -6 mm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [44]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_034",
+    "type": "cross",
+    "question": "Un technicien SAV résout un problème sur un automatisme 4en1 Proferm dont le clavier est bloqué pendant 5 minutes après 5 codes erronés. Si l'installation comprend aussi des ferrures Roto NX laquées, quel est le numéro d'article d'un compas P système 12/20-13 laqué blanc pour une LFF de 411 à 600 mm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [84]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_035",
+    "type": "cross",
+    "question": "À l'étape 3 du montage du report de charge, la pièce dormant est vissée sur le palier d'angle. En vérifiant la tolérance des caches pour un palier d'angle long de type P, quel est le numéro d'article du cache en finition 'titane mat F9' selon le tableau des couleurs Roto ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [83]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_036",
+    "type": "cross",
+    "question": "Un menuisier fabrique un châssis oscillo-battant Roto NX et doit couper le profilé de vantail. Quelle est la dimension de la rainure de ferrure en partie basse (généralement 20 mm) et à combien s'élève le jeu en feuillure nominal requis sur le schéma en coupe de la notice ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [32, 86]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_037",
+    "type": "cross",
+    "question": "Le plan de câblage de l'Eneo CC détaille les bornes de raccordement de la 'Boîte noire'. Dans le manuel général Roto NX, quelle est la procédure exacte à suivre pour l'accrochage d'un ouvrant équipé d'un compas Designo (tailles 350 et 500) au niveau de cette boîte noire ou du palier d'angle ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [6]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [110]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_038",
+    "type": "cross",
+    "question": "Après avoir installé la têtière fournie à dimension sur un kit de transformation, le poseur installe le compas OB. Si le vantail est un oscillo-battant à deux vantaux NT Designo II d'une largeur (LFF) supérieure à 1200 mm, quel composant additionnel Roto (référence 255237) devient obligatoire en partie haute ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [70]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_039",
+    "type": "cross",
+    "question": "Le test de fonctionnement automatique (autotest) de la serrure Eneo se déclenche en tapant le code '123456'. Si le technicien contrôle également la conformité de la fixation des pièces de sécurité Roto NX, quelle est la force de traction minimale exigée pour un vantail de 60 kg ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [5]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [19]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_040",
+    "type": "cross",
+    "question": "Pendant le réglage du report de charge, le ressort est ajusté pour que ses deux arcs forment un cercle plein. Quel est l'intervalle de maintenance maximal recommandé par Roto pour le contrôle et le graissage des points de verrouillage dans les hôpitaux ou les bâtiments publics ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [114]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_041",
+    "type": "cross",
+    "question": "Une fiche d'intervention SAV Proferm mentionne une erreur d'alignement de l'aimant en feuillure sur une serrure Eneo. En consultant le manuel de montage Roto NX, quel est le positionnement standard en millimètres des gâches et de la butée AFM sur le profil pour une crémone OB à poignée fixe ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [9]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [92]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_042",
+    "type": "cross",
+    "question": "Pour un usinage propre du profilé PVC avant d'installer le lecteur RFID 4en1, les dimensions d'usinage indiquent un rayon d'angle R5. Quel est le diamètre de perçage en mm préconisé par Roto pour les vis de fixation à tête fraisée (DIN 965 M5) de la poignée de fenêtre ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [4]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [86]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_043",
+    "type": "cross",
+    "question": "Un atelier Proferm prépare une traverse basse de dormant pour recevoir une gâche OB gauche. Si la fenêtre est un châssis trapézoïdal à sécurité de base, quel type de renvoi d'angle spécifique (numéro d'article 260278) doit être posé sur l'ouvrant selon la nomenclature Roto NX ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [62]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_044",
+    "type": "cross",
+    "question": "Un technicien réinitialise la boîte noire SOREX en maintenant le bouton Reset enfoncé pendant 3 secondes. Si le système gère également des ouvrants oscillo-battants équipés de crémones variables avec fouillot de 15 mm, quel est le numéro d'article de la crémone pour une hauteur en feuillure de 801 à 1200 mm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [80]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_045",
+    "type": "cross",
+    "question": "Lors du montage d'un report de charge, le poseur doit retirer la vis haute du palier d'angle et visser la pièce dormant. Quelles sont les cotes de perçage standard (diamètre et profondeur) à réaliser sur le dormant pour installer un palier de compas de type P 6/130 ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [87]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_046",
+    "type": "cross",
+    "question": "La notice de transformation OF en OB indique que le compas de quincaillerie d'origine doit être démonté. S'il s'agit d'un ouvrant à soufflet avec renvoi d'angle à sécurité de base, quel est le numéro d'article du compas de soufflet sur crémone à prévoir dans le plan de pose général Roto NX ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [60]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_047",
+    "type": "cross",
+    "question": "Le schéma électrique Proferm précise la fonction des fils du câble de type EZ de 3 mètres (Blanc, Brun, Vert, Jaune, Gris, Rose). Dans la liste des pièces Roto NX, quel prolongateur de 110 mm (référence 794225) comporte également un marquage ou un galet de type 'E' ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [6]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [78]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_048",
+    "type": "cross",
+    "question": "Un poseur doit installer un dispositif anti-rabattement automatique sur la platine du compas d'une fenêtre PVC. Quel document ou schéma d'étape Proferm illustre graphiquement le coulisseau et le plot de maintien en position soufflet à 140 mm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [91]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_049",
+    "type": "cross",
+    "question": "La notice technique du report de charge NT Designo II indique que le total des 2 arcs doit former un cercle plein. Quelle est la page du manuel Roto général qui décrit l'étape suivante, à savoir le branchement ou la mise en place de la tringle de soutien du vantail dans le dormant ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [112]
+      }
+    ]
+  },
+  {
+    "id": "TC_CROSS_050",
+    "type": "cross",
+    "question": "Un technicien SAV Proferm réajuste les ferrures d'une porte-fenêtre de grande dimension pour améliorer sa maniabilité. S'il doit mesurer la force d'arrachement ou de traction au niveau du palier de compas pour un vantail poussé à sa limite maximale de 150 kg, quelle est la force de traction en Newtons définie par la norme Roto NX ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [10]
+      },
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2_2.pdf",
+        "pages": [19]
+      }
+    ]
+  }
+]

@@ -347,6 +347,17 @@
                         </label>
                         <input type="number" id="eval-k-input" value="15" min="1" max="50" class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm bg-white/60 dark:bg-white/10 border border-black/10 dark:border-white/10" />
                     </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
+                            Modèle de LLM Juge
+                        </label>
+                        <select id="eval-judge-model-select" class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm bg-white/60 dark:bg-white/10 border border-black/10 dark:border-white/10">
+                            <option value="mistral-small-latest" selected>Mistral Small (mistral-small-latest)</option>
+                            <option value="mistral-large-latest">Mistral Large (mistral-large-latest)</option>
+                            <option value="pixtral-12b-2409">Pixtral (pixtral-12b-2409)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Drag and Drop JSON -->
@@ -354,7 +365,7 @@
                     <div>
                         <h3 class="text-md font-bold text-gray-800 dark:text-gray-200 mb-2">Dataset de questions / réponses</h3>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-                            Glissez un fichier JSON contenant les questions et les pages attendues (Ground Truth).
+                            Glissez un ou plusieurs fichiers JSON contenant les questions et les pages attendues (Ground Truth).
                         </p>
                     </div>
                     
@@ -363,25 +374,43 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                         </svg>
                         <span id="eval-drop-text" class="text-xs font-semibold text-gray-600 dark:text-gray-300 text-center">
-                            Glissez votre fichier .json ici ou cliquez pour parcourir
+                            Glissez vos fichiers .json ici ou cliquez pour parcourir
                         </span>
-                        <input type="file" id="eval-file-input" class="hidden" accept=".json" />
+                        <input type="file" id="eval-file-input" class="hidden" accept=".json" multiple />
+                    </div>
+                    
+                    <div id="eval-files-list-container" class="mt-4 space-y-2 hidden">
+                        <div class="text-xs font-bold text-gray-700 dark:text-gray-300 flex justify-between items-center mb-1">
+                            <span>Fichiers de dataset chargés :</span>
+                            <button type="button" onclick="clearAllDatasets(event)" class="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 hover:underline text-[11px] font-bold">Tout vider</button>
+                        </div>
+                        <div id="eval-files-list" class="space-y-1.5 max-h-32 overflow-y-auto pr-1">
+                            <!-- JS populated -->
+                        </div>
+                        <div class="flex justify-between items-center text-xs font-bold text-gray-900 dark:text-white pt-2 border-t border-black/5 dark:border-white/5">
+                            <span>Total combiné :</span>
+                            <span id="eval-total-questions" class="text-indigo-600 dark:text-indigo-400 font-bold">0 questions</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Run Button & Loader -->
-            <div class="flex justify-end gap-3 items-center">
+            <div class="flex justify-end gap-3 items-center flex-wrap">
                 <div id="eval-status-message" class="text-sm font-semibold text-gray-500 dark:text-gray-400 hidden"></div>
-                <button id="btn-run-eval" onclick="runRetrieverEval()" disabled class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white rounded-xl font-bold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2">
-                    <span>Lancer l'évaluation du retriever</span>
+                <button id="btn-run-eval" onclick="runRetrieverEval()" disabled class="px-6 py-3 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20 rounded-xl font-bold shadow-sm active:scale-95 transition-all text-sm flex items-center gap-2">
+                    <span>Évaluer uniquement le retriever</span>
+                </button>
+                <button id="btn-run-rag-eval" onclick="runRAGEval()" disabled class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50 disabled:hover:from-indigo-600 disabled:hover:to-violet-600 text-white rounded-xl font-bold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2">
+                    <i class="ti ti-brain text-base"></i>
+                    <span>Évaluer Retriever + Génération</span>
                 </button>
             </div>
 
             <!-- Results Section (Initially Hidden) -->
             <div id="eval-results-container" class="hidden space-y-6">
                 <!-- Summary Metrics Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
                         <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Precision</span>
                         <span id="metric-precision" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
@@ -396,6 +425,14 @@
                         <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">MRR (Mean Reciprocal Rank)</span>
                         <span id="metric-mrr" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
                         <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Ordonnancement (vitesse à laquelle la 1ère page pertinente arrive)</span>
+                    </div>
+                    <div id="eval-generation-card" class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 hidden">
+                        <span class="block text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-1">Score LLM Judge</span>
+                        <div class="flex items-baseline gap-1.5 mt-1">
+                            <span id="metric-judge-score" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold">/ 5</span>
+                        </div>
+                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Qualité de la génération (moyenne des scores du juge)</span>
                     </div>
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-transparent">
                         <span class="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Résumé global</span>
@@ -1470,6 +1507,7 @@ loadPermissions();
 
 // --- RAG EVALUATION JAVASCRIPT ---
 let uploadedDataset = null;
+let uploadedDatasets = []; // [{ name: string, content: array }]
 let lastEvalResults = null;
 
 async function loadSpacesForEval() {
@@ -1518,7 +1556,7 @@ function setupEvalDragAndDrop() {
     
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
-            handleEvalFile(e.target.files[0]);
+            handleEvalFiles(e.target.files);
         }
     });
     
@@ -1535,45 +1573,139 @@ function setupEvalDragAndDrop() {
         e.preventDefault();
         dropZone.classList.remove('border-indigo-500', 'dark:border-indigo-400', 'bg-indigo-500/5');
         if (e.dataTransfer.files.length > 0) {
-            handleEvalFile(e.dataTransfer.files[0]);
+            handleEvalFiles(e.dataTransfer.files);
         }
     });
 }
 
-function handleEvalFile(file) {
-    const dropText = document.getElementById('eval-drop-text');
-    const dropZone = document.getElementById('eval-drop-zone');
+async function handleEvalFiles(files) {
     const statusMsg = document.getElementById('eval-status-message');
+    const fileInput = document.getElementById('eval-file-input');
+    const dropZone = document.getElementById('eval-drop-zone');
     
-    if (!file.name.endsWith('.json')) {
-        showEvalError("Veuillez sélectionner un fichier JSON valide.");
-        return;
+    let errors = [];
+    const loadPromises = [];
+    
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.name.endsWith('.json')) {
+            errors.push(`<strong>${escapeHtml(file.name)}</strong> : Fichier JSON requis.`);
+            continue;
+        }
+        
+        loadPromises.push(new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    const validationError = validateDatasetSchema(json);
+                    if (validationError) {
+                        errors.push(`<strong>${escapeHtml(file.name)}</strong> : ${escapeHtml(validationError)}`);
+                    } else {
+                        const existingIdx = uploadedDatasets.findIndex(d => d.name === file.name);
+                        if (existingIdx > -1) {
+                            uploadedDatasets[existingIdx].content = json;
+                        } else {
+                            uploadedDatasets.push({ name: file.name, content: json });
+                        }
+                    }
+                } catch (err) {
+                    errors.push(`<strong>${escapeHtml(file.name)}</strong> : Erreur de parsing JSON.`);
+                }
+                resolve();
+            };
+            reader.onerror = () => {
+                errors.push(`<strong>${escapeHtml(file.name)}</strong> : Erreur lors de la lecture.`);
+                resolve();
+            };
+            reader.readAsText(file);
+        }));
     }
     
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        try {
-            const json = JSON.parse(e.target.result);
-            const validationError = validateDatasetSchema(json);
-            if (validationError) {
-                showEvalError(validationError);
-                return;
-            }
-            
-            uploadedDataset = json;
-            dropText.innerHTML = `Fichier chargé avec succès : <strong>${escapeHtml(file.name)}</strong> (${json.length} questions)`;
-            dropZone.classList.remove('border-red-500', 'dark:border-red-400');
-            dropZone.classList.add('border-green-500', 'dark:border-green-400', 'bg-green-500/5');
-            
-            if (statusMsg) {
-                statusMsg.classList.add('hidden');
-            }
-            checkRunEvalButtonState();
-        } catch (err) {
-            showEvalError("Erreur de parsing JSON. Assurez-vous que le fichier est valide.");
+    await Promise.all(loadPromises);
+    
+    if (fileInput) {
+        fileInput.value = '';
+    }
+    
+    if (errors.length > 0) {
+        showEvalError(errors.join('<br>'));
+    } else {
+        if (statusMsg) {
+            statusMsg.classList.add('hidden');
         }
-    };
-    reader.readAsText(file);
+        if (dropZone) {
+            dropZone.classList.remove('border-red-500', 'dark:border-red-400', 'bg-red-500/5');
+        }
+    }
+    
+    updateUploadedDatasetUI();
+}
+
+function updateUploadedDatasetUI() {
+    const filesContainer = document.getElementById('eval-files-list-container');
+    const filesList = document.getElementById('eval-files-list');
+    const totalQuestionsEl = document.getElementById('eval-total-questions');
+    const dropText = document.getElementById('eval-drop-text');
+    const dropZone = document.getElementById('eval-drop-zone');
+    
+    let combinedContent = [];
+    uploadedDatasets.forEach(d => {
+        combinedContent = combinedContent.concat(d.content);
+    });
+    uploadedDataset = combinedContent.length > 0 ? combinedContent : null;
+    
+    if (uploadedDatasets.length === 0) {
+        if (filesContainer) filesContainer.classList.add('hidden');
+        if (dropText) dropText.innerHTML = `Glissez vos fichiers .json ici ou cliquez pour parcourir`;
+        if (dropZone) {
+            dropZone.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-500/5', 'border-red-500', 'dark:border-red-400', 'bg-red-500/5');
+        }
+    } else {
+        if (filesContainer) filesContainer.classList.remove('hidden');
+        if (dropText) dropText.innerHTML = `<strong>${uploadedDatasets.length}</strong> fichier(s) chargé(s) (${combinedContent.length} questions)`;
+        if (dropZone) {
+            dropZone.classList.remove('border-red-500', 'dark:border-red-400', 'bg-red-500/5');
+            dropZone.classList.add('border-green-500', 'dark:border-green-400', 'bg-green-500/5');
+        }
+        
+        if (filesList) {
+            filesList.innerHTML = uploadedDatasets.map((d, index) => `
+                <div class="flex justify-between items-center bg-black/5 dark:bg-white/5 px-3 py-2 rounded-xl border border-black/5 dark:border-white/5 text-xs">
+                    <span class="truncate font-semibold text-gray-700 dark:text-gray-300 max-w-[80%]" title="${escapeHtml(d.name)}">
+                        📄 ${escapeHtml(d.name)} <span class="text-gray-500 dark:text-gray-400">(${d.content.length} q.)</span>
+                    </span>
+                    <button type="button" onclick="removeDatasetFile(event, ${index})" class="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 font-bold hover:underline shrink-0">
+                        Supprimer
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        if (totalQuestionsEl) {
+            totalQuestionsEl.innerText = `${combinedContent.length} question(s)`;
+        }
+    }
+    
+    checkRunEvalButtonState();
+}
+
+function removeDatasetFile(event, index) {
+    if (event) {
+        event.stopPropagation();
+    }
+    if (index >= 0 && index < uploadedDatasets.length) {
+        uploadedDatasets.splice(index, 1);
+        updateUploadedDatasetUI();
+    }
+}
+
+function clearAllDatasets(event) {
+    if (event) {
+        event.stopPropagation();
+    }
+    uploadedDatasets = [];
+    updateUploadedDatasetUI();
 }
 
 function validateDatasetSchema(json) {
@@ -1603,31 +1735,38 @@ function validateDatasetSchema(json) {
 function showEvalError(msg) {
     const dropText = document.getElementById('eval-drop-text');
     const dropZone = document.getElementById('eval-drop-zone');
-    uploadedDataset = null;
     
-    dropText.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">${escapeHtml(msg)}</span>`;
-    dropZone.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-500/5');
-    dropZone.classList.add('border-red-500', 'dark:border-red-400', 'bg-red-500/5');
+    if (dropText) {
+        dropText.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">${msg}</span>`;
+    }
+    if (dropZone) {
+        dropZone.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-500/5');
+        dropZone.classList.add('border-red-500', 'dark:border-red-400', 'bg-red-500/5');
+    }
     checkRunEvalButtonState();
 }
 
 function checkRunEvalButtonState() {
     const select = document.getElementById('eval-space-select');
     const btn = document.getElementById('btn-run-eval');
-    if (!btn) return;
-    btn.disabled = !(uploadedDataset && select && select.value);
+    const btnRag = document.getElementById('btn-run-rag-eval');
+    const enabled = !!(uploadedDataset && select && select.value);
+    if (btn) btn.disabled = !enabled;
+    if (btnRag) btnRag.disabled = !enabled;
 }
 
 async function runRetrieverEval() {
     const select = document.getElementById('eval-space-select');
     const kInput = document.getElementById('eval-k-input');
     const btn = document.getElementById('btn-run-eval');
+    const btnRag = document.getElementById('btn-run-rag-eval');
     const statusMsg = document.getElementById('eval-status-message');
     const resultsContainer = document.getElementById('eval-results-container');
     
     if (!uploadedDataset || !select || !select.value || !btn) return;
     
     btn.disabled = true;
+    if (btnRag) btnRag.disabled = true;
     if (resultsContainer) resultsContainer.classList.add('hidden');
     
     const spaceId = parseInt(select.value);
@@ -1714,7 +1853,7 @@ async function runRetrieverEval() {
         };
         
         lastEvalResults = data;
-        renderEvalResults(data);
+        renderEvalResults(data, false);
         
         if (statusMsg) {
             statusMsg.innerHTML = '<span class="text-green-600 dark:text-green-400 font-bold">✓ Évaluation terminée avec succès</span>';
@@ -1726,6 +1865,135 @@ async function runRetrieverEval() {
         }
     } finally {
         btn.disabled = false;
+        checkRunEvalButtonState();
+    }
+}
+
+async function runRAGEval() {
+    const select = document.getElementById('eval-space-select');
+    const kInput = document.getElementById('eval-k-input');
+    const judgeSelect = document.getElementById('eval-judge-model-select');
+    const btn = document.getElementById('btn-run-rag-eval');
+    const btnRetriever = document.getElementById('btn-run-eval');
+    const statusMsg = document.getElementById('eval-status-message');
+    const resultsContainer = document.getElementById('eval-results-container');
+    const generationCard = document.getElementById('eval-generation-card');
+    
+    if (!uploadedDataset || !select || !select.value || !btn) return;
+    
+    btn.disabled = true;
+    if (btnRetriever) btnRetriever.disabled = true;
+    if (resultsContainer) resultsContainer.classList.add('hidden');
+    if (generationCard) generationCard.classList.add('hidden');
+    
+    const spaceId = parseInt(select.value);
+    const k = parseInt(kInput ? kInput.value : 15);
+    const judgeModel = judgeSelect ? judgeSelect.value : "mistral-small-latest";
+    const totalQuestions = uploadedDataset.length;
+    const details = [];
+    const startTime = Date.now();
+    
+    try {
+        for (let i = 0; i < totalQuestions; i++) {
+            const item = uploadedDataset[i];
+            
+            if (statusMsg) {
+                statusMsg.innerHTML = `<span class="flex items-center gap-1.5"><svg class="animate-spin h-4 w-4 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> RAG Éval : question <strong>${i + 1} / ${totalQuestions}</strong>...</span>`;
+                statusMsg.classList.remove('hidden');
+            }
+            
+            const r = await apiCall('/api/admin/eval/rag/single', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    space_id: spaceId,
+                    question: item.question,
+                    type: item.type || "mono-document",
+                    pages_attendues: item.pages_attendues,
+                    reponse_attendue: item.reponse_attendue || item.expected_response || null,
+                    k: k,
+                    judge_model: judgeModel
+                })
+            });
+            
+            if (r && r.ok) {
+                const singleRes = await r.json();
+                details.push(singleRes);
+            } else {
+                const errorText = r ? await r.text() : 'Pas de réponse';
+                throw new Error(`Erreur à la question ${i + 1} : ${errorText}`);
+            }
+        }
+        
+        const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
+        
+        // Calculer les métriques globales et par type
+        let totalPrecision = 0;
+        let totalRecall = 0;
+        let totalMrr = 0;
+        let totalJudgeScore = 0;
+        let ratedQuestions = 0;
+        const typeStats = {};
+        
+        details.forEach(q => {
+            totalPrecision += q.metrics.context_precision;
+            totalRecall += q.metrics.context_recall;
+            totalMrr += q.metrics.mrr;
+            
+            if (q.judge_evaluation && q.judge_evaluation.score !== undefined && q.judge_evaluation.score !== null) {
+                totalJudgeScore += q.judge_evaluation.score;
+                ratedQuestions++;
+            }
+            
+            const qType = q.type || "mono-document";
+            if (!typeStats[qType]) {
+                typeStats[qType] = { precision: 0, recall: 0, mrr: 0, count: 0 };
+            }
+            typeStats[qType].precision += q.metrics.context_precision;
+            typeStats[qType].recall += q.metrics.context_recall;
+            typeStats[qType].mrr += q.metrics.mrr;
+            typeStats[qType].count += 1;
+        });
+        
+        const globalMetrics = {
+            context_precision: totalQuestions > 0 ? totalPrecision / totalQuestions : 0,
+            context_recall: totalQuestions > 0 ? totalRecall / totalQuestions : 0,
+            mrr: totalQuestions > 0 ? totalMrr / totalQuestions : 0,
+            average_judge_score: ratedQuestions > 0 ? totalJudgeScore / ratedQuestions : null,
+            total_questions: totalQuestions,
+            execution_time_seconds: parseFloat(elapsedTime)
+        };
+        
+        const formattedTypeStats = {};
+        Object.entries(typeStats).forEach(([type, stats]) => {
+            formattedTypeStats[type] = {
+                count: stats.count,
+                context_precision: stats.precision / stats.count,
+                context_recall: stats.recall / stats.count,
+                mrr: stats.mrr / stats.count
+            };
+        });
+        
+        const data = {
+            global_metrics: globalMetrics,
+            type_stats: formattedTypeStats,
+            details: details
+        };
+        
+        lastEvalResults = data;
+        renderEvalResults(data, true);
+        
+        if (statusMsg) {
+            statusMsg.innerHTML = '<span class="text-green-600 dark:text-green-400 font-bold">✓ Évaluation complète terminée avec succès</span>';
+        }
+    } catch (e) {
+        console.error("Error running RAG eval", e);
+        if (statusMsg) {
+            statusMsg.innerHTML = `<span class="text-red-600 dark:text-red-400">Erreur : ${escapeHtml(e.message || String(e))}</span>`;
+        }
+    } finally {
+        btn.disabled = false;
+        checkRunEvalButtonState();
     }
 }
 
@@ -1735,7 +2003,19 @@ function getMetricColorClass(val) {
     return 'text-red-600 dark:text-red-400';
 }
 
-function renderEvalResults(data) {
+function getJudgeScoreColorClass(val) {
+    if (val >= 4.0) return 'text-green-600 dark:text-green-400';
+    if (val >= 3.0) return 'text-amber-600 dark:text-amber-400';
+    return 'text-red-600 dark:text-red-400';
+}
+
+function getJudgeBadgeClass(score) {
+    if (score >= 4) return 'bg-emerald-500 text-white';
+    if (score >= 3) return 'bg-amber-500 text-white';
+    return 'bg-rose-500 text-white';
+}
+
+function renderEvalResults(data, showGeneration = false) {
     const resultsContainer = document.getElementById('eval-results-container');
     if (!resultsContainer) return;
     
@@ -1747,6 +2027,8 @@ function renderEvalResults(data) {
     const mrrEl = document.getElementById('metric-mrr');
     const countEl = document.getElementById('summary-questions-count');
     const timeEl = document.getElementById('summary-time');
+    const generationCard = document.getElementById('eval-generation-card');
+    const judgeScoreEl = document.getElementById('metric-judge-score');
     
     const gm = data.global_metrics;
     precEl.innerText = `${(gm.context_precision * 100).toFixed(1)}%`;
@@ -1760,6 +2042,16 @@ function renderEvalResults(data) {
     
     countEl.innerText = gm.total_questions;
     timeEl.innerText = `${gm.execution_time_seconds}s`;
+    
+    if (showGeneration && gm.average_judge_score !== null && gm.average_judge_score !== undefined) {
+        if (generationCard) generationCard.classList.remove('hidden');
+        if (judgeScoreEl) {
+            judgeScoreEl.innerText = gm.average_judge_score.toFixed(1);
+            judgeScoreEl.className = `text-3xl font-extrabold ${getJudgeScoreColorClass(gm.average_judge_score)}`;
+        }
+    } else {
+        if (generationCard) generationCard.classList.add('hidden');
+    }
     
     // Set type stats if available
     const typeStatsGrid = document.getElementById('eval-type-stats-grid');
@@ -1860,6 +2152,44 @@ function renderEvalResults(data) {
                         </div>
                     </div>
                 </div>
+
+                ${showGeneration && q.generated_response ? `
+                <div class="mt-3 p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-3">
+                    <div class="flex justify-between items-center border-b border-black/5 dark:border-white/5 pb-2">
+                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Évaluation de la Génération LLM</span>
+                        ${q.judge_evaluation ? `
+                        <div class="flex items-center gap-2 text-xs">
+                            <span class="font-bold text-gray-500 dark:text-gray-400">Score du Juge:</span>
+                            <span class="px-2.5 py-0.5 rounded-full font-bold text-xs ${getJudgeBadgeClass(q.judge_evaluation.score)}">
+                                ${q.judge_evaluation.score} / 5
+                            </span>
+                        </div>
+                        ` : '<span class="text-xs italic text-gray-400">Non noté (pas de réponse attendue)</span>'}
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <span class="block font-bold text-gray-500 mb-1">Réponse attendue (Référence) :</span>
+                            <div class="p-3 bg-white/40 dark:bg-black/20 rounded-xl border border-black/5 dark:border-white/5 whitespace-pre-wrap text-gray-600 dark:text-gray-300 min-h-[50px]">
+                                ${escapeHtml(q.expected_response || 'Non spécifiée')}
+                            </div>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-gray-500 mb-1">Réponse générée :</span>
+                            <div class="p-3 bg-white/40 dark:bg-black/20 rounded-xl border border-black/5 dark:border-white/5 whitespace-pre-wrap text-gray-800 dark:text-gray-100 min-h-[50px]">
+                                ${escapeHtml(q.generated_response)}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${q.judge_evaluation ? `
+                    <div class="text-xs bg-indigo-500/5 dark:bg-indigo-500/10 p-3 rounded-xl border border-indigo-500/10">
+                        <span class="font-bold text-indigo-700 dark:text-indigo-400">Justification du Juge :</span>
+                        <p class="mt-1 text-gray-600 dark:text-gray-300">${escapeHtml(q.judge_evaluation.justification)}</p>
+                    </div>
+                    ` : ''}
+                </div>
+                ` : ''}
             </div>
         `;
     }).join('');
@@ -1871,7 +2201,8 @@ function exportEvalReport() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastEvalResults, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `evaluation_retriever_${new Date().toISOString().split('T')[0]}.json`);
+    const prefix = lastEvalResults.global_metrics.average_judge_score !== undefined ? 'evaluation_rag_' : 'evaluation_retriever_';
+    downloadAnchor.setAttribute("download", `${prefix}${new Date().toISOString().split('T')[0]}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();

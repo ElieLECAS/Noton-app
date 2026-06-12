@@ -8,7 +8,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [4]
       }
-    ]
+    ],
+    "reponse_attendue": "Les dimensions d'usinage requises pour le fraisage sont de 86 mm de hauteur, 40 mm de largeur, avec des angles arrondis d'un rayon de R5[cite: 7]."
   },
   {
     "id": "TC002",
@@ -19,7 +20,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [2]
       }
-    ]
+    ],
+    "reponse_attendue": "La procédure est la suivante : 1. Insérer une tige de diamètre maximum 2,5 mm dans le trou prévu à cet effet jusqu'à entendre un clic. 2. Sortir le pêne. 3. Retourner le pêne. 4. Insérer le pêne de façon droite et appuyer. 5. Pousser la goupille de verrouillage du pêne[cite: 7]."
   },
   {
     "id": "TC003",
@@ -30,7 +32,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [2]
       }
-    ]
+    ],
+    "reponse_attendue": "Il faut impérativement veiller à ne pas faire sortir complètement la goupille de verrouillage du pêne[cite: 7]."
   },
   {
     "id": "TC004",
@@ -41,7 +44,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [5]
       }
-    ]
+    ],
+    "reponse_attendue": "En cas d'installation dans le mur, le relais doit être monté dans la zone sécurisée afin d'éviter qu'il ne soit manipulé de l'extérieur[cite: 7]."
   },
   {
     "id": "TC005",
@@ -52,18 +56,20 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [5]
       }
-    ]
+    ],
+    "reponse_attendue": "À l'état de livraison, il faut entrer le code 123456 sur le clavier puis confirmer avec la touche de validation ; le mécanisme effectue un test automatique et la porte s'ouvre[cite: 7]."
   },
   {
     "id": "TC006",
     "type": "mono",
-    "question": "Au niveau du plan de câblage, pourquoi le fil jaune (Input 2) doit-il impérativement rester non attribué ?",
+    "question": "Au niveau du plan de câblage, why le fil jaune (Input 2) doit-il impérativement rester non attribué ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [6]
       }
-    ]
+    ],
+    "reponse_attendue": "Le fil jaune doit rester non attribué car sinon il pontera l'interrupteur de l'ouvrant[cite: 7]."
   },
   {
     "id": "TC007",
@@ -74,7 +80,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [6]
       }
-    ]
+    ],
+    "reponse_attendue": "La charge maximale des contacts des bornes 5 et 6 (reliées en interne par un relais et une résistance de 47 ohms) est de 24 V / 40 mA[cite: 7]."
   },
   {
     "id": "TC008",
@@ -85,7 +92,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [7]
       }
-    ]
+    ],
+    "reponse_attendue": "Il faut appuyer sur le bouton Reset de l'unité intérieure (située sur la boîte noire protégée à l'intérieur) pendant environ 3 secondes, jusqu'à ce que deux signaux sonores soient émis en succession rapide[cite: 7]."
   },
   {
     "id": "TC009",
@@ -96,7 +104,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [7]
       }
-    ]
+    ],
+    "reponse_attendue": "Le système peut stocker un maximum de 100 empreintes, 150 codes numériques, et dispose d'une capacité illimitée pour les supports RFID eKeys[cite: 7]."
   },
   {
     "id": "TC010",
@@ -107,7 +116,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [7]
       }
-    ]
+    ],
+    "reponse_attendue": "Si un code incorrect a été saisi cinq fois consécutives, le clavier est automatiquement bloqué pendant une durée de 5 minutes[cite: 7]."
   },
   {
     "id": "TC011",
@@ -118,7 +128,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [8]
       }
-    ]
+    ],
+    "reponse_attendue": "Il est possible d'associer jusqu'à 30 télécommandes au maximum au récepteur radio de l'Eneo[cite: 7]."
   },
   {
     "id": "TC012",
@@ -129,7 +140,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [8]
       }
-    ]
+    ],
+    "reponse_attendue": "La procédure se déroule ainsi : 1. Ouvrir la porte. 2. Verrouiller la serrure avec la clé alors que la porte est ouverte. 3. Insérer une tige de diamètre 3 mm maximum dans le trou situé sous la zone du capteur (zone en PVC noir) pour lancer l'association. 4. La serrure émet un bip continu de 18 secondes. 5. Appuyer sur le bouton de la télécommande. 6. L'association est validée par un bip de 2 secondes[cite: 7]."
   },
   {
     "id": "TC013",
@@ -140,7 +152,8 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [9]
       }
-    ]
+    ],
+    "reponse_attendue": "Un signal de 3 bips indique une erreur de verrouillage incomplet, provoquée soit par un mauvais alignement entre la porte et les gâches, soit par la présence d'un corps étranger dans la gâche[cite: 7]."
   },
   {
     "id": "TC014",
@@ -151,6 +164,7 @@
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [10]
       }
-    ]
+    ],
+    "reponse_attendue": "Alors que la maintenance standard est d'au moins une fois par an, elle doit être réalisée tous les 6 mois au sein des bâtiments scolaires et hôteliers[cite: 7]."
   }
 ]
