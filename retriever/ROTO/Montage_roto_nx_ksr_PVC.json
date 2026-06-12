@@ -1,0 +1,387 @@
+[
+  {
+    "id": "TC006",
+    "type": "mono",
+    "question": "Quel catalogue Roto faut-il consulter en complément de cette notice pour obtenir des détails spécifiques sur les éléments de commande ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [6]
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "type": "mono",
+    "question": "Quelle directive du Groupement Qualité Serrures et Ferrures réglemente spécifiquement la fixation des pièces porteuses pour les ferrures OF et OB-OF ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [6]
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "type": "mono",
+    "question": "Quelle est la recommandation de la directive FPKF concernant les fenêtres à battant basculant et les impostes ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [6]
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "type": "mono",
+    "question": "Quels sont les trois documents d'entretien et de maintenance (WP.01, WP.02, WP.03) recommandés par le Syndicat des fabricants de fenêtres et de façades (VFF) ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [6]
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "type": "mono",
+    "question": "Quelle est la signification du repère graphique constitué d'un cercle noir plein avec un point blanc au centre dans les schémas de montage ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [7]
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "type": "mono",
+    "question": "Sur quelle main d'ouverture (droite ou gauche selon la norme DIN 107) se basent par défaut toutes les illustrations de cette notice de montage ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [7]
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "type": "mono",
+    "question": "Que signifie le pictogramme représentant un vantail de fenêtre avec un arc de cercle en partie haute ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [8]
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "type": "mono",
+    "question": "Dans la liste des abréviations de la notice, que signifient précisément les sigles LFF et HFF pour le dimensionnement de la menuiserie ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [9]
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "type": "mono",
+    "question": "Quelle est la signification de l'abréviation technique 'AFM' utilisée sur les crémones et gâches ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [9]
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "type": "mono",
+    "question": "Quels documents techniques et d'informations le commerce de ferrures a-t-il l'obligation légale de transmettre au fabricant de fenêtres ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [10]
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "type": "mono",
+    "question": "Sous quelle forme matérielle ou numérique est-il contractuellement permis de transmettre les instructions aux différents groupes cibles ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [10]
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "type": "mono",
+    "question": "Quels types de rubans adhésifs faut-il impérativement utiliser lors des travaux de peinture ou lasure pour éviter d'endommager les composants ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [12]
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "type": "mono",
+    "question": "Quels types de vapeurs et composés chimiques agressifs faut-il impérativement éviter dans la zone de stockage ou de pose pour préserver la surface des ferrures ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [12]
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "type": "mono",
+    "question": "Quelle procédure de ventilation par à-coups est préconisée sur les chantiers complexes pour éviter la corrosion liée au condensat d'humidité ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [13]
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "type": "mono",
+    "question": "Quelle est l'adresse postale complète du siège de Roto Frank Ferrures S.A.S. en France pour les retours SAV ou demandes de garantie ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [2]
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "type": "mono",
+    "question": "Quels sont les niveaux de performance et d'étanchéité d'un bâtiment de grande hauteur qu'un ouvrant non verrouillé ou en position d'aération ne peut plus garantir ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [15]
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "type": "mono",
+    "question": "Quelles sont les limites maximales de poids fixées pour le levage manuel d'une charge par un homme et par une femme afin d'éviter les surcharges physiques ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [17]
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "type": "mono",
+    "question": "Quelle consigne stricte doit-on respecter pour serrer les têtes de vis par rapport à la surface lors de la fixation ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [101]
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "type": "mono",
+    "question": "Quel système mécanique d'assemblage sans vis et sans perte de course caractérise la gamme de quincaillerie Roto NX ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [21]
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "type": "mono",
+    "question": "Quelle est la durée de la garantie commerciale offerte par Roto sur la fonctionnalité de ses ferrures d'origine ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [21]
+      }
+    ]
+  },
+  {
+    "id": "TC026",
+    "type": "mono",
+    "question": "Quelle est la force de traction en Newtons que doit pouvoir certifier un fabricant pour un vantail pesant 100 kg selon la directive TBDK ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [21]
+      }
+    ]
+  },
+  {
+    "id": "TC027",
+    "type": "mono",
+    "question": "Pour une fenêtre rectangulaire oscillo-battante en sécurité de base de 130 kg maximum, quelles sont les plages limites de la Largeur Fond de Feuillure (LFF) et de la Hauteur Fond de Feuillure (HFF) ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [23]
+      }
+    ]
+  },
+  {
+    "id": "TC028",
+    "type": "mono",
+    "question": "Quelle est la formule de conversion ou d'équivalence donnée par la notice pour calculer le poids d'un vitrage en kg par mm d'épaisseur et par mètre carré ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [23]
+      }
+    ]
+  },
+  {
+    "id": "TC029",
+    "type": "mono",
+    "question": "Pour les fenêtres cintrées en sécurité de base, à quelle proportion géométrique de la Largeur Fond de Feuillure (LFF) le rayon R doit-il obligatoirement correspondre ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [25]
+      }
+    ]
+  },
+  {
+    "id": "TC030",
+    "type": "mono",
+    "question": "Quelle est la plage d'angle d'ouverture en degrés obtenue pour la position d'entrebâillement sur un châssis à soufflet de HFF comprise entre 290 et 400 mm (Type 1) ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [26]
+      }
+    ]
+  },
+  {
+    "id": "TC031",
+    "type": "mono",
+    "question": "Sur une fenêtre équipée du côté paumelles cachées Designo, quel est le poids maximal admissible du vantail sans l'ajout d'un report de charge ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [28]
+      }
+    ]
+  },
+  {
+    "id": "TC032",
+    "type": "mono",
+    "question": "Quelle modification spécifique doit-on apporter à l'ouverture du compas Designo lorsque le poids total du vantail dépasse les 130 kg ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [30]
+      }
+    ]
+  },
+  {
+    "id": "TC033",
+    "type": "mono",
+    "question": "Sur le schéma en coupe du profilé, quels éléments de la menuiserie correspondent respectivement aux numéros de légende [5], [6] et [7] ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [34]
+      }
+    ]
+  },
+  {
+    "id": "TC034",
+    "type": "mono",
+    "question": "Quelle est la dimension en millimètres de l'axe de palier standard pour le palier de compas de type P3/130 ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [35]
+      }
+    ]
+  },
+  {
+    "id": "TC035",
+    "type": "mono",
+    "question": "Quelle est la tolérance minimale de châssis fixe en millimètres requise en partie basse (D) pour le côté paumelles P d'un vantail de 130 kg ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [36]
+      }
+    ]
+  },
+  {
+    "id": "TC036",
+    "type": "mono",
+    "question": "Où est-il techniquement conseillé de rajouter un bloc d'écartement lors de la pose du dormant sur l'ouvrage de maçonnerie pour une fenêtre de sécurité ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [37]
+      }
+    ]
+  },
+  {
+    "id": "TC037",
+    "type": "mono",
+    "question": "Quel est le numéro d'article de la tige d'axe de 88 mm utilisée pour la liaison du palier de compas ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [38]
+      }
+    ]
+  },
+  {
+    "id": "TC038",
+    "type": "mono",
+    "question": "Quelles sont les dimensions maximales admissibles de la Largeur fond de feuillure (LFF) et de la Hauteur fond de feuillure (HFF) pour un ouvrant de type Confort ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [27]
+      }
+    ]
+  },
+  {
+    "id": "TC039",
+    "type": "mono",
+    "question": "Dans le cas d'une ouverture à soufflet sur paumelles Designo II, quelle restriction s'applique à l'accroche crocodile si la Largeur Fond de Feuillure (LFF) est inférieure à 411 mm ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [68]
+      }
+    ]
+  },
+  {
+    "id": "TC040",
+    "type": "mono",
+    "question": "Quel diamètre de perçage (en mm) est requis pour les trous du pivot d'angle lors de la préparation de l'ouvrant ?",
+    "pages_attendues": [
+      {
+        "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+        "pages": [88]
+      }
+    ]
+  }
+]

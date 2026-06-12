@@ -35,6 +35,7 @@ media/documents/
 documentations/
 generale/
 *~
+docs/ROTO/*
 data/*hint.json
 data/
 data/*

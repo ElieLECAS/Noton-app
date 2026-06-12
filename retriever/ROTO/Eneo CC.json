@@ -1,0 +1,156 @@
+[
+  {
+    "id": "TC001",
+    "type": "mono",
+    "question": "Quelles sont les dimensions de fraisage requises pour l'installation extérieure du système de contrôle d'accès 4en1 ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [4]
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "type": "mono",
+    "question": "Quelle est la procédure exacte pour retourner le pêne de la serrure lors du montage ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [2]
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "type": "mono",
+    "question": "Quelle précaution faut-il prendre avec la goupille de verrouillage lors du retournement du pêne ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [2]
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "type": "mono",
+    "question": "En cas d'installation dans le mur, où le relais doit-il être impérativement monté pour éviter les manipulations extérieures ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [5]
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "type": "mono",
+    "question": "Comment réaliser le test de câblage automatique (autotest) après la pose de la serrure sans utiliser l'application ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [5]
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "type": "mono",
+    "question": "Au niveau du plan de câblage, pourquoi le fil jaune (Input 2) doit-il impérativement rester non attribué ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [6]
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "type": "mono",
+    "question": "Quelle est la charge maximale admissible pour les contacts des bornes 5 et 6 du câblage ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [6]
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "type": "mono",
+    "question": "Comment effectuer une réinitialisation physique (remise aux paramètres d'usine) sur la boîte noire intérieure ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "type": "mono",
+    "question": "Quelles sont les capacités maximales de stockage de l'Eneo CC pour les empreintes, codes numériques et supports RFID ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "type": "mono",
+    "question": "Si le clavier de code ne répond plus après plusieurs erreurs, combien de temps le système reste-t-il bloqué ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "type": "mono",
+    "question": "Combien de télécommandes au maximum peut-on associer au récepteur radio de l'Eneo CC ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [8]
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "type": "mono",
+    "question": "Quelle est la procédure d'association pour programmer une nouvelle télécommande sur la serrure ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [8]
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "type": "mono",
+    "question": "Que signifie un signal sonore de 3 bips émis par la serrure Eneo CC ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [9]
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "type": "mono",
+    "question": "À quelle fréquence minimale doit-on réaliser la maintenance et la vérification des ferrures de sécurité dans les bâtiments scolaires ou hôteliers ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [10]
+      }
+    ]
+  }
+]

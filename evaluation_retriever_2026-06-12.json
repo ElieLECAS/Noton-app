@@ -1,0 +1,4663 @@
+{
+  "global_metrics": {
+    "context_precision": 0.49854800000000005,
+    "context_recall": 0.7866679999999999,
+    "mrr": 0.5179980000000001,
+    "total_questions": 50,
+    "execution_time_seconds": 155.95
+  },
+  "type_stats": {
+    "mono": {
+      "count": 40,
+      "context_precision": 0.49750000000000005,
+      "context_recall": 0.85,
+      "mrr": 0.49750000000000005
+    },
+    "cross": {
+      "count": 10,
+      "context_precision": 0.50274,
+      "context_recall": 0.53334,
+      "mrr": 0.59999
+    }
+  },
+  "details": [
+    {
+      "question": "Sur un chantier de menuiserie cintrée, quelle est la longueur exacte de découpe préconisée pour le profilé acier 9708 par rapport à la longueur de la pareclose ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 5
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 10
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 4
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 10
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 5
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 10
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 4
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 10
+          }
+        ]
+      }
+    },
+    {
+      "question": "Lors d'un dépannage pour un montant de porte cintré vers l'extérieur (cas n°1), à quel endroit précis le renfort doit-il être calé côté rainure à pare-closes ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 4
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 41
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 17
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 5
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 58
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 45
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 54
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 4
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 41
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 17
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 5
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 58
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 45
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 54
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelles dimensions et caractéristiques de vis autoforantes faut-il utiliser pour fixer le profilé acier de précontrainte 9708 dans la feuillure intérieure ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 26
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 30
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 9
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 11
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 19
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 26
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 30
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 9
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 11
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 19
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est l'épaisseur minimale recommandée pour les cales à coller sur le profilé acier dans le cas d'un vitrage pour assurer son maintien ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Mise en oeuvre 5708 - Fer cintrés.pdf",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 41
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 42
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 29
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 37
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 25
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 56
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 46
+        }
+      ],
+      "metrics": {
+        "context_precision": 0,
+        "context_recall": 0,
+        "mrr": 0
+      },
+      "analysis": {
+        "hits": [],
+        "misses": [
+          {
+            "document_title": "Mise en oeuvre 5708 - Fer cintrés.pdf",
+            "page": 1
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 41
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 42
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 29
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 37
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 25
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 56
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 46
+          }
+        ]
+      }
+    },
+    {
+      "question": "Avec quel type d'éléments structurels ou de traverses horizontales la mise en œuvre du profilé précontraint 9708 est-elle strictement incompatible ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 47
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 43
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 44
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 48
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 45
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 41
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 10
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 47
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 43
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 44
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 48
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 45
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 41
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 10
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la valeur de la contrainte supplémentaire, mesurable avec une règle de 2 m, à apporter lors du calage pour redresser le montant de porte ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 5
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 17
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 4
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 4
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 5
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 5
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 17
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 4
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 4
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 5
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          }
+        ]
+      }
+    },
+    {
+      "question": "Dans le cas d'une porte cintrée vers l'intérieur (cas n°2), où l'artisan doit-il positionner les cales de 5 mm par rapport au renfort plat ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés.pdf",
+          "pages": [
+            1
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 29
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 25
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 5
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 4
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 4
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 19
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 29
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 25
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 5
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 4
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 4
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 19
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quels sont les diamètres ou dimensions d'usinage prévus en traverse basse pour réaliser le drainage d'un profilé de couleur sombre ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            42
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 43
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 47
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 41
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 45
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 46
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 42
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 44
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 48
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.1667,
+        "context_recall": 1,
+        "mrr": 0.1667
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 42
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 43
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 47
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 41
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 45
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 46
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 44
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 48
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la profondeur de fraisage exacte requise en millimètres pour implanter une pièce de dormant sans bloc d'alimentation ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            19
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 20
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 21
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 19
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 17
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 24
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 46
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.3333,
+        "context_recall": 1,
+        "mrr": 0.3333
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 19
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 20
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 21
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 17
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 24
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 46
+          }
+        ]
+      }
+    },
+    {
+      "question": "Un installateur constate une absence de courant sur une serrure motorisée. Si la LED du bloc d'alimentation intégré est bien allumée en vert, quelles sont les deux causes physiques à vérifier ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            34
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 34
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 29
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 33
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 24
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 32
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 31
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 28
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 30
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 34
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 29
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 33
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 24
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 32
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 31
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 28
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 30
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la référence de la pièce de dormant à utiliser obligatoirement pour garantir un jeu en feuillure de 4 à 12 mm sur la variante 2 ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            14
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 14
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 16
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 15
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 13
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 17
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 21
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 40
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 14
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 16
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 15
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 13
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 17
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 21
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 40
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quel est le diamètre du trou de perçage à effectuer pour le passage de la ligne de câble à travers le profil, et quelle opération de finition est requise pour éviter l'usure du fil ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            17
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 17
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 19
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 21
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 20
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 42
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 39
+        },
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 35
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 17
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 19
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 21
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 20
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 42
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 39
+          },
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 35
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle précaution de câblage spécifique s'applique au fil jaune d'une jonction de câble sans bloc d'alimentation pour éviter le pontage de l'interrupteur côté ouvrant ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            31
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 32
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 30
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 26
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 28
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 31
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 33
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 29
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 18
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.2,
+        "context_recall": 1,
+        "mrr": 0.2
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 31
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 32
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 30
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 26
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 28
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 33
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 29
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 18
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la valeur de tension et l'intensité maximale admissibles pour la charge des contacts des bornes 5 et 6 reliées en interne par relais ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            31
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 33
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 31
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 25
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 29
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 32
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 28
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 30
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 27
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.5,
+        "context_recall": 1,
+        "mrr": 0.5
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 31
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 33
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 25
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 29
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 32
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 28
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 30
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 27
+          }
+        ]
+      }
+    },
+    {
+      "question": "En cas de raccordement direct au réseau 230 V avec un système Plug & Play, quel est l'indice de protection (IP) de la jonction entre le dormant et l'ouvrant ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 10
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 32
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 26
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 30
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 29
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 28
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 23
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 10
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 32
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 26
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 30
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 29
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 28
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 23
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quel est le type de câble précis et sa section en mm² requis pour l'entrée d'alimentation secteur du bloc de jonction à têtière carrée ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            11
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 24
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 18
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 26
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 30
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 27
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 28
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 39
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.1667,
+        "context_recall": 1,
+        "mrr": 0.1667
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 24
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 18
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 26
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 30
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 27
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 28
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 39
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la longueur totale du câble d'origine fourni côté connecteur pour la référence de pièce de dormant 820187 ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 10
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 13
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 14
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 16
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 15
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 18
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 26
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 10
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 13
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 14
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 16
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 15
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 18
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 26
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la fonction attribuée au fil vert dans l'affectation du câble d'un système de contrôle d'accès 4 en 1 situé entre le connecteur JST et la Black Box ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            25
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 26
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 29
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 31
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 33
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 28
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 25
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 30
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 32
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.1667,
+        "context_recall": 1,
+        "mrr": 0.1667
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 25
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 26
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 29
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 31
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 33
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 28
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 30
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 32
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quel risque technique majeur court le matériel si le bloc d'alimentation électrique est raccordé au réseau 230 V avant que la jonction de câble ne soit connectée ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            29
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 34
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 24
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 29
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 32
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 28
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 30
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 25
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 10
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.3333,
+        "context_recall": 1,
+        "mrr": 0.3333
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 29
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 34
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 24
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 32
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 28
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 30
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 25
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 10
+          }
+        ]
+      }
+    },
+    {
+      "question": "Lors de la pose d'une jonction côté ouvrant avec coffret, quelles sont la hauteur et la largeur totales de la réservation (forme en U) nécessaires pour le perçage ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            18
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 19
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 21
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 20
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 17
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 18
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.1667,
+        "context_recall": 1,
+        "mrr": 0.1667
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 18
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 19
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 21
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 20
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 17
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la charge maximale autorisée en kilogrammes pour un vantail équipé d'une quincaillerie de type oscillo-coulissante PSK 200 Portal ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 3
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 7
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 3
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        }
+      ],
+      "metrics": {
+        "context_precision": 0,
+        "context_recall": 0,
+        "mrr": 0
+      },
+      "analysis": {
+        "hits": [],
+        "misses": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2).pdf",
+            "page": 8
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 3
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 7
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 3
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est l'épaisseur maximale de vitrage isolant (double ou triple) acceptée par les profilés de la gamme e.XCLUSIVE, e.MOTION et e.VOLUTION ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 19
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 18
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 17
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 16
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 1
+        }
+      ],
+      "metrics": {
+        "context_precision": 0,
+        "context_recall": 0,
+        "mrr": 0
+      },
+      "analysis": {
+        "hits": [],
+        "misses": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2).pdf",
+            "page": 8
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 19
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 18
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 1
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 17
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 16
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 6
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 1
+          }
+        ]
+      }
+    },
+    {
+      "question": "Dans le cas d'une pose en tableau, quel profilé de dos de dormant spécifique doit être mis en œuvre pour garantir une surface de calfeutrement minimale de 10 mm ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 4
+        },
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 58
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 54
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 4
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 56
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 60
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 6
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.2,
+        "context_recall": 1,
+        "mrr": 0.2
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 4
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 4
+          },
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 58
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 54
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 56
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 60
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 6
+          }
+        ]
+      }
+    },
+    {
+      "question": "Pour des menuiseries en PVC blanc, à partir de quelle largeur de traverse d'ouvrant le renforcement métallique devient-il systématique ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 41
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 5
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 45
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 25
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 41
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 5
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 45
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 25
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quel est l'entraxe maximal de vissage à respecter pour l'immobilisation des renforts sur des profilés ouvrants de couleur sombre plaxés ou laqués ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 8
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 2
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 2
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 5
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.25,
+        "context_recall": 1,
+        "mrr": 0.25
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 8
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 2
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 2
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 5
+          }
+        ]
+      }
+    },
+    {
+      "question": "À quelle distance maximale de l'angle de feuillure doivent se situer les vis de renfort extrêmes lors du blocage d'un ouvrant ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 41
+        },
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 45
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 5
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 21
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.1667,
+        "context_recall": 1,
+        "mrr": 0.1667
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 41
+          },
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 45
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 5
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 21
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelles sont les références des deux joints brosses interchangeables utilisables pour équiper la traverse basse d'un rejet d'eau ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            9
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 5
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 28
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 32
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 31
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 30
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.3333,
+        "context_recall": 1,
+        "mrr": 0.3333
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 9
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 5
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 28
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 32
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 31
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 30
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la hauteur de feuillure nominale des profilés ouvrants et dormants, hors hauteur des garnitures d'étanchéité ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 5
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 4
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 4
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.25,
+        "context_recall": 1,
+        "mrr": 0.25
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 5
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 4
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 4
+          }
+        ]
+      }
+    },
+    {
+      "question": "Dans le cadre de l'autocontrôle, par quel organisme officiel est suivi le marquage et la fabrication des profilés PVC de coloris marron et caramel ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            11
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 3
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 6
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 11
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 3
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 7
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 7
+        }
+      ],
+      "metrics": {
+        "context_precision": 0,
+        "context_recall": 0,
+        "mrr": 0
+      },
+      "analysis": {
+        "hits": [],
+        "misses": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2).pdf",
+            "page": 11
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 3
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 6
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 11
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 3
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 7
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 7
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la dimension maximale de baie admissible en hauteur et en largeur pour un châssis oscillo-battant à 2 vantaux ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            9
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 7
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 9
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 12
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 10
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 2
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.5,
+        "context_recall": 1,
+        "mrr": 0.5
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 9
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 7
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 12
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 10
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 2
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quel est le débit de fuite maximum sous une différence de pression de 4 Pa exigé pour qu'une menuiserie obtienne le classement de perméabilité à l'air de classe A*4 ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            5
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 5
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 5
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 10
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 12
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 11
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 9
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 5
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 5
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 10
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 12
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 11
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 9
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelles sont les deux références de mastics élastomères ou silicones du commerce ayant passé avec succès les tests d'adhésivité et de compatibilité avec le dormant PVC non revêtu ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 8
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 10
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 10
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 3
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 24
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 7
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.5,
+        "context_recall": 1,
+        "mrr": 0.5
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 10
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 8
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 10
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 3
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 24
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 7
+          }
+        ]
+      }
+    },
+    {
+      "question": "Pour des menuiseries équipées d'un capotage aluminium, quelle est la référence du manchon d'étanchéité à introduire dans l'orifice avant la mise en place de la busette de drainage ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 32
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 28
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 33
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 29
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.3333,
+        "context_recall": 1,
+        "mrr": 0.3333
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 8
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 32
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 28
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 33
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 29
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quel est le diamètre exact du perçage à réaliser simultanément sur le capot alu et le profil PVC pour intégrer le système de drainage à busette ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 35
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 39
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 32
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 40
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.25,
+        "context_recall": 1,
+        "mrr": 0.25
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 8
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 35
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 39
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 32
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 40
+          }
+        ]
+      }
+    },
+    {
+      "question": "Dans quel cas ou configuration de pose spécifique l'utilisation de l'appui en aluminium réf. A477 est-elle exclusivement réservée ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            9
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 17
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 18
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 10
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 7
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 30
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 34
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 22
+        }
+      ],
+      "metrics": {
+        "context_precision": 0,
+        "context_recall": 0,
+        "mrr": 0
+      },
+      "analysis": {
+        "hits": [],
+        "misses": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+            "page": 9
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 17
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 18
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 10
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 7
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 30
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 34
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 22
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelles sont les références des deux seuls profilés en PVC qui doivent être exclusivement dédiés à la fabrication de cadres fixes ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 3
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 3
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 6
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 7
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 3
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.25,
+        "context_recall": 1,
+        "mrr": 0.25
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 6
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 3
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 3
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 7
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 3
+          }
+        ]
+      }
+    },
+    {
+      "question": "Avec quelles références de tapées en aluminium l'appui de type A476 peut-il être associé d'après les règles de conception ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 18
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 17
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 30
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 34
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 22
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 34
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 21
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 30
+        }
+      ],
+      "metrics": {
+        "context_precision": 0,
+        "context_recall": 0,
+        "mrr": 0
+      },
+      "analysis": {
+        "hits": [],
+        "misses": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+            "page": 8
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 18
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 17
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 30
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 34
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 22
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 34
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 21
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 30
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est l'épaisseur de tôle nominale et la nuance d'acier/inox requise pour la fixation du renfort de battement réf. 76453, et quel est le pas de vissage à respecter ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            9
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 9
+        },
+        {
+          "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 15
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 22
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 16
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 20
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 23
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 9
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "Mise en oeuvre 9708 - Fer cintrés",
+            "page": 1
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 15
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 22
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 16
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 20
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 23
+          }
+        ]
+      }
+    },
+    {
+      "question": "En cas de coupe droite des capotages en aluminium pour dormants, quelle opération d'usinage mécanique doit être opérée en bout de profilé ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 32
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 28
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 2
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 5
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 54
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.3333,
+        "context_recall": 1,
+        "mrr": 0.3333
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 8
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 32
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 28
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 2
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 5
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 54
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la dimension maximale de baie (hauteur x largeur) acceptée pour un loqueteau à soufflet ?",
+      "type": "mono",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            9
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 7
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 3
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 3
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.5,
+        "context_recall": 1,
+        "mrr": 0.5
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 9
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 7
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 3
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 3
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle différence majeure existe-t-il entre l'épaisseur de vitrage maximale acceptée par la gamme e.XCLUSIVE/e.MOTION et celle acceptée par la gamme 76 ADVANCED ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            8
+          ]
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            9
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 18
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 1
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 7
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 19
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 6
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 1
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 1
+        }
+      ],
+      "metrics": {
+        "context_precision": 0,
+        "context_recall": 0,
+        "mrr": 0
+      },
+      "analysis": {
+        "hits": [],
+        "misses": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2).pdf",
+            "page": 8
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+            "page": 9
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 18
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 1
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 7
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 19
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 6
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 1
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 1
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelles sont les cotes de largeur hors-tout de l'appui pour le seuil réf. A076 comparé au seuil réf. Z043 ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            14
+          ]
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            15
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 33
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 37
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 4
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 5
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 12
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 10
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 16
+        }
+      ],
+      "metrics": {
+        "context_precision": 0,
+        "context_recall": 0,
+        "mrr": 0
+      },
+      "analysis": {
+        "hits": [],
+        "misses": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+            "page": 14
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2).pdf",
+            "page": 15
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 33
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 37
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 4
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 5
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 12
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 10
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 16
+          }
+        ]
+      }
+    },
+    {
+      "question": "Les entreprises SLS à Dahn et Menke à Warstein extrudent des profilés pour seuils mixtes. Quels sont les codes CSTB de matière certifiée gris clair communs à ces deux fabricants ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            11
+          ]
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            11
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 9
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 9
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 11
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 11
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 8
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 6
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.4167,
+        "context_recall": 1,
+        "mrr": 0.3333
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 11
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 11
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 9
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 9
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 8
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 6
+          }
+        ]
+      }
+    },
+    {
+      "question": "Comparez les entraxes de fixation maximum recommandés pour la pose des tapées et appuis en aluminium sur dormant capoté entre les deux systèmes de fenêtres Profine.",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            8
+          ]
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            9
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 36
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 32
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 31
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 35
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 36
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 31
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 0.5,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 8
+          }
+        ],
+        "misses": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2).pdf",
+            "page": 9
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 36
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 32
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 31
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 35
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 36
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 31
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la différence de classement de réaction au feu (norme M) entre un profilé PVC blanc laqué et un profilé PVC revêtu d'un film plaxé décor ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            4,
+            5
+          ]
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            5
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 5
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 6
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 8
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 2
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 2
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 10
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 11
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 4
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.625,
+        "context_recall": 0.6667,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 5
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 4
+          }
+        ],
+        "misses": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+            "page": 5
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 6
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 8
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 2
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 2
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 10
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 11
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelles sont les hauteurs de section des dormants de réhabilitation réf. 76178 et réf. 6155 lorsqu'ils sont représentés à l'échelle sur les schémas techniques ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            13
+          ]
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            13
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 13
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 14
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 4
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 12
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 13
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 6
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 9
+        }
+      ],
+      "metrics": {
+        "context_precision": 1,
+        "context_recall": 0.5,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 13
+          }
+        ],
+        "misses": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+            "page": 13
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 14
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 4
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 12
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 8
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 13
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 6
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 9
+          }
+        ]
+      }
+    },
+    {
+      "question": "Quelle est la référence de la mousse d'angle bas ou du bouchon d'extrémité à insérer pour étancher la jonction appui / tapée sur chacun des deux procédés de fenêtres ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            8
+          ]
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            9
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 8
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 24
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 41
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 28
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 37
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 36
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 9
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 31
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.6429,
+        "context_recall": 1,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 8
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 9
+          }
+        ],
+        "misses": [],
+        "noise": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 24
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 41
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 28
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 37
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 36
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 31
+          }
+        ]
+      }
+    },
+    {
+      "question": "Pour quelle variante spécifique de jeu en feuillure de la jonction de câble électrique la pièce d'ouvrant réf. 820194 est-elle requise, et quel profilé de menuiserie Profine (0303) est concerné par ce type de montage vertical ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            11,
+            14
+          ]
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            15,
+            24
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 14
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 16
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 13
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 15
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 21
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 10
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 19
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.7,
+        "context_recall": 0.5,
+        "mrr": 1
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 14
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          }
+        ],
+        "misses": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2).pdf",
+            "page": 15
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2).pdf",
+            "page": 24
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 16
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 13
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 15
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 21
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 10
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 19
+          }
+        ]
+      }
+    },
+    {
+      "question": "En comparant les schémas d'usinage de drainage, quelles sont les dimensions du trou oblong standard utilisé pour les profilés de menuiserie PVC par rapport au trou oblong nécessaire pour la platine de câblage ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "DTA_6_16-2335_V5 (2).pdf",
+          "pages": [
+            41
+          ]
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            19
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 44
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 46
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 41
+        },
+        {
+          "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+          "page": 48
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 45
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 42
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+          "page": 43
+        },
+        {
+          "document_title": "DTD-DBV-6-16-2335_V5",
+          "page": 39
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.3333,
+        "context_recall": 0.5,
+        "mrr": 0.3333
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 41
+          }
+        ],
+        "misses": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+            "page": 19
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 44
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 46
+          },
+          {
+            "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)",
+            "page": 48
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 45
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 42
+          },
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)",
+            "page": 43
+          },
+          {
+            "document_title": "DTD-DBV-6-16-2335_V5",
+            "page": 39
+          }
+        ]
+      }
+    },
+    {
+      "question": "Le raccordement électrique de la fermeture sur une alimentation externe implique un électricien qualifié. Selon les textes réglementaires de sécurité, quelles sont les normes d'installation VDE/VDS applicables à la ligne de courant par rapport aux normes d'essais acoustiques Acotherm du châssis ?",
+      "type": "cross",
+      "expected_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+          "pages": [
+            6,
+            17
+          ]
+        },
+        {
+          "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "retrieved_pages": [
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 24
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 25
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 17
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 34
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 11
+        },
+        {
+          "document_title": "DTA_6_16-2335_V5 (2)",
+          "page": 6
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 6
+        },
+        {
+          "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+          "page": 35
+        }
+      ],
+      "metrics": {
+        "context_precision": 0.3095,
+        "context_recall": 0.6667,
+        "mrr": 0.3333
+      },
+      "analysis": {
+        "hits": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 17
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 6
+          }
+        ],
+        "misses": [
+          {
+            "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+            "page": 6
+          }
+        ],
+        "noise": [
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 24
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 25
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 34
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 11
+          },
+          {
+            "document_title": "DTA_6_16-2335_V5 (2)",
+            "page": 6
+          },
+          {
+            "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3",
+            "page": 35
+          }
+        ]
+      }
+    }
+  ]
+}

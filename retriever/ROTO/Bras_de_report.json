@@ -1,0 +1,79 @@
+[
+  {
+    "id": "TC001",
+    "type": "mono",
+    "question": "Où doit-on placer et visser le report de charge d'ouvrant par rapport au pivot d'angle ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "type": "mono",
+    "question": "Quelle vis du palier d'angle doit-on retirer lors de l'étape 2 du montage ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "type": "mono",
+    "question": "Sur quelle pièce doit-on mettre et visser la pièce dormant du report de charge ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "type": "mono",
+    "question": "Où faut-il insérer la tringle de soutien du vantail lors de la cinquième étape de l'installation ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "type": "mono",
+    "question": "Quel outil et de quelle dimension faut-il utiliser pour ajuster la tension du ressort du report de charge ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "type": "mono",
+    "question": "Dans quelle position d'ouverture de la fenêtre (en degrés) doit-on effectuer le réglage de la tension du ressort ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "type": "mono",
+    "question": "Visuellement, à quoi reconnaît-on que le réglage de la tension est correct d'après les repères de couleur ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "TC001",
+    "type": "mono",
+    "question": "Quelles sont les deux pièces d'origine à démonter lors de la première étape de la transformation OF en OB ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "type": "mono",
+    "question": "Quelle est la dimension d'ouverture du soufflet obtenue avec le compas OB de la gamme Roto NX ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "type": "mono",
+    "question": "Sur quel élément de la ferrure doit-on installer le compas OB adéquat fourni dans le kit ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [1]
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "type": "mono",
+    "question": "Quelle opération sur la quincaillerie d'origine permet de libérer la manœuvre oscillo-battante (OB) lors de l'étape 4 ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "type": "mono",
+    "question": "À quel endroit précis du dormant doit-on installer et visser la gâche OB (droite ou gauche) ?",
+    "pages_attendues": [
+      {
+        "document_title": "Transformation OF en OB ROTO NX.pdf",
+        "pages": [2]
+      }
+    ]
+  }
+]
