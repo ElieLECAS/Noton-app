@@ -747,6 +747,37 @@ def render_pdf_page_png(pdf_path: str, page_index: int, dpi: Optional[int] = Non
     return buf.getvalue()
 
 
+def get_page_cache_dir():
+    """Répertoire de cache des PNG de pages (partagé chat + reranker vision)."""
+    from pathlib import Path
+
+    cache_dir = Path(settings.LANCED_DB_DIR).parent / "page_cache"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    return cache_dir
+
+
+def render_page_png_cached(pdf_path: str, page_no: int, dpi: int = 150) -> bytes:
+    """
+    Rend la page `page_no` (1-based) du PDF en PNG, avec cache disque partagé.
+
+    Le cache est indexé par hash du chemin + numéro de page + dpi, afin d'être
+    réutilisable par le chat (envoi au LLM vision) et par le reranker vision.
+    """
+    import hashlib
+
+    cache_dir = get_page_cache_dir()
+    path_hash = hashlib.md5(pdf_path.encode("utf-8")).hexdigest()
+    cache_file = cache_dir / f"{path_hash}_{page_no}_{dpi}.png"
+    if cache_file.exists():
+        return cache_file.read_bytes()
+    png = render_pdf_page_png(pdf_path, page_no - 1, dpi)
+    try:
+        cache_file.write_bytes(png)
+    except Exception as exc:
+        logger.warning("Echec ecriture cache PNG %s: %s", cache_file, exc)
+    return png
+
+
 def _parse_json_from_llm_content(raw: str) -> dict:
     """Extrait un objet JSON depuis la réponse LLM."""
     text = (raw or "").strip()
@@ -1725,9 +1756,8 @@ def build_multimodal_pages_for_pdf(
     max_pages: Optional[int] = None,
 ) -> List[MultimodalChunkSpec]:
     """
-    Pipeline ColPali-only:
-    Determines the pages in the PDF and generates page chunk specifications
-    without extracting any native text.
+    Pipeline ColPali hybrid:
+    Indexe les embeddings visuels ColPali et stocke le texte pymupdf natif par page.
     """
     import fitz
     logger.info(f"Setting up ColPali page structures for PDF: {pdf_path}")
@@ -1743,14 +1773,15 @@ def build_multimodal_pages_for_pdf(
     
     for page_idx in pages_to_process:
         page_no = page_idx + 1
-        
-        # Omit text extraction entirely - ColPali is vision-only
-        text_content = f"[ColPali Indexed Page {page_no}]"
-            
+        page = doc[page_idx]
+        text_content = page.get_text("text").strip()
+        if not text_content:
+            text_content = f"[Page {page_no} - contenu visuel uniquement]"
+
         node_id = f"colpali-{document_id}-page-{page_no}"
         meta = {
             "content_type": "page_raw_enriched",
-            "chunking_version": "colpali_only",
+            "chunking_version": "colpali_hybrid",
             "page_no": page_no,
             "page_start": page_no,
             "page_end": page_no,
@@ -1762,7 +1793,7 @@ def build_multimodal_pages_for_pdf(
         specs.append(
             MultimodalChunkSpec(
                 page_no=page_no,
-                content=text_content,
+                content=f"[Page {page_no}]\n{text_content}",
                 content_type="page_raw_enriched",
                 node_id=node_id,
                 metadata=meta,

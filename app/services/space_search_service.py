@@ -313,6 +313,8 @@ def _augment_and_format_passages(
             raw_rrf = meta.get("raw_rrf_score")
             if raw_rrf is not None:
                 out["raw_rrf_score"] = float(raw_rrf)
+            if meta.get("rerank_score") is not None:
+                out["rerank_score"] = float(meta.get("rerank_score"))
                 
             passages.append(out)
             
@@ -367,6 +369,8 @@ def _augment_and_format_passages(
             raw_rrf = meta.get("raw_rrf_score")
             if raw_rrf is not None:
                 out["raw_rrf_score"] = float(raw_rrf)
+            if meta.get("rerank_score") is not None:
+                out["rerank_score"] = float(meta.get("rerank_score"))
                 
             passages.append(out)
             
@@ -559,7 +563,8 @@ async def search_relevant_passages(
             import asyncio
             final_nodes = await asyncio.to_thread(
                 _retrieve_leaves_sql,
-                session, space_id, user_id, query_text, k, document_filter
+                session, space_id, user_id, query_text, k,
+                None, document_filter,
             )
             vr.end(outputs={"nb": len(final_nodes)})
 
@@ -588,8 +593,25 @@ async def search_relevant_passages(
         if not final_nodes:
             return {"passages": [], "status": "ok", "reason": "no_results"}
 
+        # Reranker vision LLM : juge la pertinence page-par-page (PNG) et filtre le bruit.
+        # Robuste : en cas d'echec, rerank_pages_vision renvoie les noeuds inchanges.
+        reason = "colpali_direct"
+        if settings.VISION_RERANK_ENABLED:
+            from app.services.vision_reranker_service import rerank_pages_vision
+            with trace_run(
+                "vision_rerank",
+                run_type="reranker",
+                inputs={"query": query_text, "nb_candidates": len(final_nodes)},
+                tags=["rerank", "vision", "colpali"],
+            ) as rr:
+                reranked = await rerank_pages_vision(session, query_text, final_nodes)
+                rr.end(outputs={"nb": len(reranked)})
+            if reranked:
+                final_nodes = reranked
+                reason = "colpali_vision_rerank"
+
         passages = _augment_and_format_passages(session, final_nodes, k)
-        return {"passages": passages, "status": "ok", "reason": "colpali_direct"}
+        return {"passages": passages, "status": "ok", "reason": reason}
         
     except Exception as e:
         logger.error("search_relevant_passages (space): %s", e, exc_info=True)

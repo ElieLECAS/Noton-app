@@ -273,7 +273,7 @@
         "pages": [23]
       }
     ],
-    "reponse_attendue": "Le poids théorique du verre retenu est de 2,5 kg par millimètre d'épaisseur et par mètre carré ($2,5\text{ kg}/(\text{mm}\cdot\text{m}^2)$)."
+    "reponse_attendue": "Le poids théorique du verre retenu est de 2,5 kg par millimètre d'épaisseur et par mètre carré."
   },
   {
     "id": "TC029",

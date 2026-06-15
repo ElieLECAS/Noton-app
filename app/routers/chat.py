@@ -58,12 +58,6 @@ import re
 logger = logging.getLogger(__name__)
 
 
-def _is_vision_model(model_name: str) -> bool:
-    """Helper to detect if a model supports vision/image inputs."""
-    name_lower = model_name.lower()
-    return "pixtral" in name_lower or "vision" in name_lower or "large-latest" in name_lower or "gpt-4o" in name_lower
-
-
 def _coerce_positive_int(value) -> Optional[int]:
     """Convertit une valeur en int de page (>0), sinon None."""
     if value is None:
@@ -644,6 +638,15 @@ async def stream_space_chat_message(
             ],
         })
 
+    from app.services.rag_generation_service import (
+        enrich_colpali_passages_with_pymupdf,
+        is_vision_model,
+        render_page_images_for_passages_async,
+        build_rag_user_message,
+    )
+
+    doc_passages = enrich_colpali_passages_with_pymupdf(session, doc_passages)
+
     # Construire le contexte système à partir des passages techniques
     # Si low confidence : injecter un prompt spécial pour forcer la clarification
     if retrieval_status == "low_confidence_clarification":
@@ -682,78 +685,24 @@ async def stream_space_chat_message(
 
     full_context_draft.extend(conversation_context)
 
-    # Rendre les pages ColPali en images PNG base64 pour Llama3.2-Vision
-    user_images = []
-    if doc_passages:
-        import base64
-        import hashlib
-        import asyncio
-        from pathlib import Path
-        from app.services.multimodal_page_service import render_pdf_page_png
-        from app.models.document import Document
-        
-        # Initialisation du cache
-        cache_dir = Path(settings.LANCED_DB_DIR).parent / "page_cache"
-        cache_dir.mkdir(parents=True, exist_ok=True)
-        
-        async def _get_or_render_page_async(pdf_path: str, pno: int, dpi: int = 150) -> bytes:
-            path_hash = hashlib.md5(pdf_path.encode("utf-8")).hexdigest()
-            cache_file = cache_dir / f"{path_hash}_{pno}_{dpi}.png"
-            if cache_file.exists():
-                return await asyncio.to_thread(cache_file.read_bytes)
-            png = await asyncio.to_thread(render_pdf_page_png, pdf_path, pno - 1, dpi)
-            await asyncio.to_thread(cache_file.write_bytes, png)
-            return png
-        
-        unique_pages = []
-        seen_pages = set()
-        for p in doc_passages:
-            did = p.get("document_id")
-            pno = p.get("page_no") or p.get("page_start")
-            if did is not None and pno is not None:
-                page_key = (did, pno)
-                if page_key not in seen_pages:
-                    seen_pages.add(page_key)
-                    unique_pages.append(page_key)
-        
+    user_images: List[str] = []
+    if doc_passages and is_vision_model(forced_model):
+        user_images = await render_page_images_for_passages_async(session, doc_passages)
         logger.info(
-            "[stream_space_chat_message] Unique pages found for rendering base64 images: %s. Limiting to top 3.",
-            unique_pages,
-        )
-        # Limiter aux 3 premières pages les plus pertinentes pour éviter de saturer le contexte
-        for did, pno in unique_pages[:3]:
-            try:
-                doc_obj = session.get(Document, did)
-                if doc_obj and doc_obj.source_file_path and os.path.exists(doc_obj.source_file_path):
-                    logger.info(f"Rendu visuel de la page {pno} du document {did} (chemin: {doc_obj.source_file_path}) pour Llama3.2-Vision...")
-                    png_bytes = await _get_or_render_page_async(doc_obj.source_file_path, pno, dpi=150)
-                    base64_img = base64.b64encode(png_bytes).decode("utf-8")
-                    user_images.append(base64_img)
-                    logger.info(
-                        "[stream_space_chat_message] Successfully rendered page %s as base64 image (length: %d)",
-                        pno,
-                        len(base64_img),
-                    )
-                else:
-                    logger.warning(
-                        "[stream_space_chat_message] Document %s source file path not found or doesn't exist on disk: %s",
-                        did,
-                        doc_obj.source_file_path if doc_obj else None,
-                    )
-            except Exception as e:
-                logger.error(f"Erreur lors du rendu de la page {pno} (document {did}) : {e}", exc_info=True)
-
-    user_msg = {"role": "user", "content": request.message}
-    if user_images and _is_vision_model(forced_model):
-        user_msg["images"] = user_images
-        logger.info(
-            "[stream_space_chat_message] Appending user message with %d rendered base64 images to full_context_draft (model is vision-capable)",
+            "[stream_space_chat_message] %d image(s) PNG rendues pour le modèle %s",
             len(user_images),
+            forced_model,
         )
-    else:
+    elif doc_passages:
         logger.info(
-            "[stream_space_chat_message] Appending user message WITHOUT images to full_context_draft (no images or model not vision-capable)"
+            "[stream_space_chat_message] Pas d'images (modèle non vision: %s)",
+            forced_model,
         )
+
+    user_msg = build_rag_user_message(
+        request.message,
+        images_b64=user_images or None,
+    )
     full_context_draft.append(user_msg)
 
     _pipeline_inputs_space = {

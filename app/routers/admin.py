@@ -770,17 +770,29 @@ async def evaluate_retriever_single_api(
         )
         passages = search_res.get("passages", [])
         
-        # Extraire les couples (titre, page_no)
+        # Extraire les couples (titre, page_no) et les détails ordonnés
         retrieved_pages = []
-        for p in passages:
+        retrieved_details = []
+        for idx, p in enumerate(passages):
             doc_title = p.get("document_title", "")
             page_no = p.get("page_no")
             if page_no is None:
                 page_no = p.get("page_start", 1)
             try:
-                retrieved_pages.append((doc_title, int(page_no)))
+                page_no_int = int(page_no)
             except (ValueError, TypeError):
-                retrieved_pages.append((doc_title, 1))
+                page_no_int = 1
+            retrieved_pages.append((doc_title, page_no_int))
+            
+            score = p.get("score", 0.0)
+            is_hit = match_page(doc_title, page_no_int, request.pages_attendues)
+            retrieved_details.append({
+                "rank": idx + 1,
+                "document_title": doc_title,
+                "page": page_no_int,
+                "score": round(score, 4),
+                "is_hit": is_hit
+            })
                 
         # Calculer les métriques
         precision = compute_context_precision(retrieved_pages, request.pages_attendues)
@@ -792,14 +804,18 @@ async def evaluate_retriever_single_api(
         misses_details = []
         noise_details = []
         
-        for doc_title, page_no in retrieved_pages:
-            is_hit = match_page(doc_title, page_no, request.pages_attendues)
-            page_info = {"document_title": doc_title, "page": page_no}
-            if is_hit:
-                if page_info not in hits_details:
+        for rd in retrieved_details:
+            page_info = {
+                "document_title": rd["document_title"],
+                "page": rd["page"],
+                "rank": rd["rank"],
+                "score": rd["score"]
+            }
+            if rd["is_hit"]:
+                if not any(h["document_title"] == rd["document_title"] and h["page"] == rd["page"] for h in hits_details):
                     hits_details.append(page_info)
             else:
-                if page_info not in noise_details:
+                if not any(n["document_title"] == rd["document_title"] and n["page"] == rd["page"] for n in noise_details):
                     noise_details.append(page_info)
                     
         for exp in request.pages_attendues:
@@ -824,6 +840,7 @@ async def evaluate_retriever_single_api(
             "type": request.type,
             "expected_pages": request.pages_attendues,
             "retrieved_pages": [{"document_title": t, "page": p} for t, p in retrieved_pages],
+            "retrieved_details": retrieved_details,
             "metrics": {
                 "context_precision": round(precision, 4),
                 "context_recall": round(recall, 4),
@@ -879,17 +896,29 @@ async def evaluate_rag_single_api(
         )
         passages = search_res.get("passages", [])
         
-        # Extraire les couples (titre, page_no)
+        # Extraire les couples (titre, page_no) et les détails ordonnés
         retrieved_pages = []
-        for p in passages:
+        retrieved_details = []
+        for idx, p in enumerate(passages):
             doc_title = p.get("document_title", "")
             page_no = p.get("page_no")
             if page_no is None:
                 page_no = p.get("page_start", 1)
             try:
-                retrieved_pages.append((doc_title, int(page_no)))
+                page_no_int = int(page_no)
             except (ValueError, TypeError):
-                retrieved_pages.append((doc_title, 1))
+                page_no_int = 1
+            retrieved_pages.append((doc_title, page_no_int))
+            
+            score = p.get("score", 0.0)
+            is_hit = match_page(doc_title, page_no_int, request.pages_attendues)
+            retrieved_details.append({
+                "rank": idx + 1,
+                "document_title": doc_title,
+                "page": page_no_int,
+                "score": round(score, 4),
+                "is_hit": is_hit
+            })
                 
         # Calculer les métriques
         precision = compute_context_precision(retrieved_pages, request.pages_attendues)
@@ -901,14 +930,18 @@ async def evaluate_rag_single_api(
         misses_details = []
         noise_details = []
         
-        for doc_title, page_no in retrieved_pages:
-            is_hit = match_page(doc_title, page_no, request.pages_attendues)
-            page_info = {"document_title": doc_title, "page": page_no}
-            if is_hit:
-                if page_info not in hits_details:
+        for rd in retrieved_details:
+            page_info = {
+                "document_title": rd["document_title"],
+                "page": rd["page"],
+                "rank": rd["rank"],
+                "score": rd["score"]
+            }
+            if rd["is_hit"]:
+                if not any(h["document_title"] == rd["document_title"] and h["page"] == rd["page"] for h in hits_details):
                     hits_details.append(page_info)
             else:
-                if page_info not in noise_details:
+                if not any(n["document_title"] == rd["document_title"] and n["page"] == rd["page"] for n in noise_details):
                     noise_details.append(page_info)
                     
         for exp in request.pages_attendues:
@@ -953,6 +986,7 @@ async def evaluate_rag_single_api(
             "type": request.type,
             "expected_pages": request.pages_attendues,
             "retrieved_pages": [{"document_title": t, "page": p} for t, p in retrieved_pages],
+            "retrieved_details": retrieved_details,
             "metrics": {
                 "context_precision": round(precision, 4),
                 "context_recall": round(recall, 4),

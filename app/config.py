@@ -140,6 +140,13 @@ class Settings(BaseSettings):
 
     BM25_MAX_QUERY_TERMS: int = 15
 
+    # Reranker vision LLM (juge de pertinence page-par-page sur les PNG ColPali)
+    VISION_RERANK_ENABLED: bool = os.getenv("VISION_RERANK_ENABLED", "true").strip().lower() in ('true', '1', 'yes', 'on')
+    VISION_RERANK_MODEL: str = os.getenv("VISION_RERANK_MODEL", "mistral-small-latest")
+    VISION_RERANK_MIN_SCORE: float = float(os.getenv("VISION_RERANK_MIN_SCORE", "3"))  # sur une echelle 0-5
+    VISION_RERANK_MAX_PAGES: int = int(os.getenv("VISION_RERANK_MAX_PAGES", "4"))
+    VISION_RERANK_DPI: int = int(os.getenv("VISION_RERANK_DPI", "150"))
+
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod
     def parse_database_echo(cls, v: Union[str, bool, None]) -> bool:

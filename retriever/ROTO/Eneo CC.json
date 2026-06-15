@@ -2,7 +2,7 @@
   {
     "id": "TC001",
     "type": "mono",
-    "question": "Quelles sont les dimensions de fraisage requises pour l'installation extérieure du système de contrôle d'accès 4en1 ?",
+    "question": "Sur une porte équipée d'un contrôle d'accès ROTO Eneo CC, à quelle profondeur je dois fraiser dans le dormant pour le boîtier extérieur ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -14,7 +14,7 @@
   {
     "id": "TC002",
     "type": "mono",
-    "question": "Quelle est la procédure exacte pour retourner le pêne de la serrure lors du montage ?",
+    "question": "Lors du montage d'une serrure ROTO Safe E Eneo CC, le pêne est dans le mauvais sens : comment le retourner ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -26,7 +26,7 @@
   {
     "id": "TC003",
     "type": "mono",
-    "question": "Quelle précaution faut-il prendre avec la goupille de verrouillage lors du retournement du pêne ?",
+    "question": "Sur la gamme Eneo CC, quand je retourne le pêne, à quoi dois-je faire attention avec la goupille de verrouillage ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -38,7 +38,7 @@
   {
     "id": "TC004",
     "type": "mono",
-    "question": "En cas d'installation dans le mur, où le relais doit-il être impérativement monté pour éviter les manipulations extérieures ?",
+    "question": "Pour une installation murale d'un Eneo CC, où placer le relais pour qu'il ne soit pas accessible depuis l'extérieur ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -50,7 +50,7 @@
   {
     "id": "TC005",
     "type": "mono",
-    "question": "Comment réaliser le test de câblage automatique (autotest) après la pose de la serrure sans utiliser l'application ?",
+    "question": "Après la pose d'un contrôle d'accès 4en1 ROTO Eneo CC, comment vérifier le câblage sans passer par l'application ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -62,7 +62,7 @@
   {
     "id": "TC006",
     "type": "mono",
-    "question": "Au niveau du plan de câblage, why le fil jaune (Input 2) doit-il impérativement rester non attribué ?",
+    "question": "Sur le plan de câblage d'un Eneo CC, pourquoi le fil jaune (Input 2) doit-il rester non raccordé ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -74,7 +74,7 @@
   {
     "id": "TC007",
     "type": "mono",
-    "question": "Quelle est la charge maximale admissible pour les contacts des bornes 5 et 6 du câblage ?",
+    "question": "Sur le câblage d'une serrure ROTO Eneo CC, quelle charge maximale admissible sur les contacts des bornes 5 et 6 ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -86,7 +86,7 @@
   {
     "id": "TC008",
     "type": "mono",
-    "question": "Comment effectuer une réinitialisation physique (remise aux paramètres d'usine) sur la boîte noire intérieure ?",
+    "question": "Un client a oublié son code sur son Eneo CC : comment remettre la serrure aux paramètres d'usine ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -98,19 +98,19 @@
   {
     "id": "TC009",
     "type": "mono",
-    "question": "Quelles sont les capacités maximales de stockage de l'Eneo CC pour les empreintes, codes numériques et supports RFID ?",
+    "question": "Sur la gamme Eneo CC, combien de badges RFID eKeys peut-on enregistrer au maximum ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
         "pages": [7]
       }
     ],
-    "reponse_attendue": "Le système peut stocker un maximum de 100 empreintes, 150 codes numériques, et dispose d'une capacité illimitée pour les supports RFID eKeys[cite: 7]."
+    "reponse_attendue": "La capacité de stockage des supports RFID eKeys est illimitée[cite: 7]."
   },
   {
     "id": "TC010",
     "type": "mono",
-    "question": "Si le clavier de code ne répond plus après plusieurs erreurs, combien de temps le système reste-t-il bloqué ?",
+    "question": "Sur un clavier Eneo CC, après plusieurs codes erronés, combien de temps le système reste-t-il bloqué ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -122,7 +122,7 @@
   {
     "id": "TC011",
     "type": "mono",
-    "question": "Combien de télécommandes au maximum peut-on associer au récepteur radio de l'Eneo CC ?",
+    "question": "Sur un récepteur radio Eneo CC, combien de télécommandes peut-on associer au maximum ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -134,7 +134,7 @@
   {
     "id": "TC012",
     "type": "mono",
-    "question": "Quelle est la procédure d'association pour programmer une nouvelle télécommande sur la serrure ?",
+    "question": "Comment associer une nouvelle télécommande à une serrure ROTO Eneo CC ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -146,7 +146,7 @@
   {
     "id": "TC013",
     "type": "mono",
-    "question": "Que signifie un signal sonore de 3 bips émis par la serrure Eneo CC ?",
+    "question": "Une serrure ROTO Eneo CC émet 3 bips et la porte ne se verrouille pas complètement : quelle est la cause probable ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -158,7 +158,7 @@
   {
     "id": "TC014",
     "type": "mono",
-    "question": "À quelle fréquence minimale doit-on réaliser la maintenance et la vérification des ferrures de sécurité dans les bâtiments scolaires ou hôteliers ?",
+    "question": "Pour une ferrure ROTO Eneo CC installée dans un hôtel, à quelle fréquence minimale faut-il réaliser la maintenance ?",
     "pages_attendues": [
       {
         "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
@@ -166,5 +166,101 @@
       }
     ],
     "reponse_attendue": "Alors que la maintenance standard est d'au moins une fois par an, elle doit être réalisée tous les 6 mois au sein des bâtiments scolaires et hôteliers[cite: 7]."
+  },
+  {
+    "id": "TC015",
+    "type": "mono",
+    "question": "Quelle alimentation électrique prévoir pour un contrôle d'accès ROTO Eneo CC ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      }
+    ],
+    "reponse_attendue": "Le système nécessite une tension de fonctionnement de 12 V à 24 V DC, avec une consommation de 200 mA[cite: 7]."
+  },
+  {
+    "id": "TC016",
+    "type": "mono",
+    "question": "Un Eneo CC ne réagit plus du tout : par quoi commencer le diagnostic ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [9]
+      }
+    ],
+    "reponse_attendue": "Il faut d'abord vérifier que l'alimentation 220 volts arrive bien au transformateur, puis contrôler que le transformateur délivre bien 24 volts, ensuite vérifier les câbles de connexion et leur polarité, et enfin s'assurer que l'unité motrice n'est pas en position finale[cite: 7]."
+  },
+  {
+    "id": "TC017",
+    "type": "mono",
+    "question": "Une serrure ROTO Eneo CC ne se verrouille plus automatiquement : quelles causes vérifier en priorité ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [9]
+      }
+    ],
+    "reponse_attendue": "Les causes possibles sont : la porte n'est pas complètement fermée, le système est en mode de fonctionnement de jour, ou l'aimant en feuillure est mal aligné[cite: 7]."
+  },
+  {
+    "id": "TC018",
+    "type": "mono",
+    "question": "Quelle est la plage de température de fonctionnement d'un contrôle d'accès ROTO Eneo CC ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      }
+    ],
+    "reponse_attendue": "La plage de température de fonctionnement est de -20 à +60 °C[cite: 7]."
+  },
+  {
+    "id": "TC019",
+    "type": "mono",
+    "question": "Sur la gamme Eneo CC, un utilisateur peut-il ouvrir la porte avec son smartphone ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [4]
+      }
+    ],
+    "reponse_attendue": "Oui, le système de contrôle d'accès 4en1 permet l'ouverture via smartphone compatible Bluetooth[cite: 7]."
+  },
+  {
+    "id": "TC020",
+    "type": "mono",
+    "question": "Combien de codes PIN peut-on enregistrer sur un Eneo CC ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      }
+    ],
+    "reponse_attendue": "Le système peut stocker un maximum de 150 codes numériques[cite: 7]."
+  },
+  {
+    "id": "TC021",
+    "type": "mono",
+    "question": "Quel est l'indice de protection du boîtier extérieur d'un contrôle d'accès ROTO Eneo CC une fois posé ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      }
+    ],
+    "reponse_attendue": "L'indice de protection est IP66 une fois le boîtier collé, ce qui le rend imperméable à l'eau[cite: 7]."
+  },
+  {
+    "id": "TC022",
+    "type": "mono",
+    "question": "Sur un Eneo CC, combien d'empreintes digitales peut-on enregistrer au maximum ?",
+    "pages_attendues": [
+      {
+        "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+        "pages": [7]
+      }
+    ],
+    "reponse_attendue": "Le système peut stocker un maximum de 100 empreintes digitales[cite: 7]."
   }
 ]

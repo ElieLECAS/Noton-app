@@ -205,6 +205,127 @@ def test_build_space_context_from_passages_includes_page_info():
     assert "Guide de Montage, pages 10-12" in content
 
 
+def test_is_vision_model():
+    from app.services.rag_generation_service import is_vision_model
+
+    assert is_vision_model("mistral-large-latest") is True
+    assert is_vision_model("pixtral-12b-2409") is True
+    assert is_vision_model("mistral-small-latest") is False
+
+
+def test_collect_unique_page_keys_respects_max():
+    from app.services.rag_generation_service import collect_unique_page_keys
+
+    passages = [
+        {"document_id": 1, "page_no": 4},
+        {"document_id": 1, "page_no": 4},
+        {"document_id": 1, "page_no": 2},
+        {"document_id": 2, "page_start": 7},
+    ]
+    keys = collect_unique_page_keys(passages, max_pages=2)
+    assert keys == [(1, 4), (1, 2)]
+
+
+def test_enrich_colpali_passages_with_pymupdf():
+    from unittest.mock import MagicMock, patch
+    from app.services.rag_generation_service import enrich_colpali_passages_with_pymupdf
+
+    session = MagicMock()
+    doc = MagicMock()
+    doc.source_file_path = "/tmp/doc.pdf"
+    session.get.return_value = doc
+
+    passages = [
+        {
+            "passage": "**Doc**\n[ColPali Indexed Page 3]",
+            "passage_raw": "[ColPali Indexed Page 3]",
+            "document_title": "Doc",
+            "document_id": 10,
+            "page_no": 3,
+        }
+    ]
+
+    with patch("app.services.rag_generation_service.os.path.exists", return_value=True), \
+         patch(
+             "app.services.rag_generation_service.extract_page_text_from_pdf",
+             return_value="Charge max 24 V / 40 mA",
+         ):
+        enriched = enrich_colpali_passages_with_pymupdf(session, passages)
+
+    assert "24 V / 40 mA" in enriched[0]["passage_raw"]
+    assert "[Page 3]" in enriched[0]["passage"]
+
+
+@pytest.mark.asyncio
+async def test_build_rag_generation_messages_attaches_images_for_vision_model():
+    from unittest.mock import AsyncMock, MagicMock, patch
+    from app.services.rag_generation_service import build_rag_generation_messages
+
+    session = MagicMock()
+    passages = [
+        {
+            "passage": "[ColPali Indexed Page 1]",
+            "passage_raw": "[ColPali Indexed Page 1]",
+            "document_title": "Doc",
+            "document_id": 1,
+            "page_no": 1,
+            "score": 0.9,
+        }
+    ]
+
+    with patch(
+        "app.services.rag_generation_service.enrich_colpali_passages_with_pymupdf",
+        side_effect=lambda _s, p: p,
+    ), patch(
+        "app.routers.chat.build_space_context_from_passages",
+        return_value={"role": "system", "content": "PASSAGES"},
+    ), patch(
+        "app.services.rag_generation_service.render_page_images_for_passages_async",
+        new=AsyncMock(return_value=["base64img"]),
+    ):
+        messages = await build_rag_generation_messages(
+            session,
+            passages,
+            "Question test?",
+            model="mistral-large-latest",
+        )
+
+    assert messages[0]["role"] == "system"
+    assert messages[1]["role"] == "user"
+    assert messages[1]["content"] == "Question test?"
+    assert messages[1]["images"] == ["base64img"]
+
+
+@pytest.mark.asyncio
+async def test_build_rag_generation_messages_no_images_for_small_model():
+    from unittest.mock import AsyncMock, MagicMock, patch
+    from app.services.rag_generation_service import build_rag_generation_messages
+
+    session = MagicMock()
+    passages = [{"passage": "texte", "document_title": "Doc", "score": 0.5}]
+
+    render_mock = AsyncMock(return_value=["base64img"])
+    with patch(
+        "app.services.rag_generation_service.enrich_colpali_passages_with_pymupdf",
+        side_effect=lambda _s, p: p,
+    ), patch(
+        "app.routers.chat.build_space_context_from_passages",
+        return_value={"role": "system", "content": "PASSAGES"},
+    ), patch(
+        "app.services.rag_generation_service.render_page_images_for_passages_async",
+        new=render_mock,
+    ):
+        messages = await build_rag_generation_messages(
+            session,
+            passages,
+            "Question?",
+            model="mistral-small-latest",
+        )
+
+    render_mock.assert_not_called()
+    assert "images" not in messages[1]
+
+
 
 
 

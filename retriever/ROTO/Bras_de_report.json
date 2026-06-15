@@ -2,7 +2,7 @@
   {
     "id": "TC001",
     "type": "mono",
-    "question": "Où doit-on placer et visser le report de charge d'ouvrant par rapport au pivot d'angle ?",
+    "question": "Sur un oscillo-battant ROTO NX équipé d'un report de charge NT Designo II, où positionner la pièce ouvrant par rapport au pivot d'angle ?",
     "pages_attendues": [
       {
         "document_title": "Bras de report de charge ROTO NX.pdf",
@@ -14,7 +14,7 @@
   {
     "id": "TC002",
     "type": "mono",
-    "question": "Quelle vis du palier d'angle doit-on retirer lors de l'étape 2 du montage ?",
+    "question": "Avant de fixer la pièce dormant d'un report de charge ROTO NX, quelle vis retirer sur le palier d'angle ?",
     "pages_attendues": [
       {
         "document_title": "Bras de report de charge ROTO NX.pdf",
@@ -26,7 +26,7 @@
   {
     "id": "TC003",
     "type": "mono",
-    "question": "Sur quelle pièce doit-on mettre et visser la pièce dormant du report de charge ?",
+    "question": "Sur la gamme ROTO NX, sur quelle pièce visser la partie dormant du report de charge ?",
     "pages_attendues": [
       {
         "document_title": "Bras de report de charge ROTO NX.pdf",
@@ -38,7 +38,19 @@
   {
     "id": "TC004",
     "type": "mono",
-    "question": "Où faut-il insérer la tringle de soutien du vantail lors de la cinquième étape de l'installation ?",
+    "question": "Une fois le report de charge ROTO NX fixé côté palier, comment repositionner le vantail ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ],
+    "reponse_attendue": "Il faut mettre le vantail sur le palier d'angle."
+  },
+  {
+    "id": "TC005",
+    "type": "mono",
+    "question": "Lors du montage d'un report de charge NT Designo II, où insérer la tringle de soutien du vantail ?",
     "pages_attendues": [
       {
         "document_title": "Bras de report de charge ROTO NX.pdf",
@@ -48,9 +60,9 @@
     "reponse_attendue": "Il faut mettre la tringle de soutien du vantail dans le dormant."
   },
   {
-    "id": "TC005",
+    "id": "TC006",
     "type": "mono",
-    "question": "Quel outil et de quelle dimension faut-il utiliser pour ajuster la tension du ressort du report de charge ?",
+    "question": "Pour régler la tension du ressort d'un report de charge ROTO NX, quelle clé utiliser ?",
     "pages_attendues": [
       {
         "document_title": "Bras de report de charge ROTO NX.pdf",
@@ -60,9 +72,9 @@
     "reponse_attendue": "Il faut utiliser une clé alén (ou clé Allen) de 4 mm."
   },
   {
-    "id": "TC006",
+    "id": "TC007",
     "type": "mono",
-    "question": "Dans quelle position d'ouverture de la fenêtre (en degrés) doit-on effectuer le réglage de la tension du ressort ?",
+    "question": "À quelle ouverture du vantail effectuer le réglage de tension d'un report de charge NT Designo II ?",
     "pages_attendues": [
       {
         "document_title": "Bras de report de charge ROTO NX.pdf",
@@ -72,9 +84,9 @@
     "reponse_attendue": "Le réglage doit s'effectuer en position d'ouverture à 90°."
   },
   {
-    "id": "TC007",
+    "id": "TC008",
     "type": "mono",
-    "question": "Visuellement, à quoi reconnaît-on que le réglage de la tension est correct d'après les repères de couleur ?",
+    "question": "Sur un report de charge ROTO NX, comment savoir visuellement que la tension du ressort est correcte ?",
     "pages_attendues": [
       {
         "document_title": "Bras de report de charge ROTO NX.pdf",
@@ -82,5 +94,17 @@
       }
     ],
     "reponse_attendue": "Le réglage est correct lorsque le total des 2 arcs du cercle rouge et argent forment un cercle plein."
+  },
+  {
+    "id": "TC009",
+    "type": "mono",
+    "question": "Sur un report de charge NT Designo II, les demi-cercles rouge et argent ne se rejoignent pas : le réglage est-il bon ?",
+    "pages_attendues": [
+      {
+        "document_title": "Bras de report de charge ROTO NX.pdf",
+        "pages": [1]
+      }
+    ],
+    "reponse_attendue": "Non, le réglage est incorrect : les deux arcs rouge et argent doivent former un cercle plein."
   }
 ]

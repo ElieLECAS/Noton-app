@@ -148,18 +148,30 @@ async def evaluate_retriever_dataset(
         
         passages = search_res.get("passages", [])
         
-        # Extraire les couples (titre, page_no)
+        # Extraire les couples (titre, page_no) et les détails ordonnés
         retrieved_pages = []
-        for p in passages:
+        retrieved_details = []
+        for idx, p in enumerate(passages):
             doc_title = p.get("document_title", "")
             page_no = p.get("page_no")
             # Fallback page_no
             if page_no is None:
                 page_no = p.get("page_start", 1)
             try:
-                retrieved_pages.append((doc_title, int(page_no)))
+                page_no_int = int(page_no)
             except (ValueError, TypeError):
-                retrieved_pages.append((doc_title, 1))
+                page_no_int = 1
+            retrieved_pages.append((doc_title, page_no_int))
+            
+            score = p.get("score", 0.0)
+            is_hit = match_page(doc_title, page_no_int, expected_pages)
+            retrieved_details.append({
+                "rank": idx + 1,
+                "document_title": doc_title,
+                "page": page_no_int,
+                "score": round(score, 4),
+                "is_hit": is_hit
+            })
                 
         # Calculer les métriques
         precision = compute_context_precision(retrieved_pages, expected_pages)
@@ -176,14 +188,18 @@ async def evaluate_retriever_dataset(
         noise_details = []
         
         # 1. Identifier les Hits et le Bruit (Noise) parmi les pages récupérées
-        for doc_title, page_no in retrieved_pages:
-            is_hit = match_page(doc_title, page_no, expected_pages)
-            page_info = {"document_title": doc_title, "page": page_no}
-            if is_hit:
-                if page_info not in hits_details:
+        for rd in retrieved_details:
+            page_info = {
+                "document_title": rd["document_title"],
+                "page": rd["page"],
+                "rank": rd["rank"],
+                "score": rd["score"]
+            }
+            if rd["is_hit"]:
+                if not any(h["document_title"] == rd["document_title"] and h["page"] == rd["page"] for h in hits_details):
                     hits_details.append(page_info)
             else:
-                if page_info not in noise_details:
+                if not any(n["document_title"] == rd["document_title"] and n["page"] == rd["page"] for n in noise_details):
                     noise_details.append(page_info)
                     
         # 2. Identifier les Manqués (Misses) parmi les pages attendues
@@ -218,6 +234,7 @@ async def evaluate_retriever_dataset(
             "type": q_type,
             "expected_pages": expected_pages,
             "retrieved_pages": [{"document_title": t, "page": p} for t, p in retrieved_pages],
+            "retrieved_details": retrieved_details,
             "metrics": {
                 "context_precision": round(precision, 4),
                 "context_recall": round(recall, 4),
@@ -272,22 +289,21 @@ async def generate_rag_response(
     Génère la réponse de l'assistant à partir des passages RAG en mimant le chatbot.
     """
     from app.config import settings
+    from app.services.rag_generation_service import build_rag_generation_messages
     
     if not passages:
         return "Je ne trouve pas de réponse à votre question dans les documents disponibles dans cet espace car aucune source n'est jugée suffisamment pertinente (seuil minimum de 75%)."
-        
+
     try:
-        from app.routers.chat import build_space_context_from_passages
+        messages = await build_rag_generation_messages(
+            session,
+            passages,
+            question,
+            model=settings.MODEL_FAST,
+        )
     except ImportError:
-        logger.error("Impossible d'importer build_space_context_from_passages depuis app.routers.chat")
+        logger.error("Impossible d'importer le formateur de contexte RAG")
         return "Erreur d'importation du formateur de contexte."
-        
-    space_context = build_space_context_from_passages(passages)
-    
-    messages = [
-        space_context,
-        {"role": "user", "content": question}
-    ]
     
     try:
         if settings.LLM_PROVIDER == "ollama":

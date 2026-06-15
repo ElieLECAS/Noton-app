@@ -2121,7 +2121,7 @@ function renderEvalResults(data, showGeneration = false) {
                         </div>
                         <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
                             ${q.analysis.hits.length > 0 
-                                ? q.analysis.hits.map(h => `<div class="truncate text-gray-600 dark:text-gray-300">• ${escapeHtml(h.document_title)} (Page ${h.page})</div>`).join('') 
+                                ? q.analysis.hits.map(h => `<div class="truncate text-gray-600 dark:text-gray-300" title="${escapeHtml(h.document_title)} (Page ${h.page})">• ${escapeHtml(h.document_title)} (Page ${h.page}) <span class="text-[9px] font-mono bg-green-500/10 text-green-600 dark:text-green-400 px-1 py-0.5 rounded ml-1 font-bold">#${h.rank} (${h.score.toFixed(4)})</span></div>`).join('') 
                                 : '<div class="text-gray-400 dark:text-gray-500 italic">Aucune page attendue trouvée</div>'}
                         </div>
                     </div>
@@ -2147,8 +2147,54 @@ function renderEvalResults(data, showGeneration = false) {
                         </div>
                         <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
                             ${q.analysis.noise.length > 0 
-                                ? q.analysis.noise.map(n => `<div class="truncate text-gray-500 dark:text-gray-400">• ${escapeHtml(n.document_title)} (Page ${n.page})</div>`).join('') 
+                                ? q.analysis.noise.map(n => `<div class="truncate text-gray-500 dark:text-gray-400" title="${escapeHtml(n.document_title)} (Page ${n.page})">• ${escapeHtml(n.document_title)} (Page ${n.page}) <span class="text-[9px] font-mono bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1 py-0.5 rounded ml-1 font-bold">#${n.rank} (${n.score.toFixed(4)})</span></div>`).join('') 
                                 : '<div class="text-gray-400 dark:text-gray-500 italic">Aucun bruit</div>'}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Retriever Results (Rank & Score Table) -->
+                <div class="mt-2 rounded-2xl bg-white/40 dark:bg-black/20 border border-black/5 dark:border-white/5 overflow-hidden">
+                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
+                            Détails du Retriever (Classement & Scores ColPali)
+                        </span>
+                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="hidden p-3 border-t border-black/5 dark:border-white/5 space-y-2 bg-black/[0.01] dark:bg-white/[0.01]">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="border-b border-black/10 dark:border-white/10 text-gray-500 uppercase text-[9px] tracking-wider font-semibold">
+                                        <th class="py-1.5 px-2 font-bold w-12 text-center">Rang</th>
+                                        <th class="py-1.5 px-2">Document</th>
+                                        <th class="py-1.5 px-2 w-16 text-center">Page</th>
+                                        <th class="py-1.5 px-2 w-24 text-right">Score ColPali</th>
+                                        <th class="py-1.5 px-2 w-24 text-center">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${q.retrieved_details && q.retrieved_details.length > 0 ? q.retrieved_details.map(rd => {
+                                        const statusBadge = rd.is_hit 
+                                            ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-500/10 text-green-700 dark:text-green-400">Pertinent</span>'
+                                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-gray-500/10 text-gray-500 dark:text-gray-400 font-medium">Bruit</span>';
+                                        return `
+                                            <tr class="border-b border-black/5 dark:border-white/5 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]">
+                                                <td class="py-1.5 px-2 font-mono font-bold text-center text-gray-500">#${rd.rank}</td>
+                                                <td class="py-1.5 px-2 truncate max-w-[200px] md:max-w-xs text-gray-700 dark:text-gray-300" title="${escapeHtml(rd.document_title)}">${escapeHtml(rd.document_title)}</td>
+                                                <td class="py-1.5 px-2 font-semibold text-center text-gray-700 dark:text-gray-300">${rd.page}</td>
+                                                <td class="py-1.5 px-2 font-mono text-right font-semibold text-indigo-600 dark:text-indigo-400">${rd.score.toFixed(4)}</td>
+                                                <td class="py-1.5 px-2 text-center">${statusBadge}</td>
+                                            </tr>
+                                        `;
+                                    }).join('') : `
+                                        <tr>
+                                            <td colspan="5" class="py-4 text-center text-gray-400 dark:text-gray-500 italic">Aucune page récupérée</td>
+                                        </tr>
+                                    `}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
