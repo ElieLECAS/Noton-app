@@ -1,10 +1,11 @@
 import logging
 import time
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 from sqlmodel import Session
 from app.services.space_search_service import search_relevant_passages
 
 logger = logging.getLogger(__name__)
+
 
 def match_page(retrieved_doc_title: str, retrieved_page_no: int, expected_pages: List[Dict[str, Any]]) -> bool:
     """
@@ -13,18 +14,16 @@ def match_page(retrieved_doc_title: str, retrieved_page_no: int, expected_pages:
     """
     if not retrieved_doc_title:
         return False
-    
+
     ret_title_lower = retrieved_doc_title.lower()
-    
+
     for exp in expected_pages:
         exp_title = exp.get("document_title")
         if not exp_title:
             continue
-        
+
         exp_title_lower = exp_title.lower()
-        # Vérifier si l'un est sous-chaîne de l'autre
         if exp_title_lower in ret_title_lower or ret_title_lower in exp_title_lower:
-            # Récupérer les pages attendues (converties en int pour la comparaison)
             exp_pages = exp.get("pages", [])
             parsed_pages = []
             for p in exp_pages:
@@ -32,11 +31,12 @@ def match_page(retrieved_doc_title: str, retrieved_page_no: int, expected_pages:
                     parsed_pages.append(int(p))
                 except (ValueError, TypeError):
                     pass
-            
+
             if retrieved_page_no in parsed_pages:
                 return True
-                
+
     return False
+
 
 def compute_context_precision(retrieved_pages: List[Tuple[str, int]], expected_pages: List[Dict[str, Any]]) -> float:
     """
@@ -44,16 +44,16 @@ def compute_context_precision(retrieved_pages: List[Tuple[str, int]], expected_p
     """
     hits = []
     num_expected_retrieved = 0
-    
+
     for idx, (doc_title, page_no) in enumerate(retrieved_pages):
         is_relevant = match_page(doc_title, page_no, expected_pages)
         hits.append(1 if is_relevant else 0)
         if is_relevant:
             num_expected_retrieved += 1
-            
+
     if num_expected_retrieved == 0:
         return 0.0
-        
+
     precision_sum = 0.0
     relevant_so_far = 0
     for idx, hit in enumerate(hits):
@@ -61,8 +61,9 @@ def compute_context_precision(retrieved_pages: List[Tuple[str, int]], expected_p
             relevant_so_far += 1
             precision_at_i = relevant_so_far / (idx + 1)
             precision_sum += precision_at_i
-            
+
     return precision_sum / num_expected_retrieved
+
 
 def compute_context_recall(retrieved_pages: List[Tuple[str, int]], expected_pages: List[Dict[str, Any]]) -> float:
     """
@@ -71,12 +72,11 @@ def compute_context_recall(retrieved_pages: List[Tuple[str, int]], expected_page
     total_expected = 0
     for exp in expected_pages:
         total_expected += len(exp.get("pages", []))
-        
+
     if total_expected == 0:
         return 1.0
-        
+
     retrieved_expected_count = 0
-    # Parcourir chaque page attendue unique et vérifier si elle a été récupérée
     for exp in expected_pages:
         exp_title = exp.get("document_title", "")
         for p in exp.get("pages", []):
@@ -84,8 +84,7 @@ def compute_context_recall(retrieved_pages: List[Tuple[str, int]], expected_page
                 target_p = int(p)
             except (ValueError, TypeError):
                 continue
-            
-            # Vérifier si ce couple (titre, page) est dans les résultats récupérés
+
             found = False
             for doc_title, page_no in retrieved_pages:
                 if not doc_title:
@@ -96,8 +95,9 @@ def compute_context_recall(retrieved_pages: List[Tuple[str, int]], expected_page
                         break
             if found:
                 retrieved_expected_count += 1
-                
+
     return retrieved_expected_count / total_expected
+
 
 def compute_mrr(retrieved_pages: List[Tuple[str, int]], expected_pages: List[Dict[str, Any]]) -> float:
     """
@@ -107,6 +107,195 @@ def compute_mrr(retrieved_pages: List[Tuple[str, int]], expected_pages: List[Dic
         if match_page(doc_title, page_no, expected_pages):
             return 1.0 / (idx + 1)
     return 0.0
+
+
+def _passages_to_retrieved_pages(passages: List[Dict[str, Any]]) -> Tuple[List[Tuple[str, int]], List[Dict[str, Any]]]:
+    """Extrait couples (titre, page) et détails ordonnés depuis une liste de passages."""
+    retrieved_pages: List[Tuple[str, int]] = []
+    retrieved_details: List[Dict[str, Any]] = []
+    for idx, p in enumerate(passages):
+        doc_title = p.get("document_title", "")
+        page_no = p.get("page_no")
+        if page_no is None:
+            page_no = p.get("page_start", 1)
+        try:
+            page_no_int = int(page_no)
+        except (ValueError, TypeError):
+            page_no_int = 1
+        retrieved_pages.append((doc_title, page_no_int))
+        detail: Dict[str, Any] = {
+            "rank": idx + 1,
+            "document_title": doc_title,
+            "page": page_no_int,
+            "score": round(float(p.get("score", 0.0)), 4),
+        }
+        if p.get("rerank_score") is not None:
+            detail["rerank_score"] = round(float(p["rerank_score"]), 4)
+        retrieved_details.append(detail)
+    return retrieved_pages, retrieved_details
+
+
+def _build_analysis(
+    retrieved_details: List[Dict[str, Any]],
+    expected_pages: List[Dict[str, Any]],
+) -> Dict[str, List[Dict[str, Any]]]:
+    """Construit hits / misses / noise à partir des détails récupérés."""
+    hits_details: List[Dict[str, Any]] = []
+    noise_details: List[Dict[str, Any]] = []
+
+    for rd in retrieved_details:
+        is_hit = match_page(rd["document_title"], rd["page"], expected_pages)
+        page_info = {
+            "document_title": rd["document_title"],
+            "page": rd["page"],
+            "rank": rd["rank"],
+            "score": rd["score"],
+        }
+        if rd.get("rerank_score") is not None:
+            page_info["rerank_score"] = rd["rerank_score"]
+        if is_hit:
+            if not any(
+                h["document_title"] == rd["document_title"] and h["page"] == rd["page"]
+                for h in hits_details
+            ):
+                hits_details.append(page_info)
+        else:
+            if not any(
+                n["document_title"] == rd["document_title"] and n["page"] == rd["page"]
+                for n in noise_details
+            ):
+                noise_details.append(page_info)
+
+    misses_details: List[Dict[str, Any]] = []
+    for exp in expected_pages:
+        exp_title = exp.get("document_title", "")
+        for p in exp.get("pages", []):
+            try:
+                target_p = int(p)
+            except (ValueError, TypeError):
+                continue
+            found = False
+            for hit in hits_details:
+                if exp_title.lower() in hit["document_title"].lower() or hit["document_title"].lower() in exp_title.lower():
+                    if hit["page"] == target_p:
+                        found = True
+                        break
+            if not found:
+                misses_details.append({"document_title": exp_title, "page": target_p})
+
+    return {"hits": hits_details, "misses": misses_details, "noise": noise_details}
+
+
+def compute_stage_metrics(
+    passages: List[Dict[str, Any]],
+    expected_pages: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Calcule métriques + analysis pour une étape de retrieval."""
+    retrieved_pages, retrieved_details = _passages_to_retrieved_pages(passages)
+    for rd in retrieved_details:
+        rd["is_hit"] = match_page(rd["document_title"], rd["page"], expected_pages)
+
+    precision = compute_context_precision(retrieved_pages, expected_pages)
+    recall = compute_context_recall(retrieved_pages, expected_pages)
+    mrr = compute_mrr(retrieved_pages, expected_pages)
+    analysis = _build_analysis(retrieved_details, expected_pages)
+
+    return {
+        "retrieved_pages": [{"document_title": t, "page": p} for t, p in retrieved_pages],
+        "retrieved_details": retrieved_details,
+        "metrics": {
+            "context_precision": round(precision, 4),
+            "context_recall": round(recall, 4),
+            "mrr": round(mrr, 4),
+        },
+        "analysis": analysis,
+    }
+
+
+def build_question_eval_result(
+    question: str,
+    q_type: str,
+    expected_pages: List[Dict[str, Any]],
+    passages: List[Dict[str, Any]],
+    colpali_passages: Optional[List[Dict[str, Any]]] = None,
+    vision_rerank_enabled: Optional[bool] = None,
+) -> Dict[str, Any]:
+    """
+    Construit le résultat d'évaluation pour une question (post-rerank + optionnel ColPali).
+    """
+    post = compute_stage_metrics(passages, expected_pages)
+    result: Dict[str, Any] = {
+        "question": question,
+        "type": q_type,
+        "expected_pages": expected_pages,
+        "retrieved_pages": post["retrieved_pages"],
+        "retrieved_details": post["retrieved_details"],
+        "metrics": post["metrics"],
+        "analysis": post["analysis"],
+    }
+
+    if colpali_passages is not None:
+        colpali = compute_stage_metrics(colpali_passages, expected_pages)
+        post_metrics = post["metrics"]
+        colpali_metrics = colpali["metrics"]
+        result["metrics_colpali"] = colpali_metrics
+        result["analysis_colpali"] = colpali["analysis"]
+        result["retrieved_pages_colpali"] = colpali["retrieved_pages"]
+        result["retrieved_details_colpali"] = colpali["retrieved_details"]
+        result["rerank_delta"] = {
+            "precision": round(post_metrics["context_precision"] - colpali_metrics["context_precision"], 4),
+            "recall": round(post_metrics["context_recall"] - colpali_metrics["context_recall"], 4),
+            "mrr": round(post_metrics["mrr"] - colpali_metrics["mrr"], 4),
+        }
+        if vision_rerank_enabled is not None:
+            result["vision_rerank_enabled"] = vision_rerank_enabled
+
+    return result
+
+
+def _aggregate_global_metrics(details: List[Dict[str, Any]], prefix: str = "") -> Dict[str, float]:
+    """Agrège precision/recall/mrr sur une liste de résultats par question."""
+    metrics_key = "metrics" if not prefix else f"metrics_{prefix.rstrip('_')}"
+    if prefix == "colpali":
+        metrics_key = "metrics_colpali"
+
+    n = len(details)
+    if n == 0:
+        return {"context_precision": 0.0, "context_recall": 0.0, "mrr": 0.0}
+
+    total_p = sum(d[metrics_key]["context_precision"] for d in details)
+    total_r = sum(d[metrics_key]["context_recall"] for d in details)
+    total_m = sum(d[metrics_key]["mrr"] for d in details)
+    return {
+        "context_precision": round(total_p / n, 4),
+        "context_recall": round(total_r / n, 4),
+        "mrr": round(total_m / n, 4),
+    }
+
+
+def _aggregate_type_stats(details: List[Dict[str, Any]], metrics_key: str = "metrics") -> Dict[str, Any]:
+    type_stats: Dict[str, Dict[str, float]] = {}
+    for d in details:
+        q_type = d.get("type", "mono-document")
+        if q_type not in type_stats:
+            type_stats[q_type] = {"precision": 0.0, "recall": 0.0, "mrr": 0.0, "count": 0}
+        m = d[metrics_key]
+        type_stats[q_type]["precision"] += m["context_precision"]
+        type_stats[q_type]["recall"] += m["context_recall"]
+        type_stats[q_type]["mrr"] += m["mrr"]
+        type_stats[q_type]["count"] += 1
+
+    formatted: Dict[str, Any] = {}
+    for t, stats in type_stats.items():
+        count = stats["count"]
+        formatted[t] = {
+            "count": count,
+            "context_precision": round(stats["precision"] / count, 4) if count > 0 else 0.0,
+            "context_recall": round(stats["recall"] / count, 4) if count > 0 else 0.0,
+            "mrr": round(stats["mrr"] / count, 4) if count > 0 else 0.0,
+        }
+    return formatted
+
 
 async def evaluate_retriever_dataset(
     session: Session,
@@ -120,161 +309,71 @@ async def evaluate_retriever_dataset(
     """
     start_time = time.time()
     results = []
-    
-    total_precision = 0.0
-    total_recall = 0.0
-    total_mrr = 0.0
-    
-    # Séparer les scores par type de question (mono vs cross) si défini
-    type_stats = {}
-    
+
     for item in dataset:
         question = item.get("question", "").strip()
         q_type = item.get("type", "mono-document").strip()
         expected_pages = item.get("pages_attendues", [])
-        
+
         if not question:
             continue
-            
-        # Exécuter la recherche dans l'espace
+
         search_res = await search_relevant_passages(
             session=session,
             space_id=space_id,
             query_text=question,
             user_id=user_id,
             k=k,
-            document_filter="all"
+            document_filter="all",
+            include_retrieval_stages=True,
         )
-        
+
         passages = search_res.get("passages", [])
-        
-        # Extraire les couples (titre, page_no) et les détails ordonnés
-        retrieved_pages = []
-        retrieved_details = []
-        for idx, p in enumerate(passages):
-            doc_title = p.get("document_title", "")
-            page_no = p.get("page_no")
-            # Fallback page_no
-            if page_no is None:
-                page_no = p.get("page_start", 1)
-            try:
-                page_no_int = int(page_no)
-            except (ValueError, TypeError):
-                page_no_int = 1
-            retrieved_pages.append((doc_title, page_no_int))
-            
-            score = p.get("score", 0.0)
-            is_hit = match_page(doc_title, page_no_int, expected_pages)
-            retrieved_details.append({
-                "rank": idx + 1,
-                "document_title": doc_title,
-                "page": page_no_int,
-                "score": round(score, 4),
-                "is_hit": is_hit
-            })
-                
-        # Calculer les métriques
-        precision = compute_context_precision(retrieved_pages, expected_pages)
-        recall = compute_context_recall(retrieved_pages, expected_pages)
-        mrr = compute_mrr(retrieved_pages, expected_pages)
-        
-        total_precision += precision
-        total_recall += recall
-        total_mrr += mrr
-        
-        # Classifier les pages récupérées pour l'affichage visuel
-        hits_details = []
-        misses_details = []
-        noise_details = []
-        
-        # 1. Identifier les Hits et le Bruit (Noise) parmi les pages récupérées
-        for rd in retrieved_details:
-            page_info = {
-                "document_title": rd["document_title"],
-                "page": rd["page"],
-                "rank": rd["rank"],
-                "score": rd["score"]
-            }
-            if rd["is_hit"]:
-                if not any(h["document_title"] == rd["document_title"] and h["page"] == rd["page"] for h in hits_details):
-                    hits_details.append(page_info)
-            else:
-                if not any(n["document_title"] == rd["document_title"] and n["page"] == rd["page"] for n in noise_details):
-                    noise_details.append(page_info)
-                    
-        # 2. Identifier les Manqués (Misses) parmi les pages attendues
-        for exp in expected_pages:
-            exp_title = exp.get("document_title", "")
-            for p in exp.get("pages", []):
-                try:
-                    target_p = int(p)
-                except (ValueError, TypeError):
-                    continue
-                
-                # Vérifier si cette page attendue a été trouvée
-                found = False
-                for hit in hits_details:
-                    if exp_title.lower() in hit["document_title"].lower() or hit["document_title"].lower() in exp_title.lower():
-                        if hit["page"] == target_p:
-                            found = True
-                            break
-                if not found:
-                    misses_details.append({"document_title": exp_title, "page": target_p})
-        
-        # Enregistrer les statistiques par type
-        if q_type not in type_stats:
-            type_stats[q_type] = {"precision": 0.0, "recall": 0.0, "mrr": 0.0, "count": 0}
-        type_stats[q_type]["precision"] += precision
-        type_stats[q_type]["recall"] += recall
-        type_stats[q_type]["mrr"] += mrr
-        type_stats[q_type]["count"] += 1
-        
-        results.append({
-            "question": question,
-            "type": q_type,
-            "expected_pages": expected_pages,
-            "retrieved_pages": [{"document_title": t, "page": p} for t, p in retrieved_pages],
-            "retrieved_details": retrieved_details,
-            "metrics": {
-                "context_precision": round(precision, 4),
-                "context_recall": round(recall, 4),
-                "mrr": round(mrr, 4)
-            },
-            "analysis": {
-                "hits": hits_details,
-                "misses": misses_details,
-                "noise": noise_details
-            }
-        })
-        
+        stages = search_res.get("retrieval_stages") or {}
+        colpali_passages = stages.get("colpali", passages)
+
+        results.append(
+            build_question_eval_result(
+                question=question,
+                q_type=q_type,
+                expected_pages=expected_pages,
+                passages=passages,
+                colpali_passages=colpali_passages,
+                vision_rerank_enabled=stages.get("vision_rerank_enabled"),
+            )
+        )
+
     num_queries = len(results)
-    global_precision = total_precision / num_queries if num_queries > 0 else 0.0
-    global_recall = total_recall / num_queries if num_queries > 0 else 0.0
-    global_mrr = total_mrr / num_queries if num_queries > 0 else 0.0
-    
-    # Formater les stats par type
-    formatted_type_stats = {}
-    for t, stats in type_stats.items():
-        count = stats["count"]
-        formatted_type_stats[t] = {
-            "count": count,
-            "context_precision": round(stats["precision"] / count, 4) if count > 0 else 0.0,
-            "context_recall": round(stats["recall"] / count, 4) if count > 0 else 0.0,
-            "mrr": round(stats["mrr"] / count, 4) if count > 0 else 0.0
+    global_metrics = _aggregate_global_metrics(results)
+    global_metrics["total_questions"] = num_queries
+    global_metrics["execution_time_seconds"] = round(time.time() - start_time, 2)
+
+    global_metrics_colpali = _aggregate_global_metrics(results, prefix="colpali")
+
+    rerank_impact = {"precision_delta": 0.0, "recall_delta": 0.0, "mrr_delta": 0.0}
+    if num_queries > 0 and results[0].get("rerank_delta"):
+        rerank_impact = {
+            "precision_delta": round(
+                sum(r["rerank_delta"]["precision"] for r in results) / num_queries, 4
+            ),
+            "recall_delta": round(
+                sum(r["rerank_delta"]["recall"] for r in results) / num_queries, 4
+            ),
+            "mrr_delta": round(
+                sum(r["rerank_delta"]["mrr"] for r in results) / num_queries, 4
+            ),
         }
-        
-    elapsed = time.time() - start_time
-    
+
+    vision_rerank_enabled = any(r.get("vision_rerank_enabled") for r in results)
+
     return {
-        "global_metrics": {
-            "context_precision": round(global_precision, 4),
-            "context_recall": round(global_recall, 4),
-            "mrr": round(global_mrr, 4),
-            "total_questions": num_queries,
-            "execution_time_seconds": round(elapsed, 2)
-        },
-        "type_stats": formatted_type_stats,
-        "details": results
+        "global_metrics": global_metrics,
+        "global_metrics_colpali": global_metrics_colpali,
+        "rerank_impact": rerank_impact,
+        "vision_rerank_enabled": vision_rerank_enabled,
+        "type_stats": _aggregate_type_stats(results),
+        "type_stats_colpali": _aggregate_type_stats(results, metrics_key="metrics_colpali"),
+        "details": results,
     }
 
 
@@ -290,7 +389,7 @@ async def generate_rag_response(
     """
     from app.config import settings
     from app.services.rag_generation_service import build_rag_generation_messages
-    
+
     if not passages:
         return "Je ne trouve pas de réponse à votre question dans les documents disponibles dans cet espace car aucune source n'est jugée suffisamment pertinente (seuil minimum de 75%)."
 
@@ -304,7 +403,7 @@ async def generate_rag_response(
     except ImportError:
         logger.error("Impossible d'importer le formateur de contexte RAG")
         return "Erreur d'importation du formateur de contexte."
-    
+
     try:
         if settings.LLM_PROVIDER == "ollama":
             from app.services.ollama_service import chat as ollama_chat
@@ -381,19 +480,18 @@ Réponse générée : {generated_response}"""
             )
         else:
             raise ValueError("Aucun fournisseur de LLM configuré.")
-            
+
         content = response["choices"][0]["message"]["content"]
         eval_result = json.loads(content)
-        
+
         score = eval_result.get("score")
         justification = eval_result.get("justification", "")
         if isinstance(score, (int, float)):
             score = int(score)
         else:
             score = 3
-            
+
         return {"score": score, "justification": justification}
     except Exception as e:
         logger.error("Error during LLM evaluation judge: %s", e)
         return {"score": 1, "justification": f"Erreur d'évaluation par le juge : {str(e)}"}
-

@@ -535,12 +535,14 @@ async def search_relevant_passages(
     user_id: int,
     k: int = 15,
     document_filter: str = "all",
+    include_retrieval_stages: bool = False,
 ) -> Dict:
     """
     RAG espace : recherche ColPali-only via LanceDB.
     
     Args:
         document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
+        include_retrieval_stages: si True, inclut retrieval_stages (colpali pré-rerank + post-rerank)
     
     Returns:
         Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
@@ -569,7 +571,15 @@ async def search_relevant_passages(
             vr.end(outputs={"nb": len(final_nodes)})
 
         if not final_nodes:
-            return {"passages": [], "status": "ok", "reason": "no_results"}
+            result: Dict = {"passages": [], "status": "ok", "reason": "no_results"}
+            if include_retrieval_stages:
+                result["retrieval_stages"] = {
+                    "colpali": [],
+                    "post_rerank": [],
+                    "vision_rerank_enabled": settings.VISION_RERANK_ENABLED,
+                    "reason": "no_results",
+                }
+            return result
 
         # Seuil dynamique (absolu + marge relative)
         original_count = len(final_nodes)
@@ -591,7 +601,17 @@ async def search_relevant_passages(
         )
 
         if not final_nodes:
-            return {"passages": [], "status": "ok", "reason": "no_results"}
+            result: Dict = {"passages": [], "status": "ok", "reason": "no_results"}
+            if include_retrieval_stages:
+                result["retrieval_stages"] = {
+                    "colpali": [],
+                    "post_rerank": [],
+                    "vision_rerank_enabled": settings.VISION_RERANK_ENABLED,
+                    "reason": "no_results",
+                }
+            return result
+
+        colpali_nodes = list(final_nodes)
 
         # Reranker vision LLM : juge la pertinence page-par-page (PNG) et filtre le bruit.
         # Robuste : en cas d'echec, rerank_pages_vision renvoie les noeuds inchanges.
@@ -611,7 +631,16 @@ async def search_relevant_passages(
                 reason = "colpali_vision_rerank"
 
         passages = _augment_and_format_passages(session, final_nodes, k)
-        return {"passages": passages, "status": "ok", "reason": reason}
+        result = {"passages": passages, "status": "ok", "reason": reason}
+        if include_retrieval_stages:
+            colpali_passages = _augment_and_format_passages(session, colpali_nodes, k)
+            result["retrieval_stages"] = {
+                "colpali": colpali_passages,
+                "post_rerank": passages,
+                "vision_rerank_enabled": settings.VISION_RERANK_ENABLED,
+                "reason": reason,
+            }
+        return result
         
     except Exception as e:
         logger.error("search_relevant_passages (space): %s", e, exc_info=True)

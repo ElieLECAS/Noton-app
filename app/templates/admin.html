@@ -414,16 +414,19 @@
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
                         <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Precision</span>
                         <span id="metric-precision" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1">Après rerank LLM</span>
                         <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Mesure du bruit (les pages utiles remontent-elles en premier ?)</span>
                     </div>
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
                         <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Recall</span>
                         <span id="metric-recall" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1">Après rerank LLM</span>
                         <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Mesure de la couverture (toutes les pages attendues sont-elles trouvées ?)</span>
                     </div>
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
                         <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">MRR (Mean Reciprocal Rank)</span>
                         <span id="metric-mrr" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1">Après rerank LLM</span>
                         <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Ordonnancement (vitesse à laquelle la 1ère page pertinente arrive)</span>
                     </div>
                     <div id="eval-generation-card" class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 hidden">
@@ -451,6 +454,32 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Comparaison ColPali (avant rerank) vs post-rerank -->
+                <div id="eval-colpali-comparison" class="hidden space-y-4">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">ColPali avant rerank LLM</h3>
+                        <span id="eval-rerank-badge" class="hidden px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400"></span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-slate-500/10 to-gray-500/10">
+                            <span class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">Precision ColPali</span>
+                            <span id="metric-precision-colpali" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                            <span id="metric-precision-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
+                        </div>
+                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-slate-500/10 to-gray-500/10">
+                            <span class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">Recall ColPali</span>
+                            <span id="metric-recall-colpali" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                            <span id="metric-recall-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
+                        </div>
+                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-slate-500/10 to-gray-500/10">
+                            <span class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">MRR ColPali</span>
+                            <span id="metric-mrr-colpali" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                            <span id="metric-mrr-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Les cartes du haut mesurent le pipeline complet (ColPali + rerank vision Mistral). Les cartes ci-dessus mesurent ColPali seul (post-seuil dynamique, avant rerank).</p>
                 </div>
 
                 <!-- Stats by Type (Mono vs Cross) -->
@@ -1806,51 +1835,7 @@ async function runRetrieverEval() {
         }
         
         const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
-        
-        // Calculer les métriques globales et par type
-        let totalPrecision = 0;
-        let totalRecall = 0;
-        let totalMrr = 0;
-        const typeStats = {};
-        
-        details.forEach(q => {
-            totalPrecision += q.metrics.context_precision;
-            totalRecall += q.metrics.context_recall;
-            totalMrr += q.metrics.mrr;
-            
-            const qType = q.type || "mono-document";
-            if (!typeStats[qType]) {
-                typeStats[qType] = { precision: 0, recall: 0, mrr: 0, count: 0 };
-            }
-            typeStats[qType].precision += q.metrics.context_precision;
-            typeStats[qType].recall += q.metrics.context_recall;
-            typeStats[qType].mrr += q.metrics.mrr;
-            typeStats[qType].count += 1;
-        });
-        
-        const globalMetrics = {
-            context_precision: totalQuestions > 0 ? totalPrecision / totalQuestions : 0,
-            context_recall: totalQuestions > 0 ? totalRecall / totalQuestions : 0,
-            mrr: totalQuestions > 0 ? totalMrr / totalQuestions : 0,
-            total_questions: totalQuestions,
-            execution_time_seconds: parseFloat(elapsedTime)
-        };
-        
-        const formattedTypeStats = {};
-        Object.entries(typeStats).forEach(([type, stats]) => {
-            formattedTypeStats[type] = {
-                count: stats.count,
-                context_precision: stats.precision / stats.count,
-                context_recall: stats.recall / stats.count,
-                mrr: stats.mrr / stats.count
-            };
-        });
-        
-        const data = {
-            global_metrics: globalMetrics,
-            type_stats: formattedTypeStats,
-            details: details
-        };
+        const data = aggregateEvalGlobals(details, parseFloat(elapsedTime));
         
         lastEvalResults = data;
         renderEvalResults(data, false);
@@ -1926,59 +1911,17 @@ async function runRAGEval() {
         }
         
         const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
-        
-        // Calculer les métriques globales et par type
-        let totalPrecision = 0;
-        let totalRecall = 0;
-        let totalMrr = 0;
         let totalJudgeScore = 0;
         let ratedQuestions = 0;
-        const typeStats = {};
-        
         details.forEach(q => {
-            totalPrecision += q.metrics.context_precision;
-            totalRecall += q.metrics.context_recall;
-            totalMrr += q.metrics.mrr;
-            
             if (q.judge_evaluation && q.judge_evaluation.score !== undefined && q.judge_evaluation.score !== null) {
                 totalJudgeScore += q.judge_evaluation.score;
                 ratedQuestions++;
             }
-            
-            const qType = q.type || "mono-document";
-            if (!typeStats[qType]) {
-                typeStats[qType] = { precision: 0, recall: 0, mrr: 0, count: 0 };
-            }
-            typeStats[qType].precision += q.metrics.context_precision;
-            typeStats[qType].recall += q.metrics.context_recall;
-            typeStats[qType].mrr += q.metrics.mrr;
-            typeStats[qType].count += 1;
         });
-        
-        const globalMetrics = {
-            context_precision: totalQuestions > 0 ? totalPrecision / totalQuestions : 0,
-            context_recall: totalQuestions > 0 ? totalRecall / totalQuestions : 0,
-            mrr: totalQuestions > 0 ? totalMrr / totalQuestions : 0,
+        const data = aggregateEvalGlobals(details, parseFloat(elapsedTime), {
             average_judge_score: ratedQuestions > 0 ? totalJudgeScore / ratedQuestions : null,
-            total_questions: totalQuestions,
-            execution_time_seconds: parseFloat(elapsedTime)
-        };
-        
-        const formattedTypeStats = {};
-        Object.entries(typeStats).forEach(([type, stats]) => {
-            formattedTypeStats[type] = {
-                count: stats.count,
-                context_precision: stats.precision / stats.count,
-                context_recall: stats.recall / stats.count,
-                mrr: stats.mrr / stats.count
-            };
         });
-        
-        const data = {
-            global_metrics: globalMetrics,
-            type_stats: formattedTypeStats,
-            details: details
-        };
         
         lastEvalResults = data;
         renderEvalResults(data, true);
@@ -1995,6 +1938,140 @@ async function runRAGEval() {
         btn.disabled = false;
         checkRunEvalButtonState();
     }
+}
+
+function formatMetricDelta(delta, isPercent = true) {
+    if (delta === undefined || delta === null || Number.isNaN(delta)) return '';
+    const sign = delta >= 0 ? '+' : '';
+    if (isPercent) {
+        return `Δ rerank : ${sign}${(delta * 100).toFixed(1)} pts`;
+    }
+    return `Δ rerank : ${sign}${delta.toFixed(2)}`;
+}
+
+function aggregateTypeStats(details, metricsKey = 'metrics') {
+    const typeStats = {};
+    details.forEach(q => {
+        const m = q[metricsKey];
+        if (!m) return;
+        const qType = q.type || 'mono-document';
+        if (!typeStats[qType]) {
+            typeStats[qType] = { precision: 0, recall: 0, mrr: 0, count: 0 };
+        }
+        typeStats[qType].precision += m.context_precision;
+        typeStats[qType].recall += m.context_recall;
+        typeStats[qType].mrr += m.mrr;
+        typeStats[qType].count += 1;
+    });
+    const formatted = {};
+    Object.entries(typeStats).forEach(([type, stats]) => {
+        formatted[type] = {
+            count: stats.count,
+            context_precision: stats.precision / stats.count,
+            context_recall: stats.recall / stats.count,
+            mrr: stats.mrr / stats.count,
+        };
+    });
+    return formatted;
+}
+
+function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
+    const n = details.length;
+    let totalPrecision = 0;
+    let totalRecall = 0;
+    let totalMrr = 0;
+    let totalPrecisionColpali = 0;
+    let totalRecallColpali = 0;
+    let totalMrrColpali = 0;
+    let colpaliCount = 0;
+    let deltaPrecision = 0;
+    let deltaRecall = 0;
+    let deltaMrr = 0;
+    let deltaCount = 0;
+    let visionRerankEnabled = false;
+
+    details.forEach(q => {
+        totalPrecision += q.metrics.context_precision;
+        totalRecall += q.metrics.context_recall;
+        totalMrr += q.metrics.mrr;
+        if (q.metrics_colpali) {
+            totalPrecisionColpali += q.metrics_colpali.context_precision;
+            totalRecallColpali += q.metrics_colpali.context_recall;
+            totalMrrColpali += q.metrics_colpali.mrr;
+            colpaliCount++;
+        }
+        if (q.rerank_delta) {
+            deltaPrecision += q.rerank_delta.precision;
+            deltaRecall += q.rerank_delta.recall;
+            deltaMrr += q.rerank_delta.mrr;
+            deltaCount++;
+        }
+        if (q.vision_rerank_enabled) {
+            visionRerankEnabled = true;
+        }
+    });
+
+    const result = {
+        global_metrics: {
+            context_precision: n > 0 ? totalPrecision / n : 0,
+            context_recall: n > 0 ? totalRecall / n : 0,
+            mrr: n > 0 ? totalMrr / n : 0,
+            total_questions: n,
+            execution_time_seconds: executionTimeSeconds,
+            ...extraGlobal,
+        },
+        type_stats: aggregateTypeStats(details, 'metrics'),
+        details,
+    };
+
+    if (colpaliCount > 0) {
+        result.global_metrics_colpali = {
+            context_precision: totalPrecisionColpali / colpaliCount,
+            context_recall: totalRecallColpali / colpaliCount,
+            mrr: totalMrrColpali / colpaliCount,
+        };
+        result.type_stats_colpali = aggregateTypeStats(details, 'metrics_colpali');
+    }
+    if (deltaCount > 0) {
+        result.rerank_impact = {
+            precision_delta: deltaPrecision / deltaCount,
+            recall_delta: deltaRecall / deltaCount,
+            mrr_delta: deltaMrr / deltaCount,
+        };
+    }
+    result.vision_rerank_enabled = visionRerankEnabled;
+    return result;
+}
+
+function renderEvalAnalysisColumns(analysis, scoreLabel = 'ColPali') {
+    if (!analysis) return '';
+    return `
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-3 rounded-2xl bg-green-500/5 dark:bg-green-500/10 border border-green-500/10">
+                <div class="text-xs font-bold text-green-700 dark:text-green-400 mb-1">Trouvées (${analysis.hits.length})</div>
+                <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
+                    ${analysis.hits.length > 0
+                        ? analysis.hits.map(h => `<div class="truncate text-gray-600 dark:text-gray-300">• ${escapeHtml(h.document_title)} (Page ${h.page}) <span class="text-[9px] font-mono bg-green-500/10 text-green-600 dark:text-green-400 px-1 py-0.5 rounded ml-1 font-bold">#${h.rank}</span></div>`).join('')
+                        : '<div class="text-gray-400 italic">Aucune</div>'}
+                </div>
+            </div>
+            <div class="p-3 rounded-2xl bg-red-500/5 dark:bg-red-500/10 border border-red-500/10">
+                <div class="text-xs font-bold text-red-700 dark:text-red-400 mb-1">Manquées (${analysis.misses.length})</div>
+                <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
+                    ${analysis.misses.length > 0
+                        ? analysis.misses.map(m => `<div class="truncate text-gray-700 dark:text-gray-300">• ${escapeHtml(m.document_title)} (Page ${m.page})</div>`).join('')
+                        : '<div class="text-gray-400 italic">Aucune</div>'}
+                </div>
+            </div>
+            <div class="p-3 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/10">
+                <div class="text-xs font-bold text-amber-700 dark:text-amber-400 mb-1">Bruit (${analysis.noise.length})</div>
+                <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
+                    ${analysis.noise.length > 0
+                        ? analysis.noise.map(n => `<div class="truncate text-gray-500 dark:text-gray-400">• ${escapeHtml(n.document_title)} (Page ${n.page}) <span class="text-[9px] font-mono">#${n.rank}</span></div>`).join('')
+                        : '<div class="text-gray-400 italic">Aucun</div>'}
+                </div>
+            </div>
+        </div>`;
 }
 
 function getMetricColorClass(val) {
@@ -2051,6 +2128,48 @@ function renderEvalResults(data, showGeneration = false) {
         }
     } else {
         if (generationCard) generationCard.classList.add('hidden');
+    }
+
+    // ColPali comparison section
+    const colpaliSection = document.getElementById('eval-colpali-comparison');
+    const gmColpali = data.global_metrics_colpali;
+    const rerankImpact = data.rerank_impact;
+    if (colpaliSection && gmColpali) {
+        colpaliSection.classList.remove('hidden');
+        const precColpaliEl = document.getElementById('metric-precision-colpali');
+        const recColpaliEl = document.getElementById('metric-recall-colpali');
+        const mrrColpaliEl = document.getElementById('metric-mrr-colpali');
+        if (precColpaliEl) {
+            precColpaliEl.innerText = `${(gmColpali.context_precision * 100).toFixed(1)}%`;
+            precColpaliEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmColpali.context_precision)}`;
+        }
+        if (recColpaliEl) {
+            recColpaliEl.innerText = `${(gmColpali.context_recall * 100).toFixed(1)}%`;
+            recColpaliEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmColpali.context_recall)}`;
+        }
+        if (mrrColpaliEl) {
+            mrrColpaliEl.innerText = gmColpali.mrr.toFixed(2);
+            mrrColpaliEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmColpali.mrr)}`;
+        }
+        const precDeltaEl = document.getElementById('metric-precision-delta');
+        const recDeltaEl = document.getElementById('metric-recall-delta');
+        const mrrDeltaEl = document.getElementById('metric-mrr-delta');
+        if (rerankImpact) {
+            if (precDeltaEl) precDeltaEl.textContent = formatMetricDelta(rerankImpact.precision_delta, true);
+            if (recDeltaEl) recDeltaEl.textContent = formatMetricDelta(rerankImpact.recall_delta, true);
+            if (mrrDeltaEl) mrrDeltaEl.textContent = formatMetricDelta(rerankImpact.mrr_delta, false);
+        }
+        const rerankBadge = document.getElementById('eval-rerank-badge');
+        if (rerankBadge) {
+            if (data.vision_rerank_enabled === false) {
+                rerankBadge.textContent = 'Rerank désactivé — les deux étapes sont identiques';
+                rerankBadge.classList.remove('hidden');
+            } else {
+                rerankBadge.classList.add('hidden');
+            }
+        }
+    } else if (colpaliSection) {
+        colpaliSection.classList.add('hidden');
     }
     
     // Set type stats if available
@@ -2109,8 +2228,11 @@ function renderEvalResults(data, showGeneration = false) {
                         <span>Precision: <strong class="${getMetricColorClass(q.metrics.context_precision)}">${(q.metrics.context_precision * 100).toFixed(0)}%</strong></span>
                         <span>Recall: <strong class="${getMetricColorClass(q.metrics.context_recall)}">${(q.metrics.context_recall * 100).toFixed(0)}%</strong></span>
                         <span>MRR: <strong class="${getMetricColorClass(q.metrics.mrr)}">${q.metrics.mrr.toFixed(2)}</strong></span>
+                        ${q.metrics_colpali ? `<span class="text-gray-400 hidden md:inline">| ColPali MRR: ${q.metrics_colpali.mrr.toFixed(2)}</span>` : ''}
                     </div>
                 </div>
+                
+                <p class="text-[10px] uppercase tracking-wider font-bold text-indigo-600 dark:text-indigo-400">Après rerank LLM</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Hits -->
@@ -2153,12 +2275,29 @@ function renderEvalResults(data, showGeneration = false) {
                     </div>
                 </div>
 
+                ${q.metrics_colpali ? `
+                <div class="mt-2 rounded-2xl bg-slate-500/5 dark:bg-slate-500/10 border border-slate-500/10 overflow-hidden">
+                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            ColPali avant rerank LLM
+                            <span class="font-normal text-gray-500">— P: ${(q.metrics_colpali.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_colpali.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_colpali.mrr.toFixed(2)}</span>
+                        </span>
+                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="hidden p-3 border-t border-slate-500/10 space-y-2">
+                        ${q.rerank_delta ? `<p class="text-xs text-gray-500 dark:text-gray-400">Impact rerank — Precision: ${formatMetricDelta(q.rerank_delta.precision, true)} · Recall: ${formatMetricDelta(q.rerank_delta.recall, true)} · MRR: ${formatMetricDelta(q.rerank_delta.mrr, false)}</p>` : ''}
+                        ${renderEvalAnalysisColumns(q.analysis_colpali)}
+                    </div>
+                </div>
+                ` : ''}
+
                 <!-- Detailed Retriever Results (Rank & Score Table) -->
                 <div class="mt-2 rounded-2xl bg-white/40 dark:bg-black/20 border border-black/5 dark:border-white/5 overflow-hidden">
                     <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
                         <span class="flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
-                            Détails du Retriever (Classement & Scores ColPali)
+                            Détails du Retriever après rerank (Classement & Scores)
                         </span>
                         <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>

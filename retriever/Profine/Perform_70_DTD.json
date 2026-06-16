@@ -1,242 +1,242 @@
 [
-  {
-    "id": "TC001",
-    "type": "mono",
-    "question": "J'ai de l'eau qui stagne dans le dormant d'une fenêtre e.MOTION posée chez un particulier : à quelle distance des extrémités je perce la première lumière de drainage en fond de feuillure ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [4, 45]
-      }
-    ],
-    "reponse_attendue": "La première lumière de drainage en fond de feuillure doit être percée à environ 100 mm de chaque extrémité."
-  },
-  {
-    "id": "TC002",
-    "type": "mono",
-    "question": "Sur une traverse basse de dormant KBE e.MOTION, après les perçages 5 x 25 mm ou Ø 8 mm à ~100 mm des extrémités en fond de feuillure, quel entraxe maximum entre les orifices suivants ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [4, 45]
-      }
-    ],
-    "reponse_attendue": "L'entraxe maximum entre les orifices de drainage est de 600 mm."
-  },
-  {
-    "id": "TC003",
-    "type": "mono",
-    "question": "Un client veut une oscillo-battante 1 vantail en 2,00 m de haut sur 1,50 m de large sans certificat de qualification. C'est faisable dans la gamme Profine ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [7]
-      }
-    ],
-    "reponse_attendue": "Non : hors fabrication certifiée, une oscillo-battante 1 vantail est limitée à 2,15 m x 1,40 m, ou à 1,50 m x 1,00 m selon la configuration."
-  },
-  {
-    "id": "TC004",
-    "type": "mono",
-    "question": "Sur un montant ouvrant KÖMMERLING e.VOLUTION, les renforts métalliques immobilisés par vis autotaraudeuses : à quel pas je les visser sur le profilé de feuillure ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [6]
-      }
-    ],
-    "reponse_attendue": "Les renforts des ouvrants doivent être vissés tous les 300 mm sur le profilé de feuillure concerné."
-  },
-  {
-    "id": "TC005",
-    "type": "mono",
-    "question": "Je monte un seuil PMR avec pièce d'assemblage 9F57 sur dormant 6100 : quelles vis je mets sur les patins d'étanchéité avant de presser la pièce contre le montant ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [4, 30, 37]
-      }
-    ],
-    "reponse_attendue": "Le seuil aluminium est vissé sur les patins d'étanchéité avec 2 vis Ø 4 x 50 ; une troisième vis Ø 4 x 30 est ajoutée dans le cas du seuil 9F68."
-  },
-  {
-    "id": "TC006",
-    "type": "mono",
-    "question": "Sur un dormant rénovation avec capotage aluminium complet, je ne veux pas couper le joint de frappe extérieur : comment assurer la décompression chambre ouvrant/dormant en traverse haute ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [6, 39, 45]
-      }
-    ],
-    "reponse_attendue": "Il faut réaliser deux perçages de Ø 6 mm minimum sur le recouvrement du dormant en traverse haute."
-  },
-  {
-    "id": "TC007",
-    "type": "mono",
-    "question": "Pour l'étanchéité au calfeutrement sur profilés PVC blancs TROCAL e.XCLUSIVE, quels mastics Tremco ou Den Braven sont admissibles ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [8]
-      }
-    ],
-    "reponse_attendue": "Les mastics admissibles sur les profilés PVC blancs sont le Perennator FA 101 de Tremco et le SILICONE 8051 de DEN BRAVEN France."
-  },
-  {
-    "id": "TC008",
-    "type": "mono",
-    "question": "Pour une pose de vitrage conforme NF P20-650-1 sur une menuiserie KÖMMERLING e.VOLUTION, quelle hauteur de feuillure retenir sur profilés ouvrants et dormants, hors garnitures d'étanchéité ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [7]
-      }
-    ],
-    "reponse_attendue": "La hauteur de feuillure des profilés ouvrants et dormants est de 20 mm, non compris la hauteur des garnitures d'étanchéité."
-  },
-  {
-    "id": "TC009",
-    "type": "mono",
-    "question": "Un vantail oscillo-battant MOATTI/OTLAV mesure 2,20 m de haut : combien de points de verrouillage complémentaires haut et bas centrés je prévois par vantail ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [6, 7]
-      }
-    ],
-    "reponse_attendue": "Au-delà de 2,10 m de hauteur, il faut prévoir 5 points de verrouillage complémentaires haut et bas par vantail."
-  },
-  {
-    "id": "TC010",
-    "type": "mono",
-    "question": "Mon client veut un habillage monoparois avec L* inférieur à 82 en traverse basse du dormant e.MOTION : c'est autorisé ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [7, 4, 6]
-      }
-    ],
-    "reponse_attendue": "Non : les habillages dont la caractéristique colorimétrique L* est inférieure à 82 ne peuvent pas être utilisés en traverse basse."
-  },
-  {
-    "id": "TC011",
-    "type": "mono",
-    "question": "Où je perce pour drainer la feuillure à verre côté ouvrant, en fond de feuillure ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [5, 38]
-      }
-    ],
-    "reponse_attendue": "Il faut réaliser 2 orifices de 5 x 25 mm ou un perçage Ø 8 mm situés entre 20 et 200 mm des angles intérieurs, en fond de feuillure."
-  },
-  {
-    "id": "TC012",
-    "type": "mono",
-    "question": "Sur un dormant rénovation avec capot complet, je dois poser la busette M450 : quel diamètre de perçage simultané capot + profil PVC ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [6, 33, 39]
-      }
-    ],
-    "reponse_attendue": "Le perçage doit être de 13,8 mm de diamètre, réalisé simultanément sur le capot et le profil PVC."
-  },
-  {
-    "id": "TC013",
-    "type": "mono",
-    "question": "Je fabrique une française 2 vantaux TROCAL e.XCLUSIVE avec battement central intérieur clippé et collé : quels profilés côté intérieur (1547, 6129…) ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [5]
-      }
-    ],
-    "reponse_attendue": "Pour les battements intérieurs clippés et collés, les profilés admissibles sont 1547, 6129, 6131, 76833 ou 6133."
-  },
-  {
-    "id": "TC014",
-    "type": "mono",
-    "question": "Sur un profilé PVC blanc sans capotage TROCAL e.XCLUSIVE, à partir de quelle largeur le renfort métallique devient obligatoire ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [6, 5]
-      }
-    ],
-    "reponse_attendue": "Un renfort est obligatoire au-delà de 750 mm de large de profilé PVC."
-  },
-  {
-    "id": "TC015",
-    "type": "mono",
-    "question": "Sur un dormant capoté avec tapées et appuis aluminium, quel entraxe maximum pour le vissage ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [6, 36]
-      }
-    ],
-    "reponse_attendue": "Les tapées et appuis aluminium sont vissés avec un entraxe maximum de 300 mm."
-  },
-  {
-    "id": "TC016",
-    "type": "mono",
-    "question": "En fin de montage d'un élargisseur 0303 sur dormant 6115, comment je fixe le bouchon de fermeture ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [29]
-      }
-    ],
-    "reponse_attendue": "Le bouchon d'élargisseur est collé à la colle PVC."
-  },
-  {
-    "id": "TC017",
-    "type": "mono",
-    "question": "Assemblage mécanique par alvéovis dans une traverse 6127 ou 6157 sur meneau Perform 70 : quel diamètre de vis ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [5, 26, 27]
-      }
-    ],
-    "reponse_attendue": "L'assemblage par alvéovis utilise des vis Ø 4,3 de longueur variable selon le dormant ou l'ouvrant."
-  },
-  {
-    "id": "TC018",
-    "type": "mono",
-    "question": "Hors certificat de qualification menuisier, un soufflet KBE e.MOTION en 0,90 m de haut sur 1,20 m de large est-il dans les dimensions maximales admissibles ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [7]
-      }
-    ],
-    "reponse_attendue": "Non : hors fabrication certifiée, les dimensions maximales d'un soufflet sont 0,80 m de hauteur x 1,30 m de largeur."
-  },
-  {
-    "id": "TC019",
-    "type": "mono",
-    "question": "Je monte un meneau par soudure à plat avec équerres 9714 : quelle longueur minimum d'étanchéité au mastic je laisse en solin sur la joue de feuillure ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [5, 27]
-      }
-    ],
-    "reponse_attendue": "L'étanchéité complémentaire au mastic en solin sur la joue de feuillure et devant la rainure de parclose doit avoir une longueur minimum de 250 mm."
-  },
-  {
-    "id": "TC020",
-    "type": "mono",
-    "question": "Drainage en fond de feuillure d'un seuil PMR Z043 ou 9F67 : quelles dimensions d'orifice et quel entraxe max entre perçages ?",
-    "pages_attendues": [
-      {
-        "document_title": "DTD-DBV-6-16-2335_V5",
-        "pages": [5, 4, 48]
-      }
-    ],
-    "reponse_attendue": "Le drainage de seuil PMR se fait avec 1 orifice de 5 x 25 mm ou Ø 8 mm à environ 100 mm de chaque angle intérieur, puis un orifice supplémentaire pour un entraxe maximum de 600 mm."
-  }
+    {
+        "id": "TC001",
+        "type": "mono",
+        "question": "J'ai de l'eau qui stagne dans le dormant d'une fenêtre e.MOTION posée chez un particulier : à quelle distance des extrémités je perce la première lumière de drainage en fond de feuillure ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [4]
+            }
+        ],
+        "reponse_attendue": "La première lumière de drainage en fond de feuillure doit être percée à environ 100 mm de chaque extrémité."
+    },
+    {
+        "id": "TC002",
+        "type": "mono",
+        "question": "Assemblage seuils partie fixe avec reconstitution de la contre-feuillure : je pose la parclose A271 sur le support A272 ou je passe par les équerres 9714 ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [31]
+            }
+        ],
+        "reponse_attendue": "Deux solutions sont possibles : monter la parclose extérieure A271 sur le support de cale A272 (entraxe maxi 800 mm), ou monter une traverse rapportée avec équerre de fixation 9714."
+    },
+    {
+        "id": "TC003",
+        "type": "mono",
+        "question": "Un client veut une oscillo-battante 1 vantail en 2,00 m de haut sur 1,50 m de large sans certificat de qualification. C'est faisable dans la gamme Profine ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [7]
+            }
+        ],
+        "reponse_attendue": "Non : hors fabrication certifiée, une oscillo-battante 1 vantail est limitée à 2,15 m x 1,40 m, ou à 1,50 m x 1,00 m selon la configuration."
+    },
+    {
+        "id": "TC004",
+        "type": "mono",
+        "question": "Au-delà de 750 mm de large sur un profilé PVC blanc sans capotage e.XCLUSIVE, quelle mesure de rigidité imposer ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [6]
+            }
+        ],
+        "reponse_attendue": "Un renfort métallique est obligatoire au-delà de 750 mm de large de profilé PVC."
+    },
+    {
+        "id": "TC005",
+        "type": "mono",
+        "question": "Je monte un seuil PMR avec pièce d'assemblage 9F57 sur dormant 6100 : quelles vis je mets sur les patins d'étanchéité avant de presser la pièce contre le montant ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [30]
+            }
+        ],
+        "reponse_attendue": "Le seuil aluminium est vissé sur les patins d'étanchéité avec 2 vis Ø 4 x 50 ; une troisième vis Ø 4 x 30 est ajoutée dans le cas du seuil 9F68."
+    },
+    {
+        "id": "TC006",
+        "type": "mono",
+        "question": "Montage rénovation avec demi-capot A474 sur clips M569 en traverse basse : le drainage passe par quels orifices ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [33]
+            }
+        ],
+        "reponse_attendue": "L'écoulement se fait par le drainage standard, soit des orifices de 5 x 25 mm ou un diamètre de 8 mm minimum."
+    },
+    {
+        "id": "TC007",
+        "type": "mono",
+        "question": "Pour la cohésion sur profilés PVC blancs du système e.VOLUTION, le Perennator FA 101 Tremco et le SILICONE 8051 Den Braven sont-ils admissibles ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [8]
+            }
+        ],
+        "reponse_attendue": "Oui : le Perennator FA 101 de Tremco et le SILICONE 8051 de DEN BRAVEN France sont les mastics admissibles pour la cohésion sur les profilés PVC blancs."
+    },
+    {
+        "id": "TC008",
+        "type": "mono",
+        "question": "Un client veut une française 1 vantail en 2,20 m de haut sur 1,10 m de large sans certificat de qualification. C'est faisable dans la gamme Profine ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [7]
+            }
+        ],
+        "reponse_attendue": "Non : hors fabrication certifiée, une française 1 vantail est limitée à 2,15 m de hauteur x 1,00 m de largeur."
+    },
+    {
+        "id": "TC009",
+        "type": "mono",
+        "question": "Sur les ouvrants TROCAL e.XCLUSIVE équipés de fiches MOATTI ou OTLAV, à partir de quelle hauteur prévoir des verrouillages complémentaires haut et bas centrés ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [6]
+            }
+        ],
+        "reponse_attendue": "Les ouvrants doivent être munis de verrouillages complémentaires haut et bas centrés à partir de 900 mm de hauteur."
+    },
+    {
+        "id": "TC010",
+        "type": "mono",
+        "question": "Habillages monoparois L* inférieur à 82 en traverse basse e.MOTION : risque de déformations permanentes, est-ce autorisé ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [7]
+            }
+        ],
+        "reponse_attendue": "Non : les habillages monoparois dont la caractéristique colorimétrique L* est inférieure à 82 ne peuvent pas être utilisés en traverse basse, sous peine de déformations permanentes."
+    },
+    {
+        "id": "TC011",
+        "type": "mono",
+        "question": "Où je perce pour drainer la feuillure à verre côté ouvrant, en fond de feuillure ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [5]
+            }
+        ],
+        "reponse_attendue": "Il faut réaliser 2 orifices de 5 x 25 mm ou un perçage Ø 8 mm situés entre 20 et 200 mm des angles intérieurs, en fond de feuillure."
+    },
+    {
+        "id": "TC012",
+        "type": "mono",
+        "question": "Sur un dormant rénovation avec capot complet, je dois poser la busette M450 : quel diamètre de perçage simultané capot + profil PVC ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [33]
+            }
+        ],
+        "reponse_attendue": "Le perçage doit être de 13,8 mm de diamètre, réalisé simultanément sur le capot et le profil PVC."
+    },
+    {
+        "id": "TC013",
+        "type": "mono",
+        "question": "Équilibrage de pression de la feuillure à verre côté ouvrant : si ce n'est pas en traverse basse, sur quels éléments pratiquer les orifices ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [5]
+            }
+        ],
+        "reponse_attendue": "La traverse supérieure reçoit les mêmes orifices que la traverse basse, ou bien les orifices sont réalisés en partie haute des montants latéraux, ou sur le montant côté paumelle ou pivots."
+    },
+    {
+        "id": "TC014",
+        "type": "mono",
+        "question": "Les dormants capotés peuvent recevoir tapées et appuis aluminium vissés : quel entraxe maximum de fixation ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [6]
+            }
+        ],
+        "reponse_attendue": "Les tapées et appuis aluminium sont vissés avec un entraxe maximum de 300 mm."
+    },
+    {
+        "id": "TC015",
+        "type": "mono",
+        "question": "Capotage des ouvrants e.VOLUTION : quelles garnitures de vitrage monter, 9E46 ou 9047 ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [6]
+            }
+        ],
+        "reponse_attendue": "Les ouvrants capotés sont munis des garnitures de vitrage 9E46 ou 9047."
+    },
+    {
+        "id": "TC016",
+        "type": "mono",
+        "question": "Assemblage de l'élargisseur 0303 sur dormant 6115 : le bouchon de fermeture se fixe comment en fin de montage ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [29]
+            }
+        ],
+        "reponse_attendue": "Le bouchon d'élargisseur est collé à la colle PVC."
+    },
+    {
+        "id": "TC017",
+        "type": "mono",
+        "question": "Assemblage mécanique par alvéovis dans une traverse 6127 ou 6157 sur meneau Perform 70 : quel diamètre de vis ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [5]
+            }
+        ],
+        "reponse_attendue": "L'assemblage par alvéovis utilise des vis Ø 4,3 de longueur variable selon le dormant ou l'ouvrant."
+    },
+    {
+        "id": "TC018",
+        "type": "mono",
+        "question": "Un client veut une française 2 vantaux + fixe en 2,20 m de haut sur 2,50 m de large sans certificat de qualification. C'est faisable dans la gamme Profine ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [7]
+            }
+        ],
+        "reponse_attendue": "Non : hors fabrication certifiée, une française 2 vantaux + fixe est limitée à 2,15 m x 2,40 m."
+    },
+    {
+        "id": "TC019",
+        "type": "mono",
+        "question": "Soudure à plat d'un meneau 6127 complétée par les équerres 9714 L+R : quelle longueur minimum d'étanchéité au mastic en solin sur la joue de feuillure ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [27]
+            }
+        ],
+        "reponse_attendue": "L'étanchéité complémentaire au mastic en solin sur la joue de feuillure et devant la rainure de parclose doit avoir une longueur minimum de 250 mm."
+    },
+    {
+        "id": "TC020",
+        "type": "mono",
+        "question": "Sur la traverse basse d'un dormant e.MOTION déjà percée à ~100 mm des extrémités, quel entraxe maximum entre les lumières de drainage supplémentaires en fond de feuillure ?",
+        "pages_attendues": [
+            {
+                "document_title": "DTD-DBV-6-16-2335_V5",
+                "pages": [4]
+            }
+        ],
+        "reponse_attendue": "L'entraxe maximum entre les orifices de drainage supplémentaires est de 600 mm."
+    }
 ]

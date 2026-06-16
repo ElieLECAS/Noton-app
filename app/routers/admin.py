@@ -754,11 +754,9 @@ async def evaluate_retriever_single_api(
     session: Session = Depends(get_session)
 ):
     """Évaluer le retriever ColPali sur une seule question pour la progression de l'UI."""
-    from app.services.retriever_evaluator import (
-        match_page, compute_context_precision, compute_context_recall, compute_mrr
-    )
+    from app.services.retriever_evaluator import build_question_eval_result
     from app.services.space_search_service import search_relevant_passages
-    
+
     try:
         search_res = await search_relevant_passages(
             session=session,
@@ -766,92 +764,20 @@ async def evaluate_retriever_single_api(
             query_text=request.question,
             user_id=current_user.id,
             k=request.k,
-            document_filter="all"
+            document_filter="all",
+            include_retrieval_stages=True,
         )
         passages = search_res.get("passages", [])
-        
-        # Extraire les couples (titre, page_no) et les détails ordonnés
-        retrieved_pages = []
-        retrieved_details = []
-        for idx, p in enumerate(passages):
-            doc_title = p.get("document_title", "")
-            page_no = p.get("page_no")
-            if page_no is None:
-                page_no = p.get("page_start", 1)
-            try:
-                page_no_int = int(page_no)
-            except (ValueError, TypeError):
-                page_no_int = 1
-            retrieved_pages.append((doc_title, page_no_int))
-            
-            score = p.get("score", 0.0)
-            is_hit = match_page(doc_title, page_no_int, request.pages_attendues)
-            retrieved_details.append({
-                "rank": idx + 1,
-                "document_title": doc_title,
-                "page": page_no_int,
-                "score": round(score, 4),
-                "is_hit": is_hit
-            })
-                
-        # Calculer les métriques
-        precision = compute_context_precision(retrieved_pages, request.pages_attendues)
-        recall = compute_context_recall(retrieved_pages, request.pages_attendues)
-        mrr = compute_mrr(retrieved_pages, request.pages_attendues)
-        
-        # Identifier Hits, Misses et Bruit
-        hits_details = []
-        misses_details = []
-        noise_details = []
-        
-        for rd in retrieved_details:
-            page_info = {
-                "document_title": rd["document_title"],
-                "page": rd["page"],
-                "rank": rd["rank"],
-                "score": rd["score"]
-            }
-            if rd["is_hit"]:
-                if not any(h["document_title"] == rd["document_title"] and h["page"] == rd["page"] for h in hits_details):
-                    hits_details.append(page_info)
-            else:
-                if not any(n["document_title"] == rd["document_title"] and n["page"] == rd["page"] for n in noise_details):
-                    noise_details.append(page_info)
-                    
-        for exp in request.pages_attendues:
-            exp_title = exp.get("document_title", "")
-            for p in exp.get("pages", []):
-                try:
-                    target_p = int(p)
-                except (ValueError, TypeError):
-                    continue
-                
-                found = False
-                for hit in hits_details:
-                    if exp_title.lower() in hit["document_title"].lower() or hit["document_title"].lower() in exp_title.lower():
-                        if hit["page"] == target_p:
-                            found = True
-                            break
-                if not found:
-                    misses_details.append({"document_title": exp_title, "page": target_p})
-                    
-        return {
-            "question": request.question,
-            "type": request.type,
-            "expected_pages": request.pages_attendues,
-            "retrieved_pages": [{"document_title": t, "page": p} for t, p in retrieved_pages],
-            "retrieved_details": retrieved_details,
-            "metrics": {
-                "context_precision": round(precision, 4),
-                "context_recall": round(recall, 4),
-                "mrr": round(mrr, 4)
-            },
-            "analysis": {
-                "hits": hits_details,
-                "misses": misses_details,
-                "noise": noise_details
-            }
-        }
+        stages = search_res.get("retrieval_stages") or {}
+
+        return build_question_eval_result(
+            question=request.question,
+            q_type=request.type,
+            expected_pages=request.pages_attendues,
+            passages=passages,
+            colpali_passages=stages.get("colpali", passages),
+            vision_rerank_enabled=stages.get("vision_rerank_enabled"),
+        )
     except Exception as e:
         logger.error("Error during single retriever evaluation API: %s", e, exc_info=True)
         raise HTTPException(
@@ -879,98 +805,42 @@ async def evaluate_rag_single_api(
 ):
     """Évaluer le retriever ColPali et la génération LLM sur une seule question."""
     from app.services.retriever_evaluator import (
-        match_page, compute_context_precision, compute_context_recall, compute_mrr,
-        generate_rag_response, run_llm_judge
+        build_question_eval_result,
+        generate_rag_response,
+        run_llm_judge,
     )
     from app.services.space_search_service import search_relevant_passages
-    
+
     try:
-        # 1. Recherche Retriever
         search_res = await search_relevant_passages(
             session=session,
             space_id=request.space_id,
             query_text=request.question,
             user_id=current_user.id,
             k=request.k,
-            document_filter="all"
+            document_filter="all",
+            include_retrieval_stages=True,
         )
         passages = search_res.get("passages", [])
-        
-        # Extraire les couples (titre, page_no) et les détails ordonnés
-        retrieved_pages = []
-        retrieved_details = []
-        for idx, p in enumerate(passages):
-            doc_title = p.get("document_title", "")
-            page_no = p.get("page_no")
-            if page_no is None:
-                page_no = p.get("page_start", 1)
-            try:
-                page_no_int = int(page_no)
-            except (ValueError, TypeError):
-                page_no_int = 1
-            retrieved_pages.append((doc_title, page_no_int))
-            
-            score = p.get("score", 0.0)
-            is_hit = match_page(doc_title, page_no_int, request.pages_attendues)
-            retrieved_details.append({
-                "rank": idx + 1,
-                "document_title": doc_title,
-                "page": page_no_int,
-                "score": round(score, 4),
-                "is_hit": is_hit
-            })
-                
-        # Calculer les métriques
-        precision = compute_context_precision(retrieved_pages, request.pages_attendues)
-        recall = compute_context_recall(retrieved_pages, request.pages_attendues)
-        mrr = compute_mrr(retrieved_pages, request.pages_attendues)
-        
-        # Identifier Hits, Misses et Bruit
-        hits_details = []
-        misses_details = []
-        noise_details = []
-        
-        for rd in retrieved_details:
-            page_info = {
-                "document_title": rd["document_title"],
-                "page": rd["page"],
-                "rank": rd["rank"],
-                "score": rd["score"]
-            }
-            if rd["is_hit"]:
-                if not any(h["document_title"] == rd["document_title"] and h["page"] == rd["page"] for h in hits_details):
-                    hits_details.append(page_info)
-            else:
-                if not any(n["document_title"] == rd["document_title"] and n["page"] == rd["page"] for n in noise_details):
-                    noise_details.append(page_info)
-                    
-        for exp in request.pages_attendues:
-            exp_title = exp.get("document_title", "")
-            for p in exp.get("pages", []):
-                try:
-                    target_p = int(p)
-                except (ValueError, TypeError):
-                    continue
-                
-                found = False
-                for hit in hits_details:
-                    if exp_title.lower() in hit["document_title"].lower() or hit["document_title"].lower() in exp_title.lower():
-                        if hit["page"] == target_p:
-                            found = True
-                            break
-                if not found:
-                    misses_details.append({"document_title": exp_title, "page": target_p})
-                    
-        # 2. Génération RAG
+        stages = search_res.get("retrieval_stages") or {}
+
+        eval_result = build_question_eval_result(
+            question=request.question,
+            q_type=request.type,
+            expected_pages=request.pages_attendues,
+            passages=passages,
+            colpali_passages=stages.get("colpali", passages),
+            vision_rerank_enabled=stages.get("vision_rerank_enabled"),
+        )
+
         generated_response = await generate_rag_response(
             session=session,
             space_id=request.space_id,
             user_id=current_user.id,
             question=request.question,
-            passages=passages
+            passages=passages,
         )
-        
-        # 3. LLM Judge
+
         expected = request.reponse_attendue or request.expected_response
         judge_eval = None
         if expected:
@@ -978,29 +848,13 @@ async def evaluate_rag_single_api(
                 question=request.question,
                 generated_response=generated_response,
                 expected_response=expected,
-                judge_model=request.judge_model
+                judge_model=request.judge_model,
             )
-            
-        return {
-            "question": request.question,
-            "type": request.type,
-            "expected_pages": request.pages_attendues,
-            "retrieved_pages": [{"document_title": t, "page": p} for t, p in retrieved_pages],
-            "retrieved_details": retrieved_details,
-            "metrics": {
-                "context_precision": round(precision, 4),
-                "context_recall": round(recall, 4),
-                "mrr": round(mrr, 4)
-            },
-            "analysis": {
-                "hits": hits_details,
-                "misses": misses_details,
-                "noise": noise_details
-            },
-            "generated_response": generated_response,
-            "expected_response": expected,
-            "judge_evaluation": judge_eval
-        }
+
+        eval_result["generated_response"] = generated_response
+        eval_result["expected_response"] = expected
+        eval_result["judge_evaluation"] = judge_eval
+        return eval_result
     except Exception as e:
         logger.error("Error during single RAG evaluation API: %s", e, exc_info=True)
         raise HTTPException(

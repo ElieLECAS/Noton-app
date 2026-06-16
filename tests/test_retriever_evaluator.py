@@ -3,7 +3,8 @@ from app.services.retriever_evaluator import (
     match_page,
     compute_context_precision,
     compute_context_recall,
-    compute_mrr
+    compute_mrr,
+    build_question_eval_result,
 )
 
 def test_match_page():
@@ -66,3 +67,84 @@ def test_compute_mrr():
     # Non trouvé
     retrieved = [("Notice Perform 76", 1)]
     assert compute_mrr(retrieved, expected) == 0.0
+
+
+def test_build_question_eval_result_post_only():
+    expected = [{"document_title": "Notice Perform 70", "pages": [12]}]
+    passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.85},
+    ]
+
+    result = build_question_eval_result(
+        question="Quelle est la profondeur d'installation ?",
+        q_type="mono-document",
+        expected_pages=expected,
+        passages=passages,
+    )
+
+    assert result["metrics"]["context_precision"] == 1.0
+    assert result["metrics"]["context_recall"] == 1.0
+    assert result["metrics"]["mrr"] == 1.0
+    assert len(result["analysis"]["hits"]) == 1
+    assert len(result["analysis"]["misses"]) == 0
+    assert "metrics_colpali" not in result
+    assert "rerank_delta" not in result
+
+
+def test_build_question_eval_result_with_colpali_and_delta():
+    expected = [{"document_title": "Notice Perform 70", "pages": [12]}]
+    colpali_passages = [
+        {"document_title": "Notice Perform 76", "page_no": 1, "score": 0.92},
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.81},
+    ]
+    post_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.81, "rerank_score": 4.5},
+    ]
+
+    result = build_question_eval_result(
+        question="Quelle est la profondeur d'installation ?",
+        q_type="mono-document",
+        expected_pages=expected,
+        passages=post_passages,
+        colpali_passages=colpali_passages,
+        vision_rerank_enabled=True,
+    )
+
+    assert result["metrics"]["context_precision"] == 1.0
+    assert result["metrics"]["mrr"] == 1.0
+    assert result["metrics_colpali"]["context_precision"] == 0.5
+    assert result["metrics_colpali"]["mrr"] == 0.5
+    assert result["rerank_delta"]["precision"] == 0.5
+    assert result["rerank_delta"]["mrr"] == 0.5
+    assert result["vision_rerank_enabled"] is True
+    assert len(result["analysis_colpali"]["noise"]) == 1
+    assert len(result["analysis"]["noise"]) == 0
+
+
+def test_rerank_delta_is_post_minus_colpali():
+    expected = [{"document_title": "Notice Perform 70", "pages": [12, 13]}]
+    colpali_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.9},
+        {"document_title": "Notice Perform 70", "page_no": 13, "score": 0.85},
+        {"document_title": "Notice Perform 76", "page_no": 1, "score": 0.8},
+    ]
+    post_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 13, "score": 0.85, "rerank_score": 5.0},
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.9, "rerank_score": 4.0},
+    ]
+
+    result = build_question_eval_result(
+        question="test",
+        q_type="mono-document",
+        expected_pages=expected,
+        passages=post_passages,
+        colpali_passages=colpali_passages,
+    )
+
+    post = result["metrics"]
+    colpali = result["metrics_colpali"]
+    delta = result["rerank_delta"]
+
+    assert delta["precision"] == round(post["context_precision"] - colpali["context_precision"], 4)
+    assert delta["recall"] == round(post["context_recall"] - colpali["context_recall"], 4)
+    assert delta["mrr"] == round(post["mrr"] - colpali["mrr"], 4)
