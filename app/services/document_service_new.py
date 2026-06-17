@@ -998,7 +998,22 @@ def create_document(
         is_paid=document_create.is_paid,
         folder_id=document_create.folder_id,
         library_id=library_id,
-        user_id=user_id
+        user_id=user_id,
+        product_types=list(document_create.product_types or []),
+        materials=list(document_create.materials or []),
+        coulissant_galandage=document_create.coulissant_galandage,
+        proferm_gammes=list(document_create.proferm_gammes or []),
+        source=document_create.supplier,
+    )
+    from app.services.document_classification_service import apply_classification_to_document
+
+    apply_classification_to_document(
+        document,
+        supplier=document_create.supplier,
+        product_types=document_create.product_types,
+        materials=document_create.materials,
+        coulissant_galandage=document_create.coulissant_galandage,
+        proferm_gammes=document_create.proferm_gammes,
     )
     session.add(document)
     session.commit()
@@ -1056,8 +1071,24 @@ def update_document(
         return None
     
     update_data = document_update.model_dump(exclude_unset=True)
+    classification_keys = {
+        "supplier",
+        "product_types",
+        "materials",
+        "coulissant_galandage",
+        "proferm_gammes",
+    }
+    has_classification = bool(classification_keys.intersection(update_data.keys()))
+
     for key, value in update_data.items():
+        if key in classification_keys:
+            continue
         setattr(document, key, value)
+
+    if has_classification:
+        from app.services.document_classification_service import apply_classification_update
+
+        apply_classification_update(document, document_update)
     
     document.updated_at = datetime.utcnow()
     session.add(document)

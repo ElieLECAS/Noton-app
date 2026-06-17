@@ -63,7 +63,10 @@ class Settings(BaseSettings):
     FAQ_TOP_K: int = 3
     FAQ_MIN_SIMILARITY: float = 0.30
     FAQ_POST_DRAFT_ENABLED: bool = False
-    
+
+    # RAG espace : exiger documents classés (classification_status=complete) + filtre slots
+    RAG_REQUIRE_CLASSIFICATION: bool = True
+ 
     # Brave Search (recherche web pour function calling)
     BRAVE_SEARCH_API_KEY: Optional[str] = None
  

@@ -177,6 +177,29 @@ endblock %} {% block content %}
                     class="grid grid-cols-2 gap-2 text-sm border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4 max-h-40 overflow-y-auto"
                 ></div>
             </div>
+            <div id="upload-classification-section" class="space-y-3 border border-black/5 dark:border-white/5 rounded-2xl p-4 bg-black/[0.01] dark:bg-white/[0.01]">
+                <h4 class="text-sm font-bold text-gray-900 dark:text-white">Classification document</h4>
+                <div>
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Fournisseur *</label>
+                    <select id="upload-supplier" required class="w-full px-3 py-2 rounded-xl glass-input text-sm text-gray-900 dark:text-white"></select>
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Types produit *</label>
+                    <div id="upload-product-types" class="flex flex-wrap gap-3 text-sm"></div>
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Matériau(x) *</label>
+                    <div id="upload-materials" class="flex flex-wrap gap-3 text-sm"></div>
+                </div>
+                <div id="upload-galandage-section" class="hidden">
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Galandage (coulissant) *</label>
+                    <div id="upload-galandage" class="flex flex-wrap gap-3 text-sm"></div>
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Gammes Proferm (facultatif)</label>
+                    <div id="upload-proferm-gammes" class="flex flex-wrap gap-3 text-sm"></div>
+                </div>
+            </div>
             <label
                 class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-semibold"
             >
@@ -392,6 +415,29 @@ endblock %} {% block content %}
                     class="grid grid-cols-2 gap-2 text-sm border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4 max-h-40 overflow-y-auto"
                 ></div>
             </div>
+            <div id="edit-classification-section" class="space-y-3 border border-black/5 dark:border-white/5 rounded-2xl p-4 bg-black/[0.01] dark:bg-white/[0.01]">
+                <h4 class="text-sm font-bold text-gray-900 dark:text-white">Classification document</h4>
+                <div>
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Fournisseur *</label>
+                    <select id="edit-supplier" required class="w-full px-3 py-2 rounded-xl glass-input text-sm text-gray-900 dark:text-white"></select>
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Types produit *</label>
+                    <div id="edit-product-types" class="flex flex-wrap gap-3 text-sm"></div>
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Matériau(x) *</label>
+                    <div id="edit-materials" class="flex flex-wrap gap-3 text-sm"></div>
+                </div>
+                <div id="edit-galandage-section" class="hidden">
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Galandage (coulissant) *</label>
+                    <div id="edit-galandage" class="flex flex-wrap gap-3 text-sm"></div>
+                </div>
+                <div>
+                    <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400 font-semibold">Gammes Proferm (facultatif)</label>
+                    <div id="edit-proferm-gammes" class="flex flex-wrap gap-3 text-sm"></div>
+                </div>
+            </div>
             <label
                 class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 font-semibold"
             >
@@ -531,6 +577,175 @@ endblock %} {% block content %}
     let isAdminUser = false;
     let chunksMonitorData = null;
     let chunksActiveTab = "raw";
+    let libraryTaxonomy = null;
+
+    function classificationPrefix(mode) {
+        return mode === "edit" ? "edit" : "upload";
+    }
+
+    function renderCheckboxGroup(hostId, items, name, inputType = "checkbox") {
+        const host = document.getElementById(hostId);
+        if (!host) return;
+        host.innerHTML = items
+            .map(
+                (item) => `
+            <label class="inline-flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
+                <input type="${inputType}" name="${name}" value="${item.value}" class="rounded text-indigo-600 border-gray-300 dark:border-gray-600 focus:ring-indigo-500" />
+                <span>${item.label}</span>
+            </label>`,
+            )
+            .join("");
+    }
+
+    function toggleGalandageSection(prefix) {
+        const coulissantChecked = !!document.querySelector(
+            `#${prefix}-product-types input[value="coulissant"]:checked`,
+        );
+        const section = document.getElementById(`${prefix}-galandage-section`);
+        if (section) section.classList.toggle("hidden", !coulissantChecked);
+    }
+
+    function bindClassificationInteractions(prefix) {
+        document
+            .querySelectorAll(`#${prefix}-product-types input`)
+            .forEach((el) => {
+                el.addEventListener("change", () => toggleGalandageSection(prefix));
+            });
+    }
+
+    function renderClassificationForms() {
+        if (!libraryTaxonomy) return;
+        ["upload", "edit"].forEach((prefix) => {
+            const supplierSelect = document.getElementById(`${prefix}-supplier`);
+            if (supplierSelect) {
+                supplierSelect.innerHTML =
+                    `<option value="">— Sélectionner —</option>` +
+                    libraryTaxonomy.suppliers
+                        .map((s) => `<option value="${s}">${s}</option>`)
+                        .join("");
+            }
+            renderCheckboxGroup(
+                `${prefix}-product-types`,
+                libraryTaxonomy.product_types,
+                `${prefix}-product-type`,
+            );
+            renderCheckboxGroup(
+                `${prefix}-materials`,
+                libraryTaxonomy.materials,
+                `${prefix}-material`,
+            );
+            renderCheckboxGroup(
+                `${prefix}-galandage`,
+                libraryTaxonomy.coulissant_galandage,
+                `${prefix}-galandage-value`,
+                "radio",
+            );
+            renderCheckboxGroup(
+                `${prefix}-proferm-gammes`,
+                libraryTaxonomy.proferm_gammes,
+                `${prefix}-proferm-gamme`,
+            );
+            bindClassificationInteractions(prefix);
+            toggleGalandageSection(prefix);
+        });
+    }
+
+    async function loadLibraryTaxonomy() {
+        const r = await api("/api/library/taxonomy");
+        if (!r.ok) return;
+        libraryTaxonomy = await r.json();
+        renderClassificationForms();
+    }
+
+    function readClassificationValues(prefix) {
+        const supplier = document.getElementById(`${prefix}-supplier`)?.value || "";
+        const product_types = [
+            ...document.querySelectorAll(`#${prefix}-product-types input:checked`),
+        ].map((el) => el.value);
+        const materials = [
+            ...document.querySelectorAll(`#${prefix}-materials input:checked`),
+        ].map((el) => el.value);
+        const proferm_gammes = [
+            ...document.querySelectorAll(`#${prefix}-proferm-gammes input:checked`),
+        ].map((el) => el.value);
+        const galandageEl = document.querySelector(
+            `#${prefix}-galandage input:checked`,
+        );
+        const coulissant_galandage = galandageEl ? galandageEl.value : null;
+        return {
+            supplier,
+            product_types,
+            materials,
+            proferm_gammes,
+            coulissant_galandage,
+        };
+    }
+
+    function validateClassificationClient(values) {
+        if (!values.supplier) return "Le fournisseur est obligatoire.";
+        if (!values.product_types.length)
+            return "Sélectionnez au moins un type de produit.";
+        if (!values.materials.length)
+            return "Sélectionnez au moins un matériau.";
+        if (
+            values.product_types.includes("coulissant") &&
+            !values.coulissant_galandage
+        ) {
+            return "Indiquez le galandage pour le coulissant.";
+        }
+        return null;
+    }
+
+    function setClassificationValues(prefix, doc) {
+        const supplierSelect = document.getElementById(`${prefix}-supplier`);
+        if (supplierSelect) supplierSelect.value = doc.supplier || "";
+        document
+            .querySelectorAll(`#${prefix}-product-types input`)
+            .forEach((el) => {
+                el.checked = (doc.product_types || []).includes(el.value);
+            });
+        document.querySelectorAll(`#${prefix}-materials input`).forEach((el) => {
+            el.checked = (doc.materials || []).includes(el.value);
+        });
+        document
+            .querySelectorAll(`#${prefix}-proferm-gammes input`)
+            .forEach((el) => {
+                el.checked = (doc.proferm_gammes || []).includes(el.value);
+            });
+        document.querySelectorAll(`#${prefix}-galandage input`).forEach((el) => {
+            el.checked = doc.coulissant_galandage === el.value;
+        });
+        toggleGalandageSection(prefix);
+    }
+
+    function formatClassificationBadges(doc) {
+        if (doc.classification_status !== "complete") {
+            return `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/10 text-orange-700 dark:text-orange-300 border border-orange-500/20">Non classé</span>`;
+        }
+        const bits = [];
+        (doc.materials || []).forEach((m) => {
+            const label =
+                libraryTaxonomy?.materials?.find((x) => x.value === m)?.label || m;
+            bits.push(label);
+        });
+        (doc.product_types || []).forEach((t) => {
+            const label =
+                libraryTaxonomy?.product_types?.find((x) => x.value === t)?.label || t;
+            bits.push(label);
+        });
+        if (doc.supplier) bits.push(doc.supplier);
+        (doc.proferm_gammes || []).forEach((g) => {
+            const label =
+                libraryTaxonomy?.proferm_gammes?.find((x) => x.value === g)?.label || g;
+            bits.push(label);
+        });
+        return bits
+            .map(
+                (b) =>
+                    `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/15">${b}</span>`,
+            )
+            .join("");
+    }
 
     async function api(url, options = {}) {
         const headers = { ...(options.headers || {}) };
@@ -832,6 +1047,7 @@ endblock %} {% block content %}
           </div>
           <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex flex-wrap items-center gap-1.5 font-medium">
             ${statusBadgeHtml}
+            ${formatClassificationBadges(d)}
             ${formatProcessingSnapshotLine(d)}
           </div>
         </div>
@@ -1427,6 +1643,8 @@ endblock %} {% block content %}
             )
             .join("");
 
+        setClassificationValues("edit", doc);
+
         document
             .getElementById("edit-document-modal")
             .classList.remove("hidden");
@@ -1487,11 +1705,21 @@ endblock %} {% block content %}
             if (!files.length)
                 return alert("Sélectionnez au moins un fichier.");
             const isPaid = document.getElementById("upload-is-paid").checked;
+            const classification = readClassificationValues("upload");
+            const classErr = validateClassificationClient(classification);
+            if (classErr) return alert(classErr);
 
             const fd = new FormData();
             [...files].forEach((f) => fd.append("files", f));
             fd.append("space_ids", JSON.stringify(checked));
             fd.append("is_paid", String(isPaid));
+            fd.append("supplier", classification.supplier);
+            fd.append("product_types", JSON.stringify(classification.product_types));
+            fd.append("materials", JSON.stringify(classification.materials));
+            fd.append("proferm_gammes", JSON.stringify(classification.proferm_gammes));
+            if (classification.coulissant_galandage) {
+                fd.append("coulissant_galandage", classification.coulissant_galandage);
+            }
             if (selectedFolderId !== null)
                 fd.append("folder_id", String(selectedFolderId));
 
@@ -1667,6 +1895,10 @@ endblock %} {% block content %}
             const isPaid = document.getElementById(
                 "edit-document-is-paid",
             ).checked;
+            const classification = readClassificationValues("edit");
+            const classErr = validateClassificationClient(classification);
+            if (classErr) return alert(classErr);
+
             // UX: fermer immédiatement la modale, puis traiter en arrière-plan.
             closeEditDocumentModal();
             loadDocuments();
@@ -1701,7 +1933,15 @@ endblock %} {% block content %}
                     {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ title, is_paid: isPaid }),
+                        body: JSON.stringify({
+                            title,
+                            is_paid: isPaid,
+                            supplier: classification.supplier,
+                            product_types: classification.product_types,
+                            materials: classification.materials,
+                            proferm_gammes: classification.proferm_gammes,
+                            coulissant_galandage: classification.coulissant_galandage,
+                        }),
                     },
                 );
                 if (!updateResp.ok) {
@@ -1790,6 +2030,7 @@ endblock %} {% block content %}
     document.addEventListener("DOMContentLoaded", async () => {
         await loadPermissions();
         applyPermissionUI();
+        await loadLibraryTaxonomy();
         await loadSpaces();
         await loadFolders();
         await loadDocuments();

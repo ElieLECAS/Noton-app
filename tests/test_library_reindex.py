@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import os
 import tempfile
-from unittest import mock
+from tests.helpers import upload_form
 
 import pytest
 from sqlmodel import Session, select
@@ -31,7 +31,7 @@ def test_reindex_endpoint_returns_queued(client, responsable_headers, admin_head
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("reindex.txt", b"hello", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(),
         )
     assert r.status_code == 201
     doc_id = r.json()[0]["id"]
@@ -103,7 +103,7 @@ def test_reindex_service_unavailable_returns_503(
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("a.txt", b"x", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(),
         )
     assert r.status_code == 201
     doc_id = r.json()[0]["id"]
@@ -136,7 +136,7 @@ def test_post_reindex_sets_reindex_queued_status(client, responsable_headers, ad
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("status.txt", b"hello", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(),
         )
     assert r.status_code == 201
     doc_id = r.json()[0]["id"]
@@ -180,7 +180,7 @@ def test_mark_all_eligible_sets_reindex_queued_when_file_on_disk(client, respons
                 "/api/library/upload",
                 headers=responsable_headers,
                 files=[("files", ("disk.txt", b"x", "text/plain"))],
-                data={"space_ids": "[]", "is_paid": "false"},
+                data=upload_form(),
             )
         assert r.status_code == 201
         doc_id = r.json()[0]["id"]
@@ -215,7 +215,7 @@ def test_reindex_all_worker_marks_queued_and_invokes_reindex_per_doc(client, res
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("a.txt", b"z", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(),
         )
     assert r.status_code == 201
 
@@ -333,7 +333,7 @@ def test_reindex_all_counts_ok_for_global_docs_from_other_uploaders(
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("uploaded_by_A.txt", b"z", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(),
         )
     assert r.status_code == 201
     doc_id = r.json()[0]["id"]

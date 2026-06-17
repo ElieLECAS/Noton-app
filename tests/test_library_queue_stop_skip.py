@@ -16,6 +16,9 @@ from app.services.document_service_new import (
 from app.services.library_service import get_or_create_user_library
 
 
+from tests.helpers import upload_form
+
+
 def _upload_one_doc(client, headers):
     with (
         mock.patch("app.routers.library.process_document_async"),
@@ -28,7 +31,7 @@ def _upload_one_doc(client, headers):
             "/api/library/upload",
             headers=headers,
             files=[("files", ("q.txt", b"hello", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(),
         )
     assert r.status_code == 201
     return r.json()[0]["id"]

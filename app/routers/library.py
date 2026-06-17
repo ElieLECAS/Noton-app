@@ -46,6 +46,11 @@ from app.services.document_service_new import (
     stop_library_document_processing,
 )
 from app.config import settings
+from app.catalog.taxonomy import taxonomy_payload
+from app.services.document_classification_service import (
+    apply_classification_to_document,
+    validate_classification_payload,
+)
 from app.services.task_dispatch import (
     dispatch_document_spaces_update,
     dispatch_reindex_all_library,
@@ -64,6 +69,22 @@ import json
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/library", tags=["library"])
+
+
+def _document_read(document: Document) -> DocumentRead:
+    return DocumentRead.from_document(document)
+
+
+def _document_list_item(document: Document) -> DocumentListItem:
+    return DocumentListItem.from_document(document)
+
+
+@router.get("/taxonomy")
+async def get_library_taxonomy(
+    current_user: UserRead = Depends(get_current_user),
+):
+    """Listes contrôlées pour la classification des documents."""
+    return taxonomy_payload()
 
 
 class LibraryStopDocumentResponse(BaseModel):
@@ -282,7 +303,7 @@ async def list_documents(
         ).all()
     out: list[DocumentListItemWithSnapshot] = []
     for d in documents:
-        base = DocumentListItem.model_validate(d)
+        base = _document_list_item(d)
         snap = None
         if include_processing_snapshot:
             snap = build_document_processing_snapshot(session, d.id)
@@ -474,7 +495,7 @@ async def get_document(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Document non trouvé"
         )
-    return DocumentRead.model_validate(document)
+    return _document_read(document)
 
 
 @router.post(
@@ -523,7 +544,7 @@ async def stop_single_library_document(
         },
     )
     return LibraryStopDocumentResponse(
-        document=DocumentRead.model_validate(updated),
+        document=_document_read(updated),
         processing_snapshot=snap,
         revoked_count=int(revoke_info.get("revoked_count") or 0),
         revoked_task_ids=list(revoke_info.get("revoked_task_ids") or []),
@@ -574,7 +595,7 @@ async def skip_single_library_document(
         detail={"document_id": document_id, **revoke_info},
     )
     return LibraryStopDocumentResponse(
-        document=DocumentRead.model_validate(updated),
+        document=_document_read(updated),
         processing_snapshot=snap,
         revoked_count=int(revoke_info.get("revoked_count") or 0),
         revoked_task_ids=list(revoke_info.get("revoked_task_ids") or []),
@@ -628,13 +649,33 @@ async def update_library_document(
     session: Session = Depends(get_session)
 ):
     """Met à jour les métadonnées d'un document."""
+    update_data = document_update.model_dump(exclude_unset=True)
+    classification_keys = {
+        "supplier", "product_types", "materials", "coulissant_galandage", "proferm_gammes",
+    }
+    if classification_keys.intersection(update_data.keys()):
+        doc = get_document_by_id(session, document_id, current_user.id)
+        if not doc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document non trouvé")
+        merged = {
+            "supplier": update_data.get("supplier", doc.source),
+            "product_types": update_data.get("product_types", doc.product_types),
+            "materials": update_data.get("materials", doc.materials),
+            "coulissant_galandage": update_data.get("coulissant_galandage", doc.coulissant_galandage),
+            "proferm_gammes": update_data.get("proferm_gammes", doc.proferm_gammes),
+        }
+        try:
+            validate_classification_payload(require_complete=True, **merged)
+        except ValueError as e:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
+
     document = update_document(session, document_id, document_update, current_user.id)
     if not document:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Document non trouvé"
         )
-    return DocumentRead.model_validate(document)
+    return _document_read(document)
 
 
 @router.post("/documents/{document_id}/reindex", status_code=status.HTTP_200_OK)
@@ -777,6 +818,11 @@ async def upload_documents(
     space_ids: str = Form("[]"),
     is_paid: bool = Form(False),
     folder_id: Optional[int] = Form(None),
+    supplier: str = Form(...),
+    product_types: str = Form("[]"),
+    materials: str = Form("[]"),
+    coulissant_galandage: Optional[str] = Form(None),
+    proferm_gammes: str = Form("[]"),
     current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
@@ -797,11 +843,32 @@ async def upload_documents(
         space_ids_list = json.loads(space_ids)
         if not isinstance(space_ids_list, list):
             raise ValueError("space_ids doit être un tableau")
+        product_types_list = json.loads(product_types)
+        materials_list = json.loads(materials)
+        proferm_gammes_list = json.loads(proferm_gammes)
+        if not isinstance(product_types_list, list):
+            raise ValueError("product_types doit être un tableau")
+        if not isinstance(materials_list, list):
+            raise ValueError("materials doit être un tableau")
+        if not isinstance(proferm_gammes_list, list):
+            raise ValueError("proferm_gammes doit être un tableau")
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Format space_ids invalide: {str(e)}"
+            detail=f"Format JSON invalide: {str(e)}"
         )
+
+    try:
+        validate_classification_payload(
+            supplier=supplier,
+            product_types=product_types_list,
+            materials=materials_list,
+            coulissant_galandage=coulissant_galandage,
+            proferm_gammes=proferm_gammes_list,
+            require_complete=True,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
     
     library = get_or_create_user_library(session, current_user.id)
     
@@ -832,7 +899,12 @@ async def upload_documents(
                 processing_status="pending",
                 processing_progress=0,
                 is_paid=is_paid,
-                folder_id=folder_id
+                folder_id=folder_id,
+                supplier=supplier,
+                product_types=product_types_list,
+                materials=materials_list,
+                coulissant_galandage=coulissant_galandage,
+                proferm_gammes=proferm_gammes_list,
             )
             
             document = create_document(
@@ -868,7 +940,7 @@ async def upload_documents(
     if errors:
         logger.warning(f"Certains fichiers n'ont pas pu être uploadés: {errors}")
     
-    return [DocumentRead.model_validate(doc) for doc in created_documents]
+    return [_document_read(doc) for doc in created_documents]
 
 
 @router.get("/documents/{document_id}/spaces", response_model=List[SpaceRead])
@@ -970,7 +1042,7 @@ async def move_document_to_folder(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Impossible de déplacer le document"
         )
-    return DocumentRead.model_validate(document)
+    return _document_read(document)
 
 
 @router.delete("/documents/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -1066,6 +1138,11 @@ async def export_library_document(
                 "processing_progress": document.processing_progress,
                 "is_paid": document.is_paid,
                 "source": document.source,
+                "product_types": document.product_types or [],
+                "materials": document.materials or [],
+                "coulissant_galandage": document.coulissant_galandage,
+                "proferm_gammes": document.proferm_gammes or [],
+                "classification_status": document.classification_status,
             },
             "chunks": [
                 {
@@ -1167,6 +1244,11 @@ async def export_all_library_documents(
                     "processing_progress": document.processing_progress,
                     "is_paid": document.is_paid,
                     "source": document.source,
+                    "product_types": document.product_types or [],
+                    "materials": document.materials or [],
+                    "coulissant_galandage": document.coulissant_galandage,
+                    "proferm_gammes": document.proferm_gammes or [],
+                    "classification_status": document.classification_status,
                 },
                 "chunks": [
                     {
@@ -1269,6 +1351,18 @@ async def import_library_document(
                     library_id=library.id,
                     user_id=current_user.id,
                     folder_id=folder_id
+                )
+                session.add(new_doc)
+                session.commit()
+                session.refresh(new_doc)
+
+                apply_classification_to_document(
+                    new_doc,
+                    supplier=doc_data.get("supplier") or doc_data.get("source") or inferred_source,
+                    product_types=doc_data.get("product_types"),
+                    materials=doc_data.get("materials"),
+                    coulissant_galandage=doc_data.get("coulissant_galandage"),
+                    proferm_gammes=doc_data.get("proferm_gammes"),
                 )
                 session.add(new_doc)
                 session.commit()
@@ -1377,6 +1471,18 @@ async def import_library_document(
                         library_id=library.id,
                         user_id=current_user.id,
                         folder_id=folder_id
+                    )
+                    session.add(new_doc)
+                    session.commit()
+                    session.refresh(new_doc)
+
+                    apply_classification_to_document(
+                        new_doc,
+                        supplier=doc_data.get("supplier") or doc_data.get("source") or inferred_source,
+                        product_types=doc_data.get("product_types"),
+                        materials=doc_data.get("materials"),
+                        coulissant_galandage=doc_data.get("coulissant_galandage"),
+                        proferm_gammes=doc_data.get("proferm_gammes"),
                     )
                     session.add(new_doc)
                     session.commit()

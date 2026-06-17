@@ -54,6 +54,7 @@ os.environ.setdefault(
     "SECRET_KEY",
     "pytest-secret-key-do-not-use-in-production-min-32-chars",
 )
+os.environ.setdefault("RAG_REQUIRE_CLASSIFICATION", "false")
 
 def _is_test_db_name(name: str | None) -> bool:
     if not name:
@@ -262,3 +263,36 @@ def lecteur_headers(db_session: Session) -> dict:
 def responsable_headers(db_session: Session) -> dict:
     user = create_test_user(db_session, "responsable")
     return bearer_headers(user.id)
+
+
+@pytest.fixture
+def ready_slot_validation():
+    """Validation slots complète pour bypasser le gate dans les tests RAG."""
+    from app.services.slot_filling_service import (
+        SlotState,
+        SlotValidationResult,
+        build_canonical_query,
+    )
+
+    state = SlotState(
+        intent_type="diagnostic_probleme",
+        type="fenetre",
+        material="pvc",
+        problem_symptom="ferme mal",
+        galandage="inconnu",
+    )
+    return SlotValidationResult(
+        ready=True,
+        slot_state=state,
+        canonical_query=build_canonical_query(state),
+    )
+
+
+@pytest.fixture
+def mock_slot_filling_ready(ready_slot_validation):
+    """Patch slot filling pour laisser passer le retrieval dans les tests existants."""
+    with mock.patch(
+        "app.services.slot_filling_service.process_slot_filling",
+        new=mock.AsyncMock(return_value=ready_slot_validation),
+    ):
+        yield

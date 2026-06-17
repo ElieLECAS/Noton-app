@@ -18,6 +18,9 @@ from app.services.multimodal_page_service import (
 )
 
 
+from tests.helpers import upload_form
+
+
 def test_parse_multimodal_page_response_v4():
     data = {
         "page_no": 2,
@@ -58,7 +61,7 @@ def test_multimodal_reindex_endpoint_returns_queued(
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("mm.txt", b"hello", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(),
         )
     assert r.status_code == 201
     doc_id = r.json()[0]["id"]

@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from unittest import mock
 
+from tests.helpers import upload_form
+
 
 def test_upload_is_paid_true_persisted(client, responsable_headers):
     with (
@@ -16,7 +18,7 @@ def test_upload_is_paid_true_persisted(client, responsable_headers):
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("paid.txt", b"x", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "true"},
+            data=upload_form(is_paid="true"),
         )
     assert r.status_code == 201
     doc_id = r.json()[0]["id"]
@@ -25,12 +27,12 @@ def test_upload_is_paid_true_persisted(client, responsable_headers):
     assert gr.json()["is_paid"] is True
 
 
-def test_upload_is_paid_false(client, responsable_headers):
+def test_upload_requires_classification(client, responsable_headers):
     with (
         mock.patch("app.routers.library.process_document_async"),
         mock.patch(
             "app.routers.library.save_uploaded_file",
-            return_value="media/documents/pytest_free.pdf",
+            return_value="media/documents/pytest_noclass.pdf",
         ),
     ):
         r = client.post(
@@ -39,8 +41,35 @@ def test_upload_is_paid_false(client, responsable_headers):
             files=[("files", ("free.txt", b"y", "text/plain"))],
             data={"space_ids": "[]", "is_paid": "false"},
         )
+    assert r.status_code == 422
+
+
+def test_upload_with_classification_persisted(client, responsable_headers):
+    with (
+        mock.patch("app.routers.library.process_document_async"),
+        mock.patch(
+            "app.routers.library.save_uploaded_file",
+            return_value="media/documents/pytest_class.pdf",
+        ),
+    ):
+        r = client.post(
+            "/api/library/upload",
+            headers=responsable_headers,
+            files=[("files", ("class.txt", b"z", "text/plain"))],
+            data=upload_form(
+                supplier="Technal",
+                product_types='["fenetre", "coulissant"]',
+                materials='["alu"]',
+                coulissant_galandage="both",
+                proferm_gammes='["lumine"]',
+            ),
+        )
     assert r.status_code == 201
-    assert r.json()[0]["is_paid"] is False
+    doc = r.json()[0]
+    assert doc["supplier"] == "Technal"
+    assert doc["classification_status"] == "complete"
+    assert "fenetre" in doc["product_types"]
+    assert "alu" in doc["materials"]
 
 
 def test_upload_invalid_space_ids_json(client, responsable_headers):
@@ -55,7 +84,7 @@ def test_upload_invalid_space_ids_json(client, responsable_headers):
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("a.txt", b"z", "text/plain"))],
-            data={"space_ids": "not-json", "is_paid": "false"},
+            data=upload_form(space_ids="not-json"),
         )
     assert r.status_code == 400
 
@@ -83,7 +112,7 @@ def test_upload_calls_process_once_per_file(client, responsable_headers):
                 ("files", ("one.txt", b"1", "text/plain")),
                 ("files", ("two.txt", b"2", "text/plain")),
             ],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(is_paid="false"),
         )
     assert r.status_code == 201
     assert len(r.json()) == 2
@@ -142,7 +171,7 @@ def test_document_move_to_folder(client, responsable_headers):
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("moveme.txt", b"doc", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(is_paid="false"),
         )
     assert up.status_code == 201
     doc_id = up.json()[0]["id"]
@@ -184,7 +213,7 @@ def test_document_add_and_remove_space(mock_save, mock_proc, client, responsable
         "/api/library/upload",
         headers=responsable_headers,
         files=[("files", ("linked.txt", b"t", "text/plain"))],
-        data={"space_ids": "[]", "is_paid": "false"},
+        data=upload_form(),
     )
     assert up.status_code == 201
     doc_id = up.json()[0]["id"]
@@ -245,7 +274,7 @@ def test_document_spaces_noop_does_not_dispatch(
         "/api/library/upload",
         headers=responsable_headers,
         files=[("files", ("linked.txt", b"t", "text/plain"))],
-        data={"space_ids": "[]", "is_paid": "false"},
+        data=upload_form(),
     )
     assert up.status_code == 201
     doc_id = up.json()[0]["id"]
@@ -288,7 +317,7 @@ def test_document_export_and_import(client, responsable_headers):
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("export_test.pdf", b"pdfcontent", "application/pdf"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(is_paid="false"),
         )
         assert r.status_code == 201
         doc_id = r.json()[0]["id"]
@@ -414,7 +443,7 @@ def test_library_export_all_and_import(client, responsable_headers):
             "/api/library/upload",
             headers=responsable_headers,
             files=[("files", ("export_all_test.pdf", b"pdfcontentall", "application/pdf"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(is_paid="false"),
         )
         assert r.status_code == 201
         doc_id = r.json()[0]["id"]

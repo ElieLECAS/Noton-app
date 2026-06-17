@@ -389,7 +389,10 @@ def _load_conversation_context(
     )
 
 
-def build_space_context_from_passages(passages: List[dict]) -> dict:
+def build_space_context_from_passages(
+    passages: List[dict],
+    retrieval_query_text: Optional[str] = None,
+) -> dict:
     """
     Construit le contexte système à partir des passages RAG + KAG rerankés.
     Format unifié pour le LLM (comme build_semantic_context_from_passages).
@@ -430,6 +433,22 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
             used_chars += len(passage_text)
         system_message["content"] += "\n---\n".join(passages_content)
         system_message["content"] += f"\n\n({len(passages_content)} passages.)"
+        if retrieval_query_text:
+            from app.catalog.slot_config import query_suggests_installation_context
+
+            if query_suggests_installation_context(retrieval_query_text):
+                page_nos = [
+                    int(p["page_no"])
+                    for p in passages
+                    if p.get("page_no") is not None
+                ]
+                if page_nos and all(page_no <= 6 for page_no in page_nos):
+                    system_message["content"] += (
+                        "\n\n⚠️ AVERTISSEMENT : Les passages actuels sont des pages "
+                        "réglementaires (garde), pas des schémas de pose. Ne déduis "
+                        "aucune cote en mm. Indique que le schéma de pose n'a pas été "
+                        "retrouvé et suggère de préciser le matériau (PVC / alu) si besoin."
+                    )
     else:
         system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
 
@@ -602,22 +621,132 @@ async def stream_space_chat_message(
 
         return StreamingResponse(generate_direct(), media_type="text/event-stream")
 
+    # Pass 0.5 : Slot filling menuiserie (validation avant retrieval)
+    from app.services.slot_filling_service import (
+        process_slot_filling,
+        load_slot_state_from_session,
+        build_retrieval_query_from_conversation,
+        build_clarification_message,
+        build_slot_context_for_generation,
+        filter_passages_by_slot_material,
+        slot_state_to_sources_payload,
+    )
+    from app.services.document_classification_filter import build_no_documents_message
+
+    conversation_context: List[dict] = []
+    if request.conversation_id:
+        conversation_context = _load_conversation_context(
+            session,
+            request.conversation_id,
+            max_messages=12,
+        )
+    elif request.context:
+        conversation_context = _sanitize_context_messages(request.context, max_messages=10)
+
+    while conversation_context and conversation_context[-1].get("role") == "user":
+        conversation_context.pop()
+
+    previous_slot_state = (
+        load_slot_state_from_session(session, request.conversation_id)
+        if request.conversation_id
+        else None
+    )
+
+    with trace_run(
+        "slot_filling",
+        run_type="chain",
+        inputs={"query": request.message, "space_id": space_id},
+        tags=["slot_filling", "space"],
+    ) as slot_run:
+        slot_validation = await process_slot_filling(
+            request.message,
+            history=conversation_context,
+            previous_state=previous_slot_state,
+            use_llm=bool(settings.MISTRAL_API_KEY) and settings.LLM_PROVIDER != "ollama",
+        )
+        slot_run.end(
+            outputs={
+                "ready": slot_validation.ready,
+                "missing_required_slots": slot_validation.missing_required_slots,
+                "canonical_query": slot_validation.canonical_query,
+                "slot_state": slot_validation.slot_state.model_dump(),
+            }
+        )
+        logger.info(
+            "Slot filling: ready=%s missing=%s canonical=%s",
+            slot_validation.ready,
+            slot_validation.missing_required_slots,
+            slot_validation.canonical_query,
+        )
+
+    if not slot_validation.ready:
+        clarification_text = build_clarification_message(slot_validation)
+        sources_payload = slot_state_to_sources_payload(slot_validation)
+
+        async def generate_clarification():
+            clarification_response: List[str] = []
+            try:
+                yield (
+                    f"data: {json.dumps({'need_clarification': True, 'missing_required_slots': slot_validation.missing_required_slots, 'suggested_options': slot_validation.suggested_options, 'clarification_actions': slot_validation.clarification_actions, 'clarification_questions': slot_validation.clarification_questions, 'slot_state': slot_validation.slot_state.model_dump()})}\n\n"
+                )
+                chunk_size = 25
+                for i in range(0, len(clarification_text), chunk_size):
+                    chunk = clarification_text[i : i + chunk_size]
+                    clarification_response.append(chunk)
+                    yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+
+                assistant_message_id = None
+                if request.conversation_id:
+                    try:
+                        assistant_message_id = _persist_assistant_reply(
+                            request.conversation_id,
+                            clarification_text,
+                            forced_model,
+                            forced_provider,
+                            sources_payload,
+                        )
+                    except Exception:
+                        logger.exception("Erreur sauvegarde clarification assistant (space chat)")
+
+                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+            except Exception as e:
+                logger.exception("Erreur générateur clarification slot filling")
+                yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+        return StreamingResponse(generate_clarification(), media_type="text/event-stream")
+
+    retrieval_query_text = build_retrieval_query_from_conversation(
+        slot_validation.canonical_query or "",
+        conversation_context,
+        request.message,
+        slot_state=slot_validation.slot_state,
+    )
+    validated_slot_state = slot_validation.slot_state
+
     # Pass 1 : Recherche technique (exclut FAQ correctives)
     with trace_run(
         "technical_retrieval",
         run_type="retriever",
-        inputs={"query": request.message, "space_id": space_id, "k": RAG_TOP_K},
+        inputs={
+            "query": request.message,
+            "retrieval_query": retrieval_query_text,
+            "space_id": space_id,
+            "k": RAG_TOP_K,
+            "slot_state": validated_slot_state.model_dump(),
+        },
         tags=["rag", "technical", "space"],
     ) as retrieval_run:
         from app.services.space_search_service import search_technical_passages
         retrieval = await search_technical_passages(
             session=session,
             space_id=space_id,
-            query_text=request.message,
+            query_text=retrieval_query_text,
             user_id=current_user.id,
             k=RAG_TOP_K,
+            slot_state=validated_slot_state,
         )
         doc_passages = retrieval["passages"]
+        doc_passages = filter_passages_by_slot_material(doc_passages, validated_slot_state)
         retrieval_status = retrieval["status"]
         retrieval_reason = retrieval.get("reason")
         
@@ -650,7 +779,9 @@ async def stream_space_chat_message(
     # Construire le contexte système à partir des passages techniques
     # Si low confidence : injecter un prompt spécial pour forcer la clarification
     if retrieval_status == "low_confidence_clarification":
-        space_context_draft = build_space_context_from_passages(doc_passages)
+        space_context_draft = build_space_context_from_passages(
+            doc_passages, retrieval_query_text=retrieval_query_text
+        )
         # Ajouter une instruction de clarification forcée après les passages
         space_context_draft["content"] += (
             "\n\n⚠️ IMPORTANT : Les passages ci-dessus sont ambigus ou de faible pertinence. "
@@ -663,26 +794,16 @@ async def stream_space_chat_message(
             retrieval_reason,
         )
     else:
-        space_context_draft = build_space_context_from_passages(doc_passages)
+        space_context_draft = build_space_context_from_passages(
+            doc_passages, retrieval_query_text=retrieval_query_text
+        )
+
+    slot_context_block = build_slot_context_for_generation(validated_slot_state)
+    if slot_context_block:
+        space_context_draft["content"] += f"\n\n{slot_context_block}"
 
     full_context_draft = []
     full_context_draft.append(space_context_draft)
-
-    conversation_context: List[dict] = []
-    if request.conversation_id:
-        conversation_context = _load_conversation_context(
-            session,
-            request.conversation_id,
-            max_messages=12,
-        )
-    elif request.context:
-        conversation_context = _sanitize_context_messages(request.context, max_messages=10)
-
-    # Éliminer tout message utilisateur en suspens à la fin de l'historique
-    # pour éviter la duplication de la requête courante (déjà ajoutée à la fin de full_context_draft)
-    while conversation_context and conversation_context[-1].get("role") == "user":
-        conversation_context.pop()
-
     full_context_draft.extend(conversation_context)
 
     user_images: List[str] = []
@@ -707,19 +828,26 @@ async def stream_space_chat_message(
 
     _pipeline_inputs_space = {
         "query": request.message,
+        "retrieval_query": retrieval_query_text,
         "space_id": space_id,
         "user_id": current_user.id,
         "model": forced_model,
         "nb_doc_passages": len(doc_passages),
+        "slot_state": validated_slot_state.model_dump(),
     }
 
     assistant_response: List[str] = []
+    empty_passages_message = (
+        build_no_documents_message(validated_slot_state)
+        if retrieval_reason == "no_matching_classified_documents"
+        else "Je ne trouve pas de réponse à votre question dans les documents disponibles dans cet espace car aucune source n'est jugée suffisamment pertinente (seuil minimum de 75%)."
+    )
 
     async def generate():
         error_msg_to_yield = None
         try:
             if not doc_passages:
-                static_reply = "Je ne trouve pas de réponse à votre question dans les documents disponibles dans cet espace car aucune source n'est jugée suffisamment pertinente (seuil minimum de 75%)."
+                static_reply = empty_passages_message
                 chunk_size = 25
                 for i in range(0, len(static_reply), chunk_size):
                     chunk = static_reply[i : i + chunk_size]

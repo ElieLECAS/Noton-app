@@ -104,7 +104,7 @@ async def _fake_mistral_stream(*args, **kwargs):
     yield json.dumps({"message": {"content": "chunk"}})
 
 
-def test_space_chat_stream_empty_space_no_error(client, responsable_headers):
+def test_space_chat_stream_empty_space_no_error(client, responsable_headers, mock_slot_filling_ready):
     sp = client.post(
         "/api/spaces",
         headers=responsable_headers,
@@ -133,7 +133,7 @@ def test_space_chat_stream_empty_space_no_error(client, responsable_headers):
 
 
 def test_space_chat_stream_with_conversation_persists(
-    client, responsable_headers, space_and_conversation
+    client, responsable_headers, space_and_conversation, mock_slot_filling_ready
 ):
     space_id, conv_id = space_and_conversation
     with mock.patch(
@@ -161,7 +161,7 @@ def test_space_chat_stream_with_conversation_persists(
     assert "user" in roles
 
 
-def test_space_chat_stream_bypass_when_no_passages(client, responsable_headers):
+def test_space_chat_stream_bypass_when_no_passages(client, responsable_headers, mock_slot_filling_ready):
     sp = client.post(
         "/api/spaces",
         headers=responsable_headers,

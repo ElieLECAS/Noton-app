@@ -5,6 +5,7 @@ from unittest import mock
 
 from app.models.space import Space
 from tests.conftest import create_test_user
+from tests.helpers import upload_form
 
 
 def get_user_from_headers(headers, session):
@@ -34,7 +35,7 @@ def test_upload_forbidden_lecteur(client, lecteur_headers):
             "/api/library/upload",
             headers=lecteur_headers,
             files=[("files", ("a.txt", b"hello", "text/plain"))],
-            data={"space_ids": "[]", "is_paid": "false"},
+            data=upload_form(),
         )
     assert r.status_code == 403
     detail = (r.json().get("detail") or "").lower()
@@ -51,7 +52,7 @@ def test_upload_ok_responsable(mock_save, mock_proc, client, responsable_headers
         "/api/library/upload",
         headers=responsable_headers,
         files=[("files", ("doc.txt", b"content", "text/plain"))],
-        data={"space_ids": "[]", "is_paid": "false"},
+        data=upload_form(),
     )
     assert r.status_code == 201
     data = r.json()

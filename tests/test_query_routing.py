@@ -2,6 +2,7 @@ import json
 from unittest import mock
 import pytest
 from app.services.query_reasoning_service import RetrievalDecision
+from tests.conftest import extract_sse_message_text
 
 async def _fake_mistral_stream(*args, **kwargs):
     yield json.dumps({"message": {"content": "Direct response chunk"}})
@@ -21,7 +22,7 @@ def test_space_chat_routing_direct(client, responsable_headers):
         mock_decision = RetrievalDecision(decision="direct", reasoning="Politesse ou salutation")
         
         with mock.patch(
-            "app.routers.chat.decide_retrieval_route",
+            "app.services.query_reasoning_service.decide_retrieval_route",
             new=mock.AsyncMock(return_value=mock_decision)
         ) as mock_route_decision, mock.patch(
             "app.routers.chat.mistral_chat_stream",
@@ -53,7 +54,7 @@ def test_space_chat_routing_direct(client, responsable_headers):
     finally:
         client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)
 
-def test_space_chat_routing_rag(client, responsable_headers):
+def test_space_chat_routing_rag(client, responsable_headers, ready_slot_validation):
     # 1. Create space
     sp = client.post(
         "/api/spaces",
@@ -68,9 +69,12 @@ def test_space_chat_routing_rag(client, responsable_headers):
         mock_decision = RetrievalDecision(decision="rag", reasoning="Question technique")
         
         with mock.patch(
-            "app.routers.chat.decide_retrieval_route",
+            "app.services.query_reasoning_service.decide_retrieval_route",
             new=mock.AsyncMock(return_value=mock_decision)
         ) as mock_route_decision, mock.patch(
+            "app.services.slot_filling_service.process_slot_filling",
+            new=mock.AsyncMock(return_value=ready_slot_validation),
+        ), mock.patch(
             "app.routers.chat.mistral_chat_stream",
             _fake_mistral_stream
         ), mock.patch(
@@ -92,8 +96,8 @@ def test_space_chat_routing_rag(client, responsable_headers):
             )
             
             assert r.status_code == 200
-            # Since no passages were found, it should display the RAG threshold warning
-            assert "seuil minimum de 75%" in r.text
+            text_content = extract_sse_message_text(r.text)
+            assert "seuil minimum de 75%" in text_content
             
             # Verify decide_retrieval_route was called
             mock_route_decision.assert_called_once_with("quel est le dormant Profine ?")

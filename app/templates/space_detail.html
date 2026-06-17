@@ -1281,43 +1281,70 @@ function addMessage(role, content, messageId = null, sources = null) {
   div.innerHTML = innerHtml;
   host.appendChild(div);
   host.scrollTop = host.scrollHeight;
+
+  if (role === "assistant") {
+    let slotSources = null;
+    if (sources) {
+      try {
+        slotSources = typeof sources === "string" ? JSON.parse(sources) : sources;
+      } catch (_) {}
+    }
+    if (slotSources?.need_clarification && slotSources.clarification_actions?.length) {
+      const bubble = div.querySelector(".assistant-message-bubble");
+      if (bubble) renderClarificationButtons(bubble, slotSources.clarification_actions);
+    }
+  }
   
   if (role === "assistant" && messageId) {
     fetchAndRenderFeedback(messageId);
   }
 }
 
+function renderClarificationButtons(container, actions) {
+  if (!container || !actions || !actions.length) return;
+  const existing = container.querySelector(".slot-clarification-actions");
+  if (existing) existing.remove();
 
-async function loadSpace() {
-  const r = await api(`/api/spaces/${spaceId}`);
-  if (!r.ok) return;
-  const s = await r.json();
-  document.getElementById("space-title").textContent = s.name;
+  const wrap = document.createElement("div");
+  wrap.className = "slot-clarification-actions flex flex-wrap gap-2 mt-3 pt-3 border-t border-black/5 dark:border-white/5";
+  for (const action of actions) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 border border-indigo-200/60 dark:border-indigo-500/30 transition-all active:scale-95";
+    btn.textContent = action.label || action.message || action.value;
+    btn.addEventListener("click", () => {
+      wrap.querySelectorAll("button").forEach((b) => { b.disabled = true; });
+      sendSpaceChatMessage(action.message || action.label || action.value);
+    });
+    wrap.appendChild(btn);
+  }
+  container.appendChild(wrap);
 }
 
-document.getElementById("chat-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
+function startFakeReasoning(el) {
+  el.innerHTML = `
+    <div class="flex items-center gap-3 py-1">
+      <div class="lia-loading-icon w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-md shadow-indigo-500/10">
+        <i class="ti ti-robot text-xs"></i>
+      </div>
+      <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase animate-pulse">LIA réfléchit...</span>
+    </div>
+  `;
+  return null;
+}
+
+async function sendSpaceChatMessage(message) {
+  const trimmed = (message || "").trim();
+  if (!trimmed) return;
+
   if (!currentConversationId) {
     await createNewConversation();
     if (!currentConversationId) return;
   }
-  const input = document.getElementById("chat-input");
-  const message = input.value.trim();
-  if (!message) return;
-  addMessage("user", message);
-  input.value = "";
 
-  function startFakeReasoning(el) {
-    el.innerHTML = `
-      <div class="flex items-center gap-3 py-1">
-        <div class="lia-loading-icon w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-md shadow-indigo-500/10">
-          <i class="ti ti-robot text-xs"></i>
-        </div>
-        <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase animate-pulse">LIA réfléchit...</span>
-      </div>
-    `;
-    return null;
-  }
+  addMessage("user", trimmed);
+  const input = document.getElementById("chat-input");
+  if (input) input.value = "";
 
   const host = document.getElementById("chat-messages");
   const assistantWrap = document.createElement("div");
@@ -1330,7 +1357,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   host.scrollTop = host.scrollHeight;
   const contentEl = assistantWrap.querySelector("#streaming-content");
   const reasoningInterval = startFakeReasoning(contentEl);
-  
+
   let response;
   try {
     response = await fetch(`/api/spaces/${spaceId}/chat/stream`, {
@@ -1338,7 +1365,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({
-        message,
+        message: trimmed,
         model: fastModel,
         provider: fastProvider,
         context: chatHistory,
@@ -1362,6 +1389,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   let full = "";
   let streamError = "";
   let receivedSources = [];
+  let clarificationActions = [];
   let streamDone = false;
   let assistantMessageId = null;
   const reader = response.body.getReader();
@@ -1379,18 +1407,16 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
       if (!raw) continue;
       try {
         const data = JSON.parse(raw);
-        if (data.message && data.message.content) {
+        if (data.need_clarification) {
+          clarificationActions = data.clarification_actions || [];
+        } else if (data.message && data.message.content) {
           if (reasoningInterval) clearInterval(reasoningInterval);
           full += data.message.content;
           contentEl.classList.remove("italic");
-          const withMarkdown = parseMarkdown(full);
-          contentEl.innerHTML = withMarkdown;
+          contentEl.innerHTML = parseMarkdown(full);
         } else if (data.sources) {
           receivedSources = data.sources;
-          if (full) {
-            const withMarkdown = parseMarkdown(full);
-            contentEl.innerHTML = withMarkdown;
-          }
+          if (full) contentEl.innerHTML = parseMarkdown(full);
         } else if (data.status === "cropping") {
           const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
           if (messageContainer) {
@@ -1453,9 +1479,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
         } else if (data.done) {
           if (reasoningInterval) clearInterval(reasoningInterval);
           streamDone = true;
-          if (data.message_id) {
-            assistantMessageId = data.message_id;
-          }
+          if (data.message_id) assistantMessageId = data.message_id;
           break;
         }
       } catch (_) {}
@@ -1467,8 +1491,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     host.scrollTop = host.scrollHeight;
   }
   if (reasoningInterval) clearInterval(reasoningInterval);
-  
-  // Supprimer le squelette de chargement s'il existe
+
   const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
   if (messageContainer) {
     const skeleton = messageContainer.querySelector("#illustration-skeleton");
@@ -1486,18 +1509,19 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
       ? transformCitationsToLinks(withMarkdown, receivedSources, streamingMessageKey)
       : withMarkdown;
     contentEl.innerHTML = finalHtml;
-    if (receivedSources && receivedSources.length > 0) {
-      const sourcesHtml = buildSourcesSection(receivedSources, streamingMessageKey);
-      const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
-      if (messageContainer) {
-        messageContainer.insertAdjacentHTML("beforeend", sourcesHtml);
-      }
+    if (receivedSources && receivedSources.length > 0 && messageContainer) {
+      messageContainer.insertAdjacentHTML("beforeend", buildSourcesSection(receivedSources, streamingMessageKey));
     }
   }
-  chatHistory.push({ role: "user", content: message });
+
+  if (clarificationActions.length && messageContainer) {
+    renderClarificationButtons(messageContainer, clarificationActions);
+  }
+
+  chatHistory.push({ role: "user", content: trimmed });
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });
 
-  if (assistantMessageId) {
+  if (assistantMessageId && messageContainer) {
     const feedbackHtml = `
       <div class="feedback-section mt-2 flex flex-col gap-2 border-t border-gray-200 dark:border-gray-700 pt-2 text-xs">
         <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
@@ -1522,17 +1546,29 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
         </div>
       </div>
     `;
-    const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
-    if (messageContainer) {
-      messageContainer.insertAdjacentHTML("beforeend", feedbackHtml);
-    }
+    messageContainer.insertAdjacentHTML("beforeend", feedbackHtml);
   }
 
   if (currentConversationId) {
     await api(`/api/conversations/${currentConversationId}/generate-title`, { method: "POST" });
     await refreshConversationsSidebar(currentConversationId);
   }
+}
 
+
+async function loadSpace() {
+  const r = await api(`/api/spaces/${spaceId}`);
+  if (!r.ok) return;
+  const s = await r.json();
+  document.getElementById("space-title").textContent = s.name;
+}
+
+document.getElementById("chat-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (!message) return;
+  await sendSpaceChatMessage(message);
 });
 
 // ——— Gestion du Feedback 👍/👎 ———

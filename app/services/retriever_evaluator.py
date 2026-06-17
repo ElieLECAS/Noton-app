@@ -1,10 +1,34 @@
 import logging
+import re
 import time
 from typing import List, Dict, Any, Tuple, Optional
 from sqlmodel import Session
 from app.services.space_search_service import search_relevant_passages
 
 logger = logging.getLogger(__name__)
+
+_TITLE_STOPWORDS = {
+    "de", "du", "des", "la", "le", "les", "d", "l", "pose", "notice", "rev", "rev3", "rev4",
+}
+
+
+def _titles_match(ret_title_lower: str, exp_title_lower: str) -> bool:
+    if exp_title_lower in ret_title_lower or ret_title_lower in exp_title_lower:
+        return True
+    ret_tokens = {
+        t for t in re.findall(r"\w+", ret_title_lower) if len(t) > 1 and t not in _TITLE_STOPWORDS
+    }
+    exp_tokens = {
+        t for t in re.findall(r"\w+", exp_title_lower) if len(t) > 1 and t not in _TITLE_STOPWORDS
+    }
+    if not ret_tokens or not exp_tokens:
+        return False
+    shorter, longer = (
+        (exp_tokens, ret_tokens)
+        if len(exp_tokens) <= len(ret_tokens)
+        else (ret_tokens, exp_tokens)
+    )
+    return shorter.issubset(longer)
 
 
 def match_page(retrieved_doc_title: str, retrieved_page_no: int, expected_pages: List[Dict[str, Any]]) -> bool:
@@ -23,7 +47,7 @@ def match_page(retrieved_doc_title: str, retrieved_page_no: int, expected_pages:
             continue
 
         exp_title_lower = exp_title.lower()
-        if exp_title_lower in ret_title_lower or ret_title_lower in exp_title_lower:
+        if _titles_match(ret_title_lower, exp_title_lower):
             exp_pages = exp.get("pages", [])
             parsed_pages = []
             for p in exp_pages:

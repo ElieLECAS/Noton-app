@@ -74,6 +74,7 @@ def _retrieve_leaves_sql(
     candidate_k: int,
     query_embedding: Optional[List[float]] = None,
     document_filter: str = "all",
+    slot_state: Optional[Any] = None,
 ) -> List[NodeWithScore]:
     """
     Recherche vectorielle LanceDB/ColPali sur les feuilles.
@@ -94,15 +95,21 @@ def _retrieve_leaves_sql(
 
     filter_clause = feedback_corrective_sql_filter(document_filter, "d")
 
-    # 1. Récupérer la liste des document_ids appartenant à cette space_id et satisfaisant le filter_clause
+    from app.services.document_classification_filter import build_slot_classification_filter
+
+    classification_clause, classification_params = build_slot_classification_filter(slot_state)
+    classification_sql = f" AND {classification_clause}" if classification_clause else ""
+
     sql_docs = text(f"""
         SELECT DISTINCT d.id
         FROM document d
         INNER JOIN document_space ds ON ds.document_id = d.id
         WHERE ds.space_id = :space_id
           {filter_clause}
+          {classification_sql}
     """)
-    doc_ids = [row[0] for row in session.execute(sql_docs, {"space_id": space_id})]
+    params = {"space_id": space_id, **classification_params}
+    doc_ids = [row[0] for row in session.execute(sql_docs, params)]
     logger.info(
         "[_retrieve_leaves_sql] Resolved document IDs in space %s: %s",
         space_id,
@@ -528,6 +535,49 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     return out
 
 
+def _adjust_colpali_scores_for_pose(nodes: List[Any], query_text: str) -> List[Any]:
+    """Pénalise les pages introductives et booste les passages techniques de pose."""
+    from app.catalog.slot_config import (
+        RETRIEVAL_EARLY_PAGE_PENALTY,
+        RETRIEVAL_EARLY_PAGE_THRESHOLD,
+        RETRIEVAL_TECHNICAL_KEYWORD_BOOST,
+        passage_has_technical_installation_content,
+        passage_looks_like_admin_front_matter,
+        query_suggests_installation_context,
+    )
+
+    if not query_suggests_installation_context(query_text):
+        return nodes
+
+    for nws in nodes:
+        node = getattr(nws, "node", None)
+        meta = getattr(node, "metadata", None) or {}
+        page_raw = meta.get("page_no") or meta.get("page_start") or 0
+        try:
+            page_no = int(page_raw)
+        except (TypeError, ValueError):
+            page_no = 0
+
+        content = ""
+        if node is not None:
+            content = node.get_content() if hasattr(node, "get_content") else str(node)
+        passage_text = content or str(meta.get("passage_raw") or "")
+
+        factor = 1.0
+        has_technical_content = passage_has_technical_installation_content(passage_text)
+        if page_no <= RETRIEVAL_EARLY_PAGE_THRESHOLD and not has_technical_content:
+            factor *= RETRIEVAL_EARLY_PAGE_PENALTY
+        if passage_looks_like_admin_front_matter(passage_text) and not has_technical_content:
+            factor *= RETRIEVAL_EARLY_PAGE_PENALTY
+        if has_technical_content:
+            factor *= RETRIEVAL_TECHNICAL_KEYWORD_BOOST
+
+        if factor != 1.0 and hasattr(nws, "score"):
+            nws.score = float(nws.score) * factor
+
+    return nodes
+
+
 async def search_relevant_passages(
     session: Session,
     space_id: int,
@@ -536,6 +586,7 @@ async def search_relevant_passages(
     k: int = 15,
     document_filter: str = "all",
     include_retrieval_stages: bool = False,
+    slot_state: Optional[Any] = None,
 ) -> Dict:
     """
     RAG espace : recherche ColPali-only via LanceDB.
@@ -566,12 +617,17 @@ async def search_relevant_passages(
             final_nodes = await asyncio.to_thread(
                 _retrieve_leaves_sql,
                 session, space_id, user_id, query_text, k,
-                None, document_filter,
+                None, document_filter, slot_state,
             )
             vr.end(outputs={"nb": len(final_nodes)})
 
+        final_nodes = _adjust_colpali_scores_for_pose(final_nodes, query_text)
+
         if not final_nodes:
-            result: Dict = {"passages": [], "status": "ok", "reason": "no_results"}
+            reason = "no_results"
+            if slot_state and settings.RAG_REQUIRE_CLASSIFICATION:
+                reason = "no_matching_classified_documents"
+            result: Dict = {"passages": [], "status": "ok", "reason": reason}
             if include_retrieval_stages:
                 result["retrieval_stages"] = {
                     "colpali": [],
@@ -653,6 +709,7 @@ async def search_technical_passages(
     query_text: str,
     user_id: int,
     k: int = 15,
+    slot_state: Optional[Any] = None,
 ) -> Dict:
     """
     Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
@@ -669,6 +726,7 @@ async def search_technical_passages(
         user_id=user_id,
         k=k,
         document_filter="technical",
+        slot_state=slot_state,
     )
 
 
