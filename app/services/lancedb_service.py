@@ -129,6 +129,11 @@ def delete_chunks_lancedb(document_id: int):
     except Exception as e:
         logger.error(f"Error deleting from LanceDB for document_id={document_id}: {e}", exc_info=True)
 
+
+def delete_colpali_patches_for_document(document_id: int) -> None:
+    """Alias explicite pour le pipeline document_indexing_service (mode full)."""
+    delete_chunks_lancedb(document_id)
+
 def delete_single_chunk_lancedb(chunk_id: int):
     """Deletes ColPali patches for a specific chunk ID."""
     try:

@@ -482,38 +482,39 @@ def save_uploaded_file(file_content: bytes, filename: str, upload_dir: str = "me
 
 
 def reindex_library_document(
-    document_id: int, user_id: int, run_id: Optional[str] = None
+    document_id: int,
+    user_id: int,
+    run_id: Optional[str] = None,
+    mode: str = "full",
 ) -> dict:
     """
-    Retraite un document en utilisant le pipeline multimodal unifié.
-    
-    Cette fonction remplace l'ancien pipeline PyMuPDF4LLM + MistralOCR par le pipeline
-    multimodal de meilleure qualité. Elle réutilise le fichier déjà stocké en base.
-    
+    Retraite un document via le pipeline d'indexation unifié.
+
+    Modes disponibles :
+      - full        : ColPali + pymupdf4llm + mistral-embed (pipeline complet)
+      - text_only   : pymupdf4llm + mistral-embed uniquement (ColPali inchangé)
+      - colpali_only: re-sync ColPali uniquement (chunks texte inchangés)
+
     Utilise ``document.source_file_path`` (fichier déjà stocké sous media/documents).
     """
-    from app.services.document_run import is_processing_run_current
+    from app.services.document_indexing_service import IndexingMode, process_document_indexing
 
     ld = get_library_document_logger()
     ld.info(
-        "[Réindex] Démarrage document_id=%s user_id=%s — pipeline : multimodal page par page → chunks → embeddings.",
+        "[Réindex] Démarrage document_id=%s user_id=%s mode=%s",
         document_id,
         user_id,
+        mode,
     )
-    
-    if run_id is not None and not is_processing_run_current(document_id, run_id):
-        ld.info(
-            "[Réindex] document_id=%s — abandon : run_id obsolète (stop utilisateur).",
-            document_id,
-        )
-        return {
-            "document_id": document_id,
-            "status": "aborted",
-            "reason": "stale_run",
-        }
+
+    # Résolution du mode
+    try:
+        indexing_mode = IndexingMode(mode)
+    except ValueError:
+        ld.warning("[Réindex] Mode inconnu '%s', fallback sur full", mode)
+        indexing_mode = IndexingMode.FULL
 
     try:
-        # Récupérer le source_file_path depuis la DB
         with Session(engine) as session:
             document = session.get(Document, document_id)
             if not document:
@@ -521,64 +522,39 @@ def reindex_library_document(
             library = session.get(Library, document.library_id)
             if not library:
                 raise ValueError("Document introuvable ou accès refusé")
-            # Bibliothèque globale : tout document listé côté API est réindexable par un
-            # utilisateur autorisé (library.write) ; user_id du document = auteur upload.
-            if library.is_global:
-                pass
-            elif library.user_id == user_id or document.user_id == user_id:
-                pass
-            else:
-                raise ValueError("Document introuvable ou accès refusé")
+            if not library.is_global:
+                if library.user_id != user_id and document.user_id != user_id:
+                    raise ValueError("Document introuvable ou accès refusé")
             if not document.source_file_path:
                 raise ValueError("Aucun fichier source enregistré pour ce document")
             src = Path(document.source_file_path)
             if not src.is_file():
                 raise ValueError("Fichier source introuvable sur le disque")
             file_path = str(src)
-            ld.info(
-                "[Réindex] document_id=%s — fichier source : %s",
-                document_id,
-                src,
-            )
-        
-        # Appeler le pipeline multimodal unifié en mode "complet" (supprime tous les chunks)
-        result = process_document_multimodal(
+
+        result = process_document_indexing(
             document_id=document_id,
             file_path=file_path,
             user_id=user_id,
+            mode=indexing_mode,
             run_id=run_id,
-            delete_existing_chunks=True,  # Retraitement complet: on supprime tous les chunks
         )
-        
+
         chunk_count = result.get("chunks", 0)
-        logger.info(
-            "reindex_library_document terminé document_id=%s chunks=%s",
-            document_id,
-            chunk_count,
-        )
-        ld.info(
-            "[Réindex] document_id=%s — FIN OK chunks=%s.",
-            document_id,
-            chunk_count,
-        )
-        
-        return {
-            "document_id": document_id,
-            "chunks": chunk_count,
-            "status": result.get("status", "completed"),
-        }
+        logger.info("reindex_library_document terminé document_id=%s chunks=%s mode=%s", document_id, chunk_count, mode)
+        ld.info("[Réindex] document_id=%s — FIN OK chunks=%s.", document_id, chunk_count)
+        return {"document_id": document_id, "chunks": chunk_count, "status": result.get("status", "completed")}
+
     except Exception as e:
         try:
             with Session(engine) as session:
                 doc = session.get(Document, document_id)
-                if doc:
-                    was_already_failed = doc.processing_status == "failed"
-                    if not was_already_failed:
-                        doc.processing_status = "failed"
-                        doc.updated_at = datetime.utcnow()
-                        session.add(doc)
-                        session.commit()
-                        
+                if doc and doc.processing_status != "failed":
+                    doc.processing_status = "failed"
+                    doc.updated_at = datetime.utcnow()
+                    session.add(doc)
+                    session.commit()
+                    try:
                         from app.services.discord_service import notify_document_status
                         notify_document_status(
                             document_id=document_id,
@@ -586,8 +562,10 @@ def reindex_library_document(
                             status="failed",
                             error_message=str(e),
                         )
+                    except Exception:
+                        pass
         except Exception as update_err:
-            logger.error("Failed to update status or notify Discord on reindex failure for doc %d: %s", document_id, update_err)
+            logger.error("Failed to update status on reindex failure for doc %d: %s", document_id, update_err)
         raise
 
 
@@ -1432,38 +1410,39 @@ def _process_document_for_id(
             _finalize_pipeline_abort(document_id)
             return
 
-        # Appeler le pipeline multimodal unifié
+        # Appeler le pipeline d'indexation unifié (mode full : pymupdf4llm + mistral-embed + ColPali)
+        from app.services.document_indexing_service import IndexingMode, process_document_indexing
         with trace_pipeline(
-            "multimodal_import",
+            "document_indexing_full",
             inputs={
                 "document_id": document_id,
                 "file_path": str(permanent_output_path),
             },
-            tags=["ingestion", "multimodal"],
+            tags=["ingestion", "indexing"],
         ):
-            result = process_document_multimodal(
+            result = process_document_indexing(
                 document_id=document_id,
                 file_path=str(permanent_output_path),
                 user_id=user_id,
+                mode=IndexingMode.FULL,
                 run_id=run_id,
-                delete_existing_chunks=True,  # Import initial: on supprime tous les chunks
             )
 
         if result.get("status") == "completed":
             ld.info(
-                "[Upload/Pipeline Multimodal] document_id=%s — FIN OK chunks=%s",
+                "[Upload/Indexing] document_id=%s — FIN OK chunks=%s",
                 document_id,
                 result.get("chunks", 0),
             )
         elif result.get("status") == "aborted":
             ld.info(
-                "[Upload/Pipeline Multimodal] document_id=%s — abandonné (%s)",
+                "[Upload/Indexing] document_id=%s — abandonné (%s)",
                 document_id,
                 result.get("reason", "unknown"),
             )
         else:
             ld.warning(
-                "[Upload/Pipeline Multimodal] document_id=%s — statut inattendu: %s",
+                "[Upload/Indexing] document_id=%s — statut inattendu: %s",
                 document_id,
                 result.get("status"),
             )

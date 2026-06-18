@@ -1,14 +1,13 @@
 """
-Recherche dans les espaces : chunks feuilles via pgvector + tsvector + RRF + rerank + MMR.
+Recherche dans les espaces : retrieval hybride ColPali + pgvector L1 + BM25,
+fusion RRF, expansion page entière + voisinage conditionnel, PNG si ColPali seul.
 
 Pipeline RAG :
-1. Retrieval hybride (pgvector dense + tsvector lexical)
-2. Fusion RRF (Reciprocal Rank Fusion)
-3. Résolution parents (contexte hiérarchique)
-4. Early stopping (court-circuite rerank si scores déjà excellents)
-5. Reranker cross-encoder CPU (ms-marco-MiniLM-L-6-v2)
-6. Guardrails statistiques (détection bégaiement → clarification)
-7. MMR (diversification pour éviter redondance)
+1. Retrieval ColPali (LanceDB MaxSim) + pgvector (semantic_leaf L1) + BM25 (tsvector)
+2. Fusion RRF au niveau page (document_id, page_no)
+3. Expansion small-to-big (L1 consolidés) + voisins N±1 conditionnels
+4. Vision rerank optionnel sur pages ColPali
+5. Génération : texte L1 + PNG uniquement si ColPali seul (sans accord texte)
 """
 
 from __future__ import annotations
@@ -538,15 +537,19 @@ async def search_relevant_passages(
     include_retrieval_stages: bool = False,
 ) -> Dict:
     """
-    RAG espace : recherche ColPali-only via LanceDB.
-    
-    Args:
-        document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
-        include_retrieval_stages: si True, inclut retrieval_stages (colpali pré-rerank + post-rerank)
-    
-    Returns:
-        Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
+    RAG espace : retrieval hybride ColPali + pgvector L1 + BM25, fusion RRF,
+    expansion page entière + voisinage conditionnel, PNG conditionnel si ColPali seul.
     """
+    from app.services.page_retrieval_service import (
+        build_weak_hit_pool,
+        format_hybrid_passages,
+        fuse_page_hits_rrf,
+        get_space_document_ids,
+        retrieve_bm25_page_hits,
+        retrieve_colpali_page_hits,
+        retrieve_pgvector_page_hits,
+    )
+
     space = get_space_by_id(session, space_id, user_id)
     if not space:
         logger.warning("Espace %d inaccessible (user %d)", space_id, user_id)
@@ -555,23 +558,52 @@ async def search_relevant_passages(
         return {"passages": [], "status": "disabled", "reason": "empty_query"}
 
     try:
-        # Recherche vectorielle ColPali (LanceDB)
+        pool_size = max(k, settings.RETRIEVAL_EXPAND_POOL)
+        doc_ids = get_space_document_ids(session, space_id, document_filter)
+        if not doc_ids:
+            result: Dict = {"passages": [], "status": "ok", "reason": "no_results"}
+            if include_retrieval_stages:
+                result["retrieval_stages"] = {"colpali": [], "post_rerank": [], "reason": "no_results"}
+            return result
+
+        query_embedding: Optional[List[float]] = None
+        try:
+            query_embedding = generate_embedding(query_text)
+        except Exception as exc:
+            logger.warning("[search_relevant_passages] Embedding requête indisponible : %s", exc)
+
         with trace_run(
-            "vector_retrieval",
+            "hybrid_retrieval",
             run_type="retriever",
-            inputs={"query": query_text, "space_id": space_id, "candidate_k": k},
-            tags=["retrieval", "colpali", "space"],
-        ) as vr:
-            import asyncio
-            final_nodes = await asyncio.to_thread(
-                _retrieve_leaves_sql,
-                session, space_id, user_id, query_text, k,
-                None, document_filter,
+            inputs={"query": query_text, "space_id": space_id, "pool_size": pool_size},
+            tags=["retrieval", "hybrid", "space"],
+        ) as hr:
+            colpali_hits = retrieve_colpali_page_hits(session, doc_ids, query_text, pool_size)
+            pgvector_hits = retrieve_pgvector_page_hits(session, doc_ids, query_embedding or [], pool_size)
+            bm25_hits = retrieve_bm25_page_hits(session, doc_ids, query_text, pool_size)
+            hr.end(
+                outputs={
+                    "colpali": len(colpali_hits),
+                    "pgvector": len(pgvector_hits),
+                    "bm25": len(bm25_hits),
+                }
             )
-            vr.end(outputs={"nb": len(final_nodes)})
 
-        if not final_nodes:
-            result: Dict = {"passages": [], "status": "ok", "reason": "no_results"}
+        # Seuil dynamique ColPali (absolu + marge relative)
+        if colpali_hits:
+            above_abs = [h for h in colpali_hits if h.score >= COLPALI_MIN_THRESHOLD]
+            if above_abs:
+                max_score = max(h.score for h in above_abs)
+                cutoff = max_score - COLPALI_RELATIVE_MARGIN
+                colpali_hits = [h for h in above_abs if h.score >= cutoff]
+            else:
+                colpali_hits = []
+
+        weak_pool = build_weak_hit_pool(colpali_hits, pgvector_hits, bm25_hits)
+        fused_hits = fuse_page_hits_rrf(colpali_hits, pgvector_hits, bm25_hits, top_n=k)
+
+        if not fused_hits:
+            result = {"passages": [], "status": "ok", "reason": "no_results"}
             if include_retrieval_stages:
                 result["retrieval_stages"] = {
                     "colpali": [],
@@ -581,67 +613,75 @@ async def search_relevant_passages(
                 }
             return result
 
-        # Seuil dynamique (absolu + marge relative)
-        original_count = len(final_nodes)
-        nodes_above_abs = [n for n in final_nodes if n.score >= COLPALI_MIN_THRESHOLD]
-        if nodes_above_abs:
-            max_score = max(n.score for n in nodes_above_abs)
-            cutoff = max_score - COLPALI_RELATIVE_MARGIN
-            final_nodes = [n for n in nodes_above_abs if n.score >= cutoff]
-        else:
-            final_nodes = []
+        reason = "hybrid_rrf"
+        final_hits = list(fused_hits)
 
-        logger.info(
-            "[search_relevant_passages] Seuil dynamique ColPali : %d -> %d noeuds (Seuil min : %.2f, Max score : %.2f, Cutoff relatif : %.2f)",
-            original_count,
-            len(final_nodes),
-            COLPALI_MIN_THRESHOLD,
-            max_score if nodes_above_abs else 0.0,
-            cutoff if nodes_above_abs else 0.0
-        )
-
-        if not final_nodes:
-            result: Dict = {"passages": [], "status": "ok", "reason": "no_results"}
-            if include_retrieval_stages:
-                result["retrieval_stages"] = {
-                    "colpali": [],
-                    "post_rerank": [],
-                    "vision_rerank_enabled": settings.VISION_RERANK_ENABLED,
-                    "reason": "no_results",
-                }
-            return result
-
-        colpali_nodes = list(final_nodes)
-
-        # Reranker vision LLM : juge la pertinence page-par-page (PNG) et filtre le bruit.
-        # Robuste : en cas d'echec, rerank_pages_vision renvoie les noeuds inchanges.
-        reason = "colpali_direct"
+        # Vision rerank optionnel sur les pages ColPali
         if settings.VISION_RERANK_ENABLED:
+            from llama_index.core.schema import TextNode
             from app.services.vision_reranker_service import rerank_pages_vision
-            with trace_run(
-                "vision_rerank",
-                run_type="reranker",
-                inputs={"query": query_text, "nb_candidates": len(final_nodes)},
-                tags=["rerank", "vision", "colpali"],
-            ) as rr:
-                reranked = await rerank_pages_vision(session, query_text, final_nodes)
-                rr.end(outputs={"nb": len(reranked)})
-            if reranked:
-                final_nodes = reranked
-                reason = "colpali_vision_rerank"
 
-        passages = _augment_and_format_passages(session, final_nodes, k)
+            colpali_nodes = []
+            hit_by_key = {h.page_key: h for h in final_hits}
+            for hit in final_hits:
+                if "colpali" not in hit.retrieval_sources:
+                    continue
+                meta = {
+                    "document_id": hit.document_id,
+                    "page_no": hit.page_no,
+                    "page_start": hit.page_no,
+                    "document_title": hit.document_title,
+                }
+                node = TextNode(
+                    id_=f"page-{hit.document_id}-{hit.page_no}",
+                    text=f"Page {hit.page_no}",
+                    metadata=meta,
+                )
+                colpali_nodes.append(NodeWithScore(node=node, score=hit.colpali_score or hit.score))
+
+            if colpali_nodes:
+                with trace_run(
+                    "vision_rerank",
+                    run_type="reranker",
+                    inputs={"query": query_text, "nb_candidates": len(colpali_nodes)},
+                    tags=["rerank", "vision", "hybrid"],
+                ) as rr:
+                    reranked = await rerank_pages_vision(session, query_text, colpali_nodes)
+                    rr.end(outputs={"nb": len(reranked)})
+                if reranked:
+                    reranked_keys = []
+                    for nws in reranked:
+                        meta = dict(nws.node.metadata or {})
+                        doc_id = meta.get("document_id")
+                        page_no = meta.get("page_no")
+                        if doc_id is not None and page_no is not None:
+                            reranked_keys.append(f"{doc_id}:{page_no}")
+                    if reranked_keys:
+                        ordered = []
+                        seen = set()
+                        for key in reranked_keys:
+                            if key in hit_by_key and key not in seen:
+                                ordered.append(hit_by_key[key])
+                                seen.add(key)
+                        for hit in final_hits:
+                            if hit.page_key not in seen:
+                                ordered.append(hit)
+                        final_hits = ordered[:k]
+                        reason = "hybrid_rrf_vision_rerank"
+
+        passages = format_hybrid_passages(session, final_hits, weak_pool, k)
+
         result = {"passages": passages, "status": "ok", "reason": reason}
         if include_retrieval_stages:
-            colpali_passages = _augment_and_format_passages(session, colpali_nodes, k)
+            pre_passages = format_hybrid_passages(session, fused_hits, weak_pool, k)
             result["retrieval_stages"] = {
-                "colpali": colpali_passages,
+                "colpali": pre_passages,
                 "post_rerank": passages,
                 "vision_rerank_enabled": settings.VISION_RERANK_ENABLED,
                 "reason": reason,
             }
         return result
-        
+
     except Exception as e:
         logger.error("search_relevant_passages (space): %s", e, exc_info=True)
         return {"passages": [], "status": "disabled", "reason": f"error: {str(e)}"}
@@ -794,8 +834,9 @@ def _extract_alphanumeric_codes(query: str) -> List[str]:
 
 
 def _retrieve_leaves_bm25_sql(*args, **kwargs):
-    """Stub pour compatibilité de tests."""
-    return []
+    """BM25 tsvector — implémenté dans page_retrieval_service."""
+    from app.services.page_retrieval_service import _retrieve_leaves_bm25_sql as _bm25_impl
+    return _bm25_impl(*args, **kwargs)
 
 
 def _retrieve_leaves_alphanumeric_sql(*args, **kwargs):

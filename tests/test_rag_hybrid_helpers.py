@@ -109,74 +109,63 @@ def test_reciprocal_rank_fusion_three_channels():
 @pytest.mark.asyncio
 async def test_space_search_window_aggregation_and_deduplication():
     from unittest import mock
-    from llama_index.core.schema import TextNode, NodeWithScore
     from app.services import space_search_service
+    from app.services.page_retrieval_service import PageRetrievalHit
 
     session = mock.MagicMock()
 
+    fused_hit = PageRetrievalHit(
+        document_id=123,
+        page_no=1,
+        score=0.9,
+        rrf_score=0.05,
+        retrieval_sources=["pgvector"],
+        document_title="Doc1",
+        chunk_id=1,
+    )
+
     with mock.patch("app.services.space_search_service.get_space_by_id") as mock_get_space, \
-         mock.patch("app.services.space_search_service.generate_embedding") as mock_emb, \
-         mock.patch("app.services.space_search_service._retrieve_leaves_sql") as mock_leaves, \
-         mock.patch("app.services.space_search_service._retrieve_leaves_bm25_sql") as mock_bm25, \
-         mock.patch("app.services.space_search_service._retrieve_leaves_alphanumeric_sql") as mock_alpha, \
+         mock.patch("app.services.space_search_service.generate_embedding", return_value=[0.1] * 1024), \
+         mock.patch("app.services.page_retrieval_service.get_space_document_ids", return_value=[123]), \
+         mock.patch("app.services.page_retrieval_service.retrieve_colpali_page_hits", return_value=[]), \
+         mock.patch("app.services.page_retrieval_service.retrieve_pgvector_page_hits", return_value=[fused_hit]), \
+         mock.patch("app.services.page_retrieval_service.retrieve_bm25_page_hits", return_value=[]), \
+         mock.patch("app.services.page_retrieval_service.format_hybrid_passages") as mock_format, \
          mock.patch("app.services.space_search_service.settings") as mock_settings:
 
         mock_settings.RERANKER_ENABLED = False
+        mock_settings.RETRIEVAL_EXPAND_POOL = 20
+        mock_settings.VISION_RERANK_ENABLED = False
         mock_get_space.return_value = mock.MagicMock()
-        mock_emb.return_value = [0.1] * 384
-
-        n1 = NodeWithScore(
-            node=TextNode(
-                id_="chunk-1",
-                text="Contenu de la page brute.",
-                metadata={"content_type": "page_raw_enriched", "window_id": "win-test-1", "document_title": "Doc1", "document_id": 123}
-            ),
-            score=0.9
-        )
-        n2 = NodeWithScore(
-            node=TextNode(
-                id_="chunk-2",
-                text="Rapport de la fenêtre.",
-                metadata={"content_type": "page_window_report", "window_id": "win-test-1", "document_title": "Doc1", "document_id": 123}
-            ),
-            score=0.8
-        )
-
-        mock_leaves.return_value = [n1, n2]
-        mock_bm25.return_value = []
-        mock_alpha.return_value = []
-
-        mock_raw_chunk = mock.MagicMock()
-        mock_raw_chunk.metadata_json = {"window_id": "win-test-1", "content_type": "page_raw_enriched"}
-        mock_raw_chunk.metadata_ = None
-        mock_raw_chunk.content = "Contenu brut récupéré de la DB."
-        mock_raw_chunk.text = None
-        mock_raw_chunk.chunk_index = 0
-        mock_raw_chunk.id = 1
-
-        mock_report_chunk = mock.MagicMock()
-        mock_report_chunk.metadata_json = {"window_id": "win-test-1", "content_type": "page_window_report"}
-        mock_report_chunk.metadata_ = None
-        mock_report_chunk.content = "Rapport de la fenêtre récupéré de la DB."
-        mock_report_chunk.text = None
-        mock_report_chunk.chunk_index = 0
-        mock_report_chunk.id = 2
-
-        session.execute.return_value.scalars.return_value.all.return_value = [mock_raw_chunk, mock_report_chunk]
+        mock_format.return_value = [
+            {
+                "passage": "**Doc1**\nContenu consolidé page 1.",
+                "passage_raw": "Contenu consolidé page 1.",
+                "document_title": "Doc1",
+                "document_id": 123,
+                "chunk_id": 1,
+                "score": 0.9,
+                "page_no": 1,
+                "page_start": 1,
+                "page_end": 1,
+                "retrieval_sources": ["pgvector"],
+                "needs_page_image": False,
+                "content_type": "hybrid_page_passage",
+            }
+        ]
 
         result = await space_search_service.search_relevant_passages(
             session=session,
             space_id=1,
-            query_text="test window aggregation",
+            query_text="test hybrid",
             user_id=1,
-            k=15
+            k=15,
         )
 
         passages = result.get("passages", [])
         assert len(passages) == 1
-        p = passages[0]
-        assert p["chunk_id"] == 1
-        assert "Rapport de la fenêtre récupéré de la DB." in p["passage"]
+        assert "Contenu consolidé" in passages[0]["passage"]
+        mock_format.assert_called_once()
 
 
 def test_build_space_context_from_passages_includes_page_info():
@@ -270,6 +259,8 @@ async def test_build_rag_generation_messages_attaches_images_for_vision_model():
             "document_id": 1,
             "page_no": 1,
             "score": 0.9,
+            "needs_page_image": True,
+            "image_pages": [(1, 1)],
         }
     ]
 

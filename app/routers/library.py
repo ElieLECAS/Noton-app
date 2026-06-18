@@ -124,8 +124,10 @@ class DocumentChunksMonitorResponse(BaseModel):
     document_title: str
     raw_chunks_count: int
     report_chunks_count: int
+    semantic_chunks_count: int = 0
     raw_chunks: List[DocumentChunkMonitorItem]
     report_chunks: List[DocumentChunkMonitorItem]
+    semantic_chunks: List[DocumentChunkMonitorItem] = Field(default_factory=list)
 
 
 @router.get("", response_model=LibraryRead)
@@ -359,9 +361,10 @@ async def get_document_chunks_monitor(
     session: Session = Depends(get_session),
 ):
     """
-    Retourne les chunks multimodaux d'un document pour monitoring UI :
-    - raw : page_raw_enriched (+ legacy page_multimodal_section)
-    - report : page_window_report (+ legacy page_section_report, page_multimodal_summary)
+    Retourne les chunks d'un document pour monitoring UI :
+    - semantic : chunks vision Ministral 3B (semantic_leaf, page_anchor)
+    - raw : legacy page_raw_enriched / page_multimodal_section
+    - report : legacy page_window_report / page_multimodal_summary
     """
     document = get_document_by_id(session, document_id, current_user.id)
     if not document:
@@ -370,7 +373,7 @@ async def get_document_chunks_monitor(
     safe_max_chars = max(500, min(max_chars, 20000))
     chunks = session.exec(
         select(DocumentChunk)
-        .where(DocumentChunk.document_id == document_id, DocumentChunk.is_leaf == True)  # noqa: E712
+        .where(DocumentChunk.document_id == document_id)
         .order_by(DocumentChunk.chunk_index.asc())
     ).all()
 
@@ -380,14 +383,20 @@ async def get_document_chunks_monitor(
         "page_section_report",
         "page_multimodal_summary",
     }
+    semantic_types = {"semantic_leaf", "semantic_section", "document_header"}
 
     raw_items: List[DocumentChunkMonitorItem] = []
     report_items: List[DocumentChunkMonitorItem] = []
+    semantic_items: List[DocumentChunkMonitorItem] = []
 
     for chunk in chunks:
         metadata = dict(chunk.metadata_json or chunk.metadata_ or {})
         content_type = str(metadata.get("content_type") or "unknown")
-        if content_type not in raw_types and content_type not in report_types:
+        if (
+            content_type not in raw_types
+            and content_type not in report_types
+            and content_type not in semantic_types
+        ):
             continue
         page_no = metadata.get("page_no") or metadata.get("page") or metadata.get("page_start") or 0
         try:
@@ -407,21 +416,26 @@ async def get_document_chunks_monitor(
             content=content,
             metadata=metadata,
         )
-        if content_type in raw_types:
+        if content_type in semantic_types:
+            semantic_items.append(item)
+        elif content_type in raw_types:
             raw_items.append(item)
         else:
             report_items.append(item)
 
     raw_items.sort(key=lambda x: (x.page, x.chunk_index))
     report_items.sort(key=lambda x: (x.page, x.chunk_index))
+    semantic_items.sort(key=lambda x: (x.page, x.chunk_index, x.is_leaf))
 
     return DocumentChunksMonitorResponse(
         document_id=document.id,
         document_title=document.title,
         raw_chunks_count=len(raw_items),
         report_chunks_count=len(report_items),
+        semantic_chunks_count=len(semantic_items),
         raw_chunks=raw_items,
         report_chunks=report_items,
+        semantic_chunks=semantic_items,
     )
 
 
@@ -637,31 +651,47 @@ async def update_library_document(
     return DocumentRead.model_validate(document)
 
 
+class ReindexRequest(BaseModel):
+    """Corps de la requête de retraitement."""
+    mode: str = Field(default="full", description="full | text_only | colpali_only")
+
+
 @router.post("/documents/{document_id}/reindex", status_code=status.HTTP_200_OK)
 async def reindex_library_document_endpoint(
     document_id: int,
+    body: ReindexRequest = ReindexRequest(),
     current_user: UserRead = Depends(require_role("admin")),
     session: Session = Depends(get_session),
 ):
     """
-    Enfile la réindexation sur Celery : pipeline multimodal (pymupdf + mistral-small vision), 
-    chunks multimodaux et embeddings dans le worker — pas de traitement lourd dans FastAPI.
-    
-    Ce pipeline remplace l'ancien PyMuPDF4LLM + MistralOCR par un traitement multimodal 
-    de meilleure qualité, avec 1-5 sections + synthèse par page.
-    
+    Enfile le retraitement d'un document sur Celery.
+
+    Modes disponibles :
+    - full        : Vision Ministral 3B + mistral-embed + ColPali (pipeline complet, défaut)
+    - text_only   : Vision Ministral 3B + mistral-embed uniquement (ColPali inchangé)
+    - colpali_only: re-sync visuel ColPali uniquement (chunks texte inchangés)
+
     Marque le document en reindex_queued (chunks encore disponibles pour le RAG).
     """
-    if not settings.MULTIMODAL_ENABLED:
+    from app.services.document_indexing_service import IndexingMode
+
+    valid_modes = {m.value for m in IndexingMode}
+    if body.mode not in valid_modes:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Retraitement multimodal désactivé (MULTIMODAL_ENABLED=false).",
+            detail=f"Mode invalide '{body.mode}'. Valeurs acceptées : {', '.join(sorted(valid_modes))}",
         )
-    if not settings.MISTRAL_API_KEY:
+    if body.mode in ("full", "text_only") and not settings.MISTRAL_API_KEY:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="MISTRAL_API_KEY requise pour le retraitement multimodal.",
+            detail="MISTRAL_API_KEY requise pour les modes full et text_only.",
         )
+    if body.mode in ("full", "colpali_only") and not settings.COLPALI_ENABLED:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ColPali désactivé (COLPALI_ENABLED=false). Modes full et colpali_only nécessitent ColPali.",
+        )
+
     library = get_or_create_user_library(session, current_user.id)
     document = session.exec(
         select(Document).where(
@@ -681,7 +711,7 @@ async def reindex_library_document_endpoint(
         )
     mark_document_reindex_queued(session, document_id, current_user.id)
     try:
-        celery_task_id = dispatch_reindex_library(document_id, current_user.id)
+        celery_task_id = dispatch_reindex_library(document_id, current_user.id, mode=body.mode)
     except RuntimeError as e:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -690,33 +720,63 @@ async def reindex_library_document_endpoint(
     log_admin_action(
         user_id=current_user.id,
         action="library.reindex_document",
-        detail={"document_id": document_id, "celery_task_id": celery_task_id},
+        detail={"document_id": document_id, "celery_task_id": celery_task_id, "mode": body.mode},
     )
     return {
         "status": "queued",
         "celery_task_id": celery_task_id,
         "document_id": document_id,
+        "mode": body.mode,
     }
+
+
+class ReindexAllRequest(BaseModel):
+    """Corps de la requête de retraitement global."""
+    mode: str = Field(default="full", description="full | text_only | colpali_only")
 
 
 @router.post("/reindex-all", status_code=status.HTTP_200_OK)
 async def reindex_all_library_endpoint(
+    body: ReindexAllRequest = ReindexAllRequest(),
     current_user: UserRead = Depends(require_role("admin")),
 ):
     """
-    Enfile sur Celery la réindexation de tous les documents fichier de la bibliothèque
-    (traitement séquentiel dans le worker).
+    Enfile le retraitement de tous les documents de la bibliothèque.
+
+    Modes disponibles :
+    - full        : Vision Ministral 3B + mistral-embed + ColPali (défaut)
+    - text_only   : Vision Ministral 3B + mistral-embed uniquement
+    - colpali_only: re-sync visuel ColPali uniquement
     """
+    from app.services.document_indexing_service import IndexingMode
+
+    valid_modes = {m.value for m in IndexingMode}
+    if body.mode not in valid_modes:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Mode invalide '{body.mode}'. Valeurs acceptées : {', '.join(sorted(valid_modes))}",
+        )
+    if body.mode in ("full", "text_only") and not settings.MISTRAL_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="MISTRAL_API_KEY requise pour les modes full et text_only.",
+        )
+    if body.mode in ("full", "colpali_only") and not settings.COLPALI_ENABLED:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ColPali désactivé. Modes full et colpali_only nécessitent ColPali.",
+        )
     try:
-        celery_task_id = dispatch_reindex_all_library(current_user.id)
+        celery_task_id = dispatch_reindex_all_library(current_user.id, mode=body.mode)
         log_admin_action(
             user_id=current_user.id,
             action="library.reindex_all",
-            detail={"celery_task_id": celery_task_id},
+            detail={"celery_task_id": celery_task_id, "mode": body.mode},
         )
         return {
             "status": "queued",
             "celery_task_id": celery_task_id,
+            "mode": body.mode,
         }
     except RuntimeError as e:
         raise HTTPException(

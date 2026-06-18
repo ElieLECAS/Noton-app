@@ -32,6 +32,7 @@ def is_vision_model(model_name: str) -> bool:
         or "vision" in name_lower
         or "large-latest" in name_lower
         or "small-latest" in name_lower
+        or "ministral" in name_lower
         or "gpt-4o" in name_lower
     )
 
@@ -107,26 +108,74 @@ def collect_unique_page_keys(
     passages: List[Dict[str, Any]],
     *,
     max_pages: Optional[int] = None,
+    needs_image_only: bool = False,
 ) -> List[Tuple[int, int]]:
-    """Retourne les couples (document_id, page_no) uniques, ordre de pertinence."""
+    """
+    Retourne les couples (document_id, page_no) uniques, ordre de pertinence.
+    Si needs_image_only=True, ne retient que les pages marquées needs_page_image / image_pages.
+    """
     unique_pages: List[Tuple[int, int]] = []
     seen: set[Tuple[int, int]] = set()
+
+    if needs_image_only:
+        for passage in passages:
+            for doc_id, page_no in passage.get("image_pages") or []:
+                try:
+                    key = (int(doc_id), int(page_no))
+                except (TypeError, ValueError):
+                    continue
+                if key in seen:
+                    continue
+                seen.add(key)
+                unique_pages.append(key)
+                if max_pages is not None and len(unique_pages) >= max_pages:
+                    return unique_pages
+        return unique_pages
+
     for passage in passages:
         doc_id = passage.get("document_id")
-        page_no = passage.get("page_no") or passage.get("page_start")
-        if doc_id is None or page_no is None:
+        page_start = passage.get("page_start") or passage.get("page_no")
+        page_end = passage.get("page_end") or page_start
+        if doc_id is None or page_start is None:
             continue
         try:
-            key = (int(doc_id), int(page_no))
+            doc_id_i = int(doc_id)
+            start_i = int(page_start)
+            end_i = int(page_end) if page_end is not None else start_i
         except (TypeError, ValueError):
             continue
-        if key in seen:
-            continue
-        seen.add(key)
-        unique_pages.append(key)
-        if max_pages is not None and len(unique_pages) >= max_pages:
-            break
+        for page_no in range(start_i, end_i + 1):
+            key = (doc_id_i, page_no)
+            if key in seen:
+                continue
+            seen.add(key)
+            unique_pages.append(key)
+            if max_pages is not None and len(unique_pages) >= max_pages:
+                return unique_pages
     return unique_pages
+
+
+def build_page_passage_from_l1_chunks(
+    session: Session,
+    document_id: int,
+    page_nos: List[int],
+) -> str:
+    """Concatène les chunks L1 vision pour une ou plusieurs pages (small-to-big)."""
+    from app.services.page_retrieval_service import (
+        build_consolidated_page_text,
+        load_l1_chunks_for_page,
+    )
+
+    all_chunks = []
+    seen_ids: set[int] = set()
+    for page_no in sorted(page_nos):
+        for chunk in load_l1_chunks_for_page(session, document_id, page_no):
+            if chunk.id in seen_ids:
+                continue
+            seen_ids.add(chunk.id)
+            all_chunks.append(chunk)
+    all_chunks.sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
+    return build_consolidated_page_text(all_chunks)
 
 
 def render_page_images_for_passages(
@@ -135,12 +184,16 @@ def render_page_images_for_passages(
     *,
     max_pages: int = DEFAULT_RAG_MAX_PAGE_IMAGES,
     dpi: int = DEFAULT_RAG_PAGE_IMAGE_DPI,
+    needs_image_only: bool = True,
 ) -> List[str]:
     """Rend les pages candidates en PNG base64 (ordre de pertinence des passages)."""
     from app.services.multimodal_page_service import render_page_png_cached
 
+    max_pages = max_pages or settings.GENERATION_MAX_PAGE_IMAGES
     images_b64: List[str] = []
-    for doc_id, page_no in collect_unique_page_keys(passages, max_pages=max_pages):
+    for doc_id, page_no in collect_unique_page_keys(
+        passages, max_pages=max_pages, needs_image_only=needs_image_only
+    ):
         doc = session.get(Document, doc_id)
         if not doc or not doc.source_file_path or not os.path.exists(doc.source_file_path):
             logger.warning(
@@ -169,6 +222,7 @@ async def render_page_images_for_passages_async(
     *,
     max_pages: int = DEFAULT_RAG_MAX_PAGE_IMAGES,
     dpi: int = DEFAULT_RAG_PAGE_IMAGE_DPI,
+    needs_image_only: bool = True,
 ) -> List[str]:
     """Version async (thread pool) du rendu PNG."""
     return await asyncio.to_thread(
@@ -177,6 +231,7 @@ async def render_page_images_for_passages_async(
         passages,
         max_pages=max_pages,
         dpi=dpi,
+        needs_image_only=needs_image_only,
     )
 
 
@@ -198,35 +253,44 @@ async def build_rag_generation_messages(
     question: str,
     *,
     model: Optional[str] = None,
-    max_page_images: int = DEFAULT_RAG_MAX_PAGE_IMAGES,
+    max_page_images: Optional[int] = None,
     page_image_dpi: int = DEFAULT_RAG_PAGE_IMAGE_DPI,
 ) -> List[Dict[str, Any]]:
     """
-    Pipeline unifié chat + éval : enrichissement pymupdf, system prompt, images PNG.
+    Pipeline unifié chat + éval : passages L1 vision consolidés, PNG uniquement si ColPali seul.
     """
     from app.routers.chat import build_space_context_from_passages
 
     model_name = model or settings.MODEL_FAST
+    max_images = max_page_images if max_page_images is not None else settings.GENERATION_MAX_PAGE_IMAGES
+
+    # Fallback pymupdf uniquement pour placeholders ColPali legacy sans texte L1
     enriched = enrich_colpali_passages_with_pymupdf(session, list(passages))
     space_context = build_space_context_from_passages(enriched)
 
     images_b64: List[str] = []
-    if is_vision_model(model_name):
+    any_needs_image = any(p.get("needs_page_image") for p in enriched)
+    if is_vision_model(model_name) and any_needs_image:
         images_b64 = await render_page_images_for_passages_async(
             session,
             enriched,
-            max_pages=max_page_images,
+            max_pages=max_images,
             dpi=page_image_dpi,
+            needs_image_only=True,
         )
         logger.info(
-            "build_rag_generation_messages: %d image(s) PNG pour modèle %s",
+            "build_rag_generation_messages: %d image(s) PNG (ColPali seul) pour modèle %s",
             len(images_b64),
+            model_name,
+        )
+    elif any_needs_image and not is_vision_model(model_name):
+        logger.warning(
+            "build_rag_generation_messages: pages ColPali-only détectées mais modèle non vision (%s)",
             model_name,
         )
     else:
         logger.info(
-            "build_rag_generation_messages: pas d'images (modèle non vision: %s)",
-            model_name,
+            "build_rag_generation_messages: pas d'images (accord texte+visuel ou pas de ColPali seul)",
         )
 
     user_msg = build_rag_user_message(question, images_b64=images_b64 or None)

@@ -19,6 +19,90 @@ logger = logging.getLogger(__name__)
 
 MIN_CHARS_THRESHOLD = 100  # Seuil minimal de texte pour considérer un PDF comme textuel
 
+# Marqueurs et artefacts pymupdf4llm à nettoyer
+_PAGE_MARKER_RE = re.compile(r"<!--\s*page:\s*\d+\s*-->", re.IGNORECASE)
+_PICTURE_OMITTED_RE = re.compile(
+    r"\*{0,2}\s*==>\s*picture\s*\[[^\]]*\]\s*intentionally omitted\s*<==\s*\*{0,2}",
+    re.IGNORECASE,
+)
+_PICTURE_TEXT_BLOCK_RE = re.compile(
+    r"\*{0,2}\s*-{3,}\s*Start of picture text\s*-{3,}\s*\*{0,2}\s*"
+    r"(?:<br\s*/?>\s*)*"
+    r"(.*?)"
+    r"(?:<br\s*/?>\s*)*"
+    r"\*{0,2}\s*-{3,}\s*End of picture text\s*-{3,}\s*\*{0,2}",
+    re.DOTALL | re.IGNORECASE,
+)
+_BR_RE = re.compile(r"<br\s*/?>", re.IGNORECASE)
+_BOLD_WRAP_RE = re.compile(r"\*\*(.+?)\*\*")
+
+
+def _unwrap_bold_line(line: str) -> str:
+    """Retire le gras markdown récursif sur une ligne."""
+    s = (line or "").strip()
+    for _ in range(5):
+        if s.startswith("**") and s.endswith("**") and len(s) > 4:
+            s = s[2:-2].strip()
+        else:
+            break
+    return s
+
+
+def _picture_text_to_list(match: re.Match) -> str:
+    """Convertit un bloc 'picture text' pymupdf4llm en liste à puces lisible."""
+    inner = _BR_RE.sub("\n", match.group(1) or "")
+    lines = []
+    for raw in inner.splitlines():
+        line = _unwrap_bold_line(raw)
+        if line:
+            lines.append(f"- {line}" if not line.startswith("-") else line)
+    return "\n".join(lines) if lines else ""
+
+
+def clean_pymupdf4llm_markdown(text: str) -> str:
+    """
+    Nettoie le markdown brut pymupdf4llm pour stockage et embedding.
+
+    - Supprime les marqueurs <!-- page:N -->
+    - Supprime les placeholders d'images omises
+    - Extrait le texte des légendes d'images en listes à puces
+    - Convertit <br> en retours à la ligne
+    - Normalise le gras excessif (**...** sur chaque ligne)
+    - Compresse les lignes vides multiples
+    """
+    if not text or not text.strip():
+        return ""
+
+    t = text
+    t = _PAGE_MARKER_RE.sub("", t)
+    t = _PICTURE_TEXT_BLOCK_RE.sub(_picture_text_to_list, t)
+    t = _PICTURE_OMITTED_RE.sub("", t)
+    t = _BR_RE.sub("\n", t)
+
+    cleaned_lines: List[str] = []
+    for line in t.splitlines():
+        stripped = _unwrap_bold_line(line)
+        cleaned_lines.append(stripped)
+
+    t = "\n".join(cleaned_lines)
+    t = re.sub(r"\n{3,}", "\n\n", t)
+    return t.strip()
+
+
+def extract_first_heading(markdown: str) -> str:
+    """Retourne le premier titre ## ou la première ligne non vide."""
+    cleaned = clean_pymupdf4llm_markdown(markdown)
+    if not cleaned:
+        return ""
+    m = re.search(r"(?m)^##\s+(.+)$", cleaned)
+    if m:
+        return _unwrap_bold_line(m.group(1))
+    for line in cleaned.splitlines():
+        line = line.strip()
+        if line:
+            return _unwrap_bold_line(line)
+    return ""
+
 
 def has_extractable_text(pdf_path: str, min_chars: int = MIN_CHARS_THRESHOLD) -> bool:
     """
@@ -153,6 +237,7 @@ def extract_page_texts_from_pdf(pdf_path: str) -> List[Tuple[int, str]]:
                         pass
         elif isinstance(chunk, str):
             page_text = chunk.strip()
+        page_text = clean_pymupdf4llm_markdown(page_text)
         pages.append((page_num, page_text))
     return pages
 

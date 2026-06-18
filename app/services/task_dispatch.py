@@ -270,35 +270,37 @@ def _send_multimodal_reindex_library(
 
 
 def _send_reindex_library(
-    document_id: int, user_id: int, run_id: Optional[str]
+    document_id: int, user_id: int, run_id: Optional[str], mode: str = "full"
 ) -> str:
     from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import reindex_library_document_task
 
     async_result = reindex_library_document_task.apply_async(
-        args=[document_id, user_id, run_id],
+        args=[document_id, user_id, run_id, mode],
         queue="documents",
     )
     logger.info(
-        "task_dispatch reindex_library document_id=%s celery_task_id=%s",
+        "task_dispatch reindex_library document_id=%s mode=%s celery_task_id=%s",
         document_id,
+        mode,
         async_result.id,
     )
     get_library_document_logger().info(
-        "[Dispatch] document_id=%s — reindex Celery task_id=%s user_id=%s",
+        "[Dispatch] document_id=%s — reindex Celery task_id=%s user_id=%s mode=%s",
         document_id,
         async_result.id,
         user_id,
+        mode,
     )
     return async_result.id
 
 
-def _send_reindex_all_library(user_id: int) -> str:
+def _send_reindex_all_library(user_id: int, mode: str = "full") -> str:
     from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import reindex_all_library_documents_task
 
     async_result = reindex_all_library_documents_task.apply_async(
-        args=[user_id],
+        args=[user_id, mode],
         queue="documents",
     )
     logger.info(
@@ -420,10 +422,10 @@ def dispatch_library_document(
         raise RuntimeError(_celery_only_failure_message()) from exc
 
 
-def dispatch_reindex_library(document_id: int, user_id: int) -> str:
+def dispatch_reindex_library(document_id: int, user_id: int, mode: str = "full") -> str:
     """
-    Enfile la réindexation sur la queue Celery « documents » uniquement.
-    Mistral OCR, chunks et embeddings s'exécutent dans le worker, pas dans l'API.
+    Enfile la réindexation sur la queue Celery « documents ».
+    mode : "full" | "text_only" | "colpali_only"
     Retourne l'identifiant de tâche Celery ou d'un thread.
     """
     run_id: Optional[str] = None
@@ -437,15 +439,15 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
             session.add(doc)
             session.commit()
 
-    mode = get_task_backend_mode()
-    if mode == "thread":
+    backend = get_task_backend_mode()
+    if backend == "thread":
         from app.services.document_service_new import enqueue_reindex_library_document_thread
 
         enqueue_reindex_library_document_thread(document_id, user_id, run_id)
         return f"thread-reindex-document-{document_id}"
 
     try:
-        return _send_reindex_library(document_id, user_id, run_id)
+        return _send_reindex_library(document_id, user_id, run_id, mode=mode)
     except Exception as exc:
         logger.warning(
             "Échec enqueue reindex document_id=%s user_id=%s: %s",
@@ -454,7 +456,7 @@ def dispatch_reindex_library(document_id: int, user_id: int) -> str:
             exc,
             exc_info=True,
         )
-        if mode == "hybrid":
+        if backend == "hybrid":
             from app.services.document_service_new import enqueue_reindex_library_document_thread
 
             enqueue_reindex_library_document_thread(document_id, user_id, run_id)
@@ -518,19 +520,20 @@ def dispatch_multimodal_reindex_library(document_id: int, user_id: int) -> str:
         ) from exc
 
 
-def dispatch_reindex_all_library(user_id: int) -> str:
+def dispatch_reindex_all_library(user_id: int, mode: str = "full") -> str:
     """
     Enfile la réindexation globale de la bibliothèque sur la queue Celery « documents ».
+    mode : "full" | "text_only" | "colpali_only"
     """
-    mode = get_task_backend_mode()
-    if mode == "thread":
+    backend = get_task_backend_mode()
+    if backend == "thread":
         from app.services.document_service_new import enqueue_reindex_all_library_documents_thread
 
         enqueue_reindex_all_library_documents_thread(user_id)
         return f"thread-reindex-all-library-{user_id}"
 
     try:
-        return _send_reindex_all_library(user_id)
+        return _send_reindex_all_library(user_id, mode=mode)
     except Exception as exc:
         logger.warning(
             "Échec enqueue reindex_all_library user_id=%s: %s",
@@ -538,7 +541,7 @@ def dispatch_reindex_all_library(user_id: int) -> str:
             exc,
             exc_info=True,
         )
-        if mode == "hybrid":
+        if backend == "hybrid":
             from app.services.document_service_new import enqueue_reindex_all_library_documents_thread
 
             enqueue_reindex_all_library_documents_thread(user_id)

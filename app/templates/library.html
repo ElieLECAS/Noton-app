@@ -452,12 +452,20 @@ endblock %} {% block content %}
 
         <div class="flex items-center gap-2 mb-4 shrink-0">
             <button
-                id="chunks-tab-raw"
+                id="chunks-tab-semantic"
                 type="button"
                 class="px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm"
+                onclick="switchChunksTab('semantic')"
+            >
+                Texte sémantique
+            </button>
+            <button
+                id="chunks-tab-raw"
+                type="button"
+                class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
                 onclick="switchChunksTab('raw')"
             >
-                Raw enrichi
+                Raw enrichi (legacy)
             </button>
             <button
                 id="chunks-tab-report"
@@ -465,12 +473,13 @@ endblock %} {% block content %}
                 class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
                 onclick="switchChunksTab('report')"
             >
-                Synthèse / Rapport
+                Synthèse / Rapport (legacy)
             </button>
         </div>
 
         <div class="flex-1 min-h-0 overflow-auto border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4">
-            <div id="chunks-raw-panel" class="space-y-3"></div>
+            <div id="chunks-semantic-panel" class="space-y-3"></div>
+            <div id="chunks-raw-panel" class="space-y-3 hidden"></div>
             <div id="chunks-report-panel" class="space-y-3 hidden"></div>
         </div>
     </div>
@@ -530,7 +539,7 @@ endblock %} {% block content %}
     let canSpaceDelete = false;
     let isAdminUser = false;
     let chunksMonitorData = null;
-    let chunksActiveTab = "raw";
+    let chunksActiveTab = "semantic";
 
     async function api(url, options = {}) {
         const headers = { ...(options.headers || {}) };
@@ -934,16 +943,32 @@ endblock %} {% block content %}
 
     function renderChunkCard(chunk) {
         const token =
-            chunk.token_count != null ? `${chunk.token_count} tok` : "tok ?";
+            chunk.token_count != null ? `${chunk.token_count} tok` : "";
+        const meta = chunk.metadata || {};
         const page = Number.isFinite(chunk.page) ? chunk.page : 0;
-        const heading = chunk.metadata?.section_heading || "(sans titre)";
+        const pageEnd = meta.page_end && meta.page_end !== page ? meta.page_end : null;
+        const pageLabel = pageEnd ? `p.${page}–${pageEnd}` : `p.${page}`;
+        const heading = meta.heading || meta.parent_heading || "(sans titre)";
+        const step = meta.step_number;
+        const stepBadge = step != null ? `<span class="px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">étape ${step}</span>` : "";
+        const sectionType = meta.section_type || chunk.content_type;
+        const provider = meta.extraction_provider;
+        const providerBadge = provider
+            ? `<span class="px-2 py-0.5 rounded ${provider === 'pymupdf4llm_fallback' ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300' : 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'}">${escapeHtml(provider)}</span>`
+            : "";
+        const crossPage = meta.cross_page_merge
+            ? `<span class="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">cross-page</span>`
+            : "";
         return `
       <article class="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40">
         <header class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
-          <span class="font-semibold">p.${page}</span>
+          <span class="font-semibold">${pageLabel}</span>
           <span>#${chunk.chunk_index}</span>
-          <span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700">${escapeHtml(chunk.content_type)}</span>
-          <span>${escapeHtml(token)}</span>
+          <span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700">${escapeHtml(sectionType)}</span>
+          ${stepBadge}
+          ${providerBadge}
+          ${crossPage}
+          ${token ? `<span>${escapeHtml(token)}</span>` : ""}
           <span class="truncate max-w-[40ch]">${escapeHtml(heading)}</span>
         </header>
         <div class="p-3">
@@ -954,36 +979,42 @@ endblock %} {% block content %}
     }
 
     function renderChunksPanels() {
+        const semanticHost = document.getElementById("chunks-semantic-panel");
         const rawHost = document.getElementById("chunks-raw-panel");
         const reportHost = document.getElementById("chunks-report-panel");
         if (!chunksMonitorData) {
+            semanticHost.innerHTML = "";
             rawHost.innerHTML = "";
             reportHost.innerHTML = "";
             return;
         }
+        semanticHost.innerHTML = (chunksMonitorData.semantic_chunks || []).length
+            ? chunksMonitorData.semantic_chunks.map(renderChunkCard).join("")
+            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk texte sémantique (Vision Ministral 3B). Lancez un retraitement « Complet » ou « Texte seul ».</div>`;
         rawHost.innerHTML = (chunksMonitorData.raw_chunks || []).length
             ? chunksMonitorData.raw_chunks.map(renderChunkCard).join("")
-            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk raw trouvé.</div>`;
+            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk raw legacy trouvé.</div>`;
         reportHost.innerHTML = (chunksMonitorData.report_chunks || []).length
             ? chunksMonitorData.report_chunks.map(renderChunkCard).join("")
-            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk synthèse/rapport trouvé.</div>`;
+            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk synthèse/rapport legacy trouvé.</div>`;
     }
 
     function switchChunksTab(tab) {
         chunksActiveTab = tab;
+        const semanticPanel = document.getElementById("chunks-semantic-panel");
         const rawPanel = document.getElementById("chunks-raw-panel");
         const reportPanel = document.getElementById("chunks-report-panel");
+        const semanticBtn = document.getElementById("chunks-tab-semantic");
         const rawBtn = document.getElementById("chunks-tab-raw");
         const reportBtn = document.getElementById("chunks-tab-report");
-        const showRaw = tab === "raw";
-        rawPanel.classList.toggle("hidden", !showRaw);
-        reportPanel.classList.toggle("hidden", showRaw);
-        rawBtn.className = showRaw
-            ? "px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-sm"
-            : "px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-200";
-        reportBtn.className = !showRaw
-            ? "px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-sm"
-            : "px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-200";
+        const activeClass = "px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm";
+        const inactiveClass = "px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all";
+        semanticPanel.classList.toggle("hidden", tab !== "semantic");
+        rawPanel.classList.toggle("hidden", tab !== "raw");
+        reportPanel.classList.toggle("hidden", tab !== "report");
+        semanticBtn.className = tab === "semantic" ? activeClass : inactiveClass;
+        rawBtn.className = tab === "raw" ? activeClass : inactiveClass;
+        reportBtn.className = tab === "report" ? activeClass : inactiveClass;
     }
 
     async function openChunksMonitorModal(documentId, documentTitle) {
@@ -1000,14 +1031,21 @@ endblock %} {% block content %}
             const err = await r.json().catch(() => ({}));
             subtitle.textContent =
                 err.detail || "Impossible de charger les chunks.";
+            document.getElementById("chunks-semantic-panel").innerHTML = "";
             document.getElementById("chunks-raw-panel").innerHTML = "";
             document.getElementById("chunks-report-panel").innerHTML = "";
             return;
         }
         chunksMonitorData = await r.json();
-        subtitle.textContent = `Raw: ${chunksMonitorData.raw_chunks_count} · Synthèse/Rapport: ${chunksMonitorData.report_chunks_count}`;
+        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Raw legacy: ${chunksMonitorData.raw_chunks_count} · Synthèse: ${chunksMonitorData.report_chunks_count}`;
         renderChunksPanels();
-        switchChunksTab(chunksActiveTab || "raw");
+        const defaultTab =
+            (chunksMonitorData.semantic_chunks_count ?? 0) > 0
+                ? "semantic"
+                : (chunksMonitorData.raw_chunks_count ?? 0) > 0
+                  ? "raw"
+                  : "semantic";
+        switchChunksTab(defaultTab);
     }
 
     function closeChunksMonitorModal() {
@@ -1031,106 +1069,85 @@ endblock %} {% block content %}
         await loadDocuments();
     }
 
-    async function reindexMultimodalDocument(documentId, documentTitle) {
-        const ok = confirm(
-            `Retraiter multimodal « ${documentTitle} » ?\n\n` +
-                "Ajoute 1 chunk synthétique par page (pymupdf + Mistral Small). " +
-                "Les chunks existants sont conservés ; les anciens chunks multimodal seront remplacés. " +
-                "Coût API : 1 appel Mistral par page. Traitement en arrière-plan.",
-        );
-        if (!ok) return;
+    /* ---------- Retraitement : helpers modal mode ---------- */
+    const REINDEX_MODES = [
+        { value: "full", label: "Complet", icon: "ti-refresh", desc: "Vision Ministral 3B + embeddings + ColPali (défaut)" },
+        { value: "text_only", label: "Texte seul", icon: "ti-text-size", desc: "Vision Ministral 3B + embeddings mistral-embed uniquement" },
+        { value: "colpali_only", label: "ColPali seul", icon: "ti-eye", desc: "Re-sync visuel ColPali uniquement" },
+    ];
 
-        const r = await api(
-            `/api/library/documents/${documentId}/multimodal-reindex`,
-            { method: "POST" },
-        );
-        const err = await r.json().catch(() => ({}));
+    function openReindexModeModal(title, onConfirm) {
+        document.getElementById("reindex-mode-modal")?.remove();
+        const modal = document.createElement("div");
+        modal.id = "reindex-mode-modal";
+        modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm";
+        modal.innerHTML = `
+          <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-black/10 dark:border-white/10 p-6 w-full max-w-sm mx-4">
+            <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">${title}</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Choisissez le mode de retraitement :</p>
+            <div class="flex flex-col gap-2 mb-5">
+              ${REINDEX_MODES.map((m) => `
+                <label class="flex items-start gap-3 p-3 rounded-xl border border-black/10 dark:border-white/10 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20">
+                  <input type="radio" name="reindex-mode" value="${m.value}" class="mt-0.5 accent-indigo-600" ${m.value === "full" ? "checked" : ""}>
+                  <span>
+                    <span class="flex items-center gap-1.5 text-sm font-medium text-gray-800 dark:text-gray-200"><i class="ti ${m.icon} text-base"></i>${m.label}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">${m.desc}</span>
+                  </span>
+                </label>`).join("")}
+            </div>
+            <div class="flex gap-2 justify-end">
+              <button id="reindex-cancel-btn" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Annuler</button>
+              <button id="reindex-confirm-btn" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 active:scale-95 transition-all">Lancer</button>
+            </div>
+          </div>`;
+        document.body.appendChild(modal);
+        modal.querySelector("#reindex-cancel-btn").addEventListener("click", () => modal.remove());
+        modal.querySelector("#reindex-confirm-btn").addEventListener("click", () => {
+            const selected = modal.querySelector("input[name='reindex-mode']:checked")?.value || "full";
+            modal.remove();
+            onConfirm(selected);
+        });
+        modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
+    }
 
-        if (r.status === 503) {
-            return alert(
-                err.detail ||
-                    "Service de tâches indisponible. Réessayez plus tard.",
-            );
-        }
-        if (!r.ok) {
-            return alert(
-                err.detail ||
-                    "Impossible de lancer le retraitement multimodal.",
-            );
-        }
-
-        const data = err;
-        if (data.status === "queued" && data.celery_task_id) {
-            alert(
-                "Retraitement multimodal en file d’attente.\n" +
-                    `Tâche : ${data.celery_task_id}`,
-            );
-        } else {
-            alert("Retraitement multimodal demandé.");
-        }
+    async function _doReindexDocument(documentId, mode) {
+        const r = await api(`/api/library/documents/${documentId}/reindex`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mode }),
+        });
+        const data = await r.json().catch(() => ({}));
+        if (r.status === 503) return alert(data.detail || "Service de tâches indisponible. Réessayez plus tard.");
+        if (!r.ok) return alert(data.detail || "Impossible de lancer le retraitement.");
         await loadDocuments();
+    }
+
+    // Compat : ancienne fonction multimodal — inutilisée mais conservée pour éviter les erreurs JS
+    async function reindexMultimodalDocument(documentId, documentTitle) {
+        await reindexDocument(documentId, documentTitle);
     }
 
     async function reindexDocument(documentId, documentTitle) {
-        const ok = confirm(
-            `Retraiter le document « ${documentTitle} » ?\n\n` +
-                "Les chunks, embeddings et entités (KAG) seront régénérés à partir du fichier source. " +
-                "Le traitement s’exécute en arrière-plan (Celery) et peut prendre plusieurs minutes.",
-        );
-        if (!ok) return;
-
-        const r = await api(`/api/library/documents/${documentId}/reindex`, {
-            method: "POST",
+        openReindexModeModal(`Retraiter « ${documentTitle} »`, async (mode) => {
+            await _doReindexDocument(documentId, mode);
         });
-        const err = await r.json().catch(() => ({}));
-
-        if (r.status === 503) {
-            return alert(
-                err.detail ||
-                    "Service de tâches indisponible. Réessayez plus tard.",
-            );
-        }
-        if (!r.ok) {
-            return alert(err.detail || "Impossible de lancer le retraitement.");
-        }
-
-        const data = err;
-        if (data.status === "queued" && data.celery_task_id) {
-            alert(
-                "Retraitement lancé en arrière-plan. Le statut du document va se mettre à jour.",
-            );
-        }
-        await loadDocuments();
     }
 
     async function reindexAllLibraryDocuments() {
-        const ok = confirm(
-            "Retraiter tous les documents fichier de la bibliothèque ?\n\n" +
-                "Chaque document avec un fichier source sera ré-extrait puis réindexé (chunks, embeddings, KAG), " +
-                "un par un dans une tâche Celery. Cela peut prendre longtemps.",
-        );
-        if (!ok) return;
-
-        const r = await api("/api/library/reindex-all", { method: "POST" });
-        const body = await r.json().catch(() => ({}));
-
-        if (r.status === 503) {
-            return alert(
-                body.detail ||
-                    "Service de tâches indisponible. Réessayez plus tard.",
-            );
-        }
-        if (!r.ok) {
-            return alert(
-                body.detail || "Impossible de lancer le retraitement global.",
-            );
-        }
-        if (body.status === "queued" && body.celery_task_id) {
-            alert(
-                "Retraitement global lancé en arrière-plan. Les statuts des documents vont se mettre à jour.",
-            );
-        }
-        await loadDocuments();
+        openReindexModeModal("Retraiter tous les documents", async (mode) => {
+            const modeLabel = REINDEX_MODES.find((m) => m.value === mode)?.label || mode;
+            const ok = confirm(`Retraiter TOUS les documents en mode « ${modeLabel} » ?\n\nCela peut prendre longtemps.`);
+            if (!ok) return;
+            const r = await api('/api/library/reindex-all', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mode }),
+            });
+            const body = await r.json().catch(() => ({}));
+            if (r.status === 503) return alert(body.detail || 'Service de taches indisponible. Reessayez plus tard.');
+            if (!r.ok) return alert(body.detail || 'Impossible de lancer le retraitement global.');
+            await loadDocuments();
+        });
     }
 
     async function stopQueueDocument(documentId, documentTitle) {

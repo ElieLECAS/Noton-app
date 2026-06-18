@@ -27,6 +27,10 @@ CHUNKING_VERSION_MARKDOWN_HIERARCHICAL = "markdown_hierarchical_v1"
 CHUNKING_VERSION_MARKDOWN_HIERARCHICAL_V2 = "markdown_hierarchical_v2"
 CHUNKING_VERSION_MARKDOWN_STRUCTURED = "markdown_structured_v1"
 CHUNKING_VERSION_MARKDOWN_STRUCTURED_V2 = "markdown_structured_v2"
+CHUNKING_VERSION_PYMUPDF4LLM_CLEAN = "pymupdf4llm_semantic_v2"
+
+_H2_SPLIT_RE = re.compile(r"(?m)^(##\s+.+)$")
+_NUMBERED_STEP_RE = re.compile(r"(?m)^(?:\*\*)?(\d+)\.\s+")
 
 HEADER_PATH_SEP = " > "
 
@@ -2225,6 +2229,183 @@ def chunk_markdown_structured(markdown: str, metadata_base: dict) -> List[dict]:
     )
     return combined
 
+
+def _step_number_from_heading(heading: Optional[str]) -> Optional[int]:
+    if not heading:
+        return None
+    m = re.match(r"^(\d+)\.", heading.strip())
+    return int(m.group(1)) if m else None
+
+
+def _split_block_by_numbered_steps(
+    block: str,
+    section_heading: Optional[str],
+) -> List[dict]:
+    """
+    Découpe un bloc en sections sémantiques : intro éventuelle + étapes numérotées (1. 2. 3.).
+    Chaque entrée : {heading, step_number, content, section_type}.
+    """
+    block = (block or "").strip()
+    if not block:
+        return []
+
+    from app.services.pdf_extraction_service import _unwrap_bold_line
+
+    matches = list(_NUMBERED_STEP_RE.finditer(block))
+    if not matches:
+        content = block
+        if section_heading:
+            content = f"{section_heading}\n\n{block}".strip() if block else section_heading
+        return [
+            {
+                "heading": section_heading,
+                "step_number": _step_number_from_heading(section_heading),
+                "content": content,
+                "section_type": "document_header" if not section_heading else "section",
+            }
+        ]
+
+    sections: List[dict] = []
+
+    # Intro avant la première étape numérotée (ex. légendes sous ## 1.)
+    if matches[0].start() > 0:
+        intro = block[: matches[0].start()].strip()
+        if intro:
+            combined = intro
+            if section_heading:
+                combined = f"{section_heading}\n\n{intro}"
+            sections.append(
+                {
+                    "heading": section_heading,
+                    "step_number": _step_number_from_heading(section_heading),
+                    "content": combined,
+                    "section_type": "section",
+                }
+            )
+
+    for i, m in enumerate(matches):
+        start = m.start()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(block)
+        step_text = block[start:end].strip()
+        if not step_text:
+            continue
+        step_num = int(m.group(1))
+        first_line = _unwrap_bold_line(step_text.split("\n", 1)[0])
+        sections.append(
+            {
+                "heading": first_line[:200],
+                "step_number": step_num,
+                "content": step_text,
+                "section_type": "step",
+            }
+        )
+
+    return sections
+
+
+def chunk_pymupdf4llm_page_clean(
+    page_text: str,
+    page_no: int,
+    metadata_base: dict,
+) -> List[dict]:
+    """
+    Chunking sémantique propre pour une page pymupdf4llm :
+    - 1 chunk par section ## ou par étape numérotée
+    - Contenu nettoyé (sans placeholders image, sans marqueurs page)
+    - Uniquement des feuilles (is_leaf=True)
+    """
+    from app.services.pdf_extraction_service import clean_pymupdf4llm_markdown
+
+    cleaned = clean_pymupdf4llm_markdown(page_text)
+    if not cleaned:
+        return []
+
+    base_meta = dict(metadata_base or {})
+    base_meta["chunking_version"] = CHUNKING_VERSION_PYMUPDF4LLM_CLEAN
+
+    raw_sections: List[dict] = []
+
+    # Découpe par titres ## (structure pymupdf4llm typique)
+    parts = _H2_SPLIT_RE.split(cleaned)
+    if len(parts) == 1:
+        raw_sections.extend(_split_block_by_numbered_steps(cleaned, section_heading=None))
+    else:
+        preamble = parts[0].strip()
+        if preamble and len(preamble) >= 20:
+            raw_sections.append(
+                {
+                    "heading": "Informations document",
+                    "step_number": None,
+                    "content": preamble,
+                    "section_type": "document_header",
+                }
+            )
+        idx = 1
+        while idx < len(parts):
+            h2_line = parts[idx].strip()
+            body = parts[idx + 1].strip() if idx + 1 < len(parts) else ""
+            from app.services.pdf_extraction_service import _unwrap_bold_line
+
+            section_heading = _unwrap_bold_line(re.sub(r"^##\s+", "", h2_line))
+            if body:
+                raw_sections.extend(
+                    _split_block_by_numbered_steps(body, section_heading=section_heading)
+                )
+            elif section_heading:
+                raw_sections.append(
+                    {
+                        "heading": section_heading,
+                        "step_number": _step_number_from_heading(section_heading),
+                        "content": section_heading,
+                        "section_type": "section",
+                    }
+                )
+            idx += 2
+
+    specs: List[dict] = []
+    for sec in raw_sections:
+        content = (sec.get("content") or "").strip()
+        if not content or len(content) < 8:
+            continue
+
+        node_id = str(uuid.uuid4())
+        meta = dict(base_meta)
+        meta.update(
+            {
+                "node_id": node_id,
+                "parent_node_id": None,
+                "hierarchy_level": 1,
+                "is_leaf": "true",
+                "content_type": "semantic_leaf",
+                "section_type": sec.get("section_type") or "section",
+                "page_no": page_no,
+                "page_start": page_no,
+                "page_end": page_no,
+            }
+        )
+        heading = sec.get("heading")
+        if heading:
+            meta["heading"] = heading
+            meta["parent_heading"] = heading
+        if sec.get("step_number") is not None:
+            meta["step_number"] = sec["step_number"]
+
+        specs.append(
+            {
+                "chunk_index": 0,
+                "is_leaf": True,
+                "content": content,
+                "text": content,
+                "start_char": 0,
+                "end_char": len(content),
+                "node_id": node_id,
+                "parent_node_id": None,
+                "hierarchy_level": 1,
+                "metadata_json": meta,
+            }
+        )
+
+    return specs
 
 
 def specs_to_document_chunks(document: LibraryDocument, specs: List[dict]) -> List[DocumentChunk]:

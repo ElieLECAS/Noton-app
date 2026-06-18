@@ -87,6 +87,14 @@ class Settings(BaseSettings):
     VISION_MAX_TOKENS: int = 1500
     # Plafond d’appels vision par document (None = illimité)
     VISION_MAX_IMAGES_PER_DOCUMENT: Optional[int] = None
+    # Extraction vision par page (pipeline d'indexation documentaire)
+    PAGE_EXTRACTION_MODEL: str = os.getenv("PAGE_EXTRACTION_MODEL", "ministral-3b-latest")
+    PAGE_EXTRACTION_MAX_CHUNK_TOKENS: int = int(os.getenv("PAGE_EXTRACTION_MAX_CHUNK_TOKENS", "480"))
+    PAGE_EXTRACTION_MAX_CHUNKS_PER_PAGE: int = int(os.getenv("PAGE_EXTRACTION_MAX_CHUNKS_PER_PAGE", "12"))
+    PAGE_EXTRACTION_DPI: int = int(os.getenv("PAGE_EXTRACTION_DPI", "200"))
+    PAGE_EXTRACTION_CONCURRENCY: int = int(os.getenv("PAGE_EXTRACTION_CONCURRENCY", "3"))
+    PAGE_EXTRACTION_TIMEOUT: float = float(os.getenv("PAGE_EXTRACTION_TIMEOUT", "90"))
+
     # Retraitement multimodal par page (pymupdf + mistral-small vision)
     MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"
     MULTIMODAL_EXTRACT_MODEL: str = "mistral-large-latest"
@@ -139,6 +147,15 @@ class Settings(BaseSettings):
     RAG_MIN_PERTINENCE: float = 0.75
 
     BM25_MAX_QUERY_TERMS: int = 15
+
+    # Retrieval hybride (ColPali + pgvector + BM25)
+    RETRIEVAL_EXPAND_ENABLED: bool = os.getenv("RETRIEVAL_EXPAND_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    RETRIEVAL_PAGE_RADIUS: int = int(os.getenv("RETRIEVAL_PAGE_RADIUS", "1"))
+    RETRIEVAL_EXPAND_POOL: int = int(os.getenv("RETRIEVAL_EXPAND_POOL", "20"))
+    RETRIEVAL_NEIGHBOR_MIN_SCORE_RATIO: float = float(os.getenv("RETRIEVAL_NEIGHBOR_MIN_SCORE_RATIO", "0.3"))
+    GENERATION_MAX_PAGE_IMAGES: int = int(os.getenv("GENERATION_MAX_PAGE_IMAGES", "3"))
 
     # Reranker vision LLM (juge de pertinence page-par-page sur les PNG ColPali)
     VISION_RERANK_ENABLED: bool = os.getenv("VISION_RERANK_ENABLED", "true").strip().lower() in ('true', '1', 'yes', 'on')
