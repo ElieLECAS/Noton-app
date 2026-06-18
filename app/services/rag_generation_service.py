@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 COLPALI_PLACEHOLDER_MARKER = "[ColPali Indexed Page"
 DEFAULT_RAG_PAGE_IMAGE_DPI = 150
-DEFAULT_RAG_MAX_PAGE_IMAGES = 3
+DEFAULT_RAG_MAX_PAGE_IMAGES = settings.RAG_MAX_IMAGES
 
 
 def is_vision_model(model_name: str) -> bool:
@@ -262,26 +262,28 @@ async def build_rag_generation_messages(
     from app.routers.chat import build_space_context_from_passages
 
     model_name = model or settings.MODEL_FAST
-    max_images = max_page_images if max_page_images is not None else settings.GENERATION_MAX_PAGE_IMAGES
+    max_images = max_page_images if max_page_images is not None else settings.RAG_MAX_IMAGES
 
     # Fallback pymupdf uniquement pour placeholders ColPali legacy sans texte L1
     enriched = enrich_colpali_passages_with_pymupdf(session, list(passages))
     space_context = build_space_context_from_passages(enriched)
 
     images_b64: List[str] = []
-    any_needs_image = any(p.get("needs_page_image") for p in enriched)
+    render_all = settings.RAG_RENDER_ALL_IMAGES
+    any_needs_image = any(p.get("needs_page_image") for p in enriched) or render_all
     if is_vision_model(model_name) and any_needs_image:
         images_b64 = await render_page_images_for_passages_async(
             session,
             enriched,
             max_pages=max_images,
             dpi=page_image_dpi,
-            needs_image_only=True,
+            needs_image_only=not render_all,
         )
         logger.info(
-            "build_rag_generation_messages: %d image(s) PNG (ColPali seul) pour modèle %s",
+            "build_rag_generation_messages: %d image(s) PNG pour modèle %s (render_all=%s)",
             len(images_b64),
             model_name,
+            render_all,
         )
     elif any_needs_image and not is_vision_model(model_name):
         logger.warning(

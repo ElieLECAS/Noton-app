@@ -130,21 +130,27 @@ class Settings(BaseSettings):
     LANGCHAIN_PROJECT: str = "noton-rag"
 
     # Reranker cross-encoder (CPU-only)
-    RERANKER_ENABLED: bool = False
+    RERANKER_ENABLED: bool = os.getenv("RERANKER_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
     RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-    RERANK_POOL: int = 100  # Augmenté à 100 pour une couverture élargie
+    RERANK_POOL: int = int(os.getenv("RERANK_POOL", "40"))
     RERANK_CHAR_CAP: int = 1700  # ~485 tokens (ratio FR 3.5 chars/token, marge vs max_length=512)
     RERANK_BATCH_SIZE: int = 16
     EARLY_STOP_ENABLED: bool = False  # Early stop désactivé par défaut (latence CPU acceptable)
     EARLY_STOP_TOP_N: int = 5
     EARLY_STOP_MEAN_THRESHOLD: float = 0.78
-    MIN_DYNAMIC_K: int = 1
-    MAX_DYNAMIC_K: int = 8  # Réduit de 10 → 8 pour MiniLM (chunks plus précis)
+    MIN_DYNAMIC_K: int = int(os.getenv("MIN_DYNAMIC_K", "0"))
+    MAX_DYNAMIC_K: int = int(os.getenv("MAX_DYNAMIC_K", "12"))
     SOFTMAX_CUM_THRESHOLD: float = 0.80
     STUTTER_GAP: float = 0.05
     ZSCORE_FLAT_THRESHOLD: float = 0.05
     RERANKER_MIN_SCORE: float = -3.0
     RAG_MIN_PERTINENCE: float = 0.75
+    COLPALI_PROTECTED_SLOTS: int = int(os.getenv("COLPALI_PROTECTED_SLOTS", "2"))
+    COLPALI_DOMINANCE_MIN_SCORE: float = float(os.getenv("COLPALI_DOMINANCE_MIN_SCORE", "0.55"))
+    COLPALI_PGVECTOR_WEAK_THRESHOLD: float = float(os.getenv("COLPALI_PGVECTOR_WEAK_THRESHOLD", "0.45"))
+    COLPALI_BM25_WEAK_THRESHOLD: float = float(os.getenv("COLPALI_BM25_WEAK_THRESHOLD", "0.25"))
 
     BM25_MAX_QUERY_TERMS: int = 15
 
@@ -156,6 +162,28 @@ class Settings(BaseSettings):
     RETRIEVAL_EXPAND_POOL: int = int(os.getenv("RETRIEVAL_EXPAND_POOL", "20"))
     RETRIEVAL_NEIGHBOR_MIN_SCORE_RATIO: float = float(os.getenv("RETRIEVAL_NEIGHBOR_MIN_SCORE_RATIO", "0.3"))
     GENERATION_MAX_PAGE_IMAGES: int = int(os.getenv("GENERATION_MAX_PAGE_IMAGES", "3"))
+
+    # Retrieval multimodal page-centric (refonte RRF)
+    USE_MULTIMODAL_RETRIEVAL: bool = os.getenv("USE_MULTIMODAL_RETRIEVAL", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "10"))
+    RAG_POOL_SIZE: int = int(os.getenv("RAG_POOL_SIZE", "20"))
+    RAG_NEIGHBOR_STRATEGY: str = os.getenv("RAG_NEIGHBOR_STRATEGY", "conditional")
+    RAG_RENDER_ALL_IMAGES: bool = os.getenv("RAG_RENDER_ALL_IMAGES", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    RAG_MAX_IMAGES: int = int(os.getenv("RAG_MAX_IMAGES", "12"))
+    RRF_K: int = int(os.getenv("RRF_K", "60"))
+    COLPALI_POST_FUSION_MIN_SCORE: float = float(os.getenv("COLPALI_POST_FUSION_MIN_SCORE", "0.25"))
+    COLPALI_MIN_THRESHOLD: float = float(os.getenv("COLPALI_MIN_THRESHOLD", "0.30"))
+    COLPALI_RELATIVE_MARGIN: float = float(os.getenv("COLPALI_RELATIVE_MARGIN", "0.10"))
+    BM25_USE_WEBSEARCH_QUERY: bool = os.getenv("BM25_USE_WEBSEARCH_QUERY", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    BM25_FILTER_SEMANTIC_LEAF: bool = os.getenv("BM25_FILTER_SEMANTIC_LEAF", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
 
     # Reranker vision LLM (juge de pertinence page-par-page sur les PNG ColPali)
     VISION_RERANK_ENABLED: bool = os.getenv("VISION_RERANK_ENABLED", "true").strip().lower() in ('true', '1', 'yes', 'on')

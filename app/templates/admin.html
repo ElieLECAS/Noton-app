@@ -414,19 +414,19 @@
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
                         <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Precision</span>
                         <span id="metric-precision" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1">Après rerank LLM</span>
+                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1" id="metric-final-stage-label">Pipeline final</span>
                         <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Mesure du bruit (les pages utiles remontent-elles en premier ?)</span>
                     </div>
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
                         <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Recall</span>
                         <span id="metric-recall" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1">Après rerank LLM</span>
+                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1" id="metric-final-stage-label">Pipeline final</span>
                         <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Mesure de la couverture (toutes les pages attendues sont-elles trouvées ?)</span>
                     </div>
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
                         <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">MRR (Mean Reciprocal Rank)</span>
                         <span id="metric-mrr" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1">Après rerank LLM</span>
+                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1" id="metric-final-stage-label">Pipeline final</span>
                         <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Ordonnancement (vitesse à laquelle la 1ère page pertinente arrive)</span>
                     </div>
                     <div id="eval-generation-card" class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 hidden">
@@ -459,7 +459,7 @@
                 <!-- Comparaison ColPali (avant rerank) vs post-rerank -->
                 <div id="eval-colpali-comparison" class="hidden space-y-4">
                     <div class="flex flex-wrap items-center gap-3">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">ColPali avant rerank LLM</h3>
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">ColPali seul (LanceDB + seuil dynamique)</h3>
                         <span id="eval-rerank-badge" class="hidden px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400"></span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -479,7 +479,24 @@
                             <span id="metric-mrr-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Les cartes du haut mesurent le pipeline complet (ColPali + rerank vision Mistral). Les cartes ci-dessus mesurent ColPali seul (post-seuil dynamique, avant rerank).</p>
+                    <div id="eval-post-rrf-comparison" class="hidden space-y-4 mt-2">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Post-RRF (avant rerank MiniLM)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-indigo-500/10">
+                                <span class="block text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-1">Precision Post-RRF</span>
+                                <span id="metric-precision-post-rrf" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                            </div>
+                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-indigo-500/10">
+                                <span class="block text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-1">Recall Post-RRF</span>
+                                <span id="metric-recall-post-rrf" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                            </div>
+                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-indigo-500/10">
+                                <span class="block text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-1">MRR Post-RRF</span>
+                                <span id="metric-mrr-post-rrf" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p id="eval-stages-help" class="text-xs text-gray-500 dark:text-gray-400">Les cartes du haut mesurent le pipeline final. ColPali seul = LanceDB + seuil dynamique. Post-RRF = fusion pgvector + BM25 + ColPali avant MiniLM.</p>
                 </div>
 
                 <!-- Stats by Type (Mono vs Cross) -->
@@ -1989,6 +2006,11 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
     let deltaMrr = 0;
     let deltaCount = 0;
     let visionRerankEnabled = false;
+    let minilmRerankEnabled = false;
+    let totalPrecisionPostRrf = 0;
+    let totalRecallPostRrf = 0;
+    let totalMrrPostRrf = 0;
+    let postRrfCount = 0;
 
     details.forEach(q => {
         totalPrecision += q.metrics.context_precision;
@@ -2000,6 +2022,12 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
             totalMrrColpali += q.metrics_colpali.mrr;
             colpaliCount++;
         }
+        if (q.metrics_post_rrf) {
+            totalPrecisionPostRrf += q.metrics_post_rrf.context_precision;
+            totalRecallPostRrf += q.metrics_post_rrf.context_recall;
+            totalMrrPostRrf += q.metrics_post_rrf.mrr;
+            postRrfCount++;
+        }
         if (q.rerank_delta) {
             deltaPrecision += q.rerank_delta.precision;
             deltaRecall += q.rerank_delta.recall;
@@ -2008,6 +2036,9 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
         }
         if (q.vision_rerank_enabled) {
             visionRerankEnabled = true;
+        }
+        if (q.minilm_rerank_enabled) {
+            minilmRerankEnabled = true;
         }
     });
 
@@ -2040,6 +2071,14 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
         };
     }
     result.vision_rerank_enabled = visionRerankEnabled;
+    result.minilm_rerank_enabled = minilmRerankEnabled;
+    if (postRrfCount > 0) {
+        result.global_metrics_post_rrf = {
+            context_precision: totalPrecisionPostRrf / postRrfCount,
+            context_recall: totalRecallPostRrf / postRrfCount,
+            mrr: totalMrrPostRrf / postRrfCount,
+        };
+    }
     return result;
 }
 
@@ -2161,15 +2200,52 @@ function renderEvalResults(data, showGeneration = false) {
         }
         const rerankBadge = document.getElementById('eval-rerank-badge');
         if (rerankBadge) {
-            if (data.vision_rerank_enabled === false) {
-                rerankBadge.textContent = 'Rerank désactivé — les deux étapes sont identiques';
+            if (data.minilm_rerank_enabled) {
+                rerankBadge.textContent = 'Δ affiché : pipeline final vs ColPali seul';
+                rerankBadge.classList.remove('hidden');
+            } else if (data.vision_rerank_enabled === false) {
+                rerankBadge.textContent = 'Rerank vision désactivé';
                 rerankBadge.classList.remove('hidden');
             } else {
                 rerankBadge.classList.add('hidden');
             }
         }
+
+        const postRrfSection = document.getElementById('eval-post-rrf-comparison');
+        const gmPostRrf = data.global_metrics_post_rrf;
+        if (postRrfSection && gmPostRrf) {
+            postRrfSection.classList.remove('hidden');
+            const precRrfEl = document.getElementById('metric-precision-post-rrf');
+            const recRrfEl = document.getElementById('metric-recall-post-rrf');
+            const mrrRrfEl = document.getElementById('metric-mrr-post-rrf');
+            if (precRrfEl) {
+                precRrfEl.innerText = `${(gmPostRrf.context_precision * 100).toFixed(1)}%`;
+                precRrfEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPostRrf.context_precision)}`;
+            }
+            if (recRrfEl) {
+                recRrfEl.innerText = `${(gmPostRrf.context_recall * 100).toFixed(1)}%`;
+                recRrfEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPostRrf.context_recall)}`;
+            }
+            if (mrrRrfEl) {
+                mrrRrfEl.innerText = gmPostRrf.mrr.toFixed(2);
+                mrrRrfEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPostRrf.mrr)}`;
+            }
+        } else if (postRrfSection) {
+            postRrfSection.classList.add('hidden');
+        }
     } else if (colpaliSection) {
         colpaliSection.classList.add('hidden');
+    }
+
+    const finalStageLabel = document.getElementById('metric-final-stage-label');
+    if (finalStageLabel) {
+        if (data.minilm_rerank_enabled) {
+            finalStageLabel.textContent = 'Après rerank MiniLM';
+        } else if (data.vision_rerank_enabled) {
+            finalStageLabel.textContent = 'Après rerank vision Mistral';
+        } else {
+            finalStageLabel.textContent = 'Pipeline final (RRF)';
+        }
     }
     
     // Set type stats if available
@@ -2280,7 +2356,7 @@ function renderEvalResults(data, showGeneration = false) {
                     <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
                         <span class="flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            ColPali avant rerank LLM
+                            ColPali seul (LanceDB)
                             <span class="font-normal text-gray-500">— P: ${(q.metrics_colpali.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_colpali.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_colpali.mrr.toFixed(2)}</span>
                         </span>
                         <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>

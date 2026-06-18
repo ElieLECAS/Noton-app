@@ -121,6 +121,51 @@ def test_build_question_eval_result_with_colpali_and_delta():
     assert len(result["analysis"]["noise"]) == 0
 
 
+def test_filter_colpali_pages_dynamic():
+    from app.services.page_retrieval_service import UnifiedPageHit, filter_colpali_pages_dynamic
+
+    hits = [
+        UnifiedPageHit(document_id=1, page_no=1, colpali_score=0.85, retrieval_sources=["colpali"]),
+        UnifiedPageHit(document_id=1, page_no=2, colpali_score=0.78, retrieval_sources=["colpali"]),
+        UnifiedPageHit(document_id=1, page_no=3, colpali_score=0.72, retrieval_sources=["colpali"]),
+        UnifiedPageHit(document_id=1, page_no=4, colpali_score=0.25, retrieval_sources=["colpali"]),
+    ]
+    filtered = filter_colpali_pages_dynamic(hits, min_threshold=0.30, relative_margin=0.10)
+    pages = {h.page_no for h in filtered}
+    assert pages == {1, 2}
+    assert 4 not in pages
+
+
+def test_build_question_eval_result_with_post_rrf():
+    expected = [{"document_title": "Notice Perform 70", "pages": [12]}]
+    colpali_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.9},
+    ]
+    post_rrf_passages = [
+        {"document_title": "Notice Perform 76", "page_no": 1, "score": 0.8},
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.7},
+    ]
+    final_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.7, "rerank_score": 5.0},
+    ]
+
+    result = build_question_eval_result(
+        question="test",
+        q_type="mono",
+        expected_pages=expected,
+        passages=final_passages,
+        colpali_passages=colpali_passages,
+        post_rrf_passages=post_rrf_passages,
+        minilm_rerank_enabled=True,
+    )
+
+    assert result["metrics_colpali"]["mrr"] == 1.0
+    assert result["metrics_post_rrf"]["mrr"] == 0.5
+    assert result["metrics"]["mrr"] == 1.0
+    assert result["minilm_delta"]["mrr"] == 0.5
+    assert result["rrf_delta"]["mrr"] == -0.5
+
+
 def test_rerank_delta_is_post_minus_colpali():
     expected = [{"document_title": "Notice Perform 70", "pages": [12, 13]}]
     colpali_passages = [

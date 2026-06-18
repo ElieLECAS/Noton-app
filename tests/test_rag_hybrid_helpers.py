@@ -136,6 +136,7 @@ async def test_space_search_window_aggregation_and_deduplication():
         mock_settings.RERANKER_ENABLED = False
         mock_settings.RETRIEVAL_EXPAND_POOL = 20
         mock_settings.VISION_RERANK_ENABLED = False
+        mock_settings.USE_MULTIMODAL_RETRIEVAL = False
         mock_get_space.return_value = mock.MagicMock()
         mock_format.return_value = [
             {

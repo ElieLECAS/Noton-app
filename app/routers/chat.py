@@ -134,9 +134,8 @@ def _int_env(name: str, default: int) -> int:
         return default
 
 
-# Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K).
-# Défaut 8 : avec 1 passage, le modèle comble avec des généralisations faux catalogue (tableaux inventés, ✓/✗).
-RAG_TOP_K = _int_env("RAG_TOP_K", 8)
+# Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K / settings).
+RAG_TOP_K = _int_env("RAG_TOP_K", settings.RAG_TOP_K)
 # Paramétrage en dur du chat "espaces"
 SPACE_CHAT_MAX_TOKENS = 1200
 SPACE_CHAT_TEMPERATURE = 0.0
@@ -628,10 +627,15 @@ async def stream_space_chat_message(
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]
         retrieval_reason = retrieval.get("reason")
+        retrieval_images = retrieval.get("images") or []
+        dynamic_k = retrieval.get("dynamic_k")
+        rerank_status = retrieval.get("rerank_status")
         
         retrieval_run.end(outputs={
             "status": retrieval_status,
             "reason": retrieval_reason,
+            "dynamic_k": dynamic_k,
+            "rerank_status": rerank_status,
             "nb_passages": len(doc_passages),
             "passages": [
                 {
@@ -655,9 +659,11 @@ async def stream_space_chat_message(
 
     doc_passages = enrich_colpali_passages_with_pymupdf(session, doc_passages)
     logger.info(
-        "[chat] Étape 3/4 — contexte RAG (%d passages, status=%s)",
+        "[chat] Étape 3/4 — contexte RAG (%d passages, status=%s, dynamic_k=%s, rerank=%s)",
         len(doc_passages),
         retrieval_status,
+        dynamic_k,
+        rerank_status,
     )
 
     # Construire le contexte système à partir des passages techniques
@@ -700,12 +706,25 @@ async def stream_space_chat_message(
 
     user_images: List[str] = []
     if doc_passages and is_vision_model(forced_model):
-        user_images = await render_page_images_for_passages_async(session, doc_passages)
-        logger.info(
-            "[stream_space_chat_message] %d image(s) PNG rendues pour le modèle %s",
-            len(user_images),
-            forced_model,
-        )
+        if retrieval_images:
+            user_images = retrieval_images[: settings.RAG_MAX_IMAGES]
+            logger.info(
+                "[stream_space_chat_message] %d image(s) PNG du pipeline multimodal pour %s",
+                len(user_images),
+                forced_model,
+            )
+        else:
+            user_images = await render_page_images_for_passages_async(
+                session,
+                doc_passages,
+                max_pages=settings.RAG_MAX_IMAGES,
+                needs_image_only=not settings.RAG_RENDER_ALL_IMAGES,
+            )
+            logger.info(
+                "[stream_space_chat_message] %d image(s) PNG rendues (legacy) pour %s",
+                len(user_images),
+                forced_model,
+            )
     elif doc_passages:
         logger.info(
             "[stream_space_chat_message] Pas d'images (modèle non vision: %s)",

@@ -1,13 +1,12 @@
 """
 Recherche dans les espaces : retrieval hybride ColPali + pgvector L1 + BM25,
-fusion RRF, expansion page entière + voisinage conditionnel, PNG si ColPali seul.
+fusion RRF page-centric, expansion L1 + PNG multimodal pour le LLM.
 
-Pipeline RAG :
-1. Retrieval ColPali (LanceDB MaxSim) + pgvector (semantic_leaf L1) + BM25 (tsvector)
-2. Fusion RRF au niveau page (document_id, page_no)
-3. Expansion small-to-big (L1 consolidés) + voisins N±1 conditionnels
-4. Vision rerank optionnel sur pages ColPali
-5. Génération : texte L1 + PNG uniquement si ColPali seul (sans accord texte)
+Pipeline RAG (USE_MULTIMODAL_RETRIEVAL=true, défaut) :
+1. Retrieval ColPali + pgvector + BM25 au niveau page
+2. Fusion RRF sans pré-filtrage ColPali
+3. Expansion L1 + voisinage conditionnel
+4. Génération : texte consolidé + PNG pour toutes les pages top K
 """
 
 from __future__ import annotations
@@ -37,9 +36,6 @@ logger = logging.getLogger(__name__)
 MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
 TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
-
-COLPALI_MIN_THRESHOLD = float(os.getenv("COLPALI_MIN_THRESHOLD", "0.30"))
-COLPALI_RELATIVE_MARGIN = float(os.getenv("COLPALI_RELATIVE_MARGIN", "0.10"))
 
 _FALLBACK_STOPWORDS = {
     # English
@@ -527,6 +523,300 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     return out
 
 
+async def search_multimodal_passages(
+    session: Session,
+    space_id: int,
+    query_text: str,
+    user_id: int,
+    *,
+    k: Optional[int] = None,
+    document_filter: str = "all",
+    include_retrieval_stages: bool = False,
+) -> Dict:
+    """
+    Pipeline retrieval multimodal page-centric unifié.
+    ColPali + pgvector + BM25 → RRF → expansion L1 → texte + PNG.
+    """
+    from app.services.page_retrieval_service import (
+        expand_page_context,
+        filter_colpali_pages_dynamic,
+        format_multimodal_passages,
+        fuse_multimodal_hits,
+        get_space_document_ids,
+        log_multimodal_retrieval_summary,
+        retrieve_bm25_pages,
+        retrieve_colpali_pages,
+        retrieve_pgvector_pages,
+        unified_hits_to_eval_passages,
+    )
+
+    space = get_space_by_id(session, space_id, user_id)
+    if not space:
+        logger.warning("Espace %d inaccessible (user %d)", space_id, user_id)
+        return {"passages": [], "images": [], "status": "disabled", "reason": "space_not_found"}
+    if not query_text or not query_text.strip():
+        return {"passages": [], "images": [], "status": "disabled", "reason": "empty_query"}
+
+    top_k = k if k is not None else settings.RAG_TOP_K
+    pool_size = max(settings.RERANK_POOL, settings.RAG_POOL_SIZE, top_k)
+
+    logger.info(
+        "[RAG multimodal] Démarrage — space_id=%s top_k=%s pool=%s rerank=%s filter=%s query=%r",
+        space_id,
+        top_k,
+        pool_size,
+        settings.RERANKER_ENABLED,
+        document_filter,
+        query_text[:120],
+    )
+
+    try:
+        doc_ids = get_space_document_ids(session, space_id, document_filter)
+        if not doc_ids:
+            result: Dict = {"passages": [], "images": [], "status": "ok", "reason": "no_results"}
+            if include_retrieval_stages:
+                result["retrieval_stages"] = {"colpali": [], "post_rerank": [], "reason": "no_results"}
+            return result
+
+        query_embedding: Optional[List[float]] = None
+        try:
+            query_embedding = generate_embedding(query_text)
+        except Exception as exc:
+            logger.warning("[RAG multimodal] Embedding requête indisponible : %s", exc)
+
+        with trace_run(
+            "multimodal_retrieval",
+            run_type="retriever",
+            inputs={"query": query_text, "space_id": space_id, "pool_size": pool_size},
+            tags=["retrieval", "multimodal", "space"],
+        ) as hr:
+            colpali_hits = retrieve_colpali_pages(session, doc_ids, query_text, pool_size)
+            colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
+            pgvector_hits = retrieve_pgvector_pages(session, doc_ids, query_embedding or [], pool_size)
+            bm25_hits = retrieve_bm25_pages(session, doc_ids, query_text, pool_size)
+            hr.end(
+                outputs={
+                    "colpali": len(colpali_hits),
+                    "pgvector": len(pgvector_hits),
+                    "bm25": len(bm25_hits),
+                }
+            )
+
+        logger.info(
+            "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d",
+            len(colpali_hits),
+            len(pgvector_hits),
+            len(bm25_hits),
+        )
+
+        fused_hits = fuse_multimodal_hits(
+            colpali_hits,
+            pgvector_hits,
+            bm25_hits,
+            rrf_k=settings.RRF_K,
+            top_k=pool_size,
+        )
+
+        if not fused_hits:
+            result = {"passages": [], "images": [], "status": "ok", "reason": "no_results", "dynamic_k": 0}
+            if include_retrieval_stages:
+                result["retrieval_stages"] = {
+                    "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
+                    "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
+                    "post_rrf": [],
+                    "post_rerank": [],
+                    "minilm_rerank_enabled": settings.RERANKER_ENABLED,
+                    "vision_rerank_enabled": False,
+                    "reason": "no_results",
+                }
+            return result
+
+        rerank_status = "disabled"
+        dynamic_k = len(fused_hits)
+        protected_hits: List[Any] = []
+        final_hits = fused_hits
+
+        if settings.RERANKER_ENABLED:
+            from app.services.page_reranker_service import rerank_unified_page_hits
+
+            with trace_run(
+                "minilm_rerank",
+                run_type="reranker",
+                inputs={"query": query_text, "pool_size": len(fused_hits), "max_k": top_k},
+                tags=["rerank", "minilm", "page"],
+            ) as rr:
+                final_hits, rerank_result, protected_hits = await rerank_unified_page_hits(
+                    session,
+                    query_text,
+                    fused_hits,
+                    max_k=top_k,
+                )
+                rerank_status = rerank_result.status
+                dynamic_k = len(final_hits)
+                rr.end(
+                    outputs={
+                        "status": rerank_status,
+                        "dynamic_k": dynamic_k,
+                        "protected": len(protected_hits),
+                    }
+                )
+        else:
+            final_hits = fused_hits[:top_k]
+            for rank, hit in enumerate(final_hits, start=1):
+                hit.final_rank = rank
+
+        if rerank_status == "low_confidence_clarification" and not protected_hits:
+            passages: List[Dict[str, Any]] = []
+            images: List[str] = []
+            log_multimodal_retrieval_summary(
+                query_text=query_text,
+                doc_ids=doc_ids,
+                colpali_hits=colpali_hits,
+                pgvector_hits=pgvector_hits,
+                bm25_hits=bm25_hits,
+                fused_hits=fused_hits,
+                final_hits=final_hits,
+                passages=passages,
+                images=images,
+                top_k=top_k,
+                pool_size=pool_size,
+                rerank_enabled=settings.RERANKER_ENABLED,
+                rerank_status=rerank_status,
+                dynamic_k=0,
+                protected_hits=protected_hits,
+            )
+            low_conf_result = {
+                "passages": [],
+                "images": [],
+                "status": "low_confidence_clarification",
+                "reason": rerank_status,
+                "dynamic_k": len(final_hits),
+                "rerank_status": rerank_status,
+            }
+            if include_retrieval_stages:
+                low_conf_result["retrieval_stages"] = {
+                    "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
+                    "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
+                    "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
+                    "post_rerank": [],
+                    "minilm_rerank_enabled": settings.RERANKER_ENABLED,
+                    "vision_rerank_enabled": False,
+                    "reason": rerank_status,
+                }
+            return low_conf_result
+
+        if not final_hits:
+            log_multimodal_retrieval_summary(
+                query_text=query_text,
+                doc_ids=doc_ids,
+                colpali_hits=colpali_hits,
+                pgvector_hits=pgvector_hits,
+                bm25_hits=bm25_hits,
+                fused_hits=fused_hits,
+                final_hits=[],
+                passages=[],
+                images=[],
+                top_k=top_k,
+                pool_size=pool_size,
+                rerank_enabled=settings.RERANKER_ENABLED,
+                rerank_status=rerank_status,
+                dynamic_k=0,
+                protected_hits=protected_hits,
+            )
+            return {
+                "passages": [],
+                "images": [],
+                "status": "ok",
+                "reason": "no_results_after_rerank",
+                "dynamic_k": 0,
+                "rerank_status": rerank_status,
+                **(
+                    {
+                        "retrieval_stages": {
+                            "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
+                            "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
+                            "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
+                            "post_rerank": [],
+                            "minilm_rerank_enabled": settings.RERANKER_ENABLED,
+                            "vision_rerank_enabled": False,
+                            "reason": "no_results_after_rerank",
+                        }
+                    }
+                    if include_retrieval_stages
+                    else {}
+                ),
+            }
+
+        expanded_hits = expand_page_context(
+            session,
+            final_hits,
+            neighbor_strategy=settings.RAG_NEIGHBOR_STRATEGY,
+        )
+        passages, images = format_multimodal_passages(
+            session,
+            expanded_hits,
+            render_all_images=settings.RAG_RENDER_ALL_IMAGES,
+        )
+
+        max_images = settings.RAG_MAX_IMAGES
+        if len(images) > max_images:
+            logger.warning(
+                "[RAG multimodal] Troncature images: %d → %d",
+                len(images),
+                max_images,
+            )
+            images = images[:max_images]
+
+        log_multimodal_retrieval_summary(
+            query_text=query_text,
+            doc_ids=doc_ids,
+            colpali_hits=colpali_hits,
+            pgvector_hits=pgvector_hits,
+            bm25_hits=bm25_hits,
+            fused_hits=fused_hits,
+            final_hits=final_hits,
+            passages=passages,
+            images=images,
+            top_k=top_k,
+            pool_size=pool_size,
+            rerank_enabled=settings.RERANKER_ENABLED,
+            rerank_status=rerank_status,
+            dynamic_k=dynamic_k,
+            protected_hits=protected_hits,
+        )
+
+        reason = "multimodal_rrf_minilm" if settings.RERANKER_ENABLED else "multimodal_rrf"
+        result = {
+            "passages": passages,
+            "images": images,
+            "status": "ok",
+            "reason": reason,
+            "total_hits": len(final_hits),
+            "dynamic_k": dynamic_k,
+            "rerank_status": rerank_status,
+        }
+        if include_retrieval_stages:
+            result["retrieval_stages"] = {
+                "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
+                "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
+                "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
+                "post_rerank": passages,
+                "minilm_rerank_enabled": settings.RERANKER_ENABLED,
+                "vision_rerank_enabled": False,
+                "reason": reason,
+            }
+        return result
+
+    except Exception as exc:
+        logger.error("search_multimodal_passages (space): %s", exc, exc_info=True)
+        return {
+            "passages": [],
+            "images": [],
+            "status": "disabled",
+            "reason": f"error: {str(exc)}",
+        }
+
+
 async def search_relevant_passages(
     session: Session,
     space_id: int,
@@ -539,12 +829,27 @@ async def search_relevant_passages(
     """
     RAG espace : retrieval hybride ColPali + pgvector L1 + BM25, fusion RRF,
     expansion page entière + voisinage conditionnel, PNG conditionnel si ColPali seul.
+
+    Si USE_MULTIMODAL_RETRIEVAL=true (défaut), délègue au pipeline page-centric unifié.
     """
+    if settings.USE_MULTIMODAL_RETRIEVAL:
+        return await search_multimodal_passages(
+            session=session,
+            space_id=space_id,
+            query_text=query_text,
+            user_id=user_id,
+            k=k,
+            document_filter=document_filter,
+            include_retrieval_stages=include_retrieval_stages,
+        )
+
     from app.services.page_retrieval_service import (
         build_weak_hit_pool,
+        filter_colpali_page_hits_dynamic,
         format_hybrid_passages,
         fuse_page_hits_rrf,
         get_space_document_ids,
+        page_hits_to_eval_passages,
         retrieve_bm25_page_hits,
         retrieve_colpali_page_hits,
         retrieve_pgvector_page_hits,
@@ -611,14 +916,7 @@ async def search_relevant_passages(
         )
 
         # Seuil dynamique ColPali (absolu + marge relative)
-        if colpali_hits:
-            above_abs = [h for h in colpali_hits if h.score >= COLPALI_MIN_THRESHOLD]
-            if above_abs:
-                max_score = max(h.score for h in above_abs)
-                cutoff = max_score - COLPALI_RELATIVE_MARGIN
-                colpali_hits = [h for h in above_abs if h.score >= cutoff]
-            else:
-                colpali_hits = []
+        colpali_hits = filter_colpali_page_hits_dynamic(colpali_hits)
 
         weak_pool = build_weak_hit_pool(colpali_hits, pgvector_hits, bm25_hits)
         fused_hits = fuse_page_hits_rrf(colpali_hits, pgvector_hits, bm25_hits, top_n=k)
@@ -700,10 +998,14 @@ async def search_relevant_passages(
 
         result = {"passages": passages, "status": "ok", "reason": reason}
         if include_retrieval_stages:
-            pre_passages = format_hybrid_passages(session, fused_hits, weak_pool, k)
+            colpali_only_passages = page_hits_to_eval_passages(colpali_hits, k)
+            post_rrf_passages = format_hybrid_passages(session, fused_hits, weak_pool, k)
             result["retrieval_stages"] = {
-                "colpali": pre_passages,
+                "colpali_only": colpali_only_passages,
+                "colpali": colpali_only_passages,
+                "post_rrf": post_rrf_passages,
                 "post_rerank": passages,
+                "minilm_rerank_enabled": False,
                 "vision_rerank_enabled": settings.VISION_RERANK_ENABLED,
                 "reason": reason,
             }

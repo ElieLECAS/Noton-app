@@ -218,10 +218,15 @@ def build_question_eval_result(
     expected_pages: List[Dict[str, Any]],
     passages: List[Dict[str, Any]],
     colpali_passages: Optional[List[Dict[str, Any]]] = None,
+    post_rrf_passages: Optional[List[Dict[str, Any]]] = None,
     vision_rerank_enabled: Optional[bool] = None,
+    minilm_rerank_enabled: Optional[bool] = None,
 ) -> Dict[str, Any]:
     """
-    Construit le résultat d'évaluation pour une question (post-rerank + optionnel ColPali).
+    Construit le résultat d'évaluation pour une question.
+    passages = étape finale (post-MiniLM ou post-vision rerank).
+    colpali_passages = ColPali seul (LanceDB + seuil dynamique).
+    post_rrf_passages = fusion RRF avant rerank (optionnel).
     """
     post = compute_stage_metrics(passages, expected_pages)
     result: Dict[str, Any] = {
@@ -249,15 +254,55 @@ def build_question_eval_result(
         }
         if vision_rerank_enabled is not None:
             result["vision_rerank_enabled"] = vision_rerank_enabled
+        if minilm_rerank_enabled is not None:
+            result["minilm_rerank_enabled"] = minilm_rerank_enabled
+
+    if post_rrf_passages is not None:
+        post_rrf = compute_stage_metrics(post_rrf_passages, expected_pages)
+        result["metrics_post_rrf"] = post_rrf["metrics"]
+        result["analysis_post_rrf"] = post_rrf["analysis"]
+        result["retrieved_pages_post_rrf"] = post_rrf["retrieved_pages"]
+        result["retrieved_details_post_rrf"] = post_rrf["retrieved_details"]
+        if colpali_passages is not None:
+            result["rrf_delta"] = {
+                "precision": round(
+                    post_rrf["metrics"]["context_precision"] - result["metrics_colpali"]["context_precision"],
+                    4,
+                ),
+                "recall": round(
+                    post_rrf["metrics"]["context_recall"] - result["metrics_colpali"]["context_recall"],
+                    4,
+                ),
+                "mrr": round(
+                    post_rrf["metrics"]["mrr"] - result["metrics_colpali"]["mrr"],
+                    4,
+                ),
+            }
+            result["minilm_delta"] = {
+                "precision": round(
+                    post["metrics"]["context_precision"] - post_rrf["metrics"]["context_precision"],
+                    4,
+                ),
+                "recall": round(
+                    post["metrics"]["context_recall"] - post_rrf["metrics"]["context_recall"],
+                    4,
+                ),
+                "mrr": round(
+                    post["metrics"]["mrr"] - post_rrf["metrics"]["mrr"],
+                    4,
+                ),
+            }
 
     return result
 
 
 def _aggregate_global_metrics(details: List[Dict[str, Any]], prefix: str = "") -> Dict[str, float]:
     """Agrège precision/recall/mrr sur une liste de résultats par question."""
-    metrics_key = "metrics" if not prefix else f"metrics_{prefix.rstrip('_')}"
+    metrics_key = "metrics"
     if prefix == "colpali":
         metrics_key = "metrics_colpali"
+    elif prefix == "post_rrf":
+        metrics_key = "metrics_post_rrf"
 
     n = len(details)
     if n == 0:
@@ -330,7 +375,8 @@ async def evaluate_retriever_dataset(
 
         passages = search_res.get("passages", [])
         stages = search_res.get("retrieval_stages") or {}
-        colpali_passages = stages.get("colpali", passages)
+        colpali_passages = stages.get("colpali_only") or stages.get("colpali")
+        post_rrf_passages = stages.get("post_rrf")
 
         results.append(
             build_question_eval_result(
@@ -339,7 +385,9 @@ async def evaluate_retriever_dataset(
                 expected_pages=expected_pages,
                 passages=passages,
                 colpali_passages=colpali_passages,
+                post_rrf_passages=post_rrf_passages,
                 vision_rerank_enabled=stages.get("vision_rerank_enabled"),
+                minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
             )
         )
 
@@ -349,6 +397,7 @@ async def evaluate_retriever_dataset(
     global_metrics["execution_time_seconds"] = round(time.time() - start_time, 2)
 
     global_metrics_colpali = _aggregate_global_metrics(results, prefix="colpali")
+    global_metrics_post_rrf = _aggregate_global_metrics(results, prefix="post_rrf") if results and results[0].get("metrics_post_rrf") else None
 
     rerank_impact = {"precision_delta": 0.0, "recall_delta": 0.0, "mrr_delta": 0.0}
     if num_queries > 0 and results[0].get("rerank_delta"):
@@ -365,16 +414,22 @@ async def evaluate_retriever_dataset(
         }
 
     vision_rerank_enabled = any(r.get("vision_rerank_enabled") for r in results)
+    minilm_rerank_enabled = any(r.get("minilm_rerank_enabled") for r in results)
 
-    return {
+    eval_result: Dict[str, Any] = {
         "global_metrics": global_metrics,
         "global_metrics_colpali": global_metrics_colpali,
         "rerank_impact": rerank_impact,
         "vision_rerank_enabled": vision_rerank_enabled,
+        "minilm_rerank_enabled": minilm_rerank_enabled,
         "type_stats": _aggregate_type_stats(results),
         "type_stats_colpali": _aggregate_type_stats(results, metrics_key="metrics_colpali"),
         "details": results,
     }
+    if global_metrics_post_rrf:
+        eval_result["global_metrics_post_rrf"] = global_metrics_post_rrf
+        eval_result["type_stats_post_rrf"] = _aggregate_type_stats(results, metrics_key="metrics_post_rrf")
+    return eval_result
 
 
 async def generate_rag_response(
