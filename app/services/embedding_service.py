@@ -47,6 +47,11 @@ def _embed_texts_api(texts: List[str]) -> List[List[float]]:
 
     for attempt in range(1, MAX_RETRIES + 1):
         try:
+            logger.info(
+                "[MISTRAL] Embeddings API — model=%s, batch=%d texte(s)",
+                settings.EMBEDDING_MODEL,
+                len(texts),
+            )
             response = client.embeddings.create(
                 model=settings.EMBEDDING_MODEL,
                 inputs=texts,
@@ -59,6 +64,7 @@ def _embed_texts_api(texts: List[str]) -> List[List[float]]:
                 raise RuntimeError(
                     f"Mistral embeddings: {len(vectors)} vecteurs pour {len(texts)} entrées"
                 )
+            logger.info("[MISTRAL] Embeddings OK — %d vecteur(s), dim=%d", len(vectors), len(vectors[0]) if vectors else 0)
             return vectors
         except Exception as exc:
             last_err = exc
@@ -81,7 +87,14 @@ def generate_embedding(text: str) -> Optional[List[float]]:
         logger.warning("Texte vide fourni pour génération d'embedding")
         return None
     try:
+        logger.info(
+            "[MISTRAL] Embedding requête RAG — model=%s, chars=%d",
+            settings.EMBEDDING_MODEL,
+            len(text.strip()),
+        )
         vectors = _embed_texts_api([text.strip()])
+        dim = len(vectors[0]) if vectors and vectors[0] else 0
+        logger.info("[MISTRAL] Embedding requête OK — dim=%d", dim)
         return vectors[0] if vectors else None
     except Exception as e:
         logger.error("Erreur génération embedding Mistral: %s", e, exc_info=True)

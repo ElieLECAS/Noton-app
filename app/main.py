@@ -4,7 +4,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
-import time
 from typing import Optional
 
 from app.database import get_session, create_db_and_tables, engine
@@ -13,14 +12,11 @@ from app.config import settings
 from app.services.auth_service import decode_token, get_user_by_id
 from app.models.user import UserRead
 import logging
+import time
 
-# Configurer le logging pour voir les messages INFO
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s | %(levelname)-8s | %(name)s | %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+from app.logging_config import setup_app_logging
 
+setup_app_logging()
 logger = logging.getLogger(__name__)
 
 # Fichier dédié : logs/library_document_processing.log (pipeline bibliothèque / espaces)
@@ -40,6 +36,24 @@ except Exception as e:
     logger.warning("Initialisation LangSmith ignorée : %s", e)
 
 app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot IA")
+
+
+@app.middleware("http")
+async def log_http_requests(request: Request, call_next):
+    """Trace chaque requête HTTP dans les logs du conteneur web."""
+    start = time.perf_counter()
+    response = await call_next(request)
+    elapsed_ms = (time.perf_counter() - start) * 1000
+    if request.url.path != "/health":
+        logger.info(
+            "%s %s -> %s (%.0f ms)",
+            request.method,
+            request.url.path,
+            response.status_code,
+            elapsed_ms,
+        )
+    return response
+
 
 # Configuration CORS - Debug
 import os

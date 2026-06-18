@@ -126,6 +126,18 @@ async def chat(
     # Nettoyage pour conformité API Mistral
     messages = _clean_messages(messages)
 
+    role_seq = "-".join([m["role"][0].upper() for m in messages])
+    total_chars = sum(len(str(m.get("content", ""))) for m in messages)
+    prompt_preview = str(messages[-1].get("content", ""))[:100]
+    logger.info(
+        "[MISTRAL] Appel sync — model=%s, nb_msg=%d, roles=%s, chars=%d, prompt='%s'...",
+        model,
+        len(messages),
+        role_seq,
+        total_chars,
+        prompt_preview,
+    )
+
     max_tool_rounds = 5
     for _ in range(max_tool_rounds):
         try:
@@ -150,6 +162,7 @@ async def chat(
                 "Authorization": f"Bearer {settings.MISTRAL_API_KEY}",
                 "Content-Type": "application/json",
             }
+            logger.info("[MISTRAL] Connexion sync (%s)...", base_url)
             async with httpx.AsyncClient(timeout=120.0) as client:
                 response = await _post_json_with_retry(
                     client,
@@ -158,6 +171,14 @@ async def chat(
                     payload=payload,
                 )
                 data = response.json()
+                usage = data.get("usage") or {}
+                logger.info(
+                    "[MISTRAL] Sync OK — model=%s, status=%s, prompt_tokens=%s, completion_tokens=%s",
+                    model,
+                    response.status_code,
+                    usage.get("prompt_tokens"),
+                    usage.get("completion_tokens"),
+                )
         except MistralRateLimitError:
             raise
         except Exception as e:
@@ -353,7 +374,7 @@ async def chat_stream(
         # Logging pour diagnostic
         total_chars = sum(len(str(m.get("content", ""))) for m in messages)
         prompt_preview = str(messages[-1].get("content", ""))[:100]
-        logger.info(f"Appel Mistral: model={model}, nb_msg={len(messages)}, roles={role_seq}, chars={total_chars}, prompt='{prompt_preview}'...")
+        logger.info(f"[MISTRAL] Appel stream — model={model}, nb_msg={len(messages)}, roles={role_seq}, chars={total_chars}, prompt='{prompt_preview}'...")
 
         base_url = (settings.MISTRAL_BASE_URL or "https://api.mistral.ai").rstrip("/")
         timeout = httpx.Timeout(400.0, connect=60.0)
@@ -366,7 +387,7 @@ async def chat_stream(
 
         async with httpx.AsyncClient(timeout=timeout) as client:
             try:
-                logger.info(f"Connexion Mistral en cours ({base_url})...")
+                logger.info(f"[MISTRAL] Connexion stream ({base_url})...")
                 has_yielded = False
                 for attempt in range(1, MAX_RETRIES + 1):
                     try:
@@ -376,7 +397,7 @@ async def chat_stream(
                             headers=headers,
                             json=payload,
                         ) as response:
-                            logger.info(f"Mistral status: {response.status_code}")
+                            logger.info(f"[MISTRAL] Stream status: {response.status_code}")
                             if response.status_code in RETRYABLE_STATUS_CODES:
                                 if attempt < MAX_RETRIES:
                                     wait = _retry_wait_seconds(response, attempt) + random.uniform(

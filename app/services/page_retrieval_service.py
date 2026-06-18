@@ -90,6 +90,10 @@ def _aggregate_hits_by_page(hits: List[PageRetrievalHit]) -> List[PageRetrievalH
     return list(best.values())
 
 
+def top_hit_scores(hits: List[PageRetrievalHit], n: int = 5) -> List[float]:
+    return [round(h.score, 4) for h in sorted(hits, key=lambda h: h.score, reverse=True)[:n]]
+
+
 def retrieve_colpali_page_hits(
     session: Session,
     doc_ids: List[int],
@@ -97,18 +101,25 @@ def retrieve_colpali_page_hits(
     limit: int,
 ) -> List[PageRetrievalHit]:
     if not doc_ids or not settings.COLPALI_ENABLED:
+        logger.info("[retrieve_colpali] ignoré — doc_ids=%d colpali_enabled=%s", len(doc_ids), settings.COLPALI_ENABLED)
         return []
+
+    logger.info("[retrieve_colpali] démarrage — %d docs, limit=%d, query=%r", len(doc_ids), limit, query_text[:80])
 
     from app.services.colpali_service import embed_query_colpali
     from app.services.lancedb_service import search_colpali_lancedb
 
     query_token_embeddings = embed_query_colpali(query_text)
     if not query_token_embeddings:
+        logger.info("[retrieve_colpali] aucun embedding requête")
         return []
 
     search_results = search_colpali_lancedb(query_token_embeddings, doc_ids, limit=limit)
     if not search_results:
+        logger.info("[retrieve_colpali] aucun résultat LanceDB")
         return []
+
+    logger.info("[retrieve_colpali] LanceDB — %d patches candidats", len(search_results))
 
     chunk_ids = [row["id"] for row in search_results]
     sql_chunks = text("""
@@ -148,7 +159,20 @@ def retrieve_colpali_page_hits(
                 chunk_id=int(chunk_id),
             )
         )
-    return _aggregate_hits_by_page(hits)
+    hits = _aggregate_hits_by_page(hits)
+    if search_results and not hits:
+        sample_ids = [row.get("id") for row in search_results[:5]]
+        logger.warning(
+            "[retrieve_colpali] %d résultats LanceDB mais 0 page mappée — chunk_ids échantillon=%s",
+            len(search_results),
+            sample_ids,
+        )
+    logger.info(
+        "[retrieve_colpali] %d pages — top scores: %s",
+        len(hits),
+        top_hit_scores(hits),
+    )
+    return hits
 
 
 def retrieve_pgvector_page_hits(
@@ -158,7 +182,14 @@ def retrieve_pgvector_page_hits(
     limit: int,
 ) -> List[PageRetrievalHit]:
     if not doc_ids or not query_embedding:
+        logger.info(
+            "[retrieve_pgvector] ignoré — doc_ids=%d embedding=%s",
+            len(doc_ids),
+            "ok" if query_embedding else "absent",
+        )
         return []
+
+    logger.info("[retrieve_pgvector] démarrage — %d docs, limit=%d", len(doc_ids), limit)
 
     embedding_str = "[" + ",".join(str(float(x)) for x in query_embedding) + "]"
     sql = text("""
@@ -201,7 +232,13 @@ def retrieve_pgvector_page_hits(
                 chunk_id=int(row.id),
             )
         )
-    return _aggregate_hits_by_page(hits)
+    hits = _aggregate_hits_by_page(hits)
+    logger.info(
+        "[retrieve_pgvector] %d pages — top scores: %s",
+        len(hits),
+        top_hit_scores(hits),
+    )
+    return hits
 
 
 def retrieve_bm25_page_hits(
@@ -211,7 +248,10 @@ def retrieve_bm25_page_hits(
     limit: int,
 ) -> List[PageRetrievalHit]:
     if not doc_ids or not query_text.strip():
+        logger.info("[retrieve_bm25] ignoré — doc_ids=%d query vide=%s", len(doc_ids), not query_text.strip())
         return []
+
+    logger.info("[retrieve_bm25] démarrage — %d docs, limit=%d, query=%r", len(doc_ids), limit, query_text[:80])
 
     sql = text("""
         SELECT
@@ -256,7 +296,13 @@ def retrieve_bm25_page_hits(
                 chunk_id=int(row.id),
             )
         )
-    return _aggregate_hits_by_page(hits)
+    hits = _aggregate_hits_by_page(hits)
+    logger.info(
+        "[retrieve_bm25] %d pages — top scores: %s",
+        len(hits),
+        top_hit_scores(hits),
+    )
+    return hits
 
 
 def fuse_page_hits_rrf(

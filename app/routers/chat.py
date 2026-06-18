@@ -443,6 +443,12 @@ async def stream_space_chat_message(
     session: Session = Depends(get_session),
 ):
     """Chat streaming scoped aux documents accessibles dans un espace."""
+    logger.info(
+        "Chat espace démarré — space_id=%s user_id=%s message_len=%d",
+        space_id,
+        current_user.id,
+        len(request.message or ""),
+    )
     # Espace chat: imposer le modèle fast unique configuré.
     forced_provider = "mistral"
     forced_model = settings.MODEL_FAST
@@ -473,6 +479,7 @@ async def stream_space_chat_message(
             logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
 
     # Pass 0 : Decision (direct vs RAG) avec Mistral Small
+    logger.info("[chat] Étape 1/4 — routage requête (Mistral)")
     from app.services.query_reasoning_service import decide_retrieval_route
     
     with trace_run(
@@ -603,6 +610,7 @@ async def stream_space_chat_message(
         return StreamingResponse(generate_direct(), media_type="text/event-stream")
 
     # Pass 1 : Recherche technique (exclut FAQ correctives)
+    logger.info("[chat] Étape 2/4 — retrieval hybride (ColPali + pgvector + BM25)")
     with trace_run(
         "technical_retrieval",
         run_type="retriever",
@@ -646,6 +654,11 @@ async def stream_space_chat_message(
     )
 
     doc_passages = enrich_colpali_passages_with_pymupdf(session, doc_passages)
+    logger.info(
+        "[chat] Étape 3/4 — contexte RAG (%d passages, status=%s)",
+        len(doc_passages),
+        retrieval_status,
+    )
 
     # Construire le contexte système à partir des passages techniques
     # Si low confidence : injecter un prompt spécial pour forcer la clarification
@@ -704,6 +717,8 @@ async def stream_space_chat_message(
         images_b64=user_images or None,
     )
     full_context_draft.append(user_msg)
+
+    logger.info("[chat] Étape 4/4 — génération réponse stream (model=%s)", forced_model)
 
     _pipeline_inputs_space = {
         "query": request.message,

@@ -548,6 +548,7 @@ async def search_relevant_passages(
         retrieve_bm25_page_hits,
         retrieve_colpali_page_hits,
         retrieve_pgvector_page_hits,
+        top_hit_scores,
     )
 
     space = get_space_by_id(session, space_id, user_id)
@@ -556,6 +557,14 @@ async def search_relevant_passages(
         return {"passages": [], "status": "disabled", "reason": "space_not_found"}
     if not query_text or not query_text.strip():
         return {"passages": [], "status": "disabled", "reason": "empty_query"}
+
+    logger.info(
+        "[RAG] Démarrage retrieval — space_id=%s k=%s filter=%s query=%r",
+        space_id,
+        k,
+        document_filter,
+        query_text[:120],
+    )
 
     try:
         pool_size = max(k, settings.RETRIEVAL_EXPAND_POOL)
@@ -568,10 +577,12 @@ async def search_relevant_passages(
 
         query_embedding: Optional[List[float]] = None
         try:
+            logger.info("[RAG] Génération embedding requête (pgvector)...")
             query_embedding = generate_embedding(query_text)
         except Exception as exc:
-            logger.warning("[search_relevant_passages] Embedding requête indisponible : %s", exc)
+            logger.warning("[RAG] Embedding requête indisponible : %s", exc)
 
+        logger.info("[RAG] Lancement des 3 retrievers (pool=%d, docs=%s)...", pool_size, doc_ids)
         with trace_run(
             "hybrid_retrieval",
             run_type="retriever",
@@ -589,6 +600,16 @@ async def search_relevant_passages(
                 }
             )
 
+        logger.info(
+            "[RAG] Résultats retrievers — colpali=%d pages %s | pgvector=%d pages %s | bm25=%d pages %s",
+            len(colpali_hits),
+            top_hit_scores(colpali_hits),
+            len(pgvector_hits),
+            top_hit_scores(pgvector_hits),
+            len(bm25_hits),
+            top_hit_scores(bm25_hits),
+        )
+
         # Seuil dynamique ColPali (absolu + marge relative)
         if colpali_hits:
             above_abs = [h for h in colpali_hits if h.score >= COLPALI_MIN_THRESHOLD]
@@ -601,6 +622,12 @@ async def search_relevant_passages(
 
         weak_pool = build_weak_hit_pool(colpali_hits, pgvector_hits, bm25_hits)
         fused_hits = fuse_page_hits_rrf(colpali_hits, pgvector_hits, bm25_hits, top_n=k)
+
+        logger.info(
+            "[RAG] Après filtre ColPali + fusion RRF — colpali_retenu=%d, fusionnés=%d",
+            len(colpali_hits),
+            len(fused_hits),
+        )
 
         if not fused_hits:
             result = {"passages": [], "status": "ok", "reason": "no_results"}

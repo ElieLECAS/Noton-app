@@ -125,6 +125,7 @@ async def decide_retrieval_route(query: str, history: Optional[List[Dict[str, st
     """
     Détermine si une requête nécessite une recherche documentaire RAG ou si elle peut être traitée directement.
     """
+    logger.info("[query_routing] Analyse routage — query=%r", (query or "")[:120])
     try:
         messages = [
             {"role": "system", "content": DECISION_SYSTEM_PROMPT},
@@ -146,7 +147,13 @@ async def decide_retrieval_route(query: str, history: Optional[List[Dict[str, st
         decision = data.get("decision", "rag")
         if decision not in ("direct", "rag"):
             decision = "rag"
-            
+
+        logger.info(
+            "[query_routing] decision=%s reason=%s",
+            decision,
+            data.get("reasoning", "Défaut"),
+        )
+
         return RetrievalDecision(
             decision=decision,
             reasoning=data.get("reasoning", "Défaut"),
