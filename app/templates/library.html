@@ -475,12 +475,21 @@ endblock %} {% block content %}
             >
                 Synthèse / Rapport (legacy)
             </button>
+            <button
+                id="chunks-tab-entities"
+                type="button"
+                class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
+                onclick="switchChunksTab('entities')"
+            >
+                Entités KAG
+            </button>
         </div>
 
         <div class="flex-1 min-h-0 overflow-auto border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4">
             <div id="chunks-semantic-panel" class="space-y-3"></div>
             <div id="chunks-raw-panel" class="space-y-3 hidden"></div>
             <div id="chunks-report-panel" class="space-y-3 hidden"></div>
+            <div id="chunks-entities-panel" class="space-y-3 hidden"></div>
         </div>
     </div>
 </div>
@@ -941,6 +950,21 @@ endblock %} {% block content %}
             .replaceAll("'", "&#39;");
     }
 
+    function renderEntityBadge(entity) {
+        const typeColors = {
+            product: "bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300",
+            material: "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300",
+            tool: "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300",
+            norm: "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300",
+            reference: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
+        };
+        const cls = typeColors[entity.entity_type] || "bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300";
+        const role = entity.relation_role && entity.relation_role !== "mention"
+            ? ` · ${entity.relation_role}`
+            : "";
+        return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium ${cls}" title="${escapeHtml(entity.entity_type)}${role}">${escapeHtml(entity.name)}</span>`;
+    }
+
     function renderChunkCard(chunk) {
         const token =
             chunk.token_count != null ? `${chunk.token_count} tok` : "";
@@ -959,6 +983,11 @@ endblock %} {% block content %}
         const crossPage = meta.cross_page_merge
             ? `<span class="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300">cross-page</span>`
             : "";
+        const kag = chunksMonitorData?.kag || {};
+        const chunkEntities = (kag.chunk_entities || {})[String(chunk.chunk_id)] || [];
+        const entitiesHtml = chunkEntities.length
+            ? `<div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-1.5">${chunkEntities.map(renderEntityBadge).join("")}</div>`
+            : "";
         return `
       <article class="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40">
         <header class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
@@ -973,9 +1002,72 @@ endblock %} {% block content %}
         </header>
         <div class="p-3">
           <pre class="whitespace-pre-wrap break-words text-sm text-gray-800 dark:text-gray-100 leading-relaxed font-sans">${escapeHtml(chunk.content)}</pre>
+          ${entitiesHtml}
         </div>
       </article>
     `;
+    }
+
+    function renderKagRelationsList(relations) {
+        if (!relations || !relations.length) {
+            return `<div class="text-sm text-gray-500 dark:text-gray-400">Aucune relation entité-entité extraite pour ce document.</div>`;
+        }
+        return relations.map((rel) => `
+            <div class="rounded-xl border border-black/5 dark:border-white/10 bg-white/50 dark:bg-white/[0.02] p-3 text-sm">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="font-semibold text-indigo-700 dark:text-indigo-300">${escapeHtml(rel.entity_a_name)}</span>
+                    <span class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-xs text-gray-600 dark:text-gray-300">${escapeHtml(rel.relation_type)}</span>
+                    <span class="font-semibold text-indigo-700 dark:text-indigo-300">${escapeHtml(rel.entity_b_name)}</span>
+                </div>
+                ${rel.relation_label ? `<p class="mt-1 text-xs text-gray-500 dark:text-gray-400">${escapeHtml(rel.relation_label)}</p>` : ""}
+            </div>
+        `).join("");
+    }
+
+    function renderEntitiesPanel() {
+        const host = document.getElementById("chunks-entities-panel");
+        if (!host || !chunksMonitorData) return;
+        const kag = chunksMonitorData.kag || {};
+        const entityCount = kag.entity_count || 0;
+        const relationCount = kag.relation_count || 0;
+
+        if (!entityCount && !relationCount) {
+            host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Aucune entité KAG pour ce document. Lancez un retraitement « Complet » avec KAG_ENABLED=true.</div>`;
+            return;
+        }
+
+        const allEntities = new Map();
+        Object.values(kag.chunk_entities || {}).forEach((items) => {
+            (items || []).forEach((e) => {
+                if (!allEntities.has(e.entity_id)) allEntities.set(e.entity_id, e);
+            });
+        });
+
+        const entitiesList = Array.from(allEntities.values())
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((e) => `
+                <div class="flex items-start justify-between gap-3 rounded-xl border border-black/5 dark:border-white/10 p-3">
+                    <div>
+                        <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">${escapeHtml(e.name)}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${escapeHtml(e.entity_type)}${e.relation_role && e.relation_role !== "mention" ? ` · ${escapeHtml(e.relation_role)}` : ""}</div>
+                        ${e.context_snippet ? `<p class="text-xs text-gray-600 dark:text-gray-300 mt-2">${escapeHtml(e.context_snippet)}</p>` : ""}
+                    </div>
+                    ${renderEntityBadge(e)}
+                </div>
+            `).join("");
+
+        host.innerHTML = `
+            <div class="grid gap-4 lg:grid-cols-2">
+                <section>
+                    <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Entités (${entityCount})</h4>
+                    <div class="space-y-2 max-h-[55vh] overflow-auto pr-1">${entitiesList}</div>
+                </section>
+                <section>
+                    <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Relations (${relationCount})</h4>
+                    <div class="space-y-2 max-h-[55vh] overflow-auto pr-1">${renderKagRelationsList(kag.document_relations)}</div>
+                </section>
+            </div>
+        `;
     }
 
     function renderChunksPanels() {
@@ -997,6 +1089,7 @@ endblock %} {% block content %}
         reportHost.innerHTML = (chunksMonitorData.report_chunks || []).length
             ? chunksMonitorData.report_chunks.map(renderChunkCard).join("")
             : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk synthèse/rapport legacy trouvé.</div>`;
+        renderEntitiesPanel();
     }
 
     function switchChunksTab(tab) {
@@ -1004,17 +1097,21 @@ endblock %} {% block content %}
         const semanticPanel = document.getElementById("chunks-semantic-panel");
         const rawPanel = document.getElementById("chunks-raw-panel");
         const reportPanel = document.getElementById("chunks-report-panel");
+        const entitiesPanel = document.getElementById("chunks-entities-panel");
         const semanticBtn = document.getElementById("chunks-tab-semantic");
         const rawBtn = document.getElementById("chunks-tab-raw");
         const reportBtn = document.getElementById("chunks-tab-report");
+        const entitiesBtn = document.getElementById("chunks-tab-entities");
         const activeClass = "px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm";
         const inactiveClass = "px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all";
         semanticPanel.classList.toggle("hidden", tab !== "semantic");
         rawPanel.classList.toggle("hidden", tab !== "raw");
         reportPanel.classList.toggle("hidden", tab !== "report");
+        entitiesPanel.classList.toggle("hidden", tab !== "entities");
         semanticBtn.className = tab === "semantic" ? activeClass : inactiveClass;
         rawBtn.className = tab === "raw" ? activeClass : inactiveClass;
         reportBtn.className = tab === "report" ? activeClass : inactiveClass;
+        entitiesBtn.className = tab === "entities" ? activeClass : inactiveClass;
     }
 
     async function openChunksMonitorModal(documentId, documentTitle) {
@@ -1037,7 +1134,8 @@ endblock %} {% block content %}
             return;
         }
         chunksMonitorData = await r.json();
-        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Raw legacy: ${chunksMonitorData.raw_chunks_count} · Synthèse: ${chunksMonitorData.report_chunks_count}`;
+        const kag = chunksMonitorData.kag || {};
+        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Raw legacy: ${chunksMonitorData.raw_chunks_count} · Synthèse: ${chunksMonitorData.report_chunks_count} · KAG: ${kag.entity_count ?? 0} entités, ${kag.relation_count ?? 0} relations`;
         renderChunksPanels();
         const defaultTab =
             (chunksMonitorData.semantic_chunks_count ?? 0) > 0

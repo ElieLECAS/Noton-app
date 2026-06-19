@@ -95,6 +95,18 @@ class Settings(BaseSettings):
     PAGE_EXTRACTION_CONCURRENCY: int = int(os.getenv("PAGE_EXTRACTION_CONCURRENCY", "3"))
     PAGE_EXTRACTION_TIMEOUT: float = float(os.getenv("PAGE_EXTRACTION_TIMEOUT", "90"))
 
+    # KAG — extraction entités/relations et retrieval graphe
+    KAG_ENABLED: bool = os.getenv("KAG_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    KAG_EXTRACTION_MODEL: Optional[str] = os.getenv("KAG_EXTRACTION_MODEL") or None
+    KAG_EXTRACTION_CONCURRENCY: int = int(os.getenv("KAG_EXTRACTION_CONCURRENCY", "3"))
+    KAG_EXTRACTION_TIMEOUT: float = float(os.getenv("KAG_EXTRACTION_TIMEOUT", "90"))
+    KAG_MAX_ENTITIES_PER_PAGE: int = int(os.getenv("KAG_MAX_ENTITIES_PER_PAGE", "20"))
+    KAG_MAX_RELATIONS_PER_PAGE: int = int(os.getenv("KAG_MAX_RELATIONS_PER_PAGE", "15"))
+    KAG_RETRIEVAL_HOP_LIMIT: int = int(os.getenv("KAG_RETRIEVAL_HOP_LIMIT", "1"))
+    KAG_ENTITY_MATCH_MIN_SCORE: float = float(os.getenv("KAG_ENTITY_MATCH_MIN_SCORE", "0.35"))
+
     # Retraitement multimodal par page (pymupdf + mistral-small vision)
     MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"
     MULTIMODAL_EXTRACT_MODEL: str = "mistral-large-latest"

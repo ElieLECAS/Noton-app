@@ -12,6 +12,7 @@ from app.services.space_service import (
     update_space, delete_space
 )
 from app.services.document_service_new import get_documents_by_space
+from app.services.kag_graph_service import build_space_kag_graph
 import logging
 
 logger = logging.getLogger(__name__)
@@ -158,4 +159,27 @@ async def list_space_documents(
     
     documents = get_documents_by_space(session, space_id, current_user.id)
     return [DocumentListItem.model_validate(d) for d in documents]
+
+
+@router.get("/{space_id}/kag/graph")
+async def get_space_kag_graph(
+    space_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+    max_nodes: int = Query(150, ge=10, le=500),
+    max_edges: int = Query(300, ge=10, le=1000),
+):
+    """Graphe de connaissances KAG (entités + relations) pour visualisation UI."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    return build_space_kag_graph(
+        session,
+        space_id,
+        max_nodes=max_nodes,
+        max_edges=max_edges,
+    )
 

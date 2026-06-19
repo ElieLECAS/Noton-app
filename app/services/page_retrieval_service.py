@@ -54,7 +54,7 @@ class PageRetrievalHit:
 
 @dataclass
 class UnifiedPageHit:
-    """Hit page unifié pour la fusion multimodale (ColPali + pgvector + BM25)."""
+    """Hit page unifié pour la fusion multimodale (ColPali + pgvector + BM25 + KAG)."""
 
     document_id: int
     page_no: int
@@ -62,6 +62,7 @@ class UnifiedPageHit:
     colpali_score: Optional[float] = None
     pgvector_score: Optional[float] = None
     bm25_score: Optional[float] = None
+    kag_score: Optional[float] = None
 
     rrf_score: float = 0.0
     final_rank: int = 0
@@ -1107,6 +1108,7 @@ def fuse_multimodal_hits(
     pgvector_hits: List[UnifiedPageHit],
     bm25_hits: List[UnifiedPageHit],
     *,
+    kag_hits: Optional[List[UnifiedPageHit]] = None,
     rrf_k: Optional[int] = None,
     top_k: int = 10,
     min_colpali_score: Optional[float] = None,
@@ -1152,6 +1154,8 @@ def fuse_multimodal_hits(
     add_channel(colpali_hits, "colpali")
     add_channel(pgvector_hits, "pgvector")
     add_channel(bm25_hits, "bm25")
+    if kag_hits:
+        add_channel(kag_hits, "kag")
 
     if not page_index:
         return []

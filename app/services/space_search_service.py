@@ -611,25 +611,40 @@ async def search_multimodal_passages(
             colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
             pgvector_hits = retrieve_pgvector_pages(session, doc_ids, query_embedding or [], pool_size)
             bm25_hits = retrieve_bm25_pages(session, doc_ids, lexical_q, pool_size)
+            kag_hits: List[Any] = []
+            if settings.KAG_ENABLED:
+                from app.services.kag_retrieval_service import retrieve_kag_pages
+
+                kag_hits = retrieve_kag_pages(
+                    session,
+                    space_id,
+                    doc_ids,
+                    semantic_q,
+                    query_embedding,
+                    pool_size,
+                )
             hr.end(
                 outputs={
                     "colpali": len(colpali_hits),
                     "pgvector": len(pgvector_hits),
                     "bm25": len(bm25_hits),
+                    "kag": len(kag_hits),
                 }
             )
 
         logger.info(
-            "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d",
+            "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d | kag=%d",
             len(colpali_hits),
             len(pgvector_hits),
             len(bm25_hits),
+            len(kag_hits),
         )
 
         fused_hits = fuse_multimodal_hits(
             colpali_hits,
             pgvector_hits,
             bm25_hits,
+            kag_hits=kag_hits if settings.KAG_ENABLED else None,
             rrf_k=settings.RRF_K,
             top_k=pool_size,
         )

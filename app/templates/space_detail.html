@@ -3,6 +3,7 @@
 {% block extra_head %}
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
 <style>
 /* ===== STYLES MARKDOWN MODERNES POUR LE CHAT ===== */
 .markdown-content {
@@ -345,17 +346,52 @@
 .slow-spin {
   animation: spin 3s linear infinite;
 }
+
+#kag-graph-cy {
+  width: 100%;
+  height: 380px;
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.02);
+}
+.dark #kag-graph-cy {
+  background: rgba(255, 255, 255, 0.02);
+}
 </style>
 {% endblock %}
 {% block content %}
 <div class="flex-1 flex flex-col min-h-0 bg-transparent p-4 sm:p-6">
   <div class="w-full max-w-7xl mx-auto flex-1 flex flex-col min-h-0 gap-4">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between gap-3">
       <div>
         <h1 id="space-title" class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Espace</h1>
         <p class="text-sm text-gray-500">Discussion LIA sur les documents de cet espace</p>
       </div>
+      <button
+        id="kag-graph-toggle"
+        type="button"
+        class="hidden shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold active:scale-95 transition-all"
+        onclick="toggleKagGraphPanel()"
+      >
+        <i class="ti ti-affiliate"></i>
+        <span id="kag-graph-toggle-label">Masquer le graphe</span>
+      </button>
     </div>
+
+    <section id="kag-graph-section" class="hidden glass-panel rounded-3xl border border-black/5 dark:border-white/5 shadow-lg overflow-hidden">
+      <div class="px-4 py-3 border-b border-black/5 dark:border-white/5 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 class="text-sm font-bold text-gray-900 dark:text-white">Graphe de connaissances KAG</h2>
+          <p id="kag-graph-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Chargement…</p>
+        </div>
+        <div class="text-[11px] text-gray-500 dark:text-gray-400">Glisser pour explorer · molette pour zoomer</div>
+      </div>
+      <div class="p-3">
+        <div id="kag-graph-cy"></div>
+        <div id="kag-graph-empty" class="hidden text-sm text-gray-500 dark:text-gray-400 py-8 text-center">
+          Aucune entité KAG dans cet espace. Retraitez les documents associés avec KAG activé.
+        </div>
+      </div>
+    </section>
 
     <div class="flex flex-col flex-1 min-h-0">
       <section class="glass-panel rounded-3xl flex flex-col flex-1 min-h-0 border border-black/5 dark:border-white/5 shadow-lg overflow-hidden">
@@ -1305,6 +1341,154 @@ async function loadSpace() {
   document.getElementById("space-title").textContent = s.name;
 }
 
+let kagCy = null;
+let kagGraphVisible = true;
+let kagGraphHasData = false;
+
+function toggleKagGraphPanel() {
+  const section = document.getElementById("kag-graph-section");
+  const label = document.getElementById("kag-graph-toggle-label");
+  if (!section || !kagGraphHasData) return;
+  kagGraphVisible = !kagGraphVisible;
+  section.classList.toggle("hidden", !kagGraphVisible);
+  label.textContent = kagGraphVisible ? "Masquer le graphe" : "Afficher le graphe";
+  if (kagGraphVisible && kagCy) {
+    setTimeout(() => kagCy.resize(), 50);
+  }
+}
+
+function renderKagGraph(data) {
+  const section = document.getElementById("kag-graph-section");
+  const meta = document.getElementById("kag-graph-meta");
+  const container = document.getElementById("kag-graph-cy");
+  const empty = document.getElementById("kag-graph-empty");
+  const toggle = document.getElementById("kag-graph-toggle");
+
+  if (!section || !container || typeof cytoscape === "undefined") return;
+
+  if (!data?.nodes?.length) {
+    kagGraphHasData = false;
+    section.classList.add("hidden");
+    toggle?.classList.add("hidden");
+    if (empty) empty.classList.remove("hidden");
+    container.classList.add("hidden");
+    if (meta) meta.textContent = "Aucune entité extraite pour cet espace.";
+    return;
+  }
+
+  kagGraphHasData = true;
+  toggle?.classList.remove("hidden");
+  if (kagGraphVisible) section.classList.remove("hidden");
+  if (empty) empty.classList.add("hidden");
+  container.classList.remove("hidden");
+
+  const totalEntities = data.total_entity_count ?? data.node_count;
+  const totalRelations = data.total_relation_count ?? data.edge_count;
+  if (meta) {
+    meta.textContent = `${totalEntities} entité(s) · ${totalRelations} relation(s) — affichage ${data.node_count} nœuds / ${data.edge_count} liens`;
+  }
+
+  const elements = [
+    ...data.nodes.map((n) => ({
+      data: {
+        id: n.id,
+        label: n.label,
+        entityType: n.entity_type,
+        color: n.color,
+        mentions: n.mention_count,
+      },
+    })),
+    ...data.edges.map((e) => ({
+      data: {
+        id: `e-${e.id}`,
+        source: e.source,
+        target: e.target,
+        label: e.label || e.relation_type,
+        relationType: e.relation_type,
+      },
+    })),
+  ];
+
+  if (kagCy) {
+    kagCy.destroy();
+    kagCy = null;
+  }
+
+  kagCy = cytoscape({
+    container,
+    elements,
+    minZoom: 0.2,
+    maxZoom: 2.5,
+    wheelSensitivity: 0.2,
+    style: [
+      {
+        selector: "node",
+        style: {
+          label: "data(label)",
+          "background-color": "data(color)",
+          color: "#374151",
+          "font-size": "10px",
+          "text-wrap": "ellipsis",
+          "text-max-width": "90px",
+          "text-valign": "bottom",
+          "text-margin-y": 6,
+          width: "mapData(mentions, 1, 20, 24, 52)",
+          height: "mapData(mentions, 1, 20, 24, 52)",
+          "border-width": 1,
+          "border-color": "#e5e7eb",
+        },
+      },
+      {
+        selector: "edge",
+        style: {
+          width: 1.5,
+          "line-color": "#cbd5e1",
+          "target-arrow-color": "#94a3b8",
+          "target-arrow-shape": "triangle",
+          "curve-style": "bezier",
+          label: "data(label)",
+          "font-size": "8px",
+          color: "#6b7280",
+          "text-background-color": "#ffffff",
+          "text-background-opacity": 0.85,
+          "text-background-padding": "2px",
+        },
+      },
+      {
+        selector: "node:selected",
+        style: {
+          "border-width": 3,
+          "border-color": "#6366f1",
+        },
+      },
+    ],
+    layout: {
+      name: "cose",
+      animate: true,
+      padding: 40,
+      nodeRepulsion: 8000,
+      idealEdgeLength: 90,
+    },
+  });
+
+  kagCy.on("tap", "node", (evt) => {
+    const node = evt.target;
+    const desc = node.data("entityType") ? `Type: ${node.data("entityType")}` : "";
+    if (meta) meta.textContent = `${node.data("label")}${desc ? ` · ${desc}` : ""} · ${totalEntities} entités dans l'espace`;
+  });
+}
+
+async function loadKagGraph() {
+  try {
+    const r = await api(`/api/spaces/${spaceId}/kag/graph`);
+    if (!r.ok) return;
+    const data = await r.json();
+    renderKagGraph(data);
+  } catch (err) {
+    console.warn("KAG graph load failed", err);
+  }
+}
+
 function buildSlotPromptSection(slotPrompt) {
   if (!slotPrompt || !slotPrompt.choices) return "";
   const choiceButtons = slotPrompt.choices.map((c) => (
@@ -1675,6 +1859,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   setupSpaceSidebar();
   await loadSpace();
+  await loadKagGraph();
   await loadConversations();
 });
 </script>

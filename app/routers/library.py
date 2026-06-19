@@ -119,6 +119,32 @@ class DocumentChunkMonitorItem(BaseModel):
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
 
+class DocumentChunkEntityItem(BaseModel):
+    entity_id: int
+    name: str
+    entity_type: str
+    relation_role: str = "mention"
+    relevance_score: float = 1.0
+    context_snippet: Optional[str] = None
+
+
+class DocumentEntityRelationItem(BaseModel):
+    entity_a_id: int
+    entity_b_id: int
+    entity_a_name: str
+    entity_b_name: str
+    relation_type: str
+    relation_label: Optional[str] = None
+    confidence: Optional[float] = None
+
+
+class DocumentKagSummary(BaseModel):
+    entity_count: int = 0
+    relation_count: int = 0
+    chunk_entities: Dict[str, List[DocumentChunkEntityItem]] = Field(default_factory=dict)
+    document_relations: List[DocumentEntityRelationItem] = Field(default_factory=list)
+
+
 class DocumentChunksMonitorResponse(BaseModel):
     document_id: int
     document_title: str
@@ -128,6 +154,7 @@ class DocumentChunksMonitorResponse(BaseModel):
     raw_chunks: List[DocumentChunkMonitorItem]
     report_chunks: List[DocumentChunkMonitorItem]
     semantic_chunks: List[DocumentChunkMonitorItem] = Field(default_factory=list)
+    kag: DocumentKagSummary = Field(default_factory=DocumentKagSummary)
 
 
 @router.get("", response_model=LibraryRead)
@@ -427,6 +454,24 @@ async def get_document_chunks_monitor(
     report_items.sort(key=lambda x: (x.page, x.chunk_index))
     semantic_items.sort(key=lambda x: (x.page, x.chunk_index, x.is_leaf))
 
+    from app.services.kag_graph_service import get_document_chunk_entities
+
+    kag_raw = get_document_chunk_entities(session, document_id)
+    chunk_entities_parsed: Dict[str, List[DocumentChunkEntityItem]] = {}
+    for chunk_key, items in (kag_raw.get("chunk_entities") or {}).items():
+        chunk_entities_parsed[chunk_key] = [
+            DocumentChunkEntityItem.model_validate(item) for item in items
+        ]
+    kag_summary = DocumentKagSummary(
+        entity_count=int(kag_raw.get("entity_count") or 0),
+        relation_count=int(kag_raw.get("relation_count") or 0),
+        chunk_entities=chunk_entities_parsed,
+        document_relations=[
+            DocumentEntityRelationItem.model_validate(r)
+            for r in (kag_raw.get("document_relations") or [])
+        ],
+    )
+
     return DocumentChunksMonitorResponse(
         document_id=document.id,
         document_title=document.title,
@@ -436,6 +481,7 @@ async def get_document_chunks_monitor(
         raw_chunks=raw_items,
         report_chunks=report_items,
         semantic_chunks=semantic_items,
+        kag=kag_summary,
     )
 
 

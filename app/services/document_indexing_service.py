@@ -115,6 +115,7 @@ def process_document_indexing(
 
     chunk_count = 0
     embed_count = 0
+    kag_stats: dict = {"entities": 0, "relations": 0, "status": "disabled"}
 
     try:
         if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
@@ -139,6 +140,32 @@ def process_document_indexing(
             ld.info("[Indexing] Embeddings mistral-embed document_id=%s", document_id)
             embed_count = _embed_text_chunks(document_id)
 
+            if _aborted():
+                return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
+
+            kag_stats = {"entities": 0, "relations": 0, "status": "disabled"}
+            if settings.KAG_ENABLED:
+                _set_progress(document_id, 75)
+                ld.info("[Indexing] Extraction KAG entités/relations document_id=%s", document_id)
+                try:
+                    from app.services.kag_extraction_service import (
+                        embed_kag_entities_for_document,
+                        extract_kag_for_document,
+                    )
+
+                    kag_stats = extract_kag_for_document(document_id, pdf_path)
+                    _set_progress(document_id, 85)
+                    ld.info("[Indexing] Embedding entités KAG document_id=%s", document_id)
+                    embed_kag_entities_for_document(document_id)
+                except Exception as exc:
+                    logger.error(
+                        "[Indexing] KAG échoué document_id=%s (non bloquant) : %s",
+                        document_id,
+                        exc,
+                        exc_info=True,
+                    )
+                    kag_stats = {"entities": 0, "relations": 0, "status": "failed"}
+
         if mode in (IndexingMode.FULL, IndexingMode.COLPALI_ONLY):
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
@@ -149,12 +176,16 @@ def process_document_indexing(
 
         _finalize_document(document_id, chunk_count)
         ld.info(
-            "[Indexing] FIN OK document_id=%s chunks=%s embeds=%s",
+            "[Indexing] FIN OK document_id=%s chunks=%s embeds=%s kag=%s",
             document_id,
             chunk_count,
             embed_count,
+            kag_stats if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY) else "n/a",
         )
-        return {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
+        result = {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
+        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
+            result["kag"] = kag_stats
+        return result
 
     except Exception as exc:
         logger.error("[Indexing] Échec document_id=%s: %s", document_id, exc, exc_info=True)
@@ -168,7 +199,18 @@ def process_document_indexing(
 
 
 def _delete_all_chunks(session: Session, document_id: int) -> None:
-    """Supprime tous les chunks PostgreSQL et les patches LanceDB."""
+    """Supprime tous les chunks PostgreSQL, relations KAG et patches LanceDB."""
+    if settings.KAG_ENABLED:
+        try:
+            from app.services.kag_extraction_service import cleanup_kag_for_document
+            cleanup_kag_for_document(session, document_id)
+        except Exception as exc:
+            logger.warning(
+                "[Indexing] Nettoyage KAG échoué pour document_id=%s : %s",
+                document_id,
+                exc,
+            )
+
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
     session.commit()
     try:
@@ -182,6 +224,17 @@ def _delete_text_chunks(session: Session, document_id: int) -> None:
     """
     Supprime tous les chunks texte (L1 + sections) sans toucher les L0 page_anchor ni LanceDB.
   """
+    if settings.KAG_ENABLED:
+        try:
+            from app.services.kag_extraction_service import cleanup_kag_for_document
+            cleanup_kag_for_document(session, document_id)
+        except Exception as exc:
+            logger.warning(
+                "[Indexing] Nettoyage KAG (text_only) échoué document_id=%s : %s",
+                document_id,
+                exc,
+            )
+
     # Feuilles texte (toutes versions du pipeline pymupdf4llm)
     session.execute(
         delete(DocumentChunk).where(

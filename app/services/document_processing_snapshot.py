@@ -1,4 +1,4 @@
-"""Agrégats lecture seule : chunks et embeddings — pour UI et réponses stop/skip."""
+"""Agrégats lecture seule : chunks, embeddings et KAG — pour UI et réponses stop/skip."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ from typing import Any, Literal, Optional
 from sqlalchemy import func, select
 from sqlmodel import Session
 
+from app.config import settings
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 
@@ -65,7 +66,7 @@ def build_document_processing_snapshot(
 
     readiness = _readiness_label(chunk_count, leaves_with_emb)
 
-    return {
+    result: dict[str, Any] = {
         "document_id": document_id,
         "has_chunks": chunk_count > 0,
         "chunk_count": chunk_count,
@@ -76,6 +77,17 @@ def build_document_processing_snapshot(
         "total_pages": doc.phase_status_json.get("total_pages") if doc and doc.phase_status_json else None,
     }
 
+    if settings.KAG_ENABLED:
+        try:
+            from app.services.kag_graph_service import count_document_kag_stats
+
+            result.update(count_document_kag_stats(session, document_id))
+        except Exception:
+            result["knowledge_entity_count"] = 0
+            result["entity_relation_count"] = 0
+
+    return result
+
 
 def build_document_diagnostic(session: Session, document_id: int) -> dict[str, Any]:
     """Checks pour le bouton Diagnostiquer (pipeline indexation)."""
@@ -85,6 +97,8 @@ def build_document_diagnostic(session: Session, document_id: int) -> dict[str, A
         issues.append("Aucun chunk indexé.")
     elif snap["chunks_with_embedding_count"] == 0:
         issues.append("Chunks présents mais aucun embedding vectoriel sur les feuilles.")
+    if settings.KAG_ENABLED and snap.get("knowledge_entity_count", 0) == 0 and snap["chunk_count"] > 0:
+        issues.append("Aucune entité KAG extraite pour ce document.")
     return {
         **snap,
         "checks_ok": len(issues) == 0,
