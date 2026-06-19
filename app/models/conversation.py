@@ -1,6 +1,7 @@
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field, Relationship, Column
+from sqlalchemy import JSON
 from datetime import datetime
-from typing import Optional, List, TYPE_CHECKING
+from typing import Optional, List, TYPE_CHECKING, Dict, Any
 from .space import Space
 
 if TYPE_CHECKING:
@@ -14,6 +15,7 @@ class Conversation(SQLModel, table=True):
     title: str = Field(max_length=200, default="Nouvelle conversation")
     user_id: int = Field(foreign_key="user.id")
     space_id: int = Field(foreign_key="space.id", index=True)
+    query_context: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON, nullable=True))
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     

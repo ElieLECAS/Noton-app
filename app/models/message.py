@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field, Relationship, Column, Text
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, JSON
 from datetime import datetime
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, Dict, Any
 
 if TYPE_CHECKING:
     from .conversation import Conversation
@@ -16,6 +16,7 @@ class Message(SQLModel, table=True):
     model: Optional[str] = Field(default=None, max_length=100)  # Modèle utilisé (pour les réponses assistant)
     provider: Optional[str] = Field(default=None, max_length=50)  # Provider (mistral/openai)
     sources: Optional[str] = Field(default=None, sa_column=Column(Text))  # Sources stockées sous format JSON string
+    metadata_json: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON, nullable=True))
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
     # Relations
@@ -30,6 +31,7 @@ class MessageCreate(SQLModel):
     model: Optional[str] = None
     provider: Optional[str] = None
     sources: Optional[str] = None
+    metadata_json: Optional[Dict[str, Any]] = None
 
 
 class MessageRead(SQLModel):
@@ -41,5 +43,6 @@ class MessageRead(SQLModel):
     model: Optional[str] = None
     provider: Optional[str] = None
     sources: Optional[str] = None
+    metadata_json: Optional[Dict[str, Any]] = None
     created_at: datetime
 

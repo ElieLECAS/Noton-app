@@ -1187,7 +1187,7 @@ function renderMessages(messages) {
 
   host.innerHTML = "";
   for (const message of messages) {
-    addMessage(message.role, message.content, message.id, message.sources);
+    addMessage(message.role, message.content, message.id, message.sources, message.metadata_json);
   }
 }
 
@@ -1206,7 +1206,7 @@ async function selectConversation(conversationId) {
   chatHistory = messages.map((msg) => ({ role: msg.role, content: msg.content }));
 }
 
-function addMessage(role, content, messageId = null, sources = null) {
+function addMessage(role, content, messageId = null, sources = null, metadataJson = null) {
   const host = document.getElementById("chat-messages");
   const emptyState = document.getElementById("welcome-chat-state") || host.querySelector("#empty-state-message");
   if (emptyState) {
@@ -1258,17 +1258,24 @@ function addMessage(role, content, messageId = null, sources = null) {
       `;
     }
     
+    let slotPromptHtml = "";
+    if (metadataJson && metadataJson.slot_prompt) {
+      slotPromptHtml = buildSlotPromptSection(metadataJson.slot_prompt);
+    }
+
     if (parsedSources && parsedSources.length > 0) {
       parsedHtml = transformCitationsToLinks(parsedHtml, parsedSources, messageKey);
       const sourcesSection = buildSourcesSection(parsedSources, messageKey);
       innerHtml = `<div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
         <div class="markdown-content">${parsedHtml}</div>
         ${sourcesSection}
+        ${slotPromptHtml}
         ${feedbackHtml}
       </div>`;
     } else {
       innerHtml = `<div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
         <div class="markdown-content">${parsedHtml}</div>
+        ${slotPromptHtml}
         ${feedbackHtml}
       </div>`;
     }
@@ -1280,6 +1287,9 @@ function addMessage(role, content, messageId = null, sources = null) {
   
   div.innerHTML = innerHtml;
   host.appendChild(div);
+  if (role === "assistant" && metadataJson && metadataJson.slot_prompt) {
+    attachSlotPromptListeners(div);
+  }
   host.scrollTop = host.scrollHeight;
   
   if (role === "assistant" && messageId) {
@@ -1295,18 +1305,44 @@ async function loadSpace() {
   document.getElementById("space-title").textContent = s.name;
 }
 
-document.getElementById("chat-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
+function buildSlotPromptSection(slotPrompt) {
+  if (!slotPrompt || !slotPrompt.choices) return "";
+  const choiceButtons = slotPrompt.choices.map((c) => (
+    `<button type="button" class="slot-choice-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all active:scale-95"
+      data-field="${c.field}" data-value="${c.value}" data-action="fill" data-label="${String(c.label).replace(/"/g, "&quot;")}">${c.label}</button>`
+  )).join("");
+  const skipButton = slotPrompt.allow_skip
+    ? `<button type="button" class="slot-choice-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all active:scale-95"
+        data-field="${slotPrompt.field}" data-value="" data-action="skip" data-label="${slotPrompt.skip_label || "Passer"}">${slotPrompt.skip_label || "Passer"}</button>`
+    : "";
+  return `<div class="slot-prompt-section mt-3 pt-3 border-t border-black/5 dark:border-white/5 flex flex-wrap gap-2">${choiceButtons}${skipButton}</div>`;
+}
+
+function attachSlotPromptListeners(container) {
+  if (!container) return;
+  container.querySelectorAll(".slot-choice-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      handleSlotChoice(
+        btn.dataset.field,
+        btn.dataset.value,
+        btn.dataset.action,
+        btn.dataset.label
+      );
+    });
+  });
+}
+
+async function handleSlotChoice(field, value, action, label) {
   if (!currentConversationId) {
     await createNewConversation();
     if (!currentConversationId) return;
   }
-  const input = document.getElementById("chat-input");
-  const message = input.value.trim();
-  if (!message) return;
-  addMessage("user", message);
-  input.value = "";
+  const displayLabel = label || value || "Passer";
+  addMessage("user", displayLabel);
+  await submitSpaceChat(displayLabel, { field, value, action });
+}
 
+async function submitSpaceChat(message, slotAction = null) {
   function startFakeReasoning(el) {
     el.innerHTML = `
       <div class="flex items-center gap-3 py-1">
@@ -1330,20 +1366,25 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   host.scrollTop = host.scrollHeight;
   const contentEl = assistantWrap.querySelector("#streaming-content");
   const reasoningInterval = startFakeReasoning(contentEl);
-  
+
+  const requestBody = {
+    message,
+    model: fastModel,
+    provider: fastProvider,
+    context: chatHistory,
+    conversation_id: currentConversationId,
+  };
+  if (slotAction) {
+    requestBody.slot_action = slotAction;
+  }
+
   let response;
   try {
     response = await fetch(`/api/spaces/${spaceId}/chat/stream`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({
-        message,
-        model: fastModel,
-        provider: fastProvider,
-        context: chatHistory,
-        conversation_id: currentConversationId
-      })
+      body: JSON.stringify(requestBody),
     });
   } catch (_) {
     if (reasoningInterval) clearInterval(reasoningInterval);
@@ -1362,6 +1403,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
   let full = "";
   let streamError = "";
   let receivedSources = [];
+  let receivedSlotPrompt = null;
   let streamDone = false;
   let assistantMessageId = null;
   const reader = response.body.getReader();
@@ -1383,63 +1425,20 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
           if (reasoningInterval) clearInterval(reasoningInterval);
           full += data.message.content;
           contentEl.classList.remove("italic");
-          const withMarkdown = parseMarkdown(full);
-          contentEl.innerHTML = withMarkdown;
+          contentEl.innerHTML = parseMarkdown(full);
+        } else if (data.slot_prompt) {
+          receivedSlotPrompt = data.slot_prompt;
         } else if (data.sources) {
           receivedSources = data.sources;
           if (full) {
-            const withMarkdown = parseMarkdown(full);
-            contentEl.innerHTML = withMarkdown;
+            contentEl.innerHTML = parseMarkdown(full);
           }
         } else if (data.status === "cropping") {
           const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
           if (messageContainer) {
             let skeleton = messageContainer.querySelector("#illustration-skeleton");
             if (!skeleton) {
-              const skeletonHtml = `
-                <div id="illustration-skeleton" class="mb-4 mt-4 pt-3 border-t border-black/5 dark:border-white/5 animate-pulse">
-                  <div class="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold mb-2 flex items-center gap-1.5">
-                    <i class="ti ti-photo text-sm animate-bounce"></i>
-                    <span>Cadrage de l'illustration en cours...</span>
-                  </div>
-                  <div class="rounded-2xl overflow-hidden border border-black/5 dark:border-white/5 bg-white/40 dark:bg-gray-900/40 backdrop-blur-md shadow-sm max-w-lg relative" style="height: 180px;">
-                    <div class="absolute inset-0 p-4 flex flex-col justify-between">
-                      <div class="space-y-2 opacity-30">
-                        <div class="h-2.5 bg-gray-300 dark:bg-gray-700 rounded w-5/6"></div>
-                        <div class="h-2.5 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
-                      </div>
-                      <div class="flex-1 my-3 flex items-center justify-center relative overflow-hidden rounded-lg border border-dashed border-indigo-500/30 bg-indigo-500/5 dark:bg-indigo-500/10">
-                        <div class="crop-scanner-line"></div>
-                        <div class="absolute inset-4 opacity-20 filter blur-[2px] flex flex-col gap-2 pointer-events-none">
-                          <div class="h-3 bg-gray-400 dark:bg-gray-500 rounded w-2/3"></div>
-                          <div class="h-2 bg-gray-400 dark:bg-gray-500 rounded w-full"></div>
-                          <div class="flex-1 rounded bg-gradient-to-tr from-indigo-300 to-purple-300 dark:from-indigo-700 dark:to-purple-700"></div>
-                        </div>
-                        <div class="flex flex-col items-center gap-1 z-10 text-indigo-500 dark:text-indigo-400">
-                          <i class="ti ti-crop text-2xl slow-spin"></i>
-                          <span class="text-[10px] font-bold tracking-wider uppercase opacity-90" id="skeleton-status-text">Cadrage de l'illustration...</span>
-                        </div>
-                        <div class="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-indigo-500/60"></div>
-                        <div class="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-indigo-500/60"></div>
-                        <div class="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-indigo-500/60"></div>
-                        <div class="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-indigo-500/60"></div>
-                      </div>
-                      <div class="flex items-center justify-between opacity-30 pt-2 border-t border-black/5 dark:border-white/5">
-                        <div class="h-2 bg-gray-300 dark:bg-gray-700 rounded w-1/3"></div>
-                        <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-12"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              `;
-              messageContainer.insertAdjacentHTML("beforeend", skeletonHtml);
-              skeleton = messageContainer.querySelector("#illustration-skeleton");
-            }
-            const statusText = skeleton.querySelector("#skeleton-status-text");
-            if (statusText && data.page_no) {
-              const docName = data.document_title || "Document";
-              statusText.textContent = `Page ${data.page_no} (${data.attempt}/${data.max_attempts})...`;
-              statusText.title = `Analyse de la page ${data.page_no} de "${docName}"`;
+              messageContainer.insertAdjacentHTML("beforeend", `<div id="illustration-skeleton" class="mb-4 mt-4 pt-3 border-t border-black/5 dark:border-white/5 animate-pulse"><span class="text-xs text-indigo-600">Cadrage illustration...</span></div>`);
             }
             host.scrollTop = host.scrollHeight;
           }
@@ -1467,8 +1466,7 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     host.scrollTop = host.scrollHeight;
   }
   if (reasoningInterval) clearInterval(reasoningInterval);
-  
-  // Supprimer le squelette de chargement s'il existe
+
   const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
   if (messageContainer) {
     const skeleton = messageContainer.querySelector("#illustration-skeleton");
@@ -1480,20 +1478,21 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
     contentEl.textContent = "Aucune réponse générée.";
   } else if (full && !streamError) {
     const cleaned = stripCitationMarkers(full);
-    const withMarkdown = parseMarkdown(cleaned);
     const streamingMessageKey = `msg-stream-${Date.now()}`;
     const finalHtml = (receivedSources && receivedSources.length > 0)
-      ? transformCitationsToLinks(withMarkdown, receivedSources, streamingMessageKey)
-      : withMarkdown;
+      ? transformCitationsToLinks(parseMarkdown(cleaned), receivedSources, streamingMessageKey)
+      : parseMarkdown(cleaned);
     contentEl.innerHTML = finalHtml;
     if (receivedSources && receivedSources.length > 0) {
-      const sourcesHtml = buildSourcesSection(receivedSources, streamingMessageKey);
-      const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
-      if (messageContainer) {
-        messageContainer.insertAdjacentHTML("beforeend", sourcesHtml);
-      }
+      messageContainer.insertAdjacentHTML("beforeend", buildSourcesSection(receivedSources, streamingMessageKey));
     }
   }
+
+  if (receivedSlotPrompt && messageContainer) {
+    messageContainer.insertAdjacentHTML("beforeend", buildSlotPromptSection(receivedSlotPrompt));
+    attachSlotPromptListeners(messageContainer);
+  }
+
   chatHistory.push({ role: "user", content: message });
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });
 
@@ -1511,28 +1510,28 @@ document.getElementById("chat-form").addEventListener("submit", async (e) => {
             </button>
           </div>
         </div>
-        <div id="feedback-comment-container-${assistantMessageId}" class="hidden flex gap-2 items-center mt-1">
-          <input type="text" id="feedback-comment-input-${assistantMessageId}" placeholder="Un commentaire ? (facultatif)" class="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-transparent text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-          <button onclick="saveFeedbackComment(${assistantMessageId})" class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-semibold transition-colors">
-            Valider
-          </button>
-        </div>
-        <div id="feedback-success-msg-${assistantMessageId}" class="hidden text-green-600 dark:text-green-400 font-medium flex items-center gap-1 mt-1">
-          <i class="ti ti-check text-sm"></i> <span id="feedback-success-text-${assistantMessageId}">Merci pour votre retour !</span>
-        </div>
-      </div>
-    `;
-    const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
-    if (messageContainer) {
-      messageContainer.insertAdjacentHTML("beforeend", feedbackHtml);
-    }
+      </div>`;
+    messageContainer.insertAdjacentHTML("beforeend", feedbackHtml);
   }
 
-  if (currentConversationId) {
+  if (currentConversationId && !receivedSlotPrompt) {
     await api(`/api/conversations/${currentConversationId}/generate-title`, { method: "POST" });
     await refreshConversationsSidebar(currentConversationId);
   }
+}
 
+document.getElementById("chat-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (!currentConversationId) {
+    await createNewConversation();
+    if (!currentConversationId) return;
+  }
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (!message) return;
+  addMessage("user", message);
+  input.value = "";
+  await submitSpaceChat(message, null);
 });
 
 // ——— Gestion du Feedback 👍/👎 ———

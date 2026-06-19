@@ -185,6 +185,11 @@ class Settings(BaseSettings):
         "true", "1", "yes", "on"
     )
 
+    # Query understanding — slot filling LangGraph avant retrieval RAG
+    QUERY_UNDERSTANDING_ENABLED: bool = os.getenv("QUERY_UNDERSTANDING_ENABLED", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+
     # Reranker vision LLM (juge de pertinence page-par-page sur les PNG ColPali)
     VISION_RERANK_ENABLED: bool = os.getenv("VISION_RERANK_ENABLED", "true").strip().lower() in ('true', '1', 'yes', 'on')
     VISION_RERANK_MODEL: str = os.getenv("VISION_RERANK_MODEL", "mistral-small-latest")

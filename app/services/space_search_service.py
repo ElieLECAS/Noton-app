@@ -28,6 +28,7 @@ from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.embedding_service import generate_embedding
 from app.services.space_service import get_space_by_id
+from app.services.query_understanding_graph import RetrievalQueries
 from app.tracing import trace_run
 from app.services import reranker_service
 
@@ -532,6 +533,7 @@ async def search_multimodal_passages(
     k: Optional[int] = None,
     document_filter: str = "all",
     include_retrieval_stages: bool = False,
+    queries: Optional[RetrievalQueries] = None,
 ) -> Dict:
     """
     Pipeline retrieval multimodal page-centric unifié.
@@ -557,17 +559,25 @@ async def search_multimodal_passages(
     if not query_text or not query_text.strip():
         return {"passages": [], "images": [], "status": "disabled", "reason": "empty_query"}
 
+    colpali_q = queries.colpali if queries else query_text
+    semantic_q = queries.semantic if queries else query_text
+    lexical_q = queries.lexical if queries else query_text
+    rerank_q = semantic_q
+
     top_k = k if k is not None else settings.RAG_TOP_K
     pool_size = max(settings.RERANK_POOL, settings.RAG_POOL_SIZE, top_k)
 
     logger.info(
-        "[RAG multimodal] Démarrage — space_id=%s top_k=%s pool=%s rerank=%s filter=%s query=%r",
+        "[RAG multimodal] Démarrage — space_id=%s top_k=%s pool=%s rerank=%s filter=%s "
+        "colpali=%r semantic=%r lexical=%r",
         space_id,
         top_k,
         pool_size,
         settings.RERANKER_ENABLED,
         document_filter,
-        query_text[:120],
+        colpali_q[:80],
+        semantic_q[:80],
+        lexical_q[:80],
     )
 
     try:
@@ -580,20 +590,27 @@ async def search_multimodal_passages(
 
         query_embedding: Optional[List[float]] = None
         try:
-            query_embedding = generate_embedding(query_text)
+            query_embedding = generate_embedding(semantic_q)
         except Exception as exc:
             logger.warning("[RAG multimodal] Embedding requête indisponible : %s", exc)
 
         with trace_run(
             "multimodal_retrieval",
             run_type="retriever",
-            inputs={"query": query_text, "space_id": space_id, "pool_size": pool_size},
+            inputs={
+                "query": query_text,
+                "colpali_query": colpali_q,
+                "semantic_query": semantic_q,
+                "lexical_query": lexical_q,
+                "space_id": space_id,
+                "pool_size": pool_size,
+            },
             tags=["retrieval", "multimodal", "space"],
         ) as hr:
-            colpali_hits = retrieve_colpali_pages(session, doc_ids, query_text, pool_size)
+            colpali_hits = retrieve_colpali_pages(session, doc_ids, colpali_q, pool_size)
             colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
             pgvector_hits = retrieve_pgvector_pages(session, doc_ids, query_embedding or [], pool_size)
-            bm25_hits = retrieve_bm25_pages(session, doc_ids, query_text, pool_size)
+            bm25_hits = retrieve_bm25_pages(session, doc_ids, lexical_q, pool_size)
             hr.end(
                 outputs={
                     "colpali": len(colpali_hits),
@@ -642,12 +659,12 @@ async def search_multimodal_passages(
             with trace_run(
                 "minilm_rerank",
                 run_type="reranker",
-                inputs={"query": query_text, "pool_size": len(fused_hits), "max_k": top_k},
+                inputs={"query": rerank_q, "pool_size": len(fused_hits), "max_k": top_k},
                 tags=["rerank", "minilm", "page"],
             ) as rr:
                 final_hits, rerank_result, protected_hits = await rerank_unified_page_hits(
                     session,
-                    query_text,
+                    rerank_q,
                     fused_hits,
                     max_k=top_k,
                 )
@@ -825,6 +842,7 @@ async def search_relevant_passages(
     k: int = 15,
     document_filter: str = "all",
     include_retrieval_stages: bool = False,
+    queries: Optional[RetrievalQueries] = None,
 ) -> Dict:
     """
     RAG espace : retrieval hybride ColPali + pgvector L1 + BM25, fusion RRF,
@@ -841,6 +859,7 @@ async def search_relevant_passages(
             k=k,
             document_filter=document_filter,
             include_retrieval_stages=include_retrieval_stages,
+            queries=queries,
         )
 
     from app.services.page_retrieval_service import (
@@ -863,12 +882,18 @@ async def search_relevant_passages(
     if not query_text or not query_text.strip():
         return {"passages": [], "status": "disabled", "reason": "empty_query"}
 
+    colpali_q = queries.colpali if queries else query_text
+    semantic_q = queries.semantic if queries else query_text
+    lexical_q = queries.lexical if queries else query_text
+
     logger.info(
-        "[RAG] Démarrage retrieval — space_id=%s k=%s filter=%s query=%r",
+        "[RAG] Démarrage retrieval — space_id=%s k=%s filter=%s colpali=%r semantic=%r lexical=%r",
         space_id,
         k,
         document_filter,
-        query_text[:120],
+        colpali_q[:80],
+        semantic_q[:80],
+        lexical_q[:80],
     )
 
     try:
@@ -883,7 +908,7 @@ async def search_relevant_passages(
         query_embedding: Optional[List[float]] = None
         try:
             logger.info("[RAG] Génération embedding requête (pgvector)...")
-            query_embedding = generate_embedding(query_text)
+            query_embedding = generate_embedding(semantic_q)
         except Exception as exc:
             logger.warning("[RAG] Embedding requête indisponible : %s", exc)
 
@@ -891,12 +916,19 @@ async def search_relevant_passages(
         with trace_run(
             "hybrid_retrieval",
             run_type="retriever",
-            inputs={"query": query_text, "space_id": space_id, "pool_size": pool_size},
+            inputs={
+                "query": query_text,
+                "colpali_query": colpali_q,
+                "semantic_query": semantic_q,
+                "lexical_query": lexical_q,
+                "space_id": space_id,
+                "pool_size": pool_size,
+            },
             tags=["retrieval", "hybrid", "space"],
         ) as hr:
-            colpali_hits = retrieve_colpali_page_hits(session, doc_ids, query_text, pool_size)
+            colpali_hits = retrieve_colpali_page_hits(session, doc_ids, colpali_q, pool_size)
             pgvector_hits = retrieve_pgvector_page_hits(session, doc_ids, query_embedding or [], pool_size)
-            bm25_hits = retrieve_bm25_page_hits(session, doc_ids, query_text, pool_size)
+            bm25_hits = retrieve_bm25_page_hits(session, doc_ids, lexical_q, pool_size)
             hr.end(
                 outputs={
                     "colpali": len(colpali_hits),
@@ -1022,6 +1054,7 @@ async def search_technical_passages(
     query_text: str,
     user_id: int,
     k: int = 15,
+    queries: Optional[RetrievalQueries] = None,
 ) -> Dict:
     """
     Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
@@ -1038,6 +1071,7 @@ async def search_technical_passages(
         user_id=user_id,
         k=k,
         document_filter="technical",
+        queries=queries,
     )
 
 

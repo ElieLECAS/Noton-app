@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Literal
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel
@@ -103,6 +103,7 @@ def _persist_assistant_reply(
     model: str,
     provider: str,
     sources: Optional[str] = None,
+    metadata_json: Optional[dict] = None,
 ) -> int:
     """Écrit la réponse assistant hors session de la requête (StreamingResponse ferme souvent la session injectée avant la fin du générateur) et retourne son ID."""
     with Session(engine) as s:
@@ -113,6 +114,7 @@ def _persist_assistant_reply(
             model=model,
             provider=provider,
             sources=sources,
+            metadata_json=metadata_json,
         )
         s.add(msg)
         conv = s.get(Conversation, conversation_id)
@@ -122,6 +124,16 @@ def _persist_assistant_reply(
         s.commit()
         s.refresh(msg)
         return msg.id
+
+
+def _save_conversation_query_context(conversation_id: int, query_context: dict) -> None:
+    with Session(engine) as s:
+        conv = s.get(Conversation, conversation_id)
+        if conv:
+            conv.query_context = query_context
+            conv.updated_at = datetime.utcnow()
+            s.add(conv)
+            s.commit()
 
 
 def _int_env(name: str, default: int) -> int:
@@ -319,12 +331,19 @@ async def stream_chat_message(
 
 
 
+class SlotActionRequest(BaseModel):
+    field: str
+    value: str = ""
+    action: Literal["fill", "skip"] = "fill"
+
+
 class SpaceChatRequest(BaseModel):
     message: str
     model: str
     provider: str = "mistral"
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None
+    slot_action: Optional[SlotActionRequest] = None
 
 
 def _truncate_text(value: str, max_chars: int) -> str:
@@ -477,41 +496,84 @@ async def stream_space_chat_message(
         except Exception as e:
             logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
 
-    # Pass 0 : Decision (direct vs RAG) avec Mistral Small
-    logger.info("[chat] Étape 1/4 — routage requête (Mistral)")
-    from app.services.query_reasoning_service import decide_retrieval_route
-    
-    with trace_run(
-        "query_routing",
-        run_type="chain",
-        inputs={"query": request.message, "space_id": space_id},
-        tags=["routing", "space"],
-    ) as routing_run:
-        routing_decision = await decide_retrieval_route(request.message)
-        routing_run.end(outputs={
-            "decision": routing_decision.decision,
-            "reasoning": routing_decision.reasoning
-        })
-        logger.info(
-            "Query routing decision: %s (reason: %s)",
-            routing_decision.decision,
-            routing_decision.reasoning,
+    conversation_context: List[dict] = []
+    if request.conversation_id:
+        conversation_context = _load_conversation_context(
+            session,
+            request.conversation_id,
+            max_messages=12,
         )
+    elif request.context:
+        conversation_context = _sanitize_context_messages(request.context, max_messages=10)
 
-    if routing_decision.decision == "direct":
-        conversation_context = []
+    retrieval_queries = None
+    rag_user_message = request.message
+    qu_result = None
+
+    if settings.QUERY_UNDERSTANDING_ENABLED:
+        logger.info("[chat] Étape 1/5 — query understanding (LangGraph slot filling)")
+        from app.services.query_understanding_graph import run_query_understanding, SlotAction
+
+        persisted_context = None
         if request.conversation_id:
-            conversation_context = _load_conversation_context(
-                session,
-                request.conversation_id,
-                max_messages=12,
-            )
-        elif request.context:
-            conversation_context = _sanitize_context_messages(request.context, max_messages=10)
+            conv_for_ctx = session.get(Conversation, request.conversation_id)
+            if conv_for_ctx:
+                persisted_context = conv_for_ctx.query_context
 
+        slot_action = None
+        if request.slot_action:
+            slot_action = SlotAction(**request.slot_action.model_dump())
+
+        with trace_run(
+            "query_understanding",
+            run_type="chain",
+            inputs={"query": request.message, "space_id": space_id, "slot_action": slot_action.model_dump() if slot_action else None},
+            tags=["query_understanding", "space"],
+        ) as qu_run:
+            qu_result = await run_query_understanding(
+                user_message=request.message,
+                history=conversation_context,
+                persisted_context=persisted_context,
+                slot_action=slot_action,
+            )
+            qu_run.end(outputs={
+                "route": qu_result.route,
+                "ready_for_retrieval": qu_result.ready_for_retrieval,
+                "slots": qu_result.slots,
+                "pending_field": (qu_result.clarification.pending_field if qu_result.clarification else None),
+            })
+
+        if request.conversation_id and qu_result.query_context:
+            _save_conversation_query_context(request.conversation_id, qu_result.query_context)
+
+        routing_decision_decision = qu_result.route
+    else:
+        logger.info("[chat] Étape 1/4 — routage requête (Mistral)")
+        from app.services.query_reasoning_service import decide_retrieval_route
+
+        with trace_run(
+            "query_routing",
+            run_type="chain",
+            inputs={"query": request.message, "space_id": space_id},
+            tags=["routing", "space"],
+        ) as routing_run:
+            routing_decision = await decide_retrieval_route(request.message)
+            routing_run.end(outputs={
+                "decision": routing_decision.decision,
+                "reasoning": routing_decision.reasoning,
+            })
+            logger.info(
+                "Query routing decision: %s (reason: %s)",
+                routing_decision.decision,
+                routing_decision.reasoning,
+            )
+        routing_decision_decision = routing_decision.decision
+
+    if routing_decision_decision == "direct":
+        direct_context = list(conversation_context)
         # Éliminer tout message utilisateur en suspens à la fin de l'historique
-        while conversation_context and conversation_context[-1].get("role") == "user":
-            conversation_context.pop()
+        while direct_context and direct_context[-1].get("role") == "user":
+            direct_context.pop()
 
         system_message = {
             "role": "system",
@@ -519,7 +581,7 @@ async def stream_space_chat_message(
         }
         
         full_context_draft = [system_message]
-        full_context_draft.extend(conversation_context)
+        full_context_draft.extend(direct_context)
         full_context_draft.append({"role": "user", "content": request.message})
 
         _pipeline_inputs_space = {
@@ -608,21 +670,75 @@ async def stream_space_chat_message(
 
         return StreamingResponse(generate_direct(), media_type="text/event-stream")
 
-    # Pass 1 : Recherche technique (exclut FAQ correctives)
-    logger.info("[chat] Étape 2/4 — retrieval hybride (ColPali + pgvector + BM25)")
+    if settings.QUERY_UNDERSTANDING_ENABLED and qu_result and not qu_result.ready_for_retrieval:
+        clarification = qu_result.clarification
+        if clarification:
+            logger.info(
+                "[chat] Clarification — phase=%s field=%s vague=%s (pas de RAG)",
+                clarification.phase,
+                clarification.pending_field or "-",
+                clarification.phase == "awaiting_vague_clarification",
+            )
+
+            async def generate_clarification():
+                question = clarification.question
+                slot_prompt = clarification.slot_prompt
+                yield f"data: {json.dumps({'message': {'content': question}})}\n\n"
+                if slot_prompt:
+                    yield f"data: {json.dumps({'slot_prompt': slot_prompt})}\n\n"
+
+                assistant_message_id = None
+                if request.conversation_id:
+                    try:
+                        metadata = (
+                            {"slot_prompt": slot_prompt}
+                            if slot_prompt
+                            else {"clarification_type": "vague_request"}
+                        )
+                        assistant_message_id = _persist_assistant_reply(
+                            request.conversation_id,
+                            question,
+                            forced_model,
+                            forced_provider,
+                            None,
+                            metadata_json=metadata,
+                        )
+                    except Exception:
+                        logger.exception("Erreur sauvegarde clarification assistant (space chat)")
+
+                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+
+            return StreamingResponse(generate_clarification(), media_type="text/event-stream")
+
+    if settings.QUERY_UNDERSTANDING_ENABLED and qu_result and qu_result.ready_for_retrieval:
+        retrieval_queries = qu_result.retrieval_queries
+        rag_user_message = (
+            qu_result.query_context.get("enriched_user_message")
+            or qu_result.query_context.get("original_user_message")
+            or request.message
+        )
+
+    step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
+    logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25)", step_label)
     with trace_run(
         "technical_retrieval",
         run_type="retriever",
-        inputs={"query": request.message, "space_id": space_id, "k": RAG_TOP_K},
+        inputs={
+            "query": rag_user_message,
+            "space_id": space_id,
+            "k": RAG_TOP_K,
+            "retrieval_queries": retrieval_queries.model_dump() if retrieval_queries else None,
+        },
         tags=["rag", "technical", "space"],
     ) as retrieval_run:
         from app.services.space_search_service import search_technical_passages
         retrieval = await search_technical_passages(
             session=session,
             space_id=space_id,
-            query_text=request.message,
+            query_text=rag_user_message,
             user_id=current_user.id,
             k=RAG_TOP_K,
+            queries=retrieval_queries,
         )
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]
@@ -658,8 +774,23 @@ async def stream_space_chat_message(
     )
 
     doc_passages = enrich_colpali_passages_with_pymupdf(session, doc_passages)
+
+    if settings.QUERY_UNDERSTANDING_ENABLED and qu_result and qu_result.slots.get("supplier"):
+        from app.services.query_reasoning_service import QueryIntent
+        from app.services.space_search_service import refine_with_source_authority
+        from app.services.slot_catalog import supplier_to_primary_source
+
+        intent_obj = QueryIntent(
+            intent=qu_result.slots.get("intent") or "generic",
+            primary_source=supplier_to_primary_source(qu_result.slots.get("supplier")),
+            reasoning="slot filling",
+            confidence=1.0,
+        )
+        doc_passages = refine_with_source_authority(doc_passages, rag_user_message, intent_obj)
+
     logger.info(
-        "[chat] Étape 3/4 — contexte RAG (%d passages, status=%s, dynamic_k=%s, rerank=%s)",
+        "[chat] Étape %s — contexte RAG (%d passages, status=%s, dynamic_k=%s, rerank=%s)",
+        "3/5" if settings.QUERY_UNDERSTANDING_ENABLED else "3/4",
         len(doc_passages),
         retrieval_status,
         dynamic_k,
@@ -687,22 +818,11 @@ async def stream_space_chat_message(
     full_context_draft = []
     full_context_draft.append(space_context_draft)
 
-    conversation_context: List[dict] = []
-    if request.conversation_id:
-        conversation_context = _load_conversation_context(
-            session,
-            request.conversation_id,
-            max_messages=12,
-        )
-    elif request.context:
-        conversation_context = _sanitize_context_messages(request.context, max_messages=10)
+    rag_history = list(conversation_context)
+    while rag_history and rag_history[-1].get("role") == "user":
+        rag_history.pop()
 
-    # Éliminer tout message utilisateur en suspens à la fin de l'historique
-    # pour éviter la duplication de la requête courante (déjà ajoutée à la fin de full_context_draft)
-    while conversation_context and conversation_context[-1].get("role") == "user":
-        conversation_context.pop()
-
-    full_context_draft.extend(conversation_context)
+    full_context_draft.extend(rag_history)
 
     user_images: List[str] = []
     if doc_passages and is_vision_model(forced_model):
@@ -732,15 +852,19 @@ async def stream_space_chat_message(
         )
 
     user_msg = build_rag_user_message(
-        request.message,
+        rag_user_message,
         images_b64=user_images or None,
     )
     full_context_draft.append(user_msg)
 
-    logger.info("[chat] Étape 4/4 — génération réponse stream (model=%s)", forced_model)
+    logger.info(
+        "[chat] Étape %s — génération réponse stream (model=%s)",
+        "4/5" if settings.QUERY_UNDERSTANDING_ENABLED else "4/4",
+        forced_model,
+    )
 
     _pipeline_inputs_space = {
-        "query": request.message,
+        "query": rag_user_message,
         "space_id": space_id,
         "user_id": current_user.id,
         "model": forced_model,
