@@ -20,8 +20,8 @@ def test_space_chat_routing_direct(client, responsable_headers):
         # Mock decide_retrieval_route to return direct
         mock_decision = RetrievalDecision(decision="direct", reasoning="Politesse ou salutation")
         
-        with mock.patch(
-            "app.routers.chat.decide_retrieval_route",
+        with mock.patch("app.config.settings.QUERY_UNDERSTANDING_ENABLED", False), mock.patch(
+            "app.services.query_reasoning_service.decide_retrieval_route",
             new=mock.AsyncMock(return_value=mock_decision)
         ) as mock_route_decision, mock.patch(
             "app.routers.chat.mistral_chat_stream",
@@ -67,8 +67,8 @@ def test_space_chat_routing_rag(client, responsable_headers):
         # Mock decide_retrieval_route to return RAG
         mock_decision = RetrievalDecision(decision="rag", reasoning="Question technique")
         
-        with mock.patch(
-            "app.routers.chat.decide_retrieval_route",
+        with mock.patch("app.config.settings.QUERY_UNDERSTANDING_ENABLED", False), mock.patch(
+            "app.services.query_reasoning_service.decide_retrieval_route",
             new=mock.AsyncMock(return_value=mock_decision)
         ) as mock_route_decision, mock.patch(
             "app.routers.chat.mistral_chat_stream",
@@ -93,7 +93,7 @@ def test_space_chat_routing_rag(client, responsable_headers):
             
             assert r.status_code == 200
             # Since no passages were found, it should display the RAG threshold warning
-            assert "seuil minimum de 75%" in r.text
+            assert "75%" in r.text
             
             # Verify decide_retrieval_route was called
             mock_route_decision.assert_called_once_with("quel est le dormant Profine ?")

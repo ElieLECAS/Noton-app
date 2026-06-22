@@ -90,7 +90,7 @@ endblock %} {% block content %}
 
             <section
                 id="document-drop-zone"
-                class="relative lg:col-span-3 glass-panel rounded-3xl p-5 overflow-auto transition-all shadow-sm border border-black/5 dark:border-white/5 flex flex-col"
+                class="relative lg:col-span-3 glass-panel rounded-3xl p-5 overflow-hidden transition-all shadow-sm border border-black/5 dark:border-white/5 flex flex-col min-h-0"
             >
                 <div class="flex items-center justify-between mb-3 shrink-0">
                     <h2 class="font-bold text-gray-900 dark:text-white">
@@ -102,23 +102,7 @@ endblock %} {% block content %}
                     id="folder-current-path"
                     class="text-xs text-gray-400 dark:text-gray-500 mb-4 shrink-0 font-medium"
                 ></div>
-                <div
-                    id="drop-hint"
-                    class="pointer-events-none absolute inset-0 flex items-center justify-center px-6"
-                >
-                    <div class="text-center text-gray-400 dark:text-gray-500">
-                        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4 shadow-sm">
-                            <i class="ti ti-file-upload text-3xl"></i>
-                        </div>
-                        <div class="text-sm font-bold text-gray-700 dark:text-gray-300">
-                            Glissez-déposez vos documents ici
-                        </div>
-                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                            ou utilisez le bouton Upload
-                        </div>
-                    </div>
-                </div>
-                <div id="documents-list" class="space-y-2 flex-1 overflow-auto min-h-0"></div>
+                <div id="documents-list" class="relative flex-1 overflow-y-auto overflow-x-hidden min-h-0 space-y-2 pr-1"></div>
                 <div
                     id="drop-overlay"
                     class="hidden absolute inset-3 rounded-3xl border border-dashed border-indigo-500/40 bg-white/80 dark:bg-[#0d111c]/80 backdrop-blur-md pointer-events-none flex items-center justify-center z-10 transition-all duration-300"
@@ -507,6 +491,14 @@ endblock %} {% block content %}
             >
                 Entités KAG
             </button>
+            <button
+                id="chunks-tab-categories"
+                type="button"
+                class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
+                onclick="switchChunksTab('categories')"
+            >
+                Catégories KAG
+            </button>
         </div>
 
         <div class="flex-1 min-h-0 overflow-auto border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4">
@@ -514,6 +506,7 @@ endblock %} {% block content %}
             <div id="chunks-raw-panel" class="space-y-3 hidden"></div>
             <div id="chunks-report-panel" class="space-y-3 hidden"></div>
             <div id="chunks-entities-panel" class="space-y-3 hidden"></div>
+            <div id="chunks-categories-panel" class="space-y-3 hidden"></div>
         </div>
     </div>
 </div>
@@ -561,6 +554,34 @@ endblock %} {% block content %}
     </div>
 </div>
 {% endblock %} {% block extra_scripts %}
+<style>
+    /* Pas de glass-card / transform ici : évite le contenu qui disparaît au survol dans la liste scrollable */
+    .library-doc-row {
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+    .dark .library-doc-row {
+        background: rgba(38, 47, 71, 0.55);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+    .library-doc-row:hover {
+        background: rgba(255, 255, 255, 0.88);
+        border-color: rgba(99, 102, 241, 0.35);
+        box-shadow: 0 6px 18px rgba(99, 102, 241, 0.08);
+    }
+    .dark .library-doc-row:hover {
+        background: rgba(45, 55, 82, 0.75);
+        border-color: rgba(99, 102, 241, 0.35);
+        box-shadow: 0 6px 18px rgba(99, 102, 241, 0.15);
+    }
+    .library-folder-item--active:hover {
+        background: rgba(255, 255, 255, 0.72) !important;
+    }
+    .dark .library-folder-item--active:hover {
+        background: rgba(255, 255, 255, 0.12) !important;
+    }
+</style>
 <script>
     let selectedFolderId = null;
     let spaces = [];
@@ -762,10 +783,6 @@ endblock %} {% block content %}
         const exportAllBtn = document.getElementById("library-export-all-btn");
         if (exportAllBtn) exportAllBtn.classList.toggle("hidden", !canLibraryWrite);
 
-        // Masquer l'indication visuelle "upload" (icône) quand on est en lecture seule.
-        const dropHint = document.getElementById("drop-hint");
-        if (dropHint) dropHint.classList.toggle("hidden", !canLibraryWrite);
-        
         const sharedContainer = document.getElementById("space-is-shared-container");
         const editSharedContainer = document.getElementById("edit-space-is-shared-container");
         if (isAdminUser) {
@@ -841,7 +858,7 @@ endblock %} {% block content %}
         const host = document.getElementById("folders-list");
         host.innerHTML = `
     <div
-      class="folder-item group flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border border-transparent hover:border-black/5 dark:hover:border-white/5 hover:bg-white/40 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 cursor-pointer transition-all active:scale-98 ${selectedFolderId === null ? "bg-white/60 dark:bg-white/10 shadow-sm border-black/5 dark:border-white/5 font-semibold text-indigo-600 dark:text-indigo-400" : ""}"
+      class="folder-item ${selectedFolderId === null ? "library-folder-item--active " : ""}group flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border cursor-pointer transition-all ${selectedFolderId === null ? "bg-white/60 dark:bg-white/10 shadow-sm border-black/5 dark:border-white/5 font-semibold text-indigo-600 dark:text-indigo-400" : "border-transparent hover:border-black/5 dark:hover:border-white/5 hover:bg-white/40 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200"}"
       onclick="selectFolder(null)"
       ondragover="handleFolderDragOver(event)"
       ondragleave="handleFolderDragLeave(event)"
@@ -855,7 +872,7 @@ endblock %} {% block content %}
         .map(
             (f) => `
       <div
-        class="folder-item group flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border border-transparent hover:border-black/5 dark:hover:border-white/5 hover:bg-white/40 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200 cursor-pointer transition-all active:scale-98 ${selectedFolderId === f.id ? "bg-white/60 dark:bg-white/10 shadow-sm border-black/5 dark:border-white/5 font-semibold text-indigo-600 dark:text-indigo-400" : ""}"
+        class="folder-item ${selectedFolderId === f.id ? "library-folder-item--active " : ""}group flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border cursor-pointer transition-all ${selectedFolderId === f.id ? "bg-white/60 dark:bg-white/10 shadow-sm border-black/5 dark:border-white/5 font-semibold text-indigo-600 dark:text-indigo-400" : "border-transparent hover:border-black/5 dark:hover:border-white/5 hover:bg-white/40 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200"}"
         onclick="selectFolder(${f.id})"
         ondragover="handleFolderDragOver(event)"
         ondragleave="handleFolderDragLeave(event)"
@@ -925,8 +942,31 @@ endblock %} {% block content %}
             bits.push(`${snap.knowledge_entity_count} entités KAG`);
         if (snap.entity_relation_count)
             bits.push(`${snap.entity_relation_count} relations`);
+        if (snap.content_category_count)
+            bits.push(`${snap.content_category_count} catégorie(s)`);
         if (bits.length === 0) return "";
         return ` <span class="text-emerald-700 dark:text-emerald-400">· ${bits.join(" · ")} · ${snap.readiness_label || ""}</span>`;
+    }
+
+    function renderDocumentsEmptyState() {
+        if (!canLibraryWrite) {
+            return `<div class="py-12 text-center text-sm text-gray-500 dark:text-gray-400">Aucun document dans ce dossier.</div>`;
+        }
+        return `
+            <div class="py-12 flex items-center justify-center px-6">
+                <div class="text-center text-gray-400 dark:text-gray-500">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4 shadow-sm">
+                        <i class="ti ti-file-upload text-3xl"></i>
+                    </div>
+                    <div class="text-sm font-bold text-gray-700 dark:text-gray-300">
+                        Glissez-déposez vos documents ici
+                    </div>
+                    <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                        ou utilisez le bouton Upload
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     async function loadDocuments() {
@@ -940,7 +980,12 @@ endblock %} {% block content %}
         const docs = await r.json();
         document.getElementById("docs-count").textContent =
             `${docs.length} document(s)`;
-        document.getElementById("documents-list").innerHTML = docs
+        const listHost = document.getElementById("documents-list");
+        if (!docs.length) {
+            listHost.innerHTML = renderDocumentsEmptyState();
+            return;
+        }
+        listHost.innerHTML = docs
             .map(
                 (d) => {
                     const ext = (d.title || "").split(".").pop().toLowerCase();
@@ -992,7 +1037,7 @@ endblock %} {% block content %}
 
                     return `
     <div
-      class="glass-card group p-4 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-grab active:cursor-grabbing border border-black/5 dark:border-white/5 transition-all duration-300"
+      class="library-doc-row group p-4 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-grab active:cursor-grabbing"
       draggable="true"
       ondragstart="handleDocumentDragStart(event, ${d.id})"
       ondragend="handleDocumentDragEnd(event)"
@@ -1074,14 +1119,6 @@ endblock %} {% block content %}
                 }
             )
             .join("");
-        const dropHint = document.getElementById("drop-hint");
-        if (dropHint) {
-            // Afficher l'aide visuelle surtout quand la liste est vide
-            dropHint.classList.toggle(
-                "hidden",
-                !canLibraryWrite || docs.length > 0,
-            );
-        }
     }
 
     async function openDocumentFile(documentId) {
@@ -1122,7 +1159,15 @@ endblock %} {% block content %}
         return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium ${cls}" title="${escapeHtml(entity.entity_type)}${role}">${escapeHtml(entity.name)}</span>`;
     }
 
-    function renderChunkCard(chunk) {
+    function renderCategoryBadge(category) {
+        const title = category.slug
+            ? `${category.slug}${category.confidence != null ? ` · conf. ${Math.round(category.confidence * 100)}%` : ""}`
+            : "";
+        return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="${escapeHtml(title)}">${escapeHtml(category.label || category.slug)}</span>`;
+    }
+
+    function renderChunkCard(chunk, options = {}) {
+        const { showCategoriesInHeader = false } = options;
         const token =
             chunk.token_count != null ? `${chunk.token_count} tok` : "";
         const meta = chunk.metadata || {};
@@ -1142,12 +1187,17 @@ endblock %} {% block content %}
             : "";
         const kag = chunksMonitorData?.kag || {};
         const chunkEntities = (kag.chunk_entities || {})[String(chunk.chunk_id)] || [];
+        const chunkCategories = (kag.chunk_categories || {})[String(chunk.chunk_id)] || [];
         const entitiesHtml = chunkEntities.length
             ? `<div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-1.5">${chunkEntities.map(renderEntityBadge).join("")}</div>`
             : "";
+        const categoriesHeaderHtml =
+            showCategoriesInHeader && chunkCategories.length
+                ? `<div class="flex flex-wrap items-center gap-1.5 ml-auto pl-3 border-l border-gray-300 dark:border-gray-600 shrink-0 max-w-[50%]">${chunkCategories.map(renderCategoryBadge).join("")}</div>`
+                : "";
         return `
       <article class="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/40">
-        <header class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 flex flex-wrap gap-2">
+        <header class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 flex flex-wrap items-center gap-2">
           <span class="font-semibold">${pageLabel}</span>
           <span>#${chunk.chunk_index}</span>
           <span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700">${escapeHtml(sectionType)}</span>
@@ -1155,7 +1205,8 @@ endblock %} {% block content %}
           ${providerBadge}
           ${crossPage}
           ${token ? `<span>${escapeHtml(token)}</span>` : ""}
-          <span class="truncate max-w-[40ch]">${escapeHtml(heading)}</span>
+          <span class="truncate max-w-[40ch] font-medium text-gray-800 dark:text-gray-100">${escapeHtml(heading)}</span>
+          ${categoriesHeaderHtml}
         </header>
         <div class="p-3">
           <pre class="whitespace-pre-wrap break-words text-sm text-gray-800 dark:text-gray-100 leading-relaxed font-sans">${escapeHtml(chunk.content)}</pre>
@@ -1227,6 +1278,78 @@ endblock %} {% block content %}
         `;
     }
 
+    function renderCategoriesPanel() {
+        const host = document.getElementById("chunks-categories-panel");
+        if (!host || !chunksMonitorData) return;
+        const kag = chunksMonitorData.kag || {};
+        const categories = kag.document_categories || [];
+        const categoryCount = kag.category_count || categories.length;
+
+        if (!categoryCount) {
+            host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Aucune catégorie KAG pour ce document. Lancez un retraitement « Complet » avec KAG_ENABLED=true.</div>`;
+            return;
+        }
+
+        const categoriesList = categories
+            .map((cat) => {
+                const pages =
+                    cat.page_numbers && cat.page_numbers.length
+                        ? `pages ${cat.page_numbers.join(", ")}`
+                        : cat.page_no
+                          ? `page ${cat.page_no}`
+                          : "";
+                return `
+                <div class="flex items-start justify-between gap-3 rounded-xl border border-black/5 dark:border-white/10 p-3">
+                    <div class="min-w-0">
+                        <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">${escapeHtml(cat.label)}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">${escapeHtml(cat.slug)}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">${cat.chunk_count || 0} chunk(s)${pages ? ` · ${escapeHtml(pages)}` : ""}</div>
+                    </div>
+                    ${renderCategoryBadge(cat)}
+                </div>
+            `;
+            })
+            .join("");
+
+        const chunkCategoryRows = Object.entries(kag.chunk_categories || {})
+            .map(([chunkId, items]) => {
+                const chunk =
+                    (chunksMonitorData.semantic_chunks || []).find(
+                        (c) => String(c.chunk_id) === String(chunkId),
+                    ) ||
+                    (chunksMonitorData.raw_chunks || []).find(
+                        (c) => String(c.chunk_id) === String(chunkId),
+                    ) ||
+                    (chunksMonitorData.report_chunks || []).find(
+                        (c) => String(c.chunk_id) === String(chunkId),
+                    );
+                const meta = chunk?.metadata || {};
+                const page = chunk?.page ?? meta.page ?? "?";
+                const heading =
+                    meta.heading || meta.parent_heading || `chunk #${chunk?.chunk_index ?? chunkId}`;
+                return `
+                <div class="rounded-xl border border-black/5 dark:border-white/10 p-3 text-sm">
+                    <div class="font-medium text-gray-900 dark:text-gray-100">p.${page} · ${escapeHtml(heading)}</div>
+                    <div class="mt-2 flex flex-wrap gap-1.5">${(items || []).map(renderCategoryBadge).join("")}</div>
+                </div>
+            `;
+            })
+            .join("");
+
+        host.innerHTML = `
+            <div class="grid gap-4 lg:grid-cols-2">
+                <section>
+                    <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Catégories (${categoryCount})</h4>
+                    <div class="space-y-2 max-h-[55vh] overflow-auto pr-1">${categoriesList}</div>
+                </section>
+                <section>
+                    <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Par chunk</h4>
+                    <div class="space-y-2 max-h-[55vh] overflow-auto pr-1">${chunkCategoryRows || `<div class="text-sm text-gray-500 dark:text-gray-400">Aucune liaison chunk-catégorie.</div>`}</div>
+                </section>
+            </div>
+        `;
+    }
+
     function renderChunksPanels() {
         const semanticHost = document.getElementById("chunks-semantic-panel");
         const rawHost = document.getElementById("chunks-raw-panel");
@@ -1238,15 +1361,20 @@ endblock %} {% block content %}
             return;
         }
         semanticHost.innerHTML = (chunksMonitorData.semantic_chunks || []).length
-            ? chunksMonitorData.semantic_chunks.map(renderChunkCard).join("")
+            ? chunksMonitorData.semantic_chunks
+                  .map((chunk) =>
+                      renderChunkCard(chunk, { showCategoriesInHeader: true }),
+                  )
+                  .join("")
             : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk texte sémantique (Vision Ministral 3B). Lancez un retraitement « Complet » ou « Texte seul ».</div>`;
         rawHost.innerHTML = (chunksMonitorData.raw_chunks || []).length
-            ? chunksMonitorData.raw_chunks.map(renderChunkCard).join("")
+            ? chunksMonitorData.raw_chunks.map((chunk) => renderChunkCard(chunk)).join("")
             : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk raw legacy trouvé.</div>`;
         reportHost.innerHTML = (chunksMonitorData.report_chunks || []).length
-            ? chunksMonitorData.report_chunks.map(renderChunkCard).join("")
+            ? chunksMonitorData.report_chunks.map((chunk) => renderChunkCard(chunk)).join("")
             : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk synthèse/rapport legacy trouvé.</div>`;
         renderEntitiesPanel();
+        renderCategoriesPanel();
     }
 
     function switchChunksTab(tab) {
@@ -1255,20 +1383,24 @@ endblock %} {% block content %}
         const rawPanel = document.getElementById("chunks-raw-panel");
         const reportPanel = document.getElementById("chunks-report-panel");
         const entitiesPanel = document.getElementById("chunks-entities-panel");
+        const categoriesPanel = document.getElementById("chunks-categories-panel");
         const semanticBtn = document.getElementById("chunks-tab-semantic");
         const rawBtn = document.getElementById("chunks-tab-raw");
         const reportBtn = document.getElementById("chunks-tab-report");
         const entitiesBtn = document.getElementById("chunks-tab-entities");
+        const categoriesBtn = document.getElementById("chunks-tab-categories");
         const activeClass = "px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm";
         const inactiveClass = "px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all";
         semanticPanel.classList.toggle("hidden", tab !== "semantic");
         rawPanel.classList.toggle("hidden", tab !== "raw");
         reportPanel.classList.toggle("hidden", tab !== "report");
         entitiesPanel.classList.toggle("hidden", tab !== "entities");
+        categoriesPanel.classList.toggle("hidden", tab !== "categories");
         semanticBtn.className = tab === "semantic" ? activeClass : inactiveClass;
         rawBtn.className = tab === "raw" ? activeClass : inactiveClass;
         reportBtn.className = tab === "report" ? activeClass : inactiveClass;
         entitiesBtn.className = tab === "entities" ? activeClass : inactiveClass;
+        categoriesBtn.className = tab === "categories" ? activeClass : inactiveClass;
     }
 
     async function openChunksMonitorModal(documentId, documentTitle) {
@@ -1288,11 +1420,13 @@ endblock %} {% block content %}
             document.getElementById("chunks-semantic-panel").innerHTML = "";
             document.getElementById("chunks-raw-panel").innerHTML = "";
             document.getElementById("chunks-report-panel").innerHTML = "";
+            document.getElementById("chunks-entities-panel").innerHTML = "";
+            document.getElementById("chunks-categories-panel").innerHTML = "";
             return;
         }
         chunksMonitorData = await r.json();
         const kag = chunksMonitorData.kag || {};
-        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Raw legacy: ${chunksMonitorData.raw_chunks_count} · Synthèse: ${chunksMonitorData.report_chunks_count} · KAG: ${kag.entity_count ?? 0} entités, ${kag.relation_count ?? 0} relations`;
+        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Raw legacy: ${chunksMonitorData.raw_chunks_count} · Synthèse: ${chunksMonitorData.report_chunks_count} · KAG: ${kag.entity_count ?? 0} entités, ${kag.relation_count ?? 0} relations, ${kag.category_count ?? 0} catégories`;
         renderChunksPanels();
         const defaultTab =
             (chunksMonitorData.semantic_chunks_count ?? 0) > 0
@@ -1861,7 +1995,9 @@ endblock %} {% block content %}
             showDropOverlay(true);
         });
 
-        dropZone.addEventListener("dragleave", () => {
+        dropZone.addEventListener("dragleave", (event) => {
+            const related = event.relatedTarget;
+            if (related && dropZone.contains(related)) return;
             dragDepth = Math.max(0, dragDepth - 1);
             if (dragDepth === 0) showDropOverlay(false);
         });

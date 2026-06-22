@@ -202,11 +202,32 @@ class DocumentEntityRelationItem(BaseModel):
     confidence: Optional[float] = None
 
 
+class DocumentChunkCategoryItem(BaseModel):
+    category_id: int
+    slug: str
+    label: str
+    confidence: float = 1.0
+    page_no: int = 0
+
+
+class DocumentCategorySummaryItem(BaseModel):
+    category_id: int
+    slug: str
+    label: str
+    confidence: float = 1.0
+    page_no: int = 0
+    chunk_count: int = 0
+    page_numbers: List[int] = Field(default_factory=list)
+
+
 class DocumentKagSummary(BaseModel):
     entity_count: int = 0
     relation_count: int = 0
+    category_count: int = 0
     chunk_entities: Dict[str, List[DocumentChunkEntityItem]] = Field(default_factory=dict)
+    chunk_categories: Dict[str, List[DocumentChunkCategoryItem]] = Field(default_factory=dict)
     document_relations: List[DocumentEntityRelationItem] = Field(default_factory=list)
+    document_categories: List[DocumentCategorySummaryItem] = Field(default_factory=list)
 
 
 class DocumentChunksMonitorResponse(BaseModel):
@@ -518,7 +539,10 @@ async def get_document_chunks_monitor(
     report_items.sort(key=lambda x: (x.page, x.chunk_index))
     semantic_items.sort(key=lambda x: (x.page, x.chunk_index, x.is_leaf))
 
-    from app.services.kag_graph_service import get_document_chunk_entities
+    from app.services.kag_graph_service import (
+        get_document_chunk_categories,
+        get_document_chunk_entities,
+    )
 
     kag_raw = get_document_chunk_entities(session, document_id)
     chunk_entities_parsed: Dict[str, List[DocumentChunkEntityItem]] = {}
@@ -526,13 +550,27 @@ async def get_document_chunks_monitor(
         chunk_entities_parsed[chunk_key] = [
             DocumentChunkEntityItem.model_validate(item) for item in items
         ]
+
+    categories_raw = get_document_chunk_categories(session, document_id)
+    chunk_categories_parsed: Dict[str, List[DocumentChunkCategoryItem]] = {}
+    for chunk_key, items in (categories_raw.get("chunk_categories") or {}).items():
+        chunk_categories_parsed[chunk_key] = [
+            DocumentChunkCategoryItem.model_validate(item) for item in items
+        ]
+
     kag_summary = DocumentKagSummary(
         entity_count=int(kag_raw.get("entity_count") or 0),
         relation_count=int(kag_raw.get("relation_count") or 0),
+        category_count=int(categories_raw.get("category_count") or 0),
         chunk_entities=chunk_entities_parsed,
+        chunk_categories=chunk_categories_parsed,
         document_relations=[
             DocumentEntityRelationItem.model_validate(r)
             for r in (kag_raw.get("document_relations") or [])
+        ],
+        document_categories=[
+            DocumentCategorySummaryItem.model_validate(c)
+            for c in (categories_raw.get("document_categories") or [])
         ],
     )
 

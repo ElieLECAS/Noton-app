@@ -189,7 +189,8 @@ class Settings(BaseSettings):
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "10"))
     RAG_POOL_SIZE: int = int(os.getenv("RAG_POOL_SIZE", "20"))
     RAG_NEIGHBOR_STRATEGY: str = os.getenv("RAG_NEIGHBOR_STRATEGY", "conditional")
-    RAG_RENDER_ALL_IMAGES: bool = os.getenv("RAG_RENDER_ALL_IMAGES", "false").strip().lower() in (
+    SPACE_CONTEXT_MAX_PASSAGE_CHARS: int = int(os.getenv("SPACE_CONTEXT_MAX_PASSAGE_CHARS", "4000"))
+    RAG_RENDER_ALL_IMAGES: bool = os.getenv("RAG_RENDER_ALL_IMAGES", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
     RAG_MAX_IMAGES: int = int(os.getenv("RAG_MAX_IMAGES", "12"))
@@ -204,10 +205,16 @@ class Settings(BaseSettings):
         "true", "1", "yes", "on"
     )
 
-    # Query understanding — slot filling LangGraph avant retrieval RAG
+    # Query understanding — extraction légère LangGraph avant retrieval RAG
     QUERY_UNDERSTANDING_ENABLED: bool = os.getenv("QUERY_UNDERSTANDING_ENABLED", "false").strip().lower() in (
         "true", "1", "yes", "on"
     )
+
+    # Boosts souples post-retrieval (signaux query understanding)
+    RETRIEVAL_CATEGORY_BOOST: float = float(os.getenv("RETRIEVAL_CATEGORY_BOOST", "0.15"))
+    RETRIEVAL_SOURCE_BOOST_MAX: float = float(os.getenv("RETRIEVAL_SOURCE_BOOST_MAX", "0.8"))
+    RETRIEVAL_MATERIAL_BOOST: float = float(os.getenv("RETRIEVAL_MATERIAL_BOOST", "0.3"))
+    RETRIEVAL_ENTITY_BOOST: float = float(os.getenv("RETRIEVAL_ENTITY_BOOST", "0.1"))
 
     # Reranker vision LLM (juge de pertinence page-par-page sur les PNG ColPali)
     VISION_RERANK_ENABLED: bool = os.getenv("VISION_RERANK_ENABLED", "true").strip().lower() in ('true', '1', 'yes', 'on')

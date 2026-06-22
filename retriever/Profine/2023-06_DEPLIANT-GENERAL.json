@@ -1,0 +1,242 @@
+[
+    {
+        "id": "TC001",
+        "type": "mono",
+        "question": "Liste-moi les couleurs plaxées disponibles pour la gamme Perform dans le dépliant général Profine.",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [3]
+            }
+        ],
+        "reponse_attendue": "Les plaxés Perform sont : Chêne doré (1 et 2 faces), Siena (1 et 2 faces), 7016 veiné (2 faces), Acajou (1 face extérieure). Les finitions marquées * sont en finition design uniquement."
+    },
+    {
+        "id": "TC002",
+        "type": "mono",
+        "question": "Sur la gamme Perform, quelles teintes dans la masse sont proposées en plus du blanc 9016 ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [3]
+            }
+        ],
+        "reponse_attendue": "Outre le blanc 9016 (1 ou 2 faces), Perform propose l'ivoire proche 9001 (607 Kömmerling, 2 faces uniquement) et le chêne irlandais (1 et 2 faces)."
+    },
+    {
+        "id": "TC003",
+        "type": "mono",
+        "question": "Quelle performance thermique Uw est annoncée pour la gamme Perform dans le dépliant général ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [3]
+            }
+        ],
+        "reponse_attendue": "Perform affiche des performances thermiques élevées avec un Uw jusqu'à 1,3 W/m²K."
+    },
+    {
+        "id": "TC004",
+        "type": "mono",
+        "question": "Quels niveaux de finition peut-on choisir sur la gamme Perform selon le dépliant ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [3]
+            }
+        ],
+        "reponse_attendue": "Perform propose deux niveaux de finition : DROIT ou DESIGN."
+    },
+    {
+        "id": "TC005",
+        "type": "mono",
+        "question": "Jusqu'à quel poids de fenêtre le pivot Perform peut-il supporter selon le dépliant général ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [3]
+            }
+        ],
+        "reponse_attendue": "Le pivot Perform peut supporter le poids d'une fenêtre jusqu'à 130 kg."
+    },
+    {
+        "id": "TC006",
+        "type": "mono",
+        "question": "Quel fournisseur de profilés PVC est cité pour la gamme Perform dans le dépliant ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [3]
+            }
+        ],
+        "reponse_attendue": "Les menuiseries Perform sont fabriquées avec des profils PVC Greenline de chez Kömmerling, sans plomb, recyclables."
+    },
+    {
+        "id": "TC007",
+        "type": "mono",
+        "question": "En quoi consiste la technologie de la gamme Hybride Profine décrite dans le dépliant ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [4]
+            }
+        ],
+        "reponse_attendue": "La gamme Hybride allie PVC et aluminium : un profil épais en aluminium serti sur un profil PVC Greenline Kömmerling, technologie développée exclusivement par Profine."
+    },
+    {
+        "id": "TC008",
+        "type": "mono",
+        "question": "Quelles couleurs extérieures laquées standards sont listées pour la gamme Hybride ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [4]
+            }
+        ],
+        "reponse_attendue": "Les 9 couleurs extérieures laquées à prix préférentiel sont : rouge 3004 satiné, gris 2900 granité, anthracite 7016 satiné, anthracite 7016 granité, gris 7035 granité, gris 7039 granité, noir 2100 granité, noir 9005 granité, marron 8019 granité."
+    },
+    {
+        "id": "TC009",
+        "type": "mono",
+        "question": "Quelle valeur Uw est indiquée pour la gamme Hybride dans le dépliant général ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [4]
+            }
+        ],
+        "reponse_attendue": "La gamme Hybride affiche un Uw jusqu'à 1,3 W/m²K."
+    },
+    {
+        "id": "TC010",
+        "type": "mono",
+        "question": "Avec quel fabricant d'aluminium bas carbone Profine équipe-t-il la gamme Lumine ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [5]
+            }
+        ],
+        "reponse_attendue": "Les menuiseries Lumine sont fabriquées avec des profilés en aluminium bas carbone de chez Technal."
+    },
+    {
+        "id": "TC011",
+        "type": "mono",
+        "question": "Quelle performance thermique Uw est annoncée pour la gamme Lumine ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [5]
+            }
+        ],
+        "reponse_attendue": "Lumine affiche un Uw jusqu'à 1,5 W/m²K."
+    },
+    {
+        "id": "TC012",
+        "type": "mono",
+        "question": "Quels sont les trois types de finition d'ouvrant proposés sur la gamme Lumine ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [5]
+            }
+        ],
+        "reponse_attendue": "Lumine propose : 1) ouvrant apparent droit, 2) ouvrant apparent design (galbé extérieur), 3) ouvrant minimal caché (chant clippable, galbé intérieur, clair de jour maximal)."
+    },
+    {
+        "id": "TC013",
+        "type": "mono",
+        "question": "Combien de vantaux et de rails sont possibles sur le coulissant aluminium Lumine ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [5]
+            }
+        ],
+        "reponse_attendue": "Le coulissant Lumine en aluminium permet 2 à 4 vantaux sur 2 à 4 rails. Le coulissant à galandage permet 1 à 4 vantaux sur jusqu'à 3 rails."
+    },
+    {
+        "id": "TC014",
+        "type": "mono",
+        "question": "Quelles textures intérieures exclusives sont présentées pour la gamme Textural ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [6]
+            }
+        ],
+        "reponse_attendue": "Textural propose des textures intérieures exclusives dont : argenté, wengé, gris écaillé, teck foncé, noyer, cuir anthracite, terre de Sienne, chêne, hêtre, carbone noir, glossy RAL 3002, glossy RAL 9005, et d'autres textures."
+    },
+    {
+        "id": "TC015",
+        "type": "mono",
+        "question": "Quelles finitions exceptionnelles sont mises en avant sur la gamme Textural ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [6]
+            }
+        ],
+        "reponse_attendue": "Textural dispose notamment de : paumelles invisibles, battement central design, parcloses arrondies, jonctions lisses des angles, jonc de finition de la feuillure du dormant coloré ou inox."
+    },
+    {
+        "id": "TC016",
+        "type": "mono",
+        "question": "Quelle est la durée de garantie plaxage indiquée dans le dépliant général Profine ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [7]
+            }
+        ],
+        "reponse_attendue": "Le plaxage est garanti 5 ans."
+    },
+    {
+        "id": "TC017",
+        "type": "mono",
+        "question": "Quelles durées de garantie Profine applique-t-elle à la structure de fenêtre, au vitrage et à la ferrure Roto ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [7]
+            }
+        ],
+        "reponse_attendue": "Structure de la fenêtre : 15 ans. Vitrage : 10 ans. Ferrure Roto : 10 ans sur le fonctionnement."
+    },
+    {
+        "id": "TC018",
+        "type": "mono",
+        "question": "Quelle classification CSTB A*E*V est attribuée à Profine dans le dépliant ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [7]
+            }
+        ],
+        "reponse_attendue": "Le CSTB a classé Proferm parmi les 5 meilleurs fabricants français au test A*E*V avec la notation A*4 / E*9A / V*A3."
+    },
+    {
+        "id": "TC019",
+        "type": "mono",
+        "question": "En quels matériaux les portes d'entrée Profine peuvent-elles être déclinées selon le dépliant ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [2]
+            }
+        ],
+        "reponse_attendue": "Les portes d'entrée sont déclinables en PVC, Hybride, Aluminium ou Plaxé, en monobloc ou en panneau."
+    },
+    {
+        "id": "TC020",
+        "type": "mono",
+        "question": "Dans quels cas le laquage est-il possible sur la gamme Perform selon le dépliant ?",
+        "pages_attendues": [
+            {
+                "document_title": "2023-06_DEPLIANT-GENERAL",
+                "pages": [3]
+            }
+        ],
+        "reponse_attendue": "Le laquage sur Perform est possible en cas d'ouverture extérieure ou de menuiserie cintrée."
+    }
+]

@@ -17,8 +17,6 @@ from app.config import settings
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.services.document_service_new import feedback_corrective_sql_filter
-from app.services.slot_catalog import ClassificationFilters
-
 logger = logging.getLogger(__name__)
 
 CONTENT_TYPE_SEMANTIC_LEAF = "semantic_leaf"
@@ -446,25 +444,10 @@ def get_space_document_ids(
     session: Session,
     space_id: int,
     document_filter: str = "all",
-    classification_filters: Optional[ClassificationFilters] = None,
 ) -> List[int]:
     filter_clause = feedback_corrective_sql_filter(document_filter, "d")
     extra_clauses = ["AND d.classification_status = 'complete'"]
     params: Dict[str, Any] = {"space_id": space_id}
-
-    if classification_filters:
-        if classification_filters.product_family:
-            extra_clauses.append("AND d.product_types && ARRAY[:product_family]")
-            params["product_family"] = classification_filters.product_family
-        if classification_filters.material:
-            extra_clauses.append("AND d.materials && ARRAY[:material]")
-            params["material"] = classification_filters.material
-        if classification_filters.product_range:
-            extra_clauses.append("AND d.proferm_gammes && ARRAY[:product_range]")
-            params["product_range"] = classification_filters.product_range
-        if classification_filters.supplier_source:
-            extra_clauses.append("AND lower(d.source) = lower(:supplier_source)")
-            params["supplier_source"] = classification_filters.supplier_source
 
     extra_sql = "\n          ".join(extra_clauses)
     sql_docs = text(f"""
@@ -582,7 +565,6 @@ def retrieve_pgvector_page_hits(
     doc_ids: List[int],
     query_embedding: List[float],
     limit: int,
-    content_categories: Optional[List[str]] = None,
 ) -> List[PageRetrievalHit]:
     if not doc_ids or not query_embedding:
         logger.info(
@@ -595,7 +577,6 @@ def retrieve_pgvector_page_hits(
     logger.info("[retrieve_pgvector] démarrage — %d docs, limit=%d", len(doc_ids), limit)
 
     embedding_str = "[" + ",".join(str(float(x)) for x in query_embedding) + "]"
-    category_clause, category_params = _category_metadata_filter_clause(content_categories)
     sql = text(f"""
         SELECT
             dc.id,
@@ -610,13 +591,12 @@ def retrieve_pgvector_page_hits(
           AND dc.is_leaf = true
           AND dc.embedding IS NOT NULL
           AND COALESCE(dc.metadata_json->>'content_type', dc.metadata_->>'content_type', '') = 'semantic_leaf'
-          {category_clause}
         ORDER BY dc.embedding <=> CAST(:query_vec AS vector)
         LIMIT :limit
     """)
     rows = session.execute(
         sql,
-        {"doc_ids": tuple(doc_ids), "query_vec": embedding_str, "limit": limit, **category_params},
+        {"doc_ids": tuple(doc_ids), "query_vec": embedding_str, "limit": limit},
     ).all()
 
     hits: List[PageRetrievalHit] = []
@@ -651,7 +631,6 @@ def retrieve_bm25_page_hits(
     doc_ids: List[int],
     query_text: str,
     limit: int,
-    content_categories: Optional[List[str]] = None,
 ) -> List[PageRetrievalHit]:
     if not doc_ids or not query_text.strip():
         logger.info("[retrieve_bm25] ignoré — doc_ids=%d query vide=%s", len(doc_ids), not query_text.strip())
@@ -661,7 +640,6 @@ def retrieve_bm25_page_hits(
 
     tsquery_fn = _bm25_tsquery_fn()
     semantic_filter = f"AND {_semantic_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
-    category_clause, category_params = _category_metadata_filter_clause(content_categories)
     sql = text(f"""
         SELECT
             dc.id,
@@ -677,14 +655,13 @@ def retrieve_bm25_page_hits(
           AND dc.tsv_content IS NOT NULL
           AND dc.tsv_content @@ {tsquery_fn}('french', :query)
           {semantic_filter}
-          {category_clause}
         ORDER BY rank DESC
         LIMIT :limit
     """)
     try:
         rows = session.execute(
             sql,
-            {"doc_ids": tuple(doc_ids), "query": query_text.strip(), "limit": limit, **category_params},
+            {"doc_ids": tuple(doc_ids), "query": query_text.strip(), "limit": limit},
         ).all()
     except Exception as exc:
         logger.warning("[BM25] recherche échouée (%s) : %s", tsquery_fn, exc)
@@ -917,7 +894,6 @@ def retrieve_pgvector_pages(
     doc_ids: List[int],
     query_embedding: List[float],
     limit: int,
-    content_categories: Optional[List[str]] = None,
 ) -> List[UnifiedPageHit]:
     """Retrieval pgvector — agrégation SQL par page."""
     if not doc_ids or not query_embedding:
@@ -925,7 +901,6 @@ def retrieve_pgvector_pages(
 
     embedding_str = "[" + ",".join(str(float(x)) for x in query_embedding) + "]"
     page_no_expr = _page_no_sql_expr("dc")
-    category_clause, category_params = _category_metadata_filter_clause(content_categories)
     sql = text(f"""
         SELECT
             dc.document_id,
@@ -939,14 +914,13 @@ def retrieve_pgvector_pages(
           AND dc.embedding IS NOT NULL
           AND {_semantic_leaf_filter("dc")}
           AND {page_no_expr} IS NOT NULL
-          {category_clause}
         GROUP BY dc.document_id, {page_no_expr}, d.title
         ORDER BY similarity DESC
         LIMIT :limit
     """)
     rows = session.execute(
         sql,
-        {"doc_ids": tuple(doc_ids), "query_vec": embedding_str, "limit": limit, **category_params},
+        {"doc_ids": tuple(doc_ids), "query_vec": embedding_str, "limit": limit},
     ).all()
 
     hits = [
@@ -975,13 +949,11 @@ def _run_bm25_pages_query(
     doc_ids: List[int],
     query: str,
     limit: int,
-    content_categories: Optional[List[str]] = None,
 ) -> List[Any]:
     """Exécute la requête BM25 agrégée par page."""
     tsquery_fn = _bm25_tsquery_fn()
     page_no_expr = _page_no_sql_expr("dc")
     semantic_filter = f"AND {_semantic_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
-    category_clause, category_params = _category_metadata_filter_clause(content_categories)
 
     sql = text(f"""
         SELECT
@@ -997,14 +969,13 @@ def _run_bm25_pages_query(
           AND dc.tsv_content @@ {tsquery_fn}('french', :query)
           AND {page_no_expr} IS NOT NULL
           {semantic_filter}
-          {category_clause}
         GROUP BY dc.document_id, {page_no_expr}, d.title
         ORDER BY rank DESC
         LIMIT :limit
     """)
     return session.execute(
         sql,
-        {"doc_ids": tuple(doc_ids), "query": query, "limit": limit, **category_params},
+        {"doc_ids": tuple(doc_ids), "query": query, "limit": limit},
     ).all()
 
 
@@ -1081,7 +1052,6 @@ def retrieve_bm25_pages(
     doc_ids: List[int],
     query_text: str,
     limit: int,
-    content_categories: Optional[List[str]] = None,
 ) -> List[UnifiedPageHit]:
     """Retrieval lexical — agrégation SQL par page avec websearch_to_tsquery."""
     if not doc_ids or not query_text.strip():
@@ -1094,7 +1064,7 @@ def retrieve_bm25_pages(
 
     try:
         rows = _run_bm25_pages_query(
-            session, doc_ids, normalized_query, limit, content_categories=content_categories
+            session, doc_ids, normalized_query, limit
         )
 
         if not rows:
@@ -1280,7 +1250,7 @@ def format_multimodal_passages(
     session: Session,
     hits: List[UnifiedPageHit],
     *,
-    max_passage_chars: int = 1800,
+    max_passage_chars: Optional[int] = None,
     render_all_images: bool = False,
     image_dpi: int = 150,
 ) -> Tuple[List[Dict[str, Any]], List[str]]:
@@ -1288,8 +1258,12 @@ def format_multimodal_passages(
     import base64
     import os
 
+    from app.config import settings
     from app.services.multimodal_page_service import render_page_png_cached
     from app.services.page_reranker_service import compute_page_image_policy
+
+    if max_passage_chars is None:
+        max_passage_chars = settings.SPACE_CONTEXT_MAX_PASSAGE_CHARS
 
     passages: List[Dict[str, Any]] = []
     images_b64: List[str] = []

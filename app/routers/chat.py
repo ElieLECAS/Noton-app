@@ -153,7 +153,9 @@ SPACE_CHAT_MAX_TOKENS = 1200
 SPACE_CHAT_TEMPERATURE = 0.0
 SPACE_CHAT_TOP_P = None
 SPACE_CONTEXT_MAX_CHARS = _int_env("SPACE_CONTEXT_MAX_CHARS", 18000)
-SPACE_CONTEXT_MAX_PASSAGE_CHARS = _int_env("SPACE_CONTEXT_MAX_PASSAGE_CHARS", 1800)
+SPACE_CONTEXT_MAX_PASSAGE_CHARS = _int_env(
+    "SPACE_CONTEXT_MAX_PASSAGE_CHARS", settings.SPACE_CONTEXT_MAX_PASSAGE_CHARS
+)
 SPACE_HISTORY_MAX_CHARS = _int_env("SPACE_HISTORY_MAX_CHARS", 8000)
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_CHAT_SYSTEM_PROMPT = (
@@ -508,11 +510,11 @@ async def stream_space_chat_message(
 
     retrieval_queries = None
     rag_user_message = request.message
-    qu_result = None
+    lw_result = None
 
     if settings.QUERY_UNDERSTANDING_ENABLED:
-        logger.info("[chat] Étape 1/5 — query understanding (LangGraph slot filling)")
-        from app.services.query_understanding_graph import run_query_understanding, SlotAction
+        logger.info("[chat] Étape 1/5 — lightweight query understanding")
+        from app.services.lightweight_query_understanding import run_lightweight_understanding
 
         persisted_context = None
         if request.conversation_id:
@@ -520,33 +522,28 @@ async def stream_space_chat_message(
             if conv_for_ctx:
                 persisted_context = conv_for_ctx.query_context
 
-        slot_action = None
-        if request.slot_action:
-            slot_action = SlotAction(**request.slot_action.model_dump())
-
         with trace_run(
-            "query_understanding",
+            "lightweight_query_understanding",
             run_type="chain",
-            inputs={"query": request.message, "space_id": space_id, "slot_action": slot_action.model_dump() if slot_action else None},
-            tags=["query_understanding", "space"],
+            inputs={"query": request.message, "space_id": space_id},
+            tags=["query_understanding", "lightweight", "space"],
         ) as qu_run:
-            qu_result = await run_query_understanding(
+            lw_result = await run_lightweight_understanding(
                 user_message=request.message,
                 history=conversation_context,
+                session=session,
                 persisted_context=persisted_context,
-                slot_action=slot_action,
             )
             qu_run.end(outputs={
-                "route": qu_result.route,
-                "ready_for_retrieval": qu_result.ready_for_retrieval,
-                "slots": qu_result.slots,
-                "pending_field": (qu_result.clarification.pending_field if qu_result.clarification else None),
+                "route": lw_result.route,
+                "ready_for_retrieval": lw_result.ready_for_retrieval,
+                "signals": lw_result.signals.model_dump() if lw_result.signals else None,
             })
 
-        if request.conversation_id and qu_result.query_context:
-            _save_conversation_query_context(request.conversation_id, qu_result.query_context)
+        if request.conversation_id and lw_result.query_context:
+            _save_conversation_query_context(request.conversation_id, lw_result.query_context)
 
-        routing_decision_decision = qu_result.route
+        routing_decision_decision = lw_result.route
     else:
         logger.info("[chat] Étape 1/4 — routage requête (Mistral)")
         from app.services.query_reasoning_service import decide_retrieval_route
@@ -670,38 +667,29 @@ async def stream_space_chat_message(
 
         return StreamingResponse(generate_direct(), media_type="text/event-stream")
 
-    if settings.QUERY_UNDERSTANDING_ENABLED and qu_result and not qu_result.ready_for_retrieval:
-        clarification = qu_result.clarification
+    if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and not lw_result.ready_for_retrieval:
+        clarification = lw_result.clarification
         if clarification:
             logger.info(
-                "[chat] Clarification — phase=%s field=%s vague=%s (pas de RAG)",
+                "[chat] Clarification — phase=%s vague=%s (pas de RAG)",
                 clarification.phase,
-                clarification.pending_field or "-",
                 clarification.phase == "awaiting_vague_clarification",
             )
 
             async def generate_clarification():
                 question = clarification.question
-                slot_prompt = clarification.slot_prompt
                 yield f"data: {json.dumps({'message': {'content': question}})}\n\n"
-                if slot_prompt:
-                    yield f"data: {json.dumps({'slot_prompt': slot_prompt})}\n\n"
 
                 assistant_message_id = None
                 if request.conversation_id:
                     try:
-                        metadata = (
-                            {"slot_prompt": slot_prompt}
-                            if slot_prompt
-                            else {"clarification_type": "vague_request"}
-                        )
                         assistant_message_id = _persist_assistant_reply(
                             request.conversation_id,
                             question,
                             forced_model,
                             forced_provider,
                             None,
-                            metadata_json=metadata,
+                            metadata_json={"clarification_type": "vague_request"},
                         )
                     except Exception:
                         logger.exception("Erreur sauvegarde clarification assistant (space chat)")
@@ -710,20 +698,13 @@ async def stream_space_chat_message(
 
             return StreamingResponse(generate_clarification(), media_type="text/event-stream")
 
-    if settings.QUERY_UNDERSTANDING_ENABLED and qu_result and qu_result.ready_for_retrieval:
-        retrieval_queries = qu_result.retrieval_queries
+    if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.ready_for_retrieval:
+        retrieval_queries = lw_result.retrieval_queries
         rag_user_message = (
-            qu_result.query_context.get("enriched_user_message")
-            or qu_result.query_context.get("original_user_message")
+            lw_result.query_context.get("enriched_user_message")
+            or lw_result.query_context.get("original_user_message")
             or request.message
         )
-
-    classification_filters = None
-    if settings.QUERY_UNDERSTANDING_ENABLED and qu_result and qu_result.ready_for_retrieval:
-        from app.services.slot_catalog import build_classification_filters
-
-        skipped = qu_result.query_context.get("skipped_optional", [])
-        classification_filters = build_classification_filters(qu_result.slots, skipped)
 
     step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
     logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25)", step_label)
@@ -746,7 +727,6 @@ async def stream_space_chat_message(
             user_id=current_user.id,
             k=RAG_TOP_K,
             queries=retrieval_queries,
-            classification_filters=classification_filters,
         )
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]
@@ -783,16 +763,24 @@ async def stream_space_chat_message(
 
     doc_passages = enrich_colpali_passages_with_pymupdf(session, doc_passages)
 
-    if settings.QUERY_UNDERSTANDING_ENABLED and qu_result and qu_result.slots.get("supplier"):
+    if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals:
+        from app.services.retrieval_boost_service import apply_soft_boosts_to_passages
+
+        doc_passages = apply_soft_boosts_to_passages(
+            session=session,
+            passages=doc_passages,
+            signals=lw_result.signals,
+        )
+
+    if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals.primary_source:
         from app.services.query_reasoning_service import QueryIntent
         from app.services.space_search_service import refine_with_source_authority
-        from app.services.slot_catalog import supplier_to_primary_source
 
         intent_obj = QueryIntent(
-            intent=qu_result.slots.get("intent") or "generic",
-            primary_source=supplier_to_primary_source(qu_result.slots.get("supplier")),
-            reasoning="slot filling",
-            confidence=1.0,
+            intent=lw_result.signals.intent or "generic",
+            primary_source=lw_result.signals.primary_source,
+            reasoning="lightweight extraction",
+            confidence=lw_result.signals.confidence,
         )
         doc_passages = refine_with_source_authority(doc_passages, rag_user_message, intent_obj)
 

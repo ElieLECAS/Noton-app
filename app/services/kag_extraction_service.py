@@ -204,11 +204,54 @@ _KAG_BATCH_USER_PROMPT_TEMPLATE = (
 # ---------------------------------------------------------------------------
 
 
+ENTITY_NORMALIZATION_RULES: Dict[str, str] = {
+    "alu": "aluminium",
+    "pvc": "PVC",
+    "bois": "bois",
+    "perform": "Gamme Perform",
+    "lumine": "Gamme Lumine",
+    "hybride": "Gamme Hybride",
+    "textural": "Gamme Textural",
+    "technal": "Technal",
+    "profine": "Profine",
+    "kommerling": "Kömmerling",
+    "proferm": "Proferm",
+}
+
+
+def normalize_and_expand_entity(name: str) -> Tuple[str, List[str]]:
+    """
+    Normalise le nom d'entité et génère les alias automatiques.
+
+    Returns:
+        (canonical_name, aliases)
+    """
+    stripped = (name or "").strip()
+    if not stripped:
+        return "", []
+
+    lower_name = stripped.lower()
+    canonical = ENTITY_NORMALIZATION_RULES.get(lower_name, stripped)
+
+    aliases: List[str] = []
+    if canonical.lower() != lower_name:
+        aliases.append(stripped)
+        aliases.append(lower_name)
+    if canonical != stripped:
+        aliases.append(canonical)
+        if canonical != canonical.title():
+            aliases.append(canonical.title())
+
+    return canonical, list(dict.fromkeys(a for a in aliases if a and a != canonical))
+
+
 def normalize_entity_name(name: str) -> str:
     """Normalise un nom d'entité pour déduplication (lowercase, NFKC, espaces)."""
     if not name:
         return ""
-    normalized = unicodedata.normalize("NFKC", name.strip())
+    canonical, _ = normalize_and_expand_entity(name)
+    target = canonical or name
+    normalized = unicodedata.normalize("NFKC", target.strip())
     normalized = normalized.lower()
     normalized = re.sub(r"\s+", " ", normalized)
     return normalized.strip()
@@ -638,7 +681,8 @@ def _upsert_entity(
     space_id: int,
     extracted: KagExtractedEntity,
 ) -> KnowledgeEntity:
-    name = extracted.name.strip()
+    canonical_name, auto_aliases = normalize_and_expand_entity(extracted.name.strip())
+    name = canonical_name or extracted.name.strip()
     name_normalized = normalize_entity_name(name)
     entity_type = _normalize_entity_type(extracted.type)
 
@@ -672,7 +716,8 @@ def _upsert_entity(
             entity.confidence_score = extracted.confidence
         session.add(entity)
 
-    for alias in extracted.aliases:
+    merged_aliases = list(dict.fromkeys(list(extracted.aliases) + auto_aliases))
+    for alias in merged_aliases:
         alias_norm = normalize_entity_name(alias)
         if not alias_norm or alias_norm == name_normalized:
             continue

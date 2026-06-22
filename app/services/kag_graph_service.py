@@ -170,10 +170,85 @@ def get_document_chunk_entities(session: Session, document_id: int) -> Dict[str,
     }
 
 
+def get_document_chunk_categories(session: Session, document_id: int) -> Dict[str, Any]:
+    """
+    Catégories de contenu liées aux chunks d'un document, indexées par chunk_id.
+    """
+    if not settings.KAG_ENABLED:
+        return {
+            "category_count": 0,
+            "chunk_categories": {},
+            "document_categories": [],
+        }
+
+    rows = session.execute(
+        text(
+            """
+            SELECT
+                ccr.chunk_id,
+                dc.id AS category_id,
+                dc.slug,
+                dc.label,
+                ccr.confidence,
+                ccr.page_no
+            FROM chunkcategoryrelation ccr
+            INNER JOIN documentcategory dc ON dc.id = ccr.category_id
+            WHERE ccr.document_id = :document_id
+            ORDER BY ccr.chunk_id, dc.label
+            """
+        ),
+        {"document_id": document_id},
+    ).all()
+
+    chunk_categories: Dict[int, List[dict]] = defaultdict(list)
+    seen_per_chunk: Dict[int, Set[int]] = defaultdict(set)
+    document_categories_map: Dict[int, dict] = {}
+
+    for chunk_id, category_id, slug, label, confidence, page_no in rows:
+        cat_id = int(category_id)
+        chunk_key = int(chunk_id)
+        if cat_id in seen_per_chunk[chunk_key]:
+            continue
+        seen_per_chunk[chunk_key].add(cat_id)
+        item = {
+            "category_id": cat_id,
+            "slug": slug,
+            "label": label,
+            "confidence": float(confidence or 0.0),
+            "page_no": int(page_no or 0),
+        }
+        chunk_categories[chunk_key].append(item)
+        if cat_id not in document_categories_map:
+            document_categories_map[cat_id] = {
+                **item,
+                "chunk_count": 0,
+                "page_numbers": set(),
+            }
+        document_categories_map[cat_id]["chunk_count"] += 1
+        if page_no:
+            document_categories_map[cat_id]["page_numbers"].add(int(page_no))
+
+    document_categories = []
+    for cat in sorted(document_categories_map.values(), key=lambda c: c["label"].lower()):
+        pages = sorted(cat.pop("page_numbers"))
+        cat["page_numbers"] = pages
+        document_categories.append(cat)
+
+    return {
+        "category_count": len(document_categories_map),
+        "chunk_categories": {str(k): v for k, v in chunk_categories.items()},
+        "document_categories": document_categories,
+    }
+
+
 def count_document_kag_stats(session: Session, document_id: int) -> Dict[str, int]:
     """Compteurs KAG pour le snapshot document."""
     if not settings.KAG_ENABLED:
-        return {"knowledge_entity_count": 0, "entity_relation_count": 0}
+        return {
+            "knowledge_entity_count": 0,
+            "entity_relation_count": 0,
+            "content_category_count": 0,
+        }
 
     entity_count = session.execute(
         text(
@@ -200,9 +275,21 @@ def count_document_kag_stats(session: Session, document_id: int) -> Dict[str, in
         {"document_id": document_id},
     ).scalar()
 
+    category_count = session.execute(
+        text(
+            """
+            SELECT COUNT(DISTINCT ccr.category_id)
+            FROM chunkcategoryrelation ccr
+            WHERE ccr.document_id = :document_id
+            """
+        ),
+        {"document_id": document_id},
+    ).scalar()
+
     return {
         "knowledge_entity_count": int(entity_count or 0),
         "entity_relation_count": int(relation_count or 0),
+        "content_category_count": int(category_count or 0),
     }
 
 

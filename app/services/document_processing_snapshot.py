@@ -85,6 +85,7 @@ def build_document_processing_snapshot(
         except Exception:
             result["knowledge_entity_count"] = 0
             result["entity_relation_count"] = 0
+            result["content_category_count"] = 0
 
     return result
 
