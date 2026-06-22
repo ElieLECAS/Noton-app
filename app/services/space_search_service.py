@@ -534,6 +534,7 @@ async def search_multimodal_passages(
     document_filter: str = "all",
     include_retrieval_stages: bool = False,
     queries: Optional[RetrievalQueries] = None,
+    classification_filters: Optional[Any] = None,
 ) -> Dict:
     """
     Pipeline retrieval multimodal page-centric unifié.
@@ -581,7 +582,9 @@ async def search_multimodal_passages(
     )
 
     try:
-        doc_ids = get_space_document_ids(session, space_id, document_filter)
+        doc_ids = get_space_document_ids(
+            session, space_id, document_filter, classification_filters
+        )
         if not doc_ids:
             result: Dict = {"passages": [], "images": [], "status": "ok", "reason": "no_results"}
             if include_retrieval_stages:
@@ -609,8 +612,17 @@ async def search_multimodal_passages(
         ) as hr:
             colpali_hits = retrieve_colpali_pages(session, doc_ids, colpali_q, pool_size)
             colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
-            pgvector_hits = retrieve_pgvector_pages(session, doc_ids, query_embedding or [], pool_size)
-            bm25_hits = retrieve_bm25_pages(session, doc_ids, lexical_q, pool_size)
+            category_filter = (
+                classification_filters.content_categories
+                if classification_filters and classification_filters.content_categories
+                else None
+            )
+            pgvector_hits = retrieve_pgvector_pages(
+                session, doc_ids, query_embedding or [], pool_size, content_categories=category_filter
+            )
+            bm25_hits = retrieve_bm25_pages(
+                session, doc_ids, lexical_q, pool_size, content_categories=category_filter
+            )
             kag_hits: List[Any] = []
             if settings.KAG_ENABLED:
                 from app.services.kag_retrieval_service import retrieve_kag_pages
@@ -858,6 +870,7 @@ async def search_relevant_passages(
     document_filter: str = "all",
     include_retrieval_stages: bool = False,
     queries: Optional[RetrievalQueries] = None,
+    classification_filters: Optional[Any] = None,
 ) -> Dict:
     """
     RAG espace : retrieval hybride ColPali + pgvector L1 + BM25, fusion RRF,
@@ -875,6 +888,7 @@ async def search_relevant_passages(
             document_filter=document_filter,
             include_retrieval_stages=include_retrieval_stages,
             queries=queries,
+            classification_filters=classification_filters,
         )
 
     from app.services.page_retrieval_service import (
@@ -913,7 +927,9 @@ async def search_relevant_passages(
 
     try:
         pool_size = max(k, settings.RETRIEVAL_EXPAND_POOL)
-        doc_ids = get_space_document_ids(session, space_id, document_filter)
+        doc_ids = get_space_document_ids(
+            session, space_id, document_filter, classification_filters
+        )
         if not doc_ids:
             result: Dict = {"passages": [], "status": "ok", "reason": "no_results"}
             if include_retrieval_stages:
@@ -1070,6 +1086,7 @@ async def search_technical_passages(
     user_id: int,
     k: int = 15,
     queries: Optional[RetrievalQueries] = None,
+    classification_filters: Optional[Any] = None,
 ) -> Dict:
     """
     Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
@@ -1087,6 +1104,7 @@ async def search_technical_passages(
         k=k,
         document_filter="technical",
         queries=queries,
+        classification_filters=classification_filters,
     )
 
 

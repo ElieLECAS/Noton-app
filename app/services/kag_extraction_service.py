@@ -1,16 +1,17 @@
 """
-Extraction d'entités et relations KAG via le même modèle vision que l'indexation texte.
+Extraction d'entités, relations et catégories KAG via le modèle vision.
 
-Seconde passe par page après persistance des chunks L1 :
-  1. PNG page (cache) + texte des chunks L1 de la page
-  2. Appel Ministral vision → JSON { entities, relations }
+Seconde passe par batch de pages (fenêtre glissante) après persistance des chunks L1 :
+  1. PNG des pages du batch + texte L1 concaténé
+  2. Appel Ministral vision → JSON { pages: [{ entities, relations, categories }] }
   3. Normalisation + upsert entités au niveau espace
-  4. Persistance chunkentityrelation + entityentityrelation + entityalias
+  4. Persistance chunkentityrelation + entityentityrelation + entityalias + chunkcategoryrelation
 """
 
 from __future__ import annotations
 
 import base64
+import json
 import logging
 import re
 import unicodedata
@@ -27,6 +28,7 @@ from app.database import engine
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
+from app.models.chunk_category_relation import ChunkCategoryRelation
 from app.models.knowledge_entity import (
     ChunkEntityRelation,
     EntityAlias,
@@ -36,7 +38,7 @@ from app.models.knowledge_entity import (
 
 logger = logging.getLogger(__name__)
 
-KAG_EXTRACTION_VERSION = "kag_vision_v1"
+KAG_EXTRACTION_VERSION = "kag_vision_v2"
 
 _VALID_ENTITY_TYPES = frozenset(
     {
@@ -81,6 +83,11 @@ class KagPageResponse(BaseModel):
     page_no: int
     entities: List[KagExtractedEntity] = Field(default_factory=list)
     relations: List[KagExtractedRelation] = Field(default_factory=list)
+    categories: List[str] = Field(default_factory=list)
+
+
+class BatchKagResponse(BaseModel):
+    pages: List[KagPageResponse] = Field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -131,6 +138,66 @@ _KAG_USER_PROMPT_TEMPLATE = (
     "Extrait les entités et relations de cette page selon les règles du système."
 )
 
+_KAG_COMPACT_RETRY_SUFFIX = (
+    "\n\nIMPORTANT — JSON compact obligatoire : maximum {max_entities} entités et "
+    "{max_relations} relations par page. Omet description et relation_label. "
+    "aliases : 0 ou 1 par entité. Noms courts. JSON complet et valide."
+)
+
+_KAG_BATCH_SYSTEM_PROMPT = """Tu es un expert en extraction d'entités nommées (NER), de relations (RE) et de catégorisation de contenu pour documents techniques menuiserie.
+On te donne les images de plusieurs pages consécutives ET le texte déjà extrait (chunks sémantiques par page).
+Ton travail : pour CHAQUE page, identifier les entités, relations et catégories de contenu.
+
+Règles impératives :
+1. Renvoie UNIQUEMENT un objet JSON valide (aucun texte hors JSON).
+2. Extrais les entités concrètes : produits, références, matériaux, outils, normes, dimensions, processus, organisations, lieux.
+3. Normalise les noms (casse cohérente, sans bruit markdown).
+4. Pour chaque entité, fournis un type parmi : product | material | tool | norm | dimension | process | organization | location | reference | other
+5. Les aliases sont les variantes, abréviations ou codes produit (ex. "ref ABC-123").
+6. Les relations décrivent un lien sémantique explicite entre deux entités d'une même page.
+7. Types de relation suggérés : compatible_avec | est_compose_de | remplace | utilise | conforme_a | installe_sur | fabrique_par | mesure | reference | co_occurs
+8. Ne pas inventer d'entités absentes du texte ou de l'image.
+9. Maximum {max_entities} entités et {max_relations} relations par page.
+10. Catégories : choisis UNIQUEMENT parmi la liste fournie (slug exact). Une page peut avoir 0 à plusieurs catégories selon son contenu.
+11. N'invente pas de catégories hors liste.
+
+Catégories autorisées (slug : description) :
+{category_list}
+
+Format de réponse OBLIGATOIRE :
+{{
+  "pages": [
+    {{
+      "page_no": <numéro>,
+      "entities": [
+        {{
+          "name": "<nom canonique>",
+          "type": "<type>",
+          "aliases": ["<alias1>"],
+          "description": "<contexte court>",
+          "confidence": 0.9
+        }}
+      ],
+      "relations": [
+        {{
+          "entity_a": "<nom entité A>",
+          "relation": "<type_relation>",
+          "entity_b": "<nom entité B>",
+          "relation_label": "<phrase naturelle optionnelle>",
+          "confidence": 0.85
+        }}
+      ],
+      "categories": ["<slug1>", "<slug2>"]
+    }}
+  ]
+}}"""
+
+_KAG_BATCH_USER_PROMPT_TEMPLATE = (
+    "Document : {title}\nPages du batch : {page_range}\n\n"
+    "Texte extrait par page (chunks sémantiques) :\n{chunk_text}\n\n"
+    "Extrait entités, relations et catégories pour chaque page selon les règles du système."
+)
+
 
 # ---------------------------------------------------------------------------
 # Utilitaires normalisation
@@ -164,11 +231,79 @@ def _kag_extraction_model() -> str:
     return settings.KAG_EXTRACTION_MODEL or settings.PAGE_EXTRACTION_MODEL
 
 
-def _build_kag_system_prompt() -> str:
+def _is_compact_extraction_model(model: Optional[str] = None) -> bool:
+    """Détecte les petits modèles (ex. ministral-3b) qui tronquent souvent le JSON."""
+    name = (model or _kag_extraction_model() or "").lower()
+    return any(marker in name for marker in ("3b", "ministral-3", "ministral_3"))
+
+
+def _effective_kag_limits() -> Tuple[int, int]:
+    max_entities = settings.KAG_MAX_ENTITIES_PER_PAGE
+    max_relations = settings.KAG_MAX_RELATIONS_PER_PAGE
+    if _is_compact_extraction_model():
+        max_entities = min(max_entities, settings.KAG_SMALL_MODEL_MAX_ENTITIES)
+        max_relations = min(max_relations, settings.KAG_SMALL_MODEL_MAX_RELATIONS)
+    return max_entities, max_relations
+
+
+def _build_kag_system_prompt(*, max_entities: Optional[int] = None, max_relations: Optional[int] = None) -> str:
+    ent, rel = _effective_kag_limits()
     return _KAG_SYSTEM_PROMPT.format(
-        max_entities=settings.KAG_MAX_ENTITIES_PER_PAGE,
-        max_relations=settings.KAG_MAX_RELATIONS_PER_PAGE,
+        max_entities=max_entities if max_entities is not None else ent,
+        max_relations=max_relations if max_relations is not None else rel,
     )
+
+
+def _build_kag_batch_system_prompt(category_list: str) -> str:
+    ent, rel = _effective_kag_limits()
+    return _KAG_BATCH_SYSTEM_PROMPT.format(
+        max_entities=ent,
+        max_relations=rel,
+        category_list=category_list,
+    )
+
+
+def build_kag_batches(
+    page_numbers: List[int],
+    *,
+    batch_size: Optional[int] = None,
+    overlap: Optional[int] = None,
+) -> List[List[int]]:
+    """Construit des batches de pages avec fenêtre glissante."""
+    if not page_numbers:
+        return []
+
+    size = batch_size if batch_size is not None else settings.KAG_BATCH_SIZE
+    overlap_val = overlap if overlap is not None else settings.KAG_BATCH_OVERLAP
+    size = max(1, size)
+    overlap_val = max(0, min(overlap_val, size - 1))
+    stride = max(1, size - overlap_val)
+
+    sorted_pages = sorted(set(page_numbers))
+    batches: List[List[int]] = []
+    i = 0
+    while i < len(sorted_pages):
+        batch = sorted_pages[i : i + size]
+        if batch:
+            batches.append(batch)
+        if i + size >= len(sorted_pages):
+            break
+        i += stride
+    return batches
+
+
+def _normalize_category_slugs(
+    raw_categories: List[str],
+    valid_slugs: frozenset[str],
+) -> List[str]:
+    seen: set[str] = set()
+    result: List[str] = []
+    for raw in raw_categories or []:
+        slug = (raw or "").strip().lower().replace(" ", "_")
+        if slug and slug in valid_slugs and slug not in seen:
+            seen.add(slug)
+            result.append(slug)
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -181,20 +316,40 @@ def _call_kag_vision_api(
     page_no: int,
     document_title: str,
     chunk_text: str,
+    *,
+    compact_retry: bool = False,
+    max_entities: Optional[int] = None,
+    max_relations: Optional[int] = None,
 ) -> dict:
     from app.services.multimodal_page_service import (
         _mistral_chat_completion,
         _parse_json_with_repair,
     )
 
+    ent_limit, rel_limit = _effective_kag_limits()
+    if max_entities is not None:
+        ent_limit = max_entities
+    if max_relations is not None:
+        rel_limit = max_relations
+
     user_text = _KAG_USER_PROMPT_TEMPLATE.format(
         title=document_title or "Document",
         page_no=page_no,
         chunk_text=chunk_text[:12000],
     )
+    if compact_retry:
+        user_text += _KAG_COMPACT_RETRY_SUFFIX.format(
+            max_entities=ent_limit,
+            max_relations=rel_limit,
+        )
+    elif _is_compact_extraction_model():
+        user_text += (
+            f"\n\nJSON compact : max {ent_limit} entités, max {rel_limit} relations. "
+            "Omet description si inutile."
+        )
 
     messages = [
-        {"role": "system", "content": _build_kag_system_prompt()},
+        {"role": "system", "content": _build_kag_system_prompt(max_entities=ent_limit, max_relations=rel_limit)},
         {
             "role": "user",
             "content": [
@@ -207,13 +362,125 @@ def _call_kag_vision_api(
     raw = _mistral_chat_completion(
         messages,
         page_no=page_no,
-        max_tokens=2048,
+        max_tokens=settings.KAG_EXTRACTION_MAX_TOKENS,
         temperature=0.0,
         response_format_json=True,
         timeout_seconds=settings.KAG_EXTRACTION_TIMEOUT,
         model=_kag_extraction_model(),
     )
     return _parse_json_with_repair(raw)
+
+
+def _call_kag_batch_vision_api(
+    images_b64: List[str],
+    batch_pages: List[int],
+    document_title: str,
+    chunk_text: str,
+    category_list: str,
+    *,
+    compact_retry: bool = False,
+) -> dict:
+    from app.services.multimodal_page_service import (
+        _mistral_chat_completion,
+        _parse_json_with_repair,
+    )
+
+    ent_limit, rel_limit = _effective_kag_limits()
+    page_range = f"{batch_pages[0]}-{batch_pages[-1]}" if len(batch_pages) > 1 else str(batch_pages[0])
+    user_text = _KAG_BATCH_USER_PROMPT_TEMPLATE.format(
+        title=document_title or "Document",
+        page_range=page_range,
+        chunk_text=chunk_text[:18000],
+    )
+    if compact_retry:
+        user_text += _KAG_COMPACT_RETRY_SUFFIX.format(
+            max_entities=ent_limit,
+            max_relations=rel_limit,
+        )
+    elif _is_compact_extraction_model():
+        user_text += (
+            f"\n\nJSON compact : max {ent_limit} entités et max {rel_limit} relations par page. "
+            "Omet description si inutile."
+        )
+
+    content: List[dict] = [{"type": "text", "text": user_text}]
+    for image_b64 in images_b64:
+        content.append(
+            {
+                "type": "image_url",
+                "image_url": {"url": f"data:image/png;base64,{image_b64}"},
+            }
+        )
+
+    messages = [
+        {"role": "system", "content": _build_kag_batch_system_prompt(category_list)},
+        {"role": "user", "content": content},
+    ]
+
+    raw = _mistral_chat_completion(
+        messages,
+        page_no=batch_pages[0],
+        max_tokens=settings.KAG_EXTRACTION_MAX_TOKENS,
+        temperature=0.0,
+        response_format_json=True,
+        timeout_seconds=settings.KAG_EXTRACTION_TIMEOUT,
+        model=_kag_extraction_model(),
+    )
+    return _parse_json_with_repair(raw)
+
+
+def _coerce_kag_page_response(
+    raw: dict,
+    page_no: int,
+    *,
+    valid_category_slugs: Optional[frozenset[str]] = None,
+) -> KagPageResponse:
+    """Valide et normalise une réponse KAG (tolère page_no absent)."""
+    payload = dict(raw or {})
+    payload.setdefault("page_no", page_no)
+    if not isinstance(payload.get("entities"), list):
+        payload["entities"] = []
+    if not isinstance(payload.get("relations"), list):
+        payload["relations"] = []
+    if not isinstance(payload.get("categories"), list):
+        payload["categories"] = []
+
+    response = KagPageResponse.model_validate(payload)
+    max_ent, max_rel = _effective_kag_limits()
+    response.entities = response.entities[:max_ent]
+    response.relations = response.relations[:max_rel]
+    if valid_category_slugs is not None:
+        response.categories = _normalize_category_slugs(response.categories, valid_category_slugs)
+    if not response.entities and not response.relations and not response.categories:
+        raise ValueError(f"Aucune entité, relation ni catégorie extraite pour la page {page_no}")
+    return response
+
+
+def _coerce_batch_kag_response(
+    raw: dict,
+    batch_pages: List[int],
+    *,
+    valid_category_slugs: frozenset[str],
+) -> BatchKagResponse:
+    payload = dict(raw or {})
+    pages_in = payload.get("pages")
+    if not isinstance(pages_in, list):
+        raise ValueError("Réponse batch KAG invalide : champ 'pages' absent")
+
+    pages: List[KagPageResponse] = []
+    for item in pages_in:
+        if not isinstance(item, dict):
+            continue
+        page_no = int(item.get("page_no") or 0)
+        if page_no not in batch_pages:
+            continue
+        pages.append(
+            _coerce_kag_page_response(item, page_no, valid_category_slugs=valid_category_slugs)
+        )
+
+    if not pages:
+        raise ValueError(f"Aucune page valide dans le batch {batch_pages}")
+    return BatchKagResponse(pages=pages)
 
 
 def extract_page_kag_response(
@@ -240,16 +507,101 @@ def extract_page_kag_response(
         return None
 
     try:
-        raw = _call_kag_vision_api(image_b64, page_no, document_title, chunk_text)
-        response = KagPageResponse.model_validate(raw)
-        response.entities = response.entities[: settings.KAG_MAX_ENTITIES_PER_PAGE]
-        response.relations = response.relations[: settings.KAG_MAX_RELATIONS_PER_PAGE]
-        return response
-    except (ValidationError, ValueError) as exc:
-        logger.warning("[KAG] Validation page %s échouée : %s", page_no, exc)
+        last_exc: Optional[Exception] = None
+        for attempt, compact in enumerate((False, True)):
+            try:
+                raw = _call_kag_vision_api(
+                    image_b64,
+                    page_no,
+                    document_title,
+                    chunk_text,
+                    compact_retry=compact,
+                )
+                return _coerce_kag_page_response(raw, page_no)
+            except (ValidationError, ValueError, json.JSONDecodeError) as exc:
+                last_exc = exc
+                if attempt == 0:
+                    logger.warning(
+                        "[KAG] Validation page %s échouée (tentative 1) : %s — retry compact",
+                        page_no,
+                        exc,
+                    )
+                    continue
+                logger.warning("[KAG] Validation page %s échouée : %s", page_no, exc)
+                return None
+        if last_exc is not None:
+            logger.warning("[KAG] Validation page %s échouée : %s", page_no, last_exc)
         return None
     except Exception as exc:
         logger.warning("[KAG] Extraction page %s échouée : %s", page_no, exc)
+        return None
+
+
+def extract_batch_kag_response(
+    pdf_path: str,
+    batch_pages: List[int],
+    document_title: str,
+    chunks_by_page: Dict[int, List[str]],
+    category_list: str,
+    valid_category_slugs: frozenset[str],
+) -> Optional[BatchKagResponse]:
+    """Extrait entités, relations et catégories pour un batch de pages via vision."""
+    from app.services.multimodal_page_service import render_page_png_cached
+
+    if not batch_pages:
+        return None
+
+    page_text_parts: List[str] = []
+    images_b64: List[str] = []
+    for pno in batch_pages:
+        texts = chunks_by_page.get(pno) or []
+        chunk_text = "\n\n---\n\n".join(t.strip() for t in texts if t and t.strip())
+        if chunk_text:
+            page_text_parts.append(f"--- PAGE {pno} ---\n{chunk_text}")
+        try:
+            png = render_page_png_cached(pdf_path, pno, dpi=settings.PAGE_EXTRACTION_DPI)
+            images_b64.append(base64.b64encode(png).decode("ascii"))
+        except Exception as exc:
+            logger.warning("[KAG] Rendu PNG page %s échoué : %s", pno, exc)
+            return None
+
+    if not page_text_parts or not images_b64:
+        return None
+
+    combined_text = "\n\n".join(page_text_parts)
+    try:
+        last_exc: Optional[Exception] = None
+        for attempt, compact in enumerate((False, True)):
+            try:
+                raw = _call_kag_batch_vision_api(
+                    images_b64,
+                    batch_pages,
+                    document_title,
+                    combined_text,
+                    category_list,
+                    compact_retry=compact,
+                )
+                return _coerce_batch_kag_response(
+                    raw,
+                    batch_pages,
+                    valid_category_slugs=valid_category_slugs,
+                )
+            except (ValidationError, ValueError, json.JSONDecodeError) as exc:
+                last_exc = exc
+                if attempt == 0:
+                    logger.warning(
+                        "[KAG] Validation batch %s échouée (tentative 1) : %s — retry compact",
+                        batch_pages,
+                        exc,
+                    )
+                    continue
+                logger.warning("[KAG] Validation batch %s échouée : %s", batch_pages, exc)
+                return None
+        if last_exc is not None:
+            logger.warning("[KAG] Validation batch %s échouée : %s", batch_pages, last_exc)
+        return None
+    except Exception as exc:
+        logger.warning("[KAG] Extraction batch %s échouée : %s", batch_pages, exc)
         return None
 
 
@@ -515,6 +867,94 @@ def _persist_page_kag(
     return entities_count, relations_count
 
 
+def _persist_page_categories(
+    session: Session,
+    space_ids: List[int],
+    page_no: int,
+    page_chunks: List[DocumentChunk],
+    category_slugs: List[str],
+    category_id_by_slug: Dict[str, int],
+    document_id: int,
+) -> int:
+    """Persiste les catégories de contenu pour les chunks d'une page."""
+    if not category_slugs or not page_chunks:
+        return 0
+
+    linked = 0
+    for chunk in page_chunks:
+        meta = dict(chunk.metadata_json or {})
+        existing = meta.get("categories") or []
+        if not isinstance(existing, list):
+            existing = []
+        merged_slugs = list(dict.fromkeys([*existing, *category_slugs]))
+        meta["categories"] = merged_slugs
+        meta["kag_extraction_version"] = KAG_EXTRACTION_VERSION
+        chunk.metadata_json = meta
+        chunk.metadata_ = meta
+        session.add(chunk)
+
+        for slug in category_slugs:
+            category_id = category_id_by_slug.get(slug)
+            if category_id is None:
+                continue
+            for space_id in space_ids:
+                stmt = select(ChunkCategoryRelation).where(
+                    ChunkCategoryRelation.chunk_id == chunk.id,
+                    ChunkCategoryRelation.category_id == category_id,
+                )
+                if session.exec(stmt).first():
+                    continue
+                session.add(
+                    ChunkCategoryRelation(
+                        chunk_id=chunk.id,
+                        category_id=category_id,
+                        space_id=space_id,
+                        document_id=document_id,
+                        page_no=page_no,
+                        confidence=1.0,
+                    )
+                )
+                linked += 1
+    return linked
+
+
+def _merge_page_kag_responses(
+    target: Dict[int, KagPageResponse],
+    batch_response: BatchKagResponse,
+) -> None:
+    """Fusionne les réponses batch (union catégories sur pages overlap)."""
+    for page_resp in batch_response.pages:
+        pno = page_resp.page_no
+        existing = target.get(pno)
+        if existing is None:
+            target[pno] = page_resp
+            continue
+
+        merged_categories = list(
+            dict.fromkeys([*(existing.categories or []), *(page_resp.categories or [])])
+        )
+        merged_entities = {normalize_entity_name(e.name): e for e in existing.entities}
+        for ent in page_resp.entities:
+            merged_entities[normalize_entity_name(ent.name)] = ent
+        merged_relations = list(existing.relations)
+        seen_rels = {
+            (normalize_entity_name(r.entity_a), r.relation, normalize_entity_name(r.entity_b))
+            for r in merged_relations
+        }
+        for rel in page_resp.relations:
+            key = (normalize_entity_name(rel.entity_a), rel.relation, normalize_entity_name(rel.entity_b))
+            if key not in seen_rels:
+                seen_rels.add(key)
+                merged_relations.append(rel)
+
+        target[pno] = KagPageResponse(
+            page_no=pno,
+            entities=list(merged_entities.values()),
+            relations=merged_relations,
+            categories=merged_categories,
+        )
+
+
 # ---------------------------------------------------------------------------
 # Nettoyage KAG document
 # ---------------------------------------------------------------------------
@@ -548,6 +988,10 @@ def cleanup_kag_for_document(session: Session, document_id: int) -> None:
 
     session.execute(
         text("DELETE FROM chunkentityrelation WHERE chunk_id IN :chunk_ids"),
+        {"chunk_ids": chunk_ids_tuple},
+    )
+    session.execute(
+        text("DELETE FROM chunkcategoryrelation WHERE chunk_id IN :chunk_ids"),
         {"chunk_ids": chunk_ids_tuple},
     )
     session.execute(
@@ -605,29 +1049,43 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
         page_numbers = sorted(chunks_by_page.keys())
         concurrency = settings.KAG_EXTRACTION_CONCURRENCY
 
-        page_responses: Dict[int, Optional[KagPageResponse]] = {}
+        from app.services.category_catalog import get_active_categories_for_prompt, get_category_id_by_slug
+
+        category_list = get_active_categories_for_prompt(session)
+        category_id_by_slug = get_category_id_by_slug(session)
+        valid_category_slugs = frozenset(category_id_by_slug.keys())
+
+        chunks_text_by_page = {
+            pno: [c.content for c in chunks_by_page[pno]] for pno in page_numbers
+        }
+        batches = build_kag_batches(page_numbers)
+        page_responses: Dict[int, KagPageResponse] = {}
 
         with ThreadPoolExecutor(max_workers=concurrency) as pool:
             futures = {
                 pool.submit(
-                    extract_page_kag_response,
+                    extract_batch_kag_response,
                     pdf_path,
-                    pno,
+                    batch,
                     doc_title,
-                    [c.content for c in chunks_by_page[pno]],
-                ): pno
-                for pno in page_numbers
+                    chunks_text_by_page,
+                    category_list,
+                    valid_category_slugs,
+                ): batch
+                for batch in batches
             }
             for future in as_completed(futures):
-                pno = futures[future]
+                batch = futures[future]
                 try:
-                    page_responses[pno] = future.result()
+                    batch_response = future.result()
+                    if batch_response:
+                        _merge_page_kag_responses(page_responses, batch_response)
                 except Exception as exc:
-                    logger.error("[KAG] Extraction page %s échouée : %s", pno, exc)
-                    page_responses[pno] = None
+                    logger.error("[KAG] Extraction batch %s échouée : %s", batch, exc)
 
         total_entities = 0
         total_relations = 0
+        total_categories = 0
         pages_ok = 0
 
         for pno in page_numbers:
@@ -641,24 +1099,38 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
                 chunks_by_page[pno],
                 kag_response,
             )
+            cats = _persist_page_categories(
+                session,
+                space_ids,
+                pno,
+                chunks_by_page[pno],
+                kag_response.categories,
+                category_id_by_slug,
+                document_id,
+            )
             total_entities += ents
             total_relations += rels
+            total_categories += cats
             pages_ok += 1
 
         session.commit()
 
         logger.info(
-            "[KAG] Extraction terminée document_id=%s pages=%s/%s entities=%s relations=%s model=%s",
+            "[KAG] Extraction terminée document_id=%s pages=%s/%s batches=%s "
+            "entities=%s relations=%s category_links=%s model=%s",
             document_id,
             pages_ok,
             len(page_numbers),
+            len(batches),
             total_entities,
             total_relations,
+            total_categories,
             _kag_extraction_model(),
         )
         return {
             "entities": total_entities,
             "relations": total_relations,
+            "categories": total_categories,
             "pages": pages_ok,
             "status": "completed",
         }

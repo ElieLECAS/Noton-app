@@ -94,6 +94,7 @@ class Settings(BaseSettings):
     PAGE_EXTRACTION_DPI: int = int(os.getenv("PAGE_EXTRACTION_DPI", "200"))
     PAGE_EXTRACTION_CONCURRENCY: int = int(os.getenv("PAGE_EXTRACTION_CONCURRENCY", "3"))
     PAGE_EXTRACTION_TIMEOUT: float = float(os.getenv("PAGE_EXTRACTION_TIMEOUT", "90"))
+    PAGE_EXTRACTION_MAX_TOKENS: int = int(os.getenv("PAGE_EXTRACTION_MAX_TOKENS", "4096"))
 
     # KAG — extraction entités/relations et retrieval graphe
     KAG_ENABLED: bool = os.getenv("KAG_ENABLED", "true").strip().lower() in (
@@ -102,10 +103,16 @@ class Settings(BaseSettings):
     KAG_EXTRACTION_MODEL: Optional[str] = os.getenv("KAG_EXTRACTION_MODEL") or None
     KAG_EXTRACTION_CONCURRENCY: int = int(os.getenv("KAG_EXTRACTION_CONCURRENCY", "3"))
     KAG_EXTRACTION_TIMEOUT: float = float(os.getenv("KAG_EXTRACTION_TIMEOUT", "90"))
+    KAG_EXTRACTION_MAX_TOKENS: int = int(os.getenv("KAG_EXTRACTION_MAX_TOKENS", "4096"))
     KAG_MAX_ENTITIES_PER_PAGE: int = int(os.getenv("KAG_MAX_ENTITIES_PER_PAGE", "20"))
     KAG_MAX_RELATIONS_PER_PAGE: int = int(os.getenv("KAG_MAX_RELATIONS_PER_PAGE", "15"))
+    # Plafonds réduits automatiquement pour ministral-3b et modèles compacts
+    KAG_SMALL_MODEL_MAX_ENTITIES: int = int(os.getenv("KAG_SMALL_MODEL_MAX_ENTITIES", "8"))
+    KAG_SMALL_MODEL_MAX_RELATIONS: int = int(os.getenv("KAG_SMALL_MODEL_MAX_RELATIONS", "6"))
     KAG_RETRIEVAL_HOP_LIMIT: int = int(os.getenv("KAG_RETRIEVAL_HOP_LIMIT", "1"))
     KAG_ENTITY_MATCH_MIN_SCORE: float = float(os.getenv("KAG_ENTITY_MATCH_MIN_SCORE", "0.35"))
+    KAG_BATCH_SIZE: int = int(os.getenv("KAG_BATCH_SIZE", "3"))
+    KAG_BATCH_OVERLAP: int = int(os.getenv("KAG_BATCH_OVERLAP", "1"))
 
     # Retraitement multimodal par page (pymupdf + mistral-small vision)
     MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"

@@ -971,6 +971,11 @@ def create_document(
         content=document_create.content,
         document_type=document_create.document_type,
         source_file_path=document_create.source_file_path,
+        source=document_create.source,
+        product_types=list(document_create.product_types or []),
+        materials=list(document_create.materials or []),
+        proferm_gammes=list(document_create.proferm_gammes or []),
+        classification_status=document_create.classification_status,
         processing_status=document_create.processing_status,
         processing_progress=document_create.processing_progress,
         is_paid=document_create.is_paid,
@@ -1029,11 +1034,30 @@ def update_document(
     user_id: int
 ) -> Optional[Document]:
     """Met à jour un document."""
+    from app.services.slot_catalog import compute_classification_status, normalize_document_classification
+
     document = get_document_by_id(session, document_id, user_id)
     if not document:
         return None
     
     update_data = document_update.model_dump(exclude_unset=True)
+
+    meta_keys = {"source", "product_types", "materials", "proferm_gammes"}
+    if meta_keys & set(update_data.keys()):
+        normalized = normalize_document_classification(
+            product_types=update_data.get("product_types", document.product_types),
+            materials=update_data.get("materials", document.materials),
+            source=update_data.get("source", document.source),
+            proferm_gammes=update_data.get("proferm_gammes", document.proferm_gammes),
+        )
+        update_data.update(normalized)
+        update_data["classification_status"] = compute_classification_status(
+            product_types=normalized["product_types"],
+            materials=normalized["materials"],
+            source=normalized["source"],
+            proferm_gammes=normalized["proferm_gammes"],
+        )
+
     for key, value in update_data.items():
         setattr(document, key, value)
     

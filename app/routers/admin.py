@@ -7,6 +7,12 @@ from app.models.role import Role, RoleCreate, RoleRead, RoleUpdate
 from app.models.permission import Permission, PermissionCreate, PermissionRead
 from app.models.user_role import UserRole, UserRoleCreate, UserRoleRead
 from app.models.role_permission import RolePermission, RolePermissionCreate, RolePermissionRead
+from app.models.document_category import (
+    DocumentCategory,
+    DocumentCategoryCreate,
+    DocumentCategoryRead,
+    DocumentCategoryUpdate,
+)
 from app.routers.auth import get_current_user, require_permission, require_role
 from app.services.auth_service import get_password_hash
 from pydantic import BaseModel
@@ -861,4 +867,146 @@ async def evaluate_rag_single_api(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erreur lors de l'évaluation RAG unitaire : {str(e)}"
         )
+
+
+# ==================== DOCUMENT CATEGORIES ====================
+
+
+class CategoryStatsResponse(BaseModel):
+    category_id: int
+    slug: str
+    label: str
+    chunk_links: int
+    document_count: int
+
+
+@router.get("/categories", response_model=List[DocumentCategoryRead])
+async def list_categories(
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Liste toutes les catégories de contenu (actives et inactives)."""
+    rows = session.exec(
+        select(DocumentCategory).order_by(DocumentCategory.slug)
+    ).all()
+    return [DocumentCategoryRead.model_validate(row) for row in rows]
+
+
+@router.post("/categories", response_model=DocumentCategoryRead)
+async def create_category(
+    payload: DocumentCategoryCreate,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Crée une nouvelle catégorie de contenu."""
+    from datetime import datetime
+
+    slug = payload.slug.strip().lower().replace(" ", "_")
+    existing = session.exec(
+        select(DocumentCategory).where(DocumentCategory.slug == slug)
+    ).first()
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Slug déjà utilisé : {slug}")
+
+    row = DocumentCategory(
+        slug=slug,
+        label=payload.label.strip(),
+        description=(payload.description or "").strip(),
+        is_active=True,
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow(),
+    )
+    session.add(row)
+    session.commit()
+    session.refresh(row)
+    return DocumentCategoryRead.model_validate(row)
+
+
+@router.put("/categories/{category_id}", response_model=DocumentCategoryRead)
+async def update_category(
+    category_id: int,
+    payload: DocumentCategoryUpdate,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Met à jour label, description ou statif actif d'une catégorie."""
+    from datetime import datetime
+
+    row = session.get(DocumentCategory, category_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Catégorie introuvable")
+
+    if payload.label is not None:
+        row.label = payload.label.strip()
+    if payload.description is not None:
+        row.description = payload.description.strip()
+    if payload.is_active is not None:
+        row.is_active = payload.is_active
+    row.updated_at = datetime.utcnow()
+    session.add(row)
+    session.commit()
+    session.refresh(row)
+    return DocumentCategoryRead.model_validate(row)
+
+
+@router.delete("/categories/{category_id}")
+async def delete_category(
+    category_id: int,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Supprime une catégorie si aucune relation chunk n'existe."""
+    from app.models.chunk_category_relation import ChunkCategoryRelation
+
+    row = session.get(DocumentCategory, category_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Catégorie introuvable")
+
+    link_count = session.exec(
+        select(func.count()).select_from(ChunkCategoryRelation).where(
+            ChunkCategoryRelation.category_id == category_id
+        )
+    ).first() or 0
+    if int(link_count) > 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Impossible de supprimer : des chunks sont liés à cette catégorie.",
+        )
+
+    session.delete(row)
+    session.commit()
+    return {"status": "deleted", "id": category_id}
+
+
+@router.get("/categories/{category_id}/stats", response_model=CategoryStatsResponse)
+async def category_stats(
+    category_id: int,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Statistiques d'utilisation d'une catégorie."""
+    from app.models.chunk_category_relation import ChunkCategoryRelation
+
+    row = session.get(DocumentCategory, category_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Catégorie introuvable")
+
+    chunk_links = session.exec(
+        select(func.count()).select_from(ChunkCategoryRelation).where(
+            ChunkCategoryRelation.category_id == category_id
+        )
+    ).first() or 0
+    doc_count = session.exec(
+        select(func.count(func.distinct(ChunkCategoryRelation.document_id))).where(
+            ChunkCategoryRelation.category_id == category_id
+        )
+    ).first() or 0
+
+    return CategoryStatsResponse(
+        category_id=row.id,
+        slug=row.slug,
+        label=row.label,
+        chunk_links=int(chunk_links),
+        document_count=int(doc_count),
+    )
 

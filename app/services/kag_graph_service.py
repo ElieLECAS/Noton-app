@@ -30,6 +30,43 @@ _ENTITY_TYPE_COLORS = {
     "other": "#9ca3af",
 }
 
+_ENTITY_TYPE_LABELS = {
+    "product": "Produit",
+    "material": "Matériau",
+    "tool": "Outil",
+    "norm": "Norme",
+    "dimension": "Dimension",
+    "process": "Processus",
+    "organization": "Organisation",
+    "location": "Lieu",
+    "reference": "Référence",
+    "other": "Autre",
+}
+
+_RELATION_TYPE_LABELS = {
+    "compatible_avec": "Compatible avec",
+    "est_compose_de": "Composé de",
+    "remplace": "Remplace",
+    "utilise": "Utilise",
+    "conforme_a": "Conforme à",
+    "installe_sur": "Installé sur",
+    "fabrique_par": "Fabriqué par",
+    "mesure": "Mesure",
+    "reference": "Référence",
+    "co_occurs": "Co-occurrence",
+}
+
+
+def _relation_short_label(relation_type: str) -> str:
+    key = (relation_type or "co_occurs").lower()
+    if key in _RELATION_TYPE_LABELS:
+        return _RELATION_TYPE_LABELS[key]
+    return key.replace("_", " ").strip() or "Relation"
+
+
+def _entity_type_label(entity_type: str) -> str:
+    return _ENTITY_TYPE_LABELS.get((entity_type or "other").lower(), entity_type or "Autre")
+
 
 def _entity_color(entity_type: str) -> str:
     return _ENTITY_TYPE_COLORS.get((entity_type or "other").lower(), "#9ca3af")
@@ -210,11 +247,13 @@ def build_space_kag_graph(
         }
 
     entity_ids = {e.id for e in entities if e.id is not None}
+    entity_by_id = {e.id: e for e in entities if e.id is not None}
     nodes = [
         {
             "id": str(e.id),
             "label": e.name,
             "entity_type": e.entity_type,
+            "entity_type_label": _entity_type_label(e.entity_type),
             "mention_count": e.mention_count,
             "description": e.description,
             "color": _entity_color(e.entity_type),
@@ -241,13 +280,18 @@ def build_space_kag_graph(
         if key in seen_edges:
             continue
         seen_edges.add(key)
+        source_entity = entity_by_id.get(rel.entity_a_id)
+        target_entity = entity_by_id.get(rel.entity_b_id)
         edges.append(
             {
                 "id": str(rel.id),
                 "source": str(rel.entity_a_id),
                 "target": str(rel.entity_b_id),
+                "source_label": source_entity.name if source_entity else "",
+                "target_label": target_entity.name if target_entity else "",
                 "relation_type": rel.relation_type,
-                "label": rel.relation_label or rel.relation_type.replace("_", " "),
+                "relation_type_label": _relation_short_label(rel.relation_type),
+                "relation_label": rel.relation_label,
                 "weight": rel.weight,
                 "confidence": rel.confidence,
             }
@@ -272,5 +316,9 @@ def build_space_kag_graph(
         "total_relation_count": int(total_relations or 0),
         "nodes": nodes,
         "edges": edges,
+        "entity_type_legend": [
+            {"type": k, "label": v, "color": _ENTITY_TYPE_COLORS[k]}
+            for k, v in _ENTITY_TYPE_LABELS.items()
+        ],
         "status": "ok",
     }

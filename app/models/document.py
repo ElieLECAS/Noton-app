@@ -2,7 +2,8 @@ from sqlmodel import SQLModel, Field, Relationship, Column
 from datetime import datetime
 from typing import Any, Optional, List, TYPE_CHECKING
 from pgvector.sqlalchemy import Vector
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, ARRAY
+from sqlalchemy import String
 from app.embedding_config import EMBEDDING_DIMENSION
 
 if TYPE_CHECKING:
@@ -19,7 +20,20 @@ class Document(SQLModel, table=True):
     content: Optional[str] = None
     document_type: str = Field(default="written")
     source_file_path: Optional[str] = None
-    source: Optional[str] = Field(default=None, index=True)  # Brand/Origin (Proferm, Technal, etc.)
+    source: Optional[str] = Field(default=None, index=True)  # Fournisseur / marque documentaire
+    product_types: List[str] = Field(
+        default_factory=list,
+        sa_column=Column(ARRAY(String), nullable=False, server_default="{}"),
+    )
+    materials: List[str] = Field(
+        default_factory=list,
+        sa_column=Column(ARRAY(String), nullable=False, server_default="{}"),
+    )
+    proferm_gammes: List[str] = Field(
+        default_factory=list,
+        sa_column=Column(ARRAY(String), nullable=False, server_default="{}"),
+    )
+    classification_status: str = Field(default="incomplete", max_length=16, index=True)
     # completed | pending | processing | failed | reindex_queued |
     # cancelled_by_user | skipped | partial_kag_done | failed_retry_exhausted
     processing_status: str = Field(default="completed")
@@ -50,6 +64,11 @@ class DocumentCreate(SQLModel):
     content: Optional[str] = None
     document_type: str = "written"
     source_file_path: Optional[str] = None
+    source: Optional[str] = None
+    product_types: List[str] = Field(default_factory=list)
+    materials: List[str] = Field(default_factory=list)
+    proferm_gammes: List[str] = Field(default_factory=list)
+    classification_status: str = "incomplete"
     processing_status: str = "completed"
     processing_progress: Optional[int] = 100
     is_paid: bool = False
@@ -62,6 +81,11 @@ class DocumentRead(SQLModel):
     title: str
     content: Optional[str] = None
     document_type: str
+    source: Optional[str] = None
+    product_types: List[str] = Field(default_factory=list)
+    materials: List[str] = Field(default_factory=list)
+    proferm_gammes: List[str] = Field(default_factory=list)
+    classification_status: str = "incomplete"
     processing_status: str
     processing_progress: Optional[int] = None
     is_paid: bool = False
@@ -77,6 +101,11 @@ class DocumentListItem(SQLModel):
     id: int
     title: str
     document_type: str
+    source: Optional[str] = None
+    product_types: List[str] = Field(default_factory=list)
+    materials: List[str] = Field(default_factory=list)
+    proferm_gammes: List[str] = Field(default_factory=list)
+    classification_status: str = "incomplete"
     processing_status: str
     processing_progress: Optional[int] = None
     is_paid: bool = False
@@ -96,6 +125,11 @@ class DocumentUpdate(SQLModel):
     """Schéma de mise à jour d'un document."""
     title: Optional[str] = None
     content: Optional[str] = None
+    source: Optional[str] = None
+    product_types: Optional[List[str]] = None
+    materials: Optional[List[str]] = None
+    proferm_gammes: Optional[List[str]] = None
+    classification_status: Optional[str] = None
     processing_progress: Optional[int] = None
     is_paid: Optional[bool] = None
     folder_id: Optional[int] = None

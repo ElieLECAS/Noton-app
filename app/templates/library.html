@@ -183,6 +183,21 @@ endblock %} {% block content %}
                 <input id="upload-is-paid" type="checkbox" class="rounded w-4 h-4 text-indigo-600 border-gray-300 dark:border-gray-600 focus:ring-indigo-500" />
                 <span>Document payant</span>
             </label>
+            <div
+                id="upload-classification-section"
+                class="hidden space-y-4 border-t border-black/5 dark:border-white/5 pt-4"
+            >
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Classifiez le document pour le rendre recherchable dans le chat.
+                </p>
+                <div id="upload-classification-fields"></div>
+            </div>
+            <p
+                id="upload-bulk-hint"
+                class="hidden text-xs text-amber-600 dark:text-amber-400 font-medium"
+            >
+                Les documents uploadés en lot devront être classés via « Modifier » pour être recherchables.
+            </p>
             <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
@@ -402,6 +417,15 @@ endblock %} {% block content %}
                 />
                 <span>Document payant</span>
             </label>
+            <div
+                id="edit-classification-section"
+                class="space-y-4 border-t border-black/5 dark:border-white/5 pt-4"
+            >
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Métadonnées requises pour que le document soit recherchable.
+                </p>
+                <div id="edit-classification-fields"></div>
+            </div>
             <div class="flex justify-end gap-2 pt-2">
                 <button
                     type="button"
@@ -549,6 +573,133 @@ endblock %} {% block content %}
     let isAdminUser = false;
     let chunksMonitorData = null;
     let chunksActiveTab = "semantic";
+    let classificationOptions = null;
+
+    function sourceToSupplierSlug(source) {
+        if (!source || !classificationOptions?.suppliers) return "";
+        const normalized = String(source).trim().toLowerCase();
+        const found = classificationOptions.suppliers.find(
+            (s) =>
+                s.value === normalized ||
+                String(s.label).trim().toLowerCase() === normalized,
+        );
+        return found ? found.value : "";
+    }
+
+    function renderCheckboxGroup(containerId, fieldKey, label, options, prefix, selectedValues = []) {
+        const host = document.getElementById(containerId);
+        if (!host) return;
+        const selected = new Set(selectedValues || []);
+        const block = document.createElement("div");
+        block.className = "space-y-2";
+        block.innerHTML = `
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">${label}</label>
+            <div class="grid grid-cols-2 gap-2 text-sm border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4">
+                ${(options || [])
+                    .map(
+                        (opt) => `
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" class="${prefix}-${fieldKey}-cb" value="${opt.value}" ${selected.has(opt.value) ? "checked" : ""} />
+                        <span>${opt.label}</span>
+                    </label>`,
+                    )
+                    .join("")}
+            </div>`;
+        host.appendChild(block);
+    }
+
+    function renderSupplierSelect(containerId, prefix, selectedSlug = "") {
+        const host = document.getElementById(containerId);
+        if (!host) return;
+        const block = document.createElement("div");
+        block.className = "space-y-2";
+        const optionsHtml = (classificationOptions?.suppliers || [])
+            .map(
+                (opt) =>
+                    `<option value="${opt.value}" ${opt.value === selectedSlug ? "selected" : ""}>${opt.label}</option>`,
+            )
+            .join("");
+        block.innerHTML = `
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Fournisseur</label>
+            <select id="${prefix}-supplier-select" class="w-full px-3.5 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm" required>
+                <option value="">— Sélectionner —</option>
+                ${optionsHtml}
+            </select>`;
+        host.appendChild(block);
+    }
+
+    function renderClassificationFields(containerId, prefix, initial = {}) {
+        const host = document.getElementById(containerId);
+        if (!host || !classificationOptions) return;
+        host.innerHTML = "";
+        renderCheckboxGroup(
+            containerId,
+            "product_types",
+            "Famille de produit",
+            classificationOptions.product_types,
+            prefix,
+            initial.product_types || [],
+        );
+        renderCheckboxGroup(
+            containerId,
+            "materials",
+            "Matériau",
+            classificationOptions.materials,
+            prefix,
+            initial.materials || [],
+        );
+        renderSupplierSelect(containerId, prefix, initial.supplierSlug || "");
+        renderCheckboxGroup(
+            containerId,
+            "proferm_gammes",
+            "Gamme(s) Proferm",
+            classificationOptions.proferm_gammes,
+            prefix,
+            initial.proferm_gammes || [],
+        );
+    }
+
+    function collectClassificationValues(prefix) {
+        const product_types = [
+            ...document.querySelectorAll(`.${prefix}-product_types-cb:checked`),
+        ].map((el) => el.value);
+        const materials = [
+            ...document.querySelectorAll(`.${prefix}-materials-cb:checked`),
+        ].map((el) => el.value);
+        const proferm_gammes = [
+            ...document.querySelectorAll(`.${prefix}-proferm_gammes-cb:checked`),
+        ].map((el) => el.value);
+        const sourceEl = document.getElementById(`${prefix}-supplier-select`);
+        const source = sourceEl ? sourceEl.value : "";
+        return { product_types, materials, proferm_gammes, source };
+    }
+
+    function validateClassificationValues(values) {
+        if (!values.product_types.length)
+            return "Sélectionnez au moins une famille de produit.";
+        if (!values.materials.length) return "Sélectionnez au moins un matériau.";
+        if (!values.source) return "Sélectionnez un fournisseur.";
+        if (!values.proferm_gammes.length)
+            return "Sélectionnez au moins une gamme Proferm.";
+        return null;
+    }
+
+    function toggleUploadClassificationSection(fileCount) {
+        const section = document.getElementById("upload-classification-section");
+        const bulkHint = document.getElementById("upload-bulk-hint");
+        const isSingle = fileCount === 1;
+        if (section) section.classList.toggle("hidden", !isSingle);
+        if (bulkHint) bulkHint.classList.toggle("hidden", isSingle);
+        if (isSingle) {
+            renderClassificationFields("upload-classification-fields", "upload", {});
+        }
+    }
+
+    async function loadClassificationOptions() {
+        const r = await api("/api/library/classification-options");
+        if (!r.ok) return;
+        classificationOptions = await r.json();
+    }
 
     async function api(url, options = {}) {
         const headers = { ...(options.headers || {}) };
@@ -834,6 +985,11 @@ endblock %} {% block content %}
 
                     const paidBadgeHtml = d.is_paid ? `<span title="Document payant (acheté fournisseur)" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 border border-amber-500/10 text-xs font-semibold"><i class="ti ti-coins text-xs"></i><span>Document payant</span></span>` : '';
 
+                    const classificationBadgeHtml =
+                        d.classification_status === "complete"
+                            ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-500/10 text-xs font-semibold"><i class="ti ti-tags text-xs"></i><span>Classé</span></span>`
+                            : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-700 dark:bg-orange-500/20 dark:text-orange-400 border border-orange-500/10 text-xs font-semibold"><i class="ti ti-tag-off text-xs"></i><span>À classifier</span></span>`;
+
                     return `
     <div
       class="glass-card group p-4 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-grab active:cursor-grabbing border border-black/5 dark:border-white/5 transition-all duration-300"
@@ -847,6 +1003,7 @@ endblock %} {% block content %}
           <div class="font-bold text-gray-900 dark:text-gray-100 flex flex-wrap items-center gap-2">
             <span class="truncate">${d.title}</span>
             ${paidBadgeHtml}
+            ${classificationBadgeHtml}
           </div>
           <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex flex-wrap items-center gap-1.5 font-medium">
             ${statusBadgeHtml}
@@ -1462,11 +1619,13 @@ endblock %} {% block content %}
 
     function openUploadModal() {
         document.getElementById("upload-modal").classList.remove("hidden");
+        toggleUploadClassificationSection(0);
     }
     function closeUploadModal() {
         document.getElementById("upload-modal").classList.add("hidden");
         document.getElementById("upload-form").reset();
         droppedUploadFiles = null;
+        toggleUploadClassificationSection(0);
     }
     function openFolderModal() {
         document.getElementById("folder-modal").classList.remove("hidden");
@@ -1529,6 +1688,13 @@ endblock %} {% block content %}
         document.getElementById("edit-document-is-paid").checked = Boolean(
             doc.is_paid,
         );
+
+        renderClassificationFields("edit-classification-fields", "edit", {
+            product_types: doc.product_types || [],
+            materials: doc.materials || [],
+            proferm_gammes: doc.proferm_gammes || [],
+            supplierSlug: sourceToSupplierSlug(doc.source),
+        });
 
         const host = document.getElementById("edit-document-spaces-checkboxes");
         host.innerHTML = spaces
@@ -1602,6 +1768,13 @@ endblock %} {% block content %}
             if (!files.length)
                 return alert("Sélectionnez au moins un fichier.");
             const isPaid = document.getElementById("upload-is-paid").checked;
+            const isSingle = files.length === 1;
+
+            if (isSingle) {
+                const meta = collectClassificationValues("upload");
+                const metaError = validateClassificationValues(meta);
+                if (metaError) return alert(metaError);
+            }
 
             const fd = new FormData();
             [...files].forEach((f) => fd.append("files", f));
@@ -1609,6 +1782,13 @@ endblock %} {% block content %}
             fd.append("is_paid", String(isPaid));
             if (selectedFolderId !== null)
                 fd.append("folder_id", String(selectedFolderId));
+            if (isSingle) {
+                const meta = collectClassificationValues("upload");
+                fd.append("product_types", JSON.stringify(meta.product_types));
+                fd.append("materials", JSON.stringify(meta.materials));
+                fd.append("proferm_gammes", JSON.stringify(meta.proferm_gammes));
+                fd.append("source", meta.source);
+            }
 
             const r = await fetch("/api/library/upload", {
                 method: "POST",
@@ -1624,8 +1804,9 @@ endblock %} {% block content %}
         });
 
     document.getElementById("upload-files").addEventListener("change", () => {
-        // Si l'utilisateur choisit des fichiers manuellement, on ignore le dernier drop.
         droppedUploadFiles = null;
+        const fileInput = document.getElementById("upload-files");
+        toggleUploadClassificationSection(fileInput?.files?.length || 0);
     });
 
     function showDropOverlay(show) {
@@ -1655,6 +1836,7 @@ endblock %} {% block content %}
         }
 
         openUploadModal();
+        toggleUploadClassificationSection(files.length);
     }
 
     function setupDragAndDropUpload() {
@@ -1782,6 +1964,9 @@ endblock %} {% block content %}
             const isPaid = document.getElementById(
                 "edit-document-is-paid",
             ).checked;
+            const meta = collectClassificationValues("edit");
+            const metaError = validateClassificationValues(meta);
+            if (metaError) return alert(metaError);
             // UX: fermer immédiatement la modale, puis traiter en arrière-plan.
             closeEditDocumentModal();
             loadDocuments();
@@ -1816,7 +2001,14 @@ endblock %} {% block content %}
                     {
                         method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ title, is_paid: isPaid }),
+                        body: JSON.stringify({
+                            title,
+                            is_paid: isPaid,
+                            product_types: meta.product_types,
+                            materials: meta.materials,
+                            proferm_gammes: meta.proferm_gammes,
+                            source: meta.source,
+                        }),
                     },
                 );
                 if (!updateResp.ok) {
@@ -1905,6 +2097,7 @@ endblock %} {% block content %}
     document.addEventListener("DOMContentLoaded", async () => {
         await loadPermissions();
         applyPermissionUI();
+        await loadClassificationOptions();
         await loadSpaces();
         await loadFolders();
         await loadDocuments();

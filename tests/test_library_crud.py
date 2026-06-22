@@ -1,7 +1,15 @@
 """Bibliothèque : upload, dossiers, documents, espaces (mocks traitement)."""
 from __future__ import annotations
 
+import json
 from unittest import mock
+
+COMPLETE_CLASSIFICATION = {
+    "product_types": json.dumps(["fenetres"]),
+    "materials": json.dumps(["pvc"]),
+    "proferm_gammes": json.dumps(["perform"]),
+    "source": "kommerling",
+}
 
 
 def test_upload_is_paid_true_persisted(client, responsable_headers):
@@ -516,3 +524,91 @@ def test_library_export_all_and_import(client, responsable_headers):
                 os.remove("media/documents/import_bulk_test.pdf")
         except Exception:
             pass
+
+
+def test_classification_options_endpoint(client, responsable_headers):
+    r = client.get("/api/library/classification-options", headers=responsable_headers)
+    assert r.status_code == 200
+    data = r.json()
+    assert "product_types" in data
+    assert "suppliers" in data
+    assert any(s["value"] == "kommerling" for s in data["suppliers"])
+
+
+def test_upload_single_with_classification_complete(client, responsable_headers):
+    with (
+        mock.patch("app.routers.library.process_document_async"),
+        mock.patch(
+            "app.routers.library.save_uploaded_file",
+            return_value="media/documents/pytest_classified.pdf",
+        ),
+    ):
+        r = client.post(
+            "/api/library/upload",
+            headers=responsable_headers,
+            files=[("files", ("classified.txt", b"x", "text/plain"))],
+            data={"space_ids": "[]", "is_paid": "false", **COMPLETE_CLASSIFICATION},
+        )
+    assert r.status_code == 201
+    doc = r.json()[0]
+    assert doc["classification_status"] == "complete"
+    assert doc["product_types"] == ["fenetres"]
+    assert doc["materials"] == ["pvc"]
+    assert doc["proferm_gammes"] == ["perform"]
+    assert doc["source"] == "Kommerling"
+
+
+def test_upload_bulk_without_classification_incomplete(client, responsable_headers):
+    with (
+        mock.patch("app.routers.library.process_document_async"),
+        mock.patch(
+            "app.routers.library.save_uploaded_file",
+            return_value="media/documents/pytest_bulk.pdf",
+        ),
+    ):
+        r = client.post(
+            "/api/library/upload",
+            headers=responsable_headers,
+            files=[
+                ("files", ("a.txt", b"a", "text/plain")),
+                ("files", ("b.txt", b"b", "text/plain")),
+            ],
+            data={"space_ids": "[]", "is_paid": "false"},
+        )
+    assert r.status_code == 201
+    for doc in r.json():
+        assert doc["classification_status"] == "incomplete"
+
+
+def test_update_document_classification(client, responsable_headers):
+    with (
+        mock.patch("app.routers.library.process_document_async"),
+        mock.patch(
+            "app.routers.library.save_uploaded_file",
+            return_value="media/documents/pytest_update_class.pdf",
+        ),
+    ):
+        r = client.post(
+            "/api/library/upload",
+            headers=responsable_headers,
+            files=[("files", ("update.txt", b"x", "text/plain"))],
+            data={"space_ids": "[]", "is_paid": "false"},
+        )
+    assert r.status_code == 201
+    doc_id = r.json()[0]["id"]
+    assert r.json()[0]["classification_status"] == "incomplete"
+
+    upd = client.put(
+        f"/api/library/documents/{doc_id}",
+        headers=responsable_headers,
+        json={
+            "product_types": ["portes"],
+            "materials": ["aluminium"],
+            "proferm_gammes": ["lumine"],
+            "source": "technal",
+        },
+    )
+    assert upd.status_code == 200
+    body = upd.json()
+    assert body["classification_status"] == "complete"
+    assert body["source"] == "Technal"

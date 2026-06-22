@@ -15,15 +15,18 @@ from app.config import settings
 from app.services.mistral_service import chat
 from app.services.query_reasoning_service import decide_retrieval_route
 from app.services.slot_catalog import (
-    FIELD_CHOICES,
+    OPTIONAL_FIELDS,
     build_slot_prompt,
+    detect_optional_skip_from_message,
     empty_slots,
     get_label,
     is_valid_slot_value,
     next_missing_optional,
     next_missing_required,
-    OPTIONAL_FIELDS,
     REQUIRED_FIELDS,
+    parse_content_categories,
+    serialize_content_categories,
+    suggested_categories_for_intent,
 )
 
 logger = logging.getLogger(__name__)
@@ -87,13 +90,20 @@ CHAMPS POSSIBLES (ne remplir que si explicitement mentionné ou clairement dédu
 - product_family : fenetres | portes | coulissants
 - material : pvc | aluminium | hybride (matériau, PAS la gamme Proferm)
 - product_range : perform | lumine | hybride (gamme Proferm) | textural
-- supplier : profine | technal | kommerling | roto
+- supplier : kommerling | profine | askey | roto | technal | soprofen | proferm
+- content_categories : liste de slugs séparés par virgule parmi :
+  mounting | hardware_adjustment | sealing | drilling_constraints | dimensions_tolerances |
+  load_capacity | material_profile | glazing | parts_references | product_range |
+  regulatory | warranty | certification | commercial | product_comparison | troubleshooting
+  (choisir selon le type de contenu recherché ; plusieurs valeurs possibles, ex. "mounting,sealing")
 
 RÈGLES :
 1. Ne pas inventer de valeurs absentes du dialogue.
 2. "hybride" comme matériau ≠ gamme Hybride Proferm — distinguer selon le contexte.
 3. Si l'utilisateur change clairement de sujet (nouvelle question métier sans lien), mets new_question=true.
 4. Si l'utilisateur répond à une clarification en cours, new_question=false.
+5. Si l'utilisateur répond « je ne sais pas » / « je sais pas » à une question sur gamme, fournisseur ou catégories, ne remplis pas ce slot (laisse null).
+6. Pour content_categories, déduis les catégories pertinentes depuis l'intent si possible (ex. installation → mounting,hardware_adjustment).
 
 Retourne UNIQUEMENT un JSON :
 {
@@ -182,7 +192,17 @@ def _merge_slot_dict(
     merged = dict(base)
     for key in REQUIRED_FIELDS + OPTIONAL_FIELDS:
         val = incoming.get(key)
-        if val is not None and str(val).strip():
+        if val is None:
+            continue
+        if key == "content_categories":
+            if isinstance(val, list):
+                serialized = serialize_content_categories([str(v) for v in val])
+            else:
+                serialized = serialize_content_categories(parse_content_categories(str(val)))
+            if serialized and is_valid_slot_value(key, serialized):
+                merged[key] = serialized
+            continue
+        if str(val).strip():
             candidate = str(val).strip().lower()
             if is_valid_slot_value(key, candidate):
                 merged[key] = candidate
@@ -239,8 +259,14 @@ def _node_merge_slots(state: QueryUnderstandingState) -> Dict[str, Any]:
             value = str(slot_action.get("value", "")).strip().lower()
             if is_valid_slot_value(field, value):
                 slots[field] = value
-    elif not ctx.get("original_user_message"):
-        original_message = state.get("user_message", "")
+    else:
+        if user_message:
+            pending = ctx.get("pending_field")
+            skip_field = detect_optional_skip_from_message(user_message, pending)
+            if skip_field and skip_field not in skipped:
+                skipped.append(skip_field)
+        if not ctx.get("original_user_message"):
+            original_message = state.get("user_message", "")
 
     return {
         "slots": slots,

@@ -96,6 +96,11 @@ _USER_PROMPT_TEMPLATE = (
     "Extrait tous les chunks sémantiques de cette page selon les règles du système."
 )
 
+_VISION_COMPACT_RETRY_SUFFIX = (
+    "\n\nIMPORTANT : JSON strictement valide et complet. "
+    "Chunks concis (content court, auto-suffisant). Maximum 10 chunks par page."
+)
+
 
 # -----------------------------------------------------------------------
 # Appel API vision
@@ -106,6 +111,8 @@ def _call_vision_api(
     image_b64: str,
     page_no: int,
     document_title: str,
+    *,
+    compact_retry: bool = False,
 ) -> dict:
     """
     Appelle l'API Mistral vision sur une page PNG (base64) et retourne le JSON parsé.
@@ -120,6 +127,8 @@ def _call_vision_api(
         title=document_title or "Document",
         page_no=page_no,
     )
+    if compact_retry:
+        user_text += _VISION_COMPACT_RETRY_SUFFIX
 
     messages = [
         {"role": "system", "content": _SYSTEM_PROMPT},
@@ -135,7 +144,7 @@ def _call_vision_api(
     raw = _mistral_chat_completion(
         messages,
         page_no=page_no,
-        max_tokens=2048,
+        max_tokens=settings.PAGE_EXTRACTION_MAX_TOKENS,
         temperature=0.0,
         response_format_json=True,
         timeout_seconds=settings.PAGE_EXTRACTION_TIMEOUT,
@@ -302,21 +311,39 @@ def extract_page_chunk_specs(
         )
         return _fallback_pymupdf4llm(pdf_path, page_no, metadata_base)
 
-    try:
-        raw = _call_vision_api(image_b64, page_no, document_title)
-        specs = _validate_and_normalize(raw, page_no, metadata_base)
-        logger.info(
-            "[VisionExtract] page %s — %s chunks vision (%s)",
-            page_no,
-            len(specs),
-            settings.PAGE_EXTRACTION_MODEL,
-        )
-        return specs
-    except Exception as exc:
-        logger.warning(
-            "[VisionExtract] page %s — API vision échouée (%s), fallback pymupdf4llm", page_no, exc
-        )
-        return _fallback_pymupdf4llm(pdf_path, page_no, metadata_base)
+    last_exc: Optional[Exception] = None
+    for attempt in range(2):
+        try:
+            raw = _call_vision_api(
+                image_b64,
+                page_no,
+                document_title,
+                compact_retry=attempt > 0,
+            )
+            specs = _validate_and_normalize(raw, page_no, metadata_base)
+            logger.info(
+                "[VisionExtract] page %s — %s chunks vision (%s)%s",
+                page_no,
+                len(specs),
+                settings.PAGE_EXTRACTION_MODEL,
+                " [retry]" if attempt > 0 else "",
+            )
+            return specs
+        except Exception as exc:
+            last_exc = exc
+            if attempt == 0:
+                logger.warning(
+                    "[VisionExtract] page %s — tentative 1 échouée (%s), retry compact",
+                    page_no,
+                    exc,
+                )
+
+    logger.warning(
+        "[VisionExtract] page %s — API vision échouée (%s), fallback pymupdf4llm",
+        page_no,
+        last_exc,
+    )
+    return _fallback_pymupdf4llm(pdf_path, page_no, metadata_base)
 
 
 # -----------------------------------------------------------------------

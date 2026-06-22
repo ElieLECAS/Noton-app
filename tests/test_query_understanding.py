@@ -53,6 +53,26 @@ def test_build_slot_prompt_optional_has_skip():
     prompt = build_slot_prompt("supplier", phase="optional", allow_skip=True)
     assert prompt["allow_skip"] is True
     assert prompt["skip_label"] == "Passer"
+    assert prompt["unknown_label"] == "Je ne sais pas"
+
+
+def test_merge_slots_unknown_optional_text():
+    state = {
+        "persisted_context": {
+            "slots": {
+                **empty_slots(),
+                "intent": "specification",
+                "product_family": "fenetres",
+                "material": "pvc",
+            },
+            "skipped_optional": [],
+            "pending_field": "supplier",
+            "phase": "collecting_optional",
+        },
+        "user_message": "Je ne sais pas",
+    }
+    result = _node_merge_slots(state)
+    assert "supplier" in result["skipped_optional"]
 
 
 def test_merge_slots_applies_fill_action():

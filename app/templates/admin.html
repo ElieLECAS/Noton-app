@@ -53,6 +53,13 @@
             >
                 Qualité RAG
             </button>
+            <button
+                onclick="showTab('categories')"
+                id="tab-categories"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+                Catégories
+            </button>
         </div>
 
         <!-- Users Tab -->
@@ -525,6 +532,97 @@
                 </div>
             </div>
         </div>
+
+        <!-- Categories Tab -->
+        <div id="tab-content-categories" class="tab-content hidden space-y-6">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+                        Catégories de contenu
+                    </h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Taxonomie utilisée par l'extraction KAG et le filtrage retrieval. Les slugs sont stables ; modifiez label et description pour affiner le prompt LLM.
+                    </p>
+                </div>
+                <button
+                    onclick="openCreateCategoryModal()"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2"
+                >
+                    <i class="ti ti-plus text-base"></i>Ajouter
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-black/5 dark:bg-white/5 text-left">
+                            <tr>
+                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Slug</th>
+                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Label</th>
+                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Description</th>
+                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Actif</th>
+                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Chunks</th>
+                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categories-table-body" class="divide-y divide-black/5 dark:divide-white/5">
+                            <tr><td colspan="6" class="px-4 py-6 text-center text-gray-500">Chargement…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Create User -->
+<div id="create-category-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="glass-panel rounded-3xl p-6 w-full max-w-lg shadow-2xl">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Nouvelle catégorie</h2>
+        <form id="create-category-form" onsubmit="createCategory(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Slug (identifiant stable)</label>
+                <input type="text" name="slug" required pattern="[a-z0-9_]+" class="w-full px-3 py-2.5 rounded-xl glass-input text-sm" placeholder="ex. maintenance" />
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Label</label>
+                <input type="text" name="label" required class="w-full px-3 py-2.5 rounded-xl glass-input text-sm" />
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Description (prompt LLM)</label>
+                <textarea name="description" required rows="3" class="w-full px-3 py-2.5 rounded-xl glass-input text-sm"></textarea>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" onclick="closeCreateCategoryModal()" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm font-semibold">Annuler</button>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold">Créer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="edit-category-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="glass-panel rounded-3xl p-6 w-full max-w-lg shadow-2xl">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Modifier la catégorie</h2>
+        <form id="edit-category-form" onsubmit="updateCategory(event)" class="space-y-4">
+            <input type="hidden" name="category_id" id="edit-category-id" />
+            <p class="text-xs text-gray-500">Slug : <span id="edit-category-slug" class="font-mono font-bold"></span></p>
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Label</label>
+                <input type="text" name="label" id="edit-category-label" required class="w-full px-3 py-2.5 rounded-xl glass-input text-sm" />
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Description</label>
+                <textarea name="description" id="edit-category-description" required rows="3" class="w-full px-3 py-2.5 rounded-xl glass-input text-sm"></textarea>
+            </div>
+            <label class="flex items-center gap-2 text-sm">
+                <input type="checkbox" name="is_active" id="edit-category-active" class="rounded" />
+                <span>Catégorie active (visible pour l'extraction LLM)</span>
+            </label>
+            <div class="flex justify-end gap-2 pt-2">
+                <button type="button" onclick="closeEditCategoryModal()" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm font-semibold">Annuler</button>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold">Enregistrer</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -704,6 +802,8 @@ function showTab(tabName) {
         loadAllFeedbackData();
     } else if (tabName === 'rag-eval') {
         loadSpacesForEval();
+    } else if (tabName === 'categories') {
+        loadCategories();
     }
 }
 
@@ -2467,6 +2567,145 @@ function exportEvalReport() {
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
+}
+
+// ==================== CATEGORIES ====================
+
+let allCategories = [];
+
+async function loadCategories() {
+    const tbody = document.getElementById('categories-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-gray-500">Chargement…</td></tr>';
+    try {
+        const response = await apiCall('/api/admin/categories');
+        if (!response || !response.ok) {
+            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-red-500">Erreur de chargement</td></tr>';
+            return;
+        }
+        allCategories = await response.json();
+        if (!allCategories.length) {
+            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-gray-500">Aucune catégorie</td></tr>';
+            return;
+        }
+        const statsPromises = allCategories.map(c =>
+            apiCall(`/api/admin/categories/${c.id}/stats`).then(r => r && r.ok ? r.json() : { chunk_links: 0 })
+        );
+        const statsList = await Promise.all(statsPromises);
+        tbody.innerHTML = allCategories.map((cat, idx) => {
+            const stats = statsList[idx] || {};
+            const activeBadge = cat.is_active
+                ? '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600">Actif</span>'
+                : '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-gray-500/10 text-gray-500">Inactif</span>';
+            return `
+                <tr class="hover:bg-black/[0.02] dark:hover:bg-white/[0.02]">
+                    <td class="px-4 py-3 font-mono text-xs text-indigo-600 dark:text-indigo-400">${escapeHtml(cat.slug)}</td>
+                    <td class="px-4 py-3 font-semibold text-gray-800 dark:text-gray-200">${escapeHtml(cat.label)}</td>
+                    <td class="px-4 py-3 text-gray-600 dark:text-gray-400 max-w-md truncate" title="${escapeHtml(cat.description)}">${escapeHtml(cat.description)}</td>
+                    <td class="px-4 py-3">${activeBadge}</td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-600">${stats.chunk_links || 0}</span></td>
+                    <td class="px-4 py-3 text-right space-x-2">
+                        <button onclick="openEditCategoryModal(${cat.id})" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20">Modifier</button>
+                        <button onclick="toggleCategoryActive(${cat.id}, ${cat.is_active ? 'false' : 'true'})" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500/10 text-amber-600 hover:bg-amber-500/20">${cat.is_active ? 'Désactiver' : 'Activer'}</button>
+                        <button onclick="deleteCategory(${cat.id})" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-red-500/10 text-red-600 hover:bg-red-500/20">Supprimer</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-6 text-center text-red-500">${escapeHtml(e.message || 'Erreur')}</td></tr>`;
+    }
+}
+
+function openCreateCategoryModal() {
+    document.getElementById('create-category-modal').classList.remove('hidden');
+}
+
+function closeCreateCategoryModal() {
+    document.getElementById('create-category-modal').classList.add('hidden');
+    document.getElementById('create-category-form').reset();
+}
+
+async function createCategory(event) {
+    event.preventDefault();
+    const form = event.target;
+    const payload = {
+        slug: form.slug.value.trim().toLowerCase(),
+        label: form.label.value.trim(),
+        description: form.description.value.trim(),
+    };
+    const response = await apiCall('/api/admin/categories', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    });
+    if (response && response.ok) {
+        closeCreateCategoryModal();
+        await loadCategories();
+    } else {
+        const err = response ? await response.json().catch(() => ({})) : {};
+        alert(err.detail || 'Erreur lors de la création');
+    }
+}
+
+function openEditCategoryModal(categoryId) {
+    const cat = allCategories.find(c => c.id === categoryId);
+    if (!cat) return;
+    document.getElementById('edit-category-id').value = cat.id;
+    document.getElementById('edit-category-slug').textContent = cat.slug;
+    document.getElementById('edit-category-label').value = cat.label;
+    document.getElementById('edit-category-description').value = cat.description;
+    document.getElementById('edit-category-active').checked = !!cat.is_active;
+    document.getElementById('edit-category-modal').classList.remove('hidden');
+}
+
+function closeEditCategoryModal() {
+    document.getElementById('edit-category-modal').classList.add('hidden');
+}
+
+async function updateCategory(event) {
+    event.preventDefault();
+    const form = event.target;
+    const categoryId = form.category_id.value;
+    const payload = {
+        label: form.label.value.trim(),
+        description: form.description.value.trim(),
+        is_active: form.is_active.checked,
+    };
+    const response = await apiCall(`/api/admin/categories/${categoryId}`, {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+    });
+    if (response && response.ok) {
+        closeEditCategoryModal();
+        await loadCategories();
+    } else {
+        const err = response ? await response.json().catch(() => ({})) : {};
+        alert(err.detail || 'Erreur lors de la mise à jour');
+    }
+}
+
+async function toggleCategoryActive(categoryId, makeActive) {
+    const response = await apiCall(`/api/admin/categories/${categoryId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ is_active: makeActive }),
+    });
+    if (response && response.ok) {
+        await loadCategories();
+    } else {
+        const err = response ? await response.json().catch(() => ({})) : {};
+        alert(err.detail || 'Erreur');
+    }
+}
+
+async function deleteCategory(categoryId) {
+    if (!confirm('Supprimer cette catégorie ? (impossible si des chunks y sont liés)')) return;
+    const response = await apiCall(`/api/admin/categories/${categoryId}`, { method: 'DELETE' });
+    if (response && response.ok) {
+        await loadCategories();
+    } else {
+        const err = response ? await response.json().catch(() => ({})) : {};
+        alert(err.detail || 'Erreur lors de la suppression');
+    }
 }
 </script>
 {% endblock %}

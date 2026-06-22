@@ -808,7 +808,7 @@ def _repair_common_json_issues(raw: str) -> str:
     text = re.sub(r"\s*```\s*$", "", text)
     text = text.replace("“", '"').replace("”", '"').replace("’", "'")
 
-    match = re.search(r"\{[\s\S]*\}", text)
+    match = re.search(r"\{[\s\S]*", text)
     if match:
         text = match.group(0)
 
@@ -817,15 +817,85 @@ def _repair_common_json_issues(raw: str) -> str:
     return text.strip()
 
 
+def _trim_incomplete_json_tail(text: str) -> str:
+    """Retire un élément JSON incomplet en fin de chaîne (sortie LLM tronquée)."""
+    trimmed = (text or "").rstrip()
+    if not trimmed:
+        return trimmed
+
+    trimmed = re.sub(r',\s*"[^"]*"\s*:\s*"[^"]*$', "", trimmed)
+    trimmed = re.sub(r',\s*"[^"]*"\s*:\s*[^,}\]]*$', "", trimmed)
+    trimmed = re.sub(r',\s*\{[^}]*$', "", trimmed)
+    trimmed = re.sub(r',\s*\[[^\]]*$', "", trimmed)
+    trimmed = re.sub(r',\s*"[^"]*$', "", trimmed)
+    trimmed = trimmed.rstrip().rstrip(",")
+    return trimmed
+
+
+def _close_truncated_json(text: str) -> str:
+    """Ferme les accolades/crochets et chaînes ouvertes d'un JSON tronqué."""
+    trimmed = _trim_incomplete_json_tail(text)
+    if not trimmed:
+        return trimmed
+
+    stack: List[str] = []
+    in_string = False
+    escape = False
+
+    for ch in trimmed:
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+
+        if ch == '"':
+            in_string = True
+        elif ch == "{":
+            stack.append("}")
+        elif ch == "[":
+            stack.append("]")
+        elif ch in "}]":
+            if stack and stack[-1] == ch:
+                stack.pop()
+
+    closed = trimmed
+    if in_string:
+        closed += '"'
+    while stack:
+        closed += stack.pop()
+    closed = re.sub(r",\s*([}\]])", r"\1", closed)
+    return closed
+
+
 def _parse_json_with_repair(raw: str) -> dict:
-    """Parse JSON avec tentative de réparation avant échec."""
-    try:
-        return _parse_json_from_llm_content(raw)
-    except (ValueError, json.JSONDecodeError):
-        repaired = _repair_common_json_issues(raw)
-        if not repaired:
-            raise
-        return _parse_json_from_llm_content(repaired)
+    """Parse JSON avec tentatives de réparation (virgules, troncature max_tokens)."""
+    candidates = [raw]
+    repaired = _repair_common_json_issues(raw)
+    if repaired and repaired != (raw or "").strip():
+        candidates.append(repaired)
+    closed = _close_truncated_json(repaired or raw or "")
+    if closed and closed not in candidates:
+        candidates.append(closed)
+    closed_repaired = _close_truncated_json(_repair_common_json_issues(raw))
+    if closed_repaired and closed_repaired not in candidates:
+        candidates.append(closed_repaired)
+
+    last_error: Optional[Exception] = None
+    for candidate in candidates:
+        if not candidate:
+            continue
+        try:
+            return _parse_json_from_llm_content(candidate)
+        except (ValueError, json.JSONDecodeError) as exc:
+            last_error = exc
+
+    if last_error is not None:
+        raise last_error
+    raise ValueError("Réponse LLM vide")
 
 
 def _as_str_list(val: Any) -> List[str]:

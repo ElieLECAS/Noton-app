@@ -19,6 +19,13 @@ from .knowledge_entity import (
     EntityAlias,
     EntityEntityRelation,
 )
+from .document_category import (
+    DocumentCategory,
+    DocumentCategoryRead,
+    DocumentCategoryCreate,
+    DocumentCategoryUpdate,
+)
+from .chunk_category_relation import ChunkCategoryRelation
 
 __all__ = [
     "User",
@@ -74,5 +81,10 @@ __all__ = [
     "ChunkEntityRelation",
     "EntityAlias",
     "EntityEntityRelation",
+    "DocumentCategory",
+    "DocumentCategoryRead",
+    "DocumentCategoryCreate",
+    "DocumentCategoryUpdate",
+    "ChunkCategoryRelation",
 ]
 

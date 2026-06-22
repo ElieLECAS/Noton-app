@@ -56,6 +56,11 @@ from app.services.document_processing_snapshot import (
     build_document_diagnostic,
     build_document_processing_snapshot,
 )
+from app.services.slot_catalog import (
+    compute_classification_status,
+    normalize_document_classification,
+    serialize_classification_options,
+)
 from app.services.admin_audit_service import log_admin_action
 from pathlib import Path
 import logging
@@ -64,6 +69,65 @@ import json
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/library", tags=["library"])
+
+
+def _parse_json_string_list(raw: Optional[str]) -> List[str]:
+    if not raw or not str(raw).strip():
+        return []
+    try:
+        parsed = json.loads(raw)
+        if isinstance(parsed, list):
+            return [str(v).strip().lower() for v in parsed if str(v).strip()]
+    except json.JSONDecodeError:
+        pass
+    return []
+
+
+def _build_document_create_with_classification(
+    *,
+    title: str,
+    content: str,
+    document_type: str,
+    source_file_path: str,
+    processing_status: str,
+    processing_progress: int,
+    is_paid: bool,
+    folder_id: Optional[int],
+    product_types_raw: Optional[str] = None,
+    materials_raw: Optional[str] = None,
+    proferm_gammes_raw: Optional[str] = None,
+    source_slug: Optional[str] = None,
+) -> DocumentCreate:
+    product_types = _parse_json_string_list(product_types_raw)
+    materials = _parse_json_string_list(materials_raw)
+    proferm_gammes = _parse_json_string_list(proferm_gammes_raw)
+    normalized = normalize_document_classification(
+        product_types=product_types,
+        materials=materials,
+        source=source_slug,
+        proferm_gammes=proferm_gammes,
+    )
+    status = compute_classification_status(
+        product_types=normalized["product_types"],
+        materials=normalized["materials"],
+        source=normalized["source"],
+        proferm_gammes=normalized["proferm_gammes"],
+    )
+    return DocumentCreate(
+        title=title,
+        content=content,
+        document_type=document_type,
+        source_file_path=source_file_path,
+        processing_status=processing_status,
+        processing_progress=processing_progress,
+        is_paid=is_paid,
+        folder_id=folder_id,
+        source=normalized["source"],
+        product_types=normalized["product_types"],
+        materials=normalized["materials"],
+        proferm_gammes=normalized["proferm_gammes"],
+        classification_status=status,
+    )
 
 
 class LibraryStopDocumentResponse(BaseModel):
@@ -877,12 +941,24 @@ async def get_document_file(
     return response
 
 
+@router.get("/classification-options")
+async def get_classification_options(
+    current_user: UserRead = Depends(get_current_user),
+):
+    """Taxonomie partagée document / chat (familles, matériaux, gammes, fournisseurs)."""
+    return serialize_classification_options()
+
+
 @router.post("/upload", response_model=List[DocumentRead], status_code=status.HTTP_201_CREATED)
 async def upload_documents(
     files: List[UploadFile] = File(...),
     space_ids: str = Form("[]"),
     is_paid: bool = Form(False),
     folder_id: Optional[int] = Form(None),
+    product_types: str = Form("[]"),
+    materials: str = Form("[]"),
+    proferm_gammes: str = Form("[]"),
+    source: Optional[str] = Form(None),
     current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
@@ -916,6 +992,8 @@ async def upload_documents(
     
     import os
 
+    single_file_upload = len(files) == 1
+
     # Traitement strictement séquentiel, fichier par fichier.
     for file in files:
         filename = file.filename or "fichier_inconnu"
@@ -930,7 +1008,8 @@ async def upload_documents(
 
             filename_without_ext = os.path.splitext(filename)[0]
 
-            document_create = DocumentCreate(
+            apply_metadata = single_file_upload
+            document_create = _build_document_create_with_classification(
                 title=filename_without_ext,
                 content="⏳ Traitement en cours...",
                 document_type="document",
@@ -938,7 +1017,11 @@ async def upload_documents(
                 processing_status="pending",
                 processing_progress=0,
                 is_paid=is_paid,
-                folder_id=folder_id
+                folder_id=folder_id,
+                product_types_raw=product_types if apply_metadata else None,
+                materials_raw=materials if apply_metadata else None,
+                proferm_gammes_raw=proferm_gammes if apply_metadata else None,
+                source_slug=source if apply_metadata else None,
             )
             
             document = create_document(

@@ -349,12 +349,22 @@
 
 #kag-graph-cy {
   width: 100%;
-  height: 380px;
-  border-radius: 1rem;
-  background: rgba(0, 0, 0, 0.02);
+  height: 100%;
+  min-height: 420px;
+  border-radius: 0.75rem;
+  background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
 }
 .dark #kag-graph-cy {
-  background: rgba(255, 255, 255, 0.02);
+  background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+}
+#kag-graph-modal:not(.hidden) {
+  display: flex;
+}
+.kag-relation-card {
+  border-left: 3px solid #6366f1;
+}
+.dark .kag-relation-card {
+  border-left-color: #818cf8;
 }
 </style>
 {% endblock %}
@@ -370,28 +380,12 @@
         id="kag-graph-toggle"
         type="button"
         class="hidden shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold active:scale-95 transition-all"
-        onclick="toggleKagGraphPanel()"
+        onclick="openKagGraphModal()"
       >
         <i class="ti ti-affiliate"></i>
-        <span id="kag-graph-toggle-label">Masquer le graphe</span>
+        <span id="kag-graph-toggle-label">Graphe de connaissances</span>
       </button>
     </div>
-
-    <section id="kag-graph-section" class="hidden glass-panel rounded-3xl border border-black/5 dark:border-white/5 shadow-lg overflow-hidden">
-      <div class="px-4 py-3 border-b border-black/5 dark:border-white/5 flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h2 class="text-sm font-bold text-gray-900 dark:text-white">Graphe de connaissances KAG</h2>
-          <p id="kag-graph-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Chargement…</p>
-        </div>
-        <div class="text-[11px] text-gray-500 dark:text-gray-400">Glisser pour explorer · molette pour zoomer</div>
-      </div>
-      <div class="p-3">
-        <div id="kag-graph-cy"></div>
-        <div id="kag-graph-empty" class="hidden text-sm text-gray-500 dark:text-gray-400 py-8 text-center">
-          Aucune entité KAG dans cet espace. Retraitez les documents associés avec KAG activé.
-        </div>
-      </div>
-    </section>
 
     <div class="flex flex-col flex-1 min-h-0">
       <section class="glass-panel rounded-3xl flex flex-col flex-1 min-h-0 border border-black/5 dark:border-white/5 shadow-lg overflow-hidden">
@@ -409,6 +403,60 @@
         </div>
       </section>
     </div>
+  </div>
+</div>
+
+<!-- Modale graphe KAG -->
+<div id="kag-graph-modal" class="hidden fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm items-center justify-center p-3 sm:p-6" onclick="if(event.target===this) closeKagGraphModal()">
+  <div class="w-full max-w-6xl h-[min(90vh,820px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="ti ti-affiliate text-indigo-500"></i>
+          Graphe de connaissances
+        </h2>
+        <p id="kag-graph-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Chargement…</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="resetKagGraphView()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="Réinitialiser la vue">
+          <i class="ti ti-zoom-reset"></i>
+          <span class="hidden sm:inline">Réinitialiser</span>
+        </button>
+        <button type="button" onclick="closeKagGraphModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="ti ti-x text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex-1 flex min-h-0">
+      <div class="flex-1 flex flex-col min-w-0 min-h-0 p-3 sm:p-4">
+        <div id="kag-graph-legend" class="shrink-0 flex flex-wrap gap-1.5 mb-2"></div>
+        <div class="flex-1 relative min-h-0 rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+          <div id="kag-graph-cy" class="absolute inset-0"></div>
+          <div id="kag-graph-empty" class="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-500 dark:text-gray-400 p-6 text-center">
+            Aucune entité KAG dans cet espace. Retraitez les documents associés avec KAG activé.
+          </div>
+          <div id="kag-graph-hint" class="absolute bottom-3 left-3 right-3 sm:right-auto pointer-events-none">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/90 dark:bg-gray-900/90 border border-gray-200/80 dark:border-gray-700/80 text-[11px] text-gray-500 dark:text-gray-400 shadow-sm">
+              <i class="ti ti-click"></i>
+              Cliquez sur un nœud pour voir ses relations
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <aside id="kag-graph-detail" class="hidden sm:flex w-80 shrink-0 flex-col border-l border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50">
+        <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+          <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Détail de l'entité</p>
+        </div>
+        <div id="kag-graph-detail-body" class="flex-1 overflow-y-auto p-4 space-y-4">
+          <p class="text-sm text-gray-500 dark:text-gray-400">Sélectionnez un nœud dans le graphe.</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Panneau détail mobile (sous le graphe) -->
+    <div id="kag-graph-detail-mobile" class="sm:hidden shrink-0 max-h-[35vh] overflow-y-auto border-t border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50 p-4 hidden"></div>
   </div>
 </div>
 
@@ -1342,45 +1390,208 @@ async function loadSpace() {
 }
 
 let kagCy = null;
-let kagGraphVisible = true;
 let kagGraphHasData = false;
+let kagGraphData = null;
+let kagSelectedNodeId = null;
 
-function toggleKagGraphPanel() {
-  const section = document.getElementById("kag-graph-section");
-  const label = document.getElementById("kag-graph-toggle-label");
-  if (!section || !kagGraphHasData) return;
-  kagGraphVisible = !kagGraphVisible;
-  section.classList.toggle("hidden", !kagGraphVisible);
-  label.textContent = kagGraphVisible ? "Masquer le graphe" : "Afficher le graphe";
-  if (kagGraphVisible && kagCy) {
-    setTimeout(() => kagCy.resize(), 50);
+function escapeKagHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function openKagGraphModal() {
+  if (!kagGraphHasData || !kagGraphData) return;
+  const modal = document.getElementById("kag-graph-modal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  if (!kagCy) {
+    renderKagGraph(kagGraphData);
+  }
+  setTimeout(() => {
+    if (kagCy) {
+      kagCy.resize();
+      kagCy.fit(undefined, 50);
+    }
+  }, 100);
+}
+
+function closeKagGraphModal() {
+  const modal = document.getElementById("kag-graph-modal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  document.body.style.overflow = "";
+  clearKagNodeSelection();
+}
+
+function resetKagGraphView() {
+  if (!kagCy) return;
+  clearKagNodeSelection();
+  kagCy.fit(undefined, 50);
+}
+
+function clearKagNodeSelection() {
+  kagSelectedNodeId = null;
+  if (kagCy) {
+    kagCy.elements().removeClass("highlighted dimmed");
+    kagCy.$("node:selected").unselect();
+  }
+  renderKagNodeDetail(null);
+}
+
+function renderKagLegend(legend) {
+  const host = document.getElementById("kag-graph-legend");
+  if (!host || !legend?.length) {
+    if (host) host.innerHTML = "";
+    return;
+  }
+  host.innerHTML = legend.map((item) => `
+    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300">
+      <span class="w-2 h-2 rounded-full shrink-0" style="background:${item.color}"></span>
+      ${escapeKagHtml(item.label)}
+    </span>
+  `).join("");
+}
+
+function getNodeRelations(nodeId) {
+  if (!kagGraphData?.edges) return { outgoing: [], incoming: [] };
+  const outgoing = kagGraphData.edges.filter((e) => e.source === nodeId);
+  const incoming = kagGraphData.edges.filter((e) => e.target === nodeId);
+  return { outgoing, incoming };
+}
+
+function buildRelationCard(rel, direction) {
+  const otherName = direction === "out" ? rel.target_label : rel.source_label;
+  const arrow = direction === "out" ? "→" : "←";
+  const typeLabel = rel.relation_type_label || rel.relation_type || "Relation";
+  const description = rel.relation_label
+    ? `<p class="mt-1.5 text-xs text-gray-600 dark:text-gray-300 leading-relaxed">${escapeKagHtml(rel.relation_label)}</p>`
+    : "";
+  const confidence = rel.confidence != null
+    ? `<span class="text-[10px] text-gray-400">${Math.round(rel.confidence * 100)}% conf.</span>`
+    : "";
+  return `
+    <div class="kag-relation-card rounded-lg bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 p-3">
+      <div class="flex flex-wrap items-center gap-1.5 text-xs">
+        <span class="font-semibold text-indigo-700 dark:text-indigo-300">${escapeKagHtml(otherName)}</span>
+        <span class="text-gray-400">${arrow}</span>
+        <span class="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-medium">${escapeKagHtml(typeLabel)}</span>
+        ${confidence}
+      </div>
+      ${description}
+    </div>
+  `;
+}
+
+function renderKagNodeDetail(nodeId) {
+  const desktopBody = document.getElementById("kag-graph-detail-body");
+  const mobileBody = document.getElementById("kag-graph-detail-mobile");
+  const detailAside = document.getElementById("kag-graph-detail");
+
+  if (!nodeId || !kagGraphData) {
+    const placeholder = `<p class="text-sm text-gray-500 dark:text-gray-400">Sélectionnez un nœud dans le graphe pour afficher ses relations.</p>`;
+    if (desktopBody) desktopBody.innerHTML = placeholder;
+    if (mobileBody) {
+      mobileBody.innerHTML = "";
+      mobileBody.classList.add("hidden");
+    }
+    if (detailAside) detailAside.classList.remove("hidden");
+    return;
+  }
+
+  const node = kagGraphData.nodes.find((n) => n.id === nodeId);
+  if (!node) return;
+
+  const { outgoing, incoming } = getNodeRelations(nodeId);
+  const typeLabel = node.entity_type_label || node.entity_type || "Autre";
+  const description = node.description
+    ? `<p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${escapeKagHtml(node.description)}</p>`
+    : `<p class="text-sm text-gray-400 dark:text-gray-500 italic">Aucune description disponible.</p>`;
+
+  const outgoingHtml = outgoing.length
+    ? outgoing.map((r) => buildRelationCard(r, "out")).join("")
+    : `<p class="text-xs text-gray-400">Aucune relation sortante.</p>`;
+  const incomingHtml = incoming.length
+    ? incoming.map((r) => buildRelationCard(r, "in")).join("")
+    : `<p class="text-xs text-gray-400">Aucune relation entrante.</p>`;
+
+  const html = `
+    <div>
+      <div class="flex items-start gap-3">
+        <span class="w-4 h-4 rounded-full shrink-0 mt-1" style="background:${node.color}"></span>
+        <div class="min-w-0">
+          <h3 class="text-base font-bold text-gray-900 dark:text-white leading-tight">${escapeKagHtml(node.label)}</h3>
+          <div class="flex flex-wrap gap-1.5 mt-1.5">
+            <span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">${escapeKagHtml(typeLabel)}</span>
+            <span class="px-2 py-0.5 rounded-md text-[11px] text-gray-500 dark:text-gray-400">${node.mention_count || 0} mention(s)</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3">${description}</div>
+    </div>
+    <div>
+      <h4 class="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">Relations sortantes (${outgoing.length})</h4>
+      <div class="space-y-2">${outgoingHtml}</div>
+    </div>
+    <div>
+      <h4 class="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">Relations entrantes (${incoming.length})</h4>
+      <div class="space-y-2">${incomingHtml}</div>
+    </div>
+  `;
+
+  if (desktopBody) desktopBody.innerHTML = html;
+  if (mobileBody) {
+    mobileBody.innerHTML = `<p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400 mb-2">Détail</p>${html}`;
+    mobileBody.classList.remove("hidden");
   }
 }
 
+function highlightKagNode(nodeId) {
+  if (!kagCy) return;
+  kagCy.elements().removeClass("highlighted dimmed");
+  const node = kagCy.getElementById(nodeId);
+  if (!node.length) return;
+  const neighborhood = node.closedNeighborhood();
+  kagCy.elements().not(neighborhood).addClass("dimmed");
+  neighborhood.addClass("highlighted");
+  node.select();
+}
+
+function selectKagNode(nodeId) {
+  kagSelectedNodeId = nodeId;
+  highlightKagNode(nodeId);
+  renderKagNodeDetail(nodeId);
+}
+
 function renderKagGraph(data) {
-  const section = document.getElementById("kag-graph-section");
+  kagGraphData = data;
   const meta = document.getElementById("kag-graph-meta");
   const container = document.getElementById("kag-graph-cy");
   const empty = document.getElementById("kag-graph-empty");
+  const hint = document.getElementById("kag-graph-hint");
   const toggle = document.getElementById("kag-graph-toggle");
 
-  if (!section || !container || typeof cytoscape === "undefined") return;
+  if (!container || typeof cytoscape === "undefined") return;
 
   if (!data?.nodes?.length) {
     kagGraphHasData = false;
-    section.classList.add("hidden");
     toggle?.classList.add("hidden");
     if (empty) empty.classList.remove("hidden");
     container.classList.add("hidden");
+    if (hint) hint.classList.add("hidden");
     if (meta) meta.textContent = "Aucune entité extraite pour cet espace.";
     return;
   }
 
   kagGraphHasData = true;
   toggle?.classList.remove("hidden");
-  if (kagGraphVisible) section.classList.remove("hidden");
   if (empty) empty.classList.add("hidden");
   container.classList.remove("hidden");
+  if (hint) hint.classList.remove("hidden");
 
   const totalEntities = data.total_entity_count ?? data.node_count;
   const totalRelations = data.total_relation_count ?? data.edge_count;
@@ -1388,14 +1599,23 @@ function renderKagGraph(data) {
     meta.textContent = `${totalEntities} entité(s) · ${totalRelations} relation(s) — affichage ${data.node_count} nœuds / ${data.edge_count} liens`;
   }
 
+  renderKagLegend(data.entity_type_legend);
+
+  const isDark = document.documentElement.classList.contains("dark");
+  const labelColor = isDark ? "#e5e7eb" : "#374151";
+  const edgeColor = isDark ? "#475569" : "#cbd5e1";
+  const arrowColor = isDark ? "#64748b" : "#94a3b8";
+
   const elements = [
     ...data.nodes.map((n) => ({
       data: {
         id: n.id,
         label: n.label,
         entityType: n.entity_type,
+        entityTypeLabel: n.entity_type_label,
         color: n.color,
-        mentions: n.mention_count,
+        mentions: n.mention_count || 1,
+        description: n.description || "",
       },
     })),
     ...data.edges.map((e) => ({
@@ -1403,8 +1623,9 @@ function renderKagGraph(data) {
         id: `e-${e.id}`,
         source: e.source,
         target: e.target,
-        label: e.label || e.relation_type,
         relationType: e.relation_type,
+        relationTypeLabel: e.relation_type_label,
+        relationLabel: e.relation_label || "",
       },
     })),
   ];
@@ -1417,41 +1638,42 @@ function renderKagGraph(data) {
   kagCy = cytoscape({
     container,
     elements,
-    minZoom: 0.2,
-    maxZoom: 2.5,
-    wheelSensitivity: 0.2,
+    minZoom: 0.15,
+    maxZoom: 3,
+    wheelSensitivity: 0.25,
     style: [
       {
         selector: "node",
         style: {
           label: "data(label)",
           "background-color": "data(color)",
-          color: "#374151",
-          "font-size": "10px",
+          color: labelColor,
+          "font-size": "11px",
+          "font-weight": 600,
           "text-wrap": "ellipsis",
-          "text-max-width": "90px",
+          "text-max-width": "100px",
           "text-valign": "bottom",
-          "text-margin-y": 6,
-          width: "mapData(mentions, 1, 20, 24, 52)",
-          height: "mapData(mentions, 1, 20, 24, 52)",
-          "border-width": 1,
-          "border-color": "#e5e7eb",
+          "text-margin-y": 8,
+          "text-outline-color": isDark ? "#111827" : "#ffffff",
+          "text-outline-width": 2,
+          width: "mapData(mentions, 1, 20, 28, 56)",
+          height: "mapData(mentions, 1, 20, 28, 56)",
+          "border-width": 2,
+          "border-color": isDark ? "#1f2937" : "#ffffff",
+          "border-opacity": 0.9,
+          "overlay-opacity": 0,
         },
       },
       {
         selector: "edge",
         style: {
           width: 1.5,
-          "line-color": "#cbd5e1",
-          "target-arrow-color": "#94a3b8",
+          "line-color": edgeColor,
+          "target-arrow-color": arrowColor,
           "target-arrow-shape": "triangle",
+          "arrow-scale": 0.8,
           "curve-style": "bezier",
-          label: "data(label)",
-          "font-size": "8px",
-          color: "#6b7280",
-          "text-background-color": "#ffffff",
-          "text-background-opacity": 0.85,
-          "text-background-padding": "2px",
+          opacity: 0.7,
         },
       },
       {
@@ -1459,22 +1681,78 @@ function renderKagGraph(data) {
         style: {
           "border-width": 3,
           "border-color": "#6366f1",
+          "z-index": 10,
+        },
+      },
+      {
+        selector: "node.highlighted",
+        style: {
+          opacity: 1,
+          "z-index": 5,
+        },
+      },
+      {
+        selector: "node.dimmed",
+        style: {
+          opacity: 0.25,
+        },
+      },
+      {
+        selector: "edge.highlighted",
+        style: {
+          width: 2.5,
+          "line-color": "#6366f1",
+          "target-arrow-color": "#6366f1",
+          opacity: 1,
+        },
+      },
+      {
+        selector: "edge.dimmed",
+        style: {
+          opacity: 0.08,
         },
       },
     ],
     layout: {
       name: "cose",
       animate: true,
-      padding: 40,
-      nodeRepulsion: 8000,
-      idealEdgeLength: 90,
+      animationDuration: 600,
+      padding: 50,
+      nodeRepulsion: 12000,
+      idealEdgeLength: 110,
+      edgeElasticity: 100,
+      nestingFactor: 1.2,
+      gravity: 0.25,
+      numIter: 1000,
     },
   });
 
   kagCy.on("tap", "node", (evt) => {
-    const node = evt.target;
-    const desc = node.data("entityType") ? `Type: ${node.data("entityType")}` : "";
-    if (meta) meta.textContent = `${node.data("label")}${desc ? ` · ${desc}` : ""} · ${totalEntities} entités dans l'espace`;
+    selectKagNode(evt.target.id());
+  });
+
+  kagCy.on("tap", (evt) => {
+    if (evt.target === kagCy) {
+      clearKagNodeSelection();
+    }
+  });
+
+  kagCy.on("mouseover", "edge", (evt) => {
+    const edge = evt.target;
+    const typeLabel = edge.data("relationTypeLabel") || edge.data("relationType");
+    if (meta) meta.textContent = typeLabel;
+  });
+
+  kagCy.on("mouseout", "edge", () => {
+    if (meta && kagGraphData) {
+      const totalE = kagGraphData.total_entity_count ?? kagGraphData.node_count;
+      const totalR = kagGraphData.total_relation_count ?? kagGraphData.edge_count;
+      meta.textContent = `${totalE} entité(s) · ${totalR} relation(s) — affichage ${kagGraphData.node_count} nœuds / ${kagGraphData.edge_count} liens`;
+    }
+  });
+
+  kagCy.ready(() => {
+    kagCy.fit(undefined, 50);
   });
 }
 
@@ -1483,7 +1761,25 @@ async function loadKagGraph() {
     const r = await api(`/api/spaces/${spaceId}/kag/graph`);
     if (!r.ok) return;
     const data = await r.json();
-    renderKagGraph(data);
+    kagGraphData = data;
+    const meta = document.getElementById("kag-graph-meta");
+    const toggle = document.getElementById("kag-graph-toggle");
+
+    if (!data?.nodes?.length) {
+      kagGraphHasData = false;
+      toggle?.classList.add("hidden");
+      if (meta) meta.textContent = "Aucune entité extraite pour cet espace.";
+      return;
+    }
+
+    kagGraphHasData = true;
+    toggle?.classList.remove("hidden");
+    const totalEntities = data.total_entity_count ?? data.node_count;
+    const totalRelations = data.total_relation_count ?? data.edge_count;
+    if (meta) {
+      meta.textContent = `${totalEntities} entité(s) · ${totalRelations} relation(s)`;
+    }
+    renderKagLegend(data.entity_type_legend);
   } catch (err) {
     console.warn("KAG graph load failed", err);
   }
@@ -1497,7 +1793,9 @@ function buildSlotPromptSection(slotPrompt) {
   )).join("");
   const skipButton = slotPrompt.allow_skip
     ? `<button type="button" class="slot-choice-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all active:scale-95"
-        data-field="${slotPrompt.field}" data-value="" data-action="skip" data-label="${slotPrompt.skip_label || "Passer"}">${slotPrompt.skip_label || "Passer"}</button>`
+        data-field="${slotPrompt.field}" data-value="" data-action="skip" data-label="${slotPrompt.skip_label || "Passer"}">${slotPrompt.skip_label || "Passer"}</button>
+       <button type="button" class="slot-choice-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all active:scale-95"
+        data-field="${slotPrompt.field}" data-value="" data-action="skip" data-label="${slotPrompt.unknown_label || "Je ne sais pas"}">${slotPrompt.unknown_label || "Je ne sais pas"}</button>`
     : "";
   return `<div class="slot-prompt-section mt-3 pt-3 border-t border-black/5 dark:border-white/5 flex flex-wrap gap-2">${choiceButtons}${skipButton}</div>`;
 }
@@ -1861,6 +2159,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadSpace();
   await loadKagGraph();
   await loadConversations();
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      const modal = document.getElementById("kag-graph-modal");
+      if (modal && !modal.classList.contains("hidden")) {
+        closeKagGraphModal();
+      }
+    }
+  });
 });
 </script>
 {% endblock %}

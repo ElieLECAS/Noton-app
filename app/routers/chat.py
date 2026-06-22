@@ -718,6 +718,13 @@ async def stream_space_chat_message(
             or request.message
         )
 
+    classification_filters = None
+    if settings.QUERY_UNDERSTANDING_ENABLED and qu_result and qu_result.ready_for_retrieval:
+        from app.services.slot_catalog import build_classification_filters
+
+        skipped = qu_result.query_context.get("skipped_optional", [])
+        classification_filters = build_classification_filters(qu_result.slots, skipped)
+
     step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
     logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25)", step_label)
     with trace_run(
@@ -739,6 +746,7 @@ async def stream_space_chat_message(
             user_id=current_user.id,
             k=RAG_TOP_K,
             queries=retrieval_queries,
+            classification_filters=classification_filters,
         )
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]
