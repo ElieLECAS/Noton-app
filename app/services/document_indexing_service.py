@@ -3,7 +3,7 @@ Pipeline d'indexation documentaire unifié.
 
 Remplace process_document_multimodal pour l'upload et le retraitement.
 Trois modes :
-  - full        : extraction vision Ministral 3B + embeddings mistral-embed + ColPali
+  - full        : extraction vision Ministral 8B + embeddings mistral-embed + ColPali
   - text_only   : extraction vision + embeddings (ColPali inchangé)
   - colpali_only: re-sync ColPali uniquement (chunks texte inchangés)
 
@@ -20,7 +20,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Optional
 
-from sqlalchemy import delete
+from sqlalchemy import delete, text
 from sqlmodel import Session, select
 
 from app.config import settings
@@ -38,6 +38,7 @@ logger = logging.getLogger(__name__)
 
 CONTENT_TYPE_PAGE_ANCHOR = "page_anchor"
 CONTENT_TYPE_SEMANTIC_LEAF = "semantic_leaf"
+CONTENT_TYPE_CONTEXTUAL_ENRICHMENT = "contextual_enrichment"
 
 
 class IndexingMode(str, Enum):
@@ -117,13 +118,16 @@ def process_document_indexing(
     embed_count = 0
     kag_stats: dict = {"entities": 0, "relations": 0, "status": "disabled"}
 
+    enrichment_stats: dict = {"chunks": 0, "status": "disabled"}
+
     try:
         if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
+            # --- 1. Extraction texte (vision) → L0 page_anchor + L1 semantic_leaf ---
             _set_progress(document_id, 30)
-            ld.info("[Indexing] Extraction vision Ministral 3B document_id=%s", document_id)
+            ld.info("[Indexing] Extraction vision document_id=%s", document_id)
             with Session(engine) as session:
                 document = session.get(Document, document_id)
                 chunk_count = _extract_and_persist_chunks(
@@ -136,16 +140,10 @@ def process_document_indexing(
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
-            _set_progress(document_id, 70)
-            ld.info("[Indexing] Embeddings mistral-embed document_id=%s", document_id)
-            embed_count = _embed_text_chunks(document_id)
-
-            if _aborted():
-                return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
-
-            kag_stats = {"entities": 0, "relations": 0, "status": "disabled"}
+            # --- 2. KAG : entités + relations + catégories (écrites dans les métadonnées L1) ---
+            # NB : tourne AVANT l'embedding pour que le vecteur intègre catégories/entités.
             if settings.KAG_ENABLED:
-                _set_progress(document_id, 75)
+                _set_progress(document_id, 45)
                 ld.info("[Indexing] Extraction KAG entités/relations document_id=%s", document_id)
                 try:
                     from app.services.kag_extraction_service import (
@@ -154,7 +152,6 @@ def process_document_indexing(
                     )
 
                     kag_stats = extract_kag_for_document(document_id, pdf_path)
-                    _set_progress(document_id, 85)
                     ld.info("[Indexing] Embedding entités KAG document_id=%s", document_id)
                     embed_kag_entities_for_document(document_id)
                 except Exception as exc:
@@ -166,6 +163,39 @@ def process_document_indexing(
                     )
                     kag_stats = {"entities": 0, "relations": 0, "status": "failed"}
 
+            if _aborted():
+                return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
+
+            # --- 3. Enrichissement contextuel inter-pages → L2 contextual_enrichment ---
+            if settings.CONTEXTUAL_ENRICHMENT_ENABLED:
+                _set_progress(document_id, 60)
+                ld.info(
+                    "[Indexing] Enrichissement contextuel document_id=%s",
+                    document_id,
+                )
+                try:
+                    from app.services.contextual_enrichment_service import (
+                        run_contextual_enrichment_for_document,
+                    )
+
+                    enrichment_stats = run_contextual_enrichment_for_document(document_id)
+                except Exception as exc:
+                    logger.error(
+                        "[Indexing] Enrichissement échoué document_id=%s (non bloquant) : %s",
+                        document_id,
+                        exc,
+                        exc_info=True,
+                    )
+                    enrichment_stats = {"chunks": 0, "status": "failed"}
+
+            if _aborted():
+                return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
+
+            # --- 4. Embedding mistral-embed EN DERNIER (L1 + L2, métadonnées enrichies) ---
+            _set_progress(document_id, 80)
+            ld.info("[Indexing] Embeddings mistral-embed (L1+L2) document_id=%s", document_id)
+            embed_count = _embed_text_chunks(document_id)
+
         if mode in (IndexingMode.FULL, IndexingMode.COLPALI_ONLY):
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
@@ -176,15 +206,17 @@ def process_document_indexing(
 
         _finalize_document(document_id, chunk_count)
         ld.info(
-            "[Indexing] FIN OK document_id=%s chunks=%s embeds=%s kag=%s",
+            "[Indexing] FIN OK document_id=%s chunks=%s embeds=%s kag=%s enrichment=%s",
             document_id,
             chunk_count,
             embed_count,
             kag_stats if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY) else "n/a",
+            enrichment_stats if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY) else "n/a",
         )
         result = {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
         if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
             result["kag"] = kag_stats
+            result["enrichment"] = enrichment_stats
         return result
 
     except Exception as exc:
@@ -198,18 +230,58 @@ def process_document_indexing(
 # ---------------------------------------------------------------------------
 
 
-def _delete_all_chunks(session: Session, document_id: int) -> None:
-    """Supprime tous les chunks PostgreSQL, relations KAG et patches LanceDB."""
+def _get_deletable_text_chunk_ids(session: Session, document_id: int) -> List[int]:
+    """IDs des chunks texte supprimables en mode text_only (hors page_anchor)."""
+    rows = session.execute(
+        text(
+            """
+            SELECT id FROM documentchunk
+            WHERE document_id = :doc_id
+              AND COALESCE(
+                  metadata_json->>'content_type',
+                  metadata_->>'content_type',
+                  ''
+              ) != :page_anchor
+            """
+        ),
+        {"doc_id": document_id, "page_anchor": CONTENT_TYPE_PAGE_ANCHOR},
+    ).all()
+    return [int(row[0]) for row in rows]
+
+
+def _delete_chunk_foreign_relations(session: Session, chunk_ids: List[int]) -> None:
+    """Supprime les relations FK bloquant la suppression de chunks (KAG + enrichissement)."""
+    if not chunk_ids:
+        return
+
     if settings.KAG_ENABLED:
+        from app.services.kag_extraction_service import (
+            delete_chunk_kag_relations,
+            prune_kag_entities_after_chunk_removal,
+        )
+
+        affected = delete_chunk_kag_relations(session, chunk_ids)
         try:
-            from app.services.kag_extraction_service import cleanup_kag_for_document
-            cleanup_kag_for_document(session, document_id)
+            with session.begin_nested():
+                prune_kag_entities_after_chunk_removal(session, affected)
         except Exception as exc:
             logger.warning(
-                "[Indexing] Nettoyage KAG échoué pour document_id=%s : %s",
-                document_id,
+                "[Indexing] Élagage entités KAG ignoré (%s chunk(s)) : %s",
+                len(chunk_ids),
                 exc,
             )
+
+
+def _delete_all_chunks(session: Session, document_id: int) -> None:
+    """Supprime tous les chunks PostgreSQL, relations KAG et patches LanceDB."""
+    all_chunk_ids = [
+        int(row[0])
+        for row in session.execute(
+            text("SELECT id FROM documentchunk WHERE document_id = :doc_id"),
+            {"doc_id": document_id},
+        ).all()
+    ]
+    _delete_chunk_foreign_relations(session, all_chunk_ids)
 
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
     session.commit()
@@ -223,17 +295,9 @@ def _delete_all_chunks(session: Session, document_id: int) -> None:
 def _delete_text_chunks(session: Session, document_id: int) -> None:
     """
     Supprime tous les chunks texte (L1 + sections) sans toucher les L0 page_anchor ni LanceDB.
-  """
-    if settings.KAG_ENABLED:
-        try:
-            from app.services.kag_extraction_service import cleanup_kag_for_document
-            cleanup_kag_for_document(session, document_id)
-        except Exception as exc:
-            logger.warning(
-                "[Indexing] Nettoyage KAG (text_only) échoué document_id=%s : %s",
-                document_id,
-                exc,
-            )
+    """
+    chunk_ids = _get_deletable_text_chunk_ids(session, document_id)
+    _delete_chunk_foreign_relations(session, chunk_ids)
 
     # Feuilles texte (toutes versions du pipeline pymupdf4llm)
     session.execute(
@@ -274,7 +338,7 @@ def _extract_and_persist_chunks(
     preserve_page_anchors: bool = False,
 ) -> int:
     """
-    Extrait le texte via Ministral 3B vision (boucle parallèle par page),
+    Extrait le texte via Ministral vision (boucle parallèle par page),
     crée les chunks L0 (page_anchor) + L1 (semantic_leaf) et les persiste.
 
     Si preserve_page_anchors=True (mode text_only), met à jour les anchors existants
@@ -456,26 +520,74 @@ def _extract_and_persist_chunks(
 # ---------------------------------------------------------------------------
 
 
-def _build_embed_text(chunk: DocumentChunk) -> str:
+# Types de chunks texte embeddés pour le retrieval dense/lexical (L1 + L2).
+_EMBEDDABLE_TEXT_CONTENT_TYPES = (
+    CONTENT_TYPE_SEMANTIC_LEAF,
+    CONTENT_TYPE_CONTEXTUAL_ENRICHMENT,
+)
+
+
+def _category_labels(slugs: List[str]) -> List[str]:
+    """Mappe les slugs de catégorie vers leurs labels lisibles (fallback slug)."""
+    if not slugs:
+        return []
+    try:
+        from app.services.category_catalog import DEFAULT_CATEGORY_LABELS
+
+        return [DEFAULT_CATEGORY_LABELS.get(s, s) for s in slugs if s]
+    except Exception:
+        return [s for s in slugs if s]
+
+
+def _build_embed_text(
+    chunk: DocumentChunk,
+    *,
+    doc_source: Optional[str] = None,
+    doc_materials: Optional[List[str]] = None,
+) -> str:
     """
-    Construit le texte à embedder avec contextual prefix pour améliorer le recall.
-    Le prefix n'est pas stocké dans content — seul le vecteur en bénéficie.
+    Construit le texte à embedder avec un préfixe contextuel déterministe (Contextual
+    Retrieval) : titre + section + catégories + entités + matériau/source.
+
+    Les métadonnées (catégories/entités) sont injectées par la passe KAG AVANT l'embedding,
+    de sorte que le vecteur dense « voit » nativement les signaux de catégorie et d'entité.
+    Le préfixe n'est pas stocké dans content — seul le vecteur en bénéficie.
     """
     meta = chunk.metadata_json or {}
     doc_title = meta.get("document_title", "")
     page_no = meta.get("page_no")
     heading = meta.get("heading") or meta.get("parent_heading") or ""
     step_no = meta.get("step_number")
+    theme = meta.get("theme") or ""  # chunks L2 contextual_enrichment
 
-    parts = []
+    categories = meta.get("categories") or []
+    if not categories and meta.get("category_slug"):
+        categories = [meta["category_slug"]]
+    category_labels = _category_labels(categories if isinstance(categories, list) else [])
+
+    entities = meta.get("entities") or []
+    if not isinstance(entities, list):
+        entities = []
+
+    parts: List[str] = []
     if doc_title:
         parts.append(f"Document : {doc_title}.")
     if heading:
         parts.append(f"Section : {heading}.")
+    elif theme:
+        parts.append(f"Thème : {theme}.")
     if step_no is not None:
         parts.append(f"Étape {step_no}.")
     elif page_no is not None:
         parts.append(f"Page {page_no}.")
+    if category_labels:
+        parts.append(f"Catégories : {', '.join(category_labels[:4])}.")
+    if entities:
+        parts.append(f"Éléments : {', '.join(str(e) for e in entities[:8])}.")
+    if doc_materials:
+        parts.append(f"Matériau : {', '.join(doc_materials)}.")
+    if doc_source:
+        parts.append(f"Source : {doc_source}.")
 
     prefix = " ".join(parts)
     content = chunk.content or ""
@@ -485,24 +597,40 @@ def _build_embed_text(chunk: DocumentChunk) -> str:
 
 def _embed_text_chunks(document_id: int) -> int:
     """
-    Génère les embeddings mistral-embed pour les chunks sémantiques L1 (is_leaf=True)
-    du document et les persiste en base.
+    Génère les embeddings mistral-embed pour les chunks texte retrievables (L1 semantic_leaf
+    + L2 contextual_enrichment) du document et les persiste en base.
+
+    Tourne EN DERNIER (après KAG + enrichissement) afin que `_build_embed_text` intègre
+    les catégories et entités dans le texte embeddé.
     Renvoie le nombre de chunks embeddés.
     """
     from app.services.embedding_service import generate_embeddings_batch
 
     with Session(engine) as session:
+        document = session.get(Document, document_id)
+        doc_source = document.source if document else None
+        doc_materials = list(document.materials or []) if document else []
+
         statement = select(DocumentChunk).where(
             DocumentChunk.document_id == document_id,
             DocumentChunk.is_leaf == True,  # noqa: E712
         )
-        chunks = list(session.exec(statement).all())
+        all_leaves = list(session.exec(statement).all())
+        chunks = [
+            c
+            for c in all_leaves
+            if (c.metadata_json or {}).get("content_type", CONTENT_TYPE_SEMANTIC_LEAF)
+            in _EMBEDDABLE_TEXT_CONTENT_TYPES
+        ]
 
         if not chunks:
-            logger.warning("[Indexing] Aucun chunk L1 à embedder pour document_id=%s", document_id)
+            logger.warning("[Indexing] Aucun chunk texte à embedder pour document_id=%s", document_id)
             return 0
 
-        texts = [_build_embed_text(c) for c in chunks]
+        texts = [
+            _build_embed_text(c, doc_source=doc_source, doc_materials=doc_materials)
+            for c in chunks
+        ]
         embeddings = generate_embeddings_batch(texts, batch_size=settings.EMBEDDING_BATCH_SIZE)
 
         embedded = 0
@@ -518,7 +646,7 @@ def _embed_text_chunks(document_id: int) -> int:
 
         session.commit()
         logger.info(
-            "[Indexing] %s/%s chunks L1 embeddés pour document_id=%s",
+            "[Indexing] %s/%s chunks texte (L1+L2) embeddés pour document_id=%s",
             embedded,
             len(chunks),
             document_id,

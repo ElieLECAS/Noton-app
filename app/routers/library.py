@@ -28,6 +28,10 @@ from app.services.folder_service import (
     get_folder_path, get_folder_with_contents, rename_folder,
     move_folder, delete_folder
 )
+from app.services.document_category_service import (
+    get_document_category_page_detail,
+    get_document_category_pages,
+)
 from app.services.document_service_new import (
     LIBRARY_QUEUE_ACTIVE_STATUSES,
     create_document,
@@ -236,10 +240,75 @@ class DocumentChunksMonitorResponse(BaseModel):
     raw_chunks_count: int
     report_chunks_count: int
     semantic_chunks_count: int = 0
+    enrichment_chunks_count: int = 0
     raw_chunks: List[DocumentChunkMonitorItem]
     report_chunks: List[DocumentChunkMonitorItem]
     semantic_chunks: List[DocumentChunkMonitorItem] = Field(default_factory=list)
+    enrichment_chunks: List[DocumentChunkMonitorItem] = Field(default_factory=list)
     kag: DocumentKagSummary = Field(default_factory=DocumentKagSummary)
+
+
+class DocumentCategoryRef(BaseModel):
+    category_id: int
+    slug: str
+    label: str
+
+
+class DocumentCategoryPageItem(BaseModel):
+    page_no: int
+    chunk_count: int = 0
+
+
+class DocumentCategoryPagesResponse(BaseModel):
+    document_id: int
+    category: DocumentCategoryRef
+    page_count: int = 0
+    pages: List[DocumentCategoryPageItem] = Field(default_factory=list)
+
+
+class DocumentCategoryPageChunkItem(BaseModel):
+    chunk_id: Optional[int] = None
+    chunk_index: Optional[int] = None
+    heading: Optional[str] = None
+    step_number: Optional[int] = None
+    section_type: Optional[str] = None
+    content: str
+    in_category: bool = False
+    confidence: Optional[float] = None
+
+
+class DocumentCategoryEnrichmentChunkItem(BaseModel):
+    chunk_id: Optional[int] = None
+    chunk_index: Optional[int] = None
+    theme: Optional[str] = None
+    category_slug: Optional[str] = None
+    source_page: Optional[int] = None
+    source_pages: List[int] = Field(default_factory=list)
+    content: str
+    confidence: Optional[float] = None
+
+
+class DocumentCategoryPageNavRef(BaseModel):
+    page_no: int
+    chunk_count: int = 0
+
+
+class DocumentCategoryPageNavigation(BaseModel):
+    current_index: Optional[int] = None
+    total: int = 0
+    prev: Optional[DocumentCategoryPageNavRef] = None
+    next: Optional[DocumentCategoryPageNavRef] = None
+
+
+class DocumentCategoryPageDetailResponse(BaseModel):
+    document_id: int
+    category: DocumentCategoryRef
+    document: dict
+    page_no: int
+    chunks: List[DocumentCategoryPageChunkItem] = Field(default_factory=list)
+    enrichment_chunks: List[DocumentCategoryEnrichmentChunkItem] = Field(default_factory=list)
+    consolidated_markdown: str = ""
+    navigation: DocumentCategoryPageNavigation
 
 
 @router.get("", response_model=LibraryRead)
@@ -474,7 +543,8 @@ async def get_document_chunks_monitor(
 ):
     """
     Retourne les chunks d'un document pour monitoring UI :
-    - semantic : chunks vision Ministral 3B (semantic_leaf, page_anchor)
+    - semantic : chunks vision (semantic_leaf, semantic_section, document_header)
+    - enrichment : chunks contextual_enrichment (synthèse inter-pages)
     - raw : legacy page_raw_enriched / page_multimodal_section
     - report : legacy page_window_report / page_multimodal_summary
     """
@@ -496,10 +566,12 @@ async def get_document_chunks_monitor(
         "page_multimodal_summary",
     }
     semantic_types = {"semantic_leaf", "semantic_section", "document_header"}
+    enrichment_types = {"contextual_enrichment"}
 
     raw_items: List[DocumentChunkMonitorItem] = []
     report_items: List[DocumentChunkMonitorItem] = []
     semantic_items: List[DocumentChunkMonitorItem] = []
+    enrichment_items: List[DocumentChunkMonitorItem] = []
 
     for chunk in chunks:
         metadata = dict(chunk.metadata_json or chunk.metadata_ or {})
@@ -508,6 +580,7 @@ async def get_document_chunks_monitor(
             content_type not in raw_types
             and content_type not in report_types
             and content_type not in semantic_types
+            and content_type not in enrichment_types
         ):
             continue
         page_no = metadata.get("page_no") or metadata.get("page") or metadata.get("page_start") or 0
@@ -530,6 +603,8 @@ async def get_document_chunks_monitor(
         )
         if content_type in semantic_types:
             semantic_items.append(item)
+        elif content_type in enrichment_types:
+            enrichment_items.append(item)
         elif content_type in raw_types:
             raw_items.append(item)
         else:
@@ -538,6 +613,7 @@ async def get_document_chunks_monitor(
     raw_items.sort(key=lambda x: (x.page, x.chunk_index))
     report_items.sort(key=lambda x: (x.page, x.chunk_index))
     semantic_items.sort(key=lambda x: (x.page, x.chunk_index, x.is_leaf))
+    enrichment_items.sort(key=lambda x: (x.page, x.chunk_index))
 
     from app.services.kag_graph_service import (
         get_document_chunk_categories,
@@ -580,11 +656,59 @@ async def get_document_chunks_monitor(
         raw_chunks_count=len(raw_items),
         report_chunks_count=len(report_items),
         semantic_chunks_count=len(semantic_items),
+        enrichment_chunks_count=len(enrichment_items),
         raw_chunks=raw_items,
         report_chunks=report_items,
         semantic_chunks=semantic_items,
+        enrichment_chunks=enrichment_items,
         kag=kag_summary,
     )
+
+
+@router.get(
+    "/documents/{document_id}/categories/{category_id}/pages",
+    response_model=DocumentCategoryPagesResponse,
+)
+async def list_document_category_pages(
+    document_id: int,
+    category_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Pages d'un document contenant une catégorie KAG donnée."""
+    document = get_document_by_id(session, document_id, current_user.id)
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document non trouvé")
+
+    payload = get_document_category_pages(session, document_id, category_id)
+    if payload is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Catégorie non trouvée")
+    return DocumentCategoryPagesResponse.model_validate(payload)
+
+
+@router.get(
+    "/documents/{document_id}/categories/{category_id}/pages/{page_no}",
+    response_model=DocumentCategoryPageDetailResponse,
+)
+async def get_document_category_page(
+    document_id: int,
+    category_id: int,
+    page_no: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Détail d'une page document : chunks catégorie, enrichissement IA et navigation."""
+    document = get_document_by_id(session, document_id, current_user.id)
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document non trouvé")
+
+    payload = get_document_category_page_detail(session, document_id, category_id, page_no)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Page ou catégorie non trouvée",
+        )
+    return DocumentCategoryPageDetailResponse.model_validate(payload)
 
 
 @router.post("/documents/stop-all", status_code=status.HTTP_200_OK)

@@ -22,7 +22,7 @@ import colpali_engine; \
 print('Deps OK')"
 
 # Pré-télécharger le reranker (aligné sur RERANKER_MODEL par défaut / .env)
-RUN python -c "from sentence_transformers import CrossEncoder; CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')"
+RUN python -c "from sentence_transformers import CrossEncoder; CrossEncoder('antoinelouis/crossencoder-camembert-L2-mmarcoFR')"
 
 COPY app/ ./app/
 COPY app/alembic/ ./alembic/

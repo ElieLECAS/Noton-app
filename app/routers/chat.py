@@ -707,7 +707,7 @@ async def stream_space_chat_message(
         )
 
     step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
-    logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25)", step_label)
+    logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25 + KAG)", step_label)
     with trace_run(
         "technical_retrieval",
         run_type="retriever",
@@ -727,6 +727,7 @@ async def stream_space_chat_message(
             user_id=current_user.id,
             k=RAG_TOP_K,
             queries=retrieval_queries,
+            signals=lw_result.signals if lw_result and lw_result.signals else None,
         )
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]

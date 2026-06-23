@@ -9,7 +9,9 @@ Couvre :
 """
 from __future__ import annotations
 
+from types import SimpleNamespace
 from unittest import mock
+from unittest.mock import MagicMock, patch
 from typing import List
 
 import pytest
@@ -421,3 +423,131 @@ class TestReindexAllEndpointMode:
     def test_invalid_mode_returns_400(self, client, admin_headers):
         r = client.post("/api/library/reindex-all", headers=admin_headers, json={"mode": "bad"})
         assert r.status_code == 400
+
+
+class TestBuildEmbedText:
+    """Phase 4 : préfixe contextuel déterministe (titre + section + catégories +
+    entités + matériau/source) injecté dans le texte embeddé, pas dans content."""
+
+    def test_l1_includes_categories_entities_material_source(self):
+        from app.services.document_indexing_service import _build_embed_text
+
+        chunk = SimpleNamespace(
+            content="Poser le profil seuil.",
+            metadata_json={
+                "document_title": "Notice Profine 76",
+                "heading": "Pose du seuil",
+                "page_no": 3,
+                "categories": ["mounting"],
+                "entities": ["Profine 76", "seuil PMR"],
+            },
+        )
+
+        text = _build_embed_text(chunk, doc_source="Profine", doc_materials=["pvc"])
+
+        assert "Notice Profine 76" in text
+        assert "Pose du seuil" in text
+        assert "Pose / montage" in text  # label de catégorie, pas le slug
+        assert "Profine 76" in text  # entité
+        assert "Source : Profine" in text
+        assert "pvc" in text
+        assert "Poser le profil seuil." in text  # content conservé
+        # le préfixe précède le content
+        assert text.index("Notice Profine 76") < text.index("Poser le profil seuil.")
+
+    def test_l2_enrichment_uses_theme_and_category_slug(self):
+        from app.services.document_indexing_service import _build_embed_text
+
+        chunk = SimpleNamespace(
+            content="Synthèse pose seuil.",
+            metadata_json={
+                "document_title": "Notice X",
+                "content_type": "contextual_enrichment",
+                "theme": "Pose du seuil Profine",
+                "category_slug": "mounting",
+                "page_no": 2,
+            },
+        )
+
+        text = _build_embed_text(chunk)
+
+        assert "Pose du seuil Profine" in text  # theme (à défaut de heading)
+        assert "Pose / montage" in text  # label dérivé de category_slug
+        assert "Synthèse pose seuil." in text
+
+    def test_no_metadata_returns_content_only(self):
+        from app.services.document_indexing_service import _build_embed_text
+
+        chunk = SimpleNamespace(content="Juste du contenu.", metadata_json={})
+        assert _build_embed_text(chunk) == "Juste du contenu."
+
+
+class TestEmbedTextChunksL1AndL2:
+    """Phase 1+4 : l'embedding (en dernier) couvre L1 semantic_leaf ET L2
+    contextual_enrichment, mais pas les ancres L0."""
+
+    def test_embeds_l1_and_l2_not_anchor(self):
+        from app.services import document_indexing_service as svc
+
+        leaf = SimpleNamespace(
+            content="L1 texte",
+            metadata_json={"content_type": "semantic_leaf"},
+            metadata_=None,
+            embedding=None,
+        )
+        enrich = SimpleNamespace(
+            content="L2 synthèse",
+            metadata_json={"content_type": "contextual_enrichment"},
+            metadata_=None,
+            embedding=None,
+        )
+        anchor = SimpleNamespace(
+            content="ancre",
+            metadata_json={"content_type": "page_anchor"},
+            metadata_=None,
+            embedding=None,
+        )
+
+        doc = SimpleNamespace(source="Profine", materials=["pvc"])
+
+        sess = MagicMock()
+        sess.get.return_value = doc
+        sess.exec.return_value.all.return_value = [leaf, enrich, anchor]
+        ctx = MagicMock()
+        ctx.__enter__.return_value = sess
+        ctx.__exit__.return_value = False
+
+        with patch.object(svc, "Session", return_value=ctx), patch(
+            "app.services.embedding_service.generate_embeddings_batch",
+            return_value=[[0.1] * 1024, [0.2] * 1024],
+        ) as gen:
+            count = svc._embed_text_chunks(123)
+
+        assert count == 2
+        # 2 textes embeddés (L1 + L2), l'ancre L0 est exclue
+        assert len(gen.call_args[0][0]) == 2
+        assert leaf.embedding is not None
+        assert enrich.embedding is not None
+        assert anchor.embedding is None
+
+
+class TestDeleteTextChunksKagCleanup:
+    """Les relations KAG doivent être supprimées avant les chunks (FK)."""
+
+    def test_deletes_kag_relations_before_chunks(self):
+        from app.services.document_indexing_service import _delete_text_chunks
+
+        session = mock.MagicMock()
+        select_result = mock.MagicMock()
+        select_result.all.return_value = [(49302,)]
+        session.execute.side_effect = [select_result, mock.MagicMock(), mock.MagicMock()]
+
+        with mock.patch("app.services.document_indexing_service.settings.KAG_ENABLED", True), \
+             mock.patch(
+                 "app.services.document_indexing_service._delete_chunk_foreign_relations",
+             ) as delete_relations:
+            _delete_text_chunks(session, 425)
+
+        delete_relations.assert_called_once_with(session, [49302])
+        assert session.execute.call_count == 3
+        session.commit.assert_called_once()

@@ -103,6 +103,54 @@ def test_expand_page_context_conditional_neighbor():
     assert expanded[0].expansion_reason == "continues_on_next_page"
 
 
+def test_fuse_multimodal_hits_propagates_enrichment_source_pages():
+    pgvector = _unified_hit(1, 3, 0.8, "pgvector")
+    pgvector.enrichment_source_pages = [3, 4, 5]
+    bm25 = _unified_hit(1, 3, 0.5, "bm25")
+
+    fused = fuse_multimodal_hits([], [pgvector], [bm25], top_k=5)
+    by_key = {h.page_key: h for h in fused}
+
+    assert by_key["1:3"].enrichment_source_pages == [3, 4, 5]
+
+
+def test_expand_page_context_enrichment_span_unfolds_all_pages():
+    """Un chunk contextuel retrouvé déplie tout son batch, même sans voisinage."""
+    session = mock.MagicMock()
+
+    def _make_chunk(cid: int, page: int):
+        c = mock.MagicMock()
+        c.id = cid
+        c.chunk_index = cid
+        c.content = f"Page {page}"
+        c.text = None
+        c.metadata_json = {"page_no": page, "content_type": "semantic_leaf"}
+        c.metadata_ = None
+        return c
+
+    chunks_by_page = {
+        3: [_make_chunk(30, 3)],
+        4: [_make_chunk(40, 4)],
+        5: [_make_chunk(50, 5)],
+    }
+
+    hit = _unified_hit(1, 3, 0.9, "pgvector")
+    hit.enrichment_source_pages = [3, 4, 5]
+
+    with mock.patch(
+        "app.services.page_retrieval_service.load_l1_chunks_for_page",
+        side_effect=lambda _s, _d, pno: chunks_by_page.get(pno, []),
+    ):
+        expanded = expand_page_context(session, [hit], neighbor_strategy="none")
+
+    assert expanded[0].neighbor_pages == [4, 5]
+    assert expanded[0].expansion_reason == "enrichment_span"
+    loaded_pages = {
+        (c.metadata_json or {}).get("page_no") for c in expanded[0].text_chunks
+    }
+    assert loaded_pages == {3, 4, 5}
+
+
 @pytest.mark.asyncio
 async def test_search_multimodal_passages_pipeline():
     from app.services import space_search_service
@@ -229,11 +277,13 @@ def test_extract_bm25_fallback_query_keeps_brand_terms():
     assert "roto" in or_tsq.lower() or "ROTO" in or_tsq
 
 
-def test_log_multimodal_retrieval_summary(caplog):
-    import logging
+def test_log_multimodal_retrieval_summary():
+    # NB : caplog ne capture pas les logs de ce projet (la config logging de
+    # l'app remplace le handler racine de pytest). On capture donc directement
+    # l'appel logger.info du module.
+    from app.services import page_retrieval_service as prs
     from app.services.page_retrieval_service import log_multimodal_retrieval_summary
 
-    caplog.set_level(logging.INFO)
     hit = UnifiedPageHit(
         document_id=383,
         page_no=12,
@@ -244,18 +294,32 @@ def test_log_multimodal_retrieval_summary(caplog):
         retrieval_sources=["pgvector", "colpali"],
         document_title="Notice ROTO",
     )
-    log_multimodal_retrieval_summary(
-        query_text="test query",
-        doc_ids=[383, 384],
-        colpali_hits=[hit],
-        pgvector_hits=[hit],
-        bm25_hits=[],
-        fused_hits=[hit],
-        final_hits=[hit],
-        passages=[{"page_start": 12, "page_end": 12, "page_no": 12}],
-        images=["img1"],
-        top_k=10,
-        pool_size=20,
+    kag_hit = UnifiedPageHit(
+        document_id=425,
+        page_no=2,
+        kag_score=0.81,
+        retrieval_sources=["kag"],
+        document_title="DEPLIANT",
     )
-    assert "RAG MULTIMODAL — RÉSUMÉ" in caplog.text
-    assert "doc=383 p.12" in caplog.text
+    with mock.patch.object(prs.logger, "info") as mock_info:
+        log_multimodal_retrieval_summary(
+            query_text="test query",
+            doc_ids=[383, 384],
+            colpali_hits=[hit],
+            pgvector_hits=[hit],
+            bm25_hits=[],
+            kag_hits=[kag_hit],
+            pre_kag_fused_hits=[hit],
+            fused_hits=[hit, kag_hit],
+            final_hits=[hit],
+            passages=[{"page_start": 12, "page_end": 12, "page_no": 12}],
+            images=["img1"],
+            top_k=10,
+            pool_size=20,
+        )
+
+    logged = "\n".join(str(c.args[0]) for c in mock_info.call_args_list if c.args)
+    assert "RAG MULTIMODAL — RÉSUMÉ" in logged
+    assert "Triple retriever + graphe" in logged
+    assert "doc=383 p.12" in logged
+    assert "KAG" in logged

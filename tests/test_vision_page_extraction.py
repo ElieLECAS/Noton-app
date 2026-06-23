@@ -52,7 +52,7 @@ def _make_spec(
         "page_start": page_no,
         "page_end": page_no,
         "section_type": section_type,
-        "chunking_version": "vision_page_v1",
+        "chunking_version": "vision_page_v2",
         "extraction_provider": "mistral_vision",
         "content_type": "semantic_leaf",
         "is_leaf": True,
@@ -105,7 +105,7 @@ class TestValidateAndNormalize:
         spec = specs[0]
         assert spec["content"] == "Date : 01/01/2026  Réf : PRO-PVC-OFOB-01"
         meta = spec["metadata_json"]
-        assert meta["chunking_version"] == "vision_page_v1"
+        assert meta["chunking_version"] == "vision_page_v2"
         assert meta["extraction_provider"] == "mistral_vision"
         assert meta["section_type"] == "document_header"
         assert meta["page_no"] == 1
@@ -129,6 +129,26 @@ class TestValidateAndNormalize:
         assert len(specs) == 2
         assert specs[0]["metadata_json"]["step_number"] == 1
         assert specs[1]["metadata_json"]["step_number"] == 2
+
+    def test_content_list_is_coerced_to_string(self):
+        from app.services.vision_page_extraction_service import _validate_and_normalize
+
+        raw = _make_vision_response(
+            page_no=5,
+            chunks=[
+                {
+                    "heading": "Finitions",
+                    "step_number": None,
+                    "section_type": "section",
+                    "content": ["Rouge 3004 satine 1 face", "Brun 8019 granite 1 face"],
+                    "continues_on_next_page": False,
+                    "continues_from_previous_page": False,
+                }
+            ],
+        )
+        specs = _validate_and_normalize(raw, page_no=5, metadata_base={})
+        assert len(specs) == 1
+        assert specs[0]["content"] == "Rouge 3004 satine 1 face\nBrun 8019 granite 1 face"
 
     def test_chunk_over_480_tokens_is_split(self):
         """Un chunk > 480 tokens doit être découpé côté serveur."""
@@ -209,7 +229,7 @@ class TestExtractPageChunkSpecs:
         fake_png = b"\x89PNG\r\n"
 
         with mock.patch(
-            "app.services.vision_page_extraction_service.render_page_png_cached",
+            "app.services.multimodal_page_service.render_page_png_cached",
             return_value=fake_png,
         ), mock.patch(
             "app.services.vision_page_extraction_service._call_vision_api",
@@ -224,7 +244,7 @@ class TestExtractPageChunkSpecs:
 
         assert len(specs) == 1
         assert specs[0]["metadata_json"]["extraction_provider"] == "mistral_vision"
-        assert specs[0]["metadata_json"]["chunking_version"] == "vision_page_v1"
+        assert specs[0]["metadata_json"]["chunking_version"] == "vision_page_v2"
 
     def test_api_failure_triggers_fallback(self, tmp_path):
         """En cas d'échec API, le fallback pymupdf4llm doit être appelé."""
@@ -235,7 +255,7 @@ class TestExtractPageChunkSpecs:
         fallback_spec["metadata_json"]["extraction_provider"] = "pymupdf4llm_fallback"
 
         with mock.patch(
-            "app.services.vision_page_extraction_service.render_page_png_cached",
+            "app.services.multimodal_page_service.render_page_png_cached",
             return_value=fake_png,
         ), mock.patch(
             "app.services.vision_page_extraction_service._call_vision_api",
@@ -262,7 +282,7 @@ class TestExtractPageChunkSpecs:
         fallback_spec["metadata_json"]["extraction_provider"] = "pymupdf4llm_fallback"
 
         with mock.patch(
-            "app.services.vision_page_extraction_service.render_page_png_cached",
+            "app.services.multimodal_page_service.render_page_png_cached",
             side_effect=RuntimeError("render failed"),
         ), mock.patch(
             "app.services.vision_page_extraction_service._fallback_pymupdf4llm",
@@ -464,8 +484,8 @@ class TestExtractAndPersistChunksVision:
         # 1 L0 anchor + 1 L1 chunk = 2
         assert count == 2
 
-    def test_chunking_version_is_vision_page_v1(self, tmp_path):
-        """Les chunks persistés doivent avoir chunking_version=vision_page_v1."""
+    def test_chunking_version_is_vision_page_v2(self, tmp_path):
+        """Les chunks persistés doivent avoir chunking_version=vision_page_v2."""
         from app.services.document_indexing_service import _extract_and_persist_chunks, CHUNKING_VERSION
 
-        assert CHUNKING_VERSION == "vision_page_v1"
+        assert CHUNKING_VERSION == "vision_page_v2"

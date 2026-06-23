@@ -169,8 +169,13 @@ def test_space_chat_stream_bypass_when_no_passages(client, responsable_headers):
     )
     space_id = sp.json()["id"]
     try:
-        # Mock search_technical_passages to return no passages
+        # Mock search_technical_passages to return no passages.
+        # On désactive le query understanding pour tester directement le bypass
+        # "aucune source pertinente" (sinon une question vague déclenche une
+        # demande de clarification avant la phase de retrieval).
         with mock.patch(
+            "app.config.settings.QUERY_UNDERSTANDING_ENABLED", False
+        ), mock.patch(
             "app.services.space_search_service.search_technical_passages",
             new=mock.AsyncMock(
                 return_value={"passages": [], "status": "ok", "reason": "no_results"}

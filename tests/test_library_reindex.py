@@ -278,11 +278,11 @@ def test_reindex_denies_when_private_library_neither_owner_nor_uploader(db_sessi
 
 
 @mock.patch(
-    "app.services.document_service_new.process_document_multimodal",
+    "app.services.document_indexing_service.process_document_indexing",
     return_value={"chunks": 1, "status": "completed"},
 )
 def test_reindex_allows_global_library_when_reindexer_differs_from_uploader(
-    _process_multimodal,
+    _process_indexing,
     db_session: Session,
     tmp_path,
 ):

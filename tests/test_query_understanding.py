@@ -39,7 +39,8 @@ def test_optional_fields_respect_skip():
     slots.update({"intent": "installation", "product_family": "fenetres", "material": "pvc"})
     assert next_missing_optional(slots, []) == "product_range"
     assert next_missing_optional(slots, ["product_range"]) == "supplier"
-    assert next_missing_optional(slots, ["product_range", "supplier"]) is None
+    assert next_missing_optional(slots, ["product_range", "supplier"]) == "content_categories"
+    assert next_missing_optional(slots, ["product_range", "supplier", "content_categories"]) is None
 
 
 def test_build_slot_prompt_required_has_no_skip():
@@ -123,7 +124,7 @@ def test_validate_ready_when_all_slots_filled_or_skipped():
             "product_range": "perform",
             "supplier": "profine",
         },
-        "skipped_optional": [],
+        "skipped_optional": ["content_categories"],
     }
     result = _node_validate_and_next(state)
     assert result["ready_for_retrieval"] is True
@@ -181,7 +182,7 @@ async def test_ready_generates_three_queries(mock_chat, mock_route):
             "product_range": "perform",
             "supplier": "profine",
         },
-        "skipped_optional": ["product_range", "supplier"],
+        "skipped_optional": ["product_range", "supplier", "content_categories"],
         "original_user_message": "dimensions dormant Perform",
     }
 
@@ -235,7 +236,7 @@ async def test_vague_after_slots_asks_text_clarification(mock_chat, mock_route):
             "product_range": "perform",
             "supplier": "profine",
         },
-        "skipped_optional": ["product_range", "supplier"],
+        "skipped_optional": ["product_range", "supplier", "content_categories"],
         "original_user_message": "J'ai un souci mise en place des coulisses sur un dormant MONOBLOC",
         "phase": "ready",
     }

@@ -2282,6 +2282,18 @@ def _split_block_by_numbered_steps(
                     "section_type": "section",
                 }
             )
+    elif section_heading and _step_number_from_heading(section_heading) is not None:
+        # Le titre H2 est lui-même une étape numérotée (## 4. ...) suivie
+        # immédiatement d'une autre étape dans le corps : l'émettre comme
+        # section d'étape à part entière pour ne pas perdre son step_number.
+        sections.append(
+            {
+                "heading": section_heading,
+                "step_number": _step_number_from_heading(section_heading),
+                "content": section_heading,
+                "section_type": "step",
+            }
+        )
 
     for i, m in enumerate(matches):
         start = m.start()

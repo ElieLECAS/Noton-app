@@ -31,7 +31,6 @@ def is_vision_model(model_name: str) -> bool:
         "pixtral" in name_lower
         or "vision" in name_lower
         or "large-latest" in name_lower
-        or "small-latest" in name_lower
         or "ministral" in name_lower
         or "gpt-4o" in name_lower
     )

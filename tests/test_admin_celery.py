@@ -107,7 +107,7 @@ def test_dispatch_reindex_library_enqueues_celery():
 
     assert task_id == "celery-reindex-pytest"
     apply_async.assert_called_once_with(
-        args=[5, 9, mock.ANY],
+        args=[5, 9, mock.ANY, "full"],
         queue="documents",
     )
 
@@ -134,6 +134,6 @@ def test_dispatch_reindex_all_library_enqueues_celery():
 
     assert task_id == "celery-reindex-all-pytest"
     apply_async.assert_called_once_with(
-        args=[3],
+        args=[3, "full"],
         queue="documents",
     )

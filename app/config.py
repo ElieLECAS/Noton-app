@@ -88,21 +88,26 @@ class Settings(BaseSettings):
     # Plafond d’appels vision par document (None = illimité)
     VISION_MAX_IMAGES_PER_DOCUMENT: Optional[int] = None
     # Extraction vision par page (pipeline d'indexation documentaire)
-    PAGE_EXTRACTION_MODEL: str = os.getenv("PAGE_EXTRACTION_MODEL", "ministral-3b-latest")
+    # mistral-small-latest : multimodal (vision), remplace ministral-8b pour une transcription plus fidèle.
+    PAGE_EXTRACTION_MODEL: str = os.getenv("PAGE_EXTRACTION_MODEL", "mistral-small-latest")
     PAGE_EXTRACTION_MAX_CHUNK_TOKENS: int = int(os.getenv("PAGE_EXTRACTION_MAX_CHUNK_TOKENS", "480"))
     PAGE_EXTRACTION_MAX_CHUNKS_PER_PAGE: int = int(os.getenv("PAGE_EXTRACTION_MAX_CHUNKS_PER_PAGE", "12"))
-    PAGE_EXTRACTION_DPI: int = int(os.getenv("PAGE_EXTRACTION_DPI", "200"))
+    # 300 DPI : nécessaire pour que les cotes minuscules des dessins techniques CAO
+    # (dimensions, codes profilés) soient lisibles et non hallucinées par le VLM.
+    PAGE_EXTRACTION_DPI: int = int(os.getenv("PAGE_EXTRACTION_DPI", "300"))
     PAGE_EXTRACTION_CONCURRENCY: int = int(os.getenv("PAGE_EXTRACTION_CONCURRENCY", "3"))
-    PAGE_EXTRACTION_TIMEOUT: float = float(os.getenv("PAGE_EXTRACTION_TIMEOUT", "90"))
+    # mistral-small un peu plus lent que ministral-8b → marge timeout portée à 120s
+    PAGE_EXTRACTION_TIMEOUT: float = float(os.getenv("PAGE_EXTRACTION_TIMEOUT", "120"))
     PAGE_EXTRACTION_MAX_TOKENS: int = int(os.getenv("PAGE_EXTRACTION_MAX_TOKENS", "4096"))
 
     # KAG — extraction entités/relations et retrieval graphe
     KAG_ENABLED: bool = os.getenv("KAG_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    KAG_EXTRACTION_MODEL: Optional[str] = os.getenv("KAG_EXTRACTION_MODEL") or None
+    # mistral-small-latest (vision) par défaut, ancré sur le texte L1 déjà extrait.
+    KAG_EXTRACTION_MODEL: Optional[str] = os.getenv("KAG_EXTRACTION_MODEL") or "mistral-small-latest"
     KAG_EXTRACTION_CONCURRENCY: int = int(os.getenv("KAG_EXTRACTION_CONCURRENCY", "3"))
-    KAG_EXTRACTION_TIMEOUT: float = float(os.getenv("KAG_EXTRACTION_TIMEOUT", "90"))
+    KAG_EXTRACTION_TIMEOUT: float = float(os.getenv("KAG_EXTRACTION_TIMEOUT", "120"))
     KAG_EXTRACTION_MAX_TOKENS: int = int(os.getenv("KAG_EXTRACTION_MAX_TOKENS", "4096"))
     KAG_MAX_ENTITIES_PER_PAGE: int = int(os.getenv("KAG_MAX_ENTITIES_PER_PAGE", "20"))
     KAG_MAX_RELATIONS_PER_PAGE: int = int(os.getenv("KAG_MAX_RELATIONS_PER_PAGE", "15"))
@@ -113,6 +118,29 @@ class Settings(BaseSettings):
     KAG_ENTITY_MATCH_MIN_SCORE: float = float(os.getenv("KAG_ENTITY_MATCH_MIN_SCORE", "0.35"))
     KAG_BATCH_SIZE: int = int(os.getenv("KAG_BATCH_SIZE", "3"))
     KAG_BATCH_OVERLAP: int = int(os.getenv("KAG_BATCH_OVERLAP", "1"))
+
+    # Enrichissement contextuel inter-pages (synthèse factuelle par thème/catégorie)
+    CONTEXTUAL_ENRICHMENT_ENABLED: bool = os.getenv(
+        "CONTEXTUAL_ENRICHMENT_ENABLED", "true"
+    ).strip().lower() in ("true", "1", "yes", "on")
+    CONTEXTUAL_ENRICHMENT_MODEL: str = os.getenv(
+        "CONTEXTUAL_ENRICHMENT_MODEL", "mistral-small-latest"
+    )
+    CONTEXTUAL_ENRICHMENT_MAX_TOKENS: int = int(
+        os.getenv("CONTEXTUAL_ENRICHMENT_MAX_TOKENS", "1500")
+    )
+    CONTEXTUAL_ENRICHMENT_CONCURRENCY: int = int(
+        os.getenv("CONTEXTUAL_ENRICHMENT_CONCURRENCY", "2")
+    )
+    CONTEXTUAL_ENRICHMENT_TIMEOUT: float = float(
+        os.getenv("CONTEXTUAL_ENRICHMENT_TIMEOUT", "90")
+    )
+    CONTEXTUAL_ENRICHMENT_BATCH_SIZE: int = int(
+        os.getenv("CONTEXTUAL_ENRICHMENT_BATCH_SIZE", "3")
+    )
+    CONTEXTUAL_ENRICHMENT_BATCH_OVERLAP: int = int(
+        os.getenv("CONTEXTUAL_ENRICHMENT_BATCH_OVERLAP", "1")
+    )
 
     # Retraitement multimodal par page (pymupdf + mistral-small vision)
     MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"
@@ -210,7 +238,8 @@ class Settings(BaseSettings):
         "true", "1", "yes", "on"
     )
 
-    # Boosts souples post-retrieval (signaux query understanding)
+    # Boosts retrieval (signaux query understanding)
+    # Catégories : appliquées avant fusion RRF ; source/matériau/entités : post-retrieval
     RETRIEVAL_CATEGORY_BOOST: float = float(os.getenv("RETRIEVAL_CATEGORY_BOOST", "0.15"))
     RETRIEVAL_SOURCE_BOOST_MAX: float = float(os.getenv("RETRIEVAL_SOURCE_BOOST_MAX", "0.8"))
     RETRIEVAL_MATERIAL_BOOST: float = float(os.getenv("RETRIEVAL_MATERIAL_BOOST", "0.3"))

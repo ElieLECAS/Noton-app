@@ -166,6 +166,65 @@ def test_build_question_eval_result_with_post_rrf():
     assert result["rrf_delta"]["mrr"] == -0.5
 
 
+def test_build_question_eval_result_with_kag_delta():
+    expected = [{"document_title": "Notice Perform 70", "pages": [12, 13]}]
+    pre_kag_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.8},
+    ]
+    post_rrf_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.8},
+        {"document_title": "Notice Perform 70", "page_no": 13, "score": 0.7},
+    ]
+    final_passages = post_rrf_passages
+
+    result = build_question_eval_result(
+        question="test",
+        q_type="mono",
+        expected_pages=expected,
+        passages=final_passages,
+        pre_kag_passages=pre_kag_passages,
+        post_rrf_passages=post_rrf_passages,
+        kag_only_passages=[{"document_title": "Notice Perform 70", "page_no": 13, "score": 0.6}],
+        kag_enabled=True,
+    )
+
+    assert result["metrics_pre_kag"]["context_recall"] == 0.5
+    assert result["metrics_post_rrf"]["context_recall"] == 1.0
+    assert result["kag_delta"]["recall"] == 0.5
+    assert result["metrics_kag_only"]["context_recall"] == 0.5
+    assert result["kag_enabled"] is True
+
+
+def test_build_question_eval_result_with_pgvector_and_lexical_only():
+    expected = [{"document_title": "Notice Perform 70", "pages": [12, 13]}]
+    pgvector_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.88},
+    ]
+    lexical_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 13, "score": 0.75},
+    ]
+    final_passages = [
+        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.9},
+        {"document_title": "Notice Perform 70", "page_no": 13, "score": 0.8},
+    ]
+
+    result = build_question_eval_result(
+        question="test",
+        q_type="mono",
+        expected_pages=expected,
+        passages=final_passages,
+        pgvector_only_passages=pgvector_passages,
+        lexical_only_passages=lexical_passages,
+    )
+
+    assert result["metrics_pgvector_only"]["context_recall"] == 0.5
+    assert result["metrics_pgvector_only"]["mrr"] == 1.0
+    assert result["metrics_lexical_only"]["context_recall"] == 0.5
+    assert result["metrics_lexical_only"]["mrr"] == 1.0
+    assert len(result["analysis_pgvector_only"]["hits"]) == 1
+    assert len(result["analysis_lexical_only"]["hits"]) == 1
+
+
 def test_rerank_delta_is_post_minus_colpali():
     expected = [{"document_title": "Notice Perform 70", "pages": [12, 13]}]
     colpali_passages = [

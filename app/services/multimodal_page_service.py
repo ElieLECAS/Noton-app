@@ -118,6 +118,30 @@ def count_tokens(text: str) -> int:
     return max(1, int(len(text) / 3.5))
 
 
+def _split_unit_by_words(text: str, max_tokens: int) -> List[str]:
+    """
+    Découpe une unité textuelle dépourvue de ponctuation de phrase
+    (ou trop longue) en accumulant des mots jusqu'à max_tokens.
+    Garantit que chaque partie respecte la limite de tokens.
+    """
+    words = text.split()
+    if not words:
+        return [text]
+
+    parts: List[str] = []
+    current: List[str] = []
+    for word in words:
+        candidate = " ".join(current + [word])
+        if current and count_tokens(candidate) > max_tokens:
+            parts.append(" ".join(current))
+            current = [word]
+        else:
+            current.append(word)
+    if current:
+        parts.append(" ".join(current))
+    return parts or [text]
+
+
 def split_text_by_tokens(text: str, max_tokens: int = MAX_CHUNK_TOKENS) -> List[str]:
     """
     Découpe un texte en sous-parties de max_tokens tokens maximum.
@@ -155,7 +179,14 @@ def split_text_by_tokens(text: str, max_tokens: int = MAX_CHUNK_TOKENS) -> List[
             
             # Split par phrases (points + espace/newline)
             sentences = re.split(r'(?<=[.!?])\s+', para)
+            # Éclater les phrases qui dépassent à elles seules la limite (split mots)
+            expanded_sentences: List[str] = []
             for sent in sentences:
+                if count_tokens(sent) > max_tokens:
+                    expanded_sentences.extend(_split_unit_by_words(sent, max_tokens))
+                else:
+                    expanded_sentences.append(sent)
+            for sent in expanded_sentences:
                 sent_tokens = count_tokens(sent)
                 if current_tokens + sent_tokens > max_tokens and current_chunk:
                     chunks.append("\n\n".join(current_chunk))

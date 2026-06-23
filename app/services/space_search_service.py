@@ -29,6 +29,8 @@ from app.models.document_space import DocumentSpace
 from app.services.embedding_service import generate_embedding
 from app.services.space_service import get_space_by_id
 from app.services.query_understanding_graph import RetrievalQueries
+from app.services.query_signals_schemas import LightweightQuerySignals
+from app.services.retrieval_boost_service import apply_category_boost_to_fused_hits
 from app.tracing import trace_run
 from app.services import reranker_service
 
@@ -524,6 +526,39 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
     return out
 
 
+def _multimodal_eval_stages(
+    *,
+    colpali_hits: List[Any],
+    pgvector_hits: List[Any],
+    bm25_hits: List[Any],
+    kag_hits: List[Any],
+    pre_kag_fused_hits: List[Any],
+    fused_hits: List[Any],
+    top_k: int,
+    reason: str,
+    post_rerank_passages: Optional[List[Dict[str, Any]]] = None,
+) -> Dict[str, Any]:
+    """Étapes d'éval RAG exposées à l'admin (avant/après KAG, ColPali, rerank)."""
+    from app.services.page_retrieval_service import unified_hits_to_eval_passages
+
+    stages: Dict[str, Any] = {
+        "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
+        "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
+        "pgvector_only": unified_hits_to_eval_passages(pgvector_hits, top_k),
+        "lexical_only": unified_hits_to_eval_passages(bm25_hits, top_k),
+        "pre_kag_rrf": unified_hits_to_eval_passages(pre_kag_fused_hits, top_k),
+        "kag_only": unified_hits_to_eval_passages(kag_hits, top_k) if kag_hits else [],
+        "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
+        "minilm_rerank_enabled": settings.RERANKER_ENABLED,
+        "vision_rerank_enabled": False,
+        "kag_enabled": settings.KAG_ENABLED,
+        "reason": reason,
+    }
+    if post_rerank_passages is not None:
+        stages["post_rerank"] = post_rerank_passages
+    return stages
+
+
 async def search_multimodal_passages(
     session: Session,
     space_id: int,
@@ -534,6 +569,7 @@ async def search_multimodal_passages(
     document_filter: str = "all",
     include_retrieval_stages: bool = False,
     queries: Optional[RetrievalQueries] = None,
+    signals: Optional[LightweightQuerySignals] = None,
 ) -> Dict:
     """
     Pipeline retrieval multimodal page-centric unifié.
@@ -549,7 +585,6 @@ async def search_multimodal_passages(
         retrieve_bm25_pages,
         retrieve_colpali_pages,
         retrieve_pgvector_pages,
-        unified_hits_to_eval_passages,
     )
 
     space = get_space_by_id(session, space_id, user_id)
@@ -646,6 +681,13 @@ async def search_multimodal_passages(
             len(kag_hits),
         )
 
+        pre_kag_fused_hits = fuse_multimodal_hits(
+            colpali_hits,
+            pgvector_hits,
+            bm25_hits,
+            rrf_k=settings.RRF_K,
+            top_k=pool_size,
+        )
         fused_hits = fuse_multimodal_hits(
             colpali_hits,
             pgvector_hits,
@@ -655,18 +697,23 @@ async def search_multimodal_passages(
             top_k=pool_size,
         )
 
+        # Boost catégorie multiplicatif sur rrf_score (post-fusion, avant rerank)
+        apply_category_boost_to_fused_hits(session, fused_hits, signals)
+
         if not fused_hits:
             result = {"passages": [], "images": [], "status": "ok", "reason": "no_results", "dynamic_k": 0}
             if include_retrieval_stages:
-                result["retrieval_stages"] = {
-                    "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
-                    "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
-                    "post_rrf": [],
-                    "post_rerank": [],
-                    "minilm_rerank_enabled": settings.RERANKER_ENABLED,
-                    "vision_rerank_enabled": False,
-                    "reason": "no_results",
-                }
+                result["retrieval_stages"] = _multimodal_eval_stages(
+                    colpali_hits=colpali_hits,
+                    pgvector_hits=pgvector_hits,
+                    bm25_hits=bm25_hits,
+                    kag_hits=kag_hits,
+                    pre_kag_fused_hits=pre_kag_fused_hits,
+                    fused_hits=[],
+                    top_k=top_k,
+                    reason="no_results",
+                    post_rerank_passages=[],
+                )
             return result
 
         rerank_status = "disabled"
@@ -712,6 +759,8 @@ async def search_multimodal_passages(
                 colpali_hits=colpali_hits,
                 pgvector_hits=pgvector_hits,
                 bm25_hits=bm25_hits,
+                kag_hits=kag_hits,
+                pre_kag_fused_hits=pre_kag_fused_hits,
                 fused_hits=fused_hits,
                 final_hits=final_hits,
                 passages=passages,
@@ -732,15 +781,17 @@ async def search_multimodal_passages(
                 "rerank_status": rerank_status,
             }
             if include_retrieval_stages:
-                low_conf_result["retrieval_stages"] = {
-                    "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
-                    "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
-                    "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
-                    "post_rerank": [],
-                    "minilm_rerank_enabled": settings.RERANKER_ENABLED,
-                    "vision_rerank_enabled": False,
-                    "reason": rerank_status,
-                }
+                low_conf_result["retrieval_stages"] = _multimodal_eval_stages(
+                    colpali_hits=colpali_hits,
+                    pgvector_hits=pgvector_hits,
+                    bm25_hits=bm25_hits,
+                    kag_hits=kag_hits,
+                    pre_kag_fused_hits=pre_kag_fused_hits,
+                    fused_hits=fused_hits,
+                    top_k=top_k,
+                    reason=rerank_status,
+                    post_rerank_passages=[],
+                )
             return low_conf_result
 
         if not final_hits:
@@ -750,6 +801,8 @@ async def search_multimodal_passages(
                 colpali_hits=colpali_hits,
                 pgvector_hits=pgvector_hits,
                 bm25_hits=bm25_hits,
+                kag_hits=kag_hits,
+                pre_kag_fused_hits=pre_kag_fused_hits,
                 fused_hits=fused_hits,
                 final_hits=[],
                 passages=[],
@@ -770,15 +823,17 @@ async def search_multimodal_passages(
                 "rerank_status": rerank_status,
                 **(
                     {
-                        "retrieval_stages": {
-                            "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
-                            "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
-                            "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
-                            "post_rerank": [],
-                            "minilm_rerank_enabled": settings.RERANKER_ENABLED,
-                            "vision_rerank_enabled": False,
-                            "reason": "no_results_after_rerank",
-                        }
+                        "retrieval_stages": _multimodal_eval_stages(
+                            colpali_hits=colpali_hits,
+                            pgvector_hits=pgvector_hits,
+                            bm25_hits=bm25_hits,
+                            kag_hits=kag_hits,
+                            pre_kag_fused_hits=pre_kag_fused_hits,
+                            fused_hits=fused_hits,
+                            top_k=top_k,
+                            reason="no_results_after_rerank",
+                            post_rerank_passages=[],
+                        )
                     }
                     if include_retrieval_stages
                     else {}
@@ -812,6 +867,8 @@ async def search_multimodal_passages(
             colpali_hits=colpali_hits,
             pgvector_hits=pgvector_hits,
             bm25_hits=bm25_hits,
+            kag_hits=kag_hits,
+            pre_kag_fused_hits=pre_kag_fused_hits,
             fused_hits=fused_hits,
             final_hits=final_hits,
             passages=passages,
@@ -835,15 +892,17 @@ async def search_multimodal_passages(
             "rerank_status": rerank_status,
         }
         if include_retrieval_stages:
-            result["retrieval_stages"] = {
-                "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
-                "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
-                "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
-                "post_rerank": passages,
-                "minilm_rerank_enabled": settings.RERANKER_ENABLED,
-                "vision_rerank_enabled": False,
-                "reason": reason,
-            }
+            result["retrieval_stages"] = _multimodal_eval_stages(
+                colpali_hits=colpali_hits,
+                pgvector_hits=pgvector_hits,
+                bm25_hits=bm25_hits,
+                kag_hits=kag_hits,
+                pre_kag_fused_hits=pre_kag_fused_hits,
+                fused_hits=fused_hits,
+                top_k=top_k,
+                reason=reason,
+                post_rerank_passages=passages,
+            )
         return result
 
     except Exception as exc:
@@ -865,6 +924,7 @@ async def search_relevant_passages(
     document_filter: str = "all",
     include_retrieval_stages: bool = False,
     queries: Optional[RetrievalQueries] = None,
+    signals: Optional[LightweightQuerySignals] = None,
 ) -> Dict:
     """
     RAG espace : retrieval hybride ColPali + pgvector L1 + BM25, fusion RRF,
@@ -882,6 +942,7 @@ async def search_relevant_passages(
             document_filter=document_filter,
             include_retrieval_stages=include_retrieval_stages,
             queries=queries,
+            signals=signals,
         )
 
     from app.services.page_retrieval_service import (
@@ -977,6 +1038,9 @@ async def search_relevant_passages(
         weak_pool = build_weak_hit_pool(colpali_hits, pgvector_hits, bm25_hits)
         fused_hits = fuse_page_hits_rrf(colpali_hits, pgvector_hits, bm25_hits, top_n=k)
 
+        # Boost catégorie multiplicatif sur rrf_score (post-fusion)
+        apply_category_boost_to_fused_hits(session, fused_hits, signals)
+
         logger.info(
             "[RAG] Après filtre ColPali + fusion RRF — colpali_retenu=%d, fusionnés=%d",
             len(colpali_hits),
@@ -1059,6 +1123,8 @@ async def search_relevant_passages(
             result["retrieval_stages"] = {
                 "colpali_only": colpali_only_passages,
                 "colpali": colpali_only_passages,
+                "pgvector_only": page_hits_to_eval_passages(pgvector_hits, k),
+                "lexical_only": page_hits_to_eval_passages(bm25_hits, k),
                 "post_rrf": post_rrf_passages,
                 "post_rerank": passages,
                 "minilm_rerank_enabled": False,
@@ -1079,6 +1145,7 @@ async def search_technical_passages(
     user_id: int,
     k: int = 15,
     queries: Optional[RetrievalQueries] = None,
+    signals: Optional[LightweightQuerySignals] = None,
 ) -> Dict:
     """
     Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
@@ -1096,6 +1163,7 @@ async def search_technical_passages(
         k=k,
         document_filter="technical",
         queries=queries,
+        signals=signals,
     )
 
 

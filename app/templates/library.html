@@ -468,20 +468,12 @@ endblock %} {% block content %}
                 Texte sémantique
             </button>
             <button
-                id="chunks-tab-raw"
+                id="chunks-tab-enrichment"
                 type="button"
                 class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
-                onclick="switchChunksTab('raw')"
+                onclick="switchChunksTab('enrichment')"
             >
-                Raw enrichi (legacy)
-            </button>
-            <button
-                id="chunks-tab-report"
-                type="button"
-                class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
-                onclick="switchChunksTab('report')"
-            >
-                Synthèse / Rapport (legacy)
+                Synthèse contextuelle
             </button>
             <button
                 id="chunks-tab-entities"
@@ -503,10 +495,59 @@ endblock %} {% block content %}
 
         <div class="flex-1 min-h-0 overflow-auto border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4">
             <div id="chunks-semantic-panel" class="space-y-3"></div>
-            <div id="chunks-raw-panel" class="space-y-3 hidden"></div>
-            <div id="chunks-report-panel" class="space-y-3 hidden"></div>
+            <div id="chunks-enrichment-panel" class="space-y-3 hidden"></div>
             <div id="chunks-entities-panel" class="space-y-3 hidden"></div>
             <div id="chunks-categories-panel" class="space-y-3 hidden"></div>
+        </div>
+    </div>
+</div>
+
+<div
+    id="library-category-page-modal"
+    class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm items-center justify-center p-2 sm:p-4"
+    onclick="if(event.target===this) closeLibraryCategoryPageModal()"
+>
+    <div class="w-full max-w-7xl h-[min(94vh,900px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+        <div class="shrink-0 px-3 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
+            <div class="min-w-0 flex-1">
+                <h2 id="library-category-page-title" class="text-base font-bold text-gray-900 dark:text-white truncate">Catégorie</h2>
+                <p id="library-category-page-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">—</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" id="library-category-prev-btn" onclick="navigateLibraryCategoryPage('prev')" disabled class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:pointer-events-none transition-colors">
+                    <i class="ti ti-chevron-left"></i>
+                    <span class="hidden sm:inline">Précédente</span>
+                </button>
+                <span id="library-category-page-counter" class="text-xs font-semibold text-gray-500 dark:text-gray-400 px-1">—</span>
+                <button type="button" id="library-category-next-btn" onclick="navigateLibraryCategoryPage('next')" disabled class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:pointer-events-none transition-colors">
+                    <span class="hidden sm:inline">Suivante</span>
+                    <i class="ti ti-chevron-right"></i>
+                </button>
+                <button type="button" onclick="closeLibraryCategoryPageModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i class="ti ti-x text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col lg:flex-row min-h-0">
+            <section id="library-category-pdf-panel" class="lg:w-1/2 flex flex-col min-h-0 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-950">
+                <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                    Page PDF
+                </div>
+                <div id="library-category-pdf-container" class="flex-1 overflow-auto p-3 flex items-center justify-center">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Chargement du PDF…</div>
+                </div>
+            </section>
+
+            <section id="library-category-text-panel" class="lg:w-1/2 flex flex-col min-h-0">
+                <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-2">
+                    <span>Texte extrait</span>
+                    <span class="normal-case font-medium text-teal-600 dark:text-teal-400">Source · violet = IA</span>
+                </div>
+                <div id="library-category-text-container" class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>
+                </div>
+            </section>
         </div>
     </div>
 </div>
@@ -581,6 +622,28 @@ endblock %} {% block content %}
     .dark .library-folder-item--active:hover {
         background: rgba(255, 255, 255, 0.12) !important;
     }
+
+    .category-chunk-highlight {
+        border-left: 3px solid #14b8a6;
+        background: linear-gradient(90deg, rgba(20, 184, 166, 0.08) 0%, transparent 100%);
+    }
+    .dark .category-chunk-highlight {
+        border-left-color: #2dd4bf;
+        background: linear-gradient(90deg, rgba(45, 212, 191, 0.12) 0%, transparent 100%);
+    }
+
+    .category-enrichment-chunk {
+        border-left: 3px solid #6366f1;
+        background: linear-gradient(90deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+    }
+    .dark .category-enrichment-chunk {
+        border-left-color: #818cf8;
+        background: linear-gradient(90deg, rgba(129, 140, 248, 0.12) 0%, transparent 100%);
+    }
+
+    #library-category-page-modal:not(.hidden) {
+        display: flex;
+    }
 </style>
 <script>
     let selectedFolderId = null;
@@ -593,7 +656,11 @@ endblock %} {% block content %}
     let canSpaceDelete = false;
     let isAdminUser = false;
     let chunksMonitorData = null;
+    let chunksMonitorDocumentId = null;
     let chunksActiveTab = "semantic";
+    let libraryCategoryPageState = { categoryId: null, pageNo: null };
+    let libraryCategoryPdfDoc = null;
+    let libraryCategoryPdfjsLib = null;
     let classificationOptions = null;
 
     function sourceToSupplierSlug(source) {
@@ -1166,6 +1233,52 @@ endblock %} {% block content %}
         return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="${escapeHtml(title)}">${escapeHtml(category.label || category.slug)}</span>`;
     }
 
+    function renderEnrichmentChunkCard(chunk) {
+        const meta = chunk.metadata || {};
+        const page = Number.isFinite(chunk.page) ? chunk.page : 0;
+        const sourcePages = Array.isArray(meta.source_pages) && meta.source_pages.length
+            ? meta.source_pages.join(", ")
+            : null;
+        const pageStart = meta.page_start;
+        const pageEnd = meta.page_end;
+        const batchLabel = pageStart && pageEnd && pageStart !== pageEnd
+            ? `batch p.${pageStart}–${pageEnd}`
+            : sourcePages
+              ? `pages ${sourcePages}`
+              : `p.${page}`;
+        const theme = meta.theme || "(sans thème)";
+        const categorySlug = meta.category_slug;
+        const categoryBadge = categorySlug
+            ? `<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40">${escapeHtml(categorySlug)}</span>`
+            : "";
+        const kag = chunksMonitorData?.kag || {};
+        const chunkCategories = (kag.chunk_categories || {})[String(chunk.chunk_id)] || [];
+        const categoriesHeaderHtml = chunkCategories.length
+            ? `<div class="flex flex-wrap items-center gap-1.5 ml-auto pl-3 border-l border-violet-300 dark:border-violet-700 shrink-0 max-w-[50%]">${chunkCategories.map(renderCategoryBadge).join("")}</div>`
+            : categoryBadge;
+        const model = meta.enrichment_model;
+        const modelBadge = model
+            ? `<span class="px-2 py-0.5 rounded bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300">${escapeHtml(model)}</span>`
+            : "";
+        return `
+      <article class="rounded-lg border border-violet-200 dark:border-violet-800/60 bg-violet-50/50 dark:bg-violet-950/20">
+        <header class="px-3 py-2 border-b border-violet-200 dark:border-violet-800/60 text-xs text-gray-600 dark:text-gray-300 flex flex-wrap items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-violet-200 dark:bg-violet-900/50 text-violet-800 dark:text-violet-200 font-semibold">synthèse</span>
+          <span class="font-semibold">${escapeHtml(batchLabel)}</span>
+          <span>source p.${page}</span>
+          <span>#${chunk.chunk_index}</span>
+          ${modelBadge}
+          <span class="truncate max-w-[50ch] font-medium text-gray-800 dark:text-gray-100">${escapeHtml(theme)}</span>
+          ${categoriesHeaderHtml}
+        </header>
+        <div class="p-3">
+          <p class="text-[11px] text-violet-700 dark:text-violet-300 mb-2 font-medium">Contexte complémentaire — ne pas utiliser comme preuve absolue ; se référer à la page source.</p>
+          <pre class="whitespace-pre-wrap break-words text-sm text-gray-800 dark:text-gray-100 leading-relaxed font-sans">${escapeHtml(chunk.content)}</pre>
+        </div>
+      </article>
+    `;
+    }
+
     function renderChunkCard(chunk, options = {}) {
         const { showCategoriesInHeader = false } = options;
         const token =
@@ -1299,65 +1412,34 @@ endblock %} {% block content %}
                           ? `page ${cat.page_no}`
                           : "";
                 return `
-                <div class="flex items-start justify-between gap-3 rounded-xl border border-black/5 dark:border-white/10 p-3">
+                <button
+                    type="button"
+                    onclick="openLibraryCategoryFromList(${cat.category_id})"
+                    class="w-full text-left flex items-start justify-between gap-3 rounded-xl border border-black/5 dark:border-white/10 p-3 hover:bg-teal-500/5 hover:border-teal-500/20 transition-all active:scale-[0.99]"
+                >
                     <div class="min-w-0">
                         <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">${escapeHtml(cat.label)}</div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">${escapeHtml(cat.slug)}</div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">${cat.chunk_count || 0} chunk(s)${pages ? ` · ${escapeHtml(pages)}` : ""}</div>
                     </div>
                     ${renderCategoryBadge(cat)}
-                </div>
-            `;
-            })
-            .join("");
-
-        const chunkCategoryRows = Object.entries(kag.chunk_categories || {})
-            .map(([chunkId, items]) => {
-                const chunk =
-                    (chunksMonitorData.semantic_chunks || []).find(
-                        (c) => String(c.chunk_id) === String(chunkId),
-                    ) ||
-                    (chunksMonitorData.raw_chunks || []).find(
-                        (c) => String(c.chunk_id) === String(chunkId),
-                    ) ||
-                    (chunksMonitorData.report_chunks || []).find(
-                        (c) => String(c.chunk_id) === String(chunkId),
-                    );
-                const meta = chunk?.metadata || {};
-                const page = chunk?.page ?? meta.page ?? "?";
-                const heading =
-                    meta.heading || meta.parent_heading || `chunk #${chunk?.chunk_index ?? chunkId}`;
-                return `
-                <div class="rounded-xl border border-black/5 dark:border-white/10 p-3 text-sm">
-                    <div class="font-medium text-gray-900 dark:text-gray-100">p.${page} · ${escapeHtml(heading)}</div>
-                    <div class="mt-2 flex flex-wrap gap-1.5">${(items || []).map(renderCategoryBadge).join("")}</div>
-                </div>
+                </button>
             `;
             })
             .join("");
 
         host.innerHTML = `
-            <div class="grid gap-4 lg:grid-cols-2">
-                <section>
-                    <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Catégories (${categoryCount})</h4>
-                    <div class="space-y-2 max-h-[55vh] overflow-auto pr-1">${categoriesList}</div>
-                </section>
-                <section>
-                    <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-2">Par chunk</h4>
-                    <div class="space-y-2 max-h-[55vh] overflow-auto pr-1">${chunkCategoryRows || `<div class="text-sm text-gray-500 dark:text-gray-400">Aucune liaison chunk-catégorie.</div>`}</div>
-                </section>
-            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Cliquez sur une catégorie pour parcourir le document page par page (texte source et chunks contextuels générés par l'IA).</p>
+            <div class="space-y-2 max-h-[60vh] overflow-auto pr-1">${categoriesList}</div>
         `;
     }
 
     function renderChunksPanels() {
         const semanticHost = document.getElementById("chunks-semantic-panel");
-        const rawHost = document.getElementById("chunks-raw-panel");
-        const reportHost = document.getElementById("chunks-report-panel");
+        const enrichmentHost = document.getElementById("chunks-enrichment-panel");
         if (!chunksMonitorData) {
             semanticHost.innerHTML = "";
-            rawHost.innerHTML = "";
-            reportHost.innerHTML = "";
+            enrichmentHost.innerHTML = "";
             return;
         }
         semanticHost.innerHTML = (chunksMonitorData.semantic_chunks || []).length
@@ -1366,13 +1448,10 @@ endblock %} {% block content %}
                       renderChunkCard(chunk, { showCategoriesInHeader: true }),
                   )
                   .join("")
-            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk texte sémantique (Vision Ministral 3B). Lancez un retraitement « Complet » ou « Texte seul ».</div>`;
-        rawHost.innerHTML = (chunksMonitorData.raw_chunks || []).length
-            ? chunksMonitorData.raw_chunks.map((chunk) => renderChunkCard(chunk)).join("")
-            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk raw legacy trouvé.</div>`;
-        reportHost.innerHTML = (chunksMonitorData.report_chunks || []).length
-            ? chunksMonitorData.report_chunks.map((chunk) => renderChunkCard(chunk)).join("")
-            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk synthèse/rapport legacy trouvé.</div>`;
+            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk texte sémantique (transcription vision). Lancez un retraitement « Complet » ou « Texte seul ».</div>`;
+        enrichmentHost.innerHTML = (chunksMonitorData.enrichment_chunks || []).length
+            ? chunksMonitorData.enrichment_chunks.map((chunk) => renderEnrichmentChunkCard(chunk)).join("")
+            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk de synthèse contextuelle. Activez CONTEXTUAL_ENRICHMENT_ENABLED et relancez un retraitement « Complet » ou « Texte seul ».</div>`;
         renderEntitiesPanel();
         renderCategoriesPanel();
     }
@@ -1380,25 +1459,21 @@ endblock %} {% block content %}
     function switchChunksTab(tab) {
         chunksActiveTab = tab;
         const semanticPanel = document.getElementById("chunks-semantic-panel");
-        const rawPanel = document.getElementById("chunks-raw-panel");
-        const reportPanel = document.getElementById("chunks-report-panel");
+        const enrichmentPanel = document.getElementById("chunks-enrichment-panel");
         const entitiesPanel = document.getElementById("chunks-entities-panel");
         const categoriesPanel = document.getElementById("chunks-categories-panel");
         const semanticBtn = document.getElementById("chunks-tab-semantic");
-        const rawBtn = document.getElementById("chunks-tab-raw");
-        const reportBtn = document.getElementById("chunks-tab-report");
+        const enrichmentBtn = document.getElementById("chunks-tab-enrichment");
         const entitiesBtn = document.getElementById("chunks-tab-entities");
         const categoriesBtn = document.getElementById("chunks-tab-categories");
         const activeClass = "px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm";
         const inactiveClass = "px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all";
         semanticPanel.classList.toggle("hidden", tab !== "semantic");
-        rawPanel.classList.toggle("hidden", tab !== "raw");
-        reportPanel.classList.toggle("hidden", tab !== "report");
+        enrichmentPanel.classList.toggle("hidden", tab !== "enrichment");
         entitiesPanel.classList.toggle("hidden", tab !== "entities");
         categoriesPanel.classList.toggle("hidden", tab !== "categories");
         semanticBtn.className = tab === "semantic" ? activeClass : inactiveClass;
-        rawBtn.className = tab === "raw" ? activeClass : inactiveClass;
-        reportBtn.className = tab === "report" ? activeClass : inactiveClass;
+        enrichmentBtn.className = tab === "enrichment" ? activeClass : inactiveClass;
         entitiesBtn.className = tab === "entities" ? activeClass : inactiveClass;
         categoriesBtn.className = tab === "categories" ? activeClass : inactiveClass;
     }
@@ -1407,6 +1482,7 @@ endblock %} {% block content %}
         const modal = document.getElementById("chunks-monitor-modal");
         const title = document.getElementById("chunks-monitor-title");
         const subtitle = document.getElementById("chunks-monitor-subtitle");
+        chunksMonitorDocumentId = documentId;
         title.textContent = `Monitoring des chunks — ${documentTitle}`;
         subtitle.textContent = "Chargement...";
         modal.classList.remove("hidden");
@@ -1418,27 +1494,279 @@ endblock %} {% block content %}
             subtitle.textContent =
                 err.detail || "Impossible de charger les chunks.";
             document.getElementById("chunks-semantic-panel").innerHTML = "";
-            document.getElementById("chunks-raw-panel").innerHTML = "";
-            document.getElementById("chunks-report-panel").innerHTML = "";
+            document.getElementById("chunks-enrichment-panel").innerHTML = "";
             document.getElementById("chunks-entities-panel").innerHTML = "";
             document.getElementById("chunks-categories-panel").innerHTML = "";
             return;
         }
         chunksMonitorData = await r.json();
         const kag = chunksMonitorData.kag || {};
-        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Raw legacy: ${chunksMonitorData.raw_chunks_count} · Synthèse: ${chunksMonitorData.report_chunks_count} · KAG: ${kag.entity_count ?? 0} entités, ${kag.relation_count ?? 0} relations, ${kag.category_count ?? 0} catégories`;
+        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Synthèse contextuelle: ${chunksMonitorData.enrichment_chunks_count ?? 0} · KAG: ${kag.entity_count ?? 0} entités, ${kag.relation_count ?? 0} relations, ${kag.category_count ?? 0} catégories`;
         renderChunksPanels();
         const defaultTab =
             (chunksMonitorData.semantic_chunks_count ?? 0) > 0
                 ? "semantic"
-                : (chunksMonitorData.raw_chunks_count ?? 0) > 0
-                  ? "raw"
+                : (chunksMonitorData.enrichment_chunks_count ?? 0) > 0
+                  ? "enrichment"
                   : "semantic";
         switchChunksTab(defaultTab);
     }
 
     function closeChunksMonitorModal() {
         document.getElementById("chunks-monitor-modal").classList.add("hidden");
+        closeLibraryCategoryPageModal();
+    }
+
+    async function openLibraryCategoryFromList(categoryId) {
+        if (!chunksMonitorDocumentId) return;
+        const pagesRes = await api(
+            `/api/library/documents/${chunksMonitorDocumentId}/categories/${categoryId}/pages`,
+        );
+        if (!pagesRes.ok) {
+            alert("Impossible de charger les pages de cette catégorie.");
+            return;
+        }
+        const pagesData = await pagesRes.json();
+        const firstPage = (pagesData.pages || [])[0];
+        if (!firstPage) {
+            alert("Aucune page associée à cette catégorie.");
+            return;
+        }
+        await openLibraryCategoryPageModal(categoryId, firstPage.page_no);
+    }
+
+    async function openLibraryCategoryPageModal(categoryId, pageNo) {
+        const modal = document.getElementById("library-category-page-modal");
+        if (!modal || !chunksMonitorDocumentId) return;
+        modal.classList.remove("hidden");
+
+        libraryCategoryPageState = { categoryId, pageNo };
+
+        document.getElementById("library-category-page-title").textContent = "Chargement…";
+        document.getElementById("library-category-page-meta").textContent = "—";
+        document.getElementById("library-category-page-counter").textContent = "—";
+        document.getElementById("library-category-text-container").innerHTML =
+            `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+        document.getElementById("library-category-pdf-container").innerHTML =
+            `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+
+        const r = await api(
+            `/api/library/documents/${chunksMonitorDocumentId}/categories/${categoryId}/pages/${pageNo}`,
+        );
+        if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            document.getElementById("library-category-text-container").innerHTML =
+                `<div class="text-sm text-red-500">${escapeHtml(err.detail || "Erreur de chargement")}</div>`;
+            return;
+        }
+
+        const detail = await r.json();
+        renderLibraryCategoryPageDetail(detail);
+    }
+
+    function renderLibraryCategoryPageDetail(detail) {
+        const category = detail.category || {};
+        const documentInfo = detail.document || {};
+        const nav = detail.navigation || {};
+
+        document.getElementById("library-category-page-title").textContent =
+            category.label || category.slug || "Catégorie";
+        document.getElementById("library-category-page-meta").textContent =
+            `${documentInfo.title || chunksMonitorData?.document_title || "Document"} · Page ${detail.page_no}`;
+
+        const currentIdx = nav.current_index != null ? nav.current_index + 1 : 0;
+        const total = nav.total || 0;
+        document.getElementById("library-category-page-counter").textContent =
+            total ? `${currentIdx} / ${total}` : "—";
+
+        const prevBtn = document.getElementById("library-category-prev-btn");
+        const nextBtn = document.getElementById("library-category-next-btn");
+        if (prevBtn) prevBtn.disabled = !nav.prev;
+        if (nextBtn) nextBtn.disabled = !nav.next;
+
+        renderLibraryCategoryTextChunks(
+            detail.chunks || [],
+            detail.enrichment_chunks || [],
+            category,
+        );
+        renderLibraryCategoryPdf(documentInfo, detail.page_no);
+    }
+
+    function renderLibraryCategoryTextChunks(chunks, enrichmentChunks, category) {
+        const host = document.getElementById("library-category-text-container");
+        if (!host) return;
+
+        const sourceHtml = (chunks || [])
+            .map((chunk) => renderLibraryCategoryChunkCard(chunk, category, false))
+            .join("");
+        const enrichmentHtml = (enrichmentChunks || []).length
+            ? `
+            <section class="space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300 flex items-center gap-2">
+                    <i class="ti ti-sparkles"></i>
+                    Chunks contextuels (texte généré par l'IA)
+                </h3>
+                ${enrichmentChunks.map((chunk) => renderLibraryCategoryChunkCard(chunk, category, true)).join("")}
+            </section>
+        `
+            : "";
+
+        if (!sourceHtml && !enrichmentHtml) {
+            host.innerHTML =
+                `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk associé à cette catégorie sur cette page.</div>`;
+            return;
+        }
+
+        host.innerHTML = `
+            ${sourceHtml ? `<section class="space-y-3">${sourceHtml}</section>` : ""}
+            ${enrichmentHtml}
+        `;
+    }
+
+    function renderLibraryCategoryChunkCard(chunk, category, isEnrichment) {
+        const heading =
+            chunk.heading ||
+            chunk.theme ||
+            (chunk.step_number != null ? `Étape ${chunk.step_number}` : null);
+        const sectionType =
+            chunk.section_type && !isEnrichment
+                ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">${escapeHtml(chunk.section_type)}</span>`
+                : "";
+        const sourcePages =
+            Array.isArray(chunk.source_pages) && chunk.source_pages.length
+                ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">Pages ${chunk.source_pages.join(", ")}</span>`
+                : chunk.source_page
+                  ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">Page source ${chunk.source_page}</span>`
+                  : "";
+        const categoryBadge = isEnrichment
+            ? `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40">IA générée · ${escapeHtml(category.label || "Catégorie")}</span>`
+            : `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="Texte source transcrit">${escapeHtml(category.label || "Catégorie")}${chunk.confidence != null ? ` · ${Math.round(chunk.confidence * 100)}%` : ""}</span>`;
+        const highlightClass = isEnrichment
+            ? "category-enrichment-chunk"
+            : "category-chunk-highlight";
+
+        return `
+            <article class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/40 overflow-hidden ${highlightClass}">
+                <header class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
+                    ${heading ? `<span class="font-semibold text-gray-900 dark:text-gray-100">${escapeHtml(heading)}</span>` : ""}
+                    ${sectionType}
+                    ${sourcePages}
+                    ${categoryBadge}
+                </header>
+                <div class="p-3">
+                    <pre class="whitespace-pre-wrap break-words text-sm text-gray-800 dark:text-gray-100 leading-relaxed font-sans">${escapeHtml(chunk.content || "")}</pre>
+                </div>
+            </article>
+        `;
+    }
+
+    async function loadLibraryCategoryPdfJs() {
+        if (libraryCategoryPdfjsLib) return libraryCategoryPdfjsLib;
+        const script = document.createElement("script");
+        script.type = "module";
+        script.textContent = `
+            import * as pdfjs from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
+            pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
+            window.__libraryCategoryPdfjs = pdfjs;
+        `;
+        document.head.appendChild(script);
+        return new Promise((resolve) => {
+            const t = setInterval(() => {
+                if (window.__libraryCategoryPdfjs) {
+                    clearInterval(t);
+                    libraryCategoryPdfjsLib = window.__libraryCategoryPdfjs;
+                    resolve(libraryCategoryPdfjsLib);
+                }
+            }, 50);
+        });
+    }
+
+    async function renderLibraryCategoryPdf(documentInfo, pageNo) {
+        const container = document.getElementById("library-category-pdf-container");
+        const panel = document.getElementById("library-category-pdf-panel");
+        const textSection = document.getElementById("library-category-text-panel");
+        if (!container || !panel) return;
+
+        if (!documentInfo.has_source_file || !documentInfo.document_id) {
+            panel.classList.add("hidden");
+            textSection?.classList.remove("lg:w-1/2");
+            textSection?.classList.add("lg:w-full");
+            container.innerHTML = "";
+            return;
+        }
+
+        textSection?.classList.add("lg:w-1/2");
+        textSection?.classList.remove("lg:w-full");
+        panel.classList.remove("hidden");
+        container.innerHTML =
+            `<div class="flex items-center justify-center h-full min-h-[200px] text-gray-500 dark:text-gray-400"><i class="ti ti-loader-2 text-2xl animate-spin"></i></div>`;
+
+        try {
+            await loadLibraryCategoryPdfJs();
+            const response = await fetch(
+                `/api/library/documents/${documentInfo.document_id}/file`,
+                { credentials: "include" },
+            );
+            if (!response.ok) throw new Error("PDF indisponible");
+            const pdfData = await response.arrayBuffer();
+            libraryCategoryPdfDoc = await libraryCategoryPdfjsLib
+                .getDocument({ data: pdfData })
+                .promise;
+            const safePage = Math.min(Math.max(1, pageNo), libraryCategoryPdfDoc.numPages);
+            await renderLibraryCategoryPdfPage(safePage);
+        } catch (err) {
+            container.innerHTML =
+                `<div class="text-sm text-gray-500 dark:text-gray-400 text-center p-4">Aperçu PDF indisponible</div>`;
+            console.warn(err);
+        }
+    }
+
+    async function renderLibraryCategoryPdfPage(pageNum) {
+        if (!libraryCategoryPdfDoc) return;
+        const container = document.getElementById("library-category-pdf-container");
+        const page = await libraryCategoryPdfDoc.getPage(pageNum);
+        const containerWidth = Math.max(container.clientWidth - 24, 280);
+        const viewport0 = page.getViewport({ scale: 1 });
+        const scale = containerWidth / viewport0.width;
+        const viewport = page.getViewport({ scale });
+
+        container.innerHTML = "";
+        const pageContainer = document.createElement("div");
+        pageContainer.className = "relative mx-auto";
+        pageContainer.style.width = "fit-content";
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        canvas.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
+        canvas.className = "rounded-lg";
+        pageContainer.appendChild(canvas);
+        container.appendChild(pageContainer);
+        await page.render({ canvasContext: context, viewport }).promise;
+    }
+
+    function closeLibraryCategoryPageModal() {
+        const modal = document.getElementById("library-category-page-modal");
+        if (!modal) return;
+        modal.classList.add("hidden");
+        libraryCategoryPdfDoc = null;
+        libraryCategoryPageState = { categoryId: null, pageNo: null };
+    }
+
+    async function navigateLibraryCategoryPage(direction) {
+        const { categoryId, pageNo } = libraryCategoryPageState;
+        if (!categoryId || !chunksMonitorDocumentId) return;
+
+        const r = await api(
+            `/api/library/documents/${chunksMonitorDocumentId}/categories/${categoryId}/pages/${pageNo}`,
+        );
+        if (!r.ok) return;
+        const detail = await r.json();
+        const nav = detail.navigation || {};
+        const target = direction === "prev" ? nav.prev : nav.next;
+        if (!target) return;
+
+        await openLibraryCategoryPageModal(categoryId, target.page_no);
     }
 
     async function deleteDocument(documentId, documentTitle) {

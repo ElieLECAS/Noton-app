@@ -325,7 +325,7 @@
             <div class="flex justify-between items-center mb-4">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-                        Évaluation de la qualité RAG (Retriever ColPali)
+                        Évaluation de la qualité RAG (hybride + graphe KAG)
                     </h2>
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         Mesure de la pertinence et du bruit de la récupération d'informations sur un dataset de référence (ground truth).
@@ -503,7 +503,91 @@
                             </div>
                         </div>
                     </div>
-                    <p id="eval-stages-help" class="text-xs text-gray-500 dark:text-gray-400">Les cartes du haut mesurent le pipeline final. ColPali seul = LanceDB + seuil dynamique. Post-RRF = fusion pgvector + BM25 + ColPali avant MiniLM.</p>
+                    <p id="eval-stages-help" class="text-xs text-gray-500 dark:text-gray-400">Les cartes du haut mesurent le pipeline final. ColPali seul = LanceDB + seuil dynamique. pgvector seul = vecteur texte (mistral-embed). Lexical seul = BM25/tsvector. Post-RRF = fusion ColPali + pgvector + BM25 + KAG avant MiniLM. Sans graphe = triple retriever uniquement.</p>
+                </div>
+
+                <!-- Retrievers texte isolés (pgvector + lexical) -->
+                <div id="eval-isolated-retrievers" class="hidden space-y-4 mt-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Retrievers texte isolés</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">pgvector seul (vecteur texte)</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-blue-500/10 to-sky-500/10">
+                                    <span class="block text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">Precision</span>
+                                    <span id="metric-precision-pgvector" class="text-2xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                                </div>
+                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-blue-500/10 to-sky-500/10">
+                                    <span class="block text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">Recall</span>
+                                    <span id="metric-recall-pgvector" class="text-2xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                                </div>
+                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-blue-500/10 to-sky-500/10">
+                                    <span class="block text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">MRR</span>
+                                    <span id="metric-mrr-pgvector" class="text-2xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400">Lexical seul (BM25)</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-orange-500/10 to-amber-500/10">
+                                    <span class="block text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-1">Precision</span>
+                                    <span id="metric-precision-lexical" class="text-2xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                                </div>
+                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-orange-500/10 to-amber-500/10">
+                                    <span class="block text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-1">Recall</span>
+                                    <span id="metric-recall-lexical" class="text-2xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                                </div>
+                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-orange-500/10 to-amber-500/10">
+                                    <span class="block text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-1">MRR</span>
+                                    <span id="metric-mrr-lexical" class="text-2xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparaison KAG (triple retriever vs fusion avec graphe) -->
+                <div id="eval-kag-comparison" class="hidden space-y-4 mt-4">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Triple retriever sans graphe (ColPali + pgvector + BM25)</h3>
+                        <span id="eval-kag-badge" class="hidden px-2 py-0.5 rounded text-[10px] font-bold bg-teal-500/10 text-teal-700 dark:text-teal-400"></span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-teal-500/10 to-cyan-500/10">
+                            <span class="block text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 mb-1">Precision sans KAG</span>
+                            <span id="metric-precision-pre-kag" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                            <span id="metric-precision-kag-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
+                        </div>
+                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-teal-500/10 to-cyan-500/10">
+                            <span class="block text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 mb-1">Recall sans KAG</span>
+                            <span id="metric-recall-pre-kag" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                            <span id="metric-recall-kag-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
+                        </div>
+                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-teal-500/10 to-cyan-500/10">
+                            <span class="block text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 mb-1">MRR sans KAG</span>
+                            <span id="metric-mrr-pre-kag" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                            <span id="metric-mrr-kag-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
+                        </div>
+                    </div>
+                    <div id="eval-kag-post-comparison" class="hidden space-y-4 mt-2">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Fusion RRF avec graphe KAG (entités)</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-emerald-500/10 to-teal-500/10">
+                                <span class="block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">Precision avec KAG</span>
+                                <span id="metric-precision-kag-post" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                            </div>
+                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-emerald-500/10 to-teal-500/10">
+                                <span class="block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">Recall avec KAG</span>
+                                <span id="metric-recall-kag-post" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
+                            </div>
+                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-emerald-500/10 to-teal-500/10">
+                                <span class="block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">MRR avec KAG</span>
+                                <span id="metric-mrr-kag-post" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Δ sous chaque métrique = gain ou perte après ajout du canal KAG (graphe entités) dans la fusion RRF.</p>
                 </div>
 
                 <!-- Stats by Type (Mono vs Cross) -->
@@ -2111,6 +2195,23 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
     let totalRecallPostRrf = 0;
     let totalMrrPostRrf = 0;
     let postRrfCount = 0;
+    let totalPrecisionPreKag = 0;
+    let totalRecallPreKag = 0;
+    let totalMrrPreKag = 0;
+    let preKagCount = 0;
+    let kagDeltaPrecision = 0;
+    let kagDeltaRecall = 0;
+    let kagDeltaMrr = 0;
+    let kagDeltaCount = 0;
+    let kagEnabled = false;
+    let totalPrecisionPgvector = 0;
+    let totalRecallPgvector = 0;
+    let totalMrrPgvector = 0;
+    let pgvectorCount = 0;
+    let totalPrecisionLexical = 0;
+    let totalRecallLexical = 0;
+    let totalMrrLexical = 0;
+    let lexicalCount = 0;
 
     details.forEach(q => {
         totalPrecision += q.metrics.context_precision;
@@ -2128,6 +2229,21 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
             totalMrrPostRrf += q.metrics_post_rrf.mrr;
             postRrfCount++;
         }
+        if (q.metrics_pre_kag) {
+            totalPrecisionPreKag += q.metrics_pre_kag.context_precision;
+            totalRecallPreKag += q.metrics_pre_kag.context_recall;
+            totalMrrPreKag += q.metrics_pre_kag.mrr;
+            preKagCount++;
+        }
+        if (q.kag_delta) {
+            kagDeltaPrecision += q.kag_delta.precision;
+            kagDeltaRecall += q.kag_delta.recall;
+            kagDeltaMrr += q.kag_delta.mrr;
+            kagDeltaCount++;
+        }
+        if (q.kag_enabled) {
+            kagEnabled = true;
+        }
         if (q.rerank_delta) {
             deltaPrecision += q.rerank_delta.precision;
             deltaRecall += q.rerank_delta.recall;
@@ -2139,6 +2255,18 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
         }
         if (q.minilm_rerank_enabled) {
             minilmRerankEnabled = true;
+        }
+        if (q.metrics_pgvector_only) {
+            totalPrecisionPgvector += q.metrics_pgvector_only.context_precision;
+            totalRecallPgvector += q.metrics_pgvector_only.context_recall;
+            totalMrrPgvector += q.metrics_pgvector_only.mrr;
+            pgvectorCount++;
+        }
+        if (q.metrics_lexical_only) {
+            totalPrecisionLexical += q.metrics_lexical_only.context_precision;
+            totalRecallLexical += q.metrics_lexical_only.context_recall;
+            totalMrrLexical += q.metrics_lexical_only.mrr;
+            lexicalCount++;
         }
     });
 
@@ -2172,11 +2300,40 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
     }
     result.vision_rerank_enabled = visionRerankEnabled;
     result.minilm_rerank_enabled = minilmRerankEnabled;
+    result.kag_enabled = kagEnabled;
     if (postRrfCount > 0) {
         result.global_metrics_post_rrf = {
             context_precision: totalPrecisionPostRrf / postRrfCount,
             context_recall: totalRecallPostRrf / postRrfCount,
             mrr: totalMrrPostRrf / postRrfCount,
+        };
+    }
+    if (preKagCount > 0) {
+        result.global_metrics_pre_kag = {
+            context_precision: totalPrecisionPreKag / preKagCount,
+            context_recall: totalRecallPreKag / preKagCount,
+            mrr: totalMrrPreKag / preKagCount,
+        };
+    }
+    if (kagDeltaCount > 0) {
+        result.kag_impact = {
+            precision_delta: kagDeltaPrecision / kagDeltaCount,
+            recall_delta: kagDeltaRecall / kagDeltaCount,
+            mrr_delta: kagDeltaMrr / kagDeltaCount,
+        };
+    }
+    if (pgvectorCount > 0) {
+        result.global_metrics_pgvector_only = {
+            context_precision: totalPrecisionPgvector / pgvectorCount,
+            context_recall: totalRecallPgvector / pgvectorCount,
+            mrr: totalMrrPgvector / pgvectorCount,
+        };
+    }
+    if (lexicalCount > 0) {
+        result.global_metrics_lexical_only = {
+            context_precision: totalPrecisionLexical / lexicalCount,
+            context_recall: totalRecallLexical / lexicalCount,
+            mrr: totalMrrLexical / lexicalCount,
         };
     }
     return result;
@@ -2337,6 +2494,108 @@ function renderEvalResults(data, showGeneration = false) {
         colpaliSection.classList.add('hidden');
     }
 
+    const isolatedSection = document.getElementById('eval-isolated-retrievers');
+    const gmPgvector = data.global_metrics_pgvector_only;
+    const gmLexical = data.global_metrics_lexical_only;
+    if (isolatedSection && (gmPgvector || gmLexical)) {
+        isolatedSection.classList.remove('hidden');
+        if (gmPgvector) {
+            const precPgEl = document.getElementById('metric-precision-pgvector');
+            const recPgEl = document.getElementById('metric-recall-pgvector');
+            const mrrPgEl = document.getElementById('metric-mrr-pgvector');
+            if (precPgEl) {
+                precPgEl.innerText = `${(gmPgvector.context_precision * 100).toFixed(1)}%`;
+                precPgEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmPgvector.context_precision)}`;
+            }
+            if (recPgEl) {
+                recPgEl.innerText = `${(gmPgvector.context_recall * 100).toFixed(1)}%`;
+                recPgEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmPgvector.context_recall)}`;
+            }
+            if (mrrPgEl) {
+                mrrPgEl.innerText = gmPgvector.mrr.toFixed(2);
+                mrrPgEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmPgvector.mrr)}`;
+            }
+        }
+        if (gmLexical) {
+            const precLexEl = document.getElementById('metric-precision-lexical');
+            const recLexEl = document.getElementById('metric-recall-lexical');
+            const mrrLexEl = document.getElementById('metric-mrr-lexical');
+            if (precLexEl) {
+                precLexEl.innerText = `${(gmLexical.context_precision * 100).toFixed(1)}%`;
+                precLexEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmLexical.context_precision)}`;
+            }
+            if (recLexEl) {
+                recLexEl.innerText = `${(gmLexical.context_recall * 100).toFixed(1)}%`;
+                recLexEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmLexical.context_recall)}`;
+            }
+            if (mrrLexEl) {
+                mrrLexEl.innerText = gmLexical.mrr.toFixed(2);
+                mrrLexEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmLexical.mrr)}`;
+            }
+        }
+    } else if (isolatedSection) {
+        isolatedSection.classList.add('hidden');
+    }
+
+    const kagSection = document.getElementById('eval-kag-comparison');
+    const gmPreKag = data.global_metrics_pre_kag;
+    const kagImpact = data.kag_impact;
+    const gmKagPost = data.global_metrics_post_rrf;
+    if (kagSection && gmPreKag && data.kag_enabled) {
+        kagSection.classList.remove('hidden');
+        const precPreKagEl = document.getElementById('metric-precision-pre-kag');
+        const recPreKagEl = document.getElementById('metric-recall-pre-kag');
+        const mrrPreKagEl = document.getElementById('metric-mrr-pre-kag');
+        if (precPreKagEl) {
+            precPreKagEl.innerText = `${(gmPreKag.context_precision * 100).toFixed(1)}%`;
+            precPreKagEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPreKag.context_precision)}`;
+        }
+        if (recPreKagEl) {
+            recPreKagEl.innerText = `${(gmPreKag.context_recall * 100).toFixed(1)}%`;
+            recPreKagEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPreKag.context_recall)}`;
+        }
+        if (mrrPreKagEl) {
+            mrrPreKagEl.innerText = gmPreKag.mrr.toFixed(2);
+            mrrPreKagEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPreKag.mrr)}`;
+        }
+        const precKagDeltaEl = document.getElementById('metric-precision-kag-delta');
+        const recKagDeltaEl = document.getElementById('metric-recall-kag-delta');
+        const mrrKagDeltaEl = document.getElementById('metric-mrr-kag-delta');
+        if (kagImpact) {
+            if (precKagDeltaEl) precKagDeltaEl.textContent = formatMetricDelta(kagImpact.precision_delta, true);
+            if (recKagDeltaEl) recKagDeltaEl.textContent = formatMetricDelta(kagImpact.recall_delta, true);
+            if (mrrKagDeltaEl) mrrKagDeltaEl.textContent = formatMetricDelta(kagImpact.mrr_delta, false);
+        }
+        const kagBadge = document.getElementById('eval-kag-badge');
+        if (kagBadge) {
+            kagBadge.textContent = 'Δ affiché : fusion RRF avec KAG vs triple retriever seul';
+            kagBadge.classList.remove('hidden');
+        }
+        const kagPostSection = document.getElementById('eval-kag-post-comparison');
+        if (kagPostSection && gmKagPost) {
+            kagPostSection.classList.remove('hidden');
+            const precKagPostEl = document.getElementById('metric-precision-kag-post');
+            const recKagPostEl = document.getElementById('metric-recall-kag-post');
+            const mrrKagPostEl = document.getElementById('metric-mrr-kag-post');
+            if (precKagPostEl) {
+                precKagPostEl.innerText = `${(gmKagPost.context_precision * 100).toFixed(1)}%`;
+                precKagPostEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmKagPost.context_precision)}`;
+            }
+            if (recKagPostEl) {
+                recKagPostEl.innerText = `${(gmKagPost.context_recall * 100).toFixed(1)}%`;
+                recKagPostEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmKagPost.context_recall)}`;
+            }
+            if (mrrKagPostEl) {
+                mrrKagPostEl.innerText = gmKagPost.mrr.toFixed(2);
+                mrrKagPostEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmKagPost.mrr)}`;
+            }
+        } else if (kagPostSection) {
+            kagPostSection.classList.add('hidden');
+        }
+    } else if (kagSection) {
+        kagSection.classList.add('hidden');
+    }
+
     const finalStageLabel = document.getElementById('metric-final-stage-label');
     if (finalStageLabel) {
         if (data.minilm_rerank_enabled) {
@@ -2405,6 +2664,10 @@ function renderEvalResults(data, showGeneration = false) {
                         <span>Recall: <strong class="${getMetricColorClass(q.metrics.context_recall)}">${(q.metrics.context_recall * 100).toFixed(0)}%</strong></span>
                         <span>MRR: <strong class="${getMetricColorClass(q.metrics.mrr)}">${q.metrics.mrr.toFixed(2)}</strong></span>
                         ${q.metrics_colpali ? `<span class="text-gray-400 hidden md:inline">| ColPali MRR: ${q.metrics_colpali.mrr.toFixed(2)}</span>` : ''}
+                        ${q.metrics_pgvector_only ? `<span class="text-gray-400 hidden md:inline">| pgvector MRR: ${q.metrics_pgvector_only.mrr.toFixed(2)}</span>` : ''}
+                        ${q.metrics_lexical_only ? `<span class="text-gray-400 hidden md:inline">| lexical MRR: ${q.metrics_lexical_only.mrr.toFixed(2)}</span>` : ''}
+                        ${q.metrics_pre_kag ? `<span class="text-gray-400 hidden md:inline">| sans KAG MRR: ${q.metrics_pre_kag.mrr.toFixed(2)}</span>` : ''}
+                        ${q.kag_delta ? `<span class="text-gray-400 hidden md:inline">| Δ KAG MRR: ${formatMetricDelta(q.kag_delta.mrr, false)}</span>` : ''}
                     </div>
                 </div>
                 
@@ -2464,6 +2727,71 @@ function renderEvalResults(data, showGeneration = false) {
                     <div class="hidden p-3 border-t border-slate-500/10 space-y-2">
                         ${q.rerank_delta ? `<p class="text-xs text-gray-500 dark:text-gray-400">Impact rerank — Precision: ${formatMetricDelta(q.rerank_delta.precision, true)} · Recall: ${formatMetricDelta(q.rerank_delta.recall, true)} · MRR: ${formatMetricDelta(q.rerank_delta.mrr, false)}</p>` : ''}
                         ${renderEvalAnalysisColumns(q.analysis_colpali)}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${q.metrics_pgvector_only ? `
+                <div class="mt-2 rounded-2xl bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 overflow-hidden">
+                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-blue-700 dark:text-blue-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            pgvector seul (vecteur texte)
+                            <span class="font-normal text-gray-500">— P: ${(q.metrics_pgvector_only.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_pgvector_only.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_pgvector_only.mrr.toFixed(2)}</span>
+                        </span>
+                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="hidden p-3 border-t border-blue-500/10 space-y-2">
+                        ${renderEvalAnalysisColumns(q.analysis_pgvector_only, 'pgvector')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${q.metrics_lexical_only ? `
+                <div class="mt-2 rounded-2xl bg-orange-500/5 dark:bg-orange-500/10 border border-orange-500/10 overflow-hidden">
+                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-orange-700 dark:text-orange-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            Lexical seul (BM25)
+                            <span class="font-normal text-gray-500">— P: ${(q.metrics_lexical_only.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_lexical_only.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_lexical_only.mrr.toFixed(2)}</span>
+                        </span>
+                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="hidden p-3 border-t border-orange-500/10 space-y-2">
+                        ${renderEvalAnalysisColumns(q.analysis_lexical_only, 'Lexical')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${q.metrics_pre_kag ? `
+                <div class="mt-2 rounded-2xl bg-teal-500/5 dark:bg-teal-500/10 border border-teal-500/10 overflow-hidden">
+                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-teal-700 dark:text-teal-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Triple retriever sans graphe
+                            <span class="font-normal text-gray-500">— P: ${(q.metrics_pre_kag.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_pre_kag.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_pre_kag.mrr.toFixed(2)}</span>
+                        </span>
+                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="hidden p-3 border-t border-teal-500/10 space-y-2">
+                        ${q.kag_delta ? `<p class="text-xs text-gray-500 dark:text-gray-400">Impact KAG (fusion avec graphe) — Precision: ${formatMetricDelta(q.kag_delta.precision, true)} · Recall: ${formatMetricDelta(q.kag_delta.recall, true)} · MRR: ${formatMetricDelta(q.kag_delta.mrr, false)}</p>` : ''}
+                        ${renderEvalAnalysisColumns(q.analysis_pre_kag, 'Sans KAG')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${q.metrics_kag_only ? `
+                <div class="mt-2 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 overflow-hidden">
+                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
+                        <span class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                            KAG seul (graphe entités)
+                            <span class="font-normal text-gray-500">— P: ${(q.metrics_kag_only.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_kag_only.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_kag_only.mrr.toFixed(2)}</span>
+                        </span>
+                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="hidden p-3 border-t border-emerald-500/10 space-y-2">
+                        ${renderEvalAnalysisColumns(q.analysis_kag_only, 'KAG')}
                     </div>
                 </div>
                 ` : ''}

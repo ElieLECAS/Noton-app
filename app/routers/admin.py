@@ -781,8 +781,15 @@ async def evaluate_retriever_single_api(
             q_type=request.type,
             expected_pages=request.pages_attendues,
             passages=passages,
-            colpali_passages=stages.get("colpali", passages),
+            colpali_passages=stages.get("colpali_only") or stages.get("colpali", passages),
+            pgvector_only_passages=stages.get("pgvector_only"),
+            lexical_only_passages=stages.get("lexical_only"),
+            pre_kag_passages=stages.get("pre_kag_rrf"),
+            post_rrf_passages=stages.get("post_rrf"),
+            kag_only_passages=stages.get("kag_only"),
             vision_rerank_enabled=stages.get("vision_rerank_enabled"),
+            minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
+            kag_enabled=stages.get("kag_enabled"),
         )
     except Exception as e:
         logger.error("Error during single retriever evaluation API: %s", e, exc_info=True)
@@ -835,8 +842,15 @@ async def evaluate_rag_single_api(
             q_type=request.type,
             expected_pages=request.pages_attendues,
             passages=passages,
-            colpali_passages=stages.get("colpali", passages),
+            colpali_passages=stages.get("colpali_only") or stages.get("colpali", passages),
+            pgvector_only_passages=stages.get("pgvector_only"),
+            lexical_only_passages=stages.get("lexical_only"),
+            pre_kag_passages=stages.get("pre_kag_rrf"),
+            post_rrf_passages=stages.get("post_rrf"),
+            kag_only_passages=stages.get("kag_only"),
             vision_rerank_enabled=stages.get("vision_rerank_enabled"),
+            minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
+            kag_enabled=stages.get("kag_enabled"),
         )
 
         generated_response = await generate_rag_response(

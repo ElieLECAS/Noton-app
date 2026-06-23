@@ -17,7 +17,7 @@ import re
 import unicodedata
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from pydantic import BaseModel, Field, ValidationError
 from sqlalchemy import text
@@ -38,7 +38,7 @@ from app.models.knowledge_entity import (
 
 logger = logging.getLogger(__name__)
 
-KAG_EXTRACTION_VERSION = "kag_vision_v2"
+KAG_EXTRACTION_VERSION = "kag_vision_v3"
 
 _VALID_ENTITY_TYPES = frozenset(
     {
@@ -79,11 +79,17 @@ class KagExtractedRelation(BaseModel):
     confidence: float = Field(default=0.8, ge=0.0, le=1.0)
 
 
+class ChunkCategoryItem(BaseModel):
+    chunk_index: int = Field(ge=0)
+    categories: List[str] = Field(default_factory=list)
+
+
 class KagPageResponse(BaseModel):
     page_no: int
     entities: List[KagExtractedEntity] = Field(default_factory=list)
     relations: List[KagExtractedRelation] = Field(default_factory=list)
     categories: List[str] = Field(default_factory=list)
+    chunk_categories: List[ChunkCategoryItem] = Field(default_factory=list)
 
 
 class BatchKagResponse(BaseModel):
@@ -145,8 +151,8 @@ _KAG_COMPACT_RETRY_SUFFIX = (
 )
 
 _KAG_BATCH_SYSTEM_PROMPT = """Tu es un expert en extraction d'entités nommées (NER), de relations (RE) et de catégorisation de contenu pour documents techniques menuiserie.
-On te donne les images de plusieurs pages consécutives ET le texte déjà extrait (chunks sémantiques par page).
-Ton travail : pour CHAQUE page, identifier les entités, relations et catégories de contenu.
+On te donne les images de plusieurs pages consécutives ET le texte déjà extrait (chunks transcrits par page, identifiés par chunk_index).
+Ton travail : pour CHAQUE page, identifier les entités, relations et catégories de contenu PAR CHUNK.
 
 Règles impératives :
 1. Renvoie UNIQUEMENT un objet JSON valide (aucun texte hors JSON).
@@ -158,8 +164,10 @@ Règles impératives :
 7. Types de relation suggérés : compatible_avec | est_compose_de | remplace | utilise | conforme_a | installe_sur | fabrique_par | mesure | reference | co_occurs
 8. Ne pas inventer d'entités absentes du texte ou de l'image.
 9. Maximum {max_entities} entités et {max_relations} relations par page.
-10. Catégories : choisis UNIQUEMENT parmi la liste fournie (slug exact). Une page peut avoir 0 à plusieurs catégories selon son contenu.
-11. N'invente pas de catégories hors liste.
+10. Catégories par chunk : pour chaque chunk_index, choisis UNIQUEMENT parmi la liste fournie (slug exact). Un chunk peut avoir 0 à plusieurs catégories selon son contenu réel.
+11. N'associe une catégorie qu'aux chunks dont le contenu traite explicitement du thème. Ne propage pas une catégorie à tous les chunks de la page.
+12. N'invente pas de catégories hors liste.
+13. Le champ "categories" au niveau page est optionnel (union des catégories présentes sur la page). Privilégie "chunk_categories".
 
 Catégories autorisées (slug : description) :
 {category_list}
@@ -187,15 +195,19 @@ Format de réponse OBLIGATOIRE :
           "confidence": 0.85
         }}
       ],
-      "categories": ["<slug1>", "<slug2>"]
+      "categories": ["<slug1>"],
+      "chunk_categories": [
+        {{ "chunk_index": 0, "categories": ["mounting", "hardware_adjustment"] }},
+        {{ "chunk_index": 2, "categories": ["dimensions_tolerances"] }}
+      ]
     }}
   ]
 }}"""
 
 _KAG_BATCH_USER_PROMPT_TEMPLATE = (
     "Document : {title}\nPages du batch : {page_range}\n\n"
-    "Texte extrait par page (chunks sémantiques) :\n{chunk_text}\n\n"
-    "Extrait entités, relations et catégories pour chaque page selon les règles du système."
+    "Texte extrait par page (chunks numérotés chunk_index=0, 1, 2…) :\n{chunk_text}\n\n"
+    "Extrait entités, relations et chunk_categories pour chaque page selon les règles du système."
 )
 
 
@@ -349,6 +361,37 @@ def _normalize_category_slugs(
     return result
 
 
+def _format_chunks_for_kag_prompt(chunks_by_page: Dict[int, List[DocumentChunk]]) -> str:
+    """Formate les chunks L1 avec chunk_index local par page pour le prompt KAG."""
+    parts: List[str] = []
+    for pno in sorted(chunks_by_page.keys()):
+        page_chunks = chunks_by_page[pno]
+        parts.append(f"--- PAGE {pno} ---")
+        for idx, chunk in enumerate(page_chunks):
+            meta = chunk.metadata_json or {}
+            heading = meta.get("heading") or meta.get("parent_heading") or "null"
+            section_type = meta.get("section_type") or "section"
+            content = (chunk.content or chunk.text or "").strip()
+            if not content:
+                continue
+            parts.append(
+                f"[chunk_index={idx}] heading={heading} section_type={section_type}\n{content}"
+            )
+    return "\n\n".join(parts)
+
+
+def _normalize_chunk_categories(
+    chunk_categories: List[ChunkCategoryItem],
+    valid_slugs: frozenset[str],
+) -> List[ChunkCategoryItem]:
+    normalized: List[ChunkCategoryItem] = []
+    for item in chunk_categories or []:
+        slugs = _normalize_category_slugs(item.categories, valid_slugs)
+        if slugs:
+            normalized.append(ChunkCategoryItem(chunk_index=item.chunk_index, categories=slugs))
+    return normalized
+
+
 # ---------------------------------------------------------------------------
 # Appel API vision KAG
 # ---------------------------------------------------------------------------
@@ -487,6 +530,8 @@ def _coerce_kag_page_response(
         payload["relations"] = []
     if not isinstance(payload.get("categories"), list):
         payload["categories"] = []
+    if not isinstance(payload.get("chunk_categories"), list):
+        payload["chunk_categories"] = []
 
     response = KagPageResponse.model_validate(payload)
     max_ent, max_rel = _effective_kag_limits()
@@ -494,7 +539,17 @@ def _coerce_kag_page_response(
     response.relations = response.relations[:max_rel]
     if valid_category_slugs is not None:
         response.categories = _normalize_category_slugs(response.categories, valid_category_slugs)
-    if not response.entities and not response.relations and not response.categories:
+        response.chunk_categories = _normalize_chunk_categories(
+            response.chunk_categories,
+            valid_category_slugs,
+        )
+    has_chunk_categories = bool(response.chunk_categories)
+    if (
+        not response.entities
+        and not response.relations
+        and not response.categories
+        and not has_chunk_categories
+    ):
         raise ValueError(f"Aucune entité, relation ni catégorie extraite pour la page {page_no}")
     return response
 
@@ -584,7 +639,7 @@ def extract_batch_kag_response(
     pdf_path: str,
     batch_pages: List[int],
     document_title: str,
-    chunks_by_page: Dict[int, List[str]],
+    chunks_by_page: Dict[int, List[DocumentChunk]],
     category_list: str,
     valid_category_slugs: frozenset[str],
 ) -> Optional[BatchKagResponse]:
@@ -594,13 +649,13 @@ def extract_batch_kag_response(
     if not batch_pages:
         return None
 
-    page_text_parts: List[str] = []
+    batch_chunks = {pno: chunks_by_page.get(pno) or [] for pno in batch_pages}
+    combined_text = _format_chunks_for_kag_prompt(batch_chunks)
+    if not combined_text.strip():
+        return None
+
     images_b64: List[str] = []
     for pno in batch_pages:
-        texts = chunks_by_page.get(pno) or []
-        chunk_text = "\n\n---\n\n".join(t.strip() for t in texts if t and t.strip())
-        if chunk_text:
-            page_text_parts.append(f"--- PAGE {pno} ---\n{chunk_text}")
         try:
             png = render_page_png_cached(pdf_path, pno, dpi=settings.PAGE_EXTRACTION_DPI)
             images_b64.append(base64.b64encode(png).decode("ascii"))
@@ -608,10 +663,8 @@ def extract_batch_kag_response(
             logger.warning("[KAG] Rendu PNG page %s échoué : %s", pno, exc)
             return None
 
-    if not page_text_parts or not images_b64:
+    if not images_b64:
         return None
-
-    combined_text = "\n\n".join(page_text_parts)
     try:
         last_exc: Optional[Exception] = None
         for attempt, compact in enumerate((False, True)):
@@ -673,6 +726,8 @@ def _load_l1_chunks_by_page(session: Session, document_id: int) -> Dict[int, Lis
         if page_no is None:
             continue
         by_page.setdefault(int(page_no), []).append(chunk)
+    for pno in by_page:
+        by_page[pno].sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
     return by_page
 
 
@@ -918,27 +973,48 @@ def _persist_page_categories(
     page_no: int,
     page_chunks: List[DocumentChunk],
     category_slugs: List[str],
+    chunk_categories: List[ChunkCategoryItem],
     category_id_by_slug: Dict[str, int],
     document_id: int,
+    valid_category_slugs: frozenset[str],
 ) -> int:
-    """Persiste les catégories de contenu pour les chunks d'une page."""
-    if not category_slugs or not page_chunks:
+    """Persiste les catégories de contenu pour les chunks concernés (chunk-level ou fallback page)."""
+    if not page_chunks:
+        return 0
+
+    index_to_slugs: Dict[int, List[str]] = {}
+    for item in chunk_categories or []:
+        slugs = _normalize_category_slugs(item.categories, valid_category_slugs)
+        if slugs:
+            index_to_slugs[item.chunk_index] = slugs
+
+    targets: List[tuple[DocumentChunk, List[str]]] = []
+    if index_to_slugs:
+        for chunk_idx, slugs in index_to_slugs.items():
+            if chunk_idx < 0 or chunk_idx >= len(page_chunks):
+                continue
+            targets.append((page_chunks[chunk_idx], slugs))
+    elif category_slugs:
+        for chunk in page_chunks:
+            targets.append((chunk, category_slugs))
+
+    if not targets:
         return 0
 
     linked = 0
-    for chunk in page_chunks:
+    for chunk, slugs in targets:
         meta = dict(chunk.metadata_json or {})
         existing = meta.get("categories") or []
         if not isinstance(existing, list):
             existing = []
-        merged_slugs = list(dict.fromkeys([*existing, *category_slugs]))
+        merged_slugs = list(dict.fromkeys([*existing, *slugs]))
         meta["categories"] = merged_slugs
         meta["kag_extraction_version"] = KAG_EXTRACTION_VERSION
         chunk.metadata_json = meta
         chunk.metadata_ = meta
         session.add(chunk)
 
-        for slug in category_slugs:
+        for slug in slugs:
             category_id = category_id_by_slug.get(slug)
             if category_id is None:
                 continue
@@ -963,6 +1039,53 @@ def _persist_page_categories(
     return linked
 
 
+def _annotate_chunks_with_entities(
+    session: Session,
+    page_chunks: List[DocumentChunk],
+    entities: List[KagExtractedEntity],
+    *,
+    max_entities: int = 12,
+) -> None:
+    """
+    Écrit les noms canoniques d'entités de la page dans les métadonnées de chaque chunk L1.
+
+    Sert au texte d'embedding (`_build_embed_text`) : le vecteur dense intègre ainsi les
+    références/produits de la page. Granularité page (cohérente avec le linking entité→chunk).
+    """
+    if not page_chunks or not entities:
+        return
+
+    names: List[str] = []
+    seen: set[str] = set()
+    for extracted in entities:
+        raw = (extracted.name or "").strip()
+        if not raw:
+            continue
+        canonical, _ = normalize_and_expand_entity(raw)
+        name = canonical or raw
+        key = name.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        names.append(name)
+        if len(names) >= max_entities:
+            break
+
+    if not names:
+        return
+
+    for chunk in page_chunks:
+        meta = dict(chunk.metadata_json or {})
+        existing = meta.get("entities") or []
+        if not isinstance(existing, list):
+            existing = []
+        merged = list(dict.fromkeys([*existing, *names]))[:max_entities]
+        meta["entities"] = merged
+        chunk.metadata_json = meta
+        chunk.metadata_ = meta
+        session.add(chunk)
+
+
 def _merge_page_kag_responses(
     target: Dict[int, KagPageResponse],
     batch_response: BatchKagResponse,
@@ -978,6 +1101,18 @@ def _merge_page_kag_responses(
         merged_categories = list(
             dict.fromkeys([*(existing.categories or []), *(page_resp.categories or [])])
         )
+        merged_chunk_map: Dict[int, List[str]] = {}
+        for item in existing.chunk_categories:
+            merged_chunk_map[item.chunk_index] = list(item.categories)
+        for item in page_resp.chunk_categories:
+            prev = merged_chunk_map.get(item.chunk_index, [])
+            merged_chunk_map[item.chunk_index] = list(
+                dict.fromkeys([*prev, *item.categories])
+            )
+        merged_chunk_categories = [
+            ChunkCategoryItem(chunk_index=idx, categories=slugs)
+            for idx, slugs in sorted(merged_chunk_map.items())
+        ]
         merged_entities = {normalize_entity_name(e.name): e for e in existing.entities}
         for ent in page_resp.entities:
             merged_entities[normalize_entity_name(ent.name)] = ent
@@ -997,6 +1132,7 @@ def _merge_page_kag_responses(
             entities=list(merged_entities.values()),
             relations=merged_relations,
             categories=merged_categories,
+            chunk_categories=merged_chunk_categories,
         )
 
 
@@ -1005,17 +1141,16 @@ def _merge_page_kag_responses(
 # ---------------------------------------------------------------------------
 
 
-def cleanup_kag_for_document(session: Session, document_id: int) -> None:
-    """Supprime les relations KAG liées aux chunks d'un document avant retraitement."""
-    chunk_ids = [
-        row[0]
-        for row in session.execute(
-            text("SELECT id FROM documentchunk WHERE document_id = :doc_id"),
-            {"doc_id": document_id},
-        ).all()
-    ]
+def delete_chunk_kag_relations(
+    session: Session,
+    chunk_ids: Sequence[int],
+) -> List[Tuple[int, int]]:
+    """
+    Supprime les relations KAG qui bloquent la suppression de chunks (FK).
+    Retourne les paires (entity_id, mention_count_delta) pour ajustement ultérieur.
+    """
     if not chunk_ids:
-        return
+        return []
 
     chunk_ids_tuple = tuple(chunk_ids)
 
@@ -1035,15 +1170,33 @@ def cleanup_kag_for_document(session: Session, document_id: int) -> None:
         text("DELETE FROM chunkentityrelation WHERE chunk_id IN :chunk_ids"),
         {"chunk_ids": chunk_ids_tuple},
     )
-    session.execute(
-        text("DELETE FROM chunkcategoryrelation WHERE chunk_id IN :chunk_ids"),
-        {"chunk_ids": chunk_ids_tuple},
-    )
+
+    try:
+        with session.begin_nested():
+            session.execute(
+                text("DELETE FROM chunkcategoryrelation WHERE chunk_id IN :chunk_ids"),
+                {"chunk_ids": chunk_ids_tuple},
+            )
+    except Exception as exc:
+        logger.warning(
+            "[KAG] Suppression chunkcategoryrelation ignorée (%s chunk(s)) : %s",
+            len(chunk_ids_tuple),
+            exc,
+        )
+
     session.execute(
         text("DELETE FROM entityentityrelation WHERE source_chunk_id IN :chunk_ids"),
         {"chunk_ids": chunk_ids_tuple},
     )
 
+    return [(int(entity_id), int(cnt)) for entity_id, cnt in affected]
+
+
+def prune_kag_entities_after_chunk_removal(
+    session: Session,
+    affected: Sequence[Tuple[int, int]],
+) -> None:
+    """Décrémente mention_count et supprime les entités KAG devenues orphelines."""
     for entity_id, cnt in affected:
         session.execute(
             text(
@@ -1057,9 +1210,46 @@ def cleanup_kag_for_document(session: Session, document_id: int) -> None:
             {"entity_id": entity_id, "cnt": int(cnt)},
         )
 
+    session.execute(
+        text(
+            """
+            DELETE FROM entityentityrelation
+            WHERE entity_a_id IN (SELECT id FROM knowledgeentity WHERE mention_count <= 0)
+               OR entity_b_id IN (SELECT id FROM knowledgeentity WHERE mention_count <= 0)
+            """
+        )
+    )
+    session.execute(
+        text(
+            """
+            DELETE FROM entityalias
+            WHERE entity_id IN (SELECT id FROM knowledgeentity WHERE mention_count <= 0)
+            """
+        )
+    )
     session.execute(text("DELETE FROM knowledgeentity WHERE mention_count <= 0"))
-    session.commit()
-    logger.info("[KAG] Nettoyage document_id=%s — %s chunks, %s entités affectées", document_id, len(chunk_ids), len(affected))
+
+
+def cleanup_kag_for_document(session: Session, document_id: int) -> None:
+    """Supprime les relations KAG liées aux chunks d'un document avant retraitement."""
+    chunk_ids = [
+        row[0]
+        for row in session.execute(
+            text("SELECT id FROM documentchunk WHERE document_id = :doc_id"),
+            {"doc_id": document_id},
+        ).all()
+    ]
+    if not chunk_ids:
+        return
+
+    affected = delete_chunk_kag_relations(session, chunk_ids)
+    prune_kag_entities_after_chunk_removal(session, affected)
+    logger.info(
+        "[KAG] Nettoyage document_id=%s — %s chunks, %s entités affectées",
+        document_id,
+        len(chunk_ids),
+        len(affected),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1100,9 +1290,6 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
         category_id_by_slug = get_category_id_by_slug(session)
         valid_category_slugs = frozenset(category_id_by_slug.keys())
 
-        chunks_text_by_page = {
-            pno: [c.content for c in chunks_by_page[pno]] for pno in page_numbers
-        }
         batches = build_kag_batches(page_numbers)
         page_responses: Dict[int, KagPageResponse] = {}
 
@@ -1113,7 +1300,7 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
                     pdf_path,
                     batch,
                     doc_title,
-                    chunks_text_by_page,
+                    chunks_by_page,
                     category_list,
                     valid_category_slugs,
                 ): batch
@@ -1150,9 +1337,13 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
                 pno,
                 chunks_by_page[pno],
                 kag_response.categories,
+                kag_response.chunk_categories,
                 category_id_by_slug,
                 document_id,
+                valid_category_slugs,
             )
+            # Métadonnées entités sur les chunks L1 → enrichit le texte d'embedding
+            _annotate_chunks_with_entities(session, chunks_by_page[pno], kag_response.entities)
             total_entities += ents
             total_relations += rels
             total_categories += cats

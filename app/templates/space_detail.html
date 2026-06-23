@@ -366,6 +366,29 @@
 .dark .kag-relation-card {
   border-left-color: #818cf8;
 }
+
+.category-chunk-highlight {
+  border-left: 3px solid #14b8a6;
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.08) 0%, transparent 100%);
+}
+.dark .category-chunk-highlight {
+  border-left-color: #2dd4bf;
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.12) 0%, transparent 100%);
+}
+
+.category-enrichment-chunk {
+  border-left: 3px solid #6366f1;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+}
+.dark .category-enrichment-chunk {
+  border-left-color: #818cf8;
+  background: linear-gradient(90deg, rgba(129, 140, 248, 0.12) 0%, transparent 100%);
+}
+
+#space-categories-modal:not(.hidden),
+#space-category-page-modal:not(.hidden) {
+  display: flex;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -376,15 +399,26 @@
         <h1 id="space-title" class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Espace</h1>
         <p class="text-sm text-gray-500">Discussion LIA sur les documents de cet espace</p>
       </div>
-      <button
-        id="kag-graph-toggle"
-        type="button"
-        class="hidden shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold active:scale-95 transition-all"
-        onclick="openKagGraphModal()"
-      >
-        <i class="ti ti-affiliate"></i>
-        <span id="kag-graph-toggle-label">Graphe de connaissances</span>
-      </button>
+      <div class="flex items-center gap-2 shrink-0">
+        <button
+          id="space-categories-toggle"
+          type="button"
+          class="hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-teal-500/20 bg-teal-500/5 text-teal-700 dark:text-teal-300 hover:bg-teal-500/10 text-xs font-semibold active:scale-95 transition-all"
+          onclick="openSpaceCategoriesModal()"
+        >
+          <i class="ti ti-tags"></i>
+          <span>Catégories</span>
+        </button>
+        <button
+          id="kag-graph-toggle"
+          type="button"
+          class="hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold active:scale-95 transition-all"
+          onclick="openKagGraphModal()"
+        >
+          <i class="ti ti-affiliate"></i>
+          <span id="kag-graph-toggle-label">Graphe de connaissances</span>
+        </button>
+      </div>
     </div>
 
     <div class="flex flex-col flex-1 min-h-0">
@@ -457,6 +491,74 @@
 
     <!-- Panneau détail mobile (sous le graphe) -->
     <div id="kag-graph-detail-mobile" class="sm:hidden shrink-0 max-h-[35vh] overflow-y-auto border-t border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50 p-4 hidden"></div>
+  </div>
+</div>
+
+<!-- Modale liste catégories -->
+<div id="space-categories-modal" class="hidden fixed inset-0 z-[125] bg-black/60 backdrop-blur-sm items-center justify-center p-3 sm:p-6" onclick="if(event.target===this) closeSpaceCategoriesModal()">
+  <div class="w-full max-w-2xl max-h-[min(90vh,720px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="ti ti-tags text-teal-500"></i>
+          Catégories de contenu
+        </h2>
+        <p id="space-categories-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Chargement…</p>
+      </div>
+      <button type="button" onclick="closeSpaceCategoriesModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <i class="ti ti-x text-xl"></i>
+      </button>
+    </div>
+    <div id="space-categories-list" class="flex-1 overflow-y-auto p-4 space-y-2">
+      <div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modale page catégorie : PDF + texte extrait -->
+<div id="space-category-page-modal" class="hidden fixed inset-0 z-[126] bg-black/60 backdrop-blur-sm items-center justify-center p-2 sm:p-4" onclick="if(event.target===this) closeSpaceCategoryPageModal()">
+  <div class="w-full max-w-7xl h-[min(94vh,900px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+    <div class="shrink-0 px-3 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
+      <div class="min-w-0 flex-1">
+        <h2 id="space-category-page-title" class="text-base font-bold text-gray-900 dark:text-white truncate">Catégorie</h2>
+        <p id="space-category-page-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">—</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" id="space-category-prev-btn" onclick="navigateSpaceCategoryPage('prev')" disabled class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:pointer-events-none transition-colors">
+          <i class="ti ti-chevron-left"></i>
+          <span class="hidden sm:inline">Précédente</span>
+        </button>
+        <span id="space-category-page-counter" class="text-xs font-semibold text-gray-500 dark:text-gray-400 px-1">—</span>
+        <button type="button" id="space-category-next-btn" onclick="navigateSpaceCategoryPage('next')" disabled class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:pointer-events-none transition-colors">
+          <span class="hidden sm:inline">Suivante</span>
+          <i class="ti ti-chevron-right"></i>
+        </button>
+        <button type="button" onclick="closeSpaceCategoryPageModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="ti ti-x text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex-1 flex flex-col lg:flex-row min-h-0">
+      <section id="space-category-pdf-panel" class="lg:w-1/2 flex flex-col min-h-0 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-950">
+        <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+          Page PDF
+        </div>
+        <div id="space-category-pdf-container" class="flex-1 overflow-auto p-3 flex items-center justify-center">
+          <div class="text-sm text-gray-500 dark:text-gray-400">Chargement du PDF…</div>
+        </div>
+      </section>
+
+      <section id="space-category-text-panel" class="lg:w-1/2 flex flex-col min-h-0">
+        <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+          <span>Texte extrait</span>
+          <span class="normal-case font-medium text-teal-600 dark:text-teal-400">Chunks catégorie surlignés</span>
+        </div>
+        <div id="space-category-text-container" class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
+          <div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>
+        </div>
+      </section>
+    </div>
   </div>
 </div>
 
@@ -1785,6 +1887,303 @@ async function loadKagGraph() {
   }
 }
 
+// ——— Catégories KAG par espace ———
+let spaceCategoriesData = null;
+let spaceCategoriesHasData = false;
+let spaceCategoryPageState = {
+  categoryId: null,
+  documentId: null,
+  pageNo: null,
+};
+let spaceCategoryPdfDoc = null;
+
+function renderSpaceCategoryBadge(category) {
+  const title = category.slug
+    ? `${category.slug}${category.max_confidence != null ? ` · conf. max ${Math.round(category.max_confidence * 100)}%` : ""}`
+    : "";
+  return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="${escapeHtml(title)}">${escapeHtml(category.label || category.slug)}</span>`;
+}
+
+function renderSpaceCategoriesList(categories) {
+  const host = document.getElementById("space-categories-list");
+  if (!host) return;
+
+  if (!categories.length) {
+    host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune catégorie KAG dans cet espace. Retraitez les documents avec KAG activé.</div>`;
+    return;
+  }
+
+  host.innerHTML = categories.map((cat) => `
+    <button
+      type="button"
+      onclick="openSpaceCategoryPageFromList(${cat.category_id})"
+      class="w-full text-left flex items-start justify-between gap-3 rounded-xl border border-black/5 dark:border-white/10 p-3 hover:bg-teal-500/5 hover:border-teal-500/20 transition-all active:scale-[0.99]"
+    >
+      <div class="min-w-0">
+        <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">${escapeHtml(cat.label)}</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-mono">${escapeHtml(cat.slug)}</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          ${cat.page_count || 0} page(s) · ${cat.chunk_count || 0} chunk(s) · ${cat.document_count || 0} document(s)
+        </div>
+      </div>
+      ${renderSpaceCategoryBadge(cat)}
+    </button>
+  `).join("");
+}
+
+async function loadSpaceCategories() {
+  try {
+    const r = await api(`/api/spaces/${spaceId}/categories`);
+    if (!r.ok) return;
+    const data = await r.json();
+    spaceCategoriesData = data;
+    const toggle = document.getElementById("space-categories-toggle");
+    const hasCategories = (data.category_count || 0) > 0;
+    spaceCategoriesHasData = hasCategories;
+    if (toggle) {
+      toggle.classList.toggle("hidden", !hasCategories);
+    }
+  } catch (err) {
+    console.warn("Space categories load failed", err);
+  }
+}
+
+function openSpaceCategoriesModal() {
+  const modal = document.getElementById("space-categories-modal");
+  const meta = document.getElementById("space-categories-meta");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+
+  if (spaceCategoriesData) {
+    meta.textContent = `${spaceCategoriesData.category_count || 0} catégorie(s) dans cet espace`;
+    renderSpaceCategoriesList(spaceCategoriesData.categories || []);
+    return;
+  }
+
+  meta.textContent = "Chargement…";
+  api(`/api/spaces/${spaceId}/categories`).then(async (r) => {
+    if (!r.ok) {
+      meta.textContent = "Impossible de charger les catégories.";
+      document.getElementById("space-categories-list").innerHTML = "";
+      return;
+    }
+    spaceCategoriesData = await r.json();
+    spaceCategoriesHasData = (spaceCategoriesData.category_count || 0) > 0;
+    meta.textContent = `${spaceCategoriesData.category_count || 0} catégorie(s) dans cet espace`;
+    renderSpaceCategoriesList(spaceCategoriesData.categories || []);
+  });
+}
+
+function closeSpaceCategoriesModal() {
+  const modal = document.getElementById("space-categories-modal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  if (document.getElementById("space-category-page-modal")?.classList.contains("hidden")) {
+    document.body.style.overflow = "";
+  }
+}
+
+async function openSpaceCategoryPageFromList(categoryId) {
+  closeSpaceCategoriesModal();
+  const pagesRes = await api(`/api/spaces/${spaceId}/categories/${categoryId}/pages`);
+  if (!pagesRes.ok) {
+    alert("Impossible de charger les pages de cette catégorie.");
+    return;
+  }
+  const pagesData = await pagesRes.json();
+  const firstPage = (pagesData.pages || [])[0];
+  if (!firstPage) {
+    alert("Aucune page associée à cette catégorie.");
+    return;
+  }
+  await openSpaceCategoryPageModal(categoryId, firstPage.document_id, firstPage.page_no);
+}
+
+async function openSpaceCategoryPageModal(categoryId, documentId, pageNo) {
+  const modal = document.getElementById("space-category-page-modal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+
+  spaceCategoryPageState = { categoryId, documentId, pageNo };
+
+  document.getElementById("space-category-page-title").textContent = "Chargement…";
+  document.getElementById("space-category-page-meta").textContent = "—";
+  document.getElementById("space-category-page-counter").textContent = "—";
+  document.getElementById("space-category-text-container").innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+  document.getElementById("space-category-pdf-container").innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+
+  const r = await api(`/api/spaces/${spaceId}/categories/${categoryId}/pages/${documentId}/${pageNo}`);
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    document.getElementById("space-category-text-container").innerHTML =
+      `<div class="text-sm text-red-500">${escapeHtml(err.detail || "Erreur de chargement")}</div>`;
+    return;
+  }
+
+  const detail = await r.json();
+  renderSpaceCategoryPageDetail(detail);
+}
+
+function renderSpaceCategoryPageDetail(detail) {
+  const category = detail.category || {};
+  const documentInfo = detail.document || {};
+  const nav = detail.navigation || {};
+
+  document.getElementById("space-category-page-title").textContent = category.label || category.slug || "Catégorie";
+  document.getElementById("space-category-page-meta").textContent =
+    `${escapeHtml(documentInfo.title || "Document")} · Page ${detail.page_no}`;
+
+  const currentIdx = nav.current_index != null ? nav.current_index + 1 : 0;
+  const total = nav.total || 0;
+  document.getElementById("space-category-page-counter").textContent =
+    total ? `${currentIdx} / ${total}` : "—";
+
+  const prevBtn = document.getElementById("space-category-prev-btn");
+  const nextBtn = document.getElementById("space-category-next-btn");
+  if (prevBtn) prevBtn.disabled = !nav.prev;
+  if (nextBtn) nextBtn.disabled = !nav.next;
+
+  renderSpaceCategoryTextChunks(detail.chunks || [], detail.enrichment_chunks || [], category);
+  renderSpaceCategoryPdf(documentInfo, detail.page_no);
+}
+
+function renderSpaceCategoryTextChunks(chunks, enrichmentChunks, category) {
+  const host = document.getElementById("space-category-text-container");
+  if (!host) return;
+
+  const sourceHtml = (chunks || []).map((chunk) => renderSpaceCategoryChunkCard(chunk, category, false)).join("");
+  const enrichmentHtml = (enrichmentChunks || []).length
+    ? `
+      <section class="space-y-3">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300 flex items-center gap-2">
+          <i class="ti ti-sparkles"></i>
+          Chunks contextuels (texte généré par l'IA)
+        </h3>
+        ${enrichmentChunks.map((chunk) => renderSpaceCategoryChunkCard(chunk, category, true)).join("")}
+      </section>
+    `
+    : "";
+
+  if (!sourceHtml && !enrichmentHtml) {
+    host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk associé à cette catégorie sur cette page.</div>`;
+    return;
+  }
+
+  host.innerHTML = `
+    ${sourceHtml ? `<section class="space-y-3">${sourceHtml}</section>` : ""}
+    ${enrichmentHtml}
+  `;
+}
+
+function renderSpaceCategoryChunkCard(chunk, category, isEnrichment) {
+  const heading = chunk.heading || chunk.theme || (chunk.step_number != null ? `Étape ${chunk.step_number}` : null);
+  const sectionType = chunk.section_type && !isEnrichment
+    ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">${escapeHtml(chunk.section_type)}</span>`
+    : "";
+  const sourcePages = Array.isArray(chunk.source_pages) && chunk.source_pages.length
+    ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">Pages ${chunk.source_pages.join(", ")}</span>`
+    : (chunk.source_page ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">Page source ${chunk.source_page}</span>` : "");
+  const categoryBadge = isEnrichment
+    ? `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40">IA générée · ${escapeHtml(category.label || "Catégorie")}</span>`
+    : `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="Texte source transcrit">${escapeHtml(category.label || "Catégorie")}${chunk.confidence != null ? ` · ${Math.round(chunk.confidence * 100)}%` : ""}</span>`;
+  const highlightClass = isEnrichment ? "category-enrichment-chunk" : "category-chunk-highlight";
+  const markdownHtml = parseMarkdown(chunk.content || "");
+
+  return `
+    <article class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/40 overflow-hidden ${highlightClass}">
+      <header class="px-3 py-2 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
+        ${heading ? `<span class="font-semibold text-gray-900 dark:text-gray-100">${escapeHtml(heading)}</span>` : ""}
+        ${sectionType}
+        ${sourcePages}
+        ${categoryBadge}
+      </header>
+      <div class="p-3 markdown-content text-sm">${markdownHtml}</div>
+    </article>
+  `;
+}
+
+async function renderSpaceCategoryPdf(documentInfo, pageNo) {
+  const container = document.getElementById("space-category-pdf-container");
+  const panel = document.getElementById("space-category-pdf-panel");
+  const textSection = document.getElementById("space-category-text-panel");
+  if (!container || !panel) return;
+
+  if (!documentInfo.has_source_file || !documentInfo.document_id) {
+    panel.classList.add("hidden");
+    textSection?.classList.remove("lg:w-1/2");
+    textSection?.classList.add("lg:w-full");
+    container.innerHTML = "";
+    return;
+  }
+
+  textSection?.classList.add("lg:w-1/2");
+  textSection?.classList.remove("lg:w-full");
+  panel.classList.remove("hidden");
+  container.innerHTML = `<div class="flex items-center justify-center h-full min-h-[200px] text-gray-500 dark:text-gray-400"><i class="ti ti-loader-2 text-2xl animate-spin"></i></div>`;
+
+  try {
+    await loadSpacePdfJs();
+    const response = await fetch(`/api/library/documents/${documentInfo.document_id}/file`, { credentials: "include" });
+    if (!response.ok) throw new Error("PDF indisponible");
+    const pdfData = await response.arrayBuffer();
+    spaceCategoryPdfDoc = await spacePdfjsLib.getDocument({ data: pdfData }).promise;
+    const safePage = Math.min(Math.max(1, pageNo), spaceCategoryPdfDoc.numPages);
+    await renderSpaceCategoryPdfPage(safePage);
+  } catch (err) {
+    container.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400 text-center p-4">Aperçu PDF indisponible</div>`;
+    console.warn(err);
+  }
+}
+
+async function renderSpaceCategoryPdfPage(pageNum) {
+  if (!spaceCategoryPdfDoc) return;
+  const container = document.getElementById("space-category-pdf-container");
+  const page = await spaceCategoryPdfDoc.getPage(pageNum);
+  const containerWidth = Math.max(container.clientWidth - 24, 280);
+  const viewport0 = page.getViewport({ scale: 1 });
+  const scale = containerWidth / viewport0.width;
+  const viewport = page.getViewport({ scale });
+
+  container.innerHTML = "";
+  const pageContainer = document.createElement("div");
+  pageContainer.className = "relative mx-auto";
+  pageContainer.style.width = "fit-content";
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  canvas.height = viewport.height;
+  canvas.width = viewport.width;
+  canvas.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
+  canvas.className = "rounded-lg";
+  pageContainer.appendChild(canvas);
+  container.appendChild(pageContainer);
+  await page.render({ canvasContext: context, viewport }).promise;
+}
+
+function closeSpaceCategoryPageModal() {
+  const modal = document.getElementById("space-category-page-modal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  spaceCategoryPdfDoc = null;
+  spaceCategoryPageState = { categoryId: null, documentId: null, pageNo: null };
+  document.body.style.overflow = "";
+}
+
+async function navigateSpaceCategoryPage(direction) {
+  const { categoryId, documentId, pageNo } = spaceCategoryPageState;
+  if (!categoryId) return;
+
+  const r = await api(`/api/spaces/${spaceId}/categories/${categoryId}/pages/${documentId}/${pageNo}`);
+  if (!r.ok) return;
+  const detail = await r.json();
+  const nav = detail.navigation || {};
+  const target = direction === "prev" ? nav.prev : nav.next;
+  if (!target) return;
+
+  await openSpaceCategoryPageModal(categoryId, target.document_id, target.page_no);
+}
+
 function buildSlotPromptSection(slotPrompt) {
   if (!slotPrompt || !slotPrompt.choices) return "";
   const choiceButtons = slotPrompt.choices.map((c) => (
@@ -2158,13 +2557,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupSpaceSidebar();
   await loadSpace();
   await loadKagGraph();
+  await loadSpaceCategories();
   await loadConversations();
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
+      const categoryPageModal = document.getElementById("space-category-page-modal");
+      if (categoryPageModal && !categoryPageModal.classList.contains("hidden")) {
+        closeSpaceCategoryPageModal();
+        return;
+      }
+      const categoriesModal = document.getElementById("space-categories-modal");
+      if (categoriesModal && !categoriesModal.classList.contains("hidden")) {
+        closeSpaceCategoriesModal();
+        return;
+      }
       const modal = document.getElementById("kag-graph-modal");
       if (modal && !modal.classList.contains("hidden")) {
         closeKagGraphModal();
+      }
+    } else if (!document.getElementById("space-category-page-modal")?.classList.contains("hidden")) {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        navigateSpaceCategoryPage("prev");
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        navigateSpaceCategoryPage("next");
       }
     }
   });

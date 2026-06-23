@@ -16,6 +16,7 @@ def match_page(retrieved_doc_title: str, retrieved_page_no: int, expected_pages:
         return False
 
     ret_title_lower = retrieved_doc_title.lower()
+    ret_tokens = set(ret_title_lower.split())
 
     for exp in expected_pages:
         exp_title = exp.get("document_title")
@@ -23,7 +24,15 @@ def match_page(retrieved_doc_title: str, retrieved_page_no: int, expected_pages:
             continue
 
         exp_title_lower = exp_title.lower()
-        if exp_title_lower in ret_title_lower or ret_title_lower in exp_title_lower:
+        exp_tokens = set(exp_title_lower.split())
+        # Matching flexible : sous-chaîne contiguë OU sous-ensemble de mots
+        # (ex. "Notice Perform 70" ⊆ "Notice de pose Perform 70 - Rev3")
+        if (
+            exp_title_lower in ret_title_lower
+            or ret_title_lower in exp_title_lower
+            or (exp_tokens and exp_tokens.issubset(ret_tokens))
+            or (ret_tokens and ret_tokens.issubset(exp_tokens))
+        ):
             exp_pages = exp.get("pages", [])
             parsed_pages = []
             for p in exp_pages:
@@ -218,15 +227,24 @@ def build_question_eval_result(
     expected_pages: List[Dict[str, Any]],
     passages: List[Dict[str, Any]],
     colpali_passages: Optional[List[Dict[str, Any]]] = None,
+    pgvector_only_passages: Optional[List[Dict[str, Any]]] = None,
+    lexical_only_passages: Optional[List[Dict[str, Any]]] = None,
+    pre_kag_passages: Optional[List[Dict[str, Any]]] = None,
     post_rrf_passages: Optional[List[Dict[str, Any]]] = None,
+    kag_only_passages: Optional[List[Dict[str, Any]]] = None,
     vision_rerank_enabled: Optional[bool] = None,
     minilm_rerank_enabled: Optional[bool] = None,
+    kag_enabled: Optional[bool] = None,
 ) -> Dict[str, Any]:
     """
     Construit le résultat d'évaluation pour une question.
     passages = étape finale (post-MiniLM ou post-vision rerank).
     colpali_passages = ColPali seul (LanceDB + seuil dynamique).
-    post_rrf_passages = fusion RRF avant rerank (optionnel).
+    pgvector_only_passages = pgvector seul (vecteur texte mistral-embed).
+    lexical_only_passages = lexical seul (BM25 / tsvector).
+    pre_kag_passages = fusion RRF triple retriever (sans graphe KAG).
+    post_rrf_passages = fusion RRF avec KAG (avant rerank MiniLM).
+    kag_only_passages = canal KAG seul (graphe entités).
     """
     post = compute_stage_metrics(passages, expected_pages)
     result: Dict[str, Any] = {
@@ -293,6 +311,52 @@ def build_question_eval_result(
                 ),
             }
 
+    if pre_kag_passages is not None:
+        pre_kag = compute_stage_metrics(pre_kag_passages, expected_pages)
+        result["metrics_pre_kag"] = pre_kag["metrics"]
+        result["analysis_pre_kag"] = pre_kag["analysis"]
+        result["retrieved_pages_pre_kag"] = pre_kag["retrieved_pages"]
+        result["retrieved_details_pre_kag"] = pre_kag["retrieved_details"]
+        if post_rrf_passages is not None:
+            result["kag_delta"] = {
+                "precision": round(
+                    result["metrics_post_rrf"]["context_precision"] - pre_kag["metrics"]["context_precision"],
+                    4,
+                ),
+                "recall": round(
+                    result["metrics_post_rrf"]["context_recall"] - pre_kag["metrics"]["context_recall"],
+                    4,
+                ),
+                "mrr": round(
+                    result["metrics_post_rrf"]["mrr"] - pre_kag["metrics"]["mrr"],
+                    4,
+                ),
+            }
+
+    if kag_only_passages is not None:
+        kag_only = compute_stage_metrics(kag_only_passages, expected_pages)
+        result["metrics_kag_only"] = kag_only["metrics"]
+        result["analysis_kag_only"] = kag_only["analysis"]
+        result["retrieved_pages_kag_only"] = kag_only["retrieved_pages"]
+        result["retrieved_details_kag_only"] = kag_only["retrieved_details"]
+
+    if pgvector_only_passages is not None:
+        pgvector_only = compute_stage_metrics(pgvector_only_passages, expected_pages)
+        result["metrics_pgvector_only"] = pgvector_only["metrics"]
+        result["analysis_pgvector_only"] = pgvector_only["analysis"]
+        result["retrieved_pages_pgvector_only"] = pgvector_only["retrieved_pages"]
+        result["retrieved_details_pgvector_only"] = pgvector_only["retrieved_details"]
+
+    if lexical_only_passages is not None:
+        lexical_only = compute_stage_metrics(lexical_only_passages, expected_pages)
+        result["metrics_lexical_only"] = lexical_only["metrics"]
+        result["analysis_lexical_only"] = lexical_only["analysis"]
+        result["retrieved_pages_lexical_only"] = lexical_only["retrieved_pages"]
+        result["retrieved_details_lexical_only"] = lexical_only["retrieved_details"]
+
+    if kag_enabled is not None:
+        result["kag_enabled"] = kag_enabled
+
     return result
 
 
@@ -303,6 +367,14 @@ def _aggregate_global_metrics(details: List[Dict[str, Any]], prefix: str = "") -
         metrics_key = "metrics_colpali"
     elif prefix == "post_rrf":
         metrics_key = "metrics_post_rrf"
+    elif prefix == "pre_kag":
+        metrics_key = "metrics_pre_kag"
+    elif prefix == "kag_only":
+        metrics_key = "metrics_kag_only"
+    elif prefix == "pgvector_only":
+        metrics_key = "metrics_pgvector_only"
+    elif prefix == "lexical_only":
+        metrics_key = "metrics_lexical_only"
 
     n = len(details)
     if n == 0:
@@ -376,7 +448,11 @@ async def evaluate_retriever_dataset(
         passages = search_res.get("passages", [])
         stages = search_res.get("retrieval_stages") or {}
         colpali_passages = stages.get("colpali_only") or stages.get("colpali")
+        pgvector_only_passages = stages.get("pgvector_only")
+        lexical_only_passages = stages.get("lexical_only")
         post_rrf_passages = stages.get("post_rrf")
+        pre_kag_passages = stages.get("pre_kag_rrf")
+        kag_only_passages = stages.get("kag_only")
 
         results.append(
             build_question_eval_result(
@@ -385,9 +461,14 @@ async def evaluate_retriever_dataset(
                 expected_pages=expected_pages,
                 passages=passages,
                 colpali_passages=colpali_passages,
+                pgvector_only_passages=pgvector_only_passages,
+                lexical_only_passages=lexical_only_passages,
+                pre_kag_passages=pre_kag_passages,
                 post_rrf_passages=post_rrf_passages,
+                kag_only_passages=kag_only_passages,
                 vision_rerank_enabled=stages.get("vision_rerank_enabled"),
                 minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
+                kag_enabled=stages.get("kag_enabled"),
             )
         )
 
@@ -397,9 +478,21 @@ async def evaluate_retriever_dataset(
     global_metrics["execution_time_seconds"] = round(time.time() - start_time, 2)
 
     global_metrics_colpali = _aggregate_global_metrics(results, prefix="colpali")
+    global_metrics_pgvector_only = (
+        _aggregate_global_metrics(results, prefix="pgvector_only")
+        if results and results[0].get("metrics_pgvector_only")
+        else None
+    )
+    global_metrics_lexical_only = (
+        _aggregate_global_metrics(results, prefix="lexical_only")
+        if results and results[0].get("metrics_lexical_only")
+        else None
+    )
     global_metrics_post_rrf = _aggregate_global_metrics(results, prefix="post_rrf") if results and results[0].get("metrics_post_rrf") else None
+    global_metrics_pre_kag = _aggregate_global_metrics(results, prefix="pre_kag") if results and results[0].get("metrics_pre_kag") else None
 
     rerank_impact = {"precision_delta": 0.0, "recall_delta": 0.0, "mrr_delta": 0.0}
+    kag_impact = {"precision_delta": 0.0, "recall_delta": 0.0, "mrr_delta": 0.0}
     if num_queries > 0 and results[0].get("rerank_delta"):
         rerank_impact = {
             "precision_delta": round(
@@ -412,23 +505,51 @@ async def evaluate_retriever_dataset(
                 sum(r["rerank_delta"]["mrr"] for r in results) / num_queries, 4
             ),
         }
+    kag_delta_count = sum(1 for r in results if r.get("kag_delta"))
+    if kag_delta_count > 0:
+        kag_impact = {
+            "precision_delta": round(
+                sum(r["kag_delta"]["precision"] for r in results if r.get("kag_delta")) / kag_delta_count,
+                4,
+            ),
+            "recall_delta": round(
+                sum(r["kag_delta"]["recall"] for r in results if r.get("kag_delta")) / kag_delta_count,
+                4,
+            ),
+            "mrr_delta": round(
+                sum(r["kag_delta"]["mrr"] for r in results if r.get("kag_delta")) / kag_delta_count,
+                4,
+            ),
+        }
 
     vision_rerank_enabled = any(r.get("vision_rerank_enabled") for r in results)
     minilm_rerank_enabled = any(r.get("minilm_rerank_enabled") for r in results)
+    kag_enabled = any(r.get("kag_enabled") for r in results)
 
     eval_result: Dict[str, Any] = {
         "global_metrics": global_metrics,
         "global_metrics_colpali": global_metrics_colpali,
         "rerank_impact": rerank_impact,
+        "kag_impact": kag_impact,
         "vision_rerank_enabled": vision_rerank_enabled,
         "minilm_rerank_enabled": minilm_rerank_enabled,
+        "kag_enabled": kag_enabled,
         "type_stats": _aggregate_type_stats(results),
         "type_stats_colpali": _aggregate_type_stats(results, metrics_key="metrics_colpali"),
         "details": results,
     }
+    if global_metrics_pgvector_only:
+        eval_result["global_metrics_pgvector_only"] = global_metrics_pgvector_only
+        eval_result["type_stats_pgvector_only"] = _aggregate_type_stats(results, metrics_key="metrics_pgvector_only")
+    if global_metrics_lexical_only:
+        eval_result["global_metrics_lexical_only"] = global_metrics_lexical_only
+        eval_result["type_stats_lexical_only"] = _aggregate_type_stats(results, metrics_key="metrics_lexical_only")
     if global_metrics_post_rrf:
         eval_result["global_metrics_post_rrf"] = global_metrics_post_rrf
         eval_result["type_stats_post_rrf"] = _aggregate_type_stats(results, metrics_key="metrics_post_rrf")
+    if global_metrics_pre_kag:
+        eval_result["global_metrics_pre_kag"] = global_metrics_pre_kag
+        eval_result["type_stats_pre_kag"] = _aggregate_type_stats(results, metrics_key="metrics_pre_kag")
     return eval_result
 
 

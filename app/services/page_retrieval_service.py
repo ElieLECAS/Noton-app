@@ -4,6 +4,7 @@ expansion small-to-big (L1 consolidés) et voisinage conditionnel N±1.
 """
 from __future__ import annotations
 
+import json
 import logging
 import re
 import unicodedata
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 CONTENT_TYPE_SEMANTIC_LEAF = "semantic_leaf"
 CONTENT_TYPE_PAGE_ANCHOR = "page_anchor"
+CONTENT_TYPE_CONTEXTUAL_ENRICHMENT = "contextual_enrichment"
 
 _BM25_STOPWORDS = {
     "pour", "dans", "avec", "une", "des", "les", "est", "sur", "pas", "plus", "que",
@@ -45,6 +47,7 @@ class PageRetrievalHit:
     bm25_score: Optional[float] = None
     document_title: str = "Document sans titre"
     chunk_id: Optional[int] = None
+    enrichment_source_pages: List[int] = field(default_factory=list)
 
     @property
     def page_key(self) -> str:
@@ -76,6 +79,10 @@ class UnifiedPageHit:
     neighbor_pages: List[int] = field(default_factory=list)
     expansion_reason: Optional[str] = None
 
+    # Pages sources d'un chunk d'enrichissement contextuel ayant matché cette page
+    # (déplié à l'expansion pour retourner tout le batch 1/2/3 pages).
+    enrichment_source_pages: List[int] = field(default_factory=list)
+
     @property
     def page_key(self) -> str:
         return f"{self.document_id}:{self.page_no}"
@@ -96,6 +103,57 @@ def _semantic_leaf_filter(prefix: str = "dc") -> str:
         f"COALESCE({prefix}.metadata_json->>'content_type', "
         f"{prefix}.metadata_->>'content_type', '') = 'semantic_leaf'"
     )
+
+
+def _retrievable_text_leaf_filter(prefix: str = "dc") -> str:
+    """Chunks texte indexés pour retrieval vectoriel / BM25 (source + enrichissement)."""
+    return (
+        f"COALESCE({prefix}.metadata_json->>'content_type', "
+        f"{prefix}.metadata_->>'content_type', '') IN "
+        f"('semantic_leaf', 'contextual_enrichment')"
+    )
+
+
+def _enrichment_source_pages_agg(prefix: str = "dc") -> str:
+    """Agrège (MAX) les source_pages des chunks d'enrichissement ayant matché une page.
+
+    Utilisé dans les requêtes agrégées par page (pgvector / BM25) pour savoir, quand un
+    chunk `contextual_enrichment` figure parmi les chunks retrouvés d'une page, sur quelles
+    pages sources (batch) il s'étend — afin de les déplier à l'expansion.
+    """
+    return (
+        f"MAX(CASE WHEN COALESCE({prefix}.metadata_json->>'content_type', "
+        f"{prefix}.metadata_->>'content_type', '') = '{CONTENT_TYPE_CONTEXTUAL_ENRICHMENT}' "
+        f"THEN COALESCE({prefix}.metadata_json->>'source_pages', "
+        f"{prefix}.metadata_->>'source_pages') END)"
+    )
+
+
+def _parse_source_pages(raw: Any) -> List[int]:
+    """Normalise une valeur source_pages (liste, JSON texte ou None) en List[int]."""
+    if not raw:
+        return []
+    if isinstance(raw, str):
+        try:
+            raw = json.loads(raw)
+        except (ValueError, TypeError):
+            return []
+    if not isinstance(raw, (list, tuple)):
+        return []
+    pages: List[int] = []
+    for value in raw:
+        try:
+            pages.append(int(value))
+        except (TypeError, ValueError):
+            continue
+    return pages
+
+
+def _enrichment_pages_from_meta(meta: dict) -> List[int]:
+    """source_pages d'un chunk si c'est un enrichissement contextuel, sinon []."""
+    if (meta or {}).get("content_type") != CONTENT_TYPE_CONTEXTUAL_ENRICHMENT:
+        return []
+    return _parse_source_pages(meta.get("source_pages"))
 
 
 def _category_metadata_filter_clause(
@@ -183,10 +241,13 @@ def _extract_bm25_fallback_query(query: str, max_terms: int = 6) -> str:
     Retourne une chaîne « term1 OR term2 OR … » pour websearch_to_tsquery.
     """
     normalized = _normalize_bm25_query(query)
-    tokens: List[str] = []
+    ref_tokens: List[str] = []
+    word_tokens: List[str] = []
     seen: Set[str] = set()
 
-    # Priorité : références produit (ROTO, NX, Designo II, etc.)
+    # Priorité : références produit / marques (ROTO, NX, Designo II, codes chiffrés…)
+    # On ne retient ici que les tokens « discriminants » (présence d'une majuscule
+    # ou d'un chiffre), afin que les articles/prépositions ne les évincent pas.
     for match in re.finditer(r"[A-Za-zÀ-ÿ0-9][A-Za-zÀ-ÿ0-9.\-/]{0,}", normalized):
         token = match.group(0).strip(".-/")
         if len(token) < 2:
@@ -194,8 +255,9 @@ def _extract_bm25_fallback_query(query: str, max_terms: int = 6) -> str:
         key = token.lower()
         if key in seen or key in _BM25_STOPWORDS:
             continue
-        seen.add(key)
-        tokens.append(token)
+        if any(c.isupper() for c in token) or any(c.isdigit() for c in token):
+            seen.add(key)
+            ref_tokens.append(token)
 
     # Mots techniques français (ressort, tension, clé…)
     for word in re.findall(r"[\w'-]{4,}", normalized, flags=re.UNICODE):
@@ -203,8 +265,9 @@ def _extract_bm25_fallback_query(query: str, max_terms: int = 6) -> str:
         if key in _BM25_STOPWORDS or key in seen or len(key) < 4:
             continue
         seen.add(key)
-        tokens.append(word)
+        word_tokens.append(word)
 
+    tokens = ref_tokens + word_tokens
     if not tokens:
         return ""
 
@@ -233,6 +296,8 @@ def _format_unified_hit_line(hit: UnifiedPageHit, *, show_rrf: bool = False) -> 
         scores.append(f"vec={hit.pgvector_score:.3f}")
     if hit.bm25_score is not None:
         scores.append(f"bm25={hit.bm25_score:.3f}")
+    if hit.kag_score is not None:
+        scores.append(f"kag={hit.kag_score:.3f}")
     if show_rrf:
         scores.append(f"rrf={hit.rrf_score:.4f}")
     if hit.rerank_score is not None:
@@ -326,6 +391,34 @@ def _log_bm25_zero_diagnostic(
         logger.warning("[BM25 diagnostic] impossible : %s", exc)
 
 
+def _kag_exclusive_hits(
+    kag_hits: List[UnifiedPageHit],
+    colpali_hits: List[UnifiedPageHit],
+    pgvector_hits: List[UnifiedPageHit],
+    bm25_hits: List[UnifiedPageHit],
+) -> List[UnifiedPageHit]:
+    """Pages trouvées uniquement par le graphe KAG (absentes des 3 autres canaux)."""
+    other_keys = set()
+    for hits in (colpali_hits, pgvector_hits, bm25_hits):
+        other_keys.update(h.page_key for h in hits)
+    return [h for h in kag_hits if h.page_key not in other_keys]
+
+
+def _kag_fusion_gains(
+    fused_hits: List[UnifiedPageHit],
+    pre_kag_fused_hits: List[UnifiedPageHit],
+    *,
+    pool_size: int,
+) -> List[UnifiedPageHit]:
+    """Pages entrées dans le pool RRF grâce au canal KAG (absentes sans graphe)."""
+    pre_keys = {h.page_key for h in pre_kag_fused_hits[:pool_size]}
+    return [
+        h
+        for h in fused_hits[:pool_size]
+        if h.page_key not in pre_keys and "kag" in (h.retrieval_sources or [])
+    ]
+
+
 def log_multimodal_retrieval_summary(
     *,
     query_text: str,
@@ -333,6 +426,8 @@ def log_multimodal_retrieval_summary(
     colpali_hits: List[UnifiedPageHit],
     pgvector_hits: List[UnifiedPageHit],
     bm25_hits: List[UnifiedPageHit],
+    kag_hits: Optional[List[UnifiedPageHit]] = None,
+    pre_kag_fused_hits: Optional[List[UnifiedPageHit]] = None,
     fused_hits: List[UnifiedPageHit],
     final_hits: List[UnifiedPageHit],
     passages: List[Dict[str, Any]],
@@ -345,12 +440,13 @@ def log_multimodal_retrieval_summary(
     protected_hits: Optional[List[UnifiedPageHit]] = None,
 ) -> None:
     """Résumé lisible en une seule entrée de log (visible dans docker logs)."""
+    kag_hits = kag_hits or []
     lines = [
         "══════════════════ RAG MULTIMODAL — RÉSUMÉ ══════════════════",
         f"Requête : {query_text[:100]}{'…' if len(query_text) > 100 else ''}",
         f"Documents : {len(doc_ids)} ids={doc_ids[:8]}{'…' if len(doc_ids) > 8 else ''} | pool={pool_size} top_k={top_k}",
         "",
-        "── Étape 1 : Retrievers ──",
+        "── Étape 1 : Triple retriever + graphe (KAG) ──",
         f"  ColPali  : {len(colpali_hits)} page(s)",
     ]
     for hit in colpali_hits[:5]:
@@ -370,6 +466,28 @@ def log_multimodal_retrieval_summary(
             lines.append(f"    • {_format_unified_hit_line(hit)}")
     else:
         lines.append("    • (aucun — voir [BM25 diagnostic] ci-dessus si 0)")
+
+    lines.append(f"  KAG      : {len(kag_hits)} page(s) (graphe entités)")
+    if kag_hits:
+        for hit in kag_hits[:5]:
+            lines.append(f"    • {_format_unified_hit_line(hit)}")
+        if len(kag_hits) > 5:
+            lines.append(f"    … +{len(kag_hits) - 5} autres")
+        kag_exclusive = _kag_exclusive_hits(kag_hits, colpali_hits, pgvector_hits, bm25_hits)
+        if kag_exclusive:
+            lines.append(f"  ↳ Exclusives KAG (hors triple retriever) : {len(kag_exclusive)} page(s)")
+            for hit in kag_exclusive[:5]:
+                lines.append(f"      ★ {_format_unified_hit_line(hit)}")
+            if len(kag_exclusive) > 5:
+                lines.append(f"      … +{len(kag_exclusive) - 5} autres")
+        if pre_kag_fused_hits is not None:
+            kag_gains = _kag_fusion_gains(fused_hits, pre_kag_fused_hits, pool_size=pool_size)
+            if kag_gains:
+                lines.append(f"  ↳ Gains fusion RRF grâce au KAG : {len(kag_gains)} page(s)")
+                for hit in kag_gains[:5]:
+                    lines.append(f"      ↑ {_format_unified_hit_line(hit, show_rrf=True)}")
+    else:
+        lines.append("    • (aucune — entités non matchées ou KAG désactivé)")
 
     lines.extend(["", "── Étape 2 : Fusion RRF ──"])
     if fused_hits:
@@ -461,14 +579,31 @@ def get_space_document_ids(
     return [row[0] for row in session.execute(sql_docs, params)]
 
 
+def _merge_enrichment_source_pages(
+    target: PageRetrievalHit,
+    source: PageRetrievalHit,
+) -> None:
+    if not source.enrichment_source_pages:
+        return
+    merged = set(target.enrichment_source_pages)
+    merged.update(source.enrichment_source_pages)
+    target.enrichment_source_pages = sorted(merged)
+
+
 def _aggregate_hits_by_page(hits: List[PageRetrievalHit]) -> List[PageRetrievalHit]:
     """Garde le meilleur score par (document_id, page_no)."""
     best: Dict[str, PageRetrievalHit] = {}
     for hit in hits:
         existing = best.get(hit.page_key)
         if existing is None or hit.score > existing.score:
+            if existing is not None:
+                _merge_enrichment_source_pages(hit, existing)
+                for src in existing.retrieval_sources:
+                    if src not in hit.retrieval_sources:
+                        hit.retrieval_sources.append(src)
             best[hit.page_key] = hit
         else:
+            _merge_enrichment_source_pages(existing, hit)
             for src in hit.retrieval_sources:
                 if src not in existing.retrieval_sources:
                     existing.retrieval_sources.append(src)
@@ -590,7 +725,7 @@ def retrieve_pgvector_page_hits(
         WHERE dc.document_id IN :doc_ids
           AND dc.is_leaf = true
           AND dc.embedding IS NOT NULL
-          AND COALESCE(dc.metadata_json->>'content_type', dc.metadata_->>'content_type', '') = 'semantic_leaf'
+          AND {_retrievable_text_leaf_filter("dc")}
         ORDER BY dc.embedding <=> CAST(:query_vec AS vector)
         LIMIT :limit
     """)
@@ -615,6 +750,7 @@ def retrieve_pgvector_page_hits(
                 retrieval_sources=["pgvector"],
                 document_title=row.document_title or "Document sans titre",
                 chunk_id=int(row.id),
+                enrichment_source_pages=_enrichment_pages_from_meta(meta),
             )
         )
     hits = _aggregate_hits_by_page(hits)
@@ -639,7 +775,7 @@ def retrieve_bm25_page_hits(
     logger.info("[retrieve_bm25] démarrage — %d docs, limit=%d, query=%r", len(doc_ids), limit, query_text[:80])
 
     tsquery_fn = _bm25_tsquery_fn()
-    semantic_filter = f"AND {_semantic_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
+    semantic_filter = f"AND {_retrievable_text_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
     sql = text(f"""
         SELECT
             dc.id,
@@ -685,6 +821,7 @@ def retrieve_bm25_page_hits(
                 retrieval_sources=["bm25"],
                 document_title=row.document_title or "Document sans titre",
                 chunk_id=int(row.id),
+                enrichment_source_pages=_enrichment_pages_from_meta(meta),
             )
         )
     hits = _aggregate_hits_by_page(hits)
@@ -847,7 +984,13 @@ def unified_hits_to_eval_passages(hits: List[UnifiedPageHit], top_k: int) -> Lis
         elif hit.rrf_score:
             score = hit.rrf_score
         else:
-            score = hit.colpali_score or hit.pgvector_score or hit.bm25_score or 0.0
+            score = (
+                hit.colpali_score
+                or hit.pgvector_score
+                or hit.bm25_score
+                or hit.kag_score
+                or 0.0
+            )
         passages.append(
             {
                 "rank": rank,
@@ -861,6 +1004,7 @@ def unified_hits_to_eval_passages(hits: List[UnifiedPageHit], top_k: int) -> Lis
                 "colpali_score": hit.colpali_score,
                 "pgvector_score": hit.pgvector_score,
                 "bm25_score": hit.bm25_score,
+                "kag_score": hit.kag_score,
                 "rerank_score": hit.rerank_score,
             }
         )
@@ -906,13 +1050,14 @@ def retrieve_pgvector_pages(
             dc.document_id,
             {page_no_expr} AS page_no,
             d.title AS document_title,
-            MAX(1 - (dc.embedding <=> CAST(:query_vec AS vector))) AS similarity
+            MAX(1 - (dc.embedding <=> CAST(:query_vec AS vector))) AS similarity,
+            {_enrichment_source_pages_agg("dc")} AS enrichment_source_pages_text
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         WHERE dc.document_id IN :doc_ids
           AND dc.is_leaf = true
           AND dc.embedding IS NOT NULL
-          AND {_semantic_leaf_filter("dc")}
+          AND {_retrievable_text_leaf_filter("dc")}
           AND {page_no_expr} IS NOT NULL
         GROUP BY dc.document_id, {page_no_expr}, d.title
         ORDER BY similarity DESC
@@ -930,6 +1075,9 @@ def retrieve_pgvector_pages(
             pgvector_score=float(row.similarity or 0.0),
             document_title=row.document_title or "Document sans titre",
             retrieval_sources=["pgvector"],
+            enrichment_source_pages=_parse_source_pages(
+                getattr(row, "enrichment_source_pages_text", None)
+            ),
         )
         for row in rows
     ]
@@ -953,14 +1101,15 @@ def _run_bm25_pages_query(
     """Exécute la requête BM25 agrégée par page."""
     tsquery_fn = _bm25_tsquery_fn()
     page_no_expr = _page_no_sql_expr("dc")
-    semantic_filter = f"AND {_semantic_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
+    semantic_filter = f"AND {_retrievable_text_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
 
     sql = text(f"""
         SELECT
             dc.document_id,
             {page_no_expr} AS page_no,
             d.title AS document_title,
-            MAX(ts_rank_cd(dc.tsv_content, {tsquery_fn}('french', :query))) AS rank
+            MAX(ts_rank_cd(dc.tsv_content, {tsquery_fn}('french', :query))) AS rank,
+            {_enrichment_source_pages_agg("dc")} AS enrichment_source_pages_text
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         WHERE dc.document_id IN :doc_ids
@@ -987,14 +1136,15 @@ def _run_bm25_or_pages_query(
 ) -> List[Any]:
     """Recherche BM25 avec to_tsquery OR (fallback quand AND échoue)."""
     page_no_expr = _page_no_sql_expr("dc")
-    semantic_filter = f"AND {_semantic_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
+    semantic_filter = f"AND {_retrievable_text_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
 
     sql = text(f"""
         SELECT
             dc.document_id,
             {page_no_expr} AS page_no,
             d.title AS document_title,
-            MAX(ts_rank_cd(dc.tsv_content, to_tsquery('french', :tsq))) AS rank
+            MAX(ts_rank_cd(dc.tsv_content, to_tsquery('french', :tsq))) AS rank,
+            {_enrichment_source_pages_agg("dc")} AS enrichment_source_pages_text
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         WHERE dc.document_id IN :doc_ids
@@ -1021,14 +1171,15 @@ def _run_bm25_websearch_or_pages_query(
 ) -> List[Any]:
     """Recherche BM25 avec websearch_to_tsquery sur une requête « term1 OR term2 »."""
     page_no_expr = _page_no_sql_expr("dc")
-    semantic_filter = f"AND {_semantic_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
+    semantic_filter = f"AND {_retrievable_text_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
 
     sql = text(f"""
         SELECT
             dc.document_id,
             {page_no_expr} AS page_no,
             d.title AS document_title,
-            MAX(ts_rank_cd(dc.tsv_content, websearch_to_tsquery('french', :query))) AS rank
+            MAX(ts_rank_cd(dc.tsv_content, websearch_to_tsquery('french', :query))) AS rank,
+            {_enrichment_source_pages_agg("dc")} AS enrichment_source_pages_text
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         WHERE dc.document_id IN :doc_ids
@@ -1112,6 +1263,9 @@ def retrieve_bm25_pages(
             bm25_score=float(row.rank or 0.0),
             document_title=row.document_title or "Document sans titre",
             retrieval_sources=["bm25"],
+            enrichment_source_pages=_parse_source_pages(
+                getattr(row, "enrichment_source_pages_text", None)
+            ),
         )
         for row in rows
     ]
@@ -1172,6 +1326,10 @@ def fuse_multimodal_hits(
                 target.document_title = hit.document_title
             if hit.chunk_id is not None:
                 target.chunk_id = hit.chunk_id
+            if hit.enrichment_source_pages:
+                merged_pages = set(target.enrichment_source_pages)
+                merged_pages.update(hit.enrichment_source_pages)
+                target.enrichment_source_pages = sorted(merged_pages)
 
     add_channel(colpali_hits, "colpali")
     add_channel(pgvector_hits, "pgvector")
@@ -1201,6 +1359,35 @@ def fuse_multimodal_hits(
     return final
 
 
+def _apply_enrichment_span_expansion(session: Session, hit: UnifiedPageHit) -> None:
+    """Déplie les pages sources d'un chunk d'enrichissement contextuel retrouvé.
+
+    Quand un chunk `contextual_enrichment` couvrant plusieurs pages (1/2/3) a matché la
+    page du hit, on charge les L1 de toutes ses `source_pages` afin que le retrieval
+    retourne l'intégralité du batch et non uniquement la page principale.
+    """
+    extra_pages = sorted(
+        {p for p in hit.enrichment_source_pages if p and p != hit.page_no}
+    )
+    if not extra_pages:
+        return
+
+    seen_ids = {c.id for c in hit.text_chunks if c.id is not None}
+    for pno in extra_pages:
+        for chunk in load_l1_chunks_for_page(session, hit.document_id, pno):
+            if chunk.id is not None and chunk.id in seen_ids:
+                continue
+            hit.text_chunks.append(chunk)
+            if chunk.id is not None:
+                seen_ids.add(chunk.id)
+        if pno not in hit.neighbor_pages:
+            hit.neighbor_pages.append(pno)
+
+    hit.text_chunks.sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
+    hit.neighbor_pages.sort()
+    hit.expansion_reason = hit.expansion_reason or "enrichment_span"
+
+
 def expand_page_context(
     session: Session,
     hits: List[UnifiedPageHit],
@@ -1215,6 +1402,10 @@ def expand_page_context(
         hit.text_chunks = load_l1_chunks_for_page(session, hit.document_id, hit.page_no)
         hit.neighbor_pages = []
         hit.expansion_reason = None
+
+        # Dépliage des pages sources d'un chunk d'enrichissement, indépendant de la
+        # stratégie de voisinage : un chunk contextuel retrouvé ramène tout son batch.
+        _apply_enrichment_span_expansion(session, hit)
 
         if strategy == "none":
             expanded.append(hit)
@@ -1240,7 +1431,9 @@ def expand_page_context(
                         if chunk.id is not None:
                             seen_ids.add(chunk.id)
                 hit.text_chunks.sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
-                hit.neighbor_pages.append(hit.page_no + 1)
+                if hit.page_no + 1 not in hit.neighbor_pages:
+                    hit.neighbor_pages.append(hit.page_no + 1)
+                    hit.neighbor_pages.sort()
 
         expanded.append(hit)
     return expanded
@@ -1293,6 +1486,10 @@ def format_multimodal_passages(
                 image_pages.append((hit.document_id, pno))
 
         display_score = hit.rerank_score if hit.rerank_score is not None else hit.rrf_score
+        enrichment_chunks = load_enrichment_chunks_for_pages(
+            session, hit.document_id, pages_included
+        )
+        enrichment_passages = _format_enrichment_passages(enrichment_chunks)
         passage_dict: Dict[str, Any] = {
             "rank": hit.final_rank,
             "passage": passage_text,
@@ -1301,7 +1498,10 @@ def format_multimodal_passages(
             "document_id": hit.document_id,
             "chunk_id": hit.chunk_id,
             "score": float(display_score or 0.0),
-            "page_no": page_start,
+            # page_no = page ancre réellement matchée par le retriever (pas min du span).
+            # Écraser page_no par page_start faussait l'éval et les citations quand un
+            # chunk d'enrichissement dépliait un batch [N-2..N] sous le n° de sa 1ère page.
+            "page_no": hit.page_no,
             "page_start": page_start,
             "page_end": page_end,
             "retrieval_sources": list(hit.retrieval_sources),
@@ -1315,6 +1515,8 @@ def format_multimodal_passages(
             "needs_page_image": needs_image and len(image_pages) > 0,
             "image_pages": image_pages,
             "content_type": "multimodal_page_passage",
+            "is_enrichment": False,
+            "enrichment_passages": enrichment_passages,
         }
         passages.append(passage_dict)
 
@@ -1383,6 +1585,7 @@ def fuse_page_hits_rrf(
                 target.document_title = hit.document_title
             if hit.chunk_id is not None:
                 target.chunk_id = hit.chunk_id
+            _merge_enrichment_source_pages(target, hit)
 
     _add_channel(colpali_hits, "colpali")
     _add_channel(pgvector_hits, "pgvector")
@@ -1423,7 +1626,7 @@ def load_l1_chunks_for_page(
     document_id: int,
     page_no: int,
 ) -> List[DocumentChunk]:
-    """Charge tous les semantic_leaf couvrant une page donnée."""
+    """Charge tous les semantic_leaf (texte source) couvrant une page donnée."""
     stmt = select(DocumentChunk).where(
         DocumentChunk.document_id == document_id,
         DocumentChunk.is_leaf == True,  # noqa: E712
@@ -1432,7 +1635,10 @@ def load_l1_chunks_for_page(
     result: List[DocumentChunk] = []
     for chunk in all_leaves:
         meta = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        if meta.get("content_type") == CONTENT_TYPE_PAGE_ANCHOR:
+        content_type = meta.get("content_type")
+        if content_type in (CONTENT_TYPE_PAGE_ANCHOR, CONTENT_TYPE_CONTEXTUAL_ENRICHMENT):
+            continue
+        if content_type not in (None, CONTENT_TYPE_SEMANTIC_LEAF):
             continue
         p_start = meta.get("page_start") or meta.get("page_no")
         p_end = meta.get("page_end") or p_start
@@ -1445,6 +1651,75 @@ def load_l1_chunks_for_page(
             result.append(chunk)
     result.sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
     return result
+
+
+def load_enrichment_chunks_for_pages(
+    session: Session,
+    document_id: int,
+    page_numbers: List[int],
+) -> List[DocumentChunk]:
+    """Charge les chunks contextual_enrichment liés aux pages données."""
+    if not page_numbers:
+        return []
+
+    page_set = set(page_numbers)
+    stmt = select(DocumentChunk).where(
+        DocumentChunk.document_id == document_id,
+        DocumentChunk.is_leaf == True,  # noqa: E712
+    )
+    result: List[DocumentChunk] = []
+    for chunk in session.exec(stmt).all():
+        meta = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
+        if meta.get("content_type") != CONTENT_TYPE_CONTEXTUAL_ENRICHMENT:
+            continue
+        source_pages = meta.get("source_pages") or []
+        source_page = meta.get("source_page") or meta.get("page_no")
+        covers = False
+        if isinstance(source_pages, list):
+            covers = any(int(p) in page_set for p in source_pages if p is not None)
+        if not covers and source_page is not None:
+            try:
+                covers = int(source_page) in page_set
+            except (TypeError, ValueError):
+                pass
+        if not covers:
+            p_start = meta.get("page_start") or meta.get("page_no")
+            p_end = meta.get("page_end") or p_start
+            try:
+                p_start_i = int(p_start) if p_start is not None else None
+                p_end_i = int(p_end) if p_end is not None else p_start_i
+                if p_start_i is not None and p_end_i is not None:
+                    covers = any(p_start_i <= p <= p_end_i for p in page_set)
+            except (TypeError, ValueError):
+                pass
+        if covers:
+            result.append(chunk)
+    result.sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
+    return result
+
+
+def _format_enrichment_passages(
+    enrichment_chunks: List[DocumentChunk],
+) -> List[Dict[str, Any]]:
+    passages: List[Dict[str, Any]] = []
+    for chunk in enrichment_chunks:
+        meta = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
+        content = (chunk.content or chunk.text or "").strip()
+        if not content:
+            continue
+        source_page = meta.get("source_page") or meta.get("page_no")
+        passages.append(
+            {
+                "content": content,
+                "theme": meta.get("theme"),
+                "category_slug": meta.get("category_slug"),
+                "source_page": source_page,
+                "source_pages": meta.get("source_pages") or [],
+                "is_enrichment": True,
+                "chunk_id": chunk.id,
+            }
+        )
+    return passages
 
 
 def build_consolidated_page_text(chunks: List[DocumentChunk]) -> str:
@@ -1505,8 +1780,17 @@ def expand_neighbor_pages(
     expanded_neighbors: Set[int] = set()
     reason: Optional[str] = None
 
+    # Signal 0 : dépliage des pages sources d'un chunk d'enrichissement contextuel
+    # retrouvé sur cette page (retourne tout le batch 1/2/3 pages).
+    for pno in hit.enrichment_source_pages:
+        if pno and pno != page_no:
+            pages.add(pno)
+            expanded_neighbors.add(pno)
+            reason = reason or "enrichment_span"
+
     if _has_cross_page_coverage(session, doc_id, page_no):
-        return sorted(pages), [], None
+        expanded_neighbors.discard(page_no)
+        return sorted(pages), sorted(expanded_neighbors), reason
 
     l1_chunks = load_l1_chunks_for_page(session, doc_id, page_no)
 
@@ -1641,6 +1925,10 @@ def format_hybrid_passages(
             weak_pool,
         )
         needs_page_image = len(image_pages) > 0
+        enrichment_chunks = load_enrichment_chunks_for_pages(
+            session, hit.document_id, pages_included
+        )
+        enrichment_passages = _format_enrichment_passages(enrichment_chunks)
 
         out: Dict[str, Any] = {
             "passage": passage_text,
@@ -1649,7 +1937,8 @@ def format_hybrid_passages(
             "document_id": hit.document_id,
             "chunk_id": hit.chunk_id,
             "score": float(hit.rrf_score or hit.score),
-            "page_no": page_start,
+            # page_no = page ancre matchée (cf. format_multimodal_passages) — pas min du span.
+            "page_no": hit.page_no,
             "page_start": page_start,
             "page_end": page_end,
             "retrieval_sources": list(hit.retrieval_sources),
@@ -1662,6 +1951,8 @@ def format_hybrid_passages(
             "needs_page_image": needs_page_image,
             "image_pages": image_pages,
             "content_type": "hybrid_page_passage",
+            "is_enrichment": False,
+            "enrichment_passages": enrichment_passages,
         }
         passages.append(out)
 

@@ -1,16 +1,16 @@
 """
-Extraction de chunks documentaires via Mistral vision (Ministral 3B).
+Extraction de chunks documentaires via Mistral vision (Ministral 8B).
 
 Pipeline par page :
   1. Rendu PNG via render_page_png_cached
-  2. Appel Ministral 3B → JSON structuré { chunks: [...] }
+  2. Appel Ministral 8B → JSON structuré { chunks: [...] } (transcription fidèle)
   3. Validation Pydantic + guard tokens (cap 480)
   4. Fallback pymupdf4llm si l'API échoue
 
 Après collecte de toutes les pages :
   5. merge_cross_page_chunks : recollage des passages coupés entre page N et N+1
 
-CHUNKING_VERSION = "vision_page_v1"
+CHUNKING_VERSION = "vision_page_v2"
 """
 from __future__ import annotations
 
@@ -20,13 +20,13 @@ import re
 import uuid
 from typing import List, Optional
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator
 
 from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-CHUNKING_VERSION = "vision_page_v1"
+CHUNKING_VERSION = "vision_page_v2"
 EXTRACTION_PROVIDER_VISION = "mistral_vision"
 EXTRACTION_PROVIDER_FALLBACK = "pymupdf4llm_fallback"
 
@@ -47,8 +47,23 @@ class VisionChunk(BaseModel):
     step_number: Optional[int] = Field(default=None)
     section_type: str = Field(default="section")
     content: str
+    visual_labels: List[str] = Field(default_factory=list)
     continues_on_next_page: bool = Field(default=False)
     continues_from_previous_page: bool = Field(default=False)
+
+    @field_validator("content", mode="before")
+    @classmethod
+    def _normalize_content(cls, value):
+        """
+        Tolère les sorties LLM instables où `content` est parfois une liste
+        de fragments au lieu d'une chaîne.
+        """
+        if isinstance(value, list):
+            parts = [str(item).strip() for item in value if str(item).strip()]
+            return "\n".join(parts)
+        if value is None:
+            return ""
+        return str(value)
 
 
 class VisionPageResponse(BaseModel):
@@ -60,31 +75,40 @@ class VisionPageResponse(BaseModel):
 # Prompt système
 # -----------------------------------------------------------------------
 
-_SYSTEM_PROMPT = """Tu es un assistant d'extraction documentaire technique.
+_SYSTEM_PROMPT = """Tu es un assistant de transcription documentaire technique.
 On te donne l'image d'une page de document (notice technique, catalogue, procédure).
-Ton travail est de lire TOUTE la page (texte, schémas, tableaux, légendes) et de la découper en chunks sémantiques pour un système RAG.
+Ton travail est de TRANSCRIRE fidèlement le contenu visible et de le découper en chunks pour un système RAG.
 
 Règles impératives :
 1. Renvoie UNIQUEMENT un objet JSON valide (aucun texte hors JSON).
-2. Chaque chunk doit être auto-suffisant pour le RAG : inclure le contexte nécessaire à sa compréhension (ne pas écrire "voir ci-dessus" ou "celui-ci").
-3. Chaque "content" doit faire au maximum 480 tokens Mistral (~1800 caractères).
-4. Décris les éléments visuels (schémas, assemblages) en texte dans le content du chunk concerné (ex. "le schéma montre Gâche OB Droite à gauche et Gâche OB Gauche à droite").
-5. Inclure les légendes des images dans le chunk de l'étape/section associée.
-6. Ne pas inclure de bruit markdown : pas de "**texte**", pas de "<!-- page:N -->", pas de "==> picture omitted".
-7. Si le texte d'une section est coupé en bas de page (phrase inachevée ou étape non terminée), mettre "continues_on_next_page": true sur ce chunk.
-8. Si le premier chunk de la page reprend un texte commencé sur la page précédente, mettre "continues_from_previous_page": true.
+2. Transcris le texte EXACTEMENT tel qu'il apparaît sur la page : aucune interprétation, aucune paraphrase, aucune reformulation.
+3. Ne complète pas, n'infère pas et n'explique pas le contenu : copie mot pour mot ce qui est écrit.
+4. Interdiction absolue des formulations déictiques : pas de "ce schéma", "ce profil", "celui-ci", "voir ci-dessus", "l'image montre".
+5. Chaque "content" doit faire au maximum 480 tokens Mistral (~1800 caractères).
+6. Pour les schémas, assemblages et éléments visuels : utilise section_type "diagram" et liste dans "visual_labels" chaque libellé, référence, code ou cote exactement tels qu'écrits. Reprends aussi ces libellés dans "content" sous forme de liste ou de texte transcrit, sans description libre.
+6bis. ABSTENTION STRICTE sur les cotes et valeurs chiffrées des dessins techniques :
+   - N'extrais une cote (dimension, nombre, code) QUE si tu la lis avec certitude sur l'image. Si un chiffre est flou, ambigu, partiellement masqué ou que tu n'es pas sûr de sa valeur, NE L'ÉCRIS PAS. Mieux vaut sous-extraire qu'inventer.
+   - INTERDICTION de produire une fiche technique synthétique du type "Largeur totale : X, Hauteur totale : Y, Rayon intérieur : Z". Tu ne dois PAS deviner ni nommer ce qu'une cote mesure (largeur, hauteur, rayon, encoche…) si ce rôle n'est pas explicitement écrit à côté du chiffre.
+   - Transcris chaque cote en VERBATIM : reporte uniquement le nombre (et son unité/symbole s'il est écrit : "70", "R2", "Ø8") rattaché au libellé ou code visible le plus proche. Pas de rôle inféré, pas de valeur "plausible" ajoutée pour compléter.
+   - Si un dessin ne porte qu'une référence produit lisible (ex : "6100") et aucune cote certaine, ne transcris que la référence. N'ajoute aucun chiffre.
+7. Pour les tableaux : section_type "table", transcris cellules et en-têtes tels quels.
+8. Inclure les légendes d'images dans le chunk de l'étape/section associée, texte transcrit tel quel.
+9. Ne pas inclure de bruit markdown : pas de "**texte**", pas de "<!-- page:N -->", pas de "==> picture omitted".
+10. Si le texte d'une section est coupé en bas de page (phrase inachevée ou étape non terminée), mettre "continues_on_next_page": true sur ce chunk.
+11. Si le premier chunk de la page reprend un texte commencé sur la page précédente, mettre "continues_from_previous_page": true.
 
-Types de section_type possibles : document_header | step | section | table | legend
+Types de section_type possibles : document_header | step | section | table | legend | diagram
 
 Format de réponse OBLIGATOIRE :
 {
   "page_no": <numéro de page>,
   "chunks": [
     {
-      "heading": "<titre court ou null>",
+      "heading": "<titre court transcrit ou null>",
       "step_number": <entier ou null>,
       "section_type": "<type>",
-      "content": "<texte auto-suffisant>",
+      "content": "<texte transcrit fidèlement>",
+      "visual_labels": ["<libellé exact 1>", "<libellé exact 2>"],
       "continues_on_next_page": false,
       "continues_from_previous_page": false
     }
@@ -93,12 +117,12 @@ Format de réponse OBLIGATOIRE :
 
 _USER_PROMPT_TEMPLATE = (
     "Document : {title}\nPage : {page_no}\n\n"
-    "Extrait tous les chunks sémantiques de cette page selon les règles du système."
+    "Transcris fidèlement toute la page et découpe-la en chunks selon les règles du système."
 )
 
 _VISION_COMPACT_RETRY_SUFFIX = (
     "\n\nIMPORTANT : JSON strictement valide et complet. "
-    "Chunks concis (content court, auto-suffisant). Maximum 10 chunks par page."
+    "Transcription fidèle, sans interprétation. Maximum 10 chunks par page."
 )
 
 
@@ -223,6 +247,8 @@ def _validate_and_normalize(
                 meta["parent_heading"] = chunk.heading
             if chunk.step_number is not None:
                 meta["step_number"] = chunk.step_number
+            if chunk.visual_labels:
+                meta["visual_labels"] = chunk.visual_labels
             # Flags de coupure (seulement sur le dernier / premier part si split)
             if part_idx == len(parts) - 1:
                 meta["continues_on_next_page"] = chunk.continues_on_next_page

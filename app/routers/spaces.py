@@ -1,6 +1,7 @@
 from typing import List, Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel, Field
 from sqlmodel import Session
 from app.database import get_session
 from app.models.space import SpaceCreate, SpaceRead, SpaceUpdate
@@ -13,11 +14,102 @@ from app.services.space_service import (
 )
 from app.services.document_service_new import get_documents_by_space
 from app.services.kag_graph_service import build_space_kag_graph
+from app.services.space_category_service import (
+    get_space_categories,
+    get_space_category_page_detail,
+    get_space_category_pages,
+)
 import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/spaces", tags=["spaces"])
+
+
+class SpaceCategoryItem(BaseModel):
+    category_id: int
+    slug: str
+    label: str
+    chunk_count: int = 0
+    page_count: int = 0
+    document_count: int = 0
+    max_confidence: float = 0.0
+
+
+class SpaceCategoriesResponse(BaseModel):
+    space_id: int
+    category_count: int = 0
+    categories: List[SpaceCategoryItem] = Field(default_factory=list)
+    status: str = "ok"
+
+
+class SpaceCategoryRef(BaseModel):
+    category_id: int
+    slug: str
+    label: str
+
+
+class SpaceCategoryPageItem(BaseModel):
+    document_id: int
+    document_title: str
+    page_no: int
+    chunk_count: int = 0
+    has_source_file: bool = False
+
+
+class SpaceCategoryPagesResponse(BaseModel):
+    space_id: int
+    category: SpaceCategoryRef
+    page_count: int = 0
+    pages: List[SpaceCategoryPageItem] = Field(default_factory=list)
+
+
+class SpaceCategoryPageChunkItem(BaseModel):
+    chunk_id: Optional[int] = None
+    chunk_index: Optional[int] = None
+    heading: Optional[str] = None
+    step_number: Optional[int] = None
+    section_type: Optional[str] = None
+    content: str
+    in_category: bool = False
+    confidence: Optional[float] = None
+
+
+class SpaceCategoryEnrichmentChunkItem(BaseModel):
+    chunk_id: Optional[int] = None
+    chunk_index: Optional[int] = None
+    theme: Optional[str] = None
+    category_slug: Optional[str] = None
+    source_page: Optional[int] = None
+    source_pages: List[int] = Field(default_factory=list)
+    content: str
+    confidence: Optional[float] = None
+
+
+class SpaceCategoryPageNavRef(BaseModel):
+    document_id: int
+    document_title: str
+    page_no: int
+    chunk_count: int = 0
+    has_source_file: bool = False
+
+
+class SpaceCategoryPageNavigation(BaseModel):
+    current_index: Optional[int] = None
+    total: int = 0
+    prev: Optional[SpaceCategoryPageNavRef] = None
+    next: Optional[SpaceCategoryPageNavRef] = None
+
+
+class SpaceCategoryPageDetailResponse(BaseModel):
+    space_id: int
+    category: SpaceCategoryRef
+    document: dict
+    page_no: int
+    chunks: List[SpaceCategoryPageChunkItem] = Field(default_factory=list)
+    enrichment_chunks: List[SpaceCategoryEnrichmentChunkItem] = Field(default_factory=list)
+    consolidated_markdown: str = ""
+    navigation: SpaceCategoryPageNavigation
 
 
 @router.get("", response_model=List[SpaceRead])
@@ -182,4 +274,78 @@ async def get_space_kag_graph(
         max_nodes=max_nodes,
         max_edges=max_edges,
     )
+
+
+@router.get("/{space_id}/categories", response_model=SpaceCategoriesResponse)
+async def list_space_categories(
+    space_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Catégories KAG présentes dans l'espace avec nombre de pages associées."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    payload = get_space_categories(session, space_id)
+    return SpaceCategoriesResponse.model_validate(payload)
+
+
+@router.get("/{space_id}/categories/{category_id}/pages", response_model=SpaceCategoryPagesResponse)
+async def list_space_category_pages(
+    space_id: int,
+    category_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Pages de l'espace contenant une catégorie donnée."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    payload = get_space_category_pages(session, space_id, category_id)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Catégorie non trouvée",
+        )
+    return SpaceCategoryPagesResponse.model_validate(payload)
+
+
+@router.get(
+    "/{space_id}/categories/{category_id}/pages/{document_id}/{page_no}",
+    response_model=SpaceCategoryPageDetailResponse,
+)
+async def get_space_category_page(
+    space_id: int,
+    category_id: int,
+    document_id: int,
+    page_no: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Détail d'une page : chunks texte avec surlignage catégorie et navigation."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    payload = get_space_category_page_detail(
+        session,
+        space_id,
+        category_id,
+        document_id,
+        page_no,
+    )
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Page ou catégorie non trouvée",
+        )
+    return SpaceCategoryPageDetailResponse.model_validate(payload)
 
