@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Query
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
@@ -27,6 +27,10 @@ from app.services.folder_service import (
     create_folder, get_folder_by_id, get_folders_by_parent,
     get_folder_path, get_folder_with_contents, rename_folder,
     move_folder, delete_folder
+)
+from app.services.lexical_search_service import (
+    get_document_search_page_detail,
+    search_document_pages,
 )
 from app.services.document_category_service import (
     get_document_category_page_detail,
@@ -302,6 +306,25 @@ class DocumentCategoryPageNavigation(BaseModel):
 
 class DocumentCategoryPageDetailResponse(BaseModel):
     document_id: int
+    category: DocumentCategoryRef
+    document: dict
+    page_no: int
+    chunks: List[DocumentCategoryPageChunkItem] = Field(default_factory=list)
+    enrichment_chunks: List[DocumentCategoryEnrichmentChunkItem] = Field(default_factory=list)
+    consolidated_markdown: str = ""
+    navigation: DocumentCategoryPageNavigation
+
+
+class DocumentSearchPagesResponse(BaseModel):
+    document_id: int
+    query: str
+    page_count: int = 0
+    pages: List[DocumentCategoryPageItem] = Field(default_factory=list)
+
+
+class DocumentSearchPageDetailResponse(BaseModel):
+    document_id: int
+    query: str
     category: DocumentCategoryRef
     document: dict
     page_no: int
@@ -709,6 +732,50 @@ async def get_document_category_page(
             detail="Page ou catégorie non trouvée",
         )
     return DocumentCategoryPageDetailResponse.model_validate(payload)
+
+
+@router.get(
+    "/documents/{document_id}/search/pages",
+    response_model=DocumentSearchPagesResponse,
+)
+async def search_document_pages_endpoint(
+    document_id: int,
+    q: str = Query(..., min_length=1, description="Mot-clé à rechercher (contient)"),
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Pages du document contenant le mot-clé (recherche lexicale « contient »)."""
+    document = get_document_by_id(session, document_id, current_user.id)
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document non trouvé")
+
+    payload = search_document_pages(session, document_id, q)
+    return DocumentSearchPagesResponse.model_validate(payload)
+
+
+@router.get(
+    "/documents/{document_id}/search/pages/{page_no}",
+    response_model=DocumentSearchPageDetailResponse,
+)
+async def get_document_search_page(
+    document_id: int,
+    page_no: int,
+    q: str = Query(..., min_length=1, description="Mot-clé à rechercher (contient)"),
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Détail d'une page : chunks (source + IA) contenant le mot-clé et navigation."""
+    document = get_document_by_id(session, document_id, current_user.id)
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document non trouvé")
+
+    payload = get_document_search_page_detail(session, document_id, q, page_no)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Page non trouvée pour ce mot-clé",
+        )
+    return DocumentSearchPageDetailResponse.model_validate(payload)
 
 
 @router.post("/documents/stop-all", status_code=status.HTTP_200_OK)

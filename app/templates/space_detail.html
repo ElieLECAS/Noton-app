@@ -509,6 +509,30 @@
         <i class="ti ti-x text-xl"></i>
       </button>
     </div>
+    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 bg-indigo-500/[0.04]">
+      <label class="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
+        <i class="ti ti-search text-indigo-500"></i>
+        Recherche par mot-clé dans l'espace
+      </label>
+      <div class="flex items-center gap-2">
+        <input
+          type="search"
+          id="space-keyword-search-input"
+          placeholder="Ex. une référence produit…"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();runSpaceKeywordSearch();}"
+          class="flex-1 px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/[0.05] text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all"
+        />
+        <button
+          type="button"
+          onclick="runSpaceKeywordSearch()"
+          class="shrink-0 px-3.5 py-2 rounded-lg bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm hover:bg-indigo-700"
+        >
+          Rechercher
+        </button>
+      </div>
+      <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5">Ouvre les pages PDF et chunks contenant ce mot (texte source + synthèses IA).</p>
+      <p id="space-keyword-search-msg" class="text-xs text-amber-600 dark:text-amber-400 mt-1 hidden"></p>
+    </div>
     <div id="space-categories-list" class="flex-1 overflow-y-auto p-4 space-y-2">
       <div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>
     </div>
@@ -1891,9 +1915,11 @@ async function loadKagGraph() {
 let spaceCategoriesData = null;
 let spaceCategoriesHasData = false;
 let spaceCategoryPageState = {
+  mode: "category",
   categoryId: null,
   documentId: null,
   pageNo: null,
+  query: null,
 };
 let spaceCategoryPdfDoc = null;
 
@@ -2000,13 +2026,68 @@ async function openSpaceCategoryPageFromList(categoryId) {
   await openSpaceCategoryPageModal(categoryId, firstPage.document_id, firstPage.page_no);
 }
 
+async function runSpaceKeywordSearch() {
+  const input = document.getElementById("space-keyword-search-input");
+  const msg = document.getElementById("space-keyword-search-msg");
+  const query = (input?.value || "").trim();
+  const showMsg = (txt) => {
+    if (!msg) return;
+    msg.textContent = txt;
+    msg.classList.toggle("hidden", !txt);
+  };
+  showMsg("");
+  if (query.length < 2) {
+    showMsg("Saisissez au moins 2 caractères.");
+    return;
+  }
+  const r = await api(`/api/spaces/${spaceId}/search/pages?q=${encodeURIComponent(query)}`);
+  if (!r.ok) {
+    showMsg("Erreur lors de la recherche.");
+    return;
+  }
+  const data = await r.json();
+  const firstPage = (data.pages || [])[0];
+  if (!firstPage) {
+    showMsg(`Aucune page ne contient « ${query} ».`);
+    return;
+  }
+  closeSpaceCategoriesModal();
+  await openSpaceSearchPageModal(query, firstPage.document_id, firstPage.page_no);
+}
+
+async function openSpaceSearchPageModal(query, documentId, pageNo) {
+  const modal = document.getElementById("space-category-page-modal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+
+  spaceCategoryPageState = { mode: "search", categoryId: null, documentId, pageNo, query };
+
+  document.getElementById("space-category-page-title").textContent = "Chargement…";
+  document.getElementById("space-category-page-meta").textContent = "—";
+  document.getElementById("space-category-page-counter").textContent = "—";
+  document.getElementById("space-category-text-container").innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+  document.getElementById("space-category-pdf-container").innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+
+  const r = await api(`/api/spaces/${spaceId}/search/pages/${documentId}/${pageNo}?q=${encodeURIComponent(query)}`);
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    document.getElementById("space-category-text-container").innerHTML =
+      `<div class="text-sm text-red-500">${escapeHtml(err.detail || "Erreur de chargement")}</div>`;
+    return;
+  }
+
+  const detail = await r.json();
+  renderSpaceCategoryPageDetail(detail);
+}
+
 async function openSpaceCategoryPageModal(categoryId, documentId, pageNo) {
   const modal = document.getElementById("space-category-page-modal");
   if (!modal) return;
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
 
-  spaceCategoryPageState = { categoryId, documentId, pageNo };
+  spaceCategoryPageState = { mode: "category", categoryId, documentId, pageNo, query: null };
 
   document.getElementById("space-category-page-title").textContent = "Chargement…";
   document.getElementById("space-category-page-meta").textContent = "—";
@@ -2046,6 +2127,9 @@ function renderSpaceCategoryPageDetail(detail) {
   if (nextBtn) nextBtn.disabled = !nav.next;
 
   renderSpaceCategoryTextChunks(detail.chunks || [], detail.enrichment_chunks || [], category);
+  if (spaceCategoryPageState.mode === "search" && detail.query) {
+    highlightSearchTerm(document.getElementById("space-category-text-container"), detail.query);
+  }
   renderSpaceCategoryPdf(documentInfo, detail.page_no);
 }
 
@@ -2166,14 +2250,26 @@ function closeSpaceCategoryPageModal() {
   if (!modal) return;
   modal.classList.add("hidden");
   spaceCategoryPdfDoc = null;
-  spaceCategoryPageState = { categoryId: null, documentId: null, pageNo: null };
+  spaceCategoryPageState = { mode: "category", categoryId: null, documentId: null, pageNo: null, query: null };
   document.body.style.overflow = "";
 }
 
 async function navigateSpaceCategoryPage(direction) {
-  const { categoryId, documentId, pageNo } = spaceCategoryPageState;
-  if (!categoryId) return;
+  const { mode, categoryId, documentId, pageNo, query } = spaceCategoryPageState;
 
+  if (mode === "search") {
+    if (!query) return;
+    const r = await api(`/api/spaces/${spaceId}/search/pages/${documentId}/${pageNo}?q=${encodeURIComponent(query)}`);
+    if (!r.ok) return;
+    const detail = await r.json();
+    const nav = detail.navigation || {};
+    const target = direction === "prev" ? nav.prev : nav.next;
+    if (!target) return;
+    await openSpaceSearchPageModal(query, target.document_id, target.page_no);
+    return;
+  }
+
+  if (!categoryId) return;
   const r = await api(`/api/spaces/${spaceId}/categories/${categoryId}/pages/${documentId}/${pageNo}`);
   if (!r.ok) return;
   const detail = await r.json();
@@ -2182,6 +2278,47 @@ async function navigateSpaceCategoryPage(direction) {
   if (!target) return;
 
   await openSpaceCategoryPageModal(categoryId, target.document_id, target.page_no);
+}
+
+// Surligne les occurrences d'un mot-clé dans les nœuds texte d'un conteneur
+// déjà rendu (n'altère pas le markdown : agit sur le DOM).
+function highlightSearchTerm(container, term) {
+  if (!container || !term || term.length < 2) return;
+  const needle = term.toLowerCase();
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.nodeValue || !node.nodeValue.toLowerCase().includes(needle)) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      if (node.parentElement && node.parentElement.closest("mark")) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
+  const targets = [];
+  while (walker.nextNode()) targets.push(walker.currentNode);
+  targets.forEach((node) => {
+    const text = node.nodeValue;
+    const lower = text.toLowerCase();
+    const frag = document.createDocumentFragment();
+    let idx = 0;
+    let found;
+    while ((found = lower.indexOf(needle, idx)) !== -1) {
+      if (found > idx) {
+        frag.appendChild(document.createTextNode(text.slice(idx, found)));
+      }
+      const mark = document.createElement("mark");
+      mark.className = "bg-yellow-300 dark:bg-yellow-500/60 text-gray-900 rounded px-0.5";
+      mark.textContent = text.slice(found, found + needle.length);
+      frag.appendChild(mark);
+      idx = found + needle.length;
+    }
+    if (idx < text.length) {
+      frag.appendChild(document.createTextNode(text.slice(idx)));
+    }
+    node.parentNode.replaceChild(frag, node);
+  });
 }
 
 function buildSlotPromptSection(slotPrompt) {

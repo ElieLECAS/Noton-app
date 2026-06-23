@@ -14,6 +14,10 @@ from app.services.space_service import (
 )
 from app.services.document_service_new import get_documents_by_space
 from app.services.kag_graph_service import build_space_kag_graph
+from app.services.lexical_search_service import (
+    get_space_search_page_detail,
+    search_space_pages,
+)
 from app.services.space_category_service import (
     get_space_categories,
     get_space_category_page_detail,
@@ -103,6 +107,25 @@ class SpaceCategoryPageNavigation(BaseModel):
 
 class SpaceCategoryPageDetailResponse(BaseModel):
     space_id: int
+    category: SpaceCategoryRef
+    document: dict
+    page_no: int
+    chunks: List[SpaceCategoryPageChunkItem] = Field(default_factory=list)
+    enrichment_chunks: List[SpaceCategoryEnrichmentChunkItem] = Field(default_factory=list)
+    consolidated_markdown: str = ""
+    navigation: SpaceCategoryPageNavigation
+
+
+class SpaceSearchPagesResponse(BaseModel):
+    space_id: int
+    query: str
+    page_count: int = 0
+    pages: List[SpaceCategoryPageItem] = Field(default_factory=list)
+
+
+class SpaceSearchPageDetailResponse(BaseModel):
+    space_id: int
+    query: str
     category: SpaceCategoryRef
     document: dict
     page_no: int
@@ -348,4 +371,50 @@ async def get_space_category_page(
             detail="Page ou catégorie non trouvée",
         )
     return SpaceCategoryPageDetailResponse.model_validate(payload)
+
+
+@router.get("/{space_id}/search/pages", response_model=SpaceSearchPagesResponse)
+async def search_space_pages_endpoint(
+    space_id: int,
+    q: str = Query(..., min_length=1, description="Mot-clé à rechercher (contient)"),
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Pages de l'espace contenant le mot-clé (recherche lexicale « contient »)."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    payload = search_space_pages(session, space_id, q)
+    return SpaceSearchPagesResponse.model_validate(payload)
+
+
+@router.get(
+    "/{space_id}/search/pages/{document_id}/{page_no}",
+    response_model=SpaceSearchPageDetailResponse,
+)
+async def get_space_search_page(
+    space_id: int,
+    document_id: int,
+    page_no: int,
+    q: str = Query(..., min_length=1, description="Mot-clé à rechercher (contient)"),
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Détail d'une page d'espace : chunks (source + IA) contenant le mot-clé."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    payload = get_space_search_page_detail(session, space_id, q, document_id, page_no)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Page non trouvée pour ce mot-clé",
+        )
+    return SpaceSearchPageDetailResponse.model_validate(payload)
 

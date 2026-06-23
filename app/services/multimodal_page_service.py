@@ -397,6 +397,9 @@ def _pack_rag_units(
                     for idx, part in enumerate(sub_parts):
                         prefix = "[Image: (Suite) " if idx > 0 else "[Image: "
                         chunks.append(f"{prefix}{part.strip()}]")
+                elif _IMAGE_BLOCK_RE.search(cleaned_unit):
+                    # Bonded caption+image unit — keep atomic even if oversized
+                    chunks.append(unit)
                 else:
                     sub = split_text_by_tokens(unit, max_tokens)
                     chunks.extend(sub)

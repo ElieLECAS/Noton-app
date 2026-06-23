@@ -493,6 +493,17 @@ endblock %} {% block content %}
             </button>
         </div>
 
+        <div class="shrink-0 mb-3 relative">
+            <i class="ti ti-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+            <input
+                type="search"
+                id="chunks-search-input"
+                placeholder="Rechercher dans les chunks…"
+                oninput="filterChunksActivePanel()"
+                class="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/[0.05] text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all"
+            />
+        </div>
+
         <div class="flex-1 min-h-0 overflow-auto border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4">
             <div id="chunks-semantic-panel" class="space-y-3"></div>
             <div id="chunks-enrichment-panel" class="space-y-3 hidden"></div>
@@ -658,7 +669,7 @@ endblock %} {% block content %}
     let chunksMonitorData = null;
     let chunksMonitorDocumentId = null;
     let chunksActiveTab = "semantic";
-    let libraryCategoryPageState = { categoryId: null, pageNo: null };
+    let libraryCategoryPageState = { mode: "category", categoryId: null, pageNo: null };
     let libraryCategoryPdfDoc = null;
     let libraryCategoryPdfjsLib = null;
     let classificationOptions = null;
@@ -1391,6 +1402,35 @@ endblock %} {% block content %}
         `;
     }
 
+    function renderLibraryKeywordSearchBox() {
+        return `
+            <div class="mb-4 rounded-xl border border-indigo-500/20 bg-indigo-500/[0.04] p-3">
+                <label class="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
+                    <i class="ti ti-search text-indigo-500"></i>
+                    Recherche par mot-clé dans le document
+                </label>
+                <div class="flex items-center gap-2">
+                    <input
+                        type="search"
+                        id="library-keyword-search-input"
+                        placeholder="Ex. une référence produit…"
+                        onkeydown="if(event.key==='Enter'){event.preventDefault();runLibraryKeywordSearch();}"
+                        class="flex-1 px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/[0.05] text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all"
+                    />
+                    <button
+                        type="button"
+                        onclick="runLibraryKeywordSearch()"
+                        class="shrink-0 px-3.5 py-2 rounded-lg bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm hover:bg-indigo-700"
+                    >
+                        Rechercher
+                    </button>
+                </div>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5">Ouvre les pages PDF et chunks qui contiennent ce mot (texte source + synthèses IA).</p>
+                <p id="library-keyword-search-msg" class="text-xs text-amber-600 dark:text-amber-400 mt-1 hidden"></p>
+            </div>
+        `;
+    }
+
     function renderCategoriesPanel() {
         const host = document.getElementById("chunks-categories-panel");
         if (!host || !chunksMonitorData) return;
@@ -1399,7 +1439,7 @@ endblock %} {% block content %}
         const categoryCount = kag.category_count || categories.length;
 
         if (!categoryCount) {
-            host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Aucune catégorie KAG pour ce document. Lancez un retraitement « Complet » avec KAG_ENABLED=true.</div>`;
+            host.innerHTML = `${renderLibraryKeywordSearchBox()}<div class="text-sm text-gray-500 dark:text-gray-400">Aucune catégorie KAG pour ce document. Lancez un retraitement « Complet » avec KAG_ENABLED=true.</div>`;
             return;
         }
 
@@ -1429,6 +1469,7 @@ endblock %} {% block content %}
             .join("");
 
         host.innerHTML = `
+            ${renderLibraryKeywordSearchBox()}
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Cliquez sur une catégorie pour parcourir le document page par page (texte source et chunks contextuels générés par l'IA).</p>
             <div class="space-y-2 max-h-[60vh] overflow-auto pr-1">${categoriesList}</div>
         `;
@@ -1458,6 +1499,8 @@ endblock %} {% block content %}
 
     function switchChunksTab(tab) {
         chunksActiveTab = tab;
+        const searchInput = document.getElementById("chunks-search-input");
+        if (searchInput) searchInput.value = "";
         const semanticPanel = document.getElementById("chunks-semantic-panel");
         const enrichmentPanel = document.getElementById("chunks-enrichment-panel");
         const entitiesPanel = document.getElementById("chunks-entities-panel");
@@ -1478,6 +1521,50 @@ endblock %} {% block content %}
         categoriesBtn.className = tab === "categories" ? activeClass : inactiveClass;
     }
 
+    function filterChunksActivePanel() {
+        const input = document.getElementById("chunks-search-input");
+        const term = (input?.value || "").toLowerCase().trim();
+        const panelIds = {
+            semantic: "chunks-semantic-panel",
+            enrichment: "chunks-enrichment-panel",
+            entities: "chunks-entities-panel",
+            categories: "chunks-categories-panel",
+        };
+        const panelId = panelIds[chunksActiveTab];
+        if (!panelId) return;
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+
+        if (chunksActiveTab === "entities") {
+            panel.querySelectorAll(".space-y-2 > div").forEach((item) => {
+                item.style.display = !term || item.textContent.toLowerCase().includes(term) ? "" : "none";
+            });
+        } else if (chunksActiveTab === "categories") {
+            const catContainer = panel.querySelector(".space-y-2");
+            if (catContainer) {
+                let visibleCount = 0;
+                catContainer.querySelectorAll(":scope > button").forEach((btn) => {
+                    const matches = !term || btn.textContent.toLowerCase().includes(term);
+                    btn.style.display = matches ? "" : "none";
+                    if (matches) visibleCount++;
+                });
+                let noResultEl = catContainer.querySelector(".chunks-search-no-result");
+                if (!term || visibleCount > 0) {
+                    noResultEl?.remove();
+                } else if (!noResultEl) {
+                    noResultEl = document.createElement("p");
+                    noResultEl.className = "chunks-search-no-result text-sm text-gray-500 dark:text-gray-400 py-2";
+                    noResultEl.textContent = "Aucune catégorie ne correspond à votre recherche.";
+                    catContainer.appendChild(noResultEl);
+                }
+            }
+        } else {
+            panel.querySelectorAll(":scope > article").forEach((article) => {
+                article.style.display = !term || article.textContent.toLowerCase().includes(term) ? "" : "none";
+            });
+        }
+    }
+
     async function openChunksMonitorModal(documentId, documentTitle) {
         const modal = document.getElementById("chunks-monitor-modal");
         const title = document.getElementById("chunks-monitor-title");
@@ -1485,6 +1572,8 @@ endblock %} {% block content %}
         chunksMonitorDocumentId = documentId;
         title.textContent = `Monitoring des chunks — ${documentTitle}`;
         subtitle.textContent = "Chargement...";
+        const searchInput = document.getElementById("chunks-search-input");
+        if (searchInput) searchInput.value = "";
         modal.classList.remove("hidden");
         const r = await api(
             `/api/library/documents/${documentId}/chunks-monitor?max_chars=8000`,
@@ -1535,12 +1624,72 @@ endblock %} {% block content %}
         await openLibraryCategoryPageModal(categoryId, firstPage.page_no);
     }
 
+    async function runLibraryKeywordSearch() {
+        if (!chunksMonitorDocumentId) return;
+        const input = document.getElementById("library-keyword-search-input");
+        const msg = document.getElementById("library-keyword-search-msg");
+        const query = (input?.value || "").trim();
+        const showMsg = (txt) => {
+            if (!msg) return;
+            msg.textContent = txt;
+            msg.classList.toggle("hidden", !txt);
+        };
+        showMsg("");
+        if (query.length < 2) {
+            showMsg("Saisissez au moins 2 caractères.");
+            return;
+        }
+        const r = await api(
+            `/api/library/documents/${chunksMonitorDocumentId}/search/pages?q=${encodeURIComponent(query)}`,
+        );
+        if (!r.ok) {
+            showMsg("Erreur lors de la recherche.");
+            return;
+        }
+        const data = await r.json();
+        const firstPage = (data.pages || [])[0];
+        if (!firstPage) {
+            showMsg(`Aucune page ne contient « ${query} ».`);
+            return;
+        }
+        await openLibrarySearchPageModal(query, firstPage.page_no);
+    }
+
+    async function openLibrarySearchPageModal(query, pageNo) {
+        const modal = document.getElementById("library-category-page-modal");
+        if (!modal || !chunksMonitorDocumentId) return;
+        modal.classList.remove("hidden");
+
+        libraryCategoryPageState = { mode: "search", query, pageNo };
+
+        document.getElementById("library-category-page-title").textContent = "Chargement…";
+        document.getElementById("library-category-page-meta").textContent = "—";
+        document.getElementById("library-category-page-counter").textContent = "—";
+        document.getElementById("library-category-text-container").innerHTML =
+            `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+        document.getElementById("library-category-pdf-container").innerHTML =
+            `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+
+        const r = await api(
+            `/api/library/documents/${chunksMonitorDocumentId}/search/pages/${pageNo}?q=${encodeURIComponent(query)}`,
+        );
+        if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            document.getElementById("library-category-text-container").innerHTML =
+                `<div class="text-sm text-red-500">${escapeHtml(err.detail || "Erreur de chargement")}</div>`;
+            return;
+        }
+
+        const detail = await r.json();
+        renderLibraryCategoryPageDetail(detail);
+    }
+
     async function openLibraryCategoryPageModal(categoryId, pageNo) {
         const modal = document.getElementById("library-category-page-modal");
         if (!modal || !chunksMonitorDocumentId) return;
         modal.classList.remove("hidden");
 
-        libraryCategoryPageState = { categoryId, pageNo };
+        libraryCategoryPageState = { mode: "category", categoryId, pageNo };
 
         document.getElementById("library-category-page-title").textContent = "Chargement…";
         document.getElementById("library-category-page-meta").textContent = "—";
@@ -1589,6 +1738,12 @@ endblock %} {% block content %}
             detail.enrichment_chunks || [],
             category,
         );
+        if (libraryCategoryPageState.mode === "search" && detail.query) {
+            highlightSearchTerm(
+                document.getElementById("library-category-text-container"),
+                detail.query,
+            );
+        }
         renderLibraryCategoryPdf(documentInfo, detail.page_no);
     }
 
@@ -1750,13 +1905,28 @@ endblock %} {% block content %}
         if (!modal) return;
         modal.classList.add("hidden");
         libraryCategoryPdfDoc = null;
-        libraryCategoryPageState = { categoryId: null, pageNo: null };
+        libraryCategoryPageState = { mode: "category", categoryId: null, pageNo: null };
     }
 
     async function navigateLibraryCategoryPage(direction) {
-        const { categoryId, pageNo } = libraryCategoryPageState;
-        if (!categoryId || !chunksMonitorDocumentId) return;
+        const { mode, categoryId, query, pageNo } = libraryCategoryPageState;
+        if (!chunksMonitorDocumentId) return;
 
+        if (mode === "search") {
+            if (!query) return;
+            const r = await api(
+                `/api/library/documents/${chunksMonitorDocumentId}/search/pages/${pageNo}?q=${encodeURIComponent(query)}`,
+            );
+            if (!r.ok) return;
+            const detail = await r.json();
+            const nav = detail.navigation || {};
+            const target = direction === "prev" ? nav.prev : nav.next;
+            if (!target) return;
+            await openLibrarySearchPageModal(query, target.page_no);
+            return;
+        }
+
+        if (!categoryId) return;
         const r = await api(
             `/api/library/documents/${chunksMonitorDocumentId}/categories/${categoryId}/pages/${pageNo}`,
         );
@@ -1767,6 +1937,47 @@ endblock %} {% block content %}
         if (!target) return;
 
         await openLibraryCategoryPageModal(categoryId, target.page_no);
+    }
+
+    // Surligne les occurrences d'un mot-clé dans les nœuds texte d'un conteneur
+    // déjà rendu (n'altère pas le markdown : agit sur le DOM).
+    function highlightSearchTerm(container, term) {
+        if (!container || !term || term.length < 2) return;
+        const needle = term.toLowerCase();
+        const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+                if (!node.nodeValue || !node.nodeValue.toLowerCase().includes(needle)) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                if (node.parentElement && node.parentElement.closest("mark")) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                return NodeFilter.FILTER_ACCEPT;
+            },
+        });
+        const targets = [];
+        while (walker.nextNode()) targets.push(walker.currentNode);
+        targets.forEach((node) => {
+            const text = node.nodeValue;
+            const lower = text.toLowerCase();
+            const frag = document.createDocumentFragment();
+            let idx = 0;
+            let found;
+            while ((found = lower.indexOf(needle, idx)) !== -1) {
+                if (found > idx) {
+                    frag.appendChild(document.createTextNode(text.slice(idx, found)));
+                }
+                const mark = document.createElement("mark");
+                mark.className = "bg-yellow-300 dark:bg-yellow-500/60 text-gray-900 rounded px-0.5";
+                mark.textContent = text.slice(found, found + needle.length);
+                frag.appendChild(mark);
+                idx = found + needle.length;
+            }
+            if (idx < text.length) {
+                frag.appendChild(document.createTextNode(text.slice(idx)));
+            }
+            node.parentNode.replaceChild(frag, node);
+        });
     }
 
     async function deleteDocument(documentId, documentTitle) {
