@@ -1399,6 +1399,11 @@ function renderMessages(messages) {
   for (const message of messages) {
     addMessage(message.role, message.content, message.id, message.sources, message.metadata_json);
   }
+  // Aiguillage : seul le dernier message guidé reste interactif ; on retire les choix des étapes passées.
+  const guidedSections = host.querySelectorAll(".guided-step-section");
+  guidedSections.forEach((sec, i) => {
+    if (i < guidedSections.length - 1) sec.remove();
+  });
 }
 
 async function selectConversation(conversationId) {
@@ -1473,6 +1478,11 @@ function addMessage(role, content, messageId = null, sources = null, metadataJso
       slotPromptHtml = buildSlotPromptSection(metadataJson.slot_prompt);
     }
 
+    let guidedStepHtml = "";
+    if (metadataJson && metadataJson.guided_step) {
+      guidedStepHtml = buildGuidedStepSection(metadataJson.guided_step);
+    }
+
     if (parsedSources && parsedSources.length > 0) {
       parsedHtml = transformCitationsToLinks(parsedHtml, parsedSources, messageKey);
       const sourcesSection = buildSourcesSection(parsedSources, messageKey);
@@ -1480,12 +1490,14 @@ function addMessage(role, content, messageId = null, sources = null, metadataJso
         <div class="markdown-content">${parsedHtml}</div>
         ${sourcesSection}
         ${slotPromptHtml}
+        ${guidedStepHtml}
         ${feedbackHtml}
       </div>`;
     } else {
       innerHtml = `<div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
         <div class="markdown-content">${parsedHtml}</div>
         ${slotPromptHtml}
+        ${guidedStepHtml}
         ${feedbackHtml}
       </div>`;
     }
@@ -1499,6 +1511,9 @@ function addMessage(role, content, messageId = null, sources = null, metadataJso
   host.appendChild(div);
   if (role === "assistant" && metadataJson && metadataJson.slot_prompt) {
     attachSlotPromptListeners(div);
+  }
+  if (role === "assistant" && metadataJson && metadataJson.guided_step) {
+    attachGuidedStepListeners(div);
   }
   host.scrollTop = host.scrollHeight;
   
@@ -2360,7 +2375,89 @@ async function handleSlotChoice(field, value, action, label) {
   await submitSpaceChat(displayLabel, { field, value, action });
 }
 
-async function submitSpaceChat(message, slotAction = null) {
+// ——— Aiguillage procédural (guidage SAV / chantier) ———
+function buildEscalationRecapCard(recap) {
+  if (!recap) return "";
+  const esc = (s) => String(s || "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const steps = (recap.steps_tested || []).map((s) => `<li>${esc(s)}</li>`).join("");
+  const obs = (recap.observations || []).map((s) => `<li>${esc(s)}</li>`).join("");
+  const warranty = recap.warranty_excerpt
+    ? `<div class="mt-2"><span class="font-semibold">Garantie :</span> ${esc(recap.warranty_excerpt)}</div>`
+    : "";
+  const recapText = [
+    recap.topic ? `Sujet : ${recap.topic}` : "",
+    recap.summary || "",
+    (recap.steps_tested || []).length
+      ? "Étapes testées:\n" + (recap.steps_tested || []).map((s, i) => `${i + 1}. ${s}`).join("\n")
+      : "",
+    (recap.observations || []).length
+      ? "Observations:\n" + (recap.observations || []).map((s) => `- ${s}`).join("\n")
+      : "",
+    recap.warranty_excerpt ? `Garantie: ${recap.warranty_excerpt}` : "",
+    recap.contact ? `Contact: ${recap.contact}` : "",
+  ].filter(Boolean).join("\n\n");
+  const recapEncoded = encodeURIComponent(recapText);
+  return `
+    <div class="guided-escalation-card mt-3 pt-3 border-t border-amber-300/40 text-xs">
+      <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold mb-2">
+        <i class="ti ti-headset"></i> Transmission au SAV
+      </div>
+      ${recap.summary ? `<p class="mb-2 text-gray-600 dark:text-gray-300">${esc(recap.summary)}</p>` : ""}
+      ${steps ? `<div class="mb-2"><span class="font-semibold">Étapes testées :</span><ul class="list-disc ml-5 mt-1">${steps}</ul></div>` : ""}
+      ${obs ? `<div class="mb-2"><span class="font-semibold">Observations :</span><ul class="list-disc ml-5 mt-1">${obs}</ul></div>` : ""}
+      ${warranty}
+      ${recap.contact ? `<div class="mt-2 text-gray-500">${esc(recap.contact)}</div>` : ""}
+      <button type="button" class="guided-copy-recap mt-3 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900/50 transition-all active:scale-95" data-recap="${recapEncoded}">
+        <i class="ti ti-copy"></i> Copier le récapitulatif SAV
+      </button>
+    </div>`;
+}
+
+function buildGuidedStepSection(step, interactive = true) {
+  if (!step) return "";
+  let html = "";
+  if (interactive && !step.is_terminal && step.choices && step.choices.length) {
+    const buttons = step.choices.map((c) => (
+      `<button type="button" class="guided-choice-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all active:scale-95"
+        data-value="${String(c.value).replace(/"/g, "&quot;")}" data-label="${String(c.label).replace(/"/g, "&quot;")}" title="${String(c.hint || "").replace(/"/g, "&quot;")}">${c.label}</button>`
+    )).join("");
+    html += `<div class="guided-step-section mt-3 pt-3 border-t border-black/5 dark:border-white/5 flex flex-wrap gap-2">${buttons}</div>`;
+  }
+  if (step.step_type === "escalation" && step.escalation_recap) {
+    html += buildEscalationRecapCard(step.escalation_recap);
+  }
+  return html;
+}
+
+function attachGuidedStepListeners(container) {
+  if (!container) return;
+  container.querySelectorAll(".guided-choice-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      handleGuidedChoice(btn.dataset.value, btn.dataset.label);
+    });
+  });
+  container.querySelectorAll(".guided-copy-recap").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(decodeURIComponent(btn.dataset.recap || ""));
+        btn.innerHTML = '<i class="ti ti-check"></i> Copié !';
+      } catch (_) {}
+    });
+  });
+}
+
+async function handleGuidedChoice(value, label) {
+  if (!currentConversationId) {
+    await createNewConversation();
+    if (!currentConversationId) return;
+  }
+  const displayLabel = label || value;
+  addMessage("user", displayLabel);
+  await submitSpaceChat(displayLabel, null, { value, label: displayLabel });
+}
+
+async function submitSpaceChat(message, slotAction = null, guidedChoice = null) {
   function startFakeReasoning(el) {
     el.innerHTML = `
       <div class="flex items-center gap-3 py-1">
@@ -2395,6 +2492,9 @@ async function submitSpaceChat(message, slotAction = null) {
   if (slotAction) {
     requestBody.slot_action = slotAction;
   }
+  if (guidedChoice) {
+    requestBody.guided_choice = guidedChoice;
+  }
 
   let response;
   try {
@@ -2422,6 +2522,7 @@ async function submitSpaceChat(message, slotAction = null) {
   let streamError = "";
   let receivedSources = [];
   let receivedSlotPrompt = null;
+  let receivedStep = null;
   let streamDone = false;
   let assistantMessageId = null;
   const reader = response.body.getReader();
@@ -2446,6 +2547,9 @@ async function submitSpaceChat(message, slotAction = null) {
           contentEl.innerHTML = parseMarkdown(full);
         } else if (data.slot_prompt) {
           receivedSlotPrompt = data.slot_prompt;
+        } else if (data.step) {
+          if (reasoningInterval) clearInterval(reasoningInterval);
+          receivedStep = data.step;
         } else if (data.sources) {
           receivedSources = data.sources;
           if (full) {
@@ -2511,6 +2615,11 @@ async function submitSpaceChat(message, slotAction = null) {
     attachSlotPromptListeners(messageContainer);
   }
 
+  if (receivedStep && messageContainer) {
+    messageContainer.insertAdjacentHTML("beforeend", buildGuidedStepSection(receivedStep));
+    attachGuidedStepListeners(messageContainer);
+  }
+
   chatHistory.push({ role: "user", content: message });
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });
 
@@ -2532,7 +2641,8 @@ async function submitSpaceChat(message, slotAction = null) {
     messageContainer.insertAdjacentHTML("beforeend", feedbackHtml);
   }
 
-  if (currentConversationId && !receivedSlotPrompt) {
+  const guidedPending = receivedStep && !receivedStep.is_terminal;
+  if (currentConversationId && !receivedSlotPrompt && !guidedPending) {
     await api(`/api/conversations/${currentConversationId}/generate-title`, { method: "POST" });
     await refreshConversationsSidebar(currentConversationId);
   }

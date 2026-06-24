@@ -26,6 +26,8 @@ from .document_category import (
     DocumentCategoryUpdate,
 )
 from .chunk_category_relation import ChunkCategoryRelation
+from .guided_session import GuidedSession
+from .guided_tree import GuidedTree, GuidedTreeNode
 
 __all__ = [
     "User",
@@ -86,5 +88,8 @@ __all__ = [
     "DocumentCategoryCreate",
     "DocumentCategoryUpdate",
     "ChunkCategoryRelation",
+    "GuidedSession",
+    "GuidedTree",
+    "GuidedTreeNode",
 ]
 

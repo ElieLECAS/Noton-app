@@ -121,6 +121,103 @@ Retourne UNIQUEMENT un objet JSON avec les champs suivants :
 """
 
 
+class GuidedModeDecision(BaseModel):
+    is_guided: bool
+    flow_kind: str = "howto"  # 'howto' (pose/montage chantier) | 'diagnostic' (SAV)
+    topic: str = ""
+    reasoning: str = ""
+
+
+GUIDED_MODE_SYSTEM_PROMPT = """Tu es un classifieur pour l'assistant technique PROFERM (menuiserie, volets roulants).
+Tu détermines si la demande de l'utilisateur nécessite un GUIDAGE PAS-À-PAS interactif (un cheminement
+en plusieurs étapes avec aiguillage) plutôt qu'une simple réponse documentaire en un coup.
+
+GUIDAGE = true dans 2 cas :
+1. flow_kind = "howto" : l'utilisateur veut être ACCOMPAGNÉ dans un geste sur le chantier
+   (ex : « comment poser ce seuil ? », « comment monter l'embout sur le profil alu ? »,
+   « comment installer cet accessoire ? », « guide-moi pour fixer la coulisse »).
+   → Procédure ordonnée à dérouler étape par étape.
+2. flow_kind = "diagnostic" : l'utilisateur signale un PROBLÈME / SYMPTÔME sur un produit posé
+   (ex : « mon volet roulant ne fonctionne plus », « déformation du montant coulisse »,
+   « non-conformité », « le volet est bloqué », « fuite d'eau »).
+   → Diagnostic en plusieurs étapes (vérifications successives).
+
+GUIDAGE = false si :
+- C'est une question factuelle ponctuelle (cote, tolérance, référence pièce, dimension, condition de
+  garantie, comparaison produit) qui se répond en une fois.
+- C'est une salutation, un remerciement, du bavardage, ou une question sur l'identité de l'assistant.
+
+RÈGLE : en cas de doute entre une question factuelle et un guidage, choisis is_guided=false.
+
+Retourne UNIQUEMENT un JSON :
+- is_guided: true | false
+- flow_kind: "howto" | "diagnostic" (valeur indicative si is_guided=false)
+- topic: courte étiquette du sujet (ex : « pose embout profil alu », « volet roulant bloqué »)
+- reasoning: explication courte en français
+"""
+
+
+async def decide_guided_mode(
+    query: str, history: Optional[List[Dict[str, str]]] = None
+) -> GuidedModeDecision:
+    """Détermine si la demande relève du guidage procédural (how-to / diagnostic SAV).
+
+    Appelé uniquement quand GUIDED_FLOW_ENABLED et hors reprise d'un parcours actif :
+    aucun impact sur le pipeline one-shot quand le flag est désactivé.
+    """
+    logger.info("[guided_mode] Analyse — query=%r", (query or "")[:120])
+    try:
+        messages = [{"role": "system", "content": GUIDED_MODE_SYSTEM_PROMPT}]
+        history_snippet = ""
+        if history:
+            lines = []
+            for msg in history[-6:]:
+                role = msg.get("role", "user")
+                content = str(msg.get("content", ""))[:300]
+                lines.append(f"{role}: {content}")
+            history_snippet = "\n".join(lines)
+        messages.append(
+            {
+                "role": "user",
+                "content": (
+                    f"Historique récent :\n{history_snippet or '(vide)'}\n\n"
+                    f"Message à classer : '{query}'"
+                ),
+            }
+        )
+
+        response = await chat(
+            "",
+            model=settings.MODEL_FAST,
+            context=messages,
+            response_format={"type": "json_object"},
+        )
+        content = response["choices"][0]["message"].get("content", "{}")
+        data = json.loads(content)
+
+        flow_kind = str(data.get("flow_kind") or "howto").strip().lower()
+        if flow_kind not in ("howto", "diagnostic"):
+            flow_kind = "howto"
+
+        decision = GuidedModeDecision(
+            is_guided=bool(data.get("is_guided")),
+            flow_kind=flow_kind,
+            topic=str(data.get("topic") or "").strip()[:300],
+            reasoning=str(data.get("reasoning") or "").strip(),
+        )
+        logger.info(
+            "[guided_mode] is_guided=%s flow_kind=%s topic=%r",
+            decision.is_guided,
+            decision.flow_kind,
+            decision.topic,
+        )
+        return decision
+    except Exception as e:
+        logger.error(f"Erreur lors de la classification guidage: {e}")
+        # En cas d'échec, ne pas forcer le mode guidé (repli sur le pipeline standard).
+        return GuidedModeDecision(is_guided=False, reasoning=f"Erreur technique: {e}")
+
+
 async def decide_retrieval_route(query: str, history: Optional[List[Dict[str, str]]] = None) -> RetrievalDecision:
     """
     Détermine si une requête nécessite une recherche documentaire RAG ou si elle peut être traitée directement.

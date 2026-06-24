@@ -1,11 +1,32 @@
+"""
+Extraction d'illustration pour la réponse du chat — découpe ANCRÉE SUR LA RÉFÉRENCE.
+
+Principe (refonte) :
+  Le modèle de vision ne place plus le cadre (il régresse mal des coordonnées et
+  confond deux coupes voisines). On positionne la découpe de façon DÉTERMINISTE sur
+  le texte de la page :
+
+  1. Ancre exacte : `page.search_for("6104")` → bbox pixel-précise du code cible.
+  2. Labels frères : tous les codes de la page (motif ILLUSTRATION_REFERENCE_PATTERN).
+  3. Extent du schéma : on attribue chaque trait/image au label de code le plus proche
+     (Voronoï) et on garde l'union des traits possédés par la cible.
+  4. Bornage : la fenêtre est coupée au point milieu vers chaque code frère.
+  5. Contrôle anti-fuite : aucun code frère ne doit tomber dans le crop final.
+  6. Garde-fou de lecture (vision, sur le crop seul) : confirme que la cible est
+     présente et sujet principal. Ne peut que rejeter.
+
+  Abstention stricte : sans code cible ancrable → aucune image.
+"""
 import os
-import hashlib
-import json
-import logging
-import base64
 import io
+import re
+import json
+import base64
+import hashlib
+import logging
+from typing import Any, Dict, List, Optional, Set, Tuple
+
 import numpy as np
-from typing import List, Dict, Any, Optional
 from PIL import Image
 
 from app.config import settings
@@ -14,537 +35,405 @@ from app.services import mistral_service
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
-# Constantes de filtrage des candidats
+# Constantes de découpe
 # ---------------------------------------------------------------------------
-MIN_IMAGE_SIZE_PTS = 50        # Taille min (largeur ET hauteur) pour images raster (~1.8 cm)
-MIN_CLUSTER_SIZE_PTS = 80      # Taille min pour clusters vectoriels (~2.8 cm)
-MIN_DRAWING_RECT_PTS = 15      # Taille min pour un rect vectoriel individuel avant clustering
-CLUSTER_DILATION_PTS = 30      # Dilatation pour le clustering spatial
-MIN_ASPECT_RATIO = 0.08        # Ratio min(w,h)/max(w,h) pour éliminer les lignes
-HEADER_ZONE_RATIO = 0.08       # Zone d'exclusion en haut (8% de la hauteur)
-FOOTER_ZONE_RATIO = 0.06       # Zone d'exclusion en bas (6% de la hauteur)
-MIN_RELATIVE_AREA = 0.02       # Surface min relative à la page (2%)
-MAX_RELATIVE_AREA = 0.85       # Surface max relative à la page (85%)
-MAX_FULLPAGE_RATIO = 0.95      # Seuil pour exclure les dessins couvrant quasi toute la page
-DEDUP_AREA_TOLERANCE = 100     # Tolérance en pts² pour considérer deux candidats de même taille
-CROP_DPI = 200                 # DPI pour le crop final
-ANALYSIS_DPI = 150             # DPI pour l'image envoyée au modèle de vision
-MIN_CROP_PX = 80               # Dimension minimum du crop final en pixels
-MIN_PIXEL_VARIANCE = 50.0      # Variance minimum des pixels pour détecter une image non vide
+CROP_DPI = 200                 # DPI du crop final
+MIN_CROP_PX = 80               # Dimension min du crop final (px)
+MIN_PIXEL_VARIANCE = 50.0      # Variance min des pixels (écarte les zones vides)
+
+MIN_DIAGRAM_PTS = 55.0         # Dimension min (w ET h) d'un schéma 2D valide (~1.9 cm)
+MIN_OWNED_STROKES = 6          # Nb min de traits/visuels attribués à la cible
+MIN_STROKE_PTS = 3.0           # Taille min d'un trait pour compter (élimine le bruit)
+MAX_FULLPAGE_RATIO = 0.95      # Rect couvrant ~toute la page = arrière-plan, ignoré
 
 
-def rect_width(r):
-    return r[2] - r[0]
-
-def rect_height(r):
-    return r[3] - r[1]
-
-def rect_area(r):
-    return rect_width(r) * rect_height(r)
-
-def rect_center_y(r):
-    return (r[1] + r[3]) / 2.0
-
-def rect_center_x(r):
-    return (r[0] + r[2]) / 2.0
-
-def dilate_rect(r, padding):
-    import fitz
-    return fitz.Rect(r[0] - padding, r[1] - padding, r[2] + padding, r[3] + padding)
-
-def union_rect(r1, r2):
-    import fitz
-    return fitz.Rect(
-        min(r1[0], r2[0]),
-        min(r1[1], r2[1]),
-        max(r1[2], r2[2]),
-        max(r1[3], r2[3])
-    )
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+def _norm_code(s: str) -> str:
+    return re.sub(r"\s+", "", (s or "")).strip().lower()
 
 
-def _is_in_header_footer(bbox, page_h: float) -> bool:
-    """Vérifie si le centre vertical du candidat est dans la zone header ou footer."""
-    cy = rect_center_y(bbox)
-    header_limit = page_h * HEADER_ZONE_RATIO
-    footer_limit = page_h * (1.0 - FOOTER_ZONE_RATIO)
-    return cy < header_limit or cy > footer_limit
-
-
-def _aspect_ratio(w: float, h: float) -> float:
-    """Ratio min/max pour détecter les éléments filiformes (lignes décoratives)."""
-    if max(w, h) == 0:
-        return 0.0
-    return min(w, h) / max(w, h)
-
-
-def _significance_score(cand: Dict[str, Any], page_w: float, page_h: float) -> float:
-    """
-    Score de significativité d'un candidat visuel (0-1).
-    Plus le score est élevé, plus le candidat est probablement un schéma/tableau important.
-    """
-    bbox = cand["bbox"]
-    w = rect_width(bbox)
-    h = rect_height(bbox)
-    page_area = page_w * page_h
-
-    # 1. Surface relative (poids fort : un gros visuel est probablement important)
-    area_ratio = (w * h) / page_area if page_area > 0 else 0
-    area_score = min(area_ratio / 0.3, 1.0)  # Saturé à 30% de la page
-
-    # 2. Position : le centre de la page est plus probable pour un schéma que les marges
-    cx_norm = rect_center_x(bbox) / page_w if page_w > 0 else 0.5
-    cy_norm = rect_center_y(bbox) / page_h if page_h > 0 else 0.5
-    # Distance au centre normalisée (0=centre, 1=coin)
-    dist_center = ((cx_norm - 0.5) ** 2 + (cy_norm - 0.5) ** 2) ** 0.5
-    position_score = max(0, 1.0 - dist_center * 1.5)
-
-    # 3. Type : tables et images sont plus fiables que drawing_clusters
-    type_weights = {"table": 1.0, "image": 0.9, "drawing_cluster": 0.7}
-    type_score = type_weights.get(cand.get("type", ""), 0.5)
-
-    # 4. Ratio d'aspect (un carré ou rectangle raisonnable > une bande étroite)
-    aspect = _aspect_ratio(w, h)
-    aspect_score = min(aspect / 0.3, 1.0)
-
-    # Pondération finale
-    score = (
-        0.40 * area_score +
-        0.20 * position_score +
-        0.25 * type_score +
-        0.15 * aspect_score
-    )
-    return round(score, 3)
-
-
-def get_visual_candidates(pdf_path: str, page_no: int) -> List[Dict[str, Any]]:
-    """
-    Extrait les bboxes candidates (images matricielles, tableaux et dessins vectoriels groupés)
-    présents sur une page de PDF à l'aide de PyMuPDF (fitz).
-    
-    Applique des filtres stricts pour éliminer le bruit (logos, icônes, lignes décoratives,
-    en-têtes/pieds de page) et scorer chaque candidat par significativité.
-    """
-    import fitz
-
-    logger.info(f"Extracting visual candidates from {pdf_path} page {page_no}...")
+def _reference_pattern() -> "re.Pattern":
+    raw = getattr(settings, "ILLUSTRATION_REFERENCE_PATTERN", r"\b\d{3,5}[A-Za-z]?\b")
     try:
-        doc = fitz.open(pdf_path)
-    except Exception as e:
-        logger.error(f"Failed to open PDF {pdf_path}: {e}")
-        return []
+        return re.compile(raw)
+    except re.error:
+        logger.warning("[illustration] motif de référence invalide (%r), repli par défaut", raw)
+        return re.compile(r"\b\d{3,5}[A-Za-z]?\b")
 
-    if page_no < 1 or page_no > len(doc):
-        doc.close()
-        logger.warning(f"Page number {page_no} out of range for {pdf_path}")
-        return []
 
-    page = doc[page_no - 1]
+def _rect_center(r) -> Tuple[float, float]:
+    return ((r.x0 + r.x1) / 2.0, (r.y0 + r.y1) / 2.0)
+
+
+def _overlaps(r, win) -> bool:
+    """Chevauchement tolérant aux rectangles dégénérés (traits fins de largeur/hauteur nulle),
+    pour lesquels fitz.Rect.intersects() renvoie False."""
+    return not (r.x1 < win.x0 or r.x0 > win.x1 or r.y1 < win.y0 or r.y0 > win.y1)
+
+
+def find_code_labels(page, pattern: "Optional[re.Pattern]" = None) -> List[Tuple[Any, str]]:
+    """Retourne [(fitz.Rect, code)] pour chaque mot de la page matchant le motif de code."""
+    import fitz
+
+    if pattern is None:
+        pattern = _reference_pattern()
+    labels: List[Tuple[Any, str]] = []
+    try:
+        words = page.get_text("words")  # (x0, y0, x1, y1, word, block, line, word_no)
+    except Exception as exc:
+        logger.debug("[illustration] get_text('words') échec: %s", exc)
+        return labels
+    for w in words:
+        text = (w[4] or "").strip()
+        if text and pattern.fullmatch(text):
+            labels.append((fitz.Rect(w[0], w[1], w[2], w[3]), text))
+    return labels
+
+
+def codes_inside(crop_rect, code_labels: List[Tuple[Any, str]]) -> Set[str]:
+    """Codes dont le centre du label tombe dans le crop."""
+    out: Set[str] = set()
+    for r, t in code_labels:
+        cx, cy = _rect_center(r)
+        if crop_rect.x0 <= cx <= crop_rect.x1 and crop_rect.y0 <= cy <= crop_rect.y1:
+            out.add(t)
+    return out
+
+
+def _content_rects(page, win) -> List[Any]:
+    """Rects de contenu visuel (traits vectoriels + images raster) intersectant la fenêtre,
+    hors arrière-plans pleine page et hors traits microscopiques."""
+    import fitz
+
     page_w, page_h = page.rect.width, page.rect.height
-    page_area = page_w * page_h
-    candidates = []
+    rects: List[Any] = []
 
-    # 1. Trouver les tableaux
     try:
-        tables = page.find_tables()
-        for idx, table in enumerate(tables):
-            bbox = list(table.bbox)
-            w, h = rect_width(bbox), rect_height(bbox)
-            rel_area = (w * h) / page_area if page_area > 0 else 0
-
-            # Filtres : taille minimale, pas dans header/footer, surface relative raisonnable
-            if w < MIN_IMAGE_SIZE_PTS or h < MIN_IMAGE_SIZE_PTS:
-                continue
-            if _is_in_header_footer(bbox, page_h):
-                continue
-            if rel_area < MIN_RELATIVE_AREA or rel_area > MAX_RELATIVE_AREA:
-                continue
-
-            candidates.append({
-                "type": "table",
-                "bbox": bbox,
-                "description": f"Tableau numéro {idx + 1} ({int(w)}×{int(h)} pts, {rel_area*100:.0f}% de la page)"
-            })
-    except Exception as e:
-        logger.warning(f"Failed to find tables in fitz: {e}")
-
-    # 2. Trouver les images matricielles (avec filtrage strict)
-    try:
-        images = page.get_image_info()
-        img_idx = 0
-        for img in images:
-            bbox = img.get("bbox")
-            if not bbox:
-                continue
-
-            w, h = rect_width(bbox), rect_height(bbox)
-            rel_area = (w * h) / page_area if page_area > 0 else 0
-
-            # Filtres stricts
-            if w < MIN_IMAGE_SIZE_PTS or h < MIN_IMAGE_SIZE_PTS:
-                continue
-            if _aspect_ratio(w, h) < MIN_ASPECT_RATIO:
-                continue
-            if _is_in_header_footer(bbox, page_h):
-                continue
-            if rel_area < MIN_RELATIVE_AREA or rel_area > MAX_RELATIVE_AREA:
-                continue
-
-            img_idx += 1
-            candidates.append({
-                "type": "image",
-                "bbox": list(bbox),
-                "description": f"Image matricielle numéro {img_idx} ({int(w)}×{int(h)} pts, {rel_area*100:.0f}% de la page)"
-            })
-    except Exception as e:
-        logger.warning(f"Failed to find image info in fitz: {e}")
-
-    # 3. Regrouper (clustering) les dessins vectoriels proches
-    try:
-        drawings = page.get_drawings()
-        drawing_rects = []
-        for d in drawings:
+        for d in page.get_drawings():
             r = d.get("rect")
-            if r and rect_width(r) > MIN_DRAWING_RECT_PTS and rect_height(r) > MIN_DRAWING_RECT_PTS:
-                # Exclure les rectangles géants qui couvrent toute la page (arrière-plans)
-                if rect_width(r) > page_w * MAX_FULLPAGE_RATIO and rect_height(r) > page_h * MAX_FULLPAGE_RATIO:
-                    continue
-                drawing_rects.append(r)
-
-        clusters: List[fitz.Rect] = []
-        for rect in drawing_rects:
-            merged = False
-            for i, c in enumerate(clusters):
-                dilated_c = dilate_rect(c, CLUSTER_DILATION_PTS)
-                f_rect = fitz.Rect(rect)
-                if dilated_c.intersects(f_rect):
-                    clusters[i] = union_rect(c, rect)
-                    merged = True
-                    break
-
-            if not merged:
-                clusters.append(fitz.Rect(rect))
-
-        # Ne garder que les clusters significatifs avec filtres stricts
-        drawing_idx = 1
-        for c in clusters:
-            w = rect_width(c)
-            h = rect_height(c)
-            rel_area = (w * h) / page_area if page_area > 0 else 0
-
-            # Filtres stricts pour les clusters vectoriels
-            if w < MIN_CLUSTER_SIZE_PTS or h < MIN_CLUSTER_SIZE_PTS:
+            if not r:
                 continue
-            if _aspect_ratio(w, h) < MIN_ASPECT_RATIO:
+            rr = fitz.Rect(r)
+            if rr.width < MIN_STROKE_PTS and rr.height < MIN_STROKE_PTS:
                 continue
-            if _is_in_header_footer([c[0], c[1], c[2], c[3]], page_h):
+            if rr.width > page_w * MAX_FULLPAGE_RATIO and rr.height > page_h * MAX_FULLPAGE_RATIO:
                 continue
-            if rel_area < MIN_RELATIVE_AREA or rel_area > MAX_RELATIVE_AREA:
-                continue
+            if _overlaps(rr, win):
+                rects.append(rr)
+    except Exception as exc:
+        logger.debug("[illustration] get_drawings échec: %s", exc)
 
-            candidates.append({
-                "type": "drawing_cluster",
-                "bbox": [c[0], c[1], c[2], c[3]],
-                "description": f"Schéma vectoriel numéro {drawing_idx} ({int(w)}×{int(h)} pts, {rel_area*100:.0f}% de la page)"
-            })
-            drawing_idx += 1
-    except Exception as e:
-        logger.warning(f"Failed to process drawings in fitz: {e}")
-
-    doc.close()
-
-    # 4. Supprimer les doublons ou inclusions
-    import fitz as fitz_mod
-    unique_candidates = []
-    for cand in candidates:
-        r1 = fitz_mod.Rect(cand["bbox"])
-        is_subsumed = False
-        for other in candidates:
-            if cand is other:
-                continue
-            r2 = fitz_mod.Rect(other["bbox"])
-            if r2.contains(r1):
-                if abs(rect_area(r2) - rect_area(r1)) < DEDUP_AREA_TOLERANCE:
-                    continue  # Si de taille presque identique, on ne rejette pas
-                is_subsumed = True
-                break
-        if not is_subsumed:
-            unique_candidates.append(cand)
-
-    # 5. Calculer le score de significativité et trier par score décroissant
-    for c in unique_candidates:
-        c["significance_score"] = _significance_score(c, page_w, page_h)
-
-    unique_candidates.sort(key=lambda c: c["significance_score"], reverse=True)
-
-    # Assigner un index final et arrondir les coordonnées pour la clarté du prompt
-    for idx, c in enumerate(unique_candidates):
-        c["index"] = idx
-        c["bbox"] = [round(v, 1) for v in c["bbox"]]
-
-    logger.info(
-        f"Found {len(unique_candidates)} significant candidates on page {page_no} "
-        f"(scores: {[c['significance_score'] for c in unique_candidates]})"
-    )
-    return unique_candidates
-
-
-def has_significant_visuals(pdf_path: str, page_no: int) -> bool:
-    """
-    Vérification rapide (sans appel LLM) : la page contient-elle au moins
-    un candidat visuel significatif après filtrage strict ?
-    
-    Utilisé par le chat router pour pré-filtrer les pages avant d'appeler
-    le modèle de vision (coûteux).
-    """
-    candidates = get_visual_candidates(pdf_path, page_no)
-    return len(candidates) > 0
-
-
-async def determine_and_crop_illustration(
-    query: str,
-    answer: str,
-    pdf_path: str,
-    page_no: int,
-    doc_title: str
-) -> Optional[Dict[str, Any]]:
-    """
-    Rend la page sous forme d'image, demande au modèle de vision de sélectionner le visuel 
-    le plus adapté pour illustrer la réponse, effectue le détourage et le met en cache.
-    
-    Améliorations v2 :
-    - Prompt avec critères objectifs de pertinence et de rejet
-    - Chain-of-thought pour améliorer la qualité de la décision
-    - Padding adaptatif proportionnel à la taille du visuel
-    - Validation du crop (dimensions min, image non vide)
-    """
-    from app.services.multimodal_page_service import render_pdf_page_png
-
-    # 1. Récupérer les candidats (déjà filtrés et scorés)
-    candidates = get_visual_candidates(pdf_path, page_no)
-    if not candidates:
-        logger.info(f"No significant visual candidates found on page {page_no}. Skipping illustration.")
-        return None
-
-    # 2. Rendre la page en PNG pour l'analyse visuelle
     try:
-        png_bytes = render_pdf_page_png(pdf_path, page_no - 1, dpi=ANALYSIS_DPI)
-        base64_image = base64.b64encode(png_bytes).decode("utf-8")
-    except Exception as e:
-        logger.error(f"Failed to render page {page_no} of {pdf_path}: {e}", exc_info=True)
-        return None
+        for img in page.get_image_info():
+            b = img.get("bbox")
+            if not b:
+                continue
+            rr = fitz.Rect(b)
+            if rr.width > page_w * MAX_FULLPAGE_RATIO and rr.height > page_h * MAX_FULLPAGE_RATIO:
+                continue
+            if _overlaps(rr, win):
+                rects.append(rr)
+    except Exception as exc:
+        logger.debug("[illustration] get_image_info échec: %s", exc)
 
-    # 3. Récupérer les dimensions de la page
+    return rects
+
+
+def build_anchored_crop(page, target: str, anchor_rect, code_labels: List[Tuple[Any, str]]):
+    """
+    Construit le rectangle de découpe (en points PDF) centré sur l'ancre du code `target`,
+    borné par les codes frères et limité à l'extent du schéma possédé par la cible.
+    Retourne un fitz.Rect, ou None si rien de fiable n'est isolable (abstention).
+    """
     import fitz
-    try:
-        doc = fitz.open(pdf_path)
-        page = doc[page_no - 1]
-        width_pts, height_pts = page.rect.width, page.rect.height
-        doc.close()
-    except Exception:
-        width_pts, height_pts = 595.0, 842.0  # Fallback A4
 
-    # 4. Préparer le prompt pour le modèle de vision (v2 - avec critères stricts)
-    candidates_desc = []
-    for c in candidates:
-        candidates_desc.append(
-            f"- Élément #{c['index']}: Type: {c['type']}, "
-            f"Description: {c['description']}, "
-            f"Score de significativité: {c['significance_score']}, "
-            f"Coordonnées [x0, y0, x1, y1]: {c['bbox']}"
+    page_w, page_h = page.rect.width, page.rect.height
+    max_w = page_w * settings.ILLUSTRATION_MAX_WINDOW_RATIO
+    max_h = page_h * settings.ILLUSTRATION_MAX_WINDOW_RATIO
+    acx, acy = _rect_center(anchor_rect)
+
+    # 1) Fenêtre initiale centrée sur l'ancre, plafonnée
+    win = fitz.Rect(
+        max(0.0, acx - max_w / 2.0),
+        max(0.0, acy - max_h / 2.0),
+        min(page_w, acx + max_w / 2.0),
+        min(page_h, acy + max_h / 2.0),
+    )
+
+    # 2) Bornage par les frères (codes != target) : coupe au point milieu, côté du frère
+    for r, t in code_labels:
+        if _norm_code(t) == _norm_code(target):
+            continue
+        scx, scy = _rect_center(r)
+        if not (win.x0 <= scx <= win.x1 and win.y0 <= scy <= win.y1):
+            continue  # frère déjà hors fenêtre : aucune contrainte
+        dx, dy = scx - acx, scy - acy
+        if abs(dy) >= abs(dx):
+            mid = (acy + scy) / 2.0
+            if dy >= 0:
+                win.y1 = min(win.y1, mid)
+            else:
+                win.y0 = max(win.y0, mid)
+        else:
+            mid = (acx + scx) / 2.0
+            if dx >= 0:
+                win.x1 = min(win.x1, mid)
+            else:
+                win.x0 = max(win.x0, mid)
+
+    if win.is_empty or win.width <= 1.0 or win.height <= 1.0:
+        return None
+
+    # 3) Voronoï : attribuer chaque rect de contenu au label de code le plus proche ;
+    #    garder ceux dont le label le plus proche est la cible.
+    labels_for_nearest = list(code_labels) + [(anchor_rect, target)]
+    centers = [(_rect_center(r), _norm_code(t)) for r, t in labels_for_nearest]
+    target_norm = _norm_code(target)
+
+    owned: List[Any] = []
+    for rr in _content_rects(page, win):
+        cx, cy = _rect_center(rr)
+        nearest_text = None
+        nearest_d = None
+        for (lx, ly), t in centers:
+            d = (cx - lx) ** 2 + (cy - ly) ** 2
+            if nearest_d is None or d < nearest_d:
+                nearest_d = d
+                nearest_text = t
+        if nearest_text == target_norm:
+            owned.append(rr)
+
+    if len(owned) < MIN_OWNED_STROKES:
+        logger.info(
+            "[illustration] '%s' : %d trait(s) possédé(s) (<%d) → abstention",
+            target, len(owned), MIN_OWNED_STROKES,
         )
-    candidates_text = "\n".join(candidates_desc)
+        return None
 
-    # Tronquer la réponse pour ne pas saturer le contexte du modèle
-    answer_truncated = answer[:2000] + "..." if len(answer) > 2000 else answer
+    # 4) Extent du schéma = union des traits possédés ∪ label de l'ancre, clampé à la fenêtre
+    diagram = fitz.Rect(owned[0])
+    for rr in owned[1:]:
+        diagram |= rr
+    diagram |= anchor_rect
+    diagram &= win
 
-    prompt = f"""Tu es un expert en analyse visuelle de documents techniques. 
-Tu reçois l'image d'une page de document, ainsi que la question de l'utilisateur et la réponse fournie par l'assistant.
-
-**Question de l'utilisateur** : "{query}"
-
-**Réponse de l'assistant** : "{answer_truncated}"
-
-**Éléments visuels détectés sur cette page** (coordonnées en points, page = [0, 0, {width_pts:.0f}, {height_pts:.0f}]) :
-{candidates_text}
-
----
-
-## Ta mission
-
-Tu dois décider si UN des éléments visuels ci-dessus est **directement pertinent** pour illustrer et enrichir la réponse textuelle de l'assistant.
-
-## Critères de REJET (illustration_needed = false)
-
-Tu DOIS rejeter et répondre `illustration_needed: false` si l'un de ces cas s'applique :
-- La question est purement d'ordre général, théorique ou conversationnel (salutation, remerciement, question de fonctionnement)
-- Les éléments visuels sont des **logos, en-têtes, pieds de page, numéros de page, bordures décoratives, icônes, flèches isolées ou rectangles de mise en page**
-- Le visuel traite d'un **sujet différent** de ce qui est décrit dans la réponse (même s'il est dans le même domaine général)
-- Le visuel n'ajoute **aucune information complémentaire** à ce que la réponse textuelle dit déjà — il ne fait que répéter sous forme visuelle un contenu trivial
-- Le visuel est trop générique pour être utile (ex: une photo d'ambiance, un arrière-plan décoratif)
-
-## Critères de SÉLECTION (illustration_needed = true)
-
-Tu ne dois sélectionner un visuel QUE s'il remplit TOUS ces critères :
-1. Il illustre un **élément spécifique** mentionné ou décrit dans la réponse (une mesure, un processus, une configuration, un composant, des données chiffrées)
-2. Il apporte une **valeur ajoutée concrète** : le lecteur comprend mieux la réponse grâce au visuel
-3. Il est suffisamment **lisible et complet** (pas un fragment coupé, pas une image floue)
-
-## Format de réponse
-
-Réponds UNIQUEMENT par un objet JSON valide. Tu dois d'abord raisonner brièvement (champ "reasoning") avant de décider.
-
-Si un visuel est pertinent :
-{{
-  "reasoning": "Explication en 1-2 phrases de POURQUOI ce visuel illustre spécifiquement la réponse",
-  "illustration_needed": true,
-  "selected_candidate_index": <int ou null>,
-  "custom_bbox": [<ymin>, <xmin>, <ymax>, <xmax>] ou null,
-  "caption": "Légende claire et descriptive en français décrivant précisément le contenu du schéma/tableau"
-}}
-
-Si aucun visuel n'est pertinent :
-{{
-  "reasoning": "Explication en 1 phrase de pourquoi aucun visuel n'est retenu",
-  "illustration_needed": false,
-  "selected_candidate_index": null,
-  "custom_bbox": null,
-  "caption": ""
-}}
-
-Notes :
-- "selected_candidate_index" : l'indice de l'élément dans la liste ci-dessus
-- "custom_bbox" : uniquement si l'élément pertinent n'est pas correctement couvert par la liste, format [ymin, xmin, ymax, xmax] normalisé de 0 à 100 (pourcentages de la hauteur et largeur de la page)
-- En cas de doute, préfère NE PAS illustrer plutôt que d'illustrer avec un visuel non pertinent
-"""
-
-    model_name = getattr(settings, "MULTIMODAL_EXTRACT_MODEL", "mistral-large-latest")
-    logger.info(f"Sending page {page_no} image and prompt to {model_name} (candidates: {len(candidates)})...")
-
-    try:
-        messages = [
-            {
-                "role": "user",
-                "content": prompt,
-                "images": [base64_image]
-            }
-        ]
-        
-        response = await mistral_service.chat(
-            message="",
-            model=model_name,
-            context=messages,
-            response_format={"type": "json_object"}
+    if diagram.width < MIN_DIAGRAM_PTS or diagram.height < MIN_DIAGRAM_PTS:
+        logger.info(
+            "[illustration] '%s' : schéma trop petit (%.0fx%.0f pts) → abstention",
+            target, diagram.width, diagram.height,
         )
-        
-        choice = (response.get("choices") or [{}])[0]
-        content = choice.get("message", {}).get("content", "").strip()
-        decision = json.loads(content)
-    except Exception as e:
-        logger.error(f"Error calling vision API: {e}", exc_info=True)
         return None
 
-    reasoning = decision.get("reasoning", "")
-    logger.info(f"Vision model decision: illustration_needed={decision.get('illustration_needed')}, reasoning={reasoning}")
+    # 5) Padding
+    pad = settings.ILLUSTRATION_ANCHOR_PADDING_PTS
+    crop = fitz.Rect(
+        max(0.0, diagram.x0 - pad),
+        max(0.0, diagram.y0 - pad),
+        min(page_w, diagram.x1 + pad),
+        min(page_h, diagram.y1 + pad),
+    )
 
-    if not decision.get("illustration_needed"):
-        logger.info("Vision model decided that an illustration is not relevant.")
-        return None
-
-    # 5. Déterminer la bbox à découper (en fitz points)
-    bbox = None
-    selected_idx = decision.get("selected_candidate_index")
-    custom_bbox = decision.get("custom_bbox")
-
-    if selected_idx is not None and 0 <= selected_idx < len(candidates):
-        bbox = candidates[selected_idx]["bbox"]
-        logger.info(f"Using candidate #{selected_idx} bbox: {bbox}")
-    elif custom_bbox and len(custom_bbox) == 4:
-        # Convertir les coordonnées normalisées 0-100 en points fitz
-        ymin, xmin, ymax, xmax = custom_bbox
-        bbox = [
-            (xmin * width_pts) / 100.0,
-            (ymin * height_pts) / 100.0,
-            (xmax * width_pts) / 100.0,
-            (ymax * height_pts) / 100.0
-        ]
-        logger.info(f"Using custom bbox (converted from %): {bbox}")
-
-    if not bbox:
-        logger.warning("Vision model requested an illustration but failed to provide valid coordinates.")
-        return None
-
-    # 6. Effectuer le détourage avec padding adaptatif et validation
-    try:
-        high_res_bytes = render_pdf_page_png(pdf_path, page_no - 1, dpi=CROP_DPI)
-        img = Image.open(io.BytesIO(high_res_bytes))
-
-        scale = CROP_DPI / 72.0
-        x0, y0, x1, y1 = bbox
-
-        # Padding adaptatif : proportionnel à la taille du visuel
-        visual_max_dim = max(rect_width(bbox), rect_height(bbox))
-        padding = max(5.0, min(20.0, 0.03 * visual_max_dim))
-        
-        x0 = max(0.0, x0 - padding)
-        y0 = max(0.0, y0 - padding)
-        x1 = min(width_pts, x1 + padding)
-        y1 = min(height_pts, y1 + padding)
-
-        # Convertir en pixels
-        px0 = int(x0 * scale)
-        py0 = int(y0 * scale)
-        px1 = int(x1 * scale)
-        py1 = int(y1 * scale)
-
-        # Clamp aux dimensions de l'image
-        px0 = max(0, px0)
-        py0 = max(0, py0)
-        px1 = min(img.width, px1)
-        py1 = min(img.height, py1)
-
-        cropped_img = img.crop((px0, py0, px1, py1))
-
-        # 7. Validation du crop
-        crop_w, crop_h = cropped_img.size
-        if crop_w < MIN_CROP_PX or crop_h < MIN_CROP_PX:
-            logger.warning(
-                f"Cropped image too small ({crop_w}×{crop_h} px, min {MIN_CROP_PX}). Discarding."
-            )
+    # 6) Contrôle anti-fuite : aucun code frère ne doit tomber dans le crop
+    leaked = codes_inside(crop, code_labels) - {target}
+    # tolérer d'autres occurrences du même code, rejeter tout AUTRE code
+    leaked = {c for c in leaked if _norm_code(c) != target_norm}
+    if leaked:
+        # rétrécir au schéma sans padding et re-tester
+        crop = fitz.Rect(diagram)
+        leaked = {c for c in (codes_inside(crop, code_labels) - {target}) if _norm_code(c) != target_norm}
+        if leaked:
+            logger.info("[illustration] '%s' : code(s) frère(s) %s dans le crop → abstention", target, leaked)
             return None
 
-        # Vérifier que l'image n'est pas quasi-vide (page blanche, rectangle uni)
-        try:
-            arr = np.array(cropped_img.convert("L"), dtype=np.float32)
-            variance = float(np.var(arr))
-            if variance < MIN_PIXEL_VARIANCE:
-                logger.warning(
-                    f"Cropped image has very low variance ({variance:.1f} < {MIN_PIXEL_VARIANCE}). "
-                    "Likely a blank or solid-color region. Discarding."
-                )
-                return None
-        except Exception as var_err:
-            logger.debug(f"Could not compute pixel variance (non-critical): {var_err}")
+    return crop
 
-        # 8. Sauvegarder dans le cache d'illustrations
-        cache_dir = os.path.join(os.path.dirname(settings.LANCED_DB_DIR), "illustration_cache")
-        os.makedirs(cache_dir, exist_ok=True)
 
-        # Nom unique basé sur le hash MD5 du fichier, page et coordonnées
-        key_str = f"{pdf_path}_{page_no}_{round(x0,1)}_{round(y0,1)}_{round(x1,1)}_{round(y1,1)}"
-        filename_hash = hashlib.md5(key_str.encode("utf-8")).hexdigest()
-        filename = f"crop_{filename_hash}.png"
-        file_path = os.path.join(cache_dir, filename)
+# ---------------------------------------------------------------------------
+# Rendu / validation / cache du crop
+# ---------------------------------------------------------------------------
+def _make_crop_image(pdf_path: str, page_no: int, crop_rect) -> Optional[Image.Image]:
+    """Rend la page en haute résolution, découpe le rect, valide taille et variance."""
+    from app.services.multimodal_page_service import render_pdf_page_png
 
-        cropped_img.save(file_path, format="PNG")
-        logger.info(f"Cropped illustration cached: {file_path} ({crop_w}×{crop_h} px)")
-
-        return {
-            "url": f"/api/chats/illustrations/{filename}",
-            "title": decision.get("caption") or "Schéma d'illustration",
-            "page_no": page_no,
-            "document_title": doc_title
-        }
-
-    except Exception as e:
-        logger.error(f"Error during cropping or image saving: {e}", exc_info=True)
+    try:
+        high_res = render_pdf_page_png(pdf_path, page_no - 1, dpi=CROP_DPI)
+        img = Image.open(io.BytesIO(high_res))
+    except Exception as exc:
+        logger.error("[illustration] rendu haute résolution échoué: %s", exc, exc_info=True)
         return None
+
+    scale = CROP_DPI / 72.0
+    px0 = max(0, int(crop_rect.x0 * scale))
+    py0 = max(0, int(crop_rect.y0 * scale))
+    px1 = min(img.width, int(crop_rect.x1 * scale))
+    py1 = min(img.height, int(crop_rect.y1 * scale))
+
+    if (px1 - px0) < MIN_CROP_PX or (py1 - py0) < MIN_CROP_PX:
+        logger.info("[illustration] crop trop petit (%dx%d px) → rejet", px1 - px0, py1 - py0)
+        return None
+
+    cropped = img.crop((px0, py0, px1, py1))
+    try:
+        arr = np.array(cropped.convert("L"), dtype=np.float32)
+        if float(np.var(arr)) < MIN_PIXEL_VARIANCE:
+            logger.info("[illustration] crop quasi-vide (variance faible) → rejet")
+            return None
+    except Exception as exc:
+        logger.debug("[illustration] variance non calculable (non bloquant): %s", exc)
+
+    return cropped
+
+
+def _cache_dir() -> str:
+    cache_dir = os.path.join(os.path.dirname(settings.LANCED_DB_DIR), "illustration_cache")
+    os.makedirs(cache_dir, exist_ok=True)
+    return cache_dir
+
+
+def _cache_crop_image(pdf_path: str, page_no: int, crop_rect, image: Image.Image) -> str:
+    """Sauvegarde le crop et retourne le nom de fichier (clé déterministe)."""
+    cache_dir = _cache_dir()
+    key = (
+        f"{pdf_path}_{page_no}_"
+        f"{round(crop_rect.x0, 1)}_{round(crop_rect.y0, 1)}_"
+        f"{round(crop_rect.x1, 1)}_{round(crop_rect.y1, 1)}"
+    )
+    fname = f"crop_{hashlib.md5(key.encode('utf-8')).hexdigest()}.png"
+    image.save(os.path.join(cache_dir, fname), format="PNG")
+    logger.info("[illustration] crop sauvegardé: %s (%dx%d px)", fname, image.width, image.height)
+    return fname
+
+
+# ---------------------------------------------------------------------------
+# Garde-fou de lecture (vision sur le crop seul)
+# ---------------------------------------------------------------------------
+_GATE_PROMPT = """Tu reçois une petite image découpée d'une page de document technique (menuiserie).
+On cherche à illustrer le profilé / la référence «{target}».
+
+Analyse UNIQUEMENT cette image et réponds par un JSON strict :
+{{
+  "visible_codes": ["<codes/références lisibles dans l'image>"],
+  "present": <true si «{target}» est lisible dans l'image>,
+  "dominant": <true si «{target}» est le sujet principal (le schéma/la coupe montré), pas une mention secondaire>
+}}
+
+Règle : si un AUTRE code de profilé domine l'image, "dominant" doit être false."""
+
+
+async def _vision_read_gate(crop_image: Image.Image, target: str) -> bool:
+    """Confirme via vision que le crop montre bien `target` comme sujet principal.
+    Échec API ou doute → False (abstention prudente, conforme à « rien plutôt que faux »)."""
+    buf = io.BytesIO()
+    crop_image.save(buf, format="PNG")
+    b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+
+    try:
+        response = await mistral_service.chat(
+            message="",
+            model=getattr(settings, "MULTIMODAL_EXTRACT_MODEL", "mistral-large-latest"),
+            context=[{"role": "user", "content": _GATE_PROMPT.format(target=target), "images": [b64]}],
+            response_format={"type": "json_object"},
+        )
+        content = (response.get("choices") or [{}])[0].get("message", {}).get("content", "").strip()
+        data = json.loads(content)
+    except Exception as exc:
+        logger.warning("[illustration] garde-fou vision en échec (%s) → rejet prudent", exc)
+        return False
+
+    present = bool(data.get("present"))
+    dominant = bool(data.get("dominant"))
+    target_norm = _norm_code(target)
+    others = [
+        c for c in (data.get("visible_codes") or [])
+        if _norm_code(str(c)) and _norm_code(str(c)) != target_norm
+    ]
+    ok = present and dominant
+    logger.info(
+        "[illustration] garde-fou '%s' : present=%s dominant=%s autres=%s → %s",
+        target, present, dominant, others, "OK" if ok else "REJET",
+    )
+    return ok
+
+
+# ---------------------------------------------------------------------------
+# Point d'entrée
+# ---------------------------------------------------------------------------
+async def extract_reference_illustration(
+    *,
+    targets: List[str],
+    pdf_path: str,
+    page_no: int,
+    doc_title: str,
+) -> Optional[Dict[str, Any]]:
+    """
+    Tente de produire une illustration ancrée sur l'un des codes `targets` (ordre de priorité)
+    présent comme texte sur la page `page_no` de `pdf_path`.
+
+    Retourne {url, title, page_no, document_title, reference} ou None (abstention).
+    """
+    import fitz
+
+    if not targets:
+        return None
+
+    try:
+        doc = fitz.open(pdf_path)
+    except Exception as exc:
+        logger.error("[illustration] ouverture PDF échouée %s: %s", pdf_path, exc)
+        return None
+
+    try:
+        if page_no < 1 or page_no > len(doc):
+            logger.debug("[illustration] page %s hors limites pour %s", page_no, pdf_path)
+            return None
+
+        page = doc[page_no - 1]
+        pattern = _reference_pattern()
+        code_labels = find_code_labels(page, pattern)
+
+        for target in targets:
+            if not target or not target.strip():
+                continue
+            try:
+                anchors = page.search_for(target)
+            except Exception as exc:
+                logger.debug("[illustration] search_for(%r) échec: %s", target, exc)
+                continue
+            if not anchors:
+                continue
+
+            logger.info(
+                "[illustration] cible '%s' : %d ancre(s) sur page %d de '%s'",
+                target, len(anchors), page_no, doc_title,
+            )
+            for anchor in anchors:
+                crop_rect = build_anchored_crop(page, target, anchor, code_labels)
+                if crop_rect is None:
+                    continue
+
+                crop_img = _make_crop_image(pdf_path, page_no, crop_rect)
+                if crop_img is None:
+                    continue
+
+                if settings.ILLUSTRATION_VISION_GATE_ENABLED:
+                    if not await _vision_read_gate(crop_img, target):
+                        continue
+
+                fname = _cache_crop_image(pdf_path, page_no, crop_rect, crop_img)
+                logger.info(
+                    "[illustration] illustration retenue: '%s' page %d de '%s'",
+                    target, page_no, doc_title,
+                )
+                return {
+                    "url": f"/api/chats/illustrations/{fname}",
+                    "title": f"Profilé {target}",
+                    "page_no": page_no,
+                    "document_title": doc_title,
+                    "reference": target,
+                }
+    finally:
+        doc.close()
+
+    return None

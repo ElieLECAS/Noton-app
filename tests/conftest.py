@@ -42,6 +42,22 @@ def extract_sse_message_text(response_text: str) -> str:
     return "".join(parts)
 
 
+def extract_sse_events(response_text: str) -> list[dict]:
+    """Parse tous les événements SSE (data: {...}) en objets JSON (step, sources, done…)."""
+    events: list[dict] = []
+    for line in response_text.splitlines():
+        if not line.startswith("data: "):
+            continue
+        payload = line[6:].strip()
+        if not payload or payload == "[DONE]":
+            continue
+        try:
+            events.append(json.loads(payload))
+        except json.JSONDecodeError:
+            continue
+    return events
+
+
 # Garantit l'import du package "app" en local et dans Docker.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:

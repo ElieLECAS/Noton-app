@@ -46,7 +46,7 @@ from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.space_search_service import search_relevant_passages as search_space_passages
 from app.services.space_service import get_space_by_id
-from app.services.illustration_service import determine_and_crop_illustration, has_significant_visuals
+from app.services.illustration_service import extract_reference_illustration
 from app.tracing import trace_run, trace_pipeline
 from datetime import datetime
 import json
@@ -339,6 +339,13 @@ class SlotActionRequest(BaseModel):
     action: Literal["fill", "skip"] = "fill"
 
 
+class GuidedChoiceRequest(BaseModel):
+    """Choix sélectionné par l'utilisateur dans un aiguillage procédural."""
+    value: str
+    label: str = ""
+    free_text: bool = False
+
+
 class SpaceChatRequest(BaseModel):
     message: str
     model: str
@@ -346,6 +353,7 @@ class SpaceChatRequest(BaseModel):
     context: Optional[List[dict]] = None
     conversation_id: Optional[int] = None
     slot_action: Optional[SlotActionRequest] = None
+    guided_choice: Optional[GuidedChoiceRequest] = None
 
 
 def _truncate_text(value: str, max_chars: int) -> str:
@@ -507,6 +515,93 @@ async def stream_space_chat_message(
         )
     elif request.context:
         conversation_context = _sanitize_context_messages(request.context, max_messages=10)
+
+    # ——— Aiguillage procédural (guidage SAV / chantier) ———
+    # Court-circuite le pipeline one-shot quand la demande relève d'un guidage pas-à-pas,
+    # ou quand un parcours guidé est déjà actif sur la conversation (reprise).
+    # Gardé par GUIDED_FLOW_ENABLED : zéro impact quand le flag est désactivé.
+    if settings.GUIDED_FLOW_ENABLED and request.conversation_id:
+        from app.services.guided_flow_service import load_active_guided_state, run_guided_turn
+
+        conv_for_guided = session.get(Conversation, request.conversation_id)
+        persisted_qc = conv_for_guided.query_context if conv_for_guided else None
+        active_guided = load_active_guided_state(persisted_qc)
+
+        guided_flow_kind = "howto"
+        guided_topic = ""
+        enter_guided = bool(active_guided)
+        if not enter_guided:
+            # Classification isolée (1 appel LLM), uniquement hors reprise.
+            from app.services.query_reasoning_service import decide_guided_mode
+
+            mode_decision = await decide_guided_mode(request.message, conversation_context)
+            enter_guided = mode_decision.is_guided
+            guided_flow_kind = mode_decision.flow_kind
+            guided_topic = mode_decision.topic
+
+        if enter_guided:
+            logger.info(
+                "[chat] Mode guidé — resume=%s flow_kind=%s topic=%r",
+                bool(active_guided),
+                guided_flow_kind,
+                guided_topic,
+            )
+            gtr = await run_guided_turn(
+                session=session,
+                space_id=space_id,
+                user_id=current_user.id,
+                conversation_id=request.conversation_id,
+                user_message=request.message,
+                guided_choice=request.guided_choice.model_dump() if request.guided_choice else None,
+                history=conversation_context,
+                active_state=active_guided,
+                flow_kind=guided_flow_kind,
+                topic=guided_topic,
+            )
+
+            async def generate_guided():
+                error_msg_to_yield = None
+                try:
+                    message_text = gtr.message_text or ""
+                    # 1. Streamer le message de l'étape (effet machine à écrire)
+                    chunk_size = 40
+                    for i in range(0, len(message_text), chunk_size):
+                        chunk = message_text[i : i + chunk_size]
+                        yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+
+                    # 2. Sources (citations → PDF)
+                    if gtr.sources:
+                        yield f"data: {json.dumps({'sources': gtr.sources})}\n\n"
+
+                    # 3. Persister le message assistant (session fraîche, cf. piège SSE)
+                    assistant_message_id = None
+                    try:
+                        assistant_message_id = _persist_assistant_reply(
+                            request.conversation_id,
+                            message_text,
+                            forced_model,
+                            forced_provider,
+                            json.dumps(gtr.sources, ensure_ascii=False) if gtr.sources else None,
+                            metadata_json={"guided_step": gtr.step},
+                        )
+                    except Exception:
+                        logger.exception("Erreur sauvegarde étape guidée (space chat)")
+
+                    # 4. Émettre l'étape structurée (choix interactifs)
+                    step_event = dict(gtr.step)
+                    step_event["guided_session_id"] = gtr.guided_session_id
+                    step_event["message_id"] = assistant_message_id
+                    yield f"data: {json.dumps({'step': step_event})}\n\n"
+
+                    yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+                except Exception as e:
+                    logger.exception("Erreur dans le générateur stream_space_chat_message (guided)")
+                    error_msg_to_yield = str(e)
+
+                if error_msg_to_yield:
+                    yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
+
+            return StreamingResponse(generate_guided(), media_type="text/event-stream")
 
     retrieval_queries = None
     retrieval_query_groups = None
@@ -1105,12 +1200,55 @@ async def stream_space_chat_message(
 
                 complete_response = "".join(assistant_response)
                 
-                # Détecter si un schéma ou illustration est pertinent pour compléter la réponse
-                # Stratégie multi-page : on collecte toutes les pages candidates, on les
-                # pré-filtre (visuels significatifs), puis on itère en ordre de pertinence
-                # et on s'arrête au premier succès. Max 3 tentatives.
+                # Illustration ancrée sur la RÉFÉRENCE (code profilé) demandée et présente comme
+                # texte sur une page citée. Sans code cible ancrable → aucune image (abstention).
                 MAX_ILLUSTRATION_PAGES = 3
                 illustration_data = None
+
+                # Codes de référence cibles, dérivés de la demande utilisateur (signaux + message)
+                _ref_pattern = re.compile(
+                    getattr(settings, "ILLUSTRATION_REFERENCE_PATTERN", r"\b\d{3,5}[A-Za-z]?\b")
+                )
+                target_codes: List[str] = []
+                _seen_codes: set = set()
+                _signal_texts: List[str] = []
+                if lw_result and lw_result.signals:
+                    _signal_texts.extend(lw_result.signals.detected_references or [])
+                    _signal_texts.extend(lw_result.signals.entity_texts or [])
+                _signal_texts.append(request.message or "")
+                for _txt in _signal_texts:
+                    for _code in _ref_pattern.findall(_txt or ""):
+                        _k = _code.strip().lower()
+                        if _k and _k not in _seen_codes:
+                            _seen_codes.add(_k)
+                            target_codes.append(_code.strip())
+
+                # Tie-breaker : prioriser les codes présents dans les visual_labels des chunks cités
+                if target_codes:
+                    try:
+                        _label_codes: set = set()
+                        _chunk_ids = {
+                            cid
+                            for s in sources_data
+                            for cid in (s.get("source_leaf_chunk_id"), s.get("chunk_id"))
+                            if isinstance(cid, int)
+                        }
+                        if _chunk_ids:
+                            with Session(engine) as _lbl_session:
+                                _rows = _lbl_session.exec(
+                                    select(DocumentChunk).where(DocumentChunk.id.in_(_chunk_ids))
+                                ).all()
+                                for _c in _rows:
+                                    for _lbl in ((_c.metadata_json or {}).get("visual_labels") or []):
+                                        for _code in _ref_pattern.findall(str(_lbl)):
+                                            _label_codes.add(_code.strip().lower())
+                        if _label_codes:
+                            target_codes.sort(key=lambda c: 0 if c.strip().lower() in _label_codes else 1)
+                    except Exception as _lbl_err:
+                        logger.debug("Illustration: priorisation visual_labels ignorée: %s", _lbl_err)
+                    logger.info("Illustration: codes cibles (priorité) = %s", target_codes)
+                else:
+                    logger.info("Illustration: aucun code de référence ancrable → pas d'illustration.")
                 
                 # a) Collecter TOUTES les pages citées dans la réponse (regex amélioré)
                 cited_pages: List[Dict[str, Any]] = []  # [{"doc_id": ..., "page_no": ..., "source": ...}]
@@ -1178,9 +1316,10 @@ async def stream_space_chat_message(
                     f"{[(p['doc_id'], p['page_no'], p['source'], p['score']) for p in cited_pages[:MAX_ILLUSTRATION_PAGES+2]]}"
                 )
                 
-                # c) Itérer avec pré-filtre et arrêt au premier succès
+                # Itérer : l'ancre texte sert de pré-filtre ; arrêt au premier succès.
+                # Si aucun code cible, on ne tente rien (abstention stricte).
                 attempts = 0
-                for page_candidate in cited_pages:
+                for page_candidate in (cited_pages if target_codes else []):
                     if attempts >= MAX_ILLUSTRATION_PAGES:
                         logger.info(f"Reached max illustration attempts ({MAX_ILLUSTRATION_PAGES}). Stopping.")
                         break
@@ -1197,13 +1336,8 @@ async def stream_space_chat_message(
                                 continue
                             
                             pdf_path = doc_obj.source_file_path
-                            
-                            # Pré-filtre rapide : la page a-t-elle des visuels significatifs ?
-                            if not has_significant_visuals(pdf_path, pno):
-                                logger.info(f"Page {pno} of doc {did} has no significant visuals. Skipping.")
-                                continue
-                            
-                            # Appel au modèle de vision (comptabilisé comme tentative)
+
+                            # L'ancre texte (search_for) dans extract_reference_illustration sert de pré-filtre.
                             attempts += 1
                             logger.info(
                                 f"Illustration attempt {attempts}/{MAX_ILLUSTRATION_PAGES}: "
@@ -1212,22 +1346,21 @@ async def stream_space_chat_message(
                             
                             yield f"data: {json.dumps({'status': 'cropping', 'attempt': attempts, 'max_attempts': MAX_ILLUSTRATION_PAGES, 'page_no': pno, 'document_title': doc_title_ill})}\n\n"
                             
-                            illustration_data = await determine_and_crop_illustration(
-                                query=request.message,
-                                answer=complete_response,
+                            illustration_data = await extract_reference_illustration(
+                                targets=target_codes,
                                 pdf_path=pdf_path,
                                 page_no=pno,
-                                doc_title=doc_title_ill
+                                doc_title=doc_title_ill,
                             )
-                            
+
                             if illustration_data:
                                 logger.info(
-                                    f"Illustration found on page {pno} of '{doc_title_ill}' "
-                                    f"(attempt {attempts}). Stopping search."
+                                    "Illustration trouvée: '%s' page %s de '%s' (tentative %s).",
+                                    illustration_data.get("reference"), pno, doc_title_ill, attempts,
                                 )
                                 break
                             else:
-                                logger.info(f"Vision model rejected page {pno} of doc {did}. Trying next.")
+                                logger.info(f"Aucune illustration ancrable sur page {pno} de doc {did}. Page suivante.")
                     except Exception as ill_err:
                         logger.error(f"Failed to check/crop illustration on page {pno} of doc {did}: {ill_err}", exc_info=True)
                         

@@ -160,6 +160,25 @@ class Settings(BaseSettings):
     # v4 : découpe RAG-friendly (overlap entre parts consécutives)
     RAG_CHUNK_OVERLAP_TOKENS: int = 100
 
+    # Illustration de réponse : découpe ancrée sur la référence (code profilé) présente
+    # comme texte sur la page. Voir app/services/illustration_service.py.
+    # Motif des codes de référence ancrables (ex. "6104", "6105A"). 3 à 5 chiffres + lettre optionnelle.
+    ILLUSTRATION_REFERENCE_PATTERN: str = os.getenv(
+        "ILLUSTRATION_REFERENCE_PATTERN", r"\b\d{3,5}[A-Za-z]?\b"
+    )
+    # Taille max de la fenêtre de découpe en fraction de la page (largeur ET hauteur).
+    ILLUSTRATION_MAX_WINDOW_RATIO: float = float(
+        os.getenv("ILLUSTRATION_MAX_WINDOW_RATIO", "0.55")
+    )
+    # Padding ajouté autour du contenu détouré (en points PDF).
+    ILLUSTRATION_ANCHOR_PADDING_PTS: float = float(
+        os.getenv("ILLUSTRATION_ANCHOR_PADDING_PTS", "8.0")
+    )
+    # Garde-fou de lecture par vision sur le crop final (confirme que le code cible est le sujet).
+    ILLUSTRATION_VISION_GATE_ENABLED: bool = (
+        os.getenv("ILLUSTRATION_VISION_GATE_ENABLED", "true").lower() == "true"
+    )
+
     # Tâches background : thread (historique), celery (Redis), hybrid (Celery + repli threads)
     TASK_BACKEND_MODE: str = "thread"
     REDIS_URL: Optional[str] = None  # ex. redis://redis:6379/0
@@ -251,6 +270,31 @@ class Settings(BaseSettings):
     VISION_RERANK_MIN_SCORE: float = float(os.getenv("VISION_RERANK_MIN_SCORE", "3"))  # sur une echelle 0-5
     VISION_RERANK_MAX_PAGES: int = int(os.getenv("VISION_RERANK_MAX_PAGES", "4"))
     VISION_RERANK_DPI: int = int(os.getenv("VISION_RERANK_DPI", "150"))
+
+    # Guidage procédural ("aiguillage" SAV / chantier) — moteur multi-étapes
+    # Désactivé par défaut : aucun impact sur le pipeline one-shot existant tant que False.
+    GUIDED_FLOW_ENABLED: bool = os.getenv("GUIDED_FLOW_ENABLED", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Nombre maximal d'étapes avant escalade automatique vers le SAV
+    GUIDED_MAX_STEPS: int = int(os.getenv("GUIDED_MAX_STEPS", "8"))
+    # Passages récupérés par étape (plus focalisé que RAG_TOP_K)
+    GUIDED_RETRIEVAL_K: int = int(os.getenv("GUIDED_RETRIEVAL_K", "8"))
+    # Arbres validés (capitalisation) prioritaires sur la génération dynamique (Phase 2)
+    GUIDED_AUTHORED_TREES_ENABLED: bool = os.getenv(
+        "GUIDED_AUTHORED_TREES_ENABLED", "true"
+    ).strip().lower() in ("true", "1", "yes", "on")
+    # Filtre catégorie strict (dur) vs boost souple (Phase 2)
+    GUIDED_CATEGORY_FILTER_STRICT: bool = os.getenv(
+        "GUIDED_CATEGORY_FILTER_STRICT", "false"
+    ).strip().lower() in ("true", "1", "yes", "on")
+    # Bornes du nombre de choix proposés à chaque aiguillage
+    GUIDED_MIN_CHOICES: int = int(os.getenv("GUIDED_MIN_CHOICES", "2"))
+    GUIDED_MAX_CHOICES: int = int(os.getenv("GUIDED_MAX_CHOICES", "5"))
+    # Contact SAV affiché dans le récapitulatif d'escalade (fallback si absent des métadonnées)
+    GUIDED_SAV_CONTACT: str = os.getenv(
+        "GUIDED_SAV_CONTACT", "Service SAV PROFERM — contactez votre interlocuteur habituel."
+    )
 
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod
