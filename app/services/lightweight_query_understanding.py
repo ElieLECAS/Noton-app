@@ -4,6 +4,7 @@ Remplace le slot filling obligatoire par une compréhension souple (boosts, pas 
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from typing import Any, Dict, List, Optional, TypedDict
@@ -24,6 +25,7 @@ from app.services.query_signals_schemas import (
 from app.services.query_understanding_graph import (
     GENERATE_QUERIES_SYSTEM_PROMPT,
     ClarificationResult,
+    QueryGroup,
     RetrievalQueries,
     VAGUENESS_ASSESS_SYSTEM_PROMPT,
 )
@@ -38,6 +40,8 @@ class LightweightQueryResult(BaseModel):
     retrieval_queries: Optional[RetrievalQueries] = None
     signals: LightweightQuerySignals = Field(default_factory=LightweightQuerySignals)
     query_context: Dict[str, Any] = Field(default_factory=dict)
+    query_strategy: str = "single"
+    query_groups: List[QueryGroup] = Field(default_factory=list)
 
 
 class LightweightState(TypedDict, total=False):
@@ -54,6 +58,8 @@ class LightweightState(TypedDict, total=False):
     original_user_message: str
     enriched_user_message: str
     awaiting_vague_clarification: bool
+    query_strategy: str
+    query_groups: List[Dict[str, Any]]
 
 
 def _full_request_text(state: LightweightState) -> str:
@@ -186,16 +192,91 @@ async def _node_assess_vagueness(state: LightweightState) -> Dict[str, Any]:
     }
 
 
-async def _node_generate_queries(state: LightweightState) -> Dict[str, Any]:
-    signals = state.get("signals") or {}
-    user_message = _full_request_text(state)
+PLAN_MULTI_QUERY_SYSTEM_PROMPT = """Tu analyses une requête utilisateur pour un assistant documentaire menuiserie (PROFERM) et décides d'une stratégie de recherche multi-requêtes.
 
+3 stratégies possibles :
+- "single" : requête unitaire (un sujet, un produit, un concept clair) → 1 seul groupe
+- "decomposed" : requête comparative ou multi-sujets orthogonaux (Alu vs PVC, pose + étanchéité, plusieurs gammes distinctes) → 2 ou 3 groupes thématiques
+- "reformulated" : requête précise mais formulée de façon ambiguë ou avec plusieurs terminologies équivalentes → 2 ou 3 paraphrases du même sujet
+
+RÈGLES :
+- Préfère toujours "single" pour toute requête portant sur un seul sujet ou produit.
+- "decomposed" uniquement si la question oppose ou juxtapose explicitement des thèmes documentairement indépendants (max 3 groupes).
+- "reformulated" si le terme principal a des synonymes métier importants (joint/étanchéité, montage/pose/fixation).
+- group.label : 2-4 mots, distinctif (ex : "Gamme Aluminium", "Réglementation DTU", "Pose & Fixation").
+- group.focus : orientation de recherche courte, vocabulaire documentaire, 10-20 mots max.
+
+Retourne UNIQUEMENT un JSON :
+{
+  "strategy": "single" | "decomposed" | "reformulated",
+  "reasoning": "explication courte",
+  "groups": [
+    { "label": "...", "focus": "..." }
+  ]
+}
+"""
+
+
+async def _node_plan_multi_query(state: LightweightState) -> Dict[str, Any]:
+    user_message = _full_request_text(state)
+    signals = state.get("signals") or {}
+
+    entity_texts = [
+        e if isinstance(e, str) else e.get("text", "")
+        for e in (signals.get("entities") or [])
+    ]
     prompt = (
         f"Question utilisateur : '{user_message}'\n"
-        f"Signaux extraits : {json.dumps(signals, ensure_ascii=False)}\n"
-        "Génère les 3 requêtes optimisées. Injecte les entités et références détectées."
+        f"Signaux extraits : intent={signals.get('intent')}, "
+        f"material_hint={signals.get('material_hint')}, "
+        f"entities={entity_texts[:8]}\n"
+        "Décide la stratégie de recherche et liste les groupes."
     )
 
+    try:
+        response = await chat(
+            "",
+            model=settings.MODEL_FAST,
+            context=[
+                {"role": "system", "content": PLAN_MULTI_QUERY_SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            response_format={"type": "json_object"},
+        )
+        content = response["choices"][0]["message"].get("content", "{}")
+        data = json.loads(content)
+        strategy = str(data.get("strategy") or "single").strip()
+        groups_raw = data.get("groups") or []
+        if not isinstance(groups_raw, list) or not groups_raw:
+            strategy = "single"
+            groups_raw = [{"label": "Recherche principale", "focus": user_message}]
+        groups_raw = groups_raw[:3]
+    except Exception as exc:
+        logger.error("[lightweight_qu] plan_multi_query failed: %s", exc)
+        strategy = "single"
+        groups_raw = [{"label": "Recherche principale", "focus": user_message}]
+
+    logger.info(
+        "[lightweight_qu] plan_multi_query — strategy=%s groups=%s",
+        strategy,
+        [g.get("label") for g in groups_raw],
+    )
+    return {"query_strategy": strategy, "query_groups": groups_raw}
+
+
+async def _generate_one_group_queries(
+    user_message: str,
+    signals: Dict[str, Any],
+    label: str,
+    focus: str,
+) -> RetrievalQueries:
+    prompt = (
+        f"Question utilisateur : '{user_message}'\n"
+        f"Groupe : {label}\nFocus : {focus}\n"
+        f"Signaux extraits : {json.dumps(signals, ensure_ascii=False)}\n"
+        "Génère les 3 requêtes optimisées pour ce groupe spécifique. "
+        "Chaque requête doit refléter le focus du groupe, pas la question générale dans son ensemble."
+    )
     try:
         response = await chat(
             "",
@@ -211,32 +292,60 @@ async def _node_generate_queries(state: LightweightState) -> Dict[str, Any]:
         entity_texts = signals.get("entity_texts") or []
         refs = signals.get("detected_references") or []
         lexical_extra = " ".join(entity_texts[:8] + refs[:4])
-        base_lexical = str(data.get("lexical") or user_message).strip()
+        base_lexical = str(data.get("lexical") or focus).strip()
         if lexical_extra and lexical_extra.lower() not in base_lexical.lower():
             base_lexical = f"{base_lexical} {lexical_extra}".strip()
-
-        queries = RetrievalQueries(
-            colpali=str(data.get("colpali") or user_message).strip(),
-            semantic=str(data.get("semantic") or user_message).strip(),
+        return RetrievalQueries(
+            colpali=str(data.get("colpali") or focus).strip(),
+            semantic=str(data.get("semantic") or focus).strip(),
             lexical=base_lexical,
             reasoning=str(data.get("reasoning") or ""),
             slots_used=data.get("slots_used") or signals,
         )
     except Exception as exc:
-        logger.error("[lightweight_qu] generate_queries failed: %s", exc)
-        entity_texts = signals.get("entity_texts") or []
-        fallback = user_message
-        if entity_texts:
-            fallback = f"{user_message} {' '.join(entity_texts[:6])}"
-        queries = RetrievalQueries(
-            colpali=fallback,
-            semantic=fallback,
-            lexical=fallback,
+        logger.error("[lightweight_qu] generate_queries group=%r failed: %s", label, exc)
+        return RetrievalQueries(
+            colpali=focus,
+            semantic=focus,
+            lexical=focus,
             reasoning=f"fallback: {exc}",
             slots_used=signals,
         )
 
-    return {"retrieval_queries": queries.model_dump()}
+
+async def _node_generate_queries(state: LightweightState) -> Dict[str, Any]:
+    signals = state.get("signals") or {}
+    user_message = _full_request_text(state)
+    groups_raw = state.get("query_groups") or [{"label": "Recherche principale", "focus": user_message}]
+
+    tasks = [
+        _generate_one_group_queries(
+            user_message,
+            signals,
+            g.get("label", f"Groupe {i + 1}"),
+            g.get("focus", user_message),
+        )
+        for i, g in enumerate(groups_raw)
+    ]
+    results: List[RetrievalQueries] = list(await asyncio.gather(*tasks))
+
+    query_groups_out = [
+        {
+            "label": groups_raw[i].get("label", f"Groupe {i + 1}"),
+            "focus": groups_raw[i].get("focus", user_message),
+            "queries": r.model_dump(),
+        }
+        for i, r in enumerate(results)
+    ]
+
+    logger.info(
+        "[lightweight_qu] generate_queries — %d groupe(s) générés",
+        len(query_groups_out),
+    )
+    return {
+        "query_groups": query_groups_out,
+        "retrieval_queries": results[0].model_dump() if results else None,
+    }
 
 
 def _node_merge_context(state: LightweightState) -> Dict[str, Any]:
@@ -265,7 +374,7 @@ def _after_route(state: LightweightState) -> str:
 
 def _after_assess_vagueness(state: LightweightState) -> str:
     if state.get("ready_for_retrieval"):
-        return "generate_queries"
+        return "plan_multi_query"
     return "end_clarification"
 
 
@@ -275,6 +384,7 @@ def _build_graph():
     graph.add_node("merge_context", _node_merge_context)
     graph.add_node("extract_signals", _node_extract_signals)
     graph.add_node("assess_vagueness", _node_assess_vagueness)
+    graph.add_node("plan_multi_query", _node_plan_multi_query)
     graph.add_node("generate_queries", _node_generate_queries)
 
     graph.set_entry_point("route_decision")
@@ -288,8 +398,9 @@ def _build_graph():
     graph.add_conditional_edges(
         "assess_vagueness",
         _after_assess_vagueness,
-        {"generate_queries": "generate_queries", "end_clarification": END},
+        {"plan_multi_query": "plan_multi_query", "end_clarification": END},
     )
+    graph.add_edge("plan_multi_query", "generate_queries")
     graph.add_edge("generate_queries", END)
     return graph.compile()
 
@@ -339,12 +450,29 @@ async def run_lightweight_understanding(
     }
 
     if final_state.get("ready_for_retrieval") and final_state.get("retrieval_queries"):
+        parsed_groups: List[QueryGroup] = []
+        for g in (final_state.get("query_groups") or []):
+            queries_data = g.get("queries")
+            if queries_data:
+                try:
+                    parsed_groups.append(
+                        QueryGroup(
+                            label=g.get("label", ""),
+                            focus=g.get("focus", ""),
+                            queries=RetrievalQueries(**queries_data),
+                        )
+                    )
+                except Exception:
+                    pass
+
         return LightweightQueryResult(
             route="rag",
             ready_for_retrieval=True,
             retrieval_queries=RetrievalQueries(**final_state["retrieval_queries"]),
             signals=signals,
             query_context=query_context,
+            query_strategy=final_state.get("query_strategy") or "single",
+            query_groups=parsed_groups,
         )
 
     clarification_data = final_state.get("clarification")

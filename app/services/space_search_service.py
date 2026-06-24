@@ -28,7 +28,7 @@ from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.embedding_service import generate_embedding
 from app.services.space_service import get_space_by_id
-from app.services.query_understanding_graph import RetrievalQueries
+from app.services.query_understanding_graph import QueryGroup, RetrievalQueries
 from app.services.query_signals_schemas import LightweightQuerySignals
 from app.services.retrieval_boost_service import apply_category_boost_to_fused_hits
 from app.tracing import trace_run
@@ -559,6 +559,70 @@ def _multimodal_eval_stages(
     return stages
 
 
+def _retrieve_one_group_hits(
+    session: Session,
+    space_id: int,
+    doc_ids: List[int],
+    colpali_q: str,
+    semantic_q: str,
+    lexical_q: str,
+    pool_size: int,
+    *,
+    group_index: int = 0,
+    group_label: str = "",
+) -> List[Any]:
+    """Retrieval (colpali + pgvec + bm25 + kag) + fusion RRF pour un groupe de requêtes."""
+    from app.services.page_retrieval_service import (
+        filter_colpali_pages_dynamic,
+        fuse_multimodal_hits,
+        retrieve_bm25_pages,
+        retrieve_colpali_pages,
+        retrieve_pgvector_pages,
+    )
+
+    query_embedding: Optional[List[float]] = None
+    try:
+        query_embedding = generate_embedding(semantic_q)
+    except Exception as exc:
+        logger.warning("[RAG multi-group] Embedding indisponible (group=%r): %s", group_label, exc)
+
+    colpali_hits = retrieve_colpali_pages(session, doc_ids, colpali_q, pool_size)
+    colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
+    pgvector_hits = retrieve_pgvector_pages(session, doc_ids, query_embedding or [], pool_size)
+    bm25_hits = retrieve_bm25_pages(session, doc_ids, lexical_q, pool_size)
+
+    kag_hits: List[Any] = []
+    if settings.KAG_ENABLED:
+        from app.services.kag_retrieval_service import retrieve_kag_pages
+        kag_hits = retrieve_kag_pages(
+            session, space_id, doc_ids, semantic_q, query_embedding, pool_size
+        )
+
+    fused = fuse_multimodal_hits(
+        colpali_hits,
+        pgvector_hits,
+        bm25_hits,
+        kag_hits=kag_hits if settings.KAG_ENABLED else None,
+        rrf_k=settings.RRF_K,
+        top_k=pool_size,
+    )
+
+    for hit in fused:
+        hit.query_group_index = group_index
+        hit.query_group_label = group_label
+
+    logger.info(
+        "[RAG multi-group] group=%r — colpali=%d pgvec=%d bm25=%d kag=%d → fused=%d",
+        group_label,
+        len(colpali_hits),
+        len(pgvector_hits),
+        len(bm25_hits),
+        len(kag_hits),
+        len(fused),
+    )
+    return fused
+
+
 async def search_multimodal_passages(
     session: Session,
     space_id: int,
@@ -570,6 +634,7 @@ async def search_multimodal_passages(
     include_retrieval_stages: bool = False,
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
+    query_groups: Optional[List[QueryGroup]] = None,
 ) -> Dict:
     """
     Pipeline retrieval multimodal page-centric unifié.
@@ -625,77 +690,111 @@ async def search_multimodal_passages(
                 result["retrieval_stages"] = {"colpali": [], "post_rerank": [], "reason": "no_results"}
             return result
 
-        query_embedding: Optional[List[float]] = None
-        try:
-            query_embedding = generate_embedding(semantic_q)
-        except Exception as exc:
-            logger.warning("[RAG multimodal] Embedding requête indisponible : %s", exc)
+        # --- Retrieval : mode multi-groupe ou mode unique ---
+        active_groups = query_groups if (query_groups and len(query_groups) > 1) else None
 
-        with trace_run(
-            "multimodal_retrieval",
-            run_type="retriever",
-            inputs={
-                "query": query_text,
-                "colpali_query": colpali_q,
-                "semantic_query": semantic_q,
-                "lexical_query": lexical_q,
-                "space_id": space_id,
-                "pool_size": pool_size,
-            },
-            tags=["retrieval", "multimodal", "space"],
-        ) as hr:
-            colpali_hits = retrieve_colpali_pages(session, doc_ids, colpali_q, pool_size)
-            colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
-            pgvector_hits = retrieve_pgvector_pages(
-                session, doc_ids, query_embedding or [], pool_size
-            )
-            bm25_hits = retrieve_bm25_pages(
-                session, doc_ids, lexical_q, pool_size
-            )
-            kag_hits: List[Any] = []
-            if settings.KAG_ENABLED:
-                from app.services.kag_retrieval_service import retrieve_kag_pages
+        if active_groups:
+            from app.services.page_retrieval_service import fuse_multi_query_groups
 
-                kag_hits = retrieve_kag_pages(
+            logger.info(
+                "[RAG multimodal] Mode multi-groupe — %d groupes : %s",
+                len(active_groups),
+                [g.label for g in active_groups],
+            )
+            per_group_hits = [
+                _retrieve_one_group_hits(
                     session,
                     space_id,
                     doc_ids,
-                    semantic_q,
-                    query_embedding,
+                    g.queries.colpali,
+                    g.queries.semantic,
+                    g.queries.lexical,
                     pool_size,
+                    group_index=i,
+                    group_label=g.label,
                 )
-            hr.end(
-                outputs={
-                    "colpali": len(colpali_hits),
-                    "pgvector": len(pgvector_hits),
-                    "bm25": len(bm25_hits),
-                    "kag": len(kag_hits),
-                }
+                for i, g in enumerate(active_groups)
+            ]
+            fused_hits = fuse_multi_query_groups(per_group_hits, pool_size=pool_size)
+            pre_kag_fused_hits = fused_hits
+            # Pour le rerank, on utilise la requête sémantique du premier groupe
+            rerank_q = active_groups[0].queries.semantic
+            colpali_hits = per_group_hits[0] if per_group_hits else []
+            pgvector_hits: List[Any] = []
+            bm25_hits: List[Any] = []
+            kag_hits: List[Any] = []
+        else:
+            query_embedding: Optional[List[float]] = None
+            try:
+                query_embedding = generate_embedding(semantic_q)
+            except Exception as exc:
+                logger.warning("[RAG multimodal] Embedding requête indisponible : %s", exc)
+
+            with trace_run(
+                "multimodal_retrieval",
+                run_type="retriever",
+                inputs={
+                    "query": query_text,
+                    "colpali_query": colpali_q,
+                    "semantic_query": semantic_q,
+                    "lexical_query": lexical_q,
+                    "space_id": space_id,
+                    "pool_size": pool_size,
+                },
+                tags=["retrieval", "multimodal", "space"],
+            ) as hr:
+                colpali_hits = retrieve_colpali_pages(session, doc_ids, colpali_q, pool_size)
+                colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
+                pgvector_hits = retrieve_pgvector_pages(
+                    session, doc_ids, query_embedding or [], pool_size
+                )
+                bm25_hits = retrieve_bm25_pages(
+                    session, doc_ids, lexical_q, pool_size
+                )
+                kag_hits: List[Any] = []
+                if settings.KAG_ENABLED:
+                    from app.services.kag_retrieval_service import retrieve_kag_pages
+
+                    kag_hits = retrieve_kag_pages(
+                        session,
+                        space_id,
+                        doc_ids,
+                        semantic_q,
+                        query_embedding,
+                        pool_size,
+                    )
+                hr.end(
+                    outputs={
+                        "colpali": len(colpali_hits),
+                        "pgvector": len(pgvector_hits),
+                        "bm25": len(bm25_hits),
+                        "kag": len(kag_hits),
+                    }
+                )
+
+            logger.info(
+                "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d | kag=%d",
+                len(colpali_hits),
+                len(pgvector_hits),
+                len(bm25_hits),
+                len(kag_hits),
             )
 
-        logger.info(
-            "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d | kag=%d",
-            len(colpali_hits),
-            len(pgvector_hits),
-            len(bm25_hits),
-            len(kag_hits),
-        )
-
-        pre_kag_fused_hits = fuse_multimodal_hits(
-            colpali_hits,
-            pgvector_hits,
-            bm25_hits,
-            rrf_k=settings.RRF_K,
-            top_k=pool_size,
-        )
-        fused_hits = fuse_multimodal_hits(
-            colpali_hits,
-            pgvector_hits,
-            bm25_hits,
-            kag_hits=kag_hits if settings.KAG_ENABLED else None,
-            rrf_k=settings.RRF_K,
-            top_k=pool_size,
-        )
+            pre_kag_fused_hits = fuse_multimodal_hits(
+                colpali_hits,
+                pgvector_hits,
+                bm25_hits,
+                rrf_k=settings.RRF_K,
+                top_k=pool_size,
+            )
+            fused_hits = fuse_multimodal_hits(
+                colpali_hits,
+                pgvector_hits,
+                bm25_hits,
+                kag_hits=kag_hits if settings.KAG_ENABLED else None,
+                rrf_k=settings.RRF_K,
+                top_k=pool_size,
+            )
 
         # Boost catégorie multiplicatif sur rrf_score (post-fusion, avant rerank)
         apply_category_boost_to_fused_hits(session, fused_hits, signals)
@@ -925,6 +1024,7 @@ async def search_relevant_passages(
     include_retrieval_stages: bool = False,
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
+    query_groups: Optional[List[QueryGroup]] = None,
 ) -> Dict:
     """
     RAG espace : retrieval hybride ColPali + pgvector L1 + BM25, fusion RRF,
@@ -943,6 +1043,7 @@ async def search_relevant_passages(
             include_retrieval_stages=include_retrieval_stages,
             queries=queries,
             signals=signals,
+            query_groups=query_groups,
         )
 
     from app.services.page_retrieval_service import (
@@ -1146,12 +1247,13 @@ async def search_technical_passages(
     k: int = 15,
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
+    query_groups: Optional[List[QueryGroup]] = None,
 ) -> Dict:
     """
     Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
-    
+
     Wrapper autour de search_relevant_passages avec document_filter="technical".
-    
+
     Returns:
         Dict avec clés : passages (List[Dict]), status (str), reason (Optional[str])
     """
@@ -1164,6 +1266,7 @@ async def search_technical_passages(
         document_filter="technical",
         queries=queries,
         signals=signals,
+        query_groups=query_groups,
     )
 
 

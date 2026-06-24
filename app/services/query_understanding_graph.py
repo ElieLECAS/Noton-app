@@ -46,6 +46,13 @@ class RetrievalQueries(BaseModel):
     slots_used: Dict[str, Any] = Field(default_factory=dict)
 
 
+class QueryGroup(BaseModel):
+    """Groupe thématique pour la recherche multi-requêtes."""
+    label: str
+    focus: str
+    queries: RetrievalQueries
+
+
 class ClarificationResult(BaseModel):
     question: str
     slot_prompt: Optional[Dict[str, Any]] = None
@@ -134,23 +141,28 @@ RÈGLES PAR CANAL :
 Injecte toujours les slots remplis. N'invente pas de codes produits absents des slots ou du message.
 """
 
-VAGUENESS_ASSESS_SYSTEM_PROMPT = """Tu évalues si une demande utilisateur est suffisamment précise pour lancer une recherche documentaire RAG (menuiserie PROFERM).
+VAGUENESS_ASSESS_SYSTEM_PROMPT = """Tu évalues si une demande utilisateur permet de lancer une recherche documentaire utile dans une base de documentation technique (menuiserie).
 
-Tu reçois : la demande (éventuellement enrichie de précisions), les slots structurants déjà collectés, et l'historique récent.
+Pose-toi une seule question : si on lançait la recherche maintenant, les résultats seraient-ils pertinents ou au contraire trop génériques pour être utiles ?
 
-Une demande est TROP VAGUE (too_vague=true) si une recherche documentaire risque de renvoyer des passages génériques ou hors-sujet, par exemple :
-- Dépannage / « souci », « problème » sans symptôme concret (jeu, casse, ne clippe pas, mauvaise cote…)
-- Pose / montage / réglage sans préciser l'action attendue ou le composant visé quand le contexte l'exige
-- Question générique (« quelle est la cote ? », « comment faire ? ») sans élément technique identifiable
-- Slots remplis (matériau, gamme…) mais la formulation reste trop courte pour orienter la recherche
-- Références produit ambiguës ou absentes alors qu'elles changeraient la notice (ex. variante Perform, type de dormant)
+Une recherche peut démarrer dès qu'il existe au moins UN ancrage dans la demande — c'est-à-dire n'importe quel élément qui discrimine les documents à retourner :
+- un nom propre (produit, gamme, marque, composant, norme)
+- une action ou étape technique identifiable
+- un symptôme ou comportement observable
+- une intention de comparaison ou de choix entre éléments nommés
+- un contexte fourni dans l'historique de la conversation
 
-Une demande est SUFFISAMMENT PRÉCISE (too_vague=false) si :
-- Le besoin métier est clair (dimension précise, étape de pose nommée, référence produit, norme, symptôme décrit)
-- L'utilisateur a déjà apporté des précisions qui levent l'ambiguïté principale
-- La question cible un document ou une information retrouvable sans autre clarification
+La demande est TROP VAGUE (too_vague=true) uniquement si elle est totalement dépourvue d'ancrage : la recherche retournerait n'importe quel document au hasard sans pouvoir prioriser quoi que ce soit. C'est le cas seulement pour des formulations purement génériques sans aucun substantif technique, produit ou action précise.
 
-Si too_vague=true, rédige clarification_question : 2 à 4 phrases en français, ton professionnel et chaleureux, invitant l'utilisateur à DEVELOPPER sa demande (symptôme, composant, contexte, référence). Pas de listes de boutons. Pose 1 à 2 questions ouvertes ciblées.
+La demande est SUFFISAMMENT PRÉCISE (too_vague=false) dans tous les autres cas, y compris :
+- une question courte mais avec un ou plusieurs noms identifiables
+- une demande de comparaison entre éléments nommés (même sommairement)
+- une réponse à une clarification précédente, quelle qu'elle soit — ne JAMAIS redemander une deuxième clarification sur le même sujet
+- une formulation imprécise mais accompagnée d'un contexte conversationnel exploitable
+
+En cas de doute, préférer too_vague=false. Une recherche imparfaite vaut mieux qu'un blocage.
+
+Si too_vague=true, rédige une clarification_question courte (2-3 phrases max), ton professionnel, qui demande uniquement l'ancrage manquant.
 
 Retourne UNIQUEMENT un JSON :
 {

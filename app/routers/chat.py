@@ -509,6 +509,7 @@ async def stream_space_chat_message(
         conversation_context = _sanitize_context_messages(request.context, max_messages=10)
 
     retrieval_queries = None
+    retrieval_query_groups = None
     rag_user_message = request.message
     lw_result = None
 
@@ -700,11 +701,18 @@ async def stream_space_chat_message(
 
     if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.ready_for_retrieval:
         retrieval_queries = lw_result.retrieval_queries
+        retrieval_query_groups = lw_result.query_groups if len(lw_result.query_groups) > 1 else None
         rag_user_message = (
             lw_result.query_context.get("enriched_user_message")
             or lw_result.query_context.get("original_user_message")
             or request.message
         )
+        if retrieval_query_groups:
+            logger.info(
+                "[chat] Multi-query strategy=%s groups=%s",
+                lw_result.query_strategy,
+                [g.label for g in retrieval_query_groups],
+            )
 
     step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
     logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25 + KAG)", step_label)
@@ -728,6 +736,7 @@ async def stream_space_chat_message(
             k=RAG_TOP_K,
             queries=retrieval_queries,
             signals=lw_result.signals if lw_result and lw_result.signals else None,
+            query_groups=retrieval_query_groups,
         )
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]

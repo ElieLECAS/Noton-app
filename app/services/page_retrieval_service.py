@@ -83,6 +83,10 @@ class UnifiedPageHit:
     # (déplié à l'expansion pour retourner tout le batch 1/2/3 pages).
     enrichment_source_pages: List[int] = field(default_factory=list)
 
+    # Groupe de requêtes source (multi-query) — index et label du groupe ayant produit ce hit.
+    query_group_index: int = 0
+    query_group_label: str = ""
+
     @property
     def page_key(self) -> str:
         return f"{self.document_id}:{self.page_no}"
@@ -1357,6 +1361,77 @@ def fuse_multimodal_hits(
     for rank, hit in enumerate(final, start=1):
         hit.final_rank = rank
     return final
+
+
+def fuse_multi_query_groups(
+    per_group_hits: List[List[UnifiedPageHit]],
+    *,
+    pool_size: int = 30,
+    min_quota_per_group: int = 3,
+) -> List[UnifiedPageHit]:
+    """Fusion cross-groupes avec quota garanti par groupe.
+
+    Garantit que chaque groupe contribue au minimum `min_quota_per_group` hits
+    indépendamment de leurs scores absolus — les pages de la requête 2 ne sont
+    jamais écrasées par les 20 meilleurs hits de la requête 1.
+    Les pages présentes dans plusieurs groupes reçoivent un bonus de multi-pertinence.
+    """
+    if not per_group_hits:
+        return []
+    if len(per_group_hits) == 1:
+        return per_group_hits[0][:pool_size]
+
+    n_groups = len(per_group_hits)
+    quota = max(min_quota_per_group, pool_size // n_groups)
+
+    # Normalise rrf_score dans [0,1] par groupe
+    group_norm: List[List[Tuple[UnifiedPageHit, float]]] = []
+    for hits in per_group_hits:
+        if not hits:
+            group_norm.append([])
+            continue
+        max_score = max((h.rrf_score for h in hits), default=1.0) or 1.0
+        group_norm.append([(h, h.rrf_score / max_score) for h in hits])
+
+    # pool[page_key] = (hit, best_norm_score, count_groups)
+    pool: Dict[str, Tuple[UnifiedPageHit, float, int]] = {}
+
+    # Phase 1 : quota garanti par groupe
+    for norm_hits in group_norm:
+        for hit, ns in norm_hits[:quota]:
+            key = hit.page_key
+            if key not in pool:
+                pool[key] = (hit, ns, 1)
+            else:
+                old_hit, old_ns, cnt = pool[key]
+                best_hit = hit if ns > old_ns else old_hit
+                pool[key] = (best_hit, max(old_ns, ns), cnt + 1)
+
+    # Phase 2 : remplissage jusqu'à pool_size avec les meilleurs restants
+    if len(pool) < pool_size:
+        remaining: List[Tuple[UnifiedPageHit, float]] = []
+        for norm_hits in group_norm:
+            for hit, ns in norm_hits[quota:]:
+                if hit.page_key not in pool:
+                    remaining.append((hit, ns))
+        remaining.sort(key=lambda x: x[1], reverse=True)
+        for hit, ns in remaining:
+            if len(pool) >= pool_size:
+                break
+            key = hit.page_key
+            if key not in pool:
+                pool[key] = (hit, ns, 1)
+
+    # Phase 3 : tri final — bonus de 0.1 par groupe supplémentaire
+    def _combined(entry: Tuple[UnifiedPageHit, float, int]) -> float:
+        _, ns, cnt = entry
+        return ns + (cnt - 1) * 0.1
+
+    sorted_entries = sorted(pool.values(), key=_combined, reverse=True)
+    result = [hit for hit, _, _ in sorted_entries[:pool_size]]
+    for rank, hit in enumerate(result, start=1):
+        hit.final_rank = rank
+    return result
 
 
 def _apply_enrichment_span_expansion(session: Session, hit: UnifiedPageHit) -> None:
