@@ -45,7 +45,8 @@ def get_space_categories(session: Session, space_id: int) -> Dict[str, Any]:
                 COALESCE(MAX(ccr.confidence), 0.0) AS max_confidence
             FROM chunkcategoryrelation ccr
             INNER JOIN documentcategory dc ON dc.id = ccr.category_id
-            WHERE ccr.space_id = :space_id
+            INNER JOIN document_space ds ON ds.document_id = ccr.document_id
+            WHERE ds.space_id = :space_id
             GROUP BY dc.id, dc.slug, dc.label
             ORDER BY dc.label
             """
@@ -92,7 +93,8 @@ def _list_category_pages(
                 ) AS has_source_file
             FROM chunkcategoryrelation ccr
             INNER JOIN document d ON d.id = ccr.document_id
-            WHERE ccr.space_id = :space_id
+            INNER JOIN document_space ds ON ds.document_id = ccr.document_id
+            WHERE ds.space_id = :space_id
               AND ccr.category_id = :category_id
             GROUP BY ccr.document_id, d.title, ccr.page_no
             ORDER BY d.title, ccr.page_no
@@ -173,7 +175,8 @@ def _chunk_category_map_for_page(
             """
             SELECT ccr.chunk_id, ccr.confidence
             FROM chunkcategoryrelation ccr
-            WHERE ccr.space_id = :space_id
+            INNER JOIN document_space ds ON ds.document_id = ccr.document_id
+            WHERE ds.space_id = :space_id
               AND ccr.category_id = :category_id
               AND ccr.document_id = :document_id
               AND ccr.page_no = :page_no
@@ -202,7 +205,8 @@ def _load_enrichment_chunks_for_category_page(
             SELECT dc.id, dc.content, dc.chunk_index, dc.metadata_json, dc.metadata_, ccr.confidence
             FROM chunkcategoryrelation ccr
             INNER JOIN documentchunk dc ON dc.id = ccr.chunk_id
-            WHERE ccr.space_id = :space_id
+            INNER JOIN document_space ds ON ds.document_id = ccr.document_id
+            WHERE ds.space_id = :space_id
               AND ccr.category_id = :category_id
               AND ccr.document_id = :document_id
               AND ccr.page_no = :page_no

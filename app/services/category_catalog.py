@@ -66,12 +66,95 @@ DEFAULT_CATEGORY_DESCRIPTIONS: Dict[str, str] = {
     "troubleshooting": "Symptômes client, causes probables, SAV, diagnostic",
 }
 
+# ---------------------------------------------------------------------------
+# Taxonomie multi-axes (facettes)
+# ---------------------------------------------------------------------------
+# Les 16 slugs ci-dessus appartiennent à l'axe `task` (DEFAULT_CATEGORY_LABELS).
+# On ajoute trois axes orthogonaux, chacun avec son propre vocabulaire fermé.
+# `DEFAULT_CATEGORY_LABELS` reste volontairement l'axe `task` SEUL : c'est lui qui
+# alimente le slot UI `content_categories` (slot_catalog) — pas de pollution.
+
+AXIS_TASK = "task"
+AXIS_DOC_TYPE = "doc_type"
+AXIS_LIFECYCLE_PHASE = "lifecycle_phase"
+AXIS_SYMPTOM = "symptom"
+CONTENT_AXES: Tuple[str, ...] = (AXIS_TASK, AXIS_DOC_TYPE, AXIS_LIFECYCLE_PHASE, AXIS_SYMPTOM)
+
+DOC_TYPE_LABELS: Dict[str, str] = {
+    "notice_pose": "Notice de pose",
+    "fiche_technique": "Fiche technique",
+    "doc_commerciale": "Document commercial",
+    "pv_certification": "PV / certification",
+    "conditions_garantie": "Conditions de garantie",
+    "guide_sav": "Guide SAV",
+    "nomenclature": "Nomenclature / pièces",
+    "dtu_norme": "DTU / norme",
+}
+DOC_TYPE_DESCRIPTIONS: Dict[str, str] = {
+    "notice_pose": "Procédure de pose pas à pas, séquence de montage sur chantier",
+    "fiche_technique": "Caractéristiques techniques, cotes, performances produit",
+    "doc_commerciale": "Dépliant, argumentaire, brochure marketing",
+    "pv_certification": "Procès-verbal d'essai, certificat, marquage CE, attestation",
+    "conditions_garantie": "Durée, conditions, exclusions de garantie",
+    "guide_sav": "Guide de dépannage, diagnostic, intervention après-vente",
+    "nomenclature": "Liste de composants, références pièces détachées, éclatés",
+    "dtu_norme": "Document normatif, DTU, NF EN, réglementation",
+}
+
+LIFECYCLE_PHASE_LABELS: Dict[str, str] = {
+    "avant_vente": "Avant-vente",
+    "chantier_pose": "Chantier / pose",
+    "apres_vente_sav": "Après-vente / SAV",
+}
+LIFECYCLE_PHASE_DESCRIPTIONS: Dict[str, str] = {
+    "avant_vente": "Choix produit, devis, conseil avant achat",
+    "chantier_pose": "Phase de pose et mise en œuvre sur chantier",
+    "apres_vente_sav": "Usage, maintenance, dépannage après installation",
+}
+
+SYMPTOM_LABELS: Dict[str, str] = {
+    "infiltration_eau": "Infiltration d'eau",
+    "condensation": "Condensation",
+    "blocage_manoeuvre": "Blocage de manœuvre",
+    "deformation": "Déformation",
+    "defaut_etancheite_air": "Défaut d'étanchéité à l'air",
+    "casse_quincaillerie": "Casse quincaillerie",
+    "bruit": "Bruit",
+    "desalignement_ouvrant": "Désalignement d'ouvrant",
+}
+SYMPTOM_DESCRIPTIONS: Dict[str, str] = {
+    "infiltration_eau": "Entrée d'eau, fuite, défaut d'étanchéité à l'eau",
+    "condensation": "Buée, condensation sur vitrage ou profilé",
+    "blocage_manoeuvre": "Ouvrant dur, bloqué, manœuvre difficile",
+    "deformation": "Profilé déformé, voilé, gauchi",
+    "defaut_etancheite_air": "Courant d'air, sifflement, perméabilité à l'air",
+    "casse_quincaillerie": "Pièce cassée : gâche, roulette, charnière défaillante",
+    "bruit": "Grincement, claquement, bruit de manœuvre ou au vent",
+    "desalignement_ouvrant": "Ouvrant désaligné, frottement, mauvais affleurement",
+}
+
+# Vocabulaire statique par axe (fallback si BDD vide) : axis -> {slug: description}
+DEFAULT_DESCRIPTIONS_BY_AXIS: Dict[str, Dict[str, str]] = {
+    AXIS_TASK: DEFAULT_CATEGORY_DESCRIPTIONS,
+    AXIS_DOC_TYPE: DOC_TYPE_DESCRIPTIONS,
+    AXIS_LIFECYCLE_PHASE: LIFECYCLE_PHASE_DESCRIPTIONS,
+    AXIS_SYMPTOM: SYMPTOM_DESCRIPTIONS,
+}
+DEFAULT_LABELS_BY_AXIS: Dict[str, Dict[str, str]] = {
+    AXIS_TASK: DEFAULT_CATEGORY_LABELS,
+    AXIS_DOC_TYPE: DOC_TYPE_LABELS,
+    AXIS_LIFECYCLE_PHASE: LIFECYCLE_PHASE_LABELS,
+    AXIS_SYMPTOM: SYMPTOM_LABELS,
+}
+
 INTENT_TO_CATEGORIES: Dict[str, List[str]] = {
     "installation": [
         "mounting",
         "hardware_adjustment",
         "sealing",
         "drilling_constraints",
+        "notice_pose",
+        "chantier_pose",
     ],
     "specification": [
         "dimensions_tolerances",
@@ -79,10 +162,23 @@ INTENT_TO_CATEGORIES: Dict[str, List[str]] = {
         "parts_references",
         "material_profile",
         "glazing",
+        "fiche_technique",
     ],
-    "regulatory": ["regulatory", "warranty", "certification"],
-    "product_selection": ["product_comparison", "commercial", "product_range"],
-    "troubleshooting": ["troubleshooting", "hardware_adjustment", "sealing"],
+    "regulatory": ["regulatory", "warranty", "certification", "dtu_norme", "pv_certification"],
+    "product_selection": [
+        "product_comparison",
+        "commercial",
+        "product_range",
+        "doc_commerciale",
+        "avant_vente",
+    ],
+    "troubleshooting": [
+        "troubleshooting",
+        "hardware_adjustment",
+        "sealing",
+        "guide_sav",
+        "apres_vente_sav",
+    ],
     "documentation": [],
 }
 
@@ -120,8 +216,12 @@ def is_valid_category_slug(slug: str, session: Optional[Session] = None) -> bool
 
 
 def get_active_categories_for_prompt(session: Session) -> str:
-    """JSON slug+description pour le prompt LLM d'extraction."""
-    categories = get_active_categories(session)
+    """JSON slug+description (axe `task` uniquement) pour le prompt LLM d'extraction.
+
+    Restreint à l'axe `task` : les axes doc_type/lifecycle_phase/symptom sont exposés
+    séparément via :func:`get_categories_for_prompt_grouped_by_axis`.
+    """
+    categories = get_active_categories_by_axis(session, AXIS_TASK)
     if not categories:
         payload = [
             {"slug": slug, "description": DEFAULT_CATEGORY_DESCRIPTIONS.get(slug, "")}
@@ -133,9 +233,9 @@ def get_active_categories_for_prompt(session: Session) -> str:
 
 
 def get_category_choices_for_slot(session: Optional[Session] = None) -> Dict[str, str]:
-    """Retourne slug → label pour le slot filling UI."""
+    """Retourne slug → label pour le slot filling UI (axe `task` uniquement)."""
     if session is not None:
-        rows = get_active_categories(session)
+        rows = get_active_categories_by_axis(session, AXIS_TASK)
         if rows:
             return {row.slug: row.label for row in rows}
     return dict(DEFAULT_CATEGORY_LABELS)
@@ -146,3 +246,72 @@ def suggested_categories_for_intent(intent: Optional[str]) -> List[str]:
     if not intent:
         return []
     return list(INTENT_TO_CATEGORIES.get(intent.strip().lower(), []))
+
+
+# ---------------------------------------------------------------------------
+# Accès par axe (taxonomie multi-facettes)
+# ---------------------------------------------------------------------------
+
+
+def get_active_categories_by_axis(session: Session, axis: str) -> List[DocumentCategory]:
+    """Retourne les catégories actives d'un axe donné, triées par slug."""
+    stmt = (
+        select(DocumentCategory)
+        .where(
+            DocumentCategory.is_active == True,  # noqa: E712
+            DocumentCategory.axis == axis,
+        )
+        .order_by(DocumentCategory.slug)
+    )
+    return list(session.exec(stmt).all())
+
+
+def get_allowed_slugs_by_axis(
+    session: Optional[Session] = None,
+    axes: Optional[Tuple[str, ...]] = None,
+) -> Dict[str, frozenset]:
+    """Map axis -> frozenset(slugs actifs). Fallback statique si BDD vide/absente."""
+    wanted = axes or CONTENT_AXES
+    if session is not None:
+        rows = session.exec(
+            select(DocumentCategory).where(DocumentCategory.is_active == True)  # noqa: E712
+        ).all()
+        result: Dict[str, set] = {axis: set() for axis in wanted}
+        for row in rows:
+            if row.axis in result:
+                result[row.axis].add(row.slug)
+        # Si un axe n'a aucune ligne en base, retomber sur le vocabulaire statique
+        out: Dict[str, frozenset] = {}
+        for axis in wanted:
+            slugs = result.get(axis) or set()
+            if not slugs:
+                slugs = set(DEFAULT_DESCRIPTIONS_BY_AXIS.get(axis, {}).keys())
+            out[axis] = frozenset(slugs)
+        return out
+    return {
+        axis: frozenset(DEFAULT_DESCRIPTIONS_BY_AXIS.get(axis, {}).keys())
+        for axis in wanted
+    }
+
+
+def get_categories_for_prompt_grouped_by_axis(
+    session: Session,
+    axes: Optional[Tuple[str, ...]] = None,
+) -> str:
+    """JSON {axis: [{slug, description}]} pour les prompts LLM (extraction / requête).
+
+    Présente le vocabulaire fermé groupé par axe afin que le LLM choisisse PAR AXE
+    (formater, jamais créer). Fallback statique par axe si la BDD est vide.
+    """
+    wanted = axes or CONTENT_AXES
+    payload: Dict[str, List[Dict[str, str]]] = {}
+    for axis in wanted:
+        rows = get_active_categories_by_axis(session, axis)
+        if rows:
+            payload[axis] = [{"slug": c.slug, "description": c.description} for c in rows]
+        else:
+            descriptions = DEFAULT_DESCRIPTIONS_BY_AXIS.get(axis, {})
+            payload[axis] = [
+                {"slug": slug, "description": desc} for slug, desc in descriptions.items()
+            ]
+    return json.dumps(payload, ensure_ascii=False, indent=2)

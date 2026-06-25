@@ -529,6 +529,7 @@ async def stream_space_chat_message(
 
         guided_flow_kind = "howto"
         guided_topic = ""
+        guided_symptom = ""
         enter_guided = bool(active_guided)
         if not enter_guided:
             # Classification isolée (1 appel LLM), uniquement hors reprise.
@@ -538,6 +539,7 @@ async def stream_space_chat_message(
             enter_guided = mode_decision.is_guided
             guided_flow_kind = mode_decision.flow_kind
             guided_topic = mode_decision.topic
+            guided_symptom = mode_decision.detected_symptom
 
         if enter_guided:
             logger.info(
@@ -557,6 +559,7 @@ async def stream_space_chat_message(
                 active_state=active_guided,
                 flow_kind=guided_flow_kind,
                 topic=guided_topic,
+                symptom=guided_symptom,
             )
 
             async def generate_guided():

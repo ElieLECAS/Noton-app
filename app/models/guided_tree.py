@@ -30,6 +30,8 @@ class GuidedTree(SQLModel, table=True):
     # Critères de correspondance avec une demande entrante
     match_keywords: List[str] = Field(default_factory=list, sa_column=Column(JSON))
     match_categories: List[str] = Field(default_factory=list, sa_column=Column(JSON))
+    # Symptômes SAV (slugs axis=symptom) — critère fort pour les arbres diagnostic
+    match_symptoms: List[str] = Field(default_factory=list, sa_column=Column(JSON))
 
     root_node_key: str = Field(default="root", max_length=120)
     created_at: datetime = Field(default_factory=datetime.utcnow)

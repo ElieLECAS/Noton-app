@@ -63,13 +63,13 @@ def _category_boost_for_chunk(
 def _bulk_get_page_categories(
     session: Session,
     pages: Sequence[Tuple[int, int]],
-) -> Dict[Tuple[int, int], List[str]]:
+) -> Dict[Tuple[int, int], Dict[str, str]]:
     """
-    Catégories (slugs) par page via la table chunkcategoryrelation (source de vérité).
+    Catégories par page (slug → axis) via chunkcategoryrelation (source de vérité).
 
     Plus robuste que la lecture du metadata d'un chunk représentatif : un hit ColPali
     porte le chunk_id de l'ancre L0 (sans catégories), alors que les catégories vivent
-    sur les chunks L1 de la même page.
+    sur les chunks L1 de la même page. L'axe permet de pondérer le boost par facette.
     """
     wanted = {(int(d), int(p)) for d, p in pages}
     if not wanted:
@@ -81,7 +81,7 @@ def _bulk_get_page_categories(
     rows = session.execute(
         text(
             """
-            SELECT ccr.document_id, ccr.page_no, dc.slug
+            SELECT ccr.document_id, ccr.page_no, dc.slug, dc.axis
             FROM chunkcategoryrelation ccr
             INNER JOIN documentcategory dc ON dc.id = ccr.category_id
             WHERE ccr.document_id IN :doc_ids
@@ -91,14 +91,12 @@ def _bulk_get_page_categories(
         {"doc_ids": doc_ids, "page_nos": page_nos},
     ).all()
 
-    result: Dict[Tuple[int, int], List[str]] = {}
-    for document_id, page_no, slug in rows:
+    result: Dict[Tuple[int, int], Dict[str, str]] = {}
+    for document_id, page_no, slug, axis in rows:
         key = (int(document_id), int(page_no))
         if key not in wanted or not slug:
             continue
-        bucket = result.setdefault(key, [])
-        if slug not in bucket:
-            bucket.append(slug)
+        result.setdefault(key, {})[slug] = axis or "task"
     return result
 
 
@@ -126,14 +124,20 @@ def apply_category_boost_to_fused_hits(
 
     page_keys = [(int(h.document_id), int(h.page_no)) for h in fused_hits]
     cats_by_page = _bulk_get_page_categories(session, page_keys)
+    axis_weights: Dict[str, float] = settings.RETRIEVAL_AXIS_BOOST_WEIGHTS or {}
 
     boosted = 0
     for hit in fused_hits:
-        page_cats = cats_by_page.get((int(hit.document_id), int(hit.page_no)), [])
-        matched = inferred & {c.lower() for c in page_cats}
+        slug_axis = cats_by_page.get((int(hit.document_id), int(hit.page_no)), {})
+        matched = inferred & {s.lower() for s in slug_axis}
         if not matched:
             continue
-        factor = 1.0 + len(matched) * settings.RETRIEVAL_CATEGORY_BOOST
+        # Contribution pondérée par axe (symptôme > task > doc_type), plafonnée aux 3 plus fortes.
+        contributions = sorted(
+            (float(axis_weights.get(slug_axis.get(slug, "task"), 1.0)) for slug in matched),
+            reverse=True,
+        )[:3]
+        factor = 1.0 + settings.RETRIEVAL_CATEGORY_BOOST * sum(contributions)
         hit.rrf_score = (hit.rrf_score or 0.0) * factor
         boosted += 1
 

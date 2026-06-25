@@ -38,7 +38,8 @@ from app.models.knowledge_entity import (
 
 logger = logging.getLogger(__name__)
 
-KAG_EXTRACTION_VERSION = "kag_vision_v3"
+KAG_EXTRACTION_VERSION = "kag_vision_v4"
+TAXONOMY_VERSION = "facets_v1"
 
 _VALID_ENTITY_TYPES = frozenset(
     {
@@ -90,6 +91,11 @@ class KagPageResponse(BaseModel):
     relations: List[KagExtractedRelation] = Field(default_factory=list)
     categories: List[str] = Field(default_factory=list)
     chunk_categories: List[ChunkCategoryItem] = Field(default_factory=list)
+    # Facettes page-level (homogènes au document) : appliquées à tous les chunks de la page
+    doc_types: List[str] = Field(default_factory=list)
+    lifecycle_phases: List[str] = Field(default_factory=list)
+    # Symptômes proposés HORS liste connue (vocabulaire extensible) → CategoryCandidate
+    symptom_candidates: List[str] = Field(default_factory=list)
 
 
 class BatchKagResponse(BaseModel):
@@ -150,26 +156,32 @@ _KAG_COMPACT_RETRY_SUFFIX = (
     "aliases : 0 ou 1 par entité. Noms courts. JSON complet et valide."
 )
 
-_KAG_BATCH_SYSTEM_PROMPT = """Tu es un expert en extraction d'entités nommées (NER), de relations (RE) et de catégorisation de contenu pour documents techniques menuiserie.
+_KAG_BATCH_SYSTEM_PROMPT = """Tu es un expert en extraction d'entités nommées (NER), de relations (RE) et de catégorisation multi-axes pour documents techniques menuiserie (pose, SAV, notices).
 On te donne les images de plusieurs pages consécutives ET le texte déjà extrait (chunks transcrits par page, identifiés par chunk_index).
-Ton travail : pour CHAQUE page, identifier les entités, relations et catégories de contenu PAR CHUNK.
+Ton travail : pour CHAQUE page, identifier les entités, les relations, et classer le contenu selon une taxonomie À FACETTES (plusieurs axes orthogonaux).
 
-Règles impératives :
+Règles impératives — entités & relations :
 1. Renvoie UNIQUEMENT un objet JSON valide (aucun texte hors JSON).
 2. Extrais les entités concrètes : produits, références, matériaux, outils, normes, dimensions, processus, organisations, lieux.
 3. Normalise les noms (casse cohérente, sans bruit markdown).
 4. Pour chaque entité, fournis un type parmi : product | material | tool | norm | dimension | process | organization | location | reference | other
 5. Les aliases sont les variantes, abréviations ou codes produit (ex. "ref ABC-123").
 6. Les relations décrivent un lien sémantique explicite entre deux entités d'une même page.
-7. Types de relation suggérés : compatible_avec | est_compose_de | remplace | utilise | conforme_a | installe_sur | fabrique_par | mesure | reference | co_occurs
-8. Ne pas inventer d'entités absentes du texte ou de l'image.
+7. Types de relation suggérés :
+   - produit : compatible_avec | est_compose_de | remplace | utilise | conforme_a | installe_sur | fabrique_par | mesure | reference | co_occurs
+   - SAV / procédure : symptome_cause (un symptôme a pour cause X) | cause_resolution (une cause se résout par Y) | etape_precede (une étape précède la suivante) | necessite_outil | requiert_piece
+   Privilégie les relations SAV/procédure quand le contenu décrit un dépannage ou une séquence de pose.
+8. Ne pas inventer d'entités ou de relations absentes du texte ou de l'image.
 9. Maximum {max_entities} entités et {max_relations} relations par page.
-10. Catégories par chunk : pour chaque chunk_index, choisis UNIQUEMENT parmi la liste fournie (slug exact). Un chunk peut avoir 0 à plusieurs catégories selon son contenu réel.
-11. N'associe une catégorie qu'aux chunks dont le contenu traite explicitement du thème. Ne propage pas une catégorie à tous les chunks de la page.
-12. N'invente pas de catégories hors liste.
-13. Le champ "categories" au niveau page est optionnel (union des catégories présentes sur la page). Privilégie "chunk_categories".
 
-Catégories autorisées (slug : description) :
+Règles impératives — catégorisation à facettes :
+10. Axe "task" et axe "symptom" → PAR CHUNK (champ chunk_categories). Pour chaque chunk_index, choisis UNIQUEMENT parmi les slugs des axes `task` et `symptom` fournis. Un chunk peut avoir 0 à plusieurs slugs.
+11. N'associe un slug qu'aux chunks dont le contenu traite EXPLICITEMENT du thème. Ne propage pas un slug task/symptom à tous les chunks.
+12. Axe "doc_type" et axe "lifecycle_phase" → AU NIVEAU PAGE (champs doc_types, lifecycle_phases). Ces facettes sont homogènes : décris la NATURE du document et la PHASE du cycle de vie (en général 1 valeur chacun). Choisis uniquement parmi les slugs fournis.
+13. N'invente JAMAIS de slug hors des listes pour task / doc_type / lifecycle_phase / symptom.
+14. EXCEPTION — symptom_candidates : si une page décrit un symptôme/problème SAV réel qui N'EXISTE PAS dans la liste `symptom`, propose-le en texte court dans "symptom_candidates" (niveau page). Ne le mets PAS dans chunk_categories. N'invente pas de symptôme absent du contenu.
+
+Taxonomie autorisée, groupée par axe (axe : [{{slug, description}}]) :
 {category_list}
 
 Format de réponse OBLIGATOIRE :
@@ -178,28 +190,18 @@ Format de réponse OBLIGATOIRE :
     {{
       "page_no": <numéro>,
       "entities": [
-        {{
-          "name": "<nom canonique>",
-          "type": "<type>",
-          "aliases": ["<alias1>"],
-          "description": "<contexte court>",
-          "confidence": 0.9
-        }}
+        {{ "name": "<nom canonique>", "type": "<type>", "aliases": ["<alias1>"], "description": "<contexte court>", "confidence": 0.9 }}
       ],
       "relations": [
-        {{
-          "entity_a": "<nom entité A>",
-          "relation": "<type_relation>",
-          "entity_b": "<nom entité B>",
-          "relation_label": "<phrase naturelle optionnelle>",
-          "confidence": 0.85
-        }}
+        {{ "entity_a": "<A>", "relation": "<type_relation>", "entity_b": "<B>", "relation_label": "<optionnel>", "confidence": 0.85 }}
       ],
-      "categories": ["<slug1>"],
+      "doc_types": ["<slug doc_type>"],
+      "lifecycle_phases": ["<slug lifecycle_phase>"],
       "chunk_categories": [
         {{ "chunk_index": 0, "categories": ["mounting", "hardware_adjustment"] }},
-        {{ "chunk_index": 2, "categories": ["dimensions_tolerances"] }}
-      ]
+        {{ "chunk_index": 2, "categories": ["infiltration_eau"] }}
+      ],
+      "symptom_candidates": ["<symptôme libre hors-liste, optionnel>"]
     }}
   ]
 }}"""
@@ -280,6 +282,14 @@ def _normalize_relation_type(raw: str) -> str:
     value = (raw or "co_occurs").strip().lower().replace(" ", "_")
     value = re.sub(r"[^a-z0-9_]", "", value)
     return value or "co_occurs"
+
+
+def _slugify_candidate(text: str) -> str:
+    """Slugifie un libellé libre (symptôme candidat) : minuscules, sans accent, _."""
+    value = unicodedata.normalize("NFKD", (text or "").strip().lower())
+    value = value.encode("ascii", "ignore").decode("ascii")
+    value = re.sub(r"[^a-z0-9]+", "_", value).strip("_")
+    return value[:64]
 
 
 def _kag_extraction_model() -> str:
@@ -515,41 +525,71 @@ def _call_kag_batch_vision_api(
     return _parse_json_with_repair(raw)
 
 
+def _clean_freeform_list(values: List[str]) -> List[str]:
+    out: List[str] = []
+    seen: set[str] = set()
+    for raw in values or []:
+        v = (raw or "").strip()
+        key = v.lower()
+        if v and key not in seen:
+            seen.add(key)
+            out.append(v)
+    return out
+
+
 def _coerce_kag_page_response(
     raw: dict,
     page_no: int,
     *,
     valid_category_slugs: Optional[frozenset[str]] = None,
+    allowed_by_axis: Optional[Dict[str, frozenset]] = None,
 ) -> KagPageResponse:
-    """Valide et normalise une réponse KAG (tolère page_no absent)."""
+    """Valide et normalise une réponse KAG multi-axes (tolère page_no absent)."""
     payload = dict(raw or {})
     payload.setdefault("page_no", page_no)
-    if not isinstance(payload.get("entities"), list):
-        payload["entities"] = []
-    if not isinstance(payload.get("relations"), list):
-        payload["relations"] = []
-    if not isinstance(payload.get("categories"), list):
-        payload["categories"] = []
-    if not isinstance(payload.get("chunk_categories"), list):
-        payload["chunk_categories"] = []
+    for list_field in ("entities", "relations", "categories", "chunk_categories",
+                       "doc_types", "lifecycle_phases", "symptom_candidates"):
+        if not isinstance(payload.get(list_field), list):
+            payload[list_field] = []
 
     response = KagPageResponse.model_validate(payload)
     max_ent, max_rel = _effective_kag_limits()
     response.entities = response.entities[:max_ent]
     response.relations = response.relations[:max_rel]
+
     if valid_category_slugs is not None:
+        # chunk_categories + legacy categories = axes task ∪ symptom (par chunk)
         response.categories = _normalize_category_slugs(response.categories, valid_category_slugs)
         response.chunk_categories = _normalize_chunk_categories(
             response.chunk_categories,
             valid_category_slugs,
         )
-    has_chunk_categories = bool(response.chunk_categories)
-    if (
-        not response.entities
-        and not response.relations
-        and not response.categories
-        and not has_chunk_categories
-    ):
+    if allowed_by_axis is not None:
+        response.doc_types = _normalize_category_slugs(
+            response.doc_types, allowed_by_axis.get("doc_type", frozenset())
+        )
+        response.lifecycle_phases = _normalize_category_slugs(
+            response.lifecycle_phases, allowed_by_axis.get("lifecycle_phase", frozenset())
+        )
+        # Candidats : on retire ceux qui correspondent déjà à un symptôme officiel.
+        known = allowed_by_axis.get("symptom", frozenset())
+        response.symptom_candidates = [
+            c for c in _clean_freeform_list(response.symptom_candidates)
+            if _slugify_candidate(c) not in known
+        ]
+
+    has_content = any(
+        (
+            response.entities,
+            response.relations,
+            response.categories,
+            response.chunk_categories,
+            response.doc_types,
+            response.lifecycle_phases,
+            response.symptom_candidates,
+        )
+    )
+    if not has_content:
         raise ValueError(f"Aucune entité, relation ni catégorie extraite pour la page {page_no}")
     return response
 
@@ -559,6 +599,7 @@ def _coerce_batch_kag_response(
     batch_pages: List[int],
     *,
     valid_category_slugs: frozenset[str],
+    allowed_by_axis: Optional[Dict[str, frozenset]] = None,
 ) -> BatchKagResponse:
     payload = dict(raw or {})
     pages_in = payload.get("pages")
@@ -573,7 +614,12 @@ def _coerce_batch_kag_response(
         if page_no not in batch_pages:
             continue
         pages.append(
-            _coerce_kag_page_response(item, page_no, valid_category_slugs=valid_category_slugs)
+            _coerce_kag_page_response(
+                item,
+                page_no,
+                valid_category_slugs=valid_category_slugs,
+                allowed_by_axis=allowed_by_axis,
+            )
         )
 
     if not pages:
@@ -642,6 +688,7 @@ def extract_batch_kag_response(
     chunks_by_page: Dict[int, List[DocumentChunk]],
     category_list: str,
     valid_category_slugs: frozenset[str],
+    allowed_by_axis: Optional[Dict[str, frozenset]] = None,
 ) -> Optional[BatchKagResponse]:
     """Extrait entités, relations et catégories pour un batch de pages via vision."""
     from app.services.multimodal_page_service import render_page_png_cached
@@ -681,6 +728,7 @@ def extract_batch_kag_response(
                     raw,
                     batch_pages,
                     valid_category_slugs=valid_category_slugs,
+                    allowed_by_axis=allowed_by_axis,
                 )
             except (ValidationError, ValueError, json.JSONDecodeError) as exc:
                 last_exc = exc
@@ -977,8 +1025,14 @@ def _persist_page_categories(
     category_id_by_slug: Dict[str, int],
     document_id: int,
     valid_category_slugs: frozenset[str],
+    page_wide_slugs: Optional[List[str]] = None,
 ) -> int:
-    """Persiste les catégories de contenu pour les chunks concernés (chunk-level ou fallback page)."""
+    """Persiste les catégories multi-axes des chunks de la page.
+
+    - chunk_categories (axes task/symptom) → chunks ciblés par chunk_index.
+    - page_wide_slugs (axes doc_type/lifecycle_phase) → TOUS les chunks de la page.
+    - category_slugs (legacy union page-level task) → fallback tous chunks si aucun chunk_categories.
+    """
     if not page_chunks:
         return 0
 
@@ -988,21 +1042,43 @@ def _persist_page_categories(
         if slugs:
             index_to_slugs[item.chunk_index] = slugs
 
-    targets: List[tuple[DocumentChunk, List[str]]] = []
-    if index_to_slugs:
-        for chunk_idx, slugs in index_to_slugs.items():
-            if chunk_idx < 0 or chunk_idx >= len(page_chunks):
-                continue
-            targets.append((page_chunks[chunk_idx], slugs))
-    elif category_slugs:
-        for chunk in page_chunks:
-            targets.append((chunk, category_slugs))
+    page_wide = list(dict.fromkeys(page_wide_slugs or []))
 
-    if not targets:
-        return 0
+    # Position du chunk → ensemble de slugs (multi-axes), ordre préservé.
+    position_slugs: Dict[int, List[str]] = {idx: [] for idx in range(len(page_chunks))}
+
+    def _add(idx: int, slugs: List[str]) -> None:
+        bucket = position_slugs.setdefault(idx, [])
+        for slug in slugs:
+            if slug not in bucket:
+                bucket.append(slug)
+
+    # 1. chunk-level task/symptom
+    for chunk_idx, slugs in index_to_slugs.items():
+        if 0 <= chunk_idx < len(page_chunks):
+            _add(chunk_idx, slugs)
+    # 2. legacy page-level task fallback (uniquement si aucun chunk_categories)
+    if not index_to_slugs and category_slugs:
+        for idx in range(len(page_chunks)):
+            _add(idx, list(category_slugs))
+    # 3. page-wide doc_type/lifecycle → tous les chunks
+    if page_wide:
+        for idx in range(len(page_chunks)):
+            _add(idx, page_wide)
 
     linked = 0
-    for chunk, slugs in targets:
+    for idx, chunk in enumerate(page_chunks):
+        slugs = position_slugs.get(idx) or []
+        if not slugs:
+            # Toujours marquer la version de taxonomie même sans slug.
+            meta = dict(chunk.metadata_json or {})
+            meta["kag_extraction_version"] = KAG_EXTRACTION_VERSION
+            meta["taxonomy_version"] = TAXONOMY_VERSION
+            chunk.metadata_json = meta
+            chunk.metadata_ = meta
+            session.add(chunk)
+            continue
+
         meta = dict(chunk.metadata_json or {})
         existing = meta.get("categories") or []
         if not isinstance(existing, list):
@@ -1010,6 +1086,7 @@ def _persist_page_categories(
         merged_slugs = list(dict.fromkeys([*existing, *slugs]))
         meta["categories"] = merged_slugs
         meta["kag_extraction_version"] = KAG_EXTRACTION_VERSION
+        meta["taxonomy_version"] = TAXONOMY_VERSION
         chunk.metadata_json = meta
         chunk.metadata_ = meta
         session.add(chunk)
@@ -1018,25 +1095,69 @@ def _persist_page_categories(
             category_id = category_id_by_slug.get(slug)
             if category_id is None:
                 continue
-            for space_id in space_ids:
-                stmt = select(ChunkCategoryRelation).where(
+            # Lien au niveau document : une seule ligne par (chunk, catégorie), sans espace.
+            exists = session.exec(
+                select(ChunkCategoryRelation).where(
                     ChunkCategoryRelation.chunk_id == chunk.id,
                     ChunkCategoryRelation.category_id == category_id,
                 )
-                if session.exec(stmt).first():
-                    continue
-                session.add(
-                    ChunkCategoryRelation(
-                        chunk_id=chunk.id,
-                        category_id=category_id,
-                        space_id=space_id,
-                        document_id=document_id,
-                        page_no=page_no,
-                        confidence=1.0,
-                    )
+            ).first()
+            if exists is not None:
+                continue
+            session.add(
+                ChunkCategoryRelation(
+                    chunk_id=chunk.id,
+                    category_id=category_id,
+                    document_id=document_id,
+                    page_no=page_no,
+                    confidence=1.0,
                 )
-                linked += 1
+            )
+            linked += 1
     return linked
+
+
+def _persist_symptom_candidates(
+    session: Session,
+    candidates: List[str],
+    *,
+    document_id: int,
+    known_symptom_slugs: frozenset,
+) -> int:
+    """Upsert des symptômes candidats (hors-liste) en attente de validation humaine.
+
+    Jamais lié à un chunk ni exploité par le retrieval tant qu'un expert ne l'a pas promu
+    en DocumentCategory (axis=symptom). Incrémente le compteur d'occurrences si déjà vu.
+    """
+    from app.models.category_candidate import CategoryCandidate
+
+    touched = 0
+    for raw in candidates or []:
+        label = (raw or "").strip()
+        slug = _slugify_candidate(label)
+        if not slug or slug in known_symptom_slugs:
+            continue
+        existing = session.exec(
+            select(CategoryCandidate).where(CategoryCandidate.slug == slug)
+        ).first()
+        if existing is not None:
+            existing.occurrence_count = (existing.occurrence_count or 0) + 1
+            existing.updated_at = datetime.utcnow()
+            session.add(existing)
+        else:
+            session.add(
+                CategoryCandidate(
+                    slug=slug,
+                    label=label[:200],
+                    axis="symptom",
+                    proposed_description=label[:500],
+                    occurrence_count=1,
+                    status="pending",
+                    first_seen_document_id=document_id,
+                )
+            )
+        touched += 1
+    return touched
 
 
 def _annotate_chunks_with_entities(
@@ -1127,12 +1248,25 @@ def _merge_page_kag_responses(
                 seen_rels.add(key)
                 merged_relations.append(rel)
 
+        merged_doc_types = list(
+            dict.fromkeys([*(existing.doc_types or []), *(page_resp.doc_types or [])])
+        )
+        merged_lifecycle = list(
+            dict.fromkeys([*(existing.lifecycle_phases or []), *(page_resp.lifecycle_phases or [])])
+        )
+        merged_symptom_candidates = _clean_freeform_list(
+            [*(existing.symptom_candidates or []), *(page_resp.symptom_candidates or [])]
+        )
+
         target[pno] = KagPageResponse(
             page_no=pno,
             entities=list(merged_entities.values()),
             relations=merged_relations,
             categories=merged_categories,
             chunk_categories=merged_chunk_categories,
+            doc_types=merged_doc_types,
+            lifecycle_phases=merged_lifecycle,
+            symptom_candidates=merged_symptom_candidates,
         )
 
 
@@ -1284,11 +1418,22 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
         page_numbers = sorted(chunks_by_page.keys())
         concurrency = settings.KAG_EXTRACTION_CONCURRENCY
 
-        from app.services.category_catalog import get_active_categories_for_prompt, get_category_id_by_slug
+        from app.services.category_catalog import (
+            AXIS_SYMPTOM,
+            AXIS_TASK,
+            get_allowed_slugs_by_axis,
+            get_categories_for_prompt_grouped_by_axis,
+            get_category_id_by_slug,
+        )
 
-        category_list = get_active_categories_for_prompt(session)
+        category_list = get_categories_for_prompt_grouped_by_axis(session)
         category_id_by_slug = get_category_id_by_slug(session)
-        valid_category_slugs = frozenset(category_id_by_slug.keys())
+        allowed_by_axis = get_allowed_slugs_by_axis(session)
+        # chunk_categories = axes task ∪ symptom (par chunk) ; doc_type/lifecycle = page-level
+        chunk_axis_slugs = frozenset(
+            allowed_by_axis.get(AXIS_TASK, frozenset()) | allowed_by_axis.get(AXIS_SYMPTOM, frozenset())
+        )
+        known_symptom_slugs = allowed_by_axis.get(AXIS_SYMPTOM, frozenset())
 
         batches = build_kag_batches(page_numbers)
         page_responses: Dict[int, KagPageResponse] = {}
@@ -1302,7 +1447,8 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
                     doc_title,
                     chunks_by_page,
                     category_list,
-                    valid_category_slugs,
+                    chunk_axis_slugs,
+                    allowed_by_axis,
                 ): batch
                 for batch in batches
             }
@@ -1319,6 +1465,7 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
         total_relations = 0
         total_categories = 0
         pages_ok = 0
+        symptom_candidates_all: List[str] = []
 
         for pno in page_numbers:
             kag_response = page_responses.get(pno)
@@ -1331,6 +1478,10 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
                 chunks_by_page[pno],
                 kag_response,
             )
+            page_wide_slugs = [
+                *(kag_response.doc_types or []),
+                *(kag_response.lifecycle_phases or []),
+            ]
             cats = _persist_page_categories(
                 session,
                 space_ids,
@@ -1340,8 +1491,10 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
                 kag_response.chunk_categories,
                 category_id_by_slug,
                 document_id,
-                valid_category_slugs,
+                chunk_axis_slugs,
+                page_wide_slugs=page_wide_slugs,
             )
+            symptom_candidates_all.extend(kag_response.symptom_candidates or [])
             # Métadonnées entités sur les chunks L1 → enrichit le texte d'embedding
             _annotate_chunks_with_entities(session, chunks_by_page[pno], kag_response.entities)
             total_entities += ents
@@ -1349,11 +1502,18 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
             total_categories += cats
             pages_ok += 1
 
+        candidates_touched = _persist_symptom_candidates(
+            session,
+            _clean_freeform_list(symptom_candidates_all),
+            document_id=document_id,
+            known_symptom_slugs=known_symptom_slugs,
+        )
+
         session.commit()
 
         logger.info(
             "[KAG] Extraction terminée document_id=%s pages=%s/%s batches=%s "
-            "entities=%s relations=%s category_links=%s model=%s",
+            "entities=%s relations=%s category_links=%s symptom_candidates=%s model=%s",
             document_id,
             pages_ok,
             len(page_numbers),
@@ -1361,12 +1521,14 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
             total_entities,
             total_relations,
             total_categories,
+            candidates_touched,
             _kag_extraction_model(),
         )
         return {
             "entities": total_entities,
             "relations": total_relations,
             "categories": total_categories,
+            "symptom_candidates": candidates_touched,
             "pages": pages_ok,
             "status": "completed",
         }

@@ -406,8 +406,8 @@
           class="hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-teal-500/20 bg-teal-500/5 text-teal-700 dark:text-teal-300 hover:bg-teal-500/10 text-xs font-semibold active:scale-95 transition-all"
           onclick="openSpaceCategoriesModal()"
         >
-          <i class="ti ti-tags"></i>
-          <span>Catégories</span>
+          <i class="ti ti-search"></i>
+          <span>Recherche &amp; catégories</span>
         </button>
         <button
           id="kag-graph-toggle"
@@ -494,48 +494,57 @@
   </div>
 </div>
 
-<!-- Modale liste catégories -->
+<!-- Modale recherche & catégories : 2 cartes distinctes séparées par du vide -->
 <div id="space-categories-modal" class="hidden fixed inset-0 z-[125] bg-black/60 backdrop-blur-sm items-center justify-center p-3 sm:p-6" onclick="if(event.target===this) closeSpaceCategoriesModal()">
-  <div class="w-full max-w-2xl max-h-[min(90vh,720px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
-    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3">
-      <div class="min-w-0">
+  <div class="w-full max-w-2xl max-h-[min(90vh,720px)] flex flex-col gap-4" onclick="if(event.target===this) closeSpaceCategoriesModal()">
+
+    <!-- Carte 1 : Recherche par mot-clé -->
+    <div class="shrink-0 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+      <div class="px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3">
         <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <i class="ti ti-tags text-teal-500"></i>
-          Catégories de contenu
+          <i class="ti ti-search text-indigo-500"></i>
+          Recherche par mot-clé
         </h2>
-        <p id="space-categories-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Chargement…</p>
-      </div>
-      <button type="button" onclick="closeSpaceCategoriesModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-        <i class="ti ti-x text-xl"></i>
-      </button>
-    </div>
-    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 bg-indigo-500/[0.04]">
-      <label class="block text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1.5">
-        <i class="ti ti-search text-indigo-500"></i>
-        Recherche par mot-clé dans l'espace
-      </label>
-      <div class="flex items-center gap-2">
-        <input
-          type="search"
-          id="space-keyword-search-input"
-          placeholder="Ex. une référence produit…"
-          onkeydown="if(event.key==='Enter'){event.preventDefault();runSpaceKeywordSearch();}"
-          class="flex-1 px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/[0.05] text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all"
-        />
-        <button
-          type="button"
-          onclick="runSpaceKeywordSearch()"
-          class="shrink-0 px-3.5 py-2 rounded-lg bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm hover:bg-indigo-700"
-        >
-          Rechercher
+        <button type="button" onclick="closeSpaceCategoriesModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="ti ti-x text-xl"></i>
         </button>
       </div>
-      <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5">Ouvre les pages PDF et chunks contenant ce mot (texte source + synthèses IA).</p>
-      <p id="space-keyword-search-msg" class="text-xs text-amber-600 dark:text-amber-400 mt-1 hidden"></p>
+      <div class="px-4 sm:px-5 py-3 bg-indigo-500/[0.04]">
+        <div class="flex items-center gap-2">
+          <input
+            type="search"
+            id="space-keyword-search-input"
+            placeholder="Ex. Lumine hybride, une référence produit…"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();runSpaceKeywordSearch();}"
+            class="flex-1 px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/10 bg-white/80 dark:bg-white/[0.05] text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all"
+          />
+          <button
+            type="button"
+            onclick="runSpaceKeywordSearch()"
+            class="shrink-0 px-3.5 py-2 rounded-lg bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm hover:bg-indigo-700"
+          >
+            Rechercher
+          </button>
+        </div>
+        <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5">
+          Plusieurs mots = recherche « <span class="font-semibold">OU</span> » : « Lumine hybride » remonte les pages parlant de Lumine <span class="font-semibold">ou</span> Hybride (celles qui parlent des deux d'abord). Texte source PDF + synthèses IA.
+        </p>
+        <p id="space-keyword-search-msg" class="text-xs text-amber-600 dark:text-amber-400 mt-1 hidden"></p>
+      </div>
     </div>
-    <div id="space-categories-list" class="flex-1 overflow-y-auto p-4 space-y-2">
-      <div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>
+
+    <!-- Carte 2 : Parcourir par catégorie -->
+    <div class="flex-1 min-h-0 flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+      <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
+        <i class="ti ti-tags text-teal-500"></i>
+        <h2 class="text-base font-bold text-gray-900 dark:text-white">Parcourir par catégorie</h2>
+        <span id="space-categories-meta" class="ml-auto text-xs font-medium text-gray-500 dark:text-gray-400">Chargement…</span>
+      </div>
+      <div id="space-categories-list" class="flex-1 overflow-y-auto px-4 sm:px-5 py-4 space-y-2">
+        <div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>
+      </div>
     </div>
+
   </div>
 </div>
 
@@ -576,7 +585,7 @@
       <section id="space-category-text-panel" class="lg:w-1/2 flex flex-col min-h-0">
         <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
           <span>Texte extrait</span>
-          <span class="normal-case font-medium text-teal-600 dark:text-teal-400">Chunks catégorie surlignés</span>
+          <span id="space-category-text-hint" class="normal-case font-medium text-teal-600 dark:text-teal-400">Chunks catégorie surlignés</span>
         </div>
         <div id="space-category-text-container" class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
           <div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>
@@ -1528,6 +1537,9 @@ async function loadSpace() {
   if (!r.ok) return;
   const s = await r.json();
   document.getElementById("space-title").textContent = s.name;
+  // La recherche par mot-clé est disponible pour tout espace (indépendamment
+  // des catégories KAG) : on révèle le point d'entrée dès le chargement.
+  document.getElementById("space-categories-toggle")?.classList.remove("hidden");
 }
 
 let kagCy = null;
@@ -1978,12 +1990,9 @@ async function loadSpaceCategories() {
     if (!r.ok) return;
     const data = await r.json();
     spaceCategoriesData = data;
-    const toggle = document.getElementById("space-categories-toggle");
-    const hasCategories = (data.category_count || 0) > 0;
-    spaceCategoriesHasData = hasCategories;
-    if (toggle) {
-      toggle.classList.toggle("hidden", !hasCategories);
-    }
+    // Le bouton « Recherche & catégories » reste affiché même sans catégorie
+    // (la recherche mot-clé fonctionne toujours) ; on mémorise juste l'état.
+    spaceCategoriesHasData = (data.category_count || 0) > 0;
   } catch (err) {
     console.warn("Space categories load failed", err);
   }
@@ -1995,9 +2004,11 @@ function openSpaceCategoriesModal() {
   if (!modal) return;
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  // Focus immédiat sur la recherche : c'est l'usage principal de la modale.
+  setTimeout(() => document.getElementById("space-keyword-search-input")?.focus(), 50);
 
   if (spaceCategoriesData) {
-    meta.textContent = `${spaceCategoriesData.category_count || 0} catégorie(s) dans cet espace`;
+    meta.textContent = `${spaceCategoriesData.category_count || 0} catégorie(s)`;
     renderSpaceCategoriesList(spaceCategoriesData.categories || []);
     return;
   }
@@ -2011,7 +2022,7 @@ function openSpaceCategoriesModal() {
     }
     spaceCategoriesData = await r.json();
     spaceCategoriesHasData = (spaceCategoriesData.category_count || 0) > 0;
-    meta.textContent = `${spaceCategoriesData.category_count || 0} catégorie(s) dans cet espace`;
+    meta.textContent = `${spaceCategoriesData.category_count || 0} catégorie(s)`;
     renderSpaceCategoriesList(spaceCategoriesData.categories || []);
   });
 }
@@ -2063,7 +2074,7 @@ async function runSpaceKeywordSearch() {
   const data = await r.json();
   const firstPage = (data.pages || [])[0];
   if (!firstPage) {
-    showMsg(`Aucune page ne contient « ${query} ».`);
+    showMsg(`Aucun résultat pour « ${query} ».`);
     return;
   }
   closeSpaceCategoriesModal();
@@ -2140,6 +2151,13 @@ function renderSpaceCategoryPageDetail(detail) {
   const nextBtn = document.getElementById("space-category-next-btn");
   if (prevBtn) prevBtn.disabled = !nav.prev;
   if (nextBtn) nextBtn.disabled = !nav.next;
+
+  const hint = document.getElementById("space-category-text-hint");
+  if (hint) {
+    hint.textContent = spaceCategoryPageState.mode === "search"
+      ? "Occurrences du mot-clé surlignées"
+      : "Chunks catégorie surlignés";
+  }
 
   renderSpaceCategoryTextChunks(detail.chunks || [], detail.enrichment_chunks || [], category);
   if (spaceCategoryPageState.mode === "search" && detail.query) {
@@ -2295,16 +2313,29 @@ async function navigateSpaceCategoryPage(direction) {
   await openSpaceCategoryPageModal(categoryId, target.document_id, target.page_no);
 }
 
-// Surligne les occurrences d'un mot-clé dans les nœuds texte d'un conteneur
-// déjà rendu (n'altère pas le markdown : agit sur le DOM).
+// Surligne les occurrences des mots-clés dans les nœuds texte d'un conteneur
+// déjà rendu (n'altère pas le markdown : agit sur le DOM). Recherche « OU » :
+// chaque mot de la requête (≥ 2 caractères) est surligné indépendamment.
 function highlightSearchTerm(container, term) {
-  if (!container || !term || term.length < 2) return;
-  const needle = term.toLowerCase();
+  if (!container || !term) return;
+  const needles = String(term)
+    .split(/\s+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length >= 2);
+  if (!needles.length) return;
+  const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // Mots les plus longs d'abord pour privilégier le plus grand recouvrement.
+  const pattern = needles
+    .slice()
+    .sort((a, b) => b.length - a.length)
+    .map(escapeRegex)
+    .join("|");
+  const re = new RegExp(pattern, "gi");
   const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
-      if (!node.nodeValue || !node.nodeValue.toLowerCase().includes(needle)) {
-        return NodeFilter.FILTER_REJECT;
-      }
+      if (!node.nodeValue) return NodeFilter.FILTER_REJECT;
+      re.lastIndex = 0;
+      if (!re.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
       if (node.parentElement && node.parentElement.closest("mark")) {
         return NodeFilter.FILTER_REJECT;
       }
@@ -2315,19 +2346,20 @@ function highlightSearchTerm(container, term) {
   while (walker.nextNode()) targets.push(walker.currentNode);
   targets.forEach((node) => {
     const text = node.nodeValue;
-    const lower = text.toLowerCase();
     const frag = document.createDocumentFragment();
     let idx = 0;
-    let found;
-    while ((found = lower.indexOf(needle, idx)) !== -1) {
-      if (found > idx) {
-        frag.appendChild(document.createTextNode(text.slice(idx, found)));
+    let match;
+    re.lastIndex = 0;
+    while ((match = re.exec(text)) !== null) {
+      if (match.index > idx) {
+        frag.appendChild(document.createTextNode(text.slice(idx, match.index)));
       }
       const mark = document.createElement("mark");
       mark.className = "bg-yellow-300 dark:bg-yellow-500/60 text-gray-900 rounded px-0.5";
-      mark.textContent = text.slice(found, found + needle.length);
+      mark.textContent = match[0];
       frag.appendChild(mark);
-      idx = found + needle.length;
+      idx = match.index + match[0].length;
+      if (match[0].length === 0) re.lastIndex++;
     }
     if (idx < text.length) {
       frag.appendChild(document.createTextNode(text.slice(idx)));

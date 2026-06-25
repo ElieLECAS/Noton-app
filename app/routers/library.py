@@ -1407,7 +1407,7 @@ async def delete_library_document(
 
 
 @router.get("/documents/{document_id}/export")
-async def export_library_document(
+def export_library_document(
     document_id: int,
     current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
@@ -1417,10 +1417,16 @@ async def export_library_document(
     - Le fichier PDF source.
     - Les métadonnées Postgres (Document, DocumentChunks) au format JSON.
     - Les vecteurs d'embeddings de patchs ColPali de LanceDB au format JSON.
+
+    L'archive est écrite dans un fichier temporaire sur disque puis streamée via
+    FileResponse (et non construite entièrement en RAM) : cela évite les pics
+    mémoire / OOM en production sur les documents volumineux. Endpoint synchrone
+    pour que ce travail bloquant tourne dans le threadpool sans figer l'event loop.
     """
-    import io
+    import os
+    import tempfile
     import zipfile
-    from fastapi.responses import StreamingResponse
+    from starlette.background import BackgroundTask
 
     library = get_or_create_user_library(session, current_user.id)
     document = session.exec(
@@ -1470,75 +1476,93 @@ async def export_library_document(
     except Exception as ex:
         logger.warning(f"Impossible de récupérer les patchs ColPali pour l'export : {ex}")
 
-    zip_buffer = io.BytesIO()
-    with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
-        zip_file.write(file_path, arcname=file_path.name)
-
-        metadata = {
-            "document": {
-                "title": document.title,
-                "filename": Path(document.source_file_path).name if document.source_file_path else None,
-                "document_type": document.document_type,
-                "content": document.content,
-                "processing_status": document.processing_status,
-                "processing_progress": document.processing_progress,
-                "is_paid": document.is_paid,
-                "source": document.source,
-            },
-            "chunks": [
-                {
-                    "id": c.id,
-                    "chunk_index": c.chunk_index,
-                    "content": c.content,
-                    "text": c.text,
-                    "is_leaf": c.is_leaf,
-                    "hierarchy_level": c.hierarchy_level,
-                    "node_id": c.node_id,
-                    "parent_node_id": c.parent_node_id,
-                    "start_char": c.start_char,
-                    "end_char": c.end_char,
-                    "metadata_json": c.metadata_json or c.metadata_ or {},
-                    "embedding": c.embedding.tolist() if hasattr(c.embedding, "tolist") else c.embedding,
-                    "source": c.source
-                }
-                for c in chunks
-            ]
-        }
-        zip_file.writestr("metadata.json", json.dumps(metadata, ensure_ascii=False, indent=2))
-
-        patches_json = {
-            "patches": patches_data
-        }
-        zip_file.writestr("colpali_patches.json", json.dumps(patches_json, ensure_ascii=False))
-
-    zip_buffer.seek(0)
-    headers = {
-        'Content-Disposition': f'attachment; filename="export_doc_{document_id}.zip"'
+    metadata = {
+        "document": {
+            "title": document.title,
+            "filename": Path(document.source_file_path).name if document.source_file_path else None,
+            "document_type": document.document_type,
+            "content": document.content,
+            "processing_status": document.processing_status,
+            "processing_progress": document.processing_progress,
+            "is_paid": document.is_paid,
+            "source": document.source,
+        },
+        "chunks": [
+            {
+                "id": c.id,
+                "chunk_index": c.chunk_index,
+                "content": c.content,
+                "text": c.text,
+                "is_leaf": c.is_leaf,
+                "hierarchy_level": c.hierarchy_level,
+                "node_id": c.node_id,
+                "parent_node_id": c.parent_node_id,
+                "start_char": c.start_char,
+                "end_char": c.end_char,
+                "metadata_json": c.metadata_json or c.metadata_ or {},
+                "embedding": c.embedding.tolist() if hasattr(c.embedding, "tolist") else c.embedding,
+                "source": c.source
+            }
+            for c in chunks
+        ]
     }
-    return StreamingResponse(zip_buffer, media_type="application/zip", headers=headers)
+
+    tmp = tempfile.NamedTemporaryFile(prefix="export_doc_", suffix=".zip", delete=False)
+    try:
+        with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED, False) as zip_file:
+            zip_file.write(file_path, arcname=file_path.name)
+            zip_file.writestr("metadata.json", json.dumps(metadata, ensure_ascii=False, indent=2))
+            zip_file.writestr("colpali_patches.json", json.dumps({"patches": patches_data}, ensure_ascii=False))
+        tmp.close()
+    except Exception:
+        tmp.close()
+        try:
+            os.remove(tmp.name)
+        except OSError:
+            pass
+        raise
+
+    return FileResponse(
+        tmp.name,
+        media_type="application/zip",
+        filename=f"export_doc_{document_id}.zip",
+        background=BackgroundTask(os.remove, tmp.name),
+    )
 
 
 @router.get("/export-all")
-async def export_all_library_documents(
+def export_all_library_documents(
     current_user: UserRead = Depends(require_permission("library.write")),
     session: Session = Depends(get_session)
 ):
     """
     Exporte tous les documents de la bibliothèque sous forme d'une archive ZIP globale.
     Chaque document est stocké dans un sous-dossier contenant son fichier source, ses métadonnées et ses patchs ColPali.
+
+    Comme l'export unitaire : archive écrite sur disque (fichier temporaire) puis
+    streamée via FileResponse, et endpoint synchrone (threadpool). Indispensable
+    ici car l'archive globale peut peser plusieurs centaines de Mo (vecteurs ColPali).
     """
-    import io
+    import os
+    import tempfile
     import zipfile
-    from fastapi.responses import StreamingResponse
+    from starlette.background import BackgroundTask
     from app.services.lancedb_service import get_colpali_table
 
     library = get_or_create_user_library(session, current_user.id)
     documents = get_documents_by_library(session, library.id, current_user.id)
     
-    zip_buffer = io.BytesIO()
-    table = get_colpali_table()
+    # La table ColPali peut être absente/illisible : on n'interrompt pas
+    # l'export global pour autant (les patchs sont alors simplement omis).
+    try:
+        table = get_colpali_table()
+    except Exception as ex:
+        logger.warning(f"LanceDB indisponible pour l'export global, patchs ignorés : {ex}")
+        table = None
+
+    tmp = tempfile.NamedTemporaryFile(prefix="export_library_all_", suffix=".zip", delete=False)
     
-    with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+    with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED, False) as zip_file:
         for document in documents:
             if not document.source_file_path:
                 continue
@@ -1611,11 +1635,13 @@ async def export_all_library_documents(
             patches_json = {"patches": patches_data}
             zip_file.writestr(f"{doc_dir}/colpali_patches.json", json.dumps(patches_json, ensure_ascii=False))
             
-    zip_buffer.seek(0)
-    headers = {
-        'Content-Disposition': 'attachment; filename="export_library_all.zip"'
-    }
-    return StreamingResponse(zip_buffer, media_type="application/zip", headers=headers)
+    tmp.close()
+    return FileResponse(
+        tmp.name,
+        media_type="application/zip",
+        filename="export_library_all.zip",
+        background=BackgroundTask(os.remove, tmp.name),
+    )
 
 
 @router.post("/documents/import", response_model=DocumentRead, status_code=status.HTTP_201_CREATED)
@@ -1693,6 +1719,7 @@ async def import_library_document(
                 session.refresh(new_doc)
 
                 old_chunk_to_new_chunk_id = {}
+                new_chunks = []
                 for chunk_data in chunks_data:
                     new_chunk = DocumentChunk(
                         document_id=new_doc.id,
@@ -1711,10 +1738,14 @@ async def import_library_document(
                         source=chunk_data.get("source") or inferred_source
                     )
                     session.add(new_chunk)
-                    session.commit()
-                    session.refresh(new_chunk)
+                    new_chunks.append((chunk_data["id"], new_chunk))
 
-                    old_chunk_to_new_chunk_id[chunk_data["id"]] = new_chunk.id
+                # Un seul flush pour tous les chunks : évite des centaines d'aller-retours
+                # SQL qui faisaient dépasser le timeout du reverse proxy en prod.
+                session.flush()
+                for old_id, nc in new_chunks:
+                    old_chunk_to_new_chunk_id[old_id] = nc.id
+                session.commit()
 
                 if "colpali_patches.json" in namelist:
                     patches_str = zip_file.read("colpali_patches.json").decode("utf-8")
@@ -1801,6 +1832,7 @@ async def import_library_document(
                     session.refresh(new_doc)
 
                     old_chunk_to_new_chunk_id = {}
+                    new_chunks = []
                     for chunk_data in chunks_data:
                         new_chunk = DocumentChunk(
                             document_id=new_doc.id,
@@ -1819,10 +1851,13 @@ async def import_library_document(
                             source=chunk_data.get("source") or inferred_source
                         )
                         session.add(new_chunk)
-                        session.commit()
-                        session.refresh(new_chunk)
+                        new_chunks.append((chunk_data["id"], new_chunk))
 
-                        old_chunk_to_new_chunk_id[chunk_data["id"]] = new_chunk.id
+                    # Flush unique par document (cf. Mode 1) au lieu d'un commit par chunk.
+                    session.flush()
+                    for old_id, nc in new_chunks:
+                        old_chunk_to_new_chunk_id[old_id] = nc.id
+                    session.commit()
 
                     patches_file = next((f for f in files_in_folder if f.endswith("colpali_patches.json")), None)
                     if patches_file:

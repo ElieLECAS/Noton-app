@@ -2470,7 +2470,13 @@ endblock %} {% block content %}
             });
             if (!r.ok) {
                 const err = await r.json().catch(() => ({}));
-                return alert(err.detail || "Upload échoué");
+                if (r.status === 413) {
+                    return alert(
+                        "Fichier(s) trop volumineux : le serveur (reverse proxy) a rejeté l'envoi. " +
+                        "Augmentez la taille max autorisée côté proxy (ex. nginx client_max_body_size).",
+                    );
+                }
+                return alert(err.detail || `Upload échoué (HTTP ${r.status})`);
             }
             closeUploadModal();
             await loadDocuments();
@@ -2761,7 +2767,13 @@ endblock %} {% block content %}
         });
         if (!r.ok) {
             const err = await r.json().catch(() => ({}));
-            return alert(err.detail || "Import échoué");
+            if (r.status === 413) {
+                return alert(
+                    "Fichier trop volumineux : le serveur (reverse proxy) a rejeté l'envoi. " +
+                    "Augmentez la taille max autorisée côté proxy (ex. nginx client_max_body_size).",
+                );
+            }
+            return alert(err.detail || `Import échoué (HTTP ${r.status})`);
         }
         
         closeImportModal();

@@ -7,7 +7,14 @@ from typing import Any, Dict, List, Literal, Optional, Self
 from pydantic import BaseModel, Field, ValidationInfo, field_validator, model_validator
 from sqlmodel import Session
 
-from app.services.category_catalog import CONTENT_CATEGORY_SLUGS, get_active_categories, get_active_categories_for_prompt
+from app.services.category_catalog import (
+    CONTENT_CATEGORY_SLUGS,
+    DOC_TYPE_LABELS,
+    LIFECYCLE_PHASE_LABELS,
+    SYMPTOM_LABELS,
+    get_active_categories,
+    get_active_categories_for_prompt,
+)
 from app.services.slot_catalog import INTENT_CHOICES, MATERIAL_CHOICES, SUPPLIER_CHOICES, supplier_slug_to_source
 
 logger = logging.getLogger(__name__)
@@ -56,6 +63,11 @@ class QuerySignalsExtraction(BaseModel):
     primary_source: Optional[str] = None
     material_hint: Optional[str] = None
     detected_references: List[str] = Field(default_factory=list)
+    # Facettes multi-axes (validées contre les axes correspondants)
+    detected_symptom: Optional[str] = None
+    lifecycle_phase: Optional[str] = None
+    doc_type_hint: Optional[str] = None
+    symptom_freeform: Optional[str] = None  # symptôme hors-liste (non boosté)
     confidence: float = Field(default=0.8, ge=0.0, le=1.0)
 
     @field_validator("entities", mode="before")
@@ -130,6 +142,36 @@ class QuerySignalsExtraction(BaseModel):
         self.inferred_categories = list(dict.fromkeys(valid))[:_MAX_INFERRED_CATEGORIES]
         return self
 
+    @model_validator(mode="after")
+    def sanitize_axis_facets(self, info: ValidationInfo) -> Self:
+        ctx = info.context or {}
+
+        def _norm(value: Optional[str]) -> Optional[str]:
+            if not value:
+                return None
+            return str(value).strip().lower().replace(" ", "_") or None
+
+        doc_allowed: frozenset[str] = ctx.get("allowed_doc_type_slugs") or frozenset()
+        life_allowed: frozenset[str] = ctx.get("allowed_lifecycle_slugs") or frozenset()
+        symptom_allowed: frozenset[str] = ctx.get("allowed_symptom_slugs") or frozenset()
+
+        dt = _norm(self.doc_type_hint)
+        self.doc_type_hint = dt if (dt and (not doc_allowed or dt in doc_allowed)) else None
+
+        lp = _norm(self.lifecycle_phase)
+        self.lifecycle_phase = lp if (lp and (not life_allowed or lp in life_allowed)) else None
+
+        sym = _norm(self.detected_symptom)
+        if sym and symptom_allowed and sym not in symptom_allowed:
+            # Symptôme hors-liste → conservé en freeform (non boosté), pas en detected_symptom.
+            if not self.symptom_freeform:
+                self.symptom_freeform = self.detected_symptom
+            sym = None
+        self.detected_symptom = sym
+        if self.symptom_freeform:
+            self.symptom_freeform = str(self.symptom_freeform).strip() or None
+        return self
+
 
 class LightweightQuerySignals(BaseModel):
     intent: Optional[str] = None
@@ -139,6 +181,10 @@ class LightweightQuerySignals(BaseModel):
     primary_source: Optional[str] = None
     material_hint: Optional[str] = None
     detected_references: List[str] = Field(default_factory=list)
+    detected_symptom: Optional[str] = None
+    lifecycle_phase: Optional[str] = None
+    doc_type_hint: Optional[str] = None
+    symptom_freeform: Optional[str] = None
     confidence: float = 0.8
 
 
@@ -150,9 +196,35 @@ def get_allowed_category_slugs(session: Optional[Session] = None) -> frozenset[s
     return frozenset(CONTENT_CATEGORY_SLUGS)
 
 
+def get_allowed_slugs_context(session: Optional[Session] = None) -> Dict[str, frozenset]:
+    """Contexte de validation par axe pour QuerySignalsExtraction."""
+    from app.services.category_catalog import (
+        AXIS_DOC_TYPE,
+        AXIS_LIFECYCLE_PHASE,
+        AXIS_SYMPTOM,
+        get_allowed_slugs_by_axis,
+    )
+
+    by_axis = get_allowed_slugs_by_axis(session)
+    all_slugs = frozenset().union(*by_axis.values()) if by_axis else get_allowed_category_slugs(session)
+    return {
+        "allowed_category_slugs": all_slugs,
+        "allowed_doc_type_slugs": by_axis.get(AXIS_DOC_TYPE, frozenset()),
+        "allowed_lifecycle_slugs": by_axis.get(AXIS_LIFECYCLE_PHASE, frozenset()),
+        "allowed_symptom_slugs": by_axis.get(AXIS_SYMPTOM, frozenset()),
+    }
+
+
+def _format_axis_vocab(labels: Dict[str, str]) -> str:
+    return " | ".join(f"{slug} ({label})" for slug, label in labels.items())
+
+
 def build_extract_signals_prompt(session: Session) -> str:
     category_catalog_json = get_active_categories_for_prompt(session)
     intent_values = " | ".join(INTENT_CHOICES.keys())
+    symptom_values = _format_axis_vocab(SYMPTOM_LABELS)
+    lifecycle_values = _format_axis_vocab(LIFECYCLE_PHASE_LABELS)
+    doc_type_values = _format_axis_vocab(DOC_TYPE_LABELS)
     return f"""Tu es un analyseur de requêtes pour un assistant documentaire menuiserie (PROFERM).
 
 Extrais les signaux suivants du message utilisateur.
@@ -183,9 +255,18 @@ Extrais les signaux suivants du message utilisateur.
 
 6. DETECTED_REFERENCES : codes, modèles, normes cités sous forme exacte (ex. "Perform 70").
 
+7. DETECTED_SYMPTOM (optionnel) : si la question décrit un PROBLÈME/SYMPTÔME SAV, choisis UN slug
+   STRICTEMENT parmi : {symptom_values}. Sinon null. Si le symptôme n'existe pas dans cette liste,
+   laisse detected_symptom=null et mets le libellé court dans symptom_freeform.
+
+8. LIFECYCLE_PHASE (optionnel) : phase du cycle de vie, UN slug parmi : {lifecycle_values}. Sinon null.
+
+9. DOC_TYPE_HINT (optionnel) : nature de document recherchée, UN slug parmi : {doc_type_values}. Sinon null.
+
 RÈGLES :
 - entities : privilégier le rappel (mieux vaut en extraire trop que pas assez)
 - inferred_categories : strictement limité au catalogue fourni ; ne jamais inventer de slug
+- detected_symptom / lifecycle_phase / doc_type_hint : strictement parmi les listes fournies
 - confidence : 0.0-1.0 selon clarté globale de la demande
 
 Retourne UNIQUEMENT un JSON :
@@ -196,21 +277,27 @@ Retourne UNIQUEMENT un JSON :
   "primary_source": null,
   "material_hint": null,
   "detected_references": [],
+  "detected_symptom": null,
+  "lifecycle_phase": null,
+  "doc_type_hint": null,
+  "symptom_freeform": null,
   "confidence": 0.8
 }}
 """
 
 
 def parse_and_validate_signals(raw: dict, *, session: Optional[Session] = None) -> QuerySignalsExtraction:
-    allowed = get_allowed_category_slugs(session)
-    return QuerySignalsExtraction.model_validate(
-        raw,
-        context={"allowed_category_slugs": allowed},
-    )
+    context = get_allowed_slugs_context(session)
+    return QuerySignalsExtraction.model_validate(raw, context=context)
 
 
 def to_lightweight_signals(extraction: QuerySignalsExtraction) -> LightweightQuerySignals:
-    """Convertit l'extraction validée en signaux pipeline avec entity_texts dédupliqués."""
+    """Convertit l'extraction validée en signaux pipeline avec entity_texts dédupliqués.
+
+    Fusionne les facettes d'axe (symptôme, phase, doc_type) dans ``inferred_categories``
+    afin que le boost de retrieval (qui matche par slug) les prenne en charge sans
+    modification, tout en conservant les champs dédiés pour le matching d'arbres SAV.
+    """
     seen: set[str] = set()
     entity_texts: List[str] = []
 
@@ -226,13 +313,22 @@ def to_lightweight_signals(extraction: QuerySignalsExtraction) -> LightweightQue
             seen.add(key)
             entity_texts.append(ref.strip())
 
+    fused_categories = list(extraction.inferred_categories)
+    for slug in (extraction.detected_symptom, extraction.lifecycle_phase, extraction.doc_type_hint):
+        if slug and slug not in fused_categories:
+            fused_categories.append(slug)
+
     return LightweightQuerySignals(
         intent=extraction.intent,
         entities=extraction.entities,
         entity_texts=entity_texts,
-        inferred_categories=extraction.inferred_categories,
+        inferred_categories=fused_categories,
         primary_source=extraction.primary_source,
         material_hint=extraction.material_hint,
         detected_references=extraction.detected_references,
+        detected_symptom=extraction.detected_symptom,
+        lifecycle_phase=extraction.lifecycle_phase,
+        doc_type_hint=extraction.doc_type_hint,
+        symptom_freeform=extraction.symptom_freeform,
         confidence=extraction.confidence,
     )

@@ -926,6 +926,8 @@ async def create_category(
         slug=slug,
         label=payload.label.strip(),
         description=(payload.description or "").strip(),
+        axis=(payload.axis or "task").strip().lower(),
+        parent_slug=payload.parent_slug,
         is_active=True,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow(),
@@ -954,6 +956,10 @@ async def update_category(
         row.label = payload.label.strip()
     if payload.description is not None:
         row.description = payload.description.strip()
+    if payload.axis is not None:
+        row.axis = payload.axis.strip().lower()
+    if payload.parent_slug is not None:
+        row.parent_slug = payload.parent_slug
     if payload.is_active is not None:
         row.is_active = payload.is_active
     row.updated_at = datetime.utcnow()

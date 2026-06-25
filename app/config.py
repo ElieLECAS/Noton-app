@@ -141,6 +141,20 @@ class Settings(BaseSettings):
     CONTEXTUAL_ENRICHMENT_BATCH_OVERLAP: int = int(
         os.getenv("CONTEXTUAL_ENRICHMENT_BATCH_OVERLAP", "1")
     )
+    # Enrichissement multimodal sélectif : redonne les PNG des pages au LLM d'enrichissement
+    # uniquement pour les batches procéduraux/visuels (où la séquence du geste est portée
+    # par le schéma). Texte-seul pour le reste (commercial, garantie, normes).
+    CONTEXTUAL_ENRICHMENT_MULTIMODAL_ENABLED: bool = os.getenv(
+        "CONTEXTUAL_ENRICHMENT_MULTIMODAL_ENABLED", "true"
+    ).strip().lower() in ("true", "1", "yes", "on")
+    CONTEXTUAL_ENRICHMENT_VISUAL_CATEGORIES: list = [
+        c.strip().lower()
+        for c in os.getenv(
+            "CONTEXTUAL_ENRICHMENT_VISUAL_CATEGORIES",
+            "mounting,hardware_adjustment,glazing,drilling_constraints",
+        ).split(",")
+        if c.strip()
+    ]
 
     # Retraitement multimodal par page (pymupdf + mistral-small vision)
     MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"
@@ -260,6 +274,13 @@ class Settings(BaseSettings):
     # Boosts retrieval (signaux query understanding)
     # Catégories : appliquées avant fusion RRF ; source/matériau/entités : post-retrieval
     RETRIEVAL_CATEGORY_BOOST: float = float(os.getenv("RETRIEVAL_CATEGORY_BOOST", "0.15"))
+    # Pondération du boost catégorie par axe (un slug symptôme pèse plus qu'un doc_type).
+    # JSON optionnel via env RETRIEVAL_AXIS_BOOST_WEIGHTS ; défaut sinon. Axe absent → poids 1.0.
+    RETRIEVAL_AXIS_BOOST_WEIGHTS: dict = (
+        __import__("json").loads(os.getenv("RETRIEVAL_AXIS_BOOST_WEIGHTS"))
+        if os.getenv("RETRIEVAL_AXIS_BOOST_WEIGHTS")
+        else {"symptom": 2.0, "task": 1.0, "doc_type": 0.6, "lifecycle_phase": 0.5}
+    )
     RETRIEVAL_SOURCE_BOOST_MAX: float = float(os.getenv("RETRIEVAL_SOURCE_BOOST_MAX", "0.8"))
     RETRIEVAL_MATERIAL_BOOST: float = float(os.getenv("RETRIEVAL_MATERIAL_BOOST", "0.3"))
     RETRIEVAL_ENTITY_BOOST: float = float(os.getenv("RETRIEVAL_ENTITY_BOOST", "0.1"))

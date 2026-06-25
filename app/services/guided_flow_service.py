@@ -209,6 +209,7 @@ async def run_guided_turn(
     active_state: Optional[Dict[str, Any]] = None,
     flow_kind: str = "howto",
     topic: str = "",
+    symptom: str = "",
 ) -> GuidedTurnResult:
     """Exécute un tour de guidage et retourne l'étape d'aiguillage à streamer.
 
@@ -225,16 +226,40 @@ async def run_guided_turn(
 
     resuming = gsession is not None
     if gsession is None:
+        norm_flow = flow_kind if flow_kind in ("howto", "diagnostic") else "howto"
+        # Phase 2 : un arbre validé prime sur la génération dynamique s'il correspond.
+        from app.services.authored_tree_service import match_authored_tree
+
+        inferred_for_match = suggested_categories_for_intent(
+            "installation" if norm_flow == "howto" else "troubleshooting"
+        )
+        if symptom:
+            inferred_for_match = [symptom, *inferred_for_match]
+        matched_tree = match_authored_tree(
+            session,
+            space_id=space_id,
+            flow_kind=norm_flow,
+            symptom=symptom or None,
+            inferred_categories=inferred_for_match,
+            topic=topic or user_message,
+            user_message=user_message,
+        )
         gsession = GuidedSession(
             conversation_id=conversation_id,
             space_id=space_id,
             user_id=user_id,
             topic=topic or user_message[:300],
-            flow_kind=flow_kind if flow_kind in ("howto", "diagnostic") else "howto",
-            source_mode="dynamic",
+            flow_kind=norm_flow,
+            source_mode="authored" if matched_tree else "dynamic",
+            authored_tree_id=matched_tree.id if matched_tree else None,
+            current_node_key=matched_tree.root_node_key if matched_tree else None,
             status="active",
             path=[],
-            accumulated_signals={"original_user_message": user_message, "entity_texts": []},
+            accumulated_signals={
+                "original_user_message": user_message,
+                "entity_texts": [],
+                "symptom": symptom or "",
+            },
         )
         session.add(gsession)
         session.flush()  # obtenir l'id avant d'écrire le pointeur query_context
@@ -248,11 +273,32 @@ async def run_guided_turn(
     if resuming:
         _record_user_answer(path, user_message=user_message, guided_choice=guided_choice)
 
-    # 3. Récupération documentaire scopée
+    # 3. Résoudre le nœud d'arbre validé (Phase 2) si la session est en mode authored.
+    authored_node = None
+    if gsession.source_mode == "authored":
+        from app.services.authored_tree_service import resolve_authored_node
+
+        authored_node = resolve_authored_node(
+            session, gsession, guided_choice=guided_choice, resuming=resuming
+        )
+        if authored_node is None:
+            logger.info(
+                "[guided_flow] arbre %s en impasse → repli génération dynamique",
+                gsession.authored_tree_id,
+            )
+
+    # 4. Récupération documentaire scopée (par le nœud si authored, sinon par l'intent)
     observations = _collect_observations(path)
     base_query = topic or accumulated.get("original_user_message") or user_message
     query_text = " ".join([base_query] + observations[-3:]).strip() or user_message
-    synth_signals = _synth_signals(flow_kind, accumulated, topic=topic)
+    if authored_node is not None:
+        from app.services.authored_tree_service import signals_for_authored_node
+
+        synth_signals = signals_for_authored_node(flow_kind, accumulated, topic, authored_node)
+        if authored_node.message:
+            query_text = (query_text + " " + authored_node.message).strip()
+    else:
+        synth_signals = _synth_signals(flow_kind, accumulated, topic=topic)
 
     from app.services.space_search_service import search_technical_passages
 
@@ -266,17 +312,22 @@ async def run_guided_turn(
     )
     passages = retrieval.get("passages") or []
 
-    # 4. Générer l'étape d'aiguillage (force escalade si max d'étapes atteint)
+    # 5. Construire l'étape : depuis le nœud validé (authored) ou par génération dynamique.
     step_index = len(path)
-    force_terminal = step_index >= settings.GUIDED_MAX_STEPS
-    step = await generate_routing_step(
-        flow_kind=flow_kind,
-        topic=topic,
-        passages=passages,
-        path=path,
-        step_index=step_index,
-        force_terminal=force_terminal,
-    )
+    if authored_node is not None:
+        from app.services.authored_tree_service import routing_step_from_node
+
+        step = routing_step_from_node(authored_node, passages)
+    else:
+        force_terminal = step_index >= settings.GUIDED_MAX_STEPS
+        step = await generate_routing_step(
+            flow_kind=flow_kind,
+            topic=topic,
+            passages=passages,
+            path=path,
+            step_index=step_index,
+            force_terminal=force_terminal,
+        )
 
     # 5. Enrichir le récap d'escalade à partir du parcours réel (étapes testées avant celle-ci)
     escalation_recap = step.escalation_recap.model_dump() if step.escalation_recap else None
@@ -316,7 +367,7 @@ async def run_guided_turn(
             "user_selection": None,
             "free_text": None,
             "observations": [],
-            "node_key": None,
+            "node_key": authored_node.node_key if authored_node is not None else None,
             "timestamp": datetime.utcnow().isoformat(),
         }
     )
@@ -324,7 +375,10 @@ async def run_guided_turn(
     # 8. Persister la GuidedSession (réassignations explicites → détection JSON)
     gsession.path = path
     gsession.accumulated_signals = accumulated
-    gsession.current_node_key = None
+    # Conserver le pointeur de nœud en mode authored (resolve_authored_node l'a mis à jour) ;
+    # le réinitialiser pour le mode dynamique.
+    if gsession.source_mode != "authored":
+        gsession.current_node_key = None
     gsession.updated_at = datetime.utcnow()
     if step.is_terminal:
         gsession.status = "escalated" if step.step_type == "escalation" else "resolved"

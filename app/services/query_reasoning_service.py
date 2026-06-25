@@ -125,6 +125,7 @@ class GuidedModeDecision(BaseModel):
     is_guided: bool
     flow_kind: str = "howto"  # 'howto' (pose/montage chantier) | 'diagnostic' (SAV)
     topic: str = ""
+    detected_symptom: str = ""  # slug axis=symptom si flow_kind=diagnostic, sinon ""
     reasoning: str = ""
 
 
@@ -167,7 +168,17 @@ async def decide_guided_mode(
     """
     logger.info("[guided_mode] Analyse — query=%r", (query or "")[:120])
     try:
-        messages = [{"role": "system", "content": GUIDED_MODE_SYSTEM_PROMPT}]
+        from app.services.category_catalog import SYMPTOM_LABELS
+
+        symptom_vocab = " | ".join(f"{slug} ({label})" for slug, label in SYMPTOM_LABELS.items())
+        system_prompt = (
+            GUIDED_MODE_SYSTEM_PROMPT
+            + "\n\nSYMPTÔMES SAV connus (slugs) : "
+            + symptom_vocab
+            + "\nSi flow_kind=\"diagnostic\" et qu'un symptôme de cette liste correspond, renseigne "
+            "\"detected_symptom\" avec son slug exact ; sinon \"detected_symptom\": \"\"."
+        )
+        messages = [{"role": "system", "content": system_prompt}]
         history_snippet = ""
         if history:
             lines = []
@@ -199,17 +210,23 @@ async def decide_guided_mode(
         if flow_kind not in ("howto", "diagnostic"):
             flow_kind = "howto"
 
+        detected_symptom = str(data.get("detected_symptom") or "").strip().lower()
+        if detected_symptom and detected_symptom not in SYMPTOM_LABELS:
+            detected_symptom = ""
+
         decision = GuidedModeDecision(
             is_guided=bool(data.get("is_guided")),
             flow_kind=flow_kind,
             topic=str(data.get("topic") or "").strip()[:300],
+            detected_symptom=detected_symptom,
             reasoning=str(data.get("reasoning") or "").strip(),
         )
         logger.info(
-            "[guided_mode] is_guided=%s flow_kind=%s topic=%r",
+            "[guided_mode] is_guided=%s flow_kind=%s topic=%r symptom=%r",
             decision.is_guided,
             decision.flow_kind,
             decision.topic,
+            decision.detected_symptom,
         )
         return decision
     except Exception as e:

@@ -26,6 +26,7 @@ from .document_category import (
     DocumentCategoryUpdate,
 )
 from .chunk_category_relation import ChunkCategoryRelation
+from .category_candidate import CategoryCandidate, CategoryCandidateRead
 from .guided_session import GuidedSession
 from .guided_tree import GuidedTree, GuidedTreeNode
 
@@ -88,6 +89,8 @@ __all__ = [
     "DocumentCategoryCreate",
     "DocumentCategoryUpdate",
     "ChunkCategoryRelation",
+    "CategoryCandidate",
+    "CategoryCandidateRead",
     "GuidedSession",
     "GuidedTree",
     "GuidedTreeNode",

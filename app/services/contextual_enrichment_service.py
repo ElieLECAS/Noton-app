@@ -32,35 +32,86 @@ from app.services.kag_extraction_service import build_kag_batches
 
 logger = logging.getLogger(__name__)
 
-CONTEXTUAL_ENRICHMENT_VERSION = "contextual_enrichment_v1"
+CONTEXTUAL_ENRICHMENT_VERSION = "contextual_enrichment_v3"
 CONTENT_TYPE_CONTEXTUAL_ENRICHMENT = "contextual_enrichment"
 
-_ENRICHMENT_SYSTEM_PROMPT = """Tu es rédacteur technique documentaire pour documents menuiserie / profilés PVC-alu.
-On te donne le texte transcrit de plusieurs pages consécutives d'un document technique,
-les catégories détectées et les entités nommées extraites.
+# Rôles de chunk L2 orientés accompagnement (au lieu d'une synthèse plate unique)
+CHUNK_ROLE_SYNTHESIS = "synthesis"
+CHUNK_ROLE_PROCEDURAL = "procedural_step"
+CHUNK_ROLE_DIAGNOSTIC = "diagnostic_unit"
+_VALID_CHUNK_ROLES = frozenset(
+    {CHUNK_ROLE_SYNTHESIS, CHUNK_ROLE_PROCEDURAL, CHUNK_ROLE_DIAGNOSTIC}
+)
+# section_type L1 considérés "visuels" → déclenchent l'enrichissement multimodal sélectif
+_VISUAL_SECTION_TYPES = frozenset({"diagram", "table", "step"})
 
-Produis des chunks de synthèse factuels, un par thème ou catégorie pertinent détecté dans le batch.
+_ENRICHMENT_SYSTEM_PROMPT = """Tu es technicien expert en menuiserie (profilés PVC, aluminium et hybrides PVC-alu)
+ET rédacteur d'une base de connaissances RAG destinée à des poseurs, techniciens SAV et conseillers.
+On te donne le texte transcrit de plusieurs pages consécutives d'un document technique,
+les catégories détectées et les entités nommées extraites. Parfois les images des pages.
+
+Ta mission n'est PAS de recopier ni de résumer platement : tu RÉÉCRIS et EXPLICITES le contenu avec
+ton expertise métier. Tu rends explicite ce que le document tient pour implicite — la FONCTION et le
+RÔLE de chaque élément dans la menuiserie, son emplacement, son matériau, ce qu'il permet de réaliser
+et ses conditions de mise en œuvre. Le résultat doit se lire comme une fiche technique professionnelle,
+dense et autonome : un assistant doit pouvoir y répondre sans avoir relu la page source.
+Bannis le style « liste à plat » : une énumération de codes ou de cotes doit toujours être précédée de
+ce que la famille d'éléments FAIT, puis détaillée élément par élément.
+
+Adapte la réécriture au TYPE DE CATÉGORIE : applique les consignes fournies dans le message utilisateur
+(section « CONSIGNES DE RÉÉCRITURE PAR CATÉGORIE ») pour chaque catégorie présente dans le batch.
+
+Produis des chunks factuels, un par thème/notion. Chaque chunk a un RÔLE adapté à son usage final :
+accompagnement chantier (pose) ou SAV (diagnostic).
+
+Choix du rôle (champ chunk_role) selon le category_slug :
+- "procedural_step" : si le contenu décrit une ÉTAPE de pose/montage/réglage
+  (category_slug = mounting, hardware_adjustment, sealing, drilling_constraints…).
+  Découpe la procédure en étapes ORDONNÉES (un chunk par étape).
+- "diagnostic_unit" : si le contenu décrit un PROBLÈME/SYMPTÔME SAV et sa résolution
+  (category_slug = troubleshooting ou un slug de symptôme : infiltration_eau, blocage_manoeuvre…).
+- "synthesis" : sinon (spécifications, commercial, garantie, normes…). Comportement par défaut.
 
 Règles absolues :
 1. Renvoie UNIQUEMENT un objet JSON valide (aucun texte hors JSON).
 2. Utilise les noms de produits, gammes, références et normes EXACTEMENT tels qu'ils apparaissent dans le texte source.
 3. Jamais de déictiques : interdiction de "ce schéma", "ce profil", "celui-ci", "l'image montre", "voir ci-dessus".
    Remplace par le nom précis ("le profilé PVC Kömmerling 76 AD", "la gâche OB Droite", "la gamme Perform", etc.).
-4. Texte directement réutilisable par un LLM RAG : autonome, dense, factuel, style notice technique.
-5. Chaque chunk = 1 notion/thème. Maximum 600 tokens (~2200 caractères) par chunk.
-6. Ne pas inventer d'information absente du texte source.
+4. "content" = texte autonome, dense, TECHNIQUE et EXPLICITE, style fiche/notice professionnelle,
+   directement réutilisable par un LLM RAG. Explique systématiquement la fonction et le rôle métier
+   des éléments (jamais une simple liste : décris ce que la famille de pièces FAIT, puis détaille chaque référence).
+5. Chaque chunk = 1 notion/étape/symptôme. Maximum 600 tokens (~2200 caractères) par chunk.
+6. Tu peux mobiliser le savoir métier menuiserie STANDARD pour expliciter la FONCTION d'un type d'élément
+   (ex. rôle d'un habillage, d'une garniture de joint, d'un renfort, d'un seuil PMR). Mais n'invente JAMAIS
+   de valeur, cote, référence, performance, norme ou nom de gamme absent du texte source.
 7. Croise les informations réparties sur les pages du batch quand elles concernent le même thème.
-8. Le category_slug doit correspondre à une catégorie détectée dans le batch (slug exact).
-9. source_page = numéro de la page principale où le thème est le plus documenté.
+8. category_slug = slug exact d'une catégorie détectée dans le batch.
+9. source_page = page principale où le thème est le plus documenté.
+10. Champs structurés selon le rôle (laisse vide/null si non applicable) :
+    - procedural_step : step_number (ordre), action (geste précis), components[], tools[], dimensions[], precaution, next_condition (condition de passage à l'étape suivante).
+    - diagnostic_unit : symptom (slug ou libellé), probable_cause, verification (test à effectuer), resolution (correction).
+    Le champ "content" reste TOUJOURS rempli (résumé dense), même quand les champs structurés le sont.
 
 Format de réponse OBLIGATOIRE :
 {{
   "enrichment_chunks": [
     {{
       "category_slug": "mounting",
-      "theme": "Pose du profil seuil Profine 76",
+      "chunk_role": "procedural_step",
+      "theme": "Pose du profil seuil Profine 76 — étape 1",
       "content": "...",
-      "source_page": 2
+      "source_page": 2,
+      "step_number": 1,
+      "action": "Positionner le seuil ... ",
+      "components": ["seuil PMR Profine 76"],
+      "tools": ["visseuse"],
+      "dimensions": ["jeu 5 mm"],
+      "precaution": "Ne pas percer la zone d'étanchéité",
+      "next_condition": "Seuil calé et de niveau",
+      "symptom": null,
+      "probable_cause": null,
+      "verification": null,
+      "resolution": null
     }}
   ]
 }}"""
@@ -70,7 +121,106 @@ _ENRICHMENT_USER_TEMPLATE = (
     "Texte transcrit par page :\n{page_text}\n\n"
     "Catégories détectées par page :\n{categories_text}\n\n"
     "Entités extraites par page :\n{entities_text}\n\n"
-    "Produis les chunks de synthèse factuels selon les règles du système."
+    "CONSIGNES DE RÉÉCRITURE PAR CATÉGORIE (applique celles dont la catégorie est présente ci-dessus) :\n"
+    "{playbooks}\n\n"
+    "Réécris et explicite les chunks selon ces consignes et les règles du système."
+)
+
+
+# ---------------------------------------------------------------------------
+# Consignes de réécriture par catégorie (« playbooks »)
+# ---------------------------------------------------------------------------
+# Chaque entrée dit au LLM SOUS QUEL ANGLE et AVEC QUELLE STRUCTURE réécrire le
+# contenu d'une catégorie, pour passer d'une transcription plate à une fiche
+# technique métier explicite. Seules les consignes des catégories présentes dans
+# le batch sont injectées dans le prompt (voir `_build_playbook_section`).
+# Clés = slugs de l'axe `task` (cf. category_catalog.CONTENT_CATEGORY_SLUGS).
+CATEGORY_ENRICHMENT_PLAYBOOKS: Dict[str, str] = {
+    "parts_references": (
+        "Ne te contente JAMAIS de lister les codes. Regroupe les pièces par FAMILLE FONCTIONNELLE "
+        "(habillages, garnitures de joint, renforts, tapées/appuis, embouts, profilés complémentaires…). "
+        "Pour chaque famille, écris d'abord 1 phrase sur sa FONCTION dans la menuiserie (rôle, emplacement, "
+        "matériau), puis détaille chaque référence : code exact + désignation + cotes (largeur/épaisseur/"
+        "inertie avec unité) + matériau (PVC, alu, EPDM, TPE) + ce qu'elle permet de réaliser ou sa compatibilité."
+    ),
+    "mounting": (
+        "Réécris en séquence opératoire de chantier. Pour chaque opération : le geste précis, l'outil, "
+        "les cotes/jeux à respecter, le pas de vissage/fixation (en mm), et la précaution (zone à ne pas "
+        "percer, sens du joint, ordre de calage). Explique le POURQUOI quand le texte le permet (report de "
+        "charge, étanchéité, dilatation). Découpe en étapes ORDONNÉES (rôle procedural_step)."
+    ),
+    "hardware_adjustment": (
+        "Décris l'organe de quincaillerie (gâche, roulette, charnière, compas, crémone…), son réglage "
+        "(sens, amplitude, outil/clé), l'EFFET observable du réglage et le repère de bon réglage. "
+        "Relie symptôme → réglage correctif quand c'est pertinent (utile au SAV)."
+    ),
+    "sealing": (
+        "Explique la fonction d'étanchéité (air et/ou eau) de chaque garniture, joint ou bavette : où elle "
+        "s'applique, comment elle se monte (sens, continuité, recouvrement, retours d'angle), le pas de "
+        "fixation et le matériau (EPDM, TPE, mastic). Précise le rôle (barrière à l'eau, étanchéité à l'air, "
+        "drainage) et la conséquence d'une pose défectueuse."
+    ),
+    "drilling_constraints": (
+        "Formule sans ambiguïté ce qui PEUT et ce qui NE PEUT PAS être percé/usiné, les zones INTERDITES "
+        "(chambres de renfort, canaux de drainage, plans d'étanchéité) et la CONSÉQUENCE d'un non-respect. "
+        "Mets les interdictions en tête et garde les formulations impératives."
+    ),
+    "dimensions_tolerances": (
+        "Restitue chaque cote chiffrée avec son unité, l'élément concerné et son contexte (mini/maxi, "
+        "tolérance, faux-aplomb en mm/m, jeu de pose, entraxe). Indique la limite à ne pas dépasser et "
+        "ce qui se passe au-delà (perte d'étanchéité, jeu de manœuvre, refus de garantie)."
+    ),
+    "load_capacity": (
+        "Explique les limites structurelles : poids max de vantail/remplissage, report de charge, entraxe "
+        "des pattes, inertie des renforts (en cm⁴) et ce que la valeur IMPLIQUE concrètement (rigidité, "
+        "hauteur/largeur max admissible). Relie chaque renfort à la capacité qu'il autorise."
+    ),
+    "material_profile": (
+        "Décris la nature et la composition du profilé/matériau (PVC, alu, hybride PVC-alu), sa structure "
+        "(nombre de chambres, renfort acier, rupture de pont thermique) et ses propriétés fonctionnelles "
+        "(isolation, rigidité, tenue). Donne les caractéristiques chiffrées et explique leur portée d'emploi."
+    ),
+    "glazing": (
+        "Détaille le vitrage : composition (épaisseurs des verres, lame d'air/gaz), performances thermiques "
+        "(Ug/Uw) et acoustiques (Rw), épaisseur de remplissage admissible et l'effet sur le confort. "
+        "Relie chaque spécification à la performance qu'elle apporte."
+    ),
+    "product_range": (
+        "Identifie la gamme/famille produit et ses variantes ; resitue chaque référence dans sa gamme et "
+        "son domaine d'emploi (frappe, coulissant, PMR…). Caractérise ce qui distingue la gamme et son "
+        "positionnement, sans argumentaire creux."
+    ),
+    "regulatory": (
+        "Restitue l'exigence normative (DTU, NF EN, PMR, DTA, Avis Technique) précisément : ce qu'elle "
+        "impose, à quel élément/ouvrage, et l'OBLIGATION concrète qui en découle pour la pose ou le produit. "
+        "Cite la référence du document normatif EXACTEMENT telle qu'écrite."
+    ),
+    "warranty": (
+        "Précise la durée, le périmètre couvert, les conditions à respecter et les EXCLUSIONS. Formule en "
+        "termes d'engagement et de ce qui fait PERDRE la garantie (défaut de pose, modification non autorisée)."
+    ),
+    "certification": (
+        "Précise le marquage/certificat (CE, label, PV d'essai, classement AEV), ce qu'il ATTESTE, "
+        "l'organisme et la portée. Relie l'attestation à la performance prouvée (étanchéité, résistance)."
+    ),
+    "commercial": (
+        "Reformule l'argumentaire en bénéfices CONCRETS et caractéristiques vérifiables (design, finitions, "
+        "performances), sans emphase marketing. Garde uniquement les faits exploitables en conseil client."
+    ),
+    "product_comparison": (
+        "Structure la comparaison PAR CRITÈRE (performance, dimensions, usage, finition) entre produits ou "
+        "gammes, puis conclus sur le CAS D'EMPLOI de chacun pour guider le choix."
+    ),
+    "troubleshooting": (
+        "Structure en unité de diagnostic (rôle diagnostic_unit) : symptôme observable côté client, cause "
+        "probable, vérification à effectuer, correction. Emploie à la fois le vocabulaire client et le "
+        "vocabulaire technique pour que la requête utilisateur matche."
+    ),
+}
+
+_DEFAULT_PLAYBOOK = (
+    "Réécris de façon technique, dense et explicite : nomme précisément chaque élément, explicite sa "
+    "fonction et sa portée métier, conserve toutes les valeurs et références exactes du texte source."
 )
 
 
@@ -79,6 +229,41 @@ class EnrichmentChunkItem(BaseModel):
     theme: str
     content: str
     source_page: int = Field(ge=1)
+    chunk_role: str = CHUNK_ROLE_SYNTHESIS
+    # procedural_step
+    step_number: Optional[int] = None
+    action: Optional[str] = None
+    components: List[str] = Field(default_factory=list)
+    tools: List[str] = Field(default_factory=list)
+    dimensions: List[str] = Field(default_factory=list)
+    precaution: Optional[str] = None
+    next_condition: Optional[str] = None
+    # diagnostic_unit
+    symptom: Optional[str] = None
+    probable_cause: Optional[str] = None
+    verification: Optional[str] = None
+    resolution: Optional[str] = None
+
+    def structured_metadata(self) -> Dict[str, object]:
+        """Champs structurés à sérialiser en metadata_json (selon le rôle)."""
+        if self.chunk_role == CHUNK_ROLE_PROCEDURAL:
+            return {
+                "step_number": self.step_number,
+                "action": self.action,
+                "components": self.components,
+                "tools": self.tools,
+                "dimensions": self.dimensions,
+                "precaution": self.precaution,
+                "next_condition": self.next_condition,
+            }
+        if self.chunk_role == CHUNK_ROLE_DIAGNOSTIC:
+            return {
+                "symptom": self.symptom,
+                "probable_cause": self.probable_cause,
+                "verification": self.verification,
+                "resolution": self.resolution,
+            }
+        return {}
 
 
 class BatchEnrichmentResponse(BaseModel):
@@ -215,12 +400,47 @@ def _format_batch_context(
     )
 
 
+def _collect_batch_slugs(
+    batch_pages: List[int],
+    categories_by_page: Dict[int, List[str]],
+) -> List[str]:
+    """Slugs de catégories présents dans le batch, dans l'ordre de première apparition."""
+    seen: List[str] = []
+    for pno in batch_pages:
+        for slug in categories_by_page.get(pno) or []:
+            if slug and slug not in seen:
+                seen.append(slug)
+    return seen
+
+
+def _build_playbook_section(slugs: List[str]) -> str:
+    """Concatène les consignes de réécriture des catégories présentes dans le batch.
+
+    Seules les catégories du batch sont injectées (prompt focalisé). Si aucune n'a de
+    consigne dédiée, on retombe sur une consigne générique de réécriture technique.
+    """
+    from app.services.category_catalog import DEFAULT_CATEGORY_LABELS
+
+    lines: List[str] = []
+    for slug in slugs:
+        playbook = CATEGORY_ENRICHMENT_PLAYBOOKS.get(slug)
+        if not playbook:
+            continue
+        label = DEFAULT_CATEGORY_LABELS.get(slug, slug)
+        lines.append(f"- {label} ({slug}) : {playbook}")
+    if not lines:
+        return _DEFAULT_PLAYBOOK
+    return "\n".join(lines)
+
+
 def _call_enrichment_api(
     document_title: str,
     batch_pages: List[int],
     page_text: str,
     categories_text: str,
     entities_text: str,
+    playbooks_text: str,
+    images_b64: Optional[List[str]] = None,
 ) -> dict:
     from app.services.multimodal_page_service import (
         _mistral_chat_completion,
@@ -234,11 +454,22 @@ def _call_enrichment_api(
         page_text=page_text[:20000],
         categories_text=categories_text[:4000],
         entities_text=entities_text[:4000],
+        playbooks=playbooks_text[:4000],
     )
+
+    if images_b64:
+        # Enrichissement multimodal sélectif : texte + PNG des pages (séquence visuelle du geste).
+        user_content: object = [{"type": "text", "text": user_text}]
+        for image_b64 in images_b64:
+            user_content.append(
+                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{image_b64}"}}
+            )
+    else:
+        user_content = user_text
 
     messages = [
         {"role": "system", "content": _ENRICHMENT_SYSTEM_PROMPT},
-        {"role": "user", "content": user_text},
+        {"role": "user", "content": user_content},
     ]
 
     raw = _mistral_chat_completion(
@@ -277,18 +508,66 @@ def _coerce_enrichment_response(
         source_page = int(item.get("source_page") or batch_pages[len(batch_pages) // 2])
         if source_page not in batch_pages:
             source_page = batch_pages[len(batch_pages) // 2]
-        items.append(
-            EnrichmentChunkItem(
-                category_slug=slug,
-                theme=theme,
-                content=content,
-                source_page=source_page,
-            )
+        role = (item.get("chunk_role") or CHUNK_ROLE_SYNTHESIS).strip().lower()
+        if role not in _VALID_CHUNK_ROLES:
+            role = CHUNK_ROLE_SYNTHESIS
+        normalized = dict(item)
+        normalized.update(
+            category_slug=slug,
+            theme=theme,
+            content=content,
+            source_page=source_page,
+            chunk_role=role,
         )
+        try:
+            items.append(EnrichmentChunkItem.model_validate(normalized))
+        except ValidationError:
+            # Champs structurés malformés → on conserve au moins le chunk dense.
+            items.append(
+                EnrichmentChunkItem(
+                    category_slug=slug,
+                    theme=theme,
+                    content=content,
+                    source_page=source_page,
+                    chunk_role=role,
+                )
+            )
 
     if not items:
         raise ValueError(f"Aucun chunk d'enrichissement valide pour batch {batch_pages}")
     return BatchEnrichmentResponse(enrichment_chunks=items)
+
+
+def _batch_is_visual(
+    batch_pages: List[int],
+    chunks_by_page: Dict[int, List[DocumentChunk]],
+    categories_by_page: Dict[int, List[str]],
+) -> bool:
+    """Vrai si le batch est procédural/visuel → enrichissement multimodal pertinent."""
+    visual_cats = frozenset(settings.CONTEXTUAL_ENRICHMENT_VISUAL_CATEGORIES or [])
+    for pno in batch_pages:
+        if visual_cats.intersection(categories_by_page.get(pno) or []):
+            return True
+        for chunk in chunks_by_page.get(pno) or []:
+            section_type = (chunk.metadata_json or {}).get("section_type")
+            if section_type in _VISUAL_SECTION_TYPES:
+                return True
+    return False
+
+
+def _render_batch_images(pdf_path: str, batch_pages: List[int]) -> List[str]:
+    """Rend les PNG des pages du batch en base64 (best-effort)."""
+    from app.services.multimodal_page_service import render_page_png_cached
+    import base64
+
+    images: List[str] = []
+    for pno in batch_pages:
+        try:
+            png = render_page_png_cached(pdf_path, pno, dpi=settings.PAGE_EXTRACTION_DPI)
+            images.append(base64.b64encode(png).decode("ascii"))
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[Enrichment] Rendu PNG page %s échoué : %s", pno, exc)
+    return images
 
 
 def extract_batch_enrichment_response(
@@ -298,6 +577,7 @@ def extract_batch_enrichment_response(
     categories_by_page: Dict[int, List[str]],
     entities_by_page: Dict[int, List[str]],
     valid_category_slugs: frozenset[str],
+    pdf_path: Optional[str] = None,
 ) -> Optional[BatchEnrichmentResponse]:
     if not batch_pages:
         return None
@@ -311,6 +591,25 @@ def extract_batch_enrichment_response(
     if not page_text.strip():
         return None
 
+    playbooks_text = _build_playbook_section(
+        _collect_batch_slugs(batch_pages, categories_by_page)
+    )
+
+    images_b64: Optional[List[str]] = None
+    if (
+        settings.CONTEXTUAL_ENRICHMENT_MULTIMODAL_ENABLED
+        and pdf_path
+        and _batch_is_visual(batch_pages, chunks_by_page, categories_by_page)
+    ):
+        rendered = _render_batch_images(pdf_path, batch_pages)
+        images_b64 = rendered or None
+        if images_b64:
+            logger.info(
+                "[Enrichment] Batch %s enrichi en multimodal (%s images)",
+                batch_pages,
+                len(images_b64),
+            )
+
     try:
         for attempt in range(2):
             try:
@@ -320,6 +619,8 @@ def extract_batch_enrichment_response(
                     page_text,
                     categories_text,
                     entities_text,
+                    playbooks_text,
+                    images_b64=images_b64,
                 )
                 return _coerce_enrichment_response(raw, batch_pages, valid_category_slugs)
             except (ValidationError, ValueError, json.JSONDecodeError) as exc:
@@ -382,6 +683,7 @@ def _persist_enrichment_chunks(
             "enrichment_model": _enrichment_model(),
             "category_slug": item.category_slug,
             "theme": item.theme,
+            "chunk_role": item.chunk_role,
             "source_pages": batch_pages,
             "source_page": source_page,
             "page_no": source_page,
@@ -392,6 +694,11 @@ def _persist_enrichment_chunks(
             "node_id": node_id,
             "parent_node_id": parent_node_id,
         }
+        # Champs structurés (procedural_step / diagnostic_unit) → exploités par le
+        # générateur d'arbres d'accompagnement (Étape 8).
+        structured = item.structured_metadata()
+        if structured:
+            meta["structured"] = structured
 
         chunk = DocumentChunk(
             document_id=document.id,
@@ -419,12 +726,18 @@ def _persist_enrichment_chunks(
 
         category_id = category_id_by_slug.get(item.category_slug)
         if category_id is not None:
-            for space_id in space_ids:
+            # Lien au niveau document : une seule ligne par (chunk, catégorie), sans espace.
+            exists = session.exec(
+                select(ChunkCategoryRelation).where(
+                    ChunkCategoryRelation.chunk_id == chunk.id,
+                    ChunkCategoryRelation.category_id == category_id,
+                )
+            ).first()
+            if exists is None:
                 session.add(
                     ChunkCategoryRelation(
                         chunk_id=chunk.id,
                         category_id=category_id,
-                        space_id=space_id,
                         document_id=document.id,
                         page_no=source_page,
                         confidence=0.9,
@@ -511,6 +824,8 @@ def run_contextual_enrichment_for_document(document_id: int) -> dict:
 
         category_id_by_slug = get_category_id_by_slug(session)
         valid_category_slugs = frozenset(category_id_by_slug.keys())
+        # pdf_path pour l'enrichissement multimodal sélectif (None → texte-seul partout)
+        pdf_path = document.source_file_path or None
 
         page_numbers = sorted(chunks_by_page.keys())
         batches = build_kag_batches(
@@ -532,6 +847,7 @@ def run_contextual_enrichment_for_document(document_id: int) -> dict:
                     categories_by_page,
                     entities_by_page,
                     valid_category_slugs,
+                    pdf_path,
                 ): batch
                 for batch in batches
             }

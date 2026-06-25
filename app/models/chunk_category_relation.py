@@ -8,12 +8,17 @@ from sqlmodel import Field, SQLModel
 
 
 class ChunkCategoryRelation(SQLModel, table=True):
-    """Relation page/chunk ↔ catégorie de contenu."""
+    """Relation chunk ↔ catégorie de contenu, AU NIVEAU DOCUMENT (indépendante de l'espace).
+
+    La catégorisation découle du contenu (KAG / enrichissement), identique quel que soit
+    l'espace : on ne stocke donc qu'une ligne par (chunk, catégorie). Le scope par espace
+    est dérivé à la requête via l'appartenance ``DocumentSpace`` (document ↔ espace), si bien
+    qu'ajouter un document à un espace y fait apparaître ses catégories dynamiquement.
+    """
 
     id: Optional[int] = Field(default=None, primary_key=True)
     chunk_id: int = Field(foreign_key="documentchunk.id", index=True)
     category_id: int = Field(foreign_key="documentcategory.id", index=True)
-    space_id: int = Field(foreign_key="space.id", index=True)
     document_id: int = Field(index=True)
     page_no: int = Field(default=0)
     confidence: float = Field(default=1.0)
