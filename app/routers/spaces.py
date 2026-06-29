@@ -23,6 +23,11 @@ from app.services.space_category_service import (
     get_space_category_page_detail,
     get_space_category_pages,
 )
+from app.services.space_theme_tree_service import (
+    build_space_theme_tree,
+    get_space_theme_node_pages,
+)
+from app.services.space_theme_synthesis_service import generate_space_theme_synthesis
 import logging
 
 logger = logging.getLogger(__name__)
@@ -133,6 +138,12 @@ class SpaceSearchPageDetailResponse(BaseModel):
     enrichment_chunks: List[SpaceCategoryEnrichmentChunkItem] = Field(default_factory=list)
     consolidated_markdown: str = ""
     navigation: SpaceCategoryPageNavigation
+
+
+class ThemeSynthesisRequest(BaseModel):
+    node_key: str = Field(..., min_length=1, max_length=128)
+    node_label: str = ""
+    axis: str = "task"
 
 
 @router.get("", response_model=List[SpaceRead])
@@ -296,6 +307,64 @@ async def get_space_kag_graph(
         space_id,
         max_nodes=max_nodes,
         max_edges=max_edges,
+    )
+
+
+@router.get("/{space_id}/tree")
+async def get_space_theme_tree(
+    space_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+    axis: str = Query("task"),
+):
+    """Arbre thématique (carte mentale) : racine → familles → catégories, avec comptes."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    return build_space_theme_tree(session, space_id, axis=axis)
+
+
+@router.get("/{space_id}/tree/pages")
+async def get_space_theme_tree_pages(
+    space_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+    node_key: str = Query(..., min_length=1, max_length=128),
+    axis: str = Query("task"),
+):
+    """Pages (PDF + texte) rattachées à un nœud de l'arbre thématique."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    return get_space_theme_node_pages(session, space_id, node_key, axis)
+
+
+@router.post("/{space_id}/tree/synthesis")
+async def synthesize_space_theme(
+    space_id: int,
+    request: ThemeSynthesisRequest,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Synthèse CAG d'un nœud de l'arbre : injecte le texte des documents rattachés."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    return await generate_space_theme_synthesis(
+        session,
+        space_id,
+        request.node_key,
+        request.node_label,
+        request.axis,
     )
 
 

@@ -63,13 +63,14 @@ def _category_boost_for_chunk(
 def _bulk_get_page_categories(
     session: Session,
     pages: Sequence[Tuple[int, int]],
-) -> Dict[Tuple[int, int], Dict[str, str]]:
+) -> Dict[Tuple[int, int], Dict[str, Tuple[str, float]]]:
     """
-    Catégories par page (slug → axis) via chunkcategoryrelation (source de vérité).
+    Catégories par page (slug → (axis, confidence)) via chunkcategoryrelation.
 
     Plus robuste que la lecture du metadata d'un chunk représentatif : un hit ColPali
     porte le chunk_id de l'ancre L0 (sans catégories), alors que les catégories vivent
-    sur les chunks L1 de la même page. L'axe permet de pondérer le boost par facette.
+    sur les chunks L1 de la même page. L'axe pondère le boost par facette ; la confiance
+    (MAX sur la page) évite qu'un tag faible/secondaire fasse remonter une page à tort.
     """
     wanted = {(int(d), int(p)) for d, p in pages}
     if not wanted:
@@ -81,22 +82,24 @@ def _bulk_get_page_categories(
     rows = session.execute(
         text(
             """
-            SELECT ccr.document_id, ccr.page_no, dc.slug, dc.axis
+            SELECT ccr.document_id, ccr.page_no, dc.slug, dc.axis,
+                   MAX(ccr.confidence) AS confidence
             FROM chunkcategoryrelation ccr
             INNER JOIN documentcategory dc ON dc.id = ccr.category_id
             WHERE ccr.document_id IN :doc_ids
               AND ccr.page_no IN :page_nos
+            GROUP BY ccr.document_id, ccr.page_no, dc.slug, dc.axis
             """
         ),
         {"doc_ids": doc_ids, "page_nos": page_nos},
     ).all()
 
-    result: Dict[Tuple[int, int], Dict[str, str]] = {}
-    for document_id, page_no, slug, axis in rows:
+    result: Dict[Tuple[int, int], Dict[str, Tuple[str, float]]] = {}
+    for document_id, page_no, slug, axis, confidence in rows:
         key = (int(document_id), int(page_no))
         if key not in wanted or not slug:
             continue
-        result.setdefault(key, {})[slug] = axis or "task"
+        result.setdefault(key, {})[slug] = (axis or "task", float(confidence if confidence is not None else 1.0))
     return result
 
 
@@ -128,13 +131,19 @@ def apply_category_boost_to_fused_hits(
 
     boosted = 0
     for hit in fused_hits:
-        slug_axis = cats_by_page.get((int(hit.document_id), int(hit.page_no)), {})
-        matched = inferred & {s.lower() for s in slug_axis}
+        slug_meta = cats_by_page.get((int(hit.document_id), int(hit.page_no)), {})
+        matched = inferred & {s.lower() for s in slug_meta}
         if not matched:
             continue
-        # Contribution pondérée par axe (symptôme > task > doc_type), plafonnée aux 3 plus fortes.
+        # Contribution pondérée par axe (symptôme > task > doc_type) ET par la confiance
+        # de la catégorie sur la page, plafonnée aux 3 plus fortes. Une page faiblement
+        # taggée (confiance basse) ne remonte donc plus à tort.
         contributions = sorted(
-            (float(axis_weights.get(slug_axis.get(slug, "task"), 1.0)) for slug in matched),
+            (
+                float(axis_weights.get(slug_meta.get(slug, ("task", 1.0))[0], 1.0))
+                * float(slug_meta.get(slug, ("task", 1.0))[1])
+                for slug in matched
+            ),
             reverse=True,
         )[:3]
         factor = 1.0 + settings.RETRIEVAL_CATEGORY_BOOST * sum(contributions)

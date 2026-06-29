@@ -62,7 +62,7 @@ async def reason_query_intent(query: str, history: Optional[List[Dict[str, str]]
         
         response = await chat(
             "", 
-            model=settings.MODEL_FAST, 
+            model=settings.MODEL_QUERY_UNDERSTANDING, 
             context=messages,
             response_format={"type": "json_object"}
         )
@@ -199,7 +199,7 @@ async def decide_guided_mode(
 
         response = await chat(
             "",
-            model=settings.MODEL_FAST,
+            model=settings.MODEL_QUERY_UNDERSTANDING,
             context=messages,
             response_format={"type": "json_object"},
         )
@@ -250,7 +250,7 @@ async def decide_retrieval_route(query: str, history: Optional[List[Dict[str, st
         
         response = await chat(
             "", 
-            model=settings.MODEL_FAST, 
+            model=settings.MODEL_QUERY_UNDERSTANDING, 
             context=messages,
             response_format={"type": "json_object"}
         )

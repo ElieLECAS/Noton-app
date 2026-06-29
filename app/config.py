@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     OPENAI_MODEL: Optional[List[str]] = None
     # Modèle de chat unique (plus de presets private/fast/powerful)
     MODEL_FAST: str = os.getenv("MODEL_FAST", "mistral-small-latest")
+    # Modèle dédié à la phase « compréhension de requête » (route, signaux, vagueness,
+    # génération de requêtes) : tâches JSON simples → petit modèle rapide. Évite de payer
+    # la latence d'un gros modèle (mistral-large) sur 4-5 appels avant le retrieval.
+    MODEL_QUERY_UNDERSTANDING: str = os.getenv("MODEL_QUERY_UNDERSTANDING", "mistral-small-latest")
     # Provider pour le LLM (mistral | ollama)
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "mistral")
     # Limite globale par défaut pour la longueur des réponses des LLM
@@ -41,6 +45,10 @@ class Settings(BaseSettings):
     SPACE_CHAT_MAX_TOKENS: Optional[int] = None
     SPACE_CHAT_TEMPERATURE: float = 0.0
     SPACE_CHAT_TOP_P: Optional[float] = None
+    # Synthèse "carte mentale" (CAG plein-contexte par nœud d'arbre thématique)
+    SYNTHESIS_MAX_TOKENS: int = int(os.getenv("SYNTHESIS_MAX_TOKENS", "2500"))
+    SYNTHESIS_MAX_CONTEXT_CHARS: int = int(os.getenv("SYNTHESIS_MAX_CONTEXT_CHARS", "350000"))
+    SYNTHESIS_TEMPERATURE: float = float(os.getenv("SYNTHESIS_TEMPERATURE", "0.2"))
     # Document Processing
     MAX_CONCURRENT_DOCUMENTS: int = 1
     EMBEDDING_BATCH_SIZE: int = 16
@@ -117,6 +125,13 @@ class Settings(BaseSettings):
     KAG_RETRIEVAL_HOP_LIMIT: int = int(os.getenv("KAG_RETRIEVAL_HOP_LIMIT", "1"))
     KAG_ENTITY_MATCH_MIN_SCORE: float = float(os.getenv("KAG_ENTITY_MATCH_MIN_SCORE", "0.35"))
     KAG_BATCH_SIZE: int = int(os.getenv("KAG_BATCH_SIZE", "3"))
+    # Précision de classification : seuil de confiance + plafond de catégories par chunk
+    # (axes task/symptom notés par le LLM). Au-dessous du seuil → catégorie ignorée.
+    CATEGORY_MIN_CONFIDENCE: float = float(os.getenv("CATEGORY_MIN_CONFIDENCE", "0.55"))
+    CATEGORY_MAX_PER_CHUNK: int = int(os.getenv("CATEGORY_MAX_PER_CHUNK", "3"))
+    # Carte mentale : entités croisées sous chaque catégorie (top-N co-occurrentes).
+    THEME_ENTITY_MAX_PER_CATEGORY: int = int(os.getenv("THEME_ENTITY_MAX_PER_CATEGORY", "6"))
+    THEME_ENTITY_MIN_COOCCURRENCE: int = int(os.getenv("THEME_ENTITY_MIN_COOCCURRENCE", "2"))
     KAG_BATCH_OVERLAP: int = int(os.getenv("KAG_BATCH_OVERLAP", "1"))
 
     # Enrichissement contextuel inter-pages (synthèse factuelle par thème/catégorie)
@@ -245,6 +260,17 @@ class Settings(BaseSettings):
 
     # Retrieval multimodal page-centric (refonte RRF)
     USE_MULTIMODAL_RETRIEVAL: bool = os.getenv("USE_MULTIMODAL_RETRIEVAL", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Query understanding (phase intention) — chaque étape = 1 appel LLM séquentiel.
+    # On peut couper les étapes optionnelles pour réduire la latence avant retrieval.
+    # Multi-query (groupes) : OFF par défaut (étape récente la plus coûteuse, retourne
+    # « single » dans la grande majorité des cas).
+    QUERY_MULTI_GROUP_ENABLED: bool = os.getenv("QUERY_MULTI_GROUP_ENABLED", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Évaluation de vagueness (clarification si demande trop floue) : ON par défaut.
+    QUERY_VAGUENESS_CHECK_ENABLED: bool = os.getenv("QUERY_VAGUENESS_CHECK_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "10"))

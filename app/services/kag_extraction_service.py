@@ -19,7 +19,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import Dict, List, Optional, Sequence, Tuple
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, field_validator
 from sqlalchemy import text
 from sqlmodel import Session, select
 
@@ -80,9 +80,29 @@ class KagExtractedRelation(BaseModel):
     confidence: float = Field(default=0.8, ge=0.0, le=1.0)
 
 
+class ScoredCategory(BaseModel):
+    """Catégorie de chunk notée par le LLM (axe task/symptom)."""
+
+    slug: str
+    confidence: float = Field(default=0.7, ge=0.0, le=1.0)
+    primary: bool = False
+
+
 class ChunkCategoryItem(BaseModel):
     chunk_index: int = Field(ge=0)
-    categories: List[str] = Field(default_factory=list)
+    categories: List[ScoredCategory] = Field(default_factory=list)
+
+    @field_validator("categories", mode="before")
+    @classmethod
+    def _coerce_categories(cls, value):
+        """Tolère l'ancien format (liste de slugs nus) et le nouveau (objets notés)."""
+        coerced = []
+        for item in value or []:
+            if isinstance(item, str):
+                coerced.append({"slug": item})
+            else:
+                coerced.append(item)
+        return coerced
 
 
 class KagPageResponse(BaseModel):
@@ -175,7 +195,10 @@ Règles impératives — entités & relations :
 9. Maximum {max_entities} entités et {max_relations} relations par page.
 
 Règles impératives — catégorisation à facettes :
-10. Axe "task" et axe "symptom" → PAR CHUNK (champ chunk_categories). Pour chaque chunk_index, choisis UNIQUEMENT parmi les slugs des axes `task` et `symptom` fournis. Un chunk peut avoir 0 à plusieurs slugs.
+10. Axe "task" et axe "symptom" → PAR CHUNK (champ chunk_categories). Pour chaque chunk_index, renvoie une liste d'objets {{slug, confidence, primary}} en choisissant UNIQUEMENT parmi les slugs des axes `task` et `symptom` fournis.
+    - confidence ∈ [0,1] : à quel point le chunk traite EXPLICITEMENT ce thème (0.9 = sujet central, 0.6 = thème secondaire net, < 0.5 = ne pas inclure).
+    - primary : true pour LE thème dominant du chunk. Exactement UN primary=true par chunk (ou zéro si le chunk n'a aucune catégorie).
+    - N'inclus un slug que si confidence ≥ 0.5. Mieux vaut 1 catégorie juste que 3 douteuses. Un chunk peut avoir 0 catégorie.
 11. N'associe un slug qu'aux chunks dont le contenu traite EXPLICITEMENT du thème. Ne propage pas un slug task/symptom à tous les chunks.
 12. Axe "doc_type" et axe "lifecycle_phase" → AU NIVEAU PAGE (champs doc_types, lifecycle_phases). Ces facettes sont homogènes : décris la NATURE du document et la PHASE du cycle de vie (en général 1 valeur chacun). Choisis uniquement parmi les slugs fournis.
 13. N'invente JAMAIS de slug hors des listes pour task / doc_type / lifecycle_phase / symptom.
@@ -198,8 +221,11 @@ Format de réponse OBLIGATOIRE :
       "doc_types": ["<slug doc_type>"],
       "lifecycle_phases": ["<slug lifecycle_phase>"],
       "chunk_categories": [
-        {{ "chunk_index": 0, "categories": ["mounting", "hardware_adjustment"] }},
-        {{ "chunk_index": 2, "categories": ["infiltration_eau"] }}
+        {{ "chunk_index": 0, "categories": [
+            {{ "slug": "mounting", "confidence": 0.9, "primary": true }},
+            {{ "slug": "hardware_adjustment", "confidence": 0.6, "primary": false }}
+        ] }},
+        {{ "chunk_index": 2, "categories": [ {{ "slug": "infiltration_eau", "confidence": 0.85, "primary": true }} ] }}
       ],
       "symptom_candidates": ["<symptôme libre hors-liste, optionnel>"]
     }}
@@ -390,15 +416,60 @@ def _format_chunks_for_kag_prompt(chunks_by_page: Dict[int, List[DocumentChunk]]
     return "\n\n".join(parts)
 
 
+def _dedup_scored_categories(
+    items: List[ScoredCategory],
+    valid_slugs: frozenset[str],
+) -> List[ScoredCategory]:
+    """Valide les slugs et déduplique par slug (confiance max, primary OR)."""
+    by_slug: Dict[str, ScoredCategory] = {}
+    for sc in items or []:
+        slug = (getattr(sc, "slug", "") or "").strip().lower().replace(" ", "_")
+        if not slug or slug not in valid_slugs:
+            continue
+        conf = max(0.0, min(1.0, float(getattr(sc, "confidence", 0.7) or 0.0)))
+        primary = bool(getattr(sc, "primary", False))
+        prev = by_slug.get(slug)
+        if prev is None:
+            by_slug[slug] = ScoredCategory(slug=slug, confidence=conf, primary=primary)
+        else:
+            prev.confidence = max(prev.confidence, conf)
+            prev.primary = prev.primary or primary
+    return list(by_slug.values())
+
+
+def _apply_threshold_topk(
+    scored: List[ScoredCategory],
+    min_conf: float,
+    max_per_chunk: int,
+) -> List[ScoredCategory]:
+    """Filtre par seuil de confiance, plafonne au top-K, garantit un primary unique.
+
+    Pas de catégorie forcée : un chunk sans slug au-dessus du seuil reste sans tag.
+    """
+    above = sorted(
+        (s for s in scored if s.confidence >= min_conf),
+        key=lambda s: s.confidence,
+        reverse=True,
+    )
+    if max_per_chunk > 0:
+        above = above[:max_per_chunk]
+    if above:
+        marked = [s for s in above if s.primary]
+        chosen = max(marked, key=lambda s: s.confidence) if marked else above[0]
+        for s in above:
+            s.primary = s is chosen
+    return above
+
+
 def _normalize_chunk_categories(
     chunk_categories: List[ChunkCategoryItem],
     valid_slugs: frozenset[str],
 ) -> List[ChunkCategoryItem]:
     normalized: List[ChunkCategoryItem] = []
     for item in chunk_categories or []:
-        slugs = _normalize_category_slugs(item.categories, valid_slugs)
-        if slugs:
-            normalized.append(ChunkCategoryItem(chunk_index=item.chunk_index, categories=slugs))
+        scored = _dedup_scored_categories(item.categories, valid_slugs)
+        if scored:
+            normalized.append(ChunkCategoryItem(chunk_index=item.chunk_index, categories=scored))
     return normalized
 
 
@@ -1036,62 +1107,68 @@ def _persist_page_categories(
     if not page_chunks:
         return 0
 
-    index_to_slugs: Dict[int, List[str]] = {}
+    min_conf = settings.CATEGORY_MIN_CONFIDENCE
+    max_per_chunk = settings.CATEGORY_MAX_PER_CHUNK
+
+    # chunk_index → catégories task/symptom notées, filtrées (seuil + top-K).
+    index_to_scored: Dict[int, List[ScoredCategory]] = {}
     for item in chunk_categories or []:
-        slugs = _normalize_category_slugs(item.categories, valid_category_slugs)
-        if slugs:
-            index_to_slugs[item.chunk_index] = slugs
+        scored = _apply_threshold_topk(
+            _dedup_scored_categories(item.categories, valid_category_slugs),
+            min_conf,
+            max_per_chunk,
+        )
+        if scored:
+            index_to_scored[item.chunk_index] = scored
 
     page_wide = list(dict.fromkeys(page_wide_slugs or []))
 
-    # Position du chunk → ensemble de slugs (multi-axes), ordre préservé.
-    position_slugs: Dict[int, List[str]] = {idx: [] for idx in range(len(page_chunks))}
+    # Position du chunk → {slug: (confidence, primary)}.
+    position_scored: Dict[int, Dict[str, Tuple[float, bool]]] = {
+        idx: {} for idx in range(len(page_chunks))
+    }
 
-    def _add(idx: int, slugs: List[str]) -> None:
-        bucket = position_slugs.setdefault(idx, [])
-        for slug in slugs:
-            if slug not in bucket:
-                bucket.append(slug)
+    def _add(idx: int, slug: str, conf: float, primary: bool) -> None:
+        bucket = position_scored.setdefault(idx, {})
+        prev = bucket.get(slug)
+        if prev is None:
+            bucket[slug] = (conf, primary)
+        else:
+            bucket[slug] = (max(prev[0], conf), prev[1] or primary)
 
-    # 1. chunk-level task/symptom
-    for chunk_idx, slugs in index_to_slugs.items():
+    # 1. chunk-level task/symptom (notés)
+    for chunk_idx, scored in index_to_scored.items():
         if 0 <= chunk_idx < len(page_chunks):
-            _add(chunk_idx, slugs)
-    # 2. legacy page-level task fallback (uniquement si aucun chunk_categories)
-    if not index_to_slugs and category_slugs:
-        for idx in range(len(page_chunks)):
-            _add(idx, list(category_slugs))
-    # 3. page-wide doc_type/lifecycle → tous les chunks
+            for sc in scored:
+                _add(chunk_idx, sc.slug, sc.confidence, sc.primary)
+    # 2. legacy page-level task fallback (uniquement si aucun chunk_categories noté)
+    if not index_to_scored and category_slugs:
+        for slug in _normalize_category_slugs(category_slugs, valid_category_slugs):
+            for idx in range(len(page_chunks)):
+                _add(idx, slug, 0.6, False)
+    # 3. page-wide doc_type/lifecycle → tous les chunks (facette homogène, confiance pleine)
     if page_wide:
-        for idx in range(len(page_chunks)):
-            _add(idx, page_wide)
+        for slug in page_wide:
+            for idx in range(len(page_chunks)):
+                _add(idx, slug, 1.0, False)
 
     linked = 0
     for idx, chunk in enumerate(page_chunks):
-        slugs = position_slugs.get(idx) or []
-        if not slugs:
-            # Toujours marquer la version de taxonomie même sans slug.
-            meta = dict(chunk.metadata_json or {})
-            meta["kag_extraction_version"] = KAG_EXTRACTION_VERSION
-            meta["taxonomy_version"] = TAXONOMY_VERSION
-            chunk.metadata_json = meta
-            chunk.metadata_ = meta
-            session.add(chunk)
-            continue
+        bucket = position_scored.get(idx) or {}
 
         meta = dict(chunk.metadata_json or {})
-        existing = meta.get("categories") or []
-        if not isinstance(existing, list):
-            existing = []
-        merged_slugs = list(dict.fromkeys([*existing, *slugs]))
-        meta["categories"] = merged_slugs
+        if bucket:
+            existing = meta.get("categories") or []
+            if not isinstance(existing, list):
+                existing = []
+            meta["categories"] = list(dict.fromkeys([*existing, *bucket.keys()]))
         meta["kag_extraction_version"] = KAG_EXTRACTION_VERSION
         meta["taxonomy_version"] = TAXONOMY_VERSION
         chunk.metadata_json = meta
         chunk.metadata_ = meta
         session.add(chunk)
 
-        for slug in slugs:
+        for slug, (conf, primary) in bucket.items():
             category_id = category_id_by_slug.get(slug)
             if category_id is None:
                 continue
@@ -1103,6 +1180,16 @@ def _persist_page_categories(
                 )
             ).first()
             if exists is not None:
+                # Ré-extraction : rafraîchir confiance / primaire si changé.
+                changed = False
+                if abs((exists.confidence or 0.0) - conf) > 1e-6:
+                    exists.confidence = conf
+                    changed = True
+                if bool(getattr(exists, "is_primary", False)) != primary:
+                    exists.is_primary = primary
+                    changed = True
+                if changed:
+                    session.add(exists)
                 continue
             session.add(
                 ChunkCategoryRelation(
@@ -1110,7 +1197,8 @@ def _persist_page_categories(
                     category_id=category_id,
                     document_id=document_id,
                     page_no=page_no,
-                    confidence=1.0,
+                    confidence=conf,
+                    is_primary=primary,
                 )
             )
             linked += 1
@@ -1222,17 +1310,27 @@ def _merge_page_kag_responses(
         merged_categories = list(
             dict.fromkeys([*(existing.categories or []), *(page_resp.categories or [])])
         )
-        merged_chunk_map: Dict[int, List[str]] = {}
+        merged_chunk_map: Dict[int, Dict[str, ScoredCategory]] = {}
+
+        def _merge_scored_into(idx: int, scored_list: List[ScoredCategory]) -> None:
+            bucket = merged_chunk_map.setdefault(idx, {})
+            for sc in scored_list or []:
+                prev = bucket.get(sc.slug)
+                if prev is None:
+                    bucket[sc.slug] = ScoredCategory(
+                        slug=sc.slug, confidence=sc.confidence, primary=sc.primary
+                    )
+                else:
+                    prev.confidence = max(prev.confidence, sc.confidence)
+                    prev.primary = prev.primary or sc.primary
+
         for item in existing.chunk_categories:
-            merged_chunk_map[item.chunk_index] = list(item.categories)
+            _merge_scored_into(item.chunk_index, item.categories)
         for item in page_resp.chunk_categories:
-            prev = merged_chunk_map.get(item.chunk_index, [])
-            merged_chunk_map[item.chunk_index] = list(
-                dict.fromkeys([*prev, *item.categories])
-            )
+            _merge_scored_into(item.chunk_index, item.categories)
         merged_chunk_categories = [
-            ChunkCategoryItem(chunk_index=idx, categories=slugs)
-            for idx, slugs in sorted(merged_chunk_map.items())
+            ChunkCategoryItem(chunk_index=idx, categories=list(bucket.values()))
+            for idx, bucket in sorted(merged_chunk_map.items())
         ]
         merged_entities = {normalize_entity_name(e.name): e for e in existing.entities}
         for ent in page_resp.entities:

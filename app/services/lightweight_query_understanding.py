@@ -100,7 +100,7 @@ async def _node_extract_signals(state: LightweightState) -> Dict[str, Any]:
     try:
         response = await chat(
             "",
-            model=settings.MODEL_FAST,
+            model=settings.MODEL_QUERY_UNDERSTANDING,
             context=[
                 {"role": "system", "content": build_extract_signals_prompt(session)},
                 {"role": "user", "content": prompt},
@@ -127,6 +127,16 @@ async def _node_extract_signals(state: LightweightState) -> Dict[str, Any]:
 
 async def _node_assess_vagueness(state: LightweightState) -> Dict[str, Any]:
     full_request = _full_request_text(state)
+
+    # Mode rapide : on saute l'appel LLM de vagueness et on file au retrieval.
+    if not settings.QUERY_VAGUENESS_CHECK_ENABLED:
+        return {
+            "ready_for_retrieval": True,
+            "awaiting_vague_clarification": False,
+            "enriched_user_message": full_request,
+            "clarification": None,
+        }
+
     signals = state.get("signals") or {}
 
     history_snippet = ""
@@ -149,7 +159,7 @@ async def _node_assess_vagueness(state: LightweightState) -> Dict[str, Any]:
     try:
         response = await chat(
             "",
-            model=settings.MODEL_FAST,
+            model=settings.MODEL_QUERY_UNDERSTANDING,
             context=[
                 {"role": "system", "content": VAGUENESS_ASSESS_SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},
@@ -219,6 +229,15 @@ Retourne UNIQUEMENT un JSON :
 
 async def _node_plan_multi_query(state: LightweightState) -> Dict[str, Any]:
     user_message = _full_request_text(state)
+
+    # Mode rapide : pas de planification multi-requêtes → un seul groupe, 0 appel LLM.
+    if not settings.QUERY_MULTI_GROUP_ENABLED:
+        logger.info("[lightweight_qu] plan_multi_query — désactivé (mode rapide), strategy=single")
+        return {
+            "query_strategy": "single",
+            "query_groups": [{"label": "Recherche principale", "focus": user_message}],
+        }
+
     signals = state.get("signals") or {}
 
     entity_texts = [
@@ -236,7 +255,7 @@ async def _node_plan_multi_query(state: LightweightState) -> Dict[str, Any]:
     try:
         response = await chat(
             "",
-            model=settings.MODEL_FAST,
+            model=settings.MODEL_QUERY_UNDERSTANDING,
             context=[
                 {"role": "system", "content": PLAN_MULTI_QUERY_SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},
@@ -280,7 +299,7 @@ async def _generate_one_group_queries(
     try:
         response = await chat(
             "",
-            model=settings.MODEL_FAST,
+            model=settings.MODEL_QUERY_UNDERSTANDING,
             context=[
                 {"role": "system", "content": GENERATE_QUERIES_SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},

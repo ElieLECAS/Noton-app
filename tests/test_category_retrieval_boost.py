@@ -78,28 +78,32 @@ def test_bulk_get_chunk_categories_deduplicates_ids():
 
 def test_bulk_get_page_categories_groups_by_page():
     session = MagicMock()
+    # rows: (document_id, page_no, slug, axis, confidence)
     session.execute.return_value.all.return_value = [
-        (1, 2, "mounting"),
-        (1, 2, "warranty"),
-        (3, 5, "regulatory"),
+        (1, 2, "mounting", "task", 0.9),
+        (1, 2, "warranty", "task", 0.7),
+        (3, 5, "regulatory", "task", 1.0),
     ]
 
     result = _bulk_get_page_categories(session, [(1, 2), (3, 5)])
 
-    assert result == {(1, 2): ["mounting", "warranty"], (3, 5): ["regulatory"]}
+    assert result == {
+        (1, 2): {"mounting": ("task", 0.9), "warranty": ("task", 0.7)},
+        (3, 5): {"regulatory": ("task", 1.0)},
+    }
 
 
 def test_bulk_get_page_categories_filters_unwanted_pairs():
     """Le filtre IN doc/page peut sur-récupérer (1,9) — il doit être écarté."""
     session = MagicMock()
     session.execute.return_value.all.return_value = [
-        (1, 2, "mounting"),
-        (1, 9, "warranty"),  # même doc, page non demandée
+        (1, 2, "mounting", "task", 0.8),
+        (1, 9, "warranty", "task", 0.8),  # même doc, page non demandée
     ]
 
     result = _bulk_get_page_categories(session, [(1, 2), (3, 2)])
 
-    assert result == {(1, 2): ["mounting"]}
+    assert result == {(1, 2): {"mounting": ("task", 0.8)}}
 
 
 def test_bulk_get_page_categories_empty():
@@ -141,7 +145,7 @@ def test_fused_boost_noop_empty_hits(mounting_signals):
 
 def test_fused_boost_multiplicative_single_match(mounting_signals):
     hit = _unified(1, 2, 0.04)
-    with patch(_BOOST_PATH, return_value={(1, 2): ["mounting"]}):
+    with patch(_BOOST_PATH, return_value={(1, 2): {"mounting": ("task", 1.0)}}):
         apply_category_boost_to_fused_hits(MagicMock(), [hit], mounting_signals)
     assert hit.rrf_score == pytest.approx(0.04 * (1 + settings.RETRIEVAL_CATEGORY_BOOST))
 
@@ -151,21 +155,38 @@ def test_fused_boost_multiple_matches_cumulative_factor():
         inferred_categories=["mounting", "warranty"], confidence=0.9
     )
     hit = _unified(1, 2, 0.04)
-    with patch(_BOOST_PATH, return_value={(1, 2): ["mounting", "warranty"]}):
+    with patch(
+        _BOOST_PATH,
+        return_value={(1, 2): {"mounting": ("task", 1.0), "warranty": ("task", 1.0)}},
+    ):
         apply_category_boost_to_fused_hits(MagicMock(), [hit], signals)
     assert hit.rrf_score == pytest.approx(0.04 * (1 + 2 * settings.RETRIEVAL_CATEGORY_BOOST))
 
 
+def test_fused_boost_weighted_by_confidence():
+    """Un tag faiblement noté booste moins qu'un tag à pleine confiance."""
+    signals = LightweightQuerySignals(inferred_categories=["mounting"], confidence=0.9)
+    strong = _unified(1, 2, 0.04)
+    weak = _unified(2, 2, 0.04)
+    with patch(_BOOST_PATH, return_value={(1, 2): {"mounting": ("task", 1.0)}}):
+        apply_category_boost_to_fused_hits(MagicMock(), [strong], signals)
+    with patch(_BOOST_PATH, return_value={(2, 2): {"mounting": ("task", 0.5)}}):
+        apply_category_boost_to_fused_hits(MagicMock(), [weak], signals)
+    assert strong.rrf_score == pytest.approx(0.04 * (1 + settings.RETRIEVAL_CATEGORY_BOOST * 1.0))
+    assert weak.rrf_score == pytest.approx(0.04 * (1 + settings.RETRIEVAL_CATEGORY_BOOST * 0.5))
+    assert weak.rrf_score < strong.rrf_score
+
+
 def test_fused_boost_case_insensitive(mounting_signals):
     hit = _unified(1, 2, 0.04)
-    with patch(_BOOST_PATH, return_value={(1, 2): ["Mounting"]}):
+    with patch(_BOOST_PATH, return_value={(1, 2): {"Mounting": ("task", 1.0)}}):
         apply_category_boost_to_fused_hits(MagicMock(), [hit], mounting_signals)
     assert hit.rrf_score > 0.04
 
 
 def test_fused_boost_no_match_unchanged(mounting_signals):
     hit = _unified(1, 2, 0.04)
-    with patch(_BOOST_PATH, return_value={(1, 2): ["warranty"]}):
+    with patch(_BOOST_PATH, return_value={(1, 2): {"warranty": ("task", 1.0)}}):
         apply_category_boost_to_fused_hits(MagicMock(), [hit], mounting_signals)
     assert hit.rrf_score == 0.04
 
@@ -176,7 +197,7 @@ def test_fused_boost_resorts_and_promotes_categorized_page(mounting_signals):
     low = _unified(1, 2, 0.028)    # catégorisée mounting
     hits = [high, low]
 
-    with patch(_BOOST_PATH, return_value={(1, 1): [], (1, 2): ["mounting"]}):
+    with patch(_BOOST_PATH, return_value={(1, 1): {}, (1, 2): {"mounting": ("task", 1.0)}}):
         apply_category_boost_to_fused_hits(MagicMock(), hits, mounting_signals)
 
     # 0.028 * 1.15 = 0.0322 > 0.030
@@ -190,7 +211,7 @@ def test_fused_boost_works_on_page_retrieval_hit_without_final_rank(mounting_sig
     hit = PageRetrievalHit(document_id=1, page_no=2, rrf_score=0.04, chunk_id=10)
     assert not hasattr(hit, "final_rank")
 
-    with patch(_BOOST_PATH, return_value={(1, 2): ["mounting"]}):
+    with patch(_BOOST_PATH, return_value={(1, 2): {"mounting": ("task", 1.0)}}):
         apply_category_boost_to_fused_hits(MagicMock(), [hit], mounting_signals)
 
     assert hit.rrf_score == pytest.approx(0.04 * (1 + settings.RETRIEVAL_CATEGORY_BOOST))
@@ -199,7 +220,7 @@ def test_fused_boost_works_on_page_retrieval_hit_without_final_rank(mounting_sig
 def test_fused_boost_custom_magnitude_from_settings(mounting_signals):
     hit = _unified(1, 2, 0.04)
     with patch.object(settings, "RETRIEVAL_CATEGORY_BOOST", 0.5):
-        with patch(_BOOST_PATH, return_value={(1, 2): ["mounting"]}):
+        with patch(_BOOST_PATH, return_value={(1, 2): {"mounting": ("task", 1.0)}}):
             apply_category_boost_to_fused_hits(MagicMock(), [hit], mounting_signals)
     assert hit.rrf_score == pytest.approx(0.04 * 1.5)
 
@@ -208,7 +229,7 @@ def test_fused_boost_colpali_page_via_page_level_lookup(mounting_signals):
     """Un hit ColPali porte le chunk_id de l'ancre L0 (sans catégories) : le lookup
     par page le booste quand même."""
     colpali_hit = _unified(7, 3, 0.05, chunk_id=999)  # 999 = ancre L0
-    with patch(_BOOST_PATH, return_value={(7, 3): ["mounting"]}):
+    with patch(_BOOST_PATH, return_value={(7, 3): {"mounting": ("task", 1.0)}}):
         apply_category_boost_to_fused_hits(MagicMock(), [colpali_hit], mounting_signals)
     assert colpali_hit.rrf_score == pytest.approx(0.05 * (1 + settings.RETRIEVAL_CATEGORY_BOOST))
 
@@ -226,7 +247,7 @@ def test_boost_after_fusion_changes_top_rank(mounting_signals):
     fused = fuse_multimodal_hits(colpali, [], [], top_k=2)
     assert fused[0].page_no == 1  # meilleur score ColPali avant boost
 
-    with patch(_BOOST_PATH, return_value={(1, 1): [], (1, 2): ["mounting"]}):
+    with patch(_BOOST_PATH, return_value={(1, 1): {}, (1, 2): {"mounting": ("task", 1.0)}}):
         apply_category_boost_to_fused_hits(MagicMock(), fused, mounting_signals)
 
     # page 2 (catégorisée) doit pouvoir repasser devant si l'écart rrf est faible

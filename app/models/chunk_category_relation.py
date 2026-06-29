@@ -22,6 +22,8 @@ class ChunkCategoryRelation(SQLModel, table=True):
     document_id: int = Field(index=True)
     page_no: int = Field(default=0)
     confidence: float = Field(default=1.0)
+    # Catégorie dominante du chunk (axe task/symptom) : 1 primaire par chunk au plus.
+    is_primary: bool = Field(default=False)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     __table_args__ = (

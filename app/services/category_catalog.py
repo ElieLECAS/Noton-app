@@ -48,22 +48,22 @@ DEFAULT_CATEGORY_LABELS: Dict[str, str] = {
 }
 
 DEFAULT_CATEGORY_DESCRIPTIONS: Dict[str, str] = {
-    "mounting": "Séquences de pose, assemblage, fixation, calage, pattes, gondage",
-    "hardware_adjustment": "Roulettes, gâches, réglages de manœuvre, alignement ouvrant",
-    "sealing": "Bavettes, joints, remontées, infiltration, étanchéité air/eau",
-    "drilling_constraints": "Ce qu'on peut/ne peut pas percer ; formulations « interdit »",
-    "dimensions_tolerances": "Faux aplomb, mm/m, cotes chiffrées, tolérances de pose",
-    "load_capacity": "Poids max, report de charge, entraxe pattes, limites vantail",
-    "material_profile": "PVC, alu, hybride, coupe de profil, composition matériau",
-    "glazing": "Vitrages, thermique, acoustique, spécifications de vitrage",
-    "parts_references": "Codes Txxx, SEC-xxx, nomenclature, liste de composants",
-    "product_range": "Identification SOLEAL, LUMEAL, Perform, variante, famille",
-    "regulatory": "DTU, NF EN, obligations normatives, PMR (exigences réglementaires)",
-    "warranty": "Durée, conditions de garantie, exclusions, couverture",
-    "certification": "CE, labels, attestations, conformité produit",
-    "commercial": "Dépliants, arguments design/performance, contenu marketing",
-    "product_comparison": "LUMEAL vs SOLEAL, différences produit, aide à la décision",
-    "troubleshooting": "Symptômes client, causes probables, SAV, diagnostic",
+    "mounting": "Séquence de pose et fixation de la menuiserie sur chantier : calage, pattes, vissage, mise en place du dormant. À utiliser pour le GESTE de pose. NE PAS confondre avec hardware_adjustment (réglage après pose) ni sealing (étanchéité).",
+    "hardware_adjustment": "Réglage et entretien de la quincaillerie : roulettes, gâches, compas, paumelles, alignement de l'ouvrant. À utiliser pour AJUSTER un organe mécanique. NE PAS confondre avec mounting (pose initiale) ni casse_quincaillerie (pièce cassée, axe symptom).",
+    "sealing": "Étanchéité air/eau : joints, bavettes, fonds de joint, remontées, calfeutrement périphérique. À utiliser pour ce qui REND ÉTANCHE. NE PAS confondre avec infiltration_eau (le symptôme constaté, axe symptom).",
+    "drilling_constraints": "Règles et interdictions de perçage : où l'on peut/ne peut pas percer, fixations autorisées, « interdit de percer ». À utiliser pour une CONTRAINTE de perçage. NE PAS confondre avec mounting (pose générale).",
+    "dimensions_tolerances": "Cotes chiffrées, tolérances, faux aplomb, mm/m, jeux admissibles. À utiliser quand des VALEURS dimensionnelles encadrent la pose ou le produit. NE PAS confondre avec load_capacity (limites de charge).",
+    "load_capacity": "Limites structurelles : poids max d'un vantail, report de charge, entraxe des pattes, capacité portante. À utiliser pour une LIMITE mécanique. NE PAS confondre avec dimensions_tolerances (cotes).",
+    "material_profile": "Nature et composition du matériau/profilé : PVC, aluminium, bois, hybride, coupe de profil, traitements. À utiliser pour la MATIÈRE. NE PAS confondre avec glazing (vitrage) ni product_range (gamme commerciale).",
+    "glazing": "Vitrage et ses performances directes : double/triple vitrage, Ug, intercalaire, acoustique du vitrage. À utiliser pour le VERRE. NE PAS confondre avec material_profile (le profilé).",
+    "parts_references": "Codes et références de pièces détachées, nomenclatures, éclatés (Txxx, SEC-xxx). À utiliser quand le contenu LISTE des références. NE PAS confondre avec product_range (la gamme).",
+    "product_range": "Identification d'une gamme/produit commercial (SOLEAL, LUMEAL, Perform, Lumine…), variantes, familles. À utiliser pour NOMMER le produit. NE PAS confondre avec product_comparison (choix entre gammes) ni commercial (argumentaire).",
+    "regulatory": "Exigences réglementaires/normatives : DTU, NF EN, PMR, obligations de mise en œuvre. À utiliser pour une OBLIGATION normative. NE PAS confondre avec certification (preuve/marquage d'un produit).",
+    "warranty": "Conditions, durées et exclusions de garantie. À utiliser pour la GARANTIE contractuelle. NE PAS confondre avec certification (conformité produit).",
+    "certification": "Preuves de conformité d'un produit : marquage CE, PV d'essai, attestations, labels. À utiliser pour une PREUVE/marquage. NE PAS confondre avec regulatory (l'exigence) ni warranty (la garantie).",
+    "commercial": "Contenu marketing : argumentaires, dépliants, mises en avant design/performance à but commercial. À utiliser pour du MARKETING. NE PAS confondre avec product_range (identification) ni product_comparison (aide au choix factuelle).",
+    "product_comparison": "Comparaison factuelle entre gammes/options pour aider au choix (LUMEAL vs SOLEAL, différences). À utiliser pour COMPARER. NE PAS confondre avec commercial (argumentaire) ni product_range (simple identification).",
+    "troubleshooting": "Diagnostic SAV : symptômes client, causes probables, démarche de dépannage. À utiliser pour un RAISONNEMENT de panne. Les symptômes précis vont AUSSI sur l'axe symptom (infiltration_eau, blocage_manoeuvre…).",
 }
 
 # ---------------------------------------------------------------------------

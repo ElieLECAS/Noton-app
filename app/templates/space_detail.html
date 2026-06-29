@@ -386,7 +386,8 @@
 }
 
 #space-categories-modal:not(.hidden),
-#space-category-page-modal:not(.hidden) {
+#space-category-page-modal:not(.hidden),
+#theme-tree-modal:not(.hidden) {
   display: flex;
 }
 </style>
@@ -417,6 +418,15 @@
         >
           <i class="ti ti-affiliate"></i>
           <span id="kag-graph-toggle-label">Graphe de connaissances</span>
+        </button>
+        <button
+          id="theme-tree-toggle"
+          type="button"
+          class="hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-purple-500/20 bg-purple-500/5 text-purple-700 dark:text-purple-300 hover:bg-purple-500/10 text-xs font-semibold active:scale-95 transition-all"
+          onclick="openThemeTreeModal()"
+        >
+          <i class="ti ti-sitemap"></i>
+          <span>Carte mentale</span>
         </button>
       </div>
     </div>
@@ -491,6 +501,86 @@
 
     <!-- Panneau détail mobile (sous le graphe) -->
     <div id="kag-graph-detail-mobile" class="sm:hidden shrink-0 max-h-[35vh] overflow-y-auto border-t border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50 p-4 hidden"></div>
+  </div>
+</div>
+
+<!-- Modale carte mentale (arbre thématique + pages + synthèse CAG) -->
+<div id="theme-tree-modal" class="hidden fixed inset-0 z-[124] bg-black/60 backdrop-blur-sm items-center justify-center p-3 sm:p-6" onclick="if(event.target===this) closeThemeTreeModal()">
+  <div class="w-full max-w-6xl h-[min(92vh,860px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="ti ti-sitemap text-purple-500"></i>
+          Carte mentale
+        </h2>
+        <p id="theme-tree-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Du général au précis · cliquez un thème pour la synthèse</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <label class="text-[11px] text-gray-500 dark:text-gray-400">Regrouper par</label>
+        <select id="theme-tree-axis" onchange="changeThemeTreeAxis(this.value)" class="px-2.5 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/40">
+          <option value="task">Thèmes</option>
+          <option value="doc_type">Type de document</option>
+          <option value="lifecycle_phase">Phase</option>
+          <option value="symptom">Symptômes</option>
+        </select>
+        <button type="button" onclick="closeThemeTreeModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="ti ti-x text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex-1 flex min-h-0 flex-col sm:flex-row">
+      <!-- Arbre repliable -->
+      <aside class="sm:w-96 shrink-0 flex flex-col border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/40 min-h-0 max-h-[40vh] sm:max-h-none">
+        <div id="theme-tree-root" class="flex-1 overflow-y-auto p-3 text-sm">
+          <div class="text-sm text-gray-500 dark:text-gray-400 p-2">Chargement…</div>
+        </div>
+      </aside>
+
+      <!-- Panneau de droite : pages du thème + synthèse à la demande -->
+      <section class="flex-1 min-w-0 min-h-0 flex flex-col">
+        <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <h3 id="theme-panel-title" class="text-sm font-bold text-gray-900 dark:text-white truncate">Thème</h3>
+            <p id="theme-panel-sub" class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Sélectionnez un thème dans l'arbre.</p>
+          </div>
+          <div class="shrink-0 flex items-center gap-2">
+            <button id="theme-pages-back" type="button" onclick="showThemePagesView()" class="hidden inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="Revenir aux pages">
+              <i class="ti ti-arrow-left"></i>
+              <span class="hidden sm:inline">Pages</span>
+            </button>
+            <button id="theme-synthesis-btn" type="button" onclick="runThemeSynthesis()" class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 active:scale-95 transition-all shadow-sm" title="Lancer une synthèse IA du thème sélectionné">
+              <i class="ti ti-sparkles"></i>
+              <span>Synthèse IA</span>
+            </button>
+          </div>
+        </div>
+        <div class="flex-1 overflow-y-auto">
+          <!-- Placeholder initial -->
+          <div id="theme-panel-empty" class="h-full flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500 gap-3 px-6 py-10">
+            <i class="ti ti-files text-4xl opacity-50"></i>
+            <p class="text-sm max-w-sm">Cliquez sur un thème ou sous-thème pour parcourir ses pages (PDF + texte extrait), puis « Synthèse IA » pour une note de synthèse.</p>
+          </div>
+
+          <!-- Vue pages du thème -->
+          <div id="theme-pages-view" class="hidden p-3 sm:p-4">
+            <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 px-1 mb-2">Pages du thème</p>
+            <div id="theme-pages-list" class="space-y-2"></div>
+          </div>
+
+          <!-- Vue synthèse -->
+          <div id="theme-synthesis-loading" class="hidden h-full flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400 gap-3 py-16">
+            <i class="ti ti-loader-2 text-3xl animate-spin text-purple-500"></i>
+            <p class="text-sm">Lecture des documents et synthèse en cours…</p>
+          </div>
+          <div id="theme-synthesis-content" class="hidden p-4 sm:p-6">
+            <div id="theme-synthesis-flags" class="flex flex-wrap gap-2 mb-3"></div>
+            <div id="theme-synthesis-markdown" class="prose prose-sm dark:prose-invert max-w-none"></div>
+            <div id="theme-synthesis-sources" class="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700"></div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </div>
 
@@ -801,6 +891,10 @@ function stripCitationMarkers(text) {
   cleaned = cleaned.replace(/\n\s*Sources?\s+textuelles?\s*\(\d+\)[\s\S]*$/i, "");
   // Retire une éventuelle section "Sources:" en fin de réponse
   cleaned = cleaned.replace(/\n\s*Sources?\s*:[\s\S]*$/i, "");
+  // Filet de sécurité : retire les citations inline résiduelles [..., page X] / [... p.X]
+  cleaned = cleaned.replace(/\s*\[[^\]\n]*?(?:page|p\.?)\s*\d+[^\]\n]*?\]/gi, "");
+  // Nettoie les espaces avant ponctuation laissés par la suppression
+  cleaned = cleaned.replace(/[ \t]+([.,;:!?])/g, "$1").replace(/[ \t]{2,}/g, " ");
   return cleaned.trim();
 }
 
@@ -1488,28 +1582,32 @@ function addMessage(role, content, messageId = null, sources = null, metadataJso
     }
 
     let guidedStepHtml = "";
+    let guidedRecapHtml = "";
     if (metadataJson && metadataJson.guided_step) {
       guidedStepHtml = buildGuidedStepSection(metadataJson.guided_step);
+      guidedRecapHtml = buildGuidedRecapSection(metadataJson.guided_step);
     }
 
+    let sourcesSection = "";
     if (parsedSources && parsedSources.length > 0) {
       parsedHtml = transformCitationsToLinks(parsedHtml, parsedSources, messageKey);
-      const sourcesSection = buildSourcesSection(parsedSources, messageKey);
-      innerHtml = `<div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
+      sourcesSection = buildSourcesSection(parsedSources, messageKey);
+    }
+
+    // Les propositions (choix guidés / slots) s'affichent EN DEHORS de la bulle, en dessous.
+    const propositionsHtml = (slotPromptHtml || guidedStepHtml)
+      ? `<div class="message-propositions mt-2 flex flex-col gap-2">${slotPromptHtml}${guidedStepHtml}</div>`
+      : "";
+
+    innerHtml = `<div class="flex flex-col items-start max-w-[85%] lg:max-w-[60%]">
+      <div class="w-full assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
         <div class="markdown-content">${parsedHtml}</div>
         ${sourcesSection}
-        ${slotPromptHtml}
-        ${guidedStepHtml}
+        ${guidedRecapHtml}
         ${feedbackHtml}
-      </div>`;
-    } else {
-      innerHtml = `<div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
-        <div class="markdown-content">${parsedHtml}</div>
-        ${slotPromptHtml}
-        ${guidedStepHtml}
-        ${feedbackHtml}
-      </div>`;
-    }
+      </div>
+      ${propositionsHtml}
+    </div>`;
   } else {
     innerHtml = `<div class="max-w-[75%] lg:max-w-[60%] bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-md shadow-indigo-500/5">
       <p class="whitespace-pre-wrap text-sm leading-relaxed">${content}</p>
@@ -1911,7 +2009,7 @@ function renderKagGraph(data) {
 
 async function loadKagGraph() {
   try {
-    const r = await api(`/api/spaces/${spaceId}/kag/graph`);
+    const r = await api(`/api/spaces/${spaceId}/kag/graph?max_nodes=300&max_edges=600`);
     if (!r.ok) return;
     const data = await r.json();
     kagGraphData = data;
@@ -1936,6 +2034,304 @@ async function loadKagGraph() {
   } catch (err) {
     console.warn("KAG graph load failed", err);
   }
+}
+
+// ——— Carte mentale (arbre thématique + synthèse CAG) ———
+let themeTreeData = null;
+let themeTreeAxis = "task";
+let themeNodeLabels = {};
+let themeCurrentNode = null;
+
+async function loadThemeTree(axis = "task", { reveal = false } = {}) {
+  try {
+    const r = await api(`/api/spaces/${spaceId}/tree?axis=${encodeURIComponent(axis)}`);
+    if (!r.ok) return;
+    const data = await r.json();
+    themeTreeData = data;
+    themeTreeAxis = data.axis || axis;
+    const hasNodes = (data.root?.children || []).length > 0;
+    if (reveal) {
+      document.getElementById("theme-tree-toggle")?.classList.toggle("hidden", !hasNodes);
+    }
+    return data;
+  } catch (err) {
+    console.warn("Theme tree load failed", err);
+  }
+}
+
+function themeNodeHtml(node, depth) {
+  themeNodeLabels[node.key] = node.label;
+  const safe = node.key.replace(/:/g, "-");
+  const hasChildren = (node.children || []).length > 0;
+  const pad = depth * 14 + 8;
+  const caret = hasChildren
+    ? `<button type="button" onclick="event.stopPropagation();toggleThemeGroup('${safe}')" class="shrink-0 w-4 h-4 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i id="tt-caret-${safe}" class="ti ti-chevron-down transition-transform"></i></button>`
+    : `<span class="shrink-0 w-4"></span>`;
+  const iconColor = node.kind === "entity" ? "text-teal-500" : "text-purple-500";
+  const icon = node.icon
+    ? `<i class="ti ${escapeHtml(node.icon)} ${iconColor} shrink-0"></i>`
+    : node.kind === "category"
+    ? `<i class="ti ti-point-filled text-gray-300 dark:text-gray-600 shrink-0 text-xs"></i>`
+    : "";
+  const weightCls =
+    node.kind === "root"
+      ? "font-semibold"
+      : node.kind === "group"
+      ? "font-medium"
+      : node.kind === "entity"
+      ? "text-[13px] text-gray-600 dark:text-gray-400"
+      : "";
+  const count = `<span class="ml-auto shrink-0 text-[10px] text-gray-400 dark:text-gray-500">${node.doc_count || 0} doc</span>`;
+
+  let html = `
+    <div data-node="${escapeHtml(node.key)}" onclick="selectThemeNode('${escapeHtml(node.key)}')"
+      class="theme-node flex items-center gap-1.5 rounded-lg pr-2 py-1.5 hover:bg-purple-500/5 cursor-pointer transition-colors" style="padding-left:${pad}px">
+      ${caret}${icon}
+      <span class="truncate text-gray-800 dark:text-gray-200 ${weightCls}">${escapeHtml(node.label)}</span>
+      ${count}
+    </div>`;
+  if (hasChildren) {
+    const children = node.children.map((ch) => themeNodeHtml(ch, depth + 1)).join("");
+    html += `<div id="tt-children-${safe}" class="theme-children">${children}</div>`;
+  }
+  return html;
+}
+
+function renderThemeTree() {
+  const host = document.getElementById("theme-tree-root");
+  if (!host) return;
+  themeNodeLabels = {};
+  const root = themeTreeData?.root;
+  if (!root || !(root.children || []).length) {
+    host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune catégorie pour ce regroupement. Retraitez les documents avec KAG activé.</div>`;
+    return;
+  }
+  host.innerHTML = themeNodeHtml(root, 0);
+}
+
+function toggleThemeGroup(safeKey) {
+  const box = document.getElementById(`tt-children-${safeKey}`);
+  const caret = document.getElementById(`tt-caret-${safeKey}`);
+  if (!box) return;
+  const hidden = box.classList.toggle("hidden");
+  if (caret) caret.style.transform = hidden ? "rotate(-90deg)" : "";
+}
+
+function highlightThemeNode(key) {
+  document.querySelectorAll("#theme-tree-root .theme-node").forEach((el) => {
+    const active = el.getAttribute("data-node") === key;
+    el.classList.toggle("bg-purple-500/10", active);
+    el.classList.toggle("text-purple-700", active);
+    el.classList.toggle("dark:text-purple-300", active);
+  });
+}
+
+let themeCurrentPages = [];
+
+function themePanelShow(view) {
+  const map = {
+    empty: "theme-panel-empty",
+    pages: "theme-pages-view",
+    loading: "theme-synthesis-loading",
+    synthesis: "theme-synthesis-content",
+  };
+  Object.entries(map).forEach(([k, id]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const on = k === view;
+    el.classList.toggle("hidden", !on);
+    if (k === "loading") el.classList.toggle("flex", on);
+  });
+}
+
+function themePanelReset() {
+  themeCurrentNode = null;
+  themeCurrentPages = [];
+  document.getElementById("theme-synthesis-btn").classList.add("hidden");
+  document.getElementById("theme-pages-back").classList.add("hidden");
+  document.getElementById("theme-panel-title").textContent = "Thème";
+  document.getElementById("theme-panel-sub").textContent = "Sélectionnez un thème dans l'arbre.";
+  themePanelShow("empty");
+}
+
+async function selectThemeNode(key) {
+  const label = themeNodeLabels[key] || "Thème";
+  themeCurrentNode = { key, label };
+  highlightThemeNode(key);
+
+  document.getElementById("theme-panel-title").textContent = label;
+  document.getElementById("theme-panel-sub").textContent = "Chargement des pages…";
+  document.getElementById("theme-synthesis-btn").classList.remove("hidden");
+  document.getElementById("theme-pages-back").classList.add("hidden");
+  themePanelShow("pages");
+  document.getElementById("theme-pages-list").innerHTML =
+    `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Chargement…</div>`;
+
+  try {
+    const r = await api(
+      `/api/spaces/${spaceId}/tree/pages?node_key=${encodeURIComponent(key)}&axis=${encodeURIComponent(themeTreeAxis)}`
+    );
+    if (!r.ok) {
+      document.getElementById("theme-pages-list").innerHTML =
+        `<div class="text-sm text-amber-600 dark:text-amber-400 p-2">Impossible de charger les pages.</div>`;
+      return;
+    }
+    const data = await r.json();
+    themeCurrentPages = data.pages || [];
+    renderThemeNodePages(themeCurrentPages);
+  } catch (err) {
+    console.warn("Theme node pages failed", err);
+    document.getElementById("theme-pages-list").innerHTML =
+      `<div class="text-sm text-amber-600 dark:text-amber-400 p-2">Une erreur est survenue.</div>`;
+  }
+}
+
+function renderThemeNodePages(pages) {
+  const host = document.getElementById("theme-pages-list");
+  const sub = document.getElementById("theme-panel-sub");
+  if (!host) return;
+  if (!pages.length) {
+    sub.textContent = "Aucune page rattachée.";
+    host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune page rattachée à ce thème dans cet espace.</div>`;
+    return;
+  }
+  sub.textContent = `${pages.length} page(s) · cliquez pour voir le PDF et le texte extrait`;
+  host.innerHTML = pages
+    .map(
+      (p) => `
+    <button type="button"
+      onclick="openThemeNodePage(${p.category_id}, ${p.document_id}, ${p.page_no})"
+      class="w-full text-left flex items-center justify-between gap-3 rounded-xl border border-black/5 dark:border-white/10 p-3 hover:bg-purple-500/5 hover:border-purple-500/20 transition-all active:scale-[0.99]">
+      <div class="min-w-0">
+        <div class="font-medium text-sm text-gray-900 dark:text-gray-100 truncate">${escapeHtml(p.document_title || "Document")}</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Page ${p.page_no} · ${p.chunk_count || 0} extrait(s)</div>
+      </div>
+      <span class="shrink-0 inline-flex items-center gap-1 text-[11px] ${p.has_source_file ? "text-purple-600 dark:text-purple-400" : "text-gray-400"}">
+        <i class="ti ${p.has_source_file ? "ti-file-type-pdf" : "ti-file-text"}"></i>
+      </span>
+    </button>`
+    )
+    .join("");
+}
+
+function openThemeNodePage(categoryId, documentId, pageNo) {
+  // Réutilise la modale de détail de page (PDF + texte) de « Recherche & catégories ».
+  openSpaceCategoryPageModal(categoryId, documentId, pageNo);
+}
+
+function showThemePagesView() {
+  document.getElementById("theme-pages-back").classList.add("hidden");
+  if (themeCurrentNode) {
+    document.getElementById("theme-panel-title").textContent = themeCurrentNode.label;
+  }
+  renderThemeNodePages(themeCurrentPages);
+  themePanelShow("pages");
+}
+
+async function runThemeSynthesis() {
+  if (!themeCurrentNode) return;
+  const { key, label } = themeCurrentNode;
+  document.getElementById("theme-panel-sub").textContent = "Synthèse en cours…";
+  document.getElementById("theme-pages-back").classList.remove("hidden");
+  themePanelShow("loading");
+
+  try {
+    const r = await api(`/api/spaces/${spaceId}/tree/synthesis`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ node_key: key, node_label: label, axis: themeTreeAxis }),
+    });
+    if (!r.ok) {
+      renderThemeSynthesisError("Impossible de générer la synthèse.");
+      return;
+    }
+    renderThemeSynthesis(await r.json());
+  } catch (err) {
+    console.warn("Theme synthesis failed", err);
+    renderThemeSynthesisError("Une erreur est survenue pendant la synthèse.");
+  }
+}
+
+function renderThemeSynthesisError(msg) {
+  document.getElementById("theme-synthesis-flags").innerHTML = "";
+  document.getElementById("theme-synthesis-sources").innerHTML = "";
+  document.getElementById("theme-synthesis-markdown").innerHTML =
+    `<p class="text-sm text-amber-600 dark:text-amber-400">${escapeHtml(msg)}</p>`;
+  document.getElementById("theme-panel-sub").textContent = "";
+  themePanelShow("synthesis");
+}
+
+function renderThemeSynthesis(data) {
+  const flags = document.getElementById("theme-synthesis-flags");
+  const md = document.getElementById("theme-synthesis-markdown");
+  const sourcesHost = document.getElementById("theme-synthesis-sources");
+
+  if (data.status === "empty" || !data.synthesis_markdown) {
+    document.getElementById("theme-panel-sub").textContent = "";
+    flags.innerHTML = "";
+    sourcesHost.innerHTML = "";
+    md.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400">Aucun texte exploitable n'est rattaché à ce thème dans cet espace.</p>`;
+    themePanelShow("synthesis");
+    return;
+  }
+
+  const badges = [];
+  if (data.cached) {
+    badges.push(`<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"><i class="ti ti-database"></i>Depuis le cache</span>`);
+  }
+  if (data.truncated) {
+    badges.push(`<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" title="Le texte dépassait le budget de contexte : synthèse sur un sous-ensemble."><i class="ti ti-cut"></i>Contexte tronqué</span>`);
+  }
+  flags.innerHTML = badges.join("");
+
+  document.getElementById("theme-panel-sub").textContent =
+    `${data.chunk_count || 0} extrait(s) · ${data.cached ? "depuis le cache" : "généré à l'instant"}`;
+
+  md.innerHTML = parseMarkdown(data.synthesis_markdown);
+
+  const sources = data.sources || [];
+  if (!sources.length) {
+    sourcesHost.innerHTML = "";
+  } else {
+    const chips = sources
+      .map((s) => {
+        const pages = (s.pages || []).length
+          ? `<span class="text-gray-400">· p. ${(s.pages || []).slice(0, 8).join(", ")}${(s.pages || []).length > 8 ? "…" : ""}</span>`
+          : "";
+        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300"><i class="ti ti-file-text text-purple-500"></i>${escapeHtml(s.document_title || "Document")} ${pages}</span>`;
+      })
+      .join("");
+    sourcesHost.innerHTML =
+      `<p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Sources (${sources.length})</p><div class="flex flex-wrap gap-2">${chips}</div>`;
+  }
+
+  themePanelShow("synthesis");
+}
+
+async function changeThemeTreeAxis(axis) {
+  await loadThemeTree(axis);
+  renderThemeTree();
+  themePanelReset();
+}
+
+function openThemeTreeModal() {
+  const modal = document.getElementById("theme-tree-modal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  themePanelReset();
+  if (themeTreeData && themeTreeData.axis === themeTreeAxis) {
+    renderThemeTree();
+  } else {
+    loadThemeTree(themeTreeAxis).then(() => renderThemeTree());
+  }
+}
+
+function closeThemeTreeModal() {
+  const modal = document.getElementById("theme-tree-modal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  document.body.style.overflow = "";
 }
 
 // ——— Catégories KAG par espace ———
@@ -2284,7 +2680,9 @@ function closeSpaceCategoryPageModal() {
   modal.classList.add("hidden");
   spaceCategoryPdfDoc = null;
   spaceCategoryPageState = { mode: "category", categoryId: null, documentId: null, pageNo: null, query: null };
-  document.body.style.overflow = "";
+  // Si la carte mentale reste ouverte dessous, conserver le scroll bloqué.
+  const themeOpen = !document.getElementById("theme-tree-modal")?.classList.contains("hidden");
+  document.body.style.overflow = themeOpen ? "hidden" : "";
 }
 
 async function navigateSpaceCategoryPage(direction) {
@@ -2380,7 +2778,7 @@ function buildSlotPromptSection(slotPrompt) {
        <button type="button" class="slot-choice-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all active:scale-95"
         data-field="${slotPrompt.field}" data-value="" data-action="skip" data-label="${slotPrompt.unknown_label || "Je ne sais pas"}">${slotPrompt.unknown_label || "Je ne sais pas"}</button>`
     : "";
-  return `<div class="slot-prompt-section mt-3 pt-3 border-t border-black/5 dark:border-white/5 flex flex-wrap gap-2">${choiceButtons}${skipButton}</div>`;
+  return `<div class="slot-prompt-section flex flex-wrap gap-2">${choiceButtons}${skipButton}</div>`;
 }
 
 function attachSlotPromptListeners(container) {
@@ -2446,20 +2844,25 @@ function buildEscalationRecapCard(recap) {
     </div>`;
 }
 
+// Boutons de propositions (choix guidés) — affichés EN DEHORS de la bulle, en dessous.
 function buildGuidedStepSection(step, interactive = true) {
   if (!step) return "";
-  let html = "";
   if (interactive && !step.is_terminal && step.choices && step.choices.length) {
     const buttons = step.choices.map((c) => (
       `<button type="button" class="guided-choice-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all active:scale-95"
         data-value="${String(c.value).replace(/"/g, "&quot;")}" data-label="${String(c.label).replace(/"/g, "&quot;")}" title="${String(c.hint || "").replace(/"/g, "&quot;")}">${c.label}</button>`
     )).join("");
-    html += `<div class="guided-step-section mt-3 pt-3 border-t border-black/5 dark:border-white/5 flex flex-wrap gap-2">${buttons}</div>`;
+    return `<div class="guided-step-section flex flex-wrap gap-2">${buttons}</div>`;
   }
-  if (step.step_type === "escalation" && step.escalation_recap) {
-    html += buildEscalationRecapCard(step.escalation_recap);
+  return "";
+}
+
+// Récapitulatif d'escalade SAV — contenu de la réponse, reste DANS la bulle.
+function buildGuidedRecapSection(step) {
+  if (step && step.step_type === "escalation" && step.escalation_recap) {
+    return buildEscalationRecapCard(step.escalation_recap);
   }
-  return html;
+  return "";
 }
 
 function attachGuidedStepListeners(container) {
@@ -2504,9 +2907,9 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
 
   const host = document.getElementById("chat-messages");
   const assistantWrap = document.createElement("div");
-  assistantWrap.className = "flex justify-start";
+  assistantWrap.className = "flex flex-col items-start";
   assistantWrap.innerHTML = `
-    <div class="max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
+    <div class="w-full max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
       <div id="streaming-content" class="markdown-content"></div>
     </div>`;
   host.appendChild(assistantWrap);
@@ -2642,14 +3045,25 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
     }
   }
 
-  if (receivedSlotPrompt && messageContainer) {
-    messageContainer.insertAdjacentHTML("beforeend", buildSlotPromptSection(receivedSlotPrompt));
-    attachSlotPromptListeners(messageContainer);
+  // Le récapitulatif SAV est du contenu : il reste DANS la bulle.
+  if (receivedStep && messageContainer) {
+    const recapHtml = buildGuidedRecapSection(receivedStep);
+    if (recapHtml) {
+      messageContainer.insertAdjacentHTML("beforeend", recapHtml);
+      attachGuidedStepListeners(messageContainer);
+    }
   }
 
-  if (receivedStep && messageContainer) {
-    messageContainer.insertAdjacentHTML("beforeend", buildGuidedStepSection(receivedStep));
-    attachGuidedStepListeners(messageContainer);
+  // Les propositions (choix guidés / slots) s'affichent EN DEHORS de la bulle, en dessous.
+  const slotPromptHtml = receivedSlotPrompt ? buildSlotPromptSection(receivedSlotPrompt) : "";
+  const guidedStepHtml = receivedStep ? buildGuidedStepSection(receivedStep) : "";
+  if (slotPromptHtml || guidedStepHtml) {
+    assistantWrap.insertAdjacentHTML(
+      "beforeend",
+      `<div class="message-propositions mt-2 flex flex-col gap-2">${slotPromptHtml}${guidedStepHtml}</div>`
+    );
+    attachSlotPromptListeners(assistantWrap);
+    attachGuidedStepListeners(assistantWrap);
   }
 
   chatHistory.push({ role: "user", content: message });
@@ -2837,6 +3251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadSpace();
   await loadKagGraph();
   await loadSpaceCategories();
+  await loadThemeTree("task", { reveal: true });
   await loadConversations();
 
   document.addEventListener("keydown", (e) => {
@@ -2849,6 +3264,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const categoriesModal = document.getElementById("space-categories-modal");
       if (categoriesModal && !categoriesModal.classList.contains("hidden")) {
         closeSpaceCategoriesModal();
+        return;
+      }
+      const themeModal = document.getElementById("theme-tree-modal");
+      if (themeModal && !themeModal.classList.contains("hidden")) {
+        closeThemeTreeModal();
         return;
       }
       const modal = document.getElementById("kag-graph-modal");

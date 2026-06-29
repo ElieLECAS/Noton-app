@@ -772,6 +772,16 @@ async def search_multimodal_passages(
                     }
                 )
 
+            # ColPali / pgvector / BM25 loguent déjà leur résultat depuis
+            # page_retrieval_service ; KAG n'avait aucune ligne → on l'ajoute pour que
+            # TOUS les retrievers apparaissent dans les logs.
+            logger.info(
+                "[retrieve_kag_pages] %d pages — %s",
+                len(kag_hits),
+                ", ".join(f"doc={h.document_id} p.{h.page_no}" for h in kag_hits[:3])
+                or "aucune",
+            )
+
             logger.info(
                 "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d | kag=%d",
                 len(colpali_hits),
