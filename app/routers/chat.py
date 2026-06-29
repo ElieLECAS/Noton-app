@@ -17,25 +17,31 @@ async def chat_wrapper(
     message: str,
     model: str,
     context: Optional[List[dict]] = None,
+    temperature: Optional[float] = None,
     **kwargs
 ) -> dict:
+    # Température de génération : 0.0 par défaut (hard grounding strict).
+    temp = settings.SPACE_CHAT_TEMPERATURE if temperature is None else temperature
     if settings.LLM_PROVIDER == "ollama":
         from app.services.ollama_service import chat as ollama_chat
         return await ollama_chat(message=message, model=model, context=context)
     else:
-        return await mistral_chat(message=message, model=model, context=context, **kwargs)
+        return await mistral_chat(message=message, model=model, context=context, temperature=temp, **kwargs)
 
 async def chat_stream_wrapper(
     message: str,
     model: str,
     context: Optional[List[dict]] = None,
+    temperature: Optional[float] = None,
 ):
+    # Température de génération : 0.0 par défaut (hard grounding strict).
+    temp = settings.SPACE_CHAT_TEMPERATURE if temperature is None else temperature
     if settings.LLM_PROVIDER == "ollama":
         from app.services.ollama_service import chat_stream as ollama_chat_stream
         async for chunk in ollama_chat_stream(message=message, model=model, context=context):
             yield chunk
     else:
-        async for chunk in mistral_chat_stream(message=message, model=model, context=context):
+        async for chunk in mistral_chat_stream(message=message, model=model, context=context, temperature=temp):
             yield chunk
 from app.services.chat_tools import get_available_tools
 from app.models.conversation import Conversation
@@ -149,8 +155,10 @@ def _int_env(name: str, default: int) -> int:
 # Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K / settings).
 RAG_TOP_K = _int_env("RAG_TOP_K", settings.RAG_TOP_K)
 # Paramétrage en dur du chat "espaces"
+# NB : la température effective de génération vient de settings.SPACE_CHAT_TEMPERATURE
+# (passée par chat_wrapper / chat_stream_wrapper). Cette constante n'est pas utilisée.
 SPACE_CHAT_MAX_TOKENS = 1200
-SPACE_CHAT_TEMPERATURE = 0.0
+SPACE_CHAT_TEMPERATURE = 0.3
 SPACE_CHAT_TOP_P = None
 SPACE_CONTEXT_MAX_CHARS = _int_env("SPACE_CONTEXT_MAX_CHARS", 18000)
 SPACE_CONTEXT_MAX_PASSAGE_CHARS = _int_env(
