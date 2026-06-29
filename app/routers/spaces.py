@@ -334,15 +334,19 @@ async def get_space_theme_tree_pages(
     session: Session = Depends(get_session),
     node_key: str = Query(..., min_length=1, max_length=128),
     axis: str = Query("task"),
+    q: Optional[str] = Query(None, description="Filtre mot-clé (intersection catégorie ∩ mot-clé)"),
 ):
-    """Pages (PDF + texte) rattachées à un nœud de l'arbre thématique."""
+    """Pages (PDF + texte) rattachées à un nœud de l'arbre thématique.
+
+    Si `q` est fourni, ne renvoie que les pages contenant le mot-clé.
+    """
     space = get_space_by_id(session, space_id, current_user.id)
     if not space:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Espace non trouvé",
         )
-    return get_space_theme_node_pages(session, space_id, node_key, axis)
+    return get_space_theme_node_pages(session, space_id, node_key, axis, q=q)
 
 
 @router.post("/{space_id}/tree/synthesis")

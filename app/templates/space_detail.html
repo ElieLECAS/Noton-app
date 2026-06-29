@@ -299,6 +299,19 @@
   font-size: 12px;
 }
 .sources-section { font-style: normal !important; }
+/* Repli animé des sources textuelles (hauteur naturelle via grid 0fr→1fr) */
+.text-sources-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+}
+.text-sources-wrap.open { grid-template-rows: 1fr; }
+.text-sources-wrap > .text-sources-inner {
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease 0.04s;
+}
+.text-sources-wrap.open > .text-sources-inner { opacity: 1; }
 .source-badge .citation-number {
   color: #1e40af;
   font-weight: 700;
@@ -541,9 +554,10 @@
             </button>
           </div>
           <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5">
-            Plusieurs mots = recherche « <span class="font-semibold">OU</span> ». Texte source PDF + synthèses IA.
+            Tapez un mot-clé, puis cliquez une catégorie : seules les pages contenant le mot-clé s'affichent. Plusieurs mots = « <span class="font-semibold">OU</span> ».
           </p>
           <p id="space-keyword-search-msg" class="text-xs text-amber-600 dark:text-amber-400 mt-1 hidden"></p>
+          <div id="theme-keyword-chip" class="hidden mt-1.5 items-center gap-1.5 text-[11px] font-medium text-teal-700 dark:text-teal-300"></div>
         </div>
         <div class="shrink-0 px-3 pt-2 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Parcourir par thème</div>
         <div id="theme-tree-root" class="flex-1 overflow-y-auto p-3 text-sm">
@@ -994,15 +1008,28 @@ function buildSourcesSection(sources, messageKey) {
       ` : ""}
       ${textSources.length > 0 ? `
         <div>
-          <div class="text-[11px] text-gray-500 dark:text-gray-400 font-bold mb-2 flex items-center gap-1.5">
+          <button type="button" onclick="toggleTextSources('${messageKey}')"
+            class="text-[11px] text-gray-500 dark:text-gray-400 font-bold mb-2 flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
             <i class="ti ti-book text-sm"></i>
             Sources textuelles (${textSources.length})
+            <i id="text-sources-caret-${messageKey}" class="ti ti-chevron-down text-sm transition-transform"></i>
+          </button>
+          <div id="text-sources-${messageKey}" class="text-sources-wrap">
+            <div class="text-sources-inner"><div class="flex flex-wrap gap-2 pt-0.5">${sourceBadges}</div></div>
           </div>
-          <div class="flex flex-wrap gap-2">${sourceBadges}</div>
         </div>
       ` : ""}
     </div>
   `;
+}
+
+function toggleTextSources(messageKey) {
+  const wrap = document.getElementById(`text-sources-${messageKey}`);
+  const caret = document.getElementById(`text-sources-caret-${messageKey}`);
+  if (!wrap) return;
+  const open = wrap.classList.toggle("open");
+  // Fermé : chevron vers le bas (v). Ouvert : retourné (^).
+  if (caret) caret.style.transform = open ? "rotate(180deg)" : "";
 }
 
 function transformCitationsToLinks(html, sources, messageKey) {
@@ -2082,6 +2109,29 @@ function highlightThemeNode(key) {
 }
 
 let themeCurrentPages = [];
+let themeKeyword = "";
+
+function setThemeKeyword(kw) {
+  themeKeyword = (kw || "").trim();
+  const chip = document.getElementById("theme-keyword-chip");
+  const input = document.getElementById("space-keyword-search-input");
+  if (!chip) return;
+  if (themeKeyword) {
+    chip.innerHTML = `<i class="ti ti-filter"></i> Filtre : « ${escapeHtml(themeKeyword)} » <button type="button" onclick="clearThemeKeyword()" class="ml-0.5 hover:text-teal-900 dark:hover:text-teal-100" title="Retirer le filtre"><i class="ti ti-x"></i></button>`;
+    chip.classList.remove("hidden");
+    chip.classList.add("inline-flex");
+  } else {
+    chip.classList.add("hidden");
+    chip.classList.remove("inline-flex");
+    chip.innerHTML = "";
+    if (input) input.value = "";
+  }
+}
+
+function clearThemeKeyword() {
+  setThemeKeyword("");
+  if (themeCurrentNode) selectThemeNode(themeCurrentNode.key);
+}
 
 function themePanelShow(view) {
   const map = {
@@ -2123,8 +2173,9 @@ async function selectThemeNode(key) {
     `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Chargement…</div>`;
 
   try {
+    const qParam = themeKeyword ? `&q=${encodeURIComponent(themeKeyword)}` : "";
     const r = await api(
-      `/api/spaces/${spaceId}/tree/pages?node_key=${encodeURIComponent(key)}&axis=${encodeURIComponent(themeTreeAxis)}`
+      `/api/spaces/${spaceId}/tree/pages?node_key=${encodeURIComponent(key)}&axis=${encodeURIComponent(themeTreeAxis)}${qParam}`
     );
     if (!r.ok) {
       document.getElementById("theme-pages-list").innerHTML =
@@ -2146,11 +2197,15 @@ function renderThemeNodePages(pages) {
   const sub = document.getElementById("theme-panel-sub");
   if (!host) return;
   if (!pages.length) {
-    sub.textContent = "Aucune page rattachée.";
-    host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune page rattachée à ce thème dans cet espace.</div>`;
+    sub.textContent = themeKeyword ? `Aucune page « ${themeKeyword} » ici.` : "Aucune page rattachée.";
+    host.innerHTML = themeKeyword
+      ? `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune page contenant « ${escapeHtml(themeKeyword)} » dans ce thème.</div>`
+      : `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune page rattachée à ce thème dans cet espace.</div>`;
     return;
   }
-  sub.textContent = `${pages.length} page(s) · cliquez pour voir le PDF et le texte extrait`;
+  sub.textContent = themeKeyword
+    ? `${pages.length} page(s) contenant « ${themeKeyword} » · cliquez pour ouvrir`
+    : `${pages.length} page(s) · cliquez pour voir le PDF et le texte extrait`;
   host.innerHTML = pages
     .map(
       (p) => `
@@ -2170,8 +2225,13 @@ function renderThemeNodePages(pages) {
 }
 
 function openThemeNodePage(categoryId, documentId, pageNo) {
-  // Réutilise la modale de détail de page (PDF + texte) de « Recherche & catégories ».
-  openSpaceCategoryPageModal(categoryId, documentId, pageNo);
+  // Avec un filtre mot-clé actif : ouvrir en mode recherche (surligne le mot-clé).
+  // Sinon : mode catégorie (surligne les chunks de la catégorie).
+  if (themeKeyword) {
+    openSpaceSearchPageModal(themeKeyword, documentId, pageNo);
+  } else {
+    openSpaceCategoryPageModal(categoryId, documentId, pageNo);
+  }
 }
 
 function showThemePagesView() {
@@ -2274,6 +2334,7 @@ function openThemeTreeModal() {
   if (!modal) return;
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
+  setThemeKeyword("");
   themePanelReset();
   setTimeout(() => document.getElementById("space-keyword-search-input")?.focus(), 50);
   if (themeTreeData && themeTreeData.axis === themeTreeAxis) {
@@ -2310,22 +2371,43 @@ async function runSpaceKeywordSearch() {
     msg.classList.toggle("hidden", !txt);
   };
   showMsg("");
+
+  // Champ vidé → on retire le filtre et on recharge le nœud courant non filtré.
+  if (!query) {
+    setThemeKeyword("");
+    if (themeCurrentNode) selectThemeNode(themeCurrentNode.key);
+    return;
+  }
   if (query.length < 2) {
     showMsg("Saisissez au moins 2 caractères.");
     return;
   }
-  const r = await api(`/api/spaces/${spaceId}/search/pages?q=${encodeURIComponent(query)}`);
-  if (!r.ok) {
+
+  // On valide qu'il y a des résultats, puis on ACTIVE le filtre (sans ouvrir de page).
+  try {
+    const r = await api(`/api/spaces/${spaceId}/search/pages?q=${encodeURIComponent(query)}`);
+    if (!r.ok) {
+      showMsg("Erreur lors de la recherche.");
+      return;
+    }
+    const data = await r.json();
+    const n = (data.pages || []).length;
+    if (!n) {
+      setThemeKeyword("");
+      showMsg(`Aucun résultat pour « ${query} ».`);
+      return;
+    }
+    setThemeKeyword(query);
+    if (themeCurrentNode) {
+      // Un thème est déjà sélectionné : on rafraîchit ses pages filtrées.
+      selectThemeNode(themeCurrentNode.key);
+    } else {
+      document.getElementById("theme-panel-sub").textContent =
+        `Filtre « ${query} » actif (${n} page(s) dans l'espace) — cliquez une catégorie.`;
+    }
+  } catch (err) {
     showMsg("Erreur lors de la recherche.");
-    return;
   }
-  const data = await r.json();
-  const firstPage = (data.pages || [])[0];
-  if (!firstPage) {
-    showMsg(`Aucun résultat pour « ${query} ».`);
-    return;
-  }
-  await openSpaceSearchPageModal(query, firstPage.document_id, firstPage.page_no);
 }
 
 async function openSpaceSearchPageModal(query, documentId, pageNo) {

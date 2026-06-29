@@ -371,10 +371,6 @@ def build_space_theme_tree(
     tree["root"]["doc_count"] = root_doc_count or root_counts["doc_count"]
     tree["root"]["page_count"] = root_counts["page_count"]
     tree["root"]["chunk_count"] = root_counts["chunk_count"]
-    # Phase 3 : greffe les feuilles entités sous les catégories (croisement KAG).
-    if settings.KAG_ENABLED:
-        for child in children:
-            _attach_entities(session, space_id, child)
     tree["status"] = "ok" if children else "empty"
     return tree
 
@@ -459,17 +455,39 @@ def _entity_node_pages(
     }
 
 
+def _filter_pages_by_keyword(
+    session: Session,
+    space_id: int,
+    pages: List[Dict[str, Any]],
+    q: Optional[str],
+) -> List[Dict[str, Any]]:
+    """Intersection page-level avec une recherche mot-clé (même sémantique « contient »)."""
+    if not q or not q.strip():
+        return pages
+    from app.services.lexical_search_service import search_space_pages
+
+    res = search_space_pages(session, space_id, q)
+    allowed = {
+        (int(p["document_id"]), int(p["page_no"])) for p in res.get("pages", [])
+    }
+    return [p for p in pages if (p["document_id"], p["page_no"]) in allowed]
+
+
 def get_space_theme_node_pages(
     session: Session,
     space_id: int,
     node_key: str,
     axis: str = AXIS_TASK,
+    q: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Pages (PDF + texte) rattachées à un nœud de l'arbre.
 
     Agrège l'union des catégories du nœud et renvoie, par (document, page), une
     catégorie représentative (``category_id``) pour réutiliser la modale de détail de
     page existante. La racine couvre toutes les catégories présentes dans l'espace.
+
+    Si ``q`` est fourni, les pages sont filtrées à celles contenant le mot-clé
+    (intersection « catégorie ∩ mot-clé », au niveau page).
     """
     if not is_valid_axis(axis):
         axis = AXIS_TASK
@@ -477,14 +495,18 @@ def get_space_theme_node_pages(
     # Nœud entité : pages où l'entité ET la catégorie co-occurrent.
     ent = parse_entity_node_key(node_key)
     if ent is not None:
-        return _entity_node_pages(session, space_id, ent[0], ent[1])
+        payload = _entity_node_pages(session, space_id, ent[0], ent[1])
+        payload["pages"] = _filter_pages_by_keyword(session, space_id, payload["pages"], q)
+        payload["page_count"] = len(payload["pages"])
+        payload["query"] = (q or "").strip()
+        return payload
 
     category_ids = resolve_node_to_category_ids(session, space_id, node_key, axis)
     if category_ids is None:
         category_ids = [c["category_id"] for c in _present_categories(session, space_id)]
 
     if not category_ids:
-        return {"space_id": space_id, "node_key": node_key, "page_count": 0, "pages": []}
+        return {"space_id": space_id, "node_key": node_key, "page_count": 0, "pages": [], "query": (q or "").strip()}
 
     stmt = text(
         """
@@ -524,9 +546,12 @@ def get_space_theme_node_pages(
         for document_id, document_title, page_no, chunk_count, has_source_file, category_id in rows
     ]
 
+    pages = _filter_pages_by_keyword(session, space_id, pages, q)
+
     return {
         "space_id": space_id,
         "node_key": node_key,
         "page_count": len(pages),
         "pages": pages,
+        "query": (q or "").strip(),
     }

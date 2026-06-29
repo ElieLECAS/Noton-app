@@ -52,6 +52,7 @@ _VALID_ENTITY_TYPES = frozenset(
         "organization",
         "location",
         "reference",
+        "symptom",
         "other",
     }
 )
@@ -134,7 +135,7 @@ Règles impératives :
 1. Renvoie UNIQUEMENT un objet JSON valide (aucun texte hors JSON).
 2. Extrais les entités concrètes : produits, références, matériaux, outils, normes, dimensions, processus, organisations, lieux.
 3. Normalise les noms (casse cohérente, sans bruit markdown).
-4. Pour chaque entité, fournis un type parmi : product | material | tool | norm | dimension | process | organization | location | reference | other
+4. Pour chaque entité, fournis un type parmi : product | material | tool | norm | dimension | process | organization | location | reference | symptom | other. Un symptôme ou problème SAV (ex. « infiltration d'eau », « ouvrant qui force », « condensation ») est une entité de type symptom.
 5. Les aliases sont les variantes, abréviations ou codes produit (ex. "ref ABC-123").
 6. Les relations décrivent un lien sémantique explicite entre deux entités de la page.
 7. Types de relation suggérés : compatible_avec | est_compose_de | remplace | utilise | conforme_a | installe_sur | fabrique_par | mesure | reference | co_occurs
@@ -184,7 +185,7 @@ Règles impératives — entités & relations :
 1. Renvoie UNIQUEMENT un objet JSON valide (aucun texte hors JSON).
 2. Extrais les entités concrètes : produits, références, matériaux, outils, normes, dimensions, processus, organisations, lieux.
 3. Normalise les noms (casse cohérente, sans bruit markdown).
-4. Pour chaque entité, fournis un type parmi : product | material | tool | norm | dimension | process | organization | location | reference | other
+4. Pour chaque entité, fournis un type parmi : product | material | tool | norm | dimension | process | organization | location | reference | symptom | other. Un symptôme ou problème SAV (ex. « infiltration d'eau », « ouvrant qui force », « condensation ») est une entité de type symptom.
 5. Les aliases sont les variantes, abréviations ou codes produit (ex. "ref ABC-123").
 6. Les relations décrivent un lien sémantique explicite entre deux entités d'une même page.
 7. Types de relation suggérés :
@@ -201,8 +202,7 @@ Règles impératives — catégorisation à facettes :
     - N'inclus un slug que si confidence ≥ 0.5. Mieux vaut 1 catégorie juste que 3 douteuses. Un chunk peut avoir 0 catégorie.
 11. N'associe un slug qu'aux chunks dont le contenu traite EXPLICITEMENT du thème. Ne propage pas un slug task/symptom à tous les chunks.
 12. Axe "doc_type" et axe "lifecycle_phase" → AU NIVEAU PAGE (champs doc_types, lifecycle_phases). Ces facettes sont homogènes : décris la NATURE du document et la PHASE du cycle de vie (en général 1 valeur chacun). Choisis uniquement parmi les slugs fournis.
-13. N'invente JAMAIS de slug hors des listes pour task / doc_type / lifecycle_phase / symptom.
-14. EXCEPTION — symptom_candidates : si une page décrit un symptôme/problème SAV réel qui N'EXISTE PAS dans la liste `symptom`, propose-le en texte court dans "symptom_candidates" (niveau page). Ne le mets PAS dans chunk_categories. N'invente pas de symptôme absent du contenu.
+13. N'invente JAMAIS de slug hors des listes pour task / doc_type / lifecycle_phase / symptom. Si un symptôme n'existe pas dans la liste `symptom`, ne le propose PAS : le vocabulaire des catégories est fermé.
 
 Taxonomie autorisée, groupée par axe (axe : [{{slug, description}}]) :
 {category_list}
@@ -226,8 +226,7 @@ Format de réponse OBLIGATOIRE :
             {{ "slug": "hardware_adjustment", "confidence": 0.6, "primary": false }}
         ] }},
         {{ "chunk_index": 2, "categories": [ {{ "slug": "infiltration_eau", "confidence": 0.85, "primary": true }} ] }}
-      ],
-      "symptom_candidates": ["<symptôme libre hors-liste, optionnel>"]
+      ]
     }}
   ]
 }}"""
@@ -1600,12 +1599,9 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
             total_categories += cats
             pages_ok += 1
 
-        candidates_touched = _persist_symptom_candidates(
-            session,
-            _clean_freeform_list(symptom_candidates_all),
-            document_id=document_id,
-            known_symptom_slugs=known_symptom_slugs,
-        )
+        # Catégories à vocabulaire fermé : on ne génère plus de candidats dynamiques
+        # (les concepts émergents relèvent des entités KAG, pas des catégories).
+        candidates_touched = 0
 
         session.commit()
 

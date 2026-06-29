@@ -27,6 +27,7 @@ _ENTITY_TYPE_COLORS = {
     "organization": "#ec4899",
     "location": "#14b8a6",
     "reference": "#64748b",
+    "symptom": "#f97316",
     "other": "#9ca3af",
 }
 
@@ -40,6 +41,7 @@ _ENTITY_TYPE_LABELS = {
     "organization": "Organisation",
     "location": "Lieu",
     "reference": "Référence",
+    "symptom": "Symptôme",
     "other": "Autre",
 }
 

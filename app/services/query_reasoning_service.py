@@ -197,9 +197,11 @@ async def decide_guided_mode(
             }
         )
 
+        # Décision subtile (is_guided + flow_kind diagnostic/howto + symptôme) : on garde
+        # le gros modèle ici, sinon le mode guidé n'est plus détecté (plus de boutons).
         response = await chat(
             "",
-            model=settings.MODEL_QUERY_UNDERSTANDING,
+            model=settings.MODEL_FAST,
             context=messages,
             response_format={"type": "json_object"},
         )

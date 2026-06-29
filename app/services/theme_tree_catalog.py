@@ -100,6 +100,7 @@ CATEGORY_ENTITY_TYPES: Dict[str, Tuple[str, ...]] = {
     "parts_references": ("reference",),
     "certification": ("norm", "organization"),
     "regulatory": ("norm",),
+    "troubleshooting": ("symptom",),
 }
 
 # Icône tabler par type d'entité (pour l'affichage des feuilles entités).
@@ -109,6 +110,7 @@ ENTITY_TYPE_ICON: Dict[str, str] = {
     "reference": "ti-hash",
     "norm": "ti-shield-check",
     "organization": "ti-building",
+    "symptom": "ti-alert-triangle",
     "tool": "ti-tool",
     "process": "ti-route",
     "dimension": "ti-ruler",
