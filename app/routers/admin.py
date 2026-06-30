@@ -998,6 +998,195 @@ async def delete_category(
     return {"status": "deleted", "id": category_id}
 
 
+# --- Suivi d'usage : conversations & messages (admin only) ---
+
+
+@router.get("/conversations")
+async def list_all_conversations(
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+    limit: int = 500,
+):
+    """Toutes les conversations (tous utilisateurs) + totaux. Admin uniquement."""
+    from sqlalchemy import text
+
+    totals = session.execute(
+        text(
+            "SELECT (SELECT COUNT(*) FROM conversation) AS c, "
+            "(SELECT COUNT(*) FROM message) AS m"
+        )
+    ).first()
+
+    rows = session.execute(
+        text(
+            """
+            SELECT c.id, c.title, c.user_id, u.username, u.email,
+                   c.space_id, s.name AS space_name,
+                   c.created_at, c.updated_at,
+                   COUNT(m.id) AS message_count,
+                   MAX(m.created_at) AS last_message_at
+            FROM conversation c
+            LEFT JOIN "user" u ON u.id = c.user_id
+            LEFT JOIN space s ON s.id = c.space_id
+            LEFT JOIN message m ON m.conversation_id = c.id
+            GROUP BY c.id, u.username, u.email, s.name
+            ORDER BY COALESCE(MAX(m.created_at), c.updated_at) DESC NULLS LAST
+            LIMIT :limit
+            """
+        ),
+        {"limit": limit},
+    ).all()
+
+    conversations = [
+        {
+            "id": r.id,
+            "title": r.title,
+            "user_id": r.user_id,
+            "username": r.username,
+            "email": r.email,
+            "space_id": r.space_id,
+            "space_name": r.space_name,
+            "message_count": int(r.message_count or 0),
+            "created_at": r.created_at.isoformat() if r.created_at else None,
+            "updated_at": r.updated_at.isoformat() if r.updated_at else None,
+            "last_message_at": r.last_message_at.isoformat() if r.last_message_at else None,
+        }
+        for r in rows
+    ]
+
+    return {
+        "total_conversations": int(totals.c or 0) if totals else 0,
+        "total_messages": int(totals.m or 0) if totals else 0,
+        "count_shown": len(conversations),
+        "conversations": conversations,
+    }
+
+
+@router.get("/conversations/{conversation_id}")
+async def get_conversation_detail(
+    conversation_id: int,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Détail d'une conversation (messages) pour « entrer à l'intérieur ». Admin only."""
+    from sqlalchemy import text
+
+    conv = session.execute(
+        text(
+            """
+            SELECT c.id, c.title, c.user_id, u.username, u.email,
+                   c.space_id, s.name AS space_name, c.created_at, c.updated_at
+            FROM conversation c
+            LEFT JOIN "user" u ON u.id = c.user_id
+            LEFT JOIN space s ON s.id = c.space_id
+            WHERE c.id = :id
+            """
+        ),
+        {"id": conversation_id},
+    ).first()
+    if not conv:
+        raise HTTPException(status_code=404, detail="Conversation introuvable")
+
+    msgs = session.execute(
+        text(
+            """
+            SELECT id, role, content, model, created_at
+            FROM message
+            WHERE conversation_id = :id
+            ORDER BY created_at, id
+            """
+        ),
+        {"id": conversation_id},
+    ).all()
+
+    return {
+        "id": conv.id,
+        "title": conv.title,
+        "user_id": conv.user_id,
+        "username": conv.username,
+        "email": conv.email,
+        "space_id": conv.space_id,
+        "space_name": conv.space_name,
+        "created_at": conv.created_at.isoformat() if conv.created_at else None,
+        "message_count": len(msgs),
+        "messages": [
+            {
+                "id": m.id,
+                "role": m.role,
+                "content": m.content,
+                "model": m.model,
+                "created_at": m.created_at.isoformat() if m.created_at else None,
+            }
+            for m in msgs
+        ],
+    }
+
+
+@router.get("/messages")
+async def list_all_messages(
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+    role: Optional[str] = None,
+    q: Optional[str] = None,
+    limit: int = 1000,
+):
+    """Messages (tous utilisateurs) triés/groupables par conversation. Admin only.
+
+    `role=user` → seulement les questions (voir le type de demandes). `q` filtre le contenu.
+    """
+    from sqlalchemy import text
+
+    qpat = f"%{q.strip()}%" if q and q.strip() else None
+    role_f = role if role in ("user", "assistant", "system") else None
+
+    rows = session.execute(
+        text(
+            """
+            SELECT m.id, m.conversation_id, m.role, m.content, m.created_at,
+                   c.title AS conversation_title, c.user_id,
+                   u.username, s.name AS space_name
+            FROM message m
+            INNER JOIN conversation c ON c.id = m.conversation_id
+            LEFT JOIN "user" u ON u.id = c.user_id
+            LEFT JOIN space s ON s.id = c.space_id
+            LEFT JOIN (
+                SELECT conversation_id, MAX(created_at) AS last_at
+                FROM message GROUP BY conversation_id
+            ) la ON la.conversation_id = m.conversation_id
+            WHERE (:role IS NULL OR m.role = :role)
+              AND (:qpat IS NULL OR m.content ILIKE :qpat)
+            ORDER BY la.last_at DESC NULLS LAST, m.conversation_id DESC,
+                     m.created_at ASC, m.id ASC
+            LIMIT :limit
+            """
+        ),
+        {"role": role_f, "qpat": qpat, "limit": limit},
+    ).all()
+
+    total_user = session.execute(
+        text("SELECT COUNT(*) FROM message WHERE role = 'user'")
+    ).first()
+
+    messages = [
+        {
+            "id": r.id,
+            "conversation_id": r.conversation_id,
+            "role": r.role,
+            "content": r.content,
+            "created_at": r.created_at.isoformat() if r.created_at else None,
+            "conversation_title": r.conversation_title,
+            "username": r.username,
+            "space_name": r.space_name,
+        }
+        for r in rows
+    ]
+    return {
+        "count_shown": len(messages),
+        "total_user_questions": int(total_user[0]) if total_user else 0,
+        "messages": messages,
+    }
+
+
 @router.get("/categories/{category_id}/stats", response_model=CategoryStatsResponse)
 async def category_stats(
     category_id: int,

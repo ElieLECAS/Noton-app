@@ -2,6 +2,27 @@
 
 {% block title %}Administration - {{ app_name }}{% endblock %}
 
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<style>
+  .admin-md { line-height: 1.5; }
+  .admin-md p { margin: 0.25rem 0; }
+  .admin-md strong { font-weight: 600; }
+  .admin-md ul, .admin-md ol { margin: 0.25rem 0; padding-left: 1.25rem; list-style: revert; }
+  .admin-md h1, .admin-md h2, .admin-md h3 { font-weight: 600; margin: 0.4rem 0 0.2rem; }
+  .admin-md code { background: rgba(0,0,0,0.06); padding: 0.05rem 0.3rem; border-radius: 0.25rem; font-size: 0.85em; }
+  .dark .admin-md code { background: rgba(255,255,255,0.1); }
+  .admin-md pre { overflow-x: auto; }
+  .admin-md table { border-collapse: collapse; width: 100%; margin: 0.5rem 0; font-size: 0.8rem; }
+  .admin-md th, .admin-md td { border: 1px solid rgba(0,0,0,0.14); padding: 0.3rem 0.55rem; text-align: left; white-space: nowrap; }
+  .dark .admin-md th, .dark .admin-md td { border-color: rgba(255,255,255,0.14); }
+  .admin-md th { background: rgba(0,0,0,0.04); font-weight: 600; }
+  .dark .admin-md th { background: rgba(255,255,255,0.06); }
+  .admin-md a { color: #6366f1; text-decoration: underline; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="flex-1 overflow-y-auto bg-transparent p-4 sm:p-6">
     <div class="max-w-7xl mx-auto space-y-6">
@@ -163,6 +184,14 @@
 
         <!-- Feedbacks Tab -->
         <div id="tab-content-feedbacks" class="tab-content hidden space-y-6">
+            <!-- Sous-onglets : Retours / Conversations -->
+            <div class="flex gap-2">
+                <button id="fb-subtab-retours" onclick="showFeedbackSubtab('retours')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all">Retours</button>
+                <button id="fb-subtab-conversations" onclick="showFeedbackSubtab('conversations')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">Conversations</button>
+                <button id="fb-subtab-messages" onclick="showFeedbackSubtab('messages')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">Messages</button>
+            </div>
+
+            <div id="feedback-subview-retours" class="space-y-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-gray-900 dark:text-white">
                     Statistiques des feedbacks
@@ -316,6 +345,85 @@
                             Suivant
                         </button>
                     </div>
+                </div>
+            </div>
+            </div><!-- /feedback-subview-retours -->
+
+            <!-- Sous-vue : Conversations (tous utilisateurs) -->
+            <div id="feedback-subview-conversations" class="hidden space-y-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Conversations</h2>
+                    <button type="button" onclick="loadAdminConversations()" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-1.5">
+                        <i class="ti ti-refresh text-base"></i> Actualiser
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm">
+                        <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Conversations totales</span>
+                        <div id="admin-kpi-conversations" class="text-3xl font-extrabold text-gray-900 dark:text-white mt-3">-</div>
+                    </div>
+                    <div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-5 shadow-sm">
+                        <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Messages totaux</span>
+                        <div id="admin-kpi-messages" class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 mt-3">-</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-black/5 dark:divide-white/5 text-sm">
+                            <thead class="bg-black/5 dark:bg-white/5">
+                                <tr>
+                                    <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dernière activité</th>
+                                    <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Utilisateur</th>
+                                    <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Espace</th>
+                                    <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Titre</th>
+                                    <th class="px-5 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Messages</th>
+                                    <th class="px-5 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-conversations-table-body" class="divide-y divide-black/5 dark:divide-white/5">
+                                <tr><td colspan="6" class="px-5 py-6 text-center text-gray-500">Chargement…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="px-5 py-3 border-t border-black/5 dark:border-white/5 text-xs text-gray-500 dark:text-gray-400 font-semibold" id="admin-conversations-count"></div>
+                </div>
+            </div>
+
+            <!-- Sous-vue : Messages groupés par conversation -->
+            <div id="feedback-subview-messages" class="hidden space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-3">
+                    <div class="flex items-baseline gap-2 min-w-0">
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Messages</h2>
+                        <span id="admin-messages-count" class="text-xs text-gray-500 dark:text-gray-400"></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <select id="admin-messages-role" onchange="loadAdminMessages()" class="px-2.5 py-1.5 rounded-lg text-xs font-medium border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/10 text-gray-700 dark:text-gray-300 focus:outline-none">
+                            <option value="user">Questions seulement</option>
+                            <option value="">Tous les messages</option>
+                            <option value="assistant">Réponses seulement</option>
+                        </select>
+                        <input type="search" id="admin-messages-search" placeholder="Filtrer le contenu…" onkeydown="if(event.key==='Enter'){loadAdminMessages();}" class="px-3 py-1.5 text-xs rounded-lg border border-black/10 dark:border-white/10 bg-white/60 dark:bg-white/10 text-gray-700 dark:text-gray-200 focus:outline-none w-44">
+                        <button type="button" onclick="loadAdminMessages()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 transition-all">Filtrer</button>
+                    </div>
+                </div>
+                <div id="admin-messages-list" class="space-y-4">
+                    <div class="text-sm text-gray-500 p-2">Chargement…</div>
+                </div>
+            </div>
+
+            <!-- Modale détail conversation -->
+            <div id="admin-conversation-modal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50 p-4" onclick="if(event.target===this) closeAdminConversationModal()">
+                <div class="glass-panel rounded-3xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+                    <div class="px-5 py-3 border-b border-black/5 dark:border-white/5 flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <h3 id="admin-conv-title" class="text-base font-bold text-gray-900 dark:text-white truncate">Conversation</h3>
+                            <p id="admin-conv-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">—</p>
+                        </div>
+                        <button type="button" onclick="closeAdminConversationModal()" class="shrink-0 p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"><i class="ti ti-x text-xl"></i></button>
+                    </div>
+                    <div id="admin-conv-messages" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
                 </div>
             </div>
         </div>
@@ -889,6 +997,184 @@ function showTab(tabName) {
     } else if (tabName === 'categories') {
         loadCategories();
     }
+}
+
+// ——— Sous-onglet Conversations (suivi d'usage, admin) ———
+function showFeedbackSubtab(name) {
+    const views = {
+        retours: 'feedback-subview-retours',
+        conversations: 'feedback-subview-conversations',
+        messages: 'feedback-subview-messages',
+    };
+    Object.entries(views).forEach(([k, id]) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('hidden', k !== name);
+    });
+    Object.keys(views).forEach(k => {
+        const btn = document.getElementById('fb-subtab-' + k);
+        if (!btn) return;
+        btn.className = (k === name)
+            ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all"
+            : "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
+    });
+    if (name === 'conversations') loadAdminConversations();
+    if (name === 'messages') loadAdminMessages();
+}
+
+function mdToHtml(text) {
+    try {
+        const raw = (window.marked ? marked.parse(text || '') : escapeHtml(text || ''));
+        return (window.DOMPurify ? DOMPurify.sanitize(raw) : raw);
+    } catch (e) {
+        return escapeHtml(text || '');
+    }
+}
+
+async function loadAdminMessages() {
+    const list = document.getElementById('admin-messages-list');
+    if (!list) return;
+    list.innerHTML = '<div class="text-sm text-gray-500 p-2">Chargement…</div>';
+    const role = document.getElementById('admin-messages-role')?.value ?? 'user';
+    const q = (document.getElementById('admin-messages-search')?.value || '').trim();
+    const params = new URLSearchParams();
+    if (role) params.set('role', role);
+    if (q) params.set('q', q);
+    try {
+        const r = await apiCall('/api/admin/messages?' + params.toString());
+        if (!r || !r.ok) { list.innerHTML = '<div class="text-sm text-red-500 p-2">Erreur de chargement</div>'; return; }
+        const data = await r.json();
+        const countEl = document.getElementById('admin-messages-count');
+        if (countEl) countEl.textContent = `${data.count_shown} affiché(s) · ${data.total_user_questions} questions au total`;
+        const msgs = data.messages || [];
+        if (!msgs.length) { list.innerHTML = '<div class="text-sm text-gray-500 p-2">Aucun message.</div>'; return; }
+
+        let html = '';
+        let currentConv = null;
+        msgs.forEach(m => {
+            if (m.conversation_id !== currentConv) {
+                if (currentConv !== null) html += '</div></div>';
+                currentConv = m.conversation_id;
+                html += `
+                    <div class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden">
+                        <div class="px-4 py-2.5 bg-black/[0.02] dark:bg-white/[0.03] border-b border-black/5 dark:border-white/5 flex items-center justify-between gap-3">
+                            <div class="min-w-0 truncate">
+                                <span class="font-bold text-sm text-gray-800 dark:text-gray-200">${escapeHtml(m.conversation_title || 'Sans titre')}</span>
+                                <span class="text-xs text-gray-400 ml-2">${escapeHtml(m.username || '')} · ${escapeHtml(m.space_name || '')}</span>
+                            </div>
+                            <button onclick="openAdminConversation(${m.conversation_id})" class="shrink-0 px-2 py-1 rounded-lg text-xs font-bold bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20">Ouvrir</button>
+                        </div>
+                        <div class="p-3 space-y-2">`;
+            }
+            const isUser = m.role === 'user';
+            const badge = isUser
+                ? '<span class="shrink-0 mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-500/10 text-indigo-600">Q</span>'
+                : '<span class="shrink-0 mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-black/5 dark:bg-white/10 text-gray-500">R</span>';
+            const contentHtml = isUser
+                ? `<div class="text-sm text-gray-900 dark:text-gray-100 font-medium whitespace-pre-wrap min-w-0">${escapeHtml(m.content || '')}</div>`
+                : `<div class="admin-md text-sm text-gray-600 dark:text-gray-300 min-w-0 overflow-x-auto">${mdToHtml(m.content || '')}</div>`;
+            html += `
+                <div class="flex items-start gap-2">
+                    ${badge}
+                    ${contentHtml}
+                </div>`;
+        });
+        if (currentConv !== null) html += '</div></div>';
+        list.innerHTML = html;
+    } catch (e) {
+        list.innerHTML = `<div class="text-sm text-red-500 p-2">${escapeHtml(e.message || 'Erreur')}</div>`;
+    }
+}
+
+function fmtDateTime(iso) {
+    if (!iso) return '—';
+    try { return new Date(iso).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }); }
+    catch (e) { return iso; }
+}
+
+async function loadAdminConversations() {
+    const tbody = document.getElementById('admin-conversations-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-6 text-center text-gray-500">Chargement…</td></tr>';
+    try {
+        const response = await apiCall('/api/admin/conversations');
+        if (!response || !response.ok) {
+            tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-6 text-center text-red-500">Erreur de chargement</td></tr>';
+            return;
+        }
+        const data = await response.json();
+        const kc = document.getElementById('admin-kpi-conversations');
+        const km = document.getElementById('admin-kpi-messages');
+        if (kc) kc.textContent = data.total_conversations ?? 0;
+        if (km) km.textContent = data.total_messages ?? 0;
+        const convs = data.conversations || [];
+        const countEl = document.getElementById('admin-conversations-count');
+        if (countEl) countEl.textContent = `${convs.length} conversation(s) affichée(s)` + (data.count_shown < data.total_conversations ? ` sur ${data.total_conversations}` : '');
+        if (!convs.length) {
+            tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-6 text-center text-gray-500">Aucune conversation</td></tr>';
+            return;
+        }
+        tbody.innerHTML = convs.map(c => `
+            <tr class="hover:bg-black/[0.02] dark:hover:bg-white/[0.02]">
+                <td class="px-5 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300">${fmtDateTime(c.last_message_at || c.updated_at)}</td>
+                <td class="px-5 py-3">
+                    <div class="font-semibold text-gray-800 dark:text-gray-200">${escapeHtml(c.username || ('user#' + c.user_id))}</div>
+                    <div class="text-xs text-gray-400">${escapeHtml(c.email || '')}</div>
+                </td>
+                <td class="px-5 py-3 text-gray-600 dark:text-gray-300">${escapeHtml(c.space_name || ('espace#' + c.space_id))}</td>
+                <td class="px-5 py-3 text-gray-700 dark:text-gray-200 max-w-xs truncate" title="${escapeHtml(c.title || '')}">${escapeHtml(c.title || 'Sans titre')}</td>
+                <td class="px-5 py-3 text-right"><span class="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-600">${c.message_count || 0}</span></td>
+                <td class="px-5 py-3 text-right"><button onclick="openAdminConversation(${c.id})" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20">Ouvrir</button></td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6" class="px-5 py-6 text-center text-red-500">${escapeHtml(e.message || 'Erreur')}</td></tr>`;
+    }
+}
+
+async function openAdminConversation(id) {
+    const modal = document.getElementById('admin-conversation-modal');
+    const body = document.getElementById('admin-conv-messages');
+    if (!modal || !body) return;
+    modal.classList.remove('hidden');
+    document.getElementById('admin-conv-title').textContent = 'Chargement…';
+    document.getElementById('admin-conv-meta').textContent = '—';
+    body.innerHTML = '<div class="text-sm text-gray-500 text-center py-6">Chargement…</div>';
+    try {
+        const response = await apiCall(`/api/admin/conversations/${id}`);
+        if (!response || !response.ok) {
+            body.innerHTML = '<div class="text-sm text-red-500 text-center py-6">Erreur de chargement</div>';
+            return;
+        }
+        const data = await response.json();
+        document.getElementById('admin-conv-title').textContent = data.title || 'Conversation';
+        document.getElementById('admin-conv-meta').textContent =
+            `${data.username || ('user#' + data.user_id)} · ${data.space_name || ('espace#' + data.space_id)} · ${data.message_count} message(s)`;
+        const msgs = data.messages || [];
+        if (!msgs.length) {
+            body.innerHTML = '<div class="text-sm text-gray-500 text-center py-6">Aucun message</div>';
+            return;
+        }
+        body.innerHTML = msgs.map(m => {
+            const isUser = m.role === 'user';
+            const align = isUser ? 'items-end' : 'items-start';
+            const bubble = isUser ? 'bg-indigo-600 text-white' : 'bg-black/5 dark:bg-white/10 text-gray-800 dark:text-gray-100';
+            const roleLabel = isUser ? 'Utilisateur' : (m.role === 'assistant' ? 'Assistant' : m.role);
+            const inner = isUser
+                ? `<div class="max-w-[85%] rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap ${bubble}">${escapeHtml(m.content || '')}</div>`
+                : `<div class="admin-md max-w-full rounded-2xl px-3.5 py-2 text-sm ${bubble} overflow-x-auto">${mdToHtml(m.content || '')}</div>`;
+            return `
+                <div class="flex flex-col ${align}">
+                    <div class="text-[10px] text-gray-400 mb-0.5">${escapeHtml(roleLabel)} · ${fmtDateTime(m.created_at)}</div>
+                    ${inner}
+                </div>`;
+        }).join('');
+    } catch (e) {
+        body.innerHTML = `<div class="text-sm text-red-500 text-center py-6">${escapeHtml(e.message || 'Erreur')}</div>`;
+    }
+}
+
+function closeAdminConversationModal() {
+    document.getElementById('admin-conversation-modal')?.classList.add('hidden');
 }
 
 async function loadQueueHealth() {
