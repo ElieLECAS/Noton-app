@@ -614,6 +614,67 @@ async def stream_space_chat_message(
 
             return StreamingResponse(generate_guided(), media_type="text/event-stream")
 
+    # ——— Fast-path FICHE TECHNIQUE (lookup par référence nue) ———
+    # Court-circuite le RAG conversationnel quand la demande est une référence nue
+    # ("Profil 76180", "notice de montage seuil 76180") : on produit une fiche
+    # STRUCTURÉE et sourcée plutôt qu'un texte brodé. Détection regex (zéro LLM).
+    # Gardé par FICHE_TECHNIQUE_ENABLED ; abstention (None) → pipeline RAG normal.
+    if settings.FICHE_TECHNIQUE_ENABLED:
+        from app.services.fiche_technique_service import (
+            build_fiche_technique,
+            detect_reference_query,
+        )
+
+        ref_query = detect_reference_query(request.message)
+        if ref_query:
+            logger.info("[chat] Fast-path fiche technique — refs=%s", ref_query.references)
+            fiche_result = await build_fiche_technique(
+                session=session,
+                space_id=space_id,
+                user_id=current_user.id,
+                ref_query=ref_query,
+            )
+            if fiche_result is not None:
+                fiche_markdown = fiche_result.markdown
+                fiche_sources = fiche_result.sources
+
+                async def generate_fiche():
+                    error_msg_to_yield = None
+                    try:
+                        chunk_size = 40
+                        for i in range(0, len(fiche_markdown), chunk_size):
+                            chunk = fiche_markdown[i : i + chunk_size]
+                            yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+
+                        assistant_message_id = None
+                        if request.conversation_id:
+                            try:
+                                assistant_message_id = _persist_assistant_reply(
+                                    request.conversation_id,
+                                    fiche_markdown,
+                                    forced_model,
+                                    forced_provider,
+                                    json.dumps(fiche_sources, ensure_ascii=False) if fiche_sources else None,
+                                    metadata_json={
+                                        "response_type": "fiche_technique",
+                                        "references": ref_query.references,
+                                    },
+                                )
+                            except Exception:
+                                logger.exception("Erreur sauvegarde fiche technique (space chat)")
+
+                        if fiche_sources:
+                            yield f"data: {json.dumps({'sources': fiche_sources})}\n\n"
+                        yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+                    except Exception as e:
+                        logger.exception("Erreur dans le générateur fiche technique (space chat)")
+                        error_msg_to_yield = str(e)
+
+                    if error_msg_to_yield:
+                        yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
+
+                return StreamingResponse(generate_fiche(), media_type="text/event-stream")
+
     retrieval_queries = None
     retrieval_query_groups = None
     rag_user_message = request.message

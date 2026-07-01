@@ -318,6 +318,27 @@ class Settings(BaseSettings):
     VISION_RERANK_MAX_PAGES: int = int(os.getenv("VISION_RERANK_MAX_PAGES", "4"))
     VISION_RERANK_DPI: int = int(os.getenv("VISION_RERANK_DPI", "150"))
 
+    # Fiche technique — lookup par référence nue ("Profil 76180", "notice seuil 76180")
+    # → sortie STRUCTURÉE et sourcée (pas de génération libre / broderie).
+    # Désactivé par défaut : aucun impact sur le pipeline existant tant que False.
+    FICHE_TECHNIQUE_ENABLED: bool = os.getenv("FICHE_TECHNIQUE_ENABLED", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Nombre de passages récupérés pour construire la fiche (lookup, pas top-k sémantique).
+    FICHE_TECHNIQUE_K: int = int(os.getenv("FICHE_TECHNIQUE_K", "12"))
+    # Motif des références numériques (profilés, seuils) — codes 3 à 6 chiffres.
+    FICHE_REFERENCE_PATTERN: str = os.getenv("FICHE_REFERENCE_PATTERN", r"\b\d{3,6}[A-Za-z]?\b")
+    # Motif des références alphanumériques (visserie S055, gabarit T021, seuil A076).
+    FICHE_REFERENCE_ALNUM_PATTERN: str = os.getenv(
+        "FICHE_REFERENCE_ALNUM_PATTERN", r"\b[A-Z]{1,3}\d{2,4}\b"
+    )
+    # Au-delà de ce nombre de mots, une requête n'est plus considérée « référence nue »
+    # (sauf si elle contient un marqueur documentaire explicite : fiche, notice, réf…).
+    FICHE_MAX_WORDS: int = int(os.getenv("FICHE_MAX_WORDS", "10"))
+    # Budget de tokens pour l'extraction structurée (le schéma est riche : éviter la
+    # troncature → JSON invalide → fiche vide).
+    FICHE_MAX_TOKENS: int = int(os.getenv("FICHE_MAX_TOKENS", "3000"))
+
     # Guidage procédural ("aiguillage" SAV / chantier) — moteur multi-étapes
     # Désactivé par défaut : aucun impact sur le pipeline one-shot existant tant que False.
     GUIDED_FLOW_ENABLED: bool = os.getenv("GUIDED_FLOW_ENABLED", "false").strip().lower() in (

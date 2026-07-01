@@ -119,6 +119,13 @@ x-app-env: &app-env
   MMR_LAMBDA: ${MMR_LAMBDA:-0.7}
   MMR_MAX_PER_PARENT: ${MMR_MAX_PER_PARENT:-5}
   HF_TOKEN: ${HF_TOKEN:-}
+  # Fiche technique (lookup par référence nue → sortie structurée sourcée)
+  # Motifs de référence non exposés ici (défauts Python) : un ${VAR:-} vide écraserait
+  # le regex par défaut. Les surcharger via .env si besoin.
+  FICHE_TECHNIQUE_ENABLED: ${FICHE_TECHNIQUE_ENABLED:-true}
+  FICHE_TECHNIQUE_K: ${FICHE_TECHNIQUE_K:-12}
+  FICHE_MAX_WORDS: ${FICHE_MAX_WORDS:-10}
+  FICHE_MAX_TOKENS: ${FICHE_MAX_TOKENS:-3000}
   # Moteur d'aiguillage procédural (guidage SAV / chantier)
   GUIDED_FLOW_ENABLED: ${GUIDED_FLOW_ENABLED:-false}
   GUIDED_MAX_STEPS: ${GUIDED_MAX_STEPS:-8}
