@@ -143,10 +143,42 @@ def _save_conversation_query_context(conversation_id: int, query_context: dict) 
     with Session(engine) as s:
         conv = s.get(Conversation, conversation_id)
         if conv:
-            conv.query_context = query_context
+            merged = dict(query_context or {})
+            previous = conv.query_context or {}
+            # L'ancre documentaire (current_documents) est écrite par
+            # _update_conversation_documents APRÈS le retrieval. Le query_context produit
+            # par la compréhension ne la contient jamais : sans cette préservation, chaque
+            # tour l'efface AVANT le retrieval — et un tour qui n'atteint pas le retrieval
+            # (clarification, low-confidence, erreur) la perdait définitivement.
+            if "current_documents" not in merged and previous.get("current_documents"):
+                merged["current_documents"] = previous["current_documents"]
+            conv.query_context = merged
             conv.updated_at = datetime.utcnow()
             s.add(conv)
             s.commit()
+
+
+def _update_conversation_documents(conversation_id: int, document_ids: List[int]) -> None:
+    """Persiste les documents d'ancre (sujet documentaire courant) dans query_context.
+
+    Fusionne dans le contexte existant sans l'écraser ; réassigne le dict entier pour
+    déclencher le suivi de modification JSON de SQLAlchemy.
+    """
+    with Session(engine) as s:
+        conv = s.get(Conversation, conversation_id)
+        if conv:
+            qc = dict(conv.query_context or {})
+            qc["current_documents"] = [int(d) for d in document_ids]
+            conv.query_context = qc
+            conv.updated_at = datetime.utcnow()
+            s.add(conv)
+            s.commit()
+            # Log de cycle de vie de l'ancre (diagnostic continuité conversation).
+            logger.info(
+                "[chat] ancre mise à jour — conversation=%s docs=%s",
+                conversation_id,
+                qc["current_documents"],
+            )
 
 
 def _int_env(name: str, default: int) -> int:
@@ -476,6 +508,26 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
 
     return system_message
 
+
+def _build_generation_context(
+    session: Session,
+    doc_passages: List[dict],
+    anchor_document_ids: Optional[List[int]] = None,
+) -> dict:
+    """Contexte système de génération : CAG (documents entiers, fenêtre 256k) si activé,
+    sinon fallback historique (passages tronqués). Les documents ANCRÉS (sujet courant de
+    la conversation) sont toujours inclus dans le contexte CAG — garantie de continuité."""
+    if settings.CAG_ENABLED:
+        from app.services.context_packer_service import build_cag_context
+
+        return build_cag_context(
+            session,
+            doc_passages,
+            system_prompt=SPACE_CHAT_SYSTEM_PROMPT,
+            anchor_document_ids=anchor_document_ids,
+        )
+    return build_space_context_from_passages(doc_passages)
+
 @router.post("/spaces/{space_id}/chat/stream")
 async def stream_space_chat_message(
     space_id: int,
@@ -643,6 +695,19 @@ async def stream_space_chat_message(
                 fiche_markdown = fiche_result.markdown
                 fiche_sources = fiche_result.sources
 
+                # Ancre le sujet documentaire de la fiche (ex. dormant 6101) : sans ça, le
+                # tour de SUIVI ("tu as ses dimensions ?") repart sans ancre (la fiche
+                # court-circuite le RAG) et dérive vers un autre produit.
+                if settings.CONVERSATION_ANCHOR_ENABLED and request.conversation_id and fiche_sources:
+                    from app.services.retrieval_boost_service import compute_anchor_documents
+
+                    fiche_anchor = compute_anchor_documents(
+                        fiche_sources, max_docs=settings.CONVERSATION_ANCHOR_MAX_DOCS
+                    )
+                    if fiche_anchor:
+                        _update_conversation_documents(request.conversation_id, fiche_anchor)
+                        logger.info("[chat] ancre fiche technique — docs=%s", fiche_anchor)
+
                 async def generate_fiche():
                     error_msg_to_yield = None
                     try:
@@ -687,6 +752,8 @@ async def stream_space_chat_message(
     # génération : reformulation history-aware en question autonome).
     retrieval_query_text = request.message
     lw_result = None
+    # Documents d'ancre du sujet courant (réutilisés pour biaiser le retrieval de ce tour).
+    anchor_document_ids: List[int] = []
 
     if settings.QUERY_UNDERSTANDING_ENABLED:
         logger.info("[chat] Étape 1/5 — lightweight query understanding")
@@ -722,6 +789,22 @@ async def stream_space_chat_message(
         # (assurée en amont par le condense topic_shift-aware et _node_merge_context).
         if lw_result.topic_shift:
             logger.info("[chat] topic_shift détecté — le contexte du tour précédent n'est pas réutilisé")
+
+        # Ancre documentaire : hors changement de sujet, on réutilise les documents du sujet
+        # courant (mémorisés au tour précédent) pour biaiser le retrieval → la conversation
+        # reste sur le même produit d'un tour à l'autre.
+        if (
+            settings.CONVERSATION_ANCHOR_ENABLED
+            and not lw_result.topic_shift
+            and persisted_context
+        ):
+            anchor_document_ids = [
+                int(d)
+                for d in (persisted_context.get("current_documents") or [])
+                if d is not None
+            ]
+            if anchor_document_ids:
+                logger.info("[chat] ancre documentaire active — docs=%s", anchor_document_ids)
 
         if request.conversation_id and lw_result.query_context:
             _save_conversation_query_context(request.conversation_id, lw_result.query_context)
@@ -925,6 +1008,7 @@ async def stream_space_chat_message(
             queries=retrieval_queries,
             signals=lw_result.signals if lw_result and lw_result.signals else None,
             query_groups=retrieval_query_groups,
+            anchor_document_ids=anchor_document_ids or None,
         )
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]
@@ -982,6 +1066,17 @@ async def stream_space_chat_message(
         )
         doc_passages = refine_with_source_authority(doc_passages, retrieval_query_text, intent_obj)
 
+    # Mémorise les documents dominants de ce tour comme ancre du sujet courant (réutilisée
+    # pour biaiser le retrieval du prochain tour, tant qu'il n'y a pas de changement de sujet).
+    if settings.CONVERSATION_ANCHOR_ENABLED and request.conversation_id and doc_passages:
+        from app.services.retrieval_boost_service import compute_anchor_documents
+
+        new_anchor = compute_anchor_documents(
+            doc_passages, max_docs=settings.CONVERSATION_ANCHOR_MAX_DOCS
+        )
+        if new_anchor:
+            _update_conversation_documents(request.conversation_id, new_anchor)
+
     logger.info(
         "[chat] Étape %s — contexte RAG (%d passages, status=%s, dynamic_k=%s, rerank=%s)",
         "3/5" if settings.QUERY_UNDERSTANDING_ENABLED else "3/4",
@@ -994,7 +1089,7 @@ async def stream_space_chat_message(
     # Construire le contexte système à partir des passages techniques
     # Si low confidence : injecter un prompt spécial pour forcer la clarification
     if retrieval_status == "low_confidence_clarification":
-        space_context_draft = build_space_context_from_passages(doc_passages)
+        space_context_draft = _build_generation_context(session, doc_passages, anchor_document_ids=anchor_document_ids or None)
         # Ajouter une instruction de clarification forcée après les passages
         space_context_draft["content"] += (
             "\n\n⚠️ IMPORTANT : Les passages ci-dessus sont ambigus ou de faible pertinence. "
@@ -1007,7 +1102,7 @@ async def stream_space_chat_message(
             retrieval_reason,
         )
     else:
-        space_context_draft = build_space_context_from_passages(doc_passages)
+        space_context_draft = _build_generation_context(session, doc_passages, anchor_document_ids=anchor_document_ids or None)
 
     full_context_draft = []
     full_context_draft.append(space_context_draft)

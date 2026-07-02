@@ -295,6 +295,21 @@ class Settings(BaseSettings):
     )
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "10"))
     RAG_POOL_SIZE: int = int(os.getenv("RAG_POOL_SIZE", "20"))
+
+    # CAG post-retriever : au lieu d'injecter des passages tronqués, on packe des DOCUMENTS
+    # entiers (ou des sections étendues) dans le contexte, en exploitant la fenêtre 256k de
+    # Mistral Large. Le retriever devient un sélecteur de documents → meilleur rappel.
+    CAG_ENABLED: bool = os.getenv("CAG_ENABLED", "true").strip().lower() in ("true", "1", "yes", "on")
+    # Budget contexte documentaire en TOKENS estimés (≈ chars / CAG_CHARS_PER_TOKEN).
+    CAG_TOKEN_BUDGET: int = int(os.getenv("CAG_TOKEN_BUDGET", "100000"))
+    # Nombre max de documents packés (top-D agrégés depuis les passages).
+    CAG_MAX_DOCUMENTS: int = int(os.getenv("CAG_MAX_DOCUMENTS", "8"))
+    # Au-delà de ce volume, un document n'est PAS chargé en entier → fenêtrage par pages.
+    CAG_FULL_DOC_MAX_TOKENS: int = int(os.getenv("CAG_FULL_DOC_MAX_TOKENS", "20000"))
+    # Rayon de fenêtre (pages autour des pages matchées) pour les documents trop volumineux.
+    CAG_PAGE_RADIUS: int = int(os.getenv("CAG_PAGE_RADIUS", "3"))
+    # Estimation FR chars→tokens pour le packing sous budget.
+    CAG_CHARS_PER_TOKEN: float = float(os.getenv("CAG_CHARS_PER_TOKEN", "3.5"))
     RAG_NEIGHBOR_STRATEGY: str = os.getenv("RAG_NEIGHBOR_STRATEGY", "conditional")
     # Chars max par passage injecté au LLM. Relevé (4000 → 12000) pour laisser passer des
     # PAGES ENTIÈRES (texte consolidé + enrichissement) sans troncature, en profitant de la
@@ -336,6 +351,18 @@ class Settings(BaseSettings):
         else {"symptom": 2.0, "task": 1.0, "doc_type": 0.6, "lifecycle_phase": 0.5}
     )
     RETRIEVAL_SOURCE_BOOST_MAX: float = float(os.getenv("RETRIEVAL_SOURCE_BOOST_MAX", "0.8"))
+    # Ancrage documentaire conversationnel : les documents fortement matchés à un tour sont
+    # mémorisés (query_context.current_documents) et leurs pages sont boostées aux tours
+    # SUIVANTS — tant qu'il n'y a pas de changement de sujet (topic_shift). Empêche la
+    # conversation de sauter d'un produit à l'autre (ex. KSR PVC → Lumine65 → INNOSLIDE).
+    CONVERSATION_ANCHOR_ENABLED: bool = os.getenv("CONVERSATION_ANCHOR_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Nombre de documents mémorisés comme ancre (le sujet courant tient en général sur 1-3 docs).
+    CONVERSATION_ANCHOR_MAX_DOCS: int = int(os.getenv("CONVERSATION_ANCHOR_MAX_DOCS", "3"))
+    # Boost multiplicatif du rrf_score des pages appartenant aux documents ancrés (post-fusion,
+    # AVANT la coupe top_k → une page d'un doc ancré survit à la coupe).
+    CONVERSATION_ANCHOR_BOOST: float = float(os.getenv("CONVERSATION_ANCHOR_BOOST", "0.5"))
     RETRIEVAL_MATERIAL_BOOST: float = float(os.getenv("RETRIEVAL_MATERIAL_BOOST", "0.3"))
     RETRIEVAL_ENTITY_BOOST: float = float(os.getenv("RETRIEVAL_ENTITY_BOOST", "0.1"))
 

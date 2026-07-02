@@ -698,6 +698,7 @@ async def search_multimodal_passages(
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
     query_groups: Optional[List[QueryGroup]] = None,
+    anchor_document_ids: Optional[List[int]] = None,
 ) -> Dict:
     """
     Pipeline retrieval multimodal page-centric unifié.
@@ -863,6 +864,13 @@ async def search_multimodal_passages(
 
         # Boost catégorie multiplicatif sur rrf_score (post-fusion, avant rerank)
         apply_category_boost_to_fused_hits(session, fused_hits, signals)
+
+        # Ancrage conversation : booste les pages des documents du sujet courant AVANT la
+        # coupe top_k, pour que la conversation reste sur le même produit d'un tour à l'autre.
+        if settings.CONVERSATION_ANCHOR_ENABLED and anchor_document_ids:
+            from app.services.retrieval_boost_service import apply_anchor_boost_to_fused_hits
+
+            apply_anchor_boost_to_fused_hits(fused_hits, anchor_document_ids)
 
         if not fused_hits:
             result = {"passages": [], "images": [], "status": "ok", "reason": "no_results", "dynamic_k": 0}
@@ -1090,6 +1098,7 @@ async def search_relevant_passages(
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
     query_groups: Optional[List[QueryGroup]] = None,
+    anchor_document_ids: Optional[List[int]] = None,
 ) -> Dict:
     """
     RAG espace : retrieval hybride ColPali + pgvector L1 + BM25, fusion RRF,
@@ -1107,6 +1116,7 @@ async def search_relevant_passages(
             document_filter=document_filter,
             include_retrieval_stages=include_retrieval_stages,
             queries=queries,
+            anchor_document_ids=anchor_document_ids,
             signals=signals,
             query_groups=query_groups,
         )
@@ -1313,6 +1323,7 @@ async def search_technical_passages(
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
     query_groups: Optional[List[QueryGroup]] = None,
+    anchor_document_ids: Optional[List[int]] = None,
 ) -> Dict:
     """
     Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
@@ -1332,6 +1343,7 @@ async def search_technical_passages(
         queries=queries,
         signals=signals,
         query_groups=query_groups,
+        anchor_document_ids=anchor_document_ids,
     )
 
 

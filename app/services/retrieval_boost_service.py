@@ -170,6 +170,59 @@ def apply_category_boost_to_fused_hits(
     return fused_hits
 
 
+def apply_anchor_boost_to_fused_hits(
+    fused_hits: List[Any],
+    anchor_document_ids: Optional[Sequence[int]],
+) -> List[Any]:
+    """Boost multiplicatif des pages des documents ANCRÉS (continuité de conversation).
+
+    Appliqué après la fusion RRF (et le boost catégorie), AVANT la coupe top_k : une page
+    d'un document du sujet courant remonte et survit à la coupe, même quand le tour est
+    formulé en suivi elliptique (« et les autres ? ») qui matche faiblement en propre.
+    Empêche la conversation de sauter d'un produit à l'autre. Duck typing sur rrf_score.
+    """
+    if not fused_hits or not anchor_document_ids:
+        return fused_hits
+
+    anchor = {int(d) for d in anchor_document_ids}
+    factor = 1.0 + settings.CONVERSATION_ANCHOR_BOOST
+    boosted = 0
+    for hit in fused_hits:
+        if int(getattr(hit, "document_id", -1)) in anchor:
+            hit.rrf_score = (hit.rrf_score or 0.0) * factor
+            boosted += 1
+
+    if boosted:
+        fused_hits.sort(key=lambda h: h.rrf_score or 0.0, reverse=True)
+        for rank, hit in enumerate(fused_hits, start=1):
+            if hasattr(hit, "final_rank"):
+                hit.final_rank = rank
+        logger.info(
+            "[retrieval_boost] ancre conversation: %d page(s) ×%.2f, docs=%s",
+            boosted,
+            factor,
+            sorted(anchor),
+        )
+    return fused_hits
+
+
+def compute_anchor_documents(passages: List[Dict[str, Any]], *, max_docs: int) -> List[int]:
+    """Documents dominants d'un lot de passages (somme des scores par document, top-N).
+
+    Sert à mémoriser le « sujet documentaire » d'un tour pour ancrer les tours suivants.
+    """
+    if not passages or max_docs <= 0:
+        return []
+    score_by_doc: Dict[int, float] = {}
+    for p in passages:
+        did = p.get("document_id")
+        if did is None:
+            continue
+        score_by_doc[int(did)] = score_by_doc.get(int(did), 0.0) + float(p.get("score") or 0.0)
+    ranked = sorted(score_by_doc.items(), key=lambda kv: kv[1], reverse=True)
+    return [did for did, _ in ranked[:max_docs]]
+
+
 def _get_document_source(session: Session, document_id: int) -> Optional[str]:
     doc = session.get(Document, document_id)
     return doc.source if doc else None
