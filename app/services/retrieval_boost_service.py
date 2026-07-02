@@ -146,7 +146,13 @@ def apply_category_boost_to_fused_hits(
             ),
             reverse=True,
         )[:3]
-        factor = 1.0 + settings.RETRIEVAL_CATEGORY_BOOST * sum(contributions)
+        # Plafonné : empêche qu'un cumul de matches (ex. 3 catégories symptôme) fabrique
+        # un facteur ~1.9 capable d'inverser un vrai signal de pertinence — d'autant plus
+        # critique que le reranker cross-encoder est désactivé (boost = principal signal).
+        factor = min(
+            1.0 + settings.RETRIEVAL_CATEGORY_BOOST * sum(contributions),
+            settings.RETRIEVAL_CATEGORY_BOOST_MAX,
+        )
         hit.rrf_score = (hit.rrf_score or 0.0) * factor
         boosted += 1
 

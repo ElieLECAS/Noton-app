@@ -1120,6 +1120,17 @@ def delete_document(session: Session, document_id: int, user_id: int) -> bool:
         return False
     
     doc_spaces = get_document_spaces(session, document_id, user_id)
+
+    # Nettoyage du graphe KAG AVANT la suppression des chunks. Deux raisons :
+    #  1) chunkcategoryrelation.chunk_id n'a pas d'ON DELETE CASCADE → sans ce nettoyage,
+    #     supprimer un document catégorisé lève une violation de contrainte FK.
+    #  2) chunkentityrelation a bien un CASCADE, mais il ne décrémente pas mention_count :
+    #     les entités deviennent orphelines (compteur figé) et polluent le graphe de l'espace.
+    # cleanup_kag_for_document décrémente les compteurs puis purge les entités orphelines.
+    # Doit précéder delete_chunks_for_document (il lit chunk_id depuis documentchunk).
+    from app.services.kag_extraction_service import cleanup_kag_for_document
+    cleanup_kag_for_document(session, document_id)
+
     delete_chunks_for_document(session, document_id, commit=False)
 
     for doc_space in doc_spaces:

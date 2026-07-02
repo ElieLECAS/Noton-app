@@ -42,6 +42,9 @@ class LightweightQueryResult(BaseModel):
     query_context: Dict[str, Any] = Field(default_factory=dict)
     query_strategy: str = "single"
     query_groups: List[QueryGroup] = Field(default_factory=list)
+    # True quand le dernier message change de sujet vs l'historique : le condense ne
+    # réintègre alors pas l'ancien sujet et l'appelant n'hérite pas des signaux passés.
+    topic_shift: bool = False
 
 
 class LightweightState(TypedDict, total=False):
@@ -58,6 +61,8 @@ class LightweightState(TypedDict, total=False):
     original_user_message: str
     enriched_user_message: str
     awaiting_vague_clarification: bool
+    standalone_question: str
+    topic_shift: bool
     query_strategy: str
     query_groups: List[Dict[str, Any]]
 
@@ -66,6 +71,17 @@ def _full_request_text(state: LightweightState) -> str:
     enriched = (state.get("enriched_user_message") or "").strip()
     original = (state.get("original_user_message") or state.get("user_message") or "").strip()
     return enriched or original
+
+
+def _search_text(state: LightweightState) -> str:
+    """Texte à utiliser pour la RECHERCHE documentaire.
+
+    Privilégie la question autonome reformulée (history-aware) si disponible,
+    sinon retombe sur la demande complète. Ne change pas le texte affiché ni
+    celui envoyé au LLM de génération de réponse.
+    """
+    standalone = (state.get("standalone_question") or "").strip()
+    return standalone or _full_request_text(state)
 
 
 async def _node_route_decision(state: LightweightState) -> Dict[str, Any]:
@@ -227,8 +243,229 @@ Retourne UNIQUEMENT un JSON :
 """
 
 
+CONDENSE_QUESTION_SYSTEM_PROMPT = """Tu reformules le DERNIER message d'un utilisateur en une question AUTONOME, à partir de l'historique de conversation, pour un assistant documentaire menuiserie (PROFERM).
+
+But : la reformulation servira UNIQUEMENT à une recherche documentaire. Elle doit être compréhensible sans l'historique.
+
+RÈGLES STRICTES :
+- Résous les références implicites ("et le X ?", "et celui-ci", "sa pose", "cette gamme") en réintégrant le contexte du sujet précédent (gamme, produit, système).
+- Le SUJET PRINCIPAL est ce que demande le dernier message. S'il introduit une nouvelle référence ou un nouveau produit (ex : un nouveau code produit), CE nouvel élément doit être le cœur de la question — ne le noie pas sous l'ancien sujet.
+- Conserve tel quel tout code/référence produit du dernier message (ne corrige pas, ne modifie pas la casse des références techniques).
+- Si le dernier message est déjà autonome, renvoie-le quasiment inchangé.
+- Reste concis (une seule question, ≤ 30 mots). Pas de préambule.
+
+Retourne UNIQUEMENT un JSON :
+{ "standalone_question": "..." }
+"""
+
+
+async def _node_condense_question(state: LightweightState) -> Dict[str, Any]:
+    full_request = _full_request_text(state)
+    history = state.get("history") or []
+
+    # Pas d'historique OU condensation désactivée → la demande est déjà autonome.
+    if not settings.QUERY_CONDENSE_ENABLED or not history:
+        return {"standalone_question": full_request}
+
+    lines = []
+    for msg in history[-6:]:
+        role = msg.get("role", "user")
+        content = str(msg.get("content", ""))[:400]
+        lines.append(f"{role}: {content}")
+    history_snippet = "\n".join(lines)
+
+    prompt = (
+        f"Historique récent :\n{history_snippet or '(vide)'}\n\n"
+        f"Dernier message utilisateur :\n{full_request}\n\n"
+        "Reformule ce dernier message en une question autonome pour la recherche documentaire."
+    )
+
+    standalone = full_request
+    try:
+        response = await chat(
+            "",
+            model=settings.MODEL_QUERY_UNDERSTANDING,
+            context=[
+                {"role": "system", "content": CONDENSE_QUESTION_SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            response_format={"type": "json_object"},
+        )
+        content = response["choices"][0]["message"].get("content", "{}")
+        data = json.loads(content)
+        candidate = str(data.get("standalone_question") or "").strip()
+        if candidate:
+            standalone = candidate
+    except Exception as exc:
+        logger.error("[lightweight_qu] condense_question failed: %s", exc)
+        standalone = full_request
+
+    logger.info(
+        "[lightweight_qu] condense_question — %r → %r",
+        full_request[:80],
+        standalone[:120],
+    )
+    return {"standalone_question": standalone}
+
+
+FUSED_UNDERSTANDING_EXTRA_PROMPT = """
+
+======================================================================
+EN PLUS des signaux ci-dessus, produis AUSSI, dans le MÊME objet JSON, ces champs de
+pilotage de la recherche documentaire :
+
+A. "route" : "direct" ou "rag".
+   - "direct" : salutation, remerciement, question sur ton identité/rôle/capacités, ou
+     bavardage sans lien avec un produit ou un document.
+   - "rag" : question technique, produit, gamme, norme, pose, réglage, réparation,
+     fournisseur — ou EN CAS DE DOUTE.
+
+B. "topic_shift" : true / false.
+   - true si le DERNIER message change de sujet par rapport à l'historique : nouveau
+     produit / gamme / thème sans lien, OU demande explicite d'oublier/changer de sujet
+     ("oublie", "autre chose", "passons à", "sinon parle-moi de").
+   - true aussi s'il n'y a PAS d'historique.
+   - false s'il poursuit clairement le même sujet ("et le X ?", "sa pose", "et en PVC ?"
+     quand cela s'applique au même produit).
+
+C. "standalone_question" : reformulation AUTONOME du dernier message pour la recherche.
+   - Si topic_shift = false : résous les références implicites ("et le X ?", "celui-ci",
+     "sa pose") en réintégrant le sujet de l'historique.
+   - Si topic_shift = true : NE réintègre PAS l'historique ; rends simplement le dernier
+     message grammaticalement autonome, sans y coller l'ancien sujet.
+   - Conserve tel quel tout code / référence du dernier message. Une seule question, <= 30 mots.
+
+D. "too_vague" : true si la demande reste trop vague pour une recherche pertinente MÊME en
+   tenant compte de l'historique. Si true, remplis "clarification_question" (question courte,
+   en français). Sinon too_vague = false et "clarification_question" = null.
+
+Le JSON final = TOUS les champs de signaux ci-dessus + "route" + "topic_shift" +
+"standalone_question" + "too_vague" + "clarification_question". Aucun autre champ.
+"""
+
+
+def _history_snippet(history: List[Dict[str, str]], *, turns: int, cap: int) -> str:
+    if not history:
+        return ""
+    lines = []
+    for msg in history[-turns:]:
+        role = msg.get("role", "user")
+        content = str(msg.get("content", ""))[:cap]
+        lines.append(f"{role}: {content}")
+    return "\n".join(lines)
+
+
+async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
+    """Route + signaux + condense + vagueness + topic_shift en UN appel LLM.
+
+    Remplace les nœuds route_decision / extract_signals / assess_vagueness /
+    condense_question quand QUERY_FUSED_UNDERSTANDING_ENABLED est actif. Le petit modèle
+    de compréhension traite tout en une passe JSON, ce qui supprime 3-4 allers-retours
+    séquentiels avant le retrieval.
+    """
+    session = state["session"]
+    full_request = _full_request_text(state)
+    history = state.get("history") or []
+    history_snippet = _history_snippet(history, turns=6, cap=400)
+
+    system_prompt = build_extract_signals_prompt(session) + FUSED_UNDERSTANDING_EXTRA_PROMPT
+    user_prompt = (
+        f"Historique récent :\n{history_snippet or '(vide)'}\n\n"
+        f"Dernier message utilisateur : '{full_request}'\n\n"
+        "Extrais les signaux de CE dernier message, puis produis route, topic_shift, "
+        "standalone_question, too_vague et clarification_question."
+    )
+
+    # Valeurs de repli (si l'appel LLM échoue, on ne bloque jamais le pipeline).
+    route = "rag"
+    topic_shift = not history
+    standalone = full_request
+    too_vague = False
+    clarification_q = ""
+    signals_dict = LightweightQuerySignals().model_dump()
+
+    try:
+        response = await chat(
+            "",
+            model=settings.MODEL_QUERY_UNDERSTANDING,
+            context=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            response_format={"type": "json_object"},
+        )
+        content = response["choices"][0]["message"].get("content", "{}")
+        raw = json.loads(content)
+
+        route = str(raw.get("route") or "rag").strip().lower()
+        if route not in ("direct", "rag"):
+            route = "rag"
+        # Pas d'historique → toujours un nouveau sujet, quel que soit le LLM.
+        topic_shift = bool(raw.get("topic_shift")) if history else True
+        candidate = str(raw.get("standalone_question") or "").strip()
+        if candidate:
+            standalone = candidate
+        too_vague = bool(raw.get("too_vague"))
+        clarification_q = str(raw.get("clarification_question") or "").strip()
+
+        # parse_and_validate_signals ignore les clés méta (route, topic_shift, …).
+        extraction = parse_and_validate_signals(raw, session=session)
+        signals_dict = to_lightweight_signals(extraction).model_dump()
+    except Exception as exc:
+        logger.error("[lightweight_qu] fused_understand failed: %s", exc)
+
+    if not settings.QUERY_VAGUENESS_CHECK_ENABLED:
+        too_vague = False
+
+    logger.info(
+        "[lightweight_qu] fused_understand — route=%s topic_shift=%s too_vague=%s standalone=%r",
+        route,
+        topic_shift,
+        too_vague,
+        standalone[:100],
+    )
+
+    if route == "direct":
+        return {
+            "route": route,
+            "route_reasoning": "fused",
+            "signals": signals_dict,
+            "topic_shift": topic_shift,
+        }
+
+    if too_vague and clarification_q:
+        return {
+            "route": route,
+            "route_reasoning": "fused",
+            "signals": signals_dict,
+            "topic_shift": topic_shift,
+            "standalone_question": standalone,
+            "ready_for_retrieval": False,
+            "awaiting_vague_clarification": True,
+            "enriched_user_message": full_request,
+            "clarification": {
+                "question": clarification_q,
+                "slot_prompt": None,
+                "phase": "awaiting_vague_clarification",
+                "pending_field": "",
+            },
+        }
+
+    return {
+        "route": route,
+        "route_reasoning": "fused",
+        "signals": signals_dict,
+        "topic_shift": topic_shift,
+        "standalone_question": standalone,
+        "ready_for_retrieval": True,
+        "awaiting_vague_clarification": False,
+        "enriched_user_message": full_request,
+        "clarification": None,
+    }
+
+
 async def _node_plan_multi_query(state: LightweightState) -> Dict[str, Any]:
-    user_message = _full_request_text(state)
+    user_message = _search_text(state)
 
     # Mode rapide : pas de planification multi-requêtes → un seul groupe, 0 appel LLM.
     if not settings.QUERY_MULTI_GROUP_ENABLED:
@@ -288,13 +525,21 @@ async def _generate_one_group_queries(
     signals: Dict[str, Any],
     label: str,
     focus: str,
+    history_snippet: str = "",
 ) -> RetrievalQueries:
+    history_block = (
+        f"Historique récent (contexte uniquement) :\n{history_snippet}\n"
+        if history_snippet
+        else ""
+    )
     prompt = (
-        f"Question utilisateur : '{user_message}'\n"
+        f"Question utilisateur (autonome) : '{user_message}'\n"
+        f"{history_block}"
         f"Groupe : {label}\nFocus : {focus}\n"
         f"Signaux extraits : {json.dumps(signals, ensure_ascii=False)}\n"
         "Génère les 3 requêtes optimisées pour ce groupe spécifique. "
-        "Chaque requête doit refléter le focus du groupe, pas la question générale dans son ensemble."
+        "Chaque requête doit refléter le focus du groupe, pas la question générale dans son ensemble. "
+        "Le sujet de la question autonome prime : n'introduis pas de sujet issu uniquement de l'historique."
     )
     try:
         response = await chat(
@@ -334,8 +579,18 @@ async def _generate_one_group_queries(
 
 async def _node_generate_queries(state: LightweightState) -> Dict[str, Any]:
     signals = state.get("signals") or {}
-    user_message = _full_request_text(state)
+    user_message = _search_text(state)
     groups_raw = state.get("query_groups") or [{"label": "Recherche principale", "focus": user_message}]
+
+    history = state.get("history") or []
+    history_snippet = ""
+    if history:
+        lines = []
+        for msg in history[-4:]:
+            role = msg.get("role", "user")
+            content = str(msg.get("content", ""))[:300]
+            lines.append(f"{role}: {content}")
+        history_snippet = "\n".join(lines)
 
     tasks = [
         _generate_one_group_queries(
@@ -343,6 +598,7 @@ async def _node_generate_queries(state: LightweightState) -> Dict[str, Any]:
             signals,
             g.get("label", f"Groupe {i + 1}"),
             g.get("focus", user_message),
+            history_snippet,
         )
         for i, g in enumerate(groups_raw)
     ]
@@ -368,20 +624,37 @@ async def _node_generate_queries(state: LightweightState) -> Dict[str, Any]:
 
 
 def _node_merge_context(state: LightweightState) -> Dict[str, Any]:
-    persisted = state.get("persisted_context") or {}
-    original = persisted.get("original_user_message") or state.get("user_message", "")
-    enriched = persisted.get("enriched_user_message") or ""
-    awaiting_vague = bool(persisted.get("awaiting_vague_clarification"))
+    """Prépare le message à comprendre pour ce tour.
 
+    IMPORTANT — on n'hérite du message/contexte du tour précédent QUE lorsqu'on reprend
+    une clarification (le tour N-1 a posé une question de précision et l'utilisateur y
+    répond maintenant). En dehors de ce cas, le message courant EST le sujet : réutiliser
+    l'``original_user_message`` persisté ferait « coller » la conversation au tout premier
+    message et lui ferait perdre le fil dès qu'on enchaîne ou change de sujet.
+    """
+    persisted = state.get("persisted_context") or {}
     user_message = (state.get("user_message") or "").strip()
-    if awaiting_vague and user_message and persisted.get("phase") == "awaiting_vague_clarification":
-        base = enriched or original
+    awaiting_vague = bool(persisted.get("awaiting_vague_clarification"))
+    in_vague_continuation = (
+        awaiting_vague
+        and user_message
+        and persisted.get("phase") == "awaiting_vague_clarification"
+    )
+
+    if in_vague_continuation:
+        original = persisted.get("original_user_message") or user_message
+        base = persisted.get("enriched_user_message") or original
         enriched = f"{base}\n\nPrécision utilisateur : {user_message}"
+        return {
+            "original_user_message": original,
+            "enriched_user_message": enriched,
+            "awaiting_vague_clarification": True,
+        }
 
     return {
-        "original_user_message": original or user_message,
-        "enriched_user_message": enriched,
-        "awaiting_vague_clarification": awaiting_vague,
+        "original_user_message": user_message,
+        "enriched_user_message": "",
+        "awaiting_vague_clarification": False,
     }
 
 
@@ -393,16 +666,26 @@ def _after_route(state: LightweightState) -> str:
 
 def _after_assess_vagueness(state: LightweightState) -> str:
     if state.get("ready_for_retrieval"):
-        return "plan_multi_query"
+        return "condense_question"
     return "end_clarification"
 
 
-def _build_graph():
+def _after_fused(state: LightweightState) -> str:
+    if state.get("route") == "direct":
+        return "end_direct"
+    if not state.get("ready_for_retrieval"):
+        return "end_clarification"
+    return "plan_multi_query"
+
+
+def _build_graph_legacy():
+    """Graphe multi-nœuds historique (route → signaux → vagueness → condense → …)."""
     graph = StateGraph(LightweightState)
     graph.add_node("route_decision", _node_route_decision)
     graph.add_node("merge_context", _node_merge_context)
     graph.add_node("extract_signals", _node_extract_signals)
     graph.add_node("assess_vagueness", _node_assess_vagueness)
+    graph.add_node("condense_question", _node_condense_question)
     graph.add_node("plan_multi_query", _node_plan_multi_query)
     graph.add_node("generate_queries", _node_generate_queries)
 
@@ -417,21 +700,52 @@ def _build_graph():
     graph.add_conditional_edges(
         "assess_vagueness",
         _after_assess_vagueness,
-        {"plan_multi_query": "plan_multi_query", "end_clarification": END},
+        {"condense_question": "condense_question", "end_clarification": END},
+    )
+    graph.add_edge("condense_question", "plan_multi_query")
+    graph.add_edge("plan_multi_query", "generate_queries")
+    graph.add_edge("generate_queries", END)
+    return graph.compile()
+
+
+def _build_graph_fused():
+    """Graphe fusionné : merge_context → 1 appel LLM (route+signaux+condense+vagueness)."""
+    graph = StateGraph(LightweightState)
+    graph.add_node("merge_context", _node_merge_context)
+    graph.add_node("fused_understand", _node_fused_understand)
+    graph.add_node("plan_multi_query", _node_plan_multi_query)
+    graph.add_node("generate_queries", _node_generate_queries)
+
+    graph.set_entry_point("merge_context")
+    graph.add_edge("merge_context", "fused_understand")
+    graph.add_conditional_edges(
+        "fused_understand",
+        _after_fused,
+        {
+            "end_direct": END,
+            "end_clarification": END,
+            "plan_multi_query": "plan_multi_query",
+        },
     )
     graph.add_edge("plan_multi_query", "generate_queries")
     graph.add_edge("generate_queries", END)
     return graph.compile()
 
 
-_GRAPH = None
+_GRAPH_LEGACY = None
+_GRAPH_FUSED = None
 
 
 def _get_graph():
-    global _GRAPH
-    if _GRAPH is None:
-        _GRAPH = _build_graph()
-    return _GRAPH
+    """Sélectionne le graphe selon le flag (lu à l'exécution → testable/basculable)."""
+    global _GRAPH_LEGACY, _GRAPH_FUSED
+    if settings.QUERY_FUSED_UNDERSTANDING_ENABLED:
+        if _GRAPH_FUSED is None:
+            _GRAPH_FUSED = _build_graph_fused()
+        return _GRAPH_FUSED
+    if _GRAPH_LEGACY is None:
+        _GRAPH_LEGACY = _build_graph_legacy()
+    return _GRAPH_LEGACY
 
 
 async def run_lightweight_understanding(
@@ -456,11 +770,26 @@ async def run_lightweight_understanding(
     signals_data = final_state.get("signals") or {}
     signals = LightweightQuerySignals(**signals_data) if signals_data else LightweightQuerySignals()
 
+    topic_shift = bool(final_state.get("topic_shift"))
+    standalone_q = final_state.get("standalone_question") or ""
+
+    # Sujet courant persistant (fil conducteur) : réinitialisé au message courant sur
+    # changement de sujet, sinon conservé d'un tour à l'autre. Sert de repère de continuité
+    # (télémétrie + base pour une future mémoire de conversation).
+    persisted_topic = (persisted_context or {}).get("current_topic") if persisted_context else None
+    if topic_shift or not persisted_topic:
+        current_topic = standalone_q or final_state.get("original_user_message") or user_message
+    else:
+        current_topic = persisted_topic
+
     query_context = {
         "signals": signals.model_dump(),
         "original_user_message": final_state.get("original_user_message") or user_message,
         "enriched_user_message": final_state.get("enriched_user_message") or "",
+        "standalone_question": standalone_q,
         "awaiting_vague_clarification": bool(final_state.get("awaiting_vague_clarification")),
+        "topic_shift": topic_shift,
+        "current_topic": current_topic,
         "phase": (
             "awaiting_vague_clarification"
             if final_state.get("awaiting_vague_clarification")
@@ -492,6 +821,7 @@ async def run_lightweight_understanding(
             query_context=query_context,
             query_strategy=final_state.get("query_strategy") or "single",
             query_groups=parsed_groups,
+            topic_shift=topic_shift,
         )
 
     clarification_data = final_state.get("clarification")
@@ -502,6 +832,7 @@ async def run_lightweight_understanding(
             clarification=ClarificationResult(**clarification_data),
             signals=signals,
             query_context=query_context,
+            topic_shift=topic_shift,
         )
 
     return LightweightQueryResult(
@@ -509,4 +840,5 @@ async def run_lightweight_understanding(
         ready_for_retrieval=False,
         signals=signals,
         query_context=query_context,
+        topic_shift=topic_shift,
     )

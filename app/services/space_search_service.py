@@ -11,6 +11,7 @@ Pipeline RAG (USE_MULTIMODAL_RETRIEVAL=true, défaut) :
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import math
 import os
@@ -33,6 +34,68 @@ from app.services.query_signals_schemas import LightweightQuerySignals
 from app.services.retrieval_boost_service import apply_category_boost_to_fused_hits
 from app.tracing import trace_run
 from app.services import reranker_service
+
+
+async def _run_retrievers(
+    session: Session,
+    space_id: int,
+    doc_ids: List[int],
+    colpali_q: str,
+    semantic_q: str,
+    lexical_q: str,
+    query_embedding: Optional[List[float]],
+    pool_size: int,
+) -> Tuple[List[Any], List[Any], List[Any], List[Any]]:
+    """Exécute les 4 retrievers (ColPali/pgvector/BM25/KAG).
+
+    En mode parallèle (``RETRIEVAL_PARALLEL_ENABLED``), chaque retriever tourne dans un
+    thread avec sa PROPRE session DB (une ``Session`` SQLAlchemy n'est pas concurrente),
+    ce qui recouvre l'encodage ColPali CPU avec les requêtes SQL des trois autres. Les
+    hits retournés ne portent que des identifiants (document_id/page_no/chunk_id) et des
+    scores : le texte est chargé plus tard avec la session principale, donc fermer les
+    sessions des threads est sans risque. En repli séquentiel, tout passe par ``session``.
+    """
+    from app.services.page_retrieval_service import (
+        filter_colpali_pages_dynamic,
+        retrieve_bm25_pages,
+        retrieve_colpali_pages,
+        retrieve_pgvector_pages,
+    )
+
+    kag_enabled = settings.KAG_ENABLED
+
+    def _colpali(s: Session) -> List[Any]:
+        return filter_colpali_pages_dynamic(retrieve_colpali_pages(s, doc_ids, colpali_q, pool_size))
+
+    def _pgvector(s: Session) -> List[Any]:
+        return retrieve_pgvector_pages(s, doc_ids, query_embedding or [], pool_size)
+
+    def _bm25(s: Session) -> List[Any]:
+        return retrieve_bm25_pages(s, doc_ids, lexical_q, pool_size)
+
+    def _kag(s: Session) -> List[Any]:
+        if not kag_enabled:
+            return []
+        from app.services.kag_retrieval_service import retrieve_kag_pages
+
+        return retrieve_kag_pages(s, space_id, doc_ids, semantic_q, query_embedding, pool_size)
+
+    if settings.RETRIEVAL_PARALLEL_ENABLED:
+        from app.database import engine
+
+        def _threaded(fn) -> List[Any]:
+            with Session(engine) as own_session:
+                return fn(own_session)
+
+        colpali_hits, pgvector_hits, bm25_hits, kag_hits = await asyncio.gather(
+            asyncio.to_thread(_threaded, _colpali),
+            asyncio.to_thread(_threaded, _pgvector),
+            asyncio.to_thread(_threaded, _bm25),
+            asyncio.to_thread(_threaded, _kag),
+        )
+        return colpali_hits, pgvector_hits, bm25_hits, kag_hits
+
+    return _colpali(session), _pgvector(session), _bm25(session), _kag(session)
 
 logger = logging.getLogger(__name__)
 
@@ -743,26 +806,18 @@ async def search_multimodal_passages(
                 },
                 tags=["retrieval", "multimodal", "space"],
             ) as hr:
-                colpali_hits = retrieve_colpali_pages(session, doc_ids, colpali_q, pool_size)
-                colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
-                pgvector_hits = retrieve_pgvector_pages(
-                    session, doc_ids, query_embedding or [], pool_size
+                # 4 retrievers en parallèle (threads + sessions dédiées) ou en séquence,
+                # selon RETRIEVAL_PARALLEL_ENABLED. Voir _run_retrievers.
+                colpali_hits, pgvector_hits, bm25_hits, kag_hits = await _run_retrievers(
+                    session,
+                    space_id,
+                    doc_ids,
+                    colpali_q,
+                    semantic_q,
+                    lexical_q,
+                    query_embedding,
+                    pool_size,
                 )
-                bm25_hits = retrieve_bm25_pages(
-                    session, doc_ids, lexical_q, pool_size
-                )
-                kag_hits: List[Any] = []
-                if settings.KAG_ENABLED:
-                    from app.services.kag_retrieval_service import retrieve_kag_pages
-
-                    kag_hits = retrieve_kag_pages(
-                        session,
-                        space_id,
-                        doc_ids,
-                        semantic_q,
-                        query_embedding,
-                        pool_size,
-                    )
                 hr.end(
                     outputs={
                         "colpali": len(colpali_hits),

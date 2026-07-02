@@ -33,15 +33,22 @@ async def chat_stream_wrapper(
     model: str,
     context: Optional[List[dict]] = None,
     temperature: Optional[float] = None,
+    max_tokens: Optional[int] = None,
 ):
     # Température de génération : 0.0 par défaut (hard grounding strict).
     temp = settings.SPACE_CHAT_TEMPERATURE if temperature is None else temperature
+    # Plafond de tokens de réponse : override explicite > SPACE_CHAT_MAX_TOKENS > plancher 2048.
+    # Le plancher évite le repli global MAX_COMPLETION_TOKENS (1024) qui coupait les réponses
+    # procédurales longues (SPACE_CHAT_MAX_TOKENS arrive souvent à None via un env vide).
+    tokens = max_tokens if max_tokens is not None else (settings.SPACE_CHAT_MAX_TOKENS or 2048)
     if settings.LLM_PROVIDER == "ollama":
         from app.services.ollama_service import chat_stream as ollama_chat_stream
         async for chunk in ollama_chat_stream(message=message, model=model, context=context):
             yield chunk
     else:
-        async for chunk in mistral_chat_stream(message=message, model=model, context=context, temperature=temp):
+        async for chunk in mistral_chat_stream(
+            message=message, model=model, context=context, temperature=temp, max_tokens=tokens
+        ):
             yield chunk
 from app.services.chat_tools import get_available_tools
 from app.models.conversation import Conversation
@@ -154,17 +161,15 @@ def _int_env(name: str, default: int) -> int:
 
 # Nombre de passages RAG renvoyés au LLM (configurable via RAG_TOP_K / settings).
 RAG_TOP_K = _int_env("RAG_TOP_K", settings.RAG_TOP_K)
-# Paramétrage en dur du chat "espaces"
-# NB : la température effective de génération vient de settings.SPACE_CHAT_TEMPERATURE
-# (passée par chat_wrapper / chat_stream_wrapper). Cette constante n'est pas utilisée.
-SPACE_CHAT_MAX_TOKENS = 1200
-SPACE_CHAT_TEMPERATURE = 0.3
-SPACE_CHAT_TOP_P = None
-SPACE_CONTEXT_MAX_CHARS = _int_env("SPACE_CONTEXT_MAX_CHARS", 18000)
+# Chat "espaces" : température et plafond de tokens de réponse viennent de settings
+# (SPACE_CHAT_TEMPERATURE / SPACE_CHAT_MAX_TOKENS), transmis par chat_stream_wrapper.
+# Budget contexte relevé pour tirer parti de la fenêtre 256k de Mistral Large : plusieurs
+# pages entières tiennent dans le contexte texte. Ajustables par env si modèle plus court.
+SPACE_CONTEXT_MAX_CHARS = _int_env("SPACE_CONTEXT_MAX_CHARS", 80000)
 SPACE_CONTEXT_MAX_PASSAGE_CHARS = _int_env(
     "SPACE_CONTEXT_MAX_PASSAGE_CHARS", settings.SPACE_CONTEXT_MAX_PASSAGE_CHARS
 )
-SPACE_HISTORY_MAX_CHARS = _int_env("SPACE_HISTORY_MAX_CHARS", 8000)
+SPACE_HISTORY_MAX_CHARS = _int_env("SPACE_HISTORY_MAX_CHARS", 16000)
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
 SPACE_CHAT_SYSTEM_PROMPT = (
     "Tu es LIA, l'assistante experte de PROFERM. Ton rôle est d'accompagner les collaborateurs et les clients de manière chaleureuse, professionnelle et précise sur nos produits et services.\n"
@@ -678,6 +683,9 @@ async def stream_space_chat_message(
     retrieval_queries = None
     retrieval_query_groups = None
     rag_user_message = request.message
+    # Texte utilisé pour la RECHERCHE documentaire (peut différer du message de
+    # génération : reformulation history-aware en question autonome).
+    retrieval_query_text = request.message
     lw_result = None
 
     if settings.QUERY_UNDERSTANDING_ENABLED:
@@ -705,8 +713,15 @@ async def stream_space_chat_message(
             qu_run.end(outputs={
                 "route": lw_result.route,
                 "ready_for_retrieval": lw_result.ready_for_retrieval,
+                "topic_shift": lw_result.topic_shift,
                 "signals": lw_result.signals.model_dump() if lw_result.signals else None,
             })
+
+        # Changement de sujet détecté : le retrieval/génération de ce tour repart des
+        # signaux FRAÎCHEMENT extraits (déjà le cas), sans réintégration de l'ancien sujet
+        # (assurée en amont par le condense topic_shift-aware et _node_merge_context).
+        if lw_result.topic_shift:
+            logger.info("[chat] topic_shift détecté — le contexte du tour précédent n'est pas réutilisé")
 
         if request.conversation_id and lw_result.query_context:
             _save_conversation_query_context(request.conversation_id, lw_result.query_context)
@@ -874,6 +889,12 @@ async def stream_space_chat_message(
             or lw_result.query_context.get("original_user_message")
             or request.message
         )
+        # Recherche documentaire : privilégie la question autonome reformulée
+        # (résout les messages de suivi type "et le tgy3834 ?"), sinon fallback.
+        retrieval_query_text = (
+            lw_result.query_context.get("standalone_question")
+            or rag_user_message
+        )
         if retrieval_query_groups:
             logger.info(
                 "[chat] Multi-query strategy=%s groups=%s",
@@ -887,7 +908,7 @@ async def stream_space_chat_message(
         "technical_retrieval",
         run_type="retriever",
         inputs={
-            "query": rag_user_message,
+            "query": retrieval_query_text,
             "space_id": space_id,
             "k": RAG_TOP_K,
             "retrieval_queries": retrieval_queries.model_dump() if retrieval_queries else None,
@@ -898,7 +919,7 @@ async def stream_space_chat_message(
         retrieval = await search_technical_passages(
             session=session,
             space_id=space_id,
-            query_text=rag_user_message,
+            query_text=retrieval_query_text,
             user_id=current_user.id,
             k=RAG_TOP_K,
             queries=retrieval_queries,
@@ -959,7 +980,7 @@ async def stream_space_chat_message(
             reasoning="lightweight extraction",
             confidence=lw_result.signals.confidence,
         )
-        doc_passages = refine_with_source_authority(doc_passages, rag_user_message, intent_obj)
+        doc_passages = refine_with_source_authority(doc_passages, retrieval_query_text, intent_obj)
 
     logger.info(
         "[chat] Étape %s — contexte RAG (%d passages, status=%s, dynamic_k=%s, rerank=%s)",
@@ -991,7 +1012,13 @@ async def stream_space_chat_message(
     full_context_draft = []
     full_context_draft.append(space_context_draft)
 
-    rag_history = list(conversation_context)
+    # Changement de sujet : on n'envoie PAS l'historique de l'ancien sujet à la génération,
+    # sinon le modèle reste ancré dessus. Les passages RAG + le message courant suffisent.
+    if lw_result and lw_result.topic_shift:
+        rag_history: List[dict] = []
+        logger.info("[chat] topic_shift — historique de génération élagué (nouveau sujet)")
+    else:
+        rag_history = list(conversation_context)
     while rag_history and rag_history[-1].get("role") == "user":
         rag_history.pop()
 

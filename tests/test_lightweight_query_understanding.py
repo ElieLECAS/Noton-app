@@ -8,6 +8,7 @@ from app.services.lightweight_query_understanding import run_lightweight_underst
 
 
 @pytest.mark.asyncio
+@patch("app.config.settings.QUERY_FUSED_UNDERSTANDING_ENABLED", False)
 @patch("app.services.lightweight_query_understanding.decide_retrieval_route")
 @patch("app.services.lightweight_query_understanding.chat")
 async def test_lightweight_ready_generates_queries(mock_chat, mock_route):
@@ -52,6 +53,7 @@ async def test_lightweight_ready_generates_queries(mock_chat, mock_route):
 
 
 @pytest.mark.asyncio
+@patch("app.config.settings.QUERY_FUSED_UNDERSTANDING_ENABLED", False)
 @patch("app.services.lightweight_query_understanding.decide_retrieval_route")
 @patch("app.services.lightweight_query_understanding.chat")
 async def test_lightweight_vague_requests_clarification(mock_chat, mock_route):
@@ -88,6 +90,7 @@ async def test_lightweight_vague_requests_clarification(mock_chat, mock_route):
 
 
 @pytest.mark.asyncio
+@patch("app.config.settings.QUERY_FUSED_UNDERSTANDING_ENABLED", False)
 @patch("app.services.lightweight_query_understanding.decide_retrieval_route")
 async def test_lightweight_direct_route(mock_route):
     from app.services.query_reasoning_service import RetrievalDecision

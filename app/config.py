@@ -42,6 +42,9 @@ class Settings(BaseSettings):
     # Limite globale par défaut pour la longueur des réponses des LLM
     MAX_COMPLETION_TOKENS: int = int(os.getenv("MAX_COMPLETION_TOKENS", "1024"))
     # Paramètres dédiés au chat "espaces"
+    # Plafond de longueur de réponse transmis à l'API de génération. Vide/None → le wrapper
+    # applique un plancher de 2048 (au lieu du repli global MAX_COMPLETION_TOKENS=1024) pour
+    # ne pas couper les réponses procédurales longues. Fenêtre Mistral Large 256k → marge.
     SPACE_CHAT_MAX_TOKENS: Optional[int] = None
     SPACE_CHAT_TEMPERATURE: float = float(os.getenv("SPACE_CHAT_TEMPERATURE", "0.3"))
     SPACE_CHAT_TOP_P: Optional[float] = None
@@ -262,6 +265,12 @@ class Settings(BaseSettings):
     USE_MULTIMODAL_RETRIEVAL: bool = os.getenv("USE_MULTIMODAL_RETRIEVAL", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
+    # Exécute les 4 retrievers (ColPali/pgvector/BM25/KAG) en parallèle (threads + sessions
+    # DB dédiées) au lieu de séquentiellement : recouvre l'encodage ColPali CPU avec les
+    # requêtes SQL. Repli sûr : false rebascule sur l'exécution séquentielle (session unique).
+    RETRIEVAL_PARALLEL_ENABLED: bool = os.getenv("RETRIEVAL_PARALLEL_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
     # Query understanding (phase intention) — chaque étape = 1 appel LLM séquentiel.
     # On peut couper les étapes optionnelles pour réduire la latence avant retrieval.
     # Multi-query (groupes) : OFF par défaut (étape récente la plus coûteuse, retourne
@@ -273,10 +282,24 @@ class Settings(BaseSettings):
     QUERY_VAGUENESS_CHECK_ENABLED: bool = os.getenv("QUERY_VAGUENESS_CHECK_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
+    # Reformulation history-aware du message de suivi en question autonome avant retrieval : ON par défaut.
+    QUERY_CONDENSE_ENABLED: bool = os.getenv("QUERY_CONDENSE_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Compréhension FUSIONNÉE : route + signaux + condense + vagueness + détection de
+    # changement de sujet (topic_shift) en UN seul appel LLM, au lieu de 4-5 appels
+    # séquentiels. Divise la latence pré-retrieval. Repli sûr : mettre à false rebascule
+    # sur le graphe multi-nœuds historique (mêmes prompts, comportement inchangé).
+    QUERY_FUSED_UNDERSTANDING_ENABLED: bool = os.getenv("QUERY_FUSED_UNDERSTANDING_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "10"))
     RAG_POOL_SIZE: int = int(os.getenv("RAG_POOL_SIZE", "20"))
     RAG_NEIGHBOR_STRATEGY: str = os.getenv("RAG_NEIGHBOR_STRATEGY", "conditional")
-    SPACE_CONTEXT_MAX_PASSAGE_CHARS: int = int(os.getenv("SPACE_CONTEXT_MAX_PASSAGE_CHARS", "4000"))
+    # Chars max par passage injecté au LLM. Relevé (4000 → 12000) pour laisser passer des
+    # PAGES ENTIÈRES (texte consolidé + enrichissement) sans troncature, en profitant de la
+    # fenêtre 256k. Diminuer si le modèle de génération a une fenêtre plus courte.
+    SPACE_CONTEXT_MAX_PASSAGE_CHARS: int = int(os.getenv("SPACE_CONTEXT_MAX_PASSAGE_CHARS", "12000"))
     RAG_RENDER_ALL_IMAGES: bool = os.getenv("RAG_RENDER_ALL_IMAGES", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
@@ -300,6 +323,11 @@ class Settings(BaseSettings):
     # Boosts retrieval (signaux query understanding)
     # Catégories : appliquées avant fusion RRF ; source/matériau/entités : post-retrieval
     RETRIEVAL_CATEGORY_BOOST: float = float(os.getenv("RETRIEVAL_CATEGORY_BOOST", "0.15"))
+    # Plafond du facteur multiplicatif du boost catégorie. Sans reranker cross-encoder pour
+    # rattraper, le boost est le principal signal post-fusion : on borne son amplification
+    # pour qu'une page mal classée (3 matches symptôme) ne puisse pas écraser un vrai signal
+    # de pertinence (facteur brut ~1.9 → plafonné à 1.5 par défaut).
+    RETRIEVAL_CATEGORY_BOOST_MAX: float = float(os.getenv("RETRIEVAL_CATEGORY_BOOST_MAX", "1.5"))
     # Pondération du boost catégorie par axe (un slug symptôme pèse plus qu'un doc_type).
     # JSON optionnel via env RETRIEVAL_AXIS_BOOST_WEIGHTS ; défaut sinon. Axe absent → poids 1.0.
     RETRIEVAL_AXIS_BOOST_WEIGHTS: dict = (
