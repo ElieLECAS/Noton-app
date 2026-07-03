@@ -219,6 +219,10 @@ async def test_search_multimodal_passages_pipeline():
         mock_settings.RAG_MAX_IMAGES = 12
         mock_settings.RERANKER_ENABLED = False
         mock_settings.RERANK_POOL = 40
+        # Gating ColPali désactivé pour ce test : on conserve l'intention d'origine
+        # (ColPali s'exécute — ici mocké à []) sans passer par le chemin de fallback.
+        mock_settings.COLPALI_ENABLED = True
+        mock_settings.COLPALI_GATING_ENABLED = False
 
         result = await space_search_service.search_multimodal_passages(
             session=session,

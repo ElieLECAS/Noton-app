@@ -16,6 +16,7 @@ import logging
 import math
 import os
 import re
+import time
 import unicodedata
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -36,6 +37,44 @@ from app.tracing import trace_run
 from app.services import reranker_service
 
 
+# Marqueurs textuels qui signalent un besoin de recherche VISUELLE (schéma, plan, coupe,
+# localisation) → ColPali garde toute sa valeur. Volontairement larges : mieux vaut lancer
+# ColPali à tort (le fallback ne coûte rien) que le manquer sur une vraie question visuelle.
+_COLPALI_VISUAL_MARKERS = (
+    "schéma", "schema", "plan ", "plans", "dessin", "figure", "illustration",
+    "image", "photo", "croquis", "vue", "coupe", "éclaté", "eclate", "diagramme",
+    "où se trouve", "ou se trouve", "où est", "ou est", "où sont", "ou sont",
+    "emplacement", "positionn", "situé", "situe", "localis", "visuel",
+    "montre", "montrer", "à quoi ressemble", "a quoi ressemble", "repère", "repere",
+)
+
+
+def should_use_colpali(
+    query_text: Optional[str],
+    signals: Optional[LightweightQuerySignals],
+) -> Tuple[bool, str]:
+    """Décide si ColPali (retriever visuel coûteux) doit tourner pour cette requête.
+
+    Retourne (use_colpali, raison) pour la télémétrie. ColPali tourne si :
+      - un marqueur visuel figure dans le texte (schéma, plan, coupe, « où se trouve »…) ;
+      - l'intent extrait fait partie de COLPALI_GATING_INTENTS (par défaut « installation »,
+        où les schémas de pose sont déterminants).
+    Sinon on l'écarte : BM25 + pgvector suffisent pour du texte, et un filet de sécurité en
+    aval le relance si les retrievers texte reviennent faibles (aucun rappel perdu en silence).
+    """
+    if not settings.COLPALI_ENABLED:
+        return False, "colpali_disabled"
+    if not settings.COLPALI_GATING_ENABLED:
+        return True, "gating_off"
+    lowered = (query_text or "").lower()
+    if any(marker in lowered for marker in _COLPALI_VISUAL_MARKERS):
+        return True, "visual_marker"
+    intent = (getattr(signals, "intent", None) or "").lower() if signals else ""
+    if intent and intent in settings.colpali_gating_intents:
+        return True, f"intent:{intent}"
+    return False, "text_query_skipped"
+
+
 async def _run_retrievers(
     session: Session,
     space_id: int,
@@ -45,6 +84,7 @@ async def _run_retrievers(
     lexical_q: str,
     query_embedding: Optional[List[float]],
     pool_size: int,
+    use_colpali: bool = True,
 ) -> Tuple[List[Any], List[Any], List[Any], List[Any]]:
     """Exécute les 4 retrievers (ColPali/pgvector/BM25/KAG).
 
@@ -65,6 +105,11 @@ async def _run_retrievers(
     kag_enabled = settings.KAG_ENABLED
 
     def _colpali(s: Session) -> List[Any]:
+        # Gate : requête texte → on n'exécute NI l'encode ColQwen2 NI le MaxSim (le poste
+        # le plus lourd du pipeline sur CPU). Le fallback en aval relancera ColPali si les
+        # retrievers texte sont faibles.
+        if not use_colpali:
+            return []
         return filter_colpali_pages_dynamic(retrieve_colpali_pages(s, doc_ids, colpali_q, pool_size))
 
     def _pgvector(s: Session) -> List[Any]:
@@ -794,6 +839,16 @@ async def search_multimodal_passages(
             except Exception as exc:
                 logger.warning("[RAG multimodal] Embedding requête indisponible : %s", exc)
 
+            # Gate ColPali : ne lancer le retriever visuel (coûteux sur CPU) que si la
+            # requête en a besoin. Décidé AVANT le lancement pour économiser encode + MaxSim.
+            use_colpali, gate_reason = should_use_colpali(query_text, signals)
+            logger.info(
+                "[RAG multimodal] ColPali gating — use_colpali=%s (%s) query=%r",
+                use_colpali,
+                gate_reason,
+                (query_text or "")[:80],
+            )
+
             with trace_run(
                 "multimodal_retrieval",
                 run_type="retriever",
@@ -804,6 +859,8 @@ async def search_multimodal_passages(
                     "lexical_query": lexical_q,
                     "space_id": space_id,
                     "pool_size": pool_size,
+                    "use_colpali": use_colpali,
+                    "colpali_gate_reason": gate_reason,
                 },
                 tags=["retrieval", "multimodal", "space"],
             ) as hr:
@@ -818,13 +875,55 @@ async def search_multimodal_passages(
                     lexical_q,
                     query_embedding,
                     pool_size,
+                    use_colpali=use_colpali,
                 )
+
+                # Filet de sécurité : ColPali écarté mais retrievers texte trop faibles →
+                # on le relance en rattrapage (dans un thread + session dédiée, comme le
+                # mode parallèle) pour ne perdre aucun rappel en silence.
+                if not use_colpali:
+                    text_pages = {
+                        (h.document_id, h.page_no) for h in pgvector_hits
+                    } | {(h.document_id, h.page_no) for h in bm25_hits}
+                    if len(text_pages) < settings.COLPALI_GATING_FALLBACK_MIN_HITS:
+                        from app.database import engine
+                        from app.services.page_retrieval_service import (
+                            filter_colpali_pages_dynamic,
+                            retrieve_colpali_pages,
+                        )
+
+                        def _fallback_colpali() -> List[Any]:
+                            with Session(engine) as own_session:
+                                return filter_colpali_pages_dynamic(
+                                    retrieve_colpali_pages(own_session, doc_ids, colpali_q, pool_size)
+                                )
+
+                        # Un échec du rattrapage ne doit jamais casser la requête : on
+                        # dégrade proprement vers les seuls hits texte déjà obtenus.
+                        try:
+                            colpali_hits = await asyncio.to_thread(_fallback_colpali)
+                            use_colpali = True
+                            gate_reason = "text_weak_fallback"
+                            logger.info(
+                                "[RAG multimodal] ColPali fallback — %d page(s) texte < seuil %d → "
+                                "relance ColPali (%d page(s) récupérée(s))",
+                                len(text_pages),
+                                settings.COLPALI_GATING_FALLBACK_MIN_HITS,
+                                len(colpali_hits),
+                            )
+                        except Exception as fb_exc:
+                            logger.warning(
+                                "[RAG multimodal] ColPali fallback échoué (%s) — on garde les hits texte",
+                                fb_exc,
+                            )
+
                 hr.end(
                     outputs={
                         "colpali": len(colpali_hits),
                         "pgvector": len(pgvector_hits),
                         "bm25": len(bm25_hits),
                         "kag": len(kag_hits),
+                        "colpali_gate_reason": gate_reason,
                     }
                 )
 
@@ -896,6 +995,7 @@ async def search_multimodal_passages(
         if settings.RERANKER_ENABLED:
             from app.services.page_reranker_service import rerank_unified_page_hits
 
+            _t_minilm = time.perf_counter()
             with trace_run(
                 "minilm_rerank",
                 run_type="reranker",
@@ -910,6 +1010,12 @@ async def search_multimodal_passages(
                 )
                 rerank_status = rerank_result.status
                 dynamic_k = len(final_hits)
+                logger.info(
+                    "[PERF][retrieval] rerank MiniLM %.2fs — pool=%d → %d",
+                    time.perf_counter() - _t_minilm,
+                    len(fused_hits),
+                    dynamic_k,
+                )
                 rr.end(
                     outputs={
                         "status": rerank_status,
@@ -1261,6 +1367,7 @@ async def search_relevant_passages(
                 colpali_nodes.append(NodeWithScore(node=node, score=hit.colpali_score or hit.score))
 
             if colpali_nodes:
+                _t_vision = time.perf_counter()
                 with trace_run(
                     "vision_rerank",
                     run_type="reranker",
@@ -1269,6 +1376,14 @@ async def search_relevant_passages(
                 ) as rr:
                     reranked = await rerank_pages_vision(session, query_text, colpali_nodes)
                     rr.end(outputs={"nb": len(reranked)})
+                # [PERF] Rerank vision = appels LLM vision (mistral-small) DANS le chemin
+                # critique. Souvent le poste le plus lourd après ColPali ; candidat n°1 à
+                # sortir du chemin (désactiver ou passer en asynchrone) si dominant.
+                logger.info(
+                    "[PERF][retrieval] rerank VISION %.2fs — %d page(s) jugée(s) par le VLM",
+                    time.perf_counter() - _t_vision,
+                    len(colpali_nodes),
+                )
                 if reranked:
                     reranked_keys = []
                     for nws in reranked:

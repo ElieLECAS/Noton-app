@@ -296,6 +296,28 @@ class Settings(BaseSettings):
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "10"))
     RAG_POOL_SIZE: int = int(os.getenv("RAG_POOL_SIZE", "20"))
 
+    # ColPali gating : ColPali est un retriever VISUEL très coûteux sur CPU (encode
+    # ColQwen2 + MaxSim sur des centaines de milliers de patches → ~30s/requête). On ne
+    # le lance donc QUE lorsque la requête en a besoin (marqueurs visuels : schéma, plan,
+    # coupe, « où se trouve »…). Pour les requêtes texte, BM25 + pgvector suffisent. Un
+    # FILET DE SÉCURITÉ relance ColPali si les retrievers texte reviennent trop faibles,
+    # de sorte qu'aucun rappel n'est perdu en silence. Mettre à false rebascule sur
+    # l'exécution systématique de ColPali (comportement historique).
+    COLPALI_GATING_ENABLED: bool = os.getenv("COLPALI_GATING_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Sous ce nombre de pages texte (pgvector ∪ BM25), ColPali est relancé en rattrapage
+    # même si le gate l'avait écarté.
+    COLPALI_GATING_FALLBACK_MIN_HITS: int = int(os.getenv("COLPALI_GATING_FALLBACK_MIN_HITS", "5"))
+    # Intents qui FORCENT ColPali (au-delà des marqueurs visuels du texte). « installation »
+    # par défaut : la pose/montage s'appuie fortement sur les schémas, cœur de métier — on
+    # ne veut pas y perdre le visuel. Ajuster (CSV) sans redéploiement pour élargir/réduire
+    # le périmètre ColPali (ex. "installation,specification" ou "" pour un gating agressif).
+    # Typé str (CSV brut), PAS List : pydantic-settings tenterait sinon un json.loads() sur
+    # la valeur d'env (« installation » n'est pas du JSON) et ferait échouer le démarrage.
+    # La liste normalisée est exposée via la propriété colpali_gating_intents.
+    COLPALI_GATING_INTENTS: str = os.getenv("COLPALI_GATING_INTENTS", "installation")
+
     # CAG post-retriever : au lieu d'injecter des passages tronqués, on packe des DOCUMENTS
     # entiers (ou des sections étendues) dans le contexte, en exploitant la fenêtre 256k de
     # Mistral Large. Le retriever devient un sélecteur de documents → meilleur rappel.
@@ -418,6 +440,15 @@ class Settings(BaseSettings):
     GUIDED_SAV_CONTACT: str = os.getenv(
         "GUIDED_SAV_CONTACT", "Service SAV PROFERM — contactez votre interlocuteur habituel."
     )
+
+    @property
+    def colpali_gating_intents(self) -> List[str]:
+        """Liste normalisée des intents forçant ColPali (parsée depuis le CSV brut)."""
+        return [
+            s.strip().lower()
+            for s in (self.COLPALI_GATING_INTENTS or "").split(",")
+            if s.strip()
+        ]
 
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod

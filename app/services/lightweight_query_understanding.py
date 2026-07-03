@@ -14,6 +14,10 @@ from pydantic import BaseModel, Field
 from sqlmodel import Session
 
 from app.config import settings
+from app.services.conversation_state_service import (
+    build_conversation_state,
+    format_state_facts,
+)
 from app.services.mistral_service import chat
 from app.services.query_reasoning_service import decide_retrieval_route
 from app.services.query_signals_schemas import (
@@ -63,6 +67,8 @@ class LightweightState(TypedDict, total=False):
     awaiting_vague_clarification: bool
     standalone_question: str
     topic_shift: bool
+    # Étiquette de sujet courant proposée par la compréhension fusionnée (peut être vide).
+    llm_current_topic: str
     query_strategy: str
     query_groups: List[Dict[str, Any]]
 
@@ -267,14 +273,17 @@ async def _node_condense_question(state: LightweightState) -> Dict[str, Any]:
     if not settings.QUERY_CONDENSE_ENABLED or not history:
         return {"standalone_question": full_request}
 
-    lines = []
-    for msg in history[-6:]:
-        role = msg.get("role", "user")
-        content = str(msg.get("content", ""))[:400]
-        lines.append(f"{role}: {content}")
-    history_snippet = "\n".join(lines)
+    history_snippet = _history_snippet(history, turns=6, cap=400)
+
+    # Même fil persistant que le chemin fusionné : résout les suivis elliptiques
+    # même quand l'historique tronqué a perdu le référent.
+    state_facts = format_state_facts(state.get("persisted_context"))
+    state_block = (
+        f"État de la conversation (fil persistant) :\n{state_facts}\n\n" if state_facts else ""
+    )
 
     prompt = (
+        f"{state_block}"
         f"Historique récent :\n{history_snippet or '(vide)'}\n\n"
         f"Dernier message utilisateur :\n{full_request}\n\n"
         "Reformule ce dernier message en une question autonome pour la recherche documentaire."
@@ -339,9 +348,43 @@ D. "too_vague" : true si la demande reste trop vague pour une recherche pertinen
    tenant compte de l'historique. Si true, remplis "clarification_question" (question courte,
    en français). Sinon too_vague = false et "clarification_question" = null.
 
+E. "current_topic" : étiquette COURTE (≤ 12 mots) du sujet courant de la conversation
+   APRÈS ce message : produit/référence principal + angle abordé
+   (ex : "dormant 6101 — dimensions", "réglage compression ouvrant PVC").
+   - Si topic_shift = false : fais ÉVOLUER le sujet persistant fourni (même produit,
+     nouvelle facette) au lieu de le recopier tel quel.
+   - Si topic_shift = true : repars du seul dernier message.
+
+Un bloc « État de la conversation » peut être fourni AVANT l'historique : c'est le fil
+persistant des tours précédents (sujet courant, références en focus). Utilise-le en
+priorité pour résoudre les références implicites du dernier message ("ses", "celui-ci",
+"et le…") et pour juger topic_shift — il est plus fiable qu'un historique tronqué.
+
 Le JSON final = TOUS les champs de signaux ci-dessus + "route" + "topic_shift" +
-"standalone_question" + "too_vague" + "clarification_question". Aucun autre champ.
+"standalone_question" + "too_vague" + "clarification_question" + "current_topic".
+Aucun autre champ.
 """
+
+
+def _compact_message_content(content: str) -> str:
+    """Compacte un message pour les extraits d'historique des prompts de compréhension.
+
+    Les réponses structurées (fiches techniques, tableaux Markdown) tronquées
+    brutalement à N caractères deviennent du bruit : on retire les lignes de tableau
+    et la décoration Markdown, puis on aplatit — le budget de caractères garde ainsi
+    l'essentiel sémantique (sujet, références) au lieu de pipes et de tirets.
+    """
+    kept: List[str] = []
+    for line in str(content or "").splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        # Lignes de tableau Markdown (rangées et séparateurs) : purement décoratives
+        # dans un extrait tronqué.
+        if stripped.startswith("|") or set(stripped) <= {"-", "|", ":", " "}:
+            continue
+        kept.append(stripped.lstrip("#*-• ").strip())
+    return " ".join(k for k in kept if k)
 
 
 def _history_snippet(history: List[Dict[str, str]], *, turns: int, cap: int) -> str:
@@ -350,7 +393,7 @@ def _history_snippet(history: List[Dict[str, str]], *, turns: int, cap: int) -> 
     lines = []
     for msg in history[-turns:]:
         role = msg.get("role", "user")
-        content = str(msg.get("content", ""))[:cap]
+        content = _compact_message_content(str(msg.get("content", "")))[:cap]
         lines.append(f"{role}: {content}")
     return "\n".join(lines)
 
@@ -368,12 +411,21 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
     history = state.get("history") or []
     history_snippet = _history_snippet(history, turns=6, cap=400)
 
+    # Fil persistant de la conversation (sujet courant + entités en focus) : plus fiable
+    # qu'un historique tronqué pour résoudre les suivis elliptiques, et seul survivant
+    # quand le tour précédent est passé par un fast-path (fiche technique).
+    state_facts = format_state_facts(state.get("persisted_context"))
+    state_block = (
+        f"État de la conversation (fil persistant) :\n{state_facts}\n\n" if state_facts else ""
+    )
+
     system_prompt = build_extract_signals_prompt(session) + FUSED_UNDERSTANDING_EXTRA_PROMPT
     user_prompt = (
+        f"{state_block}"
         f"Historique récent :\n{history_snippet or '(vide)'}\n\n"
         f"Dernier message utilisateur : '{full_request}'\n\n"
         "Extrais les signaux de CE dernier message, puis produis route, topic_shift, "
-        "standalone_question, too_vague et clarification_question."
+        "standalone_question, too_vague, clarification_question et current_topic."
     )
 
     # Valeurs de repli (si l'appel LLM échoue, on ne bloque jamais le pipeline).
@@ -382,6 +434,7 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
     standalone = full_request
     too_vague = False
     clarification_q = ""
+    llm_current_topic = ""
     signals_dict = LightweightQuerySignals().model_dump()
 
     try:
@@ -407,6 +460,7 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
             standalone = candidate
         too_vague = bool(raw.get("too_vague"))
         clarification_q = str(raw.get("clarification_question") or "").strip()
+        llm_current_topic = str(raw.get("current_topic") or "").strip()
 
         # parse_and_validate_signals ignore les clés méta (route, topic_shift, …).
         extraction = parse_and_validate_signals(raw, session=session)
@@ -440,6 +494,7 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
             "signals": signals_dict,
             "topic_shift": topic_shift,
             "standalone_question": standalone,
+            "llm_current_topic": llm_current_topic,
             "ready_for_retrieval": False,
             "awaiting_vague_clarification": True,
             "enriched_user_message": full_request,
@@ -457,6 +512,7 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
         "signals": signals_dict,
         "topic_shift": topic_shift,
         "standalone_question": standalone,
+        "llm_current_topic": llm_current_topic,
         "ready_for_retrieval": True,
         "awaiting_vague_clarification": False,
         "enriched_user_message": full_request,
@@ -773,14 +829,16 @@ async def run_lightweight_understanding(
     topic_shift = bool(final_state.get("topic_shift"))
     standalone_q = final_state.get("standalone_question") or ""
 
-    # Sujet courant persistant (fil conducteur) : réinitialisé au message courant sur
-    # changement de sujet, sinon conservé d'un tour à l'autre. Sert de repère de continuité
-    # (télémétrie + base pour une future mémoire de conversation).
-    persisted_topic = (persisted_context or {}).get("current_topic") if persisted_context else None
-    if topic_shift or not persisted_topic:
-        current_topic = standalone_q or final_state.get("original_user_message") or user_message
-    else:
-        current_topic = persisted_topic
+    # Fil conducteur de la conversation (sujet courant + entités en focus) : mis à jour
+    # chaque tour, réinitialisé sur changement de sujet. Réinjecté dans la compréhension
+    # du tour suivant ET dans le contexte de génération (bloc « fil de la conversation »).
+    conversation_state = build_conversation_state(
+        persisted_context,
+        topic_shift=topic_shift,
+        llm_topic=final_state.get("llm_current_topic"),
+        fallback_topic=standalone_q or final_state.get("original_user_message") or user_message,
+        new_entities=signals.entity_texts,
+    )
 
     query_context = {
         "signals": signals.model_dump(),
@@ -789,7 +847,7 @@ async def run_lightweight_understanding(
         "standalone_question": standalone_q,
         "awaiting_vague_clarification": bool(final_state.get("awaiting_vague_clarification")),
         "topic_shift": topic_shift,
-        "current_topic": current_topic,
+        **conversation_state,
         "phase": (
             "awaiting_vague_clarification"
             if final_state.get("awaiting_vague_clarification")

@@ -1,5 +1,6 @@
 import os
 import logging
+import time
 from typing import List, Optional, Dict, Any
 import lancedb
 import numpy as np
@@ -159,11 +160,13 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
         return []
     try:
         from concurrent.futures import ThreadPoolExecutor
-        
+
+        _t_start = time.perf_counter()
+        _t_candidate = _t_start  # borne de fin de la phase « récupération candidats »
         table = get_colpali_table()
         doc_ids_str = ",".join(map(str, document_ids))
         filter_str = f"document_id in ({doc_ids_str})"
-        
+
         # 1. Quick check of total patch count by selecting only chunk_id (no vector data loaded)
         quick_res = table.search().where(filter_str).select(["chunk_id"]).to_list()
         total_patches = len(quick_res)
@@ -194,15 +197,17 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
                     candidate_chunk_ids.update(chunk_ids)
             
             logger.info("[search_colpali_lancedb] Found %d unique candidate pages. Fetching patch vectors.", len(candidate_chunk_ids))
+            _t_candidate = time.perf_counter()
             if candidate_chunk_ids:
                 candidate_ids_str = ",".join(map(str, candidate_chunk_ids))
                 patch_filter = f"chunk_id in ({candidate_ids_str})"
                 tbl = table.search().where(patch_filter).select(["chunk_id", "document_id", "vector"]).to_arrow()
-                
+
         if tbl is None or len(tbl) == 0:
             logger.info("[search_colpali_lancedb] No patches found.")
             return []
-            
+
+        _t_loaded = time.perf_counter()
         logger.info("[search_colpali_lancedb] Loaded %d total patch vectors for MaxSim calculation.", len(tbl))
         
         # Extract columns to numpy arrays using zero-copy (or direct copies) to bypass Python list/dict conversion
@@ -228,37 +233,42 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
             if c_id not in chunk_to_doc:
                 chunk_to_doc[c_id] = int(d_id)
             
-        # 4. Compute MaxSim per page using NumPy
+        # 4. Compute MaxSim per page using NumPy — version vectorisée.
+        # Au lieu d'un produit matriciel + une normalisation PAR page (des centaines de
+        # petites opérations dispatched depuis Python), on normalise TOUS les patches en
+        # une passe et on calcule UNE seule grande matrice de similarité (T × N_total) via
+        # un unique appel BLAS multithreadé. Chaque page ne fait plus qu'un max+somme sur
+        # sa tranche de colonnes. Résultat numériquement identique, nettement plus rapide.
         Q = np.array(query_token_embeddings, dtype=np.float32)  # (T, 128)
         Q_norms = np.linalg.norm(Q, axis=1, keepdims=True)
         Q_norms = np.where(Q_norms == 0, 1.0, Q_norms)
         Q = Q / Q_norms
-        
-        final_results = []
+
         num_tokens = len(query_token_embeddings)
-        
+
+        # Normalisation L2 de tous les patches candidats en une seule passe.
+        P_all = vectors_numpy.astype(np.float32, copy=False)
+        P_all_norms = np.linalg.norm(P_all, axis=1, keepdims=True)
+        P_all_norms = np.where(P_all_norms == 0, 1.0, P_all_norms)
+        P_all = P_all / P_all_norms
+
+        # Matrice de similarité cosinus complète (T × N_total) — un seul GEMM.
+        sims_all = Q @ P_all.T
+
+        final_results = []
         for chunk_id, indices in chunk_to_indices.items():
             if not indices:
                 continue
-            P = vectors_numpy[indices]  # shape (P, 128)
-            P_norms = np.linalg.norm(P, axis=1, keepdims=True)
-            P_norms = np.where(P_norms == 0, 1.0, P_norms)
-            P = P / P_norms
-            
-            # Cosine similarity matrix: shape (T, P)
-            S = np.dot(Q, P.T)
-            # Max similarity for each query token: shape (T,)
-            max_sims = np.max(S, axis=1)
-            # Sum of max similarities
-            maxsim_sum = float(np.sum(max_sims))
-            
+            # Max par token sur les patches de CETTE page, puis somme (= MaxSim).
+            maxsim_sum = float(np.sum(np.max(sims_all[:, indices], axis=1)))
+
             # Convert score to distance for backward compatibility.
             # MaxSim sum range: [0, T]
             # Average similarity: MaxSim_sum / T
             # Distance = 1.0 - (MaxSim_sum / T)
             avg_similarity = maxsim_sum / max(num_tokens, 1)
             distance = 1.0 - avg_similarity
-            
+
             final_results.append({
                 "id": chunk_id,
                 "document_id": chunk_to_doc[chunk_id],
@@ -267,6 +277,19 @@ def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_i
             })
             
         final_results.sort(key=lambda x: x["_distance"])
+        # [PERF] Décompose le coût MaxSim : recherche candidats (ANN par token) vs
+        # chargement des vecteurs (I/O disque + Arrow) vs calcul NumPy. Guide le réglage
+        # (ex. baisser limit/candidats, ou gater ColPali) sans deviner.
+        _t_maxsim = time.perf_counter()
+        logger.info(
+            "[PERF][colpali] MaxSim — total %.2fs = candidats %.2fs + chargement %.2fs (%d vecteurs) + calcul %.2fs (%d pages)",
+            _t_maxsim - _t_start,
+            _t_candidate - _t_start,
+            _t_loaded - _t_candidate,
+            len(tbl),
+            _t_maxsim - _t_loaded,
+            len(chunk_to_indices),
+        )
         logger.info(
             "[search_colpali_lancedb] Sorted results. Top 5 match distances: %s",
             [round(r["_distance"], 4) for r in final_results[:5]],

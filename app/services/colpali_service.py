@@ -1,6 +1,7 @@
 import os
 import logging
 import threading
+import time
 from typing import List, Optional
 from PIL import Image
 import torch
@@ -118,20 +119,30 @@ def embed_query_colpali(query: str) -> List[List[float]]:
     Embeds query text using ColPali.
     Returns: Query token embeddings: [num_query_tokens, 128]
     """
+    _t0 = time.perf_counter()
     model, processor = get_colpali_model()
-    
+    _t_load = time.perf_counter()
+
     # Process query text using colpali-engine processor interface
     inputs = processor.process_queries([query]).to(model.device)
-    
+
     with torch.no_grad():
         embeddings = model(**inputs)  # shape: (1, num_query_tokens, dim)
-        
+
     attention_mask = inputs.get("attention_mask")
     if attention_mask is not None:
         mask = attention_mask[0] == 1
         query_vectors = embeddings[0][mask].cpu().float().numpy().tolist()
     else:
         query_vectors = embeddings[0].cpu().float().numpy().tolist()
+    # [PERF] encodage requête = tax fixe par tour RAG (forward ColQwen2 sur CPU).
+    logger.info(
+        "[PERF][colpali] encode requête — %d tokens, %.2fs (dont chargement modèle %.2fs) device=%s",
+        len(query_vectors),
+        time.perf_counter() - _t0,
+        _t_load - _t0,
+        model.device,
+    )
     return query_vectors
 
 

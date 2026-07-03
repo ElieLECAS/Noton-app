@@ -695,6 +695,35 @@ async def stream_space_chat_message(
                 fiche_markdown = fiche_result.markdown
                 fiche_sources = fiche_result.sources
 
+                # Continuité conversationnelle : la fiche court-circuite la compréhension
+                # de requête, donc AUCUN état de conversation ne serait écrit pour ce tour
+                # et le suivi elliptique ("tu as ses dimensions ?") perdrait son référent.
+                # On écrit donc le fil ici : sujet courant = la référence consultée,
+                # entités en focus = les références de la fiche (fusion avec l'existant).
+                if request.conversation_id:
+                    from app.services.conversation_state_service import build_conversation_state
+
+                    conv_prev = session.get(Conversation, request.conversation_id)
+                    prev_qc = dict(conv_prev.query_context or {}) if conv_prev else {}
+                    designation = (
+                        fiche_result.core.designation
+                        or fiche_result.core.type_element
+                        or "référence"
+                    ).strip()
+                    fiche_topic = f"{designation} {ref_query.primary}".strip()
+                    fiche_state = build_conversation_state(
+                        prev_qc,
+                        topic_shift=False,
+                        llm_topic=fiche_topic,
+                        fallback_topic=fiche_topic,
+                        new_entities=ref_query.references,
+                    )
+                    _save_conversation_query_context(
+                        request.conversation_id,
+                        {**prev_qc, **fiche_state, "phase": "ready"},
+                    )
+                    logger.info("[chat] fil conversation (fiche) — topic=%r", fiche_topic)
+
                 # Ancre le sujet documentaire de la fiche (ex. dormant 6101) : sans ça, le
                 # tour de SUIVI ("tu as ses dimensions ?") repart sans ancre (la fiche
                 # court-circuite le RAG) et dérive vers un autre produit.
@@ -987,6 +1016,8 @@ async def stream_space_chat_message(
 
     step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
     logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25 + KAG)", step_label)
+    import time as _time
+    _t_retrieval_start = _time.perf_counter()
     with trace_run(
         "technical_retrieval",
         run_type="retriever",
@@ -1035,6 +1066,15 @@ async def stream_space_chat_message(
                 for p in doc_passages
             ],
         })
+
+    # [PERF] Bucket macro n°1 : tout le retrieval (encode ColPali + MaxSim + 4 retrievers
+    # + rerank MiniLM + rerank vision). À comparer au bucket génération plus bas.
+    logger.info(
+        "[PERF][chat] retrieval TOTAL %.2fs — %d passages (rerank=%s)",
+        _time.perf_counter() - _t_retrieval_start,
+        len(doc_passages),
+        rerank_status,
+    )
 
     from app.services.rag_generation_service import (
         enrich_colpali_passages_with_pymupdf,
@@ -1103,6 +1143,22 @@ async def stream_space_chat_message(
         )
     else:
         space_context_draft = _build_generation_context(session, doc_passages, anchor_document_ids=anchor_document_ids or None)
+
+    # Fil de la conversation : sujet courant, entités en focus et demande reformulée,
+    # injectés à la FIN du message système (donc juste avant l'historique et le message
+    # utilisateur). Sans ce bloc, un suivi elliptique ("tu as ses dimensions ?") arrive
+    # après ~100k tokens de documents CAG et le modèle perd le référent — il répond sur
+    # n'importe quel élément du contexte au lieu du sujet de la conversation.
+    if lw_result:
+        from app.services.conversation_state_service import format_generation_state_block
+
+        conversation_thread_block = format_generation_state_block(
+            lw_result.query_context,
+            standalone_question=lw_result.query_context.get("standalone_question"),
+            original_message=request.message,
+        )
+        if conversation_thread_block:
+            space_context_draft["content"] += "\n\n" + conversation_thread_block
 
     full_context_draft = []
     full_context_draft.append(space_context_draft)
@@ -1216,6 +1272,10 @@ async def stream_space_chat_message(
                     tags=["llm", "stream", "space"]
                 ) as stream_run:
                     fallback_triggered = False
+                    # [PERF] Bucket macro n°2 : génération. On mesure la latence du 1er
+                    # token (= prefill Mistral sur le contexte CAG ~40k tokens) et le total.
+                    _t_gen_start = _time.perf_counter()
+                    _first_token_logged = False
                     try:
                         async for raw_chunk in chat_stream_wrapper(
                             message="",
@@ -1229,8 +1289,19 @@ async def stream_space_chat_message(
                             content = (parsed.get("message") or {}).get("content") or ""
                             if not content:
                                 continue
+                            if not _first_token_logged:
+                                _first_token_logged = True
+                                logger.info(
+                                    "[PERF][chat] génération — 1er token à %.2fs (prefill contexte)",
+                                    _time.perf_counter() - _t_gen_start,
+                                )
                             assistant_response.append(content)
                             yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
+                        logger.info(
+                            "[PERF][chat] génération TOTAL %.2fs — %d chars",
+                            _time.perf_counter() - _t_gen_start,
+                            sum(len(c) for c in assistant_response),
+                        )
                     except httpx.HTTPStatusError as exc:
                         if exc.response is not None and exc.response.status_code == 400:
                             fallback_triggered = True
