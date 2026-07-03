@@ -126,6 +126,16 @@ class GuidedModeDecision(BaseModel):
     flow_kind: str = "howto"  # 'howto' (pose/montage chantier) | 'diagnostic' (SAV)
     topic: str = ""
     detected_symptom: str = ""  # slug axis=symptom si flow_kind=diagnostic, sinon ""
+    # Le produit/gamme cible est-il explicitement nommé PAR L'UTILISATEUR (message ou
+    # historique utilisateur) ? False → le parcours guidé commence par une étape
+    # d'identification du produit au lieu d'en verrouiller un déduit du retrieval.
+    # Défaut True = comportement historique (pas d'étape 0) pour les constructions
+    # directes ; decide_guided_mode renseigne toujours la valeur explicitement.
+    product_named: bool = True
+    # L'intention est-elle ambiguë entre un geste (régler/ajuster) et un dimensionnement
+    # (définir/choisir une valeur) ? True → on n'entre PAS en guidé : le pipeline one-shot
+    # pose la question de clarification.
+    needs_intent_clarification: bool = False
     reasoning: str = ""
 
 
@@ -146,14 +156,33 @@ GUIDAGE = true dans 2 cas :
 GUIDAGE = false si :
 - C'est une question factuelle ponctuelle (cote, tolérance, référence pièce, dimension, condition de
   garantie, comparaison produit) qui se répond en une fois.
+- C'est une question de DIMENSIONNEMENT ou de CHOIX DE VALEUR (« à quelle hauteur poser… »,
+  « quelle hauteur choisir… », « quelle taille prendre… ») : c'est une réponse documentaire,
+  PAS un accompagnement pas-à-pas.
 - C'est une salutation, un remerciement, du bavardage, ou une question sur l'identité de l'assistant.
 
 RÈGLE : en cas de doute entre une question factuelle et un guidage, choisis is_guided=false.
 
+PRODUIT NOMMÉ (product_named) :
+- true UNIQUEMENT si l'UTILISATEUR (dans son message ou ses messages précédents, PAS ceux de
+  l'assistant) a explicitement nommé le produit, la gamme ou la référence concernés
+  (ex : « INNOSLIDE », « Perform 76 », « KSR PVC », « seuil 76180 »).
+- false sinon — même si le contexte laisse deviner un produit probable. Ne devine jamais.
+
+AMBIGUÏTÉ D'INTENTION (needs_intent_clarification) :
+- true si le message peut se lire de DEUX façons matériellement différentes, typiquement
+  RÉGLER/ajuster un élément existant vs DÉFINIR/choisir une valeur ou une position
+  (ex : « comment régler la hauteur de poignée ? » = ajuster la poignée posée OU déterminer
+  à quelle hauteur la poser). En cas de vraie ambiguïté → true.
+- false si le contexte lève clairement l'ambiguïté.
+
 Retourne UNIQUEMENT un JSON :
 - is_guided: true | false
 - flow_kind: "howto" | "diagnostic" (valeur indicative si is_guided=false)
-- topic: courte étiquette du sujet (ex : « pose embout profil alu », « volet roulant bloqué »)
+- topic: courte étiquette de la TÂCHE, sans y injecter un produit que l'utilisateur n'a pas
+  nommé (ex : « réglage hauteur poignée », « volet roulant bloqué »)
+- product_named: true | false
+- needs_intent_clarification: true | false
 - reasoning: explication courte en français
 """
 
@@ -221,20 +250,53 @@ async def decide_guided_mode(
             flow_kind=flow_kind,
             topic=str(data.get("topic") or "").strip()[:300],
             detected_symptom=detected_symptom,
+            product_named=bool(data.get("product_named")),
+            needs_intent_clarification=bool(data.get("needs_intent_clarification")),
             reasoning=str(data.get("reasoning") or "").strip(),
         )
         logger.info(
-            "[guided_mode] is_guided=%s flow_kind=%s topic=%r symptom=%r",
+            "[guided_mode] is_guided=%s flow_kind=%s topic=%r symptom=%r product_named=%s intent_ambigu=%s",
             decision.is_guided,
             decision.flow_kind,
             decision.topic,
             decision.detected_symptom,
+            decision.product_named,
+            decision.needs_intent_clarification,
         )
         return decision
     except Exception as e:
         logger.error(f"Erreur lors de la classification guidage: {e}")
         # En cas d'échec, ne pas forcer le mode guidé (repli sur le pipeline standard).
         return GuidedModeDecision(is_guided=False, reasoning=f"Erreur technique: {e}")
+
+
+async def resolve_guided_mode(
+    query: str,
+    history: Optional[List[Dict[str, str]]] = None,
+    *,
+    fused_guided: Any = None,
+    topic: str = "",
+) -> GuidedModeDecision:
+    """Décision de mode guidé SANS appel LLM dédié quand la compréhension fusionnée l'a
+    déjà produite (P0.4 : un seul appel LLM avant le retrieval).
+
+    ``fused_guided`` est un objet type GuidedDecision (attribut ``present``). S'il est
+    présent, on en dérive directement la décision (0 appel LLM) ; sinon on retombe sur
+    ``decide_guided_mode`` (1 appel LLM, ex. compréhension fusionnée désactivée ou échouée
+    — c'est aussi ce chemin que mockent les tests)."""
+    if fused_guided is not None and getattr(fused_guided, "present", False):
+        return GuidedModeDecision(
+            is_guided=bool(getattr(fused_guided, "is_guided", False)),
+            flow_kind=str(getattr(fused_guided, "flow_kind", "howto") or "howto"),
+            topic=(topic or "").strip()[:300],
+            detected_symptom=str(getattr(fused_guided, "detected_symptom", "") or ""),
+            product_named=bool(getattr(fused_guided, "product_named", True)),
+            needs_intent_clarification=bool(
+                getattr(fused_guided, "needs_intent_clarification", False)
+            ),
+            reasoning="fused",
+        )
+    return await decide_guided_mode(query, history)
 
 
 async def decide_retrieval_route(query: str, history: Optional[List[Dict[str, str]]] = None) -> RetrievalDecision:

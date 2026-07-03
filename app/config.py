@@ -2,7 +2,24 @@ from pydantic_settings import BaseSettings
 from pydantic import ConfigDict, field_validator
 from typing import Optional, Union, List
 from pathlib import Path
+import json
+import logging
 import os
+
+logger = logging.getLogger(__name__)
+
+# Défauts du budget de packing CAG par intent (utilisés si CAG_BUDGET_BY_INTENT est vide).
+# Au niveau module (pas attribut de Settings) pour éviter toute interférence avec la
+# gestion des champs pydantic.
+_CAG_BUDGET_DEFAULTS = {
+    "specification": {"budget": 30000, "max_documents": 4},
+    "documentation": {"budget": 30000, "max_documents": 4},
+    "installation": {"budget": 60000, "max_documents": 6},
+    "regulatory": {"budget": 60000, "max_documents": 6},
+    "product_selection": {"budget": 100000, "max_documents": 8},
+    "troubleshooting": {"budget": 100000, "max_documents": 8},
+    "default": {"budget": 60000, "max_documents": 6},
+}
 
 
 class Settings(BaseSettings):
@@ -278,8 +295,15 @@ class Settings(BaseSettings):
     QUERY_MULTI_GROUP_ENABLED: bool = os.getenv("QUERY_MULTI_GROUP_ENABLED", "false").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    # Évaluation de vagueness (clarification si demande trop floue) : ON par défaut.
-    QUERY_VAGUENESS_CHECK_ENABLED: bool = os.getenv("QUERY_VAGUENESS_CHECK_ENABLED", "true").strip().lower() in (
+    # Évaluation de vagueness PRÉ-retrieval (bloque toute recherche documentaire si le LLM
+    # juge la demande "trop vague", sur la base du seul message — sans avoir vu un document).
+    # OFF par défaut : ce garde-fou se déclenchait sur des questions techniques légitimes
+    # mais courtes/à sigles métier (ex. "comment transformer un OF en OB ?") et empêchait
+    # tout retrieval. La clarification pertinente est désormais portée par la politique de
+    # réponse du prompt système (SPACE_CHAT_SYSTEM_PROMPT, §2) : elle intervient APRÈS
+    # retrieval, informée par les documents réellement trouvés — plus fiable qu'une
+    # estimation à l'aveugle avant recherche. Remettre à true rétablit le blocage pré-retrieval.
+    QUERY_VAGUENESS_CHECK_ENABLED: bool = os.getenv("QUERY_VAGUENESS_CHECK_ENABLED", "false").strip().lower() in (
         "true", "1", "yes", "on"
     )
     # Reformulation history-aware du message de suivi en question autonome avant retrieval : ON par défaut.
@@ -293,6 +317,32 @@ class Settings(BaseSettings):
     QUERY_FUSED_UNDERSTANDING_ENABLED: bool = os.getenv("QUERY_FUSED_UNDERSTANDING_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
+    # Génération des requêtes retriever (colpali/semantic/lexical) par un appel LLM dédié
+    # APRÈS la compréhension. OFF par défaut : en mode fusionné, la question autonome +
+    # les entités/références extraites suffisent à construire les 3 requêtes de façon
+    # DÉTERMINISTE (0 appel LLM) → on tombe à UN SEUL appel LLM avant le retrieval. Mettre
+    # à true rebranche la génération LLM par groupe (utile surtout avec le multi-groupe).
+    QUERY_GENERATE_QUERIES_LLM: bool = os.getenv("QUERY_GENERATE_QUERIES_LLM", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Décision du mode guidé (is_guided/flow_kind/product_named/…) portée par le MÊME appel
+    # que la compréhension fusionnée, au lieu d'un decide_guided_mode séparé. ON par défaut
+    # quand la compréhension fusionnée est active → plus d'appel LLM guidé dédié. Le petit
+    # modèle MODEL_QUERY_UNDERSTANDING porte alors la décision guidée : si la détection se
+    # dégrade, pointer MODEL_QUERY_UNDERSTANDING vers un modèle plus capable, ou repasser
+    # ce flag à false (decide_guided_mode dédié sur MODEL_FAST).
+    GUIDED_DECISION_IN_FUSED: bool = os.getenv("GUIDED_DECISION_IN_FUSED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Budget temps (secondes) d'un appel LLM de COMPRÉHENSION de requête (fused, condense,
+    # signaux…). Dépassé → on abandonne l'appel et on retombe sur les valeurs de repli
+    # (jamais de blocage indéfini avant le retrieval). 0 = pas de plafond applicatif.
+    QUERY_UNDERSTANDING_TIMEOUT_S: float = float(os.getenv("QUERY_UNDERSTANDING_TIMEOUT_S", "25"))
+    # Budget temps (secondes) du RETRIEVAL complet (4 canaux + fusion + rerank). Dépassé →
+    # dégradation gracieuse (0 passage, statut degraded_timeout) au lieu d'un blocage
+    # indéfini si un canal freeze (ColPali CPU, MaxSim LanceDB). Généreux par défaut pour
+    # ne jamais couper un ColPali légitime ; 0 = pas de plafond applicatif.
+    RETRIEVAL_TIMEOUT_S: float = float(os.getenv("RETRIEVAL_TIMEOUT_S", "90"))
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "10"))
     RAG_POOL_SIZE: int = int(os.getenv("RAG_POOL_SIZE", "20"))
 
@@ -332,6 +382,30 @@ class Settings(BaseSettings):
     CAG_PAGE_RADIUS: int = int(os.getenv("CAG_PAGE_RADIUS", "3"))
     # Estimation FR chars→tokens pour le packing sous budget.
     CAG_CHARS_PER_TOKEN: float = float(os.getenv("CAG_CHARS_PER_TOKEN", "3.5"))
+    # Plafond de tokens de RÉPONSE en mode CAG (réponses procédurales complètes ; le
+    # plancher 2048 historique coupait les procédures longues).
+    CAG_MAX_COMPLETION_TOKENS: int = int(os.getenv("CAG_MAX_COMPLETION_TOKENS", "3072"))
+    # Images PNG jointes à la génération en mode CAG : UNIQUEMENT des pages réellement
+    # packées dans le contexte (alignement texte/visuel), plafonnées à ce nombre.
+    CAG_MAX_IMAGES: int = int(os.getenv("CAG_MAX_IMAGES", "8"))
+    # Budget de packing PAR INTENT (tokens + max documents) : une question de spécification
+    # ponctuelle ne paie pas le prefill d'un diagnostic SAV. JSON optionnel via env
+    # CAG_BUDGET_BY_INTENT ({"installation": {"budget": 60000, "max_documents": 6}, ...}) ;
+    # la clé "default" couvre les intents absents.
+    # Typé str (JSON brut), PAS dict : pydantic-settings auto-parse tout champ typé dict
+    # depuis l'env → un CAG_BUDGET_BY_INTENT vide (cf. docker-compose `:-`) ferait planter
+    # le démarrage sur json.loads(""). La table normalisée est exposée via la propriété
+    # cag_budget_by_intent (même pattern que colpali_gating_intents).
+    CAG_BUDGET_BY_INTENT: str = os.getenv("CAG_BUDGET_BY_INTENT", "")
+    # Cache TTL (secondes) du texte des chunks feuilles par document, pour éviter de
+    # recharger/concaténer ~60 chunks SQL à chaque requête. 0 = désactivé. Un réindex
+    # peut donc mettre jusqu'à TTL secondes à se refléter dans le contexte de génération.
+    CAG_FULLTEXT_CACHE_TTL: int = int(os.getenv("CAG_FULLTEXT_CACHE_TTL", "300"))
+    # Budget de packing du contexte de SECOURS (fallback Mistral 400) : quand la génération
+    # échoue en 400 — souvent parce que le contexte est trop gros — on RE-PACKE le CAG à ce
+    # petit budget au lieu de rejouer le contexte massif à l'identique (P0.2).
+    CAG_ECO_TOKEN_BUDGET: int = int(os.getenv("CAG_ECO_TOKEN_BUDGET", "20000"))
+    CAG_ECO_MAX_DOCUMENTS: int = int(os.getenv("CAG_ECO_MAX_DOCUMENTS", "3"))
     RAG_NEIGHBOR_STRATEGY: str = os.getenv("RAG_NEIGHBOR_STRATEGY", "conditional")
     # Chars max par passage injecté au LLM. Relevé (4000 → 12000) pour laisser passer des
     # PAGES ENTIÈRES (texte consolidé + enrichissement) sans troncature, en profitant de la
@@ -449,6 +523,20 @@ class Settings(BaseSettings):
             for s in (self.COLPALI_GATING_INTENTS or "").split(",")
             if s.strip()
         ]
+
+    @property
+    def cag_budget_by_intent(self) -> dict:
+        """Table budget/max_documents par intent, parsée depuis le JSON brut env
+        (repli sur les défauts si vide ou illisible)."""
+        raw = (self.CAG_BUDGET_BY_INTENT or "").strip()
+        if raw:
+            try:
+                parsed = json.loads(raw)
+                if isinstance(parsed, dict):
+                    return parsed
+            except (ValueError, TypeError):
+                logger.warning("CAG_BUDGET_BY_INTENT illisible (JSON invalide) — défauts utilisés")
+        return _CAG_BUDGET_DEFAULTS
 
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod

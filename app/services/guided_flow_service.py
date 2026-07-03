@@ -23,8 +23,17 @@ from app.models.conversation import Conversation
 from app.models.document import Document
 from app.models.guided_session import GuidedSession
 from app.services.category_catalog import suggested_categories_for_intent
-from app.services.procedural_router_service import RoutingStep, generate_routing_step
+from app.services.procedural_router_service import (
+    RoutingChoice,
+    RoutingStep,
+    generate_routing_step,
+)
 from app.services.query_signals_schemas import LightweightQuerySignals
+
+# node_key réservé de l'étape 0 d'identification du produit (slot-filling).
+PRODUCT_IDENTIFICATION_NODE_KEY = "product_identification"
+# Valeur du choix permanent « changer de produit / recommencer ».
+RESTART_PRODUCT_VALUE = "restart_product"
 
 logger = logging.getLogger(__name__)
 
@@ -171,6 +180,67 @@ async def _build_escalation_recap(
     }
 
 
+def _collect_product_options(
+    session: Session, passages: List[Dict[str, Any]], *, max_options: int
+) -> List[str]:
+    """Libellés de produits/gammes candidats depuis les documents du retrieval (ordre de
+    pertinence) : gamme PROFERM si renseignée, sinon titre du document. Dédupliqués."""
+    doc_ids: List[int] = []
+    for p in passages:
+        did = p.get("document_id")
+        if isinstance(did, int) and did not in doc_ids:
+            doc_ids.append(did)
+    if not doc_ids:
+        return []
+    docs = {
+        d.id: d for d in session.exec(select(Document).where(Document.id.in_(doc_ids))).all()
+    }
+    options: List[str] = []
+    seen: set = set()
+    for did in doc_ids:
+        doc = docs.get(did)
+        if not doc:
+            continue
+        gammes = list(getattr(doc, "proferm_gammes", None) or [])
+        label = (gammes[0] if gammes else (doc.title or "")).strip()
+        if len(label) > 60:
+            label = label[:57] + "…"
+        key = label.lower()
+        if not label or key in seen:
+            continue
+        seen.add(key)
+        options.append(label)
+        if len(options) >= max_options:
+            break
+    return options
+
+
+def _build_identification_step(
+    session: Session, passages: List[Dict[str, Any]], flow_kind: str
+) -> RoutingStep:
+    """Étape 0 obligatoire quand l'utilisateur n'a pas nommé le produit : question
+    d'identification dont les choix viennent des documents candidats du retrieval.
+    Le SUJET du parcours n'est verrouillé qu'après la réponse — jamais déduit du retrieval."""
+    max_products = max(1, settings.GUIDED_MAX_CHOICES - 1)
+    options = _collect_product_options(session, passages, max_options=max_products)
+    choices = [
+        RoutingChoice(label=opt, value=f"product_{i + 1}") for i, opt in enumerate(options)
+    ]
+    choices.append(RoutingChoice(label="Autre / je ne sais pas", value="unknown"))
+    action = "vous guider" if flow_kind == "howto" else "commencer le diagnostic"
+    message = (
+        f"Avant de {action} : sur quel produit ou quelle gamme intervenez-vous ? "
+        "Cela m'évite de vous orienter vers la mauvaise notice."
+    )
+    return RoutingStep(
+        step_type="question",
+        message=message,
+        choices=choices,
+        cited_pages=[],
+        is_terminal=False,
+    )
+
+
 def _record_user_answer(
     path: List[Dict[str, Any]],
     *,
@@ -210,6 +280,8 @@ async def run_guided_turn(
     flow_kind: str = "howto",
     topic: str = "",
     symptom: str = "",
+    product_named: bool = True,
+    anchor_document_ids: Optional[List[int]] = None,
 ) -> GuidedTurnResult:
     """Exécute un tour de guidage et retourne l'étape d'aiguillage à streamer.
 
@@ -244,6 +316,12 @@ async def run_guided_turn(
             topic=topic or user_message,
             user_message=user_message,
         )
+        # Étape 0 d'identification produit : uniquement en mode dynamique (un arbre
+        # validé porte son propre cheminement) et quand l'utilisateur n'a PAS nommé le
+        # produit — on ne verrouille JAMAIS un produit déduit du retrieval (cf. dérive
+        # INNOSLIDE : « comment régler la hauteur de poignée ? » plongeait dans une gamme
+        # jamais mentionnée par l'utilisateur).
+        needs_identification = not matched_tree and not product_named
         gsession = GuidedSession(
             conversation_id=conversation_id,
             space_id=space_id,
@@ -259,6 +337,11 @@ async def run_guided_turn(
                 "original_user_message": user_message,
                 "entity_texts": [],
                 "symptom": symptom or "",
+                # Étiquette de TÂCHE (sans produit) : sert à recomposer le sujet après
+                # identification ou après « changer de produit ».
+                "task_topic": (topic or user_message[:300]),
+                "pending_product_identification": needs_identification,
+                "confirmed_product": "",
             },
         )
         session.add(gsession)
@@ -272,6 +355,42 @@ async def run_guided_turn(
     # 2. Enregistrer la réponse de l'utilisateur à l'étape précédente (reprise)
     if resuming:
         _record_user_answer(path, user_message=user_message, guided_choice=guided_choice)
+
+        choice_value = str((guided_choice or {}).get("value") or "")
+        last_step = path[-1] if path else None
+
+        if choice_value == RESTART_PRODUCT_VALUE:
+            # « Autre produit / recommencer » : on rouvre l'identification, le sujet
+            # retombe sur l'étiquette de tâche (sans produit).
+            accumulated["pending_product_identification"] = True
+            accumulated["confirmed_product"] = ""
+            topic = str(accumulated.get("task_topic") or topic or user_message[:300])
+            gsession.topic = topic[:300]
+        elif last_step and last_step.get("node_key") == PRODUCT_IDENTIFICATION_NODE_KEY:
+            # Réponse à l'étape 0 : verrouiller (ou pas) le produit CONFIRMÉ par l'utilisateur.
+            accumulated["pending_product_identification"] = False
+            label = ""
+            if choice_value and choice_value != "unknown":
+                label = str((guided_choice or {}).get("label") or "").strip()
+            elif not choice_value and user_message.strip():
+                # Texte libre (l'utilisateur a tapé le nom de son produit).
+                label = user_message.strip()[:120]
+            if label:
+                accumulated["confirmed_product"] = label
+                entity_texts = [str(t) for t in (accumulated.get("entity_texts") or [])]
+                if label not in entity_texts:
+                    entity_texts.insert(0, label)
+                accumulated["entity_texts"] = entity_texts
+                base_topic = str(accumulated.get("task_topic") or "").strip()
+                topic = f"{base_topic} — {label}".strip(" —") or label
+                gsession.topic = topic[:300]
+            else:
+                # « Je ne sais pas » : pas de produit verrouillé — le routeur posera des
+                # questions d'OBSERVATION discriminantes, sans présumer d'une gamme.
+                accumulated["confirmed_product"] = ""
+                last_step.setdefault("observations", []).append(
+                    "Produit non identifié par l'utilisateur"
+                )
 
     # 3. Résoudre le nœud d'arbre validé (Phase 2) si la session est en mode authored.
     authored_node = None
@@ -309,12 +428,22 @@ async def run_guided_turn(
         user_id=user_id,
         k=settings.GUIDED_RETRIEVAL_K,
         signals=synth_signals,
+        # Continuité : les documents d'ancre de la conversation biaisent le retrieval
+        # de chaque étape (un tour guidé ne doit pas sauter de produit).
+        anchor_document_ids=anchor_document_ids or None,
     )
     passages = retrieval.get("passages") or []
 
-    # 5. Construire l'étape : depuis le nœud validé (authored) ou par génération dynamique.
+    # 5. Construire l'étape : identification produit (étape 0, déterministe), nœud validé
+    # (authored), ou génération dynamique.
     step_index = len(path)
-    if authored_node is not None:
+    pending_identification = (
+        gsession.source_mode != "authored"
+        and bool(accumulated.get("pending_product_identification"))
+    )
+    if pending_identification:
+        step = _build_identification_step(session, passages, flow_kind)
+    elif authored_node is not None:
         from app.services.authored_tree_service import routing_step_from_node
 
         step = routing_step_from_node(authored_node, passages)
@@ -328,6 +457,21 @@ async def run_guided_turn(
             step_index=step_index,
             force_terminal=force_terminal,
         )
+        # Choix permanent « changer de produit » quand le produit a été fixé via l'étape 0 :
+        # l'utilisateur peut signaler que le parcours s'est engagé sur le mauvais produit
+        # et rouvrir l'identification. (Pas de bruit quand il a nommé le produit lui-même.)
+        if (
+            not step.is_terminal
+            and accumulated.get("confirmed_product")
+            and not any(c.value == RESTART_PRODUCT_VALUE for c in step.choices)
+        ):
+            step.choices.append(
+                RoutingChoice(
+                    label="Ce n'est pas mon produit / recommencer",
+                    value=RESTART_PRODUCT_VALUE,
+                    hint="",
+                )
+            )
 
     # 5. Enrichir le récap d'escalade à partir du parcours réel (étapes testées avant celle-ci)
     escalation_recap = step.escalation_recap.model_dump() if step.escalation_recap else None
@@ -367,7 +511,11 @@ async def run_guided_turn(
             "user_selection": None,
             "free_text": None,
             "observations": [],
-            "node_key": authored_node.node_key if authored_node is not None else None,
+            "node_key": (
+                PRODUCT_IDENTIFICATION_NODE_KEY
+                if pending_identification
+                else (authored_node.node_key if authored_node is not None else None)
+            ),
             "timestamp": datetime.utcnow().isoformat(),
         }
     )

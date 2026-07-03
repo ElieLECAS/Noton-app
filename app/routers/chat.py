@@ -62,6 +62,7 @@ from app.services.space_service import get_space_by_id
 from app.services.illustration_service import extract_reference_illustration
 from app.tracing import trace_run, trace_pipeline
 from datetime import datetime
+import asyncio
 import json
 import logging
 import os
@@ -203,23 +204,50 @@ SPACE_CONTEXT_MAX_PASSAGE_CHARS = _int_env(
 )
 SPACE_HISTORY_MAX_CHARS = _int_env("SPACE_HISTORY_MAX_CHARS", 16000)
 TRACE_VERBOSE_TEXT = os.getenv("TRACE_VERBOSE_TEXT", "false").lower() == "true"
+# Prompt système du chat d'espace — 4 blocs hiérarchisés (identité, contexte, politique
+# de réponse, grounding). Refonte 2026-07-03 : vocabulaire aligné sur le CAG (le modèle
+# reçoit des DOCUMENTS avec en-têtes, plus des « chunks »), et politique de clarification
+# explicite — l'ancienne consigne « sans demander de précision » forçait le modèle à
+# choisir un produit à la place de l'utilisateur (cf. dérive INNOSLIDE).
 SPACE_CHAT_SYSTEM_PROMPT = (
-    "Tu es LIA, l'assistante experte de PROFERM. Ton rôle est d'accompagner les collaborateurs et les clients de manière chaleureuse, professionnelle et précise sur nos produits et services.\n"
-    "Identité : Tu parles au nom de PROFERM. Quand tu dis 'nous' ou 'nos gammes', tu fais référence aux produits PROFERM. Les documents des fournisseurs (Technal, Profine, Askey, Roto, etc.) concernent nos partenaires et doivent être présentés comme tels.\n"
-    "Ton & Style de discussion : Réponds sous forme de discussion fluide, naturelle et en prose. Privilégie une vraie conversation chaleureuse plutôt que d'aligner systématiquement des listes. Sois agréable dans tes échanges. Salue courtoisement l'utilisateur si c'est le début de la conversation, mais supprime tout texte superflu (évite les formules de salutation répétées ou de politesse de fin systématiques).\n"
-    "Concision stricte : Limite drastiquement la longueur de tes réponses. Réponds de manière extrêmement directe, concise et minimaliste. Si la question demande une pièce, un outil ou une valeur, donne uniquement cette information, sans rajouter les étapes de montage adjacentes ni d'autres détails techniques non sollicités.\n"
-    "Puces & Tableaux : Priorise la prose. N'utilise les listes à puces que si c'est réellement justifié (par exemple pour énumérer des éléments simples où la prose nuirait à la lisibilité). Utilise les tableaux Markdown pour présenter clairement les données techniques ou les comparaisons complexes sans répéter ou paraphraser les informations du tableau dans le texte qui l'accompagne.\n"
-    "Filtrage des informations : Réponds exclusivement à la question posée. Si l'information n'est pas dans le chunk spécifique à la section demandée, ne complète pas avec des données d'autres sections. Réponds exactement au périmètre de la question posée sans proposer d'informations complémentaires non sollicitées.\n"
-    "Désambiguïsation & Contextualisation automatique : Sois extrêmement vigilante avec les dénominations de gammes (ex : Perform 70 vs Perform 76), les versions de produits (ex : standard vs renforcée) et les configurations spécifiques (ex : seuil PMR vs seuil standard). Ne les confonds jamais et ne mélange pas leurs composants ou instructions. Si une information ou un composant varie selon la gamme, la version ou la configuration, présente systématiquement et automatiquement la distinction ou les différents cas de figure applicables selon les données du contexte, sans demander de précision ou de clarification à l'utilisateur.\n"
-    "Aucune citation dans le texte : NE mets AUCUN marqueur de source entre crochets dans ta réponse. N'écris jamais [Nom du document, page X] ni [Nom du document] ni de numéro de page dans le corps du texte. Les sources sont affichées automatiquement sous ta réponse : rédige une prose fluide et naturelle, sans aucune référence de document ni de page.\n"
-    "Interdiction d'halluciner, de surinterpréter et d'assembler des informations : Ne fais aucune extrapolation, supposition, spéculation ou généralisation. Ne cherche pas à deviner ou à enjoliver. Ne combine/colle JAMAIS des références de produits (ex: T141019), des cotes (ex: 300 mm) ou des dimensions (ex: 2.40 m) issues de phrases ou de sections différentes pour fabriquer une spécification qui n'est pas explicitement écrite telle quelle. Si le texte ne contient pas l'association directe et exacte demandée pour le composant spécifique, réponds obligatoirement : 'La notice ne précise pas [la mesure ou la spécification] pour cette pièce' au lieu d'extrapoler ou de proposer des valeurs standards du bâtiment.\n"
-    "### RÈGLE DE SÉCURITÉ STRICTE : GROUNDING TECHNIQUE ET GESTES\n"
-    "- Interdiction absolue d'enrichir, d'interpréter, de paraphraser ou d'extrapoler les faits, valeurs numériques, cinématiques, gestes techniques ou étapes de montage (ex: imaginer des angles, rotations, clics) à partir de tes propres connaissances ou de ta propre interprétation.\n"
-    "- Si une consigne technique, une cote ou une étape de montage est demandée, tu dois restituer STRICTEMENT et MOT POUR MOT les verbes d'action et les composants textuels fournis dans les chunks (ex: 'Mettre en contact', 'Clipper l'autre côté').\n"
-    "- En l'absence de détails explicites et exacts dans le contexte, n'invente rien, refuse d'extrapoler et dis : 'La notice ne précise pas [ce détail]'. Privilégie une concision totale plutôt que du jargon métier extrapolé.\n"
-    "Règle d'or : Hard Grounding strict. Tu dois te limiter exclusivement aux faits décrits de manière explicite dans le contexte fourni (les PASSAGES) et à leurs liaisons directes. Si l'information recherchée est absente du contexte ou incertaine, indique-le clairement et propose une étape de vérification sans essayer de deviner.\n"
-    "### RÉSOLUTION DES CONFLITS ET SPÉCIFICITÉ DES SOURCES :\n"
-    "- En cas de contradictions ou d'informations divergentes entre plusieurs passages (ex. dimensions d'outils ou instructions différentes), privilégie toujours le passage issu du document le plus spécifique au sujet de la question (ex. la notice dédiée au 'report de charge' pour une question sur le report de charge, plutôt qu'une notice de montage générale). Les passages sont classés par ordre de pertinence décroissante."
+    "Tu es LIA, l'assistante technique experte de PROFERM (menuiserie, volets roulants). "
+    "Tu accompagnes collaborateurs et clients avec chaleur, professionnalisme et précision. "
+    "Tu parles au nom de PROFERM : « nous », « nos gammes » = produits PROFERM ; les documents "
+    "des fournisseurs (Technal, Profine, Askey, Roto, etc.) concernent nos partenaires et sont présentés comme tels.\n"
+    "\n"
+    "### CONTEXTE FOURNI\n"
+    "Tu reçois des DOCUMENTS complets ou en extrait étendu, chacun avec un en-tête (source, gamme, "
+    "matériau, type) et des marqueurs [page N], classés par pertinence décroissante. "
+    "Avant d'attribuer une valeur, une cote ou une consigne à une gamme/produit, vérifie l'en-tête "
+    "du document : ne transfère JAMAIS une information d'une gamme vers une autre (ex. Perform 70 ≠ Perform 76, "
+    "seuil PMR ≠ seuil standard, version standard ≠ renforcée). En cas d'informations contradictoires entre "
+    "documents, le document le plus spécifique au sujet de la question prime.\n"
+    "\n"
+    "### POLITIQUE DE RÉPONSE (dans cet ordre)\n"
+    "1. Question claire et couverte par les documents → réponds directement, de manière concise, "
+    "exactement au périmètre demandé (pas d'étapes adjacentes ni de détails non sollicités).\n"
+    "2. La réponse DÉPEND d'un produit, d'une gamme, d'une version ou d'une configuration que "
+    "l'utilisateur n'a PAS précisée, et les documents en couvrent PLUSIEURS → ne choisis JAMAIS à sa place. "
+    "Si la réponse tient en 2-3 lignes par cas, présente brièvement chaque cas en nommant sa gamme/version ; "
+    "sinon pose UNE question de clarification courte en listant les options présentes dans les documents.\n"
+    "3. Information absente ou incertaine dans les documents → dis-le clairement "
+    "(« La notice ne précise pas [ce détail] ») et propose une étape de vérification. N'invente rien.\n"
+    "\n"
+    "### GROUNDING STRICT (sécurité)\n"
+    "- Fonde-toi EXCLUSIVEMENT sur les faits explicites des documents fournis et leurs liaisons directes. "
+    "Aucune extrapolation, supposition ou généralisation depuis tes connaissances générales.\n"
+    "- Consignes techniques, cotes, gestes de montage : restitue STRICTEMENT et MOT POUR MOT les verbes "
+    "d'action et composants des documents (ex. « Mettre en contact », « Clipper l'autre côté »). "
+    "N'imagine jamais d'angles, rotations ou clics absents du texte.\n"
+    "- Ne combine JAMAIS des références (ex. T141019), cotes (ex. 300 mm) ou dimensions (ex. 2,40 m) "
+    "issues de phrases ou sections différentes pour fabriquer une spécification qui n'est pas écrite telle quelle.\n"
+    "\n"
+    "### STYLE\n"
+    "Prose fluide et naturelle ; listes à puces seulement si elles servent la lisibilité ; tableaux Markdown "
+    "pour les données techniques ou comparaisons (sans paraphraser le tableau dans le texte). Salue courtoisement "
+    "en début de conversation, sans formules répétées ensuite. "
+    "AUCUNE citation dans le corps du texte : n'écris jamais [Nom du document, page X] ni de numéro de page — "
+    "les sources sont affichées automatiquement sous ta réponse."
 )
 
 router = APIRouter(prefix="/api", tags=["chat"])
@@ -509,14 +537,23 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
     return system_message
 
 
+# Sources UI par document packé : implémentation dans le packer (partagée avec la fiche
+# technique) ; ré-exportée ici car chat.py et ses tests l'utilisent sous ce nom.
+from app.services.context_packer_service import (  # noqa: E402
+    build_document_sources as _build_document_sources,
+)
+
+
 def _build_generation_context(
     session: Session,
     doc_passages: List[dict],
     anchor_document_ids: Optional[List[int]] = None,
+    intent: Optional[str] = None,
 ) -> dict:
     """Contexte système de génération : CAG (documents entiers, fenêtre 256k) si activé,
     sinon fallback historique (passages tronqués). Les documents ANCRÉS (sujet courant de
-    la conversation) sont toujours inclus dans le contexte CAG — garantie de continuité."""
+    la conversation) sont toujours inclus dans le contexte CAG — garantie de continuité.
+    Le budget de packing s'adapte à l'intent (CAG_BUDGET_BY_INTENT)."""
     if settings.CAG_ENABLED:
         from app.services.context_packer_service import build_cag_context
 
@@ -525,8 +562,156 @@ def _build_generation_context(
             doc_passages,
             system_prompt=SPACE_CHAT_SYSTEM_PROMPT,
             anchor_document_ids=anchor_document_ids,
+            intent=intent,
         )
     return build_space_context_from_passages(doc_passages)
+
+
+def _guided_streaming_response(
+    gtr,
+    conversation_id: int,
+    forced_model: str,
+    forced_provider: str,
+) -> StreamingResponse:
+    """Réponse SSE d'un tour de guidage (partagée par la reprise active et le nouveau
+    départ). Streame le message de l'étape, les sources, persiste, puis émet l'étape
+    structurée. Factorisé (P0.4) pour éviter la duplication entre les deux points d'entrée."""
+
+    async def generate_guided():
+        error_msg_to_yield = None
+        try:
+            message_text = gtr.message_text or ""
+            # 1. Streamer le message de l'étape (effet machine à écrire)
+            chunk_size = 40
+            for i in range(0, len(message_text), chunk_size):
+                chunk = message_text[i : i + chunk_size]
+                yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+
+            # 2. Sources (citations → PDF)
+            if gtr.sources:
+                yield f"data: {json.dumps({'sources': gtr.sources})}\n\n"
+
+            # 3. Persister le message assistant (session fraîche, cf. piège SSE)
+            assistant_message_id = None
+            try:
+                assistant_message_id = _persist_assistant_reply(
+                    conversation_id,
+                    message_text,
+                    forced_model,
+                    forced_provider,
+                    json.dumps(gtr.sources, ensure_ascii=False) if gtr.sources else None,
+                    metadata_json={"guided_step": gtr.step},
+                )
+            except Exception:
+                logger.exception("Erreur sauvegarde étape guidée (space chat)")
+
+            # 4. Émettre l'étape structurée (choix interactifs)
+            step_event = dict(gtr.step)
+            step_event["guided_session_id"] = gtr.guided_session_id
+            step_event["message_id"] = assistant_message_id
+            yield f"data: {json.dumps({'step': step_event})}\n\n"
+
+            yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+        except Exception as e:
+            logger.exception("Erreur dans le générateur stream_space_chat_message (guided)")
+            error_msg_to_yield = str(e)
+
+        if error_msg_to_yield:
+            yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
+
+    return StreamingResponse(generate_guided(), media_type="text/event-stream")
+
+
+def _guided_anchor_ids(persisted_qc: Optional[dict]) -> List[int]:
+    """Documents d'ancre du sujet courant (biaisent le retrieval de chaque étape guidée)."""
+    if not (settings.CONVERSATION_ANCHOR_ENABLED and isinstance(persisted_qc, dict)):
+        return []
+    return [
+        int(d)
+        for d in (persisted_qc.get("current_documents") or [])
+        if isinstance(d, (int, str)) and str(d).isdigit()
+    ]
+
+
+async def _stream_llm_to_sse(
+    context: List[dict],
+    *,
+    model: str,
+    max_tokens: Optional[int],
+    source_filter,
+    sink: List[str],
+):
+    """Streame une génération Mistral en événements SSE, filtre le bloc <sources> et
+    accumule le texte AFFICHÉ dans ``sink``. Factorisé (P0.2) pour dédupliquer les
+    tentatives full/eco/minimal ; propage httpx.HTTPStatusError à l'appelant (fallback)."""
+    async for raw_chunk in chat_stream_wrapper(
+        message="", model=model, context=context, max_tokens=max_tokens
+    ):
+        try:
+            parsed = json.loads(raw_chunk)
+        except json.JSONDecodeError:
+            continue
+        content = (parsed.get("message") or {}).get("content") or ""
+        if not content:
+            continue
+        if source_filter is not None:
+            content = source_filter.feed(content)
+            if not content:
+                continue
+        sink.append(content)
+        yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
+
+
+def _build_eco_context(
+    session: Session,
+    doc_passages: List[dict],
+    anchor_document_ids: Optional[List[int]],
+    user_message: str,
+) -> List[dict]:
+    """Contexte de SECOURS minimal après un Mistral 400 (P0.2) : CAG re-packé à un petit
+    budget (sans images ni historique) + question. Cible la cause probable (contexte trop
+    volumineux) au lieu de rejouer le contexte massif à l'identique."""
+    if settings.CAG_ENABLED and doc_passages:
+        from app.services.context_packer_service import build_cag_context
+
+        eco_system = build_cag_context(
+            session,
+            doc_passages,
+            system_prompt=SPACE_CHAT_SYSTEM_PROMPT,
+            token_budget=settings.CAG_ECO_TOKEN_BUDGET,
+            max_documents=settings.CAG_ECO_MAX_DOCUMENTS,
+            anchor_document_ids=anchor_document_ids,
+        )
+    else:
+        eco_system = {"role": "system", "content": SPACE_CHAT_SYSTEM_PROMPT}
+    return [eco_system, {"role": "user", "content": user_message}]
+
+
+def _persist_reply_with_retry(
+    conversation_id: int,
+    text: str,
+    model: str,
+    provider: str,
+    sources_json: Optional[str],
+    *,
+    metadata_json: Optional[dict] = None,
+    attempts: int = 2,
+) -> Optional[int]:
+    """Persiste la réponse assistant avec un petit retry (P0.2) : une écriture DB qui
+    échoue ne doit pas perdre silencieusement la réponse déjà affichée à l'utilisateur."""
+    last_exc = None
+    for i in range(max(1, attempts)):
+        try:
+            return _persist_assistant_reply(
+                conversation_id, text, model, provider, sources_json,
+                metadata_json=metadata_json,
+            )
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            logger.warning("Persistance réponse échouée (tentative %d): %s", i + 1, exc)
+    logger.error("Persistance réponse ABANDONNÉE après %d tentatives: %s", attempts, last_exc)
+    return None
+
 
 @router.post("/spaces/{space_id}/chat/stream")
 async def stream_space_chat_message(
@@ -585,34 +770,22 @@ async def stream_space_chat_message(
     # Court-circuite le pipeline one-shot quand la demande relève d'un guidage pas-à-pas,
     # ou quand un parcours guidé est déjà actif sur la conversation (reprise).
     # Gardé par GUIDED_FLOW_ENABLED : zéro impact quand le flag est désactivé.
+    # 1) REPRISE d'un parcours actif : 0 appel LLM (l'utilisateur répond à une étape en
+    #    cours). Le NOUVEAU DÉPART (décision is_guided) est traité APRÈS la compréhension
+    #    fusionnée, dont il RÉUTILISE la décision guidée — un seul appel LLM avant le
+    #    retrieval (P0.4), au lieu d'un decide_guided_mode dédié qui doublait l'appel.
+    guided_active_state = None
+    guided_persisted_qc = None
     if settings.GUIDED_FLOW_ENABLED and request.conversation_id:
         from app.services.guided_flow_service import load_active_guided_state, run_guided_turn
 
         conv_for_guided = session.get(Conversation, request.conversation_id)
-        persisted_qc = conv_for_guided.query_context if conv_for_guided else None
-        active_guided = load_active_guided_state(persisted_qc)
+        guided_persisted_qc = conv_for_guided.query_context if conv_for_guided else None
+        guided_active_state = load_active_guided_state(guided_persisted_qc)
 
-        guided_flow_kind = "howto"
-        guided_topic = ""
-        guided_symptom = ""
-        enter_guided = bool(active_guided)
-        if not enter_guided:
-            # Classification isolée (1 appel LLM), uniquement hors reprise.
-            from app.services.query_reasoning_service import decide_guided_mode
-
-            mode_decision = await decide_guided_mode(request.message, conversation_context)
-            enter_guided = mode_decision.is_guided
-            guided_flow_kind = mode_decision.flow_kind
-            guided_topic = mode_decision.topic
-            guided_symptom = mode_decision.detected_symptom
-
-        if enter_guided:
-            logger.info(
-                "[chat] Mode guidé — resume=%s flow_kind=%s topic=%r",
-                bool(active_guided),
-                guided_flow_kind,
-                guided_topic,
-            )
+        if guided_active_state:
+            anchors = _guided_anchor_ids(guided_persisted_qc)
+            logger.info("[chat] Mode guidé — REPRISE parcours actif (anchors=%s)", anchors)
             gtr = await run_guided_turn(
                 session=session,
                 space_id=space_id,
@@ -621,55 +794,13 @@ async def stream_space_chat_message(
                 user_message=request.message,
                 guided_choice=request.guided_choice.model_dump() if request.guided_choice else None,
                 history=conversation_context,
-                active_state=active_guided,
-                flow_kind=guided_flow_kind,
-                topic=guided_topic,
-                symptom=guided_symptom,
+                active_state=guided_active_state,
+                product_named=True,  # produit déjà traité en reprise
+                anchor_document_ids=anchors or None,
             )
-
-            async def generate_guided():
-                error_msg_to_yield = None
-                try:
-                    message_text = gtr.message_text or ""
-                    # 1. Streamer le message de l'étape (effet machine à écrire)
-                    chunk_size = 40
-                    for i in range(0, len(message_text), chunk_size):
-                        chunk = message_text[i : i + chunk_size]
-                        yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
-
-                    # 2. Sources (citations → PDF)
-                    if gtr.sources:
-                        yield f"data: {json.dumps({'sources': gtr.sources})}\n\n"
-
-                    # 3. Persister le message assistant (session fraîche, cf. piège SSE)
-                    assistant_message_id = None
-                    try:
-                        assistant_message_id = _persist_assistant_reply(
-                            request.conversation_id,
-                            message_text,
-                            forced_model,
-                            forced_provider,
-                            json.dumps(gtr.sources, ensure_ascii=False) if gtr.sources else None,
-                            metadata_json={"guided_step": gtr.step},
-                        )
-                    except Exception:
-                        logger.exception("Erreur sauvegarde étape guidée (space chat)")
-
-                    # 4. Émettre l'étape structurée (choix interactifs)
-                    step_event = dict(gtr.step)
-                    step_event["guided_session_id"] = gtr.guided_session_id
-                    step_event["message_id"] = assistant_message_id
-                    yield f"data: {json.dumps({'step': step_event})}\n\n"
-
-                    yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
-                except Exception as e:
-                    logger.exception("Erreur dans le générateur stream_space_chat_message (guided)")
-                    error_msg_to_yield = str(e)
-
-                if error_msg_to_yield:
-                    yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
-
-            return StreamingResponse(generate_guided(), media_type="text/event-stream")
+            return _guided_streaming_response(
+                gtr, request.conversation_id, forced_model, forced_provider
+            )
 
     # ——— Fast-path FICHE TECHNIQUE (lookup par référence nue) ———
     # Court-circuite le RAG conversationnel quand la demande est une référence nue
@@ -705,18 +836,13 @@ async def stream_space_chat_message(
 
                     conv_prev = session.get(Conversation, request.conversation_id)
                     prev_qc = dict(conv_prev.query_context or {}) if conv_prev else {}
-                    designation = (
-                        fiche_result.core.designation
-                        or fiche_result.core.type_element
-                        or "référence"
-                    ).strip()
-                    fiche_topic = f"{designation} {ref_query.primary}".strip()
+                    fiche_topic = (fiche_result.topic or ref_query.primary or ref_query.raw_message).strip()
                     fiche_state = build_conversation_state(
                         prev_qc,
                         topic_shift=False,
                         llm_topic=fiche_topic,
                         fallback_topic=fiche_topic,
-                        new_entities=ref_query.references,
+                        new_entities=ref_query.references or [fiche_topic],
                     )
                     _save_conversation_query_context(
                         request.conversation_id,
@@ -860,6 +986,62 @@ async def stream_space_chat_message(
                 routing_decision.reasoning,
             )
         routing_decision_decision = routing_decision.decision
+
+    # ——— NOUVEAU DÉPART guidé (décision portée par la compréhension fusionnée, P0.4) ———
+    # Réutilise la décision guidée du fused (0 appel LLM supplémentaire) ; retombe sur
+    # decide_guided_mode uniquement si le fused ne l'a pas produite (QU off / fused échoué).
+    if (
+        settings.GUIDED_FLOW_ENABLED
+        and request.conversation_id
+        and not guided_active_state
+    ):
+        from app.services.guided_flow_service import run_guided_turn
+        from app.services.query_reasoning_service import resolve_guided_mode
+
+        guided_topic_hint = ""
+        if lw_result and lw_result.query_context:
+            guided_topic_hint = (
+                lw_result.query_context.get("current_topic")
+                or lw_result.query_context.get("standalone_question")
+                or ""
+            )
+        guided_decision = await resolve_guided_mode(
+            request.message,
+            conversation_context,
+            fused_guided=(lw_result.guided if lw_result else None),
+            topic=guided_topic_hint,
+        )
+        # Intention ambiguë (« régler la hauteur » = ajuster OU dimensionner) : on n'entre
+        # PAS en guidé, le one-shot pose la clarification (politique de réponse n°2).
+        if guided_decision.is_guided and guided_decision.needs_intent_clarification:
+            logger.info("[chat] Guidé différé — intention ambiguë : clarification via one-shot")
+        elif guided_decision.is_guided:
+            anchors = _guided_anchor_ids(guided_persisted_qc)
+            logger.info(
+                "[chat] Mode guidé — NOUVEAU départ flow_kind=%s topic=%r product_named=%s anchors=%s",
+                guided_decision.flow_kind,
+                guided_decision.topic or guided_topic_hint,
+                guided_decision.product_named,
+                anchors,
+            )
+            gtr = await run_guided_turn(
+                session=session,
+                space_id=space_id,
+                user_id=current_user.id,
+                conversation_id=request.conversation_id,
+                user_message=request.message,
+                guided_choice=request.guided_choice.model_dump() if request.guided_choice else None,
+                history=conversation_context,
+                active_state=None,
+                flow_kind=guided_decision.flow_kind,
+                topic=guided_decision.topic or guided_topic_hint,
+                symptom=guided_decision.detected_symptom,
+                product_named=guided_decision.product_named,
+                anchor_document_ids=anchors or None,
+            )
+            return _guided_streaming_response(
+                gtr, request.conversation_id, forced_model, forced_provider
+            )
 
     if routing_decision_decision == "direct":
         direct_context = list(conversation_context)
@@ -1030,17 +1212,38 @@ async def stream_space_chat_message(
         tags=["rag", "technical", "space"],
     ) as retrieval_run:
         from app.services.space_search_service import search_technical_passages
-        retrieval = await search_technical_passages(
-            session=session,
-            space_id=space_id,
-            query_text=retrieval_query_text,
-            user_id=current_user.id,
-            k=RAG_TOP_K,
-            queries=retrieval_queries,
-            signals=lw_result.signals if lw_result and lw_result.signals else None,
-            query_groups=retrieval_query_groups,
-            anchor_document_ids=anchor_document_ids or None,
-        )
+
+        async def _do_retrieval():
+            return await search_technical_passages(
+                session=session,
+                space_id=space_id,
+                query_text=retrieval_query_text,
+                user_id=current_user.id,
+                k=RAG_TOP_K,
+                queries=retrieval_queries,
+                signals=lw_result.signals if lw_result and lw_result.signals else None,
+                query_groups=retrieval_query_groups,
+                anchor_document_ids=anchor_document_ids or None,
+            )
+
+        # Budget temps global (P0.3) : un canal qui freeze (ColPali CPU, MaxSim LanceDB) ne
+        # doit pas bloquer indéfiniment — au-delà du budget, dégradation gracieuse (0 passage).
+        try:
+            if settings.RETRIEVAL_TIMEOUT_S and settings.RETRIEVAL_TIMEOUT_S > 0:
+                retrieval = await asyncio.wait_for(
+                    _do_retrieval(), timeout=settings.RETRIEVAL_TIMEOUT_S
+                )
+            else:
+                retrieval = await _do_retrieval()
+        except asyncio.TimeoutError:
+            logger.error(
+                "[chat] retrieval au-delà du budget %.0fs → dégradation gracieuse (0 passage)",
+                settings.RETRIEVAL_TIMEOUT_S,
+            )
+            retrieval = {
+                "passages": [], "images": [], "status": "degraded_timeout",
+                "reason": "retrieval_timeout",
+            }
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]
         retrieval_reason = retrieval.get("reason")
@@ -1129,7 +1332,12 @@ async def stream_space_chat_message(
     # Construire le contexte système à partir des passages techniques
     # Si low confidence : injecter un prompt spécial pour forcer la clarification
     if retrieval_status == "low_confidence_clarification":
-        space_context_draft = _build_generation_context(session, doc_passages, anchor_document_ids=anchor_document_ids or None)
+        space_context_draft = _build_generation_context(
+            session,
+            doc_passages,
+            anchor_document_ids=anchor_document_ids or None,
+            intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
+        )
         # Ajouter une instruction de clarification forcée après les passages
         space_context_draft["content"] += (
             "\n\n⚠️ IMPORTANT : Les passages ci-dessus sont ambigus ou de faible pertinence. "
@@ -1142,7 +1350,12 @@ async def stream_space_chat_message(
             retrieval_reason,
         )
     else:
-        space_context_draft = _build_generation_context(session, doc_passages, anchor_document_ids=anchor_document_ids or None)
+        space_context_draft = _build_generation_context(
+            session,
+            doc_passages,
+            anchor_document_ids=anchor_document_ids or None,
+            intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
+        )
 
     # Fil de la conversation : sujet courant, entités en focus et demande reformulée,
     # injectés à la FIN du message système (donc juste avant l'historique et le message
@@ -1176,8 +1389,26 @@ async def stream_space_chat_message(
     full_context_draft.extend(rag_history)
 
     user_images: List[str] = []
+    user_image_captions: List[dict] = []
+    cag_documents_ctx: List[dict] = list(space_context_draft.get("cag_documents") or [])
     if doc_passages and is_vision_model(forced_model):
-        if retrieval_images:
+        if settings.CAG_ENABLED and cag_documents_ctx:
+            # Alignement texte/visuel : PNG UNIQUEMENT pour des pages réellement packées
+            # dans le contexte CAG (et légendées), pas pour les passages top-k bruts.
+            from app.services.context_packer_service import select_cag_images
+
+            user_images, user_image_captions = await asyncio.to_thread(
+                select_cag_images,
+                session,
+                cag_documents_ctx,
+                doc_passages,
+            )
+            logger.info(
+                "[stream_space_chat_message] %d image(s) PNG alignées sur le contexte CAG pour %s",
+                len(user_images),
+                forced_model,
+            )
+        elif retrieval_images:
             user_images = retrieval_images[: settings.RAG_MAX_IMAGES]
             logger.info(
                 "[stream_space_chat_message] %d image(s) PNG du pipeline multimodal pour %s",
@@ -1202,9 +1433,24 @@ async def stream_space_chat_message(
             forced_model,
         )
 
+    # Sandwich anti « lost in the middle » : rappel final de tâche (+ question autonome)
+    # en toute fin de contexte, après les ~10-100k tokens de documents.
+    task_reminder = None
+    if settings.CAG_ENABLED and doc_passages:
+        from app.services.rag_generation_service import build_cag_task_reminder
+
+        task_reminder = build_cag_task_reminder(
+            request.message,
+            standalone_question=(
+                lw_result.query_context.get("standalone_question") if lw_result else None
+            ),
+        )
+
     user_msg = build_rag_user_message(
         rag_user_message,
         images_b64=user_images or None,
+        image_captions=user_image_captions or None,
+        task_reminder=task_reminder,
     )
     full_context_draft.append(user_msg)
 
@@ -1271,81 +1517,75 @@ async def stream_space_chat_message(
                     },
                     tags=["llm", "stream", "space"]
                 ) as stream_run:
-                    fallback_triggered = False
-                    # [PERF] Bucket macro n°2 : génération. On mesure la latence du 1er
-                    # token (= prefill Mistral sur le contexte CAG ~40k tokens) et le total.
+                    # Bloc machine <sources>{...}</sources> émis en fin de réponse CAG :
+                    # filtré du stream (jamais affiché), parsé pour les sources UI.
+                    from app.services.stream_source_filter import SourcesTagStreamFilter
+
+                    source_filter = SourcesTagStreamFilter() if settings.CAG_ENABLED else None
+                    # Plafond de réponse relevé en mode CAG (procédures complètes).
+                    gen_max_tokens = settings.CAG_MAX_COMPLETION_TOKENS if settings.CAG_ENABLED else None
+
+                    # Tentatives dégressives face à un Mistral 400 (souvent = contexte trop
+                    # gros) : contexte complet → CAG RE-PACKÉ en budget eco → question nue.
+                    # Contextes construits PARESSEUSEMENT (callables) : le cas normal (succès
+                    # au 1er essai) ne doit JAMAIS payer le coût d'un repackaging CAG "eco"
+                    # inutile (SQL + calcul de tokens) à chaque requête.
+                    # Le filtre <sources> est RÉINITIALISÉ à chaque tentative (P0.2) pour ne
+                    # pas hériter d'un état de capture partiel de la tentative précédente.
+                    stream_attempts = [
+                        ("full", lambda: full_context_draft, gen_max_tokens),
+                        (
+                            "eco",
+                            lambda: _build_eco_context(
+                                session, doc_passages,
+                                anchor_document_ids or None, request.message,
+                            ),
+                            gen_max_tokens,
+                        ),
+                        ("minimal", lambda: [{"role": "user", "content": request.message}], None),
+                    ]
+                    # [PERF] Bucket macro n°2 : génération (latence 1er token = prefill).
                     _t_gen_start = _time.perf_counter()
-                    _first_token_logged = False
-                    try:
-                        async for raw_chunk in chat_stream_wrapper(
-                            message="",
-                            model=forced_model,
-                            context=full_context_draft,
-                        ):
-                            try:
-                                parsed = json.loads(raw_chunk)
-                            except json.JSONDecodeError:
-                                continue
-                            content = (parsed.get("message") or {}).get("content") or ""
-                            if not content:
-                                continue
-                            if not _first_token_logged:
-                                _first_token_logged = True
-                                logger.info(
-                                    "[PERF][chat] génération — 1er token à %.2fs (prefill contexte)",
-                                    _time.perf_counter() - _t_gen_start,
-                                )
-                            assistant_response.append(content)
-                            yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
-                        logger.info(
-                            "[PERF][chat] génération TOTAL %.2fs — %d chars",
-                            _time.perf_counter() - _t_gen_start,
-                            sum(len(c) for c in assistant_response),
-                        )
-                    except httpx.HTTPStatusError as exc:
-                        if exc.response is not None and exc.response.status_code == 400:
-                            fallback_triggered = True
-                        else:
-                            raise
-                    
-                    if fallback_triggered and not assistant_response:
-                        logger.warning("Mistral 400 on initial stream, falling back without history")
-                        fallback_context = [space_context_draft, {"role": "user", "content": request.message}]
+                    for _label, _ctx_fn, _mt in stream_attempts:
+                        # On ne bascule en fallback QUE si rien n'a encore été émis.
+                        if assistant_response:
+                            break
+                        if _label != "full":
+                            logger.warning("Mistral 400 → tentative de secours '%s'", _label)
+                            if settings.CAG_ENABLED:
+                                source_filter = SourcesTagStreamFilter()
                         try:
-                            async for raw_chunk in chat_stream_wrapper(
-                                message="",
+                            async for _sse in _stream_llm_to_sse(
+                                _ctx_fn(),
                                 model=forced_model,
-                                context=fallback_context,
+                                max_tokens=_mt,
+                                source_filter=source_filter,
+                                sink=assistant_response,
                             ):
-                                try:
-                                    parsed = json.loads(raw_chunk)
-                                except json.JSONDecodeError:
-                                    continue
-                                content = (parsed.get("message") or {}).get("content") or ""
-                                if not content:
-                                    continue
-                                assistant_response.append(content)
-                                yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
-                        except httpx.HTTPStatusError as fallback_exc:
-                            if fallback_exc.response is not None and fallback_exc.response.status_code == 400:
-                                logger.warning("Mistral 400 persistent, falling back to minimal context without RAG")
-                                async for raw_chunk in chat_stream_wrapper(
-                                    message="",
-                                    model=forced_model,
-                                    context=[{"role": "user", "content": request.message}],
-                                ):
-                                    try:
-                                        parsed = json.loads(raw_chunk)
-                                    except json.JSONDecodeError:
-                                        continue
-                                    content = (parsed.get("message") or {}).get("content") or ""
-                                    if not content:
-                                        continue
-                                    assistant_response.append(content)
-                                    yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
-                            else:
-                                raise
-                    
+                                yield _sse
+                            break  # génération réussie
+                        except httpx.HTTPStatusError as exc:
+                            if (
+                                exc.response is not None
+                                and exc.response.status_code == 400
+                                and not assistant_response
+                            ):
+                                continue  # tenter le niveau de secours suivant
+                            raise
+                    logger.info(
+                        "[PERF][chat] génération TOTAL %.2fs — %d chars",
+                        _time.perf_counter() - _t_gen_start,
+                        sum(len(c) for c in assistant_response),
+                    )
+
+                    # Fin de stream : relâcher un éventuel texte retenu à tort (balise
+                    # <sources> jamais complétée) pour ne rien perdre de la réponse.
+                    if source_filter is not None:
+                        _tail = source_filter.finalize()
+                        if _tail:
+                            assistant_response.append(_tail)
+                            yield f"data: {json.dumps({'message': {'content': _tail}})}\n\n"
+
                     final_response = "".join(assistant_response)
                     stream_run.end(outputs={"response": final_response})
 
@@ -1358,7 +1598,29 @@ async def stream_space_chat_message(
                 # Combiner les passages docs pour les sources
                 all_passages = doc_passages
                 sources_data = []
-                if all_passages:
+                has_file_by_doc = {}
+                if settings.CAG_ENABLED and cag_documents_ctx:
+                    # Sources par DOCUMENT : reflète le contexte réellement packé (CAG),
+                    # filtré par le bloc <sources> du modèle quand il est exploitable.
+                    used_pages_by_index = (
+                        {u["doc"]: u["pages"] for u in source_filter.used_documents}
+                        if source_filter is not None
+                        else {}
+                    )
+                    sources_data = _build_document_sources(cag_documents_ctx, used_pages_by_index)
+                    has_file_by_doc = {
+                        s["document_id"]: bool(s.get("has_source_file"))
+                        for s in sources_data
+                        if s.get("document_id") is not None
+                    }
+                    logger.info(
+                        "Space chat sources (doc-level): %s",
+                        [
+                            (s.get("index"), s.get("document_id"), s.get("used_pages"))
+                            for s in sources_data
+                        ],
+                    )
+                elif all_passages:
                     doc_ids = list({p.get("document_id") for p in all_passages if p.get("document_id")})
                     with Session(engine) as src_session:
                         docs = (
@@ -1653,22 +1915,19 @@ async def stream_space_chat_message(
                 # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
                 assistant_message_id = None
                 if request.conversation_id and assistant_response:
-                    try:
-                        sources_json = json.dumps(sources_data) if sources_data else None
-                        assistant_message_id = _persist_assistant_reply(
-                            request.conversation_id,
-                            complete_response,
-                            forced_model,
-                            forced_provider,
-                            sources_json,
-                        )
-                        logger.info(
-                            "Réponse assistant sauvegardée (space chat), conversation %s avec %s sources",
-                            request.conversation_id,
-                            len(sources_data) if sources_data else 0,
-                        )
-                    except Exception:
-                        logger.exception("Erreur sauvegarde réponse assistant (space chat)")
+                    sources_json = json.dumps(sources_data) if sources_data else None
+                    assistant_message_id = _persist_reply_with_retry(
+                        request.conversation_id,
+                        complete_response,
+                        forced_model,
+                        forced_provider,
+                        sources_json,
+                    )
+                    logger.info(
+                        "Réponse assistant sauvegardée (space chat), conversation %s avec %s sources",
+                        request.conversation_id,
+                        len(sources_data) if sources_data else 0,
+                    )
 
                 if sources_data:
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
@@ -1680,7 +1939,20 @@ async def stream_space_chat_message(
         except Exception as e:
             logger.exception("Erreur dans le générateur stream_space_chat_message")
             error_msg_to_yield = str(e)
-        
+            # Réponse partiellement streamée puis interrompue (P0.2) : persister le partiel
+            # AVEC un marqueur de troncature — sinon l'utilisateur voit du texte à l'écran
+            # que rien ne conserve en base (et le prochain tour perd ce contexte).
+            partial = "".join(assistant_response).strip()
+            if request.conversation_id and partial:
+                _persist_reply_with_retry(
+                    request.conversation_id,
+                    partial,
+                    forced_model,
+                    forced_provider,
+                    None,
+                    metadata_json={"response_truncated": True, "error": str(e)[:300]},
+                )
+
         if error_msg_to_yield:
             yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
 

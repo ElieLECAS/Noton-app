@@ -54,6 +54,10 @@ async def test_lightweight_ready_generates_queries(mock_chat, mock_route):
 
 @pytest.mark.asyncio
 @patch("app.config.settings.QUERY_FUSED_UNDERSTANDING_ENABLED", False)
+# QUERY_VAGUENESS_CHECK_ENABLED est OFF par défaut (bloquait des questions techniques
+# légitimes avant tout retrieval) : explicite ici pour tester ce chemin de code toujours
+# disponible (activable) sans dépendre du défaut implicite.
+@patch("app.config.settings.QUERY_VAGUENESS_CHECK_ENABLED", True)
 @patch("app.services.lightweight_query_understanding.decide_retrieval_route")
 @patch("app.services.lightweight_query_understanding.chat")
 async def test_lightweight_vague_requests_clarification(mock_chat, mock_route):

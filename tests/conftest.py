@@ -250,6 +250,17 @@ def _init_db() -> Generator[None, None, None]:
     _truncate_all_tables()
 
 
+@pytest.fixture(autouse=True)
+def _clear_cag_fulltext_cache() -> Generator[None, None, None]:
+    """Le cache TTL du packer CAG est keyé par document_id : entre deux tests, les ids
+    de documents se répètent → pollution inter-tests sans ce nettoyage."""
+    from app.services.context_packer_service import invalidate_document_fulltext_cache
+
+    invalidate_document_fulltext_cache()
+    yield
+    invalidate_document_fulltext_cache()
+
+
 @pytest.fixture
 def db_session() -> Generator[Session, None, None]:
     with Session(engine) as session:

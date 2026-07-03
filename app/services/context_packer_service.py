@@ -6,12 +6,17 @@ chaque document (entier s'il tient, sinon fenêtré autour des pages matchées) 
 de tokens, avec un en-tête explicite (source, gamme, matériau) pour éviter la confusion de
 gammes. Le rappel passe du niveau passage (fragile) au niveau document (stable).
 
-Fonction principale : ``build_cag_context`` — remplace ``build_space_context_from_passages``
-côté chat quand ``CAG_ENABLED`` est actif. Signature de sortie compatible (dict system).
+Fonctions principales :
+  * ``build_cag_context`` — remplace ``build_space_context_from_passages`` côté chat quand
+    ``CAG_ENABLED`` est actif. Budget/max_documents adaptatifs par intent
+    (``CAG_BUDGET_BY_INTENT``). Signature de sortie compatible (dict system).
+  * ``select_cag_images`` — PNG UNIQUEMENT pour des pages réellement packées dans le
+    contexte (alignement texte/visuel), avec légendes pour relier image ↔ document.
 """
 from __future__ import annotations
 
 import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple
 
 from sqlmodel import Session, select
@@ -21,6 +26,13 @@ from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 
 logger = logging.getLogger(__name__)
+
+# Enregistrement d'un chunk feuille aplati : (page, chunk_index, texte).
+LeafRecord = Tuple[int, int, str]
+
+# Cache TTL du texte des feuilles par document (évite ~60 lignes SQL + concat par requête).
+# Valeurs PLATES (pas d'objets ORM : ils seraient détachés de leur session d'origine).
+_leaf_cache: Dict[int, Tuple[float, List[LeafRecord]]] = {}
 
 
 def _resolve_chunk_page(chunk: DocumentChunk) -> int:
@@ -46,8 +58,43 @@ def estimate_tokens(text: str) -> int:
     return int(len(text) / max(0.5, settings.CAG_CHARS_PER_TOKEN))
 
 
-def _load_leaf_chunks(session: Session, document_id: int) -> List[DocumentChunk]:
-    """Tous les chunks feuilles (L1) d'un document, dans l'ordre de lecture."""
+def budget_for_intent(intent: Optional[str]) -> Tuple[int, int]:
+    """(token_budget, max_documents) selon l'intent de la requête.
+
+    Une question de spécification ponctuelle ne paie pas le prefill (coût + latence
+    1er token) d'un diagnostic SAV. Table ``CAG_BUDGET_BY_INTENT`` ; la clé "default"
+    couvre les intents absents/inconnus ; repli final sur les plafonds globaux.
+    """
+    table = settings.cag_budget_by_intent or {}
+    key = (intent or "").strip().lower()
+    entry = table.get(key) or table.get("default") or {}
+    token_budget = int(entry.get("budget") or settings.CAG_TOKEN_BUDGET)
+    max_documents = int(entry.get("max_documents") or settings.CAG_MAX_DOCUMENTS)
+    return token_budget, max_documents
+
+
+def invalidate_document_fulltext_cache(document_id: Optional[int] = None) -> None:
+    """Invalide le cache des feuilles (un document, ou tout si None) — à appeler après réindexation."""
+    if document_id is None:
+        _leaf_cache.clear()
+    else:
+        _leaf_cache.pop(int(document_id), None)
+
+
+def _load_leaf_records(session: Session, document_id: int) -> List[LeafRecord]:
+    """Chunks feuilles (L1) d'un document, aplatis en (page, index, texte), ordre de lecture.
+
+    Mise en cache TTL (``CAG_FULLTEXT_CACHE_TTL``, 0 = off) : un réindex peut mettre
+    jusqu'à TTL secondes à se refléter ici — acceptable, et ``invalidate_document_fulltext_cache``
+    permet l'invalidation immédiate côté indexation.
+    """
+    ttl = settings.CAG_FULLTEXT_CACHE_TTL
+    now = time.monotonic()
+    if ttl > 0:
+        cached = _leaf_cache.get(document_id)
+        if cached and cached[0] > now:
+            return cached[1]
+
     rows = list(
         session.exec(
             select(DocumentChunk).where(
@@ -56,7 +103,15 @@ def _load_leaf_chunks(session: Session, document_id: int) -> List[DocumentChunk]
             )
         ).all()
     )
-    return sorted(rows, key=lambda c: (_resolve_chunk_page(c), c.chunk_index or 0, c.id or 0))
+    rows.sort(key=lambda c: (_resolve_chunk_page(c), c.chunk_index or 0, c.id or 0))
+    records = [
+        (_resolve_chunk_page(c), c.chunk_index or 0, text)
+        for c in rows
+        if (text := _chunk_text(c))
+    ]
+    if ttl > 0:
+        _leaf_cache[document_id] = (now + ttl, records)
+    return records
 
 
 def aggregate_documents(
@@ -106,9 +161,33 @@ def _pages_in_window(matched_pages: set, radius: int) -> Optional[set]:
     return keep
 
 
+def _records_tokens(records: List[LeafRecord]) -> int:
+    return estimate_tokens("\n".join(text for _, _, text in records))
+
+
+def _trim_records_to_budget(
+    records: List[LeafRecord], matched_pages: set, remaining: int
+) -> List[LeafRecord]:
+    """Rogne un extrait qui dépasse le budget en retirant d'abord les pages les plus
+    ÉLOIGNÉES des pages matchées (et non les dernières du document : la réponse est
+    souvent juste après le match, pas avant)."""
+
+    def dist(page: int) -> int:
+        if not matched_pages:
+            return 0
+        return min(abs(page - m) for m in matched_pages)
+
+    trimmed = list(records)
+    while trimmed and _records_tokens(trimmed) > remaining:
+        pages = {page for page, _, _ in trimmed}
+        worst = max(pages, key=lambda p: (dist(p), p))
+        trimmed = [r for r in trimmed if r[0] != worst]
+    return trimmed
+
+
 def _render_document_block(
     doc: Document,
-    chunks: List[DocumentChunk],
+    records: List[LeafRecord],
     *,
     index: int,
     full: bool,
@@ -131,11 +210,7 @@ def _render_document_block(
 
     pages_included: List[int] = []
     current_page = None
-    for chunk in chunks:
-        text = _chunk_text(chunk)
-        if not text:
-            continue
-        page = _resolve_chunk_page(chunk)
+    for page, _, text in records:
         if page and page != current_page:
             current_page = page
             pages_included.append(page)
@@ -160,15 +235,21 @@ def build_cag_context(
     full_doc_max_tokens: Optional[int] = None,
     page_radius: Optional[int] = None,
     anchor_document_ids: Optional[List[int]] = None,
+    intent: Optional[str] = None,
+    emit_sources_tag: bool = True,
 ) -> Dict[str, Any]:
     """Construit le message système CAG : documents entiers/étendus sous budget de tokens.
 
+    Budget et nombre de documents résolus par priorité : paramètre explicite >
+    table par intent (``CAG_BUDGET_BY_INTENT``) > plafonds globaux.
+
     Retourne un dict ``{"role": "system", "content": ..., "cag_documents": [...]}``
     (compatible avec l'ancien build_space_context_from_passages ; la clé cag_documents
-    liste les documents réellement inclus, pour les sources côté UI).
+    liste les documents réellement inclus, pour les sources côté UI et les images).
     """
-    token_budget = token_budget if token_budget is not None else settings.CAG_TOKEN_BUDGET
-    max_documents = max_documents if max_documents is not None else settings.CAG_MAX_DOCUMENTS
+    intent_budget, intent_max_docs = budget_for_intent(intent)
+    token_budget = token_budget if token_budget is not None else intent_budget
+    max_documents = max_documents if max_documents is not None else intent_max_docs
     full_doc_max_tokens = (
         full_doc_max_tokens if full_doc_max_tokens is not None else settings.CAG_FULL_DOC_MAX_TOKENS
     )
@@ -220,21 +301,21 @@ def build_cag_context(
         if remaining <= 0:
             break
 
-        leaf_chunks = _load_leaf_chunks(session, did)
-        if not leaf_chunks:
+        leaf_records = _load_leaf_records(session, did)
+        if not leaf_records:
             continue
-        full_tokens = estimate_tokens("\n".join(_chunk_text(c) for c in leaf_chunks))
+        full_tokens = _records_tokens(leaf_records)
 
         # Décision : document entier vs fenêtre autour des pages matchées.
         if full_tokens <= full_doc_max_tokens and full_tokens <= remaining:
-            selected = leaf_chunks
+            selected = leaf_records
             full = True
         else:
             window = _pages_in_window(meta["matched_pages"], page_radius)
-            selected = [c for c in leaf_chunks if window is None or _resolve_chunk_page(c) in window]
-            # Rogne encore si l'extrait dépasse le budget restant.
-            while selected and estimate_tokens("\n".join(_chunk_text(c) for c in selected)) > remaining:
-                selected = selected[:-1]
+            selected = [r for r in leaf_records if window is None or r[0] in window]
+            # Rogne encore si l'extrait dépasse le budget restant (pages les plus
+            # éloignées des pages matchées d'abord).
+            selected = _trim_records_to_budget(selected, meta["matched_pages"], remaining)
             full = False
 
         if not selected:
@@ -258,6 +339,8 @@ def build_cag_context(
                 "pages": sorted(set(pages_included)),
                 "full_document": full,
                 "score": round(float(meta["score_max"]), 4),
+                "matched_pages": sorted(meta["matched_pages"]),
+                "has_source_file": bool(getattr(doc, "source_file_path", None)),
             }
         )
 
@@ -271,13 +354,167 @@ def build_cag_context(
     )
     system_message["content"] += cag_preamble + "\n\n".join(blocks)
     system_message["content"] += f"\n\n({len(blocks)} document(s), ~{spent_tokens} tokens de contexte.)"
+    if emit_sources_tag:
+        system_message["content"] += (
+            "\n\nFIN DE RÉPONSE OBLIGATOIRE : termine ta réponse par une ligne EXACTEMENT au format "
+            '<sources>{"used":[{"doc":1,"pages":[3,4]}]}</sources> listant les index de DOCUMENT '
+            "et les pages que tu as réellement utilisés pour répondre (liste vide si aucun). "
+            "Cette ligne est masquée à l'utilisateur — n'en parle jamais dans le corps de la réponse."
+        )
     system_message["cag_documents"] = cag_documents
 
     logger.info(
-        "[CAG] %d document(s) packé(s), ~%d tokens (budget %d) — %s",
+        "[CAG] %d document(s) packé(s), ~%d tokens (budget %d, intent=%s) — %s",
         len(blocks),
         spent_tokens,
         token_budget,
+        intent or "n/a",
         ", ".join(f"doc={d['document_id']}{'(complet)' if d['full_document'] else ''}" for d in cag_documents),
     )
     return system_message
+
+
+def _pages_span_label(pages: List[int]) -> str:
+    """Libellé humain d'un ensemble de pages ("page 5" / "pages 1-12")."""
+    if not pages:
+        return "pages n/a"
+    lo, hi = min(pages), max(pages)
+    return f"page {lo}" if lo == hi else f"pages {lo}-{hi}"
+
+
+def build_document_sources(
+    cag_documents: List[Dict[str, Any]], used_pages_by_index: Optional[Dict[Any, Any]] = None
+) -> List[Dict[str, Any]]:
+    """Sources UI par DOCUMENT packé — reflète le contexte que le modèle a réellement lu.
+
+    ``used_pages_by_index`` vient du bloc final <sources> émis par le modèle : quand il est
+    exploitable, seuls les documents réellement UTILISÉS sont affichés (avec leurs pages) ;
+    sinon (None / vide / inexploitable) on retombe sur tous les documents packés. La forme
+    des entrées reste compatible avec les badges front (index, document_title, page_no,
+    excerpt, score, has_source_file, cag_document)."""
+    used_pages_by_index = used_pages_by_index or {}
+    entries: List[Dict[str, Any]] = []
+    for d in cag_documents:
+        idx = d.get("index")
+        if used_pages_by_index and idx not in used_pages_by_index:
+            continue
+        used_pages = [p for p in (used_pages_by_index.get(idx) or []) if isinstance(p, int)]
+        pages = [p for p in (d.get("pages") or []) if isinstance(p, int)]
+        matched = [p for p in (d.get("matched_pages") or []) if isinstance(p, int)]
+        landing_candidates = used_pages or matched or pages
+        landing = landing_candidates[0] if landing_candidates else None
+
+        scope = ("Document complet" if d.get("full_document") else "Extrait") + f" ({_pages_span_label(pages)})"
+        if used_pages:
+            scope += " — pages utilisées : " + ", ".join(str(p) for p in used_pages)
+
+        entries.append(
+            {
+                "index": idx,
+                "document_id": d.get("document_id"),
+                "document_title": d.get("document_title") or "Document sans titre",
+                "excerpt": scope,
+                "passage_full": scope,
+                "score": float(d.get("score") or 0.0),
+                "page_no": landing,
+                "page_start": min(pages) if pages else None,
+                "page_end": max(pages) if pages else None,
+                "section": None,
+                "has_source_file": bool(d.get("has_source_file")),
+                "cag_document": True,
+                "pages": pages,
+                "used_pages": used_pages,
+                "full_document": bool(d.get("full_document")),
+            }
+        )
+
+    if not entries and cag_documents:
+        # Le bloc <sources> du modèle a tout écarté (ou est inexploitable) → afficher
+        # tous les documents packés plutôt que rien.
+        return build_document_sources(cag_documents, {})
+    return entries
+
+
+def select_cag_images(
+    session: Session,
+    cag_documents: List[Dict[str, Any]],
+    passages: List[Dict[str, Any]],
+    *,
+    max_images: Optional[int] = None,
+    dpi: int = 150,
+) -> Tuple[List[str], List[Dict[str, Any]]]:
+    """Sélectionne et rend les PNG de pages pour la génération vision, ALIGNÉS sur le
+    contexte packé : uniquement des pages incluses dans un document CAG.
+
+    Priorité : pages à besoin visuel (needs_page_image) puis score de passage décroissant.
+    Retourne (images_b64, captions) — captions = [{image_index, document_index,
+    document_title, page_no}, …] pour légender les images dans le message user.
+    """
+    import base64
+    import os
+
+    from app.services.multimodal_page_service import render_page_png_cached
+
+    max_images = max_images if max_images is not None else settings.CAG_MAX_IMAGES
+    if max_images <= 0 or not cag_documents:
+        return [], []
+
+    included: Dict[int, Dict[str, Any]] = {
+        int(d["document_id"]): d for d in cag_documents if d.get("document_id") is not None
+    }
+
+    # Candidats (doc_id, page) depuis les passages, page ancre uniquement (pas les voisins :
+    # le texte des voisins est déjà dans le contexte, le PNG n'apporte que pour le match).
+    candidates: List[Tuple[int, int, int]] = []  # (need_rank, doc_id, page)
+    seen: set = set()
+    for p in sorted(passages, key=lambda x: float(x.get("score") or 0.0), reverse=True):
+        did = p.get("document_id")
+        if did is None or int(did) not in included:
+            continue
+        did = int(did)
+        page = p.get("page_no") or p.get("page_start")
+        if not isinstance(page, int) or page <= 0:
+            continue
+        if page not in (included[did].get("pages") or []):
+            continue
+        if (did, page) in seen:
+            continue
+        seen.add((did, page))
+        candidates.append((0 if p.get("needs_page_image") else 1, did, page))
+
+    # Tri stable : besoin visuel d'abord, ordre score conservé au sein de chaque classe.
+    candidates.sort(key=lambda t: t[0])
+
+    images_b64: List[str] = []
+    captions: List[Dict[str, Any]] = []
+    doc_cache: Dict[int, Optional[Document]] = {}
+    for _, did, page in candidates:
+        if len(images_b64) >= max_images:
+            break
+        if did not in doc_cache:
+            doc_cache[did] = session.get(Document, did)
+        doc = doc_cache[did]
+        if not doc or not doc.source_file_path or not os.path.exists(doc.source_file_path):
+            continue
+        try:
+            png_bytes = render_page_png_cached(doc.source_file_path, page, dpi=dpi)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[CAG] rendu PNG échoué (doc=%s page=%s): %s", did, page, exc)
+            continue
+        images_b64.append(base64.b64encode(png_bytes).decode("utf-8"))
+        captions.append(
+            {
+                "image_index": len(images_b64),
+                "document_index": included[did].get("index"),
+                "document_title": included[did].get("document_title"),
+                "page_no": page,
+            }
+        )
+
+    logger.info(
+        "[CAG] %d image(s) alignée(s) sur le contexte packé (max %d) — %s",
+        len(images_b64),
+        max_images,
+        ", ".join(f"doc{c['document_index']}:p{c['page_no']}" for c in captions),
+    )
+    return images_b64, captions

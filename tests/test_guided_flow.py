@@ -24,6 +24,28 @@ from app.services.query_reasoning_service import GuidedModeDecision
 from tests.conftest import extract_sse_events, extract_sse_message_text
 
 
+@pytest.fixture(autouse=True)
+def _neutralize_fused_understanding():
+    """La décision guidée est désormais portée par la compréhension fusionnée (P0.4). Ces
+    tests d'intégration valident le MOTEUR guidé via decide_guided_mode (mocké) : on
+    neutralise donc le fused (present=False → resolve_guided_mode retombe sur le mock),
+    ce qui rend les tests déterministes et évite un appel LLM réseau par tour."""
+    from app.services.lightweight_query_understanding import (
+        GuidedDecision,
+        LightweightQueryResult,
+    )
+
+    with mock.patch(
+        "app.services.lightweight_query_understanding.run_lightweight_understanding",
+        new=mock.AsyncMock(
+            return_value=LightweightQueryResult(
+                route="rag", ready_for_retrieval=True, guided=GuidedDecision(present=False)
+            )
+        ),
+    ):
+        yield
+
+
 @pytest.fixture
 def space_and_conversation(client, responsable_headers):
     sp = client.post(
@@ -318,6 +340,9 @@ def test_guided_disabled_no_session(
     space_id, conv_id = space_and_conversation
     guided_mode = mock.AsyncMock(return_value=GuidedModeDecision(is_guided=True))
     with mock.patch(
+        # Patch explicite : l'env du conteneur peut définir GUIDED_FLOW_ENABLED=true.
+        "app.config.settings.GUIDED_FLOW_ENABLED", False
+    ), mock.patch(
         "app.config.settings.QUERY_UNDERSTANDING_ENABLED", False
     ), mock.patch(
         "app.services.query_reasoning_service.decide_guided_mode", new=guided_mode

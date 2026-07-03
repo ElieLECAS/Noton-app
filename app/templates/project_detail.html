@@ -2270,7 +2270,7 @@ extra_head %}
                     <div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-2 flex items-center gap-1">
                             <i class="ti ti-book text-sm"></i>
-                            Sources textuelles (${textSources.length})
+                            ${textSources.some(s => s.cag_document) ? "Documents consultés" : "Sources textuelles"} (${textSources.length})
                         </div>
                         <div class="flex flex-wrap gap-2">
                             ${sourceBadges}

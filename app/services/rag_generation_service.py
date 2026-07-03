@@ -238,12 +238,50 @@ def build_rag_user_message(
     question: str,
     *,
     images_b64: Optional[List[str]] = None,
+    image_captions: Optional[List[Dict[str, Any]]] = None,
+    task_reminder: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Construit le message utilisateur avec images optionnelles."""
-    user_msg: Dict[str, Any] = {"role": "user", "content": question}
+    """Construit le message utilisateur avec images optionnelles.
+
+    ``image_captions`` relie chaque PNG joint à son bloc texte du contexte CAG
+    (Image k = DOCUMENT i, page p) — sans ces légendes le modèle ne sait pas quelle
+    image correspond à quel document. ``task_reminder`` est le rappel final de tâche
+    placé APRÈS tout le contexte (anti « lost in the middle » sur ~100k tokens).
+    """
+    content = question
+    if image_captions:
+        lines = [
+            f"Image {c.get('image_index')} = DOCUMENT {c.get('document_index')} "
+            f"« {c.get('document_title') or 'Sans titre'} », page {c.get('page_no')}"
+            for c in image_captions
+        ]
+        content += "\n\n[Correspondance des images jointes]\n" + "\n".join(lines)
+    if task_reminder:
+        content += "\n\n" + task_reminder
+    user_msg: Dict[str, Any] = {"role": "user", "content": content}
     if images_b64:
         user_msg["images"] = images_b64
     return user_msg
+
+
+def build_cag_task_reminder(
+    original_message: str,
+    *,
+    standalone_question: Optional[str] = None,
+) -> str:
+    """Rappel final de tâche, placé en fin de message user (donc en tout dernier dans le
+    contexte) : après ~100k tokens de documents, c'est la consigne que le modèle suit le
+    plus fidèlement."""
+    bits: List[str] = ["RAPPEL FINAL — Réponds UNIQUEMENT à ma question ci-dessus."]
+    sq = (standalone_question or "").strip()
+    if sq and sq.lower() != (original_message or "").strip().lower():
+        bits.append(f"Question autonome reformulée : « {sq} ».")
+    bits.append(
+        "Si la réponse dépend d'un produit, d'une gamme ou d'une version que je n'ai pas "
+        "précisés et que les documents en couvrent plusieurs, demande-moi d'abord lequel "
+        "(ou présente brièvement les cas) au lieu de choisir à ma place."
+    )
+    return " ".join(bits)
 
 
 async def build_rag_generation_messages(

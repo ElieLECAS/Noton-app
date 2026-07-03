@@ -285,6 +285,9 @@ def _delete_all_chunks(session: Session, document_id: int) -> None:
 
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
     session.commit()
+    from app.services.context_packer_service import invalidate_document_fulltext_cache
+
+    invalidate_document_fulltext_cache(document_id)
     try:
         from app.services.lancedb_service import delete_colpali_patches_for_document
         delete_colpali_patches_for_document(document_id)
@@ -316,6 +319,9 @@ def _delete_text_chunks(session: Session, document_id: int) -> None:
         )
     )
     session.commit()
+    from app.services.context_packer_service import invalidate_document_fulltext_cache
+
+    invalidate_document_fulltext_cache(document_id)
 
 
 # ---------------------------------------------------------------------------
@@ -747,6 +753,11 @@ def _finalize_document(document_id: int, chunk_count: int) -> None:
                 doc.updated_at = datetime.utcnow()
                 session.add(doc)
                 session.commit()
+        # Les chunks viennent d'être réécrits : purger le cache fulltext du packer CAG
+        # pour que la génération voie immédiatement le nouveau contenu.
+        from app.services.context_packer_service import invalidate_document_fulltext_cache
+
+        invalidate_document_fulltext_cache(document_id)
         try:
             from app.services.discord_service import notify_document_status
             with Session(engine) as session:

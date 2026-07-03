@@ -35,6 +35,19 @@ x-app-env: &app-env
   CAG_MAX_DOCUMENTS: ${CAG_MAX_DOCUMENTS:-8}
   CAG_FULL_DOC_MAX_TOKENS: ${CAG_FULL_DOC_MAX_TOKENS:-20000}
   CAG_PAGE_RADIUS: ${CAG_PAGE_RADIUS:-3}
+  CAG_MAX_COMPLETION_TOKENS: ${CAG_MAX_COMPLETION_TOKENS:-3072}
+  CAG_MAX_IMAGES: ${CAG_MAX_IMAGES:-8}
+  # Budget de packing par intent (JSON) — vide = défauts code (30k/60k/100k selon intent).
+  CAG_BUDGET_BY_INTENT: ${CAG_BUDGET_BY_INTENT:-}
+  CAG_FULLTEXT_CACHE_TTL: ${CAG_FULLTEXT_CACHE_TTL:-300}
+  # Contexte de secours (fallback Mistral 400) : CAG re-packé petit (P0.2).
+  CAG_ECO_TOKEN_BUDGET: ${CAG_ECO_TOKEN_BUDGET:-20000}
+  CAG_ECO_MAX_DOCUMENTS: ${CAG_ECO_MAX_DOCUMENTS:-3}
+  # Un seul appel LLM avant le retrieval (P0.4) + budgets temps (P0.3).
+  QUERY_GENERATE_QUERIES_LLM: ${QUERY_GENERATE_QUERIES_LLM:-false}
+  GUIDED_DECISION_IN_FUSED: ${GUIDED_DECISION_IN_FUSED:-true}
+  QUERY_UNDERSTANDING_TIMEOUT_S: ${QUERY_UNDERSTANDING_TIMEOUT_S:-25}
+  RETRIEVAL_TIMEOUT_S: ${RETRIEVAL_TIMEOUT_S:-90}
   # Ancrage documentaire conversationnel (continuité du sujet entre les tours).
   CONVERSATION_ANCHOR_ENABLED: ${CONVERSATION_ANCHOR_ENABLED:-true}
   CONVERSATION_ANCHOR_MAX_DOCS: ${CONVERSATION_ANCHOR_MAX_DOCS:-3}
@@ -117,6 +130,9 @@ x-app-env: &app-env
   LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2:-false}
   LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT:-noton-rag}
   QUERY_UNDERSTANDING_ENABLED: ${QUERY_UNDERSTANDING_ENABLED:-false}
+  # Vagueness pré-retrieval : OFF par défaut (bloquait des questions techniques légitimes
+  # avant tout retrieval ; la clarification se fait après retrieval, voir config.py).
+  QUERY_VAGUENESS_CHECK_ENABLED: ${QUERY_VAGUENESS_CHECK_ENABLED:-false}
   # Reranker cross-encoder (CPU-only)
   RERANKER_ENABLED: ${RERANKER_ENABLED:-false}
   RERANKER_PROVIDER: ${RERANKER_PROVIDER:-local}
