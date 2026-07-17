@@ -81,8 +81,8 @@ def _set_auth_cookie(response: Response, token: str) -> None:
         key="authToken",
         value=token,
         httponly=True,
-        samesite="lax",
-        secure=False,
+        samesite=settings.AUTH_COOKIE_SAMESITE,
+        secure=settings.AUTH_COOKIE_SECURE,
         path="/",
         max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
     )

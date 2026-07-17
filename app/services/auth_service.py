@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
@@ -5,6 +6,8 @@ from passlib.context import CryptContext
 from sqlmodel import Session, select
 from app.config import settings
 from app.models.user import User, UserCreate, UserLogin
+
+logger = logging.getLogger(__name__)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -96,8 +99,7 @@ def decode_token(token: str) -> Optional[dict]:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return payload
     except JWTError as e:
-        print(f"DEBUG: Erreur de décodage JWT: {e}")
-        print(f"DEBUG: SECRET_KEY utilisé: {settings.SECRET_KEY[:20]}...")
-        print(f"DEBUG: ALGORITHM utilisé: {settings.ALGORITHM}")
+        # Ne jamais journaliser la clé secrète ni le token : un simple debug du motif d'échec.
+        logger.debug("Échec de décodage JWT: %s", e)
         return None
 

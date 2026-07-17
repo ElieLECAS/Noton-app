@@ -160,22 +160,6 @@ def _enrichment_pages_from_meta(meta: dict) -> List[int]:
     return _parse_source_pages(meta.get("source_pages"))
 
 
-def _category_metadata_filter_clause(
-    content_categories: Optional[List[str]],
-    prefix: str = "dc",
-) -> Tuple[str, Dict[str, Any]]:
-    """Clause SQL optionnelle pour filtrer par catégories de contenu (JSONB array)."""
-    if not content_categories:
-        return "", {}
-    slugs = [c.strip().lower() for c in content_categories if c and str(c).strip()]
-    if not slugs:
-        return "", {}
-    clause = (
-        f"AND COALESCE({prefix}.metadata_json->'categories', '[]'::jsonb) ?| :category_slugs"
-    )
-    return clause, {"category_slugs": slugs}
-
-
 def _bulk_resolve_chunk_to_page(
     session: Session,
     chunk_ids: List[int],

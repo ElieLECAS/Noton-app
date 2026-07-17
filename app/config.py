@@ -38,6 +38,12 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
+    # Cookie d'auth : Secure par défaut (prod HTTPS derrière nginx). Mettre à false
+    # UNIQUEMENT en dev local sur http:// (sinon le navigateur refuse le cookie).
+    AUTH_COOKIE_SECURE: bool = os.getenv("AUTH_COOKIE_SECURE", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    AUTH_COOKIE_SAMESITE: str = os.getenv("AUTH_COOKIE_SAMESITE", "lax")
     
     # Mistral
     MISTRAL_API_KEY: Optional[str] = None
@@ -278,10 +284,6 @@ class Settings(BaseSettings):
     RETRIEVAL_NEIGHBOR_MIN_SCORE_RATIO: float = float(os.getenv("RETRIEVAL_NEIGHBOR_MIN_SCORE_RATIO", "0.3"))
     GENERATION_MAX_PAGE_IMAGES: int = int(os.getenv("GENERATION_MAX_PAGE_IMAGES", "3"))
 
-    # Retrieval multimodal page-centric (refonte RRF)
-    USE_MULTIMODAL_RETRIEVAL: bool = os.getenv("USE_MULTIMODAL_RETRIEVAL", "true").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
     # Exécute les 4 retrievers (ColPali/pgvector/BM25/KAG) en parallèle (threads + sessions
     # DB dédiées) au lieu de séquentiellement : recouvre l'encodage ColPali CPU avec les
     # requêtes SQL. Repli sûr : false rebascule sur l'exécution séquentielle (session unique).
@@ -418,7 +420,8 @@ class Settings(BaseSettings):
     RRF_K: int = int(os.getenv("RRF_K", "60"))
     COLPALI_POST_FUSION_MIN_SCORE: float = float(os.getenv("COLPALI_POST_FUSION_MIN_SCORE", "0.25"))
     COLPALI_MIN_THRESHOLD: float = float(os.getenv("COLPALI_MIN_THRESHOLD", "0.30"))
-    COLPALI_RELATIVE_MARGIN: float = float(os.getenv("COLPALI_RELATIVE_MARGIN", "0.10"))
+    # 0.18 : aligné sur docker-compose/.env (une seule valeur de vérité désormais).
+    COLPALI_RELATIVE_MARGIN: float = float(os.getenv("COLPALI_RELATIVE_MARGIN", "0.18"))
     BM25_USE_WEBSEARCH_QUERY: bool = os.getenv("BM25_USE_WEBSEARCH_QUERY", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
@@ -426,8 +429,12 @@ class Settings(BaseSettings):
         "true", "1", "yes", "on"
     )
 
-    # Query understanding — extraction légère LangGraph avant retrieval RAG
-    QUERY_UNDERSTANDING_ENABLED: bool = os.getenv("QUERY_UNDERSTANDING_ENABLED", "false").strip().lower() in (
+    # Query understanding — extraction légère LangGraph avant retrieval RAG.
+    # ON par défaut : c'est la phase qui produit signals (catégories inférées, source,
+    # matériau, intent), topic_shift, l'ancrage conversationnel et le gating ColPali par
+    # intent. La désactiver rend INERTES les boosts catégorie/source/matériau, l'ancrage
+    # et le gating par intent (voir coherence_warnings()).
+    QUERY_UNDERSTANDING_ENABLED: bool = os.getenv("QUERY_UNDERSTANDING_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
 
@@ -441,11 +448,14 @@ class Settings(BaseSettings):
     RETRIEVAL_CATEGORY_BOOST_MAX: float = float(os.getenv("RETRIEVAL_CATEGORY_BOOST_MAX", "1.5"))
     # Pondération du boost catégorie par axe (un slug symptôme pèse plus qu'un doc_type).
     # JSON optionnel via env RETRIEVAL_AXIS_BOOST_WEIGHTS ; défaut sinon. Axe absent → poids 1.0.
-    RETRIEVAL_AXIS_BOOST_WEIGHTS: dict = (
-        __import__("json").loads(os.getenv("RETRIEVAL_AXIS_BOOST_WEIGHTS"))
-        if os.getenv("RETRIEVAL_AXIS_BOOST_WEIGHTS")
-        else {"symptom": 2.0, "task": 1.0, "doc_type": 0.6, "lifecycle_phase": 0.5}
-    )
+    # dict natif : pydantic-settings JSON-parse automatiquement une surcharge d'env
+    # (ex. RETRIEVAL_AXIS_BOOST_WEIGHTS='{"symptom": 3.0}'). Axe absent → poids 1.0.
+    RETRIEVAL_AXIS_BOOST_WEIGHTS: dict = {
+        "symptom": 2.0,
+        "task": 1.0,
+        "doc_type": 0.6,
+        "lifecycle_phase": 0.5,
+    }
     RETRIEVAL_SOURCE_BOOST_MAX: float = float(os.getenv("RETRIEVAL_SOURCE_BOOST_MAX", "0.8"))
     # Ancrage documentaire conversationnel : les documents fortement matchés à un tour sont
     # mémorisés (query_context.current_documents) et leurs pages sont boostées aux tours
@@ -462,8 +472,9 @@ class Settings(BaseSettings):
     RETRIEVAL_MATERIAL_BOOST: float = float(os.getenv("RETRIEVAL_MATERIAL_BOOST", "0.3"))
     RETRIEVAL_ENTITY_BOOST: float = float(os.getenv("RETRIEVAL_ENTITY_BOOST", "0.1"))
 
-    # Reranker vision LLM (juge de pertinence page-par-page sur les PNG ColPali)
-    VISION_RERANK_ENABLED: bool = os.getenv("VISION_RERANK_ENABLED", "true").strip().lower() in ('true', '1', 'yes', 'on')
+    # Reranker vision LLM (juge de pertinence page-par-page sur les PNG ColPali).
+    # OFF par défaut : appels LLM vision coûteux dans le chemin critique du retrieval.
+    VISION_RERANK_ENABLED: bool = os.getenv("VISION_RERANK_ENABLED", "false").strip().lower() in ('true', '1', 'yes', 'on')
     VISION_RERANK_MODEL: str = os.getenv("VISION_RERANK_MODEL", "mistral-small-latest")
     VISION_RERANK_MIN_SCORE: float = float(os.getenv("VISION_RERANK_MIN_SCORE", "3"))  # sur une echelle 0-5
     VISION_RERANK_MAX_PAGES: int = int(os.getenv("VISION_RERANK_MAX_PAGES", "4"))
@@ -471,8 +482,9 @@ class Settings(BaseSettings):
 
     # Fiche technique — lookup par référence nue ("Profil 76180", "notice seuil 76180")
     # → sortie STRUCTURÉE et sourcée (pas de génération libre / broderie).
-    # Désactivé par défaut : aucun impact sur le pipeline existant tant que False.
-    FICHE_TECHNIQUE_ENABLED: bool = os.getenv("FICHE_TECHNIQUE_ENABLED", "false").strip().lower() in (
+    # ON par défaut (aligné prod) : court-circuite le pipeline conversationnel pour un
+    # lookup par référence nue → réponse structurée sourcée.
+    FICHE_TECHNIQUE_ENABLED: bool = os.getenv("FICHE_TECHNIQUE_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
     # Nombre de passages récupérés pour construire la fiche (lookup, pas top-k sémantique).
@@ -537,6 +549,70 @@ class Settings(BaseSettings):
             except (ValueError, TypeError):
                 logger.warning("CAG_BUDGET_BY_INTENT illisible (JSON invalide) — défauts utilisés")
         return _CAG_BUDGET_DEFAULTS
+
+    def coherence_warnings(self) -> List[str]:
+        """Incohérences de configuration détectées au démarrage (jamais bloquantes).
+
+        Sert de garde-fou contre le « kill switch caché » : un flag maître désactivé qui
+        rend inertes des fonctionnalités par ailleurs configurées et activées.
+        """
+        warnings: List[str] = []
+
+        if not self.QUERY_UNDERSTANDING_ENABLED:
+            dependents = []
+            if self.CONVERSATION_ANCHOR_ENABLED:
+                dependents.append("ancrage conversationnel")
+            if self.COLPALI_GATING_ENABLED and self.colpali_gating_intents:
+                dependents.append("gating ColPali par intent")
+            if self.RETRIEVAL_CATEGORY_BOOST > 0:
+                dependents.append("boost catégorie/source/matériau")
+            if dependents:
+                warnings.append(
+                    "QUERY_UNDERSTANDING_ENABLED=false rend INERTES : "
+                    + ", ".join(dependents)
+                    + " (aucun `signals` n'est produit avant le retrieval)."
+                )
+
+        if not self.RERANKER_ENABLED:
+            warnings.append(
+                "RERANKER_ENABLED=false : sans cross-encoder, le boost catégorie devient "
+                "le principal signal de classement post-fusion (plafonné à "
+                f"RETRIEVAL_CATEGORY_BOOST_MAX={self.RETRIEVAL_CATEGORY_BOOST_MAX})."
+            )
+
+        if self.COLPALI_ENABLED and not self.MULTIMODAL_ENABLED:
+            warnings.append(
+                "COLPALI_ENABLED=true mais MULTIMODAL_ENABLED=false : l'ingestion "
+                "multimodale est bloquée, aucun nouveau document ne sera indexé pour ColPali."
+            )
+
+        if not self.CORS_ALLOWED_ORIGINS:
+            warnings.append(
+                "CORS_ALLOWED_ORIGINS vide : CORS restreint au même origine (aucune origine "
+                "cross-site autorisée). Renseigner la liste si un front séparé consomme l'API."
+            )
+
+        return warnings
+
+    def feature_summary(self) -> str:
+        """Matrice de features effective sur une ligne, pour vérifier la config au boot."""
+        def onoff(flag: bool) -> str:
+            return "on" if flag else "off"
+
+        return (
+            "[config] retrieval: "
+            f"multimodal={onoff(self.MULTIMODAL_ENABLED)} "
+            f"colpali={onoff(self.COLPALI_ENABLED)} "
+            f"gating={onoff(self.COLPALI_GATING_ENABLED)} "
+            f"reranker={onoff(self.RERANKER_ENABLED)} "
+            f"vision_rerank={onoff(self.VISION_RERANK_ENABLED)} "
+            f"kag={onoff(self.KAG_ENABLED)} "
+            f"cag={onoff(self.CAG_ENABLED)} "
+            f"query_understanding={onoff(self.QUERY_UNDERSTANDING_ENABLED)} "
+            f"anchor={onoff(self.CONVERSATION_ANCHOR_ENABLED)} "
+            f"fiche={onoff(self.FICHE_TECHNIQUE_ENABLED)} "
+            f"guided={onoff(self.GUIDED_FLOW_ENABLED)}"
+        )
 
     @field_validator('DATABASE_ECHO', mode='before')
     @classmethod

@@ -35,7 +35,10 @@ try:
 except Exception as e:
     logger.warning("Initialisation LangSmith ignorée : %s", e)
 
-app = FastAPI(title=settings.APP_NAME, description="Application de prise de notes avec chatbot IA")
+app = FastAPI(
+    title=settings.APP_NAME,
+    description="Assistant documentaire RAG multimodal (menuiserie PROFERM)",
+)
 
 
 @app.middleware("http")
@@ -55,15 +58,12 @@ async def log_http_requests(request: Request, call_next):
     return response
 
 
-# Configuration CORS - Debug
-import os
-env_cors = os.getenv("CORS_ALLOWED_ORIGINS")
-logger.info(f"DEBUG CORS - Variable d'environnement brute: {repr(env_cors)}")
-logger.info(f"DEBUG CORS - settings.CORS_ALLOWED_ORIGINS: {repr(settings.CORS_ALLOWED_ORIGINS)}")
-logger.info(f"DEBUG CORS - Type: {type(settings.CORS_ALLOWED_ORIGINS)}")
-
+# Configuration CORS. Origines explicites uniquement (jamais de wildcard) : l'app sert
+# son propre front en same-origin, donc l'absence d'origine CORS n'impacte pas l'UI, et
+# on évite d'exposer l'API à n'importe quel site. Renseigner CORS_ALLOWED_ORIGINS pour
+# autoriser un front séparé (les credentials ne sont activés que dans ce cas).
 if settings.CORS_ALLOWED_ORIGINS:
-    logger.info(f"✅ Configuration CORS : origines autorisées = {settings.CORS_ALLOWED_ORIGINS}")
+    logger.info("CORS : origines autorisées = %s", settings.CORS_ALLOWED_ORIGINS)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.CORS_ALLOWED_ORIGINS,
@@ -72,14 +72,9 @@ if settings.CORS_ALLOWED_ORIGINS:
         allow_headers=["*"],
     )
 else:
-    # Si aucune origine n'est spécifiée, autoriser toutes les origines (développement uniquement)
-    logger.warning("⚠️ CORS : Aucune origine spécifiée, toutes les origines sont autorisées (mode développement)")
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=False,
-        allow_methods=["*"],
-        allow_headers=["*"],
+    logger.warning(
+        "CORS : aucune origine configurée (CORS_ALLOWED_ORIGINS vide) — API restreinte au "
+        "même origine. Renseigner la variable si un front séparé doit consommer l'API."
     )
 
 # Monter les routers
@@ -109,22 +104,16 @@ except:
 
 @app.on_event("startup")
 async def startup_event():
-    """Créer les tables au démarrage."""
+    """Créer les tables au démarrage + journaliser la config effective."""
     create_db_and_tables()
-    
-    # Exécuter les migrations Alembic par programmation (utile pour le reload automatique en dev)
-    try:
-        from alembic.config import Config
-        from alembic import command
-        import os
-        config_path = "app/alembic.ini" if not os.path.exists("alembic.ini") else "alembic.ini"
-        logger.info(f"Alembic : exécution des migrations en base de données avec {config_path}...")
-        alembic_cfg = Config(config_path)
-        command.upgrade(alembic_cfg, "head")
-        logger.info("Alembic : migrations terminées avec succès.")
-    except Exception as e:
-        logger.error(f"Alembic : erreur lors de l'exécution des migrations : {e}")
-    
+
+    # Config effective : matrice de features sur une ligne + garde-fous d'incohérence.
+    # Les migrations Alembic sont exécutées AVANT uvicorn par la commande du conteneur
+    # (docker-compose `web`/`worker`), point unique pour éviter les courses multi-réplica.
+    logger.info(settings.feature_summary())
+    for warning in settings.coherence_warnings():
+        logger.warning("[config] %s", warning)
+
     # Initialiser le système RBAC (permissions + rôles)
     try:
         from app.services.rbac_seed_service import seed_rbac_system

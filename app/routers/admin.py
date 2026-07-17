@@ -53,6 +53,51 @@ class AssignPermissionRequest(BaseModel):
     permission_id: int
 
 
+# ==================== CONFIG ====================
+
+@router.get("/config")
+async def get_runtime_config(
+    current_user: UserRead = Depends(require_role("admin")),
+):
+    """Configuration effective (flags résolus) + garde-fous de cohérence.
+
+    Aucune valeur sensible (clés, secrets, URLs de connexion) n'est exposée : uniquement
+    les flags et seuils qui pilotent le pipeline RAG. Sert à vérifier en un coup d'œil ce
+    qui tourne réellement (les défauts config.py sont surchargés par .env)."""
+    from app.config import settings
+
+    return {
+        "feature_summary": settings.feature_summary(),
+        "coherence_warnings": settings.coherence_warnings(),
+        "flags": {
+            "MULTIMODAL_ENABLED": settings.MULTIMODAL_ENABLED,
+            "COLPALI_ENABLED": settings.COLPALI_ENABLED,
+            "COLPALI_GATING_ENABLED": settings.COLPALI_GATING_ENABLED,
+            "COLPALI_GATING_INTENTS": settings.colpali_gating_intents,
+            "RERANKER_ENABLED": settings.RERANKER_ENABLED,
+            "VISION_RERANK_ENABLED": settings.VISION_RERANK_ENABLED,
+            "KAG_ENABLED": settings.KAG_ENABLED,
+            "CAG_ENABLED": settings.CAG_ENABLED,
+            "QUERY_UNDERSTANDING_ENABLED": settings.QUERY_UNDERSTANDING_ENABLED,
+            "CONVERSATION_ANCHOR_ENABLED": settings.CONVERSATION_ANCHOR_ENABLED,
+            "FICHE_TECHNIQUE_ENABLED": settings.FICHE_TECHNIQUE_ENABLED,
+            "GUIDED_FLOW_ENABLED": settings.GUIDED_FLOW_ENABLED,
+        },
+        "retrieval_tuning": {
+            "RAG_TOP_K": settings.RAG_TOP_K,
+            "RERANK_POOL": settings.RERANK_POOL,
+            "RRF_K": settings.RRF_K,
+            "RETRIEVAL_CATEGORY_BOOST": settings.RETRIEVAL_CATEGORY_BOOST,
+            "RETRIEVAL_CATEGORY_BOOST_MAX": settings.RETRIEVAL_CATEGORY_BOOST_MAX,
+            "RETRIEVAL_AXIS_BOOST_WEIGHTS": settings.RETRIEVAL_AXIS_BOOST_WEIGHTS,
+            "CONVERSATION_ANCHOR_BOOST": settings.CONVERSATION_ANCHOR_BOOST,
+            "COLPALI_RELATIVE_MARGIN": settings.COLPALI_RELATIVE_MARGIN,
+            "CAG_TOKEN_BUDGET": settings.CAG_TOKEN_BUDGET,
+            "CAG_MAX_DOCUMENTS": settings.CAG_MAX_DOCUMENTS,
+        },
+    }
+
+
 # ==================== USERS ====================
 
 @router.get("/users", response_model=List[UserWithRoles])

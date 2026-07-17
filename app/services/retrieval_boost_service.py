@@ -13,51 +13,16 @@ import logging
 from typing import Any, Dict, List, Optional, Sequence, Tuple, TYPE_CHECKING
 
 from sqlalchemy import text
-from sqlmodel import Session, select
+from sqlmodel import Session
 
 from app.config import settings
 from app.models.document import Document
-from app.models.document_chunk import DocumentChunk
 from app.services.query_signals_schemas import LightweightQuerySignals
 
 if TYPE_CHECKING:
     from app.services.page_retrieval_service import PageRetrievalHit, UnifiedPageHit
 
 logger = logging.getLogger(__name__)
-
-
-def _categories_from_metadata(metadata_json: Optional[dict]) -> List[str]:
-    if not metadata_json:
-        return []
-    categories = metadata_json.get("categories", [])
-    return categories if isinstance(categories, list) else []
-
-
-def _get_chunk_categories(session: Session, chunk_id: Optional[int]) -> List[str]:
-    if not chunk_id:
-        return []
-    chunk = session.get(DocumentChunk, chunk_id)
-    if not chunk:
-        return []
-    return _categories_from_metadata(chunk.metadata_json)
-
-
-def _bulk_get_chunk_categories(session: Session, chunk_ids: Sequence[int]) -> Dict[int, List[str]]:
-    unique_ids = list(dict.fromkeys(cid for cid in chunk_ids if cid is not None))
-    if not unique_ids:
-        return {}
-    rows = session.exec(select(DocumentChunk).where(DocumentChunk.id.in_(unique_ids))).all()
-    return {int(chunk.id): _categories_from_metadata(chunk.metadata_json) for chunk in rows}
-
-
-def _category_boost_for_chunk(
-    chunk_categories: List[str],
-    inferred_categories: List[str],
-) -> float:
-    matched = set(inferred_categories) & {c.lower() for c in chunk_categories}
-    if not matched:
-        return 0.0
-    return len(matched) * settings.RETRIEVAL_CATEGORY_BOOST
 
 
 def _bulk_get_page_categories(

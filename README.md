@@ -1,112 +1,104 @@
-# Noton - Application de prise de notes avec chatbot IA
+# LIA — Assistant documentaire RAG multimodal (PROFERM)
 
-Application web moderne de prise de notes développée avec FastAPI, PostgreSQL et Mistral.
+Assistant de recherche sur la documentation technique de menuiserie de PROFERM
+(gammes PVC, ALU, Hybride, Textural et leurs fournisseurs). L'application indexe des
+PDF techniques (notices de pose, fiches produit, PV, normes) et répond aux questions
+métier en s'appuyant sur un pipeline RAG multimodal (texte **et** visuel).
 
-## Fonctionnalités
+> Le nom d'image Docker du produit est `lia` ; le dépôt historique s'appelle `Noton-app`.
 
-- ✅ Authentification utilisateur (JWT)
-- ✅ Gestion de projets
-- ✅ Gestion de notes écrites
-- ✅ Chatbot intégré (modèle `MODEL_FAST`)
-- ✅ Configuration simple via `.env`
+## Ce que fait l'application
 
-## Technologies
+- **Bibliothèque** : upload de documents, OCR/extraction (Mistral OCR + vision par page),
+  chunking hiérarchique, embeddings, indexation ColPali (visuel) et pgvector (texte).
+- **Espaces** : compartiments documentaires ; le chat est *scopé* à un espace.
+- **Chat RAG** : récupération multi-canal → fusion → (rerank) → packing de contexte → génération.
+- **KAG** : graphe d'entités/relations + classification de catégories multi-axes (facettes).
+- **Admin/RBAC** : gestion utilisateurs, rôles, permissions, taxonomie de catégories, éval retrieval.
 
-- **Backend**: FastAPI (Python 3.11)
-- **Base de données**: PostgreSQL 15
-- **ORM**: SQLModel
-- **IA**: Mistral
-- **Frontend**: HTML/CSS/JS (TailwindCSS)
-- **Déploiement**: Docker Compose
+## Pipeline de retrieval (chemin chat espace)
 
-## Installation et démarrage
+1. **Query understanding** (`QUERY_UNDERSTANDING_ENABLED`) : un appel LLM fusionné produit
+   la route, la question autonome, les `signals` (catégories inférées, source, matériau,
+   intent), le `topic_shift` et l'ancrage conversationnel.
+2. **4 retrievers en parallèle** : ColPali (visuel, *gated*), pgvector (dense), BM25 (lexical),
+   KAG (graphe d'entités).
+3. **Fusion RRF** puis **boost catégorie** (multiplicatif sur `rrf_score`) et **ancrage**
+   conversationnel (continuité du sujet entre tours).
+4. **Rerank MiniLM** cross-encoder (`RERANKER_ENABLED`).
+5. **CAG** (`CAG_ENABLED`) : au lieu d'injecter des passages tronqués, packe des documents
+   entiers / fenêtrés dans le contexte (fenêtre 256k), avec budgets par intent.
+6. **Génération** (Mistral) en streaming, avec repli `full → eco → minimal` sur erreur 400.
 
-### Prérequis
+Détails et audits dans `docs/`.
 
-- Docker et Docker Compose installés
-- Une clé API Mistral valide
+## Stack
 
-### Démarrage
+- **Backend** : FastAPI (Python 3.11), SQLModel
+- **Base** : PostgreSQL 15 + `pgvector` ; **LanceDB** pour les vecteurs ColPali
+- **Tâches** : Celery + Redis (ou workers threads selon `TASK_BACKEND_MODE`)
+- **IA** : Mistral (LLM + OCR + vision), ColQwen2 (ColPali), cross-encoder MiniLM (rerank)
+- **Front** : templates Jinja2 + HTML/CSS/JS
+- **Déploiement** : Docker Compose
 
-1. Cloner le projet
-2. Créer un fichier `.env` à partir de `.env.example` (optionnel, les valeurs par défaut fonctionnent)
-3. Lancer les services :
+## Installation
+
+Prérequis : Docker + Docker Compose, une clé API Mistral, un fichier `.env` à la racine
+(voir les variables consommées dans `docker-compose.yaml` et les défauts dans `app/config.py`).
 
 ```bash
-docker-compose up -d
+docker compose up -d          # db (pgvector) + redis + web + worker
+# Application : http://localhost:8001
 ```
 
-4. Accéder à l'application : http://localhost:8000
+Les migrations Alembic sont exécutées automatiquement par la commande du conteneur `web`
+(`alembic upgrade head`) avant le démarrage d'uvicorn — point d'exécution unique.
 
-### Créer un compte
+## Configuration
 
-L'application démarre sans utilisateur. Créez un compte via la page d'inscription.
+**Source de vérité** : `app/config.py` porte les défauts ; `.env` les surcharge en prod.
+Les `${VAR:-défaut}` de `docker-compose.yaml` ne sont que des replis, tenus alignés sur
+`config.py`.
 
-## Structure du projet
+- Au démarrage, l'app journalise une **matrice de features** (`[config] retrieval: …`) et des
+  **avertissements de cohérence** (ex. un flag maître désactivé qui rend des features inertes).
+- Vérifier la config effective en un coup d'œil (admin) : `GET /api/admin/config`.
 
-```
-noton-app/
-├── app/                    # Application FastAPI
-│   ├── main.py            # Point d'entrée
-│   ├── config.py          # Configuration
-│   ├── database.py        # Configuration DB
-│   ├── models/            # Modèles SQLModel
-│   ├── routers/           # Routes API
-│   ├── services/          # Logique métier
-│   └── templates/         # Templates Jinja2
-├── alembic/               # Migrations DB
-├── docker-compose.yaml    # Configuration Docker
-└── README.md
-```
+Flags principaux : `QUERY_UNDERSTANDING_ENABLED`, `RERANKER_ENABLED`, `VISION_RERANK_ENABLED`,
+`COLPALI_ENABLED` / `COLPALI_GATING_ENABLED`, `KAG_ENABLED`, `CAG_ENABLED`,
+`CONVERSATION_ANCHOR_ENABLED`, `FICHE_TECHNIQUE_ENABLED`, `MULTIMODAL_ENABLED`.
 
-## API Endpoints
+> Cookie d'auth : `AUTH_COOKIE_SECURE=true` par défaut (prod HTTPS derrière nginx). En dev
+> local sur `http://`, mettre `AUTH_COOKIE_SECURE=false` dans le `.env`, sinon le navigateur
+> refuse le cookie de session.
 
-### Authentification
-- `POST /api/auth/register` - Inscription
-- `POST /api/auth/login` - Connexion
-- `GET /api/auth/me` - Utilisateur courant
+## Principales routes API
 
-### Projets
-- `GET /api/projects` - Liste des projets
-- `POST /api/projects` - Créer un projet
-- `GET /api/projects/{id}` - Détail projet
-- `PUT /api/projects/{id}` - Modifier projet
-- `DELETE /api/projects/{id}` - Supprimer projet
-
-### Notes
-- `GET /api/projects/{project_id}/notes` - Liste notes
-- `POST /api/projects/{project_id}/notes` - Créer une note
-- `GET /api/notes/{id}` - Détail note
-- `PUT /api/notes/{id}` - Modifier note
-- `DELETE /api/notes/{id}` - Supprimer note
-
-### Chatbot
-- `GET /api/providers/models` - Modèle configuré
-- `POST /api/chat` - Envoyer un message
-- `POST /api/chat/stream` - Stream de réponse
+- **Auth** : `POST /api/auth/register|login|logout`, `GET /api/auth/me`
+- **Bibliothèque** : `POST /api/library/upload`, `PUT /api/library/documents/{id}`,
+  `POST /api/library/documents/{id}/spaces`, `GET /api/library/classification-options`
+- **Espaces** : `GET/POST /api/spaces`, chat streaming scopé à l'espace
+- **Conversations** : `GET/POST/DELETE /api/conversations…`
+- **Admin** : utilisateurs/rôles/permissions, catégories (`/api/admin/categories`),
+  config effective (`/api/admin/config`), éval retrieval (`/api/admin/eval/retriever`)
 
 ## Développement
 
-### Migrations
-
 ```bash
-# Créer une migration
-docker-compose exec web alembic revision --autogenerate -m "Description"
+# Tests (dépendances Docker-only)
+docker compose exec web pytest
 
-# Appliquer les migrations
-docker-compose exec web alembic upgrade head
+# Migrations
+docker compose exec web alembic revision --autogenerate -m "Description"
+docker compose exec web alembic upgrade head
+
+# Logs
+docker compose logs -f web
 ```
 
-### Logs
+### Évaluation du retrieval
 
-```bash
-# Voir les logs
-docker-compose logs -f web
-```
-
-## Notes
-
-- Le modèle chat est configuré via `MODEL_FAST` dans le `.env`
-- L'authentification utilise JWT stocké dans localStorage côté client
-- Les notes audio ne sont pas encore implémentées (prévu pour plus tard)
-
+Harnais `app/services/retriever_evaluator.py` (métriques `context_precision@K`, `match_page`,
+recall/MRR, LLM-judge). Datasets de vérité-terrain (golden) par fournisseur dans
+`tests/fixtures/golden/` (ROTO, Profine, Kommerling), passés en corps de requête à
+`POST /api/admin/eval/retriever`.
