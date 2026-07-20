@@ -266,15 +266,17 @@ def apply_soft_boosts_to_passages(
 
         doc_id = _document_id_from_passage(p_copy)
 
-        if doc_id:
-            doc_source = _get_document_source(session, doc_id)
-            if doc_source:
-                p_copy["source"] = doc_source
+        # Une seule lecture de la source par passage (évite le double session.get).
+        doc_source = _get_document_source(session, doc_id) if doc_id else None
+        if doc_source:
+            p_copy["source"] = doc_source
 
-        if signals.primary_source and doc_id:
-            doc_source = _get_document_source(session, doc_id)
-            if doc_source and doc_source.lower() == signals.primary_source.lower():
-                boost_frac += source_boost_max * signals.confidence
+        if (
+            signals.primary_source
+            and doc_source
+            and doc_source.lower() == signals.primary_source.lower()
+        ):
+            boost_frac += source_boost_max * signals.confidence
 
         if signals.material_hint and doc_id:
             doc_materials = _get_document_materials(session, doc_id)

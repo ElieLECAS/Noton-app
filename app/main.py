@@ -132,8 +132,22 @@ async def startup_event():
                 get_colpali_model()
             except Exception as e:
                 logger.error(f"Erreur lors du préchargement en arrière-plan du modèle ColPali: {e}")
-        
+
         threading.Thread(target=preload_colpali, name="colpali-preload", daemon=True).start()
+
+    # Précharger le cross-encoder de reranking (évite la latence de chargement
+    # sur la 1re requête ; singleton, jamais rechargé ensuite).
+    if settings.RERANKER_ENABLED and settings.RERANKER_PROVIDER == "local":
+        import threading
+        def preload_reranker():
+            try:
+                from app.services.reranker_service import warmup_cross_encoder
+                logger.info("Début du préchargement en arrière-plan du cross-encoder de reranking...")
+                warmup_cross_encoder()
+            except Exception as e:
+                logger.error(f"Erreur lors du préchargement en arrière-plan du cross-encoder: {e}")
+
+        threading.Thread(target=preload_reranker, name="reranker-preload", daemon=True).start()
     
     # Workers threads (embeddings + documents) uniquement si thread ou hybrid (repli Celery)
     try:

@@ -47,6 +47,61 @@ def match_page(retrieved_doc_title: str, retrieved_page_no: int, expected_pages:
     return False
 
 
+def evaluate_cag_document_hit(
+    cag_documents: List[Dict[str, Any]],
+    *,
+    acceptable_document_ids: Optional[List[int]] = None,
+    expected_pages: Optional[List[Dict[str, Any]]] = None,
+) -> Dict[str, Any]:
+    """Évalue si le CAG a packé le bon document dans le contexte final de génération.
+
+    Complète l'évaluation retrieval "au niveau passage" par une mesure "au niveau
+    document" alignée sur le fonctionnement réel du CAG (qui packe des documents
+    entiers, pas des passages) : ce qui compte pour la génération, c'est que le bon
+    DOCUMENT soit présent dans le contexte, et idéalement la bonne page.
+
+    Args:
+        cag_documents: la clé ``cag_documents`` retournée par ``build_cag_context``.
+        acceptable_document_ids: ids de documents jugés valides (gamme/sujet). Le
+            hit "lenient" est vrai si l'un d'eux est packé.
+        expected_pages: ``pages_attendues`` du golden (titre + pages) pour le hit
+            "strict" par titre + la vérification page-dans-contexte.
+
+    Retourne : {doc_hit_acceptable, doc_hit_strict, page_in_context, packed_ids}.
+    """
+    packed = cag_documents or []
+    packed_ids = {int(d.get("document_id")) for d in packed if d.get("document_id") is not None}
+
+    acc = set(acceptable_document_ids or [])
+    doc_hit_acceptable = bool(acc & packed_ids)
+
+    doc_hit_strict = False
+    page_in_context = False
+    for d in packed:
+        title = d.get("document_title") or ""
+        pages_packed = set(d.get("pages") or [])
+        for exp in (expected_pages or []):
+            exp_title = (exp.get("document_title") or "").lower()
+            t = title.lower()
+            title_match = (
+                exp_title and (exp_title in t or t in exp_title
+                or set(exp_title.split()).issubset(set(t.split()))
+                or set(t.split()).issubset(set(exp_title.split())))
+            )
+            if title_match:
+                doc_hit_strict = True
+                exp_pages = {int(p) for p in exp.get("pages", []) if str(p).isdigit()}
+                if exp_pages & pages_packed:
+                    page_in_context = True
+
+    return {
+        "doc_hit_acceptable": doc_hit_acceptable,
+        "doc_hit_strict": doc_hit_strict,
+        "page_in_context": page_in_context,
+        "packed_ids": sorted(packed_ids),
+    }
+
+
 def compute_context_precision(retrieved_pages: List[Tuple[str, int]], expected_pages: List[Dict[str, Any]]) -> float:
     """
     Context Precision@K = (Sum_{i=1}^{K} (Precision@i * Relevance(i))) / Total Expected Pages Retrieved
@@ -427,10 +482,14 @@ async def evaluate_retriever_dataset(
     start_time = time.time()
     results = []
 
+    from app.services.context_packer_service import build_cag_context
+
     for item in dataset:
         question = item.get("question", "").strip()
         q_type = item.get("type", "mono-document").strip()
         expected_pages = item.get("pages_attendues", [])
+        acceptable_ids = item.get("acceptable_document_ids") or []
+        cag_intent = item.get("intent") or "documentation"
 
         if not question:
             continue
@@ -454,23 +513,49 @@ async def evaluate_retriever_dataset(
         pre_kag_passages = stages.get("pre_kag_rrf")
         kag_only_passages = stages.get("kag_only")
 
-        results.append(
-            build_question_eval_result(
-                question=question,
-                q_type=q_type,
-                expected_pages=expected_pages,
-                passages=passages,
-                colpali_passages=colpali_passages,
-                pgvector_only_passages=pgvector_only_passages,
-                lexical_only_passages=lexical_only_passages,
-                pre_kag_passages=pre_kag_passages,
-                post_rrf_passages=post_rrf_passages,
-                kag_only_passages=kag_only_passages,
-                vision_rerank_enabled=stages.get("vision_rerank_enabled"),
-                minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
-                kag_enabled=stages.get("kag_enabled"),
-            )
+        q_result = build_question_eval_result(
+            question=question,
+            q_type=q_type,
+            expected_pages=expected_pages,
+            passages=passages,
+            colpali_passages=colpali_passages,
+            pgvector_only_passages=pgvector_only_passages,
+            lexical_only_passages=lexical_only_passages,
+            pre_kag_passages=pre_kag_passages,
+            post_rrf_passages=post_rrf_passages,
+            kag_only_passages=kag_only_passages,
+            vision_rerank_enabled=stages.get("vision_rerank_enabled"),
+            minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
+            kag_enabled=stages.get("kag_enabled"),
         )
+
+        # Étape CAG (2026-07-20) : mesure "niveau document" alignée sur le CAG réel,
+        # qui packe des documents entiers. Le retrieval sert à SÉLECTIONNER des docs ;
+        # ce qui compte pour la génération, c'est que le bon DOCUMENT (et idéalement la
+        # bonne page) soit dans le contexte final, pas la page exacte dans un top-k.
+        try:
+            cag_ctx = build_cag_context(
+                session, passages, system_prompt="",
+                intent=cag_intent, emit_sources_tag=False,
+            )
+            cag_docs = cag_ctx.get("cag_documents") or []
+            cag_hit = evaluate_cag_document_hit(
+                cag_docs, acceptable_document_ids=acceptable_ids, expected_pages=expected_pages,
+            )
+            packed = cag_hit["packed_ids"]
+            q_result["cag"] = {
+                "packed_document_ids": packed,
+                "doc_hit_acceptable": cag_hit["doc_hit_acceptable"],
+                "doc_hit_strict": cag_hit["doc_hit_strict"],
+                "page_in_context": cag_hit["page_in_context"],
+                "doc_precision": round(len(set(packed) & set(acceptable_ids)) / len(packed), 3) if packed and acceptable_ids else 0.0,
+                "num_packed": len(packed),
+            }
+        except Exception as exc:
+            logger.warning("[eval] CAG hook échoué pour '%s': %s", question[:60], exc)
+            q_result["cag"] = None
+
+        results.append(q_result)
 
     num_queries = len(results)
     global_metrics = _aggregate_global_metrics(results)
@@ -526,8 +611,23 @@ async def evaluate_retriever_dataset(
     minilm_rerank_enabled = any(r.get("minilm_rerank_enabled") for r in results)
     kag_enabled = any(r.get("kag_enabled") for r in results)
 
+    # Métriques CAG globales (niveau document — ce que le CAG packe réellement).
+    cag_rows = [r["cag"] for r in results if r.get("cag")]
+    cag_metrics = None
+    if cag_rows:
+        nc = len(cag_rows)
+        cag_metrics = {
+            "doc_recall_acceptable": round(sum(1 for c in cag_rows if c["doc_hit_acceptable"]) / nc, 4),
+            "doc_recall_strict": round(sum(1 for c in cag_rows if c["doc_hit_strict"]) / nc, 4),
+            "page_in_context": round(sum(1 for c in cag_rows if c["page_in_context"]) / nc, 4),
+            "doc_precision": round(sum(c["doc_precision"] for c in cag_rows) / nc, 4),
+            "avg_packed_documents": round(sum(c["num_packed"] for c in cag_rows) / nc, 2),
+            "total_questions": nc,
+        }
+
     eval_result: Dict[str, Any] = {
         "global_metrics": global_metrics,
+        "cag_metrics": cag_metrics,
         "global_metrics_colpali": global_metrics_colpali,
         "rerank_impact": rerank_impact,
         "kag_impact": kag_impact,

@@ -113,8 +113,27 @@ def _get_cross_encoder():
         except Exception as e:
             logger.exception("Échec chargement cross-encoder : %s", e)
             raise
-        
+
         return _cross_encoder
+
+
+def warmup_cross_encoder() -> bool:
+    """Précharge le cross-encoder au démarrage (poids + tokenizer + graphe).
+
+    Appelé une fois au boot dans un thread daemon (cf. main.py) pour que la
+    PREMIÈRE requête ne paie ni le téléchargement HF ni la compilation du modèle.
+    Le singleton reste en mémoire ensuite — jamais rechargé par requête.
+    Retourne True si le modèle est prêt, False sur échec (log, non bloquant).
+    """
+    try:
+        model = _get_cross_encoder()
+        # Predict à blanc : force l'init tokenizer + 1er forward (latence cachée ici).
+        model.predict([("réchauffe", "réchauffe")], show_progress_bar=False)
+        logger.info("Cross-encoder préchauffé au démarrage : %s", settings.RERANKER_MODEL)
+        return True
+    except Exception as e:
+        logger.error("Échec préchauffage cross-encoder : %s", e)
+        return False
 
 
 def should_early_stop(rrf_scores: List[float], threshold: float) -> bool:
@@ -313,17 +332,21 @@ def apply_dynamic_filtering(
     softmax_cum_threshold: float,
     stutter_gap: float,
     zscore_flat_threshold: float,
+    high_confidence_floor: Optional[float] = None,
 ) -> RerankResult:
     """
     Applique les guardrails statistiques et la sélection K dynamique.
-    
+
     Guardrails :
     - Gap P@1-P@2 trop faible ET z-score plat → low_confidence_clarification
-    
+      SAUF si le top-1 dépasse déjà high_confidence_floor : deux passages EXCELLENTS
+      et proches ne sont pas de l'ambiguïté (ils répondent tous les deux très bien),
+      contrairement à deux passages MÉDIOCRES et proches (aucun ne se distingue).
+
     K dynamique :
     - Sélectionne les nœuds dont la somme cumulée softmax atteint softmax_cum_threshold
     - Borné entre min_k et max_k
-    
+
     Args:
         scored: Liste (nœud, score_cross_encoder) triée décroissant
         min_k: Minimum de documents à garder
@@ -331,7 +354,9 @@ def apply_dynamic_filtering(
         softmax_cum_threshold: Seuil de masse softmax cumulée (ex: 0.8)
         stutter_gap: Delta minimum entre P@1 et P@2 (ex: 0.05)
         zscore_flat_threshold: Seuil stdev softmax pour détecter planéité
-        
+        high_confidence_floor: pertinence sigmoïde (0-1) au-dessus de laquelle le
+            top-1 est jugé fiable même à distribution plate (défaut : jamais de bypass)
+
     Returns:
         RerankResult avec status, nodes sélectionnés, et métadonnées stats
     """
@@ -392,9 +417,13 @@ def apply_dynamic_filtering(
     # Guardrail 2 : Z-score / planéité (stdev des scores softmax)
     zscore_flatness = float(np.std(softmax_scores)) if len(softmax_scores) > 1 else 0.0
     
-    # Détection "bégaiement" : gap faible ET distribution plate
+    # Détection "bégaiement" : gap faible ET distribution plate — mais seulement si le
+    # top-1 n'a pas déjà une pertinence assez haute pour se passer de se démarquer du top-2.
+    top1_pertinence = scored_filtered[0][0].score  # sigmoid déjà assigné (ligne ci-dessus)
     is_stuttering = False
-    if gap_top1_top2 is not None:
+    if gap_top1_top2 is not None and (
+        high_confidence_floor is None or top1_pertinence < high_confidence_floor
+    ):
         is_stuttering = (gap_top1_top2 < stutter_gap) and (zscore_flatness < zscore_flat_threshold)
     
     if is_stuttering:

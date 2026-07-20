@@ -770,6 +770,8 @@ class SingleRetrieverEvalRequest(BaseModel):
     question: str
     type: str = "mono-document"
     pages_attendues: List[dict]
+    acceptable_document_ids: List[int] = []
+    intent: str = "documentation"
     k: int = 15
 
 
@@ -805,8 +807,9 @@ async def evaluate_retriever_single_api(
     session: Session = Depends(get_session)
 ):
     """Évaluer le retriever ColPali sur une seule question pour la progression de l'UI."""
-    from app.services.retriever_evaluator import build_question_eval_result
+    from app.services.retriever_evaluator import build_question_eval_result, evaluate_cag_document_hit
     from app.services.space_search_service import search_relevant_passages
+    from app.services.context_packer_service import build_cag_context
 
     try:
         search_res = await search_relevant_passages(
@@ -821,7 +824,7 @@ async def evaluate_retriever_single_api(
         passages = search_res.get("passages", [])
         stages = search_res.get("retrieval_stages") or {}
 
-        return build_question_eval_result(
+        result = build_question_eval_result(
             question=request.question,
             q_type=request.type,
             expected_pages=request.pages_attendues,
@@ -836,6 +839,35 @@ async def evaluate_retriever_single_api(
             minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
             kag_enabled=stages.get("kag_enabled"),
         )
+
+        # Étape CAG (niveau document) : le CAG packe des documents entiers ; on vérifie
+        # que le bon document / la bonne page arrive dans le contexte final de génération.
+        try:
+            cag_ctx = build_cag_context(
+                session, passages, system_prompt="",
+                intent=request.intent, emit_sources_tag=False,
+            )
+            cag_docs = cag_ctx.get("cag_documents") or []
+            hit = evaluate_cag_document_hit(
+                cag_docs,
+                acceptable_document_ids=request.acceptable_document_ids,
+                expected_pages=request.pages_attendues,
+            )
+            packed = hit["packed_ids"]
+            acc = set(request.acceptable_document_ids or [])
+            result["cag"] = {
+                "packed_document_ids": packed,
+                "doc_hit_acceptable": hit["doc_hit_acceptable"],
+                "doc_hit_strict": hit["doc_hit_strict"],
+                "page_in_context": hit["page_in_context"],
+                "doc_precision": round(len(set(packed) & acc) / len(packed), 3) if (packed and acc) else 0.0,
+                "num_packed": len(packed),
+            }
+        except Exception as cag_exc:
+            logger.warning("[eval single] CAG hook échoué: %s", cag_exc)
+            result["cag"] = None
+
+        return result
     except Exception as e:
         logger.error("Error during single retriever evaluation API: %s", e, exc_info=True)
         raise HTTPException(

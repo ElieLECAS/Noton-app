@@ -224,8 +224,12 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "documents, le document le plus spécifique au sujet de la question prime.\n"
     "\n"
     "### POLITIQUE DE RÉPONSE (dans cet ordre)\n"
-    "1. Question claire et couverte par les documents → réponds directement, de manière concise, "
-    "exactement au périmètre demandé (pas d'étapes adjacentes ni de détails non sollicités).\n"
+    "1. Question claire et couverte par les documents → réponds directement, "
+    "exactement au périmètre demandé (pas d'étapes adjacentes ni de détails non sollicités). "
+    "PAR DÉFAUT, quelques phrases ou un court paragraphe suffisent. N'ajoute PAS de sections, "
+    "de plan à plusieurs cas (standard/PMR/variante...) ou de méthode pas-à-pas si l'utilisateur "
+    "n'a demandé qu'un fait précis — s'il y a plusieurs configurations possibles et qu'aucune "
+    "n'est précisée, applique la règle 2 (clarification) plutôt que de toutes les développer.\n"
     "2. La réponse DÉPEND d'un produit, d'une gamme, d'une version ou d'une configuration que "
     "l'utilisateur n'a PAS précisée, et les documents en couvrent PLUSIEURS → ne choisis JAMAIS à sa place. "
     "Si la réponse tient en 2-3 lignes par cas, présente brièvement chaque cas en nommant sa gamme/version ; "
@@ -242,10 +246,21 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "- Ne combine JAMAIS des références (ex. T141019), cotes (ex. 300 mm) ou dimensions (ex. 2,40 m) "
     "issues de phrases ou sections différentes pour fabriquer une spécification qui n'est pas écrite telle quelle.\n"
     "\n"
+    "### IMAGES\n"
+    "Quand une référence produit (ex. TGY3702, TMX13) ou un schéma pertinent est disponible, une "
+    "illustration est jointe AUTOMATIQUEMENT à ta réponse. Ne prétends JAMAIS que tu n'as pas accès "
+    "aux images, aux photos ou aux catalogues : présente l'information dont tu disposes, l'illustration "
+    "apparaît d'elle-même. Si aucune illustration n'est disponible pour la pièce demandée, dis simplement "
+    "que la notice ne fournit pas de visuel pour cette référence — sans nier ta capacité à en montrer.\n"
+    "\n"
     "### STYLE\n"
+    "Concis par défaut : vise la réponse la plus courte qui couvre exactement ce qui est demandé. "
     "Prose fluide et naturelle ; listes à puces seulement si elles servent la lisibilité ; tableaux Markdown "
-    "pour les données techniques ou comparaisons (sans paraphraser le tableau dans le texte). Salue courtoisement "
-    "en début de conversation, sans formules répétées ensuite. "
+    "UNIQUEMENT si les documents fournissent eux-mêmes des données tabulaires (dimensions, compatibilités) — "
+    "ne transforme pas une explication en plan à sections numérotées. "
+    "Ne dessine JAMAIS de schéma ASCII ou de diagramme improvisé pour illustrer un raisonnement : "
+    "un schéma texte n'est légitime que s'il retranscrit un schéma réellement présent dans le document. "
+    "Salue courtoisement en début de conversation, sans formules répétées ensuite. "
     "AUCUNE citation dans le corps du texte : n'écris jamais [Nom du document, page X] ni de numéro de page — "
     "les sources sont affichées automatiquement sous ta réponse."
 )
@@ -1297,17 +1312,10 @@ async def stream_space_chat_message(
             signals=lw_result.signals,
         )
 
-    if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals.primary_source:
-        from app.services.query_reasoning_service import QueryIntent
-        from app.services.space_search_service import refine_with_source_authority
-
-        intent_obj = QueryIntent(
-            intent=lw_result.signals.intent or "generic",
-            primary_source=lw_result.signals.primary_source,
-            reasoning="lightweight extraction",
-            confidence=lw_result.signals.confidence,
-        )
-        doc_passages = refine_with_source_authority(doc_passages, retrieval_query_text, intent_obj)
+    # L'autorité de source (primary_source) est déjà appliquée par
+    # apply_soft_boosts_to_passages ci-dessus, de façon proportionnelle à l'étendue
+    # des scores. L'ancien refine_with_source_authority ajoutait un SECOND boost
+    # (0.8·confidence, échelle ambiguë) sur le même critère → double-comptage supprimé.
 
     # Mémorise les documents dominants de ce tour comme ancre du sujet courant (réutilisée
     # pour biaiser le retrieval du prochain tour, tant qu'il n'y a pas de changement de sujet).
@@ -1911,6 +1919,24 @@ async def stream_space_chat_message(
                     sources_data.append(ill_source)
                     logger.info(f"Illustration added to sources_data: {ill_source}")
 
+                # Vérification post-génération (P2, 2026-07-20) : le texte a déjà streamé au
+                # client à ce stade — ce contrôle ne bloque PAS l'affichage, il détecte et
+                # trace les réponses hors-sujet ou hallucinées (cf. plan_p2_generation_
+                # small_verification_2026-07-20.md §2). N'échoue jamais la persistance.
+                verification_result = None
+                if request.conversation_id and assistant_response and space_context_draft.get("content"):
+                    try:
+                        from app.services.response_verification_service import verify_response
+
+                        verification_result = await verify_response(
+                            question=retrieval_query_text,
+                            response_text=complete_response,
+                            context_text=space_context_draft["content"],
+                            model=forced_model,
+                        )
+                    except Exception as verif_err:
+                        logger.warning("Vérification post-génération ignorée: %s", verif_err)
+
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
                 # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
                 assistant_message_id = None
@@ -1922,6 +1948,9 @@ async def stream_space_chat_message(
                         forced_model,
                         forced_provider,
                         sources_json,
+                        metadata_json=(
+                            {"verification": verification_result} if verification_result else None
+                        ),
                     )
                     logger.info(
                         "Réponse assistant sauvegardée (space chat), conversation %s avec %s sources",

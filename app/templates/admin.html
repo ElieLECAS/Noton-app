@@ -2308,10 +2308,12 @@ async function runRetrieverEval() {
                     question: item.question,
                     type: item.type || "mono-document",
                     pages_attendues: item.pages_attendues,
+                    acceptable_document_ids: item.acceptable_document_ids || [],
+                    intent: item.intent || "documentation",
                     k: k
                 })
             });
-            
+
             if (r && r.ok) {
                 const singleRes = await r.json();
                 details.push(singleRes);
@@ -2320,7 +2322,7 @@ async function runRetrieverEval() {
                 throw new Error(`Erreur à la question ${i + 1} : ${errorText}`);
             }
         }
-        
+
         const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
         const data = aggregateEvalGlobals(details, parseFloat(elapsedTime));
         
@@ -2622,6 +2624,20 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
             mrr: totalMrrLexical / lexicalCount,
         };
     }
+
+    // Agrégation CAG (niveau document) — le bon document est-il packé dans le contexte final ?
+    const cagRows = details.map(q => q.cag).filter(Boolean);
+    if (cagRows.length > 0) {
+        const nc = cagRows.length;
+        result.cag_metrics = {
+            doc_recall_acceptable: cagRows.filter(c => c.doc_hit_acceptable).length / nc,
+            doc_recall_strict: cagRows.filter(c => c.doc_hit_strict).length / nc,
+            page_in_context: cagRows.filter(c => c.page_in_context).length / nc,
+            doc_precision: cagRows.reduce((s, c) => s + (c.doc_precision || 0), 0) / nc,
+            avg_packed_documents: (cagRows.reduce((s, c) => s + (c.num_packed || 0), 0) / nc).toFixed(1),
+            total_questions: nc,
+        };
+    }
     return result;
 }
 
@@ -2710,6 +2726,41 @@ function renderEvalResults(data, showGeneration = false) {
         }
     } else {
         if (generationCard) generationCard.classList.add('hidden');
+    }
+
+    // === Panneau CAG (niveau DOCUMENT) — métrique titre pour le système CAG ===
+    // Le CAG packe des documents entiers : ce qui compte n'est plus "la bonne page
+    // dans le top-k" mais "le bon document packé, et la page attendue dans le contexte".
+    let cagPanel = document.getElementById('eval-cag-panel');
+    if (!cagPanel) {
+        cagPanel = document.createElement('div');
+        cagPanel.id = 'eval-cag-panel';
+        cagPanel.className = 'mb-6';
+        resultsContainer.prepend(cagPanel);
+    }
+    const cm = data.cag_metrics;
+    if (cm) {
+        const card = (label, val, cls, sub) => `
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                <div class="text-3xl font-extrabold ${cls}">${val}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">${label}</div>
+                ${sub ? `<div class="text-[11px] text-gray-400 mt-1">${sub}</div>` : ''}
+            </div>`;
+        cagPanel.innerHTML = `
+            <div class="flex items-center gap-2 mb-2">
+                <span class="text-sm font-bold text-indigo-600 dark:text-indigo-400">📦 CAG — niveau document (contexte réellement packé)</span>
+                <span class="text-[11px] text-gray-400">le bon document est-il dans le contexte final de génération ?</span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                ${card('Doc-recall (gamme acceptable)', (cm.doc_recall_acceptable*100).toFixed(0)+'%', getMetricColorClass(cm.doc_recall_acceptable), 'un doc valide de la gamme packé')}
+                ${card('Doc-recall (source exact)', (cm.doc_recall_strict*100).toFixed(0)+'%', getMetricColorClass(cm.doc_recall_strict), 'le doc source exact packé')}
+                ${card('Page dans le contexte', (cm.page_in_context*100).toFixed(0)+'%', getMetricColorClass(cm.page_in_context), 'la page attendue est packée')}
+                ${card('Doc-precision', (cm.doc_precision*100).toFixed(0)+'%', getMetricColorClass(cm.doc_precision), 'part des docs packés pertinents')}
+                ${card('Docs packés (moy.)', cm.avg_packed_documents, 'text-gray-700 dark:text-gray-200', 'nb moyen par question')}
+            </div>`;
+        cagPanel.classList.remove('hidden');
+    } else if (cagPanel) {
+        cagPanel.classList.add('hidden');
     }
 
     // ColPali comparison section

@@ -260,6 +260,7 @@ async def rerank_unified_page_hits(
         softmax_cum_threshold=settings.SOFTMAX_CUM_THRESHOLD,
         stutter_gap=settings.STUTTER_GAP,
         zscore_flat_threshold=settings.ZSCORE_FLAT_THRESHOLD,
+        high_confidence_floor=settings.STUTTER_HIGH_CONFIDENCE_FLOOR,
     )
 
     reranked: List[UnifiedPageHit] = []

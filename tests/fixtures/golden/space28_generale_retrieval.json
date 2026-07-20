@@ -1,0 +1,162 @@
+[
+  {
+    "id": "g_383",
+    "type": "mono",
+    "question": "Comment s'assurer que le système coulisseau-plot est correctement monté pour éviter les mouvements parasites sur une ouverture à soufflet ?",
+    "pages_attendues": [{ "document_title": "Transformation OF en OB ROTO NX", "pages": [1] }],
+    "acceptable_document_ids": [383],
+    "cible": "positionnement coulisseau/plot pour anti-rabattement"
+  },
+  {
+    "id": "g_384",
+    "type": "mono",
+    "question": "Comment procéder au montage du report de charge sur un système de fenêtre oscillo-battante Roto NX ?",
+    "pages_attendues": [{ "document_title": "Bras de report de charge ROTO NX", "pages": [1] }],
+    "acceptable_document_ids": [384],
+    "cible": "séquence d'assemblage du report de charge"
+  },
+  {
+    "id": "g_389",
+    "type": "mono",
+    "question": "Comment positionner le renfort et le calage pour une porte cintrée vers l'extérieur ?",
+    "pages_attendues": [{ "document_title": "Mise en oeuvre 9708 - Fer cintrés", "pages": [1] }],
+    "acceptable_document_ids": [389],
+    "cible": "calage et renfort selon le sens de cintrage"
+  },
+  {
+    "id": "g_390",
+    "type": "mono",
+    "question": "Pourquoi mon système Eneo CC ne réagit-il pas du tout, sans signal sonore ni mouvement ?",
+    "pages_attendues": [{ "document_title": "Proferm - Eneo CC - Notice simplifiée v2 (2022) (1)", "pages": [9] }],
+    "acceptable_document_ids": [390],
+    "cible": "diagnostic absence totale de réaction"
+  },
+  {
+    "id": "g_391",
+    "type": "mono",
+    "question": "Comment installer les rails verticaux et horizontaux sans ajouter de meneau fixe sur le montage Roto NX KSR ?",
+    "pages_attendues": [{ "document_title": "Montage Roto NX KSR PVC IMO_180_NX_FR_v2", "pages": [59] }],
+    "acceptable_document_ids": [391],
+    "cible": "montage des rails sans meneau fixe"
+  },
+  {
+    "id": "g_411",
+    "type": "mono",
+    "question": "Pour une porte intérieure avec montant standard en menuiserie PVC (système 76), quel dormant standard faut-il retenir ?",
+    "pages_attendues": [{ "document_title": "DTD-DBV-6-16-2335_V5", "pages": [15] }],
+    "acceptable_document_ids": [411, 412, 413, 422],
+    "cible": "choix du dormant standard adapté à un montant standard"
+  },
+  {
+    "id": "g_412",
+    "type": "mono",
+    "question": "Quels types de murs sont compatibles avec une pose en tableau avec isolation par l'extérieur pour les fenêtres PVC 76 ?",
+    "pages_attendues": [{ "document_title": "6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2)", "pages": [4] }],
+    "acceptable_document_ids": [411, 412, 413, 422],
+    "cible": "supports autorisés pour pose en tableau avec ITE"
+  },
+  {
+    "id": "g_413",
+    "type": "mono",
+    "question": "Quelles contraintes mécaniques faut-il vérifier pour un vitrage épais ou un vantail lourd sur une fenêtre TROCAL 76 ADVANCED ?",
+    "pages_attendues": [{ "document_title": "DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1)", "pages": [7] }],
+    "acceptable_document_ids": [411, 412, 413, 422],
+    "cible": "vérifications mécaniques pour vitrages épais / vantaux lourds"
+  },
+  {
+    "id": "g_415",
+    "type": "mono",
+    "question": "Comment vérifier que les connexions des câbles sont correctes avant la mise sous tension sur un Roto Safe E ?",
+    "pages_attendues": [{ "document_title": "Roto Safe E _ Jonction de câble_SUG_28_FR_v3", "pages": [32] }],
+    "acceptable_document_ids": [415],
+    "cible": "vérification des connexions câbles avant mise sous tension"
+  },
+  {
+    "id": "g_422",
+    "type": "mono",
+    "question": "Dans quels cas les profilés PVC du système 76 doivent-ils être renforcés par des inserts métalliques ?",
+    "pages_attendues": [{ "document_title": "DTA_6_16-2335_V5 (1)", "pages": [8] }],
+    "acceptable_document_ids": [411, 412, 413, 422],
+    "cible": "situations d'insertion obligatoire de renforts métalliques"
+  },
+  {
+    "id": "g_424",
+    "type": "mono",
+    "question": "Quels sont les avantages écologiques des menuiseries en PVC de la gamme PERFORM ?",
+    "pages_attendues": [{ "document_title": "2024-04_CATALOGUE-GENERAL_WEB", "pages": [6] }],
+    "acceptable_document_ids": [424, 425, 430],
+    "cible": "caractéristiques écologiques du PVC (sans plomb, recyclable)"
+  },
+  {
+    "id": "g_425",
+    "type": "mono",
+    "question": "Quels sont les avantages techniques de la combinaison PVC-aluminium de la gamme HYBRIDE par rapport à des menuiseries classiques ?",
+    "pages_attendues": [{ "document_title": "2023-06_DEPLIANT-GENERAL", "pages": [4] }],
+    "acceptable_document_ids": [425, 426, 431, 430, 424],
+    "cible": "performances isolation + garantie structure hybride"
+  },
+  {
+    "id": "g_426",
+    "type": "mono",
+    "question": "Pour la gamme Hybride, comment est gérée l'étanchéité entre les parcloses et le vitrage ?",
+    "pages_attendues": [{ "document_title": "Hybride", "pages": [2] }],
+    "acceptable_document_ids": [426, 431, 430],
+    "cible": "type de joint d'étanchéité parcloses/vitrage"
+  },
+  {
+    "id": "g_427",
+    "type": "mono",
+    "question": "Quelle quincaillerie spécifique équipe le coulissant Innoslide pour garantir sa sécurité et sa fiabilité ?",
+    "pages_attendues": [{ "document_title": "Innoslide", "pages": [2] }],
+    "acceptable_document_ids": [427, 433, 424],
+    "cible": "quincaillerie du coulissant Innoslide"
+  },
+  {
+    "id": "g_428",
+    "type": "mono",
+    "question": "Est-il possible d'obtenir une teinte personnalisée pour une menuiserie de la gamme Lumeal, et comment procéder ?",
+    "pages_attendues": [{ "document_title": "lumeal", "pages": [2] }],
+    "acceptable_document_ids": [428, 432, 424],
+    "cible": "teinte sur mesure Lumeal et modalités"
+  },
+  {
+    "id": "g_429",
+    "type": "mono",
+    "question": "Quels types d'ouvertures sont possibles pour la gamme Lumine65 en configurations standards ?",
+    "pages_attendues": [{ "document_title": "Lumine65", "pages": [3] }],
+    "acceptable_document_ids": [429, 424],
+    "cible": "schémas d'applications (types d'ouvertures)"
+  },
+  {
+    "id": "g_430",
+    "type": "mono",
+    "question": "Quels systèmes de sécurité intégrés équipent la gamme Perform Hybride pour éviter les erreurs de manipulation ?",
+    "pages_attendues": [{ "document_title": "Perform  Hybride", "pages": [2] }],
+    "acceptable_document_ids": [430, 426, 431],
+    "cible": "anti-fausse manœuvre / position OB sécurisée"
+  },
+  {
+    "id": "g_431",
+    "type": "mono",
+    "question": "Pour la gamme hybride, quelles options de finition sont disponibles pour les menuiseries extérieures en aluminium ?",
+    "pages_attendues": [{ "document_title": "2023-06_DEPLIANT-HYBRIDE", "pages": [3] }],
+    "acceptable_document_ids": [431, 426, 430],
+    "cible": "finitions extérieures alu (satiné, granité)"
+  },
+  {
+    "id": "g_432",
+    "type": "mono",
+    "question": "Quels sont les points forts de la gamme Lumeal en performance thermique et étanchéité pour une menuiserie aluminium ?",
+    "pages_attendues": [{ "document_title": "2023-06_DEPLIANT-LUMEAL", "pages": [2] }],
+    "acceptable_document_ids": [432, 428, 424],
+    "cible": "avantages thermiques et étanchéité Lumeal"
+  },
+  {
+    "id": "g_433",
+    "type": "mono",
+    "question": "Quels dispositifs de sécurité intègre la gamme INNOSLIDE pour éviter le basculement ou le soulèvement en cas de vent fort ?",
+    "pages_attendues": [{ "document_title": "2024-01_DEPLIANT-INNOSLIDE_A4-WEB-Client", "pages": [2] }],
+    "acceptable_document_ids": [433, 427, 424],
+    "cible": "anti-basculement / renvois d'angle"
+  }
+]

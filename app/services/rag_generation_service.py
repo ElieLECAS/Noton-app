@@ -25,13 +25,19 @@ DEFAULT_RAG_MAX_PAGE_IMAGES = settings.RAG_MAX_IMAGES
 
 
 def is_vision_model(model_name: str) -> bool:
-    """Indique si le modèle accepte des images en entrée."""
+    """Indique si le modèle accepte des images en entrée.
+
+    "small" ajouté 2026-07-20 : mistral-small-latest (Small 4) est multimodal ;
+    son absence ici coupait silencieusement les PNG de pages à la génération
+    dès qu'on basculait MODEL_FAST sur small.
+    """
     name_lower = (model_name or "").lower()
     return (
         "pixtral" in name_lower
         or "vision" in name_lower
         or "large-latest" in name_lower
         or "ministral" in name_lower
+        or "small" in name_lower
         or "gpt-4o" in name_lower
     )
 

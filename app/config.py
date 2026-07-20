@@ -115,7 +115,9 @@ class Settings(BaseSettings):
     
     # ColPali Settings
     COLPALI_ENABLED: bool = True
-    COLPALI_MODEL_NAME: str = "vidore/colqwen2-v0.1"
+    # v1.0 : aligne sur l'index LanceDB de prod (le modele de requete DOIT etre
+    # celui qui a encode les patches, sinon MaxSim incoherent). Etait v0.1.
+    COLPALI_MODEL_NAME: str = "vidore/colqwen2-v1.0"
     # Pixtral via API Mistral (ex. pixtral-12b-2409) pour enrichir les chunks feuilles « picture »
     VISION_MODEL: str = "pixtral-12b-2409"
     VISION_MAX_TOKENS: int = 1500
@@ -217,9 +219,13 @@ class Settings(BaseSettings):
 
     # Illustration de réponse : découpe ancrée sur la référence (code profilé) présente
     # comme texte sur la page. Voir app/services/illustration_service.py.
-    # Motif des codes de référence ancrables (ex. "6104", "6105A"). 3 à 5 chiffres + lettre optionnelle.
+    # Motif des codes de référence ancrables. Couvre :
+    #   - alphanumérique fournisseur : TGY3702, TMX13, TFZ60032, T910002 ([A-Z]{1,4} + chiffres)
+    #   - numérique pur ou décimal : 6104, 6105A, 259879, 9718.3
+    # (l'ancien r"\b\d{3,5}[A-Za-z]?\b" ratait TOUTES les réfs alphanum + le 6 chiffres.)
     ILLUSTRATION_REFERENCE_PATTERN: str = os.getenv(
-        "ILLUSTRATION_REFERENCE_PATTERN", r"\b\d{3,5}[A-Za-z]?\b"
+        "ILLUSTRATION_REFERENCE_PATTERN",
+        r"\b(?:[A-Z]{1,4}\d{2,6}[A-Za-z]?|\d{3,6}(?:\.\d{1,2})?[A-Za-z]?)\b",
     )
     # Taille max de la fenêtre de découpe en fraction de la page (largeur ET hauteur).
     ILLUSTRATION_MAX_WINDOW_RATIO: float = float(
@@ -254,9 +260,13 @@ class Settings(BaseSettings):
     RERANKER_ENABLED: bool = os.getenv("RERANKER_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    # Fournisseur de reranking : "local" (cross-encoder HF) ou "mistral" (API).
+    # Champ ajouté 2026-07-20 : auparavant lu via getattr → toujours "local" en silence.
+    RERANKER_PROVIDER: str = os.getenv("RERANKER_PROVIDER", "local")
+    # Corpus francais → cross-encoder francais par defaut (etait ms-marco anglais).
+    RERANKER_MODEL: str = "antoinelouis/crossencoder-camembert-L2-mmarcoFR"
     RERANK_POOL: int = int(os.getenv("RERANK_POOL", "40"))
-    RERANK_CHAR_CAP: int = 1700  # ~485 tokens (ratio FR 3.5 chars/token, marge vs max_length=512)
+    RERANK_CHAR_CAP: int = 1800  # ~510 tokens FR : aligne sur max_length=512 du cross-encoder
     RERANK_BATCH_SIZE: int = 16
     EARLY_STOP_ENABLED: bool = False  # Early stop désactivé par défaut (latence CPU acceptable)
     EARLY_STOP_TOP_N: int = 5
@@ -266,6 +276,15 @@ class Settings(BaseSettings):
     SOFTMAX_CUM_THRESHOLD: float = 0.80
     STUTTER_GAP: float = 0.05
     ZSCORE_FLAT_THRESHOLD: float = 0.05
+    # Plancher de confiance absolue (échelle pertinence sigmoïde, comme RAG_MIN_PERTINENCE) :
+    # au-dessus de ce score, le top-1 n'a PAS besoin de se démarquer du top-2 pour qu'on lui
+    # fasse confiance. Sans ce plancher, deux passages EXCELLENTS et proches (ex. 0.91/0.90,
+    # gauche/droite ou deux notices qui disent la même chose) déclenchaient le garde-fou
+    # « bégaiement » comme s'il s'agissait de deux passages MÉDIOCRES et proches → abstention
+    # à tort. Régression constatée le 20/07/2026 après réactivation de STUTTER_GAP=0.05.
+    STUTTER_HIGH_CONFIDENCE_FLOOR: float = float(
+        os.getenv("STUTTER_HIGH_CONFIDENCE_FLOOR", "0.85")
+    )
     RERANKER_MIN_SCORE: float = -3.0
     RAG_MIN_PERTINENCE: float = 0.75
     COLPALI_PROTECTED_SLOTS: int = int(os.getenv("COLPALI_PROTECTED_SLOTS", "2"))
@@ -355,7 +374,9 @@ class Settings(BaseSettings):
     # FILET DE SÉCURITÉ relance ColPali si les retrievers texte reviennent trop faibles,
     # de sorte qu'aucun rappel n'est perdu en silence. Mettre à false rebascule sur
     # l'exécution systématique de ColPali (comportement historique).
-    COLPALI_GATING_ENABLED: bool = os.getenv("COLPALI_GATING_ENABLED", "true").strip().lower() in (
+    # Defaut false (2026-07-20) : ColPali est le meilleur retriever et indexe TOUTES
+    # les pages (meme sans texte) — on le veut toujours actif. true = ancien gating par mots.
+    COLPALI_GATING_ENABLED: bool = os.getenv("COLPALI_GATING_ENABLED", "false").strip().lower() in (
         "true", "1", "yes", "on"
     )
     # Sous ce nombre de pages texte (pgvector ∪ BM25), ColPali est relancé en rattrapage

@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import logging
 import re
+import unicodedata
 from typing import Dict, List, Optional, Set, Tuple
 
 from sqlalchemy import text
@@ -22,6 +23,31 @@ from app.services.kag_extraction_service import normalize_entity_name
 from app.services.page_retrieval_service import UnifiedPageHit, _page_no_sql_expr
 
 logger = logging.getLogger(__name__)
+
+# Mots-outils français (interrogatifs, articles, prépositions, auxiliaires) filtrés
+# AVANT le matching d'entités : sans ça, « quelle », « comment », « pour », « avec »…
+# déclenchaient chacun une recherche d'entité et polluaient les candidats.
+# Valeurs déjà déaccentuées (le token est déaccenté avant comparaison).
+_KAG_QUERY_STOPWORDS = frozenset({
+    "les", "des", "une", "aux", "mon", "ton", "son", "mes", "tes", "ses", "nos", "vos",
+    "leur", "leurs", "cette", "cet", "ces", "qui", "que", "quoi", "dont", "quel", "quels",
+    "quelle", "quelles", "quand", "comment", "pourquoi", "est", "sont", "etre", "avoir",
+    "avez", "avons", "ont", "elle", "ils", "elles", "nous", "vous", "pas", "plus", "moins",
+    "tres", "tout", "tous", "toute", "toutes", "cela", "ceci", "comme", "mais", "donc",
+    "car", "oui", "non", "pour", "avec", "sans", "dans", "sur", "sous", "par", "entre",
+    "vers", "chez", "afin", "ainsi", "alors", "aussi", "meme", "encore", "depuis", "puis",
+})
+
+# translate() Postgres : déaccentuation symétrique (colonne ET token) au moment de la
+# requête. Zéro migration, marche sur les données existantes, pas de risque de collision
+# sur la contrainte unique. Les deux chaînes DOIVENT avoir la même longueur.
+_KAG_ACCENT_FROM = "àâäáãéèêëíìîïóòôöõúùûüçñ"
+_KAG_ACCENT_TO = "aaaaaeeeeiiiiooooouuuucn"
+
+
+def _strip_accents(value: str) -> str:
+    """Déaccentue un token (NFKD + drop des diacritiques) — côté Python (requête)."""
+    return unicodedata.normalize("NFKD", value or "").encode("ascii", "ignore").decode("ascii")
 
 
 def _query_entity_candidates(
@@ -35,46 +61,69 @@ def _query_entity_candidates(
     Retourne (entity_id, match_score, match_source) triés par score décroissant.
     """
     normalized_query = normalize_entity_name(query_text)
-    tokens = [t for t in re.split(r"\W+", normalized_query) if len(t) >= 3][:8]
+    # Ne garder que les termes DISCRIMINANTS : déaccentués, hors stopwords, longueur ≥ 3.
+    tokens: List[str] = []
+    seen_tokens: Set[str] = set()
+    for raw in re.split(r"\W+", normalized_query):
+        token = _strip_accents(raw)
+        if len(token) < 3 or token in _KAG_QUERY_STOPWORDS or token in seen_tokens:
+            continue
+        seen_tokens.add(token)
+        tokens.append(token)
+        if len(tokens) >= 8:
+            break
     candidates: Dict[int, Tuple[float, str]] = {}
 
     if tokens:
-        for token in tokens:
-            rows = session.execute(
-                text(
-                    """
-                    SELECT ke.id,
-                           GREATEST(
-                               similarity(ke.name_normalized, :token),
-                               COALESCE(
-                                   (SELECT MAX(similarity(ea.alias_normalized, :token))
-                                    FROM entityalias ea
-                                    WHERE ea.entity_id = ke.id AND ea.space_id = :space_id),
-                                   0
-                               )
-                           ) AS sim
-                    FROM knowledgeentity ke
-                    WHERE ke.space_id = :space_id
-                      AND (
-                          ke.name_normalized % :token
-                          OR EXISTS (
-                              SELECT 1 FROM entityalias ea
-                              WHERE ea.entity_id = ke.id
-                                AND ea.space_id = :space_id
-                                AND ea.alias_normalized % :token
-                          )
+        # UNE seule requête (fini le N+1 « une requête par mot ») : les tokens sont
+        # dépliés via unnest, la colonne est déaccentuée par translate() pour un
+        # matching symétrique et insensible aux accents (« reglage » ↔ « réglage »).
+        rows = session.execute(
+            text(
+                """
+                WITH q(token) AS (
+                    SELECT DISTINCT unnest(string_to_array(:tokens_csv, ','))
+                )
+                SELECT ke.id,
+                       MAX(GREATEST(
+                           similarity(translate(ke.name_normalized, :acc_from, :acc_to), q.token),
+                           COALESCE(
+                               (SELECT MAX(similarity(translate(ea.alias_normalized, :acc_from, :acc_to), q.token))
+                                FROM entityalias ea
+                                WHERE ea.entity_id = ke.id AND ea.space_id = :space_id),
+                               0
+                           )
+                       )) AS sim
+                FROM knowledgeentity ke
+                CROSS JOIN q
+                WHERE ke.space_id = :space_id
+                  AND (
+                      translate(ke.name_normalized, :acc_from, :acc_to) % q.token
+                      OR EXISTS (
+                          SELECT 1 FROM entityalias ea
+                          WHERE ea.entity_id = ke.id
+                            AND ea.space_id = :space_id
+                            AND translate(ea.alias_normalized, :acc_from, :acc_to) % q.token
                       )
-                    ORDER BY sim DESC
-                    LIMIT :lim
-                    """
-                ),
-                {"space_id": space_id, "token": token, "lim": limit},
-            ).all()
-            for entity_id, sim in rows:
-                score = float(sim or 0.0)
-                prev = candidates.get(entity_id)
-                if prev is None or score > prev[0]:
-                    candidates[entity_id] = (score, "trigram")
+                  )
+                GROUP BY ke.id
+                ORDER BY sim DESC
+                LIMIT :lim
+                """
+            ),
+            {
+                "space_id": space_id,
+                "tokens_csv": ",".join(tokens),
+                "acc_from": _KAG_ACCENT_FROM,
+                "acc_to": _KAG_ACCENT_TO,
+                "lim": limit,
+            },
+        ).all()
+        for entity_id, sim in rows:
+            score = float(sim or 0.0)
+            prev = candidates.get(entity_id)
+            if prev is None or score > prev[0]:
+                candidates[entity_id] = (score, "trigram")
 
     if query_embedding:
         embedding_str = "[" + ",".join(str(float(x)) for x in query_embedding) + "]"

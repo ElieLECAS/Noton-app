@@ -1282,6 +1282,11 @@ def refine_with_source_authority(
     """
     Optimise l'autorité des sources par rapport à l'intention détectée.
     Si primary_source correspond à la source du passage, on applique un boost au score.
+
+    DÉPRÉCIÉ (2026-07-20) : plus appelé sur le chemin de génération. L'autorité de
+    source est portée par apply_soft_boosts_to_passages (retrieval_boost_service),
+    proportionnelle à l'étendue des scores. Appeler les deux = double-comptage.
+    Conservé pour compatibilité ; ne pas rebrancher sans retirer le boost amont.
     """
     if not passages or not reasoning_result:
         return passages
