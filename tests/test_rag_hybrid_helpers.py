@@ -124,24 +124,25 @@ async def test_space_search_window_aggregation_and_deduplication():
         chunk_id=1,
     )
 
+    # NB (2026-07-21) : l'ancien mock TOTAL de settings (MagicMock) cassait dès que le
+    # pipeline lisait un nouveau réglage numérique (comparaisons MagicMock → TypeError,
+    # seuils silencieusement faux → 0 passage). On patch désormais les VRAIS settings,
+    # attribut par attribut — le reste garde ses valeurs réelles.
+    from app.config import settings as real_settings
+
     with mock.patch("app.services.space_search_service.get_space_by_id") as mock_get_space, \
          mock.patch("app.services.space_search_service.generate_embedding", return_value=[0.1] * 1024), \
          mock.patch("app.services.page_retrieval_service.get_space_document_ids", return_value=[123]), \
          mock.patch("app.services.page_retrieval_service.retrieve_colpali_page_hits", return_value=[]), \
          mock.patch("app.services.page_retrieval_service.retrieve_pgvector_page_hits", return_value=[fused_hit]), \
          mock.patch("app.services.page_retrieval_service.retrieve_bm25_page_hits", return_value=[]), \
+         mock.patch("app.services.page_retrieval_service.retrieve_kag_pages", return_value=[]), \
          mock.patch("app.services.page_retrieval_service.format_hybrid_passages") as mock_format, \
-         mock.patch("app.services.space_search_service.settings") as mock_settings:
+         mock.patch.object(real_settings, "RERANKER_ENABLED", False), \
+         mock.patch.object(real_settings, "VISION_RERANK_ENABLED", False), \
+         mock.patch.object(real_settings, "USE_MULTIMODAL_RETRIEVAL", False), \
+         mock.patch.object(real_settings, "MIN_DYNAMIC_K", 0):
 
-        mock_settings.RERANKER_ENABLED = False
-        mock_settings.RETRIEVAL_EXPAND_POOL = 20
-        mock_settings.VISION_RERANK_ENABLED = False
-        mock_settings.USE_MULTIMODAL_RETRIEVAL = False
-        # Le pipeline lit désormais ces pools numériques (max(...) → TypeError sur MagicMock).
-        mock_settings.RERANK_POOL = 20
-        mock_settings.RAG_POOL_SIZE = 20
-        mock_settings.RAG_TOP_K = 15
-        mock_settings.MIN_DYNAMIC_K = 0
         mock_get_space.return_value = mock.MagicMock()
         mock_format.return_value = [
             {
