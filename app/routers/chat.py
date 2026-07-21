@@ -233,26 +233,39 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "seuil PMR ≠ seuil standard, version standard ≠ renforcée). En cas d'informations contradictoires entre "
     "documents, le document le plus spécifique au sujet de la question prime.\n"
     "\n"
-    "### MÉTHODE (avant de rédiger)\n"
-    "Procède dans l'ordre : (1) reformule ce qui est RÉELLEMENT demandé ; (2) repère les documents "
-    "dont l'en-tête (gamme, produit, version) correspond à la question ; (3) rédige UNIQUEMENT à partir "
-    "de ces documents ; (4) relis chaque référence, cote ou norme que tu écris et vérifie qu'elle figure "
-    "littéralement dans le contexte. Si les documents pertinents ne répondent pas à CETTE question précise, "
-    "dis-le plutôt que de répondre à partir d'un document voisin ou de tes connaissances générales.\n"
+    "### SUJET DEMANDÉ (première décision, avant tout)\n"
+    "Identifie le sujet EXACT de la question. Dans une question relationnelle "
+    "(« X compatible avec Y », « quel X pour Y », « X adapté à Y »), le sujet est X ; "
+    "Y n'est qu'un filtre. Ta réponse porte sur X : liste/décris les X trouvés. "
+    "Ne produis JAMAIS de présentation non demandée de Y (pas de fiche sur le 6111 quand "
+    "on te demande les seuils compatibles avec le 6111).\n"
     "\n"
-    "### POLITIQUE DE RÉPONSE (dans cet ordre)\n"
-    "1. Question claire et couverte par les documents → réponds directement, "
-    "exactement au périmètre demandé (pas d'étapes adjacentes ni de détails non sollicités). "
-    "PAR DÉFAUT, quelques phrases ou un court paragraphe suffisent. N'ajoute PAS de sections, "
-    "de plan à plusieurs cas (standard/PMR/variante...) ou de méthode pas-à-pas si l'utilisateur "
-    "n'a demandé qu'un fait précis — s'il y a plusieurs configurations possibles et qu'aucune "
-    "n'est précisée, applique la règle 2 (clarification) plutôt que de toutes les développer.\n"
-    "2. La réponse DÉPEND d'un produit, d'une gamme, d'une version ou d'une configuration que "
-    "l'utilisateur n'a PAS précisée, et les documents en couvrent PLUSIEURS → ne choisis JAMAIS à sa place. "
-    "Si la réponse tient en 2-3 lignes par cas, présente brièvement chaque cas en nommant sa gamme/version ; "
-    "sinon pose UNE question de clarification courte en listant les options présentes dans les documents.\n"
-    "3. Information absente ou incertaine dans les documents → dis-le clairement "
-    "(« La notice ne précise pas [ce détail] ») et propose une étape de vérification. N'invente rien.\n"
+    "### FORMAT ADAPTATIF (choisi par toi, à la fin, jamais à l'avance)\n"
+    "Le format le plus COURT qui répond complètement est le bon :\n"
+    "- lookup d'une référence nue (« 6111 », « profil 76180 ») → fiche structurée sourcée "
+    "(type, dimensions, compatibilités, usage) ;\n"
+    "- question relationnelle → liste des éléments trouvés avec leurs références et sources ;\n"
+    "- question procédurale (« comment poser... ») → étapes ordonnées ;\n"
+    "- question ponctuelle (une cote, une norme, un fait) → 1 à 3 phrases, PAS de fiche ;\n"
+    "- comparaison explicite → tableau court.\n"
+    "Si la réponse dépend d'une gamme/version que l'utilisateur n'a pas précisée et que les "
+    "documents en couvrent PLUSIEURS : ne choisis pas à sa place — cas courts (2-3 lignes chacun) "
+    "→ présente-les brièvement ; sinon pose UNE question de clarification listant les options.\n"
+    "\n"
+    "### GROUNDING DUR (le bloc COUVERTURE fait foi)\n"
+    "Un bloc « COUVERTURE DE LA RECHERCHE » figure dans le contexte : c'est un rapport factuel "
+    "mesuré, il PRIME sur ton impression de savoir.\n"
+    "- Statut « vide » → réponds que les documents de l'espace ne couvrent pas cette question, "
+    "et arrête-toi là.\n"
+    "- Référence marquée ABSENTE → dis qu'elle n'est pas documentée dans cet espace. "
+    "INTERDICTION d'utiliser les valeurs d'une référence voisine (6110 ≠ 6111).\n"
+    "- Information absente ou incertaine → dis-le (« La notice ne précise pas [ce détail] ») "
+    "et propose une vérification. Jamais de connaissance générale pour combler un trou factuel.\n"
+    "\n"
+    "### ANTI-DIGRESSION\n"
+    "Aucune information non nécessaire à LA question posée : pas de section « À noter » hors "
+    "sujet, pas de caractéristiques non demandées, pas de fiche complète quand on demande UN "
+    "attribut, pas de rappel de références citées en passant.\n"
     "\n"
     "### GROUNDING STRICT (sécurité)\n"
     "- Fonde-toi EXCLUSIVEMENT sur les faits explicites des documents fournis et leurs liaisons directes. "
@@ -848,115 +861,12 @@ async def stream_space_chat_message(
                 gtr, request.conversation_id, forced_model, forced_provider
             )
 
-    # ——— Fast-path FICHE TECHNIQUE (lookup par référence nue) ———
-    # Court-circuite le RAG conversationnel quand la demande est une référence nue
-    # ("Profil 76180", "notice de montage seuil 76180") : on produit une fiche
-    # STRUCTURÉE et sourcée plutôt qu'un texte brodé. Détection regex (zéro LLM).
-    # Gardé par FICHE_TECHNIQUE_ENABLED ; abstention (None) → pipeline RAG normal.
-    if settings.FICHE_TECHNIQUE_ENABLED:
-        from app.services.fiche_technique_service import (
-            prepare_fiche_technique,
-            detect_reference_query,
-        )
-
-        ref_query = detect_reference_query(request.message)
-        if ref_query:
-            logger.info("[chat] Fast-path fiche technique — refs=%s", ref_query.references)
-            fiche_prepared = await prepare_fiche_technique(
-                session=session,
-                space_id=space_id,
-                user_id=current_user.id,
-                ref_query=ref_query,
-            )
-            if fiche_prepared is not None:
-                fiche_sources = fiche_prepared.sources
-
-                # Continuité conversationnelle : la fiche court-circuite la compréhension
-                # de requête, donc AUCUN état de conversation ne serait écrit pour ce tour
-                # et le suivi elliptique ("tu as ses dimensions ?") perdrait son référent.
-                # On écrit donc le fil ici : sujet courant = la référence consultée,
-                # entités en focus = les références de la fiche (fusion avec l'existant).
-                if request.conversation_id:
-                    from app.services.conversation_state_service import build_conversation_state
-
-                    conv_prev = session.get(Conversation, request.conversation_id)
-                    prev_qc = dict(conv_prev.query_context or {}) if conv_prev else {}
-                    fiche_topic = (fiche_prepared.topic or ref_query.primary or ref_query.raw_message).strip()
-                    fiche_state = build_conversation_state(
-                        prev_qc,
-                        topic_shift=False,
-                        llm_topic=fiche_topic,
-                        fallback_topic=fiche_topic,
-                        new_entities=ref_query.references or [fiche_topic],
-                    )
-                    _save_conversation_query_context(
-                        request.conversation_id,
-                        {**prev_qc, **fiche_state, "phase": "ready"},
-                    )
-                    logger.info("[chat] fil conversation (fiche) — topic=%r", fiche_topic)
-
-                # Ancre le sujet documentaire de la fiche (ex. dormant 6101) : sans ça, le
-                # tour de SUIVI ("tu as ses dimensions ?") repart sans ancre (la fiche
-                # court-circuite le RAG) et dérive vers un autre produit.
-                if settings.CONVERSATION_ANCHOR_ENABLED and request.conversation_id and fiche_sources:
-                    from app.services.retrieval_boost_service import compute_anchor_documents
-
-                    fiche_anchor = compute_anchor_documents(
-                        fiche_sources, max_docs=settings.CONVERSATION_ANCHOR_MAX_DOCS
-                    )
-                    if fiche_anchor:
-                        _update_conversation_documents(request.conversation_id, fiche_anchor)
-                        logger.info("[chat] ancre fiche technique — docs=%s", fiche_anchor)
-
-                async def generate_fiche():
-                    error_msg_to_yield = None
-                    try:
-                        # Génération STREAMÉE avec reasoning (relais thinking + réponse) au lieu
-                        # d'un chat() sync + faux-stream. Le contexte fiche n'émet pas de <sources>
-                        # (emit_sources_tag=False) → source_filter=None.
-                        fiche_context = [
-                            {"role": "system", "content": fiche_prepared.system_content},
-                            {"role": "user", "content": fiche_prepared.user_message},
-                        ]
-                        fiche_sink: List[str] = []
-                        async for sse_event in _stream_llm_to_sse(
-                            fiche_context,
-                            model=forced_model,
-                            max_tokens=settings.FICHE_MAX_TOKENS,
-                            source_filter=None,
-                            sink=fiche_sink,
-                        ):
-                            yield sse_event
-                        fiche_markdown = "".join(fiche_sink).strip()
-
-                        assistant_message_id = None
-                        if request.conversation_id and fiche_markdown:
-                            try:
-                                assistant_message_id = _persist_assistant_reply(
-                                    request.conversation_id,
-                                    fiche_markdown,
-                                    forced_model,
-                                    forced_provider,
-                                    json.dumps(fiche_sources, ensure_ascii=False) if fiche_sources else None,
-                                    metadata_json={
-                                        "response_type": "fiche_technique",
-                                        "references": ref_query.references,
-                                    },
-                                )
-                            except Exception:
-                                logger.exception("Erreur sauvegarde fiche technique (space chat)")
-
-                        if fiche_sources:
-                            yield f"data: {json.dumps({'sources': fiche_sources})}\n\n"
-                        yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
-                    except Exception as e:
-                        logger.exception("Erreur dans le générateur fiche technique (space chat)")
-                        error_msg_to_yield = str(e)
-
-                    if error_msg_to_yield:
-                        yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
-
-                return StreamingResponse(generate_fiche(), media_type="text/event-stream")
+    # ——— Fiche technique : ROUTE SUPPRIMÉE (refonte routage 2026-07-21, C2) ———
+    # L'ancien fast-path regex court-circuitait la compréhension et figeait le format
+    # AVANT d'avoir lu la question (« SEUILS compatibles avec 6111 » → fiche 6111).
+    # Ses deux valeurs sont relogées dans la voie unique :
+    #   - résolution par code → chunk pinning (C6) + BM25 sur la question autonome ;
+    #   - format fiche → règle FORMAT ADAPTATIF du prompt (décidée par le reasoning).
 
     retrieval_queries = None
     retrieval_query_groups = None
@@ -978,29 +888,36 @@ async def stream_space_chat_message(
             if conv_for_ctx:
                 persisted_context = conv_for_ctx.query_context
 
-        with trace_run(
-            "lightweight_query_understanding",
-            run_type="chain",
-            inputs={"query": request.message, "space_id": space_id},
-            tags=["query_understanding", "lightweight", "space"],
-        ) as qu_run:
-            lw_result = await run_lightweight_understanding(
-                user_message=request.message,
-                history=conversation_context,
-                session=session,
-                persisted_context=persisted_context,
-            )
-            qu_run.end(outputs={
-                "route": lw_result.route,
-                "ready_for_retrieval": lw_result.ready_for_retrieval,
-                "topic_shift": lw_result.topic_shift,
-                "signals": lw_result.signals.model_dump() if lw_result.signals else None,
-            })
+        # Fallback robuste (C1) : compréhension en échec → route=search avec le message
+        # brut. Chercher ne coûte presque rien et ne peut pas inventer — c'est le défaut
+        # le plus sûr ; jamais de mur pour l'utilisateur.
+        try:
+            with trace_run(
+                "lightweight_query_understanding",
+                run_type="chain",
+                inputs={"query": request.message, "space_id": space_id},
+                tags=["query_understanding", "lightweight", "space"],
+            ) as qu_run:
+                lw_result = await run_lightweight_understanding(
+                    user_message=request.message,
+                    history=conversation_context,
+                    session=session,
+                    persisted_context=persisted_context,
+                )
+                qu_run.end(outputs={
+                    "route": lw_result.route,
+                    "ready_for_retrieval": lw_result.ready_for_retrieval,
+                    "topic_shift": lw_result.topic_shift,
+                    "signals": lw_result.signals.model_dump() if lw_result.signals else None,
+                })
+        except Exception as qu_err:
+            logger.error("[chat] compréhension en échec → fallback route=search : %s", qu_err)
+            lw_result = None
 
         # Changement de sujet détecté : le retrieval/génération de ce tour repart des
         # signaux FRAÎCHEMENT extraits (déjà le cas), sans réintégration de l'ancien sujet
         # (assurée en amont par le condense topic_shift-aware et _node_merge_context).
-        if lw_result.topic_shift:
+        if lw_result and lw_result.topic_shift:
             logger.info("[chat] topic_shift détecté — le contexte du tour précédent n'est pas réutilisé")
 
         # Ancre documentaire : hors changement de sujet, on réutilise les documents du sujet
@@ -1008,6 +925,7 @@ async def stream_space_chat_message(
         # reste sur le même produit d'un tour à l'autre.
         if (
             settings.CONVERSATION_ANCHOR_ENABLED
+            and lw_result
             and not lw_result.topic_shift
             and persisted_context
         ):
@@ -1019,31 +937,16 @@ async def stream_space_chat_message(
             if anchor_document_ids:
                 logger.info("[chat] ancre documentaire active — docs=%s", anchor_document_ids)
 
-        if request.conversation_id and lw_result.query_context:
+        if request.conversation_id and lw_result and lw_result.query_context:
             _save_conversation_query_context(request.conversation_id, lw_result.query_context)
 
-        routing_decision_decision = lw_result.route
+        routing_decision_decision = lw_result.route if lw_result else "rag"
     else:
-        logger.info("[chat] Étape 1/4 — routage requête (Mistral)")
-        from app.services.query_reasoning_service import decide_retrieval_route
-
-        with trace_run(
-            "query_routing",
-            run_type="chain",
-            inputs={"query": request.message, "space_id": space_id},
-            tags=["routing", "space"],
-        ) as routing_run:
-            routing_decision = await decide_retrieval_route(request.message)
-            routing_run.end(outputs={
-                "decision": routing_decision.decision,
-                "reasoning": routing_decision.reasoning,
-            })
-            logger.info(
-                "Query routing decision: %s (reason: %s)",
-                routing_decision.decision,
-                routing_decision.reasoning,
-            )
-        routing_decision_decision = routing_decision.decision
+        # C1 (refonte routage 2026-07-21) : plus de routeur LLM parallèle quand la
+        # compréhension est désactivée — route=search directe avec le message brut.
+        # (L'ancien decide_retrieval_route autonome doublait l'appel et les chemins.)
+        logger.info("[chat] Compréhension désactivée — route=search par défaut")
+        routing_decision_decision = "rag"
 
     # ——— NOUVEAU DÉPART guidé (décision portée par la compréhension fusionnée, P0.4) ———
     # Réutilise la décision guidée du fused (0 appel LLM supplémentaire) ; retombe sur
@@ -1149,25 +1052,17 @@ async def stream_space_chat_message(
                         },
                         tags=["llm", "stream", "space", "direct"]
                     ) as stream_run:
-                        async for raw_chunk in chat_stream_wrapper(
-                            message="",
+                        # C5 (refonte 2026-07-21) : même moteur de stream que la voie RAG
+                        # (_stream_llm_to_sse) — relais thinking, parsing et erreurs uniformes.
+                        async for sse_event in _stream_llm_to_sse(
+                            full_context_draft,
                             model=forced_model,
-                            context=full_context_draft,
+                            max_tokens=None,
+                            source_filter=None,
+                            sink=assistant_response,
                         ):
-                            try:
-                                parsed = json.loads(raw_chunk)
-                            except json.JSONDecodeError:
-                                continue
-                            thinking = parsed.get("thinking")
-                            if thinking:
-                                yield f"data: {json.dumps({'thinking': thinking})}\n\n"
-                                continue
-                            content = (parsed.get("message") or {}).get("content") or ""
-                            if not content:
-                                continue
-                            assistant_response.append(content)
-                            yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
-                        
+                            yield sse_event
+
                         final_response = "".join(assistant_response)
                         stream_run.end(outputs={"response": final_response})
 
@@ -1411,6 +1306,48 @@ async def stream_space_chat_message(
             anchor_document_ids=anchor_document_ids or None,
             intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
         )
+
+    # ——— Chunk pinning (C6) + bloc COUVERTURE (C3) ———
+    # Placés en FIN de message système (zone de forte attention, comme le fil de
+    # conversation) : extraits de référence VERBATIM pour les codes demandés, puis
+    # rapport factuel de couverture (le grounding cesse d'être déclaratif).
+    from app.services.coverage_service import (
+        build_coverage_block,
+        extract_message_reference_codes,
+    )
+
+    requested_codes = extract_message_reference_codes(
+        retrieval_query_text,
+        request.message,
+        *(
+            (lw_result.signals.detected_references or [])
+            if lw_result and lw_result.signals
+            else []
+        ),
+    )
+
+    pinned_codes: List[str] = []
+    if requested_codes and settings.KAG_ENABLED:
+        try:
+            from app.services.kag_graph_service import build_pinned_reference_block
+
+            pinned_block, pinned_codes = build_pinned_reference_block(
+                session, space_id, requested_codes
+            )
+            if pinned_block:
+                space_context_draft["content"] += "\n\n" + pinned_block
+                logger.info("[chat] chunk pinning — codes épinglés=%s", pinned_codes)
+        except Exception as pin_err:
+            logger.warning("[chat] chunk pinning ignoré : %s", pin_err)
+
+    coverage_block = build_coverage_block(
+        context_text=space_context_draft.get("content") or "",
+        requested_codes=requested_codes,
+        doc_passages=doc_passages,
+        pinned_codes=pinned_codes,
+        retrieval_status=retrieval_status,
+    )
+    space_context_draft["content"] += "\n\n" + coverage_block
 
     # Fil de la conversation : sujet courant, entités en focus et demande reformulée,
     # injectés à la FIN du message système (donc juste avant l'historique et le message

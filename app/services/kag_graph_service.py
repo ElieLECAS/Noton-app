@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from sqlalchemy import text
 from sqlmodel import Session, select
@@ -338,7 +338,9 @@ def build_kag_reference_index(
     groups: Dict[str, Dict[str, Any]] = {}
     eid_to_code: Dict[int, str] = {}
     for e in entities:
-        code = _extract_ref_code(e.name)
+        # Préfère le code d'identité canonique (R1) ; regex en secours pour les entités
+        # pas encore retraitées (ref_code NULL).
+        code = getattr(e, "ref_code", None) or _extract_ref_code(e.name)
         if not code:
             continue
         g = groups.setdefault(code, {"code": code, "variants": [], "entity_ids": [], "types": set(), "mention_total": 0})
@@ -491,6 +493,115 @@ def get_kag_entity_chunks(
         "chunk_count": len(chunks),
         "chunks": chunks,
     }
+
+
+def select_authority_chunks(
+    session: Session,
+    space_id: int,
+    ref_code: str,
+    *,
+    limit: int = 2,
+    char_cap: int = 1200,
+) -> List[Dict[str, Any]]:
+    """Chunk pinning (plan routage/génération C6) : les chunks FAISANT AUTORITÉ pour un code.
+
+    Le graphe pointe, le chunk affirme : on sélectionne les chunks sources à citer
+    VERBATIM en tête de contexte. Priorité :
+      1. relation_role='subject' (le chunk PARLE de la référence, attribution R3) ;
+      2. bonus si le texte contient le code ET une unité (mm/cm/kg…) — densité « spec » ;
+      3. relevance_score, puis chunk le plus court (la ligne de spec dense).
+    Dégrade proprement : pas d'entité pour ce code → liste vide (aucun bloc)."""
+    if not settings.KAG_ENABLED or not ref_code:
+        return []
+
+    code = ref_code.strip().upper()
+    rows = session.execute(
+        text(
+            r"""
+            SELECT dc.id, d.title,
+                   COALESCE((dc.metadata_json->>'page_no')::int,
+                            (dc.metadata_json->>'page_start')::int) AS page_no,
+                   cer.relation_role, cer.relevance_score, dc.content
+            FROM knowledgeentity ke
+            JOIN chunkentityrelation cer ON cer.entity_id = ke.id
+            JOIN documentchunk dc ON dc.id = cer.chunk_id
+            JOIN document d ON d.id = dc.document_id
+            WHERE ke.space_id = :sid
+              AND UPPER(COALESCE(ke.ref_code, '')) = :code
+              AND dc.content IS NOT NULL
+            LIMIT 200
+            """
+        ),
+        {"sid": space_id, "code": code},
+    ).all()
+    if not rows:
+        return []
+
+    unit_re = re.compile(r"\b\d+([.,]\d+)?\s*(mm|cm|m|kg|g|°|dan|n)\b", re.IGNORECASE)
+    code_re = re.compile(
+        r"(?<![A-Za-z0-9])" + re.escape(code) + r"(?![A-Za-z0-9])", re.IGNORECASE
+    )
+
+    scored = []
+    for cid, title, page_no, role, rel_score, content in rows:
+        content = content or ""
+        has_code = bool(code_re.search(content))
+        has_unit = bool(unit_re.search(content))
+        rank = (
+            0 if role == "subject" else 1,          # subject d'abord
+            0 if (has_code and has_unit) else 1,     # densité spec
+            -float(rel_score or 0.0),
+            len(content),                            # le plus court = la ligne de spec
+        )
+        scored.append((rank, cid, title, page_no, role, content))
+
+    scored.sort(key=lambda x: x[0])
+    picked: List[Dict[str, Any]] = []
+    seen_content: set = set()
+    for _rank, cid, title, page_no, role, content in scored:
+        digest = content[:200]
+        if digest in seen_content:
+            continue
+        seen_content.add(digest)
+        picked.append(
+            {
+                "chunk_id": int(cid),
+                "document_title": title or "Document",
+                "page_no": page_no,
+                "relation_role": role,
+                "content": content[:char_cap],
+            }
+        )
+        if len(picked) >= limit:
+            break
+    return picked
+
+
+def build_pinned_reference_block(
+    session: Session,
+    space_id: int,
+    codes: List[str],
+    *,
+    max_codes: int = 2,
+) -> Tuple[str, List[str]]:
+    """Bloc `### EXTRAITS DE RÉFÉRENCE` (verbatim, sourcé) pour les codes demandés.
+
+    Retourne (bloc_texte, codes_effectivement_épinglés). Bloc vide si rien à épingler."""
+    parts: List[str] = []
+    pinned: List[str] = []
+    for code in codes[:max_codes]:
+        chunks = select_authority_chunks(session, space_id, code)
+        if not chunks:
+            continue
+        pinned.append(code.upper())
+        for ch in chunks:
+            page = f", p.{ch['page_no']}" if ch.get("page_no") else ""
+            parts.append(
+                f"### EXTRAIT DE RÉFÉRENCE — {code.upper()} "
+                f"(source exacte : {ch['document_title']}{page})\n"
+                f"« {ch['content'].strip()} »"
+            )
+    return ("\n\n".join(parts), pinned)
 
 
 def build_space_kag_graph(

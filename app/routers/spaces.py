@@ -2,7 +2,9 @@ from typing import List, Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
+from sqlalchemy import text
 from sqlmodel import Session
+from app.config import settings
 from app.database import get_session
 from app.models.space import SpaceCreate, SpaceRead, SpaceUpdate
 from app.models.document import DocumentListItem
@@ -342,6 +344,71 @@ async def get_space_kag_entity_chunks(
     if not space:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Espace non trouvé")
     return get_kag_entity_chunks(session, space_id, entity_id)
+
+
+@router.post("/{space_id}/kag/reindex")
+async def reindex_space_kag(
+    space_id: int,
+    current_user: UserRead = Depends(require_permission("space.update")),
+    session: Session = Depends(get_session),
+):
+    """R6 — Retraite le KAG (mode kag_only) de TOUS les documents de l'espace.
+
+    Répare l'identité par code + le linking lexical sur les chunks EXISTANTS, sans
+    re-extraire le texte ni ColPali. C'est le geste de convergence : un clic → tout
+    l'espace repasse dans le pipeline propre. Les documents les moins couverts (0 lien
+    KAG) sont enfilés en premier."""
+    from app.services.document_service_new import mark_document_reindex_queued
+    from app.services.task_dispatch import dispatch_reindex_library
+    from app.services.document_indexing_service import IndexingMode
+
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Espace non trouvé")
+    if not settings.KAG_ENABLED:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="KAG désactivé.")
+    if not settings.MISTRAL_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="MISTRAL_API_KEY requise pour le retraitement KAG.",
+        )
+
+    # Documents de l'espace, les moins couverts d'abord (0 lien KAG en tête).
+    rows = session.execute(
+        text(
+            """
+            SELECT d.id,
+                   (
+                       SELECT COUNT(*) FROM chunkentityrelation cer
+                       JOIN documentchunk dc ON dc.id = cer.chunk_id
+                       WHERE dc.document_id = d.id
+                   ) AS kag_links
+            FROM document d
+            JOIN document_space ds ON ds.document_id = d.id
+            WHERE ds.space_id = :sid
+            ORDER BY kag_links ASC NULLS FIRST, d.id ASC
+            """
+        ),
+        {"sid": space_id},
+    ).all()
+
+    queued = []
+    for doc_id, _links in rows:
+        try:
+            mark_document_reindex_queued(session, int(doc_id), current_user.id)
+            task_id = dispatch_reindex_library(
+                int(doc_id), current_user.id, mode=IndexingMode.KAG_ONLY.value
+            )
+            queued.append({"document_id": int(doc_id), "task_id": task_id})
+        except Exception as exc:
+            logger.warning("[KAG reindex espace] doc=%s échec enqueue : %s", doc_id, exc)
+
+    return {
+        "status": "queued",
+        "space_id": space_id,
+        "count": len(queued),
+        "documents": queued,
+    }
 
 
 @router.get("/{space_id}/tree")

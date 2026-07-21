@@ -18,6 +18,10 @@ class KnowledgeEntity(SQLModel, table=True):
     name: str = Field(max_length=500)
     name_normalized: str = Field(max_length=500, index=True)
     entity_type: str = Field(max_length=100, index=True)
+    # Code d'identité canonique (référence produit « 6111 », RAL « RAL:7016 », norme…).
+    # Pivot de la résolution d'identité : un produit = un nœud, indépendamment du type
+    # ou de la forme descriptive (« Profil 6111 » et « 6111 » partagent ref_code="6111").
+    ref_code: Optional[str] = Field(default=None, max_length=64, index=True)
     description: Optional[str] = Field(default=None)
     mention_count: int = Field(default=1)
     embedding: Optional[List[float]] = Field(
@@ -35,6 +39,13 @@ class KnowledgeEntity(SQLModel, table=True):
             "name_normalized",
             "entity_type",
             unique=True,
+        ),
+        # Lookup d'identité par code (non-unique : l'unicité est garantie par le pipeline
+        # d'upsert, pas par la base, pour survivre à l'état transitoire pré-retraitement).
+        Index(
+            "ix_knowledgeentity_space_ref_code",
+            "space_id",
+            "ref_code",
         ),
     )
 

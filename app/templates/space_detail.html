@@ -507,6 +507,10 @@
       </div>
       <div class="flex items-center gap-2">
         <input id="kag-ref-search" type="text" placeholder="Filtrer (ex. 6111, TGY3702)…" class="px-3 py-1.5 rounded-lg text-xs bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-1 focus:ring-amber-400 w-44" oninput="filterKagReferences(this.value)" />
+        <button id="kag-reindex-btn" type="button" onclick="reindexSpaceKag()" title="Retraiter le graphe KAG de tout l'espace (identité par code + linking lexical, sans re-extraction ni ColPali)" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 transition-colors">
+          <i class="ti ti-refresh"></i>
+          <span id="kag-reindex-btn-label">Retraiter KAG</span>
+        </button>
         <button type="button" onclick="closeKagReferencesModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
           <i class="ti ti-x text-lg"></i>
         </button>
@@ -1765,6 +1769,37 @@ function closeKagReferencesModal() {
   modal.classList.add("hidden");
   modal.style.display = "";
   document.body.style.overflow = "";
+}
+
+// R6 — Retraiter le KAG de tout l'espace (identité par code + linking lexical).
+async function reindexSpaceKag() {
+  const btn = document.getElementById("kag-reindex-btn");
+  const label = document.getElementById("kag-reindex-btn-label");
+  const prev = label ? label.textContent : "Retraiter KAG";
+  if (!confirm(
+    "Retraiter le graphe KAG de tout l'espace ?\n\n"
+    + "Réextrait entités, relations et catégories sur les chunks EXISTANTS "
+    + "(identité par code + linking lexical), sans re-extraction texte ni ColPali. "
+    + "Les documents sont traités en arrière-plan, les moins couverts d'abord."
+  )) return;
+  if (btn) btn.disabled = true;
+  if (label) label.textContent = "Envoi…";
+  try {
+    const r = await api(`/api/spaces/${spaceId}/kag/reindex`, { method: "POST" });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || "Erreur");
+    if (label) label.textContent = `${data.count} en file`;
+    alert(`${data.count} document(s) mis en file pour retraitement KAG.\n\nLe graphe se met à jour au fil du traitement — rouvre les fiches dans quelques minutes pour voir la convergence.`);
+    kagRefData = null;  // force le rechargement des fiches à la prochaine ouverture
+  } catch (e) {
+    alert("Échec du retraitement KAG : " + (e.message || e));
+    if (label) label.textContent = prev;
+  } finally {
+    setTimeout(() => {
+      if (btn) btn.disabled = false;
+      if (label) label.textContent = "Retraiter KAG";
+    }, 5000);
+  }
 }
 function filterKagReferences(q) { if (kagRefData) renderKagReferences(kagRefData, q); }
 function renderKagReferences(data, filter = "") {

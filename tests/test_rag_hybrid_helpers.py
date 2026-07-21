@@ -137,6 +137,11 @@ async def test_space_search_window_aggregation_and_deduplication():
         mock_settings.RETRIEVAL_EXPAND_POOL = 20
         mock_settings.VISION_RERANK_ENABLED = False
         mock_settings.USE_MULTIMODAL_RETRIEVAL = False
+        # Le pipeline lit désormais ces pools numériques (max(...) → TypeError sur MagicMock).
+        mock_settings.RERANK_POOL = 20
+        mock_settings.RAG_POOL_SIZE = 20
+        mock_settings.RAG_TOP_K = 15
+        mock_settings.MIN_DYNAMIC_K = 0
         mock_get_space.return_value = mock.MagicMock()
         mock_format.return_value = [
             {
@@ -200,7 +205,9 @@ def test_is_vision_model():
 
     assert is_vision_model("mistral-large-latest") is True
     assert is_vision_model("pixtral-12b-2409") is True
-    assert is_vision_model("mistral-small-latest") is False
+    # Depuis Mistral Small 3.x, le modèle small est multimodal (vision) — il reçoit
+    # les PNG de pages comme les autres (bascule faite avec MODEL_FAST=mistral-small).
+    assert is_vision_model("mistral-small-latest") is True
 
 
 def test_collect_unique_page_keys_respects_max():
@@ -307,11 +314,13 @@ async def test_build_rag_generation_messages_no_images_for_small_model():
         "app.services.rag_generation_service.render_page_images_for_passages_async",
         new=render_mock,
     ):
+        # mistral-small est devenu VISION (2026-07-20) : le cas « modèle texte pur »
+        # se teste désormais avec un modèle réellement non multimodal.
         messages = await build_rag_generation_messages(
             session,
             passages,
             "Question?",
-            model="mistral-small-latest",
+            model="open-mistral-7b",
         )
 
     render_mock.assert_not_called()

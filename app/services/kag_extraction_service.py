@@ -17,7 +17,7 @@ import re
 import unicodedata
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Set, Tuple
 
 from pydantic import BaseModel, Field, ValidationError, field_validator
 from sqlalchemy import text
@@ -71,6 +71,28 @@ class KagExtractedEntity(BaseModel):
     aliases: List[str] = Field(default_factory=list)
     description: Optional[str] = None
     confidence: float = Field(default=0.85, ge=0.0, le=1.0)
+    # R1 — identité par code : le LLM voit la page et sait si « 7016 » est un RAL ou une réf.
+    code: Optional[str] = None
+    code_kind: Optional[str] = None  # ref_produit | couleur_ral | norme | aucun
+    # R3 — attribution par chunk : indices des chunks (chunk_index de la page) qui PARLENT
+    # de cette entité (elle en est le sujet), pas ceux qui la mentionnent en passant.
+    chunk_indexes: List[int] = Field(default_factory=list)
+
+    @field_validator("chunk_indexes", mode="before")
+    @classmethod
+    def _coerce_chunk_indexes(cls, value):
+        """Tolère null / int isolé / liste ; ignore les valeurs non entières."""
+        if value is None:
+            return []
+        if isinstance(value, int):
+            return [value]
+        coerced: List[int] = []
+        for item in value if isinstance(value, list) else []:
+            try:
+                coerced.append(int(item))
+            except (TypeError, ValueError):
+                continue
+        return coerced
 
 
 class KagExtractedRelation(BaseModel):
@@ -187,22 +209,29 @@ Règles impératives — entités & relations :
 3. Normalise les noms (casse cohérente, sans bruit markdown).
 4. Pour chaque entité, fournis un type parmi : product | material | tool | norm | dimension | process | organization | location | reference | symptom | other. Un symptôme ou problème SAV (ex. « infiltration d'eau », « ouvrant qui force », « condensation ») est une entité de type symptom.
 5. Les aliases sont les variantes, abréviations ou codes produit (ex. "ref ABC-123").
-6. Les relations décrivent un lien sémantique explicite entre deux entités d'une même page.
-7. Types de relation suggérés :
-   - produit : compatible_avec | est_compose_de | remplace | utilise | conforme_a | installe_sur | fabrique_par | mesure | reference | co_occurs
-   - SAV / procédure : symptome_cause (un symptôme a pour cause X) | cause_resolution (une cause se résout par Y) | etape_precede (une étape précède la suivante) | necessite_outil | requiert_piece
-   Privilégie les relations SAV/procédure quand le contenu décrit un dépannage ou une séquence de pose.
-8. Ne pas inventer d'entités ou de relations absentes du texte ou de l'image.
-9. Maximum {max_entities} entités et {max_relations} relations par page.
+6. CODE D'IDENTITÉ (crucial) : si l'entité porte une référence codée (profil « 6111 », « SL1600 »…), une couleur RAL (« 7016 ») ou un code de norme, renseigne "code" (le code nu, ex. "6111") ET "code_kind" :
+   - "ref_produit" : référence de profil, quincaillerie, pièce (« 6111 », « SL1600 »).
+   - "couleur_ral" : teinte RAL. ATTENTION « 7016 », « 9016 », « 9005 » sont des RAL (couleurs), PAS des profils. Regarde le contexte (nuancier, finition, teinte → RAL).
+   - "norme" : code de norme/DTU/PV (« 6/16-2335 »).
+   - "aucun" : l'entité n'a pas de code d'identité. Mets "code": null.
+   Le MÊME produit sous plusieurs formes (« Profil 6111 », « Dormant 6111 », « 6111 ») doit porter le MÊME "code":"6111".
+7. ATTRIBUTION PAR CHUNK : "chunk_indexes" = la liste des chunk_index (de la page) dont le contenu PARLE de cette entité (la décrit, donne ses cotes, ses caractéristiques). PAS les chunks qui la citent juste en passant. Laisse [] si aucun chunk n'en est le sujet.
+8. Les relations décrivent un lien sémantique EXPLICITE dans le texte/l'image entre deux entités d'une même page. Ne crée PAS de relation de simple co-occurrence : s'il n'y a pas de lien explicite, n'émets rien.
+9. Types de relation autorisés (n'invente rien hors liste) :
+   - produit : compatible_avec | est_compose_de | remplace | utilise | conforme_a | installe_sur | fabrique_par | mesure | reference
+   - SAV / procédure : symptome_cause | cause_resolution | etape_precede | necessite_outil | requiert_piece
+   Privilégie les relations SAV/procédure pour un dépannage ou une séquence de pose. Si la page est un TABLEAU DE COMPATIBILITÉ (matrice de codes), extrais un maximum de paires "compatible_avec".
+10. Ne pas inventer d'entités ou de relations absentes du texte ou de l'image.
+11. Maximum {max_entities} entités et {max_relations} relations par page.
 
 Règles impératives — catégorisation à facettes :
-10. Axe "task" et axe "symptom" → PAR CHUNK (champ chunk_categories). Pour chaque chunk_index, renvoie une liste d'objets {{slug, confidence, primary}} en choisissant UNIQUEMENT parmi les slugs des axes `task` et `symptom` fournis.
+12. Axe "task" et axe "symptom" → PAR CHUNK (champ chunk_categories). Pour chaque chunk_index, renvoie une liste d'objets {{slug, confidence, primary}} en choisissant UNIQUEMENT parmi les slugs des axes `task` et `symptom` fournis.
     - confidence ∈ [0,1] : à quel point le chunk traite EXPLICITEMENT ce thème (0.9 = sujet central, 0.6 = thème secondaire net, < 0.5 = ne pas inclure).
     - primary : true pour LE thème dominant du chunk. Exactement UN primary=true par chunk (ou zéro si le chunk n'a aucune catégorie).
     - N'inclus un slug que si confidence ≥ 0.5. Mieux vaut 1 catégorie juste que 3 douteuses. Un chunk peut avoir 0 catégorie.
-11. N'associe un slug qu'aux chunks dont le contenu traite EXPLICITEMENT du thème. Ne propage pas un slug task/symptom à tous les chunks.
-12. Axe "doc_type" et axe "lifecycle_phase" → AU NIVEAU PAGE (champs doc_types, lifecycle_phases). Ces facettes sont homogènes : décris la NATURE du document et la PHASE du cycle de vie (en général 1 valeur chacun). Choisis uniquement parmi les slugs fournis.
-13. N'invente JAMAIS de slug hors des listes pour task / doc_type / lifecycle_phase / symptom. Si un symptôme n'existe pas dans la liste `symptom`, ne le propose PAS : le vocabulaire des catégories est fermé.
+13. N'associe un slug qu'aux chunks dont le contenu traite EXPLICITEMENT du thème. Ne propage pas un slug task/symptom à tous les chunks.
+14. Axe "doc_type" et axe "lifecycle_phase" → AU NIVEAU PAGE (champs doc_types, lifecycle_phases). Ces facettes sont homogènes : décris la NATURE du document et la PHASE du cycle de vie (en général 1 valeur chacun). Choisis uniquement parmi les slugs fournis.
+15. N'invente JAMAIS de slug hors des listes pour task / doc_type / lifecycle_phase / symptom. Si un symptôme n'existe pas dans la liste `symptom`, ne le propose PAS : le vocabulaire des catégories est fermé.
 
 Taxonomie autorisée, groupée par axe (axe : [{{slug, description}}]) :
 {category_list}
@@ -213,7 +242,7 @@ Format de réponse OBLIGATOIRE :
     {{
       "page_no": <numéro>,
       "entities": [
-        {{ "name": "<nom canonique>", "type": "<type>", "aliases": ["<alias1>"], "description": "<contexte court>", "confidence": 0.9 }}
+        {{ "name": "<nom canonique>", "type": "<type>", "code": "<code ou null>", "code_kind": "ref_produit|couleur_ral|norme|aucun", "chunk_indexes": [0, 2], "aliases": ["<alias1>"], "description": "<contexte court>", "confidence": 0.9 }}
       ],
       "relations": [
         {{ "entity_a": "<A>", "relation": "<type_relation>", "entity_b": "<B>", "relation_label": "<optionnel>", "confidence": 0.85 }}
@@ -301,6 +330,87 @@ def _normalize_entity_type(raw: str) -> str:
     if value in _VALID_ENTITY_TYPES:
         return value
     return "other"
+
+
+# ---------------------------------------------------------------------------
+# R1 — Identité par code (référence produit, RAL, norme)
+# ---------------------------------------------------------------------------
+
+# Motifs de code produit : alphanum (SL1600, BC01), numérique pur (6111, 155),
+# alterné (6A20). Sert de FALLBACK quand le LLM n'a pas déclaré de code.
+REF_CODE_RE = re.compile(r"[A-Za-z]{1,4}\d{2,6}[A-Za-z]?|\d[A-Z]\d{2,4}|\d{3,6}[A-Za-z]?")
+
+# Codes RAL usuels (menuiserie) — aide la détection quand le LLM ne qualifie pas code_kind.
+_COMMON_RAL = frozenset({
+    "1013", "1015", "3004", "5011", "6005", "6009", "7016", "7015", "7021", "7022",
+    "7024", "7035", "7038", "7039", "7040", "8014", "8017", "8019", "8022", "9001",
+    "9005", "9006", "9007", "9010", "9016",
+})
+
+
+def _normalize_code_token(raw: str) -> Optional[str]:
+    """Nettoie un code brut → forme canonique MAJ, ou None si ce n'est pas un code."""
+    if not raw:
+        return None
+    token = re.sub(r"\s+", "", str(raw).strip()).upper()
+    # écarte les millésimes nus (1990–2035) et les nombres trop courts
+    if token.isdigit():
+        if len(token) < 3:
+            return None
+        if len(token) == 4 and 1990 <= int(token) <= 2035:
+            return None
+    if not re.search(r"\d", token):  # un code contient au moins un chiffre
+        return None
+    if len(token) > 32:
+        return None
+    return token
+
+
+def extract_ref_code(name: str) -> Optional[str]:
+    """Extrait le code de référence dominant (le plus long) d'un nom d'entité, en MAJ.
+
+    Fallback regex quand le LLM n'a pas déclaré de code explicite."""
+    best: Optional[str] = None
+    for m in REF_CODE_RE.finditer(name or ""):
+        tok = m.group(0)
+        if tok.isdigit() and len(tok) == 4 and 1990 <= int(tok) <= 2035:
+            continue
+        if best is None or len(tok) > len(best):
+            best = tok
+    return best.upper() if best else None
+
+
+def _canonical_code_name(ref_code: str) -> str:
+    """Nom d'affichage canonique d'une entité à code (« RAL:7016 » → « RAL 7016 »)."""
+    if ref_code.startswith("RAL:"):
+        return f"RAL {ref_code[4:]}"
+    return ref_code
+
+
+def _resolve_ref_code(extracted: "KagExtractedEntity", raw_name: str, entity_type: str) -> Optional[str]:
+    """Détermine le code d'identité d'une entité : LLM déclaré d'abord, regex en secours.
+
+    Retourne « 6111 », « RAL:7016 », ou None (entité sans code d'identité)."""
+    declared = _normalize_code_token(extracted.code or "")
+    kind = (extracted.code_kind or "").strip().lower()
+
+    if declared:
+        if kind == "aucun":
+            return None
+        if kind == "couleur_ral":
+            return f"RAL:{declared}"
+        # ref_produit | norme | (non qualifié) → code nu
+        return declared
+
+    # Fallback regex : uniquement pour les types susceptibles de porter une référence.
+    if entity_type in ("product", "reference", "norm", "material"):
+        fallback = extract_ref_code(raw_name)
+        if fallback:
+            # RAL probable non déclaré → identité couleur disjointe des réfs produit.
+            if fallback in _COMMON_RAL and entity_type != "reference":
+                return f"RAL:{fallback}"
+            return fallback
+    return None
 
 
 def _normalize_relation_type(raw: str) -> str:
@@ -838,7 +948,11 @@ def _load_l1_chunks_by_page(session: Session, document_id: int) -> Dict[int, Lis
     by_page: Dict[int, List[DocumentChunk]] = {}
     for chunk in chunks:
         meta = chunk.metadata_json or {}
-        if meta.get("content_type") not in (None, "semantic_leaf"):
+        # Accepte les chunks-feuilles L1 : vision (« semantic_leaf ») ET texte enrichi
+        # page-level (« page_raw_enriched »). Les ~17 docs à 0 couverture KAG passaient par
+        # le pipeline page_raw_enriched et étaient ignorés ici — c'est LA cause racine.
+        # On exclut « contextual_enrichment » (L2 dérivé) pour ne pas dupliquer les pages.
+        if meta.get("content_type") not in (None, "semantic_leaf", "page_raw_enriched"):
             continue
         page_no = meta.get("page_no") or meta.get("page_start")
         if page_no is None:
@@ -849,22 +963,67 @@ def _load_l1_chunks_by_page(session: Session, document_id: int) -> Dict[int, Lis
     return by_page
 
 
+def _first_entity(
+    session: Session,
+    space_id: int,
+    *,
+    ref_code: Optional[str] = None,
+    name_normalized: Optional[str] = None,
+) -> Optional[KnowledgeEntity]:
+    """Lookup d'entité (par code OU par nom normalisé), le plus mentionné d'abord.
+
+    Le tri par mention_count rend la résolution déterministe malgré d'éventuels
+    doublons transitoires (état pré-retraitement)."""
+    conditions = [KnowledgeEntity.space_id == space_id]
+    if ref_code is not None:
+        conditions.append(KnowledgeEntity.ref_code == ref_code)
+    if name_normalized is not None:
+        conditions.append(KnowledgeEntity.name_normalized == name_normalized)
+    stmt = (
+        select(KnowledgeEntity)
+        .where(*conditions)
+        .order_by(KnowledgeEntity.mention_count.desc(), KnowledgeEntity.id.asc())  # type: ignore[attr-defined]
+    )
+    return session.exec(stmt).first()
+
+
 def _upsert_entity(
     session: Session,
     space_id: int,
     extracted: KagExtractedEntity,
 ) -> KnowledgeEntity:
-    canonical_name, auto_aliases = normalize_and_expand_entity(extracted.name.strip())
-    name = canonical_name or extracted.name.strip()
-    name_normalized = normalize_entity_name(name)
+    raw_name = (extracted.name or "").strip()
+    canonical_name, auto_aliases = normalize_and_expand_entity(raw_name)
+    name = canonical_name or raw_name
     entity_type = _normalize_entity_type(extracted.type)
 
-    stmt = select(KnowledgeEntity).where(
-        KnowledgeEntity.space_id == space_id,
-        KnowledgeEntity.name_normalized == name_normalized,
-        KnowledgeEntity.entity_type == entity_type,
-    )
-    entity = session.exec(stmt).first()
+    # R1 — identité par code : un produit = un nœud, indépendant du type et de la forme.
+    ref_code = _resolve_ref_code(extracted, raw_name, entity_type)
+
+    entity: Optional[KnowledgeEntity] = None
+    rename_safe = False  # renommer vers le code n'est sûr que si le nom-code est libre
+
+    if ref_code:
+        display = _canonical_code_name(ref_code)
+        display_norm = normalize_entity_name(display)
+        raw_norm = normalize_entity_name(raw_name)
+        # 1) nœud canonique déjà tamponné avec ce code
+        entity = _first_entity(session, space_id, ref_code=ref_code)
+        # 2) nœud déjà nommé par le code nu (à tamponner)
+        if entity is None and display_norm:
+            entity = _first_entity(session, space_id, name_normalized=display_norm)
+        # 3) forme descriptive existante (« Profil 6111 ») → adopter puis renommer.
+        #    Sûr car (2) a confirmé qu'aucun nœud « 6111 » n'existe encore.
+        if entity is None and raw_norm and raw_norm != display_norm:
+            entity = _first_entity(session, space_id, name_normalized=raw_norm)
+            rename_safe = entity is not None
+        # la forme descriptive rejoint les alias
+        if raw_name and raw_norm != display_norm:
+            auto_aliases = list(dict.fromkeys([raw_name, *auto_aliases]))
+        name, name_normalized = display, display_norm
+    else:
+        name_normalized = normalize_entity_name(name)
+        entity = _first_entity(session, space_id, name_normalized=name_normalized)
 
     if entity is None:
         entity = KnowledgeEntity(
@@ -872,6 +1031,7 @@ def _upsert_entity(
             name=name[:500],
             name_normalized=name_normalized[:500],
             entity_type=entity_type,
+            ref_code=ref_code,
             description=(extracted.description or "")[:2000] or None,
             mention_count=1,
             confidence_score=extracted.confidence,
@@ -881,6 +1041,15 @@ def _upsert_entity(
     else:
         entity.mention_count += 1
         entity.updated_at = datetime.utcnow()
+        # adoption : tamponne le code si absent
+        if ref_code and not entity.ref_code:
+            entity.ref_code = ref_code
+        # promotion du nom vers le code canonique (ancien nom → alias), sans collision
+        if ref_code and rename_safe and entity.name_normalized != name_normalized:
+            if entity.name and normalize_entity_name(entity.name) != name_normalized:
+                auto_aliases = list(dict.fromkeys([entity.name, *auto_aliases]))
+            entity.name = name[:500]
+            entity.name_normalized = name_normalized[:500]
         if extracted.description and not entity.description:
             entity.description = extracted.description[:2000]
         if extracted.confidence and (
@@ -1000,6 +1169,147 @@ def _upsert_entity_relation(
         session.add(existing)
 
 
+def _compile_code_regex(codes: List[str]) -> Optional["re.Pattern"]:
+    """Regex d'alternation avec frontières alphanumériques (« 6111 » sans matcher « 61110 »)."""
+    parts = [re.escape(c) for c in codes if c]
+    if not parts:
+        return None
+    return re.compile(
+        r"(?<![A-Za-z0-9])(?:" + "|".join(parts) + r")(?![A-Za-z0-9])",
+        re.IGNORECASE,
+    )
+
+
+def _lexical_link_codes(session: Session, space_id: int) -> int:
+    """R2 — relie chaque entité à code à TOUS les chunks du space contenant ce code.
+
+    Word-boundary, dans les deux sens (le doc courant vers les codes connus, et les
+    codes du doc courant vers les anciens chunks). Idempotent. C'est le cœur de la
+    couverture KAG : répare les chunks orphelins que le LLM n'a pas explicitement reliés
+    (ex. le chunk propre « 6111 : longueur 155 mm »)."""
+    code_entities = session.execute(
+        text(
+            "SELECT id, ref_code FROM knowledgeentity "
+            "WHERE space_id = :sid AND ref_code IS NOT NULL"
+        ),
+        {"sid": space_id},
+    ).all()
+    if not code_entities:
+        return 0
+
+    plain_map: Dict[str, int] = {}  # CODE -> entity_id (réfs, normes)
+    ral_map: Dict[str, int] = {}    # chiffres RAL -> entity_id
+    for eid, code in code_entities:
+        if not code:
+            continue
+        code = code.strip()
+        if code.upper().startswith("RAL:"):
+            ral_map[code[4:].strip().upper()] = int(eid)
+            continue
+        upper = code.upper()
+        if upper.isdigit():
+            # évite les collisions : un code numérique pur doit faire ≥ 4 chiffres
+            # (« 155 » = cote, pas une réf → ne pas relier partout).
+            if len(upper) < 4:
+                continue
+            # un code numérique nu qui est un RAL courant (9016, 7016…) n'est fiable QUE
+            # dans un contexte « RAL 9016 » — sinon on relie la couleur partout (bruit).
+            # Rattrape aussi le backfill regex qui a typé ces RAL comme des réfs.
+            if upper in _COMMON_RAL:
+                ral_map[upper] = int(eid)
+                continue
+        plain_map[upper] = int(eid)
+
+    plain_re = _compile_code_regex(sorted(plain_map, key=len, reverse=True))
+    ral_re = None
+    if ral_map:
+        ral_digits = "|".join(re.escape(d) for d in sorted(ral_map, key=len, reverse=True))
+        ral_re = re.compile(r"RAL\s*[:\-]?\s*(" + ral_digits + r")", re.IGNORECASE)
+
+    if plain_re is None and ral_re is None:
+        return 0
+
+    chunks = session.execute(
+        text(
+            """
+            SELECT dc.id, dc.content
+            FROM documentchunk dc
+            JOIN document_space ds ON ds.document_id = dc.document_id
+            WHERE ds.space_id = :sid
+              AND dc.is_leaf = true
+              AND dc.content IS NOT NULL
+            """
+        ),
+        {"sid": space_id},
+    ).all()
+    if not chunks:
+        return 0
+
+    # Liens « mention » déjà présents → évite un SELECT par insertion.
+    existing: Set[Tuple[int, int]] = {
+        (int(c), int(e))
+        for c, e in session.execute(
+            text(
+                "SELECT chunk_id, entity_id FROM chunkentityrelation "
+                "WHERE space_id = :sid AND relation_role = 'mention'"
+            ),
+            {"sid": space_id},
+        ).all()
+    }
+
+    created = 0
+    for chunk_id, content in chunks:
+        if not content:
+            continue
+        eids: Set[int] = set()
+        if plain_re:
+            for m in plain_re.finditer(content):
+                eid = plain_map.get(m.group(0).upper())
+                if eid:
+                    eids.add(eid)
+        if ral_re:
+            for m in ral_re.finditer(content):
+                eid = ral_map.get(m.group(1).upper())
+                if eid:
+                    eids.add(eid)
+        for eid in eids:
+            key = (int(chunk_id), eid)
+            if key in existing:
+                continue
+            session.add(
+                ChunkEntityRelation(
+                    chunk_id=int(chunk_id),
+                    entity_id=eid,
+                    space_id=space_id,
+                    relation_role="mention",
+                    relevance_score=0.9,
+                )
+            )
+            existing.add(key)
+            created += 1
+    return created
+
+
+def _entity_target_chunks(
+    extracted: KagExtractedEntity,
+    page_chunks: List[DocumentChunk],
+) -> Tuple[List[DocumentChunk], str]:
+    """R3 — chunks cibles d'une entité.
+
+    « subject » sur les chunks que le LLM a désignés comme parlant de l'entité
+    (chunk_indexes = positions dans page_chunks) ; à défaut « mention » page-globale
+    en secours. La couverture large est de toute façon assurée par R2 (lexical)."""
+    if extracted.chunk_indexes:
+        picked = [
+            page_chunks[i]
+            for i in dict.fromkeys(extracted.chunk_indexes)
+            if 0 <= i < len(page_chunks)
+        ]
+        if picked:
+            return picked, "subject"
+    return page_chunks, "mention"
+
+
 def _persist_page_kag(
     session: Session,
     space_ids: List[int],
@@ -1011,6 +1321,9 @@ def _persist_page_kag(
     entities_count = 0
     relations_count = 0
     source_chunk_id = page_chunks[0].id if page_chunks else None
+    # Ancre de page : un seul chunk pour rendre les endpoints d'une relation locatables,
+    # sans « sprayer » toutes les entités sur tous les chunks de la page (bruit).
+    anchor_chunks = page_chunks[:1]
 
     for space_id in space_ids:
         entity_by_norm: Dict[str, KnowledgeEntity] = {}
@@ -1022,11 +1335,14 @@ def _persist_page_kag(
             entity_by_norm[normalize_entity_name(extracted.name)] = entity
             for alias in extracted.aliases:
                 entity_by_norm[normalize_entity_name(alias)] = entity
+
+            target_chunks, role = _entity_target_chunks(extracted, page_chunks)
             linked = _link_entity_to_chunks(
                 session,
                 space_id,
                 entity,
-                page_chunks,
+                target_chunks,
+                relation_role=role,
                 context_snippet=extracted.description,
                 relevance_score=extracted.confidence,
             )
@@ -1034,6 +1350,11 @@ def _persist_page_kag(
                 entities_count += 1
 
         for rel in kag_response.relations:
+            # R4 — le pipeline n'écrit plus co_occurs (bruit) : R2 capture mieux la
+            # co-présence, et le graphe ne garde que des liens sémantiques explicites.
+            if _normalize_relation_type(rel.relation) == "co_occurs":
+                continue
+
             norm_a = normalize_entity_name(rel.entity_a)
             norm_b = normalize_entity_name(rel.entity_b)
             entity_a = entity_by_norm.get(norm_a)
@@ -1054,11 +1375,12 @@ def _persist_page_kag(
                 )
                 entity_by_norm[norm_b] = entity_b
 
+            # Endpoints reliés à l'ANCRE de page uniquement (localisation fine via R3/R2).
             _link_entity_to_chunks(
                 session,
                 space_id,
                 entity_a,
-                page_chunks,
+                anchor_chunks,
                 relation_role="subject",
                 relevance_score=rel.confidence,
             )
@@ -1066,7 +1388,7 @@ def _persist_page_kag(
                 session,
                 space_id,
                 entity_b,
-                page_chunks,
+                anchor_chunks,
                 relation_role="object",
                 relevance_score=rel.confidence,
             )
@@ -1427,38 +1749,71 @@ def prune_kag_entities_after_chunk_removal(
     session: Session,
     affected: Sequence[Tuple[int, int]],
 ) -> None:
-    """Décrémente mention_count et supprime les entités KAG devenues orphelines."""
-    for entity_id, cnt in affected:
+    """Supprime les entités devenues ORPHELINES (plus aucun lien chunk) et rafraîchit
+    mention_count des survivantes.
+
+    On ne se fie PLUS au décompte mention_count - liens_supprimés (fragile : le linking
+    lexical R2 ajoute des liens sans toucher mention_count, ce qui sur-décrémentait et
+    supprimait à tort des entités encore présentes dans d'autres documents). La vraie
+    condition d'orphelin est « plus aucun chunkentityrelation »."""
+    if not affected:
+        return
+
+    entity_ids = [int(eid) for eid, _ in affected]
+
+    # 1) Orphelines du lot : plus aucun lien chunk restant → suppression (+ alias + relations).
+    orphan_ids = [
+        int(r[0])
+        for r in session.execute(
+            text(
+                """
+                SELECT ke.id
+                FROM knowledgeentity ke
+                WHERE ke.id = ANY(:eids)
+                  AND NOT EXISTS (
+                      SELECT 1 FROM chunkentityrelation cer WHERE cer.entity_id = ke.id
+                  )
+                """
+            ),
+            {"eids": entity_ids},
+        ).all()
+    ]
+    if orphan_ids:
+        session.execute(
+            text(
+                "DELETE FROM entityentityrelation "
+                "WHERE entity_a_id = ANY(:ids) OR entity_b_id = ANY(:ids)"
+            ),
+            {"ids": orphan_ids},
+        )
+        session.execute(
+            text("DELETE FROM entityalias WHERE entity_id = ANY(:ids)"),
+            {"ids": orphan_ids},
+        )
+        session.execute(
+            text("DELETE FROM knowledgeentity WHERE id = ANY(:ids)"),
+            {"ids": orphan_ids},
+        )
+
+    # 2) Survivantes : mention_count = nombre de chunks distincts encore liés (signal
+    #    d'affichage/ranking cohérent avec la couverture réelle).
+    orphan_set = set(orphan_ids)
+    survivor_ids = [e for e in entity_ids if e not in orphan_set]
+    if survivor_ids:
         session.execute(
             text(
                 """
-                UPDATE knowledgeentity
-                SET mention_count = GREATEST(0, mention_count - :cnt),
+                UPDATE knowledgeentity ke
+                SET mention_count = GREATEST(1, (
+                        SELECT COUNT(DISTINCT cer.chunk_id)
+                        FROM chunkentityrelation cer WHERE cer.entity_id = ke.id
+                    )),
                     updated_at = NOW()
-                WHERE id = :entity_id
+                WHERE ke.id = ANY(:ids)
                 """
             ),
-            {"entity_id": entity_id, "cnt": int(cnt)},
+            {"ids": survivor_ids},
         )
-
-    session.execute(
-        text(
-            """
-            DELETE FROM entityentityrelation
-            WHERE entity_a_id IN (SELECT id FROM knowledgeentity WHERE mention_count <= 0)
-               OR entity_b_id IN (SELECT id FROM knowledgeentity WHERE mention_count <= 0)
-            """
-        )
-    )
-    session.execute(
-        text(
-            """
-            DELETE FROM entityalias
-            WHERE entity_id IN (SELECT id FROM knowledgeentity WHERE mention_count <= 0)
-            """
-        )
-    )
-    session.execute(text("DELETE FROM knowledgeentity WHERE mention_count <= 0"))
 
 
 def cleanup_kag_for_document(session: Session, document_id: int) -> None:
@@ -1603,11 +1958,20 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
         # (les concepts émergents relèvent des entités KAG, pas des catégories).
         candidates_touched = 0
 
+        # R2 — linking lexical : relie les codes à TOUS les chunks du space qui les
+        # contiennent (répare les orphelins, dans les deux sens). Cœur de la couverture.
+        lexical_links = 0
+        for sid in space_ids:
+            try:
+                lexical_links += _lexical_link_codes(session, sid)
+            except Exception as exc:
+                logger.warning("[KAG] Linking lexical échoué space=%s : %s", sid, exc)
+
         session.commit()
 
         logger.info(
             "[KAG] Extraction terminée document_id=%s pages=%s/%s batches=%s "
-            "entities=%s relations=%s category_links=%s symptom_candidates=%s model=%s",
+            "entities=%s relations=%s category_links=%s lexical_links=%s symptom_candidates=%s model=%s",
             document_id,
             pages_ok,
             len(page_numbers),
@@ -1615,6 +1979,7 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
             total_entities,
             total_relations,
             total_categories,
+            lexical_links,
             candidates_touched,
             _kag_extraction_model(),
         )
@@ -1622,6 +1987,7 @@ def extract_kag_for_document(document_id: int, pdf_path: str) -> dict:
             "entities": total_entities,
             "relations": total_relations,
             "categories": total_categories,
+            "lexical_links": lexical_links,
             "symptom_candidates": candidates_touched,
             "pages": pages_ok,
             "status": "completed",

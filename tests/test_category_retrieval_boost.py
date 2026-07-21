@@ -14,10 +14,7 @@ from app.services.page_retrieval_service import (
 )
 from app.services.query_signals_schemas import LightweightQuerySignals
 from app.services.retrieval_boost_service import (
-    _bulk_get_chunk_categories,
     _bulk_get_page_categories,
-    _categories_from_metadata,
-    _category_boost_for_chunk,
     apply_category_boost_to_fused_hits,
     apply_soft_boosts_to_passages,
 )
@@ -25,50 +22,10 @@ from app.services.retrieval_boost_service import (
 _BOOST_PATH = "app.services.retrieval_boost_service._bulk_get_page_categories"
 
 
-# ---------------------------------------------------------------------------
-# Helpers internes
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.parametrize(
-    "metadata, expected",
-    [
-        (None, []),
-        ({}, []),
-        ({"categories": "mounting"}, []),
-        ({"categories": ["mounting", "warranty"]}, ["mounting", "warranty"]),
-    ],
-)
-def test_categories_from_metadata(metadata, expected):
-    assert _categories_from_metadata(metadata) == expected
-
-
-def test_category_boost_for_chunk_single_match():
-    assert _category_boost_for_chunk(["mounting"], ["mounting"]) == settings.RETRIEVAL_CATEGORY_BOOST
-
-
-def test_category_boost_for_chunk_case_insensitive():
-    assert _category_boost_for_chunk(["Mounting"], ["mounting"]) == settings.RETRIEVAL_CATEGORY_BOOST
-
-
-def test_category_boost_for_chunk_no_match():
-    assert _category_boost_for_chunk(["warranty"], ["mounting"]) == 0.0
-
-
-def test_bulk_get_chunk_categories_deduplicates_ids():
-    session = MagicMock()
-    chunk_a = MagicMock(spec=DocumentChunk)
-    chunk_a.id = 10
-    chunk_a.metadata_json = {"categories": ["mounting"]}
-    chunk_b = MagicMock(spec=DocumentChunk)
-    chunk_b.id = 20
-    chunk_b.metadata_json = {"categories": ["warranty"]}
-    session.exec.return_value.all.return_value = [chunk_a, chunk_b]
-
-    result = _bulk_get_chunk_categories(session, [10, 20, 10, 20])
-
-    assert result == {10: ["mounting"], 20: ["warranty"]}
-    session.exec.assert_called_once()
+# NB (2026-07-21) : les tests des helpers chunk-level (_categories_from_metadata,
+# _category_boost_for_chunk, _bulk_get_chunk_categories) ont été retirés — ces
+# fonctions n'existent plus depuis le passage du boost catégorie au niveau PAGE
+# (chunkcategoryrelation), le module d'import était cassé.
 
 
 # ---------------------------------------------------------------------------
