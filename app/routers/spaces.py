@@ -310,6 +310,40 @@ async def get_space_kag_graph(
     )
 
 
+@router.get("/{space_id}/kag/references")
+async def get_space_kag_references(
+    space_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+    search: Optional[str] = Query(None),
+    limit: int = Query(400, ge=10, le=2000),
+):
+    """Fiches produit KAG : références regroupées par code (doublons consolidés),
+    avec leurs pages sources et leurs relations. Vue lisible + preview du merge."""
+    from app.services.kag_graph_service import build_kag_reference_index
+
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Espace non trouvé")
+    return build_kag_reference_index(session, space_id, search=search, limit=limit)
+
+
+@router.get("/{space_id}/kag/entity/{entity_id}/chunks")
+async def get_space_kag_entity_chunks(
+    space_id: int,
+    entity_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Chunks (contenu réel) liés à une entité KAG — inspection depuis les fiches produit."""
+    from app.services.kag_graph_service import get_kag_entity_chunks
+
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Espace non trouvé")
+    return get_kag_entity_chunks(session, space_id, entity_id)
+
+
 @router.get("/{space_id}/tree")
 async def get_space_theme_tree(
     space_id: int,

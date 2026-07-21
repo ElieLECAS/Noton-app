@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections import defaultdict
 from typing import Any, Dict, List, Optional, Set
 
@@ -292,6 +293,203 @@ def count_document_kag_stats(session: Session, document_id: int) -> Dict[str, in
         "knowledge_entity_count": int(entity_count or 0),
         "entity_relation_count": int(relation_count or 0),
         "content_category_count": int(category_count or 0),
+    }
+
+
+# Code de référence produit : soit lettres+chiffres (TGY3702, A108, Z043, BV11),
+# soit 3+ chiffres (6111 — exclut les dimensions nues 2 chiffres type 20/15 mm),
+# soit chiffre-lettre-chiffres (9F67). Sert à regrouper les doublons par code.
+_REF_CODE_RE = re.compile(r"[A-Za-z]{1,4}\d{2,6}[A-Za-z]?|\d[A-Z]\d{2,4}|\d{3,6}[A-Za-z]?")
+
+
+def _extract_ref_code(name: str) -> Optional[str]:
+    """Extrait le code de référence dominant d'un nom d'entité (le plus long), en MAJ."""
+    best = None
+    for m in _REF_CODE_RE.finditer(name or ""):
+        tok = m.group(0)
+        # écarte les années nues (millésimes) 1990-2035
+        if tok.isdigit() and len(tok) == 4 and 1990 <= int(tok) <= 2035:
+            continue
+        if best is None or len(tok) > len(best):
+            best = tok
+    return best.upper() if best else None
+
+
+def build_kag_reference_index(
+    session: Session,
+    space_id: int,
+    *,
+    search: Optional[str] = None,
+    limit: int = 400,
+) -> Dict[str, Any]:
+    """Index des RÉFÉRENCES produit du graphe KAG, regroupées par CODE canonique.
+
+    Chaque « fiche » regroupe les entités-doublons d'un même code (« Profil 6111 »,
+    « 6111 », « Référence 6111 »…), leurs alias, les pages/documents où le code est
+    lié, et les relations vers d'autres entités. C'est à la fois la vue « fiche
+    produit » lisible et le PREVIEW du merge (1 ligne/code vs N doublons)."""
+    if not settings.KAG_ENABLED:
+        return {"space_id": space_id, "status": "disabled", "references": [], "total_codes": 0}
+
+    entities = list(
+        session.exec(select(KnowledgeEntity).where(KnowledgeEntity.space_id == space_id)).all()
+    )
+    # Regroupe par code
+    groups: Dict[str, Dict[str, Any]] = {}
+    eid_to_code: Dict[int, str] = {}
+    for e in entities:
+        code = _extract_ref_code(e.name)
+        if not code:
+            continue
+        g = groups.setdefault(code, {"code": code, "variants": [], "entity_ids": [], "types": set(), "mention_total": 0})
+        g["variants"].append({"id": e.id, "name": e.name, "type": e.entity_type, "mentions": e.mention_count})
+        g["entity_ids"].append(e.id)
+        g["types"].add(e.entity_type)
+        g["mention_total"] += (e.mention_count or 0)
+        eid_to_code[e.id] = code
+
+    if not groups:
+        return {"space_id": space_id, "status": "empty", "references": [], "total_codes": 0}
+
+    all_eids = list(eid_to_code.keys())
+
+    # Pages/documents liés par entité → agrégés par code
+    chunk_rows = session.execute(
+        text(
+            """
+            SELECT cer.entity_id, dc.document_id, d.title,
+                   (dc.metadata_json->>'page_no') AS page_no
+            FROM chunkentityrelation cer
+            JOIN documentchunk dc ON dc.id = cer.chunk_id
+            JOIN document d ON d.id = dc.document_id
+            WHERE cer.entity_id = ANY(:eids)
+            """
+        ),
+        {"eids": all_eids},
+    ).all()
+    pages_by_code: Dict[str, Set[str]] = defaultdict(set)
+    for eid, doc_id, title, page_no in chunk_rows:
+        code = eid_to_code.get(int(eid))
+        if code and page_no:
+            pages_by_code[code].add(f"{title}|{page_no}")
+
+    # Relations entité→entité → agrégées par code (vers le code de l'autre bout)
+    rel_rows = session.execute(
+        text(
+            """
+            SELECT eer.entity_a_id, eer.entity_b_id, eer.relation_type,
+                   ka.name AS a_name, kb.name AS b_name
+            FROM entityentityrelation eer
+            JOIN knowledgeentity ka ON ka.id = eer.entity_a_id
+            JOIN knowledgeentity kb ON kb.id = eer.entity_b_id
+            WHERE eer.space_id = :sid
+              AND (eer.entity_a_id = ANY(:eids) OR eer.entity_b_id = ANY(:eids))
+            """
+        ),
+        {"sid": space_id, "eids": all_eids},
+    ).all()
+    rels_by_code: Dict[str, List[dict]] = defaultdict(list)
+    seen_rel: Set[str] = set()
+    for a_id, b_id, rtype, a_name, b_name in rel_rows:
+        for src_id, dst_name in ((int(a_id), b_name), (int(b_id), a_name)):
+            code = eid_to_code.get(src_id)
+            if not code:
+                continue
+            # évite les self-relations entre doublons du même code
+            if _extract_ref_code(dst_name) == code:
+                continue
+            key = f"{code}|{rtype}|{dst_name}"
+            if key in seen_rel:
+                continue
+            seen_rel.add(key)
+            rels_by_code[code].append({
+                "relation_type": rtype,
+                "relation_type_label": _relation_short_label(rtype),
+                "target": dst_name,
+            })
+
+    # Assemble les fiches
+    references = []
+    q = (search or "").strip().upper()
+    for code, g in groups.items():
+        if q and q not in code and not any(q in v["name"].upper() for v in g["variants"]):
+            continue
+        pages = sorted(pages_by_code.get(code, set()))
+        rels = rels_by_code.get(code, [])
+        compat = [r for r in rels if r["relation_type"] == "compatible_avec"]
+        references.append({
+            "code": code,
+            "variant_count": len(g["variants"]),
+            "variants": sorted(g["variants"], key=lambda v: -(v["mentions"] or 0)),
+            "types": sorted(g["types"]),
+            "mention_total": g["mention_total"],
+            "page_count": len(pages),
+            "pages": [{"document": p.split("|")[0], "page": p.split("|")[1]} for p in pages[:40]],
+            "relation_count": len(rels),
+            "relations": rels[:60],
+            "compatible_count": len(compat),
+        })
+
+    # tri : doublons d'abord (pour juger le merge), puis nb de mentions
+    references.sort(key=lambda r: (-r["variant_count"], -r["mention_total"]))
+    total_codes = len(groups)
+    return {
+        "space_id": space_id,
+        "status": "ok",
+        "total_codes": total_codes,
+        "total_entities": len(entities),
+        "shown": len(references),
+        "references": references[:limit],
+    }
+
+
+def get_kag_entity_chunks(
+    session: Session,
+    space_id: int,
+    entity_id: int,
+    *,
+    limit: int = 60,
+) -> Dict[str, Any]:
+    """Tous les chunks liés à une entité KAG (contenu réel), pour inspection humaine."""
+    ent = session.get(KnowledgeEntity, entity_id)
+    if not ent or ent.space_id != space_id:
+        return {"entity_id": entity_id, "status": "not_found", "chunks": []}
+
+    rows = session.execute(
+        text(
+            """
+            SELECT dc.id, d.title, dc.metadata_json->>'page_no' AS page_no,
+                   dc.metadata_json->>'content_type' AS content_type,
+                   cer.relation_role, dc.content
+            FROM chunkentityrelation cer
+            JOIN documentchunk dc ON dc.id = cer.chunk_id
+            JOIN document d ON d.id = dc.document_id
+            WHERE cer.entity_id = :eid
+            ORDER BY d.title, (dc.metadata_json->>'page_no')::int NULLS LAST, dc.id
+            LIMIT :lim
+            """
+        ),
+        {"eid": entity_id, "lim": limit},
+    ).all()
+
+    chunks = [
+        {
+            "chunk_id": int(cid),
+            "document_title": title,
+            "page_no": page_no,
+            "content_type": content_type,
+            "relation_role": role,
+            "content": (content or "")[:1500],
+        }
+        for cid, title, page_no, content_type, role, content in rows
+    ]
+    return {
+        "entity_id": entity_id,
+        "name": ent.name,
+        "entity_type": ent.entity_type,
+        "status": "ok",
+        "chunk_count": len(chunks),
+        "chunks": chunks,
     }
 
 

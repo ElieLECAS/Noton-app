@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 from app.config import settings
-from app.services.mistral_service import chat
+from app.services.mistral_service import chat, chat_collect_reasoning
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +51,8 @@ class RoutingStep(BaseModel):
     cited_pages: List[Dict[str, Any]] = Field(default_factory=list)
     is_terminal: bool = False
     escalation_recap: Optional[EscalationRecap] = None
+    # Raisonnement (ThinkChunk) du routeur, remonté pour affichage dans la bulle « réflexion ».
+    thinking: str = ""
 
 
 GUIDED_ROUTER_SYSTEM_PROMPT = """Tu es LIA, l'aiguilleuse technique de PROFERM (menuiserie, volets roulants).
@@ -240,17 +242,20 @@ async def generate_routing_step(
     )
 
     try:
-        response = await chat(
+        reasoning_effort = "high" if settings.GENERATION_REASONING_EFFORT == "high" else None
+        content, thinking_text = await chat_collect_reasoning(
             "",
             model=model or settings.MODEL_FAST,
             context=[
                 {"role": "system", "content": GUIDED_ROUTER_SYSTEM_PROMPT},
                 {"role": "user", "content": user_prompt},
             ],
+            temperature=0.2,
+            max_tokens=(settings.GENERATION_REASONING_MAX_TOKENS if reasoning_effort else None),
+            reasoning_effort=reasoning_effort,
             response_format={"type": "json_object"},
         )
-        content = response["choices"][0]["message"].get("content", "{}")
-        data = json.loads(content)
+        data = json.loads(content or "{}")
         step = RoutingStep(
             step_type=str(data.get("step_type") or "instruction").strip().lower(),
             message=str(data.get("message") or "").strip(),
@@ -282,6 +287,7 @@ async def generate_routing_step(
                 if isinstance(data.get("escalation_recap"), dict)
                 else None
             ),
+            thinking=thinking_text,
         )
     except Exception as exc:
         logger.error("[procedural_router] génération étape échouée: %s", exc)

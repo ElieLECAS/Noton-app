@@ -992,7 +992,7 @@ async def update_library_document(
 
 class ReindexRequest(BaseModel):
     """Corps de la requête de retraitement."""
-    mode: str = Field(default="full", description="full | text_only | colpali_only")
+    mode: str = Field(default="full", description="full | text_only | colpali_only | kag_only")
 
 
 @router.post("/documents/{document_id}/reindex", status_code=status.HTTP_200_OK)
@@ -1009,6 +1009,8 @@ async def reindex_library_document_endpoint(
     - full        : Vision Ministral 3B + mistral-embed + ColPali (pipeline complet, défaut)
     - text_only   : Vision Ministral 3B + mistral-embed uniquement (ColPali inchangé)
     - colpali_only: re-sync visuel ColPali uniquement (chunks texte inchangés)
+    - kag_only    : re-extrait entités + relations + catégories (KAG) sur les chunks
+                    EXISTANTS, ré-embarque les métadonnées. Ni texte, ni ColPali refaits.
 
     Marque le document en reindex_queued (chunks encore disponibles pour le RAG).
     """
@@ -1020,10 +1022,10 @@ async def reindex_library_document_endpoint(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Mode invalide '{body.mode}'. Valeurs acceptées : {', '.join(sorted(valid_modes))}",
         )
-    if body.mode in ("full", "text_only") and not settings.MISTRAL_API_KEY:
+    if body.mode in ("full", "text_only", "kag_only") and not settings.MISTRAL_API_KEY:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="MISTRAL_API_KEY requise pour les modes full et text_only.",
+            detail="MISTRAL_API_KEY requise pour les modes full, text_only et kag_only.",
         )
     if body.mode in ("full", "colpali_only") and not settings.COLPALI_ENABLED:
         raise HTTPException(

@@ -45,6 +45,10 @@ class IndexingMode(str, Enum):
     FULL = "full"
     TEXT_ONLY = "text_only"
     COLPALI_ONLY = "colpali_only"
+    # KAG seul : re-extrait entités + relations + catégories sur les chunks EXISTANTS
+    # (ni texte, ni ColPali, ni embedding vision re-faits). Répare les documents dont
+    # les chunks ont été re-créés (liens KAG orphelins) sans tout retraiter.
+    KAG_ONLY = "kag_only"
 
 
 # ---------------------------------------------------------------------------
@@ -121,21 +125,37 @@ def process_document_indexing(
     enrichment_stats: dict = {"chunks": 0, "status": "disabled"}
 
     try:
-        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
+        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY, IndexingMode.KAG_ONLY):
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
-            # --- 1. Extraction texte (vision) → L0 page_anchor + L1 semantic_leaf ---
-            _set_progress(document_id, 30)
-            ld.info("[Indexing] Extraction vision document_id=%s", document_id)
-            with Session(engine) as session:
-                document = session.get(Document, document_id)
-                chunk_count = _extract_and_persist_chunks(
-                    session,
-                    document,
-                    pdf_path,
-                    preserve_page_anchors=(mode == IndexingMode.TEXT_ONLY),
-                )
+            if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
+                # --- 1. Extraction texte (vision) → L0 page_anchor + L1 semantic_leaf ---
+                _set_progress(document_id, 30)
+                ld.info("[Indexing] Extraction vision document_id=%s", document_id)
+                with Session(engine) as session:
+                    document = session.get(Document, document_id)
+                    chunk_count = _extract_and_persist_chunks(
+                        session,
+                        document,
+                        pdf_path,
+                        preserve_page_anchors=(mode == IndexingMode.TEXT_ONLY),
+                    )
+            elif mode == IndexingMode.KAG_ONLY:
+                # Chunks EXISTANTS : compter (pour finalize) + purger l'ancien KAG du doc
+                # avant ré-extraction (répare les liens orphelins sans re-créer les chunks,
+                # donc sans casser l'index ColPali).
+                _set_progress(document_id, 30)
+                ld.info("[Indexing] KAG seul — chunks existants document_id=%s", document_id)
+                with Session(engine) as session:
+                    chunk_count = session.execute(
+                        text("SELECT count(*) FROM documentchunk WHERE document_id = :d AND is_leaf = true"),
+                        {"d": document_id},
+                    ).scalar() or 0
+                    if settings.KAG_ENABLED:
+                        from app.services.kag_extraction_service import cleanup_kag_for_document
+                        cleanup_kag_for_document(session, document_id)
+                        session.commit()
 
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
@@ -167,7 +187,8 @@ def process_document_indexing(
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
             # --- 3. Enrichissement contextuel inter-pages → L2 contextual_enrichment ---
-            if settings.CONTEXTUAL_ENRICHMENT_ENABLED:
+            # (sauté en KAG_ONLY : on ne régénère pas les L2, seulement le graphe KAG)
+            if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY) and settings.CONTEXTUAL_ENRICHMENT_ENABLED:
                 _set_progress(document_id, 60)
                 ld.info(
                     "[Indexing] Enrichissement contextuel document_id=%s",
@@ -210,12 +231,13 @@ def process_document_indexing(
             document_id,
             chunk_count,
             embed_count,
-            kag_stats if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY) else "n/a",
+            kag_stats if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY, IndexingMode.KAG_ONLY) else "n/a",
             enrichment_stats if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY) else "n/a",
         )
         result = {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
-        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
+        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY, IndexingMode.KAG_ONLY):
             result["kag"] = kag_stats
+        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
             result["enrichment"] = enrichment_stats
         return result
 

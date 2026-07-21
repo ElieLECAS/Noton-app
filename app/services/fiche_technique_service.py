@@ -210,24 +210,28 @@ FICHE_SYSTEM_PROMPT = (
 )
 
 
-async def _generate_fiche_prose(reference_label: str, system_context: str) -> str:
-    """Appelle le LLM pour produire la présentation naturelle à partir du contexte CAG."""
+def _fiche_user_message(reference_label: str) -> str:
+    """Message utilisateur de la fiche (présentation d'une référence/gamme)."""
     if reference_label:
-        user_msg = (
+        return (
             f"Présente la référence « {reference_label} » à partir des documents ci-dessus : "
             "ce que c'est et ses informations techniques utiles."
         )
-    else:
-        user_msg = (
-            "Présente le produit / la gamme demandé(e) à partir des documents ci-dessus : "
-            "ce que c'est et ses informations techniques utiles."
-        )
+    return (
+        "Présente le produit / la gamme demandé(e) à partir des documents ci-dessus : "
+        "ce que c'est et ses informations techniques utiles."
+    )
+
+
+async def _generate_fiche_prose(reference_label: str, system_context: str) -> str:
+    """Appelle le LLM (sync) pour produire la présentation. Conservé pour compat ;
+    le routeur privilégie désormais prepare_fiche_technique + génération streamée."""
     response = await chat(
         "",
         model=settings.MODEL_FAST,
         context=[
             {"role": "system", "content": system_context},
-            {"role": "user", "content": user_msg},
+            {"role": "user", "content": _fiche_user_message(reference_label)},
         ],
         temperature=0.2,
         max_tokens=settings.FICHE_MAX_TOKENS,
@@ -242,6 +246,48 @@ class FicheResult(BaseModel):
     sources: List[Dict[str, Any]] = Field(default_factory=list)
     # Étiquette de sujet pour le fil de conversation (ex. "profil 6101", "gamme Textural").
     topic: str = ""
+
+
+class FichePrepared(BaseModel):
+    """Contexte de génération fiche PRÉPARÉ (sans texte généré) — permet au routeur de
+    streamer la génération avec reasoning/thinking au lieu d'un chat() sync + faux-stream."""
+
+    system_content: str
+    user_message: str
+    sources: List[Dict[str, Any]] = Field(default_factory=list)
+    topic: str = ""
+
+
+async def prepare_fiche_technique(
+    *,
+    session: Session,
+    space_id: int,
+    user_id: int,
+    ref_query: ReferenceQuery,
+) -> Optional["FichePrepared"]:
+    """Comme build_fiche_technique mais SANS générer le texte : retrieval orienté référence
+    → contexte CAG → sources/topic. Retourne le contexte (system + user message) pour une
+    génération STREAMÉE par le routeur. None si aucun passage trouvé (→ pipeline RAG normal)."""
+    from app.services.context_packer_service import build_cag_context, build_document_sources
+
+    passages = await _resolve_passages(
+        session=session, space_id=space_id, user_id=user_id, ref_query=ref_query,
+    )
+    if not passages:
+        return None
+
+    system_message = build_cag_context(
+        session, passages, system_prompt=FICHE_SYSTEM_PROMPT,
+        intent="documentation", emit_sources_tag=False,
+    )
+    cag_documents = system_message.get("cag_documents") or []
+    reference_label = ref_query.primary or ref_query.raw_message
+    return FichePrepared(
+        system_content=system_message["content"],
+        user_message=_fiche_user_message(reference_label),
+        sources=build_document_sources(cag_documents, {}),
+        topic=(ref_query.primary or ref_query.raw_message or "").strip()[:120],
+    )
 
 
 # ---------------------------------------------------------------------------

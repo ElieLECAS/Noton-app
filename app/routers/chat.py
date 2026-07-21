@@ -41,13 +41,23 @@ async def chat_stream_wrapper(
     # Le plancher évite le repli global MAX_COMPLETION_TOKENS (1024) qui coupait les réponses
     # procédurales longues (SPACE_CHAT_MAX_TOKENS arrive souvent à None via un env vide).
     tokens = max_tokens if max_tokens is not None else (settings.SPACE_CHAT_MAX_TOKENS or 2048)
+
+    # Reasoning natif (mistral-small) : bascule high/none via GENERATION_REASONING_EFFORT.
+    # En "high", le modèle produit un ThinkChunk (masqué du stream par mistral_chat_stream)
+    # avant la réponse ; on relève le plancher de tokens car le thinking consomme le budget.
+    reasoning_kwargs = {}
+    if settings.GENERATION_REASONING_EFFORT == "high":
+        reasoning_kwargs["reasoning_effort"] = "high"
+        tokens = max(tokens, settings.GENERATION_REASONING_MAX_TOKENS)
+
     if settings.LLM_PROVIDER == "ollama":
         from app.services.ollama_service import chat_stream as ollama_chat_stream
         async for chunk in ollama_chat_stream(message=message, model=model, context=context):
             yield chunk
     else:
         async for chunk in mistral_chat_stream(
-            message=message, model=model, context=context, temperature=temp, max_tokens=tokens
+            message=message, model=model, context=context, temperature=temp, max_tokens=tokens,
+            **reasoning_kwargs,
         ):
             yield chunk
 from app.services.chat_tools import get_available_tools
@@ -222,6 +232,13 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "du document : ne transfère JAMAIS une information d'une gamme vers une autre (ex. Perform 70 ≠ Perform 76, "
     "seuil PMR ≠ seuil standard, version standard ≠ renforcée). En cas d'informations contradictoires entre "
     "documents, le document le plus spécifique au sujet de la question prime.\n"
+    "\n"
+    "### MÉTHODE (avant de rédiger)\n"
+    "Procède dans l'ordre : (1) reformule ce qui est RÉELLEMENT demandé ; (2) repère les documents "
+    "dont l'en-tête (gamme, produit, version) correspond à la question ; (3) rédige UNIQUEMENT à partir "
+    "de ces documents ; (4) relis chaque référence, cote ou norme que tu écris et vérifie qu'elle figure "
+    "littéralement dans le contexte. Si les documents pertinents ne répondent pas à CETTE question précise, "
+    "dis-le plutôt que de répondre à partir d'un document voisin ou de tes connaissances générales.\n"
     "\n"
     "### POLITIQUE DE RÉPONSE (dans cet ordre)\n"
     "1. Question claire et couverte par les documents → réponds directement, "
@@ -595,6 +612,13 @@ def _guided_streaming_response(
     async def generate_guided():
         error_msg_to_yield = None
         try:
+            # 0. Réflexion du routeur (si génération dynamique avec reasoning) : faux-streamée
+            #    dans la bulle « réflexion », masquée à l'arrivée du message de l'étape.
+            thinking_text = getattr(gtr, "thinking", "") or ""
+            if thinking_text:
+                for i in range(0, len(thinking_text), 60):
+                    yield f"data: {json.dumps({'thinking': thinking_text[i:i+60]})}\n\n"
+
             message_text = gtr.message_text or ""
             # 1. Streamer le message de l'étape (effet machine à écrire)
             chunk_size = 40
@@ -665,6 +689,13 @@ async def _stream_llm_to_sse(
         try:
             parsed = json.loads(raw_chunk)
         except json.JSONDecodeError:
+            continue
+        # Reasoning : relayer le thinking comme événement distinct (le client l'affiche
+        # dans une bulle « réflexion » puis la masque à l'arrivée de la réponse). Ni filtré
+        # <sources>, ni accumulé dans le sink (ce n'est pas la réponse persistée).
+        thinking = parsed.get("thinking")
+        if thinking:
+            yield f"data: {json.dumps({'thinking': thinking})}\n\n"
             continue
         content = (parsed.get("message") or {}).get("content") or ""
         if not content:
@@ -824,22 +855,21 @@ async def stream_space_chat_message(
     # Gardé par FICHE_TECHNIQUE_ENABLED ; abstention (None) → pipeline RAG normal.
     if settings.FICHE_TECHNIQUE_ENABLED:
         from app.services.fiche_technique_service import (
-            build_fiche_technique,
+            prepare_fiche_technique,
             detect_reference_query,
         )
 
         ref_query = detect_reference_query(request.message)
         if ref_query:
             logger.info("[chat] Fast-path fiche technique — refs=%s", ref_query.references)
-            fiche_result = await build_fiche_technique(
+            fiche_prepared = await prepare_fiche_technique(
                 session=session,
                 space_id=space_id,
                 user_id=current_user.id,
                 ref_query=ref_query,
             )
-            if fiche_result is not None:
-                fiche_markdown = fiche_result.markdown
-                fiche_sources = fiche_result.sources
+            if fiche_prepared is not None:
+                fiche_sources = fiche_prepared.sources
 
                 # Continuité conversationnelle : la fiche court-circuite la compréhension
                 # de requête, donc AUCUN état de conversation ne serait écrit pour ce tour
@@ -851,7 +881,7 @@ async def stream_space_chat_message(
 
                     conv_prev = session.get(Conversation, request.conversation_id)
                     prev_qc = dict(conv_prev.query_context or {}) if conv_prev else {}
-                    fiche_topic = (fiche_result.topic or ref_query.primary or ref_query.raw_message).strip()
+                    fiche_topic = (fiche_prepared.topic or ref_query.primary or ref_query.raw_message).strip()
                     fiche_state = build_conversation_state(
                         prev_qc,
                         topic_shift=False,
@@ -881,13 +911,26 @@ async def stream_space_chat_message(
                 async def generate_fiche():
                     error_msg_to_yield = None
                     try:
-                        chunk_size = 40
-                        for i in range(0, len(fiche_markdown), chunk_size):
-                            chunk = fiche_markdown[i : i + chunk_size]
-                            yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
+                        # Génération STREAMÉE avec reasoning (relais thinking + réponse) au lieu
+                        # d'un chat() sync + faux-stream. Le contexte fiche n'émet pas de <sources>
+                        # (emit_sources_tag=False) → source_filter=None.
+                        fiche_context = [
+                            {"role": "system", "content": fiche_prepared.system_content},
+                            {"role": "user", "content": fiche_prepared.user_message},
+                        ]
+                        fiche_sink: List[str] = []
+                        async for sse_event in _stream_llm_to_sse(
+                            fiche_context,
+                            model=forced_model,
+                            max_tokens=settings.FICHE_MAX_TOKENS,
+                            source_filter=None,
+                            sink=fiche_sink,
+                        ):
+                            yield sse_event
+                        fiche_markdown = "".join(fiche_sink).strip()
 
                         assistant_message_id = None
-                        if request.conversation_id:
+                        if request.conversation_id and fiche_markdown:
                             try:
                                 assistant_message_id = _persist_assistant_reply(
                                     request.conversation_id,
@@ -1114,6 +1157,10 @@ async def stream_space_chat_message(
                             try:
                                 parsed = json.loads(raw_chunk)
                             except json.JSONDecodeError:
+                                continue
+                            thinking = parsed.get("thinking")
+                            if thinking:
+                                yield f"data: {json.dumps({'thinking': thinking})}\n\n"
                                 continue
                             content = (parsed.get("message") or {}).get("content") or ""
                             if not content:

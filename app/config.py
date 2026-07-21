@@ -408,6 +408,14 @@ class Settings(BaseSettings):
     # Plafond de tokens de RÉPONSE en mode CAG (réponses procédurales complètes ; le
     # plancher 2048 historique coupait les procédures longues).
     CAG_MAX_COMPLETION_TOKENS: int = int(os.getenv("CAG_MAX_COMPLETION_TOKENS", "3072"))
+    # --- Reasoning natif de la génération (mistral-small : "high" | "none") ---
+    # "high" = le modèle produit un ThinkChunk (jugement) avant la réponse ; "none" =
+    # génération directe. Variable de bascule pour comparer les réponses (défaut high).
+    # Sur Mistral, reasoning_effort est BINAIRE (pas de niveau intermédiaire).
+    GENERATION_REASONING_EFFORT: str = os.getenv("GENERATION_REASONING_EFFORT", "high").strip().lower()
+    # Le thinking consomme le budget de complétion : plancher relevé quand reasoning=high
+    # (sinon la réponse est tronquée après le raisonnement).
+    GENERATION_REASONING_MAX_TOKENS: int = int(os.getenv("GENERATION_REASONING_MAX_TOKENS", "8192"))
     # Images PNG jointes à la génération en mode CAG : UNIQUEMENT des pages réellement
     # packées dans le contexte (alignement texte/visuel), plafonnées à ce nombre.
     CAG_MAX_IMAGES: int = int(os.getenv("CAG_MAX_IMAGES", "8"))

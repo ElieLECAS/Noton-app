@@ -312,6 +312,38 @@
   transition: opacity 0.2s ease 0.04s;
 }
 .text-sources-wrap.open > .text-sources-inner { opacity: 1; }
+/* Bulle de réflexion (ThinkChunk reasoning) — affichée en direct puis masquée à la réponse */
+.thinking-bubble {
+  font-style: italic;
+  opacity: 0.5;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #6b7280;
+  border-left: 2px solid rgba(99, 102, 241, 0.35);
+  padding: 0.35rem 0 0.35rem 0.75rem;
+  margin-bottom: 0.6rem;
+  max-height: 200px;
+  overflow: hidden;
+  transition: opacity 0.4s ease, max-height 0.45s ease, margin 0.45s ease, padding 0.45s ease;
+}
+.dark .thinking-bubble { color: #9ca3af; }
+.thinking-bubble .thinking-head {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6366f1;
+  opacity: 0.9;
+  margin-bottom: 0.25rem;
+}
+.thinking-bubble .thinking-body { white-space: pre-wrap; }
+.thinking-bubble.fade-out {
+  opacity: 0;
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+}
 .source-badge .citation-number {
   color: #1e40af;
   font-weight: 700;
@@ -423,6 +455,15 @@
           <span id="kag-graph-toggle-label">Graphe de connaissances</span>
         </button>
         <button
+          id="kag-references-toggle"
+          type="button"
+          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10 text-xs font-semibold active:scale-95 transition-all"
+          onclick="openKagReferencesModal()"
+        >
+          <i class="ti ti-cards"></i>
+          <span>Fiches produit</span>
+        </button>
+        <button
           id="theme-tree-toggle"
           type="button"
           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-teal-500/20 bg-teal-500/5 text-teal-700 dark:text-teal-300 hover:bg-teal-500/10 text-xs font-semibold active:scale-95 transition-all"
@@ -449,6 +490,30 @@
           </form>
         </div>
       </section>
+    </div>
+  </div>
+</div>
+
+<!-- Modale Fiches produit (références KAG) -->
+<div id="kag-references-modal" class="hidden fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm items-center justify-center p-3 sm:p-6" onclick="if(event.target===this) closeKagReferencesModal()">
+  <div class="w-full max-w-5xl h-[min(90vh,860px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="ti ti-cards text-amber-500"></i>
+          Fiches produit (KAG)
+        </h2>
+        <p id="kag-ref-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Chargement…</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <input id="kag-ref-search" type="text" placeholder="Filtrer (ex. 6111, TGY3702)…" class="px-3 py-1.5 rounded-lg text-xs bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-1 focus:ring-amber-400 w-44" oninput="filterKagReferences(this.value)" />
+        <button type="button" onclick="closeKagReferencesModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="ti ti-x text-lg"></i>
+        </button>
+      </div>
+    </div>
+    <div id="kag-ref-list" class="flex-1 overflow-y-auto p-4 space-y-3">
+      <div class="text-center text-gray-400 py-12 text-sm">Chargement des fiches…</div>
     </div>
   </div>
 </div>
@@ -1675,6 +1740,105 @@ function closeKagGraphModal() {
   clearKagNodeSelection();
 }
 
+// --- Fiches produit (références KAG) ---
+let kagRefData = null;
+async function openKagReferencesModal() {
+  const modal = document.getElementById("kag-references-modal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+  if (kagRefData) { renderKagReferences(kagRefData); return; }
+  const listEl = document.getElementById("kag-ref-list");
+  listEl.innerHTML = `<div class="text-center text-gray-400 py-12 text-sm">Chargement des fiches…</div>`;
+  try {
+    const r = await api(`/api/spaces/${spaceId}/kag/references?limit=600`);
+    kagRefData = await r.json();
+    renderKagReferences(kagRefData);
+  } catch (e) {
+    listEl.innerHTML = `<div class="text-center text-red-500 py-12 text-sm">Erreur de chargement.</div>`;
+  }
+}
+function closeKagReferencesModal() {
+  const modal = document.getElementById("kag-references-modal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.style.display = "";
+  document.body.style.overflow = "";
+}
+function filterKagReferences(q) { if (kagRefData) renderKagReferences(kagRefData, q); }
+function renderKagReferences(data, filter = "") {
+  const listEl = document.getElementById("kag-ref-list");
+  const metaEl = document.getElementById("kag-ref-meta");
+  if (!data || data.status !== "ok" || !data.references.length) {
+    listEl.innerHTML = `<div class="text-center text-gray-400 py-12 text-sm">Aucune référence KAG dans cet espace.</div>`;
+    if (metaEl) metaEl.textContent = "";
+    return;
+  }
+  const dupCodes = data.references.filter((f) => f.variant_count > 1).length;
+  if (metaEl) metaEl.innerHTML = `<b>${data.total_codes}</b> références · <b>${data.total_entities}</b> entités brutes → <b>${data.total_entities - data.total_codes}</b> doublons à consolider · ${dupCodes} codes multi-variantes`;
+  const q = (filter || "").trim().toUpperCase();
+  const refs = q
+    ? data.references.filter((f) => f.code.includes(q) || f.variants.some((v) => v.name.toUpperCase().includes(q)))
+    : data.references;
+  if (!refs.length) { listEl.innerHTML = `<div class="text-center text-gray-400 py-12 text-sm">Aucun résultat.</div>`; return; }
+  listEl.innerHTML = refs.map((f) => {
+    const dupBadge = f.variant_count > 1
+      ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-600 dark:text-red-400" title="Entités à fusionner">×${f.variant_count} variantes</span>`
+      : `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-green-500/10 text-green-600 dark:text-green-400">unique</span>`;
+    const variants = f.variants.map((v) => `<button type="button" onclick="showEntityChunks(${v.id}, '${escapeHtml(f.code)}', this)" class="px-1.5 py-0.5 rounded text-[11px] bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-amber-500/10 hover:text-amber-700 dark:hover:text-amber-300 transition-colors cursor-pointer" title="Voir les chunks liés à cette entité">${escapeHtml(v.name)} <span class="text-gray-400">(${escapeHtml(v.type)})</span></button>`).join(" ");
+    const pages = f.pages.length
+      ? f.pages.slice(0, 14).map((p) => `<span class="text-[10px] text-gray-500 dark:text-gray-400">${escapeHtml(String(p.document).slice(0, 24))} p.${escapeHtml(String(p.page))}</span>`).join(" · ")
+      : `<span class="text-[10px] text-gray-400">aucune page liée</span>`;
+    const rels = f.relations.length
+      ? f.relations.map((r) => {
+          const isCompat = r.relation_type === "compatible_avec";
+          return `<span class="px-1.5 py-0.5 rounded text-[10px] ${isCompat ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold" : "bg-gray-100 dark:bg-gray-800 text-gray-500"}">${escapeHtml(r.relation_type_label)} → ${escapeHtml(r.target)}</span>`;
+        }).join(" ")
+      : `<span class="text-[10px] text-gray-400">aucune relation</span>`;
+    return `
+      <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 p-3">
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <span class="text-base font-extrabold text-gray-900 dark:text-white">${escapeHtml(f.code)}</span>
+          ${dupBadge}
+          <span class="text-[10px] text-gray-400">${f.mention_total} mentions · ${f.page_count} pages · ${f.relation_count} relations${f.compatible_count ? ` · ${f.compatible_count} compat.` : ""}</span>
+        </div>
+        <div class="flex flex-wrap gap-1 mb-2">${variants}</div>
+        <div class="flex flex-wrap gap-x-2 gap-y-1 mb-1.5">${pages}</div>
+        <div class="flex flex-wrap gap-1">${rels}</div>
+        <div id="chunks-${escapeHtml(f.code)}" class="entity-chunks-panel hidden mt-2 pt-2 border-t border-gray-200 dark:border-gray-700"></div>
+      </div>`;
+  }).join("");
+}
+async function showEntityChunks(entityId, code, btn) {
+  const panel = document.getElementById(`chunks-${code}`);
+  if (!panel) return;
+  if (panel.dataset.entity == entityId && !panel.classList.contains("hidden")) {
+    panel.classList.add("hidden");
+    return;
+  }
+  panel.dataset.entity = entityId;
+  panel.classList.remove("hidden");
+  panel.innerHTML = `<div class="text-[11px] text-gray-400 py-2">Chargement des chunks…</div>`;
+  try {
+    const r = await api(`/api/spaces/${spaceId}/kag/entity/${entityId}/chunks`);
+    const data = await r.json();
+    if (!data.chunks || !data.chunks.length) {
+      panel.innerHTML = `<div class="text-[11px] text-gray-400 py-2">Aucun chunk lié à « ${escapeHtml(data.name || "")} ».</div>`;
+      return;
+    }
+    panel.innerHTML =
+      `<div class="text-[11px] font-semibold text-amber-600 dark:text-amber-400 mb-1.5">${data.chunk_count} chunk(s) liés à « ${escapeHtml(data.name)} » (${escapeHtml(data.entity_type)})</div>` +
+      data.chunks.map((c) => `
+        <div class="mb-2 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 p-2">
+          <div class="text-[10px] text-gray-500 mb-1">${escapeHtml(c.document_title)} · p.${escapeHtml(String(c.page_no || "?"))} · ${escapeHtml(c.content_type || "")} · <span class="text-gray-400">${escapeHtml(c.relation_role || "")}</span></div>
+          <div class="text-[11px] text-gray-700 dark:text-gray-300 whitespace-pre-wrap max-h-40 overflow-y-auto">${escapeHtml(c.content)}</div>
+        </div>`).join("");
+  } catch (e) {
+    panel.innerHTML = `<div class="text-[11px] text-red-500 py-2">Erreur de chargement.</div>`;
+  }
+}
+
 function resetKagGraphView() {
   if (!kagCy) return;
   clearKagNodeSelection();
@@ -2855,11 +3019,20 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
   assistantWrap.className = "flex flex-col items-start";
   assistantWrap.innerHTML = `
     <div class="w-full max-w-[85%] lg:max-w-[60%] assistant-message-bubble rounded-2xl px-5 py-4 assistant-message shadow-sm">
+      <div class="thinking-bubble hidden">
+        <div class="thinking-head"><i class="ti ti-bulb"></i> Réflexion…</div>
+        <div class="thinking-body"></div>
+      </div>
       <div id="streaming-content" class="markdown-content"></div>
     </div>`;
   host.appendChild(assistantWrap);
   host.scrollTop = host.scrollHeight;
   const contentEl = assistantWrap.querySelector("#streaming-content");
+  const thinkingEl = assistantWrap.querySelector(".thinking-bubble");
+  const thinkingBodyEl = assistantWrap.querySelector(".thinking-body");
+  let thinkingText = "";
+  let thinkingStarted = false;
+  let thinkingFaded = false;
   const reasoningInterval = startFakeReasoning(contentEl);
 
   const requestBody = {
@@ -2920,8 +3093,24 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
       if (!raw) continue;
       try {
         const data = JSON.parse(raw);
-        if (data.message && data.message.content) {
+        if (data.thinking) {
           if (reasoningInterval) clearInterval(reasoningInterval);
+          if (!thinkingStarted) {
+            thinkingStarted = true;
+            contentEl.innerHTML = "";          // retire le placeholder « LIA réfléchit… »
+            thinkingEl.classList.remove("hidden");
+          }
+          thinkingText += data.thinking;
+          thinkingBodyEl.textContent = thinkingText;
+          thinkingBodyEl.scrollTop = thinkingBodyEl.scrollHeight;
+          host.scrollTop = host.scrollHeight;
+        } else if (data.message && data.message.content) {
+          if (reasoningInterval) clearInterval(reasoningInterval);
+          if (thinkingStarted && !thinkingFaded) {
+            thinkingFaded = true;
+            thinkingEl.classList.add("fade-out");   // disparaît quand la réponse arrive
+            setTimeout(() => { thinkingEl.remove(); }, 450);
+          }
           full += data.message.content;
           contentEl.classList.remove("italic");
           contentEl.innerHTML = parseMarkdown(full);

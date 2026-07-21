@@ -2002,6 +2002,7 @@ endblock %} {% block content %}
         { value: "full", label: "Complet", icon: "ti-refresh", desc: "Vision Ministral 3B + embeddings + ColPali (défaut)" },
         { value: "text_only", label: "Texte seul", icon: "ti-text-size", desc: "Vision Ministral 3B + embeddings mistral-embed uniquement" },
         { value: "colpali_only", label: "ColPali seul", icon: "ti-eye", desc: "Re-sync visuel ColPali uniquement" },
+        { value: "kag_only", label: "KAG seul", icon: "ti-affiliate", desc: "Ré-extrait entités + relations + catégories sur les chunks existants (répare les liens KAG orphelins, sans re-faire texte ni ColPali)" },
     ];
 
     function openReindexModeModal(title, onConfirm) {

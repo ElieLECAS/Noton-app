@@ -44,6 +44,8 @@ class GuidedTurnResult(BaseModel):
     sources: List[Dict[str, Any]] = Field(default_factory=list)
     message_text: str = ""
     is_terminal: bool = False
+    # Raisonnement du routeur (si génération dynamique) — affiché dans la bulle « réflexion ».
+    thinking: str = ""
 
 
 def load_active_guided_state(query_context: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
@@ -570,4 +572,5 @@ async def run_guided_turn(
         sources=sources,
         message_text=step.message,
         is_terminal=step.is_terminal,
+        thinking=getattr(step, "thinking", "") or "",
     )

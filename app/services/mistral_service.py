@@ -2,7 +2,7 @@ import asyncio
 import httpx
 import json
 import random
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Optional, Any, Tuple
 import time
 import logging
 
@@ -325,6 +325,45 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return cleaned
 
 
+async def chat_collect_reasoning(
+    message: str = "",
+    *,
+    model: str,
+    context: Optional[List[Dict]] = None,
+    temperature: Optional[float] = None,
+    max_tokens: Optional[int] = None,
+    reasoning_effort: Optional[str] = None,
+    response_format: Optional[Dict] = None,
+) -> Tuple[str, str]:
+    """Exécute ``chat_stream`` (avec reasoning optionnel) mais COLLECTE le résultat au lieu
+    de le streamer : retourne ``(texte, thinking)``. Pour les appels qui veulent le
+    raisonnement ET une sortie complète en un bloc (ex. JSON structuré du routeur guidé),
+    sans exposer le stream — le thinking est ensuite affiché par l'appelant."""
+    extra: Dict[str, Any] = {}
+    if reasoning_effort:
+        extra["reasoning_effort"] = reasoning_effort
+    if response_format is not None:
+        extra["response_format"] = response_format
+
+    text_parts: List[str] = []
+    think_parts: List[str] = []
+    async for raw in chat_stream(
+        message, model=model, context=context, temperature=temperature,
+        max_tokens=max_tokens, **extra,
+    ):
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        if data.get("thinking"):
+            think_parts.append(data["thinking"])
+        else:
+            content = (data.get("message") or {}).get("content")
+            if content:
+                text_parts.append(content)
+    return "".join(text_parts), "".join(think_parts)
+
+
 async def chat_stream(
     message: str,
     model: str,
@@ -446,8 +485,34 @@ async def chat_stream(
                                             content = delta.get("content")
                                             if content:
                                                 last_token_ts = time.monotonic()
-                                                yield json.dumps({"message": {"content": content}})
-                                                has_yielded = True
+                                                if isinstance(content, list):
+                                                    # Mode reasoning : pendant la phase de réflexion,
+                                                    # delta.content est une LISTE de chunks
+                                                    # {type: "thinking"|"text"}. Le thinking est émis
+                                                    # comme événement DISTINCT ({"thinking": ...}) — le
+                                                    # client l'affiche puis le masque à l'arrivée de la
+                                                    # réponse ; le texte final passe en {"message": ...}.
+                                                    for part in content:
+                                                        if not isinstance(part, dict):
+                                                            continue
+                                                        ptype = part.get("type")
+                                                        if ptype == "text" and part.get("text"):
+                                                            yield json.dumps({"message": {"content": part["text"]}})
+                                                            has_yielded = True
+                                                        elif ptype == "thinking":
+                                                            inner = part.get("thinking")
+                                                            if isinstance(inner, list):
+                                                                think_txt = "".join(
+                                                                    tc.get("text", "") for tc in inner
+                                                                    if isinstance(tc, dict)
+                                                                )
+                                                            else:
+                                                                think_txt = inner if isinstance(inner, str) else ""
+                                                            if think_txt:
+                                                                yield json.dumps({"thinking": think_txt})
+                                                else:
+                                                    yield json.dumps({"message": {"content": content}})
+                                                    has_yielded = True
 
                                             if finish_reason:
                                                 break
