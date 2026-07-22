@@ -692,10 +692,14 @@ async def _stream_llm_to_sse(
     max_tokens: Optional[int],
     source_filter,
     sink: List[str],
+    reasoning_sink: Optional[List[str]] = None,
 ):
     """Streame une génération Mistral en événements SSE, filtre le bloc <sources> et
     accumule le texte AFFICHÉ dans ``sink``. Factorisé (P0.2) pour dédupliquer les
-    tentatives full/eco/minimal ; propage httpx.HTTPStatusError à l'appelant (fallback)."""
+    tentatives full/eco/minimal ; propage httpx.HTTPStatusError à l'appelant (fallback).
+
+    ``reasoning_sink`` (optionnel) accumule le thinking natif du modèle pour la trace de
+    génération (bouton « cheminement »). Il n'est PAS la réponse persistée."""
     async for raw_chunk in chat_stream_wrapper(
         message="", model=model, context=context, max_tokens=max_tokens
     ):
@@ -705,9 +709,11 @@ async def _stream_llm_to_sse(
             continue
         # Reasoning : relayer le thinking comme événement distinct (le client l'affiche
         # dans une bulle « réflexion » puis la masque à l'arrivée de la réponse). Ni filtré
-        # <sources>, ni accumulé dans le sink (ce n'est pas la réponse persistée).
+        # <sources>, ni accumulé dans le sink de réponse ; capturé à part pour la trace.
         thinking = parsed.get("thinking")
         if thinking:
+            if reasoning_sink is not None:
+                reasoning_sink.append(thinking)
             yield f"data: {json.dumps({'thinking': thinking})}\n\n"
             continue
         content = (parsed.get("message") or {}).get("content") or ""
@@ -770,6 +776,96 @@ def _persist_reply_with_retry(
             logger.warning("Persistance réponse échouée (tentative %d): %s", i + 1, exc)
     logger.error("Persistance réponse ABANDONNÉE après %d tentatives: %s", attempts, last_exc)
     return None
+
+
+# Plafond de taille du reasoning persisté dans la trace (le CoT natif peut être volumineux
+# ; on borne pour ne pas gonfler message.metadata_json ni le payload SSE de l'événement done).
+_TRACE_REASONING_MAX_CHARS = 8000
+_TRACE_PASSAGES_MAX = 12
+
+
+def _summarize_passages_for_trace(sources_data: Optional[List[dict]]) -> List[dict]:
+    """Résumé compact des passages retenus pour la trace (titre, score, page, section).
+    Réutilise ``sources_data`` déjà construit (aucun accès DB), ignore l'illustration."""
+    summary: List[dict] = []
+    for s in sources_data or []:
+        if s.get("is_cropped_illustration"):
+            continue
+        summary.append({
+            "document_title": s.get("document_title"),
+            "document_id": s.get("document_id"),
+            "score": s.get("score"),
+            "page_no": s.get("page_no") or s.get("page_start"),
+            "section": s.get("section"),
+            "used_pages": s.get("used_pages"),
+        })
+        if len(summary) >= _TRACE_PASSAGES_MAX:
+            break
+    return summary
+
+
+def _build_generation_trace(
+    *,
+    route: str,
+    lw_result=None,
+    retrieval_status: Optional[str] = None,
+    retrieval_reason: Optional[str] = None,
+    dynamic_k: Optional[int] = None,
+    rerank_status: Optional[str] = None,
+    nb_passages: Optional[int] = None,
+    anchor_document_ids: Optional[List[int]] = None,
+    requested_codes=None,
+    pinned_codes: Optional[List[str]] = None,
+    reasoning_parts: Optional[List[str]] = None,
+    passages_summary: Optional[List[dict]] = None,
+    verification: Optional[dict] = None,
+) -> dict:
+    """Assemble le « cheminement » de génération persisté dans message.metadata_json['trace']
+    et renvoyé dans l'événement SSE final. Alimente le bouton d'inspection côté UI.
+
+    Tout le contenu doit rester JSON-sérialisable (colonne JSON + json.dumps du SSE)."""
+    qc = (lw_result.query_context if lw_result else {}) or {}
+    signals = lw_result.signals if (lw_result and lw_result.signals) else None
+
+    reasoning_text = ""
+    if reasoning_parts:
+        reasoning_text = "".join(reasoning_parts).strip()
+        if len(reasoning_text) > _TRACE_REASONING_MAX_CHARS:
+            reasoning_text = reasoning_text[:_TRACE_REASONING_MAX_CHARS] + "…"
+
+    trace: dict = {
+        "route": route,
+        "topic_shift": (bool(lw_result.topic_shift) if lw_result else None),
+        "standalone_question": qc.get("standalone_question"),
+        "current_topic": qc.get("current_topic") or qc.get("llm_current_topic"),
+        "query_strategy": (lw_result.query_strategy if lw_result else None),
+        "signals": (signals.model_dump() if signals else None),
+        "reasoning": (reasoning_text or None),
+        "reasoning_effort": settings.GENERATION_REASONING_EFFORT,
+        "generation_temperature": settings.SPACE_CHAT_TEMPERATURE,
+        "model": settings.MODEL_FAST,
+    }
+
+    if route == "rag":
+        trace["retrieval"] = {
+            "status": retrieval_status,
+            "reason": retrieval_reason,
+            "dynamic_k": dynamic_k,
+            "rerank_status": rerank_status,
+            "nb_passages": nb_passages,
+            "anchor_document_ids": list(anchor_document_ids or []),
+            "kag_enabled": settings.KAG_ENABLED,
+        }
+        trace["kag"] = {
+            "requested_codes": list(requested_codes or []),
+            "pinned_codes": list(pinned_codes or []),
+        }
+        trace["passages"] = passages_summary or []
+
+    if verification:
+        trace["verification"] = verification
+
+    return trace
 
 
 @router.post("/spaces/{space_id}/chat/stream")
@@ -1028,6 +1124,7 @@ async def stream_space_chat_message(
         }
 
         assistant_response = []
+        reasoning_parts_direct: List[str] = []
 
         async def generate_direct():
             error_msg_to_yield = None
@@ -1060,6 +1157,7 @@ async def stream_space_chat_message(
                             max_tokens=None,
                             source_filter=None,
                             sink=assistant_response,
+                            reasoning_sink=reasoning_parts_direct,
                         ):
                             yield sse_event
 
@@ -1070,6 +1168,11 @@ async def stream_space_chat_message(
                         "response_chars": len(final_response),
                     })
 
+                    direct_trace = _build_generation_trace(
+                        route="direct",
+                        lw_result=lw_result,
+                        reasoning_parts=reasoning_parts_direct,
+                    )
                     assistant_message_id = None
                     if request.conversation_id and assistant_response:
                         try:
@@ -1079,6 +1182,7 @@ async def stream_space_chat_message(
                                 forced_model,
                                 forced_provider,
                                 None,
+                                metadata_json={"trace": direct_trace},
                             )
                             logger.info(
                                 "Réponse assistant directe sauvegardée (space chat), conversation %s",
@@ -1087,7 +1191,7 @@ async def stream_space_chat_message(
                         except Exception:
                             logger.exception("Erreur sauvegarde réponse directe assistant (space chat)")
 
-                    yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+                    yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': direct_trace})}\n\n"
 
             except MistralRateLimitError as e:
                 logger.warning("Limite de débit Mistral (stream_space_chat_message direct): %s", e)
@@ -1110,6 +1214,11 @@ async def stream_space_chat_message(
                 clarification.phase == "awaiting_vague_clarification",
             )
 
+            clarification_trace = _build_generation_trace(
+                route="clarification",
+                lw_result=lw_result,
+            )
+
             async def generate_clarification():
                 question = clarification.question
                 yield f"data: {json.dumps({'message': {'content': question}})}\n\n"
@@ -1123,12 +1232,15 @@ async def stream_space_chat_message(
                             forced_model,
                             forced_provider,
                             None,
-                            metadata_json={"clarification_type": "vague_request"},
+                            metadata_json={
+                                "clarification_type": "vague_request",
+                                "trace": clarification_trace,
+                            },
                         )
                     except Exception:
                         logger.exception("Erreur sauvegarde clarification assistant (space chat)")
 
-                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': clarification_trace})}\n\n"
 
             return StreamingResponse(generate_clarification(), media_type="text/event-stream")
 
@@ -1461,6 +1573,8 @@ async def stream_space_chat_message(
     }
 
     assistant_response: List[str] = []
+    # Accumule le reasoning natif du modèle (thinking) pour la trace de génération.
+    reasoning_parts: List[str] = []
 
     async def generate():
         error_msg_to_yield = None
@@ -1473,6 +1587,18 @@ async def stream_space_chat_message(
                     assistant_response.append(chunk)
                     yield f"data: {json.dumps({'message': {'content': chunk}})}\n\n"
                 
+                static_trace = _build_generation_trace(
+                    route="rag",
+                    lw_result=lw_result,
+                    retrieval_status=retrieval_status,
+                    retrieval_reason=retrieval_reason,
+                    dynamic_k=dynamic_k,
+                    rerank_status=rerank_status,
+                    nb_passages=0,
+                    anchor_document_ids=anchor_document_ids,
+                    requested_codes=requested_codes,
+                    pinned_codes=pinned_codes,
+                )
                 assistant_message_id = None
                 if request.conversation_id:
                     try:
@@ -1482,11 +1608,12 @@ async def stream_space_chat_message(
                             forced_model,
                             forced_provider,
                             None,
+                            metadata_json={"trace": static_trace},
                         )
                     except Exception:
                         logger.exception("Erreur sauvegarde réponse statique assistant (space chat)")
-                
-                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+
+                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': static_trace})}\n\n"
                 return
 
             with trace_pipeline(
@@ -1553,6 +1680,7 @@ async def stream_space_chat_message(
                                 max_tokens=_mt,
                                 source_filter=source_filter,
                                 sink=assistant_response,
+                                reasoning_sink=reasoning_parts,
                             ):
                                 yield _sse
                             break  # génération réussie
@@ -1921,20 +2049,41 @@ async def stream_space_chat_message(
                     except Exception as verif_err:
                         logger.warning("Vérification post-génération ignorée: %s", verif_err)
 
+                # Trace de génération (« cheminement ») : route, signaux, retrieval, KAG,
+                # reasoning et vérification, persistée dans metadata_json et renvoyée au client
+                # pour le bouton d'inspection. La clé verification reste aussi au niveau racine
+                # de metadata_json (compat lecture existante).
+                generation_trace = _build_generation_trace(
+                    route="rag",
+                    lw_result=lw_result,
+                    retrieval_status=retrieval_status,
+                    retrieval_reason=retrieval_reason,
+                    dynamic_k=dynamic_k,
+                    rerank_status=rerank_status,
+                    nb_passages=len(doc_passages),
+                    anchor_document_ids=anchor_document_ids,
+                    requested_codes=requested_codes,
+                    pinned_codes=pinned_codes,
+                    reasoning_parts=reasoning_parts,
+                    passages_summary=_summarize_passages_for_trace(sources_data),
+                    verification=verification_result,
+                )
+
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture
                 # dès `done`, ce qui coupait le générateur avant commit / événements suivants.
                 assistant_message_id = None
                 if request.conversation_id and assistant_response:
                     sources_json = json.dumps(sources_data) if sources_data else None
+                    reply_metadata: dict = {"trace": generation_trace}
+                    if verification_result:
+                        reply_metadata["verification"] = verification_result
                     assistant_message_id = _persist_reply_with_retry(
                         request.conversation_id,
                         complete_response,
                         forced_model,
                         forced_provider,
                         sources_json,
-                        metadata_json=(
-                            {"verification": verification_result} if verification_result else None
-                        ),
+                        metadata_json=reply_metadata,
                     )
                     logger.info(
                         "Réponse assistant sauvegardée (space chat), conversation %s avec %s sources",
@@ -1944,7 +2093,7 @@ async def stream_space_chat_message(
 
                 if sources_data:
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
-                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id})}\n\n"
+                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': generation_trace})}\n\n"
 
         except MistralRateLimitError as e:
             logger.warning("Limite de débit Mistral (stream_space_chat_message): %s", e)

@@ -577,6 +577,25 @@
 </div>
 
 <!-- Modale carte mentale (arbre thématique + pages + synthèse CAG) -->
+<!-- Modale « Cheminement de génération » : trace du raisonnement (route, signaux, KAG, retrieval, reasoning) -->
+<div id="generation-trace-modal" class="hidden fixed inset-0 z-[125] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6" onclick="if(event.target===this) closeGenerationTraceModal()">
+  <div class="w-full max-w-3xl h-[min(90vh,820px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
+    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="ti ti-route-2 text-indigo-500"></i>
+          Cheminement de la réponse
+        </h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Ce qui a conduit LIA à générer cette réponse</p>
+      </div>
+      <button type="button" onclick="closeGenerationTraceModal()" class="shrink-0 p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <i class="ti ti-x text-xl"></i>
+      </button>
+    </div>
+    <div id="generation-trace-body" class="flex-1 overflow-y-auto p-4 sm:p-5 text-sm space-y-4"></div>
+  </div>
+</div>
+
 <div id="theme-tree-modal" class="hidden fixed inset-0 z-[124] bg-black/60 backdrop-blur-sm items-center justify-center p-3 sm:p-6" onclick="if(event.target===this) closeThemeTreeModal()">
   <div class="w-full max-w-6xl h-[min(92vh,860px)] flex flex-col rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-2xl overflow-hidden">
     <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
@@ -1616,6 +1635,10 @@ function addMessage(role, content, messageId = null, sources = null, metadataJso
       }
     }
     
+    if (messageId != null && metadataJson && metadataJson.trace) {
+      storeGenerationTrace(messageId, metadataJson.trace);
+    }
+
     let feedbackHtml = "";
     if (messageId) {
       feedbackHtml = `
@@ -1623,6 +1646,7 @@ function addMessage(role, content, messageId = null, sources = null, metadataJso
           <div class="flex items-center justify-between">
             <span>Cette réponse vous a été utile ?</span>
             <div class="flex items-center gap-1.5">
+              ${generationTraceButtonHtml(messageId)}
               <button onclick="submitFeedback(${messageId}, true)" class="feedback-btn w-6 h-6 rounded-md text-gray-400 hover:text-green-500 hover:bg-green-500/10 flex items-center justify-center transition-all" id="feedback-up-${messageId}" title="Utile">
                 <i class="ti ti-thumb-up text-xs"></i>
               </button>
@@ -2562,6 +2586,202 @@ function closeThemeTreeModal() {
   document.body.style.overflow = "";
 }
 
+// ——— Cheminement de génération (trace du raisonnement par message) ———
+window.__genTraces = window.__genTraces || {};
+
+// Enregistre la trace d'un message (depuis l'historique ou l'événement SSE `done`).
+function storeGenerationTrace(messageId, trace) {
+  if (messageId == null || !trace) return;
+  window.__genTraces[messageId] = trace;
+}
+
+// Bouton discret d'inspection injecté dans la barre d'actions du message.
+function generationTraceButtonHtml(messageId) {
+  if (messageId == null || !window.__genTraces[messageId]) return "";
+  return `
+    <button onclick="openGenerationTraceModal(${messageId})" class="feedback-btn w-6 h-6 rounded-md text-gray-400 hover:text-indigo-500 hover:bg-indigo-500/10 flex items-center justify-center transition-all" title="Voir le cheminement de la réponse">
+      <i class="ti ti-route-2 text-xs"></i>
+    </button>`;
+}
+
+function _traceCard(title, icon, innerHtml) {
+  if (!innerHtml) return "";
+  return `
+    <section class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-800/40 overflow-hidden">
+      <div class="px-3.5 py-2 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+        <i class="ti ${icon} text-indigo-500"></i> ${title}
+      </div>
+      <div class="p-3.5 space-y-2">${innerHtml}</div>
+    </section>`;
+}
+
+// classes littérales (Tailwind CDN JIT) par couleur pour les chips
+const _TRACE_CHIP_CLASSES = {
+  indigo: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/20",
+  emerald: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20",
+  amber: "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20",
+  gray: "bg-gray-500/10 text-gray-600 dark:text-gray-300 border-gray-500/20",
+};
+
+function _traceChips(items, color = "gray") {
+  const arr = (items || []).map((x) => (x == null ? "" : String(x))).filter(Boolean);
+  if (!arr.length) return "";
+  const cls = _TRACE_CHIP_CLASSES[color] || _TRACE_CHIP_CLASSES.gray;
+  return `<div class="flex flex-wrap gap-1.5">` + arr.map((t) =>
+    `<span class="px-2 py-0.5 rounded-md text-[11px] font-medium border ${cls}">${escapeHtml(t)}</span>`
+  ).join("") + `</div>`;
+}
+
+function _traceKV(rows) {
+  const valid = (rows || []).filter((r) => r && r[1] !== null && r[1] !== undefined && r[1] !== "");
+  if (!valid.length) return "";
+  return `<dl class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs">` + valid.map(([k, v]) =>
+    `<dt class="text-gray-500 dark:text-gray-400">${escapeHtml(k)}</dt><dd class="text-gray-800 dark:text-gray-200 font-medium break-words">${escapeHtml(String(v))}</dd>`
+  ).join("") + `</dl>`;
+}
+
+const _ROUTE_LABELS = {
+  rag: "Recherche documentaire (RAG)",
+  direct: "Réponse directe (sans recherche)",
+  clarification: "Demande de clarification",
+};
+
+function renderGenerationTrace(trace) {
+  if (!trace) return `<p class="text-gray-500 dark:text-gray-400">Aucune trace disponible pour cette réponse.</p>`;
+  const parts = [];
+
+  // 1. Route + décision
+  const routeLabel = _ROUTE_LABELS[trace.route] || trace.route || "—";
+  parts.push(_traceCard("Route choisie", "ti-git-branch", _traceKV([
+    ["Décision", routeLabel],
+    ["Question autonome", trace.standalone_question],
+    ["Sujet courant", trace.current_topic],
+    ["Changement de sujet", trace.topic_shift == null ? null : (trace.topic_shift ? "oui" : "non")],
+    ["Stratégie de requête", trace.query_strategy],
+  ])));
+
+  // 2. Signaux de compréhension
+  const s = trace.signals;
+  if (s) {
+    let inner = _traceKV([
+      ["Intention", s.intent],
+      ["Source privilégiée", s.primary_source],
+      ["Matériau", s.material_hint],
+      ["Symptôme détecté", s.detected_symptom || s.symptom_freeform],
+      ["Phase cycle de vie", s.lifecycle_phase],
+      ["Type de doc", s.doc_type_hint],
+      ["Confiance", s.confidence != null ? Math.round(s.confidence * 100) + "%" : null],
+    ]);
+    if (s.entity_texts && s.entity_texts.length) {
+      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Entités extraites</div>${_traceChips(s.entity_texts, "indigo")}</div>`;
+    }
+    if (s.detected_references && s.detected_references.length) {
+      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Références détectées</div>${_traceChips(s.detected_references, "amber")}</div>`;
+    }
+    if (s.inferred_categories && s.inferred_categories.length) {
+      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Catégories inférées</div>${_traceChips(s.inferred_categories, "gray")}</div>`;
+    }
+    parts.push(_traceCard("Compréhension de la question", "ti-bulb", inner));
+  }
+
+  // 3. KAG (codes demandés / épinglés)
+  const k = trace.kag;
+  if (k && ((k.requested_codes && k.requested_codes.length) || (k.pinned_codes && k.pinned_codes.length))) {
+    let inner = "";
+    if (k.requested_codes && k.requested_codes.length) {
+      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1">Codes demandés</div>${_traceChips(k.requested_codes, "amber")}</div>`;
+    }
+    if (k.pinned_codes && k.pinned_codes.length) {
+      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Codes épinglés (extraits verbatim)</div>${_traceChips(k.pinned_codes, "emerald")}</div>`;
+    }
+    parts.push(_traceCard("Graphe de connaissances (KAG)", "ti-hierarchy-2", inner));
+  }
+
+  // 4. Retrieval
+  const r = trace.retrieval;
+  if (r) {
+    parts.push(_traceCard("Recherche documentaire", "ti-search", _traceKV([
+      ["Statut", r.status],
+      ["Raison", r.reason],
+      ["Passages retenus", r.nb_passages],
+      ["k dynamique", r.dynamic_k],
+      ["Reranking", r.rerank_status],
+      ["KAG actif", r.kag_enabled == null ? null : (r.kag_enabled ? "oui" : "non")],
+      ["Docs d'ancre", (r.anchor_document_ids && r.anchor_document_ids.length) ? r.anchor_document_ids.join(", ") : null],
+    ])));
+  }
+
+  // 5. Passages (avec scores)
+  if (trace.passages && trace.passages.length) {
+    const rows = trace.passages.map((p) => {
+      const pageBits = [];
+      if (p.page_no) pageBits.push("p. " + p.page_no);
+      if (p.used_pages && p.used_pages.length) pageBits.push("pages " + p.used_pages.join(", "));
+      const meta = [p.section, pageBits.join(" · ")].filter(Boolean).join(" · ");
+      const score = (p.score != null) ? `<span class="shrink-0 ml-2 px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-500/10 text-indigo-700 dark:text-indigo-300">${escapeHtml(String(p.score))}</span>` : "";
+      return `<li class="flex items-start justify-between gap-2 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">
+        <div class="min-w-0">
+          <div class="text-xs font-medium text-gray-800 dark:text-gray-200 truncate">${escapeHtml(p.document_title || "Document")}</div>
+          ${meta ? `<div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${escapeHtml(meta)}</div>` : ""}
+        </div>${score}
+      </li>`;
+    }).join("");
+    parts.push(_traceCard("Passages mobilisés", "ti-files", `<ul class="-my-1">${rows}</ul>`));
+  }
+
+  // 6. Reasoning (chain-of-thought natif)
+  if (trace.reasoning) {
+    parts.push(_traceCard("Raisonnement du modèle", "ti-brain",
+      `<pre class="whitespace-pre-wrap break-words text-xs leading-relaxed text-gray-700 dark:text-gray-300 font-sans">${escapeHtml(trace.reasoning)}</pre>`));
+  }
+
+  // 7. Vérification post-génération
+  const v = trace.verification;
+  if (v) {
+    let inner = _traceKV([
+      ["Vérifiée", v.ok == null ? null : (v.ok ? "conforme" : "problème détecté")],
+      ["Répond à la question", v.answers_question == null ? null : (v.answers_question ? "oui" : "non")],
+      ["Ancrée dans les sources", v.grounded == null ? null : (v.grounded ? "oui" : "non")],
+    ]);
+    if (v.unsupported_claims && v.unsupported_claims.length) {
+      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Affirmations non étayées</div>` +
+        `<ul class="list-disc pl-4 text-xs text-amber-700 dark:text-amber-300 space-y-0.5">` +
+        v.unsupported_claims.map((c) => `<li>${escapeHtml(String(c))}</li>`).join("") + `</ul></div>`;
+    }
+    if (v.issues && v.issues.length) {
+      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Remarques</div>` +
+        `<ul class="list-disc pl-4 text-xs text-gray-600 dark:text-gray-300 space-y-0.5">` +
+        v.issues.map((c) => `<li>${escapeHtml(String(c))}</li>`).join("") + `</ul></div>`;
+    }
+    parts.push(_traceCard("Vérification de la réponse", "ti-shield-check", inner));
+  }
+
+  // 8. Paramètres de génération
+  parts.push(_traceCard("Paramètres", "ti-adjustments", _traceKV([
+    ["Modèle", trace.model],
+    ["Effort de raisonnement", trace.reasoning_effort],
+    ["Température", trace.generation_temperature],
+  ])));
+
+  return parts.filter(Boolean).join("");
+}
+
+function openGenerationTraceModal(messageId) {
+  const body = document.getElementById("generation-trace-body");
+  const modal = document.getElementById("generation-trace-modal");
+  if (!body || !modal) return;
+  body.innerHTML = renderGenerationTrace(window.__genTraces[messageId]);
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function closeGenerationTraceModal() {
+  const modal = document.getElementById("generation-trace-modal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
 // ——— Détail de page (PDF + texte) partagé (recherche mot-clé + thèmes) ———
 let spaceCategoryPageState = {
   mode: "category",
@@ -3111,6 +3331,7 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
   let receivedSources = [];
   let receivedSlotPrompt = null;
   let receivedStep = null;
+  let receivedTrace = null;
   let streamDone = false;
   let assistantMessageId = null;
   const reader = response.body.getReader();
@@ -3181,6 +3402,9 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
           if (data.message_id) {
             assistantMessageId = data.message_id;
           }
+          if (data.trace) {
+            receivedTrace = data.trace;
+          }
           break;
         }
       } catch (_) {}
@@ -3239,11 +3463,15 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });
 
   if (assistantMessageId) {
+    if (receivedTrace) {
+      storeGenerationTrace(assistantMessageId, receivedTrace);
+    }
     const feedbackHtml = `
       <div class="feedback-section mt-2 flex flex-col gap-2 border-t border-gray-200 dark:border-gray-700 pt-2 text-xs">
         <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
           <span>Cette réponse vous a été utile ?</span>
           <div class="flex items-center gap-1">
+            ${generationTraceButtonHtml(assistantMessageId)}
             <button onclick="submitFeedback(${assistantMessageId}, true)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-green-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-up-${assistantMessageId}" title="Utile">
               <i class="ti ti-thumb-up text-sm"></i>
             </button>
