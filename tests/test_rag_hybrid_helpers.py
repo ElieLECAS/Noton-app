@@ -110,56 +110,64 @@ def test_reciprocal_rank_fusion_three_channels():
 async def test_space_search_window_aggregation_and_deduplication():
     from unittest import mock
     from app.services import space_search_service
-    from app.services.page_retrieval_service import PageRetrievalHit
+    from app.services.page_retrieval_service import UnifiedPageHit
 
     session = mock.MagicMock()
 
-    fused_hit = PageRetrievalHit(
+    # Les retrievers modernes renvoient des UnifiedPageHit (l'ancien PageRetrievalHit
+    # n'a pas kag_score → crash du logging de résumé).
+    fused_hit = UnifiedPageHit(
         document_id=123,
         page_no=1,
-        score=0.9,
+        pgvector_score=0.9,
         rrf_score=0.05,
         retrieval_sources=["pgvector"],
         document_title="Doc1",
         chunk_id=1,
     )
 
-    # NB (2026-07-21) : l'ancien mock TOTAL de settings (MagicMock) cassait dès que le
-    # pipeline lisait un nouveau réglage numérique (comparaisons MagicMock → TypeError,
-    # seuils silencieusement faux → 0 passage). On patch désormais les VRAIS settings,
-    # attribut par attribut — le reste garde ses valeurs réelles.
+    # NB (2026-07-21) : test réécrit — l'ancien mockait des fonctions RENOMMÉES depuis
+    # (retrieve_*_page_hits → retrieve_*_pages, format_hybrid_passages →
+    # format_multimodal_passages) et un settings TOTAL en MagicMock : les vrais
+    # retrievers tournaient contre la DB de test vide → 0 passage. On mocke désormais
+    # le point d'agrégation actuel (_run_retrievers) et les VRAIS settings, attribut
+    # par attribut.
     from app.config import settings as real_settings
 
     with mock.patch("app.services.space_search_service.get_space_by_id") as mock_get_space, \
          mock.patch("app.services.space_search_service.generate_embedding", return_value=[0.1] * 1024), \
          mock.patch("app.services.page_retrieval_service.get_space_document_ids", return_value=[123]), \
-         mock.patch("app.services.page_retrieval_service.retrieve_colpali_page_hits", return_value=[]), \
-         mock.patch("app.services.page_retrieval_service.retrieve_pgvector_page_hits", return_value=[fused_hit]), \
-         mock.patch("app.services.page_retrieval_service.retrieve_bm25_page_hits", return_value=[]), \
-         mock.patch("app.services.page_retrieval_service.retrieve_kag_pages", return_value=[]), \
-         mock.patch("app.services.page_retrieval_service.format_hybrid_passages") as mock_format, \
+         mock.patch(
+             "app.services.space_search_service._run_retrievers",
+             new=mock.AsyncMock(return_value=([], [fused_hit], [], [])),
+         ), \
+         mock.patch("app.services.page_retrieval_service.format_multimodal_passages") as mock_format, \
          mock.patch.object(real_settings, "RERANKER_ENABLED", False), \
          mock.patch.object(real_settings, "VISION_RERANK_ENABLED", False), \
-         mock.patch.object(real_settings, "USE_MULTIMODAL_RETRIEVAL", False), \
+         mock.patch.object(real_settings, "COLPALI_GATING_FALLBACK_MIN_HITS", 0), \
          mock.patch.object(real_settings, "MIN_DYNAMIC_K", 0):
 
         mock_get_space.return_value = mock.MagicMock()
-        mock_format.return_value = [
-            {
-                "passage": "**Doc1**\nContenu consolidé page 1.",
-                "passage_raw": "Contenu consolidé page 1.",
-                "document_title": "Doc1",
-                "document_id": 123,
-                "chunk_id": 1,
-                "score": 0.9,
-                "page_no": 1,
-                "page_start": 1,
-                "page_end": 1,
-                "retrieval_sources": ["pgvector"],
-                "needs_page_image": False,
-                "content_type": "hybrid_page_passage",
-            }
-        ]
+        # format_multimodal_passages retourne (passages, images).
+        mock_format.return_value = (
+            [
+                {
+                    "passage": "**Doc1**\nContenu consolidé page 1.",
+                    "passage_raw": "Contenu consolidé page 1.",
+                    "document_title": "Doc1",
+                    "document_id": 123,
+                    "chunk_id": 1,
+                    "score": 0.9,
+                    "page_no": 1,
+                    "page_start": 1,
+                    "page_end": 1,
+                    "retrieval_sources": ["pgvector"],
+                    "needs_page_image": False,
+                    "content_type": "hybrid_page_passage",
+                }
+            ],
+            [],
+        )
 
         result = await space_search_service.search_relevant_passages(
             session=session,
