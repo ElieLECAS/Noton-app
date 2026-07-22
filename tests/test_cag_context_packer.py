@@ -150,13 +150,33 @@ def test_build_cag_empty_passages(db_session: Session):
     assert msg["cag_documents"] == []
 
 
-def test_budget_for_intent_uses_table_and_default():
+def test_budget_for_intent_uses_table_and_default(monkeypatch):
+    # Plafonds globaux au niveau des défauts code : la table par intent s'exprime pleinement.
+    from app.config import settings
+
+    monkeypatch.setattr(settings, "CAG_TOKEN_BUDGET", 100000)
+    monkeypatch.setattr(settings, "CAG_MAX_DOCUMENTS", 8)
     # Table par défaut : specification = petit budget, troubleshooting = gros budget.
     assert budget_for_intent("specification") == (30000, 4)
     assert budget_for_intent("troubleshooting") == (100000, 8)
     # Intent inconnu / absent → clé "default".
     assert budget_for_intent("intent_inconnu") == (60000, 6)
     assert budget_for_intent(None) == (60000, 6)
+
+
+def test_budget_for_intent_clamped_by_global_ceilings(monkeypatch):
+    """CAG_TOKEN_BUDGET / CAG_MAX_DOCUMENTS sont des plafonds DURS : une prod configurée
+    à 50000/3 ne doit plus packer 100000/8 parce que l'intent est product_selection
+    (bug constaté en prod 2026-07-22 : variables d'env ignorées par la table par intent)."""
+    from app.config import settings
+
+    monkeypatch.setattr(settings, "CAG_TOKEN_BUDGET", 50000)
+    monkeypatch.setattr(settings, "CAG_MAX_DOCUMENTS", 3)
+    # Les gros intents sont bornés par les plafonds globaux.
+    assert budget_for_intent("product_selection") == (50000, 3)
+    assert budget_for_intent("troubleshooting") == (50000, 3)
+    # Les petits intents restent en dessous du plafond, inchangés.
+    assert budget_for_intent("specification") == (30000, 3)
 
 
 def test_windowed_trim_drops_farthest_pages_first(db_session: Session):

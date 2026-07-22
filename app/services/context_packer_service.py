@@ -63,14 +63,21 @@ def budget_for_intent(intent: Optional[str]) -> Tuple[int, int]:
 
     Une question de spécification ponctuelle ne paie pas le prefill (coût + latence
     1er token) d'un diagnostic SAV. Table ``CAG_BUDGET_BY_INTENT`` ; la clé "default"
-    couvre les intents absents/inconnus ; repli final sur les plafonds globaux.
+    couvre les intents absents/inconnus.
+
+    CAG_TOKEN_BUDGET et CAG_MAX_DOCUMENTS sont des PLAFONDS DURS : la table par intent
+    module en dessous, jamais au-dessus. Sans ce clamp, la table par défaut du code
+    (product_selection=100000/8) rendait les variables d'env inopérantes — une prod
+    configurée à 50000/3 packait quand même 100000/8 (constaté logs prod 2026-07-22).
     """
     table = settings.cag_budget_by_intent or {}
     key = (intent or "").strip().lower()
     entry = table.get(key) or table.get("default") or {}
     token_budget = int(entry.get("budget") or settings.CAG_TOKEN_BUDGET)
     max_documents = int(entry.get("max_documents") or settings.CAG_MAX_DOCUMENTS)
-    return token_budget, max_documents
+    token_budget = min(token_budget, int(settings.CAG_TOKEN_BUDGET))
+    max_documents = min(max_documents, int(settings.CAG_MAX_DOCUMENTS))
+    return max(1000, token_budget), max(1, max_documents)
 
 
 def invalidate_document_fulltext_cache(document_id: Optional[int] = None) -> None:
