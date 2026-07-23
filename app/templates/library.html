@@ -1026,6 +1026,81 @@ endblock %} {% block content %}
         return ` <span class="text-emerald-700 dark:text-emerald-400">· ${bits.join(" · ")} · ${snap.readiness_label || ""}</span>`;
     }
 
+    // ---- Santé d'indexation (texte / ColPali sync / KAG / catégories) ----
+    let latestDocsById = {};
+
+    function healthChipHtml(label, tone, tooltip, onclickAttr = "") {
+        const tones = {
+            ok: "bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border-emerald-500/10",
+            warn: "bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 border-amber-500/10",
+            error: "bg-red-500/10 text-red-700 dark:bg-red-500/20 dark:text-red-400 border-red-500/10",
+            muted: "bg-gray-500/10 text-gray-600 dark:bg-gray-500/20 dark:text-gray-400 border-gray-500/10",
+        };
+        const icons = { ok: "ti-check", warn: "ti-alert-triangle", error: "ti-x", muted: "ti-help" };
+        const clickable = onclickAttr ? ` cursor-pointer hover:opacity-80 active:scale-95 transition-all` : "";
+        return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-xs font-semibold ${tones[tone] || tones.muted}${clickable}" title="${(tooltip || "").replace(/"/g, "&quot;")}" ${onclickAttr}>
+            <i class="ti ${icons[tone] || icons.muted} text-xs"></i><span>${label}</span>
+        </span>`;
+    }
+
+    function buildHealthChips(h, doc) {
+        if (!h) return "";
+        if (h.overall === "in_progress") {
+            return healthChipHtml("Audit après traitement", "muted", "Santé d'indexation disponible une fois le traitement terminé.");
+        }
+        const t = h.text || {}, c = h.colpali || {}, k = h.kag || {};
+        const colpaliTooltip = `ColPali : ${c.indexed_pages ?? 0}/${c.expected_pages ?? 0} page(s) indexée(s) · ${c.orphan_count ?? 0} orphelin(s) · ${c.missing_count ?? 0} manquante(s)` + (c.legacy_mode ? " · pipeline legacy (feuilles)" : "");
+        if (h.overall === "ok") {
+            const detail = `Texte : ${t.chunk_count} chunk(s), ${t.leaves_with_embedding} embedding(s)\n${colpaliTooltip}\nKAG : ${k.entity_count} entité(s), ${k.relation_count} relation(s), ${k.category_count} catégorie(s)`;
+            return healthChipHtml("Pipeline complet · ColPali sync", "ok", detail);
+        }
+        const chips = [];
+        if (t.status === "missing") chips.push(healthChipHtml("Texte", "error", "Aucun chunk ou aucun embedding."));
+        else if (t.status === "partial") chips.push(healthChipHtml(`Texte ${t.missing_embeddings} sans emb.`, "warn", `${t.missing_embeddings} feuille(s) sans embedding sur ${t.leaf_count}.`));
+        else chips.push(healthChipHtml("Texte", "ok", `${t.chunk_count} chunk(s), ${t.leaves_with_embedding} embedding(s).`));
+
+        if (c.status === "desync") chips.push(healthChipHtml(`ColPali désync (${c.orphan_count + (c.legacy_count || 0)})`, "error", colpaliTooltip + "\nPatches pointant vers des chunks supprimés/obsolètes : le canal visuel rate des pages. Retraiter en mode « ColPali seul »."));
+        else if (c.status === "partial") chips.push(healthChipHtml(`ColPali ${c.indexed_pages}/${c.expected_pages}`, "warn", colpaliTooltip));
+        else if (c.status === "missing") chips.push(healthChipHtml("ColPali absent", "error", "Aucun patch ColPali indexé pour ce document."));
+        else if (c.status === "unknown") chips.push(healthChipHtml("ColPali ?", "warn", "Scan LanceDB en échec — état de sync inconnu."));
+        else if (c.status === "ok") chips.push(healthChipHtml(`ColPali ${c.indexed_pages}/${c.expected_pages}`, "ok", colpaliTooltip));
+
+        if (k.status === "missing") chips.push(healthChipHtml("Entités", "warn", "Aucune entité KAG extraite — retraiter en mode « KAG seul »."));
+        else if (k.status === "ok") chips.push(healthChipHtml(`${k.entity_count} entités`, "ok", `${k.entity_count} entité(s), ${k.relation_count} relation(s) KAG.`));
+
+        if (k.status !== "disabled") {
+            if (!h.categories_ok) chips.push(healthChipHtml("Catégories", "warn", "Aucune catégorie de contenu liée aux chunks."));
+            else if (k.category_count) chips.push(healthChipHtml(`${k.category_count} catégorie(s)`, "ok", `${k.category_count} catégorie(s) de contenu.`));
+        }
+
+        if (h.suggested_reindex_mode && isAdminUser && canLibraryWrite && doc) {
+            const safeTitle = (doc.title || "").replace(/'/g, "\\'");
+            chips.push(healthChipHtml(
+                `Retraiter (${h.suggested_reindex_mode})`,
+                "warn",
+                `Mode recommandé : ${h.suggested_reindex_mode}`,
+                `onclick="reindexDocument(${doc.id}, '${safeTitle}')"`,
+            ));
+        }
+        return chips.join("");
+    }
+
+    async function loadIndexingHealth() {
+        const params = new URLSearchParams();
+        if (selectedFolderId !== null) params.set("folder_id", String(selectedFolderId));
+        try {
+            const r = await api(`/api/library/indexing-health?${params.toString()}`);
+            if (!r.ok) return;
+            const health = await r.json();
+            document.querySelectorAll("[data-health-for]").forEach((host) => {
+                const docId = host.dataset.healthFor;
+                host.innerHTML = buildHealthChips(health[docId], latestDocsById[docId]);
+            });
+        } catch (e) {
+            /* silencieux : les pastilles restent vides */
+        }
+    }
+
     function renderDocumentsEmptyState() {
         if (!canLibraryWrite) {
             return `<div class="py-12 text-center text-sm text-gray-500 dark:text-gray-400">Aucun document dans ce dossier.</div>`;
@@ -1056,6 +1131,7 @@ endblock %} {% block content %}
         const r = await api(url);
         if (!r.ok) return;
         const docs = await r.json();
+        latestDocsById = Object.fromEntries(docs.map((d) => [d.id, d]));
         document.getElementById("docs-count").textContent =
             `${docs.length} document(s)`;
         const listHost = document.getElementById("documents-list");
@@ -1132,6 +1208,7 @@ endblock %} {% block content %}
             ${statusBadgeHtml}
             ${formatProcessingSnapshotLine(d)}
           </div>
+          <div class="mt-1.5 flex flex-wrap items-center gap-1" data-health-for="${d.id}"></div>
         </div>
       </div>
       <div class="flex items-center gap-2 flex-wrap justify-end shrink-0">
@@ -1197,6 +1274,7 @@ endblock %} {% block content %}
                 }
             )
             .join("");
+        loadIndexingHealth();
     }
 
     async function openDocumentFile(documentId) {

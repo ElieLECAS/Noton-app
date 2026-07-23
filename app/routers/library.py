@@ -935,6 +935,37 @@ async def skip_single_library_document(
     )
 
 
+@router.get("/indexing-health")
+async def get_library_indexing_health(
+    folder_id: Optional[int] = None,
+    include_all: bool = False,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Santé d'indexation par document (texte / ColPali+sync LanceDB / KAG / catégories).
+
+    Retourne {document_id: health} pour les documents du dossier (ou de toute la
+    bibliothèque avec include_all). Sert les pastilles de la vue bibliothèque afin
+    de repérer d'un coup d'œil les documents à retraiter, et en quel mode.
+    """
+    from app.services.indexing_health_service import build_indexing_health_bulk
+
+    library = get_or_create_user_library(session, current_user.id)
+    if include_all:
+        documents = get_documents_by_library(session, library.id, current_user.id)
+    else:
+        from app.services.document_service_new import _exclude_feedback_corrective_where
+
+        documents = session.exec(
+            select(Document).where(
+                Document.library_id == library.id,
+                Document.folder_id == folder_id,
+                *_exclude_feedback_corrective_where(),
+            )
+        ).all()
+    return build_indexing_health_bulk(session, list(documents))
+
+
 @router.get("/documents/{document_id}/processing-health")
 async def get_document_processing_health(
     document_id: int,
@@ -970,7 +1001,21 @@ async def get_document_diagnostic(
     ).first()
     if document is None:
         raise HTTPException(status_code=404, detail="Document non trouvé")
-    return build_document_diagnostic(session, document_id)
+    from app.services.indexing_health_service import (
+        build_indexing_health_bulk,
+        build_indexing_health_issues,
+    )
+
+    diagnostic = build_document_diagnostic(session, document_id)
+    health = build_indexing_health_bulk(session, [document]).get(document_id)
+    if health:
+        diagnostic["indexing_health"] = health
+        extra_issues = [
+            i for i in build_indexing_health_issues(health) if i not in diagnostic["issues"]
+        ]
+        diagnostic["issues"].extend(extra_issues)
+        diagnostic["checks_ok"] = diagnostic["checks_ok"] and health["overall"] in ("ok", "in_progress")
+    return diagnostic
 
 
 @router.put("/documents/{document_id}", response_model=DocumentRead)

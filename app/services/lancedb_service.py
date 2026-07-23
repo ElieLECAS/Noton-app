@@ -144,6 +144,44 @@ def delete_single_chunk_lancedb(chunk_id: int):
     except Exception as e:
         logger.error(f"Error deleting chunk_id={chunk_id} from LanceDB: {e}", exc_info=True)
 
+def get_colpali_chunk_ids_by_document(document_ids: List[int]) -> Dict[int, Optional[set]]:
+    """Ids de chunks distincts présents dans LanceDB, par document (audit de sync).
+
+    Retourne {document_id: set(chunk_ids)} — set vide si aucun patch. En cas
+    d'échec du scan LanceDB, la valeur est None (état inconnu, à distinguer
+    de « aucun patch »).
+    """
+    result: Dict[int, Optional[set]] = {int(d): set() for d in document_ids}
+    if not document_ids:
+        return result
+    try:
+        table = get_colpali_table()
+        doc_ids_str = ",".join(map(str, document_ids))
+        tbl = (
+            table.search()
+            .where(f"document_id in ({doc_ids_str})")
+            .select(["chunk_id", "document_id"])
+            .to_arrow()
+        )
+        if tbl.num_rows:
+            pairs = np.unique(
+                np.stack(
+                    [
+                        tbl["document_id"].to_numpy(zero_copy_only=False),
+                        tbl["chunk_id"].to_numpy(zero_copy_only=False),
+                    ],
+                    axis=1,
+                ),
+                axis=0,
+            )
+            for d_id, c_id in pairs.tolist():
+                result.setdefault(int(d_id), set()).add(int(c_id))
+        return result
+    except Exception as e:
+        logger.error(f"Error scanning ColPali chunk ids from LanceDB: {e}", exc_info=True)
+        return {int(d): None for d in document_ids}
+
+
 def search_colpali_lancedb(query_token_embeddings: List[List[float]], document_ids: List[int], limit: int) -> List[Dict[str, Any]]:
     """
     Performs late interaction (MaxSim) search on ColPali patches table.
