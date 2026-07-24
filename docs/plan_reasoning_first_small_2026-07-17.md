@@ -237,6 +237,32 @@ aval s'appuie sur le score.
 
 ---
 
+## 9bis. Cas cible de référence — réponse Gemini (cas #1, crémone 4 points)
+
+Preuve terrain : sur les MÊMES documents (SOLEAL GY-55, LUMEAL GA, DTA Lumeal uploadés),
+Gemini produit la réponse idéale là où le système actuel enterrait l'info. C'est la
+barre du golden answer-level.
+
+**Question** : « pour un coulissant, il y a une crémone 3 point ref TGY3702, je cherche
+la référence de la crémone 4 points pour coulissant. »
+
+**Réponse cible (Gemini)** — traits à reproduire :
+1. **Reformule la prémisse fausse** : « il n'existe pas de référence unique pour une
+   crémone 4 points complète » → pour verrouiller 4 points, on associe la 3 points + une
+   extension. (= raisonnement domaine, PAS retrieval brut → justifie Appel A+B reasoning.)
+2. **Answer-first** puis références exactes : TGY3702 (3 pts) / TGY3703 (3 pts à clé) /
+   **TGY3704 (rallonge inox 4ᵉ point)**, sans mélange.
+3. **Conclusion actionnable** : « ajoutez TGY3704 à votre crémone 3 points ».
+4. **Sourcé** (SOLEAL-GY-55-Catalogue-conception) → chaque réf traçable = phase 5.
+5. **Concis**, périmètre exact, pas de dump de fiche.
+
+**Enseignements** :
+- L'info EST dans le corpus → écart 100 % pipeline, pas données. Dé-risque le plan.
+- C'est le cas de rédaction/synthèse où small peut trailer un frontier → si small+reasoning
+  ne l'atteint pas, bascule Appel B sur `medium-3-5`. Le golden tranche.
+- Objectif = cette qualité AVEC notre moteur (retrieval à l'échelle, KAG, crops, profils,
+  données maîtrisées), pas via Gemini.
+
 ## 10. En une phrase
 
 On ne réécrit pas la continuité (elle est bonne) : on remplace les deux extractions

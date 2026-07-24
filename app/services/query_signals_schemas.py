@@ -15,7 +15,14 @@ from app.services.category_catalog import (
     get_active_categories,
     get_active_categories_for_prompt,
 )
-from app.services.slot_catalog import INTENT_CHOICES, MATERIAL_CHOICES, SUPPLIER_CHOICES, supplier_slug_to_source
+from app.services.slot_catalog import (
+    INTENT_CHOICES,
+    MATERIAL_CHOICES,
+    PRODUCT_FAMILY_CHOICES,
+    PRODUCT_RANGE_CHOICES,
+    SUPPLIER_CHOICES,
+    supplier_slug_to_source,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +44,25 @@ _MATERIAL_ALIASES: Dict[str, str] = {
     "aluminium": "aluminium",
     "pvc": "pvc",
     "hybride": "hybride",
+}
+
+# Alias vers les slugs de PRODUCT_FAMILY_CHOICES (singulier/pluriel, accents).
+_PRODUCT_FAMILY_ALIASES: Dict[str, str] = {
+    "coulissant": "coulissants",
+    "coulissants": "coulissants",
+    "coulisse": "coulissants",
+    "coulisses": "coulissants",
+    "galandage": "coulissants",
+    "baie": "coulissants",
+    "baie coulissante": "coulissants",
+    "fenetre": "fenetres",
+    "fenetres": "fenetres",
+    "fenêtre": "fenetres",
+    "fenêtres": "fenetres",
+    "porte": "portes",
+    "portes": "portes",
+    "porte-fenetre": "portes",
+    "porte-fenêtre": "portes",
 }
 
 
@@ -62,6 +88,10 @@ class QuerySignalsExtraction(BaseModel):
     inferred_categories: List[str] = Field(default_factory=list)
     primary_source: Optional[str] = None
     material_hint: Optional[str] = None
+    # Périmètre de recherche : famille de produit (coulissants/fenetres/portes) et
+    # gamme Proferm — matchés contre Document.product_types / proferm_gammes au retrieval.
+    product_family: Optional[str] = None
+    product_range: Optional[str] = None
     detected_references: List[str] = Field(default_factory=list)
     # Facettes multi-axes (validées contre les axes correspondants)
     detected_symptom: Optional[str] = None
@@ -98,6 +128,29 @@ class QuerySignalsExtraction(BaseModel):
             return None
         normalized = _MATERIAL_ALIASES.get(str(v).strip().lower())
         return normalized if normalized in MATERIAL_CHOICES else None
+
+    @field_validator("product_family", mode="before")
+    @classmethod
+    def normalize_product_family(cls, v: Any) -> Any:
+        if v is None or v == "":
+            return None
+        raw = str(v).strip().lower()
+        normalized = _PRODUCT_FAMILY_ALIASES.get(raw, raw)
+        return normalized if normalized in PRODUCT_FAMILY_CHOICES else None
+
+    @field_validator("product_range", mode="before")
+    @classmethod
+    def normalize_product_range(cls, v: Any) -> Any:
+        if v is None or v == "":
+            return None
+        slug = str(v).strip().lower()
+        if slug in PRODUCT_RANGE_CHOICES:
+            return slug
+        # Tolère le libellé ("Perform" → "perform").
+        for key, label in PRODUCT_RANGE_CHOICES.items():
+            if label.lower() == slug:
+                return key
+        return None
 
     @field_validator("primary_source", mode="before")
     @classmethod
@@ -180,6 +233,8 @@ class LightweightQuerySignals(BaseModel):
     inferred_categories: List[str] = Field(default_factory=list)
     primary_source: Optional[str] = None
     material_hint: Optional[str] = None
+    product_family: Optional[str] = None
+    product_range: Optional[str] = None
     detected_references: List[str] = Field(default_factory=list)
     detected_symptom: Optional[str] = None
     lifecycle_phase: Optional[str] = None
@@ -222,6 +277,8 @@ def _format_axis_vocab(labels: Dict[str, str]) -> str:
 def build_extract_signals_prompt(session: Session) -> str:
     category_catalog_json = get_active_categories_for_prompt(session)
     intent_values = " | ".join(INTENT_CHOICES.keys())
+    product_family_values = _format_axis_vocab(PRODUCT_FAMILY_CHOICES)
+    product_range_values = _format_axis_vocab(PRODUCT_RANGE_CHOICES)
     symptom_values = _format_axis_vocab(SYMPTOM_LABELS)
     lifecycle_values = _format_axis_vocab(LIFECYCLE_PHASE_LABELS)
     doc_type_values = _format_axis_vocab(DOC_TYPE_LABELS)
@@ -253,6 +310,14 @@ Extrais les signaux suivants du message utilisateur.
 
 5. MATERIAL_HINT (optionnel) : pvc | aluminium | hybride si mentionné, sinon null.
 
+5b. PRODUCT_FAMILY (optionnel) : famille de produit UNIQUEMENT si déductible de la question,
+   UN slug parmi : {product_family_values}. « coulissant/coulisse/galandage/baie » ⇒ coulissants ;
+   « fenêtre » ⇒ fenetres ; « porte » ⇒ portes. Sinon null. NE PAS deviner si le type
+   d'ouverture n'est pas clair (« frappe » seul est ambigu → null).
+
+5c. PRODUCT_RANGE (optionnel) : gamme Proferm citée, UN slug parmi : {product_range_values}.
+   Sinon null. NE PAS inférer depuis un code fournisseur.
+
 6. DETECTED_REFERENCES : codes, modèles, normes cités sous forme exacte (ex. "Perform 70").
 
 7. DETECTED_SYMPTOM (optionnel) : si la question décrit un PROBLÈME/SYMPTÔME SAV, choisis UN slug
@@ -276,6 +341,8 @@ Retourne UNIQUEMENT un JSON :
   "inferred_categories": [],
   "primary_source": null,
   "material_hint": null,
+  "product_family": null,
+  "product_range": null,
   "detected_references": [],
   "detected_symptom": null,
   "lifecycle_phase": null,
@@ -325,6 +392,8 @@ def to_lightweight_signals(extraction: QuerySignalsExtraction) -> LightweightQue
         inferred_categories=fused_categories,
         primary_source=extraction.primary_source,
         material_hint=extraction.material_hint,
+        product_family=extraction.product_family,
+        product_range=extraction.product_range,
         detected_references=extraction.detected_references,
         detected_symptom=extraction.detected_symptom,
         lifecycle_phase=extraction.lifecycle_phase,

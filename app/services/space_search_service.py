@@ -744,10 +744,16 @@ async def search_multimodal_passages(
     signals: Optional[LightweightQuerySignals] = None,
     query_groups: Optional[List[QueryGroup]] = None,
     anchor_document_ids: Optional[List[int]] = None,
+    allowed_document_ids: Optional[List[int]] = None,
 ) -> Dict:
     """
     Pipeline retrieval multimodal page-centric unifié.
     ColPali + pgvector + BM25 → RRF → expansion L1 → texte + PNG.
+
+    ``allowed_document_ids`` (périmètre confirmé) : si fourni, restreint les documents
+    candidats à cette liste (déjà calculée avec la politique wildcard côté résolveur).
+    Un périmètre qui ne laisse aucun document → status ``no_results`` motif
+    ``scope_empty`` : l'appelant peut alors élargir (retry sans périmètre).
     """
     from app.services.page_retrieval_service import (
         expand_page_context,
@@ -798,6 +804,24 @@ async def search_multimodal_passages(
             if include_retrieval_stages:
                 result["retrieval_stages"] = {"colpali": [], "post_rerank": [], "reason": "no_results"}
             return result
+
+        # Périmètre de recherche confirmé : intersection avec les documents autorisés.
+        # Point d'application UNIQUE — les 4 retrievers (mono/multi-groupe) reçoivent ensuite
+        # ce doc_ids déjà scopé, donc ColPali/pgvector/BM25/KAG et le packing restent dans
+        # le périmètre sans autre modification.
+        if allowed_document_ids is not None:
+            allowed_set = {int(d) for d in allowed_document_ids}
+            scoped = [d for d in doc_ids if int(d) in allowed_set]
+            logger.info(
+                "[RAG multimodal] Périmètre confirmé — %d/%d documents retenus",
+                len(scoped),
+                len(doc_ids),
+            )
+            if not scoped:
+                # Périmètre trop étroit : aucun document. L'appelant élargit (retry sans
+                # périmètre) — jamais d'échec silencieux.
+                return {"passages": [], "images": [], "status": "ok", "reason": "scope_empty"}
+            doc_ids = scoped
 
         # --- Retrieval : mode multi-groupe ou mode unique ---
         active_groups = query_groups if (query_groups and len(query_groups) > 1) else None
@@ -1205,6 +1229,7 @@ async def search_relevant_passages(
     signals: Optional[LightweightQuerySignals] = None,
     query_groups: Optional[List[QueryGroup]] = None,
     anchor_document_ids: Optional[List[int]] = None,
+    allowed_document_ids: Optional[List[int]] = None,
 ) -> Dict:
     """
     RAG espace : délègue au pipeline multimodal page-centric unifié
@@ -1223,6 +1248,7 @@ async def search_relevant_passages(
         anchor_document_ids=anchor_document_ids,
         signals=signals,
         query_groups=query_groups,
+        allowed_document_ids=allowed_document_ids,
     )
 
 
@@ -1236,6 +1262,7 @@ async def search_technical_passages(
     signals: Optional[LightweightQuerySignals] = None,
     query_groups: Optional[List[QueryGroup]] = None,
     anchor_document_ids: Optional[List[int]] = None,
+    allowed_document_ids: Optional[List[int]] = None,
 ) -> Dict:
     """
     Recherche RAG limitée aux documents techniques (exclut les FAQ correctives).
@@ -1256,6 +1283,7 @@ async def search_technical_passages(
         signals=signals,
         query_groups=query_groups,
         anchor_document_ids=anchor_document_ids,
+        allowed_document_ids=allowed_document_ids,
     )
 
 

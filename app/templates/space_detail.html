@@ -3264,7 +3264,74 @@ async function handleGuidedChoice(value, label) {
   await submitSpaceChat(displayLabel, null, { value, label: displayLabel });
 }
 
-async function submitSpaceChat(message, slotAction = null, guidedChoice = null) {
+// ——— Carte de périmètre de recherche (human-in-the-loop) ———
+function buildScopeCardSection(proposal) {
+  const esc = (s) => String(s || "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const fields = (proposal && proposal.fields) || [];
+  if (!fields.length) return "";
+  const rows = fields.map((f) => {
+    const head = `<span class="text-xs font-semibold text-gray-500 dark:text-gray-400 w-full sm:w-auto sm:mr-2">${esc(f.label)}</span>`;
+    if (f.status === "to_ask") {
+      const opts = (f.options || []).map((o) =>
+        `<button type="button" class="scope-chip px-3 py-1.5 rounded-full text-sm border border-gray-300 dark:border-gray-600 hover:border-indigo-500 hover:text-indigo-600 transition-all" data-field="${esc(f.key)}" data-value="${esc(o.value)}">${esc(o.label)}</button>`
+      ).join("");
+      const anyChip = `<button type="button" class="scope-chip px-3 py-1.5 rounded-full text-sm border border-dashed border-gray-300 dark:border-gray-600 text-gray-500 hover:border-indigo-500 transition-all" data-field="${esc(f.key)}" data-value="">Peu importe</button>`;
+      return `<div class="scope-field flex flex-wrap items-center gap-2" data-field="${esc(f.key)}">${head}${opts}${anyChip}</div>`;
+    }
+    const val = f.value || "";
+    const lbl = f.value_label || val;
+    return `<div class="scope-field flex flex-wrap items-center gap-2" data-field="${esc(f.key)}">${head}<button type="button" class="scope-chip scope-chip-active px-3 py-1.5 rounded-full text-sm border border-indigo-500 bg-indigo-500 text-white" data-field="${esc(f.key)}" data-value="${esc(val)}">${esc(lbl)}</button></div>`;
+  }).join("");
+  return `
+    <div class="scope-card rounded-2xl border border-indigo-200 dark:border-indigo-800 bg-indigo-50/50 dark:bg-indigo-900/10 p-4 flex flex-col gap-3">
+      <div class="flex items-center gap-2 text-sm font-semibold text-indigo-700 dark:text-indigo-300"><i class="ti ti-filter-search"></i> Préciser la recherche</div>
+      ${rows}
+      <div class="flex items-center gap-2 pt-1">
+        <button type="button" class="scope-confirm-btn px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-all">Chercher</button>
+        <button type="button" class="scope-skip-btn px-3 py-2 rounded-lg text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-all">Chercher dans tout l'espace</button>
+      </div>
+    </div>`;
+}
+
+function attachScopeCardListeners(container, originalMessage) {
+  if (!container) return;
+  const card = container.querySelector(".scope-card");
+  if (!card) return;
+  card.querySelectorAll(".scope-field").forEach((group) => {
+    const chips = group.querySelectorAll(".scope-chip");
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        chips.forEach((c) =>
+          c.classList.remove("scope-chip-active", "bg-indigo-500", "text-white", "border-indigo-500")
+        );
+        chip.classList.add("scope-chip-active", "bg-indigo-500", "text-white", "border-indigo-500");
+      });
+    });
+  });
+  const finish = (values) => {
+    card.querySelectorAll("button").forEach((b) => (b.disabled = true));
+    card.classList.add("opacity-60");
+    submitSpaceChat(originalMessage, null, null, { values });
+  };
+  const confirmBtn = card.querySelector(".scope-confirm-btn");
+  if (confirmBtn)
+    confirmBtn.addEventListener("click", () => {
+      const values = {};
+      card.querySelectorAll(".scope-field").forEach((group) => {
+        const active = group.querySelector(".scope-chip-active");
+        const field = group.dataset.field;
+        if (active && field && active.dataset.value) {
+          values[field] = active.dataset.value;
+        }
+      });
+      finish(values);
+    });
+  const skipBtn = card.querySelector(".scope-skip-btn");
+  if (skipBtn) skipBtn.addEventListener("click", () => finish({}));
+}
+
+async function submitSpaceChat(message, slotAction = null, guidedChoice = null, scopeChoice = null) {
   function startFakeReasoning(el) {
     el.innerHTML = `
       <div class="flex items-center gap-3 py-1">
@@ -3311,6 +3378,9 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
   if (guidedChoice) {
     requestBody.guided_choice = guidedChoice;
   }
+  if (scopeChoice) {
+    requestBody.scope_choice = scopeChoice;
+  }
 
   let response;
   try {
@@ -3339,6 +3409,7 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
   let receivedSources = [];
   let receivedSlotPrompt = null;
   let receivedStep = null;
+  let receivedScopeProposal = null;
   let receivedTrace = null;
   let streamDone = false;
   let assistantMessageId = null;
@@ -3383,6 +3454,9 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
         } else if (data.step) {
           if (reasoningInterval) clearInterval(reasoningInterval);
           receivedStep = data.step;
+        } else if (data.scope_proposal) {
+          if (reasoningInterval) clearInterval(reasoningInterval);
+          receivedScopeProposal = data.scope_proposal;
         } else if (data.sources) {
           receivedSources = data.sources;
           if (full) {
@@ -3429,6 +3503,21 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null) 
   if (messageContainer) {
     const skeleton = messageContainer.querySelector("#illustration-skeleton");
     if (skeleton) skeleton.remove();
+  }
+
+  if (receivedScopeProposal) {
+    // Proposition de périmètre : la bulle porte une courte intro, la carte s'affiche
+    // dessous. Aucun message « Aucune réponse » ni titre auto (le tour est en attente).
+    contentEl.classList.remove("italic");
+    contentEl.innerHTML = parseMarkdown("Je précise la recherche avant de chercher :");
+    const cardHtml = buildScopeCardSection(receivedScopeProposal);
+    assistantWrap.insertAdjacentHTML(
+      "beforeend",
+      `<div class="message-propositions mt-2 flex flex-col gap-2">${cardHtml}</div>`
+    );
+    attachScopeCardListeners(assistantWrap, message);
+    host.scrollTop = host.scrollHeight;
+    return;
   }
 
   if (!full && !streamError) {

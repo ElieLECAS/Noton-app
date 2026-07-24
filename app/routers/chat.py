@@ -1,7 +1,7 @@
-from typing import List, Optional, Literal
+from typing import Dict, List, Optional, Literal
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse, FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 from app.models.user import UserRead
 from app.routers.auth import get_current_user
@@ -163,7 +163,29 @@ def _save_conversation_query_context(conversation_id: int, query_context: dict) 
             # (clarification, low-confidence, erreur) la perdait définitivement.
             if "current_documents" not in merged and previous.get("current_documents"):
                 merged["current_documents"] = previous["current_documents"]
+            # Périmètre de recherche confirmé (current_scope) : même logique de préservation
+            # que l'ancre documentaire — écrit après le retrieval, il serait sinon effacé par
+            # la sauvegarde du query_context de compréhension au tour suivant.
+            if "current_scope" not in merged and previous.get("current_scope"):
+                merged["current_scope"] = previous["current_scope"]
             conv.query_context = merged
+            conv.updated_at = datetime.utcnow()
+            s.add(conv)
+            s.commit()
+
+
+def _update_conversation_scope(conversation_id: int, scope: dict) -> None:
+    """Persiste le périmètre de recherche confirmé (current_scope) dans query_context.
+
+    Fusion non destructive (comme l'ancre documentaire) : réassigne le dict entier pour
+    déclencher le suivi de modification JSON de SQLAlchemy.
+    """
+    with Session(engine) as s:
+        conv = s.get(Conversation, conversation_id)
+        if conv:
+            qc = dict(conv.query_context or {})
+            qc["current_scope"] = dict(scope or {})
+            conv.query_context = qc
             conv.updated_at = datetime.utcnow()
             s.add(conv)
             s.commit()
@@ -464,6 +486,11 @@ class GuidedChoiceRequest(BaseModel):
     free_text: bool = False
 
 
+class ScopeChoiceRequest(BaseModel):
+    """Périmètre confirmé par l'utilisateur via la carte (champ → valeur ; '' = peu importe)."""
+    values: Dict[str, str] = Field(default_factory=dict)
+
+
 class SpaceChatRequest(BaseModel):
     message: str
     model: str
@@ -472,6 +499,7 @@ class SpaceChatRequest(BaseModel):
     conversation_id: Optional[int] = None
     slot_action: Optional[SlotActionRequest] = None
     guided_choice: Optional[GuidedChoiceRequest] = None
+    scope_choice: Optional[ScopeChoiceRequest] = None
 
 
 def _truncate_text(value: str, max_chars: int) -> str:
@@ -672,6 +700,40 @@ def _guided_streaming_response(
             yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
 
     return StreamingResponse(generate_guided(), media_type="text/event-stream")
+
+
+def _scope_streaming_response(card: dict, conversation_id: Optional[int]) -> StreamingResponse:
+    """Réponse SSE d'une proposition de périmètre (human-in-the-loop) : émet l'événement
+    `scope_proposal` (carte à boutons) puis termine le tour. AUCUN retrieval n'est lancé —
+    le clic de l'utilisateur ré-entrera le pipeline avec ``scope_choice`` au tour suivant."""
+
+    async def generate_scope():
+        try:
+            payload = dict(card)
+            payload["conversation_id"] = conversation_id
+            yield f"data: {json.dumps({'scope_proposal': payload})}\n\n"
+            yield f"data: {json.dumps({'done': True})}\n\n"
+        except Exception as e:
+            logger.exception("Erreur dans le générateur de proposition de périmètre")
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+    return StreamingResponse(generate_scope(), media_type="text/event-stream")
+
+
+def _normalize_code(s: str) -> str:
+    """Réduit une chaîne à ses caractères alphanumériques minuscules (pour comparer des codes)."""
+    return "".join(ch for ch in str(s or "").lower() if ch.isalnum())
+
+
+def _passages_contain_codes(passages: List[dict], codes: List[str]) -> bool:
+    """True si au moins un code demandé (≥3 car.) apparaît, normalisé, dans un passage."""
+    norm_codes = [c for c in (_normalize_code(x) for x in (codes or [])) if len(c) >= 3]
+    if not norm_codes:
+        return False
+    blob = " ".join(
+        _normalize_code(p.get("passage_raw") or p.get("passage") or "") for p in (passages or [])
+    )
+    return any(c in blob for c in norm_codes)
 
 
 def _guided_anchor_ids(persisted_qc: Optional[dict]) -> List[int]:
@@ -898,18 +960,21 @@ async def stream_space_chat_message(
             or conversation.space_id != space_id
         ):
             raise HTTPException(status_code=404, detail="Conversation non trouvée")
-        try:
-            user_message = Message(
-                conversation_id=request.conversation_id,
-                role="user",
-                content=request.message,
-                model=None,
-                provider=None,
-            )
-            session.add(user_message)
-            session.commit()
-        except Exception as e:
-            logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
+        # Confirmation de périmètre (scope_choice) : le message a déjà été persisté au
+        # tour qui a produit la carte — ne pas le dédoubler.
+        if not request.scope_choice:
+            try:
+                user_message = Message(
+                    conversation_id=request.conversation_id,
+                    role="user",
+                    content=request.message,
+                    model=None,
+                    provider=None,
+                )
+                session.add(user_message)
+                session.commit()
+            except Exception as e:
+                logger.error(f"Erreur sauvegarde message utilisateur (space chat): {e}")
 
     conversation_context: List[dict] = []
     if request.conversation_id:
@@ -1265,6 +1330,67 @@ async def stream_space_chat_message(
                 [g.label for g in retrieval_query_groups],
             )
 
+    # ——— Périmètre de recherche confirmé (human-in-the-loop) ———
+    # Décide QUOI/OÙ chercher AVANT le retrieval. Gardé par SCOPE_CONFIRMATION_ENABLED +
+    # SCOPE_MODE (off = aucun impact). Trois issues : carte à confirmer (stop du tour),
+    # confirmation reçue (applique le choix), ou périmètre déterminé (applique en silence).
+    allowed_document_ids: Optional[List[int]] = None
+    if (
+        settings.SCOPE_CONFIRMATION_ENABLED
+        and settings.SCOPE_MODE != "off"
+        and lw_result
+    ):
+        from app.services.scope_resolver_service import (
+            PROPOSE_CARD,
+            build_scope_card,
+            compute_allowed_document_ids,
+            compute_space_scope_stats,
+            resolve_scope,
+        )
+
+        _persisted_qc = None
+        if request.conversation_id:
+            _conv_scope = session.get(Conversation, request.conversation_id)
+            _persisted_qc = _conv_scope.query_context if _conv_scope else None
+        _inherited = (_persisted_qc or {}).get("current_scope") if _persisted_qc else None
+
+        try:
+            if request.scope_choice is not None:
+                # L'utilisateur vient de valider la carte : appliquer son choix directement.
+                _chosen = {k: v for k, v in (request.scope_choice.values or {}).items() if v}
+                allowed_document_ids = (
+                    compute_allowed_document_ids(session, space_id, _chosen) if _chosen else None
+                )
+                if request.conversation_id:
+                    _update_conversation_scope(request.conversation_id, _chosen)
+                logger.info("[chat] Périmètre confirmé par l'utilisateur : %s", _chosen)
+            else:
+                _stats = compute_space_scope_stats(session, space_id)
+                _resolution = resolve_scope(
+                    lw_result.signals.model_dump() if lw_result.signals else {},
+                    space_stats=_stats,
+                    inherited_scope=_inherited,
+                    topic_shift=bool(lw_result.topic_shift),
+                    intent=(lw_result.signals.intent if lw_result.signals else None),
+                )
+                if _resolution.decision == PROPOSE_CARD:
+                    logger.info(
+                        "[chat] Périmètre — carte proposée (champs demandés: %s)",
+                        [f.key for f in _resolution.asked_fields()],
+                    )
+                    return _scope_streaming_response(
+                        build_scope_card(_resolution), request.conversation_id
+                    )
+                _applied = _resolution.applied_scope
+                allowed_document_ids = (
+                    compute_allowed_document_ids(session, space_id, _applied) if _applied else None
+                )
+                if request.conversation_id and _applied:
+                    _update_conversation_scope(request.conversation_id, _applied)
+        except Exception as _scope_err:
+            logger.warning("[chat] résolution de périmètre ignorée (erreur): %s", _scope_err)
+            allowed_document_ids = None
+
     step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
     logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25 + KAG)", step_label)
     import time as _time
@@ -1282,7 +1408,7 @@ async def stream_space_chat_message(
     ) as retrieval_run:
         from app.services.space_search_service import search_technical_passages
 
-        async def _do_retrieval():
+        async def _do_retrieval(allowed: Optional[List[int]]):
             return await search_technical_passages(
                 session=session,
                 space_id=space_id,
@@ -1293,33 +1419,99 @@ async def stream_space_chat_message(
                 signals=lw_result.signals if lw_result and lw_result.signals else None,
                 query_groups=retrieval_query_groups,
                 anchor_document_ids=anchor_document_ids or None,
+                allowed_document_ids=allowed,
             )
 
-        # Budget temps global (P0.3) : un canal qui freeze (ColPali CPU, MaxSim LanceDB) ne
-        # doit pas bloquer indéfiniment — au-delà du budget, dégradation gracieuse (0 passage).
-        try:
-            if settings.RETRIEVAL_TIMEOUT_S and settings.RETRIEVAL_TIMEOUT_S > 0:
-                retrieval = await asyncio.wait_for(
-                    _do_retrieval(), timeout=settings.RETRIEVAL_TIMEOUT_S
+        async def _run_retrieval(allowed: Optional[List[int]]):
+            # Budget temps global (P0.3) : un canal qui freeze (ColPali CPU, MaxSim LanceDB)
+            # ne doit pas bloquer indéfiniment — au-delà du budget, dégradation gracieuse.
+            try:
+                if settings.RETRIEVAL_TIMEOUT_S and settings.RETRIEVAL_TIMEOUT_S > 0:
+                    return await asyncio.wait_for(
+                        _do_retrieval(allowed), timeout=settings.RETRIEVAL_TIMEOUT_S
+                    )
+                return await _do_retrieval(allowed)
+            except asyncio.TimeoutError:
+                logger.error(
+                    "[chat] retrieval au-delà du budget %.0fs → dégradation gracieuse (0 passage)",
+                    settings.RETRIEVAL_TIMEOUT_S,
                 )
-            else:
-                retrieval = await _do_retrieval()
-        except asyncio.TimeoutError:
-            logger.error(
-                "[chat] retrieval au-delà du budget %.0fs → dégradation gracieuse (0 passage)",
-                settings.RETRIEVAL_TIMEOUT_S,
+                return {
+                    "passages": [], "images": [], "status": "degraded_timeout",
+                    "reason": "retrieval_timeout",
+                }
+
+        retrieval = await _run_retrieval(allowed_document_ids)
+        # Élargissement automatique : un périmètre trop étroit (aucun document) ne doit
+        # JAMAIS produire un « pas documenté » à tort → on relance sans périmètre.
+        if allowed_document_ids is not None and retrieval.get("reason") == "scope_empty":
+            logger.info(
+                "[chat] Périmètre vide (0 document) → élargissement automatique à tout l'espace"
             )
-            retrieval = {
-                "passages": [], "images": [], "status": "degraded_timeout",
-                "reason": "retrieval_timeout",
-            }
+            retrieval = await _run_retrieval(None)
         doc_passages = retrieval["passages"]
         retrieval_status = retrieval["status"]
         retrieval_reason = retrieval.get("reason")
         retrieval_images = retrieval.get("images") or []
         dynamic_k = retrieval.get("dynamic_k")
         rerank_status = retrieval.get("rerank_status")
-        
+
+        # ——— Retry automatique sur RÉFÉRENCE introuvable (1 passe) ———
+        # Le retriever est sensible à la formulation (« référence X » vs « crémone X ») :
+        # si la question porte un code et qu'AUCUN passage ne le contient, on relance UNE
+        # recherche ciblée sur le code seul (recall élevé). S'il reste introuvable, on
+        # demandera une précision à l'utilisateur (cf. bloc génération) au lieu d'un
+        # « non documenté » en cul-de-sac.
+        reference_not_found: List[str] = []
+        try:
+            from app.services.coverage_service import extract_message_reference_codes
+
+            _req_codes = extract_message_reference_codes(
+                retrieval_query_text,
+                request.message,
+                *(
+                    (lw_result.signals.detected_references or [])
+                    if (lw_result and lw_result.signals)
+                    else []
+                ),
+            )
+        except Exception:
+            _req_codes = []
+
+        if _req_codes and not _passages_contain_codes(doc_passages, _req_codes):
+            code_query = " ".join(_req_codes)
+            logger.info(
+                "[chat] Référence(s) %s absente(s) des passages → retry recherche ciblée",
+                _req_codes,
+            )
+            try:
+                retry = await search_technical_passages(
+                    session=session,
+                    space_id=space_id,
+                    query_text=code_query,
+                    user_id=current_user.id,
+                    k=RAG_TOP_K,
+                    signals=lw_result.signals if lw_result and lw_result.signals else None,
+                    anchor_document_ids=anchor_document_ids or None,
+                    allowed_document_ids=allowed_document_ids,
+                )
+            except Exception as _retry_err:
+                logger.warning("[chat] retry ciblé référence échoué : %s", _retry_err)
+                retry = None
+            if retry and _passages_contain_codes(retry.get("passages") or [], _req_codes):
+                logger.info("[chat] Retry ciblé — référence(s) trouvée(s), passages remplacés")
+                retrieval = retry
+                doc_passages = retrieval["passages"]
+                retrieval_status = retrieval["status"]
+                retrieval_reason = retrieval.get("reason")
+                retrieval_images = retrieval.get("images") or []
+            else:
+                reference_not_found = list(_req_codes)
+                logger.info(
+                    "[chat] Retry ciblé — référence(s) %s toujours introuvable(s) → clarification",
+                    _req_codes,
+                )
+
         retrieval_run.end(outputs={
             "status": retrieval_status,
             "reason": retrieval_reason,
@@ -1460,6 +1652,32 @@ async def stream_space_chat_message(
         retrieval_status=retrieval_status,
     )
     space_context_draft["content"] += "\n\n" + coverage_block
+
+    # Référence introuvable même après retry ciblé (cf. bloc retrieval) : au lieu d'un
+    # « non documenté » en cul-de-sac, demander UNE précision pour relancer la recherche.
+    if reference_not_found:
+        _suppliers_present = ""
+        try:
+            from app.services.scope_resolver_service import compute_space_scope_stats
+
+            _sup = sorted(compute_space_scope_stats(session, space_id).get("supplier") or [])
+            if _sup:
+                _suppliers_present = " L'espace couvre : " + ", ".join(_sup) + "."
+        except Exception:
+            pass
+        space_context_draft["content"] += (
+            "\n\n⚠️ IMPORTANT : la ou les référence(s) "
+            + ", ".join(reference_not_found)
+            + " n'apparaissent dans AUCUN passage ci-dessus, même après une recherche ciblée. "
+            "Ne réponds PAS « non documentée » comme réponse finale. À la place, demande à "
+            "l'utilisateur UNE précision courte qui permettrait de relancer la recherche : "
+            "le FOURNISSEUR/la marque concernée, la gamme, ou une reformulation avec plus de "
+            "contexte." + _suppliers_present
+        )
+        logger.info(
+            "[chat] Référence(s) %s introuvable(s) → génération orientée clarification",
+            reference_not_found,
+        )
 
     # Fil de la conversation : sujet courant, entités en focus et demande reformulée,
     # injectés à la FIN du message système (donc juste avant l'historique et le message

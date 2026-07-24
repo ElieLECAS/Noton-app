@@ -165,6 +165,12 @@ x-app-env: &app-env
   GUIDED_MIN_CHOICES: ${GUIDED_MIN_CHOICES:-2}
   GUIDED_MAX_CHOICES: ${GUIDED_MAX_CHOICES:-5}
   GUIDED_SAV_CONTACT: ${GUIDED_SAV_CONTACT:-Service SAV PROFERM — contactez votre interlocuteur habituel.}
+  # Périmètre de recherche confirmé (human-in-the-loop) — OFF par défaut.
+  SCOPE_CONFIRMATION_ENABLED: ${SCOPE_CONFIRMATION_ENABLED:-false}
+  SCOPE_MODE: ${SCOPE_MODE:-off}
+  SCOPE_MIN_DISTINCT_TO_ASK: ${SCOPE_MIN_DISTINCT_TO_ASK:-2}
+  SCOPE_ASKABLE_FIELDS: ${SCOPE_ASKABLE_FIELDS:-product_family,material}
+  SCOPE_STATS_CACHE_TTL: ${SCOPE_STATS_CACHE_TTL:-300}
 
 x-app-volumes: &app-volumes
   - ./app:/app/app

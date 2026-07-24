@@ -556,6 +556,34 @@ class Settings(BaseSettings):
         "GUIDED_SAV_CONTACT", "Service SAV PROFERM — contactez votre interlocuteur habituel."
     )
 
+    # Périmètre de recherche confirmé (human-in-the-loop) — filtre les documents par
+    # classification (product_types/materials/proferm_gammes/source) AVANT le retrieval.
+    # Master OFF par défaut : aucun impact tant que False (pipeline actuel inchangé).
+    SCOPE_CONFIRMATION_ENABLED: bool = os.getenv(
+        "SCOPE_CONFIRMATION_ENABLED", "false"
+    ).strip().lower() in ("true", "1", "yes", "on")
+    # confirm = propose une carte à valider quand un champ discriminant manque ;
+    # auto = applique les champs CERTAIN sans carte (profil interne) ;
+    # off = comportement actuel (aucun filtre de périmètre).
+    SCOPE_MODE: str = os.getenv("SCOPE_MODE", "off").strip().lower()
+    # Un champ n'est proposé À_DEMANDER que si l'espace contient AU MOINS ce nb de valeurs
+    # distinctes (sinon non discriminant → inutile de demander).
+    SCOPE_MIN_DISTINCT_TO_ASK: int = int(os.getenv("SCOPE_MIN_DISTINCT_TO_ASK", "2"))
+    # Champs demandables "à l'aveugle" (absents ET discriminants) : l'utilisateur final
+    # les connaît. Gamme/fournisseur ne sont que CONFIRMÉS s'ils sont détectés.
+    SCOPE_ASKABLE_FIELDS: str = os.getenv("SCOPE_ASKABLE_FIELDS", "product_family,material")
+    # TTL (s) du cache des stats de classification par espace (0 = pas de cache).
+    SCOPE_STATS_CACHE_TTL: int = int(os.getenv("SCOPE_STATS_CACHE_TTL", "300"))
+
+    @property
+    def scope_askable_fields(self) -> List[str]:
+        """Champs demandables à l'aveugle, normalisés depuis le CSV brut."""
+        return [
+            s.strip().lower()
+            for s in (self.SCOPE_ASKABLE_FIELDS or "").split(",")
+            if s.strip()
+        ]
+
     @property
     def colpali_gating_intents(self) -> List[str]:
         """Liste normalisée des intents forçant ColPali (parsée depuis le CSV brut)."""
