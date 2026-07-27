@@ -1,0 +1,326 @@
+[
+  {
+    "id": "TN01",
+    "type": "mono",
+    "categorie": "piege_taille_document",
+    "intent": "installation",
+    "question": "Sur un coulissant SOLEAL GY 55, dans quel ordre je monte le bouclier thermique du rail haut et à quel moment du chantier ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1)",
+        "pages": [13]
+      }
+    ],
+    "acceptable_document_ids": [405],
+    "cible": "montage bouclier thermique rail haut TGY4006 + talon TGY3864",
+    "reponse_attendue": "Après le gondage : ouvrir le vantail de service, mettre le bouclier TGY4006 côté vantail de service, refermer puis ouvrir le vantail semi-fixe, clipper le talon TGY3864 dans le rail haut et le faire glisser au contact du bouclier, puis poser le bouclier TGY4006 côté semi-fixe."
+  },
+  {
+    "id": "TN02",
+    "type": "mono",
+    "categorie": "reference_exacte",
+    "intent": "installation",
+    "question": "Il me manque les pièces d'anti-dégondage et les caches sur un GY 55, c'est quelles références et elles se posent où ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1)",
+        "pages": [12]
+      }
+    ],
+    "acceptable_document_ids": [405],
+    "cible": "anti-dégondage TGY3804 sur montants latéraux, cache TGY3863 sur montants centraux",
+    "reponse_attendue": "L'anti-dégondage TGY3804 se met sur chaque montant latéral après assemblage des ouvrants sur le dormant ; le cache TGY3863 se place en partie haute et basse de chaque montant central."
+  },
+  {
+    "id": "TN03",
+    "type": "mono",
+    "categorie": "discrimination_gamme",
+    "intent": "specification",
+    "question": "Sur un SOLEAL GY 55, la cale TGA3817 au droit des roulettes, elle est obligatoire dans quels cas ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1)",
+        "pages": [14]
+      },
+      {
+        "document_title": "SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1)",
+        "pages": [88]
+      }
+    ],
+    "acceptable_document_ids": [405, 400],
+    "cible": "cale TGA3817 : systématique en prise de volume 29-32, conditionnelle en 24-28",
+    "reponse_attendue": "Systématiquement pour une prise de volume 29-32 mm (profil T141021). Pour une prise de volume 24-28 mm (profil T141015), seulement si la largeur du vantail dépasse 1,5 m ou si son poids dépasse 120 kg. La cale est à immobiliser par collage."
+  },
+  {
+    "id": "TN04",
+    "type": "mono",
+    "categorie": "piege_taille_document",
+    "intent": "installation",
+    "question": "Je clippe le profilé de rail haut sur un LUMEAL GA : quel espacement pour les clips et quel décalage entre capot haut et capot bas ?",
+    "pages_attendues": [
+      {
+        "document_title": "LUMEAL-GA-notice-installation-5850-002-072018-FR (3)",
+        "pages": [10]
+      }
+    ],
+    "acceptable_document_ids": [406],
+    "cible": "clips TGA3612 tous les 300 mm, capot bas -2 mm par rapport au capot haut",
+    "reponse_attendue": "Un clip TGA3612 tous les 300 mm environ, et le capot bas doit être posé 2 mm plus bas que le capot haut (capot bas = -2 mm par rapport au capot haut). On met le capot en contact sur le clip puis on clippe l'autre côté."
+  },
+  {
+    "id": "TN05",
+    "type": "mono",
+    "categorie": "reference_exacte",
+    "intent": "installation",
+    "question": "Sur un coulissant LUMEAL, comment on positionne les gâches par rapport aux pênes, il y a un gabarit spécifique ?",
+    "pages_attendues": [
+      {
+        "document_title": "LUMEAL-GA-notice-installation-5850-002-072018-FR (3)",
+        "pages": [12]
+      }
+    ],
+    "acceptable_document_ids": [406],
+    "cible": "gabarit T621000 pour positionnement des gâches LUMEAL",
+    "reponse_attendue": "Oui, le gabarit T621000. Après réglage des ouvrants : pêne en position haute, poser le gabarit T621000 sur le pêne, pré-positionner la gâche sur l'ouvrant, fermer le châssis, mettre la gâche en position par rapport au gabarit, l'immobiliser avec la vis pression, vérifier la fermeture puis verrouiller avec la vis autoforeuse."
+  },
+  {
+    "id": "TN06",
+    "type": "mono",
+    "categorie": "reference_exacte",
+    "intent": "documentation",
+    "question": "Les pièces d'étanchéité d'angle du seuil PMR PY1100, c'est quelles références et laquelle va sur l'ouvrant ?",
+    "pages_attendues": [
+      {
+        "document_title": "SEUIL TECHNAL PY1100 DOC",
+        "pages": [16, 33]
+      }
+    ],
+    "acceptable_document_ids": [407],
+    "cible": "pièce d'angle 720028 (ouvrant) / 720029 (dormant)",
+    "reponse_attendue": "La pièce d'angle 720028 se pose sur l'ouvrant et la 720029 sur le dormant."
+  },
+  {
+    "id": "TN07",
+    "type": "mono",
+    "categorie": "specification",
+    "intent": "specification",
+    "question": "Quel classement AEV est tenu par une porte SOLEAL PY 1 vantail en 2406 x 1100 en ouverture extérieure sur paumelles avec seuil PMR PY1100 et pièces d'angle ?",
+    "pages_attendues": [
+      {
+        "document_title": "SEUIL TECHNAL PY1100 DOC",
+        "pages": [2]
+      }
+    ],
+    "acceptable_document_ids": [407],
+    "cible": "tableau des performances FIT N°15 — A3 E7A C3",
+    "reponse_attendue": "A3 E7A C3 (PV n° 404/12/202-1, Q100 = 2,17). Sans les pièces d'étanchéité d'angle, le même châssis est classé A4 E6A C3 (PV 404/12/202-2)."
+  },
+  {
+    "id": "TN08",
+    "type": "mono",
+    "categorie": "page_visuelle",
+    "intent": "installation",
+    "question": "Le gabarit EK7020 sert à quoi exactement sur le seuil PY1100 ?",
+    "pages_attendues": [
+      {
+        "document_title": "SEUIL TECHNAL PY1100 DOC",
+        "pages": [19, 16]
+      }
+    ],
+    "acceptable_document_ids": [407],
+    "cible": "gabarit de perçage EK7020 pour le drainage du seuil PY1100 — page quasi sans couche texte (dessin)",
+    "reponse_attendue": "C'est le gabarit de perçage qui sert à réaliser le drainage du seuil PMR PY1100 (trous Ø 8). Il est référencé EK7020 dans la nomenclature du kit seuil et TEK7020 dans le catalogue fabrication PY."
+  },
+  {
+    "id": "TN09",
+    "type": "mono",
+    "categorie": "specification",
+    "intent": "specification",
+    "question": "Un client veut une porte SOLEAL PY 55 simple action 1 vantail avec un vantail lourd : jusqu'à quel poids je peux monter et avec quelles paumelles ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1)",
+        "pages": [21]
+      }
+    ],
+    "acceptable_document_ids": [393],
+    "cible": "porte SA 1 vantail : 150 kg avec paumelles T910003 ou TPY3615",
+    "reponse_attendue": "Jusqu'à 150 kg par vantail avec les paumelles T910003 ou TPY3615, pour un vantail maxi de 2400 mm de haut x 1200 mm de large. Avec les paumelles T910002 on est limité à 130 kg pour les mêmes dimensions."
+  },
+  {
+    "id": "TN10",
+    "type": "mono",
+    "categorie": "procedure",
+    "intent": "installation",
+    "question": "Sur le seuil PMR TPY1100 d'une porte SOLEAL PY 2 vantaux, quel est l'espacement des drainages à percer ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR",
+        "pages": [18]
+      }
+    ],
+    "acceptable_document_ids": [394],
+    "cible": "drainages seuil PMR TPY1100 — 1 tous les 320 mm en 2 vantaux",
+    "reponse_attendue": "En 2 vantaux : 1 drainage tous les 320 mm, en ouverture intérieure comme extérieure. Trous Ø 8 réalisés avec le gabarit TEK7020. (En 1 vantail : 4 drainages répartis sur la traverse si L ≤ 1000 mm, plus 1 par tranche de 500 mm au-delà.)"
+  },
+  {
+    "id": "TN11",
+    "type": "mono",
+    "categorie": "discrimination_gamme",
+    "intent": "installation",
+    "question": "Combien de perçages de drainage sur la traverse basse d'un châssis SOLEAL GY 55 et de quel diamètre ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr",
+        "pages": [96]
+      }
+    ],
+    "acceptable_document_ids": [397],
+    "cible": "drainage traverse basse GY — Ø 8 mm aux extrémités + 1 au milieu si L > 1 m",
+    "reponse_attendue": "Un perçage Ø 8 mm à chaque extrémité, côté extérieur du châssis, plus un perçage au milieu de la traverse si la largeur dépasse 1 m."
+  },
+  {
+    "id": "TN12",
+    "type": "mono",
+    "categorie": "discrimination_gamme",
+    "intent": "regulatory",
+    "question": "Dans le DTA SOLEAL GY, quelles sont les dimensions maxi d'une porte-fenêtre coulissante 2 vantaux avec seuil PMR en fabrication non certifiée ?",
+    "pages_attendues": [
+      {
+        "document_title": "DTA 6_15-2261_V3 SOLEAL GY",
+        "pages": [8]
+      }
+    ],
+    "acceptable_document_ids": [402],
+    "cible": "DTA GY §2.2.3.5 — PF 2 vantaux + seuil PMR : H 2,50 m x L 3,00 m",
+    "reponse_attendue": "H = 2,50 m x L = 3,00 m, avec les montants centraux TGY1207 + TGY1209 (ou TGY1213 + TGY1215 pour les vitrages 29-32 mm). Les portes-fenêtres doivent être fabriquées avec les montants latéraux renforcés TGY1303 ou TGY1304."
+  },
+  {
+    "id": "TN13",
+    "type": "mono",
+    "categorie": "discrimination_gamme",
+    "intent": "product_selection",
+    "question": "J'ai un vantail coulissant de 280 kg à équiper en LUMEAL : quelle roulette je prends et est-ce que ça passe sur du rail inox ?",
+    "pages_attendues": [
+      {
+        "document_title": "LUMEAL-GA-catalogue-conception-5156-007-012021-FR",
+        "pages": [44]
+      }
+    ],
+    "acceptable_document_ids": [396, 401],
+    "cible": "roulettes charges lourdes LUMEAL TGA3608/TGA3609 — 300 kg, incompatibles rail inox",
+    "reponse_attendue": "Il faut une roulette « charges lourdes » triple : TGA3608 (ou TGA3609 en inox), donnée pour 300 kg maxi par vantail. Elle n'est utilisable que sur rail alu T341000 : elle est notée « non compatible » avec les rails inox TGA4001 et TGY4007."
+  },
+  {
+    "id": "TN14",
+    "type": "mono",
+    "categorie": "discrimination_gamme",
+    "intent": "regulatory",
+    "question": "Le drainage au droit du vantail semi-fixe sur un GY 55 : quelles lumières et quel espacement, et il y a un déflecteur ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-GY55-DTA-AG152261_V1",
+        "pages": [10]
+      }
+    ],
+    "acceptable_document_ids": [403],
+    "cible": "DTA GY V1 §3.12 — déflecteur T401003, 1 lumière supplémentaire tous les 0,7 m au-delà de 1 m",
+    "reponse_attendue": "Au droit du vantail semi-fixe : 2 lumières de 5 x 25 mm en sous-face du rail extérieur équipées du déflecteur T401003, puis 1 lumière supplémentaire tous les 0,7 m au-delà de 1 m, plus 1 lumière de 5 x 25 mm dans le rail intérieur et le profilé PVC T431025."
+  },
+  {
+    "id": "TN15",
+    "type": "mono",
+    "categorie": "discrimination_gamme",
+    "intent": "specification",
+    "question": "Quelle est la hauteur de feuillure des profilés LUMEAL GA, ouvrants et fixes ?",
+    "pages_attendues": [
+      {
+        "document_title": "DTA Lumeal GA 6-14-2166-v2",
+        "pages": [8]
+      }
+    ],
+    "acceptable_document_ids": [404],
+    "cible": "LUMEAL : 18 mm ouvrants / 9 ou 14 mm fixes (à ne pas confondre avec GY 18 mm et FY 25 mm)",
+    "reponse_attendue": "18 mm pour les ouvrants, 9 ou 14 mm pour les fixes selon le profilé dormant (hors hauteur des garnitures d'étanchéité). Vitrage isolant double de 24, 26, 28, 30 ou 32 mm."
+  },
+  {
+    "id": "TN16",
+    "type": "mono",
+    "categorie": "discrimination_gamme",
+    "intent": "specification",
+    "question": "Sur une fenêtre à la française SOLEAL FY, combien de paumelles 2 lames par vantail selon la hauteur, et jusqu'à quel poids ?",
+    "pages_attendues": [
+      {
+        "document_title": "DTA 6_12-2016_V5 (1)",
+        "pages": [11]
+      }
+    ],
+    "acceptable_document_ids": [409],
+    "cible": "répartition paumelles 2 lames T940025 : 2 / 3 / 4 par vantail, 70 kg maxi",
+    "reponse_attendue": "Avec la paumelle 2 lames T940025 : 2 par vantail pour H < 1,2 m, 3 par vantail pour H < 1,6 m, 4 par vantail jusqu'à 2,25 m — dans tous les cas limité à 70 kg. Un passage pour une vis de sécurité TAY0047 est prévu sur chaque corps et insert de paumelle."
+  },
+  {
+    "id": "TN17",
+    "type": "mono",
+    "categorie": "procedure",
+    "intent": "installation",
+    "question": "Combien de drainages sur l'ouvrant d'une fenêtre SOLEAL FY 55 évolution selon la largeur ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr",
+        "pages": [10]
+      }
+    ],
+    "acceptable_document_ids": [399],
+    "cible": "drainage ouvrant FY : 3 mini, 4 si L>700, 6 si L>1000, 8 si L>1700",
+    "reponse_attendue": "Minimum 3 drainages ; 4 si L > 700 mm ; 6 si L > 1000 mm ; 8 si L > 1700 mm. Un drainage supplémentaire Ø 10 est à ajouter à partir de 27 mm de prise de volume, au droit de chaque drainage."
+  },
+  {
+    "id": "TN18",
+    "type": "mono",
+    "categorie": "reference_exacte",
+    "intent": "troubleshooting",
+    "question": "Le boîtier de crémone encastré TFZ60030 sur SOLEAL FY, il accepte quel carré de poignée ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-FY-55-65-evolution-QC-catalogue-conception-6319-003-072021-FR (1)",
+        "pages": [95]
+      }
+    ],
+    "acceptable_document_ids": [395],
+    "cible": "TFZ60030 — carré de 7 mm uniquement",
+    "reponse_attendue": "Uniquement le carré de 7 mm. Technal préconise par ailleurs des poignées indexées (maintien de la béquille en position ouverte et fermée) et avec pions de centrage."
+  },
+  {
+    "id": "TN19",
+    "type": "mono",
+    "categorie": "procedure",
+    "intent": "installation",
+    "question": "Sur une ferrure SOLEAL FY QC, comment je règle la butée amovible et les taquets selon que l'ouvrant est à la française ou oscillo-battant ?",
+    "pages_attendues": [
+      {
+        "document_title": "SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR",
+        "pages": [29]
+      }
+    ],
+    "acceptable_document_ids": [408],
+    "cible": "montage boîtier TFZ60030 — butée amovible / position des taquets selon OF ou OB",
+    "reponse_attendue": "Pour un ouvrant à la française : mettre la butée amovible et les taquets en position basse. Pour un OB/BO : retirer la butée amovible et mettre les taquets en position haute. Le boîtier TFZ60030 se monte ensuite par rotation dans le profilé, puis les crémones par rotation dans la rainure."
+  },
+  {
+    "id": "TN20",
+    "type": "mono",
+    "categorie": "reference_exacte",
+    "intent": "installation",
+    "question": "Pour monter une poignée de tirage inclinée sur un coulissant LUMEAL, quelle référence de poignée et quelles douilles à sertir ?",
+    "pages_attendues": [
+      {
+        "document_title": "LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR",
+        "pages": [177]
+      }
+    ],
+    "acceptable_document_ids": [398],
+    "cible": "poignée de tirage inclinée TGA3618 + douilles TGA3707",
+    "reponse_attendue": "La poignée de tirage inclinée TGA3618 avec son ensemble support de poignée ; les douilles TGA3707 sont à sertir en premier. Sur vantail semi-fixe, monter la poignée avant l'assemblage des profilés complémentaires."
+  }
+]

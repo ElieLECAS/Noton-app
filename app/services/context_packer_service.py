@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from sqlmodel import Session, select
 
@@ -121,14 +121,85 @@ def _load_leaf_records(session: Session, document_id: int) -> List[LeafRecord]:
     return records
 
 
+# Familles de canaux de retrieval. pgvector et BM25 lisent la MÊME évidence (le texte de
+# la page) : les compter comme deux confirmations indépendantes récompense la redondance
+# lexicale et écrase ColPali, seul canal capable de voir une page « muette » (dessin coté).
+_CHANNEL_FAMILIES = {
+    "pgvector": "texte",
+    "bm25": "texte",
+    "colpali": "visuel",
+    "kag": "graphe",
+}
+
+# Les bornes d'un passage (page_start/page_end) viennent de l'expansion de voisinage, pas
+# d'un match propre : elles restent des pages matchées, mais légèrement en retrait pour
+# qu'une page ANCRE gagne toujours la course aux seeds à score égal.
+_SPAN_PAGE_WEIGHT = 0.95
+
+
+def _passage_families(passage: Dict[str, Any]) -> Set[str]:
+    """Familles de canaux ayant retrouvé ce passage (vide si l'info n'est pas portée)."""
+    return {
+        _CHANNEL_FAMILIES[src]
+        for src in (passage.get("retrieval_sources") or [])
+        if src in _CHANNEL_FAMILIES
+    }
+
+
+def _election_score(entry: Dict[str, Any]) -> float:
+    """Score d'élection d'un document : dominé par sa MEILLEURE page.
+
+    ``score_max × (1 + bonus_familles + bonus_pages)``, bonus multiplicatifs et BORNÉS :
+    ils départagent deux documents dont les meilleures pages sont proches, sans jamais
+    renverser un meilleur passage net. L'ancienne formule additive
+    ``score_max + 0.2·(somme des autres pages)`` faisait l'inverse : un catalogue plaçant
+    six pages moyennes battait arithmétiquement la notice qui contenait LA bonne page.
+    """
+    base = float(entry.get("score_max") or 0.0)
+    if base <= 0:
+        # Scores nuls/négatifs : le bonus multiplicatif n'a pas de sens (il aggraverait un
+        # score négatif). On laisse le score brut départager.
+        return base
+    n_families = max(1, len(entry.get("families") or ()))
+    n_pages = max(1, len(entry.get("matched_pages") or ()))
+    bonus = settings.CAG_ELECTION_FAMILY_BONUS * (n_families - 1) + (
+        settings.CAG_ELECTION_PAGE_BONUS
+        * min(n_pages - 1, max(0, settings.CAG_ELECTION_PAGE_CAP))
+    )
+    return base * (1.0 + bonus)
+
+
+def _legacy_election_score(entry: Dict[str, Any]) -> float:
+    """Ancienne formule (volume) — conservée derrière ``CAG_ELECTION_MODE=legacy``."""
+    return float(entry["score_max"]) + 0.2 * (
+        float(entry["score_sum"]) - float(entry["score_max"])
+    )
+
+
+def _new_document_entry(title: Optional[str] = None) -> Dict[str, Any]:
+    """Accumulateur par document (``matched_pages`` = page → meilleur score de passage)."""
+    return {
+        "score_sum": 0.0,
+        "score_max": 0.0,
+        "matched_pages": {},
+        "families": set(),
+        "title": title,
+        "election_score": 0.0,
+    }
+
+
 def aggregate_documents(
     passages: List[Dict[str, Any]], *, max_documents: int
 ) -> List[Tuple[int, Dict[str, Any]]]:
-    """Regroupe les passages par document et classe par pertinence.
+    """Regroupe les passages par document et élit les meilleurs.
 
-    Score document = score_max + 0.2·(reste des scores) : favorise les documents à la fois
-    fortement (une page très pertinente) ET largement (plusieurs pages) matchés.
-    Retourne [(document_id, {score, matched_pages, title}), …] trié décroissant.
+    Le document est élu par sa MEILLEURE page (cf. ``_election_score``), pas par le volume
+    de pages moyennes qu'il place dans le top-K. ``matched_pages`` conserve le score de
+    chaque page (page → meilleur score) : cette hiérarchie sert ensuite à choisir les seeds
+    et à remplir la fenêtre par valeur au lieu d'un rayon aveugle.
+
+    Retourne [(document_id, {score_max, score_sum, matched_pages, families, title,
+    election_score}), …] trié décroissant.
     """
     agg: Dict[int, Dict[str, Any]] = {}
     for p in passages:
@@ -136,28 +207,172 @@ def aggregate_documents(
         if did is None:
             continue
         did = int(did)
-        entry = agg.setdefault(
-            did,
-            {"score_sum": 0.0, "score_max": 0.0, "matched_pages": set(), "title": p.get("document_title")},
-        )
+        entry = agg.setdefault(did, _new_document_entry(p.get("document_title")))
         score = float(p.get("score") or 0.0)
         entry["score_sum"] += score
         entry["score_max"] = max(entry["score_max"], score)
+        entry["families"].update(_passage_families(p))
+
+        # Page ANCRE (celle que le retriever a réellement matchée) au score plein ; les
+        # bornes du span au poids réduit.
+        anchor_page = None
         for key in ("page_no", "page_start", "page_end"):
             val = p.get(key)
             if isinstance(val, int) and val > 0:
-                entry["matched_pages"].add(val)
+                anchor_page = val
+                break
+        for key in ("page_no", "page_start", "page_end"):
+            val = p.get(key)
+            if not isinstance(val, int) or val <= 0:
+                continue
+            page_score = score if val == anchor_page else score * _SPAN_PAGE_WEIGHT
+            if page_score > entry["matched_pages"].get(val, 0.0):
+                entry["matched_pages"][val] = page_score
 
-    ranked = sorted(
-        agg.items(),
-        key=lambda kv: kv[1]["score_max"] + 0.2 * (kv[1]["score_sum"] - kv[1]["score_max"]),
-        reverse=True,
-    )
+    legacy = (settings.CAG_ELECTION_MODE or "").strip().lower() == "legacy"
+    score_fn = _legacy_election_score if legacy else _election_score
+    for entry in agg.values():
+        entry["election_score"] = score_fn(entry)
+
+    ranked = sorted(agg.items(), key=lambda kv: kv[1]["election_score"], reverse=True)
     return ranked[:max_documents]
 
 
+def _seed_pages(matched_pages: Dict[int, float], max_seeds: int) -> List[Tuple[int, float]]:
+    """Pages matchées promues en SEEDS, les mieux scorées d'abord.
+
+    Plafonner le nombre de seeds évite la « fenêtre pieuvre » : un document matché sur dix
+    pages diluerait sinon son budget en dix fenêtres, au lieu de traiter à fond les
+    meilleures. À score égal, la page la plus petite gagne (ordre déterministe).
+    """
+    if not matched_pages:
+        return []
+    ordered = sorted(matched_pages.items(), key=lambda kv: (-float(kv[1]), kv[0]))
+    return ordered[: max(1, max_seeds)]
+
+
+def _budget_shares(n_docs: int) -> List[float]:
+    """Parts du budget par rang d'élection, renormalisées sur les documents réellement élus.
+
+    Retourne [] si le partage est désactivé (le premier document est alors servi jusqu'au
+    budget global, comportement historique). Avec des parts 0,5/0,3/0,2 et deux documents
+    élus, on obtient 62,5 %/37,5 % : le budget reste intégralement distribué.
+    """
+    if n_docs <= 0:
+        return []
+    declared = settings.cag_doc_budget_shares
+    if not declared:
+        return []
+    shares = list(declared[:n_docs])
+    if len(shares) < n_docs:
+        # Plus de documents que de parts déclarées : les rangs suivants héritent de la dernière.
+        shares.extend([shares[-1]] * (n_docs - len(shares)))
+    total = sum(shares)
+    if total <= 0:
+        return []
+    return [s / total for s in shares]
+
+
+def _select_records_by_value(
+    records: List[LeafRecord],
+    matched_pages: Dict[int, float],
+    budget: int,
+    *,
+    radius: int,
+    max_seeds: int,
+    decay: float,
+) -> Tuple[List[LeafRecord], List[int]]:
+    """Remplit le budget d'un document par VALEUR de page décroissante.
+
+    Les seeds (pages réellement matchées) passent en premier : la page qui a gagné le vote
+    du retriever ne peut pas être rognée tant que le document a du budget. Ses voisines
+    héritent d'une valeur décroissante (``decay^distance``), si bien que sous budget serré
+    ce sont les pages les plus FAIBLES qui sautent — et non les plus éloignées
+    géographiquement, critère aveugle à la pertinence du rognage historique.
+
+    Retourne (records retenus en ordre de lecture, pages seeds effectivement retenues).
+    """
+    by_page: Dict[int, List[LeafRecord]] = {}
+    for record in records:
+        by_page.setdefault(record[0], []).append(record)
+    if not by_page:
+        return [], []
+
+    values: Dict[int, float] = {}
+
+    # 1. TOUTE page matchée porte sa propre valeur. Une page que le retriever a trouvée ne
+    #    doit jamais céder la place à la simple voisine d'une autre page : plafonner les
+    #    seeds ferait perdre une bonne page isolée dans un gros document (cas réel : p.89
+    #    d'un catalogue, trouvée par 3 canaux et reclassée 0,901, écartée parce que les
+    #    3 meilleures pages matchées étaient groupées 40 pages plus tôt).
+    for page, score in matched_pages.items():
+        if page in by_page and page > 0:
+            values[page] = max(values.get(page, 0.0), float(score))
+
+    # 2. Le HALO, lui, reste plafonné aux meilleures seeds : c'est lui qui multiplie les
+    #    pages, et c'est donc lui — pas l'évidence — qu'il faut brider.
+    seeds = _seed_pages(matched_pages, max_seeds)
+    for seed_page, seed_score in seeds:
+        # Un score nul (ancre non retrouvée ce tour) garde quand même la page comme seed.
+        base = float(seed_score) if seed_score and seed_score > 0 else 1.0
+        for delta in range(-radius, radius + 1):
+            page = seed_page + delta
+            if page <= 0 or page not in by_page:
+                continue
+            value = base * (decay ** abs(delta))
+            if value > values.get(page, 0.0):
+                values[page] = value
+
+    if values:
+        ordered = [page for page, _ in sorted(values.items(), key=lambda kv: (-kv[1], kv[0]))]
+    else:
+        # Aucun match exploitable : ordre de lecture (cas d'un document ancré non retrouvé).
+        ordered = sorted(by_page)
+
+    kept: set = set()
+    used = 0
+    for page in ordered:
+        cost = _records_tokens(by_page[page])
+        if kept and used + cost > budget:
+            # Page trop volumineuse pour le reste du budget : on tente les suivantes,
+            # moins chères, plutôt que d'arrêter net le remplissage.
+            continue
+        kept.add(page)
+        used += cost
+
+    selected = [record for record in records if record[0] in kept]
+    # Toutes les pages matchées retenues sont signalées au modèle, pas seulement les seeds
+    # du halo : ce sont toutes des « pages retrouvées par la recherche ».
+    return selected, sorted(page for page in matched_pages if page in kept)
+
+
+def _pages_span_summary(pages: List[int]) -> str:
+    """Résumé de pages par plages consécutives (« 2-8, 37-43, 85-91 »).
+
+    Une fenêtre gloutonne est souvent DISJOINTE : annoncer « 2-91 » laisserait croire au
+    modèle qu'il dispose de tout l'intervalle alors qu'il n'en a que trois morceaux.
+    """
+    ordered = sorted(set(pages))
+    if not ordered:
+        return ""
+    runs: List[Tuple[int, int]] = []
+    start = previous = ordered[0]
+    for page in ordered[1:]:
+        if page == previous + 1:
+            previous = page
+            continue
+        runs.append((start, previous))
+        start = previous = page
+    runs.append((start, previous))
+    return ", ".join(str(a) if a == b else f"{a}-{b}" for a, b in runs)
+
+
 def _pages_in_window(matched_pages: set, radius: int) -> Optional[set]:
-    """Ensemble de pages à conserver autour des pages matchées (None = tout le document)."""
+    """Ensemble de pages à conserver autour des pages matchées (None = tout le document).
+
+    Mode historique ``CAG_WINDOW_MODE=radius`` — conservé comme repli ; le mode par défaut
+    remplit désormais par valeur (``_select_records_by_value``).
+    """
     if not matched_pages:
         return None
     keep: set = set()
@@ -198,8 +413,16 @@ def _render_document_block(
     *,
     index: int,
     full: bool,
+    seed_pages: Optional[Set[int]] = None,
 ) -> Tuple[str, List[int]]:
-    """Rend un document (ou extrait) avec en-tête métadonnées + marqueurs de page."""
+    """Rend un document (ou extrait) avec en-tête métadonnées + marqueurs de page.
+
+    Les pages retrouvées par la recherche sont explicitement signalées : sans ce marquage,
+    tout le classement du retriever s'évapore au moment du packing et le modèle reçoit des
+    dizaines de pages indifférenciées, sans savoir laquelle a motivé la sélection.
+    """
+    seed_pages = seed_pages or set()
+    mark_seeds = settings.CAG_MARK_MATCHED_PAGES
     title = doc.title or "Document sans titre"
     header_bits: List[str] = []
     if doc.source:
@@ -221,12 +444,15 @@ def _render_document_block(
         if page and page != current_page:
             current_page = page
             pages_included.append(page)
-            lines.append(f"\n[page {page}]")
+            if mark_seeds and page in seed_pages:
+                lines.append(f"\n[page {page} — ★ page retrouvée par la recherche]")
+            else:
+                lines.append(f"\n[page {page}]")
         lines.append(text)
 
     scope = "document complet" if full else "extrait"
     if pages_included:
-        span = f"{min(pages_included)}-{max(pages_included)}"
+        span = _pages_span_summary(pages_included)
         lines.insert(1 if not header_bits else 2, f"Pages incluses : {span} ({scope})")
 
     return "\n".join(lines), pages_included
@@ -275,19 +501,32 @@ def build_cag_context(
     # packés, en tête, même si le retrieval de ce tour ne les a pas fait remonter (ex. suivi
     # « tu as ses dimensions ? » où le mot "dimensions" tire vers un autre manuel). Un boost
     # de ranking ne peut pas repêcher un document absent du pool — l'inclusion ici, si.
-    if anchor_document_ids:
-        by_id = {did: meta for did, meta in ranked_docs}
-        anchored: List[Tuple[int, Dict[str, Any]]] = []
+    # Plafonné par CAG_ANCHOR_SLOTS : avec 3 ancres et max_documents=3, les documents
+    # (souvent faux) d'un tour raté consommaient TOUS les slots, et le bon document trouvé
+    # au tour suivant — périmètre confirmé compris — n'avait plus de place. Les ancres
+    # au-delà du plafond restent packées si le retrieval de ce tour les a fait remonter.
+    anchor_slots = max(0, settings.CAG_ANCHOR_SLOTS)
+    if anchor_document_ids and anchor_slots > 0:
+        forced_ids: List[int] = []
         for aid in anchor_document_ids:
             aid = int(aid)
-            meta = by_id.pop(
-                aid,
-                {"score_sum": 0.0, "score_max": 0.0, "matched_pages": set(), "title": None},
-            )
-            anchored.append((aid, meta))
+            if aid not in forced_ids:
+                forced_ids.append(aid)
+            if len(forced_ids) >= anchor_slots:
+                break
+        by_id = {did: meta for did, meta in ranked_docs}
+        anchored: List[Tuple[int, Dict[str, Any]]] = []
+        for aid in forced_ids:
+            anchored.append((aid, by_id.pop(aid, _new_document_entry())))
         others = [(did, meta) for did, meta in ranked_docs if did in by_id]
         # Jamais tronquer les ancres ; le reste complète jusqu'au plafond documents.
         ranked_docs = anchored + others[: max(0, max_documents - len(anchored))]
+        if settings.CAG_ANCHOR_RANK_BY_SCORE:
+            # Garantir la PRÉSENCE n'est pas garantir la PRIORITÉ : l'ancre reste packée
+            # mais reprend son rang réel, donc elle ne capte plus d'office la part de
+            # budget du rang 1 (cf. CAG_DOC_BUDGET_SHARES). Une ancre non retrouvée ce
+            # tour a un score nul et passe donc en dernier — présente, mais servie après.
+            ranked_docs.sort(key=lambda kv: float(kv[1].get("election_score") or 0.0), reverse=True)
 
     doc_ids = [did for did, _ in ranked_docs]
     docs_by_id = {
@@ -299,37 +538,61 @@ def build_cag_context(
     cag_documents: List[Dict[str, Any]] = []
     spent_tokens = 0
     position = 0
+    # Partage du budget par rang d'élection, avec report de la part non consommée.
+    shares = _budget_shares(len(ranked_docs))
+    carry = 0
+    max_seeds = settings.CAG_MAX_SEEDS_PER_DOC
+    greedy_window = (settings.CAG_WINDOW_MODE or "").strip().lower() != "radius"
 
-    for did, meta in ranked_docs:
-        doc = docs_by_id.get(did)
-        if doc is None:
-            continue
+    for slot, (did, meta) in enumerate(ranked_docs):
         remaining = token_budget - spent_tokens
         if remaining <= 0:
             break
+        # Part de ce rang (+ report) : sans partage, le document n°1 pouvait avaler tout
+        # le budget et ne laisser que des miettes aux suivants.
+        doc_budget = remaining
+        if shares:
+            doc_budget = min(remaining, int(token_budget * shares[slot]) + carry)
 
-        leaf_records = _load_leaf_records(session, did)
-        if not leaf_records:
+        doc = docs_by_id.get(did)
+        leaf_records = _load_leaf_records(session, did) if doc is not None else []
+        if doc is None or not leaf_records:
+            carry = doc_budget if shares else 0
             continue
+
+        matched_pages: Dict[int, float] = meta.get("matched_pages") or {}
         full_tokens = _records_tokens(leaf_records)
 
-        # Décision : document entier vs fenêtre autour des pages matchées.
-        if full_tokens <= full_doc_max_tokens and full_tokens <= remaining:
+        # Décision : document entier vs extrait ciblé sur les pages matchées.
+        if full_tokens <= full_doc_max_tokens and full_tokens <= doc_budget:
             selected = leaf_records
+            seed_pages = sorted(matched_pages)
             full = True
+        elif greedy_window:
+            selected, seed_pages = _select_records_by_value(
+                leaf_records,
+                matched_pages,
+                doc_budget,
+                radius=page_radius,
+                max_seeds=max_seeds,
+                decay=settings.CAG_NEIGHBOR_DECAY,
+            )
+            full = False
         else:
-            window = _pages_in_window(meta["matched_pages"], page_radius)
+            window = _pages_in_window(set(matched_pages), page_radius)
             selected = [r for r in leaf_records if window is None or r[0] in window]
-            # Rogne encore si l'extrait dépasse le budget restant (pages les plus
-            # éloignées des pages matchées d'abord).
-            selected = _trim_records_to_budget(selected, meta["matched_pages"], remaining)
+            selected = _trim_records_to_budget(selected, set(matched_pages), doc_budget)
+            seed_pages = sorted(matched_pages)
             full = False
 
         if not selected:
+            carry = doc_budget if shares else 0
             continue
 
         position += 1
-        block, pages_included = _render_document_block(doc, selected, index=position, full=full)
+        block, pages_included = _render_document_block(
+            doc, selected, index=position, full=full, seed_pages=set(seed_pages)
+        )
         block_tokens = estimate_tokens(block)
         if block_tokens > remaining and position > 1:
             # Ne pas dépasser le budget (on garde toujours au moins le 1er document).
@@ -338,15 +601,19 @@ def build_cag_context(
 
         blocks.append(block)
         spent_tokens += block_tokens
+        carry = max(0, doc_budget - block_tokens) if shares else 0
+        included_pages = set(pages_included)
         cag_documents.append(
             {
                 "index": position,
                 "document_id": did,
                 "document_title": doc.title,
-                "pages": sorted(set(pages_included)),
+                "pages": sorted(included_pages),
                 "full_document": full,
                 "score": round(float(meta["score_max"]), 4),
-                "matched_pages": sorted(meta["matched_pages"]),
+                "election_score": round(float(meta.get("election_score") or 0.0), 4),
+                "matched_pages": sorted(matched_pages),
+                "seed_pages": sorted(p for p in seed_pages if p in included_pages),
                 "has_source_file": bool(getattr(doc, "source_file_path", None)),
             }
         )
@@ -369,14 +636,27 @@ def build_cag_context(
             "Cette ligne est masquée à l'utilisateur — n'en parle jamais dans le corps de la réponse."
         )
     system_message["cag_documents"] = cag_documents
+    # Blocs documents SEULS (sans prompt système ni préambule) : c'est cette matière — et
+    # elle seule — qui constitue la preuve. Le juge de vérification la consomme telle quelle
+    # au lieu de tronquer un texte qui commençait par 5 000 caractères de consignes.
+    system_message["cag_document_blocks"] = blocks
 
     logger.info(
-        "[CAG] %d document(s) packé(s), ~%d tokens (budget %d, intent=%s) — %s",
+        "[CAG] %d document(s) packé(s), ~%d tokens (budget %d, intent=%s, élection=%s) — %s",
         len(blocks),
         spent_tokens,
         token_budget,
         intent or "n/a",
-        ", ".join(f"doc={d['document_id']}{'(complet)' if d['full_document'] else ''}" for d in cag_documents),
+        settings.CAG_ELECTION_MODE,
+        ", ".join(
+            "doc={id}{full} élu={elec} pages★={seeds}".format(
+                id=d["document_id"],
+                full="(complet)" if d["full_document"] else "",
+                elec=d.get("election_score"),
+                seeds=d.get("seed_pages") or "—",
+            )
+            for d in cag_documents
+        ),
     )
     return system_message
 

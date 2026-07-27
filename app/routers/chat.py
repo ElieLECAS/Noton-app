@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Literal
+from typing import Any, Dict, List, Optional, Literal
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel, Field
@@ -191,17 +191,24 @@ def _update_conversation_scope(conversation_id: int, scope: dict) -> None:
             s.commit()
 
 
-def _update_conversation_documents(conversation_id: int, document_ids: List[int]) -> None:
+def _update_conversation_documents(
+    conversation_id: int, document_ids: List[int], intent: Optional[str] = None
+) -> None:
     """Persiste les documents d'ancre (sujet documentaire courant) dans query_context.
 
     Fusionne dans le contexte existant sans l'écraser ; réassigne le dict entier pour
     déclencher le suivi de modification JSON de SQLAlchemy.
+
+    ``intent`` mémorise l'intention qui a produit cette ancre : au tour suivant, un
+    changement d'intention (référence → installation → SAV) signifie que le bon TYPE de
+    document a changé, et l'ancre perd alors sa garantie de packing.
     """
     with Session(engine) as s:
         conv = s.get(Conversation, conversation_id)
         if conv:
             qc = dict(conv.query_context or {})
             qc["current_documents"] = [int(d) for d in document_ids]
+            qc["current_documents_intent"] = (intent or "").strip() or None
             conv.query_context = qc
             conv.updated_at = datetime.utcnow()
             s.add(conv)
@@ -881,6 +888,10 @@ def _build_generation_trace(
     reasoning_parts: Optional[List[str]] = None,
     passages_summary: Optional[List[dict]] = None,
     verification: Optional[dict] = None,
+    retry_info: Optional[dict] = None,
+    anchor_boost: Optional[dict] = None,
+    anchor_intent_changed: bool = False,
+    cag_documents: Optional[List[dict]] = None,
 ) -> dict:
     """Assemble le « cheminement » de génération persisté dans message.metadata_json['trace']
     et renvoyé dans l'événement SSE final. Alimente le bouton d'inspection côté UI.
@@ -917,7 +928,28 @@ def _build_generation_trace(
             "nb_passages": nb_passages,
             "anchor_document_ids": list(anchor_document_ids or []),
             "kag_enabled": settings.KAG_ENABLED,
+            # Un tour biaisé par le sujet courant, ou dont les passages viennent d'un
+            # retry sur une autre requête, doit être identifiable sans lire les logs.
+            "anchor_boost": anchor_boost,
+            "anchor_intent_changed": bool(anchor_intent_changed),
+            "retry": retry_info,
         }
+        # Documents réellement DONNÉS au modèle (≠ documents cités par lui) : sans ça,
+        # un contexte à 3 documents s'affichait avec 1 seul passage mobilisé.
+        if cag_documents:
+            trace["packed_documents"] = [
+                {
+                    "index": d.get("index"),
+                    "document_id": d.get("document_id"),
+                    "document_title": d.get("document_title"),
+                    "election_score": d.get("election_score"),
+                    "score": d.get("score"),
+                    "pages": d.get("pages"),
+                    "seed_pages": d.get("seed_pages"),
+                    "full_document": d.get("full_document"),
+                }
+                for d in cag_documents
+            ]
         trace["kag"] = {
             "requested_codes": list(requested_codes or []),
             "pinned_codes": list(pinned_codes or []),
@@ -1038,6 +1070,9 @@ async def stream_space_chat_message(
     lw_result = None
     # Documents d'ancre du sujet courant (réutilisés pour biaiser le retrieval de ce tour).
     anchor_document_ids: List[int] = []
+    # Vrai quand l'intention du tour diffère de celle qui a produit l'ancre : celle-ci
+    # garde alors son boost de recherche mais perd sa garantie de packing (cf. A2).
+    anchor_intent_changed = False
 
     if settings.QUERY_UNDERSTANDING_ENABLED:
         logger.info("[chat] Étape 1/5 — lightweight query understanding")
@@ -1095,6 +1130,31 @@ async def stream_space_chat_message(
                 for d in (persisted_context.get("current_documents") or [])
                 if d is not None
             ]
+            # ——— L'ancre ne survit pas à un changement d'INTENTION ———
+            # Le sujet peut rester identique (topic_shift=false) alors que le bon TYPE de
+            # document change : « quelle référence ? » se répond dans un catalogue de
+            # conception, « comment l'installer ? » dans un catalogue de fabrication.
+            # Sans ce garde-fou, le document du tour précédent était packé de force et
+            # celui qui contenait la procédure n'avait plus de place (cas mesuré 27/07).
+            _prev_intent = (persisted_context.get("current_documents_intent") or "").strip()
+            _this_intent = (
+                (lw_result.signals.intent or "").strip()
+                if (lw_result and lw_result.signals)
+                else ""
+            )
+            if (
+                anchor_document_ids
+                and settings.CONVERSATION_ANCHOR_INTENT_GUARD
+                and _prev_intent
+                and _this_intent
+                and _prev_intent != _this_intent
+            ):
+                anchor_intent_changed = True
+                logger.info(
+                    "[chat] ancre dégradée — intention %s → %s (boost conservé, packing forcé retiré)",
+                    _prev_intent,
+                    _this_intent,
+                )
             if anchor_document_ids:
                 logger.info("[chat] ancre documentaire active — docs=%s", anchor_document_ids)
 
@@ -1335,6 +1395,7 @@ async def stream_space_chat_message(
     # SCOPE_MODE (off = aucun impact). Trois issues : carte à confirmer (stop du tour),
     # confirmation reçue (applique le choix), ou périmètre déterminé (applique en silence).
     allowed_document_ids: Optional[List[int]] = None
+    scope_choice_confirmed = False
     if (
         settings.SCOPE_CONFIRMATION_ENABLED
         and settings.SCOPE_MODE != "off"
@@ -1363,6 +1424,10 @@ async def stream_space_chat_message(
                 )
                 if request.conversation_id:
                     _update_conversation_scope(request.conversation_id, _chosen)
+                # Un périmètre explicitement confirmé prime sur le sujet mémorisé : sans
+                # cette purge, les documents du tour précédent (souvent ceux que la carte
+                # sert justement à écarter) restaient ancrés et repackés de force.
+                scope_choice_confirmed = True
                 logger.info("[chat] Périmètre confirmé par l'utilisateur : %s", _chosen)
             else:
                 _stats = compute_space_scope_stats(session, space_id)
@@ -1390,6 +1455,31 @@ async def stream_space_chat_message(
         except Exception as _scope_err:
             logger.warning("[chat] résolution de périmètre ignorée (erreur): %s", _scope_err)
             allowed_document_ids = None
+
+    # ——— L'ancre documentaire ne contourne plus le périmètre ———
+    # L'ancre boostait le retrieval ET forçait le packing de ses documents SANS jamais être
+    # croisée avec le périmètre : les documents (souvent faux) d'un tour raté occupaient
+    # alors tous les slots CAG, et cliquer sur la carte de filtres ne changeait rien.
+    if anchor_document_ids and scope_choice_confirmed:
+        anchor_document_ids = []
+        if request.conversation_id:
+            _update_conversation_documents(request.conversation_id, [])
+        logger.info("[chat] Périmètre confirmé → ancre documentaire purgée")
+    elif anchor_document_ids and allowed_document_ids is not None:
+        _allowed = {int(d) for d in allowed_document_ids}
+        _kept = [d for d in anchor_document_ids if int(d) in _allowed]
+        if len(_kept) != len(anchor_document_ids):
+            logger.info(
+                "[chat] Ancre restreinte au périmètre — %d/%d document(s) conservé(s)",
+                len(_kept),
+                len(anchor_document_ids),
+            )
+        anchor_document_ids = _kept
+
+    # Ancre utilisée pour le PACKING (distincte de celle du retrieval) : quand l'intention
+    # a changé, le document du tour précédent garde son boost de recherche mais perd son
+    # slot CAG réservé — sinon il occupe la place du document qui porte vraiment la réponse.
+    cag_anchor_document_ids = [] if anchor_intent_changed else list(anchor_document_ids or [])
 
     step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
     logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25 + KAG)", step_label)
@@ -1463,6 +1553,7 @@ async def stream_space_chat_message(
         # demandera une précision à l'utilisateur (cf. bloc génération) au lieu d'un
         # « non documenté » en cul-de-sac.
         reference_not_found: List[str] = []
+        retry_trace: Dict[str, Any] = {"triggered": False}
         try:
             from app.services.coverage_service import extract_message_reference_codes
 
@@ -1480,6 +1571,16 @@ async def stream_space_chat_message(
 
         if _req_codes and not _passages_contain_codes(doc_passages, _req_codes):
             code_query = " ".join(_req_codes)
+            # Cheminement (T2) : sans cette trace, rien ne distingue un tour à un retrieval
+            # d'un tour à deux — alors que le retry interroge le retriever avec une AUTRE
+            # question (les codes seuls) et que ce sont SES passages qui sont packés.
+            retry_trace = {
+                "triggered": True,
+                "requested_codes": list(_req_codes),
+                "retry_query": code_query,
+                "standalone_question": retrieval_query_text,
+                "hits_before": list(retrieval.get("top_hits") or []),
+            }
             logger.info(
                 "[chat] Référence(s) %s absente(s) des passages → retry recherche ciblée",
                 _req_codes,
@@ -1505,8 +1606,29 @@ async def stream_space_chat_message(
                 retrieval_status = retrieval["status"]
                 retrieval_reason = retrieval.get("reason")
                 retrieval_images = retrieval.get("images") or []
+                retry_trace.update(
+                    {
+                        "outcome": "found",
+                        "passages_replaced": True,
+                        "hits_after": list(retrieval.get("top_hits") or []),
+                        "warning": (
+                            "Le classement packé est celui du retry (requête « "
+                            f"{code_query} »), pas celui de la question de l'utilisateur."
+                        ),
+                    }
+                )
             else:
                 reference_not_found = list(_req_codes)
+                # Ce que le retry a RAMENÉ compte autant que son échec : sans ces hits, la
+                # trace laisse croire qu'il n'a rien trouvé, alors qu'il a bien ramené des
+                # pages — simplement aucune ne portait le code.
+                retry_trace.update(
+                    {
+                        "outcome": "not_found",
+                        "passages_replaced": False,
+                        "hits_after": list((retry or {}).get("top_hits") or []),
+                    }
+                )
                 logger.info(
                     "[chat] Retry ciblé — référence(s) %s toujours introuvable(s) → clarification",
                     _req_codes,
@@ -1572,7 +1694,11 @@ async def stream_space_chat_message(
             doc_passages, max_docs=settings.CONVERSATION_ANCHOR_MAX_DOCS
         )
         if new_anchor:
-            _update_conversation_documents(request.conversation_id, new_anchor)
+            _update_conversation_documents(
+                request.conversation_id,
+                new_anchor,
+                intent=(lw_result.signals.intent if (lw_result and lw_result.signals) else None),
+            )
 
     logger.info(
         "[chat] Étape %s — contexte RAG (%d passages, status=%s, dynamic_k=%s, rerank=%s)",
@@ -1589,7 +1715,7 @@ async def stream_space_chat_message(
         space_context_draft = _build_generation_context(
             session,
             doc_passages,
-            anchor_document_ids=anchor_document_ids or None,
+            anchor_document_ids=cag_anchor_document_ids or None,
             intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
         )
         # Ajouter une instruction de clarification forcée après les passages
@@ -1607,7 +1733,7 @@ async def stream_space_chat_message(
         space_context_draft = _build_generation_context(
             session,
             doc_passages,
-            anchor_document_ids=anchor_document_ids or None,
+            anchor_document_ids=cag_anchor_document_ids or None,
             intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
         )
 
@@ -2258,11 +2384,25 @@ async def stream_space_chat_message(
                     try:
                         from app.services.response_verification_service import verify_response
 
+                        # Pages réellement citées par le modèle (<sources>) : le juge doit
+                        # voir EN PRIORITÉ ce sur quoi la réponse s'appuie, pas la tête du
+                        # contexte. Le contexte complet reste passé pour le contrôle
+                        # programmatique, qui le scanne sans troncature.
+                        _cited_pages: dict = {}
+                        for _src in sources_data or []:
+                            _sid = _src.get("document_id")
+                            _used = [p for p in (_src.get("used_pages") or []) if isinstance(p, int)]
+                            if _sid is not None and _used:
+                                _cited_pages.setdefault(int(_sid), []).extend(_used)
+
                         verification_result = await verify_response(
                             question=retrieval_query_text,
                             response_text=complete_response,
                             context_text=space_context_draft["content"],
                             model=forced_model,
+                            document_blocks=space_context_draft.get("cag_document_blocks"),
+                            cag_documents=space_context_draft.get("cag_documents"),
+                            cited_pages=_cited_pages,
                         )
                     except Exception as verif_err:
                         logger.warning("Vérification post-génération ignorée: %s", verif_err)
@@ -2285,6 +2425,10 @@ async def stream_space_chat_message(
                     reasoning_parts=reasoning_parts,
                     passages_summary=_summarize_passages_for_trace(sources_data),
                     verification=verification_result,
+                    retry_info=retry_trace,
+                    anchor_boost=retrieval.get("anchor_boost"),
+                    anchor_intent_changed=anchor_intent_changed,
+                    cag_documents=space_context_draft.get("cag_documents"),
                 )
 
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture

@@ -302,6 +302,12 @@ class Settings(BaseSettings):
     RETRIEVAL_EXPAND_POOL: int = int(os.getenv("RETRIEVAL_EXPAND_POOL", "20"))
     RETRIEVAL_NEIGHBOR_MIN_SCORE_RATIO: float = float(os.getenv("RETRIEVAL_NEIGHBOR_MIN_SCORE_RATIO", "0.3"))
     GENERATION_MAX_PAGE_IMAGES: int = int(os.getenv("GENERATION_MAX_PAGE_IMAGES", "3"))
+    # Quota SOUPLE de pages par document dans le top-K final (fraction de top_k). Sans lui,
+    # un catalogue de 200 pages peut occuper tous les slots et fabriquer son score
+    # d'élection par le volume, évinçant la notice qui contient LA bonne page. « Souple » :
+    # les slots restés vides sont rendus aux hits écartés — le quota ne mord qu'en
+    # compétition. 0 = désactivé (coupe brute historique).
+    RETRIEVAL_PER_DOC_QUOTA_RATIO: float = float(os.getenv("RETRIEVAL_PER_DOC_QUOTA_RATIO", "0.4"))
 
     # Exécute les 4 retrievers (ColPali/pgvector/BM25/KAG) en parallèle (threads + sessions
     # DB dédiées) au lieu de séquentiellement : recouvre l'encodage ColPali CPU avec les
@@ -437,6 +443,66 @@ class Settings(BaseSettings):
     # petit budget au lieu de rejouer le contexte massif à l'identique (P0.2).
     CAG_ECO_TOKEN_BUDGET: int = int(os.getenv("CAG_ECO_TOKEN_BUDGET", "20000"))
     CAG_ECO_MAX_DOCUMENTS: int = int(os.getenv("CAG_ECO_MAX_DOCUMENTS", "3"))
+    # --- Élection des documents à packer (aggregate_documents) ---
+    # "best_passage" : le document est élu par sa MEILLEURE page, avec des bonus
+    # multiplicatifs BORNÉS (familles de canaux, nombre de pages) qui départagent sans
+    # jamais renverser un meilleur passage net. "legacy" : ancienne formule
+    # score_max + 0.2·(somme des autres pages), où le volume écrase le max.
+    CAG_ELECTION_MODE: str = os.getenv("CAG_ELECTION_MODE", "best_passage").strip().lower()
+    # Bonus par FAMILLE de canaux supplémentaire. Les familles (texte = pgvector+bm25,
+    # visuel = colpali, graphe = kag) évitent le double crédit lexical : pgvector et BM25
+    # lisent la même évidence textuelle et ne doivent pas compter pour deux confirmations.
+    CAG_ELECTION_FAMILY_BONUS: float = float(os.getenv("CAG_ELECTION_FAMILY_BONUS", "0.10"))
+    # Bonus par page matchée supplémentaire, plafonné à CAG_ELECTION_PAGE_CAP pages.
+    CAG_ELECTION_PAGE_BONUS: float = float(os.getenv("CAG_ELECTION_PAGE_BONUS", "0.05"))
+    CAG_ELECTION_PAGE_CAP: int = int(os.getenv("CAG_ELECTION_PAGE_CAP", "2"))
+    # --- Partage du budget de packing entre les documents élus ---
+    # Parts par RANG d'élection, renormalisées sur le nombre de documents réellement élus
+    # (2 docs → 62,5 %/37,5 %). Le budget non consommé par un document est reporté au
+    # suivant. Sans ce partage, le document n°1 peut avaler tout le budget et ne laisser
+    # que des miettes aux suivants. Vide = comportement historique (premier servi).
+    CAG_DOC_BUDGET_SHARES: str = os.getenv("CAG_DOC_BUDGET_SHARES", "0.5,0.3,0.2")
+    # --- Fenêtrage des documents trop volumineux ---
+    # "greedy" : les pages matchées deviennent des SEEDS scorées, leurs voisines héritent
+    # d'une valeur décroissante, et le budget du document est rempli par valeur
+    # décroissante — sous budget serré ce sont les pages les plus FAIBLES qui sautent, et
+    # la page qui a gagné le vote n'est jamais rognée. "radius" : ancien ±N arithmétique
+    # avec rognage par distance (aveugle à la valeur).
+    CAG_WINDOW_MODE: str = os.getenv("CAG_WINDOW_MODE", "greedy").strip().lower()
+    # Nombre max de pages matchées promues en seeds par document : évite la « fenêtre
+    # pieuvre » d'un document matché partout, qui diluerait le budget en 10 fenêtres.
+    CAG_MAX_SEEDS_PER_DOC: int = int(os.getenv("CAG_MAX_SEEDS_PER_DOC", "3"))
+    # Décroissance de valeur par page d'écart avec la seed la plus proche.
+    CAG_NEIGHBOR_DECAY: float = float(os.getenv("CAG_NEIGHBOR_DECAY", "0.7"))
+    # Marque les pages retrouvées par la recherche dans le contexte packé : sans ce
+    # marquage, le classement du retriever s'évapore au packing et le modèle reçoit N pages
+    # indifférenciées sans savoir où la recherche a trouvé.
+    CAG_MARK_MATCHED_PAGES: bool = os.getenv("CAG_MARK_MATCHED_PAGES", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Nombre de documents ANCRÉS (sujet courant) packés de force, même absents du retrieval
+    # de ce tour. Plafonné à 1 : avec 3 ancres et CAG_MAX_DOCUMENTS=3, les documents
+    # (souvent faux) d'un tour raté consommaient TOUS les slots et le bon document trouvé
+    # au tour suivant n'avait plus de place. 0 = aucune garantie d'ancrage.
+    CAG_ANCHOR_SLOTS: int = int(os.getenv("CAG_ANCHOR_SLOTS", "1"))
+    # Garantir la PRÉSENCE d'un document ancré n'est pas lui garantir la PRIORITÉ : à true
+    # l'ancre est packée (jamais tronquée par max_documents) mais classée à son score
+    # d'élection réel, donc elle ne capte plus d'office la part de budget du rang 1.
+    CAG_ANCHOR_RANK_BY_SCORE: bool = os.getenv("CAG_ANCHOR_RANK_BY_SCORE", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # --- Vérification post-génération (juge LLM) ---
+    # Plafond de l'extrait de contexte envoyé au juge. 20 000 en dur historiquement, sur un
+    # texte qui COMMENÇAIT par le prompt système : le juge ne voyait que 8 à 30 % du
+    # contexte et déclarait « non documenté » ce qu'il n'avait simplement pas lu.
+    # 0 = illimité (contexte complet, coût token proportionnel).
+    VERIFICATION_CONTEXT_MAX_CHARS: int = int(os.getenv("VERIFICATION_CONTEXT_MAX_CHARS", "60000"))
+    # Manifeste de TOUS les documents packés en tête de l'extrait, jamais tronqué : rend
+    # structurellement impossible le « le contexte ne parle que de la gamme X » alors qu'un
+    # document de la gamme Y était packé plus loin.
+    VERIFICATION_INCLUDE_MANIFEST: bool = os.getenv(
+        "VERIFICATION_INCLUDE_MANIFEST", "true"
+    ).strip().lower() in ("true", "1", "yes", "on")
     RAG_NEIGHBOR_STRATEGY: str = os.getenv("RAG_NEIGHBOR_STRATEGY", "conditional")
     # Chars max par passage injecté au LLM. Relevé (4000 → 12000) pour laisser passer des
     # PAGES ENTIÈRES (texte consolidé + enrichissement) sans troncature, en profitant de la
@@ -497,7 +563,25 @@ class Settings(BaseSettings):
     CONVERSATION_ANCHOR_MAX_DOCS: int = int(os.getenv("CONVERSATION_ANCHOR_MAX_DOCS", "3"))
     # Boost multiplicatif du rrf_score des pages appartenant aux documents ancrés (post-fusion,
     # AVANT la coupe top_k → une page d'un doc ancré survit à la coupe).
-    CONVERSATION_ANCHOR_BOOST: float = float(os.getenv("CONVERSATION_ANCHOR_BOOST", "0.5"))
+    # Boost multiplicatif des pages du document ancré. Ramené de 0.5 à 0.15 (2026-07-27) :
+    # à ×1.5 l'ancre accordait GRATUITEMENT, à chacune de ses pages, le boost catégorie
+    # MAXIMAL (plafonné à 1.5 et qui, lui, exige des correspondances fortes) — elle
+    # annulait donc purement et simplement le signal de pertinence. Cas mesuré : un tour
+    # « comment l'installer ? » packait le catalogue conception du tour précédent au lieu
+    # du catalogue fabrication qui contenait la procédure.
+    CONVERSATION_ANCHOR_BOOST: float = float(os.getenv("CONVERSATION_ANCHOR_BOOST", "0.15"))
+    # Nombre de pages boostées par document ancré (les mieux classées). Le but de l'ancre
+    # est qu'une page pertinente SURVIVE À LA COUPE, pas qu'un document entier s'installe
+    # en tête du classement. 0 = toutes les pages (comportement historique).
+    CONVERSATION_ANCHOR_BOOST_MAX_PAGES: int = int(
+        os.getenv("CONVERSATION_ANCHOR_BOOST_MAX_PAGES", "3")
+    )
+    # L'ancre perd sa garantie de packing quand l'INTENTION du tour change (ex.
+    # product_selection → installation) : le sujet reste le même mais le bon TYPE de
+    # document change (références → procédure de montage). Le boost léger, lui, subsiste.
+    CONVERSATION_ANCHOR_INTENT_GUARD: bool = os.getenv(
+        "CONVERSATION_ANCHOR_INTENT_GUARD", "true"
+    ).strip().lower() in ("true", "1", "yes", "on")
     RETRIEVAL_MATERIAL_BOOST: float = float(os.getenv("RETRIEVAL_MATERIAL_BOOST", "0.3"))
     RETRIEVAL_ENTITY_BOOST: float = float(os.getenv("RETRIEVAL_ENTITY_BOOST", "0.1"))
 
@@ -592,6 +676,28 @@ class Settings(BaseSettings):
             for s in (self.COLPALI_GATING_INTENTS or "").split(",")
             if s.strip()
         ]
+
+    @property
+    def cag_doc_budget_shares(self) -> List[float]:
+        """Parts de budget par rang d'élection, parsées depuis le CSV brut.
+
+        Liste vide = partage désactivé (premier document servi jusqu'au budget global).
+        Les valeurs non numériques ou négatives sont ignorées ; la renormalisation sur le
+        nombre de documents réellement élus est faite par le packer.
+        """
+        shares: List[float] = []
+        for raw in (self.CAG_DOC_BUDGET_SHARES or "").split(","):
+            raw = raw.strip()
+            if not raw:
+                continue
+            try:
+                value = float(raw)
+            except ValueError:
+                logger.warning("CAG_DOC_BUDGET_SHARES : part illisible %r ignorée", raw)
+                continue
+            if value > 0:
+                shares.append(value)
+        return shares
 
     @property
     def cag_budget_by_intent(self) -> dict:

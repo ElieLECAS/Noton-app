@@ -2717,6 +2717,70 @@ function renderGenerationTrace(trace) {
       ["KAG actif", r.kag_enabled == null ? null : (r.kag_enabled ? "oui" : "non")],
       ["Docs d'ancre", (r.anchor_document_ids && r.anchor_document_ids.length) ? r.anchor_document_ids.join(", ") : null],
     ])));
+
+    // 4b. Retry ciblé sur référence : une AUTRE requête a été posée au retriever, et en
+    // cas de succès elle remplace tous les passages. Sans cet affichage, rien ne
+    // distinguait un tour à un retrieval d'un tour à deux.
+    const rt = r.retry;
+    if (rt && rt.triggered) {
+      const _hits = (list) => (list && list.length)
+        ? `<ul class="-my-0.5">${list.map((h) => `<li class="flex items-center justify-between gap-2 py-0.5 text-[11px] text-gray-600 dark:text-gray-300">
+             <span class="truncate">doc ${escapeHtml(String(h.document_id))} · p. ${escapeHtml(String(h.page_no))} <span class="text-gray-400">${escapeHtml((h.sources || []).join("+"))}</span></span>
+             <span class="shrink-0 font-mono">${escapeHtml(String(h.score))}</span></li>`).join("")}</ul>`
+        : `<div class="text-[11px] text-gray-400">—</div>`;
+      let inner = _traceKV([
+        ["Références absentes des passages", (rt.requested_codes || []).join(", ")],
+        ["Question autonome", rt.standalone_question],
+        ["Requête envoyée au retry", rt.retry_query],
+        ["Issue", rt.outcome === "found" ? "référence retrouvée" : "toujours introuvable → clarification"],
+        ["Passages remplacés", rt.passages_replaced ? "oui" : "non"],
+      ]);
+      if (rt.warning) {
+        inner += `<div class="mt-1 text-[11px] text-amber-700 dark:text-amber-300">⚠ ${escapeHtml(rt.warning)}</div>`;
+      }
+      inner += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+          <div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1">Top 5 avant retry</div>${_hits(rt.hits_before)}</div>
+          <div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1">Top 5 ramené par le retry${rt.passages_replaced ? "" : " (écarté)"}</div>${_hits(rt.hits_after)}</div>
+        </div>`;
+      parts.push(_traceCard("Retry ciblé sur référence", "ti-refresh", inner));
+    }
+
+    // 4c. Boost d'ancre : rend visible qu'un tour a été biaisé par le sujet courant.
+    const ab = r.anchor_boost;
+    if (ab || r.anchor_intent_changed) {
+      let inner = _traceKV([
+        ["Facteur appliqué", ab ? "×" + ab.factor : null],
+        ["Pages boostées", ab ? (ab.boosted_pages || []).map((p) => `doc ${p.document_id} p.${p.page_no}`).join(", ") : null],
+        ["Plafond par document", ab ? (ab.max_pages_per_document || "aucun") : null],
+        ["Ancre dégradée", r.anchor_intent_changed ? "oui — l'intention a changé, packing forcé retiré" : null],
+      ]);
+      parts.push(_traceCard("Ancre de conversation", "ti-anchor", inner));
+    }
+  }
+
+  // 4d. Documents réellement DONNÉS au modèle (≠ documents qu'il a cités).
+  if (trace.packed_documents && trace.packed_documents.length) {
+    const rows = trace.packed_documents.map((d) => {
+      const bits = [];
+      if (d.pages && d.pages.length) bits.push(`${d.pages.length} page(s)`);
+      bits.push(d.full_document ? "document complet" : "extrait");
+      if (d.seed_pages && d.seed_pages.length) bits.push("★ " + d.seed_pages.join(", "));
+      const score = (d.election_score != null)
+        ? `<span class="shrink-0 ml-2 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">élu ${escapeHtml(String(d.election_score))}</span>`
+        : "";
+      return `<li class="flex items-start justify-between gap-2 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">
+        <div class="min-w-0">
+          <div class="text-xs font-medium text-gray-800 dark:text-gray-200 truncate">${escapeHtml(String(d.index))}. ${escapeHtml(d.document_title || "Document")}</div>
+          <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${escapeHtml(bits.join(" · "))}</div>
+        </div>${score}
+      </li>`;
+    }).join("");
+    parts.push(_traceCard(
+      "Contexte packé — documents donnés au modèle",
+      "ti-package",
+      `<ul class="-my-1">${rows}</ul>
+       <div class="mt-2 text-[11px] text-gray-400">★ = page retrouvée par la recherche. Ces documents ont été fournis au modèle, qu'il les ait cités ou non.</div>`
+    ));
   }
 
   // 5. Passages (avec scores)
@@ -2756,8 +2820,22 @@ function renderGenerationTrace(trace) {
         `<ul class="list-disc pl-4 text-xs text-amber-700 dark:text-amber-300 space-y-0.5">` +
         v.unsupported_claims.map((c) => `<li>${escapeHtml(String(c))}</li>`).join("") + `</ul></div>`;
     }
+    // Le juge a-t-il vu tout le contexte ? Un verdict rendu sur un extrait partiel ne peut
+    // pas conclure à une invention : on l'affiche comme tel plutôt qu'au même niveau.
+    if (v.context) {
+      const pct = v.context.coverage == null ? null : Math.round(v.context.coverage * 100) + " %";
+      inner += _traceKV([
+        ["Contexte vu par le juge", pct == null ? null : `${pct}${v.context.truncated ? " (tronqué)" : " (intégral)"}`],
+        ["Documents au manifeste", v.context.documents || null],
+      ]);
+    }
+    if (v.judge_suspect) {
+      inner += `<div class="mt-1 px-2 py-1.5 rounded bg-amber-500/10 text-[11px] text-amber-800 dark:text-amber-300">
+        ⚠ Verdict du juge à prendre avec réserve : ${escapeHtml(v.judge_suspect_reason || "")}.
+        Le contrôle programmatique, qui lit 100 % du contexte, fait foi.</div>`;
+    }
     if (v.issues && v.issues.length) {
-      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Remarques</div>` +
+      inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Remarques${v.judge_suspect ? " (non retenues)" : ""}</div>` +
         `<ul class="list-disc pl-4 text-xs text-gray-600 dark:text-gray-300 space-y-0.5">` +
         v.issues.map((c) => `<li>${escapeHtml(String(c))}</li>`).join("") + `</ul></div>`;
     }

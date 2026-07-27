@@ -80,8 +80,10 @@ def test_aggregate_documents_ranks_and_collects_pages():
         {"document_id": 2, "page_no": 5, "score": 0.6},
     ]
     ranked = aggregate_documents(passages, max_documents=8)
-    assert [did for did, _ in ranked] == [1, 2]  # doc 1 : 0.9 + 0.2·0.4 > doc 2 : 0.6
-    assert ranked[0][1]["matched_pages"] == {2, 3}
+    # doc 1 est élu par sa MEILLEURE page (0.9), doc 2 par la sienne (0.6).
+    assert [did for did, _ in ranked] == [1, 2]
+    # matched_pages conserve le score de chaque page (hiérarchie utilisée par le fenêtrage).
+    assert ranked[0][1]["matched_pages"] == {2: 0.9, 3: 0.4}
 
 
 # ---------------------------------------------------------------------------
@@ -296,9 +298,13 @@ def test_select_cag_images_only_packed_pages(db_session: Session, tmp_path):
 
 
 def test_build_cag_force_includes_anchored_document(db_session: Session):
-    """GARANTIE d'ancrage : le document du sujet courant est packé EN TÊTE même si le
-    retrieval du tour ne l'a pas fait remonter (scénario « tu as ses dimensions ? » qui
-    dérive vers un autre manuel)."""
+    """GARANTIE d'ancrage : le document du sujet courant est packé même si le retrieval du
+    tour ne l'a pas fait remonter (scénario « tu as ses dimensions ? » qui dérive vers un
+    autre manuel).
+
+    Depuis A3 (2026-07-27), présence garantie ≠ priorité garantie : l'ancre est classée à
+    son score d'élection réel, donc une ancre non retrouvée ce tour passe APRÈS le document
+    réellement pertinent au lieu de lui confisquer la part de budget du rang 1."""
     user = create_test_user(db_session, "responsable")
     lib = _library(db_session, user.id)
 
@@ -321,12 +327,12 @@ def test_build_cag_force_includes_anchored_document(db_session: Session):
     )
 
     content = msg["content"]
-    # Les deux documents sont présents, l'ancré en premier (DOCUMENT 1).
+    # Les deux documents sont présents ; le document retrouvé ce tour prend le rang 1.
     assert "DORMANT_6101_CONTENU" in content
     assert "ROTO_NX_DIMENSIONS" in content
     packed_ids = [d["document_id"] for d in msg["cag_documents"]]
-    assert packed_ids[0] == doc_anchored.id
-    assert doc_retrieved.id in packed_ids
+    assert packed_ids[0] == doc_retrieved.id
+    assert doc_anchored.id in packed_ids
 
 
 def test_build_cag_anchor_never_truncated_by_max_documents(db_session: Session):
@@ -356,5 +362,5 @@ def test_build_cag_anchor_never_truncated_by_max_documents(db_session: Session):
         anchor_document_ids=[anchored.id],
     )
     packed_ids = [d["document_id"] for d in msg["cag_documents"]]
-    assert packed_ids[0] == anchored.id
-    assert len(packed_ids) == 2
+    assert anchored.id in packed_ids  # jamais évincée par le plafond…
+    assert len(packed_ids) == 2       # …mais classée à son score réel (A3)

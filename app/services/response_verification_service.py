@@ -20,7 +20,9 @@ from __future__ import annotations
 import json
 import logging
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
+
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -113,6 +115,15 @@ Juge deux choses :
 
 Sur grounded, sois strict : en cas de doute sur une valeur/norme inventée, grounded=false.
 
+RÈGLE D'ABSENCE — le contexte peut t'être fourni PARTIELLEMENT (un manifeste liste alors
+TOUS les documents réellement donnés à l'assistant, suivi du contenu le plus pertinent) :
+  - Ne conclus JAMAIS « le contexte ne contient pas X » ou « le contexte ne parle que de
+    la gamme Y » sur la base d'un extrait partiel. Un document listé au manifeste FAIT
+    PARTIE du contexte même si son texte n'apparaît pas ci-dessous.
+  - Si une affirmation de la réponse renvoie à un document du manifeste dont le texte ne
+    t'est pas montré, considère-la comme NON VÉRIFIABLE — pas comme inventée — et
+    signale-le dans issues sans passer grounded à false pour autant.
+
 RETOURNE UNIQUEMENT un objet JSON valide avec exactement ces champs :
 {
   "answers_question": true|false,
@@ -121,19 +132,142 @@ RETOURNE UNIQUEMENT un objet JSON valide avec exactement ces champs :
 }
 Aucun texte avant ou après le JSON."""
 
-# Troncature de l'extrait de contexte envoyé au juge (coût/latence ; le contrôle
-# programmatique, lui, scanne le contexte COMPLET sans troncature).
-_CONTEXT_EXCERPT_CHARS = 20000
+# Repère de page inséré par le packer (``_render_document_block``) : sert à découper un
+# bloc document en unités de page pour le remplissage par les preuves.
+_PAGE_MARKER = re.compile(r"^\[page (\d+)(?: — ★[^\]]*)?\]$", re.MULTILINE)
+
+
+def _document_manifest(cag_documents: List[Dict[str, Any]]) -> str:
+    """Liste de TOUS les documents packés — jamais tronquée.
+
+    C'est le garde-fou structurel : sans lui, un juge qui ne reçoit que le début du
+    contexte conclut « le contexte concerne exclusivement la gamme X » alors qu'un
+    document de la gamme Y était packé plus loin (cas réel du 27/07). ~200 caractères
+    par document, donc négligeable devant le budget d'extrait.
+    """
+    if not cag_documents:
+        return ""
+    lines = [
+        "DOCUMENTS RÉELLEMENT FOURNIS À L'ASSISTANT "
+        "(manifeste COMPLET — aucun document n'est omis de cette liste) :"
+    ]
+    for doc in cag_documents:
+        pages = doc.get("pages") or []
+        span = f"{min(pages)}-{max(pages)}" if len(pages) > 1 else (str(pages[0]) if pages else "—")
+        seeds = doc.get("seed_pages") or []
+        scope = "document complet" if doc.get("full_document") else "extrait"
+        detail = f"pages {span} ({scope}, {len(pages)} page(s))"
+        if seeds:
+            detail += f" · pages retrouvées par la recherche : {', '.join(str(s) for s in seeds)}"
+        lines.append(f"  [{doc.get('index')}] {doc.get('document_title') or 'Sans titre'} — {detail}")
+    return "\n".join(lines)
+
+
+def _split_block_into_pages(block: str) -> List[Tuple[Optional[int], str]]:
+    """Découpe un bloc document en (page_no, texte). L'en-tête précède la 1re page."""
+    markers = list(_PAGE_MARKER.finditer(block))
+    if not markers:
+        return [(None, block)]
+    units: List[Tuple[Optional[int], str]] = []
+    header = block[: markers[0].start()].strip()
+    if header:
+        units.append((None, header))
+    for idx, match in enumerate(markers):
+        end = markers[idx + 1].start() if idx + 1 < len(markers) else len(block)
+        units.append((int(match.group(1)), block[match.start() : end].strip()))
+    return units
+
+
+def build_verification_context(
+    document_blocks: List[str],
+    cag_documents: List[Dict[str, Any]],
+    *,
+    cited_pages: Optional[Dict[int, List[int]]] = None,
+    max_chars: Optional[int] = None,
+) -> Tuple[str, Dict[str, Any]]:
+    """Assemble le contexte soumis au juge et le rapport de couverture.
+
+    Trois différences avec l'ancien ``context_text[:20000]`` :
+
+    * on part des **blocs documents seuls** — le prompt système (5 000+ caractères de
+      consignes) n'a aucune valeur probante pour un jugement de grounding ;
+    * le **manifeste** de tous les documents packés est toujours présent ;
+    * sous plafond, le remplissage suit les **preuves** (pages citées par la réponse, puis
+      pages retrouvées par la recherche, puis le reste) et non l'ordre du contexte, si
+      bien que ce qui fonde la réponse est montré en priorité.
+
+    Retourne ``(texte, {"coverage", "truncated", "chars_total", "chars_sent", "documents"})``.
+    """
+    limit = settings.VERIFICATION_CONTEXT_MAX_CHARS if max_chars is None else max_chars
+    manifest = _document_manifest(cag_documents) if settings.VERIFICATION_INCLUDE_MANIFEST else ""
+    blocks = [b for b in (document_blocks or []) if b]
+    total = sum(len(b) for b in blocks)
+
+    report: Dict[str, Any] = {
+        "chars_total": total,
+        "documents": len(cag_documents or []),
+        "manifest": bool(manifest),
+    }
+
+    def _finish(body: str, truncated: bool) -> Tuple[str, Dict[str, Any]]:
+        text = f"{manifest}\n\n{body}" if manifest else body
+        report["chars_sent"] = len(body)
+        report["truncated"] = truncated
+        # Bornée à 1.0 : le corps assemblé porte des séparateurs absents du total brut.
+        report["coverage"] = round(min(1.0, len(body) / total), 3) if total else 1.0
+        return text, report
+
+    if not blocks:
+        return _finish("", False)
+
+    # Cas nominal : tout tient (limite nulle = illimité).
+    if limit <= 0 or total <= limit:
+        return _finish("\n\n".join(blocks), False)
+
+    # Sous plafond : remplissage par les preuves d'abord.
+    cited = {int(k): {int(p) for p in v} for k, v in (cited_pages or {}).items()}
+    doc_by_index = {d.get("index"): d for d in (cag_documents or [])}
+
+    units: List[Tuple[int, int, int, str]] = []  # (priorité, ordre doc, page, texte)
+    for position, block in enumerate(blocks):
+        doc = doc_by_index.get(position + 1) or {}
+        doc_id = int(doc.get("document_id") or -1)
+        seeds = {int(s) for s in (doc.get("seed_pages") or [])}
+        cited_here = cited.get(doc_id, set())
+        for page_no, text in _split_block_into_pages(block):
+            if page_no is None:
+                priority = 0  # en-tête de document : identité produit, toujours en premier
+            elif page_no in cited_here:
+                priority = 1
+            elif page_no in seeds:
+                priority = 2
+            else:
+                priority = 3
+            units.append((priority, position, page_no or 0, text))
+
+    units.sort(key=lambda u: (u[0], u[1], u[2]))
+    kept: List[Tuple[int, int, str]] = []
+    used = 0
+    for priority, position, page_no, text in units:
+        if used + len(text) + 2 > limit and kept:
+            continue
+        kept.append((position, page_no, text))
+        used += len(text) + 2
+
+    kept.sort(key=lambda u: (u[0], u[1]))
+    body = "\n\n".join(text for _, _, text in kept)
+    return _finish(body, True)
 
 
 def build_verification_messages(
     question: str, response_text: str, context_text: str
 ) -> List[Dict[str, str]]:
-    excerpt = (context_text or "")[:_CONTEXT_EXCERPT_CHARS]
+    """Messages du juge. ``context_text`` est déjà assemblé et borné par
+    ``build_verification_context`` — aucune troncature supplémentaire ici."""
     user_content = (
         f"Question de l'utilisateur :\n{question}\n\n"
         f"Réponse générée par l'assistant :\n{response_text}\n\n"
-        f"Extrait du contexte documentaire utilisé :\n{excerpt}\n\n"
+        f"Contexte documentaire fourni à l'assistant :\n{context_text}\n\n"
         "Juge la réponse selon les règles du système et retourne le JSON demandé."
     )
     return [
@@ -206,24 +340,72 @@ async def verify_response(
     response_text: str,
     context_text: str,
     model: str,
+    document_blocks: Optional[List[str]] = None,
+    cag_documents: Optional[List[Dict[str, Any]]] = None,
+    cited_pages: Optional[Dict[int, List[int]]] = None,
 ) -> Dict[str, Any]:
     """Orchestre les deux contrôles. Ne lève jamais — un échec de vérification
     ne doit pas faire échouer la persistance de la réponse déjà affichée.
 
+    ``context_text`` reste le contexte COMPLET : le contrôle programmatique le scanne
+    intégralement. Le juge LLM, lui, reçoit un contexte assemblé par
+    ``build_verification_context`` à partir de ``document_blocks`` — sans le prompt
+    système, avec le manifeste de tous les documents packés, et rempli par les preuves.
+
     Retourne un dict prêt à stocker dans Message.metadata_json["verification"] :
     {
       "ok": bool,                       # False si un problème a été détecté
-      "unsupported_claims": [...],      # contrôle 1
+      "unsupported_claims": [...],      # contrôle 1 (contexte complet)
       "answers_question": bool,         # contrôle 2
       "grounded": bool,                 # contrôle 2
       "issues": [...],                  # contrôle 2
+      "context": {...},                 # couverture du contexte montré au juge
+      "judge_suspect": bool,            # verdict LLM à prendre avec réserve
+      "judge_suspect_reason": str|None,
     }
     """
     unsupported = check_grounding(response_text, context_text)
 
-    llm_result = await judge_relevance(question, response_text, context_text, model=model)
+    if document_blocks:
+        judge_context, coverage = build_verification_context(
+            document_blocks, cag_documents or [], cited_pages=cited_pages
+        )
+    else:
+        # Repli (contexte non CAG) : on borne au même plafond, faute de structure.
+        limit = settings.VERIFICATION_CONTEXT_MAX_CHARS
+        full = context_text or ""
+        judge_context = full if limit <= 0 else full[:limit]
+        coverage = {
+            "chars_total": len(full),
+            "chars_sent": len(judge_context),
+            "coverage": round(len(judge_context) / len(full), 3) if full else 1.0,
+            "truncated": bool(limit > 0 and len(full) > limit),
+            "documents": 0,
+            "manifest": False,
+        }
 
-    ok = not unsupported and llm_result["answers_question"] and llm_result["grounded"]
+    llm_result = await judge_relevance(question, response_text, context_text=judge_context, model=model)
+
+    # Verdict LLM à prendre avec réserve (J6) : un juge qui n'a pas tout vu ne peut pas
+    # conclure à une invention, et une contradiction avec le contrôle programmatique —
+    # qui, lui, a lu 100 % du contexte — doit être signalée plutôt qu'affichée à égalité.
+    judge_negative = not (llm_result["answers_question"] and llm_result["grounded"])
+    suspect_reason: Optional[str] = None
+    if judge_negative and coverage.get("truncated"):
+        suspect_reason = (
+            f"le juge n'a vu que {int(round(coverage.get('coverage', 0) * 100))} % du contexte"
+        )
+    elif judge_negative and extract_verifiable_claims(response_text) and not unsupported:
+        suspect_reason = (
+            "le contrôle programmatique (contexte complet) confirme toutes les valeurs citées"
+        )
+    judge_suspect = suspect_reason is not None
+
+    if judge_suspect:
+        # Le programmatique fait alors seul foi : il a lu l'intégralité du contexte.
+        ok = not unsupported
+    else:
+        ok = not unsupported and llm_result["answers_question"] and llm_result["grounded"]
 
     result = {
         "ok": ok,
@@ -231,8 +413,18 @@ async def verify_response(
         "answers_question": llm_result["answers_question"],
         "grounded": llm_result["grounded"],
         "issues": llm_result["issues"],
+        "context": coverage,
+        "judge_suspect": judge_suspect,
+        "judge_suspect_reason": suspect_reason,
     }
 
+    if judge_suspect:
+        logger.info(
+            "[verification] Verdict LLM marqué SUSPECT (%s) — couverture=%.0f%% issues=%s",
+            suspect_reason,
+            coverage.get("coverage", 0) * 100,
+            llm_result["issues"],
+        )
     if not ok:
         logger.warning(
             "[verification] Problème détecté — unsupported=%s answers_question=%s "

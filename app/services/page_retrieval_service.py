@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import re
 import unicodedata
 from dataclasses import dataclass, field
@@ -500,9 +501,13 @@ def log_multimodal_retrieval_summary(
             for hit in protected_hits:
                 lines.append(f"    ↳ {_format_unified_hit_line(hit)}")
     elif final_hits:
-        lines.extend(["", "── Étape 2b : Sélection (sans rerank) ──"])
-        for hit in final_hits[:top_k]:
+        lines.extend(["", "── Étape 2b : Sélection (sans rerank, quota + slots ColPali) ──"])
+        for hit in final_hits:
             lines.append(f"  #{hit.final_rank} {_format_unified_hit_line(hit, show_rrf=True)}")
+        if protected_hits:
+            lines.append(f"  Slots ColPali protégés : {len(protected_hits)}")
+            for hit in protected_hits:
+                lines.append(f"    ↳ {_format_unified_hit_line(hit)}")
 
     page_nums = sorted(
         {
@@ -1345,6 +1350,102 @@ def fuse_multimodal_hits(
     for rank, hit in enumerate(final, start=1):
         hit.final_rank = rank
     return final
+
+
+def select_final_hits(
+    fused_hits: List[UnifiedPageHit],
+    top_k: int,
+    *,
+    per_doc_quota_ratio: Optional[float] = None,
+    colpali_slots: Optional[int] = None,
+) -> Tuple[List[UnifiedPageHit], List[UnifiedPageHit]]:
+    """Coupe du pool RRF vers le top-K final, avec deux garde-fous d'équité.
+
+    Remplace la coupe brute ``fused_hits[:top_k]`` du chemin SANS reranker, qui laissait
+    deux biais structurels décider seuls :
+
+    * **Volume** — aucun plafond par document : un catalogue de 200 pages pouvait occuper
+      les K slots, puis remporter l'élection CAG grâce à ce volume qu'il venait de
+      fabriquer. Le quota est SOUPLE : les slots restés vides après le premier passage
+      sont rendus aux hits écartés, donc il ne mord qu'en situation de compétition.
+    * **Double vote lexical** — pgvector et BM25 lisent la MÊME évidence textuelle et
+      votent deux fois au RRF. Une page « muette » (dessin coté) que seul ColPali sait
+      voir pouvait donc être éjectée par des pages moyennes vues deux fois. La protection
+      existante (``protect_colpali_visual_hits``) ne vit que dans le chemin du reranker :
+      reranker désactivé = aucune protection. On réserve donc ici les mêmes slots.
+
+    Retourne ``(final_hits, protected_hits)``. ``final_rank`` est réaffecté sur le résultat.
+    """
+    if not fused_hits:
+        return [], []
+
+    ratio = (
+        per_doc_quota_ratio
+        if per_doc_quota_ratio is not None
+        else settings.RETRIEVAL_PER_DOC_QUOTA_RATIO
+    )
+    slots = colpali_slots if colpali_slots is not None else settings.COLPALI_PROTECTED_SLOTS
+
+    if ratio and ratio > 0:
+        quota = max(1, math.ceil(top_k * ratio))
+        selected: List[UnifiedPageHit] = []
+        deferred: List[UnifiedPageHit] = []
+        per_doc: Dict[int, int] = {}
+        for hit in fused_hits:
+            if len(selected) >= top_k:
+                break
+            doc_id = int(hit.document_id)
+            if per_doc.get(doc_id, 0) >= quota:
+                deferred.append(hit)
+                continue
+            per_doc[doc_id] = per_doc.get(doc_id, 0) + 1
+            selected.append(hit)
+        quota_kept = sum(per_doc.values())
+        if len(selected) < top_k and deferred:
+            # Quota souple : personne d'autre ne réclame ces slots → on les rend.
+            selected.extend(deferred[: top_k - len(selected)])
+        if deferred:
+            logger.info(
+                "[select_final_hits] quota %d page(s)/document — %d hit(s) écarté(s), "
+                "%d réintégré(s) faute de concurrence",
+                quota,
+                len(deferred),
+                len(selected) - quota_kept,
+            )
+    else:
+        selected = list(fused_hits[:top_k])
+
+    protected: List[UnifiedPageHit] = []
+    if slots and slots > 0:
+        # Import local : page_reranker_service importe ce module (cycle au niveau module).
+        from app.services.page_reranker_service import is_colpali_visual_priority
+
+        selected_keys = {h.page_key for h in selected}
+        already_visual = sum(1 for h in selected if is_colpali_visual_priority(h))
+        missing = slots - already_visual
+        if missing > 0:
+            candidates = [
+                h
+                for h in fused_hits
+                if h.page_key not in selected_keys and is_colpali_visual_priority(h)
+            ]
+            candidates.sort(key=lambda h: h.colpali_score or 0.0, reverse=True)
+            protected = candidates[:missing]
+            for hit in protected:
+                logger.info(
+                    "[select_final_hits] slot ColPali réservé (hors rerank) doc=%s p.%s "
+                    "colpali=%.3f vec=%s bm25=%s",
+                    hit.document_id,
+                    hit.page_no,
+                    hit.colpali_score or 0.0,
+                    f"{hit.pgvector_score:.3f}" if hit.pgvector_score is not None else "—",
+                    f"{hit.bm25_score:.3f}" if hit.bm25_score is not None else "—",
+                )
+
+    final = selected + protected
+    for rank, hit in enumerate(final, start=1):
+        hit.final_rank = rank
+    return final, protected
 
 
 def fuse_multi_query_groups(

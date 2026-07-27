@@ -990,10 +990,11 @@ async def search_multimodal_passages(
 
         # Ancrage conversation : booste les pages des documents du sujet courant AVANT la
         # coupe top_k, pour que la conversation reste sur le même produit d'un tour à l'autre.
+        anchor_boost_debug = None
         if settings.CONVERSATION_ANCHOR_ENABLED and anchor_document_ids:
             from app.services.retrieval_boost_service import apply_anchor_boost_to_fused_hits
 
-            apply_anchor_boost_to_fused_hits(fused_hits, anchor_document_ids)
+            anchor_boost_debug = apply_anchor_boost_to_fused_hits(fused_hits, anchor_document_ids)
 
         if not fused_hits:
             result = {"passages": [], "images": [], "status": "ok", "reason": "no_results", "dynamic_k": 0}
@@ -1048,9 +1049,15 @@ async def search_multimodal_passages(
                     }
                 )
         else:
-            final_hits = fused_hits[:top_k]
-            for rank, hit in enumerate(final_hits, start=1):
-                hit.final_rank = rank
+            # Coupe équitable (M1) : quota souple par document + slots ColPali réservés.
+            # Sans reranker, la coupe brute [:top_k] laissait un gros document occuper
+            # tous les slots (puis remporter l'élection CAG grâce à ce volume) et n'offrait
+            # aucune protection aux pages visuelles — protect_colpali_visual_hits ne vit
+            # que dans le chemin du reranker.
+            from app.services.page_retrieval_service import select_final_hits
+
+            final_hits, protected_hits = select_final_hits(fused_hits, top_k)
+            dynamic_k = len(final_hits)
 
         if rerank_status == "low_confidence_clarification" and not protected_hits:
             passages: List[Dict[str, Any]] = []
@@ -1192,6 +1199,20 @@ async def search_multimodal_passages(
             "total_hits": len(final_hits),
             "dynamic_k": dynamic_k,
             "rerank_status": rerank_status,
+            # Détail du boost d'ancre (None si aucun) : rend visible dans le cheminement
+            # qu'un tour a été biaisé par le sujet courant.
+            "anchor_boost": anchor_boost_debug,
+            # Top-5 du classement final, pour comparer les deux retrievals quand un retry
+            # a lieu (le retry REMPLACE les passages : sans ça, la substitution est invisible).
+            "top_hits": [
+                {
+                    "document_id": int(h.document_id),
+                    "page_no": int(h.page_no),
+                    "score": round(float(h.rrf_score or 0.0), 4),
+                    "sources": list(h.retrieval_sources or []),
+                }
+                for h in final_hits[:5]
+            ],
         }
         if include_retrieval_stages:
             result["retrieval_stages"] = _multimodal_eval_stages(

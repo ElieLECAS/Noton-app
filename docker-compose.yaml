@@ -46,6 +46,21 @@ x-app-env: &app-env
   # Contexte de secours (fallback Mistral 400) : CAG re-packé petit (P0.2).
   CAG_ECO_TOKEN_BUDGET: ${CAG_ECO_TOKEN_BUDGET:-20000}
   CAG_ECO_MAX_DOCUMENTS: ${CAG_ECO_MAX_DOCUMENTS:-3}
+  # Élection & packing : le document est élu par sa MEILLEURE page, le budget est partagé
+  # entre les élus, et la fenêtre est remplie par valeur (seeds d'abord).
+  # Repli complet vers l'ancien comportement : CAG_ELECTION_MODE=legacy +
+  # CAG_WINDOW_MODE=radius + CAG_DOC_BUDGET_SHARES= + RETRIEVAL_PER_DOC_QUOTA_RATIO=0.
+  CAG_ELECTION_MODE: ${CAG_ELECTION_MODE:-best_passage}
+  CAG_ELECTION_FAMILY_BONUS: ${CAG_ELECTION_FAMILY_BONUS:-0.10}
+  CAG_ELECTION_PAGE_BONUS: ${CAG_ELECTION_PAGE_BONUS:-0.05}
+  CAG_ELECTION_PAGE_CAP: ${CAG_ELECTION_PAGE_CAP:-2}
+  CAG_DOC_BUDGET_SHARES: ${CAG_DOC_BUDGET_SHARES:-0.5,0.3,0.2}
+  CAG_WINDOW_MODE: ${CAG_WINDOW_MODE:-greedy}
+  CAG_MAX_SEEDS_PER_DOC: ${CAG_MAX_SEEDS_PER_DOC:-3}
+  CAG_NEIGHBOR_DECAY: ${CAG_NEIGHBOR_DECAY:-0.7}
+  CAG_MARK_MATCHED_PAGES: ${CAG_MARK_MATCHED_PAGES:-true}
+  CAG_ANCHOR_SLOTS: ${CAG_ANCHOR_SLOTS:-1}
+  RETRIEVAL_PER_DOC_QUOTA_RATIO: ${RETRIEVAL_PER_DOC_QUOTA_RATIO:-0.4}
   # Un seul appel LLM avant le retrieval (P0.4) + budgets temps (P0.3).
   QUERY_GENERATE_QUERIES_LLM: ${QUERY_GENERATE_QUERIES_LLM:-false}
   GUIDED_DECISION_IN_FUSED: ${GUIDED_DECISION_IN_FUSED:-true}
@@ -54,7 +69,17 @@ x-app-env: &app-env
   # Ancrage documentaire conversationnel (continuité du sujet entre les tours).
   CONVERSATION_ANCHOR_ENABLED: ${CONVERSATION_ANCHOR_ENABLED:-true}
   CONVERSATION_ANCHOR_MAX_DOCS: ${CONVERSATION_ANCHOR_MAX_DOCS:-3}
-  CONVERSATION_ANCHOR_BOOST: ${CONVERSATION_ANCHOR_BOOST:-0.5}
+  # Ancre : boost ramené de 0.5 à 0.15 et limité aux N meilleures pages — à ×1.5 sur
+  # TOUTES ses pages, l'ancre accordait gratuitement le boost catégorie maximal et
+  # annulait le signal de pertinence (cas « comment l'installer ? » du 27/07).
+  CONVERSATION_ANCHOR_BOOST: ${CONVERSATION_ANCHOR_BOOST:-0.15}
+  CONVERSATION_ANCHOR_BOOST_MAX_PAGES: ${CONVERSATION_ANCHOR_BOOST_MAX_PAGES:-3}
+  CONVERSATION_ANCHOR_INTENT_GUARD: ${CONVERSATION_ANCHOR_INTENT_GUARD:-true}
+  CAG_ANCHOR_RANK_BY_SCORE: ${CAG_ANCHOR_RANK_BY_SCORE:-true}
+  # Juge de vérification : contexte complet (blocs documents seuls, sans prompt système)
+  # + manifeste de tous les documents packés. 0 = illimité.
+  VERIFICATION_CONTEXT_MAX_CHARS: ${VERIFICATION_CONTEXT_MAX_CHARS:-60000}
+  VERIFICATION_INCLUDE_MANIFEST: ${VERIFICATION_INCLUDE_MANIFEST:-true}
   RAG_RENDER_ALL_IMAGES: ${RAG_RENDER_ALL_IMAGES:-true}
   RAG_MAX_IMAGES: ${RAG_MAX_IMAGES:-12}
   MIN_VECTOR_SIMILARITY: ${MIN_VECTOR_SIMILARITY:-0.25}

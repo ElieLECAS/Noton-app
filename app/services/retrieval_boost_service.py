@@ -138,37 +138,74 @@ def apply_category_boost_to_fused_hits(
 def apply_anchor_boost_to_fused_hits(
     fused_hits: List[Any],
     anchor_document_ids: Optional[Sequence[int]],
-) -> List[Any]:
-    """Boost multiplicatif des pages des documents ANCRÉS (continuité de conversation).
+) -> Optional[Dict[str, Any]]:
+    """Boost multiplicatif des MEILLEURES pages des documents ANCRÉS (continuité de conversation).
 
     Appliqué après la fusion RRF (et le boost catégorie), AVANT la coupe top_k : une page
     d'un document du sujet courant remonte et survit à la coupe, même quand le tour est
     formulé en suivi elliptique (« et les autres ? ») qui matche faiblement en propre.
     Empêche la conversation de sauter d'un produit à l'autre. Duck typing sur rrf_score.
+
+    DEUX GARDE-FOUS (2026-07-27), après un cas où un tour « comment l'installer ? » packait
+    le catalogue *conception* du tour précédent au lieu du catalogue *fabrication* qui
+    contenait la procédure :
+
+    * **Facteur réduit** — à ×1.5, l'ancre accordait gratuitement à chacune de ses pages le
+      boost catégorie MAXIMAL (plafonné à 1.5, et qui exige lui des correspondances fortes) :
+      une page sans le moindre rapport avec la question recevait autant qu'une page
+      parfaitement catégorisée. L'ancre annulait le signal de pertinence au lieu de l'aider.
+    * **Pages plafonnées** — seules les N meilleures pages de chaque document ancré sont
+      boostées. Le but est qu'une page pertinente survive à la coupe, pas qu'un document
+      entier s'installe en tête.
+
+    Mute ``fused_hits`` en place. Retourne le détail du boost appliqué (pour le cheminement)
+    ou ``None`` si aucune page n'a été boostée.
     """
     if not fused_hits or not anchor_document_ids:
-        return fused_hits
+        return None
 
     anchor = {int(d) for d in anchor_document_ids}
     factor = 1.0 + settings.CONVERSATION_ANCHOR_BOOST
-    boosted = 0
-    for hit in fused_hits:
-        if int(getattr(hit, "document_id", -1)) in anchor:
-            hit.rrf_score = (hit.rrf_score or 0.0) * factor
-            boosted += 1
+    max_pages = max(0, settings.CONVERSATION_ANCHOR_BOOST_MAX_PAGES)
 
-    if boosted:
-        fused_hits.sort(key=lambda h: h.rrf_score or 0.0, reverse=True)
-        for rank, hit in enumerate(fused_hits, start=1):
-            if hasattr(hit, "final_rank"):
-                hit.final_rank = rank
-        logger.info(
-            "[retrieval_boost] ancre conversation: %d page(s) ×%.2f, docs=%s",
-            boosted,
-            factor,
-            sorted(anchor),
-        )
-    return fused_hits
+    # Les mieux classées d'abord, pour que le plafond retienne les pages les plus fortes.
+    candidates = sorted(
+        (h for h in fused_hits if int(getattr(h, "document_id", -1)) in anchor),
+        key=lambda h: h.rrf_score or 0.0,
+        reverse=True,
+    )
+    per_doc: Dict[int, int] = {}
+    boosted_pages: List[Tuple[int, int]] = []
+    for hit in candidates:
+        doc_id = int(hit.document_id)
+        if max_pages and per_doc.get(doc_id, 0) >= max_pages:
+            continue
+        per_doc[doc_id] = per_doc.get(doc_id, 0) + 1
+        hit.rrf_score = (hit.rrf_score or 0.0) * factor
+        boosted_pages.append((doc_id, int(getattr(hit, "page_no", 0) or 0)))
+
+    boosted = len(boosted_pages)
+    if not boosted:
+        return None
+
+    fused_hits.sort(key=lambda h: h.rrf_score or 0.0, reverse=True)
+    for rank, hit in enumerate(fused_hits, start=1):
+        if hasattr(hit, "final_rank"):
+            hit.final_rank = rank
+    logger.info(
+        "[retrieval_boost] ancre conversation: %d page(s) ×%.2f (max %s/doc), docs=%s",
+        boosted,
+        factor,
+        max_pages or "∞",
+        sorted(anchor),
+    )
+    # Renvoyé au cheminement (A5) : un tour biaisé par l'ancre doit être identifiable.
+    return {
+        "factor": round(factor, 3),
+        "max_pages_per_document": max_pages,
+        "documents": sorted(anchor),
+        "boosted_pages": [{"document_id": d, "page_no": p} for d, p in boosted_pages],
+    }
 
 
 def compute_anchor_documents(passages: List[Dict[str, Any]], *, max_docs: int) -> List[int]:
