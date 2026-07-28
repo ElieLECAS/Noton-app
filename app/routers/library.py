@@ -1038,6 +1038,14 @@ async def update_library_document(
 class ReindexRequest(BaseModel):
     """Corps de la requête de retraitement."""
     mode: str = Field(default="full", description="full | text_only | colpali_only | kag_only")
+    extractor: str = Field(
+        default="vision",
+        description=(
+            "Voie d'extraction du texte, modes full et text_only uniquement. "
+            "vision = rendu PNG + mistral-small ; text = couche texte native "
+            "pymupdf4llm (chiffres exacts, tableaux en chunks-lignes)."
+        ),
+    )
 
 
 @router.post("/documents/{document_id}/reindex", status_code=status.HTTP_200_OK)
@@ -1051,21 +1059,36 @@ async def reindex_library_document_endpoint(
     Enfile le retraitement d'un document sur Celery.
 
     Modes disponibles :
-    - full        : Vision Ministral 3B + mistral-embed + ColPali (pipeline complet, défaut)
-    - text_only   : Vision Ministral 3B + mistral-embed uniquement (ColPali inchangé)
+    - full        : tout (extraction + KAG + synthèses + embeddings + ColPali), défaut
+    - text_only   : extraction + embeddings SEULEMENT — ni KAG, ni synthèses
+                    contextuelles, ColPali inchangé. Passage RAPIDE (journée).
+    - kag_only    : KAG (entités/relations/catégories) + synthèses contextuelles sur
+                    les chunks EXISTANTS + ré-embedding. Passage LENT (nuit).
     - colpali_only: re-sync visuel ColPali uniquement (chunks texte inchangés)
-    - kag_only    : re-extrait entités + relations + catégories (KAG) sur les chunks
-                    EXISTANTS, ré-embarque les métadonnées. Ni texte, ni ColPali refaits.
+
+    text_only puis kag_only aboutit au même état final que full.
+
+    ``extractor`` (full et text_only) : "vision" ou "text" (couche texte native
+    pymupdf4llm, avec repli vision sur les pages sans texte).
 
     Marque le document en reindex_queued (chunks encore disponibles pour le RAG).
     """
-    from app.services.document_indexing_service import IndexingMode
+    from app.services.document_indexing_service import IndexingMode, TextExtractor
 
     valid_modes = {m.value for m in IndexingMode}
     if body.mode not in valid_modes:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Mode invalide '{body.mode}'. Valeurs acceptées : {', '.join(sorted(valid_modes))}",
+        )
+    valid_extractors = {e.value for e in TextExtractor}
+    if body.extractor not in valid_extractors:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                f"Extracteur invalide '{body.extractor}'. "
+                f"Valeurs acceptées : {', '.join(sorted(valid_extractors))}"
+            ),
         )
     if body.mode in ("full", "text_only", "kag_only") and not settings.MISTRAL_API_KEY:
         raise HTTPException(
@@ -1097,7 +1120,9 @@ async def reindex_library_document_endpoint(
         )
     mark_document_reindex_queued(session, document_id, current_user.id)
     try:
-        celery_task_id = dispatch_reindex_library(document_id, current_user.id, mode=body.mode)
+        celery_task_id = dispatch_reindex_library(
+            document_id, current_user.id, mode=body.mode, extractor=body.extractor
+        )
     except RuntimeError as e:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -1106,19 +1131,29 @@ async def reindex_library_document_endpoint(
     log_admin_action(
         user_id=current_user.id,
         action="library.reindex_document",
-        detail={"document_id": document_id, "celery_task_id": celery_task_id, "mode": body.mode},
+        detail={
+            "document_id": document_id,
+            "celery_task_id": celery_task_id,
+            "mode": body.mode,
+            "extractor": body.extractor,
+        },
     )
     return {
         "status": "queued",
         "celery_task_id": celery_task_id,
         "document_id": document_id,
         "mode": body.mode,
+        "extractor": body.extractor,
     }
 
 
 class ReindexAllRequest(BaseModel):
     """Corps de la requête de retraitement global."""
     mode: str = Field(default="full", description="full | text_only | colpali_only")
+    extractor: str = Field(
+        default="vision",
+        description="vision | text — voie d'extraction (modes full et text_only)",
+    )
 
 
 @router.post("/reindex-all", status_code=status.HTTP_200_OK)
@@ -1130,17 +1165,27 @@ async def reindex_all_library_endpoint(
     Enfile le retraitement de tous les documents de la bibliothèque.
 
     Modes disponibles :
-    - full        : Vision Ministral 3B + mistral-embed + ColPali (défaut)
-    - text_only   : Vision Ministral 3B + mistral-embed uniquement
+    - full        : tout (extraction + KAG + synthèses + embeddings + ColPali), défaut
+    - text_only   : extraction + embeddings seulement — passage RAPIDE
+    - kag_only    : KAG + synthèses contextuelles + ré-embedding — passage LENT (nuit)
     - colpali_only: re-sync visuel ColPali uniquement
     """
-    from app.services.document_indexing_service import IndexingMode
+    from app.services.document_indexing_service import IndexingMode, TextExtractor
 
     valid_modes = {m.value for m in IndexingMode}
     if body.mode not in valid_modes:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Mode invalide '{body.mode}'. Valeurs acceptées : {', '.join(sorted(valid_modes))}",
+        )
+    valid_extractors = {e.value for e in TextExtractor}
+    if body.extractor not in valid_extractors:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                f"Extracteur invalide '{body.extractor}'. "
+                f"Valeurs acceptées : {', '.join(sorted(valid_extractors))}"
+            ),
         )
     if body.mode in ("full", "text_only") and not settings.MISTRAL_API_KEY:
         raise HTTPException(
@@ -1153,16 +1198,23 @@ async def reindex_all_library_endpoint(
             detail="ColPali désactivé. Modes full et colpali_only nécessitent ColPali.",
         )
     try:
-        celery_task_id = dispatch_reindex_all_library(current_user.id, mode=body.mode)
+        celery_task_id = dispatch_reindex_all_library(
+            current_user.id, mode=body.mode, extractor=body.extractor
+        )
         log_admin_action(
             user_id=current_user.id,
             action="library.reindex_all",
-            detail={"celery_task_id": celery_task_id, "mode": body.mode},
+            detail={
+                "celery_task_id": celery_task_id,
+                "mode": body.mode,
+                "extractor": body.extractor,
+            },
         )
         return {
             "status": "queued",
             "celery_task_id": celery_task_id,
             "mode": body.mode,
+            "extractor": body.extractor,
         }
     except RuntimeError as e:
         raise HTTPException(

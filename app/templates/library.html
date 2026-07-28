@@ -449,13 +449,25 @@ endblock %} {% block content %}
                     class="text-xs text-gray-500 dark:text-gray-400 font-medium"
                 ></p>
             </div>
-            <button
-                type="button"
-                onclick="closeChunksMonitorModal()"
-                class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
-            >
-                Fermer
-            </button>
+            <div class="flex items-center gap-2">
+                <button
+                    type="button"
+                    id="chunks-page-view-btn"
+                    onclick="openLibraryPageViewer()"
+                    class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-teal-500/20 bg-teal-500/5 text-teal-700 dark:text-teal-300 hover:bg-teal-500/10 active:scale-95 transition-all text-xs font-semibold"
+                    title="Afficher la page PDF à gauche et ses chunks à droite"
+                >
+                    <i class="ti ti-layout-columns"></i>
+                    Vue page PDF
+                </button>
+                <button
+                    type="button"
+                    onclick="closeChunksMonitorModal()"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
+                >
+                    Fermer
+                </button>
+            </div>
         </div>
 
         <div class="flex items-center gap-2 mb-4 shrink-0">
@@ -606,6 +618,9 @@ endblock %} {% block content %}
     </div>
 </div>
 {% endblock %} {% block extra_scripts %}
+<!-- Visionneuse de page partagée avec space_detail.html : pdf.js, rendu de page,
+     surlignage et rendu markdown mutualisés. -->
+<script src="/static/js/page-viewer.js"></script>
 <style>
     /* Pas de glass-card / transform ici : évite le contenu qui disparaît au survol dans la liste scrollable */
     .library-doc-row {
@@ -671,7 +686,8 @@ endblock %} {% block content %}
     let chunksActiveTab = "semantic";
     let libraryCategoryPageState = { mode: "category", categoryId: null, pageNo: null };
     let libraryCategoryPdfDoc = null;
-    let libraryCategoryPdfjsLib = null;
+    // Document du PDF actuellement chargé : évite de le re-télécharger à chaque page.
+    let libraryCategoryPdfDocId = null;
     let classificationOptions = null;
 
     function sourceToSupplierSlug(source) {
@@ -1368,6 +1384,10 @@ endblock %} {% block content %}
     `;
     }
 
+    /* Rendu markdown des chunks : délégué au module partagé
+       app/static/js/page-viewer.js (échappement d'abord, aucune dépendance CDN). */
+    const renderChunkMarkdown = (raw) => PageViewer.renderMarkdown(raw);
+
     function renderChunkCard(chunk, options = {}) {
         const { showCategoriesInHeader = false } = options;
         const token =
@@ -1411,7 +1431,9 @@ endblock %} {% block content %}
           ${categoriesHeaderHtml}
         </header>
         <div class="p-3">
-          <pre class="whitespace-pre-wrap break-words text-sm text-gray-800 dark:text-gray-100 leading-relaxed font-sans">${escapeHtml(chunk.content)}</pre>
+          <div class="chunk-rendered text-sm text-gray-800 dark:text-gray-100 leading-relaxed">${renderChunkMarkdown(chunk.content)}</div>
+          <pre class="chunk-raw hidden whitespace-pre-wrap break-words text-xs text-gray-600 dark:text-gray-400 leading-relaxed font-mono">${escapeHtml(chunk.content)}</pre>
+          <button type="button" class="chunk-raw-toggle mt-2 text-xs text-indigo-600 dark:text-indigo-400 hover:underline">Voir le markdown brut</button>
           ${entitiesHtml}
         </div>
       </article>
@@ -1571,8 +1593,28 @@ endblock %} {% block content %}
         enrichmentHost.innerHTML = (chunksMonitorData.enrichment_chunks || []).length
             ? chunksMonitorData.enrichment_chunks.map((chunk) => renderEnrichmentChunkCard(chunk)).join("")
             : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk de synthèse contextuelle. Activez CONTEXTUAL_ENRICHMENT_ENABLED et relancez un retraitement « Complet » ou « Texte seul ».</div>`;
+        bindChunkRawToggles(semanticHost);
         renderEntitiesPanel();
         renderCategoriesPanel();
+    }
+
+    /* Bascule rendu lisible / markdown brut, par chunk (délégation sur l'hôte). */
+    function bindChunkRawToggles(host) {
+        if (!host || host.dataset.rawToggleBound === "1") return;
+        host.dataset.rawToggleBound = "1";
+        host.addEventListener("click", (event) => {
+            const btn = event.target.closest(".chunk-raw-toggle");
+            if (!btn) return;
+            const card = btn.closest("article");
+            if (!card) return;
+            const rendered = card.querySelector(".chunk-rendered");
+            const raw = card.querySelector(".chunk-raw");
+            if (!rendered || !raw) return;
+            const showRaw = raw.classList.contains("hidden");
+            raw.classList.toggle("hidden", !showRaw);
+            rendered.classList.toggle("hidden", showRaw);
+            btn.textContent = showRaw ? "Voir le rendu lisible" : "Voir le markdown brut";
+        });
     }
 
     function switchChunksTab(tab) {
@@ -1762,6 +1804,81 @@ endblock %} {% block content %}
         renderLibraryCategoryPageDetail(detail);
     }
 
+    /* ---------- Vue « page PDF + chunks de la page » ----------
+       Mode "page" de la modale à deux volets : contrairement aux modes "category"
+       et "search", AUCUN appel API n'est nécessaire — tous les chunks du document
+       sont déjà chargés dans chunksMonitorData par la modale de monitoring. On les
+       regroupe simplement par page côté client. */
+
+    function libraryPagesWithChunks() {
+        const pages = new Set();
+        (chunksMonitorData?.semantic_chunks || []).forEach((c) => {
+            if (Number.isFinite(c.page) && c.page > 0) pages.add(c.page);
+        });
+        (chunksMonitorData?.enrichment_chunks || []).forEach((c) => {
+            if (Number.isFinite(c.page) && c.page > 0) pages.add(c.page);
+        });
+        return Array.from(pages).sort((a, b) => a - b);
+    }
+
+    function openLibraryPageViewer(pageNo = null) {
+        if (!chunksMonitorData) return;
+        const pages = libraryPagesWithChunks();
+        if (!pages.length) {
+            alert("Aucun chunk rattaché à une page pour ce document.");
+            return;
+        }
+        renderLibraryPageView(pageNo && pages.includes(pageNo) ? pageNo : pages[0]);
+    }
+
+    function renderLibraryPageView(pageNo) {
+        const modal = document.getElementById("library-category-page-modal");
+        if (!modal || !chunksMonitorData) return;
+        modal.classList.remove("hidden");
+
+        libraryCategoryPageState = { mode: "page", categoryId: null, pageNo };
+
+        const pages = libraryPagesWithChunks();
+        const idx = pages.indexOf(pageNo);
+        const docTitle = chunksMonitorData.document_title || "Document";
+
+        document.getElementById("library-category-page-title").textContent = `Page ${pageNo}`;
+        document.getElementById("library-category-page-meta").textContent =
+            `${docTitle} · page ${pageNo}`;
+        document.getElementById("library-category-page-counter").textContent =
+            pages.length ? `${idx + 1} / ${pages.length}` : "—";
+
+        const prevBtn = document.getElementById("library-category-prev-btn");
+        const nextBtn = document.getElementById("library-category-next-btn");
+        if (prevBtn) prevBtn.disabled = idx <= 0;
+        if (nextBtn) nextBtn.disabled = idx < 0 || idx >= pages.length - 1;
+
+        const semantic = (chunksMonitorData.semantic_chunks || []).filter((c) => c.page === pageNo);
+        const enrichment = (chunksMonitorData.enrichment_chunks || []).filter((c) => c.page === pageNo);
+
+        const host = document.getElementById("library-category-text-container");
+        const semanticHtml = semantic.length
+            ? `<section class="space-y-3">${semantic
+                  .map((chunk) => renderChunkCard(chunk, { showCategoriesInHeader: true }))
+                  .join("")}</section>`
+            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk texte sur cette page.</div>`;
+        const enrichmentHtml = enrichment.length
+            ? `<section class="space-y-3 mt-4">
+                 <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300 flex items-center gap-2">
+                   <i class="ti ti-sparkles"></i>Synthèses contextuelles (générées par l'IA)
+                 </h3>
+                 ${enrichment.map((chunk) => renderEnrichmentChunkCard(chunk)).join("")}
+               </section>`
+            : "";
+        host.innerHTML = semanticHtml + enrichmentHtml;
+        bindChunkRawToggles(host);
+
+        renderLibraryCategoryPdf(
+            { document_id: chunksMonitorDocumentId, title: docTitle },
+            pageNo,
+        );
+    }
+
     async function openLibraryCategoryPageModal(categoryId, pageNo) {
         const modal = document.getElementById("library-category-page-modal");
         if (!modal || !chunksMonitorDocumentId) return;
@@ -1893,34 +2010,16 @@ endblock %} {% block content %}
         `;
     }
 
-    async function loadLibraryCategoryPdfJs() {
-        if (libraryCategoryPdfjsLib) return libraryCategoryPdfjsLib;
-        const script = document.createElement("script");
-        script.type = "module";
-        script.textContent = `
-            import * as pdfjs from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
-            pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
-            window.__libraryCategoryPdfjs = pdfjs;
-        `;
-        document.head.appendChild(script);
-        return new Promise((resolve) => {
-            const t = setInterval(() => {
-                if (window.__libraryCategoryPdfjs) {
-                    clearInterval(t);
-                    libraryCategoryPdfjsLib = window.__libraryCategoryPdfjs;
-                    resolve(libraryCategoryPdfjsLib);
-                }
-            }, 50);
-        });
-    }
-
+    /* Chargement pdf.js et rendu de page délégués au module partagé
+       app/static/js/page-viewer.js (mutualisé avec space_detail.html). */
     async function renderLibraryCategoryPdf(documentInfo, pageNo) {
         const container = document.getElementById("library-category-pdf-container");
         const panel = document.getElementById("library-category-pdf-panel");
         const textSection = document.getElementById("library-category-text-panel");
         if (!container || !panel) return;
 
-        if (!documentInfo.has_source_file || !documentInfo.document_id) {
+        const documentId = documentInfo.document_id || chunksMonitorDocumentId;
+        if (documentInfo.has_source_file === false || !documentId) {
             panel.classList.add("hidden");
             textSection?.classList.remove("lg:w-1/2");
             textSection?.classList.add("lg:w-full");
@@ -1935,18 +2034,12 @@ endblock %} {% block content %}
             `<div class="flex items-center justify-center h-full min-h-[200px] text-gray-500 dark:text-gray-400"><i class="ti ti-loader-2 text-2xl animate-spin"></i></div>`;
 
         try {
-            await loadLibraryCategoryPdfJs();
-            const response = await fetch(
-                `/api/library/documents/${documentInfo.document_id}/file`,
-                { credentials: "include" },
-            );
-            if (!response.ok) throw new Error("PDF indisponible");
-            const pdfData = await response.arrayBuffer();
-            libraryCategoryPdfDoc = await libraryCategoryPdfjsLib
-                .getDocument({ data: pdfData })
-                .promise;
-            const safePage = Math.min(Math.max(1, pageNo), libraryCategoryPdfDoc.numPages);
-            await renderLibraryCategoryPdfPage(safePage);
+            // Le PDF n'est re-téléchargé que si on change de document.
+            if (!libraryCategoryPdfDoc || libraryCategoryPdfDocId !== documentId) {
+                libraryCategoryPdfDoc = await PageViewer.openDocumentPdf(documentId);
+                libraryCategoryPdfDocId = documentId;
+            }
+            await PageViewer.renderPdfPage(container, libraryCategoryPdfDoc, pageNo);
         } catch (err) {
             container.innerHTML =
                 `<div class="text-sm text-gray-500 dark:text-gray-400 text-center p-4">Aperçu PDF indisponible</div>`;
@@ -1954,41 +2047,27 @@ endblock %} {% block content %}
         }
     }
 
-    async function renderLibraryCategoryPdfPage(pageNum) {
-        if (!libraryCategoryPdfDoc) return;
-        const container = document.getElementById("library-category-pdf-container");
-        const page = await libraryCategoryPdfDoc.getPage(pageNum);
-        const containerWidth = Math.max(container.clientWidth - 24, 280);
-        const viewport0 = page.getViewport({ scale: 1 });
-        const scale = containerWidth / viewport0.width;
-        const viewport = page.getViewport({ scale });
-
-        container.innerHTML = "";
-        const pageContainer = document.createElement("div");
-        pageContainer.className = "relative mx-auto";
-        pageContainer.style.width = "fit-content";
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        canvas.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
-        canvas.className = "rounded-lg";
-        pageContainer.appendChild(canvas);
-        container.appendChild(pageContainer);
-        await page.render({ canvasContext: context, viewport }).promise;
-    }
-
     function closeLibraryCategoryPageModal() {
         const modal = document.getElementById("library-category-page-modal");
         if (!modal) return;
         modal.classList.add("hidden");
         libraryCategoryPdfDoc = null;
+        libraryCategoryPdfDocId = null;
         libraryCategoryPageState = { mode: "category", categoryId: null, pageNo: null };
     }
 
     async function navigateLibraryCategoryPage(direction) {
         const { mode, categoryId, query, pageNo } = libraryCategoryPageState;
         if (!chunksMonitorDocumentId) return;
+
+        if (mode === "page") {
+            // Navigation locale : les pages porteuses de chunks sont déjà connues.
+            const pages = libraryPagesWithChunks();
+            const idx = pages.indexOf(pageNo);
+            const target = direction === "prev" ? pages[idx - 1] : pages[idx + 1];
+            if (target) renderLibraryPageView(target);
+            return;
+        }
 
         if (mode === "search") {
             if (!query) return;
@@ -2077,11 +2156,74 @@ endblock %} {% block content %}
 
     /* ---------- Retraitement : helpers modal mode ---------- */
     const REINDEX_MODES = [
-        { value: "full", label: "Complet", icon: "ti-refresh", desc: "Vision Ministral 3B + embeddings + ColPali (défaut)" },
-        { value: "text_only", label: "Texte seul", icon: "ti-text-size", desc: "Vision Ministral 3B + embeddings mistral-embed uniquement" },
-        { value: "colpali_only", label: "ColPali seul", icon: "ti-eye", desc: "Re-sync visuel ColPali uniquement" },
-        { value: "kag_only", label: "KAG seul", icon: "ti-affiliate", desc: "Ré-extrait entités + relations + catégories sur les chunks existants (répare les liens KAG orphelins, sans re-faire texte ni ColPali)" },
+        { value: "full", label: "Complet", icon: "ti-refresh", desc: "Tout : extraction + KAG + synthèses contextuelles + embeddings + ColPali. Le plus long." },
+        { value: "text_only", label: "Texte seul — rapide", icon: "ti-text-size", desc: "Extraction + embeddings UNIQUEMENT (ColPali inchangé). ⚠ SUPPRIME les entités, catégories et synthèses existantes du document : jusqu'au passage « KAG + synthèses », son canal KAG rend 0 résultat et son boost catégorie tombe à ×1.0 — il est donc défavorisé face aux documents encore intacts. À faire suivre d'un passage KAG." },
+        { value: "kag_only", label: "KAG + synthèses — lent", icon: "ti-affiliate", desc: "Entités, relations, catégories et synthèses contextuelles sur les chunks existants, puis ré-embedding. Plusieurs appels LLM par page : à lancer la nuit, après « Texte seul »." },
+        { value: "colpali_only", label: "ColPali seul", icon: "ti-eye", desc: "Re-sync visuel ColPali uniquement (chunks texte inchangés)." },
     ];
+
+    // Voie d'extraction du texte — proposée uniquement pour les modes qui ré-extraient
+    // le texte (full, text_only). Permet de comparer les deux extracteurs sur un même
+    // document : la version de chunking est enregistrée en base (vision_page_v2 vs
+    // text_page_v1), donc le monitoring des chunks montre laquelle a produit quoi.
+    const REINDEX_EXTRACTORS = [
+        {
+            value: "vision",
+            label: "Vision (mistral-small)",
+            icon: "ti-eye-code",
+            desc: "Rendu PNG 300 dpi lu par un modèle. Gère les pages scannées et produit la structure (étapes, sections). Transcrit les chiffres depuis des pixels ; un grand tableau ne sort pas entier.",
+        },
+        {
+            value: "text",
+            label: "Texte natif (pymupdf4llm)",
+            icon: "ti-file-text",
+            desc: "Lit la couche texte du PDF : chiffres et références exacts, tableaux complets en chunks-lignes avec en-têtes. Gratuit et quasi instantané. Bascule automatiquement en vision sur les pages sans texte.",
+        },
+    ];
+
+    const EXTRACTOR_MODES = new Set(["full", "text_only"]);
+
+    function openExtractorModal(title, onConfirm) {
+        document.getElementById("reindex-extractor-modal")?.remove();
+        const modal = document.createElement("div");
+        modal.id = "reindex-extractor-modal";
+        modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm";
+        modal.innerHTML = `
+          <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-black/10 dark:border-white/10 p-6 w-full max-w-md mx-4">
+            <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-1">${title}</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Voie d'extraction du texte :</p>
+            <div class="flex flex-col gap-2 mb-5">
+              ${REINDEX_EXTRACTORS.map((e) => `
+                <label class="flex items-start gap-3 p-3 rounded-xl border border-black/10 dark:border-white/10 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 transition-colors has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20">
+                  <input type="radio" name="reindex-extractor" value="${e.value}" class="mt-0.5 accent-indigo-600" ${e.value === "vision" ? "checked" : ""}>
+                  <span>
+                    <span class="flex items-center gap-1.5 text-sm font-medium text-gray-800 dark:text-gray-200"><i class="ti ${e.icon} text-base"></i>${e.label}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">${e.desc}</span>
+                  </span>
+                </label>`).join("")}
+            </div>
+            <div class="flex gap-2 justify-end">
+              <button id="extractor-cancel-btn" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">Annuler</button>
+              <button id="extractor-confirm-btn" class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 active:scale-95 transition-all">Lancer</button>
+            </div>
+          </div>`;
+        document.body.appendChild(modal);
+        modal.querySelector("#extractor-cancel-btn").addEventListener("click", () => modal.remove());
+        modal.querySelector("#extractor-confirm-btn").addEventListener("click", () => {
+            const selected = modal.querySelector("input[name='reindex-extractor']:checked")?.value || "vision";
+            modal.remove();
+            onConfirm(selected);
+        });
+        modal.addEventListener("click", (ev) => { if (ev.target === modal) modal.remove(); });
+    }
+
+    // Enchaîne modale mode → modale extracteur (si le mode ré-extrait le texte).
+    function openReindexFlow(title, onConfirm) {
+        openReindexModeModal(title, (mode) => {
+            if (!EXTRACTOR_MODES.has(mode)) return onConfirm(mode, "vision");
+            openExtractorModal(title, (extractor) => onConfirm(mode, extractor));
+        });
+    }
 
     function openReindexModeModal(title, onConfirm) {
         document.getElementById("reindex-mode-modal")?.remove();
@@ -2117,11 +2259,11 @@ endblock %} {% block content %}
         modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
     }
 
-    async function _doReindexDocument(documentId, mode) {
+    async function _doReindexDocument(documentId, mode, extractor = "vision") {
         const r = await api(`/api/library/documents/${documentId}/reindex`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mode }),
+            body: JSON.stringify({ mode, extractor }),
         });
         const data = await r.json().catch(() => ({}));
         if (r.status === 503) return alert(data.detail || "Service de tâches indisponible. Réessayez plus tard.");
@@ -2135,20 +2277,34 @@ endblock %} {% block content %}
     }
 
     async function reindexDocument(documentId, documentTitle) {
-        openReindexModeModal(`Retraiter « ${documentTitle} »`, async (mode) => {
-            await _doReindexDocument(documentId, mode);
+        openReindexFlow(`Retraiter « ${documentTitle} »`, async (mode, extractor) => {
+            await _doReindexDocument(documentId, mode, extractor);
         });
     }
 
     async function reindexAllLibraryDocuments() {
-        openReindexModeModal("Retraiter tous les documents", async (mode) => {
+        openReindexFlow("Retraiter tous les documents", async (mode, extractor) => {
             const modeLabel = REINDEX_MODES.find((m) => m.value === mode)?.label || mode;
-            const ok = confirm(`Retraiter TOUS les documents en mode « ${modeLabel} » ?\n\nCela peut prendre longtemps.`);
+            const extractorLabel =
+                REINDEX_EXTRACTORS.find((e) => e.value === extractor)?.label || extractor;
+            const suffix = EXTRACTOR_MODES.has(mode) ? ` (extraction : ${extractorLabel})` : "";
+            // En text_only, la suppression des liens KAG touche TOUT le corpus d'un coup :
+            // tant que le passage KAG n'a pas tourné, le boost catégorie et le canal KAG
+            // sont éteints partout. On l'énonce avant de lancer.
+            const kagWarning =
+                mode === "text_only"
+                    ? "\n\n⚠ Les entités, catégories et synthèses de TOUS les documents seront supprimées.\n" +
+                      "Jusqu'au passage « KAG + synthèses », le canal KAG et le boost catégorie\n" +
+                      "seront éteints sur l'ensemble du corpus. Pensez à enchaîner le passage KAG."
+                    : "";
+            const ok = confirm(
+                `Retraiter TOUS les documents en mode « ${modeLabel} »${suffix} ?${kagWarning}\n\nCela peut prendre longtemps.`,
+            );
             if (!ok) return;
             const r = await api('/api/library/reindex-all', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mode }),
+                body: JSON.stringify({ mode, extractor }),
             });
             const body = await r.json().catch(() => ({}));
             if (r.status === 503) return alert(body.detail || 'Service de taches indisponible. Reessayez plus tard.');

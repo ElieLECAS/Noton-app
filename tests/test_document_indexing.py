@@ -199,6 +199,70 @@ class TestProcessDocumentIndexingTextOnly:
         mark_fail.assert_not_called()
 
 
+class TestSeparationCouchesSemantiques:
+    """Répartition rapide/lent : text_only n'exécute QUE l'extraction + embeddings,
+    kag_only porte KAG + synthèses contextuelles (passage de nuit)."""
+
+    def _run(self, tmp_path, mode):
+        pdf_path = str(tmp_path / "test.pdf")
+        (tmp_path / "test.pdf").write_bytes(b"%PDF-1.4 test")
+        doc = _make_document()
+
+        with mock.patch("app.services.document_indexing_service.Session") as mock_session_cls, \
+             mock.patch("app.services.document_indexing_service._delete_all_chunks"), \
+             mock.patch("app.services.document_indexing_service._delete_text_chunks"), \
+             mock.patch("app.services.document_indexing_service._set_progress"), \
+             mock.patch("app.services.document_indexing_service._finalize_document"), \
+             mock.patch("app.services.document_indexing_service._mark_failed"), \
+             mock.patch("app.services.document_indexing_service._sync_colpali_for_pages"), \
+             mock.patch("app.services.document_indexing_service._extract_and_persist_chunks", return_value=3), \
+             mock.patch("app.services.document_indexing_service._embed_text_chunks", return_value=2) as embed, \
+             mock.patch("app.config.settings.KAG_ENABLED", True), \
+             mock.patch("app.config.settings.CONTEXTUAL_ENRICHMENT_ENABLED", True), \
+             mock.patch("app.services.kag_extraction_service.extract_kag_for_document",
+                        return_value={"entities": 1, "relations": 1, "status": "ok"}) as kag, \
+             mock.patch("app.services.kag_extraction_service.embed_kag_entities_for_document"), \
+             mock.patch("app.services.kag_extraction_service.cleanup_kag_for_document"), \
+             mock.patch("app.services.contextual_enrichment_service.run_contextual_enrichment_for_document",
+                        return_value={"chunks": 4, "status": "ok"}) as enrich, \
+             mock.patch("app.services.document_run.is_processing_run_current", return_value=True), \
+             mock.patch("app.services.file_conversion.ensure_pdf_for_ocr", return_value=pdf_path):
+
+            mock_session_cls.return_value.__enter__.return_value.get.return_value = doc
+            result = process_document_indexing(
+                document_id=1, file_path=pdf_path, user_id=99, mode=mode
+            )
+        return result, kag, enrich, embed
+
+    def test_text_only_ne_lance_ni_kag_ni_enrichissement(self, tmp_path):
+        result, kag, enrich, embed = self._run(tmp_path, IndexingMode.TEXT_ONLY)
+
+        assert result["status"] == "completed"
+        kag.assert_not_called()
+        enrich.assert_not_called()
+        # Les embeddings, eux, tournent bien (le passage rapide reste interrogeable).
+        embed.assert_called_once()
+        assert "kag" not in result
+        assert "enrichment" not in result
+
+    def test_kag_only_lance_kag_et_enrichissement(self, tmp_path):
+        result, kag, enrich, embed = self._run(tmp_path, IndexingMode.KAG_ONLY)
+
+        kag.assert_called_once()
+        enrich.assert_called_once()
+        # Ré-embedding indispensable : le préfixe d'embedding intègre catégories/entités.
+        embed.assert_called_once()
+        assert result["kag"]["status"] == "ok"
+        assert result["enrichment"]["status"] == "ok"
+
+    def test_full_lance_tout(self, tmp_path):
+        result, kag, enrich, embed = self._run(tmp_path, IndexingMode.FULL)
+
+        kag.assert_called_once()
+        enrich.assert_called_once()
+        embed.assert_called_once()
+
+
 class TestProcessDocumentIndexingColpaliOnly:
     """Mode colpali_only : ColPali uniquement, pas de texte."""
 

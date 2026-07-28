@@ -909,6 +909,9 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
+<!-- Visionneuse de page partagée avec library.html : pdf.js, rendu de page,
+     surlignage et rendu markdown mutualisés. -->
+<script src="/static/js/page-viewer.js"></script>
 <script>
 const spaceId = {{ space_id }};
 const fastModel = {{ model_fast.model|tojson }};
@@ -1257,25 +1260,12 @@ let spacePdfModalCurrentPage = 1;
 let spacePdfModalCurrentZoom = 1;
 let spacePdfjsLib = null;
 
+/* Chargement pdf.js mutualisé via app/static/js/page-viewer.js (une seule
+   implémentation partagée avec library.html au lieu de trois copies). */
 async function loadSpacePdfJs() {
   if (spacePdfjsLib) return spacePdfjsLib;
-  const script = document.createElement("script");
-  script.type = "module";
-  script.textContent = `
-    import * as pdfjs from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
-    pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
-    window.__spacePdfjs = pdfjs;
-  `;
-  document.head.appendChild(script);
-  return new Promise((resolve) => {
-    const t = setInterval(() => {
-      if (window.__spacePdfjs) {
-        clearInterval(t);
-        spacePdfjsLib = window.__spacePdfjs;
-        resolve(spacePdfjsLib);
-      }
-    }, 50);
-  });
+  spacePdfjsLib = await PageViewer.loadPdfJs();
+  return spacePdfjsLib;
 }
 
 async function openSpacePdfViewer() {
@@ -3100,28 +3090,14 @@ async function renderSpaceCategoryPdf(documentInfo, pageNo) {
   }
 }
 
+/* Rendu de page délégué au module partagé. */
 async function renderSpaceCategoryPdfPage(pageNum) {
   if (!spaceCategoryPdfDoc) return;
-  const container = document.getElementById("space-category-pdf-container");
-  const page = await spaceCategoryPdfDoc.getPage(pageNum);
-  const containerWidth = Math.max(container.clientWidth - 24, 280);
-  const viewport0 = page.getViewport({ scale: 1 });
-  const scale = containerWidth / viewport0.width;
-  const viewport = page.getViewport({ scale });
-
-  container.innerHTML = "";
-  const pageContainer = document.createElement("div");
-  pageContainer.className = "relative mx-auto";
-  pageContainer.style.width = "fit-content";
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-  canvas.height = viewport.height;
-  canvas.width = viewport.width;
-  canvas.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
-  canvas.className = "rounded-lg";
-  pageContainer.appendChild(canvas);
-  container.appendChild(pageContainer);
-  await page.render({ canvasContext: context, viewport }).promise;
+  await PageViewer.renderPdfPage(
+    document.getElementById("space-category-pdf-container"),
+    spaceCategoryPdfDoc,
+    pageNum,
+  );
 }
 
 function closeSpaceCategoryPageModal() {
@@ -3165,55 +3141,8 @@ async function navigateSpaceCategoryPage(direction) {
 // déjà rendu (n'altère pas le markdown : agit sur le DOM). Recherche « OU » :
 // chaque mot de la requête (≥ 2 caractères) est surligné indépendamment.
 function highlightSearchTerm(container, term) {
-  if (!container || !term) return;
-  const needles = String(term)
-    .split(/\s+/)
-    .map((t) => t.trim())
-    .filter((t) => t.length >= 2);
-  if (!needles.length) return;
-  const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  // Mots les plus longs d'abord pour privilégier le plus grand recouvrement.
-  const pattern = needles
-    .slice()
-    .sort((a, b) => b.length - a.length)
-    .map(escapeRegex)
-    .join("|");
-  const re = new RegExp(pattern, "gi");
-  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
-    acceptNode(node) {
-      if (!node.nodeValue) return NodeFilter.FILTER_REJECT;
-      re.lastIndex = 0;
-      if (!re.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
-      if (node.parentElement && node.parentElement.closest("mark")) {
-        return NodeFilter.FILTER_REJECT;
-      }
-      return NodeFilter.FILTER_ACCEPT;
-    },
-  });
-  const targets = [];
-  while (walker.nextNode()) targets.push(walker.currentNode);
-  targets.forEach((node) => {
-    const text = node.nodeValue;
-    const frag = document.createDocumentFragment();
-    let idx = 0;
-    let match;
-    re.lastIndex = 0;
-    while ((match = re.exec(text)) !== null) {
-      if (match.index > idx) {
-        frag.appendChild(document.createTextNode(text.slice(idx, match.index)));
-      }
-      const mark = document.createElement("mark");
-      mark.className = "bg-yellow-300 dark:bg-yellow-500/60 text-gray-900 rounded px-0.5";
-      mark.textContent = match[0];
-      frag.appendChild(mark);
-      idx = match.index + match[0].length;
-      if (match[0].length === 0) re.lastIndex++;
-    }
-    if (idx < text.length) {
-      frag.appendChild(document.createTextNode(text.slice(idx)));
-    }
-    node.parentNode.replaceChild(frag, node);
-  });
+  // Délégué au module partagé app/static/js/page-viewer.js.
+  PageViewer.highlightTerms(container, term);
 }
 
 function buildSlotPromptSection(slotPrompt) {

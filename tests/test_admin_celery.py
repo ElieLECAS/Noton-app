@@ -106,8 +106,16 @@ def test_dispatch_reindex_library_enqueues_celery():
         task_id = task_dispatch.dispatch_reindex_library(5, 9)
 
     assert task_id == "celery-reindex-pytest"
+    # kwargs et non args : ajouter un paramètre à la signature d'une tâche Celery
+    # casserait les messages consommés par un worker d'une autre version.
     apply_async.assert_called_once_with(
-        args=[5, 9, mock.ANY, "full"],
+        kwargs={
+            "document_id": 5,
+            "user_id": 9,
+            "run_id": mock.ANY,
+            "mode": "full",
+            "extractor": "vision",
+        },
         queue="documents",
     )
 
@@ -134,6 +142,6 @@ def test_dispatch_reindex_all_library_enqueues_celery():
 
     assert task_id == "celery-reindex-all-pytest"
     apply_async.assert_called_once_with(
-        args=[3, "full"],
+        kwargs={"user_id": 3, "mode": "full", "extractor": "vision"},
         queue="documents",
     )

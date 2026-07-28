@@ -44,27 +44,32 @@ def reindex_library_document_task(
     user_id: int,
     run_id: str | None = None,
     mode: str = "full",
+    extractor: str = "vision",
 ) -> dict:
     """Réindexation d'un document bibliothèque (full / text_only / colpali_only)."""
     from app.library_document_logging import get_library_document_logger
     from app.services.document_service_new import reindex_library_document
 
     get_library_document_logger().info(
-        "[Celery] reindex_library_document_task document_id=%s user_id=%s mode=%s task_id=%s",
+        "[Celery] reindex_library_document_task document_id=%s user_id=%s mode=%s extractor=%s task_id=%s",
         document_id,
         user_id,
         mode,
+        extractor,
         self.request.id,
     )
     logger.info(
-        "Celery reindex_library_document_task document_id=%s user_id=%s mode=%s task_id=%s",
+        "Celery reindex_library_document_task document_id=%s user_id=%s mode=%s extractor=%s task_id=%s",
         document_id,
         user_id,
         mode,
+        extractor,
         self.request.id,
     )
     try:
-        return reindex_library_document(document_id, user_id, run_id, mode=mode)
+        return reindex_library_document(
+            document_id, user_id, run_id, mode=mode, extractor=extractor
+        )
     except Exception:
         logger.exception(
             "reindex_library_document_task échec document_id=%s", document_id
@@ -103,7 +108,9 @@ def multimodal_reindex_library_document_task(
 
 
 @celery_app.task(bind=True, max_retries=0)
-def reindex_all_library_documents_task(self, user_id: int, mode: str = "full") -> dict:
+def reindex_all_library_documents_task(
+    self, user_id: int, mode: str = "full", extractor: str = "vision"
+) -> dict:
     """Tâche Celery pour enfiler individuellement chaque document éligible sous forme de tâche séparée."""
     from app.library_document_logging import get_library_document_logger
     from app.services.document_service_new import (
@@ -118,15 +125,17 @@ def reindex_all_library_documents_task(self, user_id: int, mode: str = "full") -
 
     ld = get_library_document_logger()
     ld.info(
-        "[Celery] reindex_all_library_documents_task user_id=%s mode=%s task_id=%s",
+        "[Celery] reindex_all_library_documents_task user_id=%s mode=%s extractor=%s task_id=%s",
         user_id,
         mode,
+        extractor,
         self.request.id,
     )
     logger.info(
-        "Celery reindex_all_library_documents_task user_id=%s mode=%s task_id=%s",
+        "Celery reindex_all_library_documents_task user_id=%s mode=%s extractor=%s task_id=%s",
         user_id,
         mode,
+        extractor,
         self.request.id,
     )
 
@@ -151,7 +160,7 @@ def reindex_all_library_documents_task(self, user_id: int, mode: str = "full") -
             continue
 
         try:
-            dispatch_reindex_library(doc.id, user_id, mode=mode)
+            dispatch_reindex_library(doc.id, user_id, mode=mode, extractor=extractor)
             results["ok"] += 1
         except Exception as e:
             logger.exception("reindex_all_task: échec enfilage document_id=%s: %s", doc.id, e)

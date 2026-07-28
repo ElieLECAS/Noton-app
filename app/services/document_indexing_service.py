@@ -1,14 +1,21 @@
 """
 Pipeline d'indexation documentaire unifié.
 
-Remplace process_document_multimodal pour l'upload et le retraitement.
-Trois modes :
-  - full        : extraction vision Ministral 8B + embeddings mistral-embed + ColPali
-  - text_only   : extraction vision + embeddings (ColPali inchangé)
+Quatre modes, pensés pour pouvoir séparer un passage RAPIDE d'un passage LOURD :
+  - full        : extraction + KAG + enrichissement + embeddings + ColPali (tout)
+  - text_only   : extraction + embeddings SEULEMENT (ni KAG, ni enrichissement,
+                  ColPali inchangé) → rapide, utilisable en journée sur tout le corpus
+  - kag_only    : KAG (entités/relations/catégories) + enrichissement contextuel +
+                  ré-embedding, sur les chunks EXISTANTS → lent (appels LLM par batch),
+                  à lancer séparément (typiquement la nuit)
   - colpali_only: re-sync ColPali uniquement (chunks texte inchangés)
 
-L'extraction de texte utilise désormais vision_page_extraction_service par page,
-avec fallback pymupdf4llm par page en cas d'échec API.
+text_only puis kag_only aboutit au MÊME état final que full : kag_only ré-embarque
+les chunks, donc le préfixe d'embedding récupère catégories et entités.
+
+Deux voies d'extraction du texte (paramètre ``extractor``) :
+  - vision : rendu PNG + mistral-small (gère les pages sans couche texte)
+  - text   : couche texte native pymupdf4llm, avec repli vision par page
 """
 from __future__ import annotations
 
@@ -51,6 +58,21 @@ class IndexingMode(str, Enum):
     KAG_ONLY = "kag_only"
 
 
+class TextExtractor(str, Enum):
+    """Voie d'extraction du texte (modes full et text_only uniquement).
+
+    VISION : rendu PNG 300 dpi + mistral-small. Gère les pages sans couche texte et
+        produit la structure (étapes, sections), mais transcrit les chiffres depuis
+        des pixels et ne peut pas sortir un grand tableau entier (plafond de tokens).
+    TEXT   : pymupdf4llm sur la couche texte native. Chiffres et références exacts,
+        tableaux complets en chunks-lignes, coût nul, déterministe. Bascule
+        automatiquement sur la vision pour les pages sans texte.
+    """
+
+    VISION = "vision"
+    TEXT = "text"
+
+
 # ---------------------------------------------------------------------------
 # Point d'entrée public
 # ---------------------------------------------------------------------------
@@ -62,11 +84,14 @@ def process_document_indexing(
     user_id: int,
     mode: IndexingMode = IndexingMode.FULL,
     run_id: Optional[str] = None,
+    extractor: TextExtractor = TextExtractor.VISION,
 ) -> dict:
     """
     Orchestrateur principal d'indexation documentaire.
 
     Gère les 3 modes de traitement et la progression en base.
+    ``extractor`` sélectionne la voie d'extraction du texte (vision ou texte natif) ;
+    il n'a d'effet que sur les modes full et text_only.
     Lève une exception en cas d'échec après avoir mis le document en status=failed.
     """
     from app.services.document_run import is_processing_run_current
@@ -81,9 +106,10 @@ def process_document_indexing(
         return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
     ld.info(
-        "[Indexing] Démarrage document_id=%s mode=%s file=%s",
+        "[Indexing] Démarrage document_id=%s mode=%s extractor=%s file=%s",
         document_id,
         mode.value,
+        extractor.value,
         file_path,
     )
 
@@ -130,9 +156,13 @@ def process_document_indexing(
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
             if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
-                # --- 1. Extraction texte (vision) → L0 page_anchor + L1 semantic_leaf ---
+                # --- 1. Extraction texte → L0 page_anchor + L1 semantic_leaf ---
                 _set_progress(document_id, 30)
-                ld.info("[Indexing] Extraction vision document_id=%s", document_id)
+                ld.info(
+                    "[Indexing] Extraction %s document_id=%s",
+                    extractor.value,
+                    document_id,
+                )
                 with Session(engine) as session:
                     document = session.get(Document, document_id)
                     chunk_count = _extract_and_persist_chunks(
@@ -140,6 +170,7 @@ def process_document_indexing(
                         document,
                         pdf_path,
                         preserve_page_anchors=(mode == IndexingMode.TEXT_ONLY),
+                        extractor=extractor,
                     )
             elif mode == IndexingMode.KAG_ONLY:
                 # Chunks EXISTANTS : compter (pour finalize) + purger l'ancien KAG du doc
@@ -160,9 +191,18 @@ def process_document_indexing(
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
+            # Couches sémantiques lourdes (KAG + enrichissement contextuel) : plusieurs
+            # appels LLM par batch de pages, soit l'essentiel du temps de traitement.
+            # Elles sont SAUTÉES en text_only — qui devient un passage rapide « extraction
+            # + embeddings » utilisable en journée sur tout le corpus — et portées par
+            # kag_only, lancé séparément (typiquement la nuit). Enchaîner text_only puis
+            # kag_only aboutit au même état final que full : kag_only ré-embarque les
+            # chunks, donc le préfixe d'embedding récupère bien catégories et entités.
+            runs_semantic_layers = mode in (IndexingMode.FULL, IndexingMode.KAG_ONLY)
+
             # --- 2. KAG : entités + relations + catégories (écrites dans les métadonnées L1) ---
             # NB : tourne AVANT l'embedding pour que le vecteur intègre catégories/entités.
-            if settings.KAG_ENABLED:
+            if runs_semantic_layers and settings.KAG_ENABLED:
                 _set_progress(document_id, 45)
                 ld.info("[Indexing] Extraction KAG entités/relations document_id=%s", document_id)
                 try:
@@ -187,8 +227,9 @@ def process_document_indexing(
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
             # --- 3. Enrichissement contextuel inter-pages → L2 contextual_enrichment ---
-            # (sauté en KAG_ONLY : on ne régénère pas les L2, seulement le graphe KAG)
-            if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY) and settings.CONTEXTUAL_ENRICHMENT_ENABLED:
+            # Idempotent : run_contextual_enrichment_for_document purge les L2 existants
+            # avant de régénérer, donc relancer kag_only ne duplique rien.
+            if runs_semantic_layers and settings.CONTEXTUAL_ENRICHMENT_ENABLED:
                 _set_progress(document_id, 60)
                 ld.info(
                     "[Indexing] Enrichissement contextuel document_id=%s",
@@ -226,18 +267,19 @@ def process_document_indexing(
             _sync_colpali_for_pages(document_id, pdf_path)
 
         _finalize_document(document_id, chunk_count)
+        semantic_ran = mode in (IndexingMode.FULL, IndexingMode.KAG_ONLY)
         ld.info(
-            "[Indexing] FIN OK document_id=%s chunks=%s embeds=%s kag=%s enrichment=%s",
+            "[Indexing] FIN OK document_id=%s mode=%s chunks=%s embeds=%s kag=%s enrichment=%s",
             document_id,
+            mode.value,
             chunk_count,
             embed_count,
-            kag_stats if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY, IndexingMode.KAG_ONLY) else "n/a",
-            enrichment_stats if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY) else "n/a",
+            kag_stats if semantic_ran else "n/a (text_only)",
+            enrichment_stats if semantic_ran else "n/a (text_only)",
         )
         result = {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
-        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY, IndexingMode.KAG_ONLY):
+        if semantic_ran:
             result["kag"] = kag_stats
-        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
             result["enrichment"] = enrichment_stats
         return result
 
@@ -359,14 +401,41 @@ def _get_pdf_page_count(pdf_path: str) -> int:
     return n
 
 
+def _extract_pages_vision(
+    pdf_path: str,
+    page_numbers: List[int],
+    doc_title: str,
+    metadata_base: dict,
+) -> dict[int, List[dict]]:
+    """Extraction vision (rendu PNG + mistral-small), en parallèle par page."""
+    concurrency = settings.PAGE_EXTRACTION_CONCURRENCY
+    specs_by_page: dict[int, List[dict]] = {}
+
+    with ThreadPoolExecutor(max_workers=concurrency) as pool:
+        futures = {
+            pool.submit(extract_page_chunk_specs, pdf_path, pno, doc_title, metadata_base): pno
+            for pno in page_numbers
+        }
+        for future in as_completed(futures):
+            pno = futures[future]
+            try:
+                specs_by_page[pno] = future.result()
+            except Exception as exc:
+                logger.error("[Indexing] Extraction page %s échouée : %s", pno, exc)
+                specs_by_page[pno] = []
+
+    return specs_by_page
+
+
 def _extract_and_persist_chunks(
     session: Session,
     document: "Document",
     pdf_path: str,
     preserve_page_anchors: bool = False,
+    extractor: TextExtractor = TextExtractor.VISION,
 ) -> int:
     """
-    Extrait le texte via Ministral vision (boucle parallèle par page),
+    Extrait le texte (voie vision ou voie texte natif selon ``extractor``),
     crée les chunks L0 (page_anchor) + L1 (semantic_leaf) et les persiste.
 
     Si preserve_page_anchors=True (mode text_only), met à jour les anchors existants
@@ -389,22 +458,56 @@ def _extract_and_persist_chunks(
         "user_id": document.user_id,
     }
 
-    # --- Extraction parallèle par page ---
-    concurrency = settings.PAGE_EXTRACTION_CONCURRENCY
-    page_specs_by_page: dict[int, List[dict]] = {}
+    # --- Extraction ---
+    pages_from_text = 0
+    pages_from_vision = 0
 
-    with ThreadPoolExecutor(max_workers=concurrency) as pool:
-        futures = {
-            pool.submit(extract_page_chunk_specs, pdf_path, pno, doc_title, metadata_base): pno
-            for pno in page_numbers
-        }
-        for future in as_completed(futures):
-            pno = futures[future]
-            try:
-                page_specs_by_page[pno] = future.result()
-            except Exception as exc:
-                logger.error("[Indexing] Extraction page %s échouée : %s", pno, exc)
-                page_specs_by_page[pno] = []
+    if extractor == TextExtractor.TEXT:
+        from app.services.text_page_extraction_service import (
+            extract_document_chunk_specs_text,
+        )
+
+        page_specs_by_page, pages_without_text = extract_document_chunk_specs_text(
+            pdf_path, metadata_base
+        )
+        pages_from_text = len(page_specs_by_page)
+
+        # Pages sans couche texte exploitable (scan, texte vectorisé) : la voie texte
+        # ne peut rien produire — bascule sur la vision pour ne pas les perdre.
+        missing = [p for p in page_numbers if p not in page_specs_by_page]
+        if missing and settings.TEXT_EXTRACTION_VISION_FALLBACK:
+            logger.info(
+                "[Indexing] %d page(s) sans couche texte → repli vision : %s",
+                len(missing),
+                missing[:20],
+            )
+            vision_specs = _extract_pages_vision(
+                pdf_path, missing, doc_title, metadata_base
+            )
+            for pno, specs in vision_specs.items():
+                if specs:
+                    page_specs_by_page[pno] = specs
+                    pages_from_vision += 1
+        elif missing:
+            logger.warning(
+                "[Indexing] %d page(s) sans couche texte et repli vision désactivé "
+                "→ pages VIDES : %s",
+                len(missing),
+                missing[:20],
+            )
+    else:
+        page_specs_by_page = _extract_pages_vision(
+            pdf_path, page_numbers, doc_title, metadata_base
+        )
+        pages_from_vision = sum(1 for s in page_specs_by_page.values() if s)
+
+    logger.info(
+        "[Indexing] document_id=%s extracteur=%s — %d page(s) texte natif, %d page(s) vision",
+        doc_id,
+        extractor.value,
+        pages_from_text,
+        pages_from_vision,
+    )
 
     # Assemblage en ordre strict page_no croissant
     all_specs_ordered: List[dict] = []
@@ -412,7 +515,11 @@ def _extract_and_persist_chunks(
         all_specs_ordered.extend(page_specs_by_page[pno])
 
     # --- Merge inter-pages ---
-    all_specs_ordered = merge_cross_page_chunks(all_specs_ordered)
+    # Uniquement en voie vision : les heuristiques de recollage (dernier caractère
+    # hors .!?:, première lettre minuscule) fusionneraient des lignes de tableau
+    # adjacentes, alors que la découpe markdown fournit déjà des frontières nettes.
+    if extractor == TextExtractor.VISION:
+        all_specs_ordered = merge_cross_page_chunks(all_specs_ordered)
 
     # --- L0 : un anchor minimal par page ---
     existing_anchors: dict[int, "DocumentChunk"] = {}
@@ -491,7 +598,7 @@ def _extract_and_persist_chunks(
         session.add_all(l0_chunks)
     session.flush()
 
-    # --- L1 : chunks sémantiques vision ---
+    # --- L1 : chunks sémantiques ---
     l1_chunks: List["DocumentChunk"] = []
     chunk_index_offset = page_count
 
@@ -501,7 +608,9 @@ def _extract_and_persist_chunks(
             continue
 
         spec_meta = dict(spec.get("metadata_json") or {})
-        spec_meta["chunking_version"] = CHUNKING_VERSION
+        # La voie texte pose sa propre chunking_version (text_page_v1) : ne l'écrase
+        # pas, elle sert à distinguer les deux voies en base pour la comparaison.
+        spec_meta.setdefault("chunking_version", CHUNKING_VERSION)
         spec_meta["content_type"] = CONTENT_TYPE_SEMANTIC_LEAF
 
         # Rattacher au page_anchor de la page de départ

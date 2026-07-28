@@ -270,37 +270,52 @@ def _send_multimodal_reindex_library(
 
 
 def _send_reindex_library(
-    document_id: int, user_id: int, run_id: Optional[str], mode: str = "full"
+    document_id: int,
+    user_id: int,
+    run_id: Optional[str],
+    mode: str = "full",
+    extractor: str = "vision",
 ) -> str:
     from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import reindex_library_document_task
 
+    # kwargs (et non args positionnels) : ajouter un paramètre à la signature d'une
+    # tâche Celery casse les messages consommés par un worker d'une autre version.
+    # En kwargs, un worker qui ignore `extractor` applique simplement son défaut.
     async_result = reindex_library_document_task.apply_async(
-        args=[document_id, user_id, run_id, mode],
+        kwargs={
+            "document_id": document_id,
+            "user_id": user_id,
+            "run_id": run_id,
+            "mode": mode,
+            "extractor": extractor,
+        },
         queue="documents",
     )
     logger.info(
-        "task_dispatch reindex_library document_id=%s mode=%s celery_task_id=%s",
+        "task_dispatch reindex_library document_id=%s mode=%s extractor=%s celery_task_id=%s",
         document_id,
         mode,
+        extractor,
         async_result.id,
     )
     get_library_document_logger().info(
-        "[Dispatch] document_id=%s — reindex Celery task_id=%s user_id=%s mode=%s",
+        "[Dispatch] document_id=%s — reindex Celery task_id=%s user_id=%s mode=%s extractor=%s",
         document_id,
         async_result.id,
         user_id,
         mode,
+        extractor,
     )
     return async_result.id
 
 
-def _send_reindex_all_library(user_id: int, mode: str = "full") -> str:
+def _send_reindex_all_library(user_id: int, mode: str = "full", extractor: str = "vision") -> str:
     from app.library_document_logging import get_library_document_logger
     from app.tasks.documents import reindex_all_library_documents_task
 
     async_result = reindex_all_library_documents_task.apply_async(
-        args=[user_id, mode],
+        kwargs={"user_id": user_id, "mode": mode, "extractor": extractor},
         queue="documents",
     )
     logger.info(
@@ -422,10 +437,13 @@ def dispatch_library_document(
         raise RuntimeError(_celery_only_failure_message()) from exc
 
 
-def dispatch_reindex_library(document_id: int, user_id: int, mode: str = "full") -> str:
+def dispatch_reindex_library(
+    document_id: int, user_id: int, mode: str = "full", extractor: str = "vision"
+) -> str:
     """
     Enfile la réindexation sur la queue Celery « documents ».
-    mode : "full" | "text_only" | "colpali_only"
+    mode : "full" | "text_only" | "colpali_only" | "kag_only"
+    extractor : "vision" | "text" (modes full et text_only uniquement)
     Retourne l'identifiant de tâche Celery ou d'un thread.
     """
     run_id: Optional[str] = None
@@ -447,7 +465,9 @@ def dispatch_reindex_library(document_id: int, user_id: int, mode: str = "full")
         return f"thread-reindex-document-{document_id}"
 
     try:
-        return _send_reindex_library(document_id, user_id, run_id, mode=mode)
+        return _send_reindex_library(
+            document_id, user_id, run_id, mode=mode, extractor=extractor
+        )
     except Exception as exc:
         logger.warning(
             "Échec enqueue reindex document_id=%s user_id=%s: %s",
@@ -520,10 +540,13 @@ def dispatch_multimodal_reindex_library(document_id: int, user_id: int) -> str:
         ) from exc
 
 
-def dispatch_reindex_all_library(user_id: int, mode: str = "full") -> str:
+def dispatch_reindex_all_library(
+    user_id: int, mode: str = "full", extractor: str = "vision"
+) -> str:
     """
     Enfile la réindexation globale de la bibliothèque sur la queue Celery « documents ».
-    mode : "full" | "text_only" | "colpali_only"
+    mode : "full" | "text_only" | "colpali_only" | "kag_only"
+    extractor : "vision" | "text" (modes full et text_only uniquement)
     """
     backend = get_task_backend_mode()
     if backend == "thread":
@@ -533,7 +556,7 @@ def dispatch_reindex_all_library(user_id: int, mode: str = "full") -> str:
         return f"thread-reindex-all-library-{user_id}"
 
     try:
-        return _send_reindex_all_library(user_id, mode=mode)
+        return _send_reindex_all_library(user_id, mode=mode, extractor=extractor)
     except Exception as exc:
         logger.warning(
             "Échec enqueue reindex_all_library user_id=%s: %s",

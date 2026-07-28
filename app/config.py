@@ -136,6 +136,45 @@ class Settings(BaseSettings):
     PAGE_EXTRACTION_TIMEOUT: float = float(os.getenv("PAGE_EXTRACTION_TIMEOUT", "120"))
     PAGE_EXTRACTION_MAX_TOKENS: int = int(os.getenv("PAGE_EXTRACTION_MAX_TOKENS", "4096"))
 
+    # --- Extraction TEXTE NATIF (pymupdf4llm) : voie alternative à la vision ---
+    # Sur une page dotée d'une couche texte, les chiffres et références sont lus dans
+    # les objets texte du PDF (exacts par construction, aucune transcription par un
+    # modèle) et les tableaux sortent entiers (pas de plafond de tokens de sortie LLM).
+    # Sélectionnable par requête de réindexation (extractor=text) pour comparer les
+    # deux voies sur un même document.
+    #
+    # Cap de tokens des chunks de PROSE. Ce n'est PAS le critère de découpe — la
+    # SECTION l'est (un titre markdown et son corps restent dans le même chunk) :
+    # ce cap n'intervient que pour scinder une section anormalement longue, en
+    # réinjectant son titre dans chaque morceau. 0 = aucun cap.
+    # 500 et non 900 : au-delà, les chunks deviennent illisibles dans le monitoring
+    # et diluent le vecteur. Le recollage inter-pages tolère jusqu'à 1,6× ce cap.
+    TEXT_EXTRACTION_MAX_CHUNK_TOKENS: int = int(
+        os.getenv("TEXT_EXTRACTION_MAX_CHUNK_TOKENS", "500")
+    )
+    # "rows" : une ligne de tableau = un chunk autosuffisant (en-têtes de colonnes
+    # réinjectés) → une question sur une référence précise matche UNE ligne au lieu
+    # d'être diluée. "atomic" : le tableau entier en un seul chunk.
+    TEXT_EXTRACTION_TABLE_MODE: str = os.getenv(
+        "TEXT_EXTRACTION_TABLE_MODE", "rows"
+    ).strip().lower()
+    # En mode "rows", ajoute un chunk « tableau complet » en plus des lignes (contexte
+    # d'ensemble : combien de lignes, quelles colonnes).
+    TEXT_EXTRACTION_TABLE_FULL_CHUNK: bool = os.getenv(
+        "TEXT_EXTRACTION_TABLE_FULL_CHUNK", "true"
+    ).strip().lower() in ("true", "1", "yes", "on")
+    # Plafond de chunks par page. Bien plus haut que les 12 de la voie vision : un
+    # tableau de 30 lignes produit légitimement 31 chunks. Tout dépassement est
+    # JOURNALISÉ en warning (la voie vision, elle, tronquait en silence). 0 = illimité.
+    TEXT_EXTRACTION_MAX_CHUNKS_PER_PAGE: int = int(
+        os.getenv("TEXT_EXTRACTION_MAX_CHUNKS_PER_PAGE", "120")
+    )
+    # Pages sans couche texte exploitable : bascule automatique sur la voie vision
+    # (une page scannée ne produit rien en texte natif). false = ces pages restent vides.
+    TEXT_EXTRACTION_VISION_FALLBACK: bool = os.getenv(
+        "TEXT_EXTRACTION_VISION_FALLBACK", "true"
+    ).strip().lower() in ("true", "1", "yes", "on")
+
     # KAG — extraction entités/relations et retrieval graphe
     KAG_ENABLED: bool = os.getenv("KAG_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"

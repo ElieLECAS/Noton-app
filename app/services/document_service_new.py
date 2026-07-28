@@ -486,25 +486,35 @@ def reindex_library_document(
     user_id: int,
     run_id: Optional[str] = None,
     mode: str = "full",
+    extractor: str = "vision",
 ) -> dict:
     """
     Retraite un document via le pipeline d'indexation unifié.
 
     Modes disponibles :
-      - full        : ColPali + pymupdf4llm + mistral-embed (pipeline complet)
-      - text_only   : pymupdf4llm + mistral-embed uniquement (ColPali inchangé)
+      - full        : extraction texte + mistral-embed + ColPali (pipeline complet)
+      - text_only   : extraction texte + mistral-embed uniquement (ColPali inchangé)
       - colpali_only: re-sync ColPali uniquement (chunks texte inchangés)
+      - kag_only    : entités/relations/catégories sur les chunks existants
+
+    ``extractor`` (modes full et text_only) : "vision" (rendu PNG + mistral-small)
+    ou "text" (couche texte native pymupdf4llm, tableaux en chunks-lignes).
 
     Utilise ``document.source_file_path`` (fichier déjà stocké sous media/documents).
     """
-    from app.services.document_indexing_service import IndexingMode, process_document_indexing
+    from app.services.document_indexing_service import (
+        IndexingMode,
+        TextExtractor,
+        process_document_indexing,
+    )
 
     ld = get_library_document_logger()
     ld.info(
-        "[Réindex] Démarrage document_id=%s user_id=%s mode=%s",
+        "[Réindex] Démarrage document_id=%s user_id=%s mode=%s extractor=%s",
         document_id,
         user_id,
         mode,
+        extractor,
     )
 
     # Résolution du mode
@@ -513,6 +523,12 @@ def reindex_library_document(
     except ValueError:
         ld.warning("[Réindex] Mode inconnu '%s', fallback sur full", mode)
         indexing_mode = IndexingMode.FULL
+
+    try:
+        text_extractor = TextExtractor(extractor)
+    except ValueError:
+        ld.warning("[Réindex] Extracteur inconnu '%s', fallback sur vision", extractor)
+        text_extractor = TextExtractor.VISION
 
     try:
         with Session(engine) as session:
@@ -538,6 +554,7 @@ def reindex_library_document(
             user_id=user_id,
             mode=indexing_mode,
             run_id=run_id,
+            extractor=text_extractor,
         )
 
         chunk_count = result.get("chunks", 0)
