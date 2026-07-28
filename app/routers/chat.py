@@ -1756,19 +1756,27 @@ async def stream_space_chat_message(
         ),
     )
 
+    # Épinglage par référence : recherche SQL directe du chunk faisant autorité pour un
+    # code demandé (densité de spécification), sans graphe d'entités.
     pinned_codes: List[str] = []
-    if requested_codes and settings.KAG_ENABLED:
+    if requested_codes:
         try:
-            from app.services.kag_graph_service import build_pinned_reference_block
+            from app.services.page_retrieval_service import get_space_document_ids
+            from app.services.reference_pinning_service import (
+                build_pinned_reference_block,
+            )
 
+            pin_doc_ids = allowed_document_ids or get_space_document_ids(
+                session, space_id, document_filter="technical"
+            )
             pinned_block, pinned_codes = build_pinned_reference_block(
-                session, space_id, requested_codes
+                session, pin_doc_ids, requested_codes
             )
             if pinned_block:
                 space_context_draft["content"] += "\n\n" + pinned_block
-                logger.info("[chat] chunk pinning — codes épinglés=%s", pinned_codes)
+                logger.info("[chat] épinglage référence — codes=%s", pinned_codes)
         except Exception as pin_err:
-            logger.warning("[chat] chunk pinning ignoré : %s", pin_err)
+            logger.warning("[chat] épinglage référence ignoré : %s", pin_err)
 
     coverage_block = build_coverage_block(
         context_text=space_context_draft.get("content") or "",

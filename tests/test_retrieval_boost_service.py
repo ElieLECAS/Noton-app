@@ -52,19 +52,22 @@ def test_soft_boosts_noop_without_signals():
     assert apply_soft_boosts_to_passages(MagicMock(), passages, None) == passages
 
 
-def test_soft_boosts_kag_entity_channel():
+def test_soft_boosts_ignore_le_canal_dorigine():
+    """Le boost « entités KAG » a été retiré avec le canal (2026-07-28) : le canal
+    d'origine d'un passage ne lui vaut plus aucun bonus. Seuls source et matériau
+    boostent désormais."""
     signals = LightweightQuerySignals(entity_texts=["coulisses", "MONOBLOC"], confidence=0.8)
     passages = [
-        {"document_id": 1, "score": 0.5, "retrieval_sources": ["kag"]},
+        {"document_id": 1, "score": 0.5, "retrieval_sources": ["colpali"]},
         {"document_id": 2, "score": 0.1, "retrieval_sources": ["pgvector"]},
     ]
 
     with patch(_SRC, return_value=None), patch(_MAT, return_value=[]):
         boosted = apply_soft_boosts_to_passages(MagicMock(), passages, signals)
 
-    kag_passage = next(p for p in boosted if p["document_id"] == 1)
-    assert kag_passage["score"] > 0.5
-    assert kag_passage.get("retrieval_boost") is not None
+    for passage in boosted:
+        assert passage.get("retrieval_boost") is None
+    assert [p["score"] for p in boosted] == [0.5, 0.1]
 
 
 def test_soft_boosts_source_match_increases_and_sets_source():

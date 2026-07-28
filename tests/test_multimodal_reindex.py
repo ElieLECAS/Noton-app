@@ -80,13 +80,11 @@ def test_multimodal_reindex_endpoint_returns_queued(
     assert body["celery_task_id"] == "task-multimodal-xyz"
 
 
-def test_multimodal_reindex_disabled_returns_400(client, admin_headers, monkeypatch):
-    monkeypatch.setattr(settings, "MULTIMODAL_ENABLED", False)
-    r = client.post(
-        "/api/library/documents/1/reindex",
-        headers=admin_headers,
-    )
-    assert r.status_code == 400
+# NB : l'endpoint /reindex ne gate plus sur MULTIMODAL_ENABLED (seuls MISTRAL_API_KEY
+# et COLPALI_ENABLED sont vérifiés désormais, cf. app/routers/library.py) — les 400
+# correspondants sont couverts dans tests/test_document_indexing.py. L'ancien test
+# postait en plus sur un document_id inexistant, ce qui masquait le vrai problème
+# derrière un 404.
 
 
 def test_multimodal_service_v4_chunks(

@@ -15,7 +15,6 @@ from app.services.space_service import (
     update_space, delete_space
 )
 from app.services.document_service_new import get_documents_by_space
-from app.services.kag_graph_service import build_space_kag_graph
 from app.services.lexical_search_service import (
     get_space_search_page_detail,
     search_space_pages,
@@ -289,128 +288,6 @@ async def list_space_documents(
     return [DocumentListItem.model_validate(d) for d in documents]
 
 
-@router.get("/{space_id}/kag/graph")
-async def get_space_kag_graph(
-    space_id: int,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-    max_nodes: int = Query(150, ge=10, le=500),
-    max_edges: int = Query(300, ge=10, le=1000),
-):
-    """Graphe de connaissances KAG (entités + relations) pour visualisation UI."""
-    space = get_space_by_id(session, space_id, current_user.id)
-    if not space:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Espace non trouvé",
-        )
-    return build_space_kag_graph(
-        session,
-        space_id,
-        max_nodes=max_nodes,
-        max_edges=max_edges,
-    )
-
-
-@router.get("/{space_id}/kag/references")
-async def get_space_kag_references(
-    space_id: int,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-    search: Optional[str] = Query(None),
-    limit: int = Query(400, ge=10, le=2000),
-):
-    """Fiches produit KAG : références regroupées par code (doublons consolidés),
-    avec leurs pages sources et leurs relations. Vue lisible + preview du merge."""
-    from app.services.kag_graph_service import build_kag_reference_index
-
-    space = get_space_by_id(session, space_id, current_user.id)
-    if not space:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Espace non trouvé")
-    return build_kag_reference_index(session, space_id, search=search, limit=limit)
-
-
-@router.get("/{space_id}/kag/entity/{entity_id}/chunks")
-async def get_space_kag_entity_chunks(
-    space_id: int,
-    entity_id: int,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-):
-    """Chunks (contenu réel) liés à une entité KAG — inspection depuis les fiches produit."""
-    from app.services.kag_graph_service import get_kag_entity_chunks
-
-    space = get_space_by_id(session, space_id, current_user.id)
-    if not space:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Espace non trouvé")
-    return get_kag_entity_chunks(session, space_id, entity_id)
-
-
-@router.post("/{space_id}/kag/reindex")
-async def reindex_space_kag(
-    space_id: int,
-    current_user: UserRead = Depends(require_permission("space.update")),
-    session: Session = Depends(get_session),
-):
-    """R6 — Retraite le KAG (mode kag_only) de TOUS les documents de l'espace.
-
-    Répare l'identité par code + le linking lexical sur les chunks EXISTANTS, sans
-    re-extraire le texte ni ColPali. C'est le geste de convergence : un clic → tout
-    l'espace repasse dans le pipeline propre. Les documents les moins couverts (0 lien
-    KAG) sont enfilés en premier."""
-    from app.services.document_service_new import mark_document_reindex_queued
-    from app.services.task_dispatch import dispatch_reindex_library
-    from app.services.document_indexing_service import IndexingMode
-
-    space = get_space_by_id(session, space_id, current_user.id)
-    if not space:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Espace non trouvé")
-    if not settings.KAG_ENABLED:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="KAG désactivé.")
-    if not settings.MISTRAL_API_KEY:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="MISTRAL_API_KEY requise pour le retraitement KAG.",
-        )
-
-    # Documents de l'espace, les moins couverts d'abord (0 lien KAG en tête).
-    rows = session.execute(
-        text(
-            """
-            SELECT d.id,
-                   (
-                       SELECT COUNT(*) FROM chunkentityrelation cer
-                       JOIN documentchunk dc ON dc.id = cer.chunk_id
-                       WHERE dc.document_id = d.id
-                   ) AS kag_links
-            FROM document d
-            JOIN document_space ds ON ds.document_id = d.id
-            WHERE ds.space_id = :sid
-            ORDER BY kag_links ASC NULLS FIRST, d.id ASC
-            """
-        ),
-        {"sid": space_id},
-    ).all()
-
-    queued = []
-    for doc_id, _links in rows:
-        try:
-            mark_document_reindex_queued(session, int(doc_id), current_user.id)
-            task_id = dispatch_reindex_library(
-                int(doc_id), current_user.id, mode=IndexingMode.KAG_ONLY.value
-            )
-            queued.append({"document_id": int(doc_id), "task_id": task_id})
-        except Exception as exc:
-            logger.warning("[KAG reindex espace] doc=%s échec enqueue : %s", doc_id, exc)
-
-    return {
-        "status": "queued",
-        "space_id": space_id,
-        "count": len(queued),
-        "documents": queued,
-    }
-
-
 @router.get("/{space_id}/tree")
 async def get_space_theme_tree(
     space_id: int,
@@ -479,7 +356,7 @@ async def list_space_categories(
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
-    """Catégories KAG présentes dans l'espace avec nombre de pages associées."""
+    """Catégories présentes dans l'espace avec nombre de pages associées."""
     space = get_space_by_id(session, space_id, current_user.id)
     if not space:
         raise HTTPException(

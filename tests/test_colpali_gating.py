@@ -90,7 +90,7 @@ async def test_run_retrievers_skips_colpali_when_gated(db_session):
     ), mock.patch.object(
         prs, "retrieve_bm25_pages", return_value=[]
     ):
-        colpali_hits, pgvector_hits, bm25_hits, kag_hits = await sss._run_retrievers(
+        colpali_hits, pgvector_hits, bm25_hits = await sss._run_retrievers(
             db_session,
             space_id=1,
             doc_ids=[1, 2],

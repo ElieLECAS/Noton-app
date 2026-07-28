@@ -298,11 +298,11 @@ def test_log_multimodal_retrieval_summary():
         retrieval_sources=["pgvector", "colpali"],
         document_title="Notice ROTO",
     )
-    kag_hit = UnifiedPageHit(
+    bm25_hit = UnifiedPageHit(
         document_id=425,
         page_no=2,
-        kag_score=0.81,
-        retrieval_sources=["kag"],
+        bm25_score=0.81,
+        retrieval_sources=["bm25"],
         document_title="DEPLIANT",
     )
     with mock.patch.object(prs.logger, "info") as mock_info:
@@ -311,10 +311,8 @@ def test_log_multimodal_retrieval_summary():
             doc_ids=[383, 384],
             colpali_hits=[hit],
             pgvector_hits=[hit],
-            bm25_hits=[],
-            kag_hits=[kag_hit],
-            pre_kag_fused_hits=[hit],
-            fused_hits=[hit, kag_hit],
+            bm25_hits=[bm25_hit],
+            fused_hits=[hit, bm25_hit],
             final_hits=[hit],
             passages=[{"page_start": 12, "page_end": 12, "page_no": 12}],
             images=["img1"],
@@ -324,6 +322,6 @@ def test_log_multimodal_retrieval_summary():
 
     logged = "\n".join(str(c.args[0]) for c in mock_info.call_args_list if c.args)
     assert "RAG MULTIMODAL — RÉSUMÉ" in logged
-    assert "Triple retriever + graphe" in logged
+    assert "Triple retriever (ColPali + pgvector + BM25)" in logged
     assert "doc=383 p.12" in logged
-    assert "KAG" in logged
+    assert "KAG" not in logged

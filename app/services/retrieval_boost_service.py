@@ -1,11 +1,14 @@
 """Boosts souples retrieval basés sur les signaux query understanding.
 
-- Catégories : appliquées APRÈS la fusion RRF, en multiplicatif sur rrf_score.
-  Échelle cohérente quel que soit le canal d'origine (ColPali/pgvector/BM25/KAG),
-  et amplifie le signal existant au lieu de fabriquer un rang (cf. anciens boosts
-  additifs sur scores bruts d'échelles incompatibles).
-- Source, matériau, entités KAG : appliqués post-retrieval, en delta proportionnel
-  à l'étendue des scores (évite d'écraser l'ordre du reranker).
+- Ancre conversationnelle : multiplicatif sur rrf_score, APRÈS la fusion RRF et avant
+  la coupe top_k, sur les meilleures pages des documents du sujet courant.
+- Source, matériau : appliqués post-retrieval, en delta proportionnel à l'étendue des
+  scores (évite d'écraser l'ordre du reranker).
+
+Le boost CATÉGORIE a été retiré le 2026-07-28 avec le KAG : son entrée mêlait des tags
+posés en masse à confiance 1.0 (doc_type/lifecycle_phase sur tous les chunks d'une page)
+et de vraies classifications au seuil 0.55, pour un levier allant jusqu'à x1.5 sur le
+classement — reranker éteint, c'était devenu le principal signal de reclassement.
 """
 from __future__ import annotations
 
@@ -23,116 +26,6 @@ if TYPE_CHECKING:
     from app.services.page_retrieval_service import PageRetrievalHit, UnifiedPageHit
 
 logger = logging.getLogger(__name__)
-
-
-def _bulk_get_page_categories(
-    session: Session,
-    pages: Sequence[Tuple[int, int]],
-) -> Dict[Tuple[int, int], Dict[str, Tuple[str, float]]]:
-    """
-    Catégories par page (slug → (axis, confidence)) via chunkcategoryrelation.
-
-    Plus robuste que la lecture du metadata d'un chunk représentatif : un hit ColPali
-    porte le chunk_id de l'ancre L0 (sans catégories), alors que les catégories vivent
-    sur les chunks L1 de la même page. L'axe pondère le boost par facette ; la confiance
-    (MAX sur la page) évite qu'un tag faible/secondaire fasse remonter une page à tort.
-    """
-    wanted = {(int(d), int(p)) for d, p in pages}
-    if not wanted:
-        return {}
-
-    doc_ids = tuple({d for d, _ in wanted})
-    page_nos = tuple({p for _, p in wanted})
-
-    rows = session.execute(
-        text(
-            """
-            SELECT ccr.document_id, ccr.page_no, dc.slug, dc.axis,
-                   MAX(ccr.confidence) AS confidence
-            FROM chunkcategoryrelation ccr
-            INNER JOIN documentcategory dc ON dc.id = ccr.category_id
-            WHERE ccr.document_id IN :doc_ids
-              AND ccr.page_no IN :page_nos
-            GROUP BY ccr.document_id, ccr.page_no, dc.slug, dc.axis
-            """
-        ),
-        {"doc_ids": doc_ids, "page_nos": page_nos},
-    ).all()
-
-    result: Dict[Tuple[int, int], Dict[str, Tuple[str, float]]] = {}
-    for document_id, page_no, slug, axis, confidence in rows:
-        key = (int(document_id), int(page_no))
-        if key not in wanted or not slug:
-            continue
-        result.setdefault(key, {})[slug] = (axis or "task", float(confidence if confidence is not None else 1.0))
-    return result
-
-
-def apply_category_boost_to_fused_hits(
-    session: Session,
-    fused_hits: List[Any],
-    signals: Optional[LightweightQuerySignals],
-) -> List[Any]:
-    """
-    Boost catégorie multiplicatif sur rrf_score, APRÈS la fusion RRF (avant rerank).
-
-    Pour chaque page dont une catégorie de contenu matche une catégorie inférée par la
-    requête : rrf_score *= (1 + n_match * RETRIEVAL_CATEGORY_BOOST).
-
-    Échelle cohérente (rrf) quel que soit le canal d'origine, borné, et amplifie le
-    signal de retrieval existant plutôt que de fabriquer un rang. Mute en place + re-trie.
-    Compatible UnifiedPageHit et PageRetrievalHit (duck typing sur rrf_score).
-    """
-    if not fused_hits or not signals or not signals.inferred_categories:
-        return fused_hits
-
-    inferred = {c.strip().lower() for c in signals.inferred_categories if c}
-    if not inferred:
-        return fused_hits
-
-    page_keys = [(int(h.document_id), int(h.page_no)) for h in fused_hits]
-    cats_by_page = _bulk_get_page_categories(session, page_keys)
-    axis_weights: Dict[str, float] = settings.RETRIEVAL_AXIS_BOOST_WEIGHTS or {}
-
-    boosted = 0
-    for hit in fused_hits:
-        slug_meta = cats_by_page.get((int(hit.document_id), int(hit.page_no)), {})
-        matched = inferred & {s.lower() for s in slug_meta}
-        if not matched:
-            continue
-        # Contribution pondérée par axe (symptôme > task > doc_type) ET par la confiance
-        # de la catégorie sur la page, plafonnée aux 3 plus fortes. Une page faiblement
-        # taggée (confiance basse) ne remonte donc plus à tort.
-        contributions = sorted(
-            (
-                float(axis_weights.get(slug_meta.get(slug, ("task", 1.0))[0], 1.0))
-                * float(slug_meta.get(slug, ("task", 1.0))[1])
-                for slug in matched
-            ),
-            reverse=True,
-        )[:3]
-        # Plafonné : empêche qu'un cumul de matches (ex. 3 catégories symptôme) fabrique
-        # un facteur ~1.9 capable d'inverser un vrai signal de pertinence — d'autant plus
-        # critique que le reranker cross-encoder est désactivé (boost = principal signal).
-        factor = min(
-            1.0 + settings.RETRIEVAL_CATEGORY_BOOST * sum(contributions),
-            settings.RETRIEVAL_CATEGORY_BOOST_MAX,
-        )
-        hit.rrf_score = (hit.rrf_score or 0.0) * factor
-        boosted += 1
-
-    if boosted:
-        fused_hits.sort(key=lambda h: h.rrf_score or 0.0, reverse=True)
-        for rank, hit in enumerate(fused_hits, start=1):
-            if hasattr(hit, "final_rank"):
-                hit.final_rank = rank
-        logger.info(
-            "[retrieval_boost] post-fusion catégorie: %d page(s) ×(1+%.2f·n), catégories=%s",
-            boosted,
-            settings.RETRIEVAL_CATEGORY_BOOST,
-            sorted(inferred),
-        )
-    return fused_hits
 
 
 def apply_anchor_boost_to_fused_hits(
@@ -280,19 +173,21 @@ def apply_soft_boosts_to_passages(
     signals: LightweightQuerySignals,
 ) -> List[Dict[str, Any]]:
     """
-    Applique des boosts souples (source / matériau / entités KAG) sur les passages finaux.
+    Applique des boosts souples (source / matériau) sur les passages finaux.
 
     Le boost est exprimé comme une FRACTION de l'étendue des scores du pool puis ajouté,
     afin d'amplifier les préférences sans écraser l'ordre du reranker (cf. ancien additif
-    fixe sur une échelle de score ambiguë). Les catégories ne sont PLUS boostées ici :
-    elles le sont en amont, sur rrf_score (apply_category_boost_to_fused_hits).
+    fixe sur une échelle de score ambiguë).
+
+    Boosts restants : source (fournisseur) et matériau. Le boost catégorie a été retiré
+    avec le KAG (2026-07-28) : son entrée était en partie des tags posés en masse à
+    confiance 1.0, pour un levier allant jusqu'à x1.5 sur le classement.
     """
     if not passages or not signals:
         return passages
 
     source_boost_max = settings.RETRIEVAL_SOURCE_BOOST_MAX
     material_boost = settings.RETRIEVAL_MATERIAL_BOOST
-    entity_boost = settings.RETRIEVAL_ENTITY_BOOST
     score_span = _passage_score_span(passages)
 
     refined: List[Dict[str, Any]] = []
@@ -319,10 +214,6 @@ def apply_soft_boosts_to_passages(
             doc_materials = _get_document_materials(session, doc_id)
             if signals.material_hint.lower() in [m.lower() for m in doc_materials]:
                 boost_frac += material_boost
-
-        retrieval_sources = p_copy.get("retrieval_sources") or []
-        if "kag" in retrieval_sources and signals.entity_texts:
-            boost_frac += entity_boost * min(len(signals.entity_texts), 3)
 
         if boost_frac > 0:
             delta = boost_frac * score_span

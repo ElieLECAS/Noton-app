@@ -223,83 +223,43 @@ def _setup_space_with_chunks(db_session: Session):
     return user, space, doc, make_chunk
 
 
-class TestSelectAuthorityChunks:
-    def test_subject_chunk_with_spec_density_ranks_first(self, db_session: Session):
-        from app.models.knowledge_entity import ChunkEntityRelation, KnowledgeEntity
-        from app.services.kag_graph_service import select_authority_chunks
+class TestEpinglageParReference:
+    """L'épinglage passe désormais par reference_pinning_service (SQL, sans graphe).
+
+    Les tests détaillés — frontières de code, densité de spécification, classement —
+    sont dans tests/test_reference_pinning.py. On vérifie ici l'intégration réelle en
+    base : le chunk le plus « spécifiant » est retenu et le bloc est verbatim + sourcé.
+    """
+
+    def test_chunk_avec_cotes_prime_sur_simple_mention(self, db_session: Session):
+        from app.services.reference_pinning_service import select_authority_chunks
 
         user, space, doc, make_chunk = _setup_space_with_chunks(db_session)
-
         spec_chunk = make_chunk(0, "Profilé TST6111 : longueur totale de 155 mm.")
-        mention_chunk = make_chunk(
-            1, "Le TST6111 est cité dans la nomenclature générale du chapitre."
-        )
+        make_chunk(1, "Le TST6111 est cité dans la nomenclature générale du chapitre.")
 
-        entity = KnowledgeEntity(
-            space_id=space.id,
-            name="TST6111",
-            name_normalized="tst6111",
-            entity_type="product",
-            ref_code="TST6111",
-            mention_count=2,
-        )
-        db_session.add(entity)
-        db_session.commit()
-        db_session.refresh(entity)
+        picked = select_authority_chunks(db_session, [doc.id], "TST6111")
 
-        db_session.add(
-            ChunkEntityRelation(
-                chunk_id=spec_chunk.id, entity_id=entity.id, space_id=space.id,
-                relation_role="subject", relevance_score=0.9,
-            )
-        )
-        db_session.add(
-            ChunkEntityRelation(
-                chunk_id=mention_chunk.id, entity_id=entity.id, space_id=space.id,
-                relation_role="mention", relevance_score=0.9,
-            )
-        )
-        db_session.commit()
-
-        picked = select_authority_chunks(db_session, space.id, "TST6111")
         assert picked, "au moins un chunk-autorité attendu"
         assert picked[0]["chunk_id"] == spec_chunk.id
-        assert picked[0]["relation_role"] == "subject"
         assert "155 mm" in picked[0]["content"]
 
-    def test_unknown_code_returns_empty(self, db_session: Session):
-        from app.services.kag_graph_service import select_authority_chunks
-
-        assert select_authority_chunks(db_session, 999_999, "ZZZ9999") == []
-
-    def test_pinned_block_contains_verbatim_and_source(self, db_session: Session):
-        from app.models.knowledge_entity import ChunkEntityRelation, KnowledgeEntity
-        from app.services.kag_graph_service import build_pinned_reference_block
+    def test_code_inconnu_rend_vide(self, db_session: Session):
+        from app.services.reference_pinning_service import select_authority_chunks
 
         user, space, doc, make_chunk = _setup_space_with_chunks(db_session)
-        chunk = make_chunk(0, "Seuil TST9F67 : épaisseur 20 mm, compatible dormant TST6111.")
+        make_chunk(0, "Profilé TST6111 : longueur totale de 155 mm.")
 
-        entity = KnowledgeEntity(
-            space_id=space.id,
-            name="TST9F67",
-            name_normalized="tst9f67",
-            entity_type="product",
-            ref_code="TST9F67",
-            mention_count=1,
-        )
-        db_session.add(entity)
-        db_session.commit()
-        db_session.refresh(entity)
-        db_session.add(
-            ChunkEntityRelation(
-                chunk_id=chunk.id, entity_id=entity.id, space_id=space.id,
-                relation_role="subject", relevance_score=1.0,
-            )
-        )
-        db_session.commit()
+        assert select_authority_chunks(db_session, [doc.id], "ZZZ9999") == []
 
-        block, pinned = build_pinned_reference_block(db_session, space.id, ["TST9F67"])
+    def test_bloc_verbatim_et_source(self, db_session: Session):
+        from app.services.reference_pinning_service import build_pinned_reference_block
+
+        user, space, doc, make_chunk = _setup_space_with_chunks(db_session)
+        make_chunk(0, "Seuil TST9F67 : épaisseur 20 mm, compatible dormant TST6111.")
+
+        block, pinned = build_pinned_reference_block(db_session, [doc.id], ["TST9F67"])
+
         assert pinned == ["TST9F67"]
         assert "EXTRAIT DE RÉFÉRENCE — TST9F67" in block
-        assert "DTA test pinning" in block           # source citée
-        assert "épaisseur 20 mm" in block            # verbatim
+        assert "épaisseur 20 mm" in block

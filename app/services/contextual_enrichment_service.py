@@ -1,10 +1,15 @@
 """
-Enrichissement contextuel inter-pages : synthèse factuelle par thème/catégorie.
+Chunks contextuels inter-pages : synthèse factuelle par thème.
 
-Troisième passe après KAG, fenêtre glissante de 3 pages :
-  1. Texte L1 transcrit + catégories/entités déjà extraites
-  2. Appel LLM texte → chunks de synthèse documentaire (1 par notion/thème)
-  3. Persistance content_type=contextual_enrichment + embedding
+Fenêtre glissante de 3 pages (overlap 1) :
+  1. Texte L1 transcrit + IMAGES des pages (vision systématique depuis 2026-07-28)
+  2. Appel LLM multimodal → chunks de synthèse documentaire (1 par notion/thème)
+  3. Contrôle déterministe : tout nombre non ancré dans le texte L1 fait rejeter le chunk
+  4. Persistance content_type=contextual_enrichment + embedding
+
+C'est le SEUL étage de la pipeline où un modèle voit une page avec le droit de
+synthétiser : la passe d'extraction, elle, a interdiction de décrire. D'où la vision
+systématique — sans elle, aucune description de schéma n'existerait nulle part.
 
 Ces chunks servent au retrieval (vectoriel + BM25) comme contexte complémentaire,
 jamais comme preuve absolue — toujours rattachés aux pages sources.
@@ -14,6 +19,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Optional, Tuple
@@ -28,12 +34,51 @@ from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.models.chunk_category_relation import ChunkCategoryRelation
-from app.services.kag_extraction_service import build_kag_batches
 
 logger = logging.getLogger(__name__)
 
 CONTEXTUAL_ENRICHMENT_VERSION = "contextual_enrichment_v3"
 CONTENT_TYPE_CONTEXTUAL_ENRICHMENT = "contextual_enrichment"
+
+
+def build_page_batches(
+    page_numbers: List[int],
+    *,
+    batch_size: Optional[int] = None,
+    overlap: Optional[int] = None,
+) -> List[List[int]]:
+    """Fenêtre glissante de pages : batches de ``batch_size`` avec ``overlap`` pages
+    de recouvrement (3 et 1 par défaut → 1-2-3, 3-4-5, 5-6-7…).
+
+    Le recouvrement coûte ~50 % d'appels supplémentaires mais évite de couper une
+    notion sur une frontière de batch.
+
+    Rapatrié de ``kag_extraction_service.build_kag_batches`` lors du retrait du KAG
+    (2026-07-28) : c'est désormais l'enrichissement contextuel qui en est le seul
+    consommateur.
+    """
+    if not page_numbers:
+        return []
+
+    size = batch_size if batch_size is not None else settings.CONTEXTUAL_ENRICHMENT_BATCH_SIZE
+    overlap_val = (
+        overlap if overlap is not None else settings.CONTEXTUAL_ENRICHMENT_BATCH_OVERLAP
+    )
+    size = max(1, size)
+    overlap_val = max(0, min(overlap_val, size - 1))
+    stride = max(1, size - overlap_val)
+
+    sorted_pages = sorted(set(page_numbers))
+    batches: List[List[int]] = []
+    i = 0
+    while i < len(sorted_pages):
+        batch = sorted_pages[i : i + size]
+        if batch:
+            batches.append(batch)
+        if i + size >= len(sorted_pages):
+            break
+        i += stride
+    return batches
 
 # Rôles de chunk L2 orientés accompagnement (au lieu d'une synthèse plate unique)
 CHUNK_ROLE_SYNTHESIS = "synthesis"
@@ -43,12 +88,11 @@ _VALID_CHUNK_ROLES = frozenset(
     {CHUNK_ROLE_SYNTHESIS, CHUNK_ROLE_PROCEDURAL, CHUNK_ROLE_DIAGNOSTIC}
 )
 # section_type L1 considérés "visuels" → déclenchent l'enrichissement multimodal sélectif
-_VISUAL_SECTION_TYPES = frozenset({"diagram", "table", "step"})
 
 _ENRICHMENT_SYSTEM_PROMPT = """Tu es technicien expert en menuiserie (profilés PVC, aluminium et hybrides PVC-alu)
 ET rédacteur d'une base de connaissances RAG destinée à des poseurs, techniciens SAV et conseillers.
-On te donne le texte transcrit de plusieurs pages consécutives d'un document technique,
-les catégories détectées et les entités nommées extraites. Parfois les images des pages.
+On te donne le texte transcrit de plusieurs pages consécutives d'un document technique
+ET les images de ces pages.
 
 Ta mission n'est PAS de recopier ni de résumer platement : tu RÉÉCRIS et EXPLICITES le contenu avec
 ton expertise métier. Tu rends explicite ce que le document tient pour implicite — la FONCTION et le
@@ -58,19 +102,17 @@ dense et autonome : un assistant doit pouvoir y répondre sans avoir relu la pag
 Bannis le style « liste à plat » : une énumération de codes ou de cotes doit toujours être précédée de
 ce que la famille d'éléments FAIT, puis détaillée élément par élément.
 
-Adapte la réécriture au TYPE DE CATÉGORIE : applique les consignes fournies dans le message utilisateur
-(section « CONSIGNES DE RÉÉCRITURE PAR CATÉGORIE ») pour chaque catégorie présente dans le batch.
+Si le message utilisateur contient une section « CONSIGNES DE RÉÉCRITURE PAR CATÉGORIE »,
+applique-la ; sinon, adapte la réécriture au type de contenu que tu observes.
 
 Produis des chunks factuels, un par thème/notion. Chaque chunk a un RÔLE adapté à son usage final :
 accompagnement chantier (pose) ou SAV (diagnostic).
 
-Choix du rôle (champ chunk_role) selon le category_slug :
-- "procedural_step" : si le contenu décrit une ÉTAPE de pose/montage/réglage
-  (category_slug = mounting, hardware_adjustment, sealing, drilling_constraints…).
+Choix du rôle (champ chunk_role) selon le CONTENU :
+- "procedural_step" : le contenu décrit une ÉTAPE de pose/montage/réglage.
   Découpe la procédure en étapes ORDONNÉES (un chunk par étape).
-- "diagnostic_unit" : si le contenu décrit un PROBLÈME/SYMPTÔME SAV et sa résolution
-  (category_slug = troubleshooting ou un slug de symptôme : infiltration_eau, blocage_manoeuvre…).
-- "synthesis" : sinon (spécifications, commercial, garantie, normes…). Comportement par défaut.
+- "diagnostic_unit" : le contenu décrit un PROBLÈME/SYMPTÔME SAV et sa résolution.
+- "synthesis" : sinon (spécifications, commercial, garantie, normes…). Par défaut.
 
 Règles absolues :
 1. Renvoie UNIQUEMENT un objet JSON valide (aucun texte hors JSON).
@@ -84,8 +126,18 @@ Règles absolues :
 6. Tu peux mobiliser le savoir métier menuiserie STANDARD pour expliciter la FONCTION d'un type d'élément
    (ex. rôle d'un habillage, d'une garniture de joint, d'un renfort, d'un seuil PMR). Mais n'invente JAMAIS
    de valeur, cote, référence, performance, norme ou nom de gamme absent du texte source.
+6bis. IMAGES — mandat STRICTEMENT limité. Quand des images de pages sont fournies, tu peux
+   décrire UNIQUEMENT :
+     - les VERDICTS visuels explicites : ce qui est coché, validé, barré, entouré, marqué
+       d'une croix ou d'un pictogramme d'interdiction ;
+     - les RELATIONS et l'ORDRE : quelle pièce se monte sur quelle autre, la séquence d'un
+       geste, le repère chiffré qui désigne une étape.
+   INTERDICTION ABSOLUE de produire un NOMBRE (cote, dimension, angle, couple, référence)
+   qui ne figure pas déjà dans le texte transcrit fourni. Lire une valeur sur un dessin est
+   hors mandat : tout nombre non présent dans le texte fera REJETER le chunk entier.
 7. Croise les informations réparties sur les pages du batch quand elles concernent le même thème.
-8. category_slug = slug exact d'une catégorie détectée dans le batch.
+8. category_slug = FACULTATIF. Ne le renseigne que si une liste de catégories t'est
+   fournie et qu'un slug s'applique exactement ; sinon laisse-le à null.
 9. source_page = page principale où le thème est le plus documenté.
 10. Champs structurés selon le rôle (laisse vide/null si non applicable) :
     - procedural_step : step_number (ordre), action (geste précis), components[], tools[], dimensions[], precaution, next_condition (condition de passage à l'étape suivante).
@@ -225,7 +277,9 @@ _DEFAULT_PLAYBOOK = (
 
 
 class EnrichmentChunkItem(BaseModel):
-    category_slug: str
+    # Optionnel depuis le retrait du KAG (2026-07-28) : plus aucune catégorie n'est
+    # détectée en amont, la catégorisation reviendra par un autre mécanisme.
+    category_slug: Optional[str] = None
     theme: str
     content: str
     source_page: int = Field(ge=1)
@@ -458,7 +512,9 @@ def _call_enrichment_api(
     )
 
     if images_b64:
-        # Enrichissement multimodal sélectif : texte + PNG des pages (séquence visuelle du geste).
+        # Texte + PNG des pages : la séquence du geste et les verdicts visuels (coché/barré)
+        # ne sont portés que par le schéma. Mandat borné par la règle 6bis du prompt système,
+        # et vérifié en aval par _drop_ungrounded_numbers.
         user_content: object = [{"type": "text", "text": user_text}]
         for image_b64 in images_b64:
             user_content.append(
@@ -484,10 +540,81 @@ def _call_enrichment_api(
     return _parse_json_with_repair(raw)
 
 
+# Valeurs numériques « techniques » : une cote, un couple, un angle, une performance.
+# On ignore volontairement les entiers courts isolés (numéros d'étape, de page, de repère),
+# qui sont légitimement produits par la synthèse sans figurer tels quels dans le texte.
+_MEASURE_RE = re.compile(
+    r"\b\d+(?:[.,]\d+)?\s*(?:mm|cm|m|kg|g|°|dan|n|nm|bar|%|mm²|mm2)\b",
+    re.IGNORECASE,
+)
+_LONG_NUMBER_RE = re.compile(r"\b\d{3,}(?:[.,]\d+)?\b")
+
+
+def _normalize_number(value: str) -> str:
+    """Forme comparable d'une valeur numérique (virgule → point, espaces retirés)."""
+    return value.replace(",", ".").replace(" ", "").lower()
+
+
+def _ungrounded_numbers(content: str, source_text: str) -> List[str]:
+    """Valeurs numériques du chunk absentes du texte source du batch.
+
+    Garde-fou du mandat visuel : la vision est autorisée pour les verdicts et les
+    relations, jamais pour lire une cote. Un nombre qui apparaît dans la synthèse sans
+    figurer dans le texte transcrit a donc été lu sur une image — ou inventé.
+
+    Même esprit que ``response_verification_service.check_grounding`` : contrôle de
+    présence littérale, tolérant sur la ponctuation (virgule décimale, espaces).
+    """
+    if not content:
+        return []
+
+    haystack = _normalize_number(source_text or "")
+    candidates = set(_MEASURE_RE.findall(content)) | set(_LONG_NUMBER_RE.findall(content))
+
+    ungrounded: List[str] = []
+    for raw_value in candidates:
+        needle = _normalize_number(str(raw_value))
+        # On compare la partie NUMÉRIQUE : « 70 mm » est ancré si « 70mm » ou « 70 » figure
+        # dans la source (l'unité peut être écrite différemment).
+        digits = re.sub(r"[^\d.]", "", needle)
+        if not digits:
+            continue
+        if digits not in haystack:
+            ungrounded.append(str(raw_value))
+    return ungrounded
+
+
+def _drop_ungrounded_numbers(
+    items: List["EnrichmentChunkItem"],
+    source_text: str,
+) -> Tuple[List["EnrichmentChunkItem"], int]:
+    """Écarte les chunks dont une valeur numérique n'est pas ancrée dans le texte source.
+
+    Returns:
+        (chunks conservés, nombre de chunks rejetés).
+    """
+    kept: List["EnrichmentChunkItem"] = []
+    rejected = 0
+    for item in items:
+        bad = _ungrounded_numbers(item.content, source_text)
+        if bad:
+            rejected += 1
+            logger.warning(
+                "[Enrichment] Chunk rejeté — valeur(s) non ancrée(s) dans le texte source : %s "
+                "(thème=%r)",
+                bad[:5],
+                (item.theme or "")[:60],
+            )
+            continue
+        kept.append(item)
+    return kept, rejected
+
+
 def _coerce_enrichment_response(
     raw: dict,
     batch_pages: List[int],
     valid_category_slugs: frozenset[str],
+    source_text: str = "",
 ) -> BatchEnrichmentResponse:
     payload = dict(raw or {})
     items_in = payload.get("enrichment_chunks")
@@ -499,11 +626,15 @@ def _coerce_enrichment_response(
         if not isinstance(item, dict):
             continue
         slug = (item.get("category_slug") or "").strip().lower().replace(" ", "_")
-        if slug and slug not in valid_category_slugs:
-            continue
+        # Slug hors catalogue → on l'IGNORE, sans jeter le chunk. Avant le retrait du
+        # KAG, les catégories étaient fournies dans le prompt et un slug inconnu
+        # signalait une hallucination ; désormais aucune catégorie n'est détectée, donc
+        # rejeter sur ce critère supprimait la TOTALITÉ des chunks du batch.
+        if slug and valid_category_slugs and slug not in valid_category_slugs:
+            slug = ""
         content = (item.get("content") or "").strip()
         theme = (item.get("theme") or "").strip()
-        if not content or not theme or not slug:
+        if not content or not theme:
             continue
         source_page = int(item.get("source_page") or batch_pages[len(batch_pages) // 2])
         if source_page not in batch_pages:
@@ -513,7 +644,7 @@ def _coerce_enrichment_response(
             role = CHUNK_ROLE_SYNTHESIS
         normalized = dict(item)
         normalized.update(
-            category_slug=slug,
+            category_slug=slug or None,
             theme=theme,
             content=content,
             source_page=source_page,
@@ -525,7 +656,7 @@ def _coerce_enrichment_response(
             # Champs structurés malformés → on conserve au moins le chunk dense.
             items.append(
                 EnrichmentChunkItem(
-                    category_slug=slug,
+                    category_slug=slug or None,
                     theme=theme,
                     content=content,
                     source_page=source_page,
@@ -535,24 +666,24 @@ def _coerce_enrichment_response(
 
     if not items:
         raise ValueError(f"Aucun chunk d'enrichissement valide pour batch {batch_pages}")
+
+    # Garde-fou du mandat visuel : un nombre absent du texte transcrit a été lu sur une
+    # image (hors mandat) ou inventé. Le chunk entier est écarté — une cote hallucinée est
+    # pire qu'une cote absente, puisqu'elle devient indexée et paraît faire autorité.
+    if source_text:
+        items, rejected = _drop_ungrounded_numbers(items, source_text)
+        if rejected:
+            logger.warning(
+                "[Enrichment] Batch %s — %d chunk(s) rejeté(s) pour valeur non ancrée",
+                batch_pages,
+                rejected,
+            )
+        if not items:
+            raise ValueError(
+                f"Tous les chunks du batch {batch_pages} rejetés (valeurs non ancrées)"
+            )
+
     return BatchEnrichmentResponse(enrichment_chunks=items)
-
-
-def _batch_is_visual(
-    batch_pages: List[int],
-    chunks_by_page: Dict[int, List[DocumentChunk]],
-    categories_by_page: Dict[int, List[str]],
-) -> bool:
-    """Vrai si le batch est procédural/visuel → enrichissement multimodal pertinent."""
-    visual_cats = frozenset(settings.CONTEXTUAL_ENRICHMENT_VISUAL_CATEGORIES or [])
-    for pno in batch_pages:
-        if visual_cats.intersection(categories_by_page.get(pno) or []):
-            return True
-        for chunk in chunks_by_page.get(pno) or []:
-            section_type = (chunk.metadata_json or {}).get("section_type")
-            if section_type in _VISUAL_SECTION_TYPES:
-                return True
-    return False
 
 
 def _render_batch_images(pdf_path: str, batch_pages: List[int]) -> List[str]:
@@ -595,12 +726,15 @@ def extract_batch_enrichment_response(
         _collect_batch_slugs(batch_pages, categories_by_page)
     )
 
+    # Vision SYSTÉMATIQUE (2026-07-28) : la porte d'avant dépendait à moitié des
+    # catégories KAG (supprimées) et à moitié d'un section_type `diagram` que la voie
+    # d'extraction texte ne produit plus. Elle n'aurait donc plus jamais tiré sur les
+    # pages de schémas — précisément celles où l'image est indispensable, puisque
+    # l'enrichissement est désormais le SEUL étage qui voit une page avec droit de
+    # synthétiser. Le garde-fou n'est plus la porte mais le mandat contraint du prompt
+    # + le contrôle déterministe des nombres (voir _drop_ungrounded_numbers).
     images_b64: Optional[List[str]] = None
-    if (
-        settings.CONTEXTUAL_ENRICHMENT_MULTIMODAL_ENABLED
-        and pdf_path
-        and _batch_is_visual(batch_pages, chunks_by_page, categories_by_page)
-    ):
+    if settings.CONTEXTUAL_ENRICHMENT_MULTIMODAL_ENABLED and pdf_path:
         rendered = _render_batch_images(pdf_path, batch_pages)
         images_b64 = rendered or None
         if images_b64:
@@ -622,7 +756,9 @@ def extract_batch_enrichment_response(
                     playbooks_text,
                     images_b64=images_b64,
                 )
-                return _coerce_enrichment_response(raw, batch_pages, valid_category_slugs)
+                return _coerce_enrichment_response(
+                    raw, batch_pages, valid_category_slugs, source_text=page_text
+                )
             except (ValidationError, ValueError, json.JSONDecodeError) as exc:
                 if attempt == 0:
                     logger.warning(
@@ -719,12 +855,14 @@ def _persist_enrichment_chunks(
         session.flush()
 
         slug_meta = dict(meta)
-        slug_meta["categories"] = [item.category_slug]
+        slug_meta["categories"] = [item.category_slug] if item.category_slug else []
         chunk.metadata_json = slug_meta
         chunk.metadata_ = slug_meta
         session.add(chunk)
 
-        category_id = category_id_by_slug.get(item.category_slug)
+        category_id = (
+            category_id_by_slug.get(item.category_slug) if item.category_slug else None
+        )
         if category_id is not None:
             # Lien au niveau document : une seule ligne par (chunk, catégorie), sans espace.
             exists = session.exec(
@@ -824,15 +962,11 @@ def run_contextual_enrichment_for_document(document_id: int) -> dict:
 
         category_id_by_slug = get_category_id_by_slug(session)
         valid_category_slugs = frozenset(category_id_by_slug.keys())
-        # pdf_path pour l'enrichissement multimodal sélectif (None → texte-seul partout)
+        # pdf_path pour l'enrichissement multimodal (None → texte-seul partout)
         pdf_path = document.source_file_path or None
 
         page_numbers = sorted(chunks_by_page.keys())
-        batches = build_kag_batches(
-            page_numbers,
-            batch_size=settings.CONTEXTUAL_ENRICHMENT_BATCH_SIZE,
-            overlap=settings.CONTEXTUAL_ENRICHMENT_BATCH_OVERLAP,
-        )
+        batches = build_page_batches(page_numbers)
 
         batch_responses: List[Tuple[List[int], BatchEnrichmentResponse]] = []
         concurrency = settings.CONTEXTUAL_ENRICHMENT_CONCURRENCY

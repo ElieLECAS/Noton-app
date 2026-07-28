@@ -1,12 +1,15 @@
-"""Nettoyage du graphe KAG à la suppression d'un document (Axe 5).
+"""Purge des relations FK à la suppression d'un document.
 
-Vérifie deux invariants :
-  1. Supprimer un document *catégorisé* ne lève plus de violation FK
-     (chunkcategoryrelation.chunk_id n'a pas d'ON DELETE CASCADE) et purge les
-     entités devenues orphelines (mention_count → 0).
-  2. Une entité partagée avec un autre document du même espace SURVIT à la
-     suppression (mention_count seulement décrémenté), et les liens de l'autre
-     document restent intacts.
+L'invariant CRITIQUE, seul conservé après le retrait du KAG (2026-07-28) :
+supprimer un document dont les chunks sont référencés par
+``chunkcategoryrelation`` / ``chunkentityrelation`` / ``entityentityrelation``
+ne doit PAS lever de violation de contrainte — aucune de ces FK n'a d'
+``ON DELETE CASCADE``, la purge applicative est donc obligatoire.
+
+Les assertions sur l'élagage des entités orphelines et la décrémentation de
+``mention_count`` ont été retirées : ce comportement appartenait au KAG. Les lignes
+``knowledgeentity`` résiduelles sont désormais inertes (plus rien ne les lit) et
+partiront avec le DROP des tables.
 """
 from __future__ import annotations
 
@@ -134,9 +137,7 @@ def test_delete_document_prunes_orphan_entity_and_category(db_session: Session):
     db_session.expire_all()
     assert db_session.get(Document, doc_id) is None
     assert db_session.get(DocumentChunk, chunk_id) is None
-    # Entité orpheline purgée (mention_count 1 → 0).
-    assert db_session.get(KnowledgeEntity, entity_id) is None
-    # Relations du chunk supprimées.
+    # Relations du chunk supprimées (c'est ce qui rend la suppression possible).
     assert (
         db_session.exec(
             select(ChunkEntityRelation).where(ChunkEntityRelation.chunk_id == chunk_id)
@@ -153,7 +154,7 @@ def test_delete_document_prunes_orphan_entity_and_category(db_session: Session):
     assert db_session.get(DocumentCategory, category.id) is not None
 
 
-def test_delete_document_keeps_entity_shared_with_other_document(db_session: Session):
+def test_delete_document_preserve_les_liens_des_autres_documents(db_session: Session):
     user = create_test_user(db_session, "responsable")
     library = Library(name="Lib", user_id=user.id, is_global=False)
     db_session.add(library)
@@ -191,10 +192,7 @@ def test_delete_document_keeps_entity_shared_with_other_document(db_session: Ses
     assert delete_document(db_session, doc_a_id, user.id) is True
 
     db_session.expire_all()
-    surviving = db_session.get(KnowledgeEntity, entity_id)
-    assert surviving is not None, "l'entité partagée ne doit pas être supprimée"
-    assert surviving.mention_count == 1
-    # Le lien du document B reste intact.
+    # Seuls les liens du document SUPPRIMÉ partent : ceux du document B restent intacts.
     assert (
         db_session.exec(
             select(ChunkEntityRelation).where(ChunkEntityRelation.chunk_id == chunk_b_id)

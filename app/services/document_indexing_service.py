@@ -2,16 +2,15 @@
 Pipeline d'indexation documentaire unifié.
 
 Quatre modes, pensés pour pouvoir séparer un passage RAPIDE d'un passage LOURD :
-  - full        : extraction + KAG + enrichissement + embeddings + ColPali (tout)
-  - text_only   : extraction + embeddings SEULEMENT (ni KAG, ni enrichissement,
-                  ColPali inchangé) → rapide, utilisable en journée sur tout le corpus
-  - kag_only    : KAG (entités/relations/catégories) + enrichissement contextuel +
-                  ré-embedding, sur les chunks EXISTANTS → lent (appels LLM par batch),
-                  à lancer séparément (typiquement la nuit)
-  - colpali_only: re-sync ColPali uniquement (chunks texte inchangés)
+  - full            : extraction + chunks contextuels + embeddings + ColPali (tout)
+  - text_only       : extraction + embeddings SEULEMENT (ni chunks contextuels,
+                      ColPali inchangé) → rapide, en journée sur tout le corpus
+  - enrichment_only : chunks contextuels (fenêtres de 3 pages, texte + vision) +
+                      ré-embedding, sur les chunks EXISTANTS → lent (appels LLM par
+                      batch), à lancer séparément (typiquement la nuit)
+  - colpali_only    : re-sync ColPali uniquement (chunks texte inchangés)
 
-text_only puis kag_only aboutit au MÊME état final que full : kag_only ré-embarque
-les chunks, donc le préfixe d'embedding récupère catégories et entités.
+text_only puis enrichment_only aboutit au MÊME état final que full.
 
 Deux voies d'extraction du texte (paramètre ``extractor``) :
   - vision : rendu PNG + mistral-small (gère les pages sans couche texte)
@@ -52,10 +51,10 @@ class IndexingMode(str, Enum):
     FULL = "full"
     TEXT_ONLY = "text_only"
     COLPALI_ONLY = "colpali_only"
-    # KAG seul : re-extrait entités + relations + catégories sur les chunks EXISTANTS
-    # (ni texte, ni ColPali, ni embedding vision re-faits). Répare les documents dont
-    # les chunks ont été re-créés (liens KAG orphelins) sans tout retraiter.
-    KAG_ONLY = "kag_only"
+    # Chunks contextuels seuls : régénère les synthèses L2 (fenêtres de 3 pages,
+    # texte + vision) sur les chunks EXISTANTS, puis ré-embarque. Ni extraction texte,
+    # ni ColPali. C'est le passage LOURD, séparé du passage rapide text_only.
+    ENRICHMENT_ONLY = "enrichment_only"
 
 
 class TextExtractor(str, Enum):
@@ -146,12 +145,10 @@ def process_document_indexing(
 
     chunk_count = 0
     embed_count = 0
-    kag_stats: dict = {"entities": 0, "relations": 0, "status": "disabled"}
-
     enrichment_stats: dict = {"chunks": 0, "status": "disabled"}
 
     try:
-        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY, IndexingMode.KAG_ONLY):
+        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY, IndexingMode.ENRICHMENT_ONLY):
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
@@ -172,63 +169,38 @@ def process_document_indexing(
                         preserve_page_anchors=(mode == IndexingMode.TEXT_ONLY),
                         extractor=extractor,
                     )
-            elif mode == IndexingMode.KAG_ONLY:
-                # Chunks EXISTANTS : compter (pour finalize) + purger l'ancien KAG du doc
-                # avant ré-extraction (répare les liens orphelins sans re-créer les chunks,
-                # donc sans casser l'index ColPali).
+            elif mode == IndexingMode.ENRICHMENT_ONLY:
+                # Chunks EXISTANTS : on compte seulement (pour finalize). Les synthèses L2
+                # sont purgées puis régénérées par run_contextual_enrichment_for_document,
+                # donc rien à nettoyer ici — et l'index ColPali reste intact.
                 _set_progress(document_id, 30)
-                ld.info("[Indexing] KAG seul — chunks existants document_id=%s", document_id)
+                ld.info(
+                    "[Indexing] Chunks contextuels seuls — chunks existants document_id=%s",
+                    document_id,
+                )
                 with Session(engine) as session:
                     chunk_count = session.execute(
                         text("SELECT count(*) FROM documentchunk WHERE document_id = :d AND is_leaf = true"),
                         {"d": document_id},
                     ).scalar() or 0
-                    if settings.KAG_ENABLED:
-                        from app.services.kag_extraction_service import cleanup_kag_for_document
-                        cleanup_kag_for_document(session, document_id)
-                        session.commit()
 
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
-            # Couches sémantiques lourdes (KAG + enrichissement contextuel) : plusieurs
-            # appels LLM par batch de pages, soit l'essentiel du temps de traitement.
-            # Elles sont SAUTÉES en text_only — qui devient un passage rapide « extraction
-            # + embeddings » utilisable en journée sur tout le corpus — et portées par
-            # kag_only, lancé séparément (typiquement la nuit). Enchaîner text_only puis
-            # kag_only aboutit au même état final que full : kag_only ré-embarque les
-            # chunks, donc le préfixe d'embedding récupère bien catégories et entités.
-            runs_semantic_layers = mode in (IndexingMode.FULL, IndexingMode.KAG_ONLY)
+            # Couche sémantique lourde (chunks contextuels) : plusieurs appels LLM par
+            # batch de 3 pages, soit l'essentiel du temps de traitement. SAUTÉE en
+            # text_only — qui devient un passage rapide « extraction + embeddings »
+            # utilisable en journée sur tout le corpus — et portée par enrichment_only,
+            # lancé séparément (typiquement la nuit). Enchaîner les deux aboutit au même
+            # état final que full.
+            runs_semantic_layers = mode in (
+                IndexingMode.FULL,
+                IndexingMode.ENRICHMENT_ONLY,
+            )
 
-            # --- 2. KAG : entités + relations + catégories (écrites dans les métadonnées L1) ---
-            # NB : tourne AVANT l'embedding pour que le vecteur intègre catégories/entités.
-            if runs_semantic_layers and settings.KAG_ENABLED:
-                _set_progress(document_id, 45)
-                ld.info("[Indexing] Extraction KAG entités/relations document_id=%s", document_id)
-                try:
-                    from app.services.kag_extraction_service import (
-                        embed_kag_entities_for_document,
-                        extract_kag_for_document,
-                    )
-
-                    kag_stats = extract_kag_for_document(document_id, pdf_path)
-                    ld.info("[Indexing] Embedding entités KAG document_id=%s", document_id)
-                    embed_kag_entities_for_document(document_id)
-                except Exception as exc:
-                    logger.error(
-                        "[Indexing] KAG échoué document_id=%s (non bloquant) : %s",
-                        document_id,
-                        exc,
-                        exc_info=True,
-                    )
-                    kag_stats = {"entities": 0, "relations": 0, "status": "failed"}
-
-            if _aborted():
-                return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
-
-            # --- 3. Enrichissement contextuel inter-pages → L2 contextual_enrichment ---
+            # --- 2. Chunks contextuels inter-pages → L2 contextual_enrichment ---
             # Idempotent : run_contextual_enrichment_for_document purge les L2 existants
-            # avant de régénérer, donc relancer kag_only ne duplique rien.
+            # avant de régénérer, donc relancer enrichment_only ne duplique rien.
             if runs_semantic_layers and settings.CONTEXTUAL_ENRICHMENT_ENABLED:
                 _set_progress(document_id, 60)
                 ld.info(
@@ -253,7 +225,7 @@ def process_document_indexing(
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
-            # --- 4. Embedding mistral-embed EN DERNIER (L1 + L2, métadonnées enrichies) ---
+            # --- 3. Embedding mistral-embed EN DERNIER (L1 + L2) ---
             _set_progress(document_id, 80)
             ld.info("[Indexing] Embeddings mistral-embed (L1+L2) document_id=%s", document_id)
             embed_count = _embed_text_chunks(document_id)
@@ -267,19 +239,17 @@ def process_document_indexing(
             _sync_colpali_for_pages(document_id, pdf_path)
 
         _finalize_document(document_id, chunk_count)
-        semantic_ran = mode in (IndexingMode.FULL, IndexingMode.KAG_ONLY)
+        semantic_ran = mode in (IndexingMode.FULL, IndexingMode.ENRICHMENT_ONLY)
         ld.info(
-            "[Indexing] FIN OK document_id=%s mode=%s chunks=%s embeds=%s kag=%s enrichment=%s",
+            "[Indexing] FIN OK document_id=%s mode=%s chunks=%s embeds=%s enrichment=%s",
             document_id,
             mode.value,
             chunk_count,
             embed_count,
-            kag_stats if semantic_ran else "n/a (text_only)",
             enrichment_stats if semantic_ran else "n/a (text_only)",
         )
         result = {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
         if semantic_ran:
-            result["kag"] = kag_stats
             result["enrichment"] = enrichment_stats
         return result
 
@@ -314,38 +284,54 @@ def _get_deletable_text_chunk_ids(session: Session, document_id: int) -> List[in
 
 
 def _delete_chunk_foreign_relations(session: Session, chunk_ids: List[int]) -> None:
-    """Supprime les relations FK bloquant la suppression de chunks (KAG + enrichissement)."""
+    """Supprime les lignes qui référencent ces chunks par clé étrangère.
+
+    INCONDITIONNEL : `chunkentityrelation.chunk_id` et `chunkcategoryrelation.chunk_id`
+    n'ont PAS de `ON DELETE CASCADE`. Conditionner cette purge à un flag (c'était le cas
+    de `KAG_ENABLED` avant le 2026-07-28) fait échouer toute suppression de chunk avec
+    une violation de contrainte dès qu'il reste d'anciennes lignes en base — donc tout
+    retraitement du document.
+
+    Les tables KAG sont conservées le temps de la transition : cette purge est ce qui
+    permet de retraiter des documents encore porteurs d'anciennes relations.
+    """
     if not chunk_ids:
         return
 
-    if settings.KAG_ENABLED:
-        from app.services.kag_extraction_service import (
-            delete_chunk_kag_relations,
-            prune_kag_entities_after_chunk_removal,
-        )
-
-        affected = delete_chunk_kag_relations(session, chunk_ids)
+    chunk_ids_tuple = tuple(chunk_ids)
+    for table in ("chunkentityrelation", "chunkcategoryrelation", "entityentityrelation"):
+        column = "source_chunk_id" if table == "entityentityrelation" else "chunk_id"
         try:
             with session.begin_nested():
-                prune_kag_entities_after_chunk_removal(session, affected)
-        except Exception as exc:
-            logger.warning(
-                "[Indexing] Élagage entités KAG ignoré (%s chunk(s)) : %s",
-                len(chunk_ids),
+                session.execute(
+                    text(f"DELETE FROM {table} WHERE {column} IN :chunk_ids"),
+                    {"chunk_ids": chunk_ids_tuple},
+                )
+        except Exception as exc:  # table absente (déjà supprimée) → sans objet
+            logger.debug(
+                "[Indexing] Purge %s ignorée (%s chunk(s)) : %s",
+                table,
+                len(chunk_ids_tuple),
                 exc,
             )
 
 
-def _delete_all_chunks(session: Session, document_id: int) -> None:
-    """Supprime tous les chunks PostgreSQL, relations KAG et patches LanceDB."""
-    all_chunk_ids = [
+def _all_chunk_ids_for_document(session: Session, document_id: int) -> List[int]:
+    """Tous les chunk_id d'un document (utilisé avant purge des relations FK)."""
+    return [
         int(row[0])
         for row in session.execute(
             text("SELECT id FROM documentchunk WHERE document_id = :doc_id"),
             {"doc_id": document_id},
         ).all()
     ]
-    _delete_chunk_foreign_relations(session, all_chunk_ids)
+
+
+def _delete_all_chunks(session: Session, document_id: int) -> None:
+    """Supprime tous les chunks PostgreSQL, leurs relations FK et les patches LanceDB."""
+    _delete_chunk_foreign_relations(
+        session, _all_chunk_ids_for_document(session, document_id)
+    )
 
     session.execute(delete(DocumentChunk).where(DocumentChunk.document_id == document_id))
     session.commit()
@@ -686,9 +672,11 @@ def _build_embed_text(
     Construit le texte à embedder avec un préfixe contextuel déterministe (Contextual
     Retrieval) : titre + section + catégories + entités + matériau/source.
 
-    Les métadonnées (catégories/entités) sont injectées par la passe KAG AVANT l'embedding,
-    de sorte que le vecteur dense « voit » nativement les signaux de catégorie et d'entité.
     Le préfixe n'est pas stocké dans content — seul le vecteur en bénéficie.
+
+    Les lignes « Catégories » et « Éléments » ne sont plus alimentées depuis le retrait du
+    KAG (2026-07-28) : elles restent lues si la métadonnée existe (documents non encore
+    retraités), et disparaîtront d'elles-mêmes au prochain passage.
     """
     meta = chunk.metadata_json or {}
     doc_title = meta.get("document_title", "")
@@ -737,7 +725,7 @@ def _embed_text_chunks(document_id: int) -> int:
     Génère les embeddings mistral-embed pour les chunks texte retrievables (L1 semantic_leaf
     + L2 contextual_enrichment) du document et les persiste en base.
 
-    Tourne EN DERNIER (après KAG + enrichissement) afin que `_build_embed_text` intègre
+    Tourne EN DERNIER (après les chunks contextuels) afin que `_build_embed_text` intègre
     les catégories et entités dans le texte embeddé.
     Renvoie le nombre de chunks embeddés.
     """

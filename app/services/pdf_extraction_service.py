@@ -13,7 +13,7 @@ import logging
 import re
 import time
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -25,12 +25,19 @@ _PICTURE_OMITTED_RE = re.compile(
     r"\*{0,2}\s*==>\s*picture\s*\[[^\]]*\]\s*intentionally omitted\s*<==\s*\*{0,2}",
     re.IGNORECASE,
 )
+# Bloc « texte d'image » de pymupdf4llm. DEUX formes existent selon la version :
+#   --- Start of picture text ---      (ancienne, à tirets)
+#   <!-- Start of picture text -->     (actuelle, commentaire HTML)
+# Le motif d'origine n'acceptait que la première (`-{3,}`) : `<!--` ne porte que DEUX
+# tirets, donc le nettoyage ne se déclenchait PLUS du tout. Conséquence observée le
+# 2026-07-28 sur une plaquette : les puces de « Les avantages » et deux sections
+# entières concaténées en un chunk de 450 tokens, marqueurs bruts inclus.
 _PICTURE_TEXT_BLOCK_RE = re.compile(
-    r"\*{0,2}\s*-{3,}\s*Start of picture text\s*-{3,}\s*\*{0,2}\s*"
+    r"\*{0,2}\s*(?:-{3,}|<!--)\s*Start of picture text\s*(?:-{3,}|-->)\s*\*{0,2}\s*"
     r"(?:<br\s*/?>\s*)*"
     r"(.*?)"
     r"(?:<br\s*/?>\s*)*"
-    r"\*{0,2}\s*-{3,}\s*End of picture text\s*-{3,}\s*\*{0,2}",
+    r"\*{0,2}\s*(?:-{3,}|<!--)\s*End of picture text\s*(?:-{3,}|-->)\s*\*{0,2}",
     re.DOTALL | re.IGNORECASE,
 )
 _BR_RE = re.compile(r"<br\s*/?>", re.IGNORECASE)
@@ -48,24 +55,85 @@ def _unwrap_bold_line(line: str) -> str:
     return s
 
 
+# Glyphes de puce rencontrés dans les PDF (carrés, ronds, tirets typographiques) :
+# pymupdf4llm les rend tels quels, ils doivent devenir des puces markdown.
+_BULLET_GLYPHS = "•▪▫◦‣·−–—□■☐✓✔»›"
+_BULLET_PREFIX_RE = re.compile(rf"^[{re.escape(_BULLET_GLYPHS)}]\s*")
+
+# Un titre de section d'une plaquette est typiquement une ligne ENTIÈREMENT en
+# capitales, courte, sans ponctuation finale (« UN DESIGN EXCLUSIF », « LES OUVERTURES »).
+# Sans promotion, ces titres restent noyés dans la liste et deux sections distinctes
+# finissent dans le même chunk.
+_ALLCAPS_TITLE_RE = re.compile(r"^[^a-z]{3,60}$")
+
+# Mobilier de page à la forme NON ambiguë : « Page 3 sur 53 », « 3/53 ».
+# Un nombre nu n'est PAS listé ici : « 9016 » (RAL), « 300 » (code CSTB) ou « 1500 »
+# (cote) ont exactement la même forme qu'un folio. Le nombre nu n'est retiré que s'il
+# ÉGALE le numéro de page — voir le paramètre page_no de clean_pymupdf4llm_markdown.
+_PAGE_FURNITURE_RE = re.compile(
+    r"^(?:[Pp]age\s+\d+\s*(?:sur|/)\s*\d+|\d{1,4}\s*/\s*\d{1,4})$"
+)
+
+
+def _is_page_folio(line: str, page_no: Optional[int]) -> bool:
+    """Nombre nu identique au numéro de page (« 4 », « .4 », « 4. »)."""
+    if page_no is None:
+        return False
+    stripped = line.strip().strip(".").strip()
+    return stripped.isdigit() and int(stripped) == page_no
+
+
+def _looks_like_section_title(line: str) -> bool:
+    stripped = line.strip().rstrip(":").strip()
+    if not (3 <= len(stripped) <= 60):
+        return False
+    if stripped.endswith((".", ";", ",")):
+        return False
+    letters = [c for c in stripped if c.isalpha()]
+    if len(letters) < 3:
+        return False
+    if not all(c.isupper() for c in letters):
+        return False
+    # Un simple sigle isolé (« PVC ») n'est pas un titre de section.
+    return len(stripped.split()) >= 2
+
+
 def _picture_text_to_list(match: re.Match) -> str:
-    """Convertit un bloc 'picture text' pymupdf4llm en liste à puces lisible."""
+    """Convertit un bloc « picture text » pymupdf4llm en markdown structuré.
+
+    Les lignes tout en capitales deviennent des TITRES (####) pour que la découpe par
+    section les voie ; les autres deviennent des puces. Sans ça, un encart de plaquette
+    mêlant une liste d'avantages et deux titres de section produisait un seul bloc.
+    """
     inner = _BR_RE.sub("\n", match.group(1) or "")
-    lines = []
+    out: List[str] = []
     for raw in inner.splitlines():
         line = _unwrap_bold_line(raw)
-        if line:
-            lines.append(f"- {line}" if not line.startswith("-") else line)
-    return "\n".join(lines) if lines else ""
+        line = _BULLET_PREFIX_RE.sub("", line).strip()
+        if not line:
+            continue
+        if _looks_like_section_title(line):
+            out.append(f"#### {line}")
+        elif line.startswith(("-", "#")):
+            out.append(line)
+        else:
+            out.append(f"- {line}")
+    if not out:
+        return ""
+    # Sauts de ligne encadrants OBLIGATOIRES : le `\s*` du motif consomme les retours
+    # à la ligne autour du bloc, ce qui collerait la première puce à la ligne
+    # précédente et la ligne suivante à la dernière puce.
+    return "\n" + "\n".join(out) + "\n"
 
 
-def clean_pymupdf4llm_markdown(text: str) -> str:
+def clean_pymupdf4llm_markdown(text: str, page_no: Optional[int] = None) -> str:
     """
     Nettoie le markdown brut pymupdf4llm pour stockage et embedding.
 
-    - Supprime les marqueurs <!-- page:N -->
+    - Supprime les marqueurs <!-- page:N --> et le mobilier de page (folios)
     - Supprime les placeholders d'images omises
-    - Extrait le texte des légendes d'images en listes à puces
+    - Convertit les blocs « picture text » en titres + listes à puces
+    - Normalise les glyphes de puce (•, ▪, ☐, –) en puces markdown
     - Convertit <br> en retours à la ligne
     - Normalise le gras excessif (**...** sur chaque ligne)
     - Compresse les lignes vides multiples
@@ -82,6 +150,16 @@ def clean_pymupdf4llm_markdown(text: str) -> str:
     cleaned_lines: List[str] = []
     for line in t.splitlines():
         stripped = _unwrap_bold_line(line)
+        # Mobilier de page : présent sur CHAQUE page, il pollue tous les chunks sans
+        # rien apporter. Le nombre nu n'est retiré que s'il ÉGALE le numéro de page —
+        # sinon on supprimerait les RAL (9016), codes CSTB (300) et cotes (1500).
+        if _PAGE_FURNITURE_RE.match(stripped.strip()) or _is_page_folio(stripped, page_no):
+            continue
+        # Puce à glyphe → puce markdown (hors tableaux, dont les lignes commencent par |).
+        if not stripped.lstrip().startswith("|"):
+            bullet = _BULLET_PREFIX_RE.match(stripped.lstrip())
+            if bullet:
+                stripped = "- " + stripped.lstrip()[bullet.end():].strip()
         cleaned_lines.append(stripped)
 
     t = "\n".join(cleaned_lines)

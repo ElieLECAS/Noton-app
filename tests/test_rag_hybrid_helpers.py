@@ -139,7 +139,7 @@ async def test_space_search_window_aggregation_and_deduplication():
          mock.patch("app.services.page_retrieval_service.get_space_document_ids", return_value=[123]), \
          mock.patch(
              "app.services.space_search_service._run_retrievers",
-             new=mock.AsyncMock(return_value=([], [fused_hit], [], [])),
+             new=mock.AsyncMock(return_value=([], [fused_hit], [])),
          ), \
          mock.patch("app.services.page_retrieval_service.format_multimodal_passages") as mock_format, \
          mock.patch.object(real_settings, "RERANKER_ENABLED", False), \

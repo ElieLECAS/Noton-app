@@ -77,16 +77,6 @@ def build_document_processing_snapshot(
         "total_pages": doc.phase_status_json.get("total_pages") if doc and doc.phase_status_json else None,
     }
 
-    if settings.KAG_ENABLED:
-        try:
-            from app.services.kag_graph_service import count_document_kag_stats
-
-            result.update(count_document_kag_stats(session, document_id))
-        except Exception:
-            result["knowledge_entity_count"] = 0
-            result["entity_relation_count"] = 0
-            result["content_category_count"] = 0
-
     return result
 
 

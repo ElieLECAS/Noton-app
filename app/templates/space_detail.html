@@ -7,7 +7,6 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
 <style>
 /* ===== STYLES MARKDOWN MODERNES POUR LE CHAT ===== */
 .markdown-content {
@@ -449,26 +448,8 @@
         <p class="text-sm text-gray-500">Discussion LIA sur les documents de cet espace</p>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <button
-          id="kag-graph-toggle"
-          type="button"
-          class="hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold active:scale-95 transition-all"
-          onclick="openKagGraphModal()"
-        >
-          <i class="ti ti-affiliate"></i>
-          <span id="kag-graph-toggle-label">Graphe de connaissances</span>
-        </button>
-        {% if user and 'admin' in (user.roles or []) %}
-        <button
-          id="kag-references-toggle"
-          type="button"
-          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10 text-xs font-semibold active:scale-95 transition-all"
-          onclick="openKagReferencesModal()"
-        >
-          <i class="ti ti-cards"></i>
-          <span>Fiches produit</span>
-        </button>
-        {% endif %}
+        <!-- Bouton « Graphe de connaissances » retiré avec le KAG (2026-07-28). -->
+        <!-- Bouton « Fiches produit » (index de références KAG) retiré avec le KAG. -->
         <button
           id="theme-tree-toggle"
           type="button"

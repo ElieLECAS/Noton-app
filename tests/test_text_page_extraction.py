@@ -238,6 +238,215 @@ class TestRecollageInterPages:
         assert merged == 0
 
 
+class TestBlocsImageEtPuces:
+    """Régression du 28/07 : le motif « picture text » n'acceptait que l'ancienne
+    forme à tirets (`--- Start of picture text ---`) alors que pymupdf4llm émet
+    désormais un commentaire HTML (`<!-- ... -->`, deux tirets seulement). Le
+    nettoyage ne se déclenchait plus : puces et sections finissaient concaténées
+    dans un seul chunk, marqueurs bruts inclus."""
+
+    PAGE = (
+        "## Les avantages\n\n"
+        "☐ Grandes dimensions (jusqu'a L 4,50 m)\n\n"
+        "<!-- Start of picture text --> Masse reduite (-35 %)"
+        "<br>Performances thermiques : Uw = 1.2\n"
+        "<br>UN DESIGN EXCLUSIF<br>Le principe ouvrant cache reduit les masses."
+        "<br>LES OUVERTURES<br>2 vantaux - 2 rails <!-- End of picture text -->\n\n"
+        ".4\n"
+    )
+
+    def test_marqueurs_bruts_absents(self):
+        specs = extract_page_chunk_specs_text(self.PAGE, 2, META)
+        blob = " ".join(s["content"] for s in specs)
+        assert "picture text" not in blob
+
+    def test_titres_en_capitales_promus_en_sections(self):
+        """« UN DESIGN EXCLUSIF » et « LES OUVERTURES » sont des sections, pas des puces."""
+        specs = extract_page_chunk_specs_text(self.PAGE, 2, META)
+        headings = [s["metadata_json"].get("heading") for s in specs]
+        assert "UN DESIGN EXCLUSIF" in headings
+        assert "LES OUVERTURES" in headings
+        assert len(specs) >= 3
+
+    def test_puces_glyphes_converties(self):
+        specs = extract_page_chunk_specs_text(self.PAGE, 2, META)
+        avantages = next(
+            s for s in specs if s["metadata_json"].get("heading") == "Les avantages"
+        )
+        assert "- Grandes dimensions" in avantages["content"]
+        assert "- Masse reduite" in avantages["content"]
+        assert "☐" not in avantages["content"]
+
+    def test_puces_non_collees_entre_elles(self):
+        """Le `\\s*` du motif consommait les sauts de ligne : la première puce du bloc
+        se collait à la ligne précédente."""
+        specs = extract_page_chunk_specs_text(self.PAGE, 2, META)
+        blob = "\n".join(s["content"] for s in specs)
+        assert ")- Masse" not in blob
+
+    def test_folio_supprime_si_egal_au_numero_de_page(self):
+        specs = extract_page_chunk_specs_text(self.PAGE, 4, META)
+        blob = "\n".join(s["content"] for s in specs)
+        assert "\n.4" not in blob
+        assert not blob.rstrip().endswith(".4")
+
+    def test_nombre_nu_conserve_si_different_du_folio(self):
+        """Sur la page 2, « .4 » n'est PAS un folio : ce pourrait être un code."""
+        specs = extract_page_chunk_specs_text(self.PAGE, 2, META)
+        blob = "\n".join(s["content"] for s in specs)
+        assert ".4" in blob
+
+
+class TestRecuperationTextePerdu:
+    """pymupdf4llm SUPPRIME le texte posé sur un visuel quand les images ne sont pas
+    écrites. Mesuré le 28/07 sur une plaquette : 12 % des lignes natives perdues —
+    libellés de nuanciers, codes RAL, épaisseurs. Inacceptable pour un extracteur dont
+    l'argument est l'exactitude : on récupère depuis page.get_text()."""
+
+    def test_lignes_absentes_du_markdown_sont_detectees(self):
+        from app.services.text_page_extraction_service import recover_lost_lines
+
+        markdown = "## Choix des coloris\n\nLes laqués :\n"
+        raw = "Choix des coloris\nLes teintés dans la masse :\nBlanc 9016\nLes laqués :\n"
+
+        lost = recover_lost_lines(markdown, raw)
+
+        assert "Les teintés dans la masse :" in lost
+        assert "Blanc 9016" in lost
+        assert "Les laqués :" not in lost, "déjà présent, ne doit pas être dupliqué"
+
+    def test_pas_de_doublon_dans_les_lignes_recuperees(self):
+        from app.services.text_page_extraction_service import recover_lost_lines
+
+        lost = recover_lost_lines("", "Blanc 9016\nBlanc 9016\nIvoire 9001\n")
+        assert lost == ["Blanc 9016", "Ivoire 9001"]
+
+    def test_sans_texte_natif_aucune_recuperation(self):
+        from app.services.text_page_extraction_service import recover_lost_lines
+
+        assert recover_lost_lines("## Titre", "") == []
+
+    def test_balisage_markdown_ne_cree_pas_de_faux_positif(self):
+        """`<sup>` laissait les lettres « sup » dans le texte normalisé : un
+        `TEXTURAL®` du PDF ne correspondait plus au `TEXTURAL**<sup>®</sup>` du
+        markdown, donc des paragraphes DÉJÀ présents étaient réinjectés en vrac."""
+        from app.services.text_page_extraction_service import recover_lost_lines
+
+        markdown = "PROFERM propose **PVC, ALU, HYBRIDE & TEXTURAL**<sup>®</sup> ."
+        raw = "PROFERM propose PVC, ALU, HYBRIDE & TEXTURAL®."
+
+        assert recover_lost_lines(markdown, raw) == []
+
+    def test_fragments_de_phrase_recolles(self):
+        """Les libellés d'encart sont des boîtes distinctes : une phrase courte y est
+        coupée en morceaux qui deviendraient autant de puces illisibles."""
+        from app.services.text_page_extraction_service import recover_lost_lines
+
+        raw = "Pivot pouvant\nsupporter le poids\nd'une fenêtre jusqu'à\n130kg.\n"
+        lost = recover_lost_lines("## Robustesse", raw)
+
+        assert lost == ["Pivot pouvant supporter le poids d'une fenêtre jusqu'à 130kg."]
+
+    def test_deux_paragraphes_ne_fusionnent_pas(self):
+        """Le recollage ne doit mordre que sur des fragments COURTS."""
+        from app.services.text_page_extraction_service import _join_wrapped_fragments
+
+        long_a = "a" * 130
+        long_b = "b" * 130
+        assert _join_wrapped_fragments([long_a, long_b]) == [long_a, long_b]
+
+    def test_integration_le_texte_perdu_arrive_dans_les_chunks(self):
+        markdown = (
+            "## CHOIX DES COLORIS\n\n"
+            "Au-dela des hautes performances, vous pouvez personnaliser vos menuiseries "
+            "selon vos envies et choisir parmi un large choix de couleurs.\n"
+        )
+        raw = markdown + "\nLes teintes dans la masse :\nBlanc 9016\n"
+
+        specs = extract_page_chunk_specs_text(markdown, 8, META, raw_text=raw)
+        blob = " ".join(s["content"] for s in specs)
+
+        assert "Les teintes dans la masse" in blob
+        assert "Blanc 9016" in blob
+
+
+class TestMobilierDePage:
+    def test_folio_egal_au_numero_de_page_supprime(self):
+        from app.services.pdf_extraction_service import clean_pymupdf4llm_markdown
+
+        cleaned = clean_pymupdf4llm_markdown("Contenu utile\n.8\n", page_no=8)
+        assert ".8" not in cleaned
+        assert "Contenu utile" in cleaned
+
+    def test_code_ral_conserve(self):
+        """« 9016 » a la même forme qu'un folio : il ne doit PAS être supprimé.
+        Le filtre initial retirait tout nombre nu, ce qui aurait mangé les RAL,
+        les codes CSTB (300) et les cotes (1500)."""
+        from app.services.pdf_extraction_service import clean_pymupdf4llm_markdown
+
+        cleaned = clean_pymupdf4llm_markdown("Blanc\n9016\n300\n1500\n", page_no=8)
+        assert "9016" in cleaned
+        assert "300" in cleaned
+        assert "1500" in cleaned
+
+    def test_forme_page_n_sur_m_supprimee(self):
+        from app.services.pdf_extraction_service import clean_pymupdf4llm_markdown
+
+        cleaned = clean_pymupdf4llm_markdown("Contenu\nPage 3 sur 53\n", page_no=3)
+        assert "sur 53" not in cleaned
+
+
+class TestTitresGrasNonApparie:
+    def test_asterisques_orphelines_retirees(self):
+        """pymupdf4llm produit des titres à gras ouvert non fermé quand la mise en
+        gras déborde du titre."""
+        md = (
+            "## **INTÉRIEUR ET EXTÉRIEUR PVC\n\n"
+            "Texte de la section suffisamment long pour passer le seuil de page.\n"
+        )
+        specs = extract_page_chunk_specs_text(md, 8, META)
+        headings = [s["metadata_json"].get("heading") for s in specs]
+
+        assert "INTÉRIEUR ET EXTÉRIEUR PVC" in headings
+        assert not any((h or "").startswith("*") for h in headings)
+
+
+class TestDeduplication:
+    """pymupdf4llm émet un bloc par image : deux images qui se recouvrent produisent
+    deux fois le même texte."""
+
+    def test_chunk_contenu_dans_un_autre_est_ecarte(self):
+        from app.services.text_page_extraction_service import _drop_duplicate_specs
+
+        specs = [
+            {"content": "Le principe ouvrant cache reduit les masses vues d'aluminium."},
+            {"content": "Le principe ouvrant cache reduit les masses."},
+            {"content": "Section totalement differente sur les ouvertures."},
+        ]
+        kept = _drop_duplicate_specs(specs)
+        contents = [s["content"] for s in kept]
+
+        assert len(kept) == 2
+        assert "Le principe ouvrant cache reduit les masses vues d'aluminium." in contents
+        assert "Section totalement differente sur les ouvertures." in contents
+
+    def test_ordre_de_lecture_preserve(self):
+        from app.services.text_page_extraction_service import _drop_duplicate_specs
+
+        specs = [{"content": "AAA premier bloc"}, {"content": "BBB second bloc plus long"}]
+        kept = _drop_duplicate_specs(specs)
+        assert [s["content"] for s in kept] == [
+            "AAA premier bloc",
+            "BBB second bloc plus long",
+        ]
+
+    def test_aucun_doublon_rien_ne_change(self):
+        from app.services.text_page_extraction_service import _drop_duplicate_specs
+
+        specs = [{"content": "Alpha"}, {"content": "Beta"}]
+        assert len(_drop_duplicate_specs(specs)) == 2
+
+
 class TestPagesSansTexte:
     def test_page_vide_ne_produit_rien(self):
         assert extract_page_chunk_specs_text("", 1, META) == []

@@ -32,7 +32,6 @@ from app.services.embedding_service import generate_embedding
 from app.services.space_service import get_space_by_id
 from app.services.query_understanding_graph import QueryGroup, RetrievalQueries
 from app.services.query_signals_schemas import LightweightQuerySignals
-from app.services.retrieval_boost_service import apply_category_boost_to_fused_hits
 from app.tracing import trace_run
 from app.services import reranker_service
 
@@ -102,8 +101,6 @@ async def _run_retrievers(
         retrieve_pgvector_pages,
     )
 
-    kag_enabled = settings.KAG_ENABLED
-
     def _colpali(s: Session) -> List[Any]:
         # Gate : requête texte → on n'exécute NI l'encode ColQwen2 NI le MaxSim (le poste
         # le plus lourd du pipeline sur CPU). Le fallback en aval relancera ColPali si les
@@ -118,13 +115,6 @@ async def _run_retrievers(
     def _bm25(s: Session) -> List[Any]:
         return retrieve_bm25_pages(s, doc_ids, lexical_q, pool_size)
 
-    def _kag(s: Session) -> List[Any]:
-        if not kag_enabled:
-            return []
-        from app.services.kag_retrieval_service import retrieve_kag_pages
-
-        return retrieve_kag_pages(s, space_id, doc_ids, semantic_q, query_embedding, pool_size)
-
     if settings.RETRIEVAL_PARALLEL_ENABLED:
         from app.database import engine
 
@@ -132,15 +122,14 @@ async def _run_retrievers(
             with Session(engine) as own_session:
                 return fn(own_session)
 
-        colpali_hits, pgvector_hits, bm25_hits, kag_hits = await asyncio.gather(
+        colpali_hits, pgvector_hits, bm25_hits = await asyncio.gather(
             asyncio.to_thread(_threaded, _colpali),
             asyncio.to_thread(_threaded, _pgvector),
             asyncio.to_thread(_threaded, _bm25),
-            asyncio.to_thread(_threaded, _kag),
         )
-        return colpali_hits, pgvector_hits, bm25_hits, kag_hits
+        return colpali_hits, pgvector_hits, bm25_hits
 
-    return _colpali(session), _pgvector(session), _bm25(session), _kag(session)
+    return _colpali(session), _pgvector(session), _bm25(session)
 
 logger = logging.getLogger(__name__)
 
@@ -639,27 +628,21 @@ def _multimodal_eval_stages(
     colpali_hits: List[Any],
     pgvector_hits: List[Any],
     bm25_hits: List[Any],
-    kag_hits: List[Any],
-    pre_kag_fused_hits: List[Any],
     fused_hits: List[Any],
     top_k: int,
     reason: str,
     post_rerank_passages: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
-    """Étapes d'éval RAG exposées à l'admin (avant/après KAG, ColPali, rerank)."""
+    """Étapes d'éval RAG exposées à l'admin (canaux isolés, fusion, rerank)."""
     from app.services.page_retrieval_service import unified_hits_to_eval_passages
 
     stages: Dict[str, Any] = {
         "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
-        "colpali": unified_hits_to_eval_passages(colpali_hits, top_k),
         "pgvector_only": unified_hits_to_eval_passages(pgvector_hits, top_k),
         "lexical_only": unified_hits_to_eval_passages(bm25_hits, top_k),
-        "pre_kag_rrf": unified_hits_to_eval_passages(pre_kag_fused_hits, top_k),
-        "kag_only": unified_hits_to_eval_passages(kag_hits, top_k) if kag_hits else [],
         "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
         "minilm_rerank_enabled": settings.RERANKER_ENABLED,
         "vision_rerank_enabled": False,
-        "kag_enabled": settings.KAG_ENABLED,
         "reason": reason,
     }
     if post_rerank_passages is not None:
@@ -699,18 +682,10 @@ def _retrieve_one_group_hits(
     pgvector_hits = retrieve_pgvector_pages(session, doc_ids, query_embedding or [], pool_size)
     bm25_hits = retrieve_bm25_pages(session, doc_ids, lexical_q, pool_size)
 
-    kag_hits: List[Any] = []
-    if settings.KAG_ENABLED:
-        from app.services.kag_retrieval_service import retrieve_kag_pages
-        kag_hits = retrieve_kag_pages(
-            session, space_id, doc_ids, semantic_q, query_embedding, pool_size
-        )
-
     fused = fuse_multimodal_hits(
         colpali_hits,
         pgvector_hits,
         bm25_hits,
-        kag_hits=kag_hits if settings.KAG_ENABLED else None,
         rrf_k=settings.RRF_K,
         top_k=pool_size,
     )
@@ -720,12 +695,11 @@ def _retrieve_one_group_hits(
         hit.query_group_label = group_label
 
     logger.info(
-        "[RAG multi-group] group=%r — colpali=%d pgvec=%d bm25=%d kag=%d → fused=%d",
+        "[RAG multi-group] group=%r — colpali=%d pgvec=%d bm25=%d → fused=%d",
         group_label,
         len(colpali_hits),
         len(pgvector_hits),
         len(bm25_hits),
-        len(kag_hits),
         len(fused),
     )
     return fused
@@ -849,13 +823,11 @@ async def search_multimodal_passages(
                 for i, g in enumerate(active_groups)
             ]
             fused_hits = fuse_multi_query_groups(per_group_hits, pool_size=pool_size)
-            pre_kag_fused_hits = fused_hits
             # Pour le rerank, on utilise la requête sémantique du premier groupe
             rerank_q = active_groups[0].queries.semantic
             colpali_hits = per_group_hits[0] if per_group_hits else []
             pgvector_hits: List[Any] = []
             bm25_hits: List[Any] = []
-            kag_hits: List[Any] = []
         else:
             query_embedding: Optional[List[float]] = None
             try:
@@ -888,9 +860,9 @@ async def search_multimodal_passages(
                 },
                 tags=["retrieval", "multimodal", "space"],
             ) as hr:
-                # 4 retrievers en parallèle (threads + sessions dédiées) ou en séquence,
+                # 3 retrievers en parallèle (threads + sessions dédiées) ou en séquence,
                 # selon RETRIEVAL_PARALLEL_ENABLED. Voir _run_retrievers.
-                colpali_hits, pgvector_hits, bm25_hits, kag_hits = await _run_retrievers(
+                colpali_hits, pgvector_hits, bm25_hits = await _run_retrievers(
                     session,
                     space_id,
                     doc_ids,
@@ -946,47 +918,24 @@ async def search_multimodal_passages(
                         "colpali": len(colpali_hits),
                         "pgvector": len(pgvector_hits),
                         "bm25": len(bm25_hits),
-                        "kag": len(kag_hits),
                         "colpali_gate_reason": gate_reason,
                     }
                 )
 
-            # ColPali / pgvector / BM25 loguent déjà leur résultat depuis
-            # page_retrieval_service ; KAG n'avait aucune ligne → on l'ajoute pour que
-            # TOUS les retrievers apparaissent dans les logs.
             logger.info(
-                "[retrieve_kag_pages] %d pages — %s",
-                len(kag_hits),
-                ", ".join(f"doc={h.document_id} p.{h.page_no}" for h in kag_hits[:3])
-                or "aucune",
-            )
-
-            logger.info(
-                "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d | kag=%d",
+                "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d",
                 len(colpali_hits),
                 len(pgvector_hits),
                 len(bm25_hits),
-                len(kag_hits),
             )
 
-            pre_kag_fused_hits = fuse_multimodal_hits(
-                colpali_hits,
-                pgvector_hits,
-                bm25_hits,
-                rrf_k=settings.RRF_K,
-                top_k=pool_size,
-            )
             fused_hits = fuse_multimodal_hits(
                 colpali_hits,
                 pgvector_hits,
                 bm25_hits,
-                kag_hits=kag_hits if settings.KAG_ENABLED else None,
                 rrf_k=settings.RRF_K,
                 top_k=pool_size,
             )
-
-        # Boost catégorie multiplicatif sur rrf_score (post-fusion, avant rerank)
-        apply_category_boost_to_fused_hits(session, fused_hits, signals)
 
         # Ancrage conversation : booste les pages des documents du sujet courant AVANT la
         # coupe top_k, pour que la conversation reste sur le même produit d'un tour à l'autre.
@@ -1003,8 +952,6 @@ async def search_multimodal_passages(
                     colpali_hits=colpali_hits,
                     pgvector_hits=pgvector_hits,
                     bm25_hits=bm25_hits,
-                    kag_hits=kag_hits,
-                    pre_kag_fused_hits=pre_kag_fused_hits,
                     fused_hits=[],
                     top_k=top_k,
                     reason="no_results",
@@ -1068,8 +1015,6 @@ async def search_multimodal_passages(
                 colpali_hits=colpali_hits,
                 pgvector_hits=pgvector_hits,
                 bm25_hits=bm25_hits,
-                kag_hits=kag_hits,
-                pre_kag_fused_hits=pre_kag_fused_hits,
                 fused_hits=fused_hits,
                 final_hits=final_hits,
                 passages=passages,
@@ -1094,8 +1039,6 @@ async def search_multimodal_passages(
                     colpali_hits=colpali_hits,
                     pgvector_hits=pgvector_hits,
                     bm25_hits=bm25_hits,
-                    kag_hits=kag_hits,
-                    pre_kag_fused_hits=pre_kag_fused_hits,
                     fused_hits=fused_hits,
                     top_k=top_k,
                     reason=rerank_status,
@@ -1110,8 +1053,6 @@ async def search_multimodal_passages(
                 colpali_hits=colpali_hits,
                 pgvector_hits=pgvector_hits,
                 bm25_hits=bm25_hits,
-                kag_hits=kag_hits,
-                pre_kag_fused_hits=pre_kag_fused_hits,
                 fused_hits=fused_hits,
                 final_hits=[],
                 passages=[],
@@ -1136,8 +1077,6 @@ async def search_multimodal_passages(
                             colpali_hits=colpali_hits,
                             pgvector_hits=pgvector_hits,
                             bm25_hits=bm25_hits,
-                            kag_hits=kag_hits,
-                            pre_kag_fused_hits=pre_kag_fused_hits,
                             fused_hits=fused_hits,
                             top_k=top_k,
                             reason="no_results_after_rerank",
@@ -1176,8 +1115,6 @@ async def search_multimodal_passages(
             colpali_hits=colpali_hits,
             pgvector_hits=pgvector_hits,
             bm25_hits=bm25_hits,
-            kag_hits=kag_hits,
-            pre_kag_fused_hits=pre_kag_fused_hits,
             fused_hits=fused_hits,
             final_hits=final_hits,
             passages=passages,
@@ -1219,8 +1156,6 @@ async def search_multimodal_passages(
                 colpali_hits=colpali_hits,
                 pgvector_hits=pgvector_hits,
                 bm25_hits=bm25_hits,
-                kag_hits=kag_hits,
-                pre_kag_fused_hits=pre_kag_fused_hits,
                 fused_hits=fused_hits,
                 top_k=top_k,
                 reason=reason,

@@ -130,13 +130,13 @@ def test_election_prefers_best_passage_over_bulky_catalogue(monkeypatch):
             "document_title": "Notice 18 pages",
             "page_no": 13,
             "score": 0.049,
-            "retrieval_sources": ["colpali", "pgvector", "bm25", "kag"],
+            "retrieval_sources": ["colpali", "pgvector", "bm25"],
         }
     ]
 
     ranked = aggregate_documents(catalogue + notice, max_documents=3)
     assert [did for did, _ in ranked] == [2, 1], "la notice doit être élue avant le catalogue"
-    assert ranked[0][1]["families"] == {"texte", "visuel", "graphe"}
+    assert ranked[0][1]["families"] == {"texte", "visuel"}
     assert ranked[1][1]["families"] == {"texte"}
 
 

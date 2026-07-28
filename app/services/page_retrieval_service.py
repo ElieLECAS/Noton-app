@@ -57,7 +57,7 @@ class PageRetrievalHit:
 
 @dataclass
 class UnifiedPageHit:
-    """Hit page unifié pour la fusion multimodale (ColPali + pgvector + BM25 + KAG)."""
+    """Hit page unifié pour la fusion multimodale (ColPali + pgvector + BM25)."""
 
     document_id: int
     page_no: int
@@ -65,7 +65,6 @@ class UnifiedPageHit:
     colpali_score: Optional[float] = None
     pgvector_score: Optional[float] = None
     bm25_score: Optional[float] = None
-    kag_score: Optional[float] = None
 
     rrf_score: float = 0.0
     final_rank: int = 0
@@ -285,8 +284,6 @@ def _format_unified_hit_line(hit: UnifiedPageHit, *, show_rrf: bool = False) -> 
         scores.append(f"vec={hit.pgvector_score:.3f}")
     if hit.bm25_score is not None:
         scores.append(f"bm25={hit.bm25_score:.3f}")
-    if hit.kag_score is not None:
-        scores.append(f"kag={hit.kag_score:.3f}")
     if show_rrf:
         scores.append(f"rrf={hit.rrf_score:.4f}")
     if hit.rerank_score is not None:
@@ -380,34 +377,6 @@ def _log_bm25_zero_diagnostic(
         logger.warning("[BM25 diagnostic] impossible : %s", exc)
 
 
-def _kag_exclusive_hits(
-    kag_hits: List[UnifiedPageHit],
-    colpali_hits: List[UnifiedPageHit],
-    pgvector_hits: List[UnifiedPageHit],
-    bm25_hits: List[UnifiedPageHit],
-) -> List[UnifiedPageHit]:
-    """Pages trouvées uniquement par le graphe KAG (absentes des 3 autres canaux)."""
-    other_keys = set()
-    for hits in (colpali_hits, pgvector_hits, bm25_hits):
-        other_keys.update(h.page_key for h in hits)
-    return [h for h in kag_hits if h.page_key not in other_keys]
-
-
-def _kag_fusion_gains(
-    fused_hits: List[UnifiedPageHit],
-    pre_kag_fused_hits: List[UnifiedPageHit],
-    *,
-    pool_size: int,
-) -> List[UnifiedPageHit]:
-    """Pages entrées dans le pool RRF grâce au canal KAG (absentes sans graphe)."""
-    pre_keys = {h.page_key for h in pre_kag_fused_hits[:pool_size]}
-    return [
-        h
-        for h in fused_hits[:pool_size]
-        if h.page_key not in pre_keys and "kag" in (h.retrieval_sources or [])
-    ]
-
-
 def log_multimodal_retrieval_summary(
     *,
     query_text: str,
@@ -415,8 +384,6 @@ def log_multimodal_retrieval_summary(
     colpali_hits: List[UnifiedPageHit],
     pgvector_hits: List[UnifiedPageHit],
     bm25_hits: List[UnifiedPageHit],
-    kag_hits: Optional[List[UnifiedPageHit]] = None,
-    pre_kag_fused_hits: Optional[List[UnifiedPageHit]] = None,
     fused_hits: List[UnifiedPageHit],
     final_hits: List[UnifiedPageHit],
     passages: List[Dict[str, Any]],
@@ -429,13 +396,12 @@ def log_multimodal_retrieval_summary(
     protected_hits: Optional[List[UnifiedPageHit]] = None,
 ) -> None:
     """Résumé lisible en une seule entrée de log (visible dans docker logs)."""
-    kag_hits = kag_hits or []
     lines = [
         "══════════════════ RAG MULTIMODAL — RÉSUMÉ ══════════════════",
         f"Requête : {query_text[:100]}{'…' if len(query_text) > 100 else ''}",
         f"Documents : {len(doc_ids)} ids={doc_ids[:8]}{'…' if len(doc_ids) > 8 else ''} | pool={pool_size} top_k={top_k}",
         "",
-        "── Étape 1 : Triple retriever + graphe (KAG) ──",
+        "── Étape 1 : Triple retriever (ColPali + pgvector + BM25) ──",
         f"  ColPali  : {len(colpali_hits)} page(s)",
     ]
     for hit in colpali_hits[:5]:
@@ -455,28 +421,6 @@ def log_multimodal_retrieval_summary(
             lines.append(f"    • {_format_unified_hit_line(hit)}")
     else:
         lines.append("    • (aucun — voir [BM25 diagnostic] ci-dessus si 0)")
-
-    lines.append(f"  KAG      : {len(kag_hits)} page(s) (graphe entités)")
-    if kag_hits:
-        for hit in kag_hits[:5]:
-            lines.append(f"    • {_format_unified_hit_line(hit)}")
-        if len(kag_hits) > 5:
-            lines.append(f"    … +{len(kag_hits) - 5} autres")
-        kag_exclusive = _kag_exclusive_hits(kag_hits, colpali_hits, pgvector_hits, bm25_hits)
-        if kag_exclusive:
-            lines.append(f"  ↳ Exclusives KAG (hors triple retriever) : {len(kag_exclusive)} page(s)")
-            for hit in kag_exclusive[:5]:
-                lines.append(f"      ★ {_format_unified_hit_line(hit)}")
-            if len(kag_exclusive) > 5:
-                lines.append(f"      … +{len(kag_exclusive) - 5} autres")
-        if pre_kag_fused_hits is not None:
-            kag_gains = _kag_fusion_gains(fused_hits, pre_kag_fused_hits, pool_size=pool_size)
-            if kag_gains:
-                lines.append(f"  ↳ Gains fusion RRF grâce au KAG : {len(kag_gains)} page(s)")
-                for hit in kag_gains[:5]:
-                    lines.append(f"      ↑ {_format_unified_hit_line(hit, show_rrf=True)}")
-    else:
-        lines.append("    • (aucune — entités non matchées ou KAG désactivé)")
 
     lines.extend(["", "── Étape 2 : Fusion RRF ──"])
     if fused_hits:
@@ -981,7 +925,6 @@ def unified_hits_to_eval_passages(hits: List[UnifiedPageHit], top_k: int) -> Lis
                 hit.colpali_score
                 or hit.pgvector_score
                 or hit.bm25_score
-                or hit.kag_score
                 or 0.0
             )
         passages.append(
@@ -997,7 +940,6 @@ def unified_hits_to_eval_passages(hits: List[UnifiedPageHit], top_k: int) -> Lis
                 "colpali_score": hit.colpali_score,
                 "pgvector_score": hit.pgvector_score,
                 "bm25_score": hit.bm25_score,
-                "kag_score": hit.kag_score,
                 "rerank_score": hit.rerank_score,
             }
         )
@@ -1277,7 +1219,6 @@ def fuse_multimodal_hits(
     pgvector_hits: List[UnifiedPageHit],
     bm25_hits: List[UnifiedPageHit],
     *,
-    kag_hits: Optional[List[UnifiedPageHit]] = None,
     rrf_k: Optional[int] = None,
     top_k: int = 10,
     min_colpali_score: Optional[float] = None,
@@ -1327,8 +1268,6 @@ def fuse_multimodal_hits(
     add_channel(colpali_hits, "colpali")
     add_channel(pgvector_hits, "pgvector")
     add_channel(bm25_hits, "bm25")
-    if kag_hits:
-        add_channel(kag_hits, "kag")
 
     if not page_index:
         return []

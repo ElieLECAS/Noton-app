@@ -117,36 +117,38 @@ class TestTextHealth:
 
 
 class TestOverallAndMode:
-    def _h(self, text="ok", colpali="ok", kag="ok"):
+    def _h(self, text="ok", colpali="ok", enrichment="ok"):
         return (
             {"status": text, "missing_embeddings": 0},
             {"status": colpali},
-            {"status": kag},
+            {"status": enrichment},
         )
 
     def test_tout_ok(self):
-        t, c, k = self._h()
-        assert _overall_and_mode(t, c, k, category_ok=True) == ("ok", None)
+        t, c, e = self._h()
+        assert _overall_and_mode(t, c, e) == ("ok", None)
 
     def test_texte_casse_impose_full(self):
-        t, c, k = self._h(text="missing")
-        assert _overall_and_mode(t, c, k, category_ok=True) == ("error", "full")
+        t, c, e = self._h(text="missing")
+        assert _overall_and_mode(t, c, e) == ("error", "full")
 
     def test_colpali_desync_suggere_colpali_only(self):
-        t, c, k = self._h(colpali="desync")
-        assert _overall_and_mode(t, c, k, category_ok=True) == ("warning", "colpali_only")
+        t, c, e = self._h(colpali="desync")
+        assert _overall_and_mode(t, c, e) == ("warning", "colpali_only")
 
-    def test_kag_manquant_suggere_kag_only(self):
-        t, c, k = self._h(kag="missing")
-        assert _overall_and_mode(t, c, k, category_ok=True) == ("warning", "kag_only")
+    def test_synthese_manquante_suggere_enrichment_only(self):
+        """Remplace l'ancienne suggestion kag_only : ce qui manque après un passage
+        text_only, ce sont les chunks contextuels."""
+        t, c, e = self._h(enrichment="missing")
+        assert _overall_and_mode(t, c, e) == ("warning", "enrichment_only")
 
-    def test_categories_manquantes_suggere_kag_only(self):
-        t, c, k = self._h()
-        assert _overall_and_mode(t, c, k, category_ok=False) == ("warning", "kag_only")
+    def test_colpali_et_synthese_casses_suggerent_full(self):
+        t, c, e = self._h(colpali="missing", enrichment="missing")
+        assert _overall_and_mode(t, c, e) == ("warning", "full")
 
-    def test_colpali_et_kag_casses_suggerent_full(self):
-        t, c, k = self._h(colpali="missing", kag="missing")
-        assert _overall_and_mode(t, c, k, category_ok=True) == ("warning", "full")
+    def test_synthese_desactivee_ne_declenche_rien(self):
+        t, c, e = self._h(enrichment="disabled")
+        assert _overall_and_mode(t, c, e) == ("ok", None)
 
 
 class TestIssues:

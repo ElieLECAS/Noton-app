@@ -1,4 +1,4 @@
-"""Santé d'indexation par document — texte, embeddings, ColPali (sync LanceDB), KAG.
+"""Santé d'indexation par document — texte, embeddings, ColPali (sync LanceDB), chunks contextuels.
 
 Répond à la question « ce document a-t-il TOUT (texte, ColPali, entités, catégories),
 et faut-il le retraiter — en quel mode ? ». Croise l'état Postgres (chunks, embeddings,
@@ -97,57 +97,35 @@ def _fetch_chunk_id_sets(
     return all_ids, anchor_ids, leaf_ids
 
 
-def _fetch_kag_counts(session: Session, doc_ids: List[int]) -> Dict[int, dict]:
-    counts: Dict[int, dict] = {
-        d: {"entity_count": 0, "relation_count": 0, "category_count": 0} for d in doc_ids
-    }
-    if not settings.KAG_ENABLED:
+def _fetch_enrichment_counts(session: Session, doc_ids: List[int]) -> Dict[int, dict]:
+    """Nombre de chunks contextuels (L2) par document.
+
+    Remplace l'ancien volet KAG (entités/relations/catégories) retiré le 2026-07-28 :
+    la question utile est désormais « ce document a-t-il ses synthèses ? », puisque
+    text_only ne les produit plus et qu'un passage enrichment_only est requis.
+    """
+    counts: Dict[int, dict] = {d: {"enrichment_count": 0} for d in doc_ids}
+    if not doc_ids:
         return counts
 
-    entity_rows = session.execute(
+    rows = session.execute(
         text(
             """
-            SELECT dc.document_id, COUNT(DISTINCT cer.entity_id)
-            FROM chunkentityrelation cer
-            INNER JOIN documentchunk dc ON dc.id = cer.chunk_id
-            WHERE dc.document_id = ANY(:ids)
-            GROUP BY dc.document_id
-            """
-        ),
-        {"ids": doc_ids},
-    ).all()
-    for did, n in entity_rows:
-        counts[int(did)]["entity_count"] = int(n or 0)
-
-    relation_rows = session.execute(
-        text(
-            """
-            SELECT dc.document_id, COUNT(*)
-            FROM entityentityrelation eer
-            INNER JOIN documentchunk dc ON dc.id = eer.source_chunk_id
-            WHERE dc.document_id = ANY(:ids)
-            GROUP BY dc.document_id
-            """
-        ),
-        {"ids": doc_ids},
-    ).all()
-    for did, n in relation_rows:
-        counts[int(did)]["relation_count"] = int(n or 0)
-
-    category_rows = session.execute(
-        text(
-            """
-            SELECT document_id, COUNT(DISTINCT category_id)
-            FROM chunkcategoryrelation
+            SELECT document_id, COUNT(*)
+            FROM documentchunk
             WHERE document_id = ANY(:ids)
+              AND COALESCE(
+                  metadata_json->>'content_type',
+                  metadata_->>'content_type',
+                  ''
+              ) = 'contextual_enrichment'
             GROUP BY document_id
             """
         ),
         {"ids": doc_ids},
     ).all()
-    for did, n in category_rows:
-        counts[int(did)]["category_count"] = int(n or 0)
-
+    for did, n in rows:
+        counts[int(did)]["enrichment_count"] = int(n or 0)
     return counts
 
 
@@ -221,31 +199,31 @@ def _colpali_health(
     return {"status": "ok", **detail}
 
 
-def _kag_health(kag_counts: dict, chunk_count: int) -> dict:
-    if not settings.KAG_ENABLED:
-        return {"status": "disabled", **kag_counts}
+def _enrichment_health(enrichment_counts: dict, chunk_count: int) -> dict:
+    if not settings.CONTEXTUAL_ENRICHMENT_ENABLED:
+        return {"status": "disabled", **enrichment_counts}
     if chunk_count == 0:
-        return {"status": "missing", **kag_counts}
-    status = "ok" if kag_counts["entity_count"] > 0 else "missing"
-    return {"status": status, **kag_counts}
+        return {"status": "missing", **enrichment_counts}
+    status = "ok" if enrichment_counts["enrichment_count"] > 0 else "missing"
+    return {"status": status, **enrichment_counts}
 
 
 def _overall_and_mode(
-    text_h: dict, colpali_h: dict, kag_h: dict, category_ok: bool
+    text_h: dict, colpali_h: dict, enrichment_h: dict
 ) -> tuple[str, Optional[str]]:
     """Verdict global + mode de retraitement suggéré (aligné sur ReindexRequest.mode)."""
     text_broken = text_h["status"] == "missing"
     colpali_broken = colpali_h["status"] in ("desync", "missing", "partial")
-    kag_broken = kag_h["status"] == "missing" or not category_ok
+    enrichment_broken = enrichment_h["status"] == "missing"
 
     if text_broken:
         return "error", "full"
-    if colpali_broken and kag_broken:
+    if colpali_broken and enrichment_broken:
         return "warning", "full"
     if colpali_broken:
         return "warning", "colpali_only"
-    if kag_broken:
-        return "warning", "kag_only"
+    if enrichment_broken:
+        return "warning", "enrichment_only"
     if text_h["status"] == "partial":
         return "warning", "text_only"
     if colpali_h["status"] == "unknown":
@@ -264,7 +242,7 @@ def build_indexing_health_bulk(
 
     summaries = _fetch_chunk_summaries(session, doc_ids)
     all_ids, anchor_ids, leaf_ids = _fetch_chunk_id_sets(session, doc_ids)
-    kag_counts = _fetch_kag_counts(session, doc_ids)
+    enrichment_counts = _fetch_enrichment_counts(session, doc_ids)
 
     if settings.COLPALI_ENABLED:
         from app.services.lancedb_service import get_colpali_chunk_ids_by_document
@@ -287,18 +265,15 @@ def build_indexing_health_bulk(
             anchor_ids=anchor_ids.get(did, set()),
             leaf_ids=leaf_ids.get(did, set()),
         )
-        kag_h = _kag_health(
-            kag_counts.get(
-                did, {"entity_count": 0, "relation_count": 0, "category_count": 0}
-            ),
+        enrichment_h = _enrichment_health(
+            enrichment_counts.get(did, {"enrichment_count": 0}),
             summary["chunk_count"],
         )
-        category_ok = (not settings.KAG_ENABLED) or kag_h["category_count"] > 0
 
         if doc.processing_status in _IN_PROGRESS_STATUSES:
             overall, suggested = "in_progress", None
         else:
-            overall, suggested = _overall_and_mode(text_h, colpali_h, kag_h, category_ok)
+            overall, suggested = _overall_and_mode(text_h, colpali_h, enrichment_h)
 
         result[did] = {
             "document_id": did,
@@ -306,8 +281,7 @@ def build_indexing_health_bulk(
             "suggested_reindex_mode": suggested,
             "text": text_h,
             "colpali": colpali_h,
-            "kag": kag_h,
-            "categories_ok": category_ok,
+            "enrichment": enrichment_h,
             "classification_status": doc.classification_status,
             "processing_status": doc.processing_status,
         }
@@ -319,7 +293,7 @@ def build_indexing_health_issues(health: dict) -> List[str]:
     issues: List[str] = []
     text_h = health.get("text") or {}
     colpali_h = health.get("colpali") or {}
-    kag_h = health.get("kag") or {}
+    enrichment_h = health.get("enrichment") or {}
 
     if text_h.get("status") == "missing":
         issues.append("Texte : aucun chunk ou aucun embedding — retraitement complet requis.")
@@ -343,9 +317,10 @@ def build_indexing_health_issues(health: dict) -> List[str]:
     elif status == "unknown":
         issues.append("ColPali : scan LanceDB en échec — état de sync inconnu.")
 
-    if kag_h.get("status") == "missing":
-        issues.append("KAG : aucune entité extraite — retraiter en mode kag_only.")
-    if settings.KAG_ENABLED and not health.get("categories_ok", True):
-        issues.append("Catégories : aucune catégorie de contenu liée aux chunks.")
+    if enrichment_h.get("status") == "missing":
+        issues.append(
+            "Chunks contextuels : aucune synthèse pour ce document — "
+            "retraiter en mode enrichment_only."
+        )
 
     return issues

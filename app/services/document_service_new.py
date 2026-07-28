@@ -495,7 +495,7 @@ def reindex_library_document(
       - full        : extraction texte + mistral-embed + ColPali (pipeline complet)
       - text_only   : extraction texte + mistral-embed uniquement (ColPali inchangé)
       - colpali_only: re-sync ColPali uniquement (chunks texte inchangés)
-      - kag_only    : entités/relations/catégories sur les chunks existants
+      - enrichment_only : chunks contextuels + ré-embedding sur les chunks existants
 
     ``extractor`` (modes full et text_only) : "vision" (rendu PNG + mistral-small)
     ou "text" (couche texte native pymupdf4llm, tableaux en chunks-lignes).
@@ -1138,15 +1138,18 @@ def delete_document(session: Session, document_id: int, user_id: int) -> bool:
     
     doc_spaces = get_document_spaces(session, document_id, user_id)
 
-    # Nettoyage du graphe KAG AVANT la suppression des chunks. Deux raisons :
-    #  1) chunkcategoryrelation.chunk_id n'a pas d'ON DELETE CASCADE → sans ce nettoyage,
-    #     supprimer un document catégorisé lève une violation de contrainte FK.
-    #  2) chunkentityrelation a bien un CASCADE, mais il ne décrémente pas mention_count :
-    #     les entités deviennent orphelines (compteur figé) et polluent le graphe de l'espace.
-    # cleanup_kag_for_document décrémente les compteurs puis purge les entités orphelines.
-    # Doit précéder delete_chunks_for_document (il lit chunk_id depuis documentchunk).
-    from app.services.kag_extraction_service import cleanup_kag_for_document
-    cleanup_kag_for_document(session, document_id)
+    # Purge des lignes qui référencent les chunks par FK, AVANT de les supprimer :
+    # chunkcategoryrelation.chunk_id et chunkentityrelation.chunk_id n'ont pas d'ON DELETE
+    # CASCADE, donc supprimer un document catégorisé lèverait une violation de contrainte.
+    # Doit précéder delete_chunks_for_document (la purge lit chunk_id depuis documentchunk).
+    from app.services.document_indexing_service import (
+        _delete_chunk_foreign_relations,
+        _all_chunk_ids_for_document,
+    )
+
+    _delete_chunk_foreign_relations(
+        session, _all_chunk_ids_for_document(session, document_id)
+    )
 
     delete_chunks_for_document(session, document_id, commit=False)
 

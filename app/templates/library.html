@@ -487,21 +487,25 @@ endblock %} {% block content %}
             >
                 Synthèse contextuelle
             </button>
+            <!-- Onglets Entités / Catégories MASQUÉS depuis le retrait du KAG
+                 (2026-07-28) : plus rien ne les alimente, et un onglet vide se lit
+                 comme une panne. Le code de rendu est conservé — retirer `hidden`
+                 suffira quand la nouvelle attribution de catégories sera en place. -->
             <button
                 id="chunks-tab-entities"
                 type="button"
-                class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
+                class="hidden px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
                 onclick="switchChunksTab('entities')"
             >
-                Entités KAG
+                Entités
             </button>
             <button
                 id="chunks-tab-categories"
                 type="button"
-                class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
+                class="hidden px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
                 onclick="switchChunksTab('categories')"
             >
-                Catégories KAG
+                Catégories
             </button>
         </div>
 
@@ -1042,7 +1046,7 @@ endblock %} {% block content %}
         return ` <span class="text-emerald-700 dark:text-emerald-400">· ${bits.join(" · ")} · ${snap.readiness_label || ""}</span>`;
     }
 
-    // ---- Santé d'indexation (texte / ColPali sync / KAG / catégories) ----
+    // ---- Santé d'indexation (texte / ColPali sync / chunks contextuels) ----
     let latestDocsById = {};
 
     function healthChipHtml(label, tone, tooltip, onclickAttr = "") {
@@ -1064,7 +1068,7 @@ endblock %} {% block content %}
         if (h.overall === "in_progress") {
             return healthChipHtml("Audit après traitement", "muted", "Santé d'indexation disponible une fois le traitement terminé.");
         }
-        const t = h.text || {}, c = h.colpali || {}, k = h.kag || {};
+        const t = h.text || {}, c = h.colpali || {}, k = h.enrichment || {};
         const colpaliTooltip = `ColPali : ${c.indexed_pages ?? 0}/${c.expected_pages ?? 0} page(s) indexée(s) · ${c.orphan_count ?? 0} orphelin(s) · ${c.missing_count ?? 0} manquante(s)` + (c.legacy_mode ? " · pipeline legacy (feuilles)" : "");
         if (h.overall === "ok") {
             const detail = `Texte : ${t.chunk_count} chunk(s), ${t.leaves_with_embedding} embedding(s)\n${colpaliTooltip}\nKAG : ${k.entity_count} entité(s), ${k.relation_count} relation(s), ${k.category_count} catégorie(s)`;
@@ -1081,8 +1085,8 @@ endblock %} {% block content %}
         else if (c.status === "unknown") chips.push(healthChipHtml("ColPali ?", "warn", "Scan LanceDB en échec — état de sync inconnu."));
         else if (c.status === "ok") chips.push(healthChipHtml(`ColPali ${c.indexed_pages}/${c.expected_pages}`, "ok", colpaliTooltip));
 
-        if (k.status === "missing") chips.push(healthChipHtml("Entités", "warn", "Aucune entité KAG extraite — retraiter en mode « KAG seul »."));
-        else if (k.status === "ok") chips.push(healthChipHtml(`${k.entity_count} entités`, "ok", `${k.entity_count} entité(s), ${k.relation_count} relation(s) KAG.`));
+        if (k.status === "missing") chips.push(healthChipHtml("Synthèses", "warn", "Aucun chunk contextuel — retraiter en mode « Chunks contextuels »."));
+        else if (k.status === "ok") chips.push(healthChipHtml(`${k.enrichment_count} synthèses`, "ok", `${k.enrichment_count} chunk(s) contextuel(s).`));
 
         if (k.status !== "disabled") {
             if (!h.categories_ok) chips.push(healthChipHtml("Catégories", "warn", "Aucune catégorie de contenu liée aux chunks."));
@@ -1710,7 +1714,7 @@ endblock %} {% block content %}
         }
         chunksMonitorData = await r.json();
         const kag = chunksMonitorData.kag || {};
-        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Synthèse contextuelle: ${chunksMonitorData.enrichment_chunks_count ?? 0} · KAG: ${kag.entity_count ?? 0} entités, ${kag.relation_count ?? 0} relations, ${kag.category_count ?? 0} catégories`;
+        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Chunks contextuels: ${chunksMonitorData.enrichment_chunks_count ?? 0}`;
         renderChunksPanels();
         const defaultTab =
             (chunksMonitorData.semantic_chunks_count ?? 0) > 0
@@ -2156,9 +2160,9 @@ endblock %} {% block content %}
 
     /* ---------- Retraitement : helpers modal mode ---------- */
     const REINDEX_MODES = [
-        { value: "full", label: "Complet", icon: "ti-refresh", desc: "Tout : extraction + KAG + synthèses contextuelles + embeddings + ColPali. Le plus long." },
-        { value: "text_only", label: "Texte seul — rapide", icon: "ti-text-size", desc: "Extraction + embeddings UNIQUEMENT (ColPali inchangé). ⚠ SUPPRIME les entités, catégories et synthèses existantes du document : jusqu'au passage « KAG + synthèses », son canal KAG rend 0 résultat et son boost catégorie tombe à ×1.0 — il est donc défavorisé face aux documents encore intacts. À faire suivre d'un passage KAG." },
-        { value: "kag_only", label: "KAG + synthèses — lent", icon: "ti-affiliate", desc: "Entités, relations, catégories et synthèses contextuelles sur les chunks existants, puis ré-embedding. Plusieurs appels LLM par page : à lancer la nuit, après « Texte seul »." },
+        { value: "full", label: "Complet", icon: "ti-refresh", desc: "Tout : extraction + chunks contextuels + embeddings + ColPali. Le plus long." },
+        { value: "text_only", label: "Texte seul — rapide", icon: "ti-text-size", desc: "Extraction + embeddings UNIQUEMENT (ColPali inchangé). ⚠ SUPPRIME les chunks contextuels existants du document — à faire suivre d'un passage « Chunks contextuels »." },
+        { value: "enrichment_only", label: "Chunks contextuels — lent", icon: "ti-sparkles", desc: "Synthèses par fenêtres de 3 pages (texte + images des pages), puis ré-embedding. Plusieurs appels LLM par fenêtre : à lancer la nuit, après « Texte seul »." },
         { value: "colpali_only", label: "ColPali seul", icon: "ti-eye", desc: "Re-sync visuel ColPali uniquement (chunks texte inchangés)." },
     ];
 
@@ -2289,16 +2293,15 @@ endblock %} {% block content %}
                 REINDEX_EXTRACTORS.find((e) => e.value === extractor)?.label || extractor;
             const suffix = EXTRACTOR_MODES.has(mode) ? ` (extraction : ${extractorLabel})` : "";
             // En text_only, la suppression des liens KAG touche TOUT le corpus d'un coup :
-            // tant que le passage KAG n'a pas tourné, le boost catégorie et le canal KAG
-            // sont éteints partout. On l'énonce avant de lancer.
-            const kagWarning =
+            // tant que le passage « Chunks contextuels » n'a pas tourné, les synthèses
+            // manquent sur tout le corpus. On l'énonce avant de lancer.
+            const enrichmentWarning =
                 mode === "text_only"
-                    ? "\n\n⚠ Les entités, catégories et synthèses de TOUS les documents seront supprimées.\n" +
-                      "Jusqu'au passage « KAG + synthèses », le canal KAG et le boost catégorie\n" +
-                      "seront éteints sur l'ensemble du corpus. Pensez à enchaîner le passage KAG."
+                    ? "\n\n⚠ Les chunks contextuels de TOUS les documents seront supprimés.\n" +
+                      "Enchaînez le passage « Chunks contextuels » pour les régénérer."
                     : "";
             const ok = confirm(
-                `Retraiter TOUS les documents en mode « ${modeLabel} »${suffix} ?${kagWarning}\n\nCela peut prendre longtemps.`,
+                `Retraiter TOUS les documents en mode « ${modeLabel} »${suffix} ?${enrichmentWarning}\n\nCela peut prendre longtemps.`,
             );
             if (!ok) return;
             const r = await api('/api/library/reindex-all', {

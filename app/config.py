@@ -192,10 +192,6 @@ class Settings(BaseSettings):
     KAG_RETRIEVAL_HOP_LIMIT: int = int(os.getenv("KAG_RETRIEVAL_HOP_LIMIT", "1"))
     KAG_ENTITY_MATCH_MIN_SCORE: float = float(os.getenv("KAG_ENTITY_MATCH_MIN_SCORE", "0.35"))
     KAG_BATCH_SIZE: int = int(os.getenv("KAG_BATCH_SIZE", "3"))
-    # Précision de classification : seuil de confiance + plafond de catégories par chunk
-    # (axes task/symptom notés par le LLM). Au-dessous du seuil → catégorie ignorée.
-    CATEGORY_MIN_CONFIDENCE: float = float(os.getenv("CATEGORY_MIN_CONFIDENCE", "0.55"))
-    CATEGORY_MAX_PER_CHUNK: int = int(os.getenv("CATEGORY_MAX_PER_CHUNK", "3"))
     # Carte mentale : entités croisées sous chaque catégorie (top-N co-occurrentes).
     THEME_ENTITY_MAX_PER_CATEGORY: int = int(os.getenv("THEME_ENTITY_MAX_PER_CATEGORY", "6"))
     THEME_ENTITY_MIN_COOCCURRENCE: int = int(os.getenv("THEME_ENTITY_MIN_COOCCURRENCE", "2"))
@@ -574,22 +570,6 @@ class Settings(BaseSettings):
 
     # Boosts retrieval (signaux query understanding)
     # Catégories : appliquées avant fusion RRF ; source/matériau/entités : post-retrieval
-    RETRIEVAL_CATEGORY_BOOST: float = float(os.getenv("RETRIEVAL_CATEGORY_BOOST", "0.15"))
-    # Plafond du facteur multiplicatif du boost catégorie. Sans reranker cross-encoder pour
-    # rattraper, le boost est le principal signal post-fusion : on borne son amplification
-    # pour qu'une page mal classée (3 matches symptôme) ne puisse pas écraser un vrai signal
-    # de pertinence (facteur brut ~1.9 → plafonné à 1.5 par défaut).
-    RETRIEVAL_CATEGORY_BOOST_MAX: float = float(os.getenv("RETRIEVAL_CATEGORY_BOOST_MAX", "1.5"))
-    # Pondération du boost catégorie par axe (un slug symptôme pèse plus qu'un doc_type).
-    # JSON optionnel via env RETRIEVAL_AXIS_BOOST_WEIGHTS ; défaut sinon. Axe absent → poids 1.0.
-    # dict natif : pydantic-settings JSON-parse automatiquement une surcharge d'env
-    # (ex. RETRIEVAL_AXIS_BOOST_WEIGHTS='{"symptom": 3.0}'). Axe absent → poids 1.0.
-    RETRIEVAL_AXIS_BOOST_WEIGHTS: dict = {
-        "symptom": 2.0,
-        "task": 1.0,
-        "doc_type": 0.6,
-        "lifecycle_phase": 0.5,
-    }
     RETRIEVAL_SOURCE_BOOST_MAX: float = float(os.getenv("RETRIEVAL_SOURCE_BOOST_MAX", "0.8"))
     # Ancrage documentaire conversationnel : les documents fortement matchés à un tour sont
     # mémorisés (query_context.current_documents) et leurs pages sont boostées aux tours
@@ -622,7 +602,6 @@ class Settings(BaseSettings):
         "CONVERSATION_ANCHOR_INTENT_GUARD", "true"
     ).strip().lower() in ("true", "1", "yes", "on")
     RETRIEVAL_MATERIAL_BOOST: float = float(os.getenv("RETRIEVAL_MATERIAL_BOOST", "0.3"))
-    RETRIEVAL_ENTITY_BOOST: float = float(os.getenv("RETRIEVAL_ENTITY_BOOST", "0.1"))
 
     # Reranker vision LLM (juge de pertinence page-par-page sur les PNG ColPali).
     # OFF par défaut : appels LLM vision coûteux dans le chemin critique du retrieval.
@@ -766,8 +745,8 @@ class Settings(BaseSettings):
                 dependents.append("ancrage conversationnel")
             if self.COLPALI_GATING_ENABLED and self.colpali_gating_intents:
                 dependents.append("gating ColPali par intent")
-            if self.RETRIEVAL_CATEGORY_BOOST > 0:
-                dependents.append("boost catégorie/source/matériau")
+            if self.RETRIEVAL_SOURCE_BOOST_MAX > 0 or self.RETRIEVAL_MATERIAL_BOOST > 0:
+                dependents.append("boosts source/matériau")
             if dependents:
                 warnings.append(
                     "QUERY_UNDERSTANDING_ENABLED=false rend INERTES : "
@@ -777,9 +756,10 @@ class Settings(BaseSettings):
 
         if not self.RERANKER_ENABLED:
             warnings.append(
-                "RERANKER_ENABLED=false : sans cross-encoder, le boost catégorie devient "
-                "le principal signal de classement post-fusion (plafonné à "
-                f"RETRIEVAL_CATEGORY_BOOST_MAX={self.RETRIEVAL_CATEGORY_BOOST_MAX})."
+                "RERANKER_ENABLED=false : plus AUCUN étage de précision. Le classement "
+                "final est de la pure fusion de rangs (RRF) — pas de seuil de pertinence, "
+                "pas d'abstention, pas de reclassement par le contenu. La précision repose "
+                "entièrement sur les filtres documentaires (classification + périmètre)."
             )
 
         if self.COLPALI_ENABLED and not self.MULTIMODAL_ENABLED:
@@ -808,8 +788,8 @@ class Settings(BaseSettings):
             f"gating={onoff(self.COLPALI_GATING_ENABLED)} "
             f"reranker={onoff(self.RERANKER_ENABLED)} "
             f"vision_rerank={onoff(self.VISION_RERANK_ENABLED)} "
-            f"kag={onoff(self.KAG_ENABLED)} "
             f"cag={onoff(self.CAG_ENABLED)} "
+            f"enrichment={onoff(self.CONTEXTUAL_ENRICHMENT_ENABLED)} "
             f"query_understanding={onoff(self.QUERY_UNDERSTANDING_ENABLED)} "
             f"anchor={onoff(self.CONVERSATION_ANCHOR_ENABLED)} "
             f"fiche={onoff(self.FICHE_TECHNIQUE_ENABLED)} "

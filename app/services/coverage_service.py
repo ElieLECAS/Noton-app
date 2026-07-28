@@ -13,7 +13,7 @@ from __future__ import annotations
 import re
 from typing import Dict, List, Optional, Sequence
 
-from app.services.kag_extraction_service import REF_CODE_RE
+from app.services.reference_codes import REF_CODE_RE
 
 # Mots courants qui matchent le motif code mais n'en sont pas (faux positifs fréquents).
 _CODE_STOPWORDS = frozenset({"pvc", "pmr", "sav", "faq", "dtu", "ral"})
@@ -22,7 +22,7 @@ _CODE_STOPWORDS = frozenset({"pvc", "pmr", "sav", "faq", "dtu", "ral"})
 def extract_message_reference_codes(*texts: Optional[str], limit: int = 8) -> List[str]:
     """Extrait les codes de référence d'un message utilisateur (et signaux), dédupliqués.
 
-    Réutilise le motif partagé du KAG (REF_CODE_RE). Garde-fous :
+    Réutilise le motif partagé (reference_codes.REF_CODE_RE). Garde-fous :
     - numérique pur → ≥ 4 chiffres (« 155 » est une cote, pas une réf) ;
     - millésimes 1990-2035 exclus ;
     - mots-outils du domaine exclus (PVC, PMR…).

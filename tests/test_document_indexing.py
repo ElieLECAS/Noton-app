@@ -201,7 +201,7 @@ class TestProcessDocumentIndexingTextOnly:
 
 class TestSeparationCouchesSemantiques:
     """Répartition rapide/lent : text_only n'exécute QUE l'extraction + embeddings,
-    kag_only porte KAG + synthèses contextuelles (passage de nuit)."""
+    enrichment_only porte les chunks contextuels (passage de nuit)."""
 
     def _run(self, tmp_path, mode):
         pdf_path = str(tmp_path / "test.pdf")
@@ -232,33 +232,28 @@ class TestSeparationCouchesSemantiques:
             result = process_document_indexing(
                 document_id=1, file_path=pdf_path, user_id=99, mode=mode
             )
-        return result, kag, enrich, embed
+        return result, enrich, embed
 
-    def test_text_only_ne_lance_ni_kag_ni_enrichissement(self, tmp_path):
-        result, kag, enrich, embed = self._run(tmp_path, IndexingMode.TEXT_ONLY)
+    def test_text_only_ne_lance_pas_les_chunks_contextuels(self, tmp_path):
+        result, enrich, embed = self._run(tmp_path, IndexingMode.TEXT_ONLY)
 
         assert result["status"] == "completed"
-        kag.assert_not_called()
         enrich.assert_not_called()
         # Les embeddings, eux, tournent bien (le passage rapide reste interrogeable).
         embed.assert_called_once()
-        assert "kag" not in result
         assert "enrichment" not in result
 
-    def test_kag_only_lance_kag_et_enrichissement(self, tmp_path):
-        result, kag, enrich, embed = self._run(tmp_path, IndexingMode.KAG_ONLY)
+    def test_enrichment_only_lance_les_chunks_contextuels(self, tmp_path):
+        result, enrich, embed = self._run(tmp_path, IndexingMode.ENRICHMENT_ONLY)
 
-        kag.assert_called_once()
         enrich.assert_called_once()
-        # Ré-embedding indispensable : le préfixe d'embedding intègre catégories/entités.
+        # Ré-embedding indispensable : les L2 doivent être vectorisés pour être trouvables.
         embed.assert_called_once()
-        assert result["kag"]["status"] == "ok"
         assert result["enrichment"]["status"] == "ok"
 
     def test_full_lance_tout(self, tmp_path):
-        result, kag, enrich, embed = self._run(tmp_path, IndexingMode.FULL)
+        result, enrich, embed = self._run(tmp_path, IndexingMode.FULL)
 
-        kag.assert_called_once()
         enrich.assert_called_once()
         embed.assert_called_once()
 

@@ -111,11 +111,19 @@ def _load_leaf_records(session: Session, document_id: int) -> List[LeafRecord]:
         ).all()
     )
     rows.sort(key=lambda c: (_resolve_chunk_page(c), c.chunk_index or 0, c.id or 0))
-    records = [
-        (_resolve_chunk_page(c), c.chunk_index or 0, text)
-        for c in rows
-        if (text := _chunk_text(c))
-    ]
+
+    records: List[LeafRecord] = []
+    for chunk in rows:
+        chunk_text = _chunk_text(chunk)
+        if not chunk_text:
+            continue
+        # Les synthèses L2 sont du texte GÉNÉRÉ par un LLM. Sans marqueur, elles étaient
+        # présentées au modèle de génération mélangées au texte source, indiscernables —
+        # il pouvait donc citer une reformulation comme s'il s'agissait du document.
+        meta = getattr(chunk, "metadata_json", None) or getattr(chunk, "metadata_", None) or {}
+        if isinstance(meta, dict) and meta.get("content_type") == "contextual_enrichment":
+            chunk_text = f"[synthèse générée par l'IA — non verbatim]\n{chunk_text}"
+        records.append((_resolve_chunk_page(chunk), chunk.chunk_index or 0, chunk_text))
     if ttl > 0:
         _leaf_cache[document_id] = (now + ttl, records)
     return records
@@ -124,11 +132,16 @@ def _load_leaf_records(session: Session, document_id: int) -> List[LeafRecord]:
 # Familles de canaux de retrieval. pgvector et BM25 lisent la MÊME évidence (le texte de
 # la page) : les compter comme deux confirmations indépendantes récompense la redondance
 # lexicale et écrase ColPali, seul canal capable de voir une page « muette » (dessin coté).
+#
+# La famille « graphe » (KAG) a été retirée le 2026-07-28 avec le canal : un document
+# retrouvé par le graphe gagnait jusqu'à +10 % de score d'élection au titre d'une
+# confirmation par le canal le plus faible du dispositif. Le bonus de familles est donc
+# borné à +0,10 (2 familles) au lieu de +0,20, ce qui laisse encore plus de poids au
+# meilleur passage — l'intention même du mode best_passage.
 _CHANNEL_FAMILIES = {
     "pgvector": "texte",
     "bm25": "texte",
     "colpali": "visuel",
-    "kag": "graphe",
 }
 
 # Les bornes d'un passage (page_start/page_end) viennent de l'expansion de voisinage, pas

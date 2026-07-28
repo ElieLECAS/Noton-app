@@ -50,6 +50,117 @@ MIN_PAGE_CHARS = 100
 # ---------------------------------------------------------------------------
 
 
+# Balisage markdown / HTML injecté par pymupdf4llm. Il DOIT être retiré avant toute
+# comparaison : `<sup>` laisse les lettres « sup » dans le texte normalisé, et un
+# `TEXTURAL®` du PDF ne correspond alors plus à `TEXTURAL**<sup>®</sup>` du markdown.
+# Conséquence observée le 2026-07-28 : des paragraphes DÉJÀ présents étaient déclarés
+# perdus, puis réinjectés en vrac dans « Éléments hors flux ».
+_MARKUP_RE = re.compile(r"</?(?:sup|sub|br|b|i|em|strong)\s*/?>", re.IGNORECASE)
+
+
+def _normalize_for_compare(text: str) -> str:
+    """Forme comparable : balisage retiré, minuscules, sans espaces ni ponctuation."""
+    cleaned = _MARKUP_RE.sub("", text or "")
+    return re.sub(r"[^a-z0-9]+", "", cleaned.lower())
+
+
+def extract_page_raw_text(pdf_path: str) -> Dict[int, str]:
+    """Texte natif par page, un BLOC de mise en page par ligne.
+
+    ``get_text("blocks")`` regroupe les lignes d'un même bloc de mise en page ; les
+    retours à la ligne internes (justification) sont donc recollés. ``get_text("text")``
+    rendait des lignes PHYSIQUES : une phrase justifiée sur trois lignes produisait trois
+    fragments (« Pivot pouvant » / « supporter le poids » / « d'une fenêtre jusqu'à »),
+    qui remontaient ensuite en trois puces absurdes.
+    """
+    import fitz
+
+    out: Dict[int, str] = {}
+    doc = fitz.open(pdf_path)
+    try:
+        for idx, page in enumerate(doc):
+            try:
+                blocks = page.get_text("blocks") or []
+            except Exception:  # noqa: BLE001
+                out[idx + 1] = page.get_text("text") or ""
+                continue
+            lines = []
+            for block in blocks:
+                # (x0, y0, x1, y1, texte, block_no, block_type)
+                if len(block) < 5 or block[4] is None:
+                    continue
+                flat = " ".join(str(block[4]).split())
+                if flat:
+                    lines.append(flat)
+            out[idx + 1] = "\n".join(lines)
+    finally:
+        doc.close()
+    return out
+
+
+def recover_lost_lines(markdown: str, raw_text: str) -> List[str]:
+    """Lignes présentes dans la couche texte MAIS absentes du markdown pymupdf4llm.
+
+    pymupdf4llm classe comme « image » le texte posé sur un visuel et le supprime
+    quand les images ne sont pas écrites. Mesuré le 2026-07-28 sur une plaquette
+    commerciale : **12 % des lignes** disparaissaient ainsi — libellés de nuanciers
+    (« Les teintés dans la masse »), codes RAL, épaisseurs (« 10 mm », « 18 mm »),
+    titres d'encarts (« ACCESSOIRES »).
+
+    Ces lignes sont du texte NATIF, donc exact : les perdre est inacceptable pour un
+    extracteur dont l'argument est justement l'exactitude. On les récupère telles
+    quelles, en conservant l'ordre de lecture du PDF.
+    """
+    if not raw_text:
+        return []
+
+    haystack = _normalize_for_compare(markdown)
+    lost: List[str] = []
+    seen: set[str] = set()
+
+    for raw_line in _join_wrapped_fragments(raw_text.splitlines()):
+        line = raw_line.strip()
+        if len(line) < 3:
+            continue
+        needle = _normalize_for_compare(line)
+        if not needle or needle in seen:
+            continue
+        if needle in haystack:
+            continue
+        seen.add(needle)
+        lost.append(line)
+
+    return lost
+
+
+def _join_wrapped_fragments(lines: List[str]) -> List[str]:
+    """Recolle les fragments d'une même phrase répartis sur plusieurs blocs.
+
+    Les libellés d'encart d'une plaquette sont des boîtes de texte distinctes : une
+    phrase courte s'y retrouve coupée (« Pivot pouvant » / « supporter le poids » /
+    « d'une fenêtre jusqu'à » / « 130kg. »). Chacune deviendrait une puce séparée et
+    illisible. On fusionne un fragment avec le suivant quand il ne se termine PAS par
+    une ponctuation forte et que le suivant ne commence pas par une majuscule — la même
+    heuristique que le recollage inter-pages.
+    """
+    out: List[str] = []
+    for raw in lines:
+        line = raw.strip()
+        if not line:
+            continue
+        if out:
+            prev = out[-1]
+            prev_open = not prev.endswith((".", ":", "!", "?", ";", "»"))
+            starts_low = line[0].islower() or line[0].isdigit()
+            # Ne recoller que des fragments COURTS : deux vrais paragraphes qui se
+            # suivent ne doivent pas fusionner.
+            if prev_open and starts_low and len(prev) < 120 and len(line) < 120:
+                out[-1] = f"{prev} {line}"
+                continue
+        out.append(line)
+    return out
+
+
 def extract_document_pages_markdown_raw(pdf_path: str) -> List[Tuple[int, str]]:
     """
     Markdown pymupdf4llm page par page, SANS nettoyage destructeur de tableaux.
@@ -371,9 +482,16 @@ def _split_prose_into_sections(text: str) -> List[dict]:
 
 
 def _clean_heading(raw: str) -> str:
+    """Titre nettoyé : gras markdown retiré, y compris NON APPARIÉ.
+
+    pymupdf4llm produit fréquemment des titres à gras ouvert mais non fermé
+    (``**INTÉRIEUR ET EXTÉRIEUR PVC``) quand la mise en gras déborde du titre :
+    ``_unwrap_bold_line`` exige les deux délimiteurs et les laissait tels quels.
+    """
     from app.services.pdf_extraction_service import _unwrap_bold_line
 
-    return _unwrap_bold_line((raw or "").strip())
+    cleaned = _unwrap_bold_line((raw or "").strip())
+    return cleaned.strip("*").strip()
 
 
 def _step_number(heading: Optional[str]) -> Optional[int]:
@@ -400,7 +518,7 @@ def _build_prose_specs(
     from app.services.multimodal_page_service import count_tokens, split_text_by_tokens
     from app.services.pdf_extraction_service import clean_pymupdf4llm_markdown
 
-    cleaned = clean_pymupdf4llm_markdown(prose_text)
+    cleaned = clean_pymupdf4llm_markdown(prose_text, page_no=page_no)
     if not cleaned:
         return []
 
@@ -451,14 +569,73 @@ def _build_prose_specs(
 # ---------------------------------------------------------------------------
 
 
+def _normalize_for_dedup(text: str) -> str:
+    """Forme comparable d'un contenu : minuscules, espaces et ponctuation écrasés."""
+    return re.sub(r"[^a-z0-9]+", "", (text or "").lower())
+
+
+def _drop_duplicate_specs(specs: List[dict]) -> List[dict]:
+    """Écarte les chunks dont le contenu est déjà couvert par un autre de la page.
+
+    pymupdf4llm émet un bloc « picture text » par image : deux images qui se recouvrent
+    (fréquent sur les plaquettes commerciales) produisent DEUX fois le même texte. Sans
+    dédup, la même notion est indexée en double, ce qui la fait remonter deux fois et
+    gonfle artificiellement le score d'élection de son document.
+
+    On garde le chunk le plus LONG (le plus complet) et on écarte ceux dont le texte
+    normalisé y est entièrement contenu.
+    """
+    if len(specs) < 2:
+        return specs
+
+    order = sorted(
+        range(len(specs)), key=lambda i: len(specs[i].get("content") or ""), reverse=True
+    )
+    kept_indices: List[int] = []
+    kept_norms: List[str] = []
+
+    for idx in order:
+        norm = _normalize_for_dedup(specs[idx].get("content"))
+        if not norm:
+            continue
+        if any(norm in bigger for bigger in kept_norms):
+            logger.info(
+                "[TextExtract] chunk doublon écarté (contenu déjà couvert) : %r",
+                (specs[idx].get("content") or "")[:60],
+            )
+            continue
+        kept_norms.append(norm)
+        kept_indices.append(idx)
+
+    # Ordre de lecture d'origine restauré.
+    return [specs[i] for i in sorted(kept_indices)]
+
+
 def extract_page_chunk_specs_text(
     page_markdown: str,
     page_no: int,
     metadata_base: dict,
+    raw_text: str = "",
 ) -> List[dict]:
-    """Specs d'une page à partir de son markdown pymupdf4llm brut."""
+    """Specs d'une page à partir de son markdown pymupdf4llm brut.
+
+    ``raw_text`` (couche texte native de la page) sert à RÉCUPÉRER ce que
+    pymupdf4llm a perdu — voir recover_lost_lines.
+    """
     if not page_markdown or len(page_markdown.strip()) < MIN_PAGE_CHARS:
         return []
+
+    lost = recover_lost_lines(page_markdown, raw_text) if raw_text else []
+    if lost:
+        logger.info(
+            "[TextExtract] page %s — %d ligne(s) récupérée(s) hors flux pymupdf4llm",
+            page_no,
+            len(lost),
+        )
+        recovered = "\n".join(f"- {line}" for line in lost)
+        page_markdown = (
+            f"{page_markdown.rstrip()}\n\n#### Éléments hors flux\n{recovered}\n"
+        )
 
     segments = _split_table_prose_segments(page_markdown)
     if not segments:
@@ -477,6 +654,8 @@ def extract_page_chunk_specs_text(
             specs.extend(
                 _build_table_specs(text, page_no, metadata_base, current_heading)
             )
+
+    specs = _drop_duplicate_specs(specs)
 
     max_chunks = settings.TEXT_EXTRACTION_MAX_CHUNKS_PER_PAGE
     if max_chunks > 0 and len(specs) > max_chunks:
@@ -563,12 +742,22 @@ def extract_document_chunk_specs_text(
         sont retournées à part pour que l'appelant les traite en vision.
     """
     pages = extract_document_pages_markdown_raw(pdf_path)
+    # Couche texte native : sert de FILET par rapport au markdown pymupdf4llm, qui
+    # perd le texte posé sur les visuels (12 % des lignes sur une plaquette mesurée).
+    try:
+        raw_by_page = extract_page_raw_text(pdf_path)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[TextExtract] texte natif indisponible (%s) — pas de filet", exc)
+        raw_by_page = {}
+
     specs_by_page: Dict[int, List[dict]] = {}
     pages_without_text: List[int] = []
 
     for page_no, markdown in pages:
         try:
-            specs = extract_page_chunk_specs_text(markdown, page_no, metadata_base)
+            specs = extract_page_chunk_specs_text(
+                markdown, page_no, metadata_base, raw_text=raw_by_page.get(page_no, "")
+            )
         except Exception as exc:
             logger.error(
                 "[TextExtract] page %s — extraction échouée : %s", page_no, exc
