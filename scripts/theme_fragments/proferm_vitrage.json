@@ -1,0 +1,32 @@
+[
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Proferm/RÉFÉRENTIEL TECHNIQUE GAMMES.pdf",
+    "pages": [4],
+    "output_name": "proferm-referentiel-technique-gammes.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Proferm/RÉFÉRENTIEL TECHNIQUE GAMMES.pdf",
+    "pages": [8],
+    "output_name": "proferm-referentiel-technique-gammes.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Proferm/2024-03_CATALOGUE-PORTES-ENTREE_PROFERM.pdf",
+    "pages": [158],
+    "output_name": "proferm-catalogue-portes-entree.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Vitrage/CEKAL VI.pdf",
+    "pages": [6,7,11,12],
+    "output_name": "vitrage-cekal-vi.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Vitrage/Condensation extérieure Proferm.pdf",
+    "pages": [1],
+    "output_name": "vitrage-condensation-exterieure.pdf"
+  }
+]

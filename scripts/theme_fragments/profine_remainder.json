@@ -1,0 +1,92 @@
+[
+  {
+    "theme": "POSE",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [94, 95, 96, 97, 100, 101, 102, 103, 104, 105, 106],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [88, 111],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [48, 88, 111, 112],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "MANUTENTION-STOCKAGE",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [98, 103],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [47, 65, 86, 112, 113],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Mise en oeuvre 9708 - Fer cintrés.pdf",
+    "pages": [1],
+    "output_name": "profine-mise-en-oeuvre-fer-cintres.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 70/DTD-DBV-6-16-2335_V5.pdf",
+    "pages": [47, 48, 49, 50, 51, 52, 53],
+    "output_name": "profine-perform70_dtd-dbv-6-16-2335.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Perform 70/DTD-DBV-6-16-2335_V5.pdf",
+    "pages": [8],
+    "output_name": "profine-perform70_dtd-dbv-6-16-2335.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 76/6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+    "pages": [4, 6, 9, 10, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56],
+    "output_name": "profine-perform76_dta-6-16-2334.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Perform 76/6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+    "pages": [5, 6, 10],
+    "output_name": "profine-perform76_dta-6-16-2334.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Profine/Perform 76/6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+    "pages": [5],
+    "output_name": "profine-perform76_dta-6-16-2334.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 76/DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf",
+    "pages": [7, 8, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60],
+    "output_name": "profine-perform76_dtd-dbv-25-6-16-2334.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Perform 76/DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf",
+    "pages": [8],
+    "output_name": "profine-perform76_dtd-dbv-25-6-16-2334.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Profine/Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+    "pages": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 35],
+    "output_name": "roto-safe-e-jonction-de-cable.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+    "pages": [34],
+    "output_name": "roto-safe-e-jonction-de-cable.pdf"
+  }
+]

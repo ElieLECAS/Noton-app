@@ -1,0 +1,194 @@
+[
+  {
+    "theme": "POSE",
+    "source": "Technal/DTA 6_12-2016_V5 (1).pdf",
+    "pages": [29, 30, 31, 32, 33, 43, 44, 45, 47, 48],
+    "output_name": "dta-soleal-fy-55-6-12-2016.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Technal/DTA 6_12-2016_V5 (1).pdf",
+    "pages": [13],
+    "output_name": "dta-soleal-fy-55-6-12-2016.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/DTA 6_12-2016_V5 (1).pdf",
+    "pages": [12],
+    "output_name": "dta-soleal-fy-55-6-12-2016.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/DTA 6_15-2261_V3 SOLEAL GY.pdf",
+    "pages": [18, 19, 21, 22, 23, 24],
+    "output_name": "dta-soleal-gy-55-6-15-2261.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Technal/DTA 6_15-2261_V3 SOLEAL GY.pdf",
+    "pages": [9],
+    "output_name": "dta-soleal-gy-55-6-15-2261.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/DTA Lumeal GA 6-14-2166-v2.pdf",
+    "pages": [9, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36],
+    "output_name": "dta-lumeal-ga-6-14-2166.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Technal/DTA Lumeal GA 6-14-2166-v2.pdf",
+    "pages": [9],
+    "output_name": "dta-lumeal-ga-6-14-2166.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-GY55-DTA-AG152261_V1.pdf",
+    "pages": [5, 9, 10, 21, 22, 23, 24, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36],
+    "output_name": "dta-soleal-gy-55-ag152261.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/SOLEAL-GY55-DTA-AG152261_V1.pdf",
+    "pages": [5],
+    "output_name": "dta-soleal-gy-55-ag152261.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf",
+    "pages": [62, 63, 64, 65],
+    "output_name": "lumeal-ga-catalogue-conception.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Technal/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf",
+    "pages": [44],
+    "output_name": "lumeal-ga-catalogue-conception.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf",
+    "pages": [17],
+    "output_name": "lumeal-ga-catalogue-conception.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf",
+    "pages": [187, 188, 189, 190, 191, 192, 193],
+    "output_name": "lumeal-ga-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf",
+    "pages": [182],
+    "output_name": "lumeal-ga-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf",
+    "pages": [4, 5, 6, 7, 8, 9, 10, 11, 13],
+    "output_name": "lumeal-ga-notice-installation.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf",
+    "pages": [7, 11, 12, 14, 15],
+    "output_name": "lumeal-ga-notice-installation.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf",
+    "pages": [59],
+    "output_name": "soleal-fy-55-65-qc-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf",
+    "pages": [155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168],
+    "output_name": "soleal-fy-55-evolution-catalogue-conception.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Technal/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf",
+    "pages": [120, 121, 122],
+    "output_name": "soleal-fy-55-evolution-catalogue-conception.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf",
+    "pages": [26],
+    "output_name": "soleal-fy-55-evolution-catalogue-conception.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf",
+    "pages": [108, 109, 110, 130, 131],
+    "output_name": "soleal-fy-55-evolution-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf",
+    "pages": [134, 135, 136, 137, 138, 139, 140],
+    "output_name": "soleal-gy-55-catalogue-conception.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf",
+    "pages": [31],
+    "output_name": "soleal-gy-55-catalogue-conception.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf",
+    "pages": [149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164],
+    "output_name": "soleal-gy-55-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf",
+    "pages": [124, 165],
+    "output_name": "soleal-gy-55-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1).pdf",
+    "pages": [5, 6, 7, 8, 9, 10, 12, 13],
+    "output_name": "soleal-gy-55-notice-installation.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1).pdf",
+    "pages": [9, 10, 11],
+    "output_name": "soleal-gy-55-notice-installation.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Technal/SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1).pdf",
+    "pages": [14],
+    "output_name": "soleal-gy-55-notice-installation.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf",
+    "pages": [170, 171],
+    "output_name": "soleal-py-55-catalogue-conception.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf",
+    "pages": [24],
+    "output_name": "soleal-py-55-catalogue-conception.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf",
+    "pages": [93, 94, 95, 96],
+    "output_name": "soleal-py-55-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "MANUTENTION-STOCKAGE",
+    "source": "Technal/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf",
+    "pages": [50, 52, 53],
+    "output_name": "soleal-py-55-catalogue-fabrication.pdf"
+  }
+]

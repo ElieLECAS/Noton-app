@@ -103,7 +103,11 @@ def _token_sql(tokens: List[str], column: str) -> Dict[str, Any]:
     }
 
 
-def _contains_any(content: Optional[str], needles_cf: List[str]) -> bool:
+def _contains_any(content: Optional[str], needles_cf: Optional[List[str]]) -> bool:
+    # needles_cf None → aucun filtre : la vue « source citée » veut toute la page,
+    # pas seulement les chunks contenant un mot-clé.
+    if needles_cf is None:
+        return True
     hay = (content or "").casefold()
     return any(n in hay for n in needles_cf)
 
@@ -342,6 +346,49 @@ def _list_space_pages(
     ]
 
 
+def _list_document_pages_all(
+    session: Session,
+    document_id: int,
+    document_title: str = "",
+    has_source_file: bool = False,
+) -> List[Dict[str, Any]]:
+    """
+    Toutes les pages d'un document portant du texte indexé (source ou synthèse IA),
+    sans filtre mot-clé. Sert de fil de navigation à la vue « source citée ».
+
+    `document_title` / `has_source_file` sont recopiés dans chaque entrée : les
+    références de navigation du contrat d'API (SpaceCategoryPageNavRef) les exigent.
+    """
+    rows = session.execute(
+        text(
+            f"""
+            SELECT page_no, COUNT(*) AS chunk_count
+            FROM (
+                SELECT {_page_no_sql_expr("dc")} AS page_no
+                FROM documentchunk dc
+                WHERE dc.document_id = :document_id
+                  AND dc.is_leaf = true
+                  AND {_CONTENT_TYPE_FILTER}
+            ) sub
+            WHERE page_no IS NOT NULL
+            GROUP BY page_no
+            ORDER BY page_no
+            """
+        ),
+        {"document_id": document_id},
+    ).all()
+    return [
+        {
+            "document_id": document_id,
+            "document_title": document_title,
+            "page_no": int(page_no),
+            "chunk_count": int(chunk_count or 0),
+            "has_source_file": has_source_file,
+        }
+        for page_no, chunk_count in rows
+    ]
+
+
 def _build_space_navigation(
     pages: List[Dict[str, Any]],
     document_id: int,
@@ -385,6 +432,77 @@ def search_space_pages(
         "query": q,
         "page_count": len(pages),
         "pages": pages,
+    }
+
+
+def get_space_source_page_detail(
+    session: Session,
+    space_id: int,
+    document_id: int,
+    page_no: int,
+) -> Optional[Dict[str, Any]]:
+    """
+    Détail d'une page citée par l'assistant : PDF + TOUT le texte extrait de la page,
+    sans filtre mot-clé ni catégorie.
+
+    Même schéma que la vue recherche pour réutiliser telle quelle la modale
+    « page PDF + texte extrait » du frontend.
+
+    À la différence de la vue recherche, on ne refuse PAS une page dépourvue de chunks :
+    une page muette (illustration sans couche texte) reste légitimement citable via
+    ColPali, et l'utilisateur doit pouvoir en voir le rendu PDF même si le volet texte
+    est vide.
+    """
+    if page_no < 1:
+        return None
+    if document_id not in set(get_space_document_ids(session, space_id)):
+        return None
+
+    document = session.get(Document, document_id)
+    if not document:
+        return None
+
+    source_chunks = load_l1_chunks_for_page(session, document_id, page_no)
+    chunk_items = [
+        item for item in (_source_chunk_item(c, None) for c in source_chunks) if item
+    ]
+    enrichment_items = [
+        item
+        for item in (
+            _enrichment_item(c, None)
+            for c in load_enrichment_chunks_for_pages(session, document_id, [page_no])
+        )
+        if item
+    ]
+
+    has_source_file = bool(
+        document.source_file_path and os.path.exists(document.source_file_path)
+    )
+
+    return {
+        "space_id": space_id,
+        "query": "",
+        "category": {
+            "category_id": 0,
+            "slug": "source",
+            "label": "Texte extrait",
+        },
+        "document": {
+            "document_id": document.id,
+            "title": document.title,
+            "has_source_file": has_source_file,
+        },
+        "page_no": page_no,
+        "chunks": chunk_items,
+        "enrichment_chunks": enrichment_items,
+        "consolidated_markdown": build_consolidated_page_text(source_chunks),
+        "navigation": _build_space_navigation(
+            _list_document_pages_all(
+                session, document_id, document.title or "", has_source_file
+            ),
+            document_id,
+            page_no,
+        ),
     }
 
 

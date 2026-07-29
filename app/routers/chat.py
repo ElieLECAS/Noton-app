@@ -20,7 +20,7 @@ async def chat_wrapper(
     temperature: Optional[float] = None,
     **kwargs
 ) -> dict:
-    # Température de génération : 0.0 par défaut (hard grounding strict).
+    # Température de génération : SPACE_CHAT_TEMPERATURE (0.2 par défaut, grounding strict).
     temp = settings.SPACE_CHAT_TEMPERATURE if temperature is None else temperature
     if settings.LLM_PROVIDER == "ollama":
         from app.services.ollama_service import chat as ollama_chat
@@ -35,7 +35,7 @@ async def chat_stream_wrapper(
     temperature: Optional[float] = None,
     max_tokens: Optional[int] = None,
 ):
-    # Température de génération : 0.0 par défaut (hard grounding strict).
+    # Température de génération : SPACE_CHAT_TEMPERATURE (0.2 par défaut, grounding strict).
     temp = settings.SPACE_CHAT_TEMPERATURE if temperature is None else temperature
     # Plafond de tokens de réponse : override explicite > SPACE_CHAT_MAX_TOKENS > plancher 2048.
     # Le plancher évite le repli global MAX_COMPLETION_TOKENS (1024) qui coupait les réponses

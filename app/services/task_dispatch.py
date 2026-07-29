@@ -331,6 +331,38 @@ def _send_reindex_all_library(user_id: int, mode: str = "full", extractor: str =
     return async_result.id
 
 
+def _send_reindex_folder_library(
+    user_id: int, folder_id: int, mode: str = "full", extractor: str = "vision"
+) -> str:
+    from app.library_document_logging import get_library_document_logger
+    from app.tasks.documents import reindex_folder_library_documents_task
+
+    async_result = reindex_folder_library_documents_task.apply_async(
+        kwargs={
+            "user_id": user_id,
+            "folder_id": folder_id,
+            "mode": mode,
+            "extractor": extractor,
+        },
+        queue="documents",
+    )
+    logger.info(
+        "task_dispatch reindex_folder_library user_id=%s folder_id=%s celery_task_id=%s",
+        user_id,
+        folder_id,
+        async_result.id,
+    )
+    get_library_document_logger().info(
+        "[Dispatch] reindex_folder_library — task_id=%s user_id=%s folder_id=%s mode=%s extractor=%s",
+        async_result.id,
+        user_id,
+        folder_id,
+        mode,
+        extractor,
+    )
+    return async_result.id
+
+
 def _send_document_embeddings(document_id: int, run_id: Optional[str]) -> bool:
     from app.tasks.documents import process_document_embeddings
 
@@ -571,6 +603,52 @@ def dispatch_reindex_all_library(
             return f"thread-reindex-all-library-{user_id}"
         raise RuntimeError(
             "Impossible d'enfiler la réindexation globale : le service de tâches (Celery) est indisponible."
+        ) from exc
+
+
+def dispatch_reindex_folder_library(
+    user_id: int, folder_id: int, mode: str = "full", extractor: str = "vision"
+) -> str:
+    """
+    Enfile la réindexation d'un dossier (et de ses sous-dossiers) sur la queue Celery
+    « documents ».
+    mode : "full" | "text_only" | "enrichment_only" | "colpali_only"
+    extractor : "vision" | "text" (modes full et text_only uniquement)
+    """
+    backend = get_task_backend_mode()
+    if backend == "thread":
+        from app.services.document_service_new import (
+            enqueue_reindex_folder_library_documents_thread,
+        )
+
+        enqueue_reindex_folder_library_documents_thread(
+            user_id, folder_id, mode=mode, extractor=extractor
+        )
+        return f"thread-reindex-folder-library-{folder_id}"
+
+    try:
+        return _send_reindex_folder_library(
+            user_id, folder_id, mode=mode, extractor=extractor
+        )
+    except Exception as exc:
+        logger.warning(
+            "Échec enqueue reindex_folder_library user_id=%s folder_id=%s: %s",
+            user_id,
+            folder_id,
+            exc,
+            exc_info=True,
+        )
+        if backend == "hybrid":
+            from app.services.document_service_new import (
+                enqueue_reindex_folder_library_documents_thread,
+            )
+
+            enqueue_reindex_folder_library_documents_thread(
+                user_id, folder_id, mode=mode, extractor=extractor
+            )
+            return f"thread-reindex-folder-library-{folder_id}"
+        raise RuntimeError(
+            "Impossible d'enfiler la réindexation du dossier : le service de tâches (Celery) est indisponible."
         ) from exc
 
 

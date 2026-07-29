@@ -612,3 +612,47 @@ def test_update_document_classification(client, responsable_headers):
     body = upd.json()
     assert body["classification_status"] == "complete"
     assert body["source"] == "Technal"
+
+
+# --------------------------------------------------------------------------- #
+# Service du fichier source : disposition attachment (défaut) vs inline        #
+# --------------------------------------------------------------------------- #
+
+
+def _upload_with_disk_file(client, headers, tmp_path, name: str) -> int:
+    real_file = tmp_path / f"{name}.pdf"
+    real_file.write_bytes(b"%PDF-1.4 fake")
+    with (
+        mock.patch("app.routers.library.process_document_async"),
+        mock.patch(
+            "app.routers.library.save_uploaded_file",
+            return_value=str(real_file),
+        ),
+    ):
+        r = client.post(
+            "/api/library/upload",
+            headers=headers,
+            files=[("files", (f"{name}.pdf", b"%PDF-1.4 fake", "application/pdf"))],
+            data={"space_ids": "[]", "is_paid": "false"},
+        )
+    assert r.status_code == 201
+    return r.json()[0]["id"]
+
+
+def test_document_file_defaults_to_attachment(client, responsable_headers, tmp_path):
+    """Sans paramètre, le comportement historique (téléchargement) est conservé."""
+    doc_id = _upload_with_disk_file(client, responsable_headers, tmp_path, "dl")
+    r = client.get(f"/api/library/documents/{doc_id}/file", headers=responsable_headers)
+    assert r.status_code == 200
+    assert r.headers["content-disposition"].startswith("attachment")
+
+
+def test_document_file_inline_disposition(client, responsable_headers, tmp_path):
+    """inline=1 : le navigateur affiche le PDF dans son lecteur (ancre #page=N exploitable)."""
+    doc_id = _upload_with_disk_file(client, responsable_headers, tmp_path, "inline")
+    r = client.get(
+        f"/api/library/documents/{doc_id}/file?inline=1", headers=responsable_headers
+    )
+    assert r.status_code == 200
+    assert r.headers["content-disposition"].startswith("inline")
+    assert r.headers["content-type"] == "application/pdf"

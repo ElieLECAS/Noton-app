@@ -903,6 +903,101 @@ def mark_all_eligible_documents_reindex_queued(user_id: int) -> int:
     return n
 
 
+def _collect_folder_documents(session: Session, user_id: int, folder_id: int) -> List[Document]:
+    """Documents d'un dossier et de toute son arborescence (hors correctifs feedback)."""
+    from app.services.folder_service import get_folder_descendant_ids
+    from app.services.library_service import get_or_create_user_library
+
+    library = get_or_create_user_library(session, user_id)
+    folder_ids = get_folder_descendant_ids(session, folder_id, library.id, user_id)
+    docs: List[Document] = []
+    for fid in folder_ids:
+        docs.extend(get_documents_by_folder(session, fid, library.id, user_id))
+    return docs
+
+
+def mark_folder_documents_reindex_queued(user_id: int, folder_id: int) -> int:
+    """
+    Marque en reindex_queued les documents fichier éligibles d'un dossier et de ses
+    sous-dossiers (chunks inchangés). Même critère d'éligibilité que le retraitement
+    global. Appelé au début de reindex_folder_library_documents_task dans le worker.
+    """
+    n = 0
+    with Session(engine) as session:
+        for doc in _collect_folder_documents(session, user_id, folder_id):
+            if doc.document_type != "document" or not doc.source_file_path:
+                continue
+            if not Path(doc.source_file_path).is_file():
+                continue
+            doc.processing_status = DOCUMENT_STATUS_REINDEX_QUEUED
+            doc.processing_progress = 0
+            doc.updated_at = datetime.utcnow()
+            session.add(doc)
+            n += 1
+        if n:
+            session.commit()
+    return n
+
+
+def reindex_folder_library_documents(
+    user_id: int, folder_id: int, mode: str = "full", extractor: str = "vision"
+) -> dict:
+    """
+    Réindexe séquentiellement les documents fichier d'un dossier et de ses sous-dossiers.
+    Repli hors Celery (backend « thread ») du retraitement par dossier.
+    """
+    ld = get_library_document_logger()
+    ld.info(
+        "[Réindex dossier] user_id=%s folder_id=%s — marquage reindex_queued puis boucle.",
+        user_id,
+        folder_id,
+    )
+    marked = mark_folder_documents_reindex_queued(user_id, folder_id)
+    ld.info(
+        "[Réindex dossier] folder_id=%s — %s document(s) marqués en attente.",
+        folder_id,
+        marked,
+    )
+
+    with Session(engine) as session:
+        docs = _collect_folder_documents(session, user_id, folder_id)
+
+    results: dict = {"ok": 0, "failed": [], "skipped": 0, "marked_queued": marked}
+    for doc in docs:
+        if doc.document_type != "document" or not doc.source_file_path:
+            results["skipped"] += 1
+            continue
+        if not Path(doc.source_file_path).is_file():
+            logger.warning(
+                "reindex_folder: fichier absent, doc_id=%s path=%s",
+                doc.id,
+                doc.source_file_path,
+            )
+            results["skipped"] += 1
+            continue
+        try:
+            reindex_library_document(doc.id, user_id, mode=mode, extractor=extractor)
+            results["ok"] += 1
+        except Exception as e:
+            logger.exception("reindex_folder: échec document_id=%s: %s", doc.id, e)
+            results["failed"].append(
+                {
+                    "document_id": doc.id,
+                    "title": doc.title,
+                    "error": str(e),
+                }
+            )
+
+    ld.info(
+        "[Réindex dossier] folder_id=%s — fin ok=%s skipped=%s failed=%s",
+        folder_id,
+        results["ok"],
+        results["skipped"],
+        len(results["failed"]),
+    )
+    return results
+
+
 def reindex_all_library_documents(user_id: int) -> dict:
     """
     Réindexe séquentiellement tous les documents fichier de la bibliothèque utilisateur.
@@ -1650,6 +1745,29 @@ def enqueue_reindex_all_library_documents_thread(user_id: int) -> None:
     threading.Thread(
         target=_runner,
         name=f"reindex-all-library-{user_id}",
+        daemon=True,
+    ).start()
+
+
+def enqueue_reindex_folder_library_documents_thread(
+    user_id: int, folder_id: int, mode: str = "full", extractor: str = "vision"
+) -> None:
+    """Exécute la réindexation d'un dossier dans un thread d'arrière-plan."""
+    def _runner():
+        try:
+            reindex_folder_library_documents(
+                user_id, folder_id, mode=mode, extractor=extractor
+            )
+        except Exception:
+            logger.exception(
+                "Thread reindex_folder_library_documents échec user_id=%s folder_id=%s",
+                user_id,
+                folder_id,
+            )
+
+    threading.Thread(
+        target=_runner,
+        name=f"reindex-folder-library-{folder_id}",
         daemon=True,
     ).start()
 

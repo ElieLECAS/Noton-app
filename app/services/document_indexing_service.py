@@ -19,6 +19,7 @@ Deux voies d'extraction du texte (paramètre ``extractor``) :
 from __future__ import annotations
 
 import logging
+import re
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
@@ -45,6 +46,24 @@ logger = logging.getLogger(__name__)
 CONTENT_TYPE_PAGE_ANCHOR = "page_anchor"
 CONTENT_TYPE_SEMANTIC_LEAF = "semantic_leaf"
 CONTENT_TYPE_CONTEXTUAL_ENRICHMENT = "contextual_enrichment"
+
+# Postgres/psycopg refuse tout octet NUL (0x00) dans une colonne texte (String/Text) —
+# vérification CLIENT-SIDE avant même l'envoi au serveur. JSONB n'a pas ce problème
+# (json.dumps échappe le NUL en séquence JSON valide), donc seuls `content`/`text`
+# sont concernés. Certains PDF convertis ou mal encodés (police corrompue, table CID
+# cassée) embarquent des NUL dans leur couche texte native : rare par page, mais
+# quasi certain sur un document de plusieurs centaines de pages — et SANS ce
+# nettoyage, l'unique octet fautif fait échouer le commit de TOUS les chunks du
+# document, y compris ceux des centaines de pages déjà extraites avec succès.
+_CONTROL_CHARS_RE = re.compile("[\x00-\x08\x0b\x0c\x0e-\x1f]")
+
+
+def _strip_db_unsafe_chars(value: str) -> str:
+    """Retire le NUL et les autres caractères de contrôle non imprimables avant
+    insertion en base. Conserve \\n, \\t, \\r (hors de la plage exclue)."""
+    if not value:
+        return value
+    return _CONTROL_CHARS_RE.sub("", value)
 
 
 class IndexingMode(str, Enum):
@@ -536,7 +555,7 @@ def _extract_and_persist_chunks(
 
     for pno in page_numbers:
         node_id = f"page-anchor-{doc_id}-{pno}"
-        heading = first_heading_by_page.get(pno, "")
+        heading = _strip_db_unsafe_chars(first_heading_by_page.get(pno, ""))
         content = heading or f"Page {pno} — contenu visuel uniquement"
         meta = {
             "document_id": doc_id,
@@ -589,7 +608,7 @@ def _extract_and_persist_chunks(
     chunk_index_offset = page_count
 
     for i, spec in enumerate(all_specs_ordered):
-        content = (spec.get("content") or "").strip()
+        content = _strip_db_unsafe_chars((spec.get("content") or "").strip())
         if not content:
             continue
 

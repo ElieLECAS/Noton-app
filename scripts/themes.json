@@ -1,0 +1,1282 @@
+[
+  {
+    "theme": "POSE",
+    "source": "Askey/Coulissant/Catalogue Fabrication Frappe OV n°Y9720008 2022.pdf",
+    "pages": [
+      99
+    ],
+    "output_name": "askey-catalogue-fabrication-frappe-ov.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Askey/Coulissant/Catalogue Fabrication coulissant 65 NV n°Y9720021 12.2022.pdf",
+    "pages": [
+      133
+    ],
+    "output_name": "askey-catalogue-fabrication-coulissant-65-nv.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Askey/Coulissant/DTA - Askey Coulissant NV.pdf",
+    "pages": [
+      10,
+      11,
+      31
+    ],
+    "output_name": "askey-dta-coulissant-nv.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Askey/Coulissant/DTA - Askey Coulissant NV.pdf",
+    "pages": [
+      4,
+      10
+    ],
+    "output_name": "askey-dta-coulissant-nv.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Askey/Coulissant/DTA - Askey Coulissant NV.pdf",
+    "pages": [
+      5,
+      11
+    ],
+    "output_name": "askey-dta-coulissant-nv.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Askey/Frappe/DTA - Askey Frappe.pdf",
+    "pages": [
+      4,
+      13,
+      61,
+      62,
+      63,
+      64
+    ],
+    "output_name": "askey-dta-frappe.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Askey/Frappe/DTA - Askey Frappe.pdf",
+    "pages": [
+      4,
+      6,
+      12,
+      13
+    ],
+    "output_name": "askey-dta-frappe.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Askey/Frappe/DTA - Askey Frappe.pdf",
+    "pages": [
+      5,
+      13
+    ],
+    "output_name": "askey-dta-frappe.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Askey/Frappe/Frappe OC/Catalogue Frappe OC Fabrication n° Y9720009 2022.pdf",
+    "pages": [
+      89
+    ],
+    "output_name": "askey-catalogue-frappe-oc-fabrication.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Askey/Frappe/Frappe OC/Catalogue Frappe OC Fabrication n° Y9720009 2022.pdf",
+    "pages": [
+      202,
+      203
+    ],
+    "output_name": "askey-catalogue-frappe-oc-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Kommerling 70/Classeur Technique e.VOLUTION.pdf",
+    "pages": [
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199,
+      200,
+      201,
+      202,
+      203,
+      205,
+      206,
+      207,
+      208,
+      209,
+      210,
+      211,
+      212,
+      213,
+      214,
+      216,
+      217,
+      218,
+      219,
+      220,
+      221,
+      222,
+      227,
+      228,
+      229,
+      231,
+      233,
+      234,
+      235,
+      236,
+      237,
+      242,
+      243,
+      244,
+      245,
+      248,
+      253,
+      257,
+      259,
+      260,
+      262,
+      266,
+      267,
+      269,
+      270,
+      272,
+      273,
+      278,
+      279,
+      284,
+      285,
+      288,
+      289,
+      292,
+      293,
+      294,
+      295,
+      302,
+      329,
+      330,
+      331,
+      334,
+      335,
+      336,
+      337,
+      338,
+      339,
+      342,
+      346,
+      349,
+      374,
+      375,
+      376,
+      377,
+      378,
+      379,
+      380,
+      381,
+      382,
+      383,
+      384,
+      385,
+      386
+    ],
+    "output_name": "classeur-technique-e-volution.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Kommerling 70/Directives_de_fabrication_plateforme_70_1 (10).pdf",
+    "pages": [
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      191,
+      203,
+      213,
+      215,
+      216,
+      220,
+      221,
+      225,
+      226,
+      229,
+      230,
+      233,
+      234,
+      236,
+      238,
+      239,
+      241,
+      242,
+      243,
+      244,
+      246,
+      247,
+      248,
+      249,
+      252,
+      254,
+      255,
+      257,
+      258,
+      259,
+      260,
+      264,
+      265,
+      266,
+      267,
+      268,
+      270,
+      272,
+      274,
+      275,
+      276,
+      277,
+      278,
+      280,
+      282,
+      284,
+      285,
+      286,
+      287,
+      288,
+      289,
+      290,
+      291,
+      292,
+      294,
+      295,
+      296,
+      298,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309,
+      310,
+      312,
+      335,
+      337,
+      339,
+      340,
+      341,
+      346,
+      347,
+      348,
+      349,
+      350,
+      351,
+      353,
+      354,
+      359,
+      361,
+      363,
+      364,
+      365,
+      366,
+      367,
+      368
+    ],
+    "output_name": "kommerling70_directives-fabrication-plateforme-70.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 70/Directives_de_fabrication_plateforme_70_1 (3).pdf",
+    "pages": [
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      191,
+      203,
+      213,
+      215,
+      216,
+      220,
+      221,
+      225,
+      226,
+      229,
+      230,
+      233,
+      234,
+      236,
+      238,
+      239,
+      241,
+      242,
+      243,
+      244,
+      246,
+      247,
+      248,
+      249,
+      252,
+      254,
+      255,
+      257,
+      258,
+      259,
+      260,
+      264,
+      265,
+      266,
+      267,
+      268,
+      270,
+      272,
+      274,
+      275,
+      276,
+      277,
+      278,
+      280,
+      282,
+      284,
+      285,
+      286,
+      287,
+      288,
+      289,
+      290,
+      291,
+      292,
+      294,
+      295,
+      296,
+      298,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309,
+      310,
+      312,
+      335,
+      337,
+      339,
+      340,
+      341,
+      346,
+      347,
+      348,
+      349,
+      350,
+      351,
+      353,
+      354,
+      359,
+      361,
+      363,
+      364,
+      365,
+      366,
+      367,
+      368
+    ],
+    "output_name": "profine-perform70_directives-fabrication-plateforme-70.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Kommerling 70/DTA_6_16-2335_V5 (1).pdf",
+    "pages": [
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      41,
+      48
+    ],
+    "output_name": "kommerling70_dta-6-16-2335.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 70/DTA_6_16-2335_V5 (2).pdf",
+    "pages": [
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      41,
+      48
+    ],
+    "output_name": "profine-perform70_dta-6-16-2335.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Kommerling 70/DTA_6_16-2335_V5 (1).pdf",
+    "pages": [
+      4,
+      5,
+      6
+    ],
+    "output_name": "kommerling70_dta-6-16-2335.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Perform 70/DTA_6_16-2335_V5 (2).pdf",
+    "pages": [
+      4,
+      5,
+      6
+    ],
+    "output_name": "profine-perform70_dta-6-16-2335.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Kommerling 70/Poster_System_70_03_2025_Profilés_Principaux.pdf",
+    "pages": [
+      1
+    ],
+    "output_name": "kommerling70_poster-profiles-principaux.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Kommerling 70/Poster_System_70_03_2025_Profilés_Complémentaires.pdf",
+    "pages": [
+      1
+    ],
+    "output_name": "kommerling70_poster-profiles-complementaires.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Proferm/RÉFÉRENTIEL TECHNIQUE GAMMES.pdf",
+    "pages": [
+      4
+    ],
+    "output_name": "proferm-referentiel-technique-gammes.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Proferm/RÉFÉRENTIEL TECHNIQUE GAMMES.pdf",
+    "pages": [
+      8
+    ],
+    "output_name": "proferm-referentiel-technique-gammes.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Proferm/2024-03_CATALOGUE-PORTES-ENTREE_PROFERM.pdf",
+    "pages": [
+      158
+    ],
+    "output_name": "proferm-catalogue-portes-entree.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Vitrage/CEKAL VI.pdf",
+    "pages": [
+      6,
+      7,
+      11,
+      12
+    ],
+    "output_name": "vitrage-cekal-vi.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Vitrage/Condensation extérieure Proferm.pdf",
+    "pages": [
+      1
+    ],
+    "output_name": "vitrage-condensation-exterieure.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [
+      94,
+      95,
+      96,
+      97,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106
+    ],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [
+      88,
+      111
+    ],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [
+      48,
+      88,
+      111,
+      112
+    ],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "MANUTENTION-STOCKAGE",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [
+      98,
+      103
+    ],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Profine/Directives_Générales_08_2023-2 (1).pdf",
+    "pages": [
+      47,
+      65,
+      86,
+      112,
+      113
+    ],
+    "output_name": "profine-directives-generales.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Mise en oeuvre 9708 - Fer cintrés.pdf",
+    "pages": [
+      1
+    ],
+    "output_name": "profine-mise-en-oeuvre-fer-cintres.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 70/DTD-DBV-6-16-2335_V5.pdf",
+    "pages": [
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53
+    ],
+    "output_name": "profine-perform70_dtd-dbv-6-16-2335.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Perform 70/DTD-DBV-6-16-2335_V5.pdf",
+    "pages": [
+      8
+    ],
+    "output_name": "profine-perform70_dtd-dbv-6-16-2335.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 76/6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+    "pages": [
+      4,
+      6,
+      9,
+      10,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56
+    ],
+    "output_name": "profine-perform76_dta-6-16-2334.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Perform 76/6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+    "pages": [
+      5,
+      6,
+      10
+    ],
+    "output_name": "profine-perform76_dta-6-16-2334.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Profine/Perform 76/6-16-2334_V5_TROCAL_76_ADVANCED_PROFINE (2).pdf",
+    "pages": [
+      5
+    ],
+    "output_name": "profine-perform76_dta-6-16-2334.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 76/DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf",
+    "pages": [
+      7,
+      8,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60
+    ],
+    "output_name": "profine-perform76_dtd-dbv-25-6-16-2334.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Perform 76/DTD-DBV-25-06-16-2334_V5_TROCAL_76_ADVANCED (1).pdf",
+    "pages": [
+      8
+    ],
+    "output_name": "profine-perform76_dtd-dbv-25-6-16-2334.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Profine/Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+    "pages": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      35
+    ],
+    "output_name": "roto-safe-e-jonction-de-cable.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Roto Safe E _ Jonction de câble_SUG_28_FR_v3.pdf",
+    "pages": [
+      34
+    ],
+    "output_name": "roto-safe-e-jonction-de-cable.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Roto/Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+    "pages": [
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      115
+    ],
+    "output_name": "roto-montage-nx-ksr.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Roto/Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+    "pages": [
+      116,
+      117,
+      118,
+      119
+    ],
+    "output_name": "roto-montage-nx-ksr.pdf"
+  },
+  {
+    "theme": "MANUTENTION-STOCKAGE",
+    "source": "Roto/Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+    "pages": [
+      120,
+      121
+    ],
+    "output_name": "roto-montage-nx-ksr.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Roto/Montage Roto NX KSR PVC IMO_180_NX_FR_v2.pdf",
+    "pages": [
+      114
+    ],
+    "output_name": "roto-montage-nx-ksr.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Roto/Bras de report de charge ROTO NX.pdf",
+    "pages": [
+      1
+    ],
+    "output_name": "roto-bras-report-de-charge.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Roto/Transformation OF en OB ROTO NX.pdf",
+    "pages": [
+      1,
+      2
+    ],
+    "output_name": "roto-transformation-of-en-ob.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Roto/Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+    "pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "output_name": "roto-eneo-cc-notice-simplifiee.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Roto/Proferm - Eneo CC - Notice simplifiée v2 (2022) (1).pdf",
+    "pages": [
+      9,
+      10
+    ],
+    "output_name": "roto-eneo-cc-notice-simplifiee.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Soprofen/Bloc Baie - Chrono One/GUIDE TECHNIQUE BLOCS BAIES PROFERM.pdf",
+    "pages": [
+      147
+    ],
+    "output_name": "guide-technique-blocs-baies-proferm.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Soprofen/Bloc Baie - Chrono One/GUIDE TECHNIQUE BLOCS BAIES PROFERM.pdf",
+    "pages": [
+      32
+    ],
+    "output_name": "guide-technique-blocs-baies-proferm.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/DTA 6_12-2016_V5 (1).pdf",
+    "pages": [
+      29,
+      30,
+      31,
+      32,
+      33,
+      43,
+      44,
+      45,
+      47,
+      48
+    ],
+    "output_name": "dta-soleal-fy-55-6-12-2016.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Technal/DTA 6_12-2016_V5 (1).pdf",
+    "pages": [
+      13
+    ],
+    "output_name": "dta-soleal-fy-55-6-12-2016.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/DTA 6_12-2016_V5 (1).pdf",
+    "pages": [
+      12
+    ],
+    "output_name": "dta-soleal-fy-55-6-12-2016.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/DTA 6_15-2261_V3 SOLEAL GY.pdf",
+    "pages": [
+      18,
+      19,
+      21,
+      22,
+      23,
+      24
+    ],
+    "output_name": "dta-soleal-gy-55-6-15-2261.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Technal/DTA 6_15-2261_V3 SOLEAL GY.pdf",
+    "pages": [
+      9
+    ],
+    "output_name": "dta-soleal-gy-55-6-15-2261.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/DTA Lumeal GA 6-14-2166-v2.pdf",
+    "pages": [
+      9,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36
+    ],
+    "output_name": "dta-lumeal-ga-6-14-2166.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Technal/DTA Lumeal GA 6-14-2166-v2.pdf",
+    "pages": [
+      9
+    ],
+    "output_name": "dta-lumeal-ga-6-14-2166.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-GY55-DTA-AG152261_V1.pdf",
+    "pages": [
+      5,
+      9,
+      10,
+      21,
+      22,
+      23,
+      24,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36
+    ],
+    "output_name": "dta-soleal-gy-55-ag152261.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/SOLEAL-GY55-DTA-AG152261_V1.pdf",
+    "pages": [
+      5
+    ],
+    "output_name": "dta-soleal-gy-55-ag152261.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf",
+    "pages": [
+      62,
+      63,
+      64,
+      65
+    ],
+    "output_name": "lumeal-ga-catalogue-conception.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Technal/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf",
+    "pages": [
+      44
+    ],
+    "output_name": "lumeal-ga-catalogue-conception.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf",
+    "pages": [
+      17
+    ],
+    "output_name": "lumeal-ga-catalogue-conception.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf",
+    "pages": [
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193
+    ],
+    "output_name": "lumeal-ga-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf",
+    "pages": [
+      182
+    ],
+    "output_name": "lumeal-ga-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf",
+    "pages": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      13
+    ],
+    "output_name": "lumeal-ga-notice-installation.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/LUMEAL-GA-notice-installation-5850-002-072018-FR (3).pdf",
+    "pages": [
+      7,
+      11,
+      12,
+      14,
+      15
+    ],
+    "output_name": "lumeal-ga-notice-installation.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf",
+    "pages": [
+      59
+    ],
+    "output_name": "soleal-fy-55-65-qc-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf",
+    "pages": [
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168
+    ],
+    "output_name": "soleal-fy-55-evolution-catalogue-conception.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Technal/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf",
+    "pages": [
+      120,
+      121,
+      122
+    ],
+    "output_name": "soleal-fy-55-evolution-catalogue-conception.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf",
+    "pages": [
+      26
+    ],
+    "output_name": "soleal-fy-55-evolution-catalogue-conception.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf",
+    "pages": [
+      108,
+      109,
+      110,
+      130,
+      131
+    ],
+    "output_name": "soleal-fy-55-evolution-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf",
+    "pages": [
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140
+    ],
+    "output_name": "soleal-gy-55-catalogue-conception.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf",
+    "pages": [
+      31
+    ],
+    "output_name": "soleal-gy-55-catalogue-conception.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf",
+    "pages": [
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164
+    ],
+    "output_name": "soleal-gy-55-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf",
+    "pages": [
+      124,
+      165
+    ],
+    "output_name": "soleal-gy-55-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1).pdf",
+    "pages": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      12,
+      13
+    ],
+    "output_name": "soleal-gy-55-notice-installation.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1).pdf",
+    "pages": [
+      9,
+      10,
+      11
+    ],
+    "output_name": "soleal-gy-55-notice-installation.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Technal/SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1).pdf",
+    "pages": [
+      14
+    ],
+    "output_name": "soleal-gy-55-notice-installation.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Technal/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf",
+    "pages": [
+      170,
+      171
+    ],
+    "output_name": "soleal-py-55-catalogue-conception.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Technal/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf",
+    "pages": [
+      24
+    ],
+    "output_name": "soleal-py-55-catalogue-conception.pdf"
+  },
+  {
+    "theme": "REGLAGES",
+    "source": "Technal/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf",
+    "pages": [
+      93,
+      94,
+      95,
+      96
+    ],
+    "output_name": "soleal-py-55-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "MANUTENTION-STOCKAGE",
+    "source": "Technal/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf",
+    "pages": [
+      50,
+      52,
+      53
+    ],
+    "output_name": "soleal-py-55-catalogue-fabrication.pdf"
+  },
+  {
+    "theme": "VOLETS-ROULANTS",
+    "source": "Soprofen/Bloc Baie - Chrono One/GUIDE TECHNIQUE BLOCS BAIES PROFERM.pdf",
+    "pages": [
+      2,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      62,
+      63,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      85,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      117,
+      118,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      147
+    ],
+    "output_name": "guide-technique-blocs-baies-proferm.pdf"
+  },
+  {
+    "theme": "VOLETS-ROULANTS",
+    "source": "Soprofen/Bloc LX - Semi- Linteau/guide technique bloc Lx.pdf",
+    "pages": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "output_name": "guide-technique-bloc-lx.pdf"
+  },
+  {
+    "theme": "VOLETS-ROULANTS",
+    "source": "Soprofen/noitce percage coulisse lame serruee.pdf",
+    "pages": [
+      1,
+      2
+    ],
+    "output_name": "notice-percage-coulisse-lame-serree.pdf"
+  }
+]

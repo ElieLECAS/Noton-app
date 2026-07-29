@@ -69,7 +69,9 @@ class Settings(BaseSettings):
     # applique un plancher de 2048 (au lieu du repli global MAX_COMPLETION_TOKENS=1024) pour
     # ne pas couper les réponses procédurales longues. Fenêtre Mistral Large 256k → marge.
     SPACE_CHAT_MAX_TOKENS: Optional[int] = None
-    SPACE_CHAT_TEMPERATURE: float = float(os.getenv("SPACE_CHAT_TEMPERATURE", "0.3"))
+    # Domaine technique factuel (références, cotes, procédures de pose) : température basse
+    # pour coller au contexte fourni plutôt que reformuler librement.
+    SPACE_CHAT_TEMPERATURE: float = float(os.getenv("SPACE_CHAT_TEMPERATURE", "0.2"))
     SPACE_CHAT_TOP_P: Optional[float] = None
     # Synthèse "carte mentale" (CAG plein-contexte par nœud d'arbre thématique)
     SYNTHESIS_MAX_TOKENS: int = int(os.getenv("SYNTHESIS_MAX_TOKENS", "2500"))

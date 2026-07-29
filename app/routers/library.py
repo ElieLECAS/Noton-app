@@ -57,6 +57,7 @@ from app.config import settings
 from app.services.task_dispatch import (
     dispatch_document_spaces_update,
     dispatch_reindex_all_library,
+    dispatch_reindex_folder_library,
     dispatch_reindex_library,
 )
 from app.services.document_space_service import get_spaces_for_document
@@ -1201,13 +1202,118 @@ async def reindex_all_library_endpoint(
         )
 
 
+class ReindexFolderRequest(BaseModel):
+    """Corps de la requête de retraitement d'un dossier."""
+    mode: str = Field(default="full", description="full | text_only | enrichment_only | colpali_only")
+    extractor: str = Field(
+        default="vision",
+        description="vision | text — voie d'extraction (modes full et text_only)",
+    )
+
+
+@router.post("/folders/{folder_id}/reindex", status_code=status.HTTP_200_OK)
+async def reindex_folder_library_endpoint(
+    folder_id: int,
+    body: ReindexFolderRequest = ReindexFolderRequest(),
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """
+    Enfile le retraitement des documents d'un dossier ET de ses sous-dossiers.
+
+    Intermédiaire entre le retraitement d'un document isolé et celui de toute la
+    bibliothèque : permet de reprendre un lot cohérent (un fournisseur, une gamme)
+    sans repasser sur tout le corpus.
+
+    Mêmes modes que /reindex-all. Les documents éligibles sont marqués en
+    reindex_queued (chunks encore disponibles pour le RAG pendant la file).
+    """
+    from app.services.document_indexing_service import IndexingMode, TextExtractor
+
+    valid_modes = {m.value for m in IndexingMode}
+    if body.mode not in valid_modes:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Mode invalide '{body.mode}'. Valeurs acceptées : {', '.join(sorted(valid_modes))}",
+        )
+    valid_extractors = {e.value for e in TextExtractor}
+    if body.extractor not in valid_extractors:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                f"Extracteur invalide '{body.extractor}'. "
+                f"Valeurs acceptées : {', '.join(sorted(valid_extractors))}"
+            ),
+        )
+    if body.mode in ("full", "text_only", "enrichment_only") and not settings.MISTRAL_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="MISTRAL_API_KEY requise pour les modes full, text_only et enrichment_only.",
+        )
+    if body.mode in ("full", "colpali_only") and not settings.COLPALI_ENABLED:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ColPali désactivé. Modes full et colpali_only nécessitent ColPali.",
+        )
+
+    library = get_or_create_user_library(session, current_user.id)
+    folder = session.exec(
+        select(Folder).where(
+            Folder.id == folder_id,
+            Folder.library_id == library.id,
+        )
+    ).first()
+    if not folder:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Dossier non trouvé",
+        )
+
+    try:
+        celery_task_id = dispatch_reindex_folder_library(
+            current_user.id, folder_id, mode=body.mode, extractor=body.extractor
+        )
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(e),
+        )
+    log_admin_action(
+        user_id=current_user.id,
+        action="library.reindex_folder",
+        detail={
+            "folder_id": folder_id,
+            "folder_name": folder.name,
+            "celery_task_id": celery_task_id,
+            "mode": body.mode,
+            "extractor": body.extractor,
+        },
+    )
+    return {
+        "status": "queued",
+        "celery_task_id": celery_task_id,
+        "folder_id": folder_id,
+        "folder_name": folder.name,
+        "mode": body.mode,
+        "extractor": body.extractor,
+    }
+
+
 @router.get("/documents/{document_id}/file")
 async def get_document_file(
     document_id: int,
+    inline: bool = False,
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session)
 ):
-    """Récupère le fichier source d'un document."""
+    """
+    Récupère le fichier source d'un document.
+
+    ``inline=1`` sert le PDF en ``Content-Disposition: inline`` : le navigateur
+    l'affiche dans son propre lecteur au lieu de le télécharger, ce qui permet
+    d'ouvrir une source citée directement à la bonne page via l'ancre ``#page=N``.
+    Sans ce paramètre, le comportement historique (téléchargement) est conservé.
+    """
     library = get_or_create_user_library(session, current_user.id)
     document = session.exec(
         select(Document).where(
@@ -1239,7 +1345,8 @@ async def get_document_file(
     response = FileResponse(
         path=str(file_path),
         filename=f"{document.title}{file_path.suffix}",
-        media_type=media_type
+        media_type=media_type,
+        content_disposition_type="inline" if inline else "attachment",
     )
     response.headers["Accept-Ranges"] = "bytes"
     response.headers["Access-Control-Expose-Headers"] = "Content-Length, Content-Range, Accept-Ranges"

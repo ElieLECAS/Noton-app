@@ -984,6 +984,19 @@ endblock %} {% block content %}
             canLibraryWrite
                 ? `
               <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                ${
+                    isAdminUser
+                        ? `
+                <button
+                  type="button"
+                  class="p-1 rounded-md hover:bg-amber-500/10 text-gray-500 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+                  onclick="event.stopPropagation(); reindexFolder(${f.id}, '${(f.name || "").replace(/'/g, "\\'")}')"
+                  title="Retraiter les documents du dossier"
+                >
+                  <i class="ti ti-refresh text-xs"></i>
+                </button>`
+                        : ``
+                }
                 <button
                   type="button"
                   class="p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/10 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
@@ -1011,22 +1024,61 @@ endblock %} {% block content %}
   `;
     }
 
+    /**
+     * Barre de contexte du dossier courant : chemin + action de retraitement.
+     * Le bouton n'est rendu que pour un vrai dossier (pas la racine, qui relève de
+     * « Tout retraiter »). Libellé explicite ici en plus de l'icône au survol dans
+     * la sidebar : une icône masquée jusqu'au survol ne se découvre pas.
+     * L'écouteur est attaché par code plutôt qu'en attribut onclick pour ne pas
+     * dépendre de l'échappement du nom de dossier (guillemets, apostrophes).
+     */
+    function renderFolderContextBar(label, folderName) {
+        const host = document.getElementById("folder-current-path");
+        if (!host) return;
+        host.className =
+            "flex items-center justify-between gap-3 text-xs text-gray-400 dark:text-gray-500 mb-4 shrink-0 font-medium";
+        const canReindex = folderName !== null && canLibraryWrite && isAdminUser;
+        host.innerHTML = `
+      <span class="truncate">${escapeHtml(label)}</span>
+      ${
+          canReindex
+              ? `<button
+              type="button"
+              id="folder-reindex-btn"
+              class="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-amber-500/30 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors text-xs font-semibold"
+              title="Retraiter les documents de ce dossier et de ses sous-dossiers"
+            >
+              <i class="ti ti-refresh text-sm"></i> Retraiter ce dossier
+            </button>`
+              : ``
+      }`;
+        if (canReindex) {
+            const folderId = selectedFolderId;
+            host
+                .querySelector("#folder-reindex-btn")
+                ?.addEventListener("click", () => reindexFolder(folderId, folderName));
+        }
+    }
+
     async function loadFolderContext() {
         const host = document.getElementById("folder-current-path");
         if (!host) return;
 
         if (selectedFolderId === null) {
-            host.textContent = "Dans: Racine";
+            renderFolderContextBar("Dans: Racine", null);
             return;
         }
 
         const r = await api(`/api/library/folders/${selectedFolderId}/path`);
         if (!r.ok) {
-            host.textContent = "Dans: (dossier introuvable)";
+            renderFolderContextBar("Dans: (dossier introuvable)", null);
             return;
         }
         const path = await r.json();
-        host.textContent = `Dans: ${path.map((p) => p.name).join(" / ")}`;
+        renderFolderContextBar(
+            `Dans: ${path.map((p) => p.name).join(" / ")}`,
+            path.length ? path[path.length - 1].name : "",
+        );
     }
 
     function formatProcessingSnapshotLine(d) {
@@ -2312,6 +2364,36 @@ endblock %} {% block content %}
             const body = await r.json().catch(() => ({}));
             if (r.status === 503) return alert(body.detail || 'Service de taches indisponible. Reessayez plus tard.');
             if (!r.ok) return alert(body.detail || 'Impossible de lancer le retraitement global.');
+            await loadDocuments();
+        });
+    }
+
+    async function reindexFolder(folderId, folderName) {
+        openReindexFlow(`Retraiter le dossier « ${folderName} »`, async (mode, extractor) => {
+            const modeLabel = REINDEX_MODES.find((m) => m.value === mode)?.label || mode;
+            const extractorLabel =
+                REINDEX_EXTRACTORS.find((e) => e.value === extractor)?.label || extractor;
+            const suffix = EXTRACTOR_MODES.has(mode) ? ` (extraction : ${extractorLabel})` : "";
+            // Le retraitement descend dans les sous-dossiers (même portée que la
+            // suppression de dossier) : on l'énonce pour éviter la surprise.
+            const enrichmentWarning =
+                mode === "text_only"
+                    ? "\n\n⚠ Les chunks contextuels des documents concernés seront supprimés.\n" +
+                      "Enchaînez le passage « Chunks contextuels » pour les régénérer."
+                    : "";
+            const ok = confirm(
+                `Retraiter les documents du dossier « ${folderName} » et de ses sous-dossiers ` +
+                    `en mode « ${modeLabel} »${suffix} ?${enrichmentWarning}`,
+            );
+            if (!ok) return;
+            const r = await api(`/api/library/folders/${folderId}/reindex`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mode, extractor }),
+            });
+            const body = await r.json().catch(() => ({}));
+            if (r.status === 503) return alert(body.detail || "Service de tâches indisponible. Réessayez plus tard.");
+            if (!r.ok) return alert(body.detail || "Impossible de lancer le retraitement du dossier.");
             await loadDocuments();
         });
     }

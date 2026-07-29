@@ -58,6 +58,34 @@ def get_folders_by_library(session: Session, library_id: int, user_id: int) -> L
     return list(session.exec(statement).all())
 
 
+def get_folder_descendant_ids(
+    session: Session,
+    folder_id: int,
+    library_id: int,
+    user_id: int
+) -> List[int]:
+    """
+    Retourne l'id du dossier suivi de ceux de toute son arborescence (parcours récursif).
+
+    Sert au retraitement par dossier : on veut les documents du dossier ET de ses
+    sous-dossiers, comme le fait déjà delete_folder. Le garde `seen` protège d'une
+    boucle parent/enfant en base (move_folder l'interdit, mais rien ne le garantit
+    pour des données plus anciennes).
+    """
+    ids: List[int] = [folder_id]
+    seen = {folder_id}
+    stack = [folder_id]
+    while stack:
+        current = stack.pop()
+        for subfolder in get_folders_by_parent(session, current, library_id, user_id):
+            if subfolder.id in seen:
+                continue
+            seen.add(subfolder.id)
+            ids.append(subfolder.id)
+            stack.append(subfolder.id)
+    return ids
+
+
 def get_folder_path(session: Session, folder_id: int, user_id: int) -> List[FolderRead]:
     """
     Récupère le chemin complet d'un dossier (breadcrumb).

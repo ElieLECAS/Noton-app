@@ -17,6 +17,7 @@ from app.services.space_service import (
 from app.services.document_service_new import get_documents_by_space
 from app.services.lexical_search_service import (
     get_space_search_page_detail,
+    get_space_source_page_detail,
     search_space_pages,
 )
 from app.services.space_category_service import (
@@ -466,6 +467,36 @@ async def get_space_search_page(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Page non trouvée pour ce mot-clé",
+        )
+    return SpaceSearchPageDetailResponse.model_validate(payload)
+
+
+@router.get(
+    "/{space_id}/pages/{document_id}/{page_no}",
+    response_model=SpaceSearchPageDetailResponse,
+)
+async def get_space_source_page(
+    space_id: int,
+    document_id: int,
+    page_no: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """
+    Détail d'une page citée dans « Documents consultés » : page PDF + texte extrait,
+    sans filtre mot-clé ni catégorie (contrairement aux vues recherche et catégorie).
+    """
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    payload = get_space_source_page_detail(session, space_id, document_id, page_no)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Page non trouvée dans cet espace",
         )
     return SpaceSearchPageDetailResponse.model_validate(payload)
 

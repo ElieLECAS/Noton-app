@@ -13,6 +13,7 @@ from app.models.library import Library
 from app.services.document_service_new import (
     DOCUMENT_STATUS_REINDEX_QUEUED,
     mark_all_eligible_documents_reindex_queued,
+    mark_folder_documents_reindex_queued,
     reindex_all_library_documents,
     reindex_library_document,
 )
@@ -238,6 +239,177 @@ def test_reindex_all_worker_marks_queued_and_invokes_reindex_per_doc(client, res
     assert out["ok"] >= 1
     assert len(calls) >= 1
     assert all(uid == user_id for _, uid in calls)
+
+
+# --------------------------------------------------------------------------- #
+# Retraitement par dossier                                                     #
+# --------------------------------------------------------------------------- #
+
+
+def _upload_doc_with_real_file(client, headers, tmp_path, name: str) -> int:
+    """Upload un document dont le source_file_path existe sur disque (éligible retraitement)."""
+    fake_file = tmp_path / f"{name}.txt"
+    fake_file.write_bytes(b"content")
+    with (
+        mock.patch("app.routers.library.process_document_async"),
+        mock.patch(
+            "app.routers.library.save_uploaded_file",
+            return_value=str(fake_file),
+        ),
+    ):
+        r = client.post(
+            "/api/library/upload",
+            headers=headers,
+            files=[("files", (f"{name}.txt", b"z", "text/plain"))],
+            data={"space_ids": "[]", "is_paid": "false"},
+        )
+    assert r.status_code == 201
+    return r.json()[0]["id"]
+
+
+def _create_folder(client, headers, name: str, parent_folder_id=None) -> int:
+    r = client.post(
+        "/api/library/folders",
+        headers=headers,
+        json={"name": name, "parent_folder_id": parent_folder_id},
+    )
+    assert r.status_code == 201
+    return r.json()["id"]
+
+
+def test_reindex_folder_endpoint_returns_queued(client, responsable_headers, admin_headers, tmp_path):
+    folder_id = _create_folder(client, responsable_headers, "Dossier retraitement")
+    _upload_doc_with_real_file(client, responsable_headers, tmp_path, "in_folder")
+
+    mock_result = mock.MagicMock()
+    mock_result.id = "task-reindex-folder-xyz"
+    with mock.patch(
+        "app.tasks.documents.reindex_folder_library_documents_task.apply_async",
+        return_value=mock_result,
+    ):
+        r = client.post(
+            f"/api/library/folders/{folder_id}/reindex",
+            headers=admin_headers,
+        )
+
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "queued"
+    assert body["celery_task_id"] == "task-reindex-folder-xyz"
+    assert body["folder_id"] == folder_id
+
+
+def test_reindex_folder_not_found_returns_404(client, admin_headers):
+    r = client.post("/api/library/folders/999999999/reindex", headers=admin_headers)
+    assert r.status_code == 404
+
+
+def test_reindex_folder_forbidden_lecteur(client, lecteur_headers):
+    r = client.post("/api/library/folders/1/reindex", headers=lecteur_headers)
+    assert r.status_code == 403
+
+
+def test_reindex_folder_forbidden_non_admin_responsable(client, responsable_headers):
+    """Retraitement par dossier : réservé au rôle admin, comme le retraitement global."""
+    r = client.post("/api/library/folders/1/reindex", headers=responsable_headers)
+    assert r.status_code == 403
+    assert "admin" in (r.json().get("detail") or "").lower()
+
+
+def test_reindex_folder_service_unavailable_returns_503(client, responsable_headers, admin_headers):
+    folder_id = _create_folder(client, responsable_headers, "Dossier 503")
+    with (
+        mock.patch("app.services.task_dispatch.get_task_backend_mode", return_value="celery"),
+        mock.patch(
+            "app.tasks.documents.reindex_folder_library_documents_task.apply_async",
+            side_effect=ConnectionError("broker down"),
+        ),
+    ):
+        r = client.post(
+            f"/api/library/folders/{folder_id}/reindex",
+            headers=admin_headers,
+        )
+    assert r.status_code == 503
+    assert "Celery" in (r.json().get("detail") or "")
+
+
+def test_mark_folder_documents_scopes_to_folder_and_subfolders(
+    client, responsable_headers, tmp_path
+):
+    """
+    Cœur de la fonctionnalité : le marquage descend dans les sous-dossiers
+    MAIS ne touche pas les documents hors du dossier ciblé.
+    """
+    parent_id = _create_folder(client, responsable_headers, "Parent retraitement")
+    child_id = _create_folder(client, responsable_headers, "Enfant retraitement", parent_id)
+    other_id = _create_folder(client, responsable_headers, "Dossier voisin")
+
+    doc_parent = _upload_doc_with_real_file(client, responsable_headers, tmp_path, "doc_parent")
+    doc_child = _upload_doc_with_real_file(client, responsable_headers, tmp_path, "doc_child")
+    doc_other = _upload_doc_with_real_file(client, responsable_headers, tmp_path, "doc_other")
+    doc_root = _upload_doc_with_real_file(client, responsable_headers, tmp_path, "doc_root")
+
+    for doc_id, folder_id in (
+        (doc_parent, parent_id),
+        (doc_child, child_id),
+        (doc_other, other_id),
+    ):
+        mv = client.post(
+            f"/api/library/documents/{doc_id}/move?new_folder_id={folder_id}",
+            headers=responsable_headers,
+        )
+        assert mv.status_code in (200, 204), mv.text
+
+    me = client.get("/api/auth/me", headers=responsable_headers)
+    user_id = me.json()["id"]
+
+    marked = mark_folder_documents_reindex_queued(user_id, parent_id)
+    assert marked == 2, f"attendu 2 documents marqués (parent + enfant), obtenu {marked}"
+
+    def _status(doc_id: int) -> str:
+        gr = client.get(f"/api/library/documents/{doc_id}", headers=responsable_headers)
+        assert gr.status_code == 200
+        return gr.json()["processing_status"]
+
+    assert _status(doc_parent) == DOCUMENT_STATUS_REINDEX_QUEUED
+    assert _status(doc_child) == DOCUMENT_STATUS_REINDEX_QUEUED
+    assert _status(doc_other) != DOCUMENT_STATUS_REINDEX_QUEUED
+    assert _status(doc_root) != DOCUMENT_STATUS_REINDEX_QUEUED
+
+
+def test_reindex_folder_worker_dispatches_only_folder_docs(client, responsable_headers, tmp_path):
+    """La tâche worker n'enfile que les documents du dossier ciblé."""
+    from app.tasks.documents import reindex_folder_library_documents_task
+
+    folder_id = _create_folder(client, responsable_headers, "Dossier worker")
+    doc_in = _upload_doc_with_real_file(client, responsable_headers, tmp_path, "worker_in")
+    doc_out = _upload_doc_with_real_file(client, responsable_headers, tmp_path, "worker_out")
+
+    mv = client.post(
+        f"/api/library/documents/{doc_in}/move?new_folder_id={folder_id}",
+        headers=responsable_headers,
+    )
+    assert mv.status_code in (200, 204), mv.text
+
+    me = client.get("/api/auth/me", headers=responsable_headers)
+    user_id = me.json()["id"]
+
+    dispatched: list[int] = []
+
+    def _fake_dispatch(document_id: int, uid: int, mode: str = "full", extractor: str = "vision"):
+        dispatched.append(document_id)
+        return f"task-{document_id}"
+
+    with mock.patch(
+        "app.services.task_dispatch.dispatch_reindex_library",
+        side_effect=_fake_dispatch,
+    ):
+        out = reindex_folder_library_documents_task.run(user_id=user_id, folder_id=folder_id)
+
+    assert out["marked_queued"] == 1
+    assert out["ok"] == 1
+    assert dispatched == [doc_in]
+    assert doc_out not in dispatched
 
 
 def _ensure_global_library(session: Session) -> Library:

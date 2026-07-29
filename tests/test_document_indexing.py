@@ -16,7 +16,11 @@ from typing import List
 
 import pytest
 
-from app.services.document_indexing_service import IndexingMode, process_document_indexing
+from app.services.document_indexing_service import (
+    IndexingMode,
+    _strip_db_unsafe_chars,
+    process_document_indexing,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -588,6 +592,51 @@ class TestEmbedTextChunksL1AndL2:
         assert leaf.embedding is not None
         assert enrich.embedding is not None
         assert anchor.embedding is None
+
+
+class TestStripDbUnsafeChars:
+    """Régression production (28/07) : un document de 400 pages a fait échouer TOUT
+    son commit de chunks — y compris les 400+ pages déjà extraites avec succès —
+    parce qu'une seule page contenait un octet NUL (0x00) dans sa couche texte
+    native (police corrompue / table CID cassée, artefact connu de certains PDF
+    convertis). Postgres/psycopg rejette le NUL dans une colonne texte, côté client,
+    avant même d'atteindre le serveur."""
+
+    def test_retire_le_nul(self):
+        assert _strip_db_unsafe_chars("avant\x00milieu\x00fin") == "avantmilieufin"
+
+    def test_retire_les_autres_caracteres_de_controle(self):
+        # \x01 (SOH), \x1f (US) : non imprimables, jamais légitimes dans du texte.
+        assert _strip_db_unsafe_chars("a\x01b\x1fc") == "abc"
+
+    def test_conserve_les_espaces_blancs_legitimes(self):
+        assert _strip_db_unsafe_chars("ligne1\nligne2\ttab\rretour") == (
+            "ligne1\nligne2\ttab\rretour"
+        )
+
+    def test_texte_sans_caractere_de_controle_inchange(self):
+        texte = "Profil 76180, largeur 70 mm."
+        assert _strip_db_unsafe_chars(texte) == texte
+
+    def test_chaine_vide_et_none(self):
+        assert _strip_db_unsafe_chars("") == ""
+        assert _strip_db_unsafe_chars(None) is None
+
+    def test_resultat_toujours_insertable_par_postgres(self, db_session):
+        """Contrôle bout en bout : le texte nettoyé passe réellement un INSERT,
+        là où le texte brut aurait levé ValueError côté psycopg."""
+        from sqlalchemy import text as sql_text
+
+        sale = "Notice page 12\x00 suite du texte"
+        propre = _strip_db_unsafe_chars(sale)
+
+        with pytest.raises(ValueError, match="NUL"):
+            db_session.execute(
+                sql_text("SELECT :v AS v"), {"v": sale}
+            )
+
+        result = db_session.execute(sql_text("SELECT :v AS v"), {"v": propre}).first()
+        assert result.v == "Notice page 12 suite du texte"
 
 
 class TestDeleteTextChunksKagCleanup:

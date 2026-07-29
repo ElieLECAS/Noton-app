@@ -1,0 +1,56 @@
+[
+  {
+    "theme": "POSE",
+    "source": "Kommerling 70/Classeur Technique e.VOLUTION.pdf",
+    "pages": [193,194,195,196,197,198,199,200,201,202,203,205,206,207,208,209,210,211,212,213,214,216,217,218,219,220,221,222,227,228,229,231,233,234,235,236,237,242,243,244,245,248,253,257,259,260,262,266,267,269,270,272,273,278,279,284,285,288,289,292,293,294,295,302,329,330,331,334,335,336,337,338,339,342,346,349,374,375,376,377,378,379,380,381,382,383,384,385,386],
+    "output_name": "classeur-technique-e-volution.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Kommerling 70/Directives_de_fabrication_plateforme_70_1 (10).pdf",
+    "pages": [120,121,122,123,124,125,191,203,213,215,216,220,221,225,226,229,230,233,234,236,238,239,241,242,243,244,246,247,248,249,252,254,255,257,258,259,260,264,265,266,267,268,270,272,274,275,276,277,278,280,282,284,285,286,287,288,289,290,291,292,294,295,296,298,301,302,303,304,305,306,307,308,309,310,312,335,337,339,340,341,346,347,348,349,350,351,353,354,359,361,363,364,365,366,367,368],
+    "output_name": "kommerling70_directives-fabrication-plateforme-70.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 70/Directives_de_fabrication_plateforme_70_1 (3).pdf",
+    "pages": [120,121,122,123,124,125,191,203,213,215,216,220,221,225,226,229,230,233,234,236,238,239,241,242,243,244,246,247,248,249,252,254,255,257,258,259,260,264,265,266,267,268,270,272,274,275,276,277,278,280,282,284,285,286,287,288,289,290,291,292,294,295,296,298,301,302,303,304,305,306,307,308,309,310,312,335,337,339,340,341,346,347,348,349,350,351,353,354,359,361,363,364,365,366,367,368],
+    "output_name": "profine-perform70_directives-fabrication-plateforme-70.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Kommerling 70/DTA_6_16-2335_V5 (1).pdf",
+    "pages": [25,26,27,28,29,30,31,32,33,34,41,48],
+    "output_name": "kommerling70_dta-6-16-2335.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Profine/Perform 70/DTA_6_16-2335_V5 (2).pdf",
+    "pages": [25,26,27,28,29,30,31,32,33,34,41,48],
+    "output_name": "profine-perform70_dta-6-16-2335.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Kommerling 70/DTA_6_16-2335_V5 (1).pdf",
+    "pages": [4,5,6],
+    "output_name": "kommerling70_dta-6-16-2335.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Profine/Perform 70/DTA_6_16-2335_V5 (2).pdf",
+    "pages": [4,5,6],
+    "output_name": "profine-perform70_dta-6-16-2335.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Kommerling 70/Poster_System_70_03_2025_Profilés_Principaux.pdf",
+    "pages": [1],
+    "output_name": "kommerling70_poster-profiles-principaux.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Kommerling 70/Poster_System_70_03_2025_Profilés_Complémentaires.pdf",
+    "pages": [1],
+    "output_name": "kommerling70_poster-profiles-complementaires.pdf"
+  }
+]

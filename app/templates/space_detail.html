@@ -962,7 +962,13 @@ function displayTitle(source) {
 
 function resolveSpaceSourcePage(source) {
   if (!source) return 1;
-  const candidates = [source.page_no, source.page_start];
+  // Pages réellement citées par le modèle d'abord (mode CAG), puis la page
+  // d'atterrissage calculée côté serveur, puis le début du span packé.
+  const candidates = [
+    Array.isArray(source.used_pages) ? source.used_pages[0] : null,
+    source.page_no,
+    source.page_start,
+  ];
   for (const value of candidates) {
     const num = parseInt(value, 10);
     if (Number.isFinite(num) && num > 0) return num;
@@ -970,18 +976,32 @@ function resolveSpaceSourcePage(source) {
   return 1;
 }
 
-/** Clic sur une source : PDF à la bonne page si fichier dispo, sinon modale texte. */
+/**
+ * Ouvre le PDF source dans un nouvel onglet, positionné sur la page citée.
+ * `inline=1` force Content-Disposition: inline côté API pour que le navigateur
+ * affiche le document dans son lecteur natif (et honore l'ancre #page=N) au lieu
+ * de le télécharger. L'auth passe par le cookie authToken, donc une navigation
+ * de premier niveau suffit.
+ */
+function openSourcePdfInNewTab(source) {
+  const page = resolveSpaceSourcePage(source);
+  const url = `/api/library/documents/${source.document_id}/file?inline=1#page=${page}`;
+  window.open(url, "_blank", "noopener");
+}
+
+/**
+ * Clic sur une source : ouvre la vue « page PDF + texte extrait » sur la page citée.
+ * Repli sur l'aperçu texte pour les sources qui ne sont pas des documents (notes,
+ * images) ou si la page n'est pas récupérable.
+ */
 function handleSpaceSourceClick(index, messageKey) {
   const sources = messageSourcesRegistry.get(messageKey) || [];
   const source = sources.find((s) => s.index === index);
   if (!source) return;
-  if (source.has_source_file && source.document_id) {
-    currentSpacePdfDocumentId = source.document_id;
-    currentSpacePdfPageNo = resolveSpaceSourcePage(source);
-    currentSpacePdfTitle = displayTitle(source);
-    currentSourceIndexFromSpacePdf = index;
-    currentSourceMessageKeyFromSpacePdf = messageKey;
-    openSpacePdfViewer();
+  if (source.document_id) {
+    openSpaceSourcePageModal(source.document_id, resolveSpaceSourcePage(source), () =>
+      showSourcePreview(index, messageKey),
+    );
     return;
   }
   showSourcePreview(index, messageKey);
@@ -1173,13 +1193,8 @@ function showSourcePreview(index, messageKey) {
   if (source.has_source_file && source.document_id) {
     pdfBtn.classList.remove("hidden");
     pdfBtn.onclick = () => {
-      currentSpacePdfDocumentId = source.document_id;
-      currentSpacePdfPageNo = resolveSpaceSourcePage(source);
-      currentSpacePdfTitle = displayTitle(source);
-      currentSourceIndexFromSpacePdf = index;
-      currentSourceMessageKeyFromSpacePdf = messageKey;
       closeSourcePreview();
-      openSpacePdfViewer();
+      openSourcePdfInNewTab(source);
     };
     libLink.classList.remove("hidden");
     libLink.href = "/library";
@@ -2924,6 +2939,38 @@ async function openSpaceSearchPageModal(query, documentId, pageNo) {
   renderSpaceCategoryPageDetail(detail);
 }
 
+/**
+ * Vue « page PDF + texte extrait » d'une page citée par l'assistant.
+ * Réutilise la modale du parcours thématique via un mode "source" : même rendu,
+ * mais sans filtre catégorie ni mot-clé (on veut tout le texte de la page).
+ * `fallback` est appelé si la page n'est pas récupérable (document hors espace,
+ * supprimé…) afin de ne pas laisser l'utilisateur devant une modale vide.
+ */
+async function openSpaceSourcePageModal(documentId, pageNo, fallback) {
+  const modal = document.getElementById("space-category-page-modal");
+  if (!modal) return fallback && fallback();
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+
+  spaceCategoryPageState = { mode: "source", categoryId: null, documentId, pageNo, query: null };
+
+  document.getElementById("space-category-page-title").textContent = "Chargement…";
+  document.getElementById("space-category-page-meta").textContent = "—";
+  document.getElementById("space-category-page-counter").textContent = "—";
+  document.getElementById("space-category-text-container").innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+  document.getElementById("space-category-pdf-container").innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
+
+  const r = await api(`/api/spaces/${spaceId}/pages/${documentId}/${pageNo}`);
+  if (!r.ok) {
+    closeSpaceCategoryPageModal();
+    if (fallback) fallback();
+    return;
+  }
+
+  const detail = await r.json();
+  renderSpaceCategoryPageDetail(detail);
+}
+
 async function openSpaceCategoryPageModal(categoryId, documentId, pageNo) {
   const modal = document.getElementById("space-category-page-modal");
   if (!modal) return;
@@ -2955,9 +3002,15 @@ function renderSpaceCategoryPageDetail(detail) {
   const documentInfo = detail.document || {};
   const nav = detail.navigation || {};
 
-  document.getElementById("space-category-page-title").textContent = category.label || category.slug || "Catégorie";
+  // En mode "source", la « catégorie » est synthétique : on titre par la page citée.
+  document.getElementById("space-category-page-title").textContent =
+    spaceCategoryPageState.mode === "source"
+      ? `Page ${detail.page_no}`
+      : category.label || category.slug || "Catégorie";
+  // textContent échappe déjà : pas de escapeHtml ici, sinon les apostrophes des
+  // titres s'affichent en entités (« L&#39;INNOSLIDE »).
   document.getElementById("space-category-page-meta").textContent =
-    `${escapeHtml(documentInfo.title || "Document")} · Page ${detail.page_no}`;
+    `${documentInfo.title || "Document"} · Page ${detail.page_no}`;
 
   const currentIdx = nav.current_index != null ? nav.current_index + 1 : 0;
   const total = nav.total || 0;
@@ -2971,9 +3024,12 @@ function renderSpaceCategoryPageDetail(detail) {
 
   const hint = document.getElementById("space-category-text-hint");
   if (hint) {
-    hint.textContent = spaceCategoryPageState.mode === "search"
-      ? "Occurrences du mot-clé surlignées"
-      : "Chunks catégorie surlignés";
+    hint.textContent =
+      spaceCategoryPageState.mode === "search"
+        ? "Occurrences du mot-clé surlignées"
+        : spaceCategoryPageState.mode === "source"
+          ? "Texte indexé de la page citée · violet = généré par l'IA"
+          : "Chunks catégorie surlignés";
   }
 
   renderSpaceCategoryTextChunks(detail.chunks || [], detail.enrichment_chunks || [], category);
@@ -3001,7 +3057,12 @@ function renderSpaceCategoryTextChunks(chunks, enrichmentChunks, category) {
     : "";
 
   if (!sourceHtml && !enrichmentHtml) {
-    host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk associé à cette catégorie sur cette page.</div>`;
+    // Une page citée sans texte indexé est un cas normal (planche d'illustrations
+    // remontée par ColPali) : on l'explique au lieu de parler de « catégorie ».
+    host.innerHTML =
+      spaceCategoryPageState.mode === "source"
+        ? `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun texte indexé sur cette page — elle a été retenue sur son contenu visuel. Le rendu PDF reste consultable.</div>`
+        : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk associé à cette catégorie sur cette page.</div>`;
     return;
   }
 
@@ -3094,6 +3155,18 @@ function closeSpaceCategoryPageModal() {
 
 async function navigateSpaceCategoryPage(direction) {
   const { mode, categoryId, documentId, pageNo, query } = spaceCategoryPageState;
+
+  if (mode === "source") {
+    // Fil de navigation = les pages du document qui portent du texte indexé.
+    const r = await api(`/api/spaces/${spaceId}/pages/${documentId}/${pageNo}`);
+    if (!r.ok) return;
+    const detail = await r.json();
+    const nav = detail.navigation || {};
+    const target = direction === "prev" ? nav.prev : nav.next;
+    if (!target) return;
+    await openSpaceSourcePageModal(target.document_id, target.page_no);
+    return;
+  }
 
   if (mode === "search") {
     if (!query) return;

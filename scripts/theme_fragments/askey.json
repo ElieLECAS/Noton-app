@@ -1,0 +1,62 @@
+[
+  {
+    "theme": "POSE",
+    "source": "Askey/Coulissant/Catalogue Fabrication Frappe OV n°Y9720008 2022.pdf",
+    "pages": [99],
+    "output_name": "askey-catalogue-fabrication-frappe-ov.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Askey/Coulissant/Catalogue Fabrication coulissant 65 NV n°Y9720021 12.2022.pdf",
+    "pages": [133],
+    "output_name": "askey-catalogue-fabrication-coulissant-65-nv.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Askey/Coulissant/DTA - Askey Coulissant NV.pdf",
+    "pages": [10, 11, 31],
+    "output_name": "askey-dta-coulissant-nv.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Askey/Coulissant/DTA - Askey Coulissant NV.pdf",
+    "pages": [4, 10],
+    "output_name": "askey-dta-coulissant-nv.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Askey/Coulissant/DTA - Askey Coulissant NV.pdf",
+    "pages": [5, 11],
+    "output_name": "askey-dta-coulissant-nv.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Askey/Frappe/DTA - Askey Frappe.pdf",
+    "pages": [4, 13, 61, 62, 63, 64],
+    "output_name": "askey-dta-frappe.pdf"
+  },
+  {
+    "theme": "NON-CONFORMITE",
+    "source": "Askey/Frappe/DTA - Askey Frappe.pdf",
+    "pages": [4, 6, 12, 13],
+    "output_name": "askey-dta-frappe.pdf"
+  },
+  {
+    "theme": "GARANTIES-ENTRETIEN",
+    "source": "Askey/Frappe/DTA - Askey Frappe.pdf",
+    "pages": [5, 13],
+    "output_name": "askey-dta-frappe.pdf"
+  },
+  {
+    "theme": "POSE",
+    "source": "Askey/Frappe/Frappe OC/Catalogue Frappe OC Fabrication n° Y9720009 2022.pdf",
+    "pages": [89],
+    "output_name": "askey-catalogue-frappe-oc-fabrication.pdf"
+  },
+  {
+    "theme": "ACCESSOIRES-PIECES",
+    "source": "Askey/Frappe/Frappe OC/Catalogue Frappe OC Fabrication n° Y9720009 2022.pdf",
+    "pages": [202, 203],
+    "output_name": "askey-catalogue-frappe-oc-fabrication.pdf"
+  }
+]
