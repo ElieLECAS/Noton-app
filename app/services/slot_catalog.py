@@ -92,6 +92,40 @@ INTENT_DESCRIPTIONS: Dict[str, str] = {
     "documentation": "retrouver une notice / fiche",
 }
 
+# Type de CONTENU attendu par intention (B1, plan boucle agentique 2026-07-29) : sert au
+# juge de suffisance pré-génération. La leçon du cas TGY3702/3704 : une page qui mentionne
+# la référence sans porter le TYPE d'information demandé (nomenclature quand on demande une
+# pose) doit être jugée insuffisante, quel que soit son score de similarité.
+INTENT_EXPECTED_CONTENT: Dict[str, str] = {
+    "specification": (
+        "des valeurs techniques précises (fiche technique, tableau de caractéristiques, cotes)"
+    ),
+    "installation": (
+        "des étapes de pose/montage/réglage numérotées ou des schémas de montage "
+        "(notice de pose, catalogue de fabrication) — un tableau de composition ou une "
+        "nomenclature qui cite la référence NE suffit PAS"
+    ),
+    "regulatory": (
+        "des exigences normatives explicites (DTU, NF EN, PV d'essai, conditions de garantie)"
+    ),
+    "product_selection": (
+        "des références, tableaux de composition ou nomenclatures (catalogue de conception)"
+    ),
+    "troubleshooting": (
+        "un diagnostic ou une procédure de réglage/SAV (guide SAV, notice) — pas une simple "
+        "fiche produit"
+    ),
+    "documentation": "la notice ou fiche demandée, identifiable par son titre",
+}
+
+_EXPECTED_CONTENT_DEFAULT = "toute page qui contient LITTÉRALEMENT l'information demandée"
+
+
+def expected_content_for_intent(intent: Optional[str]) -> str:
+    """Description du type de contenu qui peut répondre, pour le prompt du juge (B1)."""
+    return INTENT_EXPECTED_CONTENT.get((intent or "").strip().lower(), _EXPECTED_CONTENT_DEFAULT)
+
+
 UNKNOWN_OPTIONAL_PHRASES: Tuple[str, ...] = (
     "je ne sais pas",
     "je sais pas",

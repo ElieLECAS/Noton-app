@@ -629,11 +629,16 @@ def _build_generation_context(
     doc_passages: List[dict],
     anchor_document_ids: Optional[List[int]] = None,
     intent: Optional[str] = None,
+    elected_document_ids: Optional[List[int]] = None,
+    pinned_pages: Optional[Dict[int, List[int]]] = None,
 ) -> dict:
     """Contexte système de génération : CAG (documents entiers, fenêtre 256k) si activé,
     sinon fallback historique (passages tronqués). Les documents ANCRÉS (sujet courant de
     la conversation) sont toujours inclus dans le contexte CAG — garantie de continuité.
-    Le budget de packing s'adapte à l'intent (CAG_BUDGET_BY_INTENT)."""
+    Le budget de packing s'adapte à l'intent (CAG_BUDGET_BY_INTENT).
+
+    ``elected_document_ids``/``pinned_pages`` (B6) : élection du juge de suffisance —
+    documents élus packés en tête, pages citées promues seeds de la fenêtre gloutonne."""
     if settings.CAG_ENABLED:
         from app.services.context_packer_service import build_cag_context
 
@@ -643,6 +648,8 @@ def _build_generation_context(
             system_prompt=SPACE_CHAT_SYSTEM_PROMPT,
             anchor_document_ids=anchor_document_ids,
             intent=intent,
+            elected_document_ids=elected_document_ids,
+            pinned_pages=pinned_pages,
         )
     return build_space_context_from_passages(doc_passages)
 
@@ -762,13 +769,18 @@ async def _stream_llm_to_sse(
     source_filter,
     sink: List[str],
     reasoning_sink: Optional[List[str]] = None,
+    hold_messages: bool = False,
 ):
     """Streame une génération Mistral en événements SSE, filtre le bloc <sources> et
     accumule le texte AFFICHÉ dans ``sink``. Factorisé (P0.2) pour dédupliquer les
     tentatives full/eco/minimal ; propage httpx.HTTPStatusError à l'appelant (fallback).
 
     ``reasoning_sink`` (optionnel) accumule le thinking natif du modèle pour la trace de
-    génération (bouton « cheminement »). Il n'est PAS la réponse persistée."""
+    génération (bouton « cheminement »). Il n'est PAS la réponse persistée.
+
+    ``hold_messages`` (B7c, vérification bloquante) : le texte est accumulé dans ``sink``
+    mais AUCUN événement message n'est émis — l'appelant vérifie puis rejoue le tampon.
+    Les événements thinking continuent de streamer (bulle « réflexion »)."""
     async for raw_chunk in chat_stream_wrapper(
         message="", model=model, context=context, max_tokens=max_tokens
     ):
@@ -793,6 +805,8 @@ async def _stream_llm_to_sse(
             if not content:
                 continue
         sink.append(content)
+        if hold_messages:
+            continue
         yield f"data: {json.dumps({'message': {'content': content}})}\n\n"
 
 
@@ -819,6 +833,95 @@ def _build_eco_context(
     else:
         eco_system = {"role": "system", "content": SPACE_CHAT_SYSTEM_PROMPT}
     return [eco_system, {"role": "user", "content": user_message}]
+
+
+async def _attempt_repair_generation(
+    *,
+    session: Session,
+    space_id: int,
+    full_context_draft: List[dict],
+    draft_text: str,
+    verification_result: dict,
+    model: str,
+    allowed_document_ids: Optional[List[int]],
+) -> Optional[dict]:
+    """Réparation d'une réponse non ancrée (B7c) — UNE régénération contrainte.
+
+    Deux leviers, selon ce que la vérification a trouvé :
+      - codes non étayés → recherche SQL ciblée des extraits faisant autorité pour ces
+        codes (chunk pinning) : s'ils existent, le modèle reçoit la vérité verbatim ; s'ils
+        n'existent pas, consigne d'écrire explicitement l'absence.
+      - claims non étayés (cotes/normes) → consigne de suppression/aveu.
+
+    Retourne {"text", "source_filter"} ou None si la réparation n'a rien produit.
+    N'échoue jamais l'appelant."""
+    from app.services.stream_source_filter import SourcesTagStreamFilter
+
+    claims = list(verification_result.get("unsupported_claims") or [])
+    codes = list(verification_result.get("unsupported_codes") or [])
+    if not claims:
+        return None
+
+    repair_system = dict(full_context_draft[0]) if full_context_draft else None
+    if not repair_system or repair_system.get("role") != "system":
+        return None
+
+    if codes:
+        try:
+            from app.services.page_retrieval_service import get_space_document_ids
+            from app.services.reference_pinning_service import build_pinned_reference_block
+
+            pin_doc_ids = allowed_document_ids or get_space_document_ids(
+                session, space_id, document_filter="technical"
+            )
+            pinned_block, pinned = build_pinned_reference_block(session, pin_doc_ids, codes)
+            if pinned_block:
+                repair_system["content"] = (
+                    repair_system["content"]
+                    + "\n\n### EXTRAITS DE RÉFÉRENCE (réparation — font foi)\n"
+                    + pinned_block
+                )
+                logger.info("[verify] réparation — extraits épinglés pour %s", pinned)
+        except Exception as pin_err:  # noqa: BLE001
+            logger.warning("[verify] épinglage de réparation ignoré : %s", pin_err)
+
+    repair_instruction = (
+        "CONTRÔLE QUALITÉ : les éléments suivants de ta réponse précédente ne figurent "
+        "dans AUCUN des documents fournis : "
+        + ", ".join(str(c) for c in claims[:8])
+        + ". Régénère ta réponse en t'appuyant EXCLUSIVEMENT sur les documents du "
+        "contexte. Pour tout élément introuvable, écris explicitement « les documents "
+        "fournis ne précisent pas ... » au lieu de l'affirmer. N'invente aucune référence "
+        "ni valeur. Conserve la ligne <sources> exigée en fin de réponse."
+    )
+
+    repair_context = [repair_system] + [dict(m) for m in full_context_draft[1:]]
+    repair_context.append({"role": "assistant", "content": draft_text})
+    repair_context.append({"role": "user", "content": repair_instruction})
+
+    repair_filter = SourcesTagStreamFilter() if settings.CAG_ENABLED else None
+    repair_sink: List[str] = []
+    try:
+        async for _ in _stream_llm_to_sse(
+            repair_context,
+            model=model,
+            max_tokens=settings.CAG_MAX_COMPLETION_TOKENS if settings.CAG_ENABLED else None,
+            source_filter=repair_filter,
+            sink=repair_sink,
+            hold_messages=True,
+        ):
+            pass
+    except Exception as repair_err:  # noqa: BLE001
+        logger.warning("[verify] régénération de réparation en échec : %s", repair_err)
+        return None
+    if repair_filter is not None:
+        tail = repair_filter.finalize()
+        if tail:
+            repair_sink.append(tail)
+    repaired_text = "".join(repair_sink).strip()
+    if not repaired_text:
+        return None
+    return {"text": repaired_text, "source_filter": repair_filter}
 
 
 def _persist_reply_with_retry(
@@ -892,6 +995,7 @@ def _build_generation_trace(
     anchor_boost: Optional[dict] = None,
     anchor_intent_changed: bool = False,
     cag_documents: Optional[List[dict]] = None,
+    loop_info: Optional[dict] = None,
 ) -> dict:
     """Assemble le « cheminement » de génération persisté dans message.metadata_json['trace']
     et renvoyé dans l'événement SSE final. Alimente le bouton d'inspection côté UI.
@@ -955,6 +1059,10 @@ def _build_generation_trace(
             "pinned_codes": list(pinned_codes or []),
         }
         trace["passages"] = passages_summary or []
+        # Boucle agentique (B8) : rounds du juge, actions de relance, élection — la
+        # boucle doit être rejouable depuis la trace, pas depuis les logs.
+        if loop_info:
+            trace["loop"] = loop_info
 
     if verification:
         trace["verification"] = verification
@@ -1498,29 +1606,45 @@ async def stream_space_chat_message(
     ) as retrieval_run:
         from app.services.space_search_service import search_technical_passages
 
-        async def _do_retrieval(allowed: Optional[List[int]]):
+        # Sentinelle des overrides de relance (B5) : None est une valeur légitime
+        # (« pas de queries pré-dérivées ») — la sentinelle distingue « inchangé ».
+        _UNSET = object()
+
+        async def _do_retrieval(
+            allowed: Optional[List[int]],
+            *,
+            query_text: Optional[str] = None,
+            anchors=_UNSET,
+            k: Optional[int] = None,
+            queries=_UNSET,
+            query_groups=_UNSET,
+        ):
+            # Les overrides servent aux relances de la boucle agentique (B5) : requête
+            # réécrite par le juge, désancrage, k élargi. Sans override, comportement
+            # strictement identique à l'historique.
+            _anchors = (anchor_document_ids or None) if anchors is _UNSET else (anchors or None)
             return await search_technical_passages(
                 session=session,
                 space_id=space_id,
-                query_text=retrieval_query_text,
+                query_text=query_text if query_text is not None else retrieval_query_text,
                 user_id=current_user.id,
-                k=RAG_TOP_K,
-                queries=retrieval_queries,
+                k=k or RAG_TOP_K,
+                queries=retrieval_queries if queries is _UNSET else queries,
                 signals=lw_result.signals if lw_result and lw_result.signals else None,
-                query_groups=retrieval_query_groups,
-                anchor_document_ids=anchor_document_ids or None,
+                query_groups=retrieval_query_groups if query_groups is _UNSET else query_groups,
+                anchor_document_ids=_anchors,
                 allowed_document_ids=allowed,
             )
 
-        async def _run_retrieval(allowed: Optional[List[int]]):
+        async def _run_retrieval(allowed: Optional[List[int]], **overrides):
             # Budget temps global (P0.3) : un canal qui freeze (ColPali CPU, MaxSim LanceDB)
             # ne doit pas bloquer indéfiniment — au-delà du budget, dégradation gracieuse.
             try:
                 if settings.RETRIEVAL_TIMEOUT_S and settings.RETRIEVAL_TIMEOUT_S > 0:
                     return await asyncio.wait_for(
-                        _do_retrieval(allowed), timeout=settings.RETRIEVAL_TIMEOUT_S
+                        _do_retrieval(allowed, **overrides), timeout=settings.RETRIEVAL_TIMEOUT_S
                     )
-                return await _do_retrieval(allowed)
+                return await _do_retrieval(allowed, **overrides)
             except asyncio.TimeoutError:
                 logger.error(
                     "[chat] retrieval au-delà du budget %.0fs → dégradation gracieuse (0 passage)",
@@ -1685,6 +1809,212 @@ async def stream_space_chat_message(
     # des scores. L'ancien refine_with_source_authority ajoutait un SECOND boost
     # (0.8·confidence, échelle ambiguë) sur le même critère → double-comptage supprimé.
 
+    # ——— Boucle agentique (B4/B5, plan 2026-07-29) : juge de suffisance + relances ———
+    # AVANT la génération, un modèle distinct lit les DOSSIERS CANDIDATS (pack-juge) et
+    # statue : élire (documents + pages → packing) ou relancer la recherche (reformulation,
+    # filtres, désancrage), sous deadline dure. Mode shadow = verdicts tracés, jamais
+    # actionnés. Flag off = pipeline strictement inchangé. Un juge défaillant (timeout,
+    # JSON invalide, preuve introuvable) ne dégrade JAMAIS le tour : on génère comme
+    # aujourd'hui, l'échec est tracé.
+    loop_trace: Optional[Dict[str, Any]] = None
+    judge_elected_ids: List[int] = []
+    judge_pinned_pages: Dict[int, List[int]] = {}
+    judge_note_block: Optional[str] = None
+    loop_exhausted_missing: Optional[str] = None
+    if settings.AGENTIC_LOOP_ENABLED and settings.CAG_ENABLED and doc_passages:
+        from app.services.coverage_service import (
+            coverage_status as _loop_coverage_status,
+            extract_message_reference_codes as _loop_extract_codes,
+        )
+        from app.services.retrieval_judge_service import (
+            apply_judge_action,
+            build_judge_note_block,
+            build_judge_pack,
+            judge_candidates,
+            passages_pool_key,
+        )
+        from app.services.slot_catalog import expected_content_for_intent
+
+        _loop_mode = "active" if settings.AGENTIC_LOOP_MODE == "active" else "shadow"
+        loop_trace = {"mode": _loop_mode, "rounds": [], "deadline_hit": False}
+        _loop_deadline = _time.monotonic() + max(5.0, settings.LOOP_DEADLINE_S)
+        _loop_intent = lw_result.signals.intent if (lw_result and lw_result.signals) else None
+        _expected_content = expected_content_for_intent(_loop_intent)
+        try:
+            _loop_codes = _loop_extract_codes(
+                retrieval_query_text,
+                request.message,
+                *(
+                    (lw_result.signals.detected_references or [])
+                    if (lw_result and lw_result.signals)
+                    else []
+                ),
+            )
+        except Exception:  # noqa: BLE001
+            _loop_codes = []
+        _max_rounds = 1 + (max(0, settings.JUDGE_MAX_RETRIES) if _loop_mode == "active" else 0)
+        _loop_query = retrieval_query_text
+        _loop_allowed = allowed_document_ids
+        _loop_anchor_override = _UNSET
+        _loop_k: Optional[int] = None
+        _prev_pool = passages_pool_key(doc_passages)
+        _prev_missing: Optional[str] = None
+
+        try:
+            for _round in range(1, _max_rounds + 1):
+                judge_pack = await asyncio.to_thread(
+                    build_judge_pack, session, doc_passages, intent=_loop_intent
+                )
+                _judge_images: List[str] = []
+                if settings.JUDGE_IMAGES_MODE == "always" or (
+                    settings.JUDGE_IMAGES_MODE == "auto"
+                    and _loop_intent in ("installation", "troubleshooting")
+                ):
+                    try:
+                        from app.services.context_packer_service import select_cag_images
+
+                        _judge_images, _ = await asyncio.to_thread(
+                            select_cag_images,
+                            session,
+                            judge_pack["cag_documents"],
+                            doc_passages,
+                            max_images=settings.JUDGE_MAX_IMAGES,
+                        )
+                    except Exception as _ji_err:  # noqa: BLE001
+                        logger.warning("[loop] images du juge ignorées : %s", _ji_err)
+
+                _coverage_line = None
+                if _loop_codes:
+                    _cov = _loop_coverage_status(
+                        context_text=judge_pack["context_text"],
+                        requested_codes=_loop_codes,
+                        doc_passages=doc_passages,
+                    )
+                    _missing_codes = _cov.get("missing_codes") or []
+                    _coverage_line = (
+                        ("ABSENTES des dossiers : " + ", ".join(_missing_codes))
+                        if _missing_codes
+                        else ("toutes présentes dans les dossiers : " + ", ".join(_loop_codes))
+                    )
+
+                verdict = await judge_candidates(
+                    question=_loop_query,
+                    intent=_loop_intent,
+                    expected_content=_expected_content,
+                    judge_pack=judge_pack,
+                    coverage_line=_coverage_line,
+                    images=_judge_images or None,
+                    round_index=_round,
+                    previous_missing=_prev_missing,
+                )
+                _round_trace = {
+                    "round": _round,
+                    "query": _loop_query,
+                    "status": verdict.get("status"),
+                    "status_reason": verdict.get("status_reason"),
+                    "verdict": verdict.get("verdict"),
+                    "confidence": verdict.get("confidence"),
+                    "evidence": (verdict.get("evidence") or "")[:300],
+                    "evidence_verified": verdict.get("evidence_verified"),
+                    "missing": (verdict.get("missing") or "")[:300],
+                    "elected": [
+                        {
+                            "document_id": e.get("document_id"),
+                            "document_index": e.get("document_index"),
+                            "pages": e.get("pages"),
+                            "role": e.get("role"),
+                        }
+                        for e in (verdict.get("elected") or [])
+                    ],
+                    "candidates": [
+                        {"document_id": d.get("document_id"), "index": d.get("index")}
+                        for d in (judge_pack.get("cag_documents") or [])
+                    ],
+                    "images": len(_judge_images),
+                    "duration_ms": verdict.get("duration_ms"),
+                    "model": verdict.get("model"),
+                }
+                loop_trace["rounds"].append(_round_trace)
+
+                if _loop_mode == "shadow":
+                    break
+                if verdict["status"] != "ok":
+                    break
+                if verdict["verdict"] == "sufficient":
+                    judge_elected_ids = [e["document_id"] for e in verdict["elected"]]
+                    judge_pinned_pages = {
+                        e["document_id"]: e["pages"]
+                        for e in verdict["elected"]
+                        if e.get("pages")
+                    }
+                    judge_note_block = build_judge_note_block(verdict)
+                    break
+
+                # Verdict « insuffisant » → relance informée, si budget et action utile.
+                _prev_missing = verdict.get("missing") or None
+                if _round >= _max_rounds:
+                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                    break
+                if _time.monotonic() > _loop_deadline:
+                    loop_trace["deadline_hit"] = True
+                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                    break
+                _action = apply_judge_action(verdict, current_query=_loop_query)
+                if not _action:
+                    _round_trace["relaunch"] = "no_action"
+                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                    break
+                _round_trace["action"] = _action.get("label")
+                _loop_query = _action.get("query_text") or _loop_query
+                if _action.get("widen_scope"):
+                    _loop_allowed = None
+                if _action.get("restrict_document_id"):
+                    _loop_allowed = [int(_action["restrict_document_id"])]
+                if _action.get("drop_anchor"):
+                    _loop_anchor_override = []
+                if _action.get("raise_k"):
+                    _loop_k = max(RAG_TOP_K, min(2 * RAG_TOP_K, settings.RERANK_POOL))
+
+                _relaunch = await _run_retrieval(
+                    _loop_allowed,
+                    query_text=_loop_query,
+                    anchors=_loop_anchor_override,
+                    k=_loop_k,
+                    queries=None,
+                    query_groups=None,
+                )
+                _new_passages = _relaunch.get("passages") or []
+                if not _new_passages:
+                    _round_trace["relaunch"] = "empty"
+                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                    break
+                _new_passages = enrich_colpali_passages_with_pymupdf(session, _new_passages)
+                if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals:
+                    from app.services.retrieval_boost_service import (
+                        apply_soft_boosts_to_passages as _loop_boosts,
+                    )
+
+                    _new_passages = _loop_boosts(
+                        session=session, passages=_new_passages, signals=lw_result.signals
+                    )
+                _new_pool = passages_pool_key(_new_passages)
+                if _new_pool == _prev_pool:
+                    _round_trace["relaunch"] = "no_progress"
+                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                    break
+                _round_trace["relaunch"] = "replaced"
+                _prev_pool = _new_pool
+                doc_passages = _new_passages
+                retrieval = _relaunch
+                retrieval_status = _relaunch["status"]
+                retrieval_reason = _relaunch.get("reason")
+                retrieval_images = _relaunch.get("images") or []
+                dynamic_k = _relaunch.get("dynamic_k")
+                rerank_status = _relaunch.get("rerank_status")
+        except Exception as _loop_err:  # noqa: BLE001
+            logger.exception("[loop] boucle agentique interrompue — génération inchangée")
+            loop_trace["error"] = str(_loop_err)[:200]
+
     # Mémorise les documents dominants de ce tour comme ancre du sujet courant (réutilisée
     # pour biaiser le retrieval du prochain tour, tant qu'il n'y a pas de changement de sujet).
     if settings.CONVERSATION_ANCHOR_ENABLED and request.conversation_id and doc_passages:
@@ -1717,6 +2047,8 @@ async def stream_space_chat_message(
             doc_passages,
             anchor_document_ids=cag_anchor_document_ids or None,
             intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
+            elected_document_ids=judge_elected_ids or None,
+            pinned_pages=judge_pinned_pages or None,
         )
         # Ajouter une instruction de clarification forcée après les passages
         space_context_draft["content"] += (
@@ -1735,6 +2067,8 @@ async def stream_space_chat_message(
             doc_passages,
             anchor_document_ids=cag_anchor_document_ids or None,
             intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
+            elected_document_ids=judge_elected_ids or None,
+            pinned_pages=judge_pinned_pages or None,
         )
 
     # ——— Chunk pinning (C6) + bloc COUVERTURE (C3) ———
@@ -1786,6 +2120,26 @@ async def stream_space_chat_message(
         retrieval_status=retrieval_status,
     )
     space_context_draft["content"] += "\n\n" + coverage_block
+
+    # ——— Note du juge (B6) / aveu structuré (B5) ———
+    # Même zone de forte attention (fin du message système) que la COUVERTURE. La note
+    # pointe les pages VALIDÉES par le contrôle documentaire ; l'aveu remplace le
+    # « je comble le trou » par un constat explicite de ce qui manque.
+    if judge_note_block:
+        space_context_draft["content"] += "\n\n" + judge_note_block
+    elif loop_exhausted_missing:
+        space_context_draft["content"] += (
+            "\n\n⚠️ CONTRÔLE DOCUMENTAIRE (fait foi) : la recherche a été relancée sans "
+            "trouver l'information demandée (" + loop_exhausted_missing + "). "
+            "Dis explicitement ce que les documents fournis contiennent d'utile et ce qui "
+            "manque. Ne comble JAMAIS le manque par déduction, connaissance générale ou "
+            "référence voisine ; propose à l'utilisateur UNE précision courte qui "
+            "permettrait de relancer la recherche."
+        )
+        logger.info(
+            "[loop] relances épuisées → génération en aveu structuré (manque : %s)",
+            loop_exhausted_missing,
+        )
 
     # Référence introuvable même après retry ciblé (cf. bloc retrieval) : au lieu d'un
     # « non documenté » en cul-de-sac, demander UNE précision pour relancer la recherche.
@@ -1996,6 +2350,17 @@ async def stream_space_chat_message(
                     # Plafond de réponse relevé en mode CAG (procédures complètes).
                     gen_max_tokens = settings.CAG_MAX_COMPLETION_TOKENS if settings.CAG_ENABLED else None
 
+                    # ——— Vérification bloquante (B7c) : mode tampon ———
+                    # Le texte est généré SANS être émis, vérifié (codes + cotes contre le
+                    # contexte complet + juge LLM distinct), réparé une fois si besoin,
+                    # PUIS rejoué au client. VERIFY_BLOCKING=false = flux historique.
+                    verify_active = bool(
+                        settings.VERIFY_ENABLED
+                        and request.conversation_id
+                        and space_context_draft.get("content")
+                    )
+                    buffer_mode = bool(verify_active and settings.VERIFY_BLOCKING)
+
                     # Tentatives dégressives face à un Mistral 400 (souvent = contexte trop
                     # gros) : contexte complet → CAG RE-PACKÉ en budget eco → question nue.
                     # Contextes construits PARESSEUSEMENT (callables) : le cas normal (succès
@@ -2033,6 +2398,7 @@ async def stream_space_chat_message(
                                 source_filter=source_filter,
                                 sink=assistant_response,
                                 reasoning_sink=reasoning_parts,
+                                hold_messages=buffer_mode,
                             ):
                                 yield _sse
                             break  # génération réussie
@@ -2056,10 +2422,117 @@ async def stream_space_chat_message(
                         _tail = source_filter.finalize()
                         if _tail:
                             assistant_response.append(_tail)
-                            yield f"data: {json.dumps({'message': {'content': _tail}})}\n\n"
+                            if not buffer_mode:
+                                yield f"data: {json.dumps({'message': {'content': _tail}})}\n\n"
 
                     final_response = "".join(assistant_response)
                     stream_run.end(outputs={"response": final_response})
+
+                # ——— Gate de vérification (B7c) — le texte n'a PAS encore été émis ———
+                verification_result = None
+                if buffer_mode and assistant_response:
+                    # Pages citées par le modèle via <sources> : le juge doit voir en
+                    # priorité ce sur quoi la réponse s'appuie.
+                    _cited_pages_early: Dict[int, List[int]] = {}
+                    if source_filter is not None and cag_documents_ctx:
+                        _docs_by_index = {
+                            int(d.get("index")): d
+                            for d in cag_documents_ctx
+                            if d.get("index") is not None
+                        }
+                        for _u in source_filter.used_documents or []:
+                            _doc = _docs_by_index.get(_u.get("doc"))
+                            _pages = [p for p in (_u.get("pages") or []) if isinstance(p, int)]
+                            if _doc and _pages:
+                                _cited_pages_early.setdefault(
+                                    int(_doc["document_id"]), []
+                                ).extend(_pages)
+                    try:
+                        from app.services.response_verification_service import verify_response
+
+                        verification_result = await verify_response(
+                            question=retrieval_query_text,
+                            response_text="".join(assistant_response),
+                            context_text=space_context_draft["content"],
+                            model=settings.effective_verify_model,
+                            document_blocks=space_context_draft.get("cag_document_blocks"),
+                            cag_documents=space_context_draft.get("cag_documents"),
+                            cited_pages=_cited_pages_early,
+                        )
+                    except Exception as _verif_err:  # noqa: BLE001
+                        logger.warning(
+                            "Vérification bloquante en échec — émission sans gate : %s",
+                            _verif_err,
+                        )
+                        verification_result = None
+
+                    if verification_result is not None:
+                        if verification_result.get("ok"):
+                            verification_result["action"] = "passed"
+                        else:
+                            verification_result["action"] = "flagged"
+                            for _repair_round in range(max(0, settings.VERIFY_MAX_REPAIRS)):
+                                _repair = await _attempt_repair_generation(
+                                    session=session,
+                                    space_id=space_id,
+                                    full_context_draft=full_context_draft,
+                                    draft_text="".join(assistant_response),
+                                    verification_result=verification_result,
+                                    model=forced_model,
+                                    allowed_document_ids=allowed_document_ids,
+                                )
+                                if not _repair:
+                                    break
+                                # Re-vérification PROGRAMMATIQUE seulement (codes + cotes,
+                                # contexte complet) : rapide, insensible au juge LLM.
+                                from app.services.response_verification_service import (
+                                    check_grounding,
+                                    check_reference_grounding,
+                                )
+
+                                _rep_text = _repair["text"]
+                                _rep_claims = check_grounding(
+                                    _rep_text, space_context_draft["content"]
+                                )
+                                if settings.VERIFY_CODE_GROUNDING:
+                                    for _c in check_reference_grounding(
+                                        _rep_text, space_context_draft["content"]
+                                    ):
+                                        if _c not in _rep_claims:
+                                            _rep_claims.append(_c)
+                                _before_claims = len(
+                                    verification_result.get("unsupported_claims") or []
+                                )
+                                if _rep_claims and len(_rep_claims) >= _before_claims:
+                                    logger.warning(
+                                        "[verify] réparation sans progrès (%s) — texte "
+                                        "initial conservé, réponse marquée",
+                                        _rep_claims,
+                                    )
+                                    break
+                                assistant_response.clear()
+                                assistant_response.append(_rep_text)
+                                if _repair.get("source_filter") is not None:
+                                    source_filter = _repair["source_filter"]
+                                verification_result["repaired"] = True
+                                verification_result["unsupported_after_repair"] = _rep_claims
+                                verification_result["action"] = (
+                                    "repaired" if not _rep_claims else "flagged"
+                                )
+                                logger.info(
+                                    "[verify] réponse réparée — non étayés %d → %d",
+                                    _before_claims,
+                                    len(_rep_claims),
+                                )
+                                break
+                    final_response = "".join(assistant_response)
+
+                # Replay du tampon (mode buffer) : effet machine à écrire simulé, le texte
+                # émis est le texte VÉRIFIÉ (réparé le cas échéant).
+                if buffer_mode:
+                    _replay_text = "".join(assistant_response)
+                    for _i in range(0, len(_replay_text), 60):
+                        yield f"data: {json.dumps({'message': {'content': _replay_text[_i:_i + 60]}})}\n\n"
 
                 pipeline_run.end(outputs={
                     "nb_doc_passages": len(doc_passages),
@@ -2383,12 +2856,12 @@ async def stream_space_chat_message(
                     sources_data.append(ill_source)
                     logger.info(f"Illustration added to sources_data: {ill_source}")
 
-                # Vérification post-génération (P2, 2026-07-20) : le texte a déjà streamé au
-                # client à ce stade — ce contrôle ne bloque PAS l'affichage, il détecte et
-                # trace les réponses hors-sujet ou hallucinées (cf. plan_p2_generation_
-                # small_verification_2026-07-20.md §2). N'échoue jamais la persistance.
-                verification_result = None
-                if request.conversation_id and assistant_response and space_context_draft.get("content"):
+                # Vérification post-génération ADVISORY (P2, 2026-07-20 ; refonte B7) : en
+                # mode non bloquant le texte a déjà streamé — ce contrôle détecte et trace.
+                # En mode bloquant (buffer), la vérification a DÉJÀ eu lieu avant émission
+                # (gate B7c ci-dessus) : on ne la rejoue pas. Modèle DISTINCT de la
+                # génération (effective_verify_model) ; VERIFY_ENABLED=false = zéro appel.
+                if verification_result is None and verify_active and assistant_response:
                     try:
                         from app.services.response_verification_service import verify_response
 
@@ -2407,11 +2880,15 @@ async def stream_space_chat_message(
                             question=retrieval_query_text,
                             response_text=complete_response,
                             context_text=space_context_draft["content"],
-                            model=forced_model,
+                            model=settings.effective_verify_model,
                             document_blocks=space_context_draft.get("cag_document_blocks"),
                             cag_documents=space_context_draft.get("cag_documents"),
                             cited_pages=_cited_pages,
                         )
+                        if verification_result is not None:
+                            verification_result["action"] = (
+                                "passed" if verification_result.get("ok") else "detected_only"
+                            )
                     except Exception as verif_err:
                         logger.warning("Vérification post-génération ignorée: %s", verif_err)
 
@@ -2437,6 +2914,7 @@ async def stream_space_chat_message(
                     anchor_boost=retrieval.get("anchor_boost"),
                     anchor_intent_changed=anchor_intent_changed,
                     cag_documents=space_context_draft.get("cag_documents"),
+                    loop_info=loop_trace,
                 )
 
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture

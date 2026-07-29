@@ -4,16 +4,23 @@ Deux contrôles complémentaires, exécutés APRÈS la génération complète (l
 déjà streamé au client — voir docs/plan_p2_generation_small_verification_2026-07-20.md
 §2.3 pour la contrainte UX) :
 
-  1. ``check_grounding`` — programmatique, zéro LLM : extrait les normes/cotes/références
-     citées dans la réponse et vérifie leur présence LITTÉRALE dans le contexte packé.
-     A détecté 100% des fabrications du cas réel du 20/07 (normes NF inventées, calcul
-     arithmétique présenté comme une cote du document).
+  1. ``check_grounding`` — programmatique, zéro LLM : extrait les normes/cotes citées dans
+     la réponse et vérifie leur présence LITTÉRALE dans le contexte packé. A détecté 100%
+     des fabrications du cas réel du 20/07 (normes NF inventées, calcul arithmétique
+     présenté comme une cote du document).
+  1bis. ``check_reference_grounding`` (B7a, plan 2026-07-29) — même principe pour les
+     CODES PRODUITS alphanumériques de la réponse (TGY3710, 9F67…). Cas réel du 29/07 :
+     une référence inventée (TGY3710) ne pouvait être signalée que par le juge LLM en
+     texte libre — le contrôle programmatique ne connaissait que normes et cotes.
   2. ``judge_relevance`` — un appel LLM court (modèle configurable, température 0.0) juge
      si la réponse répond réellement à la question posée et si elle semble s'appuyer sur
      le contexte fourni (angle mort du contrôle programmatique : le hors-sujet confiant).
+     Tri-état ``judge_status`` : "ok" (verdict exploitable) | "unknown" (échec technique —
+     parse/API). Un échec d'infra n'est NI un blanc-seing NI une alerte.
 
-Point d'entrée : ``verify_response``. Ne bloque jamais la génération ; le résultat est
-loggé et destiné à ``Message.metadata_json["verification"]``.
+Point d'entrée : ``verify_response``. Ce module ne bloque jamais par lui-même ; c'est
+l'appelant (chat.py, mode VERIFY_BLOCKING) qui décide quoi faire du résultat, destiné à
+``Message.metadata_json["verification"]``.
 """
 from __future__ import annotations
 
@@ -93,6 +100,49 @@ def check_grounding(response_text: str, context_text: str) -> List[str]:
         if _normalize_for_match(claim) not in normalized_context
     ]
     return unsupported
+
+
+# Un code produit vérifiable côté RÉPONSE doit porter au moins une lettre : les codes
+# purement numériques (« 6111 », « 155 ») sont indiscernables des quantités, années et
+# numéros de page (« page 111 ») dans un texte généré — le contrôle ne doit jamais
+# accuser à tort. TGY3702 / 9F67 / RAL9016, eux, sont des références sans ambiguïté.
+_CODE_HAS_LETTER = re.compile(r"[A-Za-z]")
+
+
+def extract_response_reference_codes(text: str, *, limit: int = 16) -> List[str]:
+    """Codes produits ALPHANUMÉRIQUES cités dans une réponse générée, dédupliqués."""
+    from app.services.reference_codes import REF_CODE_RE
+
+    codes: List[str] = []
+    seen: set = set()
+    for match in REF_CODE_RE.finditer(text or ""):
+        tok = match.group(0).strip().upper()
+        if not tok or not _CODE_HAS_LETTER.search(tok):
+            continue
+        if tok in seen:
+            continue
+        seen.add(tok)
+        codes.append(tok)
+        if len(codes) >= limit:
+            break
+    return codes
+
+
+def check_reference_grounding(response_text: str, context_text: str) -> List[str]:
+    """Codes produits de ``response_text`` ABSENTS de ``context_text`` (B7a).
+
+    Présence testée avec frontières alphanumériques (« TGY371 » ne matche pas dans
+    « TGY3710 »), insensible à la casse. Le contexte passé est le contexte COMPLET
+    (jamais tronqué), donc ce contrôle est insensible au plafond du juge LLM.
+    C'est LE contrôle qui attrape le cas TGY3710 : référence inventée, plausible,
+    citée avec assurance — chaîne introuvable dans les documents packés."""
+    from app.services.reference_codes import code_in_text
+
+    return [
+        code
+        for code in extract_response_reference_codes(response_text)
+        if not code_in_text(code, context_text or "")
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -277,10 +327,20 @@ def build_verification_messages(
 
 
 def parse_verification_json(raw: str) -> Dict[str, Any]:
-    """Parse la sortie JSON du juge. Repli permissif (answers_question=True,
-    grounded=True) si le parsing échoue — un échec technique ne doit pas se
-    traduire par un faux signal d'alerte."""
-    fallback = {"answers_question": True, "grounded": True, "issues": [], "parse_error": True}
+    """Parse la sortie JSON du juge — TRI-ÉTAT (B0, plan 2026-07-29).
+
+    Un parsing en échec ne produit plus un blanc-seing (answers_question=True,
+    grounded=True) mais un verdict ``judge_status="unknown"`` : l'appelant sait que le
+    juge LLM n'a PAS statué et ne doit ni bloquer ni blanchir sur cette base — seul le
+    contrôle programmatique fait alors foi. Les booléens restent à True par compat
+    d'affichage (ils ne signifient rien quand judge_status != "ok")."""
+    fallback = {
+        "answers_question": True,
+        "grounded": True,
+        "issues": [],
+        "parse_error": True,
+        "judge_status": "unknown",
+    }
     if not raw or not raw.strip():
         return fallback
     content = raw.strip()
@@ -290,7 +350,7 @@ def parse_verification_json(raw: str) -> Dict[str, Any]:
     try:
         data = json.loads(content)
     except json.JSONDecodeError:
-        logger.warning("[verification] JSON invalide côté juge, repli permissif")
+        logger.warning("[verification] JSON invalide côté juge — verdict unknown")
         return fallback
     if not isinstance(data, dict):
         return fallback
@@ -299,6 +359,7 @@ def parse_verification_json(raw: str) -> Dict[str, Any]:
         "grounded": bool(data.get("grounded", True)),
         "issues": [str(i) for i in (data.get("issues") or []) if str(i).strip()],
         "parse_error": False,
+        "judge_status": "ok",
     }
 
 
@@ -310,7 +371,8 @@ async def judge_relevance(
     model: str,
 ) -> Dict[str, Any]:
     """Appel LLM de jugement (température 0.0). N'échoue jamais l'appelant :
-    en cas d'erreur API, repli permissif + log."""
+    en cas d'erreur API le verdict est ``judge_status="unknown"`` — ni alerte ni
+    blanc-seing (tri-état B0)."""
     from app.services.mistral_service import chat
 
     try:
@@ -325,8 +387,14 @@ async def judge_relevance(
         raw = (result.get("choices") or [{}])[0].get("message", {}).get("content", "")
         return parse_verification_json(raw)
     except Exception as exc:
-        logger.warning("[verification] Échec appel juge LLM (%s) — repli permissif", exc)
-        return {"answers_question": True, "grounded": True, "issues": [], "parse_error": True}
+        logger.warning("[verification] Échec appel juge LLM (%s) — verdict unknown", exc)
+        return {
+            "answers_question": True,
+            "grounded": True,
+            "issues": [],
+            "parse_error": True,
+            "judge_status": "unknown",
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -365,6 +433,15 @@ async def verify_response(
     }
     """
     unsupported = check_grounding(response_text, context_text)
+    # B7a : codes produits de la réponse absents du contexte COMPLET. Programmatique,
+    # insensible à toute troncature — quand cette liste est non vide, aucun verdict LLM
+    # (ni judge_suspect) ne peut blanchir la réponse.
+    unsupported_codes: List[str] = []
+    if settings.VERIFY_CODE_GROUNDING:
+        unsupported_codes = check_reference_grounding(response_text, context_text)
+        for code in unsupported_codes:
+            if code not in unsupported:
+                unsupported.append(code)
 
     if document_blocks:
         judge_context, coverage = build_verification_context(
@@ -389,7 +466,12 @@ async def verify_response(
     # Verdict LLM à prendre avec réserve (J6) : un juge qui n'a pas tout vu ne peut pas
     # conclure à une invention, et une contradiction avec le contrôle programmatique —
     # qui, lui, a lu 100 % du contexte — doit être signalée plutôt qu'affichée à égalité.
-    judge_negative = not (llm_result["answers_question"] and llm_result["grounded"])
+    # Tri-état : un juge en échec technique (judge_status="unknown") n'est PAS négatif —
+    # il n'a simplement pas statué, et seul le programmatique décide.
+    judge_status = llm_result.get("judge_status", "ok")
+    judge_negative = judge_status == "ok" and not (
+        llm_result["answers_question"] and llm_result["grounded"]
+    )
     suspect_reason: Optional[str] = None
     if judge_negative and coverage.get("truncated"):
         suspect_reason = (
@@ -401,7 +483,7 @@ async def verify_response(
         )
     judge_suspect = suspect_reason is not None
 
-    if judge_suspect:
+    if judge_suspect or judge_status != "ok":
         # Le programmatique fait alors seul foi : il a lu l'intégralité du contexte.
         ok = not unsupported
     else:
@@ -410,10 +492,12 @@ async def verify_response(
     result = {
         "ok": ok,
         "unsupported_claims": unsupported,
+        "unsupported_codes": unsupported_codes,
         "answers_question": llm_result["answers_question"],
         "grounded": llm_result["grounded"],
         "issues": llm_result["issues"],
         "context": coverage,
+        "judge_status": judge_status,
         "judge_suspect": judge_suspect,
         "judge_suspect_reason": suspect_reason,
     }

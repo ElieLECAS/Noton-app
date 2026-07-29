@@ -1,0 +1,807 @@
+[
+  {
+    "id": "QA1-001",
+    "type": "mono",
+    "question": "Sur la fiche technique du système e.VOLUTION, quelle masse volumique (densité) est annoncée pour le PVC Kömalit Z des profilés ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [1] } ],
+    "reponse_attendue": "1,44 g/cm3."
+  },
+  {
+    "id": "QA1-002",
+    "type": "mono",
+    "question": "Un client s'inquiète de la tenue au grand froid de ses futures fenêtres PVC Kömmerling. Que dit la fiche technique sur la résistance au choc à -40°C ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [1] } ],
+    "reponse_attendue": "Le PVC Kömalit Z résiste au choc à -40°C sans rupture."
+  },
+  {
+    "id": "QA1-003",
+    "type": "mono",
+    "question": "Comment le PVC des profilés e.VOLUTION est-il classé en comportement au feu ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [2] } ],
+    "reponse_attendue": "Il est qualifié de difficilement inflammable et autoextinguible."
+  },
+  {
+    "id": "QA1-004",
+    "type": "mono",
+    "question": "Quel produit dois-je conseiller à un client pour nettoyer ses profilés PVC blancs, gris clair ou beige, et lequel pour des profilés structurés ou de couleur ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [3] } ],
+    "reponse_attendue": "Le Köraclean extra pour les profilés PVC blancs, gris clair et beige ; le Köraclean color pour les profilés structurés et de couleur. Les produits agressifs type solvants sont à proscrire."
+  },
+  {
+    "id": "QA1-005",
+    "type": "mono",
+    "question": "À quelle fréquence dois-je conseiller à un client d'huiler les organes de rotation (paumelles, compas) de ses fenêtres ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [4] } ],
+    "reponse_attendue": "Au moins une fois par an, sur les parties marquées d'une goutte d'huile dans la notice ; les parties visibles se nettoient avec un chiffon légèrement humide."
+  },
+  {
+    "id": "QA1-006",
+    "type": "mono",
+    "question": "Un client me demande de remplacer lui-même le pivot bas d'un vantail. Puis-je le laisser faire ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [4] } ],
+    "reponse_attendue": "Non : le remplacement de certaines pièces de quincaillerie comme le pivot bas ou le compas haut, ainsi que le décrochage d'un ouvrant, doivent impérativement être effectués par une société agréée."
+  },
+  {
+    "id": "QA1-007",
+    "type": "mono",
+    "question": "Sur le système e.VOLUTION, quel jeu périphérique (jeu de feuillure) dois-je respecter entre l'ouvrant et le dormant ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [6] } ],
+    "reponse_attendue": "Un jeu périphérique de 12+1 mm entre ouvrant et dormant."
+  },
+  {
+    "id": "QA1-008",
+    "type": "mono",
+    "question": "Un matin d'hiver, l'atelier est froid : puis-je débiter mes profilés PVC directement sortis du dépôt ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [6] } ],
+    "reponse_attendue": "Non, la température des profilés doit être supérieure ou égale à 15°C avant débit ; il faut respecter une durée de pré-stockage pour les tempérer."
+  },
+  {
+    "id": "QA1-009",
+    "type": "mono",
+    "question": "Quelle tolérance d'angle est admise sur le réglage de l'outil de coupe pour le débit des profilés ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [6] } ],
+    "reponse_attendue": "L'angle doit être réglé exactement à 45°, avec un écart maximum toléré de 0,5°."
+  },
+  {
+    "id": "QA1-010",
+    "type": "mono",
+    "question": "Quel entraxe maximal dois-je respecter entre les vis ou rivets de fixation du renfort acier dans un profilé ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [9] } ],
+    "reponse_attendue": "Un entraxe maximal de 300 mm entre vis/rivets, et 30 mm maximum depuis l'extrémité du renfort."
+  },
+  {
+    "id": "QA1-011",
+    "type": "mono",
+    "question": "Puis-je fixer un renfort acier dans un profilé PVC en le clouant ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [9] } ],
+    "reponse_attendue": "Non, le cloutage est interdit. Seuls les rivets ou vis autoforeuses étanches traitées anticorrosion sont autorisés (vis à tête fraisée recommandées)."
+  },
+  {
+    "id": "QA1-012",
+    "type": "mono",
+    "question": "Quelle température de soudure dois-je viser sur l'élément chauffant pour souder des profilés blancs ou structurés ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [11] } ],
+    "reponse_attendue": "Entre 235° et 245°C, contrôlée sur la surface du miroir de soudure avec un instrument de mesure."
+  },
+  {
+    "id": "QA1-013",
+    "type": "mono",
+    "question": "Quelle est la limitation minimale du bourrelet à respecter lors de la soudure des profilés ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [11] } ],
+    "reponse_attendue": "Un minimum de 2±0,2 mm ; plus la limitation est faible, plus la résistance des angles diminue."
+  },
+  {
+    "id": "QA1-014",
+    "type": "mono",
+    "question": "Combien de temps dois-je attendre après soudure avant de procéder à l'ébavurage des dormants et ouvrants ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [12] } ],
+    "reponse_attendue": "Ne jamais ébavurer avant 1 minute minimum ; le délai d'attente idéal est de 30 minutes, sous peine d'affaiblir la soudure."
+  },
+  {
+    "id": "QA1-015",
+    "type": "mono",
+    "question": "Quelles dimensions doivent avoir les couteaux d'ébavurage (largeur et profondeur de rainure) ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [12] } ],
+    "reponse_attendue": "Largeur de rainure de 3 mm et profondeur maximale de 0,3 mm."
+  },
+  {
+    "id": "QA1-016",
+    "type": "mono",
+    "question": "Quel type de liquide de cintrage dois-je utiliser pour éviter un aspect mat et gris sur les profilés filmés ou laqués après cintrage ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [13] } ],
+    "reponse_attendue": "Un liquide à base de paraffine ; il ne faut pas utiliser de liquide à base de glycérine, qui nuit à la qualité du cintrage et de l'état de surface."
+  },
+  {
+    "id": "QA1-017",
+    "type": "mono",
+    "question": "Combien de vis minimum dois-je utiliser dans l'acier pour fixer un organe de rotation porteur sur le dormant renforcé ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [17] } ],
+    "reponse_attendue": "Au minimum deux vis dans l'acier."
+  },
+  {
+    "id": "QA1-018",
+    "type": "mono",
+    "question": "Que risque-t-on en utilisant un produit d'entretien ou un accessoire non validé par KÖMMERLING ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [21] } ],
+    "reponse_attendue": "Les réclamations liées au non-respect des directives ou à l'utilisation de produits/accessoires non préconisés ou non validés par KÖMMERLING seront rejetées."
+  },
+  {
+    "id": "QA1-019",
+    "type": "mono",
+    "question": "Quelle dimension et quel entraxe dois-je respecter pour les trous de drainage du fond de feuillure du dormant vers la préchambre ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [23] } ],
+    "reponse_attendue": "Au moins deux trous oblongs de 5 x 25 mm, espacés de 600 mm maximum (alternative acceptable : un trou Ø8 mm)."
+  },
+  {
+    "id": "QA1-020",
+    "type": "mono",
+    "question": "En perçant les trous de drainage du dormant vers l'extérieur, à quelle distance dois-je les décaler par rapport aux trous fond de feuillure/préchambre ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [25] } ],
+    "reponse_attendue": "D'environ 50 mm, pour éviter un contact direct avec l'atmosphère extérieure."
+  },
+  {
+    "id": "QA1-021",
+    "type": "mono",
+    "question": "Sur des profilés filmés, dois-je prévoir une ventilation supplémentaire des préchambres extérieures ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [29] } ],
+    "reponse_attendue": "Oui, il faut impérativement ventiler toutes les préchambres extérieures des profilés filmés (2 faces ou 1 face extérieure) pour éviter une accumulation de chaleur."
+  },
+  {
+    "id": "QA1-022",
+    "type": "mono",
+    "question": "Quelle épaisseur de vitrage maximale puis-je poser sur un ouvrant à déport du système e.VOLUTION, sans élargisseur de parclose ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [39] } ],
+    "reponse_attendue": "Entre 5 et 39 mm (21 à 55 mm avec l'élargisseur de parclose 728)."
+  },
+  {
+    "id": "QA1-023",
+    "type": "mono",
+    "question": "Quelle longueur minimale dois-je donner à mes cales de vitrage, et puis-je utiliser des cales en bois ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [40] } ],
+    "reponse_attendue": "Une longueur de 100 mm, avec une largeur au moins 2 mm supérieure à l'épaisseur du vitrage isolant ; les cales en bois ne sont pas tolérées."
+  },
+  {
+    "id": "QA1-024",
+    "type": "mono",
+    "question": "Pour un vitrage de plus de 1300 mm, dois-je ajouter une cale supplémentaire ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [40] } ],
+    "reponse_attendue": "Oui, il faut prévoir une cale intermédiaire de soutien en position centrale pour les vitrages de plus de 1300 mm."
+  },
+  {
+    "id": "QA1-025",
+    "type": "mono",
+    "question": "Comment estimer rapidement le poids d'un vitrage sur chantier à partir de son épaisseur ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [42] } ],
+    "reponse_attendue": "On compte environ 2,5 kg/m2 par mm d'épaisseur de vitre."
+  },
+  {
+    "id": "QA1-026",
+    "type": "mono",
+    "question": "Je contrôle une baie de 4 m de large en maçonnerie non enduite avant de poser une fenêtre PVC : quelle tolérance dimensionnelle du gros-œuvre est admise ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [66] } ],
+    "reponse_attendue": "Pour une cote de 2,5 à 5 m en tableau brut (maçonnerie non enduite), la tolérance admise est de ±15 mm (±10 mm en tableau fini/enduit pour cette même plage)."
+  },
+  {
+    "id": "QA1-027",
+    "type": "mono",
+    "question": "Quelle largeur de joint dois-je prévoir entre le dormant et le gros-œuvre pour un élément de fenêtre en profilé blanc de 1,5 m de large, avec un mastic silicone ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [67] } ],
+    "reponse_attendue": "10 mm pour un profilé blanc entre 1 et 2 m de largeur (15 mm pour un profilé structuré dans cette même plage)."
+  },
+  {
+    "id": "QA1-028",
+    "type": "mono",
+    "question": "Puis-je utiliser une mousse polyuréthane en bombe pour remplir le joint entre le dormant et le gros-œuvre ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [67] } ],
+    "reponse_attendue": "Non, il ne faut pas employer de mousse de polyuréthane en bombe, car sa neutralité dimensionnelle après pose est très aléatoire."
+  },
+  {
+    "id": "QA1-029",
+    "type": "mono",
+    "question": "Comment calculer la dilatation d'un châssis PVC blanc de 3 m de large entre l'hiver (-10°C) et l'été (+30°C) ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [69] } ],
+    "reponse_attendue": "Avec un coefficient de 0,1 mm par mètre et par °C (formule 0,1 x L x ΔT), soit 0,1 x 3,0 x 40 = 12 mm de dilatation globale, répartie en 6 mm de chaque côté."
+  },
+  {
+    "id": "QA1-030",
+    "type": "mono",
+    "question": "En pose en tunnel, quel entraxe maximal dois-je respecter entre deux points de fixation de la fenêtre au gros-œuvre ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [72] } ],
+    "reponse_attendue": "Un entraxe maximum de 800 mm entre deux fixations (700 mm admissible pour les dormants renforcés), avec un premier point situé à environ 100 mm de l'angle intérieur des assemblages soudés."
+  },
+  {
+    "id": "QA1-031",
+    "type": "mono",
+    "question": "Une fois la fenêtre calée dans la baie, quelle tolérance de pose dois-je vérifier selon le DTU 36.1 ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [72] } ],
+    "reponse_attendue": "2 mm de tolérance de pose (3 mm au-delà de 1,5 m), à vérifier horizontalement et verticalement dans les deux plans."
+  },
+  {
+    "id": "QA1-032",
+    "type": "mono",
+    "question": "En rénovation, quel jeu périphérique minimum dois-je vérifier entre la nouvelle fenêtre PVC et le passage libre de la baie ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [77] } ],
+    "reponse_attendue": "Un jeu périphérique minimum de 5 mm."
+  },
+  {
+    "id": "QA1-033",
+    "type": "mono",
+    "question": "En rénovation sur dormant existant, dans quel cas le joint F (entre la menuiserie existante et la maçonnerie) ne doit-il pas être étanché ?",
+    "pages_attendues": [ { "document_title": "POSE_classeur-technique-e-volution", "pages": [89] } ],
+    "reponse_attendue": "Le joint F ne doit pas être étanché lorsque l'étanchéité à l'air n'est pas assurée par le joint C ou les joints A ou B."
+  },
+  {
+    "id": "QA1-034",
+    "type": "mono",
+    "question": "Sur le système 70 Plateforme (e.VOLUTION/e.MOTION/e.XCLUSIVE), quelle épaisseur maximale de vitrage puis-je poser en ouvrant à déport sans élargisseur de parclose ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [2] } ],
+    "reponse_attendue": "Jusqu'à 42 mm (de 5 à 42 mm), et jusqu'à 58 mm (21-58 mm) avec l'élargisseur de parclose 93025."
+  },
+  {
+    "id": "QA1-035",
+    "type": "mono",
+    "question": "Pourquoi ne dois-je pas débiter mes parcloses trop longues, même si une petite surlongueur est tolérée ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [2] } ],
+    "reponse_attendue": "Une surlongueur de +0,5 mm/m est admissible, mais des parcloses trop longues peuvent entraîner des déformations de la coupe à onglet, des déformations d'ouvrant, des écartements aux assemblages mécaniques entre traverses/meneaux et cadre, et dans les cas extrêmes des casses d'angle."
+  },
+  {
+    "id": "QA1-036",
+    "type": "mono",
+    "question": "Quelle est la distance maximale admise entre la cale de vitrage et l'angle de l'ouvrant sur le système 70 ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [3] } ],
+    "reponse_attendue": "40 mm maximum ; la cale doit par ailleurs mesurer 100 mm de long et les cales en bois ne sont pas tolérées."
+  },
+  {
+    "id": "QA1-037",
+    "type": "mono",
+    "question": "Sur le système 70, à quel entraxe maximal dois-je poser les cales périphériques de solidarisation (repère C3) ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [4] } ],
+    "reponse_attendue": "Un entraxe maximal de 700 mm, en fonction de la portée du vitrage."
+  },
+  {
+    "id": "QA1-038",
+    "type": "mono",
+    "question": "Quelle alternative existe au trou oblong de drainage 5x25 mm sur le système 70 ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [7] } ],
+    "reponse_attendue": "Le trou oblong de 5 x 25 mm peut être remplacé par un trou Ø8 mm."
+  },
+  {
+    "id": "QA1-039",
+    "type": "mono",
+    "question": "Je fabrique une fenêtre en profilé de couleur sombre : dois-je prévoir une ventilation particulière des préchambres extérieures ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [8] } ],
+    "reponse_attendue": "Oui, pour éviter toute accumulation de chaleur, les préchambres extérieures des profilés de couleur, laqués ou filmés doivent impérativement être ventilées avec un trou mini de Ø5 mm."
+  },
+  {
+    "id": "QA1-040",
+    "type": "mono",
+    "question": "Quelle colle PVC est recommandée pour coller les battements, et pourquoi ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [10] } ],
+    "reponse_attendue": "La colle PVC ACROBOND MPR de la société ACROM, car elle est moins agressive et provoque moins de déformation sur les parois minces."
+  },
+  {
+    "id": "QA1-041",
+    "type": "mono",
+    "question": "Avec quels produits dois-je étancher le raccord entre un meneau horizontal (traverse) et le profilé vertical ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [20] } ],
+    "reponse_attendue": "Avec du Perennator FA 101 de Tremco ou du Silicone 8051 de DEN BRAVEN France."
+  },
+  {
+    "id": "QA1-042",
+    "type": "mono",
+    "question": "Sur un seuil aluminium à rupture de pont thermique (9F67/9F68), à quel entraxe dois-je positionner les trous de drainage ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [34] } ],
+    "reponse_attendue": "Un premier trou oblong de 5x25 mm ou Ø8 mm à environ 100 mm de l'angle inférieur, puis un trou supplémentaire avec un entraxe maximal de 600 mm."
+  },
+  {
+    "id": "QA1-043",
+    "type": "mono",
+    "question": "À quoi servent les pièces A271 et A272 utilisées avec les seuils de la gamme profine ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [44] } ],
+    "reponse_attendue": "Le profilé A271 sert de réhausse et de porte-joint, tandis que la pièce A272 sert de verrou et de sous-cale de vitrage."
+  },
+  {
+    "id": "QA1-044",
+    "type": "mono",
+    "question": "Quelles sont les dimensions maximales d'une porte d'entrée 1 vantail en profilés blanc/beige/gris sur le système 70, et quel est le poids maximal du remplissage admis ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [47] } ],
+    "reponse_attendue": "1100 x 2300 mm pour les profilés blanc/beige/gris (1100 x 2200 mm pour les profilés plaxés), avec un poids maximal du remplissage de 30 kg/m²."
+  },
+  {
+    "id": "QA1-045",
+    "type": "mono",
+    "question": "Sur une porte d'entrée, dois-je renforcer les profilés même s'ils sont en blanc, beige ou gris ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [47] } ],
+    "reponse_attendue": "Oui, sur une porte d'entrée il faut systématiquement renforcer tous les profilés, dans toutes les teintes y compris le blanc, le beige et le gris."
+  },
+  {
+    "id": "QA1-046",
+    "type": "mono",
+    "question": "Comment dois-je fixer une pièce d'appui (6134/6135) sur un dormant neuf, et à quel entraxe ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [55] } ],
+    "reponse_attendue": "Par vissage depuis le dessous de l'appui, à 50 mm de chaque extrémité puis avec un entraxe de 400 mm, après avoir réalisé une étanchéité au silicone sur toute la longueur de l'appui."
+  },
+  {
+    "id": "QA1-047",
+    "type": "mono",
+    "question": "À quel intervalle dois-je visser les tapées rapportées sur le dormant ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [58] } ],
+    "reponse_attendue": "Le vissage doit être réalisé à 150 mm des angles du châssis, puis tous les 300 mm."
+  },
+  {
+    "id": "QA1-048",
+    "type": "mono",
+    "question": "Quel entraxe maximal dois-je respecter pour les vis plot ou clips de fixation d'une coulisse ou d'un rejet d'eau ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [60] } ],
+    "reponse_attendue": "Un entraxe maximal de 300 mm, en positionnant les vis plot au plus proche des extrémités du châssis en partie haute et basse."
+  },
+  {
+    "id": "QA1-049",
+    "type": "mono",
+    "question": "Quelles conditions de stockage dois-je respecter pour des petits bois (croisillons) avant leur pose ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [62] } ],
+    "reponse_attendue": "Ne jamais les stocker à l'extérieur ; température de stockage entre 18 et 35°C avec une humidité relative d'environ 50%, à poser à plat, et à utiliser dans un délai de 6 mois (principe First in-First out)."
+  },
+  {
+    "id": "QA1-050",
+    "type": "mono",
+    "question": "Quelle température dois-je respecter pour coller correctement des petits bois sur un vitrage ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [62] } ],
+    "reponse_attendue": "Une température idéale d'environ 20°C ; en dessous de 10°C, il ne faut absolument pas coller, en particulier en cas de condensation."
+  },
+  {
+    "id": "QA1-051",
+    "type": "mono",
+    "question": "Comment estimer le diamètre minimum de cintrage d'un profilé PVC de la gamme 70 ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [75] } ],
+    "reponse_attendue": "Le diamètre de cintrage minimum est égal à la largeur du profilé multipliée par 10."
+  },
+  {
+    "id": "QA1-052",
+    "type": "mono",
+    "question": "Puis-je cintrer un profilé alors que ses joints d'étanchéité sont déjà en place ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [75] } ],
+    "reponse_attendue": "Non, les profilés ne doivent pas être cintrés avec leurs joints ; ceux-ci doivent être enfilés manuellement sur le profilé une fois le cintrage effectué."
+  },
+  {
+    "id": "QA1-053",
+    "type": "mono",
+    "question": "Pourquoi dois-je couper les capots aluminium légèrement plus courts que la cote théorique à chaque extrémité ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_directives-fabrication-plateforme-70", "pages": [76] } ],
+    "reponse_attendue": "Il est recommandé de les couper plus courts de 0,5 mm à chaque extrémité, en raison des coefficients de dilatation longitudinale différents entre le PVC et l'aluminium."
+  },
+  {
+    "id": "QA1-054",
+    "type": "mono",
+    "question": "Sur le système 70 Plateforme (e.VOLUTION/e.MOTION/e.XCLUSIVE), quelle épaisseur maximale de vitrage puis-je poser en ouvrant à déport sans élargisseur de parclose ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [2] } ],
+    "reponse_attendue": "Jusqu'à 42 mm (de 5 à 42 mm), et jusqu'à 58 mm (21-58 mm) avec l'élargisseur de parclose 93025."
+  },
+  {
+    "id": "QA1-055",
+    "type": "mono",
+    "question": "Pourquoi ne dois-je pas débiter mes parcloses trop longues, même si une petite surlongueur est tolérée ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [2] } ],
+    "reponse_attendue": "Une surlongueur de +0,5 mm/m est admissible, mais des parcloses trop longues peuvent entraîner des déformations de la coupe à onglet, des déformations d'ouvrant, des écartements aux assemblages mécaniques entre traverses/meneaux et cadre, et dans les cas extrêmes des casses d'angle."
+  },
+  {
+    "id": "QA1-056",
+    "type": "mono",
+    "question": "Quelle est la distance maximale admise entre la cale de vitrage et l'angle de l'ouvrant sur le système 70 ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [3] } ],
+    "reponse_attendue": "40 mm maximum ; la cale doit par ailleurs mesurer 100 mm de long et les cales en bois ne sont pas tolérées."
+  },
+  {
+    "id": "QA1-057",
+    "type": "mono",
+    "question": "Sur le système 70, à quel entraxe maximal dois-je poser les cales périphériques de solidarisation (repère C3) ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [4] } ],
+    "reponse_attendue": "Un entraxe maximal de 700 mm, en fonction de la portée du vitrage."
+  },
+  {
+    "id": "QA1-058",
+    "type": "mono",
+    "question": "Quelle alternative existe au trou oblong de drainage 5x25 mm sur le système 70 ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [7] } ],
+    "reponse_attendue": "Le trou oblong de 5 x 25 mm peut être remplacé par un trou Ø8 mm."
+  },
+  {
+    "id": "QA1-059",
+    "type": "mono",
+    "question": "Je fabrique une fenêtre en profilé de couleur sombre : dois-je prévoir une ventilation particulière des préchambres extérieures ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [8] } ],
+    "reponse_attendue": "Oui, pour éviter toute accumulation de chaleur, les préchambres extérieures des profilés de couleur, laqués ou filmés doivent impérativement être ventilées avec un trou mini de Ø5 mm."
+  },
+  {
+    "id": "QA1-060",
+    "type": "mono",
+    "question": "Quelle colle PVC est recommandée pour coller les battements, et pourquoi ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [10] } ],
+    "reponse_attendue": "La colle PVC ACROBOND MPR de la société ACROM, car elle est moins agressive et provoque moins de déformation sur les parois minces."
+  },
+  {
+    "id": "QA1-061",
+    "type": "mono",
+    "question": "Avec quels produits dois-je étancher le raccord entre un meneau horizontal (traverse) et le profilé vertical ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [20] } ],
+    "reponse_attendue": "Avec du Perennator FA 101 de Tremco ou du Silicone 8051 de DEN BRAVEN France."
+  },
+  {
+    "id": "QA1-062",
+    "type": "mono",
+    "question": "Sur un seuil aluminium à rupture de pont thermique (9F67/9F68), à quel entraxe dois-je positionner les trous de drainage ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [34] } ],
+    "reponse_attendue": "Un premier trou oblong de 5x25 mm ou Ø8 mm à environ 100 mm de l'angle inférieur, puis un trou supplémentaire avec un entraxe maximal de 600 mm."
+  },
+  {
+    "id": "QA1-063",
+    "type": "mono",
+    "question": "À quoi servent les pièces A271 et A272 utilisées avec les seuils de la gamme profine ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [44] } ],
+    "reponse_attendue": "Le profilé A271 sert de réhausse et de porte-joint, tandis que la pièce A272 sert de verrou et de sous-cale de vitrage."
+  },
+  {
+    "id": "QA1-064",
+    "type": "mono",
+    "question": "Quelles sont les dimensions maximales d'une porte d'entrée 1 vantail en profilés blanc/beige/gris sur le système 70, et quel est le poids maximal du remplissage admis ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [47] } ],
+    "reponse_attendue": "1100 x 2300 mm pour les profilés blanc/beige/gris (1100 x 2200 mm pour les profilés plaxés), avec un poids maximal du remplissage de 30 kg/m²."
+  },
+  {
+    "id": "QA1-065",
+    "type": "mono",
+    "question": "Sur une porte d'entrée, dois-je renforcer les profilés même s'ils sont en blanc, beige ou gris ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [47] } ],
+    "reponse_attendue": "Oui, sur une porte d'entrée il faut systématiquement renforcer tous les profilés, dans toutes les teintes y compris le blanc, le beige et le gris."
+  },
+  {
+    "id": "QA1-066",
+    "type": "mono",
+    "question": "Comment dois-je fixer une pièce d'appui (6134/6135) sur un dormant neuf, et à quel entraxe ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [55] } ],
+    "reponse_attendue": "Par vissage depuis le dessous de l'appui, à 50 mm de chaque extrémité puis avec un entraxe de 400 mm, après avoir réalisé une étanchéité au silicone sur toute la longueur de l'appui."
+  },
+  {
+    "id": "QA1-067",
+    "type": "mono",
+    "question": "À quel intervalle dois-je visser les tapées rapportées sur le dormant ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [58] } ],
+    "reponse_attendue": "Le vissage doit être réalisé à 150 mm des angles du châssis, puis tous les 300 mm."
+  },
+  {
+    "id": "QA1-068",
+    "type": "mono",
+    "question": "Quel entraxe maximal dois-je respecter pour les vis plot ou clips de fixation d'une coulisse ou d'un rejet d'eau ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [60] } ],
+    "reponse_attendue": "Un entraxe maximal de 300 mm, en positionnant les vis plot au plus proche des extrémités du châssis en partie haute et basse."
+  },
+  {
+    "id": "QA1-069",
+    "type": "mono",
+    "question": "Quelles conditions de stockage dois-je respecter pour des petits bois (croisillons) avant leur pose ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [62] } ],
+    "reponse_attendue": "Ne jamais les stocker à l'extérieur ; température de stockage entre 18 et 35°C avec une humidité relative d'environ 50%, à poser à plat, et à utiliser dans un délai de 6 mois (principe First in-First out)."
+  },
+  {
+    "id": "QA1-070",
+    "type": "mono",
+    "question": "Quelle température dois-je respecter pour coller correctement des petits bois sur un vitrage ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [62] } ],
+    "reponse_attendue": "Une température idéale d'environ 20°C ; en dessous de 10°C, il ne faut absolument pas coller, en particulier en cas de condensation."
+  },
+  {
+    "id": "QA1-071",
+    "type": "mono",
+    "question": "Comment estimer le diamètre minimum de cintrage d'un profilé PVC de la gamme 70 ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [75] } ],
+    "reponse_attendue": "Le diamètre de cintrage minimum est égal à la largeur du profilé multipliée par 10."
+  },
+  {
+    "id": "QA1-072",
+    "type": "mono",
+    "question": "Puis-je cintrer un profilé alors que ses joints d'étanchéité sont déjà en place ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [75] } ],
+    "reponse_attendue": "Non, les profilés ne doivent pas être cintrés avec leurs joints ; ceux-ci doivent être enfilés manuellement sur le profilé une fois le cintrage effectué."
+  },
+  {
+    "id": "QA1-073",
+    "type": "mono",
+    "question": "Pourquoi dois-je couper les capots aluminium légèrement plus courts que la cote théorique à chaque extrémité ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_directives-fabrication-plateforme-70", "pages": [76] } ],
+    "reponse_attendue": "Il est recommandé de les couper plus courts de 0,5 mm à chaque extrémité, en raison des coefficients de dilatation longitudinale différents entre le PVC et l'aluminium."
+  },
+  {
+    "id": "QA1-074",
+    "type": "mono",
+    "question": "Dans le montage de l'élargisseur 0303 avec le profilé 6115 (équerre 9714), quelle longueur minimale de renfort est indiquée pour la fixation de l'élément supérieur ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Un renfort de 250 mm minimum ; les bouchons d'élargisseur sont ensuite collés à la colle PVC."
+  },
+  {
+    "id": "QA1-075",
+    "type": "mono",
+    "question": "Quel entraxe maximal dois-je respecter pour la sous-cale de vitrage A272 posée sur un seuil, et quelle norme régit le calage ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_dta-6-16-2335", "pages": [3] } ],
+    "reponse_attendue": "Un entraxe maximal de 800 mm ; le calage doit par ailleurs suivre la norme NF DTU 39."
+  },
+  {
+    "id": "QA1-076",
+    "type": "mono",
+    "question": "Quel gabarit dois-je utiliser pour percer le capot et le dormant lors d'un montage rénovation, et quel entraxe respecter pour les vis inox ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_dta-6-16-2335", "pages": [5] } ],
+    "reponse_attendue": "Le gabarit de perçage T127, avec un premier perçage à 150 mm de chaque extrémité puis un entraxe maximal de 400 mm entre les fixations suivantes."
+  },
+  {
+    "id": "QA1-077",
+    "type": "mono",
+    "question": "En montage rénovation avec demi-capot en traverse basse, à quel intervalle dois-je visser les tapées ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_dta-6-16-2335", "pages": [8] } ],
+    "reponse_attendue": "Une vis tous les 300 mm."
+  },
+  {
+    "id": "QA1-078",
+    "type": "mono",
+    "question": "Sur le dormant 6104/6127, comment puis-je réaliser la décompression en traverse haute ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_dta-6-16-2335", "pages": [10] } ],
+    "reponse_attendue": "Soit par un perçage de diamètre 6 mm, soit par la suppression du joint sur une largeur de 100 mm en traverse haute."
+  },
+  {
+    "id": "QA1-079",
+    "type": "mono",
+    "question": "Sur ce DTA, quelles sont les deux options possibles pour réaliser le drainage d'un dormant, et pour la décompression ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_dta-6-16-2335", "pages": [11] } ],
+    "reponse_attendue": "Le drainage se fait par un trou oblong 5x25 mm ou un trou de diamètre 8 mm ; la décompression se fait par un trou oblong 5x25 mm ou un trou de diamètre 6 mm."
+  },
+  {
+    "id": "QA1-080",
+    "type": "mono",
+    "question": "Pour une fenêtre en couleur sombre, combien de trous de ventilation dois-je prévoir au minimum par cadre, et de quel diamètre ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_dta-6-16-2335", "pages": [11] } ],
+    "reponse_attendue": "Au minimum un trou oblong par cadre, devant ouvrir toutes les chambres exposées, avec un diamètre minimum de Ø5 mm."
+  },
+  {
+    "id": "QA1-081",
+    "type": "mono",
+    "question": "Que signifie une mise en œuvre 'en tableau, calfeutrée en tunnel et fixée en tableau' pour une fenêtre sans ébrasement ni feuillure dans le mur ?",
+    "pages_attendues": [ { "document_title": "POSE_kommerling70_dta-6-16-2335", "pages": [12] } ],
+    "reponse_attendue": "C'est une pose située en tableau, sans ébrasement ni feuillure dans le mur, où le calfeutrement est réalisé en tunnel tandis que la fixation de la fenêtre se fait en tableau."
+  },
+  {
+    "id": "QA1-082",
+    "type": "mono",
+    "question": "Dans le montage de l'élargisseur 0303 avec le profilé 6115 (équerre 9714), quelle longueur minimale de renfort est indiquée pour la fixation de l'élément supérieur ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Un renfort de 250 mm minimum ; les bouchons d'élargisseur sont ensuite collés à la colle PVC."
+  },
+  {
+    "id": "QA1-083",
+    "type": "mono",
+    "question": "Quel entraxe maximal dois-je respecter pour la sous-cale de vitrage A272 posée sur un seuil, et quelle norme régit le calage ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_dta-6-16-2335", "pages": [3] } ],
+    "reponse_attendue": "Un entraxe maximal de 800 mm ; le calage doit par ailleurs suivre la norme NF DTU 39."
+  },
+  {
+    "id": "QA1-084",
+    "type": "mono",
+    "question": "Quel gabarit dois-je utiliser pour percer le capot et le dormant lors d'un montage rénovation, et quel entraxe respecter pour les vis inox ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_dta-6-16-2335", "pages": [5] } ],
+    "reponse_attendue": "Le gabarit de perçage T127, avec un premier perçage à 150 mm de chaque extrémité puis un entraxe maximal de 400 mm entre les fixations suivantes."
+  },
+  {
+    "id": "QA1-085",
+    "type": "mono",
+    "question": "En montage rénovation avec demi-capot en traverse basse, à quel intervalle dois-je visser les tapées ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_dta-6-16-2335", "pages": [8] } ],
+    "reponse_attendue": "Une vis tous les 300 mm."
+  },
+  {
+    "id": "QA1-086",
+    "type": "mono",
+    "question": "Sur le dormant 6104/6127, comment puis-je réaliser la décompression en traverse haute ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_dta-6-16-2335", "pages": [10] } ],
+    "reponse_attendue": "Soit par un perçage de diamètre 6 mm, soit par la suppression du joint sur une largeur de 100 mm en traverse haute."
+  },
+  {
+    "id": "QA1-087",
+    "type": "mono",
+    "question": "Sur ce DTA, quelles sont les deux options possibles pour réaliser le drainage d'un dormant, et pour la décompression ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_dta-6-16-2335", "pages": [11] } ],
+    "reponse_attendue": "Le drainage se fait par un trou oblong 5x25 mm ou un trou de diamètre 8 mm ; la décompression se fait par un trou oblong 5x25 mm ou un trou de diamètre 6 mm."
+  },
+  {
+    "id": "QA1-088",
+    "type": "mono",
+    "question": "Pour une fenêtre en couleur sombre, combien de trous de ventilation dois-je prévoir au minimum par cadre, et de quel diamètre ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_dta-6-16-2335", "pages": [11] } ],
+    "reponse_attendue": "Au minimum un trou oblong par cadre, devant ouvrir toutes les chambres exposées, avec un diamètre minimum de Ø5 mm."
+  },
+  {
+    "id": "QA1-089",
+    "type": "mono",
+    "question": "Que signifie une mise en œuvre 'en tableau, calfeutrée en tunnel et fixée en tableau' pour une fenêtre sans ébrasement ni feuillure dans le mur ?",
+    "pages_attendues": [ { "document_title": "POSE_profine-perform70_dta-6-16-2335", "pages": [12] } ],
+    "reponse_attendue": "C'est une pose située en tableau, sans ébrasement ni feuillure dans le mur, où le calfeutrement est réalisé en tunnel tandis que la fixation de la fenêtre se fait en tableau."
+  },
+  {
+    "id": "QA1-090",
+    "type": "mono",
+    "question": "Ce DTA (Avis Technique) du système Kömmerling 70 couvre-t-il des chantiers en Outre-mer ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Non, la zone géographique visée par cet Avis Technique est la France métropolitaine."
+  },
+  {
+    "id": "QA1-091",
+    "type": "mono",
+    "question": "Puis-je poser un capot complet en traverse basse de dormant sur une fenêtre neuve (construction neuve) ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Non, la mise en place d'un capot complet en traverse basse de dormant est réservée aux fenêtres posées en rénovation sur dormant existant."
+  },
+  {
+    "id": "QA1-092",
+    "type": "mono",
+    "question": "Quel profilé dois-je utiliser en dos de dormant lors d'une pose en tableau, et pourquoi ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Le profilé référence G026, afin de garantir une surface de calfeutrement minimale de 10 mm."
+  },
+  {
+    "id": "QA1-093",
+    "type": "mono",
+    "question": "En pose en tableau ou en applique extérieure, dois-je prévoir un équipement particulier pour la sécurité mécanique de la fenêtre ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Oui, il convient de mettre en place des limiteurs d'ouverture en feuillure."
+  },
+  {
+    "id": "QA1-094",
+    "type": "mono",
+    "question": "Ce DTA garantit-il la sécurité contre les chutes de personnes par la fenêtre, par exemple en étage ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Non, la sécurité aux chutes des personnes n'est pas évaluée dans ce document ; elle doit être évaluée au cas par cas."
+  },
+  {
+    "id": "QA1-095",
+    "type": "mono",
+    "question": "Un client me demande le classement au feu des profilés PVC blancs, filmés et laqués de ce système : que puis-je lui répondre ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Les profilés PVC sont classés M2, les profilés PVC filmés sont classés M3, et les profilés PVC laqués sont classés M2."
+  },
+  {
+    "id": "QA1-096",
+    "type": "mono",
+    "question": "Existe-t-il une fiche de données de sécurité (FDS) pour ce procédé de fenêtres PVC ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Non, le procédé ne dispose pas de Fiche de Données de Sécurité ; le port d'équipements de protection individuelle (EPI) est recommandé lors de la mise en œuvre."
+  },
+  {
+    "id": "QA1-097",
+    "type": "mono",
+    "question": "Dois-je apporter une justification parasismique particulière pour poser ces fenêtres en zone sismique ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Non, ce système ne présentant pas d'éléments de remplissage supérieurs à 4 m², il n'y a pas lieu d'apporter de justification particulière."
+  },
+  {
+    "id": "QA1-098",
+    "type": "mono",
+    "question": "Quel est le débit de fuite maximum sous 4 Pa pour une fenêtre classée A*3 selon la norme NF EN 12207 ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "1,05 m3/h.m2 pour la classe A*3 (contre 3,16 m3/h.m2 pour la classe A*2 et 0,35 m3/h.m2 pour la classe A*4)."
+  },
+  {
+    "id": "QA1-099",
+    "type": "mono",
+    "question": "Ce système de fenêtre propose-t-il une solution de seuil accessible aux personnes handicapées sans rampe amovible ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Oui, ce système dispose d'une solution de seuil qui permet l'accès aux personnes handicapées sans recours à une rampe amovible intérieure, conformément à l'arrêté du 30 novembre 2007."
+  },
+  {
+    "id": "QA1-100",
+    "type": "mono",
+    "question": "Les quincailleries et profilés d'étanchéité de ces fenêtres sont-ils faciles à remplacer en cas d'usure ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Oui, les éléments susceptibles d'usure (quincailleries, profilés complémentaires d'étanchéité) sont aisément remplaçables, pour un entretien réduit."
+  },
+  {
+    "id": "QA1-101",
+    "type": "mono",
+    "question": "Quelle marque de qualité assure la constance de fabrication des profilés PVC de ce système ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [3] } ],
+    "reponse_attendue": "La marque de qualité QB-Profilés de fenêtres en PVC (QB 59) ; les profilés filmés ou laqués bénéficient en plus de la marque Profilés PVC Revêtus (QB33)."
+  },
+  {
+    "id": "QA1-102",
+    "type": "mono",
+    "question": "Lors de la réalisation du drainage avec le manchon G008, à quoi dois-je faire particulièrement attention ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_kommerling70_dta-6-16-2335", "pages": [3] } ],
+    "reponse_attendue": "Il faut être particulièrement attentif lors de la mise en place du mastic d'étanchéité entre le capotage aluminium et le dormant, afin qu'il n'obstrue pas l'orifice de drainage."
+  },
+  {
+    "id": "QA1-103",
+    "type": "mono",
+    "question": "Ce DTA (Avis Technique) du système Kömmerling 70 couvre-t-il des chantiers en Outre-mer ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Non, la zone géographique visée par cet Avis Technique est la France métropolitaine."
+  },
+  {
+    "id": "QA1-104",
+    "type": "mono",
+    "question": "Puis-je poser un capot complet en traverse basse de dormant sur une fenêtre neuve (construction neuve) ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Non, la mise en place d'un capot complet en traverse basse de dormant est réservée aux fenêtres posées en rénovation sur dormant existant."
+  },
+  {
+    "id": "QA1-105",
+    "type": "mono",
+    "question": "Quel profilé dois-je utiliser en dos de dormant lors d'une pose en tableau, et pourquoi ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Le profilé référence G026, afin de garantir une surface de calfeutrement minimale de 10 mm."
+  },
+  {
+    "id": "QA1-106",
+    "type": "mono",
+    "question": "En pose en tableau ou en applique extérieure, dois-je prévoir un équipement particulier pour la sécurité mécanique de la fenêtre ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Oui, il convient de mettre en place des limiteurs d'ouverture en feuillure."
+  },
+  {
+    "id": "QA1-107",
+    "type": "mono",
+    "question": "Ce DTA garantit-il la sécurité contre les chutes de personnes par la fenêtre, par exemple en étage ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [1] } ],
+    "reponse_attendue": "Non, la sécurité aux chutes des personnes n'est pas évaluée dans ce document ; elle doit être évaluée au cas par cas."
+  },
+  {
+    "id": "QA1-108",
+    "type": "mono",
+    "question": "Un client me demande le classement au feu des profilés PVC blancs, filmés et laqués de ce système : que puis-je lui répondre ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Les profilés PVC sont classés M2, les profilés PVC filmés sont classés M3, et les profilés PVC laqués sont classés M2."
+  },
+  {
+    "id": "QA1-109",
+    "type": "mono",
+    "question": "Existe-t-il une fiche de données de sécurité (FDS) pour ce procédé de fenêtres PVC ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Non, le procédé ne dispose pas de Fiche de Données de Sécurité ; le port d'équipements de protection individuelle (EPI) est recommandé lors de la mise en œuvre."
+  },
+  {
+    "id": "QA1-110",
+    "type": "mono",
+    "question": "Dois-je apporter une justification parasismique particulière pour poser ces fenêtres en zone sismique ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Non, ce système ne présentant pas d'éléments de remplissage supérieurs à 4 m², il n'y a pas lieu d'apporter de justification particulière."
+  },
+  {
+    "id": "QA1-111",
+    "type": "mono",
+    "question": "Quel est le débit de fuite maximum sous 4 Pa pour une fenêtre classée A*3 selon la norme NF EN 12207 ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "1,05 m3/h.m2 pour la classe A*3 (contre 3,16 m3/h.m2 pour la classe A*2 et 0,35 m3/h.m2 pour la classe A*4)."
+  },
+  {
+    "id": "QA1-112",
+    "type": "mono",
+    "question": "Ce système de fenêtre propose-t-il une solution de seuil accessible aux personnes handicapées sans rampe amovible ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Oui, ce système dispose d'une solution de seuil qui permet l'accès aux personnes handicapées sans recours à une rampe amovible intérieure, conformément à l'arrêté du 30 novembre 2007."
+  },
+  {
+    "id": "QA1-113",
+    "type": "mono",
+    "question": "Les quincailleries et profilés d'étanchéité de ces fenêtres sont-ils faciles à remplacer en cas d'usure ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [2] } ],
+    "reponse_attendue": "Oui, les éléments susceptibles d'usure (quincailleries, profilés complémentaires d'étanchéité) sont aisément remplaçables, pour un entretien réduit."
+  },
+  {
+    "id": "QA1-114",
+    "type": "mono",
+    "question": "Quelle marque de qualité assure la constance de fabrication des profilés PVC de ce système ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [3] } ],
+    "reponse_attendue": "La marque de qualité QB-Profilés de fenêtres en PVC (QB 59) ; les profilés filmés ou laqués bénéficient en plus de la marque Profilés PVC Revêtus (QB33)."
+  },
+  {
+    "id": "QA1-115",
+    "type": "mono",
+    "question": "Lors de la réalisation du drainage avec le manchon G008, à quoi dois-je faire particulièrement attention ?",
+    "pages_attendues": [ { "document_title": "GARANTIES-ENTRETIEN_profine-perform70_dta-6-16-2335", "pages": [3] } ],
+    "reponse_attendue": "Il faut être particulièrement attentif lors de la mise en place du mastic d'étanchéité entre le capotage aluminium et le dormant, afin qu'il n'obstrue pas l'orifice de drainage."
+  }
+]

@@ -540,6 +540,63 @@ class Settings(BaseSettings):
     VERIFICATION_INCLUDE_MANIFEST: bool = os.getenv(
         "VERIFICATION_INCLUDE_MANIFEST", "true"
     ).strip().lower() in ("true", "1", "yes", "on")
+    # --- Boucle agentique de recherche (plan_boucle_agentique_2026-07-29, lots B0-B9) ---
+    # Flag maître du juge pré-génération + relances (E4/E5). false = pipeline strictement
+    # identique à l'existant, zéro appel LLM supplémentaire avant génération.
+    AGENTIC_LOOP_ENABLED: bool = os.getenv("AGENTIC_LOOP_ENABLED", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # "shadow" : le juge tourne et TRACE ses verdicts sans jamais agir (calibrage prod) ;
+    # "active" : ses verdicts pilotent l'élection, les relances et la note de recherche.
+    AGENTIC_LOOP_MODE: str = os.getenv("AGENTIC_LOOP_MODE", "shadow").strip().lower()
+    # Deadline dure de la boucle (retrievals + juges cumulés) : au-delà on génère avec ce
+    # qu'on a, en aveu structuré si le dernier verdict était « insuffisant ».
+    LOOP_DEADLINE_S: float = float(os.getenv("LOOP_DEADLINE_S", "60"))
+    # Modèle du juge (E4) et de la vérification (E7). DISTINCT du modèle de génération :
+    # un modèle qui se relit se blanchit (cas TGY3710 du 29/07).
+    MODEL_JUDGE: str = os.getenv("MODEL_JUDGE", "mistral-small-latest")
+    # Relances de recherche max décidées par le juge (chacune = 1 retrieval + 1 juge).
+    JUDGE_MAX_RETRIES: int = int(os.getenv("JUDGE_MAX_RETRIES", "2"))
+    # Timeout d'un appel juge ; au-delà : verdict « unknown », on génère comme aujourd'hui.
+    JUDGE_TIMEOUT_S: float = float(os.getenv("JUDGE_TIMEOUT_S", "20"))
+    # Le pack-juge compare PLUS LARGE que le pack-génération : documents candidats montrés
+    # au juge (le pack-génération reste borné par CAG_MAX_DOCUMENTS/l'élection).
+    JUDGE_MAX_CANDIDATE_DOCS: int = int(os.getenv("JUDGE_MAX_CANDIDATE_DOCS", "5"))
+    # Plafond de caractères du pack-juge (rempli par les preuves, manifeste toujours inclus).
+    JUDGE_CONTEXT_MAX_CHARS: int = int(os.getenv("JUDGE_CONTEXT_MAX_CHARS", "24000"))
+    # Images de pages jointes au juge : off | auto (intent visuel : installation/SAV) | always.
+    JUDGE_IMAGES_MODE: str = os.getenv("JUDGE_IMAGES_MODE", "auto").strip().lower()
+    JUDGE_MAX_IMAGES: int = int(os.getenv("JUDGE_MAX_IMAGES", "4"))
+    # Confiance minimale pour qu'un verdict soit actionnable (sinon traité comme unknown).
+    JUDGE_MIN_CONFIDENCE: float = float(os.getenv("JUDGE_MIN_CONFIDENCE", "0.5"))
+    # --- Vérification post-génération : flag maître + gate (B7) ---
+    # false = aucune vérification (historiquement elle tournait TOUJOURS, sans effet).
+    VERIFY_ENABLED: bool = os.getenv("VERIFY_ENABLED", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Modèle de la vérification ; vide = MODEL_JUDGE. Jamais le modèle de génération.
+    VERIFY_MODEL: str = os.getenv("VERIFY_MODEL", "").strip()
+    # true = la vérification BLOQUE l'émission (génération en tampon, réparation possible) ;
+    # false = comportement historique (post-hoc, trace seulement).
+    VERIFY_BLOCKING: bool = os.getenv("VERIFY_BLOCKING", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # buffer : générer en tampon, vérifier, puis émettre (v1). stream_correct : réservé
+    # (streamer puis corriger) — non implémenté, retombe sur buffer.
+    VERIFY_EMIT_MODE: str = os.getenv("VERIFY_EMIT_MODE", "buffer").strip().lower()
+    # Réparations max après un échec de vérification en mode bloquant.
+    VERIFY_MAX_REPAIRS: int = int(os.getenv("VERIFY_MAX_REPAIRS", "1"))
+    # Contrôle programmatique des CODES PRODUITS de la réponse (présence littérale dans le
+    # contexte packé) : attrape les références inventées (TGY3710) sans aucun LLM.
+    VERIFY_CODE_GROUNDING: bool = os.getenv("VERIFY_CODE_GROUNDING", "true").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
+    # Quota par document appliqué AUSSI au chemin reranké (B2) : la coupe dynamique choisit
+    # combien de pages, le quota choisit lesquelles — sans lui, 17 passages sur 19 pouvaient
+    # venir du même document et le juge n'avait rien à comparer.
+    RERANK_PER_DOC_QUOTA_ENABLED: bool = os.getenv(
+        "RERANK_PER_DOC_QUOTA_ENABLED", "true"
+    ).strip().lower() in ("true", "1", "yes", "on")
     RAG_NEIGHBOR_STRATEGY: str = os.getenv("RAG_NEIGHBOR_STRATEGY", "conditional")
     # Chars max par passage injecté au LLM. Relevé (4000 → 12000) pour laisser passer des
     # PAGES ENTIÈRES (texte consolidé + enrichissement) sans troncature, en profitant de la
@@ -733,6 +790,15 @@ class Settings(BaseSettings):
                 logger.warning("CAG_BUDGET_BY_INTENT illisible (JSON invalide) — défauts utilisés")
         return _CAG_BUDGET_DEFAULTS
 
+    @property
+    def effective_verify_model(self) -> str:
+        """Modèle réellement utilisé pour la vérification post-génération.
+
+        VERIFY_MODEL s'il est renseigné, sinon MODEL_JUDGE — jamais le modèle de
+        génération : un modèle qui se relit se blanchit (mécanisme n°1 du juge
+        auto-complaisant, cas TGY3710)."""
+        return self.VERIFY_MODEL or self.MODEL_JUDGE
+
     def coherence_warnings(self) -> List[str]:
         """Incohérences de configuration détectées au démarrage (jamais bloquantes).
 
@@ -776,6 +842,28 @@ class Settings(BaseSettings):
                 "cross-site autorisée). Renseigner la liste si un front séparé consomme l'API."
             )
 
+        if self.AGENTIC_LOOP_ENABLED and self.AGENTIC_LOOP_MODE not in ("shadow", "active"):
+            warnings.append(
+                f"AGENTIC_LOOP_MODE={self.AGENTIC_LOOP_MODE!r} inconnu (attendu shadow|active) : "
+                "la boucle sera traitée comme shadow (juge tracé, jamais actionné)."
+            )
+        if self.AGENTIC_LOOP_ENABLED and not self.CAG_ENABLED:
+            warnings.append(
+                "AGENTIC_LOOP_ENABLED=true mais CAG_ENABLED=false : le juge travaille sur les "
+                "dossiers candidats du packing CAG — la boucle est INERTE sur le chemin legacy."
+            )
+        if self.VERIFY_BLOCKING and not self.VERIFY_ENABLED:
+            warnings.append(
+                "VERIFY_BLOCKING=true mais VERIFY_ENABLED=false : le gate de vérification est "
+                "inerte (aucune vérification n'est exécutée)."
+            )
+        if self.VERIFY_ENABLED and self.effective_verify_model == self.MODEL_FAST:
+            warnings.append(
+                "Le modèle de vérification est identique au modèle de génération "
+                f"({self.MODEL_FAST}) : le juge se relit lui-même — verdicts complaisants "
+                "attendus. Renseigner VERIFY_MODEL ou MODEL_JUDGE avec un modèle distinct."
+            )
+
         return warnings
 
     def feature_summary(self) -> str:
@@ -795,7 +883,9 @@ class Settings(BaseSettings):
             f"query_understanding={onoff(self.QUERY_UNDERSTANDING_ENABLED)} "
             f"anchor={onoff(self.CONVERSATION_ANCHOR_ENABLED)} "
             f"fiche={onoff(self.FICHE_TECHNIQUE_ENABLED)} "
-            f"guided={onoff(self.GUIDED_FLOW_ENABLED)}"
+            f"guided={onoff(self.GUIDED_FLOW_ENABLED)} "
+            f"loop={self.AGENTIC_LOOP_MODE if self.AGENTIC_LOOP_ENABLED else 'off'} "
+            f"verify={('blocking' if self.VERIFY_BLOCKING else 'advisory') if self.VERIFY_ENABLED else 'off'}"
         )
 
     @field_validator('DATABASE_ECHO', mode='before')

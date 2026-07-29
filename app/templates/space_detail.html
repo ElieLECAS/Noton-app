@@ -2700,7 +2700,7 @@ function renderGenerationTrace(trace) {
       ["Passages retenus", r.nb_passages],
       ["k dynamique", r.dynamic_k],
       ["Reranking", r.rerank_status],
-      ["KAG actif", r.kag_enabled == null ? null : (r.kag_enabled ? "oui" : "non")],
+      ["KAG (ingestion)", r.kag_enabled == null ? null : (r.kag_enabled ? "oui" : "non")],
       ["Docs d'ancre", (r.anchor_document_ids && r.anchor_document_ids.length) ? r.anchor_document_ids.join(", ") : null],
     ])));
 
@@ -2729,6 +2729,43 @@ function renderGenerationTrace(trace) {
           <div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1">Top 5 ramené par le retry${rt.passages_replaced ? "" : " (écarté)"}</div>${_hits(rt.hits_after)}</div>
         </div>`;
       parts.push(_traceCard("Retry ciblé sur référence", "ti-refresh", inner));
+    }
+
+    // 4b-bis. Boucle agentique (B8) : rounds du juge de suffisance, relances, élection.
+    const lp = trace.loop;
+    if (lp && lp.rounds && lp.rounds.length) {
+      const _verdictLabel = (rd) => {
+        if (rd.status !== "ok") return "sans verdict (" + (rd.status_reason || "échec technique") + ")";
+        if (rd.verdict === "sufficient") return "suffisant" + (rd.evidence_verified ? " — preuve vérifiée" : "");
+        return "insuffisant";
+      };
+      const loopRows = lp.rounds.map((rd) => {
+        const bits = [_verdictLabel(rd)];
+        if (rd.confidence != null) bits.push("confiance " + Math.round(rd.confidence * 100) + " %");
+        if (rd.images) bits.push(rd.images + " image(s) de page");
+        if (rd.duration_ms != null) bits.push(rd.duration_ms + " ms");
+        const elected = (rd.elected || []).map((e) =>
+          `doc ${e.document_id}${(e.pages && e.pages.length) ? " p. " + e.pages.join(", ") : ""}`
+        ).join(" · ");
+        const extra = [];
+        if (elected) extra.push("élu : " + elected);
+        if (rd.action) extra.push("relance : " + rd.action);
+        if (rd.relaunch) extra.push("issue : " + rd.relaunch);
+        if (rd.missing) extra.push("manque : " + rd.missing);
+        return `<li class="py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">
+          <div class="text-xs font-medium text-gray-800 dark:text-gray-200">Round ${escapeHtml(String(rd.round))} — ${escapeHtml(bits.join(" · "))}</div>
+          <div class="text-[11px] text-gray-500 dark:text-gray-400 break-words">« ${escapeHtml(rd.query || "")} »${extra.length ? " — " + escapeHtml(extra.join(" · ")) : ""}</div>
+          ${rd.evidence ? `<div class="text-[11px] text-emerald-700 dark:text-emerald-300 break-words">Preuve : « ${escapeHtml(rd.evidence)} »</div>` : ""}
+        </li>`;
+      }).join("");
+      let loopInner = _traceKV([
+        ["Mode", lp.mode === "active" ? "actif — le juge pilote élection et relances" : "shadow — verdicts tracés, jamais actionnés"],
+        ["Rounds", lp.rounds.length],
+        ["Deadline atteinte", lp.deadline_hit ? "oui" : null],
+        ["Erreur", lp.error || null],
+      ]);
+      loopInner += `<ul class="-my-1 mt-1">${loopRows}</ul>`;
+      parts.push(_traceCard("Boucle agentique — juge de suffisance", "ti-repeat", loopInner));
     }
 
     // 4c. Boost d'ancre : rend visible qu'un tour a été biaisé par le sujet courant.
@@ -2796,11 +2833,27 @@ function renderGenerationTrace(trace) {
   // 7. Vérification post-génération
   const v = trace.verification;
   if (v) {
+    const _VERIF_ACTION_LABELS = {
+      passed: "conforme — émise",
+      repaired: "réparée avant émission (gate bloquant)",
+      flagged: "non conforme — émise avec marquage",
+      detected_only: "problème détecté (post-hoc, non bloquant)",
+    };
     let inner = _traceKV([
       ["Vérifiée", v.ok == null ? null : (v.ok ? "conforme" : "problème détecté")],
       ["Répond à la question", v.answers_question == null ? null : (v.answers_question ? "oui" : "non")],
       ["Ancrée dans les sources", v.grounded == null ? null : (v.grounded ? "oui" : "non")],
+      ["Juge LLM", v.judge_status === "unknown" ? "indisponible (échec technique — seul le contrôle programmatique fait foi)" : null],
+      ["Action", _VERIF_ACTION_LABELS[v.action] || null],
     ]);
+    if (v.repaired) {
+      inner += `<div class="mt-1 px-2 py-1.5 rounded bg-emerald-500/10 text-[11px] text-emerald-800 dark:text-emerald-300">
+        ✔ Réponse régénérée après contrôle — éléments non étayés restants : ${
+          (v.unsupported_after_repair && v.unsupported_after_repair.length)
+            ? escapeHtml(v.unsupported_after_repair.join(", "))
+            : "aucun"
+        }.</div>`;
+    }
     if (v.unsupported_claims && v.unsupported_claims.length) {
       inner += `<div><div class="text-[11px] text-gray-500 dark:text-gray-400 mb-1 mt-1">Affirmations non étayées</div>` +
         `<ul class="list-disc pl-4 text-xs text-amber-700 dark:text-amber-300 space-y-0.5">` +

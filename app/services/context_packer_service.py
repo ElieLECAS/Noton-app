@@ -251,6 +251,47 @@ def aggregate_documents(
     return ranked[:max_documents]
 
 
+def _apply_judge_election(
+    ranked_docs: List[Tuple[int, Dict[str, Any]]],
+    elected_document_ids: Optional[List[int]],
+    pinned_pages: Optional[Dict[int, List[int]]],
+    *,
+    max_documents: int,
+) -> List[Tuple[int, Dict[str, Any]]]:
+    """Élection du juge de suffisance (B6, plan boucle agentique 2026-07-29).
+
+    Les documents élus par le juge passent EN TÊTE, dans l'ordre du juge — il a lu les
+    dossiers candidats, son classement prime sur le score d'élection du retriever. Les
+    pages qu'il a citées sont injectées dans ``matched_pages`` avec une valeur supérieure
+    au meilleur score existant : elles gagnent la course aux seeds de la fenêtre
+    gloutonne et ne peuvent pas être rognées tant que le document a du budget.
+
+    Fonction pure (aucun accès DB) — testable unitairement."""
+    if elected_document_ids:
+        by_id = {did: meta for did, meta in ranked_docs}
+        head: List[Tuple[int, Dict[str, Any]]] = []
+        for did in dict.fromkeys(int(d) for d in elected_document_ids):
+            head.append((did, by_id.pop(did, _new_document_entry())))
+        others = [(did, meta) for did, meta in ranked_docs if did in by_id]
+        ranked_docs = head + others[: max(0, max_documents - len(head))]
+
+    pinned = {
+        int(did): [int(p) for p in (pages or []) if int(p) > 0]
+        for did, pages in (pinned_pages or {}).items()
+    }
+    if pinned:
+        for did, meta in ranked_docs:
+            pages = pinned.get(int(did))
+            if not pages:
+                continue
+            matched: Dict[int, float] = meta.setdefault("matched_pages", {})
+            top = max(matched.values(), default=0.0)
+            pin_value = (top if top > 0 else 1.0) * 1.05
+            for page in pages:
+                matched[page] = max(float(matched.get(page, 0.0)), pin_value)
+    return ranked_docs
+
+
 def _seed_pages(matched_pages: Dict[int, float], max_seeds: int) -> List[Tuple[int, float]]:
     """Pages matchées promues en SEEDS, les mieux scorées d'abord.
 
@@ -483,6 +524,8 @@ def build_cag_context(
     anchor_document_ids: Optional[List[int]] = None,
     intent: Optional[str] = None,
     emit_sources_tag: bool = True,
+    elected_document_ids: Optional[List[int]] = None,
+    pinned_pages: Optional[Dict[int, List[int]]] = None,
 ) -> Dict[str, Any]:
     """Construit le message système CAG : documents entiers/étendus sous budget de tokens.
 
@@ -510,6 +553,13 @@ def build_cag_context(
 
     ranked_docs = aggregate_documents(passages, max_documents=max_documents)
 
+    # Élection du juge (B6) : quand le juge de suffisance a statué, son classement prime —
+    # documents élus en tête, pages citées promues seeds. L'ancre conversationnelle est
+    # alors ignorée : le juge a vu les dossiers candidats (ancre comprise) et a tranché.
+    ranked_docs = _apply_judge_election(
+        ranked_docs, elected_document_ids, pinned_pages, max_documents=max_documents
+    )
+
     # GARANTIE d'ancrage : les documents du sujet courant de la conversation sont TOUJOURS
     # packés, en tête, même si le retrieval de ce tour ne les a pas fait remonter (ex. suivi
     # « tu as ses dimensions ? » où le mot "dimensions" tire vers un autre manuel). Un boost
@@ -519,7 +569,7 @@ def build_cag_context(
     # au tour suivant — périmètre confirmé compris — n'avait plus de place. Les ancres
     # au-delà du plafond restent packées si le retrieval de ce tour les a fait remonter.
     anchor_slots = max(0, settings.CAG_ANCHOR_SLOTS)
-    if anchor_document_ids and anchor_slots > 0:
+    if anchor_document_ids and anchor_slots > 0 and not elected_document_ids:
         forced_ids: List[int] = []
         for aid in anchor_document_ids:
             aid = int(aid)

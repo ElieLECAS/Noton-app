@@ -206,6 +206,26 @@ def protect_colpali_visual_hits(
     return final, protected
 
 
+def _pool_in_rerank_order(
+    scored: List[Tuple[NodeWithScore, float]],
+    pool_by_key: Dict[str, UnifiedPageHit],
+) -> List[UnifiedPageHit]:
+    """Pool COMPLET remis dans l'ordre des scores de rerank décroissants (B2).
+
+    Le quota par document a besoin de voir AU-DELÀ de la coupe dynamique pour repêcher
+    les pages d'autres documents ; la coupe seule ne connaît que le volume."""
+    ordered: List[UnifiedPageHit] = []
+    seen: set = set()
+    for nws, raw_score in sorted(scored, key=lambda t: float(t[1]), reverse=True):
+        key = (nws.node.metadata or {}).get("page_key")
+        hit = pool_by_key.get(key)
+        if hit is None or key in seen:
+            continue
+        seen.add(key)
+        ordered.append(hit)
+    return ordered
+
+
 async def rerank_unified_page_hits(
     session: Session,
     query_text: str,
@@ -268,6 +288,21 @@ async def rerank_unified_page_hits(
         hit = _hit_from_node(nws, pool_by_key)
         if hit:
             reranked.append(hit)
+
+    # Quota par document AUSSI sur le chemin reranké (B2, plan 2026-07-29). La coupe
+    # dynamique décide COMBIEN de pages passent ; le quota décide LESQUELLES : sans lui,
+    # 17 passages sur 19 pouvaient venir du même document (cas mesuré 27/07) et l'élection
+    # CAG comme le juge de suffisance n'avaient rien à comparer. On rejoue la sélection sur
+    # le pool COMPLET ordonné par score de rerank, à taille inchangée (le k dynamique reste
+    # souverain sur le volume), slots ColPali désactivés ici — ils sont réservés juste après.
+    if settings.RERANK_PER_DOC_QUOTA_ENABLED and reranked:
+        ordered_pool = _pool_in_rerank_order(scored, pool_by_key)
+        if ordered_pool:
+            from app.services.page_retrieval_service import select_final_hits
+
+            reranked, _ = select_final_hits(
+                ordered_pool, len(reranked), colpali_slots=0
+            )
 
     final_hits, protected = protect_colpali_visual_hits(reranked, hits)
 
