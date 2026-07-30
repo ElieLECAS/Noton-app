@@ -1,7 +1,10 @@
-"""P0.4 — Fusion de la décision guidée + requêtes déterministes dans la compréhension.
+"""Compréhension fusionnée : UN SEUL appel LLM avant le retrieval, requêtes déterministes.
 
-Objectif : UN SEUL appel LLM avant le retrieval (fused), la décision guidée portée par
-ce même appel, et les requêtes retriever construites sans LLM.
+Refonte Arbre SAV 2026-07-30 : la décision guidée (is_guided/product_named/…) a été
+RETIRÉE du prompt fusionné — le RAG répond toujours, l'entrée en diagnostic est
+déterministe (guided_entry_index_service). Ces tests vérifient que le pipeline de
+compréhension reste à un appel unique et que les requêtes retriever sont construites
+sans LLM.
 """
 import json
 from unittest import mock
@@ -9,12 +12,9 @@ from unittest import mock
 import pytest
 
 from app.services.lightweight_query_understanding import (
-    GuidedDecision,
     _node_build_queries_fast,
-    _parse_guided_fields,
     run_lightweight_understanding,
 )
-from app.services.query_reasoning_service import GuidedModeDecision, resolve_guided_mode
 
 
 def _fused_response(**overrides):
@@ -41,7 +41,6 @@ def _fused_response(**overrides):
 @pytest.mark.asyncio
 @mock.patch("app.config.settings.QUERY_FUSED_UNDERSTANDING_ENABLED", True)
 @mock.patch("app.config.settings.QUERY_GENERATE_QUERIES_LLM", False)
-@mock.patch("app.config.settings.GUIDED_DECISION_IN_FUSED", False)
 async def test_single_llm_call_before_retrieval(db_session):
     fake_chat = mock.AsyncMock(return_value=_fused_response())
     with mock.patch("app.services.lightweight_query_understanding.chat", fake_chat):
@@ -60,49 +59,24 @@ async def test_single_llm_call_before_retrieval(db_session):
 @pytest.mark.asyncio
 @mock.patch("app.config.settings.QUERY_FUSED_UNDERSTANDING_ENABLED", True)
 @mock.patch("app.config.settings.QUERY_GENERATE_QUERIES_LLM", False)
-@mock.patch("app.config.settings.GUIDED_DECISION_IN_FUSED", True)
-@mock.patch("app.config.settings.GUIDED_FLOW_ENABLED", True)
-async def test_guided_decision_in_same_call(db_session):
-    fake_chat = mock.AsyncMock(
-        return_value=_fused_response(
-            is_guided=True,
-            flow_kind="howto",
-            product_named=False,
-            needs_intent_clarification=False,
-        )
-    )
+async def test_fused_prompt_has_no_guided_fields(db_session):
+    """Le bloc F-J (is_guided/product_named/…) ne doit plus apparaître dans le prompt :
+    le guidé ne démarre plus depuis une classification du message libre."""
+    fake_chat = mock.AsyncMock(return_value=_fused_response())
     with mock.patch("app.services.lightweight_query_understanding.chat", fake_chat):
         result = await run_lightweight_understanding(
-            user_message="comment poser le seuil ?",
+            user_message="mon volet roulant est bloqué",
             history=[],
             session=db_session,
         )
-    # Toujours un seul appel LLM, mais la décision guidée en est extraite.
     assert fake_chat.call_count == 1
-    assert result.guided.present is True
-    assert result.guided.is_guided is True
-    assert result.guided.product_named is False
-
-
-# ---------------------------------------------------------------------------
-# _parse_guided_fields (normalisation)
-# ---------------------------------------------------------------------------
-
-
-def test_parse_guided_fields_normalizes():
-    parsed = _parse_guided_fields(
-        {"is_guided": True, "flow_kind": "DIAGNOSTIC", "detected_symptom": "inconnu_xyz",
-         "product_named": False, "needs_intent_clarification": True}
-    )
-    assert parsed["present"] is True
-    assert parsed["flow_kind"] == "diagnostic"
-    assert parsed["detected_symptom"] == ""  # slug inconnu → écarté
-    assert parsed["product_named"] is False
-
-
-def test_parse_guided_fields_defaults_product_named_true_when_absent():
-    parsed = _parse_guided_fields({"is_guided": False})
-    assert parsed["product_named"] is True  # absent → True (comportement historique)
+    _, kwargs = fake_chat.call_args
+    joined_prompt = " ".join(m.get("content", "") for m in (kwargs.get("context") or []))
+    assert "is_guided" not in joined_prompt
+    assert "product_named" not in joined_prompt
+    assert "needs_intent_clarification" not in joined_prompt
+    # Le résultat ne porte plus de décision guidée.
+    assert not hasattr(result, "guided")
 
 
 # ---------------------------------------------------------------------------
@@ -125,53 +99,3 @@ def test_deterministic_queries_enrich_lexical():
     # Le canal lexical est enrichi des entités + références.
     assert "dormant 6101" in rq["lexical"] and "PVC" in rq["lexical"]
     assert out["query_strategy"] == "single"
-
-
-# ---------------------------------------------------------------------------
-# resolve_guided_mode (dérive du fused vs fallback)
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.asyncio
-async def test_resolve_guided_mode_uses_fused_without_llm():
-    fused = GuidedDecision(
-        present=True, is_guided=True, flow_kind="diagnostic",
-        detected_symptom="", product_named=False, needs_intent_clarification=True,
-    )
-    with mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode",
-        new=mock.AsyncMock(side_effect=AssertionError("ne doit PAS être appelé")),
-    ):
-        decision = await resolve_guided_mode(
-            "comment régler la hauteur ?", [], fused_guided=fused, topic="réglage hauteur"
-        )
-    assert decision.is_guided is True
-    assert decision.flow_kind == "diagnostic"
-    assert decision.product_named is False
-    assert decision.needs_intent_clarification is True
-    assert decision.topic == "réglage hauteur"
-
-
-@pytest.mark.asyncio
-async def test_resolve_guided_mode_falls_back_when_not_present():
-    fused = GuidedDecision(present=False)
-    fallback = GuidedModeDecision(is_guided=True, flow_kind="howto", topic="pose")
-    with mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode",
-        new=mock.AsyncMock(return_value=fallback),
-    ) as m:
-        decision = await resolve_guided_mode("comment poser ?", [], fused_guided=fused)
-    m.assert_awaited_once()
-    assert decision.is_guided is True
-
-
-@pytest.mark.asyncio
-async def test_resolve_guided_mode_falls_back_when_none():
-    fallback = GuidedModeDecision(is_guided=False)
-    with mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode",
-        new=mock.AsyncMock(return_value=fallback),
-    ) as m:
-        decision = await resolve_guided_mode("bonjour", [], fused_guided=None)
-    m.assert_awaited_once()
-    assert decision.is_guided is False

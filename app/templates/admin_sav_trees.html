@@ -1,0 +1,1220 @@
+{% extends "base.html" %}
+
+{% block title %}Dépannages — {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Graphe : tout tient dans la zone (aucun défilement), nœuds à taille lisible,
+       déplaçables à la souris. Tout ce qui se remplit est dans le panneau de droite. */
+    /* Viewport : on déplace et on zoome la SCÈNE (translate + scale), jamais de
+       barres de défilement. Les cas vivent en coordonnées absolues. */
+    #board { position: relative; overflow: hidden; flex: 1; background: rgba(99,102,241,.03); cursor: grab; }
+    #board.panning { cursor: grabbing; }
+    .dark #board { background: rgba(0,0,0,.14); }
+    #scene { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+    /* width/height explicites : sans elles le SVG prend sa taille intrinsèque
+       (300×150) et les liens sont coupés. */
+    #wires { position: absolute; top: 0; left: 0; pointer-events: none; }
+
+    .wire { fill: none; stroke: #94a3b8; stroke-width: 1.6px; }
+    .dark .wire { stroke: #64748b; }
+    .wire.hot { stroke: #6366f1; stroke-width: 2.4px; }
+    .wire.pale { stroke: rgba(148,163,184,.25); }
+
+    .box {
+        position: absolute; box-sizing: border-box; height: 62px;
+        display: flex; align-items: center; gap: 6px; padding: 0 12px;
+        border-radius: 12px; border: 1.5px solid rgba(0,0,0,.14); background: #fff;
+        cursor: grab; user-select: none; transition: box-shadow .12s, border-color .12s, opacity .12s;
+    }
+    .dark .box { background: #2a3350; border-color: rgba(255,255,255,.16); }
+    .box:hover { border-color: rgba(99,102,241,.7); }
+    .box.sel { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.22); }
+    .box.kin { border-color: rgba(99,102,241,.5); }
+    .box.pale { opacity: .4; }
+    .box.dragging { cursor: grabbing; box-shadow: 0 8px 20px rgba(0,0,0,.18); z-index: 20; }
+    .box.apex { background: linear-gradient(135deg,#4f46e5,#6366f1); border-color: #4338ca; color: #fff; border-radius: 999px; }
+    .box.end { border-radius: 999px; }
+    .box.sol { border-color: rgba(16,185,129,.65); }
+    .box.sav { border-color: rgba(245,158,11,.8); }
+    .box.void { border-style: dashed; border-color: rgba(239,68,68,.7); }
+
+    /* Jusqu'à 3 lignes : couper les intitulés les rendait illisibles. */
+    .box .txt { flex: 1; min-width: 0; font-size: 13px; font-weight: 500; line-height: 1.18;
+        display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .box.apex .txt { font-weight: 700; }
+    .box .txt.ph { color: #9ca3af; font-style: italic; font-weight: 400; }
+    .box.apex .txt.ph { color: rgba(255,255,255,.75); }
+
+    .mini { font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 999px;
+        display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+    .mini i { font-size: 12px; line-height: 1; }
+    .m-doc { background: rgba(168,85,247,.16); color: #7e22ce; }
+    .m-sav { background: rgba(245,158,11,.2); color: #b45309; }
+    .m-sol { background: rgba(16,185,129,.16); color: #047857; }
+    .m-link { background: rgba(14,165,233,.18); color: #0369a1; }
+    .m-void { background: rgba(239,68,68,.16); color: #b91c1c; }
+    .dark .m-doc { color: #d8b4fe; } .dark .m-sav { color: #fcd34d; }
+    .dark .m-sol { color: #6ee7b7; } .dark .m-link { color: #7dd3fc; } .dark .m-void { color: #fca5a5; }
+
+    .plus-btn {
+        position: absolute; right: -10px; bottom: -10px; width: 22px; height: 22px; border-radius: 999px;
+        display: none; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;
+        line-height: 1; background: #4f46e5; color: #fff; box-shadow: 0 2px 6px rgba(79,70,229,.45); cursor: pointer;
+    }
+    .box:hover .plus-btn, .box.sel .plus-btn { display: flex; }
+
+    /* Panneau de droite : tout ce qui se saisit est ici, avec un libellé et une explication. */
+    #panel { width: 330px; flex: none; border-left: 1px solid rgba(0,0,0,.07); overflow-y: auto; }
+    .dark #panel { border-color: rgba(255,255,255,.08); }
+    .fld { padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,.05); }
+    .dark .fld { border-color: rgba(255,255,255,.06); }
+    .fld > label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 3px; }
+    .fld .why { display: block; font-size: 11px; color: #9ca3af; line-height: 1.35; margin-bottom: 6px; }
+    .fld input[type="text"], .fld textarea {
+        width: 100%; box-sizing: border-box; background: transparent; font: inherit; font-size: 13px;
+        border: 1px solid rgba(0,0,0,.14); border-radius: 9px; padding: 7px 9px; outline: none; resize: vertical;
+    }
+    .dark .fld input[type="text"], .dark .fld textarea { border-color: rgba(255,255,255,.16); }
+    .fld input[type="text"]:focus, .fld textarea:focus { border-color: #6366f1; }
+    .switch { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+    .switch input { margin-top: 2px; }
+
+    .chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 999px;
+        border: 1px solid rgba(0,0,0,.1); font-size: 12px; font-weight: 600; cursor: pointer; }
+    .dark .chip { border-color: rgba(255,255,255,.12); }
+    .chip:hover { border-color: #6366f1; }
+    .chip.on { background: rgba(99,102,241,.12); border-color: #6366f1; color: #4338ca; }
+    .dark .chip.on { color: #a5b4fc; }
+    .btn { padding: 7px 11px; border-radius: 9px; font-size: 12px; font-weight: 700;
+        border: 1px solid rgba(0,0,0,.12); width: 100%; text-align: center; }
+    .dark .btn { border-color: rgba(255,255,255,.14); }
+    .btn:hover { border-color: #6366f1; color: #4f46e5; }
+    .btn.primary { background: #4f46e5; color: #fff; border-color: #4338ca; }
+    .btn.primary:hover { background: #4338ca; color: #fff; }
+    .btn.danger { color: #dc2626; }
+    .btn.danger:hover { border-color: #dc2626; background: rgba(239,68,68,.08); }
+
+    .doc-row { display: flex; align-items: center; gap: 6px; font-size: 11px; margin-bottom: 5px;
+        border: 1px solid rgba(168,85,247,.35); background: rgba(168,85,247,.07); border-radius: 9px; padding: 5px 8px; }
+    .ib { font-size: 12px; color: #9ca3af; padding: 3px 5px; border-radius: 7px; }
+    .ib:hover { color: #4f46e5; background: rgba(79,70,229,.12); }
+    .ib.danger:hover { color: #ef4444; background: rgba(239,68,68,.12); }
+    .thumb { cursor: pointer; border: 2px solid transparent; border-radius: 6px; }
+    .thumb.sel { border-color: #4f46e5; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col min-h-0">
+    <!-- Bandeau : les symptômes + état -->
+    <div class="px-4 py-2.5 border-b border-black/5 dark:border-white/5 flex items-center gap-2 flex-wrap">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mr-1">Le client signale</span>
+        <div id="chips" class="flex items-center gap-1.5 flex-wrap"></div>
+        <div id="actions" class="hidden flex items-center gap-2 ml-auto">
+            <span id="saved" class="text-[11px] text-gray-400 w-24 text-right"></span>
+            <div class="zoom">
+                <button onclick="zoomBy(1/1.15)" title="Dézoomer">−</button>
+                <button onclick="fitView()" title="Tout faire tenir dans la vue" style="min-width:52px"><span id="zoom-pct">100 %</span></button>
+                <button onclick="zoomBy(1.15)" title="Zoomer">+</button>
+            </div>
+            <button onclick="tidy()" class="chip" title="Replacer automatiquement tous les cas">
+                <i class="ti ti-layout-distribute-vertical"></i> Ranger
+            </button>
+            <button id="service" onclick="toggleService()" class="chip"></button>
+            <button onclick="openCheck(true)" class="chip">
+                <i class="ti ti-circle-check"></i> Vérifier <span id="nerr" class="hidden mini m-void">0</span>
+            </button>
+            <div class="relative">
+                <button onclick="toggleMore()" class="chip"><i class="ti ti-dots"></i></button>
+                <div id="more" class="hidden absolute right-0 mt-1 w-64 rounded-xl glass-panel border border-black/10 dark:border-white/10 shadow-lg z-40 p-1 text-xs">
+                    <button onclick="openHistory()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"><i class="ti ti-history"></i> Anciennes versions</button>
+                    <button onclick="fromDocs()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"><i class="ti ti-sparkles"></i> Proposer des cas depuis la doc</button>
+                    <button onclick="exportGuide()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"><i class="ti ti-download"></i> Enregistrer une copie</button>
+                    <button onclick="dropGuide()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-red-600"><i class="ti ti-trash"></i> Supprimer ce symptôme</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-1 flex min-h-0">
+        <!-- Le graphe -->
+        <div id="board">
+            <div id="scene"><svg id="wires"></svg></div>
+            <div id="hello" class="hidden absolute inset-0 flex items-center justify-center p-8">
+                <div class="max-w-md text-center">
+                    <div class="text-5xl mb-4">🪜</div>
+                    <h2 class="text-xl font-bold mb-2">Le symptôme en haut, les cas en dessous</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">
+                        Vous listez les cas possibles et vous précisez chacun jusqu'à la solution.
+                        Vous n'écrivez aucune réponse : LIA pose les questions et rédige la solution
+                        depuis la notice que vous rattachez.
+                    </p>
+                    <button onclick="newGuide()" class="chip on"><i class="ti ti-plus"></i> Créer un symptôme</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panneau de droite -->
+        <aside id="panel" class="hidden"></aside>
+    </div>
+
+    <div class="px-4 py-1.5 border-t border-black/5 dark:border-white/5 text-[11px] text-gray-400 flex items-center gap-4 flex-wrap">
+        <span><b>Cliquez</b> un cas pour le modifier à droite · <b>glissez-le</b> pour le déplacer</span>
+        <span><b>Molette</b> = zoom · <b>glissez le fond</b> = déplacer le plan</span>
+        <span class="ml-auto">Un cas sans rien en dessous est une solution.</span>
+    </div>
+</div>
+
+<!-- ============ MODALES ============ -->
+<div id="m-new" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-6 w-full max-w-lg max-h-[85vh] overflow-y-auto">
+        <h3 class="text-lg font-bold mb-1">Nouveau symptôme</h3>
+        <p class="text-xs text-gray-500 mb-4">Le problème tel que le client le décrit.</p>
+        <div id="n-syms" class="grid grid-cols-2 gap-1.5 mb-2"></div>
+        <div id="n-other-wrap" class="hidden mb-3">
+            <input id="n-other" class="glass-input w-full rounded-lg px-3 py-2 text-sm" placeholder="Ex : Poignée dure à tourner">
+        </div>
+        <div id="n-rest" class="hidden">
+            <label class="block text-sm font-semibold mb-1 mt-3">Nom affiché</label>
+            <input id="n-title" class="glass-input w-full rounded-lg px-3 py-2 text-sm mb-3">
+            <label class="block text-sm font-semibold mb-1">Où le proposer ?</label>
+            <select id="n-space" class="glass-input w-full rounded-lg px-3 py-2 text-sm mb-4"><option value="">Dans tous les espaces</option></select>
+        </div>
+        <div class="flex justify-end gap-2">
+            <button onclick="hide('m-new')" class="btn" style="width:auto">Annuler</button>
+            <button id="n-ok" onclick="createGuide()" disabled class="btn primary" style="width:auto">Créer</button>
+        </div>
+    </div>
+</div>
+
+<div id="m-link" class="hidden fixed inset-0 z-[95] flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-5 w-full max-w-md max-h-[75vh] flex flex-col">
+        <h3 class="text-lg font-bold mb-1">Ce cas dépend de…</h3>
+        <p id="link-why" class="text-xs text-gray-500 mb-3"></p>
+        <div id="link-list" class="flex-1 overflow-y-auto space-y-1"></div>
+        <div class="flex justify-end mt-3"><button onclick="hide('m-link')" class="btn" style="width:auto">Fermer</button></div>
+    </div>
+</div>
+
+<div id="m-check" class="hidden fixed inset-0 z-[95] flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-5 w-full max-w-lg max-h-[80vh] flex flex-col">
+        <h3 id="ck-title" class="text-lg font-bold mb-1"></h3>
+        <p id="ck-why" class="text-xs text-gray-500 mb-3"></p>
+        <div id="ck-list" class="flex-1 overflow-y-auto space-y-1.5"></div>
+        <div class="flex justify-end mt-3"><button onclick="hide('m-check')" class="btn" style="width:auto">Fermer</button></div>
+    </div>
+</div>
+
+<div id="m-doc" class="hidden fixed inset-0 z-[95] flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-5 w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <h3 class="text-lg font-bold mb-1">Rattacher une notice</h3>
+        <p class="text-xs text-gray-500 mb-2">Ces pages sont la source de LIA pour expliquer au client. Cliquez la page utile (une deuxième page pour une plage).</p>
+        <input id="d-search" placeholder="Nom du document…" class="glass-input w-full rounded-lg px-3 py-2 text-sm mb-2" oninput="searchLater()">
+        <div id="d-results" class="max-h-32 overflow-y-auto space-y-1 mb-3"></div>
+        <div id="d-pages" class="hidden flex-1 min-h-0 flex flex-col">
+            <div class="flex items-center gap-2 mb-2 text-xs">
+                <b id="d-title" class="truncate"></b><span id="d-count" class="text-gray-400"></span>
+                <span class="ml-auto text-gray-500">Page <input id="d-p1" type="number" min="1" class="glass-input w-14 rounded px-1 py-0.5"> à
+                <input id="d-p2" type="number" min="1" class="glass-input w-14 rounded px-1 py-0.5"></span>
+            </div>
+            <div id="d-thumbs" class="flex-1 overflow-y-auto grid grid-cols-5 gap-2 mb-3"></div>
+            <input id="d-cap" placeholder="Précision (optionnel) — ex : voir le schéma en bas de page" class="glass-input w-full rounded-lg px-3 py-2 text-sm mb-3">
+        </div>
+        <div class="flex justify-end gap-2">
+            <button onclick="hide('m-doc')" class="btn" style="width:auto">Fermer</button>
+            <button id="d-ok" onclick="addDoc()" disabled class="btn primary" style="width:auto">Rattacher</button>
+        </div>
+    </div>
+</div>
+
+<div id="m-hist" class="hidden fixed inset-0 z-[95] flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-5 w-full max-w-lg max-h-[80vh] flex flex-col">
+        <h3 class="text-lg font-bold mb-1">Anciennes versions</h3>
+        <p class="text-xs text-gray-500 mb-3">Chaque mise en service garde une copie.</p>
+        <div id="h-list" class="flex-1 overflow-y-auto space-y-2"></div>
+        <div class="flex justify-end mt-3"><button onclick="hide('m-hist')" class="btn" style="width:auto">Fermer</button></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+/* ==========================================================================
+   Dépannages — graphe éditable.
+   • Le symptôme en haut, les cas en dessous, liens tracés avec flèches.
+   • Tout tient dans la zone : aucun défilement. Les cas se DÉPLACENT à la souris
+     (positions normalisées, mémorisées avec l'arbre) ; « Ranger » les replace.
+   • Tout ce qui se remplit est dans le panneau de DROITE, chaque champ expliqué.
+   • On ne saisit que des intitulés de cas : LIA pose les questions et rédige la
+     solution depuis la notice rattachée.
+   ========================================================================== */
+
+let guides = [], symptoms = [], gaps = [], spaces = [];
+let guide = null;
+let sel = null;                 // cas sélectionné
+let pos = {};                   // key -> {x, y} : centre du cas, en coordonnées de SCÈNE
+let view = { x: 0, y: 0, k: 1 }; // déplacement + zoom du plan
+let saveTimer = null, pending = null;
+
+// Taille fixe et confortable : c'est le zoom qui sert à voir plus large, plus besoin
+// de comprimer les cases pour tout faire tenir.
+const BOX_W = 230, BOX_H = 62, LVL_GAP = 132, GAP_X = 30, MARGIN = 40;
+const K_MIN = 0.25, K_MAX = 2;
+
+const map = () => Object.fromEntries((guide?.nodes || []).map(n => [n.node_key, n]));
+const nd = (k) => map()[k];
+const kidsOf = (n) => [...new Set((n?.choices || []).filter(c => c.next_node_key).map(c => c.next_node_key))];
+const isSav = (n) => !!n && (n.step_type === "escalation" || n.termination_type === "escalation");
+const isRoot = (k) => guide && k === guide.meta.root_node_key;
+const uid = (p = "c") => `${p}_${Date.now().toString(36)}_${Math.floor(Math.random() * 1e4).toString(36)}`;
+const esc = (s) => escapeHtml(String(s == null ? "" : s));
+const jss = (s) => JSON.stringify(String(s == null ? "" : s)).replace(/"/g, "&quot;");
+const show = (id) => document.getElementById(id).classList.remove("hidden");
+const hide = (id) => document.getElementById(id).classList.add("hidden");
+function toggleMore() { document.getElementById("more").classList.toggle("hidden"); }
+document.addEventListener("click", (e) => {
+    const m = document.getElementById("more");
+    if (m && !m.classList.contains("hidden") && !e.target.closest(".relative")) m.classList.add("hidden");
+});
+function slugify(s) {
+    return (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 60);
+}
+function parentsOf(k) { return (guide?.nodes || []).filter(n => (n.choices || []).some(c => c.next_node_key === k)); }
+function descOf(k) {
+    const out = new Set([k]), st = [k];
+    while (st.length) for (const c of kidsOf(nd(st.pop()))) if (!out.has(c)) { out.add(c); st.push(c); }
+    return out;
+}
+
+/* --------------------------------- données ------------------------------- */
+
+async function loadAll() {
+    const [a, b, c, d] = await Promise.all([
+        apiCall("/api/admin/sav/symptoms"), apiCall("/api/admin/sav/trees"),
+        apiCall("/api/admin/sav/gaps"), apiCall("/api/spaces"),
+    ]);
+    if (a && a.ok) symptoms = (await a.json()).symptoms;
+    if (b && b.ok) guides = (await b.json()).trees;
+    if (c && c.ok) gaps = (await c.json()).gaps;
+    if (d && d.ok) { const j = await d.json(); spaces = Array.isArray(j) ? j : (j.spaces || []); }
+    drawChips();
+    if (!guide) show("hello");
+}
+const symLabel = (s) => (symptoms.find(x => x.slug === s) || {}).label || "";
+
+function drawChips() {
+    const og = gaps.filter(g => g.status !== "dismissed");
+    document.getElementById("chips").innerHTML =
+        guides.map(g => `
+            <button class="chip ${guide && guide.meta.id === g.id ? "on" : ""}" onclick="openGuide(${g.id})">
+                <span class="${g.status === "published" ? "text-emerald-500" : "text-amber-500"} text-[10px]">${g.status === "published" ? "●" : "○"}</span>
+                ${esc(g.title)}</button>`).join("") +
+        `<button class="chip" style="border-style:dashed" onclick="newGuide()">+ symptôme</button>` +
+        og.slice(0, 3).map(g => `
+            <button class="chip" style="border-color:rgba(245,158,11,.5);color:#b45309"
+                    title="${esc((g.query_text || "").split("\n")[0].slice(0, 140))}" onclick="fromGap(${g.id})">
+                💡 ${g.count}× ${esc(symLabel(g.detected_symptom) || g.detected_symptom || "à classer")}</button>`).join("");
+}
+
+async function openGuide(id) {
+    if (guide && guide.meta.id === id) return;
+    if (saveTimer) { clearTimeout(saveTimer); await save(); }
+    const r = await apiCall(`/api/admin/sav/trees/${id}`);
+    if (!r || !r.ok) return;
+    guide = await r.json();
+    guide.meta.layout = guide.meta.layout || {};
+    sel = null;
+    hide("hello");
+    healOrphans();
+    dropLegacyLayout();
+    drawChips(); layoutAll(); draw();
+    requestAnimationFrame(fitView);
+}
+
+// Les positions enregistrées avant le zoom étaient relatives à la taille de la fenêtre
+// (0..1) : inexploitables en coordonnées absolues, on les oublie et le placement
+// automatique reprend la main (les nouvelles positions sont en pixels de scène).
+function dropLegacyLayout() {
+    const store = guide.meta.layout || {};
+    const stale = Object.keys(store).filter(k => !store[k] || store[k].x === undefined);
+    if (!stale.length) return;
+    stale.forEach(k => delete store[k]);
+    guide.meta.layout = store;
+    touch();
+}
+
+/* ------------------------------ positionnement --------------------------- */
+
+function boardSize() {
+    const b = document.getElementById("board").getBoundingClientRect();
+    return { w: Math.max(420, b.width), h: Math.max(260, b.height) };
+}
+
+/* ------------------------- viewport : zoom + déplacement ----------------- */
+
+function applyView() {
+    document.getElementById("scene").style.transform =
+        `translate(${view.x}px, ${view.y}px) scale(${view.k})`;
+    const el = document.getElementById("zoom-pct");
+    if (el) el.textContent = Math.round(view.k * 100) + " %";
+}
+
+// Point de la scène sous un point de l'écran (pour zoomer là où est le curseur).
+function toScene(clientX, clientY) {
+    const b = document.getElementById("board").getBoundingClientRect();
+    return { x: (clientX - b.left - view.x) / view.k, y: (clientY - b.top - view.y) / view.k };
+}
+
+// Zoom en gardant fixe le point visé (curseur, ou centre du plateau).
+function zoomAt(factor, clientX, clientY) {
+    const b = document.getElementById("board").getBoundingClientRect();
+    const cx = clientX ?? (b.left + b.width / 2);
+    const cy = clientY ?? (b.top + b.height / 2);
+    const before = toScene(cx, cy);
+    view.k = Math.min(K_MAX, Math.max(K_MIN, view.k * factor));
+    view.x = cx - b.left - before.x * view.k;
+    view.y = cy - b.top - before.y * view.k;
+    applyView();
+}
+
+function contentBox() {
+    const keys = Object.keys(pos);
+    if (!keys.length) return { x: 0, y: 0, w: 1, h: 1 };
+    const xs = keys.map(k => pos[k].x), ys = keys.map(k => pos[k].y);
+    const x = Math.min(...xs) - BOX_W / 2, y = Math.min(...ys) - BOX_H / 2;
+    return { x, y, w: Math.max(...xs) + BOX_W / 2 - x, h: Math.max(...ys) + BOX_H / 2 - y };
+}
+
+// « Ajuster » : tout le graphe entre dans la zone visible, centré.
+function fitView() {
+    if (!guide) return;
+    const { w, h } = boardSize();
+    const c = contentBox();
+    view.k = Math.min(1.15, Math.max(K_MIN, Math.min((w - 60) / c.w, (h - 60) / c.h)));
+    view.x = (w - c.w * view.k) / 2 - c.x * view.k;
+    view.y = (h - c.h * view.k) / 2 - c.y * view.k;
+    applyView();
+}
+
+function zoomBy(f) { zoomAt(f); }
+
+// Molette = zoom (pas de défilement : le plan se déplace au glisser).
+document.getElementById("board").addEventListener("wheel", (e) => {
+    if (!guide) return;
+    e.preventDefault();
+    zoomAt(e.deltaY < 0 ? 1.12 : 1 / 1.12, e.clientX, e.clientY);
+}, { passive: false });
+
+// Glisser le fond = déplacer le plan.
+let pan = null;
+document.getElementById("board").addEventListener("pointerdown", (e) => {
+    if (!guide || e.button !== 0 || e.target.closest(".box")) return;
+    pan = { x0: e.clientX, y0: e.clientY, vx: view.x, vy: view.y };
+    document.getElementById("board").classList.add("panning");
+});
+
+// Place chaque cas : position mémorisée si elle existe, sinon en niveaux (pyramide).
+// Les coordonnées sont normalisées 0..1 → jamais de débordement, quelle que soit la
+// taille de la fenêtre.
+function layoutAll(force) {
+    pos = {};
+    if (!guide) return;
+    const root = guide.meta.root_node_key;
+
+    const lvl = { [root]: 0 };
+    let changed = true, guard = 0;
+    while (changed && guard++ < 200) {
+        changed = false;
+        for (const n of guide.nodes) {
+            const L = lvl[n.node_key];
+            if (L === undefined) continue;
+            for (const k of kidsOf(n)) if ((lvl[k] ?? -1) < L + 1) { lvl[k] = L + 1; changed = true; }
+        }
+    }
+    const orphans = guide.nodes.filter(n => lvl[n.node_key] === undefined).map(n => n.node_key);
+    const rows = [];
+    guide.nodes.forEach(n => { const L = lvl[n.node_key]; if (L !== undefined) (rows[L] ||= []).push(n.node_key); });
+    if (orphans.length) rows.push(orphans);
+
+    const store = guide.meta.layout || {};
+
+    // Placement automatique : un étage par niveau, rangées centrées sur 0 → pyramide.
+    // La scène n'a pas de bord : c'est le zoom / le déplacement qui donnent la vue.
+    rows.forEach((keys, L) => {
+        keys.sort((a, b) => {
+            const bx = (k) => {
+                const ps = parentsOf(k).map(p => pos[p.node_key]).filter(Boolean);
+                return ps.length ? ps.reduce((s, p) => s + p.x, 0) / ps.length : 0;
+            };
+            return bx(a) - bx(b) || String(a).localeCompare(String(b));
+        });
+        const span = keys.length * BOX_W + (keys.length - 1) * GAP_X;
+        keys.forEach((k, i) => {
+            const saved = !force && store[k];
+            pos[k] = (saved && saved.x !== undefined)
+                ? { x: saved.x, y: saved.y }
+                : { x: MARGIN + BOX_W / 2 - span / 2 + i * (BOX_W + GAP_X) + 600,
+                    y: MARGIN + BOX_H / 2 + L * LVL_GAP };
+        });
+    });
+    // Recadre la scène en coordonnées positives (le SVG part de 0,0).
+    const c = contentBox();
+    const dx = MARGIN - c.x, dy = MARGIN - c.y;
+    Object.values(pos).forEach(p => { p.x += dx; p.y += dy; });
+}
+
+function storePos(k) {
+    guide.meta.layout = guide.meta.layout || {};
+    guide.meta.layout[k] = { x: Math.round(pos[k].x), y: Math.round(pos[k].y) };
+}
+
+function tidy() {
+    if (!guide) return;
+    guide.meta.layout = {};
+    layoutAll(true);
+    guide.nodes.forEach(n => { if (pos[n.node_key]) storePos(n.node_key); });
+    touch(); draw(); fitView();
+}
+
+/* --------------------------------- dessin -------------------------------- */
+
+function draw() {
+    document.getElementById("actions").classList.toggle("hidden", !guide);
+    const scene = document.getElementById("scene");
+    scene.querySelectorAll(".box").forEach(e => e.remove());
+    const svg = document.getElementById("wires");
+    if (!guide) { svg.innerHTML = ""; document.getElementById("panel").classList.add("hidden"); return; }
+
+    // Le SVG couvre toute la scène (sinon les liens sont coupés hors de sa boîte).
+    const c = contentBox();
+    svg.setAttribute("width", Math.ceil(c.x + c.w + MARGIN));
+    svg.setAttribute("height", Math.ceil(c.y + c.h + MARGIN));
+
+    drawService(); drawErrCount();
+
+    const kin = new Set();
+    if (sel) { parentsOf(sel).forEach(p => kin.add(p.node_key)); kidsOf(nd(sel)).forEach(k => kin.add(k)); }
+
+    let d = `<defs>
+        <marker id="a1" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker>
+        <marker id="a2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+        <marker id="a3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="rgba(148,163,184,.25)"/></marker>
+    </defs>`;
+    for (const n of guide.nodes) {
+        const a = pos[n.node_key]; if (!a) continue;
+        for (const ck of kidsOf(n)) {
+            const b = pos[ck]; if (!b) continue;
+            const down = b.y > a.y;
+            const y1 = a.y + (down ? BOX_H / 2 : -BOX_H / 2);
+            const y2 = b.y + (down ? -BOX_H / 2 - 7 : BOX_H / 2 + 7);
+            const hot = sel && (n.node_key === sel || ck === sel);
+            const cls = hot ? "wire hot" : (sel ? "wire pale" : "wire");
+            const mk = hot ? "a2" : (sel ? "a3" : "a1");
+            const dy = Math.max(20, Math.abs(y2 - y1) * 0.45);
+            d += `<path class="${cls}" marker-end="url(#${mk})" d="M${a.x},${y1} C${a.x},${y1 + (down ? dy : -dy)} ${b.x},${y2 - (down ? dy : -dy)} ${b.x},${y2}"/>`;
+        }
+    }
+    svg.innerHTML = d;
+
+    for (const n of guide.nodes) {
+        const p = pos[n.node_key]; if (!p) continue;
+        scene.insertAdjacentHTML("beforeend", boxHtml(n, p, kin));
+    }
+    drawPanel();
+    applyView();
+}
+
+function boxHtml(n, p, kin) {
+    const k = n.node_key, root = isRoot(k);
+    const kids = kidsOf(n).length, docs = (n.attachments || []).length, ps = parentsOf(k).length;
+    const label = root ? (guide.meta.title || "") : (n.title || "");
+    const blank = !String(label).trim();
+    const end = !root && !kids;
+    const cls = ["box", root ? "apex" : "", end ? "end" : "", sel === k ? "sel" : "",
+        kin.has(k) ? "kin" : "", sel && sel !== k && !kin.has(k) ? "pale" : "",
+        end && isSav(n) ? "sav" : "", end && !isSav(n) ? "sol" : ""].filter(Boolean).join(" ");
+
+    return `
+    <div class="${cls}" data-key="${k}" style="left:${p.x - BOX_W / 2}px; top:${p.y - BOX_H / 2}px; width:${BOX_W}px"
+         onpointerdown="grab(event, '${k}')" ondblclick="focusName()">
+        <span class="txt ${blank ? "ph" : ""}" title="${esc(label)}">${blank ? (root ? "Nom du symptôme" : "Cas à nommer") : esc(label)}</span>
+        ${docs ? `<span class="mini m-doc" title="Notice rattachée"><i class="ti ti-paperclip"></i>${docs > 1 ? docs : ""}</span>` : ""}
+        ${n.ask_photo ? `<span class="mini m-doc" title="Photo demandée"><i class="ti ti-camera"></i></span>` : ""}
+        ${root ? `<span class="mini" style="background:rgba(255,255,255,.22);color:#fff">${kids}</span>` : ""}
+        ${end ? (isSav(n) ? `<span class="mini m-sav">SAV</span>` : `<span class="mini m-sol">solution</span>`) : ""}
+        <span class="plus-btn" onpointerdown="event.stopPropagation()" onclick="event.stopPropagation(); addUnder('${k}')" title="Ajouter un cas en dessous">+</span>
+    </div>`;
+}
+
+/* --------------------- déplacement des cas à la souris ------------------- */
+
+let drag = null;
+
+function grab(event, key) {
+    if (event.button !== 0) return;
+    // pick() redessine : on ré-interroge le DOM après, sinon on garderait une
+    // référence à l'ancien élément (détaché) et le glissement ne bougerait rien.
+    pick(key);
+    const box = document.querySelector(`.box[data-key="${key}"]`);
+    if (!box || !pos[key]) return;
+    const start = pos[key];
+    drag = { key, box, x0: event.clientX, y0: event.clientY, sx: start.x, sy: start.y, moved: false };
+    box.classList.add("dragging");
+}
+
+document.addEventListener("pointermove", (e) => {
+    if (pan) {
+        const dx = e.clientX - pan.x0, dy = e.clientY - pan.y0;
+        if (Math.abs(dx) + Math.abs(dy) > 3) pan.moved = true;
+        view.x = pan.vx + dx;
+        view.y = pan.vy + dy;
+        applyView();
+        return;
+    }
+    if (!drag) return;
+    const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+    if (!drag.moved && Math.abs(dx) + Math.abs(dy) < 4) return;
+    drag.moved = true;
+    // Le plan peut être zoomé : le déplacement écran se convertit en scène.
+    pos[drag.key] = {
+        x: Math.max(BOX_W / 2 + 4, drag.sx + dx / view.k),
+        y: Math.max(BOX_H / 2 + 4, drag.sy + dy / view.k),
+    };
+    drag.box.style.left = (pos[drag.key].x - BOX_W / 2) + "px";
+    drag.box.style.top = (pos[drag.key].y - BOX_H / 2) + "px";
+    drawWiresOnly();
+});
+
+document.addEventListener("pointerup", () => {
+    if (pan) {
+        const wasClick = !pan.moved;
+        pan = null;
+        document.getElementById("board").classList.remove("panning");
+        if (wasClick && sel) { sel = null; draw(); }   // clic dans le vide = désélectionner
+    }
+    if (!drag) return;
+    drag.box.classList.remove("dragging");
+    if (drag.moved) { storePos(drag.key); touch(); }
+    drag = null;
+});
+
+function drawWiresOnly() {
+    const svg = document.getElementById("wires");
+    const defs = svg.querySelector("defs")?.outerHTML || "";
+    let d = defs;
+    for (const n of guide.nodes) {
+        const a = pos[n.node_key]; if (!a) continue;
+        for (const ck of kidsOf(n)) {
+            const b = pos[ck]; if (!b) continue;
+            const down = b.y > a.y;
+            const y1 = a.y + (down ? BOX_H / 2 : -BOX_H / 2);
+            const y2 = b.y + (down ? -BOX_H / 2 - 7 : BOX_H / 2 + 7);
+            const hot = sel && (n.node_key === sel || ck === sel);
+            const cls = hot ? "wire hot" : (sel ? "wire pale" : "wire");
+            const mk = hot ? "a2" : (sel ? "a3" : "a1");
+            const dy = Math.max(20, Math.abs(y2 - y1) * 0.45);
+            d += `<path class="${cls}" marker-end="url(#${mk})" d="M${a.x},${y1} C${a.x},${y1 + (down ? dy : -dy)} ${b.x},${y2 - (down ? dy : -dy)} ${b.x},${y2}"/>`;
+        }
+    }
+    svg.innerHTML = d;
+}
+
+function pick(key) { if (sel !== key) { sel = key; draw(); } }
+function focusName() { document.getElementById("f-name")?.focus(); document.getElementById("f-name")?.select(); }
+
+/* ----------------------------- panneau de droite ------------------------- */
+
+function drawPanel() {
+    const panel = document.getElementById("panel");
+    if (!guide) { panel.classList.add("hidden"); return; }
+    panel.classList.remove("hidden");
+
+    if (!sel) {
+        panel.innerHTML = `
+            <div class="fld">
+                <label>Aucun cas sélectionné</label>
+                <span class="why">Cliquez un cas dans le graphe pour le renommer, y rattacher une notice,
+                ou ajouter un cas en dessous. Glissez un cas pour le déplacer.</span>
+                <button class="btn primary" onclick="addUnder('${guide.meta.root_node_key}')">+ Ajouter un cas au symptôme</button>
+            </div>`;
+        return;
+    }
+
+    const n = nd(sel);
+    if (!n) { sel = null; drawPanel(); return; }
+    const root = isRoot(sel);
+    const kids = kidsOf(n).length;
+    const ps = parentsOf(sel);
+    const end = !root && !kids;
+
+    // Deux champs, pas plus : un NOM et une DESCRIPTION. La description sert à la fois à
+    // reconnaître le problème quand le client l'exprime avec ses mots (recherche
+    // sémantique), à proposer ce cas au bon moment, et à rédiger le message affiché.
+    if (root) {
+        const sym = symptoms.find(s => s.slug === guide.meta.entry_symptom);
+        panel.innerHTML = `
+        <div class="fld">
+            <label>Nom du symptôme</label>
+            <span class="why">Ce que le client signale, dans ses mots.</span>
+            <input type="text" id="f-name" value="${esc(guide.meta.title)}" placeholder="Ex : Volet roulant bloqué"
+                   oninput="rename(this.value)">
+        </div>
+        <div class="fld">
+            <label>Description</label>
+            <span class="why">Décrivez le problème comme à un collègue. LIA s'en sert pour reconnaître
+            la demande du client, même formulée autrement, et pour proposer ce dépannage.</span>
+            <textarea rows="4" oninput="setMeta('description', this.value)"
+                      placeholder="Ex : le tablier ne monte plus ou se bloque en cours de course, moteur ou mécanique.">${esc(guide.meta.description)}</textarea>
+        </div>
+        <div class="fld">
+            <label>Mots des clients <span class="text-gray-400 font-normal">(facultatif)</span></label>
+            <span class="why">Expressions exactes à reconnaître, en plus de la description.</span>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+                ${sym ? `<span class="mini" style="background:rgba(99,102,241,.15);color:#4338ca">${esc(sym.label)}</span>` : ""}
+                ${((sym && sym.aliases) || []).map(a => `
+                    <span class="mini bg-black/5 dark:bg-white/10">${esc(a)}
+                        <button onclick="delAlias(${jss(a)})" class="text-gray-400 hover:text-red-500">×</button></span>`).join("")}
+            </div>
+            <button class="btn" onclick="addAlias()">+ Ajouter un mot</button>
+        </div>
+        <div class="fld">
+            <button class="btn primary" onclick="addUnder('${sel}')">+ Ajouter un cas</button>
+        </div>`;
+        return;
+    }
+
+    panel.innerHTML = `
+    <div class="fld">
+        <label>Nom de la proposition</label>
+        <span class="why">Le bouton que le client verra. Court et concret.</span>
+        <input type="text" id="f-name" value="${esc(n.title)}" placeholder="Ex : Le moteur ronfle sans bouger"
+               oninput="rename(this.value)">
+    </div>
+
+    <div class="fld">
+        <label>Description</label>
+        <span class="why">Le seul texte à rédiger. Il sert à trois choses :
+            reconnaître ce cas quand le client le décrit autrement, le proposer au bon moment,
+            et ${end ? "rédiger la solution donnée au client" : "formuler la question posée au client"}.
+            Écrivez-le comme vous l'expliqueriez à un collègue.</span>
+        <textarea rows="5" oninput="setField('message', this.value)"
+                  placeholder="${end
+                    ? "Ex : le condensateur du moteur est HS. Il se change sans démonter le coffre, moteur hors tension."
+                    : "Ex : on cherche si le moteur reçoit du courant : bruit au moment de l'appui sur la commande."}">${esc(n.message)}</textarea>
+    </div>
+
+    <div class="fld">
+        <label>Notice <span class="text-gray-400 font-normal">(facultatif)</span></label>
+        <span class="why">Des pages précises que LIA utilisera pour détailler${(n.attachments || []).length ? "" : ". Sans notice, elle s'appuie sur votre description"}.</span>
+        ${(n.attachments || []).map((a, i) => `
+            <div class="doc-row">
+                <i class="ti ti-file-type-pdf text-purple-500"></i>
+                <span class="flex-1 min-w-0 truncate">${esc(a.document_title || "Document")}
+                    <span class="text-gray-400">${a.page_start ? `p.${a.page_start}${a.page_end && a.page_end !== a.page_start ? "-" + a.page_end : ""}` : "entier"}</span></span>
+                <a href="/api/library/documents/${a.document_id}/file?inline=1#page=${a.page_start || 1}" target="_blank" class="ib" title="Vérifier la page"><i class="ti ti-external-link"></i></a>
+                <button class="ib danger" onclick="delDoc(${i})"><i class="ti ti-x"></i></button>
+            </div>`).join("")}
+        <button class="btn" onclick="openDoc('${sel}')">+ Rattacher une notice</button>
+    </div>
+
+    <div class="fld">
+        <div class="flex gap-1.5 flex-wrap">
+            ${end ? `<button class="chip ${isSav(n) ? "on" : ""}" onclick="setSav(${!isSav(n)})"
+                        title="Le client ne peut rien faire seul : LIA transmet le dossier au SAV">⚠️ Fin SAV</button>` : ""}
+            <button class="chip ${n.ask_photo ? "on" : ""}" onclick="setField('ask_photo', ${!n.ask_photo}, true)"
+                    title="LIA demandera une photo, jointe au dossier SAV">📷 Photo</button>
+        </div>
+    </div>
+
+    <div class="fld">
+        <button class="btn primary" onclick="addUnder('${sel}')">+ Ajouter un cas en dessous</button>
+        <div class="mt-1.5"><button class="btn" onclick="openLinks('${sel}')">Rattacher à d'autres cas${ps.length > 1 ? ` (${ps.length})` : ""}</button></div>
+        <div class="mt-1.5"><button class="btn danger" onclick="delCase('${sel}')"><i class="ti ti-trash"></i> Supprimer ce cas</button></div>
+    </div>`;
+}
+
+function setMeta(field, value) { if (!guide) return; guide.meta[field] = value; touch(); }
+
+function drawService() {
+    const b = document.getElementById("service");
+    const live = guide.meta.status === "published";
+    b.innerHTML = `<span class="${live ? "text-emerald-500" : "text-amber-500"}">${live ? "●" : "○"}</span> ${live ? "En service" : "En préparation"}`;
+    b.title = live ? "Proposé aux clients. Cliquez pour retirer." : "Pas encore proposé aux clients. Cliquez pour mettre en service.";
+    b.className = "chip" + (live ? " on" : "");
+}
+function drawErrCount() {
+    const e = (guide.lint || []).filter(i => i.severity === "error").length;
+    const el = document.getElementById("nerr");
+    el.textContent = e; el.classList.toggle("hidden", !e);
+}
+
+/* -------------------------------- édition ------------------------------- */
+
+// L'intitulé du cas EST le bouton du client : on le synchronise sur tous ses
+// rattachements (un cas peut dépendre de plusieurs cas du dessus).
+function rename(value) {
+    if (!sel) return;
+    if (isRoot(sel)) { guide.meta.title = value; }
+    else {
+        const n = nd(sel); if (!n) return;
+        n.title = value;
+        guide.nodes.forEach(p => (p.choices || []).forEach(c => { if (c.next_node_key === sel) c.label = value; }));
+    }
+    touch();
+    // Met à jour le libellé dans le graphe sans reconstruire (le champ garde le focus).
+    const box = document.querySelector(`.box[data-key="${sel}"] .txt`);
+    if (box) {
+        const blank = !String(value).trim();
+        box.textContent = blank ? (isRoot(sel) ? "Nom du symptôme" : "Cas à nommer") : value;
+        box.classList.toggle("ph", blank);
+        box.title = value;
+    }
+    if (isRoot(sel)) drawChips();
+}
+
+function setField(field, value, redraw) {
+    const n = nd(sel); if (!n) return;
+    n[field] = value; touch();
+    if (redraw) draw();
+}
+
+function setSav(on) {
+    const n = nd(sel); if (!n) return;
+    n.step_type = on ? "escalation" : "diagnostic";
+    n.is_terminal = true;
+    n.termination_type = on ? "escalation" : "resolution";
+    touch(); draw();
+}
+
+function attach(parentKey, childKey) {
+    const p = nd(parentKey); if (!p) return;
+    p.choices = p.choices || [];
+    if (!p.choices.some(c => c.next_node_key === childKey)) {
+        p.choices.push({ label: nd(childKey)?.title || "", value: uid("v"), hint: "", next_node_key: childKey });
+    }
+    p.step_type = "question"; p.is_terminal = false; p.termination_type = null;
+}
+
+function detach(parentKey, childKey) {
+    const p = nd(parentKey); if (!p) return;
+    p.choices = (p.choices || []).filter(c => c.next_node_key !== childKey);
+    if (!p.choices.length && !isRoot(parentKey)) {
+        p.step_type = "diagnostic"; p.is_terminal = true; p.termination_type = "resolution";
+    }
+}
+
+// Toujours rattaché : sans ancre valide on retombe sur le symptôme, sinon on
+// fabriquait des cas « non reliés » que le client ne pouvait jamais atteindre.
+function addUnder(anchorKey) {
+    if (!guide) return;
+    const anchor = nd(anchorKey) ? anchorKey : guide.meta.root_node_key;
+    const key = uid();
+    guide.nodes.push({
+        node_key: key, step_type: "diagnostic", title: "", message: "", internal_note: "",
+        is_terminal: true, termination_type: "resolution",
+        ask_photo: false, allow_free_text: true, tools_hint: "", choices: [], attachments: [],
+    });
+    attach(anchor, key);
+    // Sous son parent ; s'il a déjà des frères, à droite du dernier.
+    const { w, h } = boardSize();
+    const p = pos[anchor] || { x: w / 2, y: h / 4 };
+    const sibs = kidsOf(nd(anchor)).filter(k => k !== key && pos[k]);
+    pos[key] = sibs.length
+        ? { x: Math.max(...sibs.map(k => pos[k].x)) + BOX_W + GAP_X,
+            y: Math.max(...sibs.map(k => pos[k].y)) }
+        : { x: p.x, y: p.y + LVL_GAP };
+    storePos(key);
+    sel = key;
+    touch(); draw(); focusName();
+}
+
+function delCase(key) {
+    const n = nd(key); if (!n || isRoot(key)) return;
+    const ps = parentsOf(key);
+    if (ps.length > 1) {
+        if (!confirm(`« ${n.title || "ce cas"} » dépend de ${ps.length} cas du dessus.\nLe supprimer le retirera partout. Continuer ?`)) return;
+    } else if (kidsOf(n).length && !confirm(`Supprimer « ${n.title || "ce cas"} » et tous les cas en dessous ?`)) return;
+
+    const inb = {};
+    guide.nodes.forEach(x => (x.choices || []).forEach(c => { if (c.next_node_key) (inb[c.next_node_key] ||= new Set()).add(x.node_key); }));
+    const gone = new Set([key]);
+    let ch = true;
+    while (ch) {
+        ch = false;
+        guide.nodes.forEach(x => {
+            if (gone.has(x.node_key)) return;
+            const pp = inb[x.node_key];
+            if (pp && pp.size && [...pp].every(p => gone.has(p))) { gone.add(x.node_key); ch = true; }
+        });
+    }
+    guide.nodes = guide.nodes.filter(x => !gone.has(x.node_key));
+    guide.nodes.forEach(x => { x.choices = (x.choices || []).filter(c => !gone.has(c.next_node_key)); });
+    guide.nodes.forEach(x => {
+        if (isRoot(x.node_key)) return;
+        if (!(x.choices || []).length && x.step_type === "question") {
+            x.step_type = "diagnostic"; x.is_terminal = true; x.termination_type = "resolution";
+        }
+    });
+    gone.forEach(k => { delete pos[k]; if (guide.meta.layout) delete guide.meta.layout[k]; });
+    sel = ps.length ? ps[0].node_key : null;
+    touch(); draw();
+}
+
+// Un cas sans parent n'a aucun sens : le client ne peut pas l'atteindre. Plutôt que de
+// l'afficher et de demander à l'utilisateur de nettoyer, on le rend IMPOSSIBLE — les cas
+// vides sont supprimés, ceux qui ont du contenu sont rattachés au symptôme.
+function healOrphans() {
+    if (!guide) return;
+    const orphans = guide.nodes.filter(n => !isRoot(n.node_key) && parentsOf(n.node_key).length === 0);
+    if (!orphans.length) return;
+    let changed = false;
+    orphans.forEach(n => {
+        const hasContent = String(n.title || "").trim() || String(n.message || "").trim()
+            || (n.attachments || []).length || kidsOf(n).length;
+        if (hasContent) { attach(guide.meta.root_node_key, n.node_key); changed = true; }
+        else {
+            guide.nodes = guide.nodes.filter(x => x.node_key !== n.node_key);
+            if (guide.meta.layout) delete guide.meta.layout[n.node_key];
+            changed = true;
+        }
+    });
+    if (changed) touch();
+}
+
+/* --------------------------- rattachements ------------------------------ */
+
+let linkFor = null;
+
+function openLinks(key) {
+    if (!key || isRoot(key)) return;
+    linkFor = key;
+    const banned = descOf(key);
+    const mine = new Set(parentsOf(key).map(p => p.node_key));
+    const cands = guide.nodes.filter(n => !banned.has(n.node_key));
+    document.getElementById("link-why").textContent =
+        `Cochez les cas du dessus qui mènent à « ${nd(key)?.title || "ce cas"} ».`;
+    document.getElementById("link-list").innerHTML = cands.map(n => `
+        <label class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer">
+            <input type="checkbox" ${mine.has(n.node_key) ? "checked" : ""} onchange="setLink('${n.node_key}', this.checked)">
+            <span>${esc(isRoot(n.node_key) ? guide.meta.title + " (le symptôme)" : (n.title || "cas sans nom"))}</span>
+        </label>`).join("") || `<p class="text-xs text-gray-400">Aucun autre cas.</p>`;
+    show("m-link");
+}
+
+function setLink(parentKey, on) {
+    if (!linkFor) return;
+    if (on) attach(parentKey, linkFor);
+    else {
+        if (parentsOf(linkFor).length <= 1) {
+            alert("Un cas doit dépendre d'au moins un cas du dessus, sinon le client ne peut jamais l'atteindre.");
+            openLinks(linkFor); return;
+        }
+        detach(parentKey, linkFor);
+    }
+    touch(); draw(); openLinks(linkFor);
+}
+
+/* -------------------------------- notices ------------------------------- */
+
+let picked = null, docTimer = null, docFor = null;
+
+function openDoc(key) {
+    docFor = key; picked = null;
+    document.getElementById("d-search").value = "";
+    hide("d-pages"); document.getElementById("d-ok").disabled = true;
+    show("m-doc"); searchDocs();
+}
+function searchLater() { clearTimeout(docTimer); docTimer = setTimeout(searchDocs, 300); }
+
+async function searchDocs() {
+    const q = document.getElementById("d-search").value;
+    const r = await apiCall(`/api/admin/sav/library/documents?q=${encodeURIComponent(q)}&limit=20`);
+    if (!r || !r.ok) return;
+    document.getElementById("d-results").innerHTML = (await r.json()).documents.map(d => `
+        <button onclick="pickDoc(${d.id}, ${jss(d.title)})"
+                class="w-full text-left rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-xs hover:bg-black/5 dark:hover:bg-white/5">
+            <i class="ti ${d.has_file ? "ti-file-type-pdf text-purple-500" : "ti-file-text text-gray-400"}"></i>
+            <span class="truncate flex-1">${esc(d.title)}</span></button>`).join("")
+        || `<p class="text-xs text-gray-400 p-2">Aucun document à ce nom.</p>`;
+}
+
+async function pickDoc(id, title) {
+    picked = { id, title };
+    document.getElementById("d-title").textContent = title;
+    document.getElementById("d-pages").classList.remove("hidden");
+    document.getElementById("d-ok").disabled = false;
+    document.getElementById("d-p1").value = ""; document.getElementById("d-p2").value = "";
+    document.getElementById("d-thumbs").innerHTML = `<p class="text-xs text-gray-400 col-span-5">Chargement…</p>`;
+    const r = await apiCall(`/api/admin/sav/library/documents/${id}/page-count`);
+    if (r && r.ok) {
+        const c = (await r.json()).page_count, mx = Math.min(c, 60);
+        document.getElementById("d-count").textContent = `${c} pages`;
+        document.getElementById("d-thumbs").innerHTML = Array.from({ length: mx }, (_, i) => `
+            <div class="thumb" data-page="${i + 1}" onclick="clickPage(${i + 1})">
+                <img loading="lazy" src="/api/admin/sav/library/documents/${id}/page-thumbnail/${i + 1}" class="rounded-md w-full">
+                <div class="text-center text-[10px] text-gray-400">${i + 1}</div></div>`).join("")
+            + (c > mx ? `<p class="text-[10px] text-gray-400 col-span-5">…${c - mx} pages de plus : tapez les numéros.</p>` : "");
+    } else {
+        document.getElementById("d-count").textContent = "(pas d'aperçu — document entier)";
+        document.getElementById("d-thumbs").innerHTML = "";
+    }
+}
+
+function clickPage(p) {
+    const p1 = document.getElementById("d-p1"), p2 = document.getElementById("d-p2");
+    if (!p1.value || (p1.value && p2.value)) { p1.value = p; p2.value = ""; }
+    else if (p >= parseInt(p1.value)) p2.value = p;
+    else { p2.value = p1.value; p1.value = p; }
+    const a = parseInt(p1.value) || null, b = parseInt(p2.value) || a;
+    document.querySelectorAll(".thumb").forEach(el => {
+        const n = parseInt(el.dataset.page);
+        el.classList.toggle("sel", a !== null && n >= a && n <= b);
+    });
+}
+
+function addDoc() {
+    const n = nd(docFor); if (!n || !picked) return;
+    const a = parseInt(document.getElementById("d-p1").value) || null;
+    const b = parseInt(document.getElementById("d-p2").value) || a;
+    n.attachments = n.attachments || [];
+    n.attachments.push({
+        document_id: picked.id, document_title: picked.title, page_start: a, page_end: b,
+        caption: document.getElementById("d-cap").value.trim(), kind: "notice",
+    });
+    document.getElementById("d-cap").value = "";
+    hide("m-doc"); touch(); draw();
+}
+
+function delDoc(i) {
+    const n = nd(sel); if (!n) return;
+    (n.attachments || []).splice(i, 1);
+    touch(); draw();
+}
+
+/* ---------------------------- enregistrement ---------------------------- */
+
+function touch() {
+    if (!guide) return;
+    document.getElementById("saved").textContent = "modifié…";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(save, 1200);
+}
+
+async function save() {
+    if (!guide) return;
+    document.getElementById("saved").textContent = "enregistrement…";
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/draft`, {
+        method: "PUT", body: JSON.stringify({ meta: guide.meta, nodes: guide.nodes }),
+    });
+    if (r && r.ok) {
+        guide.lint = (await r.json()).lint || [];
+        document.getElementById("saved").textContent = "enregistré ✓";
+        drawErrCount();
+    } else {
+        document.getElementById("saved").textContent = "⚠ non enregistré";
+    }
+    saveTimer = null;
+}
+
+/* ------------------------- symptômes / création ------------------------- */
+
+function newGuide(pre) {
+    pending = null;
+    hide("n-other-wrap"); hide("n-rest");
+    document.getElementById("n-ok").disabled = true;
+    document.getElementById("n-other").value = "";
+    document.getElementById("n-title").value = "";
+    document.getElementById("n-space").innerHTML = `<option value="">Dans tous les espaces</option>` +
+        spaces.map(s => `<option value="${s.id}">${esc(s.name || ("Espace " + s.id))}</option>`).join("");
+    document.getElementById("n-syms").innerHTML = symptoms.map(s => `
+        <button type="button" data-slug="${s.slug}" onclick="pickSym('${s.slug}')"
+                class="n-sym text-left px-3 py-2 text-xs rounded-lg border border-black/10 dark:border-white/10 hover:border-indigo-400">${esc(s.label)}</button>`).join("") +
+        `<button type="button" data-slug="__o" onclick="pickSym('__o')"
+                 class="n-sym text-left px-3 py-2 text-xs rounded-lg border border-dashed border-black/20 dark:border-white/20 hover:border-indigo-400">Autre problème…</button>`;
+    show("m-new");
+    if (pre?.symptom && symptoms.some(s => s.slug === pre.symptom)) pickSym(pre.symptom);
+    else if (pre?.text) { pickSym("__o"); document.getElementById("n-other").value = pre.text; document.getElementById("n-title").value = pre.text; }
+}
+
+function pickSym(slug) {
+    pending = slug;
+    document.querySelectorAll(".n-sym").forEach(b => {
+        const on = b.dataset.slug === slug;
+        b.style.borderColor = on ? "#6366f1" : "";
+        b.style.background = on ? "rgba(99,102,241,0.12)" : "";
+    });
+    document.getElementById("n-other-wrap").classList.toggle("hidden", slug !== "__o");
+    show("n-rest");
+    document.getElementById("n-ok").disabled = false;
+    const t = document.getElementById("n-title");
+    if (!t.value && slug !== "__o") t.value = symLabel(slug);
+    if (slug === "__o") document.getElementById("n-other").focus();
+}
+
+async function createGuide() {
+    let sym = pending;
+    if (sym === "__o") {
+        const label = document.getElementById("n-other").value.trim();
+        if (!label) return document.getElementById("n-other").focus();
+        const slug = slugify(label);
+        const r = await apiCall("/api/admin/sav/symptoms", { method: "POST", body: JSON.stringify({ slug, label, description: "" }) });
+        if (r && !r.ok && r.status !== 409) return alert("Impossible d'enregistrer ce problème.");
+        sym = slug; await reloadSymptoms();
+    }
+    const title = document.getElementById("n-title").value.trim() || symLabel(sym) || "Nouveau symptôme";
+    const sv = document.getElementById("n-space").value;
+    const r = await apiCall("/api/admin/sav/trees", {
+        method: "POST", body: JSON.stringify({ title, entry_symptom: sym, space_id: sv ? parseInt(sv) : null }),
+    });
+    if (!r || !r.ok) return alert("Impossible de créer le symptôme.");
+    hide("m-new");
+    guide = await r.json();
+    guide.meta.layout = {};
+    sel = null; hide("hello");
+    await loadAll();
+    layoutAll(); draw(); fitView();
+    addUnder(guide.meta.root_node_key);
+}
+
+function fromGap(id) {
+    const g = gaps.find(x => x.id === id);
+    if (g) newGuide({ symptom: g.detected_symptom, text: (g.query_text || "").split("\n")[0].slice(0, 70) });
+}
+
+async function dropGuide() {
+    toggleMore();
+    if (!confirm(`Supprimer « ${guide.meta.title} » ? Il ne sera plus proposé aux clients.`)) return;
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/archive`, { method: "POST" });
+    if (r && r.ok) { guide = null; sel = null; show("hello"); await loadAll(); draw(); }
+    else if (r && r.status === 403) alert("Seul un administrateur peut retirer un symptôme.");
+}
+
+async function addAlias() {
+    const w = prompt("Un mot que les clients emploient pour ce problème :\n(ex : « ça frotte », « coince », « dur à fermer »)");
+    if (!w || !w.trim()) return;
+    const r = await apiCall(`/api/admin/sav/symptoms/${guide.meta.entry_symptom}/aliases`, {
+        method: "POST", body: JSON.stringify({ alias: w.trim() }),
+    });
+    if (r && r.ok) { await reloadSymptoms(); drawPanel(); }
+}
+async function delAlias(word) {
+    const r = await apiCall(`/api/admin/sav/symptoms/${guide.meta.entry_symptom}/aliases?alias=${encodeURIComponent(word)}`, { method: "DELETE" });
+    if (r && (r.ok || r.status === 204)) { await reloadSymptoms(); drawPanel(); }
+}
+async function reloadSymptoms() {
+    const r = await apiCall("/api/admin/sav/symptoms");
+    if (r && r.ok) symptoms = (await r.json()).symptoms;
+}
+
+/* --------------------- vérification / mise en service ------------------- */
+
+async function openCheck(refresh) {
+    if (refresh) { clearTimeout(saveTimer); await save(); }
+    const iss = guide.lint || [];
+    const errs = iss.filter(i => i.severity === "error");
+    const adv = iss.filter(i => i.severity !== "error");
+    document.getElementById("ck-title").textContent = errs.length ? "Il reste des choses à corriger" : "Ce dépannage est prêt";
+    document.getElementById("ck-why").textContent = errs.length
+        ? "Le client serait bloqué sur les points ci-dessous."
+        : (adv.length ? "Rien ne bloque. Quelques conseils :" : "Vous pouvez le mettre en service.");
+    document.getElementById("ck-list").innerHTML = (errs.length || adv.length)
+        ? [...errs, ...adv].map(i => `
+            <div ${i.node_key ? `onclick="goTo('${i.node_key}')"` : ""} class="flex items-start gap-2 rounded-xl px-3 py-2 ${
+                i.severity === "error" ? "bg-red-50 dark:bg-red-900/15 text-red-700 dark:text-red-300" : "bg-amber-50 dark:bg-amber-900/15 text-amber-700 dark:text-amber-300"
+            } ${i.node_key ? "cursor-pointer hover:opacity-80" : ""}">
+                <i class="ti ${i.severity === "error" ? "ti-alert-circle" : "ti-info-circle"} mt-0.5"></i>
+                <span class="text-xs">${esc(i.message)}${i.node_key ? ` <span class="opacity-60">— cliquez pour y aller</span>` : ""}</span>
+            </div>`).join("")
+        : `<p class="text-sm text-emerald-600">✅ Chaque cas est nommé et relié.</p>`;
+    show("m-check");
+}
+
+function goTo(key) { hide("m-check"); sel = key; draw(); focusName(); }
+
+async function toggleService() {
+    clearTimeout(saveTimer); await save();
+    if (guide.meta.status === "published") {
+        if (!confirm("Retirer ce dépannage du service ? Il ne sera plus proposé aux clients.")) return;
+        const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/archive`, { method: "POST" });
+        if (r && r.ok) { guide.meta.status = "archived"; drawService(); loadAll(); }
+        else if (r && r.status === 403) alert("Seul un administrateur peut retirer un dépannage du service.");
+        return;
+    }
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/publish`, { method: "POST", body: JSON.stringify({ note: "" }) });
+    if (r && r.ok) {
+        const d = await r.json();
+        guide.meta.status = "published"; guide.meta.current_version = d.version;
+        drawService(); loadAll();
+        document.getElementById("saved").textContent = "en service ✓";
+    } else if (r && r.status === 422) {
+        guide.lint = ((await r.json()).detail || {}).issues || [];
+        drawErrCount(); openCheck(false);
+    } else if (r && r.status === 403) alert("Seul un administrateur peut mettre un dépannage en service.");
+}
+
+/* -------------------------------- divers ------------------------------- */
+
+async function openHistory() {
+    toggleMore();
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/versions`);
+    if (!r || !r.ok) return;
+    const vs = (await r.json()).versions;
+    document.getElementById("h-list").innerHTML = vs.length ? vs.map(v => `
+        <div class="flex items-center gap-2 rounded-xl border border-black/5 dark:border-white/5 px-3 py-2 text-xs">
+            <div class="flex-1">
+                <div class="font-medium">Mise en service du ${v.published_at ? v.published_at.slice(0, 10).split("-").reverse().join("/") : "?"}</div>
+                <div class="text-[10px] text-gray-400">${v.node_count} cas${v.version === guide.meta.current_version ? " · version actuelle" : ""}</div>
+            </div>
+            ${v.version !== guide.meta.current_version ? `<button onclick="restore(${v.version})" class="chip">Revenir à celle-ci</button>` : ""}
+        </div>`).join("") : `<p class="text-xs text-gray-400">Jamais mis en service.</p>`;
+    show("m-hist");
+}
+
+async function restore(v) {
+    if (!confirm("Remettre cette ancienne version en service ?")) return;
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/rollback/${v}`, { method: "POST" });
+    if (r && r.ok) { hide("m-hist"); const id = guide.meta.id; guide = null; await openGuide(id); loadAll(); }
+    else if (r && r.status === 403) alert("Seul un administrateur peut changer la version en service.");
+}
+
+async function fromDocs() {
+    toggleMore();
+    if (!confirm("LIA va proposer une liste de cas depuis votre documentation.\nCela remplacera les cas déjà saisis. Continuer ?")) return;
+    document.getElementById("saved").textContent = "LIA cherche…";
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/generate-draft`, { method: "POST" });
+    if (r && r.ok) {
+        guide = await r.json(); guide.meta.layout = guide.meta.layout || {}; sel = null;
+        healOrphans();
+        layoutAll(true); draw(); fitView();
+        document.getElementById("saved").textContent = "proposition à relire";
+    } else if (r) {
+        document.getElementById("saved").textContent = "";
+        alert((await r.json()).detail || "Pas assez d'informations dans la documentation pour ce problème.");
+    }
+}
+
+async function exportGuide() {
+    toggleMore();
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/export`);
+    if (!r || !r.ok) return;
+    const blob = new Blob([JSON.stringify(await r.json(), null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `depannage_${slugify(guide.meta.title)}.json`;
+    a.click();
+}
+
+// Les positions sont absolues : redimensionner la fenêtre ne déplace plus rien,
+// on garde simplement la vue courante (rien à recalculer).
+let rt = null;
+window.addEventListener("resize", () => {
+    if (!guide) return;
+    clearTimeout(rt);
+    rt = setTimeout(applyView, 120);
+});
+
+loadAll();
+</script>
+{% endblock %}

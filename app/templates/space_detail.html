@@ -451,6 +451,15 @@
         <!-- Bouton « Graphe de connaissances » retiré avec le KAG (2026-07-28). -->
         <!-- Bouton « Fiches produit » (index de références KAG) retiré avec le KAG. -->
         <button
+          id="sav-diag-btn"
+          type="button"
+          class="hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold active:scale-95 transition-all"
+          onclick="openSavPicker()"
+        >
+          <i class="ti ti-tool"></i>
+          <span>Diagnostic SAV</span>
+        </button>
+        <button
           id="theme-tree-toggle"
           type="button"
           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-teal-500/20 bg-teal-500/5 text-teal-700 dark:text-teal-300 hover:bg-teal-500/10 text-xs font-semibold active:scale-95 transition-all"
@@ -459,6 +468,18 @@
           <i class="ti ti-search"></i>
           <span>Recherche</span>
         </button>
+      </div>
+    </div>
+
+    <!-- Picker « Diagnostic SAV » : symptômes → arbres publiés de l'espace -->
+    <div id="sav-picker-modal" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4">
+      <div class="glass-panel rounded-2xl p-5 w-full max-w-md max-h-[75vh] flex flex-col">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-bold flex items-center gap-2"><i class="ti ti-tool text-indigo-500"></i> Diagnostic SAV</h3>
+          <button onclick="closeSavPicker()" class="text-gray-400 hover:text-gray-600 p-1"><i class="ti ti-x"></i></button>
+        </div>
+        <p class="text-xs text-gray-500 mb-3">Choisissez le problème rencontré — je vous guide pas à pas.</p>
+        <div id="sav-picker-list" class="flex-1 overflow-y-auto space-y-1.5"></div>
       </div>
     </div>
 
@@ -3330,17 +3351,56 @@ function buildEscalationRecapCard(recap) {
     </div>`;
 }
 
-// Boutons de propositions (choix guidés) — affichés EN DEHORS de la bulle, en dessous.
+// Étape d'arbre SAV — affichée EN DEHORS de la bulle, en dessous (refonte 2026-07-30) :
+// fil d'Ariane, badge outillage, pièces jointes (PDF ouvert à la page), choix,
+// zone photo (ask_photo), et actions permanentes ← Précédent / Quitter.
 function buildGuidedStepSection(step, interactive = true) {
   if (!step) return "";
+  const esc = (s) => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  let html = "";
+
+  const crumbs = (step.breadcrumb || []).filter(Boolean);
+  if (crumbs.length) {
+    html += `<div class="text-[11px] text-gray-400 dark:text-gray-500 flex items-center gap-1 flex-wrap">
+      <i class="ti ti-route"></i> ${crumbs.map(esc).join(" › ")}</div>`;
+  }
+  if (step.tools_hint) {
+    html += `<div><span class="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">🧰 ${esc(step.tools_hint)}</span></div>`;
+  }
+
+  const atts = (step.attachments || []);
+  if (atts.length) {
+    html += `<div class="flex flex-col gap-1.5">` + atts.map((a) => `
+      <a href="/api/library/documents/${a.document_id}/file?inline=1#page=${a.page_start || 1}" target="_blank"
+         class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-900/40 transition-all w-fit max-w-full">
+        <i class="ti ti-file-type-pdf"></i>
+        <span class="truncate">${esc(a.document_title || "Document")}${a.page_start ? ` — p.${a.page_start}${a.page_end && a.page_end !== a.page_start ? "–" + a.page_end : ""}` : ""}</span>
+        ${a.caption ? `<span class="text-purple-400 truncate">· ${esc(a.caption)}</span>` : ""}
+      </a>`).join("") + `</div>`;
+  }
+
+  if (interactive && step.ask_photo && !step.is_terminal) {
+    html += `<label class="guided-photo-zone inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs border border-dashed border-purple-300 dark:border-purple-700 text-purple-600 dark:text-purple-300 cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-900/20 w-fit">
+      <i class="ti ti-camera"></i> <span class="guided-photo-label">Joindre une photo (optionnel)</span>
+      <input type="file" accept="image/*" class="guided-photo-input hidden">
+    </label>`;
+  }
+
   if (interactive && !step.is_terminal && step.choices && step.choices.length) {
     const buttons = step.choices.map((c) => (
       `<button type="button" class="guided-choice-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-all active:scale-95"
-        data-value="${String(c.value).replace(/"/g, "&quot;")}" data-label="${String(c.label).replace(/"/g, "&quot;")}" title="${String(c.hint || "").replace(/"/g, "&quot;")}">${c.label}</button>`
+        data-value="${esc(c.value)}" data-label="${esc(c.label)}" title="${esc(c.hint || "")}">${c.label}</button>`
     )).join("");
-    return `<div class="guided-step-section flex flex-wrap gap-2">${buttons}</div>`;
+    html += `<div class="flex flex-wrap gap-2">${buttons}</div>`;
+    const backBtn = step.can_go_back
+      ? `<button type="button" class="guided-back-btn text-[11px] text-gray-400 hover:text-indigo-500 transition-colors"><i class="ti ti-arrow-left"></i> Précédent</button>`
+      : "";
+    html += `<div class="flex items-center gap-3 mt-0.5">${backBtn}
+      <button type="button" class="guided-quit-btn text-[11px] text-gray-400 hover:text-red-500 transition-colors"><i class="ti ti-x"></i> Quitter le diagnostic</button>
+    </div>`;
   }
-  return "";
+
+  return html ? `<div class="guided-step-section flex flex-col gap-2">${html}</div>` : "";
 }
 
 // Récapitulatif d'escalade SAV — contenu de la réponse, reste DANS la bulle.
@@ -3358,12 +3418,27 @@ function attachGuidedStepListeners(container) {
       handleGuidedChoice(btn.dataset.value, btn.dataset.label);
     });
   });
+  container.querySelectorAll(".guided-back-btn").forEach((btn) => {
+    btn.addEventListener("click", () => handleGuidedChoice("__back", "← Précédent"));
+  });
+  container.querySelectorAll(".guided-quit-btn").forEach((btn) => {
+    btn.addEventListener("click", () => handleGuidedChoice("__quit", "Quitter le diagnostic"));
+  });
+  container.querySelectorAll(".guided-photo-input").forEach((input) => {
+    input.addEventListener("change", () => uploadSavPhoto(input));
+  });
   container.querySelectorAll(".guided-copy-recap").forEach((btn) => {
     btn.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(decodeURIComponent(btn.dataset.recap || ""));
         btn.innerHTML = '<i class="ti ti-check"></i> Copié !';
       } catch (_) {}
+    });
+  });
+  container.querySelectorAll(".sav-chip-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      btn.disabled = true;
+      startSavDiagnostic(btn.dataset.slug, btn.dataset.entry || null, btn.dataset.title || "");
     });
   });
 }
@@ -3377,6 +3452,88 @@ async function handleGuidedChoice(value, label) {
   addMessage("user", displayLabel);
   await submitSpaceChat(displayLabel, null, { value, label: displayLabel });
 }
+
+// ——— Arbre SAV : entrées explicites (bouton / picker / chip) ———
+async function openSavPicker() {
+  const modal = document.getElementById("sav-picker-modal");
+  modal.classList.remove("hidden");
+  const host = document.getElementById("sav-picker-list");
+  host.innerHTML = `<p class="text-xs text-gray-400 p-2">Chargement…</p>`;
+  const r = await api(`/api/spaces/${spaceId}/sav/entries`);
+  if (!r.ok) { host.innerHTML = `<p class="text-xs text-red-500 p-2">Erreur de chargement.</p>`; return; }
+  const entries = (await r.json()).entries || [];
+  if (!entries.length) {
+    host.innerHTML = `<p class="text-xs text-gray-400 p-2">Aucun diagnostic publié pour cet espace pour l'instant.</p>`;
+    return;
+  }
+  const esc = (s) => String(s || "").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  const bySymptom = {};
+  entries.forEach((e) => { (bySymptom[e.symptom_label] ||= []).push(e); });
+  host.innerHTML = Object.entries(bySymptom).map(([label, list]) => `
+    <div class="mb-1">
+      <div class="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1 py-1">${esc(label)}</div>
+      ${list.map((e) => `
+        <button type="button" class="sav-chip-btn w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border border-transparent hover:border-indigo-200 dark:hover:border-indigo-800 transition-all"
+                data-slug="${esc(e.tree_slug)}" data-title="${esc(e.title)}">
+          <span class="font-medium">🔧 ${esc(e.title)}</span>
+          ${e.description ? `<span class="block text-[11px] text-gray-400 truncate">${esc(e.description)}</span>` : ""}
+        </button>`).join("")}
+    </div>`).join("");
+  attachGuidedStepListeners(host);
+}
+
+function closeSavPicker() {
+  document.getElementById("sav-picker-modal").classList.add("hidden");
+}
+
+async function startSavDiagnostic(treeSlug, entryNodeKey, title) {
+  closeSavPicker();
+  if (!currentConversationId) {
+    await createNewConversation();
+    if (!currentConversationId) return;
+  }
+  addMessage("user", `🔧 Diagnostic SAV : ${title || treeSlug}`);
+  await submitSpaceChat("", null, null, null, {
+    tree_slug: treeSlug,
+    entry_node_key: entryNodeKey || null,
+  });
+}
+
+async function uploadSavPhoto(input) {
+  const file = input.files && input.files[0];
+  if (!file || !currentConversationId) return;
+  const label = input.closest(".guided-photo-zone")?.querySelector(".guided-photo-label");
+  if (label) label.textContent = "Envoi…";
+  const fd = new FormData();
+  fd.append("conversation_id", currentConversationId);
+  fd.append("file", file);
+  try {
+    const r = await fetch(`/api/spaces/${spaceId}/sav/photo`, {
+      method: "POST", credentials: "include", body: fd,
+    });
+    if (label) label.textContent = r.ok ? "📷 Photo jointe ✓ (elle suivra le dossier SAV)" : "Échec de l'envoi";
+  } catch (_) {
+    if (label) label.textContent = "Échec de l'envoi";
+  }
+}
+
+// Bouton « Diagnostic SAV » visible dès qu'un arbre publié existe pour l'espace,
+// et prise en charge du deep-link ?sav={slug} (QR code / mail SAV).
+(async () => {
+  try {
+    const r = await api(`/api/spaces/${spaceId}/sav/entries`);
+    if (!r.ok) return;
+    const entries = (await r.json()).entries || [];
+    if (entries.length) {
+      document.getElementById("sav-diag-btn").classList.remove("hidden");
+    }
+    const savParam = new URLSearchParams(window.location.search).get("sav");
+    if (savParam) {
+      const entry = entries.find((e) => e.tree_slug === savParam);
+      if (entry) startSavDiagnostic(entry.tree_slug, null, entry.title);
+    }
+  } catch (_) {}
+})();
 
 // ——— Carte de périmètre de recherche (human-in-the-loop) ———
 function buildScopeCardSection(proposal) {
@@ -3445,7 +3602,7 @@ function attachScopeCardListeners(container, originalMessage) {
   if (skipBtn) skipBtn.addEventListener("click", () => finish({}));
 }
 
-async function submitSpaceChat(message, slotAction = null, guidedChoice = null, scopeChoice = null) {
+async function submitSpaceChat(message, slotAction = null, guidedChoice = null, scopeChoice = null, savStart = null) {
   function startFakeReasoning(el) {
     el.innerHTML = `
       <div class="flex items-center gap-3 py-1">
@@ -3495,6 +3652,9 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
   if (scopeChoice) {
     requestBody.scope_choice = scopeChoice;
   }
+  if (savStart) {
+    requestBody.sav_start = savStart;
+  }
 
   let response;
   try {
@@ -3524,6 +3684,7 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
   let receivedSlotPrompt = null;
   let receivedStep = null;
   let receivedScopeProposal = null;
+  let receivedSavSuggestion = null;
   let receivedTrace = null;
   let streamDone = false;
   let assistantMessageId = null;
@@ -3571,6 +3732,8 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
         } else if (data.scope_proposal) {
           if (reasoningInterval) clearInterval(reasoningInterval);
           receivedScopeProposal = data.scope_proposal;
+        } else if (data.sav_suggestion) {
+          receivedSavSuggestion = data.sav_suggestion;
         } else if (data.sources) {
           receivedSources = data.sources;
           if (full) {
@@ -3658,13 +3821,25 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
     }
   }
 
-  // Les propositions (choix guidés / slots) s'affichent EN DEHORS de la bulle, en dessous.
+  // Les propositions (choix guidés / slots / chip SAV) s'affichent EN DEHORS de la bulle.
   const slotPromptHtml = receivedSlotPrompt ? buildSlotPromptSection(receivedSlotPrompt) : "";
   const guidedStepHtml = receivedStep ? buildGuidedStepSection(receivedStep) : "";
-  if (slotPromptHtml || guidedStepHtml) {
+  // Chip « Lancer le diagnostic » : APRÈS la réponse RAG, jamais à sa place.
+  let savChipHtml = "";
+  if (receivedSavSuggestion && receivedSavSuggestion.tree_slug) {
+    const escS = (s) => String(s || "").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+    savChipHtml = `
+      <button type="button" class="sav-chip-btn inline-flex items-center gap-2 w-fit px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition-all active:scale-95"
+              data-slug="${escS(receivedSavSuggestion.tree_slug)}"
+              data-entry="${escS(receivedSavSuggestion.entry_node_key || "")}"
+              data-title="${escS(receivedSavSuggestion.tree_title)}">
+        <i class="ti ti-tool"></i> Lancer le diagnostic guidé : ${escS(receivedSavSuggestion.tree_title)}
+      </button>`;
+  }
+  if (slotPromptHtml || guidedStepHtml || savChipHtml) {
     assistantWrap.insertAdjacentHTML(
       "beforeend",
-      `<div class="message-propositions mt-2 flex flex-col gap-2">${slotPromptHtml}${guidedStepHtml}</div>`
+      `<div class="message-propositions mt-2 flex flex-col gap-2">${slotPromptHtml}${guidedStepHtml}${savChipHtml}</div>`
     );
     attachSlotPromptListeners(assistantWrap);
     attachGuidedStepListeners(assistantWrap);

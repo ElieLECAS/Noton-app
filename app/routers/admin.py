@@ -81,7 +81,7 @@ async def get_runtime_config(
             "QUERY_UNDERSTANDING_ENABLED": settings.QUERY_UNDERSTANDING_ENABLED,
             "CONVERSATION_ANCHOR_ENABLED": settings.CONVERSATION_ANCHOR_ENABLED,
             "FICHE_TECHNIQUE_ENABLED": settings.FICHE_TECHNIQUE_ENABLED,
-            "GUIDED_FLOW_ENABLED": settings.GUIDED_FLOW_ENABLED,
+            "GUIDED_FLOW_ENABLED": True,  # Arbre SAV toujours actif (refonte 2026-07-30, plus de flag)
         },
         "retrieval_tuning": {
             "RAG_TOP_K": settings.RAG_TOP_K,

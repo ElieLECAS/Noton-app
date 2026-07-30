@@ -389,15 +389,6 @@ class Settings(BaseSettings):
     QUERY_GENERATE_QUERIES_LLM: bool = os.getenv("QUERY_GENERATE_QUERIES_LLM", "false").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    # Décision du mode guidé (is_guided/flow_kind/product_named/…) portée par le MÊME appel
-    # que la compréhension fusionnée, au lieu d'un decide_guided_mode séparé. ON par défaut
-    # quand la compréhension fusionnée est active → plus d'appel LLM guidé dédié. Le petit
-    # modèle MODEL_QUERY_UNDERSTANDING porte alors la décision guidée : si la détection se
-    # dégrade, pointer MODEL_QUERY_UNDERSTANDING vers un modèle plus capable, ou repasser
-    # ce flag à false (decide_guided_mode dédié sur MODEL_FAST).
-    GUIDED_DECISION_IN_FUSED: bool = os.getenv("GUIDED_DECISION_IN_FUSED", "true").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
     # Budget temps (secondes) d'un appel LLM de COMPRÉHENSION de requête (fused, condense,
     # signaux…). Dépassé → on abandonne l'appel et on retombe sur les valeurs de repli
     # (jamais de blocage indéfini avant le retrieval). 0 = pas de plafond applicatif.
@@ -692,30 +683,10 @@ class Settings(BaseSettings):
     # troncature → JSON invalide → fiche vide).
     FICHE_MAX_TOKENS: int = int(os.getenv("FICHE_MAX_TOKENS", "3000"))
 
-    # Guidage procédural ("aiguillage" SAV / chantier) — moteur multi-étapes
-    # Désactivé par défaut : aucun impact sur le pipeline one-shot existant tant que False.
-    GUIDED_FLOW_ENABLED: bool = os.getenv("GUIDED_FLOW_ENABLED", "false").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # Nombre maximal d'étapes avant escalade automatique vers le SAV
-    GUIDED_MAX_STEPS: int = int(os.getenv("GUIDED_MAX_STEPS", "8"))
-    # Passages récupérés par étape (plus focalisé que RAG_TOP_K)
-    GUIDED_RETRIEVAL_K: int = int(os.getenv("GUIDED_RETRIEVAL_K", "8"))
-    # Arbres validés (capitalisation) prioritaires sur la génération dynamique (Phase 2)
-    GUIDED_AUTHORED_TREES_ENABLED: bool = os.getenv(
-        "GUIDED_AUTHORED_TREES_ENABLED", "true"
-    ).strip().lower() in ("true", "1", "yes", "on")
-    # Filtre catégorie strict (dur) vs boost souple (Phase 2)
-    GUIDED_CATEGORY_FILTER_STRICT: bool = os.getenv(
-        "GUIDED_CATEGORY_FILTER_STRICT", "false"
-    ).strip().lower() in ("true", "1", "yes", "on")
-    # Bornes du nombre de choix proposés à chaque aiguillage
-    GUIDED_MIN_CHOICES: int = int(os.getenv("GUIDED_MIN_CHOICES", "2"))
-    GUIDED_MAX_CHOICES: int = int(os.getenv("GUIDED_MAX_CHOICES", "5"))
-    # Contact SAV affiché dans le récapitulatif d'escalade (fallback si absent des métadonnées)
-    GUIDED_SAV_CONTACT: str = os.getenv(
-        "GUIDED_SAV_CONTACT", "Service SAV PROFERM — contactez votre interlocuteur habituel."
-    )
+    # Arbre SAV (refonte 2026-07-30) : plus AUCUN flag — le runtime déterministe est
+    # toujours actif (reprise de session + entrées explicites bouton/chip), le RAG répond
+    # toujours aux messages libres. Constantes en dur : guided_flow_service.SAV_CONTACT,
+    # guided_entry_index_service.MIN_SIM, guided_attachment_context_service.CAG_MAX_CHARS.
 
     # Périmètre de recherche confirmé (human-in-the-loop) — filtre les documents par
     # classification (product_types/materials/proferm_gammes/source) AVANT le retrieval.
@@ -883,7 +854,7 @@ class Settings(BaseSettings):
             f"query_understanding={onoff(self.QUERY_UNDERSTANDING_ENABLED)} "
             f"anchor={onoff(self.CONVERSATION_ANCHOR_ENABLED)} "
             f"fiche={onoff(self.FICHE_TECHNIQUE_ENABLED)} "
-            f"guided={onoff(self.GUIDED_FLOW_ENABLED)} "
+            "guided=arbre-sav "
             f"loop={self.AGENTIC_LOOP_MODE if self.AGENTIC_LOOP_ENABLED else 'off'} "
             f"verify={('blocking' if self.VERIFY_BLOCKING else 'advisory') if self.VERIFY_ENABLED else 'off'}"
         )

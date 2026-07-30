@@ -7,7 +7,7 @@ from sqlmodel import Session
 from typing import Optional
 
 from app.database import get_session, create_db_and_tables, engine
-from app.routers import auth, chat, conversations, library, spaces, admin
+from app.routers import auth, chat, conversations, library, spaces, admin, guided_trees
 from app.config import settings
 from app.services.auth_service import decode_token, get_user_by_id
 from app.models.user import UserRead
@@ -84,6 +84,7 @@ app.include_router(spaces.router)
 app.include_router(chat.router)
 app.include_router(conversations.router)
 app.include_router(admin.router)
+app.include_router(guided_trees.router)
 
 # Configuration des templates
 templates = Jinja2Templates(directory="app/templates")
@@ -218,6 +219,14 @@ async def admin_page(request: Request, session: Session = Depends(get_session)):
     if _redirect_if_unauthenticated(request, session):
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("admin.html", {"request": request})
+
+
+@app.get("/admin/sav-trees", response_class=HTMLResponse)
+async def admin_sav_trees_page(request: Request, session: Session = Depends(get_session)):
+    """Builder des Arbres SAV (symptômes, éditeur outline, publication)."""
+    if _redirect_if_unauthenticated(request, session):
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("admin_sav_trees.html", {"request": request})
 
 
 @app.get("/feedbacks", response_class=HTMLResponse)

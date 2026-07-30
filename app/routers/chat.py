@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Optional, Literal
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse, FileResponse
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
@@ -498,6 +498,13 @@ class ScopeChoiceRequest(BaseModel):
     values: Dict[str, str] = Field(default_factory=dict)
 
 
+class SavStartInline(BaseModel):
+    """Démarrage d'un Arbre SAV via le flux de chat (bouton / picker / chip)."""
+    tree_slug: str = ""
+    tree_id: Optional[int] = None
+    entry_node_key: Optional[str] = None
+
+
 class SpaceChatRequest(BaseModel):
     message: str
     model: str
@@ -507,6 +514,7 @@ class SpaceChatRequest(BaseModel):
     slot_action: Optional[SlotActionRequest] = None
     guided_choice: Optional[GuidedChoiceRequest] = None
     scope_choice: Optional[ScopeChoiceRequest] = None
+    sav_start: Optional[SavStartInline] = None
 
 
 def _truncate_text(value: str, max_chars: int) -> str:
@@ -748,17 +756,6 @@ def _passages_contain_codes(passages: List[dict], codes: List[str]) -> bool:
         _normalize_code(p.get("passage_raw") or p.get("passage") or "") for p in (passages or [])
     )
     return any(c in blob for c in norm_codes)
-
-
-def _guided_anchor_ids(persisted_qc: Optional[dict]) -> List[int]:
-    """Documents d'ancre du sujet courant (biaisent le retrieval de chaque étape guidée)."""
-    if not (settings.CONVERSATION_ANCHOR_ENABLED and isinstance(persisted_qc, dict)):
-        return []
-    return [
-        int(d)
-        for d in (persisted_qc.get("current_documents") or [])
-        if isinstance(d, (int, str)) and str(d).isdigit()
-    ]
 
 
 async def _stream_llm_to_sse(
@@ -1101,8 +1098,9 @@ async def stream_space_chat_message(
         ):
             raise HTTPException(status_code=404, detail="Conversation non trouvée")
         # Confirmation de périmètre (scope_choice) : le message a déjà été persisté au
-        # tour qui a produit la carte — ne pas le dédoubler.
-        if not request.scope_choice:
+        # tour qui a produit la carte — ne pas le dédoubler. Un démarrage d'Arbre SAV
+        # (sav_start) persiste son propre libellé plus bas.
+        if not request.scope_choice and not request.sav_start:
             try:
                 user_message = Message(
                     conversation_id=request.conversation_id,
@@ -1126,26 +1124,61 @@ async def stream_space_chat_message(
     elif request.context:
         conversation_context = _sanitize_context_messages(request.context, max_messages=10)
 
-    # ——— Aiguillage procédural (guidage SAV / chantier) ———
-    # Court-circuite le pipeline one-shot quand la demande relève d'un guidage pas-à-pas,
-    # ou quand un parcours guidé est déjà actif sur la conversation (reprise).
-    # Gardé par GUIDED_FLOW_ENABLED : zéro impact quand le flag est désactivé.
-    # 1) REPRISE d'un parcours actif : 0 appel LLM (l'utilisateur répond à une étape en
-    #    cours). Le NOUVEAU DÉPART (décision is_guided) est traité APRÈS la compréhension
-    #    fusionnée, dont il RÉUTILISE la décision guidée — un seul appel LLM avant le
-    #    retrieval (P0.4), au lieu d'un decide_guided_mode dédié qui doublait l'appel.
+    # ——— Arbre SAV : DÉMARRAGE explicite (bouton / picker / chip / deep-link) ———
+    # 100 % déterministe : l'utilisateur a cliqué, aucune classification LLM en jeu.
+    if request.sav_start and request.conversation_id:
+        from app.models.guided_tree import GuidedTree
+        from app.services.guided_flow_service import start_guided_session
+
+        sav_tree = None
+        if request.sav_start.tree_id is not None:
+            sav_tree = session.get(GuidedTree, request.sav_start.tree_id)
+        elif request.sav_start.tree_slug:
+            sav_tree = session.exec(
+                select(GuidedTree).where(GuidedTree.slug == request.sav_start.tree_slug)
+            ).first()
+        try:
+            session.add(
+                Message(
+                    conversation_id=request.conversation_id,
+                    role="user",
+                    content=f"🔧 Diagnostic SAV : {sav_tree.title if sav_tree else request.sav_start.tree_slug}",
+                    model=None,
+                    provider=None,
+                )
+            )
+            session.commit()
+        except Exception:
+            logger.exception("Erreur persistance message de démarrage SAV")
+
+        gtr = start_guided_session(
+            session,
+            space_id=space_id,
+            user_id=current_user.id,
+            conversation_id=request.conversation_id,
+            tree_slug=request.sav_start.tree_slug,
+            tree_id=request.sav_start.tree_id,
+            entry_node_key=request.sav_start.entry_node_key,
+        )
+        return _guided_streaming_response(
+            gtr, request.conversation_id, forced_model, forced_provider
+        )
+
+    # ——— Arbre SAV : REPRISE d'un parcours actif (refonte 2026-07-30) ———
+    # Traversée déterministe du snapshot publié — zéro retrieval, zéro LLM (sauf mapping
+    # d'une réponse tapée sur les choix du nœud). Le guidé ne démarre plus JAMAIS depuis
+    # une classification du message libre : le RAG répond toujours (voir chip plus bas).
     guided_active_state = None
-    guided_persisted_qc = None
-    if settings.GUIDED_FLOW_ENABLED and request.conversation_id:
+    if request.conversation_id:
         from app.services.guided_flow_service import load_active_guided_state, run_guided_turn
 
         conv_for_guided = session.get(Conversation, request.conversation_id)
-        guided_persisted_qc = conv_for_guided.query_context if conv_for_guided else None
-        guided_active_state = load_active_guided_state(guided_persisted_qc)
+        guided_active_state = load_active_guided_state(
+            conv_for_guided.query_context if conv_for_guided else None
+        )
 
         if guided_active_state:
-            anchors = _guided_anchor_ids(guided_persisted_qc)
-            logger.info("[chat] Mode guidé — REPRISE parcours actif (anchors=%s)", anchors)
+            logger.info("[chat] Arbre SAV — reprise du parcours actif")
             gtr = await run_guided_turn(
                 session=session,
                 space_id=space_id,
@@ -1153,10 +1186,7 @@ async def stream_space_chat_message(
                 conversation_id=request.conversation_id,
                 user_message=request.message,
                 guided_choice=request.guided_choice.model_dump() if request.guided_choice else None,
-                history=conversation_context,
                 active_state=guided_active_state,
-                product_named=True,  # produit déjà traité en reprise
-                anchor_document_ids=anchors or None,
             )
             return _guided_streaming_response(
                 gtr, request.conversation_id, forced_model, forced_provider
@@ -1277,61 +1307,53 @@ async def stream_space_chat_message(
         logger.info("[chat] Compréhension désactivée — route=search par défaut")
         routing_decision_decision = "rag"
 
-    # ——— NOUVEAU DÉPART guidé (décision portée par la compréhension fusionnée, P0.4) ———
-    # Réutilise la décision guidée du fused (0 appel LLM supplémentaire) ; retombe sur
-    # decide_guided_mode uniquement si le fused ne l'a pas produite (QU off / fused échoué).
-    if (
-        settings.GUIDED_FLOW_ENABLED
-        and request.conversation_id
-        and not guided_active_state
-    ):
-        from app.services.guided_flow_service import run_guided_turn
-        from app.services.query_reasoning_service import resolve_guided_mode
+    # ——— Invitation Arbre SAV (déterministe — jamais à la place de la réponse) ———
+    # Si le message a une connotation SAV (symptôme détecté / vocabulaire client /
+    # intention troubleshooting) ET qu'un arbre PUBLIÉ matche via l'index d'entrée,
+    # un chip « Lancer le diagnostic » est émis SOUS la réponse RAG. Sinon, la demande
+    # alimente le backlog des angles morts (GuidedGap). Le RAG répond dans tous les cas.
+    sav_suggestion: Optional[dict] = None
+    if request.conversation_id and not guided_active_state:
+        try:
+            _sig = lw_result.signals if lw_result else None
+            _detected = str(getattr(_sig, "detected_symptom", "") or "") if _sig else ""
+            _freeform = str(getattr(_sig, "symptom_freeform", "") or "") if _sig else ""
+            _intent = str(getattr(_sig, "intent", "") or "") if _sig else ""
+            if _detected or _freeform or _intent == "troubleshooting":
+                from app.services.guided_entry_index_service import match_entry
+                from app.services.guided_gap_service import record_gap
 
-        guided_topic_hint = ""
-        if lw_result and lw_result.query_context:
-            guided_topic_hint = (
-                lw_result.query_context.get("current_topic")
-                or lw_result.query_context.get("standalone_question")
-                or ""
-            )
-        guided_decision = await resolve_guided_mode(
-            request.message,
-            conversation_context,
-            fused_guided=(lw_result.guided if lw_result else None),
-            topic=guided_topic_hint,
-        )
-        # Intention ambiguë (« régler la hauteur » = ajuster OU dimensionner) : on n'entre
-        # PAS en guidé, le one-shot pose la clarification (politique de réponse n°2).
-        if guided_decision.is_guided and guided_decision.needs_intent_clarification:
-            logger.info("[chat] Guidé différé — intention ambiguë : clarification via one-shot")
-        elif guided_decision.is_guided:
-            anchors = _guided_anchor_ids(guided_persisted_qc)
-            logger.info(
-                "[chat] Mode guidé — NOUVEAU départ flow_kind=%s topic=%r product_named=%s anchors=%s",
-                guided_decision.flow_kind,
-                guided_decision.topic or guided_topic_hint,
-                guided_decision.product_named,
-                anchors,
-            )
-            gtr = await run_guided_turn(
-                session=session,
-                space_id=space_id,
-                user_id=current_user.id,
-                conversation_id=request.conversation_id,
-                user_message=request.message,
-                guided_choice=request.guided_choice.model_dump() if request.guided_choice else None,
-                history=conversation_context,
-                active_state=None,
-                flow_kind=guided_decision.flow_kind,
-                topic=guided_decision.topic or guided_topic_hint,
-                symptom=guided_decision.detected_symptom,
-                product_named=guided_decision.product_named,
-                anchor_document_ids=anchors or None,
-            )
-            return _guided_streaming_response(
-                gtr, request.conversation_id, forced_model, forced_provider
-            )
+                _entry = match_entry(
+                    session,
+                    space_id=space_id,
+                    query_text=request.message,
+                    detected_symptom=_detected,
+                )
+                if _entry is not None:
+                    sav_suggestion = {
+                        "tree_slug": _entry.tree_slug,
+                        "tree_title": _entry.tree_title,
+                        "entry_node_key": _entry.entry_node_key,
+                        "symptom_slug": _entry.symptom_slug,
+                        "method": _entry.method,
+                        "score": round(float(_entry.score), 3),
+                    }
+                    logger.info(
+                        "[chat] Arbre SAV — invitation %s (méthode=%s score=%.2f)",
+                        _entry.tree_slug,
+                        _entry.method,
+                        _entry.score,
+                    )
+                else:
+                    record_gap(
+                        session,
+                        space_id=space_id,
+                        detected_symptom=_detected,
+                        query_text=request.message,
+                        conversation_id=request.conversation_id,
+                    )
+        except Exception:
+            logger.exception("[chat] suggestion Arbre SAV en échec (non bloquant)")
 
     if routing_decision_decision == "direct":
         direct_context = list(conversation_context)
@@ -2941,6 +2963,9 @@ async def stream_space_chat_message(
 
                 if sources_data:
                     yield f"data: {json.dumps({'sources': sources_data})}\n\n"
+                # Invitation Arbre SAV : émise APRÈS la réponse, jamais à sa place.
+                if sav_suggestion:
+                    yield f"data: {json.dumps({'sav_suggestion': sav_suggestion})}\n\n"
                 yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': generation_trace})}\n\n"
 
         except MistralRateLimitError as e:
@@ -2967,4 +2992,119 @@ async def stream_space_chat_message(
             yield f"data: {json.dumps({'error': error_msg_to_yield})}\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
+
+
+# ---------------------------------------------------------------------------
+# Arbre SAV — entrées explicites (bouton / picker / chip / deep-link)
+# ---------------------------------------------------------------------------
+
+
+class SavStartRequest(BaseModel):
+    conversation_id: int
+    tree_slug: str = ""
+    tree_id: Optional[int] = None
+    entry_node_key: Optional[str] = None
+
+
+@router.get("/spaces/{space_id}/sav/entries")
+async def get_sav_entries(
+    space_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Contenu du picker « Diagnostic SAV » : arbres publiés de l'espace, par symptôme."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(status_code=404, detail="Espace non trouvé")
+    from app.services.guided_entry_index_service import list_sav_entries
+
+    return {"entries": list_sav_entries(session, space_id)}
+
+
+@router.post("/spaces/{space_id}/sav/start")
+async def start_sav_diagnostic(
+    space_id: int,
+    request: SavStartRequest,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Démarre un parcours d'arbre SAV publié (100 % déterministe) et streame la
+    première étape avec le même contrat SSE que le chat."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(status_code=404, detail="Espace non trouvé")
+    conversation = session.get(Conversation, request.conversation_id)
+    if (
+        not conversation
+        or conversation.user_id != current_user.id
+        or conversation.space_id != space_id
+    ):
+        raise HTTPException(status_code=404, detail="Conversation non trouvée")
+
+    from app.services.guided_flow_service import start_guided_session
+
+    gtr = start_guided_session(
+        session,
+        space_id=space_id,
+        user_id=current_user.id,
+        conversation_id=request.conversation_id,
+        tree_slug=request.tree_slug,
+        tree_id=request.tree_id,
+        entry_node_key=request.entry_node_key,
+    )
+    return _guided_streaming_response(
+        gtr, request.conversation_id, settings.MODEL_FAST, "mistral"
+    )
+
+
+@router.post("/spaces/{space_id}/sav/photo")
+async def upload_sav_photo(
+    space_id: int,
+    conversation_id: int = Form(...),
+    file: UploadFile = File(...),
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Photo client pendant un diagnostic : stockée sur la session guidée active,
+    jointe au récapitulatif d'escalade."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(status_code=404, detail="Espace non trouvé")
+    conversation = session.get(Conversation, conversation_id)
+    if not conversation or conversation.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Conversation non trouvée")
+
+    from app.services.guided_flow_service import load_active_guided_state
+    from app.models.guided_session import GuidedSession
+
+    state = load_active_guided_state(conversation.query_context)
+    if not state:
+        raise HTTPException(status_code=409, detail="Aucun diagnostic actif sur cette conversation")
+    gsession = session.get(GuidedSession, int(state["active_session_id"]))
+    if gsession is None:
+        raise HTTPException(status_code=404, detail="Session de diagnostic introuvable")
+
+    content = await file.read()
+    if len(content) > 15 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Photo trop volumineuse (max 15 Mo)")
+
+    from app.services.document_service_new import save_uploaded_file
+
+    path = save_uploaded_file(content, file.filename or "photo.jpg", upload_dir="media/sav_photos")
+    if not path:
+        raise HTTPException(status_code=500, detail="Échec de sauvegarde de la photo")
+
+    files = list(gsession.uploaded_files or [])
+    files.append(
+        {
+            "path": path,
+            "node_key": gsession.current_node_key,
+            "uploaded_at": datetime.utcnow().isoformat(),
+        }
+    )
+    gsession.uploaded_files = files
+    gsession.updated_at = datetime.utcnow()
+    session.add(gsession)
+    session.commit()
+    return {"ok": True, "count": len(files)}
 

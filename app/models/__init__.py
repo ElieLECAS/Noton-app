@@ -30,6 +30,10 @@ from .space_theme_synthesis import SpaceThemeSynthesis
 from .category_candidate import CategoryCandidate, CategoryCandidateRead
 from .guided_session import GuidedSession
 from .guided_tree import GuidedTree, GuidedTreeNode
+from .guided_tree_version import GuidedTreeVersion
+from .guided_node_attachment import GuidedNodeAttachment
+from .guided_entry import GuidedEntryIndex, GuidedSymptomAlias
+from .guided_gap import GuidedGap
 
 __all__ = [
     "User",
@@ -96,5 +100,10 @@ __all__ = [
     "GuidedSession",
     "GuidedTree",
     "GuidedTreeNode",
+    "GuidedTreeVersion",
+    "GuidedNodeAttachment",
+    "GuidedEntryIndex",
+    "GuidedSymptomAlias",
+    "GuidedGap",
 ]
 

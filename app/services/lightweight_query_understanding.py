@@ -49,20 +49,6 @@ async def _understanding_chat(*args, **kwargs) -> Dict[str, Any]:
     return await chat(*args, **kwargs)
 
 
-class GuidedDecision(BaseModel):
-    """Décision de mode guidé portée par la compréhension fusionnée (0 appel LLM dédié).
-
-    Miroir de GuidedModeDecision (query_reasoning_service) : chat.py peut en dériver la
-    décision guidée sans second appel. ``present`` indique si le fused a effectivement
-    produit ces champs (sinon l'appelant retombe sur decide_guided_mode)."""
-    present: bool = False
-    is_guided: bool = False
-    flow_kind: str = "howto"
-    detected_symptom: str = ""
-    product_named: bool = True
-    needs_intent_clarification: bool = False
-
-
 class LightweightQueryResult(BaseModel):
     route: str = "rag"
     ready_for_retrieval: bool = False
@@ -75,8 +61,6 @@ class LightweightQueryResult(BaseModel):
     # True quand le dernier message change de sujet vs l'historique : le condense ne
     # réintègre alors pas l'ancien sujet et l'appelant n'hérite pas des signaux passés.
     topic_shift: bool = False
-    # Décision guidée fusionnée (si GUIDED_DECISION_IN_FUSED) — évite decide_guided_mode.
-    guided: GuidedDecision = Field(default_factory=GuidedDecision)
 
 
 class LightweightState(TypedDict, total=False):
@@ -99,8 +83,6 @@ class LightweightState(TypedDict, total=False):
     llm_current_topic: str
     query_strategy: str
     query_groups: List[Dict[str, Any]]
-    # Décision guidée extraite du même appel fusionné (dict de GuidedDecision).
-    guided: Dict[str, Any]
 
 
 def _full_request_text(state: LightweightState) -> str:
@@ -396,45 +378,6 @@ Aucun autre champ.
 """
 
 
-def _guided_prompt_block() -> str:
-    """Bloc de prompt AJOUTÉ au fused quand la décision guidée est portée par le même
-    appel (GUIDED_DECISION_IN_FUSED) : demande is_guided / flow_kind / product_named /
-    needs_intent_clarification / detected_symptom dans le MÊME JSON. Évite l'appel
-    decide_guided_mode dédié (miroir de son prompt)."""
-    from app.services.category_catalog import SYMPTOM_LABELS
-
-    symptom_vocab = " | ".join(f"{slug} ({label})" for slug, label in SYMPTOM_LABELS.items())
-    return f"""
-
-======================================================================
-DÉCISION DE MODE GUIDÉ — ajoute AUSSI ces champs au MÊME objet JSON :
-
-F. "is_guided" : true si l'utilisateur veut être ACCOMPAGNÉ PAS À PAS (procédure de pose /
-   montage à dérouler, OU diagnostic d'un problème/symptôme sur un produit posé). false pour
-   une question factuelle ponctuelle (cote, référence, comparaison), un DIMENSIONNEMENT ou
-   CHOIX DE VALEUR (« à quelle hauteur poser… », « quelle taille prendre… »), une salutation
-   ou du bavardage. En cas de doute → false.
-
-G. "flow_kind" : "howto" (pose/montage chantier) ou "diagnostic" (SAV, problème sur produit
-   posé). Valeur indicative si is_guided=false.
-
-H. "detected_symptom" : si flow_kind="diagnostic" et qu'un symptôme de cette liste correspond,
-   son slug EXACT ; sinon "". SYMPTÔMES connus : {symptom_vocab}
-
-I. "product_named" : true UNIQUEMENT si l'UTILISATEUR a explicitement nommé le produit/gamme/
-   référence (dans son message ou SES messages précédents, jamais ceux de l'assistant).
-   false sinon — même si le contexte laisse deviner un produit probable. Ne devine jamais.
-
-J. "needs_intent_clarification" : true si le message se lit de DEUX façons matériellement
-   différentes (typiquement RÉGLER/ajuster un élément existant vs DÉFINIR/choisir une valeur
-   ou une position — ex : « comment régler la hauteur de poignée ? »). false si le contexte
-   lève l'ambiguïté.
-
-Ces 5 champs viennent EN PLUS de tous les précédents. Le "topic"/"current_topic" ne doit
-PAS injecter un produit que l'utilisateur n'a pas nommé (garde l'étiquette de TÂCHE).
-"""
-
-
 def _compact_message_content(content: str) -> str:
     """Compacte un message pour les extraits d'historique des prompts de compréhension.
 
@@ -488,19 +431,16 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
         f"État de la conversation (fil persistant) :\n{state_facts}\n\n" if state_facts else ""
     )
 
-    # Décision guidée portée par CE même appel (P0.4) : plus de decide_guided_mode dédié.
-    guided_in_fused = settings.GUIDED_DECISION_IN_FUSED and settings.GUIDED_FLOW_ENABLED
+    # La décision guidée par LLM est SUPPRIMÉE (refonte Arbre SAV 2026-07-30) : le RAG
+    # répond toujours ; l'entrée en diagnostic est déterministe (bouton / chip via
+    # guided_entry_index_service). detected_symptom reste porté par les signaux.
     system_prompt = build_extract_signals_prompt(session) + FUSED_UNDERSTANDING_EXTRA_PROMPT
-    if guided_in_fused:
-        system_prompt += _guided_prompt_block()
     user_prompt = (
         f"{state_block}"
         f"Historique récent :\n{history_snippet or '(vide)'}\n\n"
         f"Dernier message utilisateur : '{full_request}'\n\n"
         "Extrais les signaux de CE dernier message, puis produis route, topic_shift, "
-        "standalone_question, too_vague, clarification_question et current_topic"
-        + (", is_guided, flow_kind, detected_symptom, product_named, needs_intent_clarification."
-           if guided_in_fused else ".")
+        "standalone_question, too_vague, clarification_question et current_topic."
     )
 
     # Valeurs de repli (si l'appel LLM échoue, on ne bloque jamais le pipeline).
@@ -511,7 +451,6 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
     clarification_q = ""
     llm_current_topic = ""
     signals_dict = LightweightQuerySignals().model_dump()
-    guided_dict = GuidedDecision().model_dump()
 
     # Appel + validation JSON avec 1 retry (P0.3) : un JSON tronqué/invalide ou sans clé
     # "route" est réessayé une fois avant de retomber sur les valeurs de repli — au lieu
@@ -560,18 +499,14 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
         except Exception as exc:
             logger.error("[lightweight_qu] fused signaux invalides: %s", exc)
 
-        if guided_in_fused:
-            guided_dict = _parse_guided_fields(raw)
-
     if not settings.QUERY_VAGUENESS_CHECK_ENABLED:
         too_vague = False
 
     logger.info(
-        "[lightweight_qu] fused_understand — route=%s topic_shift=%s too_vague=%s guided=%s standalone=%r",
+        "[lightweight_qu] fused_understand — route=%s topic_shift=%s too_vague=%s standalone=%r",
         route,
         topic_shift,
         too_vague,
-        guided_dict.get("is_guided") if guided_dict.get("present") else "n/a",
         standalone[:100],
     )
 
@@ -581,7 +516,6 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
             "route_reasoning": "fused",
             "signals": signals_dict,
             "topic_shift": topic_shift,
-            "guided": guided_dict,
         }
 
     if too_vague and clarification_q:
@@ -601,7 +535,6 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
                 "phase": "awaiting_vague_clarification",
                 "pending_field": "",
             },
-            "guided": guided_dict,
         }
 
     return {
@@ -615,29 +548,7 @@ async def _node_fused_understand(state: LightweightState) -> Dict[str, Any]:
         "awaiting_vague_clarification": False,
         "enriched_user_message": full_request,
         "clarification": None,
-        "guided": guided_dict,
     }
-
-
-def _parse_guided_fields(raw: Dict[str, Any]) -> Dict[str, Any]:
-    """Extrait et normalise les 5 champs de décision guidée du JSON fusionné."""
-    from app.services.category_catalog import SYMPTOM_LABELS
-
-    flow_kind = str(raw.get("flow_kind") or "howto").strip().lower()
-    if flow_kind not in ("howto", "diagnostic"):
-        flow_kind = "howto"
-    symptom = str(raw.get("detected_symptom") or "").strip().lower()
-    if symptom and symptom not in SYMPTOM_LABELS:
-        symptom = ""
-    return GuidedDecision(
-        present=True,
-        is_guided=bool(raw.get("is_guided")),
-        flow_kind=flow_kind,
-        detected_symptom=symptom,
-        # product_named par défaut True (comportement historique) si le LLM ne le renseigne pas.
-        product_named=bool(raw.get("product_named")) if "product_named" in raw else True,
-        needs_intent_clarification=bool(raw.get("needs_intent_clarification")),
-    ).model_dump()
 
 
 def _node_build_queries_fast(state: LightweightState) -> Dict[str, Any]:
@@ -917,8 +828,8 @@ def _build_graph_legacy():
 
 
 def _build_graph_fused(generate_queries_llm: bool):
-    """Graphe fusionné : merge_context → 1 appel LLM (route+signaux+condense+vagueness
-    +guided). La génération des requêtes retriever est soit LLM (plan+generate), soit
+    """Graphe fusionné : merge_context → 1 appel LLM (route+signaux+condense+vagueness).
+    La génération des requêtes retriever est soit LLM (plan+generate), soit
     déterministe (build_queries_fast, 0 appel LLM = UN SEUL appel avant retrieval)."""
     graph = StateGraph(LightweightState)
     graph.add_node("merge_context", _node_merge_context)
@@ -987,12 +898,8 @@ async def run_lightweight_understanding(
 
     final_state = await _get_graph().ainvoke(initial_state)
 
-    guided_obj = GuidedDecision(**(final_state.get("guided") or {}))
-
     if final_state.get("route") == "direct":
-        return LightweightQueryResult(
-            route="direct", ready_for_retrieval=False, guided=guided_obj
-        )
+        return LightweightQueryResult(route="direct", ready_for_retrieval=False)
 
     signals_data = final_state.get("signals") or {}
     signals = LightweightQuerySignals(**signals_data) if signals_data else LightweightQuerySignals()
@@ -1051,7 +958,6 @@ async def run_lightweight_understanding(
             query_strategy=final_state.get("query_strategy") or "single",
             query_groups=parsed_groups,
             topic_shift=topic_shift,
-            guided=guided_obj,
         )
 
     clarification_data = final_state.get("clarification")
@@ -1063,7 +969,6 @@ async def run_lightweight_understanding(
             signals=signals,
             query_context=query_context,
             topic_shift=topic_shift,
-            guided=guided_obj,
         )
 
     return LightweightQueryResult(
@@ -1072,5 +977,4 @@ async def run_lightweight_understanding(
         signals=signals,
         query_context=query_context,
         topic_shift=topic_shift,
-        guided=guided_obj,
     )

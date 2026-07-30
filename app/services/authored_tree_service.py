@@ -1,203 +1,159 @@
-"""Phase 2 — exploitation des arbres d'accompagnement validés (authored trees).
+"""Lecture et traversée des arbres SAV PUBLIÉS (snapshots).
 
-Quand un arbre ACTIF correspond à la demande (symptôme / catégories / mots-clés), il PRIME
-sur la génération dynamique : on déroule ses nœuds pas-à-pas (pas d'appel LLM de routage).
-Fallback dynamique systématique si aucun arbre ne matche ou si l'arbre est en impasse —
-on ne bloque jamais l'utilisateur.
-
-Le hook ``match_authored_tree`` était volontairement absent en Phase 1 ; il est branché ici.
+Le runtime ne lit jamais les lignes draft : il charge le snapshot épinglé par la
+session (GuidedTreeVersion) et le traverse de façon purement déterministe — zéro
+appel LLM, zéro retrieval. Les pièces jointes d'auteur remplacent les passages.
 """
 from __future__ import annotations
 
 import logging
-import re
 from typing import Any, Dict, List, Optional
 
 from sqlmodel import Session, select
 
-from app.config import settings
-from app.models.guided_tree import GuidedTree, GuidedTreeNode
-from app.services.category_catalog import suggested_categories_for_intent
-from app.services.procedural_router_service import (
-    STEP_TYPES,
-    EscalationRecap,
-    RoutingChoice,
-    RoutingStep,
-)
-from app.services.query_signals_schemas import LightweightQuerySignals
+from app.models.guided_tree import GuidedTree
+from app.models.guided_tree_version import GuidedTreeVersion
 
 logger = logging.getLogger(__name__)
 
-# Score minimal pour qu'un arbre prime sur le dynamique (au moins un critère significatif).
-_MATCH_MIN_SCORE = 1.0
-_WEIGHT_SYMPTOM = 3.0
-_WEIGHT_CATEGORY = 1.0
-_WEIGHT_KEYWORD = 0.5
+# Valeurs réservées des actions de parcours (préfixe __ pour ne jamais collisionner
+# avec les valeurs de choix d'auteur).
+BACK_VALUE = "__back"
+QUIT_VALUE = "__quit"
+FEEDBACK_YES_VALUE = "__feedback_yes"
+FEEDBACK_NO_VALUE = "__feedback_no"
 
 
-def _tokenize(value: str) -> set:
-    return {t for t in re.split(r"[^a-zA-Z0-9àâäéèêëïîôöùûüç]+", (value or "").lower()) if len(t) > 2}
-
-
-def match_authored_tree(
-    session: Session,
-    *,
-    space_id: int,
-    flow_kind: str,
-    symptom: Optional[str] = None,
-    inferred_categories: Optional[List[str]] = None,
-    topic: str = "",
-    user_message: str = "",
-) -> Optional[GuidedTree]:
-    """Sélectionne le meilleur arbre actif correspondant à la demande, ou None.
-
-    Score = symptôme (fort) + catégories communes + mots-clés communs. Départage par priority.
-    """
-    if not settings.GUIDED_AUTHORED_TREES_ENABLED:
-        return None
-
-    stmt = select(GuidedTree).where(
-        GuidedTree.is_active == True,  # noqa: E712
-        GuidedTree.flow_kind == flow_kind,
-    )
-    trees = [
-        t for t in session.exec(stmt).all() if t.space_id is None or t.space_id == space_id
-    ]
-    if not trees:
-        return None
-
-    tokens = _tokenize(f"{topic} {user_message}")
-    inferred = {c.strip().lower() for c in (inferred_categories or []) if c}
-    sym = (symptom or "").strip().lower()
-
-    best: Optional[GuidedTree] = None
-    best_rank: tuple = (0.0, -1)
-    for tree in trees:
-        score = 0.0
-        if sym and sym in {s.strip().lower() for s in (tree.match_symptoms or [])}:
-            score += _WEIGHT_SYMPTOM
-        score += len(inferred & {c.strip().lower() for c in (tree.match_categories or [])}) * _WEIGHT_CATEGORY
-        score += len(tokens & {k.strip().lower() for k in (tree.match_keywords or [])}) * _WEIGHT_KEYWORD
-        rank = (score, tree.priority)
-        if score >= _MATCH_MIN_SCORE and rank > best_rank:
-            best, best_rank = tree, rank
-
-    if best is not None:
-        logger.info(
-            "[authored_tree] match tree=%s score=%.1f flow=%s symptom=%r",
-            best.slug,
-            best_rank[0],
-            flow_kind,
-            sym or None,
-        )
-    return best
-
-
-def _load_node(session: Session, tree_id: int, node_key: str) -> Optional[GuidedTreeNode]:
-    return session.exec(
-        select(GuidedTreeNode).where(
-            GuidedTreeNode.tree_id == tree_id,
-            GuidedTreeNode.node_key == node_key,
+def load_published_snapshot(
+    session: Session, tree_id: int, version: Optional[int] = None
+) -> Optional[Dict[str, Any]]:
+    """Charge le snapshot d'une version publiée (par défaut : la version courante)."""
+    if version is None:
+        tree = session.get(GuidedTree, tree_id)
+        if tree is None or not tree.current_version:
+            return None
+        version = tree.current_version
+    row = session.exec(
+        select(GuidedTreeVersion).where(
+            GuidedTreeVersion.tree_id == tree_id,
+            GuidedTreeVersion.version == version,
         )
     ).first()
+    return dict(row.snapshot) if row is not None else None
 
 
-def resolve_authored_node(
-    session: Session,
-    gsession,
-    *,
-    guided_choice: Optional[Dict[str, Any]],
-    resuming: bool,
-) -> Optional[GuidedTreeNode]:
-    """Nœud à afficher ce tour ; avance via le choix utilisateur en reprise.
-
-    Met à jour ``gsession.current_node_key``. Retourne None en impasse → fallback dynamique.
-    """
-    tree_id = gsession.authored_tree_id
-    if not tree_id:
-        return None
-
-    current_key = gsession.current_node_key or "root"
-
-    if resuming:
-        current_node = _load_node(session, tree_id, current_key)
-        if current_node is None or current_node.is_terminal:
-            return None
-        chosen = str((guided_choice or {}).get("value") or "")
-        next_key: Optional[str] = None
-        for choice in current_node.choices or []:
-            if str(choice.get("value")) == chosen:
-                next_key = choice.get("next_node_key")
-                break
-        # Choix inconnu mais nœud linéaire (un seul choix) → on suit l'unique transition.
-        if not next_key and len(current_node.choices or []) == 1:
-            next_key = (current_node.choices or [{}])[0].get("next_node_key")
-        if not next_key:
-            logger.info("[authored_tree] impasse node=%s choix=%r → fallback dynamique", current_key, chosen)
-            return None
-        current_key = next_key
-
-    gsession.current_node_key = current_key
-    return _load_node(session, tree_id, current_key)
+def get_snapshot_node(snapshot: Dict[str, Any], node_key: str) -> Optional[Dict[str, Any]]:
+    nodes = snapshot.get("nodes") or {}
+    node = nodes.get(node_key)
+    return dict(node) if isinstance(node, dict) else None
 
 
-def routing_step_from_node(
-    node: GuidedTreeNode,
-    passages: Optional[List[Dict[str, Any]]] = None,
-) -> RoutingStep:
-    """Construit un RoutingStep (compatible run_guided_turn) à partir d'un nœud d'arbre."""
-    choices = [
-        RoutingChoice(
-            label=str(c.get("label") or ""),
-            value=str(c.get("value") or ""),
-            hint=str(c.get("hint") or ""),
+def _perimeter_visible(condition: Optional[Dict[str, Any]], perimeter: Optional[Dict[str, Any]]) -> bool:
+    from app.services.guided_entry_index_service import perimeter_compatible
+
+    return perimeter_compatible(condition, perimeter)
+
+
+def visible_choices(
+    node: Dict[str, Any], snapshot: Dict[str, Any], perimeter: Optional[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
+    """Choix du nœud, filtrés par le périmètre de la session (un choix pointant vers un
+    nœud conditionné hors périmètre est masqué)."""
+    out: List[Dict[str, Any]] = []
+    for c in node.get("choices") or []:
+        if not isinstance(c, dict) or not c.get("label"):
+            continue
+        nxt = str(c.get("next_node_key") or "")
+        target = get_snapshot_node(snapshot, nxt) if nxt else None
+        if target is not None and not _perimeter_visible(target.get("perimeter_condition"), perimeter):
+            continue
+        out.append(
+            {
+                "label": str(c.get("label")),
+                "value": str(c.get("value") or ""),
+                "hint": str(c.get("hint") or ""),
+                "next_node_key": nxt or None,
+            }
         )
-        for c in (node.choices or [])
-        if c.get("label") and c.get("value") is not None
-    ]
-    step_type = node.step_type if node.step_type in STEP_TYPES else "instruction"
-    is_terminal = bool(node.is_terminal)
-
-    cited_pages: List[Dict[str, Any]] = []
-    for p in (passages or [])[:3]:
-        page_no = p.get("page_no") or p.get("page_start")
-        if page_no is not None:
-            cited_pages.append(
-                {"document_title": p.get("document_title", "Document"), "page_no": page_no}
-            )
-
-    recap = None
-    if is_terminal and node.termination_type == "escalation":
-        recap = EscalationRecap(summary=node.message or "")
-
-    return RoutingStep(
-        step_type=step_type,
-        message=node.message or "",
-        choices=[] if is_terminal else choices,
-        cited_pages=cited_pages,
-        is_terminal=is_terminal,
-        escalation_recap=recap,
-    )
+    return out
 
 
-def signals_for_authored_node(
-    flow_kind: str,
-    accumulated: Dict[str, Any],
-    topic: str,
-    node: GuidedTreeNode,
-) -> LightweightQuerySignals:
-    """Signaux de retrieval scopés par le nœud (ses retrieval_categories / retrieval_entities)."""
-    intent = "installation" if flow_kind == "howto" else "troubleshooting"
-    inferred = list(node.retrieval_categories or []) or suggested_categories_for_intent(intent)
-    entity_texts = [str(t) for t in (accumulated.get("entity_texts") or []) if str(t).strip()]
-    entity_texts += [str(e) for e in (node.retrieval_entities or []) if str(e).strip()]
-    entity_texts = list(dict.fromkeys(entity_texts))
-    detected_refs = list(entity_texts)
-    if topic and topic not in detected_refs:
-        detected_refs.insert(0, topic)
-    return LightweightQuerySignals(
-        intent=intent,
-        inferred_categories=inferred,
-        entity_texts=entity_texts,
-        detected_references=detected_refs,
-    )
+def resolve_next_key(node: Dict[str, Any], choice_value: str) -> Optional[str]:
+    """node_key suivant pour la valeur cliquée ; None si valeur inconnue."""
+    for c in node.get("choices") or []:
+        if str(c.get("value")) == str(choice_value):
+            return str(c.get("next_node_key") or "") or None
+    # Nœud linéaire (un seul choix) : on suit l'unique transition quel que soit le clic.
+    choices = [c for c in (node.get("choices") or []) if c.get("next_node_key")]
+    if len(choices) == 1:
+        return str(choices[0].get("next_node_key"))
+    return None
+
+
+def breadcrumb_from_path(path: List[Dict[str, Any]], limit: int = 6) -> List[str]:
+    """Fil d'Ariane compact : libellés des réponses données (les plus récentes)."""
+    crumbs: List[str] = []
+    for rec in path:
+        sel = rec.get("user_selection") or {}
+        label = str(sel.get("label") or "").strip()
+        if label:
+            crumbs.append(label)
+    return crumbs[-limit:]
+
+
+def step_payload_from_node(
+    node: Dict[str, Any],
+    snapshot: Dict[str, Any],
+    *,
+    perimeter: Optional[Dict[str, Any]] = None,
+    path: Optional[List[Dict[str, Any]]] = None,
+    can_go_back: bool = False,
+    awaiting_feedback: bool = False,
+) -> Dict[str, Any]:
+    """Payload d'étape (SSE + persistance message) construit depuis un nœud de snapshot.
+
+    Une feuille « résolution » N'EST PAS terminale côté session : elle attend le feedback
+    (« résolu ? ») via les choix réservés __feedback_yes / __feedback_no.
+    """
+    is_leaf = bool(node.get("is_terminal"))
+    termination = node.get("termination_type")
+    step_type = str(node.get("step_type") or "question")
+
+    if is_leaf and awaiting_feedback:
+        choices = [
+            {"label": "✅ Oui, problème résolu", "value": FEEDBACK_YES_VALUE, "hint": "", "next_node_key": None},
+            {"label": "❌ Non, toujours un problème", "value": FEEDBACK_NO_VALUE, "hint": "", "next_node_key": None},
+        ]
+    elif is_leaf:
+        choices = []
+    else:
+        choices = visible_choices(node, snapshot, perimeter)
+
+    # L'auteur SAV ne rédige AUCUN texte : il ne liste que des cas. C'est donc ici que
+    # LIA prend la parole — une invite neutre pour un embranchement, l'intitulé du cas
+    # pour une fin (que guided_flow_service enrichit ensuite depuis la notice rattachée).
+    message = str(node.get("message") or "").strip()
+    if not message:
+        message = (
+            str(node.get("title") or "").strip()
+            if is_leaf
+            else "Parmi ces situations, laquelle correspond à la vôtre ?"
+        )
+
+    return {
+        "step_type": step_type,
+        "node_key": node.get("node_key"),
+        "title": node.get("title") or "",
+        "message": message,
+        "choices": choices,
+        "attachments": list(node.get("attachments") or []),
+        "ask_photo": bool(node.get("ask_photo")),
+        "allow_free_text": bool(node.get("allow_free_text", True)),
+        "tools_hint": node.get("tools_hint") or "",
+        "is_terminal": is_leaf and not awaiting_feedback,
+        "termination_type": termination,
+        "breadcrumb": breadcrumb_from_path(path or []),
+        "can_go_back": can_go_back,
+        "tree_title": snapshot.get("title") or "",
+        "flow_kind": snapshot.get("flow_kind") or "diagnostic",
+    }

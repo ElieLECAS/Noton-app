@@ -10,6 +10,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from sqlalchemy import JSON, ForeignKey
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Column, Field, SQLModel
 
 # Valeurs de référence (documentation ; pas de contrainte SQL pour rester souple)
@@ -32,8 +33,16 @@ class GuidedSession(SQLModel, table=True):
     flow_kind: str = Field(default="howto", max_length=20)  # howto | diagnostic
     source_mode: str = Field(default="dynamic", max_length=20)  # dynamic | authored
     authored_tree_id: Optional[int] = Field(default=None, index=True)
+    # Version d'arbre ÉPINGLÉE au démarrage : re-publier ne casse pas un parcours actif.
+    tree_version: Optional[int] = Field(default=None)
     current_node_key: Optional[str] = Field(default=None, max_length=120)
     status: str = Field(default="active", max_length=20, index=True)
+    # Réponse à « Le problème est-il résolu ? » sur une feuille résolution.
+    resolved_feedback: Optional[bool] = Field(default=None)
+    # Photos client : [{path, node_key, uploaded_at}]
+    uploaded_files: Optional[List[Dict[str, Any]]] = Field(
+        default=None, sa_column=Column(JSONB)
+    )
 
     # Historique ordonné des étapes (GuidedStepRecord sérialisés)
     path: List[Dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))

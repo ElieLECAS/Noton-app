@@ -1,12 +1,15 @@
-"""Moteur de guidage procédural ("aiguillage" SAV / chantier).
+"""Arbre SAV — runtime déterministe (refonte 2026-07-30).
 
-Mocks : decide_guided_mode (classification), generate_routing_step (aiguillage LLM),
-search_technical_passages (retrieval). On vérifie le contrat SSE {"step": ...},
-la création/reprise de GuidedSession, la marche how-to, l'escalade, et la rétro-compat
-(GUIDED_FLOW_ENABLED=False ⇒ pipeline one-shot inchangé).
+Le guidé ne démarre plus JAMAIS depuis une classification LLM d'un message libre :
+- un message libre reçoit une réponse RAG (non-régression « softclose ») ;
+- un parcours démarre par /sav/start (bouton/picker/chip), traverse le SNAPSHOT publié
+  (zéro retrieval par étape), gère ← Précédent / Quitter / feedback de feuille.
+
+Les embeddings de l'index d'entrée sont mockés (aucun appel API en test).
 """
 from __future__ import annotations
 
+import json
 from unittest import mock
 
 import pytest
@@ -14,35 +17,31 @@ from sqlmodel import Session, select
 
 from app.database import engine
 from app.models.conversation import Conversation
+from app.models.guided_gap import GuidedGap
 from app.models.guided_session import GuidedSession
-from app.services.procedural_router_service import (
-    EscalationRecap,
-    RoutingChoice,
-    RoutingStep,
-)
-from app.services.query_reasoning_service import GuidedModeDecision
-from tests.conftest import extract_sse_events, extract_sse_message_text
+from tests.conftest import extract_sse_events
 
 
 @pytest.fixture(autouse=True)
-def _neutralize_fused_understanding():
-    """La décision guidée est désormais portée par la compréhension fusionnée (P0.4). Ces
-    tests d'intégration valident le MOTEUR guidé via decide_guided_mode (mocké) : on
-    neutralise donc le fused (present=False → resolve_guided_mode retombe sur le mock),
-    ce qui rend les tests déterministes et évite un appel LLM réseau par tour."""
-    from app.services.lightweight_query_understanding import (
-        GuidedDecision,
-        LightweightQueryResult,
-    )
+def _no_llm_wording():
+    """Le TEXTE des tours est rédigé par LIA (compose_step_message / compose_leaf_answer).
 
-    with mock.patch(
-        "app.services.lightweight_query_understanding.run_lightweight_understanding",
-        new=mock.AsyncMock(
-            return_value=LightweightQueryResult(
-                route="rag", ready_for_retrieval=True, guided=GuidedDecision(present=False)
-            )
-        ),
-    ):
+    Ces tests valident la STRUCTURE du parcours, pas la formulation : on remplace la
+    rédaction par la description du SAV — sinon chaque tour partirait en appel réseau et
+    les assertions dépendraient d'un texte non déterministe.
+    """
+    def _text(session, **kw):
+        node = kw.get("node") or {}
+        return str(node.get("message") or node.get("title") or "")
+
+    # compose_step_message renvoie {message, labels} (les libellés des boutons sont eux
+    # aussi reformulés par LIA) ; on garde les libellés du SAV pour que les assertions
+    # portent sur les valeurs du parcours et pas sur une formulation générée.
+    def _turn(session, **kw):
+        return {"message": _text(session, **kw), "labels": {}}
+
+    with mock.patch("app.services.guided_flow_service.compose_step_message", side_effect=_turn), \
+         mock.patch("app.services.guided_flow_service.compose_leaf_answer", side_effect=_text):
         yield
 
 
@@ -51,14 +50,14 @@ def space_and_conversation(client, responsable_headers):
     sp = client.post(
         "/api/spaces",
         headers=responsable_headers,
-        json={"name": "Espace guidage pytest"},
+        json={"name": "Espace arbre SAV pytest"},
     )
     assert sp.status_code == 201
     space_id = sp.json()["id"]
     cr = client.post(
         "/api/conversations",
         headers=responsable_headers,
-        json={"title": "Conv guidage", "space_id": space_id},
+        json={"title": "Conv arbre SAV", "space_id": space_id},
     )
     assert cr.status_code == 201
     conv_id = cr.json()["id"]
@@ -67,296 +66,371 @@ def space_and_conversation(client, responsable_headers):
     client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)
 
 
-def _passage(step_text: str, page_no: int = 1):
+def _me_id(client, headers) -> int:
+    r = client.get("/api/auth/me", headers=headers)
+    assert r.status_code == 200
+    return r.json()["id"]
+
+
+def _tree_payload():
+    """Arbre : root → (Complètement → moteur ? → [Oui → diagnostic | Non → escalade])
+    | (Partiellement → diagnostic)."""
     return {
-        "passage": step_text,
-        "passage_raw": step_text,
-        "document_id": 1,
-        "document_title": "Notice de pose LUMEAL GA",
-        "chunk_id": 10,
-        "chunk_index": 0,
-        "page_no": page_no,
-        "page_start": page_no,
-        "page_end": page_no,
-        "score": 0.9,
-        "section": "Pose",
-    }
-
-
-def _retrieval_ok(passages=None):
-    return mock.AsyncMock(
-        return_value={
-            "passages": passages if passages is not None else [_passage("Étape 1 : positionner l'embout.")],
-            "status": "ok",
-            "reason": None,
-        }
-    )
-
-
-def _howto_step(message="Étape 1 : positionnez l'embout sur le profil.", terminal=False):
-    if terminal:
-        return RoutingStep(step_type="resolution", message=message, choices=[], is_terminal=True)
-    return RoutingStep(
-        step_type="instruction",
-        message=message,
-        choices=[
-            RoutingChoice(label="C'est fait, étape suivante", value="next"),
-            RoutingChoice(label="Je suis bloqué", value="stuck"),
+        "meta": {"root_node_key": "root"},
+        "nodes": [
+            {
+                "node_key": "root",
+                "step_type": "question",
+                "title": "Type de blocage",
+                "message": "Le volet est-il bloqué complètement ou partiellement ?",
+                "choices": [
+                    {"label": "Complètement bloqué", "value": "total", "next_node_key": "moteur"},
+                    {"label": "Partiellement", "value": "partiel", "next_node_key": "diag_butee"},
+                ],
+                "attachments": [],
+            },
+            {
+                "node_key": "moteur",
+                "step_type": "question",
+                "title": "Bruit moteur",
+                "message": "Le moteur fait-il du bruit quand vous commandez le volet ?",
+                "choices": [
+                    {"label": "Oui, il grogne", "value": "bruit", "next_node_key": "diag_condensateur"},
+                    {"label": "Non, aucun bruit", "value": "silence", "next_node_key": "escalade"},
+                ],
+                "attachments": [],
+            },
+            {
+                "node_key": "diag_condensateur",
+                "step_type": "diagnostic",
+                "title": "Condensateur",
+                "message": "Le condensateur du moteur est probablement HS — remplacement nécessaire.",
+                "is_terminal": True,
+                "termination_type": "resolution",
+                "choices": [],
+                "attachments": [],
+            },
+            {
+                "node_key": "diag_butee",
+                "step_type": "diagnostic",
+                "title": "Butée haute",
+                "message": "Régler la butée haute selon la notice.",
+                "is_terminal": True,
+                "termination_type": "resolution",
+                "choices": [],
+                "attachments": [],
+            },
+            {
+                "node_key": "escalade",
+                "step_type": "escalation",
+                "title": "SAV",
+                "message": "Moteur muet : intervention SAV nécessaire.",
+                "is_terminal": True,
+                "termination_type": "escalation",
+                "choices": [],
+                "attachments": [],
+            },
         ],
-        cited_pages=[{"document_title": "Notice de pose LUMEAL GA", "page_no": 1}],
-        is_terminal=False,
+    }
+
+
+def _publish_tree(space_id: int, user_id: int) -> str:
+    """Crée + publie l'arbre via la couche service (embeddings mockés). Retourne le slug."""
+    from app.services.guided_authoring_service import create_tree, publish_tree, save_tree_draft
+
+    with mock.patch(
+        "app.services.embedding_service.generate_embeddings_batch",
+        side_effect=lambda texts, **kw: [None] * len(texts),
+    ):
+        with Session(engine) as s:
+            tree = create_tree(
+                s,
+                title="Volet roulant bloqué",
+                entry_symptom="blocage_manoeuvre",
+                space_id=space_id,
+                user_id=user_id,
+            )
+            save_tree_draft(s, tree.id, _tree_payload(), user_id)
+            result = publish_tree(s, tree.id, note="test", user_id=user_id)
+            assert result["version"] == 1
+            return tree.slug
+
+
+def _start(client, headers, space_id, conv_id, slug):
+    return client.post(
+        f"/api/spaces/{space_id}/sav/start",
+        headers=headers,
+        json={"conversation_id": conv_id, "tree_slug": slug},
     )
 
 
-def _guided_post(client, headers, space_id, conv_id, message, guided_choice=None):
-    body = {
-        "message": message,
-        "model": "mistral-small-latest",
-        "provider": "mistral",
-        "conversation_id": conv_id,
-    }
-    if guided_choice is not None:
-        body["guided_choice"] = guided_choice
+def _choice(client, headers, space_id, conv_id, value, label=""):
     return client.post(
         f"/api/spaces/{space_id}/chat/stream",
         headers=headers,
-        json=body,
+        json={
+            "message": label or value,
+            "model": "mistral-small-latest",
+            "provider": "mistral",
+            "conversation_id": conv_id,
+            "guided_choice": {"value": value, "label": label or value},
+        },
     )
 
 
-def _get_conversation(conv_id: int) -> Conversation:
-    with Session(engine) as s:
-        return s.get(Conversation, conv_id)
+def _step_of(response) -> dict:
+    events = extract_sse_events(response.text)
+    steps = [e["step"] for e in events if "step" in e]
+    assert steps, f"Aucun événement step dans : {response.text[:400]}"
+    return steps[-1]
 
 
-def _get_session_for_conv(conv_id: int) -> GuidedSession | None:
+def test_full_walk_resolution_with_feedback(client, responsable_headers, space_and_conversation):
+    space_id, conv_id = space_and_conversation
+    slug = _publish_tree(space_id, _me_id(client, responsable_headers))
+
+    # Le picker liste l'arbre publié.
+    entries = client.get(f"/api/spaces/{space_id}/sav/entries", headers=responsable_headers)
+    assert entries.status_code == 200
+    assert any(e["tree_slug"] == slug for e in entries.json()["entries"])
+
+    # Démarrage explicite → racine.
+    r = _start(client, responsable_headers, space_id, conv_id, slug)
+    assert r.status_code == 200
+    step = _step_of(r)
+    assert "bloqué complètement" in step["message"]
+    assert {c["value"] for c in step["choices"]} == {"total", "partiel"}
+    assert step["is_terminal"] is False
+
+    # Clic « Complètement » → question moteur.
+    step = _step_of(_choice(client, responsable_headers, space_id, conv_id, "total", "Complètement bloqué"))
+    assert "moteur" in step["message"].lower()
+    assert step["can_go_back"] is True
+    assert step["breadcrumb"] == ["Complètement bloqué"]
+
+    # Clic « Oui, il grogne » → feuille diagnostic, feedback attendu (pas terminal).
+    step = _step_of(_choice(client, responsable_headers, space_id, conv_id, "bruit", "Oui, il grogne"))
+    assert "condensateur" in step["message"].lower()
+    assert step["is_terminal"] is False
+    assert {c["value"] for c in step["choices"]} == {"__feedback_yes", "__feedback_no"}
+
+    # Feedback « résolu » → terminal, session close, pointeur nettoyé.
+    step = _step_of(_choice(client, responsable_headers, space_id, conv_id, "__feedback_yes", "Oui, résolu"))
+    assert step["is_terminal"] is True
+
     with Session(engine) as s:
-        return s.exec(
+        gsession = s.exec(
             select(GuidedSession).where(GuidedSession.conversation_id == conv_id)
         ).first()
+        assert gsession.status == "resolved"
+        assert gsession.resolved_feedback is True
+        assert gsession.tree_version == 1
+        conv = s.get(Conversation, conv_id)
+        assert "guided" not in (conv.query_context or {})
 
 
-def test_guided_first_step_creates_session(
-    client, responsable_headers, space_and_conversation
-):
+def test_back_button_returns_to_previous_node(client, responsable_headers, space_and_conversation):
     space_id, conv_id = space_and_conversation
-    with mock.patch("app.config.settings.GUIDED_FLOW_ENABLED", True), mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode",
-        new=mock.AsyncMock(
-            return_value=GuidedModeDecision(
-                is_guided=True, flow_kind="howto", topic="pose embout profil alu"
-            )
-        ),
+    slug = _publish_tree(space_id, _me_id(client, responsable_headers))
+
+    _start(client, responsable_headers, space_id, conv_id, slug)
+    step = _step_of(_choice(client, responsable_headers, space_id, conv_id, "total", "Complètement bloqué"))
+    assert "moteur" in step["message"].lower()
+
+    step = _step_of(_choice(client, responsable_headers, space_id, conv_id, "__back", "← Précédent"))
+    assert "bloqué complètement" in step["message"]
+    assert step["node_key"] == "root"
+
+
+def test_quit_closes_session_and_clears_pointer(client, responsable_headers, space_and_conversation):
+    space_id, conv_id = space_and_conversation
+    slug = _publish_tree(space_id, _me_id(client, responsable_headers))
+
+    _start(client, responsable_headers, space_id, conv_id, slug)
+    step = _step_of(_choice(client, responsable_headers, space_id, conv_id, "__quit", "Quitter"))
+    assert step["is_terminal"] is True
+
+    with Session(engine) as s:
+        gsession = s.exec(
+            select(GuidedSession).where(GuidedSession.conversation_id == conv_id)
+        ).first()
+        assert gsession.status == "abandoned"
+        conv = s.get(Conversation, conv_id)
+        assert "guided" not in (conv.query_context or {})
+
+
+def test_feedback_no_escalates_with_recap(client, responsable_headers, space_and_conversation):
+    space_id, conv_id = space_and_conversation
+    slug = _publish_tree(space_id, _me_id(client, responsable_headers))
+
+    _start(client, responsable_headers, space_id, conv_id, slug)
+    _choice(client, responsable_headers, space_id, conv_id, "partiel", "Partiellement")
+    step = _step_of(_choice(client, responsable_headers, space_id, conv_id, "__feedback_no", "Non résolu"))
+    assert step["is_terminal"] is True
+    assert step["step_type"] == "escalation"
+    recap = step["escalation_recap"]
+    assert recap["contact"]
+    assert any("Partiellement" in str(qa.get("answer", "")) for qa in recap.get("qa_path", []))
+
+    with Session(engine) as s:
+        gsession = s.exec(
+            select(GuidedSession).where(GuidedSession.conversation_id == conv_id)
+        ).first()
+        assert gsession.status == "escalated"
+        assert gsession.resolved_feedback is False
+
+
+def test_free_text_mapped_to_choice(client, responsable_headers, space_and_conversation):
+    space_id, conv_id = space_and_conversation
+    slug = _publish_tree(space_id, _me_id(client, responsable_headers))
+    _start(client, responsable_headers, space_id, conv_id, slug)
+
+    with mock.patch(
+        "app.services.guided_flow_service.map_free_text_to_choice", return_value="total"
+    ):
+        r = client.post(
+            f"/api/spaces/{space_id}/chat/stream",
+            headers=responsable_headers,
+            json={
+                "message": "il est bloqué à fond, impossible de le descendre",
+                "model": "mistral-small-latest",
+                "provider": "mistral",
+                "conversation_id": conv_id,
+            },
+        )
+    step = _step_of(r)
+    assert "moteur" in step["message"].lower()  # a avancé comme le choix « total »
+
+
+def test_free_text_unmapped_represents_node(client, responsable_headers, space_and_conversation):
+    space_id, conv_id = space_and_conversation
+    slug = _publish_tree(space_id, _me_id(client, responsable_headers))
+    _start(client, responsable_headers, space_id, conv_id, slug)
+
+    with mock.patch(
+        "app.services.guided_flow_service.map_free_text_to_choice", return_value=None
+    ):
+        r = client.post(
+            f"/api/spaces/{space_id}/chat/stream",
+            headers=responsable_headers,
+            json={
+                "message": "je ne sais pas trop",
+                "model": "mistral-small-latest",
+                "provider": "mistral",
+                "conversation_id": conv_id,
+            },
+        )
+    step = _step_of(r)
+    assert step["node_key"] == "root"  # re-présente le nœud courant
+    assert "bloqué complètement" in step["message"]
+
+
+def test_start_unknown_tree_is_graceful(client, responsable_headers, space_and_conversation):
+    space_id, conv_id = space_and_conversation
+    r = _start(client, responsable_headers, space_id, conv_id, "arbre_inexistant")
+    assert r.status_code == 200
+    step = _step_of(r)
+    assert step["is_terminal"] is True
+    with Session(engine) as s:
+        conv = s.get(Conversation, conv_id)
+        assert "guided" not in (conv.query_context or {})
+
+
+async def _fake_mistral_stream(*args, **kwargs):
+    yield json.dumps({"message": {"content": "La fonctionnalité est softclose et softopen."}})
+
+
+def test_free_message_never_hijacked(client, responsable_headers, space_and_conversation):
+    """Non-régression « softclose » : un message libre reçoit TOUJOURS la réponse RAG,
+    même à connotation produit — plus aucun départ guidé par classification LLM."""
+    space_id, conv_id = space_and_conversation
+    _publish_tree(space_id, _me_id(client, responsable_headers))  # arbre publié présent
+
+    with mock.patch("app.config.settings.QUERY_UNDERSTANDING_ENABLED", False), mock.patch(
+        "app.routers.chat.mistral_chat_stream", _fake_mistral_stream
     ), mock.patch(
         "app.services.space_search_service.search_technical_passages",
-        new=_retrieval_ok(),
-    ), mock.patch(
-        "app.services.guided_flow_service.generate_routing_step",
-        new=mock.AsyncMock(return_value=_howto_step()),
+        new=mock.AsyncMock(
+            return_value={
+                "passages": [
+                    {
+                        "passage": "softclose", "passage_raw": "softclose",
+                        "document_id": 1, "document_title": "Doc", "chunk_id": 1,
+                        "chunk_index": 0, "page_no": 1, "page_start": 1, "page_end": 1,
+                        "score": 0.9, "section": "",
+                    }
+                ],
+                "status": "ok",
+                "reason": None,
+            }
+        ),
     ):
-        r = _guided_post(
-            client, responsable_headers, space_id, conv_id,
-            "comment monter l'embout sur le profil alu ?",
+        r = client.post(
+            f"/api/spaces/{space_id}/chat/stream",
+            headers=responsable_headers,
+            json={
+                "message": "je cherche une fonction qui ralentit le vantail de mon coulissant PVC",
+                "model": "mistral-small-latest",
+                "provider": "mistral",
+                "conversation_id": conv_id,
+            },
         )
-
     assert r.status_code == 200
     events = extract_sse_events(r.text)
-    step_events = [e["step"] for e in events if "step" in e]
-    assert len(step_events) == 1
-    step = step_events[0]
-    assert step["step_type"] == "instruction"
-    assert step["is_terminal"] is False
-    assert len(step["choices"]) == 2
-    assert step["guided_session_id"]
-    # Le message de l'étape a bien été streamé en chunks
-    assert "positionnez" in extract_sse_message_text(r.text).lower()
-    assert any(e.get("done") for e in events)
-
-    # GuidedSession créée + pointeur dans query_context
-    gs = _get_session_for_conv(conv_id)
-    assert gs is not None
-    assert gs.status == "active"
-    assert gs.flow_kind == "howto"
-    assert len(gs.path) == 1
-    conv = _get_conversation(conv_id)
-    assert conv.query_context["guided"]["active_session_id"] == gs.id
-    assert conv.query_context["guided"]["phase"] == "guided_active"
-
-    # Message assistant persisté avec metadata_json.guided_step
-    msgs = client.get(
-        f"/api/conversations/{conv_id}/messages", headers=responsable_headers
-    ).json()
-    assistant = [m for m in msgs if m["role"] == "assistant"][-1]
-    assert assistant["metadata_json"]["guided_step"]["step_type"] == "instruction"
+    assert not any("step" in e for e in events), "le tour a été détourné en mode guidé"
+    assert "softclose" in r.text
+    with Session(engine) as s:
+        gsession = s.exec(
+            select(GuidedSession).where(GuidedSession.conversation_id == conv_id)
+        ).first()
+        assert gsession is None or gsession.status != "active"
 
 
-def test_guided_resume_advances_step(
-    client, responsable_headers, space_and_conversation
-):
-    space_id, conv_id = space_and_conversation
-    gen_mock = mock.AsyncMock(
-        side_effect=[
-            _howto_step("Étape 1 : positionnez l'embout."),
-            _howto_step("Étape 2 : clippez l'embout."),
-        ]
+def test_gap_recorded_when_no_tree_matches(client, responsable_headers, space_and_conversation):
+    """Symptôme détecté sans arbre publié → GuidedGap (backlog), réponse RAG inchangée."""
+    space_id, conv_id = space_and_conversation  # AUCUN arbre publié ici
+
+    from app.services.lightweight_query_understanding import LightweightQueryResult
+    from app.services.query_signals_schemas import LightweightQuerySignals
+
+    lw = LightweightQueryResult(
+        route="rag",
+        ready_for_retrieval=True,
+        signals=LightweightQuerySignals(
+            intent="troubleshooting",
+            detected_symptom="infiltration_eau",
+        ),
     )
-    with mock.patch("app.config.settings.GUIDED_FLOW_ENABLED", True), mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode",
-        new=mock.AsyncMock(
-            return_value=GuidedModeDecision(is_guided=True, flow_kind="howto", topic="pose embout")
-        ),
+    with mock.patch("app.config.settings.QUERY_UNDERSTANDING_ENABLED", True), mock.patch(
+        "app.services.lightweight_query_understanding.run_lightweight_understanding",
+        new=mock.AsyncMock(return_value=lw),
+    ), mock.patch(
+        "app.routers.chat.mistral_chat_stream", _fake_mistral_stream
     ), mock.patch(
         "app.services.space_search_service.search_technical_passages",
-        new=_retrieval_ok(),
+        new=mock.AsyncMock(return_value={"passages": [], "status": "ok", "reason": "no_results"}),
     ), mock.patch(
-        "app.services.guided_flow_service.generate_routing_step",
-        new=gen_mock,
+        "app.services.embedding_service.generate_embedding", return_value=None
     ):
-        # Tour 1 : démarrage
-        r1 = _guided_post(
-            client, responsable_headers, space_id, conv_id, "comment poser l'embout ?"
+        r = client.post(
+            f"/api/spaces/{space_id}/chat/stream",
+            headers=responsable_headers,
+            json={
+                "message": "j'ai de l'eau qui rentre par la fenêtre",
+                "model": "mistral-small-latest",
+                "provider": "mistral",
+                "conversation_id": conv_id,
+            },
         )
-        assert r1.status_code == 200
-        # Tour 2 : l'utilisateur clique « étape suivante » (reprise, pas de reclassement)
-        r2 = _guided_post(
-            client, responsable_headers, space_id, conv_id, "C'est fait, étape suivante",
-            guided_choice={"value": "next", "label": "C'est fait, étape suivante"},
-        )
-        assert r2.status_code == 200
-
-    step2 = [e["step"] for e in extract_sse_events(r2.text) if "step" in e][0]
-    assert step2["step_index"] == 1
-
-    gs = _get_session_for_conv(conv_id)
-    assert len(gs.path) == 2
-    # La réponse de l'utilisateur a été enregistrée dans la 1re étape
-    assert gs.path[0]["user_selection"]["value"] == "next"
-    assert "C'est fait, étape suivante" in (gs.path[0]["observations"] or [])
-
-
-def test_guided_resolution_clears_pointer(
-    client, responsable_headers, space_and_conversation
-):
-    space_id, conv_id = space_and_conversation
-    with mock.patch("app.config.settings.GUIDED_FLOW_ENABLED", True), mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode",
-        new=mock.AsyncMock(
-            return_value=GuidedModeDecision(is_guided=True, flow_kind="howto", topic="pose")
-        ),
-    ), mock.patch(
-        "app.services.space_search_service.search_technical_passages",
-        new=_retrieval_ok(),
-    ), mock.patch(
-        "app.services.guided_flow_service.generate_routing_step",
-        new=mock.AsyncMock(return_value=_howto_step("Pose terminée.", terminal=True)),
-    ):
-        r = _guided_post(client, responsable_headers, space_id, conv_id, "comment poser ?")
-
     assert r.status_code == 200
-    step = [e["step"] for e in extract_sse_events(r.text) if "step" in e][0]
-    assert step["is_terminal"] is True
-    assert step["choices"] == []
-
-    gs = _get_session_for_conv(conv_id)
-    assert gs.status == "resolved"
-    conv = _get_conversation(conv_id)
-    assert "guided" not in (conv.query_context or {})
-
-
-def test_guided_escalation_builds_recap(
-    client, responsable_headers, space_and_conversation
-):
-    space_id, conv_id = space_and_conversation
-    escalation = RoutingStep(
-        step_type="escalation",
-        message="Je transmets votre demande au SAV.",
-        choices=[],
-        is_terminal=True,
-        escalation_recap=EscalationRecap(summary="Volet bloqué non résolu."),
-    )
-    with mock.patch("app.config.settings.GUIDED_FLOW_ENABLED", True), mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode",
-        new=mock.AsyncMock(
-            return_value=GuidedModeDecision(
-                is_guided=True, flow_kind="diagnostic", topic="volet roulant bloqué"
+    with Session(engine) as s:
+        gap = s.exec(
+            select(GuidedGap).where(
+                GuidedGap.space_id == space_id,
+                GuidedGap.detected_symptom == "infiltration_eau",
             )
-        ),
-    ), mock.patch(
-        "app.services.space_search_service.search_technical_passages",
-        new=_retrieval_ok([_passage("Conditions de garantie : 2 ans.")]),
-    ), mock.patch(
-        "app.services.guided_flow_service.generate_routing_step",
-        new=mock.AsyncMock(return_value=escalation),
-    ):
-        r = _guided_post(
-            client, responsable_headers, space_id, conv_id, "mon volet roulant ne fonctionne plus"
-        )
-
-    assert r.status_code == 200
-    step = [e["step"] for e in extract_sse_events(r.text) if "step" in e][0]
-    assert step["step_type"] == "escalation"
-    assert step["is_terminal"] is True
-    recap = step["escalation_recap"]
-    assert recap is not None
-    assert "contact" in recap
-    assert recap["warranty_excerpt"]  # extrait garantie récupéré
-
-    gs = _get_session_for_conv(conv_id)
-    assert gs.status == "escalated"
-
-
-def test_guided_classifier_non_guided_falls_through(
-    client, responsable_headers, space_and_conversation
-):
-    """GUIDED_FLOW_ENABLED=True mais demande factuelle ⇒ pipeline RAG standard."""
-    space_id, conv_id = space_and_conversation
-    with mock.patch("app.config.settings.GUIDED_FLOW_ENABLED", True), mock.patch(
-        "app.config.settings.QUERY_UNDERSTANDING_ENABLED", False
-    ), mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode",
-        new=mock.AsyncMock(return_value=GuidedModeDecision(is_guided=False)),
-    ), mock.patch(
-        "app.services.space_search_service.search_technical_passages",
-        new=mock.AsyncMock(
-            return_value={"passages": [], "status": "ok", "reason": "no_results"}
-        ),
-    ):
-        r = _guided_post(
-            client, responsable_headers, space_id, conv_id,
-            "quelle est la tolérance de pose ?",
-        )
-
-    assert r.status_code == 200
-    # Aucun aiguillage : pas d'événement step, fallback "aucune source pertinente"
-    assert not any("step" in e for e in extract_sse_events(r.text))
-    assert "seuil minimum de 75%" in extract_sse_message_text(r.text)
-    assert _get_session_for_conv(conv_id) is None
-
-
-def test_guided_disabled_no_session(
-    client, responsable_headers, space_and_conversation
-):
-    """Rétro-compat : flag désactivé ⇒ aucune classification guidée, pipeline inchangé."""
-    space_id, conv_id = space_and_conversation
-    guided_mode = mock.AsyncMock(return_value=GuidedModeDecision(is_guided=True))
-    with mock.patch(
-        # Patch explicite : l'env du conteneur peut définir GUIDED_FLOW_ENABLED=true.
-        "app.config.settings.GUIDED_FLOW_ENABLED", False
-    ), mock.patch(
-        "app.config.settings.QUERY_UNDERSTANDING_ENABLED", False
-    ), mock.patch(
-        "app.services.query_reasoning_service.decide_guided_mode", new=guided_mode
-    ), mock.patch(
-        "app.services.space_search_service.search_technical_passages",
-        new=mock.AsyncMock(
-            return_value={"passages": [], "status": "ok", "reason": "no_results"}
-        ),
-    ):
-        r = _guided_post(
-            client, responsable_headers, space_id, conv_id,
-            "comment monter l'embout sur le profil alu ?",
-        )
-
-    assert r.status_code == 200
-    guided_mode.assert_not_called()  # jamais classé en mode guidé
-    assert _get_session_for_conv(conv_id) is None
+        ).first()
+        assert gap is not None
+        assert gap.count >= 1
+        s.delete(gap)
+        s.commit()

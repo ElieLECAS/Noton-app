@@ -15,7 +15,6 @@ def _fake_lw_result(route: str):
         topic_shift=False,
         signals=None,
         query_context={},
-        guided=None,
         clarification=None,
         retrieval_queries=None,
         query_groups=[],

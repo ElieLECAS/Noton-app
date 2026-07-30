@@ -6,7 +6,8 @@
   - chunks L2 ``procedural_step`` (étapes ordonnées) + relations ``etape_precede`` pour les arbres HOWTO.
 
 Le LLM produit un brouillon d'arbre (GuidedTree + GuidedTreeNode) ; il est TOUJOURS persisté
-``is_active=False`` : un expert métier doit le relire et l'activer. Aucun arbre auto-activé.
+``status="draft"`` : un expert métier doit le relire dans le builder et le PUBLIER.
+Aucun arbre auto-publié.
 """
 from __future__ import annotations
 
@@ -261,7 +262,8 @@ def _persist_tree_draft(
         title=draft.title[:300],
         flow_kind=flow_kind,
         space_id=space_id,
-        is_active=False,  # JAMAIS auto-activé : validation humaine requise
+        status="draft",  # JAMAIS auto-publié : relecture + publication humaine requise
+        entry_symptom=(match_symptoms[0] if match_symptoms else None),
         priority=0,
         match_keywords=match_keywords,
         match_categories=match_categories,
