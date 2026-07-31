@@ -15,6 +15,7 @@ Codes émis (severity: error = bloque la publication, warning = informatif) :
 - no_escalation_branch  aucun chemin ne mène à une escalade (warning)
 - depth_warning         profondeur > 12 (warning)
 - terminal_with_choices feuille qui porte encore des choix
+- single_choice         question à une seule réponse : étape inutile (warning)
 - empty_message         nœud non terminal sans question/message
 """
 from __future__ import annotations
@@ -107,6 +108,20 @@ def lint_tree(draft: Dict[str, Any]) -> List[LintIssue]:
                         code="dead_end",
                         node_key=key,
                         message=f"À l'étape « {_name(node, key)} », le client n'a aucune réponse possible : il serait bloqué.",
+                    )
+                )
+            elif len(valid_choices) == 1:
+                # Une question à une seule réponse ne trie rien : le client lit une étape
+                # de plus pour aboutir au même endroit. Les deux cas doivent fusionner.
+                issues.append(
+                    LintIssue(
+                        severity="warning",
+                        code="single_choice",
+                        node_key=key,
+                        message=(
+                            f"« {_name(node, key)} » ne propose qu'une seule réponse : cette étape "
+                            "ne fait pas avancer le client. Fusionnez-la avec le cas du dessous."
+                        ),
                     )
                 )
         # Le SAV ne rédige aucun texte : ce qui doit exister, c'est le NOM du cas

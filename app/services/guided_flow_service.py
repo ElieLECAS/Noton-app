@@ -18,6 +18,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import unicodedata
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -299,7 +300,16 @@ Les libellés doivent :
 - rester tels quels si l'intitulé du technicien est DÉJÀ compréhensible par un client
   (ex. « Le moteur ne fait aucun bruit ») ;
 - reprendre EXACTEMENT le "value" fourni pour chaque situation, sans en inventer ni en oublier ;
-- ne jamais contenir de jargon (référence, nom de pièce technique) que le client ne peut pas voir ;
+- CONSERVER TEL QUEL l'intitulé du SAV quand il porte une DÉSIGNATION COMMERCIALE (gamme,
+  modèle, motorisation : « Coulissant LUMEAL GA », « Serrure Eneo CC », « Moteur autonome
+  Oximo 40 WF RTS »). Les clients ont cette désignation sur leur devis, leur étiquette ou
+  leur télécommande et s'y repèrent mieux qu'à une description. Recopie le libellé du SAV
+  sans le traduire, sans l'abréger et SURTOUT sans changer le mot qui dit ce que c'est :
+  un « Coulissant SOLEAL GY 55 » n'est pas une « Fenêtre SOLEAL GY 55 ». Tu peux au plus
+  ajouter une précision après un tiret ;
+- ne pas contenir de référence de PIÈCE interne, que le client ne peut pas voir sur sa
+  menuiserie (« T441004 », « TGA3817 », « joint T411003 ») : ça reste dans le message si
+  c'est utile au geste, jamais dans le libellé d'un bouton ;
 - être COHÉRENTS entre eux et non contradictoires : chaque libellé doit être une réponse possible
   à la question posée, et une seule doit pouvoir être vraie à la fois.
 
@@ -326,6 +336,75 @@ Règles absolues pour le message :
   VISIBLES ou AUDIBLES (voyant allumé ou éteint, bruit, absence de réaction) ; toute
   intervention sur le câblage relève d'un professionnel et doit être annoncée comme telle ;
 - si le geste demandé présente un risque, rappelle la précaution en quelques mots (hors tension…)."""
+
+
+_DESIGNATION_TOKEN = re.compile(r"[0-9A-Za-zÀ-ÿ][0-9A-Za-zÀ-ÿ'’\-/]*")
+_IS_REF = re.compile(r"[A-Z][A-Z0-9]+(?:[-/][A-Z0-9]+)*$")
+_IS_NUM = re.compile(r"\d{1,4}$")
+_IS_CAPITALIZED = re.compile(r"[A-ZÀ-Ý][a-zà-ÿ]+$")
+
+
+def designations(title: str) -> List[str]:
+    """Extrait les désignations commerciales d'un intitulé SAV, du plus long au plus court.
+
+    « Coulissant SOLEAL GY 55 » → « SOLEAL GY 55 » · « Serrure motorisée Eneo CC » →
+    « Eneo CC » · « Moteur autonome solaire Oximo 40 WF RTS » → « Oximo 40 WF RTS ».
+
+    Marche en deux temps : on isole les suites de mots en CAPITALES (avec les nombres
+    qu'elles contiennent), puis on remonte devant chacune pour récupérer la marque écrite
+    en capitale initiale (« Eneo », « Oximo »). Le mot de catégorie qui ouvre l'intitulé
+    (« Coulissant », « Porte ») est laissé de côté dès que la référence se suffit à
+    elle-même — sauf s'il EST la marque, comme dans « Eneo CC ».
+    """
+    tokens = _DESIGNATION_TOKEN.findall(title or "")
+    spans: List[str] = []
+    index = 0
+    while index < len(tokens):
+        if not _IS_REF.match(tokens[index]):
+            index += 1
+            continue
+        start = index
+        end = index
+        while end + 1 < len(tokens) and (
+            _IS_REF.match(tokens[end + 1]) or _IS_NUM.match(tokens[end + 1])
+        ):
+            end += 1
+        # Remontée devant la suite : nombres et mots à capitale initiale font partie
+        # de la désignation, un mot en minuscules la termine.
+        first = start
+        stands_alone = len(tokens[start]) >= 4
+        while first > 0:
+            previous = tokens[first - 1]
+            if _IS_NUM.match(previous):
+                first -= 1
+                continue
+            if _IS_CAPITALIZED.match(previous) and not (first - 1 == 0 and stands_alone):
+                first -= 1
+                continue
+            break
+        spans.append(" ".join(tokens[first : end + 1]))
+        index = end + 1
+    return sorted(set(spans), key=len, reverse=True)
+
+
+def keep_designation(sav_title: str, label: str) -> str:
+    """Réinjecte la désignation commerciale que la rédaction aurait laissée tomber.
+
+    Garde-fou déterministe : le prompt demande de la conserver, mais un libellé sans la
+    référence rend deux produits voisins indistinguables (« Coulissant à deux vantaux »
+    vs « Coulissant à un ou deux vantaux » — cas réellement observé)."""
+    found = designations(sav_title)
+    if not found or not label.strip():
+        return label
+    haystack = _norm_ascii(label)
+    if any(_norm_ascii(d) in haystack for d in found):
+        return label
+    return f"{found[0]} — {label}"[:90]
+
+
+def _norm_ascii(value: str) -> str:
+    v = unicodedata.normalize("NFD", (value or "").upper())
+    return "".join(c for c in v if unicodedata.category(c) != "Mn")
 
 
 _FILLER_RE = re.compile(
@@ -642,11 +721,24 @@ def _present_node(
         # mal réglée »), que le client ne peut pas identifier. LIA les réécrit en
         # OBSERVATIONS. Seul le libellé change — la valeur, donc le chemin, est intacte.
         labels = turn.get("labels") or {}
+        nodes = snapshot.get("nodes") or {}
         for choice in payload.get("choices") or []:
+            sav_label = choice.get("label") or ""
+            child = nodes.get(str(choice.get("next_node_key") or "")) or {}
+            # L'infobulle porte la description du cas : le client survole et comprend
+            # ce que désigne le bouton sans qu'on allonge le bouton lui-même.
+            choice["hint"] = str(child.get("message") or "").strip()[:300] or sav_label
+            # Identification du produit (première question) : le nom officiel est
+            # justement ce que le client reconnaît sur son devis ou son étiquette. On
+            # ne le laisse pas reformuler — LIA a déjà inventé « Fenêtre ou
+            # porte-fenêtre SOLEAL GY 55 » pour un coulissant.
+            if not path and designations(sav_label):
+                continue
             new_label = labels.get(str(choice.get("value")))
             if new_label:
-                choice["hint"] = choice.get("label") or ""   # le nom du SAV reste en infobulle
-                choice["label"] = new_label
+                # Plus bas dans l'arbre, la reformulation en observation reste utile,
+                # mais une désignation présente dans l'intitulé doit y survivre.
+                choice["label"] = keep_designation(sav_label, new_label)
     if preface:
         payload["message"] = f"{preface}\n\n{payload['message']}".strip()
 

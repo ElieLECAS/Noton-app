@@ -394,6 +394,35 @@ def archive_tree(session: Session, tree_id: int, *, user_id: int) -> None:
     remove_tree_entries(session, tree_id)
 
 
+def delete_tree(session: Session, tree_id: int) -> Dict[str, Any]:
+    """Suppression DÉFINITIVE de l'arbre. Les nœuds, pièces jointes, versions publiées et
+    entrées d'index partent en cascade (ON DELETE CASCADE) ; l'index d'entrée est purgé
+    explicitement pour que rien ne subsiste côté recherche même si la cascade évolue.
+
+    Les GuidedSession déjà tenues gardent leur `authored_tree_id` (pas de contrainte FK) :
+    c'est de l'historique, il ne doit pas disparaître avec l'arbre — mais un parcours en
+    cours perd son snapshot, d'où le décompte retourné pour prévenir l'auteur.
+    """
+    tree = session.get(GuidedTree, tree_id)
+    if tree is None:
+        raise HTTPException(status_code=404, detail="Arbre introuvable")
+
+    from app.models.guided_session import GuidedSession
+    from app.services.guided_entry_index_service import remove_tree_entries
+
+    sessions = session.exec(
+        select(GuidedSession).where(GuidedSession.authored_tree_id == tree_id)
+    ).all()
+    live = sum(1 for s in sessions if s.status == "active")
+
+    remove_tree_entries(session, tree_id)
+    title, slug = tree.title, tree.slug
+    session.delete(tree)
+    session.commit()
+    logger.info("[guided_authoring] arbre supprimé : %s (%s)", title, slug)
+    return {"deleted": True, "title": title, "sessions": len(sessions), "active_sessions": live}
+
+
 def duplicate_tree(
     session: Session, tree_id: int, *, target_space_id: Optional[int] = None, user_id: int
 ) -> GuidedTree:

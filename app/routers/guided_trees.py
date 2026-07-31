@@ -68,6 +68,13 @@ class ImportRequest(BaseModel):
     payload: Dict[str, Any]
 
 
+class ImportJsonRequest(BaseModel):
+    """Texte collé tel quel (le service tolère les ``` et un préambule)."""
+
+    space_id: Optional[int] = None
+    json_text: str
+
+
 @router.get("/trees")
 async def list_trees(
     space_id: Optional[int] = None,
@@ -193,6 +200,28 @@ async def archive(
     return {"ok": True}
 
 
+@router.delete("/trees/{tree_id}")
+async def delete_tree_endpoint(
+    tree_id: int,
+    current_user: UserRead = Depends(require_sav_editor),
+    session: Session = Depends(get_session),
+):
+    """Suppression définitive. Un brouillon jamais publié peut être supprimé par tout
+    éditeur SAV ; dès qu'un arbre a été mis en service (il a un historique de versions et
+    peut avoir des parcours clients), seul un administrateur peut le supprimer."""
+    from app.services.guided_authoring_service import delete_tree
+
+    tree = session.get(GuidedTree, tree_id)
+    if tree is None:
+        raise HTTPException(status_code=404, detail="Arbre introuvable")
+    if int(tree.current_version or 0) > 0 and "admin" not in (current_user.roles or []):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Cet arbre a déjà été mis en service : seul un administrateur peut le supprimer.",
+        )
+    return delete_tree(session, tree_id)
+
+
 @router.post("/trees/{tree_id}/duplicate", status_code=201)
 async def duplicate(
     tree_id: int,
@@ -231,6 +260,60 @@ async def import_endpoint(
         session, request.payload, space_id=request.space_id, user_id=current_user.id
     )
     return get_tree_draft(session, tree.id)
+
+
+@router.get("/import-json/prompt")
+async def import_json_prompt(current_user: UserRead = Depends(require_sav_editor)):
+    """Le mode d'emploi à coller dans Gemini / ChatGPT avec la notice (source unique)."""
+    path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "prompts", "arbre_sav_json.md")
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return {"prompt": fh.read()}
+    except OSError:
+        raise HTTPException(status_code=500, detail="Mode d'emploi introuvable sur le serveur.")
+
+
+@router.post("/trees/import-json", status_code=201)
+async def import_json_endpoint(
+    request: ImportJsonRequest,
+    current_user: UserRead = Depends(require_sav_editor),
+    session: Session = Depends(get_session),
+):
+    """Crée un arbre en BROUILLON depuis un JSON pivot (produit par un LLM à partir
+    d'une notice) ou depuis un export interne. Rien n'est publié : l'auteur relit le
+    graphe puis publie."""
+    from app.services.guided_json_import_service import import_from_json_text
+
+    return import_from_json_text(
+        session, request.json_text, space_id=request.space_id, user_id=current_user.id
+    )
+
+
+@router.post("/trees/import-json/check")
+async def check_json_endpoint(
+    request: ImportJsonRequest,
+    current_user: UserRead = Depends(require_sav_editor),
+    session: Session = Depends(get_session),
+):
+    """Vérifie le JSON sans rien créer : mêmes erreurs bloquantes, même rapport."""
+    from app.services.guided_json_import_service import (
+        convert_pivot,
+        is_native_payload,
+        parse_json_text,
+    )
+
+    data = parse_json_text(request.json_text)
+    if is_native_payload(data):
+        return {
+            "title": (data.get("meta") or {}).get("title") or "",
+            "report": {"cases": len(data.get("nodes") or []), "warnings": ["Format interne."]},
+        }
+    converted = convert_pivot(session, data)
+    return {
+        "title": converted["payload"]["meta"]["title"],
+        "symptom": converted["symptom"],
+        "report": converted["report"],
+    }
 
 
 @router.get("/trees/{tree_id}/lint")

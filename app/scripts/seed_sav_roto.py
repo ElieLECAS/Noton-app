@@ -3,24 +3,31 @@
 FLIP (flip-depannage.fr) enchaîne : IDENTIFIER l'équipement → DIAGNOSTIQUER → RÉPARER.
 On reprend cet ordre avec notre forme actuelle (un graphe de cas) :
 
-    niveau 1 : quel produit ?        (Eneo CC / Roto Safe E / ferrure Roto NX)
-    niveau 2 : quel symptôme ?       (rien ne réagit, 3 bips, télécommande muette…)
-    niveau 3 : quelle cause ?        = la solution (le « dépannage » de la notice)
+    niveau 1 : quel produit ?   (contrôle d'accès 4 en 1 / Safe E / ferrure NX)
+    niveau 2 : quel symptôme ?  (libellés du fabricant, tels quels)
+    niveau 3 : quelle origine ? = le dépannage
 
-Tout le contenu vient de la documentation RÉELLE du corpus, et chaque cas porte la page
-d'où il sort :
-  - « Proferm — Eneo CC — Notice simplifiée » p.7 (erreurs de code / reset),
-    p.8 (association télécommande), p.9 (tableau des erreurs : alimentation,
-    verrouillage automatique, 3 bips, télécommande) ;
-  - « Roto Safe E | Jonction de câble » p.34 (§ 6.1 Dépannage + § 6.2 contrôle de
-    fonctionnement : LED verte du bloc d'alimentation) ;
-  - « Montage Roto NX KSR PVC » p.34 (cotes d'axe et jeux de feuillure) — cette notice
-    ne contient AUCUNE table de pannes : la branche ferrure part donc au SAV au lieu
-    d'inventer un diagnostic.
+⚠️ SOURCE : ce contenu est transcrit depuis la COUCHE TEXTE DES PDF, pas depuis les chunks
+en base. L'ingestion de la notice Eneo CC est passée par la voie « vision » avec
+ministral-3b-latest, qui a paraphrasé et parfois INVERSÉ le sens (ex. l'encart INFORMATION
+de la p.8 sur le code du récepteur). Une première version de cet arbre, écrite d'après la
+base, contenait donc des erreurs. Toute reprise doit repartir des PDF tant que ces
+documents n'ont pas été réingérés en texte natif.
 
-Cas rattachés à PLUSIEURS parents (le même contrôle sert à deux produits) :
-  - les 4 symptômes de la serrure motorisée  ← Eneo CC ET Roto Safe E
-  - « Pas de 24 V à la sortie du bloc d'alimentation » ← 2 symptômes différents
+Sources exactes :
+  - « Proferm — Eneo CC — Notice simplifiée » (Roto Safe E | Eneo CC)
+      p.5  autotest de câblage (code 123456), p.6 plan de câblage,
+      p.7  « Assistance en cas de panne » (codes) + réinitialisation usine,
+      p.8  télécommande (30 max, code du récepteur, association en 6 étapes),
+      p.9  « Tableau des erreurs » : 4 erreurs, 14 origines,
+      p.10 consignes d'entretien et inspection.
+  - « Roto Safe E | Jonction de câble » p.34 § 6.1 Dépannage (3 causes) et § 6.2
+      contrôle de fonctionnement (LED verte). Les 3 dépannages y sont marqués ■ =
+      « réalisation uniquement par une entreprise spécialisée » → tous en sortie SAV.
+  - « Montage Roto NX KSR PVC » (pages PHYSIQUES) p.107-108 accrochage/décrochage du
+      vantail, p.109 réglage des galets (goujons E/P/V), p.115 réglage du compas.
+      Aucune table de pannes dans ce manuel : la branche ferrure ne propose que des
+      réglages, tous réservés à une entreprise spécialisée (cf. Eneo CC p.10).
 
 Usage :
     docker compose exec web python app/scripts/seed_sav_roto.py
@@ -46,157 +53,251 @@ SYMPTOM = "serrure_motorisee"
 SYMPTOM_LABEL = "Serrure ou motorisation de porte"
 ALIASES = [
     "la porte ne se verrouille plus",
+    "la porte ne se déverrouille pas",
     "ma serrure électrique ne répond plus",
     "le boîtier bipe",
     "ma télécommande de porte ne marche plus",
     "le code ne fonctionne plus",
+    "le clavier est bloqué",
 ]
 DESCRIPTION = (
-    "Problème sur une serrure motorisée ou une ferrure de porte/fenêtre ROTO : la serrure "
-    "ne réagit plus, le verrouillage automatique ne se fait pas, le boîtier émet des bips "
-    "d'erreur, la télécommande ou le code d'accès ne fonctionne plus, ou la fenêtre manœuvre mal."
+    "Problème sur une serrure motorisée Roto Safe E, un contrôle d'accès 4 en 1 Eneo CC ou "
+    "une ferrure de fenêtre Roto NX : la serrure ne réagit plus, ne se verrouille pas "
+    "automatiquement, ne se verrouille pas complètement avec un signal sonore d'erreur, la "
+    "porte ne se déverrouille pas, le code ou le clavier est bloqué, plus de courant après une "
+    "intervention sur l'ouvrant, ou la fenêtre frotte et demande un réglage."
 )
 
-# Documents sources, retrouvés par titre (les identifiants diffèrent d'une base à l'autre).
-DOCS = {
-    "eneo": "Eneo CC",
-    "cable": "Jonction de câble",
-    "nx": "Montage Roto NX",
-}
+DOCS = {"eneo": "Eneo CC", "cable": "Jonction de câble", "nx": "Montage Roto NX"}
 
-# (clé, nom, description, [enfants], sav, [(doc, page_debut, page_fin, légende)])
+# (clé, nom, description, [enfants], sav, [(doc, p1, p2, légende)])
 CASES = [
-    # ---------- niveau 1 : identifier le produit (étape « Identifier » de FLIP) ----------
-    ("p_eneo", "Serrure Eneo CC avec clavier ou lecteur d'empreinte",
-     "Boîtier de contrôle d'accès 4 en 1 (code, empreinte, badge, télécommande) monté sur la "
-     "porte d'entrée, associé à une serrure Roto Safe E.",
-     ["s_muet", "s_verrou", "s_bips", "s_telec", "s_code"], False, []),
-    ("p_safee", "Serrure Roto Safe E motorisée, sans clavier",
-     "Serrure motorisée commandée par télécommande, bouton ou interphone, alimentée par une "
-     "jonction de câble entre dormant et ouvrant.",
-     ["s_muet", "s_verrou", "s_bips", "s_telec", "s_courant"], False, []),
-    ("p_nx", "Ferrure de fenêtre Roto NX",
-     "Ferrure d'ouvrant à la française ou oscillo-battant sur menuiserie PVC.",
-     ["s_ferrure"], False, []),
+    # ================= niveau 1 : identifier le produit =================
+    ("p_4en1", "Un contrôle d'accès est monté sur la porte (clavier, empreinte, badge, smartphone)",
+     "Système de contrôle d'accès 4 en 1 Eneo CC : ouverture par code PIN, empreinte digitale, "
+     "smartphone Bluetooth ou support RFID, associé à une serrure Roto Safe E.",
+     ["s_mort", "s_verrou_auto", "s_verrou_partiel", "s_deverrou", "s_code", "s_entretien"],
+     False, [("eneo", 4, 4, "système de contrôle d'accès 4 en 1")]),
+    ("p_safee", "La porte est motorisée mais sans clavier ni lecteur",
+     "Serrure motorisée Roto Safe E commandée par télécommande, bouton poussoir ou interphone, "
+     "alimentée par une jonction de câble entre dormant et ouvrant.",
+     ["s_mort", "s_verrou_auto", "s_verrou_partiel", "s_deverrou", "s_courant", "s_entretien"],
+     False, []),
+    ("p_nx", "Il s'agit d'une fenêtre, pas d'une porte",
+     "Ferrure d'ouvrant à la française ou oscillo-battant Roto NX sur menuiserie PVC.",
+     ["s_fenetre"], False, []),
 
-    # ---------- niveau 2 : le symptôme (étape « Diagnostiquer » de FLIP) ----------
-    ("s_muet", "Rien ne réagit, aucun bip",
-     "La serrure ne donne aucun signe de vie : pas de mouvement, aucun signal sonore quand on "
-     "commande l'ouverture. D'après la notice, c'est presque toujours l'alimentation.",
-     ["c_220", "c_24bloc", "c_24serrure"], False,
-     [("eneo", 9, 9, "tableau des erreurs : le système ne fonctionne pas")]),
-    ("s_verrou", "Le verrouillage automatique ne se fait plus",
-     "La porte se ferme mais la serrure ne verrouille pas d'elle-même.",
-     ["c_porte", "c_modejour", "c_aimant"], False,
-     [("eneo", 9, 9, "verrouillage automatique non fonctionnel")]),
-    ("s_bips", "Le boîtier émet trois bips",
-     "Trois bips signalent un défaut de fermeture mécanique : la serrure ne peut pas engager "
-     "son pêne correctement.",
-     ["c_gaches", "c_corps", "c_pene"], False,
-     [("eneo", 9, 9, "signal d'erreur : 3 bips")]),
-    ("s_telec", "La télécommande ne répond plus",
-     "Aucun signal ne parvient au récepteur radio quand on appuie sur la télécommande.",
-     ["c_assoc", "c_coderecep"], False,
-     [("eneo", 8, 8, "association d'une télécommande au récepteur radio")]),
-    ("s_code", "Le code n'est pas accepté ou le clavier est bloqué",
-     "Le clavier refuse le code, ou ne répond plus du tout après plusieurs essais.",
-     ["c_chiffres", "c_5essais", "c_reset"], False,
-     [("eneo", 7, 7, "erreurs courantes du contrôle d'accès 4 en 1")]),
+    # ================= niveau 2 : les symptômes (libellés fabricant) =================
+    ("s_mort", "Le système ne fonctionne pas : aucune réaction, aucun signal sonore",
+     "L'Eneo CC ne réagit pas et n'émet aucun signal sonore quand on commande l'ouverture. "
+     "Le tableau des erreurs donne cinq origines possibles, toutes liées à l'alimentation ou "
+     "au signal, plus une procédure de dernier recours.",
+     ["a_220", "a_24secondaire", "a_24serrure", "a_polarites", "a_moteur", "a_autotest", "a_recours"],
+     False, [("eneo", 9, 9, "tableau des erreurs — le système ne fonctionne pas")]),
+    ("s_verrou_auto", "La serrure ne se verrouille pas automatiquement",
+     "La porte se ferme mais le verrouillage automatique ne se déclenche pas.",
+     ["b_porte", "b_modejour", "b_aimant"], False,
+     [("eneo", 9, 9, "Eneo CC ne se verrouille pas automatiquement")]),
+    ("s_verrou_partiel", "La serrure ne se verrouille pas complètement et émet un signal d'erreur",
+     "Le verrouillage reste incomplet et la serrure signale l'erreur par des bips : trois bips "
+     "pour un défaut d'alignement ou un corps étranger, deux bips quand le contact reed n'est "
+     "pas fermé.",
+     ["c_gaches", "c_corps", "c_pene", "c_cylindre"], False,
+     [("eneo", 9, 9, "Eneo CC ne se verrouille pas complètement (signal d'erreur)")]),
+    ("s_deverrou", "La porte ne se déverrouille pas",
+     "La commande n'ouvre plus la porte : aucun signal ne part de la télécommande, ou aucun "
+     "signal n'arrive au récepteur de l'Eneo CC.",
+     ["d_telecommande"], False,
+     [("eneo", 9, 9, "la porte ne se déverrouille pas"),
+      ("eneo", 8, 8, "télécommande : code du récepteur et association")]),
+    ("s_code", "Le code n'est pas accepté ou le clavier ne répond plus",
+     "Le clavier refuse le code saisi, ou ne réagit plus du tout après plusieurs tentatives.",
+     ["e_bloque", "e_5essais", "e_reset"], False,
+     [("eneo", 7, 7, "assistance en cas de panne — erreurs de code")]),
     ("s_courant", "Plus de courant après une intervention sur l'ouvrant",
-     "Panne d'alimentation apparue après un démontage, un réglage ou une manipulation de "
-     "l'ouvrant : la jonction de câble entre dormant et ouvrant est en cause.",
-     ["c_connecteur", "c_24bloc"], False,
-     [("cable", 34, 34, "§ 6.1 Dépannage : absence de courant électrique")]),
-    ("s_ferrure", "La fenêtre manœuvre mal ou frotte",
-     "Ouvrant dur à manœuvrer, qui frotte ou ferme mal. La notice de montage Roto NX donne les "
-     "cotes d'axe et les jeux de feuillure, mais ne contient pas de table de pannes : le "
-     "diagnostic détaillé reste à écrire, on transmet donc au SAV.",
-     [], True,
-     [("nx", 34, 34, "cotes d'axe de ferrage et jeux de feuillure")]),
+     "Panne d'alimentation apparue après un démontage, un décrochage ou une manipulation de "
+     "l'ouvrant : la jonction de câble entre dormant et ouvrant est en cause. La notice réserve "
+     "ces trois dépannages à une entreprise spécialisée.",
+     ["f_connecteur", "f_rupture", "f_connexion"], False,
+     [("cable", 34, 34, "§ 6.1 Dépannage — absence de courant électrique")]),
+    ("s_entretien", "Rien n'est cassé : je veux faire l'entretien",
+     "Entretien préventif et inspection périodique de la serrure et des ferrures de sécurité.",
+     ["g_annuel", "g_inspection"], False,
+     [("eneo", 10, 10, "consignes d'entretien et inspection")]),
+    ("s_fenetre", "La fenêtre frotte, ferme mal, ou le vantail est descendu",
+     "Manœuvre dure, frottement, mauvais affleurement ou vantail décroché sur une ferrure "
+     "Roto NX. Le manuel de montage ne contient pas de table de pannes : il donne les courses "
+     "de réglage, et la notice Eneo CC précise que les travaux de réglage sur les ferrures "
+     "doivent être faits par une entreprise spécialisée.",
+     ["h_galets", "h_hauteur", "h_vantail"], False,
+     [("nx", 109, 109, "réglage des galets — goujons E, P et V")]),
 
-    # ---------- niveau 3 : la cause = le dépannage (étape « Réparer » de FLIP) ----------
-    ("c_220", "Pas de 220 V à l'entrée du transformateur",
-     "L'installation électrique n'alimente plus le transformateur. La notice impose une "
-     "intervention par un professionnel qualifié, selon les instructions IMO_438.",
-     [], True, [("eneo", 9, 9, "absence d'alimentation électrique")]),
-    ("c_24bloc", "Pas de 24 V à la sortie du bloc d'alimentation",
-     "Le bloc d'alimentation ne délivre plus le 24 V. Vérifier les contacts du boîtier "
-     "d'alimentation ; la LED du bloc doit être allumée en vert quand il y a de la tension.",
+    # ================= niveau 3 : origines et dépannages =================
+    # --- « Le système ne fonctionne pas » (Eneo CC p.9, 5 origines + recours) ---
+    ("a_220", "Pas d'alimentation 220 V à l'entrée primaire du transformateur",
+     "Le transformateur n'est plus alimenté en 220 V. La notice impose que l'installation "
+     "électrique soit réalisée uniquement par un professionnel qualifié, comme précisé dans les "
+     "instructions de montage IMO_438.",
+     [], True, [("eneo", 9, 9, "pas d'alimentation 220 V à l'entrée primaire")]),
+    ("a_24secondaire", "Pas d'alimentation 24 V à l'entrée secondaire du transformateur",
+     "Le transformateur ne délivre plus le 24 V : vérifier les contacts du boîtier "
+     "d'alimentation.",
      [], False,
-     [("eneo", 9, 9, "24 V non fournis à l'entrée secondaire"),
-      ("cable", 34, 34, "§ 6.2 contrôle de fonctionnement : LED verte du bloc")]),
-    ("c_24serrure", "Pas de 24 V jusqu'à la serrure",
-     "Le bloc alimente bien, mais la tension n'arrive pas à la serrure : vérifier les câbles "
-     "de liaison et leurs connexions.",
+     [("eneo", 9, 9, "pas d'alimentation 24 V à l'entrée secondaire"),
+      ("eneo", 6, 6, "plan de câblage — transformateur Eneo 100-240 V AC / 24 V DC 2,5 A")]),
+    ("a_24serrure", "Le 24 V n'arrive pas jusqu'à la serrure",
+     "Le boîtier délivre bien le 24 V mais la serrure ne le reçoit pas : vérifier les câbles de "
+     "connexion entre le boîtier d'alimentation et la serrure Eneo CC, et les remplacer si "
+     "nécessaire.",
      [], False,
      [("eneo", 9, 9, "24 V non fournis à la serrure Eneo CC"),
-      ("cable", 34, 34, "vérification des connexions enfichables")]),
-
-    ("c_connecteur", "La connexion enfichable est desserrée",
-     "Le connecteur 6 broches de la jonction de câble entre dormant et ouvrant s'est desserré : "
-     "il suffit de refixer le connecteur. Ne jamais tirer sur le ressort pour le manipuler, "
-     "utiliser une clé six-pans ou un tournevis adapté.",
+      ("eneo", 6, 6, "plan de câblage et affectation des fils")]),
+    ("a_polarites", "Le 24 V arrive à la serrure mais les polarités + et − sont inversées",
+     "La tension est présente mais le + et le − ont été intervertis : inverser les polarités au "
+     "niveau de l'entrée secondaire du transformateur.",
      [], False,
-     [("cable", 34, 34, "§ 6.1 Dépannage : la connexion enfichable est desserrée")]),
+     [("eneo", 9, 9, "les +/- ont été intervertis"),
+      ("eneo", 6, 6, "plan de câblage — brun +24 V, vert GND")]),
+    ("a_moteur", "L'unité motrice est en position finale et ne reçoit pas de signal de mouvement",
+     "Le moteur est arrivé en butée et n'a pas reçu l'ordre de bouger : vérifier les câbles qui "
+     "transmettent le signal, ou changer la distance de l'Eneo CC (distance préconisée : 1 à 2 m).",
+     [], False, [("eneo", 9, 9, "l'unité motrice est dans sa position finale")]),
+    ("a_autotest", "Je veux d'abord tester le câblage",
+     "La fonction autotest vérifie le câblage et les connexions avec le moteur de la serrure. "
+     "Elle n'est possible qu'à l'état de livraison, et le nombre de tests n'est pas limité : "
+     "entrer le code 123456 sur le clavier puis confirmer avec la touche de validation ; la "
+     "porte s'ouvre si le câblage est bon.",
+     [], False, [("eneo", 5, 5, "test à l'aide de la fonction autotest")]),
+    ("a_recours", "Rien de tout cela n'a fonctionné",
+     "Procédure de dernier recours de la notice : éteindre le transformateur, attendre "
+     "10 secondes et le rallumer ; tester avec l'Unité de Contrôle Eneo ; puis contacter un "
+     "spécialiste.",
+     [], True, [("eneo", 9, 9, "« Ne fonctionne toujours pas ? »")]),
 
-    ("c_porte", "La porte n'est pas complètement fermée",
-     "Le verrouillage automatique n'est déclenché que porte entièrement fermée : la refermer "
-     "franchement et réessayer.",
+    # --- « Ne se verrouille pas automatiquement » (p.9, 3 origines) ---
+    ("b_porte", "La porte n'est pas complètement fermée",
+     "Le verrouillage automatique ne se déclenche que porte entièrement fermée : refermer la "
+     "porte complètement.",
      [], False, [("eneo", 9, 9, "la porte n'est pas complètement fermée")]),
-    ("c_modejour", "La serrure est restée en mode jour",
-     "En mode jour, le verrouillage automatique est désactivé (le 24 V n'est pas fourni à "
-     "l'entrée 2). Repasser en mode nuit.",
-     [], False, [("eneo", 9, 9, "Eneo est en mode jour")]),
-    ("c_aimant", "L'aimant en feuillure est mal aligné",
-     "La serrure ne détecte pas la fermeture : vérifier la position de l'aimant en feuillure "
-     "et l'ajuster.",
-     [], False, [("eneo", 9, 9, "aimant en feuillure mal aligné")]),
+    ("b_modejour", "La serrure est en mode de fonctionnement de jour",
+     "En mode jour le verrouillage automatique est inactif. Passer en mode nuit ; le 24 V ne "
+     "doit pas être fourni à l'entrée 2 pour le mode nuit.",
+     [], False,
+     [("eneo", 9, 9, "Eneo est en mode de fonctionnement de jour"),
+      ("eneo", 6, 6, "plan de câblage — contacteur jour / nuit, entrée IN2")]),
+    ("b_aimant", "L'aimant en feuillure est mal aligné",
+     "La serrure ne détecte pas la fermeture : vérifier la position de l'aimant en feuillure et "
+     "l'ajuster.",
+     [], False, [("eneo", 9, 9, "l'aimant en feuillure est mal aligné")]),
 
-    ("c_gaches", "La porte et les gâches sont mal alignées",
-     "Ajuster la porte et les gâches selon les instructions de mise en service.",
-     [], False, [("eneo", 9, 9, "porte et gâches mal alignés")]),
-    ("c_corps", "Un corps étranger est dans la gâche",
-     "Retirer le corps étranger présent dans la gâche, puis refaire un essai de fermeture.",
-     [], False, [("eneo", 9, 9, "corps étranger dans la gâche")]),
-    ("c_pene", "Le pêne n'engage pas et la porte s'ouvre légèrement",
-     "Le contact reed n'est pas fermé : ouvrir la porte électriquement puis la repousser pour "
-     "rétablir le contact. Si le système a été activé au cylindre, il faut le réarmer.",
-     [], False, [("eneo", 9, 9, "le pêne ne s'engage pas correctement")]),
+    # --- « Ne se verrouille pas complètement » (p.9, 4 origines) ---
+    ("c_gaches", "La porte et les gâches ne sont pas alignées correctement — trois bips",
+     "Signal d'erreur : l'Eneo bipe 3 fois. Ajuster la porte et les gâches en se référant aux "
+     "instructions de mise en service.",
+     [], False, [("eneo", 9, 9, "porte et gâches non alignés — l'Eneo bipe 3 x")]),
+    ("c_corps", "Un corps étranger est dans la gâche — trois bips",
+     "Signal d'erreur : l'Eneo bipe 3 fois. Retirer le corps étranger présent dans la gâche.",
+     [], False, [("eneo", 9, 9, "corps étranger dans la gâche — l'Eneo bipe 3 x")]),
+    ("c_pene", "Le pêne n'engage pas et la porte s'ouvre un peu — deux bips",
+     "Signal d'erreur : contact reed non fermé, l'Eneo bipe 2 fois. Ouvrir la porte "
+     "électriquement puis repousser la porte.",
+     [], False, [("eneo", 9, 9, "le pêne ne s'engage pas correctement — l'Eneo bipe 2 x")]),
+    ("c_cylindre", "La serrure a été activée au cylindre",
+     "Si la porte a été déverrouillée manuellement au cylindre, elle doit être verrouillée à "
+     "nouveau manuellement, en se référant aux instructions de mise en service.",
+     [], False, [("eneo", 9, 9, "Eneo CC a été activée au cylindre")]),
 
-    ("c_assoc", "La télécommande n'est plus associée",
-     "Reprogrammer la télécommande selon la procédure d'association : porte ouverte, serrure "
-     "verrouillée à la clé, tige de 3 mm sous la zone du capteur, bip continu de 18 secondes.",
-     [], False, [("eneo", 8, 8, "étapes d'association d'une télécommande")]),
-    ("c_coderecep", "Le code du récepteur radio ne correspond pas",
-     "Ce n'est pas le code de la télécommande qui compte mais celui du récepteur radio : les "
-     "deux doivent correspondre. Vérifier le code du récepteur et les paramètres d'accès.",
-     [], False, [("eneo", 8, 8, "code spécifique du récepteur radio")]),
+    # --- « La porte ne se déverrouille pas » (p.9 + p.8) ---
+    ("d_telecommande", "Aucun signal de la télécommande, ou aucun signal reçu par le récepteur",
+     "Programmer la télécommande comme décrit dans la notice, puis vérifier les paramètres et "
+     "le contrôle d'accès. Points utiles : jusqu'à 30 télécommandes peuvent être associées au "
+     "récepteur radio ; le récepteur n'accepte les signaux que lorsque le code transmis par la "
+     "télécommande correspond au sien ; un même bouton peut avoir été programmé pour une autre "
+     "Eneo, et deux Eneo peuvent être commandées séparément avec une seule télécommande. "
+     "Association : porte ouverte, serrure verrouillée à la clé, tige de Ø3 mm maxi dans le trou "
+     "sous la zone du capteur (PVC noir), bip continu de 18 secondes, appui sur le bouton de la "
+     "télécommande, confirmation par un bip de 2 secondes.",
+     [], False,
+     [("eneo", 8, 8, "télécommande : code du récepteur et association en 6 étapes"),
+      ("eneo", 9, 9, "la porte ne se déverrouille pas")]),
 
-    ("c_chiffres", "Des chiffres ont déjà été saisis sur le clavier",
-     "Le code est refusé parce que des touches ont été pressées avant : appuyer sur la touche "
-     "« X » du clavier pour effacer la saisie, puis entrer le code à nouveau.",
-     [], False, [("eneo", 7, 7, "code non accepté")]),
-    ("c_5essais", "Cinq codes faux ont bloqué le clavier",
-     "Après cinq saisies incorrectes le clavier se bloque pendant 5 minutes : il suffit "
-     "d'attendre la fin du blocage.",
-     [], False, [("eneo", 7, 7, "clavier bloqué après plusieurs saisies incorrectes")]),
-    ("c_reset", "Il faut réinitialiser l'accès",
-     "Réinitialisation par le bouton Reset de la boîte noire à l'intérieur (deux bips après "
-     "3 secondes), ou depuis l'application SOREX SmartLock en supprimant le premier "
-     "utilisateur enregistré.",
-     [], False, [("eneo", 7, 7, "réinitialisation et application SOREX SmartLock")]),
+    # --- Codes et clavier (p.7) ---
+    ("e_bloque", "Le code est bloqué, ou des touches ont déjà été pressées",
+     "Avant d'entrer le code, appuyer sur la touche « X » du clavier de code pour effacer les "
+     "chiffres précédemment entrés, puis saisir le code à nouveau.",
+     [], False, [("eneo", 7, 7, "le code n'a pas été accepté")]),
+    ("e_5essais", "Le clavier ne répond plus après plusieurs codes incorrects",
+     "Si un code incorrect a été saisi cinq fois, le clavier est bloqué pendant 5 minutes : "
+     "attendre que le temps de blocage soit écoulé.",
+     [], False, [("eneo", 7, 7, "le clavier cesse de répondre")]),
+    ("e_reset", "Je veux remettre le contrôle d'accès aux paramètres d'usine",
+     "Deux méthodes : appuyer sur le bouton Reset de la boîte noire, à l'intérieur, environ "
+     "3 secondes jusqu'à ce que deux signaux soient émis en succession rapide ; ou, depuis "
+     "l'application SOREX SmartLock avec le premier utilisateur enregistré, Paramètres puis "
+     "« Supprimer ». Tenir compte de la portée de l'appareil.",
+     [], False, [("eneo", 7, 7, "réinitialisation (paramètres d'usine)")]),
+
+    # --- Jonction de câble Roto Safe E (p.34) : les 3 dépannages sont ■ spécialiste ---
+    ("f_connecteur", "La connexion enfichable est desserrée",
+     "Refixer le connecteur. La notice réserve ce dépannage à une entreprise spécialisée. Ne "
+     "jamais tirer sur le ressort pour desserrer la connexion enfichable : utiliser une clé "
+     "six-pans ou un tournevis adapté.",
+     [], True, [("cable", 34, 34, "§ 6.1 — la connexion enfichable est desserrée")]),
+    ("f_rupture", "Le câble est rompu",
+     "Le câble doit être remplacé. Dépannage réservé à une entreprise spécialisée.",
+     [], True, [("cable", 34, 34, "§ 6.1 — rupture du câble")]),
+    ("f_connexion", "Il manque une connexion électrique",
+     "Vérifier les connexions enfichables, vérifier l'alimentation électrique — la LED du bloc "
+     "d'alimentation doit être allumée, elle s'allume en vert lorsqu'il y a de la tension — puis "
+     "vérifier le bloc d'alimentation. Dépannage réservé à une entreprise spécialisée ; le "
+     "raccordement au 230 V ne doit être effectué que par un électricien spécialisé.",
+     [], True,
+     [("cable", 34, 34, "§ 6.1 et § 6.2 — connexion manquante et contrôle de fonctionnement")]),
+
+    # --- Entretien (p.10) ---
+    ("g_annuel", "Entretien à faire au moins une fois par an",
+     "Resserrer les vis de fixation si nécessaire, remplacer les vis endommagées, remplacer les "
+     "pièces le cas échéant, et appliquer une huile spéciale sans résine ni acide sur toutes les "
+     "pièces mobiles ainsi que sur les gâches en acier. Le remplacement des vis et des pièces "
+     "est réservé à une entreprise spécialisée, de même que tout travail de réglage sur les "
+     "ferrures.",
+     [], False, [("eneo", 10, 10, "consignes d'entretien — au moins une fois par an")]),
+    ("g_inspection", "Inspection périodique des ferrures de sécurité",
+     "Au moins une fois par an, et tous les 6 mois dans les bâtiments scolaires et hôteliers : "
+     "vérifier que les ferrures qui assurent la sécurité sont bien fixées, contrôler leur usure, "
+     "vérifier le bon fonctionnement des parties mobiles et des points de fermeture. La mobilité "
+     "des ferrures se contrôle à la poignée de la porte.",
+     [], False, [("eneo", 10, 10, "inspection annuelle / semestrielle")]),
+
+    # --- Ferrure Roto NX : réglages, entreprise spécialisée ---
+    ("h_galets", "Le vantail serre trop ou pas assez sur le joint",
+     "Réglage de la compression d'appui par les galets : selon le type de goujon (E, P ou V), la "
+     "course de réglage va jusqu'à ±0,8 mm, et le goujon V permet en plus un réglage en hauteur "
+     "de ±0,2 mm. Travail réservé à une entreprise spécialisée.",
+     [], True, [("nx", 109, 109, "réglage des galets — goujons E, P, V et courses de réglage")]),
+    ("h_hauteur", "Le vantail frotte en bas ou n'affleure plus",
+     "Réglage en hauteur et latéral au palier d'angle et au compas : environ ±2 mm en hauteur, "
+     "±0,5 mm en latéral et en compression selon le modèle. Après un réglage en hauteur, le "
+     "report de charge doit être réglé à nouveau. Travail réservé à une entreprise spécialisée.",
+     [], True,
+     [("nx", 115, 115, "réglage du compas et du palier / pivot d'angle")]),
+    ("h_vantail", "Le vantail a été décroché ou est mal accroché",
+     "Accrochage : insérer l'ouvrant avec le compas dans le palier de compas, fermer l'ouvrant, "
+     "insérer la tige d'axe par le bas et la pousser à fleur du palier. Décrochage : fenêtre "
+     "fermée, pousser légèrement la tige d'axe du haut vers le bas avec l'outil d'extraction "
+     "899630, puis la sortir verticalement vers le bas. Le vantail peut tomber : travail à deux "
+     "et par une entreprise spécialisée.",
+     [], True,
+     [("nx", 107, 108, "accrochage et décrochage du vantail, outil d'extraction 899630")]),
 ]
 
-ROOT_CHILDREN = ["p_eneo", "p_safee", "p_nx"]
+ROOT_CHILDREN = ["p_4en1", "p_safee", "p_nx"]
 
 
 def resolve_docs(session: Session) -> dict:
-    """Identifiants réels des documents, retrouvés par titre."""
     found = {}
     for key, needle in DOCS.items():
-        doc = session.exec(
-            select(Document).where(Document.title.ilike(f"%{needle}%"))
-        ).first()
+        doc = session.exec(select(Document).where(Document.title.ilike(f"%{needle}%"))).first()
         if doc:
             found[key] = (doc.id, doc.title)
         else:
@@ -205,10 +306,7 @@ def resolve_docs(session: Session) -> dict:
 
 
 def ensure_symptom(session: Session) -> None:
-    existing = session.exec(
-        select(DocumentCategory).where(DocumentCategory.slug == SYMPTOM)
-    ).first()
-    if existing is None:
+    if session.exec(select(DocumentCategory).where(DocumentCategory.slug == SYMPTOM)).first() is None:
         session.add(DocumentCategory(
             slug=SYMPTOM, label=SYMPTOM_LABEL, axis="symptom",
             description="Serrure motorisée, contrôle d'accès ou ferrure de porte/fenêtre.",
@@ -216,11 +314,9 @@ def ensure_symptom(session: Session) -> None:
         session.commit()
         print(f"  symptôme « {SYMPTOM_LABEL} » créé")
     for alias in ALIASES:
-        if session.exec(
-            select(GuidedSymptomAlias).where(
-                GuidedSymptomAlias.symptom_slug == SYMPTOM, GuidedSymptomAlias.alias == alias
-            )
-        ).first() is None:
+        if session.exec(select(GuidedSymptomAlias).where(
+            GuidedSymptomAlias.symptom_slug == SYMPTOM, GuidedSymptomAlias.alias == alias
+        )).first() is None:
             session.add(GuidedSymptomAlias(symptom_slug=SYMPTOM, alias=alias))
     session.commit()
 
@@ -232,24 +328,23 @@ def build_payload(root_key: str, docs: dict) -> dict:
         return {"label": by_key[child][1], "value": f"v_{child}", "hint": "",
                 "next_node_key": child}
 
-    def attachments(specs) -> list:
+    def atts(specs) -> list:
         out = []
         for doc_key, p1, p2, caption in specs:
             if doc_key not in docs:
                 continue
             doc_id, doc_title = docs[doc_key]
-            out.append({"document_id": doc_id, "document_title": doc_title,
-                        "page_start": p1, "page_end": p2, "caption": caption,
-                        "kind": "notice"})
+            out.append({"document_id": doc_id, "document_title": doc_title, "page_start": p1,
+                        "page_end": p2, "caption": caption, "kind": "notice"})
         return out
 
     nodes = [{
         "node_key": root_key, "step_type": "question", "title": TITLE, "message": DESCRIPTION,
-        "internal_note": "", "is_terminal": False, "termination_type": None,
-        "ask_photo": False, "allow_free_text": True, "tools_hint": "",
+        "internal_note": "", "is_terminal": False, "termination_type": None, "ask_photo": False,
+        "allow_free_text": True, "tools_hint": "",
         "choices": [choice(k) for k in ROOT_CHILDREN], "attachments": [],
     }]
-    for key, name, desc, kids, sav, atts in CASES:
+    for key, name, desc, kids, sav, specs in CASES:
         terminal = not kids
         nodes.append({
             "node_key": key,
@@ -259,8 +354,7 @@ def build_payload(root_key: str, docs: dict) -> dict:
             "termination_type": ("escalation" if sav else "resolution") if terminal else None,
             "ask_photo": bool(terminal and sav),
             "allow_free_text": True, "tools_hint": "",
-            "choices": [choice(k) for k in kids],
-            "attachments": attachments(atts),
+            "choices": [choice(k) for k in kids], "attachments": atts(specs),
         })
     return {"meta": {"title": TITLE, "entry_symptom": SYMPTOM, "description": DESCRIPTION,
                      "root_node_key": root_key}, "nodes": nodes}
@@ -283,23 +377,25 @@ def main() -> None:
                            description=DESCRIPTION, user_id=user_id)
         save_tree_draft(session, tree.id, build_payload(tree.root_node_key, docs), user_id)
 
-        shared = {}
+        parents = {}
         for key, _n, _d, kids, _s, _a in CASES:
             for k in kids:
-                shared.setdefault(k, []).append(key)
-        multi = {k: v for k, v in shared.items() if len(v) > 1}
+                parents.setdefault(k, []).append(key)
+        multi = {k: v for k, v in parents.items() if len(v) > 1}
+        n_att = sum(len(c[5]) for c in CASES)
 
-        print(f"Arbre « {TITLE} » créé — slug={tree.slug} id={tree.id}")
-        print(f"  {len(CASES) + 1} cas · 3 produits · 7 symptômes · 14 causes/solutions")
-        print(f"  cas partagés entre plusieurs parents : {len(multi)}")
-        for k, parents in multi.items():
-            name = next(c[1] for c in CASES if c[0] == k)
-            print(f"    {name[:44]:<44} ← {len(parents)} parents")
+        print(f"Arbre « {TITLE} » — slug={tree.slug} id={tree.id}")
+        print(f"  {len(CASES) + 1} cas : 3 produits · 8 symptômes · {len(CASES) - 11} origines")
+        print(f"  {n_att} notices rattachées · {sum(1 for c in CASES if c[4])} sorties SAV")
+        print(f"  cas partagés entre plusieurs produits/symptômes : {len(multi)}")
+        for k, ps in multi.items():
+            print(f"    {next(c[1] for c in CASES if c[0] == k)[:46]:<46} ← {len(ps)}")
 
         if publish:
-            res = publish_tree(session, tree.id, note="Seed ROTO (ordre FLIP)", user_id=user_id)
-            print(f"  publié en v{res['version']} → proposé aux clients")
-            for w in [i for i in res["lint"] if i["severity"] != "error"][:5]:
+            res = publish_tree(session, tree.id, note="Seed ROTO transcrit depuis les PDF",
+                               user_id=user_id)
+            print(f"  publié en v{res['version']}")
+            for w in [i for i in res["lint"] if i["severity"] != "error"][:4]:
                 print(f"    conseil : {w['message']}")
         else:
             print("  laissé en préparation (--draft)")

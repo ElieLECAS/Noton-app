@@ -131,7 +131,8 @@
                     <button onclick="openHistory()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"><i class="ti ti-history"></i> Anciennes versions</button>
                     <button onclick="fromDocs()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"><i class="ti ti-sparkles"></i> Proposer des cas depuis la doc</button>
                     <button onclick="exportGuide()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"><i class="ti ti-download"></i> Enregistrer une copie</button>
-                    <button onclick="dropGuide()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-red-600"><i class="ti ti-trash"></i> Supprimer ce symptôme</button>
+                    <button onclick="dropGuide()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-red-600"><i class="ti ti-trash"></i> Supprimer cet arbre définitivement</button>
+                    <button onclick="retireGuide()" class="w-full text-left px-3 py-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"><i class="ti ti-eye-off"></i> Le retirer du service (sans supprimer)</button>
                 </div>
             </div>
         </div>
@@ -150,7 +151,10 @@
                         Vous n'écrivez aucune réponse : LIA pose les questions et rédige la solution
                         depuis la notice que vous rattachez.
                     </p>
-                    <button onclick="newGuide()" class="chip on"><i class="ti ti-plus"></i> Créer un symptôme</button>
+                    <div class="flex items-center justify-center gap-2">
+                        <button onclick="newGuide()" class="chip on"><i class="ti ti-plus"></i> Créer un symptôme</button>
+                        <button onclick="openJson()" class="chip"><i class="ti ti-file-import"></i> Importer un JSON</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -224,6 +228,29 @@
         <div class="flex justify-end gap-2">
             <button onclick="hide('m-doc')" class="btn" style="width:auto">Fermer</button>
             <button id="d-ok" onclick="addDoc()" disabled class="btn primary" style="width:auto">Rattacher</button>
+        </div>
+    </div>
+</div>
+
+<div id="m-json" class="hidden fixed inset-0 z-[95] flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-5 w-full max-w-2xl max-h-[88vh] flex flex-col">
+        <h3 class="text-lg font-bold mb-1">Importer un arbre depuis un JSON</h3>
+        <p class="text-xs text-gray-500 mb-3">
+            Donnez une notice à une IA avec le mode d'emploi ci-dessous, puis collez ici le JSON
+            qu'elle renvoie. L'arbre est créé en brouillon : vous le relisez avant de le mettre en service.
+        </p>
+        <div class="flex items-center gap-2 mb-2">
+            <button onclick="copyPrompt()" class="chip"><i class="ti ti-copy"></i> <span id="j-copy">Copier le mode d'emploi pour l'IA</span></button>
+            <select id="j-space" class="glass-input rounded-lg px-3 py-1.5 text-xs ml-auto"></select>
+        </div>
+        <textarea id="j-text" spellcheck="false"
+                  class="glass-input w-full rounded-lg px-3 py-2 text-xs font-mono flex-1 min-h-[220px]"
+                  placeholder='{ "titre": "…", "cas": [ … ] }'></textarea>
+        <div id="j-report" class="hidden mt-2 text-xs rounded-lg p-3 max-h-40 overflow-y-auto"></div>
+        <div class="flex justify-end gap-2 mt-3">
+            <button onclick="hide('m-json')" class="btn" style="width:auto">Annuler</button>
+            <button onclick="checkJson()" class="btn" style="width:auto">Vérifier</button>
+            <button id="j-ok" onclick="importJson()" class="btn primary" style="width:auto">Créer l'arbre</button>
         </div>
     </div>
 </div>
@@ -307,11 +334,20 @@ const symLabel = (s) => (symptoms.find(x => x.slug === s) || {}).label || "";
 function drawChips() {
     const og = gaps.filter(g => g.status !== "dismissed");
     document.getElementById("chips").innerHTML =
-        guides.map(g => `
-            <button class="chip ${guide && guide.meta.id === g.id ? "on" : ""}" onclick="openGuide(${g.id})">
-                <span class="${g.status === "published" ? "text-emerald-500" : "text-amber-500"} text-[10px]">${g.status === "published" ? "●" : "○"}</span>
-                ${esc(g.title)}</button>`).join("") +
+        guides.map(g => {
+            const dot = g.status === "published" ? "text-emerald-500"
+                : (g.status === "archived" ? "text-gray-400" : "text-amber-500");
+            const mark = g.status === "published" ? "●" : (g.status === "archived" ? "✕" : "○");
+            const title = g.status === "published" ? "En service"
+                : (g.status === "archived" ? "Retiré du service — supprimable dans le menu ⋯" : "Brouillon");
+            return `
+            <button class="chip ${guide && guide.meta.id === g.id ? "on" : ""}" title="${title}"
+                    style="${g.status === "archived" ? "opacity:.55" : ""}" onclick="openGuide(${g.id})">
+                <span class="${dot} text-[10px]">${mark}</span>
+                ${esc(g.title)}</button>`;
+        }).join("") +
         `<button class="chip" style="border-style:dashed" onclick="newGuide()">+ symptôme</button>` +
+        `<button class="chip" style="border-style:dashed" onclick="openJson()" title="Coller le JSON produit par une IA à partir d'une notice">⇪ JSON</button>` +
         og.slice(0, 3).map(g => `
             <button class="chip" style="border-color:rgba(245,158,11,.5);color:#b45309"
                     title="${esc((g.query_text || "").split("\n")[0].slice(0, 140))}" onclick="fromGap(${g.id})">
@@ -1078,17 +1114,127 @@ async function createGuide() {
     addUnder(guide.meta.root_node_key);
 }
 
+// ---------- Import d'un JSON produit par une IA depuis une notice ----------
+function openJson() {
+    document.getElementById("j-text").value = "";
+    document.getElementById("j-space").innerHTML = `<option value="">Dans tous les espaces</option>` +
+        spaces.map(s => `<option value="${s.id}">${esc(s.name || ("Espace " + s.id))}</option>`).join("");
+    hide("j-report");
+    show("m-json");
+    document.getElementById("j-text").focus();
+}
+
+async function copyPrompt() {
+    const label = document.getElementById("j-copy");
+    const r = await apiCall("/api/admin/sav/import-json/prompt");
+    if (!r || !r.ok) return alert("Mode d'emploi indisponible.");
+    const { prompt } = await r.json();
+    try {
+        await navigator.clipboard.writeText(prompt);
+        label.textContent = "Copié — collez-le dans l'IA avec la notice";
+    } catch (e) {
+        document.getElementById("j-text").value = prompt;
+        label.textContent = "Copie refusée : le texte est dans la zone ci-dessous";
+    }
+    setTimeout(() => { label.textContent = "Copier le mode d'emploi pour l'IA"; }, 6000);
+}
+
+function jsonReport(box, ok, title, lines) {
+    box.className = "mt-2 text-xs rounded-lg p-3 max-h-40 overflow-y-auto " +
+        (ok ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+            : "bg-red-500/10 text-red-700 dark:text-red-300");
+    box.innerHTML = `<b>${esc(title)}</b>` +
+        (lines.length ? "<ul class='mt-1 space-y-0.5 list-disc list-inside'>" +
+            lines.map(l => `<li>${esc(l)}</li>`).join("") + "</ul>" : "");
+    box.classList.remove("hidden");
+}
+
+function jsonErrors(payload) {
+    const d = payload && payload.detail;
+    if (typeof d === "string") return [d];
+    if (d && Array.isArray(d.errors)) return d.errors;
+    return ["Import impossible."];
+}
+
+const jsonSummary = (rep) => [
+    `${rep.cases} cas dont ${rep.first_level || 0} au premier étage`,
+    `${rep.solutions || 0} solutions · ${rep.sav || 0} renvois au SAV`,
+    `${rep.attachments || 0} notices rattachées · ${rep.shared || 0} cas partagés`,
+].concat(rep.warnings || []);
+
+async function checkJson() {
+    const box = document.getElementById("j-report");
+    const r = await apiCall("/api/admin/sav/trees/import-json/check", {
+        method: "POST", body: JSON.stringify({ json_text: document.getElementById("j-text").value }),
+    });
+    if (!r) return;
+    const j = await r.json();
+    if (!r.ok) return jsonReport(box, false, "À corriger dans le JSON :", jsonErrors(j));
+    jsonReport(box, true, `« ${j.title} » est prêt à être créé`, jsonSummary(j.report));
+}
+
+async function importJson() {
+    const box = document.getElementById("j-report");
+    const sv = document.getElementById("j-space").value;
+    const btn = document.getElementById("j-ok");
+    btn.disabled = true;
+    const r = await apiCall("/api/admin/sav/trees/import-json", {
+        method: "POST",
+        body: JSON.stringify({
+            json_text: document.getElementById("j-text").value,
+            space_id: sv ? parseInt(sv) : null,
+        }),
+    });
+    btn.disabled = false;
+    if (!r) return;
+    const j = await r.json();
+    if (!r.ok) return jsonReport(box, false, "À corriger dans le JSON :", jsonErrors(j));
+    const rep = j.import_report || { cases: (j.nodes || []).length, warnings: [] };
+    hide("m-json");
+    guide = null; sel = null;
+    await loadAll();
+    await openGuide(j.meta.id);   // relit l'arbre avec son diagnostic de cohérence
+    if ((rep.warnings || []).length) {
+        alert("Arbre créé en brouillon.\n\nÀ vérifier :\n• " + rep.warnings.join("\n• "));
+    }
+}
+
 function fromGap(id) {
     const g = gaps.find(x => x.id === id);
     if (g) newGuide({ symptom: g.detected_symptom, text: (g.query_text || "").split("\n")[0].slice(0, 70) });
 }
 
+async function retireGuide() {
+    toggleMore();
+    if (!confirm(`Retirer « ${guide.meta.title} » du service ?\n\n`
+        + "Il ne sera plus proposé aux clients, mais reste modifiable ici et peut être remis en service.")) return;
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/archive`, { method: "POST" });
+    if (r && r.ok) await loadAll();
+    else if (r && r.status === 403) alert("Seul un administrateur peut retirer un arbre du service.");
+}
+
 async function dropGuide() {
     toggleMore();
-    if (!confirm(`Supprimer « ${guide.meta.title} » ? Il ne sera plus proposé aux clients.`)) return;
-    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/archive`, { method: "POST" });
-    if (r && r.ok) { guide = null; sel = null; show("hello"); await loadAll(); draw(); }
-    else if (r && r.status === 403) alert("Seul un administrateur peut retirer un symptôme.");
+    const g = guides.find(x => x.id === guide.meta.id) || {};
+    const n = (g.stats || {}).sessions || 0;
+    const live = guide.meta.current_version > 0;
+    let warn = `Supprimer définitivement « ${guide.meta.title} » ?\n\n`
+        + `${(guide.nodes || []).length} cas seront perdus`
+        + (live ? `, ainsi que ses ${guide.meta.current_version} version(s) mise(s) en service` : "")
+        + ".\nCette action est irréversible.";
+    if (n) warn += `\n\n⚠ ${n} client(s) ont déjà suivi ce dépannage ; les parcours en cours seront interrompus.`;
+    if (!confirm(warn)) return;
+    const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}`, { method: "DELETE" });
+    if (r && r.ok) {
+        guide = null; sel = null;
+        await loadAll();
+        show("hello"); draw();
+    } else if (r && r.status === 403) {
+        const j = await r.json().catch(() => ({}));
+        alert(j.detail || "Seul un administrateur peut supprimer cet arbre.");
+    } else if (r) {
+        alert("La suppression a échoué.");
+    }
 }
 
 async function addAlias() {
