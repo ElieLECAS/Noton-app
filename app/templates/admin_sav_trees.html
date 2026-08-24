@@ -151,8 +151,9 @@
                         Vous n'écrivez aucune réponse : LIA pose les questions et rédige la solution
                         depuis la notice que vous rattachez.
                     </p>
-                    <div class="flex items-center justify-center gap-2">
+                    <div class="flex items-center justify-center gap-2 flex-wrap">
                         <button onclick="newGuide()" class="chip on"><i class="ti ti-plus"></i> Créer un symptôme</button>
+                        <button onclick="openExtract()" class="chip"><i class="ti ti-list-search"></i> Lire une notice</button>
                         <button onclick="openJson()" class="chip"><i class="ti ti-file-import"></i> Importer un JSON</button>
                     </div>
                 </div>
@@ -251,6 +252,40 @@
             <button onclick="hide('m-json')" class="btn" style="width:auto">Annuler</button>
             <button onclick="checkJson()" class="btn" style="width:auto">Vérifier</button>
             <button id="j-ok" onclick="importJson()" class="btn primary" style="width:auto">Créer l'arbre</button>
+        </div>
+    </div>
+</div>
+
+<div id="m-extract" class="hidden fixed inset-0 z-[95] flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl p-5 w-full max-w-3xl max-h-[88vh] flex flex-col">
+        <h3 class="text-lg font-bold mb-1">Ce qu'une notice contient d'utile sur chantier</h3>
+        <p class="text-xs text-gray-500 mb-2">
+            LIA relit une notice déjà traitée et en sort les constats exploitables devant le matériel :
+            pose, réglages, pannes, entretien. Le reste (fabrication, tarifs) est ignoré.
+            Rien n'est créé : c'est une lecture.
+        </p>
+        <input id="x-search" placeholder="Nom du document…" class="glass-input w-full rounded-lg px-3 py-2 text-sm mb-2" oninput="searchExtractLater()">
+        <div id="x-results" class="max-h-32 overflow-y-auto space-y-1 mb-2"></div>
+        <div id="x-setup" class="hidden items-center gap-2 mb-2 text-xs flex-wrap">
+            <b id="x-title" class="truncate max-w-[16rem]"></b>
+            <span class="text-gray-500">Pages
+                <input id="x-p1" type="number" min="1" placeholder="début" class="glass-input w-16 rounded px-1 py-0.5"> à
+                <input id="x-p2" type="number" min="1" placeholder="fin" class="glass-input w-16 rounded px-1 py-0.5">
+                <span class="text-gray-400">(vide = tout le document)</span>
+            </span>
+            <span class="text-gray-500 ml-auto">Pages par lot
+                <input id="x-batch" type="number" min="1" max="20" value="8" class="glass-input w-14 rounded px-1 py-0.5">
+            </span>
+        </div>
+        <div id="x-report" class="hidden text-xs rounded-lg p-3 mb-2"></div>
+        <div id="x-atoms" class="flex-1 overflow-y-auto space-y-2 min-h-0"></div>
+        <div class="flex items-center justify-end gap-2 mt-3">
+            <select id="x-space" class="glass-input rounded-lg px-3 py-1.5 text-xs mr-auto"></select>
+            <button onclick="hide('m-extract')" class="btn" style="width:auto">Fermer</button>
+            <button id="x-ok" onclick="runExtract()" disabled class="btn primary" style="width:auto">Lire la notice</button>
+            <button id="x-build" onclick="buildTreeFromAtoms()" disabled class="hidden btn primary" style="width:auto">
+                <i class="ti ti-sparkles"></i> Construire l'arbre
+            </button>
         </div>
     </div>
 </div>
@@ -966,14 +1001,19 @@ function searchLater() { clearTimeout(docTimer); docTimer = setTimeout(searchDoc
 
 async function searchDocs() {
     const q = document.getElementById("d-search").value;
-    const r = await apiCall(`/api/admin/sav/library/documents?q=${encodeURIComponent(q)}&limit=20`);
+    const r = await apiCall(`/api/admin/sav/library/documents?q=${encodeURIComponent(q)}&limit=100`);
     if (!r || !r.ok) return;
-    document.getElementById("d-results").innerHTML = (await r.json()).documents.map(d => `
+    const j = await r.json();
+    const list = j.documents.map(d => `
         <button onclick="pickDoc(${d.id}, ${jss(d.title)})"
                 class="w-full text-left rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-xs hover:bg-black/5 dark:hover:bg-white/5">
             <i class="ti ${d.has_file ? "ti-file-type-pdf text-purple-500" : "ti-file-text text-gray-400"}"></i>
             <span class="truncate flex-1">${esc(d.title)}</span></button>`).join("")
         || `<p class="text-xs text-gray-400 p-2">Aucun document à ce nom.</p>`;
+    const notice = j.truncated
+        ? `<p class="text-[10px] text-amber-600 px-2 pb-1">${j.total} documents trouvés, ${j.documents.length} affichés — précisez la recherche.</p>`
+        : "";
+    document.getElementById("d-results").innerHTML = notice + list;
 }
 
 async function pickDoc(id, title) {
@@ -1323,6 +1363,156 @@ async function restore(v) {
     const r = await apiCall(`/api/admin/sav/trees/${guide.meta.id}/rollback/${v}`, { method: "POST" });
     if (r && r.ok) { hide("m-hist"); const id = guide.meta.id; guide = null; await openGuide(id); loadAll(); }
     else if (r && r.status === 403) alert("Seul un administrateur peut changer la version en service.");
+}
+
+// ---- Lecture d'une notice : inventaire de la matière SAV (aucune écriture) ----
+let xDoc = null, xTimer = null;
+
+let xAtoms = [];
+
+function openExtract() {
+    xDoc = null; xAtoms = [];
+    document.getElementById("x-search").value = "";
+    document.getElementById("x-atoms").innerHTML = "";
+    document.getElementById("x-ok").disabled = true;
+    document.getElementById("x-space").innerHTML = `<option value="">Dans tous les espaces</option>` +
+        spaces.map(s => `<option value="${s.id}">${esc(s.name || ("Espace " + s.id))}</option>`).join("");
+    hide("x-setup"); hide("x-report"); hide("x-build");
+    show("m-extract");
+    searchExtractDocs();
+}
+
+function searchExtractLater() { clearTimeout(xTimer); xTimer = setTimeout(searchExtractDocs, 300); }
+
+async function searchExtractDocs() {
+    const q = document.getElementById("x-search").value;
+    const r = await apiCall(`/api/admin/sav/library/documents?q=${encodeURIComponent(q)}&limit=100`);
+    if (!r || !r.ok) return;
+    const j = await r.json();
+    const list = j.documents.map(d => `
+        <button onclick="pickExtractDoc(${d.id}, ${jss(d.title)})"
+                class="w-full text-left rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-xs hover:bg-black/5 dark:hover:bg-white/5">
+            <i class="ti ${d.has_file ? "ti-file-type-pdf text-purple-500" : "ti-file-text text-gray-400"}"></i>
+            <span class="truncate flex-1">${esc(d.title)}</span></button>`).join("")
+        || `<p class="text-xs text-gray-400 p-2">Aucun document à ce nom.</p>`;
+    const notice = j.truncated
+        ? `<p class="text-[10px] text-amber-600 px-2 pb-1">${j.total} documents trouvés, ${j.documents.length} affichés — précisez la recherche.</p>`
+        : "";
+    document.getElementById("x-results").innerHTML = notice + list;
+}
+
+function pickExtractDoc(id, title) {
+    xDoc = { id, title }; xAtoms = [];
+    document.getElementById("x-title").textContent = title;
+    document.getElementById("x-setup").classList.remove("hidden");
+    document.getElementById("x-setup").classList.add("flex");
+    document.getElementById("x-ok").disabled = false;
+    document.getElementById("x-atoms").innerHTML = "";
+    hide("x-report"); hide("x-build");
+}
+
+async function runExtract() {
+    if (!xDoc) return;
+    const btn = document.getElementById("x-ok");
+    const box = document.getElementById("x-report");
+    const p1 = parseInt(document.getElementById("x-p1").value);
+    const p2 = parseInt(document.getElementById("x-p2").value);
+    const bs = parseInt(document.getElementById("x-batch").value);
+
+    btn.disabled = true;
+    btn.textContent = "Lecture en cours…";
+    document.getElementById("x-atoms").innerHTML =
+        `<p class="text-xs text-gray-400 p-2">LIA lit les pages une à une. Comptez quelques minutes sur un gros document.</p>`;
+    box.classList.add("hidden");
+
+    const r = await apiCall("/api/admin/sav/extract/atoms", {
+        method: "POST",
+        body: JSON.stringify({
+            document_id: xDoc.id,
+            page_start: isNaN(p1) ? null : p1,
+            page_end: isNaN(p2) ? null : p2,
+            batch_size: isNaN(bs) ? null : bs,
+        }),
+    });
+    btn.disabled = false;
+    btn.textContent = "Lire la notice";
+    if (!r) return;
+    const j = await r.json();
+    if (!r.ok) {
+        document.getElementById("x-atoms").innerHTML = "";
+        return jsonReport(box, false, j.detail || "Lecture impossible.", []);
+    }
+    renderAtoms(j);
+}
+
+const X_EFFORT = { visuel: "à l'œil", outil_simple: "outil simple", demontage: "démontage" };
+
+function renderAtoms(j) {
+    const box = document.getElementById("x-report");
+    const rep = j.report || {};
+    const lines = [
+        `${rep.pages_lues || 0} pages lues en ${rep.batches || 0} lots`,
+        `${(rep.pages_avec_matiere || []).length} pages avec de la matière · ${(rep.pages_sans_matiere || []).length} sans`,
+    ];
+    if (rep.doublons_fusionnes) lines.push(`${rep.doublons_fusionnes} doublons fusionnés (recouvrement des lots)`);
+    if (rep.batches_decoupes) lines.push(`${rep.batches_decoupes} lot(s) re-découpés — réponse trop longue`);
+    jsonReport(box, (rep.atomes || 0) > 0, `${rep.atomes || 0} constats retenus`, lines);
+
+    xAtoms = j.atoms || [];
+    const buildBtn = document.getElementById("x-build");
+    if (xAtoms.length) { buildBtn.classList.remove("hidden"); buildBtn.disabled = false; }
+    else { buildBtn.classList.add("hidden"); }
+
+    const atoms = j.atoms || [];
+    document.getElementById("x-atoms").innerHTML = atoms.length ? atoms.map(a => `
+        <div class="rounded-xl border border-black/5 dark:border-white/5 p-3 text-xs">
+            <div class="flex items-start gap-2">
+                <div class="font-semibold flex-1">${esc(a.symptome)}</div>
+                <span class="mini">p.${a.page}</span>
+                ${a.qui === "sav" ? `<span class="mini text-amber-600">SAV</span>` : ""}
+                <span class="mini text-gray-400">${esc(X_EFFORT[a.effort] || a.effort)}</span>
+            </div>
+            ${a.produit ? `<div class="text-[10px] text-purple-500 mt-0.5">${esc(a.produit)}</div>` : ""}
+            <div class="mt-1.5 space-y-0.5 text-gray-600 dark:text-gray-300">
+                ${a.cause ? `<div><b>Origine</b> — ${esc(a.cause)}</div>` : ""}
+                ${a.verification ? `<div><b>À vérifier</b> — ${esc(a.verification)}</div>` : ""}
+                ${a.geste ? `<div><b>Geste</b> — ${esc(a.geste)}</div>` : ""}
+            </div>
+            ${a.citation ? `<div class="mt-1.5 pl-2 border-l-2 border-black/10 dark:border-white/10 italic text-gray-400">${esc(a.citation)}</div>` : ""}
+        </div>`).join("")
+        : `<p class="text-xs text-gray-400 p-2">Rien d'utile sur chantier dans ces pages. C'est un résultat normal
+           sur un catalogue ou une documentation commerciale.</p>`;
+}
+
+async function buildTreeFromAtoms() {
+    if (!xAtoms.length || !xDoc) return;
+    const btn = document.getElementById("x-build");
+    const box = document.getElementById("x-report");
+    const sv = document.getElementById("x-space").value;
+
+    btn.disabled = true;
+    btn.textContent = "Construction…";
+    const r = await apiCall("/api/admin/sav/extract/build-tree", {
+        method: "POST",
+        body: JSON.stringify({
+            document_id: xDoc.id,
+            atoms: xAtoms,
+            space_id: sv ? parseInt(sv) : null,
+        }),
+    });
+    btn.disabled = false;
+    btn.innerHTML = `<i class="ti ti-sparkles"></i> Construire l'arbre`;
+    if (!r) return;
+    const j = await r.json();
+    if (!r.ok) return jsonReport(box, false, j.detail || "Construction impossible.", []);
+
+    hide("m-extract");
+    guide = j; guide.meta.layout = guide.meta.layout || {}; sel = null;
+    healOrphans();
+    layoutAll(true); draw(); fitView();
+    hide("hello");
+    loadAll();
+    document.getElementById("saved").textContent = "brouillon créé — à relire avant mise en service";
 }
 
 async function fromDocs() {

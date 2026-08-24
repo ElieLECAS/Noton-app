@@ -13,48 +13,94 @@ _colpali_model = None
 _colpali_processor = None
 _colpali_lock = threading.Lock()
 
+
+def _patch_transformers_chat_template_lookup():
+    """Neutralise un bug de `transformers` >= 4.57 qui fait planter TOUT chargement de
+    processeur dont le dépôt a un dossier ``additional_chat_templates/`` (ex :
+    vidore/colqwen2-v1.0) :
+
+    ``list_repo_templates`` renvoie déjà les noms de fichiers AVEC l'extension
+    (``"vision.jinja"``), mais ``ProcessorMixin.get_processor_dict`` leur rajoute un
+    ``.jinja`` une seconde fois (``f"{CHAT_TEMPLATE_DIR}/{template}.jinja"``). Le chemin
+    résolu (``additional_chat_templates/vision.jinja.jinja``) n'existe jamais dans le
+    dépôt : ``cached_file(..., _raise_exceptions_for_missing_entries=False)`` rend
+    ``None``, puis ``open(None, ...)`` lève ``TypeError: expected str, bytes or
+    os.PathLike object, not NoneType``.
+
+    ColPali/ColQwen2 ne font jamais de chat template (juste des embeddings image et
+    texte) : on court-circuite la recherche plutôt que d'attendre un correctif upstream
+    ou de rétrograder `transformers`, utilisé ailleurs dans l'application.
+    """
+    import transformers.processing_utils as processing_utils
+
+    if getattr(processing_utils.list_repo_templates, "_patched_no_templates", False):
+        return
+
+    def _no_templates(*_args, **_kwargs):
+        return []
+
+    _no_templates._patched_no_templates = True
+    processing_utils.list_repo_templates = _no_templates
+
+
 def get_colpali_model():
-    """Lazily loads and returns the ColPali/ColQwen2 model and processor."""
+    """Lazily loads and returns the ColPali/ColQwen2 model and processor.
+
+    Le rechargement se déclenche si L'UN OU L'AUTRE manque, et tout échec remet les
+    DEUX globales à ``None`` avant de se propager. Sans ça, un modèle chargé avec succès
+    suivi d'un processeur en échec (bug transitoire, panne réseau…) laissait le worker
+    Celery — qui vit des heures et ne recharge jamais le module — bloqué à vie avec
+    ``_colpali_model`` posé et ``_colpali_processor`` à ``None`` : la garde initiale
+    (``if _colpali_model is None``) sautait tout le bloc de chargement pour toujours
+    renvoyer ce couple incohérent, d'où ``'NoneType' object has no attribute
+    'process_images'`` sur CHAQUE document suivant, jusqu'au redémarrage du worker.
+    """
     global _colpali_model, _colpali_processor
     with _colpali_lock:
-        if _colpali_model is None:
-            model_name = settings.COLPALI_MODEL_NAME
-            logger.info(f"Loading ColPali model: {model_name}...")
-        
-            device = "cuda" if torch.cuda.is_available() else "cpu"
-            dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
-            
-            # Load the correct class based on the model type
-            if "colqwen" in model_name.lower():
-                from colpali_engine.models import ColQwen2, ColQwen2Processor
-                # Pass device_map explicitly to avoid the 'meta' device bug.
-                # On CPU, device_map='cpu' materializes weights directly to RAM.
-                # On CUDA, device_map='cuda' (or 'auto') materializes weights to GPU.
-                _colpali_model = ColQwen2.from_pretrained(
-                    model_name,
-                    torch_dtype=dtype,
-                    device_map=device
-                )
-                _colpali_processor = ColQwen2Processor.from_pretrained(model_name)
-            elif "colsmol" in model_name.lower() or "idefics" in model_name.lower():
-                from colpali_engine.models import ColIdefics3, ColIdefics3Processor
-                _colpali_model = ColIdefics3.from_pretrained(
-                    model_name,
-                    torch_dtype=dtype,
-                    device_map=device
-                )
-                _colpali_processor = ColIdefics3Processor.from_pretrained(model_name)
-            else:
-                from colpali_engine.models import ColPali, ColPaliProcessor
-                _colpali_model = ColPali.from_pretrained(
-                    model_name,
-                    torch_dtype=dtype,
-                    device_map=device
-                )
-                _colpali_processor = ColPaliProcessor.from_pretrained(model_name)
-                
-            logger.info(f"ColPali model loaded on device: {_colpali_model.device}")
-        
+        if _colpali_model is None or _colpali_processor is None:
+            try:
+                _patch_transformers_chat_template_lookup()
+                model_name = settings.COLPALI_MODEL_NAME
+                logger.info(f"Loading ColPali model: {model_name}...")
+
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+                dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
+
+                # Load the correct class based on the model type
+                if "colqwen" in model_name.lower():
+                    from colpali_engine.models import ColQwen2, ColQwen2Processor
+                    # Pass device_map explicitly to avoid the 'meta' device bug.
+                    # On CPU, device_map='cpu' materializes weights directly to RAM.
+                    # On CUDA, device_map='cuda' (or 'auto') materializes weights to GPU.
+                    model = ColQwen2.from_pretrained(
+                        model_name,
+                        torch_dtype=dtype,
+                        device_map=device
+                    )
+                    processor = ColQwen2Processor.from_pretrained(model_name)
+                elif "colsmol" in model_name.lower() or "idefics" in model_name.lower():
+                    from colpali_engine.models import ColIdefics3, ColIdefics3Processor
+                    model = ColIdefics3.from_pretrained(
+                        model_name,
+                        torch_dtype=dtype,
+                        device_map=device
+                    )
+                    processor = ColIdefics3Processor.from_pretrained(model_name)
+                else:
+                    from colpali_engine.models import ColPali, ColPaliProcessor
+                    model = ColPali.from_pretrained(
+                        model_name,
+                        torch_dtype=dtype,
+                        device_map=device
+                    )
+                    processor = ColPaliProcessor.from_pretrained(model_name)
+
+                _colpali_model, _colpali_processor = model, processor
+                logger.info(f"ColPali model loaded on device: {_colpali_model.device}")
+            except Exception:
+                _colpali_model, _colpali_processor = None, None
+                raise
+
     return _colpali_model, _colpali_processor
 
 def embed_pdf_pages_colpali(pdf_path: str, document_id: Optional[int] = None) -> List[List[List[float]]]:

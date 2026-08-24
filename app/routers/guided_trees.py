@@ -316,6 +316,118 @@ async def check_json_endpoint(
     }
 
 
+class ExtractAtomsRequest(BaseModel):
+    document_id: int
+    page_start: Optional[int] = None
+    page_end: Optional[int] = None
+    batch_size: Optional[int] = None
+    overlap: Optional[int] = None
+
+
+# `def` et non `async def` : l'extraction est longue et synchrone (appels modèle +
+# rendu PNG). FastAPI l'exécute alors dans son threadpool au lieu de bloquer la boucle.
+@router.post("/extract/atoms")
+def extract_atoms_endpoint(
+    request: ExtractAtomsRequest,
+    current_user: UserRead = Depends(require_sav_editor),
+):
+    """Inventorie la matière SAV d'un document DÉJÀ traité (lot L1).
+
+    Lit le texte en base et les images des pages, rend les atomes retenus et un rapport
+    (pages sans matière, doublons fusionnés, batches re-découpés). N'écrit rien et ne crée
+    aucun arbre : c'est une lecture, destinée à être relue avant de construire le graphe.
+    """
+    from app.services.sav_extraction_service import extract_atoms_for_document
+
+    try:
+        return extract_atoms_for_document(
+            request.document_id,
+            page_start=request.page_start,
+            page_end=request.page_end,
+            batch_size=request.batch_size,
+            overlap=request.overlap,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+class BuildTreeRequest(BaseModel):
+    document_id: int
+    atoms: List[Dict[str, Any]]
+    space_id: Optional[int] = None
+    title: Optional[str] = None
+    # Temps B : regroupement des symptômes par le modèle. Désactivable pour comparer
+    # avec le regroupement par chaîne exacte sur un même jeu d'atomes.
+    group_symptoms: bool = True
+
+
+@router.post("/extract/build-tree", status_code=201)
+def build_tree_endpoint(
+    request: BuildTreeRequest,
+    current_user: UserRead = Depends(require_sav_editor),
+    session: Session = Depends(get_session),
+):
+    """Assemble les atomes retenus (lot L1) en un arbre en BROUILLON (lot L2).
+
+    L'assemblage (produit → symptôme → causes → sortie SAV) est déterministe, en Python —
+    aucun appel modèle ici. Le résultat est un JSON pivot réimporté par le chemin déjà
+    testé (`import_from_json_text`) : même convertisseur, même lint, même publication
+    humaine que l'import manuel.
+    """
+    import json
+
+    from app.services.guided_json_import_service import import_from_json_text
+    from app.services.sav_extraction_service import (
+        SavAtom,
+        build_pivot_from_atoms,
+        canonicalize_symptom_groups,
+        load_pages_text,
+    )
+
+    document = session.get(Document, request.document_id)
+    if document is None:
+        raise HTTPException(status_code=404, detail="Document introuvable")
+
+    # B5 : le texte des pages sert à vérifier que chaque citation est littérale.
+    pages_text = load_pages_text(session, request.document_id)
+
+    # B1 : temps B. Un échec ou un regroupement invalide n'est pas bloquant — on retombe
+    # sur le regroupement par chaîne exacte (moins bon, jamais faux).
+    groups = None
+    if request.group_symptoms:
+        parsed: List[SavAtom] = []
+        for row in request.atoms:
+            try:
+                parsed.append(SavAtom.model_validate(row))
+            except Exception:  # noqa: BLE001
+                continue
+        if parsed:
+            groups = canonicalize_symptom_groups(parsed)
+
+    pivot, warnings = build_pivot_from_atoms(
+        request.atoms,
+        document_id=request.document_id,
+        document_title=document.title or "",
+        tree_title=request.title,
+        pages_text=pages_text,
+        groups=groups,
+    )
+    if not pivot["cas"]:
+        raise HTTPException(
+            status_code=422,
+            detail="Aucun constat exploitable à assembler — relisez d'abord la notice.",
+        )
+
+    draft = import_from_json_text(
+        session, json.dumps(pivot), space_id=request.space_id, user_id=current_user.id
+    )
+    if warnings:
+        draft["import_report"]["warnings"] = (
+            draft["import_report"].get("warnings") or []
+        ) + warnings
+    return draft
+
+
 @router.get("/trees/{tree_id}/lint")
 async def lint(
     tree_id: int,
@@ -564,27 +676,24 @@ async def search_documents(
     current_user: UserRead = Depends(require_sav_editor),
     session: Session = Depends(get_session),
 ):
-    """Recherche simple par titre pour le picker de pièces jointes."""
+    """Recherche simple par titre pour le picker de pièces jointes et l'extraction SAV."""
     stmt = select(Document)
     docs = session.exec(stmt).all()
     needle = (q or "").strip().lower()
-    out = []
-    for d in docs:
-        if needle and needle not in (d.title or "").lower():
-            continue
-        out.append(
-            {
-                "id": d.id,
-                "title": d.title,
-                "source": d.source,
-                "has_file": bool(d.source_file_path),
-                "proferm_gammes": d.proferm_gammes or [],
-                "materials": d.materials or [],
-            }
-        )
-        if len(out) >= max(1, min(limit, 50)):
-            break
-    return {"documents": out}
+    matches = [d for d in docs if not needle or needle in (d.title or "").lower()]
+    capped = max(1, min(limit, 200))
+    out = [
+        {
+            "id": d.id,
+            "title": d.title,
+            "source": d.source,
+            "has_file": bool(d.source_file_path),
+            "proferm_gammes": d.proferm_gammes or [],
+            "materials": d.materials or [],
+        }
+        for d in matches[:capped]
+    ]
+    return {"documents": out, "total": len(matches), "truncated": len(matches) > capped}
 
 
 @router.get("/library/documents/{document_id}/page-count")

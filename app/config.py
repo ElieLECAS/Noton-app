@@ -236,6 +236,25 @@ class Settings(BaseSettings):
         if c.strip()
     ]
 
+    # Extraction d'atomes SAV depuis une notice DÉJÀ traitée
+    # (lot L1 de docs/plan_generation_graphe_depuis_pdf_2026-08-24.md).
+    SAV_EXTRACTION_MODEL: str = os.getenv("SAV_EXTRACTION_MODEL", "mistral-large-latest")
+    # Batch plus large que l'enrichissement (3/1) : la matière SAV est clairsemée, et un
+    # batch de 8 pages avec 1 page de recouvrement n'envoie chaque page que 1,14 fois
+    # (stride 7) contre 1,5 fois en 3/1 — les gros batches coûtent MOINS en images.
+    SAV_EXTRACTION_BATCH_SIZE: int = int(os.getenv("SAV_EXTRACTION_BATCH_SIZE", "8"))
+    SAV_EXTRACTION_BATCH_OVERLAP: int = int(os.getenv("SAV_EXTRACTION_BATCH_OVERLAP", "1"))
+    # Le texte vient de la base : l'image ne sert qu'aux schémas et à la mise en page,
+    # jamais à lire une cote. 150 dpi suffit et divise le poids image par ~3 face aux
+    # 300 dpi (PAGE_EXTRACTION_DPI) que l'ingestion utilise pour de l'OCR.
+    SAV_EXTRACTION_DPI: int = int(os.getenv("SAV_EXTRACTION_DPI", "150"))
+    # 4096 et non 1500 : 8 pages de tableau de pannes produisent beaucoup d'atomes, et
+    # une réponse tronquée perd des atomes en silence (d'où aussi le re-découpage).
+    SAV_EXTRACTION_MAX_TOKENS: int = int(os.getenv("SAV_EXTRACTION_MAX_TOKENS", "4096"))
+    SAV_EXTRACTION_TIMEOUT: float = float(os.getenv("SAV_EXTRACTION_TIMEOUT", "180"))
+    SAV_EXTRACTION_CONCURRENCY: int = int(os.getenv("SAV_EXTRACTION_CONCURRENCY", "2"))
+    SAV_EXTRACTION_MAX_PAGES: int = int(os.getenv("SAV_EXTRACTION_MAX_PAGES", "400"))
+
     # Retraitement multimodal par page (pymupdf + mistral-small vision)
     MULTIMODAL_PAGE_MODEL: str = "mistral-small-latest"
     MULTIMODAL_EXTRACT_MODEL: str = "mistral-large-latest"

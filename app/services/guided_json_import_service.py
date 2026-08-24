@@ -398,14 +398,26 @@ def convert_pivot(session: Session, data: Dict[str, Any]) -> Dict[str, Any]:
                 src = {"document": src}
             if not isinstance(src, dict):
                 continue
+            # document_id explicite (générateur interne — cf. sav_extraction_service) :
+            # court-circuite la résolution par titre, qui reste le seul chemin pour un
+            # JSON pivot écrit par un LLM externe qui ne connaît pas nos identifiants.
+            explicit_id = _first(src, "document_id", default=None)
             label = str(_first(src, "document", "titre", "title", "nom", default="")).strip()
-            if not label:
+            if explicit_id is not None:
+                try:
+                    doc_id = int(explicit_id)
+                except (TypeError, ValueError):
+                    doc_id = None
+                if doc_id is not None and session.get(Document, doc_id) is None:
+                    doc_id = None
+            elif label:
+                doc_id = _resolve_document(session, label, doc_cache)
+            else:
                 continue
-            doc_id = _resolve_document(session, label, doc_cache)
             if doc_id is None:
                 warnings.append(
-                    f"Cas « {entry['name']} » : document « {label} » absent de la bibliothèque "
-                    "— notice non rattachée."
+                    f"Cas « {entry['name']} » : document « {label or explicit_id} » absent de la "
+                    "bibliothèque — notice non rattachée."
                 )
                 continue
             p1, p2, mention = _pages(src)
