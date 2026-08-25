@@ -23,18 +23,17 @@ class TestFusionSansKAG:
         hit = UnifiedPageHit(document_id=1, page_no=2)
         assert not hasattr(hit, "kag_score")
 
-    def test_fusion_trois_canaux(self):
+    def test_fusion_deux_canaux(self):
         colpali = [UnifiedPageHit(document_id=1, page_no=1, colpali_score=0.9)]
-        pgvector = [UnifiedPageHit(document_id=1, page_no=1, pgvector_score=0.8)]
-        bm25 = [UnifiedPageHit(document_id=2, page_no=5, bm25_score=0.4)]
+        bm25 = [UnifiedPageHit(document_id=1, page_no=1, bm25_score=0.8)]
 
-        fused = fuse_multimodal_hits(colpali, pgvector, bm25, rrf_k=60, top_k=10)
+        fused = fuse_multimodal_hits(colpali, bm25, rrf_k=60, top_k=10)
 
-        assert len(fused) == 2
+        assert len(fused) == 1
         top = fused[0]
         assert (top.document_id, top.page_no) == (1, 1)
         # Deux canaux sur la même page → deux contributions RRF.
-        assert set(top.retrieval_sources) == {"colpali", "pgvector"}
+        assert set(top.retrieval_sources) == {"colpali", "bm25"}
         assert top.rrf_score == pytest.approx(2 / 61, rel=1e-6)
 
 
@@ -42,11 +41,6 @@ class TestElectionSansFamilleGraphe:
     def test_famille_graphe_retiree(self):
         assert "kag" not in _CHANNEL_FAMILIES
         assert set(_CHANNEL_FAMILIES.values()) == {"texte", "visuel"}
-
-    def test_pgvector_et_bm25_restent_une_seule_famille(self):
-        """Le garde-fou d'origine subsiste : le double vote lexical ne compte qu'une fois."""
-        assert _CHANNEL_FAMILIES["pgvector"] == _CHANNEL_FAMILIES["bm25"]
-        assert _CHANNEL_FAMILIES["colpali"] != _CHANNEL_FAMILIES["pgvector"]
 
     def test_bonus_familles_borne_a_deux(self):
         """Bonus max = +0,10 (2 familles) au lieu de +0,20 quand le graphe existait."""

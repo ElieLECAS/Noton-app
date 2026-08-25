@@ -1612,7 +1612,7 @@ async def stream_space_chat_message(
     cag_anchor_document_ids = [] if anchor_intent_changed else list(anchor_document_ids or [])
 
     step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
-    logger.info("[chat] Étape %s — retrieval hybride (ColPali + pgvector + BM25 + KAG)", step_label)
+    logger.info("[chat] Étape %s — retrieval hybride (ColPali + BM25)", step_label)
     import time as _time
     _t_retrieval_start = _time.perf_counter()
     with trace_run(

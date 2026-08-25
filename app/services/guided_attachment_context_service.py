@@ -3,7 +3,7 @@
 Deux modes, choisis par la taille — jamais de recherche corpus entier :
 - CAG : plage de pages attachée → texte intégral des pages (chunks feuilles ordonnés).
   Zéro recherche, déterministe : l'auteur a déjà curé la sélection.
-- RAG scopé : document entier / trop gros → cosinus pgvector avec FILTRE DUR document_id.
+- RAG scopé : document entier / trop gros → BM25 (tsvector) avec FILTRE DUR document_id.
 
 ⚠️ On ne filtre PAS par content_type : les chunks `page_raw_enriched` doivent être
 inclus (piège historique du loader KAG — cf. mémoire kag-refonte-pipeline-2026-07).
@@ -73,36 +73,64 @@ def fetch_attachment_text(
     return "\n\n".join(parts).strip()
 
 
-def scoped_semantic_passages(
+def _run_scoped_bm25_query(
+    session: Session,
+    document_ids: List[int],
+    tsquery_sql: str,
+    param_key: str,
+    param_value: str,
+    k: int,
+) -> List[Any]:
+    return session.execute(
+        sa_text(
+            f"""
+            SELECT dc.id, dc.document_id, dc.content, dc.metadata_json,
+                   ts_rank_cd(dc.tsv_content, {tsquery_sql}) AS rank
+            FROM documentchunk dc
+            WHERE dc.document_id = ANY(:doc_ids)
+              AND dc.is_leaf = true
+              AND dc.tsv_content IS NOT NULL
+              AND dc.tsv_content @@ {tsquery_sql}
+            ORDER BY rank DESC
+            LIMIT :k
+            """
+        ),
+        {"doc_ids": list(document_ids), "k": int(k), param_key: param_value},
+    ).mappings().all()
+
+
+def scoped_lexical_passages(
     session: Session,
     question: str,
     document_ids: List[int],
     k: int = SCOPED_RAG_K,
 ) -> List[Dict[str, Any]]:
-    """RAG scopé : cosinus pgvector restreint aux documents attachés (filtre dur)."""
+    """RAG scopé : BM25 (tsvector) restreint aux documents attachés (filtre dur)."""
     if not document_ids or not question.strip():
         return []
-    from app.services.embedding_service import generate_embedding
+    from app.services.page_retrieval_service import (
+        _bm25_tsquery_fn,
+        _build_bm25_or_tsquery,
+        _extract_bm25_fallback_query,
+        _normalize_bm25_query,
+    )
 
-    vec = generate_embedding(question)
-    if not vec:
-        return []
-    vec_literal = "[" + ",".join(f"{float(x):.6f}" for x in vec) + "]"
-    rows = session.execute(
-        sa_text(
-            """
-            SELECT dc.id, dc.document_id, dc.content, dc.metadata_json,
-                   1 - (dc.embedding <=> CAST(:v AS vector)) AS sim
-            FROM documentchunk dc
-            WHERE dc.document_id = ANY(:doc_ids)
-              AND dc.is_leaf = true
-              AND dc.embedding IS NOT NULL
-            ORDER BY dc.embedding <=> CAST(:v AS vector)
-            LIMIT :k
-            """
-        ),
-        {"v": vec_literal, "doc_ids": list(document_ids), "k": int(k)},
-    ).mappings().all()
+    tsquery_fn = _bm25_tsquery_fn()
+    normalized = _normalize_bm25_query(question.strip())
+    rows = _run_scoped_bm25_query(
+        session, document_ids, f"{tsquery_fn}('french', :q)", "q", normalized, k
+    )
+
+    # Repli OR : une question conversationnelle ne matche souvent rien en AND.
+    if not rows:
+        or_query = _extract_bm25_fallback_query(question)
+        if or_query:
+            terms = [t.strip() for t in or_query.replace(" OR ", "|").split("|") if t.strip()]
+            or_tsquery = _build_bm25_or_tsquery(terms)
+            if or_tsquery:
+                rows = _run_scoped_bm25_query(
+                    session, document_ids, "to_tsquery('french', :tsq)", "tsq", or_tsquery, k
+                )
 
     passages: List[Dict[str, Any]] = []
     for row in rows:
@@ -113,7 +141,7 @@ def scoped_semantic_passages(
                 "document_id": row["document_id"],
                 "content": row["content"] or "",
                 "page_no": meta.get("page_no"),
-                "score": round(float(row["sim"] or 0.0), 4),
+                "score": round(float(row["rank"] or 0.0), 4),
             }
         )
     return passages
@@ -156,6 +184,6 @@ def build_node_context(
 
     # Trop gros (ou plages absentes → docs entiers) : RAG scopé sur ces documents.
     doc_ids = list({int(a["document_id"]) for a in doc_attachments})
-    passages = scoped_semantic_passages(session, question or combined[:500], doc_ids)
+    passages = scoped_lexical_passages(session, question or combined[:500], doc_ids)
     text = "\n\n".join(p["content"] for p in passages).strip()
     return {"mode": "scoped_rag", "text": text[:max_chars], "sources": passages}

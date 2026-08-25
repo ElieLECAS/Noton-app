@@ -1,10 +1,8 @@
 from sqlmodel import SQLModel, Field, Relationship, Column
 from datetime import datetime
 from typing import Any, Optional, List, TYPE_CHECKING
-from pgvector.sqlalchemy import Vector
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
 from sqlalchemy import String
-from app.embedding_config import EMBEDDING_DIMENSION
 
 if TYPE_CHECKING:
     from .library import Library
@@ -50,8 +48,7 @@ class Document(SQLModel, table=True):
     user_id: int = Field(foreign_key="user.id", index=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(EMBEDDING_DIMENSION), nullable=True))
-    
+
     library: Optional["Library"] = Relationship(back_populates="documents")
     folder: Optional["Folder"] = Relationship(back_populates="documents")
     chunks: List["DocumentChunk"] = Relationship(back_populates="document")

@@ -119,9 +119,9 @@ async def test_space_search_window_aggregation_and_deduplication():
     fused_hit = UnifiedPageHit(
         document_id=123,
         page_no=1,
-        pgvector_score=0.9,
+        bm25_score=0.9,
         rrf_score=0.05,
-        retrieval_sources=["pgvector"],
+        retrieval_sources=["bm25"],
         document_title="Doc1",
         chunk_id=1,
     )
@@ -135,11 +135,10 @@ async def test_space_search_window_aggregation_and_deduplication():
     from app.config import settings as real_settings
 
     with mock.patch("app.services.space_search_service.get_space_by_id") as mock_get_space, \
-         mock.patch("app.services.space_search_service.generate_embedding", return_value=[0.1] * 1024), \
          mock.patch("app.services.page_retrieval_service.get_space_document_ids", return_value=[123]), \
          mock.patch(
              "app.services.space_search_service._run_retrievers",
-             new=mock.AsyncMock(return_value=([], [fused_hit], [])),
+             new=mock.AsyncMock(return_value=([], [fused_hit])),
          ), \
          mock.patch("app.services.page_retrieval_service.format_multimodal_passages") as mock_format, \
          mock.patch.object(real_settings, "RERANKER_ENABLED", False), \
@@ -161,7 +160,7 @@ async def test_space_search_window_aggregation_and_deduplication():
                     "page_no": 1,
                     "page_start": 1,
                     "page_end": 1,
-                    "retrieval_sources": ["pgvector"],
+                    "retrieval_sources": ["bm25"],
                     "needs_page_image": False,
                     "content_type": "hybrid_page_passage",
                 }

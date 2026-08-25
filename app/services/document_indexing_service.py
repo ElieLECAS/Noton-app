@@ -2,12 +2,12 @@
 Pipeline d'indexation documentaire unifié.
 
 Quatre modes, pensés pour pouvoir séparer un passage RAPIDE d'un passage LOURD :
-  - full            : extraction + chunks contextuels + embeddings + ColPali (tout)
-  - text_only       : extraction + embeddings SEULEMENT (ni chunks contextuels,
-                      ColPali inchangé) → rapide, en journée sur tout le corpus
-  - enrichment_only : chunks contextuels (fenêtres de 3 pages, texte + vision) +
-                      ré-embedding, sur les chunks EXISTANTS → lent (appels LLM par
-                      batch), à lancer séparément (typiquement la nuit)
+  - full            : extraction + chunks contextuels + ColPali (tout)
+  - text_only       : extraction SEULEMENT (ni chunks contextuels, ColPali inchangé)
+                      → rapide, en journée sur tout le corpus
+  - enrichment_only : chunks contextuels (fenêtres de 3 pages, texte + vision) sur les
+                      chunks EXISTANTS → lent (appels LLM par batch), à lancer
+                      séparément (typiquement la nuit)
   - colpali_only    : re-sync ColPali uniquement (chunks texte inchangés)
 
 text_only puis enrichment_only aboutit au MÊME état final que full.
@@ -163,7 +163,6 @@ def process_document_indexing(
     _set_progress(document_id, 10)
 
     chunk_count = 0
-    embed_count = 0
     enrichment_stats: dict = {"chunks": 0, "status": "disabled"}
 
     try:
@@ -208,7 +207,7 @@ def process_document_indexing(
 
             # Couche sémantique lourde (chunks contextuels) : plusieurs appels LLM par
             # batch de 3 pages, soit l'essentiel du temps de traitement. SAUTÉE en
-            # text_only — qui devient un passage rapide « extraction + embeddings »
+            # text_only — qui devient un passage rapide « extraction seule »
             # utilisable en journée sur tout le corpus — et portée par enrichment_only,
             # lancé séparément (typiquement la nuit). Enchaîner les deux aboutit au même
             # état final que full.
@@ -244,11 +243,6 @@ def process_document_indexing(
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
-            # --- 3. Embedding mistral-embed EN DERNIER (L1 + L2) ---
-            _set_progress(document_id, 80)
-            ld.info("[Indexing] Embeddings mistral-embed (L1+L2) document_id=%s", document_id)
-            embed_count = _embed_text_chunks(document_id)
-
         if mode in (IndexingMode.FULL, IndexingMode.COLPALI_ONLY):
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
@@ -260,11 +254,10 @@ def process_document_indexing(
         _finalize_document(document_id, chunk_count)
         semantic_ran = mode in (IndexingMode.FULL, IndexingMode.ENRICHMENT_ONLY)
         ld.info(
-            "[Indexing] FIN OK document_id=%s mode=%s chunks=%s embeds=%s enrichment=%s",
+            "[Indexing] FIN OK document_id=%s mode=%s chunks=%s enrichment=%s",
             document_id,
             mode.value,
             chunk_count,
-            embed_count,
             enrichment_stats if semantic_ran else "n/a (text_only)",
         )
         result = {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
@@ -657,145 +650,6 @@ def _extract_and_persist_chunks(
     return total
 
 
-# ---------------------------------------------------------------------------
-# Embeddings mistral-embed
-# ---------------------------------------------------------------------------
-
-
-# Types de chunks texte embeddés pour le retrieval dense/lexical (L1 + L2).
-_EMBEDDABLE_TEXT_CONTENT_TYPES = (
-    CONTENT_TYPE_SEMANTIC_LEAF,
-    CONTENT_TYPE_CONTEXTUAL_ENRICHMENT,
-)
-
-
-def _category_labels(slugs: List[str]) -> List[str]:
-    """Mappe les slugs de catégorie vers leurs labels lisibles (fallback slug)."""
-    if not slugs:
-        return []
-    try:
-        from app.services.category_catalog import DEFAULT_CATEGORY_LABELS
-
-        return [DEFAULT_CATEGORY_LABELS.get(s, s) for s in slugs if s]
-    except Exception:
-        return [s for s in slugs if s]
-
-
-def _build_embed_text(
-    chunk: DocumentChunk,
-    *,
-    doc_source: Optional[str] = None,
-    doc_materials: Optional[List[str]] = None,
-) -> str:
-    """
-    Construit le texte à embedder avec un préfixe contextuel déterministe (Contextual
-    Retrieval) : titre + section + catégories + entités + matériau/source.
-
-    Le préfixe n'est pas stocké dans content — seul le vecteur en bénéficie.
-
-    Les lignes « Catégories » et « Éléments » ne sont plus alimentées depuis le retrait du
-    KAG (2026-07-28) : elles restent lues si la métadonnée existe (documents non encore
-    retraités), et disparaîtront d'elles-mêmes au prochain passage.
-    """
-    meta = chunk.metadata_json or {}
-    doc_title = meta.get("document_title", "")
-    page_no = meta.get("page_no")
-    heading = meta.get("heading") or meta.get("parent_heading") or ""
-    step_no = meta.get("step_number")
-    theme = meta.get("theme") or ""  # chunks L2 contextual_enrichment
-
-    categories = meta.get("categories") or []
-    if not categories and meta.get("category_slug"):
-        categories = [meta["category_slug"]]
-    category_labels = _category_labels(categories if isinstance(categories, list) else [])
-
-    entities = meta.get("entities") or []
-    if not isinstance(entities, list):
-        entities = []
-
-    parts: List[str] = []
-    if doc_title:
-        parts.append(f"Document : {doc_title}.")
-    if heading:
-        parts.append(f"Section : {heading}.")
-    elif theme:
-        parts.append(f"Thème : {theme}.")
-    if step_no is not None:
-        parts.append(f"Étape {step_no}.")
-    elif page_no is not None:
-        parts.append(f"Page {page_no}.")
-    if category_labels:
-        parts.append(f"Catégories : {', '.join(category_labels[:4])}.")
-    if entities:
-        parts.append(f"Éléments : {', '.join(str(e) for e in entities[:8])}.")
-    if doc_materials:
-        parts.append(f"Matériau : {', '.join(doc_materials)}.")
-    if doc_source:
-        parts.append(f"Source : {doc_source}.")
-
-    prefix = " ".join(parts)
-    content = chunk.content or ""
-
-    return f"{prefix}\n\n{content}".strip() if prefix else content
-
-
-def _embed_text_chunks(document_id: int) -> int:
-    """
-    Génère les embeddings mistral-embed pour les chunks texte retrievables (L1 semantic_leaf
-    + L2 contextual_enrichment) du document et les persiste en base.
-
-    Tourne EN DERNIER (après les chunks contextuels) afin que `_build_embed_text` intègre
-    les catégories et entités dans le texte embeddé.
-    Renvoie le nombre de chunks embeddés.
-    """
-    from app.services.embedding_service import generate_embeddings_batch
-
-    with Session(engine) as session:
-        document = session.get(Document, document_id)
-        doc_source = document.source if document else None
-        doc_materials = list(document.materials or []) if document else []
-
-        statement = select(DocumentChunk).where(
-            DocumentChunk.document_id == document_id,
-            DocumentChunk.is_leaf == True,  # noqa: E712
-        )
-        all_leaves = list(session.exec(statement).all())
-        chunks = [
-            c
-            for c in all_leaves
-            if (c.metadata_json or {}).get("content_type", CONTENT_TYPE_SEMANTIC_LEAF)
-            in _EMBEDDABLE_TEXT_CONTENT_TYPES
-        ]
-
-        if not chunks:
-            logger.warning("[Indexing] Aucun chunk texte à embedder pour document_id=%s", document_id)
-            return 0
-
-        texts = [
-            _build_embed_text(c, doc_source=doc_source, doc_materials=doc_materials)
-            for c in chunks
-        ]
-        embeddings = generate_embeddings_batch(texts, batch_size=settings.EMBEDDING_BATCH_SIZE)
-
-        embedded = 0
-        for chunk, vector in zip(chunks, embeddings):
-            if vector:
-                chunk.embedding = vector
-                meta = dict(chunk.metadata_json or {})
-                meta["embedding_model"] = settings.EMBEDDING_MODEL
-                chunk.metadata_json = meta
-                chunk.metadata_ = meta
-                session.add(chunk)
-                embedded += 1
-
-        session.commit()
-        logger.info(
-            "[Indexing] %s/%s chunks texte (L1+L2) embeddés pour document_id=%s",
-            embedded,
-            len(chunks),
-            document_id,
-        )
-        return embedded
 
 
 # ---------------------------------------------------------------------------

@@ -282,7 +282,6 @@ def build_question_eval_result(
     expected_pages: List[Dict[str, Any]],
     passages: List[Dict[str, Any]],
     colpali_passages: Optional[List[Dict[str, Any]]] = None,
-    pgvector_only_passages: Optional[List[Dict[str, Any]]] = None,
     lexical_only_passages: Optional[List[Dict[str, Any]]] = None,
     pre_kag_passages: Optional[List[Dict[str, Any]]] = None,
     post_rrf_passages: Optional[List[Dict[str, Any]]] = None,
@@ -295,7 +294,6 @@ def build_question_eval_result(
     Construit le résultat d'évaluation pour une question.
     passages = étape finale (post-MiniLM ou post-vision rerank).
     colpali_passages = ColPali seul (LanceDB + seuil dynamique).
-    pgvector_only_passages = pgvector seul (vecteur texte mistral-embed).
     lexical_only_passages = lexical seul (BM25 / tsvector).
     pre_kag_passages = fusion RRF triple retriever (sans graphe KAG).
     post_rrf_passages = fusion RRF avec KAG (avant rerank MiniLM).
@@ -395,13 +393,6 @@ def build_question_eval_result(
         result["retrieved_pages_kag_only"] = kag_only["retrieved_pages"]
         result["retrieved_details_kag_only"] = kag_only["retrieved_details"]
 
-    if pgvector_only_passages is not None:
-        pgvector_only = compute_stage_metrics(pgvector_only_passages, expected_pages)
-        result["metrics_pgvector_only"] = pgvector_only["metrics"]
-        result["analysis_pgvector_only"] = pgvector_only["analysis"]
-        result["retrieved_pages_pgvector_only"] = pgvector_only["retrieved_pages"]
-        result["retrieved_details_pgvector_only"] = pgvector_only["retrieved_details"]
-
     if lexical_only_passages is not None:
         lexical_only = compute_stage_metrics(lexical_only_passages, expected_pages)
         result["metrics_lexical_only"] = lexical_only["metrics"]
@@ -426,8 +417,6 @@ def _aggregate_global_metrics(details: List[Dict[str, Any]], prefix: str = "") -
         metrics_key = "metrics_pre_kag"
     elif prefix == "kag_only":
         metrics_key = "metrics_kag_only"
-    elif prefix == "pgvector_only":
-        metrics_key = "metrics_pgvector_only"
     elif prefix == "lexical_only":
         metrics_key = "metrics_lexical_only"
 
@@ -507,7 +496,6 @@ async def evaluate_retriever_dataset(
         passages = search_res.get("passages", [])
         stages = search_res.get("retrieval_stages") or {}
         colpali_passages = stages.get("colpali_only") or stages.get("colpali")
-        pgvector_only_passages = stages.get("pgvector_only")
         lexical_only_passages = stages.get("lexical_only")
         post_rrf_passages = stages.get("post_rrf")
         pre_kag_passages = stages.get("pre_kag_rrf")
@@ -519,7 +507,6 @@ async def evaluate_retriever_dataset(
             expected_pages=expected_pages,
             passages=passages,
             colpali_passages=colpali_passages,
-            pgvector_only_passages=pgvector_only_passages,
             lexical_only_passages=lexical_only_passages,
             pre_kag_passages=pre_kag_passages,
             post_rrf_passages=post_rrf_passages,
@@ -563,11 +550,6 @@ async def evaluate_retriever_dataset(
     global_metrics["execution_time_seconds"] = round(time.time() - start_time, 2)
 
     global_metrics_colpali = _aggregate_global_metrics(results, prefix="colpali")
-    global_metrics_pgvector_only = (
-        _aggregate_global_metrics(results, prefix="pgvector_only")
-        if results and results[0].get("metrics_pgvector_only")
-        else None
-    )
     global_metrics_lexical_only = (
         _aggregate_global_metrics(results, prefix="lexical_only")
         if results and results[0].get("metrics_lexical_only")
@@ -638,9 +620,6 @@ async def evaluate_retriever_dataset(
         "type_stats_colpali": _aggregate_type_stats(results, metrics_key="metrics_colpali"),
         "details": results,
     }
-    if global_metrics_pgvector_only:
-        eval_result["global_metrics_pgvector_only"] = global_metrics_pgvector_only
-        eval_result["type_stats_pgvector_only"] = _aggregate_type_stats(results, metrics_key="metrics_pgvector_only")
     if global_metrics_lexical_only:
         eval_result["global_metrics_lexical_only"] = global_metrics_lexical_only
         eval_result["type_stats_lexical_only"] = _aggregate_type_stats(results, metrics_key="metrics_lexical_only")

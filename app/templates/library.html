@@ -1086,8 +1086,8 @@ endblock %} {% block content %}
         if (!snap) return "";
         const bits = [];
         if (snap.chunk_count) bits.push(`${snap.chunk_count} chunk(s)`);
-        if (snap.chunks_with_embedding_count)
-            bits.push(`${snap.chunks_with_embedding_count} avec embeddings`);
+        if (snap.leaf_chunk_count)
+            bits.push(`${snap.leaf_chunk_count} feuille(s)`);
         if (snap.knowledge_entity_count)
             bits.push(`${snap.knowledge_entity_count} entités KAG`);
         if (snap.entity_relation_count)
@@ -1123,13 +1123,12 @@ endblock %} {% block content %}
         const t = h.text || {}, c = h.colpali || {}, k = h.enrichment || {};
         const colpaliTooltip = `ColPali : ${c.indexed_pages ?? 0}/${c.expected_pages ?? 0} page(s) indexée(s) · ${c.orphan_count ?? 0} orphelin(s) · ${c.missing_count ?? 0} manquante(s)` + (c.legacy_mode ? " · pipeline legacy (feuilles)" : "");
         if (h.overall === "ok") {
-            const detail = `Texte : ${t.chunk_count} chunk(s), ${t.leaves_with_embedding} embedding(s)\n${colpaliTooltip}\nKAG : ${k.entity_count} entité(s), ${k.relation_count} relation(s), ${k.category_count} catégorie(s)`;
+            const detail = `Texte : ${t.chunk_count} chunk(s), ${t.leaf_count} feuille(s)\n${colpaliTooltip}\nKAG : ${k.entity_count} entité(s), ${k.relation_count} relation(s), ${k.category_count} catégorie(s)`;
             return healthChipHtml("Pipeline complet · ColPali sync", "ok", detail);
         }
         const chips = [];
-        if (t.status === "missing") chips.push(healthChipHtml("Texte", "error", "Aucun chunk ou aucun embedding."));
-        else if (t.status === "partial") chips.push(healthChipHtml(`Texte ${t.missing_embeddings} sans emb.`, "warn", `${t.missing_embeddings} feuille(s) sans embedding sur ${t.leaf_count}.`));
-        else chips.push(healthChipHtml("Texte", "ok", `${t.chunk_count} chunk(s), ${t.leaves_with_embedding} embedding(s).`));
+        if (t.status === "missing") chips.push(healthChipHtml("Texte", "error", "Aucun chunk indexé."));
+        else chips.push(healthChipHtml("Texte", "ok", `${t.chunk_count} chunk(s), ${t.leaf_count} feuille(s).`));
 
         if (c.status === "desync") chips.push(healthChipHtml(`ColPali désync (${c.orphan_count + (c.legacy_count || 0)})`, "error", colpaliTooltip + "\nPatches pointant vers des chunks supprimés/obsolètes : le canal visuel rate des pages. Retraiter en mode « ColPali seul »."));
         else if (c.status === "partial") chips.push(healthChipHtml(`ColPali ${c.indexed_pages}/${c.expected_pages}`, "warn", colpaliTooltip));
@@ -2416,7 +2415,7 @@ endblock %} {% block content %}
         if (s) {
             alert(
                 `Traitement arrêté.\n\n` +
-                    `Chunks: ${s.chunk_count ?? 0}, feuilles avec embeddings: ${s.chunks_with_embedding_count ?? 0}, ` +
+                    `Chunks: ${s.chunk_count ?? 0}, feuilles: ${s.leaf_chunk_count ?? 0}, ` +
                     `entités KAG: ${s.knowledge_entity_count ?? 0}, relations: ${s.entity_relation_count ?? 0}.\n` +
                     `Indicateur: ${s.readiness_label ?? "—"}.`,
             );
@@ -2442,7 +2441,7 @@ endblock %} {% block content %}
         if (s) {
             alert(
                 `Document ignoré ou arrêté.\n\n` +
-                    `Chunks: ${s.chunk_count ?? 0}, feuilles avec embeddings: ${s.chunks_with_embedding_count ?? 0}, ` +
+                    `Chunks: ${s.chunk_count ?? 0}, feuilles: ${s.leaf_chunk_count ?? 0}, ` +
                     `entités KAG: ${s.knowledge_entity_count ?? 0}, relations: ${s.entity_relation_count ?? 0}.\n` +
                     `Indicateur: ${s.readiness_label ?? "—"}.`,
             );

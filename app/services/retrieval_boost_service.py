@@ -13,7 +13,7 @@ classement — reranker éteint, c'était devenu le principal signal de reclasse
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional, Sequence, Tuple, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from sqlalchemy import text
 from sqlmodel import Session
@@ -21,9 +21,6 @@ from sqlmodel import Session
 from app.config import settings
 from app.models.document import Document
 from app.services.query_signals_schemas import LightweightQuerySignals
-
-if TYPE_CHECKING:
-    from app.services.page_retrieval_service import PageRetrievalHit, UnifiedPageHit
 
 logger = logging.getLogger(__name__)
 

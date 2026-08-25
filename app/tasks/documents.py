@@ -261,33 +261,6 @@ def reindex_folder_library_documents_task(
     return results
 
 
-@celery_app.task(bind=True, max_retries=1, default_retry_delay=60)
-def process_document_embeddings(
-    self, document_id: int, run_id: str | None = None
-) -> None:
-    """Embeddings feuilles pour un document bibliothèque puis statut completed."""
-    from app.library_document_logging import get_library_document_logger
-    from app.services.chunk_service import _process_embeddings_for_document
-
-    get_library_document_logger().info(
-        "[Celery] Tâche process_document_embeddings démarrée document_id=%s task_id=%s",
-        document_id,
-        self.request.id,
-    )
-    logger.info(
-        "Celery process_document_embeddings document_id=%s task_id=%s",
-        document_id,
-        self.request.id,
-    )
-    try:
-        _process_embeddings_for_document(document_id, run_id)
-    except Exception as exc:
-        logger.exception(
-            "process_document_embeddings échec document_id=%s: %s", document_id, exc
-        )
-        raise self.retry(exc=exc)
-
-
 @celery_app.task(bind=True, max_retries=0)
 def update_document_spaces_task(
     self,
@@ -332,7 +305,6 @@ def generate_faq_from_feedback_task(self, feedback_id: int) -> None:
     from app.models.document_chunk import DocumentChunk
     from app.models.document_space import DocumentSpace
     from app.services.library_service import get_or_create_user_library
-    from app.services.embedding_service import generate_embedding
     from app.services.feedback_knowledge_service import (
         FEEDBACK_KNOWLEDGE_CONTENT_TYPE,
         generate_feedback_knowledge_content,
@@ -409,14 +381,6 @@ def generate_faq_from_feedback_task(self, feedback_id: int) -> None:
             if not targets:
                 targets.append((f"{prefix} - Espace {space.name}", [space.id]))
 
-            embedding = generate_embedding(generated_content)
-            if not embedding:
-                error_msg = (
-                    f"Impossible de générer l'embedding pour le feedback {feedback_id}"
-                )
-                logger.error(error_msg)
-                raise ValueError(error_msg)
-
             chunk_metadata = {
                 "content_type": FEEDBACK_KNOWLEDGE_CONTENT_TYPE,
                 "feedback_id": feedback_id,
@@ -488,7 +452,6 @@ def generate_faq_from_feedback_task(self, feedback_id: int) -> None:
                     chunk_index=chunk_count,
                     content=generated_content,
                     text=generated_content,
-                    embedding=embedding,
                     is_leaf=True,
                     hierarchy_level=0,
                     source=truncated_title,

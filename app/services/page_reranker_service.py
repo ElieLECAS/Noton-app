@@ -1,6 +1,7 @@
 """
 Reranker MiniLM au niveau page : cross-encoder sur texte L1 consolidé,
 K dynamique 0–12, protection des pages visuelles ColPali-dominantes.
+Canaux texte : BM25 seul (ColPali reste le canal visuel).
 """
 from __future__ import annotations
 
@@ -31,22 +32,18 @@ def is_colpali_visual_priority(
     *,
     min_colpali_score: Optional[float] = None,
     dominance_min_score: Optional[float] = None,
-    pgvector_weak_threshold: Optional[float] = None,
     bm25_weak_threshold: Optional[float] = None,
 ) -> bool:
     """
     Page visuelle prioritaire ColPali :
-    - ColPali-only (sans pgvector ni bm25), ou
-    - ColPali fort ET scores pgvector/bm25 faibles (même si les 2 autres ont matché).
+    - ColPali-only (sans bm25), ou
+    - ColPali fort ET score bm25 faible (même si bm25 a matché).
     """
     min_colpali_score = (
         min_colpali_score if min_colpali_score is not None else settings.COLPALI_POST_FUSION_MIN_SCORE
     )
     dominance_min_score = (
         dominance_min_score if dominance_min_score is not None else settings.COLPALI_DOMINANCE_MIN_SCORE
-    )
-    pgvector_weak_threshold = (
-        pgvector_weak_threshold if pgvector_weak_threshold is not None else settings.COLPALI_PGVECTOR_WEAK_THRESHOLD
     )
     bm25_weak_threshold = (
         bm25_weak_threshold if bm25_weak_threshold is not None else settings.COLPALI_BM25_WEAK_THRESHOLD
@@ -59,19 +56,16 @@ def is_colpali_visual_priority(
     if colpali < min_colpali_score:
         return False
 
-    text_sources = set(hit.retrieval_sources or []) & {"pgvector", "bm25"}
+    text_sources = set(hit.retrieval_sources or []) & {"bm25"}
     if not text_sources:
         return True
 
     if colpali < dominance_min_score:
         return False
 
-    pgv = hit.pgvector_score or 0.0
     bm25 = hit.bm25_score or 0.0
 
-    if "pgvector" in text_sources and pgv >= pgvector_weak_threshold:
-        return False
-    if "bm25" in text_sources and bm25 >= bm25_weak_threshold:
+    if bm25 >= bm25_weak_threshold:
         return False
 
     return True
@@ -96,7 +90,7 @@ def compute_page_image_policy(hit: UnifiedPageHit, consolidated_text: str) -> bo
     if not is_colpali_visual_priority(hit):
         return False
 
-    text_sources = set(hit.retrieval_sources or []) & {"pgvector", "bm25"}
+    text_sources = set(hit.retrieval_sources or []) & {"bm25"}
     if not text_sources:
         return True
 
@@ -144,7 +138,6 @@ def _hit_from_node(node: NodeWithScore, pool_by_key: Dict[str, UnifiedPageHit]) 
         document_id=source.document_id,
         page_no=source.page_no,
         colpali_score=source.colpali_score,
-        pgvector_score=source.pgvector_score,
         bm25_score=source.bm25_score,
         rrf_score=source.rrf_score,
         document_title=source.document_title,
@@ -188,12 +181,11 @@ def protect_colpali_visual_hits(
         selected_keys.add(hit.page_key)
         reason = "colpali-only" if set(hit.retrieval_sources or []) == {"colpali"} else "colpali-dominant"
         logger.info(
-            "[ColPali protect] slot réservé (%s) doc=%s p.%s colpali=%.3f vec=%s bm25=%s",
+            "[ColPali protect] slot réservé (%s) doc=%s p.%s colpali=%.3f bm25=%s",
             reason,
             hit.document_id,
             hit.page_no,
             hit.colpali_score or 0,
-            f"{hit.pgvector_score:.3f}" if hit.pgvector_score is not None else "—",
             f"{hit.bm25_score:.3f}" if hit.bm25_score is not None else "—",
         )
 

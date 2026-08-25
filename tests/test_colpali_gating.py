@@ -86,18 +86,15 @@ async def test_run_retrievers_skips_colpali_when_gated(db_session):
     ), mock.patch.object(
         prs, "retrieve_colpali_pages", side_effect=AssertionError("ColPali ne doit PAS tourner")
     ), mock.patch.object(
-        prs, "retrieve_pgvector_pages", return_value=[]
-    ), mock.patch.object(
         prs, "retrieve_bm25_pages", return_value=[]
     ):
-        colpali_hits, pgvector_hits, bm25_hits = await sss._run_retrievers(
+        colpali_hits, bm25_hits = await sss._run_retrievers(
             db_session,
             space_id=1,
             doc_ids=[1, 2],
             colpali_q="q",
             semantic_q="q",
             lexical_q="q",
-            query_embedding=[0.0] * 1024,
             pool_size=20,
             use_colpali=False,
         )
@@ -117,8 +114,6 @@ async def test_run_retrievers_runs_colpali_when_enabled(db_session):
     ), mock.patch.object(
         prs, "filter_colpali_pages_dynamic", side_effect=lambda x: x
     ), mock.patch.object(
-        prs, "retrieve_pgvector_pages", return_value=[]
-    ), mock.patch.object(
         prs, "retrieve_bm25_pages", return_value=[]
     ):
         colpali_hits, *_ = await sss._run_retrievers(
@@ -128,7 +123,6 @@ async def test_run_retrievers_runs_colpali_when_enabled(db_session):
             colpali_q="q",
             semantic_q="q",
             lexical_q="q",
-            query_embedding=[0.0] * 1024,
             pool_size=20,
             use_colpali=True,
         )

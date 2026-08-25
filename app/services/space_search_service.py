@@ -1,9 +1,9 @@
 """
-Recherche dans les espaces : retrieval hybride ColPali + pgvector L1 + BM25,
+Recherche dans les espaces : retrieval hybride ColPali + BM25,
 fusion RRF page-centric, expansion L1 + PNG multimodal pour le LLM.
 
 Pipeline RAG (unique, page-centric) :
-1. Retrieval ColPali + pgvector + BM25 (+ KAG) au niveau page
+1. Retrieval ColPali + BM25 au niveau page
 2. Fusion RRF + boost catégorie / ancrage conversationnel
 3. Rerank MiniLM (si activé) + expansion L1 + voisinage conditionnel
 4. Génération : texte consolidé + PNG pour toutes les pages top K
@@ -28,7 +28,6 @@ from app.config import settings
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
-from app.services.embedding_service import generate_embedding
 from app.services.space_service import get_space_by_id
 from app.services.query_understanding_graph import QueryGroup, RetrievalQueries
 from app.services.query_signals_schemas import LightweightQuerySignals
@@ -58,8 +57,8 @@ def should_use_colpali(
       - un marqueur visuel figure dans le texte (schéma, plan, coupe, « où se trouve »…) ;
       - l'intent extrait fait partie de COLPALI_GATING_INTENTS (par défaut « installation »,
         où les schémas de pose sont déterminants).
-    Sinon on l'écarte : BM25 + pgvector suffisent pour du texte, et un filet de sécurité en
-    aval le relance si les retrievers texte reviennent faibles (aucun rappel perdu en silence).
+    Sinon on l'écarte : BM25 suffit pour du texte, et un filet de sécurité en
+    aval le relance si le retriever texte revient faible (aucun rappel perdu en silence).
     """
     if not settings.COLPALI_ENABLED:
         return False, "colpali_disabled"
@@ -81,16 +80,15 @@ async def _run_retrievers(
     colpali_q: str,
     semantic_q: str,
     lexical_q: str,
-    query_embedding: Optional[List[float]],
     pool_size: int,
     use_colpali: bool = True,
-) -> Tuple[List[Any], List[Any], List[Any], List[Any]]:
-    """Exécute les 4 retrievers (ColPali/pgvector/BM25/KAG).
+) -> Tuple[List[Any], List[Any]]:
+    """Exécute les 2 retrievers (ColPali/BM25).
 
     En mode parallèle (``RETRIEVAL_PARALLEL_ENABLED``), chaque retriever tourne dans un
     thread avec sa PROPRE session DB (une ``Session`` SQLAlchemy n'est pas concurrente),
-    ce qui recouvre l'encodage ColPali CPU avec les requêtes SQL des trois autres. Les
-    hits retournés ne portent que des identifiants (document_id/page_no/chunk_id) et des
+    ce qui recouvre l'encodage ColPali CPU avec les requêtes SQL de BM25. Les hits
+    retournés ne portent que des identifiants (document_id/page_no/chunk_id) et des
     scores : le texte est chargé plus tard avec la session principale, donc fermer les
     sessions des threads est sans risque. En repli séquentiel, tout passe par ``session``.
     """
@@ -98,19 +96,15 @@ async def _run_retrievers(
         filter_colpali_pages_dynamic,
         retrieve_bm25_pages,
         retrieve_colpali_pages,
-        retrieve_pgvector_pages,
     )
 
     def _colpali(s: Session) -> List[Any]:
         # Gate : requête texte → on n'exécute NI l'encode ColQwen2 NI le MaxSim (le poste
-        # le plus lourd du pipeline sur CPU). Le fallback en aval relancera ColPali si les
-        # retrievers texte sont faibles.
+        # le plus lourd du pipeline sur CPU). Le fallback en aval relancera ColPali si le
+        # retriever texte est faible.
         if not use_colpali:
             return []
         return filter_colpali_pages_dynamic(retrieve_colpali_pages(s, doc_ids, colpali_q, pool_size))
-
-    def _pgvector(s: Session) -> List[Any]:
-        return retrieve_pgvector_pages(s, doc_ids, query_embedding or [], pool_size)
 
     def _bm25(s: Session) -> List[Any]:
         return retrieve_bm25_pages(s, doc_ids, lexical_q, pool_size)
@@ -122,18 +116,16 @@ async def _run_retrievers(
             with Session(engine) as own_session:
                 return fn(own_session)
 
-        colpali_hits, pgvector_hits, bm25_hits = await asyncio.gather(
+        colpali_hits, bm25_hits = await asyncio.gather(
             asyncio.to_thread(_threaded, _colpali),
-            asyncio.to_thread(_threaded, _pgvector),
             asyncio.to_thread(_threaded, _bm25),
         )
-        return colpali_hits, pgvector_hits, bm25_hits
+        return colpali_hits, bm25_hits
 
-    return _colpali(session), _pgvector(session), _bm25(session)
+    return _colpali(session), _bm25(session)
 
 logger = logging.getLogger(__name__)
 
-MIN_VECTOR_SIMILARITY_THRESHOLD = float(os.getenv("MIN_VECTOR_SIMILARITY", "0.25"))
 TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
 TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
 
@@ -159,144 +151,6 @@ def _merged_chunk_metadata(primary: Optional[dict], legacy: Optional[dict]) -> D
     if isinstance(primary, dict):
         merged.update(primary)
     return merged
-
-
-def _retrieve_leaves_sql(
-    session: Session,
-    space_id: int,
-    user_id: int,
-    query_text: str,
-    candidate_k: int,
-    query_embedding: Optional[List[float]] = None,
-    document_filter: str = "all",
-) -> List[NodeWithScore]:
-    """
-    Recherche vectorielle LanceDB/ColPali sur les feuilles.
-    
-    Args:
-        query_embedding: Ignoré (conservé pour compatibilité de signature)
-        document_filter: "all" (tous), "technical" (exclut FAQ), "faq_corrective" (FAQ uniquement)
-    """
-    logger.info(
-        "[_retrieve_leaves_sql] Starting retrieval for space_id=%s, user_id=%s, query_text='%s', candidate_k=%d, document_filter='%s'",
-        space_id,
-        user_id,
-        query_text,
-        candidate_k,
-        document_filter,
-    )
-    from app.services.document_service_new import feedback_corrective_sql_filter
-
-    filter_clause = feedback_corrective_sql_filter(document_filter, "d")
-
-    # 1. Récupérer la liste des document_ids appartenant à cette space_id et satisfaisant le filter_clause
-    sql_docs = text(f"""
-        SELECT DISTINCT d.id
-        FROM document d
-        INNER JOIN document_space ds ON ds.document_id = d.id
-        WHERE ds.space_id = :space_id
-          {filter_clause}
-    """)
-    doc_ids = [row[0] for row in session.execute(sql_docs, {"space_id": space_id})]
-    logger.info(
-        "[_retrieve_leaves_sql] Resolved document IDs in space %s: %s",
-        space_id,
-        doc_ids,
-    )
-    if not doc_ids:
-        logger.info("LanceDB (space): aucun document correspondant au filtre dans l'espace %s", space_id)
-        return []
-
-    # 2. Rechercher dans LanceDB avec ColPali
-    from app.services.colpali_service import embed_query_colpali
-    from app.services.lancedb_service import search_colpali_lancedb
-    
-    logger.info("[_retrieve_leaves_sql] Generating ColPali query token embeddings...")
-    query_token_embeddings = embed_query_colpali(query_text)
-    logger.info(
-        "[_retrieve_leaves_sql] Generated %d query token embeddings for ColPali. Querying LanceDB...",
-        len(query_token_embeddings) if query_token_embeddings else 0,
-    )
-    search_results = search_colpali_lancedb(query_token_embeddings, doc_ids, limit=candidate_k)
-    logger.info(
-        "[_retrieve_leaves_sql] LanceDB search returned %d raw colpali patch matches.",
-        len(search_results),
-    )
-        
-    if not search_results:
-        logger.info("[_retrieve_leaves_sql] No search results returned from LanceDB.")
-        return []
-
-    # 3. Récupérer les données textuelles complètes et métadonnées depuis PostgreSQL pour les chunks trouvés
-    chunk_ids = [row["id"] for row in search_results]
-    logger.info(
-        "[_retrieve_leaves_sql] Fetching details from PostgreSQL for chunk IDs: %s",
-        chunk_ids,
-    )
-    sql_chunks = text("""
-        SELECT
-            dc.id,
-            dc.content,
-            dc.text,
-            dc.chunk_index,
-            dc.document_id,
-            dc.metadata_json,
-            dc.metadata_,
-            dc.source AS chunk_source,
-            d.title AS document_title,
-            d.source AS document_source,
-            d.id AS document_id
-        FROM documentchunk dc
-        INNER JOIN document d ON dc.document_id = d.id
-        WHERE dc.id IN :chunk_ids
-    """)
-    chunk_rows = session.execute(sql_chunks, {"chunk_ids": tuple(chunk_ids)}).all()
-    logger.info(
-        "[_retrieve_leaves_sql] PostgreSQL returned %d rows for chunk details.",
-        len(chunk_rows),
-    )
-
-    # Conserver l'ordre trié retourné par LanceDB
-    rows_map = {row.id: row for row in chunk_rows}
-    nodes: List[NodeWithScore] = []
-    
-    for row_lancedb in search_results:
-        chunk_id = row_lancedb["id"]
-        row = rows_map.get(chunk_id)
-        if not row:
-            logger.warning(
-                "[_retrieve_leaves_sql] Chunk ID %d found in LanceDB but not found in PostgreSQL!",
-                chunk_id,
-            )
-            continue
-        
-        # LanceDB retourne '_distance' en tant que distance cosinus (1 - cosine_similarity)
-        # Donc similarity_score = 1.0 - _distance
-        distance = float(row_lancedb.get("_distance", 1.0))
-        similarity_score = 1.0 - distance
-        
-        metadata = _merged_chunk_metadata(row.metadata_json, row.metadata_)
-        metadata["document_id"] = row.document_id
-        metadata["document_title"] = row.document_title or "Document sans titre"
-        metadata["chunk_index"] = row.chunk_index
-        if getattr(row, "document_source", None):
-            metadata["source"] = row.document_source
-        if getattr(row, "chunk_source", None):
-            metadata["source"] = row.chunk_source
-            
-        node = TextNode(
-            id_=f"chunk-{row.id}",
-            text=row.content or row.text or "",
-            metadata=metadata,
-        )
-        nodes.append(NodeWithScore(node=node, score=similarity_score))
-        
-    logger.info(
-        "[_retrieve_leaves_sql] Vector LanceDB/ColPali (space): %d feuilles (limit=%d)",
-        len(nodes),
-        candidate_k,
-    )
-    return nodes
 
 
 def _parse_chunk_id_from_node(node: TextNode) -> Optional[int]:
@@ -626,7 +480,6 @@ def _node_to_passage(node, fallback_score: float = 0.0) -> Dict:
 def _multimodal_eval_stages(
     *,
     colpali_hits: List[Any],
-    pgvector_hits: List[Any],
     bm25_hits: List[Any],
     fused_hits: List[Any],
     top_k: int,
@@ -638,7 +491,6 @@ def _multimodal_eval_stages(
 
     stages: Dict[str, Any] = {
         "colpali_only": unified_hits_to_eval_passages(colpali_hits, top_k),
-        "pgvector_only": unified_hits_to_eval_passages(pgvector_hits, top_k),
         "lexical_only": unified_hits_to_eval_passages(bm25_hits, top_k),
         "post_rrf": unified_hits_to_eval_passages(fused_hits, top_k),
         "minilm_rerank_enabled": settings.RERANKER_ENABLED,
@@ -662,29 +514,20 @@ def _retrieve_one_group_hits(
     group_index: int = 0,
     group_label: str = "",
 ) -> List[Any]:
-    """Retrieval (colpali + pgvec + bm25 + kag) + fusion RRF pour un groupe de requêtes."""
+    """Retrieval (colpali + bm25) + fusion RRF pour un groupe de requêtes."""
     from app.services.page_retrieval_service import (
         filter_colpali_pages_dynamic,
         fuse_multimodal_hits,
         retrieve_bm25_pages,
         retrieve_colpali_pages,
-        retrieve_pgvector_pages,
     )
-
-    query_embedding: Optional[List[float]] = None
-    try:
-        query_embedding = generate_embedding(semantic_q)
-    except Exception as exc:
-        logger.warning("[RAG multi-group] Embedding indisponible (group=%r): %s", group_label, exc)
 
     colpali_hits = retrieve_colpali_pages(session, doc_ids, colpali_q, pool_size)
     colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
-    pgvector_hits = retrieve_pgvector_pages(session, doc_ids, query_embedding or [], pool_size)
     bm25_hits = retrieve_bm25_pages(session, doc_ids, lexical_q, pool_size)
 
     fused = fuse_multimodal_hits(
         colpali_hits,
-        pgvector_hits,
         bm25_hits,
         rrf_k=settings.RRF_K,
         top_k=pool_size,
@@ -695,10 +538,9 @@ def _retrieve_one_group_hits(
         hit.query_group_label = group_label
 
     logger.info(
-        "[RAG multi-group] group=%r — colpali=%d pgvec=%d bm25=%d → fused=%d",
+        "[RAG multi-group] group=%r — colpali=%d bm25=%d → fused=%d",
         group_label,
         len(colpali_hits),
-        len(pgvector_hits),
         len(bm25_hits),
         len(fused),
     )
@@ -722,7 +564,7 @@ async def search_multimodal_passages(
 ) -> Dict:
     """
     Pipeline retrieval multimodal page-centric unifié.
-    ColPali + pgvector + BM25 → RRF → expansion L1 → texte + PNG.
+    ColPali + BM25 → RRF → expansion L1 → texte + PNG.
 
     ``allowed_document_ids`` (périmètre confirmé) : si fourni, restreint les documents
     candidats à cette liste (déjà calculée avec la politique wildcard côté résolveur).
@@ -738,7 +580,6 @@ async def search_multimodal_passages(
         log_multimodal_retrieval_summary,
         retrieve_bm25_pages,
         retrieve_colpali_pages,
-        retrieve_pgvector_pages,
     )
 
     space = get_space_by_id(session, space_id, user_id)
@@ -780,8 +621,8 @@ async def search_multimodal_passages(
             return result
 
         # Périmètre de recherche confirmé : intersection avec les documents autorisés.
-        # Point d'application UNIQUE — les 4 retrievers (mono/multi-groupe) reçoivent ensuite
-        # ce doc_ids déjà scopé, donc ColPali/pgvector/BM25/KAG et le packing restent dans
+        # Point d'application UNIQUE — les 2 retrievers (mono/multi-groupe) reçoivent ensuite
+        # ce doc_ids déjà scopé, donc ColPali/BM25 et le packing restent dans
         # le périmètre sans autre modification.
         if allowed_document_ids is not None:
             allowed_set = {int(d) for d in allowed_document_ids}
@@ -826,15 +667,8 @@ async def search_multimodal_passages(
             # Pour le rerank, on utilise la requête sémantique du premier groupe
             rerank_q = active_groups[0].queries.semantic
             colpali_hits = per_group_hits[0] if per_group_hits else []
-            pgvector_hits: List[Any] = []
             bm25_hits: List[Any] = []
         else:
-            query_embedding: Optional[List[float]] = None
-            try:
-                query_embedding = generate_embedding(semantic_q)
-            except Exception as exc:
-                logger.warning("[RAG multimodal] Embedding requête indisponible : %s", exc)
-
             # Gate ColPali : ne lancer le retriever visuel (coûteux sur CPU) que si la
             # requête en a besoin. Décidé AVANT le lancement pour économiser encode + MaxSim.
             use_colpali, gate_reason = should_use_colpali(query_text, signals)
@@ -860,27 +694,24 @@ async def search_multimodal_passages(
                 },
                 tags=["retrieval", "multimodal", "space"],
             ) as hr:
-                # 3 retrievers en parallèle (threads + sessions dédiées) ou en séquence,
+                # 2 retrievers en parallèle (threads + sessions dédiées) ou en séquence,
                 # selon RETRIEVAL_PARALLEL_ENABLED. Voir _run_retrievers.
-                colpali_hits, pgvector_hits, bm25_hits = await _run_retrievers(
+                colpali_hits, bm25_hits = await _run_retrievers(
                     session,
                     space_id,
                     doc_ids,
                     colpali_q,
                     semantic_q,
                     lexical_q,
-                    query_embedding,
                     pool_size,
                     use_colpali=use_colpali,
                 )
 
-                # Filet de sécurité : ColPali écarté mais retrievers texte trop faibles →
+                # Filet de sécurité : ColPali écarté mais le retriever texte trop faible →
                 # on le relance en rattrapage (dans un thread + session dédiée, comme le
                 # mode parallèle) pour ne perdre aucun rappel en silence.
                 if not use_colpali:
-                    text_pages = {
-                        (h.document_id, h.page_no) for h in pgvector_hits
-                    } | {(h.document_id, h.page_no) for h in bm25_hits}
+                    text_pages = {(h.document_id, h.page_no) for h in bm25_hits}
                     if len(text_pages) < settings.COLPALI_GATING_FALLBACK_MIN_HITS:
                         from app.database import engine
                         from app.services.page_retrieval_service import (
@@ -916,22 +747,19 @@ async def search_multimodal_passages(
                 hr.end(
                     outputs={
                         "colpali": len(colpali_hits),
-                        "pgvector": len(pgvector_hits),
                         "bm25": len(bm25_hits),
                         "colpali_gate_reason": gate_reason,
                     }
                 )
 
             logger.info(
-                "[RAG multimodal] Retrievers — colpali=%d | pgvector=%d | bm25=%d",
+                "[RAG multimodal] Retrievers — colpali=%d | bm25=%d",
                 len(colpali_hits),
-                len(pgvector_hits),
                 len(bm25_hits),
             )
 
             fused_hits = fuse_multimodal_hits(
                 colpali_hits,
-                pgvector_hits,
                 bm25_hits,
                 rrf_k=settings.RRF_K,
                 top_k=pool_size,
@@ -950,7 +778,6 @@ async def search_multimodal_passages(
             if include_retrieval_stages:
                 result["retrieval_stages"] = _multimodal_eval_stages(
                     colpali_hits=colpali_hits,
-                    pgvector_hits=pgvector_hits,
                     bm25_hits=bm25_hits,
                     fused_hits=[],
                     top_k=top_k,
@@ -1013,7 +840,6 @@ async def search_multimodal_passages(
                 query_text=query_text,
                 doc_ids=doc_ids,
                 colpali_hits=colpali_hits,
-                pgvector_hits=pgvector_hits,
                 bm25_hits=bm25_hits,
                 fused_hits=fused_hits,
                 final_hits=final_hits,
@@ -1037,7 +863,6 @@ async def search_multimodal_passages(
             if include_retrieval_stages:
                 low_conf_result["retrieval_stages"] = _multimodal_eval_stages(
                     colpali_hits=colpali_hits,
-                    pgvector_hits=pgvector_hits,
                     bm25_hits=bm25_hits,
                     fused_hits=fused_hits,
                     top_k=top_k,
@@ -1051,7 +876,6 @@ async def search_multimodal_passages(
                 query_text=query_text,
                 doc_ids=doc_ids,
                 colpali_hits=colpali_hits,
-                pgvector_hits=pgvector_hits,
                 bm25_hits=bm25_hits,
                 fused_hits=fused_hits,
                 final_hits=[],
@@ -1075,7 +899,6 @@ async def search_multimodal_passages(
                     {
                         "retrieval_stages": _multimodal_eval_stages(
                             colpali_hits=colpali_hits,
-                            pgvector_hits=pgvector_hits,
                             bm25_hits=bm25_hits,
                             fused_hits=fused_hits,
                             top_k=top_k,
@@ -1113,7 +936,6 @@ async def search_multimodal_passages(
             query_text=query_text,
             doc_ids=doc_ids,
             colpali_hits=colpali_hits,
-            pgvector_hits=pgvector_hits,
             bm25_hits=bm25_hits,
             fused_hits=fused_hits,
             final_hits=final_hits,
@@ -1154,7 +976,6 @@ async def search_multimodal_passages(
         if include_retrieval_stages:
             result["retrieval_stages"] = _multimodal_eval_stages(
                 colpali_hits=colpali_hits,
-                pgvector_hits=pgvector_hits,
                 bm25_hits=bm25_hits,
                 fused_hits=fused_hits,
                 top_k=top_k,
@@ -1189,7 +1010,7 @@ async def search_relevant_passages(
 ) -> Dict:
     """
     RAG espace : délègue au pipeline multimodal page-centric unifié
-    (ColPali + pgvector + BM25 + KAG, fusion RRF, boost catégorie, rerank MiniLM,
+    (ColPali + BM25, fusion RRF, boost catégorie, rerank MiniLM,
     expansion page entière + voisinage conditionnel, PNG conditionnel).
     """
     return await search_multimodal_passages(
@@ -1367,12 +1188,6 @@ def _extract_alphanumeric_codes(query: str) -> List[str]:
             if w_clean not in codes:
                 codes.append(w_clean)
     return codes
-
-
-def _retrieve_leaves_bm25_sql(*args, **kwargs):
-    """BM25 tsvector — implémenté dans page_retrieval_service."""
-    from app.services.page_retrieval_service import _retrieve_leaves_bm25_sql as _bm25_impl
-    return _bm25_impl(*args, **kwargs)
 
 
 def _retrieve_leaves_alphanumeric_sql(*args, **kwargs):

@@ -1,9 +1,7 @@
 from sqlmodel import SQLModel, Field, Relationship, Column
 from typing import Optional, List, TYPE_CHECKING, Any
-from pgvector.sqlalchemy import Vector
 from sqlalchemy import Computed, Index
 from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
-from app.embedding_config import EMBEDDING_DIMENSION
 
 if TYPE_CHECKING:
     from .document import Document
@@ -16,7 +14,6 @@ class DocumentChunk(SQLModel, table=True):
     chunk_index: int = Field(default=0)
     content: str
     text: Optional[str] = None
-    embedding: Optional[List[float]] = Field(default=None, sa_column=Column(Vector(EMBEDDING_DIMENSION), nullable=True))
     start_char: int = Field(default=0)
     end_char: int = Field(default=0)
     node_id: Optional[str] = Field(default=None, index=True)
@@ -38,12 +35,6 @@ class DocumentChunk(SQLModel, table=True):
 
     __table_args__ = (
         Index("ix_documentchunk_tsv_content", "tsv_content", postgresql_using="gin"),
-        Index(
-            "ix_documentchunk_embedding_hnsw",
-            "embedding",
-            postgresql_using="hnsw",
-            postgresql_ops={"embedding": "vector_cosine_ops"},
-        ),
     )
     
     document: Optional["Document"] = Relationship(back_populates="chunks")

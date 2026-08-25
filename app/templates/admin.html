@@ -618,30 +618,13 @@
                             </div>
                         </div>
                     </div>
-                    <p id="eval-stages-help" class="text-xs text-gray-500 dark:text-gray-400">Les cartes du haut mesurent le pipeline final. ColPali seul = LanceDB + seuil dynamique. pgvector seul = vecteur texte (mistral-embed). Lexical seul = BM25/tsvector. Post-RRF = fusion ColPali + pgvector + BM25 + KAG avant MiniLM. Sans graphe = triple retriever uniquement.</p>
+                    <p id="eval-stages-help" class="text-xs text-gray-500 dark:text-gray-400">Les cartes du haut mesurent le pipeline final. ColPali seul = LanceDB + seuil dynamique. Lexical seul = BM25/tsvector. Post-RRF = fusion ColPali + BM25 avant MiniLM.</p>
                 </div>
 
-                <!-- Retrievers texte isolés (pgvector + lexical) -->
+                <!-- Retriever texte isolé (lexical) -->
                 <div id="eval-isolated-retrievers" class="hidden space-y-4 mt-4">
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Retrievers texte isolés</h3>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="space-y-3">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">pgvector seul (vecteur texte)</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-blue-500/10 to-sky-500/10">
-                                    <span class="block text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">Precision</span>
-                                    <span id="metric-precision-pgvector" class="text-2xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                                </div>
-                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-blue-500/10 to-sky-500/10">
-                                    <span class="block text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">Recall</span>
-                                    <span id="metric-recall-pgvector" class="text-2xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                                </div>
-                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-blue-500/10 to-sky-500/10">
-                                    <span class="block text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">MRR</span>
-                                    <span id="metric-mrr-pgvector" class="text-2xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                                </div>
-                            </div>
-                        </div>
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Retriever texte isolé</h3>
+                    <div class="grid grid-cols-1 gap-6">
                         <div class="space-y-3">
                             <h4 class="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400">Lexical seul (BM25)</h4>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -665,7 +648,7 @@
                 <!-- Comparaison KAG (triple retriever vs fusion avec graphe) -->
                 <div id="eval-kag-comparison" class="hidden space-y-4 mt-4">
                     <div class="flex flex-wrap items-center gap-3">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Triple retriever sans graphe (ColPali + pgvector + BM25)</h3>
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Retriever sans graphe (ColPali + BM25)</h3>
                         <span id="eval-kag-badge" class="hidden px-2 py-0.5 rounded text-[10px] font-bold bg-teal-500/10 text-teal-700 dark:text-teal-400"></span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -2499,10 +2482,6 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
     let kagDeltaMrr = 0;
     let kagDeltaCount = 0;
     let kagEnabled = false;
-    let totalPrecisionPgvector = 0;
-    let totalRecallPgvector = 0;
-    let totalMrrPgvector = 0;
-    let pgvectorCount = 0;
     let totalPrecisionLexical = 0;
     let totalRecallLexical = 0;
     let totalMrrLexical = 0;
@@ -2550,12 +2529,6 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
         }
         if (q.minilm_rerank_enabled) {
             minilmRerankEnabled = true;
-        }
-        if (q.metrics_pgvector_only) {
-            totalPrecisionPgvector += q.metrics_pgvector_only.context_precision;
-            totalRecallPgvector += q.metrics_pgvector_only.context_recall;
-            totalMrrPgvector += q.metrics_pgvector_only.mrr;
-            pgvectorCount++;
         }
         if (q.metrics_lexical_only) {
             totalPrecisionLexical += q.metrics_lexical_only.context_precision;
@@ -2615,13 +2588,6 @@ function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
             precision_delta: kagDeltaPrecision / kagDeltaCount,
             recall_delta: kagDeltaRecall / kagDeltaCount,
             mrr_delta: kagDeltaMrr / kagDeltaCount,
-        };
-    }
-    if (pgvectorCount > 0) {
-        result.global_metrics_pgvector_only = {
-            context_precision: totalPrecisionPgvector / pgvectorCount,
-            context_recall: totalRecallPgvector / pgvectorCount,
-            mrr: totalMrrPgvector / pgvectorCount,
         };
     }
     if (lexicalCount > 0) {
@@ -2839,27 +2805,9 @@ function renderEvalResults(data, showGeneration = false) {
     }
 
     const isolatedSection = document.getElementById('eval-isolated-retrievers');
-    const gmPgvector = data.global_metrics_pgvector_only;
     const gmLexical = data.global_metrics_lexical_only;
-    if (isolatedSection && (gmPgvector || gmLexical)) {
+    if (isolatedSection && gmLexical) {
         isolatedSection.classList.remove('hidden');
-        if (gmPgvector) {
-            const precPgEl = document.getElementById('metric-precision-pgvector');
-            const recPgEl = document.getElementById('metric-recall-pgvector');
-            const mrrPgEl = document.getElementById('metric-mrr-pgvector');
-            if (precPgEl) {
-                precPgEl.innerText = `${(gmPgvector.context_precision * 100).toFixed(1)}%`;
-                precPgEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmPgvector.context_precision)}`;
-            }
-            if (recPgEl) {
-                recPgEl.innerText = `${(gmPgvector.context_recall * 100).toFixed(1)}%`;
-                recPgEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmPgvector.context_recall)}`;
-            }
-            if (mrrPgEl) {
-                mrrPgEl.innerText = gmPgvector.mrr.toFixed(2);
-                mrrPgEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmPgvector.mrr)}`;
-            }
-        }
         if (gmLexical) {
             const precLexEl = document.getElementById('metric-precision-lexical');
             const recLexEl = document.getElementById('metric-recall-lexical');
@@ -3008,7 +2956,6 @@ function renderEvalResults(data, showGeneration = false) {
                         <span>Recall: <strong class="${getMetricColorClass(q.metrics.context_recall)}">${(q.metrics.context_recall * 100).toFixed(0)}%</strong></span>
                         <span>MRR: <strong class="${getMetricColorClass(q.metrics.mrr)}">${q.metrics.mrr.toFixed(2)}</strong></span>
                         ${q.metrics_colpali ? `<span class="text-gray-400 hidden md:inline">| ColPali MRR: ${q.metrics_colpali.mrr.toFixed(2)}</span>` : ''}
-                        ${q.metrics_pgvector_only ? `<span class="text-gray-400 hidden md:inline">| pgvector MRR: ${q.metrics_pgvector_only.mrr.toFixed(2)}</span>` : ''}
                         ${q.metrics_lexical_only ? `<span class="text-gray-400 hidden md:inline">| lexical MRR: ${q.metrics_lexical_only.mrr.toFixed(2)}</span>` : ''}
                         ${q.metrics_pre_kag ? `<span class="text-gray-400 hidden md:inline">| sans KAG MRR: ${q.metrics_pre_kag.mrr.toFixed(2)}</span>` : ''}
                         ${q.kag_delta ? `<span class="text-gray-400 hidden md:inline">| Δ KAG MRR: ${formatMetricDelta(q.kag_delta.mrr, false)}</span>` : ''}
@@ -3071,22 +3018,6 @@ function renderEvalResults(data, showGeneration = false) {
                     <div class="hidden p-3 border-t border-slate-500/10 space-y-2">
                         ${q.rerank_delta ? `<p class="text-xs text-gray-500 dark:text-gray-400">Impact rerank — Precision: ${formatMetricDelta(q.rerank_delta.precision, true)} · Recall: ${formatMetricDelta(q.rerank_delta.recall, true)} · MRR: ${formatMetricDelta(q.rerank_delta.mrr, false)}</p>` : ''}
                         ${renderEvalAnalysisColumns(q.analysis_colpali)}
-                    </div>
-                </div>
-                ` : ''}
-
-                ${q.metrics_pgvector_only ? `
-                <div class="mt-2 rounded-2xl bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 overflow-hidden">
-                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-blue-700 dark:text-blue-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
-                        <span class="flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                            pgvector seul (vecteur texte)
-                            <span class="font-normal text-gray-500">— P: ${(q.metrics_pgvector_only.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_pgvector_only.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_pgvector_only.mrr.toFixed(2)}</span>
-                        </span>
-                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="hidden p-3 border-t border-blue-500/10 space-y-2">
-                        ${renderEvalAnalysisColumns(q.analysis_pgvector_only, 'pgvector')}
                     </div>
                 </div>
                 ` : ''}

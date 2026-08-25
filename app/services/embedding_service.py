@@ -159,14 +159,3 @@ def generate_embeddings_batch(
     except Exception as e:
         logger.error("Erreur batch embeddings Mistral: %s", e, exc_info=True)
         return [None] * len(texts)
-
-
-def generate_note_embedding(title: str, content: Optional[str] = None) -> Optional[List[float]]:
-    """Embedding pour une note complète (titre + contenu)."""
-    parts = [title] if title else []
-    if content and content.strip():
-        parts.append(content.strip())
-    combined = " ".join(parts).strip()
-    if not combined:
-        return None
-    return generate_embedding(combined)

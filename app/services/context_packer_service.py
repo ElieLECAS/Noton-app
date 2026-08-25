@@ -129,17 +129,16 @@ def _load_leaf_records(session: Session, document_id: int) -> List[LeafRecord]:
     return records
 
 
-# Familles de canaux de retrieval. pgvector et BM25 lisent la MÊME évidence (le texte de
-# la page) : les compter comme deux confirmations indépendantes récompense la redondance
-# lexicale et écrase ColPali, seul canal capable de voir une page « muette » (dessin coté).
+# Familles de canaux de retrieval : texte (BM25) et visuel (ColPali). Le bonus de
+# familles récompense un document confirmé par les DEUX modalités, sans jamais renverser
+# un meilleur passage net (cf. _election_score).
 #
-# La famille « graphe » (KAG) a été retirée le 2026-07-28 avec le canal : un document
-# retrouvé par le graphe gagnait jusqu'à +10 % de score d'élection au titre d'une
-# confirmation par le canal le plus faible du dispositif. Le bonus de familles est donc
-# borné à +0,10 (2 familles) au lieu de +0,20, ce qui laisse encore plus de poids au
-# meilleur passage — l'intention même du mode best_passage.
+# La famille « graphe » (KAG) a été retirée le 2026-07-28 avec le canal, et la voie dense
+# texte (pgvector) le 2026-08-25 : elle lisait la MÊME évidence que BM25 (le texte de la
+# page) et votait deux fois au RRF sans rien ajouter. Le bonus de familles est borné à
+# +0,10 (2 familles), ce qui laisse le plus de poids au meilleur passage — l'intention
+# même du mode best_passage.
 _CHANNEL_FAMILIES = {
-    "pgvector": "texte",
     "bm25": "texte",
     "colpali": "visuel",
 }

@@ -345,12 +345,11 @@ class Settings(BaseSettings):
     RAG_MIN_PERTINENCE: float = 0.75
     COLPALI_PROTECTED_SLOTS: int = int(os.getenv("COLPALI_PROTECTED_SLOTS", "2"))
     COLPALI_DOMINANCE_MIN_SCORE: float = float(os.getenv("COLPALI_DOMINANCE_MIN_SCORE", "0.55"))
-    COLPALI_PGVECTOR_WEAK_THRESHOLD: float = float(os.getenv("COLPALI_PGVECTOR_WEAK_THRESHOLD", "0.45"))
     COLPALI_BM25_WEAK_THRESHOLD: float = float(os.getenv("COLPALI_BM25_WEAK_THRESHOLD", "0.25"))
 
     BM25_MAX_QUERY_TERMS: int = 15
 
-    # Retrieval hybride (ColPali + pgvector + BM25)
+    # Retrieval hybride (ColPali + BM25)
     RETRIEVAL_EXPAND_ENABLED: bool = os.getenv("RETRIEVAL_EXPAND_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
@@ -365,7 +364,7 @@ class Settings(BaseSettings):
     # compétition. 0 = désactivé (coupe brute historique).
     RETRIEVAL_PER_DOC_QUOTA_RATIO: float = float(os.getenv("RETRIEVAL_PER_DOC_QUOTA_RATIO", "0.4"))
 
-    # Exécute les 4 retrievers (ColPali/pgvector/BM25/KAG) en parallèle (threads + sessions
+    # Exécute les 2 retrievers (ColPali/BM25) en parallèle (threads + sessions
     # DB dédiées) au lieu de séquentiellement : recouvre l'encodage ColPali CPU avec les
     # requêtes SQL. Repli sûr : false rebascule sur l'exécution séquentielle (session unique).
     RETRIEVAL_PARALLEL_ENABLED: bool = os.getenv("RETRIEVAL_PARALLEL_ENABLED", "true").strip().lower() in (
@@ -423,7 +422,7 @@ class Settings(BaseSettings):
     # ColPali gating : ColPali est un retriever VISUEL très coûteux sur CPU (encode
     # ColQwen2 + MaxSim sur des centaines de milliers de patches → ~30s/requête). On ne
     # le lance donc QUE lorsque la requête en a besoin (marqueurs visuels : schéma, plan,
-    # coupe, « où se trouve »…). Pour les requêtes texte, BM25 + pgvector suffisent. Un
+    # coupe, « où se trouve »…). Pour les requêtes texte, BM25 suffit. Un
     # FILET DE SÉCURITÉ relance ColPali si les retrievers texte reviennent trop faibles,
     # de sorte qu'aucun rappel n'est perdu en silence. Mettre à false rebascule sur
     # l'exécution systématique de ColPali (comportement historique).
@@ -432,7 +431,7 @@ class Settings(BaseSettings):
     COLPALI_GATING_ENABLED: bool = os.getenv("COLPALI_GATING_ENABLED", "false").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    # Sous ce nombre de pages texte (pgvector ∪ BM25), ColPali est relancé en rattrapage
+    # Sous ce nombre de pages texte (BM25), ColPali est relancé en rattrapage
     # même si le gate l'avait écarté.
     COLPALI_GATING_FALLBACK_MIN_HITS: int = int(os.getenv("COLPALI_GATING_FALLBACK_MIN_HITS", "5"))
     # Intents qui FORCENT ColPali (au-delà des marqueurs visuels du texte). « installation »
@@ -496,9 +495,8 @@ class Settings(BaseSettings):
     # jamais renverser un meilleur passage net. "legacy" : ancienne formule
     # score_max + 0.2·(somme des autres pages), où le volume écrase le max.
     CAG_ELECTION_MODE: str = os.getenv("CAG_ELECTION_MODE", "best_passage").strip().lower()
-    # Bonus par FAMILLE de canaux supplémentaire. Les familles (texte = pgvector+bm25,
-    # visuel = colpali, graphe = kag) évitent le double crédit lexical : pgvector et BM25
-    # lisent la même évidence textuelle et ne doivent pas compter pour deux confirmations.
+    # Bonus par FAMILLE de canaux supplémentaire (texte = bm25, visuel = colpali) :
+    # récompense un document confirmé par les deux modalités.
     CAG_ELECTION_FAMILY_BONUS: float = float(os.getenv("CAG_ELECTION_FAMILY_BONUS", "0.10"))
     # Bonus par page matchée supplémentaire, plafonné à CAG_ELECTION_PAGE_CAP pages.
     CAG_ELECTION_PAGE_BONUS: float = float(os.getenv("CAG_ELECTION_PAGE_BONUS", "0.05"))

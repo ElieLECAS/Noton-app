@@ -84,7 +84,6 @@ def _extract_doc_task(task: dict[str, Any], state: str, worker_name: str) -> Opt
     name = str(task.get("name") or "")
     if name not in {
         "app.tasks.documents.process_library_document",
-        "app.tasks.documents.process_document_embeddings",
         "app.tasks.documents.reindex_library_document_task",
         "app.tasks.documents.multimodal_reindex_library_document_task",
         "app.tasks.documents.reindex_all_library_documents_task",
@@ -183,8 +182,8 @@ def get_workers_document_tasks_view() -> dict[str, Any]:
                 task_name = "db_waiting.process_library_document"
             elif status == "processing" and progress >= 90:
                 target_worker = "worker"
-                queue_name = "embeddings"
-                task_name = "db_waiting.process_document_embeddings"
+                queue_name = "documents"
+                task_name = "db_waiting.colpali_sync"
             else:
                 # Document probablement déjà réellement en cours (active), on n'ajoute pas.
                 continue

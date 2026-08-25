@@ -9,10 +9,7 @@ Couvre :
 """
 from __future__ import annotations
 
-from types import SimpleNamespace
 from unittest import mock
-from unittest.mock import MagicMock, patch
-from typing import List
 
 import pytest
 
@@ -41,7 +38,6 @@ def _make_document(doc_id: int = 1, title: str = "Doc test"):
 def _patch_deps(
     page_texts=None,
     chunk_specs=None,
-    embeddings=None,
     colpali_enabled=True,
     mistral_key="sk-test",
 ):
@@ -62,8 +58,6 @@ def _patch_deps(
                 "metadata_json": {"page_no": 1},
             }
         ]
-    if embeddings is None:
-        embeddings = [[0.1] * 1024]
 
     patches = [
         mock.patch(
@@ -88,10 +82,6 @@ def _patch_deps(
         mock.patch(
             "app.services.document_indexing_service._extract_and_persist_chunks",
             return_value=3,
-        ),
-        mock.patch(
-            "app.services.document_indexing_service._embed_text_chunks",
-            return_value=2,
         ),
         mock.patch(
             "app.services.document_run.is_processing_run_current",
@@ -123,7 +113,7 @@ class TestIndexingModeEnum:
 
 
 class TestProcessDocumentIndexingFull:
-    """Mode full : extraction texte + embeddings + ColPali."""
+    """Mode full : extraction texte + ColPali."""
 
     def test_full_mode_calls_all_stages(self, tmp_path):
         pdf_path = str(tmp_path / "test.pdf")
@@ -140,7 +130,6 @@ class TestProcessDocumentIndexingFull:
              mock.patch("app.services.document_indexing_service._mark_failed") as mark_fail, \
              mock.patch("app.services.document_indexing_service._sync_colpali_for_pages", return_value=2) as colpali_sync, \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks", return_value=3) as extract, \
-             mock.patch("app.services.document_indexing_service._embed_text_chunks", return_value=2) as embed, \
              mock.patch("app.services.document_run.is_processing_run_current", return_value=True), \
              mock.patch("app.services.file_conversion.ensure_pdf_for_ocr", return_value=pdf_path):
 
@@ -158,14 +147,13 @@ class TestProcessDocumentIndexingFull:
         del_all.assert_called_once()
         del_text.assert_not_called()
         extract.assert_called_once()
-        embed.assert_called_once()
         colpali_sync.assert_called_once()
         finalize.assert_called_once()
         mark_fail.assert_not_called()
 
 
 class TestProcessDocumentIndexingTextOnly:
-    """Mode text_only : extraction texte + embeddings, ColPali ignoré."""
+    """Mode text_only : extraction texte seule, ColPali ignoré."""
 
     def test_text_only_skips_colpali(self, tmp_path):
         pdf_path = str(tmp_path / "test.pdf")
@@ -181,7 +169,6 @@ class TestProcessDocumentIndexingTextOnly:
              mock.patch("app.services.document_indexing_service._mark_failed") as mark_fail, \
              mock.patch("app.services.document_indexing_service._sync_colpali_for_pages") as colpali_sync, \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks", return_value=3), \
-             mock.patch("app.services.document_indexing_service._embed_text_chunks", return_value=2), \
              mock.patch("app.services.document_run.is_processing_run_current", return_value=True), \
              mock.patch("app.services.file_conversion.ensure_pdf_for_ocr", return_value=pdf_path):
 
@@ -204,7 +191,7 @@ class TestProcessDocumentIndexingTextOnly:
 
 
 class TestSeparationCouchesSemantiques:
-    """Répartition rapide/lent : text_only n'exécute QUE l'extraction + embeddings,
+    """Répartition rapide/lent : text_only n'exécute QUE l'extraction,
     enrichment_only porte les chunks contextuels (passage de nuit)."""
 
     def _run(self, tmp_path, mode):
@@ -220,7 +207,6 @@ class TestSeparationCouchesSemantiques:
              mock.patch("app.services.document_indexing_service._mark_failed"), \
              mock.patch("app.services.document_indexing_service._sync_colpali_for_pages"), \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks", return_value=3), \
-             mock.patch("app.services.document_indexing_service._embed_text_chunks", return_value=2) as embed, \
              mock.patch("app.config.settings.KAG_ENABLED", True), \
              mock.patch("app.config.settings.CONTEXTUAL_ENRICHMENT_ENABLED", True), \
              mock.patch("app.services.kag_extraction_service.extract_kag_for_document",
@@ -236,30 +222,25 @@ class TestSeparationCouchesSemantiques:
             result = process_document_indexing(
                 document_id=1, file_path=pdf_path, user_id=99, mode=mode
             )
-        return result, enrich, embed
+        return result, enrich
 
     def test_text_only_ne_lance_pas_les_chunks_contextuels(self, tmp_path):
-        result, enrich, embed = self._run(tmp_path, IndexingMode.TEXT_ONLY)
+        result, enrich = self._run(tmp_path, IndexingMode.TEXT_ONLY)
 
         assert result["status"] == "completed"
         enrich.assert_not_called()
-        # Les embeddings, eux, tournent bien (le passage rapide reste interrogeable).
-        embed.assert_called_once()
         assert "enrichment" not in result
 
     def test_enrichment_only_lance_les_chunks_contextuels(self, tmp_path):
-        result, enrich, embed = self._run(tmp_path, IndexingMode.ENRICHMENT_ONLY)
+        result, enrich = self._run(tmp_path, IndexingMode.ENRICHMENT_ONLY)
 
         enrich.assert_called_once()
-        # Ré-embedding indispensable : les L2 doivent être vectorisés pour être trouvables.
-        embed.assert_called_once()
         assert result["enrichment"]["status"] == "ok"
 
     def test_full_lance_tout(self, tmp_path):
-        result, enrich, embed = self._run(tmp_path, IndexingMode.FULL)
+        result, enrich = self._run(tmp_path, IndexingMode.FULL)
 
         enrich.assert_called_once()
-        embed.assert_called_once()
 
 
 class TestProcessDocumentIndexingColpaliOnly:
@@ -279,7 +260,6 @@ class TestProcessDocumentIndexingColpaliOnly:
              mock.patch("app.services.document_indexing_service._mark_failed") as mark_fail, \
              mock.patch("app.services.document_indexing_service._sync_colpali_for_pages", return_value=2) as colpali_sync, \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks") as extract, \
-             mock.patch("app.services.document_indexing_service._embed_text_chunks") as embed, \
              mock.patch("app.services.document_run.is_processing_run_current", return_value=True), \
              mock.patch("app.services.file_conversion.ensure_pdf_for_ocr", return_value=pdf_path):
 
@@ -297,7 +277,6 @@ class TestProcessDocumentIndexingColpaliOnly:
         del_all.assert_not_called()
         del_text.assert_not_called()
         extract.assert_not_called()
-        embed.assert_not_called()
         colpali_sync.assert_called_once()
         finalize.assert_called_once()
         mark_fail.assert_not_called()
@@ -486,112 +465,6 @@ class TestReindexAllEndpointMode:
     def test_invalid_mode_returns_400(self, client, admin_headers):
         r = client.post("/api/library/reindex-all", headers=admin_headers, json={"mode": "bad"})
         assert r.status_code == 400
-
-
-class TestBuildEmbedText:
-    """Phase 4 : préfixe contextuel déterministe (titre + section + catégories +
-    entités + matériau/source) injecté dans le texte embeddé, pas dans content."""
-
-    def test_l1_includes_categories_entities_material_source(self):
-        from app.services.document_indexing_service import _build_embed_text
-
-        chunk = SimpleNamespace(
-            content="Poser le profil seuil.",
-            metadata_json={
-                "document_title": "Notice Profine 76",
-                "heading": "Pose du seuil",
-                "page_no": 3,
-                "categories": ["mounting"],
-                "entities": ["Profine 76", "seuil PMR"],
-            },
-        )
-
-        text = _build_embed_text(chunk, doc_source="Profine", doc_materials=["pvc"])
-
-        assert "Notice Profine 76" in text
-        assert "Pose du seuil" in text
-        assert "Pose / montage" in text  # label de catégorie, pas le slug
-        assert "Profine 76" in text  # entité
-        assert "Source : Profine" in text
-        assert "pvc" in text
-        assert "Poser le profil seuil." in text  # content conservé
-        # le préfixe précède le content
-        assert text.index("Notice Profine 76") < text.index("Poser le profil seuil.")
-
-    def test_l2_enrichment_uses_theme_and_category_slug(self):
-        from app.services.document_indexing_service import _build_embed_text
-
-        chunk = SimpleNamespace(
-            content="Synthèse pose seuil.",
-            metadata_json={
-                "document_title": "Notice X",
-                "content_type": "contextual_enrichment",
-                "theme": "Pose du seuil Profine",
-                "category_slug": "mounting",
-                "page_no": 2,
-            },
-        )
-
-        text = _build_embed_text(chunk)
-
-        assert "Pose du seuil Profine" in text  # theme (à défaut de heading)
-        assert "Pose / montage" in text  # label dérivé de category_slug
-        assert "Synthèse pose seuil." in text
-
-    def test_no_metadata_returns_content_only(self):
-        from app.services.document_indexing_service import _build_embed_text
-
-        chunk = SimpleNamespace(content="Juste du contenu.", metadata_json={})
-        assert _build_embed_text(chunk) == "Juste du contenu."
-
-
-class TestEmbedTextChunksL1AndL2:
-    """Phase 1+4 : l'embedding (en dernier) couvre L1 semantic_leaf ET L2
-    contextual_enrichment, mais pas les ancres L0."""
-
-    def test_embeds_l1_and_l2_not_anchor(self):
-        from app.services import document_indexing_service as svc
-
-        leaf = SimpleNamespace(
-            content="L1 texte",
-            metadata_json={"content_type": "semantic_leaf"},
-            metadata_=None,
-            embedding=None,
-        )
-        enrich = SimpleNamespace(
-            content="L2 synthèse",
-            metadata_json={"content_type": "contextual_enrichment"},
-            metadata_=None,
-            embedding=None,
-        )
-        anchor = SimpleNamespace(
-            content="ancre",
-            metadata_json={"content_type": "page_anchor"},
-            metadata_=None,
-            embedding=None,
-        )
-
-        doc = SimpleNamespace(source="Profine", materials=["pvc"])
-
-        sess = MagicMock()
-        sess.get.return_value = doc
-        sess.exec.return_value.all.return_value = [leaf, enrich, anchor]
-        ctx = MagicMock()
-        ctx.__enter__.return_value = sess
-        ctx.__exit__.return_value = False
-
-        with patch.object(svc, "Session", return_value=ctx), patch(
-            "app.services.embedding_service.generate_embeddings_batch",
-            return_value=[[0.1] * 1024, [0.2] * 1024],
-        ) as gen:
-            count = svc._embed_text_chunks(123)
-
-        assert count == 2
-        # 2 textes embeddés (L1 + L2), l'ancre L0 est exclue
-        assert len(gen.call_args[0][0]) == 2
-        assert leaf.embedding is not None
-        assert enrich.embedding is not None
-        assert anchor.embedding is None
 
 
 class TestStripDbUnsafeChars:

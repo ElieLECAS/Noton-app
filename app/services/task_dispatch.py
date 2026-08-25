@@ -61,7 +61,6 @@ def _extract_document_id_from_celery_task(task: dict) -> Optional[int]:
         "app.tasks.documents.process_library_document",
         "app.tasks.documents.reindex_library_document_task",
         "app.tasks.documents.multimodal_reindex_library_document_task",
-        "app.tasks.documents.process_document_embeddings",
         "app.tasks.documents.update_document_spaces_task",
     }:
         return None
@@ -361,21 +360,6 @@ def _send_reindex_folder_library(
         extractor,
     )
     return async_result.id
-
-
-def _send_document_embeddings(document_id: int, run_id: Optional[str]) -> bool:
-    from app.tasks.documents import process_document_embeddings
-
-    res = process_document_embeddings.apply_async(
-        args=[document_id, run_id],
-        queue="embeddings",
-    )
-    logger.info(
-        "task_dispatch document_embeddings document_id=%s celery_task_id=%s",
-        document_id,
-        res.id,
-    )
-    return True
 
 
 def _send_document_spaces_update(

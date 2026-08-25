@@ -103,23 +103,18 @@ class TestColpaliHealth:
 
 class TestTextHealth:
     def test_ok(self):
-        h = _text_health({"chunk_count": 10, "leaf_count": 8, "leaves_with_embedding": 8})
+        h = _text_health({"chunk_count": 10, "leaf_count": 8})
         assert h["status"] == "ok"
 
-    def test_partial(self):
-        h = _text_health({"chunk_count": 10, "leaf_count": 8, "leaves_with_embedding": 5})
-        assert h["status"] == "partial"
-        assert h["missing_embeddings"] == 3
-
     def test_missing_sans_chunks(self):
-        h = _text_health({"chunk_count": 0, "leaf_count": 0, "leaves_with_embedding": 0})
+        h = _text_health({"chunk_count": 0, "leaf_count": 0})
         assert h["status"] == "missing"
 
 
 class TestOverallAndMode:
     def _h(self, text="ok", colpali="ok", enrichment="ok"):
         return (
-            {"status": text, "missing_embeddings": 0},
+            {"status": text},
             {"status": colpali},
             {"status": enrichment},
         )

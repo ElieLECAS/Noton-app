@@ -20,7 +20,6 @@ def _hit(
     *,
     sources: list[str],
     colpali: float | None = None,
-    pgvector: float | None = None,
     bm25: float | None = None,
     rrf: float = 0.01,
 ) -> UnifiedPageHit:
@@ -30,7 +29,6 @@ def _hit(
         document_title="Doc",
         retrieval_sources=sources,
         colpali_score=colpali,
-        pgvector_score=pgvector,
         bm25_score=bm25,
         rrf_score=rrf,
     )
@@ -42,13 +40,12 @@ def test_is_colpali_visual_priority_colpali_only():
 
 
 def test_is_colpali_visual_priority_dominant_weak_text():
-    """ColPali fort + pgvector/bm25 faibles → priorité visuelle même si les 3 ont matché."""
+    """ColPali fort + bm25 faible → priorité visuelle même si bm25 a matché."""
     hit = _hit(
         1,
         12,
-        sources=["colpali", "pgvector", "bm25"],
+        sources=["colpali", "bm25"],
         colpali=0.72,
-        pgvector=0.18,
         bm25=0.05,
     )
     assert is_colpali_visual_priority(hit) is True
@@ -58,9 +55,8 @@ def test_is_colpali_visual_priority_not_dominant_when_text_strong():
     hit = _hit(
         1,
         12,
-        sources=["colpali", "pgvector", "bm25"],
+        sources=["colpali", "bm25"],
         colpali=0.72,
-        pgvector=0.85,
         bm25=0.40,
     )
     assert is_colpali_visual_priority(hit) is False
@@ -70,9 +66,9 @@ def test_is_colpali_visual_priority_colpali_too_weak_for_dominance():
     hit = _hit(
         1,
         12,
-        sources=["colpali", "pgvector"],
+        sources=["colpali", "bm25"],
         colpali=0.50,
-        pgvector=0.10,
+        bm25=0.10,
     )
     assert is_colpali_visual_priority(hit) is False
 
@@ -86,9 +82,9 @@ def test_compute_page_image_policy_dominant_placeholder():
     hit = _hit(
         1,
         7,
-        sources=["colpali", "pgvector"],
+        sources=["colpali", "bm25"],
         colpali=0.65,
-        pgvector=0.20,
+        bm25=0.20,
     )
     assert compute_page_image_policy(hit, "Page 7 — contenu visuel uniquement") is True
 
@@ -97,24 +93,23 @@ def test_compute_page_image_policy_dominant_rich_text_no_png():
     hit = _hit(
         1,
         7,
-        sources=["colpali", "pgvector"],
+        sources=["colpali", "bm25"],
         colpali=0.65,
-        pgvector=0.20,
+        bm25=0.20,
     )
     rich = "Section 4.2 — Réglage tension ressort report de charge ROTO NX NT Designo II"
     assert compute_page_image_policy(hit, rich) is False
 
 
 def test_protect_colpali_visual_hits_injects_dominant_slot():
-    reranked = [_hit(1, 1, sources=["pgvector"], pgvector=0.9, rrf=0.05)]
+    reranked = [_hit(1, 1, sources=["bm25"], bm25=0.9, rrf=0.05)]
     pool = [
         reranked[0],
         _hit(
             1,
             112,
-            sources=["colpali", "pgvector", "bm25"],
+            sources=["colpali", "bm25"],
             colpali=0.78,
-            pgvector=0.12,
             bm25=0.08,
             rrf=0.02,
         ),
@@ -130,7 +125,7 @@ async def test_rerank_unified_page_hits_dynamic_k_zero():
     from app.services import reranker_service
     from llama_index.core.schema import NodeWithScore, TextNode
 
-    hit = _hit(1, 1, sources=["pgvector"], pgvector=0.5, rrf=0.01)
+    hit = _hit(1, 1, sources=["bm25"], bm25=0.5, rrf=0.01)
     session = mock.MagicMock()
 
     low_conf = reranker_service.RerankResult(

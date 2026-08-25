@@ -1,7 +1,7 @@
-"""Santé d'indexation par document — texte, embeddings, ColPali (sync LanceDB), chunks contextuels.
+"""Santé d'indexation par document — texte, ColPali (sync LanceDB), chunks contextuels.
 
 Répond à la question « ce document a-t-il TOUT (texte, ColPali, entités, catégories),
-et faut-il le retraiter — en quel mode ? ». Croise l'état Postgres (chunks, embeddings,
+et faut-il le retraiter — en quel mode ? ». Croise l'état Postgres (chunks,
 entités, catégories) avec l'état LanceDB (patches ColPali) pour détecter les
 désynchronisations que seuls les logs de retrieval révélaient jusqu'ici
 (patches orphelins → pages invisibles du canal visuel).
@@ -49,8 +49,7 @@ def _fetch_chunk_summaries(session: Session, doc_ids: List[int]) -> Dict[int, di
             """
             SELECT document_id,
                    COUNT(*) AS total,
-                   COUNT(*) FILTER (WHERE is_leaf) AS leaves,
-                   COUNT(*) FILTER (WHERE is_leaf AND embedding IS NOT NULL) AS leaves_with_embedding
+                   COUNT(*) FILTER (WHERE is_leaf) AS leaves
             FROM documentchunk
             WHERE document_id = ANY(:ids)
             GROUP BY document_id
@@ -62,7 +61,6 @@ def _fetch_chunk_summaries(session: Session, doc_ids: List[int]) -> Dict[int, di
         int(r.document_id): {
             "chunk_count": int(r.total or 0),
             "leaf_count": int(r.leaves or 0),
-            "leaves_with_embedding": int(r.leaves_with_embedding or 0),
         }
         for r in rows
     }
@@ -130,23 +128,16 @@ def _fetch_enrichment_counts(session: Session, doc_ids: List[int]) -> Dict[int, 
 
 
 def _text_health(summary: dict) -> dict:
+    """BM25 (tsv_content) est une colonne générée à l'insertion des chunks : dès que le
+    texte existe, il est indexé — pas d'état "partial" séparé comme du temps des
+    embeddings (échec API possible entre la création du chunk et son embedding)."""
     chunk_count = summary["chunk_count"]
     leaf_count = summary["leaf_count"]
-    leaves_with_embedding = summary["leaves_with_embedding"]
-    if chunk_count == 0:
-        status = "missing"
-    elif leaves_with_embedding == 0:
-        status = "missing"
-    elif leaves_with_embedding < leaf_count:
-        status = "partial"
-    else:
-        status = "ok"
+    status = "missing" if chunk_count == 0 else "ok"
     return {
         "status": status,
         "chunk_count": chunk_count,
         "leaf_count": leaf_count,
-        "leaves_with_embedding": leaves_with_embedding,
-        "missing_embeddings": max(0, leaf_count - leaves_with_embedding),
     }
 
 
@@ -224,8 +215,6 @@ def _overall_and_mode(
         return "warning", "colpali_only"
     if enrichment_broken:
         return "warning", "enrichment_only"
-    if text_h["status"] == "partial":
-        return "warning", "text_only"
     if colpali_h["status"] == "unknown":
         return "warning", None
     return "ok", None
@@ -254,9 +243,7 @@ def build_indexing_health_bulk(
     result: Dict[int, dict] = {}
     for doc in docs:
         did = int(doc.id)
-        summary = summaries.get(
-            did, {"chunk_count": 0, "leaf_count": 0, "leaves_with_embedding": 0}
-        )
+        summary = summaries.get(did, {"chunk_count": 0, "leaf_count": 0})
         text_h = _text_health(summary)
         colpali_h = _colpali_health(
             is_pdf=(doc.title or "").lower().endswith(".pdf"),
@@ -296,11 +283,7 @@ def build_indexing_health_issues(health: dict) -> List[str]:
     enrichment_h = health.get("enrichment") or {}
 
     if text_h.get("status") == "missing":
-        issues.append("Texte : aucun chunk ou aucun embedding — retraitement complet requis.")
-    elif text_h.get("status") == "partial":
-        issues.append(
-            f"Texte : {text_h.get('missing_embeddings', 0)} feuille(s) sans embedding."
-        )
+        issues.append("Texte : aucun chunk indexé — retraitement complet requis.")
 
     status = colpali_h.get("status")
     if status == "desync":

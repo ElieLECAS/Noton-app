@@ -1,4 +1,4 @@
-"""Agrégats lecture seule : chunks, embeddings et KAG — pour UI et réponses stop/skip."""
+"""Agrégats lecture seule : chunks et KAG — pour UI et réponses stop/skip."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from app.config import settings
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 
-ReadinessLabel = Literal["none", "embeddings_only", "ready"]
+ReadinessLabel = Literal["none", "ready"]
 
 
 def _to_int_scalar(value: Any) -> int:
@@ -28,10 +28,10 @@ def _to_int_scalar(value: Any) -> int:
     return int(value or 0)
 
 
-def _readiness_label(chunk_count: int, leaf_chunks_with_embedding: int) -> ReadinessLabel:
+def _readiness_label(chunk_count: int, leaf_chunk_count: int) -> ReadinessLabel:
     if chunk_count == 0:
         return "none"
-    if leaf_chunks_with_embedding == 0:
+    if leaf_chunk_count == 0:
         return "none"
     return "ready"
 
@@ -41,9 +41,6 @@ def build_document_processing_snapshot(
 ) -> dict[str, Any]:
     """Compteurs et libellé de maturité pour un document."""
     doc = session.get(Document, document_id)
-    has_doc_embedding = bool(
-        doc is not None and doc.embedding is not None and len(doc.embedding or []) > 0
-    )
 
     chunk_count = _to_int_scalar(
         session.exec(
@@ -53,25 +50,24 @@ def build_document_processing_snapshot(
         ).one()
     )
 
-    leaves_with_emb = _to_int_scalar(
+    leaf_chunk_count = _to_int_scalar(
         session.exec(
             select(func.count())
             .select_from(DocumentChunk)
             .where(
                 DocumentChunk.document_id == document_id,
-                DocumentChunk.embedding.isnot(None),
+                DocumentChunk.is_leaf == True,  # noqa: E712
             )
         ).one()
     )
 
-    readiness = _readiness_label(chunk_count, leaves_with_emb)
+    readiness = _readiness_label(chunk_count, leaf_chunk_count)
 
     result: dict[str, Any] = {
         "document_id": document_id,
         "has_chunks": chunk_count > 0,
         "chunk_count": chunk_count,
-        "has_document_embedding": has_doc_embedding,
-        "chunks_with_embedding_count": leaves_with_emb,
+        "leaf_chunk_count": leaf_chunk_count,
         "readiness_label": readiness,
         "current_page": doc.phase_status_json.get("current_page") if doc and doc.phase_status_json else None,
         "total_pages": doc.phase_status_json.get("total_pages") if doc and doc.phase_status_json else None,
@@ -86,8 +82,8 @@ def build_document_diagnostic(session: Session, document_id: int) -> dict[str, A
     issues: list[str] = []
     if snap["chunk_count"] == 0:
         issues.append("Aucun chunk indexé.")
-    elif snap["chunks_with_embedding_count"] == 0:
-        issues.append("Chunks présents mais aucun embedding vectoriel sur les feuilles.")
+    elif snap["leaf_chunk_count"] == 0:
+        issues.append("Chunks présents mais aucune feuille sémantique (semantic_leaf).")
     if settings.KAG_ENABLED and snap.get("knowledge_entity_count", 0) == 0 and snap["chunk_count"] > 0:
         issues.append("Aucune entité KAG extraite pour ce document.")
     return {

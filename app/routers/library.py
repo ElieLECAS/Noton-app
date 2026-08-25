@@ -1684,7 +1684,6 @@ def export_library_document(
                 "start_char": c.start_char,
                 "end_char": c.end_char,
                 "metadata_json": c.metadata_json or c.metadata_ or {},
-                "embedding": c.embedding.tolist() if hasattr(c.embedding, "tolist") else c.embedding,
                 "source": c.source
             }
             for c in chunks
@@ -1807,7 +1806,6 @@ def export_all_library_documents(
                         "start_char": c.start_char,
                         "end_char": c.end_char,
                         "metadata_json": c.metadata_json or c.metadata_ or {},
-                        "embedding": c.embedding.tolist() if hasattr(c.embedding, "tolist") else c.embedding,
                         "source": c.source
                     }
                     for c in chunks
@@ -1918,7 +1916,6 @@ async def import_library_document(
                         end_char=chunk_data.get("end_char", 0),
                         metadata_json=chunk_data.get("metadata_json", {}),
                         metadata_=chunk_data.get("metadata_json", {}),
-                        embedding=chunk_data.get("embedding"),
                         source=chunk_data.get("source") or inferred_source
                     )
                     session.add(new_chunk)
@@ -2031,7 +2028,6 @@ async def import_library_document(
                             end_char=chunk_data.get("end_char", 0),
                             metadata_json=chunk_data.get("metadata_json", {}),
                             metadata_=chunk_data.get("metadata_json", {}),
-                            embedding=chunk_data.get("embedding"),
                             source=chunk_data.get("source") or inferred_source
                         )
                         session.add(new_chunk)

@@ -195,11 +195,8 @@ def test_build_question_eval_result_with_kag_delta():
     assert result["kag_enabled"] is True
 
 
-def test_build_question_eval_result_with_pgvector_and_lexical_only():
+def test_build_question_eval_result_with_lexical_only():
     expected = [{"document_title": "Notice Perform 70", "pages": [12, 13]}]
-    pgvector_passages = [
-        {"document_title": "Notice Perform 70", "page_no": 12, "score": 0.88},
-    ]
     lexical_passages = [
         {"document_title": "Notice Perform 70", "page_no": 13, "score": 0.75},
     ]
@@ -213,16 +210,13 @@ def test_build_question_eval_result_with_pgvector_and_lexical_only():
         q_type="mono",
         expected_pages=expected,
         passages=final_passages,
-        pgvector_only_passages=pgvector_passages,
         lexical_only_passages=lexical_passages,
     )
 
-    assert result["metrics_pgvector_only"]["context_recall"] == 0.5
-    assert result["metrics_pgvector_only"]["mrr"] == 1.0
     assert result["metrics_lexical_only"]["context_recall"] == 0.5
     assert result["metrics_lexical_only"]["mrr"] == 1.0
-    assert len(result["analysis_pgvector_only"]["hits"]) == 1
     assert len(result["analysis_lexical_only"]["hits"]) == 1
+    assert "metrics_pgvector_only" not in result
 
 
 def test_rerank_delta_is_post_minus_colpali():

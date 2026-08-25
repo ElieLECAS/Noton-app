@@ -26,8 +26,6 @@ def _unified_hit(
     )
     if source == "colpali":
         hit.colpali_score = score
-    elif source == "pgvector":
-        hit.pgvector_score = score
     elif source == "bm25":
         hit.bm25_score = score
     return hit
@@ -35,29 +33,28 @@ def _unified_hit(
 
 def test_fuse_multimodal_hits_merges_sources():
     colpali = [_unified_hit(1, 2, 0.9, "colpali")]
-    pgvector = [_unified_hit(1, 2, 0.8, "pgvector")]
-    bm25 = [_unified_hit(1, 3, 0.5, "bm25")]
+    bm25 = [_unified_hit(1, 2, 0.8, "bm25"), _unified_hit(1, 3, 0.5, "bm25")]
 
-    fused = fuse_multimodal_hits(colpali, pgvector, bm25, top_k=5)
+    fused = fuse_multimodal_hits(colpali, bm25, top_k=5)
     by_key = {h.page_key: h for h in fused}
 
     assert "1:2" in by_key
-    assert set(by_key["1:2"].retrieval_sources) == {"colpali", "pgvector"}
+    assert set(by_key["1:2"].retrieval_sources) == {"colpali", "bm25"}
     assert "1:3" in by_key
     assert by_key["1:2"].rrf_score > by_key["1:3"].rrf_score
 
 
 def test_fuse_multimodal_hits_colpali_only_filtering():
     colpali = [_unified_hit(1, 5, 0.2, "colpali")]
-    fused = fuse_multimodal_hits(colpali, [], [], top_k=5, min_colpali_score=0.25)
+    fused = fuse_multimodal_hits(colpali, [], top_k=5, min_colpali_score=0.25)
     assert fused == []
 
 
-def test_fuse_multimodal_hits_colpali_weak_with_pgvector_kept():
+def test_fuse_multimodal_hits_colpali_weak_with_bm25_kept():
     colpali = [_unified_hit(1, 5, 0.15, "colpali")]
-    pgvector = [_unified_hit(1, 5, 0.9, "pgvector")]
+    bm25 = [_unified_hit(1, 5, 0.9, "bm25")]
 
-    fused = fuse_multimodal_hits(colpali, pgvector, [], top_k=5, min_colpali_score=0.25)
+    fused = fuse_multimodal_hits(colpali, bm25, top_k=5, min_colpali_score=0.25)
 
     assert len(fused) == 1
     assert fused[0].page_no == 5
@@ -87,7 +84,7 @@ def test_expand_page_context_conditional_neighbor():
     next_chunk.metadata_json = {"page_no": 2, "content_type": "semantic_leaf"}
     next_chunk.metadata_ = None
 
-    hit = _unified_hit(1, 1, 0.9, "pgvector")
+    hit = _unified_hit(1, 1, 0.9, "bm25")
 
     with mock.patch(
         "app.services.page_retrieval_service.load_l1_chunks_for_page",
@@ -104,11 +101,10 @@ def test_expand_page_context_conditional_neighbor():
 
 
 def test_fuse_multimodal_hits_propagates_enrichment_source_pages():
-    pgvector = _unified_hit(1, 3, 0.8, "pgvector")
-    pgvector.enrichment_source_pages = [3, 4, 5]
-    bm25 = _unified_hit(1, 3, 0.5, "bm25")
+    bm25 = _unified_hit(1, 3, 0.8, "bm25")
+    bm25.enrichment_source_pages = [3, 4, 5]
 
-    fused = fuse_multimodal_hits([], [pgvector], [bm25], top_k=5)
+    fused = fuse_multimodal_hits([], [bm25], top_k=5)
     by_key = {h.page_key: h for h in fused}
 
     assert by_key["1:3"].enrichment_source_pages == [3, 4, 5]
@@ -134,7 +130,7 @@ def test_expand_page_context_enrichment_span_unfolds_all_pages():
         5: [_make_chunk(50, 5)],
     }
 
-    hit = _unified_hit(1, 3, 0.9, "pgvector")
+    hit = _unified_hit(1, 3, 0.9, "bm25")
     hit.enrichment_source_pages = [3, 4, 5]
 
     with mock.patch(
@@ -161,8 +157,8 @@ async def test_search_multimodal_passages_pipeline():
         page_no=1,
         rrf_score=0.05,
         final_rank=1,
-        retrieval_sources=["pgvector"],
-        pgvector_score=0.9,
+        retrieval_sources=["bm25"],
+        bm25_score=0.9,
         document_title="Doc1",
     )
 
@@ -170,20 +166,14 @@ async def test_search_multimodal_passages_pipeline():
         "app.services.space_search_service.get_space_by_id",
         return_value=mock.MagicMock(),
     ), mock.patch(
-        "app.services.space_search_service.generate_embedding",
-        return_value=[0.1] * 1024,
-    ), mock.patch(
         "app.services.page_retrieval_service.get_space_document_ids",
         return_value=[123],
     ), mock.patch(
         "app.services.page_retrieval_service.retrieve_colpali_pages",
         return_value=[],
     ), mock.patch(
-        "app.services.page_retrieval_service.retrieve_pgvector_pages",
-        return_value=[fused_hit],
-    ), mock.patch(
         "app.services.page_retrieval_service.retrieve_bm25_pages",
-        return_value=[],
+        return_value=[fused_hit],
     ), mock.patch(
         "app.services.page_retrieval_service.expand_page_context",
         side_effect=lambda _s, hits, **kwargs: hits,
@@ -200,7 +190,7 @@ async def test_search_multimodal_passages_pipeline():
                     "page_no": 1,
                     "page_start": 1,
                     "page_end": 1,
-                    "retrieval_sources": ["pgvector"],
+                    "retrieval_sources": ["bm25"],
                     "needs_page_image": False,
                     "image_pages": [],
                     "content_type": "multimodal_page_passage",
@@ -291,11 +281,11 @@ def test_log_multimodal_retrieval_summary():
     hit = UnifiedPageHit(
         document_id=383,
         page_no=12,
-        pgvector_score=0.92,
+        bm25_score=0.92,
         colpali_score=0.67,
         rrf_score=0.032,
         final_rank=1,
-        retrieval_sources=["pgvector", "colpali"],
+        retrieval_sources=["bm25", "colpali"],
         document_title="Notice ROTO",
     )
     bm25_hit = UnifiedPageHit(
@@ -310,7 +300,6 @@ def test_log_multimodal_retrieval_summary():
             query_text="test query",
             doc_ids=[383, 384],
             colpali_hits=[hit],
-            pgvector_hits=[hit],
             bm25_hits=[bm25_hit],
             fused_hits=[hit, bm25_hit],
             final_hits=[hit],
@@ -322,6 +311,7 @@ def test_log_multimodal_retrieval_summary():
 
     logged = "\n".join(str(c.args[0]) for c in mock_info.call_args_list if c.args)
     assert "RAG MULTIMODAL — RÉSUMÉ" in logged
-    assert "Triple retriever (ColPali + pgvector + BM25)" in logged
+    assert "Double retriever (ColPali + BM25)" in logged
     assert "doc=383 p.12" in logged
     assert "KAG" not in logged
+    assert "pgvector" not in logged.lower()
