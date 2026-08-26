@@ -18,11 +18,13 @@ métier en s'appuyant sur un pipeline RAG multimodal (texte **et** visuel).
 
 ## Pipeline de retrieval (chemin chat espace)
 
-1. **Query understanding** (`QUERY_UNDERSTANDING_ENABLED`) : un appel LLM fusionné produit
-   la route, la question autonome, les `signals` (catégories inférées, source, matériau,
-   intent), le `topic_shift` et l'ancrage conversationnel.
-2. **4 retrievers en parallèle** : ColPali (visuel, *gated*), pgvector (dense), BM25 (lexical),
-   KAG (graphe d'entités).
+1. **Query understanding** (`QUERY_UNDERSTANDING_ENABLED`) : un appel LLM fusionné — le seul
+   avant le retrieval — produit la route, la question autonome, les `signals` (catégories
+   inférées, source, matériau, intent), le `topic_shift` et l'ancrage conversationnel. Les
+   requêtes retriever (`colpali` / `lexical`) sont ensuite construites sans LLM.
+2. **2 retrievers en parallèle** : ColPali (visuel, *gated*) et BM25 (lexical, tsvector).
+   La voie dense texte (pgvector) a été retirée le 2026-08-25 — elle lisait la même évidence
+   que BM25 et votait deux fois au RRF ; le canal KAG l'avait été le 2026-07-28.
 3. **Fusion RRF** puis **boost catégorie** (multiplicatif sur `rrf_score`) et **ancrage**
    conversationnel (continuité du sujet entre tours).
 4. **Rerank MiniLM** cross-encoder (`RERANKER_ENABLED`).

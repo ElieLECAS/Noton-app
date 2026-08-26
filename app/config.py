@@ -348,6 +348,11 @@ class Settings(BaseSettings):
     COLPALI_BM25_WEAK_THRESHOLD: float = float(os.getenv("COLPALI_BM25_WEAK_THRESHOLD", "0.25"))
 
     BM25_MAX_QUERY_TERMS: int = 15
+    # Plafond du nombre de lexèmes d'un OR de repli APRÈS expansion par le thésaurus
+    # métier (app/services/bm25_thesaurus.py). Porte sur le TOTAL, pas sur les termes
+    # d'entrée : 6 termes × 4 synonymes font un OR de 24 lexèmes où la précision
+    # s'effondre — et le reranker étant éteint, rien en aval ne rattrape un pool pollué.
+    BM25_EXPANSION_MAX_TERMS: int = int(os.getenv("BM25_EXPANSION_MAX_TERMS", "20"))
 
     # Retrieval hybride (ColPali + BM25)
     RETRIEVAL_EXPAND_ENABLED: bool = os.getenv("RETRIEVAL_EXPAND_ENABLED", "true").strip().lower() in (
@@ -370,46 +375,19 @@ class Settings(BaseSettings):
     RETRIEVAL_PARALLEL_ENABLED: bool = os.getenv("RETRIEVAL_PARALLEL_ENABLED", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    # Query understanding (phase intention) — chaque étape = 1 appel LLM séquentiel.
-    # On peut couper les étapes optionnelles pour réduire la latence avant retrieval.
-    # Multi-query (groupes) : OFF par défaut (étape récente la plus coûteuse, retourne
-    # « single » dans la grande majorité des cas).
-    QUERY_MULTI_GROUP_ENABLED: bool = os.getenv("QUERY_MULTI_GROUP_ENABLED", "false").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # Évaluation de vagueness PRÉ-retrieval (bloque toute recherche documentaire si le LLM
-    # juge la demande "trop vague", sur la base du seul message — sans avoir vu un document).
-    # OFF par défaut : ce garde-fou se déclenchait sur des questions techniques légitimes
-    # mais courtes/à sigles métier (ex. "comment transformer un OF en OB ?") et empêchait
-    # tout retrieval. La clarification pertinente est désormais portée par la politique de
-    # réponse du prompt système (SPACE_CHAT_SYSTEM_PROMPT, §2) : elle intervient APRÈS
-    # retrieval, informée par les documents réellement trouvés — plus fiable qu'une
-    # estimation à l'aveugle avant recherche. Remettre à true rétablit le blocage pré-retrieval.
-    QUERY_VAGUENESS_CHECK_ENABLED: bool = os.getenv("QUERY_VAGUENESS_CHECK_ENABLED", "false").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # Reformulation history-aware du message de suivi en question autonome avant retrieval : ON par défaut.
-    QUERY_CONDENSE_ENABLED: bool = os.getenv("QUERY_CONDENSE_ENABLED", "true").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # Compréhension FUSIONNÉE : route + signaux + condense + vagueness + détection de
-    # changement de sujet (topic_shift) en UN seul appel LLM, au lieu de 4-5 appels
-    # séquentiels. Divise la latence pré-retrieval. Repli sûr : mettre à false rebascule
-    # sur le graphe multi-nœuds historique (mêmes prompts, comportement inchangé).
-    QUERY_FUSED_UNDERSTANDING_ENABLED: bool = os.getenv("QUERY_FUSED_UNDERSTANDING_ENABLED", "true").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # Génération des requêtes retriever (colpali/semantic/lexical) par un appel LLM dédié
-    # APRÈS la compréhension. OFF par défaut : en mode fusionné, la question autonome +
-    # les entités/références extraites suffisent à construire les 3 requêtes de façon
-    # DÉTERMINISTE (0 appel LLM) → on tombe à UN SEUL appel LLM avant le retrieval. Mettre
-    # à true rebranche la génération LLM par groupe (utile surtout avec le multi-groupe).
-    QUERY_GENERATE_QUERIES_LLM: bool = os.getenv("QUERY_GENERATE_QUERIES_LLM", "false").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # Budget temps (secondes) d'un appel LLM de COMPRÉHENSION de requête (fused, condense,
-    # signaux…). Dépassé → on abandonne l'appel et on retombe sur les valeurs de repli
-    # (jamais de blocage indéfini avant le retrieval). 0 = pas de plafond applicatif.
+    # Query understanding : UN appel LLM fusionné (route + signaux + question autonome +
+    # topic_shift), puis construction déterministe des requêtes retriever (0 appel LLM).
+    #
+    # Les variantes qui se pilotaient ici ont été supprimées le 2026-08-26 : graphe
+    # multi-nœuds historique, génération LLM des requêtes, planification multi-groupe et
+    # contrôle de vagueness pré-retrieval. Toutes étaient inatteignables en configuration
+    # par défaut. La clarification pertinente est portée par la politique de réponse du
+    # prompt système (SPACE_CHAT_SYSTEM_PROMPT, §2) : elle intervient APRÈS retrieval,
+    # informée par les documents réellement trouvés.
+    #
+    # Budget temps (secondes) d'un appel LLM de COMPRÉHENSION de requête. Dépassé → on
+    # abandonne l'appel et on retombe sur les valeurs de repli (jamais de blocage indéfini
+    # avant le retrieval). 0 = pas de plafond applicatif.
     QUERY_UNDERSTANDING_TIMEOUT_S: float = float(os.getenv("QUERY_UNDERSTANDING_TIMEOUT_S", "25"))
     # Budget temps (secondes) du RETRIEVAL complet (4 canaux + fusion + rerank). Dépassé →
     # dégradation gracieuse (0 passage, statut degraded_timeout) au lieu d'un blocage
@@ -471,6 +449,28 @@ class Settings(BaseSettings):
     # Images PNG jointes à la génération en mode CAG : UNIQUEMENT des pages réellement
     # packées dans le contexte (alignement texte/visuel), plafonnées à ce nombre.
     CAG_MAX_IMAGES: int = int(os.getenv("CAG_MAX_IMAGES", "8"))
+    # DPI de rendu des pages envoyées au modèle de génération. Était codé en dur à 150,
+    # alors que l'extraction lit les mêmes pages à PAGE_EXTRACTION_DPI (300) : le modèle
+    # qui doit RÉPONDRE voyait donc la page moins bien que celui qui l'a transcrite.
+    # Monter ce DPI est le levier n°1 pour lire une cote sur une planche.
+    CAG_IMAGE_DPI: int = int(os.getenv("CAG_IMAGE_DPI", "150"))
+    # --- EXPÉRIMENTATION (temporaire, 2026-08-26) : génération 100 % PNG ---
+    # Retire le TEXTE des documents du contexte : le modèle ne reçoit qu'un manifeste
+    # (quel document, quelles pages) + les pages en images. Objectif : mesurer ce que
+    # vaut la génération quand on ne lui donne que la « vraie » page, sans le texte
+    # extrait qui, sur les planches CAO, est un sac de nombres désancré.
+    #
+    # ⚠ Pour que la comparaison soit honnête, le budget libéré par le texte doit partir
+    # dans les images : monter CAG_MAX_IMAGES et CAG_IMAGE_DPI en même temps, sinon on
+    # mesure « 8 images floues seules », pas « l'image contre le texte ».
+    #
+    # ⚠ Désactive aussi la vérification d'ancrage : elle compare la réponse au TEXTE du
+    # contexte et déclarerait inventée toute référence lue sur une image. Ce mode tourne
+    # donc SANS filet — acceptable pour un test, pas pour la production.
+    # À SUPPRIMER une fois la décision prise (pas de flag permanent).
+    CAG_IMAGE_ONLY: bool = os.getenv("CAG_IMAGE_ONLY", "false").strip().lower() in (
+        "true", "1", "yes", "on"
+    )
     # Budget de packing PAR INTENT (tokens + max documents) : une question de spécification
     # ponctuelle ne paie pas le prefill d'un diagnostic SAV. JSON optionnel via env
     # CAG_BUDGET_BY_INTENT ({"installation": {"budget": 60000, "max_documents": 6}, ...}) ;

@@ -25,6 +25,10 @@ CONTENT_TYPE_SEMANTIC_LEAF = "semantic_leaf"
 CONTENT_TYPE_PAGE_ANCHOR = "page_anchor"
 CONTENT_TYPE_CONTEXTUAL_ENRICHMENT = "contextual_enrichment"
 
+# Article élidé en tête de token (« l'ouvrant », « d'étanchéité ») : retiré avant
+# construction du tsquery, cf. _extract_bm25_fallback_query.
+_ELISION_RE = re.compile(r"^(?:[ldnsjmtc]|qu)['’]", re.IGNORECASE)
+
 _BM25_STOPWORDS = {
     "pour", "dans", "avec", "une", "des", "les", "est", "sur", "pas", "plus", "que",
     "qui", "quoi", "comment", "quel", "quelle", "quels", "quelles", "par", "sans",
@@ -62,10 +66,6 @@ class UnifiedPageHit:
     # Pages sources d'un chunk d'enrichissement contextuel ayant matché cette page
     # (déplié à l'expansion pour retourner tout le batch 1/2/3 pages).
     enrichment_source_pages: List[int] = field(default_factory=list)
-
-    # Groupe de requêtes source (multi-query) — index et label du groupe ayant produit ce hit.
-    query_group_index: int = 0
-    query_group_label: str = ""
 
     @property
     def page_key(self) -> str:
@@ -203,10 +203,16 @@ def _normalize_bm25_query(query: str) -> str:
     return " ".join(normalized.split())
 
 
-def _extract_bm25_fallback_query(query: str, max_terms: int = 6) -> str:
+def _extract_bm25_fallback_query(
+    query: str, max_terms: int = 6, *, expand: bool = False
+) -> str:
     """
     Extrait les termes discriminants (marques, références, mots techniques).
     Retourne une chaîne « term1 OR term2 OR … » pour websearch_to_tsquery.
+
+    ``expand`` étend les termes métier via le thésaurus (ouvrant→vantail, poignée→béquille).
+    Réservé aux paliers de REPLI : sur le palier AND strict, une requête qui matche est
+    fiable et ne doit pas être diluée.
     """
     normalized = _normalize_bm25_query(query)
     ref_tokens: List[str] = []
@@ -227,8 +233,12 @@ def _extract_bm25_fallback_query(query: str, max_terms: int = 6) -> str:
             seen.add(key)
             ref_tokens.append(token)
 
-    # Mots techniques français (ressort, tension, clé…)
+    # Mots techniques français (ressort, tension, clé…). L'article élidé est retiré :
+    # « l'ouvrant » nettoyé en « louvrant » par _build_bm25_or_tsquery ne correspond à
+    # AUCUN lexème du dictionnaire french — le palier de dernier recours perdait
+    # silencieusement tous les mots élidés, très fréquents en français métier.
     for word in re.findall(r"[\w'-]{4,}", normalized, flags=re.UNICODE):
+        word = _ELISION_RE.sub("", word, count=1)
         key = word.lower().strip("'")
         if key in _BM25_STOPWORDS or key in seen or len(key) < 4:
             continue
@@ -240,11 +250,39 @@ def _extract_bm25_fallback_query(query: str, max_terms: int = 6) -> str:
         return ""
 
     top = tokens[:max_terms]
+    if expand:
+        top = _expand_bm25_terms(top)
     return " OR ".join(top)
 
 
-def _build_bm25_or_tsquery(terms: List[str]) -> str:
-    """Construit un tsquery OR sûr pour to_tsquery."""
+def _expand_bm25_terms(terms: List[str]) -> List[str]:
+    """Étend les termes métier via le thésaurus, en journalisant ce qui a été ajouté.
+
+    Sans cette trace, impossible de distinguer « le thésaurus a sauvé la requête » de
+    « le thésaurus a noyé le pool » en lisant les logs.
+    """
+    from app.services.bm25_thesaurus import expand_terms
+
+    expanded = expand_terms(terms, max_total=settings.BM25_EXPANSION_MAX_TERMS)
+    added = [t for t in expanded if t not in terms]
+    if added:
+        logger.info(
+            "[BM25 thésaurus] %d terme(s) ajouté(s) : %s (total=%d)",
+            len(added),
+            added,
+            len(expanded),
+        )
+    return expanded
+
+
+def _build_bm25_or_tsquery(terms: List[str], *, expand: bool = False) -> str:
+    """Construit un tsquery OR sûr pour to_tsquery.
+
+    ``expand`` : dernier palier de repli — la requête stricte ET le OR-websearch ont déjà
+    rendu zéro, on élargit donc au vocabulaire métier équivalent.
+    """
+    if expand:
+        terms = _expand_bm25_terms(terms)
     safe: List[str] = []
     for term in terms:
         cleaned = re.sub(r"[^\w\-]", "", term, flags=re.UNICODE)
@@ -757,8 +795,12 @@ def retrieve_bm25_pages(
             session, doc_ids, normalized_query, limit
         )
 
+        # Paliers de REPLI. Le AND strict ci-dessus n'est jamais étendu : s'il matche,
+        # il est fiable. À partir d'ici il a rendu zéro — c'est précisément le cas où le
+        # vocabulaire de la question ne colle pas à celui des notices, donc où le
+        # thésaurus métier a sa place (ouvrant→vantail, poignée→béquille).
         if not rows:
-            or_websearch = _extract_bm25_fallback_query(query_text)
+            or_websearch = _extract_bm25_fallback_query(query_text, expand=True)
             if or_websearch:
                 rows = _run_bm25_websearch_or_pages_query(session, doc_ids, or_websearch, limit)
                 if rows:
@@ -772,7 +814,7 @@ def retrieve_bm25_pages(
 
         if not rows:
             terms = [t.strip() for t in _extract_bm25_fallback_query(query_text).replace(" OR ", "|").split("|") if t.strip()]
-            or_tsquery = _build_bm25_or_tsquery(terms)
+            or_tsquery = _build_bm25_or_tsquery(terms, expand=True)
             if or_tsquery:
                 rows = _run_bm25_or_pages_query(session, doc_ids, or_tsquery, limit)
                 if rows:
@@ -986,77 +1028,6 @@ def select_final_hits(
     for rank, hit in enumerate(final, start=1):
         hit.final_rank = rank
     return final, protected
-
-
-def fuse_multi_query_groups(
-    per_group_hits: List[List[UnifiedPageHit]],
-    *,
-    pool_size: int = 30,
-    min_quota_per_group: int = 3,
-) -> List[UnifiedPageHit]:
-    """Fusion cross-groupes avec quota garanti par groupe.
-
-    Garantit que chaque groupe contribue au minimum `min_quota_per_group` hits
-    indépendamment de leurs scores absolus — les pages de la requête 2 ne sont
-    jamais écrasées par les 20 meilleurs hits de la requête 1.
-    Les pages présentes dans plusieurs groupes reçoivent un bonus de multi-pertinence.
-    """
-    if not per_group_hits:
-        return []
-    if len(per_group_hits) == 1:
-        return per_group_hits[0][:pool_size]
-
-    n_groups = len(per_group_hits)
-    quota = max(min_quota_per_group, pool_size // n_groups)
-
-    # Normalise rrf_score dans [0,1] par groupe
-    group_norm: List[List[Tuple[UnifiedPageHit, float]]] = []
-    for hits in per_group_hits:
-        if not hits:
-            group_norm.append([])
-            continue
-        max_score = max((h.rrf_score for h in hits), default=1.0) or 1.0
-        group_norm.append([(h, h.rrf_score / max_score) for h in hits])
-
-    # pool[page_key] = (hit, best_norm_score, count_groups)
-    pool: Dict[str, Tuple[UnifiedPageHit, float, int]] = {}
-
-    # Phase 1 : quota garanti par groupe
-    for norm_hits in group_norm:
-        for hit, ns in norm_hits[:quota]:
-            key = hit.page_key
-            if key not in pool:
-                pool[key] = (hit, ns, 1)
-            else:
-                old_hit, old_ns, cnt = pool[key]
-                best_hit = hit if ns > old_ns else old_hit
-                pool[key] = (best_hit, max(old_ns, ns), cnt + 1)
-
-    # Phase 2 : remplissage jusqu'à pool_size avec les meilleurs restants
-    if len(pool) < pool_size:
-        remaining: List[Tuple[UnifiedPageHit, float]] = []
-        for norm_hits in group_norm:
-            for hit, ns in norm_hits[quota:]:
-                if hit.page_key not in pool:
-                    remaining.append((hit, ns))
-        remaining.sort(key=lambda x: x[1], reverse=True)
-        for hit, ns in remaining:
-            if len(pool) >= pool_size:
-                break
-            key = hit.page_key
-            if key not in pool:
-                pool[key] = (hit, ns, 1)
-
-    # Phase 3 : tri final — bonus de 0.1 par groupe supplémentaire
-    def _combined(entry: Tuple[UnifiedPageHit, float, int]) -> float:
-        _, ns, cnt = entry
-        return ns + (cnt - 1) * 0.1
-
-    sorted_entries = sorted(pool.values(), key=_combined, reverse=True)
-    result = [hit for hit, _, _ in sorted_entries[:pool_size]]
-    for rank, hit in enumerate(result, start=1):
-        hit.final_rank = rank
-    return result
 
 
 def _apply_enrichment_span_expansion(session: Session, hit: UnifiedPageHit) -> None:

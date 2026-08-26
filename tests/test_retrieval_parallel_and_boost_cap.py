@@ -30,11 +30,11 @@ async def test_run_retrievers_parallel_matches_sequential(db_session):
     with patches[0], patches[1], patches[2]:
         with mock.patch("app.config.settings.RETRIEVAL_PARALLEL_ENABLED", True):
             par = await sss._run_retrievers(
-                db_session, 1, [1, 2], "cq", "sq", "lq", 10
+                db_session, 1, [1, 2], "cq", "lq", 10
             )
         with mock.patch("app.config.settings.RETRIEVAL_PARALLEL_ENABLED", False):
             seq = await sss._run_retrievers(
-                db_session, 1, [1, 2], "cq", "sq", "lq", 10
+                db_session, 1, [1, 2], "cq", "lq", 10
             )
 
     assert par == (["colpali"], ["bm25"])
@@ -49,7 +49,7 @@ async def test_run_retrievers_respecte_le_gate_colpali(db_session):
         "app.config.settings.RETRIEVAL_PARALLEL_ENABLED", True
     ):
         result = await sss._run_retrievers(
-            db_session, 1, [1], "cq", "sq", "lq", 10, use_colpali=False
+            db_session, 1, [1], "cq", "lq", 10, use_colpali=False
         )
 
     assert result == ([], ["bm25"])

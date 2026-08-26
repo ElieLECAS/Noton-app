@@ -86,7 +86,11 @@ async def test_chat_stream_wrapper_passes_max_tokens_default():
 
 @pytest.mark.asyncio
 async def test_chat_stream_wrapper_reasoning_bumps_tokens():
-    """Reasoning high : le plancher de tokens est relevé (le thinking consomme le budget)."""
+    """Reasoning high : le plancher de tokens est relevé (le thinking consomme le budget).
+
+    Uniquement pour un modèle qui SÉPARE sa réflexion du texte (ici small) — cf. le test
+    suivant pour les autres.
+    """
     captured: dict = {}
 
     async def fake_mistral(**kwargs):
@@ -103,12 +107,41 @@ async def test_chat_stream_wrapper_reasoning_bumps_tokens():
         _ = [
             c
             async for c in chat_module.chat_stream_wrapper(
-                "", "mistral-large-latest", [{"role": "system", "content": "x"}]
+                "", "mistral-small-latest", [{"role": "system", "content": "x"}]
             )
         ]
 
     assert captured["max_tokens"] == 8192
     assert captured.get("reasoning_effort") == "high"
+
+
+@pytest.mark.asyncio
+async def test_chat_stream_wrapper_no_reasoning_for_models_that_leak_it():
+    """Un modèle qui ne sépare pas sa réflexion ne doit PAS recevoir reasoning_effort :
+    son monologue interne finirait affiché dans la réponse (mistral-medium, 2026-08-26)."""
+    captured: dict = {}
+
+    async def fake_mistral(**kwargs):
+        captured.update(kwargs)
+        yield "x"
+
+    with mock.patch("app.config.settings.LLM_PROVIDER", "mistral"), mock.patch(
+        "app.config.settings.SPACE_CHAT_MAX_TOKENS", 2048
+    ), mock.patch(
+        "app.config.settings.GENERATION_REASONING_EFFORT", "high"
+    ), mock.patch(
+        "app.config.settings.GENERATION_REASONING_MAX_TOKENS", 8192
+    ), mock.patch.object(chat_module, "mistral_chat_stream", new=fake_mistral):
+        _ = [
+            c
+            async for c in chat_module.chat_stream_wrapper(
+                "", "mistral-medium-latest", [{"role": "system", "content": "x"}]
+            )
+        ]
+
+    assert "reasoning_effort" not in captured
+    # Le plancher de tokens n'est pas relevé non plus : pas de thinking à financer.
+    assert captured["max_tokens"] == 2048
 
 
 @pytest.mark.asyncio

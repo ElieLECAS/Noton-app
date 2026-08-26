@@ -24,22 +24,61 @@ DEFAULT_RAG_PAGE_IMAGE_DPI = 150
 DEFAULT_RAG_MAX_PAGE_IMAGES = settings.RAG_MAX_IMAGES
 
 
+# Modèles Mistral SANS vision : anciens modèles texte uniquement. Toute la ligne
+# actuelle (small 3+, medium 3, large, pixtral) est multimodale.
+_TEXT_ONLY_MODEL_MARKERS = (
+    "open-mistral",
+    "open-mixtral",
+    "mistral-tiny",
+    "mistral-embed",
+    "codestral",
+)
+
+
 def is_vision_model(model_name: str) -> bool:
     """Indique si le modèle accepte des images en entrée.
 
-    "small" ajouté 2026-07-20 : mistral-small-latest (Small 4) est multimodal ;
-    son absence ici coupait silencieusement les PNG de pages à la génération
-    dès qu'on basculait MODEL_FAST sur small.
+    Logique INVERSÉE le 2026-08-26 (liste noire au lieu de liste blanche). L'ancienne
+    liste blanche a raté deux fois le même piège :
+      * 2026-07-20 : "small" absent → PNG coupés en silence après bascule sur small ;
+      * 2026-08-26 : "medium" absent → medium a répondu SANS AUCUNE image, et en mode
+        image-only sans texte non plus : il a inventé une liste de couleurs entière.
+    Une liste blanche pourrit à chaque nouveau modèle et échoue SILENCIEUSEMENT, dans le
+    sens le plus dangereux. Une liste noire échoue en 400 visible — bruyant, donc réparable.
     """
     name_lower = (model_name or "").lower()
+    if not name_lower:
+        return False
+    if any(marker in name_lower for marker in _TEXT_ONLY_MODEL_MARKERS):
+        return False
     return (
-        "pixtral" in name_lower
-        or "vision" in name_lower
-        or "large-latest" in name_lower
+        "mistral" in name_lower
+        or "pixtral" in name_lower
         or "ministral" in name_lower
-        or "small" in name_lower
+        or "vision" in name_lower
         or "gpt-4o" in name_lower
     )
+
+
+# Modèles dont la réflexion revient en chunks STRUCTURÉS (`delta.content` = liste de
+# parties typées thinking/text), donc séparables du texte de réponse par le stream.
+_STRUCTURED_REASONING_MARKERS = ("magistral", "small")
+
+
+def supports_structured_reasoning(model_name: str) -> bool:
+    """Le modèle sépare-t-il sa réflexion du texte de réponse ?
+
+    Demander `reasoning_effort` à un modèle qui ne le fait PAS met sa réflexion DANS la
+    réponse, visible par l'utilisateur — constaté le 2026-08-26 avec mistral-medium, de
+    façon intermittente (réponses courtes propres, réponses analytiques polluées). Le
+    stream ne peut pas rattraper ça : le texte final arrive collé au monologue, sans
+    séparateur exploitable. On coupe donc la demande à la source.
+
+    Contrairement à `is_vision_model`, une liste blanche est ici acceptable : l'erreur se
+    voit immédiatement (raisonnement absent des logs), elle n'est pas silencieuse.
+    """
+    name_lower = (model_name or "").lower()
+    return any(marker in name_lower for marker in _STRUCTURED_REASONING_MARKERS)
 
 
 def _is_colpali_placeholder(content: str) -> bool:

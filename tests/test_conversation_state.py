@@ -187,22 +187,14 @@ async def test_run_fused_merges_focus_entities_across_turns(db_session):
         "topic_shift": False,
         "standalone_question": "seuil 9F68 du dormant 6101",
         "current_topic": "dormant 6101 — seuil",
-        "too_vague": False,
         "entities": [{"text": "9F68"}],
         "detected_references": ["9F68"],
         "confidence": 0.9,
     }
-    queries_payload = {"colpali": "x", "semantic": "y", "lexical": "z", "reasoning": "t"}
 
-    async def side_effect(*args, **kwargs):
-        context = kwargs.get("context") or []
-        system = context[0].get("content", "") if context else ""
-        if "topic_shift" in system:
-            return _fake_chat(understand_payload)
-        return _fake_chat(queries_payload)
-
-    with mock.patch("app.config.settings.QUERY_FUSED_UNDERSTANDING_ENABLED", True), mock.patch.object(
-        lqu, "chat", new=mock.AsyncMock(side_effect=side_effect)
+    # Un seul appel LLM depuis le nettoyage du 2026-08-26 : plus d'aiguillage à faire.
+    with mock.patch.object(
+        lqu, "chat", new=mock.AsyncMock(return_value=_fake_chat(understand_payload))
     ):
         result = await lqu.run_lightweight_understanding(
             user_message="et son seuil ?",

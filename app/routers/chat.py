@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Literal
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse, FileResponse
@@ -42,13 +43,26 @@ async def chat_stream_wrapper(
     # procédurales longues (SPACE_CHAT_MAX_TOKENS arrive souvent à None via un env vide).
     tokens = max_tokens if max_tokens is not None else (settings.SPACE_CHAT_MAX_TOKENS or 2048)
 
-    # Reasoning natif (mistral-small) : bascule high/none via GENERATION_REASONING_EFFORT.
-    # En "high", le modèle produit un ThinkChunk (masqué du stream par mistral_chat_stream)
-    # avant la réponse ; on relève le plancher de tokens car le thinking consomme le budget.
+    # Reasoning natif : bascule high/none via GENERATION_REASONING_EFFORT. En "high", le
+    # modèle produit un ThinkChunk (masqué du stream par mistral_chat_stream) avant la
+    # réponse ; on relève le plancher de tokens car le thinking consomme le budget.
+    #
+    # UNIQUEMENT pour les modèles qui séparent leur réflexion du texte : la demander à un
+    # modèle qui ne le fait pas la fait atterrir DANS la réponse, sous les yeux de
+    # l'utilisateur (mistral-medium, 2026-08-26).
+    from app.services.rag_generation_service import supports_structured_reasoning
+
     reasoning_kwargs = {}
     if settings.GENERATION_REASONING_EFFORT == "high":
-        reasoning_kwargs["reasoning_effort"] = "high"
-        tokens = max(tokens, settings.GENERATION_REASONING_MAX_TOKENS)
+        if supports_structured_reasoning(model):
+            reasoning_kwargs["reasoning_effort"] = "high"
+            tokens = max(tokens, settings.GENERATION_REASONING_MAX_TOKENS)
+        else:
+            logger.info(
+                "[génération] reasoning non demandé : %s ne sépare pas sa réflexion du "
+                "texte de réponse (elle finirait affichée à l'utilisateur).",
+                model,
+            )
 
     if settings.LLM_PROVIDER == "ollama":
         from app.services.ollama_service import chat_stream as ollama_chat_stream
@@ -815,21 +829,51 @@ def _build_eco_context(
 ) -> List[dict]:
     """Contexte de SECOURS minimal après un Mistral 400 (P0.2) : CAG re-packé à un petit
     budget (sans images ni historique) + question. Cible la cause probable (contexte trop
-    volumineux) au lieu de rejouer le contexte massif à l'identique."""
+    volumineux) au lieu de rejouer le contexte massif à l'identique.
+
+    Ce repli abandonne les images. En mode CAG_IMAGE_ONLY il faut donc RÉTABLIR le texte :
+    sinon il ne reste qu'un manifeste, le modèle répond sans aucun document — et invente
+    avec assurance (constaté le 2026-08-26 : réponse plausible mais entièrement fausse).
+    """
     if settings.CAG_ENABLED and doc_passages:
         from app.services.context_packer_service import build_cag_context
 
-        eco_system = build_cag_context(
-            session,
-            doc_passages,
-            system_prompt=SPACE_CHAT_SYSTEM_PROMPT,
-            token_budget=settings.CAG_ECO_TOKEN_BUDGET,
-            max_documents=settings.CAG_ECO_MAX_DOCUMENTS,
-            anchor_document_ids=anchor_document_ids,
-        )
+        with _forced_text_context_if_image_only():
+            eco_system = build_cag_context(
+                session,
+                doc_passages,
+                system_prompt=SPACE_CHAT_SYSTEM_PROMPT,
+                token_budget=settings.CAG_ECO_TOKEN_BUDGET,
+                max_documents=settings.CAG_ECO_MAX_DOCUMENTS,
+                anchor_document_ids=anchor_document_ids,
+            )
     else:
         eco_system = {"role": "system", "content": SPACE_CHAT_SYSTEM_PROMPT}
     return [eco_system, {"role": "user", "content": user_message}]
+
+
+@contextmanager
+def _forced_text_context_if_image_only(reason: str = "repli sans images"):
+    """Rétablit temporairement le texte documentaire quand CAG_IMAGE_ONLY est actif.
+
+    Le mode image-only n'est tenable que si des images partent RÉELLEMENT. Dès qu'elles
+    sautent — repli de secours, modèle non multimodal — il ne reste qu'un manifeste : le
+    modèle répond alors sans aucun document, et invente avec assurance (constaté le
+    2026-08-26 avec mistral-medium, absent de la liste des modèles vision).
+    """
+    if not settings.CAG_IMAGE_ONLY:
+        yield
+        return
+    logger.warning(
+        "[CAG] CAG_IMAGE_ONLY actif mais %s — le texte documentaire est RÉTABLI pour ne "
+        "pas répondre sur un contexte vide.",
+        reason,
+    )
+    settings.CAG_IMAGE_ONLY = False
+    try:
+        yield
+    finally:
+        settings.CAG_IMAGE_ONLY = True
 
 
 async def _attempt_repair_generation(
@@ -1012,7 +1056,6 @@ def _build_generation_trace(
         "topic_shift": (bool(lw_result.topic_shift) if lw_result else None),
         "standalone_question": qc.get("standalone_question"),
         "current_topic": qc.get("current_topic") or qc.get("llm_current_topic"),
-        "query_strategy": (lw_result.query_strategy if lw_result else None),
         "signals": (signals.model_dump() if signals else None),
         "reasoning": (reasoning_text or None),
         "reasoning_effort": settings.GENERATION_REASONING_EFFORT,
@@ -1200,7 +1243,6 @@ async def stream_space_chat_message(
     #   - format fiche → règle FORMAT ADAPTATIF du prompt (décidée par le reasoning).
 
     retrieval_queries = None
-    retrieval_query_groups = None
     rag_user_message = request.message
     # Texte utilisé pour la RECHERCHE documentaire (peut différer du message de
     # génération : reformulation history-aware en question autonome).
@@ -1460,52 +1502,10 @@ async def stream_space_chat_message(
 
         return StreamingResponse(generate_direct(), media_type="text/event-stream")
 
-    if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and not lw_result.ready_for_retrieval:
-        clarification = lw_result.clarification
-        if clarification:
-            logger.info(
-                "[chat] Clarification — phase=%s vague=%s (pas de RAG)",
-                clarification.phase,
-                clarification.phase == "awaiting_vague_clarification",
-            )
-
-            clarification_trace = _build_generation_trace(
-                route="clarification",
-                lw_result=lw_result,
-            )
-
-            async def generate_clarification():
-                question = clarification.question
-                yield f"data: {json.dumps({'message': {'content': question}})}\n\n"
-
-                assistant_message_id = None
-                if request.conversation_id:
-                    try:
-                        assistant_message_id = _persist_assistant_reply(
-                            request.conversation_id,
-                            question,
-                            forced_model,
-                            forced_provider,
-                            None,
-                            metadata_json={
-                                "clarification_type": "vague_request",
-                                "trace": clarification_trace,
-                            },
-                        )
-                    except Exception:
-                        logger.exception("Erreur sauvegarde clarification assistant (space chat)")
-
-                yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': clarification_trace})}\n\n"
-
-            return StreamingResponse(generate_clarification(), media_type="text/event-stream")
-
     if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.ready_for_retrieval:
         retrieval_queries = lw_result.retrieval_queries
-        retrieval_query_groups = lw_result.query_groups if len(lw_result.query_groups) > 1 else None
         rag_user_message = (
-            lw_result.query_context.get("enriched_user_message")
-            or lw_result.query_context.get("original_user_message")
-            or request.message
+            lw_result.query_context.get("original_user_message") or request.message
         )
         # Recherche documentaire : privilégie la question autonome reformulée
         # (résout les messages de suivi type "et le tgy3834 ?"), sinon fallback.
@@ -1513,12 +1513,6 @@ async def stream_space_chat_message(
             lw_result.query_context.get("standalone_question")
             or rag_user_message
         )
-        if retrieval_query_groups:
-            logger.info(
-                "[chat] Multi-query strategy=%s groups=%s",
-                lw_result.query_strategy,
-                [g.label for g in retrieval_query_groups],
-            )
 
     # ——— Périmètre de recherche confirmé (human-in-the-loop) ———
     # Décide QUOI/OÙ chercher AVANT le retrieval. Gardé par SCOPE_CONFIRMATION_ENABLED +
@@ -1639,7 +1633,6 @@ async def stream_space_chat_message(
             anchors=_UNSET,
             k: Optional[int] = None,
             queries=_UNSET,
-            query_groups=_UNSET,
         ):
             # Les overrides servent aux relances de la boucle agentique (B5) : requête
             # réécrite par le juge, désancrage, k élargi. Sans override, comportement
@@ -1653,7 +1646,6 @@ async def stream_space_chat_message(
                 k=k or RAG_TOP_K,
                 queries=retrieval_queries if queries is _UNSET else queries,
                 signals=lw_result.signals if lw_result and lw_result.signals else None,
-                query_groups=retrieval_query_groups if query_groups is _UNSET else query_groups,
                 anchor_document_ids=_anchors,
                 allowed_document_ids=allowed,
             )
@@ -2003,7 +1995,6 @@ async def stream_space_chat_message(
                     anchors=_loop_anchor_override,
                     k=_loop_k,
                     queries=None,
-                    query_groups=None,
                 )
                 _new_passages = _relaunch.get("passages") or []
                 if not _new_passages:
@@ -2061,17 +2052,33 @@ async def stream_space_chat_message(
         rerank_status,
     )
 
+    # Garde-fou du mode 100 % PNG : sans modèle multimodal, AUCUNE image ne partira et le
+    # contexte se réduirait à un manifeste — le modèle répondrait de mémoire. On rebascule
+    # donc sur le texte pour toute la construction du contexte de ce tour.
+    _image_only_impossible = settings.CAG_IMAGE_ONLY and not is_vision_model(forced_model)
+
+    @contextmanager
+    def _context_mode():
+        if _image_only_impossible:
+            with _forced_text_context_if_image_only(
+                f"le modèle {forced_model} n'accepte pas d'images"
+            ):
+                yield
+        else:
+            yield
+
     # Construire le contexte système à partir des passages techniques
     # Si low confidence : injecter un prompt spécial pour forcer la clarification
     if retrieval_status == "low_confidence_clarification":
-        space_context_draft = _build_generation_context(
-            session,
-            doc_passages,
-            anchor_document_ids=cag_anchor_document_ids or None,
-            intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
-            elected_document_ids=judge_elected_ids or None,
-            pinned_pages=judge_pinned_pages or None,
-        )
+        with _context_mode():
+            space_context_draft = _build_generation_context(
+                session,
+                doc_passages,
+                anchor_document_ids=cag_anchor_document_ids or None,
+                intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
+                elected_document_ids=judge_elected_ids or None,
+                pinned_pages=judge_pinned_pages or None,
+            )
         # Ajouter une instruction de clarification forcée après les passages
         space_context_draft["content"] += (
             "\n\n⚠️ IMPORTANT : Les passages ci-dessus sont ambigus ou de faible pertinence. "
@@ -2084,14 +2091,15 @@ async def stream_space_chat_message(
             retrieval_reason,
         )
     else:
-        space_context_draft = _build_generation_context(
-            session,
-            doc_passages,
-            anchor_document_ids=cag_anchor_document_ids or None,
-            intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
-            elected_document_ids=judge_elected_ids or None,
-            pinned_pages=judge_pinned_pages or None,
-        )
+        with _context_mode():
+            space_context_draft = _build_generation_context(
+                session,
+                doc_passages,
+                anchor_document_ids=cag_anchor_document_ids or None,
+                intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
+                elected_document_ids=judge_elected_ids or None,
+                pinned_pages=judge_pinned_pages or None,
+            )
 
     # ——— Chunk pinning (C6) + bloc COUVERTURE (C3) ———
     # Placés en FIN de message système (zone de forte attention, comme le fil de
@@ -2451,8 +2459,17 @@ async def stream_space_chat_message(
                     stream_run.end(outputs={"response": final_response})
 
                 # ——— Gate de vérification (B7c) — le texte n'a PAS encore été émis ———
+                # En mode 100 % PNG le contexte ne contient plus de texte : l'ancrage
+                # compare la réponse à un manifeste et déclarerait inventée TOUTE valeur
+                # lue sur une image. On désactive donc le gate — le test tourne sans filet,
+                # ce qui est acceptable pour une expérimentation, jamais en production.
                 verification_result = None
-                if buffer_mode and assistant_response:
+                if settings.CAG_IMAGE_ONLY and buffer_mode and assistant_response:
+                    logger.warning(
+                        "[verify] CAG_IMAGE_ONLY actif — vérification d'ancrage DÉSACTIVÉE "
+                        "(pas de texte à confronter à la réponse)"
+                    )
+                elif buffer_mode and assistant_response:
                     # Pages citées par le modèle via <sources> : le juge doit voir en
                     # priorité ce sur quoi la réponse s'appuie.
                     _cited_pages_early: Dict[int, List[int]] = {}
@@ -2883,7 +2900,12 @@ async def stream_space_chat_message(
                 # En mode bloquant (buffer), la vérification a DÉJÀ eu lieu avant émission
                 # (gate B7c ci-dessus) : on ne la rejoue pas. Modèle DISTINCT de la
                 # génération (effective_verify_model) ; VERIFY_ENABLED=false = zéro appel.
-                if verification_result is None and verify_active and assistant_response:
+                if (
+                    verification_result is None
+                    and verify_active
+                    and assistant_response
+                    and not settings.CAG_IMAGE_ONLY  # cf. gate B7c : rien à confronter
+                ):
                     try:
                         from app.services.response_verification_service import verify_response
 

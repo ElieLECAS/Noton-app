@@ -161,11 +161,6 @@ def test_eco_context_not_built_when_full_attempt_succeeds(
         with mock.patch("app.config.settings.QUERY_UNDERSTANDING_ENABLED", False), mock.patch(
             "app.config.settings.FICHE_TECHNIQUE_ENABLED", False
         ), mock.patch(
-            "app.services.query_reasoning_service.decide_retrieval_route",
-            new=mock.AsyncMock(
-                return_value=mock.Mock(decision="rag", reasoning="technique")
-            ),
-        ), mock.patch(
             "app.services.space_search_service.search_technical_passages",
             new=mock.AsyncMock(return_value={"passages": passages, "status": "ok", "reason": None}),
         ), mock.patch(

@@ -29,7 +29,7 @@ from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.document_space import DocumentSpace
 from app.services.space_service import get_space_by_id
-from app.services.query_understanding_graph import QueryGroup, RetrievalQueries
+from app.services.query_schemas import RetrievalQueries
 from app.services.query_signals_schemas import LightweightQuerySignals
 from app.tracing import trace_run
 from app.services import reranker_service
@@ -78,7 +78,6 @@ async def _run_retrievers(
     space_id: int,
     doc_ids: List[int],
     colpali_q: str,
-    semantic_q: str,
     lexical_q: str,
     pool_size: int,
     use_colpali: bool = True,
@@ -502,51 +501,6 @@ def _multimodal_eval_stages(
     return stages
 
 
-def _retrieve_one_group_hits(
-    session: Session,
-    space_id: int,
-    doc_ids: List[int],
-    colpali_q: str,
-    semantic_q: str,
-    lexical_q: str,
-    pool_size: int,
-    *,
-    group_index: int = 0,
-    group_label: str = "",
-) -> List[Any]:
-    """Retrieval (colpali + bm25) + fusion RRF pour un groupe de requêtes."""
-    from app.services.page_retrieval_service import (
-        filter_colpali_pages_dynamic,
-        fuse_multimodal_hits,
-        retrieve_bm25_pages,
-        retrieve_colpali_pages,
-    )
-
-    colpali_hits = retrieve_colpali_pages(session, doc_ids, colpali_q, pool_size)
-    colpali_hits = filter_colpali_pages_dynamic(colpali_hits)
-    bm25_hits = retrieve_bm25_pages(session, doc_ids, lexical_q, pool_size)
-
-    fused = fuse_multimodal_hits(
-        colpali_hits,
-        bm25_hits,
-        rrf_k=settings.RRF_K,
-        top_k=pool_size,
-    )
-
-    for hit in fused:
-        hit.query_group_index = group_index
-        hit.query_group_label = group_label
-
-    logger.info(
-        "[RAG multi-group] group=%r — colpali=%d bm25=%d → fused=%d",
-        group_label,
-        len(colpali_hits),
-        len(bm25_hits),
-        len(fused),
-    )
-    return fused
-
-
 async def search_multimodal_passages(
     session: Session,
     space_id: int,
@@ -558,7 +512,6 @@ async def search_multimodal_passages(
     include_retrieval_stages: bool = False,
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
-    query_groups: Optional[List[QueryGroup]] = None,
     anchor_document_ids: Optional[List[int]] = None,
     allowed_document_ids: Optional[List[int]] = None,
 ) -> Dict:
@@ -590,23 +543,24 @@ async def search_multimodal_passages(
         return {"passages": [], "images": [], "status": "disabled", "reason": "empty_query"}
 
     colpali_q = queries.colpali if queries else query_text
-    semantic_q = queries.semantic if queries else query_text
     lexical_q = queries.lexical if queries else query_text
-    rerank_q = semantic_q
+    # Le reranker note des passages contre une question en langue naturelle : c'est la
+    # question autonome, celle qui alimente aussi ColPali (le canal lexical, lui, porte
+    # en plus les entités/références, utiles au tsvector mais bruitées pour un cross-encoder).
+    rerank_q = colpali_q
 
     top_k = k if k is not None else settings.RAG_TOP_K
     pool_size = max(settings.RERANK_POOL, settings.RAG_POOL_SIZE, top_k)
 
     logger.info(
         "[RAG multimodal] Démarrage — space_id=%s top_k=%s pool=%s rerank=%s filter=%s "
-        "colpali=%r semantic=%r lexical=%r",
+        "colpali=%r lexical=%r",
         space_id,
         top_k,
         pool_size,
         settings.RERANKER_ENABLED,
         document_filter,
         colpali_q[:80],
-        semantic_q[:80],
         lexical_q[:80],
     )
 
@@ -638,132 +592,99 @@ async def search_multimodal_passages(
                 return {"passages": [], "images": [], "status": "ok", "reason": "scope_empty"}
             doc_ids = scoped
 
-        # --- Retrieval : mode multi-groupe ou mode unique ---
-        active_groups = query_groups if (query_groups and len(query_groups) > 1) else None
+        # Gate ColPali : ne lancer le retriever visuel (coûteux sur CPU) que si la
+        # requête en a besoin. Décidé AVANT le lancement pour économiser encode + MaxSim.
+        use_colpali, gate_reason = should_use_colpali(query_text, signals)
+        logger.info(
+            "[RAG multimodal] ColPali gating — use_colpali=%s (%s) query=%r",
+            use_colpali,
+            gate_reason,
+            (query_text or "")[:80],
+        )
 
-        if active_groups:
-            from app.services.page_retrieval_service import fuse_multi_query_groups
-
-            logger.info(
-                "[RAG multimodal] Mode multi-groupe — %d groupes : %s",
-                len(active_groups),
-                [g.label for g in active_groups],
-            )
-            per_group_hits = [
-                _retrieve_one_group_hits(
-                    session,
-                    space_id,
-                    doc_ids,
-                    g.queries.colpali,
-                    g.queries.semantic,
-                    g.queries.lexical,
-                    pool_size,
-                    group_index=i,
-                    group_label=g.label,
-                )
-                for i, g in enumerate(active_groups)
-            ]
-            fused_hits = fuse_multi_query_groups(per_group_hits, pool_size=pool_size)
-            # Pour le rerank, on utilise la requête sémantique du premier groupe
-            rerank_q = active_groups[0].queries.semantic
-            colpali_hits = per_group_hits[0] if per_group_hits else []
-            bm25_hits: List[Any] = []
-        else:
-            # Gate ColPali : ne lancer le retriever visuel (coûteux sur CPU) que si la
-            # requête en a besoin. Décidé AVANT le lancement pour économiser encode + MaxSim.
-            use_colpali, gate_reason = should_use_colpali(query_text, signals)
-            logger.info(
-                "[RAG multimodal] ColPali gating — use_colpali=%s (%s) query=%r",
-                use_colpali,
-                gate_reason,
-                (query_text or "")[:80],
+        with trace_run(
+            "multimodal_retrieval",
+            run_type="retriever",
+            inputs={
+                "query": query_text,
+                "colpali_query": colpali_q,
+                "lexical_query": lexical_q,
+                "space_id": space_id,
+                "pool_size": pool_size,
+                "use_colpali": use_colpali,
+                "colpali_gate_reason": gate_reason,
+            },
+            tags=["retrieval", "multimodal", "space"],
+        ) as hr:
+            # 2 retrievers en parallèle (threads + sessions dédiées) ou en séquence,
+            # selon RETRIEVAL_PARALLEL_ENABLED. Voir _run_retrievers.
+            colpali_hits, bm25_hits = await _run_retrievers(
+                session,
+                space_id,
+                doc_ids,
+                colpali_q,
+                lexical_q,
+                pool_size,
+                use_colpali=use_colpali,
             )
 
-            with trace_run(
-                "multimodal_retrieval",
-                run_type="retriever",
-                inputs={
-                    "query": query_text,
-                    "colpali_query": colpali_q,
-                    "semantic_query": semantic_q,
-                    "lexical_query": lexical_q,
-                    "space_id": space_id,
-                    "pool_size": pool_size,
-                    "use_colpali": use_colpali,
-                    "colpali_gate_reason": gate_reason,
-                },
-                tags=["retrieval", "multimodal", "space"],
-            ) as hr:
-                # 2 retrievers en parallèle (threads + sessions dédiées) ou en séquence,
-                # selon RETRIEVAL_PARALLEL_ENABLED. Voir _run_retrievers.
-                colpali_hits, bm25_hits = await _run_retrievers(
-                    session,
-                    space_id,
-                    doc_ids,
-                    colpali_q,
-                    semantic_q,
-                    lexical_q,
-                    pool_size,
-                    use_colpali=use_colpali,
-                )
+            # Filet de sécurité : ColPali écarté mais le retriever texte trop faible →
+            # on le relance en rattrapage (dans un thread + session dédiée, comme le
+            # mode parallèle) pour ne perdre aucun rappel en silence.
+            if not use_colpali:
+                text_pages = {(h.document_id, h.page_no) for h in bm25_hits}
+                if len(text_pages) < settings.COLPALI_GATING_FALLBACK_MIN_HITS:
+                    from app.database import engine
+                    from app.services.page_retrieval_service import (
+                        filter_colpali_pages_dynamic,
+                        retrieve_colpali_pages,
+                    )
 
-                # Filet de sécurité : ColPali écarté mais le retriever texte trop faible →
-                # on le relance en rattrapage (dans un thread + session dédiée, comme le
-                # mode parallèle) pour ne perdre aucun rappel en silence.
-                if not use_colpali:
-                    text_pages = {(h.document_id, h.page_no) for h in bm25_hits}
-                    if len(text_pages) < settings.COLPALI_GATING_FALLBACK_MIN_HITS:
-                        from app.database import engine
-                        from app.services.page_retrieval_service import (
-                            filter_colpali_pages_dynamic,
-                            retrieve_colpali_pages,
+                    def _fallback_colpali() -> List[Any]:
+                        with Session(engine) as own_session:
+                            return filter_colpali_pages_dynamic(
+                                retrieve_colpali_pages(own_session, doc_ids, colpali_q, pool_size)
+                            )
+
+                    # Un échec du rattrapage ne doit jamais casser la requête : on
+                    # dégrade proprement vers les seuls hits texte déjà obtenus.
+                    try:
+                        colpali_hits = await asyncio.to_thread(_fallback_colpali)
+                        use_colpali = True
+                        gate_reason = "text_weak_fallback"
+                        logger.info(
+                            "[RAG multimodal] ColPali fallback — %d page(s) texte < seuil %d → "
+                            "relance ColPali (%d page(s) récupérée(s))",
+                            len(text_pages),
+                            settings.COLPALI_GATING_FALLBACK_MIN_HITS,
+                            len(colpali_hits),
+                        )
+                    except Exception as fb_exc:
+                        logger.warning(
+                            "[RAG multimodal] ColPali fallback échoué (%s) — on garde les hits texte",
+                            fb_exc,
                         )
 
-                        def _fallback_colpali() -> List[Any]:
-                            with Session(engine) as own_session:
-                                return filter_colpali_pages_dynamic(
-                                    retrieve_colpali_pages(own_session, doc_ids, colpali_q, pool_size)
-                                )
-
-                        # Un échec du rattrapage ne doit jamais casser la requête : on
-                        # dégrade proprement vers les seuls hits texte déjà obtenus.
-                        try:
-                            colpali_hits = await asyncio.to_thread(_fallback_colpali)
-                            use_colpali = True
-                            gate_reason = "text_weak_fallback"
-                            logger.info(
-                                "[RAG multimodal] ColPali fallback — %d page(s) texte < seuil %d → "
-                                "relance ColPali (%d page(s) récupérée(s))",
-                                len(text_pages),
-                                settings.COLPALI_GATING_FALLBACK_MIN_HITS,
-                                len(colpali_hits),
-                            )
-                        except Exception as fb_exc:
-                            logger.warning(
-                                "[RAG multimodal] ColPali fallback échoué (%s) — on garde les hits texte",
-                                fb_exc,
-                            )
-
-                hr.end(
-                    outputs={
-                        "colpali": len(colpali_hits),
-                        "bm25": len(bm25_hits),
-                        "colpali_gate_reason": gate_reason,
-                    }
-                )
-
-            logger.info(
-                "[RAG multimodal] Retrievers — colpali=%d | bm25=%d",
-                len(colpali_hits),
-                len(bm25_hits),
+            hr.end(
+                outputs={
+                    "colpali": len(colpali_hits),
+                    "bm25": len(bm25_hits),
+                    "colpali_gate_reason": gate_reason,
+                }
             )
 
-            fused_hits = fuse_multimodal_hits(
-                colpali_hits,
-                bm25_hits,
-                rrf_k=settings.RRF_K,
-                top_k=pool_size,
-            )
+        logger.info(
+            "[RAG multimodal] Retrievers — colpali=%d | bm25=%d",
+            len(colpali_hits),
+            len(bm25_hits),
+        )
+
+        fused_hits = fuse_multimodal_hits(
+            colpali_hits,
+            bm25_hits,
+            rrf_k=settings.RRF_K,
+            top_k=pool_size,
+        )
 
         # Ancrage conversation : booste les pages des documents du sujet courant AVANT la
         # coupe top_k, pour que la conversation reste sur le même produit d'un tour à l'autre.
@@ -1004,7 +925,6 @@ async def search_relevant_passages(
     include_retrieval_stages: bool = False,
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
-    query_groups: Optional[List[QueryGroup]] = None,
     anchor_document_ids: Optional[List[int]] = None,
     allowed_document_ids: Optional[List[int]] = None,
 ) -> Dict:
@@ -1024,7 +944,6 @@ async def search_relevant_passages(
         queries=queries,
         anchor_document_ids=anchor_document_ids,
         signals=signals,
-        query_groups=query_groups,
         allowed_document_ids=allowed_document_ids,
     )
 
@@ -1037,7 +956,6 @@ async def search_technical_passages(
     k: int = 15,
     queries: Optional[RetrievalQueries] = None,
     signals: Optional[LightweightQuerySignals] = None,
-    query_groups: Optional[List[QueryGroup]] = None,
     anchor_document_ids: Optional[List[int]] = None,
     allowed_document_ids: Optional[List[int]] = None,
 ) -> Dict:
@@ -1058,7 +976,6 @@ async def search_technical_passages(
         document_filter="technical",
         queries=queries,
         signals=signals,
-        query_groups=query_groups,
         anchor_document_ids=anchor_document_ids,
         allowed_document_ids=allowed_document_ids,
     )

@@ -27,6 +27,11 @@ from app.models.document_chunk import DocumentChunk
 
 logger = logging.getLogger(__name__)
 
+# Plafond imposé par l'API Mistral (erreur 400, code 3051). Ce n'est PAS un réglage :
+# dépasser ce nombre fait rejeter la requête entière, et le repli de secours répond
+# alors sans document — donc de mémoire, avec assurance. Constat du 2026-08-26.
+MISTRAL_MAX_IMAGES_PER_REQUEST = 8
+
 # Enregistrement d'un chunk feuille aplati : (page, chunk_index, texte).
 LeafRecord = Tuple[int, int, str]
 
@@ -680,16 +685,23 @@ def build_cag_context(
             }
         )
 
-    cag_preamble = (
-        "\n\nDOCUMENTS (contexte complet) — chaque document ci-dessous est fourni ENTIER ou en "
-        "extrait étendu, avec un en-tête (source, gamme, matériau) et ses numéros de page.\n"
-        "IMPÉRATIF : avant d'attribuer une valeur, une cote ou une consigne à une gamme/produit, "
-        "vérifie l'en-tête du document concerné. Ne transfère JAMAIS une information d'un document "
-        "vers une autre gamme (ex. Perform 70 ≠ Perform 76). Les documents sont classés par "
-        "pertinence décroissante.\n\n"
-    )
-    system_message["content"] += cag_preamble + "\n\n".join(blocks)
-    system_message["content"] += f"\n\n({len(blocks)} document(s), ~{spent_tokens} tokens de contexte.)"
+    if settings.CAG_IMAGE_ONLY:
+        # EXPÉRIMENTATION : le texte extrait est retiré, les pages sont fournies en images
+        # (jointes au message utilisateur par select_cag_images). Il ne reste qu'un
+        # manifeste, indispensable pour que le modèle sache À QUOI correspond chaque image
+        # et puisse citer ses sources.
+        system_message["content"] += _build_image_only_manifest(cag_documents)
+    else:
+        cag_preamble = (
+            "\n\nDOCUMENTS (contexte complet) — chaque document ci-dessous est fourni ENTIER ou en "
+            "extrait étendu, avec un en-tête (source, gamme, matériau) et ses numéros de page.\n"
+            "IMPÉRATIF : avant d'attribuer une valeur, une cote ou une consigne à une gamme/produit, "
+            "vérifie l'en-tête du document concerné. Ne transfère JAMAIS une information d'un document "
+            "vers une autre gamme (ex. Perform 70 ≠ Perform 76). Les documents sont classés par "
+            "pertinence décroissante.\n\n"
+        )
+        system_message["content"] += cag_preamble + "\n\n".join(blocks)
+        system_message["content"] += f"\n\n({len(blocks)} document(s), ~{spent_tokens} tokens de contexte.)"
     if emit_sources_tag:
         system_message["content"] += (
             "\n\nFIN DE RÉPONSE OBLIGATOIRE : termine ta réponse par une ligne EXACTEMENT au format "
@@ -721,6 +733,35 @@ def build_cag_context(
         ),
     )
     return system_message
+
+
+def _build_image_only_manifest(cag_documents: List[Dict[str, Any]]) -> str:
+    """Manifeste du mode 100 % PNG : ce que le modèle voit à la place du texte.
+
+    Sans lui, le modèle reçoit une pile d'images anonymes : il ne peut ni rattacher une
+    cote à la bonne gamme, ni produire le bloc <sources>. Le manifeste rétablit ces deux
+    choses pour un coût de quelques dizaines de tokens.
+    """
+    lines = [
+        "\n\nDOCUMENTS — le contenu t'est fourni en IMAGES DE PAGES, pas en texte.",
+        "Chaque image est légendée « Image N — Document D, page P ». Lis les valeurs, cotes "
+        "et références DIRECTEMENT sur les images : elles font foi.",
+        "IMPÉRATIF : avant d'attribuer une valeur à une gamme/produit, vérifie de QUEL "
+        "document provient l'image. Ne transfère jamais une information d'un document vers "
+        "une autre gamme (ex. Perform 70 ≠ Perform 76).",
+        "Si une information n'est pas lisible sur les images fournies, dis-le au lieu de "
+        "la deviner.",
+        "",
+        "Documents fournis (classés par pertinence décroissante) :",
+    ]
+    for doc in cag_documents:
+        pages = doc.get("pages") or []
+        matched = doc.get("matched_pages") or []
+        detail = f"pages {', '.join(str(p) for p in pages)}" if pages else "aucune page"
+        if matched:
+            detail += f" (pages retrouvées par la recherche : {', '.join(str(p) for p in matched)})"
+        lines.append(f"  [Document {doc.get('index')}] {doc.get('document_title')} — {detail}")
+    return "\n".join(lines)
 
 
 def _pages_span_label(pages: List[int]) -> str:
@@ -790,7 +831,7 @@ def select_cag_images(
     passages: List[Dict[str, Any]],
     *,
     max_images: Optional[int] = None,
-    dpi: int = 150,
+    dpi: Optional[int] = None,
 ) -> Tuple[List[str], List[Dict[str, Any]]]:
     """Sélectionne et rend les PNG de pages pour la génération vision, ALIGNÉS sur le
     contexte packé : uniquement des pages incluses dans un document CAG.
@@ -805,6 +846,17 @@ def select_cag_images(
     from app.services.multimodal_page_service import render_page_png_cached
 
     max_images = max_images if max_images is not None else settings.CAG_MAX_IMAGES
+    # Limite DURE de l'API Mistral : au-delà, la requête entière est rejetée en 400
+    # ("Total number of images exceeds the maximum allowed of 8", code 3051) et le repli
+    # de secours répond sans aucun document. On plafonne donc ici plutôt que d'échouer.
+    if max_images > MISTRAL_MAX_IMAGES_PER_REQUEST:
+        logger.warning(
+            "[CAG] %d images demandées mais l'API Mistral en accepte %d au maximum — plafonné.",
+            max_images,
+            MISTRAL_MAX_IMAGES_PER_REQUEST,
+        )
+        max_images = MISTRAL_MAX_IMAGES_PER_REQUEST
+    dpi = dpi if dpi is not None else settings.CAG_IMAGE_DPI
     if max_images <= 0 or not cag_documents:
         return [], []
 
@@ -833,6 +885,18 @@ def select_cag_images(
 
     # Tri stable : besoin visuel d'abord, ordre score conservé au sein de chaque classe.
     candidates.sort(key=lambda t: t[0])
+
+    if settings.CAG_IMAGE_ONLY:
+        # Le texte a été retiré du contexte : les images ne complètent plus rien, elles
+        # SONT le contenu. On complète donc avec les pages packées non matchées (le
+        # voisinage, qui portait la continuité procédurale en texte), en gardant les
+        # pages matchées en tête — c'est le budget libéré par le texte qui les paie.
+        for did, meta in included.items():
+            for page in meta.get("pages") or []:
+                if not isinstance(page, int) or (did, page) in seen:
+                    continue
+                seen.add((did, page))
+                candidates.append((2, did, page))
 
     images_b64: List[str] = []
     captions: List[Dict[str, Any]] = []

@@ -15,10 +15,7 @@ def _fake_lw_result(route: str):
         topic_shift=False,
         signals=None,
         query_context={},
-        clarification=None,
         retrieval_queries=None,
-        query_groups=[],
-        query_strategy=None,
     )
 
 
@@ -75,12 +72,10 @@ def test_space_chat_routing_rag(client, responsable_headers):
     space_id = sp.json()["id"]
     
     try:
-        # Refonte C1 : compréhension désactivée → route=search DIRECTE, plus aucun
-        # appel au routeur LLM autonome (decide_retrieval_route).
+        # Refonte C1 : compréhension désactivée → route=search DIRECTE. Le routeur LLM
+        # autonome (decide_retrieval_route) a été supprimé le 2026-08-26 : la route est
+        # produite par l'appel fusionné, il n'y a plus rien à court-circuiter.
         with mock.patch("app.config.settings.QUERY_UNDERSTANDING_ENABLED", False), mock.patch(
-            "app.services.query_reasoning_service.decide_retrieval_route",
-            new=mock.AsyncMock()
-        ) as mock_route_decision, mock.patch(
             "app.routers.chat.mistral_chat_stream",
             _fake_mistral_stream
         ), mock.patch(
@@ -105,10 +100,7 @@ def test_space_chat_routing_rag(client, responsable_headers):
             # Since no passages were found, it should display the RAG threshold warning
             assert "75%" in r.text
             
-            # Refonte C1 : plus AUCUN appel au routeur LLM autonome quand la
-            # compréhension est off — la recherche est le défaut.
-            mock_route_decision.assert_not_called()
-            # La recherche documentaire a bien eu lieu.
+            # La recherche documentaire a bien eu lieu (la recherche est le défaut).
             mock_search.assert_called_once()
             
     finally:
