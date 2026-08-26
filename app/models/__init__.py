@@ -34,6 +34,11 @@ from .guided_tree_version import GuidedTreeVersion
 from .guided_node_attachment import GuidedNodeAttachment
 from .guided_entry import GuidedEntryIndex, GuidedSymptomAlias
 from .guided_gap import GuidedGap
+from .gamme_commerciale import (
+    GammeCommerciale,
+    GammeCommercialeRead,
+    GammeCommercialeUpdate,
+)
 
 __all__ = [
     "User",
@@ -105,5 +110,8 @@ __all__ = [
     "GuidedEntryIndex",
     "GuidedSymptomAlias",
     "GuidedGap",
+    "GammeCommerciale",
+    "GammeCommercialeRead",
+    "GammeCommercialeUpdate",
 ]
 

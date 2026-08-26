@@ -13,6 +13,10 @@ from app.models.document_category import (
     DocumentCategoryRead,
     DocumentCategoryUpdate,
 )
+from app.models.gamme_commerciale import (
+    GammeCommercialeRead,
+    GammeCommercialeUpdate,
+)
 from app.routers.auth import get_current_user, require_permission, require_role
 from app.services.auth_service import get_password_hash
 from pydantic import BaseModel
@@ -1294,3 +1298,88 @@ async def category_stats(
         document_count=int(doc_count),
     )
 
+
+
+# ---------------------------------------------------------------------------
+# Connaissance métier — fiches des gammes commerciales Proferm
+#
+# Le vocabulaire des utilisateurs et celui des documents fournisseurs ne se recoupent
+# pas : ces fiches portent ce pont, pour injection dans les prompts. Elles sont
+# rédigées et validées par le métier — d'où l'édition en admin plutôt qu'un fichier.
+# ---------------------------------------------------------------------------
+
+
+@router.get("/gammes", response_model=List[GammeCommercialeRead])
+async def list_gammes_admin(
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Liste les fiches de gammes, brouillons compris."""
+    from app.services.gamme_knowledge_service import list_gammes
+
+    return [GammeCommercialeRead.model_validate(g) for g in list_gammes(session)]
+
+
+@router.post("/gammes/seed")
+async def seed_gammes_admin(
+    overwrite: bool = False,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Crée les fiches manquantes depuis l'amorçage rédigé à partir des documents.
+
+    Sans `overwrite`, une fiche déjà présente n'est jamais réécrite : une fois relue par
+    le métier, c'est la base qui fait foi.
+    """
+    from app.services.gamme_knowledge_service import seed_gammes
+
+    return seed_gammes(session, overwrite=overwrite)
+
+
+@router.put("/gammes/{gamme_id}", response_model=GammeCommercialeRead)
+async def update_gamme_admin(
+    gamme_id: int,
+    payload: GammeCommercialeUpdate,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Met à jour une fiche (édition métier)."""
+    from datetime import datetime
+
+    from app.models.gamme_commerciale import STATUTS, GammeCommerciale
+
+    row = session.get(GammeCommerciale, gamme_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Fiche introuvable")
+
+    data = payload.model_dump(exclude_unset=True)
+    if "statut" in data and data["statut"] not in STATUTS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Statut invalide : {data['statut']} (attendu : {', '.join(STATUTS)})",
+        )
+    for key, value in data.items():
+        setattr(row, key, value)
+    row.updated_at = datetime.utcnow()
+    row.updated_by = current_user.id
+    session.add(row)
+    session.commit()
+    session.refresh(row)
+    return GammeCommercialeRead.model_validate(row)
+
+
+@router.get("/gammes/preview-prompt")
+async def preview_gamme_prompt(
+    only_valid: bool = False,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Le bloc exactement tel qu'il sera injecté dans les prompts.
+
+    Rendu en entier, jamais filtré sur une gamme : pour écarter une référence Technal
+    quand on cherche du PVC, le modèle doit connaître la règle Technal.
+    """
+    from app.services.gamme_knowledge_service import build_gamme_knowledge_block
+
+    block = build_gamme_knowledge_block(session, only_valid=only_valid)
+    return {"block": block, "chars": len(block), "tokens_estimes": len(block) // 4}

@@ -81,6 +81,13 @@
             >
                 Catégories
             </button>
+            <button
+                onclick="showTab('gammes')"
+                id="tab-gammes"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+                Gammes
+            </button>
             <a
                 href="/admin/sav-trees"
                 class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 flex items-center gap-1.5"
@@ -754,6 +761,47 @@
                 </div>
             </div>
         </div>
+        <div id="tab-content-gammes" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap justify-between items-start gap-3 mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Connaissance métier — gammes Proferm</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-3xl">
+                        Le vocabulaire des clients et celui des documents fournisseurs ne se recoupent pas :
+                        « Perform 76 » n'apparaît dans aucun document technique, qui parle de « TROCAL 76 ADVANCED ».
+                        Ces fiches portent ce pont et sont injectées dans les prompts pour que l'assistant sache
+                        <strong>où chercher</strong> et <strong>quoi écarter</strong>.
+                    </p>
+                    <p class="text-xs text-amber-700 dark:text-amber-400 mt-2 max-w-3xl">
+                        ⚠️ Une fiche ne fait jamais autorité sur une valeur (cote, Uw, référence) : elle route la
+                        recherche, la valeur vient toujours du document.
+                    </p>
+                </div>
+                <div class="flex gap-2 shrink-0">
+                    <button onclick="previewGammePrompt()" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5">
+                        <i class="ti ti-eye"></i> Aperçu prompt
+                    </button>
+                    <button onclick="seedGammes()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold">
+                        <i class="ti ti-sparkles"></i> Amorcer depuis les documents
+                    </button>
+                </div>
+            </div>
+
+            <div id="gammes-list" class="space-y-4">
+                <p class="text-center text-gray-500 py-8">Chargement…</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="gamme-prompt-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+    <div class="glass-panel rounded-3xl p-6 w-full max-w-4xl shadow-2xl max-h-[85vh] flex flex-col">
+        <div class="flex justify-between items-center mb-3">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Bloc injecté dans les prompts</h2>
+            <button onclick="document.getElementById('gamme-prompt-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"><i class="ti ti-x text-xl"></i></button>
+        </div>
+        <p id="gamme-prompt-meta" class="text-xs text-gray-500 mb-3"></p>
+        <pre id="gamme-prompt-body" class="flex-1 overflow-auto text-xs whitespace-pre-wrap bg-black/5 dark:bg-white/5 rounded-xl p-4 font-mono"></pre>
     </div>
 </div>
 
@@ -986,6 +1034,207 @@ function showTab(tabName) {
         loadSpacesForEval();
     } else if (tabName === 'categories') {
         loadCategories();
+    } else if (tabName === 'gammes') {
+        loadGammes();
+    }
+}
+
+
+// ==================== CONNAISSANCE MÉTIER — GAMMES ====================
+// Les fiches portent le pont entre le vocabulaire client et celui des documents
+// fournisseurs. Elles sont rédigées par le métier, d'où l'édition ici plutôt qu'en
+// fichier : le statut « validé » indique qu'un humain a relu le pré-remplissage.
+
+let _gammesCache = [];
+
+function _gammeEsc(s) {
+    return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function _gammeChips(values, tone) {
+    const arr = Array.isArray(values) ? values.filter(Boolean) : [];
+    if (!arr.length) return '<span class="text-xs text-gray-400">—</span>';
+    const tones = {
+        user: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+        doc: "bg-sky-500/10 text-sky-700 dark:text-sky-400",
+        neutral: "bg-black/5 dark:bg-white/10 text-gray-600 dark:text-gray-300",
+    };
+    return arr.map(v =>
+        `<span class="inline-block px-2 py-0.5 rounded-md text-xs font-medium ${tones[tone] || tones.neutral}">${_gammeEsc(v)}</span>`
+    ).join(" ");
+}
+
+async function loadGammes() {
+    const host = document.getElementById("gammes-list");
+    if (!host) return;
+    try {
+        const r = await apiCall("/api/admin/gammes");
+        if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "session expirée"));
+        _gammesCache = await r.json();
+    } catch (e) {
+        host.innerHTML = `<p class="text-center text-red-500 py-8">Chargement impossible : ${_gammeEsc(e.message)}</p>`;
+        return;
+    }
+
+    if (!_gammesCache.length) {
+        host.innerHTML = `<div class="glass-panel rounded-2xl p-8 text-center">
+            <p class="text-gray-500 mb-3">Aucune fiche pour l'instant.</p>
+            <p class="text-sm text-gray-400">« Amorcer depuis les documents » crée un premier jeu de fiches rédigé à partir des documents Proferm en base. Elles arrivent en brouillon : à relire.</p>
+        </div>`;
+        return;
+    }
+
+    host.innerHTML = _gammesCache.map(g => {
+        const valide = g.statut === "valide";
+        const badge = valide
+            ? '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">validée</span>'
+            : '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400">brouillon</span>';
+        const aValider = (g.a_valider || "").trim();
+        return `
+        <div class="glass-panel rounded-2xl p-5" id="gamme-card-${g.id}">
+            <div class="flex justify-between items-start gap-4">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">${_gammeEsc(g.nom)}</h3>
+                        ${badge}
+                        <span class="font-mono text-xs text-gray-400">${_gammeEsc(g.slug)}</span>
+                    </div>
+                    ${g.accroche ? `<p class="text-sm text-gray-500 italic">${_gammeEsc(g.accroche)}</p>` : ""}
+                    <p class="text-xs text-gray-500 mt-1">
+                        ${_gammeEsc(g.materiau || "matériau ?")} · ${_gammeEsc((g.familles || []).join(", ") || "familles ?")}
+                        ${(g.fournisseurs || []).length ? " · " + _gammeEsc(g.fournisseurs.join(", ")) : ""}
+                    </p>
+                </div>
+                <button onclick="toggleGammeEdit(${g.id})" class="shrink-0 px-3 py-1.5 rounded-xl border border-black/10 dark:border-white/10 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/5">
+                    <i class="ti ti-pencil"></i> Éditer
+                </button>
+            </div>
+
+            ${g.description ? `<p class="text-sm text-gray-600 dark:text-gray-300 mt-3">${_gammeEsc(g.description)}</p>` : ""}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wide text-amber-700 dark:text-amber-400 mb-1.5">Dit par l'utilisateur</p>
+                    <div class="flex flex-wrap gap-1">${_gammeChips(g.alias_utilisateur, "user")}</div>
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-wide text-sky-700 dark:text-sky-400 mb-1.5">À chercher dans les documents</p>
+                    <div class="flex flex-wrap gap-1">${_gammeChips(g.termes_documentaires, "doc")}</div>
+                </div>
+            </div>
+
+            ${(g.discriminants || "").trim() ? `
+            <div class="mt-4 rounded-xl bg-black/5 dark:bg-white/5 p-3">
+                <p class="text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5">Ne pas confondre</p>
+                <p class="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-line">${_gammeEsc(g.discriminants)}</p>
+            </div>` : ""}
+
+            ${aValider ? `
+            <div class="mt-3 rounded-xl bg-amber-500/10 border-l-4 border-amber-500 p-3">
+                <p class="text-xs font-bold uppercase tracking-wide text-amber-700 dark:text-amber-400 mb-1.5">À trancher par le métier</p>
+                <p class="text-sm text-amber-900 dark:text-amber-200 whitespace-pre-line">${_gammeEsc(aValider)}</p>
+            </div>` : ""}
+
+            <div id="gamme-edit-${g.id}" class="hidden mt-4 pt-4 border-t border-black/10 dark:border-white/10 space-y-3"></div>
+        </div>`;
+    }).join("");
+}
+
+function toggleGammeEdit(id) {
+    const host = document.getElementById(`gamme-edit-${id}`);
+    if (!host) return;
+    if (!host.classList.contains("hidden")) { host.classList.add("hidden"); return; }
+
+    const g = _gammesCache.find(x => x.id === id);
+    if (!g) return;
+    const ta = (name, label, val, rows) =>
+        `<div><label class="block text-xs font-semibold text-gray-500 mb-1">${label}</label>
+         <textarea data-f="${name}" rows="${rows || 2}" class="w-full px-3 py-2 rounded-xl glass-input text-sm">${_gammeEsc(val || "")}</textarea></div>`;
+    const inp = (name, label, val) =>
+        `<div><label class="block text-xs font-semibold text-gray-500 mb-1">${label}</label>
+         <input data-f="${name}" value="${_gammeEsc(val || "")}" class="w-full px-3 py-2 rounded-xl glass-input text-sm" /></div>`;
+
+    host.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            ${inp("nom", "Nom", g.nom)}
+            ${inp("accroche", "Accroche", g.accroche)}
+            ${inp("materiau", "Matériau (pvc / aluminium / hybride)", g.materiau)}
+            ${inp("familles", "Familles (séparées par des virgules)", (g.familles || []).join(", "))}
+        </div>
+        ${ta("description", "Description injectée dans le prompt", g.description, 4)}
+        ${ta("alias_utilisateur", "Dit par l'utilisateur (virgules)", (g.alias_utilisateur || []).join(", "), 2)}
+        ${ta("termes_documentaires", "À chercher dans les documents (virgules)", (g.termes_documentaires || []).join(", "), 2)}
+        ${inp("fournisseurs", "Fournisseurs (virgules)", (g.fournisseurs || []).join(", "))}
+        ${ta("discriminants", "Ne pas confondre — une règle par ligne", g.discriminants, 4)}
+        ${ta("a_valider", "À trancher par le métier", g.a_valider, 3)}
+        <div class="flex items-center justify-between gap-3 pt-1">
+            <label class="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-300">
+                <input type="checkbox" data-f="statut" ${g.statut === "valide" ? "checked" : ""} class="rounded" />
+                Fiche relue et validée
+            </label>
+            <div class="flex gap-2">
+                <button onclick="toggleGammeEdit(${id})" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm font-semibold">Annuler</button>
+                <button onclick="saveGamme(${id})" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold">Enregistrer</button>
+            </div>
+        </div>`;
+    host.classList.remove("hidden");
+}
+
+async function saveGamme(id) {
+    const host = document.getElementById(`gamme-edit-${id}`);
+    if (!host) return;
+    const listFields = new Set(["familles", "alias_utilisateur", "termes_documentaires", "fournisseurs"]);
+    const payload = {};
+    host.querySelectorAll("[data-f]").forEach(el => {
+        const f = el.dataset.f;
+        if (f === "statut") { payload.statut = el.checked ? "valide" : "brouillon"; return; }
+        const v = (el.value || "").trim();
+        payload[f] = listFields.has(f)
+            ? v.split(",").map(s => s.trim()).filter(Boolean)
+            : (v || null);
+    });
+
+    try {
+        const r = await apiCall(`/api/admin/gammes/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+        if (!r || !r.ok) {
+            const err = await r.json().catch(() => ({}));
+            throw new Error(err.detail || "HTTP " + r.status);
+        }
+        await loadGammes();
+    } catch (e) {
+        alert("Enregistrement impossible : " + e.message);
+    }
+}
+
+async function seedGammes() {
+    if (!confirm("Créer les fiches manquantes à partir des documents Proferm en base ?\n\nLes fiches déjà présentes ne seront pas modifiées.")) return;
+    try {
+        const r = await apiCall("/api/admin/gammes/seed", { method: "POST" });
+        if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "session expirée"));
+        const res = await r.json();
+        alert(`${res.created} fiche(s) créée(s), ${res.skipped} conservée(s).`);
+        await loadGammes();
+    } catch (e) {
+        alert("Amorçage impossible : " + e.message);
+    }
+}
+
+async function previewGammePrompt() {
+    try {
+        const r = await apiCall("/api/admin/gammes/preview-prompt");
+        if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "session expirée"));
+        const res = await r.json();
+        document.getElementById("gamme-prompt-meta").textContent =
+            `${res.chars} caractères · ~${res.tokens_estimes} tokens, ajoutés à chaque appel de compréhension et de génération.`;
+        document.getElementById("gamme-prompt-body").textContent =
+            res.block || "(aucune fiche — le bloc n'est pas injecté)";
+        document.getElementById("gamme-prompt-modal").classList.remove("hidden");
+    } catch (e) {
+        alert("Aperçu impossible : " + e.message);
     }
 }
 
