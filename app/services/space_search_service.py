@@ -81,6 +81,7 @@ async def _run_retrievers(
     lexical_q: str,
     pool_size: int,
     use_colpali: bool = True,
+    embed_cache: Optional[Dict[str, Any]] = None,
 ) -> Tuple[List[Any], List[Any]]:
     """Exécute les 2 retrievers (ColPali/BM25).
 
@@ -103,7 +104,23 @@ async def _run_retrievers(
         # retriever texte est faible.
         if not use_colpali:
             return []
-        return filter_colpali_pages_dynamic(retrieve_colpali_pages(s, doc_ids, colpali_q, pool_size))
+        # L'encodage de la requête est mis en cache pour la phase B (recherche bornée au
+        # document élu) : même requête, périmètre différent — le ré-encoder doublerait le
+        # poste le plus lourd du retrieval.
+        embeddings = None
+        if embed_cache is not None:
+            embeddings = embed_cache.get("colpali_query")
+            if embeddings is None:
+                from app.services.colpali_service import embed_query_colpali
+
+                embeddings = embed_query_colpali(colpali_q)
+                embed_cache["colpali_query"] = embeddings
+        return filter_colpali_pages_dynamic(
+            retrieve_colpali_pages(
+                s, doc_ids, colpali_q, pool_size,
+                precomputed_query_embeddings=embeddings,
+            )
+        )
 
     def _bm25(s: Session) -> List[Any]:
         return retrieve_bm25_pages(s, doc_ids, lexical_q, pool_size)
@@ -124,6 +141,180 @@ async def _run_retrievers(
     return _colpali(session), _bm25(session)
 
 logger = logging.getLogger(__name__)
+
+# Répartition des slots de pages entre documents élus, selon leur rôle. Un document seul
+# prend TOUT le top_k : c'est ce qui permet 20 pages d'un même document là où le quota
+# précédent (8 pages/doc) le plafonnait, et donc de couvrir une notice de bout en bout.
+_ROLE_PAGE_SHARES: Dict[int, Tuple[float, ...]] = {
+    1: (1.0,),
+    2: (0.65, 0.35),
+    3: (0.60, 0.25, 0.15),
+}
+
+
+def _page_slots_for_roles(n_docs: int, top_k: int) -> List[int]:
+    """Nombre de pages allouées à chaque document élu (au moins 1 chacun)."""
+    shares = _ROLE_PAGE_SHARES.get(n_docs)
+    if not shares:
+        per_doc = max(1, top_k // max(1, n_docs))
+        return [per_doc] * n_docs
+    return [max(1, int(round(top_k * share))) for share in shares]
+
+
+async def _explore_elected_documents(
+    session: Session,
+    election: Any,
+    *,
+    space_id: int,
+    colpali_q: str,
+    lexical_q: str,
+    use_colpali: bool,
+    embed_cache: Dict[str, Any],
+    fused_hits: List[Any],
+    top_k: int,
+    pool_size: int,
+) -> Tuple[List[Any], Dict[str, Any]]:
+    """PHASE B — cherche les bonnes PAGES *à l'intérieur* des documents élus.
+
+    La phase A a répondu « dans quel document est l'information ». Ici on rouvre ce seul
+    document et on y cherche finement, ce qui change la nature du problème :
+
+    * le palier BM25 strict (AND de tous les termes), quasi inatteignable sur tout le
+      corpus, redevient franchissable sur un document unique ;
+    * la marge relative de ColPali se recalcule sur la distribution du seul document, au
+      lieu d'être écrasée par les scores d'autres documents ;
+    * LanceDB repasse en MaxSim exact (le seuil de bascule vers l'ANN est calculé sur le
+      sous-ensemble filtré) : meilleure qualité ET moins de calcul ;
+    * les documents NON élus disparaissent du pool — ils ne sont plus mal classés, ils
+      ne sont plus candidats du tout. C'est ce qui empêche le packer de les repêcher
+      pour remplir ses slots.
+
+    Le score de phase A fixe le PLAFOND de chaque document (il vient de la compétition
+    globale, seule comparable entre documents) ; la phase B ne sert qu'à choisir et
+    ordonner les pages À L'INTÉRIEUR. Sans ce recalage, les scores bornés — mécaniquement
+    plus élevés faute de concurrents — feraient remonter un document de complément
+    au-dessus du dominant.
+    """
+    from app.services.context_packer_service import (
+        MODE_FULL_TEXT,
+        MODE_IMAGE_FIRST,
+        profile_document,
+    )
+    from app.services.page_retrieval_service import fuse_multimodal_hits
+
+    hits_by_doc: Dict[int, List[Any]] = {}
+    for hit in fused_hits:
+        hits_by_doc.setdefault(int(hit.document_id), []).append(hit)
+
+    slots = _page_slots_for_roles(len(election.elected), top_k)
+    final_hits: List[Any] = []
+    trace: Dict[str, Any] = {"documents": []}
+
+    for elected, n_slots in zip(election.elected, slots):
+        doc_id = elected.document_id
+        phase_a = hits_by_doc.get(doc_id, [])
+        profile = profile_document(session, doc_id)
+
+        # ColPali borné tourne même en mode texte-intégral : c'est lui qui décide quelles
+        # pages partent en IMAGE, et le plafond de 8 images (limite dure de l'API) rend
+        # ce choix déterminant sur les planches cotées.
+        scoped_colpali, scoped_bm25 = await _run_retrievers(
+            session,
+            space_id,
+            [doc_id],
+            colpali_q,
+            lexical_q,
+            pool_size,
+            use_colpali=use_colpali or profile.mode == MODE_IMAGE_FIRST,
+            embed_cache=embed_cache,
+        )
+        # Le texte entier partant au packer, chercher DEDANS n'apporterait rien.
+        if profile.mode == MODE_FULL_TEXT:
+            scoped_bm25 = []
+
+        scoped = fuse_multimodal_hits(
+            scoped_colpali, scoped_bm25, rrf_k=settings.RRF_K, top_k=pool_size
+        )
+        merged = _merge_scoped_into_phase_a(phase_a, scoped, image_first=profile.mode == MODE_IMAGE_FIRST)
+        kept = merged[:n_slots] if merged else list(phase_a[:n_slots])
+
+        final_hits.extend(kept)
+        trace["documents"].append(
+            {
+                **profile.to_trace(),
+                # Réaffirmé après le profil : la trace doit toujours identifier le
+                # document, quelle que soit la forme du profil.
+                "document_id": doc_id,
+                "document_title": elected.title,
+                "role": elected.role,
+                "slots": n_slots,
+                "phase_a_pages": len(phase_a),
+                "scoped_pages": len(scoped),
+                "kept_pages": [int(h.page_no) for h in kept],
+            }
+        )
+        logger.info(
+            "[exploration] doc=%s mode=%s — phase A %d page(s) → bornée %d → retenu %d/%d "
+            "(pages=%s)",
+            doc_id,
+            profile.mode,
+            len(phase_a),
+            len(scoped),
+            len(kept),
+            n_slots,
+            [int(h.page_no) for h in kept],
+        )
+
+    for rank, hit in enumerate(final_hits, start=1):
+        hit.final_rank = rank
+    return final_hits, trace
+
+
+def _merge_scoped_into_phase_a(
+    phase_a: List[Any], scoped: List[Any], *, image_first: bool
+) -> List[Any]:
+    """Fusionne le classement borné (phase B) dans les hits globaux (phase A).
+
+    Les scores RRF bornés ne sont PAS comparables aux globaux : moins de concurrents ⇒
+    meilleurs rangs ⇒ scores plus élevés. On les recale donc sur le plafond de phase A du
+    document (voir la docstring de ``_explore_elected_documents``), et on conserve les
+    hits de phase A que la recherche bornée n'aurait pas retrouvés.
+    """
+    if not scoped:
+        return list(phase_a)
+
+    by_page: Dict[int, Any] = {int(h.page_no): h for h in phase_a}
+    phase_a_max = max((float(h.rrf_score or 0.0) for h in phase_a), default=0.0)
+    scoped_max = max((float(h.rrf_score or 0.0) for h in scoped), default=0.0)
+    scale = (phase_a_max / scoped_max) if (phase_a_max > 0 and scoped_max > 0) else 1.0
+
+    merged: List[Any] = []
+    seen: Set[int] = set()
+    for hit in scoped:
+        page = int(hit.page_no)
+        seen.add(page)
+        existing = by_page.get(page)
+        hit.rrf_score = float(hit.rrf_score or 0.0) * scale
+        if existing is not None:
+            # Conserve les acquis de la phase A : boost d'ancre conversationnelle,
+            # score global, et les canaux qui avaient matché.
+            hit.rrf_score = max(hit.rrf_score, float(existing.rrf_score or 0.0))
+            for source in existing.retrieval_sources or []:
+                if source not in (hit.retrieval_sources or []):
+                    hit.retrieval_sources.append(source)
+            if existing.colpali_score is not None and hit.colpali_score is None:
+                hit.colpali_score = existing.colpali_score
+            if existing.bm25_score is not None and hit.bm25_score is None:
+                hit.bm25_score = existing.bm25_score
+        if image_first:
+            # Document muet : le texte extrait ne porte pas les cotes, l'image fait foi.
+            hit.image_first = True
+        merged.append(hit)
+
+    merged.extend(h for h in phase_a if int(h.page_no) not in seen)
+    merged.sort(key=lambda h: float(h.rrf_score or 0.0), reverse=True)
+    return merged
+
 
 TITLE_QUERY_BOOST_PER_MATCH = float(os.getenv("TITLE_QUERY_BOOST_PER_MATCH", "0.5"))
 TITLE_QUERY_BOOST_CAP = float(os.getenv("TITLE_QUERY_BOOST_CAP", "2.0"))
@@ -618,6 +809,9 @@ async def search_multimodal_passages(
         ) as hr:
             # 2 retrievers en parallèle (threads + sessions dédiées) ou en séquence,
             # selon RETRIEVAL_PARALLEL_ENABLED. Voir _run_retrievers.
+            # Cache d'encodage partagé phase A → phase B : la requête ne change pas
+            # entre les deux passes, seul le périmètre documentaire se resserre.
+            embed_cache: Dict[str, Any] = {}
             colpali_hits, bm25_hits = await _run_retrievers(
                 session,
                 space_id,
@@ -626,6 +820,7 @@ async def search_multimodal_passages(
                 lexical_q,
                 pool_size,
                 use_colpali=use_colpali,
+                embed_cache=embed_cache,
             )
 
             # Filet de sécurité : ColPali écarté mais le retriever texte trop faible →
@@ -732,6 +927,7 @@ async def search_multimodal_passages(
         dynamic_k = len(fused_hits)
         protected_hits: List[Any] = []
         final_hits = fused_hits
+        exploration_trace: Optional[Dict[str, Any]] = None
 
         if settings.RERANKER_ENABLED:
             from app.services.page_reranker_service import rerank_unified_page_hits
@@ -765,14 +961,38 @@ async def search_multimodal_passages(
                     }
                 )
         else:
-            # Coupe équitable (M1) : quota souple par document + slots ColPali réservés.
-            # Sans reranker, la coupe brute [:top_k] laissait un gros document occuper
-            # tous les slots (puis remporter l'élection CAG grâce à ce volume) et n'offrait
-            # aucune protection aux pages visuelles — protect_colpali_visual_hits ne vit
-            # que dans le chemin du reranker.
-            from app.services.page_retrieval_service import select_final_hits
+            # PHASE B — exploration bornée aux documents élus. Remplace la coupe globale :
+            # au lieu de rogner un pool où tous les documents restent en lice (et où le
+            # packer pouvait donc repêcher un document que l'élection ET le juge avaient
+            # écarté), on ne garde QUE les élus et on cherche finement à l'intérieur.
+            exploration_trace = None
+            if election.elected:
+                final_hits, exploration_trace = await _explore_elected_documents(
+                    session,
+                    election,
+                    space_id=space_id,
+                    colpali_q=colpali_q,
+                    lexical_q=lexical_q,
+                    use_colpali=use_colpali,
+                    embed_cache=embed_cache,
+                    fused_hits=fused_hits,
+                    top_k=top_k,
+                    pool_size=pool_size,
+                )
 
-            final_hits, protected_hits = select_final_hits(fused_hits, top_k)
+            if not final_hits:
+                # Filet : exploration muette (échec SQL/LanceDB, ou aucune page retenue)
+                # → on retombe sur la coupe équitable du pool global plutôt que de rendre
+                # une réponse vide.
+                from app.services.page_retrieval_service import select_final_hits
+
+                final_hits, protected_hits = select_final_hits(fused_hits, top_k)
+                exploration_trace = {"fallback": "election_fallback"}
+                logger.warning(
+                    "[exploration] aucune page retenue sur les documents élus — repli sur "
+                    "la coupe globale du pool (%d hits)",
+                    len(fused_hits),
+                )
             dynamic_k = len(final_hits)
 
         if rerank_status == "low_confidence_clarification" and not protected_hits:
@@ -919,6 +1139,8 @@ async def search_multimodal_passages(
             ],
             # Phase A : qui porte la réponse, et pourquoi (trace + calibrage du seuil).
             "election": election.to_trace(),
+            # Phase B : comment chaque document élu a été exploré (mode + pages retenues).
+            "exploration": exploration_trace,
             # Vue LARGE pour le juge de suffisance : plusieurs documents peu profonds.
             # Sans elle le juge ne voit que ce que la coupe a laissé passer et ne peut
             # donc jamais contredire l'élection.

@@ -17,8 +17,10 @@ from __future__ import annotations
 
 import logging
 import time
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+from sqlalchemy import text
 from sqlmodel import Session, select
 
 from app.config import settings
@@ -443,6 +445,119 @@ def _pages_in_window(matched_pages: set, radius: int) -> Optional[set]:
 
 def _records_tokens(records: List[LeafRecord]) -> int:
     return estimate_tokens("\n".join(text for _, _, text in records))
+
+
+# --- Profilage de document (phase B du retriever) -------------------------------
+#
+# Un document ne se lit pas de la même façon selon ce qu'il CONTIENT. Trois archétypes
+# observés sur le corpus réel, qui appellent trois traitements différents :
+#
+#   * ``full_text``   — le texte tient entièrement dans le budget : inutile de chercher
+#                       DEDANS, on le donne en entier. Supprime par construction le
+#                       défaut « la règle et sa condition d'application séparées par le
+#                       chunking » (cas du capot complet / « rénovation uniquement »).
+#   * ``windowed``    — trop gros pour tenir : on relance les retrievers BORNÉS à ce
+#                       document. Le palier BM25 strict (AND), inatteignable sur tout le
+#                       corpus, redevient franchissable sur un seul document.
+#   * ``image_first`` — planche CAO quasi muette : le texte extrait ne dit presque rien,
+#                       seule l'image porte l'information (cotes). Les PNG font foi.
+#
+# Le mode n'est PAS un réglage : il se déduit du document. C'est ce qui remplace le
+# switch global CAG_IMAGE_ONLY, qui appliquait le même choix aux deux extrêmes.
+
+MODE_FULL_TEXT = "full_text"
+MODE_WINDOWED = "windowed"
+MODE_IMAGE_FIRST = "image_first"
+
+# En dessous, le texte extrait est trop maigre pour porter une réponse (planche CAO
+# transcrite en simple liste d'étiquettes, sans les cotes).
+_IMAGE_FIRST_MAX_TOKENS = 800
+
+
+@dataclass
+class DocumentProfile:
+    """Ce que contient réellement un document, et comment il doit donc être lu."""
+
+    document_id: int
+    page_count: int
+    pages_with_text: int
+    text_tokens: int
+    mode: str
+
+    def to_trace(self) -> Dict[str, Any]:
+        return {
+            "document_id": self.document_id,
+            "pages": self.page_count,
+            "pages_with_text": self.pages_with_text,
+            "text_tokens": self.text_tokens,
+            "mode": self.mode,
+        }
+
+
+def _count_document_pages(session: Session, document_id: int) -> int:
+    """Nombre de pages du document (0 si indéterminable).
+
+    Les chunks ``page_anchor`` valent 1 par page PDF (posés à l'ingestion) ; on retombe
+    sur le nombre de pages distinctes portant du texte si l'ancrage manque.
+    """
+    try:
+        row = session.execute(
+            text(
+                """
+                SELECT count(DISTINCT COALESCE(
+                           metadata_json->>'page_no', metadata_json->>'page_start'))
+                FROM documentchunk
+                WHERE document_id = :doc_id
+                  AND COALESCE(metadata_json->>'page_no',
+                               metadata_json->>'page_start') IS NOT NULL
+                """
+            ),
+            {"doc_id": int(document_id)},
+        ).scalar()
+        return int(row or 0)
+    except Exception as exc:  # pragma: no cover - lecture best-effort
+        logger.warning("[profil] comptage des pages impossible (doc %s) : %s", document_id, exc)
+        return 0
+
+
+def profile_document(
+    session: Session,
+    document_id: int,
+    *,
+    full_doc_max_tokens: Optional[int] = None,
+) -> DocumentProfile:
+    """Profile un document pour décider comment l'explorer (cf. archétypes ci-dessus).
+
+    Réutilise le cache de chunks feuilles de ``_load_leaf_records`` : appelée une fois
+    par document élu et par requête, elle ne coûte donc qu'une requête de comptage.
+    """
+    threshold = (
+        full_doc_max_tokens
+        if full_doc_max_tokens is not None
+        else settings.CAG_FULL_DOC_MAX_TOKENS
+    )
+    records = _load_leaf_records(session, document_id)
+    text_tokens = _records_tokens(records)
+    pages_with_text = len({page for page, _, _ in records if page})
+    page_count = _count_document_pages(session, document_id) or pages_with_text
+
+    # Un document dont presque aucune page ne « parle » ne peut pas être répondu par le
+    # texte, quel que soit le budget : ce test passe donc AVANT celui du texte intégral.
+    mute_page_budget = max(2, page_count // 10)
+    if text_tokens < _IMAGE_FIRST_MAX_TOKENS or pages_with_text <= mute_page_budget:
+        mode = MODE_IMAGE_FIRST
+    elif text_tokens <= threshold:
+        mode = MODE_FULL_TEXT
+    else:
+        mode = MODE_WINDOWED
+
+    return DocumentProfile(
+        document_id=int(document_id),
+        page_count=page_count,
+        pages_with_text=pages_with_text,
+        text_tokens=text_tokens,
+        mode=mode,
+    )
 
 
 def _trim_records_to_budget(

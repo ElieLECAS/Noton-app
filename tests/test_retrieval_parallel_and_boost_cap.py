@@ -15,10 +15,12 @@ from app.services import space_search_service as sss
 def _patch_retrievers():
     import app.services.page_retrieval_service as prs
 
+    # **kwargs : retrieve_colpali_pages accepte precomputed_query_embeddings (réutilisation
+    # de l'encodage de la requête entre la phase A et la phase B du retriever).
     return (
-        mock.patch.object(prs, "retrieve_colpali_pages", lambda s, d, q, p: ["colpali"]),
+        mock.patch.object(prs, "retrieve_colpali_pages", lambda s, d, q, p, **kw: ["colpali"]),
         mock.patch.object(prs, "filter_colpali_pages_dynamic", lambda hits: hits),
-        mock.patch.object(prs, "retrieve_bm25_pages", lambda s, d, q, p: ["bm25"]),
+        mock.patch.object(prs, "retrieve_bm25_pages", lambda s, d, q, p, **kw: ["bm25"]),
     )
 
 

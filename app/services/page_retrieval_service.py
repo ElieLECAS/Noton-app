@@ -67,6 +67,10 @@ class UnifiedPageHit:
     # (déplié à l'expansion pour retourner tout le batch 1/2/3 pages).
     enrichment_source_pages: List[int] = field(default_factory=list)
 
+    # Page d'un document jugé « muet » au profilage (planche CAO dont le texte extrait ne
+    # porte pas les cotes) : l'image fait foi, elle est donc prioritaire au rendu PNG.
+    image_first: bool = False
+
     @property
     def page_key(self) -> str:
         return f"{self.document_id}:{self.page_no}"
@@ -562,15 +566,23 @@ def retrieve_colpali_pages(
     doc_ids: List[int],
     query_text: str,
     limit: int,
+    *,
+    precomputed_query_embeddings: Optional[List[List[float]]] = None,
 ) -> List[UnifiedPageHit]:
-    """Retrieval ColPali — retourne des pages directement."""
+    """Retrieval ColPali — retourne des pages directement.
+
+    ``precomputed_query_embeddings`` évite de repayer l'encodage ColQwen2 de la requête,
+    qui domine le coût du retrieval sur CPU (mesuré jusqu'à 23 s à froid). La phase B
+    (recherche bornée au document élu) réutilise ainsi l'encodage de la phase A : la
+    requête est la même, seul le périmètre documentaire change.
+    """
     if not doc_ids or not settings.COLPALI_ENABLED:
         return []
 
     from app.services.colpali_service import embed_query_colpali
     from app.services.lancedb_service import search_colpali_lancedb
 
-    query_token_embeddings = embed_query_colpali(query_text)
+    query_token_embeddings = precomputed_query_embeddings or embed_query_colpali(query_text)
     if not query_token_embeddings:
         return []
 
