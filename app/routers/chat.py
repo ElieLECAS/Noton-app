@@ -64,6 +64,12 @@ async def chat_stream_wrapper(
                 model,
             )
 
+    # Graine d'échantillonnage : rend deux générations identiques comparables. Sans elle,
+    # une différence de réponse entre deux essais peut venir du hasard et non du changement
+    # de retriever qu'on cherche à évaluer.
+    if settings.GENERATION_SEED is not None:
+        reasoning_kwargs["random_seed"] = settings.GENERATION_SEED
+
     if settings.LLM_PROVIDER == "ollama":
         from app.services.ollama_service import chat_stream as ollama_chat_stream
         async for chunk in ollama_chat_stream(message=message, model=model, context=context):

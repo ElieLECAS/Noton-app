@@ -73,6 +73,11 @@ class Settings(BaseSettings):
     # pour coller au contexte fourni plutôt que reformuler librement.
     SPACE_CHAT_TEMPERATURE: float = float(os.getenv("SPACE_CHAT_TEMPERATURE", "0.2"))
     SPACE_CHAT_TOP_P: Optional[float] = None
+    # Graine d'échantillonnage de la génération (Mistral: random_seed). Sans elle, deux
+    # appels identiques rendent des réponses différentes : impossible de dire si un
+    # changement de retriever a amélioré quelque chose ou si c'est de la variance.
+    # Vide/absent = pas de graine transmise (comportement historique).
+    GENERATION_SEED: Optional[int] = None
     # Synthèse "carte mentale" (CAG plein-contexte par nœud d'arbre thématique)
     SYNTHESIS_MAX_TOKENS: int = int(os.getenv("SYNTHESIS_MAX_TOKENS", "2500"))
     SYNTHESIS_MAX_CONTEXT_CHARS: int = int(os.getenv("SYNTHESIS_MAX_CONTEXT_CHARS", "350000"))
@@ -1027,6 +1032,7 @@ class Settings(BaseSettings):
     @field_validator(
         'SPACE_CHAT_MAX_TOKENS',
         'VISION_MAX_IMAGES_PER_DOCUMENT',
+        'GENERATION_SEED',
         mode='before',
     )
     @classmethod
