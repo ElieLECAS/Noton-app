@@ -409,6 +409,7 @@ def log_multimodal_retrieval_summary(
     rerank_status: Optional[str] = None,
     dynamic_k: Optional[int] = None,
     protected_hits: Optional[List[UnifiedPageHit]] = None,
+    election: Optional[Dict[str, Any]] = None,
 ) -> None:
     """Résumé lisible en une seule entrée de log (visible dans docker logs)."""
     lines = [
@@ -439,6 +440,37 @@ def log_multimodal_retrieval_summary(
             lines.append(f"  … +{len(fused_hits) - pool_size} autres dans le pool")
     else:
         lines.append("  (aucune page dans le pool RRF)")
+
+    if election:
+        lines.extend(["", "── Étape 2c : Élection du document (pool complet) ──"])
+        lines.append(
+            f"  Décision : {election.get('decision')} "
+            f"(marge 2e/1er = {election.get('margin')})"
+        )
+        for doc in election.get("elected") or []:
+            lines.append(
+                f"  ★ {doc.get('document_title', '')[:45]} #{doc.get('document_id')} "
+                f"score={doc.get('election_score')} pages={doc.get('pages')} "
+                f"fam={'+'.join(doc.get('families') or []) or '-'} "
+                f"[{doc.get('role')}: {doc.get('reason')}]"
+            )
+            lines.append(f"      pages fortes : {doc.get('top_pages')}")
+        elected_ids = {d.get("document_id") for d in (election.get("elected") or [])}
+        others = [
+            c for c in (election.get("candidates") or [])
+            if c.get("document_id") not in elected_ids
+        ]
+        for cand in others:
+            lines.append(
+                f"  · non élu : {cand.get('document_title', '')[:45]} "
+                f"#{cand.get('document_id')} score={cand.get('election_score')} "
+                f"pages={cand.get('pages')}"
+            )
+        for rej in election.get("rejected_versions") or []:
+            lines.append(
+                f"  ⊘ version écartée : #{rej.get('document_id')} "
+                f"{rej.get('document_title', '')[:40]} → gardé #{rej.get('kept_document_id')}"
+            )
 
     if rerank_enabled:
         lines.extend(["", "── Étape 2b : Rerank MiniLM ──"])

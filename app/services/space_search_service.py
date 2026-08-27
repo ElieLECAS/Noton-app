@@ -707,6 +707,27 @@ async def search_multimodal_passages(
                 )
             return result
 
+        # PHASE A — ÉLECTION DU DOCUMENT, sur le pool fusionné COMPLET.
+        # Doit impérativement tourner AVANT la coupe top_k et le quota par document :
+        # ceux-ci ramènent à 8 les pages visibles d'un document qui en place 15, et
+        # détruisent donc la preuve même qu'il porte la réponse.
+        # Pour l'instant en OBSERVATION : le résultat part dans la trace et les logs,
+        # la sélection finale reste inchangée (l'exploitation vient au lot suivant).
+        from app.services.document_election_service import (
+            elect_documents,
+            election_candidate_passages,
+            format_election_log,
+        )
+
+        election = elect_documents(
+            session,
+            fused_hits,
+            query_text=query_text,
+            signals=signals,
+            max_docs=settings.CAG_MAX_DOCUMENTS,
+        )
+        logger.info(format_election_log(election))
+
         rerank_status = "disabled"
         dynamic_k = len(fused_hits)
         protected_hits: List[Any] = []
@@ -772,6 +793,7 @@ async def search_multimodal_passages(
                 rerank_status=rerank_status,
                 dynamic_k=0,
                 protected_hits=protected_hits,
+                election=election.to_trace(),
             )
             low_conf_result = {
                 "passages": [],
@@ -808,6 +830,7 @@ async def search_multimodal_passages(
                 rerank_status=rerank_status,
                 dynamic_k=0,
                 protected_hits=protected_hits,
+                election=election.to_trace(),
             )
             return {
                 "passages": [],
@@ -868,6 +891,7 @@ async def search_multimodal_passages(
             rerank_status=rerank_status,
             dynamic_k=dynamic_k,
             protected_hits=protected_hits,
+            election=election.to_trace(),
         )
 
         reason = "multimodal_rrf_minilm" if settings.RERANKER_ENABLED else "multimodal_rrf"
@@ -893,6 +917,12 @@ async def search_multimodal_passages(
                 }
                 for h in final_hits[:5]
             ],
+            # Phase A : qui porte la réponse, et pourquoi (trace + calibrage du seuil).
+            "election": election.to_trace(),
+            # Vue LARGE pour le juge de suffisance : plusieurs documents peu profonds.
+            # Sans elle le juge ne voit que ce que la coupe a laissé passer et ne peut
+            # donc jamais contredire l'élection.
+            "candidate_passages": election_candidate_passages(election),
         }
         if include_retrieval_stages:
             result["retrieval_stages"] = _multimodal_eval_stages(
