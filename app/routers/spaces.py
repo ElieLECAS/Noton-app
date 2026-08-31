@@ -18,6 +18,7 @@ from app.services.document_service_new import get_documents_by_space
 from app.services.lexical_search_service import (
     get_space_search_page_detail,
     get_space_source_page_detail,
+    list_space_documents_overview,
     search_space_pages,
 )
 from app.services.space_category_service import (
@@ -25,11 +26,6 @@ from app.services.space_category_service import (
     get_space_category_page_detail,
     get_space_category_pages,
 )
-from app.services.space_theme_tree_service import (
-    build_space_theme_tree,
-    get_space_theme_node_pages,
-)
-from app.services.space_theme_synthesis_service import generate_space_theme_synthesis
 import logging
 
 logger = logging.getLogger(__name__)
@@ -123,6 +119,16 @@ class SpaceCategoryPageDetailResponse(BaseModel):
     navigation: SpaceCategoryPageNavigation
 
 
+class SpaceBrowseDocumentItem(BaseModel):
+    """Document consultable dans la modale de recherche."""
+
+    document_id: int
+    title: str
+    source: str = ""
+    has_source_file: bool = False
+    page_count: int = 0
+
+
 class SpaceSearchPagesResponse(BaseModel):
     space_id: int
     query: str
@@ -141,11 +147,6 @@ class SpaceSearchPageDetailResponse(BaseModel):
     consolidated_markdown: str = ""
     navigation: SpaceCategoryPageNavigation
 
-
-class ThemeSynthesisRequest(BaseModel):
-    node_key: str = Field(..., min_length=1, max_length=128)
-    node_label: str = ""
-    axis: str = "task"
 
 
 @router.get("", response_model=List[SpaceRead])
@@ -289,68 +290,6 @@ async def list_space_documents(
     return [DocumentListItem.model_validate(d) for d in documents]
 
 
-@router.get("/{space_id}/tree")
-async def get_space_theme_tree(
-    space_id: int,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-    axis: str = Query("task"),
-):
-    """Arbre thématique (carte mentale) : racine → familles → catégories, avec comptes."""
-    space = get_space_by_id(session, space_id, current_user.id)
-    if not space:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Espace non trouvé",
-        )
-    return build_space_theme_tree(session, space_id, axis=axis)
-
-
-@router.get("/{space_id}/tree/pages")
-async def get_space_theme_tree_pages(
-    space_id: int,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-    node_key: str = Query(..., min_length=1, max_length=128),
-    axis: str = Query("task"),
-    q: Optional[str] = Query(None, description="Filtre mot-clé (intersection catégorie ∩ mot-clé)"),
-):
-    """Pages (PDF + texte) rattachées à un nœud de l'arbre thématique.
-
-    Si `q` est fourni, ne renvoie que les pages contenant le mot-clé.
-    """
-    space = get_space_by_id(session, space_id, current_user.id)
-    if not space:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Espace non trouvé",
-        )
-    return get_space_theme_node_pages(session, space_id, node_key, axis, q=q)
-
-
-@router.post("/{space_id}/tree/synthesis")
-async def synthesize_space_theme(
-    space_id: int,
-    request: ThemeSynthesisRequest,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-):
-    """Synthèse CAG d'un nœud de l'arbre : injecte le texte des documents rattachés."""
-    space = get_space_by_id(session, space_id, current_user.id)
-    if not space:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Espace non trouvé",
-        )
-    return await generate_space_theme_synthesis(
-        session,
-        space_id,
-        request.node_key,
-        request.node_label,
-        request.axis,
-    )
-
-
 @router.get("/{space_id}/categories", response_model=SpaceCategoriesResponse)
 async def list_space_categories(
     space_id: int,
@@ -429,18 +368,43 @@ async def get_space_category_page(
 async def search_space_pages_endpoint(
     space_id: int,
     q: str = Query(..., min_length=1, description="Mot-clé à rechercher (contient)"),
+    document_id: Optional[int] = Query(
+        None, description="Restreindre la recherche à ce seul document"
+    ),
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
-    """Pages de l'espace contenant le mot-clé (recherche lexicale « contient »)."""
+    """Pages contenant le mot-clé, dans tout l'espace ou dans un document donné."""
     space = get_space_by_id(session, space_id, current_user.id)
     if not space:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Espace non trouvé",
         )
-    payload = search_space_pages(session, space_id, q)
+    payload = search_space_pages(session, space_id, q, document_id=document_id)
     return SpaceSearchPagesResponse.model_validate(payload)
+
+
+@router.get(
+    "/{space_id}/browse/documents",
+    response_model=List[SpaceBrowseDocumentItem],
+)
+async def list_space_browse_documents(
+    space_id: int,
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """Documents de l'espace, avec leur nombre de pages consultables."""
+    space = get_space_by_id(session, space_id, current_user.id)
+    if not space:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Espace non trouvé",
+        )
+    return [
+        SpaceBrowseDocumentItem.model_validate(d)
+        for d in list_space_documents_overview(session, space_id)
+    ]
 
 
 @router.get(
@@ -452,6 +416,9 @@ async def get_space_search_page(
     document_id: int,
     page_no: int,
     q: str = Query(..., min_length=1, description="Mot-clé à rechercher (contient)"),
+    document_scope_id: Optional[int] = Query(
+        None, description="Portée de la recherche ayant produit ce résultat"
+    ),
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
@@ -462,7 +429,10 @@ async def get_space_search_page(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Espace non trouvé",
         )
-    payload = get_space_search_page_detail(session, space_id, q, document_id, page_no)
+    payload = get_space_search_page_detail(
+        session, space_id, q, document_id, page_no,
+        scope_document_id=document_scope_id,
+    )
     if payload is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

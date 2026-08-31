@@ -65,11 +65,19 @@ def build_coverage_block(
     doc_passages: Sequence[dict],
     pinned_codes: Optional[Sequence[str]] = None,
     retrieval_status: Optional[str] = None,
+    visual_context: bool = False,
 ) -> str:
     """Construit le bloc `### COUVERTURE DE LA RECHERCHE` injecté dans le contexte.
 
-    - `context_text` : le contenu système RÉELLEMENT packé (CAG) — la vérification
-      TROUVÉE/ABSENTE se fait contre lui, pas contre les passages bruts.
+    - `context_text` : la MATIÈRE documentaire réellement fournie au modèle — la
+      vérification TROUVÉE/ABSENTE se fait contre elle, pas contre les passages bruts.
+      En mode 100 % PNG, l'appelant doit y joindre le texte des pages packées : le
+      message système ne contient alors qu'un manifeste, et chercher une référence
+      dedans la déclarerait absente à tort (la page part pourtant bien en image).
+    - `visual_context` : les pages sont fournies en IMAGES. Une référence introuvable
+      dans le texte extrait peut rester parfaitement lisible sur la planche — le verdict
+      d'absence devient donc une invitation à vérifier l'image, jamais un ordre
+      d'abstention.
     - Statut : ok (passages + tous codes trouvés) | partiel (passages mais un code
       absent) | vide (aucun passage pertinent).
     """
@@ -97,6 +105,13 @@ def build_coverage_block(
         if found:
             suffix = " (chunk de référence épinglé)" if code_u in pinned else ""
             code_lines.append(f"- Référence {code_u} : TROUVÉE dans le contexte{suffix}")
+        elif visual_context:
+            missing_codes.append(code_u)
+            code_lines.append(
+                f"- Référence {code_u} : absente du TEXTE extrait — elle peut néanmoins "
+                "figurer sur les images de pages fournies. Lis-les avant de conclure ; "
+                "ne réponds à partir d'une référence voisine en aucun cas"
+            )
         else:
             missing_codes.append(code_u)
             code_lines.append(

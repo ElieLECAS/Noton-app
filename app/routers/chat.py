@@ -778,6 +778,17 @@ def _passages_contain_codes(passages: List[dict], codes: List[str]) -> bool:
     return any(c in blob for c in norm_codes)
 
 
+def _stage_event(key: str, label: str) -> str:
+    """Événement de PROGRESSION envoyé au client pendant les phases pré-génération.
+
+    Avant, le serveur n'émettait rien entre la requête et le premier jeton : l'interface
+    affichait un « LIA réfléchit… » figé pendant toute la recherche, le contrôle
+    documentaire et le packing — soit l'essentiel de l'attente. Ces étapes étaient
+    pourtant déjà journalisées côté serveur ; elles partent désormais aussi au client.
+    """
+    return f"data: {json.dumps({'stage': {'key': key, 'label': label}})}\n\n"
+
+
 async def _stream_llm_to_sse(
     context: List[dict],
     *,
@@ -1610,710 +1621,6 @@ async def stream_space_chat_message(
     # a changé, le document du tour précédent garde son boost de recherche mais perd son
     # slot CAG réservé — sinon il occupe la place du document qui porte vraiment la réponse.
     cag_anchor_document_ids = [] if anchor_intent_changed else list(anchor_document_ids or [])
-
-    step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
-    logger.info("[chat] Étape %s — retrieval hybride (ColPali + BM25)", step_label)
-    import time as _time
-    _t_retrieval_start = _time.perf_counter()
-    with trace_run(
-        "technical_retrieval",
-        run_type="retriever",
-        inputs={
-            "query": retrieval_query_text,
-            "space_id": space_id,
-            "k": RAG_TOP_K,
-            "retrieval_queries": retrieval_queries.model_dump() if retrieval_queries else None,
-        },
-        tags=["rag", "technical", "space"],
-    ) as retrieval_run:
-        from app.services.space_search_service import search_technical_passages
-
-        # Sentinelle des overrides de relance (B5) : None est une valeur légitime
-        # (« pas de queries pré-dérivées ») — la sentinelle distingue « inchangé ».
-        _UNSET = object()
-
-        async def _do_retrieval(
-            allowed: Optional[List[int]],
-            *,
-            query_text: Optional[str] = None,
-            anchors=_UNSET,
-            k: Optional[int] = None,
-            queries=_UNSET,
-        ):
-            # Les overrides servent aux relances de la boucle agentique (B5) : requête
-            # réécrite par le juge, désancrage, k élargi. Sans override, comportement
-            # strictement identique à l'historique.
-            _anchors = (anchor_document_ids or None) if anchors is _UNSET else (anchors or None)
-            return await search_technical_passages(
-                session=session,
-                space_id=space_id,
-                query_text=query_text if query_text is not None else retrieval_query_text,
-                user_id=current_user.id,
-                k=k or RAG_TOP_K,
-                queries=retrieval_queries if queries is _UNSET else queries,
-                signals=lw_result.signals if lw_result and lw_result.signals else None,
-                anchor_document_ids=_anchors,
-                allowed_document_ids=allowed,
-            )
-
-        async def _run_retrieval(allowed: Optional[List[int]], **overrides):
-            # Budget temps global (P0.3) : un canal qui freeze (ColPali CPU, MaxSim LanceDB)
-            # ne doit pas bloquer indéfiniment — au-delà du budget, dégradation gracieuse.
-            try:
-                if settings.RETRIEVAL_TIMEOUT_S and settings.RETRIEVAL_TIMEOUT_S > 0:
-                    return await asyncio.wait_for(
-                        _do_retrieval(allowed, **overrides), timeout=settings.RETRIEVAL_TIMEOUT_S
-                    )
-                return await _do_retrieval(allowed, **overrides)
-            except asyncio.TimeoutError:
-                logger.error(
-                    "[chat] retrieval au-delà du budget %.0fs → dégradation gracieuse (0 passage)",
-                    settings.RETRIEVAL_TIMEOUT_S,
-                )
-                return {
-                    "passages": [], "images": [], "status": "degraded_timeout",
-                    "reason": "retrieval_timeout",
-                }
-
-        retrieval = await _run_retrieval(allowed_document_ids)
-        # Élargissement automatique : un périmètre trop étroit (aucun document) ne doit
-        # JAMAIS produire un « pas documenté » à tort → on relance sans périmètre.
-        if allowed_document_ids is not None and retrieval.get("reason") == "scope_empty":
-            logger.info(
-                "[chat] Périmètre vide (0 document) → élargissement automatique à tout l'espace"
-            )
-            retrieval = await _run_retrieval(None)
-        doc_passages = retrieval["passages"]
-        retrieval_status = retrieval["status"]
-        retrieval_reason = retrieval.get("reason")
-        retrieval_images = retrieval.get("images") or []
-        dynamic_k = retrieval.get("dynamic_k")
-        rerank_status = retrieval.get("rerank_status")
-
-        # ——— Retry automatique sur RÉFÉRENCE introuvable (1 passe) ———
-        # Le retriever est sensible à la formulation (« référence X » vs « crémone X ») :
-        # si la question porte un code et qu'AUCUN passage ne le contient, on relance UNE
-        # recherche ciblée sur le code seul (recall élevé). S'il reste introuvable, on
-        # demandera une précision à l'utilisateur (cf. bloc génération) au lieu d'un
-        # « non documenté » en cul-de-sac.
-        reference_not_found: List[str] = []
-        retry_trace: Dict[str, Any] = {"triggered": False}
-        try:
-            from app.services.coverage_service import extract_message_reference_codes
-
-            _req_codes = extract_message_reference_codes(
-                retrieval_query_text,
-                request.message,
-                *(
-                    (lw_result.signals.detected_references or [])
-                    if (lw_result and lw_result.signals)
-                    else []
-                ),
-            )
-        except Exception:
-            _req_codes = []
-
-        if _req_codes and not _passages_contain_codes(doc_passages, _req_codes):
-            code_query = " ".join(_req_codes)
-            # Cheminement (T2) : sans cette trace, rien ne distingue un tour à un retrieval
-            # d'un tour à deux — alors que le retry interroge le retriever avec une AUTRE
-            # question (les codes seuls) et que ce sont SES passages qui sont packés.
-            retry_trace = {
-                "triggered": True,
-                "requested_codes": list(_req_codes),
-                "retry_query": code_query,
-                "standalone_question": retrieval_query_text,
-                "hits_before": list(retrieval.get("top_hits") or []),
-            }
-            logger.info(
-                "[chat] Référence(s) %s absente(s) des passages → retry recherche ciblée",
-                _req_codes,
-            )
-            try:
-                retry = await search_technical_passages(
-                    session=session,
-                    space_id=space_id,
-                    query_text=code_query,
-                    user_id=current_user.id,
-                    k=RAG_TOP_K,
-                    signals=lw_result.signals if lw_result and lw_result.signals else None,
-                    anchor_document_ids=anchor_document_ids or None,
-                    allowed_document_ids=allowed_document_ids,
-                )
-            except Exception as _retry_err:
-                logger.warning("[chat] retry ciblé référence échoué : %s", _retry_err)
-                retry = None
-            if retry and _passages_contain_codes(retry.get("passages") or [], _req_codes):
-                logger.info("[chat] Retry ciblé — référence(s) trouvée(s), passages remplacés")
-                retrieval = retry
-                doc_passages = retrieval["passages"]
-                retrieval_status = retrieval["status"]
-                retrieval_reason = retrieval.get("reason")
-                retrieval_images = retrieval.get("images") or []
-                retry_trace.update(
-                    {
-                        "outcome": "found",
-                        "passages_replaced": True,
-                        "hits_after": list(retrieval.get("top_hits") or []),
-                        "warning": (
-                            "Le classement packé est celui du retry (requête « "
-                            f"{code_query} »), pas celui de la question de l'utilisateur."
-                        ),
-                    }
-                )
-            else:
-                reference_not_found = list(_req_codes)
-                # Ce que le retry a RAMENÉ compte autant que son échec : sans ces hits, la
-                # trace laisse croire qu'il n'a rien trouvé, alors qu'il a bien ramené des
-                # pages — simplement aucune ne portait le code.
-                retry_trace.update(
-                    {
-                        "outcome": "not_found",
-                        "passages_replaced": False,
-                        "hits_after": list((retry or {}).get("top_hits") or []),
-                    }
-                )
-                logger.info(
-                    "[chat] Retry ciblé — référence(s) %s toujours introuvable(s) → clarification",
-                    _req_codes,
-                )
-
-        retrieval_run.end(outputs={
-            "status": retrieval_status,
-            "reason": retrieval_reason,
-            "dynamic_k": dynamic_k,
-            "rerank_status": rerank_status,
-            "nb_passages": len(doc_passages),
-            "passages": [
-                {
-                    "document_title": p.get("document_title"),
-                    "chunk_id": p.get("chunk_id"),
-                    "score": round(float(p.get("score", 0)), 4),
-                    "page_no": p.get("page_no"),
-                    "section": p.get("section"),
-                    "passage_preview": (p.get("passage_raw") or p.get("passage", ""))[:300],
-                }
-                for p in doc_passages
-            ],
-        })
-
-    # [PERF] Bucket macro n°1 : tout le retrieval (encode ColPali + MaxSim + 4 retrievers
-    # + rerank MiniLM + rerank vision). À comparer au bucket génération plus bas.
-    logger.info(
-        "[PERF][chat] retrieval TOTAL %.2fs — %d passages (rerank=%s)",
-        _time.perf_counter() - _t_retrieval_start,
-        len(doc_passages),
-        rerank_status,
-    )
-
-    from app.services.rag_generation_service import (
-        enrich_colpali_passages_with_pymupdf,
-        is_vision_model,
-        render_page_images_for_passages_async,
-        build_rag_user_message,
-    )
-
-    doc_passages = enrich_colpali_passages_with_pymupdf(session, doc_passages)
-
-    if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals:
-        from app.services.retrieval_boost_service import apply_soft_boosts_to_passages
-
-        doc_passages = apply_soft_boosts_to_passages(
-            session=session,
-            passages=doc_passages,
-            signals=lw_result.signals,
-        )
-
-    # L'autorité de source (primary_source) est déjà appliquée par
-    # apply_soft_boosts_to_passages ci-dessus, de façon proportionnelle à l'étendue
-    # des scores. L'ancien refine_with_source_authority ajoutait un SECOND boost
-    # (0.8·confidence, échelle ambiguë) sur le même critère → double-comptage supprimé.
-
-    # ——— Boucle agentique (B4/B5, plan 2026-07-29) : juge de suffisance + relances ———
-    # AVANT la génération, un modèle distinct lit les DOSSIERS CANDIDATS (pack-juge) et
-    # statue : élire (documents + pages → packing) ou relancer la recherche (reformulation,
-    # filtres, désancrage), sous deadline dure. Mode shadow = verdicts tracés, jamais
-    # actionnés. Flag off = pipeline strictement inchangé. Un juge défaillant (timeout,
-    # JSON invalide, preuve introuvable) ne dégrade JAMAIS le tour : on génère comme
-    # aujourd'hui, l'échec est tracé.
-    loop_trace: Optional[Dict[str, Any]] = None
-    judge_elected_ids: List[int] = []
-    judge_pinned_pages: Dict[int, List[int]] = {}
-    judge_note_block: Optional[str] = None
-    loop_exhausted_missing: Optional[str] = None
-    if settings.AGENTIC_LOOP_ENABLED and settings.CAG_ENABLED and doc_passages:
-        from app.services.coverage_service import (
-            coverage_status as _loop_coverage_status,
-            extract_message_reference_codes as _loop_extract_codes,
-        )
-        from app.services.retrieval_judge_service import (
-            apply_judge_action,
-            build_judge_note_block,
-            build_judge_pack,
-            judge_candidates,
-            passages_pool_key,
-        )
-        from app.services.slot_catalog import expected_content_for_intent
-
-        _loop_mode = "active" if settings.AGENTIC_LOOP_MODE == "active" else "shadow"
-        loop_trace = {"mode": _loop_mode, "rounds": [], "deadline_hit": False}
-        _loop_deadline = _time.monotonic() + max(5.0, settings.LOOP_DEADLINE_S)
-        _loop_intent = lw_result.signals.intent if (lw_result and lw_result.signals) else None
-        _expected_content = expected_content_for_intent(_loop_intent)
-        try:
-            _loop_codes = _loop_extract_codes(
-                retrieval_query_text,
-                request.message,
-                *(
-                    (lw_result.signals.detected_references or [])
-                    if (lw_result and lw_result.signals)
-                    else []
-                ),
-            )
-        except Exception:  # noqa: BLE001
-            _loop_codes = []
-        _max_rounds = 1 + (max(0, settings.JUDGE_MAX_RETRIES) if _loop_mode == "active" else 0)
-        _loop_query = retrieval_query_text
-        _loop_allowed = allowed_document_ids
-        _loop_anchor_override = _UNSET
-        _loop_k: Optional[int] = None
-        _prev_pool = passages_pool_key(doc_passages)
-        _prev_missing: Optional[str] = None
-
-        try:
-            for _round in range(1, _max_rounds + 1):
-                judge_pack = await asyncio.to_thread(
-                    build_judge_pack, session, doc_passages, intent=_loop_intent
-                )
-                _judge_images: List[str] = []
-                if settings.JUDGE_IMAGES_MODE == "always" or (
-                    settings.JUDGE_IMAGES_MODE == "auto"
-                    and _loop_intent in ("installation", "troubleshooting")
-                ):
-                    try:
-                        from app.services.context_packer_service import select_cag_images
-
-                        _judge_images, _ = await asyncio.to_thread(
-                            select_cag_images,
-                            session,
-                            judge_pack["cag_documents"],
-                            doc_passages,
-                            max_images=settings.JUDGE_MAX_IMAGES,
-                        )
-                    except Exception as _ji_err:  # noqa: BLE001
-                        logger.warning("[loop] images du juge ignorées : %s", _ji_err)
-
-                _coverage_line = None
-                if _loop_codes:
-                    _cov = _loop_coverage_status(
-                        context_text=judge_pack["context_text"],
-                        requested_codes=_loop_codes,
-                        doc_passages=doc_passages,
-                    )
-                    _missing_codes = _cov.get("missing_codes") or []
-                    _coverage_line = (
-                        ("ABSENTES des dossiers : " + ", ".join(_missing_codes))
-                        if _missing_codes
-                        else ("toutes présentes dans les dossiers : " + ", ".join(_loop_codes))
-                    )
-
-                verdict = await judge_candidates(
-                    question=_loop_query,
-                    intent=_loop_intent,
-                    expected_content=_expected_content,
-                    judge_pack=judge_pack,
-                    coverage_line=_coverage_line,
-                    images=_judge_images or None,
-                    round_index=_round,
-                    previous_missing=_prev_missing,
-                )
-                _round_trace = {
-                    "round": _round,
-                    "query": _loop_query,
-                    "status": verdict.get("status"),
-                    "status_reason": verdict.get("status_reason"),
-                    "verdict": verdict.get("verdict"),
-                    "confidence": verdict.get("confidence"),
-                    "evidence": (verdict.get("evidence") or "")[:300],
-                    "evidence_verified": verdict.get("evidence_verified"),
-                    "missing": (verdict.get("missing") or "")[:300],
-                    "elected": [
-                        {
-                            "document_id": e.get("document_id"),
-                            "document_index": e.get("document_index"),
-                            "pages": e.get("pages"),
-                            "role": e.get("role"),
-                        }
-                        for e in (verdict.get("elected") or [])
-                    ],
-                    "candidates": [
-                        {"document_id": d.get("document_id"), "index": d.get("index")}
-                        for d in (judge_pack.get("cag_documents") or [])
-                    ],
-                    "images": len(_judge_images),
-                    "duration_ms": verdict.get("duration_ms"),
-                    "model": verdict.get("model"),
-                }
-                loop_trace["rounds"].append(_round_trace)
-
-                if _loop_mode == "shadow":
-                    break
-                if verdict["status"] != "ok":
-                    break
-                if verdict["verdict"] == "sufficient":
-                    judge_elected_ids = [e["document_id"] for e in verdict["elected"]]
-                    judge_pinned_pages = {
-                        e["document_id"]: e["pages"]
-                        for e in verdict["elected"]
-                        if e.get("pages")
-                    }
-                    judge_note_block = build_judge_note_block(verdict)
-                    break
-
-                # Verdict « insuffisant » → relance informée, si budget et action utile.
-                _prev_missing = verdict.get("missing") or None
-                if _round >= _max_rounds:
-                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                    break
-                if _time.monotonic() > _loop_deadline:
-                    loop_trace["deadline_hit"] = True
-                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                    break
-                _action = apply_judge_action(verdict, current_query=_loop_query)
-                if not _action:
-                    _round_trace["relaunch"] = "no_action"
-                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                    break
-                _round_trace["action"] = _action.get("label")
-                _loop_query = _action.get("query_text") or _loop_query
-                if _action.get("widen_scope"):
-                    _loop_allowed = None
-                if _action.get("restrict_document_id"):
-                    _loop_allowed = [int(_action["restrict_document_id"])]
-                if _action.get("drop_anchor"):
-                    _loop_anchor_override = []
-                if _action.get("raise_k"):
-                    _loop_k = max(RAG_TOP_K, min(2 * RAG_TOP_K, settings.RERANK_POOL))
-
-                _relaunch = await _run_retrieval(
-                    _loop_allowed,
-                    query_text=_loop_query,
-                    anchors=_loop_anchor_override,
-                    k=_loop_k,
-                    queries=None,
-                )
-                _new_passages = _relaunch.get("passages") or []
-                if not _new_passages:
-                    _round_trace["relaunch"] = "empty"
-                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                    break
-                _new_passages = enrich_colpali_passages_with_pymupdf(session, _new_passages)
-                if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals:
-                    from app.services.retrieval_boost_service import (
-                        apply_soft_boosts_to_passages as _loop_boosts,
-                    )
-
-                    _new_passages = _loop_boosts(
-                        session=session, passages=_new_passages, signals=lw_result.signals
-                    )
-                _new_pool = passages_pool_key(_new_passages)
-                if _new_pool == _prev_pool:
-                    _round_trace["relaunch"] = "no_progress"
-                    loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                    break
-                _round_trace["relaunch"] = "replaced"
-                _prev_pool = _new_pool
-                doc_passages = _new_passages
-                retrieval = _relaunch
-                retrieval_status = _relaunch["status"]
-                retrieval_reason = _relaunch.get("reason")
-                retrieval_images = _relaunch.get("images") or []
-                dynamic_k = _relaunch.get("dynamic_k")
-                rerank_status = _relaunch.get("rerank_status")
-        except Exception as _loop_err:  # noqa: BLE001
-            logger.exception("[loop] boucle agentique interrompue — génération inchangée")
-            loop_trace["error"] = str(_loop_err)[:200]
-
-    # Mémorise les documents dominants de ce tour comme ancre du sujet courant (réutilisée
-    # pour biaiser le retrieval du prochain tour, tant qu'il n'y a pas de changement de sujet).
-    if settings.CONVERSATION_ANCHOR_ENABLED and request.conversation_id and doc_passages:
-        from app.services.retrieval_boost_service import compute_anchor_documents
-
-        new_anchor = compute_anchor_documents(
-            doc_passages, max_docs=settings.CONVERSATION_ANCHOR_MAX_DOCS
-        )
-        if new_anchor:
-            _update_conversation_documents(
-                request.conversation_id,
-                new_anchor,
-                intent=(lw_result.signals.intent if (lw_result and lw_result.signals) else None),
-            )
-
-    logger.info(
-        "[chat] Étape %s — contexte RAG (%d passages, status=%s, dynamic_k=%s, rerank=%s)",
-        "3/5" if settings.QUERY_UNDERSTANDING_ENABLED else "3/4",
-        len(doc_passages),
-        retrieval_status,
-        dynamic_k,
-        rerank_status,
-    )
-
-    # Garde-fou du mode 100 % PNG : sans modèle multimodal, AUCUNE image ne partira et le
-    # contexte se réduirait à un manifeste — le modèle répondrait de mémoire. On rebascule
-    # donc sur le texte pour toute la construction du contexte de ce tour.
-    _image_only_impossible = settings.CAG_IMAGE_ONLY and not is_vision_model(forced_model)
-
-    @contextmanager
-    def _context_mode():
-        if _image_only_impossible:
-            with _forced_text_context_if_image_only(
-                f"le modèle {forced_model} n'accepte pas d'images"
-            ):
-                yield
-        else:
-            yield
-
-    # Construire le contexte système à partir des passages techniques
-    # Si low confidence : injecter un prompt spécial pour forcer la clarification
-    if retrieval_status == "low_confidence_clarification":
-        with _context_mode():
-            space_context_draft = _build_generation_context(
-                session,
-                doc_passages,
-                anchor_document_ids=cag_anchor_document_ids or None,
-                intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
-                elected_document_ids=judge_elected_ids or None,
-                pinned_pages=judge_pinned_pages or None,
-            )
-        # Ajouter une instruction de clarification forcée après les passages
-        space_context_draft["content"] += (
-            "\n\n⚠️ IMPORTANT : Les passages ci-dessus sont ambigus ou de faible pertinence. "
-            "Ne déduis PAS de réponse définitive. Tu dois poser à l'utilisateur une question "
-            "précise de clarification basée uniquement sur le contenu de ces 1-2 passages."
-        )
-        logger.info(
-            "Low confidence détectée : prompt forcé à demander clarification (status=%s, reason=%s)",
-            retrieval_status,
-            retrieval_reason,
-        )
-    else:
-        with _context_mode():
-            space_context_draft = _build_generation_context(
-                session,
-                doc_passages,
-                anchor_document_ids=cag_anchor_document_ids or None,
-                intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
-                elected_document_ids=judge_elected_ids or None,
-                pinned_pages=judge_pinned_pages or None,
-            )
-
-    # ——— Chunk pinning (C6) + bloc COUVERTURE (C3) ———
-    # Placés en FIN de message système (zone de forte attention, comme le fil de
-    # conversation) : extraits de référence VERBATIM pour les codes demandés, puis
-    # rapport factuel de couverture (le grounding cesse d'être déclaratif).
-    from app.services.coverage_service import (
-        build_coverage_block,
-        extract_message_reference_codes,
-    )
-
-    requested_codes = extract_message_reference_codes(
-        retrieval_query_text,
-        request.message,
-        *(
-            (lw_result.signals.detected_references or [])
-            if lw_result and lw_result.signals
-            else []
-        ),
-    )
-
-    # Épinglage par référence : recherche SQL directe du chunk faisant autorité pour un
-    # code demandé (densité de spécification), sans graphe d'entités.
-    pinned_codes: List[str] = []
-    if requested_codes:
-        try:
-            from app.services.page_retrieval_service import get_space_document_ids
-            from app.services.reference_pinning_service import (
-                build_pinned_reference_block,
-            )
-
-            pin_doc_ids = allowed_document_ids or get_space_document_ids(
-                session, space_id, document_filter="technical"
-            )
-            pinned_block, pinned_codes = build_pinned_reference_block(
-                session, pin_doc_ids, requested_codes
-            )
-            if pinned_block:
-                space_context_draft["content"] += "\n\n" + pinned_block
-                logger.info("[chat] épinglage référence — codes=%s", pinned_codes)
-        except Exception as pin_err:
-            logger.warning("[chat] épinglage référence ignoré : %s", pin_err)
-
-    coverage_block = build_coverage_block(
-        context_text=space_context_draft.get("content") or "",
-        requested_codes=requested_codes,
-        doc_passages=doc_passages,
-        pinned_codes=pinned_codes,
-        retrieval_status=retrieval_status,
-    )
-    space_context_draft["content"] += "\n\n" + coverage_block
-
-    # ——— Note du juge (B6) / aveu structuré (B5) ———
-    # Même zone de forte attention (fin du message système) que la COUVERTURE. La note
-    # pointe les pages VALIDÉES par le contrôle documentaire ; l'aveu remplace le
-    # « je comble le trou » par un constat explicite de ce qui manque.
-    if judge_note_block:
-        space_context_draft["content"] += "\n\n" + judge_note_block
-    elif loop_exhausted_missing:
-        space_context_draft["content"] += (
-            "\n\n⚠️ CONTRÔLE DOCUMENTAIRE (fait foi) : la recherche a été relancée sans "
-            "trouver l'information demandée (" + loop_exhausted_missing + "). "
-            "Dis explicitement ce que les documents fournis contiennent d'utile et ce qui "
-            "manque. Ne comble JAMAIS le manque par déduction, connaissance générale ou "
-            "référence voisine ; propose à l'utilisateur UNE précision courte qui "
-            "permettrait de relancer la recherche."
-        )
-        logger.info(
-            "[loop] relances épuisées → génération en aveu structuré (manque : %s)",
-            loop_exhausted_missing,
-        )
-
-    # Référence introuvable même après retry ciblé (cf. bloc retrieval) : au lieu d'un
-    # « non documenté » en cul-de-sac, demander UNE précision pour relancer la recherche.
-    if reference_not_found:
-        _suppliers_present = ""
-        try:
-            from app.services.scope_resolver_service import compute_space_scope_stats
-
-            _sup = sorted(compute_space_scope_stats(session, space_id).get("supplier") or [])
-            if _sup:
-                _suppliers_present = " L'espace couvre : " + ", ".join(_sup) + "."
-        except Exception:
-            pass
-        space_context_draft["content"] += (
-            "\n\n⚠️ IMPORTANT : la ou les référence(s) "
-            + ", ".join(reference_not_found)
-            + " n'apparaissent dans AUCUN passage ci-dessus, même après une recherche ciblée. "
-            "Ne réponds PAS « non documentée » comme réponse finale. À la place, demande à "
-            "l'utilisateur UNE précision courte qui permettrait de relancer la recherche : "
-            "le FOURNISSEUR/la marque concernée, la gamme, ou une reformulation avec plus de "
-            "contexte." + _suppliers_present
-        )
-        logger.info(
-            "[chat] Référence(s) %s introuvable(s) → génération orientée clarification",
-            reference_not_found,
-        )
-
-    # Fil de la conversation : sujet courant, entités en focus et demande reformulée,
-    # injectés à la FIN du message système (donc juste avant l'historique et le message
-    # utilisateur). Sans ce bloc, un suivi elliptique ("tu as ses dimensions ?") arrive
-    # après ~100k tokens de documents CAG et le modèle perd le référent — il répond sur
-    # n'importe quel élément du contexte au lieu du sujet de la conversation.
-    if lw_result:
-        from app.services.conversation_state_service import format_generation_state_block
-
-        conversation_thread_block = format_generation_state_block(
-            lw_result.query_context,
-            standalone_question=lw_result.query_context.get("standalone_question"),
-            original_message=request.message,
-        )
-        if conversation_thread_block:
-            space_context_draft["content"] += "\n\n" + conversation_thread_block
-
-    full_context_draft = []
-    full_context_draft.append(space_context_draft)
-
-    # Changement de sujet : on n'envoie PAS l'historique de l'ancien sujet à la génération,
-    # sinon le modèle reste ancré dessus. Les passages RAG + le message courant suffisent.
-    if lw_result and lw_result.topic_shift:
-        rag_history: List[dict] = []
-        logger.info("[chat] topic_shift — historique de génération élagué (nouveau sujet)")
-    else:
-        rag_history = list(conversation_context)
-    while rag_history and rag_history[-1].get("role") == "user":
-        rag_history.pop()
-
-    full_context_draft.extend(rag_history)
-
-    user_images: List[str] = []
-    user_image_captions: List[dict] = []
-    cag_documents_ctx: List[dict] = list(space_context_draft.get("cag_documents") or [])
-    if doc_passages and is_vision_model(forced_model):
-        if settings.CAG_ENABLED and cag_documents_ctx:
-            # Alignement texte/visuel : PNG UNIQUEMENT pour des pages réellement packées
-            # dans le contexte CAG (et légendées), pas pour les passages top-k bruts.
-            from app.services.context_packer_service import select_cag_images
-
-            user_images, user_image_captions = await asyncio.to_thread(
-                select_cag_images,
-                session,
-                cag_documents_ctx,
-                doc_passages,
-            )
-            logger.info(
-                "[stream_space_chat_message] %d image(s) PNG alignées sur le contexte CAG pour %s",
-                len(user_images),
-                forced_model,
-            )
-        elif retrieval_images:
-            user_images = retrieval_images[: settings.RAG_MAX_IMAGES]
-            logger.info(
-                "[stream_space_chat_message] %d image(s) PNG du pipeline multimodal pour %s",
-                len(user_images),
-                forced_model,
-            )
-        else:
-            user_images = await render_page_images_for_passages_async(
-                session,
-                doc_passages,
-                max_pages=settings.RAG_MAX_IMAGES,
-                needs_image_only=not settings.RAG_RENDER_ALL_IMAGES,
-            )
-            logger.info(
-                "[stream_space_chat_message] %d image(s) PNG rendues (legacy) pour %s",
-                len(user_images),
-                forced_model,
-            )
-    elif doc_passages:
-        logger.info(
-            "[stream_space_chat_message] Pas d'images (modèle non vision: %s)",
-            forced_model,
-        )
-
-    # Sandwich anti « lost in the middle » : rappel final de tâche (+ question autonome)
-    # en toute fin de contexte, après les ~10-100k tokens de documents.
-    task_reminder = None
-    if settings.CAG_ENABLED and doc_passages:
-        from app.services.rag_generation_service import build_cag_task_reminder
-
-        task_reminder = build_cag_task_reminder(
-            request.message,
-            standalone_question=(
-                lw_result.query_context.get("standalone_question") if lw_result else None
-            ),
-        )
-
-    user_msg = build_rag_user_message(
-        rag_user_message,
-        images_b64=user_images or None,
-        image_captions=user_image_captions or None,
-        task_reminder=task_reminder,
-    )
-    full_context_draft.append(user_msg)
-
-    logger.info(
-        "[chat] Étape %s — génération réponse stream (model=%s)",
-        "4/5" if settings.QUERY_UNDERSTANDING_ENABLED else "4/4",
-        forced_model,
-    )
-
-    _pipeline_inputs_space = {
-        "query": rag_user_message,
-        "space_id": space_id,
-        "user_id": current_user.id,
-        "model": forced_model,
-        "nb_doc_passages": len(doc_passages),
-    }
-
     assistant_response: List[str] = []
     # Accumule le reasoning natif du modèle (thinking) pour la trace de génération.
     reasoning_parts: List[str] = []
@@ -2321,8 +1628,743 @@ async def stream_space_chat_message(
     async def generate():
         error_msg_to_yield = None
         try:
+            yield _stage_event("retrieval", "Recherche dans les documents")
+
+            step_label = "2/5" if settings.QUERY_UNDERSTANDING_ENABLED else "2/4"
+            logger.info("[chat] Étape %s — retrieval hybride (ColPali + BM25)", step_label)
+            import time as _time
+            _t_retrieval_start = _time.perf_counter()
+            with trace_run(
+                "technical_retrieval",
+                run_type="retriever",
+                inputs={
+                    "query": retrieval_query_text,
+                    "space_id": space_id,
+                    "k": RAG_TOP_K,
+                    "retrieval_queries": retrieval_queries.model_dump() if retrieval_queries else None,
+                },
+                tags=["rag", "technical", "space"],
+            ) as retrieval_run:
+                from app.services.space_search_service import search_technical_passages
+
+                # Sentinelle des overrides de relance (B5) : None est une valeur légitime
+                # (« pas de queries pré-dérivées ») — la sentinelle distingue « inchangé ».
+                _UNSET = object()
+
+                async def _do_retrieval(
+                    allowed: Optional[List[int]],
+                    *,
+                    query_text: Optional[str] = None,
+                    anchors=_UNSET,
+                    k: Optional[int] = None,
+                    queries=_UNSET,
+                ):
+                    # Les overrides servent aux relances de la boucle agentique (B5) : requête
+                    # réécrite par le juge, désancrage, k élargi. Sans override, comportement
+                    # strictement identique à l'historique.
+                    _anchors = (anchor_document_ids or None) if anchors is _UNSET else (anchors or None)
+                    return await search_technical_passages(
+                        session=session,
+                        space_id=space_id,
+                        query_text=query_text if query_text is not None else retrieval_query_text,
+                        user_id=current_user.id,
+                        k=k or RAG_TOP_K,
+                        queries=retrieval_queries if queries is _UNSET else queries,
+                        signals=lw_result.signals if lw_result and lw_result.signals else None,
+                        anchor_document_ids=_anchors,
+                        allowed_document_ids=allowed,
+                    )
+
+                async def _run_retrieval(allowed: Optional[List[int]], **overrides):
+                    # Budget temps global (P0.3) : un canal qui freeze (ColPali CPU, MaxSim LanceDB)
+                    # ne doit pas bloquer indéfiniment — au-delà du budget, dégradation gracieuse.
+                    try:
+                        if settings.RETRIEVAL_TIMEOUT_S and settings.RETRIEVAL_TIMEOUT_S > 0:
+                            return await asyncio.wait_for(
+                                _do_retrieval(allowed, **overrides), timeout=settings.RETRIEVAL_TIMEOUT_S
+                            )
+                        return await _do_retrieval(allowed, **overrides)
+                    except asyncio.TimeoutError:
+                        logger.error(
+                            "[chat] retrieval au-delà du budget %.0fs → dégradation gracieuse (0 passage)",
+                            settings.RETRIEVAL_TIMEOUT_S,
+                        )
+                        return {
+                            "passages": [], "images": [], "status": "degraded_timeout",
+                            "reason": "retrieval_timeout",
+                        }
+
+                retrieval = await _run_retrieval(allowed_document_ids)
+                # Élargissement automatique : un périmètre trop étroit (aucun document) ne doit
+                # JAMAIS produire un « pas documenté » à tort → on relance sans périmètre.
+                if allowed_document_ids is not None and retrieval.get("reason") == "scope_empty":
+                    logger.info(
+                        "[chat] Périmètre vide (0 document) → élargissement automatique à tout l'espace"
+                    )
+                    retrieval = await _run_retrieval(None)
+                doc_passages = retrieval["passages"]
+                retrieval_status = retrieval["status"]
+                retrieval_reason = retrieval.get("reason")
+                retrieval_images = retrieval.get("images") or []
+                dynamic_k = retrieval.get("dynamic_k")
+                rerank_status = retrieval.get("rerank_status")
+
+                # ——— Retry automatique sur RÉFÉRENCE introuvable (1 passe) ———
+                # Le retriever est sensible à la formulation (« référence X » vs « crémone X ») :
+                # si la question porte un code et qu'AUCUN passage ne le contient, on relance UNE
+                # recherche ciblée sur le code seul (recall élevé). S'il reste introuvable, on
+                # demandera une précision à l'utilisateur (cf. bloc génération) au lieu d'un
+                # « non documenté » en cul-de-sac.
+                reference_not_found: List[str] = []
+                retry_trace: Dict[str, Any] = {"triggered": False}
+                try:
+                    from app.services.coverage_service import extract_message_reference_codes
+
+                    _req_codes = extract_message_reference_codes(
+                        retrieval_query_text,
+                        request.message,
+                        *(
+                            (lw_result.signals.detected_references or [])
+                            if (lw_result and lw_result.signals)
+                            else []
+                        ),
+                    )
+                except Exception:
+                    _req_codes = []
+
+                if _req_codes and not _passages_contain_codes(doc_passages, _req_codes):
+                    code_query = " ".join(_req_codes)
+                    # Cheminement (T2) : sans cette trace, rien ne distingue un tour à un retrieval
+                    # d'un tour à deux — alors que le retry interroge le retriever avec une AUTRE
+                    # question (les codes seuls) et que ce sont SES passages qui sont packés.
+                    retry_trace = {
+                        "triggered": True,
+                        "requested_codes": list(_req_codes),
+                        "retry_query": code_query,
+                        "standalone_question": retrieval_query_text,
+                        "hits_before": list(retrieval.get("top_hits") or []),
+                    }
+                    logger.info(
+                        "[chat] Référence(s) %s absente(s) des passages → retry recherche ciblée",
+                        _req_codes,
+                    )
+                    try:
+                        retry = await search_technical_passages(
+                            session=session,
+                            space_id=space_id,
+                            query_text=code_query,
+                            user_id=current_user.id,
+                            k=RAG_TOP_K,
+                            signals=lw_result.signals if lw_result and lw_result.signals else None,
+                            anchor_document_ids=anchor_document_ids or None,
+                            allowed_document_ids=allowed_document_ids,
+                        )
+                    except Exception as _retry_err:
+                        logger.warning("[chat] retry ciblé référence échoué : %s", _retry_err)
+                        retry = None
+                    if retry and _passages_contain_codes(retry.get("passages") or [], _req_codes):
+                        logger.info("[chat] Retry ciblé — référence(s) trouvée(s), passages remplacés")
+                        retrieval = retry
+                        doc_passages = retrieval["passages"]
+                        retrieval_status = retrieval["status"]
+                        retrieval_reason = retrieval.get("reason")
+                        retrieval_images = retrieval.get("images") or []
+                        retry_trace.update(
+                            {
+                                "outcome": "found",
+                                "passages_replaced": True,
+                                "hits_after": list(retrieval.get("top_hits") or []),
+                                "warning": (
+                                    "Le classement packé est celui du retry (requête « "
+                                    f"{code_query} »), pas celui de la question de l'utilisateur."
+                                ),
+                            }
+                        )
+                    else:
+                        reference_not_found = list(_req_codes)
+                        # Ce que le retry a RAMENÉ compte autant que son échec : sans ces hits, la
+                        # trace laisse croire qu'il n'a rien trouvé, alors qu'il a bien ramené des
+                        # pages — simplement aucune ne portait le code.
+                        retry_trace.update(
+                            {
+                                "outcome": "not_found",
+                                "passages_replaced": False,
+                                "hits_after": list((retry or {}).get("top_hits") or []),
+                            }
+                        )
+                        logger.info(
+                            "[chat] Retry ciblé — référence(s) %s toujours introuvable(s) → clarification",
+                            _req_codes,
+                        )
+
+                retrieval_run.end(outputs={
+                    "status": retrieval_status,
+                    "reason": retrieval_reason,
+                    "dynamic_k": dynamic_k,
+                    "rerank_status": rerank_status,
+                    "nb_passages": len(doc_passages),
+                    "passages": [
+                        {
+                            "document_title": p.get("document_title"),
+                            "chunk_id": p.get("chunk_id"),
+                            "score": round(float(p.get("score", 0)), 4),
+                            "page_no": p.get("page_no"),
+                            "section": p.get("section"),
+                            "passage_preview": (p.get("passage_raw") or p.get("passage", ""))[:300],
+                        }
+                        for p in doc_passages
+                    ],
+                })
+
+            # [PERF] Bucket macro n°1 : tout le retrieval (encode ColPali + MaxSim + 4 retrievers
+            # + rerank MiniLM + rerank vision). À comparer au bucket génération plus bas.
+            logger.info(
+                "[PERF][chat] retrieval TOTAL %.2fs — %d passages (rerank=%s)",
+                _time.perf_counter() - _t_retrieval_start,
+                len(doc_passages),
+                rerank_status,
+            )
+
+            from app.services.rag_generation_service import (
+                enrich_colpali_passages_with_pymupdf,
+                is_vision_model,
+                render_page_images_for_passages_async,
+                build_rag_user_message,
+            )
+
+            doc_passages = enrich_colpali_passages_with_pymupdf(session, doc_passages)
+
+            if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals:
+                from app.services.retrieval_boost_service import apply_soft_boosts_to_passages
+
+                doc_passages = apply_soft_boosts_to_passages(
+                    session=session,
+                    passages=doc_passages,
+                    signals=lw_result.signals,
+                )
+
+            # L'autorité de source (primary_source) est déjà appliquée par
+            # apply_soft_boosts_to_passages ci-dessus, de façon proportionnelle à l'étendue
+            # des scores. L'ancien refine_with_source_authority ajoutait un SECOND boost
+            # (0.8·confidence, échelle ambiguë) sur le même critère → double-comptage supprimé.
+
+            # ——— Boucle agentique (B4/B5, plan 2026-07-29) : juge de suffisance + relances ———
+            # AVANT la génération, un modèle distinct lit les DOSSIERS CANDIDATS (pack-juge) et
+            # statue : élire (documents + pages → packing) ou relancer la recherche (reformulation,
+            # filtres, désancrage), sous deadline dure. Mode shadow = verdicts tracés, jamais
+            # actionnés. Flag off = pipeline strictement inchangé. Un juge défaillant (timeout,
+            # JSON invalide, preuve introuvable) ne dégrade JAMAIS le tour : on génère comme
+            # aujourd'hui, l'échec est tracé.
+            loop_trace: Optional[Dict[str, Any]] = None
+            judge_elected_ids: List[int] = []
+            judge_pinned_pages: Dict[int, List[int]] = {}
+            judge_note_block: Optional[str] = None
+            loop_exhausted_missing: Optional[str] = None
+            if settings.AGENTIC_LOOP_ENABLED and settings.CAG_ENABLED and doc_passages:
+                yield _stage_event("judge", "Contrôle des documents trouvés")
+                from app.services.coverage_service import (
+                    coverage_status as _loop_coverage_status,
+                    extract_message_reference_codes as _loop_extract_codes,
+                )
+                from app.services.retrieval_judge_service import (
+                    apply_judge_action,
+                    build_judge_note_block,
+                    build_judge_pack,
+                    judge_candidates,
+                    passages_pool_key,
+                )
+                from app.services.slot_catalog import expected_content_for_intent
+
+                _loop_mode = "active" if settings.AGENTIC_LOOP_MODE == "active" else "shadow"
+                loop_trace = {"mode": _loop_mode, "rounds": [], "deadline_hit": False}
+                _loop_deadline = _time.monotonic() + max(5.0, settings.LOOP_DEADLINE_S)
+                _loop_intent = lw_result.signals.intent if (lw_result and lw_result.signals) else None
+                _expected_content = expected_content_for_intent(_loop_intent)
+                try:
+                    _loop_codes = _loop_extract_codes(
+                        retrieval_query_text,
+                        request.message,
+                        *(
+                            (lw_result.signals.detected_references or [])
+                            if (lw_result and lw_result.signals)
+                            else []
+                        ),
+                    )
+                except Exception:  # noqa: BLE001
+                    _loop_codes = []
+                _max_rounds = 1 + (max(0, settings.JUDGE_MAX_RETRIES) if _loop_mode == "active" else 0)
+                _loop_query = retrieval_query_text
+                _loop_allowed = allowed_document_ids
+                _loop_anchor_override = _UNSET
+                _loop_k: Optional[int] = None
+                _prev_pool = passages_pool_key(doc_passages)
+                _prev_missing: Optional[str] = None
+
+                try:
+                    for _round in range(1, _max_rounds + 1):
+                        judge_pack = await asyncio.to_thread(
+                            build_judge_pack, session, doc_passages, intent=_loop_intent
+                        )
+                        _judge_images: List[str] = []
+                        if settings.JUDGE_IMAGES_MODE == "always" or (
+                            settings.JUDGE_IMAGES_MODE == "auto"
+                            and _loop_intent in ("installation", "troubleshooting")
+                        ):
+                            try:
+                                from app.services.context_packer_service import select_cag_images
+
+                                _judge_images, _ = await asyncio.to_thread(
+                                    select_cag_images,
+                                    session,
+                                    judge_pack["cag_documents"],
+                                    doc_passages,
+                                    max_images=settings.JUDGE_MAX_IMAGES,
+                                )
+                            except Exception as _ji_err:  # noqa: BLE001
+                                logger.warning("[loop] images du juge ignorées : %s", _ji_err)
+
+                        _coverage_line = None
+                        if _loop_codes:
+                            _cov = _loop_coverage_status(
+                                context_text=judge_pack["context_text"],
+                                requested_codes=_loop_codes,
+                                doc_passages=doc_passages,
+                            )
+                            _missing_codes = _cov.get("missing_codes") or []
+                            _coverage_line = (
+                                ("ABSENTES des dossiers : " + ", ".join(_missing_codes))
+                                if _missing_codes
+                                else ("toutes présentes dans les dossiers : " + ", ".join(_loop_codes))
+                            )
+
+                        verdict = await judge_candidates(
+                            question=_loop_query,
+                            intent=_loop_intent,
+                            expected_content=_expected_content,
+                            judge_pack=judge_pack,
+                            coverage_line=_coverage_line,
+                            images=_judge_images or None,
+                            round_index=_round,
+                            previous_missing=_prev_missing,
+                        )
+                        _round_trace = {
+                            "round": _round,
+                            "query": _loop_query,
+                            "status": verdict.get("status"),
+                            "status_reason": verdict.get("status_reason"),
+                            "verdict": verdict.get("verdict"),
+                            "confidence": verdict.get("confidence"),
+                            "evidence": (verdict.get("evidence") or "")[:300],
+                            "evidence_verified": verdict.get("evidence_verified"),
+                            "missing": (verdict.get("missing") or "")[:300],
+                            "elected": [
+                                {
+                                    "document_id": e.get("document_id"),
+                                    "document_index": e.get("document_index"),
+                                    "pages": e.get("pages"),
+                                    "role": e.get("role"),
+                                }
+                                for e in (verdict.get("elected") or [])
+                            ],
+                            "candidates": [
+                                {"document_id": d.get("document_id"), "index": d.get("index")}
+                                for d in (judge_pack.get("cag_documents") or [])
+                            ],
+                            "images": len(_judge_images),
+                            "duration_ms": verdict.get("duration_ms"),
+                            "model": verdict.get("model"),
+                        }
+                        loop_trace["rounds"].append(_round_trace)
+
+                        if _loop_mode == "shadow":
+                            break
+                        if verdict["status"] != "ok":
+                            break
+                        if verdict["verdict"] == "sufficient":
+                            judge_elected_ids = [e["document_id"] for e in verdict["elected"]]
+                            judge_pinned_pages = {
+                                e["document_id"]: e["pages"]
+                                for e in verdict["elected"]
+                                if e.get("pages")
+                            }
+                            judge_note_block = build_judge_note_block(verdict)
+                            break
+
+                        # Verdict « insuffisant » → relance informée, si budget et action utile.
+                        _prev_missing = verdict.get("missing") or None
+                        if _round >= _max_rounds:
+                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                            break
+                        if _time.monotonic() > _loop_deadline:
+                            loop_trace["deadline_hit"] = True
+                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                            break
+                        _action = apply_judge_action(verdict, current_query=_loop_query)
+                        if not _action:
+                            _round_trace["relaunch"] = "no_action"
+                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                            break
+                        _round_trace["action"] = _action.get("label")
+                        _loop_query = _action.get("query_text") or _loop_query
+                        if _action.get("widen_scope"):
+                            _loop_allowed = None
+                        if _action.get("restrict_document_id"):
+                            _loop_allowed = [int(_action["restrict_document_id"])]
+                        if _action.get("drop_anchor"):
+                            _loop_anchor_override = []
+                        if _action.get("raise_k"):
+                            _loop_k = max(RAG_TOP_K, min(2 * RAG_TOP_K, settings.RERANK_POOL))
+
+                        _relaunch = await _run_retrieval(
+                            _loop_allowed,
+                            query_text=_loop_query,
+                            anchors=_loop_anchor_override,
+                            k=_loop_k,
+                            queries=None,
+                        )
+                        _new_passages = _relaunch.get("passages") or []
+                        if not _new_passages:
+                            _round_trace["relaunch"] = "empty"
+                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                            break
+                        _new_passages = enrich_colpali_passages_with_pymupdf(session, _new_passages)
+                        if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals:
+                            from app.services.retrieval_boost_service import (
+                                apply_soft_boosts_to_passages as _loop_boosts,
+                            )
+
+                            _new_passages = _loop_boosts(
+                                session=session, passages=_new_passages, signals=lw_result.signals
+                            )
+                        _new_pool = passages_pool_key(_new_passages)
+                        if _new_pool == _prev_pool:
+                            _round_trace["relaunch"] = "no_progress"
+                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
+                            break
+                        _round_trace["relaunch"] = "replaced"
+                        _prev_pool = _new_pool
+                        doc_passages = _new_passages
+                        retrieval = _relaunch
+                        retrieval_status = _relaunch["status"]
+                        retrieval_reason = _relaunch.get("reason")
+                        retrieval_images = _relaunch.get("images") or []
+                        dynamic_k = _relaunch.get("dynamic_k")
+                        rerank_status = _relaunch.get("rerank_status")
+                except Exception as _loop_err:  # noqa: BLE001
+                    logger.exception("[loop] boucle agentique interrompue — génération inchangée")
+                    loop_trace["error"] = str(_loop_err)[:200]
+
+            # Mémorise les documents dominants de ce tour comme ancre du sujet courant (réutilisée
+            # pour biaiser le retrieval du prochain tour, tant qu'il n'y a pas de changement de sujet).
+            if settings.CONVERSATION_ANCHOR_ENABLED and request.conversation_id and doc_passages:
+                from app.services.retrieval_boost_service import compute_anchor_documents
+
+                new_anchor = compute_anchor_documents(
+                    doc_passages, max_docs=settings.CONVERSATION_ANCHOR_MAX_DOCS
+                )
+                if new_anchor:
+                    _update_conversation_documents(
+                        request.conversation_id,
+                        new_anchor,
+                        intent=(lw_result.signals.intent if (lw_result and lw_result.signals) else None),
+                    )
+
+            # Le packing CAG et le rendu des PNG durent plusieurs secondes : ils méritent
+            # leur propre étape, sinon l'interface annoncerait « Rédaction » pendant que
+            # le serveur découpe encore des images.
+            yield _stage_event("context", "Préparation des pages")
+            logger.info(
+                "[chat] Étape %s — contexte RAG (%d passages, status=%s, dynamic_k=%s, rerank=%s)",
+                "3/5" if settings.QUERY_UNDERSTANDING_ENABLED else "3/4",
+                len(doc_passages),
+                retrieval_status,
+                dynamic_k,
+                rerank_status,
+            )
+
+            # Garde-fou du mode 100 % PNG : sans modèle multimodal, AUCUNE image ne partira et le
+            # contexte se réduirait à un manifeste — le modèle répondrait de mémoire. On rebascule
+            # donc sur le texte pour toute la construction du contexte de ce tour.
+            _image_only_impossible = settings.CAG_IMAGE_ONLY and not is_vision_model(forced_model)
+
+            @contextmanager
+            def _context_mode():
+                if _image_only_impossible:
+                    with _forced_text_context_if_image_only(
+                        f"le modèle {forced_model} n'accepte pas d'images"
+                    ):
+                        yield
+                else:
+                    yield
+
+            # Construire le contexte système à partir des passages techniques
+            # Si low confidence : injecter un prompt spécial pour forcer la clarification
+            if retrieval_status == "low_confidence_clarification":
+                with _context_mode():
+                    space_context_draft = _build_generation_context(
+                        session,
+                        doc_passages,
+                        anchor_document_ids=cag_anchor_document_ids or None,
+                        intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
+                        elected_document_ids=judge_elected_ids or None,
+                        pinned_pages=judge_pinned_pages or None,
+                    )
+                # Ajouter une instruction de clarification forcée après les passages
+                space_context_draft["content"] += (
+                    "\n\n⚠️ IMPORTANT : Les passages ci-dessus sont ambigus ou de faible pertinence. "
+                    "Ne déduis PAS de réponse définitive. Tu dois poser à l'utilisateur une question "
+                    "précise de clarification basée uniquement sur le contenu de ces 1-2 passages."
+                )
+                logger.info(
+                    "Low confidence détectée : prompt forcé à demander clarification (status=%s, reason=%s)",
+                    retrieval_status,
+                    retrieval_reason,
+                )
+            else:
+                with _context_mode():
+                    space_context_draft = _build_generation_context(
+                        session,
+                        doc_passages,
+                        anchor_document_ids=cag_anchor_document_ids or None,
+                        intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
+                        elected_document_ids=judge_elected_ids or None,
+                        pinned_pages=judge_pinned_pages or None,
+                    )
+
+            # ——— Chunk pinning (C6) + bloc COUVERTURE (C3) ———
+            # Placés en FIN de message système (zone de forte attention, comme le fil de
+            # conversation) : extraits de référence VERBATIM pour les codes demandés, puis
+            # rapport factuel de couverture (le grounding cesse d'être déclaratif).
+            from app.services.coverage_service import (
+                build_coverage_block,
+                extract_message_reference_codes,
+            )
+
+            requested_codes = extract_message_reference_codes(
+                retrieval_query_text,
+                request.message,
+                *(
+                    (lw_result.signals.detected_references or [])
+                    if lw_result and lw_result.signals
+                    else []
+                ),
+            )
+
+            # Épinglage par référence : recherche SQL directe du chunk faisant autorité pour un
+            # code demandé (densité de spécification), sans graphe d'entités.
+            pinned_codes: List[str] = []
+            if requested_codes:
+                try:
+                    from app.services.page_retrieval_service import get_space_document_ids
+                    from app.services.reference_pinning_service import (
+                        build_pinned_reference_block,
+                    )
+
+                    pin_doc_ids = allowed_document_ids or get_space_document_ids(
+                        session, space_id, document_filter="technical"
+                    )
+                    pinned_block, pinned_codes = build_pinned_reference_block(
+                        session, pin_doc_ids, requested_codes
+                    )
+                    if pinned_block:
+                        space_context_draft["content"] += "\n\n" + pinned_block
+                        logger.info("[chat] épinglage référence — codes=%s", pinned_codes)
+                except Exception as pin_err:
+                    logger.warning("[chat] épinglage référence ignoré : %s", pin_err)
+
+            # La couverture se mesure contre la MATIÈRE documentaire, pas contre le message
+            # système. En mode 100 % PNG celui-ci ne porte qu'un manifeste (titres + numéros de
+            # page) : toute référence non épinglée y était déclarée ABSENTE, et le prompt
+            # transformait ce constat en « non documentée » — alors que la page part bel et bien
+            # en image. On joint donc le texte des pages packées, que le packer calcule dans les
+            # deux modes (cag_document_blocks), pour retrouver un verdict honnête.
+            _coverage_evidence = "\n\n".join(
+                [space_context_draft.get("content") or ""]
+                + list(space_context_draft.get("cag_document_blocks") or [])
+            )
+            coverage_block = build_coverage_block(
+                context_text=_coverage_evidence,
+                requested_codes=requested_codes,
+                doc_passages=doc_passages,
+                pinned_codes=pinned_codes,
+                retrieval_status=retrieval_status,
+                visual_context=bool(settings.CAG_IMAGE_ONLY),
+            )
+            space_context_draft["content"] += "\n\n" + coverage_block
+
+            # ——— Note du juge (B6) / aveu structuré (B5) ———
+            # Même zone de forte attention (fin du message système) que la COUVERTURE. La note
+            # pointe les pages VALIDÉES par le contrôle documentaire ; l'aveu remplace le
+            # « je comble le trou » par un constat explicite de ce qui manque.
+            if judge_note_block:
+                space_context_draft["content"] += "\n\n" + judge_note_block
+            elif loop_exhausted_missing:
+                space_context_draft["content"] += (
+                    "\n\n⚠️ CONTRÔLE DOCUMENTAIRE (fait foi) : la recherche a été relancée sans "
+                    "trouver l'information demandée (" + loop_exhausted_missing + "). "
+                    "Dis explicitement ce que les documents fournis contiennent d'utile et ce qui "
+                    "manque. Ne comble JAMAIS le manque par déduction, connaissance générale ou "
+                    "référence voisine ; propose à l'utilisateur UNE précision courte qui "
+                    "permettrait de relancer la recherche."
+                )
+                logger.info(
+                    "[loop] relances épuisées → génération en aveu structuré (manque : %s)",
+                    loop_exhausted_missing,
+                )
+
+            # Référence introuvable même après retry ciblé (cf. bloc retrieval) : au lieu d'un
+            # « non documenté » en cul-de-sac, demander UNE précision pour relancer la recherche.
+            if reference_not_found:
+                _suppliers_present = ""
+                try:
+                    from app.services.scope_resolver_service import compute_space_scope_stats
+
+                    _sup = sorted(compute_space_scope_stats(session, space_id).get("supplier") or [])
+                    if _sup:
+                        _suppliers_present = " L'espace couvre : " + ", ".join(_sup) + "."
+                except Exception:
+                    pass
+                space_context_draft["content"] += (
+                    "\n\n⚠️ IMPORTANT : la ou les référence(s) "
+                    + ", ".join(reference_not_found)
+                    + " n'apparaissent dans AUCUN passage ci-dessus, même après une recherche ciblée. "
+                    "Ne réponds PAS « non documentée » comme réponse finale. À la place, demande à "
+                    "l'utilisateur UNE précision courte qui permettrait de relancer la recherche : "
+                    "le FOURNISSEUR/la marque concernée, la gamme, ou une reformulation avec plus de "
+                    "contexte." + _suppliers_present
+                )
+                logger.info(
+                    "[chat] Référence(s) %s introuvable(s) → génération orientée clarification",
+                    reference_not_found,
+                )
+
+            # Fil de la conversation : sujet courant, entités en focus et demande reformulée,
+            # injectés à la FIN du message système (donc juste avant l'historique et le message
+            # utilisateur). Sans ce bloc, un suivi elliptique ("tu as ses dimensions ?") arrive
+            # après ~100k tokens de documents CAG et le modèle perd le référent — il répond sur
+            # n'importe quel élément du contexte au lieu du sujet de la conversation.
+            if lw_result:
+                from app.services.conversation_state_service import format_generation_state_block
+
+                conversation_thread_block = format_generation_state_block(
+                    lw_result.query_context,
+                    standalone_question=lw_result.query_context.get("standalone_question"),
+                    original_message=request.message,
+                )
+                if conversation_thread_block:
+                    space_context_draft["content"] += "\n\n" + conversation_thread_block
+
+            full_context_draft = []
+            full_context_draft.append(space_context_draft)
+
+            # Changement de sujet : on n'envoie PAS l'historique de l'ancien sujet à la génération,
+            # sinon le modèle reste ancré dessus. Les passages RAG + le message courant suffisent.
+            if lw_result and lw_result.topic_shift:
+                rag_history: List[dict] = []
+                logger.info("[chat] topic_shift — historique de génération élagué (nouveau sujet)")
+            else:
+                rag_history = list(conversation_context)
+            while rag_history and rag_history[-1].get("role") == "user":
+                rag_history.pop()
+
+            full_context_draft.extend(rag_history)
+
+            user_images: List[str] = []
+            user_image_captions: List[dict] = []
+            cag_documents_ctx: List[dict] = list(space_context_draft.get("cag_documents") or [])
+            if doc_passages and is_vision_model(forced_model):
+                if settings.CAG_ENABLED and cag_documents_ctx:
+                    # Alignement texte/visuel : PNG UNIQUEMENT pour des pages réellement packées
+                    # dans le contexte CAG (et légendées), pas pour les passages top-k bruts.
+                    from app.services.context_packer_service import select_cag_images
+
+                    user_images, user_image_captions = await asyncio.to_thread(
+                        select_cag_images,
+                        session,
+                        cag_documents_ctx,
+                        doc_passages,
+                    )
+                    logger.info(
+                        "[stream_space_chat_message] %d image(s) PNG alignées sur le contexte CAG pour %s",
+                        len(user_images),
+                        forced_model,
+                    )
+                elif retrieval_images:
+                    user_images = retrieval_images[: settings.RAG_MAX_IMAGES]
+                    logger.info(
+                        "[stream_space_chat_message] %d image(s) PNG du pipeline multimodal pour %s",
+                        len(user_images),
+                        forced_model,
+                    )
+                else:
+                    user_images = await render_page_images_for_passages_async(
+                        session,
+                        doc_passages,
+                        max_pages=settings.RAG_MAX_IMAGES,
+                        needs_image_only=not settings.RAG_RENDER_ALL_IMAGES,
+                    )
+                    logger.info(
+                        "[stream_space_chat_message] %d image(s) PNG rendues (legacy) pour %s",
+                        len(user_images),
+                        forced_model,
+                    )
+            elif doc_passages:
+                logger.info(
+                    "[stream_space_chat_message] Pas d'images (modèle non vision: %s)",
+                    forced_model,
+                )
+
+            # Sandwich anti « lost in the middle » : rappel final de tâche (+ question autonome)
+            # en toute fin de contexte, après les ~10-100k tokens de documents.
+            task_reminder = None
+            if settings.CAG_ENABLED and doc_passages:
+                from app.services.rag_generation_service import build_cag_task_reminder
+
+                task_reminder = build_cag_task_reminder(
+                    request.message,
+                    standalone_question=(
+                        lw_result.query_context.get("standalone_question") if lw_result else None
+                    ),
+                )
+
+            user_msg = build_rag_user_message(
+                rag_user_message,
+                images_b64=user_images or None,
+                image_captions=user_image_captions or None,
+                task_reminder=task_reminder,
+            )
+            full_context_draft.append(user_msg)
+
+            logger.info(
+                "[chat] Étape %s — génération réponse stream (model=%s)",
+                "4/5" if settings.QUERY_UNDERSTANDING_ENABLED else "4/4",
+                forced_model,
+            )
+
+            _pipeline_inputs_space = {
+                "query": rag_user_message,
+                "space_id": space_id,
+                "user_id": current_user.id,
+                "model": forced_model,
+                "nb_doc_passages": len(doc_passages),
+            }
+
             if not doc_passages:
-                static_reply = "Je ne trouve pas de réponse à votre question dans les documents disponibles dans cet espace car aucune source n'est jugée suffisamment pertinente (seuil minimum de 75%)."
+                # Message d'échec de recherche. Il exposait auparavant un « seuil minimum
+                # de 75 % » : un réglage interne, incompréhensible pour l'utilisateur, et
+                # devenu faux (RAG_MIN_PERTINENCE n'est plus lu sur le chemin actif depuis
+                # que le reranker est désactivé). On dit désormais ce qui a été cherché et
+                # ce qui aiderait à relancer.
+                static_reply = (
+                    "Je n'ai trouvé aucune page pertinente pour cette question dans les "
+                    "documents de cet espace.\n\n"
+                    "Pour m'aider à retrouver l'information, précisez si possible :\n"
+                    "- la **gamme** ou le **produit** concerné ;\n"
+                    "- le **fournisseur** ou la marque ;\n"
+                    "- une **référence** exacte si vous en avez une.\n\n"
+                    "Vous pouvez aussi reformuler avec le vocabulaire des notices "
+                    "(pose, montage, réglage, nomenclature…)."
+                )
                 chunk_size = 25
                 for i in range(0, len(static_reply), chunk_size):
                     chunk = static_reply[i : i + chunk_size]
@@ -2358,6 +2400,7 @@ async def stream_space_chat_message(
                 yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': static_trace})}\n\n"
                 return
 
+            yield _stage_event("generation", "Rédaction de la réponse")
             with trace_pipeline(
                 "space_chat_pipeline",
                 inputs=_pipeline_inputs_space,
@@ -2390,11 +2433,25 @@ async def stream_space_chat_message(
                     # Le texte est généré SANS être émis, vérifié (codes + cotes contre le
                     # contexte complet + juge LLM distinct), réparé une fois si besoin,
                     # PUIS rejoué au client. VERIFY_BLOCKING=false = flux historique.
+                    #
+                    # En mode 100 % PNG la vérification d'ancrage est IMPOSSIBLE : le contexte
+                    # ne contient plus de texte à confronter à la réponse, seulement un
+                    # manifeste. On désactive donc la vérification À LA SOURCE, au lieu de la
+                    # court-circuiter plus bas : sinon le tampon retenait toute la réponse —
+                    # l'utilisateur attendait la fin de la génération pour voir le premier
+                    # caractère — au bénéfice d'un contrôle qui ne s'exécutait jamais.
                     verify_active = bool(
                         settings.VERIFY_ENABLED
                         and request.conversation_id
                         and space_context_draft.get("content")
+                        and not settings.CAG_IMAGE_ONLY
                     )
+                    if settings.VERIFY_ENABLED and settings.CAG_IMAGE_ONLY:
+                        logger.warning(
+                            "[verify] CAG_IMAGE_ONLY actif — vérification d'ancrage "
+                            "désactivée (aucun texte à confronter) ET tampon levé : la "
+                            "réponse est diffusée au fil de l'eau."
+                        )
                     buffer_mode = bool(verify_active and settings.VERIFY_BLOCKING)
 
                     # Tentatives dégressives face à un Mistral 400 (souvent = contexte trop
@@ -2465,17 +2522,11 @@ async def stream_space_chat_message(
                     stream_run.end(outputs={"response": final_response})
 
                 # ——— Gate de vérification (B7c) — le texte n'a PAS encore été émis ———
-                # En mode 100 % PNG le contexte ne contient plus de texte : l'ancrage
-                # compare la réponse à un manifeste et déclarerait inventée TOUTE valeur
-                # lue sur une image. On désactive donc le gate — le test tourne sans filet,
-                # ce qui est acceptable pour une expérimentation, jamais en production.
+                # ``buffer_mode`` est déjà faux en mode 100 % PNG (cf. verify_active
+                # ci-dessus) : ce bloc ne s'exécute que lorsqu'il y a réellement du texte
+                # documentaire à confronter à la réponse.
                 verification_result = None
-                if settings.CAG_IMAGE_ONLY and buffer_mode and assistant_response:
-                    logger.warning(
-                        "[verify] CAG_IMAGE_ONLY actif — vérification d'ancrage DÉSACTIVÉE "
-                        "(pas de texte à confronter à la réponse)"
-                    )
-                elif buffer_mode and assistant_response:
+                if buffer_mode and assistant_response:
                     # Pages citées par le modèle via <sources> : le juge doit voir en
                     # priorité ce sur quoi la réponse s'appuie.
                     _cited_pages_early: Dict[int, List[int]] = {}
@@ -2910,7 +2961,6 @@ async def stream_space_chat_message(
                     verification_result is None
                     and verify_active
                     and assistant_response
-                    and not settings.CAG_IMAGE_ONLY  # cf. gate B7c : rien à confronter
                 ):
                     try:
                         from app.services.response_verification_service import verify_response
@@ -2996,6 +3046,48 @@ async def stream_space_chat_message(
                     yield f"data: {json.dumps({'sav_suggestion': sav_suggestion})}\n\n"
                 yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': generation_trace})}\n\n"
 
+        except (asyncio.CancelledError, GeneratorExit):
+            # ——— Le client s'est déconnecté (changement de page, onglet fermé, réseau) ———
+            # Starlette ferme alors le générateur. Ces deux exceptions héritent de
+            # BaseException et n'étaient donc PAS attrapées par le `except Exception`
+            # ci-dessous : la réponse déjà produite disparaissait, et la conversation
+            # gardait une question orpheline sans réponse — le message utilisateur, lui,
+            # ayant été persisté au tout début du tour.
+            #
+            # On enregistre ce qui existe avant de laisser l'annulation se propager.
+            # Uniquement des opérations SYNCHRONES ici : à ce stade la tâche est annulée,
+            # tout `await` repartirait immédiatement en CancelledError.
+            partial = "".join(assistant_response).strip()
+            if request.conversation_id and partial:
+                try:
+                    _persist_reply_with_retry(
+                        request.conversation_id,
+                        partial,
+                        forced_model,
+                        forced_provider,
+                        None,
+                        metadata_json={
+                            "response_truncated": True,
+                            "interrupted": "client_disconnected",
+                        },
+                    )
+                    logger.info(
+                        "[chat] client déconnecté — réponse partielle conservée (%d car., "
+                        "conversation %s)",
+                        len(partial),
+                        request.conversation_id,
+                    )
+                except Exception:
+                    logger.exception(
+                        "[chat] client déconnecté — échec de sauvegarde du partiel"
+                    )
+            else:
+                logger.info(
+                    "[chat] client déconnecté avant tout texte — rien à conserver "
+                    "(conversation %s)",
+                    request.conversation_id,
+                )
+            raise
         except MistralRateLimitError as e:
             logger.warning("Limite de débit Mistral (stream_space_chat_message): %s", e)
             error_msg_to_yield = str(e)

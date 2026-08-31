@@ -302,10 +302,18 @@ def _list_space_pages(
     session: Session,
     space_id: int,
     tokens: List[str],
+    scope_document_id: Optional[int] = None,
 ) -> List[Dict[str, Any]]:
+    """Pages de l'espace contenant les jetons.
+
+    ``scope_document_id`` restreint la recherche à UN document : c'est ce qui permet
+    de chercher « dans ce document » plutôt que dans tout l'espace, sans dupliquer la
+    requête ni la logique de score.
+    """
     if not tokens:
         return []
     tok = _token_sql(tokens, "dc.content")
+    scope_clause = "AND dc.document_id = :scope_document_id" if scope_document_id else ""
     rows = session.execute(
         text(
             f"""
@@ -324,6 +332,7 @@ def _list_space_pages(
                 INNER JOIN document_space ds ON ds.document_id = dc.document_id
                 WHERE ds.space_id = :space_id
                   AND dc.is_leaf = true
+                  {scope_clause}
                   AND {tok['where']}
                   AND {_CONTENT_TYPE_FILTER}
             ) sub
@@ -332,7 +341,11 @@ def _list_space_pages(
             ORDER BY match_score DESC, document_title, page_no
             """
         ),
-        {"space_id": space_id, **tok["params"]},
+        {
+            "space_id": space_id,
+            "scope_document_id": scope_document_id,
+            **tok["params"],
+        },
     ).all()
     return [
         {
@@ -420,19 +433,70 @@ def search_space_pages(
     session: Session,
     space_id: int,
     query: str,
+    document_id: Optional[int] = None,
 ) -> Dict[str, Any]:
-    """Pages (tous documents de l'espace) contenant le mot-clé."""
+    """Pages contenant le mot-clé, dans tout l'espace ou dans un seul document."""
     q = _normalize_query(query)
     if len(q) < MIN_QUERY_LEN:
         return {"space_id": space_id, "query": q, "page_count": 0, "pages": []}
 
-    pages = _list_space_pages(session, space_id, _tokenize_query(q))
+    if document_id is not None and document_id not in set(
+        get_space_document_ids(session, space_id)
+    ):
+        return {"space_id": space_id, "query": q, "page_count": 0, "pages": []}
+
+    pages = _list_space_pages(
+        session, space_id, _tokenize_query(q), scope_document_id=document_id
+    )
     return {
         "space_id": space_id,
         "query": q,
         "page_count": len(pages),
         "pages": pages,
     }
+
+
+def list_space_documents_overview(
+    session: Session, space_id: int
+) -> List[Dict[str, Any]]:
+    """Documents de l'espace avec leur nombre de pages exploitables.
+
+    Alimente la liste de la modale de consultation : on veut y voir ce qui est
+    réellement consultable (pages portant du texte indexé) et si le PDF d'origine est
+    disponible, deux informations que ``DocumentListItem`` n'expose pas.
+    """
+    rows = session.execute(
+        text(
+            f"""
+            SELECT d.id,
+                   d.title,
+                   d.source,
+                   (d.source_file_path IS NOT NULL AND d.source_file_path <> '')
+                       AS has_source_file,
+                   COUNT(DISTINCT {_page_no_sql_expr("dc")}) AS page_count
+            FROM document d
+            INNER JOIN document_space ds ON ds.document_id = d.id
+            LEFT JOIN documentchunk dc
+                   ON dc.document_id = d.id
+                  AND dc.is_leaf = true
+                  AND {_CONTENT_TYPE_FILTER}
+            WHERE ds.space_id = :space_id
+            GROUP BY d.id, d.title, d.source, d.source_file_path
+            ORDER BY d.title
+            """
+        ),
+        {"space_id": space_id},
+    ).all()
+    return [
+        {
+            "document_id": int(doc_id),
+            "title": title or "Document sans titre",
+            "source": source or "",
+            "has_source_file": bool(has_source_file),
+            "page_count": int(page_count or 0),
+        }
+        for doc_id, title, source, has_source_file, page_count in rows
+    ]
 
 
 def get_space_source_page_detail(
@@ -512,8 +576,15 @@ def get_space_search_page_detail(
     query: str,
     document_id: int,
     page_no: int,
+    scope_document_id: Optional[int] = None,
 ) -> Optional[Dict[str, Any]]:
-    """Détail d'une page d'espace : chunks (source + IA) contenant le mot-clé."""
+    """Détail d'une page d'espace : chunks (source + IA) contenant le mot-clé.
+
+    ``scope_document_id`` doit reprendre la portée utilisée pour la LISTE de résultats :
+    la navigation précédent/suivant se construit sur le même ensemble de pages, sinon
+    l'utilisateur qui cherche dans un seul document se retrouverait à naviguer vers les
+    résultats d'un autre.
+    """
     q = _normalize_query(query)
     if len(q) < MIN_QUERY_LEN:
         return None
@@ -522,7 +593,9 @@ def get_space_search_page_detail(
         return None
 
     tokens = _tokenize_query(q)
-    pages = _list_space_pages(session, space_id, tokens)
+    pages = _list_space_pages(
+        session, space_id, tokens, scope_document_id=scope_document_id
+    )
     if not any(
         p["document_id"] == document_id and p["page_no"] == page_no for p in pages
     ):

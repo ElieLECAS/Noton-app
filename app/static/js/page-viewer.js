@@ -59,27 +59,61 @@
     return pdfjs.getDocument({ data }).promise;
   }
 
-  /** Rend une page du PDF dans un conteneur, à la largeur disponible. */
-  async function renderPdfPage(container, pdfDoc, pageNum) {
+  /** Rend une page du PDF ENTIÈREMENT visible dans son conteneur.
+   *
+   * L'ajustement se faisait sur la seule largeur : une page A4 dans un panneau
+   * moitié-écran débordait donc en hauteur, et il fallait faire défiler pour voir le
+   * bas de la planche — exactement ce qu'on ne veut pas quand on compare un schéma
+   * coté au texte extrait affiché à côté. On prend désormais la plus contraignante
+   * des deux dimensions.
+   *
+   * Le canvas est rendu à la densité de l'écran (plafonnée à 2) : une page entière
+   * ramenée à la taille du panneau est petite, et sans cela les cotes deviennent
+   * illisibles sur un écran haute densité.
+   */
+  async function renderPdfPage(container, pdfDoc, pageNum, options) {
     if (!container || !pdfDoc) return;
+    const fit = (options && options.fit) === "width" ? "width" : "page";
     const safePage = Math.min(Math.max(1, pageNum || 1), pdfDoc.numPages);
     const page = await pdfDoc.getPage(safePage);
-    const width = Math.max(container.clientWidth - 24, 280);
     const base = page.getViewport({ scale: 1 });
-    const viewport = page.getViewport({ scale: width / base.width });
+
+    const availWidth = Math.max(container.clientWidth - 24, 280);
+    const availHeight = container.clientHeight - 24;
+    let scale = availWidth / base.width;
+    // « Pleine largeur » assume volontairement le débordement vertical : le conteneur
+    // défile, et les cotes d'une planche deviennent lisibles. « Page entière » retient
+    // en plus la contrainte de hauteur.
+    // clientHeight vaut 0 si le conteneur n'est pas encore disposé : on garde alors
+    // l'ajustement en largeur plutôt que de produire une page de taille nulle.
+    if (fit === "page" && availHeight > 80) {
+      scale = Math.min(scale, availHeight / base.height);
+    }
+    const viewport = page.getViewport({ scale });
 
     container.innerHTML = "";
+    // Les conteneurs centrent leur contenu (`items-center`). Sur un canvas plus haut
+    // que le conteneur, ce centrage rend le HAUT de la page inatteignable au défilement
+    // — travers connu de flexbox. En pleine largeur on repasse donc en alignement haut.
+    container.style.alignItems = fit === "width" ? "flex-start" : "";
     const wrapper = document.createElement("div");
     wrapper.className = "relative mx-auto";
     wrapper.style.width = "fit-content";
     const canvas = document.createElement("canvas");
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.floor(viewport.width * dpr);
+    canvas.height = Math.floor(viewport.height * dpr);
+    canvas.style.width = `${Math.floor(viewport.width)}px`;
+    canvas.style.height = `${Math.floor(viewport.height)}px`;
     canvas.className = "rounded-lg";
     canvas.style.boxShadow = "0 2px 10px rgba(0,0,0,0.2)";
     wrapper.appendChild(canvas);
     container.appendChild(wrapper);
-    await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+    await page.render({
+      canvasContext: canvas.getContext("2d"),
+      viewport,
+      transform: dpr === 1 ? undefined : [dpr, 0, 0, dpr, 0, 0],
+    }).promise;
   }
 
   /* ------------------------------------------------------------ surlignage */

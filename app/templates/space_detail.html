@@ -492,8 +492,13 @@
         <div class="shrink-0 p-4 border-t border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
           <form id="chat-form" class="flex gap-2 relative max-w-4xl mx-auto">
             <input id="chat-input" class="w-full pl-4 pr-12 py-3 rounded-2xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm" placeholder="Posez votre question à LIA..." required autocomplete="off" />
-            <button type="submit" class="absolute right-1.5 top-1.5 w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md active:scale-95 transition-all" title="Envoyer">
+            <button type="submit" id="chat-send-btn" class="absolute right-1.5 top-1.5 w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md active:scale-95 transition-all" title="Envoyer">
               <i class="ti ti-arrow-right text-lg"></i>
+            </button>
+            <!-- Sans bouton d'arrêt, annuler une génération obligeait à quitter la page —
+                 ce qui coupait le flux et faisait perdre la réponse. -->
+            <button type="button" id="chat-stop-btn" onclick="stopSpaceChat()" class="hidden absolute right-1.5 top-1.5 w-9 h-9 items-center justify-center rounded-xl bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 dark:hover:bg-gray-500 text-white shadow-md active:scale-95 transition-all" title="Arrêter la génération">
+              <i class="ti ti-player-stop text-lg"></i>
             </button>
           </form>
         </div>
@@ -610,26 +615,17 @@
       <div class="min-w-0">
         <h2 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <i class="ti ti-search text-teal-500"></i>
-          Recherche
+          Documents de l'espace
         </h2>
-        <p id="theme-tree-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Mot-clé, ou parcourez les thèmes du général au précis</p>
+        <p id="theme-tree-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Ouvrez un document, ou cherchez un mot-clé</p>
       </div>
-      <div class="flex items-center gap-2">
-        <label class="text-[11px] text-gray-500 dark:text-gray-400">Regrouper par</label>
-        <select id="theme-tree-axis" onchange="changeThemeTreeAxis(this.value)" class="px-2.5 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500/40">
-          <option value="task">Thèmes</option>
-          <option value="doc_type">Type de document</option>
-          <option value="lifecycle_phase">Phase</option>
-          <option value="symptom">Symptômes</option>
-        </select>
-        <button type="button" onclick="closeThemeTreeModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-          <i class="ti ti-x text-xl"></i>
-        </button>
-      </div>
+      <button type="button" onclick="closeThemeTreeModal()" class="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <i class="ti ti-x text-xl"></i>
+      </button>
     </div>
 
     <div class="flex-1 flex min-h-0 flex-col sm:flex-row">
-      <!-- Recherche mot-clé + arbre repliable -->
+      <!-- Colonne gauche : recherche + liste des documents de l'espace -->
       <aside class="sm:w-96 shrink-0 flex flex-col border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/40 min-h-0 max-h-[55vh] sm:max-h-none">
         <div class="shrink-0 p-3 border-b border-gray-200 dark:border-gray-700">
           <div class="flex items-center gap-2">
@@ -644,63 +640,46 @@
               type="button"
               onclick="runSpaceKeywordSearch()"
               class="shrink-0 px-3 py-2 rounded-lg bg-teal-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm hover:bg-teal-700"
-              title="Rechercher dans le texte source + synthèses IA"
+              title="Rechercher dans le texte extrait"
             >
               <i class="ti ti-search"></i>
             </button>
           </div>
-          <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5">
-            Tapez un mot-clé, puis cliquez une catégorie : seules les pages contenant le mot-clé s'affichent. Plusieurs mots = « <span class="font-semibold">OU</span> ».
-          </p>
-          <p id="space-keyword-search-msg" class="text-xs text-amber-600 dark:text-amber-400 mt-1 hidden"></p>
-          <div id="theme-keyword-chip" class="hidden mt-1.5 items-center gap-1.5 text-[11px] font-medium text-teal-700 dark:text-teal-300"></div>
+          <!-- Portée : tout l'espace, ou le seul document ouvert. -->
+          <div class="mt-2 flex items-center gap-1 text-[11px]">
+            <button type="button" id="scope-all-btn" onclick="setSearchScope('all')"
+                    class="px-2.5 py-1 rounded-lg font-semibold border transition-colors">
+              Tous les documents
+            </button>
+            <button type="button" id="scope-doc-btn" onclick="setSearchScope('document')"
+                    class="px-2.5 py-1 rounded-lg font-semibold border transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                    disabled title="Sélectionnez d'abord un document">
+              Ce document
+            </button>
+          </div>
+          <p id="space-keyword-search-msg" class="text-xs text-amber-600 dark:text-amber-400 mt-1.5 hidden"></p>
         </div>
-        <div class="shrink-0 px-3 pt-2 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Parcourir par thème</div>
-        <div id="theme-tree-root" class="flex-1 overflow-y-auto p-3 text-sm">
+        <div class="shrink-0 px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+          Documents <span id="browse-doc-count" class="normal-case font-medium"></span>
+        </div>
+        <div id="browse-documents-list" class="flex-1 overflow-y-auto p-2 text-sm">
           <div class="text-sm text-gray-500 dark:text-gray-400 p-2">Chargement…</div>
         </div>
       </aside>
 
-      <!-- Panneau de droite : pages du thème + synthèse à la demande -->
+      <!-- Panneau de droite : pages du document ouvert, ou résultats de recherche -->
       <section class="flex-1 min-w-0 min-h-0 flex flex-col">
-        <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700 flex items-start justify-between gap-3">
-          <div class="min-w-0">
-            <h3 id="theme-panel-title" class="text-sm font-bold text-gray-900 dark:text-white truncate">Thème</h3>
-            <p id="theme-panel-sub" class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Sélectionnez un thème dans l'arbre.</p>
-          </div>
-          <div class="shrink-0 flex items-center gap-2">
-            <button id="theme-pages-back" type="button" onclick="showThemePagesView()" class="hidden inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="Revenir aux pages">
-              <i class="ti ti-arrow-left"></i>
-              <span class="hidden sm:inline">Pages</span>
-            </button>
-            <button id="theme-synthesis-btn" type="button" onclick="runThemeSynthesis()" class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 active:scale-95 transition-all shadow-sm" title="Lancer une synthèse IA du thème sélectionné">
-              <i class="ti ti-sparkles"></i>
-              <span>Synthèse IA</span>
-            </button>
-          </div>
+        <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-gray-200 dark:border-gray-700">
+          <h3 id="theme-panel-title" class="text-sm font-bold text-gray-900 dark:text-white truncate">Aucun document ouvert</h3>
+          <p id="theme-panel-sub" class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">Choisissez un document à gauche.</p>
         </div>
         <div class="flex-1 overflow-y-auto">
-          <!-- Placeholder initial -->
           <div id="theme-panel-empty" class="h-full flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500 gap-3 px-6 py-10">
             <i class="ti ti-files text-4xl opacity-50"></i>
-            <p class="text-sm max-w-sm">Cliquez sur un thème ou sous-thème pour parcourir ses pages (PDF + texte extrait), puis « Synthèse IA » pour une note de synthèse.</p>
+            <p class="text-sm max-w-sm">Ouvrez un document pour parcourir ses pages (PDF à gauche, texte extrait à droite), ou lancez une recherche par mot-clé.</p>
           </div>
-
-          <!-- Vue pages du thème -->
           <div id="theme-pages-view" class="hidden p-3 sm:p-4">
-            <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 px-1 mb-2">Pages du thème</p>
             <div id="theme-pages-list" class="space-y-2"></div>
-          </div>
-
-          <!-- Vue synthèse -->
-          <div id="theme-synthesis-loading" class="hidden h-full flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400 gap-3 py-16">
-            <i class="ti ti-loader-2 text-3xl animate-spin text-purple-500"></i>
-            <p class="text-sm">Lecture des documents et synthèse en cours…</p>
-          </div>
-          <div id="theme-synthesis-content" class="hidden p-4 sm:p-6">
-            <div id="theme-synthesis-flags" class="flex flex-wrap gap-2 mb-3"></div>
-            <div id="theme-synthesis-markdown" class="prose prose-sm dark:prose-invert max-w-none"></div>
-            <div id="theme-synthesis-sources" class="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700"></div>
           </div>
         </div>
       </section>
@@ -733,16 +712,28 @@
     </div>
 
     <div class="flex-1 flex flex-col lg:flex-row min-h-0">
-      <section id="space-category-pdf-panel" class="lg:w-1/2 flex flex-col min-h-0 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-950">
-        <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-          Page PDF
+      <!-- Sur mobile, seul le PDF est affiché : le texte extrait occupait presque tout
+           l'écran et ne laissait au PDF qu'une bande illisible. -->
+      <section id="space-category-pdf-panel" class="flex-1 min-h-0 flex flex-col lg:flex-none lg:w-1/2 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-950">
+        <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-2">
+          <span>Page PDF</span>
+          <div class="flex items-center gap-1 normal-case">
+            <button type="button" id="space-pdf-fit-page-btn" onclick="setSpaceCategoryPdfFit('page')"
+                    class="px-2 py-0.5 rounded-md border transition-colors" title="Voir la page entière">
+              Page entière
+            </button>
+            <button type="button" id="space-pdf-fit-width-btn" onclick="setSpaceCategoryPdfFit('width')"
+                    class="px-2 py-0.5 rounded-md border transition-colors" title="Zoomer à la largeur, défilement vertical">
+              Pleine largeur
+            </button>
+          </div>
         </div>
         <div id="space-category-pdf-container" class="flex-1 overflow-auto p-3 flex items-center justify-center">
           <div class="text-sm text-gray-500 dark:text-gray-400">Chargement du PDF…</div>
         </div>
       </section>
 
-      <section id="space-category-text-panel" class="lg:w-1/2 flex flex-col min-h-0">
+      <section id="space-category-text-panel" class="hidden lg:flex lg:w-1/2 flex-col min-h-0">
         <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
           <span>Texte extrait</span>
           <span id="space-category-text-hint" class="normal-case font-medium text-teal-600 dark:text-teal-400">Chunks catégorie surlignés</span>
@@ -885,13 +876,14 @@
       <i class="ti ti-zoom-out"></i>
     </button>
     <select id="space-pdf-modal-zoom-select" onchange="spacePdfModalSetZoom(this.value)">
+      <option value="fit" selected>Page entière</option>
+      <option value="fit-width">Pleine largeur</option>
       <option value="0.5">50%</option>
       <option value="0.75">75%</option>
-      <option value="1" selected>100%</option>
+      <option value="1">100%</option>
       <option value="1.25">125%</option>
       <option value="1.5">150%</option>
       <option value="2">200%</option>
-      <option value="fit">Ajuster</option>
     </select>
     <button type="button" onclick="spacePdfModalZoomIn()" title="Zoom avant">
       <i class="ti ti-zoom-in"></i>
@@ -913,7 +905,7 @@
 {% block extra_scripts %}
 <!-- Visionneuse de page partagée avec library.html : pdf.js, rendu de page,
      surlignage et rendu markdown mutualisés. -->
-<script src="/static/js/page-viewer.js"></script>
+<script src="/static/js/page-viewer.js?v=3"></script>
 <script>
 const spaceId = {{ space_id }};
 const fastModel = {{ model_fast.model|tojson }};
@@ -1274,7 +1266,9 @@ let currentSpacePdfTitle = "Document";
 let currentSourceIndexFromSpacePdf = null;
 let spacePdfModalDoc = null;
 let spacePdfModalCurrentPage = 1;
-let spacePdfModalCurrentZoom = 1;
+// Par défaut la page entière est visible : une A4 ajustée à la seule largeur
+// débordait, obligeant à faire défiler pour lire le bas de la planche.
+let spacePdfModalCurrentZoom = "fit";
 let spacePdfjsLib = null;
 
 /* Chargement pdf.js mutualisé via app/static/js/page-viewer.js (une seule
@@ -1309,8 +1303,8 @@ async function openSpacePdfViewer() {
     document.getElementById("space-pdf-modal-total-pages").textContent = spacePdfModalDoc.numPages;
     document.getElementById("space-pdf-modal-page-input").max = spacePdfModalDoc.numPages;
     spacePdfModalCurrentPage = Math.min(Math.max(1, currentSpacePdfPageNo), spacePdfModalDoc.numPages);
-    spacePdfModalCurrentZoom = 1;
-    document.getElementById("space-pdf-modal-zoom-select").value = "1";
+    spacePdfModalCurrentZoom = "fit";
+    document.getElementById("space-pdf-modal-zoom-select").value = "fit";
     await spacePdfRenderModalPage(spacePdfModalCurrentPage);
     spacePdfUpdateNavButtons();
   } catch (err) {
@@ -1328,10 +1322,16 @@ async function spacePdfRenderModalPage(pageNum) {
   const page = await spacePdfModalDoc.getPage(pageNum);
   const container = document.getElementById("space-pdf-modal-container");
   let scale = spacePdfModalCurrentZoom;
-  if (spacePdfModalCurrentZoom === "fit") {
-    const containerWidth = container.clientWidth - 40;
+  if (spacePdfModalCurrentZoom === "fit" || spacePdfModalCurrentZoom === "fit-width") {
     const viewport0 = page.getViewport({ scale: 1 });
-    scale = containerWidth / viewport0.width;
+    const availWidth = container.clientWidth - 40;
+    scale = availWidth / viewport0.width;
+    // « Page entière » : on retient aussi la contrainte de hauteur, sinon une A4
+    // déborde et il faut faire défiler pour voir le bas de la planche.
+    const availHeight = container.clientHeight - 40;
+    if (spacePdfModalCurrentZoom === "fit" && availHeight > 80) {
+      scale = Math.min(scale, availHeight / viewport0.height);
+    }
   }
   const viewport = page.getViewport({ scale });
   container.innerHTML = "";
@@ -1341,8 +1341,11 @@ async function spacePdfRenderModalPage(pageNum) {
   pageContainer.style.width = "fit-content";
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
-  canvas.height = viewport.height;
-  canvas.width = viewport.width;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.floor(viewport.width * dpr);
+  canvas.height = Math.floor(viewport.height * dpr);
+  canvas.style.width = `${Math.floor(viewport.width)}px`;
+  canvas.style.height = `${Math.floor(viewport.height)}px`;
   canvas.style.boxShadow = "0 2px 10px rgba(0,0,0,0.3)";
   pageContainer.appendChild(canvas);
   const pageIndicator = document.createElement("div");
@@ -1350,7 +1353,11 @@ async function spacePdfRenderModalPage(pageNum) {
   pageIndicator.textContent = `Page ${pageNum} / ${spacePdfModalDoc.numPages}`;
   pageContainer.appendChild(pageIndicator);
   container.appendChild(pageContainer);
-  await page.render({ canvasContext: context, viewport }).promise;
+  await page.render({
+    canvasContext: context,
+    viewport,
+    transform: dpr === 1 ? undefined : [dpr, 0, 0, dpr, 0, 0],
+  }).promise;
   document.getElementById("space-pdf-modal-page-input").value = pageNum;
   spacePdfModalCurrentPage = pageNum;
 }
@@ -1384,24 +1391,50 @@ async function spacePdfModalGoToPage(pageNum) {
 }
 
 async function spacePdfModalSetZoom(zoom) {
-  spacePdfModalCurrentZoom = zoom === "fit" ? "fit" : parseFloat(zoom);
+  spacePdfModalCurrentZoom =
+    zoom === "fit" || zoom === "fit-width" ? zoom : parseFloat(zoom);
   await spacePdfRenderModalPage(spacePdfModalCurrentPage);
 }
 
-async function spacePdfModalZoomIn() {
+/** Déplace la sélection sur les niveaux NUMÉRIQUES de zoom.
+ *
+ * L'ancienne version raisonnait sur l'index brut avec un décalage codé en dur, qui
+ * supposait « Ajuster » en dernière position. Les modes d'ajustement étant désormais
+ * en tête de liste, on filtre explicitement les niveaux chiffrés : l'ordre des
+ * options n'a plus d'influence. Depuis un mode d'ajustement, zoomer part du niveau
+ * chiffré le plus proche de l'échelle réellement affichée.
+ */
+async function spacePdfModalStepZoom(direction) {
   const select = document.getElementById("space-pdf-modal-zoom-select");
-  if (select.selectedIndex < select.options.length - 2) {
-    select.selectedIndex += 1;
-    await spacePdfModalSetZoom(select.value);
+  const numeric = Array.from(select.options)
+    .map((o, index) => ({ index, value: parseFloat(o.value) }))
+    .filter((o) => !Number.isNaN(o.value));
+  if (!numeric.length) return;
+
+  let position = numeric.findIndex((o) => o.index === select.selectedIndex);
+  if (position === -1) {
+    // On vient d'un mode d'ajustement : repartir du palier le plus proche.
+    const current = parseFloat(spacePdfModalCurrentZoom);
+    const reference = Number.isNaN(current) ? 1 : current;
+    position = numeric.reduce(
+      (best, o, i) =>
+        Math.abs(o.value - reference) < Math.abs(numeric[best].value - reference) ? i : best,
+      0,
+    );
+  } else {
+    position += direction;
   }
+  const target = numeric[Math.min(Math.max(position, 0), numeric.length - 1)];
+  select.selectedIndex = target.index;
+  await spacePdfModalSetZoom(select.value);
+}
+
+async function spacePdfModalZoomIn() {
+  await spacePdfModalStepZoom(1);
 }
 
 async function spacePdfModalZoomOut() {
-  const select = document.getElementById("space-pdf-modal-zoom-select");
-  if (select.selectedIndex > 0) {
-    select.selectedIndex -= 1;
-    await spacePdfModalSetZoom(select.value);
-  }
+  await spacePdfModalStepZoom(-1);
 }
 
 function hideSpacePdfViewerModal() {
@@ -2268,313 +2301,214 @@ async function loadKagGraph() {
   }
 }
 
-// ——— Carte mentale (arbre thématique + synthèse CAG) ———
-let themeTreeData = null;
-let themeTreeAxis = "task";
-let themeNodeLabels = {};
-let themeCurrentNode = null;
+// ——— Consultation des documents de l'espace (liste + recherche mot-clé) ———
+// Remplace l'ancien parcours par catégories : la modale liste désormais les documents
+// de l'espace et laisse les consulter page par page (PDF à gauche, texte extrait à
+// droite). L'axe de regroupement, l'arbre thématique et la synthèse IA sont retirés.
+let browseDocuments = [];
+let browseCurrentDocument = null;   // {document_id, title, page_count, has_source_file}
+let searchScope = "all";            // "all" | "document"
+let browseKeyword = "";             // dernier mot-clé appliqué
 
-async function loadThemeTree(axis = "task", { reveal = false } = {}) {
-  try {
-    const r = await api(`/api/spaces/${spaceId}/tree?axis=${encodeURIComponent(axis)}`);
-    if (!r.ok) return;
-    const data = await r.json();
-    themeTreeData = data;
-    themeTreeAxis = data.axis || axis;
-    // Le bouton « Recherche » reste toujours visible (la recherche mot-clé
-    // fonctionne même sans thèmes) — pas de masquage conditionnel.
-    return data;
-  } catch (err) {
-    console.warn("Theme tree load failed", err);
+function browsePanelShow(view) {
+  const empty = document.getElementById("theme-panel-empty");
+  const pages = document.getElementById("theme-pages-view");
+  if (empty) empty.classList.toggle("hidden", view !== "empty");
+  if (pages) pages.classList.toggle("hidden", view !== "pages");
+}
+
+function renderScopeButtons() {
+  const allBtn = document.getElementById("scope-all-btn");
+  const docBtn = document.getElementById("scope-doc-btn");
+  const base = "px-2.5 py-1 rounded-lg font-semibold border transition-colors";
+  const on = "bg-teal-600 text-white border-teal-600";
+  const off = "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700";
+  if (allBtn) allBtn.className = base + " " + (searchScope === "all" ? on : off);
+  if (docBtn) {
+    docBtn.disabled = !browseCurrentDocument;
+    docBtn.className = base + " disabled:opacity-40 disabled:pointer-events-none " + (searchScope === "document" ? on : off);
+    docBtn.title = browseCurrentDocument
+      ? "Chercher uniquement dans ce document"
+      : "Sélectionnez d'abord un document";
   }
 }
 
-function themeNodeHtml(node, depth) {
-  themeNodeLabels[node.key] = node.label;
-  const safe = node.key.replace(/:/g, "-");
-  const hasChildren = (node.children || []).length > 0;
-  const pad = depth * 14 + 8;
-  const caret = hasChildren
-    ? `<button type="button" onclick="event.stopPropagation();toggleThemeGroup('${safe}')" class="shrink-0 w-4 h-4 flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><i id="tt-caret-${safe}" class="ti ti-chevron-down transition-transform"></i></button>`
-    : `<span class="shrink-0 w-4"></span>`;
-  const iconColor = node.kind === "entity" ? "text-teal-500" : "text-purple-500";
-  const icon = node.icon
-    ? `<i class="ti ${escapeHtml(node.icon)} ${iconColor} shrink-0"></i>`
-    : node.kind === "category"
-    ? `<i class="ti ti-point-filled text-gray-300 dark:text-gray-600 shrink-0 text-xs"></i>`
-    : "";
-  const weightCls =
-    node.kind === "root"
-      ? "font-semibold"
-      : node.kind === "group"
-      ? "font-medium"
-      : node.kind === "entity"
-      ? "text-[13px] text-gray-600 dark:text-gray-400"
-      : "";
-  const count = `<span class="ml-auto shrink-0 text-[10px] text-gray-400 dark:text-gray-500">${node.doc_count || 0} doc</span>`;
-
-  let html = `
-    <div data-node="${escapeHtml(node.key)}" onclick="selectThemeNode('${escapeHtml(node.key)}')"
-      class="theme-node flex items-center gap-1.5 rounded-lg pr-2 py-1.5 hover:bg-purple-500/5 cursor-pointer transition-colors" style="padding-left:${pad}px">
-      ${caret}${icon}
-      <span class="truncate text-gray-800 dark:text-gray-200 ${weightCls}">${escapeHtml(node.label)}</span>
-      ${count}
-    </div>`;
-  if (hasChildren) {
-    const children = node.children.map((ch) => themeNodeHtml(ch, depth + 1)).join("");
-    html += `<div id="tt-children-${safe}" class="theme-children">${children}</div>`;
-  }
-  return html;
+function setSearchScope(scope) {
+  if (scope === "document" && !browseCurrentDocument) return;
+  searchScope = scope;
+  renderScopeButtons();
+  // Une portée changée alors qu'un mot-clé est actif doit relancer la recherche :
+  // sinon le bouton s'allume mais les résultats affichés ne lui correspondent plus.
+  if (browseKeyword) runSpaceKeywordSearch();
 }
 
-function renderThemeTree() {
-  const host = document.getElementById("theme-tree-root");
+async function loadBrowseDocuments() {
+  const host = document.getElementById("browse-documents-list");
   if (!host) return;
-  themeNodeLabels = {};
-  const root = themeTreeData?.root;
-  if (!root || !(root.children || []).length) {
-    host.innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune catégorie pour ce regroupement. Retraitez les documents avec KAG activé.</div>`;
+  try {
+    const r = await api("/api/spaces/" + spaceId + "/browse/documents");
+    if (!r.ok) throw new Error("http");
+    browseDocuments = await r.json();
+  } catch (err) {
+    host.innerHTML = '<div class="text-sm text-red-500 p-2">Impossible de charger les documents.</div>';
     return;
   }
-  host.innerHTML = themeNodeHtml(root, 0);
+  renderBrowseDocuments();
 }
 
-function toggleThemeGroup(safeKey) {
-  const box = document.getElementById(`tt-children-${safeKey}`);
-  const caret = document.getElementById(`tt-caret-${safeKey}`);
-  if (!box) return;
-  const hidden = box.classList.toggle("hidden");
-  if (caret) caret.style.transform = hidden ? "rotate(-90deg)" : "";
-}
-
-function highlightThemeNode(key) {
-  document.querySelectorAll("#theme-tree-root .theme-node").forEach((el) => {
-    const active = el.getAttribute("data-node") === key;
-    el.classList.toggle("bg-purple-500/10", active);
-    el.classList.toggle("text-purple-700", active);
-    el.classList.toggle("dark:text-purple-300", active);
-  });
-}
-
-let themeCurrentPages = [];
-let themeKeyword = "";
-
-function setThemeKeyword(kw) {
-  themeKeyword = (kw || "").trim();
-  const chip = document.getElementById("theme-keyword-chip");
-  const input = document.getElementById("space-keyword-search-input");
-  if (!chip) return;
-  if (themeKeyword) {
-    chip.innerHTML = `<i class="ti ti-filter"></i> Filtre : « ${escapeHtml(themeKeyword)} » <button type="button" onclick="clearThemeKeyword()" class="ml-0.5 hover:text-teal-900 dark:hover:text-teal-100" title="Retirer le filtre"><i class="ti ti-x"></i></button>`;
-    chip.classList.remove("hidden");
-    chip.classList.add("inline-flex");
-  } else {
-    chip.classList.add("hidden");
-    chip.classList.remove("inline-flex");
-    chip.innerHTML = "";
-    if (input) input.value = "";
-  }
-}
-
-function clearThemeKeyword() {
-  setThemeKeyword("");
-  if (themeCurrentNode) selectThemeNode(themeCurrentNode.key);
-}
-
-function themePanelShow(view) {
-  const map = {
-    empty: "theme-panel-empty",
-    pages: "theme-pages-view",
-    loading: "theme-synthesis-loading",
-    synthesis: "theme-synthesis-content",
-  };
-  Object.entries(map).forEach(([k, id]) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const on = k === view;
-    el.classList.toggle("hidden", !on);
-    if (k === "loading") el.classList.toggle("flex", on);
-  });
-}
-
-function themePanelReset() {
-  themeCurrentNode = null;
-  themeCurrentPages = [];
-  document.getElementById("theme-synthesis-btn").classList.add("hidden");
-  document.getElementById("theme-pages-back").classList.add("hidden");
-  document.getElementById("theme-panel-title").textContent = "Thème";
-  document.getElementById("theme-panel-sub").textContent = "Sélectionnez un thème dans l'arbre.";
-  themePanelShow("empty");
-}
-
-async function selectThemeNode(key) {
-  const label = themeNodeLabels[key] || "Thème";
-  themeCurrentNode = { key, label };
-  highlightThemeNode(key);
-
-  document.getElementById("theme-panel-title").textContent = label;
-  document.getElementById("theme-panel-sub").textContent = "Chargement des pages…";
-  document.getElementById("theme-synthesis-btn").classList.remove("hidden");
-  document.getElementById("theme-pages-back").classList.add("hidden");
-  themePanelShow("pages");
-  document.getElementById("theme-pages-list").innerHTML =
-    `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Chargement…</div>`;
-
-  try {
-    const qParam = themeKeyword ? `&q=${encodeURIComponent(themeKeyword)}` : "";
-    const r = await api(
-      `/api/spaces/${spaceId}/tree/pages?node_key=${encodeURIComponent(key)}&axis=${encodeURIComponent(themeTreeAxis)}${qParam}`
-    );
-    if (!r.ok) {
-      document.getElementById("theme-pages-list").innerHTML =
-        `<div class="text-sm text-amber-600 dark:text-amber-400 p-2">Impossible de charger les pages.</div>`;
-      return;
-    }
-    const data = await r.json();
-    themeCurrentPages = data.pages || [];
-    renderThemeNodePages(themeCurrentPages);
-  } catch (err) {
-    console.warn("Theme node pages failed", err);
-    document.getElementById("theme-pages-list").innerHTML =
-      `<div class="text-sm text-amber-600 dark:text-amber-400 p-2">Une erreur est survenue.</div>`;
-  }
-}
-
-function renderThemeNodePages(pages) {
-  const host = document.getElementById("theme-pages-list");
-  const sub = document.getElementById("theme-panel-sub");
+function renderBrowseDocuments() {
+  const host = document.getElementById("browse-documents-list");
+  const count = document.getElementById("browse-doc-count");
   if (!host) return;
-  if (!pages.length) {
-    sub.textContent = themeKeyword ? `Aucune page « ${themeKeyword} » ici.` : "Aucune page rattachée.";
-    host.innerHTML = themeKeyword
-      ? `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune page contenant « ${escapeHtml(themeKeyword)} » dans ce thème.</div>`
-      : `<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune page rattachée à ce thème dans cet espace.</div>`;
+  if (count) count.textContent = browseDocuments.length ? "(" + browseDocuments.length + ")" : "";
+  if (!browseDocuments.length) {
+    host.innerHTML = '<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucun document dans cet espace.</div>';
     return;
   }
-  sub.textContent = themeKeyword
-    ? `${pages.length} page(s) contenant « ${themeKeyword} » · cliquez pour ouvrir`
-    : `${pages.length} page(s) · cliquez pour voir le PDF et le texte extrait`;
-  host.innerHTML = pages
-    .map(
-      (p) => `
-    <button type="button"
-      onclick="openThemeNodePage(${p.category_id}, ${p.document_id}, ${p.page_no})"
-      class="w-full text-left flex items-center justify-between gap-3 rounded-xl border border-black/5 dark:border-white/10 p-3 hover:bg-purple-500/5 hover:border-purple-500/20 transition-all active:scale-[0.99]">
-      <div class="min-w-0">
-        <div class="font-medium text-sm text-gray-900 dark:text-gray-100 truncate">${escapeHtml(p.document_title || "Document")}</div>
-        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Page ${p.page_no} · ${p.chunk_count || 0} extrait(s)</div>
-      </div>
-      <span class="shrink-0 inline-flex items-center gap-1 text-[11px] ${p.has_source_file ? "text-purple-600 dark:text-purple-400" : "text-gray-400"}">
-        <i class="ti ${p.has_source_file ? "ti-file-type-pdf" : "ti-file-text"}"></i>
-      </span>
-    </button>`
-    )
+  host.innerHTML = browseDocuments
+    .map((d) => {
+      const active = browseCurrentDocument && browseCurrentDocument.document_id === d.document_id;
+      const pagesLabel = d.page_count
+        ? d.page_count + " page" + (d.page_count > 1 ? "s" : "")
+        : "aucune page indexée";
+      const meta = [d.source, pagesLabel].filter(Boolean).join(" · ");
+      const btnCls = active
+        ? "bg-teal-50 dark:bg-teal-900/30 border-teal-300 dark:border-teal-700"
+        : "bg-white dark:bg-gray-800/60 border-transparent hover:bg-gray-100 dark:hover:bg-gray-800";
+      const iconCls = active ? "text-teal-600 dark:text-teal-400" : "text-gray-400";
+      return [
+        '<button type="button" onclick="openBrowseDocument(' + d.document_id + ')"',
+        '        class="w-full text-left px-3 py-2 rounded-lg mb-1 border transition-colors ' + btnCls + '">',
+        '  <span class="flex items-start gap-2">',
+        '    <i class="ti ti-file-text text-base mt-0.5 ' + iconCls + '"></i>',
+        '    <span class="min-w-0 flex-1">',
+        '      <span class="block font-medium text-gray-800 dark:text-gray-100 leading-snug">' + escapeHtml(d.title) + '</span>',
+        '      <span class="block text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">' + escapeHtml(meta) + '</span>',
+        '    </span>',
+        '  </span>',
+        '</button>',
+      ].join("");
+    })
     .join("");
 }
 
-function openThemeNodePage(categoryId, documentId, pageNo) {
-  // Avec un filtre mot-clé actif : ouvrir en mode recherche (surligne le mot-clé).
-  // Sinon : mode catégorie (surligne les chunks de la catégorie).
-  if (themeKeyword) {
-    openSpaceSearchPageModal(themeKeyword, documentId, pageNo);
-  } else {
-    openSpaceCategoryPageModal(categoryId, documentId, pageNo);
-  }
-}
+/** Ouvre un document : le panneau de droite liste ses pages consultables. */
+async function openBrowseDocument(documentId) {
+  const doc = browseDocuments.find((d) => d.document_id === documentId);
+  if (!doc) return;
+  browseCurrentDocument = doc;
+  renderBrowseDocuments();
+  renderScopeButtons();
 
-function showThemePagesView() {
-  document.getElementById("theme-pages-back").classList.add("hidden");
-  if (themeCurrentNode) {
-    document.getElementById("theme-panel-title").textContent = themeCurrentNode.label;
-  }
-  renderThemeNodePages(themeCurrentPages);
-  themePanelShow("pages");
-}
+  document.getElementById("theme-panel-title").textContent = doc.title;
 
-async function runThemeSynthesis() {
-  if (!themeCurrentNode) return;
-  const { key, label } = themeCurrentNode;
-  document.getElementById("theme-panel-sub").textContent = "Synthèse en cours…";
-  document.getElementById("theme-pages-back").classList.remove("hidden");
-  themePanelShow("loading");
-
-  try {
-    const r = await api(`/api/spaces/${spaceId}/tree/synthesis`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ node_key: key, node_label: label, axis: themeTreeAxis }),
-    });
-    if (!r.ok) {
-      renderThemeSynthesisError("Impossible de générer la synthèse.");
-      return;
-    }
-    renderThemeSynthesis(await r.json());
-  } catch (err) {
-    console.warn("Theme synthesis failed", err);
-    renderThemeSynthesisError("Une erreur est survenue pendant la synthèse.");
-  }
-}
-
-function renderThemeSynthesisError(msg) {
-  document.getElementById("theme-synthesis-flags").innerHTML = "";
-  document.getElementById("theme-synthesis-sources").innerHTML = "";
-  document.getElementById("theme-synthesis-markdown").innerHTML =
-    `<p class="text-sm text-amber-600 dark:text-amber-400">${escapeHtml(msg)}</p>`;
-  document.getElementById("theme-panel-sub").textContent = "";
-  themePanelShow("synthesis");
-}
-
-function renderThemeSynthesis(data) {
-  const flags = document.getElementById("theme-synthesis-flags");
-  const md = document.getElementById("theme-synthesis-markdown");
-  const sourcesHost = document.getElementById("theme-synthesis-sources");
-
-  if (data.status === "empty" || !data.synthesis_markdown) {
-    document.getElementById("theme-panel-sub").textContent = "";
-    flags.innerHTML = "";
-    sourcesHost.innerHTML = "";
-    md.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400">Aucun texte exploitable n'est rattaché à ce thème dans cet espace.</p>`;
-    themePanelShow("synthesis");
+  // Un mot-clé déjà saisi reste actif : on bascule sur ses résultats dans ce document.
+  if (browseKeyword) {
+    searchScope = "document";
+    renderScopeButtons();
+    await runSpaceKeywordSearch();
     return;
   }
 
-  const badges = [];
-  if (data.cached) {
-    badges.push(`<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"><i class="ti ti-database"></i>Depuis le cache</span>`);
+  const sub = document.getElementById("theme-panel-sub");
+  const host = document.getElementById("theme-pages-list");
+  if (!doc.page_count) {
+    sub.textContent = "Aucune page indexée pour ce document.";
+    host.innerHTML = '<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Ce document n\'a pas de texte extrait exploitable.</div>';
+    browsePanelShow("pages");
+    return;
   }
-  if (data.truncated) {
-    badges.push(`<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300" title="Le texte dépassait le budget de contexte : synthèse sur un sous-ensemble."><i class="ti ti-cut"></i>Contexte tronqué</span>`);
-  }
-  flags.innerHTML = badges.join("");
-
-  document.getElementById("theme-panel-sub").textContent =
-    `${data.chunk_count || 0} extrait(s) · ${data.cached ? "depuis le cache" : "généré à l'instant"}`;
-
-  md.innerHTML = parseMarkdown(data.synthesis_markdown);
-
-  const sources = data.sources || [];
-  if (!sources.length) {
-    sourcesHost.innerHTML = "";
-  } else {
-    const chips = sources
-      .map((s) => {
-        const pages = (s.pages || []).length
-          ? `<span class="text-gray-400">· p. ${(s.pages || []).slice(0, 8).join(", ")}${(s.pages || []).length > 8 ? "…" : ""}</span>`
-          : "";
-        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300"><i class="ti ti-file-text text-purple-500"></i>${escapeHtml(s.document_title || "Document")} ${pages}</span>`;
-      })
-      .join("");
-    sourcesHost.innerHTML =
-      `<p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Sources (${sources.length})</p><div class="flex flex-wrap gap-2">${chips}</div>`;
-  }
-
-  themePanelShow("synthesis");
+  sub.textContent = doc.page_count + " page(s) · cliquez pour ouvrir le PDF et son texte";
+  host.innerHTML = Array.from({ length: doc.page_count }, (_, i) => i + 1)
+    .map((n) => [
+      '<button type="button" onclick="openSpaceSourcePageModal(' + doc.document_id + ', ' + n + ')"',
+      '        class="w-full text-left px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/60 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center gap-2">',
+      '  <i class="ti ti-file-text text-gray-400"></i>',
+      '  <span class="text-sm text-gray-700 dark:text-gray-200">Page ' + n + '</span>',
+      '</button>',
+    ].join(""))
+    .join("");
+  browsePanelShow("pages");
 }
 
-async function changeThemeTreeAxis(axis) {
-  await loadThemeTree(axis);
-  renderThemeTree();
-  themePanelReset();
+/** Recherche mot-clé : dans tout l'espace, ou dans le seul document ouvert. */
+async function runSpaceKeywordSearch() {
+  const input = document.getElementById("space-keyword-search-input");
+  const msg = document.getElementById("space-keyword-search-msg");
+  const query = (input?.value || "").trim();
+  const showMsg = (txt) => {
+    if (!msg) return;
+    msg.textContent = txt;
+    msg.classList.toggle("hidden", !txt);
+  };
+  showMsg("");
+
+  // Champ vidé → retour à la consultation du document ouvert, ou à l'accueil.
+  if (!query) {
+    browseKeyword = "";
+    if (browseCurrentDocument) {
+      openBrowseDocument(browseCurrentDocument.document_id);
+    } else {
+      browsePanelShow("empty");
+      document.getElementById("theme-panel-title").textContent = "Aucun document ouvert";
+      document.getElementById("theme-panel-sub").textContent = "Choisissez un document à gauche.";
+    }
+    return;
+  }
+  if (query.length < 2) {
+    showMsg("Saisissez au moins 2 caractères.");
+    return;
+  }
+
+  const scoped = !!(searchScope === "document" && browseCurrentDocument);
+  const scopeParam = scoped ? "&document_id=" + browseCurrentDocument.document_id : "";
+  let data;
+  try {
+    const r = await api("/api/spaces/" + spaceId + "/search/pages?q=" + encodeURIComponent(query) + scopeParam);
+    if (!r.ok) throw new Error("http");
+    data = await r.json();
+  } catch (err) {
+    showMsg("Erreur lors de la recherche.");
+    return;
+  }
+
+  browseKeyword = query;
+  const pages = data.pages || [];
+  const title = document.getElementById("theme-panel-title");
+  const sub = document.getElementById("theme-panel-sub");
+  const host = document.getElementById("theme-pages-list");
+
+  title.textContent = scoped ? browseCurrentDocument.title : "Tous les documents";
+  if (!pages.length) {
+    sub.textContent = "Aucun résultat pour « " + query + " ».";
+    host.innerHTML = '<div class="text-sm text-gray-500 dark:text-gray-400 p-2">Aucune page ne contient « ' + escapeHtml(query) + ' »' + (scoped ? " dans ce document" : "") + ".</div>";
+    browsePanelShow("pages");
+    return;
+  }
+
+  sub.textContent = pages.length + " page(s) contenant « " + query + " »" + (scoped ? " dans ce document" : " dans l'espace") + " · cliquez pour ouvrir";
+  const scopeArg = scoped ? String(browseCurrentDocument.document_id) : "null";
+  host.innerHTML = pages
+    .map((pg) => {
+      const docLine = scoped
+        ? ""
+        : '<span class="block text-[11px] text-gray-500 dark:text-gray-400 truncate">' + escapeHtml(pg.document_title || "") + "</span>";
+      const nb = pg.chunk_count + " extrait" + (pg.chunk_count > 1 ? "s" : "");
+      return [
+        '<button type="button" onclick="openSpaceSearchPageModal(this.dataset.q, ' + pg.document_id + ', ' + pg.page_no + ', ' + scopeArg + ')"',
+        '        data-q="' + escapeHtml(query) + '"',
+        '        class="w-full text-left px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/60 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">',
+        '  <span class="flex items-center justify-between gap-2">',
+        '    <span class="min-w-0">' + docLine,
+        '      <span class="block text-sm text-gray-700 dark:text-gray-200">Page ' + pg.page_no + '</span>',
+        '    </span>',
+        '    <span class="shrink-0 text-[11px] font-semibold text-teal-700 dark:text-teal-300">' + nb + '</span>',
+        '  </span>',
+        '</button>',
+      ].join("");
+    })
+    .join("");
+  browsePanelShow("pages");
 }
 
 function openThemeTreeModal() {
@@ -2582,14 +2516,18 @@ function openThemeTreeModal() {
   if (!modal) return;
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
-  setThemeKeyword("");
-  themePanelReset();
-  setTimeout(() => document.getElementById("space-keyword-search-input")?.focus(), 50);
-  if (themeTreeData && themeTreeData.axis === themeTreeAxis) {
-    renderThemeTree();
-  } else {
-    loadThemeTree(themeTreeAxis).then(() => renderThemeTree());
-  }
+  browseCurrentDocument = null;
+  browseKeyword = "";
+  searchScope = "all";
+  const input = document.getElementById("space-keyword-search-input");
+  if (input) input.value = "";
+  document.getElementById("space-keyword-search-msg")?.classList.add("hidden");
+  document.getElementById("theme-panel-title").textContent = "Aucun document ouvert";
+  document.getElementById("theme-panel-sub").textContent = "Choisissez un document à gauche.";
+  renderScopeButtons();
+  browsePanelShow("empty");
+  setTimeout(() => input?.focus(), 50);
+  loadBrowseDocuments();
 }
 
 function closeThemeTreeModal() {
@@ -2937,62 +2875,16 @@ let spaceCategoryPageState = {
 };
 let spaceCategoryPdfDoc = null;
 
-async function runSpaceKeywordSearch() {
-  const input = document.getElementById("space-keyword-search-input");
-  const msg = document.getElementById("space-keyword-search-msg");
-  const query = (input?.value || "").trim();
-  const showMsg = (txt) => {
-    if (!msg) return;
-    msg.textContent = txt;
-    msg.classList.toggle("hidden", !txt);
-  };
-  showMsg("");
-
-  // Champ vidé → on retire le filtre et on recharge le nœud courant non filtré.
-  if (!query) {
-    setThemeKeyword("");
-    if (themeCurrentNode) selectThemeNode(themeCurrentNode.key);
-    return;
-  }
-  if (query.length < 2) {
-    showMsg("Saisissez au moins 2 caractères.");
-    return;
-  }
-
-  // On valide qu'il y a des résultats, puis on ACTIVE le filtre (sans ouvrir de page).
-  try {
-    const r = await api(`/api/spaces/${spaceId}/search/pages?q=${encodeURIComponent(query)}`);
-    if (!r.ok) {
-      showMsg("Erreur lors de la recherche.");
-      return;
-    }
-    const data = await r.json();
-    const n = (data.pages || []).length;
-    if (!n) {
-      setThemeKeyword("");
-      showMsg(`Aucun résultat pour « ${query} ».`);
-      return;
-    }
-    setThemeKeyword(query);
-    if (themeCurrentNode) {
-      // Un thème est déjà sélectionné : on rafraîchit ses pages filtrées.
-      selectThemeNode(themeCurrentNode.key);
-    } else {
-      document.getElementById("theme-panel-sub").textContent =
-        `Filtre « ${query} » actif (${n} page(s) dans l'espace) — cliquez une catégorie.`;
-    }
-  } catch (err) {
-    showMsg("Erreur lors de la recherche.");
-  }
-}
-
-async function openSpaceSearchPageModal(query, documentId, pageNo) {
+async function openSpaceSearchPageModal(query, documentId, pageNo, scopeDocumentId = null) {
   const modal = document.getElementById("space-category-page-modal");
   if (!modal) return;
   modal.classList.remove("hidden");
   document.body.style.overflow = "hidden";
 
-  spaceCategoryPageState = { mode: "search", categoryId: null, documentId, pageNo, query };
+  // `scopeDocumentId` reprend la portée de la recherche : la navigation
+  // précédent/suivant doit parcourir le MÊME ensemble de résultats, sinon une
+  // recherche limitée à un document ferait dériver vers les pages d'un autre.
+  spaceCategoryPageState = { mode: "search", categoryId: null, documentId, pageNo, query, scopeDocumentId };
 
   document.getElementById("space-category-page-title").textContent = "Chargement…";
   document.getElementById("space-category-page-meta").textContent = "—";
@@ -3000,7 +2892,8 @@ async function openSpaceSearchPageModal(query, documentId, pageNo) {
   document.getElementById("space-category-text-container").innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
   document.getElementById("space-category-pdf-container").innerHTML = `<div class="text-sm text-gray-500 dark:text-gray-400">Chargement…</div>`;
 
-  const r = await api(`/api/spaces/${spaceId}/search/pages/${documentId}/${pageNo}?q=${encodeURIComponent(query)}`);
+  const scopeParam = scopeDocumentId ? `&document_scope_id=${scopeDocumentId}` : "";
+  const r = await api(`/api/spaces/${spaceId}/search/pages/${documentId}/${pageNo}?q=${encodeURIComponent(query)}${scopeParam}`);
   if (!r.ok) {
     const err = await r.json().catch(() => ({}));
     document.getElementById("space-category-text-container").innerHTML =
@@ -3179,15 +3072,17 @@ async function renderSpaceCategoryPdf(documentInfo, pageNo) {
   if (!container || !panel) return;
 
   if (!documentInfo.has_source_file || !documentInfo.document_id) {
+    // Aucun PDF : le texte reprend toute la place, y compris sur mobile — où il est
+    // masqué par défaut au profit de la page PDF.
     panel.classList.add("hidden");
-    textSection?.classList.remove("lg:w-1/2");
-    textSection?.classList.add("lg:w-full");
+    textSection?.classList.remove("lg:w-1/2", "hidden");
+    textSection?.classList.add("lg:w-full", "flex");
     container.innerHTML = "";
     return;
   }
 
-  textSection?.classList.add("lg:w-1/2");
-  textSection?.classList.remove("lg:w-full");
+  textSection?.classList.add("lg:w-1/2", "hidden");
+  textSection?.classList.remove("lg:w-full", "flex");
   panel.classList.remove("hidden");
   container.innerHTML = `<div class="flex items-center justify-center h-full min-h-[200px] text-gray-500 dark:text-gray-400"><i class="ti ti-loader-2 text-2xl animate-spin"></i></div>`;
 
@@ -3205,13 +3100,38 @@ async function renderSpaceCategoryPdf(documentInfo, pageNo) {
   }
 }
 
-/* Rendu de page délégué au module partagé. */
+/* Rendu de page délégué au module partagé.
+ *
+ * `spaceCategoryPdfFit` retient le choix de l'utilisateur d'une page à l'autre : il
+ * serait pénible de repasser en pleine largeur à chaque « Suivante » quand on parcourt
+ * une série de planches cotées. */
+let spaceCategoryPdfFit = "page";
+let spaceCategoryPdfPageNum = 1;
+
+function renderSpaceCategoryFitButtons() {
+  const on = "px-2 py-0.5 rounded-md border transition-colors bg-teal-600 text-white border-teal-600";
+  const off = "px-2 py-0.5 rounded-md border transition-colors bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700";
+  const pageBtn = document.getElementById("space-pdf-fit-page-btn");
+  const widthBtn = document.getElementById("space-pdf-fit-width-btn");
+  if (pageBtn) pageBtn.className = spaceCategoryPdfFit === "page" ? on : off;
+  if (widthBtn) widthBtn.className = spaceCategoryPdfFit === "width" ? on : off;
+}
+
+async function setSpaceCategoryPdfFit(fit) {
+  spaceCategoryPdfFit = fit === "width" ? "width" : "page";
+  renderSpaceCategoryFitButtons();
+  await renderSpaceCategoryPdfPage(spaceCategoryPdfPageNum);
+}
+
 async function renderSpaceCategoryPdfPage(pageNum) {
   if (!spaceCategoryPdfDoc) return;
+  spaceCategoryPdfPageNum = pageNum;
+  renderSpaceCategoryFitButtons();
   await PageViewer.renderPdfPage(
     document.getElementById("space-category-pdf-container"),
     spaceCategoryPdfDoc,
     pageNum,
+    { fit: spaceCategoryPdfFit },
   );
 }
 
@@ -3227,7 +3147,7 @@ function closeSpaceCategoryPageModal() {
 }
 
 async function navigateSpaceCategoryPage(direction) {
-  const { mode, categoryId, documentId, pageNo, query } = spaceCategoryPageState;
+  const { mode, categoryId, documentId, pageNo, query, scopeDocumentId } = spaceCategoryPageState;
 
   if (mode === "source") {
     // Fil de navigation = les pages du document qui portent du texte indexé.
@@ -3243,13 +3163,16 @@ async function navigateSpaceCategoryPage(direction) {
 
   if (mode === "search") {
     if (!query) return;
-    const r = await api(`/api/spaces/${spaceId}/search/pages/${documentId}/${pageNo}?q=${encodeURIComponent(query)}`);
+    // Même portée qu'à l'ouverture : le fil de navigation doit rester celui des
+    // résultats affichés, pas celui de tout l'espace.
+    const scopeParam = scopeDocumentId ? `&document_scope_id=${scopeDocumentId}` : "";
+    const r = await api(`/api/spaces/${spaceId}/search/pages/${documentId}/${pageNo}?q=${encodeURIComponent(query)}${scopeParam}`);
     if (!r.ok) return;
     const detail = await r.json();
     const nav = detail.navigation || {};
     const target = direction === "prev" ? nav.prev : nav.next;
     if (!target) return;
-    await openSpaceSearchPageModal(query, target.document_id, target.page_no);
+    await openSpaceSearchPageModal(query, target.document_id, target.page_no, scopeDocumentId || null);
     return;
   }
 
@@ -3601,17 +3524,103 @@ function attachScopeCardListeners(container, originalMessage) {
   if (skipBtn) skipBtn.addEventListener("click", () => finish({}));
 }
 
+// ——— Contrôle du tour en cours ———
+// Le contrôleur d'annulation est partagé : le bouton « Arrêter » l'utilise, et
+// `submitSpaceChat` le remet à zéro à chaque tour. `lastUserMessage` alimente
+// « Régénérer » et le « Réessayer » d'une erreur réseau.
+let currentChatAbort = null;
+let lastUserMessage = null;
+
+function setChatBusy(busy) {
+  const sendBtn = document.getElementById("chat-send-btn");
+  const stopBtn = document.getElementById("chat-stop-btn");
+  if (sendBtn) sendBtn.classList.toggle("hidden", busy);
+  if (stopBtn) {
+    stopBtn.classList.toggle("hidden", !busy);
+    stopBtn.classList.toggle("flex", busy);
+  }
+}
+
+function stopSpaceChat() {
+  if (currentChatAbort) {
+    currentChatAbort.abort();
+    currentChatAbort = null;
+  }
+  setChatBusy(false);
+}
+
+async function copyAssistantMessage(btn) {
+  const raw = btn?.dataset?.text || "";
+  if (!raw) return;
+  try {
+    await navigator.clipboard.writeText(raw);
+  } catch (_) {
+    // Contexte non sécurisé ou permission refusée : repli sur une sélection manuelle.
+    const ta = document.createElement("textarea");
+    ta.value = raw;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); } catch (_) {}
+    ta.remove();
+  }
+  const icon = btn.querySelector("i");
+  if (icon) {
+    icon.className = "ti ti-check text-sm";
+    setTimeout(() => { icon.className = "ti ti-copy text-sm"; }, 1600);
+  }
+}
+
+async function regenerateLastAnswer() {
+  if (!lastUserMessage || currentChatAbort) return;
+  await submitSpaceChat(lastUserMessage, null);
+}
+
+/** Barre d'actions sous une réponse : copier, régénérer, puis feedback si le message
+ *  a bien été persisté (un message interrompu n'a pas d'identifiant). */
+function buildAssistantActionsHtml(assistantMessageId, rawText) {
+  const escAttr = (s) => String(s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  const feedbackHtml = assistantMessageId
+    ? `
+      ${generationTraceButtonHtml(assistantMessageId)}
+      <button onclick="submitFeedback(${assistantMessageId}, true)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-green-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-up-${assistantMessageId}" title="Utile">
+        <i class="ti ti-thumb-up text-sm"></i>
+      </button>
+      <button onclick="submitFeedback(${assistantMessageId}, false)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-down-${assistantMessageId}" title="Inutile">
+        <i class="ti ti-thumb-down text-sm"></i>
+      </button>`
+    : "";
+  return `
+    <div class="feedback-section mt-2 flex flex-col gap-2 border-t border-gray-200 dark:border-gray-700 pt-2 text-xs">
+      <div class="flex items-center justify-between gap-2 text-gray-500 dark:text-gray-400">
+        <div class="flex items-center gap-1">
+          <button type="button" onclick="copyAssistantMessage(this)" data-text="${escAttr(rawText)}" class="px-2 py-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" title="Copier la réponse">
+            <i class="ti ti-copy text-sm"></i>
+          </button>
+          <button type="button" onclick="regenerateLastAnswer()" class="px-2 py-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" title="Régénérer la réponse">
+            <i class="ti ti-refresh text-sm"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-1">${feedbackHtml}</div>
+      </div>
+    </div>`;
+}
+
 async function submitSpaceChat(message, slotAction = null, guidedChoice = null, scopeChoice = null, savStart = null) {
-  function startFakeReasoning(el) {
+  // Étape en cours, pilotée par les événements `stage` du serveur. Remplace l'ancien
+  // « LIA réfléchit... » figé, qui restait identique pendant toute la recherche, le
+  // contrôle documentaire et la préparation des pages — soit l'essentiel de l'attente.
+  function renderStage(el, label) {
     el.innerHTML = `
       <div class="flex items-center gap-3 py-1">
         <div class="lia-loading-icon w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 text-white shadow-md shadow-indigo-500/10">
           <i class="ti ti-robot text-xs"></i>
         </div>
-        <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase animate-pulse">LIA réfléchit...</span>
+        <span class="stage-label text-xs font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase animate-pulse"></span>
       </div>
     `;
-    return null;
+    el.querySelector(".stage-label").textContent = label;
   }
 
   const host = document.getElementById("chat-messages");
@@ -3633,7 +3642,9 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
   let thinkingText = "";
   let thinkingStarted = false;
   let thinkingFaded = false;
-  const reasoningInterval = startFakeReasoning(contentEl);
+  renderStage(contentEl, "Analyse de la question");
+  // `startFakeReasoning` retournait null : les clearInterval qui suivaient étaient du
+  // code mort. La progression vient désormais des événements `stage` du serveur.
 
   const requestBody = {
     message,
@@ -3655,6 +3666,31 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
     requestBody.sav_start = savStart;
   }
 
+  // Mémorisé pour « Régénérer » et pour le « Réessayer » d'une erreur réseau.
+  if (!slotAction && !guidedChoice && !scopeChoice && !savStart) lastUserMessage = message;
+
+  currentChatAbort = new AbortController();
+  setChatBusy(true);
+
+  /** Bloc d'erreur avec bouton de reprise : un message sans issue laissait
+   *  l'utilisateur sans autre recours que de retaper sa question. */
+  const renderRetry = (label) => {
+    contentEl.classList.remove("italic");
+    contentEl.innerHTML = "";
+    const box = document.createElement("div");
+    box.className = "flex flex-col items-start gap-2";
+    const txt = document.createElement("p");
+    txt.className = "text-sm text-gray-600 dark:text-gray-300";
+    txt.textContent = label;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 transition-all";
+    btn.innerHTML = '<i class="ti ti-refresh"></i> Réessayer';
+    btn.onclick = () => { assistantWrap.remove(); submitSpaceChat(message, slotAction, guidedChoice, scopeChoice, savStart); };
+    box.append(txt, btn);
+    contentEl.appendChild(box);
+  };
+
   let response;
   try {
     response = await fetch(`/api/spaces/${spaceId}/chat/stream`, {
@@ -3662,18 +3698,24 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(requestBody),
+      signal: currentChatAbort.signal,
     });
-  } catch (_) {
-    if (reasoningInterval) clearInterval(reasoningInterval);
-    contentEl.classList.remove("italic");
-    contentEl.textContent = "Erreur réseau lors de la génération de la réponse.";
+  } catch (err) {
+    setChatBusy(false);
+    currentChatAbort = null;
+    if (err && err.name === "AbortError") {
+      contentEl.classList.remove("italic");
+      contentEl.textContent = "Génération arrêtée.";
+      return;
+    }
+    renderRetry("La connexion au serveur a échoué.");
     return;
   }
   if (!response.ok || !response.body) {
-    if (reasoningInterval) clearInterval(reasoningInterval);
+    setChatBusy(false);
+    currentChatAbort = null;
     const errText = await response.text();
-    contentEl.classList.remove("italic");
-    contentEl.textContent = errText || "Erreur lors de la génération de la réponse.";
+    renderRetry(errText || "Le serveur n'a pas pu générer de réponse.");
     return;
   }
 
@@ -3690,90 +3732,100 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split("\n");
-    buffer = lines.pop() || "";
-    for (const line of lines) {
-      if (!line.startsWith("data: ")) continue;
-      const raw = line.slice(6).trim();
-      if (!raw) continue;
-      try {
-        const data = JSON.parse(raw);
-        if (data.thinking) {
-          if (reasoningInterval) clearInterval(reasoningInterval);
-          if (!thinkingStarted) {
-            thinkingStarted = true;
-            contentEl.innerHTML = "";          // retire le placeholder « LIA réfléchit… »
-            thinkingEl.classList.remove("hidden");
-          }
-          thinkingText += data.thinking;
-          thinkingBodyEl.textContent = thinkingText;
-          thinkingBodyEl.scrollTop = thinkingBodyEl.scrollHeight;
-          host.scrollTop = host.scrollHeight;
-        } else if (data.message && data.message.content) {
-          if (reasoningInterval) clearInterval(reasoningInterval);
-          if (thinkingStarted && !thinkingFaded) {
-            thinkingFaded = true;
-            thinkingEl.classList.add("fade-out");   // disparaît quand la réponse arrive
-            setTimeout(() => { thinkingEl.remove(); }, 450);
-          }
-          full += data.message.content;
-          contentEl.classList.remove("italic");
-          contentEl.innerHTML = parseMarkdown(full);
-        } else if (data.slot_prompt) {
-          receivedSlotPrompt = data.slot_prompt;
-        } else if (data.step) {
-          if (reasoningInterval) clearInterval(reasoningInterval);
-          receivedStep = data.step;
-        } else if (data.scope_proposal) {
-          if (reasoningInterval) clearInterval(reasoningInterval);
-          receivedScopeProposal = data.scope_proposal;
-        } else if (data.sav_suggestion) {
-          receivedSavSuggestion = data.sav_suggestion;
-        } else if (data.sources) {
-          receivedSources = data.sources;
-          if (full) {
-            contentEl.innerHTML = parseMarkdown(full);
-          }
-        } else if (data.status === "cropping") {
-          const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
-          if (messageContainer) {
-            let skeleton = messageContainer.querySelector("#illustration-skeleton");
-            if (!skeleton) {
-              messageContainer.insertAdjacentHTML("beforeend", `<div id="illustration-skeleton" class="mb-4 mt-4 pt-3 border-t border-black/5 dark:border-white/5 animate-pulse"><span class="text-xs text-indigo-600">Cadrage illustration...</span></div>`);
+  // Le flux peut être coupé en cours de route : soit par le bouton « Arrêter »
+  // (AbortError), soit par une perte réseau. Sans ce garde, l'exception remontait
+  // hors de la fonction et le texte déjà reçu restait à l'écran sans jamais être
+  // finalisé ni proposé à la copie.
+  let streamAborted = false;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        const raw = line.slice(6).trim();
+        if (!raw) continue;
+        try {
+          const data = JSON.parse(raw);
+          if (data.stage) {
+            // Progression réelle du serveur : recherche → contrôle → pages → rédaction.
+            if (!full && !thinkingStarted) renderStage(contentEl, data.stage.label);
+          } else if (data.thinking) {
+            if (!thinkingStarted) {
+              thinkingStarted = true;
+              contentEl.innerHTML = "";          // retire le placeholder « LIA réfléchit… »
+              thinkingEl.classList.remove("hidden");
             }
+            thinkingText += data.thinking;
+            thinkingBodyEl.textContent = thinkingText;
+            thinkingBodyEl.scrollTop = thinkingBodyEl.scrollHeight;
             host.scrollTop = host.scrollHeight;
+          } else if (data.message && data.message.content) {
+            if (thinkingStarted && !thinkingFaded) {
+              thinkingFaded = true;
+              thinkingEl.classList.add("fade-out");   // disparaît quand la réponse arrive
+              setTimeout(() => { thinkingEl.remove(); }, 450);
+            }
+            full += data.message.content;
+            contentEl.classList.remove("italic");
+            contentEl.innerHTML = parseMarkdown(full);
+          } else if (data.slot_prompt) {
+            receivedSlotPrompt = data.slot_prompt;
+          } else if (data.step) {
+            receivedStep = data.step;
+          } else if (data.scope_proposal) {
+            receivedScopeProposal = data.scope_proposal;
+          } else if (data.sav_suggestion) {
+            receivedSavSuggestion = data.sav_suggestion;
+          } else if (data.sources) {
+            receivedSources = data.sources;
+            if (full) {
+              contentEl.innerHTML = parseMarkdown(full);
+            }
+          } else if (data.status === "cropping") {
+            const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
+            if (messageContainer) {
+              let skeleton = messageContainer.querySelector("#illustration-skeleton");
+              if (!skeleton) {
+                messageContainer.insertAdjacentHTML("beforeend", `<div id="illustration-skeleton" class="mb-4 mt-4 pt-3 border-t border-black/5 dark:border-white/5 animate-pulse"><span class="text-xs text-indigo-600">Cadrage illustration...</span></div>`);
+              }
+              host.scrollTop = host.scrollHeight;
+            }
+          } else if (data.error) {
+            streamError = String(data.error);
+            contentEl.classList.remove("italic");
+            contentEl.textContent = `Erreur: ${streamError}`;
+            streamDone = true;
+            break;
+          } else if (data.done) {
+            streamDone = true;
+            if (data.message_id) {
+              assistantMessageId = data.message_id;
+            }
+            if (data.trace) {
+              receivedTrace = data.trace;
+            }
+            break;
           }
-        } else if (data.error) {
-          if (reasoningInterval) clearInterval(reasoningInterval);
-          streamError = String(data.error);
-          contentEl.classList.remove("italic");
-          contentEl.textContent = `Erreur: ${streamError}`;
-          streamDone = true;
-          break;
-        } else if (data.done) {
-          if (reasoningInterval) clearInterval(reasoningInterval);
-          streamDone = true;
-          if (data.message_id) {
-            assistantMessageId = data.message_id;
-          }
-          if (data.trace) {
-            receivedTrace = data.trace;
-          }
-          break;
-        }
-      } catch (_) {}
+        } catch (_) {}
+      }
+      if (streamDone) {
+        try { await reader.cancel(); } catch (_) {}
+        break;
+      }
+      host.scrollTop = host.scrollHeight;
     }
-    if (streamDone) {
-      try { await reader.cancel(); } catch (_) {}
-      break;
+  } catch (err) {
+    streamAborted = true;
+    if (!(err && err.name === "AbortError")) {
+      streamError = String(err && err.message ? err.message : err);
     }
-    host.scrollTop = host.scrollHeight;
   }
-  if (reasoningInterval) clearInterval(reasoningInterval);
+  setChatBusy(false);
+  currentChatAbort = null;
 
   const messageContainer = assistantWrap.querySelector(".assistant-message-bubble");
   if (messageContainer) {
@@ -3798,7 +3850,9 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
 
   if (!full && !streamError) {
     contentEl.classList.remove("italic");
-    contentEl.textContent = "Aucune réponse générée.";
+    contentEl.textContent = streamAborted
+      ? "Génération arrêtée avant la première ligne."
+      : "Aucune réponse générée.";
   } else if (full && !streamError) {
     const cleaned = stripCitationMarkers(full);
     const streamingMessageKey = `msg-stream-${Date.now()}`;
@@ -3847,26 +3901,16 @@ async function submitSpaceChat(message, slotAction = null, guidedChoice = null, 
   chatHistory.push({ role: "user", content: message });
   chatHistory.push({ role: "assistant", content: streamError ? `Erreur: ${streamError}` : full });
 
-  if (assistantMessageId) {
-    if (receivedTrace) {
-      storeGenerationTrace(assistantMessageId, receivedTrace);
-    }
-    const feedbackHtml = `
-      <div class="feedback-section mt-2 flex flex-col gap-2 border-t border-gray-200 dark:border-gray-700 pt-2 text-xs">
-        <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
-          <span>Cette réponse vous a été utile ?</span>
-          <div class="flex items-center gap-1">
-            ${generationTraceButtonHtml(assistantMessageId)}
-            <button onclick="submitFeedback(${assistantMessageId}, true)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-green-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-up-${assistantMessageId}" title="Utile">
-              <i class="ti ti-thumb-up text-sm"></i>
-            </button>
-            <button onclick="submitFeedback(${assistantMessageId}, false)" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-50 dark:hover:bg-gray-900/50 flex items-center gap-1 transition-all" id="feedback-down-${assistantMessageId}" title="Inutile">
-              <i class="ti ti-thumb-down text-sm"></i>
-            </button>
-          </div>
-        </div>
-      </div>`;
-    messageContainer.insertAdjacentHTML("beforeend", feedbackHtml);
+  // Barre d'actions : copier et régénérer sont proposés dès qu'il y a du texte, même
+  // pour une réponse interrompue (qui n'a pas d'identifiant, donc pas de feedback).
+  if (assistantMessageId && receivedTrace) {
+    storeGenerationTrace(assistantMessageId, receivedTrace);
+  }
+  if (messageContainer && (full || assistantMessageId)) {
+    messageContainer.insertAdjacentHTML(
+      "beforeend",
+      buildAssistantActionsHtml(assistantMessageId, stripCitationMarkers(full))
+    );
   }
 
   const guidedPending = receivedStep && !receivedStep.is_terminal;
@@ -4032,7 +4076,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupSpaceSidebar();
   await loadSpace();
   await loadKagGraph();
-  await loadThemeTree("task");
+  // La liste des documents est chargée à l'ouverture de la modale, pas au démarrage :
+  // inutile de payer cette requête pour un panneau que l'utilisateur n'ouvrira
+  // peut-être jamais (l'ancien arbre thématique, lui, était préchargé).
   await loadConversations();
 
   document.addEventListener("keydown", (e) => {

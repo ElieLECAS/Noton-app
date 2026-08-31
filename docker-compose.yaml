@@ -242,7 +242,12 @@ services:
       context: .
       dockerfile: ./app/Dockerfile
     container_name: noton_web
-    command: sh -c "sleep 5 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --log-level info --access-log"
+    # --reload est un drapeau de DÉVELOPPEMENT : il lance un surveillant de fichiers,
+    # force un process unique, et surtout INTERROMPT TOUS LES FLUX SSE EN COURS dès qu'un
+    # fichier bouge (une réponse de chat en cours de génération est alors perdue).
+    # Il n'est donc plus posé en dur : UVICORN_EXTRA_ARGS=--reload dans le .env local
+    # rétablit le rechargement à chaud ; une prod sans cette variable tourne sans.
+    command: sh -c "sleep 5 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 ${UVICORN_EXTRA_ARGS:-} --log-level info --access-log"
     volumes: *app-volumes
     ports:
       - "8001:8000"
@@ -263,6 +268,10 @@ services:
       dockerfile: ./app/Dockerfile
     container_name: noton_worker
     command: sh -c "sleep 10 && celery -A app.celery_app worker -l INFO -Q documents,embeddings,celery -c $${CELERY_WORKER_CONCURRENCY:-1}"
+    # L'indexation ColPali sature tout le CPU qu'on lui laisse. Sans plafond, un import
+    # en cours affame l'encodage de requête ColPali du conteneur web et double les temps
+    # de réponse du chat. On réserve donc explicitement la majorité des cœurs au web.
+    cpus: ${WORKER_CPUS:-4}
     volumes: *app-volumes
     env_file:
       - .env

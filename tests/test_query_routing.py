@@ -97,8 +97,13 @@ def test_space_chat_routing_rag(client, responsable_headers):
             )
             
             assert r.status_code == 200
-            # Since no passages were found, it should display the RAG threshold warning
-            assert "75%" in r.text
+            # Aucun passage trouvé : la voie RAG répond par le message d'échec de
+            # recherche, qui n'expose plus de seuil interne mais demande une précision.
+            # Le message étant streamé par tranches de 25 caractères, il faut le
+            # réassembler avant de chercher une phrase dedans.
+            from tests.conftest import extract_sse_message_text
+
+            assert "aucune page pertinente" in extract_sse_message_text(r.text)
             
             # La recherche documentaire a bien eu lieu (la recherche est le défaut).
             mock_search.assert_called_once()
