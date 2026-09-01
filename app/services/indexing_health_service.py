@@ -68,12 +68,12 @@ def _fetch_chunk_summaries(session: Session, doc_ids: List[int]) -> Dict[int, di
 
 def _fetch_chunk_id_sets(
     session: Session, doc_ids: List[int]
-) -> tuple[Dict[int, Set[int]], Dict[int, Set[int]], Dict[int, Set[int]]]:
-    """(all_ids, anchor_ids, leaf_ids) par document — pour l'audit de sync ColPali."""
+) -> tuple[Dict[int, Set[int]], Dict[int, Set[int]]]:
+    """(all_ids, anchor_ids) par document — pour l'audit de sync ColPali."""
     rows = session.execute(
         text(
             """
-            SELECT document_id, id, is_leaf,
+            SELECT document_id, id,
                    (metadata_json->>'content_type') = :anchor AS is_anchor
             FROM documentchunk
             WHERE document_id = ANY(:ids)
@@ -83,16 +83,13 @@ def _fetch_chunk_id_sets(
     ).all()
     all_ids: Dict[int, Set[int]] = {d: set() for d in doc_ids}
     anchor_ids: Dict[int, Set[int]] = {d: set() for d in doc_ids}
-    leaf_ids: Dict[int, Set[int]] = {d: set() for d in doc_ids}
     for r in rows:
         did = int(r.document_id)
         cid = int(r.id)
         all_ids[did].add(cid)
         if r.is_anchor:
             anchor_ids[did].add(cid)
-        if r.is_leaf:
-            leaf_ids[did].add(cid)
-    return all_ids, anchor_ids, leaf_ids
+    return all_ids, anchor_ids
 
 
 def _fetch_enrichment_counts(session: Session, doc_ids: List[int]) -> Dict[int, dict]:
@@ -147,8 +144,13 @@ def _colpali_health(
     lancedb_ids: Optional[Set[int]],
     all_ids: Set[int],
     anchor_ids: Set[int],
-    leaf_ids: Set[int],
 ) -> dict:
+    """Topologie UNIQUE : les patches doivent viser les anchors de page, un par page.
+
+    Tout patch hors anchor (héritage de l'ancien pipeline feuille, qui dupliquait
+    chaque page sur tous ses chunks texte) est un ``desync`` réparable in-place
+    (endpoint colpali-repair), sans ré-embedding.
+    """
     base = {
         "expected_pages": 0,
         "indexed_pages": 0,
@@ -161,27 +163,22 @@ def _colpali_health(
     if lancedb_ids is None:
         return {"status": "unknown", **base}
 
-    # Pipeline actuel : patches liés aux page_anchor. Ancien pipeline : liés aux feuilles.
-    expected = anchor_ids if anchor_ids else leaf_ids
-    legacy_mode = not anchor_ids
-
-    if not expected and not lancedb_ids:
+    if not anchor_ids and not lancedb_ids:
         return {"status": "not_applicable" if not is_pdf else "missing", **base}
 
     orphans = lancedb_ids - all_ids
-    synced = lancedb_ids & expected
-    stale = (lancedb_ids & all_ids) - expected  # patches vers des chunks existants mais hors cible
-    missing = expected - lancedb_ids
+    synced = lancedb_ids & anchor_ids
+    stale = (lancedb_ids & all_ids) - anchor_ids  # patches vers des chunks existants mais hors cible
+    missing = anchor_ids - lancedb_ids
 
     detail = {
-        "expected_pages": len(expected),
+        "expected_pages": len(anchor_ids),
         "indexed_pages": len(synced),
         "orphan_count": len(orphans),
         "missing_count": len(missing),
         "legacy_count": len(stale),
-        "legacy_mode": legacy_mode,
     }
-    if orphans or (stale and not legacy_mode):
+    if orphans or stale:
         return {"status": "desync", **detail}
     if not lancedb_ids:
         return {"status": "missing", **detail}
@@ -230,7 +227,7 @@ def build_indexing_health_bulk(
     doc_ids = [int(d.id) for d in docs]
 
     summaries = _fetch_chunk_summaries(session, doc_ids)
-    all_ids, anchor_ids, leaf_ids = _fetch_chunk_id_sets(session, doc_ids)
+    all_ids, anchor_ids = _fetch_chunk_id_sets(session, doc_ids)
     enrichment_counts = _fetch_enrichment_counts(session, doc_ids)
 
     if settings.COLPALI_ENABLED:
@@ -250,7 +247,6 @@ def build_indexing_health_bulk(
             lancedb_ids=lancedb_by_doc.get(did, set()),
             all_ids=all_ids.get(did, set()),
             anchor_ids=anchor_ids.get(did, set()),
-            leaf_ids=leaf_ids.get(did, set()),
         )
         enrichment_h = _enrichment_health(
             enrichment_counts.get(did, {"enrichment_count": 0}),
@@ -275,6 +271,194 @@ def build_indexing_health_bulk(
     return result
 
 
+# Remédiations, de la MOINS coûteuse à la plus coûteuse. `colpali_repair` ne passe
+# jamais le modèle (pur I/O LanceDB) : quand il suffit, il doit être proposé en premier.
+ACTION_NONE = "none"
+ACTION_COLPALI_REPAIR = "colpali_repair"
+ACTION_COLPALI_ONLY = "colpali_only"
+ACTION_ENRICHMENT_ONLY = "enrichment_only"
+ACTION_FULL = "full"
+
+_ACTION_LABELS = {
+    ACTION_COLPALI_REPAIR: "Réparer ColPali",
+    ACTION_COLPALI_ONLY: "Retraiter ColPali",
+    ACTION_ENRICHMENT_ONLY: "Régénérer les synthèses",
+    ACTION_FULL: "Retraitement complet",
+}
+# "free" = aucun passage du modèle (secondes) ; "heavy" = ré-embedding / appels LLM.
+_ACTION_COSTS = {
+    ACTION_COLPALI_REPAIR: "free",
+    ACTION_COLPALI_ONLY: "heavy",
+    ACTION_ENRICHMENT_ONLY: "heavy",
+    ACTION_FULL: "heavy",
+}
+
+
+def recommended_action(health: dict) -> dict:
+    """Remédiation la MOINS coûteuse qui règle réellement le document.
+
+    Distinction clé sur un ColPali ``desync`` — les deux cas n'ont pas le même remède :
+
+    * des patches valides mais rattachés au mauvais chunk (``legacy_count``, héritage du
+      pipeline feuilles) se ré-attachent aux ancres SANS ré-embedding → ``colpali_repair`` ;
+    * des patches orphelins seuls (chunks détruits) ne sont pas récupérables : la
+      réparation ne ferait que purger, il faut ré-embedder → ``colpali_only``.
+
+    Retourne ``{action, label, cost, reason}``. ``cost="free"`` signale une remédiation
+    sans passage du modèle, à lancer en premier.
+    """
+    text_h = health.get("text") or {}
+    colpali_h = health.get("colpali") or {}
+    enrichment_h = health.get("enrichment") or {}
+
+    if health.get("overall") == "in_progress":
+        return {
+            "action": ACTION_NONE,
+            "label": "Traitement en cours",
+            "cost": "none",
+            "reason": "Le document est en cours de traitement — audit disponible ensuite.",
+        }
+
+    if text_h.get("status") == "missing":
+        return {
+            "action": ACTION_FULL,
+            "label": _ACTION_LABELS[ACTION_FULL],
+            "cost": "heavy",
+            "reason": "Aucun chunk texte : ni BM25 ni ColPali n'ont de cible.",
+        }
+
+    colpali_status = colpali_h.get("status")
+    enrichment_broken = enrichment_h.get("status") == "missing"
+
+    if colpali_status == "desync" and (colpali_h.get("legacy_count") or 0) > 0:
+        orphans = colpali_h.get("orphan_count") or 0
+        reason = (
+            f"{colpali_h.get('legacy_count')} patch(es) hors ancre de page : "
+            "ré-attachables aux ancres sans ré-embedding."
+        )
+        if orphans:
+            reason += f" {orphans} orphelin(s) seront purgés (un ColPali seul restera peut-être requis)."
+        return {
+            "action": ACTION_COLPALI_REPAIR,
+            "label": _ACTION_LABELS[ACTION_COLPALI_REPAIR],
+            "cost": "free",
+            "reason": reason,
+        }
+
+    if colpali_status in ("desync", "missing", "partial"):
+        if colpali_status == "desync":
+            reason = (
+                f"{colpali_h.get('orphan_count', 0)} patch(es) orphelin(s) : les vecteurs "
+                "pointent vers des chunks détruits, le document est invisible pour ColPali."
+            )
+        elif colpali_status == "missing":
+            reason = "Aucun index visuel pour ce document."
+        else:
+            reason = (
+                f"{colpali_h.get('missing_count', 0)} page(s) sans index visuel "
+                f"({colpali_h.get('indexed_pages', 0)}/{colpali_h.get('expected_pages', 0)})."
+            )
+        if enrichment_broken:
+            return {
+                "action": ACTION_FULL,
+                "label": _ACTION_LABELS[ACTION_FULL],
+                "cost": "heavy",
+                "reason": reason + " Les synthèses manquent également.",
+            }
+        return {
+            "action": ACTION_COLPALI_ONLY,
+            "label": _ACTION_LABELS[ACTION_COLPALI_ONLY],
+            "cost": "heavy",
+            "reason": reason,
+        }
+
+    if enrichment_broken:
+        return {
+            "action": ACTION_ENRICHMENT_ONLY,
+            "label": _ACTION_LABELS[ACTION_ENRICHMENT_ONLY],
+            "cost": "heavy",
+            "reason": "Aucun chunk contextuel : le retrieval texte perd les synthèses de fenêtre.",
+        }
+
+    if colpali_status == "unknown":
+        return {
+            "action": ACTION_NONE,
+            "label": "Scan LanceDB en échec",
+            "cost": "none",
+            "reason": "État de synchronisation ColPali inconnu — vérifier LanceDB.",
+        }
+
+    return {
+        "action": ACTION_NONE,
+        "label": "Rien à faire",
+        "cost": "none",
+        "reason": "Indexation complète.",
+    }
+
+
+def build_indexing_issues_report(
+    session: Session, documents: List[Document]
+) -> dict:
+    """Rapport d'indexation pour le tableau de bord admin.
+
+    Ne remonte QUE les documents à problème, chacun avec sa remédiation recommandée,
+    et des totaux permettant d'annoncer d'un coup d'œil « N réparables gratuitement,
+    M à retraiter ».
+    """
+    health_by_doc = build_indexing_health_bulk(session, documents)
+    doc_by_id = {int(d.id): d for d in documents if d.id is not None}
+
+    totals = {
+        "documents": len(health_by_doc),
+        "ok": 0,
+        "in_progress": 0,
+        "issues": 0,
+        "free_fix": 0,
+        "heavy_fix": 0,
+        "by_action": {},
+    }
+    issues: List[dict] = []
+
+    for did, health in health_by_doc.items():
+        action = recommended_action(health)
+        if health.get("overall") == "in_progress":
+            totals["in_progress"] += 1
+            continue
+        if health.get("overall") == "ok" and action["action"] == ACTION_NONE:
+            totals["ok"] += 1
+            continue
+
+        totals["issues"] += 1
+        if action["cost"] == "free":
+            totals["free_fix"] += 1
+        elif action["cost"] == "heavy":
+            totals["heavy_fix"] += 1
+        totals["by_action"][action["action"]] = (
+            totals["by_action"].get(action["action"], 0) + 1
+        )
+
+        doc = doc_by_id.get(did)
+        issues.append(
+            {
+                **health,
+                "title": (doc.title if doc else None) or "Sans titre",
+                "folder_id": getattr(doc, "folder_id", None),
+                "recommended_action": action,
+            }
+        )
+
+    # Gratuit d'abord (à lancer en premier), puis erreurs avant avertissements.
+    severity = {"error": 0, "warning": 1}
+    issues.sort(
+        key=lambda i: (
+            0 if i["recommended_action"]["cost"] == "free" else 1,
+            severity.get(i.get("overall"), 2),
+            (i.get("title") or "").lower(),
+        )
+    )
+    return {"totals": totals, "documents": issues}
+
+
 def build_indexing_health_issues(health: dict) -> List[str]:
     """Issues lisibles pour le diagnostic d'un document (bouton Diagnostiquer / logs)."""
     issues: List[str] = []
@@ -289,7 +473,8 @@ def build_indexing_health_issues(health: dict) -> List[str]:
     if status == "desync":
         issues.append(
             f"ColPali désynchronisé : {colpali_h.get('orphan_count', 0)} patch(es) orphelin(s), "
-            f"{colpali_h.get('legacy_count', 0)} obsolète(s) — retraiter en mode colpali_only."
+            f"{colpali_h.get('legacy_count', 0)} hors anchor — lancer la réparation de topologie "
+            "(colpali-repair, sans ré-embedding) ou retraiter en mode colpali_only."
         )
     elif status == "partial":
         issues.append(

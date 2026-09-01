@@ -68,6 +68,13 @@
                 Feedbacks
             </button>
             <button
+                onclick="showTab('indexation')"
+                id="tab-indexation"
+                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+                Indexation
+            </button>
+            <button
                 onclick="showTab('rag-eval')"
                 id="tab-rag-eval"
                 class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -193,6 +200,45 @@
             <div>
                 <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">worker-kag</h3>
                 <div id="queues-worker-kag-docs" class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent"></div>
+            </div>
+        </div>
+
+        <!-- Indexation Tab (santé d'indexation + remédiation) -->
+        <div id="tab-content-indexation" class="tab-content hidden space-y-6">
+            <div class="flex justify-between items-start gap-4 flex-wrap">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+                        Santé d'indexation
+                    </h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-semibold">
+                        Documents dont le texte, l'index visuel ColPali ou les synthèses sont incomplets,
+                        avec la remédiation la moins coûteuse pour chacun.
+                    </p>
+                </div>
+                <div class="flex gap-2">
+                    <button
+                        type="button"
+                        onclick="repairAllColpali()"
+                        id="indexation-repair-all"
+                        class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-md active:scale-95 transition-all text-sm flex items-center gap-1.5 disabled:opacity-40"
+                        title="Ré-attache les patches ColPali existants aux ancres de page sur toute la bibliothèque, sans ré-embedding."
+                    >
+                        <i class="ti ti-wand text-sm"></i> Tout réparer (sans recalcul)
+                    </button>
+                    <button
+                        type="button"
+                        onclick="loadIndexationReport()"
+                        class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-1.5"
+                    >
+                        <i class="ti ti-refresh text-sm"></i> Actualiser
+                    </button>
+                </div>
+            </div>
+
+            <div id="indexation-summary" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
+
+            <div class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent">
+                <div id="indexation-table"></div>
             </div>
         </div>
 
@@ -1028,6 +1074,8 @@ function showTab(tabName) {
     
     if (tabName === 'queues') {
         loadQueueHealth();
+    } else if (tabName === 'indexation') {
+        loadIndexationReport();
     } else if (tabName === 'feedbacks') {
         loadAllFeedbackData();
     } else if (tabName === 'rag-eval') {
@@ -1440,6 +1488,202 @@ async function loadQueueHealth() {
         workerPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${msg}</div>`;
         workerKagPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${msg}</div>`;
     }
+}
+
+// ==================== SANTÉ D'INDEXATION ====================
+// Le back calcule déjà la remédiation la moins coûteuse par document
+// (recommended_action) : l'UI ne fait que l'afficher et la déclencher.
+
+const INDEXATION_ACTION_ICONS = {
+    colpali_repair: 'ti-wand',
+    colpali_only: 'ti-photo-search',
+    enrichment_only: 'ti-file-text',
+    full: 'ti-refresh-alert',
+};
+
+function indexationChip(label, tone, tooltip) {
+    const tones = {
+        ok: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20',
+        warn: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20',
+        error: 'bg-red-500/10 text-red-700 dark:text-red-300 border-red-500/20',
+        muted: 'bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-300 border-black/10 dark:border-white/10',
+    };
+    return `<span class="inline-flex items-center px-2 py-0.5 rounded-full border text-[11px] font-semibold whitespace-nowrap ${tones[tone] || tones.muted}" title="${escapeHtml(tooltip || '')}">${escapeHtml(label)}</span>`;
+}
+
+function indexationSummaryCard(value, label, tone, tooltip) {
+    const tones = {
+        ok: 'text-emerald-600 dark:text-emerald-400',
+        warn: 'text-amber-600 dark:text-amber-400',
+        error: 'text-red-600 dark:text-red-400',
+        muted: 'text-gray-900 dark:text-white',
+    };
+    return `<div class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 p-4 shadow-sm" title="${escapeHtml(tooltip || '')}">
+        <div class="text-2xl font-extrabold ${tones[tone] || tones.muted}">${value}</div>
+        <div class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">${escapeHtml(label)}</div>
+    </div>`;
+}
+
+function renderIndexationSummary(totals) {
+    const el = document.getElementById('indexation-summary');
+    if (!el) return;
+    el.innerHTML = [
+        indexationSummaryCard(totals.documents, 'documents', 'muted', 'Documents audités dans la bibliothèque.'),
+        indexationSummaryCard(totals.ok, 'sains', 'ok', 'Texte, ColPali et synthèses complets.'),
+        indexationSummaryCard(totals.free_fix, 'réparables', 'warn', 'Réparables sans ré-embedding : quelques secondes par document.'),
+        indexationSummaryCard(totals.heavy_fix, 'à retraiter', 'error', 'Nécessitent un vrai retraitement (modèle ou appels LLM).'),
+        indexationSummaryCard(totals.in_progress, 'en cours', 'muted', 'Traitement en cours — audit disponible ensuite.'),
+    ].join('');
+
+    const repairBtn = document.getElementById('indexation-repair-all');
+    if (repairBtn) {
+        const n = totals.free_fix || 0;
+        repairBtn.disabled = n === 0;
+        repairBtn.innerHTML = n > 0
+            ? `<i class="ti ti-wand text-sm"></i> Réparer ${n} document(s) (sans recalcul)`
+            : '<i class="ti ti-wand text-sm"></i> Rien à réparer';
+    }
+}
+
+function indexationProblemChips(doc) {
+    const chips = [];
+    const t = doc.text || {}, c = doc.colpali || {}, k = doc.enrichment || {};
+    if (t.status === 'missing') chips.push(indexationChip('Texte absent', 'error', 'Aucun chunk texte indexé.'));
+    if (c.status === 'desync') {
+        const hors = c.legacy_count || 0, orph = c.orphan_count || 0;
+        chips.push(indexationChip(
+            `ColPali désync (${hors + orph})`,
+            'error',
+            `${hors} patch(es) hors ancre de page, ${orph} orphelin(s).`,
+        ));
+    } else if (c.status === 'partial') {
+        chips.push(indexationChip(`ColPali ${c.indexed_pages}/${c.expected_pages}`, 'warn', `${c.missing_count} page(s) sans index visuel.`));
+    } else if (c.status === 'missing') {
+        chips.push(indexationChip('ColPali absent', 'error', 'Aucun index visuel.'));
+    } else if (c.status === 'unknown') {
+        chips.push(indexationChip('ColPali ?', 'warn', 'Scan LanceDB en échec.'));
+    }
+    if (k.status === 'missing') chips.push(indexationChip('Synthèses absentes', 'warn', 'Aucun chunk contextuel.'));
+    return chips.join(' ') || indexationChip('—', 'muted', '');
+}
+
+function indexationActionButton(doc) {
+    const a = doc.recommended_action || {};
+    if (!a.action || a.action === 'none') {
+        return `<span class="text-xs font-semibold text-gray-400 dark:text-gray-500">${escapeHtml(a.label || '—')}</span>`;
+    }
+    const icon = INDEXATION_ACTION_ICONS[a.action] || 'ti-tool';
+    const free = a.cost === 'free';
+    const cls = free
+        ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+        : 'border border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10';
+    const handler = a.action === 'colpali_repair'
+        ? `repairColpaliDoc(${doc.document_id})`
+        : `reindexDocFromAdmin(${doc.document_id}, '${a.action}')`;
+    return `<button type="button" onclick="${handler}"
+        class="px-3 py-1.5 rounded-lg text-xs font-bold active:scale-95 transition-all flex items-center gap-1.5 whitespace-nowrap ${cls}"
+        title="${escapeHtml(a.reason || '')}">
+        <i class="ti ${icon} text-xs"></i>${escapeHtml(a.label)}${free ? ' · gratuit' : ''}
+    </button>`;
+}
+
+function renderIndexationTable(documents) {
+    const el = document.getElementById('indexation-table');
+    if (!el) return;
+    if (!documents || documents.length === 0) {
+        el.innerHTML = '<div class="p-6 text-sm font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-2"><i class="ti ti-circle-check"></i> Tous les documents sont correctement indexés.</div>';
+        return;
+    }
+    const rows = documents.map((doc) => `
+        <tr class="border-t border-black/5 dark:border-white/5 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]" id="indexation-row-${doc.document_id}">
+            <td class="px-4 py-3">
+                <div class="text-sm font-bold text-gray-900 dark:text-white truncate max-w-[22rem]" title="${escapeHtml(doc.title)}">${escapeHtml(doc.title)}</div>
+                <div class="text-[11px] font-semibold text-gray-400 dark:text-gray-500">#${doc.document_id}</div>
+            </td>
+            <td class="px-4 py-3"><div class="flex flex-wrap gap-1">${indexationProblemChips(doc)}</div></td>
+            <td class="px-4 py-3 text-xs text-gray-500 dark:text-gray-400 max-w-[24rem]">${escapeHtml((doc.recommended_action || {}).reason || '')}</td>
+            <td class="px-4 py-3 text-right">${indexationActionButton(doc)}</td>
+        </tr>`).join('');
+    el.innerHTML = `<table class="w-full">
+        <thead class="bg-black/[0.03] dark:bg-white/[0.03]">
+            <tr class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                <th class="px-4 py-2 text-left">Document</th>
+                <th class="px-4 py-2 text-left">Problème</th>
+                <th class="px-4 py-2 text-left">Diagnostic</th>
+                <th class="px-4 py-2 text-right">Remédiation</th>
+            </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+    </table>`;
+}
+
+async function loadIndexationReport() {
+    const table = document.getElementById('indexation-table');
+    if (table) table.innerHTML = '<div class="p-6 text-sm font-semibold text-gray-500 dark:text-gray-400">Audit en cours…</div>';
+    try {
+        const r = await apiCall('/api/library/indexing-issues');
+        if (!r || !r.ok) {
+            const msg = r ? `Erreur ${r.status}` : 'Pas de réponse';
+            if (table) table.innerHTML = `<div class="p-6 text-sm font-semibold text-red-600 dark:text-red-400">${escapeHtml(msg)}</div>`;
+            return;
+        }
+        const data = await r.json();
+        renderIndexationSummary(data.totals || {});
+        renderIndexationTable(data.documents || []);
+    } catch (e) {
+        if (table) table.innerHTML = `<div class="p-6 text-sm font-semibold text-red-600 dark:text-red-400">${escapeHtml(String(e))}</div>`;
+    }
+}
+
+async function repairColpaliDoc(documentId) {
+    const row = document.getElementById(`indexation-row-${documentId}`);
+    if (row) row.style.opacity = '0.5';
+    try {
+        const r = await apiCall(`/api/library/documents/${documentId}/colpali-repair`, { method: 'POST' });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) {
+            alert(data.detail || 'Réparation impossible.');
+            return;
+        }
+        if (data.status === 'incomplete') {
+            alert(`Réparation partielle : ${data.pages_with_patches ?? 0}/${data.expected_pages ?? 0} page(s) couverte(s).\n` +
+                  'Des pages restent sans index visuel — un retraitement « ColPali » est proposé après actualisation.');
+        }
+        await loadIndexationReport();
+    } finally {
+        if (row) row.style.opacity = '';
+    }
+}
+
+async function reindexDocFromAdmin(documentId, mode) {
+    if (!confirm(`Lancer un retraitement « ${mode} » sur le document #${documentId} ?\n\nCe passage utilise le modèle : comptez plusieurs minutes.`)) return;
+    const r = await apiCall(`/api/library/documents/${documentId}/reindex`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode }),
+    });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) {
+        alert(data.detail || 'Impossible de lancer le retraitement.');
+        return;
+    }
+    await loadIndexationReport();
+}
+
+async function repairAllColpali() {
+    if (!confirm('Réparer la topologie ColPali de toute la bibliothèque ?\n\n' +
+                 'Ré-attache les patches existants aux ancres de page, sans ré-embedding.')) return;
+    const btn = document.getElementById('indexation-repair-all');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2 text-sm animate-spin"></i> Réparation lancée…'; }
+    const r = await apiCall('/api/library/colpali-repair', { method: 'POST' });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) {
+        alert(data.detail || 'Réparation impossible.');
+        await loadIndexationReport();
+        return;
+    }
+    alert('Réparation enfilée sur le worker.\nActualisez dans quelques instants pour voir le résultat.');
+    await loadIndexationReport();
 }
 
 function workerStateLabel(state) {

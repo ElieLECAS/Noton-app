@@ -945,6 +945,24 @@ async def get_library_indexing_health(
     return build_indexing_health_bulk(session, list(documents))
 
 
+@router.get("/indexing-issues")
+async def get_library_indexing_issues(
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Rapport d'indexation de TOUTE la bibliothèque, pour le tableau de bord admin.
+
+    Ne renvoie que les documents à problème (texte, ColPali, synthèses), chacun avec
+    la remédiation la moins coûteuse qui le règle — en distinguant ce qui se répare
+    sans ré-embedding de ce qui exige un vrai retraitement.
+    """
+    from app.services.indexing_health_service import build_indexing_issues_report
+
+    library = get_or_create_user_library(session, current_user.id)
+    documents = get_documents_by_library(session, library.id, current_user.id)
+    return build_indexing_issues_report(session, list(documents))
+
+
 @router.get("/documents/{document_id}/processing-health")
 async def get_document_processing_health(
     document_id: int,
@@ -1200,6 +1218,91 @@ async def reindex_all_library_endpoint(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=str(e),
         )
+
+
+@router.post("/colpali-repair", status_code=status.HTTP_200_OK)
+async def colpali_repair_endpoint(
+    current_user: UserRead = Depends(require_role("admin")),
+):
+    """
+    Enfile la réparation de topologie ColPali en masse.
+
+    Ré-attache les patches LanceDB existants aux anchors de page (une page = un jeu
+    de patches) pour les documents hérités de l'ancien pipeline feuille, SANS aucun
+    ré-embedding : I/O uniquement. Les documents restés incomplets après la passe
+    (pages sans patches, orphelins non résolubles) apparaissent dans le health
+    d'indexation avec la suggestion colpali_only.
+    """
+    if not settings.COLPALI_ENABLED:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ColPali désactivé (COLPALI_ENABLED=false).",
+        )
+    from app.services.task_dispatch import dispatch_colpali_repair
+
+    try:
+        celery_task_id = dispatch_colpali_repair(current_user.id)
+        log_admin_action(
+            user_id=current_user.id,
+            action="library.colpali_repair",
+            detail={"celery_task_id": celery_task_id},
+        )
+        return {"status": "queued", "celery_task_id": celery_task_id}
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=str(e),
+        )
+
+
+@router.post("/documents/{document_id}/colpali-repair", status_code=status.HTTP_200_OK)
+async def colpali_repair_document_endpoint(
+    document_id: int,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """
+    Répare la topologie ColPali d'UN document : ré-attache les patches LanceDB
+    existants aux anchors de page (une page = un jeu de patches), SANS ré-embedding.
+
+    Synchrone (I/O uniquement, quelques secondes au plus) : le résultat est renvoyé
+    directement pour que l'UI rafraîchisse les pastilles de santé. Un statut
+    ``incomplete`` signifie qu'il reste des pages sans patches → reindex colpali_only.
+    """
+    if not settings.COLPALI_ENABLED:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ColPali désactivé (COLPALI_ENABLED=false).",
+        )
+    library = get_or_create_user_library(session, current_user.id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if not document:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document non trouvé",
+        )
+
+    import asyncio
+
+    from app.services.document_indexing_service import repair_colpali_topology
+
+    result = await asyncio.to_thread(repair_colpali_topology, document_id)
+    log_admin_action(
+        user_id=current_user.id,
+        action="library.colpali_repair_document",
+        detail={"document_id": document_id, "status": result.get("status")},
+    )
+    if result.get("status") == "error":
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=result.get("reason") or "Réparation impossible (LanceDB indisponible ?).",
+        )
+    return result
 
 
 class ReindexFolderRequest(BaseModel):

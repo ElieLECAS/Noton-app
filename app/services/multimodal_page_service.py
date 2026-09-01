@@ -748,12 +748,10 @@ def delete_multimodal_chunks_for_document(
     )
     if commit:
         session.commit()
-    # Delete from LanceDB
-    try:
-        from app.services.lancedb_service import delete_chunks_lancedb
-        delete_chunks_lancedb(document_id)
-    except Exception as e:
-        logger.error(f"Failed to delete from LanceDB for document_id={document_id}: {e}", exc_info=True)
+    # Les patches ColPali ne sont PAS supprimés ici : ils sont rattachés aux anchors
+    # de page (topologie unique), pas aux chunks multimodaux — et le PDF n'ayant pas
+    # changé, ils restent valides. Les purger forçait un ré-embedding CPU complet à
+    # chaque retraitement multimodal.
     deleted = result.rowcount if result.rowcount is not None else 0
     logger.debug(
         "Supprimé %s chunk(s) multimodal pour document_id=%s",
@@ -1909,13 +1907,3 @@ def build_multimodal_pages_for_pdf(
     return specs
 
 
-def embed_new_multimodal_chunks(document_id: int) -> int:
-    """Génère les embeddings pour les chunks. Si ColPali est activé, on génère les embeddings ColPali uniquement."""
-    # Déclenchement de ColPali
-    try:
-        from app.services.colpali_service import sync_document_colpali_embeddings
-        sync_document_colpali_embeddings(document_id)
-    except Exception as e:
-        logger.error(f"Error generating ColPali embeddings for document {document_id}: {e}", exc_info=True)
-        
-    return 0

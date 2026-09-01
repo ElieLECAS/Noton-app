@@ -45,43 +45,63 @@ def get_colpali_table():
         return _db.open_table("colpali_patches")
     return None
 
-def insert_colpali_patches_lancedb(document_id: int, chunk_id: int, patch_vectors: List[List[float]]):
+def _ensure_vector_index(table) -> None:
+    """Crée l'index IVF_SQ UNE SEULE FOIS, jamais à chaque insertion.
+
+    ``create_index`` reconstruit l'index sur la table ENTIÈRE : mesuré à 87 s pour
+    1,6 M de vecteurs. L'appeler à chaque document rendait le coût d'une insertion
+    proportionnel à tout le corpus (et une passe de réparation sur 15 documents
+    passait 20 min à ne rebâtir que des index), en plus de provoquer des conflits de
+    commit entre transactions CreateIndex concurrentes.
+
+    Les lignes ajoutées après coup restent interrogeables (Lance balaie le fragment
+    non indexé) ; c'est ``optimize_colpali_index`` qui les fait rejoindre l'index,
+    à appeler une fois en fin de passe et non par document.
     """
-    Inserts ColPali patches for a specific chunk.
-    patch_vectors: List of 128-dimensional patch embeddings for a single page.
+    try:
+        if table.list_indices():
+            return
+    except Exception as exc:  # API absente selon la version : on tente la création
+        logger.debug(f"list_indices indisponible ({exc}) — tentative de création directe")
+    try:
+        table.create_index(
+            vector_column_name="vector",
+            index_type="IVF_SQ",
+            metric="cosine",
+        )
+        logger.info("Index IVF_SQ créé sur 'colpali_patches'")
+    except Exception as idx_err:
+        # LanceDB exige un minimum de vecteurs pour entraîner les partitions IVF.
+        logger.debug(f"Index IVF_SQ pas encore constructible (normal si la base est petite): {idx_err}")
+
+
+def optimize_colpali_index() -> dict:
+    """Intègre à l'index les vecteurs écrits depuis sa création (maintenance).
+
+    À lancer UNE fois après une passe d'écriture en masse (réparation globale,
+    réindexation de corpus), jamais par document.
     """
     try:
         table = get_colpali_table()
-        # Delete existing patches for this chunk to prevent duplicates
-        table.delete(f"chunk_id = {chunk_id}")
-        
-        patches_data = [
-            {
-                "id": f"{chunk_id}_{idx}",
-                "chunk_id": chunk_id,
-                "document_id": document_id,
-                "patch_index": idx,
-                "vector": vec
-            }
-            for idx, vec in enumerate(patch_vectors)
-        ]
-        table.add(patches_data)
-        logger.info(f"Added {len(patches_data)} ColPali patches for chunk_id={chunk_id}")
-        
-        # Try to build/update IVF_SQ index to optimize storage/search (Option A)
+        before = 0
         try:
-            table.create_index(
-                vector_column_name="vector",
-                index_type="IVF_SQ",
-                metric="cosine"
-            )
-            logger.info("Successfully updated IVF_SQ index on 'colpali_patches'")
-        except Exception as idx_err:
-            # Silence this error because LanceDB requires a minimum number of vectors
-            # to train the IVF partitions (e.g. at least 1,000 or 10,000 vectors).
-            logger.debug(f"Could not build IVF_SQ index yet (normal if database is small): {idx_err}")
-    except Exception as e:
-        logger.error(f"Error writing ColPali patches to LanceDB: {e}", exc_info=True)
+            for idx in table.list_indices():
+                before += int(getattr(idx, "num_unindexed_rows", 0) or 0)
+        except Exception:
+            pass
+        t0 = time.perf_counter()
+        table.optimize()
+        elapsed = time.perf_counter() - t0
+        logger.info(
+            "[LanceDB] optimize() terminé en %.1fs (%d ligne(s) non indexée(s) avant)",
+            elapsed,
+            before,
+        )
+        return {"status": "ok", "seconds": round(elapsed, 1), "unindexed_before": before}
+    except Exception as exc:
+        logger.error(f"Error optimizing ColPali index: {exc}", exc_info=True)
+        return {"status": "error", "reason": str(exc)}
+
 
 def insert_colpali_patches_batch_lancedb(document_id: int, chunk_patches_list: List[tuple[int, List[List[float]]]]):
     """
@@ -92,7 +112,7 @@ def insert_colpali_patches_batch_lancedb(document_id: int, chunk_patches_list: L
         table = get_colpali_table()
         # Delete existing patches for this document to prevent duplicates
         table.delete(f"document_id = {document_id}")
-        
+
         patches_data = []
         for chunk_id, patch_vectors in chunk_patches_list:
             for idx, vec in enumerate(patch_vectors):
@@ -103,21 +123,11 @@ def insert_colpali_patches_batch_lancedb(document_id: int, chunk_patches_list: L
                     "patch_index": idx,
                     "vector": vec
                 })
-        
+
         if patches_data:
             table.add(patches_data)
             logger.info(f"Added {len(patches_data)} ColPali patches in batch for document_id={document_id}")
-            
-            # Try to build/update IVF_SQ index once for all patches
-            try:
-                table.create_index(
-                    vector_column_name="vector",
-                    index_type="IVF_SQ",
-                    metric="cosine"
-                )
-                logger.info("Successfully updated IVF_SQ index on 'colpali_patches'")
-            except Exception as idx_err:
-                logger.debug(f"Could not build IVF_SQ index yet (normal if database is small): {idx_err}")
+            _ensure_vector_index(table)
     except Exception as e:
         logger.error(f"Error writing ColPali patches batch to LanceDB: {e}", exc_info=True)
 
@@ -135,14 +145,78 @@ def delete_colpali_patches_for_document(document_id: int) -> None:
     """Alias explicite pour le pipeline document_indexing_service (mode full)."""
     delete_chunks_lancedb(document_id)
 
-def delete_single_chunk_lancedb(chunk_id: int):
-    """Deletes ColPali patches for a specific chunk ID."""
+def get_colpali_document_ids() -> Optional[List[int]]:
+    """Ids de documents distincts présents dans la table colpali_patches.
+
+    Sert à la réparation de topologie en masse : on ne visite que les documents
+    qui ont réellement des patches. None si le scan LanceDB échoue.
+    """
     try:
-        colpali_table = get_colpali_table()
-        colpali_table.delete(f"chunk_id = {chunk_id}")
-        logger.info(f"Deleted ColPali patches for chunk_id={chunk_id} from LanceDB")
+        table = get_colpali_table()
+        tbl = table.search().select(["document_id"]).to_arrow()
+        if not tbl.num_rows:
+            return []
+        ids = np.unique(tbl["document_id"].to_numpy(zero_copy_only=False))
+        return [int(d) for d in ids.tolist()]
     except Exception as e:
-        logger.error(f"Error deleting chunk_id={chunk_id} from LanceDB: {e}", exc_info=True)
+        logger.error(f"Error scanning ColPali document ids from LanceDB: {e}", exc_info=True)
+        return None
+
+
+def fetch_colpali_patch_vectors_for_chunks(
+    chunk_ids: List[int],
+) -> Dict[int, "np.ndarray"]:
+    """Vecteurs de patches par chunk_id (tableau ``(n_patches, 128)``), triés par patch_index.
+
+    Utilisé par la réparation de topologie : on relit le jeu de patches d'UN chunk
+    représentatif par page pour le ré-attacher à l'anchor de la page, sans repasser
+    par le modèle. Les vecteurs restent en NumPy de bout en bout — les convertir en
+    listes Python coûtait 15 s sur un gros document (des millions d'objets flottants)
+    pour être aussitôt reconverties en Arrow à l'écriture.
+    """
+    if not chunk_ids:
+        return {}
+    try:
+        table = get_colpali_table()
+        ids_str = ",".join(map(str, chunk_ids))
+        tbl = (
+            table.search()
+            .where(f"chunk_id in ({ids_str})")
+            .select(["chunk_id", "patch_index", "vector"])
+            .to_arrow()
+        )
+        if not tbl.num_rows:
+            return {}
+
+        c_ids = tbl["chunk_id"].to_numpy(zero_copy_only=False)
+        p_idx = tbl["patch_index"].to_numpy(zero_copy_only=False)
+        try:
+            flat = tbl["vector"].combine_chunks().values.to_numpy(zero_copy_only=False)
+            vectors = flat.reshape(-1, 128)
+        except Exception as arrow_err:
+            logger.warning(
+                "fetch_colpali_patch_vectors_for_chunks: conversion Arrow directe "
+                "impossible (%s), repli lent to_pylist.",
+                arrow_err,
+            )
+            vectors = np.array(tbl["vector"].to_pylist(), dtype=np.float32)
+
+        by_chunk: Dict[int, List[tuple]] = {}
+        for row_i, (c_id, patch_i) in enumerate(zip(c_ids, p_idx)):
+            by_chunk.setdefault(int(c_id), []).append((int(patch_i), row_i))
+
+        result: Dict[int, np.ndarray] = {}
+        for c_id, entries in by_chunk.items():
+            entries.sort(key=lambda t: t[0])
+            order = np.fromiter((row_i for _, row_i in entries), dtype=np.int64, count=len(entries))
+            result[c_id] = vectors[order]
+        return result
+    except Exception as e:
+        logger.error(
+            f"Error fetching ColPali patch vectors for chunks: {e}", exc_info=True
+        )
+        return {}
+
 
 def get_colpali_chunk_ids_by_document(document_ids: List[int]) -> Dict[int, Optional[set]]:
     """Ids de chunks distincts présents dans LanceDB, par document (audit de sync).
@@ -164,18 +238,15 @@ def get_colpali_chunk_ids_by_document(document_ids: List[int]) -> Dict[int, Opti
             .to_arrow()
         )
         if tbl.num_rows:
-            pairs = np.unique(
-                np.stack(
-                    [
-                        tbl["document_id"].to_numpy(zero_copy_only=False),
-                        tbl["chunk_id"].to_numpy(zero_copy_only=False),
-                    ],
-                    axis=1,
-                ),
-                axis=0,
-            )
-            for d_id, c_id in pairs.tolist():
-                result.setdefault(int(d_id), set()).add(int(c_id))
+            # Dédoublonnage sur une clé composite 1D plutôt qu'un np.unique lexicographique
+            # sur une matrice (N, 2) : même résultat, une seule passe de tri sur un
+            # tableau contigu — le scan portant sur des millions de patches, l'écart
+            # se compte en secondes par appel du tableau de bord.
+            doc_col = tbl["document_id"].to_numpy(zero_copy_only=False).astype(np.int64)
+            chunk_col = tbl["chunk_id"].to_numpy(zero_copy_only=False).astype(np.int64)
+            keys = np.unique((doc_col << 32) | (chunk_col & 0xFFFFFFFF))
+            for key in keys.tolist():
+                result.setdefault(int(key >> 32), set()).add(int(key & 0xFFFFFFFF))
         return result
     except Exception as e:
         logger.error(f"Error scanning ColPali chunk ids from LanceDB: {e}", exc_info=True)

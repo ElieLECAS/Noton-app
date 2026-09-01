@@ -184,7 +184,6 @@ def process_document_indexing(
                         session,
                         document,
                         pdf_path,
-                        preserve_page_anchors=(mode == IndexingMode.TEXT_ONLY),
                         extractor=extractor,
                     )
             elif mode == IndexingMode.ENRICHMENT_ONLY:
@@ -249,7 +248,7 @@ def process_document_indexing(
 
             _set_progress(document_id, 90)
             ld.info("[Indexing] ColPali sync document_id=%s", document_id)
-            _sync_colpali_for_pages(document_id, pdf_path)
+            sync_colpali_page_anchors(document_id, pdf_path)
 
         _finalize_document(document_id, chunk_count)
         semantic_ran = mode in (IndexingMode.FULL, IndexingMode.ENRICHMENT_ONLY)
@@ -425,19 +424,108 @@ def _extract_pages_vision(
     return specs_by_page
 
 
+def ensure_page_anchors(
+    session: Session,
+    document: "Document",
+    page_count: int,
+    *,
+    headings_by_page: Optional[dict] = None,
+    update_existing: bool = False,
+) -> tuple[dict, int, int]:
+    """Garantit un chunk L0 ``page_anchor`` par page — cible UNIQUE des patches ColPali.
+
+    Charge les anchors existants, crée les manquants, et ne réécrit le contenu des
+    existants que si ``update_existing`` (pipeline texte : le heading de page vient
+    d'être ré-extrait). Les chunk_id existants sont TOUJOURS préservés — ce sont eux
+    que les patches LanceDB référencent.
+
+    Retourne ``(anchors_par_page, nb_créés, nb_mis_à_jour)``. ``session.flush()`` est
+    appelé pour matérialiser les ids ; le commit reste à la charge de l'appelant.
+    """
+    doc_id = document.id
+    doc_title = document.title or ""
+    headings_by_page = headings_by_page or {}
+
+    existing_anchors: dict[int, DocumentChunk] = {}
+    stmt = select(DocumentChunk).where(
+        DocumentChunk.document_id == doc_id,
+        DocumentChunk.is_leaf == False,  # noqa: E712
+        DocumentChunk.metadata_json["content_type"].astext == CONTENT_TYPE_PAGE_ANCHOR,
+    )
+    for anchor in session.exec(stmt).all():
+        meta = anchor.metadata_json or {}
+        pno = meta.get("page_no")
+        if pno is not None:
+            existing_anchors[int(pno)] = anchor
+
+    anchors_by_page: dict[int, DocumentChunk] = {}
+    created: List[DocumentChunk] = []
+    updated = 0
+
+    for pno in range(1, page_count + 1):
+        heading = _strip_db_unsafe_chars(headings_by_page.get(pno, "") or "")
+        content = heading or f"Page {pno} — contenu visuel uniquement"
+        meta = {
+            "document_id": doc_id,
+            "document_title": doc_title,
+            "page_no": pno,
+            "page_start": pno,
+            "page_end": pno,
+            "content_type": CONTENT_TYPE_PAGE_ANCHOR,
+            "chunking_version": CHUNKING_VERSION,
+            "is_leaf": False,
+        }
+
+        existing = existing_anchors.get(pno)
+        if existing is not None:
+            if update_existing:
+                existing.content = content
+                existing.text = content
+                existing.end_char = len(content)
+                existing.metadata_json = meta
+                existing.metadata_ = meta
+                existing.source = document.source
+                session.add(existing)
+                updated += 1
+            anchors_by_page[pno] = existing
+            continue
+
+        chunk = DocumentChunk(
+            document_id=doc_id,
+            chunk_index=pno - 1,
+            content=content,
+            text=content,
+            start_char=0,
+            end_char=len(content),
+            node_id=f"page-anchor-{doc_id}-{pno}",
+            parent_node_id=None,
+            is_leaf=False,
+            hierarchy_level=0,
+            metadata_json=meta,
+            metadata_=meta,
+            source=document.source,
+        )
+        created.append(chunk)
+        anchors_by_page[pno] = chunk
+
+    if created:
+        session.add_all(created)
+    session.flush()
+    return anchors_by_page, len(created), updated
+
+
 def _extract_and_persist_chunks(
     session: Session,
     document: "Document",
     pdf_path: str,
-    preserve_page_anchors: bool = False,
     extractor: TextExtractor = TextExtractor.VISION,
 ) -> int:
     """
     Extrait le texte (voie vision ou voie texte natif selon ``extractor``),
     crée les chunks L0 (page_anchor) + L1 (semantic_leaf) et les persiste.
 
-    Si preserve_page_anchors=True (mode text_only), met à jour les anchors existants
-    au lieu de les recréer — préserve les chunk_id liés aux patches ColPali LanceDB.
+    Les anchors existants sont mis à jour (jamais recréés) — préserve les chunk_id
+    liés aux patches ColPali LanceDB, quel que soit le mode d'indexation.
     """
     doc_id = document.id
     doc_title = document.title or ""
@@ -519,20 +607,6 @@ def _extract_and_persist_chunks(
     if extractor == TextExtractor.VISION:
         all_specs_ordered = merge_cross_page_chunks(all_specs_ordered)
 
-    # --- L0 : un anchor minimal par page ---
-    existing_anchors: dict[int, "DocumentChunk"] = {}
-    if preserve_page_anchors:
-        stmt = select(DocumentChunk).where(
-            DocumentChunk.document_id == doc_id,
-            DocumentChunk.is_leaf == False,  # noqa: E712
-            DocumentChunk.metadata_json["content_type"].astext == CONTENT_TYPE_PAGE_ANCHOR,
-        )
-        for anchor in session.exec(stmt).all():
-            meta = anchor.metadata_json or {}
-            pno = meta.get("page_no")
-            if pno is not None:
-                existing_anchors[int(pno)] = anchor
-
     # Résumé L0 = heading du premier chunk vision de la page
     first_heading_by_page: dict[int, str] = {}
     for spec in all_specs_ordered:
@@ -542,59 +616,14 @@ def _extract_and_persist_chunks(
             heading = meta.get("heading") or ""
             first_heading_by_page[pno] = heading
 
-    page_anchor_by_page: dict[int, "DocumentChunk"] = {}
-    l0_chunks: List["DocumentChunk"] = []
-    l0_updated = 0
-
-    for pno in page_numbers:
-        node_id = f"page-anchor-{doc_id}-{pno}"
-        heading = _strip_db_unsafe_chars(first_heading_by_page.get(pno, ""))
-        content = heading or f"Page {pno} — contenu visuel uniquement"
-        meta = {
-            "document_id": doc_id,
-            "document_title": doc_title,
-            "page_no": pno,
-            "page_start": pno,
-            "page_end": pno,
-            "content_type": CONTENT_TYPE_PAGE_ANCHOR,
-            "chunking_version": CHUNKING_VERSION,
-            "is_leaf": False,
-        }
-
-        existing = existing_anchors.get(pno)
-        if existing is not None:
-            existing.content = content
-            existing.text = content
-            existing.end_char = len(content)
-            existing.metadata_json = meta
-            existing.metadata_ = meta
-            existing.source = document.source
-            session.add(existing)
-            page_anchor_by_page[pno] = existing
-            l0_updated += 1
-            continue
-
-        chunk = DocumentChunk(
-            document_id=doc_id,
-            chunk_index=pno - 1,
-            content=content,
-            text=content,
-            start_char=0,
-            end_char=len(content),
-            node_id=node_id,
-            parent_node_id=None,
-            is_leaf=False,
-            hierarchy_level=0,
-            metadata_json=meta,
-            metadata_=meta,
-            source=document.source,
-        )
-        l0_chunks.append(chunk)
-        page_anchor_by_page[pno] = chunk
-
-    if l0_chunks:
-        session.add_all(l0_chunks)
-    session.flush()
+    # --- L0 : un anchor minimal par page (création + mise à jour idempotentes) ---
+    page_anchor_by_page, l0_created, l0_updated = ensure_page_anchors(
+        session,
+        document,
+        page_count,
+        headings_by_page=first_heading_by_page,
+        update_existing=True,
+    )
 
     # --- L1 : chunks sémantiques ---
     l1_chunks: List["DocumentChunk"] = []
@@ -638,11 +667,11 @@ def _extract_and_persist_chunks(
     session.add_all(l1_chunks)
     session.commit()
 
-    total = len(l0_chunks) + l0_updated + len(l1_chunks)
+    total = l0_created + l0_updated + len(l1_chunks)
     logger.info(
         "[Indexing] Chunks persistés document_id=%s : %s L0 créés, %s L0 màj, %s L1 = %s total",
         doc_id,
-        len(l0_chunks),
+        l0_created,
         l0_updated,
         len(l1_chunks),
         total,
@@ -653,17 +682,18 @@ def _extract_and_persist_chunks(
 
 
 # ---------------------------------------------------------------------------
-# ColPali sync ciblant les L0 page_anchor
+# ColPali : sync + réparation de topologie (1 page = 1 jeu de patches sur l'anchor)
 # ---------------------------------------------------------------------------
 
 
-def _sync_colpali_for_pages(document_id: int, pdf_path: str) -> int:
+def sync_colpali_page_anchors(document_id: int, pdf_path: str) -> int:
     """
-    Génère les embeddings ColPali pour chaque page et les lie aux chunks L0 page_anchor.
+    Génère les embeddings ColPali de chaque page et les lie aux chunks L0 page_anchor.
     Renvoie le nombre de pages traitées.
 
-    Contrairement à sync_document_colpali_embeddings (qui cible is_leaf=True), cette
-    fonction cible les chunks content_type="page_anchor" pour le nouveau pipeline.
+    Topologie UNIQUE du visuel : 1 page = 1 jeu de patches, rattaché à l'anchor de la
+    page. Les anchors manquants sont CRÉÉS (document jamais passé par l'extraction
+    texte) — plus aucun repli vers les chunks feuilles, qui dupliquait chaque page.
     """
     if not settings.COLPALI_ENABLED:
         logger.info("[Indexing] ColPali désactivé, sync ignoré.")
@@ -678,34 +708,33 @@ def _sync_colpali_for_pages(document_id: int, pdf_path: str) -> int:
 
     # Générer les embeddings image par page
     page_embeddings = embed_pdf_pages_colpali(pdf_path, document_id=document_id)
+    if not page_embeddings:
+        logger.warning("[Indexing] ColPali sync : aucun embedding produit pour %s", pdf_path)
+        return 0
 
     with Session(engine) as session:
-        statement = select(DocumentChunk).where(
-            DocumentChunk.document_id == document_id,
-            DocumentChunk.is_leaf == False,
-            DocumentChunk.metadata_json["content_type"].astext == CONTENT_TYPE_PAGE_ANCHOR,
+        document = session.get(Document, document_id)
+        if not document:
+            logger.warning("[Indexing] ColPali sync : document %s introuvable", document_id)
+            return 0
+        anchors_by_page, created, _ = ensure_page_anchors(
+            session, document, len(page_embeddings)
         )
-        anchors = list(session.exec(statement).all())
+        session.commit()
+        anchor_id_by_page = {pno: chunk.id for pno, chunk in anchors_by_page.items()}
 
-    if not anchors:
-        logger.warning(
-            "[Indexing] Aucun chunk page_anchor trouvé pour document_id=%s — "
-            "fallback sur is_leaf=True",
+    if created:
+        logger.info(
+            "[Indexing] %d anchor(s) page créés pour ColPali document_id=%s",
+            created,
             document_id,
         )
-        from app.services.colpali_service import sync_document_colpali_embeddings
-        sync_document_colpali_embeddings(document_id)
-        return len(page_embeddings)
 
-    chunk_patches_list = []
-    for anchor in anchors:
-        meta = anchor.metadata_json or {}
-        page_no = meta.get("page_no")
-        if page_no is not None:
-            page_idx = int(page_no) - 1
-            if 0 <= page_idx < len(page_embeddings):
-                chunk_patches_list.append((anchor.id, page_embeddings[page_idx]))
-
+    chunk_patches_list = [
+        (anchor_id_by_page[pno], page_embeddings[pno - 1])
+        for pno in sorted(anchor_id_by_page)
+        if 0 <= pno - 1 < len(page_embeddings)
+    ]
     if chunk_patches_list:
         insert_colpali_patches_batch_lancedb(document_id, chunk_patches_list)
 
@@ -715,6 +744,235 @@ def _sync_colpali_for_pages(document_id: int, pdf_path: str) -> int:
         document_id,
     )
     return len(chunk_patches_list)
+
+
+def repair_colpali_topology(document_id: int) -> dict:
+    """Ré-attache les patches ColPali existants aux anchors de page, SANS ré-embedding.
+
+    Répare l'héritage de l'ancien pipeline feuille (chaque chunk texte d'une page
+    portait une copie complète des patches de la page) : pour chaque page on garde UN
+    jeu de patches — les copies sont identiques entre elles — et on le réinsère sous
+    l'anchor. Coût : I/O LanceDB uniquement, aucun passage du modèle.
+
+    Statuts retournés :
+      - ok         : topologie déjà saine, rien à faire ;
+      - repaired   : réécriture effectuée, toutes les pages à patches couvertes ;
+      - incomplete : réécriture faite mais pages sans patches → colpali_only requis ;
+      - empty      : aucun patch en base pour ce document ;
+      - error      : scan LanceDB ou document indisponible.
+    """
+    from app.services.lancedb_service import (
+        fetch_colpali_patch_vectors_for_chunks,
+        get_colpali_chunk_ids_by_document,
+        insert_colpali_patches_batch_lancedb,
+    )
+
+    lancedb_ids = get_colpali_chunk_ids_by_document([document_id]).get(document_id)
+    if lancedb_ids is None:
+        return {"document_id": document_id, "status": "error", "reason": "lancedb_scan_failed"}
+    if not lancedb_ids:
+        return {"document_id": document_id, "status": "empty"}
+
+    with Session(engine) as session:
+        document = session.get(Document, document_id)
+        if not document:
+            return {"document_id": document_id, "status": "error", "reason": "document_missing"}
+
+        rows = session.execute(
+            text(
+                """
+                SELECT id,
+                       COALESCE(
+                           (metadata_json->>'page_no')::int,
+                           (metadata_json->>'page_start')::int,
+                           (metadata_->>'page_no')::int,
+                           (metadata_->>'page_start')::int
+                       ) AS page_no,
+                       COALESCE(metadata_json->>'content_type', metadata_->>'content_type', '') AS content_type
+                FROM documentchunk
+                WHERE id IN :ids
+                """
+            ),
+            {"ids": tuple(lancedb_ids)},
+        ).all()
+        page_by_chunk = {int(r.id): int(r.page_no) for r in rows if r.page_no is not None}
+        anchor_chunk_ids = {
+            int(r.id) for r in rows if r.content_type == CONTENT_TYPE_PAGE_ANCHOR
+        }
+        existing_ids = {int(r.id) for r in rows}
+        orphan_ids = set(lancedb_ids) - existing_ids
+        unresolved_ids = {int(r.id) for r in rows if r.page_no is None}
+
+        page_count = max(page_by_chunk.values(), default=0)
+        if document.source_file_path and Path(document.source_file_path).is_file():
+            real_count = _get_pdf_page_count(document.source_file_path)
+            if real_count:
+                page_count = max(page_count, real_count)
+
+        if page_count:
+            anchors_by_page, created, _ = ensure_page_anchors(session, document, page_count)
+            session.commit()
+        else:
+            anchors_by_page, created = {}, 0
+        anchor_id_by_page = {pno: chunk.id for pno, chunk in anchors_by_page.items()}
+        anchor_id_set = set(anchor_id_by_page.values())
+
+    # Topologie déjà saine : toutes les cibles LanceDB sont des anchors, zéro orphelin.
+    if not orphan_ids and not unresolved_ids and set(lancedb_ids) <= anchor_id_set:
+        return {"document_id": document_id, "status": "ok", "pages": len(lancedb_ids)}
+
+    # UN chunk source par page : l'anchor lui-même s'il porte déjà des patches,
+    # sinon le plus petit id (déterministe — les copies sont identiques).
+    source_by_page: dict[int, int] = {}
+    for c_id, pno in page_by_chunk.items():
+        current = source_by_page.get(pno)
+        if current is None:
+            source_by_page[pno] = c_id
+            continue
+        current_is_anchor = current in anchor_chunk_ids
+        candidate_is_anchor = c_id in anchor_chunk_ids
+        if candidate_is_anchor and not current_is_anchor:
+            source_by_page[pno] = c_id
+        elif candidate_is_anchor == current_is_anchor and c_id < current:
+            source_by_page[pno] = c_id
+
+    vectors_by_chunk = fetch_colpali_patch_vectors_for_chunks(
+        sorted(set(source_by_page.values()))
+    )
+
+    chunk_patches_list = []
+    unreadable_pages: List[int] = []
+    for pno in sorted(source_by_page):
+        anchor_id = anchor_id_by_page.get(pno)
+        # `patches` est un tableau NumPy : tester sa longueur, pas sa vérité booléenne.
+        patches = vectors_by_chunk.get(source_by_page[pno])
+        if anchor_id is None or patches is None or len(patches) == 0:
+            unreadable_pages.append(pno)
+            continue
+        chunk_patches_list.append((anchor_id, patches))
+
+    stats = {
+        "document_id": document_id,
+        "targets_before": len(lancedb_ids),
+        "orphan_targets": len(orphan_ids),
+        "unresolved_targets": len(unresolved_ids),
+        "anchors_created": created,
+        "pages_with_patches": len(chunk_patches_list),
+        "expected_pages": len(anchor_id_by_page),
+    }
+
+    if not chunk_patches_list:
+        # Rien de récupérable (ex. uniquement des orphelins) : on purge pour que le
+        # health signale « missing » plutôt qu'un faux desync éternel.
+        from app.services.lancedb_service import delete_colpali_patches_for_document
+
+        delete_colpali_patches_for_document(document_id)
+        return {**stats, "status": "incomplete", "reason": "no_resolvable_patches"}
+
+    # delete document + insert : la réécriture est portée par l'insert batch.
+    insert_colpali_patches_batch_lancedb(document_id, chunk_patches_list)
+
+    missing_pages = sorted(set(anchor_id_by_page) - set(source_by_page)) + unreadable_pages
+    status = "incomplete" if missing_pages else "repaired"
+    logger.info(
+        "[ColPali repair] document_id=%s : %d cible(s) → %d page(s) sur anchors "
+        "(orphelins=%d, pages manquantes=%d)",
+        document_id,
+        len(lancedb_ids),
+        len(chunk_patches_list),
+        len(orphan_ids),
+        len(missing_pages),
+    )
+    return {**stats, "status": status, "missing_pages": missing_pages[:20]}
+
+
+def ensure_colpali_page_sync(document_id: int, pdf_path: str) -> dict:
+    """Garantit la topologie ColPali d'un document SANS ré-embedding inutile.
+
+    Appelé par le retraitement multimodal : le PDF n'ayant pas changé, les patches
+    existants restent valides. Ordre :
+      1. patches déjà tous sur les anchors et complets → rien à faire ;
+      2. patches présents mais mal rattachés → réparation in-place (I/O seulement) ;
+      3. pages manquantes après réparation, ou aucun patch → embedding complet.
+    """
+    if not settings.COLPALI_ENABLED:
+        return {"document_id": document_id, "status": "disabled"}
+
+    from app.services.lancedb_service import get_colpali_chunk_ids_by_document
+
+    lancedb_ids = get_colpali_chunk_ids_by_document([document_id]).get(document_id)
+    page_count = _get_pdf_page_count(pdf_path) if Path(pdf_path).is_file() else 0
+
+    if lancedb_ids:
+        repair = repair_colpali_topology(document_id)
+        if repair.get("status") in ("ok", "repaired"):
+            after = get_colpali_chunk_ids_by_document([document_id]).get(document_id) or set()
+            if len(after) >= page_count and after:
+                logger.info(
+                    "[Indexing] ColPali déjà à jour document_id=%s (%d pages, %s) — pas de ré-embedding",
+                    document_id,
+                    len(after),
+                    repair["status"],
+                )
+                return {"document_id": document_id, "status": repair["status"], "pages": len(after)}
+        logger.info(
+            "[Indexing] ColPali incomplet après réparation (%s) — re-sync complet document_id=%s",
+            repair.get("status"),
+            document_id,
+        )
+
+    pages = sync_colpali_page_anchors(document_id, pdf_path)
+    return {"document_id": document_id, "status": "resynced", "pages": pages}
+
+
+def repair_all_colpali_topologies() -> dict:
+    """Répare la topologie ColPali de tous les documents ayant des patches LanceDB.
+
+    Réparation in-place uniquement (aucun embedding) : les documents ``incomplete``
+    restent listés pour un passage ``colpali_only`` explicite.
+    """
+    from app.services.lancedb_service import get_colpali_document_ids
+
+    doc_ids = get_colpali_document_ids()
+    if doc_ids is None:
+        return {"status": "error", "reason": "lancedb_scan_failed"}
+
+    ld = get_library_document_logger()
+    summary = {
+        "status": "completed",
+        "documents": len(doc_ids),
+        "ok": 0,
+        "repaired": 0,
+        "incomplete": 0,
+        "empty": 0,
+        "error": 0,
+        "details": [],
+    }
+    for doc_id in doc_ids:
+        result = repair_colpali_topology(doc_id)
+        status = result.get("status", "error")
+        summary[status] = summary.get(status, 0) + 1
+        if status not in ("ok", "empty"):
+            summary["details"].append(result)
+
+    # Les réécritures ont laissé des vecteurs hors index : on les y intègre UNE fois
+    # ici, jamais par document (une reconstruction complète coûte ~90 s sur 1,6 M).
+    if summary.get("repaired") or summary.get("incomplete"):
+        from app.services.lancedb_service import optimize_colpali_index
+
+        summary["index_optimize"] = optimize_colpali_index()
+
+    ld.info(
+        "[ColPali repair] passe globale : %d document(s) — ok=%d réparés=%d "
+        "incomplets=%d vides=%d erreurs=%d",
+        summary["documents"],
+        summary["ok"],
+        summary["repaired"],
+        summary["incomplete"],
+        summary["empty"],
+        summary["error"],
+    )
+    return summary
 
 
 # ---------------------------------------------------------------------------

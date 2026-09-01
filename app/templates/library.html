@@ -1138,7 +1138,7 @@ endblock %} {% block content %}
             return healthChipHtml("Audit après traitement", "muted", "Santé d'indexation disponible une fois le traitement terminé.");
         }
         const t = h.text || {}, c = h.colpali || {}, k = h.enrichment || {};
-        const colpaliTooltip = `ColPali : ${c.indexed_pages ?? 0}/${c.expected_pages ?? 0} page(s) indexée(s) · ${c.orphan_count ?? 0} orphelin(s) · ${c.missing_count ?? 0} manquante(s)` + (c.legacy_mode ? " · pipeline legacy (feuilles)" : "");
+        const colpaliTooltip = `ColPali : ${c.indexed_pages ?? 0}/${c.expected_pages ?? 0} page(s) indexée(s) · ${c.orphan_count ?? 0} orphelin(s) · ${c.missing_count ?? 0} manquante(s)` + (c.legacy_count ? ` · ${c.legacy_count} hors ancre` : "");
         if (h.overall === "ok") {
             const detail = `Texte : ${t.chunk_count} chunk(s), ${t.leaf_count} feuille(s)\n${colpaliTooltip}\nKAG : ${k.entity_count} entité(s), ${k.relation_count} relation(s), ${k.category_count} catégorie(s)`;
             return healthChipHtml("Pipeline complet · ColPali sync", "ok", detail);
@@ -1147,7 +1147,18 @@ endblock %} {% block content %}
         if (t.status === "missing") chips.push(healthChipHtml("Texte", "error", "Aucun chunk indexé."));
         else chips.push(healthChipHtml("Texte", "ok", `${t.chunk_count} chunk(s), ${t.leaf_count} feuille(s).`));
 
-        if (c.status === "desync") chips.push(healthChipHtml(`ColPali désync (${c.orphan_count + (c.legacy_count || 0)})`, "error", colpaliTooltip + "\nPatches pointant vers des chunks supprimés/obsolètes : le canal visuel rate des pages. Retraiter en mode « ColPali seul »."));
+        if (c.status === "desync") {
+            chips.push(healthChipHtml(`ColPali désync (${c.orphan_count + (c.legacy_count || 0)})`, "error", colpaliTooltip + "\nPatches hors ancre de page (héritage pipeline feuilles) ou orphelins : le canal visuel rate des pages.\nRéparer d'abord (sans recalcul) ; « ColPali seul » seulement si la réparation reste incomplète."));
+            if (isAdminUser && canLibraryWrite && doc) {
+                const safeTitle = (doc.title || "").replace(/'/g, "\\'");
+                chips.push(healthChipHtml(
+                    "Réparer ColPali",
+                    "warn",
+                    "Ré-attache les patches existants aux ancres de page (une page = un jeu de patches), sans ré-embedding. Quasi instantané.",
+                    `onclick="repairColpaliDocument(${doc.id}, '${safeTitle}')"`,
+                ));
+            }
+        }
         else if (c.status === "partial") chips.push(healthChipHtml(`ColPali ${c.indexed_pages}/${c.expected_pages}`, "warn", colpaliTooltip));
         else if (c.status === "missing") chips.push(healthChipHtml("ColPali absent", "error", "Aucun patch ColPali indexé pour ce document."));
         else if (c.status === "unknown") chips.push(healthChipHtml("ColPali ?", "warn", "Scan LanceDB en échec — état de sync inconnu."));
@@ -2444,6 +2455,24 @@ endblock %} {% block content %}
     // Compat : ancienne fonction multimodal — inutilisée mais conservée pour éviter les erreurs JS
     async function reindexMultimodalDocument(documentId, documentTitle) {
         await reindexDocument(documentId, documentTitle);
+    }
+
+    async function repairColpaliDocument(documentId, documentTitle) {
+        const ok = confirm(
+            `Réparer la topologie ColPali de « ${documentTitle} » ?\n\n` +
+            "Ré-attache les patches existants aux ancres de page, sans ré-embedding (quasi instantané).",
+        );
+        if (!ok) return;
+        const r = await api(`/api/library/documents/${documentId}/colpali-repair`, { method: "POST" });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) return alert(data.detail || "Réparation impossible.");
+        if (data.status === "incomplete") {
+            alert(
+                `Réparation partielle : ${data.pages_with_patches ?? 0}/${data.expected_pages ?? 0} page(s) couverte(s).\n` +
+                "Des pages restent sans patches — lancer un retraitement « ColPali seul » sur ce document.",
+            );
+        }
+        await loadDocuments();
     }
 
     async function reindexDocument(documentId, documentTitle) {

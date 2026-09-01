@@ -3,7 +3,7 @@ import httpx
 import json
 from unittest import mock
 from app.services.mistral_service import _post_json_with_retry, chat_stream
-from app.services.lancedb_service import insert_colpali_patches_lancedb, get_colpali_table
+from app.services.lancedb_service import get_colpali_table
 
 
 @pytest.mark.asyncio
@@ -142,32 +142,12 @@ async def test_chat_stream_network_error_no_retry_after_yield():
             assert mock_client.stream.call_count == 1
 
 
-def test_insert_colpali_patches_index_creation():
-    # Test that insert_colpali_patches_lancedb calls table.create_index
+def test_insert_colpali_patches_batch_cree_index_si_absent():
+    """Première écriture : la table n'a pas encore d'index, on le construit."""
     mock_table = mock.Mock()
-    
-    with mock.patch("app.services.lancedb_service.get_colpali_table", return_value=mock_table):
-        insert_colpali_patches_lancedb(
-            document_id=123,
-            chunk_id=456,
-            patch_vectors=[[0.1] * 128, [0.2] * 128]
-        )
-        
-        # Verify it deleted, added, and called create_index
-        mock_table.delete.assert_called_once_with("chunk_id = 456")
-        mock_table.add.assert_called_once()
-        mock_table.create_index.assert_called_once_with(
-            vector_column_name="vector",
-            index_type="IVF_SQ",
-            metric="cosine"
-        )
-
-
-def test_insert_colpali_patches_batch_index_creation():
-    # Test that insert_colpali_patches_batch_lancedb calls table.delete on document level and table.create_index
-    mock_table = mock.Mock()
+    mock_table.list_indices.return_value = []
     from app.services.lancedb_service import insert_colpali_patches_batch_lancedb
-    
+
     with mock.patch("app.services.lancedb_service.get_colpali_table", return_value=mock_table):
         insert_colpali_patches_batch_lancedb(
             document_id=123,
@@ -176,8 +156,7 @@ def test_insert_colpali_patches_batch_index_creation():
                 (457, [[0.2] * 128])
             ]
         )
-        
-        # Verify it deleted document-wide, added, and called create_index
+
         mock_table.delete.assert_called_once_with("document_id = 123")
         mock_table.add.assert_called_once()
         mock_table.create_index.assert_called_once_with(
@@ -185,3 +164,36 @@ def test_insert_colpali_patches_batch_index_creation():
             index_type="IVF_SQ",
             metric="cosine"
         )
+
+
+def test_insert_colpali_patches_batch_ne_reconstruit_pas_un_index_existant():
+    """Index déjà présent : NE PAS le reconstruire.
+
+    `create_index` reconstruit la table entière (~90 s pour 1,6 M de vecteurs) : le
+    faire à chaque document rendait chaque insertion proportionnelle au corpus complet.
+    """
+    mock_table = mock.Mock()
+    mock_table.list_indices.return_value = [mock.Mock(name="vector_idx")]
+    from app.services.lancedb_service import insert_colpali_patches_batch_lancedb
+
+    with mock.patch("app.services.lancedb_service.get_colpali_table", return_value=mock_table):
+        insert_colpali_patches_batch_lancedb(
+            document_id=123,
+            chunk_patches_list=[(456, [[0.1] * 128])],
+        )
+
+        mock_table.add.assert_called_once()
+        mock_table.create_index.assert_not_called()
+
+
+def test_optimize_colpali_index_delegue_a_lancedb():
+    """La maintenance d'index est explicite (fin de passe), pas un effet de bord."""
+    mock_table = mock.Mock()
+    mock_table.list_indices.return_value = []
+    from app.services.lancedb_service import optimize_colpali_index
+
+    with mock.patch("app.services.lancedb_service.get_colpali_table", return_value=mock_table):
+        result = optimize_colpali_index()
+
+    mock_table.optimize.assert_called_once()
+    assert result["status"] == "ok"

@@ -1,4 +1,3 @@
-import os
 import logging
 import threading
 import time
@@ -190,56 +189,3 @@ def embed_query_colpali(query: str) -> List[List[float]]:
         model.device,
     )
     return query_vectors
-
-
-def sync_document_colpali_embeddings(document_id: int):
-    """
-    Checks if ColPali is enabled, reads the document from DB, 
-    generates ColPali page embeddings, and inserts them into LanceDB.
-    """
-    if not settings.COLPALI_ENABLED:
-        return
-        
-    from app.models.document import Document
-    from app.models.document_chunk import DocumentChunk
-    from app.services.lancedb_service import insert_colpali_patches_batch_lancedb
-    from sqlmodel import Session, select
-    from app.database import engine
-    
-    with Session(engine) as session:
-        document = session.get(Document, document_id)
-        if not document or not document.source_file_path:
-            return
-            
-        pdf_path = document.source_file_path
-        if not os.path.exists(pdf_path):
-            logger.warning(f"Source file path not found for ColPali: {pdf_path}")
-            return
-            
-        try:
-            # 1. Generate ColPali page-level embeddings
-            page_embeddings = embed_pdf_pages_colpali(pdf_path, document_id=document_id)
-            
-            # 2. Get document chunks
-            statement = select(DocumentChunk).where(
-                DocumentChunk.document_id == document_id,
-                DocumentChunk.is_leaf == True
-            )
-            chunks = list(session.exec(statement).all())
-            
-            # Map chunk IDs to page indices and prepare batch list
-            chunk_patches_list = []
-            for chunk in chunks:
-                meta = chunk.metadata_json or {}
-                page_no = meta.get("page_no") or meta.get("page_start")
-                if page_no is not None:
-                    page_idx = int(page_no) - 1
-                    if 0 <= page_idx < len(page_embeddings):
-                        chunk_patches_list.append((chunk.id, page_embeddings[page_idx]))
-            
-            if chunk_patches_list:
-                insert_colpali_patches_batch_lancedb(document_id, chunk_patches_list)
-                
-            logger.info(f"ColPali embeddings generated and synced for document {document_id}")
-        except Exception as e:
-            logger.error(f"Error generating ColPali embeddings for document {document_id}: {e}", exc_info=True)

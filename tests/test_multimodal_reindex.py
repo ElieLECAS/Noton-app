@@ -166,8 +166,8 @@ def test_multimodal_service_v4_chunks(
             return_value=fake_specs,
         ),
         mock.patch(
-            "app.services.multimodal_page_service.embed_new_multimodal_chunks",
-            return_value=2,
+            "app.services.document_indexing_service.ensure_colpali_page_sync",
+            return_value={"status": "ok", "pages": 1},
         ),
     ):
         result = multimodal_reindex_library_document(doc.id, user.id)

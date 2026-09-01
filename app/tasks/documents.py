@@ -38,6 +38,24 @@ def process_library_document(
 
 
 @celery_app.task(bind=True, max_retries=0)
+def repair_colpali_topology_task(self, user_id: int) -> dict:
+    """Réparation de topologie ColPali en masse (remap patches → anchors, sans ré-embedding)."""
+    from app.library_document_logging import get_library_document_logger
+    from app.services.document_indexing_service import repair_all_colpali_topologies
+
+    get_library_document_logger().info(
+        "[Celery] repair_colpali_topology_task user_id=%s task_id=%s",
+        user_id,
+        self.request.id,
+    )
+    try:
+        return repair_all_colpali_topologies()
+    except Exception:
+        logger.exception("repair_colpali_topology_task échec user_id=%s", user_id)
+        raise
+
+
+@celery_app.task(bind=True, max_retries=0)
 def reindex_library_document_task(
     self,
     document_id: int,

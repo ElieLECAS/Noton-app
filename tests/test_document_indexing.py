@@ -76,7 +76,7 @@ def _patch_deps(
             "app.services.document_indexing_service._mark_failed",
         ),
         mock.patch(
-            "app.services.document_indexing_service._sync_colpali_for_pages",
+            "app.services.document_indexing_service.sync_colpali_page_anchors",
             return_value=2,
         ),
         mock.patch(
@@ -128,7 +128,7 @@ class TestProcessDocumentIndexingFull:
              mock.patch("app.services.document_indexing_service._set_progress") as set_prog, \
              mock.patch("app.services.document_indexing_service._finalize_document") as finalize, \
              mock.patch("app.services.document_indexing_service._mark_failed") as mark_fail, \
-             mock.patch("app.services.document_indexing_service._sync_colpali_for_pages", return_value=2) as colpali_sync, \
+             mock.patch("app.services.document_indexing_service.sync_colpali_page_anchors", return_value=2) as colpali_sync, \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks", return_value=3) as extract, \
              mock.patch("app.services.document_run.is_processing_run_current", return_value=True), \
              mock.patch("app.services.file_conversion.ensure_pdf_for_ocr", return_value=pdf_path):
@@ -167,7 +167,7 @@ class TestProcessDocumentIndexingTextOnly:
              mock.patch("app.services.document_indexing_service._set_progress"), \
              mock.patch("app.services.document_indexing_service._finalize_document") as finalize, \
              mock.patch("app.services.document_indexing_service._mark_failed") as mark_fail, \
-             mock.patch("app.services.document_indexing_service._sync_colpali_for_pages") as colpali_sync, \
+             mock.patch("app.services.document_indexing_service.sync_colpali_page_anchors") as colpali_sync, \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks", return_value=3), \
              mock.patch("app.services.document_run.is_processing_run_current", return_value=True), \
              mock.patch("app.services.file_conversion.ensure_pdf_for_ocr", return_value=pdf_path):
@@ -205,7 +205,7 @@ class TestSeparationCouchesSemantiques:
              mock.patch("app.services.document_indexing_service._set_progress"), \
              mock.patch("app.services.document_indexing_service._finalize_document"), \
              mock.patch("app.services.document_indexing_service._mark_failed"), \
-             mock.patch("app.services.document_indexing_service._sync_colpali_for_pages"), \
+             mock.patch("app.services.document_indexing_service.sync_colpali_page_anchors"), \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks", return_value=3), \
              mock.patch("app.config.settings.KAG_ENABLED", True), \
              mock.patch("app.config.settings.CONTEXTUAL_ENRICHMENT_ENABLED", True), \
@@ -258,7 +258,7 @@ class TestProcessDocumentIndexingColpaliOnly:
              mock.patch("app.services.document_indexing_service._set_progress"), \
              mock.patch("app.services.document_indexing_service._finalize_document") as finalize, \
              mock.patch("app.services.document_indexing_service._mark_failed") as mark_fail, \
-             mock.patch("app.services.document_indexing_service._sync_colpali_for_pages", return_value=2) as colpali_sync, \
+             mock.patch("app.services.document_indexing_service.sync_colpali_page_anchors", return_value=2) as colpali_sync, \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks") as extract, \
              mock.patch("app.services.document_run.is_processing_run_current", return_value=True), \
              mock.patch("app.services.file_conversion.ensure_pdf_for_ocr", return_value=pdf_path):

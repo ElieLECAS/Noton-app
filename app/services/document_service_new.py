@@ -638,19 +638,20 @@ def process_document_multimodal(
     file_path: str,
     user_id: int,
     run_id: Optional[str] = None,
-    delete_existing_chunks: bool = False,
 ) -> dict:
     """
     Pipeline multimodal unifié pour import initial et retraitement.
-    
+
+    Mode additif : seuls les chunks multimodaux sont remplacés. Les anchors de page
+    et leurs patches ColPali LanceDB sont conservés (le PDF n'a pas changé) — la
+    topologie visuelle est vérifiée/réparée en fin de passe SANS ré-embedding inutile.
+
     Args:
         document_id: ID du document à traiter
         file_path: Chemin du fichier source (peut être différent de source_file_path en DB lors de l'import initial)
         user_id: ID de l'utilisateur
         run_id: ID de run pour vérification d'annulation
-        delete_existing_chunks: Si True, supprime TOUS les chunks existants (retraitement complet).
-                                Si False, supprime seulement les chunks multimodaux (mode additif).
-    
+
     Returns:
         dict avec document_id, chunks, status
     """
@@ -660,9 +661,7 @@ def process_document_multimodal(
         append_multimodal_page_chunks,
         build_multimodal_pages_for_pdf,
         delete_multimodal_chunks_for_document,
-        embed_new_multimodal_chunks,
     )
-    from app.services.chunk_service import delete_chunks_for_document
 
     if not settings.MULTIMODAL_ENABLED:
         raise ValueError(
@@ -671,11 +670,10 @@ def process_document_multimodal(
 
     ld = get_library_document_logger()
     ld.info(
-        "[Multimodal] Démarrage document_id=%s user_id=%s file=%s delete_existing=%s",
+        "[Multimodal] Démarrage document_id=%s user_id=%s file=%s",
         document_id,
         user_id,
         file_path,
-        delete_existing_chunks,
     )
     
     if run_id is not None and not is_processing_run_current(document_id, run_id):
@@ -697,13 +695,10 @@ def process_document_multimodal(
         
         title = document.title or ""
         
-        # Nettoyage des chunks existants selon le mode
-        if delete_existing_chunks:
-            ld.info("[Multimodal] document_id=%s — suppression de TOUS les chunks", document_id)
-            delete_chunks_for_document(session, document_id, commit=True)
-        else:
-            ld.info("[Multimodal] document_id=%s — suppression des chunks multimodaux uniquement", document_id)
-            delete_multimodal_chunks_for_document(session, document_id, commit=True)
+        # Mode additif : seuls les chunks multimodaux sont remplacés (anchors +
+        # patches ColPali conservés).
+        ld.info("[Multimodal] document_id=%s — suppression des chunks multimodaux uniquement", document_id)
+        delete_multimodal_chunks_for_document(session, document_id, commit=True)
         
         document = session.get(Document, document_id)
         if not document:
@@ -756,7 +751,25 @@ def process_document_multimodal(
                 "chunks": chunk_count,
             }
 
-        embed_new_multimodal_chunks(document_id)
+        # Topologie ColPali : vérifiée/réparée sur les anchors, ré-embedding SEULEMENT
+        # si des pages manquent (jamais à cause du retraitement texte lui-même).
+        try:
+            from app.services.document_indexing_service import ensure_colpali_page_sync
+
+            colpali_state = ensure_colpali_page_sync(document_id, pdf_input)
+            ld.info(
+                "[Multimodal] document_id=%s — ColPali %s (%s page(s))",
+                document_id,
+                colpali_state.get("status"),
+                colpali_state.get("pages", 0),
+            )
+        except Exception as colpali_err:
+            logger.error(
+                "Erreur sync ColPali pour document %s: %s",
+                document_id,
+                colpali_err,
+                exc_info=True,
+            )
 
         with Session(engine) as session:
             document = session.get(Document, document_id)
@@ -845,13 +858,12 @@ def multimodal_reindex_library_document(
                 raise ValueError("Fichier source introuvable sur le disque")
             file_path = str(src)
         
-        # Appeler le pipeline unifié en mode "additif" (ne supprime que les chunks multimodaux)
+        # Appeler le pipeline unifié (mode additif : ne remplace que les chunks multimodaux)
         return process_document_multimodal(
             document_id=document_id,
             file_path=file_path,
             user_id=user_id,
             run_id=run_id,
-            delete_existing_chunks=False,
         )
     except Exception as e:
         try:

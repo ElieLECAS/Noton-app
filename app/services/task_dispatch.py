@@ -590,6 +590,62 @@ def dispatch_reindex_all_library(
         ) from exc
 
 
+def _send_colpali_repair(user_id: int) -> str:
+    from app.tasks.documents import repair_colpali_topology_task
+
+    async_result = repair_colpali_topology_task.apply_async(
+        args=[user_id],
+        queue="documents",
+    )
+    logger.info(
+        "task_dispatch colpali_repair user_id=%s celery_task_id=%s",
+        user_id,
+        async_result.id,
+    )
+    return async_result.id
+
+
+def dispatch_colpali_repair(user_id: int) -> str:
+    """
+    Enfile la réparation de topologie ColPali en masse : ré-attache les patches
+    LanceDB existants aux anchors de page (une page = un jeu de patches), sans
+    aucun ré-embedding. Les documents restés incomplets sont à repasser en
+    colpali_only (listés par le health d'indexation).
+    """
+
+    def _run_in_thread() -> str:
+        import threading
+
+        from app.services.document_indexing_service import repair_all_colpali_topologies
+
+        def _runner():
+            try:
+                repair_all_colpali_topologies()
+            except Exception:
+                logger.exception(
+                    "Thread repair_all_colpali_topologies échec user_id=%s", user_id
+                )
+
+        threading.Thread(target=_runner, name="colpali-repair", daemon=True).start()
+        return f"thread-colpali-repair-{user_id}"
+
+    backend = get_task_backend_mode()
+    if backend == "thread":
+        return _run_in_thread()
+
+    try:
+        return _send_colpali_repair(user_id)
+    except Exception as exc:
+        logger.warning(
+            "Échec enqueue colpali_repair user_id=%s: %s", user_id, exc, exc_info=True
+        )
+        if backend == "hybrid":
+            return _run_in_thread()
+        raise RuntimeError(
+            "Impossible d'enfiler la réparation ColPali : le service de tâches (Celery) est indisponible."
+        ) from exc
+
+
 def dispatch_reindex_folder_library(
     user_id: int, folder_id: int, mode: str = "full", extractor: str = "vision"
 ) -> str:
