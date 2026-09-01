@@ -696,6 +696,11 @@
         <p id="space-category-page-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">—</p>
       </div>
       <div class="flex items-center gap-2 shrink-0">
+        <button type="button" id="space-category-text-toggle" onclick="toggleSpaceCategoryText()"
+                class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors">
+          <i class="ti ti-file-text"></i>
+          <span class="hidden sm:inline">Texte extrait</span>
+        </button>
         <button type="button" id="space-category-prev-btn" onclick="navigateSpaceCategoryPage('prev')" disabled class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:pointer-events-none transition-colors">
           <i class="ti ti-chevron-left"></i>
           <span class="hidden sm:inline">Précédente</span>
@@ -712,9 +717,9 @@
     </div>
 
     <div class="flex-1 flex flex-col lg:flex-row min-h-0">
-      <!-- Sur mobile, seul le PDF est affiché : le texte extrait occupait presque tout
-           l'écran et ne laissait au PDF qu'une bande illisible. -->
-      <section id="space-category-pdf-panel" class="flex-1 min-h-0 flex flex-col lg:flex-none lg:w-1/2 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-950">
+      <!-- Le texte extrait est masqué par défaut : le PDF occupe alors toute la modale.
+           Le bouton « Texte extrait » de l'en-tête rétablit l'affichage côte à côte. -->
+      <section id="space-category-pdf-panel" class="flex-1 min-h-0 flex flex-col border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-950">
         <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-2">
           <span>Page PDF</span>
           <div class="flex items-center gap-1 normal-case">
@@ -722,9 +727,9 @@
                     class="px-2 py-0.5 rounded-md border transition-colors" title="Voir la page entière">
               Page entière
             </button>
-            <button type="button" id="space-pdf-fit-width-btn" onclick="setSpaceCategoryPdfFit('width')"
-                    class="px-2 py-0.5 rounded-md border transition-colors" title="Zoomer à la largeur, défilement vertical">
-              Pleine largeur
+            <button type="button" id="space-pdf-fit-zoom-btn" onclick="setSpaceCategoryPdfFit('zoom')"
+                    class="px-2 py-0.5 rounded-md border transition-colors" title="Zoomer : la page remplit le panneau et défile">
+              Zoom
             </button>
           </div>
         </div>
@@ -733,7 +738,7 @@
         </div>
       </section>
 
-      <section id="space-category-text-panel" class="hidden lg:flex lg:w-1/2 flex-col min-h-0">
+      <section id="space-category-text-panel" class="hidden flex-1 min-h-0 lg:w-1/2 flex-col">
         <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
           <span>Texte extrait</span>
           <span id="space-category-text-hint" class="normal-case font-medium text-teal-600 dark:text-teal-400">Chunks catégorie surlignés</span>
@@ -877,7 +882,7 @@
     </button>
     <select id="space-pdf-modal-zoom-select" onchange="spacePdfModalSetZoom(this.value)">
       <option value="fit" selected>Page entière</option>
-      <option value="fit-width">Pleine largeur</option>
+      <option value="fit-zoom">Zoom</option>
       <option value="0.5">50%</option>
       <option value="0.75">75%</option>
       <option value="1">100%</option>
@@ -905,7 +910,7 @@
 {% block extra_scripts %}
 <!-- Visionneuse de page partagée avec library.html : pdf.js, rendu de page,
      surlignage et rendu markdown mutualisés. -->
-<script src="/static/js/page-viewer.js?v=3"></script>
+<script src="/static/js/page-viewer.js?v=5"></script>
 <script>
 const spaceId = {{ space_id }};
 const fastModel = {{ model_fast.model|tojson }};
@@ -1322,15 +1327,19 @@ async function spacePdfRenderModalPage(pageNum) {
   const page = await spacePdfModalDoc.getPage(pageNum);
   const container = document.getElementById("space-pdf-modal-container");
   let scale = spacePdfModalCurrentZoom;
-  if (spacePdfModalCurrentZoom === "fit" || spacePdfModalCurrentZoom === "fit-width") {
+  if (spacePdfModalCurrentZoom === "fit" || spacePdfModalCurrentZoom === "fit-zoom") {
     const viewport0 = page.getViewport({ scale: 1 });
     const availWidth = container.clientWidth - 40;
-    scale = availWidth / viewport0.width;
-    // « Page entière » : on retient aussi la contrainte de hauteur, sinon une A4
-    // déborde et il faut faire défiler pour voir le bas de la planche.
     const availHeight = container.clientHeight - 40;
-    if (spacePdfModalCurrentZoom === "fit" && availHeight > 80) {
-      scale = Math.min(scale, availHeight / viewport0.height);
+    scale = availWidth / viewport0.width;
+    if (availHeight > 80) {
+      // « Page entière » retient la plus contraignante des deux échelles (rien ne
+      // déborde) ; « Zoom » la plus généreuse — l'axe qui défile se déduit alors du
+      // FORMAT de la page : largeur pour un portrait, hauteur pour un paysage.
+      const scaleHeight = availHeight / viewport0.height;
+      scale = spacePdfModalCurrentZoom === "fit"
+        ? Math.min(scale, scaleHeight)
+        : Math.max(scale, scaleHeight);
     }
   }
   const viewport = page.getViewport({ scale });
@@ -1392,7 +1401,7 @@ async function spacePdfModalGoToPage(pageNum) {
 
 async function spacePdfModalSetZoom(zoom) {
   spacePdfModalCurrentZoom =
-    zoom === "fit" || zoom === "fit-width" ? zoom : parseFloat(zoom);
+    zoom === "fit" || zoom === "fit-zoom" ? zoom : parseFloat(zoom);
   await spacePdfRenderModalPage(spacePdfModalCurrentPage);
 }
 
@@ -3072,18 +3081,15 @@ async function renderSpaceCategoryPdf(documentInfo, pageNo) {
   if (!container || !panel) return;
 
   if (!documentInfo.has_source_file || !documentInfo.document_id) {
-    // Aucun PDF : le texte reprend toute la place, y compris sur mobile — où il est
-    // masqué par défaut au profit de la page PDF.
-    panel.classList.add("hidden");
-    textSection?.classList.remove("lg:w-1/2", "hidden");
-    textSection?.classList.add("lg:w-full", "flex");
+    // Aucun PDF : le texte est la seule chose à montrer, quel que soit l'état du bouton.
+    spaceCategoryHasPdf = false;
+    applySpaceCategoryTextVisibility();
     container.innerHTML = "";
     return;
   }
 
-  textSection?.classList.add("lg:w-1/2", "hidden");
-  textSection?.classList.remove("lg:w-full", "flex");
-  panel.classList.remove("hidden");
+  spaceCategoryHasPdf = true;
+  applySpaceCategoryTextVisibility();
   container.innerHTML = `<div class="flex items-center justify-center h-full min-h-[200px] text-gray-500 dark:text-gray-400"><i class="ti ti-loader-2 text-2xl animate-spin"></i></div>`;
 
   try {
@@ -3100,6 +3106,50 @@ async function renderSpaceCategoryPdf(documentInfo, pageNo) {
   }
 }
 
+/* ——— Affichage du texte extrait ———
+ * Masqué par défaut : la page PDF est ce qu'on vient lire en priorité, et le texte
+ * lui prenait la moitié de la place (la totalité sur mobile). Le choix est ensuite
+ * conservé d'une page à l'autre, comme le mode d'ajustement.
+ * Un document sans PDF force l'affichage : sinon la modale serait vide. */
+let spaceCategoryTextVisible = false;
+let spaceCategoryHasPdf = true;
+
+function applySpaceCategoryTextVisibility() {
+  const panel = document.getElementById("space-category-pdf-panel");
+  const textSection = document.getElementById("space-category-text-panel");
+  const toggle = document.getElementById("space-category-text-toggle");
+  const showText = spaceCategoryTextVisible || !spaceCategoryHasPdf;
+
+  panel?.classList.toggle("hidden", !spaceCategoryHasPdf);
+  panel?.classList.toggle("lg:w-1/2", showText);
+  // Sans texte à côté, la bordure de séparation laisserait un trait orphelin
+  // le long du bord de la modale.
+  panel?.classList.toggle("border-b", showText);
+  panel?.classList.toggle("lg:border-r", showText);
+
+  textSection?.classList.toggle("hidden", !showText);
+  textSection?.classList.toggle("flex", showText);
+
+  if (toggle) {
+    const on = "inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors bg-teal-600 text-white border-teal-600";
+    const off = "inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800";
+    toggle.className = showText ? on : off;
+    toggle.disabled = !spaceCategoryHasPdf;
+    toggle.title = !spaceCategoryHasPdf
+      ? "Ce document n'a pas de PDF : seul le texte extrait est disponible"
+      : showText
+        ? "Masquer le texte extrait"
+        : "Afficher le texte extrait";
+  }
+}
+
+async function toggleSpaceCategoryText() {
+  spaceCategoryTextVisible = !spaceCategoryTextVisible;
+  applySpaceCategoryTextVisibility();
+  // La largeur du panneau PDF vient de changer : il faut le re-rendre à la bonne échelle.
+  await renderSpaceCategoryPdfPage(spaceCategoryPdfPageNum);
+}
+
 /* Rendu de page délégué au module partagé.
  *
  * `spaceCategoryPdfFit` retient le choix de l'utilisateur d'une page à l'autre : il
@@ -3112,13 +3162,13 @@ function renderSpaceCategoryFitButtons() {
   const on = "px-2 py-0.5 rounded-md border transition-colors bg-teal-600 text-white border-teal-600";
   const off = "px-2 py-0.5 rounded-md border transition-colors bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700";
   const pageBtn = document.getElementById("space-pdf-fit-page-btn");
-  const widthBtn = document.getElementById("space-pdf-fit-width-btn");
+  const zoomBtn = document.getElementById("space-pdf-fit-zoom-btn");
   if (pageBtn) pageBtn.className = spaceCategoryPdfFit === "page" ? on : off;
-  if (widthBtn) widthBtn.className = spaceCategoryPdfFit === "width" ? on : off;
+  if (zoomBtn) zoomBtn.className = spaceCategoryPdfFit === "zoom" ? on : off;
 }
 
 async function setSpaceCategoryPdfFit(fit) {
-  spaceCategoryPdfFit = fit === "width" ? "width" : "page";
+  spaceCategoryPdfFit = fit === "zoom" ? "zoom" : "page";
   renderSpaceCategoryFitButtons();
   await renderSpaceCategoryPdfPage(spaceCategoryPdfPageNum);
 }
@@ -3127,12 +3177,26 @@ async function renderSpaceCategoryPdfPage(pageNum) {
   if (!spaceCategoryPdfDoc) return;
   spaceCategoryPdfPageNum = pageNum;
   renderSpaceCategoryFitButtons();
-  await PageViewer.renderPdfPage(
+  const result = await PageViewer.renderPdfPage(
     document.getElementById("space-category-pdf-container"),
     spaceCategoryPdfDoc,
     pageNum,
     { fit: spaceCategoryPdfFit },
   );
+  // L'axe d'ajustement dépend du format de la page : on le dit plutôt que de laisser
+  // l'utilisateur deviner pourquoi le défilement est tantôt vertical, tantôt horizontal.
+  const zoomBtn = document.getElementById("space-pdf-fit-zoom-btn");
+  if (zoomBtn) {
+    const axis = result && result.fitAxis;
+    zoomBtn.title =
+      spaceCategoryPdfFit !== "zoom"
+        ? "Zoomer : la page remplit le panneau et défile"
+        : axis === "height"
+          ? "Ajusté à la hauteur — défilement horizontal"
+          : axis === "width"
+            ? "Ajusté à la largeur — défilement vertical"
+            : "Zoom appliqué";
+  }
 }
 
 function closeSpaceCategoryPageModal() {

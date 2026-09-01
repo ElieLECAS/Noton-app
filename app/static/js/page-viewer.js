@@ -59,45 +59,65 @@
     return pdfjs.getDocument({ data }).promise;
   }
 
-  /** Rend une page du PDF ENTIÈREMENT visible dans son conteneur.
+  /** Rend une page du PDF dans son conteneur, selon deux modes d'ajustement.
    *
-   * L'ajustement se faisait sur la seule largeur : une page A4 dans un panneau
-   * moitié-écran débordait donc en hauteur, et il fallait faire défiler pour voir le
-   * bas de la planche — exactement ce qu'on ne veut pas quand on compare un schéma
-   * coté au texte extrait affiché à côté. On prend désormais la plus contraignante
-   * des deux dimensions.
+   * `options.fit` :
+   *   - "page" (défaut) — la page tient ENTIÈREMENT : on retient la plus contraignante
+   *     des deux échelles, rien ne déborde, rien ne défile.
+   *   - "zoom"          — on retient la plus GÉNÉREUSE : la page remplit le conteneur
+   *     et déborde sur l'autre axe, qui devient défilable.
+   *
+   * L'axe qui déborde n'a donc pas à être choisi : il se déduit du FORMAT. Une page
+   * portrait dans un panneau plus large que haut se cale sur la largeur et défile
+   * verticalement ; une planche paysage se cale sur la hauteur et défile
+   * horizontalement. Un simple max() suffit à couvrir les deux cas.
    *
    * Le canvas est rendu à la densité de l'écran (plafonnée à 2) : une page entière
    * ramenée à la taille du panneau est petite, et sans cela les cotes deviennent
    * illisibles sur un écran haute densité.
+   *
+   * Retourne `{ fitAxis }` — "width", "height" ou "none" — pour que l'appelant puisse
+   * dire à l'utilisateur ce que le zoom a réellement fait.
    */
   async function renderPdfPage(container, pdfDoc, pageNum, options) {
-    if (!container || !pdfDoc) return;
-    const fit = (options && options.fit) === "width" ? "width" : "page";
+    if (!container || !pdfDoc) return { fitAxis: "none" };
+    const fit = (options && options.fit) === "zoom" ? "zoom" : "page";
     const safePage = Math.min(Math.max(1, pageNum || 1), pdfDoc.numPages);
     const page = await pdfDoc.getPage(safePage);
     const base = page.getViewport({ scale: 1 });
 
     const availWidth = Math.max(container.clientWidth - 24, 280);
     const availHeight = container.clientHeight - 24;
-    let scale = availWidth / base.width;
-    // « Pleine largeur » assume volontairement le débordement vertical : le conteneur
-    // défile, et les cotes d'une planche deviennent lisibles. « Page entière » retient
-    // en plus la contrainte de hauteur.
-    // clientHeight vaut 0 si le conteneur n'est pas encore disposé : on garde alors
-    // l'ajustement en largeur plutôt que de produire une page de taille nulle.
-    if (fit === "page" && availHeight > 80) {
-      scale = Math.min(scale, availHeight / base.height);
+    const scaleWidth = availWidth / base.width;
+    const scaleHeight = availHeight / base.height;
+    // clientHeight vaut 0 tant que le conteneur n'est pas disposé : sans ce garde, le
+    // mode « page » produirait une page de taille nulle et le mode « zoom » ignorerait
+    // la hauteur. On retombe alors sur l'ajustement en largeur, toujours valide.
+    const heightKnown = availHeight > 80;
+    let scale = scaleWidth;
+    if (heightKnown) {
+      scale = fit === "page"
+        ? Math.min(scaleWidth, scaleHeight)
+        : Math.max(scaleWidth, scaleHeight);
     }
     const viewport = page.getViewport({ scale });
 
     container.innerHTML = "";
-    // Les conteneurs centrent leur contenu (`items-center`). Sur un canvas plus haut
-    // que le conteneur, ce centrage rend le HAUT de la page inatteignable au défilement
-    // — travers connu de flexbox. En pleine largeur on repasse donc en alignement haut.
-    container.style.alignItems = fit === "width" ? "flex-start" : "";
+    // Les conteneurs centrent leur contenu sur les deux axes. Or un contenu plus grand
+    // que son conteneur centré par flexbox déborde des DEUX côtés, et la partie qui
+    // sort en haut (ou à gauche) devient inatteignable au défilement. On repasse donc
+    // en alignement début sur le seul axe qui déborde réellement.
+    container.style.alignItems = viewport.height > availHeight + 1 ? "flex-start" : "";
+    container.style.justifyContent = viewport.width > availWidth + 1 ? "flex-start" : "";
+    const fitAxis = !heightKnown || Math.abs(scaleWidth - scaleHeight) < 1e-6
+      ? "none"
+      : scale === scaleWidth
+        ? "width"
+        : "height";
     const wrapper = document.createElement("div");
-    wrapper.className = "relative mx-auto";
+    // Pas de `mx-auto` : une marge automatique recrée exactement le débordement
+    // inatteignable que `justifyContent` vient d'écarter.
+    wrapper.className = "relative";
     wrapper.style.width = "fit-content";
     const canvas = document.createElement("canvas");
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -114,6 +134,7 @@
       viewport,
       transform: dpr === 1 ? undefined : [dpr, 0, 0, dpr, 0, 0],
     }).promise;
+    return { fitAxis };
   }
 
   /* ------------------------------------------------------------ surlignage */

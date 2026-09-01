@@ -541,6 +541,11 @@ endblock %} {% block content %}
                 <p id="library-category-page-meta" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">—</p>
             </div>
             <div class="flex items-center gap-2 shrink-0">
+                <button type="button" id="library-category-text-toggle" onclick="toggleLibraryCategoryText()"
+                        class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors">
+                    <i class="ti ti-file-text"></i>
+                    <span class="hidden sm:inline">Texte extrait</span>
+                </button>
                 <button type="button" id="library-category-prev-btn" onclick="navigateLibraryCategoryPage('prev')" disabled class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-40 disabled:pointer-events-none transition-colors">
                     <i class="ti ti-chevron-left"></i>
                     <span class="hidden sm:inline">Précédente</span>
@@ -557,9 +562,9 @@ endblock %} {% block content %}
         </div>
 
         <div class="flex-1 flex flex-col lg:flex-row min-h-0">
-            <!-- Sur mobile, seul le PDF est affiché : le texte extrait occupait presque
-                 tout l'écran et ne laissait au PDF qu'une bande illisible. -->
-            <section id="library-category-pdf-panel" class="flex-1 min-h-0 flex flex-col lg:flex-none lg:w-1/2 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-950">
+            <!-- Le texte extrait est masqué par défaut : le PDF occupe alors toute la
+                 modale. Le bouton « Texte extrait » de l'en-tête rétablit le côte à côte. -->
+            <section id="library-category-pdf-panel" class="flex-1 min-h-0 flex flex-col border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-950">
                 <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-2">
                     <span>Page PDF</span>
                     <div class="flex items-center gap-1 normal-case">
@@ -567,9 +572,9 @@ endblock %} {% block content %}
                                 class="px-2 py-0.5 rounded-md border transition-colors" title="Voir la page entière">
                             Page entière
                         </button>
-                        <button type="button" id="library-pdf-fit-width-btn" onclick="setLibraryCategoryPdfFit('width')"
-                                class="px-2 py-0.5 rounded-md border transition-colors" title="Zoomer à la largeur, défilement vertical">
-                            Pleine largeur
+                        <button type="button" id="library-pdf-fit-zoom-btn" onclick="setLibraryCategoryPdfFit('zoom')"
+                                class="px-2 py-0.5 rounded-md border transition-colors" title="Zoomer : la page remplit le panneau et défile">
+                            Zoom
                         </button>
                     </div>
                 </div>
@@ -578,7 +583,7 @@ endblock %} {% block content %}
                 </div>
             </section>
 
-            <section id="library-category-text-panel" class="hidden lg:flex lg:w-1/2 flex-col min-h-0">
+            <section id="library-category-text-panel" class="hidden flex-1 min-h-0 lg:w-1/2 flex-col">
                 <div class="shrink-0 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between gap-2">
                     <span>Texte extrait</span>
                     <span class="normal-case font-medium text-teal-600 dark:text-teal-400">Source · violet = IA</span>
@@ -636,7 +641,7 @@ endblock %} {% block content %}
 {% endblock %} {% block extra_scripts %}
 <!-- Visionneuse de page partagée avec space_detail.html : pdf.js, rendu de page,
      surlignage et rendu markdown mutualisés. -->
-<script src="/static/js/page-viewer.js?v=3"></script>
+<script src="/static/js/page-viewer.js?v=5"></script>
 <style>
     /* Pas de glass-card / transform ici : évite le contenu qui disparaît au survol dans la liste scrollable */
     .library-doc-row {
@@ -2077,6 +2082,55 @@ endblock %} {% block content %}
         `;
     }
 
+    /* ——— Affichage du texte extrait ———
+       Masqué par défaut : la page PDF est ce qu'on vient lire en priorité. Le choix est
+       ensuite conservé d'une page à l'autre. Un document sans PDF force l'affichage,
+       sinon la modale serait vide. */
+    let libraryCategoryTextVisible = false;
+    let libraryCategoryHasPdf = true;
+
+    function applyLibraryCategoryTextVisibility() {
+        const panel = document.getElementById("library-category-pdf-panel");
+        const textSection = document.getElementById("library-category-text-panel");
+        const toggle = document.getElementById("library-category-text-toggle");
+        const showText = libraryCategoryTextVisible || !libraryCategoryHasPdf;
+
+        panel?.classList.toggle("hidden", !libraryCategoryHasPdf);
+        panel?.classList.toggle("lg:w-1/2", showText);
+        // Sans texte à côté, la bordure de séparation laisserait un trait orphelin.
+        panel?.classList.toggle("border-b", showText);
+        panel?.classList.toggle("lg:border-r", showText);
+
+        textSection?.classList.toggle("hidden", !showText);
+        textSection?.classList.toggle("flex", showText);
+
+        if (toggle) {
+            const on = "inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors bg-teal-600 text-white border-teal-600";
+            const off = "inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800";
+            toggle.className = showText ? on : off;
+            toggle.disabled = !libraryCategoryHasPdf;
+            toggle.title = !libraryCategoryHasPdf
+                ? "Ce document n'a pas de PDF : seul le texte extrait est disponible"
+                : showText
+                    ? "Masquer le texte extrait"
+                    : "Afficher le texte extrait";
+        }
+    }
+
+    async function toggleLibraryCategoryText() {
+        libraryCategoryTextVisible = !libraryCategoryTextVisible;
+        applyLibraryCategoryTextVisibility();
+        // La largeur du panneau PDF a changé : re-rendre à la bonne échelle.
+        const container = document.getElementById("library-category-pdf-container");
+        if (container && libraryCategoryPdfDoc) {
+            updateLibraryZoomTitle(
+                await PageViewer.renderPdfPage(container, libraryCategoryPdfDoc, libraryCategoryPdfPageNum, {
+                    fit: libraryCategoryPdfFit,
+                }),
+            );
+        }
+    }
+
     /* Ajustement retenu d'une page à l'autre : repasser en pleine largeur à chaque
        « Suivante » serait pénible pour parcourir une série de planches cotées. */
     let libraryCategoryPdfFit = "page";
@@ -2087,19 +2141,37 @@ endblock %} {% block content %}
         const on = "px-2 py-0.5 rounded-md border transition-colors bg-teal-600 text-white border-teal-600";
         const off = "px-2 py-0.5 rounded-md border transition-colors bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700";
         const pageBtn = document.getElementById("library-pdf-fit-page-btn");
-        const widthBtn = document.getElementById("library-pdf-fit-width-btn");
+        const zoomBtn = document.getElementById("library-pdf-fit-zoom-btn");
         if (pageBtn) pageBtn.className = libraryCategoryPdfFit === "page" ? on : off;
-        if (widthBtn) widthBtn.className = libraryCategoryPdfFit === "width" ? on : off;
+        if (zoomBtn) zoomBtn.className = libraryCategoryPdfFit === "zoom" ? on : off;
+    }
+
+    /* L'axe d'ajustement dépend du format de la page : on le dit plutôt que de laisser
+       l'utilisateur deviner pourquoi le défilement change de sens. */
+    function updateLibraryZoomTitle(result) {
+        const zoomBtn = document.getElementById("library-pdf-fit-zoom-btn");
+        if (!zoomBtn) return;
+        const axis = result && result.fitAxis;
+        zoomBtn.title =
+            libraryCategoryPdfFit !== "zoom"
+                ? "Zoomer : la page remplit le panneau et défile"
+                : axis === "height"
+                    ? "Ajusté à la hauteur — défilement horizontal"
+                    : axis === "width"
+                        ? "Ajusté à la largeur — défilement vertical"
+                        : "Zoom appliqué";
     }
 
     async function setLibraryCategoryPdfFit(fit) {
-        libraryCategoryPdfFit = fit === "width" ? "width" : "page";
+        libraryCategoryPdfFit = fit === "zoom" ? "zoom" : "page";
         renderLibraryCategoryFitButtons();
         const container = document.getElementById("library-category-pdf-container");
         if (container && libraryCategoryPdfDoc) {
-            await PageViewer.renderPdfPage(container, libraryCategoryPdfDoc, libraryCategoryPdfPageNum, {
-                fit: libraryCategoryPdfFit,
-            });
+            const result = await PageViewer.renderPdfPage(
+                container, libraryCategoryPdfDoc, libraryCategoryPdfPageNum,
+                { fit: libraryCategoryPdfFit },
+            );
+            updateLibraryZoomTitle(result);
         }
     }
 
@@ -2113,18 +2185,15 @@ endblock %} {% block content %}
 
         const documentId = documentInfo.document_id || chunksMonitorDocumentId;
         if (documentInfo.has_source_file === false || !documentId) {
-            // Aucun PDF : le texte reprend toute la place, y compris sur mobile — où il
-            // est masqué par défaut au profit de la page PDF.
-            panel.classList.add("hidden");
-            textSection?.classList.remove("lg:w-1/2", "hidden");
-            textSection?.classList.add("lg:w-full", "flex");
+            // Aucun PDF : le texte est la seule chose à montrer, quel que soit le bouton.
+            libraryCategoryHasPdf = false;
+            applyLibraryCategoryTextVisibility();
             container.innerHTML = "";
             return;
         }
 
-        textSection?.classList.add("lg:w-1/2", "hidden");
-        textSection?.classList.remove("lg:w-full", "flex");
-        panel.classList.remove("hidden");
+        libraryCategoryHasPdf = true;
+        applyLibraryCategoryTextVisibility();
         container.innerHTML =
             `<div class="flex items-center justify-center h-full min-h-[200px] text-gray-500 dark:text-gray-400"><i class="ti ti-loader-2 text-2xl animate-spin"></i></div>`;
 
@@ -2136,9 +2205,11 @@ endblock %} {% block content %}
             }
             libraryCategoryPdfPageNum = pageNo;
             renderLibraryCategoryFitButtons();
-            await PageViewer.renderPdfPage(container, libraryCategoryPdfDoc, pageNo, {
-                fit: libraryCategoryPdfFit,
-            });
+            updateLibraryZoomTitle(
+                await PageViewer.renderPdfPage(container, libraryCategoryPdfDoc, pageNo, {
+                    fit: libraryCategoryPdfFit,
+                }),
+            );
         } catch (err) {
             container.innerHTML =
                 `<div class="text-sm text-gray-500 dark:text-gray-400 text-center p-4">Aperçu PDF indisponible</div>`;
