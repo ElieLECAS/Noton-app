@@ -42,6 +42,12 @@ _NORM_PATTERNS = (
     re.compile(r"\bDTU\s?\d+(?:\.\d+)?\b", re.IGNORECASE),
     re.compile(r"\bFD\s?DTU\s?\d+(?:\.\d+)?\b", re.IGNORECASE),
     re.compile(r"\bEN\s?\d+(?:-\d+)?\b", re.IGNORECASE),
+    # Teintes RAL. Cas réel du 01/09 : une liste de RAL (1015, 7035, 9005…) absents de
+    # TOUT le corpus est partie à l'utilisateur. Écrite « RAL 9016 » avec une espace, elle
+    # échappait au contrôle des codes produits (qui exige lettres et chiffres contigus) et
+    # le contrôle des normes ne connaissait pas le RAL. La normalisation retire les espaces :
+    # « RAL 9016 » et « RAL9016 » se comparent à l'identique côté réponse et côté contexte.
+    re.compile(r"\bRAL\s?\d{4}\b", re.IGNORECASE),
 )
 
 # Cotes numériques avec unité (mm/cm/m/kg/N/°). Le \b final évite de capturer un
@@ -126,6 +132,32 @@ def extract_response_reference_codes(text: str, *, limit: int = 16) -> List[str]
         if len(codes) >= limit:
             break
     return codes
+
+
+def unsupported_reference_codes(
+    response_text: str,
+    context_text: str,
+    *,
+    question: Optional[str] = None,
+    user_message: Optional[str] = None,
+) -> List[str]:
+    """Codes de la réponse absents du contexte ET absents de la question.
+
+    Un code que l'utilisateur a lui-même tapé (« la rallonge TGY3704 ») n'est pas une
+    invention du modèle, même si le texte extrait des pages ne le contient pas — cas
+    fréquent des planches CAO, où la référence n'existe qu'en image et où la génération
+    la lit sur le PNG. Sans cette exemption, la vérification en mode 100 % PNG accuserait
+    à tort et une « réparation » retirerait une référence juste.
+    """
+    unsupported = check_reference_grounding(response_text, context_text)
+    if not unsupported:
+        return []
+    asked = " ".join(t for t in (question, user_message) if t)
+    if not asked:
+        return unsupported
+    from app.services.reference_codes import code_in_text
+
+    return [code for code in unsupported if not code_in_text(code, asked)]
 
 
 def check_reference_grounding(response_text: str, context_text: str) -> List[str]:
@@ -411,9 +443,13 @@ async def verify_response(
     document_blocks: Optional[List[str]] = None,
     cag_documents: Optional[List[Dict[str, Any]]] = None,
     cited_pages: Optional[Dict[int, List[int]]] = None,
+    user_message: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Orchestre les deux contrôles. Ne lève jamais — un échec de vérification
     ne doit pas faire échouer la persistance de la réponse déjà affichée.
+
+    ``user_message`` (et ``question``) servent à EXEMPTER les codes que l'utilisateur a
+    lui-même cités : ils ne peuvent pas être une invention du modèle.
 
     ``context_text`` reste le contexte COMPLET : le contrôle programmatique le scanne
     intégralement. Le juge LLM, lui, reçoit un contexte assemblé par
@@ -438,7 +474,9 @@ async def verify_response(
     # (ni judge_suspect) ne peut blanchir la réponse.
     unsupported_codes: List[str] = []
     if settings.VERIFY_CODE_GROUNDING:
-        unsupported_codes = check_reference_grounding(response_text, context_text)
+        unsupported_codes = unsupported_reference_codes(
+            response_text, context_text, question=question, user_message=user_message
+        )
         for code in unsupported_codes:
             if code not in unsupported:
                 unsupported.append(code)

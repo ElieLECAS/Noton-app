@@ -34,6 +34,12 @@ logger = logging.getLogger(__name__)
 # alors sans document — donc de mémoire, avec assurance. Constat du 2026-08-26.
 MISTRAL_MAX_IMAGES_PER_REQUEST = 8
 
+# Images garanties à CHAQUE document packé quand plusieurs sont élus. Sans ce plancher,
+# le document dominant — qui place mécaniquement plus de pages — rafle les 8 slots et le
+# second document, pourtant packé, n'est vu par le modèle qu'en mode texte (et pas du tout
+# en mode 100 % PNG). Voir le commentaire dans ``select_cag_images``.
+IMAGES_FLOOR_PER_DOCUMENT = 2
+
 # Enregistrement d'un chunk feuille aplati : (page, chunk_index, texte).
 LeafRecord = Tuple[int, int, str]
 
@@ -257,20 +263,24 @@ def aggregate_documents(
     return ranked[:max_documents]
 
 
-def _apply_judge_election(
+def _apply_document_election(
     ranked_docs: List[Tuple[int, Dict[str, Any]]],
     elected_document_ids: Optional[List[int]],
     pinned_pages: Optional[Dict[int, List[int]]],
     *,
     max_documents: int,
 ) -> List[Tuple[int, Dict[str, Any]]]:
-    """Élection du juge de suffisance (B6, plan boucle agentique 2026-07-29).
+    """Impose un classement de documents décidé EN AMONT du packer.
 
-    Les documents élus par le juge passent EN TÊTE, dans l'ordre du juge — il a lu les
-    dossiers candidats, son classement prime sur le score d'élection du retriever. Les
-    pages qu'il a citées sont injectées dans ``matched_pages`` avec une valeur supérieure
-    au meilleur score existant : elles gagnent la course aux seeds de la fenêtre
-    gloutonne et ne peuvent pas être rognées tant que le document a du budget.
+    Les documents élus passent EN TÊTE, dans l'ordre fourni : leur classement prime sur
+    le score d'élection interne du packer. Les pages épinglées sont injectées dans
+    ``matched_pages`` avec une valeur supérieure au meilleur score existant : elles
+    gagnent la course aux seeds de la fenêtre gloutonne et ne peuvent pas être rognées
+    tant que le document a du budget.
+
+    NOTE : le juge de suffisance, qui alimentait ces deux entrées, a été supprimé
+    (verdict inexploitable pour 2,7 s par requête). Le mécanisme est conservé tel quel
+    car l'élection ColPali doit le reprendre — sans producteur, il est inerte.
 
     Fonction pure (aucun accès DB) — testable unitairement."""
     if elected_document_ids:
@@ -675,7 +685,7 @@ def build_cag_context(
     # Élection du juge (B6) : quand le juge de suffisance a statué, son classement prime —
     # documents élus en tête, pages citées promues seeds. L'ancre conversationnelle est
     # alors ignorée : le juge a vu les dossiers candidats (ancre comprise) et a tranché.
-    ranked_docs = _apply_judge_election(
+    ranked_docs = _apply_document_election(
         ranked_docs, elected_document_ids, pinned_pages, max_documents=max_documents
     )
 
@@ -1012,6 +1022,26 @@ def select_cag_images(
                     continue
                 seen.add((did, page))
                 candidates.append((2, did, page))
+
+    # PLANCHER PAR DOCUMENT. Les candidats sont triés au score, et le document dominant
+    # en place mécaniquement plus (il a plus de pages retenues) : mesuré le 01/09 sur
+    # « couleurs Perform », les 8 images partaient TOUTES du dominant alors qu'un second
+    # document — co-élu précisément parce qu'il détenait le meilleur passage — était packé
+    # à côté. En mode 100 % PNG les images SONT le contenu : un document sans image est un
+    # document absent, et la co-élection ne servait donc à rien.
+    #
+    # On réserve les premières places de chaque document packé (ses meilleurs candidats,
+    # l'ordre interne est conservé), puis on remplit le reste au mérite global. Avec 8
+    # images et au plus 3 documents élus, le plancher n'immobilise jamais plus de 6 slots.
+    if len(included) > 1 and IMAGES_FLOOR_PER_DOCUMENT > 0:
+        by_doc: Dict[int, List[Tuple[int, int, int]]] = {}
+        for cand in candidates:
+            by_doc.setdefault(cand[1], []).append(cand)
+        reserved: List[Tuple[int, int, int]] = []
+        for did in included:                     # ordre de packing (pertinence décroissante)
+            reserved.extend(by_doc.get(did, [])[:IMAGES_FLOOR_PER_DOCUMENT])
+        reserved_keys = {(c[1], c[2]) for c in reserved}
+        candidates = reserved + [c for c in candidates if (c[1], c[2]) not in reserved_keys]
 
     images_b64: List[str] = []
     captions: List[Dict[str, Any]] = []

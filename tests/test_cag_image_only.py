@@ -108,6 +108,87 @@ class TestSelectionDesImages:
         assert len(images) == 2
 
 
+class TestPlancherParDocument:
+    """Un document packé doit être VU. En mode 100 % PNG, sans image, il est absent.
+
+    Panne mesurée le 01/09 sur « couleurs de la gamme Perform » : le dépliant qui portait
+    les couleurs était co-élu (il détenait le meilleur passage) et bien packé, mais les
+    8 images partaient TOUTES du document dominant — qui place mécaniquement plus de
+    pages. La co-élection ne servait donc à rien côté génération.
+    """
+
+    def _docs(self):
+        return [
+            {
+                "index": 1, "document_id": 10, "document_title": "Dossier technique",
+                "pages": [1, 3, 4, 5, 6, 7, 8, 10, 11, 12], "matched_pages": [4, 5],
+                "seed_pages": [4], "full_document": False, "score": 0.9,
+                "election_score": 0.9, "has_source_file": True,
+            },
+            {
+                "index": 2, "document_id": 20, "document_title": "Dépliant général",
+                "pages": [3, 4, 5], "matched_pages": [3], "seed_pages": [3],
+                "full_document": False, "score": 0.8, "election_score": 0.8,
+                "has_source_file": True,
+            },
+        ]
+
+    def _run(self, max_images: int):
+        session = mock.MagicMock()
+        doc = mock.MagicMock()
+        doc.source_file_path = "/tmp/doc.pdf"
+        session.get.return_value = doc
+        # Le dominant monopolise les meilleurs scores : c'est la configuration qui
+        # produisait 8 images sur 8 pour lui seul.
+        passages = [
+            {"document_id": 10, "page_no": p, "score": 0.9 - i * 0.01}
+            for i, p in enumerate([4, 5, 6, 7, 8, 10, 11, 12])
+        ] + [{"document_id": 20, "page_no": 3, "score": 0.30}]
+
+        with mock.patch.object(cps.settings, "CAG_IMAGE_ONLY", True), mock.patch.object(
+            cps.settings, "CAG_MAX_IMAGES", max_images
+        ), mock.patch(
+            "app.services.multimodal_page_service.render_page_png_cached",
+            return_value=b"PNG",
+        ), mock.patch("os.path.exists", return_value=True):
+            return cps.select_cag_images(session, self._docs(), passages)
+
+    def test_le_second_document_obtient_ses_images(self):
+        _, captions = self._run(max_images=8)
+        par_doc = {}
+        for c in captions:
+            par_doc[c["document_index"]] = par_doc.get(c["document_index"], 0) + 1
+        assert par_doc.get(2, 0) >= cps.IMAGES_FLOOR_PER_DOCUMENT, (
+            "le document co-élu n'est pas vu du modèle en mode image-only"
+        )
+        assert par_doc.get(1, 0) >= cps.IMAGES_FLOOR_PER_DOCUMENT
+
+    def test_le_dominant_garde_la_priorite_et_le_reste_du_budget(self):
+        """Le plancher réserve, il n'égalise pas : le surplus revient au mérite."""
+        _, captions = self._run(max_images=8)
+        assert captions[0]["document_index"] == 1, "le dominant reste en tête"
+        n_dominant = sum(1 for c in captions if c["document_index"] == 1)
+        assert n_dominant > cps.IMAGES_FLOOR_PER_DOCUMENT
+
+    def test_un_seul_document_packe_nactive_pas_le_plancher(self):
+        """Sans concurrence, la sélection reste strictement au score."""
+        _, captions = self._run_single()
+        assert {c["document_index"] for c in captions} == {1}
+
+    def _run_single(self):
+        session = mock.MagicMock()
+        doc = mock.MagicMock()
+        doc.source_file_path = "/tmp/doc.pdf"
+        session.get.return_value = doc
+        with mock.patch.object(cps.settings, "CAG_IMAGE_ONLY", True), mock.patch.object(
+            cps.settings, "CAG_MAX_IMAGES", 4
+        ), mock.patch(
+            "app.services.multimodal_page_service.render_page_png_cached",
+            return_value=b"PNG",
+        ), mock.patch("os.path.exists", return_value=True):
+            return cps.select_cag_images(session, self._docs()[:1], [])
+
+
 class TestLimiteDureApi:
     """Mistral rejette toute requête de plus de 8 images (400, code 3051).
 

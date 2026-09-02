@@ -1053,7 +1053,6 @@ def _build_generation_trace(
     anchor_boost: Optional[dict] = None,
     anchor_intent_changed: bool = False,
     cag_documents: Optional[List[dict]] = None,
-    loop_info: Optional[dict] = None,
 ) -> dict:
     """Assemble le « cheminement » de génération persisté dans message.metadata_json['trace']
     et renvoyé dans l'événement SSE final. Alimente le bouton d'inspection côté UI.
@@ -1116,10 +1115,6 @@ def _build_generation_trace(
             "pinned_codes": list(pinned_codes or []),
         }
         trace["passages"] = passages_summary or []
-        # Boucle agentique (B8) : rounds du juge, actions de relance, élection — la
-        # boucle doit être rejouable depuis la trace, pas depuis les logs.
-        if loop_info:
-            trace["loop"] = loop_info
 
     if verification:
         trace["verification"] = verification
@@ -1848,212 +1843,6 @@ async def stream_space_chat_message(
             # des scores. L'ancien refine_with_source_authority ajoutait un SECOND boost
             # (0.8·confidence, échelle ambiguë) sur le même critère → double-comptage supprimé.
 
-            # ——— Boucle agentique (B4/B5, plan 2026-07-29) : juge de suffisance + relances ———
-            # AVANT la génération, un modèle distinct lit les DOSSIERS CANDIDATS (pack-juge) et
-            # statue : élire (documents + pages → packing) ou relancer la recherche (reformulation,
-            # filtres, désancrage), sous deadline dure. Mode shadow = verdicts tracés, jamais
-            # actionnés. Flag off = pipeline strictement inchangé. Un juge défaillant (timeout,
-            # JSON invalide, preuve introuvable) ne dégrade JAMAIS le tour : on génère comme
-            # aujourd'hui, l'échec est tracé.
-            loop_trace: Optional[Dict[str, Any]] = None
-            judge_elected_ids: List[int] = []
-            judge_pinned_pages: Dict[int, List[int]] = {}
-            judge_note_block: Optional[str] = None
-            loop_exhausted_missing: Optional[str] = None
-            if settings.AGENTIC_LOOP_ENABLED and settings.CAG_ENABLED and doc_passages:
-                yield _stage_event("judge", "Contrôle des documents trouvés")
-                from app.services.coverage_service import (
-                    coverage_status as _loop_coverage_status,
-                    extract_message_reference_codes as _loop_extract_codes,
-                )
-                from app.services.retrieval_judge_service import (
-                    apply_judge_action,
-                    build_judge_note_block,
-                    build_judge_pack,
-                    judge_candidates,
-                    passages_pool_key,
-                )
-                from app.services.slot_catalog import expected_content_for_intent
-
-                _loop_mode = "active" if settings.AGENTIC_LOOP_MODE == "active" else "shadow"
-                loop_trace = {"mode": _loop_mode, "rounds": [], "deadline_hit": False}
-                _loop_deadline = _time.monotonic() + max(5.0, settings.LOOP_DEADLINE_S)
-                _loop_intent = lw_result.signals.intent if (lw_result and lw_result.signals) else None
-                _expected_content = expected_content_for_intent(_loop_intent)
-                try:
-                    _loop_codes = _loop_extract_codes(
-                        retrieval_query_text,
-                        request.message,
-                        *(
-                            (lw_result.signals.detected_references or [])
-                            if (lw_result and lw_result.signals)
-                            else []
-                        ),
-                    )
-                except Exception:  # noqa: BLE001
-                    _loop_codes = []
-                _max_rounds = 1 + (max(0, settings.JUDGE_MAX_RETRIES) if _loop_mode == "active" else 0)
-                _loop_query = retrieval_query_text
-                _loop_allowed = allowed_document_ids
-                _loop_anchor_override = _UNSET
-                _loop_k: Optional[int] = None
-                _prev_pool = passages_pool_key(doc_passages)
-                _prev_missing: Optional[str] = None
-
-                try:
-                    for _round in range(1, _max_rounds + 1):
-                        judge_pack = await asyncio.to_thread(
-                            build_judge_pack, session, doc_passages, intent=_loop_intent
-                        )
-                        _judge_images: List[str] = []
-                        if settings.JUDGE_IMAGES_MODE == "always" or (
-                            settings.JUDGE_IMAGES_MODE == "auto"
-                            and _loop_intent in ("installation", "troubleshooting")
-                        ):
-                            try:
-                                from app.services.context_packer_service import select_cag_images
-
-                                _judge_images, _ = await asyncio.to_thread(
-                                    select_cag_images,
-                                    session,
-                                    judge_pack["cag_documents"],
-                                    doc_passages,
-                                    max_images=settings.JUDGE_MAX_IMAGES,
-                                )
-                            except Exception as _ji_err:  # noqa: BLE001
-                                logger.warning("[loop] images du juge ignorées : %s", _ji_err)
-
-                        _coverage_line = None
-                        if _loop_codes:
-                            _cov = _loop_coverage_status(
-                                context_text=judge_pack["context_text"],
-                                requested_codes=_loop_codes,
-                                doc_passages=doc_passages,
-                            )
-                            _missing_codes = _cov.get("missing_codes") or []
-                            _coverage_line = (
-                                ("ABSENTES des dossiers : " + ", ".join(_missing_codes))
-                                if _missing_codes
-                                else ("toutes présentes dans les dossiers : " + ", ".join(_loop_codes))
-                            )
-
-                        verdict = await judge_candidates(
-                            question=_loop_query,
-                            intent=_loop_intent,
-                            expected_content=_expected_content,
-                            judge_pack=judge_pack,
-                            coverage_line=_coverage_line,
-                            images=_judge_images or None,
-                            round_index=_round,
-                            previous_missing=_prev_missing,
-                        )
-                        _round_trace = {
-                            "round": _round,
-                            "query": _loop_query,
-                            "status": verdict.get("status"),
-                            "status_reason": verdict.get("status_reason"),
-                            "verdict": verdict.get("verdict"),
-                            "confidence": verdict.get("confidence"),
-                            "evidence": (verdict.get("evidence") or "")[:300],
-                            "evidence_verified": verdict.get("evidence_verified"),
-                            "missing": (verdict.get("missing") or "")[:300],
-                            "elected": [
-                                {
-                                    "document_id": e.get("document_id"),
-                                    "document_index": e.get("document_index"),
-                                    "pages": e.get("pages"),
-                                    "role": e.get("role"),
-                                }
-                                for e in (verdict.get("elected") or [])
-                            ],
-                            "candidates": [
-                                {"document_id": d.get("document_id"), "index": d.get("index")}
-                                for d in (judge_pack.get("cag_documents") or [])
-                            ],
-                            "images": len(_judge_images),
-                            "duration_ms": verdict.get("duration_ms"),
-                            "model": verdict.get("model"),
-                        }
-                        loop_trace["rounds"].append(_round_trace)
-
-                        if _loop_mode == "shadow":
-                            break
-                        if verdict["status"] != "ok":
-                            break
-                        if verdict["verdict"] == "sufficient":
-                            judge_elected_ids = [e["document_id"] for e in verdict["elected"]]
-                            judge_pinned_pages = {
-                                e["document_id"]: e["pages"]
-                                for e in verdict["elected"]
-                                if e.get("pages")
-                            }
-                            judge_note_block = build_judge_note_block(verdict)
-                            break
-
-                        # Verdict « insuffisant » → relance informée, si budget et action utile.
-                        _prev_missing = verdict.get("missing") or None
-                        if _round >= _max_rounds:
-                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                            break
-                        if _time.monotonic() > _loop_deadline:
-                            loop_trace["deadline_hit"] = True
-                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                            break
-                        _action = apply_judge_action(verdict, current_query=_loop_query)
-                        if not _action:
-                            _round_trace["relaunch"] = "no_action"
-                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                            break
-                        _round_trace["action"] = _action.get("label")
-                        _loop_query = _action.get("query_text") or _loop_query
-                        if _action.get("widen_scope"):
-                            _loop_allowed = None
-                        if _action.get("restrict_document_id"):
-                            _loop_allowed = [int(_action["restrict_document_id"])]
-                        if _action.get("drop_anchor"):
-                            _loop_anchor_override = []
-                        if _action.get("raise_k"):
-                            _loop_k = max(RAG_TOP_K, min(2 * RAG_TOP_K, settings.RERANK_POOL))
-
-                        _relaunch = await _run_retrieval(
-                            _loop_allowed,
-                            query_text=_loop_query,
-                            anchors=_loop_anchor_override,
-                            k=_loop_k,
-                            queries=None,
-                        )
-                        _new_passages = _relaunch.get("passages") or []
-                        if not _new_passages:
-                            _round_trace["relaunch"] = "empty"
-                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                            break
-                        _new_passages = enrich_colpali_passages_with_pymupdf(session, _new_passages)
-                        if settings.QUERY_UNDERSTANDING_ENABLED and lw_result and lw_result.signals:
-                            from app.services.retrieval_boost_service import (
-                                apply_soft_boosts_to_passages as _loop_boosts,
-                            )
-
-                            _new_passages = _loop_boosts(
-                                session=session, passages=_new_passages, signals=lw_result.signals
-                            )
-                        _new_pool = passages_pool_key(_new_passages)
-                        if _new_pool == _prev_pool:
-                            _round_trace["relaunch"] = "no_progress"
-                            loop_exhausted_missing = _prev_missing or "information demandée introuvable"
-                            break
-                        _round_trace["relaunch"] = "replaced"
-                        _prev_pool = _new_pool
-                        doc_passages = _new_passages
-                        retrieval = _relaunch
-                        retrieval_status = _relaunch["status"]
-                        retrieval_reason = _relaunch.get("reason")
-                        retrieval_images = _relaunch.get("images") or []
-                        dynamic_k = _relaunch.get("dynamic_k")
-                        rerank_status = _relaunch.get("rerank_status")
-                except Exception as _loop_err:  # noqa: BLE001
-                    logger.exception("[loop] boucle agentique interrompue — génération inchangée")
-                    loop_trace["error"] = str(_loop_err)[:200]
-
             # Mémorise les documents dominants de ce tour comme ancre du sujet courant (réutilisée
             # pour biaiser le retrieval du prochain tour, tant qu'il n'y a pas de changement de sujet).
             if settings.CONVERSATION_ANCHOR_ENABLED and request.conversation_id and doc_passages:
@@ -2097,6 +1886,17 @@ async def stream_space_chat_message(
                 else:
                     yield
 
+            # L'élection de phase A (document_election_service) fait foi pour l'ORDRE des
+            # documents dans le pack : sans elle le packer rejouait sa propre formule (plafond
+            # de pages différent) et pouvait classer les élus autrement — deux « élections »
+            # contradictoires dans un même journal, et le document porteur du meilleur
+            # passage relégué derrière un généraliste pour le budget et les images.
+            _elected_ids = [
+                int(d["document_id"])
+                for d in ((retrieval.get("election") or {}).get("elected") or [])
+                if d.get("document_id") is not None
+            ] or None
+
             # Construire le contexte système à partir des passages techniques
             # Si low confidence : injecter un prompt spécial pour forcer la clarification
             if retrieval_status == "low_confidence_clarification":
@@ -2106,8 +1906,7 @@ async def stream_space_chat_message(
                         doc_passages,
                         anchor_document_ids=cag_anchor_document_ids or None,
                         intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
-                        elected_document_ids=judge_elected_ids or None,
-                        pinned_pages=judge_pinned_pages or None,
+                        elected_document_ids=_elected_ids,
                     )
                 # Ajouter une instruction de clarification forcée après les passages
                 space_context_draft["content"] += (
@@ -2127,8 +1926,7 @@ async def stream_space_chat_message(
                         doc_passages,
                         anchor_document_ids=cag_anchor_document_ids or None,
                         intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
-                        elected_document_ids=judge_elected_ids or None,
-                        pinned_pages=judge_pinned_pages or None,
+                        elected_document_ids=_elected_ids,
                     )
 
             # ——— Chunk pinning (C6) + bloc COUVERTURE (C3) ———
@@ -2191,26 +1989,6 @@ async def stream_space_chat_message(
                 visual_context=bool(settings.CAG_IMAGE_ONLY),
             )
             space_context_draft["content"] += "\n\n" + coverage_block
-
-            # ——— Note du juge (B6) / aveu structuré (B5) ———
-            # Même zone de forte attention (fin du message système) que la COUVERTURE. La note
-            # pointe les pages VALIDÉES par le contrôle documentaire ; l'aveu remplace le
-            # « je comble le trou » par un constat explicite de ce qui manque.
-            if judge_note_block:
-                space_context_draft["content"] += "\n\n" + judge_note_block
-            elif loop_exhausted_missing:
-                space_context_draft["content"] += (
-                    "\n\n⚠️ CONTRÔLE DOCUMENTAIRE (fait foi) : la recherche a été relancée sans "
-                    "trouver l'information demandée (" + loop_exhausted_missing + "). "
-                    "Dis explicitement ce que les documents fournis contiennent d'utile et ce qui "
-                    "manque. Ne comble JAMAIS le manque par déduction, connaissance générale ou "
-                    "référence voisine ; propose à l'utilisateur UNE précision courte qui "
-                    "permettrait de relancer la recherche."
-                )
-                logger.info(
-                    "[loop] relances épuisées → génération en aveu structuré (manque : %s)",
-                    loop_exhausted_missing,
-                )
 
             # Référence introuvable même après retry ciblé (cf. bloc retrieval) : au lieu d'un
             # « non documenté » en cul-de-sac, demander UNE précision pour relancer la recherche.
@@ -2434,23 +2212,29 @@ async def stream_space_chat_message(
                     # contexte complet + juge LLM distinct), réparé une fois si besoin,
                     # PUIS rejoué au client. VERIFY_BLOCKING=false = flux historique.
                     #
-                    # En mode 100 % PNG la vérification d'ancrage est IMPOSSIBLE : le contexte
-                    # ne contient plus de texte à confronter à la réponse, seulement un
-                    # manifeste. On désactive donc la vérification À LA SOURCE, au lieu de la
-                    # court-circuiter plus bas : sinon le tampon retenait toute la réponse —
-                    # l'utilisateur attendait la fin de la génération pour voir le premier
-                    # caractère — au bénéfice d'un contrôle qui ne s'exécutait jamais.
+                    # En mode 100 % PNG le message système ne porte qu'un manifeste, mais le
+                    # packer calcule le TEXTE des pages packées dans les deux modes
+                    # (cag_document_blocks) — le bloc COUVERTURE s'en sert déjà. La matière à
+                    # confronter existe donc : on la joint au contexte de vérification au lieu
+                    # de désactiver le contrôle. Mesuré le 01/09 : sans lui, une liste de codes
+                    # RAL absents de TOUT le corpus est partie à l'utilisateur sans être
+                    # rattrapée — précisément dans le mode où le modèle ne lit que des images
+                    # et fabrique le plus volontiers.
+                    _verification_evidence = "\n\n".join(
+                        [space_context_draft.get("content") or ""]
+                        + list(space_context_draft.get("cag_document_blocks") or [])
+                    )
                     verify_active = bool(
                         settings.VERIFY_ENABLED
                         and request.conversation_id
                         and space_context_draft.get("content")
-                        and not settings.CAG_IMAGE_ONLY
                     )
-                    if settings.VERIFY_ENABLED and settings.CAG_IMAGE_ONLY:
-                        logger.warning(
-                            "[verify] CAG_IMAGE_ONLY actif — vérification d'ancrage "
-                            "désactivée (aucun texte à confronter) ET tampon levé : la "
-                            "réponse est diffusée au fil de l'eau."
+                    if verify_active and settings.CAG_IMAGE_ONLY:
+                        logger.info(
+                            "[verify] CAG_IMAGE_ONLY actif — vérification d'ancrage sur le "
+                            "TEXTE des pages packées (%d caractères) ; les codes cités dans "
+                            "la question sont exemptés.",
+                            sum(len(b) for b in (space_context_draft.get("cag_document_blocks") or [])),
                         )
                     buffer_mode = bool(verify_active and settings.VERIFY_BLOCKING)
 
@@ -2549,11 +2333,12 @@ async def stream_space_chat_message(
                         verification_result = await verify_response(
                             question=retrieval_query_text,
                             response_text="".join(assistant_response),
-                            context_text=space_context_draft["content"],
+                            context_text=_verification_evidence,
                             model=settings.effective_verify_model,
                             document_blocks=space_context_draft.get("cag_document_blocks"),
                             cag_documents=space_context_draft.get("cag_documents"),
                             cited_pages=_cited_pages_early,
+                            user_message=request.message,
                         )
                     except Exception as _verif_err:  # noqa: BLE001
                         logger.warning(
@@ -2588,11 +2373,18 @@ async def stream_space_chat_message(
 
                                 _rep_text = _repair["text"]
                                 _rep_claims = check_grounding(
-                                    _rep_text, space_context_draft["content"]
+                                    _rep_text, _verification_evidence
                                 )
                                 if settings.VERIFY_CODE_GROUNDING:
-                                    for _c in check_reference_grounding(
-                                        _rep_text, space_context_draft["content"]
+                                    from app.services.response_verification_service import (
+                                        unsupported_reference_codes,
+                                    )
+
+                                    for _c in unsupported_reference_codes(
+                                        _rep_text,
+                                        _verification_evidence,
+                                        question=retrieval_query_text,
+                                        user_message=request.message,
                                     ):
                                         if _c not in _rep_claims:
                                             _rep_claims.append(_c)
@@ -2979,11 +2771,12 @@ async def stream_space_chat_message(
                         verification_result = await verify_response(
                             question=retrieval_query_text,
                             response_text=complete_response,
-                            context_text=space_context_draft["content"],
+                            context_text=_verification_evidence,
                             model=settings.effective_verify_model,
                             document_blocks=space_context_draft.get("cag_document_blocks"),
                             cag_documents=space_context_draft.get("cag_documents"),
                             cited_pages=_cited_pages,
+                            user_message=request.message,
                         )
                         if verification_result is not None:
                             verification_result["action"] = (
@@ -3014,7 +2807,6 @@ async def stream_space_chat_message(
                     anchor_boost=retrieval.get("anchor_boost"),
                     anchor_intent_changed=anchor_intent_changed,
                     cag_documents=space_context_draft.get("cag_documents"),
-                    loop_info=loop_trace,
                 )
 
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture

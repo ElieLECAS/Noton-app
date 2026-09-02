@@ -12,10 +12,18 @@ puis coupait à ``top_k`` avec un quota par document. Deux conséquences mesuré
 
 Ce module répond à la question amont « DANS QUEL document est la réponse ? » sur le
 pool fusionné COMPLET (avant toute coupe), et n'élit plus qu'un document par défaut.
-Un second (voire un troisième) n'est admis que sur PREUVE : question comparative, ou
+Un second (voire un troisième) n'est admis que sur PREUVE : question comparative,
 complémentarité d'archétypes (une notice texte + une planche muette lisible seulement
-en image). Un doute ne doit pas produire un empilement : il produit un score serré,
-visible dans la trace, que le juge de suffisance peut ensuite contredire.
+en image), ou détention du meilleur passage du pool. Un doute ne doit pas produire un
+empilement : il produit un score serré, visible dans la trace, que le juge de suffisance
+peut ensuite contredire.
+
+Depuis le 01/09, l'élection suit d'abord les PASSAGES : les documents qui détiennent
+l'un des ``TOP_PASSAGE_HOLDERS`` meilleurs passages du pool sont élus d'office (le
+premier est le dominant), et l'agrégation par document ne sert plus qu'à compléter les
+places restantes. Raison : le score par document récompense l'affinité thématique
+(« beaucoup de pages parlent du sujet ») plutôt que la preuve (« une page porte la
+réponse ») — mesuré dans les deux sens sur le corpus réel. Voir ``elect_documents``.
 
 Aucun appel LLM ici : uniquement de l'agrégation et une lecture de métadonnées.
 """
@@ -48,6 +56,31 @@ DOMINANCE_RATIO = 0.70
 # Plafonds structurels.
 MAX_ELECTED = 3
 MAX_CANDIDATES = 5
+
+# Les documents qui détiennent l'un des K meilleurs PASSAGES du pool fusionné sont élus
+# d'office, dans l'ordre de leurs passages. Mesuré le 01/09 sur 6 requêtes réelles
+# (espace 28) : la fusion place le passage du bon document en tête dans 6 cas sur 6,
+# alors que l'agrégation par document ne le classait premier que 4 fois sur 5 et
+# n'élisait PAS le document qui a répondu sur le cas TGY3704 (son passage était 3e).
+# C'est l'observation d'Elie — « le bon document n'est jamais top 1 à 100 %, mais dans le
+# top 3 à plus de 85 % » — traduite en règle : on fait confiance au retriever pour les
+# passages, et à l'élection seulement pour ce qu'elle sait faire (ordonner, compléter).
+TOP_PASSAGE_HOLDERS = 3
+
+# Un passage ne compte comme « l'un des meilleurs » que s'il n'est pas DÉCROCHÉ du premier :
+# même seuil que la dominance. Sur un vrai pool RRF les trois premiers passages tiennent
+# dans ~10 % (compression des rangs), donc ce plancher ne mord jamais en pratique ; il
+# empêche seulement qu'un pool étriqué (deux pages, 0,90 contre 0,10) élise le second
+# document au seul motif qu'il n'y en avait pas de troisième.
+TOP_PASSAGE_MIN_RATIO = DOMINANCE_RATIO
+
+# Un complément « texte » (dominant visuel, candidat trouvé par BM25 seulement) doit
+# apporter un VRAI match lexical, pas une miette du repli en OU. Mesuré : le repli OR
+# produit des ts_rank_cd quantifiés ~0,1 par terme (0,2…0,9 sur 6 requêtes, 30 à 75 % des
+# pages sous 0,4 × max) ; une page qui matche la question entière monte à 4,2. Sous cette
+# barre, une notice générique de 124 pages entrait en complément sur « rallonge TGY3704 »
+# par sa seule différence de canal, alors que BM25 n'y trouvait que des mots communs.
+BM25_COMPLEMENT_MIN_RANK = 1.0
 
 # Plafond du bonus de distribution. Plus généreux que le plafond du packer (2) parce
 # qu'ici on compte les pages du pool COMPLET : c'est justement le signal qu'on veut
@@ -377,7 +410,8 @@ def _is_channel_complement(dominant: ElectedDocument, other: ElectedDocument) ->
         return False
     if "visuel" in other.families:
         return other.colpali_best >= settings.COLPALI_DOMINANCE_MIN_SCORE
-    return other.bm25_best > 0.0
+    # Un match BM25 issu du repli en OU (une miette de la question) ne prouve rien.
+    return other.bm25_best >= BM25_COMPLEMENT_MIN_RANK
 
 
 def elect_documents(
@@ -390,36 +424,101 @@ def elect_documents(
 ) -> ElectionResult:
     """Phase A : élit 1 à ``max_docs`` documents sur le pool fusionné complet.
 
-    Un document par défaut. Un second/troisième seulement sur preuve explicite
-    (question comparative, ou complémentarité d'archétypes) ET score proche du dominant.
+    Deux étages, dans cet ordre :
+
+    1. **Détenteurs des meilleurs passages** (``TOP_PASSAGE_HOLDERS``). Les documents qui
+       portent l'un des K premiers passages du pool fusionné sont élus d'office, dans
+       l'ordre de leurs passages — le premier est le dominant. C'est la règle qui suit le
+       retriever : quand ColPali et la fusion placent une page en tête, son document part
+       au contexte, quoi qu'en dise l'agrégation par document.
+    2. **Compléments** sur les places restantes, parmi les candidats classés par score
+       d'élection : le meilleur document au score d'élection (le « volume », s'il n'est pas
+       déjà élu), puis question comparative ou complémentarité de canaux — ces deux
+       dernières soumises à ``DOMINANCE_RATIO``.
+
+    POURQUOI cet ordre. Le score d'élection agrège PAR DOCUMENT et récompense donc
+    « beaucoup de pages parlent du sujet » plutôt que « une page porte la réponse ». Trois
+    pannes mesurées le 01/09 ont cette forme : le catalogue général évince Lumine55 (2 pages,
+    dont LA page des 40 dB, meilleur passage du pool) ; un dossier technique Perform76 dont
+    aucune page ne parle de couleurs évince le dépliant qui les porte (meilleur passage) ;
+    une notice Roto de 124 pages entre en « complément de canal » sur des mots communs et
+    prend la place du catalogue SOLEAL que ColPali classe 2e à 0,740 — le document qui a
+    répondu. Dans les trois cas la bonne page était en tête du pool fusionné. Aucun réglage
+    des bonus ne sépare l'affinité thématique de la preuve ; suivre les passages, si.
     """
     ranked = score_documents(fused_hits)
     if not ranked:
         return ElectionResult(decision="empty")
 
     ranked, rejected = dedupe_versions(session, ranked)
+    by_id = {d.document_id: d for d in ranked}
     candidates = ranked[:MAX_CANDIDATES]
-    dominant = candidates[0]
-    dominant.role = "dominant"
-    dominant.reason = "best_election_score"
+    cap = max(1, min(int(max_docs or 1), MAX_ELECTED))
+    comparative, marker = is_comparative_query(query_text, signals)
 
+    # ——— Étage 1 : les détenteurs des K meilleurs passages ———
+    # Le pool est trié par la fusion ; on le retrie défensivement, et à égalité de RRF
+    # (fréquente : rang 1 dans un canal = rang 1 dans l'autre) le passage vu par ColPali
+    # passe devant — c'est le canal fiable sur les planches muettes.
+    ordered_hits = sorted(
+        (h for h in fused_hits if getattr(h, "document_id", None) is not None),
+        key=lambda h: (
+            -float(getattr(h, "rrf_score", 0.0) or 0.0),
+            -float(getattr(h, "colpali_score", 0.0) or 0.0),
+            int(h.document_id),
+        ),
+    )
+    elected: List[ElectedDocument] = []
+    passage_rank = 0
+    best_rrf = float(getattr(ordered_hits[0], "rrf_score", 0.0) or 0.0) if ordered_hits else 0.0
+    for hit in ordered_hits:
+        if passage_rank >= TOP_PASSAGE_HOLDERS or len(elected) >= cap:
+            break
+        if float(getattr(hit, "rrf_score", 0.0) or 0.0) < TOP_PASSAGE_MIN_RATIO * best_rrf:
+            break                                   # décroché du meilleur : plus un « top »
+        passage_rank += 1
+        holder = by_id.get(int(hit.document_id))
+        if holder is None:                      # révision écartée par dedupe_versions
+            continue
+        if any(d.document_id == holder.document_id for d in elected):
+            continue
+        holder.role = "dominant" if not elected else "complement"
+        holder.reason = f"top_passage:{passage_rank}"
+        elected.append(holder)
+
+    if not elected:                             # pool sans page exploitable : repli
+        dominant = candidates[0]
+        dominant.role, dominant.reason = "dominant", "best_election_score"
+        elected.append(dominant)
+    dominant = elected[0]
+
+    # Marge : rapport des deux meilleurs PASSAGES (pas des scores d'élection, qui ne sont
+    # plus monotones dans l'ordre d'élection). 1,0 = passages à égalité parfaite.
     margin = (
-        candidates[1].election_score / dominant.election_score
-        if len(candidates) > 1 and dominant.election_score > 0
+        float(ordered_hits[1].rrf_score or 0.0) / float(ordered_hits[0].rrf_score or 0.0)
+        if len(ordered_hits) > 1 and float(ordered_hits[0].rrf_score or 0.0) > 0
         else 0.0
     )
 
-    elected = [dominant]
-    comparative, marker = is_comparative_query(query_text, signals)
-    cap = max(1, min(int(max_docs or 1), MAX_ELECTED))
+    # ——— Étage 2 : compléments sur les places restantes ———
+    elected_ids = {d.document_id for d in elected}
+    volume_best = candidates[0]
+    if len(elected) < cap and volume_best.document_id not in elected_ids:
+        # Le gagnant de la formule par document garde une place quand il en reste une :
+        # « ce document place beaucoup de pages » reste une preuve, juste plus la première.
+        volume_best.role, volume_best.reason = "complement", "best_election_score"
+        elected.append(volume_best)
+        elected_ids.add(volume_best.document_id)
 
-    for other in candidates[1:]:
+    for other in candidates:
         if len(elected) >= cap:
             break
+        if other.document_id in elected_ids:
+            continue
         if dominant.election_score <= 0:
             break
         if other.election_score < DOMINANCE_RATIO * dominant.election_score:
-            break                       # écart net : le dominant part seul
+            continue                    # écart net avec le dominant : pas de complément
         if comparative:
             other.role, other.reason = "complement", f"comparative_query:{marker}"
         elif _is_channel_complement(dominant, other):
@@ -427,11 +526,19 @@ def elect_documents(
         else:
             continue                    # score proche mais AUCUNE preuve → non élu
         elected.append(other)
+        elected_ids.add(other.document_id)
+
+    # Un élu peut manquer au top-N par score d'élection (c'est justement sa faiblesse) :
+    # il rejoint les candidats pour rester visible dans la trace et le pack du juge.
+    known = {c.document_id for c in candidates}
+    candidates = candidates + [d for d in elected if d.document_id not in known]
 
     if len(elected) == 1:
         decision = "mono_document"
-    elif comparative:
+    elif comparative and any(d.reason.startswith("comparative_query") for d in elected):
         decision = f"comparative:{len(elected)}"
+    elif all(d.reason.startswith("top_passage") for d in elected):
+        decision = f"top_passages:{len(elected)}"
     else:
         decision = f"complement:{len(elected)}"
 
@@ -472,8 +579,8 @@ def format_election_log(result: ElectionResult) -> str:
     if not result.elected:
         return "[élection] aucun document (pool vide)"
     parts = [
-        f"{d.title[:40]}#{d.document_id} score={d.election_score:.4f} "
-        f"pages={d.page_count} fam={'+'.join(sorted(d.families)) or '-'} ({d.role})"
+        f"{d.title[:40]}#{d.document_id} score={d.election_score:.4f} pic={d.score_max:.4f} "
+        f"pages={d.page_count} fam={'+'.join(sorted(d.families)) or '-'} ({d.role}:{d.reason})"
         for d in result.elected
     ]
     tail = ""
@@ -481,8 +588,11 @@ def format_election_log(result: ElectionResult) -> str:
         tail = f" | versions écartées: {len(result.rejected_versions)}"
     others = [c for c in result.candidates if c.document_id not in set(result.elected_ids)]
     if others:
+        # Le pic est affiché AUSSI pour les non élus : sans lui, la co-élection d'un
+        # détenteur au score d'élection plus faible que le dominant paraît arbitraire.
         tail += " | non élus: " + ", ".join(
-            f"{c.title[:30]}#{c.document_id}={c.election_score:.4f}" for c in others[:3]
+            f"{c.title[:30]}#{c.document_id}={c.election_score:.4f}(pic {c.score_max:.4f})"
+            for c in others[:3]
         )
     return (
         f"[élection] {result.decision} marge={result.margin:.2f} → "

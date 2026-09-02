@@ -553,35 +553,9 @@ class Settings(BaseSettings):
     VERIFICATION_INCLUDE_MANIFEST: bool = os.getenv(
         "VERIFICATION_INCLUDE_MANIFEST", "true"
     ).strip().lower() in ("true", "1", "yes", "on")
-    # --- Boucle agentique de recherche (plan_boucle_agentique_2026-07-29, lots B0-B9) ---
-    # Flag maître du juge pré-génération + relances (E4/E5). false = pipeline strictement
-    # identique à l'existant, zéro appel LLM supplémentaire avant génération.
-    AGENTIC_LOOP_ENABLED: bool = os.getenv("AGENTIC_LOOP_ENABLED", "false").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # "shadow" : le juge tourne et TRACE ses verdicts sans jamais agir (calibrage prod) ;
-    # "active" : ses verdicts pilotent l'élection, les relances et la note de recherche.
-    AGENTIC_LOOP_MODE: str = os.getenv("AGENTIC_LOOP_MODE", "shadow").strip().lower()
-    # Deadline dure de la boucle (retrievals + juges cumulés) : au-delà on génère avec ce
-    # qu'on a, en aveu structuré si le dernier verdict était « insuffisant ».
-    LOOP_DEADLINE_S: float = float(os.getenv("LOOP_DEADLINE_S", "60"))
-    # Modèle du juge (E4) et de la vérification (E7). DISTINCT du modèle de génération :
+    # Modèle de la vérification post-génération. DISTINCT du modèle de génération :
     # un modèle qui se relit se blanchit (cas TGY3710 du 29/07).
     MODEL_JUDGE: str = os.getenv("MODEL_JUDGE", "mistral-small-latest")
-    # Relances de recherche max décidées par le juge (chacune = 1 retrieval + 1 juge).
-    JUDGE_MAX_RETRIES: int = int(os.getenv("JUDGE_MAX_RETRIES", "2"))
-    # Timeout d'un appel juge ; au-delà : verdict « unknown », on génère comme aujourd'hui.
-    JUDGE_TIMEOUT_S: float = float(os.getenv("JUDGE_TIMEOUT_S", "20"))
-    # Le pack-juge compare PLUS LARGE que le pack-génération : documents candidats montrés
-    # au juge (le pack-génération reste borné par CAG_MAX_DOCUMENTS/l'élection).
-    JUDGE_MAX_CANDIDATE_DOCS: int = int(os.getenv("JUDGE_MAX_CANDIDATE_DOCS", "5"))
-    # Plafond de caractères du pack-juge (rempli par les preuves, manifeste toujours inclus).
-    JUDGE_CONTEXT_MAX_CHARS: int = int(os.getenv("JUDGE_CONTEXT_MAX_CHARS", "24000"))
-    # Images de pages jointes au juge : off | auto (intent visuel : installation/SAV) | always.
-    JUDGE_IMAGES_MODE: str = os.getenv("JUDGE_IMAGES_MODE", "auto").strip().lower()
-    JUDGE_MAX_IMAGES: int = int(os.getenv("JUDGE_MAX_IMAGES", "4"))
-    # Confiance minimale pour qu'un verdict soit actionnable (sinon traité comme unknown).
-    JUDGE_MIN_CONFIDENCE: float = float(os.getenv("JUDGE_MIN_CONFIDENCE", "0.5"))
     # --- Vérification post-génération : flag maître + gate (B7) ---
     # false = aucune vérification (historiquement elle tournait TOUJOURS, sans effet).
     VERIFY_ENABLED: bool = os.getenv("VERIFY_ENABLED", "true").strip().lower() in (
@@ -618,7 +592,10 @@ class Settings(BaseSettings):
     RAG_RENDER_ALL_IMAGES: bool = os.getenv("RAG_RENDER_ALL_IMAGES", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    RAG_MAX_IMAGES: int = int(os.getenv("RAG_MAX_IMAGES", "12"))
+    # 8 = plafond DUR de l'API Mistral par requête (MISTRAL_MAX_IMAGES_PER_REQUEST).
+    # Annoncer 12 ne servait qu'à faire mentir les logs : la voie CAG était de toute
+    # façon écrêtée à 8, et les voies de repli n'auraient jamais pu en envoyer plus.
+    RAG_MAX_IMAGES: int = int(os.getenv("RAG_MAX_IMAGES", "8"))
     RRF_K: int = int(os.getenv("RRF_K", "60"))
     COLPALI_POST_FUSION_MIN_SCORE: float = float(os.getenv("COLPALI_POST_FUSION_MIN_SCORE", "0.25"))
     COLPALI_MIN_THRESHOLD: float = float(os.getenv("COLPALI_MIN_THRESHOLD", "0.30"))
@@ -835,16 +812,6 @@ class Settings(BaseSettings):
                 "cross-site autorisée). Renseigner la liste si un front séparé consomme l'API."
             )
 
-        if self.AGENTIC_LOOP_ENABLED and self.AGENTIC_LOOP_MODE not in ("shadow", "active"):
-            warnings.append(
-                f"AGENTIC_LOOP_MODE={self.AGENTIC_LOOP_MODE!r} inconnu (attendu shadow|active) : "
-                "la boucle sera traitée comme shadow (juge tracé, jamais actionné)."
-            )
-        if self.AGENTIC_LOOP_ENABLED and not self.CAG_ENABLED:
-            warnings.append(
-                "AGENTIC_LOOP_ENABLED=true mais CAG_ENABLED=false : le juge travaille sur les "
-                "dossiers candidats du packing CAG — la boucle est INERTE sur le chemin legacy."
-            )
         if self.VERIFY_BLOCKING and not self.VERIFY_ENABLED:
             warnings.append(
                 "VERIFY_BLOCKING=true mais VERIFY_ENABLED=false : le gate de vérification est "
@@ -877,7 +844,6 @@ class Settings(BaseSettings):
             f"anchor={onoff(self.CONVERSATION_ANCHOR_ENABLED)} "
             f"fiche={onoff(self.FICHE_TECHNIQUE_ENABLED)} "
             "guided=arbre-sav "
-            f"loop={self.AGENTIC_LOOP_MODE if self.AGENTIC_LOOP_ENABLED else 'off'} "
             f"verify={('blocking' if self.VERIFY_BLOCKING else 'advisory') if self.VERIFY_ENABLED else 'off'}"
         )
 

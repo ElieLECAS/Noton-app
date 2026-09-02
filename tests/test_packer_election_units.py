@@ -1,7 +1,7 @@
-"""B2/B6 (plan boucle agentique 2026-07-29) — unités pures du packer et du reranker.
+"""Unités pures du packer et du reranker.
 
-  * ``_apply_judge_election`` : les documents élus par le juge passent en tête (son
-    classement prime sur le score d'élection du retriever) et les pages qu'il cite
+  * ``_apply_document_election`` : un classement de documents décidé en amont passe en
+    tête (il prime sur le score d'élection interne du packer) et les pages épinglées
     deviennent les seeds les mieux valorisées de la fenêtre gloutonne ;
   * ``_pool_in_rerank_order`` + quota par document sur le chemin reranké : la coupe
     dynamique choisit COMBIEN de pages, le quota choisit LESQUELLES.
@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from llama_index.core.schema import NodeWithScore, TextNode
 
-from app.services.context_packer_service import _apply_judge_election, _new_document_entry
+from app.services.context_packer_service import _apply_document_election, _new_document_entry
 from app.services.page_reranker_service import _pool_in_rerank_order
 from app.services.page_retrieval_service import UnifiedPageHit, select_final_hits
 
@@ -30,19 +30,19 @@ def _entry(score_max: float, matched: dict) -> dict:
 
 def test_elected_documents_move_to_head_in_judge_order():
     ranked = [(10, _entry(0.9, {66: 0.9})), (20, _entry(0.5, {111: 0.5}))]
-    result = _apply_judge_election(ranked, [20], None, max_documents=3)
+    result = _apply_document_election(ranked, [20], None, max_documents=3)
     assert [did for did, _ in result] == [20, 10]
 
 
 def test_election_caps_non_elected_documents():
     ranked = [(10, _entry(0.9, {})), (20, _entry(0.8, {})), (30, _entry(0.7, {}))]
-    result = _apply_judge_election(ranked, [30], None, max_documents=2)
+    result = _apply_document_election(ranked, [30], None, max_documents=2)
     assert [did for did, _ in result] == [30, 10]
 
 
 def test_elected_document_missing_from_ranked_gets_empty_entry():
     ranked = [(10, _entry(0.9, {}))]
-    result = _apply_judge_election(ranked, [99], None, max_documents=3)
+    result = _apply_document_election(ranked, [99], None, max_documents=3)
     assert result[0][0] == 99
     assert result[0][1]["score_max"] == 0.0
 
@@ -51,7 +51,7 @@ def test_pinned_pages_outvalue_every_matched_page():
     """Les pages citées par le juge doivent gagner la course aux seeds : valeur
     strictement supérieure au meilleur score existant du document."""
     ranked = [(20, _entry(0.8, {42: 0.8, 43: 0.6}))]
-    result = _apply_judge_election(ranked, [20], {20: [111, 112]}, max_documents=3)
+    result = _apply_document_election(ranked, [20], {20: [111, 112]}, max_documents=3)
     matched = result[0][1]["matched_pages"]
     assert matched[111] > 0.8
     assert matched[112] > 0.8
@@ -60,13 +60,13 @@ def test_pinned_pages_outvalue_every_matched_page():
 
 def test_pinned_pages_without_election_still_apply():
     ranked = [(20, _entry(0.8, {42: 0.8}))]
-    result = _apply_judge_election(ranked, None, {20: [111]}, max_documents=3)
+    result = _apply_document_election(ranked, None, {20: [111]}, max_documents=3)
     assert result[0][1]["matched_pages"][111] > 0.8
 
 
 def test_no_election_no_pin_is_identity():
     ranked = [(10, _entry(0.9, {1: 0.9})), (20, _entry(0.5, {2: 0.5}))]
-    assert _apply_judge_election(ranked, None, None, max_documents=3) == ranked
+    assert _apply_document_election(ranked, None, None, max_documents=3) == ranked
 
 
 # ---------------------------------------------------------------------------
