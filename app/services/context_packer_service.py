@@ -34,12 +34,6 @@ logger = logging.getLogger(__name__)
 # alors sans document — donc de mémoire, avec assurance. Constat du 2026-08-26.
 MISTRAL_MAX_IMAGES_PER_REQUEST = 8
 
-# Images garanties à CHAQUE document packé quand plusieurs sont élus. Sans ce plancher,
-# le document dominant — qui place mécaniquement plus de pages — rafle les 8 slots et le
-# second document, pourtant packé, n'est vu par le modèle qu'en mode texte (et pas du tout
-# en mode 100 % PNG). Voir le commentaire dans ``select_cag_images``.
-IMAGES_FLOOR_PER_DOCUMENT = 2
-
 # Enregistrement d'un chunk feuille aplati : (page, chunk_index, texte).
 LeafRecord = Tuple[int, int, str]
 
@@ -473,7 +467,6 @@ def _records_tokens(records: List[LeafRecord]) -> int:
 #                       seule l'image porte l'information (cotes). Les PNG font foi.
 #
 # Le mode n'est PAS un réglage : il se déduit du document. C'est ce qui remplace le
-# switch global CAG_IMAGE_ONLY, qui appliquait le même choix aux deux extrêmes.
 
 MODE_FULL_TEXT = "full_text"
 MODE_WINDOWED = "windowed"
@@ -617,7 +610,7 @@ def _render_document_block(
     if getattr(doc, "product_types", None):
         header_bits.append(f"Type : {', '.join(doc.product_types)}")
 
-    lines: List[str] = [f"=== DOCUMENT {index} : « {title} » ==="]
+    lines: List[str] = [f"=== DOCUMENT {index} (id {doc.id}) : « {title} » ==="]
     if header_bits:
         lines.append(" | ".join(header_bits))
 
@@ -810,23 +803,17 @@ def build_cag_context(
             }
         )
 
-    if settings.CAG_IMAGE_ONLY:
-        # EXPÉRIMENTATION : le texte extrait est retiré, les pages sont fournies en images
-        # (jointes au message utilisateur par select_cag_images). Il ne reste qu'un
-        # manifeste, indispensable pour que le modèle sache À QUOI correspond chaque image
-        # et puisse citer ses sources.
-        system_message["content"] += _build_image_only_manifest(cag_documents)
-    else:
-        cag_preamble = (
-            "\n\nDOCUMENTS (contexte complet) — chaque document ci-dessous est fourni ENTIER ou en "
-            "extrait étendu, avec un en-tête (source, gamme, matériau) et ses numéros de page.\n"
-            "IMPÉRATIF : avant d'attribuer une valeur, une cote ou une consigne à une gamme/produit, "
-            "vérifie l'en-tête du document concerné. Ne transfère JAMAIS une information d'un document "
-            "vers une autre gamme (ex. Perform 70 ≠ Perform 76). Les documents sont classés par "
-            "pertinence décroissante.\n\n"
-        )
-        system_message["content"] += cag_preamble + "\n\n".join(blocks)
-        system_message["content"] += f"\n\n({len(blocks)} document(s), ~{spent_tokens} tokens de contexte.)"
+    cag_preamble = (
+        "\n\nDOCUMENTS (contexte complet) — chaque document ci-dessous est fourni ENTIER ou en "
+        "extrait étendu, avec un en-tête (source, gamme, matériau, identifiant « id N ») et ses "
+        "numéros de page.\n"
+        "IMPÉRATIF : avant d'attribuer une valeur, une cote ou une consigne à une gamme/produit, "
+        "vérifie l'en-tête du document concerné. Ne transfère JAMAIS une information d'un document "
+        "vers une autre gamme (ex. Perform 70 ≠ Perform 76). Les documents sont classés par "
+        "pertinence décroissante.\n\n"
+    )
+    system_message["content"] += cag_preamble + "\n\n".join(blocks)
+    system_message["content"] += f"\n\n({len(blocks)} document(s), ~{spent_tokens} tokens de contexte.)"
     if emit_sources_tag:
         system_message["content"] += (
             "\n\nFIN DE RÉPONSE OBLIGATOIRE : termine ta réponse par une ligne EXACTEMENT au format "
@@ -858,35 +845,6 @@ def build_cag_context(
         ),
     )
     return system_message
-
-
-def _build_image_only_manifest(cag_documents: List[Dict[str, Any]]) -> str:
-    """Manifeste du mode 100 % PNG : ce que le modèle voit à la place du texte.
-
-    Sans lui, le modèle reçoit une pile d'images anonymes : il ne peut ni rattacher une
-    cote à la bonne gamme, ni produire le bloc <sources>. Le manifeste rétablit ces deux
-    choses pour un coût de quelques dizaines de tokens.
-    """
-    lines = [
-        "\n\nDOCUMENTS — le contenu t'est fourni en IMAGES DE PAGES, pas en texte.",
-        "Chaque image est légendée « Image N — Document D, page P ». Lis les valeurs, cotes "
-        "et références DIRECTEMENT sur les images : elles font foi.",
-        "IMPÉRATIF : avant d'attribuer une valeur à une gamme/produit, vérifie de QUEL "
-        "document provient l'image. Ne transfère jamais une information d'un document vers "
-        "une autre gamme (ex. Perform 70 ≠ Perform 76).",
-        "Si une information n'est pas lisible sur les images fournies, dis-le au lieu de "
-        "la deviner.",
-        "",
-        "Documents fournis (classés par pertinence décroissante) :",
-    ]
-    for doc in cag_documents:
-        pages = doc.get("pages") or []
-        matched = doc.get("matched_pages") or []
-        detail = f"pages {', '.join(str(p) for p in pages)}" if pages else "aucune page"
-        if matched:
-            detail += f" (pages retrouvées par la recherche : {', '.join(str(p) for p in matched)})"
-        lines.append(f"  [Document {doc.get('index')}] {doc.get('document_title')} — {detail}")
-    return "\n".join(lines)
 
 
 def _pages_span_label(pages: List[int]) -> str:
@@ -957,11 +915,20 @@ def select_cag_images(
     *,
     max_images: Optional[int] = None,
     dpi: Optional[int] = None,
+    visual_only: bool = False,
 ) -> Tuple[List[str], List[Dict[str, Any]]]:
     """Sélectionne et rend les PNG de pages pour la génération vision, ALIGNÉS sur le
     contexte packé : uniquement des pages incluses dans un document CAG.
 
-    Priorité : pages à besoin visuel (needs_page_image) puis score de passage décroissant.
+    Le texte des pages est TOUJOURS dans le contexte ; l'image le complète. Priorité :
+      0. pages d'un document « image_first » (texte quasi absent : l'image EST le contenu),
+         celles à besoin visuel d'abord ;
+      1. pages à besoin visuel (``needs_page_image`` : planche vue par ColPali, texte
+         placeholder) ;
+      2. autres pages matchées — au score décroissant dans chaque classe.
+    ``visual_only`` ne retient que les pages muettes (classes 0 et 1) : c'est le pack initial
+    du lecteur agentique, qui demandera lui-même les autres images (lire_pages, zoomer).
+
     Retourne (images_b64, captions) — captions = [{image_index, document_index,
     document_title, page_no}, …] pour légender les images dans le message user.
     """
@@ -972,8 +939,7 @@ def select_cag_images(
 
     max_images = max_images if max_images is not None else settings.CAG_MAX_IMAGES
     # Limite DURE de l'API Mistral : au-delà, la requête entière est rejetée en 400
-    # ("Total number of images exceeds the maximum allowed of 8", code 3051) et le repli
-    # de secours répond sans aucun document. On plafonne donc ici plutôt que d'échouer.
+    # ("Total number of images exceeds the maximum allowed of 8", code 3051).
     if max_images > MISTRAL_MAX_IMAGES_PER_REQUEST:
         logger.warning(
             "[CAG] %d images demandées mais l'API Mistral en accepte %d au maximum — plafonné.",
@@ -989,9 +955,19 @@ def select_cag_images(
         int(d["document_id"]): d for d in cag_documents if d.get("document_id") is not None
     }
 
+    # Profil par document (cache des feuilles → une requête de comptage) : un document
+    # muet en texte fait passer TOUTES ses pages matchées en tête.
+    image_first_docs: set = set()
+    for did in included:
+        try:
+            if profile_document(session, did).mode == MODE_IMAGE_FIRST:
+                image_first_docs.add(did)
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("[CAG] profil indisponible doc=%s : %s", did, exc)
+
     # Candidats (doc_id, page) depuis les passages, page ancre uniquement (pas les voisins :
     # le texte des voisins est déjà dans le contexte, le PNG n'apporte que pour le match).
-    candidates: List[Tuple[int, int, int]] = []  # (need_rank, doc_id, page)
+    candidates: List[Tuple[int, int, int]] = []  # (rang, doc_id, page)
     seen: set = set()
     for p in sorted(passages, key=lambda x: float(x.get("score") or 0.0), reverse=True):
         did = p.get("document_id")
@@ -1006,42 +982,14 @@ def select_cag_images(
         if (did, page) in seen:
             continue
         seen.add((did, page))
-        candidates.append((0 if p.get("needs_page_image") else 1, did, page))
+        needs = bool(p.get("needs_page_image"))
+        rank = (0 if did in image_first_docs else 2) + (0 if needs else 1)
+        if visual_only and rank >= 3:
+            continue
+        candidates.append((rank, did, page))
 
-    # Tri stable : besoin visuel d'abord, ordre score conservé au sein de chaque classe.
+    # Tri stable : classe d'abord, ordre score conservé au sein de chaque classe.
     candidates.sort(key=lambda t: t[0])
-
-    if settings.CAG_IMAGE_ONLY:
-        # Le texte a été retiré du contexte : les images ne complètent plus rien, elles
-        # SONT le contenu. On complète donc avec les pages packées non matchées (le
-        # voisinage, qui portait la continuité procédurale en texte), en gardant les
-        # pages matchées en tête — c'est le budget libéré par le texte qui les paie.
-        for did, meta in included.items():
-            for page in meta.get("pages") or []:
-                if not isinstance(page, int) or (did, page) in seen:
-                    continue
-                seen.add((did, page))
-                candidates.append((2, did, page))
-
-    # PLANCHER PAR DOCUMENT. Les candidats sont triés au score, et le document dominant
-    # en place mécaniquement plus (il a plus de pages retenues) : mesuré le 01/09 sur
-    # « couleurs Perform », les 8 images partaient TOUTES du dominant alors qu'un second
-    # document — co-élu précisément parce qu'il détenait le meilleur passage — était packé
-    # à côté. En mode 100 % PNG les images SONT le contenu : un document sans image est un
-    # document absent, et la co-élection ne servait donc à rien.
-    #
-    # On réserve les premières places de chaque document packé (ses meilleurs candidats,
-    # l'ordre interne est conservé), puis on remplit le reste au mérite global. Avec 8
-    # images et au plus 3 documents élus, le plancher n'immobilise jamais plus de 6 slots.
-    if len(included) > 1 and IMAGES_FLOOR_PER_DOCUMENT > 0:
-        by_doc: Dict[int, List[Tuple[int, int, int]]] = {}
-        for cand in candidates:
-            by_doc.setdefault(cand[1], []).append(cand)
-        reserved: List[Tuple[int, int, int]] = []
-        for did in included:                     # ordre de packing (pertinence décroissante)
-            reserved.extend(by_doc.get(did, [])[:IMAGES_FLOOR_PER_DOCUMENT])
-        reserved_keys = {(c[1], c[2]) for c in reserved}
-        candidates = reserved + [c for c in candidates if (c[1], c[2]) not in reserved_keys]
 
     images_b64: List[str] = []
     captions: List[Dict[str, Any]] = []
@@ -1070,9 +1018,10 @@ def select_cag_images(
         )
 
     logger.info(
-        "[CAG] %d image(s) alignée(s) sur le contexte packé (max %d) — %s",
+        "[CAG] %d image(s) alignée(s) sur le contexte packé (max %d, visual_only=%s) — %s",
         len(images_b64),
         max_images,
+        visual_only,
         ", ".join(f"doc{c['document_index']}:p{c['page_no']}" for c in captions),
     )
     return images_b64, captions

@@ -459,23 +459,6 @@ class Settings(BaseSettings):
     # qui doit RÉPONDRE voyait donc la page moins bien que celui qui l'a transcrite.
     # Monter ce DPI est le levier n°1 pour lire une cote sur une planche.
     CAG_IMAGE_DPI: int = int(os.getenv("CAG_IMAGE_DPI", "150"))
-    # --- EXPÉRIMENTATION (temporaire, 2026-08-26) : génération 100 % PNG ---
-    # Retire le TEXTE des documents du contexte : le modèle ne reçoit qu'un manifeste
-    # (quel document, quelles pages) + les pages en images. Objectif : mesurer ce que
-    # vaut la génération quand on ne lui donne que la « vraie » page, sans le texte
-    # extrait qui, sur les planches CAO, est un sac de nombres désancré.
-    #
-    # ⚠ Pour que la comparaison soit honnête, le budget libéré par le texte doit partir
-    # dans les images : monter CAG_MAX_IMAGES et CAG_IMAGE_DPI en même temps, sinon on
-    # mesure « 8 images floues seules », pas « l'image contre le texte ».
-    #
-    # ⚠ Désactive aussi la vérification d'ancrage : elle compare la réponse au TEXTE du
-    # contexte et déclarerait inventée toute référence lue sur une image. Ce mode tourne
-    # donc SANS filet — acceptable pour un test, pas pour la production.
-    # À SUPPRIMER une fois la décision prise (pas de flag permanent).
-    CAG_IMAGE_ONLY: bool = os.getenv("CAG_IMAGE_ONLY", "false").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
     # Budget de packing PAR INTENT (tokens + max documents) : une question de spécification
     # ponctuelle ne paie pas le prefill d'un diagnostic SAV. JSON optionnel via env
     # CAG_BUDGET_BY_INTENT ({"installation": {"budget": 60000, "max_documents": 6}, ...}) ;
@@ -541,43 +524,24 @@ class Settings(BaseSettings):
     CAG_ANCHOR_RANK_BY_SCORE: bool = os.getenv("CAG_ANCHOR_RANK_BY_SCORE", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    # --- Vérification post-génération (juge LLM) ---
-    # Plafond de l'extrait de contexte envoyé au juge. 20 000 en dur historiquement, sur un
-    # texte qui COMMENÇAIT par le prompt système : le juge ne voyait que 8 à 30 % du
-    # contexte et déclarait « non documenté » ce qu'il n'avait simplement pas lu.
-    # 0 = illimité (contexte complet, coût token proportionnel).
-    VERIFICATION_CONTEXT_MAX_CHARS: int = int(os.getenv("VERIFICATION_CONTEXT_MAX_CHARS", "60000"))
-    # Manifeste de TOUS les documents packés en tête de l'extrait, jamais tronqué : rend
-    # structurellement impossible le « le contexte ne parle que de la gamme X » alors qu'un
-    # document de la gamme Y était packé plus loin.
-    VERIFICATION_INCLUDE_MANIFEST: bool = os.getenv(
-        "VERIFICATION_INCLUDE_MANIFEST", "true"
-    ).strip().lower() in ("true", "1", "yes", "on")
-    # Modèle de la vérification post-génération. DISTINCT du modèle de génération :
-    # un modèle qui se relit se blanchit (cas TGY3710 du 29/07).
-    MODEL_JUDGE: str = os.getenv("MODEL_JUDGE", "mistral-small-latest")
-    # --- Vérification post-génération : flag maître + gate (B7) ---
-    # false = aucune vérification (historiquement elle tournait TOUJOURS, sans effet).
-    VERIFY_ENABLED: bool = os.getenv("VERIFY_ENABLED", "true").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # Modèle de la vérification ; vide = MODEL_JUDGE. Jamais le modèle de génération.
-    VERIFY_MODEL: str = os.getenv("VERIFY_MODEL", "").strip()
-    # true = la vérification BLOQUE l'émission (génération en tampon, réparation possible) ;
-    # false = comportement historique (post-hoc, trace seulement).
-    VERIFY_BLOCKING: bool = os.getenv("VERIFY_BLOCKING", "false").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
-    # buffer : générer en tampon, vérifier, puis émettre (v1). stream_correct : réservé
-    # (streamer puis corriger) — non implémenté, retombe sur buffer.
-    VERIFY_EMIT_MODE: str = os.getenv("VERIFY_EMIT_MODE", "buffer").strip().lower()
-    # Réparations max après un échec de vérification en mode bloquant.
-    VERIFY_MAX_REPAIRS: int = int(os.getenv("VERIFY_MAX_REPAIRS", "1"))
-    # Contrôle programmatique des CODES PRODUITS de la réponse (présence littérale dans le
-    # contexte packé) : attrape les références inventées (TGY3710) sans aucun LLM.
-    VERIFY_CODE_GROUNDING: bool = os.getenv("VERIFY_CODE_GROUNDING", "true").strip().lower() in (
-        "true", "1", "yes", "on"
-    )
+    # --- Lecteur agentique (docs/plan_lecteur_agentique_2026-09-02.md) ---
+    # Le générateur (MODEL_FAST) lit un pack INITIAL court puis va chercher le reste avec
+    # cinq outils déterministes (rechercher, lire_pages, zoomer, chercher_code,
+    # plan_du_document), sous budget. Le contrôle de sortie est programmatique (codes,
+    # cotes, normes, RAL, citations) sur ce que le lecteur a réellement lu ; l'ancien juge
+    #
+    # Pack initial : texte des pages retrouvées des documents élus. Petit par construction —
+    # ne pas confondre avec CAG_TOKEN_BUDGET (plafond du packer pour les autres
+    # consommateurs : fiche technique, évaluation, repli eco).
+    READER_INITIAL_PACK_TOKENS: int = int(os.getenv("READER_INITIAL_PACK_TOKENS", "12000"))
+    # Images jointes au pack initial : pages MUETTES uniquement (le lecteur demande les autres).
+    READER_INITIAL_MAX_IMAGES: int = int(os.getenv("READER_INITIAL_MAX_IMAGES", "3"))
+    # Appels d'outils max par tour ; deadline (secondes) au-delà de laquelle le lecteur doit
+    # répondre ; images fournies par les outils, cumulées sur le tour (l'API en accepte 8 par
+    # requête : l'orchestrateur élague les images déjà vues de l'historique).
+    READER_MAX_TOOL_CALLS: int = int(os.getenv("READER_MAX_TOOL_CALLS", "6"))
+    READER_DEADLINE_S: float = float(os.getenv("READER_DEADLINE_S", "60"))
+    READER_MAX_TOOL_IMAGES: int = int(os.getenv("READER_MAX_TOOL_IMAGES", "8"))
     # Quota par document appliqué AUSSI au chemin reranké (B2) : la coupe dynamique choisit
     # combien de pages, le quota choisit lesquelles — sans lui, 17 passages sur 19 pouvaient
     # venir du même document et le juge n'avait rien à comparer.
@@ -760,15 +724,6 @@ class Settings(BaseSettings):
                 logger.warning("CAG_BUDGET_BY_INTENT illisible (JSON invalide) — défauts utilisés")
         return _CAG_BUDGET_DEFAULTS
 
-    @property
-    def effective_verify_model(self) -> str:
-        """Modèle réellement utilisé pour la vérification post-génération.
-
-        VERIFY_MODEL s'il est renseigné, sinon MODEL_JUDGE — jamais le modèle de
-        génération : un modèle qui se relit se blanchit (mécanisme n°1 du juge
-        auto-complaisant, cas TGY3710)."""
-        return self.VERIFY_MODEL or self.MODEL_JUDGE
-
     def coherence_warnings(self) -> List[str]:
         """Incohérences de configuration détectées au démarrage (jamais bloquantes).
 
@@ -812,18 +767,6 @@ class Settings(BaseSettings):
                 "cross-site autorisée). Renseigner la liste si un front séparé consomme l'API."
             )
 
-        if self.VERIFY_BLOCKING and not self.VERIFY_ENABLED:
-            warnings.append(
-                "VERIFY_BLOCKING=true mais VERIFY_ENABLED=false : le gate de vérification est "
-                "inerte (aucune vérification n'est exécutée)."
-            )
-        if self.VERIFY_ENABLED and self.effective_verify_model == self.MODEL_FAST:
-            warnings.append(
-                "Le modèle de vérification est identique au modèle de génération "
-                f"({self.MODEL_FAST}) : le juge se relit lui-même — verdicts complaisants "
-                "attendus. Renseigner VERIFY_MODEL ou MODEL_JUDGE avec un modèle distinct."
-            )
-
         return warnings
 
     def feature_summary(self) -> str:
@@ -844,7 +787,8 @@ class Settings(BaseSettings):
             f"anchor={onoff(self.CONVERSATION_ANCHOR_ENABLED)} "
             f"fiche={onoff(self.FICHE_TECHNIQUE_ENABLED)} "
             "guided=arbre-sav "
-            f"verify={('blocking' if self.VERIFY_BLOCKING else 'advisory') if self.VERIFY_ENABLED else 'off'}"
+            f"reader=tools({self.READER_MAX_TOOL_CALLS} appels, {self.READER_DEADLINE_S:.0f}s, "
+            f"pack {self.READER_INITIAL_PACK_TOKENS} tok)"
         )
 
     @field_validator('DATABASE_ECHO', mode='before')

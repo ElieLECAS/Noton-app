@@ -1,7 +1,8 @@
 import logging
 import threading
 import time
-from typing import List, Optional
+from collections import OrderedDict
+from typing import List, Optional, Tuple
 from PIL import Image
 import torch
 from app.config import settings
@@ -159,11 +160,59 @@ def embed_pdf_pages_colpali(pdf_path: str, document_id: Optional[int] = None) ->
     return all_embeddings
 
 
+# Cache des embeddings de REQUÊTE, clefé par texte normalisé. L'encodage ColQwen2 d'une
+# requête est la taxe fixe du retrieval (jusqu'à 23 s à froid sur CPU) ; dans un tour du
+# lecteur agentique, plusieurs `rechercher` peuvent porter le même texte (ou celui de la
+# phase A), et la phase B réutilise celui de la phase A. Avant : un dict par requête HTTP à
+# clé unique (space_search_service), donc chaque texte différent repayait l'encodage.
+_QUERY_EMBED_CACHE: "OrderedDict[str, Tuple[float, List[List[float]]]]" = OrderedDict()
+_QUERY_EMBED_CACHE_MAX = 128
+_QUERY_EMBED_CACHE_TTL_S = 900.0
+_query_cache_lock = threading.Lock()
+
+
+def _query_cache_key(query: str) -> str:
+    return " ".join((query or "").lower().split())
+
+
+def _query_cache_get(query: str) -> Optional[List[List[float]]]:
+    key = _query_cache_key(query)
+    now = time.monotonic()
+    with _query_cache_lock:
+        entry = _QUERY_EMBED_CACHE.get(key)
+        if entry is None:
+            return None
+        ts, vectors = entry
+        if now - ts > _QUERY_EMBED_CACHE_TTL_S:
+            _QUERY_EMBED_CACHE.pop(key, None)
+            return None
+        _QUERY_EMBED_CACHE.move_to_end(key)
+        return vectors
+
+
+def _query_cache_put(query: str, vectors: List[List[float]]) -> None:
+    key = _query_cache_key(query)
+    with _query_cache_lock:
+        _QUERY_EMBED_CACHE[key] = (time.monotonic(), vectors)
+        _QUERY_EMBED_CACHE.move_to_end(key)
+        while len(_QUERY_EMBED_CACHE) > _QUERY_EMBED_CACHE_MAX:
+            _QUERY_EMBED_CACHE.popitem(last=False)
+
+
+def clear_query_embedding_cache() -> None:
+    with _query_cache_lock:
+        _QUERY_EMBED_CACHE.clear()
+
+
 def embed_query_colpali(query: str) -> List[List[float]]:
     """
-    Embeds query text using ColPali.
+    Embeds query text using ColPali (avec cache par texte de requête).
     Returns: Query token embeddings: [num_query_tokens, 128]
     """
+    cached = _query_cache_get(query)
+    if cached is not None:
+        logger.info("[PERF][colpali] encode requête — cache (%d tokens)", len(cached))
+        return cached
     _t0 = time.perf_counter()
     model, processor = get_colpali_model()
     _t_load = time.perf_counter()
@@ -188,4 +237,5 @@ def embed_query_colpali(query: str) -> List[List[float]]:
         _t_load - _t0,
         model.device,
     )
+    _query_cache_put(query, query_vectors)
     return query_vectors

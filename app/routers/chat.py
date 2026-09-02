@@ -35,6 +35,7 @@ async def chat_stream_wrapper(
     context: Optional[List[dict]] = None,
     temperature: Optional[float] = None,
     max_tokens: Optional[int] = None,
+    **kwargs,
 ):
     # Température de génération : SPACE_CHAT_TEMPERATURE (0.2 par défaut, grounding strict).
     temp = settings.SPACE_CHAT_TEMPERATURE if temperature is None else temperature
@@ -75,9 +76,10 @@ async def chat_stream_wrapper(
         async for chunk in ollama_chat_stream(message=message, model=model, context=context):
             yield chunk
     else:
+        # kwargs : outils du lecteur agentique (tools, tool_choice, parallel_tool_calls).
         async for chunk in mistral_chat_stream(
             message=message, model=model, context=context, temperature=temp, max_tokens=tokens,
-            **reasoning_kwargs,
+            **{**reasoning_kwargs, **kwargs},
         ):
             yield chunk
 from app.services.chat_tools import get_available_tools
@@ -343,6 +345,77 @@ SPACE_CHAT_SYSTEM_PROMPT = (
     "AUCUNE citation dans le corps du texte : n'écris jamais [Nom du document, page X] ni de numéro de page — "
     "les sources sont affichées automatiquement sous ta réponse."
 )
+
+
+# ——— Prompt du LECTEUR AGENTIQUE (docs/plan_lecteur_agentique_2026-09-02.md, phase 4) ———
+# Dérivé du prompt d'espace : les sections « CONTEXTE FOURNI », « GROUNDING DUR » et
+# « IMAGES » — pensées pour un jet unique sur un pack fermé — sont remplacées par les
+# consignes d'outils ; identité, sujet, format, anti-digression, grounding strict et style
+# restent partagés à l'identique (une seule source de vérité pour ces règles).
+_READER_CONTEXT_SECTION = (
+    "CE QUE TU AS\n"
+    "Le contexte contient un PREMIER jeu de pages trouvées par la recherche (marquées ★) pour "
+    "1 à 3 documents, en texte, chacun avec un en-tête (source, gamme, matériau, type) et son "
+    "identifiant « id N », avec des marqueurs [page N]. Des images de pages peuvent être jointes "
+    "pour les pages sans texte. Ce n'est qu'un POINT DE DÉPART : tu peux aller lire plus loin avec "
+    "tes outils. Avant d'attribuer une valeur, une cote ou une consigne à une gamme/produit, "
+    "vérifie l'en-tête du document : ne transfère JAMAIS une information d'une gamme vers une "
+    "autre (ex. Perform 70 ≠ Perform 76, seuil PMR ≠ seuil standard). En cas d'informations "
+    "contradictoires entre documents, le document le plus spécifique au sujet de la question prime.\n"
+)
+_READER_TOOLS_SECTION = (
+    "CE QUE TU PEUX FAIRE (outils)\n"
+    "Tu disposes de cinq outils et d'un budget d'appels et de temps, rappelé après chaque "
+    "résultat. Avant chaque appel, écris UNE phrase : ce que tu cherches et pourquoi.\n"
+    "- lire_pages : lis d'abord le TEXTE quand il existe ; il est plus fiable que l'image pour "
+    "les cotes et les références. Demande l'image (avec_images=true) seulement pour une page "
+    "signalée muette, ou pour vérifier une valeur que tu vas citer.\n"
+    "- chercher_code : avant de citer une référence qui n'est pas dans les pages lues, vérifie "
+    "qu'elle existe. Ne déduis JAMAIS une référence par analogie de numérotation (TGY3702 ≠ TGY3710).\n"
+    "- rechercher : reformule en vocabulaire métier ; ne relance jamais la même question ; "
+    "préfère document_id quand tu sais où chercher.\n"
+    "- plan_du_document : pour trouver la bonne section d'un long document.\n"
+    "- zoomer : pour lire une cote ou un repère trop petit sur l'image.\n"
+    "Un bloc « COUVERTURE DE LA RECHERCHE » indique ce que la recherche initiale a trouvé : une "
+    "référence marquée absente du texte doit être vérifiée avec chercher_code avant toute réponse "
+    "à son sujet.\n"
+)
+_READER_STOP_SECTION = (
+    "QUAND T'ARRÊTER ET COMMENT CONCLURE\n"
+    "Dès que tu as la preuve, réponds. Si le budget est épuisé sans preuve : dis ce que tu as "
+    "trouvé, où, et ce qui manque. Jamais de connaissance générale pour combler un trou factuel ; "
+    "une information absente des pages lues se dit (« les documents fournis ne précisent pas … »).\n"
+    "FIN DE RÉPONSE OBLIGATOIRE : deux lignes machine, masquées à l'utilisateur, en toute fin :\n"
+    "<sources>{\"used\":[{\"doc_id\":405,\"pages\":[111,112]}]}</sources> — les identifiants « id N » "
+    "des documents et les pages réellement utilisés ;\n"
+    "<evidence>[\"phrase exacte copiée d\'une page lue (doc 405 p.111)\", \"…\"]</evidence> — une "
+    "citation MOT POUR MOT par valeur, référence ou consigne que tu affirmes ; pour une valeur lue "
+    "sur une image sans texte, écris \"(image doc 405 p.111)\".\n"
+    "N\'en parle jamais dans le corps de la réponse.\n"
+)
+
+
+def _build_reader_prompt(base: str) -> str:
+    """Recompose le prompt du lecteur à partir des sections du prompt d'espace."""
+    chunks = base.split("\n### ")
+    head, sections = chunks[0], chunks[1:]
+
+    def _key(section: str) -> str:
+        return section.split("\n", 1)[0].split(" (")[0].strip()
+
+    kept = [s for s in sections if _key(s) not in ("CONTEXTE FOURNI", "GROUNDING DUR", "IMAGES")]
+    ordered: List[str] = [_READER_CONTEXT_SECTION]
+    for section in kept:
+        key = _key(section)
+        if key == "ANTI-DIGRESSION":
+            ordered.append(_READER_TOOLS_SECTION)
+        if key == "STYLE":
+            ordered.append(_READER_STOP_SECTION)
+        ordered.append(section)
+    return head + "\n### " + "\n### ".join(ordered)
+
+
+READER_SYSTEM_PROMPT = _build_reader_prompt(SPACE_CHAT_SYSTEM_PROMPT)
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
@@ -682,6 +755,39 @@ def _build_generation_context(
     return build_space_context_from_passages(doc_passages)
 
 
+
+def _build_reader_pack(
+    session: Session,
+    doc_passages: List[dict],
+    *,
+    anchor_document_ids: Optional[List[int]] = None,
+    intent: Optional[str] = None,
+    elected_document_ids: Optional[List[int]] = None,
+) -> dict:
+    """Pack INITIAL du lecteur agentique : texte des pages ★ des documents élus, sous un
+    budget réduit (READER_INITIAL_PACK_TOKENS, ≤ 3 documents). Le lecteur ira chercher le
+    reste avec ses outils ; inutile de payer 50 k tokens de prefill pour des pages qu'il ne
+    lira peut-être pas. Le prompt système est celui du lecteur (outils, preuves)."""
+    if settings.CAG_ENABLED:
+        from app.services.context_packer_service import build_cag_context
+
+        return build_cag_context(
+            session,
+            doc_passages,
+            system_prompt=READER_SYSTEM_PROMPT,
+            token_budget=settings.READER_INITIAL_PACK_TOKENS,
+            max_documents=max(1, min(3, settings.CAG_MAX_DOCUMENTS)),
+            anchor_document_ids=anchor_document_ids,
+            intent=intent,
+            emit_sources_tag=False,
+            elected_document_ids=elected_document_ids,
+        )
+    ctx = build_space_context_from_passages(doc_passages)
+    content = ctx.get("content") or ""
+    if content.startswith(SPACE_CHAT_SYSTEM_PROMPT):
+        ctx["content"] = READER_SYSTEM_PROMPT + content[len(SPACE_CHAT_SYSTEM_PROMPT):]
+    return ctx
+
 def _guided_streaming_response(
     gtr,
     conversation_id: int,
@@ -845,141 +951,22 @@ def _build_eco_context(
     user_message: str,
 ) -> List[dict]:
     """Contexte de SECOURS minimal après un Mistral 400 (P0.2) : CAG re-packé à un petit
-    budget (sans images ni historique) + question. Cible la cause probable (contexte trop
-    volumineux) au lieu de rejouer le contexte massif à l'identique.
-
-    Ce repli abandonne les images. En mode CAG_IMAGE_ONLY il faut donc RÉTABLIR le texte :
-    sinon il ne reste qu'un manifeste, le modèle répond sans aucun document — et invente
-    avec assurance (constaté le 2026-08-26 : réponse plausible mais entièrement fausse).
-    """
+    budget (sans images, sans historique, sans outils) + question. Cible la cause probable
+    (contexte trop volumineux) au lieu de rejouer le contexte massif à l'identique."""
     if settings.CAG_ENABLED and doc_passages:
         from app.services.context_packer_service import build_cag_context
 
-        with _forced_text_context_if_image_only():
-            eco_system = build_cag_context(
-                session,
-                doc_passages,
-                system_prompt=SPACE_CHAT_SYSTEM_PROMPT,
-                token_budget=settings.CAG_ECO_TOKEN_BUDGET,
-                max_documents=settings.CAG_ECO_MAX_DOCUMENTS,
-                anchor_document_ids=anchor_document_ids,
-            )
+        eco_system = build_cag_context(
+            session,
+            doc_passages,
+            system_prompt=SPACE_CHAT_SYSTEM_PROMPT,
+            token_budget=settings.CAG_ECO_TOKEN_BUDGET,
+            max_documents=settings.CAG_ECO_MAX_DOCUMENTS,
+            anchor_document_ids=anchor_document_ids,
+        )
     else:
         eco_system = {"role": "system", "content": SPACE_CHAT_SYSTEM_PROMPT}
     return [eco_system, {"role": "user", "content": user_message}]
-
-
-@contextmanager
-def _forced_text_context_if_image_only(reason: str = "repli sans images"):
-    """Rétablit temporairement le texte documentaire quand CAG_IMAGE_ONLY est actif.
-
-    Le mode image-only n'est tenable que si des images partent RÉELLEMENT. Dès qu'elles
-    sautent — repli de secours, modèle non multimodal — il ne reste qu'un manifeste : le
-    modèle répond alors sans aucun document, et invente avec assurance (constaté le
-    2026-08-26 avec mistral-medium, absent de la liste des modèles vision).
-    """
-    if not settings.CAG_IMAGE_ONLY:
-        yield
-        return
-    logger.warning(
-        "[CAG] CAG_IMAGE_ONLY actif mais %s — le texte documentaire est RÉTABLI pour ne "
-        "pas répondre sur un contexte vide.",
-        reason,
-    )
-    settings.CAG_IMAGE_ONLY = False
-    try:
-        yield
-    finally:
-        settings.CAG_IMAGE_ONLY = True
-
-
-async def _attempt_repair_generation(
-    *,
-    session: Session,
-    space_id: int,
-    full_context_draft: List[dict],
-    draft_text: str,
-    verification_result: dict,
-    model: str,
-    allowed_document_ids: Optional[List[int]],
-) -> Optional[dict]:
-    """Réparation d'une réponse non ancrée (B7c) — UNE régénération contrainte.
-
-    Deux leviers, selon ce que la vérification a trouvé :
-      - codes non étayés → recherche SQL ciblée des extraits faisant autorité pour ces
-        codes (chunk pinning) : s'ils existent, le modèle reçoit la vérité verbatim ; s'ils
-        n'existent pas, consigne d'écrire explicitement l'absence.
-      - claims non étayés (cotes/normes) → consigne de suppression/aveu.
-
-    Retourne {"text", "source_filter"} ou None si la réparation n'a rien produit.
-    N'échoue jamais l'appelant."""
-    from app.services.stream_source_filter import SourcesTagStreamFilter
-
-    claims = list(verification_result.get("unsupported_claims") or [])
-    codes = list(verification_result.get("unsupported_codes") or [])
-    if not claims:
-        return None
-
-    repair_system = dict(full_context_draft[0]) if full_context_draft else None
-    if not repair_system or repair_system.get("role") != "system":
-        return None
-
-    if codes:
-        try:
-            from app.services.page_retrieval_service import get_space_document_ids
-            from app.services.reference_pinning_service import build_pinned_reference_block
-
-            pin_doc_ids = allowed_document_ids or get_space_document_ids(
-                session, space_id, document_filter="technical"
-            )
-            pinned_block, pinned = build_pinned_reference_block(session, pin_doc_ids, codes)
-            if pinned_block:
-                repair_system["content"] = (
-                    repair_system["content"]
-                    + "\n\n### EXTRAITS DE RÉFÉRENCE (réparation — font foi)\n"
-                    + pinned_block
-                )
-                logger.info("[verify] réparation — extraits épinglés pour %s", pinned)
-        except Exception as pin_err:  # noqa: BLE001
-            logger.warning("[verify] épinglage de réparation ignoré : %s", pin_err)
-
-    repair_instruction = (
-        "CONTRÔLE QUALITÉ : les éléments suivants de ta réponse précédente ne figurent "
-        "dans AUCUN des documents fournis : "
-        + ", ".join(str(c) for c in claims[:8])
-        + ". Régénère ta réponse en t'appuyant EXCLUSIVEMENT sur les documents du "
-        "contexte. Pour tout élément introuvable, écris explicitement « les documents "
-        "fournis ne précisent pas ... » au lieu de l'affirmer. N'invente aucune référence "
-        "ni valeur. Conserve la ligne <sources> exigée en fin de réponse."
-    )
-
-    repair_context = [repair_system] + [dict(m) for m in full_context_draft[1:]]
-    repair_context.append({"role": "assistant", "content": draft_text})
-    repair_context.append({"role": "user", "content": repair_instruction})
-
-    repair_filter = SourcesTagStreamFilter() if settings.CAG_ENABLED else None
-    repair_sink: List[str] = []
-    try:
-        async for _ in _stream_llm_to_sse(
-            repair_context,
-            model=model,
-            max_tokens=settings.CAG_MAX_COMPLETION_TOKENS if settings.CAG_ENABLED else None,
-            source_filter=repair_filter,
-            sink=repair_sink,
-            hold_messages=True,
-        ):
-            pass
-    except Exception as repair_err:  # noqa: BLE001
-        logger.warning("[verify] régénération de réparation en échec : %s", repair_err)
-        return None
-    if repair_filter is not None:
-        tail = repair_filter.finalize()
-        if tail:
-            repair_sink.append(tail)
-    repaired_text = "".join(repair_sink).strip()
-    if not repaired_text:
-        return None
-    return {"text": repaired_text, "source_filter": repair_filter}
 
 
 def _persist_reply_with_retry(
@@ -1053,6 +1040,7 @@ def _build_generation_trace(
     anchor_boost: Optional[dict] = None,
     anchor_intent_changed: bool = False,
     cag_documents: Optional[List[dict]] = None,
+    loop: Optional[dict] = None,
 ) -> dict:
     """Assemble le « cheminement » de génération persisté dans message.metadata_json['trace']
     et renvoyé dans l'événement SSE final. Alimente le bouton d'inspection côté UI.
@@ -1115,6 +1103,10 @@ def _build_generation_trace(
             "pinned_codes": list(pinned_codes or []),
         }
         trace["passages"] = passages_summary or []
+
+    if loop:
+        # Boucle du lecteur agentique : rounds, appels d'outils, durées, arrêt, repli.
+        trace["loop"] = loop
 
     if verification:
         trace["verification"] = verification
@@ -1871,68 +1863,69 @@ async def stream_space_chat_message(
                 rerank_status,
             )
 
-            # Garde-fou du mode 100 % PNG : sans modèle multimodal, AUCUNE image ne partira et le
-            # contexte se réduirait à un manifeste — le modèle répondrait de mémoire. On rebascule
-            # donc sur le texte pour toute la construction du contexte de ce tour.
-            _image_only_impossible = settings.CAG_IMAGE_ONLY and not is_vision_model(forced_model)
-
-            @contextmanager
-            def _context_mode():
-                if _image_only_impossible:
-                    with _forced_text_context_if_image_only(
-                        f"le modèle {forced_model} n'accepte pas d'images"
-                    ):
-                        yield
-                else:
-                    yield
-
-            # L'élection de phase A (document_election_service) fait foi pour l'ORDRE des
-            # documents dans le pack : sans elle le packer rejouait sa propre formule (plafond
-            # de pages différent) et pouvait classer les élus autrement — deux « élections »
-            # contradictoires dans un même journal, et le document porteur du meilleur
-            # passage relégué derrière un généraliste pour le budget et les images.
+            # ——— Pack initial COURT du lecteur agentique ———
+            # Le tour 0 (retrieval, élection, exploration bornée) n'est plus la décision
+            # finale : il produit un premier coup d'œil — texte des pages ★ des documents
+            # élus, sous budget réduit — et le lecteur va chercher le reste lui-même avec
+            # ses outils (docs/plan_lecteur_agentique_2026-09-02.md).
             _elected_ids = [
                 int(d["document_id"])
                 for d in ((retrieval.get("election") or {}).get("elected") or [])
                 if d.get("document_id") is not None
             ] or None
+            _intent = lw_result.signals.intent if (lw_result and lw_result.signals) else None
 
-            # Construire le contexte système à partir des passages techniques
-            # Si low confidence : injecter un prompt spécial pour forcer la clarification
+            space_context_draft = _build_reader_pack(
+                session,
+                doc_passages,
+                anchor_document_ids=cag_anchor_document_ids or None,
+                intent=_intent,
+                elected_document_ids=_elected_ids,
+            )
             if retrieval_status == "low_confidence_clarification":
-                with _context_mode():
-                    space_context_draft = _build_generation_context(
-                        session,
-                        doc_passages,
-                        anchor_document_ids=cag_anchor_document_ids or None,
-                        intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
-                        elected_document_ids=_elected_ids,
-                    )
-                # Ajouter une instruction de clarification forcée après les passages
                 space_context_draft["content"] += (
-                    "\n\n⚠️ IMPORTANT : Les passages ci-dessus sont ambigus ou de faible pertinence. "
-                    "Ne déduis PAS de réponse définitive. Tu dois poser à l'utilisateur une question "
-                    "précise de clarification basée uniquement sur le contenu de ces 1-2 passages."
+                    "\n\n⚠️ IMPORTANT : les pages ci-dessus sont ambiguës ou de faible pertinence. "
+                    "Ne déduis PAS de réponse définitive sans avoir vérifié avec tes outils ; si la "
+                    "vérification ne lève pas l'ambiguïté, pose à l'utilisateur UNE question précise "
+                    "de clarification."
                 )
                 logger.info(
-                    "Low confidence détectée : prompt forcé à demander clarification (status=%s, reason=%s)",
+                    "Low confidence détectée : consigne de vérification/clarification (status=%s, reason=%s)",
                     retrieval_status,
                     retrieval_reason,
                 )
-            else:
-                with _context_mode():
-                    space_context_draft = _build_generation_context(
-                        session,
-                        doc_passages,
-                        anchor_document_ids=cag_anchor_document_ids or None,
-                        intent=(lw_result.signals.intent if lw_result and lw_result.signals else None),
-                        elected_document_ids=_elected_ids,
-                    )
+
+            cag_documents_ctx: List[dict] = list(space_context_draft.get("cag_documents") or [])
+
+            # Images du pack initial : pages MUETTES uniquement (document image_first ou
+            # besoin visuel). Le texte des autres pages est dans le pack ; le lecteur
+            # demandera leurs images s'il en a besoin (lire_pages, zoomer).
+            user_images: List[str] = []
+            user_image_captions: List[dict] = []
+            if doc_passages and cag_documents_ctx and is_vision_model(forced_model):
+                from app.services.context_packer_service import select_cag_images
+
+                user_images, user_image_captions = await asyncio.to_thread(
+                    select_cag_images,
+                    session,
+                    cag_documents_ctx,
+                    doc_passages,
+                    max_images=settings.READER_INITIAL_MAX_IMAGES,
+                    visual_only=True,
+                )
+                logger.info(
+                    "[lecteur] %d image(s) initiale(s) — pages muettes uniquement (%s)",
+                    len(user_images),
+                    forced_model,
+                )
+            elif doc_passages and not is_vision_model(forced_model):
+                logger.info("[lecteur] Pas d'images (modèle non vision: %s)", forced_model)
 
             # ——— Chunk pinning (C6) + bloc COUVERTURE (C3) ———
             # Placés en FIN de message système (zone de forte attention, comme le fil de
             # conversation) : extraits de référence VERBATIM pour les codes demandés, puis
-            # rapport factuel de couverture (le grounding cesse d'être déclaratif).
+            # rapport factuel de couverture du tour 0. Le lecteur peut désormais VÉRIFIER une
+            # référence marquée absente (chercher_code) au lieu de s'abstenir d'office.
             from app.services.coverage_service import (
                 build_coverage_block,
                 extract_message_reference_codes,
@@ -1948,8 +1941,6 @@ async def stream_space_chat_message(
                 ),
             )
 
-            # Épinglage par référence : recherche SQL directe du chunk faisant autorité pour un
-            # code demandé (densité de spécification), sans graphe d'entités.
             pinned_codes: List[str] = []
             if requested_codes:
                 try:
@@ -1970,12 +1961,6 @@ async def stream_space_chat_message(
                 except Exception as pin_err:
                     logger.warning("[chat] épinglage référence ignoré : %s", pin_err)
 
-            # La couverture se mesure contre la MATIÈRE documentaire, pas contre le message
-            # système. En mode 100 % PNG celui-ci ne porte qu'un manifeste (titres + numéros de
-            # page) : toute référence non épinglée y était déclarée ABSENTE, et le prompt
-            # transformait ce constat en « non documentée » — alors que la page part bel et bien
-            # en image. On joint donc le texte des pages packées, que le packer calcule dans les
-            # deux modes (cag_document_blocks), pour retrouver un verdict honnête.
             _coverage_evidence = "\n\n".join(
                 [space_context_draft.get("content") or ""]
                 + list(space_context_draft.get("cag_document_blocks") or [])
@@ -1986,12 +1971,12 @@ async def stream_space_chat_message(
                 doc_passages=doc_passages,
                 pinned_codes=pinned_codes,
                 retrieval_status=retrieval_status,
-                visual_context=bool(settings.CAG_IMAGE_ONLY),
+                visual_context=bool(user_images),
             )
             space_context_draft["content"] += "\n\n" + coverage_block
 
-            # Référence introuvable même après retry ciblé (cf. bloc retrieval) : au lieu d'un
-            # « non documenté » en cul-de-sac, demander UNE précision pour relancer la recherche.
+            # Référence introuvable même après retry ciblé (cf. bloc retrieval) : le lecteur
+            # vérifie lui-même (chercher_code) avant de demander une précision.
             if reference_not_found:
                 _suppliers_present = ""
                 try:
@@ -2005,22 +1990,22 @@ async def stream_space_chat_message(
                 space_context_draft["content"] += (
                     "\n\n⚠️ IMPORTANT : la ou les référence(s) "
                     + ", ".join(reference_not_found)
-                    + " n'apparaissent dans AUCUN passage ci-dessus, même après une recherche ciblée. "
-                    "Ne réponds PAS « non documentée » comme réponse finale. À la place, demande à "
-                    "l'utilisateur UNE précision courte qui permettrait de relancer la recherche : "
-                    "le FOURNISSEUR/la marque concernée, la gamme, ou une reformulation avec plus de "
-                    "contexte." + _suppliers_present
+                    + " n'apparaissent dans AUCUNE page du pack initial, même après une recherche "
+                    "ciblée. Vérifie leur existence avec chercher_code (sans document_id). Si elles "
+                    "n'existent dans aucun document, ne réponds PAS « non documentée » comme réponse "
+                    "finale : demande à l'utilisateur UNE précision courte qui permettrait de "
+                    "relancer la recherche (fournisseur/marque, gamme, ou reformulation)."
+                    + _suppliers_present
                 )
                 logger.info(
-                    "[chat] Référence(s) %s introuvable(s) → génération orientée clarification",
+                    "[chat] Référence(s) %s introuvable(s) au tour 0 → vérification par le lecteur",
                     reference_not_found,
                 )
 
             # Fil de la conversation : sujet courant, entités en focus et demande reformulée,
             # injectés à la FIN du message système (donc juste avant l'historique et le message
             # utilisateur). Sans ce bloc, un suivi elliptique ("tu as ses dimensions ?") arrive
-            # après ~100k tokens de documents CAG et le modèle perd le référent — il répond sur
-            # n'importe quel élément du contexte au lieu du sujet de la conversation.
+            # après le pack et le modèle perd le référent.
             if lw_result:
                 from app.services.conversation_state_service import format_generation_state_block
 
@@ -2047,53 +2032,8 @@ async def stream_space_chat_message(
 
             full_context_draft.extend(rag_history)
 
-            user_images: List[str] = []
-            user_image_captions: List[dict] = []
-            cag_documents_ctx: List[dict] = list(space_context_draft.get("cag_documents") or [])
-            if doc_passages and is_vision_model(forced_model):
-                if settings.CAG_ENABLED and cag_documents_ctx:
-                    # Alignement texte/visuel : PNG UNIQUEMENT pour des pages réellement packées
-                    # dans le contexte CAG (et légendées), pas pour les passages top-k bruts.
-                    from app.services.context_packer_service import select_cag_images
-
-                    user_images, user_image_captions = await asyncio.to_thread(
-                        select_cag_images,
-                        session,
-                        cag_documents_ctx,
-                        doc_passages,
-                    )
-                    logger.info(
-                        "[stream_space_chat_message] %d image(s) PNG alignées sur le contexte CAG pour %s",
-                        len(user_images),
-                        forced_model,
-                    )
-                elif retrieval_images:
-                    user_images = retrieval_images[: settings.RAG_MAX_IMAGES]
-                    logger.info(
-                        "[stream_space_chat_message] %d image(s) PNG du pipeline multimodal pour %s",
-                        len(user_images),
-                        forced_model,
-                    )
-                else:
-                    user_images = await render_page_images_for_passages_async(
-                        session,
-                        doc_passages,
-                        max_pages=settings.RAG_MAX_IMAGES,
-                        needs_image_only=not settings.RAG_RENDER_ALL_IMAGES,
-                    )
-                    logger.info(
-                        "[stream_space_chat_message] %d image(s) PNG rendues (legacy) pour %s",
-                        len(user_images),
-                        forced_model,
-                    )
-            elif doc_passages:
-                logger.info(
-                    "[stream_space_chat_message] Pas d'images (modèle non vision: %s)",
-                    forced_model,
-                )
-
             # Sandwich anti « lost in the middle » : rappel final de tâche (+ question autonome)
-            # en toute fin de contexte, après les ~10-100k tokens de documents.
+            # en toute fin de contexte, après le pack.
             task_reminder = None
             if settings.CAG_ENABLED and doc_passages:
                 from app.services.rag_generation_service import build_cag_task_reminder
@@ -2114,9 +2054,11 @@ async def stream_space_chat_message(
             full_context_draft.append(user_msg)
 
             logger.info(
-                "[chat] Étape %s — génération réponse stream (model=%s)",
+                "[chat] Étape %s — lecteur agentique (model=%s, pack=%d doc(s), %d image(s))",
                 "4/5" if settings.QUERY_UNDERSTANDING_ENABLED else "4/4",
                 forced_model,
+                len(cag_documents_ctx),
+                len(user_images),
             )
 
             _pipeline_inputs_space = {
@@ -2178,249 +2120,179 @@ async def stream_space_chat_message(
                 yield f"data: {json.dumps({'done': True, 'message_id': assistant_message_id, 'trace': static_trace})}\n\n"
                 return
 
-            yield _stage_event("generation", "Rédaction de la réponse")
+            yield _stage_event("generation", "Lecture des documents")
+            source_filter = None
+            verification_result = None
+            loop_trace = None
+            used_pages_by_index: Dict[int, List[int]] = {}
             with trace_pipeline(
                 "space_chat_pipeline",
                 inputs=_pipeline_inputs_space,
-                tags=["chat", "space", "rag", "kag"],
+                tags=["chat", "space", "rag", "reader"],
             ) as pipeline_run:
                 if settings.LLM_PROVIDER != "ollama" and not settings.MISTRAL_API_KEY:
                     raise ValueError("Mistral API key non configurée")
+
+                from app.services.reader_agent_service import LoopBudget, ReaderLoop
+                from app.services.reader_tools import ToolContext, build_reader_tools
+                from app.services.response_verification_service import check_reader_output
+                from app.services.stream_source_filter import SourcesTagStreamFilter
+
+                gen_max_tokens = settings.CAG_MAX_COMPLETION_TOKENS if settings.CAG_ENABLED else None
+
+                # Corpus de preuve initial : les blocs documents du pack (sans le prompt).
+                _evidence_seed = list(space_context_draft.get("cag_document_blocks") or [])
+                if not _evidence_seed:
+                    _evidence_seed = [space_context_draft.get("content") or ""]
+
+                tool_ctx = ToolContext(
+                    space_id=space_id,
+                    user_id=current_user.id,
+                    allowed_document_ids=allowed_document_ids,
+                    signals=(lw_result.signals if lw_result and lw_result.signals else None),
+                    known_documents={
+                        int(d["document_id"]): str(d.get("document_title") or "")
+                        for d in cag_documents_ctx
+                        if d.get("document_id") is not None
+                    },
+                    matched_pages_by_doc={
+                        int(d["document_id"]): list(d.get("matched_pages") or [])
+                        for d in cag_documents_ctx
+                        if d.get("document_id") is not None
+                    },
+                    image_dpi=settings.CAG_IMAGE_DPI,
+                )
+                reader_tools = build_reader_tools(tool_ctx) if settings.LLM_PROVIDER != "ollama" else []
+
+                def _output_check(final_text: str, evidence_text: str, citations: List[str]) -> dict:
+                    return check_reader_output(
+                        response_text=final_text,
+                        evidence_text=evidence_text,
+                        question=retrieval_query_text,
+                        user_message=request.message,
+                        citations=citations,
+                    )
+
+                _doc_id_by_index = {
+                    d.get("index"): d.get("document_id") for d in cag_documents_ctx
+                }
+                loop = ReaderLoop(
+                    messages=full_context_draft,
+                    model=forced_model,
+                    stream_fn=chat_stream_wrapper,
+                    tools=reader_tools,
+                    budget=LoopBudget(
+                        max_tool_calls=settings.READER_MAX_TOOL_CALLS,
+                        deadline_s=settings.READER_DEADLINE_S,
+                        max_tool_images=settings.READER_MAX_TOOL_IMAGES,
+                    ),
+                    max_tokens=gen_max_tokens,
+                    initial_documents=cag_documents_ctx,
+                    evidence_seed=_evidence_seed,
+                    initial_images_meta=[
+                        {
+                            "document_id": _doc_id_by_index.get(c.get("document_index")),
+                            "page_no": c.get("page_no"),
+                            "document_title": c.get("document_title"),
+                        }
+                        for c in user_image_captions
+                    ],
+                    output_check=_output_check,
+                )
 
                 with trace_run(
                     "stream_generation",
                     run_type="llm",
                     inputs={
                         "model": forced_model,
+                        "tools": [t.name for t in reader_tools],
                         "messages": [
-                            {"role": m.get("role"), "content": str(m.get("content", ""))}
+                            {"role": m.get("role"), "content": str(m.get("content", ""))[:2000]}
                             for m in full_context_draft
-                        ]
+                        ],
                     },
-                    tags=["llm", "stream", "space"]
+                    tags=["llm", "stream", "space", "reader"],
                 ) as stream_run:
-                    # Bloc machine <sources>{...}</sources> émis en fin de réponse CAG :
-                    # filtré du stream (jamais affiché), parsé pour les sources UI.
-                    from app.services.stream_source_filter import SourcesTagStreamFilter
-
-                    source_filter = SourcesTagStreamFilter() if settings.CAG_ENABLED else None
-                    # Plafond de réponse relevé en mode CAG (procédures complètes).
-                    gen_max_tokens = settings.CAG_MAX_COMPLETION_TOKENS if settings.CAG_ENABLED else None
-
-                    # ——— Vérification bloquante (B7c) : mode tampon ———
-                    # Le texte est généré SANS être émis, vérifié (codes + cotes contre le
-                    # contexte complet + juge LLM distinct), réparé une fois si besoin,
-                    # PUIS rejoué au client. VERIFY_BLOCKING=false = flux historique.
-                    #
-                    # En mode 100 % PNG le message système ne porte qu'un manifeste, mais le
-                    # packer calcule le TEXTE des pages packées dans les deux modes
-                    # (cag_document_blocks) — le bloc COUVERTURE s'en sert déjà. La matière à
-                    # confronter existe donc : on la joint au contexte de vérification au lieu
-                    # de désactiver le contrôle. Mesuré le 01/09 : sans lui, une liste de codes
-                    # RAL absents de TOUT le corpus est partie à l'utilisateur sans être
-                    # rattrapée — précisément dans le mode où le modèle ne lit que des images
-                    # et fabrique le plus volontiers.
-                    _verification_evidence = "\n\n".join(
-                        [space_context_draft.get("content") or ""]
-                        + list(space_context_draft.get("cag_document_blocks") or [])
-                    )
-                    verify_active = bool(
-                        settings.VERIFY_ENABLED
-                        and request.conversation_id
-                        and space_context_draft.get("content")
-                    )
-                    if verify_active and settings.CAG_IMAGE_ONLY:
-                        logger.info(
-                            "[verify] CAG_IMAGE_ONLY actif — vérification d'ancrage sur le "
-                            "TEXTE des pages packées (%d caractères) ; les codes cités dans "
-                            "la question sont exemptés.",
-                            sum(len(b) for b in (space_context_draft.get("cag_document_blocks") or [])),
-                        )
-                    buffer_mode = bool(verify_active and settings.VERIFY_BLOCKING)
-
-                    # Tentatives dégressives face à un Mistral 400 (souvent = contexte trop
-                    # gros) : contexte complet → CAG RE-PACKÉ en budget eco → question nue.
-                    # Contextes construits PARESSEUSEMENT (callables) : le cas normal (succès
-                    # au 1er essai) ne doit JAMAIS payer le coût d'un repackaging CAG "eco"
-                    # inutile (SQL + calcul de tokens) à chaque requête.
-                    # Le filtre <sources> est RÉINITIALISÉ à chaque tentative (P0.2) pour ne
-                    # pas hériter d'un état de capture partiel de la tentative précédente.
-                    stream_attempts = [
-                        ("full", lambda: full_context_draft, gen_max_tokens),
-                        (
-                            "eco",
-                            lambda: _build_eco_context(
-                                session, doc_passages,
-                                anchor_document_ids or None, request.message,
-                            ),
-                            gen_max_tokens,
-                        ),
-                        ("minimal", lambda: [{"role": "user", "content": request.message}], None),
-                    ]
-                    # [PERF] Bucket macro n°2 : génération (latence 1er token = prefill).
+                    # [PERF] Bucket macro n°2 : lecteur (appels Large + outils).
                     _t_gen_start = _time.perf_counter()
-                    for _label, _ctx_fn, _mt in stream_attempts:
-                        # On ne bascule en fallback QUE si rien n'a encore été émis.
-                        if assistant_response:
-                            break
-                        if _label != "full":
-                            logger.warning("Mistral 400 → tentative de secours '%s'", _label)
-                            if settings.CAG_ENABLED:
-                                source_filter = SourcesTagStreamFilter()
-                        try:
-                            async for _sse in _stream_llm_to_sse(
-                                _ctx_fn(),
-                                model=forced_model,
-                                max_tokens=_mt,
-                                source_filter=source_filter,
-                                sink=assistant_response,
-                                reasoning_sink=reasoning_parts,
-                                hold_messages=buffer_mode,
-                            ):
-                                yield _sse
-                            break  # génération réussie
-                        except httpx.HTTPStatusError as exc:
-                            if (
-                                exc.response is not None
-                                and exc.response.status_code == 400
-                                and not assistant_response
-                            ):
-                                continue  # tenter le niveau de secours suivant
+                    try:
+                        async for _sse in loop.run():
+                            yield _sse
+                    except httpx.HTTPStatusError as exc:
+                        # Contexte trop gros même SANS outils (le lecteur a déjà tenté son
+                        # propre repli) → tentatives de secours historiques : CAG eco, puis
+                        # question nue. Uniquement si rien n'a encore été produit.
+                        if not (
+                            exc.response is not None
+                            and exc.response.status_code == 400
+                            and not loop.final_text
+                        ):
                             raise
+                        logger.warning("Mistral 400 hors outils → tentatives de secours eco / minimal")
+                        _fallbacks = [
+                            (
+                                "eco",
+                                lambda: _build_eco_context(
+                                    session, doc_passages, anchor_document_ids or None, request.message
+                                ),
+                                gen_max_tokens,
+                            ),
+                            ("minimal", lambda: [{"role": "user", "content": request.message}], None),
+                        ]
+                        for _label, _ctx_fn, _mt in _fallbacks:
+                            if assistant_response:
+                                break
+                            logger.warning("Mistral 400 → tentative de secours '%s'", _label)
+                            _fb_filter = SourcesTagStreamFilter() if settings.CAG_ENABLED else None
+                            try:
+                                async for _sse in _stream_llm_to_sse(
+                                    _ctx_fn(),
+                                    model=forced_model,
+                                    max_tokens=_mt,
+                                    source_filter=_fb_filter,
+                                    sink=assistant_response,
+                                    reasoning_sink=reasoning_parts,
+                                ):
+                                    yield _sse
+                            except httpx.HTTPStatusError as exc2:
+                                if (
+                                    exc2.response is not None
+                                    and exc2.response.status_code == 400
+                                    and not assistant_response
+                                ):
+                                    continue
+                                raise
+                            if _fb_filter is not None:
+                                _tail = _fb_filter.finalize()
+                                if _tail:
+                                    assistant_response.append(_tail)
+                                    yield f"data: {json.dumps({'message': {'content': _tail}})}\n\n"
+                                for _u in _fb_filter.used_documents:
+                                    if _u.get("doc") is not None:
+                                        used_pages_by_index.setdefault(int(_u["doc"]), []).extend(
+                                            _u.get("pages") or []
+                                        )
+                            source_filter = _fb_filter
+                            break
+                    else:
+                        assistant_response.append(loop.final_text)
+                        source_filter = loop.source_filter
+                        reasoning_parts.extend(loop.reasoning_parts)
+                        used_pages_by_index = loop.used_pages_by_index()
+                        verification_result = loop.verification
+                        # Documents réellement LUS (pack + outils) : ce sont eux que les
+                        # sources reflètent, pas seulement le pack initial.
+                        cag_documents_ctx = loop.documents_for_sources() or cag_documents_ctx
+                    loop_trace = loop.trace
                     logger.info(
-                        "[PERF][chat] génération TOTAL %.2fs — %d chars",
+                        "[PERF][chat] génération TOTAL %.2fs — %d chars, %d appel(s) d'outil, arrêt=%s",
                         _time.perf_counter() - _t_gen_start,
                         sum(len(c) for c in assistant_response),
+                        loop.tool_calls_used,
+                        loop.stopped_by,
                     )
-
-                    # Fin de stream : relâcher un éventuel texte retenu à tort (balise
-                    # <sources> jamais complétée) pour ne rien perdre de la réponse.
-                    if source_filter is not None:
-                        _tail = source_filter.finalize()
-                        if _tail:
-                            assistant_response.append(_tail)
-                            if not buffer_mode:
-                                yield f"data: {json.dumps({'message': {'content': _tail}})}\n\n"
-
                     final_response = "".join(assistant_response)
-                    stream_run.end(outputs={"response": final_response})
-
-                # ——— Gate de vérification (B7c) — le texte n'a PAS encore été émis ———
-                # ``buffer_mode`` est déjà faux en mode 100 % PNG (cf. verify_active
-                # ci-dessus) : ce bloc ne s'exécute que lorsqu'il y a réellement du texte
-                # documentaire à confronter à la réponse.
-                verification_result = None
-                if buffer_mode and assistant_response:
-                    # Pages citées par le modèle via <sources> : le juge doit voir en
-                    # priorité ce sur quoi la réponse s'appuie.
-                    _cited_pages_early: Dict[int, List[int]] = {}
-                    if source_filter is not None and cag_documents_ctx:
-                        _docs_by_index = {
-                            int(d.get("index")): d
-                            for d in cag_documents_ctx
-                            if d.get("index") is not None
-                        }
-                        for _u in source_filter.used_documents or []:
-                            _doc = _docs_by_index.get(_u.get("doc"))
-                            _pages = [p for p in (_u.get("pages") or []) if isinstance(p, int)]
-                            if _doc and _pages:
-                                _cited_pages_early.setdefault(
-                                    int(_doc["document_id"]), []
-                                ).extend(_pages)
-                    try:
-                        from app.services.response_verification_service import verify_response
-
-                        verification_result = await verify_response(
-                            question=retrieval_query_text,
-                            response_text="".join(assistant_response),
-                            context_text=_verification_evidence,
-                            model=settings.effective_verify_model,
-                            document_blocks=space_context_draft.get("cag_document_blocks"),
-                            cag_documents=space_context_draft.get("cag_documents"),
-                            cited_pages=_cited_pages_early,
-                            user_message=request.message,
-                        )
-                    except Exception as _verif_err:  # noqa: BLE001
-                        logger.warning(
-                            "Vérification bloquante en échec — émission sans gate : %s",
-                            _verif_err,
-                        )
-                        verification_result = None
-
-                    if verification_result is not None:
-                        if verification_result.get("ok"):
-                            verification_result["action"] = "passed"
-                        else:
-                            verification_result["action"] = "flagged"
-                            for _repair_round in range(max(0, settings.VERIFY_MAX_REPAIRS)):
-                                _repair = await _attempt_repair_generation(
-                                    session=session,
-                                    space_id=space_id,
-                                    full_context_draft=full_context_draft,
-                                    draft_text="".join(assistant_response),
-                                    verification_result=verification_result,
-                                    model=forced_model,
-                                    allowed_document_ids=allowed_document_ids,
-                                )
-                                if not _repair:
-                                    break
-                                # Re-vérification PROGRAMMATIQUE seulement (codes + cotes,
-                                # contexte complet) : rapide, insensible au juge LLM.
-                                from app.services.response_verification_service import (
-                                    check_grounding,
-                                    check_reference_grounding,
-                                )
-
-                                _rep_text = _repair["text"]
-                                _rep_claims = check_grounding(
-                                    _rep_text, _verification_evidence
-                                )
-                                if settings.VERIFY_CODE_GROUNDING:
-                                    from app.services.response_verification_service import (
-                                        unsupported_reference_codes,
-                                    )
-
-                                    for _c in unsupported_reference_codes(
-                                        _rep_text,
-                                        _verification_evidence,
-                                        question=retrieval_query_text,
-                                        user_message=request.message,
-                                    ):
-                                        if _c not in _rep_claims:
-                                            _rep_claims.append(_c)
-                                _before_claims = len(
-                                    verification_result.get("unsupported_claims") or []
-                                )
-                                if _rep_claims and len(_rep_claims) >= _before_claims:
-                                    logger.warning(
-                                        "[verify] réparation sans progrès (%s) — texte "
-                                        "initial conservé, réponse marquée",
-                                        _rep_claims,
-                                    )
-                                    break
-                                assistant_response.clear()
-                                assistant_response.append(_rep_text)
-                                if _repair.get("source_filter") is not None:
-                                    source_filter = _repair["source_filter"]
-                                verification_result["repaired"] = True
-                                verification_result["unsupported_after_repair"] = _rep_claims
-                                verification_result["action"] = (
-                                    "repaired" if not _rep_claims else "flagged"
-                                )
-                                logger.info(
-                                    "[verify] réponse réparée — non étayés %d → %d",
-                                    _before_claims,
-                                    len(_rep_claims),
-                                )
-                                break
-                    final_response = "".join(assistant_response)
-
-                # Replay du tampon (mode buffer) : effet machine à écrire simulé, le texte
-                # émis est le texte VÉRIFIÉ (réparé le cas échéant).
-                if buffer_mode:
-                    _replay_text = "".join(assistant_response)
-                    for _i in range(0, len(_replay_text), 60):
-                        yield f"data: {json.dumps({'message': {'content': _replay_text[_i:_i + 60]}})}\n\n"
+                    stream_run.end(outputs={"response": final_response, "loop": loop_trace})
 
                 pipeline_run.end(outputs={
                     "nb_doc_passages": len(doc_passages),
@@ -2435,11 +2307,6 @@ async def stream_space_chat_message(
                 if settings.CAG_ENABLED and cag_documents_ctx:
                     # Sources par DOCUMENT : reflète le contexte réellement packé (CAG),
                     # filtré par le bloc <sources> du modèle quand il est exploitable.
-                    used_pages_by_index = (
-                        {u["doc"]: u["pages"] for u in source_filter.used_documents}
-                        if source_filter is not None
-                        else {}
-                    )
                     sources_data = _build_document_sources(cag_documents_ctx, used_pages_by_index)
                     has_file_by_doc = {
                         s["document_id"]: bool(s.get("has_source_file"))
@@ -2744,47 +2611,6 @@ async def stream_space_chat_message(
                     sources_data.append(ill_source)
                     logger.info(f"Illustration added to sources_data: {ill_source}")
 
-                # Vérification post-génération ADVISORY (P2, 2026-07-20 ; refonte B7) : en
-                # mode non bloquant le texte a déjà streamé — ce contrôle détecte et trace.
-                # En mode bloquant (buffer), la vérification a DÉJÀ eu lieu avant émission
-                # (gate B7c ci-dessus) : on ne la rejoue pas. Modèle DISTINCT de la
-                # génération (effective_verify_model) ; VERIFY_ENABLED=false = zéro appel.
-                if (
-                    verification_result is None
-                    and verify_active
-                    and assistant_response
-                ):
-                    try:
-                        from app.services.response_verification_service import verify_response
-
-                        # Pages réellement citées par le modèle (<sources>) : le juge doit
-                        # voir EN PRIORITÉ ce sur quoi la réponse s'appuie, pas la tête du
-                        # contexte. Le contexte complet reste passé pour le contrôle
-                        # programmatique, qui le scanne sans troncature.
-                        _cited_pages: dict = {}
-                        for _src in sources_data or []:
-                            _sid = _src.get("document_id")
-                            _used = [p for p in (_src.get("used_pages") or []) if isinstance(p, int)]
-                            if _sid is not None and _used:
-                                _cited_pages.setdefault(int(_sid), []).extend(_used)
-
-                        verification_result = await verify_response(
-                            question=retrieval_query_text,
-                            response_text=complete_response,
-                            context_text=_verification_evidence,
-                            model=settings.effective_verify_model,
-                            document_blocks=space_context_draft.get("cag_document_blocks"),
-                            cag_documents=space_context_draft.get("cag_documents"),
-                            cited_pages=_cited_pages,
-                            user_message=request.message,
-                        )
-                        if verification_result is not None:
-                            verification_result["action"] = (
-                                "passed" if verification_result.get("ok") else "detected_only"
-                            )
-                    except Exception as verif_err:
-                        logger.warning("Vérification post-génération ignorée: %s", verif_err)
-
                 # Trace de génération (« cheminement ») : route, signaux, retrieval, KAG,
                 # reasoning et vérification, persistée dans metadata_json et renvoyée au client
                 # pour le bouton d'inspection. La clé verification reste aussi au niveau racine
@@ -2807,6 +2633,7 @@ async def stream_space_chat_message(
                     anchor_boost=retrieval.get("anchor_boost"),
                     anchor_intent_changed=anchor_intent_changed,
                     cag_documents=space_context_draft.get("cag_documents"),
+                    loop=loop_trace,
                 )
 
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture

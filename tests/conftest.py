@@ -213,21 +213,6 @@ def bearer_headers(user_id: int) -> dict:
     return {"Authorization": f"Bearer {token}"}
 
 
-@pytest.fixture(autouse=True)
-def _neutralise_modes_experimentaux() -> Generator[None, None, None]:
-    """Un switch d'expérimentation ne doit JAMAIS changer ce que la suite valide.
-
-    Constaté le 2026-08-26 : `CAG_IMAGE_ONLY=true` posé dans le .env pour un test manuel
-    faisait tomber 12 tests de packing — le contexte ne contenait plus de texte, et la
-    suite validait donc un chemin qui n'est pas celui de la production. Les tests qui
-    ciblent explicitement ce mode le réactivent eux-mêmes.
-    """
-    from app.config import settings as _settings
-
-    with mock.patch.object(_settings, "CAG_IMAGE_ONLY", False):
-        yield
-
-
 @pytest.fixture(scope="session", autouse=True)
 def _patch_embedding_startup() -> Generator[None, None, None]:
     fake = [0.0] * EMBEDDING_DIMENSION

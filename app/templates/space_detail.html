@@ -2698,41 +2698,53 @@ function renderGenerationTrace(trace) {
       parts.push(_traceCard("Retry ciblé sur référence", "ti-refresh", inner));
     }
 
-    // 4b-bis. Boucle agentique (B8) : rounds du juge de suffisance, relances, élection.
+    // 4b-bis. Lecteur agentique : rounds, appels d'outils, budget, arrêt, repli.
     const lp = trace.loop;
     if (lp && lp.rounds && lp.rounds.length) {
-      const _verdictLabel = (rd) => {
-        if (rd.status !== "ok") return "sans verdict (" + (rd.status_reason || "échec technique") + ")";
-        if (rd.verdict === "sufficient") return "suffisant" + (rd.evidence_verified ? " — preuve vérifiée" : "");
-        return "insuffisant";
+      const _STOP_LABELS = {
+        final: "réponse rendue", budget: "budget d'appels épuisé", deadline: "deadline atteinte",
+        repeat: "appel répété (non-progrès)", degraded: "repli sans outils",
+      };
+      const _argsLabel = (a) => {
+        if (!a || typeof a !== "object") return "";
+        const bits = [];
+        if (a.question) bits.push("« " + String(a.question).slice(0, 80) + " »");
+        if (a.code) bits.push(String(a.code).toUpperCase());
+        if (a.document_id != null) bits.push("doc " + a.document_id);
+        if (a.pages) bits.push("p. " + [].concat(a.pages).join(", "));
+        if (a.page != null) bits.push("p. " + a.page);
+        if (a.autour_de) bits.push("autour de " + a.autour_de);
+        if (a.zone) bits.push(a.zone);
+        if (a.avec_images) bits.push("avec images");
+        return bits.join(" · ");
       };
       const loopRows = lp.rounds.map((rd) => {
-        const bits = [_verdictLabel(rd)];
-        if (rd.confidence != null) bits.push("confiance " + Math.round(rd.confidence * 100) + " %");
-        if (rd.images) bits.push(rd.images + " image(s) de page");
-        if (rd.duration_ms != null) bits.push(rd.duration_ms + " ms");
-        const elected = (rd.elected || []).map((e) =>
-          `doc ${e.document_id}${(e.pages && e.pages.length) ? " p. " + e.pages.join(", ") : ""}`
-        ).join(" · ");
-        const extra = [];
-        if (elected) extra.push("élu : " + elected);
-        if (rd.action) extra.push("relance : " + rd.action);
-        if (rd.relaunch) extra.push("issue : " + rd.relaunch);
-        if (rd.missing) extra.push("manque : " + rd.missing);
+        const callRows = (rd.calls || []).map((c) =>
+          `<div class="text-[11px] ${c.error ? "text-amber-700 dark:text-amber-300" : "text-gray-600 dark:text-gray-300"} break-words">
+            <span class="font-mono">${escapeHtml(String(c.tool || "?"))}</span> ${escapeHtml(_argsLabel(c.args))}
+            <span class="text-gray-400">— ${c.ms != null ? c.ms + " ms" : ""}${c.images ? " · " + c.images + " image(s)" : ""}${c.error ? " · erreur" : ""}</span>
+          </div>`
+        ).join("");
+        const head = rd.final
+          ? "Réponse finale" + (rd.llm_ms != null ? " · " + rd.llm_ms + " ms" : "")
+          : `${(rd.calls || []).length} appel(s) d'outil` + (rd.llm_ms != null ? " · modèle " + rd.llm_ms + " ms" : "");
         return `<li class="py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">
-          <div class="text-xs font-medium text-gray-800 dark:text-gray-200">Round ${escapeHtml(String(rd.round))} — ${escapeHtml(bits.join(" · "))}</div>
-          <div class="text-[11px] text-gray-500 dark:text-gray-400 break-words">« ${escapeHtml(rd.query || "")} »${extra.length ? " — " + escapeHtml(extra.join(" · ")) : ""}</div>
-          ${rd.evidence ? `<div class="text-[11px] text-emerald-700 dark:text-emerald-300 break-words">Preuve : « ${escapeHtml(rd.evidence)} »</div>` : ""}
+          <div class="text-xs font-medium text-gray-800 dark:text-gray-200">Round ${escapeHtml(String(rd.round))} — ${escapeHtml(head)}</div>
+          ${rd.plan ? `<div class="text-[11px] italic text-gray-500 dark:text-gray-400 break-words">« ${escapeHtml(rd.plan)} »</div>` : ""}
+          ${callRows}
         </li>`;
       }).join("");
       let loopInner = _traceKV([
-        ["Mode", lp.mode === "active" ? "actif — le juge pilote élection et relances" : "shadow — verdicts tracés, jamais actionnés"],
-        ["Rounds", lp.rounds.length],
-        ["Deadline atteinte", lp.deadline_hit ? "oui" : null],
-        ["Erreur", lp.error || null],
+        ["Appels d'outils", lp.tool_calls != null ? lp.tool_calls : null],
+        ["Images d'outils", lp.tool_images || null],
+        ["Rounds de contrôle", lp.control_rounds || null],
+        ["Arrêt", _STOP_LABELS[lp.stopped_by] || lp.stopped_by || null],
+        ["Durée", lp.duration_ms != null ? lp.duration_ms + " ms" : null],
+        ["Repli sans outils", lp.degraded ? String(lp.degraded) : null],
+        ["Outils disponibles", (lp.tools_available || []).join(", ") || null],
       ]);
       loopInner += `<ul class="-my-1 mt-1">${loopRows}</ul>`;
-      parts.push(_traceCard("Boucle agentique — juge de suffisance", "ti-repeat", loopInner));
+      parts.push(_traceCard("Lecteur agentique — appels d'outils", "ti-repeat", loopInner));
     }
 
     // 4c. Boost d'ancre : rend visible qu'un tour a été biaisé par le sujet courant.

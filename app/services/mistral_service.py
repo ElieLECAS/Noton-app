@@ -2,7 +2,7 @@ import asyncio
 import httpx
 import json
 import random
-from typing import List, Dict, Optional, Any, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 import time
 import logging
 
@@ -209,11 +209,88 @@ async def chat(
     return data
 
 
+_TOOL_CALL_ID_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+
+def _fallback_tool_call_id() -> str:
+    """Identifiant d'appel de repli : Mistral exige 9 caractères alphanumériques."""
+    import secrets
+
+    return "".join(secrets.choice(_TOOL_CALL_ID_ALPHABET) for _ in range(9))
+
+
+class ToolCallAccumulator:
+    """Recompose les appels d'outils d'un flux SSE Mistral.
+
+    En streaming, un appel arrive en fragments ``delta.tool_calls[i]`` : ``index``
+    (position de l'appel), ``id`` et ``function.name`` en tête, puis ``function.arguments``
+    en morceaux de JSON à concaténer. Certains flux omettent ``index`` : un fragment porteur
+    d'un ``id`` ouvre alors un nouvel appel, un fragment sans ``id`` prolonge le dernier.
+    Fonction pure (aucune E/S) : testable sans réseau.
+    """
+
+    def __init__(self) -> None:
+        self._calls: Dict[int, Dict[str, Any]] = {}
+        self._order: List[int] = []
+
+    def feed(self, deltas: Any) -> None:
+        if not isinstance(deltas, list):
+            return
+        for delta in deltas:
+            if not isinstance(delta, dict):
+                continue
+            idx = delta.get("index")
+            if not isinstance(idx, int):
+                if delta.get("id") or not self._order:
+                    idx = len(self._order)
+                else:
+                    idx = self._order[-1]
+            entry = self._calls.get(idx)
+            if entry is None:
+                entry = {"id": None, "type": "function", "function": {"name": "", "arguments": ""}}
+                self._calls[idx] = entry
+                self._order.append(idx)
+            if delta.get("id"):
+                entry["id"] = str(delta["id"])
+            fn = delta.get("function") or {}
+            name = fn.get("name")
+            if name:
+                entry["function"]["name"] = str(name)
+            args = fn.get("arguments")
+            if isinstance(args, str):
+                entry["function"]["arguments"] += args
+            elif isinstance(args, dict):
+                entry["function"]["arguments"] += json.dumps(args, ensure_ascii=False)
+
+    @property
+    def has_calls(self) -> bool:
+        return any(self._calls[i]["function"]["name"] for i in self._order)
+
+    def finish(self) -> List[Dict[str, Any]]:
+        """Appels complets, dans l'ordre d'apparition ; sans nom → ignoré."""
+        calls: List[Dict[str, Any]] = []
+        for idx in self._order:
+            entry = self._calls[idx]
+            if not entry["function"]["name"]:
+                continue
+            if not entry["id"]:
+                entry["id"] = _fallback_tool_call_id()
+            if not entry["function"]["arguments"].strip():
+                entry["function"]["arguments"] = "{}"
+            calls.append(entry)
+        return calls
+
+
 def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Nettoie la liste de messages pour Mistral:
+    """Nettoie la liste de messages pour Mistral :
     1. Fusionne les messages système consécutifs au début.
-    2. Fusionne les messages consécutifs du même rôle (user/user, assistant/assistant).
-    3. S'assure que l'ordre est respecté (system? -> user -> assistant -> user...).
+    2. Fusionne les messages consécutifs du même rôle (user/user, assistant/assistant) —
+       SAUF les messages du protocole d'outils, qui doivent rester distincts : un
+       assistant porteur de ``tool_calls`` (même sans texte) et chaque message ``tool``
+       (apparié à son ``tool_call_id``). Les fusionner ou les supprimer casse
+       l'appariement appel ↔ résultat et l'API répond 400 (constaté avant la boucle
+       du lecteur : un assistant à ``content=""`` était jeté, deux ``tool`` fusionnés).
+    3. S'assure que l'ordre commence par user (après un éventuel system).
     """
     logger.info(
         "[_clean_messages] Cleaning %d messages before sending to Mistral API...",
@@ -221,9 +298,9 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     )
     if not messages:
         return []
-    
-    cleaned = []
-    
+
+    cleaned: List[Dict[str, Any]] = []
+
     # 1. Gérer le système
     system_content = []
     idx = 0
@@ -235,52 +312,72 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if content:
             system_content.append(content)
         idx += 1
-    
+
     if system_content:
         cleaned.append({"role": "system", "content": "\n\n".join(system_content)})
-    
-    # 2. Gérer le reste avec fusion des doublons de rôles
+
+    # 2. Gérer le reste avec fusion des doublons de rôles (hors protocole d'outils)
     for i in range(idx, len(messages)):
         msg = messages[i]
         role = msg.get("role")
         content = msg.get("content", "")
-        
-        # S'assurer que content est une string propre
+
         if isinstance(content, list):
             text_parts = [part["text"] for part in content if isinstance(part, dict) and part.get("type") == "text"]
             content_str = "\n\n".join(text_parts)
         else:
-            content_str = str(content)
-            
+            content_str = "" if content is None else str(content)
+
         images = msg.get("images") or []
-        
+
+        # ——— Protocole d'outils : jamais fusionné, jamais supprimé ———
+        if role == "tool":
+            entry: Dict[str, Any] = {"role": "tool", "content": content_str}
+            if msg.get("tool_call_id"):
+                entry["tool_call_id"] = msg["tool_call_id"]
+            if msg.get("name"):
+                entry["name"] = msg["name"]
+            cleaned.append(entry)
+            continue
+        tool_calls = msg.get("tool_calls") if role == "assistant" else None
+        if tool_calls:
+            cleaned.append({"role": "assistant", "content": content_str, "tool_calls": list(tool_calls)})
+            continue
+
         if not content_str.strip() and not images:
             continue
-            
-        if cleaned and cleaned[-1]["role"] == role:
+
+        prev = cleaned[-1] if cleaned else None
+        mergeable = (
+            prev is not None
+            and prev.get("role") == role
+            and role in ("user", "assistant")
+            and not prev.get("tool_calls")
+        )
+        if mergeable:
             # Même rôle que le précédent, on fusionne
-            existing_content = cleaned[-1]["content"]
+            existing_content = prev["content"]
             existing_is_list = isinstance(existing_content, list)
-            
+
             if existing_is_list or images:
                 # Normaliser l'existant en liste de parties
                 if existing_is_list:
                     parts = list(existing_content)
                 else:
                     parts = [{"type": "text", "text": str(existing_content)}]
-                
+
                 # Ajouter la nouvelle partie texte
                 parts.append({"type": "text", "text": "\n\n" + content_str})
-                
+
                 # Ajouter les nouvelles images
                 for img in images:
                     url = img if img.startswith("data:") else f"data:image/png;base64,{img}"
                     parts.append({"type": "image_url", "image_url": {"url": url}})
-                
-                cleaned[-1]["content"] = parts
+
+                prev["content"] = parts
             else:
                 # Fusion classique simple en string
-                cleaned[-1]["content"] += "\n\n" + content_str
+                prev["content"] += "\n\n" + content_str
         else:
             # Nouveau message
             if images:
@@ -291,7 +388,7 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 cleaned.append({"role": role, "content": parts})
             else:
                 cleaned.append({"role": role, "content": content_str})
-    
+
     # Mistral demande que ça commence par user (si pas de system) ou que ça suive system
     # Si le premier après system est un assistant, on l'ignore ou on l'insère après un user vide
     if cleaned and cleaned[0]["role"] == "system":
@@ -299,7 +396,7 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             cleaned.insert(1, {"role": "user", "content": "(Suite de la conversation)"})
     elif cleaned and cleaned[0]["role"] == "assistant":
         cleaned.insert(0, {"role": "user", "content": "(Début de la conversation)"})
-        
+
     # Log the summary of cleaned messages
     for idx_msg, m in enumerate(cleaned):
         role = m.get("role")
@@ -314,14 +411,22 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 num_images,
                 text_lens,
             )
+        elif m.get("tool_calls"):
+            logger.info(
+                "[_clean_messages] Msg #%d: role=assistant, %d tool_call(s) [%s]",
+                idx_msg,
+                len(m["tool_calls"]),
+                ", ".join(str((tc.get("function") or {}).get("name")) for tc in m["tool_calls"]),
+            )
         else:
             logger.info(
-                "[_clean_messages] Msg #%d: role=%s, content=STRING [len=%d]",
+                "[_clean_messages] Msg #%d: role=%s, content=STRING [len=%d]%s",
                 idx_msg,
                 role,
                 len(str(c)),
+                f" tool_call_id={m.get('tool_call_id')}" if role == "tool" else "",
             )
-        
+
     return cleaned
 
 
@@ -466,6 +571,12 @@ async def chat_stream(
                                     raise MistralRateLimitError(_rate_limit_user_message())
                                 response.raise_for_status()
 
+                            # Appels d'outils : ils arrivent en fragments indexés dans
+                            # delta.tool_calls ; on les recompose et on les émet EN FIN de
+                            # flux, en un seul événement {"tool_calls": [...]}. Le texte qui
+                            # les précède (le « plan » du modèle) est émis normalement.
+                            tool_acc = ToolCallAccumulator()
+                            finish_reason_seen: Optional[str] = None
                             async for line in response.aiter_lines():
                                 if not line:
                                     continue
@@ -477,47 +588,53 @@ async def chat_stream(
                                         continue
                                     try:
                                         data = json.loads(data_str)
-                                        choices = data.get("choices", [])
-                                        if choices:
-                                            choice0 = choices[0] or {}
-                                            finish_reason = choice0.get("finish_reason")
-                                            delta = choice0.get("delta", {})
-                                            content = delta.get("content")
-                                            if content:
-                                                last_token_ts = time.monotonic()
-                                                if isinstance(content, list):
-                                                    # Mode reasoning : pendant la phase de réflexion,
-                                                    # delta.content est une LISTE de chunks
-                                                    # {type: "thinking"|"text"}. Le thinking est émis
-                                                    # comme événement DISTINCT ({"thinking": ...}) — le
-                                                    # client l'affiche puis le masque à l'arrivée de la
-                                                    # réponse ; le texte final passe en {"message": ...}.
-                                                    for part in content:
-                                                        if not isinstance(part, dict):
-                                                            continue
-                                                        ptype = part.get("type")
-                                                        if ptype == "text" and part.get("text"):
-                                                            yield json.dumps({"message": {"content": part["text"]}})
-                                                            has_yielded = True
-                                                        elif ptype == "thinking":
-                                                            inner = part.get("thinking")
-                                                            if isinstance(inner, list):
-                                                                think_txt = "".join(
-                                                                    tc.get("text", "") for tc in inner
-                                                                    if isinstance(tc, dict)
-                                                                )
-                                                            else:
-                                                                think_txt = inner if isinstance(inner, str) else ""
-                                                            if think_txt:
-                                                                yield json.dumps({"thinking": think_txt})
-                                                else:
-                                                    yield json.dumps({"message": {"content": content}})
-                                                    has_yielded = True
-
-                                            if finish_reason:
-                                                break
                                     except json.JSONDecodeError:
                                         continue
+                                    choices = data.get("choices", [])
+                                    if not choices:
+                                        continue
+                                    choice0 = choices[0] or {}
+                                    finish_reason = choice0.get("finish_reason")
+                                    delta = choice0.get("delta", {}) or {}
+                                    tool_deltas = delta.get("tool_calls")
+                                    if tool_deltas:
+                                        last_token_ts = time.monotonic()
+                                        tool_acc.feed(tool_deltas)
+                                    content = delta.get("content")
+                                    if content:
+                                        last_token_ts = time.monotonic()
+                                        if isinstance(content, list):
+                                            # Mode reasoning : pendant la phase de réflexion,
+                                            # delta.content est une LISTE de chunks
+                                            # {type: "thinking"|"text"}. Le thinking est émis
+                                            # comme événement DISTINCT ({"thinking": ...}) — le
+                                            # client l'affiche puis le masque à l'arrivée de la
+                                            # réponse ; le texte final passe en {"message": ...}.
+                                            for part in content:
+                                                if not isinstance(part, dict):
+                                                    continue
+                                                ptype = part.get("type")
+                                                if ptype == "text" and part.get("text"):
+                                                    yield json.dumps({"message": {"content": part["text"]}})
+                                                    has_yielded = True
+                                                elif ptype == "thinking":
+                                                    inner = part.get("thinking")
+                                                    if isinstance(inner, list):
+                                                        think_txt = "".join(
+                                                            tc.get("text", "") for tc in inner
+                                                            if isinstance(tc, dict)
+                                                        )
+                                                    else:
+                                                        think_txt = inner if isinstance(inner, str) else ""
+                                                    if think_txt:
+                                                        yield json.dumps({"thinking": think_txt})
+                                        else:
+                                            yield json.dumps({"message": {"content": content}})
+                                            has_yielded = True
+
+                                    if finish_reason:
+                                        finish_reason_seen = finish_reason
+                                        break
 
                                 if time.monotonic() - last_token_ts > idle_break_seconds:
                                     logger.warning(
@@ -529,6 +646,20 @@ async def chat_stream(
                                         f"Mistral stream max duration reached ({max_duration_seconds}s)"
                                     )
                                     break
+                            tool_calls_final = tool_acc.finish()
+                            if tool_calls_final:
+                                logger.info(
+                                    "[MISTRAL] Stream : %d appel(s) d'outil recomposé(s) [%s]",
+                                    len(tool_calls_final),
+                                    ", ".join(tc["function"]["name"] for tc in tool_calls_final),
+                                )
+                                yield json.dumps(
+                                    {
+                                        "tool_calls": tool_calls_final,
+                                        "finish_reason": finish_reason_seen or "tool_calls",
+                                    }
+                                )
+                                has_yielded = True
                         break
                     except httpx.RequestError as exc:
                         if has_yielded or attempt >= MAX_RETRIES:
