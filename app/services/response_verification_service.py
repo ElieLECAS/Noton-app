@@ -234,6 +234,7 @@ def check_reader_output(
     question: Optional[str] = None,
     user_message: Optional[str] = None,
     citations: Optional[Sequence[str]] = None,
+    image_pages_seen: Optional[Sequence[Any]] = None,
 ) -> Dict[str, Any]:
     """Confronte la réponse du lecteur à ce qu'il a lu. Ne lève jamais.
 
@@ -250,6 +251,34 @@ def check_reader_output(
     """
     evidence_text = evidence_text or ""
     unsupported = check_grounding(response_text, evidence_text)
+
+    # Cotes lues sur un DESSIN : ce contrôle ne voit que du texte. Sur une planche
+    # technique, l'épaisseur d'un vitrage ou d'une feuillure n'est qu'une annotation de
+    # la coupe — jamais dans le texte extrait. Quand le lecteur a réellement eu l'image
+    # d'une page sous les yeux, une cote absente du texte n'est donc PAS la preuve d'une
+    # invention : le contrôle est aveugle, il se tait plutôt que d'accuser à tort (et de
+    # faire réécrire une bonne réponse en « les documents ne précisent pas »).
+    # Normes (NF/DTU/EN) et teintes RAL restent contrôlées : ce sont des chaînes de
+    # texte, pas des cotes de dessin — c'est par là qu'une liste de RAL inventés est
+    # partie à l'utilisateur le 01/09.
+    claims_from_image: List[str] = []
+    if image_pages_seen and unsupported:
+        still_unsupported: List[str] = []
+        for claim in unsupported:
+            if _MEASUREMENT_PATTERN.fullmatch(claim.strip()):
+                claims_from_image.append(claim)
+            else:
+                still_unsupported.append(claim)
+        unsupported = still_unsupported
+        if claims_from_image:
+            logger.info(
+                "[contrôle] %d cote(s) non trouvée(s) dans le texte mais %d page(s) vue(s) en "
+                "image — non signalées : %s",
+                len(claims_from_image),
+                len(image_pages_seen),
+                ", ".join(claims_from_image[:10]),
+            )
+
     unsupported_codes = unsupported_reference_codes(
         response_text, evidence_text, question=question, user_message=user_message
     )
@@ -268,6 +297,10 @@ def check_reader_output(
     feedback: Optional[str] = None
     if not ok:
         bits = [
+            "[MESSAGE SYSTÈME AUTOMATIQUE — ce n'est PAS l'utilisateur qui écrit. Corrige en "
+            "silence : ne t'adresse JAMAIS à l'utilisateur à propos de ce contrôle, n'écris "
+            "jamais « vous avez raison », « je me suis trompée » ou toute autre phrase qui "
+            "laisserait croire que l'utilisateur t'a corrigée.]\n"
             "CONTRÔLE DOCUMENTAIRE (automatique, fait foi) : les éléments suivants de ta "
             "réponse ne figurent dans AUCUNE page que tu as lue : "
             + ", ".join(str(c) for c in unsupported[:10])
@@ -292,8 +325,10 @@ def check_reader_output(
                 "mot pour mot : copie les phrases exactes des pages lues."
             )
         bits.append(
-            "Puis réponds à nouveau, complètement, en conservant les blocs <sources> et "
-            "<evidence> en fin de réponse."
+            "Puis réponds à nouveau, COMPLÈTEMENT et directement à la question initiale de "
+            "l'utilisateur — comme s'il s'agissait de ta première réponse, sans mentionner ce "
+            "contrôle ni t'excuser — en conservant les blocs <sources> et <evidence> en fin de "
+            "réponse."
         )
         feedback = " ".join(bits)
         logger.warning(
@@ -310,6 +345,8 @@ def check_reader_output(
         "ok": ok,
         "unsupported_claims": unsupported,
         "unsupported_codes": unsupported_codes,
+        # Cotes invérifiables par ce contrôle (lues sur une image vue par le lecteur).
+        "claims_from_image": claims_from_image,
         "citations_total": len(cites),
         "citations_unverified": unverified,
         "feedback": feedback,

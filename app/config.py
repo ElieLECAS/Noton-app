@@ -534,8 +534,10 @@ class Settings(BaseSettings):
     # ne pas confondre avec CAG_TOKEN_BUDGET (plafond du packer pour les autres
     # consommateurs : fiche technique, évaluation, repli eco).
     READER_INITIAL_PACK_TOKENS: int = int(os.getenv("READER_INITIAL_PACK_TOKENS", "12000"))
-    # Images jointes au pack initial : pages MUETTES uniquement (le lecteur demande les autres).
-    READER_INITIAL_MAX_IMAGES: int = int(os.getenv("READER_INITIAL_MAX_IMAGES", "3"))
+    # Images jointes au pack initial : les pages trouvées (muettes d'abord), TEXTE + IMAGE.
+    # Les cotes des planches techniques ne sont pas dans le texte extrait — un pack sans PNG
+    # fait répondre le lecteur sur les seuls libellés.
+    READER_INITIAL_MAX_IMAGES: int = int(os.getenv("READER_INITIAL_MAX_IMAGES", "6"))
     # Appels d'outils max par tour ; deadline (secondes) au-delà de laquelle le lecteur doit
     # répondre ; images fournies par les outils, cumulées sur le tour (l'API en accepte 8 par
     # requête : l'orchestrateur élague les images déjà vues de l'historique).

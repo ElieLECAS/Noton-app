@@ -178,6 +178,47 @@ def test_question_codes_are_exempt_and_measurements_checked():
     assert res["ok"] is False and "lire_pages" in res["feedback"]
 
 
+def test_measurement_read_on_a_seen_image_is_not_flagged():
+    """Cote absente du texte mais page vue en IMAGE : le contrôle est aveugle, il se tait.
+
+    Cas réel du 04/09 (parclose 2452) : l'épaisseur de vitrage n'est qu'une cote de la
+    coupe — la signaler « non étayée » faisait réécrire une bonne réponse en « les
+    documents ne précisent pas »."""
+    res = check_reader_output(
+        response_text="La parclose 2452 reçoit un vitrage de 30 mm.",
+        evidence_text=_EVIDENCE,
+        question="épaisseur de vitrage parclose 2452 ?",
+        image_pages_seen=[(438, 8)],
+    )
+    assert res["ok"] is True and res["feedback"] is None
+    assert res["claims_from_image"] == ["30 mm"]
+
+
+def test_norms_and_ral_stay_checked_even_with_images():
+    """L'exemption ne vaut QUE pour les cotes : une norme ou un RAL inventé reste signalé."""
+    res = check_reader_output(
+        response_text="Conforme à la NF P20-302, teinte RAL 9016.",
+        evidence_text=_EVIDENCE,
+        question="norme et teinte ?",
+        image_pages_seen=[(438, 8)],
+    )
+    assert res["ok"] is False
+    assert any("NF" in c for c in res["unsupported_claims"])
+    assert any("RAL" in c.upper() for c in res["unsupported_claims"])
+
+
+def test_measurement_without_image_is_still_flagged():
+    """Sans image vue, une cote absente du texte reste une invention signalée."""
+    res = check_reader_output(
+        response_text="La parclose 2452 reçoit un vitrage de 30 mm.",
+        evidence_text=_EVIDENCE,
+        question="épaisseur de vitrage parclose 2452 ?",
+    )
+    assert res["ok"] is False
+    assert any("30 mm" in c for c in res["unsupported_claims"])
+    assert res["claims_from_image"] == []
+
+
 def test_evidence_in_pack_tolerances():
     assert evidence_in_pack("ENGAGER le tenon tgy3704 dans le boitier", _EVIDENCE)
     assert evidence_in_pack("Engager le tenon TGY3704 … couple de 2,5 N·m", _EVIDENCE)

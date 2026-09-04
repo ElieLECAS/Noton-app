@@ -105,7 +105,10 @@ class ReadDocument:
 
 
 StreamFn = Callable[..., AsyncIterator[str]]
-OutputCheck = Callable[[str, str, List[str]], Dict[str, Any]]
+# (réponse, corpus de preuve texte, citations <evidence>, pages vues en IMAGE) → verdict.
+# Les pages vues en image sont nécessaires au contrôle : il ne lit que du texte, et une cote
+# portée sur une coupe n'y figure jamais.
+OutputCheck = Callable[[str, str, List[str], List[Tuple[int, int]]], Dict[str, Any]]
 
 
 def sse(obj: Dict[str, Any]) -> str:
@@ -182,6 +185,13 @@ class ReaderLoop:
             )
         # Légendes des images du message initial (pour l'élagage).
         self._initial_images_meta = list(initial_images_meta or [])
+        # Pages dont le lecteur a VU l'image (pack initial + outils) : le contrôle de sortie
+        # ne lit que du texte et doit savoir ce qu'il ne peut pas vérifier.
+        self.image_pages_seen: Set[Tuple[int, int]] = {
+            (int(m["document_id"]), int(m["page_no"]))
+            for m in self._initial_images_meta
+            if m.get("document_id") is not None and m.get("page_no") is not None
+        }
 
         # Corpus de preuve : ce que le lecteur a réellement lu.
         self.evidence_parts: List[str] = [b for b in (evidence_seed or []) if b]
@@ -391,7 +401,12 @@ class ReaderLoop:
 
                 if self.output_check is not None:
                     try:
-                        verdict = self.output_check(display, self.evidence_text, self.evidence_citations)
+                        verdict = self.output_check(
+                            display,
+                            self.evidence_text,
+                            self.evidence_citations,
+                            sorted(self.image_pages_seen),
+                        )
                     except Exception as exc:  # noqa: BLE001
                         logger.warning("[lecteur] contrôle de sortie en échec (%s) — réponse émise", exc)
                         verdict = None
@@ -410,7 +425,10 @@ class ReaderLoop:
                             # Le brouillon reste dans l'historique du tour (pas dans la
                             # conversation persistée) : le lecteur corrige EN RELISANT.
                             self.messages.append({"role": "assistant", "content": text})
-                            self.messages.append({"role": "user", "content": verdict["feedback"]})
+                            # role="system" (et non "user") : sinon le modèle traite ce tour
+                            # comme un vrai message de l'utilisateur et lui répond directement
+                            # ("vous avez raison...") au lieu de corriger en silence.
+                            self.messages.append({"role": "system", "content": verdict["feedback"]})
                             # Un round de contrôle rouvre les outils même après un arrêt
                             # « répétition » : la consigne change la question posée.
                             self._stop_tools = False
@@ -546,6 +564,9 @@ class ReaderLoop:
             for did, page in res.pages_read or []:
                 self._register_document(int(did), None)
                 self.read_documents[int(did)].pages.add(int(page))
+            for img in res.images or []:
+                if img.get("document_id") is not None and img.get("page_no") is not None:
+                    self.image_pages_seen.add((int(img["document_id"]), int(img["page_no"])))
             evidence = res.text if res.evidence is None else res.evidence
             if evidence and not res.error:
                 self.evidence_parts.append(evidence)

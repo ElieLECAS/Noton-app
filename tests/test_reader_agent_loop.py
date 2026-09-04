@@ -266,7 +266,7 @@ async def test_output_check_feedback_round_then_repaired():
     async def chercher_code(args):
         return ToolResult(text=f"{args['code']} — aucun chunk ne contient cette référence (31 documents).")
 
-    def check(text, evidence, citations):
+    def check(text, evidence, citations, image_pages=()):
         # Mini-modèle du contrôle réel : un code cité est étayé s'il figure dans ce que le
         # lecteur a lu — y compris le résultat d'outil qui constate son ABSENCE (« TGY3710 —
         # aucun chunk… »), ce qui permet de dire honnêtement qu'il n'est pas documenté.
@@ -289,7 +289,7 @@ async def test_output_check_feedback_round_then_repaired():
     # Le brouillon et la consigne de contrôle sont dans l'historique du tour…
     ctx = stream.calls[1]["context"]
     assert ctx[-2] == {"role": "assistant", "content": "La rallonge est la TGY3710."}
-    assert ctx[-1]["role"] == "user" and "CONTRÔLE" in ctx[-1]["content"]
+    assert ctx[-1]["role"] == "system" and "CONTRÔLE" in ctx[-1]["content"]
     # …et la vérification finale porte l'action « repaired ».
     assert loop.trace["control_rounds"] == 1
     assert loop.verification["ok"] is True
@@ -300,7 +300,7 @@ async def test_output_check_feedback_round_then_repaired():
 
 @pytest.mark.asyncio
 async def test_output_check_still_ko_after_feedback_is_flagged_not_looped():
-    def check(text, evidence, citations):
+    def check(text, evidence, citations, image_pages=()):
         return {"ok": False, "unsupported_claims": ["X1"], "unsupported_codes": ["X1"], "feedback": "CONTRÔLE : X1."}
 
     stream = FakeStream(

@@ -356,8 +356,10 @@ _READER_CONTEXT_SECTION = (
     "CE QUE TU AS\n"
     "Le contexte contient un PREMIER jeu de pages trouvées par la recherche (marquées ★) pour "
     "1 à 3 documents, en texte, chacun avec un en-tête (source, gamme, matériau, type) et son "
-    "identifiant « id N », avec des marqueurs [page N]. Des images de pages peuvent être jointes "
-    "pour les pages sans texte. Ce n'est qu'un POINT DE DÉPART : tu peux aller lire plus loin avec "
+    "identifiant « id N », avec des marqueurs [page N]. Les IMAGES de ces pages sont jointes quand "
+    "elles sont disponibles : sur une planche technique, le texte ne porte que les libellés et les "
+    "repères — les cotes, elles, ne sont QUE sur le dessin. Regarde l'image de la page avant de "
+    "citer une cote. Ce n'est qu'un POINT DE DÉPART : tu peux aller lire plus loin avec "
     "tes outils. Avant d'attribuer une valeur, une cote ou une consigne à une gamme/produit, "
     "vérifie l'en-tête du document : ne transfère JAMAIS une information d'une gamme vers une "
     "autre (ex. Perform 70 ≠ Perform 76, seuil PMR ≠ seuil standard). En cas d'informations "
@@ -367,9 +369,13 @@ _READER_TOOLS_SECTION = (
     "CE QUE TU PEUX FAIRE (outils)\n"
     "Tu disposes de cinq outils et d'un budget d'appels et de temps, rappelé après chaque "
     "résultat. Avant chaque appel, écris UNE phrase : ce que tu cherches et pourquoi.\n"
-    "- lire_pages : lis d'abord le TEXTE quand il existe ; il est plus fiable que l'image pour "
-    "les cotes et les références. Demande l'image (avec_images=true) seulement pour une page "
-    "signalée muette, ou pour vérifier une valeur que tu vas citer.\n"
+    "- lire_pages : lis d'abord le TEXTE quand il existe — il est plus fiable que l'image pour "
+    "les RÉFÉRENCES. Mais une COTE (épaisseur, feuillure, section, entraxe) portée sur une "
+    "coupe ou une planche n'est PAS dans le texte extrait : le texte donne la liste des "
+    "repères, le dessin porte les valeurs. Demande donc l'image (avec_images=true) avant de "
+    "citer une cote, et ne transpose JAMAIS sur un repère une valeur écrite ailleurs sur la "
+    "page (une note générale de type « valable pour une feuillure de X mm » n'est pas la cote "
+    "du repère demandé).\n"
     "- chercher_code : avant de citer une référence qui n'est pas dans les pages lues, vérifie "
     "qu'elle existe. Ne déduis JAMAIS une référence par analogie de numérotation (TGY3702 ≠ TGY3710).\n"
     "- rechercher : reformule en vocabulaire métier ; ne relance jamais la même question ; "
@@ -1897,9 +1903,12 @@ async def stream_space_chat_message(
 
             cag_documents_ctx: List[dict] = list(space_context_draft.get("cag_documents") or [])
 
-            # Images du pack initial : pages MUETTES uniquement (document image_first ou
-            # besoin visuel). Le texte des autres pages est dans le pack ; le lecteur
-            # demandera leurs images s'il en a besoin (lire_pages, zoomer).
+            # Images du pack initial : TEXTE + IMAGE des pages trouvées (★), pas seulement
+            # les pages muettes. Sur ce corpus (dossiers techniques), une page a du texte —
+            # la liste des références — mais ses COTES n'existent que comme annotations du
+            # dessin : « parclose 2452 » est dans le texte, son épaisseur de vitrage est sur
+            # la coupe. Restreindre les PNG aux pages sans texte laissait le lecteur répondre
+            # sur les seuls libellés (régression du 04/09 vs la génération 100 % PNG).
             user_images: List[str] = []
             user_image_captions: List[dict] = []
             if doc_passages and cag_documents_ctx and is_vision_model(forced_model):
@@ -1911,10 +1920,10 @@ async def stream_space_chat_message(
                     cag_documents_ctx,
                     doc_passages,
                     max_images=settings.READER_INITIAL_MAX_IMAGES,
-                    visual_only=True,
+                    visual_only=False,
                 )
                 logger.info(
-                    "[lecteur] %d image(s) initiale(s) — pages muettes uniquement (%s)",
+                    "[lecteur] %d image(s) initiale(s) — pages trouvées, muettes d'abord (%s)",
                     len(user_images),
                     forced_model,
                 )
@@ -2164,13 +2173,19 @@ async def stream_space_chat_message(
                 )
                 reader_tools = build_reader_tools(tool_ctx) if settings.LLM_PROVIDER != "ollama" else []
 
-                def _output_check(final_text: str, evidence_text: str, citations: List[str]) -> dict:
+                def _output_check(
+                    final_text: str,
+                    evidence_text: str,
+                    citations: List[str],
+                    image_pages: List[tuple] | None = None,
+                ) -> dict:
                     return check_reader_output(
                         response_text=final_text,
                         evidence_text=evidence_text,
                         question=retrieval_query_text,
                         user_message=request.message,
                         citations=citations,
+                        image_pages_seen=image_pages,
                     )
 
                 _doc_id_by_index = {
