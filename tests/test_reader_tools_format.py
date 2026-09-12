@@ -1,9 +1,11 @@
 """Formats des résultats d'outils du lecteur (fonctions pures, sans DB) et contrôle de sortie."""
 from __future__ import annotations
 
+from app.services.page_reader_service import PageReading
 from app.services.reader_tools import (
     _collapse_sections,
     format_code_occurrences,
+    format_page_reading,
     format_pages_text,
     format_plan,
     format_search_results,
@@ -26,7 +28,7 @@ def test_search_results_are_compact_and_expose_channels():
     ]
     text, evidence, docs = format_search_results(passages)
     assert text.startswith("1. doc 405 « Notice » p.111  0.031  [colpali, bm25]")
-    assert "[colpali]" in text and "demande l'image" in text
+    assert "[colpali]" in text and "planche : lis-la avec lire_pages" in text
     assert len(text.splitlines()[1]) <= 320  # extrait borné
     assert "Engager le tenon" in evidence and "contenu visuel" not in evidence
     assert docs == {405: "Notice", 424: "Catalogue"}
@@ -43,17 +45,47 @@ def test_search_no_results_says_so_with_scope():
 # ---------------------------------------------------------------------------
 
 
-def test_pages_text_marks_mute_pages_and_out_of_range():
+def test_pages_text_marks_read_plates_and_out_of_range():
+    reading = PageReading(
+        document_id=405, page_no=111, answer="30",
+        convention="Cotation en bleu = épaisseur vitrage",
+        survey=[{"repere": "Parclose 2636", "valeurs": [{"valeur": "30", "couleur": "bleu"}]}],
+        citations=["Parclose 2636", "30"],
+    )
     out = format_pages_text(
         document_id=405, title="Notice", header="Source : Technal", page_count=124,
         pages=[110, 111, 112, 200], text_by_page={110: "Crémones", 112: "Serrer les 6 vis TGY3723"},
-        image_pages=[111],
+        question="épaisseur de vitrage de la parclose 2636", readings={111: reading}, needle="2636",
     )
     assert out.startswith("=== doc 405 « Notice » ===\nSource : Technal\nDocument de 124 page(s).")
+    assert "Ta question : « épaisseur de vitrage de la parclose 2636 »" in out
     assert "[page 110]\nCrémones" in out
-    assert "[page 111] (page muette — aucun texte extrait ; image jointe ci-dessous)" in out
+    assert "[page 111] PLANCHE TECHNIQUE (aucun texte dans le PDF) — lue en image :" in out
+    assert "→ 30" in out and "Cotation en bleu" in out
+    assert "relevé pour « Parclose 2636 » : 30 (bleu)" in out
     assert "[page 112]\nSerrer" in out
     assert "[page 200] (hors du document : 124 pages)" in out
+
+
+def test_plate_absent_never_yields_a_neighbour_value():
+    """Une référence absente de la planche doit se dire — c'est le garde-fou contre la valeur
+    inventée par analogie, mesurée le 2026-09-12 sur un recadrage sans le repère."""
+    out = format_page_reading(PageReading(document_id=405, page_no=8, absent=True), needle="9999")
+    assert "n'apparaît PAS sur cette page" in out and "chercher_code" in out
+    assert "9999" not in out
+
+
+def test_plate_ambiguous_refuses_to_choose():
+    reading = PageReading(
+        document_id=405, page_no=8, ambiguous=True,
+        convention="Cotation en bleu = épaisseur vitrage",
+        survey=[{"repere": "Parclose 2636", "valeurs": [
+            {"valeur": "30", "couleur": "bleu"}, {"valeur": "27", "couleur": "noir"}]}],
+    )
+    out = format_page_reading(reading, needle="2636")
+    assert "ne permet pas d'attribuer une valeur" in out
+    assert "30" in out and "27" in out  # les deux candidats restent visibles
+    assert "n'en choisis AUCUNE au hasard" in out
 
 
 def test_pages_text_truncates_over_cap():
@@ -110,7 +142,7 @@ def test_plan_with_and_without_sections():
     assert "Pages retrouvées par la recherche : 111" in text
     assert "Sections : p.1 Sommaire · p.12 Usinages · p.108 Crémones et rallonges" in text
     empty = format_plan(document_id=1, title="T", header="", page_count=3, pages_with_text=0, mode="image_first", sections=[])
-    assert "Aucun titre de section indexé" in empty and "demande les images" in empty
+    assert "Aucun titre de section indexé" in empty and "lis-les avec lire_pages" in empty
 
 
 # ---------------------------------------------------------------------------

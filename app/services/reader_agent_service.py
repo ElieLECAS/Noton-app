@@ -651,7 +651,7 @@ class ReaderLoop:
                 "\n[Images déjà vues, retirées de cette requête pour respecter la limite : "
                 + ", ".join(labels)
                 + " — leur texte extrait figure ci-dessus quand il existe ; redemande une "
-                "image précise avec lire_pages ou zoomer si nécessaire.]"
+                "image précise avec lire_pages si nécessaire.]"
             )
             msg["content"] = (str(msg.get("content") or "") + placeholder).strip()
             total -= len(imgs)

@@ -526,10 +526,16 @@ class Settings(BaseSettings):
     )
     # --- Lecteur agentique (docs/plan_lecteur_agentique_2026-09-02.md) ---
     # Le générateur (MODEL_FAST) lit un pack INITIAL court puis va chercher le reste avec
-    # cinq outils déterministes (rechercher, lire_pages, zoomer, chercher_code,
-    # plan_du_document), sous budget. Le contrôle de sortie est programmatique (codes,
-    # cotes, normes, RAL, citations) sur ce que le lecteur a réellement lu ; l'ancien juge
+    # quatre outils (rechercher, lire_pages, chercher_code, plan_du_document), sous budget.
+    # Le contrôle de sortie est programmatique (codes, cotes, normes, RAL, citations) sur ce
+    # que le lecteur a réellement lu ; l'ancien juge
     #
+    # Modèle du LECTEUR DE PAGE : ``lire_pages`` délègue la lecture d'une planche (dessin
+    # sans couche texte) à un appel vision isolé — une page, une question, aucun autre
+    # contexte. Mesuré le 2026-09-12 sur la planche des parcloses : small et large répondent
+    # juste tous les deux (~800 ms pour small), alors que la MÊME page lue par large au
+    # milieu du contexte du tour donne le mauvais chiffre. Le petit modèle suffit donc.
+    READER_PAGE_MODEL: str = os.getenv("READER_PAGE_MODEL", "mistral-small-latest")
     # Pack initial : texte des pages retrouvées des documents élus. Petit par construction —
     # ne pas confondre avec CAG_TOKEN_BUDGET (plafond du packer pour les autres
     # consommateurs : fiche technique, évaluation, repli eco).

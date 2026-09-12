@@ -1,26 +1,30 @@
-"""Les cinq outils du lecteur agentique — wrappers fins sur des fonctions existantes.
+"""Les quatre outils du lecteur agentique — wrappers fins sur des fonctions existantes.
 
-Plan ``docs/plan_lecteur_agentique_2026-09-02.md`` (phase 3). Aucune logique nouvelle de
-retrieval : chaque outil enveloppe une fonction déjà écrite et testée, et rend un résultat
-**compact** (il reste dans l'historique des appels suivants) et **explicite** sur ce qu'il
-n'a pas trouvé (une page muette, une référence absente), pour que le modèle agisse au lieu
-de deviner.
+Plan ``docs/plan_lecteur_agentique_2026-09-02.md`` (phase 3). Presque aucune logique
+nouvelle de retrieval : chaque outil enveloppe une fonction déjà écrite et testée, et rend
+un résultat **compact** (il reste dans l'historique des appels suivants) et **explicite**
+sur ce qu'il n'a pas trouvé (une page muette, une référence absente), pour que le modèle
+agisse au lieu de deviner.
 
   * ``rechercher``        → ``search_technical_passages`` (phase A ; phase B si document_id)
-  * ``lire_pages``        → ``_load_leaf_records`` / ``extract_page_text_from_pdf`` / ``render_page_png_cached``
-  * ``zoomer``            → ``build_anchored_crop`` / ``_make_crop_image`` (illustration_service)
+  * ``lire_pages``        → texte des chunks feuilles, ou lecture déléguée en image
+                            (``page_reader_service``) pour les pages sans couche texte
   * ``chercher_code``     → SQL + ``code_in_text`` + ``spec_density`` (motif de reference_pinning)
   * ``plan_du_document``  → ``profile_document`` + titres de sections des chunks
 
-Tous déterministes, aucun LLM. Les fonctions ``format_*`` sont pures (testables sans DB) ;
-les handlers ouvrent leur propre ``Session`` (les appels d'un même round s'exécutent en
-parallèle, et une Session SQLAlchemy n'est pas concurrente).
+``zoomer`` a été retiré le 2026-09-12. Deux mesures l'ont condamné : sur une planche
+vectorielle sans couche texte — le seul cas où il servait — ``page.search_for`` ne rend
+AUCUNE ancre, donc l'ancrage par code était structurellement impossible ; et le recadrage
+n'apportait rien, la page entière à 150 dpi suffisant à lire une cotation. Son rôle est
+repris par la lecture déléguée de ``lire_pages``.
+
+Les fonctions ``format_*`` sont pures (testables sans DB) ; les handlers ouvrent leur
+propre ``Session`` (les appels d'un même round s'exécutent en parallèle, et une Session
+SQLAlchemy n'est pas concurrente).
 """
 from __future__ import annotations
 
 import asyncio
-import base64
-import io
 import logging
 import os
 import re
@@ -33,6 +37,7 @@ from sqlmodel import Session
 from app.config import settings
 from app.database import engine
 from app.models.document import Document
+from app.services.page_reader_service import PageReading, read_page_image, survey_entry_for
 from app.services.reader_agent_service import ToolResult, ToolSpec
 
 logger = logging.getLogger(__name__)
@@ -41,7 +46,6 @@ logger = logging.getLogger(__name__)
 SEARCH_MAX_RESULTS = 8
 SEARCH_EXTRACT_CHARS = 300
 READ_MAX_PAGES = 6
-READ_MAX_IMAGES = 2
 READ_MAX_CHARS = 20000
 CODE_MAX_EXTRACTS = 3
 CODE_EXTRACT_CHAR_CAP = 1200
@@ -52,7 +56,7 @@ _PLACEHOLDER_MARKERS = ("contenu visuel uniquement", "[ColPali Indexed Page")
 _MODE_LABELS = {
     "full_text": "texte — le texte extrait est fiable, lis-le",
     "windowed": "texte, document long — cible des pages précises",
-    "image_first": "image — pages muettes en texte, demande les images (lire_pages avec_images=true)",
+    "image_first": "image — pages muettes en texte, lis-les avec lire_pages (lecture sur le dessin)",
 }
 
 
@@ -68,7 +72,15 @@ class ToolContext:
     matched_pages_by_doc: Dict[int, List[int]] = field(default_factory=dict)
     retrieval_k: int = SEARCH_MAX_RESULTS
     image_dpi: int = 150
+    # Modèle qui LIT les planches en image (appel isolé, une page, une question). Petit et
+    # rapide suffit : mesuré aussi juste que le grand sur la cotation, en deux fois moins
+    # de temps — c'est le cadrage de l'appel qui fait la justesse, pas la taille du modèle.
+    page_reader_model: str = ""
     _space_docs: Optional[Set[int]] = None
+
+    def __post_init__(self) -> None:
+        if not self.page_reader_model:
+            self.page_reader_model = settings.READER_PAGE_MODEL
 
     def space_document_ids(self, session: Session) -> Set[int]:
         if self._space_docs is None:
@@ -140,7 +152,7 @@ def format_search_results(passages: Sequence[Dict[str, Any]], *, document_id: Op
         except (TypeError, ValueError):
             score = 0.0
         if _is_placeholder(raw):
-            extract = "(page sans texte extrait — demande l'image avec lire_pages avec_images=true)"
+            extract = "(page sans texte extrait — planche : lis-la avec lire_pages en posant ta question)"
         else:
             extract = _compact(raw, SEARCH_EXTRACT_CHARS)
             evidence.append(extract)
@@ -148,6 +160,60 @@ def format_search_results(passages: Sequence[Dict[str, Any]], *, document_id: Op
         if did is not None:
             docs[did] = title
     return "\n".join(lines), "\n".join(evidence), docs
+
+
+def format_page_reading(reading: PageReading, *, needle: str = "") -> str:
+    """Rendu d'une page lue EN IMAGE (planche sans couche texte).
+
+    Le bloc dit toujours d'où vient la valeur — « lue sur l'image » — et ce qui a été lu à
+    côté d'elle : une valeur sans son repère est invérifiable, et c'est précisément la
+    forme que prend une lecture inventée.
+    """
+    head = f"[page {reading.page_no}] PLANCHE TECHNIQUE (aucun texte dans le PDF) — lue en image"
+    if reading.error:
+        return head + f" : lecture indisponible ({reading.error}).\nUtilise chercher_code, ou lis une autre page."
+    if reading.absent:
+        return (
+            head
+            + " : ce que tu cherches n'apparaît PAS sur cette page.\n"
+            "Ne déduis rien d'un repère voisin — vérifie la référence avec chercher_code, "
+            "ou cherche la bonne page (rechercher, plan_du_document)."
+        )
+
+    def _entry_line(entry: Dict[str, Any]) -> str:
+        bits = []
+        for v in entry.get("valeurs") or []:
+            value = v.get("valeur") or "?"
+            couleur = v.get("couleur") or ""
+            bits.append(f"{value} ({couleur})" if couleur else value)
+        return f"  relevé pour « {entry.get('repere')} » : " + " · ".join(bits)
+
+    entry = survey_entry_for(reading.survey, needle) if needle else None
+
+    if reading.ambiguous or not reading.answer:
+        out = [
+            head + " : la planche ne permet pas d'attribuer une valeur avec certitude au "
+            "repère demandé."
+        ]
+        if entry:
+            out.append(_entry_line(entry))
+        if reading.convention:
+            out.append(f"  convention lue sur la page : « {reading.convention} »")
+        out.append(
+            "  → n'en choisis AUCUNE au hasard : recoupe avec chercher_code (il rend souvent "
+            "la valeur associée à une référence), ou dis à l'utilisateur que la planche ne "
+            "permet pas de trancher."
+        )
+        return "\n".join(out)
+
+    out = [head + " :", f"  → {reading.answer}"]
+    if reading.convention:
+        out.append(f"  convention lue sur la page : « {reading.convention} »")
+    if entry:
+        out.append(_entry_line(entry))
+    if reading.citations:
+        out.append("  repères lus sur la page : " + " · ".join(f"« {c} »" for c in reading.citations))
+    return "\n".join(out)
 
 
 def format_pages_text(
@@ -158,31 +224,48 @@ def format_pages_text(
     page_count: int,
     pages: Sequence[int],
     text_by_page: Dict[int, str],
-    image_pages: Sequence[int] = (),
+    question: str = "",
+    readings: Optional[Dict[int, PageReading]] = None,
+    needle: str = "",
 ) -> str:
-    """Bloc texte de ``lire_pages`` : en-tête + un marqueur ``[page N]`` par page demandée."""
+    """Bloc texte de ``lire_pages`` : en-tête + un marqueur ``[page N]`` par page demandée.
+
+    Une page dont le PDF ne porte AUCUN texte (planche vectorielle, scan) n'est pas rendue
+    en transcription : son texte extrait ne contient que des étiquettes, jamais les cotes,
+    et il sert alors de béquille — le modèle croit avoir lu la page et ne regarde plus le
+    dessin. Ces pages arrivent ici déjà lues en image (``readings``).
+    """
+    readings = readings or {}
     out: List[str] = [f"=== doc {document_id} « {title} » ==="]
     if header:
         out.append(header)
     if page_count:
         out.append(f"Document de {page_count} page(s).")
+    if question:
+        out.append(f"Ta question : « {_compact(question, 200)} »")
     total = 0
     truncated = False
     for p in pages:
         if page_count and p > page_count:
             out.append(f"[page {p}] (hors du document : {page_count} pages)")
             continue
+        reading = readings.get(p)
+        if reading is not None:
+            out.append(format_page_reading(reading, needle=needle))
+            continue
         txt = (text_by_page.get(p) or "").strip()
         if not txt:
-            note = "image jointe ci-dessous" if p in image_pages else "demande l'image avec avec_images=true"
-            out.append(f"[page {p}] (page muette — aucun texte extrait ; {note})")
+            out.append(
+                f"[page {p}] (page muette — ni texte extrait ni image exploitable ; "
+                "essaie une page voisine ou chercher_code)"
+            )
             continue
         if total + len(txt) > READ_MAX_CHARS:
             room = max(0, READ_MAX_CHARS - total)
             txt = txt[:room].rstrip() + "\n[… texte tronqué : demande moins de pages à la fois]"
             truncated = True
         total += len(txt)
-        out.append(f"[page {p}]" + (" (image jointe ci-dessous)" if p in image_pages else ""))
+        out.append(f"[page {p}]")
         out.append(txt)
         if truncated:
             break
@@ -393,10 +476,31 @@ def _section_rows(session: Session, document_id: int) -> List[Tuple[Optional[int
     return [(r.page, r.heading) for r in rows]
 
 
-def _render_b64(pdf_path: str, page_no: int, dpi: int) -> str:
-    from app.services.multimodal_page_service import render_page_png_cached
+def _native_text_by_page(pdf_path: Optional[str], pages: Sequence[int]) -> Dict[int, str]:
+    """Texte de la COUCHE TEXTE du PDF, page par page (vide = planche vectorielle ou scan).
 
-    return base64.b64encode(render_page_png_cached(pdf_path, page_no, dpi=dpi)).decode("utf-8")
+    C'est le discriminateur de ``lire_pages`` : il sépare un texte réellement écrit dans le
+    document d'une transcription produite par la passe vision à l'ingestion. Une seule
+    ouverture du PDF pour toutes les pages demandées.
+    """
+    if not pdf_path or not pages:
+        return {}
+    import fitz
+
+    out: Dict[int, str] = {}
+    try:
+        with fitz.open(pdf_path) as pdf:
+            for page_no in pages:
+                if page_no < 1 or page_no > len(pdf):
+                    continue
+                try:
+                    out[page_no] = pdf[page_no - 1].get_text("text").strip()
+                except Exception as exc:  # noqa: BLE001
+                    logger.debug("[lire_pages] couche texte p.%s illisible : %s", page_no, exc)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[lire_pages] ouverture PDF échouée (%s) : %s", pdf_path, exc)
+        return {}
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -405,7 +509,7 @@ def _render_b64(pdf_path: str, page_no: int, dpi: int) -> str:
 
 
 def build_reader_tools(ctx: ToolContext) -> List[ToolSpec]:
-    """Les cinq outils, liés au contexte du tour."""
+    """Les quatre outils, liés au contexte du tour."""
 
     async def rechercher(args: Dict[str, Any]) -> ToolResult:
         question = str(args.get("question") or "").strip()
@@ -439,6 +543,13 @@ def build_reader_tools(ctx: ToolContext) -> List[ToolSpec]:
         doc_id = _coerce_int(args.get("document_id"))
         if doc_id is None:
             return ToolResult(text="Paramètre « document_id » manquant.", error=True)
+        question = str(args.get("question") or "").strip()
+        if not question:
+            return ToolResult(
+                text="Paramètre « question » manquant : dis ce que tu cherches sur ces pages "
+                "(une planche est lue en image, la lecture a besoin d'une question précise).",
+                error=True,
+            )
         raw_pages = args.get("pages") or []
         if not isinstance(raw_pages, list):
             raw_pages = [raw_pages]
@@ -450,7 +561,6 @@ def build_reader_tools(ctx: ToolContext) -> List[ToolSpec]:
         pages = sorted(pages)[:READ_MAX_PAGES]
         if not pages:
             return ToolResult(text="Aucune page valide demandée (entiers ≥ 1).", error=True)
-        with_images = bool(args.get("avec_images"))
 
         from app.services.context_packer_service import _count_document_pages, _load_leaf_records
 
@@ -466,42 +576,54 @@ def build_reader_tools(ctx: ToolContext) -> List[ToolSpec]:
             records = _load_leaf_records(session, doc_id)
             pdf_path = doc.source_file_path if doc.source_file_path and os.path.exists(doc.source_file_path) else None
 
+        valid_pages = [p for p in pages if not page_count or p <= page_count]
+
+        # Couche texte NATIVE du PDF : c'est elle qui décide comment la page est lue.
+        # Vide ⇒ planche vectorielle ou scan : le texte « extrait » de ces pages vient d'une
+        # transcription vision qui ne porte JAMAIS les cotes (mesuré doc 438 p.8 : 663
+        # caractères d'étiquettes, une seule valeur, celle d'une note générale — et c'est
+        # cette note que le modèle a transposée à tort sur un repère).
+        native_text = await asyncio.to_thread(_native_text_by_page, pdf_path, valid_pages)
+
         text_by_page: Dict[int, List[str]] = {}
         for page, _, txt in records:
-            if page in pages and txt:
+            if page in valid_pages and txt:
                 text_by_page.setdefault(page, []).append(txt)
         joined = {p: "\n".join(parts) for p, parts in text_by_page.items()}
+        for p, txt in native_text.items():
+            if txt and not joined.get(p):
+                joined[p] = txt
 
-        # Repli pymupdf pour les pages sans chunk feuille.
-        if pdf_path:
-            from app.services.rag_generation_service import extract_page_text_from_pdf
+        # Repère cherché : sert au recoupement couleur du lecteur de page, puis à retrouver
+        # la ligne utile du relevé (le relevé entier, 30 schémas, n'a rien à faire dans
+        # l'historique du lecteur).
+        needle = ""
+        try:
+            from app.services.coverage_service import extract_message_reference_codes
 
-            for p in pages:
-                if joined.get(p) or (page_count and p > page_count):
-                    continue
-                try:
-                    txt = await asyncio.to_thread(extract_page_text_from_pdf, pdf_path, p)
-                except Exception as exc:  # noqa: BLE001
-                    logger.debug("[lire_pages] pymupdf p.%s échoué : %s", p, exc)
-                    txt = ""
-                if txt and txt.strip():
-                    joined[p] = txt.strip()
+            codes = extract_message_reference_codes(question)
+            needle = codes[0] if codes else ""
+        except Exception:  # noqa: BLE001
+            needle = ""
 
-        valid_pages = [p for p in pages if not page_count or p <= page_count]
-        images: List[Dict[str, Any]] = []
-        image_pages: List[int] = []
-        if with_images and pdf_path and valid_pages:
-            mute_first = sorted(valid_pages, key=lambda p: (0 if not joined.get(p) else 1, p))
-            for p in mute_first[:READ_MAX_IMAGES]:
-                try:
-                    b64 = await asyncio.to_thread(_render_b64, pdf_path, p, ctx.image_dpi)
-                except Exception as exc:  # noqa: BLE001
-                    logger.warning("[lire_pages] rendu PNG doc=%s p.%s échoué : %s", doc_id, p, exc)
-                    continue
-                images.append({"b64": b64, "document_id": doc_id, "page_no": p, "document_title": title})
-                image_pages.append(p)
-        elif with_images and not pdf_path:
-            pass  # signalé dans le texte : pas de fichier source
+        plate_pages = [p for p in valid_pages if not (native_text.get(p) or "").strip()]
+        readings: Dict[int, PageReading] = {}
+        if plate_pages and pdf_path:
+            results = await asyncio.gather(
+                *(
+                    read_page_image(
+                        pdf_path=pdf_path,
+                        document_id=doc_id,
+                        page_no=p,
+                        question=question,
+                        needle=needle,
+                        model=ctx.page_reader_model,
+                        dpi=ctx.image_dpi,
+                    )
+                    for p in plate_pages
+                )
+            )
+            readings = {r.page_no: r for r in results}
 
         text = format_pages_text(
             document_id=doc_id,
@@ -510,105 +632,32 @@ def build_reader_tools(ctx: ToolContext) -> List[ToolSpec]:
             page_count=page_count,
             pages=pages,
             text_by_page=joined,
-            image_pages=image_pages,
+            question=question,
+            readings=readings,
+            needle=needle,
         )
-        if with_images and not pdf_path:
-            text += "\n(Fichier PDF source indisponible : aucune image possible pour ce document.)"
+        if plate_pages and not pdf_path:
+            text += "\n(Fichier PDF source indisponible : les planches de ce document ne peuvent pas être lues.)"
+
+        # Corpus de preuve : le texte natif des pages lisibles, et la LECTURE des planches
+        # (valeur + repères). C'est ce qui rend une cote lue sur un dessin vérifiable par le
+        # contrôle de sortie, au lieu de reposer sur une exemption aveugle.
+        evidence_parts: List[str] = []
+        for p in valid_pages:
+            reading = readings.get(p)
+            if reading is not None:
+                if reading.ok:
+                    bits = [reading.answer] + list(reading.citations)
+                    evidence_parts.append(f"[page {p}] (lu sur l'image) " + " · ".join(bits))
+                continue
+            if joined.get(p):
+                evidence_parts.append(f"[page {p}]\n{joined[p]}")
+
         return ToolResult(
             text=text,
-            images=images,
             pages_read=[(doc_id, p) for p in valid_pages],
             documents={doc_id: title},
-            evidence="\n".join(f"[page {p}]\n{joined[p]}" for p in valid_pages if joined.get(p)),
-        )
-
-    async def zoomer(args: Dict[str, Any]) -> ToolResult:
-        doc_id = _coerce_int(args.get("document_id"))
-        page = _coerce_int(args.get("page"))
-        if doc_id is None or page is None:
-            return ToolResult(text="Paramètres « document_id » et « page » requis.", error=True)
-        autour_de = str(args.get("autour_de") or "").strip() or None
-        zone = str(args.get("zone") or "").strip().lower() or None
-        if not autour_de and zone not in ("haut-gauche", "haut-droit", "bas-gauche", "bas-droit"):
-            return ToolResult(
-                text="Précise « autour_de » (un code présent comme texte sur la page) ou « zone » "
-                "(haut-gauche, haut-droit, bas-gauche, bas-droit).",
-                error=True,
-            )
-        with Session(engine) as session:
-            if doc_id not in ctx.space_document_ids(session):
-                return ToolResult(text=f"Document {doc_id} inconnu dans cet espace.", error=True)
-            doc = session.get(Document, doc_id)
-            if doc is None or not doc.source_file_path or not os.path.exists(doc.source_file_path):
-                return ToolResult(text=f"Pas de fichier PDF source pour le document {doc_id} : zoom impossible.", error=True)
-            pdf_path = doc.source_file_path
-            title = doc.title or f"Document {doc_id}"
-
-        def _work() -> Tuple[Optional[Tuple[str, str, List[str]]], Optional[str]]:
-            import fitz
-
-            from app.services import illustration_service as ill
-
-            with fitz.open(pdf_path) as pdf:
-                if page < 1 or page > len(pdf):
-                    return None, f"page {page} hors du document ({len(pdf)} pages)"
-                pg = pdf[page - 1]
-                W, H = pg.rect.width, pg.rect.height
-                code_labels = ill.find_code_labels(pg, ill._reference_pattern())
-                rect = None
-                label = ""
-                if autour_de:
-                    try:
-                        anchors = pg.search_for(autour_de)
-                    except Exception:  # noqa: BLE001
-                        anchors = []
-                    if not anchors:
-                        return None, f"« {autour_de} » n'apparaît pas comme texte sur la page {page} (essaie zone=…)"
-                    for anchor in anchors:
-                        rect = ill.build_anchored_crop(pg, autour_de, anchor, code_labels)
-                        if rect is not None:
-                            label = f"schéma ancré sur {autour_de}"
-                            break
-                    if rect is None:
-                        a = anchors[0]
-                        cx, cy = (a.x0 + a.x1) / 2, (a.y0 + a.y1) / 2
-                        w, h = W * 0.40, H * 0.28
-                        rect = fitz.Rect(max(0, cx - w / 2), max(0, cy - h / 2), min(W, cx + w / 2), min(H, cy + h / 2))
-                        label = f"zone approximative autour de {autour_de}"
-                else:
-                    halves = {
-                        "haut-gauche": fitz.Rect(0, 0, W * 0.55, H * 0.55),
-                        "haut-droit": fitz.Rect(W * 0.45, 0, W, H * 0.55),
-                        "bas-gauche": fitz.Rect(0, H * 0.45, W * 0.55, H),
-                        "bas-droit": fitz.Rect(W * 0.45, H * 0.45, W, H),
-                    }
-                    rect = halves[zone]
-                    label = f"quart {zone}"
-                visible = sorted(ill.codes_inside(rect, code_labels)) if code_labels else []
-                img = ill._make_crop_image(pdf_path, page, rect)
-                if img is None:
-                    return None, "zone vide ou trop petite pour être rendue"
-                buf = io.BytesIO()
-                img.save(buf, format="PNG")
-                return (base64.b64encode(buf.getvalue()).decode("utf-8"), label, visible), None
-
-        try:
-            res, err = await asyncio.to_thread(_work)
-        except Exception as exc:  # noqa: BLE001
-            return ToolResult(text=f"Zoom impossible : {exc}", error=True)
-        if err:
-            return ToolResult(text=f"Zoom doc {doc_id} p.{page} : {err}.", error=True)
-        b64, label, visible = res  # type: ignore[misc]
-        text = f"Zoom doc {doc_id} « {title} » p.{page} — {label}"
-        if visible:
-            text += " ; repères visibles dans le cadre : " + ", ".join(visible[:12])
-        text += " (image jointe ci-dessous)."
-        return ToolResult(
-            text=text,
-            images=[{"b64": b64, "document_id": doc_id, "page_no": page, "document_title": title, "label": label}],
-            pages_read=[(doc_id, page)],
-            documents={doc_id: title},
-            evidence="",
+            evidence="\n".join(evidence_parts),
         )
 
     async def chercher_code(args: Dict[str, Any]) -> ToolResult:
@@ -688,16 +737,7 @@ def build_reader_tools(ctx: ToolContext) -> List[ToolSpec]:
             name="lire_pages",
             schema=TOOL_SCHEMAS["lire_pages"],
             handler=lire_pages,
-            max_images=READ_MAX_IMAGES,
             label=lambda a: f"Lecture {_pages_label(a.get('pages'))} de « {_compact(_title(a.get('document_id')), 50)} »",
-        ),
-        ToolSpec(
-            name="zoomer",
-            schema=TOOL_SCHEMAS["zoomer"],
-            handler=zoomer,
-            max_images=1,
-            label=lambda a: f"Zoom page {a.get('page')} de « {_compact(_title(a.get('document_id')), 50)} »"
-            + (f" autour de {a.get('autour_de')}" if a.get("autour_de") else ""),
         ),
         ToolSpec(
             name="chercher_code",
@@ -751,45 +791,27 @@ TOOL_SCHEMAS: Dict[str, Dict[str, Any]] = {
         "function": {
             "name": "lire_pages",
             "description": (
-                "Rend le texte de pages précises d'un document, avec marqueurs [page N]. Signale "
-                "explicitement les pages sans texte. avec_images=true joint les PNG (2 max par "
-                "appel) : à réserver aux pages muettes ou à la vérification d'une valeur."
+                "Lit des pages précises d'un document et répond à TA question sur ces pages. "
+                "Une page avec du texte est rendue telle quelle ; une PLANCHE (dessin sans "
+                "texte : coupe, nomenclature cotée) est lue directement sur l'image, et la "
+                "réponse cite le repère lu à côté de la valeur. Une planche dit explicitement "
+                "quand ce que tu cherches n'y figure pas — ne déduis alors rien d'un repère "
+                "voisin. C'est l'outil à utiliser pour toute COTE (épaisseur, section, entraxe)."
             ),
             "parameters": {
                 "type": "object",
                 "properties": {
                     "document_id": {"type": "integer"},
                     "pages": {"type": "array", "items": {"type": "integer"}, "maxItems": READ_MAX_PAGES},
-                    "avec_images": {"type": "boolean", "default": False},
-                },
-                "required": ["document_id", "pages"],
-            },
-        },
-    },
-    "zoomer": {
-        "type": "function",
-        "function": {
-            "name": "zoomer",
-            "description": (
-                "Rend en haute résolution une zone d'une page : autour d'un code de référence "
-                "présent comme texte sur la page (précis), ou un quart de page. Pour lire une "
-                "cote ou un repère illisible sur l'image entière."
-            ),
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "document_id": {"type": "integer"},
-                    "page": {"type": "integer"},
-                    "autour_de": {
-                        "type": ["string", "null"],
-                        "description": "Code de référence à centrer (ex. TGY3704).",
-                    },
-                    "zone": {
-                        "type": ["string", "null"],
-                        "enum": ["haut-gauche", "haut-droit", "bas-gauche", "bas-droit", None],
+                    "question": {
+                        "type": "string",
+                        "description": (
+                            "Ce que tu cherches sur ces pages, en une phrase précise et "
+                            "autonome (ex. « épaisseur de vitrage de la parclose 2636 »)."
+                        ),
                     },
                 },
-                "required": ["document_id", "page"],
+                "required": ["document_id", "pages", "question"],
             },
         },
     },

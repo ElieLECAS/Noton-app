@@ -309,15 +309,15 @@ def check_reader_output(
         if unsupported_codes:
             bits.append(
                 "Pour chaque référence, vérifie son existence avec chercher_code (ou relis la "
-                "page avec lire_pages / zoomer). Si elle n'existe pas dans les documents, "
+                "page avec lire_pages). Si elle n'existe pas dans les documents, "
                 "écris explicitement que les documents ne la mentionnent pas — ne la déduis "
                 "jamais d'une numérotation voisine."
             )
         else:
             bits.append(
-                "Relis la page qui porte la valeur (lire_pages, ou zoomer si elle est trop "
-                "petite) et cite-la exactement ; sinon écris que les documents ne précisent "
-                "pas cette valeur."
+                "Relis la page qui porte la valeur avec lire_pages, en posant la question "
+                "précise (l'outil lit les planches sur le dessin), et cite-la exactement ; "
+                "sinon écris que les documents ne précisent pas cette valeur."
             )
         if unverified:
             bits.append(
