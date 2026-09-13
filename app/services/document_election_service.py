@@ -19,11 +19,17 @@ empilement : il produit un score serré, visible dans la trace, que le juge de s
 peut ensuite contredire.
 
 Depuis le 01/09, l'élection suit d'abord les PASSAGES : les documents qui détiennent
-l'un des ``TOP_PASSAGE_HOLDERS`` meilleurs passages du pool sont élus d'office (le
+l'un des meilleurs passages du pool sont élus d'office (le
 premier est le dominant), et l'agrégation par document ne sert plus qu'à compléter les
 places restantes. Raison : le score par document récompense l'affinité thématique
 (« beaucoup de pages parlent du sujet ») plutôt que la preuve (« une page porte la
 réponse ») — mesuré dans les deux sens sur le corpus réel. Voir ``elect_documents``.
+
+Depuis le 13/09, l'étage des passages compte des DOCUMENTS distincts (fenêtre de 10
+passages, plancher 0,45) et les champions de chaque canal sont garantis : le retriever
+place le bon document dans les premiers passages, l'élection ne doit plus le jeter parce
+qu'un dossier thématique tient les trois premiers rangs. Les candidats non élus restent
+tracés avec la raison de leur éviction.
 
 Aucun appel LLM ici : uniquement de l'agrégation et une lecture de métadonnées.
 """
@@ -57,22 +63,29 @@ DOMINANCE_RATIO = 0.70
 MAX_ELECTED = 3
 MAX_CANDIDATES = 5
 
-# Les documents qui détiennent l'un des K meilleurs PASSAGES du pool fusionné sont élus
-# d'office, dans l'ordre de leurs passages. Mesuré le 01/09 sur 6 requêtes réelles
-# (espace 28) : la fusion place le passage du bon document en tête dans 6 cas sur 6,
-# alors que l'agrégation par document ne le classait premier que 4 fois sur 5 et
-# n'élisait PAS le document qui a répondu sur le cas TGY3704 (son passage était 3e).
-# C'est l'observation d'Elie — « le bon document n'est jamais top 1 à 100 %, mais dans le
-# top 3 à plus de 85 % » — traduite en règle : on fait confiance au retriever pour les
-# passages, et à l'élection seulement pour ce qu'elle sait faire (ordonner, compléter).
-TOP_PASSAGE_HOLDERS = 3
+# Fenêtre de PASSAGES examinés à l'étage 1. Les détenteurs des meilleurs passages du pool
+# fusionné sont élus d'office, dans l'ordre des passages, jusqu'à ``max_docs`` documents
+# DISTINCTS. Jusqu'au 13/09 on s'arrêtait après TROIS passages : un dossier consacré au
+# sujet tient souvent les rangs 1 à 3 à lui seul (toutes ses pages parlent de la gamme) et
+# partait donc SEUL, alors que le document qui porte la réponse avait son passage au 4e
+# rang — visible dans les candidats, puis jeté par la phase B sans retour possible dans le
+# tour. C'est le symptôme rapporté par Elie (« un seul élu, le mauvais, alors que le bon
+# était retenu puis viré »). On compte désormais des documents, pas des passages.
+TOP_PASSAGE_WINDOW = 10
 
-# Un passage ne compte comme « l'un des meilleurs » que s'il n'est pas DÉCROCHÉ du premier :
-# même seuil que la dominance. Sur un vrai pool RRF les trois premiers passages tiennent
-# dans ~10 % (compression des rangs), donc ce plancher ne mord jamais en pratique ; il
-# empêche seulement qu'un pool étriqué (deux pages, 0,90 contre 0,10) élise le second
-# document au seul motif qu'il n'y en avait pas de troisième.
-TOP_PASSAGE_MIN_RATIO = DOMINANCE_RATIO
+# Plancher relatif d'un passage pour compter comme « l'un des meilleurs ». Avec RRF_K = 60,
+# le rang 1 d'un canal SEUL vaut 1/61 ≈ 0,0164 et le rang 1 des DEUX canaux 2/61 ≈ 0,0328 :
+# rapport exactement 0,50. L'ancien plancher (0,70, celui de la dominance) excluait donc
+# structurellement toute page vue par un seul canal dès que la meilleure était bi-canal —
+# y compris le top 1 ColPali d'une planche muette, seule page à porter la réponse quand la
+# référence n'existe qu'en image. 0,45 admet le rang 1 à 7 d'un canal seul et les pages
+# bi-canal jusqu'au rang ≈ 60 ; un pool étriqué (0,90 contre 0,10) reste mono-document.
+TOP_PASSAGE_MIN_RATIO = 0.45
+
+# Candidats exposés dans la trace (élus compris, jamais tronqués) : volume ∪ détenteurs de
+# passages ∪ champions de canal — pour qu'un « bon document retenu puis viré » soit toujours
+# visible, avec la raison de sa non-élection.
+MAX_CANDIDATES_TRACE = 8
 
 # Un complément « texte » (dominant visuel, candidat trouvé par BM25 seulement) doit
 # apporter un VRAI match lexical, pas une miette du repli en OU. Mesuré : le repli OR
@@ -206,7 +219,13 @@ class ElectionResult:
                     "document_id": d.document_id,
                     "document_title": d.title,
                     "election_score": round(d.election_score, 6),
+                    "score_max": round(d.score_max, 6),
                     "pages": d.page_count,
+                    "top_pages": d.top_pages(3),
+                    "role": d.role,
+                    # Pour un non-élu : pourquoi (cap_reached, below_floor, beyond_window,
+                    # weak_channel) — c'est ce qui rend l'éviction visible et navigable.
+                    "reason": d.reason,
                 }
                 for d in self.candidates
             ],
@@ -414,6 +433,44 @@ def _is_channel_complement(dominant: ElectedDocument, other: ElectedDocument) ->
     return other.bm25_best >= BM25_COMPLEMENT_MIN_RANK
 
 
+def _passage_is_credible(hit: Any) -> bool:
+    """Un passage vu par UN seul canal ne compte à l'étage 1 que s'il porte un vrai match.
+
+    À RRF égal (1/61 pour tout rang 1 mono-canal), une miette du repli BM25 en OU (~0,1 par
+    terme) ferait entrer un guide de câblage à côté du catalogue qui porte la réponse, et
+    une page ColPali sous le seuil de dominance ne prouve rien. Un passage vu par les DEUX
+    canaux compte toujours ; un score inconnu (stub, canal non renseigné) ne pénalise pas.
+    """
+    families = _hit_families(getattr(hit, "retrieval_sources", ()) or ())
+    if len(families) >= 2:
+        return True
+    if "visuel" in families:
+        score = getattr(hit, "colpali_score", None)
+        return score is None or float(score) >= settings.COLPALI_DOMINANCE_MIN_SCORE
+    if "texte" in families:
+        score = getattr(hit, "bm25_score", None)
+        return score is None or float(score) >= BM25_COMPLEMENT_MIN_RANK
+    return True
+
+
+def _why_not_elected(doc: ElectedDocument, ordered_hits: Sequence[Any], best_rrf: float) -> str:
+    """Raison lisible pour laquelle un candidat n'a PAS été élu — tracée pour rendre visible
+    le « bon document retenu puis viré », et pour le panorama que lira le lecteur."""
+    for rank, hit in enumerate(ordered_hits, start=1):
+        if int(hit.document_id) != doc.document_id:
+            continue
+        rrf = float(getattr(hit, "rrf_score", 0.0) or 0.0)
+        ratio = (rrf / best_rrf) if best_rrf > 0 else 0.0
+        if ratio < TOP_PASSAGE_MIN_RATIO:
+            return "not_elected:below_floor"
+        if rank > TOP_PASSAGE_WINDOW:
+            return "not_elected:beyond_window"
+        if not _passage_is_credible(hit):
+            return "not_elected:weak_channel"
+        return "not_elected:cap_reached"
+    return "not_elected:no_passage"
+
+
 def elect_documents(
     session: Optional[Session],
     fused_hits: Sequence[Any],
@@ -424,27 +481,31 @@ def elect_documents(
 ) -> ElectionResult:
     """Phase A : élit 1 à ``max_docs`` documents sur le pool fusionné complet.
 
-    Deux étages, dans cet ordre :
+    Trois étages, dans cet ordre :
 
-    1. **Détenteurs des meilleurs passages** (``TOP_PASSAGE_HOLDERS``). Les documents qui
-       portent l'un des K premiers passages du pool fusionné sont élus d'office, dans
-       l'ordre de leurs passages — le premier est le dominant. C'est la règle qui suit le
-       retriever : quand ColPali et la fusion placent une page en tête, son document part
-       au contexte, quoi qu'en dise l'agrégation par document.
-    2. **Compléments** sur les places restantes, parmi les candidats classés par score
-       d'élection : le meilleur document au score d'élection (le « volume », s'il n'est pas
-       déjà élu), puis question comparative ou complémentarité de canaux — ces deux
-       dernières soumises à ``DOMINANCE_RATIO``.
+    1. **Détenteurs des meilleurs passages** — les documents DISTINCTS qui portent l'un des
+       ``TOP_PASSAGE_WINDOW`` premiers passages crédibles du pool fusionné (au-dessus du
+       plancher ``TOP_PASSAGE_MIN_RATIO``), dans l'ordre des passages ; le premier est le
+       dominant. On compte des documents, pas des passages : un dossier qui tient les rangs
+       1 à 3 n'empêche plus le document du 4e rang d'entrer.
+    2. **Champions de canal** — s'il reste une place, le détenteur du meilleur score ColPali
+       (≥ ``COLPALI_DOMINANCE_MIN_SCORE``) puis celui du meilleur score BM25 (≥
+       ``BM25_COMPLEMENT_MIN_RANK``, un vrai match). La fusion RRF noie le rang 1 d'un canal
+       seul sous n'importe quelle page moyenne des deux canaux ; ici il est garanti présent.
+    3. **Compléments** sur les places restantes, parmi les candidats classés par score
+       d'élection : le meilleur au score de volume (s'il n'est pas déjà élu), puis question
+       comparative ou complémentarité de canaux — sous ``DOMINANCE_RATIO``.
 
     POURQUOI cet ordre. Le score d'élection agrège PAR DOCUMENT et récompense donc
-    « beaucoup de pages parlent du sujet » plutôt que « une page porte la réponse ». Trois
-    pannes mesurées le 01/09 ont cette forme : le catalogue général évince Lumine55 (2 pages,
-    dont LA page des 40 dB, meilleur passage du pool) ; un dossier technique Perform76 dont
-    aucune page ne parle de couleurs évince le dépliant qui les porte (meilleur passage) ;
-    une notice Roto de 124 pages entre en « complément de canal » sur des mots communs et
-    prend la place du catalogue SOLEAL que ColPali classe 2e à 0,740 — le document qui a
-    répondu. Dans les trois cas la bonne page était en tête du pool fusionné. Aucun réglage
-    des bonus ne sépare l'affinité thématique de la preuve ; suivre les passages, si.
+    « beaucoup de pages parlent du sujet » plutôt que « une page porte la réponse ». Les
+    pannes mesurées le 01/09 (LUMINE, couleurs Perform, TGY3704) avaient toutes la bonne
+    page en tête du pool fusionné et le bon document jeté par l'agrégation ; suivre les
+    passages les a réparées. Le 13/09, le symptôme restant — un seul élu, le mauvais, le
+    bon document candidat puis jeté — venait de la borne « trois passages » et du plancher
+    0,70 : d'où la fenêtre par documents distincts, le plancher 0,45 et les champions.
+    La réponse tient souvent dans UNE page mais se comprend avec son document (parfois un
+    autre) : on élit donc sur la page, généreusement sur les documents, et le budget par
+    document reste serré en aval (packer, phase B).
     """
     ranked = score_documents(fused_hits)
     if not ranked:
@@ -456,7 +517,6 @@ def elect_documents(
     cap = max(1, min(int(max_docs or 1), MAX_ELECTED))
     comparative, marker = is_comparative_query(query_text, signals)
 
-    # ——— Étage 1 : les détenteurs des K meilleurs passages ———
     # Le pool est trié par la fusion ; on le retrie défensivement, et à égalité de RRF
     # (fréquente : rang 1 dans un canal = rang 1 dans l'autre) le passage vu par ColPali
     # passe devant — c'est le canal fiable sur les planches muettes.
@@ -468,29 +528,34 @@ def elect_documents(
             int(h.document_id),
         ),
     )
-    elected: List[ElectedDocument] = []
-    passage_rank = 0
     best_rrf = float(getattr(ordered_hits[0], "rrf_score", 0.0) or 0.0) if ordered_hits else 0.0
-    for hit in ordered_hits:
-        if passage_rank >= TOP_PASSAGE_HOLDERS or len(elected) >= cap:
-            break
+
+    # ——— Étage 1 : documents distincts détenteurs des meilleurs passages ———
+    window_holders: List[ElectedDocument] = []
+    window_rank: Dict[int, int] = {}
+    for passage_rank, hit in enumerate(ordered_hits[:TOP_PASSAGE_WINDOW], start=1):
         if float(getattr(hit, "rrf_score", 0.0) or 0.0) < TOP_PASSAGE_MIN_RATIO * best_rrf:
-            break                                   # décroché du meilleur : plus un « top »
-        passage_rank += 1
+            break                                   # décroché du meilleur (et la suite aussi : trié)
+        if not _passage_is_credible(hit):
+            continue
         holder = by_id.get(int(hit.document_id))
-        if holder is None:                      # révision écartée par dedupe_versions
-            continue
-        if any(d.document_id == holder.document_id for d in elected):
-            continue
+        if holder is None or holder.document_id in window_rank:
+            continue                                # révision écartée, ou document déjà compté
+        window_rank[holder.document_id] = passage_rank
+        window_holders.append(holder)
+
+    elected: List[ElectedDocument] = []
+    for holder in window_holders[:cap]:
         holder.role = "dominant" if not elected else "complement"
-        holder.reason = f"top_passage:{passage_rank}"
+        holder.reason = f"top_passage:{window_rank[holder.document_id]}"
         elected.append(holder)
 
-    if not elected:                             # pool sans page exploitable : repli
+    if not elected:                             # pool sans passage crédible : repli
         dominant = candidates[0]
         dominant.role, dominant.reason = "dominant", "best_election_score"
         elected.append(dominant)
     dominant = elected[0]
+    elected_ids = {d.document_id for d in elected}
 
     # Marge : rapport des deux meilleurs PASSAGES (pas des scores d'élection, qui ne sont
     # plus monotones dans l'ordre d'élection). 1,0 = passages à égalité parfaite.
@@ -500,8 +565,28 @@ def elect_documents(
         else 0.0
     )
 
-    # ——— Étage 2 : compléments sur les places restantes ———
-    elected_ids = {d.document_id for d in elected}
+    # ——— Étage 2 : champions de canal ———
+    champions: List[ElectedDocument] = []
+    for channel, attr, floor in (
+        ("colpali", "colpali_score", settings.COLPALI_DOMINANCE_MIN_SCORE),
+        ("bm25", "bm25_score", BM25_COMPLEMENT_MIN_RANK),
+    ):
+        if not ordered_hits:
+            break
+        champion = max(ordered_hits, key=lambda h: float(getattr(h, attr, 0.0) or 0.0))
+        if float(getattr(champion, attr, 0.0) or 0.0) < floor:
+            continue
+        holder = by_id.get(int(champion.document_id))
+        if holder is None:
+            continue
+        champions.append(holder)
+        if len(elected) >= cap or holder.document_id in elected_ids:
+            continue
+        holder.role, holder.reason = "complement", f"channel_top:{channel}"
+        elected.append(holder)
+        elected_ids.add(holder.document_id)
+
+    # ——— Étage 3 : compléments sur les places restantes ———
     volume_best = candidates[0]
     if len(elected) < cap and volume_best.document_id not in elected_ids:
         # Le gagnant de la formule par document garde une place quand il en reste une :
@@ -528,10 +613,28 @@ def elect_documents(
         elected.append(other)
         elected_ids.add(other.document_id)
 
-    # Un élu peut manquer au top-N par score d'élection (c'est justement sa faiblesse) :
-    # il rejoint les candidats pour rester visible dans la trace et le pack du juge.
-    known = {c.document_id for c in candidates}
-    candidates = candidates + [d for d in elected if d.document_id not in known]
+    # ——— Candidats tracés : volume ∪ détenteurs de passages ∪ champions ∪ élus ———
+    # Un document court à une seule bonne page peut être absent du top 5 au score de volume
+    # (c'est justement sa faiblesse) : sans cette union, le « bon document retenu puis viré »
+    # n'était même pas observable dans la trace.
+    seen: Set[int] = set()
+    union: List[ElectedDocument] = []
+    for doc in candidates + window_holders + champions + elected:
+        if doc.document_id in seen:
+            continue
+        seen.add(doc.document_id)
+        union.append(doc)
+    for doc in union:
+        if doc.document_id not in elected_ids:
+            doc.role = "candidate"
+            doc.reason = _why_not_elected(doc, ordered_hits, best_rrf)
+    kept_elected = [d for d in union if d.document_id in elected_ids]
+    kept_others = sorted(
+        (d for d in union if d.document_id not in elected_ids),
+        key=lambda d: (-d.election_score, -d.score_max, d.document_id),
+    )
+    candidates = kept_elected + kept_others[: max(0, MAX_CANDIDATES_TRACE - len(kept_elected))]
+    candidates.sort(key=lambda d: (-d.election_score, -d.score_max, d.document_id))
 
     if len(elected) == 1:
         decision = "mono_document"
@@ -549,7 +652,6 @@ def elect_documents(
         decision=decision,
         margin=margin,
     )
-
 
 def election_candidate_passages(result: ElectionResult) -> List[Dict[str, Any]]:
     """Passages LÉGERS (sans texte) décrivant les candidats, pour le pack du juge.
@@ -591,8 +693,10 @@ def format_election_log(result: ElectionResult) -> str:
         # Le pic est affiché AUSSI pour les non élus : sans lui, la co-élection d'un
         # détenteur au score d'élection plus faible que le dominant paraît arbitraire.
         tail += " | non élus: " + ", ".join(
-            f"{c.title[:30]}#{c.document_id}={c.election_score:.4f}(pic {c.score_max:.4f})"
-            for c in others[:3]
+            f"{c.title[:30]}#{c.document_id}={c.election_score:.4f}(pic {c.score_max:.4f}"
+            + (f", {c.reason.split(':', 1)[1]}" if c.reason.startswith("not_elected:") else "")
+            + ")"
+            for c in others[:5]
         )
     return (
         f"[élection] {result.decision} marge={result.margin:.2f} → "

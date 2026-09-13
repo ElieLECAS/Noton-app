@@ -563,6 +563,18 @@ def profile_document(
     )
 
 
+def _best_matched_page(
+    matched_pages: Dict[int, float], records: List[LeafRecord]
+) -> Optional[int]:
+    """Page matchée la mieux notée qui existe réellement dans les feuilles du document."""
+    present = {r[0] for r in records}
+    ordered = sorted(matched_pages.items(), key=lambda kv: (-float(kv[1]), kv[0]))
+    for page, _ in ordered:
+        if page in present:
+            return int(page)
+    return int(records[0][0]) if records else None
+
+
 def _trim_records_to_budget(
     records: List[LeafRecord], matched_pages: set, remaining: int
 ) -> List[LeafRecord]:
@@ -729,9 +741,17 @@ def build_cag_context(
     max_seeds = settings.CAG_MAX_SEEDS_PER_DOC
     greedy_window = (settings.CAG_WINDOW_MODE or "").strip().lower() != "radius"
 
+    # Un document ÉLU par la phase A n'est JAMAIS évincé du pack : jusqu'au 13/09, le 3e élu
+    # tombait sans trace dès que les deux premiers avaient consommé le budget (« retenu puis
+    # viré », côté packer cette fois). Il garde au minimum sa meilleure page ★, quitte à
+    # dépasser le budget d'une page — la réponse tient souvent dans une page, et c'est le
+    # lecteur qui ira chercher le reste.
+    elected_set = {int(d) for d in (elected_document_ids or [])}
+
     for slot, (did, meta) in enumerate(ranked_docs):
         remaining = token_budget - spent_tokens
-        if remaining <= 0:
+        is_elected = int(did) in elected_set
+        if remaining <= 0 and not is_elected:
             break
         # Part de ce rang (+ report) : sans partage, le document n°1 pouvait avaler tout
         # le budget et ne laisser que des miettes aux suivants.
@@ -780,9 +800,33 @@ def build_cag_context(
         )
         block_tokens = estimate_tokens(block)
         if block_tokens > remaining and position > 1:
-            # Ne pas dépasser le budget (on garde toujours au moins le 1er document).
-            position -= 1
-            break
+            if not is_elected:
+                # Ne pas dépasser le budget (on garde toujours au moins le 1er document).
+                position -= 1
+                break
+            # Document élu : repli sur sa meilleure page ★ seule, jamais l'éviction.
+            star = _best_matched_page(matched_pages, leaf_records)
+            if star is not None and len(pages_included) > 1:
+                one_page = [r for r in leaf_records if r[0] == star]
+                block, pages_included = _render_document_block(
+                    doc, one_page, index=position, full=False, seed_pages={star}
+                )
+                block_tokens = estimate_tokens(block)
+                selected, seed_pages, full = one_page, [star], False
+                logger.info(
+                    "[CAG] doc=%s élu — budget restant %d tokens insuffisant : réduit à sa page ★ %s (%d tokens)",
+                    did,
+                    remaining,
+                    star,
+                    block_tokens,
+                )
+            if block_tokens > remaining:
+                logger.warning(
+                    "[CAG] doc=%s élu — sa page ★ (%d tokens) dépasse le budget restant (%d) : conservée quand même",
+                    did,
+                    block_tokens,
+                    remaining,
+                )
 
         blocks.append(block)
         spent_tokens += block_tokens

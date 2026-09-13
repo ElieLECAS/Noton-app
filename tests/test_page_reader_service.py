@@ -1,17 +1,14 @@
-"""Lecteur de page délégué : parsing du relevé et désambiguïsation par la couleur.
+"""Lecteur de page délégué : parsing du relevé rendu par le modèle vision.
 
 Toutes les fonctions testées ici sont pures — aucun appel modèle, aucune image. Ce qu'elles
-protègent a été mesuré le 2026-09-12 sur la planche des parcloses (doc 438 p.8) : le modèle
-relève toujours les bonnes valeurs, mais l'étiquette de couleur bascule EN BLOC d'un run à
-l'autre. C'est donc le recoupement déterministe, pas le jugement du modèle, qui tranche.
+protègent : une sortie illisible devient une ERREUR explicite et non « rien sur cette page »,
+et un « absent » ou « ambigu » ne laisse jamais passer une valeur. C'est ce contrat, et non
+une règle ajoutée, qui empêche une valeur devinée de revenir en texte propre.
 """
 from __future__ import annotations
 
 from app.services.page_reader_service import (
-    detect_convention_color,
-    normalize_value,
     parse_page_reading,
-    resolve_by_color,
     survey_entry_for,
 )
 
@@ -60,34 +57,8 @@ def test_unparseable_output_is_an_error_not_an_empty_reading():
 
 
 # ---------------------------------------------------------------------------
-# Désambiguïsation par la couleur
+# Repérage dans le relevé
 # ---------------------------------------------------------------------------
-
-
-def test_detect_convention_color():
-    assert detect_convention_color("Cotation en bleu = épaisseur vitrage") == "bleu"
-    assert detect_convention_color("Les cotes en ROUGE sont les entraxes") == "rouge"
-    assert detect_convention_color("Cotes en millimètres") is None
-
-
-def test_normalize_value_tolerates_units_and_decimal_comma():
-    assert normalize_value("29,5") == normalize_value("29.5") == "29.5"
-    assert normalize_value("30 mm") == "30"
-    assert normalize_value("") == ""
-
-
-def test_resolve_by_color_picks_the_single_coloured_value():
-    values = [{"valeur": "30", "couleur": "noir"}, {"valeur": "27", "couleur": "bleu"}]
-    # Les étiquettes du modèle sont ici INVERSÉES ; seul l'ensemble coloré fait foi.
-    value, status = resolve_by_color(values, ["16", "18", "30", "31"])
-    assert (value, status) == ("30", "resolved")
-
-
-def test_resolve_by_color_refuses_when_both_or_none_match():
-    values = [{"valeur": "30", "couleur": ""}, {"valeur": "28", "couleur": ""}]
-    assert resolve_by_color(values, ["30", "28"])[1] == "ambiguous"
-    assert resolve_by_color(values, ["16", "18"])[1] == "ambiguous"
-    assert resolve_by_color(values, [])[1] == "unusable"
 
 
 def test_survey_entry_lookup_is_loose_on_formatting():
@@ -96,3 +67,63 @@ def test_survey_entry_lookup_is_loose_on_formatting():
     assert survey_entry_for(survey, "parclose-2634")["repere"] == "2634"
     assert survey_entry_for(survey, "9999") is None
     assert survey_entry_for(survey, "") is None
+
+
+# ---------------------------------------------------------------------------
+# Non-régressions du 2026-09-12 : faux code « FORM76 » et fuite du raisonnement
+# ---------------------------------------------------------------------------
+
+
+def test_gamme_name_is_not_a_reference_code():
+    """« PERFORM76 » produisait le code fantôme « FORM76 » (le motif démarrait au milieu du
+    mot), introuvable par construction : le contrôle de sortie déclenchait donc une
+    correction à CHAQUE réponse de l'espace Perform."""
+    from app.services.reference_codes import REF_CODE_RE
+
+    def codes(text):
+        return [m.group(0) for m in REF_CODE_RE.finditer(text)]
+
+    assert codes("la gamme PERFORM76 est en PVC") == []
+    assert codes("le PROFORM76") == []
+    assert "FORM76" not in codes("Dossier technique gamme Perform76 CCV03")
+    # Les vraies références restent détectées.
+    assert codes("crémone TGY3702 et rallonge TGY3704") == ["TGY3702", "TGY3704"]
+    assert codes("dormant 76177 rénovation") == ["76177"]
+    assert codes("réf.SL1600") == ["SL1600"] and codes("RAL9016") == ["RAL9016"]
+
+
+def test_response_control_no_longer_fires_on_a_gamme_name():
+    from app.services.response_verification_service import check_reader_output
+
+    res = check_reader_output(
+        response_text="Le dormant rénovation de la gamme Perform76 accepte un délignage.",
+        evidence_text="[page 7] Dormant rénovation, délignage de l'aile à effectuer sur chantier.",
+        question="délignage maxi dormant rénovation",
+    )
+    assert res["ok"] is True and res["unsupported_claims"] == []
+
+
+def test_control_round_reasoning_never_reaches_the_user():
+    """Le round de contrôle répondait « Voici la vérification et la correction : … » suivi de
+    ses constats, et tout partait à l'utilisateur. Seul le contenu déclaré est montré."""
+    from app.services.reader_agent_service import extract_declared_answer
+
+    leaked = (
+        "Voici la vérification et la correction:\n"
+        "Les documents consultés ne mentionnent pas le terme \"FORM76\"…\n"
+        "<reponse_finale>Le délignage maxi de l'aile est de 20 mm, à effectuer sur le "
+        "chantier.</reponse_finale>"
+    )
+    out = extract_declared_answer(leaked)
+    assert out == "Le délignage maxi de l'aile est de 20 mm, à effectuer sur le chantier."
+    assert "vérification" not in out and "FORM76" not in out
+
+
+def test_declared_answer_falls_back_to_full_text():
+    """Pas de balise, ou balise vide → on montre tout : mieux vaut bavard que muet."""
+    from app.services.reader_agent_service import extract_declared_answer
+
+    assert extract_declared_answer("Réponse directe.") == "Réponse directe."
+    assert extract_declared_answer("X <reponse_finale>  </reponse_finale>").startswith("X ")
+    # Balise ouverte non refermée (réponse tronquée par le plafond de tokens).
+    assert extract_declared_answer("meta\n<reponse_finale>Début tronqué") == "Début tronqué"

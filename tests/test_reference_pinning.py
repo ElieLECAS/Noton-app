@@ -99,7 +99,9 @@ class TestBlocEpingle:
         block, pinned = build_pinned_reference_block(_session(rows), [1], ["6111"])
 
         assert pinned == ["6111"]
-        assert "EXTRAIT DE RÉFÉRENCE — 6111" in block
+        assert "OÙ APPARAÎT LA RÉFÉRENCE 6111" in block
+        # Le bloc localise et épelle ; il ne doit jamais se présenter comme une valeur.
+        assert "n'y lis AUCUNE valeur" in block
         assert "Catalogue Perform" in block
         assert "p.34" in block
         assert "« Profil 6111 : largeur 70 mm. »" in block

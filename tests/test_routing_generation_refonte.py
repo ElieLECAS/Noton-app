@@ -261,5 +261,5 @@ class TestEpinglageParReference:
         block, pinned = build_pinned_reference_block(db_session, [doc.id], ["TST9F67"])
 
         assert pinned == ["TST9F67"]
-        assert "EXTRAIT DE RÉFÉRENCE — TST9F67" in block
+        assert "OÙ APPARAÎT LA RÉFÉRENCE TST9F67" in block
         assert "épaisseur 20 mm" in block

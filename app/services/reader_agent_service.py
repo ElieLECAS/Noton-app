@@ -31,6 +31,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import re
 import time
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator, Awaitable, Callable, Dict, List, Optional, Set, Tuple
@@ -109,6 +110,32 @@ StreamFn = Callable[..., AsyncIterator[str]]
 # Les pages vues en image sont nécessaires au contrôle : il ne lit que du texte, et une cote
 # portée sur une coupe n'y figure jamais.
 OutputCheck = Callable[[str, str, List[str], List[Tuple[int, int]]], Dict[str, Any]]
+
+
+_FINAL_ANSWER_RE = re.compile(
+    r"<\s*reponse_finale\s*>(.*?)(?:<\s*/\s*reponse_finale\s*>|$)",
+    re.DOTALL | re.IGNORECASE,
+)
+
+
+def extract_declared_answer(text: str) -> str:
+    """Garde UNIQUEMENT ce que le modèle a déclaré comme réponse finale, si balisé.
+
+    Le round de contrôle demande une réponse corrigée : le modèle y répond volontiers par
+    « Voici la vérification et la correction : … » suivi de ses constats, puis de la vraie
+    réponse — et tout partait à l'utilisateur (constaté le 2026-09-12). Aucune consigne de
+    prompt n'a tenu. On inverse donc la charge : ce qui n'est pas déclaré comme réponse
+    n'est pas montré.
+
+    Repli volontaire sur le texte intégral quand la balise est absente ou vide : mieux vaut
+    une réponse bavarde qu'un message vide. La balise ouverte mais non refermée (réponse
+    tronquée par le plafond de tokens) est acceptée telle quelle.
+    """
+    match = _FINAL_ANSWER_RE.search(text or "")
+    if not match:
+        return text
+    inner = (match.group(1) or "").strip()
+    return inner or text
 
 
 def sse(obj: Dict[str, Any]) -> str:
@@ -675,4 +702,7 @@ class ReaderLoop:
         out += finalize_filters(filters)
         self.source_filter = sf
         self.evidence_citations = ef.citations
-        return out.rstrip()
+        # Les filtres d'abord (ils moissonnent <sources>/<evidence> où qu'ils soient dans
+        # le texte), l'extraction ensuite — sinon des sources déclarées hors de la balise
+        # de réponse seraient perdues avec le reste.
+        return extract_declared_answer(out).rstrip()

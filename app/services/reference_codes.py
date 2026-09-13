@@ -17,7 +17,19 @@ import re
 # Motifs de code produit (référence, RAL, norme). Volontairement large : les
 # garde-fous (longueur minimale, exclusion des millésimes, stopwords) sont portés
 # par les appelants — voir coverage_service.extract_message_reference_codes.
-REF_CODE_RE = re.compile(r"[A-Za-z]{1,4}\d{2,6}[A-Za-z]?|\d[A-Z]\d{2,4}|\d{3,6}[A-Za-z]?")
+#
+# Les frontières alphanumériques ne sont PAS un détail : sans elles, le motif démarre au
+# MILIEU d'un mot. « PERFORM76 » — le nom de gamme le plus fréquent du corpus — produisait
+# le code fantôme « FORM76 » (les 4 lettres qui précèdent les chiffres), introuvable dans
+# les documents par construction. Le contrôle de sortie déclenchait donc une correction à
+# CHAQUE réponse de l'espace Perform (mesuré le 2026-09-12 : sur toutes les questions,
+# quel que soit le sujet), et ces rounds de contrôle finissaient par déverser leur
+# raisonnement dans la réponse montrée à l'utilisateur.
+REF_CODE_RE = re.compile(
+    r"(?<![A-Za-z0-9])"
+    r"(?:[A-Za-z]{1,4}\d{2,6}[A-Za-z]?|\d[A-Z]\d{2,4}|\d{3,6}[A-Za-z]?)"
+    r"(?![A-Za-z0-9])"
+)
 
 # Unités qui signalent une VALEUR technique à côté d'un code : sert à mesurer la
 # « densité de spécification » d'un passage lors de l'épinglage par référence.

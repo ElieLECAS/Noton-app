@@ -18,6 +18,15 @@ l'image, le modèle invente une valeur sans hésiter (« 2452 = 38 mm » sur un 
 ne contient pas 2452). La valeur fabriquée reviendrait alors en texte propre, indétectable.
 D'où le contrat de sortie : ``absent`` est une réponse de premier rang, et toute valeur
 doit être accompagnée du libellé du repère lu à côté d'elle — ce qui rend l'erreur visible.
+
+RETIRÉ le 2026-09-13 : la désambiguïsation déterministe par la couleur (second rendu de la
+page avec tout sauf une couleur effacé, puis intersection d'ensembles). Elle rendait juste
+la planche des parcloses, mais c'était un mécanisme bâti pour UNE page : sur les 26 pages
+du dossier Perform76, une seule porte une légende de couleur. Décision d'Elie : le lecteur
+lit la page depuis le PNG, sans règle ajoutée. Conséquence mesurée et assumée — sur cette
+planche, le repère 2636 est lu 27 (le nombre noir voisin) au lieu de 30, de façon stable.
+La parade générique reste le contrat de sortie : plusieurs valeurs sans règle lisible sur
+la page → ``ambigu``, jamais un nombre choisi au hasard.
 """
 from __future__ import annotations
 
@@ -97,8 +106,6 @@ class PageReading:
     convention: str = ""
     # Relevé systématique de la page : [{repere, valeurs: [{valeur, couleur}]}].
     survey: List[Dict[str, Any]] = field(default_factory=list)
-    # Résultat du recoupement par la couleur : resolved | ambiguous | unusable | "".
-    color_check: str = ""
     error: Optional[str] = None
     ms: int = 0
 
@@ -165,89 +172,6 @@ def _coerce_survey(raw: Any) -> List[Dict[str, Any]]:
     return out
 
 
-# ---------------------------------------------------------------------------
-# Désambiguïsation par la COULEUR — déterministe
-# ---------------------------------------------------------------------------
-#
-# Mesuré le 2026-09-12 sur la planche des parcloses, 3 lectures par référence : le modèle
-# relève TOUJOURS les bonnes valeurs, dans le bon ordre — mais l'étiquette de couleur bascule
-# d'un run à l'autre, et elle bascule EN BLOC (27 repères sur 27 du même côté). Impossible
-# donc de corriger par un vote interne : quand il se trompe, il se trompe partout.
-#
-# On ne lui demande plus. La page est rendue une seconde fois avec TOUT sauf la couleur de la
-# convention effacé : il ne reste que les cotes concernées, et les lire devient trivial. Le
-# rapprochement final est une intersection d'ensembles, pas un jugement perceptif.
-_COLOR_TESTS: Dict[str, Any] = {
-    "bleu": lambda r, g, b: (b > r + 40) & (b > g + 40),
-    "rouge": lambda r, g, b: (r > g + 40) & (r > b + 40),
-    "vert": lambda r, g, b: (g > r + 40) & (g > b + 40),
-}
-
-
-def detect_convention_color(convention: str) -> Optional[str]:
-    """Couleur citée par la convention de lecture de la page (« cotation en bleu = … »)."""
-    flat = (convention or "").lower()
-    for color in _COLOR_TESTS:
-        if color in flat:
-            return color
-    return None
-
-
-def isolate_color(png_bytes: bytes, color: str) -> Optional[bytes]:
-    """Rend la page en ne gardant QUE les pixels de la couleur demandée (noir sur blanc)."""
-    test = _COLOR_TESTS.get(color)
-    if test is None:
-        return None
-    try:
-        import io as _io
-
-        import numpy as np
-        from PIL import Image
-
-        img = Image.open(_io.BytesIO(png_bytes)).convert("RGB")
-        arr = np.asarray(img).astype(np.int16)
-        mask = test(arr[:, :, 0], arr[:, :, 1], arr[:, :, 2])
-        if not mask.any():
-            return None
-        out = np.full_like(arr, 255)
-        out[mask] = [0, 0, 0]
-        buf = _io.BytesIO()
-        Image.fromarray(out.astype("uint8")).save(buf, format="PNG")
-        return buf.getvalue()
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("[lecteur de page] isolation couleur %s échouée : %s", color, exc)
-        return None
-
-
-def normalize_value(value: Any) -> str:
-    """Forme comparable d'une cote (« 29,5 » ≡ « 29.5 » ≡ « 29.5 mm »)."""
-    text = str(value or "").strip().lower().replace(",", ".")
-    match = re.search(r"\d+(?:\.\d+)?", text)
-    if not match:
-        return ""
-    number = match.group(0).rstrip("0").rstrip(".") if "." in match.group(0) else match.group(0)
-    return number
-
-
-def resolve_by_color(
-    values: Sequence[Dict[str, str]], color_values: Sequence[str]
-) -> Tuple[Optional[str], str]:
-    """Choisit, parmi les valeurs d'un repère, celle qui porte la couleur de la convention.
-
-    Retourne ``(valeur, statut)`` avec statut ``resolved`` | ``ambiguous`` | ``unusable``.
-    Ambigu quand zéro ou plusieurs candidats figurent dans l'ensemble coloré : mieux vaut
-    renvoyer le lecteur vers un recoupement que trancher au hasard.
-    """
-    colored = {normalize_value(v) for v in color_values}
-    colored.discard("")
-    if not colored:
-        return None, "unusable"
-    hits = [v for v in values if normalize_value(v.get("valeur")) in colored]
-    if len(hits) == 1:
-        return hits[0].get("valeur"), "resolved"
-    return None, "ambiguous"
-
-
 def survey_entry_for(survey: Sequence[Dict[str, Any]], needle: str) -> Optional[Dict[str, Any]]:
     """Entrée du relevé correspondant à un repère cherché (comparaison lâche)."""
     key = re.sub(r"[^a-z0-9]", "", (needle or "").lower())
@@ -311,54 +235,6 @@ def parse_page_reading(raw: str, *, document_id: int, page_no: int) -> PageReadi
     )
 
 
-COLOR_VALUES_QUESTION = (
-    "Cette image ne contient plus que les cotes d'une seule couleur, le reste du dessin a "
-    "été effacé. Relève TOUS les nombres visibles, dans l'ordre de lecture (colonne par "
-    'colonne, de haut en bas). Réponds en JSON strict : {"valeurs": ["16", "18", …]}. '
-    "N'ajoute aucun nombre que tu ne vois pas, n'en omets aucun."
-)
-
-
-async def _read_color_values(
-    png_bytes: bytes, color: str, *, model: str, document_id: int, page_no: int
-) -> List[str]:
-    """Nombres portant la couleur de la convention, lus sur la page filtrée."""
-    from app.services.mistral_service import chat
-
-    masked = await asyncio.to_thread(isolate_color, png_bytes, color)
-    if not masked:
-        return []
-    b64 = base64.b64encode(masked).decode("utf-8")
-    try:
-        result = await chat(
-            message="",
-            model=model,
-            context=[{"role": "user", "content": COLOR_VALUES_QUESTION, "images": [b64]}],
-            temperature=0.0,
-            max_tokens=1200,
-            response_format={"type": "json_object"},
-        )
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("[lecteur de page] lecture des cotes %s échouée : %s", color, exc)
-        return []
-    choice = (result.get("choices") or [{}])[0]
-    content = (choice.get("message") or {}).get("content") or ""
-    try:
-        data = json.loads(content)
-    except (TypeError, ValueError):
-        return []
-    values = data.get("valeurs") if isinstance(data, dict) else None
-    out = [_clean(v, 24) for v in values] if isinstance(values, list) else []
-    logger.info(
-        "[lecteur de page] doc=%s p.%s — %d cote(s) « %s » relevée(s) sur la page filtrée",
-        document_id,
-        page_no,
-        len(out),
-        color,
-    )
-    return [v for v in out if v]
-
-
 async def read_page_image(
     *,
     pdf_path: str,
@@ -409,36 +285,6 @@ async def read_page_image(
         content = " ".join(p.get("text", "") for p in content if isinstance(p, dict))
 
     reading = parse_page_reading(str(content), document_id=document_id, page_no=page_no)
-
-    # Recoupement déterministe par la couleur, quand la page dit elle-même comment se lire
-    # et que le repère cherché porte plusieurs valeurs. C'est ce qui remplace le jugement
-    # « lequel est bleu ? », mesuré instable.
-    color = detect_convention_color(reading.convention)
-    entry = survey_entry_for(reading.survey, needle) if needle else None
-    if color and entry and len(entry.get("valeurs") or []) > 1:
-        color_values = await _read_color_values(
-            png, color, model=model, document_id=document_id, page_no=page_no
-        )
-        value, status = resolve_by_color(entry["valeurs"], color_values)
-        reading.color_check = status
-        if status == "resolved" and value:
-            if normalize_value(value) != normalize_value(reading.answer):
-                logger.info(
-                    "[lecteur de page] doc=%s p.%s — couleur %s : %r corrigé en %r",
-                    document_id,
-                    page_no,
-                    color,
-                    reading.answer,
-                    value,
-                )
-            reading.answer = value
-            reading.ambiguous = False
-            reading.citations = [str(entry.get("repere") or ""), str(value)]
-        elif status == "ambiguous":
-            # Le relevé coloré ne tranche pas : on ne garde SURTOUT pas la valeur devinée.
-            reading.ambiguous = True
-            reading.answer = ""
-
     reading.ms = int((time.perf_counter() - t0) * 1000)
     logger.info(
         "[lecteur de page] doc=%s p.%s model=%s %dms → %s",

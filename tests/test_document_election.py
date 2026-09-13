@@ -18,6 +18,9 @@ Chaque test reproduit une pathologie mesurée sur le corpus réel :
     récompense l'affinité thématique plutôt que la preuve ; les deux pannes mesurées le
     01/09 (LUMINE 55 et couleurs Perform) jetaient la page qui portait la réponse alors
     qu'elle était en TÊTE du pool fusionné.
+  * C1-C4 (13/09) « un seul élu, le mauvais » — l'étage des passages compte des DOCUMENTS
+    distincts (fenêtre de 10, plancher 0,45), les champions de canal sont garantis, et les
+    candidats non élus restent tracés avec la raison de leur éviction.
 """
 from __future__ import annotations
 
@@ -33,6 +36,9 @@ from app.config import settings
 from app.services.document_election_service import (
     DOMINANCE_RATIO,
     ELECTION_PAGE_CAP,
+    MAX_CANDIDATES_TRACE,
+    TOP_PASSAGE_MIN_RATIO,
+    TOP_PASSAGE_WINDOW,
     ElectedDocument,
     dedupe_versions,
     elect_documents,
@@ -107,8 +113,8 @@ def test_p1_cas_lumine_le_detenteur_du_meilleur_passage_devient_dominant():
 
     assert result.elected[0].document_id == 439, "le détenteur du meilleur passage doit mener"
     assert result.elected[0].reason == "top_passage:1"
-    assert 424 in result.elected_ids, "le volume reste une preuve : le catalogue est complément"
-    assert next(d.reason for d in result.elected if d.document_id == 424) == "best_election_score"
+    assert 424 in result.elected_ids, "troisième document distinct de la fenêtre : il entre"
+    assert next(d.reason for d in result.elected if d.document_id == 424) == "top_passage:4"
 
 
 def test_p2_cas_perform_le_depliant_qui_porte_les_couleurs_devient_dominant():
@@ -195,15 +201,18 @@ def test_p_un_passage_decroche_du_meilleur_nest_pas_un_top():
     assert result.elected_ids == [1]
 
 
-def test_p_un_document_qui_tient_les_trois_meilleurs_passages_part_seul():
-    """Trois passages en tête du même document = mono : la règle n'empile pas pour rien."""
+def test_p_un_document_qui_tient_les_trois_meilleurs_passages_nempeche_plus_le_second():
+    """C1 (13/09). Jusqu'ici trois passages en tête du même document = mono, et le document
+    du 4e passage — souvent celui qui porte la réponse — était candidat puis jeté par la
+    phase B. On compte désormais des DOCUMENTS distincts dans la fenêtre : il entre."""
     pool = _pool([
         (1, "Notice", [(3, 0.50, 0.70, 0.60), (4, 0.48, 0.65, 0.55), (5, 0.46, 0.62, 0.50)]),
         (2, "Autre", [(9, 0.40, 0.55, 0.40)]),
     ])
     result = elect_documents(None, pool, query_text="hauteur de poignee")
-    assert result.decision == "mono_document"
-    assert result.elected_ids == [1]
+    assert result.decision == "top_passages:2"
+    assert result.elected_ids == [1, 2]
+    assert result.elected[1].reason == "top_passage:4"
 
 
 def test_p_max_docs_a_un_garde_le_meilleur_passage():
@@ -216,20 +225,27 @@ def test_p_max_docs_a_un_garde_le_meilleur_passage():
     assert result.elected_ids == [2]
 
 
-def test_p_le_volume_reste_une_preuve_de_complement():
-    """La fiche tient les TROIS meilleurs passages ; le catalogue, 4e au passage mais premier
-    au score d'élection (8 pages, deux canaux), entre en complément au titre du volume."""
+def test_p_le_volume_reste_une_preuve_de_complement(monkeypatch):
+    """La fiche et un jeu de planches remplissent les dix passages de la fenêtre ; le
+    catalogue, premier au score d'élection (8 pages, deux canaux) mais 11e au passage,
+    entre en complément au titre du volume — le chemin « volume » reste un filet."""
+    from app.services import document_election_service as svc
+
+    monkeypatch.setattr(svc.settings, "COLPALI_DOMINANCE_MIN_SCORE", 0.55)
     pool = _pool([
         (2, "Fiche", [(3, 0.31, 0.70, 0.50), (4, 0.30, 0.66, 0.45), (5, 0.295, 0.62, 0.40)]),
+        (3, "Planches", [(p, 0.300 - i * 0.001, 0.60, None) for i, p in enumerate(range(1, 8))]),
         (1, "Catalogue", [(p, 0.29, 0.60, 0.50) for p in range(1, 9)]),
     ])
     result = elect_documents(None, pool, query_text="cote")
     trace = result.to_trace()
 
     assert result.candidates[0].document_id == 1, "le catalogue doit bien gagner au score d'élection"
-    assert result.decision == "complement:2"          # passage n°1 + volume
+    assert result.elected_ids == [2, 3, 1]
+    assert result.decision == "complement:3"          # passages n°1 et n°3 + volume
     assert trace["elected"][0]["reason"] == "top_passage:1"
-    assert trace["elected"][1]["reason"] == "best_election_score"
+    assert trace["elected"][1]["reason"] == "top_passage:3"
+    assert trace["elected"][2]["reason"] == "best_election_score"
     assert "top_passage:1" in format_election_log(result)
 
 
@@ -321,9 +337,10 @@ def test_e3_trois_meilleurs_passages_de_trois_documents_donnent_trois_elus():
     assert result.margin == pytest.approx(0.48 / 0.50, rel=1e-3)
 
 
-def test_e3bis_au_dela_du_troisieme_passage_il_faut_une_preuve():
-    """Le 4e document, même proche, n'entre plus sans preuve : la règle des passages est
-    bornée à trois, et la comparaison / complémentarité gardent leur seuil."""
+def test_e3bis_au_dela_du_plafond_le_quatrieme_reste_candidat_avec_sa_raison():
+    """Quatre documents distincts dans la fenêtre, plafond à trois : le 4e n'entre pas mais
+    reste candidat, et la trace dit POURQUOI (cap_reached) — c'est ce qui rend l'éviction
+    visible, et navigable par le lecteur."""
     hits = [
         _hit(1, 3, 0.50, sources=("bm25",)),
         _hit(2, 3, 0.48, sources=("bm25",)),
@@ -332,18 +349,24 @@ def test_e3bis_au_dela_du_troisieme_passage_il_faut_une_preuve():
     ]
     result = elect_documents(None, hits, query_text="hauteur de poignee")
     assert result.elected_ids == [1, 2, 3]
-    assert 4 in [c.document_id for c in result.candidates], "il reste candidat, visible du juge"
+    four = next(c for c in result.candidates if c.document_id == 4)
+    assert four.role == "candidate"
+    assert four.reason == "not_elected:cap_reached"
+    assert "cap_reached" in format_election_log(result)
+
+
+def _fenetre_pleine(doc_id: int = 1, *, bm25=None, colpali=None, sources=("bm25",)) -> list:
+    """Dix passages d'un même document qui remplissent la fenêtre (0,500 → 0,455)."""
+    return [
+        _hit(doc_id, 3 + i, 0.50 - i * 0.005, sources=sources, bm25=bm25, colpali=colpali)
+        for i in range(TOP_PASSAGE_WINDOW)
+    ]
 
 
 def test_e4_question_comparative_admet_un_second_document_au_dela_des_passages():
-    """Le document comparé n'est PAS dans les trois meilleurs passages (le premier les
-    tient tous) : c'est la question comparative qui l'admet, sous seuil de dominance."""
-    hits = [
-        _hit(1, 3, 0.50, sources=("bm25",)),
-        _hit(1, 4, 0.49, sources=("bm25",)),
-        _hit(1, 5, 0.48, sources=("bm25",)),
-        _hit(2, 3, 0.40, sources=("bm25",)),
-    ]
+    """Le document comparé est HORS de la fenêtre des passages (le premier la remplit) :
+    c'est la question comparative qui l'admet, sous seuil de dominance."""
+    hits = _fenetre_pleine(1) + [_hit(2, 3, 0.45, sources=("bm25",))]
     result = elect_documents(
         None, hits, query_text="quelle difference entre le Perform 76 et le Kommerling 70 ?"
     )
@@ -369,8 +392,8 @@ def test_e5_complementarite_archetypes_notice_plus_planche(monkeypatch):
     from app.services import document_election_service as svc
 
     monkeypatch.setattr(svc.settings, "COLPALI_DOMINANCE_MIN_SCORE", 0.55)
-    # La notice tient les trois meilleurs passages ; la planche est 4e — seule la
-    # complémentarité de canaux peut l'admettre.
+    # La notice tient les trois meilleurs passages ; la planche est 4e — depuis C1 elle
+    # entre par l'étage des passages (document distinct, ColPali crédible).
     hits = [
         _hit(1, 8, 0.50, sources=("bm25",), bm25=1.4),
         _hit(1, 9, 0.49, sources=("bm25",), bm25=1.2),
@@ -378,9 +401,23 @@ def test_e5_complementarite_archetypes_notice_plus_planche(monkeypatch):
         _hit(2, 14, 0.40, sources=("colpali",), colpali=0.80),
     ]
     result = elect_documents(None, hits, query_text="cote du dormant")
-    assert result.decision == "complement:2"
+    assert result.decision == "top_passages:2"
     assert result.elected_ids == [1, 2]
-    assert result.elected[1].reason == "channel_complement"
+    assert result.elected[1].reason == "top_passage:4"
+
+
+def test_e5bis_planche_hors_fenetre_entre_comme_champion_colpali(monkeypatch):
+    """C3 (13/09). La notice remplit la fenêtre ; la planche muette est 11e à la fusion
+    (rang 1 d'un canal seul, noyé par RRF) mais détient le MEILLEUR score ColPali : elle
+    est garantie présente comme champion de canal."""
+    from app.services import document_election_service as svc
+
+    monkeypatch.setattr(svc.settings, "COLPALI_DOMINANCE_MIN_SCORE", 0.55)
+    hits = _fenetre_pleine(1, bm25=1.4) + [_hit(2, 14, 0.45, sources=("colpali",), colpali=0.80)]
+    result = elect_documents(None, hits, query_text="cote du dormant")
+    assert result.elected_ids == [1, 2]
+    assert result.elected[1].reason == "channel_top:colpali"
+    assert result.decision == "complement:2"
 
 
 def test_complementarite_refusee_si_colpali_trop_faible(monkeypatch):
@@ -422,19 +459,17 @@ def test_complement_texte_admis_sur_un_vrai_match_lexical():
     ]
     result = elect_documents(None, hits, query_text="installer la rallonge")
     assert result.elected_ids == [1, 2]
-    assert result.elected[1].reason == "channel_complement"
+    assert result.elected[1].reason == "top_passage:4"   # vrai match BM25 = passage crédible
 
 
 def test_meme_famille_de_canaux_nest_pas_une_complementarite():
-    """Deux documents texte : le second, hors des trois meilleurs passages, reste concurrent."""
-    hits = [
-        _hit(1, 8, 0.50, sources=("bm25",), bm25=1.4),
-        _hit(1, 9, 0.49, sources=("bm25",), bm25=1.2),
-        _hit(1, 10, 0.48, sources=("bm25",), bm25=1.1),
-        _hit(2, 9, 0.40, sources=("bm25",), bm25=1.3),
-    ]
+    """Deux documents texte : le second, HORS de la fenêtre des passages et sans question
+    comparative, reste concurrent — la différence de canal n'existe pas."""
+    hits = _fenetre_pleine(1, bm25=1.4) + [_hit(2, 9, 0.45, sources=("bm25",), bm25=1.3)]
     result = elect_documents(None, hits, query_text="cote du dormant")
     assert result.elected_ids == [1]
+    two = next(c for c in result.candidates if c.document_id == 2)
+    assert two.reason == "not_elected:beyond_window"
 
 
 def test_max_docs_plafonne_le_nombre_delus():
@@ -450,21 +485,20 @@ def test_max_docs_plafonne_le_nombre_delus():
 
 
 def test_seuil_de_dominance_est_bien_relatif():
-    """Juste sous le seuil → écarté ; juste au-dessus → admis (question comparative)."""
-    juste_sous = DOMINANCE_RATIO * 0.50 - 0.01
-    juste_au_dessus = DOMINANCE_RATIO * 0.50 + 0.01
+    """Juste sous le seuil → écarté ; juste au-dessus → admis (question comparative).
+    Le candidat est placé HORS de la fenêtre des passages, là où l'étage des compléments
+    est le seul à décider."""
+    fenetre = _fenetre_pleine(1)
+    dominant_score = 0.50 * (1 + settings.CAG_ELECTION_PAGE_BONUS * ELECTION_PAGE_CAP)
+    juste_sous = DOMINANCE_RATIO * dominant_score - 0.01
+    juste_au_dessus = DOMINANCE_RATIO * dominant_score + 0.01
+    assert juste_au_dessus < 0.455, "le candidat doit rester 11e au passage"
     q = "comparer les deux"
 
-    r1 = elect_documents(
-        None, [_hit(1, 1, 0.50, sources=("bm25",)), _hit(2, 1, juste_sous, sources=("bm25",))],
-        query_text=q,
-    )
+    r1 = elect_documents(None, fenetre + [_hit(2, 1, juste_sous, sources=("bm25",))], query_text=q)
     assert r1.elected_ids == [1]
 
-    r2 = elect_documents(
-        None, [_hit(1, 1, 0.50, sources=("bm25",)), _hit(2, 1, juste_au_dessus, sources=("bm25",))],
-        query_text=q,
-    )
+    r2 = elect_documents(None, fenetre + [_hit(2, 1, juste_au_dessus, sources=("bm25",))], query_text=q)
     assert r2.elected_ids == [1, 2]
 
 
@@ -628,9 +662,9 @@ def test_candidate_passages_couvre_tous_les_candidats_pas_seulement_les_elus():
         _hit(3, 2, 0.35, sources=("bm25",)),
     ]
     result = elect_documents(None, hits, query_text="hauteur de poignee")
-    # Passages 0,50 / 0,45 (doc 1) et 0,40 (doc 2) sont les trois meilleurs → deux élus ;
-    # le doc 3 (0,35 = 70 % du meilleur, à la limite) reste candidat.
-    assert result.elected_ids == [1, 2]
+    # Trois documents distincts dans la fenêtre (0,35 = 70 % du meilleur, au-dessus du
+    # plancher 0,45) → trois élus.
+    assert result.elected_ids == [1, 2, 3]
 
     passages = election_candidate_passages(result)
     doc_ids = {p["document_id"] for p in passages}
@@ -664,3 +698,121 @@ def test_trace_est_json_serialisable():
     assert '"decision"' in payload
     assert '"elected"' in payload
     assert '"candidates"' in payload
+
+
+# ---------------------------------------------------------------------------
+# C1-C4 (13/09) — « un seul élu, le mauvais, alors que le bon était retenu puis viré »
+# ---------------------------------------------------------------------------
+
+
+def test_c1_le_bon_document_au_quatrieme_passage_est_elu():
+    """Le symptôme rapporté : un dossier thématique tient les rangs 1 à 3 (toutes ses pages
+    parlent de la gamme), le document qui porte la réponse a son passage au 4e rang. Il
+    était candidat, puis jeté par la phase B. Il est désormais élu."""
+    pool = _pool([
+        (438, "Dossier technique gamme Perform76",
+         [(5, 0.0296, 0.651, 0.30), (4, 0.0291, 0.640, 0.30), (6, 0.0285, 0.630, 0.30)]),
+        (425, "2023-06_DEPLIANT-GENERAL", [(3, 0.0280, 0.687, 0.40)]),
+    ])
+    result = elect_documents(None, pool, query_text="couleurs disponibles gamme Perform")
+    assert result.elected_ids == [438, 425]
+    assert result.elected[1].reason == "top_passage:4"
+    assert result.decision == "top_passages:2"
+
+
+def test_c2_le_rang_1_dun_canal_seul_passe_le_plancher(monkeypatch):
+    """Avec RRF_K = 60, le rang 1 d'un canal seul vaut exactement la moitié du rang 1 des
+    deux canaux : l'ancien plancher (0,70) l'excluait structurellement. À 0,45 il entre."""
+    from app.services import document_election_service as svc
+
+    monkeypatch.setattr(svc.settings, "COLPALI_DOMINANCE_MIN_SCORE", 0.55)
+    assert TOP_PASSAGE_MIN_RATIO < 0.5
+    pool = _pool([
+        (1, "Bi-canal", [(3, 2 / 61, 0.60, 0.50)]),
+        (2, "Planche ColPali seul", [(9, 1 / 61, 0.74, None)]),
+    ])
+    result = elect_documents(None, pool, query_text="cote")
+    assert result.elected_ids == [1, 2]
+    assert result.elected[1].reason == "top_passage:2"
+
+
+def test_c1_une_miette_bm25_ne_devient_pas_un_top_passage():
+    """Cas TGY : à RRF égal (1/61), le guide de câblage trouvé par le repli OR (ts_rank 0,50)
+    ne doit pas entrer à côté du catalogue que ColPali classe premier."""
+    pool = _pool([
+        (400, "Catalogue SOLEAL", [(89, 0.0164, 0.741, None)]),
+        (415, "Roto Safe E câblage", [(25, 0.0164, None, 0.50)]),
+    ])
+    result = elect_documents(None, pool, query_text="rallonge TGY3704")
+    assert result.elected_ids == [400]
+    weak = next(c for c in result.candidates if c.document_id == 415)
+    assert weak.reason == "not_elected:weak_channel"
+
+
+def test_c3_le_champion_colpali_hors_fenetre_est_garanti(monkeypatch):
+    """Douze pages bi-canal moyennes d'un même document remplissent la fenêtre ; la planche
+    que ColPali classe première (0,78) est 13e à la fusion. Elle entre comme champion."""
+    from app.services import document_election_service as svc
+
+    monkeypatch.setattr(svc.settings, "COLPALI_DOMINANCE_MIN_SCORE", 0.55)
+    pool = _pool([
+        (1, "Catalogue", [(p, 0.0300 - i * 0.0005, 0.60, 0.50) for i, p in enumerate(range(1, 13))]),
+        (2, "Planche", [(9, 1 / 61, 0.78, None)]),
+    ])
+    result = elect_documents(None, pool, query_text="cote")
+    assert result.elected_ids == [1, 2]
+    assert result.elected[1].reason == "channel_top:colpali"
+
+
+def test_c3_le_champion_bm25_exige_un_vrai_match():
+    """Le meilleur BM25 du pool n'est garanti que s'il porte un vrai match (≥ 1,0) : une
+    miette du repli OR (0,9) ne fait pas un champion."""
+    catalogue = [(p, 0.0300 - i * 0.0005, 0.60, 0.50) for i, p in enumerate(range(1, 13))]
+    miette = elect_documents(
+        None, _pool([(1, "Catalogue", catalogue), (2, "Notice", [(4, 1 / 61, None, 0.90)])]),
+        query_text="pose",
+    )
+    assert miette.elected_ids == [1]
+
+    vrai = elect_documents(
+        None, _pool([(1, "Catalogue", catalogue), (2, "Notice", [(4, 1 / 61, None, 4.2)])]),
+        query_text="pose",
+    )
+    assert vrai.elected_ids == [1, 2]
+    assert vrai.elected[1].reason == "channel_top:bm25"
+
+
+def test_c4_un_document_court_hors_du_top_volume_reste_visible_avec_sa_raison():
+    """Un document d'UNE page, 6e au score de volume, était invisible dans la trace ; il
+    figure désormais parmi les candidats avec la raison de sa non-élection."""
+    low = lambda pages, base: [(p, base - i * 0.001, 0.60, 0.50) for i, p in enumerate(pages)]
+    pool = _pool([
+        (1, "A", [(1, 0.300, 0.65, 0.50), (2, 0.299, 0.60, 0.50), (3, 0.298, 0.60, 0.50)] + low(range(10, 15), 0.20)),
+        (2, "B", [(1, 0.297, 0.60, 0.50), (2, 0.296, 0.60, 0.50)] + low(range(10, 14), 0.20)),
+        (3, "C", [(1, 0.2955, 0.60, 0.50)] + low(range(10, 14), 0.20)),
+        (6, "F (une page)", [(1, 0.295, 0.60, 0.50)]),
+        (4, "D", [(p, 0.294, 0.60, 0.50) for p in range(1, 5)]),
+        (5, "E", [(p, 0.293, 0.60, 0.50) for p in range(1, 4)]),
+    ])
+    result = elect_documents(None, pool, query_text="cote")
+    assert result.elected_ids == [1, 2, 3]
+
+    by_id = {c.document_id: c for c in result.candidates}
+    assert 6 in by_id, "le document court doit rester visible"
+    assert by_id[6].reason == "not_elected:cap_reached"
+    assert by_id[4].reason == "not_elected:cap_reached"
+    assert by_id[5].reason == "not_elected:beyond_window"
+    assert len(result.candidates) <= MAX_CANDIDATES_TRACE
+    trace = result.to_trace()
+    assert all("reason" in c and "score_max" in c for c in trace["candidates"])
+
+
+def test_c4_un_passage_decroche_est_trace_below_floor():
+    pool = _pool([
+        (1, "Notice", [(3, 0.50, 0.70, 0.60)]),
+        (2, "Autre", [(9, 0.20, 0.60, 0.50)]),
+    ])
+    result = elect_documents(None, pool, query_text="hauteur de poignee")
+    assert result.decision == "mono_document"
+    other = next(c for c in result.candidates if c.document_id == 2)
+    assert other.reason == "not_elected:below_floor"

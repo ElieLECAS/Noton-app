@@ -764,38 +764,6 @@ def _build_generation_context(
 
 
 
-def _build_reader_pack(
-    session: Session,
-    doc_passages: List[dict],
-    *,
-    anchor_document_ids: Optional[List[int]] = None,
-    intent: Optional[str] = None,
-    elected_document_ids: Optional[List[int]] = None,
-) -> dict:
-    """Pack INITIAL du lecteur agentique : texte des pages ★ des documents élus, sous un
-    budget réduit (READER_INITIAL_PACK_TOKENS, ≤ 3 documents). Le lecteur ira chercher le
-    reste avec ses outils ; inutile de payer 50 k tokens de prefill pour des pages qu'il ne
-    lira peut-être pas. Le prompt système est celui du lecteur (outils, preuves)."""
-    if settings.CAG_ENABLED:
-        from app.services.context_packer_service import build_cag_context
-
-        return build_cag_context(
-            session,
-            doc_passages,
-            system_prompt=READER_SYSTEM_PROMPT,
-            token_budget=settings.READER_INITIAL_PACK_TOKENS,
-            max_documents=max(1, min(3, settings.CAG_MAX_DOCUMENTS)),
-            anchor_document_ids=anchor_document_ids,
-            intent=intent,
-            emit_sources_tag=False,
-            elected_document_ids=elected_document_ids,
-        )
-    ctx = build_space_context_from_passages(doc_passages)
-    content = ctx.get("content") or ""
-    if content.startswith(SPACE_CHAT_SYSTEM_PROMPT):
-        ctx["content"] = READER_SYSTEM_PROMPT + content[len(SPACE_CHAT_SYSTEM_PROMPT):]
-    return ctx
-
 def _guided_streaming_response(
     gtr,
     conversation_id: int,
@@ -1038,6 +1006,7 @@ def _build_generation_trace(
     dynamic_k: Optional[int] = None,
     rerank_status: Optional[str] = None,
     nb_passages: Optional[int] = None,
+    reading_trace: Optional[dict] = None,
     anchor_document_ids: Optional[List[int]] = None,
     requested_codes=None,
     pinned_codes: Optional[List[str]] = None,
@@ -1073,6 +1042,9 @@ def _build_generation_trace(
         "reasoning_effort": settings.GENERATION_REASONING_EFFORT,
         "generation_temperature": settings.SPACE_CHAT_TEMPERATURE,
         "model": settings.MODEL_FAST,
+        # Pages LUES en image au tour 0 : combien répondent, combien se déclarent absentes.
+        # C'est le compteur qui dit si la réponse repose sur une lecture ou sur rien.
+        "reading": reading_trace,
     }
 
     if route == "rag":
@@ -1822,7 +1794,6 @@ async def stream_space_chat_message(
 
             from app.services.rag_generation_service import (
                 enrich_colpali_passages_with_pymupdf,
-                is_vision_model,
                 render_page_images_for_passages_async,
                 build_rag_user_message,
             )
@@ -1871,25 +1842,50 @@ async def stream_space_chat_message(
                 rerank_status,
             )
 
-            # ——— Pack initial COURT du lecteur agentique ———
-            # Le tour 0 (retrieval, élection, exploration bornée) n'est plus la décision
-            # finale : il produit un premier coup d'œil — texte des pages ★ des documents
-            # élus, sous budget réduit — et le lecteur va chercher le reste lui-même avec
-            # ses outils (docs/plan_lecteur_agentique_2026-09-02.md).
+            # ——— Pack de LECTURE ———
+            # Le tour 0 (retrieval, élection, exploration) dit OÙ regarder ; il ne dit plus
+            # QUOI répondre. Les pages retrouvées des documents élus sont RENDUES EN IMAGE et
+            # lues une par une par un lecteur dédié (page_reader_service), en parallèle, avec
+            # la question de l'utilisateur. Le générateur reçoit ces lectures — jamais le
+            # texte extrait, jamais les PNG.
+            # Pourquoi : sur ce corpus le texte indexé est soit une transcription vision sans
+            # aucune cote (dossier Perform76 : 26 pages sur 26 sans couche texte), soit une
+            # reconstruction de tableau qui fabrique des associations fausses (doc 400 p.172 :
+            # « TGA3817 Cale de vitrage=TGY3605 Butées multivantaux »). Et un PNG noyé dans le
+            # contexte du tour se lit au hasard, alors que le même modèle sur la même image,
+            # seul, est juste (mesuré les 12 et 13/09).
+            from app.services.coverage_service import (
+                build_coverage_block,
+                extract_message_reference_codes,
+            )
+            from app.services.reading_pack_service import build_reading_pack
+
+            requested_codes = extract_message_reference_codes(
+                retrieval_query_text,
+                request.message,
+                *(
+                    (lw_result.signals.detected_references or [])
+                    if lw_result and lw_result.signals
+                    else []
+                ),
+            )
+
             _elected_ids = [
                 int(d["document_id"])
                 for d in ((retrieval.get("election") or {}).get("elected") or [])
                 if d.get("document_id") is not None
             ] or None
-            _intent = lw_result.signals.intent if (lw_result and lw_result.signals) else None
 
-            space_context_draft = _build_reader_pack(
+            space_context_draft = await build_reading_pack(
                 session,
                 doc_passages,
-                anchor_document_ids=cag_anchor_document_ids or None,
-                intent=_intent,
+                question=retrieval_query_text or request.message,
+                system_prompt=READER_SYSTEM_PROMPT,
+                needle=requested_codes[0] if requested_codes else "",
                 elected_document_ids=_elected_ids,
+                dpi=settings.CAG_IMAGE_DPI,
             )
+            reading_trace = space_context_draft.get("reading_trace")
             if retrieval_status == "low_confidence_clarification":
                 space_context_draft["content"] += (
                     "\n\n⚠️ IMPORTANT : les pages ci-dessus sont ambiguës ou de faible pertinence. "
@@ -1905,53 +1901,20 @@ async def stream_space_chat_message(
 
             cag_documents_ctx: List[dict] = list(space_context_draft.get("cag_documents") or [])
 
-            # Images du pack initial : TEXTE + IMAGE des pages trouvées (★), pas seulement
-            # les pages muettes. Sur ce corpus (dossiers techniques), une page a du texte —
-            # la liste des références — mais ses COTES n'existent que comme annotations du
-            # dessin : « parclose 2452 » est dans le texte, son épaisseur de vitrage est sur
-            # la coupe. Restreindre les PNG aux pages sans texte laissait le lecteur répondre
-            # sur les seuls libellés (régression du 04/09 vs la génération 100 % PNG).
+            # AUCUNE image n'est jointe au contexte du lecteur. Les pages ont déjà été VUES,
+            # par le lecteur de page, isolément. Joindre le PNG ici rouvrirait le raccourci
+            # mesuré : le modèle répond depuis l'image au milieu du contexte, où il lit la
+            # ligne voisine (31,5 au lieu de 30 le 13/09), au lieu de s'appuyer sur la lecture.
             user_images: List[str] = []
             user_image_captions: List[dict] = []
-            if doc_passages and cag_documents_ctx and is_vision_model(forced_model):
-                from app.services.context_packer_service import select_cag_images
-
-                user_images, user_image_captions = await asyncio.to_thread(
-                    select_cag_images,
-                    session,
-                    cag_documents_ctx,
-                    doc_passages,
-                    max_images=settings.READER_INITIAL_MAX_IMAGES,
-                    visual_only=False,
-                )
-                logger.info(
-                    "[lecteur] %d image(s) initiale(s) — pages trouvées, muettes d'abord (%s)",
-                    len(user_images),
-                    forced_model,
-                )
-            elif doc_passages and not is_vision_model(forced_model):
-                logger.info("[lecteur] Pas d'images (modèle non vision: %s)", forced_model)
 
             # ——— Chunk pinning (C6) + bloc COUVERTURE (C3) ———
+            # La couverture se mesure désormais sur les LECTURES (réponses, repères relevés
+            # sur le dessin, texte imprimé), pas sur le texte indexé.
             # Placés en FIN de message système (zone de forte attention, comme le fil de
             # conversation) : extraits de référence VERBATIM pour les codes demandés, puis
             # rapport factuel de couverture du tour 0. Le lecteur peut désormais VÉRIFIER une
             # référence marquée absente (chercher_code) au lieu de s'abstenir d'office.
-            from app.services.coverage_service import (
-                build_coverage_block,
-                extract_message_reference_codes,
-            )
-
-            requested_codes = extract_message_reference_codes(
-                retrieval_query_text,
-                request.message,
-                *(
-                    (lw_result.signals.detected_references or [])
-                    if lw_result and lw_result.signals
-                    else []
-                ),
-            )
-
             pinned_codes: List[str] = []
             if requested_codes:
                 try:
@@ -1982,7 +1945,9 @@ async def stream_space_chat_message(
                 doc_passages=doc_passages,
                 pinned_codes=pinned_codes,
                 retrieval_status=retrieval_status,
-                visual_context=bool(user_images),
+                # Les pages ont été vues : une référence absente du texte peut figurer sur
+                # le dessin, et le relevé des repères la fait apparaître dans le pack.
+                visual_context=True,
             )
             space_context_draft["content"] += "\n\n" + coverage_block
 
@@ -2651,6 +2616,7 @@ async def stream_space_chat_message(
                     anchor_intent_changed=anchor_intent_changed,
                     cag_documents=space_context_draft.get("cag_documents"),
                     loop=loop_trace,
+                    reading_trace=reading_trace,
                 )
 
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture

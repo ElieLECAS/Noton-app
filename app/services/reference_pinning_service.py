@@ -120,7 +120,11 @@ def build_pinned_reference_block(
     max_codes: int = 2,
     char_cap: int = DEFAULT_CHAR_CAP,
 ) -> Tuple[str, List[str]]:
-    """Bloc ``### EXTRAIT DE RÉFÉRENCE`` verbatim et sourcé pour les codes demandés.
+    """Bloc ``### OÙ APPARAÎT LA RÉFÉRENCE`` — localisation et orthographe exacte.
+
+    Ce bloc vient du texte INDEXÉ : il répond à « ce code existe-t-il, et où ? », pas à
+    « que vaut-il ? ». Depuis le pack de lecture (2026-09-13), toute VALEUR se lit sur la
+    page rendue en image ; le texte indexé ne sert plus qu'à trouver et à épeler.
 
     Returns:
         (bloc_texte, codes_effectivement_épinglés) — bloc vide si rien à épingler.
@@ -145,8 +149,16 @@ def build_pinned_reference_block(
         for chunk in chunks:
             page = f", p.{chunk['page_no']}" if chunk.get("page_no") else ""
             parts.append(
-                f"### EXTRAIT DE RÉFÉRENCE — {code.upper()} "
-                f"(source exacte : {chunk['document_title']}{page})\n"
+                f"### OÙ APPARAÎT LA RÉFÉRENCE {code.upper()} "
+                f"({chunk['document_title']}{page})\n"
+                # Texte INDEXÉ : il localise la référence et donne son orthographe
+                # exacte. Il ne dit PAS ce que vaut une cote — sur une planche c'est une
+                # transcription vision qui ne porte aucune valeur, et sur un tableau sa
+                # reconstruction relie des références sans rapport (doc 400 p.172 :
+                # « TGA3817 Cale de vitrage=TGY3605 Butées multivantaux »). La valeur se
+                # lit sur la PAGE, jamais ici.
+                "[texte indexé — sert à localiser la référence et à vérifier son "
+                "orthographe ; n'y lis AUCUNE valeur, lis la page avec lire_pages]\n"
                 f"« {chunk['content']} »"
             )
 

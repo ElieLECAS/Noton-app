@@ -328,7 +328,12 @@ def check_reader_output(
             "Puis réponds à nouveau, COMPLÈTEMENT et directement à la question initiale de "
             "l'utilisateur — comme s'il s'agissait de ta première réponse, sans mentionner ce "
             "contrôle ni t'excuser — en conservant les blocs <sources> et <evidence> en fin de "
-            "réponse."
+            "réponse.\n"
+            "ENCADRE ta réponse corrigée par <reponse_finale> et </reponse_finale>. SEUL ce "
+            "qui est à l'intérieur de ces balises sera montré à l'utilisateur : tes "
+            "vérifications, tes constats sur ce contrôle et tout raisonnement doivent rester "
+            "EN DEHORS. N'écris jamais « voici la vérification », « réponse corrigée » ou toute "
+            "formule de ce genre à l'intérieur des balises."
         )
         feedback = " ".join(bits)
         logger.warning(

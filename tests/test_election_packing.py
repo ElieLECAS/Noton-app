@@ -513,3 +513,66 @@ def test_anchor_slots_zero_disables_forced_packing(db_session: Session, monkeypa
     )
 
     assert [d["document_id"] for d in msg["cag_documents"]] == [trouve.id]
+
+
+# ---------------------------------------------------------------------------
+# C5 (13/09) — un document ÉLU n'est jamais évincé du pack
+# ---------------------------------------------------------------------------
+
+
+def _three_elected_docs(db_session: Session):
+    user = create_test_user(db_session, "responsable")
+    lib = _library(db_session, user.id)
+    docs = [
+        _make_doc(db_session, user_id=user.id, library_id=lib.id, title=f"Doc {i}")
+        for i in range(3)
+    ]
+    for d in docs:
+        # ≈ 200 tokens par page : le premier document consomme presque tout le budget.
+        _add_page(db_session, document_id=d.id, page=1, text=f"REPONSE_{d.id}_" + "x" * 700)
+    db_session.commit()
+    passages = [
+        {"document_id": d.id, "document_title": d.title, "page_no": 1, "score": 0.9 - 0.1 * i}
+        for i, d in enumerate(docs)
+    ]
+    return docs, passages
+
+
+def test_elected_documents_survive_a_tight_budget(db_session: Session):
+    """Trois élus, budget mangé par le premier : les deux autres gardent leur page ★ au lieu
+    de tomber sans trace (« retenu puis viré », version packer). Le dépassement du budget
+    est borné à une page par élu, et logué."""
+    docs, passages = _three_elected_docs(db_session)
+    elected = [d.id for d in docs]
+
+    msg = build_cag_context(
+        db_session,
+        passages,
+        system_prompt=SYS,
+        token_budget=250,
+        full_doc_max_tokens=1,
+        page_radius=0,
+        elected_document_ids=elected,
+    )
+
+    assert [d["document_id"] for d in msg["cag_documents"]] == elected
+    assert all(d["pages"] == [1] for d in msg["cag_documents"])
+    for d in docs:
+        assert f"REPONSE_{d.id}_" in msg["content"]
+
+
+def test_non_elected_documents_still_respect_the_budget(db_session: Session):
+    """Contraste : sans élection amont, le budget reste une borne dure (comportement
+    historique conservé pour les documents non élus)."""
+    docs, passages = _three_elected_docs(db_session)
+
+    msg = build_cag_context(
+        db_session,
+        passages,
+        system_prompt=SYS,
+        token_budget=250,
+        full_doc_max_tokens=1,
+        page_radius=0,
+    )
+
+    assert [d["document_id"] for d in msg["cag_documents"]] == [docs[0].id]

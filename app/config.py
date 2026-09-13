@@ -547,6 +547,12 @@ class Settings(BaseSettings):
     # Appels d'outils max par tour ; deadline (secondes) au-delà de laquelle le lecteur doit
     # répondre ; images fournies par les outils, cumulées sur le tour (l'API en accepte 8 par
     # requête : l'orchestrateur élague les images déjà vues de l'historique).
+    # Pack de LECTURE (reading_pack_service) : le lecteur ne reçoit que des pages LUES en
+    # image, jamais du texte extrait. Nombre de pages lues au tour 0 (en PARALLÈLE : mesuré
+    # 6 pages = 8,5 s de mur pour 26,4 s d'appels cumulés) et plafond par document, pour
+    # qu'un document élu en complément obtienne toujours au moins une page lue.
+    READER_PACK_MAX_READINGS: int = int(os.getenv("READER_PACK_MAX_READINGS", "8"))
+    READER_PACK_MAX_PAGES_PER_DOC: int = int(os.getenv("READER_PACK_MAX_PAGES_PER_DOC", "5"))
     READER_MAX_TOOL_CALLS: int = int(os.getenv("READER_MAX_TOOL_CALLS", "6"))
     READER_DEADLINE_S: float = float(os.getenv("READER_DEADLINE_S", "60"))
     READER_MAX_TOOL_IMAGES: int = int(os.getenv("READER_MAX_TOOL_IMAGES", "8"))
