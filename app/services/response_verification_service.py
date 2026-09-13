@@ -88,6 +88,37 @@ def extract_verifiable_claims(text: str) -> List[str]:
     return claims
 
 
+# Partie numérique d'une cote (« 29,5 mm » → « 29,5 »).
+_CLAIM_NUMBER = re.compile(r"\d+(?:[.,]\d+)?")
+
+
+def _measurement_number_present(claim: str, context_text: str) -> bool:
+    """La VALEUR d'une cote figure-t-elle dans la preuve, même sans son unité ?
+
+    Depuis le pack de lecture (2026-09-13), la preuve d'une cote est une ligne de lecture
+    (« → 30 », « relevé pour « Parclose 2636 » : 30 (bleu) · 27 (noir) ») : le lecteur de
+    page rend le NOMBRE lu sur le dessin, l'unité est ajoutée par le rédacteur de la
+    réponse. Un test de présence littérale de « 30 mm » échouerait donc sur une réponse
+    parfaitement juste, et déclencherait un round de contrôle sur chaque question de cote —
+    or ce sont ces rounds qui ont produit les régressions de ton et la fuite d'appel
+    d'outil en texte du 13/09.
+
+    On n'assouplit QUE les cotes : normes (NF/DTU/EN) et teintes RAL restent des chaînes
+    littérales, parce que c'est par là qu'une liste de RAL inventés est partie le 01/09.
+    Le nombre doit apparaître isolé (ni collé à un autre chiffre, ni partie d'un décimal) :
+    « 30 » ne doit pas être validé par « 130 » ni par « 30.5 ».
+    """
+    match = _CLAIM_NUMBER.search(claim)
+    if not match:
+        return False
+    number = match.group(0)
+    variantes = {number, number.replace(",", "."), number.replace(".", ",")}
+    for variante in variantes:
+        if re.search(rf"(?<![\d.,]){re.escape(variante)}(?![\d.,])", context_text or ""):
+            return True
+    return False
+
+
 def check_grounding(response_text: str, context_text: str) -> List[str]:
     """Retourne les affirmations (normes/cotes) de `response_text` ABSENTES de
     `context_text`. Liste vide = pas de problème détecté par ce contrôle.
@@ -100,10 +131,17 @@ def check_grounding(response_text: str, context_text: str) -> List[str]:
     if not claims:
         return []
     normalized_context = _normalize_for_match(context_text or "")
-    unsupported = [
-        claim for claim in claims
-        if _normalize_for_match(claim) not in normalized_context
-    ]
+    unsupported: List[str] = []
+    for claim in claims:
+        if _normalize_for_match(claim) in normalized_context:
+            continue
+        # Une COTE dont la valeur figure dans la preuve sans son unité est étayée : la
+        # lecture de page rend le nombre lu sur le dessin, l'unité vient du rédacteur.
+        if _MEASUREMENT_PATTERN.fullmatch(claim.strip()) and _measurement_number_present(
+            claim, context_text or ""
+        ):
+            continue
+        unsupported.append(claim)
     return unsupported
 
 

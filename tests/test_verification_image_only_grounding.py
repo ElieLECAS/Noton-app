@@ -83,3 +83,46 @@ class TestExemptionDesCodesDeLaQuestion:
         assert unsupported_reference_codes(
             "Utiliser la platine TGY3710.", self._CONTEXTE_MUET, question="la TGY371 ?"
         ) == ["TGY3710"]
+
+
+# ---------------------------------------------------------------------------
+# Pack de lecture (2026-09-13) — la preuve d'une cote est une LIGNE DE LECTURE
+# ---------------------------------------------------------------------------
+
+_LECTURE = (
+    "[page 8] LUE EN IMAGE : → 30\n"
+    "  relevé pour « Parclose 2636 » : 30 (bleu) · 27 (noir)\n"
+    "  feuillure 62"
+)
+
+
+def test_une_cote_lue_sans_unite_etaye_la_reponse_avec_unite():
+    """Le lecteur de page rend le NOMBRE lu sur le dessin ; l'unité vient du rédacteur.
+
+    Sans cette tolérance, le contrôle échouait sur CHAQUE question de cote dès que le pack
+    de lecture a remplacé le texte extrait — et ce sont ces rounds de contrôle qui ont
+    produit les régressions de ton et la fuite d'appel d'outil en texte du 13/09.
+    """
+    assert check_grounding("épaisseur de vitrage de 30 mm", _LECTURE) == []
+
+
+def test_une_cote_inventee_reste_signalee():
+    assert check_grounding("épaisseur de 31,5 mm", _LECTURE) == ["31,5 mm"]
+
+
+def test_la_tolerance_ne_valide_pas_une_sous_chaine():
+    """« 3 mm » ne doit pas être étayé par le « 30 » de la lecture."""
+    assert check_grounding("largeur de 3 mm", _LECTURE) == ["3 mm"]
+    assert check_grounding("entraxe de 2 mm", "cote 27 relevée") == ["2 mm"]
+
+
+def test_la_tolerance_accepte_virgule_et_point():
+    assert check_grounding("section de 29,5 mm", "relevé : 29.5 sur le dessin") == []
+    assert check_grounding("section de 29.5 mm", "relevé : 29,5 sur le dessin") == []
+
+
+def test_les_normes_restent_des_chaines_litterales():
+    """La tolérance ne touche QUE les cotes : c'est par les normes et les RAL qu'une liste
+    inventée est partie à l'utilisateur le 01/09."""
+    signales = check_grounding("conforme à la norme NF EN 14351-1", _LECTURE)
+    assert "NF EN 14351-1" in signales
