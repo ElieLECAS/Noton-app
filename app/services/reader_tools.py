@@ -197,8 +197,6 @@ def format_page_reading(reading: PageReading, *, needle: str = "") -> str:
         ]
         if entry:
             out.append(_entry_line(entry))
-        if reading.convention:
-            out.append(f"  convention lue sur la page : « {reading.convention} »")
         out.append(
             "  → n'en choisis AUCUNE au hasard : recoupe avec chercher_code (il rend souvent "
             "la valeur associée à une référence), ou dis à l'utilisateur que la planche ne "
@@ -207,8 +205,6 @@ def format_page_reading(reading: PageReading, *, needle: str = "") -> str:
         return "\n".join(out)
 
     out = [head + " :", f"  → {reading.answer}"]
-    if reading.convention:
-        out.append(f"  convention lue sur la page : « {reading.convention} »")
     if entry:
         out.append(_entry_line(entry))
     if reading.citations:
@@ -732,12 +728,6 @@ def build_reader_tools(ctx: ToolContext) -> List[ToolSpec]:
             handler=rechercher,
             label=lambda a: "Recherche : « " + _compact(str(a.get("question") or ""), 70) + " »"
             + (f" dans {_title(a.get('document_id'))}" if a.get("document_id") else ""),
-        ),
-        ToolSpec(
-            name="lire_pages",
-            schema=TOOL_SCHEMAS["lire_pages"],
-            handler=lire_pages,
-            label=lambda a: f"Lecture {_pages_label(a.get('pages'))} de « {_compact(_title(a.get('document_id')), 50)} »",
         ),
         ToolSpec(
             name="chercher_code",

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlmodel import Session, select, func
 from app.database import get_session
 from app.models.user import User, UserRead, UserCreate
@@ -19,8 +19,9 @@ from app.models.gamme_commerciale import (
 )
 from app.routers.auth import get_current_user, require_permission, require_role
 from app.services.auth_service import get_password_hash
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -971,6 +972,121 @@ class CategoryStatsResponse(BaseModel):
     label: str
     chunk_links: int
     document_count: int
+
+
+
+
+# ---------------------------------------------------------------------------
+# Jeux d'évaluation livrés avec l'application
+# ---------------------------------------------------------------------------
+
+
+@router.get("/eval/datasets")
+async def list_eval_datasets_api(
+    current_user: UserRead = Depends(require_role("admin")),
+):
+    """Inventaire des jeux de référence versionnés avec le code.
+
+    Un jeu qui vit sur le poste de quelqu'un n'est pas un jeu de référence : il se perd, il
+    diverge, et deux mesures ne se comparent plus. Ceux-ci sont dans le dépôt.
+    """
+    from app.services.eval_datasets_service import list_datasets
+
+    return {"datasets": list_datasets()}
+
+
+@router.get("/eval/datasets/{key}")
+async def get_eval_dataset_api(
+    key: str,
+    current_user: UserRead = Depends(require_role("admin")),
+    session: Session = Depends(get_session),
+):
+    """Un jeu complet, questions normalisées (identifiants de documents résolus en titres)."""
+    from app.services.eval_datasets_service import load_dataset
+
+    data = load_dataset(session, key)
+    if data is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Jeu « {key} » introuvable."
+        )
+    return data
+
+
+class SingleGenerationEvalRequest(BaseModel):
+    """Une question du jeu, rejouée sur le VRAI tour de chat puis notée littéralement."""
+
+    space_id: int
+    question: str
+    attendu: Optional[dict] = None
+    pages_attendues: List[dict] = Field(default_factory=list)
+    id: Optional[str] = None
+    tags: List[str] = Field(default_factory=list)
+    difficulte: Optional[str] = None
+    verite: Optional[str] = None
+    model: Optional[str] = None
+    timeout_s: float = 300.0
+
+
+@router.post("/eval/generation/single")
+async def evaluate_generation_single_api(
+    request: SingleGenerationEvalRequest,
+    http_request: Request,
+    current_user: UserRead = Depends(require_role("admin")),
+):
+    """Rejoue UNE question sur l'endpoint de chat réel et note la réponse sans LLM juge.
+
+    Pourquoi un appel HTTP à notre propre endpoint plutôt qu'un appel de services : le tour
+    vit dans ``stream_space_chat_message`` (compréhension, périmètre, retrieval, élection,
+    pack de lecture, boucle, contrôle, sources). Le reconstituer ici mesurerait une pipeline
+    qui n'existe pas — et c'est justement l'écart entre les deux qu'on cherche à éliminer.
+
+    Pourquoi pas de juge LLM : un juge qui note une réponse portant sur une planche cotée
+    sans voir la planche est aveugle (c'est pourquoi l'ancien juge a été retiré le 02/09).
+    Une comparaison de valeurs contre une vérité lue sur la page, elle, ne se trompe pas.
+    """
+    import httpx
+
+    from app.config import settings
+    from app.services.generation_eval_service import run_question
+
+    entete = http_request.headers.get("authorization") or ""
+    token = entete.split(" ", 1)[1].strip() if entete.lower().startswith("bearer ") else ""
+    if not token:
+        # Session par cookie : l'endpoint de chat accepte le même jeton.
+        token = http_request.cookies.get("authToken") or ""
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Jeton absent : l'évaluation rejoue le tour de chat en votre nom.",
+        )
+
+    base_url = f"http://localhost:{os.getenv('PORT', '8000')}"
+    entry = {
+        "id": request.id,
+        "question": request.question,
+        "attendu": request.attendu or {},
+        "pages_attendues": request.pages_attendues,
+        "tags": request.tags,
+        "difficulte": request.difficulte,
+        "verite": request.verite,
+    }
+    try:
+        async with httpx.AsyncClient() as client:
+            return await run_question(
+                client,
+                entry,
+                base_url=base_url,
+                space_id=request.space_id,
+                token=token,
+                model=request.model or settings.MODEL_FAST,
+                timeout_s=request.timeout_s,
+            )
+    except Exception as exc:  # noqa: BLE001
+        logger.error("Erreur d'évaluation de génération : %s", exc, exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erreur lors de l'évaluation de la génération : {exc}",
+        )
 
 
 @router.get("/categories", response_model=List[DocumentCategoryRead])

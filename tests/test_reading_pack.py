@@ -99,30 +99,41 @@ def test_une_page_qui_repond_dit_la_valeur_et_sa_provenance():
         page_no=8,
         reading=_lecture(
             answer="30",
-            convention="Cotation en bleu = épaisseur vitrage",
             survey=[{"repere": "Parclose 2636", "valeurs": [{"valeur": "30", "couleur": "bleu"}]}],
         ),
     )
     bloc = render_page_block(entry, needle="2636")
     assert "LUE EN IMAGE" in bloc
     assert "→ 30" in bloc
-    assert "Cotation en bleu" in bloc
     assert "Parclose 2636" in bloc
 
 
-def test_une_absence_est_une_information_de_premier_rang():
-    """Les cinq pages hors sujet du tour mesuré se sont déclarées absentes : c'est ce qui
-    empêche le modèle d'aller chercher une valeur sur la mauvaise page."""
+def test_une_absence_ne_propose_aucune_valeur():
+    """Les pages hors sujet le disent : c'est ce qui empêche le modèle d'aller chercher une
+    valeur sur la mauvaise page. Mais l'absence de RÉPONSE ne vide pas la page."""
     bloc = render_page_block(PageRead(document_id=438, page_no=5, reading=_lecture(absent=True)))
-    assert "n'apparaît PAS sur cette page" in bloc
+    assert "n'y a pas trouvé ce qui est demandé" in bloc
     assert "→" not in bloc
+
+
+def test_une_page_sans_reponse_montre_quand_meme_son_contenu():
+    """LA régression du 13/09 (« hauteur de poignée pour un ouvrant de 700 mm ») : la page
+    qui porte le tableau de correspondance concluait « absent », parce que 700 n'est le
+    repère de rien — et le pack ne montrait alors PLUS RIEN de cette page. Le croisement de
+    plage est le travail du lecteur principal ; encore faut-il lui laisser le tableau."""
+    tableau = "| Hauteur ouvrant | Axe poignée |\n| 601 mm | 900 mm | 220 mm |"
+    bloc = render_page_block(
+        PageRead(document_id=438, page_no=6, reading=_lecture(absent=True, content=tableau))
+    )
+    assert "601 mm | 900 mm | 220 mm" in bloc
+    assert "Contenu de la page, restitué depuis l'image" in bloc
 
 
 def test_une_ambiguite_ne_propose_aucune_valeur():
     bloc = render_page_block(
         PageRead(document_id=1, page_no=2, reading=_lecture(ambiguous=True, answer=""))
     )
-    assert "ne permet pas de trancher" in bloc
+    assert "la lecture ne tranche pas" in bloc
 
 
 def test_le_texte_imprime_est_joint_mais_annonce_comme_non_interprete():
@@ -208,7 +219,6 @@ async def test_le_texte_indexe_nentre_jamais_dans_le_pack(db_session: Session, t
             document_id=kwargs["document_id"],
             page_no=kwargs["page_no"],
             answer="30",
-            convention="Cotation en bleu = épaisseur vitrage",
             survey=[{"repere": "Parclose 2636", "valeurs": [{"valeur": "30", "couleur": "bleu"}]}],
         )
 
@@ -298,30 +308,20 @@ async def test_les_pages_sont_lues_en_parallele(db_session: Session, tmp_path, m
 # ---------------------------------------------------------------------------
 # Fiabilité — deux pages peuvent répondre, elles ne se valent pas
 # ---------------------------------------------------------------------------
-
-
-def test_une_page_qui_porte_sa_convention_ne_declenche_aucune_alerte():
-    """La page dit comment elle se lit : rien à signaler, la convention est affichée telle
-    quelle et le lecteur arbitre dessus."""
-    bloc = render_page_block(
-        PageRead(
-            document_id=438,
-            page_no=8,
-            reading=_lecture(answer="30", convention="Cotation en bleu = épaisseur vitrage"),
-        )
-    )
-    assert "fiabilité" not in bloc
-    assert "Cotation en bleu" in bloc
-
-
-def test_une_valeur_sans_regle_de_lecture_est_annoncee_faible():
-    bloc = render_page_block(
-        PageRead(document_id=438, page_no=12, reading=_lecture(page_no=12, answer="21"))
-    )
-    assert "fiabilité : FAIBLE" in bloc
-    assert "c'est elle qui fait foi" in bloc
-
-
 def test_une_absence_ne_porte_aucune_mention_de_fiabilite():
     bloc = render_page_block(PageRead(document_id=1, page_no=2, reading=_lecture(absent=True)))
     assert "fiabilité" not in bloc
+
+
+def test_le_releve_cede_la_place_au_contenu_restitue():
+    """Sur une page de tableau, le relevé plat ferait doublon — et c'est lui qui aplatissait
+    les lignes. Le contenu restitué prime ; le relevé reste utile aux planches cotées."""
+    survey = [{"repere": "Parclose 2636", "valeurs": [{"valeur": "30", "couleur": "bleu"}]}]
+    avec = render_page_block(
+        PageRead(document_id=1, page_no=1, reading=_lecture(answer="x", content="| a | b |", survey=survey))
+    )
+    sans = render_page_block(
+        PageRead(document_id=1, page_no=1, reading=_lecture(answer="x", survey=survey))
+    )
+    assert "repères lus sur la page" not in avec
+    assert "repères lus sur la page" in sans

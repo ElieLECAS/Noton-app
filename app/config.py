@@ -535,7 +535,12 @@ class Settings(BaseSettings):
     # contexte. Mesuré le 2026-09-12 sur la planche des parcloses : small et large répondent
     # juste tous les deux (~800 ms pour small), alors que la MÊME page lue par large au
     # milieu du contexte du tour donne le mauvais chiffre. Le petit modèle suffit donc.
-    READER_PAGE_MODEL: str = os.getenv("READER_PAGE_MODEL", "mistral-small-latest")
+    # 14/09 : passé à Large. Le petit modèle suffisait sur la planche des parcloses en
+    # appel isolé (mesure du 12/09), mais la campagne du 14/09 montre que les erreurs
+    # portent aussi sur des tableaux à double entrée (hauteur de poignée, pattes de pose),
+    # où il faut choisir une LIGNE et pas seulement lire un nombre. La lecture est l'étage
+    # où se joue la justesse : c'est le dernier endroit où économiser.
+    READER_PAGE_MODEL: str = os.getenv("READER_PAGE_MODEL", "mistral-large-latest")
     # Pack initial : texte des pages retrouvées des documents élus. Petit par construction —
     # ne pas confondre avec CAG_TOKEN_BUDGET (plafond du packer pour les autres
     # consommateurs : fiche technique, évaluation, repli eco).

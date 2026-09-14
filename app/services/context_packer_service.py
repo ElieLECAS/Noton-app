@@ -646,6 +646,130 @@ def _render_document_block(
     return "\n".join(lines), pages_included
 
 
+def build_image_only_context(
+    session: Session,
+    passages: List[Dict[str, Any]],
+    *,
+    system_prompt: str,
+    max_documents: Optional[int] = None,
+    elected_document_ids: Optional[List[int]] = None,
+    intent: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Pack PNG ONLY : un MANIFESTE par document (titre, gamme, matériau, pages
+    disponibles) — AUCUN corps de texte des pages. Le générateur ne reçoit une valeur que
+    depuis l'image jointe (``select_cag_images``, appelé séparément par le routeur).
+
+    Décision d'Elie le 13/09, après mesure : dès que le texte indexé d'une page (couche
+    native ou transcription vision) est présent dans le même message que son image, le
+    modèle peut s'appuyer dessus au lieu de regarder le dessin — c'est ce qui a produit la
+    réponse fausse du 13/09 (note de feuillure recopiée au lieu de la cote lue sur le
+    schéma). Le texte reste utile en AMONT, pour BM25/ColPali (localiser la page) ; il
+    n'entre plus dans ce message.
+
+    Retourne la même forme que ``build_cag_context`` (``content``, ``cag_documents``,
+    ``cag_document_blocks``) pour rester compatible avec les sources UI, ``select_cag_images``
+    et le contrôle de sortie — ``cag_documents[i]["pages"]`` liste TOUTES les pages matchées
+    (non plafonné) pour que la sélection d'images garde tous ses candidats.
+    """
+    _, intent_max_docs = budget_for_intent(intent)
+    max_documents = max_documents if max_documents is not None else intent_max_docs
+
+    system_message: Dict[str, Any] = {"role": "system", "content": system_prompt}
+    if not passages:
+        system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
+        system_message["cag_documents"] = []
+        system_message["cag_document_blocks"] = []
+        return system_message
+
+    ranked_docs = aggregate_documents(passages, max_documents=max_documents)
+    ranked_docs = _apply_document_election(
+        ranked_docs, elected_document_ids, None, max_documents=max_documents
+    )
+
+    doc_ids = [did for did, _ in ranked_docs]
+    docs_by_id = {
+        d.id: d
+        for d in session.exec(select(Document).where(Document.id.in_(doc_ids))).all()
+    }
+
+    blocks: List[str] = []
+    cag_documents: List[Dict[str, Any]] = []
+    position = 0
+    for did, meta in ranked_docs:
+        doc = docs_by_id.get(did)
+        if doc is None:
+            continue
+        matched_pages: Dict[int, float] = meta.get("matched_pages") or {}
+        if not matched_pages:
+            continue
+        position += 1
+
+        title = doc.title or "Document sans titre"
+        header_bits: List[str] = []
+        if doc.source:
+            header_bits.append(f"Source : {doc.source}")
+        if getattr(doc, "proferm_gammes", None):
+            header_bits.append(f"Gamme : {', '.join(doc.proferm_gammes)}")
+        if getattr(doc, "materials", None):
+            header_bits.append(f"Matériau : {', '.join(doc.materials)}")
+        if getattr(doc, "product_types", None):
+            header_bits.append(f"Type : {', '.join(doc.product_types)}")
+
+        pages_sorted = sorted(matched_pages, key=lambda p: -matched_pages[p])
+
+        lines = [f"=== DOCUMENT {position} (id {doc.id}) : « {title} » ==="]
+        if header_bits:
+            lines.append(" | ".join(header_bits))
+        # Le manifeste n'ÉNUMÈRE PLUS les pages retrouvées (14/09). Il en listait jusqu'à 30,
+        # dont au plus 6 étaient réellement jointes en image : le modèle citait alors des
+        # pages qu'il n'avait jamais vues (« comme indiqué page 17 »), 20 réponses sur 62.
+        # Les légendes des images sont la seule liste de pages du contexte, et elles ne
+        # nomment que des pages effectivement sous ses yeux.
+        lines.append(
+            "Les pages retenues de ce document te sont jointes à ce message en IMAGES, "
+            "identifiées par leur légende. Elles sont ta SEULE source pour toute valeur, "
+            "cote, référence ou consigne de ce document."
+        )
+        blocks.append("\n".join(lines))
+
+        cag_documents.append(
+            {
+                "index": position,
+                "document_id": did,
+                "document_title": doc.title,
+                # NON plafonné : select_cag_images en a besoin pour choisir parmi TOUTES
+                # les pages matchées, pas seulement celles listées en aperçu ci-dessus.
+                "pages": sorted(matched_pages.keys()),
+                "full_document": False,
+                "score": round(float(meta.get("score_max") or 0.0), 4),
+                "election_score": round(float(meta.get("election_score") or 0.0), 4),
+                "matched_pages": sorted(matched_pages.keys()),
+                "seed_pages": pages_sorted[:6],
+                "has_source_file": bool(getattr(doc, "source_file_path", None)),
+            }
+        )
+
+    preamble = (
+        "\n\nDOCUMENTS (manifeste — AUCUN texte de page ci-dessous, uniquement les "
+        "images jointes à ce message) : chaque document est identifié par son en-tête "
+        "(source, gamme, matériau, identifiant « id N ») et la liste des pages que la "
+        "recherche a retrouvées. Avant d'attribuer une valeur, une cote ou une consigne à "
+        "une gamme/produit, vérifie l'en-tête du document concerné : ne transfère JAMAIS "
+        "une information d'un document vers une autre gamme (ex. Perform 70 ≠ Perform 76).\n\n"
+    )
+    system_message["content"] += preamble + "\n\n".join(blocks)
+    system_message["content"] += f"\n\n({len(blocks)} document(s) — voir les images jointes.)"
+    system_message["cag_documents"] = cag_documents
+    system_message["cag_document_blocks"] = blocks
+
+    logger.info(
+        "[CAG image-only] %d document(s) — manifeste sans texte, %s",
+        len(blocks),
+        ", ".join(f"doc={d['document_id']}({len(d['pages'])}p)" for d in cag_documents),
+    )
+    return system_message
+
+
 def build_cag_context(
     session: Session,
     passages: List[Dict[str, Any]],

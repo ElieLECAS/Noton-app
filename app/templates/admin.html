@@ -535,28 +535,37 @@
                     </div>
                 </div>
 
-                <!-- Drag and Drop JSON -->
+                <!-- Jeux de référence fournis + dépôt manuel -->
                 <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 md:col-span-2 flex flex-col justify-between">
                     <div>
                         <h3 class="text-md font-bold text-gray-800 dark:text-gray-200 mb-2">Dataset de questions / réponses</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-                            Glissez un ou plusieurs fichiers JSON contenant les questions et les pages attendues (Ground Truth).
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                            Les jeux de référence livrés avec l'application sont disponibles directement. Vous pouvez aussi déposer vos propres fichiers.
                         </p>
                     </div>
-                    
-                    <div id="eval-drop-zone" class="border-2 border-dashed border-black/15 dark:border-white/15 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400 transition-all bg-black/5 dark:bg-white/5">
-                        <svg class="w-10 h-10 text-gray-400 dark:text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
+                            Jeux de référence fournis
+                        </label>
+                        <div id="eval-builtin-list" class="space-y-2">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">Chargement…</div>
+                        </div>
+                    </div>
+
+                    <div id="eval-drop-zone" class="border-2 border-dashed border-black/15 dark:border-white/15 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400 transition-all bg-black/5 dark:bg-white/5">
+                        <svg class="w-8 h-8 text-gray-400 dark:text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                         </svg>
                         <span id="eval-drop-text" class="text-xs font-semibold text-gray-600 dark:text-gray-300 text-center">
-                            Glissez vos fichiers .json ici ou cliquez pour parcourir
+                            ou glissez vos fichiers .json ici
                         </span>
                         <input type="file" id="eval-file-input" class="hidden" accept=".json" multiple />
                     </div>
-                    
+
                     <div id="eval-files-list-container" class="mt-4 space-y-2 hidden">
                         <div class="text-xs font-bold text-gray-700 dark:text-gray-300 flex justify-between items-center mb-1">
-                            <span>Fichiers de dataset chargés :</span>
+                            <span>Jeux chargés :</span>
                             <button type="button" onclick="clearAllDatasets(event)" class="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 hover:underline text-[11px] font-bold">Tout vider</button>
                         </div>
                         <div id="eval-files-list" class="space-y-1.5 max-h-32 overflow-y-auto pr-1">
@@ -568,6 +577,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- Run Button & Loader -->
@@ -580,10 +590,15 @@
                     <i class="ti ti-brain text-base"></i>
                     <span>Évaluer Retriever + Génération</span>
                 </button>
+                <button id="btn-run-generation-eval" onclick="runGenerationEval()" disabled class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-50 disabled:hover:from-emerald-600 disabled:hover:to-teal-600 text-white rounded-xl font-bold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2" title="Rejoue le tour de chat complet et compare la réponse à la vérité lue sur la page. Sans juge LLM.">
+                    <i class="ti ti-checkbox text-base"></i>
+                    <span>Évaluer la génération (réponses)</span>
+                </button>
             </div>
 
             <!-- Results Section (Initially Hidden) -->
             <div id="eval-results-container" class="hidden space-y-6">
+                <div id="eval-generation-results" class="hidden"></div>
                 <!-- Summary Metrics Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
                     <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
@@ -2541,6 +2556,218 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Fallback call
 setTimeout(setupEvalDragAndDrop, 500);
+setTimeout(loadBuiltinDatasets, 600);
+
+// ---------------------------------------------------------------------------
+// Jeux de référence livrés avec l'application
+// ---------------------------------------------------------------------------
+// Un jeu de référence qui vit sur le poste de quelqu'un n'est pas un jeu de référence :
+// il se perd, il diverge, et deux mesures ne se comparent plus. Ceux-ci sont versionnés
+// avec le code et se chargent d'un clic.
+
+let builtinDatasets = [];
+
+async function loadBuiltinDatasets() {
+    const container = document.getElementById('eval-builtin-list');
+    if (!container) return;
+    try {
+        const r = await apiCall('/api/admin/eval/datasets');
+        if (!r || !r.ok) throw new Error('indisponible');
+        const data = await r.json();
+        builtinDatasets = data.datasets || [];
+    } catch (err) {
+        container.innerHTML = `<div class="text-xs text-rose-600 dark:text-rose-400">Jeux fournis indisponibles.</div>`;
+        return;
+    }
+    if (!builtinDatasets.length) {
+        container.innerHTML = `<div class="text-xs text-gray-500 dark:text-gray-400">Aucun jeu fourni.</div>`;
+        return;
+    }
+    container.innerHTML = builtinDatasets.map((d, i) => {
+        const genere = d.kind === 'generation';
+        const badge = genere
+            ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-700 dark:text-violet-300">réponses attendues</span>`
+            : `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">pages attendues</span>`;
+        return `
+        <button type="button" onclick="useBuiltinDataset(${i})"
+            class="w-full text-left bg-black/5 dark:bg-white/5 hover:bg-indigo-500/10 border border-black/5 dark:border-white/5 hover:border-indigo-500/30 rounded-xl px-3 py-2.5 transition-all">
+            <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-gray-800 dark:text-gray-200 truncate">${escapeHtml(d.filename)}</span>
+                ${badge}
+            </div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                ${d.questions} question(s)${d.space_id ? ` · espace ${d.space_id}` : ''}${d.created ? ` · ${escapeHtml(d.created)}` : ''}
+            </div>
+        </button>`;
+    }).join('');
+}
+
+async function useBuiltinDataset(index) {
+    const meta = builtinDatasets[index];
+    if (!meta) return;
+    const statusMsg = document.getElementById('eval-status-message');
+    try {
+        const r = await apiCall(`/api/admin/eval/datasets/${encodeURIComponent(meta.key)}`);
+        if (!r || !r.ok) throw new Error('chargement impossible');
+        const data = await r.json();
+        const existant = uploadedDatasets.findIndex(d => d.name === data.filename);
+        const entree = { name: data.filename, content: data.questions, kind: data.kind };
+        if (existant > -1) uploadedDatasets[existant] = entree;
+        else uploadedDatasets.push(entree);
+
+        // Sélectionner d'office l'espace du jeu : mesurer un jeu sur le mauvais espace
+        // produit des chiffres qui ne veulent rien dire.
+        const select = document.getElementById('eval-space-select');
+        if (select && data.space_id) {
+            const option = Array.from(select.options).find(o => String(o.value) === String(data.space_id));
+            if (option) select.value = String(data.space_id);
+        }
+        if (data.documents_manquants && data.documents_manquants.length) {
+            showEvalError(
+                `Attention : ${data.documents_manquants.length} document(s) de ce jeu sont absents de la base `
+                + `(${data.documents_manquants.join(', ')}). Les questions qui en dépendent échoueront sans que le retriever y soit pour quelque chose.`
+            );
+        } else if (statusMsg) {
+            statusMsg.classList.add('hidden');
+        }
+        updateUploadedDatasetUI();
+    } catch (err) {
+        showEvalError(`Impossible de charger « ${escapeHtml(meta.filename)} ».`);
+    }
+}
+
+function datasetHasExpectedAnswers() {
+    return uploadedDatasets.some(d => (d.content || []).some(q => q && q.attendu));
+}
+
+// ---------------------------------------------------------------------------
+// Évaluation de la GÉNÉRATION sur les réponses attendues
+// ---------------------------------------------------------------------------
+// Sans juge LLM : on compare la réponse à une vérité LUE SUR LA PAGE. Un juge qui note une
+// réponse portant sur une planche cotée sans voir la planche est aveugle (c'est pourquoi
+// l'ancien a été retiré le 02/09) ; une comparaison de valeurs, elle, ne se trompe pas.
+
+const VERDICT_STYLE = {
+    juste:          { label: 'juste',        cls: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300' },
+    abstention_ok:  { label: 'abstention',   cls: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300' },
+    ambigu:         { label: 'ambigu',       cls: 'bg-amber-500/15 text-amber-700 dark:text-amber-300' },
+    faux:           { label: 'faux',         cls: 'bg-rose-500/15 text-rose-700 dark:text-rose-300' },
+    abstention_ko:  { label: 'a répondu',    cls: 'bg-rose-500/15 text-rose-700 dark:text-rose-300' },
+    erreur:         { label: 'erreur',       cls: 'bg-gray-500/15 text-gray-700 dark:text-gray-300' },
+};
+
+async function runGenerationEval() {
+    const select = document.getElementById('eval-space-select');
+    const statusMsg = document.getElementById('eval-status-message');
+    const boutons = ['btn-run-eval', 'btn-run-rag-eval', 'btn-run-generation-eval']
+        .map(id => document.getElementById(id)).filter(Boolean);
+
+    if (!uploadedDataset || !select || !select.value) return;
+    if (!datasetHasExpectedAnswers()) {
+        showEvalError("Ce jeu n'a pas de réponses attendues : utilisez « Évaluer uniquement le retriever ».");
+        return;
+    }
+
+    boutons.forEach(b => { b.disabled = true; });
+    const spaceId = parseInt(select.value);
+    const questions = uploadedDataset.filter(q => q && q.attendu);
+    const resultats = [];
+    const t0 = Date.now();
+
+    try {
+        for (let i = 0; i < questions.length; i++) {
+            const item = questions[i];
+            if (statusMsg) {
+                statusMsg.innerHTML = `<span class="flex items-center gap-1.5"><svg class="animate-spin h-4 w-4 text-violet-600 dark:text-violet-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Génération : question <strong>${i + 1} / ${questions.length}</strong> — le tour complet est rejoué, comptez ~1 min par question…</span>`;
+                statusMsg.classList.remove('hidden');
+            }
+            const r = await apiCall('/api/admin/eval/generation/single', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    space_id: spaceId,
+                    question: item.question,
+                    attendu: item.attendu,
+                    pages_attendues: item.pages_attendues || [],
+                    id: item.id || null,
+                    tags: item.tags || [],
+                    difficulte: item.difficulte || null,
+                    verite: item.verite || null,
+                }),
+            });
+            if (!r || !r.ok) {
+                const txt = r ? await r.text() : 'pas de réponse';
+                throw new Error(`Question ${i + 1} : ${txt}`);
+            }
+            resultats.push(await r.json());
+            renderGenerationEval(resultats, questions.length, (Date.now() - t0) / 1000);
+        }
+        if (statusMsg) statusMsg.classList.add('hidden');
+    } catch (err) {
+        showEvalError(`Évaluation interrompue — ${escapeHtml(String(err.message || err))}`);
+    } finally {
+        boutons.forEach(b => { b.disabled = false; });
+        checkRunEvalButtonState();
+    }
+}
+
+function renderGenerationEval(resultats, total, secondes) {
+    const bloc = document.getElementById('eval-generation-results');
+    const conteneur = document.getElementById('eval-results-container');
+    if (!bloc) return;
+    if (conteneur) conteneur.classList.remove('hidden');
+    bloc.classList.remove('hidden');
+
+    const n = resultats.length;
+    const compte = v => resultats.filter(r => r.verdict === v).length;
+    const reussite = n ? Math.round(100 * (compte('juste') + compte('abstention_ok')) / n) : 0;
+    const vues = n ? Math.round(100 * resultats.filter(r => r.page_vue).length / n) : 0;
+    const citees = n ? Math.round(100 * resultats.filter(r => r.page_citee).length / n) : 0;
+
+    const lignes = resultats.map(r => {
+        const style = VERDICT_STYLE[r.verdict] || VERDICT_STYLE.erreur;
+        const manque = (r.manquants || []).length ? `attendu : ${escapeHtml((r.manquants || []).join(', '))}` : '';
+        const piege = (r.interdits_presents || []).length ? ` · valeur piège : ${escapeHtml(r.interdits_presents.join(', '))}` : '';
+        return `
+        <div class="border-b border-black/5 dark:border-white/5 py-3">
+            <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-gray-800 dark:text-gray-200">${escapeHtml(r.question || '')}</div>
+                    <div class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                        ${manque}${piege}
+                        ${r.verite ? ` · vérité : ${escapeHtml(r.verite)}` : ''}
+                    </div>
+                </div>
+                <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full ${style.cls}">${style.label}</span>
+            </div>
+            <div class="text-[11px] text-gray-600 dark:text-gray-300 mt-1.5 bg-black/5 dark:bg-white/5 rounded-lg px-2.5 py-1.5">
+                ${escapeHtml((r.answer || r.error || '').slice(0, 400))}
+            </div>
+            <div class="text-[10px] text-gray-400 dark:text-gray-500 mt-1 flex gap-3 flex-wrap">
+                <span>page vue : ${r.page_vue ? 'oui' : 'non'}</span>
+                <span>citation exacte : ${r.page_citee ? 'oui' : (r.page_decalee ? 'page décalée' : 'non')}</span>
+                <span>outils : ${r.tool_calls ?? 0}</span>
+                <span>${r.total_s ?? '?'} s</span>
+            </div>
+        </div>`;
+    }).join('');
+
+    bloc.innerHTML = `
+        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <h3 class="text-md font-bold text-gray-800 dark:text-gray-200">Génération — réponses comparées à la vérité des pages</h3>
+                <span class="text-xs text-gray-500 dark:text-gray-400">${n} / ${total} question(s) · ${secondes.toFixed(0)} s</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
+                <div><span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Réussite</span><span class="text-2xl font-extrabold text-gray-900 dark:text-white">${reussite}%</span></div>
+                <div><span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Page de preuve vue</span><span class="text-2xl font-extrabold text-gray-900 dark:text-white">${vues}%</span></div>
+                <div><span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Citation exacte</span><span class="text-2xl font-extrabold text-gray-900 dark:text-white">${citees}%</span></div>
+                <div><span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Faux / ambigus</span><span class="text-2xl font-extrabold text-gray-900 dark:text-white">${compte('faux') + compte('abstention_ko')} / ${compte('ambigu')}</span></div>
+            </div>
+            <div class="max-h-[32rem] overflow-y-auto pr-1">${lignes}</div>
+        </div>`;
+}
+
 
 function setupEvalDragAndDrop() {
     const dropZone = document.getElementById('eval-drop-zone');
@@ -2749,9 +2976,12 @@ function checkRunEvalButtonState() {
     const select = document.getElementById('eval-space-select');
     const btn = document.getElementById('btn-run-eval');
     const btnRag = document.getElementById('btn-run-rag-eval');
+    const btnGen = document.getElementById('btn-run-generation-eval');
     const enabled = !!(uploadedDataset && select && select.value);
     if (btn) btn.disabled = !enabled;
     if (btnRag) btnRag.disabled = !enabled;
+    // La génération exige des réponses attendues : sans elles, rien à comparer.
+    if (btnGen) btnGen.disabled = !(enabled && datasetHasExpectedAnswers());
 }
 
 async function runRetrieverEval() {

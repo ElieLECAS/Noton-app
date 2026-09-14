@@ -170,7 +170,7 @@ async def test_repeated_identical_call_stops_tools():
     await _collect(loop)
 
     second_tool_msg = [m for m in stream.calls[2]["context"] if m["role"] == "tool"][1]
-    assert "Appel identique déjà effectué" in second_tool_msg["content"]
+    assert "Tu as DÉJÀ lu cette cible" in second_tool_msg["content"]
     assert stream.calls[2]["kwargs"]["tool_choice"] == "none"
     assert loop.stopped_by == "repeat"
     assert loop.tool_calls_used == 1
@@ -340,3 +340,26 @@ async def test_no_tools_means_single_plain_call():
     assert stream.calls[0]["kwargs"] == {}
     assert loop.final_text == "Direct."
     assert loop.trace["rounds"][0]["final"] is True
+
+
+def test_une_meme_page_relue_avec_une_autre_question_compte_comme_un_doublon():
+    """Mesuré le 13/09 sur « hauteur de poignée pour un ouvrant de 700 mm » : le lecteur a
+    relu TROIS FOIS la même page en changeant seulement le libellé de sa question, épuisé
+    ses 6 appels, puis s'est abstenu. La page rend la même chose à chaque fois."""
+    from app.services.reader_agent_service import _call_key
+
+    a = _call_key("lire_pages", {"document_id": 438, "pages": [6], "question": "hauteur poignée ?"})
+    b = _call_key("lire_pages", {"document_id": 438, "pages": [6], "question": "valeurs axe poignée ?"})
+    assert a == b, "reformuler la question ne crée pas un nouvel appel"
+
+    autre_page = _call_key("lire_pages", {"document_id": 438, "pages": [8], "question": "x"})
+    autre_doc = _call_key("lire_pages", {"document_id": 424, "pages": [6], "question": "x"})
+    assert a != autre_page and a != autre_doc, "changer de page ou de document reste permis"
+
+
+def test_rechercher_reste_identifie_par_sa_question():
+    """Contre-exemple : une recherche EST sa question, deux formulations ramènent des pages
+    différentes. Elle garde donc son identité complète."""
+    from app.services.reader_agent_service import _call_key
+
+    assert _call_key("rechercher", {"question": "a"}) != _call_key("rechercher", {"question": "b"})

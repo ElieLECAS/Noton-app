@@ -18,7 +18,7 @@ from app.services.page_reader_service import (
 # ---------------------------------------------------------------------------
 
 
-def test_parse_reads_survey_convention_and_answer():
+def test_parse_reads_survey_and_answer():
     raw = """{"convention": "Cotation en bleu = épaisseur vitrage",
       "releve": [{"repere": "Parclose 2636", "valeurs": [
           {"valeur": "30", "couleur": "bleu"}, {"valeur": "27", "couleur": "noir"}]}],
@@ -26,7 +26,6 @@ def test_parse_reads_survey_convention_and_answer():
       "citations": ["Parclose 2636", "30"]}"""
     r = parse_page_reading(raw, document_id=438, page_no=8)
     assert r.ok and r.answer == "30"
-    assert r.convention.startswith("Cotation en bleu")
     assert r.survey[0]["repere"] == "Parclose 2636"
     assert [v["valeur"] for v in r.survey[0]["valeurs"]] == ["30", "27"]
 
@@ -127,3 +126,50 @@ def test_declared_answer_falls_back_to_full_text():
     assert extract_declared_answer("X <reponse_finale>  </reponse_finale>").startswith("X ")
     # Balise ouverte non refermée (réponse tronquée par le plafond de tokens).
     assert extract_declared_answer("meta\n<reponse_finale>Début tronqué") == "Début tronqué"
+
+
+# ---------------------------------------------------------------------------
+# Robustesse du parsing — depuis que « contenu » restitue du Markdown
+# ---------------------------------------------------------------------------
+
+
+def test_un_contenu_markdown_avec_blocs_de_code_ne_casse_pas_le_parsing():
+    """Mesuré le 13/09 : la restitution contient des ``` et des tableaux. Chercher un bloc
+    de code AVANT de tenter le JSON découpait au milieu de la réponse et perdait la page
+    entière, alors que la sortie du modèle était complète et valide."""
+    brut = (
+        '{"type": "mixte", "contenu": "### Hauteur poignee\n\n```\n\n```\n\n'
+        '| Hauteur Ouvrant | Axe poignee |\n| 601 mm | 220 mm |", '
+        '"reponse": "", "citations": []}'
+    )
+    r = parse_page_reading(brut, document_id=438, page_no=6)
+    assert r.error is None
+    assert "| 601 mm | 220 mm |" in r.content
+    assert r.usable and not r.ok
+
+
+def test_un_json_encadre_par_un_bloc_de_code_reste_lisible():
+    """Le cas inverse : certains modèles emballent VRAIMENT leur JSON dans un bloc."""
+    r = parse_page_reading(
+        '```json\n{"contenu": "page", "reponse": "30", "citations": []}\n```',
+        document_id=1, page_no=1,
+    )
+    assert r.error is None and r.answer == "30"
+
+
+def test_des_retours_a_la_ligne_bruts_dans_une_chaine_sont_tolerés():
+    """Un schéma dessiné en caractères produit de vrais retours à la ligne non échappés :
+    la page ne doit pas être perdue pour un défaut d'échappement."""
+    brut = '{"contenu": "schema :\n  boite 49\n  70", "reponse": "", "citations": []}'
+    r = parse_page_reading(brut, document_id=1, page_no=21)
+    assert r.error is None
+    assert "boite 49" in r.content
+
+
+def test_une_page_sans_reponse_mais_restituee_est_utilisable():
+    r = parse_page_reading(
+        '{"contenu": "| a | b |", "absent": true, "reponse": "", "citations": []}',
+        document_id=1, page_no=1,
+    )
+    assert not r.ok, "elle n'a pas répondu"
+    assert r.usable, "mais elle reste exploitable : son tableau est là"

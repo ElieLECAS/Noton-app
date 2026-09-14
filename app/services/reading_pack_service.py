@@ -190,27 +190,31 @@ def render_page_block(entry: PageRead, *, needle: str = "") -> str:
 
     if r.error:
         lines.append(f" — LECTURE INDISPONIBLE ({r.error}).")
-    elif r.absent:
-        lines.append(" — LUE EN IMAGE : ce que tu cherches n'apparaît PAS sur cette page.")
-    elif r.ambiguous or not r.answer:
-        lines.append(" — LUE EN IMAGE : la page ne permet pas de trancher avec certitude.")
-    else:
-        lines.append(" — LUE EN IMAGE :")
+    elif r.answer and not r.absent and not r.ambiguous:
+        lines.append(f" — LUE EN IMAGE ({r.page_type or 'page'}) :")
         lines.append(f"  → {r.answer}")
-
-    if r.convention:
-        lines.append(f"  convention lue sur la page : « {r.convention} »")
-
-    # Deux pages peuvent répondre à la même question avec des valeurs différentes (mesuré :
-    # la planche des parcloses donne une valeur AVEC sa convention de lecture, une planche
-    # de meneaux en donne une autre SANS aucune règle). Les présenter à égalité rouvrirait
-    # l'arbitrage au hasard : on signale donc la page qui ne dit pas comment se lire.
-    if r.answer and not r.absent and not r.ambiguous and not r.convention:
+    elif r.absent:
         lines.append(
-            "  fiabilité : FAIBLE — aucune règle de lecture n'est inscrite sur cette page, "
-            "rien ne dit ce que ce nombre mesure. Si une autre page répond AVEC sa "
-            "convention, c'est elle qui fait foi."
+            f" — LUE EN IMAGE ({r.page_type or 'page'}) : la lecture n'y a pas trouvé ce qui "
+            "est demandé. Le contenu restitué ci-dessous reste à ta disposition."
         )
+    elif r.ambiguous:
+        lines.append(
+            f" — LUE EN IMAGE ({r.page_type or 'page'}) : la lecture ne tranche pas. "
+            "Appuie-toi sur le contenu restitué."
+        )
+    else:
+        lines.append(f" — LUE EN IMAGE ({r.page_type or 'page'}) :")
+
+    # LE CONTENU DE LA PAGE, toujours — même quand la lecture n'a pas su répondre.
+    # Régression du 13/09 (« hauteur de poignée pour un ouvrant de 700 mm ») : la page qui
+    # porte le tableau de correspondance concluait « absent », parce que 700 n'est le repère
+    # de rien, et le pack ne montrait alors PLUS RIEN de cette page. Un croisement de plage,
+    # une taille intermédiaire, une procédure : c'est le lecteur principal qui sait les
+    # faire, à condition qu'on lui laisse la matière.
+    if r.content:
+        lines.append("  Contenu de la page, restitué depuis l'image (tableaux intacts) :")
+        lines.append(r.content)
 
     entree = survey_entry_for(r.survey, needle) if needle else None
     if entree:
@@ -221,7 +225,7 @@ def render_page_block(entry: PageRead, *, needle: str = "") -> str:
         if valeurs:
             lines.append(f"  relevé pour « {entree.get('repere')} » : {valeurs}")
 
-    if r.survey:
+    if r.survey and not r.content:
         # Les LIBELLÉS seulement : les étiquettes de couleur du relevé basculent en bloc
         # d'un run à l'autre (mesuré le 12/09) et ne valent rien. L'inventaire, lui, dit ce
         # qui est sur la page — et il est lu sur le dessin, pas sur une transcription.
@@ -263,10 +267,13 @@ PREAMBULE = (
     "dédié, une page à la fois, avec ta question. Ce que tu lis ici est le résultat de cette "
     "lecture, pas un texte extrait automatiquement.\n"
     "RÈGLE : une valeur, une cote, une référence ou une consigne ne se cite QUE depuis une "
-    "page lue. Une page qui dit « ce que tu cherches n'apparaît PAS » est une information "
-    "fiable : cherche ailleurs (rechercher, lire_pages sur une autre page), ne transpose "
-    "JAMAIS la valeur d'un repère voisin et ne reprends JAMAIS une note générale de la page "
-    "comme si c'était la valeur du repère demandé.\n"
+    "page lue. Ne transpose JAMAIS la valeur d'un repère voisin et ne reprends JAMAIS une "
+    "note générale de la page comme si c'était la valeur du repère demandé.\n"
+    "Chaque page est RESTITUÉE telle qu'elle est imprimée, tableaux compris. Quand la "
+    "lecture n'a pas su répondre, le contenu reste exploitable : c'est à TOI de faire le "
+    "croisement — lire la ligne d'un tableau qui encadre une valeur demandée, suivre une "
+    "plage (« 601 à 900 mm »), reconstituer une suite d'étapes. Ne conclus « les documents "
+    "ne précisent pas » qu'après avoir regardé le contenu restitué de CHAQUE page.\n"
     "Avant d'attribuer une information à une gamme ou à un produit, vérifie l'en-tête du "
     "document : ne transfère jamais une valeur d'une gamme vers une autre.\n\n"
 )
@@ -362,6 +369,7 @@ async def build_reading_pack(
         )
         if not chemin:
             return did, page, None
+        # Une page, une question, une lecture. Aucune règle ajoutée, aucun filtrage.
         lecture = await read_page_image(
             pdf_path=chemin,
             document_id=did,
@@ -418,10 +426,12 @@ async def build_reading_pack(
                     "etat": (
                         "non_lue" if lecture is None
                         else "erreur" if lecture.error
+                        else "repond" if lecture.ok
+                        else "restitue" if lecture.content
                         else "absent" if lecture.absent
-                        else "ambigu" if lecture.ambiguous
-                        else "repond"
+                        else "ambigu"
                     ),
+                    "car": len(lecture.content) if lecture else 0,
                     "ms": lecture.ms if lecture else 0,
                 }
             )

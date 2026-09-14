@@ -1,0 +1,1926 @@
+{
+  "version": 1,
+  "kind": "generation",
+  "space_id": 29,
+  "created": "2026-09-14",
+  "description": "Golden set de GÉNÉRATION sur l'espace 29 (perform76). Chaque réponse attendue a été lue sur le PNG de la page citée (rendu 150 dpi), jamais sur le texte indexé. Les numéros de page sont les numéros de page PDF (ceux que le système manipule) : pour le dossier 438, page PDF N = page imprimée N-3.",
+  "documents": {
+    "438": "Dossier technique gamme Perform76 26 08 2026",
+    "424": "2024-04_CATALOGUE-GENERAL_WEB",
+    "427": "Innoslide",
+    "433": "2024-01_DEPLIANT-INNOSLIDE_A4-WEB-Client"
+  },
+  "regles_de_score": {
+    "valeur": "juste = toutes les valeurs de `valeurs` (mode tous) ou au moins une (mode un) figurent dans la réponse ET aucune valeur de `interdits` ; ambigu = attendu présent ET un interdit présent ; faux = attendu absent.",
+    "liste": "juste = au moins `min` éléments de `elements` présents (insensible casse/accents) ; faux sinon.",
+    "texte": "juste = au moins une regex de `regex_any` matche ; faux sinon.",
+    "abstention": "abstention_ok = une regex de `regex_any` matche ET aucun `interdits` ; abstention_ko sinon (valeur inventée ou réponse affirmative).",
+    "page": "page_citee = une des pages de `preuve` figure dans les sources renvoyées ; page_vue = elle figure dans le pack initial ou dans les pages lues par les outils."
+  },
+  "entries": [
+    {
+      "id": "g29_001",
+      "tags": [
+        "perform76",
+        "parclose",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est l'épaisseur de vitrage pour la parclose 2452 sur Perform 76 ?",
+      "variantes": [
+        "Parclose 2452 : épaisseur de vitrage ?",
+        "Avec la parclose 2452, quel vitrage je peux mettre ?"
+      ],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "16"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "41.5"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Planche parcloses : 2452 → cotation bleue 16 (= épaisseur vitrage), 41,5 en noir."
+    },
+    {
+      "id": "g29_002",
+      "tags": [
+        "perform76",
+        "parclose",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle épaisseur de vitrage accepte la parclose 2636 ?",
+      "variantes": [
+        "Épaisseur de vitrage de la parclose dormant 2636"
+      ],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "30"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "27"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Parclose dormant 2636 → 30 (bleu), 27 (noir). Cas mesuré faux le 12/09 (27 lu au milieu du contexte)."
+    },
+    {
+      "id": "g29_003",
+      "tags": [
+        "perform76",
+        "parclose",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est l'épaisseur de vitrage de la parclose 76503 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "36"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "22"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Parclose ouvrant 76503 → 36 (bleu), 22 (noir)."
+    },
+    {
+      "id": "g29_004",
+      "tags": [
+        "perform76",
+        "parclose",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Épaisseur de vitrage pour la parclose 2454 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "31"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "26.5"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Parclose ouvrant 2454 → 31 (bleu), 26,5 (noir)."
+    },
+    {
+      "id": "g29_005",
+      "tags": [
+        "perform76",
+        "parclose",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quel vitrage pour la parclose dormant 76579 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "48"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "10.8"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Parclose dormant 76579 → 48 (bleu), 10,8 (noir)."
+    },
+    {
+      "id": "g29_006",
+      "tags": [
+        "perform76",
+        "parclose",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est l'épaisseur de vitrage de la parclose 76527 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "26"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "31.5"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Parclose ouvrant 76527 → 26 (bleu), 31,5 (noir)."
+    },
+    {
+      "id": "g29_007",
+      "tags": [
+        "perform76",
+        "parclose",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Parclose 2433 : quelle épaisseur de vitrage ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "33"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "23.5"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Parclose ouvrant 2433 → 33 (bleu), 23,5 (noir)."
+    },
+    {
+      "id": "g29_008",
+      "tags": [
+        "perform76",
+        "parclose",
+        "inverse"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle parclose ouvrant dois-je utiliser pour un vitrage de 28 mm sur Perform 76 ?",
+      "variantes": [
+        "Référence de parclose ouvrant pour un vitrage de 28 mm"
+      ],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "76526"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Ouvrant 28 → parclose 76526 (le dormant 28 est la 2634, acceptable en complément)."
+    },
+    {
+      "id": "g29_009",
+      "tags": [
+        "perform76",
+        "parclose",
+        "inverse"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle parclose dormant utiliser avec un vitrage de 44 mm ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "76577"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Dormant 44 → parclose 76577 (l'ouvrant 44 est la 76507)."
+    },
+    {
+      "id": "g29_010",
+      "tags": [
+        "perform76",
+        "parclose",
+        "texte"
+      ],
+      "difficulte": "simple",
+      "question": "Pour quelle feuillure les épaisseurs de remplissage des parcloses Perform 76 sont-elles valables ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "62"
+        ],
+        "mode": "tous",
+        "interdits": [],
+        "regex_any": [
+          "post[- ]?extrud"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Encadré : « Epaisseur de remplissage valable pour une feuillure de 62 mm avec un joint post-extrudé ou d'épaisseur équivalente »."
+    },
+    {
+      "id": "g29_011",
+      "tags": [
+        "perform76",
+        "parclose",
+        "absent"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle est l'épaisseur de vitrage de la parclose 2637 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "abstention",
+        "regex_any": [
+          "n['’]existe",
+          "n['’]appara[iî]t",
+          "ne (figure|mentionne|précise|trouve)",
+          "pas de parclose 2637",
+          "aucune (parclose|référence) 2637",
+          "introuvable",
+          "non document",
+          "pas (référencée|documentée|listée)"
+        ],
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "La 2637 n'existe pas sur la planche (2636 = 30, 2638 = 31). Réponse attendue : dire qu'elle n'est pas documentée, ne pas transposer une voisine."
+    },
+    {
+      "id": "g29_012",
+      "tags": [
+        "perform76",
+        "parclose",
+        "absent",
+        "code"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle est l'épaisseur de vitrage de la parclose TGY3702 sur Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "abstention",
+        "regex_any": [
+          "n['’]existe",
+          "n['’]appara[iî]t",
+          "ne (figure|mentionne|précise|trouve)",
+          "pas (une |de )?(parclose|référence) (perform|proferm)",
+          "introuvable",
+          "non document",
+          "pas (référencée|documentée|listée)",
+          "aucun document"
+        ],
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "TGY3702 est une référence Technal, absente de l'espace perform76. Aucune valeur ne doit être donnée."
+    },
+    {
+      "id": "g29_013",
+      "tags": [
+        "perform76",
+        "poignee",
+        "tableau"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle est la hauteur de poignée pour un ouvrant de 700 mm de hauteur sur Perform 76 ?",
+      "variantes": [
+        "hauteur de poignée si ouvrant hauteur de 700",
+        "Où se place l'axe de poignée pour un ouvrant de 700 mm ?"
+      ],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "220",
+          "240",
+          "263",
+          "283"
+        ],
+        "mode": "un",
+        "interdits": [
+          "120",
+          "170",
+          "413",
+          "513",
+          "563",
+          "763",
+          "1000"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "verite": "Tableau « Position poignée » : 601–900 mm → deux lignes : FFO 220 / bas ouvrant 240, ou FFO 263 / bas ouvrant 283. La meilleure réponse donne les deux options. Cas mesuré en échec le 13/09 (budget épuisé, abstention)."
+    },
+    {
+      "id": "g29_014",
+      "tags": [
+        "perform76",
+        "poignee",
+        "tableau"
+      ],
+      "difficulte": "complexe",
+      "question": "Hauteur de l'axe de poignée pour un ouvrant de 1500 mm ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "563",
+          "583"
+        ],
+        "mode": "un",
+        "interdits": [
+          "763",
+          "783",
+          "513",
+          "1000"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "verite": "1201–1800 mm → FFO 563 / bas ouvrant 583 (la ligne 1601–1800 ne couvre pas 1500)."
+    },
+    {
+      "id": "g29_015",
+      "tags": [
+        "perform76",
+        "poignee",
+        "tableau"
+      ],
+      "difficulte": "complexe",
+      "question": "Pour un ouvrant de 1700 mm de hauteur, quelle hauteur d'axe de poignée ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "563",
+          "583",
+          "763",
+          "783"
+        ],
+        "mode": "un",
+        "interdits": [
+          "1000",
+          "1020",
+          "513"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "verite": "Deux lignes couvrent 1700 : 1201–1800 (563/583) et 1601–1800 (763/783). Réponse complète = les deux options."
+    },
+    {
+      "id": "g29_016",
+      "tags": [
+        "perform76",
+        "poignee",
+        "tableau"
+      ],
+      "difficulte": "simple",
+      "question": "Hauteur de poignée pour un ouvrant de 2000 mm sur Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1000",
+          "1020"
+        ],
+        "mode": "un",
+        "interdits": [
+          "763",
+          "783"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "verite": "1801–2400 mm → FFO 1000 / bas ouvrant 1020."
+    },
+    {
+      "id": "g29_017",
+      "tags": [
+        "perform76",
+        "poignee",
+        "tableau"
+      ],
+      "difficulte": "complexe",
+      "question": "Où placer la poignée pour un petit ouvrant de 450 mm de haut ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "120",
+          "140",
+          "170",
+          "190"
+        ],
+        "mode": "un",
+        "interdits": [
+          "220",
+          "240",
+          "263"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "verite": "300–600 mm → deux lignes : 120/140 ou 170/190."
+    },
+    {
+      "id": "g29_018",
+      "tags": [
+        "perform76",
+        "poignee",
+        "texte"
+      ],
+      "difficulte": "simple",
+      "question": "Que signifie FFO dans le tableau des hauteurs de poignée ?",
+      "variantes": [],
+      "attendu": {
+        "type": "texte",
+        "regex_any": [
+          "fond (de )?feuillure"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "verite": "*FFO = Hauteur axe poignée fond feuillure quincaillerie."
+    },
+    {
+      "id": "g29_019",
+      "tags": [
+        "perform76",
+        "pivot",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle charge maximale par ouvrant sur le pivot bas Perform 76 ?",
+      "variantes": [
+        "Charge admissible du pivot bas"
+      ],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "100"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "verite": "Encadré : « Charge 100 Kg par ouvrant sur pivot bas »."
+    },
+    {
+      "id": "g29_020",
+      "tags": [
+        "perform76",
+        "pivot",
+        "reglage"
+      ],
+      "difficulte": "simple",
+      "question": "Avec quelle clé se règle la hauteur du pivot bas et quelle est la plage de réglage ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "4",
+          "2"
+        ],
+        "mode": "tous",
+        "interdits": [],
+        "regex_any": [
+          "6 pans"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            6
+          ]
+        }
+      ],
+      "verite": "« Réglage hauteur clé 6 pans de 4 mm (+ ou - 2 mm) »."
+    },
+    {
+      "id": "g29_021",
+      "tags": [
+        "perform76",
+        "generalites"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est l'épaisseur du dormant Perform 76 et combien de chambres a-t-il ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "76",
+          "6"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "verite": "« Dormant à 6 chambres de 76 mm d'épaisseur »."
+    },
+    {
+      "id": "g29_022",
+      "tags": [
+        "perform76",
+        "generalites",
+        "renfort"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est l'épaisseur du renfort acier du dormant Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1.5"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "verite": "« renfort acier galvanisé tubulaire de 1.5 mm d'épaisseur » (le renfort de l'ouvrant fait 2 mm)."
+    },
+    {
+      "id": "g29_023",
+      "tags": [
+        "perform76",
+        "generalites",
+        "renfort"
+      ],
+      "difficulte": "simple",
+      "question": "Épaisseur du renfort acier dans l'ouvrant Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "2"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "verite": "« un renfort acier galvanisé (6) de 2 mm d'épaisseur » pour l'ouvrant."
+    },
+    {
+      "id": "g29_024",
+      "tags": [
+        "perform76",
+        "generalites",
+        "vitrage"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la composition du double vitrage standard de la Perform 76 et son coefficient Ug ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "28",
+          "1.1"
+        ],
+        "mode": "tous",
+        "interdits": [],
+        "regex_any": [
+          "argon"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            4
+          ]
+        },
+        {
+          "document_id": 424,
+          "pages": [
+            27
+          ]
+        }
+      ],
+      "verite": "« Double vitrage de 28 mm d'épaisseur (6mm-18gaz argon-4mm) avec intercalaire TGI coloris noir avec coefficient Ug égal à 1.1 W/m²k »."
+    },
+    {
+      "id": "g29_025",
+      "tags": [
+        "perform76",
+        "generalites",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la largeur du battement central réduit sur Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "112"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "verite": "« Battement central réduit d'une largeur de 112 mm »."
+    },
+    {
+      "id": "g29_026",
+      "tags": [
+        "perform76",
+        "generalites",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est l'épaisseur de l'ouvrant galbé Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "83"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "verite": "« Ouvrant à 6 chambres droit (5a) 76 mm d'épaisseur ou Galbé (5b) 83 mm d'épaisseur »."
+    },
+    {
+      "id": "g29_027",
+      "tags": [
+        "perform76",
+        "generalites",
+        "joints"
+      ],
+      "difficulte": "simple",
+      "question": "Combien de joints d'étanchéité comporte le système Perform 76 et où sont-ils ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "3"
+        ],
+        "mode": "tous",
+        "interdits": [],
+        "regex_any": [
+          "central"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            4
+          ]
+        }
+      ],
+      "verite": "« Système à 3 joints d'étanchéité : 1 joint à frappe sur l'ouvrant et 1 joint central + 1 joint à frappe sur le dormant »."
+    },
+    {
+      "id": "g29_028",
+      "tags": [
+        "perform76",
+        "pose",
+        "interdit"
+      ],
+      "difficulte": "simple",
+      "question": "Peut-on utiliser de la mousse polyuréthane pour poser une fenêtre Perform 76 ?",
+      "variantes": [
+        "Mousse expansive autorisée pour la pose Perform 76 ?"
+      ],
+      "attendu": {
+        "type": "texte",
+        "regex_any": [
+          "proscri",
+          "interdit",
+          "à éviter",
+          "ne (doit|faut) pas",
+          "\\bnon\\b"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "verite": "« Attention : L'utilisation de la mousse polyuréthane est à proscrire dans l'ensemble des cas de pose »."
+    },
+    {
+      "id": "g29_029",
+      "tags": [
+        "perform76",
+        "pose",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quel recouvrement sur le mur faut-il prévoir en pose neuve Perform 76, avec et sans tapées ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "35",
+          "30"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            10
+          ]
+        }
+      ],
+      "verite": "« Recouvrement sur le mur 35 mm avec tapées / 30 mm sans tapées »."
+    },
+    {
+      "id": "g29_030",
+      "tags": [
+        "perform76",
+        "pose",
+        "liste"
+      ],
+      "difficulte": "simple",
+      "question": "Quels éléments composent la pose en rénovation version 1 sur Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "compensation bois",
+          "fond de joint",
+          "silicone",
+          "cale latérale"
+        ],
+        "min": 3
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            11
+          ]
+        }
+      ],
+      "verite": "Version 1 : compensation bois, fond de joint, silicone, cale latérale."
+    },
+    {
+      "id": "g29_031",
+      "tags": [
+        "perform76",
+        "pose",
+        "comparaison"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle est la différence entre la version 1 et la version 2 de la pose en rénovation Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "texte",
+        "regex_any": [
+          "compensation bois[\\s\\S]{0,400}mise à niveau",
+          "mise à niveau[\\s\\S]{0,400}compensation bois"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            11
+          ]
+        }
+      ],
+      "verite": "V1 : compensation bois ; V2 : mise à niveau bois (fond de joint, silicone et cale latérale dans les deux cas)."
+    },
+    {
+      "id": "g29_032",
+      "tags": [
+        "perform76",
+        "drainage",
+        "cote"
+      ],
+      "difficulte": "complexe",
+      "question": "Comment est réalisée la décompression sur les menuiseries Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "100",
+          "25",
+          "5"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            7
+          ]
+        }
+      ],
+      "verite": "« Décompression par découpe de 100 mm de joint par ouvrant » et « Décompression par fraisage de 25 mm x 5 mm »."
+    },
+    {
+      "id": "g29_033",
+      "tags": [
+        "perform76",
+        "drainage",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelles sont les dimensions du fraisage de drainage sur Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "25",
+          "5"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            7
+          ]
+        }
+      ],
+      "verite": "« Drainage par fraisage de 25 mm x 5 mm »."
+    },
+    {
+      "id": "g29_034",
+      "tags": [
+        "perform76",
+        "meneau",
+        "code"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la référence du meneau dormant de 124 mm sur Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "76373"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            13
+          ]
+        }
+      ],
+      "verite": "« Meneau dormant 124 mm Réf 76373 » (le 98 mm est le 76372)."
+    },
+    {
+      "id": "g29_035",
+      "tags": [
+        "perform76",
+        "meneau",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la largeur du meneau ouvrant réf 76301 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "84"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            13
+          ]
+        }
+      ],
+      "verite": "« Meneau ouvrant 84 mm Réf 76301 » (21/42/21)."
+    },
+    {
+      "id": "g29_036",
+      "tags": [
+        "perform76",
+        "meneau",
+        "texte"
+      ],
+      "difficulte": "simple",
+      "question": "Le meneau ouvrant 76303 peut-il être monté sur un dormant ?",
+      "variantes": [],
+      "attendu": {
+        "type": "texte",
+        "regex_any": [
+          "uniquement[\\s\\S]{0,60}ouvrants?",
+          "\\bnon\\b",
+          "pas (compatible|possible|prévu)",
+          "réservé aux ouvrants"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            13
+          ]
+        }
+      ],
+      "verite": "« Montage uniquement compatible avec les ouvrants »."
+    },
+    {
+      "id": "g29_037",
+      "tags": [
+        "perform76",
+        "meneau",
+        "liste"
+      ],
+      "difficulte": "simple",
+      "question": "Quelles sont les références des meneaux dormants Perform 76 et leurs largeurs ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "76372",
+          "76373",
+          "98",
+          "124"
+        ],
+        "min": 4
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            13
+          ]
+        }
+      ],
+      "verite": "Meneau dormant 98 mm Réf 76372 ; meneau dormant 124 mm Réf 76373."
+    },
+    {
+      "id": "g29_038",
+      "tags": [
+        "perform76",
+        "dormant",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la largeur d'aile du dormant rénovation 76185 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "60"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            15,
+            3,
+            7
+          ]
+        }
+      ],
+      "verite": "« Planche Dormant rénovation 76185 Avec aile de 60 mm » (76177 = aile de 40 mm)."
+    },
+    {
+      "id": "g29_039",
+      "tags": [
+        "perform76",
+        "dormant",
+        "cote"
+      ],
+      "difficulte": "complexe",
+      "question": "Quel délignage maximum est possible sur le dormant rénovation 76177 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "20"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            14
+          ]
+        }
+      ],
+      "verite": "« Délignage maxi (à effectuer sur le chantier) : 20 » sur la planche 76177 (40 sur la 76185)."
+    },
+    {
+      "id": "g29_040",
+      "tags": [
+        "perform76",
+        "ouvrant",
+        "code"
+      ],
+      "difficulte": "simple",
+      "question": "Quelles références d'ouvrant existent pour le dormant neuf 76180 (droit et galbé) ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "76281",
+          "76275"
+        ],
+        "min": 2
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            18
+          ]
+        }
+      ],
+      "verite": "Ouvrant droit 76281, ouvrant galbé 76275."
+    },
+    {
+      "id": "g29_041",
+      "tags": [
+        "perform76",
+        "isolation",
+        "tableau",
+        "code"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle patte de pose et quel appui pour une isolation de 140 mm sur dormant 76180 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "NT1947",
+          "6137"
+        ],
+        "min": 2
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            19
+          ]
+        }
+      ],
+      "verite": "Tableau clameau CP14GGOM0012 (sans cale) : 140 mm → patte NT1947, appui 6137."
+    },
+    {
+      "id": "g29_042",
+      "tags": [
+        "perform76",
+        "isolation",
+        "tableau",
+        "code"
+      ],
+      "difficulte": "complexe",
+      "question": "Pour une isolation de 175 mm sur dormant 76171, quelle patte de pose et quel appui utiliser ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "NT1949",
+          "6137"
+        ],
+        "min": 2
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            24
+          ]
+        }
+      ],
+      "verite": "Tableau (cale CTHNT0030) : 175 mm → NT1949, appui 6137* (* dormant en partie basse 76180 aile de 20 mm)."
+    },
+    {
+      "id": "g29_043",
+      "tags": [
+        "perform76",
+        "isolation",
+        "code"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle tapée utiliser pour une isolation de 120 mm sur un dormant rénovation 76177 ou 76185 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "6140"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            17
+          ]
+        }
+      ],
+      "verite": "Tapée 6140 = Iso de 120 (6139 = 100, 6141 = 140)."
+    },
+    {
+      "id": "g29_044",
+      "tags": [
+        "perform76",
+        "elargisseur",
+        "liste"
+      ],
+      "difficulte": "complexe",
+      "question": "Quels élargisseurs existent pour les dormants 76171 et 76172 et quelles sont leurs largeurs ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "76700",
+          "76701",
+          "76702",
+          "76703"
+        ],
+        "min": 3
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            22
+          ]
+        }
+      ],
+      "verite": "Élargisseurs 76700 (15), 76701 (30), 76702 (60), 76703 (120) ; renfort acier en option sur 76702 et 76703."
+    },
+    {
+      "id": "g29_045",
+      "tags": [
+        "perform76",
+        "compensateur",
+        "code"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la référence du compensateur 19 x 29 pour profil rénovation Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "6143"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            16
+          ]
+        }
+      ],
+      "verite": "« Compensateur 6143 pour profil rénovation » (19 × 29) ; le 6144 fait 12 × 16."
+    },
+    {
+      "id": "g29_046",
+      "tags": [
+        "perform76",
+        "assemblage",
+        "code"
+      ],
+      "difficulte": "simple",
+      "question": "Quelles sont les références du clip cornière et de l'adaptateur pour les dormants 76171 et 76172 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "76822",
+          "76821"
+        ],
+        "min": 2
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            23
+          ]
+        }
+      ],
+      "verite": "Clip cornière 76822 ; adaptateur Réf 76821."
+    },
+    {
+      "id": "g29_047",
+      "tags": [
+        "perform76",
+        "assemblage",
+        "code"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la référence du poteau d'angle à 90° sur Perform 76 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "8355"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            23
+          ]
+        }
+      ],
+      "verite": "Poteau d'angle à 90° : Réf 8355 (135° : 8356 ; variable : 8340/8341)."
+    },
+    {
+      "id": "g29_048",
+      "tags": [
+        "perform76",
+        "appui",
+        "code"
+      ],
+      "difficulte": "complexe",
+      "question": "Quel appui de 97 mm existe pour le dormant rénovation 76185 ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "6137"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            16,
+            15
+          ]
+        }
+      ],
+      "verite": "Appui 6137 = 97 (6136 = 67, 76768 = 136)."
+    },
+    {
+      "id": "g29_049",
+      "tags": [
+        "catalogue",
+        "perform",
+        "performance"
+      ],
+      "difficulte": "simple",
+      "question": "Quel est le classement A*E*V de la gamme Perform ?",
+      "variantes": [],
+      "attendu": {
+        "type": "texte",
+        "regex_any": [
+          "A\\s?\\*?\\s?4\\s?/?\\s?E\\s?\\*?\\s?9A\\s?/?\\s?V\\s?\\*?\\s?A3"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            7
+          ]
+        }
+      ],
+      "verite": "CSTB A*4 / E*9A / V*A3 (l'Innoslide est A*4 / E*7A / V*B3)."
+    },
+    {
+      "id": "g29_050",
+      "tags": [
+        "catalogue",
+        "perform",
+        "coloris"
+      ],
+      "difficulte": "simple",
+      "question": "Quelles sont les teintes teintées dans la masse disponibles pour la gamme Perform ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "9016",
+          "ivoire"
+        ],
+        "min": 2
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "Blanc 9016 (1 ou 2 faces) et Ivoire proche 9001 (607 Kömmerling, 2 faces uniquement)."
+    },
+    {
+      "id": "g29_051",
+      "tags": [
+        "innoslide",
+        "coloris",
+        "multi-doc"
+      ],
+      "difficulte": "complexe",
+      "question": "Quels coloris sont disponibles pour le coulissant Innoslide ?",
+      "variantes": [],
+      "attendu": {
+        "type": "liste",
+        "elements": [
+          "9016",
+          "7016"
+        ],
+        "min": 2
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            8
+          ]
+        },
+        {
+          "document_id": 427,
+          "pages": [
+            2
+          ]
+        },
+        {
+          "document_id": 433,
+          "pages": [
+            3
+          ]
+        }
+      ],
+      "verite": "Blanc 9016 2 faces ; Blanc 9016 int / Gris 7016 grainé ext ; Gris 7016 grainé 2 faces."
+    },
+    {
+      "id": "g29_052",
+      "tags": [
+        "innoslide",
+        "cote",
+        "multi-doc"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle épaisseur de vitrage maximale accepte l'Innoslide ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "41"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            8
+          ]
+        },
+        {
+          "document_id": 427,
+          "pages": [
+            2
+          ]
+        },
+        {
+          "document_id": 433,
+          "pages": [
+            2
+          ]
+        }
+      ],
+      "verite": "« Épaisseur vitrage jusqu'à 41 mm »."
+    },
+    {
+      "id": "g29_053",
+      "tags": [
+        "innoslide",
+        "cote",
+        "multi-doc"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelles sont les dimensions maximales d'un coulissant Innoslide ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "3200",
+          "4200"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            8
+          ]
+        },
+        {
+          "document_id": 427,
+          "pages": [
+            2
+          ]
+        },
+        {
+          "document_id": 433,
+          "pages": [
+            2
+          ]
+        }
+      ],
+      "verite": "Soudure grain d'orge : H 2400 × L 3200 ; au-delà, dormant ébavuré et ouvrant grain d'orge : H 2400 × L 4200 ; largeur mini 1500."
+    },
+    {
+      "id": "g29_054",
+      "tags": [
+        "innoslide",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "À partir de quelle largeur la fonction SoftOpen est-elle disponible sur l'Innoslide ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1970"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            8
+          ]
+        },
+        {
+          "document_id": 427,
+          "pages": [
+            2
+          ]
+        },
+        {
+          "document_id": 433,
+          "pages": [
+            2
+          ]
+        }
+      ],
+      "verite": "« SoftOpen … (à partir de 1970 mm de largeur) »."
+    },
+    {
+      "id": "g29_055",
+      "tags": [
+        "innoslide",
+        "garantie"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la durée de garantie de la structure de la menuiserie Innoslide ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "15"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 427,
+          "pages": [
+            2
+          ]
+        },
+        {
+          "document_id": 433,
+          "pages": [
+            3
+          ]
+        }
+      ],
+      "verite": "Structure de la menuiserie : 15 ans ; ferrure Roto 10 ans ; vitrage 10 ans ; volet roulant 7 ans."
+    },
+    {
+      "id": "g29_056",
+      "tags": [
+        "catalogue",
+        "vitrage",
+        "acoustique"
+      ],
+      "difficulte": "complexe",
+      "question": "Quel vitrage PROFERM recommande-t-il pour une façade située sur une route à fort trafic ?",
+      "variantes": [],
+      "attendu": {
+        "type": "texte",
+        "regex_any": [
+          "10\\s?/\\s?14\\s?/\\s?4"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            27
+          ]
+        }
+      ],
+      "verite": "Double vitrage Planitherm One 10/14/4 avec intercalaire warm edge et gaz argon (33 dB) ; zones très bruyantes : 44.6/14/10."
+    },
+    {
+      "id": "g29_057",
+      "tags": [
+        "catalogue",
+        "croisillons"
+      ],
+      "difficulte": "simple",
+      "question": "Quelles largeurs de croisillons sont proposées sur les menuiseries PROFERM ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "10",
+          "18",
+          "26"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            7,
+            11,
+            15
+          ]
+        }
+      ],
+      "verite": "Croisillons 10 mm, 18 mm, 26 mm ; laiton 8 mm et plomb 8 mm sans croix."
+    },
+    {
+      "id": "g29_058",
+      "tags": [
+        "catalogue",
+        "volet-roulant",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelles hauteurs de coffre existent pour le volet roulant intégré PROFERM ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "200",
+          "230"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            28
+          ]
+        }
+      ],
+      "verite": "« deux hauteurs de coffre selon la dimension de la menuiserie : 200 mm ou 230 mm »."
+    },
+    {
+      "id": "g29_059",
+      "tags": [
+        "catalogue",
+        "lumine",
+        "performance"
+      ],
+      "difficulte": "simple",
+      "question": "Quel coefficient Uw atteint la gamme Lumine ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "1.5"
+        ],
+        "mode": "tous",
+        "interdits": [
+          "1.3"
+        ]
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            15
+          ]
+        }
+      ],
+      "verite": "« Performances thermiques élevées : Uw jusque 1.5/m²K » pour Lumine (Perform et Hybride : 1.3)."
+    },
+    {
+      "id": "g29_060",
+      "tags": [
+        "catalogue",
+        "coulissant",
+        "cote"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle largeur maximale pour un coulissant aluminium Soléal à 2 vantaux ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "3500"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            16
+          ]
+        }
+      ],
+      "verite": "Soléal : largeur mini 800 ; maxi 3 500 mm (2 vantaux), 5 400 (3 vantaux), 5 500 (4 vantaux), 6 200 (6 à 8 vantaux)."
+    },
+    {
+      "id": "g29_061",
+      "tags": [
+        "catalogue",
+        "coulissant",
+        "cote"
+      ],
+      "difficulte": "simple",
+      "question": "Quelle est la charge maximale par vantail sur la baie coulissante Luméal ?",
+      "variantes": [],
+      "attendu": {
+        "type": "valeur",
+        "valeurs": [
+          "300"
+        ],
+        "mode": "tous",
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 424,
+          "pages": [
+            16
+          ]
+        }
+      ],
+      "verite": "« Charge maximale par vantail : 300 kg »."
+    },
+    {
+      "id": "g29_062",
+      "tags": [
+        "perform76",
+        "parclose",
+        "absent"
+      ],
+      "difficulte": "complexe",
+      "question": "Quelle parclose Perform 76 permet de monter un vitrage de 52 mm ?",
+      "variantes": [],
+      "attendu": {
+        "type": "abstention",
+        "regex_any": [
+          "aucune",
+          "pas de parclose",
+          "n['’]existe",
+          "ne (permet|propose|prévoit|va)"
+        ],
+        "interdits": []
+      },
+      "preuve": [
+        {
+          "document_id": 438,
+          "pages": [
+            8
+          ]
+        }
+      ],
+      "verite": "L'épaisseur maximale sur la planche est 50 (parclose 76515 ouvrant) et 48 (dormant 76579) : aucune parclose pour 52."
+    }
+  ]
+}

@@ -138,6 +138,41 @@ def extract_declared_answer(text: str) -> str:
     return inner or text
 
 
+# Amorces d'un méta-commentaire de reprise : le modèle parle du CONTRÔLE au lieu de
+# répondre. Ce n'est jamais une réponse à l'utilisateur.
+_META_OPENINGS = (
+    "voici les corrections",
+    "voici la correction",
+    "voici la vérification",
+    "voici la version corrigée",
+    "réponse corrigée",
+    "reponse corrigee",
+    "correction du bloc",
+)
+
+
+def _is_degenerate(repaired: str, draft: str) -> bool:
+    """La reprise a-t-elle détruit la réponse au lieu de la corriger ?
+
+    Trois signatures, toutes observées : une reprise vide, une reprise réduite à un
+    moignon face à un brouillon substantiel, ou une reprise qui commente le contrôle au
+    lieu de répondre.
+    """
+    corrige = (repaired or "").strip()
+    brouillon = (draft or "").strip()
+    if not brouillon:
+        return False
+    if not corrige:
+        return True
+    tete = corrige.lower().lstrip("*# \n-")
+    if any(tete.startswith(m) for m in _META_OPENINGS):
+        return True
+    # Effondrement : un brouillon SUBSTANTIEL réduit à une fraction. Le seuil de longueur
+    # ne s'applique qu'aux brouillons longs — une réponse ponctuelle légitime (« 30 mm »)
+    # est courte par nature et ne doit pas être confondue avec un moignon.
+    return len(brouillon) >= 200 and len(corrige) < int(0.25 * len(brouillon))
+
+
 def sse(obj: Dict[str, Any]) -> str:
     return f"data: {json.dumps(obj)}\n\n"
 
@@ -152,11 +187,73 @@ def _parse_args(raw: Any) -> Dict[str, Any]:
     return data if isinstance(data, dict) else {}
 
 
+# Paramètres qui IDENTIFIENT une cible, par outil. Deux appels qui visent la même cible
+# sont le même appel, même si la question est reformulée.
+#
+# Mesuré le 13/09 : sur « hauteur de poignée pour un ouvrant de 700 mm », le lecteur a relu
+# TROIS FOIS la page 6 du même document en changeant seulement le libellé de sa question, a
+# épuisé son budget de 6 appels (« stopped_by=budget ») et a fini par s'abstenir. La page
+# rend la même chose à chaque fois : c'est du budget brûlé.
+_CALL_IDENTITY: Dict[str, Tuple[str, ...]] = {
+    "lire_pages": ("document_id", "pages"),
+    "chercher_code": ("code", "document_id"),
+    "plan_du_document": ("document_id",),
+}
+
+
+# Un bloc machine de fin de réponse (``<sources>``, ``<evidence>``) parti dans le canal
+# des appels d'outils au lieu du texte.
+_MACHINE_BLOCK_RE = re.compile(r"<\s*/?\s*(?:sources|evidence)\s*>", re.IGNORECASE)
+# Le modèle appelle parfois « sources » ou « evidence » comme un outil, sans les chevrons.
+_MACHINE_BLOCK_NAMES = frozenset({"sources", "evidence"})
+
+
+def split_leaked_blocks(
+    tool_calls: List[Dict[str, Any]]
+) -> Tuple[List[Dict[str, Any]], str]:
+    """Sépare les VRAIS appels d'outils des blocs machine égarés dans ``tool_calls``.
+
+    Mesuré le 14/09 : sur 4 tours des 62, le modèle a émis
+    ``<sources>{"used":[{"doc_id":438,"pages":[5]}]}</sources>`` comme NOM d'outil.
+    L'orchestrateur répondait « Outil inconnu », le bloc n'atteignait jamais le filtre, et
+    les sources affichées retombaient sur le repli — 20 à 22 pages au lieu d'une seule.
+    C'est le miroir de la fuite du 13/09 : là le modèle écrivait l'appel d'outil dans le
+    texte, ici il écrit le texte dans l'appel d'outil. Les deux se rattrapent au même
+    endroit — ce que le modèle a voulu dire compte, pas le canal qu'il a choisi.
+
+    Retourne (appels réels, texte récupéré à réinjecter dans la réponse).
+    """
+    reels: List[Dict[str, Any]] = []
+    fuites: List[str] = []
+    for call in tool_calls or []:
+        fn = call.get("function") or {}
+        name = str(fn.get("name") or "")
+        raw_args = fn.get("arguments")
+        args_text = raw_args if isinstance(raw_args, str) else ""
+        nom_nu = name.strip().lower()
+        if nom_nu in _MACHINE_BLOCK_NAMES:
+            # Le modèle « appelle » sources / evidence comme s'il s'agissait d'un outil,
+            # le bloc étant dans les arguments. Mesuré le 14/09 : le tour finissait avec
+            # une réponse VIDE. On reconstitue la balise autour des arguments.
+            fuites.append(f"<{nom_nu}>{args_text.strip()}</{nom_nu}>")
+            continue
+        if _MACHINE_BLOCK_RE.search(name) or _MACHINE_BLOCK_RE.search(args_text):
+            morceau = name if _MACHINE_BLOCK_RE.search(name) else args_text
+            fuites.append(morceau.strip())
+            continue
+        reels.append(call)
+    return reels, "\n".join(f for f in fuites if f)
+
+
 def _call_key(name: str, args: Dict[str, Any]) -> str:
+    identity = _CALL_IDENTITY.get(name)
+    payload: Any = args
+    if identity:
+        payload = {k: args.get(k) for k in identity}
     try:
-        return name + ":" + json.dumps(args, sort_keys=True, ensure_ascii=False)
+        return name + ":" + json.dumps(payload, sort_keys=True, ensure_ascii=False, default=str)
     except (TypeError, ValueError):
-        return name + ":" + repr(args)
+        return name + ":" + repr(payload)
 
 
 # ---------------------------------------------------------------------------
@@ -230,6 +327,8 @@ class ReaderLoop:
         self._stop_tools = False
         self.degraded = False
         self.stopped_by: Optional[str] = None
+        # Réponse affichable d'avant le round de contrôle : filet si la reprise dégénère.
+        self._draft_display = ""
 
         # Sorties.
         self.final_text = ""
@@ -262,8 +361,17 @@ class ReaderLoop:
         return list(self.source_filter.used_documents) if self.source_filter else []
 
     def used_pages_by_index(self) -> Dict[int, List[int]]:
-        """Pages citées dans ``<sources>`` par INDEX de document lu (clé ``doc`` ou ``doc_id``)."""
+        """Pages citées dans ``<sources>`` par INDEX de document lu (clé ``doc`` ou ``doc_id``).
+
+        Les pages déclarées sont RECALÉES sur celles réellement lues. Mesuré le 14/09 :
+        le modèle recopie le numéro IMPRIMÉ sur la planche (« Page 5 » dans le cartouche)
+        au lieu du numéro de page du document (8) — décalage constant de −3 sur ce
+        dossier, 51,6 % de citations vers la mauvaise page, et un clic sur la source qui
+        ouvre autre chose que ce qui a servi à répondre. Le harness, lui, sait exactement
+        quelles pages il a fait lire : c'est cette liste qui fait foi.
+        """
         by_id = {d.document_id: d.index for d in self.read_documents.values()}
+        by_index = {d.index: d for d in self.read_documents.values()}
         result: Dict[int, List[int]] = {}
         for item in self.used_documents:
             idx: Optional[int] = None
@@ -279,7 +387,25 @@ class ReaderLoop:
                     idx = by_id[candidate]
             if idx is None:
                 continue
-            result.setdefault(idx, []).extend(int(p) for p in item.get("pages") or [])
+            declarees = [int(p) for p in item.get("pages") or []]
+            lues = by_index[idx].pages if idx in by_index else set()
+            if lues:
+                retenues = [p for p in declarees if p in lues]
+                if not retenues:
+                    # Aucune page déclarée ne correspond à une page lue : la déclaration
+                    # est inexploitable (numéro imprimé, page inventée). On rend les pages
+                    # RÉELLEMENT lues de ce document plutôt qu'un renvoi faux.
+                    retenues = sorted(lues)
+                    logger.info(
+                        "[lecteur] sources recalées — doc %s : pages déclarées %s "
+                        "introuvables parmi les pages lues %s",
+                        by_index[idx].document_id,
+                        declarees,
+                        retenues,
+                    )
+            else:
+                retenues = declarees
+            result.setdefault(idx, []).extend(retenues)
         return result
 
     def documents_for_sources(self) -> List[Dict[str, Any]]:
@@ -378,6 +504,19 @@ class ReaderLoop:
 
                 text = "".join(text_parts)
 
+                # Blocs machine égarés dans le canal des appels d'outils : on les remet
+                # dans le texte AVANT de décider si ce round est un round d'outils. Sans
+                # ça, un tour dont le seul « appel » était son bloc <sources> partait en
+                # round d'outils, recevait « Outil inconnu », et perdait ses sources.
+                if tool_calls:
+                    tool_calls, fuite = split_leaked_blocks(tool_calls)
+                    if fuite:
+                        logger.info(
+                            "[lecteur] bloc machine récupéré du canal tool_calls (%d car.)",
+                            len(fuite),
+                        )
+                        text = (text + "\n" + fuite).strip()
+
                 # ——— Round d'outils ———
                 if tool_calls:
                     plan = text.strip()
@@ -415,6 +554,21 @@ class ReaderLoop:
                 # ——— Réponse finale ———
                 self.final_raw_text = text
                 display = self._filter_final(text)
+                # Un round de contrôle doit AMÉLIORER la réponse, jamais la détruire.
+                # Mesuré le 14/09 : sur « épaisseur de la parclose 76527 », la lecture
+                # avait pourtant tranché juste (26), le contrôle a déclenché une reprise,
+                # et le modèle a rendu « Voici les corrections nécessaires pour le bloc `.
+                # </reponse_finale> » — la réponse était perdue. Le brouillon d'avant le
+                # contrôle vaut infiniment mieux qu'un moignon de méta-commentaire.
+                if control_rounds and _is_degenerate(display, self._draft_display):
+                    logger.warning(
+                        "[lecteur] round de contrôle dégénéré (%d car. contre %d) — "
+                        "le brouillon d'origine est conservé",
+                        len(display),
+                        len(self._draft_display),
+                    )
+                    display = self._draft_display
+                    self.trace["control_reverted"] = True
                 self.final_text = display
                 self.trace["rounds"].append(
                     {
@@ -449,6 +603,9 @@ class ReaderLoop:
                         ):
                             control_rounds += 1
                             self.trace["control_rounds"] = control_rounds
+                            # Le brouillon est mémorisé : si la reprise rend un moignon,
+                            # c'est lui qui sera servi (cf. _is_degenerate plus haut).
+                            self._draft_display = display
                             # Le brouillon reste dans l'historique du tour (pas dans la
                             # conversation persistée) : le lecteur corrige EN RELISANT.
                             self.messages.append({"role": "assistant", "content": text})
@@ -539,8 +696,10 @@ class ReaderLoop:
                 self.stopped_by = self.stopped_by or "budget"
             elif key in self._seen_calls:
                 precomputed = ToolResult(
-                    text="Appel identique déjà effectué dans ce tour : le résultat serait le même. "
-                    "Réponds avec ce que tu as lu, ou change de question / de document.",
+                    text="Tu as DÉJÀ lu cette cible dans ce tour : le résultat serait identique, "
+                    "reformuler la question ne fera pas apparaître autre chose sur la page. "
+                    "Relis ce qu'elle t'a rendu plus haut, puis change de PAGE ou de DOCUMENT, "
+                    "ou réponds avec ce que tu as.",
                     error=True,
                 )
                 self._stop_tools = True

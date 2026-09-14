@@ -48,7 +48,6 @@ def test_search_no_results_says_so_with_scope():
 def test_pages_text_marks_read_plates_and_out_of_range():
     reading = PageReading(
         document_id=405, page_no=111, answer="30",
-        convention="Cotation en bleu = épaisseur vitrage",
         survey=[{"repere": "Parclose 2636", "valeurs": [{"valeur": "30", "couleur": "bleu"}]}],
         citations=["Parclose 2636", "30"],
     )
@@ -61,7 +60,7 @@ def test_pages_text_marks_read_plates_and_out_of_range():
     assert "Ta question : « épaisseur de vitrage de la parclose 2636 »" in out
     assert "[page 110]\nCrémones" in out
     assert "[page 111] PLANCHE TECHNIQUE (aucun texte dans le PDF) — lue en image :" in out
-    assert "→ 30" in out and "Cotation en bleu" in out
+    assert "→ 30" in out
     assert "relevé pour « Parclose 2636 » : 30 (bleu)" in out
     assert "[page 112]\nSerrer" in out
     assert "[page 200] (hors du document : 124 pages)" in out
@@ -78,7 +77,6 @@ def test_plate_absent_never_yields_a_neighbour_value():
 def test_plate_ambiguous_refuses_to_choose():
     reading = PageReading(
         document_id=405, page_no=8, ambiguous=True,
-        convention="Cotation en bleu = épaisseur vitrage",
         survey=[{"repere": "Parclose 2636", "valeurs": [
             {"valeur": "30", "couleur": "bleu"}, {"valeur": "27", "couleur": "noir"}]}],
     )
