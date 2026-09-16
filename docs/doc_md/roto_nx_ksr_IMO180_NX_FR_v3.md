@@ -1392,8 +1392,8 @@ sont portées par le tableau de cette page.
 |---|---|---|---|
 | grand arc de cercle extérieur, fléché aux deux bouts, du haut du dormant jusqu'au niveau du vantail en traits interrompus | angle balayé par le vantail depuis le plan du dormant | aucune | [déduit du trait de cote] |
 | arc de cercle intérieur, fléché, du dormant jusqu'à la face intérieure du vantail gris | angle balayé par le vantail depuis le plan du dormant | aucune | [déduit du trait de cote] |
-| deux traits droits parallèles au vantail gris, fléchés aux deux bouts | distances prises le long du vantail | aucune | [rôle non écrit] |
-| trois traits verticaux fléchés, à droite du dormant, dans la zone de la paumelle | distances prises le long du dormant, dans la zone de la paumelle | aucune | [rôle non écrit] |
+| deux traits droits parallèles au vantail gris, fléchés aux deux bouts | distances prises le long du vantail, entre l’arc de débattement et la face du profilé ; le dessin ne montre pas sur quelles arêtes précises les flèches s’appuient | aucune | [déduit du trait de cote, extrémités non identifiables] |
+| trois traits verticaux fléchés, à droite du dormant, dans la zone de la paumelle | distances prises le long du dormant, dans la zone de la paumelle ; le dessin ne montre pas sur quelles arêtes précises les flèches s’appuient | aucune | [déduit du trait de cote, extrémités non identifiables] |
 
 Repères présents : aucune lettre ni aucun numéro n'est imprimé sur le dessin.
 
@@ -1870,6 +1870,11 @@ imprimées « P3 » et « P6 », une ligne de dessins (une vue en perspective pa
 et une dernière ligne qui reprend les repères des dessins entre crochets et leur associe
 une ou deux lignes de valeurs.
 
+Sur cette page, chaque valeur est une **longueur de palier** : l'en-tête de section le dit,
+et le repère numéroté du dessin montre SUR QUEL élément cette longueur est prise. Quand une
+colonne porte deux repères différents, ils désignent deux éléments distincts, l'un en haut,
+l'autre en bas, avec deux longueurs différentes.
+
 ### Vue : palier de compas P3 (cellule de gauche, désignation imprimée « P3 »)
 
 Ce que montre la vue : le palier vu en perspective presque de profil, la platine
@@ -1880,7 +1885,7 @@ platine.
 
 | Repère | Ligne imprimée | Ce que la valeur mesure sur le plan | Source du rôle |
 |---|---|---|---|
-| [1] | P3/130 : 4 mm |  | [rôle non écrit] |
+| [1] | P3/130 : 4 mm | longueur de l’ergot repéré [1], qui dépasse du bord de la platine, pour le palier de compas P3/130 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
 
 Repères présents : 1 (deux fois, une fois à chaque extrémité de la platine).
 Portée : palier de compas de désignation P3.
@@ -1894,8 +1899,8 @@ dépasse du bord gauche de la platine, plus long que l'ergot de la vue P3.
 
 | Repère | Ligne imprimée | Ce que la valeur mesure sur le plan | Source du rôle |
 |---|---|---|---|
-| [2] | P6/130 : 9 mm |  | [rôle non écrit] |
-| [2] | P6/150 : 9 mm |  | [rôle non écrit] |
+| [2] | P6/130 : 9 mm | longueur du téton repéré [2], qui dépasse du bord de la platine, pour le palier de compas P6/130 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
+| [2] | P6/150 : 9 mm | longueur du téton repéré [2], qui dépasse du bord de la platine, pour le palier de compas P6/150 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
 
 Repères présents : 2 (deux fois, une fois à chaque extrémité de la platine).
 Portée : palier de compas de désignation P6.
@@ -1918,7 +1923,7 @@ par la gauche, l'une à l'extrémité haute, l'autre à l'extrémité basse de l
 
 | Repère | Ligne imprimée | Ce que la valeur mesure sur le plan | Source du rôle |
 |---|---|---|---|
-| [1] | P3/130 : 3 mm |  | [rôle non écrit] |
+| [1] | P3/130 : 3 mm | longueur de l’élément repéré [1] aux deux extrémités de la platine, pour le palier d’angle P3/130 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
 
 Repères présents : 1 (deux fois, une fois à chaque extrémité de la platine).
 Portée : palier d'angle de désignation P3.
@@ -1932,10 +1937,10 @@ basse, où elle désigne un téton grisé qui dépasse du bord gauche.
 
 | Repère | Ligne imprimée | Ce que la valeur mesure sur le plan | Source du rôle |
 |---|---|---|---|
-| [2] | P6/130 : 3 mm |  | [rôle non écrit] |
-| [2] | P6/150 : 3 mm |  | [rôle non écrit] |
-| [3] | P6/130 : 9 mm |  | [rôle non écrit] |
-| [3] | P6/150 : 19 mm |  | [rôle non écrit] |
+| [2] | P6/130 : 3 mm | longueur de l’élément repéré [2], à l’extrémité HAUTE de la platine, pour le palier d’angle P6/130 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
+| [2] | P6/150 : 3 mm | longueur de l’élément repéré [2], à l’extrémité HAUTE de la platine, pour le palier d’angle P6/150 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
+| [3] | P6/130 : 9 mm | longueur de l’élément repéré [3], à l’extrémité BASSE de la platine, pour le palier d’angle P6/130 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
+| [3] | P6/150 : 19 mm | longueur de l’élément repéré [3], à l’extrémité BASSE de la platine, pour le palier d’angle P6/150 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
 
 Repères présents : 2 (extrémité haute), 3 (extrémité basse).
 Portée : palier d'angle de désignation P6.
@@ -1949,7 +1954,7 @@ basse, et désignent chacune une patte grisée qui dépasse du bord gauche du co
 
 | Repère | Ligne imprimée | Ce que la valeur mesure sur le plan | Source du rôle |
 |---|---|---|---|
-| [4] | P6/150 : 23 mm |  | [rôle non écrit] |
+| [4] | P6/150 : 23 mm | longueur de l’élément repéré [4] aux deux extrémités du corps, pour le pivot d’angle P6/150 | en-tête de section « 3.5 Longueurs de palier » + repère du dessin |
 
 Repères présents : 4 (deux fois, une fois à chaque extrémité du corps).
 Portée : pivot d'angle de désignation P6.
@@ -5444,7 +5449,7 @@ centre, traversée par l'axe horizontal en trait mixte que désigne le libellé.
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
 | 32 | du bord haut au bord bas de la lumière oblongue | [déduit du trait de cote] |
-| 12.3 |  | [rôle non écrit] |
+| 12.3 | du bord gauche au bord droit de la lumière oblongue, c'est-à-dire sa largeur ; les deux flèches sont tournées vers l'extérieur et la valeur est reportée à droite par un trait de renvoi | [déduit du trait de cote] |
 
 Repères présents : « Milieu de la poignée », libellé placé à droite de la vue, sa ligne de
 repère aboutissant sur l'axe horizontal en trait mixte.
@@ -5475,8 +5480,8 @@ trait mixte de la vue de gauche prolongé jusque dans la coupe.
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
 | 8 | de l'axe vertical en trait mixte de la coupe à une ligne verticale du profilé, à gauche | [déduit du trait de cote] |
-| 11 |  | [rôle non écrit] |
-| 4 |  | [rôle non écrit] |
+| 11 | du trait horizontal qui ferme le haut de la partie basse du profilé, celui qui part du crochet arrondi de gauche, au trait extérieur du bas de la coupe | [déduit du trait de cote] |
+| 4 | de l'arête extérieure gauche du profilé au premier trait vertical intérieur, celui qui rejoint le trait du bas de la coupe | [déduit du trait de cote] |
 
 Repères présents : « A – A » (titre de la coupe, imprimé en haut à droite de la vue).
 Mentions imprimées : « Selon gamme, il peut être nécessaire d'usiner une partie du
@@ -5504,16 +5509,16 @@ rectangle blanc qui sert de support aux cotes verticales.
 
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
-| 2,2 |  | [rôle non écrit] |
-| 9,3 |  | [rôle non écrit] |
-| 16,2 |  | [rôle non écrit] |
-| 12,3 |  | [rôle non écrit] |
-| 20 |  | [rôle non écrit] |
+| 2,2 | de la face du profilé où s'ouvre la rainure de ferrure au plan des deux épaulements en retrait de cette face, plan que marque le point plein servant d'origine aux deux cotes horizontales | [déduit du trait de cote] |
+| 9,3 | de ce même plan d'épaulement au fond de la rainure de ferrure, sur lequel aboutit la ligne d'axe en trait mixte descendue depuis la cote | [déduit du trait de cote] |
+| 16,2 | d'une arête à l'autre de l'ouverture de la rainure de ferrure, prise sur la face du profilé, aux deux arêtes où cette face s'interrompt | [déduit du trait de cote] |
+| 12,3 | d'une lèvre à l'autre de la rainure de ferrure, prise sur les faces en regard des deux épaulements, en retrait de l'ouverture | [déduit du trait de cote] |
+| 20 | de l'arête extrême du profilé, à gauche de la coupe, à la face du profilé où s'ouvre la rainure de ferrure | [déduit du trait de cote] |
 
-Les cotes 2,2 et 9,3 sont deux cotes horizontales enchaînées en haut de la vue, de part et
-d'autre d'un point de référence marqué par un point plein ; 16,2 et 12,3 sont deux cotes
-verticales emboîtées à gauche ; 20 est une cote horizontale sous la vue. Aucun libellé ne
-nomme ce que mesurent ces cinq cotes.
+Les cotes 2,2 et 9,3 sont deux cotes horizontales enchaînées en haut de la vue depuis un
+point de référence marqué par un point plein ; 16,2 et 12,3 sont deux cotes verticales
+emboîtées à gauche ; 20 est une cote horizontale sous la vue. Aucun libellé imprimé ne
+nomme ces cinq cotes : leur rôle est lu aux deux extrémités de leur trait de cote.
 
 ### Vue : crémone avec fouillot -6 (coupe horizontale, au centre)
 
@@ -5523,14 +5528,14 @@ de la vue.
 
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
-| 12 |  | [rôle non écrit] |
-| 6 |  | [rôle non écrit] |
-| 22 |  | [rôle non écrit] |
-| 30 |  | [rôle non écrit] |
+| 12 | d'une joue à l'autre de l'ouverture ménagée dans le profilé, relevée au niveau du dessus du boîtier de crémone | [déduit du trait de cote] |
+| 6 | de l'axe en trait mixte de la vue, celui de la tige teintée en rouge, à la joue droite de cette même ouverture | [déduit du trait de cote] |
+| 22 | du trait horizontal haut du repère « Axe de ferrure », celui qui traverse le boîtier de crémone par le milieu, à l'arête basse de la lèvre haute du crochet ménagé sur le flanc droit du profilé | [déduit du trait de cote] |
+| 30 | du même trait horizontal à l'arête basse du second crochet de ce flanc droit, à l'angle inférieur du flanc | [déduit du trait de cote] |
 | min. ø13 mm | cote horizontale portée sur la tige de fouillot teintée, en bas de la vue | libellé « min. ø13 mm » |
 
 Les cotes 12 et 6 sont deux cotes horizontales emboîtées en haut de la vue ; 22 et 30 sont
-deux cotes verticales emboîtées à droite de la vue.
+deux cotes verticales emboîtées à droite de la vue, à partir du même trait horizontal.
 Repères présents : « Axe de ferrure », libellé composé verticalement à gauche de la vue,
 sur la ligne de rappel de deux traits horizontaux.
 Titre imprimé de la vue : « Crémone avec fouillot -6 ».
@@ -5543,7 +5548,7 @@ d'un logement carré en bas.
 
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
-| 8 |  | [rôle non écrit] |
+| 8 | de l'arête haute du logement carré tracé en croix à la face d'extrémité de l'adaptateur, en bas de la vue | [déduit du trait de cote] |
 
 La cote 8 est une cote verticale à droite du corps hachuré.
 Titre imprimé de la vue : « Adaptateur carré de 7 mm ».
@@ -5587,8 +5592,8 @@ apparaissent les trois perçages déjà exécutés.
 | Ø10 | diamètre du foret de gauche, désigné par une ligne de repère | libellé « Ø10 » |
 | Ø10 | diamètre du foret de droite, désigné par une ligne de repère | libellé « Ø10 » |
 | Ø12 | diamètre du perçage central du profilé, désigné par une ligne de repère qui aboutit sur la face du profilé | libellé « Ø12 » |
-| 12 |  | [rôle non écrit] |
-| 14 avec Fouillot -6 |  | [rôle non écrit] |
+| 12 | diamètre du perçage central : ligne du bloc d'annotations placée en retrait juste au-dessus de « Ø12 », dont la ligne de repère aboutit sur la face du profilé, sous la pointe du foret central | libellé « Ø12 » |
+| 14 | même perçage central, dans le cas du fouillot -6 | libellé « 14 avec Fouillot -6 » |
 
 Mentions imprimées : le bloc d'annotations de cette vue est composé, de haut en bas,
 « Ø10 », « 12 », « 14 avec Fouillot -6 », « Ø12 » ; seules les lignes « Ø10 » et « Ø12 »
@@ -5602,8 +5607,8 @@ un point plein.
 
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
-| 20 |  | [rôle non écrit] |
-| 28 | profondeur minimale de fraisage, cotée horizontalement sous la coupe | libellé « Profondeur fraisage min. » |
+| 20 | de l'arête extrême du profilé, à gauche de la coupe, au point de référence marqué d'un point plein, qui tombe sur la face du profilé où s'ouvre la rainure de ferrure | [déduit du trait de cote] |
+| 28 | profondeur minimale de fraisage, cotée horizontalement sous la coupe, du même point de référence au trait interrompu tracé dans le profilé | libellé « Profondeur fraisage min. » |
 
 Repères présents : « Axe de fouillot  8 / 15 », libellé dont la flèche aboutit sur l'axe
 vertical en trait mixte de la coupe.
@@ -5617,7 +5622,7 @@ symétrique par rapport à l'axe vertical en trait mixte.
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
 | min. 65 | longueur du fraisage oblong, d'une extrémité à l'autre | [déduit du trait de cote] |
-| 12,3 |  | [rôle non écrit] |
+| 12,3 | d'un grand côté à l'autre du fraisage oblong teinté : sa largeur, entre les deux traits qui le bordent sur toute la longueur de la vue | [déduit du trait de cote] |
 
 Repères présents : « Fouillot  8 / 15 » (titre au-dessus de la vue).
 Mentions imprimées de cette vue et de son encadré : « Fraisage boîtier de crémone » ;
@@ -5651,7 +5656,7 @@ carrée dirigée vers la gauche.
 
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
-| 58 |  | [rôle non écrit] |
+| 58 | de la face de la rosace tournée vers le profilé, celle d'où sortent les galets, à l'arête extérieure du coude de la poignée, la plus éloignée de la rosace | [déduit du trait de cote] |
 | Ø 10 mm | diamètre des galets, désignés par une ligne de repère à deux branches aboutissant sur les deux galets | libellé « Galets Ø 10 mm » |
 | 7 mm | dimension de la tige carrée, désignée par une ligne de repère aboutissant sur la tige | libellé « tige carrée 7 mm » |
 
@@ -5945,10 +5950,10 @@ miroir, une fois pour chaque ouvrant.
 | MV2 | de l'arête haute de la feuillure au bord haut de la troisième gâche du montant latéral | [déduit du trait de cote] |
 | MV3 | de l'arête haute de la feuillure au bord haut de la quatrième gâche du montant latéral | [déduit du trait de cote] |
 | MV4 | de l'arête haute de la feuillure au bord haut de la cinquième gâche du montant latéral | [déduit du trait de cote] |
-| 53 |  | [rôle non écrit] |
+| 53 | de l'axe de jonction des deux ouvrants à la gâche de la traverse basse de l'ouvrant de gauche ; à cette extrémité, le trait de renvoi descend d'un point pris entre les deux arêtes de la gâche, sans coïncider avec l'une d'elles | [déduit du trait de cote] |
 | 18 | de l'axe de jonction des deux ouvrants à l'arête de la première gâche de la traverse basse située de l'autre côté de cet axe | [déduit du trait de cote] |
 | 86,5 | de cette même arête à l'arête opposée de la gâche voisine de la traverse basse | [déduit du trait de cote] |
-| 12 |  | [rôle non écrit] |
+| 12 | du court trait horizontal tracé dans la feuillure de la traverse basse de l'ouvrant de droite, entre l'arête intérieure de la feuillure et le haut des gâches, au trait horizontal sur lequel ces gâches s'appuient ; une seule flèche est tracée, par-dessous, sa pointe sur ce trait | [déduit du trait de cote] |
 | MH1 | de l'arête intérieure de la deuxième gâche de la traverse basse (en partant du montant latéral extérieur) à l'axe de jonction des deux ouvrants | [déduit du trait de cote] |
 | MH 2 | de l'arête intérieure de la première gâche de la traverse basse (en partant du montant latéral extérieur) à l'axe de jonction des deux ouvrants | [déduit du trait de cote] |
 
@@ -7229,8 +7234,8 @@ montant gauche, à mi-hauteur.
 | x | angle porté par l'arc fléché tracé en haut à gauche, entre le montant et la traverse oblique | libellé « X Suivant l'angle de basculement il convient de tracer l'emplacement de la gâche de fermeture » |
 | x | cote oblique tirée le long de la traverse oblique, du montant gauche vers la gâche de cette traverse | libellé « X Suivant l'angle de basculement il convient de tracer l'emplacement de la gâche de fermeture » |
 | x | seconde cote oblique tirée le long de la traverse oblique, plus longue que la précédente | libellé « X Suivant l'angle de basculement il convient de tracer l'emplacement de la gâche de fermeture » |
-| 3 |  | [rôle non écrit] |
-| 3 |  | [rôle non écrit] |
+| 3 | en haut à gauche du cintre : du trait oblique tracé en travers du cintre depuis la pièce dessinée hors du châssis, celui sur lequel s'appuient la pointe de l'arc de l'angle « x » et celle de la longue cote oblique « x », au trait parallèle qui passe par la petite arête de la gâche du cintre | [déduit du trait de cote] |
+| 3 | à droite du cintre : du trait oblique tracé en travers du cintre depuis la pièce dessinée hors du châssis, à droite, au trait parallèle qui passe par la petite arête de la gâche voisine, dans la feuillure du cintre | [déduit du trait de cote] |
 | 190 | cote verticale de droite, celle que désigne « F-F ouvrant » : du trait horizontal tiré de l'angle haut du châssis au trait horizontal tiré du bas du cintre | libellé « F-F ouvrant » |
 | 45 | du trait horizontal qui passe par le haut de la pièce fixée dans la feuillure du montant droit, au bas du cintre, au trait horizontal qui passe par son milieu | [déduit du trait de cote] |
 | S | de la ligne de référence basse du châssis au trait de renvoi de la première pièce de ferrure dessinée détachée à gauche | [déduit du trait de cote] |
@@ -7240,7 +7245,7 @@ montant gauche, à mi-hauteur.
 | GH | du trait d'axe qui passe par le demi-cercle du montant gauche au trait court tracé au-dessus de la traverse basse | [déduit du trait de cote] |
 | MV1 | de la ligne de référence basse du châssis à la gâche basse de la feuillure du montant droit | [déduit du trait de cote] |
 | MV2 | de la ligne de référence basse du châssis à la gâche située au-dessus de la précédente, même montant | [déduit du trait de cote] |
-| 12 |  | [rôle non écrit] |
+| 12 | du court trait horizontal tracé dans la feuillure de la traverse basse, entre l'arête intérieure de la feuillure et le haut des gâches, au trait horizontal sur lequel ces gâches s'appuient ; les deux flèches sont tournées vers l'intérieur, l'une par-dessus, l'autre par-dessous | [déduit du trait de cote] |
 | 24 | de l'arête de feuillure du montant gauche à l'arête de la première gâche de la traverse basse | [déduit du trait de cote] |
 | 86,5 | de cette même arête de la première gâche à l'arête opposée de la gâche voisine de la traverse basse | [déduit du trait de cote] |
 | MH1 | de l'arête de feuillure du montant gauche à l'arête de la gâche de la traverse basse la plus éloignée de ce montant | [déduit du trait de cote] |
@@ -7283,8 +7288,8 @@ monté dans la feuillure ; une double flèche grise horizontale traverse le prof
 
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
-| -3.0 | extrémité gauche de la double flèche grise de réglage | [rôle non écrit] |
-| +2.0 | extrémité droite de la double flèche grise de réglage | [rôle non écrit] |
+| -3.0 | course de la flèche grise de gauche : du trait vertical du profilé sur lequel les deux flèches grises se rejoignent, vers la gauche du dessin, du côté opposé au palier | [déduit du trait de cote] |
+| +2.0 | course de la flèche grise de droite : du même trait vertical du profilé, vers la droite du dessin, du côté du palier | [déduit du trait de cote] |
 
 Repères présents : [A] (deux fois, sur les deux vis de réglage du palier).
 Mentions imprimées : « Pour le réglage, utiliser une clé six-pans de 4 mm. », « Faire un
@@ -8306,11 +8311,10 @@ Ce que montre la vue : l'angle bas de la fenêtre, dormant teinté en rose et ou
 | Cote | Ce qu'elle mesure sur le plan | Source du rôle |
 |---|---|---|
 | + 2,0 mm | course du réglage en hauteur vers le haut, dans le sens de la flèche rouge supérieure | [déduit du trait de cote] |
-| 1,0 mm | course du réglage en hauteur vers le bas, dans le sens de la flèche rouge inférieure ; l'image imprime « - 1,0 mm » | [déduit du trait de cote] |
-| - 0,5 mm |  | [rôle non écrit] |
+| - 1,0 mm | course du réglage en hauteur vers le bas, dans le sens de la flèche rouge inférieure | [déduit du trait de cote] |
 
 Mentions imprimées : titre de la vue en gras « réglage hauteur ».
-Non lisible : le relevé de texte porte deux libellés superposés au même emplacement, juste sous « + 2,0 mm » : « - 0,5 mm » et « 1,0 mm ». Sur l'image, seul « - 1,0 mm » est lisible, le groupe « 0,5 » étant recouvert par « 1,0 » et le signe « - » visible étant celui de « - 0,5 mm ». Les deux valeurs figurent donc dans le relevé de cette vue, « - 0,5 mm » sans rôle.
+Non lisible : aucune cote de cette vue n'est illisible. La valeur « - 0,5 mm » que porte le fichier au même emplacement est masquée à l'impression ; elle est reportée en fin de page.
 
 ### Vue : réglage latéral du palier / pivot d'angle (perspective de l'angle bas, vue du côté intérieur)
 
@@ -8340,6 +8344,16 @@ Mention imprimée en gras sous la vue du réglage hauteur : « Après le réglag
 Symboles de cette page : les valeurs de compression sont imprimées sans espace avant l'unité, « ± 0,5mm » ; elles sont recopiées telles quelles.
 
 Portée : Roto NX KSR sur PVC, ferrure NT Designo II, réglage du compas et du palier / pivot d'angle.
+
+### Texte du fichier non visible à l'impression
+
+Valeur relevée : **- 0,5 mm**, au même emplacement que la course de réglage en hauteur
+vers le bas, juste sous « + 2,0 mm ». Le fichier porte deux libellés superposés à cet
+endroit, « - 0,5 mm » et « 1,0 mm » : un rectangle de la couleur du fond recouvre le
+groupe « 0,5 mm » et « 1,0 » est imprimé par-dessus, de sorte que la page montre
+« - 1,0 mm ». Seul le signe « - » appartenant à « - 0,5 mm » reste visible. Aucun trait de
+cote n'est attaché à cette valeur : la course de réglage en hauteur vers le bas imprimée
+par cette page est **- 1,0 mm**.
 
 ---
 
