@@ -192,7 +192,7 @@ def _generate_tree_draft(
             temperature=0.1,
             response_format_json=True,
             timeout_seconds=120,
-            model=settings.CONTEXTUAL_ENRICHMENT_MODEL or settings.MODEL_FAST,
+            model=settings.MODEL_FAST,
         )
         data = _parse_json_with_repair(raw)
         draft = DraftTree.model_validate(data)

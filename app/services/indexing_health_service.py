@@ -92,37 +92,6 @@ def _fetch_chunk_id_sets(
     return all_ids, anchor_ids
 
 
-def _fetch_enrichment_counts(session: Session, doc_ids: List[int]) -> Dict[int, dict]:
-    """Nombre de chunks contextuels (L2) par document.
-
-    Remplace l'ancien volet KAG (entités/relations/catégories) retiré le 2026-07-28 :
-    la question utile est désormais « ce document a-t-il ses synthèses ? », puisque
-    text_only ne les produit plus et qu'un passage enrichment_only est requis.
-    """
-    counts: Dict[int, dict] = {d: {"enrichment_count": 0} for d in doc_ids}
-    if not doc_ids:
-        return counts
-
-    rows = session.execute(
-        text(
-            """
-            SELECT document_id, COUNT(*)
-            FROM documentchunk
-            WHERE document_id = ANY(:ids)
-              AND COALESCE(
-                  metadata_json->>'content_type',
-                  metadata_->>'content_type',
-                  ''
-              ) = 'contextual_enrichment'
-            GROUP BY document_id
-            """
-        ),
-        {"ids": doc_ids},
-    ).all()
-    for did, n in rows:
-        counts[int(did)]["enrichment_count"] = int(n or 0)
-    return counts
-
 
 def _text_health(summary: dict) -> dict:
     """BM25 (tsv_content) est une colonne générée à l'insertion des chunks : dès que le
@@ -187,31 +156,18 @@ def _colpali_health(
     return {"status": "ok", **detail}
 
 
-def _enrichment_health(enrichment_counts: dict, chunk_count: int) -> dict:
-    if not settings.CONTEXTUAL_ENRICHMENT_ENABLED:
-        return {"status": "disabled", **enrichment_counts}
-    if chunk_count == 0:
-        return {"status": "missing", **enrichment_counts}
-    status = "ok" if enrichment_counts["enrichment_count"] > 0 else "missing"
-    return {"status": status, **enrichment_counts}
+def _overall_and_mode(text_h: dict, colpali_h: dict) -> tuple[str, Optional[str]]:
+    """Verdict global + mode de retraitement suggéré (aligné sur ReindexRequest.mode).
 
-
-def _overall_and_mode(
-    text_h: dict, colpali_h: dict, enrichment_h: dict
-) -> tuple[str, Optional[str]]:
-    """Verdict global + mode de retraitement suggéré (aligné sur ReindexRequest.mode)."""
+    Deux axes depuis le retrait des chunks contextuels (2026-09-16) : le texte et ColPali.
+    """
     text_broken = text_h["status"] == "missing"
     colpali_broken = colpali_h["status"] in ("desync", "missing", "partial")
-    enrichment_broken = enrichment_h["status"] == "missing"
 
     if text_broken:
         return "error", "full"
-    if colpali_broken and enrichment_broken:
-        return "warning", "full"
     if colpali_broken:
         return "warning", "colpali_only"
-    if enrichment_broken:
-        return "warning", "enrichment_only"
     if colpali_h["status"] == "unknown":
         return "warning", None
     return "ok", None
@@ -228,7 +184,6 @@ def build_indexing_health_bulk(
 
     summaries = _fetch_chunk_summaries(session, doc_ids)
     all_ids, anchor_ids = _fetch_chunk_id_sets(session, doc_ids)
-    enrichment_counts = _fetch_enrichment_counts(session, doc_ids)
 
     if settings.COLPALI_ENABLED:
         from app.services.lancedb_service import get_colpali_chunk_ids_by_document
@@ -248,15 +203,10 @@ def build_indexing_health_bulk(
             all_ids=all_ids.get(did, set()),
             anchor_ids=anchor_ids.get(did, set()),
         )
-        enrichment_h = _enrichment_health(
-            enrichment_counts.get(did, {"enrichment_count": 0}),
-            summary["chunk_count"],
-        )
-
         if doc.processing_status in _IN_PROGRESS_STATUSES:
             overall, suggested = "in_progress", None
         else:
-            overall, suggested = _overall_and_mode(text_h, colpali_h, enrichment_h)
+            overall, suggested = _overall_and_mode(text_h, colpali_h)
 
         result[did] = {
             "document_id": did,
@@ -264,7 +214,6 @@ def build_indexing_health_bulk(
             "suggested_reindex_mode": suggested,
             "text": text_h,
             "colpali": colpali_h,
-            "enrichment": enrichment_h,
             "classification_status": doc.classification_status,
             "processing_status": doc.processing_status,
         }
@@ -276,20 +225,17 @@ def build_indexing_health_bulk(
 ACTION_NONE = "none"
 ACTION_COLPALI_REPAIR = "colpali_repair"
 ACTION_COLPALI_ONLY = "colpali_only"
-ACTION_ENRICHMENT_ONLY = "enrichment_only"
 ACTION_FULL = "full"
 
 _ACTION_LABELS = {
     ACTION_COLPALI_REPAIR: "Réparer ColPali",
     ACTION_COLPALI_ONLY: "Retraiter ColPali",
-    ACTION_ENRICHMENT_ONLY: "Régénérer les synthèses",
     ACTION_FULL: "Retraitement complet",
 }
 # "free" = aucun passage du modèle (secondes) ; "heavy" = ré-embedding / appels LLM.
 _ACTION_COSTS = {
     ACTION_COLPALI_REPAIR: "free",
     ACTION_COLPALI_ONLY: "heavy",
-    ACTION_ENRICHMENT_ONLY: "heavy",
     ACTION_FULL: "heavy",
 }
 
@@ -309,7 +255,6 @@ def recommended_action(health: dict) -> dict:
     """
     text_h = health.get("text") or {}
     colpali_h = health.get("colpali") or {}
-    enrichment_h = health.get("enrichment") or {}
 
     if health.get("overall") == "in_progress":
         return {
@@ -328,7 +273,6 @@ def recommended_action(health: dict) -> dict:
         }
 
     colpali_status = colpali_h.get("status")
-    enrichment_broken = enrichment_h.get("status") == "missing"
 
     if colpali_status == "desync" and (colpali_h.get("legacy_count") or 0) > 0:
         orphans = colpali_h.get("orphan_count") or 0
@@ -358,13 +302,6 @@ def recommended_action(health: dict) -> dict:
                 f"{colpali_h.get('missing_count', 0)} page(s) sans index visuel "
                 f"({colpali_h.get('indexed_pages', 0)}/{colpali_h.get('expected_pages', 0)})."
             )
-        if enrichment_broken:
-            return {
-                "action": ACTION_FULL,
-                "label": _ACTION_LABELS[ACTION_FULL],
-                "cost": "heavy",
-                "reason": reason + " Les synthèses manquent également.",
-            }
         return {
             "action": ACTION_COLPALI_ONLY,
             "label": _ACTION_LABELS[ACTION_COLPALI_ONLY],
@@ -372,13 +309,6 @@ def recommended_action(health: dict) -> dict:
             "reason": reason,
         }
 
-    if enrichment_broken:
-        return {
-            "action": ACTION_ENRICHMENT_ONLY,
-            "label": _ACTION_LABELS[ACTION_ENRICHMENT_ONLY],
-            "cost": "heavy",
-            "reason": "Aucun chunk contextuel : le retrieval texte perd les synthèses de fenêtre.",
-        }
 
     if colpali_status == "unknown":
         return {
@@ -464,7 +394,6 @@ def build_indexing_health_issues(health: dict) -> List[str]:
     issues: List[str] = []
     text_h = health.get("text") or {}
     colpali_h = health.get("colpali") or {}
-    enrichment_h = health.get("enrichment") or {}
 
     if text_h.get("status") == "missing":
         issues.append("Texte : aucun chunk indexé — retraitement complet requis.")
@@ -484,11 +413,5 @@ def build_indexing_health_issues(health: dict) -> List[str]:
         issues.append("ColPali : aucun patch indexé pour ce document.")
     elif status == "unknown":
         issues.append("ColPali : scan LanceDB en échec — état de sync inconnu.")
-
-    if enrichment_h.get("status") == "missing":
-        issues.append(
-            "Chunks contextuels : aucune synthèse pour ce document — "
-            "retraiter en mode enrichment_only."
-        )
 
     return issues

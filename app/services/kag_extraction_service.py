@@ -951,7 +951,6 @@ def _load_l1_chunks_by_page(session: Session, document_id: int) -> Dict[int, Lis
         # Accepte les chunks-feuilles L1 : vision (« semantic_leaf ») ET texte enrichi
         # page-level (« page_raw_enriched »). Les ~17 docs à 0 couverture KAG passaient par
         # le pipeline page_raw_enriched et étaient ignorés ici — c'est LA cause racine.
-        # On exclut « contextual_enrichment » (L2 dérivé) pour ne pas dupliquer les pages.
         if meta.get("content_type") not in (None, "semantic_leaf", "page_raw_enriched"):
             continue
         page_no = meta.get("page_no") or meta.get("page_start")

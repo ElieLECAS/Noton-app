@@ -191,8 +191,8 @@ class TestProcessDocumentIndexingTextOnly:
 
 
 class TestSeparationCouchesSemantiques:
-    """Répartition rapide/lent : text_only n'exécute QUE l'extraction,
-    enrichment_only porte les chunks contextuels (passage de nuit)."""
+    """Répartition des modes : text_only n'exécute que l'extraction texte,
+    full y ajoute la synchronisation ColPali."""
 
     def _run(self, tmp_path, mode):
         pdf_path = str(tmp_path / "test.pdf")
@@ -208,13 +208,10 @@ class TestSeparationCouchesSemantiques:
              mock.patch("app.services.document_indexing_service.sync_colpali_page_anchors"), \
              mock.patch("app.services.document_indexing_service._extract_and_persist_chunks", return_value=3), \
              mock.patch("app.config.settings.KAG_ENABLED", True), \
-             mock.patch("app.config.settings.CONTEXTUAL_ENRICHMENT_ENABLED", True), \
              mock.patch("app.services.kag_extraction_service.extract_kag_for_document",
                         return_value={"entities": 1, "relations": 1, "status": "ok"}) as kag, \
              mock.patch("app.services.kag_extraction_service.embed_kag_entities_for_document"), \
              mock.patch("app.services.kag_extraction_service.cleanup_kag_for_document"), \
-             mock.patch("app.services.contextual_enrichment_service.run_contextual_enrichment_for_document",
-                        return_value={"chunks": 4, "status": "ok"}) as enrich, \
              mock.patch("app.services.document_run.is_processing_run_current", return_value=True), \
              mock.patch("app.services.file_conversion.ensure_pdf_for_ocr", return_value=pdf_path):
 
@@ -222,25 +219,24 @@ class TestSeparationCouchesSemantiques:
             result = process_document_indexing(
                 document_id=1, file_path=pdf_path, user_id=99, mode=mode
             )
-        return result, enrich
+        return result
 
-    def test_text_only_ne_lance_pas_les_chunks_contextuels(self, tmp_path):
-        result, enrich = self._run(tmp_path, IndexingMode.TEXT_ONLY)
+    def test_text_only_extrait_le_texte_sans_rien_d_autre(self, tmp_path):
+        result = self._run(tmp_path, IndexingMode.TEXT_ONLY)
 
         assert result["status"] == "completed"
-        enrich.assert_not_called()
+        # La couche d'enrichissement a été supprimée le 2026-09-16 : aucun mode ne la porte.
         assert "enrichment" not in result
 
-    def test_enrichment_only_lance_les_chunks_contextuels(self, tmp_path):
-        result, enrich = self._run(tmp_path, IndexingMode.ENRICHMENT_ONLY)
+    def test_full_extrait_le_texte(self, tmp_path):
+        result = self._run(tmp_path, IndexingMode.FULL)
 
-        enrich.assert_called_once()
-        assert result["enrichment"]["status"] == "ok"
+        assert result["status"] == "completed"
+        assert result["chunks"] == 3
 
-    def test_full_lance_tout(self, tmp_path):
-        result, enrich = self._run(tmp_path, IndexingMode.FULL)
-
-        enrich.assert_called_once()
+    def test_le_mode_enrichment_only_n_existe_plus(self):
+        assert not hasattr(IndexingMode, "ENRICHMENT_ONLY")
+        assert {m.value for m in IndexingMode} == {"full", "text_only", "colpali_only"}
 
 
 class TestProcessDocumentIndexingColpaliOnly:

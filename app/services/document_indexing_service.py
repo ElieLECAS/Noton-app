@@ -1,16 +1,15 @@
 """
 Pipeline d'indexation documentaire unifié.
 
-Quatre modes, pensés pour pouvoir séparer un passage RAPIDE d'un passage LOURD :
-  - full            : extraction + chunks contextuels + ColPali (tout)
-  - text_only       : extraction SEULEMENT (ni chunks contextuels, ColPali inchangé)
-                      → rapide, en journée sur tout le corpus
-  - enrichment_only : chunks contextuels (fenêtres de 3 pages, texte + vision) sur les
-                      chunks EXISTANTS → lent (appels LLM par batch), à lancer
-                      séparément (typiquement la nuit)
-  - colpali_only    : re-sync ColPali uniquement (chunks texte inchangés)
+Trois modes :
+  - full         : extraction texte + ColPali
+  - text_only    : extraction texte SEULEMENT (ColPali inchangé)
+  - colpali_only : re-sync ColPali uniquement (chunks texte inchangés)
 
-text_only puis enrichment_only aboutit au MÊME état final que full.
+La couche « chunks contextuels » (synthèses L2 réécrites par un LLM sur des fenêtres de
+3 pages) a été SUPPRIMÉE le 2026-09-16 : elle réécrivait le document au lieu de le
+transcrire, entrait dans la matière lue par le générateur mêlée au texte source, et ne
+pesait que 0,7 % du corpus de recherche. Le mode ``enrichment_only`` disparaît avec elle.
 
 Deux voies d'extraction du texte (paramètre ``extractor``) :
   - vision : rendu PNG + mistral-small (gère les pages sans couche texte)
@@ -45,7 +44,6 @@ logger = logging.getLogger(__name__)
 
 CONTENT_TYPE_PAGE_ANCHOR = "page_anchor"
 CONTENT_TYPE_SEMANTIC_LEAF = "semantic_leaf"
-CONTENT_TYPE_CONTEXTUAL_ENRICHMENT = "contextual_enrichment"
 
 # Postgres/psycopg refuse tout octet NUL (0x00) dans une colonne texte (String/Text) —
 # vérification CLIENT-SIDE avant même l'envoi au serveur. JSONB n'a pas ce problème
@@ -70,10 +68,6 @@ class IndexingMode(str, Enum):
     FULL = "full"
     TEXT_ONLY = "text_only"
     COLPALI_ONLY = "colpali_only"
-    # Chunks contextuels seuls : régénère les synthèses L2 (fenêtres de 3 pages,
-    # texte + vision) sur les chunks EXISTANTS, puis ré-embarque. Ni extraction texte,
-    # ni ColPali. C'est le passage LOURD, séparé du passage rapide text_only.
-    ENRICHMENT_ONLY = "enrichment_only"
 
 
 class TextExtractor(str, Enum):
@@ -163,10 +157,9 @@ def process_document_indexing(
     _set_progress(document_id, 10)
 
     chunk_count = 0
-    enrichment_stats: dict = {"chunks": 0, "status": "disabled"}
 
     try:
-        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY, IndexingMode.ENRICHMENT_ONLY):
+        if mode in (IndexingMode.FULL, IndexingMode.TEXT_ONLY):
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
 
@@ -186,58 +179,6 @@ def process_document_indexing(
                         pdf_path,
                         extractor=extractor,
                     )
-            elif mode == IndexingMode.ENRICHMENT_ONLY:
-                # Chunks EXISTANTS : on compte seulement (pour finalize). Les synthèses L2
-                # sont purgées puis régénérées par run_contextual_enrichment_for_document,
-                # donc rien à nettoyer ici — et l'index ColPali reste intact.
-                _set_progress(document_id, 30)
-                ld.info(
-                    "[Indexing] Chunks contextuels seuls — chunks existants document_id=%s",
-                    document_id,
-                )
-                with Session(engine) as session:
-                    chunk_count = session.execute(
-                        text("SELECT count(*) FROM documentchunk WHERE document_id = :d AND is_leaf = true"),
-                        {"d": document_id},
-                    ).scalar() or 0
-
-            if _aborted():
-                return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
-
-            # Couche sémantique lourde (chunks contextuels) : plusieurs appels LLM par
-            # batch de 3 pages, soit l'essentiel du temps de traitement. SAUTÉE en
-            # text_only — qui devient un passage rapide « extraction seule »
-            # utilisable en journée sur tout le corpus — et portée par enrichment_only,
-            # lancé séparément (typiquement la nuit). Enchaîner les deux aboutit au même
-            # état final que full.
-            runs_semantic_layers = mode in (
-                IndexingMode.FULL,
-                IndexingMode.ENRICHMENT_ONLY,
-            )
-
-            # --- 2. Chunks contextuels inter-pages → L2 contextual_enrichment ---
-            # Idempotent : run_contextual_enrichment_for_document purge les L2 existants
-            # avant de régénérer, donc relancer enrichment_only ne duplique rien.
-            if runs_semantic_layers and settings.CONTEXTUAL_ENRICHMENT_ENABLED:
-                _set_progress(document_id, 60)
-                ld.info(
-                    "[Indexing] Enrichissement contextuel document_id=%s",
-                    document_id,
-                )
-                try:
-                    from app.services.contextual_enrichment_service import (
-                        run_contextual_enrichment_for_document,
-                    )
-
-                    enrichment_stats = run_contextual_enrichment_for_document(document_id)
-                except Exception as exc:
-                    logger.error(
-                        "[Indexing] Enrichissement échoué document_id=%s (non bloquant) : %s",
-                        document_id,
-                        exc,
-                        exc_info=True,
-                    )
-                    enrichment_stats = {"chunks": 0, "status": "failed"}
 
             if _aborted():
                 return {"document_id": document_id, "status": "aborted", "reason": "stale_run"}
@@ -250,19 +191,36 @@ def process_document_indexing(
             ld.info("[Indexing] ColPali sync document_id=%s", document_id)
             sync_colpali_page_anchors(document_id, pdf_path)
 
+        # Markdown augmenté : ses lignes BM25 viennent du FICHIER, pas de l'extraction, mais
+        # les purges de chunks ci-dessus les emportent. On les reconstruit systématiquement —
+        # sinon un retraitement ferait disparaître le document du corpus lexical enrichi,
+        # en silence.
+        try:
+            from app.services.page_markdown_service import has_markdown, sync_chunks
+
+            if has_markdown(document_id):
+                with Session(engine) as md_session:
+                    n_md = sync_chunks(md_session, document_id)
+                ld.info(
+                    "[Indexing] Markdown augmenté resynchronisé — %d page(s) document_id=%s",
+                    n_md,
+                    document_id,
+                )
+        except Exception as exc:  # noqa: BLE001 - jamais bloquant pour l'indexation
+            logger.warning(
+                "[Indexing] resynchronisation du markdown échouée document_id=%s : %s",
+                document_id,
+                exc,
+            )
+
         _finalize_document(document_id, chunk_count)
-        semantic_ran = mode in (IndexingMode.FULL, IndexingMode.ENRICHMENT_ONLY)
         ld.info(
-            "[Indexing] FIN OK document_id=%s mode=%s chunks=%s enrichment=%s",
+            "[Indexing] FIN OK document_id=%s mode=%s chunks=%s",
             document_id,
             mode.value,
             chunk_count,
-            enrichment_stats if semantic_ran else "n/a (text_only)",
         )
-        result = {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
-        if semantic_ran:
-            result["enrichment"] = enrichment_stats
-        return result
+        return {"document_id": document_id, "chunks": chunk_count, "status": "completed"}
 
     except Exception as exc:
         logger.error("[Indexing] Échec document_id=%s: %s", document_id, exc, exc_info=True)

@@ -12,6 +12,10 @@ Fonctions principales :
     (``CAG_BUDGET_BY_INTENT``). Signature de sortie compatible (dict system).
   * ``select_cag_images`` — PNG UNIQUEMENT pour des pages réellement packées dans le
     contexte (alignement texte/visuel), avec légendes pour relier image ↔ document.
+
+``build_image_only_context`` (manifeste sans texte de page, 14/09) a été supprimée le
+2026-09-16 : le générateur reçoit de nouveau le texte des pages, markdown augmenté en
+priorité, en plus de leurs PNG.
 """
 from __future__ import annotations
 
@@ -95,6 +99,39 @@ def invalidate_document_fulltext_cache(document_id: Optional[int] = None) -> Non
         _leaf_cache.pop(int(document_id), None)
 
 
+def _load_page_records(session: Session, document_id: int) -> List[LeafRecord]:
+    """Matière LUE par le générateur : le markdown augmenté de la page quand il existe,
+    sinon les fragments indexés.
+
+    C'est la seule substitution du lot. Mesuré le 15/09 sur 62 questions, page de preuve
+    seule : PNG + fragments 12/13 sans gain, **PNG + markdown de page 96,8 % contre 85,5 %
+    pour le PNG seul**. Le motif est qu'un fragment n'est pas une page — 4 à 10 fragments
+    par page, un tableau coupé entre deux perd son en-tête.
+
+    ``_load_leaf_records`` reste utilisé tel quel par ``profile_document`` : sa détection
+    « document muet » doit continuer de juger le texte RÉELLEMENT extrait du PDF, pas une
+    transcription écrite à la main.
+    """
+    from app.services.page_markdown_service import load_page_records
+
+    try:
+        records = load_page_records(document_id)
+    except Exception as exc:  # noqa: BLE001 - un markdown illisible ne casse pas le tour
+        logger.warning(
+            "[CAG] markdown de page illisible (doc %s) : %s — repli sur les fragments",
+            document_id,
+            exc,
+        )
+        records = None
+
+    if records:
+        logger.info(
+            "[CAG] doc=%s — markdown augmenté utilisé (%d page(s))", document_id, len(records)
+        )
+        return records
+    return _load_leaf_records(session, document_id)
+
+
 def _load_leaf_records(session: Session, document_id: int) -> List[LeafRecord]:
     """Chunks feuilles (L1) d'un document, aplatis en (page, index, texte), ordre de lecture.
 
@@ -124,12 +161,14 @@ def _load_leaf_records(session: Session, document_id: int) -> List[LeafRecord]:
         chunk_text = _chunk_text(chunk)
         if not chunk_text:
             continue
-        # Les synthèses L2 sont du texte GÉNÉRÉ par un LLM. Sans marqueur, elles étaient
-        # présentées au modèle de génération mélangées au texte source, indiscernables —
-        # il pouvait donc citer une reformulation comme s'il s'agissait du document.
+        # Les synthèses L2 (`contextual_enrichment`) étaient du texte GÉNÉRÉ par un LLM,
+        # packé mêlé au texte source : le modèle pouvait citer une reformulation comme
+        # s'il s'agissait du document. La couche a été supprimée le 2026-09-16 ; ce filtre
+        # reste pour que d'éventuelles lignes résiduelles n'atteignent JAMAIS la matière
+        # lue, avant que la migration de purge ne soit passée partout.
         meta = getattr(chunk, "metadata_json", None) or getattr(chunk, "metadata_", None) or {}
         if isinstance(meta, dict) and meta.get("content_type") == "contextual_enrichment":
-            chunk_text = f"[synthèse générée par l'IA — non verbatim]\n{chunk_text}"
+            continue
         records.append((_resolve_chunk_page(chunk), chunk.chunk_index or 0, chunk_text))
     if ttl > 0:
         _leaf_cache[document_id] = (now + ttl, records)
@@ -626,6 +665,20 @@ def _render_document_block(
     if header_bits:
         lines.append(" | ".join(header_bits))
 
+    # Conventions du document (markdown augmenté) : unités, code couleur de cotation,
+    # sens de lecture. Sans elles, la légende d'une planche peut se trouver 17 pages plus
+    # loin que le tableau qui l'utilise, et le modèle tranche au hasard. Placées une fois
+    # en tête du bloc : les pages du document y sont contiguës.
+    if doc.id is not None:
+        try:
+            from app.services.page_markdown_service import conventions_block
+
+            conventions = conventions_block(int(doc.id))
+            if conventions:
+                lines.append(conventions)
+        except Exception as exc:  # noqa: BLE001 - jamais bloquant pour le packing
+            logger.debug("[CAG] conventions indisponibles (doc %s) : %s", doc.id, exc)
+
     pages_included: List[int] = []
     current_page = None
     for page, _, text in records:
@@ -644,130 +697,6 @@ def _render_document_block(
         lines.insert(1 if not header_bits else 2, f"Pages incluses : {span} ({scope})")
 
     return "\n".join(lines), pages_included
-
-
-def build_image_only_context(
-    session: Session,
-    passages: List[Dict[str, Any]],
-    *,
-    system_prompt: str,
-    max_documents: Optional[int] = None,
-    elected_document_ids: Optional[List[int]] = None,
-    intent: Optional[str] = None,
-) -> Dict[str, Any]:
-    """Pack PNG ONLY : un MANIFESTE par document (titre, gamme, matériau, pages
-    disponibles) — AUCUN corps de texte des pages. Le générateur ne reçoit une valeur que
-    depuis l'image jointe (``select_cag_images``, appelé séparément par le routeur).
-
-    Décision d'Elie le 13/09, après mesure : dès que le texte indexé d'une page (couche
-    native ou transcription vision) est présent dans le même message que son image, le
-    modèle peut s'appuyer dessus au lieu de regarder le dessin — c'est ce qui a produit la
-    réponse fausse du 13/09 (note de feuillure recopiée au lieu de la cote lue sur le
-    schéma). Le texte reste utile en AMONT, pour BM25/ColPali (localiser la page) ; il
-    n'entre plus dans ce message.
-
-    Retourne la même forme que ``build_cag_context`` (``content``, ``cag_documents``,
-    ``cag_document_blocks``) pour rester compatible avec les sources UI, ``select_cag_images``
-    et le contrôle de sortie — ``cag_documents[i]["pages"]`` liste TOUTES les pages matchées
-    (non plafonné) pour que la sélection d'images garde tous ses candidats.
-    """
-    _, intent_max_docs = budget_for_intent(intent)
-    max_documents = max_documents if max_documents is not None else intent_max_docs
-
-    system_message: Dict[str, Any] = {"role": "system", "content": system_prompt}
-    if not passages:
-        system_message["content"] += "\n\nAucun passage trouvé dans cet espace pour cette requête."
-        system_message["cag_documents"] = []
-        system_message["cag_document_blocks"] = []
-        return system_message
-
-    ranked_docs = aggregate_documents(passages, max_documents=max_documents)
-    ranked_docs = _apply_document_election(
-        ranked_docs, elected_document_ids, None, max_documents=max_documents
-    )
-
-    doc_ids = [did for did, _ in ranked_docs]
-    docs_by_id = {
-        d.id: d
-        for d in session.exec(select(Document).where(Document.id.in_(doc_ids))).all()
-    }
-
-    blocks: List[str] = []
-    cag_documents: List[Dict[str, Any]] = []
-    position = 0
-    for did, meta in ranked_docs:
-        doc = docs_by_id.get(did)
-        if doc is None:
-            continue
-        matched_pages: Dict[int, float] = meta.get("matched_pages") or {}
-        if not matched_pages:
-            continue
-        position += 1
-
-        title = doc.title or "Document sans titre"
-        header_bits: List[str] = []
-        if doc.source:
-            header_bits.append(f"Source : {doc.source}")
-        if getattr(doc, "proferm_gammes", None):
-            header_bits.append(f"Gamme : {', '.join(doc.proferm_gammes)}")
-        if getattr(doc, "materials", None):
-            header_bits.append(f"Matériau : {', '.join(doc.materials)}")
-        if getattr(doc, "product_types", None):
-            header_bits.append(f"Type : {', '.join(doc.product_types)}")
-
-        pages_sorted = sorted(matched_pages, key=lambda p: -matched_pages[p])
-
-        lines = [f"=== DOCUMENT {position} (id {doc.id}) : « {title} » ==="]
-        if header_bits:
-            lines.append(" | ".join(header_bits))
-        # Le manifeste n'ÉNUMÈRE PLUS les pages retrouvées (14/09). Il en listait jusqu'à 30,
-        # dont au plus 6 étaient réellement jointes en image : le modèle citait alors des
-        # pages qu'il n'avait jamais vues (« comme indiqué page 17 »), 20 réponses sur 62.
-        # Les légendes des images sont la seule liste de pages du contexte, et elles ne
-        # nomment que des pages effectivement sous ses yeux.
-        lines.append(
-            "Les pages retenues de ce document te sont jointes à ce message en IMAGES, "
-            "identifiées par leur légende. Elles sont ta SEULE source pour toute valeur, "
-            "cote, référence ou consigne de ce document."
-        )
-        blocks.append("\n".join(lines))
-
-        cag_documents.append(
-            {
-                "index": position,
-                "document_id": did,
-                "document_title": doc.title,
-                # NON plafonné : select_cag_images en a besoin pour choisir parmi TOUTES
-                # les pages matchées, pas seulement celles listées en aperçu ci-dessus.
-                "pages": sorted(matched_pages.keys()),
-                "full_document": False,
-                "score": round(float(meta.get("score_max") or 0.0), 4),
-                "election_score": round(float(meta.get("election_score") or 0.0), 4),
-                "matched_pages": sorted(matched_pages.keys()),
-                "seed_pages": pages_sorted[:6],
-                "has_source_file": bool(getattr(doc, "source_file_path", None)),
-            }
-        )
-
-    preamble = (
-        "\n\nDOCUMENTS (manifeste — AUCUN texte de page ci-dessous, uniquement les "
-        "images jointes à ce message) : chaque document est identifié par son en-tête "
-        "(source, gamme, matériau, identifiant « id N ») et la liste des pages que la "
-        "recherche a retrouvées. Avant d'attribuer une valeur, une cote ou une consigne à "
-        "une gamme/produit, vérifie l'en-tête du document concerné : ne transfère JAMAIS "
-        "une information d'un document vers une autre gamme (ex. Perform 70 ≠ Perform 76).\n\n"
-    )
-    system_message["content"] += preamble + "\n\n".join(blocks)
-    system_message["content"] += f"\n\n({len(blocks)} document(s) — voir les images jointes.)"
-    system_message["cag_documents"] = cag_documents
-    system_message["cag_document_blocks"] = blocks
-
-    logger.info(
-        "[CAG image-only] %d document(s) — manifeste sans texte, %s",
-        len(blocks),
-        ", ".join(f"doc={d['document_id']}({len(d['pages'])}p)" for d in cag_documents),
-    )
-    return system_message
 
 
 def build_cag_context(
@@ -884,7 +813,7 @@ def build_cag_context(
             doc_budget = min(remaining, int(token_budget * shares[slot]) + carry)
 
         doc = docs_by_id.get(did)
-        leaf_records = _load_leaf_records(session, did) if doc is not None else []
+        leaf_records = _load_page_records(session, did) if doc is not None else []
         if doc is None or not leaf_records:
             carry = doc_budget if shares else 0
             continue
@@ -956,6 +885,15 @@ def build_cag_context(
         spent_tokens += block_tokens
         carry = max(0, doc_budget - block_tokens) if shares else 0
         included_pages = set(pages_included)
+        # Page d'atterrissage de secours : la MIEUX NOTÉE parmi celles réellement packées.
+        # `matched_pages` est rangé par numéro croissant pour l'affichage, ce qui ferait
+        # atterrir un document complet sur sa page 1 — sa couverture — dès que le modèle
+        # omet les pages dans son bloc <sources>. Le classement du retriever, lui, sait
+        # quelle page porte la réponse.
+        _best_included = sorted(
+            ((p, s) for p, s in matched_pages.items() if p in included_pages),
+            key=lambda kv: (-float(kv[1]), kv[0]),
+        )
         cag_documents.append(
             {
                 "index": position,
@@ -966,6 +904,7 @@ def build_cag_context(
                 "score": round(float(meta["score_max"]), 4),
                 "election_score": round(float(meta.get("election_score") or 0.0), 4),
                 "matched_pages": sorted(matched_pages),
+                "best_page": _best_included[0][0] if _best_included else None,
                 "seed_pages": sorted(p for p in seed_pages if p in included_pages),
                 "has_source_file": bool(getattr(doc, "source_file_path", None)),
             }
@@ -986,7 +925,10 @@ def build_cag_context(
         system_message["content"] += (
             "\n\nFIN DE RÉPONSE OBLIGATOIRE : termine ta réponse par une ligne EXACTEMENT au format "
             '<sources>{"used":[{"doc":1,"pages":[3,4]}]}</sources> listant les index de DOCUMENT '
-            "et les pages que tu as réellement utilisés pour répondre (liste vide si aucun). "
+            "et, pour chacun, LES PAGES que tu as réellement utilisées. Le numéro de page est celui "
+            "du marqueur [page N] du contexte, jamais celui imprimé dans le cartouche de la planche. "
+            "C'est cette ligne qui ouvre le PDF à la bonne page pour l'utilisateur : un document cité "
+            "sans page ne mène nulle part. N'omets les pages que si tu n'as utilisé aucun document. "
             "Cette ligne est masquée à l'utilisateur — n'en parle jamais dans le corps de la réponse."
         )
     system_message["cag_documents"] = cag_documents
@@ -1042,7 +984,12 @@ def build_document_sources(
         used_pages = [p for p in (used_pages_by_index.get(idx) or []) if isinstance(p, int)]
         pages = [p for p in (d.get("pages") or []) if isinstance(p, int)]
         matched = [p for p in (d.get("matched_pages") or []) if isinstance(p, int)]
-        landing_candidates = used_pages or matched or pages
+        # Le modèle omet parfois les pages de son bloc <sources>. Dans ce cas on atterrit
+        # sur la page la MIEUX NOTÉE du pack, pas sur le plus petit numéro : sans cela un
+        # document complet ouvre toujours sur sa couverture, et le badge ne mène nulle part.
+        best = d.get("best_page")
+        best_list = [best] if isinstance(best, int) else []
+        landing_candidates = used_pages or best_list or matched or pages
         landing = landing_candidates[0] if landing_candidates else None
 
         scope = ("Document complet" if d.get("full_document") else "Extrait") + f" ({_pages_span_label(pages)})"

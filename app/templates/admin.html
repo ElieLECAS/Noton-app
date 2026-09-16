@@ -1512,7 +1512,6 @@ async function loadQueueHealth() {
 const INDEXATION_ACTION_ICONS = {
     colpali_repair: 'ti-wand',
     colpali_only: 'ti-photo-search',
-    enrichment_only: 'ti-file-text',
     full: 'ti-refresh-alert',
 };
 
@@ -1562,7 +1561,7 @@ function renderIndexationSummary(totals) {
 
 function indexationProblemChips(doc) {
     const chips = [];
-    const t = doc.text || {}, c = doc.colpali || {}, k = doc.enrichment || {};
+    const t = doc.text || {}, c = doc.colpali || {};
     if (t.status === 'missing') chips.push(indexationChip('Texte absent', 'error', 'Aucun chunk texte indexé.'));
     if (c.status === 'desync') {
         const hors = c.legacy_count || 0, orph = c.orphan_count || 0;
@@ -1578,7 +1577,6 @@ function indexationProblemChips(doc) {
     } else if (c.status === 'unknown') {
         chips.push(indexationChip('ColPali ?', 'warn', 'Scan LanceDB en échec.'));
     }
-    if (k.status === 'missing') chips.push(indexationChip('Synthèses absentes', 'warn', 'Aucun chunk contextuel.'));
     return chips.join(' ') || indexationChip('—', 'muted', '');
 }
 

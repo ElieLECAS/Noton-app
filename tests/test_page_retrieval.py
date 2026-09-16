@@ -41,9 +41,6 @@ def test_format_multimodal_passage_keeps_matched_page_no():
         "app.services.page_retrieval_service.load_l1_chunks_for_page",
         return_value=[leaf],
     ), mock.patch(
-        "app.services.page_retrieval_service.load_enrichment_chunks_for_pages",
-        return_value=[],
-    ), mock.patch(
         "app.services.page_reranker_service.compute_page_image_policy",
         return_value=False,
     ):

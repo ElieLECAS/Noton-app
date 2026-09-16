@@ -479,14 +479,6 @@ endblock %} {% block content %}
             >
                 Texte sémantique
             </button>
-            <button
-                id="chunks-tab-enrichment"
-                type="button"
-                class="px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all"
-                onclick="switchChunksTab('enrichment')"
-            >
-                Synthèse contextuelle
-            </button>
             <!-- Onglets Entités / Catégories MASQUÉS depuis le retrait du KAG
                  (2026-07-28) : plus rien ne les alimente, et un onglet vide se lit
                  comme une panne. Le code de rendu est conservé — retirer `hidden`
@@ -522,7 +514,6 @@ endblock %} {% block content %}
 
         <div class="flex-1 min-h-0 overflow-auto border border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01] rounded-2xl p-4">
             <div id="chunks-semantic-panel" class="space-y-3"></div>
-            <div id="chunks-enrichment-panel" class="space-y-3 hidden"></div>
             <div id="chunks-entities-panel" class="space-y-3 hidden"></div>
             <div id="chunks-categories-panel" class="space-y-3 hidden"></div>
         </div>
@@ -597,6 +588,86 @@ endblock %} {% block content %}
 </div>
 
 <div
+    id="page-markdown-modal"
+    class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
+>
+    <div class="w-full max-w-3xl glass-panel rounded-3xl p-6 shadow-2xl max-h-[92vh] flex flex-col">
+        <div class="flex items-start justify-between gap-4 shrink-0">
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Markdown augmenté</h3>
+                <p id="page-markdown-subtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
+            </div>
+            <button
+                type="button"
+                onclick="closePageMarkdownModal()"
+                class="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-gray-500 active:scale-95 transition-all"
+                aria-label="Fermer"
+            >
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+
+        <div id="page-markdown-state" class="mt-3 shrink-0"></div>
+
+        <div
+            id="page-markdown-drop"
+            class="mt-3 shrink-0 rounded-2xl border border-dashed border-indigo-500/40 bg-indigo-500/[0.04] dark:bg-indigo-500/[0.07] p-5 text-center cursor-pointer hover:bg-indigo-500/10 transition-all"
+            onclick="document.getElementById('page-markdown-file').click()"
+            ondragover="handlePageMarkdownDragOver(event)"
+            ondragleave="handlePageMarkdownDragLeave(event)"
+            ondrop="handlePageMarkdownDrop(event)"
+        >
+            <i class="ti ti-file-text text-2xl text-indigo-500"></i>
+            <p class="text-sm font-semibold text-gray-800 dark:text-gray-100 mt-1.5">
+                Déposez le fichier .md ici
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                ou cliquez pour le choisir, ou collez le contenu ci-dessous
+            </p>
+            <input id="page-markdown-file" type="file" accept=".md,.markdown,.txt" class="hidden" onchange="handlePageMarkdownFile(event)" />
+        </div>
+
+        <textarea
+            id="page-markdown-content"
+            class="mt-3 flex-1 min-h-[140px] w-full glass-input rounded-xl p-3 text-xs font-mono text-gray-900 dark:text-white resize-none"
+            placeholder="&lt;!-- PageBreak page_pdf=&quot;1&quot; page_imprimee=&quot;1&quot; --&gt;&#10;## Page 1 — …"
+            oninput="onPageMarkdownEdited()"
+        ></textarea>
+
+        <div id="page-markdown-report" class="mt-3 overflow-auto max-h-[28vh] shrink-0"></div>
+
+        <div class="flex justify-between items-center gap-2 pt-4 shrink-0">
+            <button
+                type="button"
+                id="page-markdown-delete-btn"
+                onclick="deletePageMarkdown()"
+                class="hidden px-3 py-2 rounded-xl border border-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-500/10 active:scale-95 transition-all text-sm font-semibold"
+            >
+                Détacher
+            </button>
+            <div class="flex gap-2 ml-auto">
+                <button
+                    type="button"
+                    onclick="validatePageMarkdown()"
+                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold"
+                >
+                    Vérifier
+                </button>
+                <button
+                    type="button"
+                    id="page-markdown-import-btn"
+                    onclick="importPageMarkdown()"
+                    disabled
+                    class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white active:scale-95 transition-all text-sm font-semibold"
+                >
+                    Importer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div
     id="import-modal"
     class="hidden fixed inset-0 bg-black/30 backdrop-blur-md z-50 flex items-center justify-center p-4"
 >
@@ -641,6 +712,8 @@ endblock %} {% block content %}
 {% endblock %} {% block extra_scripts %}
 <!-- Visionneuse de page partagée avec space_detail.html : pdf.js, rendu de page,
      surlignage et rendu markdown mutualisés. -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 <script src="/static/js/page-viewer.js?v=5"></script>
 <style>
     /* Pas de glass-card / transform ici : évite le contenu qui disparaît au survol dans la liste scrollable */
@@ -679,14 +752,35 @@ endblock %} {% block content %}
         background: linear-gradient(90deg, rgba(45, 212, 191, 0.12) 0%, transparent 100%);
     }
 
-    .category-enrichment-chunk {
-        border-left: 3px solid #6366f1;
-        background: linear-gradient(90deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+    .markdown-page table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        margin: 0.5rem 0;
     }
-    .dark .category-enrichment-chunk {
-        border-left-color: #818cf8;
-        background: linear-gradient(90deg, rgba(129, 140, 248, 0.12) 0%, transparent 100%);
+    .markdown-page th,
+    .markdown-page td {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        padding: 4px 7px;
+        text-align: left;
+        vertical-align: top;
     }
+    .dark .markdown-page th,
+    .dark .markdown-page td {
+        border-color: rgba(255, 255, 255, 0.14);
+    }
+    .markdown-page th { background: rgba(0, 0, 0, 0.04); font-weight: 600; }
+    .dark .markdown-page th { background: rgba(255, 255, 255, 0.06); }
+    .markdown-page h2 { font-size: 15px; font-weight: 700; margin: 0.6rem 0 0.3rem; }
+    .markdown-page h3 { font-size: 13px; font-weight: 600; margin: 0.5rem 0 0.25rem; }
+    .markdown-page blockquote {
+        border-left: 3px solid rgba(99, 102, 241, 0.5);
+        padding-left: 0.6rem;
+        margin: 0.4rem 0;
+        color: inherit;
+    }
+    .markdown-page ul, .markdown-page ol { padding-left: 1.1rem; margin: 0.3rem 0; }
+    .markdown-page li { margin: 0.1rem 0; }
 
     #library-category-page-modal:not(.hidden) {
         display: flex;
@@ -835,6 +929,192 @@ endblock %} {% block content %}
         const r = await api("/api/library/classification-options");
         if (!r.ok) return;
         classificationOptions = await r.json();
+    }
+
+    /* ——— Markdown augmenté : dépôt, vérification, import ———
+       Le contrôle à blanc est OBLIGATOIRE avant l'import : un markdown dont le nombre de
+       sections ne correspond pas au PDF décale l'appariement page ↔ image en silence. */
+    let pageMarkdownDocId = null;
+    let pageMarkdownValidated = false;
+
+    async function openPageMarkdownModal(docId, title) {
+        pageMarkdownDocId = docId;
+        pageMarkdownValidated = false;
+        document.getElementById("page-markdown-subtitle").textContent = title || "";
+        document.getElementById("page-markdown-content").value = "";
+        document.getElementById("page-markdown-report").innerHTML = "";
+        document.getElementById("page-markdown-import-btn").disabled = true;
+        document.getElementById("page-markdown-modal").classList.remove("hidden");
+        await refreshPageMarkdownState();
+    }
+
+    function closePageMarkdownModal() {
+        document.getElementById("page-markdown-modal").classList.add("hidden");
+        pageMarkdownDocId = null;
+    }
+
+    async function refreshPageMarkdownState() {
+        const host = document.getElementById("page-markdown-state");
+        const delBtn = document.getElementById("page-markdown-delete-btn");
+        host.innerHTML = `<div class="text-xs text-gray-500 dark:text-gray-400">Chargement…</div>`;
+        const r = await api(`/api/library/documents/${pageMarkdownDocId}/page-markdown`);
+        if (!r.ok) {
+            host.innerHTML = `<div class="text-xs text-red-600 dark:text-red-400">État indisponible.</div>`;
+            return;
+        }
+        const st = await r.json();
+        delBtn.classList.toggle("hidden", !st.present);
+        if (!st.present) {
+            host.innerHTML = `<div class="rounded-xl border border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] px-3 py-2 text-xs text-gray-600 dark:text-gray-300">
+                Aucun markdown attaché — ce document est lu par ses fragments indexés.
+            </div>`;
+            return;
+        }
+        const aligne = st.aligne
+            ? `<span class="text-emerald-600 dark:text-emerald-400 font-semibold">${st.pages} page(s), aligné sur le PDF</span>`
+            : `<span class="text-red-600 dark:text-red-400 font-semibold">${st.pages} section(s) pour ${st.pages_pdf ?? "?"} page(s) de PDF</span>`;
+        const hash =
+            st.hash_source_ok === false
+                ? ` · <span class="text-amber-600 dark:text-amber-400">PDF modifié depuis la rédaction</span>`
+                : "";
+        const conv = st.conventions ? "" : ` · <span class="text-amber-600 dark:text-amber-400">sans conventions</span>`;
+        host.innerHTML = `<div class="rounded-xl border border-violet-500/20 bg-violet-500/[0.06] px-3 py-2 text-xs text-gray-700 dark:text-gray-200">
+            Markdown attaché : ${aligne}${hash}${conv}
+            ${st.redige_le ? ` · rédigé le ${escapeHtml(st.redige_le)}` : ""}
+        </div>`;
+    }
+
+    function onPageMarkdownEdited() {
+        pageMarkdownValidated = false;
+        document.getElementById("page-markdown-import-btn").disabled = true;
+    }
+
+    function handlePageMarkdownDragOver(event) {
+        event.preventDefault();
+        event.currentTarget.classList.add("bg-indigo-500/15");
+    }
+
+    function handlePageMarkdownDragLeave(event) {
+        event.currentTarget.classList.remove("bg-indigo-500/15");
+    }
+
+    async function handlePageMarkdownDrop(event) {
+        event.preventDefault();
+        event.currentTarget.classList.remove("bg-indigo-500/15");
+        const file = event.dataTransfer?.files?.[0];
+        if (file) await readPageMarkdownFile(file);
+    }
+
+    async function handlePageMarkdownFile(event) {
+        const file = event.target.files?.[0];
+        if (file) await readPageMarkdownFile(file);
+        event.target.value = "";
+    }
+
+    async function readPageMarkdownFile(file) {
+        const text = await file.text();
+        document.getElementById("page-markdown-content").value = text;
+        onPageMarkdownEdited();
+        await validatePageMarkdown();
+    }
+
+    function renderPageMarkdownReport(report) {
+        const host = document.getElementById("page-markdown-report");
+        const line = (tone, icon, text) => {
+            const tones = {
+                error: "text-red-600 dark:text-red-400",
+                warn: "text-amber-600 dark:text-amber-400",
+                ok: "text-emerald-600 dark:text-emerald-400",
+            };
+            return `<li class="flex items-start gap-1.5 ${tones[tone]}"><i class="ti ${icon} mt-0.5 shrink-0"></i><span>${escapeHtml(text)}</span></li>`;
+        };
+        const items = [
+            ...(report.errors || []).map((e) => line("error", "ti-x", e)),
+            ...(report.warnings || []).map((w) => line("warn", "ti-alert-triangle", w)),
+        ];
+        if (report.ok && !items.length) {
+            items.push(line("ok", "ti-check", `${report.pages_found} page(s), alignées sur le PDF.`));
+        } else if (report.ok) {
+            items.unshift(line("ok", "ti-check", `${report.pages_found} page(s) — import possible.`));
+        }
+        const apercu = (report.apercu || [])
+            .slice(0, 60)
+            .map(
+                (p) =>
+                    `<tr class="border-b border-black/5 dark:border-white/5">
+                        <td class="py-0.5 pr-3 font-mono text-[11px]">${p.page_pdf}</td>
+                        <td class="py-0.5 pr-3 font-mono text-[11px] text-gray-500">${p.page_imprimee ?? "—"}</td>
+                        <td class="py-0.5 pr-3 truncate max-w-[26rem]">${escapeHtml(p.titre || "")}</td>
+                        <td class="py-0.5 text-right font-mono text-[11px] ${p.caracteres ? "" : "text-red-500"}">${p.caracteres}</td>
+                    </tr>`,
+            )
+            .join("");
+        host.innerHTML = `
+            <ul class="space-y-1 text-xs">${items.join("")}</ul>
+            ${
+                apercu
+                    ? `<table class="w-full mt-3 text-xs">
+                        <thead><tr class="text-[10px] uppercase tracking-wider text-gray-400">
+                            <th class="text-left pb-1 pr-3">PDF</th><th class="text-left pb-1 pr-3">Imprimée</th>
+                            <th class="text-left pb-1 pr-3">Titre</th><th class="text-right pb-1">Car.</th>
+                        </tr></thead>
+                        <tbody>${apercu}</tbody>
+                       </table>`
+                    : ""
+            }`;
+    }
+
+    async function validatePageMarkdown() {
+        const content = document.getElementById("page-markdown-content").value;
+        if (!content.trim()) {
+            document.getElementById("page-markdown-report").innerHTML =
+                `<div class="text-xs text-gray-500">Rien à vérifier.</div>`;
+            return;
+        }
+        const r = await api(`/api/library/documents/${pageMarkdownDocId}/page-markdown/validate`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content }),
+        });
+        const report = await r.json().catch(() => null);
+        if (!r.ok || !report) {
+            document.getElementById("page-markdown-report").innerHTML =
+                `<div class="text-xs text-red-600 dark:text-red-400">Vérification impossible.</div>`;
+            return;
+        }
+        renderPageMarkdownReport(report);
+        pageMarkdownValidated = !!report.ok;
+        document.getElementById("page-markdown-import-btn").disabled = !report.ok;
+    }
+
+    async function importPageMarkdown() {
+        if (!pageMarkdownValidated) return;
+        const content = document.getElementById("page-markdown-content").value;
+        const r = await api(`/api/library/documents/${pageMarkdownDocId}/page-markdown`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content }),
+        });
+        const body = await r.json().catch(() => ({}));
+        if (!r.ok) {
+            alert((body.detail && body.detail.message) || "Import refusé.");
+            return;
+        }
+        await refreshPageMarkdownState();
+        await loadDocuments();
+        document.getElementById("page-markdown-report").innerHTML =
+            `<div class="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5"><i class="ti ti-check"></i><span>Importé : ${body.pages_found} page(s) attachées au document.</span></div>`;
+    }
+
+    async function deletePageMarkdown() {
+        if (!confirm("Détacher le markdown augmenté ? Le document repassera sur ses fragments indexés.")) return;
+        const r = await api(`/api/library/documents/${pageMarkdownDocId}/page-markdown`, { method: "DELETE" });
+        if (!r.ok) return alert("Suppression impossible.");
+        document.getElementById("page-markdown-content").value = "";
+        document.getElementById("page-markdown-report").innerHTML = "";
+        onPageMarkdownEdited();
+        await refreshPageMarkdownState();
+        await loadDocuments();
     }
 
     async function api(url, options = {}) {
@@ -1137,10 +1417,10 @@ endblock %} {% block content %}
         if (h.overall === "in_progress") {
             return healthChipHtml("Audit après traitement", "muted", "Santé d'indexation disponible une fois le traitement terminé.");
         }
-        const t = h.text || {}, c = h.colpali || {}, k = h.enrichment || {};
+        const t = h.text || {}, c = h.colpali || {};
         const colpaliTooltip = `ColPali : ${c.indexed_pages ?? 0}/${c.expected_pages ?? 0} page(s) indexée(s) · ${c.orphan_count ?? 0} orphelin(s) · ${c.missing_count ?? 0} manquante(s)` + (c.legacy_count ? ` · ${c.legacy_count} hors ancre` : "");
         if (h.overall === "ok") {
-            const detail = `Texte : ${t.chunk_count} chunk(s), ${t.leaf_count} feuille(s)\n${colpaliTooltip}\nKAG : ${k.entity_count} entité(s), ${k.relation_count} relation(s), ${k.category_count} catégorie(s)`;
+            const detail = `Texte : ${t.chunk_count} chunk(s), ${t.leaf_count} feuille(s)\n${colpaliTooltip}`;
             return healthChipHtml("Pipeline complet · ColPali sync", "ok", detail);
         }
         const chips = [];
@@ -1164,13 +1444,7 @@ endblock %} {% block content %}
         else if (c.status === "unknown") chips.push(healthChipHtml("ColPali ?", "warn", "Scan LanceDB en échec — état de sync inconnu."));
         else if (c.status === "ok") chips.push(healthChipHtml(`ColPali ${c.indexed_pages}/${c.expected_pages}`, "ok", colpaliTooltip));
 
-        if (k.status === "missing") chips.push(healthChipHtml("Synthèses", "warn", "Aucun chunk contextuel — retraiter en mode « Chunks contextuels »."));
-        else if (k.status === "ok") chips.push(healthChipHtml(`${k.enrichment_count} synthèses`, "ok", `${k.enrichment_count} chunk(s) contextuel(s).`));
-
-        if (k.status !== "disabled") {
-            if (!h.categories_ok) chips.push(healthChipHtml("Catégories", "warn", "Aucune catégorie de contenu liée aux chunks."));
-            else if (k.category_count) chips.push(healthChipHtml(`${k.category_count} catégorie(s)`, "ok", `${k.category_count} catégorie(s) de contenu.`));
-        }
+        if (!h.categories_ok) chips.push(healthChipHtml("Catégories", "warn", "Aucune catégorie de contenu liée aux chunks."));
 
         if (h.suggested_reindex_mode && isAdminUser && canLibraryWrite && doc) {
             const safeTitle = (doc.title || "").replace(/'/g, "\\'");
@@ -1321,6 +1595,14 @@ endblock %} {% block content %}
         </button>
         ${
             canLibraryWrite
+                ? `<button class="px-3 py-1.5 rounded-xl border border-violet-500/10 bg-violet-500/5 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400 hover:bg-violet-500/10 dark:hover:bg-violet-500/20 active:scale-95 transition-all text-xs font-semibold flex items-center gap-1.5" onclick="openPageMarkdownModal(${d.id}, '${(d.title || "").replace(/'/g, "\\'")}')" title="Attacher un markdown augmenté (une section par page)">
+          <i class="ti ti-markdown text-sm"></i>
+          <span>Markdown</span>
+        </button>`
+                : ""
+        }
+        ${
+            canLibraryWrite
                 ? `
               ${
                   d.document_type === "document" && isAdminUser
@@ -1421,51 +1703,6 @@ endblock %} {% block content %}
         return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="${escapeHtml(title)}">${escapeHtml(category.label || category.slug)}</span>`;
     }
 
-    function renderEnrichmentChunkCard(chunk) {
-        const meta = chunk.metadata || {};
-        const page = Number.isFinite(chunk.page) ? chunk.page : 0;
-        const sourcePages = Array.isArray(meta.source_pages) && meta.source_pages.length
-            ? meta.source_pages.join(", ")
-            : null;
-        const pageStart = meta.page_start;
-        const pageEnd = meta.page_end;
-        const batchLabel = pageStart && pageEnd && pageStart !== pageEnd
-            ? `batch p.${pageStart}–${pageEnd}`
-            : sourcePages
-              ? `pages ${sourcePages}`
-              : `p.${page}`;
-        const theme = meta.theme || "(sans thème)";
-        const categorySlug = meta.category_slug;
-        const categoryBadge = categorySlug
-            ? `<span class="px-2 py-0.5 rounded text-[11px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40">${escapeHtml(categorySlug)}</span>`
-            : "";
-        const kag = chunksMonitorData?.kag || {};
-        const chunkCategories = (kag.chunk_categories || {})[String(chunk.chunk_id)] || [];
-        const categoriesHeaderHtml = chunkCategories.length
-            ? `<div class="flex flex-wrap items-center gap-1.5 ml-auto pl-3 border-l border-violet-300 dark:border-violet-700 shrink-0 max-w-[50%]">${chunkCategories.map(renderCategoryBadge).join("")}</div>`
-            : categoryBadge;
-        const model = meta.enrichment_model;
-        const modelBadge = model
-            ? `<span class="px-2 py-0.5 rounded bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300">${escapeHtml(model)}</span>`
-            : "";
-        return `
-      <article class="rounded-lg border border-violet-200 dark:border-violet-800/60 bg-violet-50/50 dark:bg-violet-950/20">
-        <header class="px-3 py-2 border-b border-violet-200 dark:border-violet-800/60 text-xs text-gray-600 dark:text-gray-300 flex flex-wrap items-center gap-2">
-          <span class="px-2 py-0.5 rounded bg-violet-200 dark:bg-violet-900/50 text-violet-800 dark:text-violet-200 font-semibold">synthèse</span>
-          <span class="font-semibold">${escapeHtml(batchLabel)}</span>
-          <span>source p.${page}</span>
-          <span>#${chunk.chunk_index}</span>
-          ${modelBadge}
-          <span class="truncate max-w-[50ch] font-medium text-gray-800 dark:text-gray-100">${escapeHtml(theme)}</span>
-          ${categoriesHeaderHtml}
-        </header>
-        <div class="p-3">
-          <p class="text-[11px] text-violet-700 dark:text-violet-300 mb-2 font-medium">Contexte complémentaire — ne pas utiliser comme preuve absolue ; se référer à la page source.</p>
-          <pre class="whitespace-pre-wrap break-words text-sm text-gray-800 dark:text-gray-100 leading-relaxed font-sans">${escapeHtml(chunk.content)}</pre>
-        </div>
-      </article>
-    `;
-    }
 
     /* Rendu markdown des chunks : délégué au module partagé
        app/static/js/page-viewer.js (échappement d'abord, aucune dépendance CDN). */
@@ -1608,7 +1845,7 @@ endblock %} {% block content %}
                         Rechercher
                     </button>
                 </div>
-                <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5">Ouvre les pages PDF et chunks qui contiennent ce mot (texte source + synthèses IA).</p>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-1.5">Ouvre les pages PDF et chunks qui contiennent ce mot.</p>
                 <p id="library-keyword-search-msg" class="text-xs text-amber-600 dark:text-amber-400 mt-1 hidden"></p>
             </div>
         `;
@@ -1653,17 +1890,15 @@ endblock %} {% block content %}
 
         host.innerHTML = `
             ${renderLibraryKeywordSearchBox()}
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Cliquez sur une catégorie pour parcourir le document page par page (texte source et chunks contextuels générés par l'IA).</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Cliquez sur une catégorie pour parcourir le document page par page.</p>
             <div class="space-y-2 max-h-[60vh] overflow-auto pr-1">${categoriesList}</div>
         `;
     }
 
     function renderChunksPanels() {
         const semanticHost = document.getElementById("chunks-semantic-panel");
-        const enrichmentHost = document.getElementById("chunks-enrichment-panel");
         if (!chunksMonitorData) {
             semanticHost.innerHTML = "";
-            enrichmentHost.innerHTML = "";
             return;
         }
         semanticHost.innerHTML = (chunksMonitorData.semantic_chunks || []).length
@@ -1673,9 +1908,6 @@ endblock %} {% block content %}
                   )
                   .join("")
             : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk texte sémantique (transcription vision). Lancez un retraitement « Complet » ou « Texte seul ».</div>`;
-        enrichmentHost.innerHTML = (chunksMonitorData.enrichment_chunks || []).length
-            ? chunksMonitorData.enrichment_chunks.map((chunk) => renderEnrichmentChunkCard(chunk)).join("")
-            : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk de synthèse contextuelle. Activez CONTEXTUAL_ENRICHMENT_ENABLED et relancez un retraitement « Complet » ou « Texte seul ».</div>`;
         bindChunkRawToggles(semanticHost);
         renderEntitiesPanel();
         renderCategoriesPanel();
@@ -1705,21 +1937,17 @@ endblock %} {% block content %}
         const searchInput = document.getElementById("chunks-search-input");
         if (searchInput) searchInput.value = "";
         const semanticPanel = document.getElementById("chunks-semantic-panel");
-        const enrichmentPanel = document.getElementById("chunks-enrichment-panel");
         const entitiesPanel = document.getElementById("chunks-entities-panel");
         const categoriesPanel = document.getElementById("chunks-categories-panel");
         const semanticBtn = document.getElementById("chunks-tab-semantic");
-        const enrichmentBtn = document.getElementById("chunks-tab-enrichment");
         const entitiesBtn = document.getElementById("chunks-tab-entities");
         const categoriesBtn = document.getElementById("chunks-tab-categories");
         const activeClass = "px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold active:scale-95 transition-all shadow-sm";
         const inactiveClass = "px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-xs font-semibold active:scale-95 transition-all";
         semanticPanel.classList.toggle("hidden", tab !== "semantic");
-        enrichmentPanel.classList.toggle("hidden", tab !== "enrichment");
         entitiesPanel.classList.toggle("hidden", tab !== "entities");
         categoriesPanel.classList.toggle("hidden", tab !== "categories");
         semanticBtn.className = tab === "semantic" ? activeClass : inactiveClass;
-        enrichmentBtn.className = tab === "enrichment" ? activeClass : inactiveClass;
         entitiesBtn.className = tab === "entities" ? activeClass : inactiveClass;
         categoriesBtn.className = tab === "categories" ? activeClass : inactiveClass;
     }
@@ -1729,7 +1957,6 @@ endblock %} {% block content %}
         const term = (input?.value || "").toLowerCase().trim();
         const panelIds = {
             semantic: "chunks-semantic-panel",
-            enrichment: "chunks-enrichment-panel",
             entities: "chunks-entities-panel",
             categories: "chunks-categories-panel",
         };
@@ -1786,22 +2013,15 @@ endblock %} {% block content %}
             subtitle.textContent =
                 err.detail || "Impossible de charger les chunks.";
             document.getElementById("chunks-semantic-panel").innerHTML = "";
-            document.getElementById("chunks-enrichment-panel").innerHTML = "";
             document.getElementById("chunks-entities-panel").innerHTML = "";
             document.getElementById("chunks-categories-panel").innerHTML = "";
             return;
         }
         chunksMonitorData = await r.json();
         const kag = chunksMonitorData.kag || {};
-        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} · Chunks contextuels: ${chunksMonitorData.enrichment_chunks_count ?? 0}`;
+        subtitle.textContent = `Texte sémantique: ${chunksMonitorData.semantic_chunks_count ?? 0} chunk(s)`;
         renderChunksPanels();
-        const defaultTab =
-            (chunksMonitorData.semantic_chunks_count ?? 0) > 0
-                ? "semantic"
-                : (chunksMonitorData.enrichment_chunks_count ?? 0) > 0
-                  ? "enrichment"
-                  : "semantic";
-        switchChunksTab(defaultTab);
+        switchChunksTab("semantic");
     }
 
     function closeChunksMonitorModal() {
@@ -1898,9 +2118,6 @@ endblock %} {% block content %}
         (chunksMonitorData?.semantic_chunks || []).forEach((c) => {
             if (Number.isFinite(c.page) && c.page > 0) pages.add(c.page);
         });
-        (chunksMonitorData?.enrichment_chunks || []).forEach((c) => {
-            if (Number.isFinite(c.page) && c.page > 0) pages.add(c.page);
-        });
         return Array.from(pages).sort((a, b) => a - b);
     }
 
@@ -1937,7 +2154,6 @@ endblock %} {% block content %}
         if (nextBtn) nextBtn.disabled = idx < 0 || idx >= pages.length - 1;
 
         const semantic = (chunksMonitorData.semantic_chunks || []).filter((c) => c.page === pageNo);
-        const enrichment = (chunksMonitorData.enrichment_chunks || []).filter((c) => c.page === pageNo);
 
         const host = document.getElementById("library-category-text-container");
         const semanticHtml = semantic.length
@@ -1945,15 +2161,7 @@ endblock %} {% block content %}
                   .map((chunk) => renderChunkCard(chunk, { showCategoriesInHeader: true }))
                   .join("")}</section>`
             : `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk texte sur cette page.</div>`;
-        const enrichmentHtml = enrichment.length
-            ? `<section class="space-y-3 mt-4">
-                 <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300 flex items-center gap-2">
-                   <i class="ti ti-sparkles"></i>Synthèses contextuelles (générées par l'IA)
-                 </h3>
-                 ${enrichment.map((chunk) => renderEnrichmentChunkCard(chunk)).join("")}
-               </section>`
-            : "";
-        host.innerHTML = semanticHtml + enrichmentHtml;
+        host.innerHTML = semanticHtml;
         bindChunkRawToggles(host);
 
         renderLibraryCategoryPdf(
@@ -2011,11 +2219,7 @@ endblock %} {% block content %}
         if (prevBtn) prevBtn.disabled = !nav.prev;
         if (nextBtn) nextBtn.disabled = !nav.next;
 
-        renderLibraryCategoryTextChunks(
-            detail.chunks || [],
-            detail.enrichment_chunks || [],
-            category,
-        );
+        renderLibraryCategoryTextChunks(detail, category);
         if (libraryCategoryPageState.mode === "search" && detail.query) {
             highlightSearchTerm(
                 document.getElementById("library-category-text-container"),
@@ -2025,58 +2229,70 @@ endblock %} {% block content %}
         renderLibraryCategoryPdf(documentInfo, detail.page_no);
     }
 
-    function renderLibraryCategoryTextChunks(chunks, enrichmentChunks, category) {
+    /* Rend un markdown en HTML sûr. Même paire que le chat d'espace (marked + DOMPurify). */
+    function renderMarkdownSafe(text) {
+        if (!window.marked || !window.DOMPurify) {
+            const pre = document.createElement("pre");
+            pre.textContent = text || "";
+            pre.className = "whitespace-pre-wrap text-xs font-mono";
+            return pre.outerHTML;
+        }
+        return DOMPurify.sanitize(marked.parse(text || ""));
+    }
+
+    /* Bandeau « markdown augmenté » + page rendue. Quand le document a été retranscrit,
+       c'est cette page-là qu'on montre à côté du PDF, pas les fragments d'extraction. */
+    function renderPageMarkdownPanel(markdown) {
+        return `
+            <div class="mb-2 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-violet-500/20 bg-violet-500/10 text-violet-700 dark:text-violet-300 text-[11px] font-semibold">
+                    <i class="ti ti-markdown text-xs"></i>Markdown augmenté
+                </span>
+                <span class="text-[11px] text-gray-500 dark:text-gray-400">transcription fidèle de la page</span>
+            </div>
+            <article class="markdown-page prose prose-sm dark:prose-invert max-w-none text-sm text-gray-800 dark:text-gray-100">
+                ${renderMarkdownSafe(markdown)}
+            </article>`;
+    }
+
+    function renderLibraryCategoryTextChunks(detail, category) {
         const host = document.getElementById("library-category-text-container");
         if (!host) return;
 
-        const sourceHtml = (chunks || [])
-            .map((chunk) => renderLibraryCategoryChunkCard(chunk, category, false))
-            .join("");
-        const enrichmentHtml = (enrichmentChunks || []).length
-            ? `
-            <section class="space-y-3">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300 flex items-center gap-2">
-                    <i class="ti ti-sparkles"></i>
-                    Chunks contextuels (texte généré par l'IA)
-                </h3>
-                ${enrichmentChunks.map((chunk) => renderLibraryCategoryChunkCard(chunk, category, true)).join("")}
-            </section>
-        `
-            : "";
+        if (detail && detail.markdown_augmente && detail.consolidated_markdown) {
+            host.innerHTML = renderPageMarkdownPanel(detail.consolidated_markdown);
+            return;
+        }
 
-        if (!sourceHtml && !enrichmentHtml) {
+        const sourceHtml = ((detail && detail.chunks) || [])
+            .map((chunk) => renderLibraryCategoryChunkCard(chunk, category))
+            .join("");
+
+        if (!sourceHtml) {
             host.innerHTML =
                 `<div class="text-sm text-gray-500 dark:text-gray-400">Aucun chunk associé à cette catégorie sur cette page.</div>`;
             return;
         }
 
-        host.innerHTML = `
-            ${sourceHtml ? `<section class="space-y-3">${sourceHtml}</section>` : ""}
-            ${enrichmentHtml}
-        `;
+        host.innerHTML = `<section class="space-y-3">${sourceHtml}</section>`;
     }
 
-    function renderLibraryCategoryChunkCard(chunk, category, isEnrichment) {
+    function renderLibraryCategoryChunkCard(chunk, category) {
         const heading =
             chunk.heading ||
             chunk.theme ||
             (chunk.step_number != null ? `Étape ${chunk.step_number}` : null);
-        const sectionType =
-            chunk.section_type && !isEnrichment
-                ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">${escapeHtml(chunk.section_type)}</span>`
-                : "";
+        const sectionType = chunk.section_type
+            ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">${escapeHtml(chunk.section_type)}</span>`
+            : "";
         const sourcePages =
             Array.isArray(chunk.source_pages) && chunk.source_pages.length
                 ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">Pages ${chunk.source_pages.join(", ")}</span>`
                 : chunk.source_page
                   ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">Page source ${chunk.source_page}</span>`
                   : "";
-        const categoryBadge = isEnrichment
-            ? `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40">IA générée · ${escapeHtml(category.label || "Catégorie")}</span>`
-            : `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="Texte source transcrit">${escapeHtml(category.label || "Catégorie")}${chunk.confidence != null ? ` · ${Math.round(chunk.confidence * 100)}%` : ""}</span>`;
-        const highlightClass = isEnrichment
-            ? "category-enrichment-chunk"
-            : "category-chunk-highlight";
+        const categoryBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="Texte source transcrit">${escapeHtml(category.label || "Catégorie")}${chunk.confidence != null ? ` · ${Math.round(chunk.confidence * 100)}%` : ""}</span>`;
+        const highlightClass = "category-chunk-highlight";
 
         return `
             <article class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/40 overflow-hidden ${highlightClass}">
@@ -2339,7 +2555,6 @@ endblock %} {% block content %}
     const REINDEX_MODES = [
         { value: "full", label: "Complet", icon: "ti-refresh", desc: "Tout : extraction + chunks contextuels + embeddings + ColPali. Le plus long." },
         { value: "text_only", label: "Texte seul — rapide", icon: "ti-text-size", desc: "Extraction + embeddings UNIQUEMENT (ColPali inchangé). ⚠ SUPPRIME les chunks contextuels existants du document — à faire suivre d'un passage « Chunks contextuels »." },
-        { value: "enrichment_only", label: "Chunks contextuels — lent", icon: "ti-sparkles", desc: "Synthèses par fenêtres de 3 pages (texte + images des pages), puis ré-embedding. Plusieurs appels LLM par fenêtre : à lancer la nuit, après « Texte seul »." },
         { value: "colpali_only", label: "ColPali seul", icon: "ti-eye", desc: "Re-sync visuel ColPali uniquement (chunks texte inchangés)." },
     ];
 
@@ -2487,16 +2702,8 @@ endblock %} {% block content %}
             const extractorLabel =
                 REINDEX_EXTRACTORS.find((e) => e.value === extractor)?.label || extractor;
             const suffix = EXTRACTOR_MODES.has(mode) ? ` (extraction : ${extractorLabel})` : "";
-            // En text_only, la suppression des liens KAG touche TOUT le corpus d'un coup :
-            // tant que le passage « Chunks contextuels » n'a pas tourné, les synthèses
-            // manquent sur tout le corpus. On l'énonce avant de lancer.
-            const enrichmentWarning =
-                mode === "text_only"
-                    ? "\n\n⚠ Les chunks contextuels de TOUS les documents seront supprimés.\n" +
-                      "Enchaînez le passage « Chunks contextuels » pour les régénérer."
-                    : "";
             const ok = confirm(
-                `Retraiter TOUS les documents en mode « ${modeLabel} »${suffix} ?${enrichmentWarning}\n\nCela peut prendre longtemps.`,
+                `Retraiter TOUS les documents en mode « ${modeLabel} »${suffix} ?\n\nCela peut prendre longtemps.`,
             );
             if (!ok) return;
             const r = await api('/api/library/reindex-all', {
@@ -2519,14 +2726,9 @@ endblock %} {% block content %}
             const suffix = EXTRACTOR_MODES.has(mode) ? ` (extraction : ${extractorLabel})` : "";
             // Le retraitement descend dans les sous-dossiers (même portée que la
             // suppression de dossier) : on l'énonce pour éviter la surprise.
-            const enrichmentWarning =
-                mode === "text_only"
-                    ? "\n\n⚠ Les chunks contextuels des documents concernés seront supprimés.\n" +
-                      "Enchaînez le passage « Chunks contextuels » pour les régénérer."
-                    : "";
             const ok = confirm(
                 `Retraiter les documents du dossier « ${folderName} » et de ses sous-dossiers ` +
-                    `en mode « ${modeLabel} »${suffix} ?${enrichmentWarning}`,
+                    `en mode « ${modeLabel} »${suffix} ?`,
             );
             if (!ok) return;
             const r = await api(`/api/library/folders/${folderId}/reindex`, {

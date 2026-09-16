@@ -11,7 +11,6 @@ from sqlmodel import Session
 from app.config import settings
 from app.models.document import Document
 from app.services.page_retrieval_service import (
-    CONTENT_TYPE_CONTEXTUAL_ENRICHMENT,
     build_consolidated_page_text,
     load_l1_chunks_for_page,
 )
@@ -108,57 +107,23 @@ def _chunk_category_map_for_page(
     return {int(chunk_id): float(confidence or 0.0) for chunk_id, confidence in rows}
 
 
-def _load_enrichment_chunks_for_category_page(
-    session: Session,
-    document_id: int,
-    category_id: int,
-    page_no: int,
-) -> List[Dict[str, Any]]:
-    rows = session.execute(
-        text(
-            """
-            SELECT dc.id, dc.content, dc.chunk_index, dc.metadata_json, dc.metadata_, ccr.confidence
-            FROM chunkcategoryrelation ccr
-            INNER JOIN documentchunk dc ON dc.id = ccr.chunk_id
-            WHERE ccr.document_id = :document_id
-              AND ccr.category_id = :category_id
-              AND ccr.page_no = :page_no
-              AND COALESCE(
-                  dc.metadata_json->>'content_type',
-                  dc.metadata_->>'content_type',
-                  ''
-              ) = :content_type
-            ORDER BY dc.chunk_index
-            """
-        ),
-        {
-            "document_id": document_id,
-            "category_id": category_id,
-            "page_no": page_no,
-            "content_type": CONTENT_TYPE_CONTEXTUAL_ENRICHMENT,
-        },
-    ).all()
 
-    items: List[Dict[str, Any]] = []
-    for chunk_id, content, chunk_index, metadata_json, metadata_, confidence in rows:
-        meta = dict(metadata_json or metadata_ or {})
-        text_content = (content or "").strip()
-        if not text_content:
-            continue
-        items.append(
-            {
-                "chunk_id": int(chunk_id),
-                "chunk_index": chunk_index,
-                "theme": meta.get("theme"),
-                "category_slug": meta.get("category_slug"),
-                "source_page": meta.get("source_page") or meta.get("page_no"),
-                "source_pages": meta.get("source_pages") or [],
-                "content": text_content,
-                "is_enrichment": True,
-                "confidence": float(confidence or 0.0),
-            }
-        )
-    return items
+def _page_display_text(document_id, page_no, chunks) -> tuple:
+    """(texte de la page, vient-il du markdown augmenté ?).
+
+    Quand le document a été retranscrit, c'est cette page-là qu'on montre à côté du PDF :
+    une page entière et fidèle, au lieu des fragments de l'extraction automatique.
+    """
+    from app.services.page_markdown_service import page_section
+    from app.services.page_retrieval_service import build_consolidated_page_text
+
+    try:
+        md = page_section(int(document_id), int(page_no))
+    except Exception:  # noqa: BLE001 - l'affichage ne doit jamais tomber là-dessus
+        md = None
+    if md:
+        return md, True
+    return build_consolidated_page_text(chunks), False
 
 
 def _build_navigation(
@@ -243,20 +208,17 @@ def get_document_category_page_detail(
                 "section_type": meta.get("section_type") or meta.get("content_type"),
                 "content": content,
                 "in_category": True,
-                "is_enrichment": False,
                 "confidence": chunk_confidence.get(chunk_id),
             }
         )
 
-    enrichment_items = _load_enrichment_chunks_for_category_page(
-        session, document_id, category_id, page_no
-    )
 
     has_source_file = bool(
         document.source_file_path and os.path.exists(document.source_file_path)
     )
     cat_id, slug, label = category_row
 
+    _texte_page, _md_augmente = _page_display_text(document_id, page_no, source_chunks_for_consolidated)
     return {
         "document_id": document_id,
         "category": {
@@ -271,7 +233,7 @@ def get_document_category_page_detail(
         },
         "page_no": page_no,
         "chunks": chunk_items,
-        "enrichment_chunks": enrichment_items,
-        "consolidated_markdown": build_consolidated_page_text(source_chunks_for_consolidated),
+        "consolidated_markdown": _texte_page,
+        "markdown_augmente": _md_augmente,
         "navigation": _build_navigation(pages, page_no),
     }

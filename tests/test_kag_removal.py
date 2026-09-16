@@ -98,17 +98,20 @@ class TestDemenagements:
 
         assert coverage_service.REF_CODE_RE is REF_CODE_RE
 
-    def test_fenetres_de_pages_dans_le_service_enrichissement(self):
-        from app.services.contextual_enrichment_service import build_page_batches
+    def test_fenetres_de_pages_dans_le_service_sav(self):
+        """La fenêtre glissante a migré KAG → enrichissement → SAV (seul consommateur)."""
+        from app.services.sav_extraction_service import build_sav_batches
 
         # 3 pages, overlap 1 → 1-2-3, 3-4-5, 5-6-7
-        assert build_page_batches([1, 2, 3, 4, 5, 6, 7]) == [[1, 2, 3], [3, 4, 5], [5, 6, 7]]
+        assert build_sav_batches(
+            [1, 2, 3, 4, 5, 6, 7], batch_size=3, overlap=1
+        ) == [[1, 2, 3], [3, 4, 5], [5, 6, 7]]
 
     def test_fenetres_vides_et_page_unique(self):
-        from app.services.contextual_enrichment_service import build_page_batches
+        from app.services.sav_extraction_service import build_sav_batches
 
-        assert build_page_batches([]) == []
-        assert build_page_batches([4]) == [[4]]
+        assert build_sav_batches([], batch_size=3, overlap=1) == []
+        assert build_sav_batches([4], batch_size=3, overlap=1) == [[4]]
 
 
 class TestPlusDeDependanceKAG:

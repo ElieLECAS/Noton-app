@@ -431,69 +431,77 @@ def _build_reader_prompt(base: str) -> str:
 READER_SYSTEM_PROMPT = _build_reader_prompt(SPACE_CHAT_SYSTEM_PROMPT)
 
 
-# ——— Prompt IMAGE ONLY (14/09) ———
-# Le générateur ne reçoit QUE le manifeste des documents et les PNG des pages. Aucun texte
-# de page, aucun extrait indexé, aucun outil, donc aucun bloc dérivé du texte : « CONTEXTE
-# FOURNI » (qui décrit des extraits), « GROUNDING DUR » (qui s'appuie sur le bloc COUVERTURE,
-# calculé sur du texte) et « IMAGES » (qui parle des illustrations jointes à la réponse)
-# sont remplacés. Identité, sujet, format, anti-digression, grounding strict et style restent
-# partagés à l'identique avec le prompt d'espace.
-_IMAGE_ONLY_CONTEXT_SECTION = (
+# ——— Prompt PAGES : texte des pages + images des pages (16/09) ———
+# Le générateur reçoit le TEXTE de chaque page packée (markdown augmenté quand le document
+# en a un, fragments indexés sinon) ET le PNG des pages les plus pertinentes. Les sections
+# « CONTEXTE FOURNI », « GROUNDING DUR » et « IMAGES » du prompt d'espace décrivent un autre
+# dispositif (extraits indexés, bloc COUVERTURE, illustration jointe à la réponse) : elles
+# sont remplacées. Identité, sujet, format, anti-digression, grounding strict et style
+# restent partagés à l'identique avec le prompt d'espace.
+#
+# Les règles de lecture de planche et la consigne de forme (« réponds comme un technicien
+# qui a le document sous les yeux », aucun numéro de page dans le corps) viennent de la voie
+# image-only : mesurées le 14/09, elles font passer la page citée de 43,5 % à 83,9 % et la
+# page décalée de 53 % à 9,7 %.
+_PAGES_CONTEXT_SECTION = (
     "CE QUE TU AS\n"
-    "Le contexte ne contient AUCUN texte de page. Il contient un manifeste : pour chaque "
-    "document, son en-tête (source, gamme, matériau, type) et son identifiant « id N ». Les "
-    "PAGES elles-mêmes sont jointes à ce message en IMAGES, légendées « Image k = DOCUMENT "
-    "i, page p ». Aucune autre page n'existe pour toi : tu ne peux ni citer ni invoquer une "
-    "page qui n'est pas dans ces légendes.\n"
-    "Toute valeur, cote, référence ou consigne se lit SUR L'IMAGE, et nulle part ailleurs. "
-    "Regarde la page avant d'affirmer quoi que ce soit.\n"
-    "Sur une planche cotée, chaque schéma porte PLUSIEURS nombres, et une légende dit "
-    "souvent ce que chaque cotation représente. Lis cette légende, puis rattache la valeur au "
-    "repère dont elle est la cote : jamais celle d'un repère voisin, jamais une note générale "
-    "de la page (« valable pour une feuillure de X mm ») prise pour la valeur du repère "
-    "demandé. Dans un tableau, identifie d'abord la LIGNE qui encadre la valeur demandée, "
-    "puis lis la colonne.\n"
+    "Pour chaque document retenu : un en-tête (source, gamme, matériau, identifiant « id N »), "
+    "les conventions de lecture du document quand il en publie, puis le TEXTE de ses pages, "
+    "chacune sous un marqueur [page N]. Les pages retrouvées par la recherche portent une "
+    "étoile.\n"
+    "Ce texte est, selon les documents, une transcription fidèle de la page écrite pour être "
+    "lue, ou le résultat d'une extraction automatique — celle-ci peut être incomplète, mal "
+    "recollée, et elle ne porte PAS les valeurs qui ne sont que dessinées.\n"
+    "Les pages les plus pertinentes sont EN PLUS jointes à ce message en IMAGES, légendées "
+    "« Image k = DOCUMENT i, page p ».\n"
+    "L'IMAGE FAIT FOI : c'est la page telle qu'elle est imprimée ; le texte n'en est que la "
+    "transcription. Quand une image est jointe et qu'elle contredit visiblement le texte, "
+    "dis-le au lieu de trancher en silence. Quand une valeur n'est ni dans le texte ni "
+    "lisible sur une image jointe, elle n'existe pas pour toi.\n"
+    "Sur une planche cotée, chaque schéma porte PLUSIEURS nombres, et une légende dit souvent "
+    "ce que chaque cotation représente. Lis cette légende, puis rattache la valeur au repère "
+    "dont elle est la cote : jamais celle d'un repère voisin, jamais une note générale de la "
+    "page (« valable pour une feuillure de X mm ») prise pour la valeur du repère demandé. "
+    "Dans un tableau, identifie d'abord la LIGNE qui encadre la valeur demandée, puis lis la "
+    "colonne.\n"
+    "Une nomenclature se restitue ligne par ligne : ne totalise JAMAIS des quantités que le "
+    "document ne totalise pas lui-même. Une cellule vide signifie que le document n'indique "
+    "aucune valeur à cet endroit : ce n'est pas un zéro.\n"
     "Avant d'attribuer une information à une gamme ou à un produit, vérifie l'en-tête du "
     "document : ne transfère JAMAIS une valeur d'une gamme vers une autre (Perform 70 ≠ "
     "Perform 76, seuil PMR ≠ seuil standard). En cas d'informations contradictoires, le "
     "document le plus spécifique au sujet de la question prime.\n"
-    "Si les images ne portent pas ce qui est demandé, dis-le (« les documents fournis ne "
-    "précisent pas … »). Si la page ne permet pas de trancher entre deux nombres, dis-le "
-    "aussi : une ambiguïté déclarée est utile, un nombre choisi au hasard est une faute. "
-    "Jamais de connaissance générale pour combler un trou factuel, jamais de référence "
+    "Si ni le texte ni les images ne portent ce qui est demandé, dis-le (« les documents "
+    "fournis ne précisent pas … »). Si une page ne permet pas de trancher entre deux nombres, "
+    "dis-le aussi : une ambiguïté déclarée est utile, un nombre choisi au hasard est une "
+    "faute. Jamais de connaissance générale pour combler un trou factuel, jamais de référence "
     "déduite par analogie de numérotation (TGY3702 ≠ TGY3710).\n"
 )
-_IMAGE_ONLY_STOP_SECTION = (
+_PAGES_ANSWER_SECTION = (
     "COMMENT RÉPONDRE\n"
-    "Réponds comme un technicien qui a le document sous les yeux et à qui on pose la "
-    "question de vive voix : la réponse d'abord, en une phrase, puis seulement ce qui est "
-    "nécessaire pour s'en servir.\n"
+    "Réponds comme un technicien qui a le document sous les yeux et à qui on pose la question "
+    "de vive voix : la réponse d'abord, en une phrase, puis seulement ce qui est nécessaire "
+    "pour s'en servir.\n"
     "N'écris JAMAIS, dans le corps de ta réponse : un numéro de page, un numéro d'image, un "
     "identifiant de document (« doc 438 », « id 424 »), un titre de fichier, ni une section "
-    "« Preuve », « Source » ou « Justification ». Les sources sont affichées "
-    "automatiquement sous ta réponse, avec le document et la page : les répéter alourdit "
-    "sans rien prouver.\n"
+    "« Preuve », « Source » ou « Justification ». Les sources sont affichées automatiquement "
+    "sous ta réponse, avec le document et la page : les répéter alourdit sans rien prouver.\n"
+    "Cette interdiction porte sur le CORPS de la réponse, et sur lui seul. La ligne machine "
+    "<sources> de toute fin, elle, DOIT nommer les pages : c'est elle qui ouvre le PDF au bon "
+    "endroit pour l'utilisateur. Dès que tu t'appuies sur une page, elle y figure. Une liste de "
+    "pages vide signifie « je n'ai utilisé aucun document », ce qui est très rare.\n"
     "Quand la page porte plusieurs valeurs pour le repère demandé et qu'une légende dit "
-    "laquelle correspond, donne CELLE-LÀ, seule. Ne cite pas les autres cotes du même "
-    "repère : elles ne répondent pas à la question et transforment ta réponse en devinette.\n"
+    "laquelle correspond, donne CELLE-LÀ, seule. Ne cite pas les autres cotes du même repère : "
+    "elles ne répondent pas à la question et transforment ta réponse en devinette.\n"
     "La concision porte sur le COMMENTAIRE, jamais sur le contenu. Si la question appelle "
     "plusieurs valeurs, plusieurs cas ou plusieurs configurations, donne-les TOUS : une "
-    "réponse courte à laquelle il manque un cas est une réponse fausse. De même, quand "
-    "aucune des valeurs de la page ne convient, dis-le franchement au lieu de retenir la "
-    "plus proche.\n"
-    "\n"
-    "FIN DE RÉPONSE OBLIGATOIRE\n"
-    "Une ligne machine, masquée à l'utilisateur, en toute fin de réponse :\n"
-    "<sources>{\"used\":[{\"doc_id\":405,\"pages\":[111,112]}]}</sources> — les identifiants "
-    "« id N » des documents et les pages réellement utilisées. Le numéro de page est celui de "
-    "la légende de l'image (« page p »), JAMAIS celui imprimé dans le cartouche de la planche : "
-    "les deux diffèrent souvent.\n"
-    "N'en parle jamais dans le corps de la réponse.\n"
+    "réponse courte à laquelle il manque un cas est une réponse fausse. De même, quand aucune "
+    "des valeurs de la page ne convient, dis-le franchement au lieu de retenir la plus proche.\n"
 )
 
 
-def _build_image_only_prompt(base: str) -> str:
-    """Recompose le prompt image-only à partir des sections du prompt d'espace."""
+def _build_pages_prompt(base: str) -> str:
+    """Recompose le prompt « texte + images » à partir des sections du prompt d'espace."""
     chunks = base.split("\n### ")
     head, sections = chunks[0], chunks[1:]
 
@@ -501,15 +509,15 @@ def _build_image_only_prompt(base: str) -> str:
         return section.split("\n", 1)[0].split(" (")[0].strip()
 
     kept = [s for s in sections if _key(s) not in ("CONTEXTE FOURNI", "GROUNDING DUR", "IMAGES")]
-    ordered: List[str] = [_IMAGE_ONLY_CONTEXT_SECTION]
+    ordered: List[str] = [_PAGES_CONTEXT_SECTION]
     for section in kept:
         if _key(section) == "STYLE":
-            ordered.append(_IMAGE_ONLY_STOP_SECTION)
+            ordered.append(_PAGES_ANSWER_SECTION)
         ordered.append(section)
     return head + "\n### " + "\n### ".join(ordered)
 
 
-IMAGE_ONLY_SYSTEM_PROMPT = _build_image_only_prompt(SPACE_CHAT_SYSTEM_PROMPT)
+PAGES_SYSTEM_PROMPT = _build_pages_prompt(SPACE_CHAT_SYSTEM_PROMPT)
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
@@ -817,6 +825,65 @@ def build_space_context_from_passages(passages: List[dict]) -> dict:
 from app.services.context_packer_service import (  # noqa: E402
     build_document_sources as _build_document_sources,
 )
+
+
+def _question_documentaire(session: Session, space_id: int, message: str) -> Optional[str]:
+    """Raison pour laquelle ce message relève des documents, ou None.
+
+    Le routeur de compréhension est un petit modèle : il classe parfois une vraie question
+    technique en « direct », et le tour répond alors DE MÉMOIRE, sans document et sans
+    source — le pire mode de panne possible. Ce contrôle déterministe le rattrape.
+
+    Trois signaux, du moins cher au plus cher :
+      * une référence produit dans le message ;
+      * une mesure (un nombre suivi d'une unité) ;
+      * des termes rares RÉELLEMENT présents dans les documents de l'espace. Ce dernier
+        signal réutilise la fréquence documentaire calculée pour BM25 : si la question
+        parle le vocabulaire des notices, elle n'est pas du bavardage.
+    """
+    texte = (message or "").strip()
+    if not texte:
+        return None
+
+    try:
+        from app.services.coverage_service import extract_message_reference_codes
+
+        codes = extract_message_reference_codes(texte)
+        if codes:
+            return f"référence(s) {', '.join(codes[:3])}"
+    except Exception:  # noqa: BLE001
+        pass
+
+    if re.search(
+        r"\b\d+(?:[.,]\d+)?\s*(?:mm|cm|m|kg|g|°|dan|nm|bar|%|v|a|ma|w|db)\b",
+        texte,
+        re.IGNORECASE,
+    ):
+        return "mesure chiffrée"
+
+    try:
+        from app.services.page_retrieval_service import (
+            _bm25_document_frequency,
+            _bm25_page_universe,
+            _bm25_rare_terms,
+            _bm25_terms_of,
+        )
+        from app.services.page_retrieval_service import get_space_document_ids
+
+        doc_ids = get_space_document_ids(session, space_id, document_filter="technical")
+        if not doc_ids:
+            return None
+        termes = _bm25_terms_of(texte)
+        if not termes:
+            return None
+        dfs = _bm25_document_frequency(session, doc_ids, termes)
+        univers = _bm25_page_universe(session, doc_ids)
+        rares = _bm25_rare_terms(dfs, univers)
+        if len(rares) >= 2:
+            return f"termes documentaires {', '.join(rares[:3])}"
+    except Exception as exc:  # noqa: BLE001 - le garde-fou ne doit jamais casser le tour
+        logger.debug("[chat] garde-fou route directe indisponible : %s", exc)
+    return None
 
 
 def _build_generation_context(
@@ -1484,6 +1551,18 @@ async def stream_space_chat_message(
             logger.exception("[chat] suggestion Arbre SAV en échec (non bloquant)")
 
     if routing_decision_decision == "direct":
+        # Le routeur s'est déjà trompé sur une vraie question technique (16/09, « couleur de
+        # fil sur la broche 4 » → direct → réponse inventée avec une fausse source). On ne
+        # part en direct que si RIEN dans le message ne renvoie aux documents.
+        _raison_doc = _question_documentaire(session, space_id, request.message)
+        if _raison_doc:
+            logger.info(
+                "[chat] route « direct » annulée — le message renvoie aux documents (%s)",
+                _raison_doc,
+            )
+            routing_decision_decision = "rag"
+
+    if routing_decision_decision == "direct":
         direct_context = list(conversation_context)
         # Éliminer tout message utilisateur en suspens à la fin de l'historique
         while direct_context and direct_context[-1].get("role") == "user":
@@ -1491,7 +1570,20 @@ async def stream_space_chat_message(
 
         system_message = {
             "role": "system",
-            "content": SPACE_CHAT_SYSTEM_PROMPT + "\n\n(Note : Aucune recherche documentaire n'est nécessaire pour ce message. Réponds de manière polie et directe à la requête de l'utilisateur.)",
+            "content": SPACE_CHAT_SYSTEM_PROMPT
+            + (
+                "\n\n### AUCUN DOCUMENT POUR CE MESSAGE\n"
+                "Ce tour n'a déclenché aucune recherche : tu ne disposes d'AUCUN extrait, "
+                "d'AUCUNE page et d'AUCUNE image. Réponds poliment et directement.\n"
+                "Dans cet état, tu n'énonces JAMAIS : une cote, une valeur, une référence "
+                "produit, une couleur de fil, une norme, ni aucun fait technique — même si "
+                "tu crois le savoir. Tu n'écris JAMAIS de ligne « Source : … » : tu n'en as "
+                "aucune, et en inventer une est la faute la plus grave que tu puisses "
+                "commettre.\n"
+                "Si la demande appelle en réalité une information technique, dis simplement "
+                "que tu vas la chercher dans les documents et invite l'utilisateur à "
+                "reformuler en nommant le produit ou la gamme."
+            ),
         }
         
         full_context_draft = [system_message]
@@ -1945,18 +2037,17 @@ async def stream_space_chat_message(
             )
 
             # ——— Pack IMAGE ONLY (14/09) ———
-            # Le retriever élit les documents ; le générateur reçoit leur MANIFESTE (en-tête,
-            # pages retrouvées) et les PNG des pages. Rien d'autre : ni texte de page, ni
-            # transcription vision, ni lecture déléguée, ni outil.
+            # Le retriever élit les documents ; le générateur reçoit leur TEXTE page par page
+            # ET les PNG des pages les plus pertinentes.
             #
-            # Pourquoi : mesuré le 14/09, le texte indexé de ce corpus est soit une
-            # transcription sans aucune cote (dossier Perform76, 26 pages sur 26 sans couche
-            # texte), soit une reconstruction de tableau qui fabrique de fausses associations
-            # (doc 400 p.172 : « TGA3817 Cale de vitrage = TGY3605 Butées multivantaux »).
-            # Dès qu'il entre dans le contexte — directement, par un outil, ou récrit par un
-            # lecteur délégué — le modèle s'appuie dessus au lieu de regarder le dessin.
+            # Le texte servi est le markdown augmenté du document quand il en a un (une section
+            # par page, appariée au PNG de la même page), et les fragments indexés sinon —
+            # l'arbitrage est dans `_load_page_records`. Mesuré le 15/09 sur 62 questions, page
+            # de preuve seule : PNG seul 85,5 %, PNG + fragments indexés 12/13 sans gain,
+            # PNG + markdown de page 96,8 %. La voie « image only » du 14/09, qui n'envoyait
+            # qu'un manifeste sans aucun texte, est donc remplacée.
             from app.services.context_packer_service import (
-                build_image_only_context,
+                build_cag_context,
                 select_cag_images,
             )
             from app.services.coverage_service import extract_message_reference_codes
@@ -1978,18 +2069,19 @@ async def stream_space_chat_message(
             ] or None
             _intent = lw_result.signals.intent if (lw_result and lw_result.signals) else None
 
-            space_context_draft = build_image_only_context(
+            space_context_draft = build_cag_context(
                 session,
                 doc_passages,
-                system_prompt=IMAGE_ONLY_SYSTEM_PROMPT,
+                system_prompt=PAGES_SYSTEM_PROMPT,
+                anchor_document_ids=cag_anchor_document_ids or None,
                 elected_document_ids=_elected_ids,
                 intent=_intent,
             )
             reading_trace = None
             if retrieval_status == "low_confidence_clarification":
                 space_context_draft["content"] += (
-                    "\n\n⚠️ IMPORTANT : les pages jointes sont ambiguës ou de faible pertinence. "
-                    "Ne déduis PAS de réponse définitive de ce que tu y vois ; si les images ne "
+                    "\n\n⚠️ IMPORTANT : les pages fournies sont ambiguës ou de faible pertinence. "
+                    "Ne déduis PAS de réponse définitive de ce que tu y lis ou vois ; si elles ne "
                     "lèvent pas l'ambiguïté, pose à l'utilisateur UNE question précise de "
                     "clarification."
                 )
@@ -2001,7 +2093,7 @@ async def stream_space_chat_message(
 
             cag_documents_ctx: List[dict] = list(space_context_draft.get("cag_documents") or [])
 
-            # Les PNG des pages élues : c'est la SEULE matière documentaire du tour.
+            # Les PNG des pages élues, joints EN PLUS du texte packé.
             user_images, user_image_captions = select_cag_images(
                 session,
                 cag_documents_ctx,
@@ -2010,26 +2102,13 @@ async def stream_space_chat_message(
                 dpi=settings.CAG_IMAGE_DPI,
             )
 
-            # Les pages d'un document deviennent celles qui sont RÉELLEMENT jointes en image.
-            # Avant, « pages » portait toutes les pages retrouvées (jusqu'à 26 pour un
-            # dossier) : le bandeau de sources annonçait « p. 3-17 » alors que le modèle
-            # n'avait vu que 6 pages, et le recalage des pages citées n'avait plus de
-            # référence utile. Un document sans image jointe n'est pas lisible ce tour-ci :
-            # il quitte le registre des documents lus.
-            _pages_jointes: Dict[int, List[int]] = {}
-            for _c in user_image_captions:
-                _idx, _pg = _c.get("document_index"), _c.get("page_no")
-                if _idx is not None and isinstance(_pg, int):
-                    _pages_jointes.setdefault(int(_idx), []).append(_pg)
-            cag_documents_ctx = [
-                {**d, "pages": sorted(_pages_jointes[int(d["index"])])}
-                for d in cag_documents_ctx
-                if d.get("index") is not None and int(d["index"]) in _pages_jointes
-            ]
+            # Les pages du registre restent celles réellement PACKÉES : le modèle en a lu le
+            # texte, qu'une image soit jointe ou non. En voie image-only, ce registre était
+            # réduit aux seules pages illustrées, parce qu'une page non illustrée n'avait
+            # alors aucune matière — ce n'est plus le cas.
 
-            # Aucun bloc COUVERTURE : son verdict TROUVÉE/ABSENTE se calcule sur le texte
-            # indexé, qui n'existe pas ici. Sur un manifeste, il déclarerait absente toute
-            # référence — y compris celle qui est lisible sur l'image jointe.
+            # Bloc COUVERTURE : de nouveau calculable (le texte des pages est packé), mais
+            # laissé de côté tant qu'il n'a pas été remesuré sur le golden.
             pinned_codes: List[str] = []
 
             # Référence introuvable même après retry ciblé (cf. bloc retrieval) : sans outil,
@@ -2047,15 +2126,16 @@ async def stream_space_chat_message(
                 space_context_draft["content"] += (
                     "\n\n⚠️ IMPORTANT : la ou les référence(s) "
                     + ", ".join(reference_not_found)
-                    + " n'ont été retrouvées par aucune recherche, même ciblée. Vérifie sur les "
-                    "images jointes si elles y figurent. Si elles n'y sont pas, ne réponds PAS "
+                    + " n'ont été retrouvées par aucune recherche, même ciblée. Vérifie dans le "
+                    "texte des pages et sur les images jointes si elles y figurent. Si elles n'y "
+                    "sont pas, ne réponds PAS "
                     "« non documentée » comme réponse finale : demande à l'utilisateur UNE "
                     "précision courte qui permettrait de relancer la recherche "
                     "(fournisseur/marque, gamme, ou reformulation)."
                     + _suppliers_present
                 )
                 logger.info(
-                    "[chat] Référence(s) %s introuvable(s) au tour 0 → vérification sur images",
+                    "[chat] Référence(s) %s introuvable(s) au tour 0 → vérification sur les pages",
                     reference_not_found,
                 )
 

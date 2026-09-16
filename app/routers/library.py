@@ -245,11 +245,9 @@ class DocumentChunksMonitorResponse(BaseModel):
     raw_chunks_count: int
     report_chunks_count: int
     semantic_chunks_count: int = 0
-    enrichment_chunks_count: int = 0
     raw_chunks: List[DocumentChunkMonitorItem]
     report_chunks: List[DocumentChunkMonitorItem]
     semantic_chunks: List[DocumentChunkMonitorItem] = Field(default_factory=list)
-    enrichment_chunks: List[DocumentChunkMonitorItem] = Field(default_factory=list)
     kag: DocumentKagSummary = Field(default_factory=DocumentKagSummary)
 
 
@@ -282,16 +280,6 @@ class DocumentCategoryPageChunkItem(BaseModel):
     confidence: Optional[float] = None
 
 
-class DocumentCategoryEnrichmentChunkItem(BaseModel):
-    chunk_id: Optional[int] = None
-    chunk_index: Optional[int] = None
-    theme: Optional[str] = None
-    category_slug: Optional[str] = None
-    source_page: Optional[int] = None
-    source_pages: List[int] = Field(default_factory=list)
-    content: str
-    confidence: Optional[float] = None
-
 
 class DocumentCategoryPageNavRef(BaseModel):
     page_no: int
@@ -311,8 +299,8 @@ class DocumentCategoryPageDetailResponse(BaseModel):
     document: dict
     page_no: int
     chunks: List[DocumentCategoryPageChunkItem] = Field(default_factory=list)
-    enrichment_chunks: List[DocumentCategoryEnrichmentChunkItem] = Field(default_factory=list)
     consolidated_markdown: str = ""
+    markdown_augmente: bool = False
     navigation: DocumentCategoryPageNavigation
 
 
@@ -330,8 +318,8 @@ class DocumentSearchPageDetailResponse(BaseModel):
     document: dict
     page_no: int
     chunks: List[DocumentCategoryPageChunkItem] = Field(default_factory=list)
-    enrichment_chunks: List[DocumentCategoryEnrichmentChunkItem] = Field(default_factory=list)
     consolidated_markdown: str = ""
+    markdown_augmente: bool = False
     navigation: DocumentCategoryPageNavigation
 
 
@@ -568,7 +556,6 @@ async def get_document_chunks_monitor(
     """
     Retourne les chunks d'un document pour monitoring UI :
     - semantic : chunks vision (semantic_leaf, semantic_section, document_header)
-    - enrichment : chunks contextual_enrichment (synthèse inter-pages)
     - raw : legacy page_raw_enriched / page_multimodal_section
     - report : legacy page_window_report / page_multimodal_summary
     """
@@ -590,12 +577,10 @@ async def get_document_chunks_monitor(
         "page_multimodal_summary",
     }
     semantic_types = {"semantic_leaf", "semantic_section", "document_header"}
-    enrichment_types = {"contextual_enrichment"}
 
     raw_items: List[DocumentChunkMonitorItem] = []
     report_items: List[DocumentChunkMonitorItem] = []
     semantic_items: List[DocumentChunkMonitorItem] = []
-    enrichment_items: List[DocumentChunkMonitorItem] = []
 
     for chunk in chunks:
         metadata = dict(chunk.metadata_json or chunk.metadata_ or {})
@@ -604,7 +589,6 @@ async def get_document_chunks_monitor(
             content_type not in raw_types
             and content_type not in report_types
             and content_type not in semantic_types
-            and content_type not in enrichment_types
         ):
             continue
         page_no = metadata.get("page_no") or metadata.get("page") or metadata.get("page_start") or 0
@@ -627,8 +611,6 @@ async def get_document_chunks_monitor(
         )
         if content_type in semantic_types:
             semantic_items.append(item)
-        elif content_type in enrichment_types:
-            enrichment_items.append(item)
         elif content_type in raw_types:
             raw_items.append(item)
         else:
@@ -637,7 +619,6 @@ async def get_document_chunks_monitor(
     raw_items.sort(key=lambda x: (x.page, x.chunk_index))
     report_items.sort(key=lambda x: (x.page, x.chunk_index))
     semantic_items.sort(key=lambda x: (x.page, x.chunk_index, x.is_leaf))
-    enrichment_items.sort(key=lambda x: (x.page, x.chunk_index))
 
     # Volets Entités / Catégories vidés avec le retrait du KAG (2026-07-28) : la
     # structure de réponse est conservée (le front masque les onglets correspondants)
@@ -658,11 +639,9 @@ async def get_document_chunks_monitor(
         raw_chunks_count=len(raw_items),
         report_chunks_count=len(report_items),
         semantic_chunks_count=len(semantic_items),
-        enrichment_chunks_count=len(enrichment_items),
         raw_chunks=raw_items,
         report_chunks=report_items,
         semantic_chunks=semantic_items,
-        enrichment_chunks=enrichment_items,
         kag=kag_summary,
     )
 
@@ -1034,7 +1013,7 @@ async def update_library_document(
 
 class ReindexRequest(BaseModel):
     """Corps de la requête de retraitement."""
-    mode: str = Field(default="full", description="full | text_only | enrichment_only | colpali_only")
+    mode: str = Field(default="full", description="full | text_only | colpali_only")
     extractor: str = Field(
         default="vision",
         description=(
@@ -1056,14 +1035,9 @@ async def reindex_library_document_endpoint(
     Enfile le retraitement d'un document sur Celery.
 
     Modes disponibles :
-    - full        : tout (extraction + KAG + synthèses + embeddings + ColPali), défaut
-    - text_only   : extraction + embeddings SEULEMENT — ni KAG, ni synthèses
-                    contextuelles, ColPali inchangé. Passage RAPIDE (journée).
-    - enrichment_only : chunks contextuels (fenêtres de 3 pages, texte + vision) sur
-                    les chunks EXISTANTS + ré-embedding. Passage LENT (nuit).
+    - full        : extraction texte + embeddings + ColPali, défaut
+    - text_only   : extraction texte + embeddings SEULEMENT (ColPali inchangé)
     - colpali_only: re-sync visuel ColPali uniquement (chunks texte inchangés)
-
-    text_only puis enrichment_only aboutit au même état final que full.
 
     ``extractor`` (full et text_only) : "vision" ou "text" (couche texte native
     pymupdf4llm, avec repli vision sur les pages sans texte).
@@ -1087,10 +1061,10 @@ async def reindex_library_document_endpoint(
                 f"Valeurs acceptées : {', '.join(sorted(valid_extractors))}"
             ),
         )
-    if body.mode in ("full", "text_only", "enrichment_only") and not settings.MISTRAL_API_KEY:
+    if body.mode in ("full", "text_only") and not settings.MISTRAL_API_KEY:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="MISTRAL_API_KEY requise pour les modes full, text_only et enrichment_only.",
+            detail="MISTRAL_API_KEY requise pour les modes full et text_only.",
         )
     if body.mode in ("full", "colpali_only") and not settings.COLPALI_ENABLED:
         raise HTTPException(
@@ -1162,9 +1136,8 @@ async def reindex_all_library_endpoint(
     Enfile le retraitement de tous les documents de la bibliothèque.
 
     Modes disponibles :
-    - full        : tout (extraction + KAG + synthèses + embeddings + ColPali), défaut
-    - text_only   : extraction + embeddings seulement — passage RAPIDE
-    - enrichment_only : chunks contextuels + ré-embedding — passage LENT (nuit)
+    - full        : extraction texte + embeddings + ColPali, défaut
+    - text_only   : extraction texte + embeddings seulement
     - colpali_only: re-sync visuel ColPali uniquement
     """
     from app.services.document_indexing_service import IndexingMode, TextExtractor
@@ -1307,7 +1280,7 @@ async def colpali_repair_document_endpoint(
 
 class ReindexFolderRequest(BaseModel):
     """Corps de la requête de retraitement d'un dossier."""
-    mode: str = Field(default="full", description="full | text_only | enrichment_only | colpali_only")
+    mode: str = Field(default="full", description="full | text_only | colpali_only")
     extractor: str = Field(
         default="vision",
         description="vision | text — voie d'extraction (modes full et text_only)",
@@ -1348,10 +1321,10 @@ async def reindex_folder_library_endpoint(
                 f"Valeurs acceptées : {', '.join(sorted(valid_extractors))}"
             ),
         )
-    if body.mode in ("full", "text_only", "enrichment_only") and not settings.MISTRAL_API_KEY:
+    if body.mode in ("full", "text_only") and not settings.MISTRAL_API_KEY:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="MISTRAL_API_KEY requise pour les modes full, text_only et enrichment_only.",
+            detail="MISTRAL_API_KEY requise pour les modes full et text_only.",
         )
     if body.mode in ("full", "colpali_only") and not settings.COLPALI_ENABLED:
         raise HTTPException(
@@ -1400,6 +1373,165 @@ async def reindex_folder_library_endpoint(
         "mode": body.mode,
         "extractor": body.extractor,
     }
+
+
+# ---------------------------------------------------------------------------
+# Markdown augmenté — une section par page, appariée au PNG de la même page
+# (protocole : docs/protocole_markdown_augmente_2026-09-16.md)
+# ---------------------------------------------------------------------------
+
+
+class PageMarkdownImport(BaseModel):
+    """Contenu du markdown augmenté, collé ou déposé depuis l'interface."""
+
+    content: str = Field(..., description="Markdown augmenté complet, séparateurs compris")
+
+
+def _document_for_markdown(session: Session, document_id: int, user_id: int) -> Document:
+    library = get_or_create_user_library(session, user_id)
+    document = session.exec(
+        select(Document).where(
+            Document.id == document_id,
+            Document.library_id == library.id,
+        )
+    ).first()
+    if document is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Document non trouvé"
+        )
+    return document
+
+
+def _validate_page_markdown(document: Document, content: str) -> dict:
+    """Parse + valide un markdown contre le PDF source. N'écrit rien."""
+    import os as _os
+
+    from app.services.page_markdown_service import (
+        parse_markdown,
+        pdf_page_count,
+        sha256_of_file,
+        validate,
+    )
+
+    pdf_path = document.source_file_path
+    has_pdf = bool(pdf_path and _os.path.exists(pdf_path))
+    expected = pdf_page_count(pdf_path) if has_pdf else None
+    source_hash = sha256_of_file(pdf_path) if has_pdf else None
+
+    parsed = parse_markdown(content)
+    report = validate(
+        content, parsed, expected_pages=expected, source_sha256=source_hash
+    )
+    payload = report.to_dict()
+    payload["document_id"] = document.id
+    payload["document_title"] = document.title
+    payload["source_sha256"] = source_hash
+    if not has_pdf:
+        payload["warnings"].append(
+            "Le PDF source est introuvable : le nombre de pages n'a pas pu être vérifié."
+        )
+    return payload
+
+
+@router.get("/documents/{document_id}/page-markdown")
+def get_page_markdown(
+    document_id: int,
+    raw: bool = Query(False, description="Renvoyer aussi le markdown complet"),
+    current_user: UserRead = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    """État du markdown augmenté d'un document (et son contenu si ``raw=1``)."""
+    from app.services.page_markdown_service import read_markdown, status as md_status
+
+    document = _document_for_markdown(session, document_id, current_user.id)
+    payload = md_status(document_id, document.source_file_path)
+    payload["document_id"] = document_id
+    payload["document_title"] = document.title
+    if raw:
+        payload["content"] = read_markdown(document_id) or ""
+    return payload
+
+
+@router.post("/documents/{document_id}/page-markdown/validate")
+def validate_page_markdown(
+    document_id: int,
+    body: PageMarkdownImport,
+    current_user: UserRead = Depends(require_permission("library.write")),
+    session: Session = Depends(get_session),
+):
+    """Contrôle à blanc : rapport de validation, AUCUNE écriture.
+
+    C'est l'étape qui rend l'import sûr. Un markdown à 20 sections pour un PDF de
+    26 pages décale tout à partir de la première erreur, et le décalage est silencieux :
+    on le montre avant d'écrire, jamais après.
+    """
+    document = _document_for_markdown(session, document_id, current_user.id)
+    return _validate_page_markdown(document, body.content)
+
+
+@router.post("/documents/{document_id}/page-markdown")
+def import_page_markdown(
+    document_id: int,
+    body: PageMarkdownImport,
+    force: bool = Query(
+        False,
+        description="Écrire malgré les erreurs de validation (réservé aux cas connus)",
+    ),
+    current_user: UserRead = Depends(require_permission("library.write")),
+    session: Session = Depends(get_session),
+):
+    """Attache un markdown augmenté au document. Refuse si la validation échoue."""
+    from app.services.page_markdown_service import write_markdown
+
+    document = _document_for_markdown(session, document_id, current_user.id)
+    report = _validate_page_markdown(document, body.content)
+
+    if not report["ok"] and not force:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={"message": "Markdown refusé par la validation", "report": report},
+        )
+
+    path = write_markdown(document_id, body.content)
+    # Le packer garde les feuilles en cache : sans cette purge, l'ancien texte reste servi
+    # jusqu'à expiration du TTL.
+    from app.services.context_packer_service import invalidate_document_fulltext_cache
+    from app.services.page_markdown_service import sync_chunks
+
+    invalidate_document_fulltext_cache(document_id)
+    # Corpus lexical : une ligne par page, pour que BM25 puisse chercher dedans.
+    pages_indexees = sync_chunks(session, document_id)
+
+    logger.info(
+        "[PageMarkdown] import doc=%s — %d page(s), forcé=%s",
+        document_id,
+        report["pages_found"],
+        force,
+    )
+    report["stored_path"] = str(path)
+    report["forced"] = bool(force and not report["ok"])
+    report["pages_indexees_bm25"] = pages_indexees
+    return report
+
+
+@router.delete("/documents/{document_id}/page-markdown", status_code=status.HTTP_200_OK)
+def delete_page_markdown(
+    document_id: int,
+    current_user: UserRead = Depends(require_permission("library.write")),
+    session: Session = Depends(get_session),
+):
+    """Détache le markdown augmenté : le document repasse sur ses fragments indexés."""
+    from app.services.page_markdown_service import delete_markdown
+
+    _document_for_markdown(session, document_id, current_user.id)
+    removed = delete_markdown(document_id)
+    from app.services.context_packer_service import invalidate_document_fulltext_cache
+    from app.services.page_markdown_service import delete_chunks
+
+    lignes = delete_chunks(session, document_id)
+    session.commit()
+    invalidate_document_fulltext_cache(document_id)
+    return {"document_id": document_id, "removed": removed, "lignes_bm25_retirees": lignes}
 
 
 @router.get("/documents/{document_id}/file")

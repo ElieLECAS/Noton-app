@@ -1,0 +1,42 @@
+{
+  "espace": 24,
+  "commentaire": "Espace ROTO. Chaque cas vise un mode de panne précis du canal lexical.",
+  "documents": [383, 384, 390, 391],
+  "cas": [
+    {
+      "id": "bm25_01_vocabulaire_absent",
+      "question": "Avec quel outil contrôler la mobilité des ferrures à la poignée de la porte ?",
+      "document_id": 390,
+      "page": 10,
+      "vise": "Le mot 'dynamométrique' n'existe que dans le markdown ; l'extraction vision de la page 10 ne contient que la note légale."
+    },
+    {
+      "id": "bm25_02_question_naturelle",
+      "question": "Quelles sont les couleurs des fils sur le passage de câble de l'Eneo CC ?",
+      "document_id": 390,
+      "page": 6,
+      "vise": "Question formulée naturellement : le palier OU laisse passer des mots vides ('sont') qui ramènent du bruit."
+    },
+    {
+      "id": "bm25_03_reference_produit",
+      "question": "À quoi correspond la référence 820255 ?",
+      "document_id": 390,
+      "page": 3,
+      "vise": "Recherche par numéro d'article. Une référence doit primer sur tout le reste."
+    },
+    {
+      "id": "bm25_04_discrimination_documents",
+      "question": "Comment associer une télécommande à la serrure ?",
+      "document_id": 390,
+      "page": 8,
+      "vise": "L'espace contient aussi 391 (Roto NX KSR, 547 chunks). Le gros document ne doit pas écraser le petit."
+    },
+    {
+      "id": "bm25_05_valeur_chiffree",
+      "question": "Quelle est la tension de sortie du transformateur Eneo ?",
+      "document_id": 390,
+      "page": 6,
+      "vise": "Valeur chiffrée avec unité (24 V DC / 2.5 A) : elle n'est pas dans l'extraction vision de la page."
+    }
+  ]
+}

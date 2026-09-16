@@ -23,7 +23,6 @@ logger = logging.getLogger(__name__)
 
 CONTENT_TYPE_SEMANTIC_LEAF = "semantic_leaf"
 CONTENT_TYPE_PAGE_ANCHOR = "page_anchor"
-CONTENT_TYPE_CONTEXTUAL_ENRICHMENT = "contextual_enrichment"
 
 # Article élidé en tête de token (« l'ouvrant », « d'étanchéité ») : retiré avant
 # construction du tsquery, cf. _extract_bm25_fallback_query.
@@ -65,7 +64,6 @@ class UnifiedPageHit:
 
     # Pages sources d'un chunk d'enrichissement contextuel ayant matché cette page
     # (déplié à l'expansion pour retourner tout le batch 1/2/3 pages).
-    enrichment_source_pages: List[int] = field(default_factory=list)
 
     # Page d'un document jugé « muet » au profilage (planche CAO dont le texte extrait ne
     # porte pas les cotes) : l'image fait foi, elle est donc prioritaire au rendu PNG.
@@ -94,26 +92,25 @@ def _semantic_leaf_filter(prefix: str = "dc") -> str:
 
 
 def _retrievable_text_leaf_filter(prefix: str = "dc") -> str:
-    """Chunks texte indexés pour retrieval vectoriel / BM25 (source + enrichissement)."""
-    return (
-        f"COALESCE({prefix}.metadata_json->>'content_type', "
-        f"{prefix}.metadata_->>'content_type', '') IN "
-        f"('semantic_leaf', 'contextual_enrichment')"
-    )
+    """Chunks texte interrogés par BM25.
 
+    Deux natures y cohabitent depuis le 2026-09-16 :
+      * ``semantic_leaf`` — les fragments issus de l'extraction automatique du PDF ;
+      * ``page_markdown`` — une ligne par page du markdown augmenté, quand le document a
+        été retranscrit.
 
-def _enrichment_source_pages_agg(prefix: str = "dc") -> str:
-    """Agrège (MAX) les source_pages des chunks d'enrichissement ayant matché une page.
+    Les deux sont interrogeables ensemble, et c'est voulu : le markdown apporte les termes
+    que l'extraction a perdus (« Éteindre », « dynamométrique », « pH neutre » étaient
+    introuvables sur le document 390), l'extraction garde ceux qu'une transcription
+    reformule. Le retrieval agrège par PAGE, donc une page présente dans les deux natures
+    n'est pas comptée deux fois — elle a seulement deux chances de matcher.
 
-    Utilisé dans les requêtes agrégées par page (BM25) pour savoir, quand un
-    chunk `contextual_enrichment` figure parmi les chunks retrouvés d'une page, sur quelles
-    pages sources (batch) il s'étend — afin de les déplier à l'expansion.
+    Aucune réécriture de LLM n'entre ici : les chunks contextuels ont été supprimés le
+    même jour, et le markdown augmenté est une transcription, pas un commentaire.
     """
     return (
-        f"MAX(CASE WHEN COALESCE({prefix}.metadata_json->>'content_type', "
-        f"{prefix}.metadata_->>'content_type', '') = '{CONTENT_TYPE_CONTEXTUAL_ENRICHMENT}' "
-        f"THEN COALESCE({prefix}.metadata_json->>'source_pages', "
-        f"{prefix}.metadata_->>'source_pages') END)"
+        f"COALESCE({prefix}.metadata_json->>'content_type', "
+        f"{prefix}.metadata_->>'content_type', '') IN ('semantic_leaf', 'page_markdown')"
     )
 
 
@@ -135,13 +132,6 @@ def _parse_source_pages(raw: Any) -> List[int]:
         except (TypeError, ValueError):
             continue
     return pages
-
-
-def _enrichment_pages_from_meta(meta: dict) -> List[int]:
-    """source_pages d'un chunk si c'est un enrichissement contextuel, sinon []."""
-    if (meta or {}).get("content_type") != CONTENT_TYPE_CONTEXTUAL_ENRICHMENT:
-        return []
-    return _parse_source_pages(meta.get("source_pages"))
 
 
 def _bulk_resolve_chunk_to_page(
@@ -729,8 +719,7 @@ def _run_bm25_pages_query(
             dc.document_id,
             {page_no_expr} AS page_no,
             d.title AS document_title,
-            MAX(ts_rank_cd(dc.tsv_content, {tsquery_fn}('french', :query))) AS rank,
-            {_enrichment_source_pages_agg("dc")} AS enrichment_source_pages_text
+            MAX(ts_rank_cd(dc.tsv_content, {tsquery_fn}('french', :query))) AS rank
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         WHERE dc.document_id IN :doc_ids
@@ -764,8 +753,7 @@ def _run_bm25_or_pages_query(
             dc.document_id,
             {page_no_expr} AS page_no,
             d.title AS document_title,
-            MAX(ts_rank_cd(dc.tsv_content, to_tsquery('french', :tsq))) AS rank,
-            {_enrichment_source_pages_agg("dc")} AS enrichment_source_pages_text
+            MAX(ts_rank_cd(dc.tsv_content, to_tsquery('french', :tsq))) AS rank
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         WHERE dc.document_id IN :doc_ids
@@ -799,8 +787,7 @@ def _run_bm25_websearch_or_pages_query(
             dc.document_id,
             {page_no_expr} AS page_no,
             d.title AS document_title,
-            MAX(ts_rank_cd(dc.tsv_content, websearch_to_tsquery('french', :query))) AS rank,
-            {_enrichment_source_pages_agg("dc")} AS enrichment_source_pages_text
+            MAX(ts_rank_cd(dc.tsv_content, websearch_to_tsquery('french', :query))) AS rank
         FROM documentchunk dc
         INNER JOIN document d ON dc.document_id = d.id
         WHERE dc.document_id IN :doc_ids
@@ -819,6 +806,180 @@ def _run_bm25_websearch_or_pages_query(
     ).all()
 
 
+# ---------------------------------------------------------------------------
+# Rareté des termes — ce que ts_rank_cd ne sait pas faire
+# ---------------------------------------------------------------------------
+# PostgreSQL classe par fréquence et proximité DANS le document, jamais par rareté
+# DANS le corpus : un terme courant pèse autant qu'une référence unique. On calcule
+# donc la fréquence documentaire nous-mêmes — une seule requête — et on s'en sert pour
+# deux choses : choisir une ancre rare, et reclasser les résultats du palier OU.
+
+# Au-delà, un terme est jugé trop courant pour servir d'ancre (part des pages du périmètre).
+_BM25_RARE_MAX_RATIO = 0.10
+# ... et en valeur absolue, pour les petits périmètres où 10 % ne veut rien dire.
+_BM25_RARE_MAX_PAGES = 8
+
+
+def _bm25_terms_of(query_text: str) -> List[str]:
+    """Termes discriminants d'une requête, sans les mots vides du dictionnaire french.
+
+    On ne maintient PLUS de liste de mots vides à la main pour ce filtrage : Postgres
+    répond lui-même (``to_tsvector('french', mot)`` vide = mot vide). ``_BM25_STOPWORDS``
+    reste utilisé en amont par ``_extract_bm25_fallback_query`` pour la construction des
+    requêtes de repli.
+    """
+    brut = _extract_bm25_fallback_query(query_text, max_terms=8)
+    return [t.strip() for t in brut.split(" OR ") if t.strip()]
+
+
+def _bm25_page_universe(session: Session, doc_ids: List[int]) -> int:
+    """Nombre de pages distinctes du périmètre — le N de l'IDF."""
+    semantic_filter = (
+        f"AND {_retrievable_text_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
+    )
+    sql = text(
+        f"""
+        SELECT count(DISTINCT (dc.document_id, {_page_no_sql_expr("dc")}))
+        FROM documentchunk dc
+        WHERE dc.document_id IN :doc_ids
+          AND dc.is_leaf = true
+          AND {_page_no_sql_expr("dc")} IS NOT NULL
+          {semantic_filter}
+        """
+    )
+    try:
+        return int(session.execute(sql, {"doc_ids": tuple(doc_ids)}).scalar() or 0)
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("[bm25] univers de pages indisponible : %s", exc)
+        return 0
+
+
+def _bm25_document_frequency(
+    session: Session, doc_ids: List[int], terms: List[str]
+) -> Dict[str, int]:
+    """Nombre de pages du périmètre portant chaque terme. Une seule requête.
+
+    Le ``FILTER`` n'est pas décoratif : avec un LEFT JOIN, ``count(DISTINCT (a, b))``
+    compte le tuple ``(NULL, NULL)`` comme une valeur. Sans lui, un terme ABSENT du
+    corpus obtient df = 1, passe donc pour le plus rare, et devient l'ancre — l'inverse
+    exact de ce qu'on veut.
+    """
+    if not terms:
+        return {}
+    semantic_filter = (
+        f"AND {_retrievable_text_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
+    )
+    sql = text(
+        f"""
+        SELECT t.terme, count(DISTINCT (dc.document_id, {_page_no_sql_expr("dc")})) FILTER (WHERE dc.id IS NOT NULL) AS n
+        FROM unnest(CAST(:terms AS text[])) AS t(terme)
+        LEFT JOIN documentchunk dc
+          ON dc.document_id IN :doc_ids
+         AND dc.is_leaf = true
+         AND {_page_no_sql_expr("dc")} IS NOT NULL
+         {semantic_filter}
+         AND dc.tsv_content @@ plainto_tsquery('french', t.terme)
+        GROUP BY t.terme
+        """
+    )
+    try:
+        rows = session.execute(sql, {"terms": terms, "doc_ids": tuple(doc_ids)}).all()
+        return {str(r[0]): int(r[1] or 0) for r in rows}
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("[bm25] fréquence documentaire indisponible : %s", exc)
+        return {}
+
+
+def _bm25_rare_terms(dfs: Dict[str, int], univers: int) -> List[str]:
+    """Termes assez rares pour servir d'ancre, du plus rare au moins rare.
+
+    Un terme absent du corpus (df = 0) n'est pas une ancre : il ne matcherait rien.
+    """
+    if not dfs:
+        return []
+    plafond = max(1, min(_BM25_RARE_MAX_PAGES, int(univers * _BM25_RARE_MAX_RATIO) or _BM25_RARE_MAX_PAGES))
+    rares = [(t, n) for t, n in dfs.items() if 0 < n <= plafond]
+    rares.sort(key=lambda kv: kv[1])
+    return [t for t, _ in rares]
+
+
+def _bm25_idf(df: int, univers: int) -> float:
+    """IDF lissé. Un terme sur 1 page d'un corpus de 600 pèse ~6,4 ; sur 300, ~0,7."""
+    if df <= 0 or univers <= 0:
+        return 0.0
+    return math.log(1.0 + (univers / df))
+
+
+def _bm25_rerank_by_rarity(
+    session: Session,
+    doc_ids: List[int],
+    rows: List[Any],
+    terms: List[str],
+    dfs: Dict[str, int],
+    univers: int,
+) -> List[Any]:
+    """Reclasse des pages du palier OU en pondérant chaque terme par sa rareté.
+
+    Le palier OU additionne des correspondances sans distinguer « 820255 » de
+    « correspond ». Ici, la page est notée par la somme des IDF des termes qu'elle porte
+    RÉELLEMENT ; le rang ts_rank_cd d'origine ne sert plus qu'à départager à égalité.
+    """
+    if not rows or not terms or not dfs or univers <= 0:
+        return rows
+
+    pages = [(int(r.document_id), int(r.page_no)) for r in rows]
+    semantic_filter = (
+        f"AND {_retrievable_text_leaf_filter('dc')}" if settings.BM25_FILTER_SEMANTIC_LEAF else ""
+    )
+    sql = text(
+        f"""
+        SELECT dc.document_id, {_page_no_sql_expr("dc")} AS page_no, t.terme
+        FROM unnest(CAST(:terms AS text[])) AS t(terme)
+        JOIN documentchunk dc
+          ON dc.document_id IN :doc_ids
+         AND dc.is_leaf = true
+         AND {_page_no_sql_expr("dc")} IS NOT NULL
+         {semantic_filter}
+         AND dc.tsv_content @@ plainto_tsquery('french', t.terme)
+        GROUP BY 1, 2, 3
+        """
+    )
+    try:
+        matched = session.execute(sql, {"terms": terms, "doc_ids": tuple(doc_ids)}).all()
+    except Exception as exc:  # noqa: BLE001
+        logger.debug("[bm25] reclassement par rareté ignoré : %s", exc)
+        return rows
+
+    poids: Dict[Tuple[int, int], float] = {}
+    for did, pno, terme in matched:
+        cle = (int(did), int(pno))
+        poids[cle] = poids.get(cle, 0.0) + _bm25_idf(dfs.get(str(terme), 0), univers)
+
+    if not poids:
+        return rows
+
+    ordre = {cle: i for i, cle in enumerate(pages)}
+    reclasse = sorted(
+        rows,
+        key=lambda r: (
+            -poids.get((int(r.document_id), int(r.page_no)), 0.0),
+            -float(r.rank or 0.0),
+            ordre.get((int(r.document_id), int(r.page_no)), 10**6),
+        ),
+    )
+    if [(int(r.document_id), int(r.page_no)) for r in reclasse] != pages:
+        avant, apres = pages[0], (int(reclasse[0].document_id), int(reclasse[0].page_no))
+        if avant != apres:
+            logger.info(
+                "[bm25] reclassement par rareté — tête %s → %s (poids %.2f contre %.2f)",
+                f"doc{avant[0]}:p{avant[1]}",
+                f"doc{apres[0]}:p{apres[1]}",
+                poids.get(apres, 0.0),
+                poids.get(avant, 0.0),
+            )
+    return reclasse
+
+
 def retrieve_bm25_pages(
     session: Session,
     doc_ids: List[int],
@@ -834,15 +995,53 @@ def retrieve_bm25_pages(
     used_query = normalized_query
     query_mode = "AND"
 
+    # Rareté des termes : calculée une fois, elle sert à l'ancre rare puis au reclassement.
+    termes = _bm25_terms_of(query_text)
+    univers = _bm25_page_universe(session, doc_ids)
+    dfs = _bm25_document_frequency(session, doc_ids, termes) if termes else {}
+
     try:
         rows = _run_bm25_pages_query(
             session, doc_ids, normalized_query, limit
         )
 
-        # Paliers de REPLI. Le AND strict ci-dessus n'est jamais étendu : s'il matche,
-        # il est fiable. À partir d'ici il a rendu zéro — c'est précisément le cas où le
-        # vocabulaire de la question ne colle pas à celui des notices, donc où le
-        # thésaurus métier a sa place (ouvrant→vantail, poignée→béquille).
+        # Palier ANCRE RARE. Le AND strict exige TOUS les termes sur une même page : sur
+        # une question en langue naturelle il ne matche presque jamais (mesuré 0 fois sur
+        # 5 le 16/09). Plutôt que de basculer aussitôt sur un OU large, on tente un AND
+        # sur les seuls termes RARES du périmètre — une référence produit, un mot
+        # technique unique. C'est le palier précis qui manquait.
+        if not rows:
+            rares = _bm25_rare_terms(dfs, univers)
+            # Un SEUL terme rare en langue courante est une ancre fragile : « outil » est
+            # rare dans le périmètre, mais il vit dans un autre document que la réponse, et
+            # l'ancre y emmenait toute la recherche. On n'ancre donc que sur au moins deux
+            # termes, ou sur un terme qui porte un chiffre — une référence produit, elle,
+            # est discriminante à elle seule (« 820255 »).
+            if len(rares) == 1 and not any(c.isdigit() for c in rares[0]):
+                logger.info(
+                    "[retrieve_bm25_pages] ancre rare écartée — %r seul et sans chiffre (df=%s)",
+                    rares[0],
+                    dfs.get(rares[0]),
+                )
+                rares = []
+            if rares:
+                ancre = _build_bm25_or_tsquery(rares[:3], expand=False).replace("|", "&")
+                if ancre:
+                    ancre_rows = _run_bm25_or_pages_query(session, doc_ids, ancre, limit)
+                    if ancre_rows:
+                        rows = ancre_rows
+                        used_query = ancre
+                        query_mode = "AND-ancre-rare"
+                        logger.info(
+                            "[retrieve_bm25_pages] ancre rare — %r (df=%s) → %d pages",
+                            ancre,
+                            {t: dfs.get(t) for t in rares[:3]},
+                            len(rows),
+                        )
+
+        # Paliers de REPLI. À partir d'ici, ni le AND strict ni l'ancre rare n'ont rendu
+        # de page — c'est le cas où le vocabulaire de la question ne colle pas à celui des
+        # notices, donc où le thésaurus métier a sa place (ouvrant→vantail, poignée→béquille).
         if not rows:
             or_websearch = _extract_bm25_fallback_query(query_text, expand=True)
             if or_websearch:
@@ -873,6 +1072,12 @@ def retrieve_bm25_pages(
         logger.warning("[retrieve_bm25_pages] recherche échouée (%s) : %s", tsquery_fn, exc)
         return []
 
+    # Les paliers OU additionnent des correspondances sans distinguer un terme unique
+    # d'un mot courant : on les repondère par la rareté. Le AND strict et l'ancre rare
+    # sont déjà précis par construction, on n'y touche pas.
+    if rows and query_mode.startswith("OR"):
+        rows = _bm25_rerank_by_rarity(session, doc_ids, rows, termes, dfs, univers)
+
     if not rows:
         _log_bm25_zero_diagnostic(session, doc_ids, normalized_query)
         logger.info(
@@ -888,9 +1093,6 @@ def retrieve_bm25_pages(
             bm25_score=float(row.rank or 0.0),
             document_title=row.document_title or "Document sans titre",
             retrieval_sources=["bm25"],
-            enrichment_source_pages=_parse_source_pages(
-                getattr(row, "enrichment_source_pages_text", None)
-            ),
         )
         for row in rows
     ]
@@ -949,10 +1151,6 @@ def fuse_multimodal_hits(
                 target.document_title = hit.document_title
             if hit.chunk_id is not None:
                 target.chunk_id = hit.chunk_id
-            if hit.enrichment_source_pages:
-                merged_pages = set(target.enrichment_source_pages)
-                merged_pages.update(hit.enrichment_source_pages)
-                target.enrichment_source_pages = sorted(merged_pages)
 
     add_channel(colpali_hits, "colpali")
     add_channel(bm25_hits, "bm25")
@@ -1074,35 +1272,6 @@ def select_final_hits(
     return final, protected
 
 
-def _apply_enrichment_span_expansion(session: Session, hit: UnifiedPageHit) -> None:
-    """Déplie les pages sources d'un chunk d'enrichissement contextuel retrouvé.
-
-    Quand un chunk `contextual_enrichment` couvrant plusieurs pages (1/2/3) a matché la
-    page du hit, on charge les L1 de toutes ses `source_pages` afin que le retrieval
-    retourne l'intégralité du batch et non uniquement la page principale.
-    """
-    extra_pages = sorted(
-        {p for p in hit.enrichment_source_pages if p and p != hit.page_no}
-    )
-    if not extra_pages:
-        return
-
-    seen_ids = {c.id for c in hit.text_chunks if c.id is not None}
-    for pno in extra_pages:
-        for chunk in load_l1_chunks_for_page(session, hit.document_id, pno):
-            if chunk.id is not None and chunk.id in seen_ids:
-                continue
-            hit.text_chunks.append(chunk)
-            if chunk.id is not None:
-                seen_ids.add(chunk.id)
-        if pno not in hit.neighbor_pages:
-            hit.neighbor_pages.append(pno)
-
-    hit.text_chunks.sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
-    hit.neighbor_pages.sort()
-    hit.expansion_reason = hit.expansion_reason or "enrichment_span"
-
-
 def expand_page_context(
     session: Session,
     hits: List[UnifiedPageHit],
@@ -1117,10 +1286,6 @@ def expand_page_context(
         hit.text_chunks = load_l1_chunks_for_page(session, hit.document_id, hit.page_no)
         hit.neighbor_pages = []
         hit.expansion_reason = None
-
-        # Dépliage des pages sources d'un chunk d'enrichissement, indépendant de la
-        # stratégie de voisinage : un chunk contextuel retrouvé ramène tout son batch.
-        _apply_enrichment_span_expansion(session, hit)
 
         if strategy == "none":
             expanded.append(hit)
@@ -1201,10 +1366,6 @@ def format_multimodal_passages(
                 image_pages.append((hit.document_id, pno))
 
         display_score = hit.rerank_score if hit.rerank_score is not None else hit.rrf_score
-        enrichment_chunks = load_enrichment_chunks_for_pages(
-            session, hit.document_id, pages_included
-        )
-        enrichment_passages = _format_enrichment_passages(enrichment_chunks)
         passage_dict: Dict[str, Any] = {
             "rank": hit.final_rank,
             "passage": passage_text,
@@ -1229,8 +1390,6 @@ def format_multimodal_passages(
             "needs_page_image": needs_image and len(image_pages) > 0,
             "image_pages": image_pages,
             "content_type": "multimodal_page_passage",
-            "is_enrichment": False,
-            "enrichment_passages": enrichment_passages,
         }
         passages.append(passage_dict)
 
@@ -1275,7 +1434,7 @@ def load_l1_chunks_for_page(
     for chunk in all_leaves:
         meta = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
         content_type = meta.get("content_type")
-        if content_type in (CONTENT_TYPE_PAGE_ANCHOR, CONTENT_TYPE_CONTEXTUAL_ENRICHMENT):
+        if content_type == CONTENT_TYPE_PAGE_ANCHOR:
             continue
         if content_type not in (None, CONTENT_TYPE_SEMANTIC_LEAF):
             continue
@@ -1290,75 +1449,6 @@ def load_l1_chunks_for_page(
             result.append(chunk)
     result.sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
     return result
-
-
-def load_enrichment_chunks_for_pages(
-    session: Session,
-    document_id: int,
-    page_numbers: List[int],
-) -> List[DocumentChunk]:
-    """Charge les chunks contextual_enrichment liés aux pages données."""
-    if not page_numbers:
-        return []
-
-    page_set = set(page_numbers)
-    stmt = select(DocumentChunk).where(
-        DocumentChunk.document_id == document_id,
-        DocumentChunk.is_leaf == True,  # noqa: E712
-    )
-    result: List[DocumentChunk] = []
-    for chunk in session.exec(stmt).all():
-        meta = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        if meta.get("content_type") != CONTENT_TYPE_CONTEXTUAL_ENRICHMENT:
-            continue
-        source_pages = meta.get("source_pages") or []
-        source_page = meta.get("source_page") or meta.get("page_no")
-        covers = False
-        if isinstance(source_pages, list):
-            covers = any(int(p) in page_set for p in source_pages if p is not None)
-        if not covers and source_page is not None:
-            try:
-                covers = int(source_page) in page_set
-            except (TypeError, ValueError):
-                pass
-        if not covers:
-            p_start = meta.get("page_start") or meta.get("page_no")
-            p_end = meta.get("page_end") or p_start
-            try:
-                p_start_i = int(p_start) if p_start is not None else None
-                p_end_i = int(p_end) if p_end is not None else p_start_i
-                if p_start_i is not None and p_end_i is not None:
-                    covers = any(p_start_i <= p <= p_end_i for p in page_set)
-            except (TypeError, ValueError):
-                pass
-        if covers:
-            result.append(chunk)
-    result.sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
-    return result
-
-
-def _format_enrichment_passages(
-    enrichment_chunks: List[DocumentChunk],
-) -> List[Dict[str, Any]]:
-    passages: List[Dict[str, Any]] = []
-    for chunk in enrichment_chunks:
-        meta = _merged_chunk_metadata(chunk.metadata_json, chunk.metadata_)
-        content = (chunk.content or chunk.text or "").strip()
-        if not content:
-            continue
-        source_page = meta.get("source_page") or meta.get("page_no")
-        passages.append(
-            {
-                "content": content,
-                "theme": meta.get("theme"),
-                "category_slug": meta.get("category_slug"),
-                "source_page": source_page,
-                "source_pages": meta.get("source_pages") or [],
-                "is_enrichment": True,
-                "chunk_id": chunk.id,
-            }
-        )
-    return passages
 
 
 def build_consolidated_page_text(chunks: List[DocumentChunk]) -> str:

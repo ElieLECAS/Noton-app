@@ -495,7 +495,6 @@ def reindex_library_document(
       - full        : extraction texte + mistral-embed + ColPali (pipeline complet)
       - text_only   : extraction texte + mistral-embed uniquement (ColPali inchangé)
       - colpali_only: re-sync ColPali uniquement (chunks texte inchangés)
-      - enrichment_only : chunks contextuels + ré-embedding sur les chunks existants
 
     ``extractor`` (modes full et text_only) : "vision" (rendu PNG + mistral-small)
     ou "text" (couche texte native pymupdf4llm, tableaux en chunks-lignes).
@@ -1278,7 +1277,19 @@ def delete_document(session: Session, document_id: int, user_id: int) -> bool:
             logger.info(f"Images supprimées: {images_dir}")
         except Exception as e:
             logger.warning(f"Impossible de supprimer le dossier d'images: {e}")
-    
+
+    # Markdown augmenté : il est nommé par l'ID du document. Le laisser derrière soi en
+    # ferait un orphelin qui se rattacherait silencieusement à un futur document portant
+    # le même identifiant (restauration de dump, import forcé) — donc un document lu avec
+    # la transcription d'un AUTRE.
+    try:
+        from app.services.page_markdown_service import delete_markdown
+
+        if delete_markdown(document_id):
+            logger.info("Markdown augmenté supprimé (doc %s)", document_id)
+    except Exception as exc:  # noqa: BLE001 - ne doit jamais bloquer une suppression
+        logger.warning("Impossible de supprimer le markdown augmenté: %s", exc)
+
     session.delete(document)
     session.commit()
     

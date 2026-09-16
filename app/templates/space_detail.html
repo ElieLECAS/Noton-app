@@ -415,6 +415,32 @@
   border-left-color: #818cf8;
 }
 
+.markdown-page table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 0.5rem 0;
+}
+.markdown-page th,
+.markdown-page td {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 4px 7px;
+  text-align: left;
+  vertical-align: top;
+}
+.dark .markdown-page th,
+.dark .markdown-page td { border-color: rgba(255, 255, 255, 0.14); }
+.markdown-page th { background: rgba(0, 0, 0, 0.04); font-weight: 600; }
+.dark .markdown-page th { background: rgba(255, 255, 255, 0.06); }
+.markdown-page h2 { font-size: 15px; font-weight: 700; margin: 0.6rem 0 0.3rem; }
+.markdown-page h3 { font-size: 13px; font-weight: 600; margin: 0.5rem 0 0.25rem; }
+.markdown-page blockquote {
+  border-left: 3px solid rgba(99, 102, 241, 0.5);
+  padding-left: 0.6rem;
+  margin: 0.4rem 0;
+}
+.markdown-page ul, .markdown-page ol { padding-left: 1.1rem; margin: 0.3rem 0; }
+
 .category-chunk-highlight {
   border-left: 3px solid #14b8a6;
   background: linear-gradient(90deg, rgba(20, 184, 166, 0.08) 0%, transparent 100%);
@@ -422,15 +448,6 @@
 .dark .category-chunk-highlight {
   border-left-color: #2dd4bf;
   background: linear-gradient(90deg, rgba(45, 212, 191, 0.12) 0%, transparent 100%);
-}
-
-.category-enrichment-chunk {
-  border-left: 3px solid #6366f1;
-  background: linear-gradient(90deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
-}
-.dark .category-enrichment-chunk {
-  border-left-color: #818cf8;
-  background: linear-gradient(90deg, rgba(129, 140, 248, 0.12) 0%, transparent 100%);
 }
 
 #space-category-page-modal:not(.hidden),
@@ -1069,9 +1086,15 @@ function buildSourcesSection(sources, messageKey) {
     const index = source.index;
     let pageInfo = source.page_no ? ` (p.${source.page_no})` : "";
     if (source.cag_document) {
-      // Source par DOCUMENT (mode CAG) : pages réellement utilisées > document complet > span packé.
+      // Source par DOCUMENT (mode CAG). L'étiquette doit nommer la page où le lien MÈNE :
+      // le bouton ouvre le PDF sur `source.page_no`. Afficher « (complet) » quand cette
+      // page existe trompait le lecteur — il cliquait et atterrissait sur une page précise
+      // que rien n'annonçait. Ordre : pages déclarées par le modèle > page d'atterrissage
+      // > span packé > « complet » en dernier recours seulement.
       if (Array.isArray(source.used_pages) && source.used_pages.length > 0) {
         pageInfo = ` (p.${source.used_pages.join(", ")})`;
+      } else if (source.page_no) {
+        pageInfo = ` (p.${source.page_no})`;
       } else if (source.full_document) {
         pageInfo = " (complet)";
       } else if (source.page_start && source.page_end) {
@@ -3019,31 +3042,34 @@ function renderSpaceCategoryPageDetail(detail) {
           : "Chunks catégorie surlignés";
   }
 
-  renderSpaceCategoryTextChunks(detail.chunks || [], detail.enrichment_chunks || [], category);
+  renderSpaceCategoryTextChunks(detail, category);
   if (spaceCategoryPageState.mode === "search" && detail.query) {
     highlightSearchTerm(document.getElementById("space-category-text-container"), detail.query);
   }
   renderSpaceCategoryPdf(documentInfo, detail.page_no);
 }
 
-function renderSpaceCategoryTextChunks(chunks, enrichmentChunks, category) {
+function renderSpaceCategoryTextChunks(detail, category) {
   const host = document.getElementById("space-category-text-container");
   if (!host) return;
 
-  const sourceHtml = (chunks || []).map((chunk) => renderSpaceCategoryChunkCard(chunk, category, false)).join("");
-  const enrichmentHtml = (enrichmentChunks || []).length
-    ? `
-      <section class="space-y-3">
-        <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300 flex items-center gap-2">
-          <i class="ti ti-sparkles"></i>
-          Chunks contextuels (texte généré par l'IA)
-        </h3>
-        ${enrichmentChunks.map((chunk) => renderSpaceCategoryChunkCard(chunk, category, true)).join("")}
-      </section>
-    `
-    : "";
+  // Page retranscrite : c'est elle qu'on montre à côté du PDF, pas les fragments.
+  if (detail && detail.markdown_augmente && detail.consolidated_markdown) {
+    host.innerHTML = `
+      <div class="mb-2 flex items-center gap-2">
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-violet-500/20 bg-violet-500/10 text-violet-700 dark:text-violet-300 text-[11px] font-semibold">
+          <i class="ti ti-markdown text-xs"></i>Markdown augmenté
+        </span>
+        <span class="text-[11px] text-gray-500 dark:text-gray-400">transcription fidèle de la page</span>
+      </div>
+      <article class="markdown-page text-sm text-gray-800 dark:text-gray-100">
+        ${parseMarkdown(detail.consolidated_markdown)}
+      </article>`;
+    return;
+  }
 
-  if (!sourceHtml && !enrichmentHtml) {
+  const sourceHtml = ((detail && detail.chunks) || []).map((chunk) => renderSpaceCategoryChunkCard(chunk, category)).join("");
+  if (!sourceHtml) {
     // Une page citée sans texte indexé est un cas normal (planche d'illustrations
     // remontée par ColPali) : on l'explique au lieu de parler de « catégorie ».
     host.innerHTML =
@@ -3053,24 +3079,19 @@ function renderSpaceCategoryTextChunks(chunks, enrichmentChunks, category) {
     return;
   }
 
-  host.innerHTML = `
-    ${sourceHtml ? `<section class="space-y-3">${sourceHtml}</section>` : ""}
-    ${enrichmentHtml}
-  `;
+  host.innerHTML = `<section class="space-y-3">${sourceHtml}</section>`;
 }
 
-function renderSpaceCategoryChunkCard(chunk, category, isEnrichment) {
+function renderSpaceCategoryChunkCard(chunk, category) {
   const heading = chunk.heading || chunk.theme || (chunk.step_number != null ? `Étape ${chunk.step_number}` : null);
-  const sectionType = chunk.section_type && !isEnrichment
+  const sectionType = chunk.section_type
     ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">${escapeHtml(chunk.section_type)}</span>`
     : "";
   const sourcePages = Array.isArray(chunk.source_pages) && chunk.source_pages.length
     ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">Pages ${chunk.source_pages.join(", ")}</span>`
     : (chunk.source_page ? `<span class="px-2 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-[10px]">Page source ${chunk.source_page}</span>` : "");
-  const categoryBadge = isEnrichment
-    ? `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40">IA générée · ${escapeHtml(category.label || "Catégorie")}</span>`
-    : `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="Texte source transcrit">${escapeHtml(category.label || "Catégorie")}${chunk.confidence != null ? ` · ${Math.round(chunk.confidence * 100)}%` : ""}</span>`;
-  const highlightClass = isEnrichment ? "category-enrichment-chunk" : "category-chunk-highlight";
+  const categoryBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-800 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40" title="Texte source transcrit">${escapeHtml(category.label || "Catégorie")}${chunk.confidence != null ? ` · ${Math.round(chunk.confidence * 100)}%` : ""}</span>`;
+  const highlightClass = "category-chunk-highlight";
   const markdownHtml = parseMarkdown(chunk.content || "");
 
   return `

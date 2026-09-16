@@ -16,7 +16,7 @@ graphe est câblé en code (invariant I1 du plan). Le résultat est un JSON pivo
 par ``guided_json_import_service.import_from_json_text`` : un seul convertisseur, déjà
 couvert par ``tests/test_guided_json_import.py``.
 
-Trois garde-fous, tous repris de l'ingestion plutôt que réinventés :
+Trois garde-fous :
   1. ``_ungrounded_numbers`` — un nombre absent du texte transcrit a été lu sur l'image
      (hors mandat) ou inventé : l'atome entier est écarté. Une cote de réglage fausse est
      pire qu'une cote absente.
@@ -166,18 +166,105 @@ def build_sav_batches(
     batch_size: Optional[int] = None,
     overlap: Optional[int] = None,
 ) -> List[List[int]]:
-    """Fenêtre glissante de pages, aux réglages SAV (8/1 par défaut).
+    """Fenêtre glissante de pages : batches de ``batch_size`` avec ``overlap`` pages de
+    recouvrement (8 et 1 par défaut → 1-8, 8-15, 15-22…).
 
-    Délègue à ``contextual_enrichment_service.build_page_batches`` : même mécanique que
-    l'ingestion, seuls les défauts changent.
+    Le recouvrement coûte des appels supplémentaires mais évite de couper une notion sur
+    une frontière de batch.
+
+    Cette mécanique a successivement vécu dans ``kag_extraction_service`` (retrait du KAG,
+    2026-07-28) puis dans ``contextual_enrichment_service`` (retrait des chunks contextuels,
+    2026-09-16) : l'extraction SAV en est désormais le seul consommateur, elle l'héberge.
     """
-    from app.services.contextual_enrichment_service import build_page_batches
+    size = batch_size if batch_size is not None else settings.SAV_EXTRACTION_BATCH_SIZE
+    overlap_val = overlap if overlap is not None else settings.SAV_EXTRACTION_BATCH_OVERLAP
 
-    return build_page_batches(
-        list(page_numbers),
-        batch_size=batch_size if batch_size is not None else settings.SAV_EXTRACTION_BATCH_SIZE,
-        overlap=overlap if overlap is not None else settings.SAV_EXTRACTION_BATCH_OVERLAP,
+    if not page_numbers:
+        return []
+
+    size = max(1, size)
+    overlap_val = max(0, min(overlap_val, size - 1))
+    stride = max(1, size - overlap_val)
+
+    sorted_pages = sorted(set(page_numbers))
+    batches: List[List[int]] = []
+    i = 0
+    while i < len(sorted_pages):
+        batch = sorted_pages[i : i + size]
+        if batch:
+            batches.append(batch)
+        if i + size >= len(sorted_pages):
+            break
+        i += stride
+    return batches
+
+
+# ---------------------------------------------------------------------------
+# Garde-fou déterministe : un nombre absent du texte source a été lu sur l'image
+# ---------------------------------------------------------------------------
+
+_MEASURE_RE = re.compile(
+    r"\b\d+(?:[.,]\d+)?\s*(?:mm|cm|m|kg|g|°|dan|n|nm|bar|%|mm²|mm2)\b",
+    re.IGNORECASE,
+)
+_LONG_NUMBER_RE = re.compile(r"\b\d{3,}(?:[.,]\d+)?\b")
+
+
+def _normalize_number(value: str) -> str:
+    """Forme comparable d'une valeur numérique (virgule → point, espaces retirés)."""
+    return value.replace(",", ".").replace(" ", "").lower()
+
+
+def _ungrounded_numbers(content: str, source_text: str) -> List[str]:
+    """Valeurs numériques du contenu absentes du texte source du batch.
+
+    La vision est autorisée pour les verdicts et les relations, jamais pour lire une cote.
+    Un nombre qui apparaît sans figurer dans le texte transcrit a donc été lu sur une
+    image — ou inventé. Contrôle de présence littérale, tolérant sur la ponctuation
+    (virgule décimale, espaces).
+    """
+    if not content:
+        return []
+
+    haystack = _normalize_number(source_text or "")
+    candidates = set(_MEASURE_RE.findall(content)) | set(_LONG_NUMBER_RE.findall(content))
+
+    ungrounded: List[str] = []
+    for raw_value in candidates:
+        needle = _normalize_number(str(raw_value))
+        # On compare la partie NUMÉRIQUE : « 70 mm » est ancré si « 70mm » ou « 70 » figure
+        # dans la source (l'unité peut être écrite différemment).
+        digits = re.sub(r"[^\d.]", "", needle)
+        if not digits:
+            continue
+        if digits not in haystack:
+            ungrounded.append(str(raw_value))
+    return ungrounded
+
+
+def _load_semantic_chunks_by_page(
+    session: Session, document_id: int
+) -> Dict[int, List["DocumentChunk"]]:
+    """Chunks L1 ``semantic_leaf`` d'un document, groupés par page, en ordre de lecture."""
+    from app.models.document_chunk import DocumentChunk
+    from sqlmodel import select
+
+    stmt = select(DocumentChunk).where(
+        DocumentChunk.document_id == document_id,
+        DocumentChunk.is_leaf == True,  # noqa: E712
     )
+    by_page: Dict[int, List[DocumentChunk]] = {}
+    for chunk in session.exec(stmt).all():
+        meta = chunk.metadata_json or {}
+        if meta.get("content_type") != "semantic_leaf":
+            continue
+        page_no = meta.get("page_no") or meta.get("page_start")
+        if page_no is None:
+            continue
+        by_page.setdefault(int(page_no), []).append(chunk)
+    for pno in by_page:
+        by_page[pno].sort(key=lambda c: (c.chunk_index or 0, c.id or 0))
+    return by_page
 
 
 def _strip_fences(raw: str) -> str:
@@ -257,11 +344,9 @@ def drop_ungrounded_atoms(
 ) -> Tuple[List[SavAtom], List[SavAtom]]:
     """Écarte les atomes portant une valeur chiffrée absente du texte source.
 
-    Réutilise le contrôle déterministe de l'ingestion (``_ungrounded_numbers``) : la
-    vision est autorisée pour comprendre un schéma, jamais pour lire une cote.
+    S'appuie sur ``_ungrounded_numbers`` : la vision est autorisée pour comprendre un
+    schéma, jamais pour lire une cote.
     """
-    from app.services.contextual_enrichment_service import _ungrounded_numbers
-
     kept: List[SavAtom] = []
     dropped: List[SavAtom] = []
     for atom in atoms:
@@ -306,8 +391,6 @@ def dedupe_atoms(atoms: Sequence[SavAtom]) -> List[SavAtom]:
 
 def load_pages_text(session: Session, document_id: int) -> Dict[int, str]:
     """Texte par page depuis les chunks L1 déjà indexés. Aucune ré-extraction."""
-    from app.services.contextual_enrichment_service import _load_semantic_chunks_by_page
-
     chunks_by_page = _load_semantic_chunks_by_page(session, document_id)
     pages: Dict[int, str] = {}
     for page_no, chunks in chunks_by_page.items():

@@ -204,47 +204,11 @@ class Settings(BaseSettings):
     THEME_ENTITY_MIN_COOCCURRENCE: int = int(os.getenv("THEME_ENTITY_MIN_COOCCURRENCE", "2"))
     KAG_BATCH_OVERLAP: int = int(os.getenv("KAG_BATCH_OVERLAP", "1"))
 
-    # Enrichissement contextuel inter-pages (synthèse factuelle par thème/catégorie)
-    CONTEXTUAL_ENRICHMENT_ENABLED: bool = os.getenv(
-        "CONTEXTUAL_ENRICHMENT_ENABLED", "true"
-    ).strip().lower() in ("true", "1", "yes", "on")
-    CONTEXTUAL_ENRICHMENT_MODEL: str = os.getenv(
-        "CONTEXTUAL_ENRICHMENT_MODEL", "mistral-small-latest"
-    )
-    CONTEXTUAL_ENRICHMENT_MAX_TOKENS: int = int(
-        os.getenv("CONTEXTUAL_ENRICHMENT_MAX_TOKENS", "1500")
-    )
-    CONTEXTUAL_ENRICHMENT_CONCURRENCY: int = int(
-        os.getenv("CONTEXTUAL_ENRICHMENT_CONCURRENCY", "2")
-    )
-    CONTEXTUAL_ENRICHMENT_TIMEOUT: float = float(
-        os.getenv("CONTEXTUAL_ENRICHMENT_TIMEOUT", "90")
-    )
-    CONTEXTUAL_ENRICHMENT_BATCH_SIZE: int = int(
-        os.getenv("CONTEXTUAL_ENRICHMENT_BATCH_SIZE", "3")
-    )
-    CONTEXTUAL_ENRICHMENT_BATCH_OVERLAP: int = int(
-        os.getenv("CONTEXTUAL_ENRICHMENT_BATCH_OVERLAP", "1")
-    )
-    # Enrichissement multimodal sélectif : redonne les PNG des pages au LLM d'enrichissement
-    # uniquement pour les batches procéduraux/visuels (où la séquence du geste est portée
-    # par le schéma). Texte-seul pour le reste (commercial, garantie, normes).
-    CONTEXTUAL_ENRICHMENT_MULTIMODAL_ENABLED: bool = os.getenv(
-        "CONTEXTUAL_ENRICHMENT_MULTIMODAL_ENABLED", "true"
-    ).strip().lower() in ("true", "1", "yes", "on")
-    CONTEXTUAL_ENRICHMENT_VISUAL_CATEGORIES: list = [
-        c.strip().lower()
-        for c in os.getenv(
-            "CONTEXTUAL_ENRICHMENT_VISUAL_CATEGORIES",
-            "mounting,hardware_adjustment,glazing,drilling_constraints",
-        ).split(",")
-        if c.strip()
-    ]
 
     # Extraction d'atomes SAV depuis une notice DÉJÀ traitée
     # (lot L1 de docs/plan_generation_graphe_depuis_pdf_2026-08-24.md).
     SAV_EXTRACTION_MODEL: str = os.getenv("SAV_EXTRACTION_MODEL", "mistral-large-latest")
-    # Batch plus large que l'enrichissement (3/1) : la matière SAV est clairsemée, et un
+    # Batch large : la matière SAV est clairsemée, et un
     # batch de 8 pages avec 1 page de recouvrement n'envoie chaque page que 1,14 fois
     # (stride 7) contre 1,5 fois en 3/1 — les gros batches coûtent MOINS en images.
     SAV_EXTRACTION_BATCH_SIZE: int = int(os.getenv("SAV_EXTRACTION_BATCH_SIZE", "8"))
@@ -801,7 +765,6 @@ class Settings(BaseSettings):
             f"reranker={onoff(self.RERANKER_ENABLED)} "
             f"vision_rerank={onoff(self.VISION_RERANK_ENABLED)} "
             f"cag={onoff(self.CAG_ENABLED)} "
-            f"enrichment={onoff(self.CONTEXTUAL_ENRICHMENT_ENABLED)} "
             f"query_understanding={onoff(self.QUERY_UNDERSTANDING_ENABLED)} "
             f"anchor={onoff(self.CONVERSATION_ANCHOR_ENABLED)} "
             f"fiche={onoff(self.FICHE_TECHNIQUE_ENABLED)} "

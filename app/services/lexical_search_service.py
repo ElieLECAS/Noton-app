@@ -4,8 +4,8 @@ Renvoie des pages/chunks au même schéma que les services catégories
 (`document_category_service` / `space_category_service`) afin de réutiliser
 telle quelle la modale de détail (PDF + texte + navigation) côté frontend.
 
-Périmètre de recherche : texte source du PDF (`semantic_leaf`) + synthèses IA
-(`contextual_enrichment`). Insensible à la casse, sous-chaîne.
+Périmètre de recherche : texte source du PDF (`semantic_leaf`) uniquement.
+Insensible à la casse, sous-chaîne.
 
 Sémantique multi-mots : la requête est découpée en mots et combinée en **OU**.
 Ex. « Lumine hybride » remonte les pages parlant de *Lumine* OU *Hybride* (donc
@@ -26,7 +26,6 @@ from app.services.page_retrieval_service import (
     _page_no_sql_expr,
     build_consolidated_page_text,
     get_space_document_ids,
-    load_enrichment_chunks_for_pages,
     load_l1_chunks_for_page,
 )
 
@@ -36,8 +35,26 @@ MIN_TOKEN_LEN = 2
 
 _CONTENT_TYPE_FILTER = (
     "COALESCE(dc.metadata_json->>'content_type', dc.metadata_->>'content_type', '') "
-    "IN ('semantic_leaf', 'contextual_enrichment')"
+    "= 'semantic_leaf'"
 )
+
+
+def _page_display_text(document_id, page_no, chunks) -> tuple:
+    """(texte de la page, vient-il du markdown augmenté ?).
+
+    Quand le document a été retranscrit, c'est cette page-là qu'on montre à côté du PDF :
+    une page entière et fidèle, au lieu des fragments de l'extraction automatique.
+    """
+    from app.services.page_markdown_service import page_section
+    from app.services.page_retrieval_service import build_consolidated_page_text
+
+    try:
+        md = page_section(int(document_id), int(page_no))
+    except Exception:  # noqa: BLE001 - l'affichage ne doit jamais tomber là-dessus
+        md = None
+    if md:
+        return md, True
+    return build_consolidated_page_text(chunks), False
 
 
 def _like_pattern(query: str) -> str:
@@ -121,23 +138,6 @@ def _category_ref(query: str) -> Dict[str, Any]:
     }
 
 
-def _enrichment_item(chunk, needles_cf: List[str]) -> Optional[Dict[str, Any]]:
-    content = (chunk.content or chunk.text or "").strip()
-    if not content or not _contains_any(content, needles_cf):
-        return None
-    meta = dict(chunk.metadata_json or chunk.metadata_ or {})
-    return {
-        "chunk_id": int(chunk.id) if chunk.id is not None else None,
-        "chunk_index": chunk.chunk_index,
-        "theme": meta.get("theme"),
-        "category_slug": meta.get("category_slug"),
-        "source_page": meta.get("source_page") or meta.get("page_no"),
-        "source_pages": meta.get("source_pages") or [],
-        "content": content,
-        "is_enrichment": True,
-        "confidence": None,
-    }
-
 
 def _source_chunk_item(chunk, needles_cf: List[str]) -> Optional[Dict[str, Any]]:
     content = (chunk.content or chunk.text or "").strip()
@@ -152,7 +152,6 @@ def _source_chunk_item(chunk, needles_cf: List[str]) -> Optional[Dict[str, Any]]
         "section_type": meta.get("section_type") or meta.get("content_type"),
         "content": content,
         "in_category": True,
-        "is_enrichment": False,
         "confidence": None,
     }
 
@@ -266,16 +265,12 @@ def get_document_search_page_detail(
             chunk_items.append(item)
             matched_for_consolidated.append(chunk)
 
-    enrichment_items: List[Dict[str, Any]] = []
-    for chunk in load_enrichment_chunks_for_pages(session, document_id, [page_no]):
-        item = _enrichment_item(chunk, needles_cf)
-        if item:
-            enrichment_items.append(item)
 
     has_source_file = bool(
         document.source_file_path and os.path.exists(document.source_file_path)
     )
 
+    _texte_page, _md_augmente = _page_display_text(document_id, page_no, matched_for_consolidated)
     return {
         "document_id": document_id,
         "query": q,
@@ -287,8 +282,8 @@ def get_document_search_page_detail(
         },
         "page_no": page_no,
         "chunks": chunk_items,
-        "enrichment_chunks": enrichment_items,
-        "consolidated_markdown": build_consolidated_page_text(matched_for_consolidated),
+        "consolidated_markdown": _texte_page,
+        "markdown_augmente": _md_augmente,
         "navigation": _build_document_navigation(pages, page_no),
     }
 
@@ -530,19 +525,12 @@ def get_space_source_page_detail(
     chunk_items = [
         item for item in (_source_chunk_item(c, None) for c in source_chunks) if item
     ]
-    enrichment_items = [
-        item
-        for item in (
-            _enrichment_item(c, None)
-            for c in load_enrichment_chunks_for_pages(session, document_id, [page_no])
-        )
-        if item
-    ]
 
     has_source_file = bool(
         document.source_file_path and os.path.exists(document.source_file_path)
     )
 
+    _texte_page, _md_augmente = _page_display_text(document_id, page_no, source_chunks)
     return {
         "space_id": space_id,
         "query": "",
@@ -558,8 +546,8 @@ def get_space_source_page_detail(
         },
         "page_no": page_no,
         "chunks": chunk_items,
-        "enrichment_chunks": enrichment_items,
-        "consolidated_markdown": build_consolidated_page_text(source_chunks),
+        "consolidated_markdown": _texte_page,
+        "markdown_augmente": _md_augmente,
         "navigation": _build_space_navigation(
             _list_document_pages_all(
                 session, document_id, document.title or "", has_source_file
@@ -615,16 +603,12 @@ def get_space_search_page_detail(
             chunk_items.append(item)
             matched_for_consolidated.append(chunk)
 
-    enrichment_items: List[Dict[str, Any]] = []
-    for chunk in load_enrichment_chunks_for_pages(session, document_id, [page_no]):
-        item = _enrichment_item(chunk, needles_cf)
-        if item:
-            enrichment_items.append(item)
 
     has_source_file = bool(
         document.source_file_path and os.path.exists(document.source_file_path)
     )
 
+    _texte_page, _md_augmente = _page_display_text(document_id, page_no, matched_for_consolidated)
     return {
         "space_id": space_id,
         "query": q,
@@ -636,7 +620,7 @@ def get_space_search_page_detail(
         },
         "page_no": page_no,
         "chunks": chunk_items,
-        "enrichment_chunks": enrichment_items,
-        "consolidated_markdown": build_consolidated_page_text(matched_for_consolidated),
+        "consolidated_markdown": _texte_page,
+        "markdown_augmente": _md_augmente,
         "navigation": _build_space_navigation(pages, document_id, page_no),
     }

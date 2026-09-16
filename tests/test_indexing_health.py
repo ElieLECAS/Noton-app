@@ -109,38 +109,30 @@ class TestTextHealth:
 
 
 class TestOverallAndMode:
-    def _h(self, text="ok", colpali="ok", enrichment="ok"):
-        return (
-            {"status": text},
-            {"status": colpali},
-            {"status": enrichment},
-        )
+    """Deux axes depuis le retrait des chunks contextuels (2026-09-16) : texte et ColPali."""
+
+    def _h(self, text="ok", colpali="ok"):
+        return ({"status": text}, {"status": colpali})
 
     def test_tout_ok(self):
-        t, c, e = self._h()
-        assert _overall_and_mode(t, c, e) == ("ok", None)
+        t, c = self._h()
+        assert _overall_and_mode(t, c) == ("ok", None)
 
     def test_texte_casse_impose_full(self):
-        t, c, e = self._h(text="missing")
-        assert _overall_and_mode(t, c, e) == ("error", "full")
+        t, c = self._h(text="missing")
+        assert _overall_and_mode(t, c) == ("error", "full")
 
     def test_colpali_desync_suggere_colpali_only(self):
-        t, c, e = self._h(colpali="desync")
-        assert _overall_and_mode(t, c, e) == ("warning", "colpali_only")
+        t, c = self._h(colpali="desync")
+        assert _overall_and_mode(t, c) == ("warning", "colpali_only")
 
-    def test_synthese_manquante_suggere_enrichment_only(self):
-        """Remplace l'ancienne suggestion kag_only : ce qui manque après un passage
-        text_only, ce sont les chunks contextuels."""
-        t, c, e = self._h(enrichment="missing")
-        assert _overall_and_mode(t, c, e) == ("warning", "enrichment_only")
+    def test_colpali_manquant_suggere_colpali_only(self):
+        t, c = self._h(colpali="missing")
+        assert _overall_and_mode(t, c) == ("warning", "colpali_only")
 
-    def test_colpali_et_synthese_casses_suggerent_full(self):
-        t, c, e = self._h(colpali="missing", enrichment="missing")
-        assert _overall_and_mode(t, c, e) == ("warning", "full")
-
-    def test_synthese_desactivee_ne_declenche_rien(self):
-        t, c, e = self._h(enrichment="disabled")
-        assert _overall_and_mode(t, c, e) == ("ok", None)
+    def test_colpali_inconnu_avertit_sans_mode(self):
+        t, c = self._h(colpali="unknown")
+        assert _overall_and_mode(t, c) == ("warning", None)
 
 
 class TestIssues:
@@ -162,7 +154,6 @@ def _health(
     overall="warning",
     text="ok",
     colpali="ok",
-    enrichment="ok",
     legacy_count=0,
     orphan_count=0,
     missing_count=0,
@@ -179,7 +170,6 @@ def _health(
             "indexed_pages": 3,
             "expected_pages": 5,
         },
-        "enrichment": {"status": enrichment, "enrichment_count": 2},
     }
 
 
@@ -208,13 +198,9 @@ class TestRecommendedAction:
         a = recommended_action(_health(overall="error", text="missing"))
         assert a["action"] == "full"
 
-    def test_colpali_et_syntheses_casses_imposent_le_full(self):
-        a = recommended_action(_health(colpali="missing", enrichment="missing"))
-        assert a["action"] == "full"
-
-    def test_syntheses_seules(self):
-        a = recommended_action(_health(enrichment="missing"))
-        assert a["action"] == "enrichment_only"
+    def test_colpali_absent_impose_un_reembedding_visuel(self):
+        a = recommended_action(_health(colpali="missing"))
+        assert a["action"] == "colpali_only"
 
     def test_document_sain(self):
         a = recommended_action(_health(overall="ok"))

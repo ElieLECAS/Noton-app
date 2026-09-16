@@ -82,17 +82,6 @@ class SpaceCategoryPageChunkItem(BaseModel):
     confidence: Optional[float] = None
 
 
-class SpaceCategoryEnrichmentChunkItem(BaseModel):
-    chunk_id: Optional[int] = None
-    chunk_index: Optional[int] = None
-    theme: Optional[str] = None
-    category_slug: Optional[str] = None
-    source_page: Optional[int] = None
-    source_pages: List[int] = Field(default_factory=list)
-    content: str
-    confidence: Optional[float] = None
-
-
 class SpaceCategoryPageNavRef(BaseModel):
     document_id: int
     document_title: str
@@ -114,8 +103,8 @@ class SpaceCategoryPageDetailResponse(BaseModel):
     document: dict
     page_no: int
     chunks: List[SpaceCategoryPageChunkItem] = Field(default_factory=list)
-    enrichment_chunks: List[SpaceCategoryEnrichmentChunkItem] = Field(default_factory=list)
     consolidated_markdown: str = ""
+    markdown_augmente: bool = False
     navigation: SpaceCategoryPageNavigation
 
 
@@ -143,8 +132,8 @@ class SpaceSearchPageDetailResponse(BaseModel):
     document: dict
     page_no: int
     chunks: List[SpaceCategoryPageChunkItem] = Field(default_factory=list)
-    enrichment_chunks: List[SpaceCategoryEnrichmentChunkItem] = Field(default_factory=list)
     consolidated_markdown: str = ""
+    markdown_augmente: bool = False
     navigation: SpaceCategoryPageNavigation
 
 

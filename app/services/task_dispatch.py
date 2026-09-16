@@ -652,7 +652,7 @@ def dispatch_reindex_folder_library(
     """
     Enfile la réindexation d'un dossier (et de ses sous-dossiers) sur la queue Celery
     « documents ».
-    mode : "full" | "text_only" | "enrichment_only" | "colpali_only"
+    mode : "full" | "text_only" | "colpali_only"
     extractor : "vision" | "text" (modes full et text_only uniquement)
     """
     backend = get_task_backend_mode()

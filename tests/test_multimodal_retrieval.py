@@ -100,53 +100,6 @@ def test_expand_page_context_conditional_neighbor():
     assert expanded[0].expansion_reason == "continues_on_next_page"
 
 
-def test_fuse_multimodal_hits_propagates_enrichment_source_pages():
-    bm25 = _unified_hit(1, 3, 0.8, "bm25")
-    bm25.enrichment_source_pages = [3, 4, 5]
-
-    fused = fuse_multimodal_hits([], [bm25], top_k=5)
-    by_key = {h.page_key: h for h in fused}
-
-    assert by_key["1:3"].enrichment_source_pages == [3, 4, 5]
-
-
-def test_expand_page_context_enrichment_span_unfolds_all_pages():
-    """Un chunk contextuel retrouvé déplie tout son batch, même sans voisinage."""
-    session = mock.MagicMock()
-
-    def _make_chunk(cid: int, page: int):
-        c = mock.MagicMock()
-        c.id = cid
-        c.chunk_index = cid
-        c.content = f"Page {page}"
-        c.text = None
-        c.metadata_json = {"page_no": page, "content_type": "semantic_leaf"}
-        c.metadata_ = None
-        return c
-
-    chunks_by_page = {
-        3: [_make_chunk(30, 3)],
-        4: [_make_chunk(40, 4)],
-        5: [_make_chunk(50, 5)],
-    }
-
-    hit = _unified_hit(1, 3, 0.9, "bm25")
-    hit.enrichment_source_pages = [3, 4, 5]
-
-    with mock.patch(
-        "app.services.page_retrieval_service.load_l1_chunks_for_page",
-        side_effect=lambda _s, _d, pno: chunks_by_page.get(pno, []),
-    ):
-        expanded = expand_page_context(session, [hit], neighbor_strategy="none")
-
-    assert expanded[0].neighbor_pages == [4, 5]
-    assert expanded[0].expansion_reason == "enrichment_span"
-    loaded_pages = {
-        (c.metadata_json or {}).get("page_no") for c in expanded[0].text_chunks
-    }
-    assert loaded_pages == {3, 4, 5}
-
-
 @pytest.mark.asyncio
 async def test_search_multimodal_passages_pipeline():
     from app.services import space_search_service
