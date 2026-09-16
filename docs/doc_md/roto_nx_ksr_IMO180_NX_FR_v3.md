@@ -2531,8 +2531,8 @@ Note 4 : avec renvoi d’angle ob intégré.
 | 16 | Releveur / anti-fausse manœuvre partie ouvrant | 1 |
 | 17 | Gâche releveur / anti-fausse manœuvre | 1 |
 | 18 | Gâche de basculement de sécurité | 1 |
-| 19 | [repère non listé sur la page 42] | 5 |
-| 20 | [repère non listé sur la page 42] | 1 |
+| 19 | Gâche | 5 |
+| 20 | Cale accessoire | 1 |
 
 Mentions portées sur le schéma : Veillez à limiter l’ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm ! ; Poignées : voir CTL_1.
 
@@ -2698,22 +2698,22 @@ Note 4 : avec renvoi d’angle ob intégré.
 | 15 | Releveur / anti-fausse manœuvre partie ouvrant | 1 |
 | 16 | Equerre de compas OF | 1 |
 | 17 | Compas OF P 12/20-13 | 1 |
-| 18 | [repère non listé sur la page 44] | 1 |
-| 18a | [repère non listé sur la page 44] | 1 |
-| 19 | [repère non listé sur la page 44] | 1 |
-| 20 | [repère non listé sur la page 44] | 1 |
-| 21 | [repère non listé sur la page 44] | 1 |
+| 18 | Crémone de semi-fixe KSR hauteur poignée fixe | 1 |
+| 18a | Crémone de semi-fixe hauteur poignée fixe | 1 |
+| 19 | Loqueteau sur crémone semi-fixe | 1 |
+| 20 | Gâche loqueteau sur crémone semi-fixe | 1 |
+| 21 | Butée AFM sur battement | 1 |
 | 22 | [repère non listé sur la page 44] | 2 |
-| 23 | [repère non listé sur la page 44] | 1 |
-| 24 | [repère non listé sur la page 44] | 1 |
-| 25 | [repère non listé sur la page 44] | 1 |
-| 26 | [repère non listé sur la page 44] | 1 |
-| 27 | [repère non listé sur la page 44] | 8 |
-| 29 | [repère non listé sur la page 44] | 1 |
-| 30 | [repère non listé sur la page 44] | 1 |
-| 31 | [repère non listé sur la page 44] | 2 |
-| 32 | [repère non listé sur la page 44] | 1 |
-| 33 | [repère non listé sur la page 44] | 1 |
+| 23 | Gâche sur battement | 1 |
+| 24 | Cale jeu de 12 mm | 1 |
+| 25 | Verrouilleur médian invisible ouvrant | 1 |
+| 26 | Gâche de basculement de sécurité | 1 |
+| 27 | Gâche | 8 |
+| 29 | Verrouilleur médian invisible dormant | 1 |
+| 30 | Cale pour deuxième compas | 1 |
+| 31 | Gâche sortie de tringle | 2 |
+| 32 | Gâche loqueteau sur battement | 1 |
+| 33 | Renvoi de fouillot | 1 |
 
 Mentions portées sur le schéma : Veillez à limiter l’ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm ! ; OPTION ; Poignées : voir CTL_1.
 
@@ -2939,17 +2939,17 @@ Note 4 : [note absente de la page].
 | 17 | Crémone de semi-fixe KSR hauteur poignée fixe | 1 |
 | 17a | Crémone de semi-fixe hauteur poignée fixe | 1 |
 | 18 | Deuxième compas (à partir de LFF 1400 mm) | 1 |
-| 19 | [repère non listé sur la page 46] | 1 |
-| 20 | [repère non listé sur la page 46] | 2 |
-| 21 | [repère non listé sur la page 46] | 1 |
-| 22 | [repère non listé sur la page 46] | 2 |
-| 23 | [repère non listé sur la page 46] | 1 |
-| 24 | [repère non listé sur la page 46] | 1 |
-| 25 | [repère non listé sur la page 46] | 8 |
-| 27 | [repère non listé sur la page 46] | 1 |
-| 28 | [repère non listé sur la page 46] | 1 |
-| 30 | [repère non listé sur la page 46] | 1 |
-| 31 | [repère non listé sur la page 46] | 2 |
+| 19 | Butée AFM sur battement | 1 |
+| 20 | Releveur / anti-fausse manœuvre partie ouvrant | 2 |
+| 21 | Cale jeu de 12 mm | 1 |
+| 22 | Verrou pour semi-fixe 100 (non illustré) | 2 |
+| 23 | Gâche sur battement | 1 |
+| 24 | Gâche de basculement | 1 |
+| 25 | Gâche | 8 |
+| 27 | Verrouilleur médian partie dormant | 1 |
+| 28 | Verrouilleur médian partie ouvrant | 1 |
+| 30 | Cale pour deuxième compas | 1 |
+| 31 | Gâche sortie de tringle | 2 |
 
 Mentions portées sur le schéma : 1) HFF 601-700 avec Mini renvoi d’angle 2) Pas de releveur / anti-fausse manœuvre 3) HFF 435-520 avec Mini renvoi d’angle 4) Avec renvoi d’angle OB intégré 5) HFF 801-900 avec Mini renvoi d’angle ; Veillez à limiter l’ouverture à soufflet des vantaux dont HFF < 500 mm à 80 mm ! ; Poignées : voir CTL_1 ; 1 x 495096 ; 1 x 495096 1 x 495096 ; 2 x 495096 ; 1 x 495096 1 x 495096 3 x 495096 3 x 495096 3 x 495096 1 x 495096 1 x 495096 2 x 495096 1 x 495096 1 x 495096 ; Numéro d'article ; Cale ; 2 x 498312 1 x 498312 2 x 498312 2 x 498312 3 x 498312 1 x 498312 2 x 498312 2 x 498312 1 x 498312 ; 2 x 498312 2 x 498312 1 x 498312 2 x 498312 2 x 498312.
 
@@ -4638,25 +4638,25 @@ Note 4 : avec renvoi d’angle ob intégré.
 | 15 | Renvoi d’angle avec gâche | 1 |
 | 16 | Equerre de compas OF Designo | 1 |
 | 17 | Compas OF | 1 |
-| 18 | [repère non listé sur la page 72] | 1 |
+| 18 | Crémone de semi-fixe KSR hauteur poignée fixe | 1 |
 | 18a | Crémone de semi-fixe hauteur poignée fixe | 1 |
-| 19 | [repère non listé sur la page 72] | 1 |
-| 20 | [repère non listé sur la page 72] | 1 |
-| 21 | [repère non listé sur la page 72] | 1 |
-| 22 | [repère non listé sur la page 72] | 2 |
-| 23 | [repère non listé sur la page 72] | 1 |
-| 24 | [repère non listé sur la page 72] | 1 |
-| 25 | [repère non listé sur la page 72] | 1 |
-| 26 | [repère non listé sur la page 72] | 1 |
-| 27 | [repère non listé sur la page 72] | 8 |
-| 29 | [repère non listé sur la page 72] | 1 |
-| 30 | [repère non listé sur la page 72] | 1 |
-| 31 | [repère non listé sur la page 72] | 2 |
-| 33 | [repère non listé sur la page 72] | 2 |
-| 34 | [repère non listé sur la page 72] | 2 |
-| 35 | [repère non listé sur la page 72] | 2 |
-| 36 | [repère non listé sur la page 72] | 2 |
-| 37 | [repère non listé sur la page 72] | 1 |
+| 19 | Loqueteau sur crémone semi-fixe | 1 |
+| 20 | Gâche loqueteau sur crémone semi-fixe | 1 |
+| 21 | Butée AFM sur battement | 1 |
+| 22 | Verrou pour semi-fixe 100 | 2 |
+| 23 | Gâche sur battement | 1 |
+| 24 | Cale jeu de 12 mm | 1 |
+| 25 | Verrouilleur médian invisible, partie ouvrant | 1 |
+| 26 | Gâche de basculement de sécurité | 1 |
+| 27 | Gâche | 8 |
+| 29 | Verrouilleur médian invisible dormant | 1 |
+| 30 | Cale accessoire | 1 |
+| 31 | Gâche sortie de tringle | 2 |
+| 33 | Kit 150 kg partie dormant | 2 |
+| 34 | Kit 150 kg partie ouvrant | 2 |
+| 35 | Compas limiteur d’ouverture (LFF >1000) | 2 |
+| 36 | Gâche compas limiteur d’ouverture | 2 |
+| 37 | Renvoi de fouillot | 1 |
 
 Mentions portées sur le schéma : OPTION ; Poignées : voir CTL_1.
 
