@@ -1,0 +1,4 @@
+# Le protocole de markdown augmenté impose des fins de ligne LF (§ 1) : sans cette règle,
+# autocrlf réécrit le fichier en CRLF à chaque checkout, et l'octet livré n'est plus celui
+# qui a été validé et haché.
+docs/doc_md/*.md text eol=lf
