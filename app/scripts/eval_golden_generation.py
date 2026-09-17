@@ -3,21 +3,20 @@
 Le golden retrieval (``eval_golden_retrieval.py``) mesure si la bonne PAGE est packée.
 Celui-ci mesure l'étage d'après : **la réponse dit-elle la bonne valeur, et cite-t-elle la
 page qui la porte ?** C'est la mesure qui manquait pour arbitrer entre la voie image-only
-d'avant et la boucle agentique (audit ``docs/audit_rag_generation_2026-09-14.md``, P1).
+d'avant et le couple texte + image (audit ``docs/audit_rag_generation_2026-09-14.md``, P1).
 
 Pourquoi passer par HTTP et non par des appels de services : le tour de chat vit dans
 ``stream_space_chat_message`` (compréhension → périmètre → retrieval → élection → pack →
-ReaderLoop → contrôle → sources). Le rejouer en important des morceaux mesurerait une
+génération → contrôle → sources). Le rejouer en important des morceaux mesurerait une
 pipeline qui n'existe pas. On appelle donc l'endpoint réel et on lit le flux SSE, exactement
 comme le navigateur.
 
 Ce que le runner mesure, par question :
   * verdict      : juste | ambigu | faux | abstention_ok | abstention_ko | erreur
   * page_citee   : une page de preuve figure dans les sources renvoyées
-  * page_vue     : elle était dans le pack initial ou a été lue par un outil
+  * page_vue     : son PNG était joint au contexte de génération
   * latence      : premier token, total
-  * boucle       : appels d'outils, rounds, motif d'arrêt, rounds de contrôle, dégradation
-  * contrôle     : verdict du contrôle de sortie (passed / repaired / flagged)
+  * contrôle     : verdict du contrôle d'ancrage (passed / flagged)
 
 Usage (dans le conteneur) ::
 
@@ -274,7 +273,7 @@ def pages_packed(trace: Dict[str, Any]) -> List[Tuple[int, int]]:
 
 
 def pages_seen_as_image(trace: Dict[str, Any]) -> List[Tuple[int, int]]:
-    """Pages dont le modèle a réellement eu l'IMAGE : PNG du pack + lectures d'outils.
+    """Pages dont le modèle a réellement eu l'IMAGE : les PNG joints au contexte.
 
     C'est la seule mesure qui sépare une réponse lue d'une réponse devinée : sur ce corpus
     les cotes n'existent que sur le dessin.
@@ -288,24 +287,6 @@ def pages_seen_as_image(trace: Dict[str, Any]) -> List[Tuple[int, int]]:
             out.append((int(did), int(page)))
         except (TypeError, ValueError):
             continue
-    # Pack de LECTURE : ces pages ont été rendues en PNG et lues par le lecteur isolé.
-    # Elles comptent comme vues au même titre qu'une image jointe au message — c'est même
-    # la seule façon dont une page est vue depuis P2.
-    for item in ((trace or {}).get("reading") or {}).get("details") or []:
-        did, page = item.get("document_id"), item.get("page_no")
-        if did is None or page is None or item.get("etat") == "non_lue":
-            continue
-        try:
-            out.append((int(did), int(page)))
-        except (TypeError, ValueError):
-            continue
-    for rnd in ((trace or {}).get("loop") or {}).get("rounds") or []:
-        for call in rnd.get("calls") or []:
-            for pair in call.get("pages_read") or []:
-                try:
-                    out.append((int(pair[0]), int(pair[1])))
-                except (TypeError, ValueError, IndexError):
-                    continue
     return out
 
 
@@ -533,8 +514,7 @@ def settings_snapshot() -> Dict[str, Any]:
     keys = [
         "MODEL_FAST", "SPACE_CHAT_TEMPERATURE", "GENERATION_REASONING_EFFORT",
         "RAG_TOP_K", "CAG_MAX_DOCUMENTS", "CAG_IMAGE_DPI", "CAG_MAX_IMAGES",
-        "READER_INITIAL_MAX_IMAGES", "READER_MAX_TOOL_CALLS", "READER_DEADLINE_S",
-        "READER_MAX_TOOL_IMAGES", "READER_PAGE_MODEL", "RERANKER_ENABLED",
+        "GENERATION_MAX_IMAGES", "RERANKER_ENABLED",
         "COLPALI_GATING_ENABLED", "QUERY_UNDERSTANDING_ENABLED", "SCOPE_MODE",
         "CONVERSATION_ANCHOR_ENABLED", "GENERATION_SEED",
     ]
@@ -655,8 +635,8 @@ def print_report(report: Dict[str, Any]) -> None:
     print("=" * 78)
     s = report["reglages"]
     print(f"modèle={s.get('MODEL_FAST')}  reasoning={s.get('GENERATION_REASONING_EFFORT')}  "
-          f"dpi={s.get('CAG_IMAGE_DPI')}  images={s.get('READER_INITIAL_MAX_IMAGES')}  "
-          f"outils={s.get('READER_MAX_TOOL_CALLS')}  deadline={s.get('READER_DEADLINE_S')}s")
+          f"dpi={s.get('CAG_IMAGE_DPI')}  images={s.get('GENERATION_MAX_IMAGES')}  "
+          "")
     print(f"questions={agg['n']}  essais/question={report['repeat']}")
     print("-" * 78)
     v = agg["verdicts"]

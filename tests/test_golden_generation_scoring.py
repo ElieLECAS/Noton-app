@@ -169,14 +169,13 @@ def test_pages_packees_viennent_du_manifeste():
     assert set(pages_packed(trace)) == {(438, 6), (438, 8), (438, 12)}
 
 
-def test_pages_vues_ne_comptent_que_les_images_et_les_lectures():
-    """Le manifeste liste toutes les pages retrouvées ; seules les IMAGES ont été vues."""
+def test_pages_vues_ne_comptent_que_les_images():
+    """Le manifeste liste toutes les pages packées ; seules les IMAGES ont été vues."""
     trace = {
         "packed_documents": [{"document_id": 438, "pages": [1, 2, 3, 4, 5, 6, 8, 12]}],
         "images": [{"document_id": 438, "page_no": 8}],
-        "loop": {"rounds": [{"calls": [{"tool": "lire_pages", "pages_read": [[438, 21]]}]}]},
     }
-    assert set(pages_seen_as_image(trace)) == {(438, 8), (438, 21)}
+    assert set(pages_seen_as_image(trace)) == {(438, 8)}
     assert (438, 12) not in set(pages_seen_as_image(trace))
 
 
@@ -288,16 +287,12 @@ def test_un_motif_regex_garde_ses_classes_de_caracteres():
                              "Montage uniquement compatible avec les ouvrants.")
 
 
-def test_les_pages_lues_par_le_pack_comptent_comme_vues():
-    """Depuis P2, une page n'est vue QUE par le lecteur isolé : le pack de lecture est la
-    source de vérité de « le modèle a-t-il regardé cette page »."""
+def test_une_page_packee_sans_image_n_est_pas_vue():
+    """Le pack de lecture a disparu : une page n'est vue que si son PNG est joint."""
     trace = {
-        "reading": {"details": [
-            {"document_id": 438, "page_no": 8, "etat": "repond"},
-            {"document_id": 438, "page_no": 6, "etat": "restitue"},
-            {"document_id": 424, "page_no": 3, "etat": "non_lue"},
-        ]},
+        "packed_documents": [{"document_id": 438, "pages": [6, 8]}],
+        "images": [{"document_id": 438, "page_no": 8}],
     }
     vues = set(pages_seen_as_image(trace))
-    assert (438, 8) in vues and (438, 6) in vues
-    assert (424, 3) not in vues, "une page non lue n'a pas été vue"
+    assert (438, 8) in vues
+    assert (438, 6) not in vues, "packée n'est pas vue"

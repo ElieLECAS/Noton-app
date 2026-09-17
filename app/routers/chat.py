@@ -352,85 +352,6 @@ SPACE_CHAT_SYSTEM_PROMPT = (
 # « IMAGES » — pensées pour un jet unique sur un pack fermé — sont remplacées par les
 # consignes d'outils ; identité, sujet, format, anti-digression, grounding strict et style
 # restent partagés à l'identique (une seule source de vérité pour ces règles).
-_READER_CONTEXT_SECTION = (
-    "CE QUE TU AS\n"
-    "Le contexte contient des PAGES LUES. Chacune a été rendue en image et lue par un "
-    "lecteur dédié, une page à la fois, avec ta question — ce que tu lis n'est pas un texte "
-    "extrait automatiquement, c'est le résultat de cette lecture. Les documents portent un "
-    "en-tête (source, gamme, matériau, type) et un identifiant « id N » ; chaque page porte "
-    "un marqueur [page N].\n"
-    "Une lecture te donne, quand la page s'y prête : le REPÈRE localisé et son libellé "
-    "exact, TOUTES les valeurs écrites à côté de lui, la convention de lecture inscrite sur "
-    "la page, et le contenu de la page restitué tel qu'imprimé (tableaux intacts). Quand la "
-    "lecture n'a pas su répondre, ce contenu reste exploitable : c'est à TOI de faire le "
-    "croisement — suivre une plage (« 601 à 900 mm »), lire la ligne d'un tableau, "
-    "reconstituer une suite d'étapes. Ne conclus « les documents ne précisent pas » qu'après "
-    "avoir regardé le contenu restitué de CHAQUE page.\n"
-    "Quand une lecture est déclarée ambiguë ou instable, ne choisis PAS un nombre : dis que "
-    "la page ne permet pas de trancher. Avant d'attribuer une valeur, une cote ou une "
-    "consigne à une gamme/produit, vérifie l'en-tête du document : ne transfère JAMAIS une "
-    "information d'une gamme vers une autre (ex. Perform 70 ≠ Perform 76, seuil PMR ≠ seuil "
-    "standard). En cas d'informations contradictoires, le document le plus spécifique au "
-    "sujet de la question prime.\n"
-)
-_READER_TOOLS_SECTION = (
-    "CE QUE TU PEUX FAIRE (outils)\n"
-    "Les pages lues sont un POINT DE DÉPART : tu peux aller chercher plus loin, sous un "
-    "budget d'appels et de temps rappelé après chaque résultat. Avant chaque appel, écris "
-    "UNE phrase : ce que tu cherches et pourquoi.\n"
-    "- chercher_code : avant de citer une référence qui n'est pas dans les pages lues, "
-    "vérifie qu'elle existe. Ne déduis JAMAIS une référence par analogie de numérotation "
-    "(TGY3702 ≠ TGY3710). Il traverse TOUS les documents de l'espace.\n"
-    "- rechercher : quand aucune page lue ne porte le sujet. Reformule en vocabulaire métier ; "
-    "ne relance jamais la même question ; préfère document_id quand tu sais où chercher.\n"
-    "- plan_du_document : pour situer la bonne section d'un long document.\n"
-    "Ces outils rendent du TEXTE INDEXÉ, pas des pages lues : il sert à localiser et à "
-    "vérifier l'existence d'une référence, jamais à en déduire une cote.\n"
-    "Un bloc « COUVERTURE DE LA RECHERCHE » indique ce que la recherche initiale a trouvé : "
-    "une référence marquée absente doit être vérifiée avec chercher_code avant toute réponse "
-    "à son sujet.\n"
-)
-_READER_STOP_SECTION = (
-    "QUAND T'ARRÊTER ET COMMENT CONCLURE\n"
-    "Dès que tu as la preuve, réponds. Si le budget est épuisé sans preuve : dis ce que tu as "
-    "trouvé, où, et ce qui manque. Jamais de connaissance générale pour combler un trou factuel ; "
-    "une information absente des pages lues se dit (« les documents fournis ne précisent pas … »).\n"
-    "FIN DE RÉPONSE OBLIGATOIRE : deux lignes machine, masquées à l'utilisateur, en toute fin. "
-    "Écris-les dans le TEXTE de ta réponse — jamais comme un appel d'outil.\n"
-    "<sources>{\"used\":[{\"doc_id\":405,\"pages\":[111,112]}]}</sources> — les identifiants "
-    "« id N » des documents et les pages réellement utilisées. Le numéro de page est celui du "
-    "marqueur [page N] du contexte, JAMAIS celui imprimé dans le cartouche de la planche : les "
-    "deux diffèrent souvent, et c'est le marqueur qui permet de rouvrir la bonne page.\n"
-    "<evidence>[\"phrase exacte copiée d'une page lue (doc 405 p.111)\", \"…\"]</evidence> — une "
-    "citation MOT POUR MOT par valeur, référence ou consigne que tu affirmes ; pour une valeur "
-    "venant d'une lecture d'image, recopie la ligne de lecture (le repère et sa valeur).\n"
-    "N'en parle jamais dans le corps de la réponse.\n"
-)
-
-
-def _build_reader_prompt(base: str) -> str:
-    """Recompose le prompt du lecteur à partir des sections du prompt d'espace."""
-    chunks = base.split("\n### ")
-    head, sections = chunks[0], chunks[1:]
-
-    def _key(section: str) -> str:
-        return section.split("\n", 1)[0].split(" (")[0].strip()
-
-    kept = [s for s in sections if _key(s) not in ("CONTEXTE FOURNI", "GROUNDING DUR", "IMAGES")]
-    ordered: List[str] = [_READER_CONTEXT_SECTION]
-    for section in kept:
-        key = _key(section)
-        if key == "ANTI-DIGRESSION":
-            ordered.append(_READER_TOOLS_SECTION)
-        if key == "STYLE":
-            ordered.append(_READER_STOP_SECTION)
-        ordered.append(section)
-    return head + "\n### " + "\n### ".join(ordered)
-
-
-READER_SYSTEM_PROMPT = _build_reader_prompt(SPACE_CHAT_SYSTEM_PROMPT)
-
-
 # ——— Prompt PAGES : texte des pages + images des pages (16/09) ———
 # Le générateur reçoit le TEXTE de chaque page packée (markdown augmenté quand le document
 # en a un, fragments indexés sinon) ET le PNG des pages les plus pertinentes. Les sections
@@ -1159,7 +1080,6 @@ def _build_generation_trace(
     dynamic_k: Optional[int] = None,
     rerank_status: Optional[str] = None,
     nb_passages: Optional[int] = None,
-    reading_trace: Optional[dict] = None,
     anchor_document_ids: Optional[List[int]] = None,
     requested_codes=None,
     pinned_codes: Optional[List[str]] = None,
@@ -1171,7 +1091,7 @@ def _build_generation_trace(
     anchor_intent_changed: bool = False,
     cag_documents: Optional[List[dict]] = None,
     image_captions: Optional[List[dict]] = None,
-    loop: Optional[dict] = None,
+    generation: Optional[dict] = None,
 ) -> dict:
     """Assemble le « cheminement » de génération persisté dans message.metadata_json['trace']
     et renvoyé dans l'événement SSE final. Alimente le bouton d'inspection côté UI.
@@ -1196,9 +1116,6 @@ def _build_generation_trace(
         "reasoning_effort": settings.GENERATION_REASONING_EFFORT,
         "generation_temperature": settings.SPACE_CHAT_TEMPERATURE,
         "model": settings.MODEL_FAST,
-        # Pages LUES en image au tour 0 : combien répondent, combien se déclarent absentes.
-        # C'est le compteur qui dit si la réponse repose sur une lecture ou sur rien.
-        "reading": reading_trace,
     }
 
     if route == "rag":
@@ -1253,9 +1170,9 @@ def _build_generation_trace(
         }
         trace["passages"] = passages_summary or []
 
-    if loop:
-        # Boucle du lecteur agentique : rounds, appels d'outils, durées, arrêt, repli.
-        trace["loop"] = loop
+    if generation:
+        # Appel de génération : durées, blocs machine récupérés, verdict du contrôle.
+        trace["generation"] = generation
 
     if verification:
         trace["verification"] = verification
@@ -2077,7 +1994,6 @@ async def stream_space_chat_message(
                 elected_document_ids=_elected_ids,
                 intent=_intent,
             )
-            reading_trace = None
             if retrieval_status == "low_confidence_clarification":
                 space_context_draft["content"] += (
                     "\n\n⚠️ IMPORTANT : les pages fournies sont ambiguës ou de faible pertinence. "
@@ -2098,7 +2014,7 @@ async def stream_space_chat_message(
                 session,
                 cag_documents_ctx,
                 doc_passages,
-                max_images=settings.READER_INITIAL_MAX_IMAGES,
+                max_images=settings.GENERATION_MAX_IMAGES,
                 dpi=settings.CAG_IMAGE_DPI,
             )
 
@@ -2260,7 +2176,7 @@ async def stream_space_chat_message(
             yield _stage_event("generation", "Lecture des documents")
             source_filter = None
             verification_result = None
-            loop_trace = None
+            generation_trace_llm = None
             used_pages_by_index: Dict[int, List[int]] = {}
             with trace_pipeline(
                 "space_chat_pipeline",
@@ -2270,7 +2186,7 @@ async def stream_space_chat_message(
                 if settings.LLM_PROVIDER != "ollama" and not settings.MISTRAL_API_KEY:
                     raise ValueError("Mistral API key non configurée")
 
-                from app.services.reader_agent_service import LoopBudget, ReaderLoop
+                from app.services.answer_generation_service import AnswerGeneration
                 from app.services.response_verification_service import check_reader_output
                 from app.services.stream_source_filter import SourcesTagStreamFilter
 
@@ -2280,15 +2196,6 @@ async def stream_space_chat_message(
                 _evidence_seed = list(space_context_draft.get("cag_document_blocks") or [])
                 if not _evidence_seed:
                     _evidence_seed = [space_context_draft.get("content") or ""]
-
-                # AUCUN OUTIL. Les trois outils restants (rechercher, chercher_code,
-                # plan_du_document) rendent du TEXTE INDEXÉ, qui n'a pas sa place ici : il
-                # entre dans le contexte ET dans le corpus de preuve dès le premier appel.
-                # Mesuré le 14/09 : sur les 11 échecs de la campagne de référence, zéro
-                # appel d'outil — ils n'y changeaient rien ; sur les rejeux avec pack de
-                # lecture, « rechercher » est appelé 5 à 7 fois pour 11 questions, et c'est
-                # du texte qui revient. Le tour est donc un appel unique sur les images.
-                reader_tools: List[Any] = []
 
                 def _output_check(
                     final_text: str,
@@ -2308,16 +2215,10 @@ async def stream_space_chat_message(
                 _doc_id_by_index = {
                     d.get("index"): d.get("document_id") for d in cag_documents_ctx
                 }
-                loop = ReaderLoop(
+                generation = AnswerGeneration(
                     messages=full_context_draft,
                     model=forced_model,
                     stream_fn=chat_stream_wrapper,
-                    tools=reader_tools,
-                    budget=LoopBudget(
-                        max_tool_calls=settings.READER_MAX_TOOL_CALLS,
-                        deadline_s=settings.READER_DEADLINE_S,
-                        max_tool_images=settings.READER_MAX_TOOL_IMAGES,
-                    ),
                     max_tokens=gen_max_tokens,
                     initial_documents=cag_documents_ctx,
                     evidence_seed=_evidence_seed,
@@ -2337,30 +2238,28 @@ async def stream_space_chat_message(
                     run_type="llm",
                     inputs={
                         "model": forced_model,
-                        "tools": [t.name for t in reader_tools],
                         "messages": [
                             {"role": m.get("role"), "content": str(m.get("content", ""))[:2000]}
                             for m in full_context_draft
                         ],
                     },
-                    tags=["llm", "stream", "space", "reader"],
+                    tags=["llm", "stream", "space"],
                 ) as stream_run:
-                    # [PERF] Bucket macro n°2 : lecteur (appels Large + outils).
+                    # [PERF] Bucket macro n°2 : génération (appel Large).
                     _t_gen_start = _time.perf_counter()
                     try:
-                        async for _sse in loop.run():
+                        async for _sse in generation.run():
                             yield _sse
                     except httpx.HTTPStatusError as exc:
-                        # Contexte trop gros même SANS outils (le lecteur a déjà tenté son
-                        # propre repli) → tentatives de secours historiques : CAG eco, puis
-                        # question nue. Uniquement si rien n'a encore été produit.
+                        # Contexte trop gros → tentatives de secours historiques : CAG eco,
+                        # puis question nue. Uniquement si rien n'a encore été produit.
                         if not (
                             exc.response is not None
                             and exc.response.status_code == 400
-                            and not loop.final_text
+                            and not generation.final_text
                         ):
                             raise
-                        logger.warning("Mistral 400 hors outils → tentatives de secours eco / minimal")
+                        logger.warning("Mistral 400 → tentatives de secours eco / minimal")
                         _fallbacks = [
                             (
                                 "eco",
@@ -2407,24 +2306,24 @@ async def stream_space_chat_message(
                             source_filter = _fb_filter
                             break
                     else:
-                        assistant_response.append(loop.final_text)
-                        source_filter = loop.source_filter
-                        reasoning_parts.extend(loop.reasoning_parts)
-                        used_pages_by_index = loop.used_pages_by_index()
-                        verification_result = loop.verification
-                        # Documents réellement LUS (pack + outils) : ce sont eux que les
-                        # sources reflètent, pas seulement le pack initial.
-                        cag_documents_ctx = loop.documents_for_sources() or cag_documents_ctx
-                    loop_trace = loop.trace
+                        assistant_response.append(generation.final_text)
+                        source_filter = generation.source_filter
+                        reasoning_parts.extend(generation.reasoning_parts)
+                        used_pages_by_index = generation.used_pages_by_index()
+                        verification_result = generation.verification
+                        cag_documents_ctx = (
+                            generation.documents_for_sources() or cag_documents_ctx
+                        )
+                    generation_trace_llm = generation.trace
                     logger.info(
-                        "[PERF][chat] génération TOTAL %.2fs — %d chars, %d appel(s) d'outil, arrêt=%s",
+                        "[PERF][chat] génération TOTAL %.2fs — %d chars",
                         _time.perf_counter() - _t_gen_start,
                         sum(len(c) for c in assistant_response),
-                        loop.tool_calls_used,
-                        loop.stopped_by,
                     )
                     final_response = "".join(assistant_response)
-                    stream_run.end(outputs={"response": final_response, "loop": loop_trace})
+                    stream_run.end(
+                        outputs={"response": final_response, "generation": generation_trace_llm}
+                    )
 
                 pipeline_run.end(outputs={
                     "nb_doc_passages": len(doc_passages),
@@ -2766,8 +2665,7 @@ async def stream_space_chat_message(
                     anchor_intent_changed=anchor_intent_changed,
                     cag_documents=space_context_draft.get("cag_documents"),
                     image_captions=user_image_captions,
-                    loop=loop_trace,
-                    reading_trace=reading_trace,
+                    generation=generation_trace_llm,
                 )
 
                 # Persister et envoyer les sources avant `done` : le client peut annuler la lecture

@@ -1042,7 +1042,7 @@ def select_cag_images(
          placeholder) ;
       2. autres pages matchées — au score décroissant dans chaque classe.
     ``visual_only`` ne retient que les pages muettes (classes 0 et 1) : c'est le pack initial
-    du lecteur agentique, qui ira lui-même lire les autres pages (lire_pages).
+    de la génération, qui dispose du texte de page et du PNG des pages élues.
 
     Retourne (images_b64, captions) — captions = [{image_index, document_index,
     document_title, page_no}, …] pour légender les images dans le message user.

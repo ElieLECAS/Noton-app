@@ -488,43 +488,17 @@ class Settings(BaseSettings):
     CAG_ANCHOR_RANK_BY_SCORE: bool = os.getenv("CAG_ANCHOR_RANK_BY_SCORE", "true").strip().lower() in (
         "true", "1", "yes", "on"
     )
-    # --- Lecteur agentique (docs/plan_lecteur_agentique_2026-09-02.md) ---
-    # Le générateur (MODEL_FAST) lit un pack INITIAL court puis va chercher le reste avec
-    # quatre outils (rechercher, lire_pages, chercher_code, plan_du_document), sous budget.
-    # Le contrôle de sortie est programmatique (codes, cotes, normes, RAL, citations) sur ce
-    # que le lecteur a réellement lu ; l'ancien juge
+    # --- Génération ---
+    # Le tour est UN appel : le pack (texte des pages + PNG) part au modèle, qui répond.
+    # La boucle d'outils du « lecteur agentique » a été mesurée inerte le 14/09 (zéro appel
+    # sur les onze échecs de la campagne de référence) puis supprimée : ses outils ne
+    # rendaient que du texte indexé déjà présent dans le pack. Le contrôle de sortie reste
+    # programmatique (codes, cotes, normes, RAL, citations) sur le corpus de preuve.
     #
-    # Modèle du LECTEUR DE PAGE : ``lire_pages`` délègue la lecture d'une planche (dessin
-    # sans couche texte) à un appel vision isolé — une page, une question, aucun autre
-    # contexte. Mesuré le 2026-09-12 sur la planche des parcloses : small et large répondent
-    # juste tous les deux (~800 ms pour small), alors que la MÊME page lue par large au
-    # milieu du contexte du tour donne le mauvais chiffre. Le petit modèle suffit donc.
-    # 14/09 : passé à Large. Le petit modèle suffisait sur la planche des parcloses en
-    # appel isolé (mesure du 12/09), mais la campagne du 14/09 montre que les erreurs
-    # portent aussi sur des tableaux à double entrée (hauteur de poignée, pattes de pose),
-    # où il faut choisir une LIGNE et pas seulement lire un nombre. La lecture est l'étage
-    # où se joue la justesse : c'est le dernier endroit où économiser.
-    READER_PAGE_MODEL: str = os.getenv("READER_PAGE_MODEL", "mistral-large-latest")
-    # Pack initial : texte des pages retrouvées des documents élus. Petit par construction —
-    # ne pas confondre avec CAG_TOKEN_BUDGET (plafond du packer pour les autres
-    # consommateurs : fiche technique, évaluation, repli eco).
-    READER_INITIAL_PACK_TOKENS: int = int(os.getenv("READER_INITIAL_PACK_TOKENS", "12000"))
-    # Images jointes au pack initial : les pages trouvées (muettes d'abord), TEXTE + IMAGE.
-    # Les cotes des planches techniques ne sont pas dans le texte extrait — un pack sans PNG
-    # fait répondre le lecteur sur les seuls libellés.
-    READER_INITIAL_MAX_IMAGES: int = int(os.getenv("READER_INITIAL_MAX_IMAGES", "6"))
-    # Appels d'outils max par tour ; deadline (secondes) au-delà de laquelle le lecteur doit
-    # répondre ; images fournies par les outils, cumulées sur le tour (l'API en accepte 8 par
-    # requête : l'orchestrateur élague les images déjà vues de l'historique).
-    # Pack de LECTURE (reading_pack_service) : le lecteur ne reçoit que des pages LUES en
-    # image, jamais du texte extrait. Nombre de pages lues au tour 0 (en PARALLÈLE : mesuré
-    # 6 pages = 8,5 s de mur pour 26,4 s d'appels cumulés) et plafond par document, pour
-    # qu'un document élu en complément obtienne toujours au moins une page lue.
-    READER_PACK_MAX_READINGS: int = int(os.getenv("READER_PACK_MAX_READINGS", "8"))
-    READER_PACK_MAX_PAGES_PER_DOC: int = int(os.getenv("READER_PACK_MAX_PAGES_PER_DOC", "5"))
-    READER_MAX_TOOL_CALLS: int = int(os.getenv("READER_MAX_TOOL_CALLS", "6"))
-    READER_DEADLINE_S: float = float(os.getenv("READER_DEADLINE_S", "60"))
-    READER_MAX_TOOL_IMAGES: int = int(os.getenv("READER_MAX_TOOL_IMAGES", "8"))
+    # Images des pages élues jointes au contexte de génération, EN PLUS du texte packé.
+    # Les cotes des planches techniques ne sont pas dans le texte extrait — un contexte sans
+    # PNG fait répondre le modèle sur les seuls libellés. Plafond API : 8 par requête.
+    GENERATION_MAX_IMAGES: int = int(os.getenv("GENERATION_MAX_IMAGES", "6"))
     # Quota par document appliqué AUSSI au chemin reranké (B2) : la coupe dynamique choisit
     # combien de pages, le quota choisit lesquelles — sans lui, 17 passages sur 19 pouvaient
     # venir du même document et le juge n'avait rien à comparer.
@@ -769,8 +743,7 @@ class Settings(BaseSettings):
             f"anchor={onoff(self.CONVERSATION_ANCHOR_ENABLED)} "
             f"fiche={onoff(self.FICHE_TECHNIQUE_ENABLED)} "
             "guided=arbre-sav "
-            f"reader=tools({self.READER_MAX_TOOL_CALLS} appels, {self.READER_DEADLINE_S:.0f}s, "
-            f"pack {self.READER_INITIAL_PACK_TOKENS} tok)"
+            f"generation=1 appel ({self.GENERATION_MAX_IMAGES} images max)"
         )
 
     @field_validator('DATABASE_ECHO', mode='before')

@@ -1,9 +1,9 @@
-"""Contrôle programmatique de sortie du lecteur — zéro LLM.
+"""Contrôle programmatique d'ancrage de la réponse — zéro LLM.
 
-Le lecteur agentique (``reader_agent_service``) répond après avoir lu : le pack initial
-puis ce que ses outils lui ont rendu. Ce module confronte sa réponse à **exactement cette
-matière** (pack ∪ résultats d'outils) — le lecteur et le contrôle lisent la même chose,
-ce qui n'était pas le cas de l'ancien juge LLM (texte des pages vs images vues).
+La génération (``answer_generation_service``) répond sur le pack : texte des pages et PNG
+des pages élues. Ce module confronte sa réponse à **exactement cette matière** — le modèle
+et le contrôle lisent la même chose, ce qui n'était pas le cas de l'ancien juge LLM (texte
+des pages contre images vues).
 
 Trois contrôles, tous littéraux et insensibles au modèle :
 
@@ -17,10 +17,9 @@ Trois contrôles, tous littéraux et insensibles au modèle :
      ellipses). Contrôle SOUPLE : une citation introuvable est signalée, pas bloquante —
      une valeur lue sur une planche muette n'a pas de texte à citer.
 
-Point d'entrée : ``check_reader_output``. Quand le verdict est KO, il produit aussi le
-message de retour destiné au lecteur (message ``user`` de contrôle) : « ces éléments ne
-figurent dans aucune page lue : … ; vérifie avec chercher_code / lire_pages, ou écris
-explicitement l'absence ». Le lecteur relit ; il ne réécrit pas à l'aveugle.
+Point d'entrée : ``check_reader_output``. Le verdict est CONSTATÉ, jamais rejoué : il est
+tracé et joint à la réponse pour l'inspection. Le round de reprise a disparu avec la boucle
+d'outils — il n'avait de sens que si le modèle pouvait relire, et relire supposait un outil.
 
 L'ancien juge LLM (``judge_relevance`` / ``verify_response``) a été retiré le 2026-09-02 :
 un petit modèle qui ne voit pas les images et lit un extrait plafonné ne peut pas juger
@@ -283,7 +282,6 @@ def check_reader_output(
       "unsupported_codes": [...],     # codes produits seuls
       "citations_total": int,
       "citations_unverified": [...],  # citations <evidence> introuvables (souple)
-      "feedback": str | None,         # message de contrôle à renvoyer au lecteur si KO
       "action": None,                 # posé par l'appelant : passed | repaired | flagged
     }
     """
@@ -332,48 +330,7 @@ def check_reader_output(
     ]
 
     ok = not unsupported
-    feedback: Optional[str] = None
     if not ok:
-        bits = [
-            "[MESSAGE SYSTÈME AUTOMATIQUE — ce n'est PAS l'utilisateur qui écrit. Corrige en "
-            "silence : ne t'adresse JAMAIS à l'utilisateur à propos de ce contrôle, n'écris "
-            "jamais « vous avez raison », « je me suis trompée » ou toute autre phrase qui "
-            "laisserait croire que l'utilisateur t'a corrigée.]\n"
-            "CONTRÔLE DOCUMENTAIRE (automatique, fait foi) : les éléments suivants de ta "
-            "réponse ne figurent dans AUCUNE page que tu as lue : "
-            + ", ".join(str(c) for c in unsupported[:10])
-            + "."
-        ]
-        if unsupported_codes:
-            bits.append(
-                "Pour chaque référence, vérifie son existence avec chercher_code (ou relis la "
-                "page avec lire_pages). Si elle n'existe pas dans les documents, "
-                "écris explicitement que les documents ne la mentionnent pas — ne la déduis "
-                "jamais d'une numérotation voisine."
-            )
-        else:
-            bits.append(
-                "Relis la page qui porte la valeur avec lire_pages, en posant la question "
-                "précise (l'outil lit les planches sur le dessin), et cite-la exactement ; "
-                "sinon écris que les documents ne précisent pas cette valeur."
-            )
-        if unverified:
-            bits.append(
-                f"{len(unverified)} citation(s) de ton bloc <evidence> n'ont pas été retrouvées "
-                "mot pour mot : copie les phrases exactes des pages lues."
-            )
-        bits.append(
-            "Puis réponds à nouveau, COMPLÈTEMENT et directement à la question initiale de "
-            "l'utilisateur — comme s'il s'agissait de ta première réponse, sans mentionner ce "
-            "contrôle ni t'excuser — en conservant les blocs <sources> et <evidence> en fin de "
-            "réponse.\n"
-            "ENCADRE ta réponse corrigée par <reponse_finale> et </reponse_finale>. SEUL ce "
-            "qui est à l'intérieur de ces balises sera montré à l'utilisateur : tes "
-            "vérifications, tes constats sur ce contrôle et tout raisonnement doivent rester "
-            "EN DEHORS. N'écris jamais « voici la vérification », « réponse corrigée » ou toute "
-            "formule de ce genre à l'intérieur des balises."
-        )
-        feedback = " ".join(bits)
         logger.warning(
             "[contrôle] réponse non étayée — %s | question=%r", unsupported, (question or "")[:120]
         )
@@ -392,6 +349,5 @@ def check_reader_output(
         "claims_from_image": claims_from_image,
         "citations_total": len(cites),
         "citations_unverified": unverified,
-        "feedback": feedback,
         "action": None,
     }

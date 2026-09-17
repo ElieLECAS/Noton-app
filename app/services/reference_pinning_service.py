@@ -158,7 +158,7 @@ def build_pinned_reference_block(
                 # « TGA3817 Cale de vitrage=TGY3605 Butées multivantaux »). La valeur se
                 # lit sur la PAGE, jamais ici.
                 "[texte indexé — sert à localiser la référence et à vérifier son "
-                "orthographe ; n'y lis AUCUNE valeur, lis la page avec lire_pages]\n"
+                "orthographe ; n'y lis AUCUNE valeur, lis la page jointe]\n"
                 f"« {chunk['content']} »"
             )
 
