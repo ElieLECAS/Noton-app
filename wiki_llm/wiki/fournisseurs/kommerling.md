@@ -127,7 +127,7 @@ avec ses propres dormants, ouvrants, seuils et renforts, et va jusqu'à **3,20 m
 oscillo-coulissante**, ce que le 76 Advanced ne permet pas.
 
 **Le wiki ne sait pas encore si c'est le système des gammes PERFORM70 et HYBRIDE70 de PROFERM.**
-Aucun document PROFERM ne cite une référence en 6xxx. Entrée **VER-28** du registre
+Aucun document PROFERM ne cite une référence en 6xxx. Ses profilés, ses renforts et leurs inerties sont dans [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md). Entrée **VER-28** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 Les **profilés complémentaires sont partagés entre les deux systèmes** : le poster des

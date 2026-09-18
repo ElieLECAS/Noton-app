@@ -1,61 +1,32 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-env/
+.venv/
 venv/
-ENV/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-docs/*
-!docs/doc_md/
-wheels/
+env/
 *.egg-info/
-.installed.cfg
-*.egg
-media/
-# Environment
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environnement local (secrets) : voir .env_exemple
 .env
-.venv
-media/documents/
-# IDE
+
+# IDE / OS
 .vscode/
 .idea/
 *.swp
 *.swo
-documentations/
-generale/
 *~
-docs/ROTO/*
-data/*hint.json
-data/
-data/*
-
-# Database
-*.db
-*.sqlite3
-
-# Logs
-*.log
-
-# OS
 .DS_Store
 Thumbs.db
 
-# Alembic
-alembic/versions/*.pyc
-
-
-# Rapports du golden (app/scripts/eval_golden_generation.py)
+# Journaux et rapports du golden (app/scripts/eval_golden_generation.py)
+*.log
 logs/eval/
+
+# Restes locaux de l'ancien système (index LanceDB/ColPali, médias, PDF de travail) :
+# plus aucun consommateur dans l'application. Les PDF du wiki suivent wiki_llm/.gitignore.
+data/
+media/
+docs/documentations/

@@ -1,62 +1,33 @@
+# Contexte de build de app/Dockerfile : seul app/ est copié dans l'image.
+
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual environments
-env/
+.venv/
 venv/
-ENV/
-.venv
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Environment files
-.env
-.env.local
-.env.*.local
-.env_exemple
-
-# Logs
-*.log
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Git
-.git/
-.gitignore
-
-# Docker
-docker-compose.yaml
-*.md
-README.md
-
-# Tests (non inclus dans l'image Docker)
-tests/
+env/
 .pytest_cache/
 .coverage
 htmlcov/
-requirements-dev.txt
 
-# Media files (ne pas inclure dans l'image)
+# Environnement et IDE
+.env
+.env_exemple
+.vscode/
+.idea/
+
+# Git et Docker
+.git/
+.gitignore
+docker-compose.yaml
+
+# Hors image : le wiki est monté en volume, les tests se lancent dans le conteneur,
+# le reste n'a rien à faire dans le contexte (data/ pèse plusieurs Go).
+wiki_llm/
+tests/
+docs/
+data/
 media/
-
-# Alembic cache
-app/alembic/versions/__pycache__/
-
-# Fichiers temporaires
-*.tmp
-*.bak
-
+logs/
+*.md
+*.log

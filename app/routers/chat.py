@@ -48,7 +48,6 @@ def _persist_reply(conversation_id: int, answer: WikiAnswer) -> Optional[int]:
                 role="assistant",
                 content=answer.text,
                 model=answer.model,
-                provider="mistral",
                 sources=json.dumps(answer.sources, ensure_ascii=False),
                 metadata_json={"trace": answer.trace, "anomalies": answer.anomalies},
             )

@@ -3,58 +3,21 @@
 {% block extra_head %}
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<link rel="stylesheet" href="/static/css/wiki-doc.css">
 <style>
-/* ===== Markdown des réponses et des pages ===== */
-.markdown-content { font-size: 0.95rem; line-height: 1.7; color: #374151; }
-.dark .markdown-content { color: #e5e7eb; }
-.markdown-content > *:first-child { margin-top: 0; }
-.markdown-content > *:last-child { margin-bottom: 0; }
-.markdown-content h1 { font-size: 1.35rem; font-weight: 700; margin: 1.4rem 0 0.8rem; padding-bottom: 0.4rem; border-bottom: 2px solid #e5e7eb; color: #111827; }
-.dark .markdown-content h1 { border-bottom-color: #4b5563; color: #f9fafb; }
-.markdown-content h2 { font-size: 1.15rem; font-weight: 600; margin: 1.2rem 0 0.6rem; color: #1f2937; }
-.dark .markdown-content h2 { color: #f3f4f6; }
-.markdown-content h3 { font-size: 1.02rem; font-weight: 600; margin: 1rem 0 0.5rem; color: #374151; }
-.dark .markdown-content h3 { color: #e5e7eb; }
-.markdown-content p { margin: 0.7rem 0; }
-.markdown-content ul, .markdown-content ol { margin: 0.7rem 0; padding-left: 1.6rem; }
-.markdown-content ul { list-style-type: disc; }
-.markdown-content ol { list-style-type: decimal; }
-.markdown-content li { margin: 0.3rem 0; }
-.markdown-content li::marker { color: #6b7280; }
-.markdown-content strong { font-weight: 700; color: #111827; }
-.dark .markdown-content strong { color: #f9fafb; }
-.markdown-content code { font-family: "SF Mono", "Fira Code", Consolas, monospace; font-size: 0.86em; background: #f3f4f6; color: #b91c1c; padding: 0.15em 0.4em; border-radius: 4px; }
-.dark .markdown-content code { background: #374151; color: #fca5a5; }
-.markdown-content pre { background: #1f2937; color: #e5e7eb; padding: 0.9rem; border-radius: 8px; overflow-x: auto; margin: 0.9rem 0; font-size: 0.85rem; }
-.markdown-content pre code { background: transparent; color: inherit; padding: 0; }
-.markdown-content blockquote { border-left: 3px solid #6366f1; background: rgba(99,102,241,0.06); padding: 0.6rem 0.9rem; margin: 0.9rem 0; border-radius: 0 8px 8px 0; color: #3730a3; }
-.dark .markdown-content blockquote { background: rgba(99,102,241,0.12); color: #c7d2fe; }
-.markdown-content blockquote p { margin: 0; }
-.markdown-content .table-wrapper { overflow-x: auto; margin: 0.9rem 0; border-radius: 8px; border: 1px solid #e5e7eb; }
-.dark .markdown-content .table-wrapper { border-color: #4b5563; }
-.markdown-content table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
-.markdown-content th, .markdown-content td { border: 1px solid #e5e7eb; padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
-.dark .markdown-content th, .dark .markdown-content td { border-color: #4b5563; }
-.markdown-content th { background: #f9fafb; font-weight: 600; white-space: nowrap; }
-.dark .markdown-content th { background: #374151; }
-.markdown-content tr:nth-child(even) { background: #f9fafb; }
-.dark .markdown-content tr:nth-child(even) { background: #1f2937; }
-.markdown-content a { color: #2563eb; text-decoration: underline; text-underline-offset: 2px; }
-.dark .markdown-content a { color: #60a5fa; }
-.markdown-content hr { border: none; border-top: 2px solid #e5e7eb; margin: 1.2rem 0; }
-.dark .markdown-content hr { border-top-color: #4b5563; }
+/* La typographie des réponses et des pages vient de wiki-doc.css (partagée avec /wiki) :
+   .wiki-doc pour le corps du markdown, .wiki-doc-head / .wiki-doc-foot pour l'en-tête et
+   le pied du lecteur. Ce qui suit est propre au chat : bulle de réflexion, chips de
+   sources sous une réponse, chrome du lecteur et des conversations, visionneuse PDF. */
 
-/* Liens vers le wiki insérés dans le texte */
-.wiki-cite { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.05em 0.55em; margin: 0 0.1em; border-radius: 9999px; border: 1px solid rgba(99,102,241,0.35); background: rgba(99,102,241,0.08); color: #4338ca !important; font-size: 0.82em; font-weight: 600; text-decoration: none !important; cursor: pointer; vertical-align: baseline; white-space: nowrap; max-width: 100%; }
-.wiki-cite:hover { background: rgba(99,102,241,0.18); }
-.dark .wiki-cite { color: #c7d2fe !important; border-color: rgba(129,140,248,0.4); background: rgba(99,102,241,0.18); }
-.wiki-cite.missing { border-color: rgba(220,38,38,0.4); background: rgba(220,38,38,0.08); color: #b91c1c !important; }
-.dark .wiki-cite.missing { color: #fca5a5 !important; }
-.wiki-cite .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
-.anomaly-cite { padding: 0.02em 0.4em; border-radius: 5px; background: rgba(245,158,11,0.15); color: #b45309 !important; font-weight: 700; font-size: 0.9em; text-decoration: none !important; cursor: pointer; }
-.dark .anomaly-cite { color: #fcd34d !important; background: rgba(245,158,11,0.2); }
-.raw-link { color: #0f766e !important; text-decoration: underline dotted !important; cursor: pointer; }
-.dark .raw-link { color: #5eead4 !important; }
+/* Chips de sources — mêmes jetons de couleur que .wiki-cite (wiki-doc.css) */
+.source-chip { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.3rem 0.7rem; border-radius: 0.75rem; border: 1px solid var(--wd-line); background: var(--wd-bg-2); font-family: var(--wd-font); font-size: 0.75rem; font-weight: 600; color: var(--wd-tx-2); cursor: pointer; transition: all .15s; max-width: 100%; }
+.source-chip:hover { border-color: var(--wd-accent-line); background: var(--wd-accent-bg); color: var(--wd-accent-2); }
+.source-chip .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.source-chip .kind { font-weight: 500; color: var(--wd-tx-4); }
+.source-chip.missing { border-color: var(--wd-danger-line); background: var(--wd-danger-bg); color: var(--wd-danger-tx); cursor: default; }
+.source-chip.anomaly { border-color: var(--wd-amber-bg); color: var(--wd-amber-tx); }
+.source-chip .title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Bulle de réflexion */
 .thinking-bubble { font-style: italic; opacity: 0.55; font-size: 0.8rem; line-height: 1.5; color: #6b7280; border-left: 2px solid rgba(99,102,241,0.35); padding: 0.3rem 0 0.3rem 0.7rem; margin-bottom: 0.6rem; max-height: 180px; overflow: hidden; transition: opacity .4s ease, max-height .45s ease, margin .45s ease, padding .45s ease; }
@@ -63,20 +26,7 @@
 .thinking-bubble .thinking-body { white-space: pre-wrap; }
 .thinking-bubble.fade-out { opacity: 0; max-height: 0; margin: 0; padding: 0; }
 
-/* Chips de sources */
-.source-chip { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.3rem 0.7rem; border-radius: 0.75rem; border: 1px solid rgba(0,0,0,0.08); background: rgba(255,255,255,0.7); font-size: 0.75rem; font-weight: 600; color: #374151; cursor: pointer; transition: all .15s; max-width: 100%; }
-.source-chip:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.08); color: #4338ca; }
-.dark .source-chip { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #d1d5db; }
-.dark .source-chip:hover { background: rgba(99,102,241,0.18); color: #c7d2fe; }
-.source-chip .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-.source-chip .kind { font-weight: 500; color: #6b7280; }
-.source-chip.missing { border-color: rgba(220,38,38,0.35); color: #b91c1c; cursor: default; }
-.dark .source-chip.missing { color: #fca5a5; }
-.source-chip.anomaly { border-color: rgba(245,158,11,0.4); color: #b45309; }
-.dark .source-chip.anomaly { color: #fcd34d; }
-.source-chip .title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-/* Le lecteur */
+/* Le lecteur — panneau plus étroit que la page /wiki : en-tête un cran plus petit */
 #reader { width: 0; opacity: 0; pointer-events: none; transition: width .22s cubic-bezier(.2,.7,.3,1), opacity .18s; }
 #reader.open { width: 30rem; opacity: 1; pointer-events: auto; }
 @media (min-width: 1536px) { #reader.open { width: 36rem; } }
@@ -89,25 +39,11 @@
 }
 #conv-toggle { display: none; }
 @media (max-width: 767px) { #conv-toggle { display: inline-flex; } }
-.reader-doc { font-size: 0.92rem; }
-.reader-doc .markdown-content { font-size: 0.9rem; }
-.reader-title { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; }
-.reader-lede { color: #6b7280; font-size: 0.95rem; margin-top: 0.4rem; }
-.dark .reader-lede { color: #9ca3af; }
-.props { display: grid; grid-template-columns: max-content 1fr; gap: 0.3rem 0.9rem; font-size: 0.78rem; margin: 1rem 0; padding: 0.75rem 0.9rem; border-radius: 0.75rem; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); }
-.dark .props { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.06); }
-.props dt { color: #6b7280; font-weight: 600; }
-.props dd { margin: 0; color: #374151; }
-.dark .props dd { color: #d1d5db; }
-.pill { display: inline-block; padding: 0.05rem 0.5rem; border-radius: 9999px; background: rgba(0,0,0,0.06); font-size: 0.72rem; font-weight: 600; }
-.dark .pill { background: rgba(255,255,255,0.1); }
-.pill.warn { background: rgba(220,38,38,0.12); color: #b91c1c; }
-.badge-type { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.1rem 0.6rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; }
-.backlinks a { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.5rem; border-radius: 0.5rem; font-size: 0.8rem; color: #374151; cursor: pointer; }
-.backlinks a:hover { background: rgba(99,102,241,0.08); color: #4338ca; }
-.dark .backlinks a { color: #d1d5db; }
-.dark .backlinks a:hover { color: #c7d2fe; }
-.backlinks .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.reader-doc .wiki-doc { font-size: .95rem }
+.reader-doc .wiki-doc-head { padding-bottom: 1.1rem; margin-bottom: 1.2rem }
+.reader-doc .wiki-doc-head h1 { font-size: 1.5rem }
+.reader-doc .wiki-doc-head .wd-lede { font-size: .95rem }
+.reader-doc .wiki-doc-foot { margin-top: 2rem; padding-top: 1.1rem }
 .anomaly-highlight { background: rgba(245,158,11,0.22) !important; outline: 2px solid rgba(245,158,11,0.6); outline-offset: -2px; }
 
 /* Conversations */
@@ -318,82 +254,164 @@ function preprocessMarkdown(text) {
     .replace(/^(#{1,6})([^#\s])/gm, "$1 $2")
     .replace(/^(\s*)-([A-Za-zÀ-ÿ0-9])/gm, "$1- $2");
 }
-function wrapTables(html) {
-  if (!html || !html.includes("<table")) return html;
-  return html.replace(/<table(\s[^>]*)?>/gi, '<div class="table-wrapper"><table$1>').replace(/<\/table>/g, "</table></div>");
-}
 function parseMarkdown(text, opts = {}) {
   const raw = marked.parse(preprocessMarkdown(text || ""), { breaks: opts.breaks !== false, gfm: true, headerIds: false, mangle: false });
-  return wrapTables(DOMPurify.sanitize(raw, { ADD_ATTR: ["target", "rel"] }));
+  return DOMPurify.sanitize(raw, { ADD_ATTR: ["target", "rel"] });
 }
 
-/* Transforme, dans les nœuds texte seulement, les chemins de pages, les identifiants
-   d'anomalie et les renvois « raw/x.pdf, p. N » en liens. Les balises déjà présentes
-   (liens markdown, code) ne sont pas touchées. */
-const LINK_RE = /(?<![\w\/.])(\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.md)(?![\w\/])|raw\/([A-Za-z0-9._-]+\.pdf)(?:,?\s*(?:p\.|pages?)\s*(\d+)(?:\s*(?:à|-|et)\s*\d+)?)?|\b(INC|CTR|VER)-(\d{1,3})\b/g;
+/* Décore le DOM déjà rendu (jamais le markdown) — même moteur que la page /wiki
+   (app/templates/wiki.html), pour un rendu identique des deux côtés de l'appli :
+     - liens réels <a href="/x.md"> (le modèle en écrit parfois) -> chips .wiki-cite
+     - chemins /dossier/page.md en texte nu (la forme demandée par les consignes),
+       raw/x.pdf [, p. N], <code>raw/x.pdf</code> -> .pdf-cite vers /api/wiki/raw
+     - INC-NN / CTR-NN / VER-NN -> .anomaly-cite vers le registre
+     - tableaux -> .table-wrap, colonnes numériques alignées (.num), cotes absentes (.empty-cell) */
+const RE_CITE = /(?<![\w/.])(\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.md)(?![\w/])|raw\/([A-Za-z0-9_.-]+\.pdf)((?:,\s*registre\s+[\d.]+)?(?:,?\s*(?:p\.|pages?)\s*(\d+))?)|\b(INC|CTR|VER)-(\d{1,3})\b/g;
+const RE_CODE_PDF = /^raw\/([A-Za-z0-9_.-]+\.pdf)$/;
+const RE_PAGE_APRES = /^(?:,\s*registre\s+[\d.]+)?,?\s*(?:p\.|pages?)\s*(\d+)/;
+const RE_NUM = /^-?\d+(?:[.,]\d+)?$/;
+const RE_EMPTY = /^[-–—]$/;
 
-function linkifyElement(root) {
+function rawUrl(file, page) {
+  return `/api/wiki/raw/${String(file).replace(/^raw\//, "").split("/").map(encodeURIComponent).join("/")}${page ? `#page=${page}` : ""}`;
+}
+function wikiChip(id) {
+  const node = wikiIndex.get(id);
+  const a = document.createElement("a");
+  a.href = "#";
+  a.className = "wiki-cite" + (node && !node.missing ? "" : " missing");
+  a.dataset.wiki = id;
+  const title = node && !node.missing ? node.title : id.split("/").pop().replace(/\.md$/, "").replace(/-/g, " ");
+  a.title = node && !node.missing ? `${node.type} — ${id}` : `Page inexistante : ${id}`;
+  const dot = document.createElement("span");
+  dot.className = "dot";
+  dot.style.background = typeColor(node ? node.type : "À écrire");
+  a.appendChild(dot);
+  a.appendChild(document.createTextNode(title));
+  return a;
+}
+function pdfLink(file, page, label) {
+  const a = document.createElement("a");
+  a.className = "pdf-cite";
+  a.href = rawUrl(file, page);
+  a.target = "_blank"; a.rel = "noopener";
+  a.dataset.raw = file; a.dataset.page = page || "1";
+  a.title = page ? `Ouvrir le PDF à la page ${page}` : "Ouvrir le PDF";
+  if (label != null) a.textContent = label;
+  return a;
+}
+function anomalyChip(id) {
+  const a = document.createElement("a");
+  a.href = "#";
+  a.className = "anomaly-cite";
+  a.dataset.anomaly = id;
+  a.dataset.wiki = ANOMALY_PAGES[id.slice(0, 3)];
+  a.title = "Voir l'entrée dans le registre d'anomalies";
+  a.textContent = id;
+  return a;
+}
+
+function decorateBody(root) {
+  root.querySelectorAll("a[href]").forEach((a) => {
+    const href = a.getAttribute("href") || "";
+    if (href.startsWith("/") && href.endsWith(".md")) {
+      const id = href.split("#")[0];
+      const node = wikiIndex.get(id);
+      a.setAttribute("href", "#");
+      a.classList.add("wiki-cite");
+      a.dataset.wiki = id;
+      if (!node || node.missing) a.classList.add("missing");
+      if (node) a.title = `${node.type} — ${id}`;
+      const dot = document.createElement("span");
+      dot.className = "dot";
+      dot.style.background = typeColor(node ? node.type : "À écrire");
+      a.prepend(dot);
+    } else if (href.startsWith("raw/")) {
+      const cut = href.indexOf("#");
+      const file = (cut < 0 ? href : href.slice(0, cut)).slice(4);
+      const pm = cut < 0 ? null : /page=(\d+)/.exec(href.slice(cut));
+      a.href = rawUrl(file, pm ? pm[1] : null);
+      a.target = "_blank"; a.rel = "noopener";
+      a.dataset.raw = file; a.dataset.page = pm ? pm[1] : "1";
+      a.classList.add("pdf-cite");
+    } else if (href.startsWith("/api/wiki/raw/")) {
+      a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener");
+    } else if (/^https?:/i.test(href)) {
+      a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener noreferrer");
+    }
+  });
+
+  // <code>raw/x.pdf</code>, p. N
+  root.querySelectorAll("code").forEach((code) => {
+    if (code.closest("pre, a")) return;
+    const m = RE_CODE_PDF.exec(code.textContent.trim());
+    if (!m) return;
+    let page = null;
+    const nx = code.nextSibling;
+    if (nx && nx.nodeType === Node.TEXT_NODE) {
+      const pm = RE_PAGE_APRES.exec(nx.nodeValue);
+      if (pm) page = pm[1];
+    }
+    const a = pdfLink(m[1], page, null);
+    code.replaceWith(a);
+    a.appendChild(code);
+  });
+
+  // Texte nu : chemins de page, renvois PDF, identifiants d'anomalie.
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       let p = node.parentElement;
       while (p && p !== root) {
-        const tag = p.tagName;
-        if (tag === "A" || tag === "CODE" || tag === "PRE" || tag === "SCRIPT" || tag === "STYLE") return NodeFilter.FILTER_REJECT;
+        if (["A", "CODE", "PRE", "SCRIPT", "STYLE"].includes(p.tagName)) return NodeFilter.FILTER_REJECT;
         p = p.parentElement;
       }
-      return LINK_RE.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      return RE_CITE.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
     },
   });
-  const targets = [];
-  while (walker.nextNode()) targets.push(walker.currentNode);
-  for (const node of targets) {
-    const text = node.nodeValue;
+  const texts = [];
+  let t;
+  while ((t = walker.nextNode())) texts.push(t);
+  for (const node of texts) {
+    const s = node.nodeValue;
     const frag = document.createDocumentFragment();
     let last = 0;
-    LINK_RE.lastIndex = 0;
+    RE_CITE.lastIndex = 0;
     let m;
-    while ((m = LINK_RE.exec(text)) !== null) {
-      if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
-      if (m[1]) frag.appendChild(makeWikiCite(m[1]));
-      else if (m[2]) frag.appendChild(makeRawLink(m[0], m[2], m[3]));
-      else frag.appendChild(makeAnomalyCite(`${m[4]}-${m[5]}`));
+    while ((m = RE_CITE.exec(s)) !== null) {
+      if (m.index > last) frag.appendChild(document.createTextNode(s.slice(last, m.index)));
+      if (m[1]) frag.appendChild(wikiChip(m[1]));
+      else if (m[2]) frag.appendChild(pdfLink(m[2], m[4] || null, m[0]));
+      else frag.appendChild(anomalyChip(`${m[5]}-${m[6]}`));
       last = m.index + m[0].length;
     }
-    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    if (last < s.length) frag.appendChild(document.createTextNode(s.slice(last)));
     node.parentNode.replaceChild(frag, node);
   }
-  // Les liens markdown vers des pages du wiki ouvrent le lecteur.
-  root.querySelectorAll('a[href^="/"]').forEach((a) => {
-    const href = a.getAttribute("href") || "";
-    if (href.endsWith(".md")) { a.dataset.wiki = href.split("#")[0]; a.setAttribute("href", "#"); }
-    else if (href.startsWith("/api/wiki/raw/")) { a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener"); }
-  });
-  root.querySelectorAll('a[href^="http"]').forEach((a) => { a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener noreferrer"); });
+
+  root.querySelectorAll("table").forEach(decorateTable);
 }
 
-function makeWikiCite(path) {
-  const node = wikiIndex.get(path);
-  const a = document.createElement("a");
-  a.href = "#";
-  a.className = "wiki-cite" + (node && !node.missing ? "" : " missing");
-  a.dataset.wiki = path;
-  const title = node && !node.missing ? node.title : path.split("/").pop().replace(/\.md$/, "").replace(/-/g, " ");
-  a.title = node && !node.missing ? `${node.type} — ${path}` : `Page inexistante : ${path}`;
-  a.innerHTML = `<span class="dot" style="background:${typeColor(node ? node.type : "À écrire")}"></span>${escapeHtml(title)}`;
-  return a;
-}
-function makeAnomalyCite(id) {
-  const a = document.createElement("a");
-  a.href = "#"; a.className = "anomaly-cite"; a.dataset.anomaly = id; a.dataset.wiki = ANOMALY_PAGES[id.slice(0, 3)];
-  a.title = "Voir l'entrée dans le registre d'anomalies"; a.textContent = id;
-  return a;
-}
-function makeRawLink(label, file, page) {
-  const a = document.createElement("a");
-  a.href = `/api/wiki/raw/${encodeURIComponent(file)}#page=${page || 1}`;
-  a.className = "raw-link"; a.dataset.raw = file; a.dataset.page = page || "1";
-  a.title = "Ouvrir le document source à cette page"; a.textContent = label;
-  return a;
+function decorateTable(table) {
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap";
+  table.replaceWith(wrap);
+  wrap.appendChild(table);
+  const rows = [...table.querySelectorAll("tbody tr")];
+  const head = table.querySelector("thead tr");
+  const ncol = Math.max(head ? head.children.length : 0, ...rows.map((r) => r.children.length));
+  for (let c = 0; c < ncol; c++) {
+    let nums = 0, filled = 0;
+    rows.forEach((r) => {
+      const td = r.children[c];
+      if (!td) return;
+      const s = td.textContent.trim();
+      if (!s) return;
+      if (RE_EMPTY.test(s)) { td.classList.add("empty-cell"); return; }
+      filled++;
+      if (RE_NUM.test(s)) { nums++; td.classList.add("num"); }
+    });
+    if (filled && nums === filled && head && head.children[c]) head.children[c].classList.add("num");
+  }
 }
 
 /* Un seul gestionnaire pour le fil et le lecteur. */
@@ -451,47 +469,58 @@ async function openWikiPage(path, opts = {}) {
   renderReaderPage(page, opts.anomaly);
 }
 
+function metaBlock(page) {
+  const rows = [];
+  if ((page.tags || []).length) rows.push(["Étiquettes", page.tags.map((t) => `<span class="wd-pill">${escapeHtml(t)}</span>`).join(" ")]);
+  if ((page.sources || []).length) rows.push(["Sources", page.sources.map(sourceRow).join("")]);
+  if (page.staleAfter) rows.push([page.stale ? "Périmée depuis" : "À revoir le", page.stale ? `<span class="danger">${escapeHtml(page.staleAfter)}</span>` : escapeHtml(page.staleAfter)]);
+  rows.push(["Liens", `${page.outDegree} sortants · ${page.inDegree} entrants`]);
+  return `<dl class="wd-meta">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
+}
+function sourceRow(s) {
+  if (typeof s === "string") s = { title: s };
+  if (!s || typeof s !== "object") return "";
+  const res = String(s.resource || "");
+  const title = escapeHtml(s.title || res || s.id || "");
+  if (res.startsWith("raw/")) {
+    return `<span class="wd-src"><a class="pdf-cite" href="${rawUrl(res)}" target="_blank" rel="noopener">${title}</a><span class="wd-src-file">${escapeHtml(res.replace(/^raw\//, ""))}</span></span>`;
+  }
+  if (/^https?:/i.test(res)) return `<span class="wd-src"><a href="${escapeHtml(res)}" target="_blank" rel="noopener noreferrer">${title}</a></span>`;
+  return `<span class="wd-src">${title}${res ? `<span class="wd-src-file">${escapeHtml(res)}</span>` : ""}</span>`;
+}
+function backlinkChip(n) {
+  return `<a class="wiki-cite${n.missing ? " missing" : ""}" href="#" data-wiki="${escapeHtml(n.id)}" title="${escapeHtml(n.type)}"><span class="dot" style="background:${typeColor(n.type)}"></span>${escapeHtml(n.title)}${n.missing ? " (à écrire)" : ""}</a>`;
+}
+function readerChipsBlock(title, list) {
+  return `<h2 class="wd-foot-h">${escapeHtml(title)}<span class="n">${list.length}</span></h2>` +
+    (list.length ? `<div class="wd-chips">${list.map(backlinkChip).join("")}</div>` : `<p class="wd-empty">Aucune</p>`);
+}
+
 function renderReaderPage(page, anomaly) {
   const body = document.getElementById("reader-body");
   const crumb = document.getElementById("reader-crumb");
   crumb.innerHTML = `${page.folder && page.folder !== "." ? escapeHtml(page.folder) + ' <span class="opacity-50">/</span> ' : ""}<span class="font-semibold text-gray-700 dark:text-gray-200">${escapeHtml(page.title)}</span>`;
 
-  const color = typeColor(page.type);
-  const badges = [`<span class="badge-type" style="background:${color}1f;color:${color}"><span class="w-2 h-2 rounded-full" style="background:${color}"></span>${escapeHtml(page.type)}</span>`];
-  if (page.status) badges.push(`<span class="pill ${page.status === "draft" ? "warn" : ""}">${page.status === "draft" ? "brouillon — contradiction ouverte" : escapeHtml(page.status)}</span>`);
-  if (page.stale) badges.push(`<span class="pill warn">périmée depuis le ${escapeHtml(page.staleAfter)}</span>`);
-
-  const props = [];
-  if ((page.tags || []).length) props.push(["Étiquettes", page.tags.map((t) => `<span class="pill">${escapeHtml(t)}</span>`).join(" ")]);
-  if ((page.sources || []).length) {
-    props.push(["Sources", page.sources.map((s) => {
-      const title = escapeHtml(s.title || s.resource || "");
-      const res = String(s.resource || "");
-      if (res.startsWith("raw/")) {
-        const file = res.slice(4);
-        return `<a href="#" class="raw-link" data-raw="${escapeHtml(file)}" data-page="1"><i class="ti ti-file-type-pdf"></i> ${title}</a>`;
-      }
-      return title;
-    }).join("<br>")]);
-  }
-  if (page.staleAfter) props.push([page.stale ? "Périmée depuis" : "À revoir le", escapeHtml(page.staleAfter)]);
-  props.push(["Liens", `${page.outDegree} sortants · ${page.inDegree} entrants`]);
-
-  const backlinks = (list, title) => list.length
-    ? `<p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mt-6 mb-1.5">${title} — ${list.length}</p><div class="backlinks">${list.map((n) => `<a href="#" data-wiki="${escapeHtml(n.id)}"><span class="dot" style="background:${typeColor(n.type)}"></span>${escapeHtml(n.title)}${n.missing ? ' <span class="pill">à écrire</span>' : ""}</a>`).join("")}</div>`
-    : "";
+  const c = typeColor(page.type);
+  const badges = [`<span class="wd-badge" style="color:${c};background:${c}1f"><span class="dot" style="background:${c}"></span>${escapeHtml(page.type)}</span>`];
+  if (page.status) badges.push(`<span class="wd-pill${page.status === "draft" ? " draft" : ""}">${page.status === "draft" ? "brouillon" : escapeHtml(page.status)}</span>`);
+  if (page.stale) badges.push(`<span class="wd-pill stale">périmée depuis le ${escapeHtml(page.staleAfter)}</span>`);
 
   body.innerHTML = `
-    <div class="flex flex-wrap gap-1.5 mb-3">${badges.join("")}</div>
-    <h1 class="reader-title text-gray-900 dark:text-white">${escapeHtml(page.title)}</h1>
-    ${page.description ? `<p class="reader-lede">${escapeHtml(page.description)}</p>` : ""}
-    <dl class="props">${props.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
-    <div class="markdown-content reader-markdown"></div>
-    ${backlinks(page.outLinks || [], "Liens sortants")}
-    ${backlinks(page.inLinks || [], "Cité par")}`;
-  const md = body.querySelector(".reader-markdown");
+    <header class="wiki-doc-head">
+      <div class="wd-badges">${badges.join("")}</div>
+      <h1>${escapeHtml(page.title)}</h1>
+      ${page.description ? `<p class="wd-lede">${escapeHtml(page.description)}</p>` : ""}
+      ${metaBlock(page)}
+    </header>
+    <div class="wiki-doc" id="reader-markdown"></div>
+    <footer class="wiki-doc-foot">
+      ${readerChipsBlock("Cité par", page.inLinks || [])}
+      ${readerChipsBlock("Liens sortants", page.outLinks || [])}
+    </footer>`;
+  const md = body.querySelector("#reader-markdown");
   md.innerHTML = parseMarkdown(page.body || "*Page vide.*", { breaks: false });
-  linkifyElement(md);
+  decorateBody(md);
   document.getElementById("reader-body").scrollTop = 0;
 
   if (anomaly) {
@@ -745,7 +774,7 @@ function actionsBarHtml(messageId, rawText) {
 
 function renderAssistantContent(el, text) {
   el.innerHTML = parseMarkdown(text);
-  linkifyElement(el);
+  decorateBody(el);
 }
 
 function addMessage(role, content, messageId = null, sources = null, metadataJson = null) {
@@ -760,11 +789,11 @@ function addMessage(role, content, messageId = null, sources = null, metadataJso
     const anomalies = metadataJson && metadataJson.anomalies ? metadataJson.anomalies : [];
     if (messageId != null && metadataJson && metadataJson.trace) traces.set(messageId, metadataJson.trace);
     div.innerHTML = `<div class="w-full max-w-[92%] lg:max-w-[78%] assistant-message-bubble rounded-2xl px-5 py-4 shadow-sm">
-        <div class="markdown-content"></div>
+        <div class="wiki-doc"></div>
         ${sourcesSectionHtml(parsedSources, anomalies)}
         ${actionsBarHtml(messageId, content)}
       </div>`;
-    renderAssistantContent(div.querySelector(".markdown-content"), content);
+    renderAssistantContent(div.querySelector(".wiki-doc"), content);
   } else {
     div.innerHTML = `<div class="max-w-[85%] lg:max-w-[65%] bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-md shadow-indigo-500/10">
       <p class="whitespace-pre-wrap text-sm leading-relaxed">${escapeHtml(content)}</p></div>`;
@@ -791,11 +820,11 @@ async function submitChat(message) {
   wrap.innerHTML = `
     <div class="w-full max-w-[92%] lg:max-w-[78%] assistant-message-bubble rounded-2xl px-5 py-4 shadow-sm">
       <div class="thinking-bubble hidden"><div class="thinking-head"><i class="ti ti-bulb"></i> Réflexion…</div><div class="thinking-body"></div></div>
-      <div class="markdown-content streaming"></div>
+      <div class="wiki-doc streaming"></div>
     </div>`;
   host.appendChild(wrap);
   const bubble = wrap.querySelector(".assistant-message-bubble");
-  const contentEl = wrap.querySelector(".markdown-content");
+  const contentEl = wrap.querySelector(".wiki-doc");
   const thinkingEl = wrap.querySelector(".thinking-bubble");
   const thinkingBody = wrap.querySelector(".thinking-body");
   const renderStage = (label) => {

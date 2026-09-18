@@ -138,6 +138,8 @@ créés le 12 mai 2025.
 # Voir aussi
 
 - [KÖMMERLING](/fournisseurs/kommerling.md)
+- [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
+- [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md)
 - [PERFORM](/gammes/perform.md)
 - [HYBRIDE](/gammes/hybride.md)
 - [Posters Système 76 Advanced](/sources/posters-systeme-76-advanced.md)

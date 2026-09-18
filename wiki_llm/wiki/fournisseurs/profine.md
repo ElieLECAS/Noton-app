@@ -125,6 +125,8 @@ du registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
 | [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md) | dossier technique détaillé du système 76 Advanced, révisé au GS6 du 13 mars 2025 |
 | [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md) | dossier technique détaillé du système e.XCLUSIVE, e.MOTION, e.VOLUTION, révisé au GS6 du 19 décembre 2024 |
 | [Redressement d'un montant de porte cintré](/procedures/redressement-montant-porte-cintre-9708.md) | préconisation de mise en œuvre du profilé acier 9708, juillet 2017 |
+| [Mise en œuvre Système 70 Plateforme](/sources/profine-mise-en-oeuvre-systeme-70.md) | manuel de fabrication du système 70, 371 pages, version septembre 2023 |
+| [Plans des profilés e.VOLUTION, 2008](/sources/plans-profiles-e-volution-2008.md) | classeur de 395 planches à l'échelle 1:1, édition août 2008 |
 
 # Citations
 

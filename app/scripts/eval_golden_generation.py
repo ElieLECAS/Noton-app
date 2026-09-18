@@ -52,6 +52,7 @@ VERDICTS = ("juste", "ambigu", "faux", "abstention_ok", "abstention_ko", "erreur
 # l'édition 2026 du même document : c'est elle qui est acceptée.
 DOCUMENTS: Dict[int, str] = {
     438: "cahier-technique-perform76-2026-09-02-cc03.pdf",
+    441: "cahier-technique-perform76-2026-09-02-cc03.pdf",  # réimport du 17/09 (jeu réduit, jeu sans réponse)
     424: "catalogue-general-2026-01.pdf",
     427: "depliant-innoslide-2024-01.pdf",
     433: "depliant-innoslide-2024-01-a4-web.pdf",

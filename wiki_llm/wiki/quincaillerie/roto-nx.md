@@ -118,7 +118,7 @@ Les [instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md), vers
 | Abaques de charge | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) — LFF, HFF et poids de vantail par type d'ouverture et par classe de sécurité |
 | Norme du traitement anticorrosion | **DIN EN 13126/8**, finition Roto Sil argent mat, **exempte de composés de chrome VI** |
 | Périmètre du RC2 | classification **CDR selon DIN EN 1627-1630**, avec un champ d'application propre à chaque classe. Le **Tilt Safe** relève des classes **CDR 2 et CDR 2 N** |
-| Références de ferrage | **toujours manquant** — les 21 planches d'aperçu du manuel sont des nomenclatures dessinées |
+| Références de ferrage | portées par le [catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md) de juin 2023, non transcrites : les en-têtes de ses tableaux sont des pictogrammes |
 
 **Le manuel confirme la charge annoncée : jusqu'à 150 kg**, côté paumelles P reposant, pour
 fenêtres et portes PVC. Il confirme aussi la **garantie 10 ans sur la fonctionnalité** des
@@ -138,7 +138,7 @@ Cette page reste en `status: draft` : les produits que la Roto NX équipe sont d
 entrée **VER-02** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-Manquent encore : les **références de ferrage** configuration par configuration, et **le côté
+Le catalogue de juin 2023 porte les numéros de matériel par composant — crémones, compas, verrouilleurs, pivots — mais ses tableaux ne se transcrivent pas sans le rendu des planches. Manque encore **le côté
 paumelles que PROFERM emploie réellement** — P ou Designo II, dont les champs d'application
 diffèrent nettement. Entrée **VER-34**.
 

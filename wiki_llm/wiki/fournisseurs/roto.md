@@ -112,7 +112,7 @@ avant toute réponse écrite sur la conformité d'une menuiserie à son Avis Tec
 
 # Documents ROTO dans le wiki
 
-Cinq documents de ferrure sont entrés au wiki, dont deux co-marqués PROFERM.
+Six documents de ferrure sont entrés au wiki, dont deux co-marqués PROFERM.
 
 | Document | Nature | Date | Page |
 | --- | --- | --- | --- |
@@ -121,6 +121,7 @@ Cinq documents de ferrure sont entrés au wiki, dont deux co-marqués PROFERM.
 | Roto Safe E Eneo CC, notice simplifiée | extrait PROFERM de l'IMO_438 | 2022, version 2 | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
 | Roto Safe E, jonction de câble, réf. SUG_28_FR_v3 | notice constructeur ROTO | novembre 2024 | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
 | Roto NX KSR, instructions de montage PVC, réf. IMO_180_NX_FR_v2 | manuel de ferrage constructeur, 124 pages | novembre 2022 | [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md) |
+| Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5 | catalogue de commande constructeur, 451 pages | juin 2023 | [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md) |
 
 Les quatre premiers sont des **notices d'atelier et de chantier**, sans page « document source »
 distincte : leur provenance est portée par la page de concept correspondante. Le cinquième est un

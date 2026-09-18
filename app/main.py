@@ -61,7 +61,6 @@ app.include_router(admin.router)
 
 templates = Jinja2Templates(directory="app/templates")
 templates.env.globals["app_name"] = settings.APP_NAME
-templates.env.globals["model_fast"] = {"provider": "mistral", "model": settings.MODEL_FAST}
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
@@ -145,14 +144,6 @@ async def feedbacks_page(request: Request, session: Session = Depends(get_sessio
     if not user:
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("feedbacks.html", {"request": request, "user": user})
-
-
-# Anciennes adresses (espaces, bibliothèque, arbres SAV) : vers le chat.
-@app.get("/spaces/{space_id}")
-@app.get("/library")
-@app.get("/admin/sav-trees")
-async def legacy_redirect(request: Request):
-    return RedirectResponse(url="/", status_code=303)
 
 
 @app.get("/health")

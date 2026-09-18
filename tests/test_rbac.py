@@ -32,20 +32,9 @@ def test_chat_and_wiki_open_to_every_role(client, lecteur_headers):
     client.delete(f"/api/conversations/{r.json()['id']}", headers=lecteur_headers)
 
 
-def test_seeded_roles_only_carry_admin_permissions(db_session):
+def test_permission_catalogue_is_administration_only(db_session):
     codes = {p.code for p in db_session.exec(select(Permission)).all()}
-    assert {"config.manage_users", "config.manage_roles"} <= codes
-    assert not any(c.startswith(("library.", "space.", "feedback.")) for c in codes
-                   if c in {"library.read", "library.write", "space.create", "space.read",
-                            "space.update", "space.delete", "feedback.auto_faq"}
-                   and _role_has(db_session, c))
-
-
-def _role_has(session, code: str) -> bool:
-    perm = session.exec(select(Permission).where(Permission.code == code)).first()
-    if perm is None:
-        return False
-    return session.exec(select(RolePermission).where(RolePermission.permission_id == perm.id)).first() is not None
+    assert codes == {"config.manage_users", "config.manage_roles"}
 
 
 def test_lecteur_and_responsable_have_no_permissions(db_session):

@@ -1,10 +1,10 @@
-"""Conversations, messages et retours utilisateurs."""
+"""Conversations, messages (lecture seule : le tour de chat les écrit) et retours utilisateurs."""
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select, func
 from app.models.user import UserRead
 from app.models.conversation import Conversation, ConversationCreate, ConversationRead, ConversationUpdate
-from app.models.message import Message, MessageCreate, MessageRead
+from app.models.message import Message, MessageRead
 from app.models.message_feedback import MessageFeedback, FeedbackCreate, FeedbackRead
 from app.routers.auth import get_current_user
 from app.database import get_session
@@ -122,27 +122,6 @@ async def list_messages(
     return session.exec(
         select(Message).where(Message.conversation_id == conversation_id).order_by(Message.created_at, Message.id)
     ).all()
-
-
-@router.post("/{conversation_id}/messages", response_model=MessageRead)
-async def create_message(
-    conversation_id: int,
-    message: MessageCreate,
-    current_user: UserRead = Depends(get_current_user),
-    session: Session = Depends(get_session),
-):
-    conversation = _owned(session, conversation_id, current_user.id)
-    if message.conversation_id != conversation_id:
-        raise HTTPException(status_code=400, detail="ID de conversation incohérent")
-    db_message = Message(**message.model_dump())
-    session.add(db_message)
-    conversation.updated_at = datetime.utcnow()
-    if conversation.title == "Nouvelle conversation" and message.role == "user":
-        conversation.title = message.content[:50] + "..." if len(message.content) > 50 else message.content
-    session.add(conversation)
-    session.commit()
-    session.refresh(db_message)
-    return db_message
 
 
 def _fallback_title(messages: List[Message]) -> str:

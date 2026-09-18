@@ -27,6 +27,7 @@
 * [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) - Les cotes à déduire de la dimension hors tout pour débiter dormants, meneaux, ouvrants, battements et seuils du système 76 Advanced à joint central.
 * [Renforts du système 76](/profiles/systeme-76-renforts.md) - Les renforts acier du système 76 Advanced à joint central, leur épaisseur, leurs inerties IW et IG, et le profilé que chacun équipe.
 * [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md) - Les limites de dimension d'ouvrant du système 76 Advanced selon le renfort, la couleur et l'épaisseur de vitrage, et pourquoi un profilé de couleur change la fabrication.
+* [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) - Les dormants, ouvrants, battements et meneaux du système 70 Plateforme de profine, avec le renfort acier de chaque profilé et ses inerties IG et IW.
 
 # Vitrages
 
@@ -106,3 +107,6 @@
 * [DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION](/sources/dtd-6-16-2335.md) - Dossier Technique Détaillé de 53 pages d'un second système profine certifié, en références 6xxx, qui correspond à la Gamme 70 de KÖMMERLING.
 * [Posters Gamme 70 KÖMMERLING, mars 2025](/sources/posters-kommerling-70.md) - Deux planches A0 KÖMMERLING recensant les profilés principaux et complémentaires de la Gamme 70, premier inventaire du système 70 mm dans le wiki.
 * [Instructions de montage Roto NX KSR, PVC, novembre 2022](/sources/roto-nx-ksr-montage.md) - Manuel de ferrage de 124 pages de la quincaillerie Roto NX KSR sur menuiseries PVC, qui apporte au wiki les abaques de charge, les classes de sécurité et la maintenance des ferrures.
+* [Mise en œuvre Système 70 Plateforme, profine](/sources/profine-mise-en-oeuvre-systeme-70.md) - Manuel de fabrication de 371 pages du système PVC 70 Plateforme de profine, marques e.VOLUTION, e.MOTION et e.XCLUSIVE, version septembre 2023.
+* [Plans des profilés e.VOLUTION, août 2008](/sources/plans-profiles-e-volution-2008.md) - Classeur de 395 planches à l'échelle 1:1 du système e.VOLUTION, avec le renfort et son inertie pour chaque profilé, et les zones de vent NV 65 par département.
+* [Catalogue Roto NX pour profils PVC, juin 2023](/sources/roto-nx-catalogue-pvc.md) - Catalogue de 451 pages de la ferrure Roto NX sur menuiseries PVC, qui porte les références de commande par composant et ajoute la classe de sécurité CDR 3.

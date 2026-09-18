@@ -9,6 +9,10 @@ sources:
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
     last_modified: 2022-11-30
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 generated:
   by: process:claude-code
   at: 2026-09-18T14:15:00Z
@@ -89,6 +93,39 @@ vantail lourd n'est pas réalisable.
 Le montage du report de charge est décrit dans
 [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md).
 
+# Le catalogue de juin 2023 donne d'autres bornes, et une classe de plus
+
+Le [catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md) de juin 2023 reprend
+les mêmes champs d'application, côté paumelles P, oscillo-battant rectangulaire, avec des bornes
+qui ne sont pas celles du manuel de montage de novembre 2022.
+
+| Version | Classe de sécurité | LFF mini (mm) | LFF maxi (mm) | HFF mini (mm) | HFF maxi (mm) | PV maxi (kg) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 130 kg | Sécurité de base | 290 | 1600 | 280 | 2800 | 130 |
+| 130 kg | CDR 1 N | 320 | 1600 | 280 | 2800 | 130 |
+| 130 kg | CDR 2 et CDR 2 N | 320 | 1400 | 510 | 2800 | 130 |
+| 130 kg | **CDR 3** | 490 | 1400 | 600 | 2800 | 130 |
+| 150 kg | Sécurité de base | 290 | 1600 | 280 | 2800 | 150 |
+| 150 kg | CDR 1 N | 320 | 1600 | 280 | 2800 | 150 |
+| 150 kg | CDR 2 et CDR 2 N | 320 | 1400 | 510 | 2800 | 150 |
+| 150 kg | **CDR 3** | 320 | 1400 | 510 | 2800 | 150 |
+
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 35 et 36)
+
+**La CDR 3 n'existe que dans le catalogue.** C'est la classe la plus élevée documentée pour la
+Roto NX, et elle coûte de la largeur : 490 mm de LFF mini en version 130 kg, contre 320 mm en
+CDR 2.
+
+**Les deux documents ROTO ne donnent pas les mêmes bornes** sur quatre valeurs — hauteur de
+feuillure minimale, largeur maximale en CDR 1 N, hauteur maximale en CDR 1 N et en CDR 2. Aucune
+règle du wiki ne départage deux documents du même fabricant : entrée **CTR-18** du registre
+[Contradictions entre sources](/anomalies/contradictions-entre-sources.md). **Pour un chiffrage,
+retenir les bornes les plus basses des deux documents** tant que l'arbitrage n'est pas fait.
+
+Le tableau de la version 150 kg est **imprimé en allemand** dans ce catalogue français, et il y
+désigne les classes par « RC » là où les pages françaises écrivent « CDR » — entrée **INC-13** du
+registre [Incohérences internes](/anomalies/incoherences-internes.md).
+
 # Convertir une épaisseur de vitrage en poids de vantail
 
 Les diagrammes portent le poids du vitrage en **kg/m²**, pas l'épaisseur. Le manuel donne la
@@ -118,10 +155,21 @@ Forces de traction rapportées au palier de compas, relevées p. 20.
 
 | Poids du vantail (kg) | Force de traction (N) |
 | --- | --- |
+| 60 | 1 650 |
+| 70 | 1 900 |
+| 80 | 2 200 |
+| 90 | 2 450 |
+| 100 | 2 700 |
+| 110 | 3 000 |
+| 120 | 3 250 |
+| 130 | 3 500 |
 | 140 | 3 900 |
 | 150 | 4 200 |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 20)
+(schéma: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf, p. 34)
+
+Les instructions de montage ne donnent que les deux dernières lignes, 140 et 150 kg, aux mêmes
+valeurs [1 p. 20]. Le catalogue descend jusqu'à 60 kg [2 p. 34].
 
 Ces valeurs valent **également pour les paliers d'angle lorsque la fixation est réalisée selon le
 palier de compas**. Le manuel renvoie à la **directive TBDK** pour les forces de traction en
@@ -192,10 +240,14 @@ donnent pas la même limite, **c'est la plus basse qui s'applique**.
 IMO_180_NX_FR_v2, novembre 2022 —
 `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 19 à 30
 
+[2] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 34 à 36
+
 # Voir aussi
 
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
 - [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)
 - [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md)
 - [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select, func
 from app.database import get_session
 from app.models.user import User, UserRead, UserCreate
@@ -9,9 +9,8 @@ from app.models.user_role import UserRole, UserRoleCreate, UserRoleRead
 from app.models.role_permission import RolePermission, RolePermissionCreate, RolePermissionRead
 from app.routers.auth import get_current_user, require_permission, require_role
 from app.services.auth_service import get_password_hash
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 import logging
-import os
 
 logger = logging.getLogger(__name__)
 

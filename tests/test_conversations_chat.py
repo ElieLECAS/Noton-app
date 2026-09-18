@@ -8,8 +8,18 @@ import pytest
 from sqlmodel import select
 
 from app.config import settings
+from app.models.message import Message
 from app.models.user_role import UserRole
 from tests.conftest import extract_sse_events, extract_sse_message_text
+
+
+def _seed_message(db_session, conversation_id: int, role: str, content: str) -> int:
+    """Insère un message directement : seul le tour de chat en écrit par l'API."""
+    msg = Message(conversation_id=conversation_id, role=role, content=content)
+    db_session.add(msg)
+    db_session.commit()
+    db_session.refresh(msg)
+    return msg.id
 
 
 @pytest.fixture
@@ -21,25 +31,26 @@ def conversation(client, responsable_headers):
     client.delete(f"/api/conversations/{conv_id}", headers=responsable_headers)
 
 
-def test_conversation_crud_and_messages(client, responsable_headers, conversation):
+def test_conversation_crud_and_messages(client, responsable_headers, conversation, db_session):
     r = client.patch(f"/api/conversations/{conversation}", headers=responsable_headers, json={"title": "Titre mis à jour"})
     assert r.status_code == 200 and r.json()["title"] == "Titre mis à jour"
 
+    msg_id = _seed_message(db_session, conversation, "user", "Bonjour test")
+    r = client.get(f"/api/conversations/{conversation}/messages", headers=responsable_headers)
+    assert r.status_code == 200 and any(m["id"] == msg_id for m in r.json())
+
+    # Seul le tour de chat écrit des messages : pas d'écriture par l'API des conversations.
     r = client.post(
         f"/api/conversations/{conversation}/messages",
         headers=responsable_headers,
-        json={"conversation_id": conversation, "role": "user", "content": "Bonjour test"},
+        json={"conversation_id": conversation, "role": "assistant", "content": "faux"},
     )
-    assert r.status_code == 200
-    msg_id = r.json()["id"]
-
-    r = client.get(f"/api/conversations/{conversation}/messages", headers=responsable_headers)
-    assert r.status_code == 200 and any(m["id"] == msg_id for m in r.json())
+    assert r.status_code == 405
 
     r = client.get("/api/conversations", headers=responsable_headers)
     assert r.status_code == 200
     mine = next(c for c in r.json() if c["id"] == conversation)
-    assert mine["message_count"] == 1 and "space_id" not in mine
+    assert mine["message_count"] == 1
 
 
 def test_conversation_other_user_404(client, responsable_headers, db_session):
@@ -94,7 +105,7 @@ def test_chat_stream_persists_question_and_answer(client, responsable_headers, c
     assert msgs[0]["content"] == "Quelle parclose pour 44 mm ?"
     assistant = msgs[1]
     assert assistant["id"] == done["message_id"]
-    assert assistant["model"] == settings.MODEL_FAST and assistant["provider"] == "mistral"
+    assert assistant["model"] == settings.MODEL_FAST
     sources = json.loads(assistant["sources"])
     assert sources[0]["path"] == "/profiles/perform76-parcloses.md" and sources[0]["exists"] is True
     assert assistant["metadata_json"]["trace"]["prompt_tokens"] == 185508
@@ -140,11 +151,7 @@ def test_load_history_is_bounded(client, responsable_headers, conversation, db_s
     from app.services.wiki_chat_service import load_history
 
     for i in range(6):
-        role = "user" if i % 2 == 0 else "assistant"
-        client.post(
-            f"/api/conversations/{conversation}/messages", headers=responsable_headers,
-            json={"conversation_id": conversation, "role": role, "content": f"message {i}"},
-        )
+        _seed_message(db_session, conversation, "user" if i % 2 == 0 else "assistant", f"message {i}")
     monkeypatch.setattr(settings, "CHAT_HISTORY_MAX_MESSAGES", 3)
     history = load_history(db_session, conversation)
     # 3 derniers = assistant 3, user 4, assistant 5 → l'assistant de tête est retiré.
@@ -170,7 +177,7 @@ def test_feedback_on_assistant_message(client, responsable_headers, conversation
     )
     assert r.status_code == 201
     fb = r.json()
-    assert fb["query_text"] == "Q" and fb["category"] == "Hallucination" and "space_id" not in fb
+    assert fb["query_text"] == "Q" and fb["category"] == "Hallucination"
 
     r = client.get("/api/conversations/feedbacks/mine", headers=responsable_headers)
     assert r.status_code == 200

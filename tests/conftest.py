@@ -42,7 +42,7 @@ def extract_sse_message_text(response_text: str) -> str:
 
 
 def extract_sse_events(response_text: str) -> list[dict]:
-    """Parse tous les événements SSE (data: {...}) en objets JSON (step, sources, done…)."""
+    """Parse tous les événements SSE (data: {...}) en objets JSON (stage, thinking, sources, done…)."""
     events: list[dict] = []
     for line in response_text.splitlines():
         if not line.startswith("data: "):
@@ -169,11 +169,15 @@ def _reset_public_schema() -> None:
         conn.commit()
 
 
+def alembic_config() -> Config:
+    cfg = Config(str(PROJECT_ROOT / "app" / "alembic.ini"))
+    cfg.set_main_option("script_location", str(PROJECT_ROOT / "app" / "alembic"))
+    return cfg
+
+
 def _run_migrations() -> None:
-    """Applique l'ensemble des migrations Alembic sur la DB de test."""
-    alembic_cfg = Config(str(PROJECT_ROOT / "app" / "alembic.ini"))
-    alembic_cfg.set_main_option("script_location", str(PROJECT_ROOT / "app" / "alembic"))
-    command.upgrade(alembic_cfg, "head")
+    """Applique la migration unique (lia_wiki_schema) sur la DB de test."""
+    command.upgrade(alembic_config(), "head")
 
 
 def assign_role(session: Session, user_id: int, role_name: str) -> None:
@@ -220,17 +224,8 @@ def _init_db() -> Generator[None, None, None]:
 
     _ensure_database_exists()
     _reset_public_schema()
-    # Les migrations historiques créent des colonnes pgvector avant que la refonte wiki
-    # ne retire l'extension : elle doit exister pour que la chaîne se rejoue.
-    try:
-        with engine.connect() as conn:
-            conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
-            conn.commit()
-    except Exception:
-        pass
     _run_migrations()
-    # File de sécurité: certaines tables (ex. RBAC) ne sont pas encore couvertes
-    # par les migrations Alembic présentes.
+    # Comme au démarrage de l'application : create_all est idempotent et ne doit rien ajouter.
     SQLModel.metadata.create_all(engine)
     _truncate_all_tables()
     with Session(engine) as session:

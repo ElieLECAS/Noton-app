@@ -50,6 +50,12 @@ sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage, réf. IMO_180_NX_FR_v2
+  - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
+    id: profine-mise-en-oeuvre-systeme-70
+    title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
@@ -91,7 +97,7 @@ sues.
 | ID | Sujet | Source muette | À demander à |
 | --- | --- | --- | --- |
 | VER-35 | Sens des sigles « DV » et « CV » qui qualifient les valeurs thermiques | Catalogue général, p. 17 : les deux sigles n'apparaissent qu'à cette page et ne sont définis nulle part dans le corpus. « DV » se lit « double vitrage » sans que la source l'écrive ; « CV » n'a pas de lecture évidente, alors que la même mention annonce un vitrage 6/14/4, qui est un double vitrage. Tant que le sens de « CV » n'est pas établi, on ne sait pas à quelle configuration se rapporte le Uw de 1,4 W/(m².K) des coulissants — voir `INC-02` | Service technique |
-| VER-03 | Nombre de chambres et de joints de la PERFORM70 | Catalogue général, p. 6 : seule la PERFORM76 est décrite | Bureau d'études |
+| VER-03 | Nombre de chambres et de joints de la PERFORM70 | Catalogue général, p. 6 : seule la PERFORM76 est décrite. Le système 70 Plateforme de profine compte **5 chambres** ([Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)), mais rien ne dit que la PERFORM70 repose dessus — la réponse dépend de `VER-28` | Bureau d'études |
 | VER-04 | Épaisseurs de profilé HYBRIDE70 et HYBRIDE76 | Catalogue général, p. 10 : une plage 70-76 mm pour la gamme entière. La brochure HYBRIDE de mars 2025 donne 72 mm pour une gamme alors unique — voir `CTR-06` | Bureau d'études |
 | VER-05 | Épaisseur de profilé de la gamme TEXTURAL | Catalogue général, p. 20-23 : aucune cote | Bureau d'études |
 | VER-06 | Composition du double vitrage « SGC ULTRA ONE » | Catalogue général, p. 27 : annoncé sans composition | Fournisseur de vitrage |
@@ -105,7 +111,7 @@ sues.
 | VER-24 | Orientation de montage du renfort V317 | Mise en œuvre Système 76 Advanced : IW 4,8 / IG 2,3 sur le battement 76472 (registre 2.1.2, p. 16), IW 2,3 / IG 4,8 sur la réhausse 76705 (registre 2.1.3, p. 4). La permutation est cohérente avec un montage tourné de 90°, le manuel ne l'écrit pas | profine — confirmer que c'est bien l'orientation qui change et non une coquille |
 | VER-25 | Longueur de l'acier dit « long » dans le tableau des poids d'ouvrant admissibles | Mise en œuvre Système 76 Advanced, registre 2.3.3, p. 5 : « court (55 mm) » et « long (5 mm) » — la seconde valeur ne peut pas être une longueur en regard de la première | profine — c'est la ligne qui fait passer une ferrure de 80 à 100 kg admissibles |
 | VER-27 | Périmètre d'emploi du profilé acier 9708 | Mise en œuvre 9708, profine France, juillet 2017 : la note ne donne ni la longueur ni la section du profilé, ne nomme aucun système — ni 70, ni 76 Advanced — et ne fixe aucune flèche maximale rattrapable | profine — savoir sur quelles gammes et jusqu'à quelle déformation le procédé s'applique |
-| VER-28 | Système profilé réel des gammes PERFORM70 et HYBRIDE70 | Aucun document PROFERM ne nomme le système 70 ni ne cite une référence en 6xxx. Les posters Gamme 70 et le DTD 6/16-2335 décrivent le système KÖMMERLING e.VOLUTION, sans lien écrit avec PROFERM | Bureau d'études — c'est la condition pour exploiter les deux posters et le DTD 2335 |
+| VER-28 | Système profilé réel des gammes PERFORM70 et HYBRIDE70 | Aucun document PROFERM ne nomme le système 70 ni ne cite une référence en 6xxx. Les posters Gamme 70, le DTD 6/16-2335 et, depuis le 18/09/2026, le **manuel de fabrication complet du système 70 Plateforme** décrivent le système KÖMMERLING e.VOLUTION, sans lien écrit avec PROFERM | Bureau d'études — **c'est devenu la question la plus rentable du registre** : elle décide de l'exploitation de 371 pages de cotes, de renforts et d'abaques déjà versées dans `raw/` |
 | VER-29 | Le battement 76453 du renfort inox VSF01 | DTD n° DBV-25-6/16-2334_V5, § 2.2.3.4 : « le renfort inox VSF01 peut être vissé à l'extérieur du battement 76453 ». Cette référence n'existe ni au cahier technique PERFORM76 ni au manuel de mise en œuvre profine, qui donnent 76471, 76472 et 76473 | profine — coquille probable pour 76473, mais une référence de battement ne se devine pas |
 | VER-30 | Type d'ouverture de la ligne « 2 vantaux, 2,15 × 1,60 m » | DTD 6/16-2335 : « oscillo battante 2 vantaux ». DTA et DTD 6/16-2334 : « 2 vantaux OF », c'est-à-dire ouvrant à la française. Même cote, même position dans le tableau, libellé différent | CSTB ou profine — savoir si les deux systèmes diffèrent réellement sur cette configuration |
 | VER-31 | Références, cotes et limites de la transformation OF en OB sur ROTO NX | Transformation OF en OB, PROFERM, réf. PRO-PVC-OFOB-01 rév. A : la têtière, le compas OB et la gâche OB sont dits « fournis », sans référence ni cote de perçage, et aucune limite dimensionnelle n'est rappelée pour l'ouvrant transformé | Service technique — un ouvrant dimensionné en OF peut sortir de son abaque une fois transformé en OB |
@@ -131,6 +137,13 @@ sues.
 du cahier PERFORM76 appartenant au système profine, **tout s'approvisionne chez le fournisseur**
 et la nomenclature du cahier est directement utilisable pour commander. Voir
 [KÖMMERLING](/fournisseurs/kommerling.md).
+
+**VER-28 a changé de nature le 18/09/2026.** Tant qu'elle n'était documentée que par deux
+planches A0 et un dossier réglementaire, elle relevait de la curiosité. Le manuel de mise en
+œuvre du système 70 Plateforme étant désormais dans `raw/`, une réponse positive rendrait
+exploitables les cotes de débit, les renforts, les abaques et la statique d'une gamme que le wiki
+ne documente aujourd'hui que par son épaisseur et son Uw. Voir
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md).
 
 **VER-20 est la nouvelle entrée sensible** : sans la justification de substitution de ROTO à
 FERCO, l'emploi de la quincaillerie ROTO n'est pas tracé vis-à-vis de l'Avis Technique. C'est le

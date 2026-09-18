@@ -32,6 +32,12 @@ sources:
   - resource: raw/brochure-lumine65-2025-02.pdf
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
+  - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
+    id: profine-mise-en-oeuvre-systeme-70
+    title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
+  - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
+    id: roto-nx-catalogue-ctl-105
+    title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
@@ -65,6 +71,8 @@ ce que le registre lui prêtait. Elle quitte alors le registre actif pour la sec
 | INC-09 | Mise en œuvre Système 76 Advanced | registre 2.1.2, p. 2 vs p. 17 et 18 | Le sommaire des profilés annonce « 76303 Meneau de 110 mm » et « 76373 Meneau de 110 mm » ; les planches de détail donnent « 76303 Traverse d'ouvrant 119 mm » et « 76373 Meneau/Traverse 124 mm » | Retenir les planches de détail : 124 mm pour le 76373 recoupe le cahier technique PERFORM76. La valeur de 110 mm portée au sommaire pour le 76373 semble recopiée de la ligne du 76303 juste au-dessus | Meneau commandé au mauvais gabarit, et 14 mm d'erreur sur une largeur hors tout d'ensemble |
 | INC-10 | Mise en œuvre Système 76 Advanced | registre 2.3.3, p. 3 vs p. 5 | Deux distances maximales entre points de verrouillage dans le même registre : « les points de verrouillage (paumelle) ne doivent pas être distants de plus de 70 cm » p. 3, « les points de verrouillage (galets etc.) ne doivent pas être distants de plus de 80 cm » p. 5 | Les deux phrases visent probablement des organes différents — paumelles d'un côté, galets de crémone de l'autre. Le manuel ne le dit pas : à faire préciser, et retenir 70 cm en attendant | Entraxe de verrouillage surestimé de 10 cm, donc un point de fermeture en moins sur un grand ouvrant |
 | INC-11 | Instructions de montage Roto NX KSR | toutes les pages | Chaque page porte **deux références de document et deux dates** : « Roto NX KSR - IMO_180_NX_FR_v2, Novembre 2022 » en pied de page, et « Roto NX IMO_455_FR_v2 · 07 / 2018 » juste en dessous. Les renvois internes suivent la seconde pagination et pointent vers les pages 215, 216 et 219, qui n'existent pas dans ce document de 124 pages | Le document est un extrait recomposé du manuel IMO_455 de juillet 2018 : renuméroter les renvois, ou indiquer qu'ils visent le manuel complet | Un lecteur qui suit un renvoi ne trouve rien, et personne ne sait laquelle des deux versions fait foi sur une valeur contestée |
+| INC-12 | Mise en œuvre Système 70 Plateforme | registre 2.1.2, p. 1 vs p. 8 à 15 | Huit dormants portent deux largeurs différentes : le sommaire des profilés donne 91, 84, 87, 95, 107, 87, 117 et 122 mm pour les 6102, 6104, 6105, 6106, 6107, 6155, 6156 et 6159, leurs planches de détail donnent 57, 64, 67, 75, 87, 67, 97 et 102 mm. L'écart est de 20 mm sur sept d'entre eux et de 34 mm sur le 6102. Les huit autres dormants concordent | Établir ce que mesure chacune des deux pages. L'écart constant de 20 mm ressemble à deux conventions de mesure, pas à huit coquilles, mais aucune des deux pages ne le dit | Dormant commandé au mauvais gabarit sur la moitié de la gamme. La planche du 6159 est en outre titrée « 6156 », libellé recopié comme dans INC-03 |
+| INC-13 | Catalogue Roto NX pour profils PVC | 36 | Dans un catalogue français, le tableau des champs d'application de la version 150 kg est **imprimé en allemand** — « Flügelfalzbreite », « Grundsicherheit », « unzulässiger Anwendungsbereich » — et il désigne les classes de sécurité par « RC » là où la page 35, en français, écrit « CDR » | Traduire la page 36. Retenir que RC et CDR désignent la même classification, celle de la DIN EN 1627-1630 | Un lecteur français ne lit pas les bornes de la ferrure 150 kg, qui est celle des vantaux lourds |
 
 # INC-02 en détail
 

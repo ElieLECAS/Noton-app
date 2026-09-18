@@ -20,13 +20,6 @@ def test_admin_page_redirects_unauthenticated(client):
     assert "/login" in (r.headers.get("location") or "")
 
 
-def test_legacy_addresses_redirect_to_chat(client, responsable_headers):
-    for url in ("/spaces/1", "/library", "/admin/sav-trees"):
-        r = client.get(url, headers=responsable_headers, follow_redirects=False)
-        assert r.status_code == 303
-        assert r.headers.get("location") == "/"
-
-
 def test_root_ok_authenticated(client, responsable_headers):
     r = client.get("/", headers=responsable_headers, follow_redirects=False)
     assert r.status_code == 200

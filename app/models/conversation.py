@@ -1,18 +1,17 @@
-from sqlmodel import SQLModel, Field, Relationship, Column
-from sqlalchemy import JSON
+from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
-from typing import Optional, List, TYPE_CHECKING, Dict, Any
+from typing import Optional, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .message import Message
 
 
 class Conversation(SQLModel, table=True):
-    """Une conversation avec LIA. Un seul corpus (le wiki) : plus d'espace."""
+    """Une conversation avec LIA. Un seul corpus (le wiki) : pas d'espace, pas de contexte
+    de question mémorisé — l'historique des messages suffit."""
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str = Field(max_length=200, default="Nouvelle conversation")
     user_id: int = Field(foreign_key="user.id")
-    query_context: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON, nullable=True))
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
