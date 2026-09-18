@@ -21,87 +21,25 @@ PERMISSIONS_CATALOG = [
         "description": "Créer, modifier, supprimer des rôles et assigner des permissions",
         "category": "config"
     },
-    {
-        "code": "library.read",
-        "name": "Consulter la bibliothèque",
-        "description": "Voir les documents et dossiers de la bibliothèque",
-        "category": "library"
-    },
-    {
-        "code": "library.write",
-        "name": "Modifier la bibliothèque",
-        "description": "Ajouter, modifier, supprimer des documents et dossiers",
-        "category": "library"
-    },
-    {
-        "code": "space.create",
-        "name": "Créer un espace",
-        "description": "Créer de nouveaux espaces de travail",
-        "category": "space"
-    },
-    {
-        "code": "space.update",
-        "name": "Modifier un espace",
-        "description": "Modifier les espaces existants",
-        "category": "space"
-    },
-    {
-        "code": "space.delete",
-        "name": "Supprimer un espace",
-        "description": "Supprimer des espaces de travail",
-        "category": "space"
-    },
-    {
-        "code": "space.read",
-        "name": "Consulter les espaces",
-        "description": "Voir les espaces et leurs contenus",
-        "category": "space"
-    },
-    {
-        "code": "feedback.auto_faq",
-        "name": "Auto-générer FAQ",
-        "description": "Générer automatiquement des FAQ correctives depuis les retours utilisateur",
-        "category": "feedback"
-    },
 ]
 
-# Définition des rôles et leurs permissions
+# Définition des rôles et leurs permissions. Le chat et le wiki sont ouverts à tout
+# utilisateur connecté ; les permissions ne portent que sur l'administration.
 ROLES_CATALOG = {
     "admin": {
         "description": "Administrateur avec tous les droits",
         "permissions": [
             "config.manage_users",
             "config.manage_roles",
-            "library.read",
-            "library.write",
-            "space.create",
-            "space.update",
-            "space.delete",
-            "space.read",
-            "feedback.auto_faq",
         ]
     },
     "responsable": {
-        "description": "Responsable avec droits d'édition",
-        "permissions": [
-            "library.read",
-            "library.write",
-            "space.create",
-            "space.update",
-            "space.delete",
-            "space.read",
-            "feedback.auto_faq",
-        ]
+        "description": "Responsable : chat et wiki, sans administration",
+        "permissions": []
     },
     "lecteur": {
-        "description": "Lecteur avec accès en lecture seule",
-        "permissions": [
-            "library.read",
-            "space.read",
-            "space.create",
-            "space.update",
-            "space.delete",
-        ]
+        "description": "Lecteur : chat et wiki",
+        "permissions": []
     },
 }
 

@@ -1,4 +1,4 @@
-"""Conversations / messages et chat espace (mocks Mistral / recherche)."""
+"""Conversations, messages, historique et tour de chat (Mistral simulé)."""
 from __future__ import annotations
 
 import json
@@ -7,200 +7,172 @@ from unittest import mock
 import pytest
 from sqlmodel import select
 
+from app.config import settings
 from app.models.user_role import UserRole
-from tests.conftest import extract_sse_message_text
+from tests.conftest import extract_sse_events, extract_sse_message_text
 
 
 @pytest.fixture
-def space_and_conversation(client, responsable_headers):
-    sp = client.post(
-        "/api/spaces",
-        headers=responsable_headers,
-        json={"name": "Espace conv pytest"},
-    )
-    assert sp.status_code == 201
-    space_id = sp.json()["id"]
-    cr = client.post(
-        "/api/conversations",
-        headers=responsable_headers,
-        json={"title": "Ma conv", "space_id": space_id},
-    )
+def conversation(client, responsable_headers):
+    cr = client.post("/api/conversations", headers=responsable_headers, json={"title": "Ma conv"})
     assert cr.status_code == 201
     conv_id = cr.json()["id"]
-    yield space_id, conv_id
+    yield conv_id
     client.delete(f"/api/conversations/{conv_id}", headers=responsable_headers)
-    client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)
 
 
-def test_create_conversation_unknown_space_404(client, responsable_headers):
-    r = client.post(
-        "/api/conversations",
-        headers=responsable_headers,
-        json={"title": "X", "space_id": 999_999_999},
-    )
-    assert r.status_code == 404
-
-
-def test_conversation_crud_and_messages(client, responsable_headers, space_and_conversation):
-    space_id, conv_id = space_and_conversation
-
-    r = client.patch(
-        f"/api/conversations/{conv_id}",
-        headers=responsable_headers,
-        json={"title": "Titre mis à jour"},
-    )
-    assert r.status_code == 200
-    assert r.json()["title"] == "Titre mis à jour"
+def test_conversation_crud_and_messages(client, responsable_headers, conversation):
+    r = client.patch(f"/api/conversations/{conversation}", headers=responsable_headers, json={"title": "Titre mis à jour"})
+    assert r.status_code == 200 and r.json()["title"] == "Titre mis à jour"
 
     r = client.post(
-        f"/api/conversations/{conv_id}/messages",
+        f"/api/conversations/{conversation}/messages",
         headers=responsable_headers,
-        json={
-            "conversation_id": conv_id,
-            "role": "user",
-            "content": "Bonjour test",
-        },
+        json={"conversation_id": conversation, "role": "user", "content": "Bonjour test"},
     )
     assert r.status_code == 200
     msg_id = r.json()["id"]
 
-    r = client.get(f"/api/conversations/{conv_id}/messages", headers=responsable_headers)
+    r = client.get(f"/api/conversations/{conversation}/messages", headers=responsable_headers)
+    assert r.status_code == 200 and any(m["id"] == msg_id for m in r.json())
+
+    r = client.get("/api/conversations", headers=responsable_headers)
     assert r.status_code == 200
-    assert any(m["id"] == msg_id for m in r.json())
+    mine = next(c for c in r.json() if c["id"] == conversation)
+    assert mine["message_count"] == 1 and "space_id" not in mine
 
 
 def test_conversation_other_user_404(client, responsable_headers, db_session):
-    from app.models.space import Space
-    from tests.conftest import bearer_headers, create_test_user
+    from app.models.conversation import Conversation
+    from tests.conftest import create_test_user
 
     user_b = create_test_user(db_session, "responsable")
-    space = Space(name="Iso B", user_id=user_b.id)
-    db_session.add(space)
-    db_session.commit()
-    db_session.refresh(space)
-
-    from app.models.conversation import Conversation
-
-    conv = Conversation(title="Secrète", user_id=user_b.id, space_id=space.id)
+    conv = Conversation(title="Secrète", user_id=user_b.id)
     db_session.add(conv)
     db_session.commit()
     db_session.refresh(conv)
-
-    r = client.get(
-        f"/api/conversations/{conv.id}",
-        headers=responsable_headers,
-    )
-    assert r.status_code == 404
-
-    db_session.delete(conv)
-    db_session.delete(space)
-    for ur in db_session.exec(select(UserRole).where(UserRole.user_id == user_b.id)).all():
-        db_session.delete(ur)
-    db_session.delete(user_b)
-    db_session.commit()
-
-
-async def _fake_mistral_stream(*args, **kwargs):
-    yield json.dumps({"message": {"content": "chunk"}})
-
-
-def test_space_chat_stream_empty_space_no_error(client, responsable_headers):
-    sp = client.post(
-        "/api/spaces",
-        headers=responsable_headers,
-        json={"name": "Espace vide chat"},
-    )
-    space_id = sp.json()["id"]
     try:
-        with mock.patch(
-            "app.routers.chat.mistral_chat_stream",
-            _fake_mistral_stream,
-        ):
-            r = client.post(
-                f"/api/spaces/{space_id}/chat/stream",
-                headers=responsable_headers,
-                json={
-                    "message": "Question sans doc",
-                    "model": "mistral-small-latest",
-                    "provider": "mistral",
-                    "conversation_id": None,
-                },
-            )
-        assert r.status_code == 200
-        assert "done" in r.text.lower()
-    finally:
-        client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)
-
-
-def test_space_chat_stream_with_conversation_persists(
-    client, responsable_headers, space_and_conversation
-):
-    space_id, conv_id = space_and_conversation
-    with mock.patch(
-        "app.routers.chat.mistral_chat_stream",
-        _fake_mistral_stream,
-    ):
+        assert client.get(f"/api/conversations/{conv.id}", headers=responsable_headers).status_code == 404
         r = client.post(
-            f"/api/spaces/{space_id}/chat/stream",
-            headers=responsable_headers,
-            json={
-                "message": "Hello",
-                "model": "mistral-small-latest",
-                "provider": "mistral",
-                "conversation_id": conv_id,
-            },
+            "/api/chat/stream", headers=responsable_headers,
+            json={"message": "Question", "conversation_id": conv.id},
+        )
+        assert r.status_code == 404
+    finally:
+        db_session.delete(conv)
+        for ur in db_session.exec(select(UserRole).where(UserRole.user_id == user_b.id)).all():
+            db_session.delete(ur)
+        db_session.delete(user_b)
+        db_session.commit()
+
+
+async def _fake_stream(message, **kwargs):
+    yield json.dumps({"thinking": "je lis"})
+    yield json.dumps({"message": {"content": "La parclose 76507 "}})
+    yield json.dumps({"message": {"content": "(/profiles/perform76-parcloses.md)."}})
+    yield json.dumps({"usage": {"prompt_tokens": 185508, "completion_tokens": 12,
+                                "prompt_tokens_details": {"cached_tokens": 185472}}})
+
+
+def test_chat_stream_persists_question_and_answer(client, responsable_headers, conversation):
+    with mock.patch("app.services.wiki_chat_service.chat_stream", _fake_stream):
+        r = client.post(
+            "/api/chat/stream", headers=responsable_headers,
+            json={"message": "Quelle parclose pour 44 mm ?", "conversation_id": conversation},
         )
     assert r.status_code == 200
+    events = extract_sse_events(r.text)
+    kinds = [next(iter(e)) for e in events]
+    assert kinds == ["stage", "thinking", "message", "message", "sources", "done"]
+    assert extract_sse_message_text(r.text) == "La parclose 76507 (/profiles/perform76-parcloses.md)."
+    done = events[-1]
+    assert done["message_id"] and done["trace"]["cited_pages"] == ["/profiles/perform76-parcloses.md"]
+    assert done["trace"]["cached_tokens"] == 185472
 
-    msgs = client.get(
-        f"/api/conversations/{conv_id}/messages",
-        headers=responsable_headers,
+    msgs = client.get(f"/api/conversations/{conversation}/messages", headers=responsable_headers).json()
+    assert [m["role"] for m in msgs] == ["user", "assistant"]
+    assert msgs[0]["content"] == "Quelle parclose pour 44 mm ?"
+    assistant = msgs[1]
+    assert assistant["id"] == done["message_id"]
+    assert assistant["model"] == settings.MODEL_FAST and assistant["provider"] == "mistral"
+    sources = json.loads(assistant["sources"])
+    assert sources[0]["path"] == "/profiles/perform76-parcloses.md" and sources[0]["exists"] is True
+    assert assistant["metadata_json"]["trace"]["prompt_tokens"] == 185508
+
+
+def test_chat_stream_sends_history_after_system_prompt(client, responsable_headers, conversation):
+    captured = {}
+
+    async def spy(message, **kwargs):
+        captured["context"] = kwargs["context"]
+        yield json.dumps({"message": {"content": "ok"}})
+
+    with mock.patch("app.services.wiki_chat_service.chat_stream", spy):
+        client.post("/api/chat/stream", headers=responsable_headers, json={"message": "Première", "conversation_id": conversation})
+        client.post("/api/chat/stream", headers=responsable_headers, json={"message": "Seconde", "conversation_id": conversation})
+    ctx = captured["context"]
+    assert ctx[0]["role"] == "system"
+    assert [(m["role"], m["content"]) for m in ctx[1:]] == [
+        ("user", "Première"), ("assistant", "ok"), ("user", "Seconde"),
+    ]
+
+
+def test_chat_stream_error_persists_nothing_but_the_question(client, responsable_headers, conversation):
+    async def boom(message, **kwargs):
+        raise RuntimeError("Mistral injoignable")
+        yield  # pragma: no cover
+
+    with mock.patch("app.services.wiki_chat_service.chat_stream", boom):
+        r = client.post("/api/chat/stream", headers=responsable_headers, json={"message": "Hello", "conversation_id": conversation})
+    assert r.status_code == 200
+    events = extract_sse_events(r.text)
+    assert any("error" in e for e in events) and not any("done" in e for e in events)
+    msgs = client.get(f"/api/conversations/{conversation}/messages", headers=responsable_headers).json()
+    assert [m["role"] for m in msgs] == ["user"]
+
+
+def test_chat_stream_rejects_empty_message(client, responsable_headers, conversation):
+    r = client.post("/api/chat/stream", headers=responsable_headers, json={"message": "   ", "conversation_id": conversation})
+    assert r.status_code == 422
+
+
+def test_load_history_is_bounded(client, responsable_headers, conversation, db_session, monkeypatch):
+    from app.services.wiki_chat_service import load_history
+
+    for i in range(6):
+        role = "user" if i % 2 == 0 else "assistant"
+        client.post(
+            f"/api/conversations/{conversation}/messages", headers=responsable_headers,
+            json={"conversation_id": conversation, "role": role, "content": f"message {i}"},
+        )
+    monkeypatch.setattr(settings, "CHAT_HISTORY_MAX_MESSAGES", 3)
+    history = load_history(db_session, conversation)
+    # 3 derniers = assistant 3, user 4, assistant 5 → l'assistant de tête est retiré.
+    assert [(m["role"], m["content"]) for m in history] == [("user", "message 4"), ("assistant", "message 5")]
+
+    monkeypatch.setattr(settings, "CHAT_HISTORY_MAX_MESSAGES", 10)
+    monkeypatch.setattr(settings, "CHAT_HISTORY_MAX_CHARS", 20)
+    history = load_history(db_session, conversation)
+    assert sum(len(m["content"]) for m in history) <= 20
+    assert not history or history[0]["role"] == "user"
+
+
+def test_feedback_on_assistant_message(client, responsable_headers, conversation):
+    with mock.patch("app.services.wiki_chat_service.chat_stream", _fake_stream):
+        r = client.post("/api/chat/stream", headers=responsable_headers, json={"message": "Q", "conversation_id": conversation})
+    message_id = extract_sse_events(r.text)[-1]["message_id"]
+
+    r = client.post(f"/api/conversations/messages/{message_id}/feedback", headers=responsable_headers, json={"is_positive": False})
+    assert r.status_code == 422  # commentaire obligatoire pour un retour négatif
+    r = client.post(
+        f"/api/conversations/messages/{message_id}/feedback", headers=responsable_headers,
+        json={"is_positive": False, "comment": "Mauvaise famille", "category": "Hallucination"},
     )
-    assert msgs.status_code == 200
-    roles = [m["role"] for m in msgs.json()]
-    assert "user" in roles
+    assert r.status_code == 201
+    fb = r.json()
+    assert fb["query_text"] == "Q" and fb["category"] == "Hallucination" and "space_id" not in fb
 
-
-def test_space_chat_stream_bypass_when_no_passages(client, responsable_headers):
-    sp = client.post(
-        "/api/spaces",
-        headers=responsable_headers,
-        json={"name": "Espace test bypass"},
-    )
-    space_id = sp.json()["id"]
-    try:
-        # Mock search_technical_passages to return no passages.
-        # On désactive le query understanding pour tester directement le bypass
-        # "aucune source pertinente" (sinon une question vague déclenche une
-        # demande de clarification avant la phase de retrieval).
-        with mock.patch(
-            "app.config.settings.QUERY_UNDERSTANDING_ENABLED", False
-        ), mock.patch(
-            "app.services.space_search_service.search_technical_passages",
-            new=mock.AsyncMock(
-                return_value={"passages": [], "status": "ok", "reason": "no_results"}
-            ),
-        ):
-            
-            # We don't mock any LLM call because it should be bypassed
-            r = client.post(
-                f"/api/spaces/{space_id}/chat/stream",
-                headers=responsable_headers,
-                json={
-                    "message": "Question test bypass",
-                    "model": "mistral-small-latest",
-                    "provider": "mistral",
-                    "conversation_id": None,
-                },
-            )
-            
-            assert r.status_code == 200
-            text_content = extract_sse_message_text(r.text)
-            # Le message d'échec ne doit plus exposer de seuil interne à l'utilisateur,
-            # mais dire ce qui a été cherché et ce qui aiderait à relancer.
-            assert "aucune page pertinente" in text_content
-            assert "%" not in text_content
-            assert "done" in r.text.lower()
-    finally:
-        client.delete(f"/api/spaces/{space_id}", headers=responsable_headers)
-
+    r = client.get("/api/conversations/feedbacks/mine", headers=responsable_headers)
+    assert r.status_code == 200
+    item = next(i for i in r.json()["items"] if i["message_id"] == message_id)
+    assert item["conversation_id"] == conversation

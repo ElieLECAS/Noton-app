@@ -1,43 +1,32 @@
-from fastapi import FastAPI, Request, Depends, HTTPException
+"""LIA — l'assistant documentaire de PROFERM, adossé au wiki.
+
+Trois écrans : le chat (``/``), le wiki (``/wiki``, graphe + lecteur) et l'administration.
+Le wiki est chargé au démarrage et rechargé dès qu'un fichier change (voir wiki_service).
+"""
+import logging
+import time
+from typing import Optional
+
+from fastapi import Depends, FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
-from typing import Optional
 
-from app.database import get_session, create_db_and_tables, engine
-from app.routers import auth, chat, conversations, library, spaces, admin, guided_trees
 from app.config import settings
-from app.services.auth_service import decode_token, get_user_by_id
-from app.models.user import UserRead
-import logging
-import time
-
+from app.database import create_db_and_tables, engine, get_session
 from app.logging_config import setup_app_logging
+from app.models.user import UserRead
+from app.routers import admin, auth, chat, conversations, wiki
+from app.services.auth_service import decode_token, get_user_by_id
 
 setup_app_logging()
 logger = logging.getLogger(__name__)
 
-# Fichier dédié : logs/library_document_processing.log (pipeline bibliothèque / espaces)
-try:
-    from app.library_document_logging import setup_library_document_file_logging
-
-    _lib_log_path = setup_library_document_file_logging()
-    logger.info("Journal documents bibliothèque/espaces : %s", _lib_log_path)
-except Exception as e:
-    logger.warning("Initialisation journal bibliothèque/espaces ignorée : %s", e)
-
-# LangSmith — observabilité RAG
-try:
-    from app.tracing import init_langsmith
-    init_langsmith()
-except Exception as e:
-    logger.warning("Initialisation LangSmith ignorée : %s", e)
-
 app = FastAPI(
     title=settings.APP_NAME,
-    description="Assistant documentaire RAG multimodal (menuiserie PROFERM)",
+    description="Assistant documentaire PROFERM — réponses sourcées sur le wiki interne (CAG).",
 )
 
 
@@ -48,20 +37,12 @@ async def log_http_requests(request: Request, call_next):
     response = await call_next(request)
     elapsed_ms = (time.perf_counter() - start) * 1000
     if request.url.path != "/health":
-        logger.info(
-            "%s %s -> %s (%.0f ms)",
-            request.method,
-            request.url.path,
-            response.status_code,
-            elapsed_ms,
-        )
+        logger.info("%s %s -> %s (%.0f ms)", request.method, request.url.path, response.status_code, elapsed_ms)
     return response
 
 
-# Configuration CORS. Origines explicites uniquement (jamais de wildcard) : l'app sert
-# son propre front en same-origin, donc l'absence d'origine CORS n'impacte pas l'UI, et
-# on évite d'exposer l'API à n'importe quel site. Renseigner CORS_ALLOWED_ORIGINS pour
-# autoriser un front séparé (les credentials ne sont activés que dans ce cas).
+# CORS : origines explicites uniquement. L'app sert son propre front en same-origin ; sans
+# variable, l'API reste restreinte au même origine.
 if settings.CORS_ALLOWED_ORIGINS:
     logger.info("CORS : origines autorisées = %s", settings.CORS_ALLOWED_ORIGINS)
     app.add_middleware(
@@ -71,178 +52,117 @@ if settings.CORS_ALLOWED_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-else:
-    logger.warning(
-        "CORS : aucune origine configurée (CORS_ALLOWED_ORIGINS vide) — API restreinte au "
-        "même origine. Renseigner la variable si un front séparé doit consommer l'API."
-    )
 
-# Monter les routers
 app.include_router(auth.router)
-app.include_router(library.router)
-app.include_router(spaces.router)
 app.include_router(chat.router)
 app.include_router(conversations.router)
+app.include_router(wiki.router)
 app.include_router(admin.router)
-app.include_router(guided_trees.router)
 
-# Configuration des templates
 templates = Jinja2Templates(directory="app/templates")
-
-# Ajouter le contexte global pour tous les templates
 templates.env.globals["app_name"] = settings.APP_NAME
-templates.env.globals["model_fast"] = {
-    "provider": "mistral",
-    "model": settings.MODEL_FAST
-}
+templates.env.globals["model_fast"] = {"provider": "mistral", "model": settings.MODEL_FAST}
 
-# Servir les fichiers statiques
-try:
-    app.mount("/static", StaticFiles(directory="app/static"), name="static")
-except:
-    pass  # Le dossier static peut ne pas exister
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
 @app.on_event("startup")
 async def startup_event():
-    """Créer les tables au démarrage + journaliser la config effective."""
+    """Tables, RBAC, puis chargement du wiki (le premier tour ne doit pas l'attendre)."""
     create_db_and_tables()
-
-    # Config effective : matrice de features sur une ligne + garde-fous d'incohérence.
-    # Les migrations Alembic sont exécutées AVANT uvicorn par la commande du conteneur
-    # (docker-compose `web`/`worker`), point unique pour éviter les courses multi-réplica.
-    logger.info(settings.feature_summary())
-    for warning in settings.coherence_warnings():
-        logger.warning("[config] %s", warning)
-
-    # Initialiser le système RBAC (permissions + rôles)
     try:
         from app.services.rbac_seed_service import seed_rbac_system
+
         with Session(engine) as session:
             seed_rbac_system(session)
-    except Exception as e:
-        logger.error(f"Erreur lors de l'initialisation RBAC: {e}")
-    
-    # Précharger le modèle ColPali en arrière-plan si activé
-    if settings.COLPALI_ENABLED:
-        import threading
-        def preload_colpali():
-            try:
-                from app.services.colpali_service import get_colpali_model
-                logger.info("Début du préchargement en arrière-plan du modèle ColPali...")
-                get_colpali_model()
-            except Exception as e:
-                logger.error(f"Erreur lors du préchargement en arrière-plan du modèle ColPali: {e}")
+    except Exception as exc:  # noqa: BLE001
+        logger.error("Initialisation RBAC en échec : %s", exc)
 
-        threading.Thread(target=preload_colpali, name="colpali-preload", daemon=True).start()
-
-    # Précharger le cross-encoder de reranking (évite la latence de chargement
-    # sur la 1re requête ; singleton, jamais rechargé ensuite).
-    if settings.RERANKER_ENABLED and settings.RERANKER_PROVIDER == "local":
-        import threading
-        def preload_reranker():
-            try:
-                from app.services.reranker_service import warmup_cross_encoder
-                logger.info("Début du préchargement en arrière-plan du cross-encoder de reranking...")
-                warmup_cross_encoder()
-            except Exception as e:
-                logger.error(f"Erreur lors du préchargement en arrière-plan du cross-encoder: {e}")
-
-        threading.Thread(target=preload_reranker, name="reranker-preload", daemon=True).start()
-    
-    # Workers threads (embeddings + documents) uniquement si thread ou hybrid (repli Celery)
     try:
-        from app.services.task_dispatch import should_start_thread_workers
+        from app.services.wiki_service import get_snapshot
 
-        if should_start_thread_workers():
-            from app.services.chunk_service import _ensure_embedding_workers
-            from app.services.document_service_new import _ensure_document_workers
+        snapshot = get_snapshot()
+        logger.info(
+            "Wiki prêt : %d pages, ~%s tokens de prompt, modèle %s, raisonnement %s",
+            len(snapshot.concept_pages),
+            f"{snapshot.estimated_tokens:,}".replace(",", " "),
+            settings.MODEL_FAST,
+            settings.GENERATION_REASONING_EFFORT or "aucun",
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.error("Wiki indisponible au démarrage : %s", exc)
+    if not settings.MISTRAL_API_KEY:
+        logger.warning("MISTRAL_API_KEY est vide : le chat répondra une erreur.")
 
-            _ensure_embedding_workers()
-            _ensure_document_workers()
-            logger.info("Workers de traitement de documents (threads) démarrés")
-        else:
-            logger.info(
-                "TASK_BACKEND_MODE=%s : pas de workers threads sur le process web (Celery)",
-                settings.TASK_BACKEND_MODE,
-            )
-    except Exception as e:
-        logger.error(f"Erreur lors du démarrage des workers threads: {e}")
 
+# ---------------------------------------------------------------------------
+# Pages
+# ---------------------------------------------------------------------------
 
 
 @app.get("/", response_class=HTMLResponse)
-async def root(request: Request, session: Session = Depends(get_session)):
-    """Page d'accueil (choix des espaces)."""
-    if _redirect_if_unauthenticated(request, session):
+async def chat_page(request: Request, session: Session = Depends(get_session)):
+    """Le chat — l'écran d'accueil."""
+    user = _get_authenticated_user(request, session)
+    if not user:
         return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("home_spaces.html", {"request": request})
+    return templates.TemplateResponse("chat.html", {"request": request, "user": user})
+
+
+@app.get("/wiki", response_class=HTMLResponse)
+async def wiki_page(request: Request, session: Session = Depends(get_session)):
+    """Le wiki : graphe et lecteur de pages."""
+    user = _get_authenticated_user(request, session)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("wiki.html", {"request": request, "user": user})
 
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request, session: Session = Depends(get_session)):
-    """Page de connexion"""
-    if not _redirect_if_unauthenticated(request, session):
+    if _get_authenticated_user(request, session):
         return RedirectResponse(url="/", status_code=303)
     return templates.TemplateResponse("login.html", {"request": request})
 
 
 @app.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request, session: Session = Depends(get_session)):
-    """Page d'inscription"""
-    if not _redirect_if_unauthenticated(request, session):
+    if _get_authenticated_user(request, session):
         return RedirectResponse(url="/", status_code=303)
     return templates.TemplateResponse("register.html", {"request": request})
 
 
-@app.get("/library", response_class=HTMLResponse)
-async def library_page(request: Request, session: Session = Depends(get_session)):
-    """Page bibliothèque générale."""
-    user = _get_authenticated_user(request, session)
-    if not user:
-        return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("library.html", {"request": request, "user": user})
-
-
-@app.get("/spaces/{space_id}", response_class=HTMLResponse)
-async def space_detail_page(request: Request, space_id: int, session: Session = Depends(get_session)):
-    """Page de discussion dans un espace."""
-    user = _get_authenticated_user(request, session)
-    if not user:
-        return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("space_detail.html", {"request": request, "space_id": space_id, "user": user})
-
-
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_page(request: Request, session: Session = Depends(get_session)):
-    """Page d'administration (gestion users/rôles)."""
-    if _redirect_if_unauthenticated(request, session):
+    if not _get_authenticated_user(request, session):
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("admin.html", {"request": request})
 
 
-@app.get("/admin/sav-trees", response_class=HTMLResponse)
-async def admin_sav_trees_page(request: Request, session: Session = Depends(get_session)):
-    """Builder des Arbres SAV (symptômes, éditeur outline, publication)."""
-    if _redirect_if_unauthenticated(request, session):
-        return RedirectResponse(url="/login", status_code=303)
-    return templates.TemplateResponse("admin_sav_trees.html", {"request": request})
-
-
 @app.get("/feedbacks", response_class=HTMLResponse)
 async def feedbacks_page(request: Request, session: Session = Depends(get_session)):
-    """Page contenant les feedbacks de l'utilisateur."""
     user = _get_authenticated_user(request, session)
     if not user:
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("feedbacks.html", {"request": request, "user": user})
 
 
+# Anciennes adresses (espaces, bibliothèque, arbres SAV) : vers le chat.
+@app.get("/spaces/{space_id}")
+@app.get("/library")
+@app.get("/admin/sav-trees")
+async def legacy_redirect(request: Request):
+    return RedirectResponse(url="/", status_code=303)
+
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
     return {"status": "ok", "timestamp": time.time()}
+
+
+# ---------------------------------------------------------------------------
+# Authentification des pages (cookie ou Bearer)
+# ---------------------------------------------------------------------------
 
 
 def _extract_bearer_token_from_request(request: Request) -> Optional[str]:
@@ -266,25 +186,14 @@ def _get_authenticated_user(request: Request, session: Session) -> Optional[User
         user_id = int(user_id_str)
     except (ValueError, TypeError):
         return None
-    
     user = get_user_by_id(session, user_id)
     if not user:
         return None
-    
-    # Mapper les rôles pour le template
     roles = [ur.role.name for ur in user.user_roles] if hasattr(user, "user_roles") else []
     return UserRead(
         id=user.id,
         username=user.username,
         email=user.email,
         created_at=user.created_at,
-        roles=roles
+        roles=roles,
     )
-
-
-def _is_request_authenticated(request: Request, session: Session) -> bool:
-    return _get_authenticated_user(request, session) is not None
-
-
-def _redirect_if_unauthenticated(request: Request, session: Session) -> bool:
-    return not _is_request_authenticated(request, session)

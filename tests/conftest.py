@@ -14,7 +14,6 @@ import uuid
 from datetime import timedelta
 from pathlib import Path
 from typing import Generator
-from unittest import mock
 
 import pytest
 from alembic import command
@@ -110,14 +109,12 @@ def _build_isolated_test_url() -> str:
 
 
 os.environ["DATABASE_URL"] = _build_isolated_test_url()
-os.environ.setdefault("TASK_BACKEND_MODE", "celery")
 os.environ.setdefault("MISTRAL_API_KEY", "pytest-mistral-key")
 
 from starlette.testclient import TestClient
 from sqlmodel import Session, select
 
 from app.database import engine
-from app.embedding_config import EMBEDDING_DIMENSION
 from app.main import app
 from app.models.role import Role
 from app.models.user import User
@@ -214,16 +211,6 @@ def bearer_headers(user_id: int) -> dict:
 
 
 @pytest.fixture(scope="session", autouse=True)
-def _patch_embedding_startup() -> Generator[None, None, None]:
-    fake = [0.0] * EMBEDDING_DIMENSION
-    with mock.patch(
-        "app.services.embedding_service.generate_embedding",
-        return_value=fake,
-    ):
-        yield
-
-
-@pytest.fixture(scope="session", autouse=True)
 def _init_db() -> Generator[None, None, None]:
     parsed = make_url(os.environ["DATABASE_URL"])
     if not _is_test_db_name(parsed.database):
@@ -233,6 +220,8 @@ def _init_db() -> Generator[None, None, None]:
 
     _ensure_database_exists()
     _reset_public_schema()
+    # Les migrations historiques créent des colonnes pgvector avant que la refonte wiki
+    # ne retire l'extension : elle doit exister pour que la chaîne se rejoue.
     try:
         with engine.connect() as conn:
             conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
@@ -248,17 +237,6 @@ def _init_db() -> Generator[None, None, None]:
         seed_rbac_system(session)
     yield
     _truncate_all_tables()
-
-
-@pytest.fixture(autouse=True)
-def _clear_cag_fulltext_cache() -> Generator[None, None, None]:
-    """Le cache TTL du packer CAG est keyé par document_id : entre deux tests, les ids
-    de documents se répètent → pollution inter-tests sans ce nettoyage."""
-    from app.services.context_packer_service import invalidate_document_fulltext_cache
-
-    invalidate_document_fulltext_cache()
-    yield
-    invalidate_document_fulltext_cache()
 
 
 @pytest.fixture

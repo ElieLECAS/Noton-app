@@ -8,8 +8,21 @@ Create Date: 2026-03-23 10:00:00.000000
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
-from pgvector.sqlalchemy import Vector
-from app.embedding_config import EMBEDDING_DIMENSION
+try:
+    from pgvector.sqlalchemy import Vector
+except ImportError:  # pgvector n'est plus une dépendance depuis la refonte wiki (2026-09-18)
+    from sqlalchemy.types import UserDefinedType
+
+    class Vector(UserDefinedType):
+        cache_ok = True
+
+        def __init__(self, dim=None):
+            self.dim = dim
+
+        def get_col_spec(self, **kw):
+            return f"vector({self.dim})" if self.dim else "vector"
+# Dimension historique des embeddings Mistral (app.embedding_config a disparu avec le retriever).
+EMBEDDING_DIMENSION = 1024
 
 
 revision = "add_library_architecture"

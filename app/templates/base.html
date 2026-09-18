@@ -342,20 +342,23 @@
                 <nav class="flex-1 p-3 overflow-y-auto space-y-1">
                     <a
                         href="/"
+                        id="nav-chat"
                         class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                     >
-                        <i class="ti ti-home-2 text-lg"></i>
-                        <span>Accueil</span>
+                        <i class="ti ti-message-circle text-lg"></i>
+                        <span>Chat</span>
                     </a>
                     <a
-                        href="/library"
+                        href="/wiki"
+                        id="nav-wiki"
                         class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                     >
-                        <i class="ti ti-library text-lg"></i>
-                        <span>Bibliothèque</span>
+                        <i class="ti ti-topology-star-3 text-lg"></i>
+                        <span>Wiki</span>
                     </a>
                     <a
                         href="/feedbacks"
+                        id="nav-feedbacks"
                         class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                     >
                         <i class="ti ti-message-check text-lg"></i>
@@ -369,27 +372,7 @@
                         <i class="ti ti-settings text-lg"></i>
                         <span>Administration</span>
                     </a>
-
-                    <div id="sidebar-secondary-section" class="mt-6 pt-4 border-t border-black/5 dark:border-white/5">
-                        <div class="flex items-center justify-between px-3 py-1 mb-2">
-                            <span
-                                id="sidebar-secondary-title"
-                                class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider"
-                                >ESPACES</span
-                            >
-                            <button
-                                id="sidebar-secondary-action"
-                                onclick="if (typeof openCreateSpaceModal === 'function') openCreateSpaceModal();"
-                                class="text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-all"
-                                title="Nouvel espace"
-                            >
-                                <i class="ti ti-plus text-sm"></i>
-                            </button>
-                        </div>
-                        <div id="spaces-list" class="space-y-1">
-                            <!-- Espaces chargés dynamiquement -->
-                        </div>
-                    </div>
+                    {% block sidebar_extra %}{% endblock %}
                 </nav>
                 <div class="p-3 border-t border-black/5 dark:border-white/5 bg-black/[0.02] dark:bg-white/[0.02] rounded-b-2xl">
                     <div class="flex items-center justify-between gap-2">
@@ -440,64 +423,6 @@
                 </div>
                 {% block content %}{% endblock %}
             </main>
-        </div>
-
-        <!-- Modals -->
-        <div
-            id="create-project-modal"
-            class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-        >
-            <div
-                class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
-            >
-                <h2
-                    class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100"
-                >
-                    Créer un nouveau projet
-                </h2>
-                <form id="create-project-form" onsubmit="createProject(event)">
-                    <div class="mb-4">
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                            >Titre</label
-                        >
-                        <input
-                            type="text"
-                            name="title"
-                            required
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Mon projet"
-                        />
-                    </div>
-                    <div class="mb-4">
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                            >Description (optionnelle)</label
-                        >
-                        <textarea
-                            name="description"
-                            rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Décrivez votre projet..."
-                        ></textarea>
-                    </div>
-                    <div class="flex justify-end gap-2">
-                        <button
-                            type="button"
-                            onclick="hideCreateProjectModal()"
-                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
-                        >
-                            Annuler
-                        </button>
-                        <button
-                            type="submit"
-                            class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
-                        >
-                            Créer le projet
-                        </button>
-                    </div>
-                </form>
-            </div>
         </div>
 
         <script>
@@ -585,192 +510,10 @@
                 return response;
             }
 
-            function showCreateProjectModal() {
-                document
-                    .getElementById("create-project-modal")
-                    .classList.remove("hidden");
-            }
-
-            function hideCreateProjectModal() {
-                document
-                    .getElementById("create-project-modal")
-                    .classList.add("hidden");
-                document.getElementById("create-project-form").reset();
-            }
-
-            async function createProject(event) {
-                event.preventDefault();
-                const formData = new FormData(event.target);
-                const data = {
-                    title: formData.get("title"),
-                    description: formData.get("description") || null,
-                };
-                const response = await apiCall("/api/projects", {
-                    method: "POST",
-                    body: JSON.stringify(data),
-                });
-                if (response && response.ok) {
-                    hideCreateProjectModal();
-                    loadProjects();
-                    if (window.loadProjectsList) window.loadProjectsList();
-                }
-            }
-
             function escapeHtml(text) {
                 const div = document.createElement("div");
                 div.textContent = text;
                 return div.innerHTML;
-            }
-
-            async function loadProjects() {
-                const response = await apiCall("/api/projects");
-                if (response && response.ok) {
-                    const projects = await response.json();
-                    const projectsList =
-                        document.getElementById("projects-list");
-                    if (projectsList) {
-                        projectsList.innerHTML = projects
-                            .map(
-                                (p) => `
-                        <div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                            <a href="/projects/${
-                                p.id
-                            }" class="flex-1 text-gray-700 dark:text-gray-300 cursor-pointer" data-project-title="${escapeHtml(
-                                    p.title
-                                )}">
-                                <span id="project-title-${p.id}">${escapeHtml(
-                                    p.title
-                                )}</span>
-                            </a>
-                            <button
-                                onclick="editProjectName(event, ${p.id})"
-                                class="opacity-0 group-hover:opacity-100 text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 p-1 transition-opacity"
-                                title="Renommer le projet"
-                                data-project-title="${escapeHtml(p.title)}"
-                            >
-                                <i class="ti ti-pencil text-sm"></i>
-                            </button>
-                            <button
-                                onclick="deleteProject(event, ${p.id})"
-                                class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1 transition-opacity"
-                                title="Supprimer le projet"
-                                data-project-title="${escapeHtml(p.title)}"
-                            >
-                                <i class="ti ti-trash text-sm"></i>
-                            </button>
-                        </div>
-                    `
-                            )
-                            .join("");
-                    }
-                }
-            }
-
-            async function deleteProject(event, projectId) {
-                event.stopPropagation();
-                const button = event.target.closest("button");
-                const projectTitle = button
-                    ? button.getAttribute("data-project-title")
-                    : "ce projet";
-                if (
-                    !confirm(
-                        `Êtes-vous sûr de vouloir supprimer le projet "${projectTitle}" ? Cette action est irréversible.`
-                    )
-                ) {
-                    return;
-                }
-                const response = await apiCall(`/api/projects/${projectId}`, {
-                    method: "DELETE",
-                });
-                if (response && response.ok) {
-                    loadProjects();
-                    if (window.loadProjectsList) window.loadProjectsList();
-                    // Rediriger vers la page d'accueil si on était sur la page du projet supprimé
-                    if (window.location.pathname === `/projects/${projectId}`) {
-                        window.location.href = "/";
-                    }
-                } else {
-                    alert("Erreur lors de la suppression du projet");
-                }
-            }
-
-            function editProjectName(event, projectId) {
-                event.preventDefault();
-                event.stopPropagation();
-                const button = event.target.closest("button");
-                const currentTitle = button
-                    ? button.getAttribute("data-project-title")
-                    : "";
-
-                const titleElement = document.getElementById(
-                    `project-title-${projectId}`
-                );
-                if (!titleElement) return;
-
-                const linkElement = titleElement.closest("a");
-                if (!linkElement) return;
-
-                // Sauvegarder le contenu original du lien
-                const originalContent = linkElement.innerHTML;
-                const originalHref = linkElement.getAttribute("href");
-
-                // Créer un input pour l'édition
-                const input = document.createElement("input");
-                input.type = "text";
-                input.value = currentTitle;
-                input.className =
-                    "w-full px-2 py-1 border border-blue-500 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500";
-                input.style.minWidth = "150px";
-
-                // Remplacer le contenu du lien par l'input
-                linkElement.innerHTML = "";
-                linkElement.appendChild(input);
-                linkElement.style.pointerEvents = "none"; // Désactiver la navigation pendant l'édition
-                input.focus();
-                input.select();
-
-                const saveEdit = async () => {
-                    const newTitle = input.value.trim();
-                    if (newTitle === currentTitle || newTitle === "") {
-                        // Annuler si pas de changement ou vide
-                        linkElement.innerHTML = originalContent;
-                        linkElement.style.pointerEvents = "";
-                        return;
-                    }
-
-                    const response = await apiCall(
-                        `/api/projects/${projectId}`,
-                        {
-                            method: "PUT",
-                            body: JSON.stringify({ title: newTitle }),
-                        }
-                    );
-
-                    if (response && response.ok) {
-                        loadProjects();
-                        if (window.loadProjectsList) window.loadProjectsList();
-                    } else {
-                        alert("Erreur lors de la modification du projet");
-                        linkElement.innerHTML = originalContent;
-                        linkElement.style.pointerEvents = "";
-                    }
-                };
-
-                const cancelEdit = () => {
-                    linkElement.innerHTML = originalContent;
-                    linkElement.style.pointerEvents = "";
-                };
-
-                input.addEventListener("blur", saveEdit);
-                input.addEventListener("keydown", (e) => {
-                    if (e.key === "Enter") {
-                        e.preventDefault();
-                        input.blur();
-                    } else if (e.key === "Escape") {
-                        e.preventDefault();
-                        cancelEdit();
-                    }
-                });
             }
 
             async function logout() {
@@ -808,6 +551,14 @@
                     window.location.href = "/login";
                 }
             }
+
+            // Lien actif de la barre latérale
+            (function markActiveNav() {
+                const path = window.location.pathname;
+                const id = path === "/" ? "nav-chat" : path.startsWith("/wiki") ? "nav-wiki"
+                    : path.startsWith("/feedbacks") ? "nav-feedbacks" : path.startsWith("/admin") ? "admin-link" : null;
+                if (id) { const el = document.getElementById(id); if (el) el.classList.add("active"); }
+            })();
 
             // Initialisation
             initDarkMode();

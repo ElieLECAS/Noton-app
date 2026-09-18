@@ -1,0 +1,1500 @@
+{% extends "base.html" %}
+{% block title %}Wiki - {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<style>
+{% raw %}
+  /* ==== jetons de theme =================================================
+     Palette calquee sur Notion : un gris chaud (#37352f) sur blanc en clair,
+     un gris neutre sur #191919 en sombre. Tout ce qui est couleur passe par
+     un jeton, y compris le fond du graphe -- le SVG s'en sert pour detourer
+     les titres et remplir les noeuds fantomes.
+     Le theme est celui de l'application : la classe `dark` posee sur <html>
+     par base.html, pas un reglage propre au wiki. */
+  :root{
+    --bg:#ffffff; --bg-side:#f7f7f5; --bg-sunken:#f1f1ef; --bg-hover:#ececeb;
+    --line:#e9e9e7; --line-strong:#dcdcd9;
+    --tx:#37352f; --tx-dim:#787774; --tx-faint:#9b9a97;
+    --accent:#2383e2; --accent-soft:#e7f1fb;
+    --danger:#d44c47; --danger-bg:#fdebec; --danger-tx:#b3302c; --danger-br:#f3cfd0;
+    --stage-solid:#fcfcfb;
+    --stage:radial-gradient(ellipse 70% 60% at 50% 45%,#f3f5f9 0%,transparent 70%),
+            radial-gradient(ellipse 40% 40% at 22% 25%,#eef4f8 0%,transparent 65%),
+            radial-gradient(ellipse 40% 40% at 78% 72%,#f4f0f8 0%,transparent 65%),
+            var(--stage-solid);
+    --dim-op:.10;
+    --shadow:0 1px 2px rgba(15,15,15,.06),0 4px 14px rgba(15,15,15,.08);
+    --shadow-lg:0 2px 6px rgba(15,15,15,.08),0 12px 36px rgba(15,15,15,.12);
+    --scrim:rgba(255,255,255,.86);
+  }
+  :root.dark{
+    --bg:#191919; --bg-side:#202020; --bg-sunken:#252525; --bg-hover:#2d2d2d;
+    --line:#2f2f2f; --line-strong:#3d3d3d;
+    --tx:#e6e6e3; --tx-dim:#9b9b98; --tx-faint:#6f6f6c;
+    --accent:#529cca; --accent-soft:#1c3346;
+    --danger:#ff7369; --danger-bg:#3a2523; --danger-tx:#ff9b93; --danger-br:#5c3733;
+    --stage-solid:#141416;
+    --stage:radial-gradient(ellipse 70% 60% at 50% 45%,#1b1e2a 0%,transparent 70%),
+            radial-gradient(ellipse 40% 40% at 22% 25%,#15212c 0%,transparent 65%),
+            radial-gradient(ellipse 40% 40% at 78% 72%,#1c1826 0%,transparent 65%),
+            var(--stage-solid);
+    --dim-op:.07;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.45);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.45),0 12px 36px rgba(0,0,0,.55);
+    --scrim:rgba(20,20,22,.86);
+  }
+
+  /* ==== coquille ==========================================================
+     Le shell remplit le <main> de base.html (colonne flex) et pose un fond
+     opaque : le panneau « glass » translucide de l'application rendrait le
+     SVG illisible. Tout le CSS est prefixe par #wiki-shell pour ne rien
+     imposer au reste de la page et pour passer devant le preflight Tailwind
+     (qui retire les puces des listes et met kbd en monospace). */
+  #wiki-shell{position:relative;display:flex;flex:1 1 0%;min-height:0;min-width:0;
+    overflow:hidden;background:var(--bg);color:var(--tx);color-scheme:light;
+    font:15px/1.5 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,
+      system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  :root.dark #wiki-shell{color-scheme:dark}
+  #wiki-shell *{box-sizing:border-box}
+  #wiki-shell button{font:inherit;color:inherit}
+
+  /* ==== boutons icone ==================================================== */
+  #wiki-shell .ico{width:15px;height:15px;flex:none;display:block}
+  #wiki-shell .ibtn{display:inline-flex;align-items:center;justify-content:center;width:27px;
+    height:27px;border:0;background:none;color:var(--tx-dim);border-radius:5px;cursor:pointer;
+    transition:background .12s,color .12s}
+  #wiki-shell .ibtn:hover{background:var(--bg-hover);color:var(--tx)}
+  #wiki-shell .ibtn:disabled{opacity:.3;cursor:default;background:none}
+  #wiki-shell .ibtn:focus-visible,#search:focus-visible,#wiki-shell .pg:focus-visible,
+  #wiki-shell .grp-head:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+  /* ==== panneau lateral du wiki ========================================== */
+  #wiki-sidebar{width:262px;flex:none;background:var(--bg-side);border-right:1px solid var(--line);
+    display:flex;flex-direction:column;min-height:0;
+    transition:width .18s cubic-bezier(.2,.7,.3,1),opacity .14s}
+  #wiki-shell.side-off #wiki-sidebar{width:0;opacity:0;pointer-events:none;overflow:hidden}
+
+  #wiki-side-head{display:flex;align-items:center;gap:2px;padding:9px 8px 9px 11px;flex:none}
+  #wiki-shell .ws{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+  #wiki-shell .ws-mark{width:19px;height:19px;border-radius:4px;background:var(--accent);color:#fff;
+    font-size:11px;font-weight:700;display:grid;place-items:center;flex:none}
+  #wiki-shell .ws-name{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis}
+
+  /* ---- recherche ---- */
+  #search-wrap{position:relative;padding:0 8px 8px;flex:none}
+  #search-box{display:flex;align-items:center;gap:7px;background:var(--bg-sunken);
+    border:1px solid transparent;border-radius:6px;padding:0 8px;height:31px;
+    transition:border-color .12s,background .12s}
+  #search-box:focus-within{background:var(--bg);border-color:var(--accent)}
+  #search-box .ico{color:var(--tx-faint)}
+  #search{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--tx);
+    font:inherit;font-size:13.5px;padding:0;box-shadow:none}
+  #search:focus{outline:none;box-shadow:none}
+  #search::placeholder{color:var(--tx-faint);opacity:1}
+  #search::-webkit-search-cancel-button{display:none}
+  #wiki-shell kbd{font:inherit;font-size:10.5px;color:var(--tx-faint);background:var(--bg-hover);
+    border-radius:3px;padding:1px 5px;white-space:nowrap}
+  #search-box:focus-within kbd{display:none}
+
+  #results{position:absolute;left:8px;right:8px;top:38px;z-index:30;background:var(--bg);
+    border:1px solid var(--line-strong);border-radius:8px;box-shadow:var(--shadow-lg);
+    padding:4px;max-height:52vh;overflow:auto}
+  #results[hidden]{display:none}
+  #wiki-shell .res{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;
+    padding:6px 8px;border-radius:5px;cursor:pointer;text-align:left}
+  #wiki-shell .res:hover,#wiki-shell .res.on{background:var(--bg-hover)}
+  #wiki-shell .res .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  #wiki-shell .res .rt{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #wiki-shell .res .rd{font-size:11.5px;color:var(--tx-faint);margin-left:auto;padding-left:8px;
+    white-space:nowrap;flex:none}
+  #wiki-shell .res-empty{padding:10px 9px;font-size:12.5px;color:var(--tx-faint)}
+
+  /* ---- arbre des pages ---- */
+  #tree{flex:1;min-height:0;overflow:auto;padding:2px 8px 8px}
+  #wiki-shell .sec-lab{font-size:11px;font-weight:600;color:var(--tx-faint);letter-spacing:.03em;
+    padding:8px 5px 3px}
+  #wiki-shell .grp{margin-bottom:1px}
+  #wiki-shell .grp-head{display:flex;align-items:center;gap:6px;width:100%;border:0;background:none;
+    padding:3px 5px;border-radius:5px;cursor:pointer;text-align:left;color:var(--tx-dim)}
+  #wiki-shell .grp-head:hover{background:var(--bg-hover);color:var(--tx)}
+  #wiki-shell .tw{width:14px;height:14px;flex:none;display:grid;place-items:center;
+    color:var(--tx-faint);transition:transform .13s}
+  #wiki-shell .grp.open .tw{transform:rotate(90deg)}
+  #wiki-shell .grp-head .dot{width:8px;height:8px;border-radius:50%;flex:none}
+  #wiki-shell .grp-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis}
+  #wiki-shell .grp-n{margin-left:auto;font-size:11px;color:var(--tx-faint);
+    font-variant-numeric:tabular-nums}
+  #wiki-shell .eye{width:21px;height:21px;flex:none;border:0;background:none;border-radius:4px;
+    color:var(--tx-faint);cursor:pointer;display:grid;place-items:center;opacity:0}
+  #wiki-shell .grp-head:hover .eye,#wiki-shell .grp.hid .eye{opacity:1}
+  #wiki-shell .eye:hover{background:var(--bg-sunken);color:var(--tx)}
+  #wiki-shell .grp.hid .grp-head{opacity:.45}
+  #wiki-shell .grp-list{display:none;padding:1px 0 3px 12px;margin-left:11px;
+    border-left:1px solid var(--line)}
+  #wiki-shell .grp.open .grp-list{display:block}
+  #wiki-shell .pg{display:flex;align-items:center;gap:6px;width:100%;border:0;background:none;
+    padding:3px 7px;border-radius:5px;cursor:pointer;text-align:left;color:var(--tx-dim);
+    font-size:12.5px}
+  #wiki-shell .pg:hover{background:var(--bg-hover);color:var(--tx)}
+  #wiki-shell .pg.cur{background:var(--accent-soft);color:var(--tx);font-weight:500}
+  #wiki-shell .pg.ghost .pg-t{font-style:italic;color:var(--tx-faint)}
+  #wiki-shell .pg-t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #wiki-shell .pg-flag{width:5px;height:5px;border-radius:50%;background:var(--danger);flex:none;
+    margin-left:auto}
+
+  /* ---- reglages d'affichage ---- */
+  #display{flex:none;border-top:1px solid var(--line);padding:4px 8px}
+  #display>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;
+    padding:6px 5px;border-radius:5px;font-size:12px;font-weight:600;color:var(--tx-faint)}
+  #display>summary::-webkit-details-marker{display:none}
+  #display>summary:hover{background:var(--bg-hover);color:var(--tx)}
+  #display>summary .tw{transition:transform .13s}
+  #display[open]>summary .tw{transform:rotate(90deg)}
+  #wiki-shell .toggles{display:flex;flex-direction:column;gap:1px;padding:2px 0 6px}
+  #wiki-shell .toggles label{display:flex;align-items:center;gap:8px;font-size:12.5px;
+    color:var(--tx-dim);cursor:pointer;padding:3px 5px;border-radius:5px}
+  #wiki-shell .toggles label:hover{background:var(--bg-hover);color:var(--tx)}
+  #wiki-shell .toggles input{accent-color:var(--accent);margin:0}
+  #wiki-shell .slider{padding:4px 5px 8px}
+  #wiki-shell .slider .lab{display:flex;justify-content:space-between;font-size:12px;
+    color:var(--tx-dim);margin-bottom:4px}
+  #wiki-shell .slider .lab b{color:var(--tx);font-weight:600;font-variant-numeric:tabular-nums}
+  #wiki-shell .slider input{width:100%;accent-color:var(--accent);margin:0}
+
+  #wiki-side-foot{flex:none;display:flex;gap:11px;flex-wrap:wrap;padding:8px 13px 10px;
+    border-top:1px solid var(--line);font-size:11.5px;color:var(--tx-faint)}
+  #wiki-side-foot b{color:var(--tx-dim);font-weight:600;font-variant-numeric:tabular-nums}
+
+  /* ==== scene ============================================================ */
+  #wiki-main{position:relative;flex:1;min-width:0}
+  #stage{position:absolute;inset:0;background:var(--stage)}
+  svg#svg{display:block;width:100%;height:100%;cursor:grab}
+  svg#svg.dragging{cursor:grabbing}
+
+  #reopen{position:absolute;top:10px;left:10px;z-index:6;background:var(--bg);
+    border:1px solid var(--line-strong);box-shadow:var(--shadow)}
+  #wiki-shell:not(.side-off) #reopen{display:none}
+  #peek-side{display:none}
+  #wiki-shell.side-off #peek-side{display:inline-flex}
+
+  #zoombar{position:absolute;right:12px;bottom:12px;z-index:6;display:flex;gap:1px;
+    background:var(--bg);border:1px solid var(--line-strong);border-radius:7px;padding:2px;
+    box-shadow:var(--shadow)}
+  #hint{position:absolute;left:12px;bottom:14px;z-index:6;font-size:11.5px;color:var(--tx-faint);
+    pointer-events:none;white-space:nowrap;transition:opacity .15s}
+  #wiki-shell.peek-on #hint{opacity:0}
+
+  /* ==== graphe =========================================================== */
+  #wiki-shell .link{fill:none;stroke-linecap:round}
+  #wiki-shell .link.hi{stroke-opacity:.95!important;stroke-width:1.9px}
+  #wiki-shell .halo{pointer-events:none}
+  #wiki-shell .core{cursor:pointer}
+  #wiki-shell .node.missing .core{fill:var(--stage-solid)}
+  #wiki-shell .ring{fill:none;pointer-events:none}
+  #wiki-shell .node.draft .ring{stroke-dasharray:2.5 2.5}
+  #wiki-shell .node.stale .ring{stroke:var(--danger)!important;stroke-opacity:.95!important;
+    stroke-width:1.9px}
+  #wiki-shell .node text{fill:var(--tx-dim);font-size:10.5px;pointer-events:none;text-anchor:middle;
+    paint-order:stroke;stroke:var(--stage-solid);stroke-width:3.6px;stroke-linejoin:round}
+  #wiki-shell .node.hi text{fill:var(--tx)}
+  #wiki-shell .dim{opacity:var(--dim-op)}
+  #wiki-shell .node.sel .ring{stroke:var(--tx)!important;stroke-opacity:1!important;
+    stroke-width:2.4px}
+  #pulses circle{pointer-events:none}
+
+  /* Respiration des somas : lente, decalee par noeud, coupee avec les impulsions. */
+  @keyframes soma{0%,100%{opacity:.30}50%{opacity:.62}}
+  #graph.vivant .halo{animation:soma 5.5s ease-in-out infinite}
+  @media(prefers-reduced-motion:reduce){#graph.vivant .halo{animation:none}}
+
+  /* L'infobulle et la notice sont positionnees dans le shell (et non dans la
+     fenetre) : le panneau « glass » de base.html porte un backdrop-filter qui
+     capture les descendants en position:fixed. */
+  #tip{position:absolute;pointer-events:none;z-index:40;background:var(--bg);
+    border:1px solid var(--line-strong);border-radius:7px;padding:7px 10px;
+    box-shadow:var(--shadow-lg);max-width:290px;display:none}
+  #tip .t{font-size:12.5px;font-weight:600;margin-bottom:1px}
+  #tip .d{color:var(--tx-dim);font-size:11.5px;line-height:1.4}
+
+  /* ==== panneau de lecture =============================================== */
+  /* Le lecteur recouvre la scene au lieu de la partager : la page est ce qu'on
+     vient lire, le graphe n'est que le chemin pour y arriver. */
+  #peek{position:absolute;inset:0;z-index:20;background:var(--bg);
+    display:flex;flex-direction:column;opacity:0;pointer-events:none;
+    transform:translateY(6px);transition:opacity .16s,transform .16s}
+  #peek.open{opacity:1;pointer-events:auto;transform:none}
+  #peek-head{flex:none;display:flex;align-items:center;gap:2px;
+    padding:8px 11px;border-bottom:1px solid var(--line);background:var(--bg)}
+  #crumb{flex:1;min-width:0;display:flex;align-items:center;gap:5px;font-size:12.5px;
+    color:var(--tx-faint);padding:0 5px;white-space:nowrap;overflow:hidden}
+  #crumb .cr-t{color:var(--tx-dim);font-weight:500;overflow:hidden;text-overflow:ellipsis}
+  #crumb .cr-home{border:0;background:none;padding:0;font:inherit;cursor:pointer;
+    color:var(--tx-faint)}
+  #crumb .cr-home:hover{color:var(--accent);text-decoration:underline}
+  #peek-body{flex:1;min-height:0;overflow:auto}
+
+  /* Colonne de lecture centree a largeur de confort -- un texte qui court sur
+     1400 px ne se lit pas -- et sommaire en rail colle a droite quand la place
+     le permet. */
+  #peek .col{display:grid;grid-template-columns:minmax(0,740px) 216px;gap:44px;
+    justify-content:center;padding:44px 40px 140px}
+  #peek .doc{min-width:0}
+  #peek .doc details.toc{display:none}
+  #peek .toc-rail{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 150px);
+    overflow:auto}
+  #peek .toc-rail .rail-h{font-size:11px;font-weight:600;color:var(--tx-faint);
+    letter-spacing:.03em;margin:0 0 7px;padding-left:12px}
+  #peek .toc-rail a{display:block;padding:4px 0 4px 12px;font-size:12.5px;line-height:1.35;
+    color:var(--tx-dim);text-decoration:none;cursor:pointer;
+    border-left:2px solid var(--line)}
+  #peek .toc-rail a:hover{color:var(--accent);border-left-color:var(--accent)}
+  #peek .toc-rail a.lv3{padding-left:22px;font-size:12px}
+
+  #peek .badges{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:11px}
+  #peek .badge{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:99px;
+    font-size:11.5px;font-weight:600}
+  #peek .pill{display:inline-block;padding:1px 7px;border-radius:99px;font-size:11.5px;
+    background:var(--bg-sunken);color:var(--tx-dim);border:1px solid var(--line)}
+  #peek .pill.warn{background:var(--danger-bg);color:var(--danger-tx);border-color:var(--danger-br)}
+
+  #peek h1.pg-title{font-size:38px;line-height:1.18;font-weight:700;margin:0 0 10px;
+    letter-spacing:-.018em}
+  #peek .lede{color:var(--tx-dim);margin:0 0 22px;font-size:15.5px;line-height:1.6}
+
+  /* Bloc de proprietes facon Notion : libelle gris a gauche, valeur a droite. */
+  #peek .props{display:grid;grid-template-columns:150px 1fr;gap:2px 10px;margin:0 0 20px;
+    font-size:13px}
+  #peek .props dt{color:var(--tx-faint);padding:3px 0;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis}
+  #peek .props dd{margin:0;padding:3px 0;color:var(--tx-dim)}
+  #peek .props a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  #peek .props a:hover{border-bottom-color:var(--accent)}
+  #peek .props .src-file{color:var(--tx-faint);font-size:11.5px;margin-left:6px}
+  #peek .danger{color:var(--danger-tx)}
+  #peek .p-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;
+    vertical-align:baseline}
+
+  #peek details.toc{border:1px solid var(--line);border-radius:7px;margin:0 0 20px;
+    background:var(--bg-sunken)}
+  #peek details.toc>summary{list-style:none;cursor:pointer;padding:7px 12px;font-size:12px;
+    font-weight:600;color:var(--tx-dim);display:flex;align-items:center;gap:6px}
+  #peek details.toc>summary::-webkit-details-marker{display:none}
+  #peek details.toc[open]>summary .tw{transform:rotate(90deg)}
+  #peek details.toc ol{list-style:none;margin:0;padding:0 12px 9px}
+  #peek details.toc a{display:block;padding:3px 0;font-size:12.5px;color:var(--tx-dim);
+    text-decoration:none;cursor:pointer}
+  #peek details.toc a:hover{color:var(--accent)}
+  #peek details.toc a.lv3{padding-left:14px;font-size:12px}
+
+  #wiki-body{font-size:16px;line-height:1.7}
+  #wiki-body>*:first-child{margin-top:0}
+  #wiki-body h1{font-size:23px;font-weight:650;margin:34px 0 10px;letter-spacing:-.01em}
+  #wiki-body h2{font-size:19px;font-weight:650;margin:26px 0 8px}
+  #wiki-body h3{font-size:16.5px;font-weight:650;margin:20px 0 5px}
+  #wiki-body p{margin:0 0 12px}
+  #wiki-body ul,#wiki-body ol{margin:0 0 12px;padding-left:22px}
+  #wiki-body ul{list-style:disc}
+  #wiki-body ol{list-style:decimal}
+  #wiki-body li{margin:2px 0}
+  #wiki-body p,#wiki-body li{color:var(--tx)}
+  #wiki-body hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+  #wiki-body table{border-collapse:collapse;width:100%;margin:12px 0;font-size:12.5px;display:block;
+    overflow-x:auto}
+  #wiki-body th,#wiki-body td{border:1px solid var(--line);padding:6px 10px;text-align:left;
+    vertical-align:top}
+  #wiki-body th{background:var(--bg-sunken);color:var(--tx);font-weight:600}
+  #wiki-body tbody tr:hover{background:var(--bg-sunken)}
+  #wiki-body code{background:var(--bg-sunken);border:1px solid var(--line);padding:1px 5px;
+    border-radius:4px;font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,
+    Consolas,monospace;color:var(--danger-tx)}
+  #wiki-body pre{background:var(--bg-sunken);border:1px solid var(--line);border-radius:7px;
+    padding:11px 13px;overflow:auto;font-size:12.5px}
+  #wiki-body pre code{background:none;border:0;padding:0;color:var(--tx)}
+  #wiki-body a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  #wiki-body a:hover{border-bottom-color:var(--accent)}
+  #wiki-body a code{color:var(--accent)}
+  #wiki-body a.anom{font-variant-numeric:tabular-nums;font-weight:600}
+  #wiki-body strong{color:var(--tx);font-weight:650}
+  #wiki-body blockquote{border-left:3px solid var(--line-strong);margin:12px 0;padding:2px 0 2px 14px;
+    color:var(--tx-dim)}
+
+  #peek .back{border-top:1px solid var(--line);margin-top:30px;padding-top:18px}
+  #peek .back-h{font-size:11.5px;font-weight:600;color:var(--tx-faint);letter-spacing:.03em;
+    margin:0 0 6px}
+  #peek .back-list{display:flex;flex-direction:column;gap:1px;margin-bottom:18px}
+  #peek .back-list a{display:flex;align-items:center;gap:7px;padding:4px 7px;margin-left:-7px;
+    border-radius:5px;font-size:13px;color:var(--tx-dim);text-decoration:none;cursor:pointer}
+  #peek .back-list a:hover{background:var(--bg-hover);color:var(--tx)}
+  #peek .back-list .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  #peek .empty{color:var(--tx-faint);font-size:13.5px;font-style:italic}
+  @keyframes wiki-loading{from{opacity:.35}to{opacity:1}}
+  #peek .empty.loading{animation:wiki-loading .9s ease-in-out infinite alternate}
+
+  #notice{position:absolute;bottom:22px;left:50%;transform:translate(-50%,14px);z-index:60;
+    background:var(--danger-bg);border:1px solid var(--danger-br);color:var(--danger-tx);
+    padding:9px 15px;border-radius:8px;font-size:12.5px;opacity:0;pointer-events:none;
+    box-shadow:var(--shadow);transition:opacity .15s,transform .15s;max-width:calc(100% - 40px);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #notice.show{opacity:1;transform:translate(-50%,0)}
+
+  #wiki-shell ::-webkit-scrollbar{width:9px;height:9px}
+  #wiki-shell ::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:9px;
+    border:2px solid transparent;background-clip:padding-box}
+  #wiki-shell ::-webkit-scrollbar-thumb:hover{background:var(--tx-faint);background-clip:padding-box}
+  #wiki-shell ::-webkit-scrollbar-track{background:transparent}
+
+  /* Sous cette largeur le rail n'a plus sa place : le sommaire repasse en
+     bloc repliable au fil du texte. */
+  @media(max-width:1180px){
+    #peek .col{grid-template-columns:minmax(0,760px);gap:0}
+    #peek .toc-rail{display:none}
+    #peek .doc details.toc{display:block}
+  }
+  @media(max-width:900px){
+    #wiki-sidebar{position:absolute;inset:0 auto 0 0;z-index:25;box-shadow:var(--shadow-lg)}
+    #peek .col{padding:28px 20px 120px}
+    #peek h1.pg-title{font-size:30px}
+  }
+{% endraw %}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="wiki-shell" class="flex-1 min-h-0">
+
+  <aside id="wiki-sidebar">
+    <header id="wiki-side-head">
+      <div class="ws"><span class="ws-mark">P</span><span class="ws-name">Wiki PROFERM</span></div>
+      <button class="ibtn" id="wiki-btn-side" title="Masquer le panneau (Ctrl+\)"></button>
+    </header>
+
+    <div id="search-wrap">
+      <div id="search-box">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="Rechercher une page…" autocomplete="off">
+        <kbd>Ctrl K</kbd>
+      </div>
+      <div id="results" hidden></div>
+    </div>
+
+    <nav id="tree"></nav>
+
+    <details id="display">
+      <summary>
+        <span class="tw"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
+          style="width:11px;height:11px"><path d="m9 6 6 6-6 6"/></svg></span>
+        Affichage
+      </summary>
+      <div class="toggles">
+        <label><input type="checkbox" id="t-lobes" checked> Regrouper par type</label>
+        <label><input type="checkbox" id="t-pulse" checked> Impulsions</label>
+        <label><input type="checkbox" id="t-labels" checked> Afficher les titres</label>
+        <label><input type="checkbox" id="t-reserved"> Afficher index et log</label>
+        <label><input type="checkbox" id="t-stale"> Périmées uniquement</label>
+      </div>
+      <div class="slider">
+        <div class="lab"><span>Liens cités au moins</span><b id="w-val">1×</b></div>
+        <input type="range" id="t-weight" min="1" max="3" step="1" value="1">
+      </div>
+    </details>
+
+    <footer id="wiki-side-foot">
+      <span><b id="s-nodes">0</b> pages</span>
+      <span><b id="s-links">0</b> liens</span>
+      <span><b id="s-stale">0</b> périmées</span>
+    </footer>
+  </aside>
+
+  <div id="wiki-main">
+  <div id="stage">
+    <button class="ibtn" id="reopen" title="Afficher le panneau (Ctrl+\)"></button>
+    <svg id="svg"></svg>
+    <div id="zoombar">
+      <button class="ibtn" id="z-in" title="Zoomer">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button class="ibtn" id="z-out" title="Dézoomer">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+      <button class="ibtn" id="z-fit" title="Tout afficher">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5
+          M20 15v5h-5"/></svg></button>
+    </div>
+    <div id="hint">molette : zoom · glisser : déplacer · clic : ouvrir la page</div>
+  </div>
+
+  <aside id="peek">
+    <header id="peek-head">
+      <button class="ibtn" id="peek-side" title="Afficher le panneau (Ctrl+\)"></button>
+      <button class="ibtn" id="nav-back" title="Précédent" disabled>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <button class="ibtn" id="nav-fwd" title="Suivant" disabled>
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <div id="crumb"></div>
+      <button class="ibtn" id="peek-locate" title="Voir dans le graphe">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.2"
+          fill="currentColor" stroke="none"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
+      <button class="ibtn" id="peek-close" title="Fermer (Échap)">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div id="peek-body">
+      <div class="col">
+        <article class="doc" id="peek-doc"></article>
+        <aside class="toc-rail" id="peek-rail"></aside>
+      </div>
+    </div>
+  </aside>
+  </div>
+
+  <div id="tip"></div>
+  <div id="notice"></div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+{% raw %}
+/* Tout le code du graphe vit dans une fermeture : base.html definit deja ses
+   propres globales (apiCall, escapeHtml, toggleDarkMode, currentUser...) et
+   l'original declarait une fonction `open` au niveau global, qui ecrasait
+   window.open. Rien ne fuit dans window. */
+(function(){
+
+/* ==== palettes ==========================================================
+   Deux jeux de couleurs pour les memes types. Les teintes claires du theme
+   sombre (sky-300, amber-400) disparaissent sur fond blanc : le theme clair
+   reprend les memes familles deux crans plus foncees. Les cles sont dans le
+   meme ordre dans les deux objets, ce qui garde les degrades de halo stables
+   d'un theme a l'autre. */
+const PALETTES = {
+  dark:{
+    "Gamme":"#7dd3fc","Profilé":"#a78bfa","Quincaillerie":"#fbbf24","Vitrage":"#67e8f9",
+    "Équipement":"#34d399","Porte d'entrée":"#fb923c","Garantie":"#f472b6",
+    "Procédure":"#4ade80","Certification":"#facc15","Anomalie":"#f87171",
+    "Fournisseur":"#93c5fd","Document source":"#d4d4d8","Réservé":"#71717a",
+    "À écrire":"#52525b","Sans type":"#52525b"
+  },
+  light:{
+    "Gamme":"#0284c7","Profilé":"#7c3aed","Quincaillerie":"#b45309","Vitrage":"#0891b2",
+    "Équipement":"#059669","Porte d'entrée":"#ea580c","Garantie":"#db2777",
+    "Procédure":"#16a34a","Certification":"#a16207","Anomalie":"#dc2626",
+    "Fournisseur":"#2563eb","Document source":"#78716c","Réservé":"#a1a1aa",
+    "À écrire":"#c0c0c6","Sans type":"#c0c0c6"
+  }
+};
+const FALLBACK = {dark:"#52525b", light:"#c0c0c6"};
+// Le theme est celui de l'application : la classe `dark` sur <html>, posee et
+// basculee par base.html. Le wiki ne garde aucun reglage de theme a lui.
+const themeCourant = () => document.documentElement.classList.contains("dark") ? "dark" : "light";
+let THEME = themeCourant();
+let COLORS = PALETTES[THEME];
+const color = t => COLORS[t] || FALLBACK[THEME];
+
+// Ordre des lobes autour de l'anneau : il suit la chaine de production, de l'amont
+// (le fournisseur) vers l'aval (le controle), les sources documentaires fermant la
+// boucle. Deux types voisins sur l'anneau sont donc deux types qui se citent.
+const ORDRE_LOBES = ["Fournisseur","Gamme","Profilé","Quincaillerie","Vitrage","Équipement",
+  "Porte d'entrée","Procédure","Certification","Garantie","Anomalie","Document source",
+  "Réservé","À écrire","Sans type"];
+
+// Registres d'anomalies : un identifiant INC-/CTR-/VER- dans le corps d'une page
+// renvoie vers la page registre qui le porte.
+const REGISTRES = {
+  INC: "/anomalies/incoherences-internes.md",
+  CTR: "/anomalies/contradictions-entre-sources.md",
+  VER: "/anomalies/informations-a-verifier.md"
+};
+
+let DATA, nodeById, sim, sel = null, hidden = new Set(["Réservé"]);
+let currentLinks = [], seuilsTitres = [0,0,0,0];
+
+const $ = id => document.getElementById(id);
+const shell = $("wiki-shell");
+const stage = $("stage");
+const svg = d3.select("#svg");
+const defs = svg.append("defs");
+const root = svg.append("g").attr("id","graph");
+const gLink = root.append("g");
+const gPulse = root.append("g").attr("id","pulses");
+const gNode = root.append("g");
+const tip = d3.select("#tip");
+
+const ICO = {
+  eye:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'+
+      ' stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px">'+
+      '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/>'+
+      '<circle cx="12" cy="12" r="2.6"/></svg>',
+  eyeOff:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'+
+      ' stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px">'+
+      '<path d="M4 4l16 16"/><path d="M9.6 6a9.9 9.9 0 0 1 2.4-.3c6.4 0 10 6.3 10 6.3'+
+      'a17 17 0 0 1-2.8 3.5M6.3 8.2A16.6 16.6 0 0 0 2 12s3.6 6.5 10 6.5c1.2 0 2.3-.2 3.2-.5"/>'+
+      '<path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
+  chev:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"'+
+      ' stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px">'+
+      '<path d="m9 6 6 6-6 6"/></svg>',
+  panel:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'+
+      ' stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/>'+
+      '<path d="M9.5 4v16"/></svg>'
+};
+
+/* ==== theme =============================================================
+   Le changement de theme ne relance pas la simulation : il repeint les
+   attributs de couleur sur les selections en place. Relancer render() aurait
+   remis alpha a .9 et fait sauter toute la disposition sous les yeux. */
+function applyTheme(t){
+  THEME = t;
+  COLORS = PALETTES[t];
+  buildHalos();
+  if(DATA){ paintGraph(); paintTree(); if(sel) renderPeek(sel); }
+}
+// Le bouton de theme de base.html bascule la classe `dark` sur <html> : on
+// l'observe au lieu d'avoir un second bouton.
+new MutationObserver(() => {
+  const t = themeCourant();
+  if(t !== THEME) applyTheme(t);
+}).observe(document.documentElement, {attributes:true, attributeFilter:["class"]});
+
+// Un degrade de halo par couleur de type : le soma rayonne dans sa couleur au lieu
+// d'etre un disque plat. Les halos du theme clair sont deux fois plus discrets, un
+// fond blanc ne supportant pas le meme rayonnement qu'un fond noir.
+const haloId = new Map();
+function buildHalos(){
+  defs.selectAll("radialGradient").remove();
+  haloId.clear();
+  const [o0, o1] = THEME === "dark" ? [.55,.17] : [.26,.08];
+  Object.values(COLORS).forEach(c => {
+    if(haloId.has(c)) return;
+    const id = "halo-" + haloId.size;
+    haloId.set(c, id);
+    const g = defs.append("radialGradient").attr("id", id);
+    g.append("stop").attr("offset","0%").attr("stop-color",c).attr("stop-opacity",o0);
+    g.append("stop").attr("offset","45%").attr("stop-color",c).attr("stop-opacity",o1);
+    g.append("stop").attr("offset","100%").attr("stop-color",c).attr("stop-opacity",0);
+  });
+}
+const halo = t => "url(#" + (haloId.get(color(t)) || haloId.get(FALLBACK[THEME])) + ")";
+const linkOp = c => (THEME === "dark" ? .10 : .17) + Math.min(c,4) * (THEME === "dark" ? .045 : .055);
+
+/* ==== zoom ============================================================== */
+let zk = 1;
+const zoom = d3.zoom().scaleExtent([0.15, 6]).on("zoom", e => {
+  root.attr("transform", e.transform);
+  zk = e.transform.k;
+  applyLabels();
+});
+svg.call(zoom)
+   .on("mousedown.c", () => svg.classed("dragging", true))
+   .on("mouseup.c", () => svg.classed("dragging", false));
+
+$("z-in").onclick  = () => svg.transition().duration(200).call(zoom.scaleBy, 1.45);
+$("z-out").onclick = () => svg.transition().duration(200).call(zoom.scaleBy, 1/1.45);
+$("z-fit").onclick = fitView;
+
+function fitView(){
+  const ns = gNode.selectAll("g.node").data().filter(n => n.x != null);
+  if(!ns.length) return;
+  const x0 = d3.min(ns, n => n.x), x1 = d3.max(ns, n => n.x);
+  const y0 = d3.min(ns, n => n.y), y1 = d3.max(ns, n => n.y);
+  const W = stage.clientWidth, H = stage.clientHeight, pad = 80;
+  const k = Math.max(.15, Math.min(2.4, (W - pad*2) / Math.max(x1-x0, 1),
+                                        (H - pad*2) / Math.max(y1-y0, 1)));
+  svg.transition().duration(480).call(zoom.transform, d3.zoomIdentity
+    .translate(W/2 - k*(x0+x1)/2, H/2 - k*(y0+y1)/2).scale(k));
+}
+
+function focusNode(id){
+  const n = nodeById.get(id);
+  if(!n || n.x == null) return;
+  const W = stage.clientWidth, H = stage.clientHeight;
+  const k = Math.min(2.6, Math.max(zk, 1.15));
+  svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity
+    .translate(W/2 - k*n.x, H/2 - k*n.y).scale(k));
+}
+
+/* ==== API ===============================================================
+   Le graphe et les pages viennent de l'application, sous la session deja
+   ouverte (cookie). Un 401 renvoie a la connexion comme le fait apiCall()
+   dans base.html. */
+function wikiFetch(url){
+  return fetch(url, {credentials:"include"}).then(r => {
+    if(r.status === 401){ window.location.href = "/login"; throw new Error("session expirée"); }
+    return r;
+  });
+}
+
+const pageUrl = id => "/api/wiki/pages/" +
+  String(id).replace(/^\/+/, "").split("/").map(encodeURIComponent).join("/");
+
+// `raw/x.pdf` -> /api/wiki/raw/x.pdf, avec #page=N que le navigateur honore.
+function rawUrl(resource, page){
+  const file = String(resource).replace(/^raw\//, "");
+  return "/api/wiki/raw/" + file.split("/").map(encodeURIComponent).join("/") +
+    (page ? "#page=" + page : "");
+}
+
+// Cache memoire des pages lues pendant la session : une page n'est chargee
+// qu'une fois, et un changement de theme la repeint depuis le cache. Une
+// erreur passagere (reseau, 5xx) est gardee jusqu'a la prochaine ouverture
+// de la page, qui la retente ; un 404 reste acquis.
+const pageCache = new Map(), pageInflight = new Map();
+function loadPage(id){
+  if(pageCache.has(id)) return Promise.resolve(pageCache.get(id));
+  if(pageInflight.has(id)) return pageInflight.get(id);
+  const p = wikiFetch(pageUrl(id))
+    .then(r => {
+      if(r.ok) return r.json().then(page => ({page}));
+      return {
+        error: r.status === 404 ? "Cette page n'existe pas (ou plus) sur le serveur."
+                                : "Le serveur a répondu " + r.status + ".",
+        retry: r.status !== 404
+      };
+    })
+    .catch(err => ({error: "Impossible de charger la page : " + (err && err.message || err),
+                    retry: true}))
+    .then(rec => { pageCache.set(id, rec); pageInflight.delete(id); return rec; });
+  pageInflight.set(id, p);
+  return p;
+}
+
+/* ==== chargement ======================================================== */
+wikiFetch("/api/wiki/graph")
+  .then(r => { if(!r.ok) throw new Error("le serveur a répondu " + r.status); return r.json(); })
+  .then(data => {
+    DATA = data || {};
+    DATA.nodes = DATA.nodes || [];
+    DATA.links = DATA.links || [];
+    nodeById = new Map(DATA.nodes.map(n => [n.id, n]));
+    buildTree();
+    $("s-stale").textContent = DATA.nodes.filter(n => n.stale).length;
+    render();
+    openFromHash();
+  })
+  .catch(err => {
+    $("hint").textContent = "Graphe indisponible : " + (err && err.message || err);
+    notice("Impossible de charger le graphe du wiki.");
+  });
+
+const srcId = l => typeof l.source === "object" ? l.source.id : l.source;
+const tgtId = l => typeof l.target === "object" ? l.target.id : l.target;
+const deg = n => n.inDegree + n.outDegree;
+const rayon = n => 4 + Math.sqrt(deg(n)) * 2.1;
+
+function visibleNodes(){
+  const reserved = $("t-reserved").checked;
+  const staleOnly = $("t-stale").checked;
+  return DATA.nodes.filter(n =>
+    (reserved || !n.reserved) && !hidden.has(n.type) && (!staleOnly || n.stale));
+}
+
+// Centre de chaque lobe sur un anneau. La part d'angle suit la racine du nombre de
+// pages : un type a 16 pages prend plus de place qu'un type a 1 page, sans pour
+// autant ecraser les petits types contre leurs voisins.
+function centresLobes(nodes, W, H){
+  const counts = d3.rollup(nodes, v => v.length, d => d.type);
+  const presents = ORDRE_LOBES.filter(t => counts.has(t))
+    .concat([...counts.keys()].filter(t => !ORDRE_LOBES.includes(t)));
+  const poids = presents.map(t => Math.sqrt(counts.get(t)));
+  const total = d3.sum(poids) || 1;
+  const R = Math.min(W, H) * 0.35;
+  const centres = new Map();
+  let acc = 0;
+  presents.forEach((t, i) => {
+    const a = (acc + poids[i] / 2) / total * 2 * Math.PI - Math.PI / 2;
+    acc += poids[i];
+    centres.set(t, {x: W / 2 + Math.cos(a) * R, y: H / 2 + Math.sin(a) * R});
+  });
+  return centres;
+}
+
+function render(){
+  const nodes = visibleNodes();
+  const keep = new Set(nodes.map(n => n.id));
+  const seuil = +$("t-weight").value;
+  const lobes = $("t-lobes").checked;
+
+  const links = DATA.links
+    .filter(l => l.count >= seuil && keep.has(srcId(l)) && keep.has(tgtId(l)))
+    .map(l => ({source: srcId(l), target: tgtId(l), count: l.count}));
+
+  $("s-nodes").textContent = nodes.length;
+  $("s-links").textContent = links.length;
+
+  const W = stage.clientWidth, H = stage.clientHeight;
+  lastW = W; lastH = H;
+  const centres = centresLobes(nodes, W, H);
+  const cx = d => (centres.get(d.type) || {x: W / 2}).x;
+  const cy = d => (centres.get(d.type) || {y: H / 2}).y;
+
+  // Amorcer chaque noeud dans son lobe : sans cela la simulation part d'un tas
+  // central et met plusieurs secondes a demeler ce qu'on sait deja placer.
+  nodes.forEach(n => {
+    if(n.x === undefined){
+      const a = Math.random() * 2 * Math.PI, d = Math.random() * 60;
+      n.x = cx(n) + Math.cos(a) * d;
+      n.y = cy(n) + Math.sin(a) * d;
+    }
+  });
+
+  // Seuils de degre par quantile : sert a n'afficher de loin que les gros noeuds.
+  const degres = nodes.map(deg).sort(d3.ascending);
+  seuilsTitres = [.88, .70, .40, 0].map(q => d3.quantileSorted(degres, q) ?? 0);
+
+  const link = gLink.selectAll("path").data(links, d => d.source + "→" + d.target)
+    .join("path")
+      .attr("class","link")
+      .each(function(d){ d.el = this; });
+
+  const node = gNode.selectAll("g.node").data(nodes, d => d.id)
+    .join(enter => {
+      const g = enter.append("g").attr("class","node");
+      g.append("circle").attr("class","halo");
+      g.append("circle").attr("class","core");
+      g.append("circle").attr("class","ring");
+      g.append("text");
+      return g;
+    })
+    .attr("class", d => "node" + (d.status === "draft" ? " draft" : "") +
+      (d.stale ? " stale" : "") + (d.missing ? " missing" : "") + (d.id === sel ? " sel" : ""))
+    .call(d3.drag()
+      .on("start", (e,d) => { if(!e.active) sim.alphaTarget(.25).restart(); d.fx = d.x; d.fy = d.y; })
+      .on("drag",  (e,d) => { d.fx = e.x; d.fy = e.y; })
+      .on("end",   (e,d) => { if(!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+  node.select("circle.halo")
+    .attr("r", d => rayon(d) * 3.2)
+    .style("animation-delay", () => (-Math.random() * 5.5).toFixed(2) + "s");
+  node.select("circle.core").attr("r", rayon);
+  node.select("circle.ring").attr("r", d => rayon(d) + 1.4);
+  node.select("text").attr("dy", d => rayon(d) + 12).text(d => d.title);
+
+  paintGraph();
+
+  node.on("click", (e,d) => { e.stopPropagation(); openPage(d.id); })
+      .on("mouseenter", (e,d) => { hover(d); showTip(e,d); })
+      .on("mousemove", showTip)
+      .on("mouseleave", () => { if(!sel) hover(null); tip.style("display","none"); });
+
+  svg.on("click", () => { closePeek(); hover(null); });
+
+  // Une seule simulation a la fois : sans ce stop, chaque changement de filtre et
+  // chaque redimensionnement en empilait une de plus, et elles se disputaient les
+  // memes noeuds -- c'est une grosse part de ce qui faisait trembler le graphe.
+  if(sim) sim.stop();
+
+  sim = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id)
+      .distance(l => lobes ? 58 : 90 + l.count * 6)
+      .strength(lobes ? .05 : .2))
+    .force("charge", d3.forceManyBody().strength(lobes ? -230 : -520).distanceMax(700))
+    .force("collide", d3.forceCollide().radius(d => rayon(d) + 13).strength(.92))
+    .force("x", d3.forceX(lobes ? cx : W / 2).strength(lobes ? .20 : .035))
+    .force("y", d3.forceY(lobes ? cy : H / 2).strength(lobes ? .20 : .035))
+    .alpha(.9)
+    .on("tick", () => {
+      link.attr("d", arc);
+      node.attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+    });
+
+  currentLinks = links;
+  seedPulses();
+  applyLabels();
+  applySearch();
+}
+
+// Tout ce qui depend de la palette est regroupe ici, pour qu'un changement de
+// theme se contente de repasser dessus sans toucher a la simulation.
+function paintGraph(){
+  gLink.selectAll("path")
+    .attr("stroke", d => color((nodeById.get(srcId(d)) || {}).type))
+    .attr("stroke-opacity", d => linkOp(d.count))
+    .attr("stroke-width", d => .6 + Math.min(d.count, 4) * .28);
+  const node = gNode.selectAll("g.node");
+  node.select("circle.halo").attr("fill", d => halo(d.type));
+  node.select("circle.core").attr("fill", d => d.missing ? null : color(d.type));
+  node.select("circle.ring")
+    .attr("stroke", d => color(d.type))
+    .attr("stroke-opacity", d => d.missing ? .9 : .45)
+    .attr("stroke-width", d => d.missing ? 1.4 : 1);
+}
+
+// Les liens sont des arcs et non des segments : deux pages qui se citent dans les
+// deux sens ne se superposent plus, et le faisceau qui sort d'un gros noeud s'ouvre
+// en eventail au lieu de former une etoile illisible.
+function arc(d){
+  const dx = d.target.x - d.source.x, dy = d.target.y - d.source.y;
+  const r = Math.hypot(dx, dy) * 2.4;
+  if(!r) return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+  return "M" + d.source.x + "," + d.source.y +
+         "A" + r + "," + r + " 0 0,1 " + d.target.x + "," + d.target.y;
+}
+
+/* ---- impulsions ---------------------------------------------------------
+   Des points qui remontent les axones. Purement decoratif, mais c'est ce qui
+   distingue un reseau vivant d'un diagramme fige. Le nombre est plafonne et la
+   boucle s'arrete des que la case est decochee ou l'onglet masque. */
+const NB_IMPULSIONS = 16;
+let impulsions = [], rafId = null, dernierT = 0;
+
+function nouvelleImpulsion(){
+  if(!currentLinks.length) return null;
+  const l = currentLinks[(Math.random() * currentLinks.length) | 0];
+  return {l: l, t: -Math.random() * .8, v: .18 + Math.random() * .30};
+}
+
+function seedPulses(){
+  impulsions = [];
+  const actif = $("t-pulse").checked;
+  root.classed("vivant", actif);
+  if(!actif || !currentLinks.length){
+    gPulse.selectAll("circle").remove();
+    if(rafId){ cancelAnimationFrame(rafId); rafId = null; }
+    return;
+  }
+  for(let i = 0; i < NB_IMPULSIONS; i++){
+    const p = nouvelleImpulsion();
+    if(p) impulsions.push(p);
+  }
+  gPulse.selectAll("circle").data(impulsions).join("circle")
+    .attr("r", 1.9).attr("opacity", 0);
+  if(rafId === null){
+    dernierT = performance.now();
+    rafId = requestAnimationFrame(boucleImpulsions);
+  }
+}
+
+function boucleImpulsions(ts){
+  const dt = Math.min((ts - dernierT) / 1000, .1);
+  dernierT = ts;
+  if(!$("t-pulse").checked || document.hidden || $("peek").classList.contains("open")){
+    rafId = null;
+    gPulse.selectAll("circle").attr("opacity", 0);
+    return;
+  }
+  gPulse.selectAll("circle").each(function(p, i){
+    if(!p || !p.l || !p.l.el) return;
+    p.t += p.v * dt;
+    if(p.t > 1){
+      const n = nouvelleImpulsion();
+      if(!n) return;
+      impulsions[i] = n;
+      p = n;
+    }
+    if(p.t < 0){ this.setAttribute("opacity", 0); return; }
+    let pt;
+    try { pt = p.l.el.getPointAtLength(p.l.el.getTotalLength() * p.t); }
+    catch(e){ return; }
+    this.setAttribute("cx", pt.x);
+    this.setAttribute("cy", pt.y);
+    this.setAttribute("fill", color((nodeById.get(srcId(p.l)) || {}).type));
+    // Fondu aux deux bouts : l'impulsion nait et meurt sur le soma, pas en l'air.
+    this.setAttribute("opacity", Math.sin(p.t * Math.PI) * .85);
+  });
+  rafId = requestAnimationFrame(boucleImpulsions);
+}
+
+document.addEventListener("visibilitychange", () => {
+  if(!document.hidden && $("t-pulse").checked && rafId === null){
+    dernierT = performance.now();
+    rafId = requestAnimationFrame(boucleImpulsions);
+  }
+});
+
+function hover(d){
+  const nodes = gNode.selectAll("g.node");
+  const links = gLink.selectAll("path");
+  if(!d){
+    nodes.classed("dim", false).classed("hi", false);
+    links.classed("dim", false).classed("hi", false);
+    return;
+  }
+  const nb = new Set([d.id]);
+  DATA.links.forEach(l => {
+    if(srcId(l) === d.id) nb.add(tgtId(l));
+    if(tgtId(l) === d.id) nb.add(srcId(l));
+  });
+  nodes.classed("dim", n => !nb.has(n.id)).classed("hi", n => n.id === d.id);
+  links.classed("dim", l => srcId(l) !== d.id && tgtId(l) !== d.id)
+       .classed("hi",  l => srcId(l) === d.id || tgtId(l) === d.id);
+}
+
+// L'infobulle est positionnee dans le shell, pas dans la fenetre : les
+// coordonnees de la souris sont ramenees a son origine.
+function showTip(e, d){
+  const n = d || e.currentTarget.__data__;
+  const r = shell.getBoundingClientRect();
+  tip.style("display","block")
+     .style("left", Math.max(0, Math.min(e.clientX - r.left + 14, r.width - 305)) + "px")
+     .style("top", Math.max(0, Math.min(e.clientY - r.top + 14, r.height - 90)) + "px")
+     .html('<div class="t">' + esc(n.title) + '</div>' +
+           '<div class="d">' + esc(n.description || n.type) + '</div>');
+}
+
+/* ==== arbre de navigation ===============================================
+   L'arbre sert deux roles a la fois : il liste les pages par type, et l'oeil
+   de chaque groupe pilote la visibilite de ce type dans le graphe. Un seul
+   controle, au lieu d'une legende et d'un sommaire qui disaient la meme chose. */
+function buildTree(){
+  const byType = d3.group(DATA.nodes, d => d.type);
+  const types = [...byType.keys()].sort((a,b) => {
+    const ia = ORDRE_LOBES.indexOf(a), ib = ORDRE_LOBES.indexOf(b);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a.localeCompare(b, "fr");
+  });
+  $("tree").innerHTML = '<div class="sec-lab">Pages</div>' + types.map(t => {
+    const list = byType.get(t).slice().sort((a,b) => a.title.localeCompare(b.title, "fr"));
+    return '<section class="grp' + (hidden.has(t) ? " hid" : "") + '" data-type="' + esc(t) + '">' +
+      '<div class="grp-head" role="button" tabindex="0">' +
+        '<span class="tw">' + ICO.chev + '</span>' +
+        '<span class="dot"></span>' +
+        '<span class="grp-name">' + esc(t) + '</span>' +
+        '<span class="grp-n">' + list.length + '</span>' +
+        '<button class="eye" title="Afficher ce type dans le graphe"></button>' +
+      '</div>' +
+      '<div class="grp-list">' + list.map(pageRow).join("") + '</div>' +
+    '</section>';
+  }).join("");
+  paintTree();
+}
+
+const pageRow = n =>
+  '<button class="pg' + (n.missing ? " ghost" : "") + '" data-id="' + esc(n.id) + '"' +
+  ' title="' + esc(n.description || n.title) + '">' +
+  '<span class="pg-t">' + esc(n.title) + '</span>' +
+  (n.stale ? '<span class="pg-flag" title="Périmée"></span>' : "") + '</button>';
+
+// Les pastilles de couleur et les icones d'oeil dependent du theme et de l'etat
+// des filtres : elles sont repeintes a part du squelette HTML de l'arbre.
+function paintTree(){
+  $("tree").querySelectorAll(".grp").forEach(g => {
+    const t = g.dataset.type;
+    const off = hidden.has(t);
+    g.classList.toggle("hid", off);
+    g.querySelector(".dot").style.background = color(t);
+    const eye = g.querySelector(".eye");
+    eye.innerHTML = off ? ICO.eyeOff : ICO.eye;
+    eye.title = off ? "Afficher « " + t + " » dans le graphe"
+                    : "Masquer « " + t + " » du graphe";
+  });
+}
+
+$("tree").addEventListener("click", e => {
+  const eye = e.target.closest(".eye");
+  if(eye){
+    e.stopPropagation();
+    const t = eye.closest(".grp").dataset.type;
+    hidden.has(t) ? hidden.delete(t) : hidden.add(t);
+    paintTree();
+    render();
+    return;
+  }
+  const pg = e.target.closest(".pg");
+  if(pg){ openPage(pg.dataset.id); focusNode(pg.dataset.id); return; }
+  const head = e.target.closest(".grp-head");
+  if(head) head.closest(".grp").classList.toggle("open");
+});
+$("tree").addEventListener("keydown", e => {
+  if((e.key === "Enter" || e.key === " ") && e.target.classList.contains("grp-head")){
+    e.preventDefault();
+    e.target.closest(".grp").classList.toggle("open");
+  }
+});
+
+function revealInTree(id){
+  const tree = $("tree");
+  tree.querySelectorAll(".pg.cur").forEach(el => el.classList.remove("cur"));
+  const el = tree.querySelector('.pg[data-id="' + cssEsc(id) + '"]');
+  if(!el) return;
+  el.classList.add("cur");
+  el.closest(".grp").classList.add("open");
+  el.scrollIntoView({block:"nearest"});
+}
+
+/* ==== recherche =========================================================
+   Le champ fait deux choses : il attenue le graphe comme avant, et il propose
+   une liste de resultats navigable au clavier -- c'est le chemin le plus court
+   entre une question et une page quand on ne sait pas ou elle se trouve. */
+let hits = [], hitPos = -1;
+
+function searchHits(q){
+  if(!q) return [];
+  const score = n => {
+    const t = n.title.toLowerCase();
+    if(t === q) return 0;
+    if(t.startsWith(q)) return 1;
+    if(t.includes(q)) return 2;
+    if((n.description || "").toLowerCase().includes(q)) return 3;
+    if((n.tags || []).join(" ").toLowerCase().includes(q)) return 4;
+    if(n.id.toLowerCase().includes(q)) return 5;
+    return 99;
+  };
+  return DATA.nodes.map(n => ({n, s: score(n)})).filter(h => h.s < 99)
+    .sort((a,b) => a.s - b.s || a.n.title.localeCompare(b.n.title, "fr"))
+    .slice(0, 12).map(h => h.n);
+}
+
+function renderResults(){
+  const box = $("results");
+  const q = $("search").value.trim();
+  if(!q || !DATA){ box.hidden = true; box.innerHTML = ""; hits = []; hitPos = -1; return; }
+  hits = searchHits(q.toLowerCase());
+  hitPos = hits.length ? 0 : -1;
+  box.hidden = false;
+  box.innerHTML = hits.length
+    ? hits.map((n,i) =>
+        '<button class="res' + (i === 0 ? " on" : "") + '" data-id="' + esc(n.id) + '">' +
+        '<span class="dot" style="background:' + color(n.type) + '"></span>' +
+        '<span class="rt">' + esc(n.title) + '</span>' +
+        '<span class="rd">' + esc(n.type) + '</span></button>').join("")
+    : '<div class="res-empty">Aucune page pour « ' + esc(q) + ' »</div>';
+}
+
+function moveHit(step){
+  if(!hits.length) return;
+  hitPos = (hitPos + step + hits.length) % hits.length;
+  const els = $("results").querySelectorAll(".res");
+  els.forEach((el,i) => el.classList.toggle("on", i === hitPos));
+  if(els[hitPos]) els[hitPos].scrollIntoView({block:"nearest"});
+}
+
+function closeResults(){ $("results").hidden = true; hits = []; hitPos = -1; }
+
+$("results").addEventListener("mousedown", e => {
+  const b = e.target.closest(".res");
+  if(!b) return;
+  e.preventDefault();
+  openPage(b.dataset.id);
+  focusNode(b.dataset.id);
+  closeResults();
+});
+
+$("search").addEventListener("input", () => { renderResults(); applySearch(); });
+$("search").addEventListener("focus", () => { if($("search").value.trim()) renderResults(); });
+$("search").addEventListener("blur", () => setTimeout(closeResults, 120));
+$("search").addEventListener("keydown", e => {
+  if(e.key === "ArrowDown"){ e.preventDefault(); moveHit(1); }
+  else if(e.key === "ArrowUp"){ e.preventDefault(); moveHit(-1); }
+  else if(e.key === "Enter" && hitPos >= 0){
+    e.preventDefault();
+    openPage(hits[hitPos].id);
+    focusNode(hits[hitPos].id);
+    closeResults();
+    $("search").blur();
+  } else if(e.key === "Escape"){
+    if(!$("results").hidden){ closeResults(); }
+    else { $("search").value = ""; applySearch(); $("search").blur(); }
+  }
+});
+
+function applySearch(){
+  const q = $("search").value.trim().toLowerCase();
+  const nodes = gNode.selectAll("g.node");
+  if(!q){ nodes.classed("dim", false).classed("hi", false); return; }
+  const hit = n => (n.title + " " + n.description + " " + (n.tags||[]).join(" ") + " " + n.id)
+    .toLowerCase().includes(q);
+  nodes.classed("dim", n => !hit(n)).classed("hi", hit);
+}
+
+/* ==== panneau de lecture ================================================
+   Historique avant / arriere : suivre trois liens dans le corps d'une page et
+   ne pas pouvoir revenir en arriere etait le principal point de friction de la
+   navigation precedente. */
+let hist = [], hpos = -1;
+
+function openPage(id, fromHistory){
+  const n = nodeById.get(id);
+  if(!n) return;
+  sel = id;
+  if(!fromHistory && hist[hpos] !== id){
+    hist = hist.slice(0, hpos + 1);
+    hist.push(id);
+    hpos = hist.length - 1;
+  }
+  // Une erreur passagere se retente a chaque ouverture ; un 404 est acquis.
+  const rec = pageCache.get(id);
+  if(rec && rec.error && rec.retry) pageCache.delete(id);
+  gNode.selectAll("g.node").classed("sel", d => d.id === id);
+  hover(n);
+  renderPeek(id);
+  revealInTree(id);
+  $("peek").classList.add("open");
+  shell.classList.add("peek-on");
+  if(innerWidth <= 900 && !shell.classList.contains("side-off")){
+    shell.classList.add("side-off");
+    sideAuto = true;
+  }
+  $("peek-body").scrollTop = 0;
+  updateNav();
+  writeHash(id);
+}
+
+function updateNav(){
+  $("nav-back").disabled = hpos <= 0;
+  $("nav-fwd").disabled = hpos >= hist.length - 1;
+}
+$("nav-back").onclick = () => { if(hpos > 0){ hpos--; openPage(hist[hpos], true); } };
+$("nav-fwd").onclick  = () => { if(hpos < hist.length - 1){ hpos++; openPage(hist[hpos], true); } };
+$("peek-close").onclick = closePeek;
+// Rendre la main au graphe en gardant la page reperee : on ferme, on centre,
+// et le voisinage du noeud reste en surbrillance jusqu'au prochain clic.
+$("peek-locate").onclick = () => {
+  const id = sel;
+  closePeek();
+  if(id){ focusNode(id); const n = nodeById.get(id); if(n) hover(n); }
+};
+$("crumb").addEventListener("click", e => { if(e.target.closest(".cr-home")) closePeek(); });
+
+/* ---- lien profond --------------------------------------------------------
+   #/dossier/page.md ouvre la page au chargement ; ouvrir une page ecrit le
+   hash (sans nouvelle entree d'historique), fermer le panneau le vide. */
+function hashId(){
+  const h = location.hash || "";
+  if(!h.startsWith("#/")) return null;
+  try { return decodeURIComponent(h.slice(1)); } catch(e){ return h.slice(1); }
+}
+function writeHash(id){
+  const want = id ? "#" + id : "";
+  if((location.hash || "") === want) return;
+  history.replaceState(null, "", location.pathname + location.search + want);
+}
+function openFromHash(){
+  const id = hashId();
+  if(!id){ if(sel) closePeek(); return; }
+  if(nodeById.has(id)) openPage(id);
+  else notice("Page inexistante : " + id);
+}
+addEventListener("hashchange", () => { if(DATA) openFromHash(); });
+
+function renderPeek(id){
+  const n = nodeById.get(id);
+  if(!n) return;
+  const ins = DATA.links.filter(l => tgtId(l) === id).map(l => nodeById.get(srcId(l)));
+  const outs = DATA.links.filter(l => srcId(l) === id).map(l => nodeById.get(tgtId(l)));
+
+  $("crumb").innerHTML =
+    '<button class="cr-home" title="Revenir au graphe (Échap)">Graphe</button>' +
+    ' <span>/</span> ' +
+    (n.folder && n.folder !== "." ? esc(n.folder) + ' <span>/</span> ' : "") +
+    '<span class="cr-t">' + esc(n.title) + '</span>';
+
+  const badges = ['<span class="badge" style="background:' + color(n.type) + '1f;color:' +
+    color(n.type) + '"><span class="p-dot" style="background:' + color(n.type) +
+    ';margin:0"></span>' + esc(n.type) + '</span>'];
+  if(n.stale) badges.push('<span class="pill warn">périmée depuis le ' + esc(n.staleAfter) + '</span>');
+  if(n.missing) badges.push('<span class="pill">page à écrire</span>');
+
+  // Le corps vient de l'API, a la demande. Une page fantome n'a pas de corps :
+  // on ne l'appelle pas. Tant que la page charge, le squelette (titre, badges,
+  // proprietes du graphe, retroliens) est deja la ; le corps suit.
+  const rec = n.missing ? null : pageCache.get(id);
+  const page = rec && rec.page ? rec.page : null;
+  let body = null, bodyHtml;
+  if(n.missing){
+    bodyHtml = '<p class="empty">Page liée depuis le wiki mais pas encore écrite.</p>';
+  } else if(page){
+    body = renderBody(page.body || "", id);
+    bodyHtml = body.html || '<p class="empty">Cette page n’a pas encore de contenu.</p>';
+  } else if(rec && rec.error){
+    bodyHtml = '<p class="empty">' + esc(rec.error) + '</p>';
+  } else {
+    bodyHtml = '<p class="empty loading">Chargement de la page…</p>';
+    loadPage(id).then(() => { if(sel === id) renderPeek(id); });
+  }
+
+  $("peek-doc").innerHTML =
+    '<div class="badges">' + badges.join("") + '</div>' +
+    '<h1 class="pg-title">' + esc(n.title) + '</h1>' +
+    (n.description ? '<p class="lede">' + esc(n.description) + '</p>' : "") +
+    props(n, page) +
+    (body && body.toc ? body.toc : "") +
+    '<div id="wiki-body">' + bodyHtml + '</div>' +
+    '<div class="back">' +
+      backBlock("Liens sortants — " + outs.length, outs) +
+      backBlock("Liens entrants — " + ins.length, ins) +
+    '</div>';
+  $("peek-rail").innerHTML = body && body.rail ? body.rail : "";
+}
+
+// Bloc de proprietes facon Notion : ce que la frontmatter OKF declare, en clair,
+// avant le corps de la page. Les sources viennent de la page quand elle est
+// chargee (objets {title, resource}, avec lien vers le PDF), sinon du graphe
+// (titres seuls).
+function props(n, page){
+  const rows = [];
+  if(n.status) rows.push(["Statut", '<span class="pill">' + esc(n.status) + '</span>']);
+  if(n.folder && n.folder !== ".") rows.push(["Dossier", esc(n.folder)]);
+  if((n.tags || []).length)
+    rows.push(["Étiquettes", n.tags.map(t => '<span class="pill">' + esc(t) + '</span>').join(" ")]);
+  const sources = page && Array.isArray(page.sources) ? page.sources : (n.sources || []);
+  if(sources.length) rows.push(["Sources", sources.map(sourceRow).join("<br>")]);
+  if(n.staleAfter)
+    rows.push([n.stale ? "Périmée depuis" : "À revoir le",
+      '<span class="' + (n.stale ? "danger" : "") + '">' + esc(n.staleAfter) + '</span>']);
+  rows.push(["Liens", n.outDegree + " sortants · " + n.inDegree + " entrants"]);
+  if(!rows.length) return "";
+  return '<dl class="props">' + rows.map(([k,v]) =>
+    '<dt>' + k + '</dt><dd' + (v.includes('class="danger"') ? ' class="danger"' : "") +
+    '>' + v + '</dd>').join("") + '</dl>';
+}
+
+function sourceRow(s){
+  if(typeof s === "string") s = {title: s};
+  if(!s || typeof s !== "object") return "";
+  const res = String(s.resource || "");
+  const title = s.title || res || s.id || "";
+  if(/^raw\//.test(res)){
+    return '<a href="' + esc(rawUrl(res)) + '" target="_blank" rel="noopener" title="Ouvrir ' +
+      esc(res) + '">' + esc(title) + '</a>' +
+      '<span class="src-file">' + esc(res.replace(/^raw\//, "")) + '</span>';
+  }
+  if(/^https?:/i.test(res))
+    return '<a href="' + esc(res) + '" target="_blank" rel="noopener noreferrer">' + esc(title) + '</a>';
+  return esc(title) + (res ? '<span class="src-file">' + esc(res) + '</span>' : "");
+}
+
+function backBlock(title, list){
+  if(!list.length) return '<p class="back-h">' + esc(title) + '</p>';
+  return '<p class="back-h">' + esc(title) + '</p><div class="back-list">' +
+    list.map(n => '<a data-id="' + esc(n.id) + '">' +
+      '<span class="dot" style="background:' + color(n.type) + '"></span>' +
+      esc(n.title) + '</a>').join("") + '</div>';
+}
+
+// marked 12 ne genere plus d'ancres : les identifiants de titre sont poses ici,
+// ce qui sert aussi a construire le sommaire.
+function renderBody(md, pageId){
+  const host = document.createElement("div");
+  try { host.innerHTML = marked.parse(md); }
+  catch(e){ return {toc:"", rail:"", html:"<pre>" + esc(md) + "</pre>"}; }
+  try { linkifyBody(host, pageId); } catch(e){ /* le corps reste lisible sans les liens */ }
+  const hs = [...host.querySelectorAll("h1,h2,h3")];
+  hs.forEach((h,i) => { h.id = "h-" + i; });
+  let toc = "", rail = "";
+  if(hs.length >= 3){
+    const items = hs.map((h,i) => '<a data-toc="h-' + i + '" class="lv' + h.tagName[1] +
+      '">' + esc(h.textContent) + '</a>').join("");
+    toc = '<details class="toc"><summary><span class="tw">' + ICO.chev +
+      '</span>Sommaire</summary><ol>' + items + '</ol></details>';
+    rail = '<p class="rail-h">Sommaire</p>' + items;
+  }
+  return {toc, rail, html: host.innerHTML};
+}
+
+/* ---- citations et anomalies dans le corps ---------------------------------
+   Travaille sur le DOM rendu, jamais sur le markdown : les liens deja presents
+   (<a>) et le code preformate (<pre>) sont laisses tels quels.
+   - `raw/x.pdf, p. N` en texte nu -> lien vers /api/wiki/raw/x.pdf#page=N
+   - <code>raw/x.pdf</code> suivi de « , p. N » -> le code devient le lien
+   - [titre](raw/x.pdf) -> href reecrit vers l'API
+   - INC-NN / CTR-NN / VER-NN -> lien vers le registre, sauf sur le registre lui-meme */
+const RE_CITE = /raw\/([A-Za-z0-9_.\-]+\.pdf)((?:,\s*registre\s+[\d.]+)?(?:,\s*p\.\s*(\d+))?)|\b(INC|CTR|VER)-(\d{2,3})\b/g;
+const RE_CODE_PDF = /^raw\/([A-Za-z0-9_.\-]+\.pdf)$/;
+const RE_PAGE_APRES = /^(?:,\s*registre\s+[\d.]+)?,\s*p\.\s*(\d+)/;
+
+function pdfLink(file, page, label){
+  const a = document.createElement("a");
+  a.className = "cite";
+  a.href = rawUrl(file, page);
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.title = page ? "Ouvrir le PDF à la page " + page : "Ouvrir le PDF";
+  if(label != null) a.textContent = label;
+  return a;
+}
+
+function linkifyBody(host, pageId){
+  // [titre](raw/x.pdf) ou [titre](raw/x.pdf#page=N)
+  host.querySelectorAll('a[href^="raw/"]').forEach(a => {
+    const href = a.getAttribute("href");
+    const cut = href.indexOf("#");
+    const file = cut < 0 ? href : href.slice(0, cut);
+    const pm = cut < 0 ? null : /page=(\d+)/.exec(href.slice(cut));
+    a.href = rawUrl(file, pm ? pm[1] : null);
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.classList.add("cite");
+  });
+
+  // <code>raw/x.pdf</code>, p. N
+  host.querySelectorAll("code").forEach(code => {
+    if(code.closest("pre, a")) return;
+    const m = RE_CODE_PDF.exec(code.textContent.trim());
+    if(!m) return;
+    let page = null;
+    const nx = code.nextSibling;
+    if(nx && nx.nodeType === Node.TEXT_NODE){
+      const pm = RE_PAGE_APRES.exec(nx.nodeValue);
+      if(pm) page = pm[1];
+    }
+    const a = pdfLink(m[1], page, null);
+    code.replaceWith(a);
+    a.appendChild(code);
+  });
+
+  // texte nu : citations et identifiants d'anomalie
+  const walker = document.createTreeWalker(host, NodeFilter.SHOW_TEXT);
+  const texts = [];
+  let t;
+  while((t = walker.nextNode())) texts.push(t);
+  texts.forEach(node => {
+    const s = node.nodeValue;
+    if(!s || !/raw\/|INC-|CTR-|VER-/.test(s)) return;
+    if(node.parentElement && node.parentElement.closest("a, code, pre")) return;
+    RE_CITE.lastIndex = 0;
+    let last = 0, m, frag = null;
+    while((m = RE_CITE.exec(s))){
+      let el = null;
+      if(m[1]){
+        el = pdfLink(m[1], m[3] || null, m[0]);
+      } else {
+        const target = REGISTRES[m[4]];
+        if(target && target !== pageId){
+          el = document.createElement("a");
+          el.className = "anom";
+          el.href = target;
+          el.dataset.id = target;
+          el.title = "Ouvrir le registre " + target;
+          el.textContent = m[0];
+        }
+      }
+      if(!el) continue;
+      if(!frag) frag = document.createDocumentFragment();
+      if(m.index > last) frag.appendChild(document.createTextNode(s.slice(last, m.index)));
+      frag.appendChild(el);
+      last = m.index + m[0].length;
+    }
+    if(!frag) return;
+    if(last < s.length) frag.appendChild(document.createTextNode(s.slice(last)));
+    node.replaceWith(frag);
+  });
+}
+
+/* Les liens du corps markdown sont de vrais <a href="/xxx.md"> : sans interception
+   le navigateur quitte l'application pour une URL que le serveur ne connait pas.
+   Un seul gestionnaire delegue couvre le corps, le sommaire, les retroliens et les
+   identifiants d'anomalie. Les liens vers /api/wiki/raw/... et vers l'exterieur
+   suivent leur href (nouvel onglet). */
+$("peek").addEventListener("click", ev => {
+  const a = ev.target.closest("a");
+  if(!a) return;
+  if(a.dataset.toc){
+    ev.preventDefault();
+    const t = $("peek-doc").querySelector("#" + a.dataset.toc);
+    if(t) t.scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
+  const href = a.dataset.id || a.getAttribute("href") || "";
+  if(href.startsWith("/") && href.endsWith(".md")){
+    ev.preventDefault();
+    if(nodeById.has(href)) openPage(href);
+    else notice("Page inexistante : " + href);
+  } else if(/^https?:/i.test(href)){
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+  }
+});
+
+function closePeek(){
+  $("peek").classList.remove("open");
+  shell.classList.remove("peek-on");
+  if(sideAuto){ shell.classList.remove("side-off"); sideAuto = false; }
+  seedPulses();
+  gNode.selectAll("g.node").classed("sel", false);
+  $("tree").querySelectorAll(".pg.cur").forEach(el => el.classList.remove("cur"));
+  sel = null;
+  hover(null);
+  writeHash(null);
+}
+
+let noticeTimer;
+function notice(msg){
+  const el = $("notice");
+  el.textContent = msg;
+  el.title = msg;
+  el.classList.add("show");
+  clearTimeout(noticeTimer);
+  noticeTimer = setTimeout(() => el.classList.remove("show"), 2600);
+}
+
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cssEsc = s => window.CSS && CSS.escape ? CSS.escape(s) : String(s).replace(/"/g, '\\"');
+
+// Comme dans Obsidian : de loin on ne lit que les gros noeuds, les titres
+// apparaissent a mesure qu'on zoome. Les seuils sont des quantiles de degre,
+// donc ils suivent la densite reelle du graphe au lieu d'etre en dur.
+function applyLabels(){
+  const on = $("t-labels").checked;
+  if(!on){ gNode.selectAll("text").style("display","none"); return; }
+  const floor = zk >= 1.6 ? seuilsTitres[3]
+              : zk >= 1.1 ? seuilsTitres[2]
+              : zk >= 0.75 ? seuilsTitres[1]
+              : seuilsTitres[0];
+  gNode.selectAll("text")
+    .style("display", d => deg(d) >= floor ? null : "none")
+    .style("font-size", Math.min(13, 10.5 / Math.sqrt(zk)) + "px");
+}
+
+/* ==== chrome ============================================================ */
+// sideAuto distingue un repli decide par l'application d'un repli decide par
+// l'utilisateur : seul le premier se defait tout seul en quittant la lecture.
+let sideAuto = false;
+function toggleSide(){ shell.classList.toggle("side-off"); sideAuto = false; }
+$("wiki-btn-side").onclick = toggleSide;
+$("reopen").onclick = toggleSide;
+$("peek-side").onclick = toggleSide;
+$("wiki-btn-side").innerHTML = ICO.panel;
+$("reopen").innerHTML = ICO.panel;
+$("peek-side").innerHTML = ICO.panel;
+
+$("t-reserved").addEventListener("change", () => { if(DATA) render(); });
+$("t-stale").addEventListener("change", () => { if(DATA) render(); });
+$("t-lobes").addEventListener("change", () => { if(DATA) render(); });
+$("t-labels").addEventListener("change", applyLabels);
+$("t-pulse").addEventListener("change", seedPulses);
+$("t-weight").addEventListener("input", e => {
+  $("w-val").textContent = e.target.value + "×";
+  if(DATA) render();
+});
+
+// Ctrl+K recherche, Ctrl+\ replie la barre du wiki, Echap ferme la page.
+document.addEventListener("keydown", e => {
+  const mod = e.ctrlKey || e.metaKey;
+  if(mod && e.key.toLowerCase() === "k"){ e.preventDefault(); $("search").focus(); $("search").select(); }
+  else if(mod && e.key === "\\"){ e.preventDefault(); toggleSide(); }
+  else if(e.key === "Escape" && document.activeElement !== $("search")) closePeek();
+});
+
+// Le redimensionnement est debounce : un seul render en fin de geste, la ou la
+// fenetre en declenchait des dizaines. On observe la scene elle-meme et non la
+// fenetre : dans l'application, la scene change aussi de taille quand la barre
+// laterale (celle du wiki ou celle de l'application) se replie.
+let resizeTimer, lastW = 0, lastH = 0;
+function onStageResize(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if(!DATA) return;
+    const W = stage.clientWidth, H = stage.clientHeight;
+    if(W === lastW && H === lastH) return;
+    render();
+  }, 180);
+}
+if(window.ResizeObserver) new ResizeObserver(onStageResize).observe(stage);
+else addEventListener("resize", onStageResize);
+
+applyTheme(THEME);
+
+})();
+{% endraw %}
+</script>
+{% endblock %}

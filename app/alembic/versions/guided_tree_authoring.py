@@ -18,7 +18,19 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy import inspect
 from sqlalchemy.dialects.postgresql import JSONB
-from pgvector.sqlalchemy import Vector
+try:
+    from pgvector.sqlalchemy import Vector
+except ImportError:  # pgvector n'est plus une dépendance depuis la refonte wiki (2026-09-18)
+    from sqlalchemy.types import UserDefinedType
+
+    class Vector(UserDefinedType):
+        cache_ok = True
+
+        def __init__(self, dim=None):
+            self.dim = dim
+
+        def get_col_spec(self, **kw):
+            return f"vector({self.dim})" if self.dim else "vector"
 
 
 revision = "guided_tree_authoring"

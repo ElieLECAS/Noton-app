@@ -12,11 +12,16 @@ Revises: add_ccr_is_primary
 from alembic import op
 from sqlalchemy import text
 
-from app.services.category_catalog import (
-    CONTENT_CATEGORY_SLUGS,
-    DEFAULT_CATEGORY_DESCRIPTIONS,
-)
-from app.services.theme_tree_catalog import THEME_FAMILIES, family_for_task_slug
+# Les catalogues de catégories ont disparu avec le retriever (refonte wiki, 2026-09-18) et la
+# table ``documentcategory`` est supprimée par ``wiki_refonte_drop_retrieval``. Sur une base
+# neuve ce peuplement n'a plus d'objet : les listes sont vides et la migration ne fait rien.
+THEME_FAMILIES: list = []
+CONTENT_CATEGORY_SLUGS: list = []
+DEFAULT_CATEGORY_DESCRIPTIONS: dict = {}
+
+
+def family_for_task_slug(slug: str):
+    return None
 
 
 revision = "add_two_level_taxonomy"

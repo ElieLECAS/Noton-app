@@ -2,31 +2,23 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Runtime minimal : PostgreSQL client, LibreOffice (Office→PDF), poppler (pdf2image)
+# Runtime minimal : le client PostgreSQL suffit (plus d'OCR, de PDF ni de modèles locaux).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
-    libreoffice \
-    poppler-utils \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
 COPY app/requirements.txt .
 
-RUN pip install --no-cache-dir -U pip "wheel" "setuptools<82" \
-    && pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
-
-RUN python -c "\
-from llama_index.core.node_parser import HierarchicalNodeParser; \
-from mistralai import Mistral; \
-import colpali_engine; \
-print('Deps OK')"
-
-# Pré-télécharger le reranker (aligné sur RERANKER_MODEL par défaut / .env)
-RUN python -c "from sentence_transformers import CrossEncoder; CrossEncoder('antoinelouis/crossencoder-camembert-L2-mmarcoFR')"
+RUN pip install --no-cache-dir -U pip \
+    && pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/
 COPY app/alembic/ ./alembic/
 COPY app/alembic.ini ./alembic.ini
+
+# Le wiki (wiki_llm/) n'est PAS copié dans l'image : il est monté en volume par
+# docker-compose, ce qui permet de le mettre à jour par un simple git pull.
 
 ENV PYTHONUNBUFFERED=1
 

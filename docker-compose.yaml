@@ -1,208 +1,31 @@
-# Stack Noton : Mistral OCR + ColPali + pgvector + BM25 + KAG + reranker MiniLM + CAG.
-# Source de vérité des valeurs : app/config.py (défauts) surchargés par .env (prod).
-# Les `${VAR:-défaut}` ci-dessous ne servent que de repli si .env n'a pas la variable ;
-# leurs défauts sont tenus ALIGNÉS sur config.py pour éviter toute divergence.
+# Stack LIA : PostgreSQL + web (FastAPI). Le wiki (wiki_llm/) est monté en lecture seule.
+# Source de vérité des valeurs : app/config.py (défauts) surchargés par .env.
 x-app-env: &app-env
   PYTHONUNBUFFERED: "1"
-  APP_NAME: ${APP_NAME}
+  APP_NAME: ${APP_NAME:-LIA}
   DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
   SECRET_KEY: ${SECRET_KEY}
+  AUTH_COOKIE_SECURE: ${AUTH_COOKIE_SECURE:-true}
+  AUTH_COOKIE_SAMESITE: ${AUTH_COOKIE_SAMESITE:-lax}
+  CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
+  ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+  # Mistral
   MISTRAL_API_KEY: ${MISTRAL_API_KEY}
   MISTRAL_BASE_URL: ${MISTRAL_BASE_URL:-https://api.mistral.ai}
-  MISTRAL_OCR_MODEL: ${MISTRAL_OCR_MODEL:-mistral-ocr-latest}
-  MISTRAL_OCR_TIMEOUT: ${MISTRAL_OCR_TIMEOUT:-300}
-  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-  OPENAI_MODEL: ${OPENAI_MODEL:-}
-  BRAVE_SEARCH_API_KEY: ${BRAVE_SEARCH_API_KEY:-}
   MODEL_FAST: ${MODEL_FAST:-mistral-small-latest}
-  MAX_COMPLETION_TOKENS: ${MAX_COMPLETION_TOKENS:-1024}
-  SPACE_CHAT_MAX_TOKENS: ${SPACE_CHAT_MAX_TOKENS:-2048}
-  SPACE_CHAT_TEMPERATURE: ${SPACE_CHAT_TEMPERATURE:-0.55}
-  SPACE_CHAT_TOP_P: ${SPACE_CHAT_TOP_P:-}
-  EMBEDDING_BATCH_SIZE: ${EMBEDDING_BATCH_SIZE:-16}
-  EMBEDDING_DIMENSION: ${EMBEDDING_DIMENSION:-1024}
-  EMBEDDING_MODEL: ${EMBEDDING_MODEL:-mistral-embed}
-  HIERARCHICAL_CHUNK_SIZES: ${HIERARCHICAL_CHUNK_SIZES:-1024,256}
-  USE_MARKDOWN_STRUCTURED_CHUNKING: ${USE_MARKDOWN_STRUCTURED_CHUNKING:-false}
-  PDF_FORCE_OCR: ${PDF_FORCE_OCR:-false}
-  MARKDOWN_STRUCTURED_PARENT_DEPTH: ${MARKDOWN_STRUCTURED_PARENT_DEPTH:-1}
-  CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
-  RAG_TOP_K: ${RAG_TOP_K:-8}
-  # Budget contexte génération relevé pour la fenêtre 256k (plusieurs pages entières).
-  SPACE_CONTEXT_MAX_PASSAGE_CHARS: ${SPACE_CONTEXT_MAX_PASSAGE_CHARS:-12000}
-  SPACE_CONTEXT_MAX_CHARS: ${SPACE_CONTEXT_MAX_CHARS:-80000}
-  SPACE_HISTORY_MAX_CHARS: ${SPACE_HISTORY_MAX_CHARS:-16000}
-  # CAG post-retriever : charge des DOCUMENTS entiers dans le contexte (fenêtre 256k).
-  CAG_ENABLED: ${CAG_ENABLED:-true}
-  CAG_TOKEN_BUDGET: ${CAG_TOKEN_BUDGET:-100000}
-  CAG_MAX_DOCUMENTS: ${CAG_MAX_DOCUMENTS:-8}
-  CAG_FULL_DOC_MAX_TOKENS: ${CAG_FULL_DOC_MAX_TOKENS:-20000}
-  CAG_PAGE_RADIUS: ${CAG_PAGE_RADIUS:-3}
-  CAG_MAX_COMPLETION_TOKENS: ${CAG_MAX_COMPLETION_TOKENS:-3072}
-  CAG_MAX_IMAGES: ${CAG_MAX_IMAGES:-8}
-  # DPI de rendu des pages envoyées au modèle de génération (l'extraction, elle, lit à 300).
-  CAG_IMAGE_DPI: ${CAG_IMAGE_DPI:-150}
-  # EXPÉRIMENTATION temporaire : génération 100 % PNG (retire le texte du contexte et
-  # DÉSACTIVE la vérification d'ancrage — jamais en production). Monter CAG_MAX_IMAGES et
-  # CAG_IMAGE_DPI en même temps, sinon le test mesure « moins d'info », pas « image vs texte ».
-  CAG_IMAGE_ONLY: ${CAG_IMAGE_ONLY:-false}
-  # Budget de packing par intent (JSON) — vide = défauts code (30k/60k/100k selon intent).
-  CAG_BUDGET_BY_INTENT: ${CAG_BUDGET_BY_INTENT:-}
-  CAG_FULLTEXT_CACHE_TTL: ${CAG_FULLTEXT_CACHE_TTL:-300}
-  # Contexte de secours (fallback Mistral 400) : CAG re-packé petit (P0.2).
-  CAG_ECO_TOKEN_BUDGET: ${CAG_ECO_TOKEN_BUDGET:-20000}
-  CAG_ECO_MAX_DOCUMENTS: ${CAG_ECO_MAX_DOCUMENTS:-3}
-  # Élection & packing : le document est élu par sa MEILLEURE page, le budget est partagé
-  # entre les élus, et la fenêtre est remplie par valeur (seeds d'abord).
-  # Repli complet vers l'ancien comportement : CAG_ELECTION_MODE=legacy +
-  # CAG_WINDOW_MODE=radius + CAG_DOC_BUDGET_SHARES= + RETRIEVAL_PER_DOC_QUOTA_RATIO=0.
-  CAG_ELECTION_MODE: ${CAG_ELECTION_MODE:-best_passage}
-  CAG_ELECTION_FAMILY_BONUS: ${CAG_ELECTION_FAMILY_BONUS:-0.10}
-  CAG_ELECTION_PAGE_BONUS: ${CAG_ELECTION_PAGE_BONUS:-0.05}
-  CAG_ELECTION_PAGE_CAP: ${CAG_ELECTION_PAGE_CAP:-2}
-  CAG_DOC_BUDGET_SHARES: ${CAG_DOC_BUDGET_SHARES:-0.5,0.3,0.2}
-  CAG_WINDOW_MODE: ${CAG_WINDOW_MODE:-greedy}
-  CAG_MAX_SEEDS_PER_DOC: ${CAG_MAX_SEEDS_PER_DOC:-3}
-  CAG_NEIGHBOR_DECAY: ${CAG_NEIGHBOR_DECAY:-0.7}
-  CAG_MARK_MATCHED_PAGES: ${CAG_MARK_MATCHED_PAGES:-true}
-  CAG_ANCHOR_SLOTS: ${CAG_ANCHOR_SLOTS:-1}
-  RETRIEVAL_PER_DOC_QUOTA_RATIO: ${RETRIEVAL_PER_DOC_QUOTA_RATIO:-0.4}
-  # Un seul appel LLM avant le retrieval (P0.4) + budgets temps (P0.3).
-  QUERY_UNDERSTANDING_TIMEOUT_S: ${QUERY_UNDERSTANDING_TIMEOUT_S:-25}
-  RETRIEVAL_TIMEOUT_S: ${RETRIEVAL_TIMEOUT_S:-90}
-  # Ancrage documentaire conversationnel (continuité du sujet entre les tours).
-  CONVERSATION_ANCHOR_ENABLED: ${CONVERSATION_ANCHOR_ENABLED:-true}
-  CONVERSATION_ANCHOR_MAX_DOCS: ${CONVERSATION_ANCHOR_MAX_DOCS:-3}
-  # Ancre : boost ramené de 0.5 à 0.15 et limité aux N meilleures pages — à ×1.5 sur
-  # TOUTES ses pages, l'ancre accordait gratuitement le boost catégorie maximal et
-  # annulait le signal de pertinence (cas « comment l'installer ? » du 27/07).
-  CONVERSATION_ANCHOR_BOOST: ${CONVERSATION_ANCHOR_BOOST:-0.15}
-  CONVERSATION_ANCHOR_BOOST_MAX_PAGES: ${CONVERSATION_ANCHOR_BOOST_MAX_PAGES:-3}
-  CONVERSATION_ANCHOR_INTENT_GUARD: ${CONVERSATION_ANCHOR_INTENT_GUARD:-true}
-  CAG_ANCHOR_RANK_BY_SCORE: ${CAG_ANCHOR_RANK_BY_SCORE:-true}
-  # Juge de vérification : contexte complet (blocs documents seuls, sans prompt système)
-  # + manifeste de tous les documents packés. 0 = illimité.
-  VERIFICATION_CONTEXT_MAX_CHARS: ${VERIFICATION_CONTEXT_MAX_CHARS:-60000}
-  VERIFICATION_INCLUDE_MANIFEST: ${VERIFICATION_INCLUDE_MANIFEST:-true}
-  RAG_RENDER_ALL_IMAGES: ${RAG_RENDER_ALL_IMAGES:-true}
-  RAG_MAX_IMAGES: ${RAG_MAX_IMAGES:-12}
-  COLPALI_MIN_THRESHOLD: ${COLPALI_MIN_THRESHOLD:-0.30}
-  COLPALI_RELATIVE_MARGIN: ${COLPALI_RELATIVE_MARGIN:-0.18}
-  # Gating ColPali : ne lance le retriever visuel (coûteux sur CPU) que si la requête en
-  # a besoin (marqueurs visuels / intent). Fallback si les retrievers texte sont faibles.
-  COLPALI_GATING_ENABLED: ${COLPALI_GATING_ENABLED:-true}
-  COLPALI_GATING_INTENTS: ${COLPALI_GATING_INTENTS:-installation}
-  COLPALI_GATING_FALLBACK_MIN_HITS: ${COLPALI_GATING_FALLBACK_MIN_HITS:-5}
-  VISION_RERANK_ENABLED: ${VISION_RERANK_ENABLED:-false}
-  VISION_RERANK_MODEL: ${VISION_RERANK_MODEL:-mistral-small-latest}
-  VISION_RERANK_MIN_SCORE: ${VISION_RERANK_MIN_SCORE:-3}
-  VISION_RERANK_MAX_PAGES: ${VISION_RERANK_MAX_PAGES:-4}
-  VISION_RERANK_DPI: ${VISION_RERANK_DPI:-150}
-  FAQ_TOP_K: ${FAQ_TOP_K:-3}
-  FAQ_MIN_SIMILARITY: ${FAQ_MIN_SIMILARITY:-0.30}
-  FAQ_POST_DRAFT_ENABLED: ${FAQ_POST_DRAFT_ENABLED:-true}
-  REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
-  CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
-  CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
-  CELERY_WORKER_CONCURRENCY: ${CELERY_WORKER_CONCURRENCY:-1}
-  MULTIMODAL_PAGE_CONCURRENCY: ${MULTIMODAL_PAGE_CONCURRENCY:-3}
-  TASK_BACKEND_MODE: ${TASK_BACKEND_MODE:-celery}
-  KAG_ENABLED: ${KAG_ENABLED:-true}
-  KAG_EXTRACTION_MODEL: ${KAG_EXTRACTION_MODEL:-mistral-small-latest}
-  KAG_EXTRACTION_CONCURRENCY: ${KAG_EXTRACTION_CONCURRENCY:-3}
-  KAG_EXTRACTION_TIMEOUT: ${KAG_EXTRACTION_TIMEOUT:-120}
-  KAG_EXTRACTION_MAX_TOKENS: ${KAG_EXTRACTION_MAX_TOKENS:-4096}
-  KAG_MAX_ENTITIES_PER_PAGE: ${KAG_MAX_ENTITIES_PER_PAGE:-20}
-  KAG_MAX_RELATIONS_PER_PAGE: ${KAG_MAX_RELATIONS_PER_PAGE:-15}
-  KAG_SMALL_MODEL_MAX_ENTITIES: ${KAG_SMALL_MODEL_MAX_ENTITIES:-8}
-  KAG_SMALL_MODEL_MAX_RELATIONS: ${KAG_SMALL_MODEL_MAX_RELATIONS:-6}
-  KAG_RETRIEVAL_HOP_LIMIT: ${KAG_RETRIEVAL_HOP_LIMIT:-1}
-  KAG_ENTITY_MATCH_MIN_SCORE: ${KAG_ENTITY_MATCH_MIN_SCORE:-0.35}
-  # Extraction KAG par fenêtre glissante (entités + catégories, 3 PNG par appel)
-  KAG_BATCH_SIZE: ${KAG_BATCH_SIZE:-3}
-  KAG_BATCH_OVERLAP: ${KAG_BATCH_OVERLAP:-1}
-  # Enrichissement contextuel inter-pages (synthèse factuelle par thème/catégorie)
-  MULTIMODAL_ENABLED: ${MULTIMODAL_ENABLED:-true}
-  MULTIMODAL_PAGE_MODEL: ${MULTIMODAL_PAGE_MODEL:-mistral-small-latest}
-  MULTIMODAL_PAGE_DPI: ${MULTIMODAL_PAGE_DPI:-200}
-  MULTIMODAL_PAGE_MAX_TOKENS: ${MULTIMODAL_PAGE_MAX_TOKENS:-6000}
-  VISION_MODEL: ${VISION_MODEL:-pixtral-12b-2409}
-  VISION_MAX_TOKENS: ${VISION_MAX_TOKENS:-1500}
-  VISION_MAX_IMAGES_PER_DOCUMENT: ${VISION_MAX_IMAGES_PER_DOCUMENT:-}
-  # Extraction vision par page (indexation documentaire)
-  PAGE_EXTRACTION_MODEL: ${PAGE_EXTRACTION_MODEL:-mistral-small-latest}
-  PAGE_EXTRACTION_MAX_CHUNK_TOKENS: ${PAGE_EXTRACTION_MAX_CHUNK_TOKENS:-480}
-  PAGE_EXTRACTION_MAX_CHUNKS_PER_PAGE: ${PAGE_EXTRACTION_MAX_CHUNKS_PER_PAGE:-12}
-  PAGE_EXTRACTION_DPI: ${PAGE_EXTRACTION_DPI:-200}
-  PAGE_EXTRACTION_CONCURRENCY: ${PAGE_EXTRACTION_CONCURRENCY:-3}
-  PAGE_EXTRACTION_TIMEOUT: ${PAGE_EXTRACTION_TIMEOUT:-120}
-  PAGE_EXTRACTION_MAX_TOKENS: ${PAGE_EXTRACTION_MAX_TOKENS:-4096}
-  # Extraction TEXTE NATIF (pymupdf4llm) — voie sélectionnable par requête de
-  # réindexation (extractor=text). Chiffres exacts, tableaux en chunks-lignes.
-  TEXT_EXTRACTION_MAX_CHUNK_TOKENS: ${TEXT_EXTRACTION_MAX_CHUNK_TOKENS:-500}
-  TEXT_EXTRACTION_TABLE_MODE: ${TEXT_EXTRACTION_TABLE_MODE:-rows}
-  TEXT_EXTRACTION_TABLE_FULL_CHUNK: ${TEXT_EXTRACTION_TABLE_FULL_CHUNK:-true}
-  TEXT_EXTRACTION_MAX_CHUNKS_PER_PAGE: ${TEXT_EXTRACTION_MAX_CHUNKS_PER_PAGE:-120}
-  TEXT_EXTRACTION_VISION_FALLBACK: ${TEXT_EXTRACTION_VISION_FALLBACK:-true}
-  DOCLING_OCR_ENABLED: ${DOCLING_OCR_ENABLED:-true}
-  DOCLING_OCR_LANG: ${DOCLING_OCR_LANG:-fr,en}
-  DOCLING_CPU_ONLY: ${DOCLING_CPU_ONLY:-true}
-  DOCLING_USE_GPU: ${DOCLING_USE_GPU:-false}
-  OCR_IMAGE_SCALE: ${OCR_IMAGE_SCALE:-3.0}
-  OCR_PREPROCESS_ENABLED: ${OCR_PREPROCESS_ENABLED:-true}
-  OCR_FALLBACK_ENABLED: ${OCR_FALLBACK_ENABLED:-true}
-  OCR_MIN_TEXT_LENGTH: ${OCR_MIN_TEXT_LENGTH:-50}
-  OCR_TESSERACT_CONFIG: ${OCR_TESSERACT_CONFIG:-}
-  LANGSMITH_API_KEY: ${LANGSMITH_API_KEY:-}
-  LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2:-false}
-  LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT:-noton-rag}
-  QUERY_UNDERSTANDING_ENABLED: ${QUERY_UNDERSTANDING_ENABLED:-true}
-  # Reranker cross-encoder (CPU-only). Défaut aligné sur config.py (true) ; le .env prod
-  # peut le désactiver (une désactivation fait du boost catégorie le signal final —
-  # cf. coherence_warnings() au démarrage).
-  RERANKER_ENABLED: ${RERANKER_ENABLED:-true}
-  RERANKER_PROVIDER: ${RERANKER_PROVIDER:-local}
-  RERANKER_MODEL: ${RERANKER_MODEL:-cross-encoder/ms-marco-MiniLM-L-6-v2}
-  RERANK_POOL: ${RERANK_POOL:-40}
-  RERANK_CHAR_CAP: ${RERANK_CHAR_CAP:-8000}
-  RERANK_BATCH_SIZE: ${RERANK_BATCH_SIZE:-16}
-  EARLY_STOP_TOP_N: ${EARLY_STOP_TOP_N:-5}
-  EARLY_STOP_MEAN_THRESHOLD: ${EARLY_STOP_MEAN_THRESHOLD:-0.78}
-  MIN_DYNAMIC_K: ${MIN_DYNAMIC_K:-2}
-  MAX_DYNAMIC_K: ${MAX_DYNAMIC_K:-12}
-  SOFTMAX_CUM_THRESHOLD: ${SOFTMAX_CUM_THRESHOLD:-0.80}
-  STUTTER_GAP: ${STUTTER_GAP:-0.05}
-  ZSCORE_FLAT_THRESHOLD: ${ZSCORE_FLAT_THRESHOLD:-0.05}
-  HF_TOKEN: ${HF_TOKEN:-}
-  # Fiche technique (lookup par référence nue → sortie structurée sourcée)
-  # Motifs de référence non exposés ici (défauts Python) : un ${VAR:-} vide écraserait
-  # le regex par défaut. Les surcharger via .env si besoin.
-  FICHE_TECHNIQUE_ENABLED: ${FICHE_TECHNIQUE_ENABLED:-true}
-  FICHE_TECHNIQUE_K: ${FICHE_TECHNIQUE_K:-12}
-  FICHE_MAX_WORDS: ${FICHE_MAX_WORDS:-10}
-  FICHE_MAX_TOKENS: ${FICHE_MAX_TOKENS:-3000}
-  # Moteur d'aiguillage procédural (guidage SAV / chantier)
-  # Périmètre de recherche confirmé (human-in-the-loop) — OFF par défaut.
-  SCOPE_CONFIRMATION_ENABLED: ${SCOPE_CONFIRMATION_ENABLED:-false}
-  SCOPE_MODE: ${SCOPE_MODE:-off}
-  SCOPE_MIN_DISTINCT_TO_ASK: ${SCOPE_MIN_DISTINCT_TO_ASK:-2}
-  SCOPE_ASKABLE_FIELDS: ${SCOPE_ASKABLE_FIELDS:-product_family,material}
-  SCOPE_STATS_CACHE_TTL: ${SCOPE_STATS_CACHE_TTL:-300}
-
-x-app-volumes: &app-volumes
-  - ./app:/app/app
-  - ./app/alembic:/app/alembic
-  - ./app/alembic.ini:/app/alembic.ini
-  - ./media:/app/media
-  - ./logs:/app/logs
-  # Tests : montés pour pouvoir lancer pytest dans le conteneur
-  - ./tests:/app/tests
-  - ./app/pytest.ini:/app/pytest.ini
-  - hf_cache:/root/.cache/huggingface
-  - ./data:/app/data
+  # Le chat CAG : le wiki entier dans le prompt, raisonnement, température basse.
+  GENERATION_REASONING_EFFORT: ${GENERATION_REASONING_EFFORT:-high}
+  CHAT_TEMPERATURE: ${CHAT_TEMPERATURE:-0.2}
+  CHAT_MAX_TOKENS: ${CHAT_MAX_TOKENS:-4096}
+  CHAT_HISTORY_MAX_MESSAGES: ${CHAT_HISTORY_MAX_MESSAGES:-10}
+  CHAT_HISTORY_MAX_CHARS: ${CHAT_HISTORY_MAX_CHARS:-24000}
+  # Le wiki : wiki/ (les pages) et raw/ (les PDF, hors git, copiés sur le serveur).
+  WIKI_DIR: /app/wiki_llm
 
 services:
   db:
+    # Image pgvector conservée pour ne pas toucher au volume existant ; l'extension
+    # vector est retirée par la migration wiki_refonte_drop_retrieval.
     image: pgvector/pgvector:pg15
     container_name: noton_db
     environment:
@@ -219,65 +42,32 @@ services:
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:7-alpine
-    container_name: noton_redis
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
   web:
     build:
       context: .
       dockerfile: ./app/Dockerfile
     container_name: noton_web
-    # --reload est un drapeau de DÉVELOPPEMENT : il lance un surveillant de fichiers,
-    # force un process unique, et surtout INTERROMPT TOUS LES FLUX SSE EN COURS dès qu'un
-    # fichier bouge (une réponse de chat en cours de génération est alors perdue).
-    # Il n'est donc plus posé en dur : UVICORN_EXTRA_ARGS=--reload dans le .env local
-    # rétablit le rechargement à chaud ; une prod sans cette variable tourne sans.
-    command: sh -c "sleep 5 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 ${UVICORN_EXTRA_ARGS:-} --log-level info --access-log"
-    volumes: *app-volumes
+    # --reload est un drapeau de DÉVELOPPEMENT (UVICORN_EXTRA_ARGS=--reload dans le .env
+    # local) : il interrompt les flux SSE en cours dès qu'un fichier bouge.
+    command: sh -c "sleep 3 && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 ${UVICORN_EXTRA_ARGS:-} --log-level info --access-log"
+    volumes:
+      - ./app:/app/app
+      - ./app/alembic:/app/alembic
+      - ./app/alembic.ini:/app/alembic.ini
+      - ./logs:/app/logs
+      - ./wiki_llm:/app/wiki_llm:ro
+      # Tests : montés pour pouvoir lancer pytest dans le conteneur
+      - ./tests:/app/tests
+      - ./app/pytest.ini:/app/pytest.ini
     ports:
       - "8001:8000"
     env_file:
       - .env
     environment:
       <<: *app-env
-      TASK_BACKEND_MODE: ${TASK_BACKEND_MODE:-thread}
     depends_on:
       db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-
-  worker:
-    build:
-      context: .
-      dockerfile: ./app/Dockerfile
-    container_name: noton_worker
-    command: sh -c "sleep 10 && celery -A app.celery_app worker -l INFO -Q documents,embeddings,celery -c $${CELERY_WORKER_CONCURRENCY:-1}"
-    # L'indexation ColPali sature tout le CPU qu'on lui laisse. Sans plafond, un import
-    # en cours affame l'encodage de requête ColPali du conteneur web et double les temps
-    # de réponse du chat. On réserve donc explicitement la majorité des cœurs au web.
-    cpus: ${WORKER_CPUS:-4}
-    volumes: *app-volumes
-    env_file:
-      - .env
-    environment:
-      <<: *app-env
-      TASK_BACKEND_MODE: celery
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
         condition: service_healthy
 
 volumes:
   postgres_data:
-  ollama_data:
-  hf_cache:

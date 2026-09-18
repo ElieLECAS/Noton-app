@@ -1,0 +1,481 @@
+"""Le wiki — la seule source de LIA.
+
+Le wiki est un bundle OKF (``wiki_llm/wiki/*.md`` : frontmatter YAML + markdown, liens
+``[..](/dossier/page.md)``). Il s'écrit HORS de l'application (Claude Code + git, protocole
+``wiki_llm/CLAUDE.md``) ; l'application le lit. Ce module construit un instantané :
+
+  * les pages (frontmatter, corps, liens sortants), les nœuds fantômes (liens vers des pages
+    pas encore écrites — valides en OKF), les degrés, les pages périmées ;
+  * le **prompt système** du chat : consignes + ``index.md`` + registres d'anomalies + toutes
+    les pages, ``log.md`` exclu — et sa clé de cache Mistral (sha256 du prompt entier, donc
+    toute modification du wiki ou des consignes invalide proprement le cache) ;
+  * un lint (orphelines, fantômes, périmées, frontmatter illisible, pages hors index) et des
+    statistiques pour la carte d'administration.
+
+L'instantané est reconstruit dès qu'un fichier change (signature = nombre, taille et date des
+``.md`` + date des consignes + nombre de PDF de ``raw/``), vérifiée à chaque accès : quelques
+dizaines de ``stat`` — sans bouton ni tâche planifiée.
+
+Mesuré le 18/09/2026 sur un appel réel : 542 491 caractères → 185 508 tokens (2,92 car./tok),
+cache Mistral à 99,98 % dès le troisième appel, premier appel 15,5 s puis 5,9 s en cache.
+"""
+from __future__ import annotations
+
+import hashlib
+import logging
+import os
+import re
+import threading
+from collections import Counter
+from dataclasses import dataclass, field
+from datetime import date, datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+import yaml
+
+from app.config import settings
+
+logger = logging.getLogger(__name__)
+
+RESERVED = frozenset({"index.md", "log.md"})
+LINK_RE = re.compile(r"\[([^\]]*)\]\((/[^)\s]+\.md)\)")
+FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n?(.*)\Z", re.DOTALL)
+# Ratio caractères / token mesuré le 18/09 sur le prompt réel (Small, tokenizer tekken).
+CHARS_PER_TOKEN = 2.924
+# Fenêtre de Small : 256 k tokens. Au-delà de ce seuil ESTIMÉ, on avertit (journal + admin) :
+# pas de troncature silencieuse — la décision appartient à celui qui écrit le wiki.
+TOKEN_WARNING_THRESHOLD = 200_000
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+CONSIGNES_PATH = PROJECT_ROOT / "app" / "prompts" / "wiki_consignes.md"
+
+
+class WikiUnavailable(RuntimeError):
+    """Le dossier du wiki ou le fichier de consignes est introuvable."""
+
+
+# ---------------------------------------------------------------------------
+# Modèle
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class WikiPage:
+    id: str  # identité OKF : "/dossier/page.md"
+    title: str
+    type: str
+    description: str = ""
+    status: str = ""
+    tags: List[str] = field(default_factory=list)
+    stale_after: str = ""
+    stale: bool = False
+    folder: str = "."
+    reserved: bool = False
+    missing: bool = False
+    sources: List[Dict[str, Any]] = field(default_factory=list)
+    generated: Dict[str, Any] = field(default_factory=dict)
+    body: str = ""
+    raw_text: str = ""  # le fichier entier, frontmatter comprise : c'est ce que lit le modèle
+    out_links: List[str] = field(default_factory=list)
+    in_degree: int = 0
+    out_degree: int = 0
+    frontmatter_error: str = ""
+
+    @property
+    def is_concept(self) -> bool:
+        return not self.reserved and not self.missing
+
+    @property
+    def source_titles(self) -> List[str]:
+        return [str(s.get("title") or s.get("resource") or "") for s in self.sources if s]
+
+    def node(self) -> Dict[str, Any]:
+        """Le nœud du graphe : le contrat de ``graph.json`` moins le corps."""
+        return {
+            "id": self.id,
+            "title": self.title,
+            "type": self.type,
+            "description": self.description,
+            "status": self.status,
+            "tags": list(self.tags),
+            "staleAfter": self.stale_after,
+            "stale": self.stale,
+            "folder": self.folder,
+            "reserved": self.reserved,
+            "missing": self.missing,
+            "sources": self.source_titles,
+            "inDegree": self.in_degree,
+            "outDegree": self.out_degree,
+        }
+
+
+@dataclass
+class WikiSnapshot:
+    root: Path
+    pages: Dict[str, WikiPage]
+    links: List[Dict[str, Any]]
+    system_prompt: str
+    cache_key: str
+    raw_files: List[str]
+    signature: Tuple
+    loaded_at: datetime
+    lint: Dict[str, Any]
+
+    # ---- mesures -------------------------------------------------------
+
+    @property
+    def char_count(self) -> int:
+        return len(self.system_prompt)
+
+    @property
+    def estimated_tokens(self) -> int:
+        return round(self.char_count / CHARS_PER_TOKEN)
+
+    @property
+    def token_warning(self) -> bool:
+        return self.estimated_tokens > TOKEN_WARNING_THRESHOLD
+
+    @property
+    def concept_pages(self) -> List[WikiPage]:
+        return [p for p in self.pages.values() if p.is_concept]
+
+    # ---- charges utiles ------------------------------------------------
+
+    def graph_payload(self) -> Dict[str, Any]:
+        return {
+            "generated": self.loaded_at.isoformat(timespec="seconds"),
+            "nodes": [p.node() for p in sorted(self.pages.values(), key=lambda p: p.id)],
+            "links": [dict(l) for l in self.links],
+        }
+
+    def page_payload(self, page_id: str) -> Optional[Dict[str, Any]]:
+        page = self.pages.get(page_id)
+        if page is None or page.missing:
+            return None
+        ins = [self.pages[l["source"]] for l in self.links if l["target"] == page_id]
+        outs = [self.pages[l["target"]] for l in self.links if l["source"] == page_id]
+        payload = page.node()
+        payload.update(
+            {
+                "body": page.body,
+                "sources": [dict(s) for s in page.sources],
+                "generated": dict(page.generated),
+                "inLinks": [{"id": q.id, "title": q.title, "type": q.type} for q in ins],
+                "outLinks": [
+                    {"id": q.id, "title": q.title, "type": q.type, "missing": q.missing}
+                    for q in outs
+                ],
+            }
+        )
+        return payload
+
+    def raw_path(self, name: str) -> Optional[Path]:
+        """Le PDF ``name`` de ``raw/`` — résolu contre la LISTE des fichiers, jamais contre le
+        disque : aucun ``..`` ni sous-chemin ne peut sortir du dossier."""
+        if name in self.raw_files:
+            return self.root / "raw" / name
+        return None
+
+    def stats(self) -> Dict[str, Any]:
+        concept = self.concept_pages
+        types = Counter(p.type for p in concept)
+        return {
+            "pages": len(concept),
+            "reserved": sum(1 for p in self.pages.values() if p.reserved),
+            "ghosts": len(self.lint["ghosts"]),
+            "links": len(self.links),
+            "drafts": len(self.lint["drafts"]),
+            "types": dict(sorted(types.items(), key=lambda kv: (-kv[1], kv[0]))),
+            "orphans": self.lint["orphans"],
+            "stale": self.lint["stale"],
+            "chars": self.char_count,
+            "estimated_tokens": self.estimated_tokens,
+            "token_warning": self.token_warning,
+            "cache_key": self.cache_key,
+            "loaded_at": self.loaded_at.isoformat(timespec="seconds"),
+            "wiki_dir": str(self.root),
+            "raw_files": len(self.raw_files),
+            "lint": {
+                "frontmatter_errors": self.lint["frontmatter_errors"],
+                "not_in_index": self.lint["not_in_index"],
+                "index_dead_links": self.lint["index_dead_links"],
+            },
+            "last_call": last_call(),
+        }
+
+
+# ---------------------------------------------------------------------------
+# Lecture des fichiers
+# ---------------------------------------------------------------------------
+
+
+def wiki_root() -> Path:
+    """La racine de connaissance (``wiki_llm/`` par défaut) : ``wiki/`` et ``raw/`` dedans."""
+    configured = Path(settings.WIKI_DIR)
+    return configured if configured.is_absolute() else PROJECT_ROOT / configured
+
+
+def _page_id(path: Path, wiki_dir: Path) -> str:
+    return "/" + path.relative_to(wiki_dir).as_posix()
+
+
+def _parse_page(path: Path, wiki_dir: Path) -> WikiPage:
+    raw = path.read_text(encoding="utf-8")
+    page_id = _page_id(path, wiki_dir)
+    reserved = path.name in RESERVED
+    folder = path.parent.relative_to(wiki_dir).as_posix() or "."
+
+    meta: Dict[str, Any] = {}
+    body = raw
+    error = ""
+    match = FRONTMATTER_RE.match(raw)
+    if match:
+        body = match.group(2)
+        try:
+            loaded = yaml.safe_load(match.group(1))
+        except yaml.YAMLError as exc:
+            error = f"YAML illisible : {str(exc).splitlines()[0]}"
+        else:
+            if isinstance(loaded, dict):
+                meta = loaded
+            else:
+                error = "frontmatter qui n'est pas un dictionnaire"
+    elif not reserved:
+        error = "frontmatter absente"
+
+    page_type = str(meta.get("type") or "").strip()
+    if reserved:
+        page_type = "Réservé"
+    elif not page_type:
+        if not error:
+            error = "champ type vide"
+        page_type = "Sans type"
+
+    title = str(meta.get("title") or "").strip()
+    if not title:
+        if path.name == "index.md":
+            title = "Table des matières"
+        elif path.name == "log.md":
+            title = "Journal des opérations"
+        else:
+            title = path.stem.replace("-", " ")
+
+    tags_raw = meta.get("tags")
+    tags = [str(t) for t in tags_raw] if isinstance(tags_raw, list) else []
+    sources_raw = meta.get("sources")
+    sources = [s for s in sources_raw if isinstance(s, dict)] if isinstance(sources_raw, list) else []
+    generated = meta.get("generated") if isinstance(meta.get("generated"), dict) else {}
+    stale_after = meta.get("stale_after")
+    stale_after_str = str(stale_after) if stale_after else ""
+
+    return WikiPage(
+        id=page_id,
+        title=title,
+        type=page_type,
+        description=str(meta.get("description") or "").strip(),
+        status=str(meta.get("status") or "").strip(),
+        tags=tags,
+        stale_after=stale_after_str,
+        stale=bool(stale_after_str and stale_after_str < date.today().isoformat()),
+        folder=folder,
+        reserved=reserved,
+        sources=sources,
+        generated=generated,
+        body=body.strip(),
+        raw_text=raw,
+        out_links=[target for _, target in LINK_RE.findall(body)],
+        frontmatter_error=error,
+    )
+
+
+def _ghost(target: str) -> WikiPage:
+    """Une cible de lien qui n'existe pas : en OKF un lien cassé est valide, il marque une
+    connaissance pas encore écrite."""
+    stripped = target.strip("/")
+    return WikiPage(
+        id=target,
+        title=target.rsplit("/", 1)[-1][:-3].replace("-", " "),
+        type="À écrire",
+        description="Page liée mais pas encore écrite.",
+        folder=stripped.rsplit("/", 1)[0] if "/" in stripped else ".",
+        missing=True,
+    )
+
+
+def _signature(root: Path) -> Tuple:
+    wiki_dir = root / "wiki"
+    count, latest, size = 0, 0, 0
+    if wiki_dir.is_dir():
+        for dirpath, _, files in os.walk(wiki_dir):
+            for name in files:
+                if name.endswith(".md"):
+                    st = os.stat(os.path.join(dirpath, name))
+                    count += 1
+                    size += st.st_size
+                    latest = max(latest, st.st_mtime_ns)
+    consignes = CONSIGNES_PATH.stat().st_mtime_ns if CONSIGNES_PATH.exists() else 0
+    raw_dir = root / "raw"
+    raw_count = sum(1 for _ in raw_dir.glob("*.pdf")) if raw_dir.is_dir() else 0
+    return (count, latest, size, consignes, raw_count)
+
+
+# ---------------------------------------------------------------------------
+# Prompt système
+# ---------------------------------------------------------------------------
+
+
+def build_system_prompt(pages: Dict[str, WikiPage], consignes: str) -> Tuple[str, str]:
+    """Consignes, puis la table des matières, puis les registres d'anomalies (la consigne n° 2
+    impose de les consulter d'abord), puis toutes les pages par chemin. ``log.md`` est exclu :
+    journal d'opérations, aucune valeur de réponse, et il change à chaque édition.
+
+    Retourne ``(prompt, clé de cache)``. La clé couvre le prompt ENTIER, consignes comprises :
+    modifier une consigne invalide donc le cache au lieu de servir un préfixe périmé.
+    """
+    index = pages.get("/index.md")
+    anomalies = sorted(
+        (p for p in pages.values() if p.is_concept and p.folder == "anomalies"),
+        key=lambda p: p.id,
+    )
+    others = sorted(
+        (p for p in pages.values() if p.is_concept and p.folder != "anomalies"),
+        key=lambda p: p.id,
+    )
+    parts: List[str] = []
+    if index is not None:
+        parts.append(f"===== TABLE DES MATIÈRES {index.id} =====\n{index.raw_text}")
+    for page in anomalies + others:
+        parts.append(f"===== PAGE {page.id} =====\n{page.raw_text}")
+    corpus = "\n\n".join(parts)
+    prompt = (
+        f"{consignes.rstrip()}\n\n===== DÉBUT DU WIKI =====\n\n{corpus}\n\n===== FIN DU WIKI ====="
+    )
+    key = "lia-wiki-" + hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:32]
+    return prompt, key
+
+
+# ---------------------------------------------------------------------------
+# Construction de l'instantané
+# ---------------------------------------------------------------------------
+
+
+def _lint(pages: Dict[str, WikiPage]) -> Dict[str, Any]:
+    concept = [p for p in pages.values() if p.is_concept]
+    index = pages.get("/index.md")
+    index_links = set(index.out_links) if index else set()
+    # Une orpheline n'est citée par aucune page CONCEPT : index.md cite tout le monde, le
+    # compter rendrait le lint aveugle.
+    cited_by_concepts = {
+        target for p in concept for target in p.out_links
+    }
+    return {
+        "orphans": sorted(p.id for p in concept if p.id not in cited_by_concepts),
+        "ghosts": sorted(p.id for p in pages.values() if p.missing),
+        "stale": sorted(p.id for p in concept if p.stale),
+        "drafts": sorted(p.id for p in concept if p.status == "draft"),
+        "frontmatter_errors": sorted(
+            f"{p.id} — {p.frontmatter_error}" for p in concept if p.frontmatter_error
+        ),
+        "not_in_index": sorted(p.id for p in concept if p.id not in index_links),
+        "index_dead_links": sorted(
+            t for t in index_links if t not in pages or pages[t].missing
+        ),
+    }
+
+
+def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None) -> WikiSnapshot:
+    root = root or wiki_root()
+    wiki_dir = root / "wiki"
+    if not wiki_dir.is_dir():
+        raise WikiUnavailable(f"wiki/ introuvable sous {root}")
+    if not CONSIGNES_PATH.is_file():
+        raise WikiUnavailable(f"consignes introuvables : {CONSIGNES_PATH}")
+    consignes = CONSIGNES_PATH.read_text(encoding="utf-8")
+
+    pages: Dict[str, WikiPage] = {}
+    for path in sorted(wiki_dir.rglob("*.md")):
+        page = _parse_page(path, wiki_dir)
+        pages[page.id] = page
+
+    links: List[Dict[str, Any]] = []
+    seen: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    for page in list(pages.values()):
+        for target in page.out_links:
+            if target not in pages:
+                pages[target] = _ghost(target)
+            key = (page.id, target)
+            if key in seen:
+                seen[key]["count"] += 1
+            else:
+                seen[key] = {"source": page.id, "target": target, "count": 1}
+                links.append(seen[key])
+    for link in links:
+        pages[link["source"]].out_degree += 1
+        pages[link["target"]].in_degree += 1
+
+    prompt, cache_key = build_system_prompt(pages, consignes)
+    raw_dir = root / "raw"
+    raw_files = sorted(p.name for p in raw_dir.glob("*.pdf")) if raw_dir.is_dir() else []
+
+    snapshot = WikiSnapshot(
+        root=root,
+        pages=pages,
+        links=links,
+        system_prompt=prompt,
+        cache_key=cache_key,
+        raw_files=raw_files,
+        signature=signature if signature is not None else _signature(root),
+        loaded_at=datetime.now(),
+        lint=_lint(pages),
+    )
+    logger.info(
+        "[wiki] %d pages, %d liens, %d fantômes, %s car. (~%s tokens), clé %s",
+        len(snapshot.concept_pages),
+        len(links),
+        len(snapshot.lint["ghosts"]),
+        f"{snapshot.char_count:,}".replace(",", " "),
+        f"{snapshot.estimated_tokens:,}".replace(",", " "),
+        cache_key,
+    )
+    if snapshot.token_warning:
+        logger.warning(
+            "[wiki] le prompt système dépasse %s tokens estimés : la fenêtre de 256 k approche",
+            f"{TOKEN_WARNING_THRESHOLD:,}".replace(",", " "),
+        )
+    return snapshot
+
+
+_lock = threading.Lock()
+_current: Optional[WikiSnapshot] = None
+_last_call: Optional[Dict[str, Any]] = None
+
+
+def get_snapshot() -> WikiSnapshot:
+    """L'instantané courant, reconstruit si un fichier a changé depuis."""
+    global _current
+    root = wiki_root()
+    signature = _signature(root)
+    current = _current
+    if current is not None and current.root == root and current.signature == signature:
+        return current
+    with _lock:
+        current = _current
+        if current is not None and current.root == root and current.signature == signature:
+            return current
+        _current = load_snapshot(root, signature=signature)
+        return _current
+
+
+def reset_snapshot() -> None:
+    global _current
+    _current = None
+
+
+def record_call(info: Dict[str, Any]) -> None:
+    """Mémorise la mesure du dernier appel réel (tokens, cache, latence) pour l'admin."""
+    global _last_call
+    _last_call = dict(info)
+
+
+def last_call() -> Optional[Dict[str, Any]]:
+    return dict(_last_call) if _last_call else None

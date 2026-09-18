@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+# Les PDF sources et la file d'attente ne sont pas versionnés : ils sont copiés sur le serveur
+# (dossier monté en volume) ; seul le wiki markdown est dans git.
+raw/
+a_faire/

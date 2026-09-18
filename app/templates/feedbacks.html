@@ -258,10 +258,6 @@
                             </span>
                             ${categoryBadge}
                             <span class="text-xs font-bold text-gray-500 dark:text-gray-400">
-                                Espace : ${escapeHtml(f.space_name)}
-                            </span>
-                            <span class="text-xs text-gray-400 dark:text-gray-500">•</span>
-                            <span class="text-xs font-bold text-gray-500 dark:text-gray-400">
                                 Conversation : <span class="font-bold ${f.conversation_title ? 'text-gray-600 dark:text-gray-300' : 'text-rose-500 dark:text-rose-400 italic'}">${escapeHtml(f.conversation_title || 'supprimée')}</span>
                             </span>
                         </div>
@@ -296,25 +292,16 @@
                             </div>
                         ` : ''}
 
-                        ${f.auto_faq_generated ? `
-                            <div class="text-sm bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 p-4 rounded-2xl mt-2">
-                                <span class="font-bold text-blue-800 dark:text-blue-400 inline-flex items-center gap-1.5">
-                                    <i class="ti ti-bulb text-base"></i> Texte technique généré par IA :
-                                </span>
-                                <div class="text-gray-900 dark:text-gray-100 mt-2 text-xs leading-relaxed whitespace-pre-line font-semibold bg-white/40 dark:bg-black/20 p-3 rounded-xl border border-blue-505/5 dark:border-blue-950/50">
-                                    ${escapeHtml(f.auto_faq_content)}
-                                </div>
-                            </div>
-                        ` : ''}
+
                     </div>
 
                     <div class="flex justify-between items-center border-t border-black/5 dark:border-white/5 pt-4 mt-1">
                         <button onclick="deleteFeedback(${f.message_id}, this)" class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 transition-colors bg-rose-500/5 hover:bg-rose-500/10 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 px-3.5 py-2 rounded-xl border border-rose-500/10 hover:border-rose-500/20 active:scale-95 transition-all shadow-sm">
                             <i class="ti ti-trash text-sm"></i> Supprimer
                         </button>
-                        <a href="/spaces/${f.space_id}" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 px-3.5 py-2 rounded-xl border border-indigo-500/10 hover:border-indigo-500/20 active:scale-95 transition-all shadow-sm">
-                            Ouvrir l'espace <i class="ti ti-arrow-right text-sm"></i>
-                        </a>
+                        ${f.conversation_id ? `<a href="/?conversation=${f.conversation_id}" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors bg-indigo-500/5 hover:bg-indigo-500/10 dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 px-3.5 py-2 rounded-xl border border-indigo-500/10 hover:border-indigo-500/20 active:scale-95 transition-all shadow-sm">
+                            Ouvrir la conversation <i class="ti ti-arrow-right text-sm"></i>
+                        </a>` : ''}
                     </div>
                 </div>
             `;

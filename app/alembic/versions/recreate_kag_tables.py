@@ -6,10 +6,23 @@ Revises: add_query_context_slots
 
 from alembic import op
 import sqlalchemy as sa
-from pgvector.sqlalchemy import Vector
+try:
+    from pgvector.sqlalchemy import Vector
+except ImportError:  # pgvector n'est plus une dépendance depuis la refonte wiki (2026-09-18)
+    from sqlalchemy.types import UserDefinedType
+
+    class Vector(UserDefinedType):
+        cache_ok = True
+
+        def __init__(self, dim=None):
+            self.dim = dim
+
+        def get_col_spec(self, **kw):
+            return f"vector({self.dim})" if self.dim else "vector"
 from sqlalchemy import inspect
 
-from app.embedding_config import EMBEDDING_DIMENSION
+# Dimension historique des embeddings Mistral (app.embedding_config a disparu avec le retriever).
+EMBEDDING_DIMENSION = 1024
 
 
 revision = "recreate_kag_tables"

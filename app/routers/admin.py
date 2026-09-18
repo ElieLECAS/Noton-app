@@ -7,16 +7,6 @@ from app.models.role import Role, RoleCreate, RoleRead, RoleUpdate
 from app.models.permission import Permission, PermissionCreate, PermissionRead
 from app.models.user_role import UserRole, UserRoleCreate, UserRoleRead
 from app.models.role_permission import RolePermission, RolePermissionCreate, RolePermissionRead
-from app.models.document_category import (
-    DocumentCategory,
-    DocumentCategoryCreate,
-    DocumentCategoryRead,
-    DocumentCategoryUpdate,
-)
-from app.models.gamme_commerciale import (
-    GammeCommercialeRead,
-    GammeCommercialeUpdate,
-)
 from app.routers.auth import get_current_user, require_permission, require_role
 from app.services.auth_service import get_password_hash
 from pydantic import BaseModel, Field
@@ -56,51 +46,6 @@ class AssignPermissionRequest(BaseModel):
     """Assigner une permission à un rôle."""
     role_id: int
     permission_id: int
-
-
-# ==================== CONFIG ====================
-
-@router.get("/config")
-async def get_runtime_config(
-    current_user: UserRead = Depends(require_role("admin")),
-):
-    """Configuration effective (flags résolus) + garde-fous de cohérence.
-
-    Aucune valeur sensible (clés, secrets, URLs de connexion) n'est exposée : uniquement
-    les flags et seuils qui pilotent le pipeline RAG. Sert à vérifier en un coup d'œil ce
-    qui tourne réellement (les défauts config.py sont surchargés par .env)."""
-    from app.config import settings
-
-    return {
-        "feature_summary": settings.feature_summary(),
-        "coherence_warnings": settings.coherence_warnings(),
-        "flags": {
-            "MULTIMODAL_ENABLED": settings.MULTIMODAL_ENABLED,
-            "COLPALI_ENABLED": settings.COLPALI_ENABLED,
-            "COLPALI_GATING_ENABLED": settings.COLPALI_GATING_ENABLED,
-            "COLPALI_GATING_INTENTS": settings.colpali_gating_intents,
-            "RERANKER_ENABLED": settings.RERANKER_ENABLED,
-            "VISION_RERANK_ENABLED": settings.VISION_RERANK_ENABLED,
-            "KAG_ENABLED": settings.KAG_ENABLED,
-            "CAG_ENABLED": settings.CAG_ENABLED,
-            "QUERY_UNDERSTANDING_ENABLED": settings.QUERY_UNDERSTANDING_ENABLED,
-            "CONVERSATION_ANCHOR_ENABLED": settings.CONVERSATION_ANCHOR_ENABLED,
-            "FICHE_TECHNIQUE_ENABLED": settings.FICHE_TECHNIQUE_ENABLED,
-            "GUIDED_FLOW_ENABLED": True,  # Arbre SAV toujours actif (refonte 2026-07-30, plus de flag)
-        },
-        "retrieval_tuning": {
-            "RAG_TOP_K": settings.RAG_TOP_K,
-            "RERANK_POOL": settings.RERANK_POOL,
-            "RRF_K": settings.RRF_K,
-            "RETRIEVAL_CATEGORY_BOOST": settings.RETRIEVAL_CATEGORY_BOOST,
-            "RETRIEVAL_CATEGORY_BOOST_MAX": settings.RETRIEVAL_CATEGORY_BOOST_MAX,
-            "RETRIEVAL_AXIS_BOOST_WEIGHTS": settings.RETRIEVAL_AXIS_BOOST_WEIGHTS,
-            "CONVERSATION_ANCHOR_BOOST": settings.CONVERSATION_ANCHOR_BOOST,
-            "COLPALI_RELATIVE_MARGIN": settings.COLPALI_RELATIVE_MARGIN,
-            "CAG_TOKEN_BUDGET": settings.CAG_TOKEN_BUDGET,
-            "CAG_MAX_DOCUMENTS": settings.CAG_MAX_DOCUMENTS,
-        },
-    }
 
 
 # ==================== USERS ====================
@@ -479,79 +424,18 @@ async def create_permission(
     return PermissionRead.model_validate(permission)
 
 
-# ==================== QUEUES / OPS (admin rôle) ====================
-
-@router.get("/queues/health")
-async def admin_queues_health(
-    current_user: UserRead = Depends(require_role("admin")),
-):
-    """Santé des files Celery et workers (best-effort)."""
-    from app.services.celery_queue_health import get_queue_health_payload
-
-    return get_queue_health_payload()
-
-
-@router.get("/queues/workers-documents")
-async def admin_workers_documents_view(
-    current_user: UserRead = Depends(require_role("admin")),
-):
-    """Vue workers: documents en cours/en attente (worker + worker-kag)."""
-    from app.services.celery_queue_health import get_workers_document_tasks_view
-
-    return get_workers_document_tasks_view()
-
-
-@router.get("/documents/stuck-processing")
-async def admin_stuck_processing_documents(
-    minutes: int = 30,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session)
-):
-    """Documents en traitement depuis plus de N minutes (heuristique ``updated_at``)."""
-    from app.services.celery_queue_health import list_stuck_processing_documents
-
-    return list_stuck_processing_documents(minutes)
-
-
 @router.get("/feedbacks/stats")
 async def get_admin_feedback_stats(
     current_user: UserRead = Depends(require_role("admin")),
     session: Session = Depends(get_session)
 ):
-    """Statistiques globales et par espace pour les feedbacks."""
+    """Statistiques globales des retours utilisateurs."""
     from app.models.message_feedback import MessageFeedback
-    from app.models.space import Space
 
     total = session.exec(select(func.count(MessageFeedback.id))).first() or 0
     positive = session.exec(select(func.count(MessageFeedback.id)).where(MessageFeedback.is_positive == True)).first() or 0
     negative = session.exec(select(func.count(MessageFeedback.id)).where(MessageFeedback.is_positive == False)).first() or 0
     ratio = round(positive / total, 2) if total > 0 else 1.0
-
-    # Group by space and positivity in a simple DB-agnostic query
-    space_stats = session.exec(
-        select(
-            Space.id,
-            Space.name,
-            MessageFeedback.is_positive,
-            func.count(MessageFeedback.id)
-        )
-        .join(MessageFeedback, MessageFeedback.space_id == Space.id)
-        .group_by(Space.id, Space.name, MessageFeedback.is_positive)
-    ).all()
-
-    by_space_dict = {}
-    for space_id, space_name, is_positive, count in space_stats:
-        if space_id not in by_space_dict:
-            by_space_dict[space_id] = {
-                "space_id": space_id,
-                "space_name": space_name,
-                "positive": 0,
-                "negative": 0
-            }
-        if is_positive:
-            by_space_dict[space_id]["positive"] = count
-        else:
-            by_space_dict[space_id]["negative"] = count
 
     # Répartition des classifications pour les retours négatifs
     class_stats = session.exec(
@@ -573,7 +457,6 @@ async def get_admin_feedback_stats(
         "positive": positive,
         "negative": negative,
         "ratio": ratio,
-        "by_space": list(by_space_dict.values()),
         "classifications": classifications
     }
 
@@ -661,14 +544,12 @@ async def get_admin_recent_feedbacks(
 ):
     """Liste paginée des retours utilisateurs récents."""
     from app.models.message_feedback import MessageFeedback
-    from app.models.space import Space
     from app.models.conversation import Conversation
     from app.models.message import Message
     from app.models.user import User
 
     query = select(
         MessageFeedback,
-        Space.name.label("space_name"),
         Conversation.title.label("conversation_title"),
         Conversation.id.label("conversation_id"),
         User.email.label("user_email")
@@ -676,8 +557,6 @@ async def get_admin_recent_feedbacks(
         Message, MessageFeedback.message_id == Message.id
     ).outerjoin(
         Conversation, Message.conversation_id == Conversation.id
-    ).join(
-        Space, MessageFeedback.space_id == Space.id
     ).join(
         User, MessageFeedback.user_id == User.id
     )
@@ -716,12 +595,10 @@ async def get_admin_recent_feedbacks(
     results = session.exec(paginated_query).all()
 
     items = []
-    for feedback, space_name, conversation_title, conversation_id, user_email in results:
+    for feedback, conversation_title, conversation_id, user_email in results:
         items.append({
             "id": feedback.id,
             "message_id": feedback.message_id,
-            "space_id": feedback.space_id,
-            "space_name": space_name,
             "conversation_title": conversation_title,
             "conversation_id": conversation_id,
             "user_email": user_email,
@@ -729,9 +606,6 @@ async def get_admin_recent_feedbacks(
             "comment": feedback.comment,
             "query_text": feedback.query_text,
             "response_text": feedback.response_text,
-            "chunk_ids": feedback.chunk_ids,
-            "auto_faq_generated": feedback.auto_faq_generated,
-            "auto_faq_content": feedback.auto_faq_content,
             "category": feedback.category,
             "created_at": feedback.created_at.isoformat() if feedback.created_at else None,
             "updated_at": feedback.updated_at.isoformat() if feedback.updated_at else None
@@ -762,437 +636,6 @@ async def delete_admin_feedback(
     return
 
 
-# ==================== RAG EVALUATION ====================
-
-class RetrieverEvalRequest(BaseModel):
-    space_id: int
-    dataset: List[dict]
-    k: int = 15
-
-
-class SingleRetrieverEvalRequest(BaseModel):
-    space_id: int
-    question: str
-    type: str = "mono-document"
-    pages_attendues: List[dict]
-    acceptable_document_ids: List[int] = []
-    intent: str = "documentation"
-    k: int = 15
-
-
-@router.post("/eval/retriever")
-async def evaluate_retriever_api(
-    request: RetrieverEvalRequest,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session)
-):
-    """Évaluer le retriever ColPali sur un dataset complet."""
-    from app.services.retriever_evaluator import evaluate_retriever_dataset
-    try:
-        results = await evaluate_retriever_dataset(
-            session=session,
-            space_id=request.space_id,
-            user_id=current_user.id,
-            dataset=request.dataset,
-            k=request.k
-        )
-        return results
-    except Exception as e:
-        logger.error("Error during retriever evaluation API: %s", e, exc_info=True)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de l'évaluation : {str(e)}"
-        )
-
-
-@router.post("/eval/retriever/single")
-async def evaluate_retriever_single_api(
-    request: SingleRetrieverEvalRequest,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session)
-):
-    """Évaluer le retriever ColPali sur une seule question pour la progression de l'UI."""
-    from app.services.retriever_evaluator import build_question_eval_result, evaluate_cag_document_hit
-    from app.services.space_search_service import search_relevant_passages
-    from app.services.context_packer_service import build_cag_context
-
-    try:
-        search_res = await search_relevant_passages(
-            session=session,
-            space_id=request.space_id,
-            query_text=request.question,
-            user_id=current_user.id,
-            k=request.k,
-            document_filter="all",
-            include_retrieval_stages=True,
-        )
-        passages = search_res.get("passages", [])
-        stages = search_res.get("retrieval_stages") or {}
-
-        result = build_question_eval_result(
-            question=request.question,
-            q_type=request.type,
-            expected_pages=request.pages_attendues,
-            passages=passages,
-            colpali_passages=stages.get("colpali_only") or stages.get("colpali", passages),
-            lexical_only_passages=stages.get("lexical_only"),
-            pre_kag_passages=stages.get("pre_kag_rrf"),
-            post_rrf_passages=stages.get("post_rrf"),
-            kag_only_passages=stages.get("kag_only"),
-            vision_rerank_enabled=stages.get("vision_rerank_enabled"),
-            minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
-            kag_enabled=stages.get("kag_enabled"),
-        )
-
-        # Étape CAG (niveau document) : le CAG packe des documents entiers ; on vérifie
-        # que le bon document / la bonne page arrive dans le contexte final de génération.
-        try:
-            cag_ctx = build_cag_context(
-                session, passages, system_prompt="",
-                intent=request.intent, emit_sources_tag=False,
-            )
-            cag_docs = cag_ctx.get("cag_documents") or []
-            hit = evaluate_cag_document_hit(
-                cag_docs,
-                acceptable_document_ids=request.acceptable_document_ids,
-                expected_pages=request.pages_attendues,
-            )
-            packed = hit["packed_ids"]
-            acc = set(request.acceptable_document_ids or [])
-            result["cag"] = {
-                "packed_document_ids": packed,
-                "doc_hit_acceptable": hit["doc_hit_acceptable"],
-                "doc_hit_strict": hit["doc_hit_strict"],
-                "page_in_context": hit["page_in_context"],
-                "doc_precision": round(len(set(packed) & acc) / len(packed), 3) if (packed and acc) else 0.0,
-                "num_packed": len(packed),
-            }
-        except Exception as cag_exc:
-            logger.warning("[eval single] CAG hook échoué: %s", cag_exc)
-            result["cag"] = None
-
-        return result
-    except Exception as e:
-        logger.error("Error during single retriever evaluation API: %s", e, exc_info=True)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de l'évaluation unitaire : {str(e)}"
-        )
-
-
-class SingleRAGEvalRequest(BaseModel):
-    space_id: int
-    question: str
-    type: str = "mono-document"
-    pages_attendues: List[dict]
-    reponse_attendue: Optional[str] = None
-    expected_response: Optional[str] = None
-    k: int = 15
-    judge_model: str = "mistral-small-latest"
-
-
-@router.post("/eval/rag/single")
-async def evaluate_rag_single_api(
-    request: SingleRAGEvalRequest,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session)
-):
-    """Évaluer le retriever ColPali et la génération LLM sur une seule question."""
-    from app.services.retriever_evaluator import (
-        build_question_eval_result,
-        generate_rag_response,
-        run_llm_judge,
-    )
-    from app.services.space_search_service import search_relevant_passages
-
-    try:
-        search_res = await search_relevant_passages(
-            session=session,
-            space_id=request.space_id,
-            query_text=request.question,
-            user_id=current_user.id,
-            k=request.k,
-            document_filter="all",
-            include_retrieval_stages=True,
-        )
-        passages = search_res.get("passages", [])
-        stages = search_res.get("retrieval_stages") or {}
-
-        eval_result = build_question_eval_result(
-            question=request.question,
-            q_type=request.type,
-            expected_pages=request.pages_attendues,
-            passages=passages,
-            colpali_passages=stages.get("colpali_only") or stages.get("colpali", passages),
-            lexical_only_passages=stages.get("lexical_only"),
-            pre_kag_passages=stages.get("pre_kag_rrf"),
-            post_rrf_passages=stages.get("post_rrf"),
-            kag_only_passages=stages.get("kag_only"),
-            vision_rerank_enabled=stages.get("vision_rerank_enabled"),
-            minilm_rerank_enabled=stages.get("minilm_rerank_enabled"),
-            kag_enabled=stages.get("kag_enabled"),
-        )
-
-        generated_response = await generate_rag_response(
-            session=session,
-            space_id=request.space_id,
-            user_id=current_user.id,
-            question=request.question,
-            passages=passages,
-        )
-
-        expected = request.reponse_attendue or request.expected_response
-        judge_eval = None
-        if expected:
-            judge_eval = await run_llm_judge(
-                question=request.question,
-                generated_response=generated_response,
-                expected_response=expected,
-                judge_model=request.judge_model,
-            )
-
-        eval_result["generated_response"] = generated_response
-        eval_result["expected_response"] = expected
-        eval_result["judge_evaluation"] = judge_eval
-        return eval_result
-    except Exception as e:
-        logger.error("Error during single RAG evaluation API: %s", e, exc_info=True)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de l'évaluation RAG unitaire : {str(e)}"
-        )
-
-
-# ==================== DOCUMENT CATEGORIES ====================
-
-
-class CategoryStatsResponse(BaseModel):
-    category_id: int
-    slug: str
-    label: str
-    chunk_links: int
-    document_count: int
-
-
-
-
-# ---------------------------------------------------------------------------
-# Jeux d'évaluation livrés avec l'application
-# ---------------------------------------------------------------------------
-
-
-@router.get("/eval/datasets")
-async def list_eval_datasets_api(
-    current_user: UserRead = Depends(require_role("admin")),
-):
-    """Inventaire des jeux de référence versionnés avec le code.
-
-    Un jeu qui vit sur le poste de quelqu'un n'est pas un jeu de référence : il se perd, il
-    diverge, et deux mesures ne se comparent plus. Ceux-ci sont dans le dépôt.
-    """
-    from app.services.eval_datasets_service import list_datasets
-
-    return {"datasets": list_datasets()}
-
-
-@router.get("/eval/datasets/{key}")
-async def get_eval_dataset_api(
-    key: str,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Un jeu complet, questions normalisées (identifiants de documents résolus en titres)."""
-    from app.services.eval_datasets_service import load_dataset
-
-    data = load_dataset(session, key)
-    if data is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=f"Jeu « {key} » introuvable."
-        )
-    return data
-
-
-class SingleGenerationEvalRequest(BaseModel):
-    """Une question du jeu, rejouée sur le VRAI tour de chat puis notée littéralement."""
-
-    space_id: int
-    question: str
-    attendu: Optional[dict] = None
-    pages_attendues: List[dict] = Field(default_factory=list)
-    id: Optional[str] = None
-    tags: List[str] = Field(default_factory=list)
-    difficulte: Optional[str] = None
-    verite: Optional[str] = None
-    model: Optional[str] = None
-    timeout_s: float = 300.0
-
-
-@router.post("/eval/generation/single")
-async def evaluate_generation_single_api(
-    request: SingleGenerationEvalRequest,
-    http_request: Request,
-    current_user: UserRead = Depends(require_role("admin")),
-):
-    """Rejoue UNE question sur l'endpoint de chat réel et note la réponse sans LLM juge.
-
-    Pourquoi un appel HTTP à notre propre endpoint plutôt qu'un appel de services : le tour
-    vit dans ``stream_space_chat_message`` (compréhension, périmètre, retrieval, élection,
-    pack de lecture, boucle, contrôle, sources). Le reconstituer ici mesurerait une pipeline
-    qui n'existe pas — et c'est justement l'écart entre les deux qu'on cherche à éliminer.
-
-    Pourquoi pas de juge LLM : un juge qui note une réponse portant sur une planche cotée
-    sans voir la planche est aveugle (c'est pourquoi l'ancien juge a été retiré le 02/09).
-    Une comparaison de valeurs contre une vérité lue sur la page, elle, ne se trompe pas.
-    """
-    import httpx
-
-    from app.config import settings
-    from app.services.generation_eval_service import run_question
-
-    entete = http_request.headers.get("authorization") or ""
-    token = entete.split(" ", 1)[1].strip() if entete.lower().startswith("bearer ") else ""
-    if not token:
-        # Session par cookie : l'endpoint de chat accepte le même jeton.
-        token = http_request.cookies.get("authToken") or ""
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Jeton absent : l'évaluation rejoue le tour de chat en votre nom.",
-        )
-
-    base_url = f"http://localhost:{os.getenv('PORT', '8000')}"
-    entry = {
-        "id": request.id,
-        "question": request.question,
-        "attendu": request.attendu or {},
-        "pages_attendues": request.pages_attendues,
-        "tags": request.tags,
-        "difficulte": request.difficulte,
-        "verite": request.verite,
-    }
-    try:
-        async with httpx.AsyncClient() as client:
-            return await run_question(
-                client,
-                entry,
-                base_url=base_url,
-                space_id=request.space_id,
-                token=token,
-                model=request.model or settings.MODEL_FAST,
-                timeout_s=request.timeout_s,
-            )
-    except Exception as exc:  # noqa: BLE001
-        logger.error("Erreur d'évaluation de génération : %s", exc, exc_info=True)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erreur lors de l'évaluation de la génération : {exc}",
-        )
-
-
-@router.get("/categories", response_model=List[DocumentCategoryRead])
-async def list_categories(
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Liste toutes les catégories de contenu (actives et inactives)."""
-    rows = session.exec(
-        select(DocumentCategory).order_by(DocumentCategory.slug)
-    ).all()
-    return [DocumentCategoryRead.model_validate(row) for row in rows]
-
-
-@router.post("/categories", response_model=DocumentCategoryRead)
-async def create_category(
-    payload: DocumentCategoryCreate,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Crée une nouvelle catégorie de contenu."""
-    from datetime import datetime
-
-    slug = payload.slug.strip().lower().replace(" ", "_")
-    existing = session.exec(
-        select(DocumentCategory).where(DocumentCategory.slug == slug)
-    ).first()
-    if existing:
-        raise HTTPException(status_code=400, detail=f"Slug déjà utilisé : {slug}")
-
-    row = DocumentCategory(
-        slug=slug,
-        label=payload.label.strip(),
-        description=(payload.description or "").strip(),
-        axis=(payload.axis or "task").strip().lower(),
-        parent_slug=payload.parent_slug,
-        is_active=True,
-        created_at=datetime.utcnow(),
-        updated_at=datetime.utcnow(),
-    )
-    session.add(row)
-    session.commit()
-    session.refresh(row)
-    return DocumentCategoryRead.model_validate(row)
-
-
-@router.put("/categories/{category_id}", response_model=DocumentCategoryRead)
-async def update_category(
-    category_id: int,
-    payload: DocumentCategoryUpdate,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Met à jour label, description ou statif actif d'une catégorie."""
-    from datetime import datetime
-
-    row = session.get(DocumentCategory, category_id)
-    if not row:
-        raise HTTPException(status_code=404, detail="Catégorie introuvable")
-
-    if payload.label is not None:
-        row.label = payload.label.strip()
-    if payload.description is not None:
-        row.description = payload.description.strip()
-    if payload.axis is not None:
-        row.axis = payload.axis.strip().lower()
-    if payload.parent_slug is not None:
-        row.parent_slug = payload.parent_slug
-    if payload.is_active is not None:
-        row.is_active = payload.is_active
-    row.updated_at = datetime.utcnow()
-    session.add(row)
-    session.commit()
-    session.refresh(row)
-    return DocumentCategoryRead.model_validate(row)
-
-
-@router.delete("/categories/{category_id}")
-async def delete_category(
-    category_id: int,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Supprime une catégorie si aucune relation chunk n'existe."""
-    from app.models.chunk_category_relation import ChunkCategoryRelation
-
-    row = session.get(DocumentCategory, category_id)
-    if not row:
-        raise HTTPException(status_code=404, detail="Catégorie introuvable")
-
-    link_count = session.exec(
-        select(func.count()).select_from(ChunkCategoryRelation).where(
-            ChunkCategoryRelation.category_id == category_id
-        )
-    ).first() or 0
-    if int(link_count) > 0:
-        raise HTTPException(
-            status_code=400,
-            detail="Impossible de supprimer : des chunks sont liés à cette catégorie.",
-        )
-
-    session.delete(row)
-    session.commit()
-    return {"status": "deleted", "id": category_id}
-
-
 # --- Suivi d'usage : conversations & messages (admin only) ---
 
 
@@ -1216,15 +659,13 @@ async def list_all_conversations(
         text(
             """
             SELECT c.id, c.title, c.user_id, u.username, u.email,
-                   c.space_id, s.name AS space_name,
                    c.created_at, c.updated_at,
                    COUNT(m.id) AS message_count,
                    MAX(m.created_at) AS last_message_at
             FROM conversation c
             LEFT JOIN "user" u ON u.id = c.user_id
-            LEFT JOIN space s ON s.id = c.space_id
             LEFT JOIN message m ON m.conversation_id = c.id
-            GROUP BY c.id, u.username, u.email, s.name
+            GROUP BY c.id, u.username, u.email
             ORDER BY COALESCE(MAX(m.created_at), c.updated_at) DESC NULLS LAST
             LIMIT :limit
             """
@@ -1239,8 +680,6 @@ async def list_all_conversations(
             "user_id": r.user_id,
             "username": r.username,
             "email": r.email,
-            "space_id": r.space_id,
-            "space_name": r.space_name,
             "message_count": int(r.message_count or 0),
             "created_at": r.created_at.isoformat() if r.created_at else None,
             "updated_at": r.updated_at.isoformat() if r.updated_at else None,
@@ -1270,10 +709,9 @@ async def get_conversation_detail(
         text(
             """
             SELECT c.id, c.title, c.user_id, u.username, u.email,
-                   c.space_id, s.name AS space_name, c.created_at, c.updated_at
+                   c.created_at, c.updated_at
             FROM conversation c
             LEFT JOIN "user" u ON u.id = c.user_id
-            LEFT JOIN space s ON s.id = c.space_id
             WHERE c.id = :id
             """
         ),
@@ -1300,8 +738,6 @@ async def get_conversation_detail(
         "user_id": conv.user_id,
         "username": conv.username,
         "email": conv.email,
-        "space_id": conv.space_id,
-        "space_name": conv.space_name,
         "created_at": conv.created_at.isoformat() if conv.created_at else None,
         "message_count": len(msgs),
         "messages": [
@@ -1339,11 +775,10 @@ async def list_all_messages(
             """
             SELECT m.id, m.conversation_id, m.role, m.content, m.created_at,
                    c.title AS conversation_title, c.user_id,
-                   u.username, s.name AS space_name
+                   u.username
             FROM message m
             INNER JOIN conversation c ON c.id = m.conversation_id
             LEFT JOIN "user" u ON u.id = c.user_id
-            LEFT JOIN space s ON s.id = c.space_id
             LEFT JOIN (
                 SELECT conversation_id, MAX(created_at) AS last_at
                 FROM message GROUP BY conversation_id
@@ -1371,7 +806,6 @@ async def list_all_messages(
             "created_at": r.created_at.isoformat() if r.created_at else None,
             "conversation_title": r.conversation_title,
             "username": r.username,
-            "space_name": r.space_name,
         }
         for r in rows
     ]
@@ -1382,120 +816,3 @@ async def list_all_messages(
     }
 
 
-@router.get("/categories/{category_id}/stats", response_model=CategoryStatsResponse)
-async def category_stats(
-    category_id: int,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Statistiques d'utilisation d'une catégorie."""
-    from app.models.chunk_category_relation import ChunkCategoryRelation
-
-    row = session.get(DocumentCategory, category_id)
-    if not row:
-        raise HTTPException(status_code=404, detail="Catégorie introuvable")
-
-    chunk_links = session.exec(
-        select(func.count()).select_from(ChunkCategoryRelation).where(
-            ChunkCategoryRelation.category_id == category_id
-        )
-    ).first() or 0
-    doc_count = session.exec(
-        select(func.count(func.distinct(ChunkCategoryRelation.document_id))).where(
-            ChunkCategoryRelation.category_id == category_id
-        )
-    ).first() or 0
-
-    return CategoryStatsResponse(
-        category_id=row.id,
-        slug=row.slug,
-        label=row.label,
-        chunk_links=int(chunk_links),
-        document_count=int(doc_count),
-    )
-
-
-
-# ---------------------------------------------------------------------------
-# Connaissance métier — fiches des gammes commerciales Proferm
-#
-# Le vocabulaire des utilisateurs et celui des documents fournisseurs ne se recoupent
-# pas : ces fiches portent ce pont, pour injection dans les prompts. Elles sont
-# rédigées et validées par le métier — d'où l'édition en admin plutôt qu'un fichier.
-# ---------------------------------------------------------------------------
-
-
-@router.get("/gammes", response_model=List[GammeCommercialeRead])
-async def list_gammes_admin(
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Liste les fiches de gammes, brouillons compris."""
-    from app.services.gamme_knowledge_service import list_gammes
-
-    return [GammeCommercialeRead.model_validate(g) for g in list_gammes(session)]
-
-
-@router.post("/gammes/seed")
-async def seed_gammes_admin(
-    overwrite: bool = False,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Crée les fiches manquantes depuis l'amorçage rédigé à partir des documents.
-
-    Sans `overwrite`, une fiche déjà présente n'est jamais réécrite : une fois relue par
-    le métier, c'est la base qui fait foi.
-    """
-    from app.services.gamme_knowledge_service import seed_gammes
-
-    return seed_gammes(session, overwrite=overwrite)
-
-
-@router.put("/gammes/{gamme_id}", response_model=GammeCommercialeRead)
-async def update_gamme_admin(
-    gamme_id: int,
-    payload: GammeCommercialeUpdate,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Met à jour une fiche (édition métier)."""
-    from datetime import datetime
-
-    from app.models.gamme_commerciale import STATUTS, GammeCommerciale
-
-    row = session.get(GammeCommerciale, gamme_id)
-    if not row:
-        raise HTTPException(status_code=404, detail="Fiche introuvable")
-
-    data = payload.model_dump(exclude_unset=True)
-    if "statut" in data and data["statut"] not in STATUTS:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Statut invalide : {data['statut']} (attendu : {', '.join(STATUTS)})",
-        )
-    for key, value in data.items():
-        setattr(row, key, value)
-    row.updated_at = datetime.utcnow()
-    row.updated_by = current_user.id
-    session.add(row)
-    session.commit()
-    session.refresh(row)
-    return GammeCommercialeRead.model_validate(row)
-
-
-@router.get("/gammes/preview-prompt")
-async def preview_gamme_prompt(
-    only_valid: bool = False,
-    current_user: UserRead = Depends(require_role("admin")),
-    session: Session = Depends(get_session),
-):
-    """Le bloc exactement tel qu'il sera injecté dans les prompts.
-
-    Rendu en entier, jamais filtré sur une gamme : pour écarter une référence Technal
-    quand on cherche du PVC, le modèle doit connaître la règle Technal.
-    """
-    from app.services.gamme_knowledge_service import build_gamme_knowledge_block
-
-    block = build_gamme_knowledge_block(session, only_valid=only_valid)
-    return {"block": block, "chars": len(block), "tokens_estimes": len(block) // 4}

@@ -31,7 +31,7 @@
         </h1>
 
         <!-- Tabs Navigation -->
-        <div class="mb-8 bg-black/5 dark:bg-white/5 p-1 rounded-2xl border border-black/5 dark:border-white/5 backdrop-blur-md w-fit flex gap-1">
+        <div class="mb-8 bg-black/5 dark:bg-white/5 p-1 rounded-2xl border border-black/5 dark:border-white/5 backdrop-blur-md w-fit flex gap-1 flex-wrap">
             <button
                 onclick="showTab('users')"
                 id="tab-users"
@@ -54,13 +54,6 @@
                 Permissions
             </button>
             <button
-                onclick="showTab('queues')"
-                id="tab-queues"
-                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            >
-                Files &amp; workers
-            </button>
-            <button
                 onclick="showTab('feedbacks')"
                 id="tab-feedbacks"
                 class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -68,40 +61,12 @@
                 Feedbacks
             </button>
             <button
-                onclick="showTab('indexation')"
-                id="tab-indexation"
+                onclick="showTab('wiki')"
+                id="tab-wiki"
                 class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
-                Indexation
+                Wiki
             </button>
-            <button
-                onclick="showTab('rag-eval')"
-                id="tab-rag-eval"
-                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            >
-                Qualité RAG
-            </button>
-            <button
-                onclick="showTab('categories')"
-                id="tab-categories"
-                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            >
-                Catégories
-            </button>
-            <button
-                onclick="showTab('gammes')"
-                id="tab-gammes"
-                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            >
-                Gammes
-            </button>
-            <a
-                href="/admin/sav-trees"
-                class="tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 flex items-center gap-1.5"
-                style="text-decoration: none;"
-            >
-                <i class="ti ti-binary-tree"></i> Arbres SAV
-            </a>
         </div>
 
         <!-- Users Tab -->
@@ -174,77 +139,9 @@
             </div>
         </div>
 
-        <!-- Queues Tab (admin rôle) -->
-        <div id="tab-content-queues" class="tab-content hidden space-y-6">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-                        Workers documents
-                    </h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-semibold">
-                        Liste des documents en cours ou en attente sur les deux workers Celery.
-                    </p>
-                </div>
-                <button
-                    type="button"
-                    onclick="loadQueueHealth()"
-                    class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-1.5"
-                >
-                    <i class="ti ti-refresh text-sm"></i> Actualiser
-                </button>
-            </div>
-            <div>
-                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">worker (documents/embeddings)</h3>
-                <div id="queues-worker-docs" class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent"></div>
-            </div>
-            <div>
-                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">worker-kag</h3>
-                <div id="queues-worker-kag-docs" class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent"></div>
-            </div>
-        </div>
-
-        <!-- Indexation Tab (santé d'indexation + remédiation) -->
-        <div id="tab-content-indexation" class="tab-content hidden space-y-6">
-            <div class="flex justify-between items-start gap-4 flex-wrap">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-                        Santé d'indexation
-                    </h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-semibold">
-                        Documents dont le texte, l'index visuel ColPali ou les synthèses sont incomplets,
-                        avec la remédiation la moins coûteuse pour chacun.
-                    </p>
-                </div>
-                <div class="flex gap-2">
-                    <button
-                        type="button"
-                        onclick="repairAllColpali()"
-                        id="indexation-repair-all"
-                        class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-md active:scale-95 transition-all text-sm flex items-center gap-1.5 disabled:opacity-40"
-                        title="Ré-attache les patches ColPali existants aux ancres de page sur toute la bibliothèque, sans ré-embedding."
-                    >
-                        <i class="ti ti-wand text-sm"></i> Tout réparer (sans recalcul)
-                    </button>
-                    <button
-                        type="button"
-                        onclick="loadIndexationReport()"
-                        class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-1.5"
-                    >
-                        <i class="ti ti-refresh text-sm"></i> Actualiser
-                    </button>
-                </div>
-            </div>
-
-            <div id="indexation-summary" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
-
-            <div class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent">
-                <div id="indexation-table"></div>
-            </div>
-        </div>
-
         <!-- Feedbacks Tab -->
         <div id="tab-content-feedbacks" class="tab-content hidden space-y-6">
-            <!-- Sous-onglets : Retours / Conversations -->
+            <!-- Sous-onglets : Retours / Conversations / Messages -->
             <div class="flex gap-2">
                 <button id="fb-subtab-retours" onclick="showFeedbackSubtab('retours')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all">Retours</button>
                 <button id="fb-subtab-conversations" onclick="showFeedbackSubtab('conversations')" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all">Conversations</button>
@@ -334,16 +231,6 @@
                 </div>
             </div>
 
-            <!-- Space breakdown -->
-            <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col">
-                <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-1.5">
-                    <i class="ti ti-folders text-indigo-500 text-lg"></i> Par Espace
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="admin-space-breakdown">
-                    <div class="text-center text-sm text-gray-500 dark:text-gray-400 py-8 font-semibold">Chargement...</div>
-                </div>
-            </div>
-
             <!-- Recent Feedbacks Table -->
             <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 shadow-sm overflow-hidden">
                 <div class="p-5 border-b border-black/5 dark:border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -382,7 +269,7 @@
                         <thead class="bg-black/5 dark:bg-white/5">
                             <tr>
                                 <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
-                                <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Espace / Convers.</th>
+                                <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Conversation</th>
                                 <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Avis</th>
                                 <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Question / Commentaire</th>
                                 <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Utilisateur</th>
@@ -436,14 +323,13 @@
                                 <tr>
                                     <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dernière activité</th>
                                     <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Utilisateur</th>
-                                    <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Espace</th>
                                     <th class="px-5 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Titre</th>
                                     <th class="px-5 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Messages</th>
                                     <th class="px-5 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-conversations-table-body" class="divide-y divide-black/5 dark:divide-white/5">
-                                <tr><td colspan="6" class="px-5 py-6 text-center text-gray-500">Chargement…</td></tr>
+                                <tr><td colspan="5" class="px-5 py-6 text-center text-gray-500">Chargement…</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -488,432 +374,81 @@
             </div>
         </div>
 
-        <!-- RAG Quality Evaluation Tab -->
-        <div id="tab-content-rag-eval" class="tab-content hidden space-y-6">
-            <div class="flex justify-between items-center mb-4">
+        <!-- Wiki Tab -->
+        <div id="tab-content-wiki" class="tab-content hidden space-y-6">
+            <div class="flex justify-between items-start gap-4 flex-wrap">
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-                        Évaluation de la qualité RAG (hybride + graphe KAG)
+                        Wiki
                     </h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Mesure de la pertinence et du bruit de la récupération d'informations sur un dataset de référence (ground truth).
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-semibold">
+                        État du wiki markdown chargé en mémoire : c'est l'intégralité de ce que l'assistant lit pour répondre.
                     </p>
+                    <div id="wiki-meta" class="flex flex-wrap gap-2 mt-3"></div>
                 </div>
-            </div>
-
-            <!-- Configuration Panel -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Select Space & K -->
-                <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 space-y-4">
-                    <h3 class="text-md font-bold text-gray-800 dark:text-gray-200">Configuration</h3>
-                    
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
-                            Espace de recherche
-                        </label>
-                        <select id="eval-space-select" class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm bg-white/60 dark:bg-white/10 border border-black/10 dark:border-white/10" onchange="checkRunEvalButtonState()">
-                            <option value="">Chargement des espaces...</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
-                            Nombre de pages à récupérer (K)
-                        </label>
-                        <input type="number" id="eval-k-input" value="15" min="1" max="50" class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm bg-white/60 dark:bg-white/10 border border-black/10 dark:border-white/10" />
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
-                            Modèle de LLM Juge
-                        </label>
-                        <select id="eval-judge-model-select" class="w-full px-3 py-2.5 rounded-xl glass-input text-gray-900 dark:text-white text-sm bg-white/60 dark:bg-white/10 border border-black/10 dark:border-white/10">
-                            <option value="mistral-small-latest" selected>Mistral Small (mistral-small-latest)</option>
-                            <option value="mistral-large-latest">Mistral Large (mistral-large-latest)</option>
-                            <option value="pixtral-12b-2409">Pixtral (pixtral-12b-2409)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Jeux de référence fournis + dépôt manuel -->
-                <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 md:col-span-2 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-md font-bold text-gray-800 dark:text-gray-200 mb-2">Dataset de questions / réponses</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                            Les jeux de référence livrés avec l'application sont disponibles directement. Vous pouvez aussi déposer vos propres fichiers.
-                        </p>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">
-                            Jeux de référence fournis
-                        </label>
-                        <div id="eval-builtin-list" class="space-y-2">
-                            <div class="text-xs text-gray-500 dark:text-gray-400">Chargement…</div>
-                        </div>
-                    </div>
-
-                    <div id="eval-drop-zone" class="border-2 border-dashed border-black/15 dark:border-white/15 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 dark:hover:border-indigo-400 transition-all bg-black/5 dark:bg-white/5">
-                        <svg class="w-8 h-8 text-gray-400 dark:text-gray-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                        </svg>
-                        <span id="eval-drop-text" class="text-xs font-semibold text-gray-600 dark:text-gray-300 text-center">
-                            ou glissez vos fichiers .json ici
-                        </span>
-                        <input type="file" id="eval-file-input" class="hidden" accept=".json" multiple />
-                    </div>
-
-                    <div id="eval-files-list-container" class="mt-4 space-y-2 hidden">
-                        <div class="text-xs font-bold text-gray-700 dark:text-gray-300 flex justify-between items-center mb-1">
-                            <span>Jeux chargés :</span>
-                            <button type="button" onclick="clearAllDatasets(event)" class="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 hover:underline text-[11px] font-bold">Tout vider</button>
-                        </div>
-                        <div id="eval-files-list" class="space-y-1.5 max-h-32 overflow-y-auto pr-1">
-                            <!-- JS populated -->
-                        </div>
-                        <div class="flex justify-between items-center text-xs font-bold text-gray-900 dark:text-white pt-2 border-t border-black/5 dark:border-white/5">
-                            <span>Total combiné :</span>
-                            <span id="eval-total-questions" class="text-indigo-600 dark:text-indigo-400 font-bold">0 questions</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Run Button & Loader -->
-            <div class="flex justify-end gap-3 items-center flex-wrap">
-                <div id="eval-status-message" class="text-sm font-semibold text-gray-500 dark:text-gray-400 hidden"></div>
-                <button id="btn-run-eval" onclick="runRetrieverEval()" disabled class="px-6 py-3 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-700 dark:text-indigo-400 border border-indigo-500/20 rounded-xl font-bold shadow-sm active:scale-95 transition-all text-sm flex items-center gap-2">
-                    <span>Évaluer uniquement le retriever</span>
-                </button>
-                <button id="btn-run-rag-eval" onclick="runRAGEval()" disabled class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 disabled:opacity-50 disabled:hover:from-indigo-600 disabled:hover:to-violet-600 text-white rounded-xl font-bold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2">
-                    <i class="ti ti-brain text-base"></i>
-                    <span>Évaluer Retriever + Génération</span>
-                </button>
-                <button id="btn-run-generation-eval" onclick="runGenerationEval()" disabled class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-50 disabled:hover:from-emerald-600 disabled:hover:to-teal-600 text-white rounded-xl font-bold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2" title="Rejoue le tour de chat complet et compare la réponse à la vérité lue sur la page. Sans juge LLM.">
-                    <i class="ti ti-checkbox text-base"></i>
-                    <span>Évaluer la génération (réponses)</span>
-                </button>
-            </div>
-
-            <!-- Results Section (Initially Hidden) -->
-            <div id="eval-results-container" class="hidden space-y-6">
-                <div id="eval-generation-results" class="hidden"></div>
-                <!-- Summary Metrics Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
-                    <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
-                        <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Precision</span>
-                        <span id="metric-precision" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1" id="metric-final-stage-label">Pipeline final</span>
-                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Mesure du bruit (les pages utiles remontent-elles en premier ?)</span>
-                    </div>
-                    <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
-                        <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Context Recall</span>
-                        <span id="metric-recall" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1" id="metric-final-stage-label">Pipeline final</span>
-                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Mesure de la couverture (toutes les pages attendues sont-elles trouvées ?)</span>
-                    </div>
-                    <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
-                        <span class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">MRR (Mean Reciprocal Rank)</span>
-                        <span id="metric-mrr" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                        <span class="block text-[10px] font-semibold text-indigo-500/80 dark:text-indigo-400/80 mt-1" id="metric-final-stage-label">Pipeline final</span>
-                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Ordonnancement (vitesse à laquelle la 1ère page pertinente arrive)</span>
-                    </div>
-                    <div id="eval-generation-card" class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 hidden">
-                        <span class="block text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-1">Score LLM Judge</span>
-                        <div class="flex items-baseline gap-1.5 mt-1">
-                            <span id="metric-judge-score" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold">/ 5</span>
-                        </div>
-                        <span class="block text-xs text-gray-500 dark:text-gray-400 mt-2">Qualité de la génération (moyenne des scores du juge)</span>
-                    </div>
-                    <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-transparent">
-                        <span class="block text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Résumé global</span>
-                        <div class="space-y-1 mt-2">
-                            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-                                <span>Questions évaluées :</span>
-                                <span id="summary-questions-count" class="font-bold">0</span>
-                            </div>
-                            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-                                <span>Temps d'exécution :</span>
-                                <span id="summary-time" class="font-bold">0s</span>
-                            </div>
-                            <div class="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-                                <span>Régime :</span>
-                                <span class="font-bold text-green-600 dark:text-green-400">ColPali Hybrid</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Comparaison ColPali (avant rerank) vs post-rerank -->
-                <div id="eval-colpali-comparison" class="hidden space-y-4">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">ColPali seul (LanceDB + seuil dynamique)</h3>
-                        <span id="eval-rerank-badge" class="hidden px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400"></span>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-slate-500/10 to-gray-500/10">
-                            <span class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">Precision ColPali</span>
-                            <span id="metric-precision-colpali" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                            <span id="metric-precision-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
-                        </div>
-                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-slate-500/10 to-gray-500/10">
-                            <span class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">Recall ColPali</span>
-                            <span id="metric-recall-colpali" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                            <span id="metric-recall-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
-                        </div>
-                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-slate-500/10 to-gray-500/10">
-                            <span class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">MRR ColPali</span>
-                            <span id="metric-mrr-colpali" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                            <span id="metric-mrr-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
-                        </div>
-                    </div>
-                    <div id="eval-post-rrf-comparison" class="hidden space-y-4 mt-2">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Post-RRF (avant rerank MiniLM)</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-indigo-500/10">
-                                <span class="block text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-1">Precision Post-RRF</span>
-                                <span id="metric-precision-post-rrf" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                            </div>
-                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-indigo-500/10">
-                                <span class="block text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-1">Recall Post-RRF</span>
-                                <span id="metric-recall-post-rrf" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                            </div>
-                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-violet-500/10 to-indigo-500/10">
-                                <span class="block text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-1">MRR Post-RRF</span>
-                                <span id="metric-mrr-post-rrf" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <p id="eval-stages-help" class="text-xs text-gray-500 dark:text-gray-400">Les cartes du haut mesurent le pipeline final. ColPali seul = LanceDB + seuil dynamique. Lexical seul = BM25/tsvector. Post-RRF = fusion ColPali + BM25 avant MiniLM.</p>
-                </div>
-
-                <!-- Retriever texte isolé (lexical) -->
-                <div id="eval-isolated-retrievers" class="hidden space-y-4 mt-4">
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Retriever texte isolé</h3>
-                    <div class="grid grid-cols-1 gap-6">
-                        <div class="space-y-3">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400">Lexical seul (BM25)</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-orange-500/10 to-amber-500/10">
-                                    <span class="block text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-1">Precision</span>
-                                    <span id="metric-precision-lexical" class="text-2xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                                </div>
-                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-orange-500/10 to-amber-500/10">
-                                    <span class="block text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-1">Recall</span>
-                                    <span id="metric-recall-lexical" class="text-2xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                                </div>
-                                <div class="glass-panel rounded-3xl p-5 border border-black/5 dark:border-white/5 bg-gradient-to-br from-orange-500/10 to-amber-500/10">
-                                    <span class="block text-xs font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 mb-1">MRR</span>
-                                    <span id="metric-mrr-lexical" class="text-2xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Comparaison KAG (triple retriever vs fusion avec graphe) -->
-                <div id="eval-kag-comparison" class="hidden space-y-4 mt-4">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Retriever sans graphe (ColPali + BM25)</h3>
-                        <span id="eval-kag-badge" class="hidden px-2 py-0.5 rounded text-[10px] font-bold bg-teal-500/10 text-teal-700 dark:text-teal-400"></span>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-teal-500/10 to-cyan-500/10">
-                            <span class="block text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 mb-1">Precision sans KAG</span>
-                            <span id="metric-precision-pre-kag" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                            <span id="metric-precision-kag-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
-                        </div>
-                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-teal-500/10 to-cyan-500/10">
-                            <span class="block text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 mb-1">Recall sans KAG</span>
-                            <span id="metric-recall-pre-kag" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                            <span id="metric-recall-kag-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
-                        </div>
-                        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-teal-500/10 to-cyan-500/10">
-                            <span class="block text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 mb-1">MRR sans KAG</span>
-                            <span id="metric-mrr-pre-kag" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                            <span id="metric-mrr-kag-delta" class="block text-xs font-semibold mt-2 text-gray-500 dark:text-gray-400"></span>
-                        </div>
-                    </div>
-                    <div id="eval-kag-post-comparison" class="hidden space-y-4 mt-2">
-                        <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Fusion RRF avec graphe KAG (entités)</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-emerald-500/10 to-teal-500/10">
-                                <span class="block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">Precision avec KAG</span>
-                                <span id="metric-precision-kag-post" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                            </div>
-                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-emerald-500/10 to-teal-500/10">
-                                <span class="block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">Recall avec KAG</span>
-                                <span id="metric-recall-kag-post" class="text-3xl font-extrabold text-gray-900 dark:text-white">0%</span>
-                            </div>
-                            <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-gradient-to-br from-emerald-500/10 to-teal-500/10">
-                                <span class="block text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">MRR avec KAG</span>
-                                <span id="metric-mrr-kag-post" class="text-3xl font-extrabold text-gray-900 dark:text-white">0.0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Δ sous chaque métrique = gain ou perte après ajout du canal KAG (graphe entités) dans la fusion RRF.</p>
-                </div>
-
-                <!-- Stats by Type (Mono vs Cross) -->
-                <div id="eval-type-stats-container" class="hidden glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 bg-transparent">
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3">Scores par type de question</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="eval-type-stats-grid">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <!-- Detail list -->
-                <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5 overflow-hidden shadow-sm bg-transparent">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-md font-bold text-gray-900 dark:text-white">Détail par question</h3>
-                        <button onclick="exportEvalReport()" class="px-3 py-1.5 rounded-lg border border-black/10 dark:border-white/10 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                            Exporter le rapport JSON
-                        </button>
-                    </div>
-
-                    <div class="divide-y divide-black/5 dark:divide-white/5 space-y-4" id="eval-detail-list">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Categories Tab -->
-        <div id="tab-content-categories" class="tab-content hidden space-y-6">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-                        Catégories de contenu
-                    </h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Taxonomie utilisée par l'extraction KAG et le filtrage retrieval. Les slugs sont stables ; modifiez label et description pour affiner le prompt LLM.
-                    </p>
-                </div>
-                <button
-                    onclick="openCreateCategoryModal()"
-                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-md active:scale-95 transition-all text-sm flex items-center gap-2"
-                >
-                    <i class="ti ti-plus text-base"></i>Ajouter
-                </button>
-            </div>
-
-            <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 overflow-hidden shadow-sm">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead class="bg-black/5 dark:bg-white/5 text-left">
-                            <tr>
-                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Slug</th>
-                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Label</th>
-                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Description</th>
-                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Actif</th>
-                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300">Chunks</th>
-                                <th class="px-4 py-3 font-bold text-gray-600 dark:text-gray-300 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="categories-table-body" class="divide-y divide-black/5 dark:divide-white/5">
-                            <tr><td colspan="6" class="px-4 py-6 text-center text-gray-500">Chargement…</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div id="tab-content-gammes" class="tab-content hidden space-y-6">
-            <div class="flex flex-wrap justify-between items-start gap-3 mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Connaissance métier — gammes Proferm</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-3xl">
-                        Le vocabulaire des clients et celui des documents fournisseurs ne se recoupent pas :
-                        « Perform 76 » n'apparaît dans aucun document technique, qui parle de « TROCAL 76 ADVANCED ».
-                        Ces fiches portent ce pont et sont injectées dans les prompts pour que l'assistant sache
-                        <strong>où chercher</strong> et <strong>quoi écarter</strong>.
-                    </p>
-                    <p class="text-xs text-amber-700 dark:text-amber-400 mt-2 max-w-3xl">
-                        ⚠️ Une fiche ne fait jamais autorité sur une valeur (cote, Uw, référence) : elle route la
-                        recherche, la valeur vient toujours du document.
-                    </p>
-                </div>
-                <div class="flex gap-2 shrink-0">
-                    <button onclick="previewGammePrompt()" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5">
-                        <i class="ti ti-eye"></i> Aperçu prompt
-                    </button>
-                    <button onclick="seedGammes()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold">
-                        <i class="ti ti-sparkles"></i> Amorcer depuis les documents
+                <div class="flex gap-2">
+                    <a
+                        href="/wiki"
+                        class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-1.5"
+                        style="text-decoration: none;"
+                    >
+                        <i class="ti ti-book text-sm"></i> Ouvrir le wiki
+                    </a>
+                    <button
+                        type="button"
+                        onclick="loadWikiStats()"
+                        class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 active:scale-95 transition-all text-sm font-semibold flex items-center gap-1.5"
+                    >
+                        <i class="ti ti-refresh text-sm"></i> Actualiser
                     </button>
                 </div>
             </div>
 
-            <div id="gammes-list" class="space-y-4">
-                <p class="text-center text-gray-500 py-8">Chargement…</p>
+            <!-- Bandeau : le prompt approche la fenêtre du modèle -->
+            <div id="wiki-token-warning" class="hidden rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 flex items-start gap-3">
+                <i class="ti ti-alert-triangle text-amber-600 dark:text-amber-400 text-xl shrink-0"></i>
+                <div>
+                    <div class="text-sm font-bold text-amber-800 dark:text-amber-300">Le prompt approche la fenêtre de 256 k tokens</div>
+                    <div class="text-xs text-amber-700 dark:text-amber-400 mt-0.5 font-semibold">
+                        Le wiki entier est injecté à chaque appel : scindez ou allégez les pages les plus longues avant que le modèle ne tronque.
+                    </div>
+                </div>
+            </div>
+
+            <div id="wiki-error" class="hidden rounded-2xl border border-rose-500/30 bg-rose-500/10 px-5 py-4 text-sm font-semibold text-rose-700 dark:text-rose-300"></div>
+
+            <!-- Compteurs -->
+            <div id="wiki-kpis" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+                <div class="col-span-full text-center text-sm text-gray-500 dark:text-gray-400 py-6 font-semibold">Chargement…</div>
+            </div>
+
+            <!-- Répartition par type & budget de contexte -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm flex flex-col">
+                    <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-1.5">
+                        <i class="ti ti-chart-bar text-indigo-500 text-lg"></i> Répartition par type
+                    </h3>
+                    <div id="wiki-types" class="space-y-3"></div>
+                </div>
+                <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm lg:col-span-2 flex flex-col">
+                    <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-1.5">
+                        <i class="ti ti-gauge text-indigo-500 text-lg"></i> Budget de contexte
+                    </h3>
+                    <div id="wiki-budget"></div>
+                </div>
+            </div>
+
+            <!-- Lint -->
+            <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm">
+                <h3 class="font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-1.5">
+                    <i class="ti ti-stethoscope text-indigo-500 text-lg"></i> Lint
+                </h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 font-semibold">
+                    Ce que le chargement a relevé. Chaque chemin ouvre la page dans le wiki.
+                </p>
+                <div id="wiki-lint" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
         </div>
-    </div>
-</div>
-
-
-<div id="gamme-prompt-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
-    <div class="glass-panel rounded-3xl p-6 w-full max-w-4xl shadow-2xl max-h-[85vh] flex flex-col">
-        <div class="flex justify-between items-center mb-3">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Bloc injecté dans les prompts</h2>
-            <button onclick="document.getElementById('gamme-prompt-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"><i class="ti ti-x text-xl"></i></button>
-        </div>
-        <p id="gamme-prompt-meta" class="text-xs text-gray-500 mb-3"></p>
-        <pre id="gamme-prompt-body" class="flex-1 overflow-auto text-xs whitespace-pre-wrap bg-black/5 dark:bg-white/5 rounded-xl p-4 font-mono"></pre>
-    </div>
-</div>
-
-<!-- Modal: Create User -->
-<div id="create-category-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
-    <div class="glass-panel rounded-3xl p-6 w-full max-w-lg shadow-2xl">
-        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Nouvelle catégorie</h2>
-        <form id="create-category-form" onsubmit="createCategory(event)" class="space-y-4">
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Slug (identifiant stable)</label>
-                <input type="text" name="slug" required pattern="[a-z0-9_]+" class="w-full px-3 py-2.5 rounded-xl glass-input text-sm" placeholder="ex. maintenance" />
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Label</label>
-                <input type="text" name="label" required class="w-full px-3 py-2.5 rounded-xl glass-input text-sm" />
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Description (prompt LLM)</label>
-                <textarea name="description" required rows="3" class="w-full px-3 py-2.5 rounded-xl glass-input text-sm"></textarea>
-            </div>
-            <div class="flex justify-end gap-2 pt-2">
-                <button type="button" onclick="closeCreateCategoryModal()" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm font-semibold">Annuler</button>
-                <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold">Créer</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div id="edit-category-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
-    <div class="glass-panel rounded-3xl p-6 w-full max-w-lg shadow-2xl">
-        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Modifier la catégorie</h2>
-        <form id="edit-category-form" onsubmit="updateCategory(event)" class="space-y-4">
-            <input type="hidden" name="category_id" id="edit-category-id" />
-            <p class="text-xs text-gray-500">Slug : <span id="edit-category-slug" class="font-mono font-bold"></span></p>
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Label</label>
-                <input type="text" name="label" id="edit-category-label" required class="w-full px-3 py-2.5 rounded-xl glass-input text-sm" />
-            </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Description</label>
-                <textarea name="description" id="edit-category-description" required rows="3" class="w-full px-3 py-2.5 rounded-xl glass-input text-sm"></textarea>
-            </div>
-            <label class="flex items-center gap-2 text-sm">
-                <input type="checkbox" name="is_active" id="edit-category-active" class="rounded" />
-                <span>Catégorie active (visible pour l'extraction LLM)</span>
-            </label>
-            <div class="flex justify-end gap-2 pt-2">
-                <button type="button" onclick="closeEditCategoryModal()" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm font-semibold">Annuler</button>
-                <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold">Enregistrer</button>
-            </div>
-        </form>
     </div>
 </div>
 
@@ -1078,226 +613,19 @@ function showTab(tabName) {
     document.querySelectorAll('.tab-button').forEach(el => {
         el.className = "tab-button px-4 py-2 rounded-xl text-sm font-semibold transition-all text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200";
     });
-    
+
     const contentEl = document.getElementById(`tab-content-${tabName}`);
     if (contentEl) contentEl.classList.remove('hidden');
-    
+
     const button = document.getElementById(`tab-${tabName}`);
     if (button) {
         button.className = "tab-button px-4 py-2 rounded-xl text-sm font-bold transition-all bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400";
     }
-    
-    if (tabName === 'queues') {
-        loadQueueHealth();
-    } else if (tabName === 'indexation') {
-        loadIndexationReport();
-    } else if (tabName === 'feedbacks') {
+
+    if (tabName === 'feedbacks') {
         loadAllFeedbackData();
-    } else if (tabName === 'rag-eval') {
-        loadSpacesForEval();
-    } else if (tabName === 'categories') {
-        loadCategories();
-    } else if (tabName === 'gammes') {
-        loadGammes();
-    }
-}
-
-
-// ==================== CONNAISSANCE MÉTIER — GAMMES ====================
-// Les fiches portent le pont entre le vocabulaire client et celui des documents
-// fournisseurs. Elles sont rédigées par le métier, d'où l'édition ici plutôt qu'en
-// fichier : le statut « validé » indique qu'un humain a relu le pré-remplissage.
-
-let _gammesCache = [];
-
-function _gammeEsc(s) {
-    return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-function _gammeChips(values, tone) {
-    const arr = Array.isArray(values) ? values.filter(Boolean) : [];
-    if (!arr.length) return '<span class="text-xs text-gray-400">—</span>';
-    const tones = {
-        user: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-        doc: "bg-sky-500/10 text-sky-700 dark:text-sky-400",
-        neutral: "bg-black/5 dark:bg-white/10 text-gray-600 dark:text-gray-300",
-    };
-    return arr.map(v =>
-        `<span class="inline-block px-2 py-0.5 rounded-md text-xs font-medium ${tones[tone] || tones.neutral}">${_gammeEsc(v)}</span>`
-    ).join(" ");
-}
-
-async function loadGammes() {
-    const host = document.getElementById("gammes-list");
-    if (!host) return;
-    try {
-        const r = await apiCall("/api/admin/gammes");
-        if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "session expirée"));
-        _gammesCache = await r.json();
-    } catch (e) {
-        host.innerHTML = `<p class="text-center text-red-500 py-8">Chargement impossible : ${_gammeEsc(e.message)}</p>`;
-        return;
-    }
-
-    if (!_gammesCache.length) {
-        host.innerHTML = `<div class="glass-panel rounded-2xl p-8 text-center">
-            <p class="text-gray-500 mb-3">Aucune fiche pour l'instant.</p>
-            <p class="text-sm text-gray-400">« Amorcer depuis les documents » crée un premier jeu de fiches rédigé à partir des documents Proferm en base. Elles arrivent en brouillon : à relire.</p>
-        </div>`;
-        return;
-    }
-
-    host.innerHTML = _gammesCache.map(g => {
-        const valide = g.statut === "valide";
-        const badge = valide
-            ? '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">validée</span>'
-            : '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400">brouillon</span>';
-        const aValider = (g.a_valider || "").trim();
-        return `
-        <div class="glass-panel rounded-2xl p-5" id="gamme-card-${g.id}">
-            <div class="flex justify-between items-start gap-4">
-                <div class="min-w-0">
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">${_gammeEsc(g.nom)}</h3>
-                        ${badge}
-                        <span class="font-mono text-xs text-gray-400">${_gammeEsc(g.slug)}</span>
-                    </div>
-                    ${g.accroche ? `<p class="text-sm text-gray-500 italic">${_gammeEsc(g.accroche)}</p>` : ""}
-                    <p class="text-xs text-gray-500 mt-1">
-                        ${_gammeEsc(g.materiau || "matériau ?")} · ${_gammeEsc((g.familles || []).join(", ") || "familles ?")}
-                        ${(g.fournisseurs || []).length ? " · " + _gammeEsc(g.fournisseurs.join(", ")) : ""}
-                    </p>
-                </div>
-                <button onclick="toggleGammeEdit(${g.id})" class="shrink-0 px-3 py-1.5 rounded-xl border border-black/10 dark:border-white/10 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/5">
-                    <i class="ti ti-pencil"></i> Éditer
-                </button>
-            </div>
-
-            ${g.description ? `<p class="text-sm text-gray-600 dark:text-gray-300 mt-3">${_gammeEsc(g.description)}</p>` : ""}
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wide text-amber-700 dark:text-amber-400 mb-1.5">Dit par l'utilisateur</p>
-                    <div class="flex flex-wrap gap-1">${_gammeChips(g.alias_utilisateur, "user")}</div>
-                </div>
-                <div>
-                    <p class="text-xs font-bold uppercase tracking-wide text-sky-700 dark:text-sky-400 mb-1.5">À chercher dans les documents</p>
-                    <div class="flex flex-wrap gap-1">${_gammeChips(g.termes_documentaires, "doc")}</div>
-                </div>
-            </div>
-
-            ${(g.discriminants || "").trim() ? `
-            <div class="mt-4 rounded-xl bg-black/5 dark:bg-white/5 p-3">
-                <p class="text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5">Ne pas confondre</p>
-                <p class="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-line">${_gammeEsc(g.discriminants)}</p>
-            </div>` : ""}
-
-            ${aValider ? `
-            <div class="mt-3 rounded-xl bg-amber-500/10 border-l-4 border-amber-500 p-3">
-                <p class="text-xs font-bold uppercase tracking-wide text-amber-700 dark:text-amber-400 mb-1.5">À trancher par le métier</p>
-                <p class="text-sm text-amber-900 dark:text-amber-200 whitespace-pre-line">${_gammeEsc(aValider)}</p>
-            </div>` : ""}
-
-            <div id="gamme-edit-${g.id}" class="hidden mt-4 pt-4 border-t border-black/10 dark:border-white/10 space-y-3"></div>
-        </div>`;
-    }).join("");
-}
-
-function toggleGammeEdit(id) {
-    const host = document.getElementById(`gamme-edit-${id}`);
-    if (!host) return;
-    if (!host.classList.contains("hidden")) { host.classList.add("hidden"); return; }
-
-    const g = _gammesCache.find(x => x.id === id);
-    if (!g) return;
-    const ta = (name, label, val, rows) =>
-        `<div><label class="block text-xs font-semibold text-gray-500 mb-1">${label}</label>
-         <textarea data-f="${name}" rows="${rows || 2}" class="w-full px-3 py-2 rounded-xl glass-input text-sm">${_gammeEsc(val || "")}</textarea></div>`;
-    const inp = (name, label, val) =>
-        `<div><label class="block text-xs font-semibold text-gray-500 mb-1">${label}</label>
-         <input data-f="${name}" value="${_gammeEsc(val || "")}" class="w-full px-3 py-2 rounded-xl glass-input text-sm" /></div>`;
-
-    host.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            ${inp("nom", "Nom", g.nom)}
-            ${inp("accroche", "Accroche", g.accroche)}
-            ${inp("materiau", "Matériau (pvc / aluminium / hybride)", g.materiau)}
-            ${inp("familles", "Familles (séparées par des virgules)", (g.familles || []).join(", "))}
-        </div>
-        ${ta("description", "Description injectée dans le prompt", g.description, 4)}
-        ${ta("alias_utilisateur", "Dit par l'utilisateur (virgules)", (g.alias_utilisateur || []).join(", "), 2)}
-        ${ta("termes_documentaires", "À chercher dans les documents (virgules)", (g.termes_documentaires || []).join(", "), 2)}
-        ${inp("fournisseurs", "Fournisseurs (virgules)", (g.fournisseurs || []).join(", "))}
-        ${ta("discriminants", "Ne pas confondre — une règle par ligne", g.discriminants, 4)}
-        ${ta("a_valider", "À trancher par le métier", g.a_valider, 3)}
-        <div class="flex items-center justify-between gap-3 pt-1">
-            <label class="flex items-center gap-2 text-sm font-semibold text-gray-600 dark:text-gray-300">
-                <input type="checkbox" data-f="statut" ${g.statut === "valide" ? "checked" : ""} class="rounded" />
-                Fiche relue et validée
-            </label>
-            <div class="flex gap-2">
-                <button onclick="toggleGammeEdit(${id})" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-sm font-semibold">Annuler</button>
-                <button onclick="saveGamme(${id})" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold">Enregistrer</button>
-            </div>
-        </div>`;
-    host.classList.remove("hidden");
-}
-
-async function saveGamme(id) {
-    const host = document.getElementById(`gamme-edit-${id}`);
-    if (!host) return;
-    const listFields = new Set(["familles", "alias_utilisateur", "termes_documentaires", "fournisseurs"]);
-    const payload = {};
-    host.querySelectorAll("[data-f]").forEach(el => {
-        const f = el.dataset.f;
-        if (f === "statut") { payload.statut = el.checked ? "valide" : "brouillon"; return; }
-        const v = (el.value || "").trim();
-        payload[f] = listFields.has(f)
-            ? v.split(",").map(s => s.trim()).filter(Boolean)
-            : (v || null);
-    });
-
-    try {
-        const r = await apiCall(`/api/admin/gammes/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-        });
-        if (!r || !r.ok) {
-            const err = await r.json().catch(() => ({}));
-            throw new Error(err.detail || "HTTP " + r.status);
-        }
-        await loadGammes();
-    } catch (e) {
-        alert("Enregistrement impossible : " + e.message);
-    }
-}
-
-async function seedGammes() {
-    if (!confirm("Créer les fiches manquantes à partir des documents Proferm en base ?\n\nLes fiches déjà présentes ne seront pas modifiées.")) return;
-    try {
-        const r = await apiCall("/api/admin/gammes/seed", { method: "POST" });
-        if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "session expirée"));
-        const res = await r.json();
-        alert(`${res.created} fiche(s) créée(s), ${res.skipped} conservée(s).`);
-        await loadGammes();
-    } catch (e) {
-        alert("Amorçage impossible : " + e.message);
-    }
-}
-
-async function previewGammePrompt() {
-    try {
-        const r = await apiCall("/api/admin/gammes/preview-prompt");
-        if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "session expirée"));
-        const res = await r.json();
-        document.getElementById("gamme-prompt-meta").textContent =
-            `${res.chars} caractères · ~${res.tokens_estimes} tokens, ajoutés à chaque appel de compréhension et de génération.`;
-        document.getElementById("gamme-prompt-body").textContent =
-            res.block || "(aucune fiche — le bloc n'est pas injecté)";
-        document.getElementById("gamme-prompt-modal").classList.remove("hidden");
-    } catch (e) {
-        alert("Aperçu impossible : " + e.message);
+    } else if (tabName === 'wiki') {
+        loadWikiStats();
     }
 }
 
@@ -1361,7 +689,7 @@ async function loadAdminMessages() {
                         <div class="px-4 py-2.5 bg-black/[0.02] dark:bg-white/[0.03] border-b border-black/5 dark:border-white/5 flex items-center justify-between gap-3">
                             <div class="min-w-0 truncate">
                                 <span class="font-bold text-sm text-gray-800 dark:text-gray-200">${escapeHtml(m.conversation_title || 'Sans titre')}</span>
-                                <span class="text-xs text-gray-400 ml-2">${escapeHtml(m.username || '')} · ${escapeHtml(m.space_name || '')}</span>
+                                <span class="text-xs text-gray-400 ml-2">${escapeHtml(m.username || '')}</span>
                             </div>
                             <button onclick="openAdminConversation(${m.conversation_id})" class="shrink-0 px-2 py-1 rounded-lg text-xs font-bold bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20">Ouvrir</button>
                         </div>
@@ -1396,11 +724,11 @@ function fmtDateTime(iso) {
 async function loadAdminConversations() {
     const tbody = document.getElementById('admin-conversations-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-6 text-center text-gray-500">Chargement…</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-6 text-center text-gray-500">Chargement…</td></tr>';
     try {
         const response = await apiCall('/api/admin/conversations');
         if (!response || !response.ok) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-6 text-center text-red-500">Erreur de chargement</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-6 text-center text-red-500">Erreur de chargement</td></tr>';
             return;
         }
         const data = await response.json();
@@ -1412,7 +740,7 @@ async function loadAdminConversations() {
         const countEl = document.getElementById('admin-conversations-count');
         if (countEl) countEl.textContent = `${convs.length} conversation(s) affichée(s)` + (data.count_shown < data.total_conversations ? ` sur ${data.total_conversations}` : '');
         if (!convs.length) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-5 py-6 text-center text-gray-500">Aucune conversation</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-6 text-center text-gray-500">Aucune conversation</td></tr>';
             return;
         }
         tbody.innerHTML = convs.map(c => `
@@ -1422,14 +750,13 @@ async function loadAdminConversations() {
                     <div class="font-semibold text-gray-800 dark:text-gray-200">${escapeHtml(c.username || ('user#' + c.user_id))}</div>
                     <div class="text-xs text-gray-400">${escapeHtml(c.email || '')}</div>
                 </td>
-                <td class="px-5 py-3 text-gray-600 dark:text-gray-300">${escapeHtml(c.space_name || ('espace#' + c.space_id))}</td>
                 <td class="px-5 py-3 text-gray-700 dark:text-gray-200 max-w-xs truncate" title="${escapeHtml(c.title || '')}">${escapeHtml(c.title || 'Sans titre')}</td>
                 <td class="px-5 py-3 text-right"><span class="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-600">${c.message_count || 0}</span></td>
                 <td class="px-5 py-3 text-right"><button onclick="openAdminConversation(${c.id})" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20">Ouvrir</button></td>
             </tr>
         `).join('');
     } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="6" class="px-5 py-6 text-center text-red-500">${escapeHtml(e.message || 'Erreur')}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-6 text-center text-red-500">${escapeHtml(e.message || 'Erreur')}</td></tr>`;
     }
 }
 
@@ -1450,7 +777,7 @@ async function openAdminConversation(id) {
         const data = await response.json();
         document.getElementById('admin-conv-title').textContent = data.title || 'Conversation';
         document.getElementById('admin-conv-meta').textContent =
-            `${data.username || ('user#' + data.user_id)} · ${data.space_name || ('espace#' + data.space_id)} · ${data.message_count} message(s)`;
+            `${data.username || ('user#' + data.user_id)} · ${data.message_count} message(s)`;
         const msgs = data.messages || [];
         if (!msgs.length) {
             body.innerHTML = '<div class="text-sm text-gray-500 text-center py-6">Aucun message</div>';
@@ -1479,261 +806,234 @@ function closeAdminConversationModal() {
     document.getElementById('admin-conversation-modal')?.classList.add('hidden');
 }
 
-async function loadQueueHealth() {
-    const workerPre = document.getElementById('queues-worker-docs');
-    const workerKagPre = document.getElementById('queues-worker-kag-docs');
-    if (!workerPre || !workerKagPre) return;
-    workerPre.innerHTML = '<div class="p-4 text-sm font-semibold text-gray-500 dark:text-gray-400">Chargement…</div>';
-    workerKagPre.innerHTML = '<div class="p-4 text-sm font-semibold text-gray-500 dark:text-gray-400">Chargement…</div>';
-    try {
-        const r = await apiCall('/api/admin/queues/workers-documents');
-        if (r && r.ok) {
-            const data = await r.json();
-            const workerDocs = data?.workers?.["worker"] || [];
-            const workerKagDocs = data?.workers?.["worker-kag"] || [];
-            renderWorkerTasksList(workerPre, workerDocs);
-            renderWorkerTasksList(workerKagPre, workerKagDocs);
-        } else {
-            const msg = r ? `Erreur ${r.status}` : 'Pas de réponse';
-            workerPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${escapeHtml(msg)}</div>`;
-            workerKagPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${escapeHtml(msg)}</div>`;
-        }
-    } catch (e) {
-        const msg = escapeHtml(String(e));
-        workerPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${msg}</div>`;
-        workerKagPre.innerHTML = `<div class="p-4 text-sm font-semibold text-red-600 dark:text-red-400">${msg}</div>`;
-    }
+// ==================== WIKI ====================
+// Le wiki markdown est la seule matière de l'assistant : cet onglet montre ce qui est
+// chargé (pages, liens, budget de tokens) et ce que le lint a relevé au chargement.
+
+const WIKI_CONTEXT_WINDOW = 256000;
+
+function wikiFmtInt(n) {
+    if (n === null || n === undefined || Number.isNaN(Number(n))) return '—';
+    return Number(n).toLocaleString('fr-FR');
 }
 
-// ==================== SANTÉ D'INDEXATION ====================
-// Le back calcule déjà la remédiation la moins coûteuse par document
-// (recommended_action) : l'UI ne fait que l'afficher et la déclencher.
-
-const INDEXATION_ACTION_ICONS = {
-    colpali_repair: 'ti-wand',
-    colpali_only: 'ti-photo-search',
-    full: 'ti-refresh-alert',
-};
-
-function indexationChip(label, tone, tooltip) {
-    const tones = {
-        ok: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20',
-        warn: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20',
-        error: 'bg-red-500/10 text-red-700 dark:text-red-300 border-red-500/20',
-        muted: 'bg-black/5 dark:bg-white/5 text-gray-600 dark:text-gray-300 border-black/10 dark:border-white/10',
-    };
-    return `<span class="inline-flex items-center px-2 py-0.5 rounded-full border text-[11px] font-semibold whitespace-nowrap ${tones[tone] || tones.muted}" title="${escapeHtml(tooltip || '')}">${escapeHtml(label)}</span>`;
+function wikiFmtMs(ms) {
+    if (ms === null || ms === undefined || Number.isNaN(Number(ms))) return '—';
+    const v = Number(ms);
+    if (v >= 1000) return `${(v / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} s`;
+    return `${Math.round(v)} ms`;
 }
 
-function indexationSummaryCard(value, label, tone, tooltip) {
+function wikiPageLink(path) {
+    const p = String(path || '');
+    return `<a href="/wiki#${escapeHtml(p)}" class="font-mono text-xs text-indigo-600 dark:text-indigo-400 hover:underline break-all">${escapeHtml(p)}</a>`;
+}
+
+function wikiLintText(s) {
+    // Une erreur de frontmatter cite en général la page en tête : on la rend cliquable.
+    const str = String(s || '');
+    const m = str.match(/^(\/\S+?\.md)(.*)$/);
+    if (m) return `${wikiPageLink(m[1])}<span class="text-gray-600 dark:text-gray-300">${escapeHtml(m[2])}</span>`;
+    return `<span class="text-gray-600 dark:text-gray-300">${escapeHtml(str)}</span>`;
+}
+
+function wikiMetaChip(icon, label, tooltip) {
+    return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-[11px] font-semibold text-gray-600 dark:text-gray-300" title="${escapeHtml(tooltip || '')}">
+        <i class="ti ${icon} text-xs"></i>${label}
+    </span>`;
+}
+
+function renderWikiMeta(s) {
+    const el = document.getElementById('wiki-meta');
+    if (!el) return;
+    const key = String(s.cache_key || '');
+    const shortKey = key.length > 20 ? key.slice(0, 20) + '…' : key;
+    el.innerHTML = [
+        wikiMetaChip('ti-clock', `Chargé le ${escapeHtml(fmtDateTime(s.loaded_at))}`, 'Dernier chargement du wiki en mémoire.'),
+        key ? wikiMetaChip('ti-key', `<span class="font-mono">${escapeHtml(shortKey)}</span>`, `Clé de cache du prompt : ${key}`) : '',
+        s.wiki_dir ? wikiMetaChip('ti-folder', `<span class="font-mono">${escapeHtml(s.wiki_dir)}</span>`, 'Dossier du wiki sur le serveur.') : '',
+        wikiMetaChip('ti-lock', `${wikiFmtInt(s.reserved)} réservée(s)`, 'Pages réservées, hors comptage des pages.'),
+    ].join('');
+}
+
+function wikiKpiCard(value, label, tone, tooltip) {
     const tones = {
         ok: 'text-emerald-600 dark:text-emerald-400',
         warn: 'text-amber-600 dark:text-amber-400',
-        error: 'text-red-600 dark:text-red-400',
+        accent: 'text-indigo-600 dark:text-indigo-400',
         muted: 'text-gray-900 dark:text-white',
     };
-    return `<div class="glass-panel rounded-2xl border border-black/5 dark:border-white/5 p-4 shadow-sm" title="${escapeHtml(tooltip || '')}">
-        <div class="text-2xl font-extrabold ${tones[tone] || tones.muted}">${value}</div>
+    return `<div class="glass-card rounded-2xl border border-black/5 dark:border-white/5 p-4 shadow-sm hover:translate-y-0 hover:scale-100" title="${escapeHtml(tooltip || '')}">
+        <div class="text-2xl font-extrabold ${tones[tone] || tones.muted}">${wikiFmtInt(value)}</div>
         <div class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">${escapeHtml(label)}</div>
     </div>`;
 }
 
-function renderIndexationSummary(totals) {
-    const el = document.getElementById('indexation-summary');
+function renderWikiKpis(s) {
+    const el = document.getElementById('wiki-kpis');
     if (!el) return;
+    const orphans = (s.orphans || []).length;
+    const stale = (s.stale || []).length;
+    const ghosts = Number(s.ghosts) || 0;
+    const alertTone = n => (n > 0 ? 'warn' : 'ok');
     el.innerHTML = [
-        indexationSummaryCard(totals.documents, 'documents', 'muted', 'Documents audités dans la bibliothèque.'),
-        indexationSummaryCard(totals.ok, 'sains', 'ok', 'Texte, ColPali et synthèses complets.'),
-        indexationSummaryCard(totals.free_fix, 'réparables', 'warn', 'Réparables sans ré-embedding : quelques secondes par document.'),
-        indexationSummaryCard(totals.heavy_fix, 'à retraiter', 'error', 'Nécessitent un vrai retraitement (modèle ou appels LLM).'),
-        indexationSummaryCard(totals.in_progress, 'en cours', 'muted', 'Traitement en cours — audit disponible ensuite.'),
+        wikiKpiCard(s.pages, 'pages', 'muted', 'Pages markdown chargées (hors pages réservées).'),
+        wikiKpiCard(s.links, 'liens', 'accent', 'Liens internes résolus entre pages.'),
+        wikiKpiCard(ghosts, 'fantômes', alertTone(ghosts), "Liens vers des pages qui n'existent pas."),
+        wikiKpiCard(orphans, 'orphelines', alertTone(orphans), "Pages vers lesquelles aucune autre page ne pointe."),
+        wikiKpiCard(stale, 'périmées', alertTone(stale), 'Pages dont la source a changé depuis leur rédaction.'),
+        wikiKpiCard(s.drafts, 'brouillons', 'muted', 'Pages encore marquées brouillon.'),
+        wikiKpiCard(s.raw_files, 'PDF', 'muted', 'Fichiers sources bruts déposés à côté du wiki.'),
     ].join('');
-
-    const repairBtn = document.getElementById('indexation-repair-all');
-    if (repairBtn) {
-        const n = totals.free_fix || 0;
-        repairBtn.disabled = n === 0;
-        repairBtn.innerHTML = n > 0
-            ? `<i class="ti ti-wand text-sm"></i> Réparer ${n} document(s) (sans recalcul)`
-            : '<i class="ti ti-wand text-sm"></i> Rien à réparer';
-    }
 }
 
-function indexationProblemChips(doc) {
-    const chips = [];
-    const t = doc.text || {}, c = doc.colpali || {};
-    if (t.status === 'missing') chips.push(indexationChip('Texte absent', 'error', 'Aucun chunk texte indexé.'));
-    if (c.status === 'desync') {
-        const hors = c.legacy_count || 0, orph = c.orphan_count || 0;
-        chips.push(indexationChip(
-            `ColPali désync (${hors + orph})`,
-            'error',
-            `${hors} patch(es) hors ancre de page, ${orph} orphelin(s).`,
-        ));
-    } else if (c.status === 'partial') {
-        chips.push(indexationChip(`ColPali ${c.indexed_pages}/${c.expected_pages}`, 'warn', `${c.missing_count} page(s) sans index visuel.`));
-    } else if (c.status === 'missing') {
-        chips.push(indexationChip('ColPali absent', 'error', 'Aucun index visuel.'));
-    } else if (c.status === 'unknown') {
-        chips.push(indexationChip('ColPali ?', 'warn', 'Scan LanceDB en échec.'));
-    }
-    return chips.join(' ') || indexationChip('—', 'muted', '');
-}
-
-function indexationActionButton(doc) {
-    const a = doc.recommended_action || {};
-    if (!a.action || a.action === 'none') {
-        return `<span class="text-xs font-semibold text-gray-400 dark:text-gray-500">${escapeHtml(a.label || '—')}</span>`;
-    }
-    const icon = INDEXATION_ACTION_ICONS[a.action] || 'ti-tool';
-    const free = a.cost === 'free';
-    const cls = free
-        ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-        : 'border border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10';
-    const handler = a.action === 'colpali_repair'
-        ? `repairColpaliDoc(${doc.document_id})`
-        : `reindexDocFromAdmin(${doc.document_id}, '${a.action}')`;
-    return `<button type="button" onclick="${handler}"
-        class="px-3 py-1.5 rounded-lg text-xs font-bold active:scale-95 transition-all flex items-center gap-1.5 whitespace-nowrap ${cls}"
-        title="${escapeHtml(a.reason || '')}">
-        <i class="ti ${icon} text-xs"></i>${escapeHtml(a.label)}${free ? ' · gratuit' : ''}
-    </button>`;
-}
-
-function renderIndexationTable(documents) {
-    const el = document.getElementById('indexation-table');
+function renderWikiTypes(types) {
+    const el = document.getElementById('wiki-types');
     if (!el) return;
-    if (!documents || documents.length === 0) {
-        el.innerHTML = '<div class="p-6 text-sm font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-2"><i class="ti ti-circle-check"></i> Tous les documents sont correctement indexés.</div>';
+    const entries = Object.entries(types || {})
+        .map(([k, v]) => [k, Number(v) || 0])
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'fr'));
+    if (!entries.length) {
+        el.innerHTML = '<div class="text-xs text-gray-500 dark:text-gray-400 font-semibold">Aucun type déclaré.</div>';
         return;
     }
-    const rows = documents.map((doc) => `
-        <tr class="border-t border-black/5 dark:border-white/5 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]" id="indexation-row-${doc.document_id}">
-            <td class="px-4 py-3">
-                <div class="text-sm font-bold text-gray-900 dark:text-white truncate max-w-[22rem]" title="${escapeHtml(doc.title)}">${escapeHtml(doc.title)}</div>
-                <div class="text-[11px] font-semibold text-gray-400 dark:text-gray-500">#${doc.document_id}</div>
-            </td>
-            <td class="px-4 py-3"><div class="flex flex-wrap gap-1">${indexationProblemChips(doc)}</div></td>
-            <td class="px-4 py-3 text-xs text-gray-500 dark:text-gray-400 max-w-[24rem]">${escapeHtml((doc.recommended_action || {}).reason || '')}</td>
-            <td class="px-4 py-3 text-right">${indexationActionButton(doc)}</td>
-        </tr>`).join('');
-    el.innerHTML = `<table class="w-full">
-        <thead class="bg-black/[0.03] dark:bg-white/[0.03]">
-            <tr class="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-                <th class="px-4 py-2 text-left">Document</th>
-                <th class="px-4 py-2 text-left">Problème</th>
-                <th class="px-4 py-2 text-left">Diagnostic</th>
-                <th class="px-4 py-2 text-right">Remédiation</th>
-            </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-    </table>`;
+    const max = Math.max(1, ...entries.map(e => e[1]));
+    el.innerHTML = entries.map(([type, n]) => `
+        <div class="${n === 0 ? 'opacity-50' : ''}">
+            <div class="flex justify-between items-baseline text-xs mb-1 gap-2">
+                <span class="font-semibold text-gray-700 dark:text-gray-300 truncate" title="${escapeHtml(type)}">${escapeHtml(type)}</span>
+                <span class="font-bold text-gray-500 dark:text-gray-400 shrink-0">${wikiFmtInt(n)}</span>
+            </div>
+            <div class="w-full bg-black/5 dark:bg-white/5 h-1.5 rounded-full overflow-hidden">
+                <div class="bg-indigo-500 h-full rounded-full" style="width: ${Math.round(n / max * 100)}%"></div>
+            </div>
+        </div>`).join('');
 }
 
-async function loadIndexationReport() {
-    const table = document.getElementById('indexation-table');
-    if (table) table.innerHTML = '<div class="p-6 text-sm font-semibold text-gray-500 dark:text-gray-400">Audit en cours…</div>';
+function wikiBudgetRow(label, value, sub) {
+    return `<div class="flex justify-between items-baseline gap-3 py-2 border-b border-black/5 dark:border-white/5 last:border-b-0">
+        <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">${escapeHtml(label)}</span>
+        <span class="text-right">
+            <span class="text-sm font-bold text-gray-900 dark:text-white">${value}</span>
+            ${sub ? `<span class="block text-[11px] text-gray-400 dark:text-gray-500 font-semibold">${sub}</span>` : ''}
+        </span>
+    </div>`;
+}
+
+function renderWikiBudget(s) {
+    const el = document.getElementById('wiki-budget');
+    if (!el) return;
+    const estimated = Number(s.estimated_tokens) || 0;
+    const pct = Math.min(100, Math.round(estimated / WIKI_CONTEXT_WINDOW * 100));
+    const barTone = s.token_warning ? 'bg-amber-500' : 'bg-indigo-500';
+
+    let lastCall;
+    const lc = s.last_call;
+    if (lc) {
+        const prompt = Number(lc.prompt_tokens) || 0;
+        const cached = Number(lc.cached_tokens) || 0;
+        const cachePct = prompt > 0 ? Math.min(100, cached / prompt * 100) : 0;
+        // Une décimale : 186 500 / 187 000 n'est pas « 100 % », c'est 99,7 %.
+        const cachePctLabel = cachePct.toLocaleString('fr-FR', { maximumFractionDigits: 1 });
+        lastCall = `
+            <div class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dernier appel</div>
+            <div class="text-[11px] text-gray-400 dark:text-gray-500 font-semibold mt-0.5">
+                ${escapeHtml(fmtDateTime(lc.at))}${lc.model ? ` · <span class="font-mono">${escapeHtml(lc.model)}</span>` : ''}
+            </div>
+            <div class="mt-2">
+                ${wikiBudgetRow('Tokens du prompt', wikiFmtInt(prompt), `${cachePctLabel} % servis depuis le cache (${wikiFmtInt(cached)})`)}
+                ${wikiBudgetRow('Tokens de réponse', wikiFmtInt(lc.completion_tokens))}
+                ${wikiBudgetRow('Premier token', wikiFmtMs(lc.first_token_ms))}
+                ${wikiBudgetRow('Durée totale', wikiFmtMs(lc.duration_ms))}
+            </div>
+            <div class="w-full bg-black/5 dark:bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden" title="Part du prompt servie depuis le cache">
+                <div class="bg-emerald-500 h-full rounded-full" style="width: ${cachePct}%"></div>
+            </div>
+            <div class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 font-semibold">${cachePctLabel} % du prompt en cache</div>`;
+    } else {
+        lastCall = `
+            <div class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Dernier appel</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold italic mt-2">Aucun appel au modèle depuis le démarrage.</div>`;
+    }
+
+    el.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tokens estimés</span>
+                <div class="flex items-baseline gap-2 mt-1">
+                    <span class="text-3xl font-extrabold ${s.token_warning ? 'text-amber-600 dark:text-amber-400' : 'text-gray-900 dark:text-white'}">${wikiFmtInt(estimated)}</span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500 font-semibold">/ 256 k</span>
+                </div>
+                <div class="w-full bg-black/5 dark:bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
+                    <div class="${barTone} h-full rounded-full" style="width: ${pct}%"></div>
+                </div>
+                <div class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 font-semibold">${pct} % de la fenêtre · ${wikiFmtInt(s.chars)} caractères</div>
+            </div>
+            <div>${lastCall}</div>
+        </div>`;
+}
+
+function wikiLintBlock(title, items, tone, renderItem) {
+    const list = Array.isArray(items) ? items : [];
+    const tones = {
+        ok: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300',
+        warn: 'bg-amber-500/10 text-amber-700 dark:text-amber-300',
+        error: 'bg-rose-500/10 text-rose-700 dark:text-rose-300',
+    };
+    const badge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${list.length ? (tones[tone] || tones.warn) : tones.ok}">${list.length}</span>`;
+    const body = list.length
+        ? `<ul class="space-y-1 max-h-48 overflow-y-auto pr-1">${list.map(it => `
+            <li class="flex items-start gap-1.5 text-xs">
+                <i class="ti ti-point-filled text-gray-400 dark:text-gray-500 text-xs mt-0.5 shrink-0"></i>
+                <span class="min-w-0">${renderItem(it)}</span>
+            </li>`).join('')}</ul>`
+        : '<div class="text-xs text-gray-400 dark:text-gray-500 font-semibold italic">Rien à signaler.</div>';
+    return `<div class="rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4">
+        <div class="flex items-center justify-between mb-2 gap-2">
+            <span class="text-xs font-bold text-gray-700 dark:text-gray-300">${escapeHtml(title)}</span>
+            ${badge}
+        </div>
+        ${body}
+    </div>`;
+}
+
+function renderWikiLint(s) {
+    const el = document.getElementById('wiki-lint');
+    if (!el) return;
+    const lint = s.lint || {};
+    el.innerHTML = [
+        wikiLintBlock('Pages orphelines', s.orphans, 'warn', wikiPageLink),
+        wikiLintBlock('Pages périmées', s.stale, 'warn', wikiPageLink),
+        wikiLintBlock('Erreurs de frontmatter', lint.frontmatter_errors, 'error', wikiLintText),
+        wikiLintBlock("Pages absentes de l'index", lint.not_in_index, 'warn', wikiPageLink),
+        wikiLintBlock("Liens morts de l'index", lint.index_dead_links, 'error', wikiPageLink),
+    ].join('');
+}
+
+async function loadWikiStats() {
+    const kpis = document.getElementById('wiki-kpis');
+    const err = document.getElementById('wiki-error');
+    if (kpis) kpis.innerHTML = '<div class="col-span-full text-center text-sm text-gray-500 dark:text-gray-400 py-6 font-semibold">Chargement…</div>';
+    if (err) err.classList.add('hidden');
     try {
-        const r = await apiCall('/api/library/indexing-issues');
-        if (!r || !r.ok) {
-            const msg = r ? `Erreur ${r.status}` : 'Pas de réponse';
-            if (table) table.innerHTML = `<div class="p-6 text-sm font-semibold text-red-600 dark:text-red-400">${escapeHtml(msg)}</div>`;
-            return;
-        }
-        const data = await r.json();
-        renderIndexationSummary(data.totals || {});
-        renderIndexationTable(data.documents || []);
+        const r = await apiCall('/api/wiki/stats');
+        if (!r) throw new Error('Pas de réponse');
+        if (r.status === 403) throw new Error('Accès réservé aux administrateurs.');
+        if (!r.ok) throw new Error(`Erreur ${r.status}`);
+        const s = await r.json();
+        renderWikiMeta(s);
+        renderWikiKpis(s);
+        renderWikiTypes(s.types);
+        renderWikiBudget(s);
+        renderWikiLint(s);
+        document.getElementById('wiki-token-warning')?.classList.toggle('hidden', !s.token_warning);
     } catch (e) {
-        if (table) table.innerHTML = `<div class="p-6 text-sm font-semibold text-red-600 dark:text-red-400">${escapeHtml(String(e))}</div>`;
-    }
-}
-
-async function repairColpaliDoc(documentId) {
-    const row = document.getElementById(`indexation-row-${documentId}`);
-    if (row) row.style.opacity = '0.5';
-    try {
-        const r = await apiCall(`/api/library/documents/${documentId}/colpali-repair`, { method: 'POST' });
-        const data = await r.json().catch(() => ({}));
-        if (!r.ok) {
-            alert(data.detail || 'Réparation impossible.');
-            return;
+        if (kpis) kpis.innerHTML = '';
+        if (err) {
+            err.textContent = `Statistiques du wiki indisponibles : ${e.message || e}`;
+            err.classList.remove('hidden');
         }
-        if (data.status === 'incomplete') {
-            alert(`Réparation partielle : ${data.pages_with_patches ?? 0}/${data.expected_pages ?? 0} page(s) couverte(s).\n` +
-                  'Des pages restent sans index visuel — un retraitement « ColPali » est proposé après actualisation.');
-        }
-        await loadIndexationReport();
-    } finally {
-        if (row) row.style.opacity = '';
     }
-}
-
-async function reindexDocFromAdmin(documentId, mode) {
-    if (!confirm(`Lancer un retraitement « ${mode} » sur le document #${documentId} ?\n\nCe passage utilise le modèle : comptez plusieurs minutes.`)) return;
-    const r = await apiCall(`/api/library/documents/${documentId}/reindex`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode }),
-    });
-    const data = await r.json().catch(() => ({}));
-    if (!r.ok) {
-        alert(data.detail || 'Impossible de lancer le retraitement.');
-        return;
-    }
-    await loadIndexationReport();
-}
-
-async function repairAllColpali() {
-    if (!confirm('Réparer la topologie ColPali de toute la bibliothèque ?\n\n' +
-                 'Ré-attache les patches existants aux ancres de page, sans ré-embedding.')) return;
-    const btn = document.getElementById('indexation-repair-all');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader-2 text-sm animate-spin"></i> Réparation lancée…'; }
-    const r = await apiCall('/api/library/colpali-repair', { method: 'POST' });
-    const data = await r.json().catch(() => ({}));
-    if (!r.ok) {
-        alert(data.detail || 'Réparation impossible.');
-        await loadIndexationReport();
-        return;
-    }
-    alert('Réparation enfilée sur le worker.\nActualisez dans quelques instants pour voir le résultat.');
-    await loadIndexationReport();
-}
-
-function workerStateLabel(state) {
-    if (state === 'active') return 'En cours';
-    if (state === 'reserved') return 'En attente';
-    if (state === 'scheduled') return 'Planifié';
-    return state || 'Inconnu';
-}
-
-function renderWorkerTasksList(container, tasks) {
-    if (!tasks || tasks.length === 0) {
-        container.innerHTML = '<div class="p-4 text-sm font-semibold text-gray-500 dark:text-gray-400">Aucun document en cours ou en attente.</div>';
-        return;
-    }
-
-    const rows = tasks.map(t => `
-        <tr class="border-t border-black/5 dark:border-white/5 hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
-            <td class="px-4 py-3 text-sm font-bold text-gray-900 dark:text-gray-100">${escapeHtml(t.document_name || '—')}</td>
-            <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">${escapeHtml(workerStateLabel(t.state))}</td>
-            <td class="px-4 py-3 text-sm font-mono text-xs text-indigo-600 dark:text-indigo-400">${escapeHtml(t.queue || '—')}</td>
-            <td class="px-4 py-3 text-sm font-mono text-xs text-gray-500 dark:text-gray-400">${escapeHtml(t.task_name || '—')}</td>
-        </tr>
-    `).join('');
-
-    container.innerHTML = `
-        <table class="min-w-full">
-            <thead class="bg-black/5 dark:bg-white/5">
-                <tr>
-                    <th class="px-4 py-2 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase">Document</th>
-                    <th class="px-4 py-2 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase">État</th>
-                    <th class="px-4 py-2 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase">Queue</th>
-                    <th class="px-4 py-2 text-left text-xs font-bold text-gray-500 dark:text-gray-300 uppercase">Tâche</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-black/5 dark:divide-white/5">${rows}</tbody>
-        </table>
-    `;
 }
 
 // Load Data
@@ -1827,7 +1127,7 @@ function renderPermissions() {
         if (!byCategory[perm.category]) byCategory[perm.category] = [];
         byCategory[perm.category].push(perm);
     });
-    
+
     grid.innerHTML = Object.entries(byCategory).map(([category, perms]) => `
         <div class="glass-card rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm hover:translate-y-0 hover:scale-100">
             <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 capitalize">${escapeHtml(category)}</h3>
@@ -1861,12 +1161,12 @@ async function createUser(event) {
         email: formData.get('email'),
         password: formData.get('password')
     };
-    
+
     const response = await apiCall('/api/admin/users', {
         method: 'POST',
         body: JSON.stringify(data)
     });
-    
+
     if (response && response.ok) {
         closeCreateUserModal();
         loadUsers();
@@ -1876,11 +1176,11 @@ async function createUser(event) {
 // Delete User
 async function deleteUser(userId) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) return;
-    
+
     const response = await apiCall(`/api/admin/users/${userId}`, {
         method: 'DELETE'
     });
-    
+
     if (response && response.ok) {
         loadUsers();
     }
@@ -1891,7 +1191,7 @@ async function openManageRolesModal(userId) {
     currentManageUserId = userId;
     const user = allUsers.find(u => u.id === userId);
     document.getElementById('manage-roles-username').textContent = user.username;
-    
+
     const content = document.getElementById('manage-roles-content');
     content.innerHTML = allRoles.map(role => {
         const hasRole = user.roles.includes(role.name);
@@ -1910,7 +1210,7 @@ async function openManageRolesModal(userId) {
             </div>
         `;
     }).join('');
-    
+
     document.getElementById('manage-roles-modal').classList.remove('hidden');
 }
 
@@ -1924,7 +1224,7 @@ async function assignRoleToUser(userId, roleId) {
         method: 'POST',
         body: JSON.stringify({ user_id: userId, role_id: roleId })
     });
-    
+
     if (response && response.ok) {
         await loadUsers();
         openManageRolesModal(userId);
@@ -1935,7 +1235,7 @@ async function removeRoleFromUser(userId, roleId) {
     const response = await apiCall(`/api/admin/users/${userId}/roles/${roleId}`, {
         method: 'DELETE'
     });
-    
+
     if (response && response.ok) {
         await loadUsers();
         openManageRolesModal(userId);
@@ -1959,12 +1259,12 @@ async function createRole(event) {
         name: formData.get('name'),
         description: formData.get('description') || null
     };
-    
+
     const response = await apiCall('/api/admin/roles', {
         method: 'POST',
         body: JSON.stringify(data)
     });
-    
+
     if (response && response.ok) {
         closeCreateRoleModal();
         loadRoles();
@@ -1974,11 +1274,11 @@ async function createRole(event) {
 // Delete Role
 async function deleteRole(roleId) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce rôle ?')) return;
-    
+
     const response = await apiCall(`/api/admin/roles/${roleId}`, {
         method: 'DELETE'
     });
-    
+
     if (response && response.ok) {
         loadRoles();
     }
@@ -1989,14 +1289,14 @@ async function openManagePermissionsModal(roleId) {
     currentManageRoleId = roleId;
     const role = allRoles.find(r => r.id === roleId);
     document.getElementById('manage-permissions-rolename').textContent = role.name;
-    
+
     const content = document.getElementById('manage-permissions-content');
     const byCategory = {};
     allPermissions.forEach(perm => {
         if (!byCategory[perm.category]) byCategory[perm.category] = [];
         byCategory[perm.category].push(perm);
     });
-    
+
     content.innerHTML = Object.entries(byCategory).map(([category, perms]) => `
         <div class="mb-4">
             <h4 class="font-bold text-gray-900 dark:text-white mb-2.5 capitalize text-sm">${escapeHtml(category)}</h4>
@@ -2024,7 +1324,7 @@ async function openManagePermissionsModal(roleId) {
             </div>
         </div>
     `).join('');
-    
+
     document.getElementById('manage-permissions-modal').classList.remove('hidden');
 }
 
@@ -2038,7 +1338,7 @@ async function assignPermissionToRole(roleId, permissionId) {
         method: 'POST',
         body: JSON.stringify({ role_id: roleId, permission_id: permissionId })
     });
-    
+
     if (response && response.ok) {
         await loadRoles();
         openManagePermissionsModal(roleId);
@@ -2049,7 +1349,7 @@ async function removePermissionFromRole(roleId, permissionId) {
     const response = await apiCall(`/api/admin/roles/${roleId}/permissions/${permissionId}`, {
         method: 'DELETE'
     });
-    
+
     if (response && response.ok) {
         await loadRoles();
         openManagePermissionsModal(roleId);
@@ -2081,18 +1381,18 @@ async function renderTimelineChart(data) {
         console.error(e);
         return;
     }
-    
+
     const chartEl = document.getElementById('admin-feedback-timeline-chart');
     if (!chartEl) return;
     const ctx = chartEl.getContext('2d');
     if (chartInstance) {
         chartInstance.destroy();
     }
-    
+
     const labels = data.map(item => item.label);
     const positiveData = data.map(item => item.positive);
     const negativeData = data.map(item => item.negative);
-    
+
     // Detect dark mode to adjust colors
     const isDark = document.documentElement.classList.contains('dark');
     const gridColor = isDark ? 'rgba(75, 85, 99, 0.2)' : 'rgba(229, 231, 235, 0.5)';
@@ -2273,37 +1573,14 @@ async function loadFeedbackStats() {
             document.getElementById('admin-kpi-total').textContent = stats.total;
             document.getElementById('admin-kpi-positive').textContent = `${stats.positive} (${stats.total > 0 ? Math.round(stats.positive/stats.total*100) : 0}%)`;
             document.getElementById('admin-kpi-negative').textContent = `${stats.negative} (${stats.total > 0 ? Math.round(stats.negative/stats.total*100) : 0}%)`;
-            
+
             const ratioPercent = stats.total > 0 ? Math.round(stats.positive/stats.total*100) : 100;
             document.getElementById('admin-kpi-ratio').textContent = `${ratioPercent}%`;
-            
+
             // Set progress bars
             document.getElementById('admin-bar-positive').style.width = `${ratioPercent}%`;
             document.getElementById('admin-bar-negative').style.width = `${stats.total > 0 ? Math.round(stats.negative/stats.total*100) : 0}%`;
             document.getElementById('admin-bar-ratio').style.width = `${ratioPercent}%`;
-            
-            // Render space breakdown
-            const spaceList = document.getElementById('admin-space-breakdown');
-            if (stats.by_space && stats.by_space.length > 0) {
-                spaceList.innerHTML = stats.by_space.map(sp => {
-                    const spTotal = sp.positive + sp.negative;
-                    const spRatio = spTotal > 0 ? Math.round(sp.positive / spTotal * 100) : 100;
-                    return `
-                        <div class="bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 p-4 rounded-2xl">
-                            <div class="flex justify-between text-xs font-bold mb-2">
-                                <span class="text-gray-800 dark:text-gray-200 truncate max-w-[180px]" title="${escapeHtml(sp.space_name)}">${escapeHtml(sp.space_name)}</span>
-                                <span class="text-gray-500 dark:text-gray-400 font-semibold">${sp.positive}👍 / ${sp.negative}👎 (${spRatio}%)</span>
-                            </div>
-                            <div class="w-full bg-gray-100 dark:bg-gray-800 h-2 rounded-full overflow-hidden flex">
-                                <div class="bg-green-500 h-full" style="width: ${spTotal > 0 ? (sp.positive / spTotal * 100) : 100}%"></div>
-                                <div class="bg-red-500 h-full" style="width: ${spTotal > 0 ? (sp.negative / spTotal * 100) : 0}%"></div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } else {
-                spaceList.innerHTML = `<div class="text-center text-xs text-gray-500 dark:text-gray-400 py-8 lg:col-span-3">Aucune donnée par espace.</div>`;
-            }
 
             // Render classification pie chart
             if (stats.classifications) {
@@ -2338,7 +1615,7 @@ async function loadRecentFeedbacks() {
         if (adminFeedbackTableFilter === 'negative' && adminFeedbackTableCategoryFilter) {
             params.set('filter_category', adminFeedbackTableCategoryFilter);
         }
-        
+
         const r = await apiCall(`/api/admin/feedbacks/recent?${params.toString()}`);
         const tbody = document.getElementById('admin-feedbacks-table-body');
         if (r && r.ok) {
@@ -2346,11 +1623,11 @@ async function loadRecentFeedbacks() {
             const total = data.total;
             const limit = data.limit;
             const totalPages = Math.max(1, Math.ceil(total / limit));
-            
+
             document.getElementById('admin-feedback-tbl-count').textContent = `${total} retours - Page ${adminFeedbackTablePage} sur ${totalPages}`;
             document.getElementById('admin-feedback-tbl-prev').disabled = adminFeedbackTablePage <= 1;
             document.getElementById('admin-feedback-tbl-next').disabled = adminFeedbackTablePage >= totalPages;
-            
+
             if (data.items && data.items.length > 0) {
                 tbody.innerHTML = data.items.map(f => {
                     const date = new Date(f.created_at);
@@ -2360,9 +1637,9 @@ async function loadRecentFeedbacks() {
                         hour: '2-digit',
                         minute: '2-digit'
                     });
-                    
-                    const badgeClass = f.is_positive 
-                        ? "bg-green-500/10 text-green-700 border-green-500/20 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30" 
+
+                    const badgeClass = f.is_positive
+                        ? "bg-green-500/10 text-green-700 border-green-500/20 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30"
                         : "bg-red-500/10 text-red-700 border-red-500/20 dark:bg-red-950/20 dark:text-red-400 dark:border-red-800/30";
                     const badgeText = f.is_positive ? "👍 Utile" : "👎 Inutile";
 
@@ -2371,15 +1648,21 @@ async function loadRecentFeedbacks() {
                              ${escapeHtml(f.category)}
                            </span>`
                         : "";
-                    
+
+                    // La page d'accueil est le chat : elle lit ?conversation=<id> pour rouvrir le fil.
+                    const openLink = f.conversation_id
+                        ? `<a href="/?conversation=${encodeURIComponent(f.conversation_id)}" class="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
+                                Ouvrir <i class="ti ti-arrow-right text-sm"></i>
+                            </a>`
+                        : '';
+
                     return `
                         <tr class="hover:bg-white/40 dark:hover:bg-white/5 border-b border-black/5 dark:border-white/5 last:border-b-0 transition-colors">
                             <td class="px-5 py-4 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400 font-semibold">
                                 ${dateStr}
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap text-xs">
-                                <div class="font-bold text-gray-900 dark:text-gray-100 truncate max-w-[120px]" title="${escapeHtml(f.space_name)}">${escapeHtml(f.space_name)}</div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[120px] font-semibold ${!f.conversation_title ? 'text-rose-500 dark:text-rose-400 italic' : ''}" title="${escapeHtml(f.conversation_title || 'Conversation supprimée')}">${escapeHtml(f.conversation_title || 'Conversation supprimée')}</div>
+                                <div class="text-xs text-gray-800 dark:text-gray-200 truncate max-w-[160px] font-semibold ${!f.conversation_title ? 'text-rose-500 dark:text-rose-400 italic' : ''}" title="${escapeHtml(f.conversation_title || 'Conversation supprimée')}">${escapeHtml(f.conversation_title || 'Conversation supprimée')}</div>
                             </td>
                             <td class="px-5 py-4 whitespace-nowrap text-xs">
                                 <div class="flex flex-col gap-1">
@@ -2402,9 +1685,7 @@ async function loadRecentFeedbacks() {
                                     <button onclick="deleteAdminFeedback(${f.id})" class="inline-flex items-center gap-1 text-xs font-bold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:underline">
                                         <i class="ti ti-trash text-sm"></i> Supprimer
                                     </button>
-                                    <a href="/spaces/${f.space_id}" class="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">
-                                        Ouvrir <i class="ti ti-arrow-right text-sm"></i>
-                                    </a>
+                                    ${openLink}
                                 </div>
                             </td>
                         </tr>
@@ -2427,10 +1708,10 @@ async function loadRecentFeedbacks() {
 
 function toggleAdminTimelinePeriod(period) {
     adminFeedbackPeriod = period;
-    
+
     const btnWeek = document.getElementById('btn-period-week');
     const btnMonth = document.getElementById('btn-period-month');
-    
+
     if (period === 'week') {
         btnWeek.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all";
         btnMonth.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
@@ -2438,14 +1719,14 @@ function toggleAdminTimelinePeriod(period) {
         btnMonth.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white/60 dark:bg-white/10 shadow-sm border border-black/5 dark:border-white/5 text-indigo-600 dark:text-indigo-400 transition-all";
         btnWeek.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
     }
-    
+
     loadFeedbackTimeline();
 }
 
 function setAdminFeedbackTableFilter(filter) {
     adminFeedbackTableFilter = filter;
     adminFeedbackTablePage = 1;
-    
+
     // Toggle category select container visibility
     const categoryContainer = document.getElementById('admin-classification-filter-container');
     if (categoryContainer) {
@@ -2459,15 +1740,15 @@ function setAdminFeedbackTableFilter(filter) {
             if (selectEl) selectEl.value = "";
         }
     }
-    
+
     const tabs = {
         'all': document.getElementById('btn-tbl-filter-all'),
         'positive': document.getElementById('btn-tbl-filter-positive'),
         'negative': document.getElementById('btn-tbl-filter-negative')
     };
-    
+
     const activeKey = filter === null ? 'all' : filter;
-    
+
     Object.keys(tabs).forEach(key => {
         const tab = tabs[key];
         if (!tab) return;
@@ -2477,7 +1758,7 @@ function setAdminFeedbackTableFilter(filter) {
             tab.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-all";
         }
     });
-    
+
     loadRecentFeedbacks();
 }
 
@@ -2494,12 +1775,12 @@ function changeAdminFeedbackTblPage(delta) {
 
 async function deleteAdminFeedback(feedbackId) {
     if (!confirm("Êtes-vous sûr de vouloir supprimer ce feedback en tant qu'administrateur ?")) return;
-    
+
     try {
         const response = await apiCall(`/api/admin/feedbacks/${feedbackId}`, {
             method: "DELETE"
         });
-        
+
         if (response && response.ok) {
             await loadFeedbackStats();
             await loadRecentFeedbacks();
@@ -2516,1520 +1797,5 @@ async function deleteAdminFeedback(feedbackId) {
 loadUsers();
 loadRoles();
 loadPermissions();
-
-// --- RAG EVALUATION JAVASCRIPT ---
-let uploadedDataset = null;
-let uploadedDatasets = []; // [{ name: string, content: array }]
-let lastEvalResults = null;
-
-async function loadSpacesForEval() {
-    const select = document.getElementById('eval-space-select');
-    if (!select) return;
-    
-    select.innerHTML = '<option value="">Chargement des espaces...</option>';
-    
-    try {
-        const r = await apiCall('/api/spaces');
-        if (r && r.ok) {
-            const spaces = await r.json();
-            if (spaces && spaces.length > 0) {
-                select.innerHTML = spaces.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
-                checkRunEvalButtonState();
-            } else {
-                select.innerHTML = '<option value="">Aucun espace disponible</option>';
-            }
-        } else {
-            select.innerHTML = '<option value="">Erreur de chargement</option>';
-        }
-    } catch (e) {
-        console.error("Error loading spaces for eval", e);
-        select.innerHTML = '<option value="">Erreur de chargement</option>';
-    }
-}
-
-// Drag & drop handlers
-document.addEventListener('DOMContentLoaded', () => {
-    setupEvalDragAndDrop();
-});
-
-// Fallback call
-setTimeout(setupEvalDragAndDrop, 500);
-setTimeout(loadBuiltinDatasets, 600);
-
-// ---------------------------------------------------------------------------
-// Jeux de référence livrés avec l'application
-// ---------------------------------------------------------------------------
-// Un jeu de référence qui vit sur le poste de quelqu'un n'est pas un jeu de référence :
-// il se perd, il diverge, et deux mesures ne se comparent plus. Ceux-ci sont versionnés
-// avec le code et se chargent d'un clic.
-
-let builtinDatasets = [];
-
-async function loadBuiltinDatasets() {
-    const container = document.getElementById('eval-builtin-list');
-    if (!container) return;
-    try {
-        const r = await apiCall('/api/admin/eval/datasets');
-        if (!r || !r.ok) throw new Error('indisponible');
-        const data = await r.json();
-        builtinDatasets = data.datasets || [];
-    } catch (err) {
-        container.innerHTML = `<div class="text-xs text-rose-600 dark:text-rose-400">Jeux fournis indisponibles.</div>`;
-        return;
-    }
-    if (!builtinDatasets.length) {
-        container.innerHTML = `<div class="text-xs text-gray-500 dark:text-gray-400">Aucun jeu fourni.</div>`;
-        return;
-    }
-    container.innerHTML = builtinDatasets.map((d, i) => {
-        const genere = d.kind === 'generation';
-        const badge = genere
-            ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-700 dark:text-violet-300">réponses attendues</span>`
-            : `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">pages attendues</span>`;
-        return `
-        <button type="button" onclick="useBuiltinDataset(${i})"
-            class="w-full text-left bg-black/5 dark:bg-white/5 hover:bg-indigo-500/10 border border-black/5 dark:border-white/5 hover:border-indigo-500/30 rounded-xl px-3 py-2.5 transition-all">
-            <div class="flex items-center justify-between gap-2">
-                <span class="text-xs font-bold text-gray-800 dark:text-gray-200 truncate">${escapeHtml(d.filename)}</span>
-                ${badge}
-            </div>
-            <div class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
-                ${d.questions} question(s)${d.space_id ? ` · espace ${d.space_id}` : ''}${d.created ? ` · ${escapeHtml(d.created)}` : ''}
-            </div>
-        </button>`;
-    }).join('');
-}
-
-async function useBuiltinDataset(index) {
-    const meta = builtinDatasets[index];
-    if (!meta) return;
-    const statusMsg = document.getElementById('eval-status-message');
-    try {
-        const r = await apiCall(`/api/admin/eval/datasets/${encodeURIComponent(meta.key)}`);
-        if (!r || !r.ok) throw new Error('chargement impossible');
-        const data = await r.json();
-        const existant = uploadedDatasets.findIndex(d => d.name === data.filename);
-        const entree = { name: data.filename, content: data.questions, kind: data.kind };
-        if (existant > -1) uploadedDatasets[existant] = entree;
-        else uploadedDatasets.push(entree);
-
-        // Sélectionner d'office l'espace du jeu : mesurer un jeu sur le mauvais espace
-        // produit des chiffres qui ne veulent rien dire.
-        const select = document.getElementById('eval-space-select');
-        if (select && data.space_id) {
-            const option = Array.from(select.options).find(o => String(o.value) === String(data.space_id));
-            if (option) select.value = String(data.space_id);
-        }
-        if (data.documents_manquants && data.documents_manquants.length) {
-            showEvalError(
-                `Attention : ${data.documents_manquants.length} document(s) de ce jeu sont absents de la base `
-                + `(${data.documents_manquants.join(', ')}). Les questions qui en dépendent échoueront sans que le retriever y soit pour quelque chose.`
-            );
-        } else if (statusMsg) {
-            statusMsg.classList.add('hidden');
-        }
-        updateUploadedDatasetUI();
-    } catch (err) {
-        showEvalError(`Impossible de charger « ${escapeHtml(meta.filename)} ».`);
-    }
-}
-
-function datasetHasExpectedAnswers() {
-    return uploadedDatasets.some(d => (d.content || []).some(q => q && q.attendu));
-}
-
-// ---------------------------------------------------------------------------
-// Évaluation de la GÉNÉRATION sur les réponses attendues
-// ---------------------------------------------------------------------------
-// Sans juge LLM : on compare la réponse à une vérité LUE SUR LA PAGE. Un juge qui note une
-// réponse portant sur une planche cotée sans voir la planche est aveugle (c'est pourquoi
-// l'ancien a été retiré le 02/09) ; une comparaison de valeurs, elle, ne se trompe pas.
-
-const VERDICT_STYLE = {
-    juste:          { label: 'juste',        cls: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300' },
-    abstention_ok:  { label: 'abstention',   cls: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300' },
-    ambigu:         { label: 'ambigu',       cls: 'bg-amber-500/15 text-amber-700 dark:text-amber-300' },
-    faux:           { label: 'faux',         cls: 'bg-rose-500/15 text-rose-700 dark:text-rose-300' },
-    abstention_ko:  { label: 'a répondu',    cls: 'bg-rose-500/15 text-rose-700 dark:text-rose-300' },
-    erreur:         { label: 'erreur',       cls: 'bg-gray-500/15 text-gray-700 dark:text-gray-300' },
-};
-
-async function runGenerationEval() {
-    const select = document.getElementById('eval-space-select');
-    const statusMsg = document.getElementById('eval-status-message');
-    const boutons = ['btn-run-eval', 'btn-run-rag-eval', 'btn-run-generation-eval']
-        .map(id => document.getElementById(id)).filter(Boolean);
-
-    if (!uploadedDataset || !select || !select.value) return;
-    if (!datasetHasExpectedAnswers()) {
-        showEvalError("Ce jeu n'a pas de réponses attendues : utilisez « Évaluer uniquement le retriever ».");
-        return;
-    }
-
-    boutons.forEach(b => { b.disabled = true; });
-    const spaceId = parseInt(select.value);
-    const questions = uploadedDataset.filter(q => q && q.attendu);
-    const resultats = [];
-    const t0 = Date.now();
-
-    try {
-        for (let i = 0; i < questions.length; i++) {
-            const item = questions[i];
-            if (statusMsg) {
-                statusMsg.innerHTML = `<span class="flex items-center gap-1.5"><svg class="animate-spin h-4 w-4 text-violet-600 dark:text-violet-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Génération : question <strong>${i + 1} / ${questions.length}</strong> — le tour complet est rejoué, comptez ~1 min par question…</span>`;
-                statusMsg.classList.remove('hidden');
-            }
-            const r = await apiCall('/api/admin/eval/generation/single', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    space_id: spaceId,
-                    question: item.question,
-                    attendu: item.attendu,
-                    pages_attendues: item.pages_attendues || [],
-                    id: item.id || null,
-                    tags: item.tags || [],
-                    difficulte: item.difficulte || null,
-                    verite: item.verite || null,
-                }),
-            });
-            if (!r || !r.ok) {
-                const txt = r ? await r.text() : 'pas de réponse';
-                throw new Error(`Question ${i + 1} : ${txt}`);
-            }
-            resultats.push(await r.json());
-            renderGenerationEval(resultats, questions.length, (Date.now() - t0) / 1000);
-        }
-        if (statusMsg) statusMsg.classList.add('hidden');
-    } catch (err) {
-        showEvalError(`Évaluation interrompue — ${escapeHtml(String(err.message || err))}`);
-    } finally {
-        boutons.forEach(b => { b.disabled = false; });
-        checkRunEvalButtonState();
-    }
-}
-
-function renderGenerationEval(resultats, total, secondes) {
-    const bloc = document.getElementById('eval-generation-results');
-    const conteneur = document.getElementById('eval-results-container');
-    if (!bloc) return;
-    if (conteneur) conteneur.classList.remove('hidden');
-    bloc.classList.remove('hidden');
-
-    const n = resultats.length;
-    const compte = v => resultats.filter(r => r.verdict === v).length;
-    const reussite = n ? Math.round(100 * (compte('juste') + compte('abstention_ok')) / n) : 0;
-    const vues = n ? Math.round(100 * resultats.filter(r => r.page_vue).length / n) : 0;
-    const citees = n ? Math.round(100 * resultats.filter(r => r.page_citee).length / n) : 0;
-
-    const lignes = resultats.map(r => {
-        const style = VERDICT_STYLE[r.verdict] || VERDICT_STYLE.erreur;
-        const manque = (r.manquants || []).length ? `attendu : ${escapeHtml((r.manquants || []).join(', '))}` : '';
-        const piege = (r.interdits_presents || []).length ? ` · valeur piège : ${escapeHtml(r.interdits_presents.join(', '))}` : '';
-        return `
-        <div class="border-b border-black/5 dark:border-white/5 py-3">
-            <div class="flex items-start justify-between gap-3">
-                <div class="min-w-0">
-                    <div class="text-xs font-bold text-gray-800 dark:text-gray-200">${escapeHtml(r.question || '')}</div>
-                    <div class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
-                        ${manque}${piege}
-                        ${r.verite ? ` · vérité : ${escapeHtml(r.verite)}` : ''}
-                    </div>
-                </div>
-                <span class="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full ${style.cls}">${style.label}</span>
-            </div>
-            <div class="text-[11px] text-gray-600 dark:text-gray-300 mt-1.5 bg-black/5 dark:bg-white/5 rounded-lg px-2.5 py-1.5">
-                ${escapeHtml((r.answer || r.error || '').slice(0, 400))}
-            </div>
-            <div class="text-[10px] text-gray-400 dark:text-gray-500 mt-1 flex gap-3 flex-wrap">
-                <span>page vue : ${r.page_vue ? 'oui' : 'non'}</span>
-                <span>citation exacte : ${r.page_citee ? 'oui' : (r.page_decalee ? 'page décalée' : 'non')}</span>
-                <span>outils : ${r.tool_calls ?? 0}</span>
-                <span>${r.total_s ?? '?'} s</span>
-            </div>
-        </div>`;
-    }).join('');
-
-    bloc.innerHTML = `
-        <div class="glass-panel rounded-3xl p-6 border border-black/5 dark:border-white/5">
-            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <h3 class="text-md font-bold text-gray-800 dark:text-gray-200">Génération — réponses comparées à la vérité des pages</h3>
-                <span class="text-xs text-gray-500 dark:text-gray-400">${n} / ${total} question(s) · ${secondes.toFixed(0)} s</span>
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
-                <div><span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Réussite</span><span class="text-2xl font-extrabold text-gray-900 dark:text-white">${reussite}%</span></div>
-                <div><span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Page de preuve vue</span><span class="text-2xl font-extrabold text-gray-900 dark:text-white">${vues}%</span></div>
-                <div><span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Citation exacte</span><span class="text-2xl font-extrabold text-gray-900 dark:text-white">${citees}%</span></div>
-                <div><span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Faux / ambigus</span><span class="text-2xl font-extrabold text-gray-900 dark:text-white">${compte('faux') + compte('abstention_ko')} / ${compte('ambigu')}</span></div>
-            </div>
-            <div class="max-h-[32rem] overflow-y-auto pr-1">${lignes}</div>
-        </div>`;
-}
-
-
-function setupEvalDragAndDrop() {
-    const dropZone = document.getElementById('eval-drop-zone');
-    const fileInput = document.getElementById('eval-file-input');
-    
-    if (!dropZone || !fileInput) return;
-    
-    if (dropZone.dataset.bound) return;
-    dropZone.dataset.bound = "true";
-    
-    dropZone.addEventListener('click', () => fileInput.click());
-    
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            handleEvalFiles(e.target.files);
-        }
-    });
-    
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('border-indigo-500', 'dark:border-indigo-400', 'bg-indigo-500/5');
-    });
-    
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('border-indigo-500', 'dark:border-indigo-400', 'bg-indigo-500/5');
-    });
-    
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('border-indigo-500', 'dark:border-indigo-400', 'bg-indigo-500/5');
-        if (e.dataTransfer.files.length > 0) {
-            handleEvalFiles(e.dataTransfer.files);
-        }
-    });
-}
-
-async function handleEvalFiles(files) {
-    const statusMsg = document.getElementById('eval-status-message');
-    const fileInput = document.getElementById('eval-file-input');
-    const dropZone = document.getElementById('eval-drop-zone');
-    
-    let errors = [];
-    const loadPromises = [];
-    
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!file.name.endsWith('.json')) {
-            errors.push(`<strong>${escapeHtml(file.name)}</strong> : Fichier JSON requis.`);
-            continue;
-        }
-        
-        loadPromises.push(new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const json = JSON.parse(e.target.result);
-                    const validationError = validateDatasetSchema(json);
-                    if (validationError) {
-                        errors.push(`<strong>${escapeHtml(file.name)}</strong> : ${escapeHtml(validationError)}`);
-                    } else {
-                        const existingIdx = uploadedDatasets.findIndex(d => d.name === file.name);
-                        if (existingIdx > -1) {
-                            uploadedDatasets[existingIdx].content = json;
-                        } else {
-                            uploadedDatasets.push({ name: file.name, content: json });
-                        }
-                    }
-                } catch (err) {
-                    errors.push(`<strong>${escapeHtml(file.name)}</strong> : Erreur de parsing JSON.`);
-                }
-                resolve();
-            };
-            reader.onerror = () => {
-                errors.push(`<strong>${escapeHtml(file.name)}</strong> : Erreur lors de la lecture.`);
-                resolve();
-            };
-            reader.readAsText(file);
-        }));
-    }
-    
-    await Promise.all(loadPromises);
-    
-    if (fileInput) {
-        fileInput.value = '';
-    }
-    
-    if (errors.length > 0) {
-        showEvalError(errors.join('<br>'));
-    } else {
-        if (statusMsg) {
-            statusMsg.classList.add('hidden');
-        }
-        if (dropZone) {
-            dropZone.classList.remove('border-red-500', 'dark:border-red-400', 'bg-red-500/5');
-        }
-    }
-    
-    updateUploadedDatasetUI();
-}
-
-function updateUploadedDatasetUI() {
-    const filesContainer = document.getElementById('eval-files-list-container');
-    const filesList = document.getElementById('eval-files-list');
-    const totalQuestionsEl = document.getElementById('eval-total-questions');
-    const dropText = document.getElementById('eval-drop-text');
-    const dropZone = document.getElementById('eval-drop-zone');
-    
-    let combinedContent = [];
-    uploadedDatasets.forEach(d => {
-        combinedContent = combinedContent.concat(d.content);
-    });
-    uploadedDataset = combinedContent.length > 0 ? combinedContent : null;
-    
-    if (uploadedDatasets.length === 0) {
-        if (filesContainer) filesContainer.classList.add('hidden');
-        if (dropText) dropText.innerHTML = `Glissez vos fichiers .json ici ou cliquez pour parcourir`;
-        if (dropZone) {
-            dropZone.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-500/5', 'border-red-500', 'dark:border-red-400', 'bg-red-500/5');
-        }
-    } else {
-        if (filesContainer) filesContainer.classList.remove('hidden');
-        if (dropText) dropText.innerHTML = `<strong>${uploadedDatasets.length}</strong> fichier(s) chargé(s) (${combinedContent.length} questions)`;
-        if (dropZone) {
-            dropZone.classList.remove('border-red-500', 'dark:border-red-400', 'bg-red-500/5');
-            dropZone.classList.add('border-green-500', 'dark:border-green-400', 'bg-green-500/5');
-        }
-        
-        if (filesList) {
-            filesList.innerHTML = uploadedDatasets.map((d, index) => `
-                <div class="flex justify-between items-center bg-black/5 dark:bg-white/5 px-3 py-2 rounded-xl border border-black/5 dark:border-white/5 text-xs">
-                    <span class="truncate font-semibold text-gray-700 dark:text-gray-300 max-w-[80%]" title="${escapeHtml(d.name)}">
-                        📄 ${escapeHtml(d.name)} <span class="text-gray-500 dark:text-gray-400">(${d.content.length} q.)</span>
-                    </span>
-                    <button type="button" onclick="removeDatasetFile(event, ${index})" class="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 font-bold hover:underline shrink-0">
-                        Supprimer
-                    </button>
-                </div>
-            `).join('');
-        }
-        
-        if (totalQuestionsEl) {
-            totalQuestionsEl.innerText = `${combinedContent.length} question(s)`;
-        }
-    }
-    
-    checkRunEvalButtonState();
-}
-
-function removeDatasetFile(event, index) {
-    if (event) {
-        event.stopPropagation();
-    }
-    if (index >= 0 && index < uploadedDatasets.length) {
-        uploadedDatasets.splice(index, 1);
-        updateUploadedDatasetUI();
-    }
-}
-
-function clearAllDatasets(event) {
-    if (event) {
-        event.stopPropagation();
-    }
-    uploadedDatasets = [];
-    updateUploadedDatasetUI();
-}
-
-function validateDatasetSchema(json) {
-    if (!Array.isArray(json)) return "Le dataset doit être un tableau d'objets JSON.";
-    if (json.length === 0) return "Le dataset ne peut pas être vide.";
-    for (let i = 0; i < json.length; i++) {
-        const item = json[i];
-        if (!item.question || typeof item.question !== 'string') {
-            return `L'élément à l'index ${i} doit contenir un champ 'question' (chaîne).`;
-        }
-        if (!item.pages_attendues || !Array.isArray(item.pages_attendues)) {
-            return `L'élément à l'index ${i} doit contenir un tableau 'pages_attendues'.`;
-        }
-        for (let j = 0; j < item.pages_attendues.length; j++) {
-            const exp = item.pages_attendues[j];
-            if (!exp.document_title || typeof exp.document_title !== 'string') {
-                return `L'élément à l'index ${i}, page attendue ${j} doit avoir un 'document_title' (chaîne).`;
-            }
-            if (!exp.pages || !Array.isArray(exp.pages)) {
-                return `L'élément à l'index ${i}, page attendue ${j} doit avoir un tableau 'pages'.`;
-            }
-        }
-    }
-    return null;
-}
-
-function showEvalError(msg) {
-    const dropText = document.getElementById('eval-drop-text');
-    const dropZone = document.getElementById('eval-drop-zone');
-    
-    if (dropText) {
-        dropText.innerHTML = `<span class="text-red-600 dark:text-red-400 font-semibold">${msg}</span>`;
-    }
-    if (dropZone) {
-        dropZone.classList.remove('border-green-500', 'dark:border-green-400', 'bg-green-500/5');
-        dropZone.classList.add('border-red-500', 'dark:border-red-400', 'bg-red-500/5');
-    }
-    checkRunEvalButtonState();
-}
-
-function checkRunEvalButtonState() {
-    const select = document.getElementById('eval-space-select');
-    const btn = document.getElementById('btn-run-eval');
-    const btnRag = document.getElementById('btn-run-rag-eval');
-    const btnGen = document.getElementById('btn-run-generation-eval');
-    const enabled = !!(uploadedDataset && select && select.value);
-    if (btn) btn.disabled = !enabled;
-    if (btnRag) btnRag.disabled = !enabled;
-    // La génération exige des réponses attendues : sans elles, rien à comparer.
-    if (btnGen) btnGen.disabled = !(enabled && datasetHasExpectedAnswers());
-}
-
-async function runRetrieverEval() {
-    const select = document.getElementById('eval-space-select');
-    const kInput = document.getElementById('eval-k-input');
-    const btn = document.getElementById('btn-run-eval');
-    const btnRag = document.getElementById('btn-run-rag-eval');
-    const statusMsg = document.getElementById('eval-status-message');
-    const resultsContainer = document.getElementById('eval-results-container');
-    
-    if (!uploadedDataset || !select || !select.value || !btn) return;
-    
-    btn.disabled = true;
-    if (btnRag) btnRag.disabled = true;
-    if (resultsContainer) resultsContainer.classList.add('hidden');
-    
-    const spaceId = parseInt(select.value);
-    const k = parseInt(kInput ? kInput.value : 15);
-    const totalQuestions = uploadedDataset.length;
-    const details = [];
-    const startTime = Date.now();
-    
-    try {
-        for (let i = 0; i < totalQuestions; i++) {
-            const item = uploadedDataset[i];
-            
-            if (statusMsg) {
-                statusMsg.innerHTML = `<span class="flex items-center gap-1.5"><svg class="animate-spin h-4 w-4 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Évaluation : question <strong>${i + 1} / ${totalQuestions}</strong>...</span>`;
-                statusMsg.classList.remove('hidden');
-            }
-            
-            const r = await apiCall('/api/admin/eval/retriever/single', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    space_id: spaceId,
-                    question: item.question,
-                    type: item.type || "mono-document",
-                    pages_attendues: item.pages_attendues,
-                    acceptable_document_ids: item.acceptable_document_ids || [],
-                    intent: item.intent || "documentation",
-                    k: k
-                })
-            });
-
-            if (r && r.ok) {
-                const singleRes = await r.json();
-                details.push(singleRes);
-            } else {
-                const errorText = r ? await r.text() : 'Pas de réponse';
-                throw new Error(`Erreur à la question ${i + 1} : ${errorText}`);
-            }
-        }
-
-        const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
-        const data = aggregateEvalGlobals(details, parseFloat(elapsedTime));
-        
-        lastEvalResults = data;
-        renderEvalResults(data, false);
-        
-        if (statusMsg) {
-            statusMsg.innerHTML = '<span class="text-green-600 dark:text-green-400 font-bold">✓ Évaluation terminée avec succès</span>';
-        }
-    } catch (e) {
-        console.error("Error running eval", e);
-        if (statusMsg) {
-            statusMsg.innerHTML = `<span class="text-red-600 dark:text-red-400">Erreur : ${escapeHtml(e.message || String(e))}</span>`;
-        }
-    } finally {
-        btn.disabled = false;
-        checkRunEvalButtonState();
-    }
-}
-
-async function runRAGEval() {
-    const select = document.getElementById('eval-space-select');
-    const kInput = document.getElementById('eval-k-input');
-    const judgeSelect = document.getElementById('eval-judge-model-select');
-    const btn = document.getElementById('btn-run-rag-eval');
-    const btnRetriever = document.getElementById('btn-run-eval');
-    const statusMsg = document.getElementById('eval-status-message');
-    const resultsContainer = document.getElementById('eval-results-container');
-    const generationCard = document.getElementById('eval-generation-card');
-    
-    if (!uploadedDataset || !select || !select.value || !btn) return;
-    
-    btn.disabled = true;
-    if (btnRetriever) btnRetriever.disabled = true;
-    if (resultsContainer) resultsContainer.classList.add('hidden');
-    if (generationCard) generationCard.classList.add('hidden');
-    
-    const spaceId = parseInt(select.value);
-    const k = parseInt(kInput ? kInput.value : 15);
-    const judgeModel = judgeSelect ? judgeSelect.value : "mistral-small-latest";
-    const totalQuestions = uploadedDataset.length;
-    const details = [];
-    const startTime = Date.now();
-    
-    try {
-        for (let i = 0; i < totalQuestions; i++) {
-            const item = uploadedDataset[i];
-            
-            if (statusMsg) {
-                statusMsg.innerHTML = `<span class="flex items-center gap-1.5"><svg class="animate-spin h-4 w-4 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> RAG Éval : question <strong>${i + 1} / ${totalQuestions}</strong>...</span>`;
-                statusMsg.classList.remove('hidden');
-            }
-            
-            const r = await apiCall('/api/admin/eval/rag/single', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    space_id: spaceId,
-                    question: item.question,
-                    type: item.type || "mono-document",
-                    pages_attendues: item.pages_attendues,
-                    reponse_attendue: item.reponse_attendue || item.expected_response || null,
-                    k: k,
-                    judge_model: judgeModel
-                })
-            });
-            
-            if (r && r.ok) {
-                const singleRes = await r.json();
-                details.push(singleRes);
-            } else {
-                const errorText = r ? await r.text() : 'Pas de réponse';
-                throw new Error(`Erreur à la question ${i + 1} : ${errorText}`);
-            }
-        }
-        
-        const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
-        let totalJudgeScore = 0;
-        let ratedQuestions = 0;
-        details.forEach(q => {
-            if (q.judge_evaluation && q.judge_evaluation.score !== undefined && q.judge_evaluation.score !== null) {
-                totalJudgeScore += q.judge_evaluation.score;
-                ratedQuestions++;
-            }
-        });
-        const data = aggregateEvalGlobals(details, parseFloat(elapsedTime), {
-            average_judge_score: ratedQuestions > 0 ? totalJudgeScore / ratedQuestions : null,
-        });
-        
-        lastEvalResults = data;
-        renderEvalResults(data, true);
-        
-        if (statusMsg) {
-            statusMsg.innerHTML = '<span class="text-green-600 dark:text-green-400 font-bold">✓ Évaluation complète terminée avec succès</span>';
-        }
-    } catch (e) {
-        console.error("Error running RAG eval", e);
-        if (statusMsg) {
-            statusMsg.innerHTML = `<span class="text-red-600 dark:text-red-400">Erreur : ${escapeHtml(e.message || String(e))}</span>`;
-        }
-    } finally {
-        btn.disabled = false;
-        checkRunEvalButtonState();
-    }
-}
-
-function formatMetricDelta(delta, isPercent = true) {
-    if (delta === undefined || delta === null || Number.isNaN(delta)) return '';
-    const sign = delta >= 0 ? '+' : '';
-    if (isPercent) {
-        return `Δ rerank : ${sign}${(delta * 100).toFixed(1)} pts`;
-    }
-    return `Δ rerank : ${sign}${delta.toFixed(2)}`;
-}
-
-function aggregateTypeStats(details, metricsKey = 'metrics') {
-    const typeStats = {};
-    details.forEach(q => {
-        const m = q[metricsKey];
-        if (!m) return;
-        const qType = q.type || 'mono-document';
-        if (!typeStats[qType]) {
-            typeStats[qType] = { precision: 0, recall: 0, mrr: 0, count: 0 };
-        }
-        typeStats[qType].precision += m.context_precision;
-        typeStats[qType].recall += m.context_recall;
-        typeStats[qType].mrr += m.mrr;
-        typeStats[qType].count += 1;
-    });
-    const formatted = {};
-    Object.entries(typeStats).forEach(([type, stats]) => {
-        formatted[type] = {
-            count: stats.count,
-            context_precision: stats.precision / stats.count,
-            context_recall: stats.recall / stats.count,
-            mrr: stats.mrr / stats.count,
-        };
-    });
-    return formatted;
-}
-
-function aggregateEvalGlobals(details, executionTimeSeconds, extraGlobal = {}) {
-    const n = details.length;
-    let totalPrecision = 0;
-    let totalRecall = 0;
-    let totalMrr = 0;
-    let totalPrecisionColpali = 0;
-    let totalRecallColpali = 0;
-    let totalMrrColpali = 0;
-    let colpaliCount = 0;
-    let deltaPrecision = 0;
-    let deltaRecall = 0;
-    let deltaMrr = 0;
-    let deltaCount = 0;
-    let visionRerankEnabled = false;
-    let minilmRerankEnabled = false;
-    let totalPrecisionPostRrf = 0;
-    let totalRecallPostRrf = 0;
-    let totalMrrPostRrf = 0;
-    let postRrfCount = 0;
-    let totalPrecisionPreKag = 0;
-    let totalRecallPreKag = 0;
-    let totalMrrPreKag = 0;
-    let preKagCount = 0;
-    let kagDeltaPrecision = 0;
-    let kagDeltaRecall = 0;
-    let kagDeltaMrr = 0;
-    let kagDeltaCount = 0;
-    let kagEnabled = false;
-    let totalPrecisionLexical = 0;
-    let totalRecallLexical = 0;
-    let totalMrrLexical = 0;
-    let lexicalCount = 0;
-
-    details.forEach(q => {
-        totalPrecision += q.metrics.context_precision;
-        totalRecall += q.metrics.context_recall;
-        totalMrr += q.metrics.mrr;
-        if (q.metrics_colpali) {
-            totalPrecisionColpali += q.metrics_colpali.context_precision;
-            totalRecallColpali += q.metrics_colpali.context_recall;
-            totalMrrColpali += q.metrics_colpali.mrr;
-            colpaliCount++;
-        }
-        if (q.metrics_post_rrf) {
-            totalPrecisionPostRrf += q.metrics_post_rrf.context_precision;
-            totalRecallPostRrf += q.metrics_post_rrf.context_recall;
-            totalMrrPostRrf += q.metrics_post_rrf.mrr;
-            postRrfCount++;
-        }
-        if (q.metrics_pre_kag) {
-            totalPrecisionPreKag += q.metrics_pre_kag.context_precision;
-            totalRecallPreKag += q.metrics_pre_kag.context_recall;
-            totalMrrPreKag += q.metrics_pre_kag.mrr;
-            preKagCount++;
-        }
-        if (q.kag_delta) {
-            kagDeltaPrecision += q.kag_delta.precision;
-            kagDeltaRecall += q.kag_delta.recall;
-            kagDeltaMrr += q.kag_delta.mrr;
-            kagDeltaCount++;
-        }
-        if (q.kag_enabled) {
-            kagEnabled = true;
-        }
-        if (q.rerank_delta) {
-            deltaPrecision += q.rerank_delta.precision;
-            deltaRecall += q.rerank_delta.recall;
-            deltaMrr += q.rerank_delta.mrr;
-            deltaCount++;
-        }
-        if (q.vision_rerank_enabled) {
-            visionRerankEnabled = true;
-        }
-        if (q.minilm_rerank_enabled) {
-            minilmRerankEnabled = true;
-        }
-        if (q.metrics_lexical_only) {
-            totalPrecisionLexical += q.metrics_lexical_only.context_precision;
-            totalRecallLexical += q.metrics_lexical_only.context_recall;
-            totalMrrLexical += q.metrics_lexical_only.mrr;
-            lexicalCount++;
-        }
-    });
-
-    const result = {
-        global_metrics: {
-            context_precision: n > 0 ? totalPrecision / n : 0,
-            context_recall: n > 0 ? totalRecall / n : 0,
-            mrr: n > 0 ? totalMrr / n : 0,
-            total_questions: n,
-            execution_time_seconds: executionTimeSeconds,
-            ...extraGlobal,
-        },
-        type_stats: aggregateTypeStats(details, 'metrics'),
-        details,
-    };
-
-    if (colpaliCount > 0) {
-        result.global_metrics_colpali = {
-            context_precision: totalPrecisionColpali / colpaliCount,
-            context_recall: totalRecallColpali / colpaliCount,
-            mrr: totalMrrColpali / colpaliCount,
-        };
-        result.type_stats_colpali = aggregateTypeStats(details, 'metrics_colpali');
-    }
-    if (deltaCount > 0) {
-        result.rerank_impact = {
-            precision_delta: deltaPrecision / deltaCount,
-            recall_delta: deltaRecall / deltaCount,
-            mrr_delta: deltaMrr / deltaCount,
-        };
-    }
-    result.vision_rerank_enabled = visionRerankEnabled;
-    result.minilm_rerank_enabled = minilmRerankEnabled;
-    result.kag_enabled = kagEnabled;
-    if (postRrfCount > 0) {
-        result.global_metrics_post_rrf = {
-            context_precision: totalPrecisionPostRrf / postRrfCount,
-            context_recall: totalRecallPostRrf / postRrfCount,
-            mrr: totalMrrPostRrf / postRrfCount,
-        };
-    }
-    if (preKagCount > 0) {
-        result.global_metrics_pre_kag = {
-            context_precision: totalPrecisionPreKag / preKagCount,
-            context_recall: totalRecallPreKag / preKagCount,
-            mrr: totalMrrPreKag / preKagCount,
-        };
-    }
-    if (kagDeltaCount > 0) {
-        result.kag_impact = {
-            precision_delta: kagDeltaPrecision / kagDeltaCount,
-            recall_delta: kagDeltaRecall / kagDeltaCount,
-            mrr_delta: kagDeltaMrr / kagDeltaCount,
-        };
-    }
-    if (lexicalCount > 0) {
-        result.global_metrics_lexical_only = {
-            context_precision: totalPrecisionLexical / lexicalCount,
-            context_recall: totalRecallLexical / lexicalCount,
-            mrr: totalMrrLexical / lexicalCount,
-        };
-    }
-
-    // Agrégation CAG (niveau document) — le bon document est-il packé dans le contexte final ?
-    const cagRows = details.map(q => q.cag).filter(Boolean);
-    if (cagRows.length > 0) {
-        const nc = cagRows.length;
-        result.cag_metrics = {
-            doc_recall_acceptable: cagRows.filter(c => c.doc_hit_acceptable).length / nc,
-            doc_recall_strict: cagRows.filter(c => c.doc_hit_strict).length / nc,
-            page_in_context: cagRows.filter(c => c.page_in_context).length / nc,
-            doc_precision: cagRows.reduce((s, c) => s + (c.doc_precision || 0), 0) / nc,
-            avg_packed_documents: (cagRows.reduce((s, c) => s + (c.num_packed || 0), 0) / nc).toFixed(1),
-            total_questions: nc,
-        };
-    }
-    return result;
-}
-
-function renderEvalAnalysisColumns(analysis, scoreLabel = 'ColPali') {
-    if (!analysis) return '';
-    return `
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="p-3 rounded-2xl bg-green-500/5 dark:bg-green-500/10 border border-green-500/10">
-                <div class="text-xs font-bold text-green-700 dark:text-green-400 mb-1">Trouvées (${analysis.hits.length})</div>
-                <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
-                    ${analysis.hits.length > 0
-                        ? analysis.hits.map(h => `<div class="truncate text-gray-600 dark:text-gray-300">• ${escapeHtml(h.document_title)} (Page ${h.page}) <span class="text-[9px] font-mono bg-green-500/10 text-green-600 dark:text-green-400 px-1 py-0.5 rounded ml-1 font-bold">#${h.rank}</span></div>`).join('')
-                        : '<div class="text-gray-400 italic">Aucune</div>'}
-                </div>
-            </div>
-            <div class="p-3 rounded-2xl bg-red-500/5 dark:bg-red-500/10 border border-red-500/10">
-                <div class="text-xs font-bold text-red-700 dark:text-red-400 mb-1">Manquées (${analysis.misses.length})</div>
-                <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
-                    ${analysis.misses.length > 0
-                        ? analysis.misses.map(m => `<div class="truncate text-gray-700 dark:text-gray-300">• ${escapeHtml(m.document_title)} (Page ${m.page})</div>`).join('')
-                        : '<div class="text-gray-400 italic">Aucune</div>'}
-                </div>
-            </div>
-            <div class="p-3 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/10">
-                <div class="text-xs font-bold text-amber-700 dark:text-amber-400 mb-1">Bruit (${analysis.noise.length})</div>
-                <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
-                    ${analysis.noise.length > 0
-                        ? analysis.noise.map(n => `<div class="truncate text-gray-500 dark:text-gray-400">• ${escapeHtml(n.document_title)} (Page ${n.page}) <span class="text-[9px] font-mono">#${n.rank}</span></div>`).join('')
-                        : '<div class="text-gray-400 italic">Aucun</div>'}
-                </div>
-            </div>
-        </div>`;
-}
-
-function getMetricColorClass(val) {
-    if (val >= 0.8) return 'text-green-600 dark:text-green-400';
-    if (val >= 0.5) return 'text-amber-600 dark:text-amber-400';
-    return 'text-red-600 dark:text-red-400';
-}
-
-function getJudgeScoreColorClass(val) {
-    if (val >= 4.0) return 'text-green-600 dark:text-green-400';
-    if (val >= 3.0) return 'text-amber-600 dark:text-amber-400';
-    return 'text-red-600 dark:text-red-400';
-}
-
-function getJudgeBadgeClass(score) {
-    if (score >= 4) return 'bg-emerald-500 text-white';
-    if (score >= 3) return 'bg-amber-500 text-white';
-    return 'bg-rose-500 text-white';
-}
-
-function renderEvalResults(data, showGeneration = false) {
-    const resultsContainer = document.getElementById('eval-results-container');
-    if (!resultsContainer) return;
-    
-    resultsContainer.classList.remove('hidden');
-    
-    // Set global cards
-    const precEl = document.getElementById('metric-precision');
-    const recEl = document.getElementById('metric-recall');
-    const mrrEl = document.getElementById('metric-mrr');
-    const countEl = document.getElementById('summary-questions-count');
-    const timeEl = document.getElementById('summary-time');
-    const generationCard = document.getElementById('eval-generation-card');
-    const judgeScoreEl = document.getElementById('metric-judge-score');
-    
-    const gm = data.global_metrics;
-    precEl.innerText = `${(gm.context_precision * 100).toFixed(1)}%`;
-    precEl.className = `text-3xl font-extrabold ${getMetricColorClass(gm.context_precision)}`;
-    
-    recEl.innerText = `${(gm.context_recall * 100).toFixed(1)}%`;
-    recEl.className = `text-3xl font-extrabold ${getMetricColorClass(gm.context_recall)}`;
-    
-    mrrEl.innerText = gm.mrr.toFixed(2);
-    mrrEl.className = `text-3xl font-extrabold ${getMetricColorClass(gm.mrr)}`;
-    
-    countEl.innerText = gm.total_questions;
-    timeEl.innerText = `${gm.execution_time_seconds}s`;
-    
-    if (showGeneration && gm.average_judge_score !== null && gm.average_judge_score !== undefined) {
-        if (generationCard) generationCard.classList.remove('hidden');
-        if (judgeScoreEl) {
-            judgeScoreEl.innerText = gm.average_judge_score.toFixed(1);
-            judgeScoreEl.className = `text-3xl font-extrabold ${getJudgeScoreColorClass(gm.average_judge_score)}`;
-        }
-    } else {
-        if (generationCard) generationCard.classList.add('hidden');
-    }
-
-    // === Panneau CAG (niveau DOCUMENT) — métrique titre pour le système CAG ===
-    // Le CAG packe des documents entiers : ce qui compte n'est plus "la bonne page
-    // dans le top-k" mais "le bon document packé, et la page attendue dans le contexte".
-    let cagPanel = document.getElementById('eval-cag-panel');
-    if (!cagPanel) {
-        cagPanel = document.createElement('div');
-        cagPanel.id = 'eval-cag-panel';
-        cagPanel.className = 'mb-6';
-        resultsContainer.prepend(cagPanel);
-    }
-    const cm = data.cag_metrics;
-    if (cm) {
-        const card = (label, val, cls, sub) => `
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-                <div class="text-3xl font-extrabold ${cls}">${val}</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">${label}</div>
-                ${sub ? `<div class="text-[11px] text-gray-400 mt-1">${sub}</div>` : ''}
-            </div>`;
-        cagPanel.innerHTML = `
-            <div class="flex items-center gap-2 mb-2">
-                <span class="text-sm font-bold text-indigo-600 dark:text-indigo-400">📦 CAG — niveau document (contexte réellement packé)</span>
-                <span class="text-[11px] text-gray-400">le bon document est-il dans le contexte final de génération ?</span>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-                ${card('Doc-recall (gamme acceptable)', (cm.doc_recall_acceptable*100).toFixed(0)+'%', getMetricColorClass(cm.doc_recall_acceptable), 'un doc valide de la gamme packé')}
-                ${card('Doc-recall (source exact)', (cm.doc_recall_strict*100).toFixed(0)+'%', getMetricColorClass(cm.doc_recall_strict), 'le doc source exact packé')}
-                ${card('Page dans le contexte', (cm.page_in_context*100).toFixed(0)+'%', getMetricColorClass(cm.page_in_context), 'la page attendue est packée')}
-                ${card('Doc-precision', (cm.doc_precision*100).toFixed(0)+'%', getMetricColorClass(cm.doc_precision), 'part des docs packés pertinents')}
-                ${card('Docs packés (moy.)', cm.avg_packed_documents, 'text-gray-700 dark:text-gray-200', 'nb moyen par question')}
-            </div>`;
-        cagPanel.classList.remove('hidden');
-    } else if (cagPanel) {
-        cagPanel.classList.add('hidden');
-    }
-
-    // ColPali comparison section
-    const colpaliSection = document.getElementById('eval-colpali-comparison');
-    const gmColpali = data.global_metrics_colpali;
-    const rerankImpact = data.rerank_impact;
-    if (colpaliSection && gmColpali) {
-        colpaliSection.classList.remove('hidden');
-        const precColpaliEl = document.getElementById('metric-precision-colpali');
-        const recColpaliEl = document.getElementById('metric-recall-colpali');
-        const mrrColpaliEl = document.getElementById('metric-mrr-colpali');
-        if (precColpaliEl) {
-            precColpaliEl.innerText = `${(gmColpali.context_precision * 100).toFixed(1)}%`;
-            precColpaliEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmColpali.context_precision)}`;
-        }
-        if (recColpaliEl) {
-            recColpaliEl.innerText = `${(gmColpali.context_recall * 100).toFixed(1)}%`;
-            recColpaliEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmColpali.context_recall)}`;
-        }
-        if (mrrColpaliEl) {
-            mrrColpaliEl.innerText = gmColpali.mrr.toFixed(2);
-            mrrColpaliEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmColpali.mrr)}`;
-        }
-        const precDeltaEl = document.getElementById('metric-precision-delta');
-        const recDeltaEl = document.getElementById('metric-recall-delta');
-        const mrrDeltaEl = document.getElementById('metric-mrr-delta');
-        if (rerankImpact) {
-            if (precDeltaEl) precDeltaEl.textContent = formatMetricDelta(rerankImpact.precision_delta, true);
-            if (recDeltaEl) recDeltaEl.textContent = formatMetricDelta(rerankImpact.recall_delta, true);
-            if (mrrDeltaEl) mrrDeltaEl.textContent = formatMetricDelta(rerankImpact.mrr_delta, false);
-        }
-        const rerankBadge = document.getElementById('eval-rerank-badge');
-        if (rerankBadge) {
-            if (data.minilm_rerank_enabled) {
-                rerankBadge.textContent = 'Δ affiché : pipeline final vs ColPali seul';
-                rerankBadge.classList.remove('hidden');
-            } else if (data.vision_rerank_enabled === false) {
-                rerankBadge.textContent = 'Rerank vision désactivé';
-                rerankBadge.classList.remove('hidden');
-            } else {
-                rerankBadge.classList.add('hidden');
-            }
-        }
-
-        const postRrfSection = document.getElementById('eval-post-rrf-comparison');
-        const gmPostRrf = data.global_metrics_post_rrf;
-        if (postRrfSection && gmPostRrf) {
-            postRrfSection.classList.remove('hidden');
-            const precRrfEl = document.getElementById('metric-precision-post-rrf');
-            const recRrfEl = document.getElementById('metric-recall-post-rrf');
-            const mrrRrfEl = document.getElementById('metric-mrr-post-rrf');
-            if (precRrfEl) {
-                precRrfEl.innerText = `${(gmPostRrf.context_precision * 100).toFixed(1)}%`;
-                precRrfEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPostRrf.context_precision)}`;
-            }
-            if (recRrfEl) {
-                recRrfEl.innerText = `${(gmPostRrf.context_recall * 100).toFixed(1)}%`;
-                recRrfEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPostRrf.context_recall)}`;
-            }
-            if (mrrRrfEl) {
-                mrrRrfEl.innerText = gmPostRrf.mrr.toFixed(2);
-                mrrRrfEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPostRrf.mrr)}`;
-            }
-        } else if (postRrfSection) {
-            postRrfSection.classList.add('hidden');
-        }
-    } else if (colpaliSection) {
-        colpaliSection.classList.add('hidden');
-    }
-
-    const isolatedSection = document.getElementById('eval-isolated-retrievers');
-    const gmLexical = data.global_metrics_lexical_only;
-    if (isolatedSection && gmLexical) {
-        isolatedSection.classList.remove('hidden');
-        if (gmLexical) {
-            const precLexEl = document.getElementById('metric-precision-lexical');
-            const recLexEl = document.getElementById('metric-recall-lexical');
-            const mrrLexEl = document.getElementById('metric-mrr-lexical');
-            if (precLexEl) {
-                precLexEl.innerText = `${(gmLexical.context_precision * 100).toFixed(1)}%`;
-                precLexEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmLexical.context_precision)}`;
-            }
-            if (recLexEl) {
-                recLexEl.innerText = `${(gmLexical.context_recall * 100).toFixed(1)}%`;
-                recLexEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmLexical.context_recall)}`;
-            }
-            if (mrrLexEl) {
-                mrrLexEl.innerText = gmLexical.mrr.toFixed(2);
-                mrrLexEl.className = `text-2xl font-extrabold ${getMetricColorClass(gmLexical.mrr)}`;
-            }
-        }
-    } else if (isolatedSection) {
-        isolatedSection.classList.add('hidden');
-    }
-
-    const kagSection = document.getElementById('eval-kag-comparison');
-    const gmPreKag = data.global_metrics_pre_kag;
-    const kagImpact = data.kag_impact;
-    const gmKagPost = data.global_metrics_post_rrf;
-    if (kagSection && gmPreKag && data.kag_enabled) {
-        kagSection.classList.remove('hidden');
-        const precPreKagEl = document.getElementById('metric-precision-pre-kag');
-        const recPreKagEl = document.getElementById('metric-recall-pre-kag');
-        const mrrPreKagEl = document.getElementById('metric-mrr-pre-kag');
-        if (precPreKagEl) {
-            precPreKagEl.innerText = `${(gmPreKag.context_precision * 100).toFixed(1)}%`;
-            precPreKagEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPreKag.context_precision)}`;
-        }
-        if (recPreKagEl) {
-            recPreKagEl.innerText = `${(gmPreKag.context_recall * 100).toFixed(1)}%`;
-            recPreKagEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPreKag.context_recall)}`;
-        }
-        if (mrrPreKagEl) {
-            mrrPreKagEl.innerText = gmPreKag.mrr.toFixed(2);
-            mrrPreKagEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmPreKag.mrr)}`;
-        }
-        const precKagDeltaEl = document.getElementById('metric-precision-kag-delta');
-        const recKagDeltaEl = document.getElementById('metric-recall-kag-delta');
-        const mrrKagDeltaEl = document.getElementById('metric-mrr-kag-delta');
-        if (kagImpact) {
-            if (precKagDeltaEl) precKagDeltaEl.textContent = formatMetricDelta(kagImpact.precision_delta, true);
-            if (recKagDeltaEl) recKagDeltaEl.textContent = formatMetricDelta(kagImpact.recall_delta, true);
-            if (mrrKagDeltaEl) mrrKagDeltaEl.textContent = formatMetricDelta(kagImpact.mrr_delta, false);
-        }
-        const kagBadge = document.getElementById('eval-kag-badge');
-        if (kagBadge) {
-            kagBadge.textContent = 'Δ affiché : fusion RRF avec KAG vs triple retriever seul';
-            kagBadge.classList.remove('hidden');
-        }
-        const kagPostSection = document.getElementById('eval-kag-post-comparison');
-        if (kagPostSection && gmKagPost) {
-            kagPostSection.classList.remove('hidden');
-            const precKagPostEl = document.getElementById('metric-precision-kag-post');
-            const recKagPostEl = document.getElementById('metric-recall-kag-post');
-            const mrrKagPostEl = document.getElementById('metric-mrr-kag-post');
-            if (precKagPostEl) {
-                precKagPostEl.innerText = `${(gmKagPost.context_precision * 100).toFixed(1)}%`;
-                precKagPostEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmKagPost.context_precision)}`;
-            }
-            if (recKagPostEl) {
-                recKagPostEl.innerText = `${(gmKagPost.context_recall * 100).toFixed(1)}%`;
-                recKagPostEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmKagPost.context_recall)}`;
-            }
-            if (mrrKagPostEl) {
-                mrrKagPostEl.innerText = gmKagPost.mrr.toFixed(2);
-                mrrKagPostEl.className = `text-3xl font-extrabold ${getMetricColorClass(gmKagPost.mrr)}`;
-            }
-        } else if (kagPostSection) {
-            kagPostSection.classList.add('hidden');
-        }
-    } else if (kagSection) {
-        kagSection.classList.add('hidden');
-    }
-
-    const finalStageLabel = document.getElementById('metric-final-stage-label');
-    if (finalStageLabel) {
-        if (data.minilm_rerank_enabled) {
-            finalStageLabel.textContent = 'Après rerank MiniLM';
-        } else if (data.vision_rerank_enabled) {
-            finalStageLabel.textContent = 'Après rerank vision Mistral';
-        } else {
-            finalStageLabel.textContent = 'Pipeline final (RRF)';
-        }
-    }
-    
-    // Set type stats if available
-    const typeStatsGrid = document.getElementById('eval-type-stats-grid');
-    const typeStatsContainer = document.getElementById('eval-type-stats-container');
-    
-    if (typeStatsGrid && typeStatsContainer && data.type_stats && Object.keys(data.type_stats).length > 0) {
-        typeStatsContainer.classList.remove('hidden');
-        typeStatsGrid.innerHTML = Object.entries(data.type_stats).map(([type, stats]) => {
-            const typeClass = type === 'cross-document' 
-                ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400' 
-                : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400';
-                
-            return `
-                <div class="p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${typeClass} mb-2 inline-block capitalize">${escapeHtml(type)}</span>
-                    <div class="grid grid-cols-3 gap-2 mt-1">
-                        <div>
-                            <span class="block text-[10px] uppercase text-gray-500">Precision</span>
-                            <span class="text-md font-bold ${getMetricColorClass(stats.context_precision)}">${(stats.context_precision * 100).toFixed(1)}%</span>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] uppercase text-gray-500">Recall</span>
-                            <span class="text-md font-bold ${getMetricColorClass(stats.context_recall)}">${(stats.context_recall * 100).toFixed(1)}%</span>
-                        </div>
-                        <div>
-                            <span class="block text-[10px] uppercase text-gray-500">MRR</span>
-                            <span class="text-md font-bold ${getMetricColorClass(stats.mrr)}">${stats.mrr.toFixed(2)}</span>
-                        </div>
-                    </div>
-                    <span class="block text-[10px] text-gray-500 dark:text-gray-400 mt-2">${stats.count} question(s) de ce type</span>
-                </div>
-            `;
-        }).join('');
-    } else if (typeStatsContainer) {
-        typeStatsContainer.classList.add('hidden');
-    }
-    
-    // Render details list
-    const detailList = document.getElementById('eval-detail-list');
-    if (!detailList) return;
-    
-    detailList.innerHTML = data.details.map((q, idx) => {
-        const typeClass = q.type === 'cross-document' 
-            ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400' 
-            : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400';
-            
-        return `
-            <div class="pt-4 first:pt-0 border-t border-black/5 dark:border-white/5 first:border-t-0 space-y-3">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                    <div class="flex items-center gap-2">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${typeClass} shrink-0">${escapeHtml(q.type)}</span>
-                        <h4 class="text-sm font-bold text-gray-900 dark:text-white">${escapeHtml(q.question)}</h4>
-                    </div>
-                    <div class="flex items-center gap-4 text-xs font-semibold text-gray-600 dark:text-gray-400 shrink-0">
-                        <span>Precision: <strong class="${getMetricColorClass(q.metrics.context_precision)}">${(q.metrics.context_precision * 100).toFixed(0)}%</strong></span>
-                        <span>Recall: <strong class="${getMetricColorClass(q.metrics.context_recall)}">${(q.metrics.context_recall * 100).toFixed(0)}%</strong></span>
-                        <span>MRR: <strong class="${getMetricColorClass(q.metrics.mrr)}">${q.metrics.mrr.toFixed(2)}</strong></span>
-                        ${q.metrics_colpali ? `<span class="text-gray-400 hidden md:inline">| ColPali MRR: ${q.metrics_colpali.mrr.toFixed(2)}</span>` : ''}
-                        ${q.metrics_lexical_only ? `<span class="text-gray-400 hidden md:inline">| lexical MRR: ${q.metrics_lexical_only.mrr.toFixed(2)}</span>` : ''}
-                        ${q.metrics_pre_kag ? `<span class="text-gray-400 hidden md:inline">| sans KAG MRR: ${q.metrics_pre_kag.mrr.toFixed(2)}</span>` : ''}
-                        ${q.kag_delta ? `<span class="text-gray-400 hidden md:inline">| Δ KAG MRR: ${formatMetricDelta(q.kag_delta.mrr, false)}</span>` : ''}
-                    </div>
-                </div>
-                
-                <p class="text-[10px] uppercase tracking-wider font-bold text-indigo-600 dark:text-indigo-400">Après rerank LLM</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Hits -->
-                    <div class="p-3 rounded-2xl bg-green-500/5 dark:bg-green-500/10 border border-green-500/10">
-                        <div class="text-xs font-bold text-green-700 dark:text-green-400 mb-1 flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Trouvées (${q.analysis.hits.length})
-                        </div>
-                        <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
-                            ${q.analysis.hits.length > 0 
-                                ? q.analysis.hits.map(h => `<div class="truncate text-gray-600 dark:text-gray-300" title="${escapeHtml(h.document_title)} (Page ${h.page})">• ${escapeHtml(h.document_title)} (Page ${h.page}) <span class="text-[9px] font-mono bg-green-500/10 text-green-600 dark:text-green-400 px-1 py-0.5 rounded ml-1 font-bold">#${h.rank} (${h.score.toFixed(4)})</span></div>`).join('') 
-                                : '<div class="text-gray-400 dark:text-gray-500 italic">Aucune page attendue trouvée</div>'}
-                        </div>
-                    </div>
-                    
-                    <!-- Misses -->
-                    <div class="p-3 rounded-2xl bg-red-500/5 dark:bg-red-500/10 border border-red-500/10">
-                        <div class="text-xs font-bold text-red-700 dark:text-red-400 mb-1 flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                            Manquées (${q.analysis.misses.length})
-                        </div>
-                        <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
-                            ${q.analysis.misses.length > 0 
-                                ? q.analysis.misses.map(m => `<div class="truncate text-gray-700 dark:text-gray-300">• ${escapeHtml(m.document_title)} (Page ${m.page})</div>`).join('') 
-                                : '<div class="text-gray-400 dark:text-gray-500 italic">Aucune page manquée</div>'}
-                        </div>
-                    </div>
-                    
-                    <!-- Noise -->
-                    <div class="p-3 rounded-2xl bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/10">
-                        <div class="text-xs font-bold text-amber-700 dark:text-amber-400 mb-1 flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                            Bruit / Pages en trop (${q.analysis.noise.length})
-                        </div>
-                        <div class="text-xs space-y-1 mt-1 max-h-24 overflow-y-auto">
-                            ${q.analysis.noise.length > 0 
-                                ? q.analysis.noise.map(n => `<div class="truncate text-gray-500 dark:text-gray-400" title="${escapeHtml(n.document_title)} (Page ${n.page})">• ${escapeHtml(n.document_title)} (Page ${n.page}) <span class="text-[9px] font-mono bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1 py-0.5 rounded ml-1 font-bold">#${n.rank} (${n.score.toFixed(4)})</span></div>`).join('') 
-                                : '<div class="text-gray-400 dark:text-gray-500 italic">Aucun bruit</div>'}
-                        </div>
-                    </div>
-                </div>
-
-                ${q.metrics_colpali ? `
-                <div class="mt-2 rounded-2xl bg-slate-500/5 dark:bg-slate-500/10 border border-slate-500/10 overflow-hidden">
-                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
-                        <span class="flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            ColPali seul (LanceDB)
-                            <span class="font-normal text-gray-500">— P: ${(q.metrics_colpali.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_colpali.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_colpali.mrr.toFixed(2)}</span>
-                        </span>
-                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="hidden p-3 border-t border-slate-500/10 space-y-2">
-                        ${q.rerank_delta ? `<p class="text-xs text-gray-500 dark:text-gray-400">Impact rerank — Precision: ${formatMetricDelta(q.rerank_delta.precision, true)} · Recall: ${formatMetricDelta(q.rerank_delta.recall, true)} · MRR: ${formatMetricDelta(q.rerank_delta.mrr, false)}</p>` : ''}
-                        ${renderEvalAnalysisColumns(q.analysis_colpali)}
-                    </div>
-                </div>
-                ` : ''}
-
-                ${q.metrics_lexical_only ? `
-                <div class="mt-2 rounded-2xl bg-orange-500/5 dark:bg-orange-500/10 border border-orange-500/10 overflow-hidden">
-                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-orange-700 dark:text-orange-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
-                        <span class="flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            Lexical seul (BM25)
-                            <span class="font-normal text-gray-500">— P: ${(q.metrics_lexical_only.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_lexical_only.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_lexical_only.mrr.toFixed(2)}</span>
-                        </span>
-                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="hidden p-3 border-t border-orange-500/10 space-y-2">
-                        ${renderEvalAnalysisColumns(q.analysis_lexical_only, 'Lexical')}
-                    </div>
-                </div>
-                ` : ''}
-
-                ${q.metrics_pre_kag ? `
-                <div class="mt-2 rounded-2xl bg-teal-500/5 dark:bg-teal-500/10 border border-teal-500/10 overflow-hidden">
-                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-teal-700 dark:text-teal-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
-                        <span class="flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            Triple retriever sans graphe
-                            <span class="font-normal text-gray-500">— P: ${(q.metrics_pre_kag.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_pre_kag.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_pre_kag.mrr.toFixed(2)}</span>
-                        </span>
-                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="hidden p-3 border-t border-teal-500/10 space-y-2">
-                        ${q.kag_delta ? `<p class="text-xs text-gray-500 dark:text-gray-400">Impact KAG (fusion avec graphe) — Precision: ${formatMetricDelta(q.kag_delta.precision, true)} · Recall: ${formatMetricDelta(q.kag_delta.recall, true)} · MRR: ${formatMetricDelta(q.kag_delta.mrr, false)}</p>` : ''}
-                        ${renderEvalAnalysisColumns(q.analysis_pre_kag, 'Sans KAG')}
-                    </div>
-                </div>
-                ` : ''}
-
-                ${q.metrics_kag_only ? `
-                <div class="mt-2 rounded-2xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 overflow-hidden">
-                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
-                        <span class="flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-                            KAG seul (graphe entités)
-                            <span class="font-normal text-gray-500">— P: ${(q.metrics_kag_only.context_precision * 100).toFixed(0)}% · R: ${(q.metrics_kag_only.context_recall * 100).toFixed(0)}% · MRR: ${q.metrics_kag_only.mrr.toFixed(2)}</span>
-                        </span>
-                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="hidden p-3 border-t border-emerald-500/10 space-y-2">
-                        ${renderEvalAnalysisColumns(q.analysis_kag_only, 'KAG')}
-                    </div>
-                </div>
-                ` : ''}
-
-                <!-- Detailed Retriever Results (Rank & Score Table) -->
-                <div class="mt-2 rounded-2xl bg-white/40 dark:bg-black/20 border border-black/5 dark:border-white/5 overflow-hidden">
-                    <button type="button" class="w-full px-4 py-2 flex justify-between items-center text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-all" onclick="const details = this.nextElementSibling; details.classList.toggle('hidden'); const icon = this.querySelector('.toggle-icon'); if (details.classList.contains('hidden')) { icon.style.transform = 'rotate(0deg)'; } else { icon.style.transform = 'rotate(180deg)'; }">
-                        <span class="flex items-center gap-1.5">
-                            <svg class="w-3.5 h-3.5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
-                            Détails du Retriever après rerank (Classement & Scores)
-                        </span>
-                        <svg class="w-4 h-4 toggle-icon transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="hidden p-3 border-t border-black/5 dark:border-white/5 space-y-2 bg-black/[0.01] dark:bg-white/[0.01]">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-xs">
-                                <thead>
-                                    <tr class="border-b border-black/10 dark:border-white/10 text-gray-500 uppercase text-[9px] tracking-wider font-semibold">
-                                        <th class="py-1.5 px-2 font-bold w-12 text-center">Rang</th>
-                                        <th class="py-1.5 px-2">Document</th>
-                                        <th class="py-1.5 px-2 w-16 text-center">Page</th>
-                                        <th class="py-1.5 px-2 w-24 text-right">Score ColPali</th>
-                                        <th class="py-1.5 px-2 w-24 text-center">Statut</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${q.retrieved_details && q.retrieved_details.length > 0 ? q.retrieved_details.map(rd => {
-                                        const statusBadge = rd.is_hit 
-                                            ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-500/10 text-green-700 dark:text-green-400">Pertinent</span>'
-                                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-gray-500/10 text-gray-500 dark:text-gray-400 font-medium">Bruit</span>';
-                                        return `
-                                            <tr class="border-b border-black/5 dark:border-white/5 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]">
-                                                <td class="py-1.5 px-2 font-mono font-bold text-center text-gray-500">#${rd.rank}</td>
-                                                <td class="py-1.5 px-2 truncate max-w-[200px] md:max-w-xs text-gray-700 dark:text-gray-300" title="${escapeHtml(rd.document_title)}">${escapeHtml(rd.document_title)}</td>
-                                                <td class="py-1.5 px-2 font-semibold text-center text-gray-700 dark:text-gray-300">${rd.page}</td>
-                                                <td class="py-1.5 px-2 font-mono text-right font-semibold text-indigo-600 dark:text-indigo-400">${rd.score.toFixed(4)}</td>
-                                                <td class="py-1.5 px-2 text-center">${statusBadge}</td>
-                                            </tr>
-                                        `;
-                                    }).join('') : `
-                                        <tr>
-                                            <td colspan="5" class="py-4 text-center text-gray-400 dark:text-gray-500 italic">Aucune page récupérée</td>
-                                        </tr>
-                                    `}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                ${showGeneration && q.generated_response ? `
-                <div class="mt-3 p-4 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-3">
-                    <div class="flex justify-between items-center border-b border-black/5 dark:border-white/5 pb-2">
-                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">Évaluation de la Génération LLM</span>
-                        ${q.judge_evaluation ? `
-                        <div class="flex items-center gap-2 text-xs">
-                            <span class="font-bold text-gray-500 dark:text-gray-400">Score du Juge:</span>
-                            <span class="px-2.5 py-0.5 rounded-full font-bold text-xs ${getJudgeBadgeClass(q.judge_evaluation.score)}">
-                                ${q.judge_evaluation.score} / 5
-                            </span>
-                        </div>
-                        ` : '<span class="text-xs italic text-gray-400">Non noté (pas de réponse attendue)</span>'}
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                        <div>
-                            <span class="block font-bold text-gray-500 mb-1">Réponse attendue (Référence) :</span>
-                            <div class="p-3 bg-white/40 dark:bg-black/20 rounded-xl border border-black/5 dark:border-white/5 whitespace-pre-wrap text-gray-600 dark:text-gray-300 min-h-[50px]">
-                                ${escapeHtml(q.expected_response || 'Non spécifiée')}
-                            </div>
-                        </div>
-                        <div>
-                            <span class="block font-bold text-gray-500 mb-1">Réponse générée :</span>
-                            <div class="p-3 bg-white/40 dark:bg-black/20 rounded-xl border border-black/5 dark:border-white/5 whitespace-pre-wrap text-gray-800 dark:text-gray-100 min-h-[50px]">
-                                ${escapeHtml(q.generated_response)}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    ${q.judge_evaluation ? `
-                    <div class="text-xs bg-indigo-500/5 dark:bg-indigo-500/10 p-3 rounded-xl border border-indigo-500/10">
-                        <span class="font-bold text-indigo-700 dark:text-indigo-400">Justification du Juge :</span>
-                        <p class="mt-1 text-gray-600 dark:text-gray-300">${escapeHtml(q.judge_evaluation.justification)}</p>
-                    </div>
-                    ` : ''}
-                </div>
-                ` : ''}
-            </div>
-        `;
-    }).join('');
-}
-
-function exportEvalReport() {
-    if (!lastEvalResults) return;
-    
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(lastEvalResults, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    const prefix = lastEvalResults.global_metrics.average_judge_score !== undefined ? 'evaluation_rag_' : 'evaluation_retriever_';
-    downloadAnchor.setAttribute("download", `${prefix}${new Date().toISOString().split('T')[0]}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-}
-
-// ==================== CATEGORIES ====================
-
-let allCategories = [];
-
-async function loadCategories() {
-    const tbody = document.getElementById('categories-table-body');
-    if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-gray-500">Chargement…</td></tr>';
-    try {
-        const response = await apiCall('/api/admin/categories');
-        if (!response || !response.ok) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-red-500">Erreur de chargement</td></tr>';
-            return;
-        }
-        allCategories = await response.json();
-        if (!allCategories.length) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-6 text-center text-gray-500">Aucune catégorie</td></tr>';
-            return;
-        }
-        const statsPromises = allCategories.map(c =>
-            apiCall(`/api/admin/categories/${c.id}/stats`).then(r => r && r.ok ? r.json() : { chunk_links: 0 })
-        );
-        const statsList = await Promise.all(statsPromises);
-        tbody.innerHTML = allCategories.map((cat, idx) => {
-            const stats = statsList[idx] || {};
-            const activeBadge = cat.is_active
-                ? '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600">Actif</span>'
-                : '<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-gray-500/10 text-gray-500">Inactif</span>';
-            return `
-                <tr class="hover:bg-black/[0.02] dark:hover:bg-white/[0.02]">
-                    <td class="px-4 py-3 font-mono text-xs text-indigo-600 dark:text-indigo-400">${escapeHtml(cat.slug)}</td>
-                    <td class="px-4 py-3 font-semibold text-gray-800 dark:text-gray-200">${escapeHtml(cat.label)}</td>
-                    <td class="px-4 py-3 text-gray-600 dark:text-gray-400 max-w-md truncate" title="${escapeHtml(cat.description)}">${escapeHtml(cat.description)}</td>
-                    <td class="px-4 py-3">${activeBadge}</td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-600">${stats.chunk_links || 0}</span></td>
-                    <td class="px-4 py-3 text-right space-x-2">
-                        <button onclick="openEditCategoryModal(${cat.id})" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-indigo-500/10 text-indigo-600 hover:bg-indigo-500/20">Modifier</button>
-                        <button onclick="toggleCategoryActive(${cat.id}, ${cat.is_active ? 'false' : 'true'})" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500/10 text-amber-600 hover:bg-amber-500/20">${cat.is_active ? 'Désactiver' : 'Activer'}</button>
-                        <button onclick="deleteCategory(${cat.id})" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-red-500/10 text-red-600 hover:bg-red-500/20">Supprimer</button>
-                    </td>
-                </tr>
-            `;
-        }).join('');
-    } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-6 text-center text-red-500">${escapeHtml(e.message || 'Erreur')}</td></tr>`;
-    }
-}
-
-function openCreateCategoryModal() {
-    document.getElementById('create-category-modal').classList.remove('hidden');
-}
-
-function closeCreateCategoryModal() {
-    document.getElementById('create-category-modal').classList.add('hidden');
-    document.getElementById('create-category-form').reset();
-}
-
-async function createCategory(event) {
-    event.preventDefault();
-    const form = event.target;
-    const payload = {
-        slug: form.slug.value.trim().toLowerCase(),
-        label: form.label.value.trim(),
-        description: form.description.value.trim(),
-    };
-    const response = await apiCall('/api/admin/categories', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-    });
-    if (response && response.ok) {
-        closeCreateCategoryModal();
-        await loadCategories();
-    } else {
-        const err = response ? await response.json().catch(() => ({})) : {};
-        alert(err.detail || 'Erreur lors de la création');
-    }
-}
-
-function openEditCategoryModal(categoryId) {
-    const cat = allCategories.find(c => c.id === categoryId);
-    if (!cat) return;
-    document.getElementById('edit-category-id').value = cat.id;
-    document.getElementById('edit-category-slug').textContent = cat.slug;
-    document.getElementById('edit-category-label').value = cat.label;
-    document.getElementById('edit-category-description').value = cat.description;
-    document.getElementById('edit-category-active').checked = !!cat.is_active;
-    document.getElementById('edit-category-modal').classList.remove('hidden');
-}
-
-function closeEditCategoryModal() {
-    document.getElementById('edit-category-modal').classList.add('hidden');
-}
-
-async function updateCategory(event) {
-    event.preventDefault();
-    const form = event.target;
-    const categoryId = form.category_id.value;
-    const payload = {
-        label: form.label.value.trim(),
-        description: form.description.value.trim(),
-        is_active: form.is_active.checked,
-    };
-    const response = await apiCall(`/api/admin/categories/${categoryId}`, {
-        method: 'PUT',
-        body: JSON.stringify(payload),
-    });
-    if (response && response.ok) {
-        closeEditCategoryModal();
-        await loadCategories();
-    } else {
-        const err = response ? await response.json().catch(() => ({})) : {};
-        alert(err.detail || 'Erreur lors de la mise à jour');
-    }
-}
-
-async function toggleCategoryActive(categoryId, makeActive) {
-    const response = await apiCall(`/api/admin/categories/${categoryId}`, {
-        method: 'PUT',
-        body: JSON.stringify({ is_active: makeActive }),
-    });
-    if (response && response.ok) {
-        await loadCategories();
-    } else {
-        const err = response ? await response.json().catch(() => ({})) : {};
-        alert(err.detail || 'Erreur');
-    }
-}
-
-async function deleteCategory(categoryId) {
-    if (!confirm('Supprimer cette catégorie ? (impossible si des chunks y sont liés)')) return;
-    const response = await apiCall(`/api/admin/categories/${categoryId}`, { method: 'DELETE' });
-    if (response && response.ok) {
-        await loadCategories();
-    } else {
-        const err = response ? await response.json().catch(() => ({})) : {};
-        alert(err.detail || 'Erreur lors de la suppression');
-    }
-}
 </script>
 {% endblock %}

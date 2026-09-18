@@ -1,0 +1,1049 @@
+{% extends "base.html" %}
+{% block title %}Chat - {{ app_name }}{% endblock %}
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<style>
+/* ===== Markdown des réponses et des pages ===== */
+.markdown-content { font-size: 0.95rem; line-height: 1.7; color: #374151; }
+.dark .markdown-content { color: #e5e7eb; }
+.markdown-content > *:first-child { margin-top: 0; }
+.markdown-content > *:last-child { margin-bottom: 0; }
+.markdown-content h1 { font-size: 1.35rem; font-weight: 700; margin: 1.4rem 0 0.8rem; padding-bottom: 0.4rem; border-bottom: 2px solid #e5e7eb; color: #111827; }
+.dark .markdown-content h1 { border-bottom-color: #4b5563; color: #f9fafb; }
+.markdown-content h2 { font-size: 1.15rem; font-weight: 600; margin: 1.2rem 0 0.6rem; color: #1f2937; }
+.dark .markdown-content h2 { color: #f3f4f6; }
+.markdown-content h3 { font-size: 1.02rem; font-weight: 600; margin: 1rem 0 0.5rem; color: #374151; }
+.dark .markdown-content h3 { color: #e5e7eb; }
+.markdown-content p { margin: 0.7rem 0; }
+.markdown-content ul, .markdown-content ol { margin: 0.7rem 0; padding-left: 1.6rem; }
+.markdown-content ul { list-style-type: disc; }
+.markdown-content ol { list-style-type: decimal; }
+.markdown-content li { margin: 0.3rem 0; }
+.markdown-content li::marker { color: #6b7280; }
+.markdown-content strong { font-weight: 700; color: #111827; }
+.dark .markdown-content strong { color: #f9fafb; }
+.markdown-content code { font-family: "SF Mono", "Fira Code", Consolas, monospace; font-size: 0.86em; background: #f3f4f6; color: #b91c1c; padding: 0.15em 0.4em; border-radius: 4px; }
+.dark .markdown-content code { background: #374151; color: #fca5a5; }
+.markdown-content pre { background: #1f2937; color: #e5e7eb; padding: 0.9rem; border-radius: 8px; overflow-x: auto; margin: 0.9rem 0; font-size: 0.85rem; }
+.markdown-content pre code { background: transparent; color: inherit; padding: 0; }
+.markdown-content blockquote { border-left: 3px solid #6366f1; background: rgba(99,102,241,0.06); padding: 0.6rem 0.9rem; margin: 0.9rem 0; border-radius: 0 8px 8px 0; color: #3730a3; }
+.dark .markdown-content blockquote { background: rgba(99,102,241,0.12); color: #c7d2fe; }
+.markdown-content blockquote p { margin: 0; }
+.markdown-content .table-wrapper { overflow-x: auto; margin: 0.9rem 0; border-radius: 8px; border: 1px solid #e5e7eb; }
+.dark .markdown-content .table-wrapper { border-color: #4b5563; }
+.markdown-content table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.markdown-content th, .markdown-content td { border: 1px solid #e5e7eb; padding: 0.5rem 0.65rem; text-align: left; vertical-align: top; }
+.dark .markdown-content th, .dark .markdown-content td { border-color: #4b5563; }
+.markdown-content th { background: #f9fafb; font-weight: 600; white-space: nowrap; }
+.dark .markdown-content th { background: #374151; }
+.markdown-content tr:nth-child(even) { background: #f9fafb; }
+.dark .markdown-content tr:nth-child(even) { background: #1f2937; }
+.markdown-content a { color: #2563eb; text-decoration: underline; text-underline-offset: 2px; }
+.dark .markdown-content a { color: #60a5fa; }
+.markdown-content hr { border: none; border-top: 2px solid #e5e7eb; margin: 1.2rem 0; }
+.dark .markdown-content hr { border-top-color: #4b5563; }
+
+/* Liens vers le wiki insérés dans le texte */
+.wiki-cite { display: inline-flex; align-items: center; gap: 0.3em; padding: 0.05em 0.55em; margin: 0 0.1em; border-radius: 9999px; border: 1px solid rgba(99,102,241,0.35); background: rgba(99,102,241,0.08); color: #4338ca !important; font-size: 0.82em; font-weight: 600; text-decoration: none !important; cursor: pointer; vertical-align: baseline; white-space: nowrap; max-width: 100%; }
+.wiki-cite:hover { background: rgba(99,102,241,0.18); }
+.dark .wiki-cite { color: #c7d2fe !important; border-color: rgba(129,140,248,0.4); background: rgba(99,102,241,0.18); }
+.wiki-cite.missing { border-color: rgba(220,38,38,0.4); background: rgba(220,38,38,0.08); color: #b91c1c !important; }
+.dark .wiki-cite.missing { color: #fca5a5 !important; }
+.wiki-cite .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.anomaly-cite { padding: 0.02em 0.4em; border-radius: 5px; background: rgba(245,158,11,0.15); color: #b45309 !important; font-weight: 700; font-size: 0.9em; text-decoration: none !important; cursor: pointer; }
+.dark .anomaly-cite { color: #fcd34d !important; background: rgba(245,158,11,0.2); }
+.raw-link { color: #0f766e !important; text-decoration: underline dotted !important; cursor: pointer; }
+.dark .raw-link { color: #5eead4 !important; }
+
+/* Bulle de réflexion */
+.thinking-bubble { font-style: italic; opacity: 0.55; font-size: 0.8rem; line-height: 1.5; color: #6b7280; border-left: 2px solid rgba(99,102,241,0.35); padding: 0.3rem 0 0.3rem 0.7rem; margin-bottom: 0.6rem; max-height: 180px; overflow: hidden; transition: opacity .4s ease, max-height .45s ease, margin .45s ease, padding .45s ease; }
+.dark .thinking-bubble { color: #9ca3af; }
+.thinking-bubble .thinking-head { font-style: normal; font-weight: 600; font-size: 0.68rem; letter-spacing: .04em; text-transform: uppercase; color: #6366f1; margin-bottom: .2rem; }
+.thinking-bubble .thinking-body { white-space: pre-wrap; }
+.thinking-bubble.fade-out { opacity: 0; max-height: 0; margin: 0; padding: 0; }
+
+/* Chips de sources */
+.source-chip { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.3rem 0.7rem; border-radius: 0.75rem; border: 1px solid rgba(0,0,0,0.08); background: rgba(255,255,255,0.7); font-size: 0.75rem; font-weight: 600; color: #374151; cursor: pointer; transition: all .15s; max-width: 100%; }
+.source-chip:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.08); color: #4338ca; }
+.dark .source-chip { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: #d1d5db; }
+.dark .source-chip:hover { background: rgba(99,102,241,0.18); color: #c7d2fe; }
+.source-chip .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.source-chip .kind { font-weight: 500; color: #6b7280; }
+.source-chip.missing { border-color: rgba(220,38,38,0.35); color: #b91c1c; cursor: default; }
+.dark .source-chip.missing { color: #fca5a5; }
+.source-chip.anomaly { border-color: rgba(245,158,11,0.4); color: #b45309; }
+.dark .source-chip.anomaly { color: #fcd34d; }
+.source-chip .title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Le lecteur */
+#reader { width: 0; opacity: 0; pointer-events: none; transition: width .22s cubic-bezier(.2,.7,.3,1), opacity .18s; }
+#reader.open { width: 30rem; opacity: 1; pointer-events: auto; }
+@media (min-width: 1536px) { #reader.open { width: 36rem; } }
+@media (max-width: 1279px) {
+  #reader.open { position: fixed; inset: 0.5rem; width: auto; z-index: 60; border-radius: 1rem; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+}
+@media (min-width: 1280px) and (max-width: 1535px) {
+  .reader-open #conv-panel:not(.mobile-open) { display: none; }
+  .reader-open #conv-toggle { display: inline-flex; }
+}
+#conv-toggle { display: none; }
+@media (max-width: 767px) { #conv-toggle { display: inline-flex; } }
+.reader-doc { font-size: 0.92rem; }
+.reader-doc .markdown-content { font-size: 0.9rem; }
+.reader-title { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; }
+.reader-lede { color: #6b7280; font-size: 0.95rem; margin-top: 0.4rem; }
+.dark .reader-lede { color: #9ca3af; }
+.props { display: grid; grid-template-columns: max-content 1fr; gap: 0.3rem 0.9rem; font-size: 0.78rem; margin: 1rem 0; padding: 0.75rem 0.9rem; border-radius: 0.75rem; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.05); }
+.dark .props { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.06); }
+.props dt { color: #6b7280; font-weight: 600; }
+.props dd { margin: 0; color: #374151; }
+.dark .props dd { color: #d1d5db; }
+.pill { display: inline-block; padding: 0.05rem 0.5rem; border-radius: 9999px; background: rgba(0,0,0,0.06); font-size: 0.72rem; font-weight: 600; }
+.dark .pill { background: rgba(255,255,255,0.1); }
+.pill.warn { background: rgba(220,38,38,0.12); color: #b91c1c; }
+.badge-type { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.1rem 0.6rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700; }
+.backlinks a { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.5rem; border-radius: 0.5rem; font-size: 0.8rem; color: #374151; cursor: pointer; }
+.backlinks a:hover { background: rgba(99,102,241,0.08); color: #4338ca; }
+.dark .backlinks a { color: #d1d5db; }
+.dark .backlinks a:hover { color: #c7d2fe; }
+.backlinks .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.anomaly-highlight { background: rgba(245,158,11,0.22) !important; outline: 2px solid rgba(245,158,11,0.6); outline-offset: -2px; }
+
+/* Conversations */
+.conv-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.7rem; border-radius: 0.75rem; cursor: pointer; font-size: 0.82rem; color: #374151; transition: background .15s; }
+.conv-item:hover { background: rgba(99,102,241,0.08); }
+.conv-item.active { background: linear-gradient(135deg, rgba(79,70,229,0.14), rgba(99,102,241,0.08)); color: #3730a3; font-weight: 600; }
+.dark .conv-item { color: #d1d5db; }
+.dark .conv-item.active { color: #c7d2fe; }
+.conv-item .del { opacity: 0; transition: opacity .15s; }
+.conv-item:hover .del { opacity: 1; }
+#conv-panel.mobile-open { display: flex !important; position: fixed; inset: 0.5rem auto 0.5rem 0.5rem; width: 18rem; z-index: 70; border-radius: 1rem; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+
+/* Étape en cours */
+.lia-avatar { width: 1.6rem; height: 1.6rem; border-radius: 0.5rem; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 4px 10px rgba(99,102,241,0.25); flex: none; }
+
+/* Visionneuse PDF */
+.pdf-toolbar { background: #323639; color: #fff; padding: 8px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pdf-toolbar button { background: #4a4d50; border: none; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 13px; }
+.pdf-toolbar button:hover { background: #5a5d60; }
+.pdf-toolbar button:disabled { opacity: .5; cursor: not-allowed; }
+.pdf-toolbar input { width: 54px; padding: 4px 6px; border-radius: 4px; border: none; text-align: center; font-size: 13px; color: #111; }
+.pdf-toolbar select { padding: 4px 6px; border-radius: 4px; border: none; font-size: 13px; color: #111; }
+.pdf-page-indicator { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.7); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 12px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="chat-layout" class="flex-1 flex min-h-0 overflow-hidden">
+
+  <!-- ===== Conversations ===== -->
+  <aside id="conv-panel" class="hidden md:flex w-64 shrink-0 flex-col border-r border-black/5 dark:border-white/5 bg-black/[0.015] dark:bg-white/[0.015]">
+    <div class="p-3 flex items-center justify-between gap-2 border-b border-black/5 dark:border-white/5">
+      <span class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1">Conversations</span>
+      <div class="flex items-center gap-1">
+        <button onclick="createNewConversation(true)" class="text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 p-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-all" title="Nouvelle conversation">
+          <i class="ti ti-plus text-base"></i>
+        </button>
+        <button onclick="toggleConvPanel()" class="md:hidden text-gray-400 hover:text-gray-700 p-1.5 rounded-md hover:bg-black/5 dark:hover:bg-white/5" title="Fermer">
+          <i class="ti ti-x text-base"></i>
+        </button>
+      </div>
+    </div>
+    <div id="conversations-list" class="flex-1 overflow-y-auto p-2 space-y-0.5">
+      <div class="px-3 py-2 text-xs text-gray-400">Chargement…</div>
+    </div>
+  </aside>
+
+  <!-- ===== Chat ===== -->
+  <section class="flex-1 flex flex-col min-w-0 min-h-0">
+    <div class="shrink-0 px-4 sm:px-5 py-3 border-b border-black/5 dark:border-white/5 flex items-center gap-3">
+      <button id="conv-toggle" onclick="toggleConvPanel()" class="items-center text-gray-500 hover:text-gray-900 dark:hover:text-white p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5" title="Conversations">
+        <i class="ti ti-messages text-lg"></i>
+      </button>
+      <div class="min-w-0 flex-1">
+        <h1 id="conversation-title" class="text-base font-bold text-gray-900 dark:text-white truncate">LIA</h1>
+        <p class="text-[11px] text-gray-500 dark:text-gray-400 truncate">Réponses sourcées sur le wiki PROFERM — chaque page citée s'ouvre à droite.</p>
+      </div>
+      <button onclick="openWikiPage('/index.md')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold active:scale-95 transition-all" title="Parcourir le wiki">
+        <i class="ti ti-book-2"></i><span class="hidden sm:inline">Sommaire du wiki</span>
+      </button>
+    </div>
+
+    <div id="chat-messages" class="flex-1 overflow-y-auto px-4 sm:px-6 py-5 space-y-4 min-h-0">
+      <div id="welcome-state" class="max-w-2xl mx-auto mt-6 sm:mt-14 text-center">
+        <div class="mx-auto w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white grid place-items-center shadow-lg shadow-indigo-500/20 mb-5">
+          <i class="ti ti-robot text-2xl"></i>
+        </div>
+        <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Posez votre question à LIA</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Gammes, profilés, cotes, quincaillerie, garanties, certifications : LIA lit tout le wiki à chaque question et cite les pages dont elle tire sa réponse.</p>
+        <div id="starters" class="mt-7 grid gap-2 sm:grid-cols-2 text-left"></div>
+      </div>
+    </div>
+
+    <div class="shrink-0 p-3 sm:p-4 border-t border-black/5 dark:border-white/5 bg-black/[0.01] dark:bg-white/[0.01]">
+      <form id="chat-form" class="relative max-w-3xl mx-auto">
+        <textarea id="chat-input" rows="1" class="w-full pl-4 pr-14 py-3 rounded-2xl glass-input text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm resize-none" placeholder="Quelle parclose pour un vitrage de 44 mm ?" autocomplete="off"></textarea>
+        <button type="submit" id="chat-send-btn" class="absolute right-2 bottom-2 w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md active:scale-95 transition-all" title="Envoyer">
+          <i class="ti ti-arrow-up text-lg"></i>
+        </button>
+        <button type="button" id="chat-stop-btn" onclick="stopChat()" class="hidden absolute right-2 bottom-2 w-9 h-9 items-center justify-center rounded-xl bg-gray-700 hover:bg-gray-800 dark:bg-gray-600 text-white shadow-md active:scale-95 transition-all" title="Arrêter">
+          <i class="ti ti-player-stop text-lg"></i>
+        </button>
+      </form>
+      <p class="max-w-3xl mx-auto mt-1.5 text-[11px] text-gray-400 dark:text-gray-500 px-1">Entrée pour envoyer, Maj+Entrée pour une nouvelle ligne. Vérifiez toujours une cote sur la page citée.</p>
+    </div>
+  </section>
+
+  <!-- ===== Lecteur du wiki ===== -->
+  <aside id="reader" class="shrink-0 flex flex-col border-l border-black/5 dark:border-white/5 bg-white dark:bg-[#1c2235] overflow-hidden">
+    <div class="shrink-0 px-3 py-2.5 border-b border-black/5 dark:border-white/5 flex items-center gap-1.5">
+      <button id="reader-back" onclick="readerNavigate(-1)" class="p-1.5 rounded-lg text-gray-500 hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-30" title="Précédent" disabled><i class="ti ti-chevron-left"></i></button>
+      <button id="reader-fwd" onclick="readerNavigate(1)" class="p-1.5 rounded-lg text-gray-500 hover:bg-black/5 dark:hover:bg-white/5 disabled:opacity-30" title="Suivant" disabled><i class="ti ti-chevron-right"></i></button>
+      <div id="reader-crumb" class="flex-1 min-w-0 text-xs text-gray-500 dark:text-gray-400 truncate px-1"></div>
+      <a id="reader-graph-link" href="/wiki" class="p-1.5 rounded-lg text-gray-500 hover:text-indigo-600 hover:bg-black/5 dark:hover:bg-white/5" title="Voir dans le graphe"><i class="ti ti-topology-star-3"></i></a>
+      <button onclick="closeReader()" class="p-1.5 rounded-lg text-gray-500 hover:bg-black/5 dark:hover:bg-white/5" title="Fermer (Échap)"><i class="ti ti-x"></i></button>
+    </div>
+    <div id="reader-body" class="flex-1 overflow-y-auto px-5 py-5 reader-doc"></div>
+  </aside>
+</div>
+
+<!-- ===== Visionneuse PDF (documents sources de raw/) ===== -->
+<div id="pdf-modal" class="hidden fixed inset-0 z-[130] flex flex-col bg-black/85" onclick="if(event.target===this) closePdf()">
+  <div class="pdf-toolbar shrink-0">
+    <span id="pdf-title" class="font-semibold text-sm truncate max-w-[40vw]"></span>
+    <div class="flex items-center gap-1 ml-auto">
+      <button id="pdf-prev" onclick="pdfPrev()" title="Page précédente"><i class="ti ti-chevron-left"></i></button>
+      <input id="pdf-page-input" type="number" min="1" value="1" onchange="pdfGoTo(this.value)" />
+      <span class="text-xs">/ <span id="pdf-total">?</span></span>
+      <button id="pdf-next" onclick="pdfNext()" title="Page suivante"><i class="ti ti-chevron-right"></i></button>
+    </div>
+    <select id="pdf-zoom" onchange="pdfSetZoom(this.value)">
+      <option value="fit">Page entière</option>
+      <option value="fit-zoom">Zoom</option>
+      <option value="1">100 %</option>
+      <option value="1.5">150 %</option>
+      <option value="2">200 %</option>
+    </select>
+    <a id="pdf-download" href="#" target="_blank" rel="noopener" class="text-xs underline">Ouvrir le PDF</a>
+    <button onclick="closePdf()" title="Fermer"><i class="ti ti-x"></i></button>
+  </div>
+  <div id="pdf-container" class="flex-1 overflow-auto relative"></div>
+</div>
+
+<!-- ===== Retour négatif ===== -->
+<div id="feedback-negative-modal" class="hidden fixed inset-0 z-[110] bg-black/50 flex items-center justify-center p-4" onclick="if(event.target===this) closeFeedbackNegativeModal()">
+  <div class="glass-panel rounded-2xl p-5 w-full max-w-md">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-base font-bold flex items-center gap-2"><i class="ti ti-thumb-down text-rose-500"></i> Qu'est-ce qui ne va pas ?</h3>
+      <button onclick="closeFeedbackNegativeModal()" class="text-gray-400 hover:text-gray-600 p-1"><i class="ti ti-x"></i></button>
+    </div>
+    <input type="hidden" id="feedback-negative-msg-id" />
+    <label for="feedback-negative-category" class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Catégorie du problème</label>
+    <select id="feedback-negative-category" class="w-full px-3 py-2 rounded-lg glass-input text-sm mb-3" onchange="validateNegativeFeedbackBtn()">
+      <option value="">Choisir…</option>
+      <option value="Hallucination">Valeur inventée ou absente du wiki</option>
+      <option value="Mauvais document / Mauvaise source">Mauvaise page citée</option>
+      <option value="Information obsolète">Information périmée</option>
+      <option value="Manque de précision / Incomplet">Réponse incomplète ou imprécise</option>
+      <option value="Raisonnement incorrect">Contresens sur le wiki</option>
+      <option value="Hors-sujet">Hors sujet</option>
+    </select>
+    <label for="feedback-negative-comment" class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Votre correction</label>
+    <textarea id="feedback-negative-comment" rows="4" placeholder="Ex. : la parclose 76507 tient 44 mm en ouvrant, pas en dormant…" class="w-full px-3 py-2 rounded-lg glass-input text-sm" oninput="validateNegativeFeedbackBtn()"></textarea>
+    <p class="text-[11px] text-gray-500 mt-2">Votre correction alimente le wiki : la prochaine réponse en profite.</p>
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" onclick="closeFeedbackNegativeModal()" class="px-4 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5">Annuler</button>
+      <button type="button" id="feedback-negative-submit-btn" onclick="submitNegativeFeedback()" disabled class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium disabled:opacity-40">Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Trace d'une réponse ===== -->
+<div id="trace-modal" class="hidden fixed inset-0 z-[120] bg-black/50 flex items-center justify-center p-4" onclick="if(event.target===this) closeTraceModal()">
+  <div class="glass-panel rounded-2xl p-5 w-full max-w-lg max-h-[85vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-base font-bold flex items-center gap-2"><i class="ti ti-route-2 text-indigo-500"></i> Comment cette réponse a été produite</h3>
+      <button onclick="closeTraceModal()" class="text-gray-400 hover:text-gray-600 p-1"><i class="ti ti-x"></i></button>
+    </div>
+    <div id="trace-body" class="text-sm space-y-3"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+/* ============================================================================
+   État
+   ========================================================================== */
+let conversations = [];
+let currentConversationId = null;
+let currentAbort = null;
+let lastUserMessage = null;
+const traces = new Map();          // message_id → trace
+let wikiIndex = new Map();         // id → nœud du graphe (titre, type, …)
+const pageCache = new Map();       // id → page complète
+let readerHistory = [], readerPos = -1;
+
+const STARTERS = [
+  "Quelle parclose pour un vitrage de 44 mm ?",
+  "Quelle tapée pour 140 mm d'isolant sur un dormant 76171 ?",
+  "Quelle est la garantie sur la structure d'une LUMINE65 ?",
+  "Peut-on monter un STADIP 44.2/16/4 sur une PERFORM76 ?",
+  "Quelles sont les restrictions de fabrication de la PERFORM+ ?",
+  "Comment transformer un ouvrant OF en OB avec Roto NX ?",
+];
+
+const TYPE_COLORS = {
+  "Gamme": "#0284c7", "Profilé": "#7c3aed", "Quincaillerie": "#b45309", "Vitrage": "#0891b2",
+  "Équipement": "#059669", "Porte d'entrée": "#ea580c", "Garantie": "#db2777", "Procédure": "#16a34a",
+  "Certification": "#a16207", "Anomalie": "#dc2626", "Fournisseur": "#2563eb", "Document source": "#78716c",
+  "Réservé": "#a1a1aa", "À écrire": "#c0c0c6",
+};
+const typeColor = (t) => TYPE_COLORS[t] || "#9ca3af";
+const ANOMALY_PAGES = {
+  INC: "/anomalies/incoherences-internes.md",
+  CTR: "/anomalies/contradictions-entre-sources.md",
+  VER: "/anomalies/informations-a-verifier.md",
+};
+
+marked.setOptions({ breaks: true, gfm: true, headerIds: false, mangle: false });
+
+/* ============================================================================
+   Markdown
+   ========================================================================== */
+function preprocessMarkdown(text) {
+  if (!text) return "";
+  return text
+    .replace(/^(#{1,6})([^#\s])/gm, "$1 $2")
+    .replace(/^(\s*)-([A-Za-zÀ-ÿ0-9])/gm, "$1- $2");
+}
+function wrapTables(html) {
+  if (!html || !html.includes("<table")) return html;
+  return html.replace(/<table(\s[^>]*)?>/gi, '<div class="table-wrapper"><table$1>').replace(/<\/table>/g, "</table></div>");
+}
+function parseMarkdown(text, opts = {}) {
+  const raw = marked.parse(preprocessMarkdown(text || ""), { breaks: opts.breaks !== false, gfm: true, headerIds: false, mangle: false });
+  return wrapTables(DOMPurify.sanitize(raw, { ADD_ATTR: ["target", "rel"] }));
+}
+
+/* Transforme, dans les nœuds texte seulement, les chemins de pages, les identifiants
+   d'anomalie et les renvois « raw/x.pdf, p. N » en liens. Les balises déjà présentes
+   (liens markdown, code) ne sont pas touchées. */
+const LINK_RE = /(?<![\w\/.])(\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.md)(?![\w\/])|raw\/([A-Za-z0-9._-]+\.pdf)(?:,?\s*(?:p\.|pages?)\s*(\d+)(?:\s*(?:à|-|et)\s*\d+)?)?|\b(INC|CTR|VER)-(\d{1,3})\b/g;
+
+function linkifyElement(root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      let p = node.parentElement;
+      while (p && p !== root) {
+        const tag = p.tagName;
+        if (tag === "A" || tag === "CODE" || tag === "PRE" || tag === "SCRIPT" || tag === "STYLE") return NodeFilter.FILTER_REJECT;
+        p = p.parentElement;
+      }
+      return LINK_RE.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    },
+  });
+  const targets = [];
+  while (walker.nextNode()) targets.push(walker.currentNode);
+  for (const node of targets) {
+    const text = node.nodeValue;
+    const frag = document.createDocumentFragment();
+    let last = 0;
+    LINK_RE.lastIndex = 0;
+    let m;
+    while ((m = LINK_RE.exec(text)) !== null) {
+      if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+      if (m[1]) frag.appendChild(makeWikiCite(m[1]));
+      else if (m[2]) frag.appendChild(makeRawLink(m[0], m[2], m[3]));
+      else frag.appendChild(makeAnomalyCite(`${m[4]}-${m[5]}`));
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+  // Les liens markdown vers des pages du wiki ouvrent le lecteur.
+  root.querySelectorAll('a[href^="/"]').forEach((a) => {
+    const href = a.getAttribute("href") || "";
+    if (href.endsWith(".md")) { a.dataset.wiki = href.split("#")[0]; a.setAttribute("href", "#"); }
+    else if (href.startsWith("/api/wiki/raw/")) { a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener"); }
+  });
+  root.querySelectorAll('a[href^="http"]').forEach((a) => { a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener noreferrer"); });
+}
+
+function makeWikiCite(path) {
+  const node = wikiIndex.get(path);
+  const a = document.createElement("a");
+  a.href = "#";
+  a.className = "wiki-cite" + (node && !node.missing ? "" : " missing");
+  a.dataset.wiki = path;
+  const title = node && !node.missing ? node.title : path.split("/").pop().replace(/\.md$/, "").replace(/-/g, " ");
+  a.title = node && !node.missing ? `${node.type} — ${path}` : `Page inexistante : ${path}`;
+  a.innerHTML = `<span class="dot" style="background:${typeColor(node ? node.type : "À écrire")}"></span>${escapeHtml(title)}`;
+  return a;
+}
+function makeAnomalyCite(id) {
+  const a = document.createElement("a");
+  a.href = "#"; a.className = "anomaly-cite"; a.dataset.anomaly = id; a.dataset.wiki = ANOMALY_PAGES[id.slice(0, 3)];
+  a.title = "Voir l'entrée dans le registre d'anomalies"; a.textContent = id;
+  return a;
+}
+function makeRawLink(label, file, page) {
+  const a = document.createElement("a");
+  a.href = `/api/wiki/raw/${encodeURIComponent(file)}#page=${page || 1}`;
+  a.className = "raw-link"; a.dataset.raw = file; a.dataset.page = page || "1";
+  a.title = "Ouvrir le document source à cette page"; a.textContent = label;
+  return a;
+}
+
+/* Un seul gestionnaire pour le fil et le lecteur. */
+document.addEventListener("click", (ev) => {
+  const a = ev.target.closest("a[data-wiki], a[data-raw], .source-chip[data-wiki]");
+  if (!a) return;
+  ev.preventDefault();
+  if (a.dataset.raw) { openPdf(a.dataset.raw, parseInt(a.dataset.page || "1", 10)); return; }
+  if (a.dataset.wiki) openWikiPage(a.dataset.wiki, { anomaly: a.dataset.anomaly || null });
+});
+
+/* ============================================================================
+   Wiki : index, lecteur, PDF
+   ========================================================================== */
+async function loadWikiIndex() {
+  try {
+    const r = await apiCall("/api/wiki/graph");
+    if (!r || !r.ok) return;
+    const data = await r.json();
+    wikiIndex = new Map(data.nodes.map((n) => [n.id, n]));
+  } catch (_) {}
+}
+
+async function openWikiPage(path, opts = {}) {
+  if (!path) return;
+  const reader = document.getElementById("reader");
+  reader.classList.add("open");
+  document.getElementById("chat-layout").classList.add("reader-open");
+  const body = document.getElementById("reader-body");
+  if (!opts.fromHistory) {
+    readerHistory = readerHistory.slice(0, readerPos + 1);
+    readerHistory.push(path);
+    readerPos = readerHistory.length - 1;
+  }
+  updateReaderNav();
+  document.getElementById("reader-graph-link").href = `/wiki#${path}`;
+  let page = pageCache.get(path);
+  if (!page) {
+    body.innerHTML = `<div class="flex items-center gap-2 text-sm text-gray-400 py-8 justify-center"><i class="ti ti-loader-2 animate-spin"></i> Chargement…</div>`;
+    const r = await apiCall(`/api/wiki/pages${path}`);
+    if (!r) return;
+    if (!r.ok) {
+      const node = wikiIndex.get(path);
+      body.innerHTML = `<div class="py-8 text-center">
+        <i class="ti ti-file-unknown text-3xl text-gray-300"></i>
+        <p class="mt-2 font-semibold text-gray-700 dark:text-gray-200">${escapeHtml(node ? node.title : path)}</p>
+        <p class="text-sm text-gray-500 mt-1">${node && node.missing ? "Page liée depuis le wiki mais pas encore écrite." : "Cette page n'existe pas dans le wiki."}</p>
+        <p class="text-xs text-gray-400 mt-2 font-mono">${escapeHtml(path)}</p></div>`;
+      document.getElementById("reader-crumb").textContent = path;
+      return;
+    }
+    page = await r.json();
+    pageCache.set(path, page);
+  }
+  renderReaderPage(page, opts.anomaly);
+}
+
+function renderReaderPage(page, anomaly) {
+  const body = document.getElementById("reader-body");
+  const crumb = document.getElementById("reader-crumb");
+  crumb.innerHTML = `${page.folder && page.folder !== "." ? escapeHtml(page.folder) + ' <span class="opacity-50">/</span> ' : ""}<span class="font-semibold text-gray-700 dark:text-gray-200">${escapeHtml(page.title)}</span>`;
+
+  const color = typeColor(page.type);
+  const badges = [`<span class="badge-type" style="background:${color}1f;color:${color}"><span class="w-2 h-2 rounded-full" style="background:${color}"></span>${escapeHtml(page.type)}</span>`];
+  if (page.status) badges.push(`<span class="pill ${page.status === "draft" ? "warn" : ""}">${page.status === "draft" ? "brouillon — contradiction ouverte" : escapeHtml(page.status)}</span>`);
+  if (page.stale) badges.push(`<span class="pill warn">périmée depuis le ${escapeHtml(page.staleAfter)}</span>`);
+
+  const props = [];
+  if ((page.tags || []).length) props.push(["Étiquettes", page.tags.map((t) => `<span class="pill">${escapeHtml(t)}</span>`).join(" ")]);
+  if ((page.sources || []).length) {
+    props.push(["Sources", page.sources.map((s) => {
+      const title = escapeHtml(s.title || s.resource || "");
+      const res = String(s.resource || "");
+      if (res.startsWith("raw/")) {
+        const file = res.slice(4);
+        return `<a href="#" class="raw-link" data-raw="${escapeHtml(file)}" data-page="1"><i class="ti ti-file-type-pdf"></i> ${title}</a>`;
+      }
+      return title;
+    }).join("<br>")]);
+  }
+  if (page.staleAfter) props.push([page.stale ? "Périmée depuis" : "À revoir le", escapeHtml(page.staleAfter)]);
+  props.push(["Liens", `${page.outDegree} sortants · ${page.inDegree} entrants`]);
+
+  const backlinks = (list, title) => list.length
+    ? `<p class="text-[11px] font-bold uppercase tracking-wider text-gray-400 mt-6 mb-1.5">${title} — ${list.length}</p><div class="backlinks">${list.map((n) => `<a href="#" data-wiki="${escapeHtml(n.id)}"><span class="dot" style="background:${typeColor(n.type)}"></span>${escapeHtml(n.title)}${n.missing ? ' <span class="pill">à écrire</span>' : ""}</a>`).join("")}</div>`
+    : "";
+
+  body.innerHTML = `
+    <div class="flex flex-wrap gap-1.5 mb-3">${badges.join("")}</div>
+    <h1 class="reader-title text-gray-900 dark:text-white">${escapeHtml(page.title)}</h1>
+    ${page.description ? `<p class="reader-lede">${escapeHtml(page.description)}</p>` : ""}
+    <dl class="props">${props.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
+    <div class="markdown-content reader-markdown"></div>
+    ${backlinks(page.outLinks || [], "Liens sortants")}
+    ${backlinks(page.inLinks || [], "Cité par")}`;
+  const md = body.querySelector(".reader-markdown");
+  md.innerHTML = parseMarkdown(page.body || "*Page vide.*", { breaks: false });
+  linkifyElement(md);
+  document.getElementById("reader-body").scrollTop = 0;
+
+  if (anomaly) {
+    // Surligne la ligne (ou le paragraphe) qui porte l'identifiant.
+    const cells = [...md.querySelectorAll("td, li, p, h2, h3")].filter((el) => el.textContent.includes(anomaly));
+    const target = cells.find((el) => el.tagName === "TD")?.closest("tr") || cells[0];
+    if (target) {
+      target.classList.add("anomaly-highlight");
+      setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
+    }
+  }
+}
+
+function updateReaderNav() {
+  document.getElementById("reader-back").disabled = readerPos <= 0;
+  document.getElementById("reader-fwd").disabled = readerPos >= readerHistory.length - 1;
+}
+function readerNavigate(step) {
+  const next = readerPos + step;
+  if (next < 0 || next >= readerHistory.length) return;
+  readerPos = next;
+  openWikiPage(readerHistory[readerPos], { fromHistory: true });
+}
+function closeReader() {
+  document.getElementById("reader").classList.remove("open");
+  document.getElementById("chat-layout").classList.remove("reader-open");
+}
+
+/* ---- pdf.js ---- */
+const PDFJS_VERSION = "4.0.379";
+let pdfjsPromise = null, pdfDoc = null, pdfPage = 1, pdfZoom = "fit", pdfFile = null;
+function loadPdfJs() {
+  if (pdfjsPromise) return pdfjsPromise;
+  pdfjsPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.type = "module";
+    script.textContent = `
+      import * as pdfjs from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VERSION}/pdf.min.mjs';
+      pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VERSION}/pdf.worker.min.mjs';
+      window.__pdfjsLib = pdfjs; window.dispatchEvent(new Event('pdfjs-ready'));`;
+    window.addEventListener("pdfjs-ready", () => resolve(window.__pdfjsLib), { once: true });
+    script.onerror = () => reject(new Error("pdf.js indisponible"));
+    document.head.appendChild(script);
+    setTimeout(() => { if (!window.__pdfjsLib) reject(new Error("pdf.js : délai dépassé")); }, 20000);
+  });
+  return pdfjsPromise;
+}
+async function openPdf(file, page) {
+  pdfFile = file;
+  const modal = document.getElementById("pdf-modal");
+  modal.classList.remove("hidden");
+  document.getElementById("pdf-title").textContent = file;
+  document.getElementById("pdf-download").href = `/api/wiki/raw/${encodeURIComponent(file)}#page=${page || 1}`;
+  const container = document.getElementById("pdf-container");
+  container.innerHTML = `<div class="flex items-center justify-center h-full text-white"><i class="ti ti-loader-2 text-4xl animate-spin"></i></div>`;
+  try {
+    const pdfjs = await loadPdfJs();
+    const r = await fetch(`/api/wiki/raw/${encodeURIComponent(file)}`, { credentials: "include" });
+    if (!r.ok) throw new Error(r.status === 404 ? "Ce PDF n'est pas présent dans raw/ sur le serveur." : "Chargement impossible");
+    pdfDoc = await pdfjs.getDocument({ data: await r.arrayBuffer() }).promise;
+    document.getElementById("pdf-total").textContent = pdfDoc.numPages;
+    document.getElementById("pdf-page-input").max = pdfDoc.numPages;
+    pdfZoom = "fit"; document.getElementById("pdf-zoom").value = "fit";
+    await pdfRender(Math.min(Math.max(1, page || 1), pdfDoc.numPages));
+  } catch (err) {
+    container.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-white p-4"><p>Erreur lors du chargement du PDF</p><p class="text-sm text-gray-400 mt-1">${escapeHtml(String(err.message || err))}</p></div>`;
+  }
+}
+async function pdfRender(num) {
+  if (!pdfDoc) return;
+  const page = await pdfDoc.getPage(num);
+  const container = document.getElementById("pdf-container");
+  let scale = parseFloat(pdfZoom);
+  if (pdfZoom === "fit" || pdfZoom === "fit-zoom") {
+    const v0 = page.getViewport({ scale: 1 });
+    const w = (container.clientWidth - 40) / v0.width, h = (container.clientHeight - 40) / v0.height;
+    scale = pdfZoom === "fit" ? Math.min(w, h) : Math.max(w, h);
+  }
+  const viewport = page.getViewport({ scale });
+  container.innerHTML = "";
+  const wrap = document.createElement("div");
+  wrap.className = "relative"; wrap.style.margin = "10px auto"; wrap.style.width = "fit-content";
+  const canvas = document.createElement("canvas");
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.floor(viewport.width * dpr); canvas.height = Math.floor(viewport.height * dpr);
+  canvas.style.width = `${Math.floor(viewport.width)}px`; canvas.style.height = `${Math.floor(viewport.height)}px`;
+  canvas.style.boxShadow = "0 2px 10px rgba(0,0,0,.4)";
+  wrap.appendChild(canvas);
+  const ind = document.createElement("div");
+  ind.className = "pdf-page-indicator"; ind.textContent = `Page ${num} / ${pdfDoc.numPages}`;
+  wrap.appendChild(ind);
+  container.appendChild(wrap);
+  await page.render({ canvasContext: canvas.getContext("2d"), viewport, transform: dpr === 1 ? undefined : [dpr, 0, 0, dpr, 0, 0] }).promise;
+  pdfPage = num;
+  document.getElementById("pdf-page-input").value = num;
+  document.getElementById("pdf-prev").disabled = num <= 1;
+  document.getElementById("pdf-next").disabled = num >= pdfDoc.numPages;
+}
+function pdfPrev() { if (pdfDoc && pdfPage > 1) pdfRender(pdfPage - 1); }
+function pdfNext() { if (pdfDoc && pdfPage < pdfDoc.numPages) pdfRender(pdfPage + 1); }
+function pdfGoTo(v) { const n = parseInt(v, 10); if (pdfDoc && n >= 1 && n <= pdfDoc.numPages) pdfRender(n); }
+function pdfSetZoom(v) { pdfZoom = v; if (pdfDoc) pdfRender(pdfPage); }
+function closePdf() { document.getElementById("pdf-modal").classList.add("hidden"); pdfDoc = null; }
+
+/* ============================================================================
+   Conversations
+   ========================================================================== */
+function toggleConvPanel() { document.getElementById("conv-panel").classList.toggle("mobile-open"); }
+document.addEventListener("click", (ev) => {
+  const panel = document.getElementById("conv-panel");
+  if (!panel.classList.contains("mobile-open")) return;
+  if (panel.contains(ev.target) || ev.target.closest("#conv-toggle")) return;
+  panel.classList.remove("mobile-open");
+});
+
+async function loadConversations() {
+  const r = await apiCall("/api/conversations");
+  if (!r || !r.ok) return;
+  conversations = await r.json();
+  renderConversations();
+}
+function renderConversations() {
+  const host = document.getElementById("conversations-list");
+  if (!conversations.length) {
+    host.innerHTML = `<div class="px-3 py-2 text-xs text-gray-400">Aucune conversation. Posez une question pour en démarrer une.</div>`;
+    return;
+  }
+  host.innerHTML = conversations.map((c) => `
+    <div class="conv-item group ${c.id === currentConversationId ? "active" : ""}" onclick="selectConversation(${c.id})" title="${escapeHtml(c.title)}">
+      <i class="ti ti-message text-sm opacity-60 shrink-0"></i>
+      <span class="flex-1 truncate">${escapeHtml(c.title)}</span>
+      <button class="del text-gray-400 hover:text-rose-500 p-0.5 rounded" onclick="event.stopPropagation(); deleteConversation(${c.id})" title="Supprimer"><i class="ti ti-trash text-sm"></i></button>
+    </div>`).join("");
+}
+async function createNewConversation(select = true) {
+  const r = await apiCall("/api/conversations", { method: "POST", body: JSON.stringify({ title: "Nouvelle conversation" }) });
+  if (!r || !r.ok) { alert("Impossible de créer la conversation."); return null; }
+  const conv = await r.json();
+  conversations.unshift(conv);
+  if (select) {
+    currentConversationId = conv.id;
+    document.getElementById("conversation-title").textContent = conv.title;
+    resetMessagesArea();
+    renderConversations();
+    document.getElementById("conv-panel").classList.remove("mobile-open");
+    history.replaceState(null, "", `/?conversation=${conv.id}`);
+  }
+  return conv;
+}
+async function selectConversation(id) {
+  currentConversationId = id;
+  const conv = conversations.find((c) => c.id === id);
+  document.getElementById("conversation-title").textContent = conv ? conv.title : "Conversation";
+  renderConversations();
+  document.getElementById("conv-panel").classList.remove("mobile-open");
+  history.replaceState(null, "", `/?conversation=${id}`);
+  const r = await apiCall(`/api/conversations/${id}/messages`);
+  if (!r || !r.ok) return;
+  const messages = await r.json();
+  resetMessagesArea(messages.length > 0);
+  for (const m of messages) addMessage(m.role, m.content, m.id, m.sources, m.metadata_json);
+  const host = document.getElementById("chat-messages");
+  host.scrollTop = host.scrollHeight;
+  messages.filter((m) => m.role === "assistant" && m.id).forEach((m) => fetchAndRenderFeedback(m.id));
+}
+async function deleteConversation(id) {
+  if (!confirm("Supprimer cette conversation ?")) return;
+  const r = await apiCall(`/api/conversations/${id}`, { method: "DELETE" });
+  if (!r || !r.ok) { alert("Suppression impossible."); return; }
+  conversations = conversations.filter((c) => c.id !== id);
+  if (currentConversationId === id) {
+    currentConversationId = null;
+    document.getElementById("conversation-title").textContent = "LIA";
+    resetMessagesArea(false);
+    history.replaceState(null, "", "/");
+  }
+  renderConversations();
+}
+async function refreshConversationTitle() {
+  if (!currentConversationId) return;
+  const r = await apiCall(`/api/conversations/${currentConversationId}/generate-title`, { method: "POST" });
+  if (r && r.ok) {
+    const conv = await r.json();
+    const idx = conversations.findIndex((c) => c.id === conv.id);
+    if (idx >= 0) conversations[idx] = conv; else conversations.unshift(conv);
+    conversations.sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""));
+    document.getElementById("conversation-title").textContent = conv.title;
+    renderConversations();
+  }
+}
+
+function resetMessagesArea(hasMessages = false) {
+  const host = document.getElementById("chat-messages");
+  host.innerHTML = "";
+  if (!hasMessages) host.appendChild(buildWelcome());
+}
+function buildWelcome() {
+  const tpl = document.getElementById("welcome-template");
+  const el = tpl.content.firstElementChild.cloneNode(true);
+  const starters = el.querySelector("#starters");
+  STARTERS.forEach((q) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "text-left px-4 py-3 rounded-2xl glass-card border border-black/5 dark:border-white/5 text-sm text-gray-700 dark:text-gray-200 hover:border-indigo-400/50 transition-all";
+    b.innerHTML = `<i class="ti ti-message-question text-indigo-500 mr-1.5"></i>${escapeHtml(q)}`;
+    b.onclick = () => { document.getElementById("chat-input").value = q; document.getElementById("chat-form").requestSubmit(); };
+    starters.appendChild(b);
+  });
+  return el;
+}
+
+/* ============================================================================
+   Messages
+   ========================================================================== */
+function sourcesSectionHtml(sources, anomalies) {
+  const list = Array.isArray(sources) ? sources : [];
+  const anoms = Array.isArray(anomalies) ? anomalies : [];
+  if (!list.length && !anoms.length) return "";
+  const chips = list.map((s) => {
+    const node = wikiIndex.get(s.path);
+    const type = s.type || (node ? node.type : "");
+    if (s.exists === false) {
+      return `<span class="source-chip missing" title="Le modèle cite une page qui n'existe pas dans le wiki : ${escapeHtml(s.path)}"><i class="ti ti-alert-triangle"></i><span class="title">${escapeHtml(s.path)}</span><span class="kind">page inexistante</span></span>`;
+    }
+    return `<a href="#" class="source-chip" data-wiki="${escapeHtml(s.path)}" title="${escapeHtml(s.path)}"><span class="dot" style="background:${typeColor(type)}"></span><span class="title">${escapeHtml(s.title || s.path)}</span>${type ? `<span class="kind">${escapeHtml(type)}</span>` : ""}</a>`;
+  });
+  const anomChips = anoms.map((a) => `<a href="#" class="source-chip anomaly" data-wiki="${escapeHtml(a.path)}" data-anomaly="${escapeHtml(a.id)}" title="Entrée du registre d'anomalies"><i class="ti ti-alert-circle"></i><span class="title">${escapeHtml(a.id)}</span></a>`);
+  return `<div class="sources-section mt-3 pt-3 border-t border-black/5 dark:border-white/5">
+    <p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-2">Pages du wiki citées</p>
+    <div class="flex flex-wrap gap-1.5">${chips.join("")}${anomChips.join("")}</div></div>`;
+}
+
+function actionsBarHtml(messageId, rawText) {
+  const escAttr = (s) => String(s || "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  const right = messageId ? `
+      <button onclick="openTraceModal(${messageId})" class="px-2 py-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-black/5 dark:hover:bg-white/5 flex items-center gap-1 transition-all" title="Comment cette réponse a été produite"><i class="ti ti-route-2 text-sm"></i></button>
+      <button onclick="submitFeedback(${messageId}, true)" id="feedback-up-${messageId}" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-green-500 hover:bg-black/5 dark:hover:bg-white/5 flex items-center gap-1 transition-all" title="Utile"><i class="ti ti-thumb-up text-sm"></i></button>
+      <button onclick="submitFeedback(${messageId}, false)" id="feedback-down-${messageId}" class="feedback-btn px-2 py-1 rounded text-gray-400 hover:text-red-500 hover:bg-black/5 dark:hover:bg-white/5 flex items-center gap-1 transition-all" title="Inexact ou incomplet"><i class="ti ti-thumb-down text-sm"></i></button>` : "";
+  return `
+    <div class="feedback-section mt-2 flex flex-col gap-1 border-t border-black/5 dark:border-white/5 pt-2 text-xs">
+      <div class="flex items-center justify-between gap-2 text-gray-500 dark:text-gray-400">
+        <div class="flex items-center gap-1">
+          <button type="button" onclick="copyAnswer(this)" data-text="${escAttr(rawText)}" class="px-2 py-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-black/5 dark:hover:bg-white/5 flex items-center gap-1 transition-all" title="Copier la réponse"><i class="ti ti-copy text-sm"></i></button>
+          <button type="button" onclick="regenerateLastAnswer()" class="px-2 py-1 rounded text-gray-400 hover:text-indigo-500 hover:bg-black/5 dark:hover:bg-white/5 flex items-center gap-1 transition-all" title="Reposer la dernière question"><i class="ti ti-refresh text-sm"></i></button>
+        </div>
+        <div class="flex items-center gap-1">${right}</div>
+      </div>
+      ${messageId ? `<div id="feedback-success-msg-${messageId}" class="hidden text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1"><i class="ti ti-check text-xs"></i> <span id="feedback-success-text-${messageId}">Merci pour votre retour !</span></div>` : ""}
+    </div>`;
+}
+
+function renderAssistantContent(el, text) {
+  el.innerHTML = parseMarkdown(text);
+  linkifyElement(el);
+}
+
+function addMessage(role, content, messageId = null, sources = null, metadataJson = null) {
+  const host = document.getElementById("chat-messages");
+  const welcome = host.querySelector("#welcome-state");
+  if (welcome) welcome.remove();
+  const div = document.createElement("div");
+  div.className = `flex w-full ${role === "user" ? "justify-end" : "justify-start"}`;
+  if (role === "assistant") {
+    let parsedSources = null;
+    try { parsedSources = typeof sources === "string" ? JSON.parse(sources) : sources; } catch (_) {}
+    const anomalies = metadataJson && metadataJson.anomalies ? metadataJson.anomalies : [];
+    if (messageId != null && metadataJson && metadataJson.trace) traces.set(messageId, metadataJson.trace);
+    div.innerHTML = `<div class="w-full max-w-[92%] lg:max-w-[78%] assistant-message-bubble rounded-2xl px-5 py-4 shadow-sm">
+        <div class="markdown-content"></div>
+        ${sourcesSectionHtml(parsedSources, anomalies)}
+        ${actionsBarHtml(messageId, content)}
+      </div>`;
+    renderAssistantContent(div.querySelector(".markdown-content"), content);
+  } else {
+    div.innerHTML = `<div class="max-w-[85%] lg:max-w-[65%] bg-gradient-to-br from-indigo-500 to-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-md shadow-indigo-500/10">
+      <p class="whitespace-pre-wrap text-sm leading-relaxed">${escapeHtml(content)}</p></div>`;
+  }
+  host.appendChild(div);
+  return div;
+}
+
+/* ============================================================================
+   Le tour de chat
+   ========================================================================== */
+function setChatBusy(busy) {
+  document.getElementById("chat-send-btn").classList.toggle("hidden", busy);
+  const stop = document.getElementById("chat-stop-btn");
+  stop.classList.toggle("hidden", !busy);
+  stop.classList.toggle("flex", busy);
+}
+function stopChat() { if (currentAbort) { currentAbort.abort(); currentAbort = null; } setChatBusy(false); }
+
+async function submitChat(message) {
+  const host = document.getElementById("chat-messages");
+  const wrap = document.createElement("div");
+  wrap.className = "flex w-full justify-start";
+  wrap.innerHTML = `
+    <div class="w-full max-w-[92%] lg:max-w-[78%] assistant-message-bubble rounded-2xl px-5 py-4 shadow-sm">
+      <div class="thinking-bubble hidden"><div class="thinking-head"><i class="ti ti-bulb"></i> Réflexion…</div><div class="thinking-body"></div></div>
+      <div class="markdown-content streaming"></div>
+    </div>`;
+  host.appendChild(wrap);
+  const bubble = wrap.querySelector(".assistant-message-bubble");
+  const contentEl = wrap.querySelector(".markdown-content");
+  const thinkingEl = wrap.querySelector(".thinking-bubble");
+  const thinkingBody = wrap.querySelector(".thinking-body");
+  const renderStage = (label) => {
+    contentEl.innerHTML = `<div class="flex items-center gap-3 py-1"><div class="lia-avatar lia-loading-icon"><i class="ti ti-robot text-xs"></i></div><span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase animate-pulse">${escapeHtml(label)}</span></div>`;
+  };
+  renderStage("Lecture du wiki");
+  host.scrollTop = host.scrollHeight;
+
+  lastUserMessage = message;
+  currentAbort = new AbortController();
+  setChatBusy(true);
+
+  const renderRetry = (label) => {
+    contentEl.innerHTML = "";
+    const box = document.createElement("div");
+    box.className = "flex flex-col items-start gap-2";
+    box.innerHTML = `<p class="text-sm text-gray-600 dark:text-gray-300">${escapeHtml(label)}</p>`;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 transition-all";
+    btn.innerHTML = '<i class="ti ti-refresh"></i> Réessayer';
+    btn.onclick = () => { wrap.remove(); submitChat(message); };
+    box.appendChild(btn);
+    contentEl.appendChild(box);
+  };
+
+  let response;
+  try {
+    response = await fetch("/api/chat/stream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ message, conversation_id: currentConversationId }),
+      signal: currentAbort.signal,
+    });
+  } catch (err) {
+    setChatBusy(false); currentAbort = null;
+    if (err && err.name === "AbortError") { contentEl.textContent = "Génération arrêtée."; return; }
+    renderRetry("La connexion au serveur a échoué."); return;
+  }
+  if (response.status === 401) { window.location.href = "/login"; return; }
+  if (!response.ok || !response.body) {
+    setChatBusy(false); currentAbort = null;
+    let detail = "";
+    try { detail = (await response.json()).detail || ""; } catch (_) {}
+    renderRetry(detail || "Le serveur n'a pas pu générer de réponse."); return;
+  }
+
+  let full = "", thinking = "", streamError = "", sources = [], anomalies = [], trace = null, messageId = null;
+  let thinkingStarted = false, thinkingFaded = false, done = false, aborted = false;
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  try {
+    while (true) {
+      const { done: end, value } = await reader.read();
+      if (end) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+      for (const line of lines) {
+        if (!line.startsWith("data: ")) continue;
+        let data;
+        try { data = JSON.parse(line.slice(6)); } catch (_) { continue; }
+        if (data.stage) {
+          if (!full && !thinkingStarted) renderStage(data.stage.label);
+        } else if (data.thinking) {
+          if (!thinkingStarted) { thinkingStarted = true; contentEl.innerHTML = ""; thinkingEl.classList.remove("hidden"); }
+          thinking += data.thinking;
+          thinkingBody.textContent = thinking;
+          thinkingBody.scrollTop = thinkingBody.scrollHeight;
+        } else if (data.message && data.message.content) {
+          if (thinkingStarted && !thinkingFaded) { thinkingFaded = true; thinkingEl.classList.add("fade-out"); setTimeout(() => thinkingEl.remove(), 450); }
+          full += data.message.content;
+          contentEl.innerHTML = parseMarkdown(full);
+        } else if (data.sources) {
+          sources = data.sources; anomalies = data.anomalies || [];
+        } else if (data.error) {
+          streamError = String(data.error); done = true; break;
+        } else if (data.done) {
+          done = true; messageId = data.message_id || null; trace = data.trace || null; break;
+        }
+      }
+      if (done) { try { await reader.cancel(); } catch (_) {} break; }
+      host.scrollTop = host.scrollHeight;
+    }
+  } catch (err) {
+    aborted = true;
+    if (!(err && err.name === "AbortError")) streamError = String(err && err.message ? err.message : err);
+  }
+  setChatBusy(false); currentAbort = null;
+
+  if (streamError) {
+    renderRetry(streamError);
+  } else if (!full) {
+    contentEl.innerHTML = `<p class="text-sm text-gray-500 italic">${aborted ? "Génération arrêtée avant la première ligne." : "Aucune réponse générée."}</p>`;
+  } else {
+    renderAssistantContent(contentEl, full);
+    contentEl.classList.remove("streaming");
+    bubble.insertAdjacentHTML("beforeend", sourcesSectionHtml(sources, anomalies));
+    bubble.insertAdjacentHTML("beforeend", actionsBarHtml(messageId, full));
+    if (messageId && trace) traces.set(messageId, trace);
+  }
+  host.scrollTop = host.scrollHeight;
+  if (full && !streamError) await refreshConversationTitle();
+}
+
+document.getElementById("chat-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (currentAbort) return;
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (!message) return;
+  if (!currentConversationId) {
+    const conv = await createNewConversation(true);
+    if (!conv) return;
+  }
+  addMessage("user", message);
+  input.value = ""; input.style.height = "auto";
+  await submitChat(message);
+});
+const chatInput = document.getElementById("chat-input");
+chatInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); document.getElementById("chat-form").requestSubmit(); }
+});
+chatInput.addEventListener("input", () => { chatInput.style.height = "auto"; chatInput.style.height = Math.min(chatInput.scrollHeight, 180) + "px"; });
+
+async function copyAnswer(btn) {
+  const raw = btn?.dataset?.text || "";
+  if (!raw) return;
+  try { await navigator.clipboard.writeText(raw); } catch (_) {
+    const ta = document.createElement("textarea"); ta.value = raw; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); } catch (_) {} ta.remove();
+  }
+  const icon = btn.querySelector("i");
+  if (icon) { icon.className = "ti ti-check text-sm"; setTimeout(() => { icon.className = "ti ti-copy text-sm"; }, 1600); }
+}
+async function regenerateLastAnswer() {
+  if (!lastUserMessage || currentAbort || !currentConversationId) return;
+  addMessage("user", lastUserMessage);
+  await submitChat(lastUserMessage);
+}
+
+/* ============================================================================
+   Retours 👍/👎
+   ========================================================================== */
+async function fetchAndRenderFeedback(messageId) {
+  const r = await apiCall(`/api/conversations/messages/${messageId}/feedback`);
+  if (r && r.ok) { const fb = await r.json(); if (fb) updateFeedbackUI(messageId, fb.is_positive); }
+}
+async function submitFeedback(messageId, isPositive) {
+  if (!messageId) return;
+  if (isPositive) {
+    const r = await apiCall(`/api/conversations/messages/${messageId}/feedback`, { method: "POST", body: JSON.stringify({ is_positive: true }) });
+    if (r && r.ok) updateFeedbackUI(messageId, true);
+    return;
+  }
+  document.getElementById("feedback-negative-msg-id").value = messageId;
+  document.getElementById("feedback-negative-comment").value = "";
+  document.getElementById("feedback-negative-category").value = "";
+  document.getElementById("feedback-negative-submit-btn").disabled = true;
+  document.getElementById("feedback-negative-modal").classList.remove("hidden");
+  setTimeout(() => document.getElementById("feedback-negative-comment").focus(), 80);
+}
+function validateNegativeFeedbackBtn() {
+  const comment = document.getElementById("feedback-negative-comment").value.trim();
+  const category = document.getElementById("feedback-negative-category").value;
+  document.getElementById("feedback-negative-submit-btn").disabled = !comment || !category;
+}
+function closeFeedbackNegativeModal() { document.getElementById("feedback-negative-modal").classList.add("hidden"); }
+async function submitNegativeFeedback() {
+  const messageId = document.getElementById("feedback-negative-msg-id").value;
+  const comment = document.getElementById("feedback-negative-comment").value.trim();
+  const category = document.getElementById("feedback-negative-category").value;
+  if (!messageId || !comment || !category) return;
+  const r = await apiCall(`/api/conversations/messages/${messageId}/feedback`, { method: "POST", body: JSON.stringify({ is_positive: false, comment, category }) });
+  if (r && r.ok) { closeFeedbackNegativeModal(); updateFeedbackUI(messageId, false); }
+  else { const err = r ? await r.json().catch(() => ({})) : {}; alert(err.detail || "Erreur lors de l'envoi du retour."); }
+}
+function updateFeedbackUI(messageId, isPositive) {
+  const up = document.getElementById(`feedback-up-${messageId}`), down = document.getElementById(`feedback-down-${messageId}`);
+  const msg = document.getElementById(`feedback-success-msg-${messageId}`), txt = document.getElementById(`feedback-success-text-${messageId}`);
+  if (!up || !down) return;
+  up.classList.remove("text-green-500", "pointer-events-none", "text-gray-300");
+  down.classList.remove("text-red-500", "pointer-events-none", "text-gray-300");
+  if (isPositive) { up.classList.add("text-green-500"); down.classList.add("text-gray-300", "pointer-events-none"); if (txt) txt.textContent = "Merci pour votre retour !"; }
+  else { down.classList.add("text-red-500"); up.classList.add("text-gray-300", "pointer-events-none"); if (txt) txt.textContent = "Merci, votre correction sera reportée dans le wiki."; }
+  if (msg) msg.classList.remove("hidden");
+}
+
+/* ============================================================================
+   Trace
+   ========================================================================== */
+const fmt = (n) => (n == null ? "—" : Number(n).toLocaleString("fr-FR"));
+function openTraceModal(messageId) {
+  const t = traces.get(messageId);
+  const body = document.getElementById("trace-body");
+  if (!t) { body.innerHTML = `<p class="text-gray-500">Aucune trace enregistrée pour ce message.</p>`; }
+  else {
+    const cached = t.cached_tokens != null && t.prompt_tokens ? Math.round((t.cached_tokens / t.prompt_tokens) * 100) : null;
+    const row = (k, v) => `<div class="flex justify-between gap-4 py-1 border-b border-black/5 dark:border-white/5"><span class="text-gray-500">${k}</span><span class="font-semibold text-right">${v}</span></div>`;
+    const pages = (t.cited_pages || []).map((p) => `<a href="#" class="wiki-cite" data-wiki="${escapeHtml(p)}">${escapeHtml((wikiIndex.get(p) || {}).title || p)}</a>`).join(" ") || "<span class='text-gray-400'>aucune</span>";
+    const unknown = (t.unknown_citations || []).map((p) => `<span class="wiki-cite missing">${escapeHtml(p)}</span>`).join(" ");
+    body.innerHTML = `
+      <p class="text-xs text-gray-500">Tout le wiki (${fmt(t.wiki_pages)} pages) était dans le contexte ; aucune recherche, aucun extrait. Le modèle a répondu et cité ses pages ; l'application a vérifié que chaque page citée existe.</p>
+      <div class="text-xs">
+        ${row("Modèle", escapeHtml(t.model || "—"))}
+        ${row("Tokens en entrée", fmt(t.prompt_tokens) + (cached != null ? ` <span class="text-emerald-600">(${cached} % en cache)</span>` : ""))}
+        ${row("Tokens en sortie", fmt(t.completion_tokens))}
+        ${row("Premier mot", t.first_token_ms != null ? (t.first_token_ms / 1000).toFixed(1) + " s" : "—")}
+        ${row("Durée totale", t.duration_ms != null ? (t.duration_ms / 1000).toFixed(1) + " s" : "—")}
+        ${row("Messages d'historique", fmt(t.history_messages))}
+        ${row("Version du wiki", `<span class="font-mono text-[10px]">${escapeHtml(String(t.wiki_hash || "").slice(-12))}</span>`)}
+      </div>
+      <div><p class="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Pages citées</p><div class="flex flex-wrap gap-1">${pages}</div></div>
+      ${unknown ? `<div><p class="text-[10px] font-bold uppercase tracking-wider text-rose-500 mb-1">Citations vers des pages inexistantes</p><div class="flex flex-wrap gap-1">${unknown}</div></div>` : ""}
+      ${(t.anomalies || []).length ? `<div><p class="text-[10px] font-bold uppercase tracking-wider text-amber-600 mb-1">Anomalies signalées</p><div class="flex flex-wrap gap-1">${t.anomalies.map((a) => `<a href="#" class="anomaly-cite" data-anomaly="${a}" data-wiki="${ANOMALY_PAGES[a.slice(0, 3)]}">${a}</a>`).join(" ")}</div></div>` : ""}`;
+  }
+  document.getElementById("trace-modal").classList.remove("hidden");
+}
+function closeTraceModal() { document.getElementById("trace-modal").classList.add("hidden"); }
+
+/* ============================================================================
+   Démarrage
+   ========================================================================== */
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if (!document.getElementById("pdf-modal").classList.contains("hidden")) { closePdf(); return; }
+  if (!document.getElementById("trace-modal").classList.contains("hidden")) { closeTraceModal(); return; }
+  if (!document.getElementById("feedback-negative-modal").classList.contains("hidden")) { closeFeedbackNegativeModal(); return; }
+  if (document.getElementById("reader").classList.contains("open")) closeReader();
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // Le bloc d'accueil est cloné à chaque nouvelle conversation : on le garde en modèle.
+  const welcome = document.getElementById("welcome-state");
+  const tpl = document.createElement("template");
+  tpl.id = "welcome-template";
+  tpl.content.appendChild(welcome.cloneNode(true));
+  document.body.appendChild(tpl);
+  welcome.replaceWith(buildWelcome());
+
+  await Promise.all([loadWikiIndex(), loadConversations()]);
+  const wanted = parseInt(new URLSearchParams(location.search).get("conversation") || "", 10);
+  if (wanted && conversations.some((c) => c.id === wanted)) await selectConversation(wanted);
+  const page = new URLSearchParams(location.search).get("page");
+  if (page) openWikiPage(page.startsWith("/") ? page : "/" + page);
+  document.getElementById("chat-input").focus();
+});
+</script>
+{% endblock %}

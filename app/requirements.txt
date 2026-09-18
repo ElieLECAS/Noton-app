@@ -1,49 +1,20 @@
 # API & app
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
-celery[redis]==5.4.0
-redis>=5.0,<6
 sqlmodel==0.0.14
 psycopg2-binary==2.9.9
 alembic==1.12.1
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
-python-multipart==0.0.6
 httpx>=0.27,<0.28
 jinja2==3.1.2
 python-dotenv==1.0.0
 pydantic-settings>=2.3.0,<3.0.0
 pydantic>=2.11.5,<3.0.0
 
-# Base de données vectorielle
-pgvector==0.4.2
-lancedb>=0.4.0
-pyarrow>=12.0.0
-
-# Ingestion : Mistral OCR + chunking LlamaIndex + embeddings API
-mistralai>=1.0.0
-pdf2image>=1.16.3
-pillow>=10.0.0
-pymupdf4llm>=0.0.17  # Extraction markdown natif PDF pour LlamaIndex (CPU-only, rapide)
-llama-index-core==0.14.14
-
-# Reranker & MMR (CPU-only, pas de CUDA)
-sentence-transformers>=3.0,<4.0
-torch==2.3.1
-numpy>=1.26
-colpali-engine
-transformers>=4.45.0
-accelerate
-einops
-peft
-
-# Observabilité (optionnel)
-langsmith>=0.1.0
-
-# Query understanding (slot filling LangGraph)
-langgraph>=0.2.0
-langchain-core>=0.3.0
+# Le wiki : frontmatter YAML des pages
+PyYAML>=6.0,<7
 
 # Tests (pytest dans Docker Compose)
 pytest>=8.0,<9

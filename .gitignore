@@ -56,3 +56,6 @@ Thumbs.db
 # Alembic
 alembic/versions/*.pyc
 
+
+# Rapports du golden (app/scripts/eval_golden_generation.py)
+logs/eval/
