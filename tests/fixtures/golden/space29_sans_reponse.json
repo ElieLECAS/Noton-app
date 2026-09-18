@@ -1,0 +1,358 @@
+{
+ "version": 1,
+ "kind": "generation",
+ "space_id": 29,
+ "created": "2026-09-17",
+ "description": "Jeu SANS RÉPONSE : 12 questions dont la réponse n'existe pas dans l'espace 29. Absences vérifiées contre les 636 chunks indexés. Trois catégories : absence déclarée par le markdown v2, absence non déclarée, et piège de voisinage (la valeur existe pour un autre produit ou une référence voisine).",
+ "documents": {
+  "441": "Dossier technique gamme Perform76 03 09 2026 CCV03",
+  "424": "2024-04_CATALOGUE-GENERAL_WEB",
+  "427": "Innoslide",
+  "433": "2024-01_DEPLIANT-INNOSLIDE_A4-WEB-Client"
+ },
+ "regles_de_score": {
+  "valeur": "juste = toutes les valeurs de `valeurs` (mode tous) ou au moins une (mode un) figurent dans la réponse ET aucune valeur de `interdits` ; ambigu = attendu présent ET un interdit présent ; faux = attendu absent.",
+  "liste": "juste = au moins `min` éléments de `elements` présents (insensible casse/accents) ; faux sinon.",
+  "texte": "juste = au moins une regex de `regex_any` matche ; faux sinon.",
+  "abstention": "abstention_ok = une regex de `regex_any` matche ET aucun `interdits` ; abstention_ko sinon (valeur inventée ou réponse affirmative).",
+  "page": "page_citee = une des pages de `preuve` figure dans les sources renvoyées ; page_vue = elle figure dans le pack initial ou dans les pages lues par les outils."
+ },
+ "entries": [
+  {
+   "id": "g29_na01",
+   "tags": [
+    "perform76",
+    "thermique",
+    "declare"
+   ],
+   "difficulte": "complexe",
+   "question": "Quel est le Uw de la gamme Perform 76 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": [
+     "1.2",
+     "1.3",
+     "1.5",
+     "1.4"
+    ]
+   },
+   "preuve": [],
+   "verite": "Absence DÉCLARÉE p.4 du md v2. Pièges : Uw 1.2/1.3/1.4/1.5 présents pour d'autres gammes."
+  },
+  {
+   "id": "g29_na02",
+   "tags": [
+    "perform76",
+    "thermique",
+    "piege"
+   ],
+   "difficulte": "complexe",
+   "question": "Quel est le facteur solaire Sw de la gamme Perform 76 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": [
+     "0.46",
+     "0.48",
+     "0.51"
+    ]
+   },
+   "preuve": [],
+   "verite": "Sw existe dans l'espace (0,46 alu 68/77 ; 0,48 fenêtres ; 0,51 coulissants) mais JAMAIS pour Perform 76."
+  },
+  {
+   "id": "g29_na03",
+   "tags": [
+    "perform76",
+    "acoustique",
+    "declare"
+   ],
+   "difficulte": "complexe",
+   "question": "Quel est l'affaiblissement acoustique Rw de la gamme Perform 76 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": []
+   },
+   "preuve": [],
+   "verite": "« Rw » absent du corpus ; le md v2 déclare explicitement l'absence d'affaiblissement acoustique."
+  },
+  {
+   "id": "g29_na04",
+   "tags": [
+    "parclose",
+    "analogie",
+    "piege"
+   ],
+   "difficulte": "complexe",
+   "question": "Quelle est l'épaisseur de vitrage pour la parclose 2637 sur Perform 76 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": [
+     "30",
+     "31"
+    ]
+   },
+   "preuve": [],
+   "verite": "2637 n'existe pas. Voisins dans le tableau : 2636 → 30 mm, 2638 → 31 mm."
+  },
+  {
+   "id": "g29_na05",
+   "tags": [
+    "code",
+    "analogie",
+    "piege"
+   ],
+   "difficulte": "complexe",
+   "question": "Quelle est la cote du meneau dormant 76374 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": []
+   },
+   "preuve": [],
+   "verite": "76374 n'existe pas. 76373 existe (meneau dormant 124 mm)."
+  },
+  {
+   "id": "g29_na06",
+   "tags": [
+    "code",
+    "analogie",
+    "piege"
+   ],
+   "difficulte": "complexe",
+   "question": "Quel élargisseur 76704 est disponible sur Perform 76 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": []
+   },
+   "preuve": [],
+   "verite": "Les élargisseurs vont de 76700 à 76703. 76704 n'existe pas."
+  },
+  {
+   "id": "g29_na07",
+   "tags": [
+    "perform76",
+    "certification"
+   ],
+   "difficulte": "complexe",
+   "question": "La gamme Perform 76 est-elle certifiée Acotherm ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": []
+   },
+   "preuve": [],
+   "verite": "« Acotherm » n'apparaît nulle part dans l'espace. Absence NON déclarée."
+  },
+  {
+   "id": "g29_na08",
+   "tags": [
+    "perform76",
+    "effraction"
+   ],
+   "difficulte": "complexe",
+   "question": "Quelle est la classe de résistance à l'effraction CR2 de la gamme Perform 76 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": []
+   },
+   "preuve": [],
+   "verite": "« CR2 » absent du corpus. L'anti-effraction est décrit qualitativement, sans classe normée."
+  },
+  {
+   "id": "g29_na09",
+   "tags": [
+    "perform76",
+    "montage"
+   ],
+   "difficulte": "complexe",
+   "question": "Quel est le couple de serrage des vis de fixation des pattes de pose Perform 76 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": []
+   },
+   "preuve": [],
+   "verite": "Aucun couple de serrage, aucun N.m dans le corpus."
+  },
+  {
+   "id": "g29_na10",
+   "tags": [
+    "perform76",
+    "feu"
+   ],
+   "difficulte": "complexe",
+   "question": "Quel est le classement de résistance au feu de la gamme Perform 76 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": []
+   },
+   "preuve": [],
+   "verite": "« résistance au feu », « coupe-feu », « pare-flamme » absents du corpus."
+  },
+  {
+   "id": "g29_na11",
+   "tags": [
+    "perform76",
+    "poids",
+    "piege"
+   ],
+   "difficulte": "complexe",
+   "question": "Quel est le poids d'un vantail Perform 76 de 1,20 x 1,40 m ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": [
+     "130"
+    ]
+   },
+   "preuve": [],
+   "verite": "Piège : « pivot pouvant supporter le poids d'une fenêtre jusqu'à 130 kg » est une CAPACITÉ de quincaillerie, pas un poids de vantail."
+  },
+  {
+   "id": "g29_na12",
+   "tags": [
+    "gamme_absente",
+    "piege"
+   ],
+   "difficulte": "complexe",
+   "question": "Quelles sont les dimensions maximales d'un ouvrant de la gamme Perform 70 ?",
+   "variantes": [],
+   "attendu": {
+    "type": "abstention",
+    "regex_any": [
+     "n['’]existe",
+     "ne (figure|mentionne|précise|trouve|donne|comporte|contient|indique|fournit)",
+     "aucune? (mention|information|valeur|donnée|indication|référence|précision)",
+     "(pas|non) (documenté|précisé|indiqué|mentionné|renseigné|disponible)",
+     "ne (sont|est) pas (précisé|indiqué|mentionné|documenté|renseigné)",
+     "documents? (fournis? )?ne ",
+     "je n['’]ai (pas |rien )?trouvé",
+     "(pas|aucun) .{0,30}dans (les|ce) documents?"
+    ],
+    "interdits": [
+     "2.7",
+     "2.25"
+    ]
+   },
+   "preuve": [],
+   "verite": "Perform 70 n'est pas dans cet espace. Piège : des dimensions maxi existent pour d'autres gammes (H 2,7 x L 2,25 m)."
+  }
+ ]
+}
