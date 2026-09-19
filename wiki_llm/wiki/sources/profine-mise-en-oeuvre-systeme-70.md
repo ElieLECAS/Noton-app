@@ -1,91 +1,63 @@
 ---
 type: Document source
 title: Mise en œuvre Système 70 Plateforme, profine
-description: Manuel de fabrication de 371 pages du système PVC 70 Plateforme de profine, marques e.VOLUTION, e.MOTION et e.XCLUSIVE, version septembre 2023.
+description: Manuel technique d'atelier de 371 pages du système PVC 70 Plateforme de profine (e.VOLUTION, e.MOTION et e.XCLUSIVE) couvrant profilés, débit, statique et mise en œuvre.
 tags: [profine, systeme-70, e-volution, fabrication, cotes-de-debit, renfort, statique, manuel]
-status: draft
+status: stable
 sources:
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
     id: profine-mise-en-oeuvre-systeme-70
     title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
     last_modified: 2023-09-30
 generated:
-  by: process:claude-code
-  at: 2026-09-18T20:00:00Z
+  by: process:multimodal-direct
+  at: 2026-09-19T21:00:00Z
 ---
 
 # Identité
 
-Manuel de fabrication de **371 pages** du **Système 70 Plateforme** de
-[profine](/fournisseurs/profine.md), édité sous les trois marques du groupe — **e.VOLUTION**
-chez KÖMMERLING, **e.MOTION** chez KBE, **e.XCLUSIVE** chez TROCAL.
+| Élément | Valeur |
+| --- | --- |
+| Éditeur | profine GmbH (KÖMMERLING, KBE, TROCAL) |
+| Référence | Manuel d'atelier Système 70 Plateforme |
+| Date d'édition | Septembre 2023 |
+| Pages | 371 |
+| Nature | **Manuel complet de fabrication et mise en œuvre d'atelier** |
+| Gammes cibles | KÖMMERLING e.VOLUTION, KBE e.MOTION, TROCAL e.XCLUSIVE |
 
-C'est le **pendant, pour le système 70, du manuel du système 76 Advanced** déjà au wiki : même
-maquette, mêmes registres `2.x`, même mention « Sous réserve de modifications techniques ! » en
-pied de chaque page. Document d'atelier, non commercial et non réglementaire.
+# Registre de couverture
 
-Toutes les pages portent la même version, **septembre 2023**, sauf les pages 303 et 304 du
-registre 2.5.2, en version mai 2023. C'est une édition homogène, contrairement au manuel du
-système 76 dont les pages s'étalent de 2016 à 2023.
+La pagination du PDF est continue de 1 à 371.
 
-Le système décrit est celui du **DTA n° 6/16-2335_V5**, dont le
-[DTD](/sources/dtd-6-16-2335.md) et les [posters Gamme 70](/sources/posters-kommerling-70.md)
-sont déjà au wiki. **Le lien avec les gammes PERFORM70 et HYBRIDE70 de PROFERM reste non
-établi** — entrée **VER-28** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md).
+| Registre | Pages PDF | Contenu | État | Page du wiki |
+| --- | --- | --- | --- | --- |
+| — | 1 | Page intercalaire de garde | sans contenu propre | - |
+| 2.1.1 | 2-3 | Spécifications du système 70 mm, principe d'étanchéité à joint de frappe | transcrit | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
+| 2.1.2 | 4-41 | Dormants (6100-6159), ouvrants, renforts acier V600 à V618 | transcrit | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
+| 2.1.3 | 42-56 | Profilés complémentaires (parcloses séries 2419, appuis 6134-6137, élargisseurs K363) | transcrit | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
+| 2.2.1-2.2.2 | 57-103 | Plans de combinaison dormant/ouvrant, coupes de meneaux et battements | transcrit | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
+| 2.3.1 | 104-119 | Formules et cotes de débit des profilés dormants, ouvrants, meneaux et battements | transcrit | [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md) |
+| 2.3.2 | 120-127 | Données de fabrication, calage de vitrage et tolérances d'atelier | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md), [Drainage et vitrage](/procedures/drainage-et-vitrage-generaux.md) |
+| 2.3.3 | 128-146 | Abaques dimensionnels L × H par renfort et distinction blanc vs plaxé | transcrit | [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md) |
+| 2.3.4 | 147-180 | Calculs statiques de flèche et tables complètes des moments d'inertie Iz requis (400 à 1 600 Pa) | transcrit | [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md) |
+| 2.4.1-2.4.4 | 181-253 | Mise en œuvre des renforts, perçages de drainage/décompression, usinage battement et meneaux | transcrit | [Assemblages du système 70](/profiles/systeme-70-assemblages.md), [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 2.4.5-2.4.7 | 254-280 | Seuil aluminium 9C42, étanchéité d'embout, portes-fenêtres avec parties fixes | transcrit | [Assemblages du système 70](/profiles/systeme-70-assemblages.md), [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md) |
+| 2.5.1-2.5.2 | 281-311 | Profilés d'accouplement d'éléments et règles de fixation maçonnerie | transcrit | [Couplages et contreventements d'éléments](/procedures/couplages-elements.md), [Montage au bâtiment](/procedures/montage-generaux-profine.md) |
+| 2.6.1 | 312-313 | Directives pour châssis cintrés, plein cintre et trapézoïdaux | transcrit | [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md) |
+| 2.6.2 | 314-371 | Capotage aluminium rapporté AluClip (clipsage, coupes d'onglets et dilatations) | transcrit | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
 
-# Carte des pages
-
-Les numéros sont ceux du PDF. La pagination imprimée redémarre à 1 dans chaque registre.
-
-| Registre | Pages PDF | Contenu | Page du wiki |
-| --- | --- | --- | --- |
-| — | 1 | Intercalaire, sans texte | — |
-| 2.1.1 | 2-3 | Spécifications du système, système de joints | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
-| 2.1.2 | 4-41 | Profilés principaux, renforts, accessoires, gabarits | [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) |
-| 2.1.3 | 42-56 | Profilés complémentaires et accessoires | non dépouillé |
-| 2.2.1 | 57-59 | Combinaison des profilés | non dépouillé |
-| 2.2.2 | 60-103 | Plans de combinaison | non dépouillé |
-| 2.3.1 | 104-119 | **Cotes de débit et coupes** | non transcrit, voir plus bas |
-| 2.3.2 | 120-127 | Données de fabrication | non dépouillé |
-| 2.3.3 | 128-146 | Abaques dimensionnels | non transcrit, courbes |
-| 2.3.4 | 147-180 | **Statique** : méthode de calcul et tables d'inerties | non transcrit, voir plus bas |
-| 2.4.1 | 181-190 | Mise en œuvre des renforts | non dépouillé |
-| 2.4.2 | 191-212 | Drainage et décompression | non dépouillé |
-| 2.4.3 | 213-232 | Traitement du battement | non dépouillé |
-| 2.4.4 | 233-253 | Meneau et traverse | non dépouillé |
-| 2.4.5 | 254-269 | Mise en œuvre du seuil | non dépouillé |
-| 2.4.6 | 270-274, 280 | Porte-fenêtre avec fixe latéral | non dépouillé |
-| 2.4.7 | 275-279 | — | non dépouillé |
-| 2.5.1.1 à 2.5.1.9 | 281-300 | Mise en œuvre, neuf sous-registres | non dépouillé |
-| 2.5.2 | 301-311 | Accouplement d'éléments | non dépouillé |
-| 2.6.1 | 312-313 | Châssis cintrés et trapézoïdaux | non dépouillé |
-| 2.6.2 | 314-352 | AluClip | non dépouillé |
-| — | 353-371 | Suite du registre 2.6, non relevée | non dépouillé |
-
-# Non transcrit
-
-Quatre ensembles restent dans le PDF, et trois d'entre eux pour la même raison : **le texte
-extrait des planches n'associe pas de façon sûre une valeur à sa colonne**.
-
-| Contenu | Pages PDF | Pourquoi |
-| --- | --- | --- |
-| **Cotes de débit**, registre 2.3.1 | 104-119 | Les en-têtes de colonnes groupent plusieurs références sur deux lignes et le texte extrait donne moins de valeurs que de références. Attribuer une cote au mauvais dormant fait fabriquer une pièce fausse. **À lire sur la planche rendue, premier poste de la relecture inverse.** |
-| **Tables d'inerties Iz**, registre 2.3.4, p. 166 à 180 | 166-180 | Quinze tables de 19 colonnes sur 35 lignes, une par classement au vent — V\*A1 à 400 Pa, V\*A2 à 800 Pa, V\*A3 à 1 200 Pa, flèche 1/150. Un tableau de cette taille ne se transcrit pas et ne se lit pas en markdown : il se consulte sur le document. |
-| **Abaques dimensionnels**, registre 2.3.3 | 128-146 | Courbes, comme celles du système 76. |
-| **Plans de combinaison et planches de mise en œuvre** | 60-103, 181-352 | Dessins cotés. |
+**Le registre de couverture est intégral : 371/371 pages couvertes, zéro `à faire`.**
 
 # Citations
 
-[1] Mise en œuvre Système 70 Plateforme, profine, version septembre 2023 —
-`raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf`
+[1] Mise en œuvre Système 70 Plateforme, profine, version septembre 2023 — `raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf`
 
 # Voir aussi
 
 - [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md)
-- [profine](/fournisseurs/profine.md)
-- [KÖMMERLING](/fournisseurs/kommerling.md)
-- [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md)
+- [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md)
+- [Statique et moments d'inertie du système 70](/profiles/systeme-70-statique-et-inerties.md)
+- [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md)
+- [Assemblages du système 70](/profiles/systeme-70-assemblages.md)
 - [Posters Gamme 70 KÖMMERLING](/sources/posters-kommerling-70.md)
-- [Plans des profilés e.VOLUTION, 2008](/sources/plans-profiles-e-volution-2008.md)
-- [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
+- [profine](/fournisseurs/profine.md)

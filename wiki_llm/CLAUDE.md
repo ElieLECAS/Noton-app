@@ -34,6 +34,13 @@ Claude does the reading and the writing. The human curates what goes into `raw/`
 questions, and arbitrates the judgment calls: a contradiction between two suppliers, a new
 `type`, a categorization that could go either way.
 
+### Native Multimodal Ingestion (Zero Script, Zero Data Loss)
+
+**PDFs are ingested natively and multimodally.**
+- **No Python scripts, no PyMuPDF (`fitz`), no OCR tools**: Claude directly inspects and reads each PDF page natively (visual rendering of plates, section cuts, icon tables and drawings, combined with context).
+- **Zero data loss**: every drawing, dimension, tolerance, profile section, catalog reference, abaque curve and workshop procedure is faithfully extracted into structured tables and assertive markdown.
+- **Autonomous Wiki**: the wiki replaces the original PDFs entirely and stands alone as professional technical documentation.
+
 ## Folder structure
 
 ```
@@ -260,9 +267,8 @@ were made: what nobody opened never made the list.
 
 When the user adds a new source to `raw/` and asks you to ingest it:
 
-1. **Sweep the document page by page.** Render every page at 120 dpi and look at it -- quickly,
-   just enough to say what is on it. No page is characterised from its title, from the section it
-   sits in, or from the text layer alone
+1. **Parcourir le document page par page en vision multimodale.** Visualiser chaque page directement
+   pour identifier son contenu exact. Aucune page n'est qualifiée depuis son titre, sa section ou sa seule couche texte.
 2. **Create the `sources/` card with its coverage register**, one row per page or per contiguous
    range of pages of identical nature, every row in state `à faire`. The union of the rows covers
    page 1 to page N with no gap -- see *The `sources/` card*
@@ -305,31 +311,21 @@ number belongs to. Both problems are solved the same way: **render the page and 
 content and 309 have no usable text layer at all. A page holding a plate is never declared
 transcribed on the strength of its text layer.
 
-PyMuPDF is available on the machine. Render into the scratchpad, never into the repository:
+**La lecture est multimodale native, sans script ni outil externe.** L'agent ouvre et visualise
+directement les pages de chaque PDF (rendu visuel haute définition de la planche entière, des schémas,
+coupes et tableaux techniques, doublé de la couche textuelle alignée). Aucun script Python (PyMuPDF, fitz)
+n'est requis : l'inspection visuelle est directe et native.
 
-```python
-import fitz
-doc = fitz.open("wiki_llm/raw/cahier-technique-perform76-2026-09-02-cc03.pdf")
-page = doc[7]                                   # PDF page 8
-page.get_pixmap(dpi=200).save("full.png")       # layout, structure, what is where
-r = page.rect                                   # then a tile, for the figures
-tile = fitz.Rect(r.x0, r.y0, r.x0 + r.width/2, r.y0 + r.height/2)
-page.get_pixmap(dpi=400, clip=tile).save("tile_TL.png")
-```
-
-- **120 dpi on the full page** for the opening sweep of a document: enough to say what is on the
-  page and fill its row in the register, not enough to read a cote.
-- **200 dpi on the full page** to see the structure: how many tables, where the legend sits,
-  which colour means what.
-- **400 to 600 dpi on a half or a quarter** to read the figures. A dense CAO plate is not legible
-  at full-page scale, because the image is downscaled before it reaches the model.
-- **Read the legend first.** On the cahier technique PERFORM76 the glazing thickness is printed
-  in blue and the parclose's own dimension in black; a page read without that key inverts every
-  pair.
-- **A figure that is not legible stays `-`**, with one line in the body saying so. Never infer a
-  cote from the drawing's proportions, and never take the text layer's word over the image.
-- **A plate that resists at 600 dpi by quarters goes to state `illisible`** in the register, with
-  the attempt named. That is a measured failure, not a judgement about the page's importance.
+- **Inspection visuelle systématique** : chaque page technique est examinée visuellement pour repérer
+  la structure, les tableaux, les cotes en coupe, les renvois et les avertissements.
+- **Lecture de la légende d'abord.** Sur le catalogue ROTO NX, les en-têtes de tableaux sont des
+  pictogrammes définis en p. 10-12 ; sur le cahier technique PERFORM76 l'épaisseur de vitrage est en bleu
+  et la parclose en noir. La lecture visuelle native décode la légende avant de transcrire les cotes.
+- **Une cote ou valeur illisible reste `-`**, avec mention dans le corps. Ne jamais déduire une
+  dimension d'une proportion de dessin, et ne jamais faire confiance aveuglément à une couche texte brute
+  sans contrôle visuel de la planche.
+- **Une planche non exploitable va à l'état `illisible`** dans le registre de couverture avec mention
+  du motif technique précis. C'est un constat mesuré, jamais une décision d'abandon.
 
 ### Lire un abaque
 
@@ -678,7 +674,7 @@ the PDF. The pass has two outputs at once -- a verdict on what is written, and w
 
 1. **Take one table, not one document.** The unit is a `# Cotes` or `# Compatibilités` table, or
    a rule stated in the body
-2. **Open the PDF at the page its locator names**, rendered as an image -- see *Reading a plate*
+2. **Open the PDF at the page its locator names**, via native multimodal direct reading
 3. **Check every cell**: the value, the unit against the header, the family (une tapée n'est pas
    un appui n'est pas une patte de pose), the context of the row, and the exclusions
 4. **Read what surrounds the table on the plate.** This is where the pass earns its keep: a

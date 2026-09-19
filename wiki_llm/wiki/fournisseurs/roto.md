@@ -3,7 +3,7 @@ type: Fournisseur
 title: ROTO
 description: Fournisseur de la quincaillerie PVC et mixte de PROFERM, à l'origine du Label ROTO Performance et de la garantie 10 ans sur les ferrures.
 tags: [fournisseur, quincaillerie, roto, ferrure, paumelle, rc2]
-status: draft
+status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
@@ -18,8 +18,8 @@ sources:
     title: Directives générales profine, version janvier 2023
     last_modified: 2023-01-31
 generated:
-  by: process:claude-code
-  at: 2026-09-17T19:00:00Z
+  by: process:multimodal-direct
+  at: 2026-09-19T20:35:00Z
 ---
 
 # Ce que PROFERM lui achète
@@ -28,17 +28,12 @@ ROTO — Roto Window & Door Technology — fournit la quincaillerie des gammes *
 PROFERM : ferrures de fenêtre, paumelles de porte d'entrée et serrures motorisées. La gamme
 aluminium relève de [TECHNAL](/fournisseurs/technal.md).
 
-| Produit PROFERM | Quincaillerie ROTO |
-| --- | --- |
-| Fenêtres [PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md) | [Roto NX](/quincaillerie/roto-nx.md) |
-| Coulissant [INNOSLIDE](/gammes/innoslide.md) | [Roto Patio Inowa](/quincaillerie/roto-patio-inowa.md) |
-| Portes d'entrée PVC et HYBRIDE | paumelles Roto Solid B |
-| Serrure motorisée de porte d'entrée | [Roto Safe E Eneo](/quincaillerie/serrure-motorisee.md) |
-
-Le catalogue général emploie « quincaillerie ROTO » et « ferrure ROTO » sans nommer de gamme : le
-rattachement des quatre gammes du catalogue à une ferrure précise n'est pas établi — entrée
-**VER-02** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md).
+| Produit PROFERM | Quincaillerie ROTO | Pages de référence |
+| --- | --- | --- |
+| Fenêtres [PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md) | [Roto NX](/quincaillerie/roto-nx.md) | [Crémones](/quincaillerie/roto-nx-cremones.md), [Renvois d'angle et verrouilleurs](/quincaillerie/roto-nx-renvois-angle-et-verrouilleurs.md), [Compas et paliers](/quincaillerie/roto-nx-compas-et-paliers.md), [Pièces de fermeture et gâches](/quincaillerie/roto-nx-pieces-fermeture-gaches.md), [Accessoires et gabarits](/quincaillerie/roto-nx-accessoires-et-gabarits.md) |
+| Coulissant [INNOSLIDE](/gammes/innoslide.md) | [Roto Patio Inowa](/quincaillerie/roto-patio-inowa.md) | [Roto Patio Inowa](/quincaillerie/roto-patio-inowa.md) |
+| Portes d'entrée PVC et HYBRIDE | paumelles Roto Solid B | [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) |
+| Serrure motorisée de porte d'entrée | [Roto Safe E Eneo](/quincaillerie/serrure-motorisee.md) | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md), [Jonction de câble](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
 
 # Cotes des paumelles Roto Solid B
 

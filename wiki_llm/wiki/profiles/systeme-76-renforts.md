@@ -194,20 +194,29 @@ Voir [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et
 
 # Vissage des renforts
 
-La fixation des renforts se fait à la **vis auto-perforeuse à tête fraisée**
-[1 registre 2.4.1 p. 1 à 9].
+La fixation des renforts acier dans les chambres des profilés PVC s'effectue au moyen de **vis auto-perforeuses à tête fraisée** (norme DIN 7504 P) [1 registre 2.4.1 p. 1 à 9].
 
-| Renfort | Vis |
-| --- | --- |
-| V312.Z | 3,9 × 13 mm |
-| tous les autres renforts du registre 2.4.1 | 3,9 × 16 mm |
+### Dimensions des vis selon renfort
 
-**Les positions de vissage ne sont pas reprises ici** : le registre 2.4.1 les porte en dessins
-cotés à l'échelle 1:2. Se reporter au document avant de percer.
+| Renfort | Type et dimension de vis | Usage profilé |
+| --- | --- | --- |
+| **V312.Z** | **3,9 × 13 mm** auto-perforeuse à tête fraisée | Croisillons 76300, élargisseurs 76700-76702 |
+| **Tous les autres renforts** (V306.Z, V307.Z, V308, V309.Z, V310, V314.Z, V326.Z, V266.Z, V316, V317, V318.Z, V319, V322, V323.Z, V324, V325, etc.) | **3,9 × 16 mm** auto-perforeuse à tête fraisée | Dormants, ouvrants, meneaux, battements et profilés complémentaires |
 
-Sur un profilé de couleur ou capoté aluminium, le vissage du renfort s'accompagne d'une
-**ventilation obligatoire des préchambres extérieures** — voir
-[Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md).
+### Règles et entraxes de fixation en atelier
+
+* **Pas de vissage maximal (entraxe entre vis)** :
+  * **Profilés blancs** : entraxe maximal de **300 mm**.
+  * **Profilés couleur ou plaxés** (1 ou 2 faces) : entraxe maximal ramené à **250 mm** en raison des contraintes thermiques et des gradients d'échauffement accrus.
+* **Distance aux extrémités coupées** :
+  * La première vis à chaque extrémité doit impérativement être positionnée entre **20 mm et 50 mm** de l'extrémité coupée de la barre d'acier ou du fond de feuillure soudé.
+  * *Règle critique* : interdiction de visser à moins de 20 mm du bord (risque d'éclatement de la chambre PVC et interférence mécanique avec le miroir de soudage ou les ébavureuses d'angle).
+* **Nombre minimal de vis** :
+  * Tout tronçon de renfort doit comporter **au minimum 3 vis** de fixation, y compris sur les profilés courts ou impostes.
+* **Axe et guidage de perçage** :
+  * Le positionnement s'effectue dans la gorge de centrage coextrudée en fond de rainure de ferrure ou en fond de feuillure du profilé PVC, assurant la prise directe de la vis auto-foreuse dans l'épaisseur d'acier sans avant-trou.
+* **Profilés de couleur et AluClip** :
+  * Sur tout profilé filmé, laqué ou capoté aluminium, le vissage du renfort s'accompagne obligatoirement de la **ventilation des préchambres extérieures** (évacuation des calories emmagasinées) — voir [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md).
 
 # Citations
 

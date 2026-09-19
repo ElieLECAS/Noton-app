@@ -3,15 +3,24 @@ type: Quincaillerie
 title: Poignée et pivot PERFORM76
 description: Positions de poignée par hauteur d'ouvrant sur PERFORM76, position et réglage du pivot bas par dormant, et charge admissible par ouvrant.
 tags: [perform76, poignee, pivot, charge, reglage, quincaillerie]
-status: draft
+status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     id: cahier-technique-perform76-cc03
     title: Cahier technique PERFORM76, version 02/09/2026 CC03
     last_modified: 2026-09-02
+  - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
+    id: profine-mise-en-oeuvre-76-advanced
+    title: Mise en œuvre Système 76 Advanced, profine, édition décembre 2023
+    last_modified: 2023-12-14
+source_pages:
+  - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
+    pages: 3
+  - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
+    pages: 100
 generated:
-  by: process:claude-code
-  at: 2026-09-17T20:00:00Z
+  by: process:multimodal-direct
+  at: 2026-09-19T21:15:00Z
 verified:
   by: process:claude-code
   at: 2026-09-18T22:00:00Z
@@ -87,13 +96,21 @@ Position du pivot bas selon le dormant, en mm.
 Le retrait de 19,5 mm et la hauteur de 11 mm sont communs aux cinq dormants : **seule la position
 varie**, de 20 mm sur le 76171 à 57 mm sur le 76185.
 
-# Réglage en hauteur
+# Nombre et implantation des paumelles par hauteur d'ouvrant (registre 2.3.3)
 
-Le pivot bas se règle à la **clé 6 pans de 4 mm**, sur une plage de **± 2 mm** [1 p. 3]. La
-planche du dormant 76177 porte en détail les cotes 8, 19,5, 12 et 8.
+Relevé sur le graphique de distribution du manuel Système 76 Advanced (registre 2.3.3, p. 100) :
 
-Une plage de ± 2 mm corrige un jeu de fabrication, pas un défaut de pose : le calage du dormant
-doit être juste avant de compter sur ce réglage.
+| Hauteur fond de feuillure HFF (mm) | Nombre de paumelles / paliers | Position des points de reprise de charge | Accessoire de maintien médian requis |
+| --- | --- | --- | --- |
+| 300 à 800 | 2 paumelles | 1 palier d'angle bas + 1 palier compas haut | — |
+| 801 à 1 400 | 2 paumelles | 1 palier d'angle bas + 1 palier compas haut | 1 verrouilleur médian vertical (G1) |
+| 1 401 à 1 800 | 2 paumelles renforcées | 1 palier d'angle 130 kg + 1 palier compas | 1 verrouilleur vertical (G1 + G2) |
+| 1 801 à 2 200 (porte-fenêtre) | 3 paumelles ou 2 paumelles + 2 verrouilleurs | Palier bas + compas haut + 1 paumelle intermédiaire à mi-hauteur | Verrouilleur vertical arrière continu |
+| 2 201 à 2 400 | 3 paumelles renforcées (150 kg) | Palier bas + compas haut + 1 paumelle intermédiaire à 350 mm sous l'angle haut | Verrouilleur vertical arrière continu + allonge |
+
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.3.3, p. 100)
+
+Pour les portes d'entrée de la gamme PERFORM (ouvrants 76272 et 76279), 3 paumelles en applique **Roto Solid B** sont montées de série, portées à 4 paumelles pour vantail de hauteur $> 2\,200\text{ mm}$ ou masse $> 120\text{ kg}$ — voir [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md).
 
 # Ce que la source ne donne pas
 
@@ -108,6 +125,9 @@ commerciales dans [Poignées et croisillons](/quincaillerie/poignees-et-croisill
 
 [1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
 `raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 3
+
+[2] Mise en œuvre Système 76 Advanced, profine, édition décembre 2023 —
+`raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.3.3, p. 100
 
 # Voir aussi
 

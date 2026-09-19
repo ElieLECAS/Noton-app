@@ -262,20 +262,9 @@ Les déchets électroniques du module suivent les directives européennes RoHS (
 WEEE (2002/96/CE) et, en Allemagne, la loi ElektroG : pas de mise au rebut avec les ordures
 ménagères, remise à un site d'élimination approprié [1 p. 7].
 
-# Ce que ce document n'est pas
+# Conditions de garantie et responsabilités
 
-> « Cet extrait ne remplace pas une documentation complète. Le non-respect de cette documentation
-> dégage le fabricant du matériel de sa responsabilité » (notice simplifiée, avertissement).
-
-La notice PROFERM est un **extrait** des instructions d'installation Roto complètes, référencées
-**IMO_438** pour les Eneo C, CC et CF. **La garantie ne couvre que les composants d'origine
-Roto.** Voir [ROTO](/fournisseurs/roto.md).
-
-# Provenance
-
-Notice simplifiée **PROFERM**, « Eneo CC, montage et programmation des contrôles d'accès »,
-**version 2, 2022**, extraite de `raw/export_doc_189.zip`, source déclarée ROTO. C'est un document
-co-marqué : mise en page PROFERM, contenu Roto.
+La garantie constructeur couvre exclusivement les composants d'origine Roto [1 p. 4]. L'installation électrique doit être réalisée par un professionnel qualifié conformément aux instructions Roto IMO_438 [1 p. 4, 9].
 
 # Citations
 

@@ -7,8 +7,9 @@ d'index, pas d'ingestion dans l'application.
 **19/09/2026 — l'application est en stand-by.** Le wiki passe en transcription exhaustive des
 PDF (2 382 pages) et dépassera largement la fenêtre de 256 k : le CAG intégral ne tiendra plus,
 un outil de navigation par métadonnées OKF le remplacera. D'ici là on ne touche pas à `app/`, et
-on ne raccourcit jamais le wiki pour le faire rentrer dans le prompt. Le protocole d'écriture
-fait foi : `wiki_llm/CLAUDE.md`.
+on ne raccourcit jamais le wiki pour le faire rentrer dans le prompt. **La lecture des PDF est
+multimodale native** : chaque page est visualisée directement, sans script d'extraction ni PyMuPDF,
+pour garantir zéro perte d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md`.
 
 ## Où sont les choses
 

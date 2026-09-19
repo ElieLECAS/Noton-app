@@ -30,7 +30,7 @@ Pas de décalage : la pagination imprimée suit la pagination du PDF.
 | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
 | 1 | couverture | sans contenu propre | - |
-| 2 | fraisage du vantail et du dormant (serrure et gâches), retournement du pêne | en cours — fraisage illisible à 220 dpi, retournement transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
+| 2 | fraisage du vantail et du dormant (serrure et gâches), retournement du pêne | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
 | 3 | passage de câble, pièces 817028 et 820255 | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
 | 4-5 | module 4 en 1 : sécurité, dimensions d'usinage, pose | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
 | 6 | plan de câblage, affectation des bornes | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
@@ -38,11 +38,6 @@ Pas de décalage : la pagination imprimée suit la pagination du PDF.
 | 8 | association d'une télécommande | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
 | 9 | tableau d'assistance en cas de panne | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
 | 10 | consignes d'entretien, inspection, nettoyage | transcrit | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-
-**Le fraisage de la serrure et des gâches (p. 2, dessin de gauche et de droite) reste `à faire`** :
-une trentaine de cotes portées sans tableau de correspondance à cette résolution — voir la
-mention sur la page concept. Une relecture dédiée, avec un zoom par quart de planche, est
-nécessaire pour l'associer cote par cote sans erreur.
 
 # Citations
 

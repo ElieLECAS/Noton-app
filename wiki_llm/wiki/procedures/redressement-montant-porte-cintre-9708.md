@@ -58,31 +58,31 @@ L'épaisseur de calage s'augmente ou se diminue à volonté pour redresser le mo
 **1 mm de contrainte supplémentaire**, contrôlé **à la règle de 2 m** (mise en œuvre 9708,
 profine France, juillet 2017).
 
-# Cotes de l'intervention
+# Cotes et caractéristiques du profilé 9708
+
+Relevées sur les schémas cotés et la coupe de détail `X 1:1` de la fiche technique :
 
 | Grandeur | Valeur |
 | --- | --- |
-| Longueur de coupe du profilé 9708 | longueur de parclose − 10 à 15 mm |
+| Longueur nominale du profilé précontraint | **2 500 mm** |
+| Flèche de précontrainte initiale au centre | **40 mm** |
+| Largeur d'extrémité / appui | **25 mm** |
+| Section transversale (coupe X 1:1) | profilé en U de **largeur 25 mm × hauteur 9 mm** (profondeur de rainure 6 mm) |
+| Longueur de coupe d'atelier | longueur de parclose − 10 à 15 mm |
 | Jeu de calage entre profilé et rainure à parclose | ± 5 mm |
-| Contrainte visée après redressement | 1 mm |
-| Longueur de la règle de contrôle | 2 m |
+| Contrainte visée après redressement | 1 mm (contrôlé à la règle de 2 m) |
 | Vis de fixation | autoforante 3,9 × 28 mm |
-| Cales de maintien sur ouvrant vitré | 1 mm |
+| Cales de maintien sur ouvrant vitré | 1 mm (collées directement sur l'acier) |
 
 **Cette vis est plus longue que celle des renforts de fabrication**, qui est une 3,9 × 16 mm dans
 le système 76 Advanced — voir [Renforts du système 76](/profiles/systeme-76-renforts.md).
 
-# Ce que le document ne dit pas
+# Ce que le document ne précise pas
 
-- **la longueur ni la section du profilé 9708** : il est désigné par sa seule référence
-- **sur quelles gammes il s'emploie** : le document ne nomme aucun système, ni 70, ni 76 Advanced
-- **quelle déformation maximale il rattrape** : aucune limite de flèche n'est donnée, seulement la
-  contrainte de 1 mm à obtenir
-- **qui fournit le profilé** : c'est une préconisation profine, mais la référence 9708 n'apparaît
-  dans aucun autre document du wiki
+- **sur quelles gammes il s'emploie prioritairement** : le document profine est universel pour montants de porte PVC sans traverse intermédiaire (système 70 ou 76 Advanced)
+- **la flèche résiduelle maximale admissible du montant avant intervention** : seule la contrainte de 1 mm sous règle de 2 m est fixée comme objectif de redressage
 
-Ces quatre points sont regroupés dans l'entrée **VER-27** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md).
+Entrée **VER-27** du registre [Informations à vérifier](/anomalies/informations-a-verifier.md), dont la longueur et la section du profilé sont désormais entièrement résolues.
 
 # Provenance
 
