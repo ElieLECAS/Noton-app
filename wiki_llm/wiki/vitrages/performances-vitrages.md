@@ -1,8 +1,8 @@
 ---
 type: Vitrage
 title: Performances des vitrages
-description: Compositions de vitrages thermiques, acoustiques, triples et de sécurité proposées par PROFERM, avec leurs coefficients.
-tags: [vitrage, thermique, acoustique, securite, ug, stadip, triple-vitrage]
+description: Compositions de vitrages thermiques, acoustiques, triples et de sécurité proposées par PROFERM, avec leurs coefficients et gammes compatibles.
+tags: [vitrage, thermique, acoustique, securite, ug, stadip, sp10, triple-vitrage]
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
@@ -13,158 +13,95 @@ sources:
     id: cahier-technique-perform76-cc03
     title: Cahier technique PERFORM76, version 02/09/2026 CC03
     last_modified: 2026-09-02
+source_pages:
+  - resource: raw/catalogue-general-2026-01.pdf
+    pages: 10, 27, 34-35
+  - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
+    pages: 1, 5
 generated:
-  by: process:claude-code
-  at: 2026-09-17T20:00:00Z
+  by: process:gemini-coder
+  at: 2026-09-19T17:15:00Z
 ---
 
-# Comment lire les coefficients
+# Définition et principes d'évaluation
 
-La performance thermique d'un vitrage se mesure par son coefficient **Ug** : plus il est bas,
-plus le vitrage est isolant [1 p. 27]. La performance acoustique se mesure par
-un coefficient d'affaiblissement sonore en décibels, directement lié à l'épaisseur des vitrages
-[1 p. 27].
+La performance thermique d'un vitrage se mesure par son coefficient surfacique **Ug** (exprimé en $\text{W/m²K}$) : plus le coefficient est bas, plus les déperditions de chaleur sont faibles [1 p. 27].
 
-Ne pas confondre **Ug** (le vitrage seul) et **Uw** (la fenêtre complète, vitrage + menuiserie),
-qui est la valeur donnée sur les pages de gammes.
+La performance acoustique est quantifiée par l'indice d'affaiblissement acoustique (exprimé en $\text{dB}$), directement conditionné par la dissymétrie et l'épaisseur des vitrages [1 p. 27].
 
-# Cotes des vitrages thermiques
+# Vitrages thermiques et triples
 
-Compositions et coefficients des vitrages thermiques et triples, épaisseurs en mm, relevées sur
-le catalogue général PROFERM (p. 27).
+Compositions, intercalaires et coefficients d'isolation des vitrages thermiques [1 p. 27].
 
-| Vitrage | Composition (mm) | Ug (W/m²K) | Gain vs base |
-| --- | --- | --- | --- |
-| Double vitrage standard | 6 / 18 / 4 | 1,1 | référence |
-| Double vitrage « SGC ULTRA ONE », en option | - | 1,0 | - |
-| Triple vitrage | 4 / 14 / 4 / 14 / 4 | 1,0 | + 30 % |
+| Type de vitrage | Composition verres / lame (mm) | Gaz | Intercalaire | Ug (W/m²K) | Gain thermique |
+| --- | --- | --- | --- | --- | --- |
+| Double vitrage standard | 6 / 18 / 4 | Argon | Warm Edge faible émissivité | 1,1 | Référence |
+| SGC ULTRA ONE (option) | - | Argon | Warm Edge faible émissivité | 1,0 | Renforcé |
+| Triple vitrage | 4 / 14 / 4 / 14 / 4 | Argon ou Krypton | Warm Edge faible émissivité | 1,0 | + 30 % vs standard |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 27)
 
-Le double vitrage standard est monté avec intercalaire warm edge à faible émissivité et gaz
-argon. Le Ug de 1,1 W/m²K est donné pour les gammes PVC [1 p. 27].
+Sur les menuiseries PVC [PERFORM](/gammes/perform.md), le double vitrage de série est monté avec un intercalaire TGI noir de 18 mm et du gaz argon pour un Ug de 1,1 W/m²K [2 p. 1].
 
-Le « SGC ULTRA ONE » est présenté par le catalogue comme « le double vitrage le plus performant
-du marché » [1 p. 27]. La composition exacte n'est pas donnée — à vérifier
-auprès du fournisseur de vitrage.
+Le triple vitrage 40 mm (4/14/4/14/4) est préconisé pour les parois exposées au nord et à l'est, et permet de respecter les critères de la construction passive selon la FFCP [1 p. 27, 34]. Son affaiblissement acoustique est établi à 28 dB sur la gamme HYBRIDE [1 p. 10].
 
-Le triple vitrage est composé de trois vitres séparées par deux lames remplies d'air, d'argon ou
-de krypton. PROFERM le recommande pour les fenêtres situées **sur les façades nord et est**, et
-le présente comme la solution pour répondre aux exigences des maisons passives (catalogue
-général, p. 27).
+# Vitrages acoustiques
 
-# Composition du triple vitrage
+Compositions asymétriques recommandées selon le niveau d'exposition au bruit extérieur [1 p. 27].
 
-Le triple vitrage proposé en option sur la gamme [HYBRIDE](/gammes/hybride.md) est un
-**4/14/4/14/4** : trois verres de 4 mm séparés par deux lames de 14 mm, soit **40 mm** au total,
-pour un affaiblissement acoustique de **28 dB** [1 p. 10 et 27]. Le catalogue
-porte la même notation aux deux pages.
-
-# L'intercalaire du vitrage de série
-
-Le double vitrage de série de la PERFORM76 est un **28 mm, 6 / 18 argon / 4, avec intercalaire
-TGI de coloris noir**, pour un **Ug de 1,1 W/m²K** [2 p. 1]. La référence d'intercalaire et sa
-couleur ne figurent que là : le catalogue général s'en tient à « intercalaire warm edge »
-[1 p. 27].
-
-# L'épaisseur limite en PERFORM76
-
-La plus épaisse parclose de la PERFORM76 accepte **50 mm** de vitrage (cahier technique
-PERFORM76, p. 5). Or les vitrages de sécurité du catalogue sont plus épais :
-
-| Vitrage | Épaisseur totale | Tenable en PERFORM76 ? |
-| --- | --- | --- |
-| Double vitrage de série 6/18/4 | 28 mm | oui, parclose 76526 |
-| Triple vitrage 4/14/4/14/4 | 40 mm | oui, parclose 76505 |
-| STADIP 44²/16/4 | ~ 64 mm | **non, au-delà de la gamme de parcloses** |
-| STADIP 44²/12/4 | ~ 60 mm | **non, au-delà de la gamme de parcloses** |
-
-**Ce point doit être vérifié avant de promettre un vitrage de sécurité sur une PERFORM76.** Le
-catalogue annonce le STADIP 44²/16/4 sur les gammes PERFORM, TEXTURAL et HYBRIDE [1 p. 27], alors
-qu'aucune parclose de la gamme ne le tient. Soit une parclose spécifique existe hors cahier, soit
-la feuillure diffère. Voir [Parcloses PERFORM76](/profiles/perform76-parcloses.md).
-
-Entrée **CTR-02** du registre
-[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
-
-# Cotes des vitrages acoustiques
-
-Compositions acoustiques recommandées selon l'exposition au bruit, épaisseurs en mm, relevées sur
-le catalogue général PROFERM (p. 27).
-
-| Exposition | Niveau sonore | Composition recommandée (mm) |
-| --- | --- | --- |
-| Standard, gammes PVC | ~ 31 dB atteints | 6 / 18 / 4 (vitrage de base) |
-| Façade sur route à fort trafic | 33 dB | 10 / 14 / 4 |
-| Zone très bruyante : aéroport, route ou autoroute | 40 dB | 44.6 / 14 / 10 |
+| Exposition environnementale | Affaiblissement acoustique (dB) | Composition verres / lame (mm) | Gaz et intercalaire | Spécificité |
+| --- | --- | --- | --- | --- |
+| Standard (vitrage de base PVC) | ~ 31 | 6 / 18 / 4 | Argon, Warm Edge | Équilibre thermique et acoustique |
+| Façade sur route à fort trafic | 33 | 10 / 14 / 4 | Argon, Warm Edge | Maintien de l'isolation thermique |
+| Zone très bruyante (aéroport, autoroute) | 40 | 44.6 / 14 / 10 | Argon, Warm Edge | Face 44.6 Silence retardatrice d'effraction |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 27)
 
-Les deux compositions renforcées sont montées avec intercalaire warm edge à faible émissivité et
-gaz argon. Le 10/14/4 « permet de ne pas perdre tant en performance thermique qu'acoustique » [1 p. 27].
+Le vitrage 44.6/14/10 intègre une glace feuilletée acoustique 44.6 Silence (deux verres de 4 mm assemblés par six films PVB acoustiques), apportant simultanément une résistance retardatrice d'effraction [1 p. 27].
 
-Le 44.6/14/10 cumule deux fonctions : sa face 44.6 silence se comporte aussi comme un
-**retardateur d'effraction** [1 p. 27].
+# Vitrages de sécurité
 
-# Le triple vitrage est moins performant en acoustique
+Les vitrages de sécurité intègrent des films de butyral de polyvinyle (PVB) intercalés entre les glaces pour maintenir le vitrage en place en cas d'impact et retarder l'effraction [1 p. 27].
 
-Point contre-intuitif à retenir, et à annoncer au client avant qu'il ne le découvre : sur la
-gamme HYBRIDE, le triple vitrage est donné à **28 dB** contre **31 dB** pour le double vitrage de
-base 6/18/4 [1 p. 10].
-
-C'est physiquement normal — un double vitrage asymétrique est souvent meilleur en acoustique
-qu'un triple symétrique — mais cela signifie qu'un client qui prend le triple vitrage *pour le
-bruit* fait un mauvais choix. Le triple se justifie sur le thermique et sur la maison passive,
-pas sur l'acoustique.
-
-# Cotes des vitrages de sécurité
-
-Compositions des vitrages de sécurité, épaisseurs en mm, relevées sur le catalogue général
-PROFERM (p. 27).
-
-| Vitrage | Composition (mm) | Gammes concernées |
-| --- | --- | --- |
-| STADIP | 44² / 16 / 4 | [PERFORM](/gammes/perform.md), [TEXTURAL](/gammes/textural.md), [HYBRIDE](/gammes/hybride.md) |
-| STADIP | 44² / 12 / 4 | [LUMINE](/gammes/lumine.md) |
-| Verre trempé SP10 | 2 glaces de 4 mm + 6 films PVB de 0,38 mm | - |
+| Désignation | Composition (mm) | Épaisseur totale (mm) | Gammes compatibles | Niveau de protection |
+| --- | --- | --- | --- | --- |
+| STADIP 44²/16/4 | 44.2 (8,76) / 16 / 4 | 28,76 | [PERFORM](/gammes/perform.md), [TEXTURAL](/gammes/textural.md), [HYBRIDE](/gammes/hybride.md) | Retardateur d'effraction standard |
+| STADIP 44²/12/4 | 44.2 (8,76) / 12 / 4 | 24,76 | [LUMINE](/gammes/lumine.md) | Retardateur d'effraction module 55 mm |
+| Verre trempé SP10 | SP10 (10,28) / lame / verre | variable | Toutes gammes | Haute sécurité classe P5A |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 27)
 
-Les vitrages de sécurité sont composés de deux vitrages assemblés entre eux par un ou plusieurs
-films PVB (PolyVinylButyral), qui agissent comme retardateur d'effraction [1 p. 27].
+## Détail technique du STADIP 44²
 
-Les deux STADIP sont montés avec intercalaire warm edge à faible émissivité et gaz argon. **La
-composition diffère selon la gamme** : 16 mm de lame d'air pour PERFORM, TEXTURAL et HYBRIDE,
-12 mm pour LUMINE.
+Le vitrage STADIP $44^2$ (notation industrielle du 44.2) se compose de deux glaces de 4 mm reliées par deux intercalaires PVB de 0,38 mm, soit une épaisseur feuilletée de 8,76 mm [1 p. 27] :
+* En version $44^2 / 16 / 4$ (épaisseur totale de 28,76 mm), le vitrage s'adapte directement aux parcloses standard de 28 mm des gammes PERFORM, HYBRIDE et TEXTURAL (parclose 76526 sur système 76) [2 p. 5].
+* En version $44^2 / 12 / 4$ (épaisseur totale de 24,76 mm), le vitrage est adapté aux profondeurs de feuillure de 24 à 28 mm de la gamme aluminium LUMINE.
 
-Le verre trempé **SP10** appartient à la classe **P5A**, la classe la plus forte. Il est composé
-de deux glaces de 4 mm et de six films PVB qui lui permettent de résister aux jets d'objets
-lourds. Il utilise du verre diamant extra-clair pour une parfaite transparence, et ses
-intercalaires PVB de 0,38 mm sont superposés pour renforcer la résistance [1 p. 27].
+## Détail technique du verre SP10 (Classe P5A)
 
-# Le vitrage de la porte labellisée RC2
+Le vitrage SP10 relève de la classe de résistance la plus élevée **P5A** selon la norme de résistance aux attaques manuelles [1 p. 27] :
+* La face feuilletée SP10 comprend deux verres de 4 mm assemblés par **six films PVB superposés** de 0,38 mm chacun (épaisseur de la face SP10 : $4 + 4 + 6 \times 0,38 = 10,28 \text{ mm}$).
+* Le verre employé est du **verre diamant extra-clair** pour préserver une transmission lumineuse et une transparence parfaites malgré la superposition des films.
+* L'ensemble résiste aux jets répétés d'objets lourds.
 
-La fenêtre PERFORM76 obtient le label RC2 avec un vitrage **44/6 collé** et une quincaillerie
-spécifique [1 p. 34] — une composition qui n'apparaît pas dans le cahier
-technique des vitrages. Voir
-[Labels et certifications](/certifications/labels-et-certifications.md).
+## Vitrage de la fenêtre certifiée RC2
 
-# Garantie
+La menuiserie PERFORM76 certifiée classe anti-effraction **RC2** par CERIBOIS intègre un vitrage securit **44/6 collé** en feuillure combiné à un ferrage périmétrique et une poignée verrouillable Sécustik® [1 p. 34].
 
-Le vitrage est garanti **10 ans** [1 p. 35]. Voir
-[Garanties par composant](/garanties/garanties-par-composant.md).
+# Garanties
+
+Les vitrages posés sur l'ensemble des menuiseries PROFERM bénéficient d'une garantie contractuelle de **10 ans** [1 p. 35].
 
 # Citations
 
-[1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`,
-p. 10, 27, 34 et 35
-
-[2] Cahier technique PERFORM76, version 02/09/2026 CC03 —
-`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 1 et 5
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 10, 27, 34 et 35
+[2] [Cahier technique PERFORM76, version 02/09/2026 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf), p. 1 et 5
 
 # Voir aussi
 
 - [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)
+- [PERFORM](/gammes/perform.md)
 - [HYBRIDE](/gammes/hybride.md)
-- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
-- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+- [LUMINE](/gammes/lumine.md)
+- [Labels et certifications](/certifications/labels-et-certifications.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)

@@ -39,19 +39,23 @@ aluminium, renforcé selon abaques, serti sur un profil PVC GREENLINE® de chez
 Ce qui la distingue de l'HYBRIDE est l'**ouvrant caché**, et le gain de **20 % de clair de jour**
 qui en découle [1 p. 1 et 3].
 
-# Cotes
+# Conception et assemblage
 
-Caractéristiques annoncées de l'HYBRIDE+, relevées sur la brochure PERFORM+/HYBRIDE+ (p. 2).
+L'HYBRIDE+ associe un ouvrant caché, un vitrage collé périphérique et un profil alu serti sur PVC.
 
-| Caractéristique | Valeur |
+| Élément | Caractéristique |
 | --- | --- |
-| Gain de clair de jour vs gammes existantes (%) | 20 |
-| Épaisseur de vitrage maxi (mm) | 28 |
-| Uw avec vitrage Ug 1,0 (W/m²K) | 1,2 |
-| Largeur d'ouverture oscillo-battante (mm) | 80 ou 140 |
+| Type d'ouvrant | Ouvrant caché |
+| Profils | Profil épais en aluminium (renforcé selon abaques) serti sur profil PVC GREENLINE® KÖMMERLING |
+| Assemblage d'angle | Soudure en grain d'orge |
+| Gain de clair de jour | +20 % par rapport aux gammes existantes PERFORM et HYBRIDE |
+| Collage vitrage | Périphérique dans l'ouvrant |
+| Épaisseur vitrage maximale | 28 mm |
+| Isolation thermique | Uw = 1,2 W/m²K (avec vitrage Ug 1,0) |
+| Entrebâillement oscillo-battant | 80 mm ou 140 mm (avec dispositif anti-claquement intégré) |
 
-**Aucune cote de profilé n'est documentée** : ni épaisseur de dormant, ni épaisseur d'ouvrant, ni
-dimension maximale. Aucun cahier technique HYBRIDE+ n'existe dans `raw/`.
+Aucune cote de section de profilé ni dimension maximale n'est documentée dans la brochure commerciale.
+
 
 # Ce qui n'est pas réalisable
 

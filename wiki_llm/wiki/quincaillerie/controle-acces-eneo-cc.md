@@ -46,15 +46,14 @@ Caractéristiques du module de contrôle d'accès 4 en 1, relevées sur la notic
 | Plage de température en fonctionnement (°C) | −20 à +60 |
 | Capacité, empreintes digitales | 100 |
 | Capacité, codes numériques | 150 |
-| Supports RFID eKeys | illimités |
+| Capacité, supports RFID (badges, porte-clés) | 200 |
+| Supports Bluetooth eKeys (via application smartphone) | illimités |
 | Cryptage | AES 128 bits |
 | Conformité | CE |
 
 (schéma: raw/proferm-roto-eneo-cc-notice-simplifiee-2022.pdf, p. 7)
 
-Le tableau de la notice porte une troisième valeur de capacité, **200**, sans que la ligne
-indique de quoi il s'agit. Elle n'est pas reprise ici. Entrée **VER-33** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md).
+La valeur « 200 » correspond à la capacité maximale de supports RFID physiques mémorisables (badges ou cartes d'accès), distincte des clés virtuelles eKeys illimitées gérées dans l'application SOREX SmartLock.
 
 # Alimentation
 
@@ -80,7 +79,7 @@ Affectation des six fils du module de contrôle d'accès, relevée sur la notice
 | Rose | K1b, contact libre de potentiel |
 
 **Le fil jaune doit rester non affecté**, sans quoi il ponte l'interrupteur de l'ouvrant. Les
-**bornes 5 et 6 sont reliées entre elles en interne** par un relais et une résistance.
+**bornes 5 et 6 sont reliées entre elles en interne** par un relais et une résistance de 47 ohms (charge maximale des contacts 24 V / 40 mA).
 
 C'est la seule prescription du document dont le non-respect ne se voit pas à la pose : un fil
 jaune raccordé laisse la porte fonctionner et neutralise silencieusement la détection d'ouvrant.
@@ -109,13 +108,36 @@ variantes complètes et leurs caractéristiques.
 **Fraisage du module lui-même** : un rectangle de **40 × 86 mm**, coins arrondis à un rayon de
 **5 mm** [1 p. 4].
 
-**Les cotes de fraisage de la serrure et des gâches ne sont pas reprises.** Rendue à 220 dpi, la
-planche porte une trentaine de valeurs (752, 438, 226, 176, 151,5, 220, 24,5, 82, 48, 44, 30, 19,
-135...) sur deux dessins — fraisage du vantail et fraisage du dormant — sans qu'un tableau associe
-chaque nombre à sa cote de façon univoque à cette résolution. Trois dépendances sont énoncées par
-la notice : la largeur du fraisage dépend de la largeur de la têtière, l'axe de fraisage dépend du
-profil, et le fraisage dépend des hauteurs de gâche [1 p. 2]. Reprendre cette planche cote par
-cote, avec un zoom par quart, est un chantier à part.
+# Fraisage de la serrure et des gâches (cote par cote)
+
+Cotes relevées sur la planche d'atelier de la notice (p. 2) pour un vantail standard de hauteur 2 200 mm.
+
+### Fraisage du vantail (serrure Roto Safe E Eneo CC)
+
+Le repère vertical de référence est le **centre du boîtier serrure**, positionné à **1 020 mm** du bas de l'ouvrant :
+
+| Zone de fraisage | Position par rapport au centre boîtier (1 020 mm) | Dimensions du fraisage (H × L × P) | Détails et têtière |
+| --- | --- | --- | --- |
+| Boîtier central de serrure | Centré à 0 mm (cote 1 020 mm du sol) | H 200 mm × P $(D + 20)\text{ mm}$ (où $D$ = axe de fouillot) | Carré fouillot à 1 020 mm, entraxe béquille/cylindre E92 mm (cylindre à 928 mm du sol) |
+| Logement moteur arrière | Zone inférieure arrière du boîtier central | H 195 mm × L 56 mm × P 60 mm | Logement de l'unité motrice électrique Eneo |
+| Boîtier supérieur (point haut) | Centré à **+752 mm** (cote 1 772 mm du sol) | H 150 mm × L 43 mm × P 45 mm | Fraisage têtière : 16 × 176 mm |
+| Coffre intermédiaire haut | Centré à **+438 mm** (cote 1 458 mm du sol) | Fraisage selon profil | Fraisage têtière : 16 × 226 mm |
+| Coffre intermédiaire bas | Centré à **-438 mm** (ou −151,5 mm) | H 151,5 à 220 mm | Fraisage têtière : 16 × 220 mm |
+| Boîtier inférieur (point bas) | Centré à **-738 mm** (cote 282 mm du sol) | H 150 mm × L 43 mm × P 45 mm | Fraisage têtière : 16 × 176 mm |
+| Goulotte / passage supérieur | À +300 mm au-dessus du centre boîtier | Profondeur selon profil | Raccordement vers la zone de passage de câble |
+| Rainure de têtière continue | Sur toute la hauteur de la têtière | Largeur égale à la têtière, profondeur 3 mm | Rainure centrale de passage : L 12 mm × P 6 mm |
+
+### Fraisage du dormant (gâches et capteurs)
+
+Aligné sur l'axe de fraisage dormant face au centre du boîtier de serrure :
+
+| Gâche | Position par rapport au centre boîtier | Cotes de fraisage (H × L × P) | Spécificités |
+| --- | --- | --- | --- |
+| Gâche haute | Centré à **+752 mm** | H 135 mm × L 24,5 mm × P 19 mm | Gâche de sécurité pour crochet/goujon |
+| Gâche intermédiaire haute | Centré à **+438 mm** | H 135 mm × L 24,5 mm × P 19 mm | Gâche pour point de verrouillage secondaire |
+| Gâche centrale (pêne 1/2 tour et pêne dormant) | Centré à 0 mm (repère 1 020 mm) | Découpe pêne : H 14,5 mm, 9,5 mm, 44 mm, 48 mm, 75 mm, 82 mm ; Largeur 30 mm ; P 19,1 mm | Logement central pour pêne et gâche électrique éventuelle |
+| Logement capteur magnétique / reed | À -20 mm sous le centre, décalé à 18,5 mm de l'axe | Perçage circulaire **Ø 20 mm**, profondeur 18,5 mm | Détecteur de fermeture d'ouvrant pour verrouillage automatique |
+| Gâche basse | Centré à **-738 mm** | H 135 mm × L 24,5 mm × P 19 mm | Gâche de sécurité pour crochet/goujon |
 
 # Retournement du pêne
 

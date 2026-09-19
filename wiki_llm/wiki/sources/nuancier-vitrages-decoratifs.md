@@ -1,9 +1,9 @@
 ---
 type: Document source
 title: Nuancier des vitrages décoratifs PROFERM
-description: Nuancier photo de 5 pages montrant sept vitrages décoratifs vus à travers un objet-test, sans date d'édition.
+description: Nuancier photographique de 5 pages présentant sept vitrages décoratifs en situation d'occultation devant un objet-test coloré, sans date d'édition mentionnée.
 tags: [nuancier, vitrage, decoratif, sans-date]
-status: draft
+status: stable
 sources:
   - resource: raw/nuancier-vitrages-decoratifs.pdf
     id: nuancier-vitrages-decoratifs
@@ -16,35 +16,40 @@ generated:
 
 | Élément | Valeur |
 | --- | --- |
-| Éditeur | PROFERM |
-| Édition | **aucune date, aucun numéro de version** |
+| Éditeur | PROFERM MULTITECHNIQUES |
+| Usine / Siège | 355 Avenue de Londres, ZI Artois Flandres - 62138 Douvrin |
+| Édition | Sans mention de date ni de révision (VER-19) |
 | Pages | 5 |
-| Nature | nuancier commercial |
+| Nature | Commerciale, **nuancier photographique d'occultation et de texture de vitrages** |
 
-Seul document du corpus sans date d'édition — entrée **VER-19** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md). Sa seule signature est
-l'adresse de PROFERM en dernière page.
+Chaque vitrage est photographié en situation réelle devant un objet-test (figurine poupée kokeshi et fond bariolé) masqué à 50% pour apprécier le degré de transparence, le floutage et le relief du motif.
 
-Chaque vitrage y est photographié devant un même objet-test à moitié masqué par le verre : c'est
-un nuancier d'occultation, destiné à montrer le rendu réel.
+# Registre de couverture OKF
 
-# Carte des pages
+| Élément source | Page doc | Statut OKF | Fichier cible dans le wiki |
+| --- | --- | --- | --- |
+| Couverture "Les vitrages" avec macro-photo d'un verre imprimé | 1 | Intégré | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) |
+| Chinchilla clair (texture linéaire fine ondulée) | 2 | Intégré | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) |
+| Clé de fleur (motifs floraux en relief dépoli) | 2 | Intégré | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) |
+| Delta mat (motif nervuré à fond translucide mat) | 3 | Intégré | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) |
+| Delta clair (motif nervuré à fond transparent clair) | 3 | Intégré | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) |
+| Dépoli acide (occultation satinée uniforme) | 4 | Intégré | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) |
+| Imprimé 200 / G200 (martelé granité classique) | 4 | Intégré | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md), [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) |
+| Olivier (rameaux d'olivier dépolis en relief) | 5 | Intégré | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) |
+| Coordonnées du siège PROFERM Douvrin | 5 | Intégré | [Fiche source](/sources/nuancier-vitrages-decoratifs.md) |
 
-| Page | Contenu | Page du wiki |
-| --- | --- | --- |
-| 1-5 | Sept vitrages photographiés : Chinchilla clair, Clé de fleur, Delta mat, Delta clair, Dépoli acide, Imprimé 200, Olivier | [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) |
+# Ce qu'il apporte seul
+
+- Le **rendu visuel réel d'occultation** des sept vitrages photographiés en situation.
+- La confirmation que le vitrage **Imprimé 200** est le nom commercial direct de l'échantillon vitrier qui correspond au verre **G200** du catalogue général (et verre standard de face intérieure des portes classiques).
+- L'absence d'échantillon photographié pour le **Listral** et le **Mimosa**, qui figurent pourtant au catalogue général 2026 (**CTR-14**).
 
 # Anomalies portées par ce document
 
 | Entrée | Objet |
 | --- | --- |
-| **VER-19** | document non daté, donc impossible à situer face au catalogue |
-| **CTR-14** | liste de sept verres, contre neuf au catalogue général |
-
-# Non transcrit
-
-Aucune épaisseur, aucun coefficient, aucun degré d'occultation chiffré, aucune compatibilité de
-gamme, aucun tarif.
+| **VER-19** | Document non daté, sans numéro de version ni millésime. |
+| **CTR-14** | Liste de 7 verres avec échantillon photo, contre 9 verres nommés au catalogue général (Listral et Mimosa non illustrés). |
 
 # Citations
 
@@ -54,3 +59,6 @@ gamme, aucun tarif.
 
 - [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)
 - [Performances des vitrages](/vitrages/performances-vitrages.md)
+- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+- [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
+

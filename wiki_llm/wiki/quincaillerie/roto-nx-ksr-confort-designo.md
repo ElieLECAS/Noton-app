@@ -1,7 +1,7 @@
 ---
 type: Quincaillerie
 title: Configurations Roto NX KSR — Confort et NT Designo II
-description: La quincaillerie Roto NX KSR des gammes Confort et NT Designo II, qui emploient leurs propres références de pivot, palier et têtière de compas, distinctes du système P standard.
+description: La quincaillerie et le positionnement des gâches Roto NX KSR des gammes Confort et NT Designo II, qui emploient leurs propres références de pivot, palier et têtière de compas, distinctes du système P standard.
 tags: [roto, roto-nx, ksr, confort, designo, designo-ii, quincaillerie, champs-application]
 famille: roto-nx
 status: stable
@@ -12,7 +12,7 @@ sources:
     last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 64, 66-68, 70-71
+    pages: 64, 66-68, 70-71, 99
 generated:
   by: process:claude-code
   at: 2026-09-20T00:50:00Z
@@ -96,6 +96,60 @@ Double repère de hauteur — côté fermeture et côté paumelle — pour une m
 **Ces références sont les mêmes que le verrouilleur vertical du châssis cintré** — voir
 [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md)
 — la gamme Confort et le cintré partagent leur quincaillerie de verrouillage.
+
+## Positionnement des gâches, crémone OB fouillot 15 mm, position de poignée variable
+
+Cotes de positionnement, dormant, pour cette même configuration Confort [1 p. 99]. **B** se
+compte depuis le montant côté compas et **A** depuis le montant côté crémone :
+
+| Largeur LVFF (mm) | HP (mm) | MH1 (mm) | MH2 (mm) | Référence |
+| --- | --- | --- | --- | --- |
+| 521 – 700 | 220 | - | - | 490/220 |
+| 701 – 900 | 220 | 452 | - | 690/220 1E |
+| 901 – 1100 | 220 | 452 | - | 690/220 1E + 200 KU |
+| 1101 – 1300 | 220 | 452 | 276 | 690/220 1E + 400 1E KU |
+| 1301 – 1400 | 220 | 452 | 476 | 690/220 1E + 400 1E KU + 200 KU |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 99)
+
+**Compas K Confort** :
+
+| Largeur LVFF (mm) | A (mm) | B (mm) | Référence |
+| --- | --- | --- | --- |
+| 521 – 600 | - | - | 490 |
+| 601 – 800 | - | - | 690 |
+| 801 – 1000 | 600 | - | 890 1E |
+| 1001 – 1200 | 600 | 276 | 890 1E + 200 1E KU |
+| 1201 – 1400 | 600 | 476 | 690 1E + 400 1E KU |
+
+**Côté suspension** (compas, verticale) :
+
+| HVFF (mm) | MV1 (mm) | MV2 (mm) | MV3 (mm) | Élément cintré |
+| --- | --- | --- | --- | --- |
+| 530 – 600 | - | - | - | 245715 |
+| 601 – 800 | 175 | 280 | - | 245716 |
+| 801 – 1000 | 175 | 480 | - | 245718 |
+| 1001 – 1200 | 175 | 680 | - | 245720 |
+| 1201 – 1400 | 175 | 880 | - | 245722 |
+| 1401 – 1600 | 175 | 680 | 1080 | 245724 |
+| 1601 – 1730 | 175 | 680 | 1280 | 245726 |
+
+**Verrouilleur vertical**, côté crémone :
+
+| HVFF (mm) | MV4 (mm) | MV5 (mm) | MV6 (mm) | Élément cintré |
+| --- | --- | --- | --- | --- |
+| 530 – 730 | 196 | 298 | - | 245716 |
+| 731 – 930 | 196 | 498 | - | 245718 |
+| 931 – 1130 | 196 | 698 | - | 245720 |
+| 1131 – 1330 | 196 | 898 | - | 245722 |
+| 1331 – 1530 | 196 | 698 | 1098 | 245724 |
+| 1531 – 1730 | 196 | 698 | 1298 | 245726 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 99)
+
+**Les colonnes « côté suspension » et « verrouilleur vertical » renvoient à la même référence
+d'élément cintré que le verrouilleur médian du châssis cintré ci-dessus** — la gamme Confort
+partage cette pièce avec le châssis cintré/trapézoïdal, confirmé par les deux planches.
 
 # Oscillo-battant NT Designo II, sécurité de base
 
@@ -213,7 +267,7 @@ donnés sans détail de fonctionnement.
 
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 64, 66 à
-68 et 70 à 71
+68, 70 à 71 et 99
 
 # Voir aussi
 

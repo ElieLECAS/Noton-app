@@ -1,7 +1,7 @@
 ---
 type: Quincaillerie
 title: Configurations Roto NX KSR — ouvrant à la française
-description: Les champs d'application et la quincaillerie propres à l'ouvrant à la française Roto NX KSR, à un ou deux vantaux, avec ses compas, têtières et verrouilleurs médians.
+description: Les champs d'application, la quincaillerie et le positionnement des gâches de l'ouvrant à la française Roto NX KSR, à un ou deux vantaux, avec ses compas, têtières, verrouilleurs médians et gabarits de montage.
 tags: [roto, roto-nx, ksr, ouvrant-francaise, of, quincaillerie, champs-application]
 famille: roto-nx
 status: stable
@@ -12,7 +12,7 @@ sources:
     last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 36-39, 46, 48, 50
+    pages: 36-39, 46, 48, 50, 98, 104
 generated:
   by: process:claude-code
   at: 2026-09-19T23:55:00Z
@@ -106,17 +106,85 @@ Options propres à ces trois configurations :
 
 (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 46, 48 et 50)
 
+# Positionnement des gâches — crémone à sortie de tringle
+
+Cotes de positionnement des gâches (dormant, deux vantaux sans meneau fixe), crémone à sorties de
+tringle, fouillot 15, 8 et -6 mm, hauteur de poignée fixe [1 p. 98]. **HP** est la cote de la
+crémone, **G1** se relève depuis le haut et **AFM** depuis le bas, chacune selon la hauteur en
+feuillure HFF :
+
+| Crémone OF F8 — HFF (mm) | HP (mm) | G1 (mm) | AFM (mm) |
+| --- | --- | --- | --- |
+| 375 – 600 | 120 | - | - |
+| 601 – 800 | 220 | 391 | - |
+| 801 – 1000 | 413 | 540 | 240 |
+| 1001 – 1200 | 513 | 640 | 313 |
+| 1201 – 1800 | 563 | 690 | 363 |
+| 1801 – 2400 | 763 | 392 | 563 |
+| 1801 – 2400 | 1000 | 622 | 800 |
+
+| Crémone OF F-6 — HFF (mm) | HP (mm) | G1 (mm) | AFM (mm) |
+| --- | --- | --- | --- |
+| 375 – 600 | 120 | - | - |
+| 601 – 800 | 220 | 391 | 80 |
+| 450 – 600 | 413 | 540 | 213 |
+| 1001 – 1200 | 513 | 640 | 313 |
+| 1201 – 1800 | 563 | 690 | 363 |
+| 1801 – 2400 | 763 | 392 | 563 |
+| 1801 – 2400 | 1000 | 622 | 800 |
+
+| Crémone OF F15 — HFF (mm) | HP (mm) | G1 (mm) | AFM (mm) |
+| --- | --- | --- | --- |
+| 375 – 559 | 120 | - | - |
+| 450 – 600 | 170 | - | - |
+| 601 – 800 | 263 | - | 90 |
+| 801 – 1000 | 413 | 540 | 240 |
+| 1001 – 1200 | 513 | 640 | 313 |
+| 1201 – 1800 | 563 | 690 | 363 |
+| 1801 – 2400 | 1000 | 622 | 800 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 98)
+
+**Allonge OF**, pour les grandes hauteurs :
+
+| Longueur (mm) | Lg (mm) | G2 (mm) |
+| --- | --- | --- |
+| 1200 – 1400 | 675 | 343 |
+| 1801 – 2000 | 875 | 543 |
+| 2001 – 2200 | 1075 | 743 |
+
+**Verrouilleur médian horizontal** :
+
+| Largeur FF (mm) | MH1 (mm) | Référence |
+| --- | --- | --- |
+| 800 – 1200 | 520 | 400 E |
+| 1201 – 1600 | 720 | 600 E |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 98)
+
+# Gabarit de montage OF, deux vantaux — utilisation
+
+| Gabarit | Utilisation |
+| --- | --- |
+| OB H 03 | horizontal télescopique haut et bas |
+| OF V 06 | gâches crémones HP 220, 763, 1000 mm, fouillot 8 et -6 (butée jaune) ; allonges AL 675, 875, 1075 (butée bleue) |
+| OF V 07 | gâches crémones HP 413, 513, 563 mm, fouillot 15, 8 et -6 (butée jaune) ; allonges AL 675, 875, 1075 (butée bleue) |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 104)
+
 # Ce que la source ne donne pas
 
 Les cotes de montage du verrouilleur médian selon la hauteur en feuillure ne sont pas détaillées
 au-delà des trois plages de largeur ci-dessus : la source ne croise pas largeur et hauteur pour
-cette pièce sur ces deux configurations.
+cette pièce sur ces deux configurations. Sur la table de la crémone à sortie de tringle (p. 98),
+la plage 1801-2400 mm porte deux jeux de cotes G1/AFM sans que le document précise le critère de
+choix entre eux — probablement une variante haute/basse de la même plage, à vérifier.
 
 # Citations
 
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 36 à 39,
-46, 48 et 50
+46, 48, 50, 98 et 104
 
 # Voir aussi
 

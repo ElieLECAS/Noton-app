@@ -125,28 +125,45 @@ Le seuil aluminium est exclu sur un **oscillo-coulissant** [1 p. 4].
 
 # Pose du seuil aluminium
 
-Pour les assemblages 9F57 à 9F66, J087 et J088 : un mastic polyuréthane est déposé à l'arrière de
-la pièce d'assemblage, puis le seuil aluminium est vissé sur les patins d'étanchéité des pièces
-d'assemblage à l'aide de **2 vis Ø 4 × 50** [1 p. 4].
+Pour les assemblages **9F57 à 9F66, J087 et J088** :
+- Un cordon de mastic polyuréthane est déposé à l'arrière de la pièce d'assemblage.
+- Le seuil aluminium est vissé sur les patins d'étanchéité des pièces d'assemblage à l'aide de **2 vis $\varnothing 4 \times 50\text{ mm}$** (une troisième vis **$\varnothing 4 \times 30\text{ mm}$** est ajoutée pour le seuil large 9F68 de 36 mm).
+- La pièce d'assemblage est pressée contre le montant à l'aide d'une vis $\varnothing 4 \times 30\text{ mm}$.
+- Le maintien est assuré par deux vis autoforeuses **$\varnothing 4 \times 20\text{ mm}$** vissées au travers de la pièce d'assemblage dans le fond de feuillure du montant (préalablement étanché au mastic élastomère mono-composant).
+- Le cache-vis est ensuite clippé.
+
+Pour les assemblages **9F71, 9F72 et J077 + M002** :
+- Les montants sont contre-profilés avec le même contour que les traverses pour le seuil 9F68 (ou avec un contour spécial pour les seuils 9F67 et Z043).
+- Les pièces d'assemblage sont introduites directement dans les chambres de renfort des profilés et verrouillées par des goupilles.
+- Une étanchéité complémentaire au mastic élastomère est déposée en feuillure et dans la rainure de parclose du seuil.
+- Le seuil est percé à ses extrémités à l'aide d'un gabarit et fixé par deux vis.
 
 Sur une partie fixe équipée du seuil 9F67 ou Z043, deux montages sont admis :
+- Un profilé de dormant monté sur le seuil pour permettre la prise en feuillure du vitrage ; les fonds de feuillure des montants sont alors étanchés au **mastic élastomère mono-composant** en partie basse, et la traverse PVC montée à l'aide d'**équerres 9714**.
+- Ou la parclose extérieure **A271** montée sur le support de cale **A272** (entraxe max 800 mm).
 
-- un profilé de dormant monté sur le seuil pour permettre la prise en feuillure du vitrage ; les
-  fonds de feuillure des montants sont alors étanchés au **mastic élastomère mono-composant** en
-  partie basse, et la traverse PVC montée à l'aide d'**équerres 9714**
-- ou la parclose extérieure **A271** montée sur le support de cale **A272**
+(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 4, 30 et 31)
 
-(schéma: raw/dtd-6-16-2335-v5-e-volution.pdf, p. 30)
+# Les 4 modes d'assemblage mécanique meneau / traverse
 
-# Ce que la source ne donne pas
+Le DTD définit quatre types d'assemblages mécaniques homologués pour les traverses intermédiaires et meneaux [1 p. 5, 26] :
 
-Le DTD ne donne ni la longueur de coupe des traverses, ni le couple de serrage des vis, ni le
-nombre de points d'assemblage mécanique par traverse.
+1. **Par alvéovis dans traverse 6127 / 6157** : perçage à l'aide d'un gabarit de 2 trous étagés ($\varnothing 4,5\text{ mm}$ côté feuillure et $\varnothing 10,5\text{ mm}$ côté opposé). Deux vis $\varnothing 4,3\text{ mm}$ viennent se prendre dans les alvéovis de la traverse. La tête de vis repose obligatoirement sur un renfort d'acier d'au moins $250\text{ mm}$ de long. Un solin de mastic assure l'étanchéité dans et devant la rainure de parclose.
+2. **Par pièces d'ancrage et goupille** : perçage de la traverse à l'aide du gabarit 9918 ($\varnothing 8,5\text{ mm}$). La pièce d'ancrage est logée dans la chambre de renfort et bloquée par une goupille traversante. Une vis CHC M6 traverse le cadre et se visse dans la pièce d'ancrage, tête sur renfort min $250\text{ mm}$. Une bague en caoutchouc et du mastic écrasé assurent l'étanchéité.
+3. **Par équerres métalliques** : perçage traverse avec gabarit $\varnothing 8,5\text{ mm}$ et cadre à $\varnothing 3,2\text{ mm}$. Patin d'étanchéité intermédiaire. Équerres fixées par 4 vis $\varnothing 4,2 \times 16\text{ mm}$ et 4 vis auto-perçantes pénétrant dans un renfort d'au moins $250\text{ mm}$.
+4. **Par pièces d'ancrage et goupille avec fixation en feuillure** : gabarit 9918 ($\varnothing 8,5\text{ mm}$) et goupille traversante. La pièce d'ancrage est munie d'un coussin d'étanchéité intégré et se visse directement en fond de feuillure par vis auto-perçantes dans un renfort d'au moins $250\text{ mm}$.
+
+# Soudure à plat du meneau 6127
+
+Sur les dormants (soudure SP\*), la traverse 6127 peut être soudée à plat :
+- **Inertie de la zone soudée** : $I_x = 8,43\text{ cm}^4$, $I_y = 5,39\text{ cm}^4$ [1 p. 27].
+- L'assemblage par soudure est **systématiquement complété par l'ajout des équerres 9714 L+R** dont les plots de centrage ont été meulés / supprimés.
+- Les soudures à plat doivent rendre parfaitement étanches les chambres de renfort des profilés assemblés (contrôle d'étanchéité sous gradient thermique RE CSTB n° DBV-21-06826).
 
 # Citations
 
 [1] DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION —
-`raw/dtd-6-16-2335-v5-e-volution.pdf`, p. 4, 12, 13 et 30
+`raw/dtd-6-16-2335-v5-e-volution.pdf`, p. 4, 5, 12, 13, 26, 27, 30 et 31
 
 # Voir aussi
 
@@ -154,3 +171,4 @@ nombre de points d'assemblage mécanique par traverse.
 - [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md)
 - [DTD n° DBV-24-6/16-2335_V5](/sources/dtd-6-16-2335.md)
 - [profine](/fournisseurs/profine.md)
+- [KÖMMERLING](/fournisseurs/kommerling.md)

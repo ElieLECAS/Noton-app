@@ -1,7 +1,7 @@
 ---
 type: Quincaillerie
 title: Serrure motorisée
-description: Option de serrure motorisée Safe E Eneo pour portes d'entrée PROFERM, avec module de contrôle d'accès 4 en 1.
+description: Option de serrure motorisée automatique Safe E Eneo CC pour portes d'entrée PROFERM, avec contrôle d'accès 4 en 1.
 tags: [porte-entree, serrure, motorisation, eneo, sorex, digicode, bluetooth]
 status: stable
 sources:
@@ -9,88 +9,60 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+source_pages:
+  - resource: raw/catalogue-general-2026-01.pdf
+    pages: 33, 35
 generated:
-  by: process:claude-code
-  at: 2026-09-17T19:00:00Z
+  by: process:gemini-coder
+  at: 2026-09-19T17:28:00Z
 ---
 
-# Ce qu'est l'option
+# Définition et principe de fonctionnement
 
-La serrure motorisée est une option de porte d'entrée : de l'intérieur comme de l'extérieur, la
-porte se ferme et se verrouille automatiquement [1 p. 33]. Le matériel identifié
-au catalogue est un **moteur Safe E Eneo CC** avec verrouillage combiné.
+La serrure motorisée **Safe E Eneo CC** assure la fermeture et le verrouillage électromécanique automatique de la porte d'entrée dès que l'ouvrant entre en contact avec le dormant, depuis l'intérieur comme depuis l'extérieur [1 p. 33].
 
-# Deux restrictions déterminantes
+# Conditions de mise en œuvre et restrictions
 
-À vérifier avant toute proposition commerciale [1 p. 33] :
+L'intégration de la serrure motorisée est soumise à deux règles d'atelier impératives [1 p. 33] :
+1. **Compatibilité d'ouvrant** : disponible exclusivement sur **ouvrant PVC de 118 mm** ou sur **panneau monobloc** (gamme [Sélection Hexa](/portes/selection-hexa.md)). L'ouvrant PVC de 97 mm est exclu.
+2. **Absence de poignée extérieure** : la porte ne comporte pas de béquille extérieure ; la manœuvre nécessite l'installation d'un bâton de tirage ou l'actionnement direct du cylindre de sécurité.
 
-1. **Disponible uniquement sur ouvrant de 118 ou sur monobloc.** Un ouvrant PVC 97 est donc
-   exclu. Voir [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) pour les
-   types d'ouvrant, et [Sélection Hexa](/portes/selection-hexa.md) pour les monoblocs.
-2. **Cette serrure ne dispose pas de poignée extérieure.** Il faut donc prévoir un **bâton de
-   tirage**, ou conserver le cylindre de sécurité.
+# Sécurité mécanique et électromécanique
 
-# Sécurité
+Spécifications du boîtier moteur et du verrouillage combiné [1 p. 33] :
+* **Verrouillage combiné** : ancrage de sécurité simultané par goujon et crochet en acier dans les gâches du dormant.
+* **Secours manuel** : fonction manuelle par clé conservée pour le déverrouillage mécanique en cas de coupure de courant ou de panne secteur.
+* **Alimentation** : transformateur électrique directement intégré au châssis.
 
-Relevé de la page 33 du catalogue :
+# Contrôle d'accès et module Eneo 4 en 1
 
-- verrouillage et déverrouillage électromécanique
-- fermeture sécurisée par goujon et crochet
-- fonction manuelle avec clé en cas de coupure de courant
+Le paramétrage des autorisations et des plages d'accès est géré depuis l'application mobile **SOREX** [1 p. 33]. Le module de commande en façade regroupe quatre technologies d'identification [1 p. 33] :
 
-Le repli manuel par clé est le point à retenir pour rassurer un client sur le risque de panne
-électrique.
-
-# Confort et contrôle d'accès
-
-L'installation est présentée comme facile : le transformateur est intégré, et le paramétrage des
-accès se fait par l'application **SOREX** [1 p. 33].
-
-Le module de contrôle d'accès **Eneo 4 en 1** combine quatre modes d'ouverture (catalogue
-général, p. 33) :
-
-| Mode | Support |
+| Mode d'accès | Support d'identification |
 | --- | --- |
-| Digicode | clavier du module |
-| Lecteur d'empreintes | module |
-| Lecteur de badges | badge |
-| Bluetooth® | déverrouillage à proximité |
+| Clavier codé | Digicode tactile sur boîtier |
+| Biométrie | Lecteur d'empreintes digitales |
+| Sans contact | Lecteur de badges RFID |
+| Sans fil de proximité | Connexion Bluetooth® sécurisée via smartphone |
 
-# Option télécommande
+(schéma: raw/catalogue-general-2026-01.pdf, p. 33)
 
-Une télécommande est proposée en option. **Le récepteur radio de la télécommande est intégré de
-série dans le boîtier moteur** [1 p. 33] : ajouter la télécommande ne demande
-donc pas de récepteur supplémentaire.
+## Option télécommande radio
 
-# Garantie
+Une télécommande d'ouverture à distance est disponible en option. Le récepteur radio correspondant est intégré de série directement dans le boîtier moteur Safe E Eneo CC, sans ajout de carte électronique déportée [1 p. 33].
 
-La motorisation est garantie **7 ans** [1 p. 35] — même durée que la
-motorisation de volet roulant. Voir
-[Garanties par composant](/garanties/garanties-par-composant.md).
+# Garanties
 
-# À documenter
-
-Le catalogue ne nomme pas le fabricant de la serrure Safe E Eneo ni l'éditeur de l'application
-SOREX, et ne donne aucune cote d'encastrement du boîtier. Ces éléments devront venir d'une fiche
-technique fournisseur.
+La motorisation de serrure Safe E Eneo CC bénéficie d'une garantie contractuelle de **7 ans** [1 p. 35].
 
 # Citations
 
-[1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`,
-p. 33 et 35
-
-# Le détail technique est ailleurs
-
-Deux pages du wiki portent le détail de mise en œuvre de la Safe E :
-
-| Sujet | Page |
-| --- | --- |
-| Module de contrôle d'accès 4 en 1 : caractéristiques, câblage, autotest, réinitialisation | [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) |
-| Passage du courant entre dormant et ouvrant, avec ou sans bloc d'alimentation intégré | [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) |
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 33 et 35
 
 # Voir aussi
 
 - [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
 - [Sélection Hexa](/portes/selection-hexa.md)
-- [Collection Authentique](/portes/collection-authentique.md)
-- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)
+- [Contrôle d'accès 4 en 1 Eneo CC](/quincaillerie/controle-acces-eneo-cc.md)
+- [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md)

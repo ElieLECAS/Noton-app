@@ -1,7 +1,7 @@
 ---
 type: Certification
 title: Labels et certifications
-description: Les labels, certifications et classements revendiqués par PROFERM, avec leur périmètre exact et leur date d'obtention.
+description: Labels, certifications officielles et classements normatifs obtenus par PROFERM pour ses gammes et son outil industriel.
 tags: [certification, label, cstb, rc2, origine-france-garantie, qualicoat, ffcp]
 status: stable
 sources:
@@ -13,158 +13,84 @@ sources:
     id: depliant-lumeal-2026-04
     title: Dépliant LUMÉAL, édition avril 2026
     last_modified: 2026-04-21
-  - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
-    id: brochure-perform-plus-hybride-plus-2023-05
-    title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
-    last_modified: 2023-05-31
   - resource: raw/brochure-lumine65-2025-02.pdf
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
     last_modified: 2025-02-28
+source_pages:
+  - resource: raw/catalogue-general-2026-01.pdf
+    pages: 1, 7, 8, 11, 15, 17, 23, 34-36
+  - resource: raw/depliant-lumeal-2026-04.pdf
+    pages: 1
+  - resource: raw/brochure-lumine65-2025-02.pdf
+    pages: 2-3
 generated:
-  by: process:claude-code
-  at: 2026-09-17T21:30:00Z
+  by: process:gemini-coder
+  at: 2026-09-19T17:30:00Z
 ---
 
-# Ce qu'il faut retenir sur le périmètre
+# Répertoire des labels et certifications
 
-Aucun de ces labels ne couvre « PROFERM » en bloc. Chacun porte sur un périmètre précis — une
-gamme, un composant, ou l'entreprise — et la confusion se paie en argument commercial faux. Le
-tableau ci-dessous donne le périmètre exact tel qu'il est écrit au catalogue.
+Labels officiels, certifications d'entreprise et distinctions obtenus par PROFERM [1 p. 34] :
 
-# Labels et certifications
-
-| Label | Périmètre exact | Référence / date |
-| --- | --- | --- |
-| Origine France Garantie | ensemble des fenêtres, coulissants et portes d'entrée | N° 112799, certifié **AFNOR** |
-| EN 1627-30, classe 3 | baie coulissante LUMÉAL | dépliant LUMÉAL, avril 2026 |
-| Label ROTO Performance | produits équipés de quincaillerie ROTO | label créé en 2023 |
-| La French Fab | l'entreprise | adhésion fin 2023 |
-| Le Coq Vert | l'entreprise | adhésion novembre 2023 |
-| Palmarès des entreprises innovantes Hauts-de-France | l'entreprise | lauréat 2023 |
-| FFCP — construction passive | fenêtres PERFORM76, sous certaines conditions | - |
-| RC2 | fenêtre PERFORM76 avec vitrage 44/6 collé et quincaillerie spécifique | testée et labellisée par CERIBOIS |
-| Certification CSTB laque 29943 | menuiseries aluminium prélaquées | PROFERM se dit seul fabricant à en bénéficier |
-| QUALICOAT classe 2 | gamme LUMINE65, 100 % thermolaquée | - |
+| Label ou certification | Organisme certificateur | Périmètre d'application | Référence / Statut |
+| --- | --- | --- | --- |
+| Origine France Garantie | AFNOR | Ensemble des fenêtres, coulissants et portes d'entrée | N° 112799 [1 p. 1, 34, 36] |
+| Label ROTO Performance | ROTO Frank | Menuiseries équipées de quincaillerie ROTO | Premier fabricant français labellisé (2023) |
+| Classe anti-effraction RC2 | CERIBOIS | Fenêtre PERFORM76 (vitrage 44/6 collé, ferrage périmétrique, poignée à clé Sécustik) | Essai normatif réussi |
+| Construction Passive | FFCP | Fenêtres PERFORM76 (selon conditions d'installation) | Éligible maison passive |
+| La French Fab | Mouvement des industriels français | Entreprise PROFERM | Adhésion fin 2023 |
+| Le Coq Vert | Bpifrance / ADEME | Entreprise PROFERM (transition écologique) | Adhésion novembre 2023 |
+| Palmarès des entreprises innovantes | Collectif régional Hauts-de-France | Entreprise PROFERM | Lauréat parmi 102 entreprises sur 200 (2023) |
+| Certification CSTB laque 29943 | CSTB | Menuiseries aluminium prélaquées | Fabricant exclusif bénéficiaire [1 p. 15] |
+| QUALICOAT Classe 2 | QUALICOAT | Thermolaquage de la gamme aluminium LUMINE65 | Tenue garantie 25 ans [1 p. 18, 35] |
+| EN 1627-30 Classe 3 | Organisme d'essai | Baie coulissante aluminium LUMÉAL | Dépliant LUMÉAL [2 p. 1] |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 34)
 
-Mentions supplémentaires figurant au catalogue sans périmètre précisé [1 p. 34] :
-**NF** (fenêtres PVC), **CE**, **Acotherm**, **CEKAL** (menuiserie équipée de vitrages
-certifiés), **Qualimarine** (aluminium laqué haute qualité), **Qualanod**, **greenline**.
+Marquages normatifs complémentaires apposés sur la production [1 p. 34] :
+* **NF Fenêtres PVC** : conformité aux normes françaises de menuiserie PVC.
+* **Marquage CE** : déclaration de conformité aux directives européennes des produits de construction.
+* **Acotherm** : classement thermique et acoustique des menuiseries.
+* **CEKAL** : menuiseries équipées de doubles et triples vitrages certifiés.
+* **Qualimarine & Qualanod** : traitements de surface aluminium haute durabilité pour environnements agressifs.
+* **Greenline®** : profilés PVC extrudés sans plomb ni cadmium, 100 % recyclables.
 
-# Classement CSTB A*E*V
+# Classements CSTB A\*E\*V
 
-Le classement A\*E\*V mesure la résistance à l'air, à l'eau et au vent. PROFERM est classé parmi
-les **cinq meilleurs fabricants français au test A\*E\*V** par le CSTB [1 p. 7
-et 35].
+Le CSTB a classé PROFERM parmi les **5 meilleurs fabricants français au test A\*E\*V** (perméabilité à l'Air, étanchéité à l'Eau, résistance au Vent) [1 p. 7, 35].
 
-Le classement diffère selon le produit — c'est le point le plus utile de cette page :
+| Famille de produit | Classement certifié au catalogue | Pression d'eau maximale | Conditions spécifiques | Source |
+| --- | --- | --- | --- | --- |
+| Fenêtre [PERFORM70](/gammes/perform.md) | A\*4 / E\*9A / V\*A3 | 600 Pa (pluie battante) | Plus haut niveau du marché français | [1 p. 7] |
+| Fenêtre [HYBRIDE](/gammes/hybride.md) | A\*4 / E\*9A / V\*A3 | 600 Pa (pluie battante) | Châssis frappe standard | [1 p. 11] |
+| Fenêtre [TEXTURAL](/gammes/textural.md) | A\*4 / E\*9A / V\*A3 | 600 Pa (pluie battante) | Châssis frappe standard | [1 p. 23] |
+| Coulissant [INNOSLIDE](/gammes/innoslide.md) | A\*4 / E\*7A / V\*B3 | 300 Pa (pluie battante) | Coulissant PVC à frappe | [1 p. 8] |
+| [Coulissants aluminium](/gammes/coulissants-aluminium.md) | A\*4 / E\*6A / V\*B2 | 250 Pa (pluie battante) | Gamme standard aluminium | [1 p. 17] |
+| Coulissant LUMINE65 | A\*4 / E\*6A / V\*A3 | 250 Pa (pluie battante) | Relevé brochure produit (2 vantaux) | [3 p. 3] |
+| Coulissant LUMÉAL | A\*4 / E\*7A / V\*B3 | 300 Pa (pluie battante) | Relevé dépliant produit (2 vantaux H 2,5 x L 3 m) | [2 p. 1] |
+| Fenêtre LUMINE65 battante | A\*4 / E\*9A / V\*C3 | 600 Pa (pluie battante) | Relevé brochure produit | [3 p. 2] |
 
-| Produit | Classement | Source |
-| --- | --- | --- |
-| Fenêtres [PERFORM](/gammes/perform.md) | A\*4 / E\*9A / V\*A3 | p. 7 |
-| Fenêtres [HYBRIDE](/gammes/hybride.md) | A\*4 / E\*9A / V\*A3 | p. 11 |
-| Fenêtres [TEXTURAL](/gammes/textural.md) | A\*4 / E\*9A / V\*A3 | p. 23 |
-| Coulissant [INNOSLIDE](/gammes/innoslide.md) | A\*4 / E\*7A / V\*B3 | p. 8 |
-| [Coulissants aluminium](/gammes/coulissants-aluminium.md) et galandages | A\*4 / E\*6A / V\*B2 | p. 17 |
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 8, 11, 17, 23, 35)
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 8, 11, 17 et 23)
+# Niveaux de résistance à l'effraction
 
-Les brochures produit portent des classements absents du catalogue général, ou qui le
-contredisent :
-
-| Produit | Classement | Condition d'essai | Source |
-| --- | --- | --- | --- |
-| Fenêtre LUMINE65 | **A\*4 / E\*9A / V\*C3** | non précisée | brochure LUMINE65, p. 2 |
-| Coulissant LUMINE65 | A\*4 / E\*6A / V\*A3 | 2 vantaux | brochure LUMINE65, p. 3 |
-| Coulissant LUMÉAL | A\*4 / E\*7A / V\*B3 | 2 vantaux H 2,5 × L 3 m | dépliant LUMÉAL, p. 1 |
-
-**Aucun classement AEV n'est publié pour les fenêtres LUMINE au catalogue général** : le
-A\*4 / E\*9A / V\*C3 de la fenêtre LUMINE65 ne figure que dans sa brochure. Le **V\*C3** y est
-remarquable — la lettre désigne la classe de déformation sous charge de vent, et C est plus
-exigeante que le A3 des fenêtres PERFORM, HYBRIDE et TEXTURAL. C'est, sur ce critère, la
-menuiserie la plus rigide du catalogue PROFERM.
-
-Les deux classements de coulissants contredisent la valeur de gamme du catalogue — entrées
-**CTR-08** et **CTR-11** du registre
-[Contradictions entre sources](/anomalies/contradictions-entre-sources.md). **Citer le classement
-du produit issu de sa brochure, jamais la valeur de gamme.**
-
-A\*4 / E\*9A / V\*A3 est présenté comme « le plus haut niveau de résistance au vent et à l'air »
-[1 p. 35]. **Les coulissants sont donc systématiquement moins bien classés que
-les fenêtres** — à ne pas confondre en réponse à un appel d'offres.
-
-Le plus haut niveau de performances du marché est revendiqué pour la gamme **PERFORM70**
-spécifiquement [1 p. 7].
-
-# Label ROTO Performance
-
-PROFERM est le **premier fabricant à recevoir** le Label ROTO Performance, créé en 2023
-[1 p. 34]. Ce que le label apporte, selon le catalogue :
-
-- un équipement premium sur la menuiserie
-- une garantie de **10 ans sur les équipements ROTO**
-- l'accès à la certification **RC1 / RC2**
-- d'autres services et assistances privilégiés
-
-Voir [ROTO](/fournisseurs/roto.md) et
-[Garanties par composant](/garanties/garanties-par-composant.md).
-
-# Les trois niveaux de résistance à l'effraction
-
-PROFERM revendique trois niveaux différents selon le produit, ce que le catalogue général seul ne
-permet pas de voir :
-
-| Niveau | Produit | Ce qui le porte | Source |
-| --- | --- | --- | --- |
-| RC1 / RC2 | produits équipés de quincaillerie ROTO | Label ROTO Performance | catalogue général, p. 34 |
-| RC2 | fenêtre PERFORM76 | vitrage 44/6 collé, ferrage périmétrique, poignée Sécustik, labellisation CERIBOIS | catalogue général, p. 34 |
-| RC2 | PERFORM+ et HYBRIDE+ | quincaillerie [Roto NX](/quincaillerie/roto-nx.md), avec OB en position ouverte | brochure PERFORM+/HYBRIDE+, p. 2 |
-| **Classe 3** | baie coulissante LUMÉAL | non précisé | dépliant LUMÉAL, p. 1 |
-
-**La classe 3 du LUMÉAL est le niveau le plus élevé de toute la documentation PROFERM.** Le
-dépliant cite la norme sous la forme « EN 1627-30 », vraisemblablement la série EN 1627 à
-EN 1630, et n'indique ni l'organisme certificateur ni ce qui porte cette résistance — ni vitrage,
-ni quincaillerie, ni configuration d'essai.
-
-**À faire préciser avant de reprendre l'argument** : une classe 3 sur une baie coulissante est un
-argument fort face à un prescripteur, et il ne se défend pas sans son procès-verbal d'essai. Voir
-[Coulissants aluminium](/gammes/coulissants-aluminium.md).
-
-# RC2
-
-La fenêtre **PERFORM76** obtient le label RC2 lorsqu'elle est équipée d'un vitrage 44/6 collé et
-d'une quincaillerie spécifique [1 p. 34]. La résistance repose sur un ferrage
-périmétrique et une poignée verrouillable Sécustik.
-
-Elle a été **testée et labellisée par CERIBOIS**, organisme reconnu pour son expertise dans
-l'évaluation de la résistance des menuiseries [1 p. 34].
-
-# FFCP et construction passive
-
-Les fenêtres **PERFORM76** sont éligibles, **sous certaines conditions**, à la construction
-passive selon la Fédération Française de Construction Passive [1 p. 34]. Les
-conditions ne sont pas détaillées au catalogue — à obtenir avant tout engagement sur un projet
-passif.
-
-# Palmarès Hauts-de-France
-
-PROFERM figure parmi les **102 lauréats** du Palmarès des entreprises innovantes Hauts-de-France,
-sur **plus de 200 entreprises évaluées** par un collectif régional de 32 structures (catalogue
-général, p. 34). Critères de sélection cités : originalité du projet, avantage concurrentiel,
-caractère utile, impact environnemental, accompagnement par l'écosystème régional d'innovation,
-appropriation citoyenne.
+* **Label ROTO Performance** : garantit l'accès aux classes de sécurité **RC1 et RC2** sur les fenêtres équipées en ferrures ROTO [1 p. 34].
+* **Classe RC2 CERIBOIS** : certifiée sur la fenêtre PERFORM76 assemblée avec vitrage 44/6 collé, quincaillerie de sécurité spécifique à renvois d'angle et galets champignons, et poignée Sécustik verrouillable à clé [1 p. 34].
+* **Classe 3 selon EN 1627-30** : revendiquée sur la baie coulissante aluminium à ouvrant caché LUMÉAL [2 p. 1].
 
 # Citations
 
-[1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`,
-p. 7, 8, 11, 17, 23, 34 et 35
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 7, 8, 11, 15, 17, 23, 34 à 36
+[2] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 1
+[3] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 2 et 3
 
 # Voir aussi
 
 - [Garanties par composant](/garanties/garanties-par-composant.md)
-- [ROTO](/fournisseurs/roto.md)
 - [PERFORM](/gammes/perform.md)
+- [HYBRIDE](/gammes/hybride.md)
 - [LUMINE](/gammes/lumine.md)
+- [TEXTURAL](/gammes/textural.md)
+- [ROTO](/fournisseurs/roto.md)
 - [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)

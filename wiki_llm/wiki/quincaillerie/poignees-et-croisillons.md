@@ -9,6 +9,11 @@ sources:
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+  - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
+    id: brochure-perform-plus-hybride-plus-2023-05
+    title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
+
 generated:
   by: process:claude-code
   at: 2026-09-17T19:00:00Z
@@ -17,17 +22,22 @@ generated:
 # Poignées de fenêtre par gamme
 
 Les poignées de fenêtre diffèrent d'une gamme à l'autre : les deux Sécustik® sont communes à
-toutes les gammes, les deux Technal® sont réservées à
+toutes les gammes battantes traditionnelles, les deux Technal® sont réservées à
 [LUMINE](/gammes/lumine.md) [1 p. 7, 11, 15 et 23].
 
-| Poignée | PERFORM | HYBRIDE | LUMINE | TEXTURAL | Coloris |
-| --- | --- | --- | --- | --- | --- |
-| Sécustik® ATLANTA | oui | oui | oui | oui | blanc, aspect inox, caramel ou laiton |
-| Sécustik® TOULON | oui | oui | oui | oui | noir, 7016, aspect inox ou blanc |
-| Technal® BERLIN | non | non | en option | non | noir, inox, blanc ou 7016, autres coloris sur demande |
-| Technal® ANTIBES | non | non | en option | non | noir, 7016, aspect inox ou blanc |
+| Poignée | PERFORM | HYBRIDE | LUMINE | TEXTURAL | PERFORM+ / HYBRIDE+ | Coloris |
+| --- | --- | --- | --- | --- | --- | --- |
+| Sécustik® ATLANTA | oui | oui | oui | oui | non | blanc, aspect inox, caramel ou laiton |
+| Sécustik® TOULON | oui | oui | oui | oui | non | noir, 7016, aspect inox ou blanc |
+| TOULON (version décalée) | non | non | oui (LUMINE55) | non | **obligatoire** | blanc, noir, F9 (laquage RAL en option) [2 p. 3] |
+| Technal® BERLIN | non | non | en option | non | non | noir, inox, blanc ou 7016, autres coloris sur demande |
+| Technal® ANTIBES | non | non | en option | non | non | noir, 7016, aspect inox ou blanc |
 
-La poignée TOULON est celle utilisée en position décalée sur la quincaillerie invisible du
+Sur les gammes à ouvrant caché **PERFORM+** et **HYBRIDE+**, la poignée TOULON en position **décalée**
+est la seule réalisable. La poignée centrée y est techniquement impossible [2 p. 2-3]. De même, la pose
+de serrures sur portes-fenêtres est exclue sur ces gammes [2 p. 2].
+
+La poignée TOULON est également celle utilisée en position décalée sur la quincaillerie invisible du
 LUMINE55 [1 p. 14].
 
 # Béquilles doubles et rosaces, pour portes-fenêtres
@@ -112,10 +122,15 @@ Communs aux quatre gammes [1 p. 7, 11, 15 et 23] :
 
 [1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`,
 p. 7, 11, 14, 15, 17 et 23
+[2] Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023 — `raw/brochure-perform-plus-hybride-plus-2023-05.pdf`,
+p. 2-3
 
 # Voir aussi
 
+- [PERFORM+](/gammes/perform-plus.md)
+- [HYBRIDE+](/gammes/hybride-plus.md)
 - [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
 - [TECHNAL](/fournisseurs/technal.md)
 - [ROTO](/fournisseurs/roto.md)
 - [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+

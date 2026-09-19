@@ -1,7 +1,7 @@
 ---
 type: Quincaillerie
 title: Sécurité des portes d'entrée
-description: Serrures, paumelles, cylindres et renforts des portes d'entrée PROFERM, par type d'ouvrant.
+description: Serrures, paumelles, cylindres et renforts des portes d'entrée PROFERM, définis selon le type d'ouvrant.
 tags: [porte-entree, serrure, paumelle, cylindre, roto, fapim, securite]
 status: stable
 sources:
@@ -13,135 +13,77 @@ sources:
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
     last_modified: 2024-03-31
+source_pages:
+  - resource: raw/catalogue-general-2026-01.pdf
+    pages: 32, 35
+  - resource: raw/catalogue-portes-entree-2024-03.pdf
+    pages: 142, 151
 generated:
-  by: process:claude-code
-  at: 2026-09-17T23:30:00Z
+  by: process:gemini-coder
+  at: 2026-09-19T17:26:00Z
 ---
 
-# La logique du catalogue : tout dépend du type d'ouvrant
+# Définition et principe d'équipement
 
-La quincaillerie des portes d'entrée PROFERM n'est pas déterminée par le modèle de porte mais par
-le **type d'ouvrant** : PVC 97, PVC 118, ou aluminium [1 p. 32]. C'est la clé de
-lecture de toute cette page.
+La dotation en quincaillerie de sécurité des portes d'entrée PROFERM est déterminée par le matériau et la section de l'ouvrant : ouvrant PVC de 97 mm, ouvrant PVC de 118 mm, ou ouvrant aluminium [1 p. 32].
 
-# Cotes des serrures et paumelles par ouvrant
+# Matrice de quincaillerie par type d'ouvrant
 
-Quincaillerie de sécurité par type d'ouvrant, diamètres en mm, relevée sur le catalogue général
-PROFERM (p. 32).
+Composants de verrouillage, de rotation et de renfort selon la section du vantail [1 p. 32] :
 
-| Type d'ouvrant | Serrure | Paumelle | Ø paumelle (mm) | Cylindre débrayable | Nombre de clés |
-| --- | --- | --- | --- | --- | --- |
-| PVC 97 | à relevage 5 points, à rouleaux | Roto Solid B | 18 | en option | 3 |
-| PVC 118 | à crochets | Roto Solid B | 22 | inclus | 5 |
-| Aluminium | à goujons | Fapim Tube | - | inclus | 5 |
+| Type d'ouvrant | Serrure de série | Modèle de paumelle | Diamètre paumelle (mm) | Cylindre débrayable de sécurité | Clés fournies | Renforts acier |
+| --- | --- | --- | --- | --- | --- | --- |
+| PVC 97 | Relevage 5 points à rouleaux | Roto Solid B | 18 | En option | 3 | Totalité dormant et ouvrant |
+| PVC 118 | Serrure à crochets | Roto Solid B | 22 | Inclus de série | 5 | Totalité dormant et ouvrant |
+| Aluminium | Serrure à goujons | Fapim Tube | - | Inclus de série | 5 | Profils tubulaires alliage alu |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 32)
 
-Le diamètre des paumelles Fapim Tube de l'ouvrant aluminium n'est pas donné au catalogue — à
-vérifier auprès du fournisseur.
+# Spécifications des serrures et gâches
 
-Le texte de la page 32 décrit la serrure du PVC 97 comme « serrure à relevage 5 points », tandis
-que la légende du schéma la désigne « à rouleaux ». Les deux descriptions sont compatibles — une
-serrure 5 points à galets de relevage — mais il faut le savoir pour ne pas croire à deux produits
-distincts.
+Le verrouillage en feuillure fait appel à trois technologies de pênes [1 p. 32] :
+* **Serrure à rouleaux (PVC 97)** : 5 points de verrouillage par rouleaux à compression, activés par relevage de béquille.
+* **Serrure à crochets (PVC 118)** : pênes crochets en acier haute résistance venant s'ancrer dans les gâches du dormant pour empêcher l'écartement des montants.
+* **Serrure à goujons (Aluminium)** : pênes goujons cylindriques à fort enfoncement dans le montant dormant.
 
-# Serrures et renforts par ouvrant
+Deux types de gâches de dormant sont associées :
+* **Gâche classique** : gâche filante standard.
+* **Gâche IS Sécurité** : gâche renforcée avec profil anti-arrachement et réglage de compression.
 
-Le détail par ouvrant, plus fin que celui du catalogue général [2 p. 142] :
+# Paumelles renforcées
 
-| Ouvrant | Serrure selon le catalogue portes | Renfort |
-| --- | --- | --- |
-| PVC 97 | **5 points, dont 4 galets et 1 pêne dormant** | acier galvanisé en U tubulaire, côté serrure |
-| PVC 118 | **6 points, dont 3 en compression et 3 en sécurité** | total tubulaire en périphérie, inserts sertis dans les profils acier |
-| Aluminium SOLEAL | **3 pênes pénétrants** | acier galvanisé en U tubulaire, côté serrure |
+Les paumelles employées sont renforcées et intègrent un ergot anti-dégondage [1 p. 32] :
+* Les fixations sont vissées directement à travers les parois des profilés dans les armatures métalliques internes du dormant et de l'ouvrant.
+* Les ouvrants PVC et [HYBRIDE](/gammes/hybride.md) reçoivent les paumelles [ROTO](/fournisseurs/roto.md) Solid B (Ø 18 mm sur ouvrant 97, Ø 22 mm sur ouvrant 118).
+* Les ouvrants en aluminium reçoivent les paumelles Fapim Tube.
 
-La **gâche IS** est donnée « sur demande » sur le 97 et sur le SOLEAL. Le catalogue portes
-distingue par ailleurs les paumelles à **ancrage multi-points**, réservées à l'ouvrant 118
-(p. 151).
+# Cylindres de sécurité et clés
 
-**La serrure de la porte aluminium porte quatre désignations différentes dans le corpus.** Le
-schéma de la page 151 du catalogue portes légende « À pênes — Sur ALU », le texte de la même page
-écrit « serrure à crochets pour la porte d'entrée PVC 118 **et la porte d'entrée aluminium** », et
-le catalogue général écrit « serrure à goujons ».
+La sécurisation de la reproduction des clés est assurée par une **carte d'identification propriétaire** [1 p. 32] :
+* La reproduction des clés est bloquée et ne peut s'effectuer qu'après présentation de la carte d'identification associée à l'empreinte du barillet.
+* Le barillet est de type **débrayable** (manœuvrable de l'extérieur même si une clé est engagée à l'intérieur).
+* Dotation : 5 clés livrées de série sur ouvrant PVC 118 et ouvrant Aluminium ; 3 clés livrées sur ouvrant PVC 97.
 
-| Source | Serrure de la porte aluminium |
-| --- | --- |
-| Catalogue portes, p. 142 | 3 pênes pénétrants |
-| Catalogue portes, p. 151, schéma | à pênes |
-| Catalogue portes, p. 151, texte | à crochets |
-| Catalogue général, p. 32 | à goujons |
+# Armatures métalliques
 
-Entrée **INC-08** du registre
-[Incohérences internes](/anomalies/incoherences-internes.md). Trois désignations pour une même
-serrure dans un seul document : **retenir « 3 pênes pénétrants » de la page 142**, la seule
-formulation technique et détaillée.
-
-Voir [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) pour le tableau complet des trois
-ouvrants.
-
-# Serrures
-
-PROFERM propose différents types de serrures selon le modèle de porte d'entrée (catalogue
-général, p. 32). Deux types de gâche sont illustrés : **gâche classique** et **gâche IS
-Sécurité**.
-
-# Paumelles
-
-Les paumelles sont **renforcées et anti-dégondage**. Elles sont vissées dans les armatures du dormant et de l'ouvrant
-[1 p. 32].
-
-Les paumelles Roto Solid B équipent les ouvrants PVC et [HYBRIDE](/gammes/hybride.md), les
-paumelles Fapim Tube les ouvrants aluminium. Voir [ROTO](/fournisseurs/roto.md).
-
-# Cylindres
-
-La duplication des clés nécessite la présentation de la **carte d'identification** associée à
-l'empreinte du cylindre [1 p. 32] — information à donner au client à la
-livraison, car sans cette carte il ne pourra pas faire de double.
-
-Le cylindre est **débrayable** : inclus sur l'ouvrant PVC 118 et sur l'aluminium, en option sur
-l'ouvrant PVC 97 [1 p. 32].
-
-Le nombre de clés fournies diffère : **5 clés**, sauf sur PVC 97 où il n'y en a que **3**
-[1 p. 32].
-
-# Renforts
-
-Les portes d'entrée PVC sont **toutes renforcées d'armatures métalliques sur la totalité de la
-porte**, ouvrant et dormant. Les points d'ancrage et de fixation sont réalisés sur cette ossature
-[1 p. 32].
-
-# Lien avec le label RC2
-
-Le label RC2 obtenu par la fenêtre PERFORM76 repose sur un ferrage périmétrique et une poignée
-verrouillable Sécustik, avec vitrage 44/6 collé [1 p. 34]. Il porte sur la
-fenêtre, non sur la porte d'entrée. Voir
-[Labels et certifications](/certifications/labels-et-certifications.md).
+Toutes les portes d'entrée en PVC sont intégralement équipées d'armatures métalliques tubulaires en acier sur la périphérie complète de l'ouvrant et du dormant [1 p. 32]. L'ensemble des points d'ancrage, gâches et paumelles est fixé mécaniquement dans cette ossature métallique.
 
 # Garanties
 
-| Élément | Garantie |
-| --- | --- |
-| Ferrure ROTO | 10 ans sur le fonctionnement |
-| Autre ferrure | 2 ans |
-| Crémone de porte | 2 ans |
-
-Relevé sur le catalogue général (p. 35). L'écart est considérable : la quincaillerie ROTO est
-garantie cinq fois plus longtemps que les autres ferrures. Voir
-[Garanties par composant](/garanties/garanties-par-composant.md).
+Durées de garantie contractuelles [1 p. 35] :
+* Ferrures ROTO de portes : garantie 10 ans sur le fonctionnement.
+* Autres ferrures (Fapim) : garantie 2 ans.
+* Crémones de porte : garantie 2 ans.
 
 # Citations
 
-[1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`,
-p. 32, 34 et 35
-
-[2] Catalogue portes d'entrée PROFERM, édition mars 2024 —
-`raw/catalogue-portes-entree-2024-03.pdf`, p. 142 et 151
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 32 et 35
+[2] [Catalogue portes d'entrée PROFERM, édition mars 2024](raw/catalogue-portes-entree-2024-03.pdf), p. 142 et 151
 
 # Voir aussi
 
-- [Serrure motorisée](/quincaillerie/serrure-motorisee.md)
 - [Collection Authentique](/portes/collection-authentique.md)
 - [Sélection Hexa](/portes/selection-hexa.md)
+- [Serrure motorisée](/quincaillerie/serrure-motorisee.md)
 - [ROTO](/fournisseurs/roto.md)
-- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
+- [Garanties par composant](/garanties/garanties-par-composant.md)

@@ -1,9 +1,9 @@
 ---
 type: Document source
 title: Dépliant HYBRIDE, édition juin 2023
-description: Dépliant de 4 pages sur la gamme HYBRIDE, édition antérieure de deux ans à la brochure de 2025, aux chiffres techniques identiques.
+description: Dépliant commercial de 4 pages sur la gamme mixte HYBRIDE, édition historique de juin 2023 confirmant le profilé 72 mm, les ouvrants DROIT et DESIGN, et le nuancier à 9 teintes.
 tags: [depliant, hybride, kommerling, garanties]
-status: draft
+status: stable
 sources:
   - resource: raw/depliant-hybride-2023-06.pdf
     id: depliant-hybride-2023-06
@@ -17,43 +17,44 @@ generated:
 
 | Élément | Valeur |
 | --- | --- |
-| Éditeur | PROFERM |
+| Éditeur | PROFERM MULTITECHNIQUES |
+| Usine / Siège | 355 Avenue de Londres, ZI Artois Flandres - 62138 Douvrin |
 | Édition | juin 2023 |
 | Pages | 4 |
-| Nature | commercial, **document produit** |
+| Nature | Commerciale, **document produit menuiserie mixte alu/PVC** |
 
 Édition antérieure de 21 mois à la
 [brochure HYBRIDE de mars 2025](/sources/brochure-hybride.md), dont elle partage la structure et
-les chiffres techniques.
+les caractéristiques d'extrusion.
 
-# Carte des pages
+# Registre de couverture OKF
 
-| Page | Contenu | Page du wiki |
-| --- | --- | --- |
-| 1 | Couverture, positionnement | [HYBRIDE](/gammes/hybride.md) |
-| 2 | Caractéristiques techniques, étanchéité, sécurité | [HYBRIDE](/gammes/hybride.md) |
-| 3 | Coloris, garanties, certifications | [Garanties par composant](/garanties/garanties-par-composant.md) |
-| 4 | Mentions légales | — |
+| Élément source | Page doc | Statut OKF | Fichier cible dans le wiki |
+| --- | --- | --- | --- |
+| Concept mixte aluminium serti sur PVC Greenline KÖMMERLING | 1, 2 | Intégré | [HYBRIDE](/gammes/hybride.md), [KÖMMERLING](/fournisseurs/kommerling.md) |
+| Profil PVC 72 mm, 5 chambres d'isolation, Uw jusqu'à 1,2 W/m²K | 2 | Intégré | [HYBRIDE](/gammes/hybride.md), [CTR-06](/anomalies/contradictions-entre-sources.md), [CTR-07](/anomalies/contradictions-entre-sources.md) |
+| 3 joints de butée périphériques (dormant, ouvrant, parclose/verre) | 2 | Intégré | [HYBRIDE](/gammes/hybride.md) |
+| Sécurité Roto : rouleau champignon anti-dégondage, anti-fausse manœuvre, pivot 130 kg | 2 | Intégré | [HYBRIDE](/gammes/hybride.md), [ROTO](/fournisseurs/roto.md) |
+| Finitions : soudure grain d'orge intérieure, jonc de finition bas, aérateur discret | 2 | Intégré | [HYBRIDE](/gammes/hybride.md) |
+| Choix des 2 profils d'ouvrants extérieurs alu : DROIT ou DESIGN | 3 | Intégré | [HYBRIDE](/gammes/hybride.md) |
+| Nuancier : Intérieur teinté masse (Blanc 9016, Ivoire 607) ; Extérieur alu (Blanc brillant standard + 9 couleurs préférentielles) | 3 | Intégré | [HYBRIDE](/gammes/hybride.md) |
+| Règle dérogatoire cintrage / ouverture extérieure (laquage 2 faces sur PVC) | 3 | Intégré | [HYBRIDE](/gammes/hybride.md) |
+| Grille des garanties (Structure 15 ans, Laquage 7 ans, Roto 10 ans, Autre 2 ans, Volet 7 ans) | 3 | Intégré | [Garanties par composant](/garanties/garanties-par-composant.md), [CTR-04](/anomalies/contradictions-entre-sources.md) |
+| Labels : CEKAL, Acotherm, Qualanod, Qualicoat, Qualimarine Certifié, CE, Greenline | 3 | Intégré | [Labels et certifications](/certifications/labels-et-certifications.md) |
 
 # Ce qu'il établit
 
-Les chiffres de l'HYBRIDE sont **identiques à ceux de mars 2025** : profilé 72 mm, 5 chambres,
-Uw 1,2 W/m²K, pivot 130 kg, joint de butée périphérique, aucune déclinaison. La gamme est donc
-restée stable **au moins 21 mois** avant le passage à 70-76 mm et 0,8 W/m²K du catalogue de
-janvier 2026 — entrées **CTR-06** et **CTR-07**.
-
-Seule évolution entre les deux éditions : **9 couleurs extérieures à prix préférentiel en 2023**,
-11 en 2025 avec l'ajout des anodisés argent et champagne.
+- **Constance de la construction 72 mm de 2023 à 2025** : profilé PVC unique de 72 mm à 5 chambres, Uw 1,2 W/m²K, pivot 130 kg, 3 joints de butée. L'évolution vers les profilés 70 et 76 mm et le Uw de 0,8 W/m²K date de la refonte du catalogue 2026 (**CTR-06**, **CTR-07**).
+- **Nuancier 2023 à 9 teintes extérieures** : en 2023, seules 9 couleurs à prix préférentiel étaient proposées (les deux finitions anodisées argent et champagne ont été ajoutées dans l'édition 2025).
+- **Option d'ouvrant extérieur DROIT ou DESIGN** : formalise les deux designs de profilés aluminium extérieurs.
+- **Règle de cintrage** : le cintrage et l'ouverture extérieure sont irréalisables en complexe alu/PVC serti et doivent être réalisés sur base PVC intégralement laqué 2 faces.
 
 # Anomalies portées par ce document
 
 | Entrée | Objet |
 | --- | --- |
-| **CTR-13** | Uw de 1,2 W/m²K, contre 1,3 au dépliant général du même mois |
-
-# Non transcrit
-
-Aucune cote de profilé hors l'épaisseur, aucune dimension maximale, aucune référence, aucun tarif.
+| **CTR-13** | Uw de 1,2 W/m²K, contre 1,3 W/m²K au dépliant général du même mois (juin 2023). |
+| **CTR-04** | Garantie volet roulant de 7 ans, contre 5 ans au catalogue général 2026. |
 
 # Citations
 
@@ -64,3 +65,5 @@ Aucune cote de profilé hors l'épaisseur, aucune dimension maximale, aucune ré
 - [HYBRIDE](/gammes/hybride.md)
 - [Brochure HYBRIDE, édition mars 2025](/sources/brochure-hybride.md)
 - [Dépliant général PROFERM, édition juin 2023](/sources/depliant-general-2023.md)
+- [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
+

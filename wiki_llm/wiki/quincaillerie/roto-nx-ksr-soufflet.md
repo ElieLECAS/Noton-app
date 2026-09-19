@@ -1,7 +1,7 @@
 ---
 type: Quincaillerie
 title: Configurations Roto NX KSR — ouvrant à soufflet
-description: La quincaillerie de l'ouvrant à soufflet Roto NX KSR, avec et sans renvoi d'angle — crémone verrou poignée milieu, paumelle OF, compas soufflet et verrouilleur médian vertical.
+description: La quincaillerie et le positionnement du compas et des gâches de l'ouvrant à soufflet Roto NX KSR, avec et sans renvoi d'angle — crémone verrou poignée milieu, paumelle OF, compas soufflet et verrouilleur médian vertical.
 tags: [roto, roto-nx, ksr, soufflet, quincaillerie, champs-application, paumelle]
 famille: roto-nx
 status: stable
@@ -12,7 +12,7 @@ sources:
     last_modified: 2022-11-30
 source_pages:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
-    pages: 31, 58-61, 72, 74
+    pages: 31, 58-61, 72, 74, 95
 generated:
   by: process:claude-code
   at: 2026-09-20T00:40:00Z
@@ -139,6 +139,52 @@ champ non autorisé, 2 compas latéraux, 1 compas en partie haute, 2 compas lat�
 haute, 2 compas en partie haute — non repris en table ici, à lire sur le diagramme rendu en
 image.
 
+# Positionnement du compas et des gâches
+
+Cotes de positionnement du compas à soufflet, côté dormant et côté ouvrant, selon le fouillot de
+la crémone [1 p. 95]. Le compas se fixe à des points **L1**/**L1.1**/**R1**/**R1.1** sur le
+dormant et **L2**/**R2** sur l'ouvrant :
+
+| LFF (mm) | L1 (mm) | L1.1 (mm) | R1 (mm) | R1.1 (mm) | L2 (mm) | R2 (mm) | Fouillot |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 621 – 800 | - | - | - | 4 | - | 73 | 15 |
+| 801 – 1200 | - | - | - | 4 | - | 73 | 15 |
+| 1200 – 1600 | 15 | - | 195 | - | 212 | 392 | 8/15 |
+| 1601 – 2000 | 433 | - | 109 | - | 364 | 306 | 8/15 |
+| 2001 – 2400 | 433 | - | 509 | - | 364 | 706 | 8/15 |
+
+Crémone OB — compas à soufflet (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 95)
+
+| LFF (mm) | L1 (mm) | L1.1 (mm) | R1 (mm) | R1.1 (mm) | L2 (mm) | R2 (mm) | Fouillot |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 501 – 800 | - | 4 | - | - | 73 | - | 15 |
+| 801 – 1100 | - | - | - | 4 | - | 73 | 15 |
+| 1101 – 1400 | 174 | - | 220 | - | 105 | 417 | 8/15 |
+| 1401 – 1800 | 247 | - | 340 | - | 444 | 537 | 8/15 |
+| 1801 – 2400 | 433 | - | 560 | - | 364 | 757 | 8/15 |
+
+Crémone verrou — compas à soufflet (schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf,
+p. 95)
+
+Positionnement des gâches, crémone OB hauteur de poignée variable :
+
+| Largeur FF (mm) | A (mm) | B (mm) | C (mm) | D (mm) | E (mm) |
+| --- | --- | --- | --- | --- | --- |
+| 450 – 620 | - | - | - | - | - |
+| 621 – 800 | 125 | - | - | - | - |
+| 801 – 1200 | 125 | - | - | - | - |
+| 1201 – 1600 | 125 | 340 | - | - | - |
+| 1601 – 2000 | - | 312 | 358 | - | - |
+| 2001 – 2400 | - | 312 | 358 | 758 | 740 |
+
+Verrouilleur vertical, un à gauche (F1) et un à droite (F2) :
+
+| HFF (mm) | F1 (mm), gauche | Référence | F2 (mm), droite | Référence |
+| --- | --- | --- | --- | --- |
+| 801 – 1200 | 462 | 400 E | 480 | 400 E |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 95)
+
 # Ce que la source ne donne pas
 
 Les gâches (galet, sécurité, standard) et les verrouilleurs médians invisibles se lisent au
@@ -148,7 +194,7 @@ fichier gamme, hors de ce corpus.
 
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
 IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 31, 58 à
-61, 72 et 74
+61, 72, 74 et 95
 
 # Voir aussi
 

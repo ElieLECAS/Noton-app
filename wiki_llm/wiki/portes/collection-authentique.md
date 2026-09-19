@@ -1,97 +1,80 @@
 ---
 type: Porte d'entrée
 title: Collection Authentique
-description: Les sept modèles de portes d'entrée personnalisables de PROFERM, disponibles en PERFORM, HYBRIDE et TEXTURAL.
+description: Les sept modèles de portes d'entrée traditionnelles personnalisables de PROFERM, réalisables en PERFORM, HYBRIDE et TEXTURAL.
 tags: [porte-entree, authentique, perform, hybride, textural, ferronnerie]
+gamme: [PERFORM, HYBRIDE, TEXTURAL]
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
     last_modified: 2026-01-31
+source_pages:
+  - resource: raw/catalogue-general-2026-01.pdf
+    pages: 30, 32, 35
 generated:
-  by: process:claude-code
-  at: 2026-09-17T19:00:00Z
+  by: process:gemini-coder
+  at: 2026-09-19T17:22:00Z
 ---
 
-# Ce qu'est la Collection Authentique
+# Définition et modèles
 
-La collection « Authentique » regroupe les portes d'entrée personnalisables de PROFERM, décrites
-comme une fusion entre artisanat français et personnalisation [1 p. 30]. Elle
-est disponible sur trois gammes : [PERFORM](/gammes/perform.md),
-[HYBRIDE](/gammes/hybride.md) et [TEXTURAL](/gammes/textural.md).
+La collection « Authentique » regroupe les portes d'entrée traditionnelles personnalisables à moulures et panneaux décoratifs de PROFERM [1 p. 30]. Elle est disponible sur trois gammes de menuiseries : [PERFORM](/gammes/perform.md) (PVC), [HYBRIDE](/gammes/hybride.md) (mixte alu/PVC) et [TEXTURAL](/gammes/textural.md) (décoratif) [1 p. 30].
 
-Le principe est celui de la toile vierge : chaque modèle est un panneau de base que le client
-habille ensuite.
+La collection est structurée autour de sept modèles de base [1 p. 30] :
 
-# Les sept modèles
-
-| Modèle | Vitrage visible sur la photo du catalogue |
+| Modèle | Agencement des panneaux et vitrages |
 | --- | --- |
-| ADONIS | trois panneaux vitrés superposés |
-| ANÉMONE | pleine, sans vitrage |
-| CHICORÉE | un panneau vitré en partie haute |
-| CHICORÉE 2 | un panneau vitré haut, un panneau plein bas mouluré |
-| CHICORÉE 4 | deux panneaux vitrés verticaux, panneaux pleins bas |
-| DOMINO | deux panneaux vitrés verticaux en partie haute |
-| IRIS | deux panneaux vitrés verticaux, un panneau plein bas |
+| ADONIS | Trois panneaux vitrés rectangulaires superposés avec petits bois ou grille |
+| ANÉMONE | Panneau plein intégral mouluré, sans vitrage |
+| CHICORÉE | Un grand panneau vitré en partie haute, soubassement plein mouluré |
+| CHICORÉE 2 | Un panneau vitré haut, deux panneaux pleins moulurés superposés en partie basse |
+| CHICORÉE 4 | Deux panneaux vitrés verticaux en partie haute, panneaux pleins bas |
+| DOMINO | Deux panneaux vitrés verticaux en partie haute avec soubassement plein |
+| IRIS | Deux panneaux vitrés verticaux à grille, grand panneau bas avec moulure centrale |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 30)
 
-**Aucune cote n'est publiée pour ces portes** au catalogue général : ni dimensions de passage, ni
-épaisseur d'ouvrant, ni dimensions de panneau. Le renvoi se fait vers le catalogue portes, en
-ligne sur `proferm.net/nos-produits/nos-catalogues` [1 p. 32]. Les cotes devront
-venir de cette source.
+# Personnalisation et ferronnerie d'art
 
-# Les quatre étapes de personnalisation
+La conception sur mesure des portes de la Collection Authentique s'articule en quatre étapes de configuration [1 p. 30] :
+1. **Choix du modèle de panneau** parmi les sept modèles.
+2. **Choix de la gamme et des éléments décoratifs** : intégration de petits bois, heurtoir traditionnel, tirant horizontal ou vertical.
+3. **Sécurité et fonctionnalités** : sélection du vitrage décoratif ou retardateur d'effraction, grille de défense en fer forgé, bâton de tirage en inox, ou dispositif **ouvrant dans l'ouvrant**.
+4. **Compositions d'ensemble** : ajout d'une imposte haute ou d'une tierce latérale vitrée ou pleine.
 
-La personnalisation se déroule en quatre étapes [1 p. 30] :
+## Atelier de ferronnerie d'art intégré
 
-1. choisir le modèle de panneau
-2. sélectionner la gamme et les options : petits bois, heurtoir, tirant
-3. ajouter les éléments de fonction et de sécurité : vitrage, grille de défense, bâton de tirage,
-   ouvrant dans l'ouvrant
-4. compléter avec une tierce ou une imposte
+Toutes les grilles de défense de la Collection Authentique sont **forgées sur mesure au sein de l'atelier de ferronnerie d'art intégré de PROFERM** [1 p. 30].
 
-# Options de configuration
+# Configurations de mise en œuvre
 
-Quatre configurations proposées [1 p. 32] :
+Quatre configurations de baie sont réalisables [1 p. 32] :
+* Porte d'entrée vitrée.
+* Porte d'entrée avec ouvrant dans l'ouvrant (*option exclue sur les profilés aluminium*).
+* Porte d'entrée avec imposte.
+* Porte d'entrée avec tierce latérale.
 
-| Configuration | Restriction |
-| --- | --- |
-| Porte d'entrée vitrée | - |
-| Porte avec ouvrant dans l'ouvrant | **à l'exception des portes en aluminium** |
-| Porte d'entrée avec imposte | - |
-| Porte d'entrée avec tierce | - |
+# Quincaillerie et sécurité
 
-# Grilles de défense
+La quincaillerie dépend de l'ouvrant retenu (voir détail sur [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)) [1 p. 32] :
+* Ouvrant PVC 97 : serrure à relevage 5 points à rouleaux, paumelles Roto Solid B Ø 18 mm, cylindre débrayable 3 clés en option.
+* Ouvrant PVC 118 : serrure à crochets, paumelles Roto Solid B Ø 22 mm, cylindre débrayable de sécurité avec 5 clés de série.
+* Armatures métalliques en acier insérées dans l'intégralité du dormant et de l'ouvrant.
 
-**Toutes les grilles de défense sont forgées sur mesure dans l'atelier de ferronnerie d'art de
-PROFERM** [1 p. 30]. C'est une capacité de production interne, pas un achat
-fournisseur.
+# Garanties
 
-Les différents modèles ne sont pas au catalogue général : ils sont sur le site internet et dans
-le catalogue de portes d'entrée dédié [1 p. 30].
-
-# Sécurité et garanties
-
-La serrure, les paumelles, le cylindre et les renforts sont détaillés dans
-[Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md). L'option motorisée est
-traitée dans [Serrure motorisée](/quincaillerie/serrure-motorisee.md).
-
-Garanties applicables [1 p. 35] :
-
-| Élément | Garantie |
-| --- | --- |
-| Panneau de porte | 10 ans |
-| Panneau de porte, modèles plaxés | 7 ans |
-| Soubassement mouluré et plate-bande | 2 ans |
-| Crémone de porte | 2 ans |
+Durées de garantie applicables aux composants de la Collection Authentique [1 p. 35] :
+* Panneau de porte laqué ou teinté : garantie 10 ans.
+* Panneau de porte avec film plaxé : garantie 7 ans.
+* Soubassement mouluré et plate-bande : garantie 2 ans.
+* Crémone et serrure de porte : garantie 2 ans.
+* Ferrures ROTO associées : garantie 10 ans sur le fonctionnement.
 
 # Citations
 
-[1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`,
-p. 30, 32 et 35
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 30, 32 et 35
 
 # Voir aussi
 

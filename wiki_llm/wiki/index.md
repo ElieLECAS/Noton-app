@@ -13,14 +13,14 @@
 
 # Gammes
 
-* [PERFORM](/gammes/perform.md) - Gamme de fenêtres PVC de PROFERM, déclinée en profilés de 70 et 76 mm sur profilés KÖMMERLING GREENLINE.
+* [PERFORM](/gammes/perform.md) - Gamme de fenêtres et portes PVC de PROFERM, déclinée en profilés de 70 et 76 mm sur profilés KÖMMERLING GREENLINE.
 * [PERFORM+](/gammes/perform-plus.md) - Gamme de fenêtres PVC à ouvrant caché de PROFERM, annonçant 20 % de clair de jour en plus que la PERFORM, sur profilés KÖMMERLING GREENLINE 100 % renforcés.
-* [HYBRIDE](/gammes/hybride.md) - Gamme de fenêtres PROFERM à profil aluminium serti sur cœur PVC KÖMMERLING, déclinée en 70 et 76 mm.
+* [HYBRIDE](/gammes/hybride.md) - Gamme de menuiseries mixtes de PROFERM associant un profil aluminium extérieur serti sur un cœur PVC KÖMMERLING, en 70 et 76 mm.
 * [HYBRIDE+](/gammes/hybride-plus.md) - Gamme de fenêtres mixtes aluminium/PVC à ouvrant caché de PROFERM, annonçant 20 % de clair de jour en plus, avec dix coloris extérieurs laqués.
 * [LUMINE](/gammes/lumine.md) - Gamme de fenêtres aluminium de PROFERM sur profilés TECHNAL, déclinée en LUMINE55 et LUMINE65.
-* [TEXTURAL](/gammes/textural.md) - Gamme décorative de PROFERM, PVC serti aluminium, personnalisable par textures intérieures et finitions exclusives.
-* [INNOSLIDE](/gammes/innoslide.md) - Coulissant PVC à frappe de PROFERM, sans soulèvement de l'ouvrant, rattaché à la gamme PERFORM.
-* [Coulissants aluminium](/gammes/coulissants-aluminium.md) - Les quatre coulissants aluminium de PROFERM — SOLÉAL55, GALANDAGE55, LUMÉAL55 et LUMINE65 — avec leurs limites dimensionnelles par configuration.
+* [TEXTURAL](/gammes/textural.md) - Gamme décorative de PROFERM, cœur PVC KÖMMERLING serti d'aluminium, personnalisable par textures intérieures et finitions exclusives.
+* [INNOSLIDE](/gammes/innoslide.md) - Coulissant PVC à frappe de PROFERM sans soulèvement d'ouvrant, rattaché à la gamme PERFORM.
+* [Coulissants aluminium](/gammes/coulissants-aluminium.md) - Les quatre coulissants aluminium de PROFERM — SOLÉAL55, GALANDAGE55, LUMÉAL55 et LUMINE65 — avec leurs limites dimensionnelles et quincailleries.
 
 # Profilés
 
@@ -40,21 +40,26 @@
 
 # Vitrages
 
-* [Performances des vitrages](/vitrages/performances-vitrages.md) - Compositions de vitrages thermiques, acoustiques, triples et de sécurité proposées par PROFERM, avec leurs coefficients.
-* [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) - Les neuf vitrages standards décoratifs proposés par PROFERM sur toutes ses menuiseries, et les options hors catalogue.
+* [Performances des vitrages](/vitrages/performances-vitrages.md) - Compositions de vitrages thermiques, acoustiques, triples et de sécurité proposées par PROFERM, avec leurs coefficients et gammes compatibles.
+* [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) - Les neuf vitrages standards décoratifs proposés par PROFERM sur toutes ses menuiseries, et les options de personnalisation.
 
 # Équipements
 
 * [Stores intégrés](/equipements/stores-integres.md) - Stores vénitiens 16 mm et plissés 20 mm intégrés à la menuiserie PROFERM, avec leurs limites dimensionnelles, encombrements et classes de protection solaire.
-* [Volets roulants](/equipements/volets-roulants.md) - Volets roulants intégrés PROFERM, hauteurs de coffre, technologie GoodNight et motorisations SOMFY.
+* [Volets roulants](/equipements/volets-roulants.md) - Volets roulants intégrés PROFERM, hauteurs de coffre, technologie brevetée GoodNight et motorisations SOMFY.
 
 # Portes d'entrée
 
 * [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) - Les trois ouvrants de porte PROFERM — 97, 118 et SOLEAL 100 — avec leurs dimensions, serrures, quincailleries et ce que chacun interdit.
 * [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) - Les deux modes de fabrication d'une porte PROFERM, les compositions de panneaux, les monoblocs THERMIXEL et THERMALUX, le panneau verrier VERRISSIMA et les 39 modèles de la collection Lumière.
-* [Collection Authentique](/portes/collection-authentique.md) - Les sept modèles de portes d'entrée personnalisables de PROFERM, disponibles en PERFORM, HYBRIDE et TEXTURAL.
+* [Collection Authentique](/portes/collection-authentique.md) - Les sept modèles de portes d'entrée traditionnelles personnalisables de PROFERM, réalisables en PERFORM, HYBRIDE et TEXTURAL.
 * [Collection Contemporain](/portes/collection-contemporain.md) - Les 76 modèles à référence propre de la collection Contemporain, la plus large des six collections de portes d'entrée PROFERM, avec leur composition et leur coloris de présentation.
-* [Sélection Hexa](/portes/selection-hexa.md) - Les six portes d'entrée monobloc contemporaines de PROFERM, disponibles en LUMINE et HYBRIDE.
+* [Collection Graphite](/portes/collection-graphite.md) - Collection de portes d'entrée monoblocs contemporaines en gamme TEXTURAL®, caractérisées par un système breveté indéformable (Ωméga), une isolation Up de 0,36 W/m²K et des décors personnalisés peints à la main.
+* [Collection Lumière](/portes/collection-lumiere.md) - Portes d'entrée entièrement vitrées de PROFERM fabriquées en partenariat avec VERRISSIMA, dotées du vitrage haute sécurité SP510 (norme EN 356 classe P5A) et d'œuvres exclusives Métal Art et Cristal Art.
+* [Collection Classique](/portes/collection-classique.md) - Portes d'entrée traditionnelles moulurées en saillie de PROFERM, avec vitrages décoratifs spécifiques (vitrages Diamant Di101 à Di612, petits bois V, plombs et films) et cimaises extérieures.
+* [Collection Éléments](/portes/collection-elements.md) - Portes d'entrée contemporaines de PROFERM associant parements laqués et inserts texturés à l'aspect bois naturel et veinage en relief (Chêne graphite, naturel ou blanchi).
+* [Sélection Hexa](/portes/selection-hexa.md) - Les six portes d'entrée monobloc contemporaines de PROFERM, disponibles en gammes LUMINE et HYBRIDE.
+
 
 # Quincaillerie
 
@@ -63,17 +68,17 @@
 * [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) - Les largeurs, hauteurs et poids de vantail admissibles de la ferrure Roto NX selon le type d'ouverture et la classe de sécurité, avec la règle qui convertit l'épaisseur de vitrage en poids.
 * [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) - Les références de commande des crémones Roto NX par fouillot, galet et hauteur de poignée — fixe ou variable, 8, -6, 15 mm, EasyMix ou sortie de tringle — les serrures H100 de porte-fenêtre, et la méthode de lecture des tableaux à en-têtes pictographiques du catalogue.
 * [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) - Les paliers, pivots, compas OF, têtières et petites pièces qui reviennent à l'identique sur la plupart des configurations de ferrage Roto NX KSR, avec leur référence de commande.
-* [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) - Les champs d'application et la quincaillerie propres à l'ouvrant à la française Roto NX KSR, à un ou deux vantaux, avec ses compas, têtières et verrouilleurs médians.
-* [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) - Les champs d'application et la quincaillerie de l'oscillo-battant Roto NX KSR, sécurité de base, à un vantail et à deux vantaux — têtière de compas, compas P, verrouilleur médian et crémone de semi-fixe.
-* [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) - La quincaillerie de l'ouvrant à soufflet Roto NX KSR, avec et sans renvoi d'angle — crémone verrou poignée milieu, paumelle OF, compas soufflet et verrouilleur médian vertical.
+* [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) - Les champs d'application, la quincaillerie et le positionnement des gâches de l'ouvrant à la française Roto NX KSR, à un ou deux vantaux, avec ses compas, têtières, verrouilleurs médians et gabarits de montage.
+* [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) - Les champs d'application, la quincaillerie et le positionnement des gâches de l'oscillo-battant Roto NX KSR, sécurité de base et RC1, à un vantail et à deux vantaux — têtière de compas, compas P, verrouilleur médian, crémone de semi-fixe et gabarits de montage.
+* [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) - La quincaillerie et le positionnement du compas et des gâches de l'ouvrant à soufflet Roto NX KSR, avec et sans renvoi d'angle — crémone verrou poignée milieu, paumelle OF, compas soufflet et verrouilleur médian vertical.
 * [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) - La quincaillerie oscillo-battante Roto NX KSR pour châssis cintré, plein cintre et trapézoïdal — crémones, compas, verrouilleurs et raccords propres à la géométrie courbe.
-* [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) - La quincaillerie Roto NX KSR des gammes Confort et NT Designo II, qui emploient leurs propres références de pivot, palier et têtière de compas, distinctes du système P standard.
+* [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) - La quincaillerie et le positionnement des gâches Roto NX KSR des gammes Confort et NT Designo II, qui emploient leurs propres références de pivot, palier et têtière de compas, distinctes du système P standard.
 * [Limiteur d'ouverture à positions indexées Roto NX KSR](/quincaillerie/roto-nx-ksr-limiteur-ouverture.md) - L'ouvrant à la française Roto NX KSR équipé d'un limiteur d'ouverture à positions indexées, avec ses cotes de montage par largeur en feuillure et par côté paumelle (P, Designo, Designo II).
 * [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md) - Les références de caches de compas et de palier d'angle Roto NX par coloris, les compas, paliers et pivots eux-mêmes disponibles laqués blanc ou titane, et le gabarit de montage du renvoi de fouillot.
 * [Roto Patio Inowa](/quincaillerie/roto-patio-inowa.md) - Quincaillerie ROTO du coulissant INNOSLIDE, à commande active de tous les points de fermeture, sans soulèvement de l'ouvrant.
 * [Accessoires de porte d'entrée](/quincaillerie/accessoires-portes-entree.md) - Bâtons de tirage, heurtoirs, poignées, boutons et boîtes aux lettres des portes PROFERM, avec leurs longueurs et leurs restrictions par ouvrant.
-* [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) - Serrures, paumelles, cylindres et renforts des portes d'entrée PROFERM, par type d'ouvrant.
-* [Serrure motorisée](/quincaillerie/serrure-motorisee.md) - Option de serrure motorisée Safe E Eneo pour portes d'entrée PROFERM, avec module de contrôle d'accès 4 en 1.
+* [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) - Serrures, paumelles, cylindres et renforts des portes d'entrée PROFERM, définis selon le type d'ouvrant.
+* [Serrure motorisée](/quincaillerie/serrure-motorisee.md) - Option de serrure motorisée automatique Safe E Eneo CC pour portes d'entrée PROFERM, avec contrôle d'accès 4 en 1.
 * [Contrôle d'accès 4 en 1 Roto Safe E Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) - Le contrôle d'accès 4 en 1 des portes PROFERM — code PIN, empreinte, Bluetooth et RFID — avec ses caractéristiques électriques, son câblage et sa procédure de réinitialisation.
 * [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) - Les variantes de jonction de câble qui alimentent une serrure motorisée Roto Safe E entre dormant et ouvrant, avec ou sans bloc d'alimentation intégré.
 * [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) - Poignées, béquilles, fausses crémones et croisillons disponibles par gamme et par type de coulissant chez PROFERM.
@@ -95,11 +100,11 @@
 # Certifications
 
 * [DTA n° 6/16-2334_V5, système 76 Advanced](/certifications/dta-6-16-2334.md) - Document Technique d'Application CSTB du système PVC 76 Advanced de profine, valide jusqu'au 31 juillet 2028, avec son domaine d'emploi et ses dimensions maximales.
-* [Labels et certifications](/certifications/labels-et-certifications.md) - Les labels, certifications et classements revendiqués par PROFERM, avec leur périmètre exact et leur date d'obtention.
+* [Labels et certifications](/certifications/labels-et-certifications.md) - Labels, certifications officielles et classements normatifs obtenus par PROFERM pour ses gammes et son outil industriel.
 
 # Garanties
 
-* [Garanties par composant](/garanties/garanties-par-composant.md) - Durées de garantie PROFERM composant par composant, y compris les cas particuliers du laquage et du plaxage.
+* [Garanties par composant](/garanties/garanties-par-composant.md) - Grille contractuelle des durées de garantie de PROFERM par composant, laquage, plaxage et option bord de mer.
 
 # Fournisseurs
 

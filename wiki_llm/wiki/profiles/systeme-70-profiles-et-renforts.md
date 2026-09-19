@@ -192,22 +192,29 @@ Les inerties du V600 et du V601 sont **corroborées par le classeur de 2008**, q
 
 (schéma: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf, registre 2.1.2, p. 22 à 31)
 
-Deux renforts sont livrés **pré-usinés en barre** : le **V069**, long de 2 m, pour les ouvrants de
-97 mm, et le **V154**, long de 2,25 m, pour l'ouvrant 2415. Leurs inerties ne sont pas portées sur
-les planches.
+L'ouvrant de porte **2416** ($70 \times 98\text{ mm}$, feuillure $20\text{ mm}$), l'élargisseur d'ouvrant **0303** ($70 \times 90\text{ mm}$) et les huit **ouvrants réduits** — 6113, 6116, 6118, 6120, 6122, 6124, 6151 et 6153 — ont leurs cotes complètes dans le DTD [3 p. 16, 17 et 18] :
 
-L'ouvrant **2416**, de 118 mm, et les huit **ouvrants réduits** — 6113, 6116, 6118, 6120, 6122,
-6124, 6151 et 6153, de 53 ou 77 mm — figurent au sommaire des profilés sans que leur planche ait
-été dépouillée [1 registre 2.1.2 p. 2 et 3]. **Le DTD porte leur planche**, groupée par marque —
-KÖMMERLING e.VOLUTION p. 17, KBE e.MOTION p. 18, TROCAL e.XCLUSIVE p. 17 — avec des cotes qui ne
-s'expriment pas dans le même système d'axes que le tableau ci-dessus : à relever précisément avant
-de les inscrire dans cette table [3 p. 17 et 18].
+| Ouvrant | Marque / Type | Profondeur (mm) | Hauteur vue (mm) | Feuillure (mm) | Capot alu associé |
+| --- | --- | :---: | :---: | :---: | :---: |
+| **6112C** | générique droit | 70 | 53 | 20 | A170 |
+| **6113** | générique réduit | 70 | 33 | 20 | A170 |
+| **6115** | générique grand | 70 | 77 | 20 | A172 |
+| **6116** | générique réduit | 70 | 57 | 20 | A172 |
+| **2416** | ouvrant de porte | 70 | 98 | 20 | 9C36 |
+| **6121** | KÖMMERLING e.VOLUTION semi-affleurant galbé | **78** | 53 | 20 | — |
+| **6122** | KÖMMERLING e.VOLUTION réduit | **78** | 33 | 20 | — |
+| **6123** | KÖMMERLING e.VOLUTION grand | **78** | 77 | 20 | — |
+| **6124** | KÖMMERLING e.VOLUTION réduit | **78** | 57 | 20 | — |
+| **6150** | TROCAL e.XCLUSIVE semi-affleurant chanfreiné | 70 | 53 | 20 | — |
+| **6151** | TROCAL e.XCLUSIVE réduit | 70 | 53 | 20 | — |
+| **6152** | TROCAL e.XCLUSIVE grand | 70 | 77 | 20 | — |
+| **6153** | TROCAL e.XCLUSIVE réduit | 70 | 57 | 20 | — |
+| **6118** | KBE e.MOTION biseauté | 70 | 53 | 20 | — |
+| **6117** | KBE e.MOTION | 70 | 53 | 20 | — |
+| **6119** | KBE e.MOTION grand | 70 | 77 | 20 | — |
+| **6120** | KBE e.MOTION réduit | 70 | 57 | 20 | — |
 
-**Les ouvrants KÖMMERLING e.VOLUTION sont profonds de 78 mm, contre 70 mm chez TROCAL e.XCLUSIVE
-et KBE e.MOTION** — 6121-6122-6123-6124 pour la première marque, 6117-6118-6119-6120 pour KBE,
-6150-6151-6152-6153 pour TROCAL [3 p. 17 et 18]. **Le système 70 n'est donc pas uniformément
-profond de 70 mm : cette valeur qualifie le dormant, pas l'ouvrant KÖMMERLING.** Le dormant, lui,
-reste à 70 mm sur les trois marques.
+**Les ouvrants KÖMMERLING e.VOLUTION sont profonds de 78 mm, contre 70 mm chez TROCAL e.XCLUSIVE et KBE e.MOTION** — 6121-6122-6123-6124 pour la première marque, 6117-6118-6119-6120 pour KBE, 6150-6151-6152-6153 pour TROCAL [3 p. 17 et 18]. **Le système 70 n'est donc pas uniformément profond de 70 mm : cette valeur qualifie le dormant, pas l'ouvrant KÖMMERLING.** Le dormant, lui, reste à 70 mm sur les trois marques.
 
 # Cotes des battements
 

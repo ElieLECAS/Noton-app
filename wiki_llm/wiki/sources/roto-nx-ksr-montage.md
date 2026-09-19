@@ -67,9 +67,14 @@ Numérotation imprimée ; décalage de -2 par rapport au PDF.
 | 82 | loqueteau Roto NX | transcrit | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
 | 83-85 | caches par coloris, pièces laquées, montage renvoi de fouillot | transcrit | [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md) |
 | 86-91 | perçage poignée, dormant, ouvrant ; montage ferrure vantail ; coupe crémone semi-fixe ; bras de compas limiteur soufflet | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
-| 92-99 | positionnement des gâches (cotes de pose), par famille de crémone et de verrouilleur, sécurité de base et RC1 | à faire | - |
+| 92-94 | positionnement des gâches (cotes de pose), oscillo-battant à un vantail, sécurité de base et RC1, fouillot 8 et 15 mm | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 95 | positionnement du compas et des gâches, ouverture à soufflet | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+| 96-97 | positionnement des gâches (cotes de pose), oscillo-battant à deux vantaux sans meneau fixe, sécurité de base et RC1, fouillot 8 et -6 mm | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 98 | positionnement des gâches, ouvrant à la française, crémone à sortie de tringle | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
+| 99 | positionnement des gâches, oscillo-battant Confort, fouillot 15 mm poignée variable | transcrit | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
 | 100-101 | châssis cintré ou trapézoïdal : positionnement des gâches, montage en 13 étapes, gabarit de perçage du palier de compas | transcrit | [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) |
-| 102-104 | chartes d'applicabilité des gabarits de gâche, par configuration OB/OF et par classe de sécurité | à faire | - |
+| 102-103 | chartes d'applicabilité des gabarits de gâche, oscillo-battant à un et deux vantaux, sécurité de base | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 104 | charte d'applicabilité des gabarits de gâche, ouvrant à la française à deux vantaux, crémone à sortie de tringle | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
 | 105-107 | accrochage et décrochage du vantail à compas simple, fixation de la gâche de sécurité, réglage des galets E/P/V | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
 | 108-111 | vissage, force de traction exigée par poids d'ouvrant (directive TBDK), accrochage NT Designo II compas 350/500 et 250 | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
 | 112-113 | montage et réglage du report de charge NT Designo II | transcrit | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
@@ -78,13 +83,11 @@ Numérotation imprimée ; décalage de -2 par rapport au PDF.
 | 116-117 | maintenance, nettoyage | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
 | 118-121 | transport, stockage, mise au rebut | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
 | 122 | quatrième de couverture, coordonnées Roto Frank Ferrures | sans contenu propre | - |
-| 118-124 | (à vérifier au rendu) | à faire | - |
 
-**11 pages restent `à faire`** : 8 (p. 92-99, le positionnement des gâches par famille de
-crémone et de verrouilleur, sécurité de base et RC1) + 3 (p. 102-104, les chartes d'applicabilité
-des gabarits par configuration). Toutes les configurations de fenêtre, les familles de crémones,
-le perçage, le montage, l'accrochage, le vissage, l'entretien et la logistique ont été
-dépouillés.
+**Le registre ne porte plus aucune ligne `à faire` : les 122 pages imprimées sont couvertes.**
+Toutes les configurations de fenêtre, les familles de crémones, le positionnement des gâches et
+des gabarits de montage, le perçage, l'accrochage, le vissage, l'entretien et la logistique ont
+été dépouillés.
 
 # Ce qu'il apporte seul
 

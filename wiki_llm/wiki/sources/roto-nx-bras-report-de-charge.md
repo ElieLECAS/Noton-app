@@ -8,18 +8,21 @@ sources:
   - resource: raw/roto-nx-bras-report-de-charge.pdf
     id: roto-nx-report-de-charge
     title: Bras de report de charge ROTO NX, montage report de charge NT Designo II
+    last_modified: 2022-11-30
 generated:
-  by: process:claude-code
-  at: 2026-09-19T22:30:00Z
+  by: process:multimodal-okf
+  at: 2026-09-19T18:15:00Z
 ---
 
 # Identité
 
 | Élément | Valeur |
 | --- | --- |
-| Éditeur | source déclarée ROTO |
+| Éditeur | Roto Frank AG |
+| Référence | Roto NX KSR – IMO_180_NX_FR_v2, p. 112 |
+| Date | Novembre 2022 |
 | Pages | 1 |
-| Nature | atelier, extrait probable du chapitre « Montage du report de charge NT Designo II » des instructions Roto NX KSR (p. 112) |
+| Nature | **notice technique d'atelier**, extrait de la notice IMO 180 |
 
 # Registre de couverture
 

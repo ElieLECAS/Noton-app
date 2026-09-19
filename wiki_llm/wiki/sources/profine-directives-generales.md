@@ -69,6 +69,53 @@ Pas de décalage : la pagination imprimée suit la pagination du PDF.
 ouverture : les obligations contractuelles profine/fabricant (p. 2-8) et les photographies
 d'exemple de catégories de terrain, déjà définies en texte (p. 81-84).
 
+# Données techniques et paramètres d'atelier
+
+## 1. Conditions thermiques et préparation
+- **Température matière minimale** : $\ge 15^\circ\text{C}$ au moment de l'usinage et du soudage. À température d'atelier ($18\text{-}20^\circ\text{C}$), les profilés se réchauffent d'environ $1^\circ\text{C}$ par heure (p. 19, 27, 35).
+- **Débit des profilés filmés / plaxés** : couper obligatoirement **environ 15 mm en bout de barre** avant tout débit, le film n'adhérant pas de façon fiable sur les 10 premiers millimètres (p. 23, 28). Stockage des profilés débités avec surface de coupe en bas, soudage sous 48 heures max.
+- **Scies à onglet** : denture « trapèze plat », pas de 13 mm ($\varnothing 450 = 110$ dents, $\varnothing 500 = 120$ dents), vitesse de coupe 60 à 70 m/s. Denture fine (pas 3-4 mm) pour parcloses.
+
+## 2. Paramètres de soudage standard (p. 35)
+- **Miroir chauffant** : $245^\circ\text{ à }250^\circ\text{C}$ (contrôle direct au miroir).
+- **Temps de fusion** : 30 à 40 s.
+- **Temps de réglage / ajustement** : 2 s maximum.
+- **Temps d'aboutage (maintien en pression)** : 25 s minimum.
+- **Pressions de travail** :
+  - Pression de serrage : 4,5 à 6,0 bar.
+  - Pression d'accostage : 2,5 à 3,0 bar.
+  - Pression de soudage : 4,0 à 5,0 bar.
+- **Temps de refroidissement avant ébavurage** : au moins 45 s (max 30 min). **Interdiction formelle de refroidissement accéléré** (air comprimé proscrit).
+- **Limitation du cordon** : standard 2,0 mm (réductible jusqu'à 0,2 mm sous contrôle de résistance de coin). Couteau chauffé à $45\text{-}50^\circ\text{C}$.
+
+## 3. Ébavurage et usinages
+- Ébavurage effectué entre **1 minute au plus tôt et 30 minutes au plus tard** après soudure.
+- Profondeur maximale de la rainure visible : **0,5 mm**.
+- Fraisage de décompression/drainage : fente minimale $5 \times 25\text{ mm}$ ou perçage $\varnothing 8\text{ mm}$ (décalage de 50 mm entre intérieur et extérieur).
+- Entailles pour aérateur autoréglable : hauteur minimale de passage de 12 mm en direct ou 15 mm en décalé.
+
+## 4. Renforcement et vissage (p. 32)
+- **Profilés blancs** : entraxe maximal entre vis de 300 mm ; distance maximale à l'onglet de 65 mm.
+- **Profilés en couleur** : entraxe maximal entre vis de 250 mm ; distance maximale à l'onglet de 25 mm.
+- **Règle absolue** : au moins 3 vis par renfort. Vissage dans le premier tiers de la largeur du renfort.
+- Distance renfort à l'onglet : 5 à 55 mm en blanc, 5 à 15 mm en couleur.
+
+## 5. Couplages et dilatations (p. 95-96)
+- **Jeu de dilatation du couplage** : joint de compensation d'au moins **5 mm** obligatoire :
+  - dès que la largeur totale dépasse **3,50 m en blanc** ;
+  - dès que la largeur totale dépasse **2,50 m en couleur**.
+- **Vissage du couplage dans l'acier** :
+  - Première vis à 150 mm du coin intérieur (jusqu'à 250 mm pour profilés en couleur).
+  - Deuxième et troisième vis à 150 mm.
+  - Toutes les autres vis à entraxe de 300 mm.
+  - Diamètre de vis au moins 5 mm.
+
+## 6. Fixation à la maçonnerie (p. 102-105)
+- Distance des angles : 100 à 150 mm (250 mm pour profilés en couleur).
+- Entraxe maximal entre fixations : **700 mm**.
+- Joint de pose périphérique : au moins 10 mm de jeu de construction.
+- Épaisseur du mastic d'étanchéité : égale à la moitié de la largeur du joint.
+
 # Ce qu'il apporte seul
 
 **La terminologie de référence de tout le corpus profine** : les repères A à R des cotes d'une

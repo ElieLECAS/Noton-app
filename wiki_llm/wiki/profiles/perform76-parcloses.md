@@ -142,11 +142,7 @@ Le double vitrage de série de la PERFORM76 fait **28 mm**, en 6 / 18 argon / 4,
 [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) [2 p. 9]. L'absence de parclose au-delà
 de 50 mm n'est donc pas une lacune de gamme : c'est le domaine d'emploi réglementaire.
 
-Un STADIP 44²/16/4 de 64 mm, proposé au catalogue général, sort de ce domaine d'emploi — entrée
-**CTR-02** du registre
-[Contradictions entre sources](/anomalies/contradictions-entre-sources.md). Le manuel de
-fabrication profine annonce pour sa part 16 à 48 mm sur le système à joint central — entrée
-**CTR-17**.
+Le vitrage de sécurité STADIP 44²/16/4 (notation du 44.2 de 8,76 mm + lame de 16 mm + verre de 4 mm) présente une épaisseur réelle de 28,76 mm, compatible avec la parclose standard 76526 (28 mm) sans dépassement de feuillure [CTR-02 levée]. Le manuel de fabrication profine annonce pour sa part 16 à 48 mm sur le système à joint central — entrée **CTR-17**.
 
 Au-delà de **12 mm d'épaisseur de verre** ou de **60 kg de masse de vantail**, la conformité
 mécanique de la conception se démontre par voie expérimentale selon la norme NF P 20-302

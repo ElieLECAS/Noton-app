@@ -146,8 +146,12 @@ par la planche du 76303 qui reçoit les mêmes renforts. **À confirmer sur le d
 calcul statique** — entrée **VER-23** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-Le **battement 76473 ne reçoit aucun renfort** dans le manuel, alors que les 76471 et 76472 en
-reçoivent un chacun. C'est cohérent avec sa largeur : 46 mm contre 62 et 80 mm.
+Le **battement 76473 ne reçoit aucun renfort interne** dans le manuel de mise en œuvre, alors que les 76471 et 76472 en reçoivent un chacun. En revanche, le **DTD n° DBV-25-6/16-2334_V5** (p. 6, 20 et 43) prévoit pour le 76473 la possibilité d'un **renfort inox extérieur VSF01** ($21,4 \times 11\text{ mm}$, épaisseur $2,5\text{ mm}$, inertie $I_x = 1,08\text{ cm}^4$), vissé sur la face extérieure du battement tous les $250\text{ mm}$ à l'aide de vis inox A2 de $4,1 \times 40\text{ mm}$.
+
+Les **dormants pour cadres fixes exclusifs 76101 et 76102** (inconnus du cahier PERFORM76) reçoivent quant à eux :
+- 76101 : V306, V307, V309 ou **V329** ($32,5 \times 28\text{ mm}$, épaisseur $1,25\text{ mm}$, $I_x = 2,15\text{ cm}^4$)
+- 76102 : V314 ($I_x = 5,7\text{ cm}^4$) ou V326 ($I_x = 5,0\text{ cm}^4$)
+- Les renforts soudables avec insert **V337L/V337R** et **V339L/V339R** ($35 \times 45\text{ mm}$, épaisseur $2\text{ mm}$) équipent également les profils 76102/76172/76272/76279.
 
 Voir [Meneaux PERFORM76](/profiles/perform76-meneaux.md) et
 [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).

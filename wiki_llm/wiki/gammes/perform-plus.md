@@ -40,20 +40,23 @@ Les profils sont des **PVC GREENLINE® de chez [KÖMMERLING](/fournisseurs/komme
 Le « 100 % renforcés » distingue la PERFORM+ de l'[HYBRIDE+](/gammes/hybride-plus.md), dont
 l'aluminium est renforcé selon abaques.
 
-# Cotes
+# Conception et assemblage
 
-Caractéristiques annoncées de la PERFORM+, relevées sur la brochure PERFORM+/HYBRIDE+ (p. 2).
+La gamme PERFORM+ est conçue avec un ouvrant caché et un vitrage collé périphérique.
 
-| Caractéristique | Valeur |
+| Élément | Caractéristique |
 | --- | --- |
-| Gain de clair de jour vs gammes existantes (%) | 20 |
-| Épaisseur de vitrage maxi (mm) | 28 |
-| Uw avec vitrage Ug 1,0 (W/m²K) | 1,2 |
-| Largeur d'ouverture oscillo-battante (mm) | 80 ou 140 |
+| Type d'ouvrant | Ouvrant caché |
+| Profils | KÖMMERLING GREENLINE® 100 % renforcés, sans plomb, recyclable |
+| Assemblage d'angle | Soudure en grain d'orge |
+| Gain de clair de jour | +20 % par rapport aux gammes existantes PERFORM et HYBRIDE |
+| Collage vitrage | Périphérique dans l'ouvrant |
+| Épaisseur vitrage maximale | 28 mm |
+| Isolation thermique | Uw = 1,2 W/m²K (avec vitrage Ug 1,0) |
+| Entrebâillement oscillo-battant | 80 mm ou 140 mm (avec dispositif anti-claquement intégré) |
 
-**Aucune cote de profilé n'est documentée** : ni épaisseur de dormant, ni épaisseur d'ouvrant, ni
-dimension maximale de menuiserie. Il n'existe pas de cahier technique PERFORM+ dans
-`raw/` — contrairement à la [PERFORM76](/sources/cahier-technique-perform76.md).
+Aucune cote de section de profilé (dormant ou ouvrant) ni dimension maximale de fabrication n'est documentée dans la brochure commerciale.
+
 
 # Ce qui n'est pas réalisable
 
