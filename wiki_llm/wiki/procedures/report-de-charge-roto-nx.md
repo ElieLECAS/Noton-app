@@ -15,7 +15,6 @@ sources:
 generated:
   by: process:claude-code
   at: 2026-09-18T12:15:00Z
-stale_after: 2027-12-31
 ---
 
 # À quoi sert un report de charge
@@ -85,7 +84,7 @@ Voir [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md
 
 - **la référence de commande** du NT Designo II et de ses composants
 - **s'il s'applique aussi aux coulissants à pivot**, ou seulement aux oscillo-battants : les
-  champs d'application du manuel ne parlent que de fenêtres à la française et oscillo-battantes
+  champs d'application documentés ne couvrent que les fenêtres à la française et oscillo-battantes
 
 Entrée **VER-32** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md), dont la première question — le

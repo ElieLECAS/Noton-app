@@ -8,10 +8,10 @@ sources:
   - resource: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf
     id: profine-9708-montants-cintres
     title: Mise en œuvre 9708, profine France, juillet 2017
+    last_modified: 2017-07-06
 generated:
   by: process:claude-code
   at: 2026-09-18T10:00:00Z
-stale_after: 2024-12-31
 ---
 
 # À quoi sert cette procédure

@@ -8,48 +8,63 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     id: cahier-technique-perform76-cc03
     title: Cahier technique PERFORM76, version 02/09/2026 CC03
+    last_modified: 2026-09-02
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
   - resource: raw/brochure-hybride-2025-03.pdf
     id: brochure-hybride-2025-03
     title: Brochure HYBRIDE, édition mars 2025
+    last_modified: 2025-03-31
   - resource: raw/depliant-innoslide-2024-01.pdf
     id: depliant-innoslide-2024-01
     title: Dépliant INNOSLIDE, édition janvier 2024
+    last_modified: 2024-01-31
   - resource: raw/depliant-lumeal-2026-04.pdf
     id: depliant-lumeal-2026-04
     title: Dépliant LUMÉAL, édition avril 2026
+    last_modified: 2026-04-21
   - resource: raw/brochure-lumine65-2025-02.pdf
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
+    last_modified: 2025-02-28
   - resource: raw/catalogue-portes-entree-2024-03.pdf
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
+    last_modified: 2024-03-31
   - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf
     id: dta-6-16-2334-v5
     title: DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED
+    last_modified: 2025-06-19
   - resource: raw/depliant-general-2023-06.pdf
     id: depliant-general-2023-06
     title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
   - resource: raw/depliant-hybride-2023-06.pdf
     id: depliant-hybride-2023-06
     title: Dépliant HYBRIDE, édition juin 2023
+    last_modified: 2023-06-30
   - resource: raw/depliant-lumeal-2023-06.pdf
     id: depliant-lumeal-2023-06
     title: Dépliant LUMÉAL, édition juin 2023
+    last_modified: 2023-06-30
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
     id: profine-mise-en-oeuvre-76-advanced
     title: Mise en œuvre Système 76 Advanced, profine
+    last_modified: 2023-12-14
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage, réf. IMO_180_NX_FR_v2
+    last_modified: 2022-11-30
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
     id: roto-nx-catalogue-ctl-105
     title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 generated:
   by: process:claude-code
   at: 2026-09-17T22:30:00Z
@@ -87,6 +102,8 @@ technique tranche.
 | CTR-16 | Garantie du panneau de porte | Catalogue portes, mars 2024, p. 156 : 7 ans, plaxé 5 ans | Catalogue général, janvier 2026, p. 35 : 10 ans, plaxé 7 ans | **10 ans**, source la plus récente : l'amélioration est postérieure à mars 2024 | Garantie sous-annoncée de 3 ans sur un poste coûteux |
 | CTR-17 | Épaisseur de vitrage maximale du système 76 | Mise en œuvre Système 76 Advanced, profine, registre 2.1.1, p. 1 : « mise en oeuvre de différentes épaisseurs de vitrage ou panneau de remplissage **de 16 à 48 mm** » | DTA n° 6/16-2334_V5, p. 9 : vitrage jusqu'à **50 mm** ; cahier technique PERFORM76, p. 5 : parcloses d'ouvrant jusqu'à **50 mm** | **50 mm**, valeur réglementaire du DTA, qui est la pièce opposable. Le manuel de fabrication donne par ailleurs 36 à 50 mm pour la variante AluClip Zero (registre 2.6.5) : la borne de 48 mm n'est donc pas une limite du système entier | Un vitrage de 50 mm refusé à tort en atelier, ou accepté sans vérifier la parclose |
 | CTR-18 | Champs d'application de la ferrure Roto NX, côté paumelles P, oscillo-battant rectangulaire | Instructions de montage Roto NX KSR, novembre 2022, p. 21 à 27 : HFF mini 290 mm, CDR 1 N jusqu'à 1 400 mm de LFF et 2 600 mm de HFF, CDR 2 jusqu'à 2 400 mm de HFF | Catalogue Roto NX, juin 2023, p. 35 : HFF mini 280 mm, CDR 1 N jusqu'à 1 600 mm de LFF et 2 800 mm de HFF, CDR 2 jusqu'à 2 800 mm de HFF | **Les bornes les plus basses des deux documents**, en attendant l'arbitrage : les deux sont des documents ROTO du même produit, à sept mois d'écart, et aucune règle du wiki ne les départage | Vantail accepté en commande hors du champ d'application réel de la ferrure, sur quatre bornes dont trois en CDR |
+| CTR-19 | Épaisseur de vitrage de trois parcloses PERFORM76 | Cahier technique PERFORM76, p. 5 : 76508 à 48 mm, 2454 à 31 mm, 2433 à 33 mm | DTD n° DBV-25-6/16-2334_V5, p. 18 : 76508 à 46 mm, 2454 à 32 mm, 2433 à 34 mm | **Les valeurs du cahier technique** — c'est le document produit, celui qui fixe la fabrication PERFORM76 | Parclose commandée à l'épaisseur du DTD, en écart de 1 à 2 mm avec le vitrage réellement posé |
+| CTR-20 | Largeur totale de cinq dormants larges du système 70 | Mise en œuvre Système 70 Plateforme, registre 2.1.2 : 6108 à 105 mm, 6109 à 125, 6110 à 145, 6111 à 165, 6158 à 210 | DTD n° DBV-24-6/16-2335_V5, p. 15 : 6108 à 95 mm, 6109 à 115, 6110 à 135, 6111 à 155, 6158 à 200 | **Les valeurs du classeur de fabrication**, qui sert déjà de référence aux cotes de débit ; l'écart constant de 10 mm sur les cinq références suggère une convention de mesure différente, non énoncée par l'un ou l'autre document | Élargisseur ou pièce d'appui commandé 10 mm trop court ou trop long sur les cinq dormants larges |
 
 # CTR-01 en détail
 

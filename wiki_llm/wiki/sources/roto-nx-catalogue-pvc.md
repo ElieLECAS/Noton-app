@@ -34,7 +34,7 @@ page [Roto NX](/quincaillerie/roto-nx.md), que le manuel de montage ne comblait 
 | 10-33 | Généralités : pictogrammes, types d'ouverture, codes couleur, abréviations, certifications | — |
 | 34-53 | **Diagrammes d'applications** par côté paumelles et par classe de sécurité | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
 | 54-211 | Aperçu des ferrures, une planche par configuration | non transcrit |
-| 212-265 | **Crémones** | non transcrit |
+| 212-265 | **Crémones** | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md), une planche sur plus de trente |
 | 266-277 | Renvois d'angle | non transcrit |
 | 278-317 | Compas | non transcrit |
 | 318-333 | Verrouilleurs | non transcrit |
@@ -46,17 +46,13 @@ page [Roto NX](/quincaillerie/roto-nx.md), que le manuel de montage ne comblait 
 
 # Non transcrit
 
-**Les 240 pages de références, pages 212 à 451, ne sont pas reprises dans le wiki**, et pour une
-raison précise : **les en-têtes de leurs colonnes sont des pictogrammes**, définis pages 10 à 12
-par une légende dessinée. Le texte extrait donne les valeurs à la suite, sans en-tête.
-
-La ligne `601 – 800 | 690 | 200 | 263 | N N N | Roto Sil | 771919` du tableau des crémones est
-lisible comme suite de nombres et **illisible comme tableau** : rien dans le texte ne dit lequel
-de ces nombres est la longueur, lequel la hauteur de poignée, lequel le fouillot. Transcrire
-reviendrait à deviner, et une référence de ferrure fausse se paie à la commande.
-
-Ces pages sont **le deuxième poste de la relecture inverse**, après les cotes de débit du
-système 70, et elles demandent le rendu des planches en image.
+**Les en-têtes de colonnes de ces 240 pages sont des pictogrammes**, non du texte : le texte
+extrait donne les valeurs à la suite, sans dire laquelle est la longueur, laquelle la hauteur de
+poignée. **La légende des pages 10 à 12 les définit et rend la lecture possible** — voir
+[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md), qui documente les douze pictogrammes et
+transcrit la première planche complète. Ce n'est donc plus un blocage de méthode, mais un chantier
+de volume : plus de trente planches rien que pour les crémones, et sept autres familles de
+composants jusqu'à la page 435.
 
 Les 158 planches de l'aperçu des ferrures, pages 54 à 211, sont des nomenclatures dessinées,
 comme les 21 planches équivalentes du manuel de montage.
@@ -64,11 +60,12 @@ comme les 21 planches équivalentes du manuel de montage.
 # Citations
 
 [1] Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023 —
-`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 7 à 37 et 212 à 214
+`raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf`, p. 7 à 37 et 212 à 215
 
 # Voir aussi
 
 - [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
 - [ROTO](/fournisseurs/roto.md)

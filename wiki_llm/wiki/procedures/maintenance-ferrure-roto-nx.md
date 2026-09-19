@@ -1,7 +1,7 @@
 ---
 type: Procédure
 title: Maintenance d'une ferrure Roto NX
-description: Intervalles, répartition des responsabilités, nettoyage, graissage et contrôle fonctionnel d'une ferrure Roto NX, avec le couple de verrouillage maximal de 10 Nm.
+description: Intervalles, répartition des responsabilités, nettoyage, graissage, contrôle fonctionnel, transport, stockage et mise au rebut d'une ferrure Roto NX, avec le couple de verrouillage maximal de 10 Nm.
 tags: [roto, roto-nx, maintenance, entretien, nettoyage, graissage, sav, responsabilite]
 status: stable
 sources:
@@ -12,7 +12,6 @@ sources:
 generated:
   by: process:claude-code
   at: 2026-09-18T14:30:00Z
-stale_after: 2025-11-30
 ---
 
 # Intervalles de maintenance
@@ -81,9 +80,20 @@ regraisser. Un nettoyage sans regraissage abîme la ferrure au lieu de l'entrete
 | Points | deux familles distinctes sur les schémas du manuel — points à l'**huile** et points à la **graisse** |
 | Excédents | éliminer les fuites et excédents, les trier et les éliminer selon la réglementation |
 
-**Le manuel distingue les points à huiler des points à graisser**, sur un schéma en page 115. Cette
-répartition n'est pas transcrite ici : elle est portée par des repères sur un dessin, sans liste
-textuelle.
+**Le manuel distingue les points à huiler des points à graisser**, sur un schéma en page 115
+[1 p. 115] :
+
+| Emplacement | Lubrifiant |
+| --- | --- |
+| Angles du dormant (coins hauts et bas, assemblage à onglet) | graisse |
+| Montant du dormant, aux deux points de paumelle | graisse |
+| Traverse haute du dormant, à l'aplomb du compas et de la têtière | huile et graisse, aux points d'engagement |
+| Angle de raccord dormant-ouvrant, à l'aplomb du compas | graisse |
+| Montant de l'ouvrant portant la crémone (haut, milieu, bas) | huile en haut et en bas, graisse au milieu |
+
+**Les angles et les points de pivot reçoivent la graisse ; les points de coulissement de la
+crémone contre son rail reçoivent l'huile** — la règle qui ressort du schéma, au-delà de la
+liste ci-dessus.
 
 # Contrôle fonctionnel
 
@@ -126,18 +136,34 @@ fixation de la ferrure » (manuel, p. 117).
 | **Ne pas décrocher la fenêtre pour la maintenance** | la ferrure se contrôle **à l'état monté** |
 
 **Contrôler une ferrure décrochée n'a pas de sens** : c'est monté que le jeu, l'étanchéité et le
-couple se mesurent. Le manuel l'écrit comme une consigne de sécurité, mais c'est aussi une
-condition de validité du contrôle.
+couple se mesurent. C'est à la fois une consigne de sécurité et une condition de validité du
+contrôle.
 
 La garantie ROTO ne couvre que les composants d'origine Roto, et le manuel exclut sa
 responsabilité en cas de non-respect des prescriptions d'installation ou d'encrassement important.
 Voir [ROTO](/fournisseurs/roto.md).
 
+# Transport, stockage et mise au rebut
+
+**Transport** : port et levage manuels plafonnés à **40 kg pour un homme et 25 kg pour une
+femme**, dans une posture ergonomique correcte. Au-delà, transport à deux personnes ou avec un
+moyen de manutention adapté (chariot, tire-palette). Contrôler l'intégralité de la livraison dès
+réception — une défaillance se réclame dès qu'elle est constatée, les dommages-intérêts n'étant
+exigibles que pendant la période de garantie [1 p. 118-119].
+
+**Stockage**, jusqu'au montage : au sec, à l'abri, sur une surface plane, à l'abri des rayons du
+soleil [1 p. 119].
+
+**Mise au rebut** : les ferrures sont des matières premières, à mettre au rebut en déchets mixtes
+dans une filière de revalorisation — jamais avec les ordures ménagères, toujours en centre de
+collecte ou de recyclage local, en respectant les réglementations nationales [1 p. 120]. Les
+éléments de ferrure se démontent de la menuiserie avant mise au rebut.
+
 # Citations
 
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
 IMO_180_NX_FR_v2, novembre 2022 —
-`raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 114 à 117
+`raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 114 à 120
 
 # Voir aussi
 

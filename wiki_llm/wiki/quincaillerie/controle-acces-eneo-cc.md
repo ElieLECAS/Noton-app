@@ -3,16 +3,19 @@ type: Quincaillerie
 title: Contrôle d'accès 4 en 1 Roto Safe E Eneo CC
 description: Le contrôle d'accès 4 en 1 des portes PROFERM — code PIN, empreinte, Bluetooth et RFID — avec ses caractéristiques électriques, son câblage et sa procédure de réinitialisation.
 tags: [roto, safe-e, eneo-cc, controle-acces, porte-entree, serrure-motorisee, rfid, biometrie, cablage]
+famille: roto-safe-e
 status: stable
 sources:
   - resource: raw/proferm-roto-eneo-cc-notice-simplifiee-2022.pdf
     id: proferm-eneo-cc-notice-2022
     title: Roto Safe E Eneo CC, notice simplifiée PROFERM, version 2, 2022
     last_modified: 2022-12-31
+source_pages:
+  - resource: raw/proferm-roto-eneo-cc-notice-simplifiee-2022.pdf
+    pages: 1-10
 generated:
   by: process:claude-code
-  at: 2026-09-18T12:30:00Z
-stale_after: 2026-12-31
+  at: 2026-09-19T22:30:00Z
 ---
 
 # Ce qu'est le contrôle d'accès 4 en 1
@@ -103,10 +106,16 @@ variantes complètes et leurs caractéristiques.
 | 5 | Appuyer sur le module **de tous les côtés** — un scellement supplémentaire est recommandé sur les surfaces texturées |
 | 6 | Raccorder le transformateur à l'alimentation électrique |
 
-**Les cotes d'usinage ne sont pas reprises dans ce wiki.** La notice les porte sur des dessins
-cotés dont le texte extrait est illisible : la largeur du fraisage dépend de la largeur de la
-têtière, l'axe de fraisage dépend du profil, et le fraisage dépend des hauteurs de gâche. Ces trois
-dépendances sont énoncées par la notice, les valeurs sont à lire sur les planches.
+**Fraisage du module lui-même** : un rectangle de **40 × 86 mm**, coins arrondis à un rayon de
+**5 mm** [1 p. 4].
+
+**Les cotes de fraisage de la serrure et des gâches ne sont pas reprises.** Rendue à 220 dpi, la
+planche porte une trentaine de valeurs (752, 438, 226, 176, 151,5, 220, 24,5, 82, 48, 44, 30, 19,
+135...) sur deux dessins — fraisage du vantail et fraisage du dormant — sans qu'un tableau associe
+chaque nombre à sa cote de façon univoque à cette résolution. Trois dépendances sont énoncées par
+la notice : la largeur du fraisage dépend de la largeur de la têtière, l'axe de fraisage dépend du
+profil, et le fraisage dépend des hauteurs de gâche [1 p. 2]. Reprendre cette planche cote par
+cote, avec un zoom par quart, est un chantier à part.
 
 # Retournement du pêne
 
@@ -140,6 +149,97 @@ La réinitialisation aux paramètres d'usine se fait de deux façons :
 La **boîte noire** est l'unité intérieure, placée à l'abri dans le vantail ou dans le mur : c'est
 elle qui protège l'électronique et porte le bouton Reset.
 
+**Le code d'usine 123456, suivi de la touche de validation, ouvre la porte et teste
+l'installation** — mais seulement dans l'état de livraison, avant toute programmation par
+l'utilisateur [1 p. 5].
+
+# Télécommande
+
+Jusqu'à **30 télécommandes** peuvent être associées au récepteur radio de l'Eneo C, CC ou CF
+[1 p. 8]. Le récepteur porte un code propre : il n'accepte que les signaux d'une télécommande
+programmée avec ce code. Un même bouton de télécommande peut piloter des Eneo différentes — deux
+Eneo se pilotent séparément avec une seule télécommande — et les deux boutons d'une télécommande
+peuvent aussi être programmés pour une seule Eneo.
+
+| Étape | Opération |
+| --- | --- |
+| 1 | Ouvrir la porte |
+| 2 | Verrouiller la serrure avec la clé, porte ouverte |
+| 3 | Insérer une tige de Ø 3 mm maximum dans le trou situé sous la zone du capteur (zone en PVC noir), pour activer l'association |
+| 4 | Attendre le bip sonore continu de 18 secondes, qui signale que la serrure est prête pour l'association |
+| 5 | Appuyer sur le bouton de la télécommande |
+| 6 | L'association est confirmée par un bip de 2 secondes |
+
+(schéma: raw/proferm-roto-eneo-cc-notice-simplifiee-2022.pdf, p. 8)
+
+# Dépannage
+
+Table d'assistance en cas de panne, relevée sur la notice (p. 9).
+
+| Symptôme | Cause possible | Solution |
+| --- | --- | --- |
+| Le système ne fonctionne pas, aucun signal sonore | absence de 220 V à l'entrée primaire du transformateur | installation électrique réservée à un professionnel qualifié, selon l'IMO_438 |
+| Le système ne fonctionne pas | absence de 24 V à la sortie du transformateur | vérifier les contacts du boîtier d'alimentation |
+| Le système ne fonctionne pas | 24 V absents à la serrure | vérifier et remplacer si besoin les câbles de connexion |
+| Le système ne fonctionne pas | polarité +/− inversée à la sortie du transformateur | inverser les polarités à l'entrée secondaire |
+| Le système ne fonctionne pas | l'unité motrice en position finale ne reçoit pas de signal de mouvement | vérifier les câbles ou changer la distance de l'Eneo CC (1 à 2 m) |
+| Eneo CC ne se verrouille pas automatiquement | porte non complètement fermée | fermer complètement la porte |
+| Eneo CC ne se verrouille pas automatiquement | mode de fonctionnement de jour actif | passer en mode nuit |
+| Eneo CC ne se verrouille pas automatiquement | aimant en feuillure mal aligné | vérifier et ajuster la position de l'aimant |
+| Ne se verrouille pas complètement, signal d'erreur (bip ×3) | porte et gâches mal alignées, ou corps étranger dans la gâche | ajuster porte et gâches, ou retirer le corps étranger |
+| Ne se verrouille pas complètement, signal d'erreur (bip ×2) | pêne mal engagé, contact reed non fermé | ouvrir la porte électriquement et repousser la porte |
+| Porte activée manuellement au cylindre | déverrouillage manuel | reverrouiller manuellement après un déverrouillage manuel |
+| La porte ne se déverrouille pas | aucun signal reçu de la télécommande ou du contrôle d'accès | programmer la télécommande, vérifier les paramètres du contrôle d'accès |
+
+(schéma: raw/proferm-roto-eneo-cc-notice-simplifiee-2022.pdf, p. 9)
+
+**Si le système ne fonctionne toujours pas** : éteindre le transformateur, attendre 10 secondes,
+le rallumer, tester avec l'Unité de Contrôle Eneo, puis contacter un spécialiste [1 p. 9].
+
+# Entretien
+
+Trois tables de maintenance relevées sur la notice (p. 10), chacune répartie entre **entreprise
+spécialisée** et **utilisateur final**.
+
+**Au moins une fois par an :**
+
+| Opération | Entreprise spécialisée | Utilisateur final |
+| --- | --- | --- |
+| Resserrer les vis de fixation desserrées | oui | oui |
+| Remplacer les vis endommagées | oui | non |
+| Remplacer les pièces si besoin | oui | non |
+| Appliquer une huile sans résine ni acide sur les pièces mobiles | oui | oui |
+| Appliquer une huile sans résine ni acide sur les gâches en acier | oui | oui |
+
+**Inspection, au moins une fois par an, tous les 6 mois en établissement scolaire ou hôtelier :**
+
+| Opération | Entreprise spécialisée | Utilisateur final |
+| --- | --- | --- |
+| Vérifier la fixation des ferrures de sécurité | oui | oui |
+| Vérifier l'usure des ferrures de sécurité | oui | oui |
+| Vérifier le fonctionnement des parties mobiles | oui | oui |
+| Vérifier le fonctionnement des points de fermeture | oui | oui |
+| Améliorer la mobilité par graissage/huilage ou réajustement des ferrures | oui | non |
+
+**Nettoyage :**
+
+| Opération | Entreprise spécialisée | Utilisateur final |
+| --- | --- | --- |
+| Ôter dépôts et saletés des ferrures | oui | oui |
+| Nettoyer au détergent doux, pH neutre et dilué, chiffon doux | oui | oui |
+| Utiliser un détergent agressif, acide ou abrasif | **interdit dans tous les cas** | **interdit dans tous les cas** |
+
+**L'utilisateur final n'est jamais autorisé aux travaux de montage** — les cases qu'il ne coche
+pas dans ces trois tables sont toutes réservées à l'entreprise spécialisée, sans exception
+[1 p. 10]. Roto Frank recommande au fabricant de portes de conclure un contrat de maintenance
+avec ses clients.
+
+# Élimination des déchets
+
+Les déchets électroniques du module suivent les directives européennes RoHS (2002/95/CE) et
+WEEE (2002/96/CE) et, en Allemagne, la loi ElektroG : pas de mise au rebut avec les ordures
+ménagères, remise à un site d'élimination approprié [1 p. 7].
+
 # Ce que ce document n'est pas
 
 > « Cet extrait ne remplace pas une documentation complète. Le non-respect de cette documentation
@@ -148,11 +248,6 @@ elle qui protège l'électronique et porte le bouton Reset.
 La notice PROFERM est un **extrait** des instructions d'installation Roto complètes, référencées
 **IMO_438** pour les Eneo C, CC et CF. **La garantie ne couvre que les composants d'origine
 Roto.** Voir [ROTO](/fournisseurs/roto.md).
-
-Le document prévoit un entretien **au moins une fois par an**, avec une répartition explicite des
-tâches entre **entreprise spécialisée** et **utilisateur final** — resserrage des vis de fixation,
-remplacement des vis endommagées. Les réglages de ferrure sont réservés à l'entreprise
-spécialisée.
 
 # Provenance
 

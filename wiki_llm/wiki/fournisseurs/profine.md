@@ -9,27 +9,25 @@ sources:
   - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf
     id: dta-6-16-2334-v5
     title: DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED
+    last_modified: 2025-06-19
   - resource: raw/profine-directives-generales-2023-01.pdf
     id: profine-directives-generales-2023
     title: Directives générales profine, version janvier 2023
+    last_modified: 2023-01-31
   - resource: raw/poster-systeme-76-advanced-principaux-2022.pdf
     id: poster-76-advanced-principaux
     title: Poster Système 76 Advanced, profilés principaux, 2022
+    last_modified: 2022-12-31
 generated:
   by: process:claude-code
   at: 2026-09-18T00:00:00Z
-stale_after: 2028-07-31
 ---
 
-# Ce que profine est réellement
+# Ce que PROFERM lui achète
 
-**profine est le groupe qui extrude les profilés PVC de PROFERM.** Jusqu'ici le wiki ne le
-connaissait que par un logo sur la couverture du cahier technique PERFORM76, à côté de celui de
-[KÖMMERLING](/fournisseurs/kommerling.md). Les documents fournisseur versés dans `raw/`
-établissent la relation.
-
-**KÖMMERLING n'est pas un fournisseur distinct : c'est une marque de profine.** Le DTA
-n° 6/16-2334_V5 couvre un seul et même procédé commercialisé sous **trois marques** :
+**profine est le groupe qui extrude les profilés PVC de PROFERM.**
+[KÖMMERLING](/fournisseurs/kommerling.md) en est une marque, aux côtés de TROCAL et de KBE : le
+DTA n° 6/16-2334_V5 couvre un seul procédé commercialisé sous **trois marques** :
 
 | Marque | Désignation du système |
 | --- | --- |
@@ -37,10 +35,12 @@ n° 6/16-2334_V5 couvre un seul et même procédé commercialisé sous **trois m
 | KBE | KBE 76 ADVANCED |
 | **KÖMMERLING** | **KÖMMERLING 76 ADVANCED** |
 
-(source: dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 6)
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 6)
 
-Quand PROFERM annonce des « profils PVC GREENLINE® de chez KÖMMERLING® », il s'agit donc du
-**système 76 Advanced de profine**, vendu sous la marque KÖMMERLING.
+Un « profil PVC GREENLINE® de chez KÖMMERLING® » est donc un profilé du **système 76 Advanced de
+profine**. Les deux systèmes profine employés par PROFERM sont détaillés dans
+[Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) et dans les
+trois pages du système 76.
 
 # Coordonnées du titulaire
 
@@ -50,14 +50,12 @@ Quand PROFERM annonce des « profils PVC GREENLINE® de chez KÖMMERLING® », i
 | Adresse | ZI de Gutleutfeld, FR-67440 Marmoutier |
 | Téléphone | 03 88 71 50 51 |
 
-(source: dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 7)
-
-C'est la première coordonnée fournisseur que le wiki possède.
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 7)
 
 # Sites d'extrusion
 
 Les profilés sont marqués à la fabrication d'un repère indiquant l'année, le jour de fabrication
-et **le lieu d'extrusion** (DTA, p. 7). Quatre sites :
+et **le lieu d'extrusion** [1 p. 7]. Quatre sites :
 
 | Site | Pays |
 | --- | --- |
@@ -77,21 +75,21 @@ litige de qualité matière.
 | **QB 49** | QB-Profilés aluminium à rupture de pont thermique, pour le profilé EO20545 |
 | **QB 33** | Profilés Revêtus, pour les films et laques |
 
-(source: dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 6 et 7)
+(schéma: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf, p. 6 et 7)
 
 **L'autocontrôle de fabrication et le marquage des profilés de coloris caramel et brun font
-l'objet d'un suivi par le CSTB** (DTA, p. 6) — ces deux coloris sont donc surveillés
-spécifiquement, vraisemblablement pour leur tenue.
+l'objet d'un suivi par le CSTB** [1 p. 6]. Aucun autre coloris ne fait l'objet d'un suivi
+nommé.
 
 # Déclaration environnementale
 
 Le système fait l'objet d'une **Déclaration Environnementale collective**, établie le
-**12 décembre 2019** par l'**UFME** (Union des Fabricants de Menuiseries Extérieures) et le
-**SNEP** (Syndicat National de l'Extrusion Plastique), vérifiée par tierce partie indépendante
-selon l'arrêté du 31 août 2015 et déposée sur **inies.fr** (DTA, p. 6).
+**12 décembre 2019** par l'**UFME**, Union des Fabricants de Menuiseries Extérieures, et le
+**SNEP**, Syndicat National de l'Extrusion Plastique, vérifiée par tierce partie indépendante
+selon l'arrêté du 31 août 2015 et déposée sur **inies.fr** [1 p. 6].
 
-C'est la donnée qui permet de calculer l'impact environnemental d'un ouvrage intégrant ces
-menuiseries — ce que le discours « PVC recyclable » du catalogue PROFERM ne permet pas de faire.
+C'est la seule donnée du corpus qui permette de calculer l'impact environnemental d'un ouvrage
+intégrant ces menuiseries.
 
 # profine porte deux systèmes certifiés, pas un
 
@@ -106,15 +104,13 @@ groupe. Le second correspond à la **Gamme 70** des planches KÖMMERLING — voi
 
 # La quincaillerie du DTA n'est pas celle de PROFERM
 
-Le DTA nomme **FERCO** comme quincaillerie du procédé, en ajoutant que « d'autres quincailleries
-peuvent être utilisées sur justifications » (DTA, p. 9).
+La quincaillerie du procédé 76 Advanced est **FERCO**, d'autres quincailleries étant admises
+« sur justifications » [1 p. 9]. PROFERM emploie [ROTO](/fournisseurs/roto.md) : la substitution
+est prévue par le DTA, mais la justification correspondante ne figure dans aucun document du
+corpus — entrée **VER-20** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-PROFERM utilise [ROTO](/fournisseurs/roto.md), et revendique même le Label ROTO Performance. Ce
-n'est donc pas une contradiction mais une **substitution justifiée**, prévue par le DTA
-lui-même. La justification correspondante n'est dans aucun document du wiki — entrée **VER-20**
-du registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
-
-# Documents profine dans le wiki
+# Documents
 
 | Document | Nature |
 | --- | --- |

@@ -12,7 +12,6 @@ sources:
 generated:
   by: process:claude-code
   at: 2026-09-18T12:00:00Z
-stale_after: 2028-03-19
 ---
 
 # Ce que fait cette procédure
@@ -54,7 +53,7 @@ le dormant.
 - **les références** de la têtière, du compas OB et de la gâche OB : la procédure les appelle
   « fournis », sans numéro de commande
 - **la longueur de la têtière** : elle est « fournie à dimension », donc commandée par la hauteur
-  de l'ouvrant, mais le document ne donne pas la règle de calcul
+  de l'ouvrant, sans règle de calcul publiée
 - **les cotes de perçage** de la gâche OB en traverse basse
 - **les limites dimensionnelles** de l'ouvrant transformé : un oscillo-battant n'a pas les mêmes
   cotes maximales qu'un ouvrant à la française — voir

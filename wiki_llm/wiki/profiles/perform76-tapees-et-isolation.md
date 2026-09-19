@@ -8,35 +8,37 @@ sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     id: cahier-technique-perform76-cc03
     title: Cahier technique PERFORM76, version 02/09/2026 CC03
+    last_modified: 2026-09-02
+  - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
+    id: dtd-6-16-2334-v5
+    title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
+    last_modified: 2025-06-19
 generated:
   by: process:claude-code
   at: 2026-09-17T20:00:00Z
-stale_after: 2027-09-02
+verified:
+  by: process:claude-code
+  at: 2026-09-18T22:00:00Z
 ---
 
-# La règle à retenir
+# Une tapée ne donne pas la même isolation selon le dormant
 
-**Une même tapée ne donne pas la même épaisseur d'isolant selon le dormant sur lequel elle est
-montée.** Sur un dormant 76171, chaque tapée gagne 15 mm d'isolant par rapport au même profil
-monté sur un 76177, un 76185 ou un 76180.
+Montée sur un dormant **76171**, une tapée PERFORM76 donne **15 mm d'isolant de plus** que le même
+profil monté sur un 76177, un 76185 ou un 76180. L'épaisseur d'isolation se lit donc dans la
+colonne du dormant réellement employé.
 
-Lire l'épaisseur d'isolant dans la colonne du dormant réellement utilisé, jamais dans celle d'à
-côté. C'est l'erreur qui coûte une tapée refaite.
+Trois familles de pièces se lisent dans les colonnes voisines d'un même tableau et ne se
+substituent pas :
 
-**Sur un dormant 76171, les seules épaisseurs d'isolation qui existent sont 80, 95, 115, 135,
-155, 175, 195 et 215 mm.** Il n'y a pas de 140 mm sur ce dormant : 140 mm est une valeur du 76180
-et du 76177/76185. Une demande à 140 mm sur un 76171 se traite en 135 ou en 155 mm, pas entre les
-deux.
-
-Ne pas confondre les familles : la **tapée** est le profil qui donne l'épaisseur d'isolation
-(6138 à 6142, 76772, 76769), l'**appui** est une autre pièce (6136, 6137, 76758, 76768), la
-**patte de pose** une troisième (NT1939 à NT1953). Une même épaisseur d'isolation se lit sur trois
-tableaux différents, un par famille.
+| Famille | Rôle | Références |
+| --- | --- | --- |
+| Tapée | donne l'épaisseur d'isolation | 6138 à 6142, 76772, 76769 |
+| Appui | reçoit le rejet d'eau sous le dormant | 6136, 6137, 76758, 76768 |
+| Patte de pose | fixe le dormant dans le gros œuvre | NT1939 à NT1953 |
 
 # Cotes des tapées par dormant
 
-Épaisseur d'isolation permise par chaque tapée, en mm, relevée sur le cahier technique (p. 14,
-16 et 21).
+Épaisseur d'isolation permise par chaque tapée PERFORM76, en mm, selon le dormant support.
 
 | Tapée | Cote propre (mm) | Iso sur 76177 et 76185 (mm) | Iso sur 76180 (mm) | Iso sur 76171 (mm) |
 | --- | --- | --- | --- | --- |
@@ -51,17 +53,57 @@ tableaux différents, un par famille.
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14, 16 et 21)
 
-La cote propre est la hauteur de la tapée elle-même, constante quel que soit le dormant. Les
-cotes de montage, elles, varient : 35/16 sur les dormants rénovation, 35/39 sur le 76180, 35/45
-sur le 76171 (cahier technique, p. 14, 16 et 21).
+**Sur un dormant 76171, les seules épaisseurs d'isolation qui existent sont 80, 95, 115, 135, 155,
+175, 195 et 215 mm.** Une demande à 140 mm sur ce dormant se traite en 135 ou en 155 mm : le
+140 mm appartient au 76180 et aux dormants rénovation.
 
-Le cahier technique ne donne **aucune planche de tapées pour le dormant 76172** — compatibilité
-à confirmer auprès du bureau d'études.
+Le DTD du système donne les mêmes tapées à 0,5 mm près et suffixées **.1** sur quatre d'entre
+elles : 6139.1, 6140.1, 6141.1 et 6142.1 pour 35,5, 55,5, 75,5 et 95,5 mm d'épaisseur propre —
+contre 35, 55, 75 et 95 mm au cahier technique. Écart mineur d'arrondi entre les deux sources,
+sans incidence sur l'isolation obtenue [2 p. 4].
 
-# La contrainte du 76171 en forte isolation
+# Correspondance avec les pièces d'appui
 
-Sur un dormant 76171, **au-delà de 155 mm d'isolant, le dormant bas doit être remplacé par un
-76180 à aile de 20 mm** (cahier technique, p. 21, note en bas de tableau).
+Chaque tapée n'est pas compatible avec chacun des quatre appuis de pièce d'appui du système.
+Correspondance relevée sur le DTD, `X` marquant une compatibilité.
+
+| Tapée | Épaisseur (mm) | Appui 6137 | Appui 6136 | Appui 76758 | Appui 76768 |
+| --- | --- | --- | --- | --- | --- |
+| 6138 | 15 | X | X | X | X |
+| 6139.1 | 35,5 | X | X | X | X |
+| 6140.1 | 55,5 | X | X | X | X |
+| 6141.1 | 75,5 | X | X | X | - |
+| 6142.1 | 95,5 | X | X | - | - |
+| 76772 | 115,5 | X | - | - | - |
+| 76769 | 135,5 | X | - | - | - |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 4)
+
+**Plus la tapée est épaisse, moins elle admet d'appuis** : les deux tapées les plus fines
+(6138 et 6139.1) se posent sur les quatre appuis, les deux plus épaisses (76772 et 76769)
+n'admettent plus que le 6137.
+
+# Embouts des pièces d'appui
+
+Chaque appui de pièce d'appui a son propre embout, en PVC expansé, qui obture ses chambres.
+
+| Appui | Embout | Nombre de pièces |
+| --- | --- | --- |
+| 6136 | 9F55.1 | 1 |
+| 6137 | 9F56.1 | 2 |
+| 76758 | AC011 | 3 |
+| 76768 | M780, M781, M782 | 3 |
+
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 4 et 23)
+
+La cote propre est la hauteur de la tapée, constante quel que soit le dormant. Les cotes de
+montage varient : **35 / 16** sur les dormants rénovation, **35 / 39** sur le 76180, **35 / 45**
+sur le 76171, à l'exception de la tapée 76769 qui y est cotée 35 / 39.
+
+# La contrainte du 76171 au-delà de 155 mm
+
+Sur un dormant 76171, **au-delà de 155 mm d'isolant le dormant bas devient un 76180 à aile de
+20 mm**.
 
 | Iso sur 76171 (mm) | Appui | Dormant bas |
 | --- | --- | --- |
@@ -74,12 +116,12 @@ Sur un dormant 76171, **au-delà de 155 mm d'isolant, le dormant bas doit être 
 | 195 | 76768 | **76180, aile de 20 mm** |
 | 215 | 76768 | **76180, aile de 20 mm** |
 
-C'est une contrainte de conception, pas un détail de pose : elle change la nomenclature du
-châssis. À vérifier dès le chiffrage d'un projet en isolation renforcée.
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 21)
 
-# Appuis et pattes de pose sur dormants 76177 et 76185
+C'est une contrainte de conception : elle change la nomenclature du châssis, et se vérifie au
+chiffrage d'un projet en isolation renforcée.
 
-Correspondance épaisseur d'isolation / référence d'appui, relevée sur le cahier technique (p. 14).
+# Appuis sur dormants 76177 et 76185
 
 | Épaisseur d'isolation (mm) | Appui |
 | --- | --- |
@@ -94,16 +136,15 @@ Correspondance épaisseur d'isolation / référence d'appui, relevée sur le cah
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14)
 
-Aucune patte de pose n'est indiquée pour ces deux dormants rénovation : la fixation se fait par
-les principes de pose rénovation. Voir
+Aucune patte de pose n'est affectée à ces deux dormants rénovation : la fixation suit les
+principes de pose rénovation, décrits dans
 [Pose de la PERFORM76](/procedures/pose-perform76.md).
 
-Le tableau d'appuis part de 60 mm alors que la planche de tapées annonce « Iso de 65 » sans
-tapée. Le cahier technique ne raccorde pas les deux valeurs — écart mineur, à confirmer.
+Ce tableau part de 60 mm alors que la planche de tapées annonce 65 mm sans tapée — entrée
+**INC-06** du registre [Incohérences internes](/anomalies/incoherences-internes.md).
 
 # Appuis et pattes de pose sur dormant 76180
 
-Correspondance épaisseur d'isolation / patte / appui, relevée sur le cahier technique (p. 16).
 Clameau réf. **CP14GGOM0012**, **sans cale**.
 
 | Épaisseur d'isolation (mm) | Patte de pose | Appui |
@@ -121,7 +162,6 @@ Clameau réf. **CP14GGOM0012**, **sans cale**.
 
 # Appuis et pattes de pose sur dormant 76171
 
-Correspondance épaisseur d'isolation / patte / appui, relevée sur le cahier technique (p. 21).
 Clameau réf. **CP14GGOM0012**, cale réf. **CTHNT0030**.
 
 | Épaisseur d'isolation (mm) | Patte de pose | Appui | Cale |
@@ -137,14 +177,13 @@ Clameau réf. **CP14GGOM0012**, cale réf. **CTHNT0030**.
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 21)
 
-Les trois dernières lignes imposent le dormant bas 76180 — voir la section précédente. Le premier
-cas, à 80 mm, est le seul **sans cale** de tout le tableau.
+Le cas à 80 mm est le seul **sans cale** du tableau. Les trois dernières lignes imposent le
+dormant bas 76180.
 
 # Compatibilités des pattes de pose
 
-**Une ligne par couple patte et dormant.** Une même patte dessert les deux dormants neufs à des
-épaisseurs d'isolation différentes : lire la ligne dont la colonne « Dormant » correspond au
-dormant réellement utilisé.
+Une ligne par couple patte et dormant : une même patte dessert les deux dormants neufs à des
+épaisseurs d'isolation différentes.
 
 | Patte | Dormant | Épaisseur d'isolation (mm) |
 | --- | --- | --- |
@@ -165,17 +204,24 @@ dormant réellement utilisé.
 | NT1953 | 76180 | 200 |
 | NT1953 | 76171 | 215 |
 
-Les sept pattes ne sont documentées que sur les dormants neufs 76171 et 76180. Le cahier ne
-donne aucune cote pour ces pattes, seulement leur affectation.
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16 et 21)
 
-**Aucune épaisseur intermédiaire n'existe.** Les valeurs ci-dessus sont les seules documentées :
-140 mm est une épaisseur valable sur le 76180 mais **pas sur le 76171**, où les valeurs
-encadrantes sont 135 et 155 mm.
+**Aucune épaisseur intermédiaire n'existe** : les valeurs de ce tableau sont les seules
+documentées.
+
+# Ce que la source ne donne pas
+
+- Aucune **planche de tapées pour le dormant 76172**.
+- Aucune **cote pour les pattes NT1939 à NT1953**, seulement leur affectation.
+- Aucune patte de pose pour les dormants rénovation 76177 et 76185.
 
 # Citations
 
 [1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
 `raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 14, 16 et 21
+
+[2] DTD n° DBV-25-6/16-2334_V5, système 76 Advanced —
+`raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 4 et 23
 
 # Voir aussi
 
@@ -183,3 +229,4 @@ encadrantes sont 135 et 155 mm.
 - [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md)
 - [Pose de la PERFORM76](/procedures/pose-perform76.md)
 - [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
+- [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md)

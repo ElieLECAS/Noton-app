@@ -11,168 +11,141 @@ sources:
     last_modified: 2022-11-30
 generated:
   by: process:claude-code
-  at: 2026-09-18T14:00:00Z
-stale_after: 2025-11-30
+  at: 2026-09-20T00:10:00Z
 ---
+# Identité
 
-# Ce que contient le document
-
-**124 pages**, éditées par **Roto Frank Ferrures S.A.S.**, 42 avenue de Longchamp, 57502
-Saint-Avold, copyright **novembre 2022**, référence **IMO_180_NX_FR_v2**.
-
-Sous-titre exact : « Instructions de montage — Fenêtres et portes-fenêtres en **PVC** — Côté
-paumelle **P** et **Designo II** ». Le produit est présenté comme « la ferrure oscillo-battante
-pour fenêtres et portes-fenêtres la plus vendue à travers le monde ».
-
-C'est le premier document [ROTO](/fournisseurs/roto.md) de fond du wiki : les quatre notices
-entrées auparavant étaient des fiches d'intervention, celui-ci est le manuel de ferrage complet.
-
-# Structure
-
-Découpage relevé sur le sommaire (p. 3 et 4). Les numéros sont ceux **imprimés sur les pages**,
-inférieurs de 2 aux pages du PDF.
-
-| Pages imprimées | Contenu | Exploité |
-| --- | --- | --- |
-| 4 à 18 | Informations générales, groupes cibles, droits, sécurité | non |
-| 19 et 20 | Caractéristiques générales des ferrures, recommandations, forces de traction | oui |
-| 21 à 27 | **Champs d'application** — OB rectangulaire 130 et 150 kg, OB cintrée, soufflet, fenêtre confort | oui |
-| 28 à 30 | **Champs d'application Designo II** — 80 kg, 100 kg, report de charge 80 à 150 kg | oui |
-| 32 | Désignations de l'élément de fenêtre et dimensionnement des profilés | oui |
-| 33 | Longueurs de palier | partiellement |
-| 34 | Encombrement de la paumelle, tolérance de châssis fixe | oui |
-| 35 | Suggestion de fixation pour fenêtre de sécurité | oui |
-| 36 à 85 | **Aperçu des ferrures** — 21 configurations, une planche chacune | non |
-| 86 à 113 | **Montage** — cotes de perçage, gabarits, accrochage, réglages | non |
-| 114 à 117 | **Entretien** — maintenance, nettoyage, contrôle fonctionnel | oui |
-
-Les **21 configurations de l'aperçu des ferrures** (p. 36 à 85) vont de l'ouvrant à la française
-à un vantail à l'oscillo-battant trapézoïdal et cintré, en passant par les portes-fenêtres à
-serrure H100, l'accès aux personnes à mobilité réduite et les cinq variantes NT Designo II.
-Chacune est une **planche de nomenclature graphique** : elle ne se transcrit pas en texte.
-
-# Ce que ce document apporte au wiki
-
-La page [Roto NX](/quincaillerie/roto-nx.md) listait quatre manques. Ce manuel en comble trois.
-
-| Manque déclaré | Comblé par |
+| Élément | Valeur |
 | --- | --- |
-| Les abaques de charge | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
-| La norme de référence du traitement anticorrosion | **DIN EN 13126/8**, finition Roto Sil argent mat, exempte de composés de chrome VI (p. 19) |
-| Le périmètre exact du RC2 | la classification **CDR selon DIN EN 1627-1630**, avec un champ d'application propre à chaque classe |
-| Les références de ferrage | **non comblé** — l'aperçu des ferrures est graphique |
+| Éditeur | Roto Frank Ferrures S.A.S., 42 avenue de Longchamp, 57502 Saint-Avold |
+| Référence | **IMO_180_NX_FR_v2** |
+| Copyright | novembre 2022 |
+| Pages | 124 |
+| Nature | **manuel d'atelier**, instructions de montage |
+| Sous-titre | Fenêtres et portes-fenêtres en **PVC**, côtés paumelles **P** et **Designo II** |
 
-Il précise aussi ce que la brochure commerciale disait sans le sourcer : la position de
-basculement à retard d'effraction **Tilt Safe** relève de la classification **CDR 2 / CDR 2 N**
-(p. 19). C'est la justification de l'argument « RC2 avec OB position ouverte ».
+Document de ferrage de la Roto NX. Son pendant de commande est le
+[catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md) de juin 2023.
 
-Trois autres caractéristiques générales, relevées p. 19 :
+**La pagination imprimée est inférieure de 2 aux pages du PDF** : les 124 pages du PDF portent
+les numéros imprimés 1 à 122, sans page imprimée 123 ni 124. Les citations du wiki emploient le
+numéro imprimé.
 
-- charges élevées **jusqu'à 150 kg**, côté paumelles P reposant, pour fenêtres et portes PVC
-- assemblage **« Clip&Fit »** mécanique et sans perte de course
-- assemblage sans vis de têtière et boîtier de crémone par le système **Easy Mix System**, pour
-  des dimensions de fouillot **≥ 25 mm**
-- **certifié selon QM 328**, garantie **10 ans sur la fonctionnalité** — cette dernière valeur
-  recoupe la brochure PERFORM+/HYBRIDE+ et le catalogue général
+# Registre de couverture
 
-# Trois galets de verrouillage
+Numérotation imprimée ; décalage de -2 par rapport au PDF.
 
-Le manuel distingue trois galets, et c'est le seul endroit du wiki où la distinction est écrite
-(p. 19).
-
-| Galet | Réglage |
-| --- | --- |
-| E | galet excentrique, réglable en **pression d'appui** |
-| P | galet excentrique **de sécurité**, réglable en pression d'appui |
-| V | galet excentrique **de sécurité**, réglable en pression d'appui **et en hauteur** |
-
-# Cotes de dimensionnement des profilés
-
-Systèmes d'axe de ferrage admis, en mm, relevés p. 32. La désignation se lit
-« jeu de joint / largeur de recouvrement - axe de ferrage ».
-
-| Système | Axe de ferrage (mm) | Jeu de joint (mm) | Largeur de recouvrement (mm) |
+| Pages imprimées | Contenu | État | Page du wiki |
 | --- | --- | --- | --- |
-| 12/18-9 | 9 | 12 | 18 |
-| 12/18-13 | 13 | 12 | 18 |
-| 12/20-9 | 9 | 12 | 20 |
-| 12/20-13 | 13 | 12 | 20 |
-| 12/21-13 | 13 | 12 | 21 |
-| 12/22-13 | 13 | 12 | 22 |
+| 1-3 | couverture, contact, sommaire | sans contenu propre | - |
+| 4-18 | informations générales, groupes cibles, droits, sécurité | sans contenu propre — socle générique, sans donnée produit | - |
+| 19-20 | caractéristiques générales, recommandations, forces de traction | transcrit | [Roto NX](/quincaillerie/roto-nx.md) |
+| 21-27 | champs d'application côté paumelles P | transcrit | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| 28-30 | champs d'application Designo II, report de charge | transcrit | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| 31 | champs d'application ouvrant à soufflet, côté paumelles Designo | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+| 32 | désignations de l'élément, systèmes d'axe de ferrage | transcrit | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| 33 | longueurs de palier (compas, angle, pivot) | transcrit | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
+| 34 | encombrement de la paumelle, tolérance de châssis fixe | transcrit | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| 35 | fixation d'une fenêtre de sécurité | transcrit | [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md) |
+| 36-37 | ouvrant à la française, un vantail | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
+| 38-39 | ouvrant à la française, deux vantaux | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md) |
+| 40-41 | oscillo-battant un vantail, sécurité de base | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 42-43 | oscillo-battant deux vantaux, sécurité de base, crémone de semi-fixe | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 44-45 | oscillo-battant deux vantaux, poignée centrée, fouillot -6 mm | transcrit | [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md) |
+| 46-51 | ouvrant à la française, crémone à sortie de tringle (un et deux vantaux, deux vantaux larges) | transcrit | [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md), [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 52-53 | porte-fenêtre à condamnation au cylindre, serrure H100 à sortie de tringle | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 54-57 | porte-fenêtre à un vantail, serrure H100 à galets ; porte-fenêtre PMR, double mouvement | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 58-61 | ouvrant à soufflet, avec et sans renvoi d'angle | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+| 62-63 | châssis cintré et trapézoïdal, oscillo-battant | transcrit | [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) |
+| 64-65 | oscillo-battant Confort, sécurité de base | transcrit | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+| 66-71 | oscillo-battant et ouvrant à la française NT Designo II (un et deux vantaux) | transcrit | [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md) |
+| 72-73 | soufflet NT Designo II, crémone verrou | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md) |
+| 74-75 | soufflet NT Designo II avec renvoi d'angle ; crémone OB hauteur poignée variable | transcrit | [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md), [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 76-77 | limiteur d'ouverture à positions indexées | transcrit | [Limiteur d'ouverture à positions indexées Roto NX KSR](/quincaillerie/roto-nx-ksr-limiteur-ouverture.md) |
+| 78 | allonges et prolongateurs de crémones | transcrit | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
+| 79-81 | crémones OB KSR galet V, fouillot 15 mm, EasyMix, renvoi d'angle intégré | transcrit | [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md) |
+| 82 | loqueteau Roto NX | transcrit | [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md) |
+| 83-85 | caches par coloris, pièces laquées, montage renvoi de fouillot | transcrit | [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md) |
+| 86-91 | perçage poignée, dormant, ouvrant ; montage ferrure vantail ; coupe crémone semi-fixe ; bras de compas limiteur soufflet | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
+| 92-99 | positionnement des gâches (cotes de pose), par famille de crémone et de verrouilleur, sécurité de base et RC1 | à faire | - |
+| 100-101 | châssis cintré ou trapézoïdal : positionnement des gâches, montage en 13 étapes, gabarit de perçage du palier de compas | transcrit | [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md) |
+| 102-104 | chartes d'applicabilité des gabarits de gâche, par configuration OB/OF et par classe de sécurité | à faire | - |
+| 105-107 | accrochage et décrochage du vantail à compas simple, fixation de la gâche de sécurité, réglage des galets E/P/V | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
+| 108-111 | vissage, force de traction exigée par poids d'ouvrant (directive TBDK), accrochage NT Designo II compas 350/500 et 250 | transcrit | [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) |
+| 112-113 | montage et réglage du report de charge NT Designo II | transcrit | [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) |
+| 114 | maintenance, contrôle fonctionnel | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+| 115 | répartition des points à huiler et à graisser | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+| 116-117 | maintenance, nettoyage | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+| 118-121 | transport, stockage, mise au rebut | transcrit | [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) |
+| 122 | quatrième de couverture, coordonnées Roto Frank Ferrures | sans contenu propre | - |
+| 118-124 | (à vérifier au rendu) | à faire | - |
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 32)
+**11 pages restent `à faire`** : 8 (p. 92-99, le positionnement des gâches par famille de
+crémone et de verrouilleur, sécurité de base et RC1) + 3 (p. 102-104, les chartes d'applicabilité
+des gabarits par configuration). Toutes les configurations de fenêtre, les familles de crémones,
+le perçage, le montage, l'accrochage, le vissage, l'entretien et la logistique ont été
+dépouillés.
 
-Le jeu de joint est tolérancé **− 0,5 mm / + 1,5 mm** sur les six systèmes. Le manuel nomme par
-ailleurs les huit repères de l'élément : cote de l'axe, jeu en feuillure, largeur de recouvrement,
-hauteur de recouvrement, dormant, ouvrant, parclose, rainure de vantail.
+# Ce qu'il apporte seul
 
-# Cotes de tolérance de châssis fixe, côté paumelles P
+La norme du traitement anticorrosion, **DIN EN 13126/8**, finition Roto Sil argent mat exempte de
+chrome VI. La classification **CDR selon DIN EN 1627-1630** et le rattachement du **Tilt Safe** aux
+classes CDR 2 et CDR 2 N. Les trois galets de verrouillage E, P et V. Les six systèmes d'axe de
+ferrage et leur tolérance de jeu de joint. L'assemblage **Clip&Fit** et le système **Easy Mix**
+pour fouillot ≥ 25 mm. La certification **QM 328**.
 
-Encombrement à prévoir pour une largeur de recouvrement de 20 mm, relevé p. 34.
+L'avertissement qui conclut le chapitre sécurité : **une ferrure classée CDR ne fait pas une
+fenêtre classée**, la dénomination étant refusée si la pose n'est pas conforme.
 
-| Poids du vantail (kg) | Tolérance de châssis fixe (mm) | Hauteur de recouvrement mini (mm) | Jeu en haut (mm) | Jeu en bas (mm) |
-| --- | --- | --- | --- | --- |
-| 130 | 21,0 | 16 | 1,0 | 8 |
-| 150 | 26,5 | 16 | 1,0 | 8 |
+**Les références de crémone par configuration**, complémentaires du catalogue : fouillot 8 mm
+(hauteur fixe et variable), fouillot -6 mm, fouillot 15 mm (hauteur variable, galets E et V),
+EasyMix, crémone à sortie de tringle, crémone de semi-fixe, serrures H100 de porte-fenêtre — voir
+[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md).
 
-(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 34)
+**Un jeu de ferrure Designo II parallèle au système P standard** : pivot d'angle, palier d'angle,
+équerre de compas OF et têtière de compas portent des références propres, sans équivalence
+directe avec le système P — voir
+[Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md).
 
-La tolérance s'entend **caches compris**, et l'angle d'ouverture d'environ 180° vaut jusqu'à
-20 mm de hauteur de recouvrement — « selon l'embrasure, l'angle d'ouverture peut être inférieur à
-180° ».
+**La quincaillerie du châssis cintré et trapézoïdal**, avec son palier de compas réglable ±3°
+propre à la géométrie courbe — voir
+[Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md).
 
-**Passer de 130 à 150 kg coûte 5,5 mm d'encombrement supplémentaire** en tolérance de châssis
-fixe. C'est à vérifier au dessin, pas au montage.
+**Quinze coloris de caches**, pour le compas et le palier/pivot d'angle, et la quincaillerie
+laquée en série — voir [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md).
 
-# Fixation d'une fenêtre de sécurité
+**La force de traction exigée par poids d'ouvrant, selon la directive allemande TBDK** — de
+1 650 N à 60 kg jusqu'à 4 200 N à 150 kg — et les gabarits de perçage des paliers et pivots, avec
+leurs propres numéros d'article (788436, 788438, 788503) — voir
+[Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md).
 
-Le manuel donne une suggestion de fixation (p. 35) : **bloc d'écartement entre l'ouvrage de
-maçonnerie et le dormant**, à installer **dans la zone des vissages de gâches de sécurité**, avec
-un entraxe d'environ **400 mm** et des reprises à environ **150 mm** des angles.
+# Anomalies portées par ce document
 
-Avertissement explicite du manuel :
-
-> « Les fenêtres à retard d'effraction au sens de la DIN EN 1627–1630 ne doivent être désignées
-> comme telles qu'uniquement lorsque le montage a été effectué en tous points selon la norme
-> prescrite. »
-
-**Une ferrure classée CDR ne fait pas une fenêtre classée.** C'est la pose qui décide, et le
-manuel refuse la dénomination si elle n'est pas conforme.
-
-# Ce qui n'a pas été transcrit
-
-- les **diagrammes d'applications** eux-mêmes : ce sont des courbes en kg/m² de vitrage, avec des
-  zones « champ d'application non autorisé » et « 2ᵉ compas nécessaire » qui n'existent que
-  graphiquement. Seules les bornes et les règles sont reprises
-- les **21 planches de l'aperçu des ferrures** (p. 36 à 85), qui sont des nomenclatures dessinées
-- les **cotes de perçage et gabarits** du chapitre Montage (p. 86 à 113)
-- les **longueurs de palier** (p. 33) : les valeurs P3/130, P6/130 et P6/150 sont rattachées à des
-  repères numérotés sur un dessin, sans légende textuelle exploitable
-
-# Anomalie relevée
-
-**INC-11** : chaque page porte **deux références de document et deux dates** — l'en-tête de pied
-annonce « Roto NX KSR - IMO_180_NX_FR_v2, Novembre 2022 », et une seconde ligne, plus bas, « Roto
-NX IMO_455_FR_v2 · 07 / 2018 ». Les renvois internes suivent la seconde pagination et pointent
-vers des pages 215, 216 et 219 qui n'existent pas dans ce document de 124 pages. Voir
-[Incohérences internes](/anomalies/incoherences-internes.md).
-
-# Provenance du fichier
-
-Extrait de `raw/export_doc_193.zip`, titre interne « Montage Roto NX KSR PVC IMO_180_NX_FR_v2 »,
-source déclarée **ROTO**, fichier produit le 3 juillet 2023 et réenregistré le 16 février 2024.
+| Entrée | Objet |
+| --- | --- |
+| **INC-11** | deux références de document et deux dates sur chaque page, renvois vers des pages inexistantes |
+| **CTR-18** | bornes de champ d'application différentes de celles du catalogue de juin 2023 |
+| **VER-34** | le manuel couvre deux côtés paumelles, aucune source PROFERM ne dit lequel est employé |
 
 # Citations
 
 [1] Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf.
-IMO_180_NX_FR_v2, novembre 2022 —
-`raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`, p. 3, 4, 19, 20, 32, 34, 35 et 114 à 117
+IMO_180_NX_FR_v2, novembre 2022 — `raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf`
 
 # Voir aussi
 
-- [ROTO](/fournisseurs/roto.md)
 - [Roto NX](/quincaillerie/roto-nx.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
+- [Composants communs Roto NX KSR](/quincaillerie/roto-nx-composants-communs.md)
+- [Configurations Roto NX KSR — ouvrant à la française](/quincaillerie/roto-nx-ksr-ouvrant-francaise.md)
+- [Configurations Roto NX KSR — oscillo-battant](/quincaillerie/roto-nx-ksr-oscillo-battant.md)
+- [Configurations Roto NX KSR — ouvrant à soufflet](/quincaillerie/roto-nx-ksr-soufflet.md)
+- [Configurations Roto NX KSR — châssis cintré et trapézoïdal](/quincaillerie/roto-nx-ksr-cintre-trapezoidal.md)
+- [Configurations Roto NX KSR — Confort et NT Designo II](/quincaillerie/roto-nx-ksr-confort-designo.md)
+- [Limiteur d'ouverture à positions indexées Roto NX KSR](/quincaillerie/roto-nx-ksr-limiteur-ouverture.md)
+- [Finitions Roto NX](/quincaillerie/roto-nx-finitions.md)
+- [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md)
 - [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
 - [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md)
-- [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md)
-- [Incohérences internes](/anomalies/incoherences-internes.md)
+- [Catalogue Roto NX pour profils PVC](/sources/roto-nx-catalogue-pvc.md)
+- [ROTO](/fournisseurs/roto.md)

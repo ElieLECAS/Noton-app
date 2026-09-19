@@ -8,23 +8,24 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
   - resource: raw/brochure-lumine65-2025-02.pdf
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
+    last_modified: 2025-02-28
 generated:
   by: process:claude-code
   at: 2026-09-17T22:00:00Z
-stale_after: 2027-01-31
 ---
 
 # Ce qu'est la gamme LUMINE
 
 LUMINE est la gamme de fenêtres aluminium de PROFERM, présentée sous le slogan « l'aluminium en
-mode sublime » (catalogue général, p. 1). Elle est fabriquée à partir de matériaux
-[TECHNAL](/fournisseurs/technal.md) (catalogue général, p. 4).
+mode sublime » [1 p. 1]. Elle est fabriquée à partir de matériaux
+[TECHNAL](/fournisseurs/technal.md) [1 p. 4].
 
 Deux versions : **LUMINE55** et **LUMINE65**, adaptées à la rénovation comme à la construction
-(catalogue général, p. 14). Les coulissants de la gamme font l'objet d'une page dédiée :
+[1 p. 14]. Les coulissants de la gamme font l'objet d'une page dédiée :
 [Coulissants aluminium](/gammes/coulissants-aluminium.md).
 
 # Cotes
@@ -39,11 +40,10 @@ catalogue général PROFERM (p. 14 à 17).
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 14)
 
-Le catalogue donne un Uw « jusque 1.5 W/m²K » pour la gamme LUMINE sans distinguer les deux
-versions (catalogue général, p. 15). La page 17 précise les conditions de mesure : Uw jusqu'à
-1,5 W/(m².K) « en DV », avec Sw = 0,48 et TLw = 0,6, vitrage 6/14/4. Le catalogue écrit
-« DV » sans jamais le définir : lire « double vitrage » est une inférence, cohérente avec
-le vitrage 6/14/4 annoncé mais absente de la source. Entrée **VER-35** du registre
+Le Uw de la gamme LUMINE est donné **jusqu'à 1,5 W/m²K**, sans distinction entre les deux
+versions [1 p. 15]. Les conditions de mesure sont Sw 0,48, TLw 0,6 et vitrage 6/14/4, sous la
+mention « en DV » [1 p. 17]. Le sigle **DV** n'est défini dans aucun document du corpus — entrée
+**VER-35** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 # La fenêtre LUMINE65 en détail
@@ -61,7 +61,7 @@ bien plus finement que le catalogue général.
 
 (schéma: raw/brochure-lumine65-2025-02.pdf, p. 2)
 
-Trois points techniques portent ces performances (brochure LUMINE65, p. 2) :
+Trois points techniques portent ces performances [2 p. 2] :
 
 - **vrai ouvrant caché** : disparition totale de l'ouvrant, la masse s'intègre entièrement dans
   le cadre
@@ -94,15 +94,15 @@ imposée par la serrure — c'est la troisième finition annoncée au catalogue.
 # Quincaillerie invisible
 
 Les menuiseries LUMINE55 sont équipées **en standard** de la quincaillerie invisible, selon
-abaques (catalogue général, p. 14). Les paumelles sont intégrées à la structure de la fenêtre et
+abaques [1 p. 14]. Les paumelles sont intégrées à la structure de la fenêtre et
 la poignée TOULON est décalée. L'ouverture va jusqu'à **180°**.
 
 **Restriction importante : la quincaillerie invisible n'est pas disponible sur la gamme
-LUMINE65** (catalogue général, p. 14).
+LUMINE65** [1 p. 14].
 
 # Finitions
 
-Trois finitions sur LUMINE55 et trois sur LUMINE65 (catalogue général, p. 14) :
+Trois finitions sur LUMINE55 et trois sur LUMINE65 [1 p. 14] :
 
 | Version | Finition | Détail |
 | --- | --- | --- |
@@ -118,14 +118,14 @@ Trois finitions sur LUMINE55 et trois sur LUMINE65 (catalogue général, p. 14) 
 # Laquage et certification
 
 PROFERM se présente comme **le seul fabricant à bénéficier de la certification CSTB avec la laque
-29943 sur les menuiseries aluminium prélaquées** (catalogue général, p. 15).
+29943 sur les menuiseries aluminium prélaquées** [1 p. 15].
 
 La gamme LUMINE65 est disponible à 100 % en thermolaquage **QUALICOAT classe 2** : la garantie sur
 la tenue, la permanence de la couleur et le vieillissement uniforme est de **25 ans**. Les liants
 et pigments de la classe 2 sont au moins trois fois plus stables aux UV et aux intempéries que la
-qualité standard classe 1 (catalogue général, p. 18).
+qualité standard classe 1 [1 p. 18].
 
-Conséquence sur les garanties (catalogue général, p. 35) :
+Conséquence sur les garanties [1 p. 35] :
 
 | Périmètre | Garantie laquage | Classe Qualicoat |
 | --- | --- | --- |
@@ -134,7 +134,7 @@ Conséquence sur les garanties (catalogue général, p. 35) :
 | LUMINE55, couleurs hors standards | 7 ans | - |
 
 **Le Qualicoat classe 2 recouvre en réalité deux garanties distinctes**, que le catalogue
-résume en une seule (brochure LUMINE65, p. 5) :
+résume en une seule [2 p. 5] :
 
 | Objet de la garantie | Classe 2 | Classe 1 |
 | --- | --- | --- |
@@ -145,13 +145,13 @@ Les 25 ans souvent cités ne couvrent donc pas l'accroche, qui est garantie 15 a
 compte en cas de litige sur un écaillement. Voir
 [Garanties par composant](/garanties/garanties-par-composant.md).
 
-**Neuf des onze coloris LUMINE65 sont au prix du blanc** (brochure LUMINE65, p. 5), information
+**Neuf des onze coloris LUMINE65 sont au prix du blanc** [2 p. 5], information
 absente du catalogue. L'anodisé laqué argent est en option, et les deux anodisés laqués sont
 obtenus par contretypage.
 
 # Coloris
 
-**LUMINE55** (catalogue général, p. 18) :
+**LUMINE55** [1 p. 18] :
 
 | Coloris | Faces | Finition |
 | --- | --- | --- |
@@ -169,9 +169,9 @@ obtenus par contretypage.
 | Marron 8019 | 1 face extérieure uniquement | granité |
 
 Le laquage en toutes teintes RAL est possible sur la face intérieure ou sur 2 faces, et toutes
-autres teintes personnalisées sur demande en option (catalogue général, p. 18).
+autres teintes personnalisées sur demande en option [1 p. 18].
 
-**LUMINE65** — onze coloris, tous disponibles en 1 ou 2 faces (catalogue général, p. 18) :
+**LUMINE65** — onze coloris, tous disponibles en 1 ou 2 faces [1 p. 18] :
 Blanc 9016 mat, Gris 7016 satiné ou granité, Rouge 3004 granité, Gris 2900 granité, Gris 7039
 granité, Gris 7035 granité, Noir 2100 granité, Noir 9005 granité, Marron 8019 granité, Anodisé
 laqué champagne, Anodisé laqué argent.
@@ -180,7 +180,7 @@ laqué champagne, Anodisé laqué argent.
 
 Relevé de la page 15 du catalogue : matériau robuste, isolant et esthétique ; très bon rempart
 contre le bruit ; haut niveau de personnalisation ; aluminium bas carbone. L'aluminium TECHNAL®
-est recyclé à 75 % (catalogue général, p. 35).
+est recyclé à 75 % [1 p. 35].
 
 # Accessoires
 
@@ -197,9 +197,8 @@ p. 1, 4, 14, 15, 17, 18 et 35
 
 # Garantie structure : 20 ans selon la brochure
 
-La brochure LUMINE65 de février 2025 affiche **« GARANTIE 20 ANS » sur la structure de la
-fenêtre** (p. 5), là où le catalogue général de janvier 2026 annonce 15 ans pour l'ensemble des
-menuiseries.
+La structure de la fenêtre LUMINE65 est garantie **20 ans** [2 p. 5], contre 15 ans pour
+l'ensemble des menuiseries au catalogue général.
 
 C'est l'entrée **CTR-03** du registre
 [Contradictions entre sources](/anomalies/contradictions-entre-sources.md) — et cette brochure

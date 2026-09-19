@@ -8,37 +8,44 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
   - resource: raw/depliant-innoslide-2024-01.pdf
     id: depliant-innoslide-2024-01
     title: Dépliant INNOSLIDE, édition janvier 2024
+    last_modified: 2024-01-31
   - resource: raw/depliant-lumeal-2026-04.pdf
     id: depliant-lumeal-2026-04
     title: Dépliant LUMÉAL, édition avril 2026
+    last_modified: 2026-04-21
   - resource: raw/brochure-lumine65-2025-02.pdf
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
+    last_modified: 2025-02-28
   - resource: raw/catalogue-portes-entree-2024-03.pdf
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
+    last_modified: 2024-03-31
   - resource: raw/depliant-general-2023-06.pdf
     id: depliant-general-2023-06
     title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
   - resource: raw/depliant-lumeal-2023-06.pdf
     id: depliant-lumeal-2023-06
     title: Dépliant LUMÉAL, édition juin 2023
+    last_modified: 2023-06-30
 generated:
   by: process:claude-code
   at: 2026-09-17T21:30:00Z
-stale_after: 2027-01-31
 ---
 
 # Attention à la « garantie 15 ans »
 
 Le catalogue affiche « GARANTIE 15 ANS » en couverture intérieure, avec un astérisque renvoyant à
-la mention **« sur la structure de la fenêtre »** (catalogue général, p. 2).
+la mention **« sur la structure de la fenêtre »** [1 p. 2].
 
 Les 15 ans ne couvrent donc que la structure. Tout le reste — vitrage, ferrure, laquage,
 plaxage, volet roulant, panneau de porte — relève de durées différentes, de 2 à 25 ans. C'est la
@@ -100,7 +107,7 @@ mentionne pas.
 L'écart reste majeur : **25 ans sur le LUMINE65 contre 10 ans sur le LUMINE55**, pour la seule
 raison de la classe de thermolaquage. C'est l'argument de vente le plus fort du LUMINE65, et il
 est justifié techniquement — les liants et pigments de la classe 2 sont au moins trois fois plus
-stables aux UV et aux intempéries que ceux de la classe 1 (catalogue général, p. 18). Voir
+stables aux UV et aux intempéries que ceux de la classe 1 [1 p. 18]. Voir
 [LUMINE](/gammes/lumine.md).
 
 **Sortir des couleurs standards fait perdre 3 ans de garantie** sur LUMINE55 et HYBRIDE : à
@@ -161,7 +168,7 @@ Voir [LUMINE](/gammes/lumine.md), [PERFORM+](/gammes/perform-plus.md) et
 
 # Option « bord de mer »
 
-Garantie contre la corrosion des parties laquées, en option (catalogue général, p. 35) :
+Garantie contre la corrosion des parties laquées, en option [1 p. 35] :
 
 | Distance du littoral | Garantie (ans) |
 | --- | --- |
@@ -180,8 +187,8 @@ Le catalogue général ne connaît que deux catégories (p. 35) :
 | ROTO | 10 |
 | Autre | 2 |
 
-**Le dépliant LUMÉAL d'avril 2026 en ajoute une troisième** : « Ferrure Technal : 10 ans sur le
-fonctionnement / Autre ferrure : 2 ans » (dépliant LUMÉAL, p. 2).
+**Une troisième catégorie existe** : « Ferrure Technal : 10 ans sur le fonctionnement / Autre
+ferrure : 2 ans » [2 p. 2].
 
 | Ferrure | Garantie (ans) | Source |
 | --- | --- | --- |
@@ -191,8 +198,8 @@ fonctionnement / Autre ferrure : 2 ans » (dépliant LUMÉAL, p. 2).
 
 Les deux fournisseurs de quincaillerie de PROFERM bénéficient donc du même régime — ROTO côté
 PVC et mixte, [TECHNAL](/fournisseurs/technal.md) côté aluminium. La formulation « autre
-ferrure » du catalogue rangeait implicitement la quincaillerie Technal dans les 2 ans, ce qui
-**sous-annonce la garantie de 8 ans sur toute la gamme aluminium**. Entrée **CTR-09** du registre
+ferrure » du catalogue range implicitement la quincaillerie Technal dans les 2 ans, ce qui
+**sous-annonce de 8 ans la garantie de toute la gamme aluminium**. Entrée **CTR-09** du registre
 [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
 
 Le facteur cinq entre une ferrure de marque et une « autre ferrure » reste la contrepartie
@@ -211,15 +218,16 @@ Relevé de la page 35 du catalogue :
 
 # Où trouver le détail
 
-Le catalogue renvoie vers `proferm.net` et vers un QR code en page 35 pour le détail complet des
-garanties (catalogue général, p. 35). Les conditions d'application, les exclusions et les
-modalités de mise en œuvre de ces garanties ne figurent pas au catalogue général — à récupérer
-avant tout litige.
+Le détail complet des garanties est sur `proferm.net`, via un QR code [1 p. 35]. **Les conditions
+d'application, les exclusions et les modalités de mise en œuvre ne figurent dans aucun document
+du corpus.**
 
 # Citations
 
 [1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`,
 p. 2, 18, 34 et 35
+
+[2] Dépliant LUMÉAL, édition avril 2026 — `raw/depliant-lumeal-2026-04.pdf`, p. 2
 
 # Voir aussi
 

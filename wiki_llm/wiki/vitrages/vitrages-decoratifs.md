@@ -8,13 +8,13 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
   - resource: raw/nuancier-vitrages-decoratifs.pdf
     id: nuancier-vitrages-decoratifs
     title: Nuancier des vitrages décoratifs PROFERM
 generated:
   by: process:claude-code
   at: 2026-09-17T23:00:00Z
-stale_after: 2027-01-31
 ---
 
 # Les vitrages décoratifs standards
@@ -37,14 +37,14 @@ objet de référence vu à travers le verre.
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 26)
 
-Le catalogue ne donne ni cote, ni épaisseur, ni degré d'occultation pour ces vitrages : ce sont
-des références commerciales illustrées, pas des fiches techniques. Le niveau d'intimité de
-chacun reste à documenter — à demander au fournisseur de vitrage.
+**Ni cote, ni épaisseur, ni degré d'occultation ne sont publiés** pour ces vitrages : ce sont des
+références commerciales illustrées. Le niveau d'intimité de chacun reste à établir auprès du
+fournisseur de vitrage.
 
-# Le nuancier ne dit pas la même chose que le catalogue
+# Deux listes qui ne coïncident pas
 
-Le [nuancier des vitrages décoratifs](/sources/nuancier-vitrages-decoratifs.md), qui photographie
-chaque verre devant un même objet-test, ne présente pas la même liste :
+Le [nuancier des vitrages décoratifs](/sources/nuancier-vitrages-decoratifs.md) photographie
+chaque verre devant un même objet-test. Sa liste diffère de celle du catalogue :
 
 | Vitrage | Nuancier | Catalogue général |
 | --- | --- | --- |
@@ -70,8 +70,8 @@ Il figure donc au nuancier parce qu'il est physiquement montrable, et non dans l
 vente parce qu'il ne se commande pas séparément. Voir
 [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md).
 
-Le catalogue portes donne par ailleurs la **même liste de neuf vitrages** que le catalogue
-général (p. 147) — Clair, Dépoli acide, Chinchilla, Delta clair, Delta mat, Listral en standard,
+Le catalogue portes porte la **même liste de neuf vitrages** que le catalogue général, à sa
+page 147 — Clair, Dépoli acide, Chinchilla, Delta clair, Delta mat, Listral en standard,
 puis Mimosa, Olivier et Clé de fleur pour la collection Authentique avec plus-value. Il emploie
 la dénomination « **Dépoli acide** » du nuancier, tranchant en sa faveur contre le « Dépoli » du
 catalogue général.
@@ -82,7 +82,7 @@ photographié. C'est un manque de support commercial, plus une contradiction de 
 
 # Options hors des neuf standards
 
-Le catalogue mentionne trois possibilités supplémentaires (catalogue général, p. 26) :
+Trois possibilités s'ajoutent aux neuf vitrages standards [1 p. 26] :
 
 - **vitrage Antélio** en option — vitrage à couche réfléchissante, non détaillé dans le document
 - **vitrage avec plats collés et intercalaires fictifs** — imite un vitrage à petits bois sans
@@ -98,11 +98,11 @@ vitrage, dans l'alignement des plats.
 Les quatre gammes de fenêtres renvoient toutes vers ce cahier technique pour les vitrages
 décoratifs : [PERFORM](/gammes/perform.md) (p. 7), [HYBRIDE](/gammes/hybride.md) (p. 11),
 [LUMINE](/gammes/lumine.md) (p. 15) et [TEXTURAL](/gammes/textural.md) (p. 23). Les coulissants
-renvoient quant à eux vers les seuls vitrages techniques (catalogue général, p. 17), sans
+renvoient quant à eux vers les seuls vitrages techniques [1 p. 17], sans
 mentionner les décoratifs — restriction à confirmer.
 
 Les portes d'entrée de la [Collection Authentique](/portes/collection-authentique.md) sont
-également vitrables (catalogue général, p. 30).
+également vitrables [1 p. 30].
 
 # Citations
 

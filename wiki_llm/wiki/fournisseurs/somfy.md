@@ -1,74 +1,76 @@
 ---
 type: Fournisseur
 title: SOMFY
-description: Fournisseur des motorisations et de la domotique de volets roulants proposées par PROFERM.
+description: Fournisseur des motorisations et de la domotique des volets roulants proposés par PROFERM.
 tags: [fournisseur, somfy, motorisation, volet-roulant, domotique, tahoma]
 status: draft
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
 generated:
   by: process:claude-code
   at: 2026-09-17T19:00:00Z
-stale_after: 2027-01-31
 ---
 
-# Ce que le catalogue dit de SOMFY
+# Ce que PROFERM lui achète
 
-SOMFY® fournit les motorisations et la domotique des volets roulants PROFERM (catalogue général,
-p. 28). C'est le seul fournisseur de motorisation nommé au catalogue.
+SOMFY fournit les **motorisations et la domotique** des volets roulants PROFERM. C'est le seul
+motoriste du corpus. Le volet roulant lui-même, coffre et tablier, n'a pas de fabricant nommé.
 
-| Produit | Rôle |
+| Produit SOMFY | Rôle |
 | --- | --- |
-| Moteur SOMFY® IO RS100 | motorisation haut de gamme |
-| Moteur SOMFY® filaire | motorisation économique |
+| Moteur IO RS100 | motorisation haut de gamme |
+| Moteur filaire | motorisation économique |
 | Radio IO solaire | alimentation sans câblage |
 | RADIO IO HOMECONTROL | protocole des points de commande |
 | Boîtier TaHoma | pilotage domotique |
 | Commandes RTS | télécommandes compatibles |
 
-# Moteur IO RS100
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
 
-Relevé de la page 28 du catalogue :
+# Caractéristiques du moteur IO RS100
 
-- démarrage et arrêt en douceur en fins de courses
-- moteur **bi-vitesse**
-- **mode discret** : le volet roulant devient silencieux
-- détection d'obstacles avec arrêt immédiat
-- **détection du gel**, qui évite la détérioration du matériel
+| Caractéristique | Détail |
+| --- | --- |
+| Fins de course | démarrage et arrêt en douceur |
+| Vitesse | moteur bi-vitesse |
+| Mode discret | fonctionnement silencieux |
+| Détection d'obstacles | arrêt immédiat |
+| Détection du gel | évite la détérioration du matériel |
 
-# Moteur filaire
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
 
-Solution présentée comme plus économique. La commande filaire permet de contrôler les volets et
-de gérer ouverture et fermeture, mais **le système filaire ne commande qu'un seul volet**
-(catalogue général, p. 28) — contrainte structurante pour un chiffrage multi-ouvertures.
+# Restrictions du moteur filaire
+
+**Le système filaire ne commande qu'un seul volet** [1 p. 28]. Un chiffrage multi-ouvertures en
+filaire demande donc autant de commandes que de volets.
 
 # Radio IO solaire
 
-Le capteur solaire supprime le besoin de câblage électrique. Il s'installe sur le coffre en
-rénovation, ou au-dessus de la menuiserie en neuf. Il est compatible avec toute la gamme des
-commandes RTS et TaHoma (catalogue général, p. 28).
+Le capteur solaire supprime le câblage électrique. Il se pose **sur le coffre en rénovation** et
+**au-dessus de la menuiserie en neuf**, et fonctionne avec toute la gamme des commandes RTS et
+TaHoma [1 p. 28].
 
 # Compatibilité
 
-**L'ensemble des volets roulants proposés par PROFERM est compatible avec la technologie RADIO IO
-HOMECONTROL** (catalogue général, p. 28). Le pilotage se fait par télécommande, par boîtier
-TaHoma ou par smartphone, depuis chez soi comme à distance.
+**Tous les volets roulants proposés par PROFERM sont compatibles RADIO IO HOMECONTROL** [1 p. 28].
+Le pilotage se fait par télécommande, par boîtier TaHoma ou par smartphone, à distance comme sur
+place.
 
-# Garantie
+# Garantie propre
 
-La motorisation est garantie **7 ans** (catalogue général, p. 35). Voir
-[Garanties par composant](/garanties/garanties-par-composant.md).
+La motorisation est garantie **7 ans** [1 p. 35], deux ans de plus que le volet roulant lui-même.
+Voir [Garanties par composant](/garanties/garanties-par-composant.md).
 
-# À documenter
+# Ce que le corpus ne donne pas
 
-Cette page est un stub : le catalogue général ne donne aucune coordonnée, aucune référence
-commerciale, aucune puissance ni couple moteur, aucun abaque de dimensionnement. À compléter
-quand une documentation SOMFY sera versée dans `raw/`.
+Aucune coordonnée, aucune référence commerciale, aucune puissance ni couple moteur, aucun abaque
+de dimensionnement.
 
 La serrure motorisée de porte d'entrée n'est **pas** un produit SOMFY : elle repose sur un moteur
-Safe E Eneo CC et l'application SOREX, dont le fabricant n'est pas nommé au catalogue. Voir
+Roto Safe E Eneo CC et l'application SOREX. Voir
 [Serrure motorisée](/quincaillerie/serrure-motorisee.md).
 
 # Citations
@@ -81,4 +83,3 @@ p. 28 et 35
 - [Volets roulants](/equipements/volets-roulants.md)
 - [Serrure motorisée](/quincaillerie/serrure-motorisee.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)
-- [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)

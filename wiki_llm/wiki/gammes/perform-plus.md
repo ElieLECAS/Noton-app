@@ -8,10 +8,10 @@ sources:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
-stale_after: 2024-05-31
 ---
 
 # Statut incertain : à vérifier avant toute proposition
@@ -36,7 +36,7 @@ gammes PVC et mixtes existantes, grâce aux masses réduites et à l'ouvrant cac
 PERFORM+/HYBRIDE+, p. 1 et 3).
 
 Les profils sont des **PVC GREENLINE® de chez [KÖMMERLING](/fournisseurs/kommerling.md),
-100 % renforcés** — un PVC garanti sans plomb, recyclable (brochure PERFORM+/HYBRIDE+, p. 3).
+100 % renforcés** — un PVC garanti sans plomb, recyclable [1 p. 3].
 Le « 100 % renforcés » distingue la PERFORM+ de l'[HYBRIDE+](/gammes/hybride-plus.md), dont
 l'aluminium est renforcé selon abaques.
 
@@ -51,8 +51,8 @@ Caractéristiques annoncées de la PERFORM+, relevées sur la brochure PERFORM+/
 | Uw avec vitrage Ug 1,0 (W/m²K) | 1,2 |
 | Largeur d'ouverture oscillo-battante (mm) | 80 ou 140 |
 
-La brochure ne donne **aucune cote de profilé** : ni épaisseur de dormant, ni épaisseur
-d'ouvrant, ni dimension maximale de menuiserie. Il n'existe pas de cahier technique PERFORM+ dans
+**Aucune cote de profilé n'est documentée** : ni épaisseur de dormant, ni épaisseur d'ouvrant, ni
+dimension maximale de menuiserie. Il n'existe pas de cahier technique PERFORM+ dans
 `raw/` — contrairement à la [PERFORM76](/sources/cahier-technique-perform76.md).
 
 # Ce qui n'est pas réalisable
@@ -68,9 +68,8 @@ PERFORM+/HYBRIDE+, p. 2) :
 | Réaliser le produit avec des fiches | paumelles uniquement |
 | Cintrer la menuiserie | aucune forme cintrée, contrairement à la [PERFORM](/gammes/perform.md) 70 |
 
-**Ces cinq points sont à vérifier en tout début de projet.** Une porte-fenêtre à serrure ou une
-imposte à traverse suffit à disqualifier la gamme, et la brochure les mentionne dans une
-parenthèse facile à manquer.
+**Ces cinq points se vérifient en tout début de projet** : une porte-fenêtre à serrure ou une
+imposte à traverse suffit à disqualifier la gamme.
 
 # Isolation
 
@@ -86,7 +85,7 @@ elle est vendue sur la luminosité, pas sur le thermique.
 # Sécurité
 
 La quincaillerie est une **Roto NX**, pouvant répondre à la classe de résistance **RC2 avec
-oscillo-battant en position ouverte** (brochure PERFORM+/HYBRIDE+, p. 2). Détail des composants
+oscillo-battant en position ouverte** [1 p. 2]. Détail des composants
 dans [Roto NX](/quincaillerie/roto-nx.md).
 
 C'est une voie d'accès au RC2 **différente** de celle de la PERFORM76, qui l'obtient par un
@@ -96,7 +95,7 @@ vitrage 44/6 collé et un ferrage périmétrique (catalogue général, p. 34). V
 # Coloris
 
 La PERFORM+ n'offre qu'un seul coloris, intérieur et extérieur PVC teinté dans la masse
-(brochure PERFORM+/HYBRIDE+, p. 3) :
+[1 p. 3] :
 
 | Coloris | Type | Faces |
 | --- | --- | --- |
@@ -135,7 +134,7 @@ volet roulant. Entrées **CTR-03** à **CTR-05** du registre
 # Labels
 
 La brochure affiche CEKAL, CE, Kömmerling®, Acotherm, Qualanod, greenline, Qualimarine
-« Aluminium Laqué Haute Qualité Certifié » et Roto (brochure PERFORM+/HYBRIDE+, p. 3). Tous
+« Aluminium Laqué Haute Qualité Certifié » et Roto [1 p. 3]. Tous
 figurent déjà dans
 [Labels et certifications](/certifications/labels-et-certifications.md).
 

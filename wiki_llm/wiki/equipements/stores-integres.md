@@ -8,10 +8,10 @@ sources:
   - resource: raw/nuancier-stores-2020.pdf
     id: nuancier-stores-2020
     title: Nuancier stores PROFERM, 2020
+    last_modified: 2020-12-31
 generated:
   by: process:claude-code
   at: 2026-09-17T23:00:00Z
-stale_after: 2021-12-31
 ---
 
 # Ce qu'est un store intégré
@@ -19,7 +19,7 @@ stale_after: 2021-12-31
 Les stores vénitiens et plissés intégrés s'installent **à l'intérieur du vitrage**, entre les
 parcloses de la menuiserie. PROFERM les présente comme un **système breveté** dont le faible
 encombrement assure un maximum de clair de jour et une intégration totale à la menuiserie
-(nuancier stores, p. 10).
+[1 p. 10].
 
 Ils sont adaptés aux menuiseries **PVC et aluminium disposant de parcloses spécialement
 étudiées** : ce n'est donc pas un accessoire posé après coup, la menuiserie doit être prévue pour.
@@ -38,7 +38,7 @@ et n'a pas d'équivalent récent.
 
 # Deux incompatibilités qui disqualifient le produit
 
-À vérifier avant toute proposition (nuancier stores, p. 11) :
+À vérifier avant toute proposition [1 p. 11] :
 
 | Incompatibilité | Conséquence |
 | --- | --- |
@@ -46,7 +46,7 @@ et n'a pas d'équivalent récent.
 | **Menuiseries cintrées** | store intégré impossible |
 
 S'y ajoute une condition de vitrage : **aucune restriction de coloris avec un vitrage 4+16+4
-clair**. Pour tout autre vitrage, le document impose de consulter PROFERM. Or le vitrage de série
+clair**. Tout autre vitrage impose de consulter PROFERM. Or le vitrage de série
 des gammes actuelles est un **6/18/4 de 28 mm**, pas un 4/16/4 — la compatibilité des stores
 intégrés avec les vitrages actuels est donc à faire confirmer. Voir
 [Performances des vitrages](/vitrages/performances-vitrages.md).
@@ -141,7 +141,7 @@ parclose** — c'est ce détail qui rend le système invisible.
 | Opacités | transparent, semi-opaque ou opaque |
 
 Le plissé revendique une **bonne performance thermique** en isolation et étanchéité, et un
-encombrement minimal une fois remonté (nuancier stores, p. 6).
+encombrement minimal une fois remonté [1 p. 6].
 
 # Cotes des trous de cordons du store plissé
 
@@ -163,7 +163,7 @@ Le tissu opaque, plus lourd, tolère une plus grande portée entre cordons.
 Le facteur solaire **Gtot(i)** est la part d'énergie solaire qui entre dans la pièce en traversant
 le vitrage et sa protection : **plus il est faible, meilleure est la protection thermique**. Les
 gammes sont classées de **0 à 4**, une classe plus élevée laissant entrer moins de chaleur
-(nuancier stores, p. 9).
+[1 p. 9].
 
 | Collection de tissu plissé | Classe | Exceptions |
 | --- | --- | --- |
@@ -177,15 +177,15 @@ gammes sont classées de **0 à 4**, une classe plus élevée laissant entrer mo
 **Les Croquants sont la seule collection en classe 2**, la meilleure du document — cohérent avec
 leur tissu opaque occultant.
 
-La ligne des Caramels est incomplète : le document écrit « classe 1 sauf le Curacao 5035 et le
-Chocolat 5040 » **sans dire dans quelle classe tombent ces deux références**. Entrée **INC-07** du
+La ligne des Caramels est incomplète : « classe 1 sauf le Curacao 5035 et le Chocolat 5040 »,
+**sans que la classe de ces deux références soit donnée**. Entrée **INC-07** du
 registre [Incohérences internes](/anomalies/incoherences-internes.md).
 
 Aucune classe n'est donnée pour les stores vénitiens.
 
 # Coloris des tissus plissés
 
-Quatre collections, 29 références au total (nuancier stores, p. 7 et 8).
+Quatre collections, 29 références au total [1 p. 7 et 8].
 
 | Collection | Opacité | Effet tissu | Références |
 | --- | --- | --- | --- |
@@ -201,27 +201,24 @@ le numéro : c'est la collection qui détermine transparent, semi-opaque ou opaq
 
 # Coloris des lames vénitiennes
 
-Le nuancier présente une planche de **56 références de lames aluminium 16 mm**, codées `U` ou `D`
-suivis de quatre chiffres (nuancier stores, p. 4). Le document annonce « coloris au choix » dans
-tous les coloris de la collection en vigueur.
+Les lames vénitiennes existent en **56 références** de 16 mm, codées `U` ou `D` suivis de quatre
+chiffres, au choix dans les coloris de la collection en vigueur [1 p. 4].
 
-Le catalogue cite en exemple le **D7113**, gris écaillé, monté en face intérieure d'une fenêtre
-[TEXTURAL](/gammes/textural.md) (nuancier stores, p. 2).
+Le **D7113**, gris écaillé, est montré en face intérieure d'une fenêtre
+[TEXTURAL](/gammes/textural.md) [1 p. 2].
 
 Les références ne sont accompagnées d'aucun nom de couleur, seulement d'un aplat photographié,
 avec la mention « photos non contractuelles, coloris et matières donnés à titre indicatif ». La
 planche n'est donc pas exploitable comme table de correspondance — **demander le nuancier
 physique pour un choix client**.
 
-**Point d'attention sur la gamme TEXTURAL** : le document précise que pour les **Textural
-exclusives**, il faut demander conseil aux techniciens PROFERM, qui orienteront vers une couleur
-adaptée (nuancier stores, p. 3). Les textures exclusives ne se marient donc pas avec n'importe
-quelle lame.
+**Sur les textures TEXTURAL exclusives, le choix de la lame passe par les techniciens PROFERM**
+[1 p. 3] : elles ne se marient pas avec n'importe quel coloris.
 
 # Options
 
 Une seule option documentée : une **perche de manœuvre en aluminium laqué blanc, longueur
-1 500 mm** (nuancier stores, p. 11), pour les stores hors de portée.
+1 500 mm** [1 p. 11], pour les stores hors de portée.
 
 # À documenter
 

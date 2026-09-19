@@ -8,19 +8,22 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
   - resource: raw/depliant-lumeal-2026-04.pdf
     id: depliant-lumeal-2026-04
     title: Dépliant LUMÉAL, édition avril 2026
+    last_modified: 2026-04-21
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
   - resource: raw/brochure-lumine65-2025-02.pdf
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
+    last_modified: 2025-02-28
 generated:
   by: process:claude-code
   at: 2026-09-17T21:30:00Z
-stale_after: 2027-01-31
 ---
 
 # Ce qu'il faut retenir sur le périmètre
@@ -46,15 +49,15 @@ tableau ci-dessous donne le périmètre exact tel qu'il est écrit au catalogue.
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 34)
 
-Mentions supplémentaires figurant au catalogue sans périmètre précisé (catalogue général, p. 34) :
+Mentions supplémentaires figurant au catalogue sans périmètre précisé [1 p. 34] :
 **NF** (fenêtres PVC), **CE**, **Acotherm**, **CEKAL** (menuiserie équipée de vitrages
 certifiés), **Qualimarine** (aluminium laqué haute qualité), **Qualanod**, **greenline**.
 
 # Classement CSTB A*E*V
 
 Le classement A\*E\*V mesure la résistance à l'air, à l'eau et au vent. PROFERM est classé parmi
-les **cinq meilleurs fabricants français au test A\*E\*V** par le CSTB (catalogue général, p. 7
-et 35).
+les **cinq meilleurs fabricants français au test A\*E\*V** par le CSTB [1 p. 7
+et 35].
 
 Le classement diffère selon le produit — c'est le point le plus utile de cette page :
 
@@ -68,7 +71,7 @@ Le classement diffère selon le produit — c'est le point le plus utile de cett
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 7, 8, 11, 17 et 23)
 
-Les brochures produit donnent des classements que le catalogue ne contient pas, ou qui le
+Les brochures produit portent des classements absents du catalogue général, ou qui le
 contredisent :
 
 | Produit | Classement | Condition d'essai | Source |
@@ -77,8 +80,8 @@ contredisent :
 | Coulissant LUMINE65 | A\*4 / E\*6A / V\*A3 | 2 vantaux | brochure LUMINE65, p. 3 |
 | Coulissant LUMÉAL | A\*4 / E\*7A / V\*B3 | 2 vantaux H 2,5 × L 3 m | dépliant LUMÉAL, p. 1 |
 
-**Le catalogue général ne donne aucun classement AEV pour les fenêtres LUMINE** : le
-A\*4 / E\*9A / V\*C3 de la fenêtre LUMINE65 n'existe que dans sa brochure. Le **V\*C3** y est
+**Aucun classement AEV n'est publié pour les fenêtres LUMINE au catalogue général** : le
+A\*4 / E\*9A / V\*C3 de la fenêtre LUMINE65 ne figure que dans sa brochure. Le **V\*C3** y est
 remarquable — la lettre désigne la classe de déformation sous charge de vent, et C est plus
 exigeante que le A3 des fenêtres PERFORM, HYBRIDE et TEXTURAL. C'est, sur ce critère, la
 menuiserie la plus rigide du catalogue PROFERM.
@@ -89,16 +92,16 @@ Les deux classements de coulissants contredisent la valeur de gamme du catalogue
 du produit issu de sa brochure, jamais la valeur de gamme.**
 
 A\*4 / E\*9A / V\*A3 est présenté comme « le plus haut niveau de résistance au vent et à l'air »
-(catalogue général, p. 35). **Les coulissants sont donc systématiquement moins bien classés que
+[1 p. 35]. **Les coulissants sont donc systématiquement moins bien classés que
 les fenêtres** — à ne pas confondre en réponse à un appel d'offres.
 
-Le catalogue attribue le plus haut niveau de performances du marché à la gamme **PERFORM70**
-spécifiquement (catalogue général, p. 7).
+Le plus haut niveau de performances du marché est revendiqué pour la gamme **PERFORM70**
+spécifiquement [1 p. 7].
 
 # Label ROTO Performance
 
 PROFERM est le **premier fabricant à recevoir** le Label ROTO Performance, créé en 2023
-(catalogue général, p. 34). Ce que le label apporte, selon le catalogue :
+[1 p. 34]. Ce que le label apporte, selon le catalogue :
 
 - un équipement premium sur la menuiserie
 - une garantie de **10 ans sur les équipements ROTO**
@@ -132,16 +135,16 @@ argument fort face à un prescripteur, et il ne se défend pas sans son procès-
 # RC2
 
 La fenêtre **PERFORM76** obtient le label RC2 lorsqu'elle est équipée d'un vitrage 44/6 collé et
-d'une quincaillerie spécifique (catalogue général, p. 34). La résistance repose sur un ferrage
+d'une quincaillerie spécifique [1 p. 34]. La résistance repose sur un ferrage
 périmétrique et une poignée verrouillable Sécustik.
 
 Elle a été **testée et labellisée par CERIBOIS**, organisme reconnu pour son expertise dans
-l'évaluation de la résistance des menuiseries (catalogue général, p. 34).
+l'évaluation de la résistance des menuiseries [1 p. 34].
 
 # FFCP et construction passive
 
 Les fenêtres **PERFORM76** sont éligibles, **sous certaines conditions**, à la construction
-passive selon la Fédération Française de Construction Passive (catalogue général, p. 34). Les
+passive selon la Fédération Française de Construction Passive [1 p. 34]. Les
 conditions ne sont pas détaillées au catalogue — à obtenir avant tout engagement sur un projet
 passif.
 

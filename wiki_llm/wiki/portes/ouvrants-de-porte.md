@@ -8,10 +8,10 @@ sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
+    last_modified: 2024-03-31
 generated:
   by: process:claude-code
   at: 2026-09-17T23:30:00Z
-stale_after: 2025-03-31
 ---
 
 # Le choix de l'ouvrant commande tout le reste
@@ -95,8 +95,8 @@ périphérique complet contre un renfort limité au côté serrure.
 
 Relevé sur le catalogue portes d'entrée (p. 142 et 152).
 
-**L'ouvrant 118 est le seul à ouvrir toutes les options.** Le cahier l'écrit explicitement :
-« toutes options possibles : bâton de tirage, gâche électrique, système anti-panique, serrure
+**L'ouvrant 118 est le seul à ouvrir toutes les options** : « toutes options possibles : bâton
+de tirage, gâche électrique, système anti-panique, serrure
 motorisée ». Un client qui veut une serrure motorisée ou un bâton de tirage impose donc un
 ouvrant 118 — et donc un dormant neuf et une finition droit.
 

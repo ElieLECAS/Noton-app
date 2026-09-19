@@ -8,10 +8,10 @@ sources:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
-stale_after: 2024-05-31
 ---
 
 # Statut incertain : à vérifier avant toute proposition
@@ -29,16 +29,15 @@ entrée **VER-02** du registre
 
 HYBRIDE+ est la gamme de fenêtres **mixtes aluminium/PVC à ouvrant caché** de PROFERM, présentée
 comme une nouveauté en mai 2023 sous le même slogan que l'HYBRIDE, « la fenêtre écologique »
-(brochure PERFORM+/HYBRIDE+, p. 1).
+[1 p. 1].
 
 Sa construction reprend celle de l'[HYBRIDE](/gammes/hybride.md) : un **profil épais en
 aluminium, renforcé selon abaques, serti sur un profil PVC GREENLINE® de chez
-[KÖMMERLING](/fournisseurs/kommerling.md)**. La brochure la présente comme **unique sur le marché
-de la menuiserie** et comme une technologie **entièrement et exclusivement développée par
-PROFERM** (brochure PERFORM+/HYBRIDE+, p. 3).
+[KÖMMERLING](/fournisseurs/kommerling.md)**. Elle est présentée comme **unique sur le marché de la menuiserie** et comme une technologie
+**entièrement et exclusivement développée par PROFERM** [1 p. 3].
 
 Ce qui la distingue de l'HYBRIDE est l'**ouvrant caché**, et le gain de **20 % de clair de jour**
-qui en découle (brochure PERFORM+/HYBRIDE+, p. 1 et 3).
+qui en découle [1 p. 1 et 3].
 
 # Cotes
 
@@ -51,8 +50,8 @@ Caractéristiques annoncées de l'HYBRIDE+, relevées sur la brochure PERFORM+/H
 | Uw avec vitrage Ug 1,0 (W/m²K) | 1,2 |
 | Largeur d'ouverture oscillo-battante (mm) | 80 ou 140 |
 
-La brochure ne donne **aucune cote de profilé** : ni épaisseur de dormant, ni épaisseur
-d'ouvrant, ni dimension maximale. Aucun cahier technique HYBRIDE+ n'existe dans `raw/`.
+**Aucune cote de profilé n'est documentée** : ni épaisseur de dormant, ni épaisseur d'ouvrant, ni
+dimension maximale. Aucun cahier technique HYBRIDE+ n'existe dans `raw/`.
 
 # Ce qui n'est pas réalisable
 
@@ -74,7 +73,7 @@ caractères, et une seule d'entre elles suffit à disqualifier la gamme.
 
 L'isolation repose sur le **collage périphérique du vitrage dans l'ouvrant**, avec une épaisseur
 de vitrage jusqu'à 28 mm, pour un **Uw de 1,2 W/m²K avec un vitrage de coefficient Ug 1,0**
-(brochure PERFORM+/HYBRIDE+, p. 2).
+[1 p. 2].
 
 Ce Uw de 1,2 est **moins bon que celui de l'[HYBRIDE](/gammes/hybride.md), annoncée à 0,8 W/m²K**
 au catalogue général. Comme la PERFORM+, l'HYBRIDE+ se vend sur la luminosité, pas sur le
@@ -83,7 +82,7 @@ thermique — le compromis est explicite.
 # Sécurité
 
 Quincaillerie **Roto NX**, pouvant répondre à la classe de résistance **RC2 avec oscillo-battant
-en position ouverte** (brochure PERFORM+/HYBRIDE+, p. 2). Détail dans
+en position ouverte** [1 p. 2]. Détail dans
 [Roto NX](/quincaillerie/roto-nx.md).
 
 # Coloris
@@ -91,7 +90,7 @@ en position ouverte** (brochure PERFORM+/HYBRIDE+, p. 2). Détail dans
 C'est le domaine où l'HYBRIDE+ se sépare nettement de la [PERFORM+](/gammes/perform-plus.md), qui
 n'offre que du blanc.
 
-Intérieur PVC (brochure PERFORM+/HYBRIDE+, p. 3) :
+Intérieur PVC [1 p. 3] :
 
 | Coloris | Type |
 | --- | --- |
@@ -119,9 +118,9 @@ PERFORM+/HYBRIDE+, p. 3) :
 | Marron 8019 | granité |
 
 La palette est **presque identique à celle de l'[HYBRIDE](/gammes/hybride.md)**, à deux
-exceptions près : l'HYBRIDE+ ne propose ni Anodisé argent ni Anodisé champagne, et le catalogue
-nomme « Gris 7016 » ce que la brochure appelle « Anthracite 7016 ». Même RAL, désignation
-commerciale différente — à harmoniser si les deux gammes coexistent au tarif.
+exceptions près : l'HYBRIDE+ ne propose ni Anodisé argent ni Anodisé champagne, et le **Gris
+7016** de l'HYBRIDE est le même RAL que l'**Anthracite 7016** de l'HYBRIDE+, sous deux
+désignations commerciales.
 
 L'intérieur ne propose pas l'Ivoire disponible sur l'HYBRIDE, ni le laquage 2 faces en toutes
 teintes RAL.
@@ -129,7 +128,7 @@ teintes RAL.
 # Poignée
 
 La poignée **TOULON** est la seule proposée, en blanc, noir ou F9, **uniquement en version
-décalée**. Laquage RAL sur demande en option (brochure PERFORM+/HYBRIDE+, p. 3).
+décalée**. Laquage RAL sur demande en option [1 p. 3].
 
 # Garanties annoncées
 

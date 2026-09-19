@@ -8,17 +8,16 @@ sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
+    last_modified: 2024-03-31
 generated:
   by: process:claude-code
   at: 2026-09-17T23:30:00Z
-stale_after: 2025-03-31
 ---
 
 # L'avertissement qui gouverne toute la page
 
 Le catalogue ouvre sa section accessoires par une mise en garde en gras : **« Attention tous nos
-accessoires ne sont pas compatibles sur tous les modèles de portes d'entrée »** (catalogue portes
-d'entrée, p. 152).
+accessoires ne sont pas compatibles sur tous les modèles de portes d'entrée »** [1 p. 152].
 
 Deux restrictions sont explicites dans le document, et elles suffisent à écarter beaucoup de
 combinaisons :
@@ -91,7 +90,7 @@ PVD peuvent varier** — à montrer physiquement au client plutôt que sur photo
 
 # Boutons
 
-Trois finitions : **inox**, **fer cémenté**, **laiton PVD** (catalogue portes d'entrée, p. 154).
+Trois finitions : **inox**, **fer cémenté**, **laiton PVD** [1 p. 154].
 
 **Avertissement explicite du catalogue : « Nos boutons de porte ne sont pas garantis contre la
 corrosion. »** C'est la seule pièce de la documentation PROFERM à porter une exclusion de
@@ -100,8 +99,7 @@ mer.
 
 # Boîtes aux lettres intégrées
 
-Quatre coloris : **laiton / doré**, **argent / F9**, **noir**, **blanc** (catalogue portes
-d'entrée, p. 154).
+Quatre coloris : **laiton / doré**, **argent / F9**, **noir**, **blanc** [1 p. 154].
 
 La **faisabilité est sur demande** : ce n'est pas une option catalogue, elle se valide au cas par
 cas.

@@ -9,21 +9,21 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
 generated:
   by: process:claude-code
   at: 2026-09-17T19:00:00Z
-stale_after: 2027-01-31
 ---
 
 # Ce qu'est la sélection Hexa
 
 Hexa est la sélection de portes d'entrée **monobloc** de PROFERM, positionnée sur le style
-contemporain (catalogue général, p. 31). Elle est disponible sur deux gammes :
+contemporain [1 p. 31]. Elle est disponible sur deux gammes :
 [LUMINE](/gammes/lumine.md) en aluminium et [HYBRIDE](/gammes/hybride.md) en mixte
 aluminium/PVC.
 
-Le catalogue annonce « 6 monoblocs incontournables ». Les informations complémentaires sont sur
-`www.proferm.net/hexa` (catalogue général, p. 31).
+La sélection compte **six monoblocs**. Les informations complémentaires sont sur
+`www.proferm.net/hexa` [1 p. 31].
 
 # Cotes du monobloc
 
@@ -56,7 +56,7 @@ d'ouvrant) n'est donnée au catalogue général.
 
 # Options
 
-Deux options, chacune restreinte à certains modèles (catalogue général, p. 31) :
+Deux options, chacune restreinte à certains modèles [1 p. 31] :
 
 | Option | Modèles concernés |
 | --- | --- |
@@ -66,7 +66,7 @@ Deux options, chacune restreinte à certains modèles (catalogue général, p. 3
 # Accessoires
 
 Les accessoires Hexa sont spécifiques à la sélection et différents de ceux des fenêtres
-(catalogue général, p. 31) :
+[1 p. 31] :
 
 | Accessoire | Type |
 | --- | --- |
@@ -76,7 +76,7 @@ Les accessoires Hexa sont spécifiques à la sélection et différents de ceux d
 
 # Coloris
 
-Intérieur (catalogue général, p. 31) :
+Intérieur [1 p. 31] :
 
 | Coloris | Emplacement |
 | --- | --- |
@@ -84,7 +84,7 @@ Intérieur (catalogue général, p. 31) :
 | Gris 7016 satiné | intérieur / extérieur alu |
 | Gris 7016 granité | intérieur / extérieur alu |
 
-Extérieur alu et hybride (catalogue général, p. 31) : Blanc 9016, Rouge 3004 satiné, Gris 2900
+Extérieur alu et hybride [1 p. 31] : Blanc 9016, Rouge 3004 satiné, Gris 2900
 granité, Gris 7039 granité, Gris 7035 granité, Marron 8019 granité, Noir 2100 granité, Noir 9005
 granité, Gris 7016 satiné, Gris 7016 granité.
 
@@ -99,7 +99,7 @@ La serrure motorisée est disponible **sur monobloc**, donc sur toute la sélect
 général, p. 33). Voir [Serrure motorisée](/quincaillerie/serrure-motorisee.md).
 
 Restriction à retenir : l'option « ouvrant dans l'ouvrant » n'est pas possible sur les portes en
-aluminium (catalogue général, p. 32).
+aluminium [1 p. 32].
 
 # Citations
 

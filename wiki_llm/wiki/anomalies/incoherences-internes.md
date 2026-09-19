@@ -8,36 +8,47 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     id: cahier-technique-perform76-cc03
     title: Cahier technique PERFORM76, version 02/09/2026 CC03
+    last_modified: 2026-09-02
   - resource: raw/catalogue-portes-entree-2024-03.pdf
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
+    last_modified: 2024-03-31
   - resource: raw/nuancier-stores-2020.pdf
     id: nuancier-stores-2020
     title: Nuancier stores PROFERM, 2020
+    last_modified: 2020-12-31
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
     id: profine-mise-en-oeuvre-76-advanced
     title: Mise en œuvre Système 76 Advanced, profine
+    last_modified: 2023-12-14
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage, réf. IMO_180_NX_FR_v2
+    last_modified: 2022-11-30
   - resource: raw/depliant-lumeal-2023-06.pdf
     id: depliant-lumeal-2023-06
     title: Dépliant LUMÉAL, édition juin 2023
+    last_modified: 2023-06-30
   - resource: raw/depliant-lumeal-2026-04.pdf
     id: depliant-lumeal-2026-04
     title: Dépliant LUMÉAL, édition avril 2026
+    last_modified: 2026-04-21
   - resource: raw/brochure-lumine65-2025-02.pdf
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
+    last_modified: 2025-02-28
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
     id: profine-mise-en-oeuvre-systeme-70
     title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
+    last_modified: 2023-09-30
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
     id: roto-nx-catalogue-ctl-105
     title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
@@ -73,6 +84,7 @@ ce que le registre lui prêtait. Elle quitte alors le registre actif pour la sec
 | INC-11 | Instructions de montage Roto NX KSR | toutes les pages | Chaque page porte **deux références de document et deux dates** : « Roto NX KSR - IMO_180_NX_FR_v2, Novembre 2022 » en pied de page, et « Roto NX IMO_455_FR_v2 · 07 / 2018 » juste en dessous. Les renvois internes suivent la seconde pagination et pointent vers les pages 215, 216 et 219, qui n'existent pas dans ce document de 124 pages | Le document est un extrait recomposé du manuel IMO_455 de juillet 2018 : renuméroter les renvois, ou indiquer qu'ils visent le manuel complet | Un lecteur qui suit un renvoi ne trouve rien, et personne ne sait laquelle des deux versions fait foi sur une valeur contestée |
 | INC-12 | Mise en œuvre Système 70 Plateforme | registre 2.1.2, p. 1 vs p. 8 à 15 | Huit dormants portent deux largeurs différentes : le sommaire des profilés donne 91, 84, 87, 95, 107, 87, 117 et 122 mm pour les 6102, 6104, 6105, 6106, 6107, 6155, 6156 et 6159, leurs planches de détail donnent 57, 64, 67, 75, 87, 67, 97 et 102 mm. L'écart est de 20 mm sur sept d'entre eux et de 34 mm sur le 6102. Les huit autres dormants concordent | Établir ce que mesure chacune des deux pages. L'écart constant de 20 mm ressemble à deux conventions de mesure, pas à huit coquilles, mais aucune des deux pages ne le dit | Dormant commandé au mauvais gabarit sur la moitié de la gamme. La planche du 6159 est en outre titrée « 6156 », libellé recopié comme dans INC-03 |
 | INC-13 | Catalogue Roto NX pour profils PVC | 36 | Dans un catalogue français, le tableau des champs d'application de la version 150 kg est **imprimé en allemand** — « Flügelfalzbreite », « Grundsicherheit », « unzulässiger Anwendungsbereich » — et il désigne les classes de sécurité par « RC » là où la page 35, en français, écrit « CDR » | Traduire la page 36. Retenir que RC et CDR désignent la même classification, celle de la DIN EN 1627-1630 | Un lecteur français ne lit pas les bornes de la ferrure 150 kg, qui est celle des vantaux lourds |
+| INC-14 | DTD n° DBV-25-6/16-2334_V5 | 47 | Le tableau d'assignation du drainage groupe les ouvrants « 76271, 76272, **78275**, 76279, 76281 » — la référence **78275** ne correspond à aucun profilé connu du système, alors que le **76275** est l'un des quatre ouvrants PERFORM76 et manque justement à cette liste | Coquille probable : lire 76275 | Un lecteur cherchant le drainage du 76275 ne le trouve pas, cherché sous 78275 il ne trouve rien non plus |
 
 # INC-02 en détail
 
@@ -135,8 +147,7 @@ et [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-gen
 
 # INC-05 en détail
 
-Les plages de hauteur d'ouvrant du tableau de position de poignée (cahier technique PERFORM76,
-p. 3) se recouvrent à quatre endroits :
+Les plages de hauteur d'ouvrant du tableau de position de poignée [2 p. 3] se recouvrent à quatre endroits :
 
 | Chevauchement | Plages concernées | Positions FFO données |
 | --- | --- | --- |

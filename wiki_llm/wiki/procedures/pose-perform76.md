@@ -8,16 +8,16 @@ sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     id: cahier-technique-perform76-cc03
     title: Cahier technique PERFORM76, version 02/09/2026 CC03
+    last_modified: 2026-09-02
 generated:
   by: process:claude-code
   at: 2026-09-17T20:00:00Z
-stale_after: 2027-09-02
 ---
 
 # Interdiction absolue : la mousse polyuréthane
 
 **« L'utilisation de la mousse polyuréthane est à proscrire dans l'ensemble des cas de pose »**
-(cahier technique, p. 7, mention en rouge et en tête de page).
+(cahier technique PERFORM76, p. 7, mention en rouge et en tête de page).
 
 C'est la seule interdiction générale du cahier technique, et elle ne souffre aucune exception :
 ni en neuf, ni en dépose, ni en rénovation. L'étanchéité se fait au compribande et au silicone,
@@ -26,7 +26,7 @@ le calage à la cale latérale ou au bois.
 # Les quatre principes de pose
 
 Chaque principe n'accepte que certains dormants. Choisir le dormant avant le principe, ou
-l'inverse, mais vérifier la correspondance (cahier technique, p. 7 et 8).
+l'inverse, mais vérifier la correspondance [1 p. 7 et 8].
 
 | Principe | Dormants compatibles | Constituants |
 | --- | --- | --- |
@@ -38,8 +38,7 @@ l'inverse, mais vérifier la correspondance (cahier technique, p. 7 et 8).
 Voir [Dormants PERFORM76](/profiles/perform76-dormants.md).
 
 Les deux versions de rénovation acceptent les mêmes dormants et diffèrent par le traitement du
-bois existant : **compensation** en version 1, **mise à niveau** en version 2 (cahier technique,
-p. 8).
+bois existant : **compensation** en version 1, **mise à niveau** en version 2 [1 p. 8].
 
 # Cotes de recouvrement sur le mur
 
@@ -77,13 +76,12 @@ Position du fraisage sur le dessus du dormant bas, qui dépend du profil :
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 4)
 
 La décompression combine deux usinages distincts — un fraisage de 25 × 5 mm **et** une découpe de
-100 mm de joint par ouvrant. Les deux sont nécessaires : le cahier les présente comme deux
-opérations, pas comme une alternative.
+100 mm de joint par ouvrant. **Les deux sont nécessaires**, ce ne sont pas des alternatives.
 
 # Délignage de l'aile, sur le chantier
 
 Le délignage de l'aile des dormants rénovation est explicitement **« à effectuer sur le
-chantier »** (cahier technique, p. 4, 11 et 12), pas en atelier.
+chantier »** [1 p. 4, 11 et 12], pas en atelier.
 
 | Dormant | Aile (mm) | Délignage maxi (mm) |
 | --- | --- | --- |
@@ -110,7 +108,7 @@ majeure : **au-delà de 155 mm d'isolant sur un 76171, le dormant bas doit deven
 # Alignement à demander à la commande
 
 L'alignement des vitrages par rapport au dessus des traverses est possible **à la demande du
-client lors de la commande** (cahier technique, p. 9). Ce n'est pas un réglage de chantier : si
+client lors de la commande** [1 p. 9]. Ce n'est pas un réglage de chantier : si
 ce n'est pas demandé à la commande, ce n'est pas rattrapable à la pose. Voir
 [Meneaux PERFORM76](/profiles/perform76-meneaux.md).
 

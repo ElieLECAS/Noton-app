@@ -1,126 +1,115 @@
 ---
 type: Document source
 title: Directives générales profine, version janvier 2023
-description: Manuel de mise en œuvre de 113 pages de profine, qui fixe la terminologie, les tailles d'ouvrants et la méthode de calcul des dimensions d'élément.
+description: Manuel de mise en œuvre de 113 pages de profine, qui fixe la terminologie, les tailles d'ouvrants, la méthode de calcul des dimensions d'élément, et les tolérances de fabrication et de montage communes à tous les systèmes.
 tags: [profine, directives, terminologie, mise-en-oeuvre, dimensions, manuel]
-status: draft
+status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf
     id: profine-directives-generales-2023
     title: Directives générales profine, version janvier 2023
+    last_modified: 2023-01-31
 generated:
   by: process:claude-code
-  at: 2026-09-18T00:00:00Z
-stale_after: 2024-12-31
+  at: 2026-09-19T23:30:00Z
 ---
 
-# Ce que contient le document
+# Identité
 
-**113 pages**, version **janvier 2023**. C'est le manuel de mise en œuvre de
-[profine](/fournisseurs/profine.md), organisé en **registres** numérotés — l'équivalent
-industriel d'un référentiel de fabrication.
-
-**C'est le tome 1 d'un classeur en deux volumes.** Le tome 2,
-[Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md), reprend la
-même table des matières et porte les registres `2.x` propres au système 76 : cotes de débit,
-abaques dimensionnels, renforts, usinages. Les deux se citent l'un l'autre — le tome 2 renvoie au
-registre 1.2.3 pour les directives de renforcement et au registre 1.3.3 pour les exigences
-statiques, qui sont ici.
-
-Le document précise sa propre portée : il « comprend toutes les instructions permettant une
-utilisation conforme » des systèmes profine, et les produits sont « soumis à des essais de type
-initiaux » auxquels ce manuel est rattaché. **Ce n'est donc pas de la documentation commerciale
-mais une pièce du système qualité** : s'en écarter peut invalider les essais de type.
-
-**Chaque page porte la mention « Sous réserve de modifications techniques ! »**, et la version est
-datée. Un exemplaire périmé n'a aucune valeur.
-
-# Ce qui est exploité pour l'instant
-
-Seul le registre **1.1.2 Terminologie et légendes** a été dépouillé. Il donne trois choses.
-
-## Cotes des tailles d'ouvrants minimales
-
-| Type de butée | Largeur mini (mm) | Hauteur mini (mm) |
-| --- | --- | --- |
-| Oscillo-battante | 340 | 660 |
-| Soufflet, impostes | 660 | 340 |
-
-(schéma: raw/profine-directives-generales-2023-01.pdf, registre 1.1.2, p. 1)
-
-Les deux valeurs sont **inversées entre les deux types** : un oscillo-battant doit être plus haut
-que large, un soufflet plus large que haut. Le [DTA](/certifications/dta-6-16-2334.md) donne les
-maxima, ce manuel donne les minima — les deux sont nécessaires pour borner une commande.
-
-## La règle de calcul d'une dimension d'élément
-
-**Les cotes maximales des registres sont des cotes extérieures d'ouvrant, pas des dimensions de
-fenêtre.** Pour obtenir la cote finale, il faut ajouter les profilés adjacents sur tous les côtés
-(directives générales, registre 1.1.2, p. 1).
-
-Exemple donné par le manuel :
-
-| Poste | Valeur (mm) |
+| Élément | Valeur |
 | --- | --- |
-| Cote extérieure d'ouvrant | 2 100 |
-| Vue intérieure de dormant, 2 × 42 | 84 |
-| Coffre de volet roulant | 205 |
-| Profilés d'élargissement | 120 |
-| **Hauteur totale d'élément** | **2 509** |
+| Éditeur | profine |
+| Version | janvier 2023 (pages datées de janvier 2016 à février 2023 selon le registre) |
+| Pages | 113 |
+| Nature | **manuel de mise en œuvre**, pièce du système qualité |
+| Mention | « Sous réserve de modifications techniques ! » sur chaque page |
 
-(schéma: raw/profine-directives-generales-2023-01.pdf, registre 1.1.2, p. 1)
+**Tome 1 d'un classeur en deux volumes.** Le tome 2,
+[Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md), reprend la
+même table des matières et porte les registres `2.x` propres au système 76. Les produits profine
+sont soumis à des **essais de type initiaux** auxquels ce manuel est rattaché : s'en écarter peut
+invalider ces essais.
 
-**Près de 20 % d'écart entre la cote d'ouvrant et la cote d'élément** dans cet exemple. C'est
-l'erreur de métré la plus coûteuse possible, et le manuel ouvre dessus.
+# Registre de couverture
 
-## La terminologie de référence
+Pas de décalage : la pagination imprimée suit la pagination du PDF.
 
-Le registre fixe le vocabulaire de toutes les cotes d'une menuiserie, avec un repère par notion :
+| Pages PDF | Registre | Contenu | État | Page du wiki |
+| --- | --- | --- | --- | --- |
+| 1 | — | Sommaire | sans contenu propre | - |
+| 2-8 | 1.1.1 | À propos du manuel : structure, Cascading ITT, obligations légales, CPU | sans contenu propre — obligations contractuelles profine/fabricant, sans donnée produit | - |
+| 9-16 | 1.1.2 | Terminologie, légendes, tailles d'ouvrants minimales, calcul d'une dimension d'élément | transcrit | [Glossaire des sigles et des cotes](/reference/glossaire.md) |
+| 17-25 | 1.2.1 | Livraison, stockage, manutention des semi-produits PVC et aluminium | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 26-30 | 1.2.2 | Débit : scies, jeu périphérique, zone de fonte, profilés plaxés | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 31-33 | 1.2.3 | Renforcement : tailles obligatoires, débit du renfort, vissage | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 34-40 | 1.2.4 | Soudage et ébavurage : températures, temps, pressions | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 41 | 1.2.5 | Assemblages de meneaux/traverses, force de rupture SKG | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 42-43 | 1.2.6 | Joints : types, excédent de longueur, fraisage de la rainure | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 44-48 | 1.2.7 | Surfaces : collage, colles de référence, nettoyage, aluminium laqué | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 49-51 | 1.2.9 | Fixation des profilés complémentaires : charges admissibles, petits bois collés | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 52-55 | 1.3.1 | Décompression et drainage : cotes d'ouverture, ventilation | transcrit | [Drainage et vitrage généraux](/procedures/drainage-et-vitrage-generaux.md) |
+| 56-62 | 1.3.2 | Vitrage : poids, débit de parclose, calage, montage/démontage | transcrit | [Drainage et vitrage généraux](/procedures/drainage-et-vitrage-generaux.md) |
+| 63-65 | 1.3.3 | Domaine d'application, régions climatiques, catégories de terrain, exigences de rigidité et de flèche | transcrit | [Classification A\*E\*V\* par site](/reference/classification-aev-par-site.md) |
+| 66-73 | 1.3.3 | Tableaux 1 à 6 : pressions de vent, perméabilité, étanchéité, France métropolitaine et DOM | transcrit (combinés) | [Classification A\*E\*V\* par site](/reference/classification-aev-par-site.md) |
+| 74-75 | 1.3.3 | Tableau 7 (réduction pour ouvrage protégé) et tableau 8 (récapitulatif A\*E\*V\*, métropole et DOM) | transcrit | [Classification A\*E\*V\* par site](/reference/classification-aev-par-site.md) |
+| 76-77 | 1.3.3 | Résistance mécanique (fenêtres et portes), et texte de l'Annexe A | transcrit | [Classification A\*E\*V\* par site](/reference/classification-aev-par-site.md) |
+| 78-80 | 1.3.3, annexe A | Tableaux A.1 et A.2 : régions climatiques et découpage cantonal par département | transcrit | [Régions climatiques par département](/reference/regions-climatiques-par-departement.md) |
+| 81-84 | 1.3.3, annexe A | Figures A.2/A.3 : illustrations photographiques des catégories de terrain | sans contenu propre — images d'exemple, définition déjà donnée p. 64 | - |
+| 85-92 | 1.3.4 | Ferrure : sécurité, quincailleries approuvées par configuration de fenêtre et de porte | transcrit | [ROTO](/fournisseurs/roto.md) |
+| 93 | 1.3.4 | Quincailleries approuvées par petit accessoire (cale, aérateur, ouverture d'imposte) | transcrit | [ROTO](/fournisseurs/roto.md) |
+| 94-97 | 1.3.5 | Couplages et contreventements : solutions de profilé, dilatation, vissage, étanchéité | transcrit | [Couplages et contreventements d'éléments](/procedures/couplages-elements.md) |
+| 98 | 1.3.6 | Stockage et transport des menuiseries finies | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 99 | 1.3.6 | Check-list de contrôle intermédiaire et final, 33 points | transcrit | [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) |
+| 100-101 | 1.3.7 | Joints de raccordement : sources d'erreur de conception et de pose | transcrit | [Usage, nettoyage et entretien](/procedures/usage-nettoyage-entretien-menuiseries.md) |
+| 102-106 | 1.3.7 | Montage : entraxes de fixation, tolérances de maçonnerie, largeur de joint, dilatation alu | transcrit | [Montage au bâtiment](/procedures/montage-generaux-profine.md) |
+| 107-110 | 1.3.8 | Entrées d'air autoréglables : modules, passage, usinage | transcrit | [Montage au bâtiment](/procedures/montage-generaux-profine.md) |
+| 111-113 | 1.3.9 | Usage de la poignée, nettoyage, entretien, irisations, condensation | transcrit | [Usage, nettoyage et entretien](/procedures/usage-nettoyage-entretien-menuiseries.md) |
 
-| Repère | Notion | Repère | Notion |
-| --- | --- | --- | --- |
-| A | Dormant | J | Hauteur joint comprimé |
-| B | Ouvrant | K | Recouvrement ouvrant |
-| C | Parclose | L | Hauteur de calage vitrage |
-| D | Rainure crémone | M | Hauteur pré-cale |
-| E | Dos de dormant | N | Jeu de fonctionnement |
-| F | Chambre des renforts | O | Dimension extérieure dormant |
-| G | Rainure parclose | P | Clair de jour vitrage |
-| H | Feuillure vitrage | Q | Clair de jour ouvrant |
-| I | Feuillure quincaillerie | R | Clair de jour dormant |
+**Les 113 pages sont couvertes, aucune `à faire`.** Deux plages sont `sans contenu propre` après
+ouverture : les obligations contractuelles profine/fabricant (p. 2-8) et les photographies
+d'exemple de catégories de terrain, déjà définies en texte (p. 81-84).
 
-Il définit également les sigles employés dans tout le système : **DHT** dimension hors tout,
-**CCD** cote clair de dormant, **CCO** cote clair d'ouvrant, **CCV** cote clair de vitrage.
+# Ce qu'il apporte seul
 
-C'est la seule définition formelle de ce vocabulaire dans tout le corpus, et elle vaut pour lire
-n'importe quelle planche profine.
+**La terminologie de référence de tout le corpus profine** : les repères A à R des cotes d'une
+menuiserie et les sigles DHT, CCD, CCO et CCV, repris dans
+[Glossaire des sigles et des cotes](/reference/glossaire.md).
 
-# Ce qui reste à dépouiller
+**La règle de calcul d'une dimension d'élément** : les cotes maximales des registres sont des
+cotes extérieures d'ouvrant, auxquelles il faut ajouter les profilés adjacents sur les quatre
+côtés. L'exemple du manuel porte une cote d'ouvrant de 2 100 mm à une hauteur d'élément de
+2 509 mm, soit près de 20 % d'écart.
 
-**Les 107 autres pages n'ont pas été exploitées.** Le document est organisé en registres couvrant
-la composition des menuiseries — fenêtre, porte-fenêtre, coulissant, chicane — et vraisemblablement
-les abaques de renfort, les tolérances et les règles d'usinage que le wiki réclame depuis
-l'ingestion du catalogue général.
+**Les tailles d'ouvrants minimales** : 340 × 660 mm en oscillo-battant, 660 × 340 mm en soufflet
+et imposte — les deux valeurs sont inversées entre les deux types.
 
-C'est la source la plus prometteuse encore inexploitée du corpus. À traiter registre par
-registre plutôt qu'en bloc, en commençant par ceux qui répondent à une question ouverte du
-registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
+**La classification A\*E\*V\* à préconiser par site, métropole et outre-mer** — région de vent,
+catégorie de terrain et hauteur de bâtiment, avec la région de chaque département — voir
+[Classification A\*E\*V\* par site](/reference/classification-aev-par-site.md) et
+[Régions climatiques par département](/reference/regions-climatiques-par-departement.md).
 
-# Provenance du fichier
-
-PDF extrait de `raw/export_doc_146.zip`. Titre interne « Directives_Générales_08_2023 »,
-identifiant 146.
+**Un premier élément concret sur VER-20** : le registre Ferrure liste ROTO comme quincaillerie
+approuvée pour la quasi-totalité des fenêtres, plusieurs portes, et l'aérateur à entrebâillement
+— mais pas la porte d'entrée à un vantail seule, les seuils, les ferme-portes ni les autres petits
+accessoires — voir [ROTO](/fournisseurs/roto.md).
 
 # Citations
 
 [1] Directives générales profine, version janvier 2023 —
-`raw/profine-directives-generales-2023-01.pdf`, registre 1.1.2
+`raw/profine-directives-generales-2023-01.pdf`
 
 # Voir aussi
 
 - [profine](/fournisseurs/profine.md)
-- [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)
-- [Posters Système 76 Advanced](/sources/posters-systeme-76-advanced.md)
 - [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
-- [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md)
+- [Glossaire des sigles et des cotes](/reference/glossaire.md)
+- [Classification A\*E\*V\* par site](/reference/classification-aev-par-site.md)
+- [Régions climatiques par département](/reference/regions-climatiques-par-departement.md)
+- [Classification de la résistance au vent](/reference/classification-resistance-au-vent.md)
+- [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md)
+- [Drainage et vitrage généraux](/procedures/drainage-et-vitrage-generaux.md)
+- [Couplages et contreventements d'éléments](/procedures/couplages-elements.md)
+- [Montage au bâtiment](/procedures/montage-generaux-profine.md)
+- [Usage, nettoyage et entretien](/procedures/usage-nettoyage-entretien-menuiseries.md)
+- [ROTO](/fournisseurs/roto.md)
 - [Informations à vérifier](/anomalies/informations-a-verifier.md)

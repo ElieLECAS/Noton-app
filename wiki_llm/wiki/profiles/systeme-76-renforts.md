@@ -8,17 +8,21 @@ sources:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
     id: profine-mise-en-oeuvre-76-advanced
     title: Mise en œuvre Système 76 Advanced, profine
+    last_modified: 2023-12-14
+  - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
+    id: dtd-6-16-2334-v5
+    title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
+    last_modified: 2025-06-19
 generated:
   by: process:claude-code
   at: 2026-09-18T09:00:00Z
-stale_after: 2024-12-31
 ---
 
 # Ce que désignent IW et IG
 
 Chaque renfort acier du **système 76 Advanced à joint central** de
 [profine](/fournisseurs/profine.md) porte deux valeurs d'inertie, et elles ne servent pas à la
-même chose (registre 2.3.3, p. 2, version janvier 2016) :
+même chose [1 registre 2.3.3 p. 2] :
 
 | Valeur | Ce qu'elle borne | Ce qu'on en fait |
 | --- | --- | --- |
@@ -70,6 +74,12 @@ le renfort de dormant le plus raide en poids du système.
 pour une IW comparable : c'est le renfort à demander quand le vitrage est lourd et que le vent ne
 l'est pas.
 
+**Un huitième dormant, le 76179, apparaît sur le DTD** du système, groupé avec les 76171, 76172 et
+76180 dans le tableau d'assignation du drainage — ni ses cotes ni son renfort ne sont donnés par
+une source du wiki [2 p. 47]. Le même tableau porte la référence **78275** parmi les ouvrants, une
+coquille probable pour 76275 — entrée **INC-14** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
 Voir [Dormants PERFORM76](/profiles/perform76-dormants.md).
 
 # Renforts des ouvrants
@@ -102,7 +112,7 @@ détermine l'épaisseur de vitrage admissible, pas la hauteur du profil elle-mê
 Le **76271 équipé du capot aluminium A072 se passe de renfort acier** — c'est la variante AluClip
 Pro. Ses inerties sont celles du capot, et elles sont les plus faibles du système en vent (0,8 cm⁴).
 Une **équerre de feuillure J079 dans les quatre angles devient obligatoire à partir de 40 kg de
-poids d'ouvrant** (registre 2.6.3, p. 1, version décembre 2016). Les battements, eux, restent
+poids d'ouvrant** [1 registre 2.6.3 p. 1]. Les battements, eux, restent
 systématiquement renforcés.
 
 Voir [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md).
@@ -173,24 +183,23 @@ Le **V288 du profilé de liaison 76608 est le renfort le plus raide au vent de t
 
 **Le renfort V317 apparaît avec des inerties permutées selon la planche** : IW 4,8 / IG 2,3 sur le
 battement 76472, IW 2,3 / IG 4,8 sur la réhausse 76705. C'est cohérent avec un montage tourné de
-90°, l'axe fort passant du vent au poids — mais le manuel ne l'écrit pas. Entrée **VER-24** du
+90°, l'axe fort passant du vent au poids, sans que le document l'écrive. Entrée **VER-24** du
 registre [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 Voir [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md).
 
 # Vissage des renforts
 
-Le manuel impose une **vis auto-perforeuse à tête fraisée** pour la fixation des renforts
-(registre 2.4.1, p. 1 à 9, versions janvier 2016 à mars 2021).
+La fixation des renforts se fait à la **vis auto-perforeuse à tête fraisée**
+[1 registre 2.4.1 p. 1 à 9].
 
 | Renfort | Vis |
 | --- | --- |
 | V312.Z | 3,9 × 13 mm |
 | tous les autres renforts du registre 2.4.1 | 3,9 × 16 mm |
 
-**Les positions de vissage ne sont pas reprises dans ce wiki** : le registre 2.4.1 les donne sous
-forme de dessins cotés à l'échelle 1:2, impossibles à transcrire sans les redessiner. Se reporter
-au document pour percer.
+**Les positions de vissage ne sont pas reprises ici** : le registre 2.4.1 les porte en dessins
+cotés à l'échelle 1:2. Se reporter au document avant de percer.
 
 Sur un profilé de couleur ou capoté aluminium, le vissage du renfort s'accompagne d'une
 **ventilation obligatoire des préchambres extérieures** — voir
@@ -201,6 +210,9 @@ Sur un profilé de couleur ou capoté aluminium, le vissage du renfort s'accompa
 [1] Mise en œuvre Système 76 Advanced, profine —
 `raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registres 2.1.2, 2.1.3, 2.3.3, 2.4.1 et 2.6.3
 
+[2] DTD n° DBV-25-6/16-2334_V5, système 76 Advanced —
+`raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 47
+
 # Voir aussi
 
 - [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md)
@@ -208,4 +220,5 @@ Sur un profilé de couleur ou capoté aluminium, le vissage du renfort s'accompa
 - [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
 - [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md)
+- [Incohérences internes](/anomalies/incoherences-internes.md)
 - [Informations à vérifier](/anomalies/informations-a-verifier.md)

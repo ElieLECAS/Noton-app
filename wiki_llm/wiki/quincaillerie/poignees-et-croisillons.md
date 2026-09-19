@@ -8,17 +8,17 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
 generated:
   by: process:claude-code
   at: 2026-09-17T19:00:00Z
-stale_after: 2027-01-31
 ---
 
 # Poignées de fenêtre par gamme
 
 Les poignées de fenêtre diffèrent d'une gamme à l'autre : les deux Sécustik® sont communes à
 toutes les gammes, les deux Technal® sont réservées à
-[LUMINE](/gammes/lumine.md) (catalogue général, p. 7, 11, 15 et 23).
+[LUMINE](/gammes/lumine.md) [1 p. 7, 11, 15 et 23].
 
 | Poignée | PERFORM | HYBRIDE | LUMINE | TEXTURAL | Coloris |
 | --- | --- | --- | --- | --- | --- |
@@ -28,7 +28,7 @@ toutes les gammes, les deux Technal® sont réservées à
 | Technal® ANTIBES | non | non | en option | non | noir, 7016, aspect inox ou blanc |
 
 La poignée TOULON est celle utilisée en position décalée sur la quincaillerie invisible du
-LUMINE55 (catalogue général, p. 14).
+LUMINE55 [1 p. 14].
 
 # Béquilles doubles et rosaces, pour portes-fenêtres
 
@@ -46,7 +46,7 @@ laiton, avec le noir et le 7016 en option selon les modèles.
 
 # Poignées de coulissant
 
-Les poignées de coulissant dépendent du produit, pas de la gamme (catalogue général, p. 17).
+Les poignées de coulissant dépendent du produit, pas de la gamme [1 p. 17].
 
 | Poignée | Tous coulissants | LUMINE65 | SOLÉAL & GALANDAGE | LUMÉAL |
 | --- | --- | --- | --- | --- |
@@ -87,20 +87,20 @@ Largeurs de croisillons disponibles, en mm, relevées sur le catalogue général
 
 Les six croisillons sont identiques sur les quatre gammes de fenêtres. **Sur les coulissants, le
 45 mm, le laiton et le plomb restent disponibles mais l'offre s'arrête à trois largeurs standards
-— 10, 18 et 26 mm** (catalogue général, p. 17).
+— 10, 18 et 26 mm** [1 p. 17].
 
 # Fausses crémones
 
 La fausse crémone décorative est disponible sur [PERFORM](/gammes/perform.md),
 [HYBRIDE](/gammes/hybride.md) et [TEXTURAL](/gammes/textural.md), en blanc ou fer cémenté, **sauf
-sur porte-fenêtre avec serrure** (catalogue général, p. 7, 11 et 23). Elle constitue la signature
+sur porte-fenêtre avec serrure** [1 p. 7, 11 et 23]. Elle constitue la signature
 du style AUTHENTIQUE de la gamme TEXTURAL®.
 
-Elle n'apparaît pas dans les accessoires de la gamme LUMINE (catalogue général, p. 15).
+Elle n'apparaît pas dans les accessoires de la gamme LUMINE [1 p. 15].
 
 # Autres accessoires communs
 
-Communs aux quatre gammes (catalogue général, p. 7, 11, 15 et 23) :
+Communs aux quatre gammes [1 p. 7, 11, 15 et 23] :
 
 - **moustiquaire** à cadre fixe, permettant de laisser la fenêtre ouverte, fermée ou ouvrant
   battant

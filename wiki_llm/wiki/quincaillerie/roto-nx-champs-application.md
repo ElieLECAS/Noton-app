@@ -16,7 +16,6 @@ sources:
 generated:
   by: process:claude-code
   at: 2026-09-18T14:15:00Z
-stale_after: 2025-11-30
 ---
 
 # Les trois grandeurs qui bornent une ferrure Roto NX
@@ -128,8 +127,8 @@ registre [Incohérences internes](/anomalies/incoherences-internes.md).
 
 # Convertir une épaisseur de vitrage en poids de vantail
 
-Les diagrammes portent le poids du vitrage en **kg/m²**, pas l'épaisseur. Le manuel donne la
-conversion (p. 21) :
+Les diagrammes portent le poids du vitrage en **kg/m²**, pas l'épaisseur. La conversion est
+[1 p. 21] :
 
 > **1 mm/m² d'épaisseur de vitre ≙ 2,5 kg**
 
@@ -172,9 +171,8 @@ Les instructions de montage ne donnent que les deux dernières lignes, 140 et 15
 valeurs [1 p. 20]. Le catalogue descend jusqu'à 60 kg [2 p. 34].
 
 Ces valeurs valent **également pour les paliers d'angle lorsque la fixation est réalisée selon le
-palier de compas**. Le manuel renvoie à la **directive TBDK** pour les forces de traction en
-fonction du poids de vantail — la même directive qui borne les poids d'ouvrant admissibles du
-système profine, voir
+palier de compas**. Les forces de traction relèvent de la **directive TBDK**, la même qui borne
+les poids d'ouvrant admissibles du système profine, voir
 [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md).
 
 # Cotes de la ferrure soufflet
@@ -191,7 +189,7 @@ La ferrure soufflet a des limites supplémentaires liées au compas d'arrêt, re
 
 Trois positions de compas d'arrêt sont possibles, et le poids admissible en dépend : **jusqu'à
 80 kg** en position possible et en position alternative, **jusqu'à 60 kg** dans la seconde position
-alternative. Le manuel ne précise pas laquelle est laquelle autrement que par un repère graphique.
+alternative. La correspondance entre position et poids n'est donnée que par un repère graphique.
 
 **L'emploi d'un compas d'arrêt latéral avec le verrouilleur médian VM 200 n'est pas possible.**
 C'est une exclusion nette, la seule de ce chapitre.
@@ -218,6 +216,63 @@ autrement, et c'est l'angle qui compte pour l'encombrement intérieur.
 L'**angle de position de nettoyage ne suit pas cette décroissance** : il passe de 90° à 67°, puis
 remonte à 88° au changement de type de palier, avant de redescendre. C'est le passage du type 1 au
 type 2 qui le provoque.
+
+# Cotes de dimensionnement des profilés
+
+Systèmes d'axe de ferrage admis par la Roto NX, en mm. La désignation se lit
+« jeu de joint / largeur de recouvrement - axe de ferrage ».
+
+| Système | Axe de ferrage (mm) | Jeu de joint (mm) | Largeur de recouvrement (mm) |
+| --- | --- | --- | --- |
+| 12/18-9 | 9 | 12 | 18 |
+| 12/18-13 | 13 | 12 | 18 |
+| 12/20-9 | 9 | 12 | 20 |
+| 12/20-13 | 13 | 12 | 20 |
+| 12/21-13 | 13 | 12 | 21 |
+| 12/22-13 | 13 | 12 | 22 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 32)
+
+Le jeu de joint est tolérancé **− 0,5 mm / + 1,5 mm** sur les six systèmes.
+
+Les huit repères de l'élément sont la cote de l'axe, le jeu en feuillure, la largeur et la hauteur
+de recouvrement, le dormant, l'ouvrant, la parclose et la rainure de vantail. Voir
+[Glossaire des sigles et des cotes](/reference/glossaire.md).
+
+# Cotes de tolérance de châssis fixe, côté paumelles P
+
+Encombrement à prévoir pour une largeur de recouvrement de 20 mm, en mm.
+
+| Poids du vantail (kg) | Tolérance de châssis fixe (mm) | Hauteur de recouvrement mini (mm) | Jeu en haut (mm) | Jeu en bas (mm) |
+| --- | --- | --- | --- | --- |
+| 130 | 21,0 | 16 | 1,0 | 8 |
+| 150 | 26,5 | 16 | 1,0 | 8 |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 34)
+
+La tolérance s'entend **caches compris**. L'angle d'ouverture d'environ 180° vaut jusqu'à 20 mm de
+hauteur de recouvrement, et peut être inférieur selon l'embrasure.
+
+**Passer de 130 à 150 kg coûte 5,5 mm d'encombrement supplémentaire** en tolérance de châssis
+fixe : cela se vérifie au dessin, pas au montage.
+
+# Fixation d'une fenêtre de sécurité
+
+| Élément | Valeur |
+| --- | --- |
+| Dispositif | bloc d'écartement entre l'ouvrage de maçonnerie et le dormant |
+| Emplacement | dans la zone des vissages de gâches de sécurité |
+| Entraxe | environ 400 mm |
+| Reprises d'angle | à environ 150 mm des angles |
+
+(schéma: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf, p. 35)
+
+> « Les fenêtres à retard d'effraction au sens de la DIN EN 1627–1630 ne doivent être désignées
+> comme telles qu'uniquement lorsque le montage a été effectué en tous points selon la norme
+> prescrite. »
+
+**Une ferrure classée CDR ne fait pas une fenêtre classée** : c'est la pose qui décide, et la
+dénomination est refusée si elle n'est pas conforme.
 
 # Ce que ces champs d'application ne disent pas
 

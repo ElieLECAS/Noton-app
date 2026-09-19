@@ -8,16 +8,16 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
 generated:
   by: process:claude-code
   at: 2026-09-17T19:00:00Z
-stale_after: 2027-01-31
 ---
 
 # Le volet roulant intégré
 
 PROFERM propose le volet roulant **assemblé à la menuiserie**, présenté comme la solution idéale
-en isolation thermique et en rapidité de pose (catalogue général, p. 28). Les volets roulants
+en isolation thermique et en rapidité de pose [1 p. 28]. Les volets roulants
 s'adaptent à toutes les menuiseries PROFERM.
 
 # Cotes
@@ -31,9 +31,9 @@ Hauteurs de coffre disponibles, en mm, relevées sur le catalogue général PROF
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 28)
 
-Le choix entre les deux hauteurs se fait **selon la dimension de la menuiserie** (catalogue
-général, p. 28) : le catalogue ne donne pas l'abaque de correspondance. À demander au bureau
-d'études.
+Le choix entre les deux hauteurs se fait **selon la dimension de la menuiserie** [1 p. 28].
+L'abaque de correspondance n'est pas publié — entrée **VER-09** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
 
 # Technologie GoodNight
 
@@ -49,7 +49,7 @@ général, p. 28).
 
 # Motorisations SOMFY
 
-Deux moteurs [SOMFY](/fournisseurs/somfy.md) sont proposés (catalogue général, p. 28) :
+Deux moteurs [SOMFY](/fournisseurs/somfy.md) sont proposés [1 p. 28] :
 
 | Motorisation | Caractéristiques |
 | --- | --- |
@@ -57,15 +57,15 @@ Deux moteurs [SOMFY](/fournisseurs/somfy.md) sont proposés (catalogue général
 | SOMFY® filaire | solution plus économique, commande un seul volet |
 
 Le moteur IO RS100 est le modèle haut de gamme : sa détection du gel évite la détérioration du
-matériel, et son « mode discret » rend le volet silencieux (catalogue général, p. 28).
+matériel, et son « mode discret » rend le volet silencieux [1 p. 28].
 
 Le moteur filaire ne commande **qu'un seul volet** — contrainte à retenir pour un chiffrage
-multi-ouvertures (catalogue général, p. 28).
+multi-ouvertures [1 p. 28].
 
 # Radio IO solaire
 
 Une alimentation solaire supprime le besoin de câblage électrique. Le capteur solaire s'installe
-(catalogue général, p. 28) :
+[1 p. 28] :
 
 - sur le coffre, en rénovation
 - au-dessus de la menuiserie, en neuf
@@ -75,12 +75,12 @@ Il est compatible avec toute la gamme des commandes RTS et TaHoma.
 # Points de commande
 
 L'ensemble des volets roulants proposés par PROFERM est compatible avec la technologie **RADIO IO
-HOMECONTROL** (catalogue général, p. 28). Le pilotage se fait par télécommande, par boîtier
+HOMECONTROL** [1 p. 28]. Le pilotage se fait par télécommande, par boîtier
 TaHoma, ou depuis un smartphone — chez soi comme en vacances.
 
 # Mécanismes manuels, sans domotique
 
-Trois mécanismes manuels (catalogue général, p. 28) :
+Trois mécanismes manuels [1 p. 28] :
 
 | Mécanisme | Disponibilité |
 | --- | --- |

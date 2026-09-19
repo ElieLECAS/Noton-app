@@ -1,22 +1,22 @@
 ---
 type: Porte d'entrée
 title: Panneaux et monoblocs
-description: Les deux modes de fabrication d'une porte PROFERM, les compositions de panneaux, les monoblocs THERMIXEL et THERMALUX et le panneau verrier VERRISSIMA.
+description: Les deux modes de fabrication d'une porte PROFERM, les compositions de panneaux, les monoblocs THERMIXEL et THERMALUX, le panneau verrier VERRISSIMA et les 39 modèles de la collection Lumière.
 tags: [porte-entree, panneau, monobloc, thermixel, thermalux, verrissima, up]
 status: draft
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf
     id: catalogue-portes-entree-2024-03
     title: Catalogue portes d'entrée PROFERM, édition mars 2024
+    last_modified: 2024-03-31
 generated:
   by: process:claude-code
   at: 2026-09-17T23:30:00Z
-stale_after: 2025-03-31
 ---
 
 # Panneau ou monobloc : l'effet « escalier »
 
-Les deux modes de fabrication diffèrent, et cela se voit (catalogue portes d'entrée, p. 143) :
+Les deux modes de fabrication diffèrent, et cela se voit [1 p. 143] :
 
 | Mode | Fabrication | Aspect |
 | --- | --- | --- |
@@ -51,8 +51,7 @@ Compositions des panneaux, relevées sur le catalogue portes d'entrée (p. 144).
 L'Up de 1,0 W/m²K est donné pour un **panneau mousse de 32 mm d'épaisseur, modèle plein**.
 
 Les **dimensions maximales** du panneau de couleur sont de **2 380 mm de hauteur et 1 140 mm de
-largeur**, des dimensions supérieures restant possibles sur étude (catalogue portes d'entrée,
-p. 144).
+largeur**, des dimensions supérieures restant possibles sur étude [1 p. 144].
 
 ## Les quatre âmes disponibles
 
@@ -64,7 +63,7 @@ p. 144).
 | Multiplis | plusieurs couches de placages de bois collées, épaisseur variable | panneau couleur et blanc |
 
 L'**AEROLAME est un procédé développé spécifiquement pour le produit aluminium afin d'éviter
-l'effet bilame** (catalogue portes d'entrée, p. 144) — la déformation d'un panneau dont les deux
+l'effet bilame** [1 p. 144] — la déformation d'un panneau dont les deux
 faces se dilatent différemment. Il n'existe donc pas sur le panneau blanc PVC, qui n'a pas ce
 problème.
 
@@ -89,7 +88,7 @@ Les Up standards sont donnés pour un **modèle plein équipé d'une structure s
 
 Le **pack thermique** est une option commune aux deux : une mousse à isolation renforcée de
 conductivité **0,028 W/m²K** remplace la mousse standard à **0,034 W/m²K**, ce qui amène les deux
-monoblocs à **0,42 W/m²K** (catalogue portes d'entrée, p. 146).
+monoblocs à **0,42 W/m²K** [1 p. 146].
 
 **Ce que chacun résout :**
 
@@ -104,19 +103,77 @@ Pour les deux, la liste des profils dormants adaptables est disponible **sur sim
 elle ne figure pas au catalogue.
 
 Les accessoires des deux monoblocs acceptent « l'adaptation de votre quincaillerie ou des
-produits **VOLMA** » (catalogue portes d'entrée, p. 146). C'est la première fois qu'une source du
+produits **VOLMA** » [1 p. 146]. C'est la première fois qu'une source du
 wiki nomme VOLMA comme fournisseur et non comme crédit photo.
 
 # Le panneau verrier
 
 Réservé aux gammes **LUMINE et TEXTURAL**, il équipe la collection Lumière. Le fabricant est
 **VERRISSIMA**, présenté comme le premier fabricant français de panneaux de portes d'entrée en
-verre (catalogue portes d'entrée, p. 145).
+verre [1 p. 145].
 
 Le vitrage **résiste à la perforation d'une bille de 4,1 kg lâchée neuf fois d'affilée de 9 m de
-haut**. Le cahier précise que le niveau de sécurité au-dessus est le vitrage pare-balle. En cas
+haut**. Le niveau de sécurité immédiatement supérieur est le vitrage pare-balle. En cas
 de bris, les films PVB retiennent les fragments — la technologie des pare-brises — et le vitrage
 reste en place en attendant son remplacement.
+
+## Modèles de la collection Lumière
+
+Chaque motif de panneau verrier existe en plusieurs déclinaisons, distinguées par leur suffixe :
+**PS** (dépoli sablé), **PP** (impression numérique gris anthracite sur dépoli acide), **ML**
+(dépoli sablé sur vitrage dépoli acide), **MA** (Métal Art, incrustation inox ou Cristal Art
+gravée à la main), **CA** (Cristal Art). Chaque référence porte une orientation DIN fixe.
+
+| Modèle | Référence | DIN | Vitrage |
+| --- | --- | --- | --- |
+| ARPÈGE PS | PS01PROF | Gauche | Dépoli sablé, motif transparent |
+| ARPÈGE ML | PS01MLPROF | Droite | Dépoli sablé sur dépoli acide |
+| ARPÈGE PP | PPU01PROF | Droite | Impression numérique gris anthracite |
+| PERSPECTIVE PS | PS02PROF | Gauche | Dépoli sablé, motif transparent |
+| PERSPECTIVE PP | PPU02PROF | Gauche | Impression numérique gris anthracite |
+| PERSPECTIVE ML | PS02MLPROF | Gauche | Dépoli sablé sur dépoli acide |
+| HAUSSMANNIENNE 2 PS | PS03PROF | Droite | Dépoli sablé, motif transparent |
+| HAUSSMANNIENNE 2 ML | PS03MLPROF | Gauche | Dépoli sablé sur dépoli acide |
+| HAUSSMANNIENNE 2 PP | PPU03PROF | Gauche | Impression numérique gris anthracite |
+| SYMBIOSE PS | PS04PROF | Gauche | Dépoli sablé, motif transparent |
+| SYMBIOSE PP | PPU04PROF | Gauche | Impression numérique gris anthracite |
+| SYMBIOSE ML | PS04MLPROF | Gauche | Dépoli sablé sur dépoli acide |
+| HARMONIE PS | PS05PROF | Droite | Dépoli sablé, motif transparent |
+| HARMONIE ML | PS05MLPROF | Gauche | Dépoli sablé sur dépoli acide |
+| HARMONIE PP | PPU05PROF | Gauche | Impression numérique gris anthracite |
+| ANÉMONE PS | PS06PROF | Gauche | Dépoli sablé, motif transparent |
+| ANÉMONE PP | PPU06PROF | Gauche | Impression numérique gris anthracite |
+| MILLENIUM PP | PPU07PROF | Gauche | Impression numérique gris anthracite |
+| MILLENIUM ML | PS07MLPROF | Gauche | Dépoli sablé sur dépoli acide |
+| MILLENIUM PS | PS07PROF | Droite | Dépoli sablé, motif transparent |
+| HAUSSMANNIENNE 2 PS MA | AMPSG03PROF | Droite | Dépoli sablé, 1 inox poli-miroir Ø 100 mm |
+| ESPRIT PS MA | AMPS136PROF | Droite | Dépoli sablé, triple vitrage, ellipse inox 100 × 700 mm |
+| PERSPECTIVE PS MA | AMPSG01PROF | Gauche | Dépoli sablé, motif transparent |
+| OSMOSE PS MA | AMPSG14PROF | Droite | Dépoli sablé, motif transparent |
+| ANÉMONE PS MA 1 | AMPSG06APROF | Droite | Dépoli sablé, inox poli-miroir « ATRIA » gravé main |
+| ANÉMONE PS MA 2 | AMPSG06BPROF | Droite | Dépoli sablé, inox poli-miroir « DIAM » gravé main |
+| RELAX PS CA | AMPSG100PROF | Droite | Dépoli sablé, 1 Cristal Art 150 × 150 mm |
+| SYMBIOSE PS CA | AMPSG104PROF | Gauche | Dépoli sablé, motif transparent |
+| ARPÈGE PS CA | AMPSG101PROF | Gauche | Dépoli sablé, motif transparent |
+| ANÉMONE PS CA | AMPSG106PROF | Droite | Dépoli sablé, Cristal Art « CLAVA » gravé main |
+| PASIPHAE | AMOEU05PROF | Gauche | Impression numérique 100 %, luminosité moyenne à faible |
+| AMALTHE | AMOEU07PROF | Droite | Impression numérique 100 %, luminosité moyenne à faible |
+| ANANKE | AMOEU51PROF | Droite | Impression numérique 100 %, luminosité moyenne à faible |
+| ADRASTÉE | AMOEU01NBPROF | Droite | Impression numérique 100 %, luminosité moyenne à faible |
+| THÉBÉ | AMOEU07PROF | Droite | Impression numérique 100 %, luminosité moyenne à faible |
+| HIMALIA | AMOEU04PROF | Gauche | Impression numérique, œuvre et effet dépoli |
+| SYNOPE | AMOEU01QPROF | Droite | Impression numérique 100 %, luminosité moyenne à faible |
+| SYMBIOSE MA | AMART04PROF | Gauche | Impression numérique, filets transparents |
+| ARPÈGE MA | AMART01PROF | Droite | Impression numérique, inox « ALYA » gravé main |
+| MÉTIS MA | AMART50PROF | Droite | Impression numérique, Métal Art « AME » gravé main |
+
+(schéma: raw/catalogue-portes-entree-2024-03.pdf, p. 107 à 122)
+
+**THÉBÉ et AMALTHE portent la même référence AMOEU07PROF** malgré des noms distincts — même cas
+que les portes ISAÏS/ISABELLE et MORGANE/NINON de la collection Contemporain, entrée **VER-41**
+du registre [Informations à vérifier](/anomalies/informations-a-verifier.md). Une référence
+**NUMÉRO UNIVERSEL** (PSNUM ou AMNUM selon la finition) existe aussi, universelle à toute porte,
+en impression numérique 100 %.
 
 ## Cotes des classes de résistance EN 356
 
@@ -158,16 +215,18 @@ C'est cette page qui explique l'**imprimé 200** du
 vitrage décoratif au choix, mais le verre de face intérieure des panneaux classiques. Voir
 [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md).
 
-Le triple vitrage est **conseillé pour la composition plomb** (catalogue portes d'entrée, p. 150).
+Le triple vitrage est **conseillé pour la composition plomb** [1 p. 150].
 
 # Citations
 
 [1] Catalogue portes d'entrée PROFERM, édition mars 2024 —
-`raw/catalogue-portes-entree-2024-03.pdf`, p. 143 à 146 et 150
+`raw/catalogue-portes-entree-2024-03.pdf`, p. 107 à 122, 143 à 146 et 150
 
 # Voir aussi
 
 - [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md)
 - [Collection Authentique](/portes/collection-authentique.md)
+- [Collection Contemporain](/portes/collection-contemporain.md)
 - [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)
+- [Informations à vérifier](/anomalies/informations-a-verifier.md)
 - [Catalogue portes d'entrée PROFERM](/sources/catalogue-portes-entree.md)

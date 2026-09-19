@@ -8,6 +8,7 @@ sources:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage fenêtres et portes-fenêtres en PVC, réf. IMO_180_NX_FR_v2
@@ -15,7 +16,6 @@ sources:
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
-stale_after: 2024-05-31
 ---
 
 # Ce qu'est la Roto NX
@@ -56,25 +56,22 @@ Largeurs d'ouverture oscillo-battante, en mm, relevées sur la brochure PERFORM+
 | Largeur d'ouverture OB, position 1 | 80 |
 | Largeur d'ouverture OB, position 2 | 140 |
 
-Les deux largeurs sont équipées du **dispositif anti-claquement intégré**. La brochure ne dit pas
-si le choix se fait à la commande ou si les deux positions sont disponibles sur une même
-menuiserie — à vérifier.
+Les deux largeurs portent le **dispositif anti-claquement intégré**. Le mode de choix, à la
+commande ou sur la menuiserie posée, n'est pas documenté.
 
 # Traitement de surface Roto Sil Level 6
 
 Le traitement de surface **Roto Sil Level 6** « surpasse les exigences de la classe anticorrosion
 5, la classe maximale, pour un traitement d'une dureté exceptionnelle et d'une protection
-durable contre la corrosion » (brochure PERFORM+/HYBRIDE+, p. 2).
+durable contre la corrosion » [1 p. 2].
 
 | Caractéristique | Valeur |
 | --- | --- |
 | Classe anticorrosion de référence | 5, présentée comme la classe maximale |
 | Positionnement annoncé | au-delà de la classe 5 |
 
-L'argument est à manier avec précaution : la brochure affirme dépasser une classe qu'elle
-présente elle-même comme maximale, sans nommer la norme qui définit ces classes. **Vérifier la
-norme de référence avant de reprendre cet argument** face à un prescripteur — une classe
-anticorrosion s'appuie normalement sur un essai normalisé et une durée d'exposition.
+La classe 5 y est à la fois présentée comme maximale et dépassée, sans que la norme soit nommée.
+**Elle l'est par le manuel de montage : DIN EN 13126/8**, voir plus bas.
 
 Ce traitement pourrait constituer un argument pour les chantiers en bord de mer, où le catalogue
 général ne propose qu'une garantie corrosion en option, plus courte à moins de 10 km du littoral.
@@ -83,7 +80,7 @@ Voir [Garanties par composant](/garanties/garanties-par-composant.md).
 # Accès au RC2
 
 La Roto NX permet de « répondre à la classe de résistance 2 avec OB position ouverte (RC2) »
-(brochure PERFORM+/HYBRIDE+, p. 2).
+[1 p. 2].
 
 C'est une **seconde voie d'accès au RC2** chez PROFERM, distincte de celle documentée au
 catalogue général :
@@ -98,8 +95,8 @@ que la résistance RC2 est maintenue **même fenêtre entrouverte en oscillo-bat
 précisément la faiblesse classique de cette position. C'est vraisemblablement ce que sécurise le
 système TiltSafe.
 
-Le catalogue général rattache par ailleurs l'accès aux certifications RC1 et RC2 au **Label ROTO
-Performance**, dont PROFERM est le premier bénéficiaire (catalogue général, p. 34). Voir
+L'accès aux certifications RC1 et RC2 relève par ailleurs du **Label ROTO Performance** [2 p. 34].
+Voir
 [Labels et certifications](/certifications/labels-et-certifications.md).
 
 # Garantie
@@ -108,7 +105,7 @@ La ferrure ROTO est garantie **10 ans sur le fonctionnement**, valeur identique 
 sources — c'est l'un des rares postes de garantie sur lequel la brochure et le catalogue général
 s'accordent (brochure PERFORM+/HYBRIDE+, p. 3 ; catalogue général, p. 35).
 
-# Ce que le manuel de montage ROTO ajoute à la brochure
+# Caractéristiques établies par le manuel de ferrage
 
 Les [instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md), versées en novembre
 2022, comblent trois des quatre manques que cette page signalait.
@@ -138,7 +135,9 @@ Cette page reste en `status: draft` : les produits que la Roto NX équipe sont d
 entrée **VER-02** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-Le catalogue de juin 2023 porte les numéros de matériel par composant — crémones, compas, verrouilleurs, pivots — mais ses tableaux ne se transcrivent pas sans le rendu des planches. Manque encore **le côté
+Le catalogue de juin 2023 porte les numéros de matériel par composant — crémones, compas, verrouilleurs, pivots. Ses tableaux se lisent avec la légende pictographique des pages 10 à 12,
+mais une seule planche sur plus de deux cents est transcrite à ce jour — voir
+[Crémones Roto NX](/quincaillerie/roto-nx-cremones.md). Manque encore **le côté
 paumelles que PROFERM emploie réellement** — P ou Designo II, dont les champs d'application
 diffèrent nettement. Entrée **VER-34**.
 
@@ -166,4 +165,5 @@ p. 34 et 35
 - [Brochure Nouveautés PERFORM+ et HYBRIDE+](/sources/brochure-perform-plus-hybride-plus.md)
 - [Instructions de montage Roto NX KSR](/sources/roto-nx-ksr-montage.md)
 - [Champs d'application Roto NX](/quincaillerie/roto-nx-champs-application.md)
+- [Crémones Roto NX](/quincaillerie/roto-nx-cremones.md)
 - [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md)

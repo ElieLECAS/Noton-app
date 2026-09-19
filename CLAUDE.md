@@ -4,6 +4,12 @@ Assistant documentaire PROFERM. **Une seule source : le wiki** (`wiki_llm/wiki/`
 entier dans le prompt système à chaque question (CAG, Mistral Small). Pas de retriever, pas
 d'index, pas d'ingestion dans l'application.
 
+**19/09/2026 — l'application est en stand-by.** Le wiki passe en transcription exhaustive des
+PDF (2 382 pages) et dépassera largement la fenêtre de 256 k : le CAG intégral ne tiendra plus,
+un outil de navigation par métadonnées OKF le remplacera. D'ici là on ne touche pas à `app/`, et
+on ne raccourcit jamais le wiki pour le faire rentrer dans le prompt. Le protocole d'écriture
+fait foi : `wiki_llm/CLAUDE.md`.
+
 ## Où sont les choses
 
 - `app/services/wiki_service.py` — charge le wiki, construit le prompt système et sa clé de

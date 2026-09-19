@@ -8,23 +8,24 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
   - resource: raw/depliant-innoslide-2024-01.pdf
     id: depliant-innoslide-2024-01
     title: Dépliant INNOSLIDE, édition janvier 2024
+    last_modified: 2024-01-31
 generated:
   by: process:claude-code
   at: 2026-09-17T21:15:00Z
-stale_after: 2027-01-31
 ---
 
 # Ce qu'est l'INNOSLIDE
 
 L'INNOSLIDE est le coulissant PVC à frappe de PROFERM, présenté comme nouveau dans l'édition
-janvier 2026 du catalogue (catalogue général, p. 8). Il est rattaché à la gamme
+janvier 2026 du catalogue [1 p. 8]. Il est rattaché à la gamme
 [PERFORM](/gammes/perform.md).
 
 Son argument différenciant : contrairement aux autres systèmes coulissants, l'ouvrant n'a pas à
-être soulevé. Un simple petit mouvement suffit à accéder à l'extérieur (catalogue général, p. 8).
+être soulevé. Un simple petit mouvement suffit à accéder à l'extérieur [1 p. 8].
 
 # Cotes
 
@@ -46,17 +47,14 @@ La **hauteur maximale de 2 400 mm ne figure pas au catalogue général**, qui ne
 largeurs : elle vient du dépliant INNOSLIDE de janvier 2024 (p. 2). Elle est identique dans les
 deux configurations — seule la largeur maximale change.
 
-**Ce qui est ébavuré pour atteindre 4 200 mm** : le dépliant précise « dormant ébavuré **et
-ouvrant grain d'orge** » (dépliant INNOSLIDE, p. 2). L'ouvrant conserve donc sa soudure grain
-d'orge ; seul le dormant y renonce. Le catalogue général écrit simplement « dormant ébavuré »
-(p. 8), formulation qui laissait croire à un abandon du grain d'orge sur l'ensemble de la
-menuiserie.
+**Pour atteindre 4 200 mm, seul le dormant est ébavuré** : l'ouvrant conserve sa soudure grain
+d'orge [2 p. 2]. La formulation « dormant ébavuré » du catalogue général laisse croire à un
+abandon du grain d'orge sur l'ensemble de la menuiserie.
 
 # Configuration
 
-L'INNOSLIDE est un coulissant à **une partie coulissante et une partie fixe** (dépliant
-INNOSLIDE, p. 2) — soit deux vantaux dont un seul mobile. Le catalogue général ne le précise
-nulle part, et n'annonce aucune configuration à plus de deux vantaux.
+L'INNOSLIDE est un coulissant à **une partie coulissante et une partie fixe** [2 p. 2], soit deux
+vantaux dont un seul mobile. Aucune configuration à plus de deux vantaux n'existe.
 
 C'est une différence structurante avec les
 [coulissants aluminium](/gammes/coulissants-aluminium.md), qui vont jusqu'à 8 vantaux et 4 rails.
@@ -69,20 +67,19 @@ fenêtres de la gamme PERFORM, classées E\*9A / V\*A3.
 
 # Fonctions SoftClose et SoftOpen
 
-Deux fonctions d'amortissement sont proposées (catalogue général, p. 8) :
+Deux fonctions d'amortissement sont proposées [1 p. 8] :
 
 - **SoftClose** : freine doucement l'ouvrant lors de la fermeture et le déplace en position
   finale.
 - **SoftOpen** : freine l'ouvrant brièvement après l'ouverture et le déplace en position finale
   ouverte. Disponible à partir de 1 970 mm de largeur.
 
-Le catalogue présente ces fonctions comme une protection supplémentaire pour le coulissant et
-pour la personne qui le manœuvre, afin de prévenir les chocs incontrôlés (catalogue général,
-p. 8).
+Les deux fonctions protègent le coulissant et la personne qui le manœuvre contre les chocs
+incontrôlés [1 p. 8].
 
 # Coloris
 
-Trois configurations de coloris, en PVC intérieur et extérieur (catalogue général, p. 8) :
+Trois configurations de coloris, en PVC intérieur et extérieur [1 p. 8] :
 
 | Coloris | Faces |
 | --- | --- |
@@ -92,7 +89,7 @@ Trois configurations de coloris, en PVC intérieur et extérieur (catalogue gén
 
 # Quincaillerie
 
-L'INNOSLIDE est équipé d'une **Roto Patio Inowa** (dépliant INNOSLIDE, p. 2). C'est elle qui rend
+L'INNOSLIDE est équipé d'une **Roto Patio Inowa** [2 p. 2]. C'est elle qui rend
 possible l'ouverture sans soulèvement : plutôt que de poser l'ouvrant sur un rail, elle le tire
 contre un joint périphérique par une commande active de tous les points de fermeture.
 
@@ -102,9 +99,8 @@ stabilisateur. Détail dans [Roto Patio Inowa](/quincaillerie/roto-patio-inowa.m
 
 # Poignée et accessoires
 
-La poignée de l'INNOSLIDE est disponible en **blanc, noir ou F9** (dépliant INNOSLIDE, p. 2) ; le
-dépliant n'en donne pas le modèle. Le catalogue général renvoie de son côté aux poignées communes
-à tous les coulissants — voir
+La poignée de l'INNOSLIDE existe en **blanc, noir ou F9** [2 p. 2], sans modèle nommé. Les
+poignées communes à tous les coulissants sont dans
 [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), catalogue général, p. 17.
 Les deux sources ne se recoupent pas sur ce point : à confirmer.
 

@@ -8,89 +8,58 @@ sources:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
-stale_after: 2024-05-31
 ---
 
-# Ce que contient le document
+# Identité
 
-Brochure commerciale de **4 pages**, éditée en **mai 2023**, consacrée au lancement de deux
-gammes de fenêtres à **ouvrant caché** : [PERFORM+](/gammes/perform-plus.md) en PVC et
-[HYBRIDE+](/gammes/hybride-plus.md) en mixte aluminium/PVC.
-
-Le document est court et entièrement commercial : pas de cote de profilé, pas de dimension
-maximale, pas de référence. Il donne en revanche les performances annoncées, la quincaillerie,
-les coloris, les restrictions de fabrication et une grille de garanties propre.
-
-| Page | Contenu |
+| Élément | Valeur |
 | --- | --- |
-| 1 | Couverture, annonce des deux gammes et du gain de 20 % de luminosité |
-| 2 | Avantages, isolation, sécurité et quincaillerie Roto NX |
-| 3 | Clair de jour, coloris, poignée TOULON, garanties et labels |
-| 4 | Mentions légales, coordonnées, édition mai 2023 |
+| Éditeur | PROFERM |
+| Édition | mai 2023 |
+| Pages | 4 |
+| Nature | commercial, **document produit** |
 
-# Le document a plus de trois ans, et il est orphelin
+**Seule source du corpus sur les gammes PERFORM+ et HYBRIDE+**, qui n'apparaissent nulle part au
+catalogue général de janvier 2026 — entrée **VER-02** du registre
+[Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-**Les gammes PERFORM+ et HYBRIDE+ n'apparaissent nulle part dans le
-[catalogue général de janvier 2026](/sources/catalogue-general-2026.md)**, qui présente
-pourtant PERFORM, HYBRIDE, LUMINE et TEXTURAL comme les quatre gammes de la maison.
+# Carte des pages
 
-Trois ans séparent les deux documents. Deux explications possibles, et aucune n'est anodine :
-
-- les gammes + ont été **abandonnées ou renommées**, et cette brochure ne doit plus servir
-- le **catalogue général est incomplet**, et deux gammes commercialisées n'y figurent pas
-
-C'est l'entrée **VER-02** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md), et la question à poser en
-priorité. Tant qu'elle n'est pas tranchée, les pages des deux gammes restent en `status: draft`.
-
-# Ce qu'il contredit
-
-La grille de garanties de la brochure diffère de celle du catalogue général sur trois postes —
-entrées **CTR-03**, **CTR-04** et **CTR-05** du registre
-[Contradictions entre sources](/anomalies/contradictions-entre-sources.md) :
-
-| Composant | Brochure, mai 2023 | Catalogue général, janvier 2026 |
+| Page | Contenu | Page du wiki |
 | --- | --- | --- |
-| Structure | jusqu'à 20 ans | 15 ans |
-| Laquage | 7 ans | 25 / 10 / 7 ans selon gamme |
-| Volet roulant | 7 ans | 5 ans |
-| Ferrure Roto | 10 ans | 10 ans |
-| Vitrage | 10 ans | 10 ans |
+| 1 | Couverture, annonce des deux gammes et du gain de 20 % de luminosité | [PERFORM+](/gammes/perform-plus.md), [HYBRIDE+](/gammes/hybride-plus.md) |
+| 2 | Avantages, isolation, sécurité, quincaillerie Roto NX | [Roto NX](/quincaillerie/roto-nx.md) |
+| 3 | Clair de jour, coloris, poignée TOULON, garanties, labels | [Garanties par composant](/garanties/garanties-par-composant.md) |
+| 4 | Mentions légales, coordonnées | — |
 
-Soit les gammes + ont des garanties propres et meilleures, soit les garanties ont changé depuis
-2023. Le litige contractuel possible porte sur **5 ans de structure**.
+# Ce qu'il apporte seul
 
-# Ce qu'il apporte au wiki
+La gamme de quincaillerie **Roto NX** et son traitement de surface **Roto Sil Level 6**, avec une
+voie d'accès au RC2 différente de celle de la PERFORM76. La technique du **collage périphérique
+du vitrage dans l'ouvrant**, qui porte le Uw de 1,2 W/m²K.
 
-Deux informations qu'aucune autre source ne donne :
+# Anomalies portées par ce document
 
-- la gamme de quincaillerie **Roto NX** et son traitement de surface **Roto Sil Level 6**, avec
-  une voie d'accès au RC2 différente de celle de la PERFORM76. Voir
-  [Roto NX](/quincaillerie/roto-nx.md)
-- la technique du **collage périphérique du vitrage dans l'ouvrant**, qui porte l'Uw de 1,2 W/m²K
+| Entrée | Objet |
+| --- | --- |
+| **VER-02** | statut commercial des gammes PERFORM+ et HYBRIDE+ |
+| **CTR-03** | garantie structure jusqu'à 20 ans, contre 15 au catalogue général |
+| **CTR-04** | garantie volet roulant de 7 ans, contre 5 |
+| **CTR-05** | laquage 7 ans forfaitaires, contre la grille 25 / 10 / 7 |
 
-# Provenance du fichier
+# Non transcrit
 
-Le PDF a été extrait de `raw/export_doc_188.zip`, un export applicatif contenant également un
-`metadata.json` et un `colpali_patches.json`. Les métadonnées donnent le titre interne
-« Perform  Hybride », la source « Proferm » et un identifiant de document 188. Le contenu y est
-marqué « contenu visuel uniquement » : le PDF ne porte pas de couche texte exploitable, ce qui
-explique le recours à un index visuel.
-
-# Ce que le document ne couvre pas
-
-Aucune cote, aucune dimension maximale, aucune référence de profilé, aucun tarif. Rien sur les
-coulissants, les portes d'entrée ni les volets roulants au-delà de leur durée de garantie. Les
-restrictions de fabrication sont énoncées mais non justifiées.
+Aucune cote, aucune dimension maximale, aucune référence de profilé, aucun tarif. Les cinq
+restrictions de fabrication sont énoncées sans justification.
 
 # Citations
 
 [1] Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023 —
 `raw/brochure-perform-plus-hybride-plus-2023-05.pdf`
-[2] [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)
 
 # Voir aussi
 
@@ -98,4 +67,3 @@ restrictions de fabrication sont énoncées mais non justifiées.
 - [HYBRIDE+](/gammes/hybride-plus.md)
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [Informations à vérifier](/anomalies/informations-a-verifier.md)
-- [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)

@@ -8,13 +8,14 @@ sources:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
     id: profine-mise-en-oeuvre-76-advanced
     title: Mise en œuvre Système 76 Advanced, profine
+    last_modified: 2023-12-14
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
     id: dtd-6-16-2334-v5
     title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
+    last_modified: 2025-06-19
 generated:
   by: process:claude-code
   at: 2026-09-18T09:00:00Z
-stale_after: 2024-12-31
 ---
 
 # Ce qu'est un abaque dimensionnel d'ouvrant
@@ -60,7 +61,7 @@ inversant hauteur et largeur (registre 2.3.3, p. 1).
 
 **Ces bornes sont les coins de l'abaque, pas un rectangle admissible.** Un ouvrant de 150 × 250 cm
 n'est réalisable que si le point tombe sous la courbe de sa couleur et de son épaisseur de
-vitrage. Les courbes elles-mêmes ne sont pas transcrites dans ce wiki : elles n'existent que sous
+vitrage. Les courbes elles-mêmes ne sont pas transcrites ici : elles n'existent que sous
 forme de tracés sur les planches. Pour un cas limite, lire l'abaque.
 
 Sur les abaques à **deux vantaux** — ouvrant plus battement, registre 2.3.3, p. 12 à 18 — les
@@ -70,7 +71,7 @@ combinaison de renforts d'ouvrant et de battement.
 # La règle des 25 %
 
 **La largeur d'ouvrant ne peut dépasser la hauteur d'ouvrant de plus de 25 %** (registre 2.3.3,
-p. 6 à 11). Exemple donné par le manuel : pour une largeur de 150 cm, la hauteur doit être d'au
+p. 6 à 11). Exemple porté sur la planche : pour une largeur de 150 cm, la hauteur doit être d'au
 moins 120 cm ; pour une largeur de 130 cm, au moins 103 cm.
 
 C'est une contrainte de **quincaillerie et de poids**, indépendante du renfort : elle interdit
@@ -147,8 +148,8 @@ film, relevées sur le registre 2.3.3 (p. 4, version janvier 2022).
 
 (schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.3.3, p. 4)
 
-Le manuel précise que cette liste est celle **en vigueur à l'édition de la page** et qu'elle
-évolue avec l'offre : le tarif en vigueur fait foi.
+Cette liste est celle **en vigueur à l'édition de la page** et évolue avec l'offre : le tarif en
+vigueur fait foi.
 
 ## Les 6 couleurs standard
 
@@ -170,7 +171,7 @@ change l'abaque à lire.
 
 # Pourquoi la couleur change la fabrication
 
-Le manuel donne une raison, et une seule, pour la ventilation :
+Une seule raison est donnée à la ventilation :
 
 > « Pour éviter toute accumulation de chaleur, les préchambres extérieures des profilés de
 > couleur, laqués ou filmés 2 faces ou 1 face extérieure doivent impérativement être ventilées »
@@ -179,7 +180,7 @@ Le manuel donne une raison, et une seule, pour la ventilation :
 Cette ventilation s'ajoute au drainage, elle ne le remplace pas, et elle vaut aussi pour les
 profilés **capotés aluminium**, traités comme des profilés de couleur.
 
-**Le manuel n'énonce aucune raison physique au renforcement systématique des profilés de
+**Aucune raison physique n'est donnée au renforcement systématique des profilés de
 couleur** : il pose la règle et donne les abaques réduits qui vont avec. Attribuer ce renforcement
 à la dilatation thermique est une déduction plausible, que le document ne fait pas.
 
@@ -195,7 +196,7 @@ Le [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md) ne raisonne pas en �
 | Chambres des profilés à L\* < 82 communiquant avec l'extérieur | décompression par orifices de **Ø 5 mm minimum** |
 | Habillage monoparoi à L\* < 82 ou non défini | **interdit en traverse basse**, quelle que soit la technologie de coloration |
 
-**C'est la réponse que le manuel de fabrication ne donne pas** : le renforcement d'un profilé
+**Le critère est réglementaire** : le renforcement d'un profilé
 anthracite est une prescription du Groupe Spécialisé du CSTB, déclenchée par une mesure de clarté,
 et non une préférence d'extrudeur. Les catégories de couleur ci-dessus sont la traduction
 commerciale de ce seuil par profine.
@@ -214,7 +215,7 @@ portée en pied de chaque abaque (registre 2.3.3, p. 3 et 6 à 19). **Le détail
 correspondance n'est pas transcrit** : il est porté sous forme de barres graphiques, sans tableau
 de valeurs.
 
-Le manuel donne **deux distances maximales différentes entre points de verrouillage** :
+**Deux distances maximales différentes entre points de verrouillage** coexistent dans le même registre :
 
 | Page | Formulation du manuel | Valeur |
 | --- | --- | --- |
@@ -251,7 +252,7 @@ ce qui ne peut pas être une longueur de vis en regard des 55 mm de l'acier cour
 **VER-25** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
-Le manuel insiste : ces valeurs ne valent **que pour les composants des rapports d'essais** —
+Ces valeurs ne valent **que pour les composants des rapports d'essais** —
 compas, vis, acier — et sont **indicatives**. Le contrôle et la garantie du poids d'ouvrant
 incombent au fabricant de fenêtres, dans le cadre de son contrôle de production en usine (WPK).
 Voir [Roto NX](/quincaillerie/roto-nx.md).

@@ -8,10 +8,10 @@ sources:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
     id: profine-mise-en-oeuvre-76-advanced
     title: Mise en œuvre Système 76 Advanced, profine
+    last_modified: 2023-12-14
 generated:
   by: process:claude-code
   at: 2026-09-18T09:00:00Z
-stale_after: 2024-12-31
 ---
 
 # Ce que donnent ces tableaux
@@ -143,7 +143,7 @@ battement (registre 2.3.1, p. 5, 6 et 7, version octobre 2021).
 (schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, registre 2.3.1, p. 5, 6 et 7)
 
 **Le dormant 76185 n'apparaît sur aucune des trois planches de battement**, alors qu'il figure sur
-la planche générale des dormants. Le manuel ne dit pas s'il s'agit d'une exclusion ou d'un oubli —
+la planche générale des dormants. Ni exclusion ni oubli ne sont énoncés —
 entrée **VER-21** du registre
 [Informations à vérifier](/anomalies/informations-a-verifier.md).
 
@@ -160,8 +160,8 @@ dimension extérieure d'ouvrant obtenue au tableau précédent.
 | 76473 sans embout bas M462 | DEO − (47 mm + 33 mm) | — | — |
 
 **Les trois battements se débitent à la même formule, DEO − 2 × 47 mm**, mais seul le 76473
-change de formule selon la présence de l'embout bas **M462**. Le manuel ne donne pas de renfort
-pour le 76473. Voir [Renforts du système 76](/profiles/systeme-76-renforts.md).
+change de formule selon la présence de l'embout bas **M462**. Aucun renfort n'est associé au
+76473. Voir [Renforts du système 76](/profiles/systeme-76-renforts.md).
 
 # Cotes de débit des seuils aluminium
 

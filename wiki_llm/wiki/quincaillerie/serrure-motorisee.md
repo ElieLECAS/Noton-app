@@ -8,21 +8,21 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
 generated:
   by: process:claude-code
   at: 2026-09-17T19:00:00Z
-stale_after: 2027-01-31
 ---
 
 # Ce qu'est l'option
 
 La serrure motorisée est une option de porte d'entrée : de l'intérieur comme de l'extérieur, la
-porte se ferme et se verrouille automatiquement (catalogue général, p. 33). Le matériel identifié
+porte se ferme et se verrouille automatiquement [1 p. 33]. Le matériel identifié
 au catalogue est un **moteur Safe E Eneo CC** avec verrouillage combiné.
 
 # Deux restrictions déterminantes
 
-À vérifier avant toute proposition commerciale (catalogue général, p. 33) :
+À vérifier avant toute proposition commerciale [1 p. 33] :
 
 1. **Disponible uniquement sur ouvrant de 118 ou sur monobloc.** Un ouvrant PVC 97 est donc
    exclu. Voir [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) pour les
@@ -44,7 +44,7 @@ Le repli manuel par clé est le point à retenir pour rassurer un client sur le 
 # Confort et contrôle d'accès
 
 L'installation est présentée comme facile : le transformateur est intégré, et le paramétrage des
-accès se fait par l'application **SOREX** (catalogue général, p. 33).
+accès se fait par l'application **SOREX** [1 p. 33].
 
 Le module de contrôle d'accès **Eneo 4 en 1** combine quatre modes d'ouverture (catalogue
 général, p. 33) :
@@ -59,12 +59,12 @@ général, p. 33) :
 # Option télécommande
 
 Une télécommande est proposée en option. **Le récepteur radio de la télécommande est intégré de
-série dans le boîtier moteur** (catalogue général, p. 33) : ajouter la télécommande ne demande
+série dans le boîtier moteur** [1 p. 33] : ajouter la télécommande ne demande
 donc pas de récepteur supplémentaire.
 
 # Garantie
 
-La motorisation est garantie **7 ans** (catalogue général, p. 35) — même durée que la
+La motorisation est garantie **7 ans** [1 p. 35] — même durée que la
 motorisation de volet roulant. Voir
 [Garanties par composant](/garanties/garanties-par-composant.md).
 

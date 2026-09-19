@@ -8,54 +8,70 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     id: cahier-technique-perform76-cc03
     title: Cahier technique PERFORM76, version 02/09/2026 CC03
+    last_modified: 2026-09-02
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
+    last_modified: 2023-05-31
   - resource: raw/brochure-hybride-2025-03.pdf
     id: brochure-hybride-2025-03
     title: Brochure HYBRIDE, édition mars 2025
+    last_modified: 2025-03-31
   - resource: raw/depliant-innoslide-2024-01.pdf
     id: depliant-innoslide-2024-01
     title: Dépliant INNOSLIDE, édition janvier 2024
+    last_modified: 2024-01-31
   - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf
     id: dta-6-16-2334-v5
     title: DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED
+    last_modified: 2025-06-19
   - resource: raw/depliant-general-2023-06.pdf
     id: depliant-general-2023-06
     title: Dépliant général PROFERM, édition juin 2023
+    last_modified: 2023-06-30
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
     id: profine-mise-en-oeuvre-76-advanced
     title: Mise en œuvre Système 76 Advanced, profine
+    last_modified: 2023-12-14
   - resource: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf
     id: profine-9708-montants-cintres
     title: Mise en œuvre 9708, profine France, juillet 2017
+    last_modified: 2017-07-06
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
     id: dtd-6-16-2334-v5
     title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
+    last_modified: 2025-06-19
   - resource: raw/dtd-6-16-2335-v5-e-volution.pdf
     id: dtd-6-16-2335-v5
     title: DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION
+    last_modified: 2025-04-15
   - resource: raw/roto-nx-transformation-of-en-ob-2026-03.pdf
     id: proferm-transformation-of-ob-roto-nx
     title: Transformation OF en OB gamme ROTO NX, PROFERM, réf. PRO-PVC-OFOB-01
+    last_modified: 2026-03-19
   - resource: raw/roto-nx-bras-report-de-charge.pdf
     id: roto-nx-report-de-charge
     title: Bras de report de charge ROTO NX
   - resource: raw/proferm-roto-eneo-cc-notice-simplifiee-2022.pdf
     id: proferm-eneo-cc-notice-2022
     title: Roto Safe E Eneo CC, notice simplifiée PROFERM, version 2, 2022
+    last_modified: 2022-12-31
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf
     id: roto-nx-ksr-montage-imo-180
     title: Roto NX KSR, instructions de montage, réf. IMO_180_NX_FR_v2
+    last_modified: 2022-11-30
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf
     id: profine-mise-en-oeuvre-systeme-70
     title: Mise en œuvre Système 70 Plateforme, profine, version septembre 2023
+    last_modified: 2023-09-30
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf
     id: roto-nx-catalogue-ctl-105
     title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
+    last_modified: 2023-06-30
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
@@ -118,6 +134,12 @@ sues.
 | VER-32 | Référence de commande et périmètre du report de charge NT Designo II | Bras de report de charge ROTO NX : la notice donne le montage et le réglage, jamais la référence de commande, ni si le procédé vaut pour les coulissants à pivot. **Le seuil, lui, est désormais connu** : les instructions de montage Roto NX KSR (p. 28 à 30) plafonnent le côté paumelles Designo à 100 kg sans report de charge, et à 150 kg avec | ROTO ou service technique — sans seuil, impossible de le prévoir au chiffrage |
 | VER-33 | La troisième capacité du contrôle d'accès 4 en 1 | Notice simplifiée Eneo CC, p. 7 : le tableau des données techniques porte « 100 empreintes, 150 codes numériques, 200 » — la ligne ne dit pas ce que compte ce 200 | ROTO — probablement une capacité de badges ou de codes supplémentaires, mais rien ne le dit |
 | VER-34 | Côté paumelles employé par PROFERM sur la Roto NX | Instructions de montage Roto NX KSR : le manuel couvre deux côtés paumelles, **P** et **Designo II**, dont les champs d'application diffèrent nettement — 1 600 mm de largeur maxi et 150 kg côté P, 1 400 mm et 100 kg côté Designo sans report de charge. Aucune source PROFERM ne dit lequel équipe les gammes | Service technique — le choix change les dimensions et le poids de vantail réalisables |
+| VER-36 | Famille d'emploi de sept parcloses PERFORM76 complémentaires | DTD n° DBV-25-6/16-2334_V5, p. 18 : sept parcloses (1511, 1512, 76513, 76531 à 76534) et un rehausseur (76570) suivent les séries d'ouvrant et de dormant sans étiquette « ouvrant » ni « dormant », avec un profil dessiné différent des deux séries | profine — savoir si elles montent sur l'ouvrant, le dormant, ou une troisième famille de profilé |
+| VER-37 | Cotes de la traverse de meneau 6127 sur le DTD du système 70 | DTD n° DBV-24-6/16-2335_V5, p. 19 : la cote verticale du 6127 se lit 140 mm sur la planche rendue, contre une largeur non cotée par le classeur de fabrication pour ce même profilé | profine — confirmer la cote avant de l'inscrire dans le tableau des meneaux et traverses |
+| VER-38 | Attribution des capots de réhabilitation aux dormants du système 70 | DTD n° DBV-24-6/16-2335_V5, p. 14 : cinq dormants rénovation (6102, 6105, 6107, 6155, 6156) partagent la note « capots pour dormants réhabilitation », sans dire lequel des capots 9C01.1 ou 9C02.1 chacun reçoit | profine — le capot dépend probablement de la largeur du dormant, comme pour 2501/2502, mais rien ne l'écrit |
+| VER-39 | Affectation des seuils A075, A077 et A343 à un dormant du système 76 | DTA n° 6/16-2334_V5, p. 14 : le seuil A076 (76 mm) est déjà rattaché aux cinq dormants PERFORM76 par le cahier technique, mais A075 (76 mm, plus haut), A077 (123 mm) et A343 (135 mm) n'apparaissent que sur cette planche, sans dormant ni configuration nommés | profine — savoir s'ils desservent un dormant large, une rénovation, ou une configuration hors PERFORM76 |
+| VER-40 | Homonymie des références A469 à A473 entre le système 76 et le système 70 | DTA n° 6/16-2334_V5, p. 18 : A469 à A473 sont des **tapées aluminium** cotées 30 à 110 mm de haut. Le poster Gamme 70 KÖMMERLING nomme les mêmes cinq références « embouts d'extrémité de pièce d'appui », une fonction différente, sur une planche dont les cotes ne sont pas lisibles avec certitude | profine — savoir s'il s'agit d'une coïncidence de numérotation entre deux systèmes distincts ou d'une erreur de lecture du poster |
+| VER-41 | Trois paires de modèles de porte partageant une même référence | Catalogue portes d'entrée, mars 2024, p. 54, 60, 62, 64 et 119-120 : les modèles ISAÏS et ISABELLE portent tous deux la référence 3720, MORGANE et NINON tous deux la référence 4060, THÉBÉ et AMALTHE tous deux la référence AMOEU07PROF, sans qu'aucune note ne les rapproche | Service commercial — savoir s'il s'agit du même panneau vendu sous deux noms ou d'une erreur de référence |
 
 # Rattachements non sourcés
 
@@ -130,7 +152,7 @@ sues.
 | VER-15 | ALUPLAST fournirait le profilé du coulissant INNOSLIDE | ALUPLAST est crédité des photos du dépliant INNOSLIDE de janvier 2024, aux côtés de PROFERM et ROTO, et fabrique des profilés PVC | Un crédit photo n'est pas une preuve de fourniture. Le catalogue général rattache toute la gamme PVC au GREENLINE® de KÖMMERLING |
 | VER-16 | LAKAL fournirait les volets roulants | LAKAL est crédité des photos du dépliant général de juin 2023 et fabrique des volets roulants. Aucun fournisseur de volet roulant n'est nommé dans le wiki, seul le motoriste [SOMFY](/fournisseurs/somfy.md) l'est | Crédit photo uniquement. Le catalogue ne nomme aucun fabricant de coffre ni de tablier |
 | VER-17 | DEVGLASS fournirait le vitrage | DEVGLASS est crédité des photos du dépliant général de juin 2023 et transforme du verre. Le fournisseur de vitrage n'est nommé nulle part, alors que le catalogue détaille dix compositions | Crédit photo uniquement. Le « SGC ULTRA ONE » du catalogue suggère par ailleurs un autre nom |
-| VER-20 | La justification de la substitution de quincaillerie ROTO à FERCO | Le DTA nomme FERCO comme quincaillerie du procédé et admet d'autres quincailleries « sur justifications » (p. 9). PROFERM emploie ROTO et revendique le Label ROTO Performance | La justification correspondante ne figure dans aucun document du wiki. **Le DTD n° DBV-25-6/16-2334_V5, révisé au GS6 du 13 mars 2025, nomme encore FERCO en deux endroits** avec la même réserve « sur justifications » : la pièce la plus récente de la chaîne réglementaire n'a pas enregistré le changement. Sans elle, l'emploi de ROTO n'est pas tracé vis-à-vis de l'Avis Technique |
+| VER-20 | La justification de la substitution de quincaillerie ROTO à FERCO | Le DTA nomme FERCO comme quincaillerie du procédé et admet d'autres quincailleries « sur justifications » (p. 9). PROFERM emploie ROTO et revendique le Label ROTO Performance | **Un premier élément trouvé le 19/09/2026** : les Directives générales profine, registre 1.3.4, listent ROTO comme quincaillerie approuvée pour la quasi-totalité des configurations de fenêtre et plusieurs portes, mais pas pour la porte d'entrée à un vantail seule, les seuils ni les ferme-portes — voir [ROTO](/fournisseurs/roto.md). Ce document ne cite aucun DTA et ne se présente pas explicitement comme la justification exigée. **Le DTD n° DBV-25-6/16-2334_V5, révisé au GS6 du 13 mars 2025, nomme encore FERCO en deux endroits** avec la même réserve « sur justifications » : la pièce la plus récente de la chaîne réglementaire n'a toujours pas enregistré le changement par son nom |
 | VER-26 | La gamme PERFORM76 est la variante **à joint central** du système 76 Advanced | Les sept dormants, les cinq ouvrants, les meneaux, les battements, les tapées et les appuis du cahier technique PERFORM76 figurent tous dans le manuel de mise en œuvre du 76 Advanced à joint central, aux mêmes références | **Aucun document PROFERM n'emploie les mots « joint central » ni « joint de frappe ».** Le système existe dans les deux variantes, avec des cotes de débit et des parcloses différentes : appliquer les cotes de débit du joint central à une fabrication à joint de frappe donnerait des pièces fausses |
 
 **VER-12 est close, et sa réponse a une conséquence pratique immédiate** : toutes les références

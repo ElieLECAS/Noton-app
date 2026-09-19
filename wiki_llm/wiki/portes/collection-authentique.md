@@ -8,16 +8,16 @@ sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
     title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
 generated:
   by: process:claude-code
   at: 2026-09-17T19:00:00Z
-stale_after: 2027-01-31
 ---
 
 # Ce qu'est la Collection Authentique
 
 La collection « Authentique » regroupe les portes d'entrée personnalisables de PROFERM, décrites
-comme une fusion entre artisanat français et personnalisation (catalogue général, p. 30). Elle
+comme une fusion entre artisanat français et personnalisation [1 p. 30]. Elle
 est disponible sur trois gammes : [PERFORM](/gammes/perform.md),
 [HYBRIDE](/gammes/hybride.md) et [TEXTURAL](/gammes/textural.md).
 
@@ -38,14 +38,14 @@ habille ensuite.
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 30)
 
-Le catalogue ne donne **aucune cote** pour ces portes : ni dimensions de passage, ni épaisseur
-d'ouvrant, ni dimensions de panneau. Il renvoie vers un catalogue de portes d'entrée dédié, en
-ligne sur `proferm.net/nos-produits/nos-catalogues` (catalogue général, p. 32). Les cotes devront
+**Aucune cote n'est publiée pour ces portes** au catalogue général : ni dimensions de passage, ni
+épaisseur d'ouvrant, ni dimensions de panneau. Le renvoi se fait vers le catalogue portes, en
+ligne sur `proferm.net/nos-produits/nos-catalogues` [1 p. 32]. Les cotes devront
 venir de cette source.
 
 # Les quatre étapes de personnalisation
 
-Le catalogue décrit la démarche commerciale en quatre étapes (catalogue général, p. 30) :
+La personnalisation se déroule en quatre étapes [1 p. 30] :
 
 1. choisir le modèle de panneau
 2. sélectionner la gamme et les options : petits bois, heurtoir, tirant
@@ -55,7 +55,7 @@ Le catalogue décrit la démarche commerciale en quatre étapes (catalogue gén�
 
 # Options de configuration
 
-Quatre configurations proposées (catalogue général, p. 32) :
+Quatre configurations proposées [1 p. 32] :
 
 | Configuration | Restriction |
 | --- | --- |
@@ -67,11 +67,11 @@ Quatre configurations proposées (catalogue général, p. 32) :
 # Grilles de défense
 
 **Toutes les grilles de défense sont forgées sur mesure dans l'atelier de ferronnerie d'art de
-PROFERM** (catalogue général, p. 30). C'est une capacité de production interne, pas un achat
+PROFERM** [1 p. 30]. C'est une capacité de production interne, pas un achat
 fournisseur.
 
 Les différents modèles ne sont pas au catalogue général : ils sont sur le site internet et dans
-le catalogue de portes d'entrée dédié (catalogue général, p. 30).
+le catalogue de portes d'entrée dédié [1 p. 30].
 
 # Sécurité et garanties
 
@@ -79,7 +79,7 @@ La serrure, les paumelles, le cylindre et les renforts sont détaillés dans
 [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md). L'option motorisée est
 traitée dans [Serrure motorisée](/quincaillerie/serrure-motorisee.md).
 
-Garanties applicables (catalogue général, p. 35) :
+Garanties applicables [1 p. 35] :
 
 | Élément | Garantie |
 | --- | --- |
