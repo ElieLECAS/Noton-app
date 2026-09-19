@@ -48,10 +48,10 @@ Spécifications dimensionnelles, thermiques et vitrages des quatre baies couliss
 | --- | --- | --- | --- | --- | --- |
 | SOLÉAL55 | 55 | 20 | Apparent | 6 / 14 / 4 | 1,4 |
 | GALANDAGE55 | 55 | 20 | Apparent | 6 / 14 / 4 | 1,4 |
-| LUMÉAL55 | 55 | - | Caché | 28 (6/18/4) | 1,2 |
+| LUMÉAL55 (LUMEAL GA) | 100 (2R) / 151 (3R) | 33 (dormant) / 22 (ouvrant) | Caché | 28 (6/18/4) | 1,2 |
 | LUMINE65 | 65 | - | Apparent | 28 (6/18/4), 32 mm possible | 1,6 |
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 16-17)
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16-17 ; wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 4)
 
 ## Équipements communs
 
@@ -202,6 +202,13 @@ Les finitions du coulissant LUMINE65 reprennent les 11 coloris thermolaqués QUA
 # Voir aussi
 
 - [LUMINE](/gammes/lumine.md)
+- [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
+- [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
+- [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)
+- [Cotes de débit LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md)
+- [Roulements et fermetures LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md)
+- [Fabrication et pose LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md)
+- [Pose et galandage SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md)
 - [INNOSLIDE](/gammes/innoslide.md)
 - [TECHNAL](/fournisseurs/technal.md)
 - [Labels et certifications](/certifications/labels-et-certifications.md)

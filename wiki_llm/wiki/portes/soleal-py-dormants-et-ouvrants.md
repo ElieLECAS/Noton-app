@@ -1,5 +1,5 @@
 ---
-type: Profilés
+type: Porte d'entrée
 title: Profilés dormants et ouvrants de porte Technal SOLEAL PY 55
 description: Architecture technique et catalogue des profilés de porte à rupture de pont thermique SOLEAL PY 55 de TECHNAL (dormants standard et renforcés 3 mm, ouvrants en T et en Z, portes va-et-vient, portes tubes anti-pince doigts APD, poteaux et traverses renforcées).
 tags: [technal, soleal, soleal-py, porte, profilés, dormants, ouvrants, anti-pince-doigts, 55mm]

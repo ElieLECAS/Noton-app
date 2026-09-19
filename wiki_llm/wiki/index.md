@@ -21,6 +21,9 @@
 * [TEXTURAL](/gammes/textural.md) - Gamme décorative de PROFERM, cœur PVC KÖMMERLING serti d'aluminium, personnalisable par textures intérieures et finitions exclusives.
 * [INNOSLIDE](/gammes/innoslide.md) - Coulissant PVC à frappe de PROFERM sans soulèvement d'ouvrant, rattaché à la gamme PERFORM.
 * [Coulissants aluminium](/gammes/coulissants-aluminium.md) - Les quatre coulissants aluminium de PROFERM — SOLÉAL55, GALANDAGE55, LUMÉAL55 et LUMINE65 — avec leurs limites dimensionnelles et quincailleries.
+* [Gamme ASKEY Coulissant 65 NV](/gammes/askey-coulissant-65-nv.md) - Système coulissant aluminium à rupture de pont thermique de 65 mm pour 2, 3 et 4 vantaux sur 2 rails de la marque ASKEY (Hydro Building Systems).
+* [Gamme ASKEY Frappe 65 Ouvrant Caché](/gammes/askey-frappe-65-oc.md) - Système de fenêtre et porte-fenêtre battante aluminium 65 mm à ouvrant caché, hautes performances AEV et acoustiques (groupe Hydro).
+* [Gamme ASKEY Frappe 65 Ouvrant Visible](/gammes/askey-frappe-65-ov.md) - Système de fenêtre et porte-fenêtre battante aluminium 65 mm traditionnel avec parcloses intérieures clipées et seuil PMR filant (groupe Hydro).
 
 # Profilés
 
@@ -40,6 +43,19 @@
 * [Abaques dimensionnels du système 70](/profiles/systeme-70-abaques-dimensionnels.md) - Les limites de largeur, hauteur et poids d'ouvrant admissibles du système 70 Plateforme selon le renfort acier, la couleur du profilé (blanc vs plaxé) et le type d'ouverture.
 * [Assemblages du système 70](/profiles/systeme-70-assemblages.md) - Les méthodes d'assemblage autorisées entre dormants, ouvrants et traverses du système 70 Plateforme, et les sets d'assemblage entre chaque dormant et chaque seuil aluminium.
 * [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md) - Les joints de frappe, de vitrage et centraux des systèmes 76 Advanced et 70 Plateforme, avec leur matière par coloris, et les kits d'assemblage de meneau.
+* [Dormants et ouvrants SOLEAL FY](/profiles/soleal-fy-dormants-et-ouvrants.md) - Profilés de fenêtres et portes-fenêtres à frappe aluminium TECHNAL SOLEAL FY 55 et FY 65, ouvrants apparents (OA), minimaux (OM) et minimaux chant clippable, avec leurs caractéristiques géométriques et leurs moments d'inertie Ix et Iy.
+* [Cotes de débit SOLEAL FY](/profiles/soleal-fy-cotes-de-debit.md) - Formules de coupe d'atelier, déductions et cotes de débit des profilés dormants, ouvrants, battements, seuils PMR, parcloses et vitrages pour fenêtres et portes-fenêtres TECHNAL SOLEAL FY 55 et FY 65.
+* [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md) - Matrice complète des prises de volume de 4 à 70 mm, parcloses droites, arrondies et pose de face, calage de vitrage et joints d'étanchéité pour menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65.
+* [Profilés dormants, rails et ouvrants Technal SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md) - Architecture technique complète du système coulissant à rupture de pont thermique SOLEAL GY 55 de TECHNAL (dormants 2, 3 et 4 rails, ouvrants 24-28 mm et 29-32 mm, chemins de roulement alu et inox, boucliers thermiques et inerties mécaniques).
+* [Cotes de débit et formules de calcul Technal SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md) - Formules de débit exhaustives, déductions de profilés (dormants, ouvrants, rails alu/inox, boucliers thermiques, chicanes), dimensionnement des vitrages et débits d'angle pour le coulissant SOLEAL GY 55 de TECHNAL.
+* [Profilés dormants et ouvrants Technal LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md) - Architecture technique, cotes de section et moments d'inertie des profilés aluminium à rupture de pont thermique et ouvrant caché du système de coulissant minimal LUMEAL GA de Technal.
+* [Cotes de débit Technal LUMEAL GA](/profiles/lumeal-ga-cotes-de-debit.md) - Formules de coupe d'atelier, cotes de débit des profilés aluminium, boucliers thermiques et calcul des dimensions de vitrage du coulissant minimal LUMEAL GA de Technal.
+* [Profilés dormants et ouvrants ASKEY Coulissant 65 NV](/profiles/askey-coulissant-65-nv-dormants-et-ouvrants.md) - Nomenclatures, dimensions, inerties et compatibilités des profilés aluminium dormants, rails, ouvrants et chicanes du Coulissant 65 NV ASKEY.
+* [Cotes de débit ASKEY Coulissant 65 NV](/profiles/askey-coulissant-65-nv-cotes-de-debit.md) - Formules de calcul et abaques de débit des profilés aluminium, vitrages et accessoires pour les châssis Coulissant 65 NV ASKEY.
+* [Profilés dormants et ouvrants ASKEY Frappe 65 Ouvrant Caché](/profiles/askey-frappe-65-oc-dormants-et-ouvrants.md) - Nomenclatures, cotes d'atelier, inerties et compatibilités des profilés aluminium dormants, ouvrants cachés, traverses et battements de la gamme Frappe 65 OC ASKEY.
+* [Cotes de débit ASKEY Frappe 65 Ouvrant Caché](/profiles/askey-frappe-65-oc-cotes-de-debit.md) - Formules de débit, abaques de coupe et nomenclatures pour les fenêtres, portes-fenêtres, ensembles composés et châssis fixes Frappe 65 OC ASKEY.
+* [Profilés dormants et ouvrants ASKEY Frappe 65 Ouvrant Visible](/profiles/askey-frappe-65-ov-dormants-et-ouvrants.md) - Nomenclatures, dimensions, caractéristiques et parcloses des profilés aluminium dormants, ouvrants et seuils de la Frappe 65 OV ASKEY.
+* [Profilés complémentaires ASKEY](/profiles/askey-profils-complementaires.md) - Nomenclatures et cotes des bavettes, tapées, coulisses VR, couvre-joints, profilés ITE, profilés de liaison et profilés standards ULT ASKEY.
 
 # Vitrages
 
@@ -62,6 +78,8 @@
 * [Collection Classique](/portes/collection-classique.md) - Portes d'entrée traditionnelles moulurées en saillie de PROFERM, avec vitrages décoratifs spécifiques (vitrages Diamant Di101 à Di612, petits bois V, plombs et films) et cimaises extérieures.
 * [Collection Éléments](/portes/collection-elements.md) - Portes d'entrée contemporaines de PROFERM associant parements laqués et inserts texturés à l'aspect bois naturel et veinage en relief (Chêne graphite, naturel ou blanchi).
 * [Sélection Hexa](/portes/selection-hexa.md) - Les six portes d'entrée monobloc contemporaines de PROFERM, disponibles en gammes LUMINE et HYBRIDE.
+* [Profilés dormants et ouvrants SOLEAL PY 55](/portes/soleal-py-dormants-et-ouvrants.md) - Architecture technique et catalogue des profilés de porte à rupture de pont thermique SOLEAL PY 55 de TECHNAL (dormants standard et renforcés 3 mm, ouvrants en T et en Z, portes va-et-vient, portes tubes anti-pince doigts APD, poteaux et traverses renforcées).
+* [Cotes de débit des portes SOLEAL PY 55](/portes/soleal-py-cotes-de-debit.md) - Recueil exhaustif des formules de débit, déductions de profilés (dormants, ouvrants en T/Z, plinthes, traverses FPI, seuils PMR PY1100), dimensionnement des vitrages et formules de coupe des tringles de crémone pour la porte SOLEAL PY 55 de TECHNAL.
 
 
 # Quincaillerie
@@ -89,6 +107,12 @@
 * [Contrôle d'accès 4 en 1 Roto Safe E Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) - Le contrôle d'accès 4 en 1 des portes PROFERM — code PIN, empreinte, Bluetooth et RFID — avec ses caractéristiques électriques, son câblage et sa procédure de réinitialisation.
 * [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) - Les variantes de jonction de câble qui alimentent une serrure motorisée Roto Safe E entre dormant et ouvrant, avec ou sans bloc d'alimentation intégré.
 * [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) - Poignées, béquilles, fausses crémones et croisillons disponibles par gamme et par type de coulissant chez PROFERM.
+* [Quincaillerie visible et cachée SOLEAL FY](/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md) - Systèmes de ferrures, paumelles apparentes 2 et 3 lames, paumelles sur pivot, quincaillerie cachée (QC 180°), crémones, serrures et organes de verrouillage pour menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65.
+* [Roulements, fermetures et manœuvres Technal SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md) - Guide technique exhaustif de la quincaillerie du coulissant SOLEAL GY 55 de TECHNAL (chariots simples/doubles alu et inox jusqu'à 200 kg, fermetures 1 à 4 points, crémones à clé, organes de manœuvre, poignée réversible TGY3606, fermeture pompier et gâches).
+* [Paumelles, serrures et ferme-portes Technal SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md) - Guide technique complet de la quincaillerie pour porte battante et va-et-vient SOLEAL PY 55 de TECHNAL (paumelles en feuillure 130/150 kg, ferme-porte intégré FPI conforme PMR, serrures 1 à multipoints, retard à l'effraction RC2/RC3, ventouses 300 kg et pivots freins de sol).
+* [Roulements et fermetures Technal LUMEAL GA](/quincaillerie/lumeal-ga-roulements-et-fermetures.md) - Chariots de roulement simples, doubles et triples jusqu'à 300 kg, ferrures de verrouillage 1 à 3 points, poignées de tirage et équipements de retard à l'effraction classe RC3 du coulissant minimal LUMEAL GA de Technal.
+* [Quincaillerie et accessoires ASKEY Coulissant 65 NV](/quincaillerie/askey-coulissant-65-nv-quincaillerie.md) - Nomenclatures, charges limites, caractéristiques et compatibilités des chariots de roulement, serrures multipoints, poignées et accessoires du Coulissant 65 NV ASKEY.
+* [Quincaillerie et équerres ASKEY Frappe 65](/quincaillerie/askey-frappe-quincaillerie-et-equerres.md) - Nomenclatures des équerres d'assemblage, raccords, goupilles, visserie, ferrures Ferco Unijet et bouchons d'étanchéité de la gamme Frappe 65 ASKEY.
 
 # Procédures
 
@@ -103,6 +127,12 @@
 * [Couplages et contreventements d'éléments, directives profine](/procedures/couplages-elements.md) - Les seuils de largeur au-delà desquels un couplage de fenêtres profine exige un jeu de dilatation, et les distances de vissage des couplages et contreventements.
 * [Montage au bâtiment](/procedures/montage-generaux-profine.md) - Les tolérances de fixation à la maçonnerie, les largeurs de joint de raccordement et la dilatation admissible pour le montage d'une menuiserie profine, avec les entrées d'air autoréglables.
 * [Usage, nettoyage et entretien d'une menuiserie profine](/procedures/usage-nettoyage-entretien-menuiseries.md) - Les consignes d'usage de la poignée, de nettoyage du PVC, de l'aluminium, des joints et du vitrage, et l'explication de la condensation extérieure — utile au SAV pour répondre aux réclamations client.
+* [Fabrication et usinage SOLEAL FY](/procedures/fabrication-soleal-fy.md) - Directives d'atelier, opérations d'usinage, de sertissage, de goupillage, de drainage, d'assemblage d'onglets et de montage de la quincaillerie pour les menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65.
+* [Fabrication, pose et étanchéité du galandage Technal SOLEAL GY 55](/procedures/pose-soleal-gy-galandage.md) - Procédure complète d'atelier et de chantier pour les coulissants à galandage et traditionnels SOLEAL GY 55 de TECHNAL (1 à 4 vantaux, caissons de refoulement, chicanes fixes, drainages étagés, talons injectés, seuil PMR et règles NF DTU 36.5).
+* [Fabrication et mise en œuvre du seuil PMR Technal PY1100](/procedures/technal-seuil-pmr-py1100.md) - Procédure d'atelier et de chantier pour le seuil à rupture de pont thermique pour personnes à mobilité réduite (PMR) PY1100 de TECHNAL (portes battantes SOLEAL PY 55, gabarit EK7020, pièces d'angle 720028/29, gâche basse PY6000 et règles NF DTU 36.5).
+* [Fabrication en atelier et pose sur chantier Technal LUMEAL GA](/procedures/fabrication-et-pose-lumeal-ga.md) - Règles de fabrication en atelier, plans de drainage, injection d'étanchéité Butyl/élastomère, vitrage en portefeuille et mise en œuvre chantier selon le NF DTU 36.5 du coulissant minimal LUMEAL GA de Technal.
+* [Procédure de fabrication ASKEY Coulissant 65 NV](/procedures/fabrication-coulissant-askey-65-nv.md) - Méthode d'atelier pour l'usinage, le poinçonnage, le drainage caché, l'assemblage des dormants coupe droite et le montage des ouvrants du Coulissant 65 NV ASKEY.
+* [Procédure de fabrication ASKEY Frappe 65](/procedures/fabrication-frappe-askey-65.md) - Méthode d'atelier pour l'usinage, le drainage, l'assemblage des dormants et ouvrants, et la mise en œuvre du seuil PMR de la Frappe 65 ASKEY (OC et OV).
 
 # Certifications
 
@@ -117,7 +147,8 @@
 
 * [profine](/fournisseurs/profine.md) - Groupe extrudeur des profilés PVC de PROFERM, propriétaire des marques KÖMMERLING, TROCAL et KBE, et titulaire du DTA du système 76 Advanced.
 * [KÖMMERLING](/fournisseurs/kommerling.md) - Marque PVC du groupe profine sous laquelle PROFERM achète les profilés GREENLINE des gammes PERFORM, HYBRIDE et TEXTURAL.
-* [TECHNAL](/fournisseurs/technal.md) - Fournisseur des systèmes aluminium et de la quincaillerie de la gamme LUMINE et des coulissants aluminium de PROFERM.
+* [TECHNAL](/fournisseurs/technal.md) - Fournisseur des systèmes aluminium et de la quincaillerie des gammes LUMINE, SOLEAL FY/GY/PY et LUMÉAL de PROFERM.
+* [ASKEY](/fournisseurs/askey.md) - Fournisseur de systèmes aluminium à rupture thermique pour coulissants 65 NV et frappes 65 ouvrants cachés et visibles (groupe Hydro Building Systems France).
 * [ROTO](/fournisseurs/roto.md) - Fournisseur de la quincaillerie PVC et mixte de PROFERM, à l'origine du Label ROTO Performance et de la garantie 10 ans sur les ferrures.
 * [SOMFY](/fournisseurs/somfy.md) - Fournisseur des motorisations et de la domotique des volets roulants proposés par PROFERM.
 
@@ -152,3 +183,21 @@
 * [Mise en œuvre 9708, profine France](/sources/profine-mise-en-oeuvre-9708-montants-cintres.md) - Fiche d'une page pour le redressement d'un montant de porte cintré au moyen du profilé acier précontraint 9708.
 * [Bras de report de charge ROTO NX](/sources/roto-nx-bras-report-de-charge.md) - Notice d'une page pour le montage et le réglage du report de charge NT Designo II sur quincaillerie ROTO NX.
 * [Transformation OF en OB, gamme ROTO NX](/sources/roto-nx-transformation-of-en-ob.md) - Procédure PROFERM de 2 pages pour transformer un ouvrant à la française en oscillo-battant sur quincaillerie ROTO NX.
+* [DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm](/sources/technal-dta-soleal-fy.md) - Document Technique d'Application CSTB de 48 pages du système de fenêtres et portes-fenêtres aluminium à frappe SOLEAL 55 de TECHNAL, valide jusqu'au 31 octobre 2026.
+* [Catalogues de conception Technal SOLEAL FY 55 et 55/65 QC](/sources/technal-soleal-fy-conception.md) - Catalogues techniques de conception générale Technal pour la gamme à frappe SOLEAL FY 55 Évolution (apparent et minimal, réf. 6057.003) et SOLEAL FY 55/65 Quincaillerie Cachée QC (réf. 6319.003).
+* [Catalogues de fabrication Technal SOLEAL FY 55 et 55/65 QC](/sources/technal-soleal-fy-fabrication.md) - Catalogues techniques d'atelier et notices d'usinage Technal pour la fabrication de la gamme à frappe SOLEAL FY 55 Évolution (DOC-0001186128 Rév. B) et SOLEAL FY 55/65 Quincaillerie Cachée QC (Réf. 6320.003).
+* [DTA n° 6/15-2261_V3 et V1, procédé Soleal GY](/sources/technal-dta-soleal-gy.md) - Document Technique d'Application CSTB du système de fenêtres et portes-fenêtres coulissantes en aluminium à rupture de pont thermique SOLEAL GY de TECHNAL (validité jusqu'au 31 juillet 2029).
+* [Catalogue de conception Technal SOLEAL GY 55](/sources/technal-soleal-gy-conception.md) - Catalogue technique de conception générale Technal pour la gamme de coulissants universels SOLEAL GY 55 (Réf. 5744.005 - 09/2021, 184 pages).
+* [Catalogue de fabrication Technal SOLEAL GY 55](/sources/technal-soleal-gy-fabrication.md) - Guide officiel de fabrication et catalogue d'atelier Technal pour le système coulissant et galandage SOLEAL GY 55 (Réf. 5746.003 - 09/2021, 200 pages).
+* [Notice d'installation Technal SOLEAL GY 55](/sources/technal-soleal-gy-installation.md) - Notice officielle de pose et de mise en œuvre chantier Technal pour le coulissant SOLEAL GY 55 (Réf. 5832.002 / 5832.003 - 05/2018, 18 pages).
+* [F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100 Technal](/sources/technal-seuil-py1100.md) - Fiche d'Information Technique officielle Technal détaillant le seuil PMR à rupture de pont thermique PY1100, les pièces d'angle préformées et les procès-verbaux d'essais AEV (33 pages).
+* [Catalogue de conception Technal SOLEAL PY 55](/sources/technal-soleal-py-conception.md) - Catalogue technique officiel de conception système Technal pour la gamme de portes battantes et va-et-vient SOLEAL PY 55 (Réf. 4944.006 - 09/2018, 210 pages).
+* [Catalogue de fabrication Technal SOLEAL PY 55](/sources/technal-soleal-py-fabrication.md) - Guide technique officiel d'atelier et catalogue de fabrication Technal pour les portes à rupture de pont thermique SOLEAL PY 55 (Réf. 4899.007 - 09/2018, 222 pages).
+* [DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga](/sources/technal-dta-lumeal-ga.md) - Document Technique d'Application CSTB de 36 pages pour le coulissant aluminium à rupture de pont thermique et ouvrant caché LUMEAL Minimal Ga de Technal (valide jusqu'au 31 juillet 2029).
+* [Catalogue de conception Technal LUMEAL GA](/sources/technal-lumeal-ga-conception.md) - Catalogue technique officiel de conception générale Technal pour la gamme de coulissants minimaux à ouvrant caché LUMEAL GA (Réf. 5156.007 - 01/2021, 94 pages).
+* [Catalogue de fabrication Technal LUMEAL GA](/sources/technal-lumeal-ga-fabrication.md) - Guide technique officiel d'atelier et catalogue de fabrication Technal (Réf. 5074.007 - 01/2021, 214 pages) et notice officielle de pose chantier (Réf. 5850.002 - 07/2018, 18 pages) pour le coulissant minimal LUMEAL GA.
+* [Coulissant 65 NV ASKEY - Conception](/sources/askey-coulissant-65-nv-conception.md) - Manuel technique de conception du système coulissant aluminium 65 NV ASKEY par Hydro Building Systems France.
+* [Coulissant 65 NV ASKEY - Fabrication](/sources/askey-coulissant-65-nv-fabrication.md) - Manuel technique d'atelier et de fabrication du système coulissant aluminium 65 NV ASKEY par Hydro Building Systems France.
+* [Frappe 65 Ouvrant Caché ASKEY - Conception](/sources/askey-frappe-65-oc-conception.md) - Manuel technique de conception de la gamme frappe 65 à ouvrant caché ASKEY par Hydro Building Systems France.
+* [Frappe 65 Ouvrant Caché ASKEY - Fabrication](/sources/askey-frappe-65-oc-fabrication.md) - Manuel technique d'atelier et de fabrication de la gamme frappe 65 à ouvrant caché ASKEY par Hydro Building Systems France.
+* [Frappe 65 Ouvrant Visible ASKEY - Fabrication](/sources/askey-frappe-65-ov-fabrication.md) - Manuel technique d'atelier et de fabrication de la gamme frappe 65 à ouvrant visible ASKEY par Hydro Building Systems France.

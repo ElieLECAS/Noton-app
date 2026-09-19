@@ -11,10 +11,10 @@ sources:
     id: technal-soleal-fy-55-fabrication-doc-0001186128
     title: SOLEAL FY 55 Évolution — Guide d'atelier et catalogue de fabrication (DOC-0001186128 Rév. B)
     last_modified: 2021-04-01
-  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-évo-QC-catalogue-fabrication-6320-003-072021-Fr.pdf
+  - resource: wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf
     id: technal-soleal-fy-55-65-fabrication-qc-6320-003
-    title: SOLEAL FY 55/65 Évolution — Guide de fabrication Quincaillerie Cachée QC (Réf. 6320.003 - 07/2021)
-    last_modified: 2021-07-01
+    title: SOLEAL FY 55/65 Évolution — Guide de fabrication Quincaillerie Cachée QC (Réf. 6320.003 - 04/2021)
+    last_modified: 2021-04-01
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T22:08:00Z
@@ -58,7 +58,7 @@ generated:
 # Citations
 
 [1] SOLEAL FY 55 Évolution — Guide d'atelier et catalogue de fabrication (DOC-0001186128 Rév. B) — `wiki_llm/a_faire/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf`
-[2] SOLEAL FY 55/65 Évolution — Guide de fabrication Quincaillerie Cachée QC (Réf. 6320.003 - 07/2021) — `wiki_llm/a_faire/SOLEAL-FY-55-65-évo-QC-catalogue-fabrication-6320-003-072021-Fr.pdf`
+[2] SOLEAL FY 55/65 Évolution — Guide de fabrication Quincaillerie Cachée QC (Réf. 6320.003 - 04/2021) — `wiki_llm/a_faire/SOLEAL-FY-55-65-evolution-QC-catalogue-fabrication-6320-003-042021-FR.pdf`
 
 # Voir aussi
 
