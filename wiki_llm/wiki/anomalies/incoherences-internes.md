@@ -49,6 +49,14 @@ sources:
     id: roto-nx-catalogue-ctl-105
     title: Roto NX, catalogue pour profils PVC, réf. CTL_105_FR_v5, juin 2023
     last_modified: 2023-06-30
+  - resource: raw/moustiquaires/Fiche produit Moustiquaire enroulable verticale SOPROFEN 2026.pdf
+    id: soprofen-moustiquaire-enroulable-verticale-2026
+    title: Fiche produit Moustiquaire ENROULABLE VERTICALE SOPROFEN
+    last_modified: 2026-04-30
+  - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI NON PREMONTE 2025 SOPROFEN.pdf
+    id: soprofen-volet-tradi-non-premonte-2025
+    title: Fiche produit volet traditionnel TRADI NON PRÉMONTÉ SOPROFEN
+    last_modified: 2025-07-31
 generated:
   by: process:claude-code
   at: 2026-09-17T20:30:00Z
@@ -85,6 +93,8 @@ ce que le registre lui prêtait. Elle quitte alors le registre actif pour la sec
 | INC-12 | Mise en œuvre Système 70 Plateforme | registre 2.1.2, p. 1 vs p. 8 à 15 | Huit dormants portent deux largeurs différentes : le sommaire des profilés donne 91, 84, 87, 95, 107, 87, 117 et 122 mm pour les 6102, 6104, 6105, 6106, 6107, 6155, 6156 et 6159, leurs planches de détail donnent 57, 64, 67, 75, 87, 67, 97 et 102 mm. L'écart est de 20 mm sur sept d'entre eux et de 34 mm sur le 6102. Les huit autres dormants concordent | Établir ce que mesure chacune des deux pages. L'écart constant de 20 mm ressemble à deux conventions de mesure, pas à huit coquilles, mais aucune des deux pages ne le dit | Dormant commandé au mauvais gabarit sur la moitié de la gamme. La planche du 6159 est en outre titrée « 6156 », libellé recopié comme dans INC-03 |
 | INC-13 | Catalogue Roto NX pour profils PVC | 36 | Dans un catalogue français, le tableau des champs d'application de la version 150 kg est **imprimé en allemand** — « Flügelfalzbreite », « Grundsicherheit », « unzulässiger Anwendungsbereich » — et il désigne les classes de sécurité par « RC » là où la page 35, en français, écrit « CDR » | Traduire la page 36. Retenir que RC et CDR désignent la même classification, celle de la DIN EN 1627-1630 | Un lecteur français ne lit pas les bornes de la ferrure 150 kg, qui est celle des vantaux lourds |
 | INC-14 | DTD n° DBV-25-6/16-2334_V5 | 47 | Le tableau d'assignation du drainage groupe les ouvrants « 76271, 76272, **78275**, 76279, 76281 » — la référence **78275** ne correspond à aucun profilé connu du système, alors que le **76275** est l'un des quatre ouvrants PERFORM76 et manque justement à cette liste | Coquille probable : lire 76275 | Un lecteur cherchant le drainage du 76275 ne le trouve pas, cherché sous 78275 il ne trouve rien non plus |
+| INC-15 | Fiche produit Moustiquaire ENROULABLE VERTICALE SOPROFEN | 2 | La note de bas de page relative aux manœuvres manuelles porte « Pour MONO 54 CH » là où le tableau de dimensions et la planche technique nomment le produit « MOHO 54 CH » [6 p. 2] | Coquille manifeste : lire « MOHO 54 CH » | Risque de confusion de référence lors de la commande ou de l'intégration |
+| INC-16 | Fiche produit volet traditionnel TRADI NON PRÉMONTÉ SOPROFEN | 1 | La rubrique « Facilité de pose » porte « Pose rapide grâce à ses consoles et tablier prémontés, solidaires de l'axe » et « Auto-portant sans déport », recopiés mot pour mot de la fiche TRADI PRÉMONTÉ, alors que la fiche concerne le volet non prémonté avec « Déport sur mesure » [7 p. 1] | Erreur de copier-coller manifeste : supprimer la mention de prémontage et d'autoportance sans déport pour ce modèle | Confusion sur le niveau de pré-assemblage et le mode de pose en atelier et chantier |
 
 # INC-02 en détail
 
@@ -174,6 +184,8 @@ p. 16 et 17
 [3] Dépliant LUMÉAL, édition juin 2023 — `raw/depliant-lumeal-2023-06.pdf`, p. 2
 [4] Dépliant LUMÉAL, édition avril 2026 — `raw/depliant-lumeal-2026-04.pdf`, p. 2
 [5] Brochure LUMINE65, édition février 2025 — `raw/brochure-lumine65-2025-02.pdf`, p. 2 et 3
+[6] Fiche produit Moustiquaire ENROULABLE VERTICALE SOPROFEN, réf. DOC83151 Version 042026 — `raw/moustiquaires/Fiche produit Moustiquaire enroulable verticale SOPROFEN 2026.pdf`, p. 2
+[7] Fiche produit volet traditionnel TRADI NON PRÉMONTÉ SOPROFEN, réf. DOC83116 Version 07/2025 — `raw/moustiquaires/Fiche produit volet traditionnel TRADI NON PREMONTE 2025 SOPROFEN.pdf`, p. 1
 
 # Voir aussi
 
@@ -182,3 +194,5 @@ p. 16 et 17
 - [Performances des vitrages](/vitrages/performances-vitrages.md)
 - [Coulissants aluminium](/gammes/coulissants-aluminium.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
+- [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md)
+- [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md)

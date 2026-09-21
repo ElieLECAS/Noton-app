@@ -19,6 +19,7 @@
     --accent:#4f46e5; --accent-soft:#eef2ff;
     --danger:#d44c47; --danger-bg:#fdebec; --danger-tx:#b3302c; --danger-br:#f3cfd0;
     --amber-bg:rgba(245,158,11,.08); --amber-br:rgba(245,158,11,.35);
+    --hit-bg:#fde047; --hit-bg-on:#fbbf24; --hit-tx:#1f2937;
     --stage-solid:#fcfcfb;
     --stage:radial-gradient(ellipse 70% 60% at 50% 45%,#f3f5f9 0%,transparent 70%),
             radial-gradient(ellipse 40% 40% at 22% 25%,#eef4f8 0%,transparent 65%),
@@ -35,6 +36,7 @@
     --accent:#818cf8; --accent-soft:#1f2440;
     --danger:#ff7369; --danger-bg:#3a2523; --danger-tx:#ff9b93; --danger-br:#5c3733;
     --amber-bg:rgba(245,158,11,.10); --amber-br:rgba(245,158,11,.40);
+    --hit-bg:#facc15; --hit-bg-on:#f59e0b; --hit-tx:#171717;
     --stage-solid:#141416;
     --stage:radial-gradient(ellipse 70% 60% at 50% 45%,#1b1e2a 0%,transparent 70%),
             radial-gradient(ellipse 40% 40% at 22% 25%,#15212c 0%,transparent 65%),
@@ -262,6 +264,15 @@
   #wiki-shell .card-t{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem;
     line-height:1.3;min-width:0}
   #wiki-shell .card-t .dot{width:8px;height:8px;border-radius:50%;flex:none}
+  #wiki-shell .card-x{font-size:.8rem;line-height:1.4;color:var(--tx-dim);
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  /* Le surlignage se lit d'un coup d'oeil : fond plein, texte sombre dans les deux
+     themes. Le premier passage, celui sur lequel la page se pose, va un cran plus loin. */
+  #wiki-shell .card-x mark,
+  #wiki-shell #wiki-body mark.hit{background:var(--hit-bg);color:var(--hit-tx);font-weight:700;
+    border-radius:3px;padding:0 2px;box-shadow:0 0 0 1px var(--hit-bg)}
+  #wiki-shell #wiki-body mark.hit.is-first{background:var(--hit-bg-on);
+    box-shadow:0 0 0 2px var(--hit-bg-on),0 1px 8px rgba(245,158,11,.55)}
   #wiki-shell .card-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
   #wiki-shell .pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:600;
     background:var(--bg-sunken);color:var(--tx-dim);border:1px solid var(--line)}
@@ -1247,20 +1258,117 @@ function card(n, desc, titleOverride){
   '</a>';
 }
 
+// La recherche de l'accueil se fait a deux temps. Le filtre local repond des la
+// frappe sur ce que la tuile porte deja (titre, description, etiquettes, chemin) ;
+// le serveur complete avec les pages dont le CORPS contient les mots, si bien qu'une
+// reference citee dans un tableau (TGY3704) se retrouve depuis l'accueil. La reponse
+// du serveur est un sur-ensemble du filtre local : les tuiles s'ajoutent, aucune ne
+// disparait quand elle arrive.
+let searchSeq = 0, searchTimer = null, homeTerms = [];
+
 function filterHome(q){
-  q = (q || "").trim().toLowerCase();
+  q = (q || "").trim();
+  applyHomeFilter(q, null);
+  clearTimeout(searchTimer);
+  const seq = ++searchSeq;
+  if(!q) return;
+  searchTimer = setTimeout(() => {
+    wikiFetch("/api/wiki/search?q=" + encodeURIComponent(q))
+      .then(r => r.ok ? r.json() : null)
+      .then(res => { if(res && seq === searchSeq) applyHomeFilter(q, res.pages || []); })
+      .catch(() => { /* le filtre local reste en place */ });
+  }, 140);
+}
+
+function applyHomeFilter(q, deep){
+  homeTerms = (q || "").toLowerCase().split(/\s+/).filter(Boolean);
+  const terms = homeTerms;
+  const excerpts = new Map((deep || []).map(h => [h.id, h.excerpt || ""]));
   const home = $("view-home");
   let any = false;
   home.querySelectorAll(".card").forEach(c => {
-    const hit = !q || (c.dataset.search || "").includes(q);
+    const hay = c.dataset.search || "";
+    const hit = !terms.length || terms.every(t => hay.includes(t)) || excerpts.has(c.dataset.id);
     c.hidden = !hit;
     if(hit) any = true;
+    cardExcerpt(c, hit ? excerpts.get(c.dataset.id) : "", terms);
   });
   home.querySelectorAll(".home-sec").forEach(s => {
     s.hidden = ![...s.querySelectorAll(".card")].some(c => !c.hidden);
   });
   const none = home.querySelector(".home-none");
   if(none) none.hidden = any;
+}
+
+// L'extrait n'existe que le temps d'une recherche : la tuile au repos garde son titre seul.
+function cardExcerpt(cardEl, text, terms){
+  let el = cardEl.querySelector(".card-x");
+  if(!text){ if(el) el.remove(); return; }
+  if(!el){
+    el = document.createElement("span");
+    el.className = "card-x";
+    cardEl.appendChild(el);
+  }
+  el.innerHTML = markTerms(text, terms);
+}
+
+// Surligne les mots trouves dans l'extrait. Pas d'expression reguliere : une
+// reference porte des caracteres qu'il faudrait echapper un a un.
+function markTerms(text, terms){
+  const src = String(text), low = src.toLowerCase();
+  let out = "", i = 0;
+  while(i < src.length){
+    const {at, len} = nextTerm(low, i, terms);
+    if(at < 0){ out += esc(src.slice(i)); break; }
+    out += esc(src.slice(i, at)) + "<mark>" + esc(src.slice(at, at + len)) + "</mark>";
+    i = at + len;
+  }
+  return out;
+}
+
+// Le prochain mot de terms rencontre a partir de from, le plus long a egalite.
+// at vaut -1 quand il n'y en a plus. Pas d'expression reguliere : une reference
+// porte des caracteres qu'il faudrait echapper un a un.
+function nextTerm(low, from, terms){
+  let at = -1, len = 0;
+  terms.forEach(t => {
+    const p = t ? low.indexOf(t, from) : -1;
+    if(p >= 0 && (at < 0 || p < at || (p === at && t.length > len))){ at = p; len = t.length; }
+  });
+  return {at, len};
+}
+
+// Surligne les mots dans le corps affiche et rend le premier trouve, pour s'y poser.
+// Les noeuds de texte sont releves AVANT d'etre remplaces : on ne marche pas sur
+// l'arbre qu'on parcourt, et les liens et pastilles deja poses restent intacts.
+function highlightHits(root, terms){
+  if(!root || !terms || !terms.length) return null;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const texts = [];
+  for(let node = walker.nextNode(); node; node = walker.nextNode())
+    if(node.nodeValue && node.nodeValue.trim()) texts.push(node);
+  let first = null;
+  texts.forEach(node => {
+    const src = node.nodeValue, low = src.toLowerCase();
+    let i = 0, frag = null;
+    while(i < src.length){
+      const {at, len} = nextTerm(low, i, terms);
+      if(at < 0) break;
+      if(!frag) frag = document.createDocumentFragment();
+      if(at > i) frag.appendChild(document.createTextNode(src.slice(i, at)));
+      const m = document.createElement("mark");
+      m.className = "hit";
+      m.textContent = src.slice(at, at + len);
+      frag.appendChild(m);
+      if(!first) first = m;
+      i = at + len;
+    }
+    if(frag){
+      if(i < src.length) frag.appendChild(document.createTextNode(src.slice(i)));
+      node.parentNode.replaceChild(frag, node);
+    }
+  });
+  return first;
 }
 
 $("view-home").addEventListener("input", e => {
@@ -1270,7 +1378,7 @@ $("view-home").addEventListener("keydown", e => {
   if(e.target.id !== "home-search") return;
   if(e.key === "Enter"){
     const first = $("view-home").querySelector(".card:not([hidden])");
-    if(first){ e.preventDefault(); openPage(first.dataset.id); }
+    if(first){ e.preventDefault(); openPage(first.dataset.id, false, homeTerms); }
   } else if(e.key === "Escape"){
     e.stopPropagation();
     e.target.value = ""; filterHome(""); e.target.blur();
@@ -1280,17 +1388,21 @@ $("view-home").addEventListener("click", e => {
   const a = e.target.closest("a.card");
   if(!a) return;
   e.preventDefault();
-  if(nodeById.has(a.dataset.id)) openPage(a.dataset.id);
+  if(nodeById.has(a.dataset.id)) openPage(a.dataset.id, false, homeTerms);
   else notice("Page inexistante : " + a.dataset.id);
 });
 
 /* ==== lecture d'une page ================================================ */
 let hist = [], hpos = -1;
+// Les mots a surligner dans la page ouverte : ceux de la recherche d'accueil quand on
+// vient d'une tuile, aucun autrement (lien, graphe, historique, barre du haut).
+let pageTerms = [];
 
-function openPage(id, fromHistory){
+function openPage(id, fromHistory, terms){
   const n = nodeById.get(id);
   if(!n) return;
   sel = id;
+  pageTerms = terms || [];
   if(!fromHistory && hist[hpos] !== id){
     hist = hist.slice(0, hpos + 1);
     hist.push(id);
@@ -1370,6 +1482,12 @@ function renderPage(id){
     '</footer>';
   $("page-rail").innerHTML = body && body.rail
     ? '<nav class="wiki-toc"><p class="wiki-toc-h">Sommaire</p>' + body.rail + '</nav>' : "";
+  // Le defilement attend la trame suivante : openPage remet le corps en haut juste apres.
+  const firstHit = body ? highlightHits($("wiki-body"), pageTerms) : null;
+  if(firstHit){
+    firstHit.classList.add("is-first");
+    requestAnimationFrame(() => firstHit.scrollIntoView({behavior: "smooth", block: "center"}));
+  }
   renderCrumb();
   setupTocSpy();
 }

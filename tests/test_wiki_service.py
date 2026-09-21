@@ -168,3 +168,22 @@ def test_get_snapshot_reloads_when_a_file_changes(small_wiki: Path, monkeypatch)
 def test_missing_wiki_dir_raises(tmp_path: Path):
     with pytest.raises(WikiUnavailable):
         load_snapshot(tmp_path / "nulle-part")
+
+
+def test_search_reaches_the_body(small_wiki: Path):
+    snap = load_snapshot(small_wiki)
+    # « Seule. » n'est ni dans un titre ni dans une description : seul le corps le porte.
+    hits = snap.search("seule")
+    assert [h["id"] for h in hits] == ["/gammes/beta.md"]
+    assert hits[0]["excerpt"] == "Seule."
+    # Tous les mots doivent tomber dans la MÊME page.
+    assert [h["id"] for h in snap.search("alpha fantôme")] == ["/gammes/alpha.md"]
+    assert snap.search("seule fantôme") == []
+    # Réservées (index.md, log.md) et fantômes restent hors recherche, requête vide aussi.
+    assert snap.search("update log") == []
+    assert snap.search("   ") == []
+    # Le chemin compte aussi : beta se trouve par son identifiant (aucun extrait, le mot
+    # n'est pas dans son corps), alpha par le lien qui la cite.
+    by_path = {h["id"]: h["excerpt"] for h in snap.search("gammes/beta.md")}
+    assert by_path["/gammes/beta.md"] == ""
+    assert "Beta" in by_path["/gammes/alpha.md"]

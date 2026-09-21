@@ -2,6 +2,140 @@
 
 ## 2026-09-21
 
+* **Ingestion multimodale du PDF « Guide technique Blocs-baies 2022 » (`export_doc_132.zip` / `132.pdf`)** :
+  * Extraction et lecture multimodale native directe des 148 pages du catalogue technique général officiel (réf. `DOC86505 – 09/2022`, SOPROFEN / Groupe Bouyer Leroux) couvrant l'ensemble des coffres blocs-baies neufs et rénovation.
+  * Synthèse des gammes présentées : Chrono ONE (neuf, réno, ITE), Chrono CX14 / CRX14 / CRX18 (avec variante pour dormant de 70 mm), Bloc LX (coffre demi-linteau), Chrono PSE² (corps PSE haute isolation thermique jusqu'à $0,3\text{ W/m}^2\text{K}$, volet roulant ou BSO, caissons 300 et 360 mm, accès intérieur ou extérieur) et Mono VI (volet roulant inversé à enroulement extérieur et trappe d'accès affleurante intérieure, hauteur de coffre compacte de 140 mm maximisant le clair de jour).
+  * Extraction des règles normatives de résistance au vent NF EN 13659 et DTU 34-2 (p. 144) : largeurs maximales des lames PVC (L37, L50) et aluminium (LA37, LA50) pour les classes de vent V\*2 à V\*6, et matrice de sélection croisant les 4 zones géographiques de vent, les 5 catégories de terrain (IV urbain à 0 littoral) et les tranches de hauteur jusqu'à 100 m.
+  * Création de la carte source : [Guide technique Blocs-baies SOPROFEN 2022](/sources/soprofen-guide-technique-blocs-baies-2022.md) avec registre exhaustif 148/148 pages (état transcrit).
+  * Création de la fiche Équipement : [Volet roulant et BSO bloc-baie CHRONO PSE²](/equipements/volets-roulants-chrono-pse2.md).
+  * Création de la fiche Équipement : [Volet roulant inversé bloc-baie MONO VI](/equipements/volets-roulants-mono-vi.md).
+  * Création de la fiche Référence : [Résistance au vent des volets roulants SOPROFEN](/reference/resistance-au-vent-volets-soprofen.md).
+  * Enrichissement de la fiche [Volets roulants](/equipements/volets-roulants.md) et de la fiche Fournisseur [SOPROFEN](/fournisseurs/soprofen.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Avis Technique CSTB n° 6/16-2339_V2 » (`export_doc_135.zip` / `135.pdf`)** :
+  * Extraction et lecture multimodale native directe des 72 pages du document officiel CSTB / CCFAT (validité 22/02/2022 au 31/01/2027, SOPROFEN SAS) : évaluation technique et certification des coffres blocs-baies PVC Chrono C, Chrono VX2, Chrono VRX2 réno et Chrono ONE.
+  * Extraction des 4 domaines d'emploi autorisés en France métropolitaine : applique intérieure ITI derrière linteau, tableau sous dalle, rénovation sur dormant existant, et tableau avec ITE (spécifiquement validé pour Chrono ONE).
+  * Extraction des caractéristiques certifiées : perméabilité à l'air classe C3 ($0,26\text{ m}^3/\text{h.m}$) et classe C4 ($0,08\text{ m}^3/\text{h.m}$ sous 4 Pa) selon NF P20-302 ; classement de réaction au feu M3 des profilés plaxés ; formules de calcul thermique surfacique moyen du coffre $U_c$ et de la paroi $U_p$ en fonction de la longueur de coffre $L_c$.
+  * Données de rigidité flexionnelle $EI$ au vent : Chrono ONE ($8\,400\text{ N.m}^2$ sans renfort, $46\,830\text{ N.m}^2$ avec renfort standard, $62\,160\text{ N.m}^2$ avec renfort MX20-2) ; CX18/22 ($5\,040$ à $57\,960\text{ N.m}^2$) ; CRX14/18 ($6\,510$ à $53\,760\text{ N.m}^2$). Bride métallique interne de reprise au gros œuvre obligatoire pour $L \in [2\,500, 3\,000]\text{ mm}$ sur Chrono ONE (équerre MX-ETH et MX-ENTH).
+  * Prescriptions critiques d'atelier et de pose : réversibilité de sous-face CX01 et MX01R permettant un gain d'isolation de 40 mm (de 120 à 160 mm) sans changer d'adaptateur ; fixations d'adaptateur tous les 40 cm (alu) et 20 cm (PVC) ; coulisses aluminium Chrono ONE avec profilé PVC noir POC démontable pour SAV ; critère de clarté $L^* < 82$ imposant le lambrequin aluminium en exposition extérieure ; liste des mastics certifiés NF EN ISO 8339.
+  * Création de la carte source : [Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN (2022)](/sources/soprofen-at-cstb-coffres-chrono.md) avec registre exhaustif 72/72 pages (état transcrit).
+  * Création de la fiche Certification : [Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN](/certifications/at-cstb-6-16-2339-coffres-chrono.md) avec matrices thermiques, aérauliques et mécaniques.
+  * Enrichissement de la fiche [Volets roulants](/equipements/volets-roulants.md) et de la fiche Fournisseur [SOPROFEN](/fournisseurs/soprofen.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Guide technique BLOC LX » (`export_doc_133.zip` / `133.pdf`)** :
+  * Extraction et lecture multimodale native directe des 16 pages du document (p. 110 à 125, SOPROFEN) : guide technique exhaustif d'atelier et d'aide à la commande pour le volet roulant sous coffre demi-linteau Bloc LX en construction neuve.
+  * Extraction des règles dimensionnelles et cotes de fabrication : $L$ = dos à dos des coulisses ($L_{\max} = 3500\text{ mm}$ en LA50), largeur hors-tout tiroir demi-coffre = $L + 270\text{ mm}$ ($135\text{ mm}$ de débord latéral par côté, axe coulisse à $70\text{ mm}$ du bord console), $H$ = bas des coulisses au-dessus de la feuillure dormant (aligné avec dessus trappe de visite), réservation linteau $H_{\text{demi-linteau}} = 292,5\text{ mm}$ (passage libre $\ge 216\text{ mm}$).
+  * Compatibilité et matrices d'intégration selon les fabricants de coffres demi-linteaux : Terreal, Genova, Prefatec, Imerys et Stradal. Identification de l'**incompatibilité stricte du coffre STRADAL avec la manœuvre par treuil** (absence de réservation latérale pour le déport de cardan ; motorisation obligatoire).
+  * Abaques complets des tabliers PVC (L37, L50) et alu (LATH37, LA37, LAHD37, LATH50, LA50, LAHD50) avec poids au m² ($2,7$ à $3,5\text{ kg/m}^2$), majoration lame finale ($1,1\text{ kg/ml}$) et limites $H_{\max}$ par coffre.
+  * Synthèse des largeurs minimales ($L_{\min}$) pour l'ensemble des motorisations : Somfy RTS (Oximo, Oximo court), Somfy IO (Oximo IO, S&SO RS100 IO), Soprofen M-Soft² (MVM, MVEC, MVE), Filaire WT (Ilmo, Ilmo 12 trs), Hybride filaire/radio IO (S&SO RS100 IO Hybrid) et treuil manuel (TX13/5-7).
+  * Mécanisme de projection à l'italienne : bras 300 et 470 mm, traverse basse EP25, tapée mini 60 mm, réservé aux coulisses simples CTA 09/13E, et **interdiction formelle en manœuvre motorisée** (manuelle uniquement).
+  * Profilés acier de renfort de traverse haute : code 1 ($I_{yy'} = 5,56\text{ cm}^4$, doublage 100-120 mm) et code 2 ($I_{yy'} = 18,7\text{ cm}^4$, doublage 140-160 mm).
+  * Création de la carte source : [Guide technique volet roulant demi-linteau Bloc LX SOPROFEN](/sources/soprofen-guide-technique-bloc-lx.md) avec registre exhaustif 16/16 pages (état transcrit).
+  * Création de la fiche Équipement : [Volet roulant coffre demi-linteau BLOC LX](/equipements/volet-roulant-bloc-lx-demi-linteau.md) avec matrices d'intégration, abaques et options.
+  * Enrichissement de la fiche [Volets roulants](/equipements/volets-roulants.md), de la procédure [Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md) et de la fiche Fournisseur [SOPROFEN](/fournisseurs/soprofen.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Notice de pose Coffre Bloc baie – En atelier sur dormant MONOBLOC » (`export_doc_138.zip` / `138.pdf`)** :
+  * Extraction et lecture multimodale native directe des 3 pages du document (réf. `NO-BB-T-CO-01-FR-202406`, SOPROFEN) : directives d'assemblage en atelier de fabrication du coffre bloc-baie Chrono One (manœuvre motorisée) spécifiquement sur dormant monobloc.
+  * Mise en évidence de l'inversion opératoire par rapport au dormant traditionnel : vissage préalable des coulisses sur les montants de la menuiserie (grugeage d'usine vers le haut, première vis à $\ge 50\text{ mm}$, entraxe $\le 400\text{ mm}$, vis plots VC4/10T obligatoires sur coulisse centrale pour tablier double), puis insertion par le haut du coffre dans la zone d'indexage sommitale en créneau des coulisses.
+  * Procédure de fixation frontale du coffre : refoulement manuel de la lame finale au fond du coffre pour dégager la rangée de perçages de l'adaptateur, et vissage traversant de l'adaptateur dans le dormant monobloc avec ancrage obligatoire sur **au moins 2 cloisons** PVC/alu.
+  * Pose optionnelle du joint adhésif de finition et des pattes déformables d'angle VX26 (fixation coffre par vis 15/3-9/9-5 sur 3 positions angulaires, pliage et vissage dormant).
+  * Création de la carte source : [Notice de pose coffre bloc-baie Chrono One sur dormant monobloc SOPROFEN (2024)](/sources/soprofen-notice-pose-bloc-baie-chrono-one-monobloc.md) avec registre complet 3/3 pages (état transcrit).
+  * Création de la fiche Procédure : [Montage en atelier du bloc-baie Chrono One sur dormant monobloc SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-monobloc-soprofen.md) avec tableau des composants et 4 étapes détaillées.
+  * Enrichissement de la fiche [Volets roulants](/equipements/volets-roulants.md) et de la fiche Fournisseur [SOPROFEN](/fournisseurs/soprofen.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Notice de pose Coffre Bloc baie – En atelier » (`export_doc_137.zip` / `137.pdf`)** :
+  * Extraction et lecture multimodale native directe des 4 pages du document (réf. `NO-BB-T-CD-00-FR-202406`, SOPROFEN) : directives d'assemblage direct en atelier de fabrication du coffre bloc-baie Chrono One (manœuvre motorisée) sur dormant de menuiserie extérieure PVC ou aluminium.
+  * Extraction des étapes opératoires et contraintes techniques : conformité anticorrosion NF EN 1670 (24 h intérieur / 96 h extérieur), isolation diélectrique obligatoire, interdiction de stockage du bloc-baie assemblé sur la tranche.
+  * Préparation de la traverse haute de dormant : centrage de l'adaptateur PVC (débordement latéral équilibré), pose du joint d'étanchéité de finition adhésif en retrait de 1 mm de l'arête intérieure du dormant, fixation par vis FPZ-3.9-28-ST à entraxe 400 mm max.
+  * Encliquetage du coffre : basculement dans la rainure avant de l'adaptateur, verrouillage des côtés par vis FPZ-3.9-28-ST dans les crabots latéraux.
+  * Fixation et étanchéité des coulisses : perçage/fraisage $\varnothing 10\text{ mm} / \varnothing 5\text{ mm}$ du fond de coulisse (1er trou à 200 mm du bas, entraxe 400 mm max), clippage par pions taraudés VC4/10T axe 21 mm, étanchéité par double cordon de mastic PVC/silicone entre coulisse et dormant, vis de pied de coulisse traversant l'appui/bavette, et équerres déformables VX26 (vis $\le 9,5\text{ mm}$).
+  * Création de la carte source : [Notice de pose coffre bloc-baie Chrono One SOPROFEN en atelier (2024)](/sources/soprofen-notice-pose-bloc-baie-chrono-one.md) avec registre complet 4/4 pages (état transcrit).
+  * Création de la fiche Procédure : [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md) avec tableau des composants/visserie et 4 phases d'assemblage pas-à-pas.
+  * Enrichissement de la fiche [Volets roulants](/equipements/volets-roulants.md) (section coffre bloc-baie Chrono One) et de la fiche Fournisseur [SOPROFEN](/fournisseurs/soprofen.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Guide de pose Bloc LX coffre demi-linteau » (`export_doc_136(1).zip` / `136.pdf`)** :
+  * Extraction et lecture multimodale native directe des 3 pages du document (réf. `NO-BB-T-BLX-00-FR-202111`, SOPROFEN) : règles de pose et de fixation d'atelier et de chantier du volet roulant demi-linteau Bloc LX (manœuvres treuil et motorisée, NF C 15-100).
+  * Extraction des règles critiques d'assemblage : sens des coulisses avec trou $\varnothing 5\text{ mm}$ à 55 mm du haut solidarisé par vis réf. 2095/4/8 dans la tulipe, bande mousse d'étanchéité dormant/tiroir, tolérances d'aplomb et équidistance des coulisses, vissage tiroir à 100 mm des extrémités et entraxe 600 mm max, renforts d'inertie DL-R10 (doublage $\le 100\text{ mm}$) et DL-R12 (doublage $> 100\text{ mm}$), pattes de fixation VX26 (vis $\le 9,5\text{ mm}$), étanchéité silicone périphérique et obturation du sommet des tapées creuses contre les infiltrations d'air.
+  * Création de la carte source : [Guide de pose Bloc LX coffre demi-linteau SOPROFEN (2021)](/sources/soprofen-guide-pose-bloc-lx-demi-linteau.md) avec registre complet 3/3 pages (état transcrit).
+  * Création de la fiche Procédure : [Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN](/procedures/pose-bloc-lx-demi-linteau-soprofen.md) avec tableau des références composants et étapes opératoires pas-à-pas.
+  * Enrichissement de la fiche [Volets roulants](/equipements/volets-roulants.md) (section coffres demi-linteau Bloc LX) et de la fiche Fournisseur [SOPROFEN](/fournisseurs/soprofen.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Notice de perçage des coulisses pour lame à serrure » (`export_doc_134.zip` / `134.pdf`)** :
+  * Extraction et lecture multimodale native directe des 2 pages du document (réf. `NO-MM-T-TD-00-FR-032008`) : méthodologie de traçage et d'usinage sur chantier des lumières de verrouillage en fond de coulisses sur volets roulants à tirage direct équipés d'une lame finale à serrure.
+  * Distinction opératoire selon la géométrie du barillet : cylindre rond (repère dessus de lame – 10 mm, trou brut $\varnothing 10\text{ mm}$) vs cylindre ovale (repère dessous de lame + 15 mm, trou $\varnothing 10\text{ mm}$ ovalisé à la lime pour targette plate de 10 mm de hauteur).
+  * Création de la carte source : [Notice de perçage des coulisses pour lame à serrure SOPROFEN (2008)](/sources/soprofen-notice-percage-coulisse-lame-serrure.md) avec registre complet 2/2 pages (état transcrit).
+  * Création de la fiche Procédure : [Perçage des coulisses pour lame à serrure sur volet à tirage direct](/procedures/percage-coulisses-lame-serrure-soprofen.md) avec tableau comparatif des cylindres et étapes opératoires pas-à-pas.
+  * Mise à jour de la fiche [Volets roulants](/equipements/volets-roulants.md) (liaison du tirage direct vers la procédure de perçage) et de la fiche Fournisseur [SOPROFEN](/fournisseurs/soprofen.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Catalogue moustiquaires SOPROFEN FR » (dossier `raw/moustiquaires/`)** :
+  * Lecture multimodale native directe des 13 planches doubles (24 pages imprimées) du document (réf. `DOC90708 05/2026`, SOPROFEN / Groupe Bouyer Leroux) : panorama exhaustif des 5 familles de moustiquaires (enroulables verticales, coulissantes, cadres fixes, plissées, battantes).
+  * Extraction des données corporate : SOPROFEN filiale du Groupe Bouyer Leroux, 655 collaborateurs, 8 usines de production (6 en France : Mertzwiller, Froideconche, Champagney, Cholet, Marssac-sur-Tarn, Lassay ; 2 en Belgique : Lokeren, Charleroi), plus de 35 ans d'expérience.
+  * Extraction des cotes minimales et maximales d'exécution et surfaces maximales (MOHO 48 : 350 à 1600 mm, surface max 2,7 m² ; MOHO 54 : 650 à 1600 mm, surface max 3,0 m² ; MOHO 54C : 450 à 1600 mm, surface max 3,0 m² ; CA 68 ZIP : 400 à 2400 mm ; CA 96 ZIP : 650 à 3500 mm ; MOCO 2 vantaux : 400 à 3000 mm ; MOFI / MOFI CLIP : 200 à 1500 mm ; MOPL 29 1V : 700 à 1800 mm ; MOPL 29 2VO : 1000 à 3200 mm ; MOPL 29 2VJ : 1000 à 2300 mm ; MOPF 29 REV : 400 à 2800 mm ; MOBA 1V : 700 à 1000 mm ; MOBA 2V : 700 à 1800 mm).
+  * Extraction des options toiles (option toile noire sur CA 68/96 Zip) et nuanciers (tous coloris RAL au même prix en 4 finitions : Mat, Brillant, Satin, Texturé).
+  * Création de la carte source : [Catalogue Moustiquaires SOPROFEN 2026](/sources/soprofen-catalogue-moustiquaires-2026.md) avec registre de couverture complet 13/13 planches (état transcrit).
+  * Enrichissement des 3 fiches Équipements : [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md), [Moustiquaires plissées](/equipements/moustiquaires-plissees.md), [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md).
+  * Enrichissement de la fiche Fournisseur : [SOPROFEN](/fournisseurs/soprofen.md) avec la section consacrée à l'organisation industrielle et au Groupe Bouyer Leroux.
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Fiche produit volet traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR pose sur coulisses existantes 2025 Soprofen » (dossier `raw/moustiquaires/`)** :
+  * Lecture multimodale native directe des 2 pages du document (réf. `DOC83120 Version 07/2025`) : volet traditionnel optimisé pour intégration dans coffres tunnel préfabriqués (kit universel breveté sur fond de joue sans perçage ni chevillage de maçonnerie, réglage télescopique, verrouillage sécurisé) et solution TRADI VTR pour rénovation sur coulisses existantes (cornières alu d'adaptation, consoles à picots), compatibilité enroulement intérieur et extérieur, intégration des lames LA 37 (jusqu'à 3000 × 2600 mm) et LA 546 (jusqu'à 4000 × 2800 mm), cotes spécifiques d'encombrement axe/consoles, étanchéité de coffre et motorisations Somfy / Soprofen M-Soft².
+  * Création de la carte source : [Fiche produit Volet traditionnel TRADI COFFRE TUNNEL et TRADI VTR SOPROFEN 2025](/sources/soprofen-volet-tradi-tunnel-et-vtr-2025.md) avec registre de couverture complet 2/2 pages (état transcrit).
+  * Création de la fiche Équipement : [Volet roulant traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR](/equipements/volets-roulants-tradi-tunnel-vtr.md) avec tableaux exhaustifs des cotes de coffres tunnel et TRADI VTR, limites dimensionnelles et options.
+  * Mise à jour de la fiche Fournisseur : [SOPROFEN](/fournisseurs/soprofen.md) et de la fiche [Volets roulants](/equipements/volets-roulants.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Fiche produit volet traditionnel TRADI NON PREMONTE 2025 SOPROFEN » (dossier `raw/moustiquaires/`)** :
+  * Lecture multimodale native directe des 2 pages du document (réf. `DOC83116 Version 07/2025`) : volet traditionnel avec déport sur-mesure pour tous coffres maçonnés ou menuisés existants, intégration de la lame grand format aluminium LA 546 jusqu'à 4500 × 2800 mm d'un seul tenant (nuancier spécifique 14 teintes dont Noir graphite B8821 et Chêne clair), coulisse Goodnight sur LA 37/50 (exclusion formelle sur LA 546), lames thermiques LATH ($\Delta R = 0,24\text{ m}^2\text{K/W}$), isolation Isoflex, verrous automatiques 25 kg et motorisations Somfy / Soprofen M-Soft².
+  * Création de la carte source : [Fiche produit Volet traditionnel TRADI NON PRÉMONTÉ SOPROFEN 2025](/sources/soprofen-volet-tradi-non-premonte-2025.md) avec registre de couverture complet 2/2 pages (état transcrit).
+  * Création de la fiche Équipement : [Volet roulant traditionnel TRADI NON PRÉMONTÉ](/equipements/volets-roulants-tradi-non-premonte.md) avec tableaux exhaustifs des cotes, spécificités d'ajustement de déport et nuancier LA 546.
+  * Enregistrement de l'anomalie **INC-16** dans [Incohérences internes](/anomalies/incoherences-internes.md) (mention erronée de « consoles et tablier prémontés » sur la fiche non prémontée).
+  * Mise à jour de la fiche Fournisseur : [SOPROFEN](/fournisseurs/soprofen.md) et de la fiche [Volets roulants](/equipements/volets-roulants.md).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN » (dossier `raw/moustiquaires/`)** :
+  * Lecture multimodale native directe des 2 pages du document (réf. `DOC83117 - Version 07/2025`) : volet traditionnel sans coffre extérieur sur consoles et axe AXIS 50 (autoportant sans déport en motorisé, idéal ossature bois MOB et vérandas), technologie brevetée Goodnight (occultation complète jusqu'à 3000 mm, profilé d'insertion noir, joints d'étanchéité coffre et lame finale), lames alu LA 37/50, lames PVC L 37/50, lames thermiques LATH apportant $\Delta R = 0,24\text{ m}^2\text{K/W}$, plaque isolante Isoflex pour coffre menuisé (-66 % déperdition, -6 dB acoustique), verrous automatiques 25 kg, limites dimensionnelles jusqu'à 3500 × 3000 mm (et 4500 mm avec séparation), motorisations Somfy et Soprofen M-Soft² (filaire, radio, solaire déporté).
+  * Création de la carte source : [Fiche produit Volet traditionnel TRADI PRÉMONTÉ SOPROFEN 2025](/sources/soprofen-volet-tradi-premonte-2025.md) avec registre de couverture complet 2/2 pages (état transcrit).
+  * Création de la fiche Équipement : [Volet roulant traditionnel TRADI PRÉMONTÉ](/equipements/volets-roulants-tradi-premonte.md) avec tableaux exhaustifs des cotes, performances d'isolation thermique/acoustique et motorisations.
+  * Mise à jour de la fiche Fournisseur : [SOPROFEN](/fournisseurs/soprofen.md) avec intégration de la cinquième source et liaison vers la gamme de volets traditionnels.
+  * Enrichissement de la fiche [Volets roulants](/equipements/volets-roulants.md) (attribution du brevet GoodNight à SOPROFEN et maillage).
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR » (dossier `raw/moustiquaires/`)** :
+  * Lecture multimodale native directe des 2 pages du document (réf. `DOC83100 Version 062025`) : screens zippés grande largeur jusqu'à 7,00 m, caissons compacts 85 mm (jusqu'à 6 × 2,30 m) et 100 mm (jusqu'à 7 × 4,00 m), technologie brevetée Zoom Tech à double axe précontraint contre la flexion, coulisse fine 22 mm et large 42 mm, motorisation solaire autonome Somfy Sunea DC (panneau 7 mm, 45 jours d'autonomie) et motorisations 230 V (Somfy, Soprofen M-SOFT²), toiles Alkenz/Mermet/Ferrari filtrant jusqu'à 97 % des rayons solaires, fonction moustiquaire intégrale en position fermée, 15 teintes d'encadrement en 3 finitions et option bord de mer.
+  * Création de la carte source : [Fiche produit Screen Extérieur SCREENAMAX SOPROFEN 2025](/sources/soprofen-screen-exterieur-screenamax-2025.md) avec registre de couverture complet 2/2 pages (état transcrit).
+  * Création de la fiche Équipement : [Screen extérieur SCREENAMAX](/equipements/screen-exterieur-screenamax.md) avec tableaux des cotes, caissons, coulisses, toiles et motorisations.
+  * Mise à jour de la fiche Fournisseur : [SOPROFEN](/fournisseurs/soprofen.md) avec intégration de la quatrième source et du rôle de protection solaire zippée.
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Fiche produit Moustiquaire battante Coulissante Cadre fixe SOPROFEN 2026 » (dossier `raw/moustiquaires/`)** :
+  * Lecture multimodale native directe des 2 pages du document (réf. `DOC83153 Version 04/2026`) : portes battantes sans seuil au sol (fermeture magnétique, poussant extérieur, dormant 45 mm, ouvrant 40 mm), moustiquaires coulissantes 2 vantaux (seuil extra-plat, poignée intégrée, bloqueur PVC), cadres fixes démontables pour fenêtres (profilé 12 × 28 mm, renfort si surface > 1,5 m², équerres inox/PVC ou pose libre).
+  * Création de la carte source : [Fiche produit Moustiquaire battante Coulissante Cadre fixe SOPROFEN 2026](/sources/soprofen-moustiquaire-battante-coulissante-cadre-fixe-2026.md) avec registre de couverture complet 2/2 pages (état transcrit).
+  * Création de la fiche Équipement : [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md) avec tableau exhaustif des limites dimensionnelles, coupes cotées et détails de pose.
+  * Mise à jour de la fiche Fournisseur : [SOPROFEN](/fournisseurs/soprofen.md) avec intégration de la troisième source et mise à jour de la nomenclature de produits.
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Fiche produit Moustiquaire plissée SOPROFEN 2026 » (dossier `raw/moustiquaires/`)** :
+  * Lecture multimodale native directe des 2 pages du document (réf. `DOC83152 Version 042026`) : coupes techniques des poses en tableau et en applique de face, encombrements repliés ($E_{\min}$ et $E_{\max}$), limites dimensionnelles jusqu'à 3200 × 2500 mm, profilé extra-fin de 29 mm, seuil bas à rattrapage d'inclinaison jusqu'à 5°, toiles plissées 15 mm en fils polyester enduits PVC.
+  * Création de la carte source : [Fiche produit Moustiquaire plissée SOPROFEN 2026](/sources/soprofen-moustiquaire-plissee-2026.md) avec registre de couverture complet 2/2 pages (état transcrit).
+  * Création de la fiche Équipement : [Moustiquaires plissées](/equipements/moustiquaires-plissees.md) avec tableau complet des cotes, modèles (MOPL 29 1V, 2VO, 2VJ, MOPF 29 REV, 1R), tableau des encombrements repliés, système de seuil articulé et finitions RAL 4 finitions.
+  * Mise à jour de la fiche Fournisseur : [SOPROFEN](/fournisseurs/soprofen.md) avec liaison vers la gamme plissée et intégration de la seconde source.
+  * Mise à jour de [wiki/index.md](/index.md).
+
+* **Ingestion multimodale du PDF « Fiche produit Moustiquaire enroulable verticale SOPROFEN 2026 » (dossier `raw/moustiquaires/`)** :
+  * Lecture multimodale native directe des 2 pages du document (réf. `DOC83151 Version 042026`) : coupes de guidage, encombrements coffres 48 à 96 mm, limites dimensionnelles exhaustives, caractéristiques toile et manœuvres manuelles / motorisées (Somfy, Cherubini, Ozroll).
+  * Création de la fiche Fournisseur : [SOPROFEN](/fournisseurs/soprofen.md), fabricant français de volets roulants, moustiquaires et protections solaires extérieures.
+  * Création de la carte source : [Fiche produit Moustiquaire enroulable verticale SOPROFEN 2026](/sources/soprofen-moustiquaire-enroulable-verticale-2026.md) avec registre de couverture complet 2/2 pages (état transcrit).
+  * Création de la fiche Équipement : [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md) avec tableau complet des cotes d'encombrement, systèmes de guidage (brosse, opercules, zip), caractéristiques de toile (120 g/m², 36 % fibre de verre / 64 % PVC) et manœuvres compatibles.
+  * Enregistrement de l'anomalie **INC-15** dans [Incohérences internes](/anomalies/incoherences-internes.md) (coquille « MONO 54 CH » pour « MOHO 54 CH » en note de manœuvre).
+  * Mise à jour de [wiki/index.md](/index.md).
+
 * **Extraction et intégration des coupes techniques de parcloses PERFORM76** :
   * Dépouillement et extraction haute définition (300 DPI) des 27 coupes de parcloses depuis la page 8 (page 5 imprimée) du [Cahier technique PERFORM76 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf).
   * Enregistrement des 27 assets PNG parfaitement cropés avec cotations et étiquettes dans `wiki/assets/profiles/perform76/parcloses/` (17 parcloses d'ouvrant, 10 parcloses de dormant).

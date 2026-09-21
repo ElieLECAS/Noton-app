@@ -41,6 +41,15 @@ async def wiki_page(path: str, current_user: UserRead = Depends(get_current_user
     return payload
 
 
+@router.get("/search")
+async def wiki_search(q: str = "", current_user: UserRead = Depends(get_current_user)):
+    """Les pages où tous les mots de ``q`` apparaissent, corps compris.
+
+    L'accueil du wiki s'en sert pour retrouver une référence citée dans un tableau
+    (``TGY3704``) : le filtre du navigateur ne voit que titres et métadonnées."""
+    return {"q": q, "pages": _snapshot().search(q)}
+
+
 @router.get("/raw/{name}")
 async def wiki_raw(name: str, current_user: UserRead = Depends(get_current_user)):
     """Un PDF source de ``raw/``, par son nom exact (liste blanche des fichiers présents)."""

@@ -120,6 +120,9 @@ class WikiSnapshot:
     signature: Tuple
     loaded_at: datetime
     lint: Dict[str, Any]
+    # Le texte cherchable de chaque page, en minuscules — construit à la première
+    # recherche, jeté avec l'instantané dès qu'un fichier change.
+    search_index: Dict[str, str] = field(default_factory=dict, repr=False)
 
     # ---- mesures -------------------------------------------------------
 
@@ -169,6 +172,31 @@ class WikiSnapshot:
         )
         return payload
 
+    def search(self, query: str, limit: int = 120) -> List[Dict[str, Any]]:
+        """Les pages où TOUS les mots de ``query`` apparaissent — titre, description,
+        étiquettes, chemin **et corps**. C'est ce qui permet de retrouver depuis l'accueil
+        une référence citée dans un tableau (``TGY3704``) et pas seulement dans un titre.
+        Chaque page revient avec l'extrait de la ligne qui porte le mot, vide si le mot
+        n'est que dans les métadonnées."""
+        terms = [t for t in query.lower().split() if t]
+        if not terms:
+            return []
+        if not self.search_index:
+            for page in self.pages.values():
+                if page.is_concept:
+                    self.search_index[page.id] = " ".join(
+                        (page.title, page.description, page.type, " ".join(page.tags), page.id, page.body)
+                    ).lower()
+        hits: List[Dict[str, Any]] = []
+        for page_id in sorted(self.search_index):
+            haystack = self.search_index[page_id]
+            if any(term not in haystack for term in terms):
+                continue
+            hits.append({"id": page_id, "excerpt": _excerpt(self.pages[page_id].body, terms)})
+            if len(hits) >= limit:
+                break
+        return hits
+
     def raw_path(self, name: str) -> Optional[Path]:
         """Le PDF ``name`` de ``raw/`` — résolu contre la LISTE des fichiers, jamais contre le
         disque : aucun ``..`` ni sous-chemin ne peut sortir du dossier."""
@@ -207,6 +235,23 @@ class WikiSnapshot:
 # ---------------------------------------------------------------------------
 # Lecture des fichiers
 # ---------------------------------------------------------------------------
+
+
+def _excerpt(body: str, terms: List[str], width: int = 170) -> str:
+    """La ligne du corps qui porte le premier mot trouvé, resserrée autour de lui."""
+    low = body.lower()
+    found = [pos for pos in (low.find(t) for t in terms) if pos >= 0]
+    if not found:
+        return ""
+    pos = min(found)
+    start = low.rfind("\n", 0, pos) + 1
+    end = low.find("\n", pos)
+    line = body[start:] if end < 0 else body[start:end]
+    if len(line) <= width:
+        return line.strip()
+    lead = max(0, (pos - start) - width // 3)
+    chunk = line[lead:lead + width]
+    return ("… " if lead else "") + chunk.strip() + (" …" if lead + width < len(line) else "")
 
 
 def wiki_root() -> Path:

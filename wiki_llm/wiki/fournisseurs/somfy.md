@@ -81,5 +81,7 @@ p. 28 et 35
 # Voir aussi
 
 - [Volets roulants](/equipements/volets-roulants.md)
+- [Moustiquaires enroulables verticales](/equipements/moustiquaires-enroulables-verticales.md)
+- [SOPROFEN](/fournisseurs/soprofen.md)
 - [Serrure motorisée](/quincaillerie/serrure-motorisee.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)

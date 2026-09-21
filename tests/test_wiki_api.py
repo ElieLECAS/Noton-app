@@ -55,3 +55,14 @@ def test_stats_admin_only(client, lecteur_headers, admin_headers):
     assert {"links", "ghosts", "orphans", "stale", "drafts", "types", "chars",
             "estimated_tokens", "token_warning", "cache_key", "loaded_at", "lint"} <= set(stats)
     assert "last_call" in stats
+
+
+def test_search_requires_auth_and_reads_the_body(client, lecteur_headers):
+    assert client.get("/api/wiki/search?q=parclose").status_code == 401
+    r = client.get("/api/wiki/search?q=parclose", headers=lecteur_headers)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["q"] == "parclose"
+    assert "/profiles/perform76-parcloses.md" in {p["id"] for p in data["pages"]}
+    assert all({"id", "excerpt"} == set(p) for p in data["pages"])
+    assert client.get("/api/wiki/search", headers=lecteur_headers).json()["pages"] == []
