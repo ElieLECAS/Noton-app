@@ -41,7 +41,7 @@ verified:
 # Comment choisir une parclose
 
 Une parclose PERFORM76 se choisit par **l'épaisseur du vitrage à tenir**. Sur les planches, cette
-épaisseur est cotée en **bleu** et la cote propre de la parclose en **noir** [1 p. 5].
+épaisseur est cotée en **bleu** et l'épaisseur de la parclose en **noir** [1 p. 5].
 
 Deux familles séparées, non interchangeables : les parcloses d'**ouvrant** et celles de
 **dormant**. Toutes sont arrondies [1 p. 1].
@@ -53,25 +53,25 @@ L'ouvrant couvre de 16 à 50 mm de vitrage, le dormant de 28 à 48 mm. **Un vitr
 
 Les 17 parcloses d'ouvrant PERFORM76, par épaisseur de vitrage croissante, cotes en mm.
 
-| Parclose | Épaisseur de vitrage (mm) | Cote parclose (mm) |
-| --- | --- | --- |
-| 2452 | 16 | 41,5 |
-| 2451 | 18 | 39,5 |
-| 2453 | 20 | 37,5 |
-| 76501 | 24 | 34 |
-| 76527 | 26 | 31,5 |
-| 76526 | 28 | 29,5 |
-| 76516 | 30 | 28 |
-| 2454 | 31 | 26,5 |
-| 2433 | 33 | 23,5 |
-| 76503 | 36 | 22 |
-| 76504 | 38 | 20 |
-| 76505 | 40 | 18 |
-| 76506 | 42 | 16 |
-| 76507 | 44 | 14 |
-| 76508 | 48 | 12 |
-| 76509 | 48 | 10,8 |
-| 76515 | 50 | 9,5 |
+| Parclose | Épaisseur de vitrage (mm) | Épaisseur parclose (mm) | Coupe |
+| --- | --- | --- | ---: |
+| 2452 | 16 | 41,5 | ![Parclose 2452](/assets/profiles/perform76/parcloses/parclose-2452.png) |
+| 2451 | 18 | 39,5 | ![Parclose 2451](/assets/profiles/perform76/parcloses/parclose-2451.png) |
+| 2453 | 20 | 37,5 | ![Parclose 2453](/assets/profiles/perform76/parcloses/parclose-2453.png) |
+| 76501 | 24 | 34 | ![Parclose 76501](/assets/profiles/perform76/parcloses/parclose-76501.png) |
+| 76527 | 26 | 31,5 | ![Parclose 76527](/assets/profiles/perform76/parcloses/parclose-76527.png) |
+| 76526 | 28 | 29,5 | ![Parclose 76526](/assets/profiles/perform76/parcloses/parclose-76526.png) |
+| 76516 | 30 | 28 | ![Parclose 76516](/assets/profiles/perform76/parcloses/parclose-76516.png) |
+| 2454 | 31 | 26,5 | ![Parclose 2454](/assets/profiles/perform76/parcloses/parclose-2454.png) |
+| 2433 | 33 | 23,5 | ![Parclose 2433](/assets/profiles/perform76/parcloses/parclose-2433.png) |
+| 76503 | 36 | 22 | ![Parclose 76503](/assets/profiles/perform76/parcloses/parclose-76503.png) |
+| 76504 | 38 | 20 | ![Parclose 76504](/assets/profiles/perform76/parcloses/parclose-76504.png) |
+| 76505 | 40 | 18 | ![Parclose 76505](/assets/profiles/perform76/parcloses/parclose-76505.png) |
+| 76506 | 42 | 16 | ![Parclose 76506](/assets/profiles/perform76/parcloses/parclose-76506.png) |
+| 76507 | 44 | 14 | ![Parclose 76507](/assets/profiles/perform76/parcloses/parclose-76507.png) |
+| 76508 | 48 | 12 | ![Parclose 76508](/assets/profiles/perform76/parcloses/parclose-76508.png) |
+| 76509 | 48 | 10,8 | ![Parclose 76509](/assets/profiles/perform76/parcloses/parclose-76509.png) |
+| 76515 | 50 | 9,5 | ![Parclose 76515](/assets/profiles/perform76/parcloses/parclose-76515.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
 
@@ -90,18 +90,18 @@ registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.
 
 Les 10 parcloses de dormant PERFORM76, par épaisseur de vitrage croissante, cotes en mm.
 
-| Parclose | Épaisseur de vitrage (mm) | Cote parclose (mm) |
-| --- | --- | --- |
-| 2634 | 28 | 29,5 |
-| 2636 | 30 | 27 |
-| 2638 | 31 | 26,5 |
-| 2640 | 34 | 23,5 |
-| 76573 | 36 | 22 |
-| 76575 | 40 | 18 |
-| 76576 | 42 | 16 |
-| 76577 | 44 | 14 |
-| 76578 | 46 | 12 |
-| 76579 | 48 | 10,8 |
+| Parclose | Épaisseur de vitrage (mm) | Épaisseur parclose (mm) | Coupe |
+| --- | --- | --- | ---: |
+| 2634 | 28 | 29,5 | ![Parclose 2634](/assets/profiles/perform76/parcloses/parclose-2634.png) |
+| 2636 | 30 | 27 | ![Parclose 2636](/assets/profiles/perform76/parcloses/parclose-2636.png) |
+| 2638 | 31 | 26,5 | ![Parclose 2638](/assets/profiles/perform76/parcloses/parclose-2638.png) |
+| 2640 | 34 | 23,5 | ![Parclose 2640](/assets/profiles/perform76/parcloses/parclose-2640.png) |
+| 76573 | 36 | 22 | ![Parclose 76573](/assets/profiles/perform76/parcloses/parclose-76573.png) |
+| 76575 | 40 | 18 | ![Parclose 76575](/assets/profiles/perform76/parcloses/parclose-76575.png) |
+| 76576 | 42 | 16 | ![Parclose 76576](/assets/profiles/perform76/parcloses/parclose-76576.png) |
+| 76577 | 44 | 14 | ![Parclose 76577](/assets/profiles/perform76/parcloses/parclose-76577.png) |
+| 76578 | 46 | 12 | ![Parclose 76578](/assets/profiles/perform76/parcloses/parclose-76578.png) |
+| 76579 | 48 | 10,8 | ![Parclose 76579](/assets/profiles/perform76/parcloses/parclose-76579.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
 

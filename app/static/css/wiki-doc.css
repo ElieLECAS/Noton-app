@@ -23,7 +23,7 @@
    .wiki-toc        rail « Sommaire » (a.lv2 / a.lv3, .is-active), avec
                     .wiki-toc-h pour le libellé
    .wiki-toc-inline <details> replié au-dessus du corps (petits écrans)
-   .wiki-doc-foot   pied : .wd-foot-h, .wd-chips, .wd-chat-link
+   .wiki-doc-foot   pied : .wd-chat-link
    .wd-empty        texte d'état vide ; .wd-empty.loading clignote
 
    Thème : :root = clair (défaut), .dark sur <html> = sombre.
@@ -205,8 +205,30 @@
 
 .wiki-doc a{ color: var(--wd-accent); text-decoration: none; border-bottom: 1px solid var(--wd-accent-line) }
 .wiki-doc a:hover{ color: var(--wd-accent-2); border-bottom-color: var(--wd-accent) }
-.wiki-doc a code{ color: var(--wd-accent) }
 .wiki-doc img{ max-width: 100%; border-radius: var(--wd-radius) }
+.wiki-doc td img, .table-wrap td img {
+  max-height: 36px;
+  max-width: 85px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+  background: #ffffff;
+  border-radius: 4px;
+  cursor: zoom-in;
+  padding: 1px 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.wiki-doc td img:hover, .table-wrap td img:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+.wiki-doc th[align="right"], .table-wrap th[align="right"],
+.wiki-doc td[align="right"], .table-wrap td[align="right"],
+.wiki-doc td:has(img), .table-wrap td:has(img) {
+  text-align: right;
+}
 
 /* ==== tableaux (cotes, compatibilités, registres) ====================== */
 .table-wrap{
@@ -226,7 +248,7 @@
   border-bottom: 1px solid var(--wd-line);
 }
 .wiki-doc td, .table-wrap td{
-  padding: .55rem .8rem; vertical-align: top; text-align: left;
+  padding: .45rem .8rem; vertical-align: middle; text-align: left;
   border-bottom: 1px solid var(--wd-line); color: var(--wd-tx-2);
 }
 .wiki-doc th:first-child, .wiki-doc td:first-child{ padding-left: 1rem }
@@ -317,16 +339,8 @@ a.anomaly-cite:hover{ filter: brightness(.92) }
   font-family: var(--wd-font); margin-top: 2.6rem; padding-top: 1.4rem;
   border-top: 1px solid var(--wd-line); color: var(--wd-tx-2);
 }
-.wd-foot-h{
-  font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
-  color: var(--wd-tx-4); margin: 1.1rem 0 .55rem; border: 0; padding: 0;
-}
-.wd-foot-h:first-child{ margin-top: 0 }
-.wd-foot-h .n{ color: var(--wd-tx-3); font-weight: 600; margin-left: .3rem }
-.wd-chips{ display: flex; flex-wrap: wrap; gap: .45rem .4rem; font-size: 1rem }
-.wd-chips .wiki-cite{ margin: 0 }
 .wd-chat-link{
-  display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.6rem;
+  display: inline-flex; align-items: center; gap: .5rem;
   padding: .55rem 1rem; border-radius: 10px;
   background: var(--wd-accent); color: #fff !important; font-weight: 600; font-size: .9rem;
   text-decoration: none !important; border: 0 !important;

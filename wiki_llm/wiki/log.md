@@ -1,5 +1,12 @@
 # Update Log
 
+## 2026-09-21
+
+* **Extraction et intégration des coupes techniques de parcloses PERFORM76** :
+  * Dépouillement et extraction haute définition (300 DPI) des 27 coupes de parcloses depuis la page 8 (page 5 imprimée) du [Cahier technique PERFORM76 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf).
+  * Enregistrement des 27 assets PNG parfaitement cropés avec cotations et étiquettes dans `wiki/assets/profiles/perform76/parcloses/` (17 parcloses d'ouvrant, 10 parcloses de dormant).
+  * Enrichissement de la fiche [Parcloses PERFORM76](/profiles/perform76-parcloses.md) avec l'ajout de la colonne visuelle « Coupe » dans les deux tableaux d'ouvrant et de dormant.
+
 ## 2026-09-19
 
 * **Ingestion intégrale du corpus ASKEY (Hydro Building Systems France — 5 documents PDF, 978 pages dépouillés en vision multimodale native directe)** :

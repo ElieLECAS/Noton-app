@@ -64,6 +64,11 @@ templates.env.globals["app_name"] = settings.APP_NAME
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
+from app.services.wiki_service import wiki_root
+wiki_assets_path = wiki_root() / "wiki" / "assets"
+wiki_assets_path.mkdir(parents=True, exist_ok=True)
+app.mount("/assets", StaticFiles(directory=str(wiki_assets_path)), name="wiki-assets")
+
 
 @app.on_event("startup")
 async def startup_event():

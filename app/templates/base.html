@@ -201,6 +201,33 @@
                 }
             }
 
+            /* ===== MINIATURES COUPES TECHNIQUES DANS LES TABLEAUX ===== */
+            table td img, .table-wrap td img, .wiki-doc td img {
+                max-height: 38px !important;
+                max-width: 90px !important;
+                width: auto !important;
+                height: auto !important;
+                object-fit: contain !important;
+                display: inline-block !important;
+                margin-left: auto !important;
+                vertical-align: middle !important;
+                background: #ffffff !important;
+                border-radius: 4px !important;
+                padding: 1px 3px !important;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+                border: 1px solid rgba(0, 0, 0, 0.12) !important;
+                cursor: zoom-in !important;
+                transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+            }
+            table td img:hover, .table-wrap td img:hover, .wiki-doc td img:hover {
+                transform: scale(1.15) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+            }
+            table th:last-child, .table-wrap th:last-child, .wiki-doc th:last-child,
+            table td:last-child, .table-wrap td:last-child, .wiki-doc td:last-child {
+                text-align: right !important;
+            }
+
             /* ===== HIGH CONTRAST & READABLE MODALS (Light/Dark) ===== */
             /* 1. Darker & more blurred overlay for better focus */
             div[id*="modal"], div[id$="-modal"], div[class*="modal"] {
@@ -561,6 +588,56 @@
             // Initialisation
             initDarkMode();
             loadCurrentUser();
+        </script>
+
+        <!-- Modale d'agrandissement des coupes et images techniques -->
+        <div id="image-viewer-modal" class="hidden fixed inset-0 z-[200] bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 transition-opacity duration-200" onclick="if(event.target===this) closeImageViewer()">
+            <div class="relative max-w-4xl w-full max-h-[92vh] flex flex-col items-center">
+                <div class="w-full flex items-center justify-between pb-2 px-1 text-white">
+                    <div id="image-viewer-title" class="text-sm font-semibold truncate text-white" style="color:#ffffff !important;">Coupe technique</div>
+                    <button type="button" onclick="closeImageViewer()" class="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors" title="Fermer (Échap)">
+                        <i class="ti ti-x text-xl"></i>
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-2xl p-4 sm:p-6 max-w-full max-h-[82vh] overflow-auto flex items-center justify-center border border-white/20">
+                    <img id="image-viewer-img" src="" alt="" class="max-w-full max-h-[72vh] object-contain select-none" />
+                </div>
+                <p id="image-viewer-caption" class="text-xs text-white/70 mt-2 text-center truncate max-w-full"></p>
+            </div>
+        </div>
+
+        <script>
+            function openImageViewer(src, alt) {
+                const modal = document.getElementById("image-viewer-modal");
+                const img = document.getElementById("image-viewer-img");
+                const title = document.getElementById("image-viewer-title");
+                const caption = document.getElementById("image-viewer-caption");
+                if (!modal || !img) return;
+                img.src = src;
+                img.alt = alt || "";
+                if (title) title.textContent = alt || "Coupe technique";
+                if (caption) caption.textContent = alt || "";
+                modal.classList.remove("hidden");
+            }
+
+            function closeImageViewer() {
+                const modal = document.getElementById("image-viewer-modal");
+                if (modal) modal.classList.add("hidden");
+            }
+
+            document.addEventListener("keydown", function(e) {
+                if (e.key === "Escape") closeImageViewer();
+            });
+
+            // Écouteur global pour ouvrir la modale au clic sur n'importe quelle coupe / image wiki
+            document.addEventListener("click", function(e) {
+                const targetImg = e.target.closest(".wiki-doc img, .table-wrap img, #page-doc img, #reader img, #doc-body img");
+                if (targetImg && targetImg.id !== "image-viewer-img") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openImageViewer(targetImg.src, targetImg.alt || targetImg.title || "Coupe technique");
+                }
+            });
         </script>
         {% block extra_scripts %}{% endblock %}
     </body>

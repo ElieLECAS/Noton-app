@@ -4,7 +4,7 @@
 {% block extra_head %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<link rel="stylesheet" href="/static/css/wiki-doc.css">
+<link rel="stylesheet" href="/static/css/wiki-doc.css?v=3">
 <style>
 {% raw %}
   /* ==== jetons de la coquille ============================================
@@ -43,6 +43,39 @@
     --dim-op:.07;
     --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.45);
     --shadow-lg:0 2px 6px rgba(0,0,0,.45),0 12px 36px rgba(0,0,0,.55);
+  }
+
+  /* ==== miniatures des coupes techniques dans les tableaux ==== */
+  .wiki-doc table td img,
+  .wiki-doc .table-wrap td img,
+  table td img {
+    max-height: 38px !important;
+    max-width: 90px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+    margin-left: auto !important;
+    vertical-align: middle !important;
+    background: #ffffff !important;
+    border-radius: 4px !important;
+    padding: 1px 3px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08) !important;
+    border: 1px solid rgba(0,0,0,0.12) !important;
+    cursor: zoom-in !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  }
+  .wiki-doc table td img:hover,
+  .wiki-doc .table-wrap td img:hover,
+  table td img:hover {
+    transform: scale(1.15) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+  }
+  .wiki-doc table td:last-child,
+  .wiki-doc .table-wrap td:last-child,
+  .wiki-doc table th:last-child,
+  .wiki-doc .table-wrap th:last-child {
+    text-align: right !important;
   }
 
   /* ==== coquille ========================================================== */
@@ -229,8 +262,6 @@
   #wiki-shell .card-t{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem;
     line-height:1.3;min-width:0}
   #wiki-shell .card-t .dot{width:8px;height:8px;border-radius:50%;flex:none}
-  #wiki-shell .card-d{font-size:.84rem;line-height:1.45;color:var(--tx-dim);
-    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   #wiki-shell .card-pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
   #wiki-shell .pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11px;font-weight:600;
     background:var(--bg-sunken);color:var(--tx-dim);border:1px solid var(--line)}
@@ -1212,7 +1243,6 @@ function card(n, desc, titleOverride){
   return '<a class="card' + (n.type === "Anomalie" ? " band-card" : "") + '" href="' + esc(n.id) +
       '" data-id="' + esc(n.id) + '" data-search="' + esc(search) + '">' +
     '<span class="card-t"><span class="dot" style="background:' + color(n.type) + '"></span>' + esc(title) + '</span>' +
-    (desc ? '<span class="card-d">' + esc(desc) + '</span>' : "") +
     (pills.length ? '<span class="card-pills">' + pills.join("") + '</span>' : "") +
   '</a>';
 }
@@ -1302,9 +1332,6 @@ $("crumb").addEventListener("click", e => { if(e.target.closest(".cr-home")) goH
 function renderPage(id){
   const n = nodeById.get(id);
   if(!n) return;
-  const ins = DATA.links.filter(l => tgtId(l) === id).map(l => nodeById.get(srcId(l))).filter(Boolean);
-  const outs = DATA.links.filter(l => srcId(l) === id).map(l => nodeById.get(tgtId(l))).filter(Boolean);
-
   const c = color(n.type);
   const badges = ['<span class="wd-badge" style="color:' + c + ';background:' + c + '1f">' +
     '<span class="dot" style="background:' + c + '"></span>' + esc(n.type) + '</span>'];
@@ -1339,8 +1366,6 @@ function renderPage(id){
     (body && body.toc ? body.toc : "") +
     '<div class="wiki-doc" id="wiki-body">' + bodyHtml + '</div>' +
     '<footer class="wiki-doc-foot">' +
-      chipsBlock("Cité par", ins) +
-      chipsBlock("Liens sortants", outs) +
       '<a class="wd-chat-link" href="/?page=' + encodeURIComponent(id) + '" title="Poser une question sur cette page">Ouvrir dans le chat</a>' +
     '</footer>';
   $("page-rail").innerHTML = body && body.rail
@@ -1376,18 +1401,6 @@ function sourceRow(s){
   if(/^https?:/i.test(res))
     return '<span class="wd-src"><a href="' + esc(res) + '" target="_blank" rel="noopener noreferrer">' + esc(title) + '</a></span>';
   return '<span class="wd-src">' + esc(title) + (res ? '<span class="wd-src-file">' + esc(res) + '</span>' : "") + '</span>';
-}
-
-function chip(n){
-  return '<a class="wiki-cite' + (n.missing ? " missing" : "") + '" href="' + esc(n.id) + '" data-id="' + esc(n.id) +
-    '" data-wiki="' + esc(n.id) + '" title="' + esc(n.description || n.type) + '">' +
-    '<span class="dot" style="background:' + color(n.type) + '"></span>' + esc(n.title) + '</a>';
-}
-
-function chipsBlock(title, list){
-  return '<h2 class="wd-foot-h">' + esc(title) + '<span class="n">' + list.length + '</span></h2>' +
-    (list.length ? '<div class="wd-chips">' + list.map(chip).join("") + '</div>'
-                 : '<p class="wd-empty">Aucune</p>');
 }
 
 // marked 12 ne genere plus d'ancres : les identifiants de titre sont poses
