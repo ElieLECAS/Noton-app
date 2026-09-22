@@ -3,7 +3,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select, func
 from app.models.user import UserRead
-from app.models.conversation import Conversation, ConversationCreate, ConversationRead, ConversationUpdate
+from app.models.conversation import MODES, Conversation, ConversationCreate, ConversationRead, ConversationUpdate
 from app.models.message import Message, MessageRead
 from app.models.message_feedback import MessageFeedback, FeedbackCreate, FeedbackRead
 from app.routers.auth import get_current_user
@@ -43,6 +43,7 @@ async def create_conversation(
     db_conversation = Conversation(
         title=conversation.title or "Nouvelle conversation",
         user_id=current_user.id,
+        mode=conversation.mode if conversation.mode in MODES else "chat",
     )
     session.add(db_conversation)
     session.commit()
@@ -53,13 +54,18 @@ async def create_conversation(
 
 @router.get("", response_model=List[ConversationRead])
 async def list_conversations(
+    mode: str = "chat",
     current_user: UserRead = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
+    """Les conversations de l'utilisateur, d'un seul écran à la fois : le chat ne liste pas
+    les sessions vocales, et réciproquement."""
+    if mode not in MODES:
+        raise HTTPException(status_code=422, detail=f"mode inconnu : {mode}")
     query = (
         select(Conversation, func.count(Message.id).label("message_count"))
         .outerjoin(Message)
-        .where(Conversation.user_id == current_user.id)
+        .where(Conversation.user_id == current_user.id, Conversation.mode == mode)
         .group_by(Conversation.id)
         .order_by(Conversation.updated_at.desc())
     )

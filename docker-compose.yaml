@@ -13,6 +13,11 @@ x-app-env: &app-env
   MISTRAL_API_KEY: ${MISTRAL_API_KEY}
   MISTRAL_BASE_URL: ${MISTRAL_BASE_URL:-https://api.mistral.ai}
   MODEL_FAST: ${MODEL_FAST:-mistral-small-latest}
+  # La voix : transcription Voxtral Mini (par lots, biais de vocabulaire), synthèse Voxtral TTS,
+  # voix préréglée Marie (français).
+  VOCAL_MODELE_TRANSCRIPTION: ${VOCAL_MODELE_TRANSCRIPTION:-voxtral-mini-latest}
+  VOCAL_MODELE_SYNTHESE: ${VOCAL_MODELE_SYNTHESE:-voxtral-mini-tts-latest}
+  VOCAL_VOIX: ${VOCAL_VOIX:-fr_marie_excited}
   # Le chat CAG : le wiki entier dans le prompt, raisonnement, température basse.
   GENERATION_REASONING_EFFORT: ${GENERATION_REASONING_EFFORT:-high}
   CHAT_TEMPERATURE: ${CHAT_TEMPERATURE:-0.2}

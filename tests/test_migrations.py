@@ -1,4 +1,4 @@
-"""La migration unique : rejouable sur une base déjà en place, et elle nettoie l'ancien schéma.
+"""Les migrations : rejouables sur une base déjà en place, et la première nettoie l'ancien schéma.
 
 C'est le chemin de déploiement d'une base migrée par l'ancienne chaîne : la commande du
 conteneur efface la table de version (``stamp --purge base``) puis rejoue ``upgrade head``.
@@ -37,7 +37,10 @@ def test_single_migration_is_idempotent_and_drops_legacy_schema(_init_db):
         assert set(inspector.get_table_names()) == EXPECTED_TABLES
         assert "query_context" not in {c["name"] for c in inspector.get_columns("conversation")}
         assert "provider" not in {c["name"] for c in inspector.get_columns("message")}
-        assert conn.execute(text("SELECT version_num FROM alembic_version")).scalar() == "lia_wiki_schema"
+        assert conn.execute(text("SELECT version_num FROM alembic_version")).scalar() == "lia_vocal_mode"
+        # La seconde migration : le mode d'une conversation, « chat » pour l'existant.
+        colonnes = {c["name"]: c for c in inspector.get_columns("conversation")}
+        assert "mode" in colonnes and colonnes["mode"]["nullable"] is False
         # Les données des tables conservées survivent au rejeu.
         assert conn.execute(text("SELECT COUNT(*) FROM role")).scalar() == roles_before
         assert roles_before >= 3

@@ -14,6 +14,11 @@ s'ouvre à la bonne planche.
 - **Chat** (`/`) : conversations, réponse streamée avec raisonnement, pages du wiki citées en
   chips cliquables, identifiants d'anomalie (`INC-`, `CTR-`, `VER-`) liés aux registres,
   lecteur de page à droite, visionneuse PDF des documents sources, retours 👍/👎.
+- **Vocal** (`/vocal`) : on parle, LIA transcrit (Voxtral Mini, biais de vocabulaire tiré du
+  wiki), lit les pages avec le même tour d'outils, et répond de vive voix (Voxtral TTS, voix
+  Marie) en prose courte, phrase par phrase, dès la première phrase complète. Fin de parole
+  détectée dans le navigateur, mains libres, transcription surlignée au fil de la voix, pages
+  citées en pastilles, retours 👍/👎. Les conversations vocales sont persistées à part.
 - **Wiki** (`/wiki`) : le graphe des pages (d3, à la Obsidian) avec recherche, arbre par type,
   filtres et lecteur ; lien profond `/wiki#/dossier/page.md`.
 - **Administration** (`/admin`) : utilisateurs, rôles, permissions, retours utilisateurs,
@@ -51,7 +56,8 @@ tokens estimés.
 ## Stack
 
 - **Backend** : FastAPI (Python 3.11), SQLModel, PostgreSQL 15
-- **IA** : Mistral (`mistral-small-latest`, `reasoning_effort: high`, température 0,2)
+- **IA** : Mistral (`mistral-small-latest`, `reasoning_effort: high`, température 0,2) ;
+  Voxtral Mini (transcription) et Voxtral TTS (synthèse, voix Marie) pour l'assistant vocal
 - **Front** : templates Jinja2, Tailwind, marked + DOMPurify, d3 (graphe), pdf.js (sources)
 - **Déploiement** : Docker Compose (`db` + `web`)
 
@@ -72,6 +78,7 @@ Variables du `.env` (défauts dans `app/config.py`) :
 | --- | --- |
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `SECRET_KEY` | base et session |
 | `MISTRAL_API_KEY`, `MODEL_FAST` | le modèle du chat |
+| `VOCAL_MODELE_TRANSCRIPTION` (`voxtral-mini-latest`), `VOCAL_MODELE_SYNTHESE` (`voxtral-mini-tts-latest`), `VOCAL_VOIX` (`fr_marie_excited`) | l'assistant vocal |
 | `GENERATION_REASONING_EFFORT` (`high`), `CHAT_TEMPERATURE` (0.2), `CHAT_MAX_TOKENS` (4096) | la génération |
 | `CHAT_HISTORY_MAX_MESSAGES` (10), `CHAT_HISTORY_MAX_CHARS` (24000) | l'historique renvoyé au modèle |
 | `WIKI_DIR` | la racine de connaissance (`wiki_llm` par défaut, `/app/wiki_llm` dans le conteneur) |
@@ -83,6 +90,9 @@ Variables du `.env` (défauts dans `app/config.py`) :
 - **Auth** : `POST /api/auth/register|login|logout`, `GET /api/auth/me`
 - **Chat** : `POST /api/chat/stream` `{message, conversation_id}` → SSE
   (`stage`, `thinking`, `message`, `sources`, `done` | `error`)
+- **Vocal** : `POST /api/vocal/tour?conversation_id=` corps `audio/wav` (16 kHz mono) ou JSON
+  `{texte}` → SSE (`transcription`, `etape`, `message`, `phrase`, `audio`, `sources`, `done` |
+  `error`) ; `GET /api/conversations?mode=vocal`
 - **Conversations** : `GET/POST/PATCH/DELETE /api/conversations…`, retours
   `POST /api/conversations/messages/{id}/feedback`
 - **Wiki** : `GET /api/wiki/graph`, `GET /api/wiki/pages/{chemin}`, `GET /api/wiki/raw/{fichier}`,

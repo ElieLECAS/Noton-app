@@ -1,0 +1,926 @@
+{% extends "base.html" %}
+{% block title %}Vocal - {{ app_name }}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/wiki-doc.css?v=3">
+<style>
+/* ===== La barre de commande : l'orbe EST le bouton micro ===== */
+#commande { background: rgba(0,0,0,.015); }
+.dark #commande { background: rgba(255,255,255,.015); }
+#btn-micro { position: relative; width: 6.5rem; height: 6.5rem; border-radius: 9999px; display: grid; place-items: center; background: none; border: 0; padding: 0; transition: transform .15s cubic-bezier(.4,0,.2,1); }
+@media (min-width: 640px) { #btn-micro { width: 8rem; height: 8rem; } }
+#btn-micro canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#btn-micro i { position: relative; color: #fff; font-size: 1.6rem; text-shadow: 0 2px 8px rgba(0,0,0,.3); pointer-events: none; }
+@media (min-width: 640px) { #btn-micro i { font-size: 2rem; } }
+#btn-micro:hover { transform: scale(1.04); }
+#btn-micro:active { transform: scale(.95); }
+#btn-micro:focus-visible { outline: 2px solid #6366f1; outline-offset: 6px; }
+.btn-rond { width: 2.9rem; height: 2.9rem; border-radius: 9999px; display: grid; place-items: center; color: #6b7280; background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.06); transition: all .15s; }
+.dark .btn-rond { color: #9ca3af; background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.08); }
+.btn-rond:hover { color: #4f46e5; background: rgba(79,70,229,.08); }
+.btn-rond.actif { color: #fff; background: linear-gradient(135deg, #4f46e5, #6366f1); border-color: transparent; box-shadow: 0 6px 16px rgba(79,70,229,.3); }
+/* Une seule ligne d'information, de hauteur réservée : la phrase dite quand LIA parle,
+   l'état du tour sinon. Deux lignes qui apparaissent l'une après l'autre feraient sauter
+   le bouton à chaque mot. */
+#info { min-height: 2.9rem; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; }
+#sous-titre { font-size: .95rem; line-height: 1.4; color: #4338ca; font-weight: 500; }
+.dark #sous-titre { color: #c7d2fe; }
+#statut { font-size: .82rem; line-height: 1.35; color: #6b7280; }
+.dark #statut { color: #9ca3af; }
+#statut.hidden { display: none; }
+
+/* ===== Les tours : la question dite, la réponse dite ===== */
+.tour { border-radius: 1.25rem; padding: .9rem 1rem; background: rgba(255,255,255,.55); border: 1px solid rgba(0,0,0,.05); }
+@media (min-width: 640px) { .tour { padding: 1.1rem 1.3rem; } }
+.dark .tour { background: rgba(38,47,71,.55); border-color: rgba(255,255,255,.08); }
+.tour .question { display: flex; align-items: flex-start; gap: .6rem; font-size: .9rem; color: #4b5563; font-style: italic; border-left: 2px solid rgba(225,29,72,.35); padding-left: .6rem; }
+.dark .tour .question { color: #cbd5e1; }
+.tour .question i { color: #e11d48; margin-top: .2rem; flex: none; }
+.tour .reponse { margin-top: .85rem; font-size: 1rem; line-height: 1.7; color: #1f2937; }
+@media (min-width: 640px) { .tour .reponse { font-size: 1.04rem; line-height: 1.75; } }
+.dark .tour .reponse { color: #e5e7eb; }
+.tour .reponse .phrase { transition: background .25s, color .25s; border-radius: .3rem; padding: 0 .1rem; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.tour .reponse .phrase.dite { background: rgba(99,102,241,.16); color: #312e81; }
+.dark .tour .reponse .phrase.dite { background: rgba(129,140,248,.22); color: #e0e7ff; }
+.tour .reponse .wiki-cite, .tour .reponse .anomaly-cite { vertical-align: baseline; margin: 0 .1rem; }
+.tour .etat { font-size: .78rem; color: #6b7280; display: flex; align-items: center; gap: .4rem; margin-top: .8rem; }
+.dark .tour .etat { color: #9ca3af; }
+.tour .etat.erreur { color: #b91c1c; }
+.tour .sources { margin-top: .8rem; padding-top: .7rem; border-top: 1px solid rgba(0,0,0,.05); display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+.dark .tour .sources { border-color: rgba(255,255,255,.08); }
+.tour .sources .libelle { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #9ca3af; margin-right: .2rem; }
+.tour .actions { margin-top: .5rem; display: flex; gap: .15rem; justify-content: flex-end; }
+.tour .actions button { padding: .3rem .5rem; border-radius: .5rem; color: #9ca3af; font-size: .78rem; display: flex; align-items: center; gap: .3rem; transition: all .15s; }
+.tour .actions button:hover { color: #4f46e5; background: rgba(0,0,0,.04); }
+.tour .actions button.oui { color: #16a34a; } .tour .actions button.non { color: #dc2626; }
+.tour .etat.hidden, .tour .sources.hidden, .tour .actions.hidden { display: none; }
+.exemple { text-align: left; padding: .7rem .9rem; border-radius: 1rem; font-size: .84rem; line-height: 1.45; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="vocal-layout" class="flex-1 flex flex-col min-h-0 overflow-hidden">
+
+  <!-- ===== En-tête ===== -->
+  <div class="shrink-0 px-4 sm:px-6 py-2.5 sm:py-3 border-b border-black/5 dark:border-white/5 flex items-center gap-3">
+    <div class="min-w-0 flex-1">
+      <h1 class="text-base font-bold text-gray-900 dark:text-white truncate">LIA vocale</h1>
+      <p class="hidden sm:block text-[11px] text-gray-500 dark:text-gray-400 truncate">Parlez, LIA cherche dans le wiki et vous répond de vive voix. Voix : Marie.</p>
+    </div>
+    <button onclick="nouvelleConversation()" class="inline-flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold active:scale-95 transition-all" title="Repartir d'une conversation vide">
+      <i class="ti ti-plus"></i><span class="hidden sm:inline">Nouvelle conversation</span>
+    </button>
+  </div>
+
+  <!-- ===== La conversation, en haut, qui défile ===== -->
+  <section id="transcription" class="flex-1 min-h-0 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6">
+    <div id="tours" class="max-w-2xl mx-auto space-y-4">
+      <div id="accueil" class="pt-2 sm:pt-6 pb-2">
+        <div class="mx-auto w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 to-indigo-600 text-white grid place-items-center shadow-lg shadow-indigo-500/20 mb-4"><i class="ti ti-microphone text-lg"></i></div>
+        <h2 class="text-lg sm:text-xl font-extrabold text-gray-900 dark:text-white tracking-tight text-center">Posez votre question à voix haute</h2>
+        <p class="text-[13px] sm:text-sm text-gray-500 dark:text-gray-400 mt-2 text-center max-w-md mx-auto">LIA transcrit, lit les pages du wiki, puis répond en quelques phrases. Une pause d'une seconde termine la question.</p>
+        <div id="exemples" class="mt-5 grid gap-2 sm:grid-cols-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== La commande, en bas : l'orbe est le bouton ===== -->
+  <section id="commande" class="shrink-0 border-t border-black/5 dark:border-white/5 px-4 pt-2.5 pb-4 sm:pb-5">
+    <div class="max-w-2xl mx-auto flex flex-col items-center gap-2.5">
+      <div id="info" class="w-full">
+        <p id="sous-titre"></p>
+        <p id="statut">Appuyez sur le micro et posez votre question.</p>
+      </div>
+      <form id="form-texte" class="hidden w-full max-w-md relative" onsubmit="envoyerTexte(event)">
+        <input id="champ-texte" type="text" class="w-full pl-4 pr-12 py-2.5 rounded-2xl glass-input text-sm text-gray-900 dark:text-white placeholder-gray-400" placeholder="Écrivez votre question…" autocomplete="off" />
+        <button type="submit" class="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 grid place-items-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white" title="Envoyer"><i class="ti ti-arrow-up"></i></button>
+      </form>
+      <div class="flex items-center gap-6 sm:gap-9">
+        <button id="btn-mains-libres" class="btn-rond" onclick="basculerMainsLibres()" title="Mains libres : LIA se remet à écouter après chaque réponse" aria-label="Mains libres"><i class="ti ti-repeat text-lg"></i></button>
+        <button id="btn-micro" data-etat="repos" onclick="actionMicro()" title="Parler" aria-label="Parler">
+          <canvas id="orbe" width="640" height="640" aria-hidden="true"></canvas>
+          <i class="ti ti-microphone"></i>
+        </button>
+        <button id="btn-clavier" class="btn-rond" onclick="basculerClavier()" title="Écrire la question" aria-label="Écrire la question"><i class="ti ti-keyboard text-lg"></i></button>
+      </div>
+      <p class="hidden sm:block text-[11px] text-gray-400 dark:text-gray-500 text-center">Espace : parler, ou couper la parole de LIA. Échap : tout arrêter.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== Retour négatif ===== -->
+<div id="feedback-negative-modal" class="hidden fixed inset-0 z-[110] bg-black/50 flex items-center justify-center p-4" onclick="if(event.target===this) fermerRetourNegatif()">
+  <div class="glass-panel rounded-2xl p-5 w-full max-w-md">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-base font-bold flex items-center gap-2"><i class="ti ti-thumb-down text-rose-500"></i> Qu'est-ce qui ne va pas ?</h3>
+      <button onclick="fermerRetourNegatif()" class="text-gray-400 hover:text-gray-600 p-1"><i class="ti ti-x"></i></button>
+    </div>
+    <input type="hidden" id="retour-msg-id" />
+    <label for="retour-categorie" class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Catégorie du problème</label>
+    <select id="retour-categorie" class="w-full px-3 py-2 rounded-lg glass-input text-sm mb-3" onchange="validerRetourNegatif()">
+      <option value="">Choisir…</option>
+      <option value="Hallucination">Valeur inventée ou absente du wiki</option>
+      <option value="Mauvais document / Mauvaise source">Mauvaise page citée</option>
+      <option value="Information obsolète">Information périmée</option>
+      <option value="Manque de précision / Incomplet">Réponse incomplète ou imprécise</option>
+      <option value="Raisonnement incorrect">Contresens sur le wiki</option>
+      <option value="Hors-sujet">Hors sujet ou question mal transcrite</option>
+    </select>
+    <label for="retour-commentaire" class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wider">Votre correction</label>
+    <textarea id="retour-commentaire" rows="4" placeholder="Ex. : la parclose 76507 tient 44 mm en ouvrant, pas en dormant…" class="w-full px-3 py-2 rounded-lg glass-input text-sm" oninput="validerRetourNegatif()"></textarea>
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" onclick="fermerRetourNegatif()" class="px-4 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5">Annuler</button>
+      <button type="button" id="retour-envoyer" onclick="envoyerRetourNegatif()" disabled class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-sm font-medium disabled:opacity-40">Envoyer</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+/* ============================================================================
+   État
+   ========================================================================== */
+const ETATS = { REPOS: "repos", ECOUTE: "ecoute", TRAITEMENT: "traitement", PAROLE: "parole" };
+let etat = ETATS.REPOS;
+let conversationId = null;
+let mainsLibres = false;
+let requeteEnCours = null;          // AbortController du tour en cours
+let tourCourant = null;             // le tour affiché et joué
+let arretDemande = false;           // l'utilisateur a coupé : pas de réécoute automatique
+const wikiIndex = new Map();        // chemin → nœud du graphe (titre, type)
+
+const EXEMPLES = [
+  "Quelle parclose pour un vitrage de 44 millimètres ?",
+  "Quelle est la garantie sur la structure d'une LUMINE 65 ?",
+  "Peut-on monter un STADIP 44.2 16 4 sur une PERFORM 76 ?",
+  "Comment transformer un ouvrant à la française en oscillo-battant avec Roto NX ?",
+];
+const TYPE_COLORS = {
+  "Gamme": "#0284c7", "Profilé": "#7c3aed", "Quincaillerie": "#b45309", "Vitrage": "#0891b2",
+  "Équipement": "#059669", "Porte d'entrée": "#ea580c", "Garantie": "#db2777", "Procédure": "#16a34a",
+  "Certification": "#a16207", "Anomalie": "#dc2626", "Fournisseur": "#2563eb", "Document source": "#78716c",
+  "Réservé": "#a1a1aa", "À écrire": "#c0c0c6",
+};
+const typeColor = (t) => TYPE_COLORS[t] || "#9ca3af";
+const ANOMALY_PAGES = {
+  INC: "/anomalies/incoherences-internes.md",
+  CTR: "/anomalies/contradictions-entre-sources.md",
+  VER: "/anomalies/informations-a-verifier.md",
+};
+
+/* ============================================================================
+   Capture du micro : AudioWorklet → PCM 16 kHz 16 bits, détection de fin de parole
+   ========================================================================== */
+const FREQ_CAPTURE = 16000;
+const MORCEAU = 1024;                 // échantillons par message du worklet : 64 ms à 16 kHz
+const SEUIL_MIN = 0.010;              // RMS (échelle float) sous lequel rien n'est de la parole
+const FACTEUR_PLANCHER = 3.0;         // parole = au moins trois fois le bruit de fond mesuré
+const DEBUT_MORCEAUX = 2;             // deux morceaux au-dessus du seuil pour démarrer (128 ms)
+const SILENCE_FIN_MS = 1000;          // une seconde de silence termine la question
+const PAROLE_MAX_MS = 45000;
+const ATTENTE_SANS_PAROLE_MS = 8000;  // sans mains libres, on relâche le micro
+const ATTENTE_MAINS_LIBRES_MS = 90000;
+const PRE_ROLL_MORCEAUX = 6;          // ~380 ms gardés avant le début détecté
+
+const CODE_WORKLET = `
+class Capteur extends AudioWorkletProcessor {
+  constructor() {
+    super();
+    this.cible = 16000;
+    this.rapport = sampleRate / this.cible;
+    this.pos = 0;
+    this.tampon = new Int16Array(1024);
+    this.rempli = 0;
+    this.carre = 0;
+  }
+  process(entrees) {
+    const canal = entrees[0] && entrees[0][0];
+    if (!canal || !canal.length) return true;
+    if (this.rapport === 1) {
+      for (let i = 0; i < canal.length; i++) this.pousser(canal[i]);
+    } else {
+      // Rééchantillonnage linéaire vers 16 kHz quand le contexte tourne à une autre cadence.
+      while (this.pos < canal.length - 1) {
+        const i0 = Math.floor(this.pos), frac = this.pos - i0;
+        this.pousser(canal[i0] + (canal[i0 + 1] - canal[i0]) * frac);
+        this.pos += this.rapport;
+      }
+      this.pos -= canal.length;
+    }
+    return true;
+  }
+  pousser(x) {
+    const v = Math.max(-1, Math.min(1, x));
+    this.carre += v * v;
+    this.tampon[this.rempli++] = Math.round(v * 32767);
+    if (this.rempli === this.tampon.length) {
+      const rms = Math.sqrt(this.carre / this.tampon.length);
+      this.port.postMessage({ pcm: this.tampon.buffer, rms: rms }, [this.tampon.buffer]);
+      this.tampon = new Int16Array(1024);
+      this.rempli = 0;
+      this.carre = 0;
+    }
+  }
+}
+registerProcessor("lia-capteur", Capteur);
+`;
+
+let ctxCapture = null, noeudWorklet = null, sourceMicro = null, fluxMicro = null, sortieMuette = null;
+let capture = null;                   // l'écoute en cours (voir demarrerEcoute)
+let niveauMicro = 0;
+
+async function ouvrirCapture() {
+  fluxMicro = await navigator.mediaDevices.getUserMedia({
+    audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+  });
+  // Un contexte à 16 kHz évite le rééchantillonnage ; certains navigateurs refusent de relier
+  // un micro à un contexte d'une autre cadence — on retombe alors sur la cadence native, et le
+  // worklet rééchantillonne.
+  const monter = async (options) => {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)(options);
+    await ctx.audioWorklet.addModule(URL.createObjectURL(new Blob([CODE_WORKLET], { type: "application/javascript" })));
+    const source = ctx.createMediaStreamSource(fluxMicro);
+    return { ctx, source };
+  };
+  let monte;
+  try { monte = await monter({ sampleRate: FREQ_CAPTURE }); }
+  catch (_) { monte = await monter(undefined); }
+  ctxCapture = monte.ctx; sourceMicro = monte.source;
+  if (ctxCapture.state === "suspended") await ctxCapture.resume();
+  noeudWorklet = new AudioWorkletNode(ctxCapture, "lia-capteur", { numberOfInputs: 1, numberOfOutputs: 1, channelCount: 1 });
+  sortieMuette = ctxCapture.createGain(); sortieMuette.gain.value = 0;
+  noeudWorklet.connect(sortieMuette).connect(ctxCapture.destination);
+  noeudWorklet.port.onmessage = (e) => traiterMorceau(new Int16Array(e.data.pcm), e.data.rms);
+  sourceMicro.connect(noeudWorklet);
+}
+
+function fermerCapture() {
+  try { if (sourceMicro) sourceMicro.disconnect(); } catch (_) {}
+  try { if (noeudWorklet) { noeudWorklet.port.onmessage = null; noeudWorklet.disconnect(); } } catch (_) {}
+  try { if (fluxMicro) fluxMicro.getTracks().forEach((t) => t.stop()); } catch (_) {}
+  try { if (ctxCapture) ctxCapture.close(); } catch (_) {}
+  ctxCapture = noeudWorklet = sourceMicro = fluxMicro = sortieMuette = null;
+  niveauMicro = 0;
+}
+
+async function demarrerEcoute() {
+  if (etat === ETATS.ECOUTE) return;
+  if (etat === ETATS.PAROLE || etat === ETATS.TRAITEMENT) couperTour(false);
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.AudioWorkletNode) {
+    setStatut("Le micro n'est disponible qu'en HTTPS (ou sur localhost) dans un navigateur récent.");
+    return;
+  }
+  assurerLecture(); // le geste utilisateur débloque aussi la sortie audio
+  arretDemande = false;
+  try {
+    await ouvrirCapture();
+  } catch (err) {
+    fermerCapture();
+    const refus = err && (err.name === "NotAllowedError" || err.name === "SecurityError");
+    setStatut(refus ? "Autorisez l'accès au micro dans le navigateur." : "Micro indisponible : " + ((err && err.message) || err));
+    return;
+  }
+  capture = {
+    morceaux: [], preRoll: [], enParole: false, compteurDebut: 0,
+    debutParole: 0, dernierSon: 0, debutEcoute: performance.now(), plancher: 0.004,
+  };
+  passerEtat(ETATS.ECOUTE);
+  setStatut("Je vous écoute… parlez, puis marquez une pause.");
+  setSousTitre("");
+}
+
+function traiterMorceau(pcm, rms) {
+  const c = capture;
+  if (!c) return;
+  const maintenant = performance.now();
+  niveauMicro = rms;
+  const seuil = Math.max(SEUIL_MIN, c.plancher * FACTEUR_PLANCHER);
+  if (!c.enParole) {
+    c.preRoll.push(pcm);
+    while (c.preRoll.length > PRE_ROLL_MORCEAUX) c.preRoll.shift();
+    if (rms > seuil) {
+      if (++c.compteurDebut >= DEBUT_MORCEAUX) {
+        c.enParole = true; c.debutParole = maintenant; c.dernierSon = maintenant;
+        c.morceaux = c.preRoll.slice(); c.preRoll = [];
+        setStatut("Je vous écoute…");
+      }
+    } else {
+      c.compteurDebut = 0;
+      c.plancher = c.plancher * 0.95 + rms * 0.05;
+      const attente = mainsLibres ? ATTENTE_MAINS_LIBRES_MS : ATTENTE_SANS_PAROLE_MS;
+      if (maintenant - c.debutEcoute > attente) {
+        arreterEcoute(false);
+        setStatut("Je n'ai rien entendu. Appuyez sur le micro pour réessayer.");
+      }
+    }
+    return;
+  }
+  c.morceaux.push(pcm);
+  if (rms > seuil) c.dernierSon = maintenant;
+  if (maintenant - c.dernierSon > SILENCE_FIN_MS || maintenant - c.debutParole > PAROLE_MAX_MS) arreterEcoute(true);
+}
+
+function arreterEcoute(envoyer) {
+  const c = capture;
+  capture = null;
+  fermerCapture();
+  if (etat === ETATS.ECOUTE) passerEtat(ETATS.REPOS);
+  if (!c) return;
+  const echantillons = c.morceaux.reduce((n, m) => n + m.length, 0);
+  const dureeMs = (echantillons / FREQ_CAPTURE) * 1000;
+  if (!envoyer || !c.enParole || dureeMs < 350) {
+    if (envoyer) setStatut("Je n'ai rien entendu. Appuyez sur le micro pour réessayer.");
+    else if (!arretDemande) setStatut("Appuyez sur le micro et posez votre question.");
+    return;
+  }
+  envoyerTour(versWav(c.morceaux, FREQ_CAPTURE), "audio/wav");
+}
+
+function versWav(morceaux, freq) {
+  const total = morceaux.reduce((n, m) => n + m.length, 0);
+  const tampon = new ArrayBuffer(44 + total * 2);
+  const vue = new DataView(tampon);
+  const ecrire = (o, s) => { for (let i = 0; i < s.length; i++) vue.setUint8(o + i, s.charCodeAt(i)); };
+  ecrire(0, "RIFF"); vue.setUint32(4, 36 + total * 2, true); ecrire(8, "WAVE");
+  ecrire(12, "fmt "); vue.setUint32(16, 16, true); vue.setUint16(20, 1, true); vue.setUint16(22, 1, true);
+  vue.setUint32(24, freq, true); vue.setUint32(28, freq * 2, true); vue.setUint16(32, 2, true); vue.setUint16(34, 16, true);
+  ecrire(36, "data"); vue.setUint32(40, total * 2, true);
+  let o = 44;
+  for (const m of morceaux) { for (let i = 0; i < m.length; i++, o += 2) vue.setInt16(o, m[i], true); }
+  return new Blob([tampon], { type: "audio/wav" });
+}
+
+/* ============================================================================
+   Lecture : les fragments float32 24 kHz sont enchaînés sans trou
+   ========================================================================== */
+const FREQ_SYNTHESE = 24000;
+let ctxLecture = null, analyseur = null, prochainDebut = 0;
+const sourcesActives = new Set();
+let resteOctets = new Uint8Array(0);
+const donneesAnalyse = new Uint8Array(512);
+
+function assurerLecture() {
+  if (!ctxLecture) {
+    ctxLecture = new (window.AudioContext || window.webkitAudioContext)();
+    analyseur = ctxLecture.createAnalyser();
+    analyseur.fftSize = 512;
+    analyseur.connect(ctxLecture.destination);
+  }
+  if (ctxLecture.state === "suspended") ctxLecture.resume();
+}
+
+function base64VersOctets(b64) {
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+function jouerFragment(b64, index) {
+  assurerLecture();
+  let octets = base64VersOctets(b64);
+  if (resteOctets.length) {
+    const fusion = new Uint8Array(resteOctets.length + octets.length);
+    fusion.set(resteOctets); fusion.set(octets, resteOctets.length);
+    octets = fusion;
+  }
+  const n = Math.floor(octets.length / 4);
+  resteOctets = octets.slice(n * 4);
+  if (!n) return;
+  const f32 = new Float32Array(octets.buffer, octets.byteOffset, n);
+  const echantillons = new Float32Array(f32); // copie alignée, conservée pour la réécoute
+  programmer(echantillons, index);
+  if (tourCourant && index >= 0) tourCourant.audio.push(echantillons);
+}
+
+function programmer(echantillons, index, tour = tourCourant) {
+  const tampon = ctxLecture.createBuffer(1, echantillons.length, FREQ_SYNTHESE);
+  tampon.copyToChannel(echantillons, 0);
+  const src = ctxLecture.createBufferSource();
+  src.buffer = tampon;
+  src.connect(analyseur);
+  const debut = Math.max(ctxLecture.currentTime + 0.04, prochainDebut);
+  src.start(debut);
+  prochainDebut = debut + tampon.duration;
+  sourcesActives.add(src);
+  src.onended = () => { sourcesActives.delete(src); verifierFinLecture(); };
+  if (etat !== ETATS.PAROLE) passerEtat(ETATS.PAROLE);
+  if (tour) marquerPhrase(tour, index, debut);
+}
+
+function marquerPhrase(tour, index, debut) {
+  if (tour.phrasesProgrammees.has(index)) return;
+  tour.phrasesProgrammees.add(index);
+  const delai = Math.max(0, (debut - ctxLecture.currentTime) * 1000);
+  tour.minuteries.push(setTimeout(() => {
+    if (tour !== tourCourant) return;
+    tour.phraseActive = index;
+    const seg = index === -1 ? tour.attente : tour.segments.find((s) => s.index === index);
+    setSousTitre(seg ? nettoyerProse(seg.texte) : "");
+    if (index >= 0) { tour.reponseAnnoncee = true; setStatut("LIA répond…"); rendreReponse(tour); }
+  }, delai));
+}
+
+function couperAudio() {
+  for (const src of Array.from(sourcesActives)) { try { src.onended = null; src.stop(); } catch (_) {} }
+  sourcesActives.clear();
+  prochainDebut = 0;
+  resteOctets = new Uint8Array(0);
+  if (tourCourant) { tourCourant.minuteries.forEach(clearTimeout); tourCourant.minuteries = []; }
+}
+
+function niveauSortie() {
+  if (!analyseur) return 0;
+  analyseur.getByteTimeDomainData(donneesAnalyse);
+  let somme = 0;
+  for (let i = 0; i < donneesAnalyse.length; i++) { const v = (donneesAnalyse[i] - 128) / 128; somme += v * v; }
+  return Math.sqrt(somme / donneesAnalyse.length);
+}
+
+function verifierFinLecture() {
+  if (sourcesActives.size) return;
+  if (tourCourant && !tourCourant.fluxTermine) return;
+  if (etat !== ETATS.PAROLE) return;
+  terminerTour();
+}
+
+function terminerTour() {
+  passerEtat(ETATS.REPOS);
+  setSousTitre("");
+  if (tourCourant) { tourCourant.phraseActive = null; rendreReponse(tourCourant); }
+  if (mainsLibres && !arretDemande) {
+    setStatut("À vous.");
+    setTimeout(() => { if (etat === ETATS.REPOS && mainsLibres && !arretDemande) demarrerEcoute(); }, 350);
+  } else {
+    setStatut("Appuyez sur le micro pour poursuivre.");
+  }
+}
+
+/* Couper la parole : on arrête le son et la requête ; la réponse déjà écrite reste. */
+function couperTour(marquer = true) {
+  arretDemande = true;
+  couperAudio();
+  if (requeteEnCours) { try { requeteEnCours.abort(); } catch (_) {} requeteEnCours = null; }
+  if (tourCourant && !tourCourant.fluxTermine && marquer) etatTour(tourCourant, "Parole coupée.", "ti-player-stop");
+  if (tourCourant) { tourCourant.fluxTermine = true; tourCourant.phraseActive = null; rendreReponse(tourCourant); }
+  passerEtat(ETATS.REPOS);
+  setSousTitre("");
+  if (marquer) setStatut("Appuyez sur le micro pour poursuivre.");
+}
+
+/* ============================================================================
+   Le tour : envoi, flux SSE, affichage
+   ========================================================================== */
+async function creerConversation() {
+  const r = await apiCall("/api/conversations", { method: "POST", body: JSON.stringify({ title: "Conversation vocale", mode: "vocal" }) });
+  if (!r || !r.ok) { setStatut("Impossible de démarrer la conversation."); return null; }
+  const conv = await r.json();
+  conversationId = conv.id;
+  return conv;
+}
+
+function nouveauTour(questionInitiale) {
+  const accueil = document.getElementById("accueil");
+  if (accueil) accueil.remove();
+  const racine = document.createElement("article");
+  racine.className = "tour";
+  racine.innerHTML = `
+    <div class="question"><i class="ti ti-microphone"></i><span class="texte-question">${questionInitiale ? escapeHtml(questionInitiale) : "<span class='opacity-60'>Je transcris…</span>"}</span></div>
+    <div class="reponse"></div>
+    <div class="etat"><div class="lia-avatar lia-loading-icon" style="width:1.3rem;height:1.3rem;border-radius:.4rem"><i class="ti ti-robot" style="font-size:.7rem"></i></div><span class="etat-texte">Je lis la question…</span></div>
+    <div class="sources hidden"></div>
+    <div class="actions hidden"></div>`;
+  document.getElementById("tours").appendChild(racine);
+  const tour = {
+    racine, questionEl: racine.querySelector(".texte-question"), reponseEl: racine.querySelector(".reponse"),
+    etatEl: racine.querySelector(".etat"), sourcesEl: racine.querySelector(".sources"), actionsEl: racine.querySelector(".actions"),
+    full: "", segments: [], attente: null, phraseActive: null, phrasesProgrammees: new Set(), minuteries: [],
+    audio: [], sources: [], anomalies: [], messageId: null, trace: null, fluxTermine: false, reponseAnnoncee: false, question: questionInitiale || "",
+  };
+  defiler(true);
+  return tour;
+}
+
+function etatTour(tour, texte, icone) {
+  tour.etatEl.classList.remove("hidden", "erreur");
+  tour.etatEl.innerHTML = `<i class="ti ${icone || "ti-search"}"></i><span class="etat-texte">${escapeHtml(texte)}</span>`;
+}
+function erreurTour(tour, texte) {
+  tour.etatEl.classList.remove("hidden");
+  tour.etatEl.classList.add("erreur");
+  tour.etatEl.innerHTML = `<i class="ti ti-alert-triangle"></i><span class="etat-texte">${escapeHtml(texte)}</span>`;
+}
+
+async function envoyerTour(corps, type) {
+  if (requeteEnCours) couperTour(false);
+  arretDemande = false;
+  if (!conversationId && !(await creerConversation())) return;
+  const question = type === "application/json" ? JSON.parse(corps).texte : "";
+  const tour = nouveauTour(question);
+  tourCourant = tour;
+  passerEtat(ETATS.TRAITEMENT);
+  setStatut(type === "application/json" ? "Je lis la question…" : "Je transcris…");
+  setSousTitre("");
+  requeteEnCours = new AbortController();
+  const signal = requeteEnCours.signal;
+
+  let reponse;
+  try {
+    reponse = await fetch(`/api/vocal/tour?conversation_id=${conversationId}`, {
+      method: "POST", headers: { "Content-Type": type }, body: corps, credentials: "include", signal,
+    });
+  } catch (err) {
+    if (err && err.name === "AbortError") return;
+    erreurTour(tour, "La connexion au serveur a échoué."); finirEnErreur(); return;
+  }
+  if (reponse.status === 401) { window.location.href = "/login"; return; }
+  if (!reponse.ok || !reponse.body) {
+    let detail = "";
+    try { detail = (await reponse.json()).detail || ""; } catch (_) {}
+    erreurTour(tour, detail || "Le serveur n'a pas pu répondre."); finirEnErreur(); return;
+  }
+
+  const lecteur = reponse.body.getReader();
+  const decodeur = new TextDecoder();
+  let tampon = "", termine = false, reflechit = false;
+  try {
+    while (!termine) {
+      const { done, value } = await lecteur.read();
+      if (done) break;
+      tampon += decodeur.decode(value, { stream: true });
+      const lignes = tampon.split("\n");
+      tampon = lignes.pop() || "";
+      for (const ligne of lignes) {
+        if (!ligne.startsWith("data: ")) continue;
+        let data;
+        try { data = JSON.parse(ligne.slice(6)); } catch (_) { continue; }
+        if (data.transcription) {
+          tour.question = data.transcription.texte || "";
+          tour.questionEl.textContent = tour.question || "(rien d'audible)";
+          if (tour.question) { setStatut("Je cherche dans le wiki…"); etatTour(tour, "Je cherche dans le wiki…"); }
+        } else if (data.etape) {
+          const libelle = data.etape.outil === "chercher" ? "Je cherche : " : data.etape.outil === "lire_page" ? "Je lis : " : "Je vérifie : ";
+          if (!tour.full) etatTour(tour, libelle + (data.etape.detail || ""));
+          if (!tour.reponseAnnoncee) setStatut(libelle + (data.etape.detail || ""));
+        } else if (data.thinking) {
+          if (!reflechit && !tour.full) { reflechit = true; etatTour(tour, "Je réfléchis…", "ti-bulb"); if (!tour.reponseAnnoncee) setStatut("Je réfléchis…"); }
+        } else if (data.reset) {
+          tour.full = ""; tour.segments = []; tour.phraseActive = null;
+          couperAudio(); rendreReponse(tour);
+        } else if (data.message && data.message.content) {
+          tour.full += data.message.content;
+          rendreReponse(tour);
+          if (tour.full.trim()) tour.etatEl.classList.add("hidden");
+        } else if (data.phrase) {
+          if (data.phrase.index === -1) tour.attente = data.phrase;
+          else tour.segments.push({ index: data.phrase.index, texte: data.phrase.texte });
+        } else if (data.audio) {
+          jouerFragment(data.audio.data, data.audio.index);
+        } else if (data.avertissement) {
+          etatTour(tour, data.avertissement, "ti-volume-off");
+        } else if (data.sources) {
+          tour.sources = data.sources; tour.anomalies = data.anomalies || [];
+          rendreSources(tour);
+        } else if (data.error) {
+          erreurTour(tour, String(data.error)); termine = true; break;
+        } else if (data.done) {
+          if (data.vide) {
+            tour.racine.remove();
+            if (tourCourant === tour) tourCourant = null;
+            passerEtat(ETATS.REPOS);
+            setStatut("Je n'ai rien compris. Parlez un peu plus près du micro, puis réessayez.");
+            if (mainsLibres && !arretDemande) setTimeout(() => { if (etat === ETATS.REPOS) demarrerEcoute(); }, 600);
+            requeteEnCours = null;
+            return;
+          }
+          tour.messageId = data.message_id || null; tour.trace = data.trace || null;
+          rendreSources(tour);
+          termine = true; break;
+        }
+      }
+      defiler();
+    }
+  } catch (err) {
+    if (!(err && err.name === "AbortError")) erreurTour(tour, String((err && err.message) || err));
+    requeteEnCours = null;
+    return;
+  }
+  try { await lecteur.cancel(); } catch (_) {}
+  requeteEnCours = null;
+  tour.fluxTermine = true;
+  if (!tour.full.trim()) {
+    if (!tour.etatEl.classList.contains("erreur")) erreurTour(tour, "Aucune réponse produite.");
+    finirEnErreur();
+    return;
+  }
+  rendreReponse(tour);
+  rendreActions(tour);
+  defiler();
+  if (etat !== ETATS.PAROLE) {
+    // Aucun son n'a été programmé (synthèse indisponible) : le tour se termine sur le texte.
+    if (!sourcesActives.size) terminerTour();
+  } else {
+    verifierFinLecture();
+  }
+}
+
+function finirEnErreur() {
+  requeteEnCours = null;
+  if (tourCourant) tourCourant.fluxTermine = true;
+  passerEtat(ETATS.REPOS);
+  setStatut("Appuyez sur le micro pour réessayer.");
+}
+
+async function envoyerTexte(e) {
+  e.preventDefault();
+  const champ = document.getElementById("champ-texte");
+  const texte = champ.value.trim();
+  if (!texte) return;
+  champ.value = "";
+  assurerLecture();
+  await envoyerTour(JSON.stringify({ texte }), "application/json");
+}
+
+/* ---- rendu de la réponse : prose, phrases surlignées, pastilles de pages ---------- */
+const RE_CHEMIN = /\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.md/g;
+const RE_DECOR = /\(\s*((?:\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.md\s*[,;]?\s*)+)\)|(?<![\w/.])(\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.md)(?![\w/])|\b(INC|CTR|VER)-(\d{1,3})\b/g;
+
+/* La prose affichée : sans le markdown que le modèle écrit parfois malgré la consigne (gras,
+   images, code). La même normalisation s'applique au texte et aux segments dits, pour que le
+   surlignage retrouve chaque segment dans le texte. */
+const nettoyerProse = (t) => (t || "")
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+  .replace(/\[([^\]]+)\]\((?!\/[a-z0-9_\/-]+\.md)[^)]*\)/g, "$1")
+  .replace(/[*_`#]+/g, "")
+  .replace(/^\s*[-•]\s+/gm, "");
+const normaliser = (t) => nettoyerProse(t).replace(/\n{2,}/g, " ¶ ").replace(/\s+/g, " ").trim();
+
+function chipPage(chemin) {
+  const n = wikiIndex.get(chemin);
+  const titre = n && !n.missing ? n.title : chemin.split("/").pop().replace(/\.md$/, "").replace(/-/g, " ");
+  const titreAttr = n && !n.missing ? `${n.type} — ${chemin}` : `Page inexistante : ${chemin}`;
+  return `<a class="wiki-cite${n && !n.missing ? "" : " missing"}" href="/wiki#${encodeURI(chemin)}" target="_blank" rel="noopener" title="${escapeHtml(titreAttr)}"><span class="dot" style="background:${typeColor(n ? n.type : "À écrire")}"></span>${escapeHtml(titre)}</a>`;
+}
+function chipAnomalie(id) {
+  return `<a class="anomaly-cite" href="/wiki#${ANOMALY_PAGES[id.slice(0, 3)]}" target="_blank" rel="noopener" title="Voir l'entrée dans le registre d'anomalies">${id}</a>`;
+}
+function decorer(texte) {
+  let html = "", dernier = 0, m;
+  RE_DECOR.lastIndex = 0;
+  while ((m = RE_DECOR.exec(texte)) !== null) {
+    html += escapeHtml(texte.slice(dernier, m.index));
+    if (m[1]) html += " " + (m[1].match(RE_CHEMIN) || []).map(chipPage).join(" ");
+    else if (m[2]) html += chipPage(m[2]);
+    else html += chipAnomalie(`${m[3]}-${m[4]}`);
+    dernier = m.index + m[0].length;
+  }
+  html += escapeHtml(texte.slice(dernier));
+  return html.replace(/ ?¶ ?/g, "<br><br>");
+}
+
+function rendreReponse(tour) {
+  const norm = normaliser(tour.full);
+  if (!norm) { tour.reponseEl.innerHTML = ""; return; }
+  let html = "", curseur = 0;
+  for (const seg of tour.segments) {
+    const s = normaliser(seg.texte);
+    if (!s) continue;
+    const pos = norm.indexOf(s, curseur);
+    if (pos < 0) continue;
+    if (pos > curseur) html += decorer(norm.slice(curseur, pos));
+    html += `<span class="phrase${seg.index === tour.phraseActive ? " dite" : ""}" data-index="${seg.index}">${decorer(s)}</span>`;
+    curseur = pos + s.length;
+  }
+  if (curseur < norm.length) html += decorer(norm.slice(curseur));
+  tour.reponseEl.innerHTML = html;
+}
+
+function rendreSources(tour) {
+  let libelle = "Pages citées";
+  let pages = (tour.sources || []).map((s) => s.exists === false
+    ? `<span class="wiki-cite missing" title="Le modèle cite une page qui n'existe pas : ${escapeHtml(s.path)}"><span class="dot"></span>${escapeHtml(s.path)}</span>`
+    : chipPage(s.path));
+  const anomalies = (tour.anomalies || []).map((a) => chipAnomalie(a.id));
+  if (!pages.length && tour.trace && (tour.trace.pages_lues || []).length) {
+    // Le modèle n'a rien cité : on montre ce qu'il a lu, sous son vrai nom.
+    libelle = "Pages consultées";
+    pages = tour.trace.pages_lues.map(chipPage);
+  }
+  if (!pages.length && !anomalies.length) { tour.sourcesEl.classList.add("hidden"); return; }
+  tour.sourcesEl.classList.remove("hidden");
+  tour.sourcesEl.innerHTML = `<span class="libelle">${libelle}</span>${pages.join("")}${anomalies.join("")}`;
+}
+
+function rendreActions(tour) {
+  const id = tour.messageId;
+  tour.actionsEl.classList.remove("hidden");
+  tour.actionsEl.innerHTML = `
+    ${tour.audio.length ? `<button type="button" onclick="rejouer(this)" title="Réécouter la réponse"><i class="ti ti-player-play"></i> Réécouter</button>` : ""}
+    <button type="button" onclick="copier(this)" title="Copier la réponse"><i class="ti ti-copy"></i></button>
+    ${id ? `<button type="button" id="retour-oui-${id}" onclick="retour(${id}, true)" title="Utile"><i class="ti ti-thumb-up"></i></button>
+    <button type="button" id="retour-non-${id}" onclick="retour(${id}, false)" title="Inexact ou incomplet"><i class="ti ti-thumb-down"></i></button>` : ""}`;
+  tour.actionsEl.dataset.texte = tour.full;
+}
+
+function tourDe(el) {
+  const racine = el.closest(".tour");
+  return toursConnus.find((t) => t.racine === racine) || null;
+}
+const toursConnus = [];
+const _nouveauTour = nouveauTour;
+nouveauTour = function (q) { const t = _nouveauTour(q); toursConnus.push(t); return t; };
+
+async function copier(btn) {
+  const texte = btn.closest(".actions").dataset.texte || "";
+  try { await navigator.clipboard.writeText(texte); } catch (_) {}
+  const i = btn.querySelector("i"); if (i) { i.className = "ti ti-check"; setTimeout(() => { i.className = "ti ti-copy"; }, 1500); }
+}
+
+function rejouer(btn) {
+  const tour = tourDe(btn);
+  if (!tour || !tour.audio.length) return;
+  if (etat !== ETATS.REPOS) couperTour(false);
+  arretDemande = false;
+  assurerLecture();
+  tourCourant = tour;
+  tour.fluxTermine = true; tour.phrasesProgrammees = new Set(); tour.minuteries = [];
+  tour.audio.forEach((echantillons) => programmer(echantillons, 0, tour));
+  setStatut("Je relis la réponse…");
+}
+
+/* ---- retours 👍/👎 ------------------------------------------------------------- */
+async function retour(messageId, positif) {
+  if (positif) {
+    const r = await apiCall(`/api/conversations/messages/${messageId}/feedback`, { method: "POST", body: JSON.stringify({ is_positive: true }) });
+    if (r && r.ok) marquerRetour(messageId, true);
+    return;
+  }
+  document.getElementById("retour-msg-id").value = messageId;
+  document.getElementById("retour-commentaire").value = "";
+  document.getElementById("retour-categorie").value = "";
+  document.getElementById("retour-envoyer").disabled = true;
+  document.getElementById("feedback-negative-modal").classList.remove("hidden");
+  setTimeout(() => document.getElementById("retour-commentaire").focus(), 80);
+}
+function validerRetourNegatif() {
+  const ok = document.getElementById("retour-commentaire").value.trim() && document.getElementById("retour-categorie").value;
+  document.getElementById("retour-envoyer").disabled = !ok;
+}
+function fermerRetourNegatif() { document.getElementById("feedback-negative-modal").classList.add("hidden"); }
+async function envoyerRetourNegatif() {
+  const messageId = document.getElementById("retour-msg-id").value;
+  const comment = document.getElementById("retour-commentaire").value.trim();
+  const category = document.getElementById("retour-categorie").value;
+  if (!messageId || !comment || !category) return;
+  const r = await apiCall(`/api/conversations/messages/${messageId}/feedback`, { method: "POST", body: JSON.stringify({ is_positive: false, comment, category }) });
+  if (r && r.ok) { fermerRetourNegatif(); marquerRetour(messageId, false); }
+  else { const err = r ? await r.json().catch(() => ({})) : {}; alert(err.detail || "Erreur lors de l'envoi du retour."); }
+}
+function marquerRetour(messageId, positif) {
+  const oui = document.getElementById(`retour-oui-${messageId}`), non = document.getElementById(`retour-non-${messageId}`);
+  if (!oui || !non) return;
+  oui.classList.toggle("oui", positif); non.classList.toggle("non", !positif);
+}
+
+/* ============================================================================
+   Commandes, statut, orbe
+   ========================================================================== */
+function passerEtat(nouveau) {
+  etat = nouveau;
+  const btn = document.getElementById("btn-micro");
+  btn.dataset.etat = nouveau;
+  btn.title = nouveau === ETATS.ECOUTE ? "Terminer la question" : nouveau === ETATS.PAROLE ? "Couper la parole et parler" : nouveau === ETATS.TRAITEMENT ? "Annuler" : "Parler";
+  btn.setAttribute("aria-label", btn.title);
+  btn.querySelector("i").className = nouveau === ETATS.ECOUTE ? "ti ti-check"
+    : nouveau === ETATS.REPOS ? "ti ti-microphone" : "ti ti-player-stop";
+}
+function setStatut(texte) { document.getElementById("statut").textContent = texte; }
+function setSousTitre(texte) {
+  document.getElementById("sous-titre").textContent = texte ? `« ${texte} »` : "";
+  // Tant que LIA parle, sa phrase occupe la ligne : l'état du tour reste lisible dans la carte.
+  document.getElementById("statut").classList.toggle("hidden", !!texte);
+}
+/* On ne ramène en bas que si l'utilisateur y est déjà : sinon relire une réponse précédente
+   pendant que la suivante s'écrit devient impossible. */
+function defiler(force = false) {
+  const s = document.getElementById("transcription");
+  if (force || s.scrollHeight - s.scrollTop - s.clientHeight < 140) s.scrollTop = s.scrollHeight;
+}
+
+function actionMicro() {
+  if (etat === ETATS.REPOS) demarrerEcoute();
+  else if (etat === ETATS.ECOUTE) arreterEcoute(true);
+  else if (etat === ETATS.PAROLE) { couperTour(false); demarrerEcoute(); }
+  else couperTour(true);
+}
+function basculerMainsLibres() {
+  mainsLibres = !mainsLibres;
+  document.getElementById("btn-mains-libres").classList.toggle("actif", mainsLibres);
+  if (mainsLibres && etat === ETATS.REPOS) demarrerEcoute();
+}
+function basculerClavier() {
+  const form = document.getElementById("form-texte");
+  form.classList.toggle("hidden");
+  document.getElementById("btn-clavier").classList.toggle("actif", !form.classList.contains("hidden"));
+  if (!form.classList.contains("hidden")) document.getElementById("champ-texte").focus();
+}
+function nouvelleConversation() {
+  couperTour(false);
+  if (etat === ETATS.ECOUTE) arreterEcoute(false);
+  conversationId = null; tourCourant = null; toursConnus.length = 0;
+  document.getElementById("tours").innerHTML = "";
+  document.getElementById("tours").appendChild(accueilModele.content.firstElementChild.cloneNode(true));
+  remplirExemples();
+  setStatut("Nouvelle conversation. Appuyez sur le micro et posez votre question.");
+  setSousTitre("");
+}
+
+document.addEventListener("keydown", (e) => {
+  const saisie = ["INPUT", "TEXTAREA", "SELECT"].includes((e.target && e.target.tagName) || "");
+  if (e.key === "Escape") {
+    if (!document.getElementById("feedback-negative-modal").classList.contains("hidden")) { fermerRetourNegatif(); return; }
+    if (etat === ETATS.ECOUTE) { arretDemande = true; arreterEcoute(false); setStatut("Écoute annulée."); }
+    else if (etat !== ETATS.REPOS) couperTour(true);
+    return;
+  }
+  if (e.code === "Space" && !saisie) { e.preventDefault(); actionMicro(); }
+});
+
+/* L'orbe : respire au repos, s'ouvre au niveau du micro, vibre au son de la voix, tourne
+   pendant la recherche. */
+let lisse = 0, angle = 0;
+function dessiner() {
+  const canvas = document.getElementById("orbe");
+  if (!canvas) return requestAnimationFrame(dessiner);
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width, h = canvas.height, cx = w / 2, cy = h / 2;
+  const t = performance.now() / 1000;
+  ctx.clearRect(0, 0, w, h);
+  let niveau = 0;
+  if (etat === ETATS.ECOUTE) niveau = Math.min(1, niveauMicro * 9);
+  else if (etat === ETATS.PAROLE) niveau = Math.min(1, niveauSortie() * 3.2);
+  lisse += (niveau - lisse) * (niveau > lisse ? 0.35 : 0.12);
+  const couleurs = etat === ETATS.ECOUTE ? ["#f43f5e", "#fb7185", "#e11d48"]
+    : etat === ETATS.TRAITEMENT ? ["#f59e0b", "#fbbf24", "#d97706"]
+    : etat === ETATS.PAROLE ? ["#6366f1", "#a78bfa", "#4f46e5"]
+    : ["#6366f1", "#8b5cf6", "#4f46e5"];
+  const base = w * 0.32;
+  const respiration = etat === ETATS.REPOS ? Math.sin(t * 1.4) * w * 0.008 : 0;
+  const r = base + respiration + lisse * w * 0.06;
+
+  // halo
+  const halo = ctx.createRadialGradient(cx, cy, r * 0.6, cx, cy, r * 1.55);
+  halo.addColorStop(0, couleurs[0] + "55"); halo.addColorStop(1, couleurs[1] + "00");
+  ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(cx, cy, r * 1.55, 0, Math.PI * 2); ctx.fill();
+  // anneaux
+  for (let i = 3; i >= 1; i--) {
+    const rr = r + i * w * 0.030 + Math.sin(t * 2.3 + i) * w * 0.005 * (etat === ETATS.REPOS ? 1 : 2 + lisse * 3);
+    ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2);
+    ctx.strokeStyle = couleurs[1] + (i === 1 ? "66" : i === 2 ? "3a" : "1f"); ctx.lineWidth = w * 0.005; ctx.stroke();
+  }
+  // cœur
+  const coeur = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.35, r * 0.1, cx, cy, r);
+  coeur.addColorStop(0, couleurs[1]); coeur.addColorStop(1, couleurs[2]);
+  ctx.fillStyle = coeur; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+  // recherche : un arc qui tourne
+  if (etat === ETATS.TRAITEMENT) {
+    angle += 0.07;
+    ctx.beginPath(); ctx.arc(cx, cy, r + w * 0.045, angle, angle + Math.PI * 0.9);
+    ctx.strokeStyle = "#ffffffcc"; ctx.lineWidth = w * 0.014; ctx.lineCap = "round"; ctx.stroke();
+  }
+  requestAnimationFrame(dessiner);
+}
+
+/* ============================================================================
+   Démarrage
+   ========================================================================== */
+let accueilModele = null;
+function remplirExemples() {
+  const host = document.getElementById("exemples");
+  if (!host) return;
+  host.innerHTML = "";
+  EXEMPLES.forEach((q) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "exemple glass-card border border-black/5 dark:border-white/5 text-gray-700 dark:text-gray-200 hover:border-indigo-400/50 transition-all";
+    b.innerHTML = `<i class="ti ti-message-question text-indigo-500 mr-1.5"></i>${escapeHtml(q)}`;
+    b.onclick = () => { assurerLecture(); envoyerTour(JSON.stringify({ texte: q }), "application/json"); };
+    host.appendChild(b);
+  });
+}
+async function chargerIndexWiki() {
+  const r = await apiCall("/api/wiki/graph");
+  if (!r || !r.ok) return;
+  const graphe = await r.json();
+  (graphe.nodes || []).forEach((n) => wikiIndex.set(n.id, n));
+  toursConnus.forEach(rendreReponse);
+}
+document.addEventListener("DOMContentLoaded", () => {
+  accueilModele = document.createElement("template");
+  accueilModele.content.appendChild(document.getElementById("accueil").cloneNode(true));
+  remplirExemples();
+  chargerIndexWiki();
+  dessiner();
+});
+</script>
+{% endblock %}

@@ -12,6 +12,10 @@ Le wiki est un bundle OKF (``wiki_llm/wiki/*.md`` : frontmatter YAML + markdown,
     milliers de tokens, PAS le wiki, qui ne tient dans aucune fenêtre — et sa clé de cache
     Mistral (sha256 du prompt entier, donc toute modification des consignes, du vocabulaire ou
     d'une entrée d'anomalie invalide proprement le cache) ;
+  * le **prompt du tour vocal** : les mêmes vocabulaire et index, précédés des consignes parlées
+    (``app/prompts/vocal_consignes.md``) puis des consignes générales, avec sa propre clé de
+    cache (``lia-vocal-``) — les règles de vérité sont écrites une fois, la forme parlée
+    s'ajoute devant ;
   * un lint (orphelines, fantômes, périmées, frontmatter illisible, pages hors index) et des
     statistiques pour la carte d'administration.
 
@@ -55,6 +59,7 @@ CHARS_PER_TOKEN = 2.924
 TOKEN_WARNING_THRESHOLD = 20_000
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONSIGNES_PATH = PROJECT_ROOT / "app" / "prompts" / "wiki_consignes.md"
+CONSIGNES_VOCALES_PATH = PROJECT_ROOT / "app" / "prompts" / "vocal_consignes.md"
 
 
 class WikiUnavailable(RuntimeError):
@@ -135,6 +140,10 @@ class WikiSnapshot:
     # Le texte cherchable de chaque page, en minuscules — construit à la première
     # recherche, jeté avec l'instantané dès qu'un fichier change.
     search_index: Dict[str, str] = field(default_factory=dict, repr=False)
+    # Le prompt du tour vocal et sa clé : consignes parlées + consignes générales + le même
+    # vocabulaire et le même index des anomalies.
+    vocal_prompt: str = ""
+    vocal_cache_key: str = ""
 
     # ---- mesures -------------------------------------------------------
 
@@ -374,9 +383,10 @@ def _signature(root: Path) -> Tuple:
                     size += st.st_size
                     latest = max(latest, st.st_mtime_ns)
     consignes = CONSIGNES_PATH.stat().st_mtime_ns if CONSIGNES_PATH.exists() else 0
+    vocales = CONSIGNES_VOCALES_PATH.stat().st_mtime_ns if CONSIGNES_VOCALES_PATH.exists() else 0
     raw_dir = root / "raw"
     raw_count = sum(1 for _ in raw_dir.glob("*.pdf")) if raw_dir.is_dir() else 0
-    return (count, latest, size, consignes, raw_count)
+    return (count, latest, size, consignes, vocales, raw_count)
 
 
 # ---------------------------------------------------------------------------
@@ -384,7 +394,7 @@ def _signature(root: Path) -> Tuple:
 # ---------------------------------------------------------------------------
 
 
-def build_system_prompt(index: WikiIndex, consignes: str) -> Tuple[str, str]:
+def build_system_prompt(index: WikiIndex, consignes: str, cle: str = "lia-wiki-") -> Tuple[str, str]:
     """Consignes, vocabulaire, index des anomalies. **Pas le wiki** : il ne tient pas.
 
     Le modèle n'a en permanence que de quoi *formuler une recherche* — les types de pages, les
@@ -394,7 +404,8 @@ def build_system_prompt(index: WikiIndex, consignes: str) -> Tuple[str, str]:
     par le serveur (règle 2).
 
     Retourne ``(prompt, clé de cache)``. La clé couvre le prompt ENTIER, consignes comprises :
-    modifier une consigne invalide donc le cache au lieu de servir un préfixe périmé.
+    modifier une consigne invalide donc le cache au lieu de servir un préfixe périmé. ``cle`` est
+    le préfixe de la clé : le chat et le tour vocal ont deux prompts, donc deux caches.
     """
     prompt = "\n\n".join([
         consignes.rstrip(),
@@ -405,7 +416,7 @@ def build_system_prompt(index: WikiIndex, consignes: str) -> Tuple[str, str]:
         "fourni automatiquement ; pour les autres, appelle lire_anomalie(identifiant).",
         index.index_anomalies(),
     ])
-    key = "lia-wiki-" + hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:32]
+    key = cle + hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:32]
     return prompt, key
 
 
@@ -445,7 +456,10 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
         raise WikiUnavailable(f"wiki/ introuvable sous {root}")
     if not CONSIGNES_PATH.is_file():
         raise WikiUnavailable(f"consignes introuvables : {CONSIGNES_PATH}")
+    if not CONSIGNES_VOCALES_PATH.is_file():
+        raise WikiUnavailable(f"consignes vocales introuvables : {CONSIGNES_VOCALES_PATH}")
     consignes = CONSIGNES_PATH.read_text(encoding="utf-8")
+    consignes_vocales = CONSIGNES_VOCALES_PATH.read_text(encoding="utf-8")
 
     pages: Dict[str, WikiPage] = {}
     for path in sorted(wiki_dir.rglob("*.md")):
@@ -470,6 +484,10 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
 
     index = WikiIndex(pages.values())
     prompt, cache_key = build_system_prompt(index, consignes)
+    # Le tour vocal : la forme parlée d'abord, les mêmes règles de vérité ensuite.
+    vocal_prompt, vocal_cache_key = build_system_prompt(
+        index, consignes_vocales.rstrip() + "\n\n" + consignes, cle="lia-vocal-"
+    )
     raw_dir = root / "raw"
     raw_files = sorted(p.name for p in raw_dir.glob("*.pdf")) if raw_dir.is_dir() else []
 
@@ -484,6 +502,8 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
         signature=signature if signature is not None else _signature(root),
         loaded_at=datetime.now(),
         lint=_lint(pages),
+        vocal_prompt=vocal_prompt,
+        vocal_cache_key=vocal_cache_key,
     )
     logger.info(
         "[wiki] %d pages, %d liens, %d fantômes, %d entrées d'anomalie — prompt permanent "

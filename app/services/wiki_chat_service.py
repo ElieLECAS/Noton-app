@@ -425,6 +425,12 @@ class WikiAnswer:
     model: str = ""
     # Résolu à l'exécution (``chat_stream`` du module) pour rester remplaçable dans les tests.
     stream_fn: Optional[StreamFn] = None
+    # Le prompt permanent et sa clé de cache : ceux du chat par défaut, ceux du tour vocal quand
+    # la réponse doit être dite (mêmes règles de vérité, forme parlée devant).
+    system_prompt: Optional[str] = None
+    cache_key: Optional[str] = None
+    # Les coupes n'ont pas de sens à l'oral : le tour vocal les laisse de côté.
+    images: bool = True
 
     text: str = ""
     thinking: str = ""
@@ -437,6 +443,10 @@ class WikiAnswer:
     def __post_init__(self) -> None:
         if not self.model:
             self.model = settings.MODEL_FAST
+        if self.system_prompt is None:
+            self.system_prompt = self.snapshot.system_prompt
+        if self.cache_key is None:
+            self.cache_key = self.snapshot.cache_key
 
     @property
     def index(self) -> WikiIndex:
@@ -444,7 +454,7 @@ class WikiAnswer:
 
     def messages(self) -> List[Dict[str, Any]]:
         return (
-            [{"role": "system", "content": self.snapshot.system_prompt}]
+            [{"role": "system", "content": self.system_prompt}]
             + list(self.history)
             + [{"role": "user", "content": self.question}]
         )
@@ -516,7 +526,7 @@ class WikiAnswer:
         first_token_ms: Optional[int] = None
 
         extra: Dict[str, Any] = {
-            "prompt_cache_key": self.snapshot.cache_key,
+            "prompt_cache_key": self.cache_key,
             "tools": TOOLS,
             "tool_choice": "auto",
         }
@@ -653,12 +663,13 @@ class WikiAnswer:
         think_parts: List[str],
     ) -> AsyncIterator[str]:
         """Filtre les coupes, vérifie les citations, mesure le tour."""
-        texte, coupes = preparer_images(texte, self.question, pages_lues, self.snapshot.root)
-        # Le texte servi peut différer de celui qui a été streamé : une coupe inventée a été
-        # retirée, une coupe oubliée ajoutée. On le renvoie en entier, l'interface remplace.
-        if any(coupes.values()):
-            logger.info("[chat] coupes : %s", json.dumps(coupes, ensure_ascii=False))
-            yield sse({"remplacer": texte})
+        if self.images:
+            texte, coupes = preparer_images(texte, self.question, pages_lues, self.snapshot.root)
+            # Le texte servi peut différer de celui qui a été streamé : une coupe inventée a été
+            # retirée, une coupe oubliée ajoutée. On le renvoie en entier, l'interface remplace.
+            if any(coupes.values()):
+                logger.info("[chat] coupes : %s", json.dumps(coupes, ensure_ascii=False))
+                yield sse({"remplacer": texte})
 
         self.text = texte.strip()
         self.thinking = "".join(think_parts)
@@ -674,7 +685,7 @@ class WikiAnswer:
             "appels": cumul["appels"],
             "first_token_ms": first_token_ms,
             "duration_ms": int((time.perf_counter() - t0) * 1000),
-            "wiki_hash": self.snapshot.cache_key,
+            "wiki_hash": self.cache_key,
             "wiki_pages": len(self.snapshot.concept_pages),
             "history_messages": len(self.history),
             "steps": self.steps,

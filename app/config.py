@@ -64,6 +64,14 @@ class Settings(BaseSettings):
     # à la racine du projet ou absolue.
     WIKI_DIR: str = "wiki_llm"
 
+    # La voix — Voxtral. La question est transcrite par lots (Voxtral Mini Transcribe 2 : une
+    # demi-seconde pour dix secondes d'audio, avec un biais de vocabulaire tiré du wiki, ce que
+    # le modèle temps réel ne permet pas) ; la réponse est dite par Voxtral TTS en flux, phrase
+    # par phrase. La voix est un préréglage Mistral désigné par son slug (Marie, français).
+    VOCAL_MODELE_TRANSCRIPTION: str = "voxtral-mini-latest"
+    VOCAL_MODELE_SYNTHESE: str = "voxtral-mini-tts-latest"
+    VOCAL_VOIX: str = "fr_marie_excited"
+
     @field_validator("DATABASE_ECHO", "AUTH_COOKIE_SECURE", mode="before")
     @classmethod
     def parse_bool(cls, v: Union[str, bool, None]) -> bool:

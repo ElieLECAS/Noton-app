@@ -1,8 +1,10 @@
 """LIA — l'assistant documentaire de PROFERM, adossé au wiki.
 
-Trois écrans : le chat (``/``), le wiki (``/wiki``, graphe + lecteur) et l'administration.
-Le wiki est chargé au démarrage et rechargé dès qu'un fichier change (voir wiki_service).
+Quatre écrans : le chat (``/``), l'assistant vocal (``/vocal``), le wiki (``/wiki``, graphe +
+lecteur) et l'administration. Le wiki est chargé au démarrage et rechargé dès qu'un fichier
+change (voir wiki_service).
 """
+import asyncio
 import logging
 import time
 from typing import Optional
@@ -18,7 +20,7 @@ from app.config import settings
 from app.database import create_db_and_tables, engine, get_session
 from app.logging_config import setup_app_logging
 from app.models.user import UserRead
-from app.routers import admin, auth, chat, conversations, wiki
+from app.routers import admin, auth, chat, conversations, vocal, wiki
 from app.services.auth_service import decode_token, get_user_by_id
 
 setup_app_logging()
@@ -56,6 +58,7 @@ if settings.CORS_ALLOWED_ORIGINS:
 app.include_router(auth.router)
 app.include_router(chat.router)
 app.include_router(conversations.router)
+app.include_router(vocal.router)
 app.include_router(wiki.router)
 app.include_router(admin.router)
 
@@ -95,8 +98,20 @@ async def startup_event():
         )
     except Exception as exc:  # noqa: BLE001
         logger.error("Wiki indisponible au démarrage : %s", exc)
+    logger.info(
+        "Voix : transcription %s, synthèse %s, voix %s",
+        settings.VOCAL_MODELE_TRANSCRIPTION,
+        settings.VOCAL_MODELE_SYNTHESE,
+        settings.VOCAL_VOIX,
+    )
     if not settings.MISTRAL_API_KEY:
         logger.warning("MISTRAL_API_KEY est vide : le chat répondra une erreur.")
+    else:
+        from app.services.vocal_service import prechauffer_attentes
+
+        # En arrière-plan : le premier tour vocal ne doit pas attendre la synthèse des phrases
+        # d'attente, et le démarrage ne doit pas attendre l'API.
+        asyncio.create_task(prechauffer_attentes())
 
 
 # ---------------------------------------------------------------------------
@@ -111,6 +126,15 @@ async def chat_page(request: Request, session: Session = Depends(get_session)):
     if not user:
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("chat.html", {"request": request, "user": user})
+
+
+@app.get("/vocal", response_class=HTMLResponse)
+async def vocal_page(request: Request, session: Session = Depends(get_session)):
+    """L'assistant vocal : on parle, LIA cherche dans le wiki et répond de vive voix."""
+    user = _get_authenticated_user(request, session)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("vocal.html", {"request": request, "user": user})
 
 
 @app.get("/wiki", response_class=HTMLResponse)
