@@ -4,34 +4,82 @@
 <link rel="stylesheet" href="/static/css/wiki-doc.css?v=3">
 <style>
 /* ===== La barre de commande : l'orbe EST le bouton micro ===== */
-#commande { background: rgba(0,0,0,.015); }
-.dark #commande { background: rgba(255,255,255,.015); }
-#btn-micro { position: relative; width: 6.5rem; height: 6.5rem; border-radius: 9999px; display: grid; place-items: center; background: none; border: 0; padding: 0; transition: transform .15s cubic-bezier(.4,0,.2,1); }
-@media (min-width: 640px) { #btn-micro { width: 8rem; height: 8rem; } }
+#commande { position: relative; --lueur: rgba(99,102,241,.14); }
+/* La lueur de l'orbe déborde sur la conversation : la barre n'est pas une boîte posée en bas,
+   c'est la source lumineuse de l'écran. */
+#commande::before {
+  content: ""; position: absolute; left: 50%; bottom: 0; width: min(38rem, 120%); height: 16rem;
+  transform: translateX(-50%); pointer-events: none; z-index: 0;
+  background: radial-gradient(60% 70% at 50% 85%, var(--lueur), transparent 72%);
+  transition: background .4s linear;
+}
+#commande > * { position: relative; z-index: 1; }
+
+#btn-micro {
+  position: relative; width: 7rem; height: 7rem; border-radius: 9999px; display: grid;
+  place-items: center; background: none; border: 0; padding: 0; cursor: pointer;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+@media (min-width: 640px) { #btn-micro { width: 8.5rem; height: 8.5rem; } }
+@media (min-width: 1024px) { #btn-micro { width: 10rem; height: 10rem; } }
 #btn-micro canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-#btn-micro i { position: relative; color: #fff; font-size: 1.6rem; text-shadow: 0 2px 8px rgba(0,0,0,.3); pointer-events: none; }
-@media (min-width: 640px) { #btn-micro i { font-size: 2rem; } }
-#btn-micro:hover { transform: scale(1.04); }
-#btn-micro:active { transform: scale(.95); }
-#btn-micro:focus-visible { outline: 2px solid #6366f1; outline-offset: 6px; }
-.btn-rond { width: 2.9rem; height: 2.9rem; border-radius: 9999px; display: grid; place-items: center; color: #6b7280; background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.06); transition: all .15s; }
-.dark .btn-rond { color: #9ca3af; background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.08); }
-.btn-rond:hover { color: #4f46e5; background: rgba(79,70,229,.08); }
-.btn-rond.actif { color: #fff; background: linear-gradient(135deg, #4f46e5, #6366f1); border-color: transparent; box-shadow: 0 6px 16px rgba(79,70,229,.3); }
-/* Une seule ligne d'information, de hauteur réservée : la phrase dite quand LIA parle,
-   l'état du tour sinon. Deux lignes qui apparaissent l'une après l'autre feraient sauter
-   le bouton à chaque mot. */
-#info { min-height: 2.9rem; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; }
-#sous-titre { font-size: .95rem; line-height: 1.4; color: #4338ca; font-weight: 500; }
-.dark #sous-titre { color: #c7d2fe; }
-#statut { font-size: .82rem; line-height: 1.35; color: #6b7280; }
+#btn-micro i {
+  position: relative; color: #fff; font-size: 1.5rem; opacity: .95;
+  text-shadow: 0 2px 10px rgba(0,0,0,.35); pointer-events: none;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
+}
+@media (min-width: 640px) { #btn-micro i { font-size: 1.9rem; } }
+#btn-micro:hover { transform: scale(1.05); }
+#btn-micro:hover i { transform: scale(1.08); }
+#btn-micro:active { transform: scale(.97); }
+#btn-micro:focus-visible { outline: none; }
+#btn-micro:focus-visible i { opacity: 1; transform: scale(1.12); }
+
+.btn-rond {
+  width: 2.75rem; height: 2.75rem; border-radius: 9999px; display: grid; place-items: center;
+  color: #6b7280; background: rgba(255,255,255,.55); border: 1px solid rgba(0,0,0,.06);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(31,38,135,.06);
+  transition: color .2s, background .2s, border-color .2s, transform .15s, box-shadow .2s;
+}
+.dark .btn-rond { color: #9ca3af; background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.09); box-shadow: none; }
+.btn-rond:hover { color: #4f46e5; border-color: rgba(99,102,241,.35); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(79,70,229,.14); }
+.dark .btn-rond:hover { color: #a5b4fc; }
+.btn-rond:active { transform: scale(.94); }
+.btn-rond.actif { color: #fff; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-color: transparent; box-shadow: 0 8px 20px rgba(79,70,229,.35); }
+
+/* Une seule ligne d'information, de hauteur réservée : la phrase dite quand LIA parle, l'état
+   du tour sinon. Deux lignes qui apparaissent l'une après l'autre feraient sauter l'orbe. */
+#info { min-height: 3rem; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; text-align: center; }
+#sous-titre:not(:empty) {
+  font-size: .95rem; line-height: 1.45; font-weight: 500; letter-spacing: -.01em;
+  background: linear-gradient(95deg, #4f46e5, #9333ea 55%, #db2777);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: monter .3s cubic-bezier(.2,.8,.3,1);
+}
+.dark #sous-titre:not(:empty) { background: linear-gradient(95deg, #a5b4fc, #d8b4fe 55%, #f9a8d4); -webkit-background-clip: text; background-clip: text; }
+#statut { font-size: .82rem; line-height: 1.4; color: #6b7280; transition: opacity .2s; }
 .dark #statut { color: #9ca3af; }
 #statut.hidden { display: none; }
+@keyframes monter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+#champ-texte { box-shadow: 0 4px 16px rgba(31,38,135,.05); }
+
+/* ===== La conversation ===== */
+#transcription { display: flex; flex-direction: column; scroll-behavior: smooth; }
+#transcription:has(#accueil) #tours { margin-top: auto; margin-bottom: auto; }
+#accueil { animation: monter .45s cubic-bezier(.2,.8,.3,1); }
 
 /* ===== Les tours : la question dite, la réponse dite ===== */
-.tour { border-radius: 1.25rem; padding: .9rem 1rem; background: rgba(255,255,255,.55); border: 1px solid rgba(0,0,0,.05); }
-@media (min-width: 640px) { .tour { padding: 1.1rem 1.3rem; } }
-.dark .tour { background: rgba(38,47,71,.55); border-color: rgba(255,255,255,.08); }
+.tour {
+  border-radius: 1.4rem; padding: 1rem 1.1rem; background: rgba(255,255,255,.62);
+  border: 1px solid rgba(255,255,255,.7); box-shadow: 0 6px 24px rgba(31,38,135,.06);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  animation: tour-apparait .4s cubic-bezier(.2,.8,.3,1);
+}
+@media (min-width: 640px) { .tour { padding: 1.2rem 1.4rem; } }
+@keyframes tour-apparait { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+.dark .tour { background: rgba(38,47,71,.6); border-color: rgba(255,255,255,.08); box-shadow: 0 6px 24px rgba(0,0,0,.18); }
 .tour .question { display: flex; align-items: flex-start; gap: .6rem; font-size: .9rem; color: #4b5563; font-style: italic; border-left: 2px solid rgba(225,29,72,.35); padding-left: .6rem; }
 .dark .tour .question { color: #cbd5e1; }
 .tour .question i { color: #e11d48; margin-top: .2rem; flex: none; }
@@ -39,7 +87,7 @@
 @media (min-width: 640px) { .tour .reponse { font-size: 1.04rem; line-height: 1.75; } }
 .dark .tour .reponse { color: #e5e7eb; }
 .tour .reponse .phrase { transition: background .25s, color .25s; border-radius: .3rem; padding: 0 .1rem; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.tour .reponse .phrase.dite { background: rgba(99,102,241,.16); color: #312e81; }
+.tour .reponse .phrase.dite { background: linear-gradient(105deg, rgba(99,102,241,.18), rgba(168,85,247,.14)); color: #312e81; }
 .dark .tour .reponse .phrase.dite { background: rgba(129,140,248,.22); color: #e0e7ff; }
 .tour .reponse .wiki-cite, .tour .reponse .anomaly-cite { vertical-align: baseline; margin: 0 .1rem; }
 .tour .etat { font-size: .78rem; color: #6b7280; display: flex; align-items: center; gap: .4rem; margin-top: .8rem; }
@@ -846,48 +894,138 @@ document.addEventListener("keydown", (e) => {
   if (e.code === "Space" && !saisie) { e.preventDefault(); actionMicro(); }
 });
 
-/* L'orbe : respire au repos, s'ouvre au niveau du micro, vibre au son de la voix, tourne
-   pendant la recherche. */
-let lisse = 0, angle = 0;
+/* ============================================================================
+   L'orbe : trois nappes organiques qui respirent au repos, s'ouvrent au niveau du micro et
+   vibrent au son de la voix. Les couleurs glissent d'un état à l'autre plutôt que de sauter,
+   et des ondes partent du bord dès que ça parle — de part et d'autre du micro, c'est le même
+   objet qui écoute et qui répond.
+   ========================================================================== */
+const PALETTES = {
+  repos:      [[99, 102, 241], [139, 92, 246], [217, 70, 239]],
+  ecoute:     [[244, 63, 94], [251, 113, 133], [249, 115, 22]],
+  traitement: [[245, 158, 11], [251, 191, 36], [249, 115, 22]],
+  parole:     [[79, 70, 229], [168, 85, 247], [56, 189, 248]],
+};
+let teintes = PALETTES.repos.map((c) => c.slice());
+let lisse = 0, angle = 0, ondes = [], derniereOnde = 0;
+
+const rgba = (c, a) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+
+/* Un contour fermé déformé par trois sinusoïdes de périodes différentes : le mélange ne se
+   répète pas à l'œil, et l'amplitude suit le son. */
+function nappe(ctx, cx, cy, rayon, t, amplitude, dephasage) {
+  const n = 72;
+  ctx.beginPath();
+  for (let i = 0; i <= n; i++) {
+    const a = (i / n) * Math.PI * 2;
+    const d = rayon * (1 + amplitude * (
+      0.55 * Math.sin(a * 3 + t * 1.10 + dephasage) +
+      0.30 * Math.sin(a * 5 - t * 0.70 + dephasage * 1.7) +
+      0.15 * Math.sin(a * 2 + t * 1.55 + dephasage * 0.6)));
+    const x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
+    if (i) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+  }
+  ctx.closePath();
+}
+
 function dessiner() {
   const canvas = document.getElementById("orbe");
   if (!canvas) return requestAnimationFrame(dessiner);
   const ctx = canvas.getContext("2d");
   const w = canvas.width, h = canvas.height, cx = w / 2, cy = h / 2;
-  const t = performance.now() / 1000;
+  const temps = performance.now() / 1000;
   ctx.clearRect(0, 0, w, h);
+
+  // Le niveau : le micro quand on écoute, la sortie quand LIA parle. La montée est vive, la
+  // descente lente — sinon l'orbe clignote sur chaque syllabe.
   let niveau = 0;
   if (etat === ETATS.ECOUTE) niveau = Math.min(1, niveauMicro * 9);
   else if (etat === ETATS.PAROLE) niveau = Math.min(1, niveauSortie() * 3.2);
-  lisse += (niveau - lisse) * (niveau > lisse ? 0.35 : 0.12);
-  const couleurs = etat === ETATS.ECOUTE ? ["#f43f5e", "#fb7185", "#e11d48"]
-    : etat === ETATS.TRAITEMENT ? ["#f59e0b", "#fbbf24", "#d97706"]
-    : etat === ETATS.PAROLE ? ["#6366f1", "#a78bfa", "#4f46e5"]
-    : ["#6366f1", "#8b5cf6", "#4f46e5"];
-  const base = w * 0.32;
-  const respiration = etat === ETATS.REPOS ? Math.sin(t * 1.4) * w * 0.008 : 0;
-  const r = base + respiration + lisse * w * 0.06;
+  lisse += (niveau - lisse) * (niveau > lisse ? 0.35 : 0.08);
 
-  // halo
-  const halo = ctx.createRadialGradient(cx, cy, r * 0.6, cx, cy, r * 1.55);
-  halo.addColorStop(0, couleurs[0] + "55"); halo.addColorStop(1, couleurs[1] + "00");
-  ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(cx, cy, r * 1.55, 0, Math.PI * 2); ctx.fill();
-  // anneaux
-  for (let i = 3; i >= 1; i--) {
-    const rr = r + i * w * 0.030 + Math.sin(t * 2.3 + i) * w * 0.005 * (etat === ETATS.REPOS ? 1 : 2 + lisse * 3);
-    ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2);
-    ctx.strokeStyle = couleurs[1] + (i === 1 ? "66" : i === 2 ? "3a" : "1f"); ctx.lineWidth = w * 0.005; ctx.stroke();
+  const cible = PALETTES[etat] || PALETTES.repos;
+  for (let i = 0; i < 3; i++) {
+    for (let c = 0; c < 3; c++) teintes[i][c] += (cible[i][c] - teintes[i][c]) * 0.07;
   }
-  // cœur
-  const coeur = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.35, r * 0.1, cx, cy, r);
-  coeur.addColorStop(0, couleurs[1]); coeur.addColorStop(1, couleurs[2]);
-  ctx.fillStyle = coeur; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
-  // recherche : un arc qui tourne
+
+  const base = w * 0.27;
+  const respiration = Math.sin(temps * 1.25) * w * (etat === ETATS.REPOS ? 0.011 : 0.005);
+  const r = base + respiration + lisse * w * 0.055;
+  const remous = 0.045 + lisse * 0.075 + (etat === ETATS.TRAITEMENT ? 0.03 : 0);
+
+  // Les ondes : une bulle de lumière quittant le bord à chaque montée de son.
+  if ((etat === ETATS.PAROLE || etat === ETATS.ECOUTE) && lisse > 0.14 && temps * 1000 - derniereOnde > 460) {
+    derniereOnde = temps * 1000;
+    ondes.push({ r: r * 1.05, a: 0.22 + lisse * 0.16 });
+  }
+  ondes = ondes.filter((o) => o.a > 0.015);
+  for (const onde of ondes) {
+    onde.r += w * 0.0042;
+    onde.a *= 0.972;
+    ctx.beginPath();
+    ctx.arc(cx, cy, onde.r, 0, Math.PI * 2);
+    ctx.strokeStyle = rgba(teintes[1], onde.a);
+    ctx.lineWidth = w * 0.004;
+    ctx.stroke();
+  }
+
+  // Le halo, largement diffus : c'est lui qui éclaire la barre et déborde sur la conversation.
+  const halo = ctx.createRadialGradient(cx, cy, r * 0.55, cx, cy, r * 1.85);
+  halo.addColorStop(0, rgba(teintes[0], 0.34));
+  halo.addColorStop(0.55, rgba(teintes[2], 0.12));
+  halo.addColorStop(1, rgba(teintes[1], 0));
+  ctx.fillStyle = halo;
+  ctx.beginPath(); ctx.arc(cx, cy, r * 1.85, 0, Math.PI * 2); ctx.fill();
+
+  // Deux nappes additives, déphasées : le noyau paraît fluide et irisé plutôt que peint.
+  ctx.globalCompositeOperation = "lighter";
+  nappe(ctx, cx, cy, r * 1.04, temps, remous, 0);
+  ctx.fillStyle = rgba(teintes[2], 0.30);
+  ctx.fill();
+  nappe(ctx, cx, cy, r * 0.97, temps * 1.15, remous * 0.9, 2.2);
+  ctx.fillStyle = rgba(teintes[0], 0.34);
+  ctx.fill();
+  ctx.globalCompositeOperation = "source-over";
+
+  // Le noyau : dégradé décalé vers le haut-gauche, comme une sphère éclairée de biais.
+  ctx.save();
+  ctx.shadowColor = rgba(teintes[1], 0.5);
+  ctx.shadowBlur = w * 0.07;
+  nappe(ctx, cx, cy, r, temps * 0.9, remous * 0.75, 4.1);
+  const coeur = ctx.createRadialGradient(cx - r * 0.34, cy - r * 0.4, r * 0.06, cx, cy, r * 1.08);
+  coeur.addColorStop(0, rgba(teintes[1].map((v) => Math.min(255, v + 70)), 0.98));
+  coeur.addColorStop(0.45, rgba(teintes[0], 0.97));
+  coeur.addColorStop(1, rgba(teintes[2], 0.93));
+  ctx.fillStyle = coeur;
+  ctx.fill();
+  ctx.restore();
+
+  // Le reflet spéculaire, et un liseré clair au sommet : la sphère prend du volume.
+  ctx.save();
+  nappe(ctx, cx, cy, r, temps * 0.9, remous * 0.75, 4.1);
+  ctx.clip();
+  const reflet = ctx.createRadialGradient(cx - r * 0.36, cy - r * 0.46, 0, cx - r * 0.36, cy - r * 0.46, r * 0.85);
+  reflet.addColorStop(0, "rgba(255,255,255,.42)");
+  reflet.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = reflet;
+  ctx.fillRect(cx - r * 1.3, cy - r * 1.3, r * 2.6, r * 2.6);
+  ctx.restore();
+
+  // La recherche : un arc qui tourne autour de l'orbe.
   if (etat === ETATS.TRAITEMENT) {
-    angle += 0.07;
-    ctx.beginPath(); ctx.arc(cx, cy, r + w * 0.045, angle, angle + Math.PI * 0.9);
-    ctx.strokeStyle = "#ffffffcc"; ctx.lineWidth = w * 0.014; ctx.lineCap = "round"; ctx.stroke();
+    angle += 0.055;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * 1.22, angle, angle + Math.PI * 0.75);
+    ctx.strokeStyle = "rgba(255,255,255,.85)";
+    ctx.lineWidth = w * 0.013;
+    ctx.lineCap = "round";
+    ctx.stroke();
   }
+
+  // La barre reprend la couleur de l'orbe : une seule source de lumière à l'écran.
+  const commande = document.getElementById("commande");
+  if (commande) commande.style.setProperty("--lueur", rgba(teintes[1], 0.13 + lisse * 0.14));
+
   requestAnimationFrame(dessiner);
 }
 
