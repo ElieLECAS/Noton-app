@@ -37,26 +37,29 @@ def test_real_wiki_loads(real_snapshot):
     assert snap.raw_files == sorted(snap.raw_files)
 
 
-def test_prompt_order_and_exclusions(real_snapshot):
+def test_le_prompt_permanent_ne_contient_pas_le_wiki(real_snapshot):
+    """Consignes, vocabulaire, index des anomalies — et rien du corps des pages."""
     prompt = real_snapshot.system_prompt
     consignes = wiki_service.CONSIGNES_PATH.read_text(encoding="utf-8").rstrip()
     assert prompt.startswith(consignes)
-    assert "/log.md =====" not in prompt
-    i_index = prompt.index("===== TABLE DES MATIÈRES /index.md =====")
-    i_anomalies = prompt.index("===== PAGE /anomalies/")
-    i_profiles = prompt.index("===== PAGE /profiles/")
-    assert i_index < i_anomalies < i_profiles
-    assert prompt.endswith("===== FIN DU WIKI =====")
-    # Toutes les pages concept y sont, une fois.
-    for page in real_snapshot.concept_pages:
-        assert prompt.count(f"===== PAGE {page.id} =====") == 1
+    assert "===== VOCABULAIRE DU WIKI" in prompt
+    assert "===== INDEX DES ANOMALIES" in prompt
+    # L'index des anomalies ne porte qu'un identifiant et un sujet par entrée.
+    assert "CTR-09 | " in prompt
+    # Aucune page n'est recopiée : c'est tout l'objet de la navigation outillée.
+    assert "===== PAGE /" not in prompt
+    for page in real_snapshot.concept_pages[:20]:
+        if len(page.body) > 400:
+            assert page.body[:400] not in prompt
+    # Il reste petit : il est payé à chaque appel d'un tour d'outils.
+    assert real_snapshot.estimated_tokens < wiki_service.TOKEN_WARNING_THRESHOLD
 
 
 def test_cache_key_covers_whole_prompt(real_snapshot):
-    pages = real_snapshot.pages
-    _, k1 = build_system_prompt(pages, "consignes A")
-    _, k1_again = build_system_prompt(pages, "consignes A")
-    _, k2 = build_system_prompt(pages, "consignes B")
+    index = real_snapshot.index
+    _, k1 = build_system_prompt(index, "consignes A")
+    _, k1_again = build_system_prompt(index, "consignes A")
+    _, k2 = build_system_prompt(index, "consignes B")
     assert k1 == k1_again
     assert k1 != k2
     assert k1.startswith("lia-wiki-") and len(k1) == len("lia-wiki-") + 32
@@ -161,7 +164,31 @@ def test_get_snapshot_reloads_when_a_file_changes(small_wiki: Path, monkeypatch)
 
     second = get_snapshot()
     assert second is not first
-    assert second.cache_key != key_before
+    # Le corps d'une page ne figure plus dans le prompt permanent : la clé de cache ne bouge
+    # donc pas, et c'est bien ce qu'on veut — le préfixe mis en cache reste valide. Ce qui doit
+    # changer, c'est le contenu servi par l'index.
+    assert second.cache_key == key_before
+    assert "Une ligne de plus." in second.pages["/gammes/beta.md"].body
+    entree = next(e for e in second.index.entries if e["chemin"] == "/gammes/beta.md")
+    assert "Une ligne de plus." in entree["corps"]
+    reset_snapshot()
+
+
+def test_le_vocabulaire_change_invalide_le_cache(small_wiki: Path, monkeypatch):
+    """Un tag nouveau entre dans le vocabulaire, donc dans le prompt : la clé doit bouger."""
+    monkeypatch.setattr(settings, "WIKI_DIR", str(small_wiki))
+    reset_snapshot()
+    avant = get_snapshot().cache_key
+
+    page = small_wiki / "wiki" / "gammes" / "alpha.md"
+    texte = page.read_text(encoding="utf-8").replace("tags: [alpha]", "tags: [alpha, tag-tout-neuf]", 1)
+    page.write_text(texte, encoding="utf-8")
+    future = time.time() + 5
+    os.utime(page, (future, future))
+
+    apres = get_snapshot()
+    assert "tag-tout-neuf" in apres.system_prompt
+    assert apres.cache_key != avant
     reset_snapshot()
 
 

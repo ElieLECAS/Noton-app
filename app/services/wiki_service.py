@@ -6,9 +6,12 @@ Le wiki est un bundle OKF (``wiki_llm/wiki/*.md`` : frontmatter YAML + markdown,
 
   * les pages (frontmatter, corps, liens sortants), les nœuds fantômes (liens vers des pages
     pas encore écrites — valides en OKF), les degrés, les pages périmées ;
-  * le **prompt système** du chat : consignes + ``index.md`` + registres d'anomalies + toutes
-    les pages, ``log.md`` exclu — et sa clé de cache Mistral (sha256 du prompt entier, donc
-    toute modification du wiki ou des consignes invalide proprement le cache) ;
+  * l'**index de navigation** (``wiki_index.WikiIndex``) : recherche lexicale sur le texte
+    intégral et registres d'anomalies, ce que l'outil ``chercher`` du chat interroge ;
+  * le **prompt système** du chat : consignes + vocabulaire + index des anomalies — quelques
+    milliers de tokens, PAS le wiki, qui ne tient dans aucune fenêtre — et sa clé de cache
+    Mistral (sha256 du prompt entier, donc toute modification des consignes, du vocabulaire ou
+    d'une entrée d'anomalie invalide proprement le cache) ;
   * un lint (orphelines, fantômes, périmées, frontmatter illisible, pages hors index) et des
     statistiques pour la carte d'administration.
 
@@ -16,8 +19,9 @@ L'instantané est reconstruit dès qu'un fichier change (signature = nombre, tai
 ``.md`` + date des consignes + nombre de PDF de ``raw/``), vérifiée à chaque accès : quelques
 dizaines de ``stat`` — sans bouton ni tâche planifiée.
 
-Mesuré le 18/09/2026 sur un appel réel : 542 491 caractères → 185 508 tokens (2,92 car./tok),
-cache Mistral à 99,98 % dès le troisième appel, premier appel 15,5 s puis 5,9 s en cache.
+Le 19/09/2026 le wiki est passé en transcription exhaustive des PDF : 198 pages, largement
+au-delà de la fenêtre de 256 k. Le contexte augmenté (CAG) est donc abandonné au profit de la
+navigation outillée — voir ``wiki_index`` et ``wiki_chat_service``.
 """
 from __future__ import annotations
 
@@ -35,6 +39,8 @@ from typing import Any, Dict, List, Optional, Tuple
 import yaml
 
 from app.config import settings
+from app.services import wiki_index
+from app.services.wiki_index import WikiIndex
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +49,10 @@ LINK_RE = re.compile(r"\[([^\]]*)\]\((/[^)\s]+\.md)\)")
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n?(.*)\Z", re.DOTALL)
 # Ratio caractères / token mesuré le 18/09 sur le prompt réel (Small, tokenizer tekken).
 CHARS_PER_TOKEN = 2.924
-# Fenêtre de Small : 256 k tokens. Au-delà de ce seuil ESTIMÉ, on avertit (journal + admin) :
-# pas de troncature silencieuse — la décision appartient à celui qui écrit le wiki.
-TOKEN_WARNING_THRESHOLD = 200_000
+# Le prompt permanent ne porte plus que les consignes, le vocabulaire et l'index des anomalies :
+# il doit rester petit, puisqu'il est payé à chaque appel d'un tour d'outils. Au-delà de ce seuil
+# ESTIMÉ on avertit (journal + admin) — c'est en général le vocabulaire ou un registre qui enfle.
+TOKEN_WARNING_THRESHOLD = 20_000
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONSIGNES_PATH = PROJECT_ROOT / "app" / "prompts" / "wiki_consignes.md"
 
@@ -67,6 +74,10 @@ class WikiPage:
     description: str = ""
     status: str = ""
     tags: List[str] = field(default_factory=list)
+    # Facettes de la recherche : saisies tantôt en chaîne, tantôt en entier, tantôt en liste.
+    gamme: List[str] = field(default_factory=list)
+    systeme: List[str] = field(default_factory=list)
+    famille: List[str] = field(default_factory=list)
     stale_after: str = ""
     stale: bool = False
     folder: str = "."
@@ -114,6 +125,7 @@ class WikiSnapshot:
     root: Path
     pages: Dict[str, WikiPage]
     links: List[Dict[str, Any]]
+    index: WikiIndex
     system_prompt: str
     cache_key: str
     raw_files: List[str]
@@ -320,6 +332,9 @@ def _parse_page(path: Path, wiki_dir: Path) -> WikiPage:
         description=str(meta.get("description") or "").strip(),
         status=str(meta.get("status") or "").strip(),
         tags=tags,
+        gamme=wiki_index.normalise(meta.get("gamme")),
+        systeme=wiki_index.normalise(meta.get("systeme")),
+        famille=wiki_index.normalise(meta.get("famille")),
         stale_after=stale_after_str,
         stale=bool(stale_after_str and stale_after_str < date.today().isoformat()),
         folder=folder,
@@ -369,32 +384,27 @@ def _signature(root: Path) -> Tuple:
 # ---------------------------------------------------------------------------
 
 
-def build_system_prompt(pages: Dict[str, WikiPage], consignes: str) -> Tuple[str, str]:
-    """Consignes, puis la table des matières, puis les registres d'anomalies (la consigne n° 2
-    impose de les consulter d'abord), puis toutes les pages par chemin. ``log.md`` est exclu :
-    journal d'opérations, aucune valeur de réponse, et il change à chaque édition.
+def build_system_prompt(index: WikiIndex, consignes: str) -> Tuple[str, str]:
+    """Consignes, vocabulaire, index des anomalies. **Pas le wiki** : il ne tient pas.
+
+    Le modèle n'a en permanence que de quoi *formuler une recherche* — les types de pages, les
+    tags, les gammes, les systèmes — et de quoi *savoir qu'une anomalie existe* : un identifiant
+    et un sujet par entrée. Les pages arrivent par l'outil ``chercher`` ; le détail d'une entrée
+    par ``lire_anomalie``, et les entrées qui concernent la réponse sont de toute façon injectées
+    par le serveur (règle 2).
 
     Retourne ``(prompt, clé de cache)``. La clé couvre le prompt ENTIER, consignes comprises :
     modifier une consigne invalide donc le cache au lieu de servir un préfixe périmé.
     """
-    index = pages.get("/index.md")
-    anomalies = sorted(
-        (p for p in pages.values() if p.is_concept and p.folder == "anomalies"),
-        key=lambda p: p.id,
-    )
-    others = sorted(
-        (p for p in pages.values() if p.is_concept and p.folder != "anomalies"),
-        key=lambda p: p.id,
-    )
-    parts: List[str] = []
-    if index is not None:
-        parts.append(f"===== TABLE DES MATIÈRES {index.id} =====\n{index.raw_text}")
-    for page in anomalies + others:
-        parts.append(f"===== PAGE {page.id} =====\n{page.raw_text}")
-    corpus = "\n\n".join(parts)
-    prompt = (
-        f"{consignes.rstrip()}\n\n===== DÉBUT DU WIKI =====\n\n{corpus}\n\n===== FIN DU WIKI ====="
-    )
+    prompt = "\n\n".join([
+        consignes.rstrip(),
+        f"===== VOCABULAIRE DU WIKI ({len(index.entries)} pages indexées) =====",
+        index.vocabulaire(),
+        f"===== INDEX DES ANOMALIES ({len(index.anomalies)} entrées) =====",
+        "Identifiant et sujet seulement. Le détail des entrées qui concernent ta réponse t'est "
+        "fourni automatiquement ; pour les autres, appelle lire_anomalie(identifiant).",
+        index.index_anomalies(),
+    ])
     key = "lia-wiki-" + hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:32]
     return prompt, key
 
@@ -458,7 +468,8 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
         pages[link["source"]].out_degree += 1
         pages[link["target"]].in_degree += 1
 
-    prompt, cache_key = build_system_prompt(pages, consignes)
+    index = WikiIndex(pages.values())
+    prompt, cache_key = build_system_prompt(index, consignes)
     raw_dir = root / "raw"
     raw_files = sorted(p.name for p in raw_dir.glob("*.pdf")) if raw_dir.is_dir() else []
 
@@ -466,6 +477,7 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
         root=root,
         pages=pages,
         links=links,
+        index=index,
         system_prompt=prompt,
         cache_key=cache_key,
         raw_files=raw_files,
@@ -474,17 +486,20 @@ def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None
         lint=_lint(pages),
     )
     logger.info(
-        "[wiki] %d pages, %d liens, %d fantômes, %s car. (~%s tokens), clé %s",
+        "[wiki] %d pages, %d liens, %d fantômes, %d entrées d'anomalie — prompt permanent "
+        "%s car. (~%s tokens), clé %s",
         len(snapshot.concept_pages),
         len(links),
         len(snapshot.lint["ghosts"]),
+        len(index.anomalies),
         f"{snapshot.char_count:,}".replace(",", " "),
         f"{snapshot.estimated_tokens:,}".replace(",", " "),
         cache_key,
     )
     if snapshot.token_warning:
         logger.warning(
-            "[wiki] le prompt système dépasse %s tokens estimés : la fenêtre de 256 k approche",
+            "[wiki] le prompt permanent dépasse %s tokens estimés : il est payé à chaque appel "
+            "d'un tour d'outils — vérifier le vocabulaire et les registres d'anomalies",
             f"{TOKEN_WARNING_THRESHOLD:,}".replace(",", " "),
         )
     return snapshot

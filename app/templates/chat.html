@@ -58,6 +58,19 @@ table td img:hover {
 .thinking-bubble .thinking-body { white-space: pre-wrap; }
 .thinking-bubble.fade-out { opacity: 0; max-height: 0; margin: 0; padding: 0; }
 
+/* Étapes de lecture — l'outil appelé, son argument, les pages chargées */
+.lia-steps { margin-bottom: 0.6rem; display: flex; flex-direction: column; gap: 0.15rem; }
+.lia-step { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; line-height: 1.45; color: #6b7280; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.dark .lia-step { color: #9ca3af; }
+.lia-step i { font-size: 0.8rem; opacity: 0.6; flex-shrink: 0; }
+.lia-step span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lia-step-page { padding-left: 1.2rem; opacity: 0.8; }
+.lia-step-page i { color: #6366f1; }
+
+/* Coupes de profilés : le modèle recopie le lien image d'une page, le serveur le vérifie */
+.wiki-doc img { max-width: 100%; max-height: 420px; margin: 0.7rem 0; border-radius: 0.5rem; border: 1px solid rgba(0,0,0,0.07); background: #fff; padding: 0.4rem; }
+.dark .wiki-doc img { border-color: rgba(255,255,255,0.08); }
+
 /* Le lecteur — panneau plus étroit que la page /wiki : en-tête un cran plus petit */
 #reader { width: 0; opacity: 0; pointer-events: none; transition: width .22s cubic-bezier(.2,.7,.3,1), opacity .18s; }
 #reader.open { width: 30rem; opacity: 1; pointer-events: auto; }
@@ -840,11 +853,13 @@ async function submitChat(message) {
   wrap.innerHTML = `
     <div class="w-full max-w-[92%] lg:max-w-[78%] assistant-message-bubble rounded-2xl px-5 py-4 shadow-sm">
       <div class="thinking-bubble hidden"><div class="thinking-head"><i class="ti ti-bulb"></i> Réflexion…</div><div class="thinking-body"></div></div>
+      <div class="lia-steps hidden"></div>
       <div class="wiki-doc streaming"></div>
     </div>`;
   host.appendChild(wrap);
   const bubble = wrap.querySelector(".assistant-message-bubble");
   const contentEl = wrap.querySelector(".wiki-doc");
+  const stepsEl = wrap.querySelector(".lia-steps");
   const thinkingEl = wrap.querySelector(".thinking-bubble");
   const thinkingBody = wrap.querySelector(".thinking-body");
   const renderStage = (label) => {
@@ -911,6 +926,29 @@ async function submitChat(message) {
         try { data = JSON.parse(line.slice(6)); } catch (_) { continue; }
         if (data.stage) {
           if (!full && !thinkingStarted) renderStage(data.stage.label);
+        } else if (data.etape) {
+          // Le tour de lecture s'affiche pendant qu'il a lieu : un outil, son argument, et les
+          // pages que « chercher » a livrées entières. C'est la traçabilité de la réponse.
+          stepsEl.classList.remove("hidden");
+          if (!full) contentEl.innerHTML = "";
+          const ligne = document.createElement("div");
+          ligne.className = "lia-step";
+          ligne.innerHTML = `<i class="ti ti-search"></i><span>${escapeHtml(data.etape.libelle)} : ${escapeHtml(data.etape.detail)}</span>`;
+          stepsEl.appendChild(ligne);
+          for (const chemin of data.etape.pages || []) {
+            const page = document.createElement("div");
+            page.className = "lia-step lia-step-page";
+            page.innerHTML = `<i class="ti ti-file-text"></i><span>page chargée : ${escapeHtml(chemin)}</span>`;
+            stepsEl.appendChild(page);
+          }
+          host.scrollTop = host.scrollHeight;
+        } else if (data.reset) {
+          // Le modèle a finalement appelé un outil : ce qu'il avait commencé à écrire n'était
+          // qu'un préambule, il n'a pas sa place à l'écran.
+          full = ""; contentEl.innerHTML = "";
+        } else if (data.remplacer) {
+          // Le serveur a retiré une coupe inventée ou ajouté la coupe demandée.
+          full = data.remplacer; contentEl.innerHTML = parseMarkdown(full);
         } else if (data.thinking) {
           if (!thinkingStarted) { thinkingStarted = true; contentEl.innerHTML = ""; thinkingEl.classList.remove("hidden"); }
           thinking += data.thinking;

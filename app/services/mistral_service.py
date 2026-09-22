@@ -162,6 +162,12 @@ def _clean_messages(messages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
     for msg in messages[idx:]:
         role = msg.get("role")
+        # Un tour d'outils ne se fusionne pas et ne se jette pas : le message assistant qui
+        # porte des ``tool_calls`` a un contenu vide, et chaque résultat ``tool`` doit rester
+        # apparié à son appel par ``tool_call_id``. Les deux passent tels quels.
+        if role == "tool" or msg.get("tool_calls"):
+            cleaned.append(dict(msg))
+            continue
         content = _text_of(msg.get("content", ""))
         if not content.strip():
             continue
@@ -188,9 +194,12 @@ async def chat_stream(
     top_p: Optional[float] = None,
     **kwargs: Any,
 ):
-    """Appel streamé. Rend des chaînes JSON : ``thinking``, ``message``, puis ``usage``.
+    """Appel streamé. Rend des chaînes JSON : ``thinking``, ``message``, ``tool_calls``, ``usage``.
 
-    ``kwargs`` part tel quel dans la charge utile (``prompt_cache_key``, ``reasoning_effort``).
+    ``kwargs`` part tel quel dans la charge utile (``prompt_cache_key``, ``reasoning_effort``,
+    ``tools``, ``tool_choice``). Quand le modèle appelle un outil plutôt que de répondre, le
+    flux ne porte aucun ``message`` : les appels recollés sortent en un seul ``tool_calls``
+    juste avant l'``usage``.
     """
     if not settings.MISTRAL_API_KEY:
         raise ValueError("MISTRAL_API_KEY n'est pas configurée")
@@ -247,6 +256,10 @@ async def chat_stream(
                         response.raise_for_status()
 
                     usage: Optional[Dict[str, Any]] = None
+                    # Les appels d'outils arrivent en fragments : l'identifiant et le nom sur
+                    # le premier delta, les arguments JSON en morceaux sur les suivants. On
+                    # les recolle par index et on ne les rend qu'une fois complets.
+                    tool_calls: Dict[int, Dict[str, Any]] = {}
                     async for line in response.aiter_lines():
                         if not line or not line.startswith("data:"):
                             continue
@@ -267,6 +280,19 @@ async def chat_stream(
                         if not choices:
                             continue
                         delta = (choices[0] or {}).get("delta") or {}
+                        for fragment in delta.get("tool_calls") or []:
+                            last_token_ts = time.monotonic()
+                            slot = tool_calls.setdefault(
+                                fragment.get("index", 0),
+                                {"id": "", "type": "function", "function": {"name": "", "arguments": ""}},
+                            )
+                            if fragment.get("id"):
+                                slot["id"] = fragment["id"]
+                            fonction = fragment.get("function") or {}
+                            if fonction.get("name"):
+                                slot["function"]["name"] = fonction["name"]
+                            if fonction.get("arguments"):
+                                slot["function"]["arguments"] += fonction["arguments"]
                         content = delta.get("content")
                         if content:
                             last_token_ts = time.monotonic()
@@ -300,6 +326,10 @@ async def chat_stream(
                         if time.monotonic() - start_ts > max_duration_seconds:
                             logger.warning("Mistral stream max duration reached (%ss)", max_duration_seconds)
                             break
+                    if tool_calls:
+                        yield json.dumps(
+                            {"tool_calls": [tool_calls[i] for i in sorted(tool_calls)]}
+                        )
                     if usage:
                         yield json.dumps({"usage": usage})
                 break

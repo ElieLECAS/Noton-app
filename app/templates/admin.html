@@ -404,13 +404,13 @@
                 </div>
             </div>
 
-            <!-- Bandeau : le prompt approche la fenêtre du modèle -->
+            <!-- Bandeau : le prompt permanent enfle (il est payé à chaque appel d'un tour d'outils) -->
             <div id="wiki-token-warning" class="hidden rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 flex items-start gap-3">
                 <i class="ti ti-alert-triangle text-amber-600 dark:text-amber-400 text-xl shrink-0"></i>
                 <div>
-                    <div class="text-sm font-bold text-amber-800 dark:text-amber-300">Le prompt approche la fenêtre de 256 k tokens</div>
+                    <div class="text-sm font-bold text-amber-800 dark:text-amber-300">Le prompt permanent enfle</div>
                     <div class="text-xs text-amber-700 dark:text-amber-400 mt-0.5 font-semibold">
-                        Le wiki entier est injecté à chaque appel : scindez ou allégez les pages les plus longues avant que le modèle ne tronque.
+                        Consignes, vocabulaire et index des anomalies sont envoyés à chaque appel d'un tour de lecture : vérifiez le vocabulaire et les registres d'anomalies.
                     </div>
                 </div>
             </div>
@@ -810,7 +810,9 @@ function closeAdminConversationModal() {
 // Le wiki markdown est la seule matière de l'assistant : cet onglet montre ce qui est
 // chargé (pages, liens, budget de tokens) et ce que le lint a relevé au chargement.
 
-const WIKI_CONTEXT_WINDOW = 256000;
+// Le prompt permanent ne porte plus le wiki : la jauge se lit contre le seuil d'alerte du
+// serveur (wiki_service.TOKEN_WARNING_THRESHOLD), pas contre la fenêtre du modèle.
+const WIKI_CONTEXT_WINDOW = 20000;
 
 function wikiFmtInt(n) {
     if (n === null || n === undefined || Number.isNaN(Number(n))) return '—';
@@ -967,7 +969,7 @@ function renderWikiBudget(s) {
                 <div class="w-full bg-black/5 dark:bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
                     <div class="${barTone} h-full rounded-full" style="width: ${pct}%"></div>
                 </div>
-                <div class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 font-semibold">${pct} % de la fenêtre · ${wikiFmtInt(s.chars)} caractères</div>
+                <div class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 font-semibold">${pct} % du budget de prompt permanent · ${wikiFmtInt(s.chars)} caractères</div>
             </div>
             <div>${lastCall}</div>
         </div>`;
