@@ -41,8 +41,13 @@ machine (0 fichier) : la fidélité des pages aux documents n'a pas pu être con
    pages à scinder pour la taille, trois familles de contenu à déplacer de `sources/` vers les
    pages concept.
 
-Le plan ordonné est en § 8. Les corrections d'index (§ 3) sont les plus rentables : une
-demi-journée, +8 questions sur 62, aucune écriture de wiki.
+7. **Le wiki est une base de données lue comme de la prose.** Les cotes de débit sont des
+   formules, les abaques des bornes, l'AEV par site une matrice à trois entrées, et rien de tout
+   cela n'est calculé : c'est récité. Les fonctionnalités qui dépassent le chat et le wiki
+   consultable sont au § 9, avec ce qu'elles supposent.
+
+Le plan ordonné est en § 8, les fonctionnalités au § 9. Les corrections d'index (§ 3) sont les
+plus rentables : une demi-journée, +8 questions sur 62, aucune écriture de wiki.
 
 ---
 
@@ -436,7 +441,165 @@ page les porte, l'autre renvoie.
 12. Export des 👎 vers une liste de corrections ; biais vocal curé ; recherche unifiée à
     l'accueil du wiki ; `.env` nettoyé ; dépendances remontées.
 
-## 9. Ce que cet audit n'a pas pu faire
+Ce plan remet le chat au niveau que les pages permettent. Il ne crée aucune fonctionnalité : ce
+qui va au‑delà du chat et du wiki consultable est au § 9, et deux de ces entrées y trouvent leur
+prolongement — la veille des validités (§ 9.5) est le débouché du `stale_after` posé en P1, et
+l'export des 👎 (P2, entrée 12) est la première brique de la boucle usage vers wiki.
+
+## 9. Au-delà du chat : ce que les tableaux permettent de construire
+
+Le wiki n'est pas un corpus de texte, c'est une base de données lue comme de la prose. Le
+protocole impose une ligne par référence et l'unité en en‑tête : les cotes de débit sont des
+formules, les abaques sont des bornes, l'AEV par site est une matrice à trois entrées. Aujourd'hui
+le modèle lit ces tableaux et les récite. Les fonctionnalités qui suivent les **calculent**. C'est
+la différence entre un assistant qui répond et un outil qui décide, et c'est exactement là où un
+petit modèle est le plus faible : croiser quatre tableaux sans se tromper de ligne.
+
+### 9.1 Le vérificateur de faisabilité
+
+**Ce qu'il fait.** On saisit une configuration — gamme, dimensions hors tout, type d'ouverture,
+épaisseur de vitrage, couleur du profilé, épaisseur d'isolant — et il répond **réalisable**,
+**hors domaine d'emploi** ou **sur étude**, en nommant la contrainte qui mord et la page qui la
+porte. Pas une réponse rédigée : un verdict, ses bornes, ses citations.
+
+**Ce qui existe déjà**, et qu'il suffit de croiser :
+
+| Contrainte | Où elle est écrite |
+| --- | --- |
+| Dimensions maximales de baie par configuration d'ouverture | `/certifications/dta-6-16-2334.md`, reprises sur `/gammes/perform.md` |
+| Cotes d'ouvrant maximales par renfort | `/profiles/systeme-76-abaques-dimensionnels.md` |
+| Renforcement total obligatoire au‑delà de 12 mm de verre ; courbes 12, 16, 20, 24, 28 mm, arrondi à la courbe supérieure | idem |
+| Renfort systématique en couleur et en IR‑Reflex, préconisé en blanc | idem |
+| Largeur, hauteur et poids de vantail admissibles par type d'ouverture et classe de sécurité, côtés P et Designo II, plus la conversion épaisseur de vitrage → poids | `/quincaillerie/roto-nx-champs-application.md` |
+| Épaisseur de vitrage plafonnée à 50 mm par le DTA, parclose correspondante | `/profiles/perform76-parcloses.md` |
+| Charge du pivot bas, 100 kg (CTR‑01) | `/quincaillerie/perform76-poignee-et-pivot.md` |
+| Isolant admissible par couple dormant et tapée | `/profiles/perform76-tapees-et-isolation.md` |
+
+**Ce qui manque.** Les tableaux sous forme de données (§ 9.6) et un moteur de règles déterministe.
+Le modèle n'intervient que pour remplir le formulaire depuis une phrase et pour rédiger le verdict.
+**Aucune valeur ne doit sortir du modèle.** Une case que le wiki laisse à `-` reste indécidable :
+le verdict est alors « sur étude », jamais une interpolation.
+
+**Pourquoi en premier.** C'est la question qui coûte de l'argent quand la réponse est fausse, et
+c'est celle où le tour de chat est structurellement le plus exposé. Les échecs du golden du 18/09
+étaient déjà des croisements de tableaux.
+
+### 9.2 Le calcul de débit et la nomenclature
+
+`/profiles/systeme-76-cotes-de-debit.md` écrit la méthode en toutes lettres : ce sont des **cotes
+à déduire, pour une seule coupe**, avec l'exemple chiffré du manuel (DHT 2 000 × 1 200, dormant
+76171, meneau 76372 : DEO = 1 000 − (38 + 13) = 949, vitrage = 949 − 2 × 60 = 829) et la table de
+déduction des sept dormants, colonne par colonne — DEO, DFO, vitrage fixe, renfort, meneau,
+renfort de meneau, parclose. Le système 70, l'ASKEY, le SOLEAL FY, le GY, le PY et le LUMEAL GA
+ont chacun la leur.
+
+Saisir la dimension hors tout et la configuration rend les cotes de coupe et la liste des
+références à commander. Deux pièges que le calculateur doit hériter du wiki plutôt que les
+lisser : le renfort du 76173 ne se débite pas symétriquement (75 mm en haut, 45 vers le bas), et
+trois des sept dormants du système ne sont pas proposés par PROFERM. C'est l'outil que l'atelier
+ouvrira tous les jours, et c'est aussi le meilleur test de fidélité du wiki : une cote fausse s'y
+voit en une journée.
+
+### 9.3 La prescription par chantier
+
+Trois tables déjà présentes se composent sans aucun modèle :
+
+1. `/reference/regions-climatiques-par-departement.md` : département, et découpage cantonal des
+   départements partagés, vers la région 1 à 4.
+2. `/reference/classification-aev-par-site.md` : région, catégorie de terrain (0, II, IIIa, IIIb,
+   IV) et hauteur du bâtiment en cinq tranches, vers la classe A\*E\*V minimale, avec la réduction
+   pour ouvrage protégé.
+3. Les classements des gammes (`/gammes/perform.md` en A\*4/E\*9A/V\*A3,
+   `/certifications/labels-et-certifications.md`, les pages LUMINE et coulissants) : qui atteint
+   la classe exigée.
+
+Le même enchaînement existe pour les fermetures avec
+`/reference/resistance-au-vent-volets-soprofen.md` et le DTU 34‑2. Entrée : un code postal, un
+terrain, une hauteur. Sortie : la classe exigée et les produits qui la tiennent. C'est une réponse
+que le commerce donne aujourd'hui au jugé.
+
+### 9.4 La fiche d'identité d'une référence
+
+Taper `76758` et obtenir sa **famille** (un appui, pas une tapée), sa page, ses cotes, ses
+compatibilités, ses exclusions et sa coupe quand elle existe. L'index construit pour cet audit
+recense **1 189 références** en première colonne de tableau dans tout le wiki ; la table est déjà
+calculée à chaque chargement. C'est le moins cher de la liste, et c'est ce qui referme
+définitivement la confusion tapée / appui / patte de pose que la règle 9 des consignes essaie de
+tenir par le texte. À exposer dans les deux sens : la fiche pour l'humain, et un outil
+`fiche_reference(ref)` pour le modèle, qui lui évite de charger 30 000 caractères pour une ligne.
+
+### 9.5 Rendre le wiki vivant plutôt que consultable
+
+- **Veille réglementaire.** Le DTA SOLEAL FY est valide **jusqu'au 31 octobre 2026**, soit cinq
+  semaines, et il couvre toute la LUMINE55 battante. Rien ne le signalera : `stale_after` n'est
+  posé que sur cinq pages et pas sur celle‑là, et le lint des pages périmées renvoie une liste
+  vide. Les autres échéances sont l'Avis Technique des coffres Chrono au 31/01/2027, le DTA 76
+  Advanced au 31/07/2028, les DTA LUMEAL GA et SOLEAL GY au 31/07/2029. Un tableau de bord des
+  validités et une alerte à six mois relèvent du risque contractuel, pas du confort. Prérequis :
+  poser `stale_after` sur chaque page qui porte une validité réelle, ce que le protocole demande
+  déjà.
+- **Le registre d'anomalies comme flux de travail.** 77 entrées avec leur impact et la personne à
+  interroger, figées dans du markdown en lecture seule. Leur donner un responsable, un état, une
+  date et la réponse obtenue en fait la liste de dettes techniques de l'entreprise. Les classer
+  par le nombre de fois où elles sont réellement citées en réponse donne l'ordre de traitement :
+  sur 27 tours enregistrés, CTR‑03 est sortie cinq fois.
+- **La boucle usage vers wiki.** Les pouces baissés, les 8 tours sur 27 qui n'ont cité aucune
+  page, les « le wiki ne couvre pas », les recherches répétées : tout est déjà dans les traces des
+  messages et exploité nulle part. C'est la file d'ingestion, dérivée de l'usage réel.
+- **Couverture des PDF, mesurée.** `source_pages` est le réciproque du registre de couverture. Un
+  tableau de bord par document — pages couvertes, par quelle page du wiki, ce qui reste — remplace
+  une affirmation (§ 4.4) par une mesure.
+- **Mode SAV.** Le wiki conserve volontairement les valeurs historiques : l'HYBRIDE en 72 mm
+  jusqu'en 2025, l'évolution des garanties depuis 2023, le laquage à 25, 10 ou 7 ans selon la
+  gamme et le coloris, la garantie bord de mer à 5 ou 7 ans selon la distance au littoral. Un
+  parcours qui demande l'année de fabrication et lit la bonne ligne répond sur la pièce de
+  rechange et sur la garantie applicable, avec CTR‑03 et CTR‑09 en réserve. Cet actif existe déjà
+  et personne ne s'en sert.
+- **Mode atelier.** Un contexte de session (« je suis sur la PERFORM76 ») pour que les questions
+  suivantes n'aient plus à nommer la gamme, et une fiche imprimable d'une page par procédure, avec
+  ses coupes. Le vocal mains libres est déjà construit ; ce qui lui manque est ce contexte.
+
+### 9.6 Le prérequis commun : promouvoir les tableaux en données
+
+Les quatre premières fonctionnalités supposent la même chose, et c'est la seule décision
+d'architecture de cette section : **les tableaux doivent devenir des lignes typées.** Deux voies.
+
+| Voie | Coût | Risque |
+| --- | --- | --- |
+| Extraction au chargement, comme l'index de recherche | moyen, une fois | une table non conforme n'est pas extraite |
+| Bloc `data:` en frontmatter, saisi à la main | élevé, à chaque page | la donnée et le tableau divergent |
+
+Je recommande l'extraction. Elle ne demande rien aux rédacteurs, elle s'appuie sur des règles que
+le protocole impose déjà (première colonne = la référence, unité en en‑tête, une ligne par
+référence, un contexte par ligne), et **le contrôle d'extraction devient le contrôle de conformité
+des tableaux** : une table qui ne s'extrait pas est une table à corriger. C'est le même mouvement
+que le lint étendu du § 4.6, avec une sortie utilisable en plus.
+
+### 9.7 Ce que je ne construirais pas
+
+- **Un moteur sémantique sur les PDF.** C'est ce que fait la solution externe, à 2 réponses
+  exploitables sur 31.
+- **Un chiffrage ou un devis**, tant que `tarifs/` est vide. Le wiki ne porte aucun prix.
+- **Un configurateur commercial complet.** Le vérificateur du § 9.1 dit ce qui est réalisable ;
+  vendre, c'est l'ERP.
+
+### 9.8 Ordre proposé
+
+| Fonctionnalité | Donnée présente | Effort | Ce que ça évite |
+| --- | --- | --- | --- |
+| Fiche d'identité d'une référence | oui, déjà indexée | faible | la mauvaise famille commandée |
+| Veille des validités | oui, dans les corps de page | faible | poser sous un avis expiré |
+| Vérificateur de faisabilité | oui, cinq tableaux à croiser | moyen | une menuiserie refaite |
+| Anomalies en flux de travail | oui, 77 entrées | moyen | une contradiction qui traîne deux ans |
+| Prescription par chantier | oui, trois tables | moyen | une classe AEV donnée au jugé |
+| Calcul de débit | oui, formules et déductions | élevé | une barre coupée trop court |
+| Mode SAV | oui, valeurs historiques | élevé | une garantie mal engagée |
+
+Si une seule est retenue, c'est le **vérificateur de faisabilité** : la question qui coûte quand
+elle est fausse, celle où le modèle seul est le plus faible, et la donnée est là. La fiche de
+référence se fait en parallèle pour presque rien.
+
+## 10. Ce que cet audit n'a pas pu faire
 
 - Confronter une seule cellule du wiki à son PDF : `raw/` est vide ici. Les registres de
   couverture et les 8 `verified` sont pris sur parole ; la densité du § 4.4 est un indice, pas
