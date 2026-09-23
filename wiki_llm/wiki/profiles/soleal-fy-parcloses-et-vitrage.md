@@ -32,26 +32,35 @@ Sur le module de 55 mm, les prises de volume admissibles s'étendent de **4 à 4
 
 ### Matrice des parcloses droites et arrondies (Ouvrant Apparent et Fixe FY 55)
 
-L'épaisseur totale du vitrage ($A$) dépend de la parclose choisie ($C$) et du joint d'étanchéité intérieur ($B$) associé au joint extérieur standard **T410010** [2 p. 32] :
+Sur l'ouvrant apparent et la partie fixe SOLEAL FY 55, trois cotes se lisent dans la matrice : **A** est l'épaisseur du remplissage (le vitrage), **B** l'épaisseur du joint intérieur, **C** la hauteur de la parclose. Le joint extérieur est toujours le **T410010**. Pour un remplissage donné, on cherche la cellule qui vaut A : sa ligne donne la parclose, sa colonne donne le joint intérieur. Exemple : un remplissage de 24 mm se monte avec la parclose T591005 (droite) ou TFY2412 (arrondie), hauteur C = 15 mm, et le joint intérieur vert TAS0017 (B = 7 mm). La hauteur C de la parclose n'est pas l'épaisseur du remplissage : la parclose T591008, de hauteur C = 24 mm, reçoit un remplissage de 14 à 20 mm. La dernière colonne reprend la zone grisée de la planche, « prise de volume recommandée » [2 p. 32].
 
-| Réf. Parclose | Forme / Style | Hauteur $C$ (mm) | Joint Blanc (8 mm) TAS0018 | Joint Vert (7 mm) TAS0017 | Joint Rouge (6 mm) TAS0016 | Joint Bleu (5 mm) TAS0015 | Joint Jaune (4 mm) T710004 | Joint Marron (2 mm) T710002 |
-| --- | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **T591001** | Droite | 2 | 36 mm | 37 mm | 38 mm | 39 mm | — | — |
-| **T591002** | Droite | 5 | 33 mm | 34 mm | 35 mm | 36 mm | 37 mm | 39 mm |
-| **T591003** | Droite | 9 | 29 mm | 30 mm | 31 mm | 32 mm | 33 mm | 35 mm |
-| **T591004** | Droite | 12 | 26 mm | 27 mm | 28 mm | 29 mm | 30 mm | 32 mm |
-| **TFY2413** | Arrondie | 12 | 26 mm | 27 mm | 28 mm | 29 mm | 30 mm | 32 mm |
-| **T591005** | Droite | 15 | 23 mm | 24 mm | 25 mm | 26 mm | 27 mm | 29 mm |
-| **TFY2412** | Arrondie | 15 | 23 mm | 24 mm | 25 mm | 26 mm | 27 mm | 29 mm |
-| **T591006** | Droite | 19 | 19 mm | 20 mm | 21 mm | 22 mm | 23 mm | 25 mm |
-| **T591007** | Droite | 22 | 16 mm | 17 mm | 18 mm | 19 mm | 20 mm | 22 mm |
-| **T591008** | Droite | 24 | 14 mm | 15 mm | 16 mm | 17 mm | 18 mm | 20 mm |
-| **T591009** | Droite | 26 | 12 mm | 13 mm | 14 mm | 15 mm | 16 mm | 18 mm |
-| **T591010** | Droite | 29 | 9 mm | 10 mm | 11 mm | 12 mm | 13 mm | 15 mm |
-| **T591011** | Droite | 32 | 6 mm | 7 mm | 8 mm | 9 mm | 10 mm | 12 mm |
-| **T591012** | Droite | 34 | 4 mm | 5 mm | 6 mm | 7 mm | 8 mm | 10 mm |
+<table>
+<thead>
+<tr><th rowspan="3">Parclose</th><th rowspan="3">Forme</th><th rowspan="3">Hauteur de parclose C (mm)</th><th colspan="6">Épaisseur de remplissage A (mm) obtenue avec le joint intérieur</th><th rowspan="3">Prise de volume recommandée, A (mm)</th></tr>
+<tr><th>Blanc TAS0018</th><th>Vert TAS0017</th><th>Rouge TAS0016</th><th>Bleu TAS0015</th><th>Jaune T710004</th><th>Marron T710002</th></tr>
+<tr><th>B = 8 mm</th><th>B = 7 mm</th><th>B = 6 mm</th><th>B = 5 mm</th><th>B = 4 mm</th><th>B = 2 mm</th></tr>
+</thead>
+<tbody>
+<tr><td>T591001</td><td>droite</td><td>2</td><td>36</td><td>37</td><td>38</td><td>39</td><td>-</td><td>-</td><td>37 à 39</td></tr>
+<tr><td>T591002</td><td>droite</td><td>5</td><td>33</td><td>34</td><td>35</td><td>36</td><td>37</td><td>39</td><td>34 à 35</td></tr>
+<tr><td>T591003</td><td>droite</td><td>9</td><td>29</td><td>30</td><td>31</td><td>32</td><td>33</td><td>35</td><td>30 à 33</td></tr>
+<tr><td>T591004</td><td>droite</td><td>12</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>32</td><td>27 à 29</td></tr>
+<tr><td>TFY2413</td><td>arrondie</td><td>12</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>32</td><td>27 à 29</td></tr>
+<tr><td>T591005</td><td>droite</td><td>15</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>29</td><td>24 à 26</td></tr>
+<tr><td>TFY2412</td><td>arrondie</td><td>15</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>29</td><td>24 à 26</td></tr>
+<tr><td>T591006</td><td>droite</td><td>19</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>25</td><td>20 à 23</td></tr>
+<tr><td>T591007</td><td>droite</td><td>22</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>22</td><td>17 à 19</td></tr>
+<tr><td>T591008</td><td>droite</td><td>24</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>20</td><td>15 à 16</td></tr>
+<tr><td>T591009</td><td>droite</td><td>26</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>18</td><td>13 à 14</td></tr>
+<tr><td>T591010</td><td>droite</td><td>29</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>15</td><td>10 à 12</td></tr>
+<tr><td>T591011</td><td>droite</td><td>32</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>12</td><td>7 à 9</td></tr>
+<tr><td>T591012</td><td>droite</td><td>34</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>10</td><td>4 à 6</td></tr>
+</tbody>
+</table>
 
 (schéma: wiki_llm/a_faire/SOLEAL-FY-55-evolution-catalogue-conception-minimal-apparent-6057-003-072020-FR (1).pdf, p. 32)
+
+La parclose T591001 ne se monte pas avec les joints jaune et marron. Le grisé de la colonne Bleu n'a pas pu être confirmé sur trois cellules : T591002 à 36 mm, T591008 à 17 mm et T591009 à 15 mm ; elles restent hors de la prise de volume recommandée jusqu'à relecture de la planche.
 
 *Pour les profilés anodisés*, la pose du clip anti-désaffleurement **TAT0049** est obligatoire (1 clip par extrémité de parclose). Pour les profilés laqués, la pièce plastique **T197112** est optionnelle pour maintenir la parclose lors du transport [2 p. 32].
 

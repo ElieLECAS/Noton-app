@@ -2,6 +2,15 @@
 
 ## 2026-09-23
 
+* **Update** : [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md) --
+  matrice des parcloses droites et arrondies (ouvrant apparent et fixe FY 55) réécrite en HTML
+  avec l'en-tête à deux niveaux de la planche, cellules en nombres nus, et une phrase qui
+  définit A, B, C et donne un exemple de lecture. Cause : LIA a répondu T591008 pour un
+  remplissage de 24 mm en prenant la hauteur de parclose C = 24 pour l'épaisseur de
+  remplissage A (réponse juste : T591005 ou TFY2412 + joint vert TAS0017). Ajout de la colonne
+  « prise de volume recommandée » (zone grisée, absente jusqu'alors), relevée en vision sur la
+  page PDF 34 ; trois cellules de la colonne Bleu restent à confirmer (T591002 à 36, T591008 à
+  17, T591009 à 15). Valeurs A inchangées, contrôlées cellule par cellule contre la planche.
 * **Correction de frontmatter illisible sur deux pages** : le champ `description` portait un
   ` : ` non protégé (« … pour portes et fenêtres : portes battantes… », « … à cadres :
   battantes… »), que YAML lit comme un second couple clé/valeur. La frontmatter entière était
