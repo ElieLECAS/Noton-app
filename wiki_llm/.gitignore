@@ -6,3 +6,7 @@ __pycache__/
 # (dossier monté en volume) ; seul le wiki markdown est dans git.
 raw/
 a_faire/
+
+# Les dépôts en cours de l'administration (préparation du wiki avant bascule) :
+# ramassés tout seuls, jamais versionnés.
+.depot/

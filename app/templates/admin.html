@@ -404,22 +404,41 @@
                 </div>
             </div>
 
-            <!-- Bandeau : le prompt permanent enfle (il est payé à chaque appel d'un tour d'outils) -->
-            <div id="wiki-token-warning" class="hidden rounded-2xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 flex items-start gap-3">
-                <i class="ti ti-alert-triangle text-amber-600 dark:text-amber-400 text-xl shrink-0"></i>
-                <div>
-                    <div class="text-sm font-bold text-amber-800 dark:text-amber-300">Le prompt permanent enfle</div>
-                    <div class="text-xs text-amber-700 dark:text-amber-400 mt-0.5 font-semibold">
-                        Consignes, vocabulaire et index des anomalies sont envoyés à chaque appel d'un tour de lecture : vérifiez le vocabulaire et les registres d'anomalies.
-                    </div>
-                </div>
-            </div>
-
             <div id="wiki-error" class="hidden rounded-2xl border border-rose-500/30 bg-rose-500/10 px-5 py-4 text-sm font-semibold text-rose-700 dark:text-rose-300"></div>
 
             <!-- Compteurs -->
             <div id="wiki-kpis" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
                 <div class="col-span-full text-center text-sm text-gray-500 dark:text-gray-400 py-6 font-semibold">Chargement…</div>
+            </div>
+
+            <!-- Dépôt : glisser wiki_llm/ pour remplacer les pages et joindre les PDF -->
+            <div class="glass-panel rounded-3xl border border-black/5 dark:border-white/5 p-5 shadow-sm">
+                <h3 class="font-bold text-gray-900 dark:text-white mb-1 flex items-center gap-1.5">
+                    <i class="ti ti-cloud-upload text-indigo-500 text-lg"></i> Déposer le wiki
+                </h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 font-semibold leading-relaxed">
+                    Glissez le dossier <span class="font-mono text-gray-700 dark:text-gray-300">wiki_llm</span>
+                    (ou seulement <span class="font-mono text-gray-700 dark:text-gray-300">wiki</span>, ou
+                    <span class="font-mono text-gray-700 dark:text-gray-300">raw</span>). Les pages déposées
+                    <strong>remplacent le wiki en entier</strong> — une page absente du dépôt disparaît du serveur ;
+                    les PDF de <span class="font-mono text-gray-700 dark:text-gray-300">raw/</span> ne montent que
+                    s'ils manquent ou ont changé, et ne sont jamais supprimés. Rien n'est appliqué avant votre confirmation.
+                </p>
+
+                <label
+                    id="depot-zone"
+                    for="depot-input"
+                    class="block cursor-pointer rounded-2xl border-2 border-dashed border-black/10 dark:border-white/15 px-5 py-8 text-center transition-colors hover:border-indigo-400 hover:bg-indigo-500/[0.04]"
+                >
+                    <input id="depot-input" type="file" webkitdirectory directory multiple class="hidden">
+                    <i class="ti ti-folder-up text-3xl text-gray-400 dark:text-gray-500"></i>
+                    <div id="depot-zone-titre" class="text-sm font-bold text-gray-700 dark:text-gray-300 mt-2">Glissez le dossier ici</div>
+                    <div id="depot-zone-detail" class="text-xs text-gray-400 dark:text-gray-500 font-semibold mt-1">ou cliquez pour le choisir</div>
+                </label>
+
+                <div id="depot-plan" class="hidden mt-4"></div>
+                <div id="depot-progres" class="hidden mt-4"></div>
+                <div id="depot-resultat" class="hidden mt-4"></div>
             </div>
 
             <!-- Répartition par type & budget de contexte -->
@@ -810,10 +829,6 @@ function closeAdminConversationModal() {
 // Le wiki markdown est la seule matière de l'assistant : cet onglet montre ce qui est
 // chargé (pages, liens, budget de tokens) et ce que le lint a relevé au chargement.
 
-// Le prompt permanent ne porte plus le wiki : la jauge se lit contre le seuil d'alerte du
-// serveur (wiki_service.TOKEN_WARNING_THRESHOLD), pas contre la fenêtre du modèle.
-const WIKI_CONTEXT_WINDOW = 20000;
-
 function wikiFmtInt(n) {
     if (n === null || n === undefined || Number.isNaN(Number(n))) return '—';
     return Number(n).toLocaleString('fr-FR');
@@ -925,9 +940,9 @@ function wikiBudgetRow(label, value, sub) {
 function renderWikiBudget(s) {
     const el = document.getElementById('wiki-budget');
     if (!el) return;
-    const estimated = Number(s.estimated_tokens) || 0;
-    const pct = Math.min(100, Math.round(estimated / WIKI_CONTEXT_WINDOW * 100));
-    const barTone = s.token_warning ? 'bg-amber-500' : 'bg-indigo-500';
+    const wikiTokens = Number(s.wiki_estimated_tokens) || 0;
+    const pages = Number(s.pages) || 0;
+    const parPage = pages ? Math.round(wikiTokens / pages) : 0;
 
     let lastCall;
     const lc = s.last_call;
@@ -961,15 +976,14 @@ function renderWikiBudget(s) {
     el.innerHTML = `
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tokens estimés</span>
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Le wiki entier</span>
                 <div class="flex items-baseline gap-2 mt-1">
-                    <span class="text-3xl font-extrabold ${s.token_warning ? 'text-amber-600 dark:text-amber-400' : 'text-gray-900 dark:text-white'}">${wikiFmtInt(estimated)}</span>
-                    <span class="text-xs text-gray-400 dark:text-gray-500 font-semibold">/ 256 k</span>
+                    <span class="text-3xl font-extrabold text-gray-900 dark:text-white">${wikiFmtInt(wikiTokens)}</span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500 font-semibold">tokens sur ${wikiFmtInt(pages)} pages</span>
                 </div>
-                <div class="w-full bg-black/5 dark:bg-white/5 h-1.5 rounded-full mt-3 overflow-hidden">
-                    <div class="${barTone} h-full rounded-full" style="width: ${pct}%"></div>
+                <div class="text-[11px] text-gray-400 dark:text-gray-500 mt-2 font-semibold">
+                    ${wikiFmtInt(s.wiki_chars)} caractères${parPage ? ` · ${wikiFmtInt(parPage)} tokens par page en moyenne` : ''}
                 </div>
-                <div class="text-[11px] text-gray-400 dark:text-gray-500 mt-1 font-semibold">${pct} % du budget de prompt permanent · ${wikiFmtInt(s.chars)} caractères</div>
             </div>
             <div>${lastCall}</div>
         </div>`;
@@ -1028,7 +1042,6 @@ async function loadWikiStats() {
         renderWikiTypes(s.types);
         renderWikiBudget(s);
         renderWikiLint(s);
-        document.getElementById('wiki-token-warning')?.classList.toggle('hidden', !s.token_warning);
     } catch (e) {
         if (kpis) kpis.innerHTML = '';
         if (err) {
@@ -1036,6 +1049,334 @@ async function loadWikiStats() {
             err.classList.remove('hidden');
         }
     }
+}
+
+// ——— Dépôt du wiki ————————————————————————————————————————————————————————
+// Le wiki s'écrit hors de l'application (Claude Code + git) ; il arrive ici. Trois temps, parce
+// qu'on ne lance pas 800 Mo à l'aveugle : on annonce ce qu'on a, le serveur répond ce qu'il
+// réclame ET ce que ça changera, puis les fichiers montent un par un — corps brut, trois en
+// parallèle — et la bascule se fait au dernier appel. Voir app/services/wiki_depot.py.
+
+const DEPOT_PARALLELE = 3;
+let depotEtat = null;      // { id, attendus, parChemin, plan, octets }
+let depotEnVol = false;
+
+function depotOctets(n) {
+    if (!n) return '0 o';
+    const unites = ['o', 'ko', 'Mo', 'Go'];
+    let i = 0, v = n;
+    while (v >= 1024 && i < unites.length - 1) { v /= 1024; i++; }
+    return `${(i > 0 && v < 100) ? v.toFixed(1) : Math.round(v)} ${unites[i]}`;
+}
+
+function depotBloc(id, html) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = html || '';
+    el.classList.toggle('hidden', !html);
+}
+
+function depotListe(titre, chemins, ton) {
+    const items = Array.isArray(chemins) ? chemins : [];
+    if (!items.length) return '';
+    const tons = {
+        ajout: 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10',
+        retrait: 'text-rose-700 dark:text-rose-300 bg-rose-500/10',
+        neutre: 'text-gray-600 dark:text-gray-300 bg-black/5 dark:bg-white/5',
+    };
+    const apercu = items.slice(0, 200).map(c =>
+        `<li class="font-mono text-[11px] break-all">${escapeHtml(c)}</li>`).join('');
+    const reste = items.length > 200
+        ? `<li class="text-[11px] font-semibold italic">… et ${items.length - 200} autre(s)</li>`
+        : '';
+    return `<details class="rounded-xl ${tons[ton] || tons.neutre} px-3 py-2">
+        <summary class="cursor-pointer text-xs font-bold">${escapeHtml(titre)} · ${items.length}</summary>
+        <ul class="mt-2 space-y-0.5 max-h-40 overflow-y-auto pr-1">${apercu}${reste}</ul>
+    </details>`;
+}
+
+// Parcours de l'arborescence glissée. Les entrées sont extraites de façon SYNCHRONE : la liste
+// du transfert est vidée dès que le gestionnaire rend la main.
+function depotLireLot(lecteur) {
+    return new Promise((ok, ko) => lecteur.readEntries(ok, ko));
+}
+
+async function depotParcourir(entree, prefixe, fichiers) {
+    if (!entree) return;
+    if (entree.isFile) {
+        const fichier = await new Promise((ok, ko) => entree.file(ok, ko));
+        fichiers.push({ chemin: prefixe + entree.name, fichier });
+        return;
+    }
+    if (!entree.isDirectory) return;
+    if (['.git', '.depot', 'node_modules', '__pycache__'].includes(entree.name)) return;
+    const lecteur = entree.createReader();
+    for (;;) {
+        const lot = await depotLireLot(lecteur);
+        if (!lot.length) break;
+        for (const sous of lot) await depotParcourir(sous, prefixe + entree.name + '/', fichiers);
+    }
+}
+
+async function depotCollecter(transfert) {
+    const entrees = Array.from(transfert.items || [])
+        .map(it => (it.webkitGetAsEntry ? it.webkitGetAsEntry() : null))
+        .filter(Boolean);
+    const fichiers = [];
+    if (entrees.length) {
+        for (const e of entrees) await depotParcourir(e, '', fichiers);
+        return fichiers;
+    }
+    for (const f of Array.from(transfert.files || [])) {
+        fichiers.push({ chemin: f.webkitRelativePath || f.name, fichier: f });
+    }
+    return fichiers;
+}
+
+function depotZoneEtat(titre, detail) {
+    const t = document.getElementById('depot-zone-titre');
+    const d = document.getElementById('depot-zone-detail');
+    if (t) t.textContent = titre;
+    if (d) d.textContent = detail;
+}
+
+function depotRemiseAZero() {
+    depotEtat = null;
+    depotBloc('depot-plan', '');
+    depotBloc('depot-progres', '');
+    depotZoneEtat('Glissez le dossier ici', 'ou cliquez pour le choisir');
+    const input = document.getElementById('depot-input');
+    if (input) input.value = '';
+}
+
+// 1. Annoncer — le serveur répond le plan. Rien n'est encore envoyé.
+async function depotAnnoncer(fichiers) {
+    if (depotEnVol) return;
+    depotBloc('depot-resultat', '');
+    if (!fichiers.length) {
+        depotBloc('depot-plan', `<div class="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs font-semibold text-amber-700 dark:text-amber-300">Aucun fichier lu : glissez un dossier, pas un fichier isolé.</div>`);
+        return;
+    }
+    depotEnVol = true;
+    depotZoneEtat(`${fichiers.length} fichier(s) lu(s)`, 'Comparaison avec le serveur…');
+    depotBloc('depot-plan', '<div class="text-xs font-semibold text-gray-500 dark:text-gray-400">Comparaison avec le serveur…</div>');
+    try {
+        const r = await apiCall('/api/wiki/depot', {
+            method: 'POST',
+            body: JSON.stringify({
+                fichiers: fichiers.map(f => ({ chemin: f.chemin, taille: f.fichier.size })),
+            }),
+        });
+        if (!r) throw new Error('pas de réponse');
+        if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || `HTTP ${r.status}`);
+        const data = await r.json();
+        depotEtat = {
+            id: data.depot,
+            attendus: data.attendus || [],
+            parChemin: new Map(fichiers.map(f => [f.chemin, f.fichier])),
+            plan: data.plan || {},
+            octets: data.octets_attendus || 0,
+            ignores: data.ignores || [],
+            ignoresTotal: data.ignores_total || 0,
+        };
+        depotRendrePlan();
+    } catch (e) {
+        depotBloc('depot-plan', `<div class="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-xs font-semibold text-rose-700 dark:text-rose-300">Dépôt refusé : ${escapeHtml(String(e.message || e))}</div>`);
+        depotZoneEtat('Glissez le dossier ici', 'ou cliquez pour le choisir');
+    } finally {
+        depotEnVol = false;
+    }
+}
+
+function depotRendrePlan() {
+    if (!depotEtat) return;
+    const p = depotEtat.plan;
+    const supprimees = p.pages_supprimees || [];
+    const rien = !depotEtat.attendus.length && !p.miroir_wiki;
+    const chiffre = (n, libelle, ton) => `<div class="rounded-xl px-3 py-2 ${ton}">
+        <div class="text-lg font-extrabold leading-none">${n}</div>
+        <div class="text-[10px] font-bold uppercase tracking-wide mt-1 opacity-80">${escapeHtml(libelle)}</div>
+    </div>`;
+
+    const alerte = supprimees.length
+        ? `<div class="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 flex items-start gap-2 mb-3">
+            <i class="ti ti-alert-triangle text-amber-600 dark:text-amber-400 shrink-0"></i>
+            <div class="text-xs font-semibold text-amber-800 dark:text-amber-300">
+                ${supprimees.length} page(s) du serveur ne sont pas dans votre dépôt : elles seront <strong>supprimées</strong>.
+            </div>
+        </div>`
+        : '';
+
+    const ecartes = depotEtat.ignoresTotal
+        ? depotListe(`Écartés (hors wiki/ et raw/, ou extension non retenue) — ${depotEtat.ignoresTotal} au total`,
+            depotEtat.ignores.map(i => `${i.chemin} — ${i.raison}`), 'neutre')
+        : '';
+
+    const corps = rien
+        ? `<div class="text-xs font-semibold text-emerald-700 dark:text-emerald-300">Le serveur a déjà tout : rien à envoyer.</div>`
+        : `${alerte}
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+            ${chiffre(p.pages_deposees || 0, 'pages déposées', 'bg-black/5 dark:bg-white/5 text-gray-800 dark:text-gray-200')}
+            ${chiffre((p.pages_ajoutees || []).length, 'pages nouvelles', 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300')}
+            ${chiffre(supprimees.length, 'pages supprimées', supprimees.length ? 'bg-rose-500/10 text-rose-700 dark:text-rose-300' : 'bg-black/5 dark:bg-white/5 text-gray-800 dark:text-gray-200')}
+            ${chiffre((p.pdf_nouveaux || []).length + (p.pdf_remplaces || []).length, 'PDF à envoyer', 'bg-indigo-500/10 text-indigo-700 dark:text-indigo-300')}
+        </div>
+        <div class="space-y-2">
+            ${depotListe('Pages nouvelles', p.pages_ajoutees, 'ajout')}
+            ${depotListe('Pages supprimées', supprimees, 'retrait')}
+            ${depotListe('PDF nouveaux', p.pdf_nouveaux, 'ajout')}
+            ${depotListe('PDF remplacés', p.pdf_remplaces, 'neutre')}
+            ${ecartes}
+        </div>`;
+
+    const note = p.miroir_wiki ? '' : " · le wiki n'est pas touché (aucune page dans le dépôt)";
+    depotBloc('depot-plan', `<div class="rounded-2xl border border-black/10 dark:border-white/10 p-4">
+        <div class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-3">
+            Ce qui va se passer — ${depotEtat.attendus.length} fichier(s) à envoyer, ${depotOctets(depotEtat.octets)}${escapeHtml(note)}
+        </div>
+        ${corps}
+        <div class="flex gap-2 mt-4">
+            <button type="button" onclick="depotEnvoyer()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold active:scale-95 transition-all flex items-center gap-1.5">
+                <i class="ti ti-upload text-sm"></i> ${rien ? 'Appliquer' : 'Envoyer et appliquer'}
+            </button>
+            <button type="button" onclick="depotAbandonner()" class="px-4 py-2 rounded-xl border border-black/10 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 text-sm font-semibold active:scale-95 transition-all">
+                Annuler
+            </button>
+        </div>
+    </div>`);
+    depotZoneEtat(`${p.pages_deposees || 0} page(s) et ${p.pdf_deposes || 0} PDF lus`,
+        'Vérifiez le plan avant d’envoyer');
+}
+
+// 2. Envoyer — un fichier par requête, corps brut, trois en parallèle. XHR et pas fetch :
+// c'est le seul moyen de suivre l'avancement à l'intérieur d'un catalogue de 55 Mo.
+function depotEnvoyerFichier(attendu, surAvance) {
+    return new Promise((ok, ko) => {
+        const fichier = depotEtat.parChemin.get(attendu.chemin);
+        if (!fichier) return ko(new Error(`${attendu.cle} — fichier introuvable dans le dépôt`));
+        const xhr = new XMLHttpRequest();
+        xhr.open('PUT', `/api/wiki/depot/${depotEtat.id}/fichier?chemin=${encodeURIComponent(attendu.chemin)}`);
+        xhr.withCredentials = true;
+        let vu = 0;
+        xhr.upload.onprogress = (e) => { surAvance(e.loaded - vu); vu = e.loaded; };
+        xhr.onload = () => (xhr.status >= 200 && xhr.status < 300)
+            ? ok()
+            : ko(new Error(`${attendu.cle} — HTTP ${xhr.status}`));
+        xhr.onerror = () => ko(new Error(`${attendu.cle} — connexion interrompue`));
+        xhr.send(fichier);
+    });
+}
+
+function depotRendreProgres(faits, total, octetsFaits, octetsTotal) {
+    const pct = octetsTotal ? Math.min(100, Math.round((octetsFaits / octetsTotal) * 100)) : 100;
+    depotBloc('depot-progres', `<div class="rounded-2xl border border-black/10 dark:border-white/10 p-4">
+        <div class="flex items-center justify-between text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">
+            <span>Envoi en cours — ${faits} / ${total} fichier(s)</span>
+            <span class="font-mono">${depotOctets(octetsFaits)} / ${depotOctets(octetsTotal)}</span>
+        </div>
+        <div class="h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
+            <div class="h-full bg-indigo-500 transition-all" style="width:${pct}%"></div>
+        </div>
+    </div>`);
+}
+
+async function depotEnvoyer() {
+    if (!depotEtat || depotEnVol) return;
+    depotEnVol = true;
+    depotBloc('depot-plan', '');
+    depotBloc('depot-resultat', '');
+    const attendus = depotEtat.attendus.slice();
+    const total = attendus.length;
+    let faits = 0, octetsFaits = 0;
+    depotRendreProgres(0, total, 0, depotEtat.octets);
+    try {
+        let curseur = 0;
+        const ouvrier = async () => {
+            for (;;) {
+                const i = curseur++;
+                if (i >= attendus.length) return;
+                await depotEnvoyerFichier(attendus[i], (delta) => {
+                    octetsFaits += delta;
+                    depotRendreProgres(faits, total, octetsFaits, depotEtat.octets);
+                });
+                faits++;
+                depotRendreProgres(faits, total, octetsFaits, depotEtat.octets);
+            }
+        };
+        await Promise.all(Array.from({ length: Math.min(DEPOT_PARALLELE, total || 1) }, ouvrier));
+
+        depotBloc('depot-progres', '<div class="text-xs font-semibold text-gray-500 dark:text-gray-400">Bascule du wiki et rechargement…</div>');
+        const r = await apiCall(`/api/wiki/depot/${depotEtat.id}/valider`, { method: 'POST' });
+        if (!r) throw new Error('pas de réponse');
+        if (!r.ok) {
+            const detail = (await r.json().catch(() => ({}))).detail;
+            throw new Error(typeof detail === 'string' ? detail : ((detail && detail.message) || `HTTP ${r.status}`));
+        }
+        const data = await r.json();
+        depotBloc('depot-progres', '');
+        depotRendreResultat(data.resume || {});
+        depotRemiseAZero();
+        loadWikiStats();
+    } catch (e) {
+        depotBloc('depot-progres', '');
+        depotBloc('depot-resultat', `<div class="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-xs font-semibold text-rose-700 dark:text-rose-300">
+            Envoi interrompu : ${escapeHtml(String(e.message || e))}. Le wiki servi n'a pas bougé — relancez l'envoi.
+        </div>`);
+        depotRendrePlan();
+    } finally {
+        depotEnVol = false;
+    }
+}
+
+function depotRendreResultat(resume) {
+    const n = (cle) => (resume[cle] || []).length;
+    depotBloc('depot-resultat', `<div class="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4">
+        <div class="flex items-start gap-2">
+            <i class="ti ti-circle-check text-emerald-600 dark:text-emerald-400 text-xl shrink-0"></i>
+            <div class="min-w-0 flex-1">
+                <div class="text-sm font-bold text-emerald-800 dark:text-emerald-300">Wiki à jour</div>
+                <div class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5">
+                    ${n('pages_ajoutees')} page(s) ajoutée(s), ${n('pages_modifiees')} modifiée(s), ${n('pages_supprimees')} supprimée(s) ·
+                    ${n('pdf_nouveaux')} PDF nouveau(x), ${n('pdf_remplaces')} remplacé(s).
+                </div>
+                <div class="mt-2 space-y-2">
+                    ${depotListe('Pages ajoutées', resume.pages_ajoutees, 'ajout')}
+                    ${depotListe('Pages modifiées', resume.pages_modifiees, 'neutre')}
+                    ${depotListe('Pages supprimées', resume.pages_supprimees, 'retrait')}
+                    ${depotListe('PDF nouveaux', resume.pdf_nouveaux, 'ajout')}
+                </div>
+            </div>
+        </div>
+    </div>`);
+}
+
+async function depotAbandonner() {
+    if (depotEtat && !depotEnVol) {
+        try { await apiCall(`/api/wiki/depot/${depotEtat.id}`, { method: 'DELETE' }); } catch (e) { /* le dépôt sera ramassé */ }
+    }
+    depotRemiseAZero();
+}
+
+function depotBrancher() {
+    const zone = document.getElementById('depot-zone');
+    const input = document.getElementById('depot-input');
+    if (!zone || !input) return;
+    const surligne = (actif) => zone.classList.toggle('border-indigo-500', actif);
+
+    ['dragenter', 'dragover'].forEach(ev => zone.addEventListener(ev, (e) => {
+        e.preventDefault(); e.stopPropagation(); surligne(true);
+    }));
+    ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, (e) => {
+        e.preventDefault(); e.stopPropagation(); surligne(false);
+    }));
+    zone.addEventListener('drop', async (e) => {
+        const fichiers = await depotCollecter(e.dataTransfer);
+        depotAnnoncer(fichiers);
+    });
+    input.addEventListener('change', () => {
+        depotAnnoncer(Array.from(input.files || [])
+            .map(f => ({ chemin: f.webkitRelativePath || f.name, fichier: f })));
+    });
 }
 
 // Load Data
@@ -1799,5 +2140,6 @@ async function deleteAdminFeedback(feedbackId) {
 loadUsers();
 loadRoles();
 loadPermissions();
+depotBrancher();
 </script>
 {% endblock %}

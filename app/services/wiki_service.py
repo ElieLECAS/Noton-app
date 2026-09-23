@@ -55,7 +55,8 @@ FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n?(.*)\Z", re.DOTALL)
 CHARS_PER_TOKEN = 2.924
 # Le prompt permanent ne porte plus que les consignes, le vocabulaire et l'index des anomalies :
 # il doit rester petit, puisqu'il est payé à chaque appel d'un tour d'outils. Au-delà de ce seuil
-# ESTIMÉ on avertit (journal + admin) — c'est en général le vocabulaire ou un registre qui enfle.
+# ESTIMÉ on avertit dans le JOURNAL — c'est en général le vocabulaire ou un registre qui enfle.
+# L'administration ne montre pas cette mesure : elle n'a rien à dire à qui rédige le wiki.
 TOKEN_WARNING_THRESHOLD = 20_000
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONSIGNES_PATH = PROJECT_ROOT / "app" / "prompts" / "wiki_consignes.md"
@@ -163,6 +164,20 @@ class WikiSnapshot:
     def concept_pages(self) -> List[WikiPage]:
         return [p for p in self.pages.values() if p.is_concept]
 
+    @property
+    def wiki_chars(self) -> int:
+        """Le poids du wiki LISIBLE : la somme de ce que ``lire_page`` peut servir, frontmatter
+        comprise (``read_wiki_page`` rend ``raw_text``, et refuse les pages réservées).
+
+        C'est la mesure qui dit pourquoi le CAG a été abandonné : ce total est hors du prompt
+        permanent, et n'entre dans le contexte que page par page, à la demande des outils.
+        """
+        return sum(len(p.raw_text) for p in self.concept_pages)
+
+    @property
+    def wiki_estimated_tokens(self) -> int:
+        return round(self.wiki_chars / CHARS_PER_TOKEN)
+
     # ---- charges utiles ------------------------------------------------
 
     def graph_payload(self) -> Dict[str, Any]:
@@ -237,9 +252,10 @@ class WikiSnapshot:
             "types": dict(sorted(types.items(), key=lambda kv: (-kv[1], kv[0]))),
             "orphans": self.lint["orphans"],
             "stale": self.lint["stale"],
-            "chars": self.char_count,
-            "estimated_tokens": self.estimated_tokens,
-            "token_warning": self.token_warning,
+            # Le poids du wiki. La taille du prompt permanent n'est PAS servie ici : elle
+            # n'intéresse que le journal du serveur, qui avertit tout seul si elle enfle.
+            "wiki_chars": self.wiki_chars,
+            "wiki_estimated_tokens": self.wiki_estimated_tokens,
             "cache_key": self.cache_key,
             "loaded_at": self.loaded_at.isoformat(timespec="seconds"),
             "wiki_dir": str(self.root),
@@ -549,6 +565,16 @@ def get_snapshot() -> WikiSnapshot:
 def reset_snapshot() -> None:
     global _current
     _current = None
+
+
+def reload_lock() -> threading.Lock:
+    """Le verrou du rechargement, pour qui remplace ``wiki/`` sous les pieds de l'application.
+
+    Le dépôt (``wiki_depot``) bascule le dossier par deux renommages : le tenir garantit qu'aucun
+    tour ne recharge entre les deux et ne tombe sur un wiki absent. Il n'est PAS réentrant :
+    ``get_snapshot`` le prend aussi — on le relâche avant de recharger.
+    """
+    return _lock
 
 
 def record_call(info: Dict[str, Any]) -> None:

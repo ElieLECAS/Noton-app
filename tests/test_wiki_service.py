@@ -68,7 +68,13 @@ def test_cache_key_covers_whole_prompt(real_snapshot):
 def test_estimated_tokens_and_stats(real_snapshot):
     stats = real_snapshot.stats()
     assert stats["pages"] == len(real_snapshot.concept_pages)
-    assert stats["estimated_tokens"] == round(real_snapshot.char_count / wiki_service.CHARS_PER_TOKEN)
+    # Le prompt permanent se mesure toujours (le journal avertit s'il enfle), mais il ne sort
+    # plus dans les statistiques : l'administration ne montre que le poids du wiki.
+    assert real_snapshot.estimated_tokens == round(
+        real_snapshot.char_count / wiki_service.CHARS_PER_TOKEN
+    )
+    assert stats["wiki_chars"] == sum(len(p.raw_text) for p in real_snapshot.concept_pages)
+    assert stats["wiki_chars"] > real_snapshot.char_count * 10
     assert set(stats["lint"]) == {"frontmatter_errors", "not_in_index", "index_dead_links"}
     assert stats["types"]["Document source"] >= 1
     graph = real_snapshot.graph_payload()

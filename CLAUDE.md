@@ -29,12 +29,15 @@ d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md
   par lots avec biais de vocabulaire tiré du wiki, le MÊME `WikiAnswer` (prompt vocal, coupes
   désactivées), synthèse Voxtral TTS en flux phrase par phrase (voix Marie), `texte_parle`
   (ce qui se dit ≠ ce qui s'affiche), phrases d'attente préchauffées.
+- `app/services/wiki_depot.py` — le dépôt : glisser `wiki_llm/` dans l'administration met le
+  wiki à jour et joint les PDF, sans pull ni rebuild (voir plus bas).
 - `app/routers/chat.py`, `vocal.py`, `wiki.py`, `conversations.py`, `admin.py`, `auth.py`.
 - `app/templates/chat.html` (chat + étapes de lecture + lecteur + PDF), `vocal.html` (orbe,
   micro, détection de fin de parole côté navigateur, transcription surlignée au fil de la
   voix), `wiki.html` (graphe), `admin.html`.
 - `wiki_llm/CLAUDE.md` — le protocole d'écriture du wiki : c'est LUI qui fait foi pour toute
-  ingestion ou correction de page. L'application ne modifie jamais le wiki.
+  ingestion ou correction de page. L'application ne corrige jamais une page : elle remplace le
+  wiki EN BLOC par ce qu'on lui dépose.
 
 ## Le tour de chat en trois outils
 
@@ -71,6 +74,33 @@ les événements du tour (`etape`, `message`, `sources`) sont entrelacés avec `
 - **ce qui se dit ≠ ce qui s'affiche** : `texte_parle` retire les chemins cités, lit les
   identifiants d'anomalie en clair, déplie les unités ; l'écran garde les pastilles.
 - Les conversations vocales ont `mode = "vocal"` et ne sont pas listées dans le chat.
+
+## Le dépôt du wiki (`/admin`, onglet Wiki, 23/09/2026)
+
+Le wiki s'écrit hors de l'application et arrivait sur le serveur en deux morceaux : `git pull`
+pour les `.md`, `scp` pour les PDF (hors git, 800 Mo). Il se dépose maintenant depuis
+l'administration — on glisse `wiki_llm/` (ou `wiki/`, ou `raw/`), sans pull ni rebuild.
+
+Trois temps, parce qu'on ne lance pas 800 Mo à l'aveugle : `POST /api/wiki/depot` annonce ce
+qu'on a et reçoit le **plan** (pages nouvelles, pages qui vont disparaître, PDF manquants) ;
+`PUT /api/wiki/depot/{id}/fichier?chemin=` envoie un fichier par requête, corps brut, en flux,
+trois en parallèle ; `POST …/valider` bascule et recharge l'instantané.
+
+Deux dossiers, deux contrats — ils n'ont pas la même nature :
+
+- `wiki/` est un **miroir** : ce qui est déposé DEVIENT le wiki, une page absente disparaît —
+  sans quoi une page retirée de la rédaction continuerait de répondre. Tout monte dans
+  `.depot/<id>/wiki`, et la bascule est un couple de renommages sous le verrou de l'instantané
+  (`wiki_service.reload_lock`) : un envoi interrompu ne laisse pas un wiki à trous.
+- `raw/` s'**accumule** : seuls les PDF manquants ou de taille différente montent, et rien n'est
+  jamais supprimé. Sans ce différentiel, corriger une page coûterait 800 Mo.
+
+Un dépôt sans aucune page ne touche pas au wiki : glisser `raw/` seul ajoute des PDF, point.
+C'est ce qui rend la suppression en miroir sûre. Aucun état en mémoire : le manifeste est sur
+disque, un dépôt abandonné est ramassé au suivant.
+
+`wiki_llm/` est donc monté **en écriture** (`docker-compose.yaml`). Derrière nginx :
+`client_max_body_size` ≥ le plus gros PDF (256 Mo couvre large), `proxy_request_buffering off`.
 
 ## Règles de la maison
 

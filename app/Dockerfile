@@ -18,7 +18,8 @@ COPY app/alembic/ ./alembic/
 COPY app/alembic.ini ./alembic.ini
 
 # Le wiki (wiki_llm/) n'est PAS copié dans l'image : il est monté en volume par
-# docker-compose, ce qui permet de le mettre à jour par un simple git pull.
+# docker-compose, ce qui permet de le mettre à jour par un git pull — ou par le dépôt de
+# l'administration (app/services/wiki_depot.py), qui écrit dans ce volume.
 
 ENV PYTHONUNBUFFERED=1
 

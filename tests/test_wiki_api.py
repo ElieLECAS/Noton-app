@@ -1,6 +1,7 @@
 """L'API du wiki : graphe, pages, PDF sources, statistiques."""
 from __future__ import annotations
 
+from app.services import wiki_service
 from app.services.wiki_service import load_snapshot, wiki_root
 
 
@@ -52,9 +53,16 @@ def test_stats_admin_only(client, lecteur_headers, admin_headers):
     assert r.status_code == 200
     stats = r.json()
     assert stats["pages"] >= 60
-    assert {"links", "ghosts", "orphans", "stale", "drafts", "types", "chars",
-            "estimated_tokens", "token_warning", "cache_key", "loaded_at", "lint"} <= set(stats)
+    assert {"links", "ghosts", "orphans", "stale", "drafts", "types",
+            "cache_key", "loaded_at", "lint"} <= set(stats)
     assert "last_call" in stats
+    # La seule mesure de poids servie à l'administration est celle du WIKI : ce que le modèle
+    # va lire page par page. La taille du prompt permanent reste au journal du serveur.
+    assert stats["wiki_estimated_tokens"] == round(
+        stats["wiki_chars"] / wiki_service.CHARS_PER_TOKEN
+    )
+    assert stats["wiki_estimated_tokens"] > 100_000
+    assert not {"chars", "estimated_tokens", "token_warning", "token_threshold"} & set(stats)
 
 
 def test_search_requires_auth_and_reads_the_body(client, lecteur_headers):

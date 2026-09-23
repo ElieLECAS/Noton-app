@@ -1,4 +1,5 @@
-# Stack LIA : PostgreSQL + web (FastAPI). Le wiki (wiki_llm/) est monté en lecture seule.
+# Stack LIA : PostgreSQL + web (FastAPI). Le wiki (wiki_llm/) est monté en ÉCRITURE : le
+# dépôt de l'administration y écrit les pages et les PDF (app/services/wiki_depot.py).
 # Source de vérité des valeurs : app/config.py (défauts) surchargés par .env.
 x-app-env: &app-env
   PYTHONUNBUFFERED: "1"
@@ -60,7 +61,8 @@ services:
       - ./app/alembic:/app/alembic
       - ./app/alembic.ini:/app/alembic.ini
       - ./logs:/app/logs
-      - ./wiki_llm:/app/wiki_llm:ro
+      # En écriture : le dépôt de l'administration remplace wiki/ et ajoute dans raw/.
+      - ./wiki_llm:/app/wiki_llm
       # Tests : montés pour pouvoir lancer pytest dans le conteneur
       - ./tests:/app/tests
       - ./app/pytest.ini:/app/pytest.ini

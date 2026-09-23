@@ -104,13 +104,16 @@ def test_le_modele_cherche_puis_repond(snapshot, monkeypatch):
         if len(contextes) == 1:
             assert kwargs["tools"] and kwargs["tool_choice"] == "auto"
             yield json.dumps({"tool_calls": [_outil("chercher", {"mots_cles": "parclose 76507"})]})
-            yield json.dumps({"usage": {"prompt_tokens": 5000, "completion_tokens": 30}})
+            yield json.dumps(
+                {"usage": {"prompt_tokens": 5000, "completion_tokens": 30,
+                           "prompt_tokens_details": {"cached_tokens": 4600}}}
+            )
             return
         yield json.dumps({"message": {"content": "La parclose **76507** "}})
         yield json.dumps({"message": {"content": "(/profiles/perform76-parcloses.md) tient 44 mm."}})
         yield json.dumps(
             {"usage": {"prompt_tokens": 18000, "completion_tokens": 60,
-                       "prompt_tokens_details": {"cached_tokens": 4600}}}
+                       "prompt_tokens_details": {"cached_tokens": 5000}}}
         )
 
     monkeypatch.setattr(settings, "GENERATION_REASONING_EFFORT", "high")
@@ -149,9 +152,14 @@ def test_le_modele_cherche_puis_repond(snapshot, monkeypatch):
     assert answer.trace["appels"] == 2
     assert answer.trace["prompt_tokens"] == 23000
     assert answer.trace["completion_tokens"] == 90
+    # Le cache se cumule comme le reste : chacun des deux appels a réutilisé le préfixe. Ne
+    # retenir que le dernier rapportait 5 000 / 23 000 au lieu de 9 600 / 23 000 — le taux
+    # affiché à l'administration était divisé par le nombre d'appels du tour.
+    assert answer.trace["cached_tokens"] == 9600
     assert answer.trace["cited_pages"] == ["/profiles/perform76-parcloses.md"]
     assert answer.trace["steps"][0]["outil"] == "chercher"
     assert wiki_service.last_call()["appels"] == 2
+    assert wiki_service.last_call()["cached_tokens"] == 9600
 
 
 def test_le_serveur_injecte_les_anomalies(snapshot):

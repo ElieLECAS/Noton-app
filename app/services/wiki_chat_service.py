@@ -538,7 +538,10 @@ class WikiAnswer:
         pages_lues: List[Dict[str, Any]] = []
         deja_injectees: set = set()
         relance_faite = False
-        cumul = {"prompt_tokens": 0, "completion_tokens": 0, "appels": 0}
+        # Les trois mesures sont CUMULÉES sur les appels du tour : un tour d'outils en fait
+        # jusqu'à six, et chacun paie son prompt et réutilise le préfixe en cache. Rapporter le
+        # cache d'un seul appel à la somme des prompts divisait le taux par le nombre d'appels.
+        cumul = {"prompt_tokens": 0, "completion_tokens": 0, "cached_tokens": 0, "appels": 0}
         think_parts: List[str] = []
 
         # Injecté avant le premier appel : le modèle peut répondre sans outil, et la règle 2
@@ -582,6 +585,7 @@ class WikiAnswer:
 
             cumul["prompt_tokens"] += usage.get("prompt_tokens") or 0
             cumul["completion_tokens"] += usage.get("completion_tokens") or 0
+            cumul["cached_tokens"] += _cached_tokens(usage) or 0
             cumul["appels"] += 1
             texte = "".join(text_parts)
 
@@ -680,7 +684,7 @@ class WikiAnswer:
         self.trace = {
             "model": self.model,
             "prompt_tokens": cumul["prompt_tokens"] or usage.get("prompt_tokens"),
-            "cached_tokens": _cached_tokens(usage),
+            "cached_tokens": cumul["cached_tokens"],
             "completion_tokens": cumul["completion_tokens"] or usage.get("completion_tokens"),
             "appels": cumul["appels"],
             "first_token_ms": first_token_ms,

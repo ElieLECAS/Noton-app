@@ -1,5 +1,17 @@
 # Update Log
 
+## 2026-09-23
+
+* **Correction de frontmatter illisible sur deux pages** : le champ `description` portait un
+  ` : ` non protégé (« … pour portes et fenêtres : portes battantes… », « … à cadres :
+  battantes… »), que YAML lit comme un second couple clé/valeur. La frontmatter entière était
+  rejetée : les deux pages remontaient sans `type`, sans `tags` et sans `sources`, donc
+  invisibles aux facettes de la recherche.
+  * [Moustiquaires battantes, coulissantes et cadres fixes](/equipements/moustiquaires-battantes-coulissantes-fixes.md) -- `type` rétabli à `Équipement`, 6 tags, 2 sources.
+  * [Fiche produit Moustiquaire battante Coulissante Cadre fixe SOPROFEN 2026](/sources/soprofen-moustiquaire-battante-coulissante-cadre-fixe-2026.md) -- `type` rétabli à `Document source`, 7 tags, 1 source.
+  * Les textes sont inchangés au caractère près, seules des guillemets ont été ajoutées :
+    `index.md` continue de correspondre exactement.
+
 ## 2026-09-21
 
 * **Ingestion multimodale du PDF « Guide technique Blocs-baies 2022 » (`export_doc_132.zip` / `132.pdf`)** :
