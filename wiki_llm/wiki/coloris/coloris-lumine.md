@@ -1,7 +1,7 @@
 ---
 type: Coloris
 title: Coloris LUMINE
-description: Nuancier aluminium de la gamme LUMINE — LUMINE55 (anodisé, 4 coloris 1 ou 2 faces, 7 coloris extérieurs), LUMINE65 (11 coloris 1 ou 2 faces) et coulissants SOLÉAL55, GALANDAGE55 et LUMÉAL55.
+description: Nuancier aluminium de la gamme LUMINE — LUMINE55 (anodisé, 4 coloris 1 ou 2 faces, 7 coloris extérieurs), LUMINE65 (11 coloris 1 ou 2 faces), coulissants SOLÉAL55, GALANDAGE55 et LUMÉAL55, et nuancier propre du LUMÉAL (3 couleurs standards, 7 à prix préférentiel).
 tags: [coloris, nuancier, aluminium, laquage, anodise, satine, granite, lumine, soleal, galandage, lumeal]
 gamme: LUMINE
 systeme: [SOLEAL FY, SOLEAL GY, LUMEAL GA]
@@ -17,11 +17,17 @@ sources:
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
     last_modified: 2025-02-28
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    id: depliant-lumeal-2023-06
+    title: Dépliant LUMÉAL, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 18
   - resource: raw/brochure-lumine65-2025-02.pdf
     pages: 5
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    pages: 3
 generated:
   by: process:claude-code
   at: 2026-09-25T12:00:00Z
@@ -101,8 +107,8 @@ lesquels ; l'anodisé laqué argent est en option [2 p. 5] (**VER-50**).
 
 ## Coulissants SOLÉAL55, GALANDAGE55 et LUMÉAL55
 
-Deux teintes et un laquage à la demande [1 p. 18]. Le nuancier propre du LUMÉAL55 diffère :
-**CTR-10**, voir [Coulissants aluminium](/gammes/coulissants-aluminium.md).
+Deux teintes et un laquage à la demande [1 p. 18]. Le nuancier propre du LUMÉAL est dans la
+section suivante (**CTR-10**).
 
 | Code de la source | Nom | Famille | Faces | Finition | Restriction | Pastille |
 | --- | --- | --- | --- | --- | --- | ---: |
@@ -112,6 +118,43 @@ Deux teintes et un laquage à la demande [1 p. 18]. Le nuancier propre du LUMÉA
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 18)
 
+## Coulissant LUMÉAL, dépliant de juin 2023
+
+Le coulissant à ouvrant caché LUMÉAL ([Coulissants aluminium](/gammes/coulissants-aluminium.md))
+a son propre nuancier, différent de celui des coulissants au catalogue général (**CTR-10**) :
+trois « couleurs extérieures standards » et sept « couleurs extérieures à prix préférentiel »,
+présentées sous « Personnalisez vos menuiseries selon vos envies ! Intérieur ou extérieur, nos
+menuiseries LUMINE vous offrent un grand choix de teintes » [3 p. 3]. Une ligne par teinte, dans
+l'ordre et les termes de la source ; la pastille est un **rendu indicatif**, le code et le nom font
+foi à la commande.
+
+| Code de la source | Nom | Famille | Faces | Finition | Restriction | Pastille |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 9016 | Blanc 9016 brillant | couleur extérieure standard | 1 face | brillant | - | ![Blanc 9016 brillant](/assets/coloris/lumine/lumeal-2023-blanc-9016-brillant.png) |
+| 7016 | Anthracite 7016 satiné | couleur extérieure standard | 1 et 2 faces | satiné | - | ![Anthracite 7016 satiné](/assets/coloris/lumine/lumeal-2023-anthracite-7016-satine.png) |
+| 7016 | Anthracite 7016 granité | couleur extérieure standard | 1 et 2 faces | granité | - | ![Anthracite 7016 granité](/assets/coloris/lumine/lumeal-2023-anthracite-7016-granite.png) |
+| 3004 | Rouge 3004 satiné | couleur extérieure à prix préférentiel | 1 face | satiné | - | ![Rouge 3004 satiné](/assets/coloris/lumine/lumeal-2023-rouge-3004-satine.png) |
+| 7035 | Gris 7035 granité | couleur extérieure à prix préférentiel | 1 face | granité | - | ![Gris 7035 granité](/assets/coloris/lumine/lumeal-2023-gris-7035-granite.png) |
+| 2900 | Gris 2900 granité | couleur extérieure à prix préférentiel | 1 face | granité | - | ![Gris 2900 granité](/assets/coloris/lumine/lumeal-2023-gris-2900-granite.png) |
+| 7039 | Gris 7039 granité | couleur extérieure à prix préférentiel | 1 face | granité | - | ![Gris 7039 granité](/assets/coloris/lumine/lumeal-2023-gris-7039-granite.png) |
+| 2100 | Noir 2100 granité | couleur extérieure à prix préférentiel | 1 face | granité | - | ![Noir 2100 granité](/assets/coloris/lumine/lumeal-2023-noir-2100-granite.png) |
+| 9005 | Noir 9005 granité | couleur extérieure à prix préférentiel | 1 face | granité | - | ![Noir 9005 granité](/assets/coloris/lumine/lumeal-2023-noir-9005-granite.png) |
+| 8019 | Marron 8019 granité | couleur extérieure à prix préférentiel | 1 face | granité | - | ![Marron 8019 granité](/assets/coloris/lumine/lumeal-2023-marron-8019-granite.png) |
+
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 3)
+
+Au-delà de ces couleurs, sous « Le petit + » : « Équipé de plusieurs cabines de laquage, PROFERM
+vous propose, au-delà des couleurs standards et à prix préférentiel, un panel de couleurs
+possibles pour vos menuiseries. Une teinte préférée ? PROFERM va plus loin et confectionne pour
+vous la couleur sur mesure de vos envies ! » [3 p. 3]
+
+![Couleur sur mesure, LUMÉAL](/assets/coloris/lumine/lumeal-2023-laquage-sur-mesure.png)
+
+Le nuancier de juin 2023 ne compte ni chêne doré, ni anodisé, et ne dit rien d'une bicoloration
+(une teinte différente sur chaque face) [3 p. 3].
+
+## Finitions satiné et granité
+
 Les deux aspects de laquage, satiné et granité, sont montrés sur une même pastille :
 
 ![Finitions satiné et granité](/assets/coloris/lumine/finitions-satine-granite.png)
@@ -120,6 +163,7 @@ Les deux aspects de laquage, satiné et granité, sont montrés sur une même pa
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 18
 [2] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 5
+[3] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 3
 
 # Voir aussi
 

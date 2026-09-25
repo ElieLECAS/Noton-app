@@ -17,11 +17,17 @@ sources:
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
     last_modified: 2025-02-28
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    id: depliant-lumeal-2023-06
+    title: Dépliant LUMÉAL, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 1, 4, 13-18
   - resource: raw/brochure-lumine65-2025-02.pdf
     pages: 1-3, 5-6
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    pages: 1-4
 generated:
   by: process:claude-code
   at: 2026-09-25T12:00:00Z
@@ -127,6 +133,49 @@ arbitrée sur [Garanties par composant](/garanties/garanties-par-composant.md), 
 [2 p. 5]. La brochure est signée « Expert agréé PROFERM - Fabricant français de menuiseries
 innovantes » et porte le logo « Conception & Fabrication Hauts-de-France » [2 p. 1, 6].
 
+## Le LUMÉAL
+
+Ce que le dépliant LUMÉAL de juin 2023 annonce du coulissant aluminium à ouvrant caché ; les
+valeurs mesurées sont sur [Coulissants aluminium](/gammes/coulissants-aluminium.md). Les pages
+intérieures portent le bandeau « LUMINE ».
+
+La couverture annonce « Masse d'aluminium réduite de 35 % » et « Jusqu'à Uw = 1.2/m².K » [3 p. 1].
+
+Sous le titre « LUMÉAL, le coulissant minimal » et l'intertitre « Le design au service de la
+performance » : « LUMÉAL est notre nouvelle baie coulissante à ouvrant caché. Sa ligne
+minimaliste assure un gain de 8 à 14 % de clair de vitrage suivant son type de pose. » [3 p. 2]
+
+Les avantages annoncés, dans les termes de l'encadré « Les avantages » [3 p. 2] :
+
+| Avantage | Ce qui est annoncé |
+| --- | --- |
+| Grandes dimensions | « jusqu'à L 4,50 m x H 2,70 m (2 vtx) » |
+| Masse d'aluminium réduite | « (-35 %) avec seulement 68 mm et 77 mm d'aluminium visible. Finesse de la percussion centrale » |
+| Performances thermiques élevées | Uw, Sw et TLw, valeurs sur [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
+| Performances AEV | classement, sur [Labels et certifications](/certifications/labels-et-certifications.md) |
+| Performance d'étanchéité | « Très faible déperdition » |
+| Sécurité renforcée | « Classe de résistance niveau 3 contre l'effraction selon la norme européenne EN 1627-30 » |
+
+L'aluminium bas carbone TECHNAL est annoncé comme possédant « l'une des plus faibles empreintes de
+carbone au monde : 2,3 kg de CO2 par kg d'aluminium » [3 p. 2].
+
+Sous « Un design exclusif », le principe de l'ouvrant caché est présenté comme ce qui « maximise
+le clair de vitrage » ; l'ouvrant « est même totalement invisible selon le type de pose » [3 p. 2].
+
+« PROFERM vous propose plusieurs poignées au design exclusif pour personnaliser votre baie
+coulissante. » ; la poignée design minimal est dite « Discrète, elle est préconisée par les
+architectes » [3 p. 3]. « Personnalisez vos menuiseries selon vos envies ! Intérieur ou extérieur,
+nos menuiseries LUMINE vous offrent un grand choix de teintes. » ; « Une teinte préférée ? PROFERM
+va plus loin et confectionne pour vous la couleur sur mesure de vos envies ! » [3 p. 3]
+
+« La satisfaction est au cœur de nos préoccupations, c'est pourquoi, PROFERM s'engage à vous
+fournir tranquillité et sérénité jusqu'à plusieurs années après la pose de vos menuiseries.
+PROFERM vous offre des garanties exceptionnelles et exclusives sur l'ensemble des composants. » La
+grille est sur [Garanties par composant](/garanties/garanties-par-composant.md) [3 p. 3].
+
+La quatrième de couverture porte un encadré vierge sous « Un projet ? Posez toutes vos questions
+à : » [3 p. 4].
+
 # Ce que la source ne chiffre pas
 
 « Très bon rempart contre le bruit » et « performances thermiques et acoustiques améliorées » ne
@@ -139,10 +188,15 @@ supérieure », « luminosité intérieure augmentée » et « clair de jour opt
 aucun gain chiffré par rapport à un autre produit ; « pas d'effet de dilatation » des joints à fil
 kevlar n'est rattaché à aucun essai nommé [2 p. 1-3].
 
+Pour le LUMÉAL, « l'une des plus faibles empreintes de carbone au monde » n'est comparée à aucune
+autre valeur, et « Très faible déperdition » renvoie à la seule valeur de perméabilité à l'air
+donnée [3 p. 2].
+
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 13 à 18
 [2] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 1 à 3, 5 et 6
+[3] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 1 à 4
 
 # Voir aussi
 

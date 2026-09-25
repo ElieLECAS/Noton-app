@@ -38,6 +38,10 @@ sources:
     id: depliant-innoslide-2024-01
     title: Dépliant INNOSLIDE, édition janvier 2024, version impression
     last_modified: 2024-01-31
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    id: depliant-lumeal-2023-06
+    title: Dépliant LUMÉAL, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 1, 7, 8, 11, 15, 17, 23, 34-36
@@ -55,6 +59,8 @@ source_pages:
     pages: 2-3
   - resource: raw/depliant-innoslide-2024-01.pdf
     pages: 2
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    pages: 2-3
 generated:
   by: process:gemini-coder
   at: 2026-09-19T17:30:00Z
@@ -77,7 +83,7 @@ termes de la source [1 p. 34]. Ce que la marque en dit au-delà du fait (« prem
 | Palmarès des entreprises innovantes Hauts-de-France | collectif régional de 32 structures | entreprise PROFERM | parmi les 102 lauréats sur plus de 200 entreprises évaluées ; logo « Lauréate du Palmarès 2023 » |
 | Certification CSTB, laque 29943 | CSTB | menuiseries aluminium prélaquées | [1 p. 15] |
 | QUALICOAT classe 2 | - | thermo-laquage de la gamme LUMINE65 | [1 p. 18, 35] |
-| EN 1627-30 classe 3 | - | baie coulissante aluminium LUMÉAL | dépliant LUMÉAL [2 p. 1] |
+| EN 1627-30 classe 3 | - | baie coulissante aluminium LUMÉAL | « Classe de résistance niveau 3 contre l'effraction selon la norme européenne EN 1627-30 » [8 p. 2] ; [2 p. 1] |
 | Conception & Fabrication Hauts-de-France | - | produits PROFERM | logo [3 p. 6] |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 34)
@@ -99,7 +105,9 @@ Le Coq Vert et La French Fab. Les gammes PERFORM+ et HYBRIDE+ sont présentées 
 CEKAL, CE, Kömmerling® (« Today for tomorrow »), Acotherm, Qualanod, greenline, Qualimarine
 (« Aluminium Laqué Haute Qualité, Certifié ») et Roto [5 p. 3] ; l'HYBRIDE de juin 2023 avec les
 mêmes logos, sans celui de Roto [6 p. 3]. Le coulissant INNOSLIDE est présenté avec les logos
-CEKAL (« menuiserie équipée de vitrages certifiés »), CE, Acotherm et Roto [7 p. 3].
+CEKAL (« menuiserie équipée de vitrages certifiés »), CE, Acotherm et Roto [7 p. 3] ; le LUMÉAL de
+juin 2023 avec les logos CEKAL, CE, Acotherm, Qualanod (European Anodisers Association) et
+Qualimarine (« Aluminium Laqué Haute Qualité, Certifié ») [8 p. 3].
 
 # Classements CSTB A\*E\*V
 
@@ -117,16 +125,16 @@ au test A\*E\*V [1 p. 7, 35]. Une ligne par produit, tel que la source le nomme.
 | Coulissant [INNOSLIDE](/gammes/innoslide.md) | A\*4 / E\*7A / V\*B3 | [1 p. 8, 7 p. 2] |
 | [Coulissants aluminium](/gammes/coulissants-aluminium.md), sans produit nommé | A\*4 / E\*6A / V\*B2 | [1 p. 17] |
 | Coulissant LUMINE65, 2 vantaux | A\*4 / E\*6A / V\*A3 (**CTR-11**) | [3 p. 3] |
-| Coulissant LUMÉAL, 2 vantaux H 2,5 × L 3 m | A\*4 / E\*7A / V\*B3 (**CTR-08**) | [2 p. 1] |
+| Coulissant LUMÉAL, 2 vantaux H 2,5 × L 3 m | A\*4 / E\*7A / V\*B3 (**CTR-08**) | [8 p. 2], [2 p. 1] |
 | Fenêtre LUMINE65 battante | A\*4 / E\*9A / V\*C3 | [3 p. 2] |
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 8, 11, 17, 23, 35 ; raw/depliant-innoslide-2024-01-a4-web.pdf, p. 2)
+(schéma: raw/catalogue-general-2026-01.pdf, p. 7, 8, 11, 17, 23, 35 ; raw/depliant-innoslide-2024-01-a4-web.pdf, p. 2 ; raw/depliant-lumeal-2023-06.pdf, p. 2)
 
 # Niveaux de résistance à l'effraction
 
 * **Label ROTO Performance** : il offre l'accès à la certification RC1 / RC2 sur les fenêtres [1 p. 34].
 * **Classe RC2 CERIBOIS** : la fenêtre PERFORM76, équipée d'un vitrage securit 44/6 collé et d'une quincaillerie spécifique — ferrage périmétrique et poignée verrouillable Sécustik —, a été testée et labellisée par CERIBOIS [1 p. 34].
-* **Classe 3 selon EN 1627-30** : revendiquée sur la baie coulissante aluminium à ouvrant caché LUMÉAL [2 p. 1].
+* **Classe 3 selon EN 1627-30** : revendiquée sur la baie coulissante aluminium à ouvrant caché LUMÉAL [2 p. 1, 8 p. 2].
 * **Classe de résistance 2 avec oscillo-battant en position ouverte (RC2)** : les quincailleries Roto NX des gammes [PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md) peuvent y répondre ; le système TiltSafe est donné « pour une position OB sécurisée » [5 p. 2]. Voir [Roto NX](/quincaillerie/roto-nx.md).
 
 # Citations
@@ -138,6 +146,7 @@ au test A\*E\*V [1 p. 7, 35]. Une ligne par produit, tel que la source le nomme.
 [5] [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](raw/brochure-perform-plus-hybride-plus-2023-05.pdf), p. 2 et 3
 [6] [Dépliant HYBRIDE, édition juin 2023](raw/depliant-hybride-2023-06.pdf), p. 3
 [7] [Dépliant INNOSLIDE, édition janvier 2024, version A4 web](raw/depliant-innoslide-2024-01-a4-web.pdf), p. 2 et 3
+[8] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 2 et 3
 
 # Voir aussi
 

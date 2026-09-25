@@ -2,6 +2,48 @@
 
 ## 2026-09-25
 
+* **Retraitement** du [Dépliant LUMÉAL, juin 2023](/sources/depliant-lumeal-2023.md)
+  (`raw/depliant-lumeal-2023-06.pdf`, 4 pages) : pages rendues en PNG à 200 dpi (300 dpi pour les
+  découpes), lues en image, aucune couche texte lue. Fiche réécrite au format du protocole
+  (« Registre de couverture OKF », « Ce qu'il établit » retirés) : 4 `transcrit`, aucune `à faire`.
+  Le LUMÉAL n'a pas de page gamme : son nuancier va dans [Coloris LUMINE](/coloris/coloris-lumine.md)
+  (`gamme: LUMINE` de [Coulissants aluminium](/gammes/coulissants-aluminium.md)), aucune page
+  `coloris-lumeal` créée.
+  * **Images** (16) : `assets/gammes/coulissants-aluminium/lumeal-2023-coupe.png` (p. 2, pictogramme
+    et angle de photo voisins blanchis), `lumeal-2023-masses-vues-68-77.png`,
+    `lumeal-2023-details-ouvrant-cache.png`, `lumeal-2023-ouvertures.png` (p. 2),
+    `lumeal-2023-vitrage-28.png` (p. 3) ; `assets/coloris/lumine/lumeal-2023-*.png`, dix pastilles
+    et la couleur sur mesure (p. 3). Les quatre photos de poignées sont celles des Technal OSAKA,
+    TOKYO, KYOTO et KOBE du catalogue général : liées, pas redécoupées.
+  * **Erreurs corrigées** (avant → après) : [Coulissants aluminium](/gammes/coulissants-aluminium.md) —
+    « Masse vue d'aluminium 68 mm (dormant visible) et 77 mm (percussion centrale) » → 68 et 77 mm
+    d'aluminium visible, seul le dormant visible à 68 mm, la cote de 77 mm décrite telle que le schéma
+    la place (aucune source ne l'attribue à la percussion centrale) ; « -35 % par rapport à un
+    coulissant classique (150 mm) » → réduction de masse de 35 % et face vue de 68 mm contre 150 mm
+    pour un coulissant traditionnel, deux lignes ; « Sécurité anti-effraction : Classe de résistance 3
+    (RC3 …) » → « classe de résistance niveau 3 … selon la norme européenne EN 1627-30 » (le sigle RC3
+    n'est pas dans le dépliant de 2023) ; « Cintrage et formes hors d'équerre : incompatibles avec
+    les rails de roulement » (sans source) → retiré, **VER-52** ; « pas de chêne doré du tout selon le
+    dépliant LUMÉAL » (source sujet) → « le nuancier propre du LUMÉAL ne compte pas de chêne doré » ;
+    liste des coloris LUMÉAL (copie) → lien vers Coloris LUMINE ; tableau des caractéristiques
+    LUMÉAL réécrit avec unité, condition et source par ligne. [Dépliant LUMÉAL 2023](/sources/depliant-lumeal-2023.md)
+    — logo « Qualicoat » (absent de la page) → retiré, Qualanod et Qualimarine seuls ; « Organes de
+    manœuvre Technal (Minimal, bouton KOBE, droit TOKYO, incliné KYOTO) » → noms de la source
+    (poignée design minimal, design droit, inclinée, bouton de manoeuvre), les noms Technal venant
+    du catalogue général ; données juridiques (absentes de la page) → retirées.
+  * **Complétés** : [Coulissants aluminium](/gammes/coulissants-aluminium.md) (principe de l'ouvrant
+    caché, Sw/TLw, aluminium bas carbone, coupe, masses vues, ouvertures par source, vitrage 28 mm et
+    Ug) ; [Coloris LUMINE](/coloris/coloris-lumine.md) (section *Coulissant LUMÉAL, dépliant de juin
+    2023*, 10 lignes, couleur sur mesure) ; [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
+    (4 lignes LUMÉAL 2023) ; [Garanties par composant](/garanties/garanties-par-composant.md)
+    (section *Grille du LUMÉAL de juin 2023*) ; [Labels et certifications](/certifications/labels-et-certifications.md)
+    (A\*E\*V et EN 1627-30 sourcés au dépliant 2023, logos) ; [Arguments de vente LUMINE](/commercial/lumine.md)
+    (section *Le LUMÉAL*).
+  * **Anomalies** : **CTR-29** créée (LUMÉAL 4 vantaux, 2 ou 3 rails contre 2 rails) ; **VER-52**
+    créée (cintrage des coulissants aluminium non documenté) ; **CTR-05**, **CTR-08**, **CTR-10**
+    complétées ; aucune fermée. « Jusqu'à Uw = 1.2/m².K » de la couverture (unité W absente) cité
+    tel quel, la p. 2 portant « 1.2W/m².K ».
+
 * **Retraitement** du [Dépliant INNOSLIDE, janvier 2024, version impression](/sources/depliant-innoslide.md)
   (`raw/depliant-innoslide-2024-01.pdf`, 2 planches doubles) : planches rendues en PNG à 150 dpi,
   lues en image, comparées bloc par bloc à la version A4 web : planche 1 = pages web 4 et 1, planche 2

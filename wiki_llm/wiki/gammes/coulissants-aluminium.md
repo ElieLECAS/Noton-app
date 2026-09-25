@@ -21,6 +21,10 @@ sources:
     id: brochure-lumine65-2025-02
     title: Brochure LUMINE65, édition février 2025
     last_modified: 2025-02-28
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    id: depliant-lumeal-2023-06
+    title: Dépliant LUMÉAL, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 16-18, 35
@@ -28,6 +32,8 @@ source_pages:
     pages: 1-2
   - resource: raw/brochure-lumine65-2025-02.pdf
     pages: 3
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    pages: 1-3
 generated:
   by: process:gemini-coder
   at: 2026-09-19T17:08:00Z
@@ -119,33 +125,99 @@ Les configurations dessinées sont : 1 vantail, 2 vantaux - 1 rail, 2 vantaux - 
 
 ## LUMÉAL55
 
-Abaques d'encombrement, performances et spécifications du coulissant à ouvrant caché [1 p. 16, 2 p. 2, 4 p. 2] :
+Le LUMÉAL est la baie coulissante aluminium à ouvrant caché de PROFERM, sur profilés
+[TECHNAL](/fournisseurs/technal.md) en aluminium bas carbone (système LUMEAL GA) [4 p. 2]. Dans un
+coulissant à ouvrant caché, les montants et traverses des vantaux mobiles (les ouvrants) sont
+dissimulés derrière le dormant, le cadre fixe : « Le principe « ouvrant caché » permet de réduire
+les masses vues d'aluminium puisque seul le dormant reste visible, d'où une face vue aluminium de
+68 mm (par rapport à un coulissant traditionnel 150 mm), ce qui maximise le clair de vitrage de
++ 8 %. Il est même totalement invisible selon le type de pose. » [4 p. 2]
 
-| Caractéristique | Valeur |
-| --- | --- |
-| Hauteur maximale par vantail | 2,70 m |
-| Largeur maximale par vantail | 2,25 m |
-| Largeur maximale totale de la baie | 6,00 m |
-| Poids maximal par vantail | 300 kg |
-| Grandes dimensions 2 vantaux | jusqu'à L 4,50 m x H 2,70 m |
-| Masse vue d'aluminium | 68 mm (dormant visible) et 77 mm (percussion centrale) |
-| Réduction de masse d'aluminium vue | -35 % par rapport à un coulissant classique (150 mm) |
-| Gain de clair de vitrage | +8 % à +14 % suivant le type de pose (ouvrant invisible) |
-| Isolation thermique | Uw = 1,2 W/m²K, Sw = 0,46, TLw = 0,65 |
-| Épaisseur de vitrage | 28 mm |
-| Étanchéité à l'air (déperdition) | jusqu'à 1,39 m³/h/m² (1 vantail + fixe : L 3 m x H 2,50 m) |
-| Classement AEV certifié | A\*4 / E\*7A / V\*B3 (2 vantaux H 2,50 m x L 3,00 m) [CTR-08] |
-| Sécurité anti-effraction | Classe de résistance 3 (RC3 selon norme européenne EN 1627-30) |
-| Matériau | Aluminium bas carbone TECHNAL (min. 75 % recyclé, 2,3 kg CO₂/kg alu) |
+Caractéristiques et performances du LUMÉAL, une ligne par caractéristique, avec la condition
+d'essai ou la précision que la source lui attache [1 p. 16, 4 p. 2]. Sw est le facteur solaire de
+la fenêtre (part de l'énergie solaire transmise), TLw sa transmission lumineuse.
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/depliant-lumeal-2026-04.pdf, p. 2)
+| Caractéristique | Valeur | Unité | Condition ou précision | Source |
+| --- | --- | --- | --- | --- |
+| Hauteur maximale par vantail | 2,7 | m | - | [4 p. 2] |
+| Largeur maximale par vantail | 2,25 | m | - | [4 p. 2] |
+| Largeur maximale de la baie | 6 | m | - | [4 p. 2] |
+| Charge maximale par vantail | 300 | kg | - | [4 p. 2] |
+| Grandes dimensions, largeur | 4,50 | m | 2 vantaux, avec H 2,70 m | [4 p. 2] |
+| Grandes dimensions, hauteur | 2,70 | m | 2 vantaux, avec L 4,50 m | [4 p. 2] |
+| Aluminium visible | 68 et 77 | mm | « seulement 68 mm et 77 mm d'aluminium visible » ; seul le dormant reste visible, face vue de 68 mm | [1 p. 16, 4 p. 2] |
+| Face vue d'un coulissant traditionnel, pour comparaison | 150 | mm | - | [4 p. 2] |
+| Réduction de la masse d'aluminium | 35 | % | « Masse d'aluminium réduite (-35 %) » | [1 p. 16, 4 p. 1, 2] |
+| Gain de clair de vitrage | 8 à 14 | % | suivant le type de pose | [1 p. 16, 4 p. 2] |
+| Uw (transmission thermique de la fenêtre) | 1,2 | W/m².K | « jusqu'à » | [1 p. 16, 4 p. 1, 2] |
+| Sw (facteur solaire) | 0,46 | - | - | [4 p. 2] |
+| TLw (transmission lumineuse) | 0,65 | - | - | [4 p. 2] |
+| Épaisseur de vitrage | 28 | mm | - | [4 p. 3] |
+| Perméabilité à l'air (déperdition) | 1,39 | m³/h/m² | « jusqu'à » ; 1 vantail + fixe, L 3 m × H 2,50 m | [4 p. 2] |
+| Classement A\*E\*V | A\*4 / E\*7A / V\*B3 | - | 2 vantaux, H 2,5 × L 3 m (**CTR-08**) ; voir [Labels et certifications](/certifications/labels-et-certifications.md) | [4 p. 2] |
+| Résistance à l'effraction | classe de résistance niveau 3 | - | selon la norme européenne EN 1627-30 | [4 p. 2] |
+| Aluminium des profilés | au minimum 75 % d'aluminium recyclé en fin de vie ; 2,3 kg de CO2 par kg d'aluminium | - | aluminium bas carbone TECHNAL | [4 p. 2] |
 
-Configurations dessinées : 2 vantaux - 2 rails, 3 vantaux - 2 ou 3 rails, 4 vantaux - 2 rails, 6 vantaux - 3 rails [1 p. 16] ; 4 vantaux sur 2 ou 3 rails [2 p. 2]. Se rapprocher d'un technicien PROFERM afin de valider la faisabilité avant de passer commande [1 p. 16].
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 2 et 3)
 
-![Configurations du LUMÉAL55](/assets/gammes/coulissants-aluminium/lumeal55-configurations.png)
+« L'aluminium bas carbone est un aluminium recyclé à faible teneur en carbone » ; il s'agit
+« d'un aluminium de première qualité fabriqué avec un minimum de 75 % d'aluminium recyclé en fin
+de vie (déchets post-consommation) » [4 p. 2].
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 16)
+### Coupe et masses vues
 
+Coupe en perspective du LUMÉAL : dormant et deux vantaux vitrés, profilés aluminium gris [4 p. 2].
+
+![Coupe en perspective du coulissant LUMÉAL](/assets/gammes/coulissants-aluminium/lumeal-2023-coupe.png)
+
+Schéma des masses vues : la cote de 68 mm est portée sur la traverse haute du dormant, celle de
+77 mm sur le montant vertical, devant le vitrage (en bleu clair) [4 p. 2].
+
+![Aluminium visible du LUMÉAL, 68 mm et 77 mm](/assets/gammes/coulissants-aluminium/lumeal-2023-masses-vues-68-77.png)
+
+Trois photos de détail montrent l'ouvrant caché derrière le dormant [4 p. 2] :
+
+![Détails de l'ouvrant caché du LUMÉAL](/assets/gammes/coulissants-aluminium/lumeal-2023-details-ouvrant-cache.png)
+
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 2)
+
+### Ouvertures
+
+Configurations du LUMÉAL, une ligne par nombre de vantaux, une colonne par source ; chaque schéma
+montre la baie vue de face (flèches : vantaux qui coulissent) et, dessous, la vue en plan des
+vantaux sur leurs rails.
+
+| Configuration | Rails, catalogue général de janvier 2026 | Rails, dépliant LUMÉAL de juin 2023 |
+| --- | --- | --- |
+| 2 vantaux | 2 | 2 |
+| 3 vantaux | 2 ou 3 | 2 ou 3 |
+| 4 vantaux | 2 | 2 ou 3 (**CTR-29**) |
+| 6 vantaux | 3 | 3 |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/depliant-lumeal-2023-06.pdf, p. 2)
+
+Le 4 vantaux sur 3 rails n'est dessiné que sur le document produit ; il est retenu, sous réserve
+de validation, le catalogue de conception TECHNAL ne listant que le 4 vantaux sur 2 rails
+(**CTR-29**). Se rapprocher d'un technicien PROFERM afin de valider la faisabilité avant de passer
+commande [1 p. 16].
+
+![Configurations du LUMÉAL55, catalogue général](/assets/gammes/coulissants-aluminium/lumeal55-configurations.png)
+
+![Ouvertures du LUMÉAL, dépliant de juin 2023](/assets/gammes/coulissants-aluminium/lumeal-2023-ouvertures.png)
+
+### Vitrage
+
+Le LUMÉAL reçoit un vitrage de 28 mm. « La performance thermique d'un vitrage se mesure grâce à
+son coefficient Ug. Plus ce coefficient est bas, plus le vitrage est isolant. » [4 p. 3] Ug est
+le coefficient de transmission thermique du vitrage seul, en W/m².K.
+
+![Vitrage 28 mm](/assets/gammes/coulissants-aluminium/lumeal-2023-vitrage-28.png)
+
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 3)
+
+Les poignées du LUMÉAL sont sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md),
+ses coloris sur [Coloris LUMINE](/coloris/coloris-lumine.md), sa grille de garanties sur
+[Garanties par composant](/garanties/garanties-par-composant.md) [4 p. 3].
 
 ## LUMINE65
 
@@ -199,27 +271,24 @@ SOLÉAL55, GALANDAGE55 et LUMÉAL55 se font en blanc 9016 brillant, en chêne do
 uniquement, et en laquage toutes teintes RAL (satiné ou granité) ; le coulissant LUMINE65 suit le
 nuancier LUMINE65. Nuancier complet : [Coloris LUMINE](/coloris/coloris-lumine.md) [1 p. 18].
 
-Le nuancier propre du **LUMÉAL55** diffère du nuancier général : pas de bicoloration, pas de chêne
-doré, trois couleurs extérieures standards et sept à prix préférentiel ; la liste du dépliant est
-retenue (**CTR-10**) [2 p. 2, 4 p. 3] :
-
-* **3 couleurs extérieures standards** : Blanc 9016 brillant (1 face), Anthracite 7016 satiné (1 et 2 faces), Anthracite 7016 granité (1 et 2 faces).
-* **7 couleurs extérieures à prix préférentiel** : Rouge 3004 satiné, Gris 7035 granité, Gris 2900 granité, Gris 7039 granité, Noir 2100 granité, Noir 9005 granité, Marron 8019 granité (1 face).
-* **Laquage sur mesure** : teinte au choix réalisée dans les cabines internes de laquage PROFERM.
+Le LUMÉAL a son propre nuancier, différent de celui du catalogue général (**CTR-10**) :
+trois couleurs extérieures standards, sept à prix préférentiel et la couleur sur mesure, voir
+[Coloris LUMINE](/coloris/coloris-lumine.md) [2 p. 2, 4 p. 3].
 
 # Ce qui n'est pas réalisable
 
-* **Cintrage et formes hors d'équerre** : incompatibles avec les rails de roulement des chariots coulissants.
-* **Chêne doré en 2 faces uniquement** sur SOLÉAL55, GALANDAGE55 et LUMÉAL55 [1 p. 18] ; pas de chêne doré du tout selon le dépliant LUMÉAL (**CTR-10**).
+* **Chêne doré en 2 faces uniquement** sur SOLÉAL55, GALANDAGE55 et LUMÉAL55 [1 p. 18] ; le nuancier propre du LUMÉAL ne compte pas de chêne doré (**CTR-10**) [4 p. 3].
 * **Bicoloration sur LUMÉAL55** : interdite par la fiche produit officielle [2 p. 2].
 * **SOLÉAL55 en 6 vantaux - 3 rails et 8 vantaux - 4 rails** : tarif et faisabilité sur demande [1 p. 16].
+
+Aucune source ne dit si les coulissants aluminium se font en forme cintrée ou hors d'équerre (**VER-52**).
 
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 16 à 18, et 35
 [2] [Dépliant LUMÉAL, édition avril 2026](raw/depliant-lumeal-2026-04.pdf), p. 1 et 2
 [3] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 3
-[4] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 2 et 3
+[4] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 1 à 3
 
 
 # Voir aussi

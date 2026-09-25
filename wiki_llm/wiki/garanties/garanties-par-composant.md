@@ -38,6 +38,10 @@ sources:
     id: depliant-innoslide-2024-01
     title: Dépliant INNOSLIDE, édition janvier 2024, version impression
     last_modified: 2024-01-31
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    id: depliant-lumeal-2023-06
+    title: Dépliant LUMÉAL, édition juin 2023
+    last_modified: 2023-06-30
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 2, 18, 34, 35
@@ -55,6 +59,8 @@ source_pages:
     pages: 2-3
   - resource: raw/depliant-innoslide-2024-01.pdf
     pages: 2
+  - resource: raw/depliant-lumeal-2023-06.pdf
+    pages: 3
 generated:
   by: process:gemini-coder
   at: 2026-09-19T17:32:00Z
@@ -172,6 +178,26 @@ années, dans les termes de la grille. Les menuiseries y sont annoncées « gara
 La grille de l'INNOSLIDE ne donne aucune durée pour le laquage, le plaxage, l'autre ferrure, le
 soubassement, la motorisation ni la garantie « bord de mer » [7 p. 3].
 
+# Grille du LUMÉAL de juin 2023
+
+Grille des garanties du coulissant aluminium à ouvrant caché LUMÉAL
+([Coulissants aluminium](/gammes/coulissants-aluminium.md)) ; durées en années, dans les termes de
+la grille [8 p. 3].
+
+| Composant | Garantie (années) | Cas |
+| --- | --- | --- |
+| Structure de la menuiserie | 15 | - (**CTR-03**) |
+| Laquage | 7 | - (**CTR-05**) |
+| Ferrure Technal | 10 | sur le fonctionnement (**CTR-09**) |
+| Autre ferrure | 2 | - |
+| Vitrage | 10 | - |
+| Volet roulant | 7 | - (**CTR-04**) |
+
+(schéma: raw/depliant-lumeal-2023-06.pdf, p. 3)
+
+La grille du LUMÉAL de juin 2023 ne donne aucune durée pour le plaxage, le soubassement, la
+motorisation ni la garantie « bord de mer » [8 p. 3].
+
 # Garantie optionnelle « bord de mer »
 
 Garantie « bord de mer » : corrosion des parties laquées, en option [1 p. 35] :
@@ -198,6 +224,7 @@ aluminium bas carbone TECHNAL® recyclé à 75 %) est sur
 [5] [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](raw/brochure-perform-plus-hybride-plus-2023-05.pdf), p. 2 et 3
 [6] [Dépliant HYBRIDE, édition juin 2023](raw/depliant-hybride-2023-06.pdf), p. 2 et 3
 [7] [Dépliant INNOSLIDE, édition janvier 2024, version A4 web](raw/depliant-innoslide-2024-01-a4-web.pdf), p. 2 et 3
+[8] [Dépliant LUMÉAL, édition juin 2023](raw/depliant-lumeal-2023-06.pdf), p. 3
 
 # Voir aussi
 
@@ -205,6 +232,7 @@ aluminium bas carbone TECHNAL® recyclé à 75 %) est sur
 - [PERFORM](/gammes/perform.md)
 - [HYBRIDE](/gammes/hybride.md)
 - [INNOSLIDE](/gammes/innoslide.md)
+- [Coulissants aluminium](/gammes/coulissants-aluminium.md)
 - [LUMINE](/gammes/lumine.md)
 - [TEXTURAL](/gammes/textural.md)
 - [Volets roulants](/equipements/volets-roulants.md)
