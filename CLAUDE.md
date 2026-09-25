@@ -53,6 +53,12 @@ d'information technique. Le protocole d'écriture fait foi : `wiki_llm/CLAUDE.md
   coupe, renforts d'ouvrant selon la zone de l'abaque, parclose, tapée, appui, paumelles ; puis
   nomenclature (qté, ml) et accessoires par profilé avec dessins. Barres soudées en cote finie
   sauf surcote saisie (le 76 n'en documente pas). Impression A4 et CSV côté navigateur.
+- `app/services/parcloses.py` + `parcloses.html` (`/parcloses`) — pour un vitrage de X mm, les
+  parcloses et joints de chaque gamme, chacune lue dans sa forme : 76 Advanced (A joint 4 mm /
+  B joint 2 mm, tolérance +1 / −0,5), PERFORM76 (cahier), SOLEAL FY 55 (matrice parclose ×
+  joint intérieur, plage recommandée, élargisseur, pose de face, ouvrant minimal), ASKEY /
+  LUMEAL GA / SOLEAL GY (profilé d'ouvrant par épaisseur). Tolérance écrite = règle ; sans
+  tolérance : ±0,5 mm « correspond », ±1,5 mm « proche ». Les gammes non calculables sont listées.
 - `wiki_llm/CLAUDE.md` — le protocole d'écriture du wiki : c'est LUI qui fait foi pour toute
   ingestion ou correction de page. L'application ne corrige jamais une page : elle remplace le
   wiki EN BLOC par ce qu'on lui dépose.

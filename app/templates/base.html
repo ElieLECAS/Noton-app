@@ -406,6 +406,14 @@
                         <span>Faisabilité et débit</span>
                     </a>
                     <a
+                        href="/parcloses"
+                        id="nav-parcloses"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                    >
+                        <i class="ti ti-border-outer text-lg"></i>
+                        <span>Parcloses et joints</span>
+                    </a>
+                    <a
                         href="/feedbacks"
                         id="nav-feedbacks"
                         class="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
@@ -604,7 +612,7 @@
             // Lien actif de la barre latérale
             (function markActiveNav() {
                 const path = window.location.pathname;
-                const id = path === "/" ? "nav-chat" : path.startsWith("/vocal") ? "nav-vocal" : path.startsWith("/wiki") ? "nav-wiki" : path.startsWith("/carte") ? "nav-carte" : path.startsWith("/faisabilite") ? "nav-faisabilite"
+                const id = path === "/" ? "nav-chat" : path.startsWith("/vocal") ? "nav-vocal" : path.startsWith("/wiki") ? "nav-wiki" : path.startsWith("/carte") ? "nav-carte" : path.startsWith("/faisabilite") ? "nav-faisabilite" : path.startsWith("/parcloses") ? "nav-parcloses"
                     : path.startsWith("/feedbacks") ? "nav-feedbacks" : path.startsWith("/admin") ? "admin-link" : null;
                 if (id) { const el = document.getElementById(id); if (el) el.classList.add("active"); }
             })();

@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% block title %}Parcloses et joints - {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<style>
+{% raw %}
+  :root{
+    --bg:#ffffff; --bg-side:#f7f7f5; --bg-sunken:#f1f1ef; --bg-hover:#ececeb;
+    --line:#e9e9e7; --line-strong:#dcdcd9;
+    --tx:#1f2937; --tx-dim:#6b7280; --tx-faint:#9ca3af;
+    --accent:#4f46e5; --accent-soft:#eef2ff;
+    --ok:#15803d; --ok-bg:#ecfdf3; --ok-br:#bbf7d0;
+    --etude:#b45309; --etude-bg:#fffbeb; --etude-br:#fde68a;
+    --pvc:#0284c7; --alu:#7c3aed;
+    --shadow:0 1px 2px rgba(15,15,15,.06),0 4px 14px rgba(15,15,15,.08);
+  }
+  :root.dark{
+    --bg:#191919; --bg-side:#202020; --bg-sunken:#252525; --bg-hover:#2d2d2d;
+    --line:#2f2f2f; --line-strong:#3d3d3d;
+    --tx:#e5e7eb; --tx-dim:#9b9b98; --tx-faint:#6f6f6c;
+    --accent:#818cf8; --accent-soft:#1f2440;
+    --ok:#4ade80; --ok-bg:#14271b; --ok-br:#1f4a2e;
+    --etude:#fbbf24; --etude-bg:#2b2310; --etude-br:#5a4715;
+    --pvc:#7dd3fc; --alu:#c4b5fd;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.45);
+  }
+  #pj{flex:1 1 0%;min-height:0;overflow:auto;background:var(--bg);color:var(--tx);
+    font-family:Outfit,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+  #pj *{box-sizing:border-box}
+  #pj [hidden]{display:none!important}
+  #pj .wrap{max-width:78rem;margin:0 auto;padding:1.6rem 1.8rem 5rem}
+  #pj .head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+  #pj h1{font-size:1.7rem;font-weight:800;letter-spacing:-.02em;margin:0}
+  #pj .lede{color:var(--tx-dim);margin:.3rem 0 1.2rem;max-width:62rem;line-height:1.5}
+  #pj .help-btn{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--line-strong);background:var(--bg);
+    color:var(--tx-dim);font-size:17px;font-weight:700;font-style:italic;font-family:Georgia,serif;cursor:pointer}
+  #pj .help-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+
+  /* ---- saisie ---- */
+  #pj form{display:flex;flex-wrap:wrap;gap:1rem 1.4rem;align-items:flex-end;background:var(--bg-side);
+    border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem;margin-bottom:1rem;position:sticky;top:0;z-index:5}
+  #pj .f-lab{display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-faint);margin-bottom:.35rem}
+  #pj select,#pj input{height:36px;border:1px solid var(--line-strong);border-radius:8px;background:var(--bg);color:var(--tx);
+    font:inherit;padding:0 .6rem}
+  #pj select{min-width:16rem}
+  #pj input{width:10rem}
+  #pj select:focus,#pj input:focus,#pj .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  #pj .seg{display:flex;gap:4px;flex-wrap:wrap}
+  #pj .seg button{border:1px solid var(--line-strong);background:var(--bg);color:var(--tx-dim);border-radius:8px;padding:0 12px;
+    height:36px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+  #pj .seg button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+  #pj .resume{margin-left:auto;text-align:right}
+  #pj .resume b{font-size:1.5rem;font-weight:800;display:block;line-height:1.1}
+  #pj .resume span{color:var(--tx-dim);font-size:12.5px}
+
+  /* ---- résultats ---- */
+  #pj .sys{border:1px solid var(--line);border-radius:14px;background:var(--bg);margin-bottom:1rem;overflow:hidden}
+  #pj .sys-h{display:flex;align-items:center;gap:.7rem;padding:.8rem 1rem;border-bottom:1px solid var(--line);background:var(--bg-side)}
+  #pj .sys-h h2{margin:0;font-size:1.05rem;font-weight:800}
+  #pj .mat{font-size:11px;font-weight:700;border-radius:99px;padding:1px 9px;border:1px solid currentColor}
+  #pj .mat.pvc{color:var(--pvc)} #pj .mat.alu{color:var(--alu)}
+  #pj .sys-h .meta{color:var(--tx-dim);font-size:12.5px}
+  #pj .sys-h .n{margin-left:auto;color:var(--tx-faint);font-size:12px}
+  #pj .ctx{padding:.2rem 1rem .6rem}
+  #pj .ctx h3{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-faint);margin:.8rem 0 .4rem}
+  #pj .recette{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:.3rem .9rem;align-items:baseline}
+  #pj .el{display:contents}
+  #pj .role{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-faint);padding-top:.15rem}
+  #pj .val{display:flex;flex-wrap:wrap;align-items:baseline;gap:.2rem .5rem}
+  #pj .val b{font-size:14.5px;font-weight:800;color:var(--tx)}
+  #pj .val .det{font-size:12.5px;color:var(--tx-dim)}
+  #pj .val .ou{font-size:12px;color:var(--tx-faint);font-style:italic;margin:0 .15rem}
+  #pj .recette .note{grid-column:1/-1;margin:.1rem 0 0;font-size:12px;color:var(--tx-dim)}
+  #pj .admis{font-size:12.5px;color:var(--tx-dim)} #pj .admis b{color:var(--tx);font-size:14px}
+  #pj .tol{font-size:11.5px;color:var(--tx-faint)}
+  #pj details.proches{margin-top:.3rem}
+  #pj details.proches>summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--etude);padding:.4rem 0}
+  #pj .sol{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:1rem;align-items:center;padding:.6rem 0;
+    border-top:1px solid var(--line)}
+  #pj .ctx h3+.sol{border-top:0}
+  #pj .sol.proche{opacity:.78}
+  #pj .coupe{width:64px;height:44px;border-radius:6px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+  #pj .coupe img{max-width:60px;max-height:40px}
+  #pj .coupe.vide{background:var(--bg-sunken)}
+  #pj .etat{display:flex;flex-direction:column;align-items:flex-end;gap:.25rem;text-align:right}
+  #pj .tag{font-size:11px;font-weight:700;border-radius:99px;padding:1px 8px;border:1px solid;white-space:nowrap}
+  #pj .t-ok{color:var(--ok);background:var(--ok-bg);border-color:var(--ok-br)}
+  #pj .t-proche{color:var(--etude);background:var(--etude-bg);border-color:var(--etude-br)}
+  #pj .t-reco{color:var(--accent);background:var(--accent-soft);border-color:transparent}
+  #pj .liens{display:flex;gap:.3rem;flex-wrap:wrap;justify-content:flex-end}
+  #pj .src{font-size:11px;color:var(--tx-dim);border:1px solid var(--line);border-radius:99px;padding:0 8px;text-decoration:none}
+  #pj .src:hover{border-color:var(--accent);color:var(--accent)}
+  #pj .anom{font-size:11px;font-weight:700;color:var(--etude);border:1px solid var(--etude-br);background:var(--etude-bg);
+    border-radius:99px;padding:0 8px;text-decoration:none}
+  #pj h2.sep{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--etude);margin:1.6rem 0 .6rem}
+  #pj .aside{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:900px){#pj .aside{grid-template-columns:1fr} #pj .sol{grid-template-columns:56px minmax(0,1fr)} #pj .recette{grid-template-columns:7.5rem minmax(0,1fr)} #pj .etat{grid-column:1/-1;align-items:flex-start}}
+  #pj .box{border:1px solid var(--line);border-radius:14px;padding:.8rem 1rem}
+  #pj .box h2{margin:0 0 .5rem;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint)}
+  #pj .box ul{margin:0;padding-left:1.1rem;color:var(--tx-dim);line-height:1.5}
+  #pj .box a{color:var(--accent)}
+  #pj .empty{color:var(--tx-faint);padding:2rem 0;text-align:center}
+  #pj .err{color:#b91c1c}
+
+  /* ---- aide ---- */
+  #pj-aide{width:min(44rem,calc(100vw - 32px));max-height:calc(100vh - 48px);padding:0;border:1px solid var(--line-strong);
+    border-radius:16px;background:var(--bg);color:var(--tx);font-family:Outfit,ui-sans-serif,system-ui,sans-serif;font-size:14px;line-height:1.55}
+  #pj-aide::backdrop{background:rgba(15,15,20,.45)}
+  #pj-aide .a-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:1rem 1.3rem .8rem;
+    background:var(--bg);border-bottom:1px solid var(--line)}
+  #pj-aide h2{margin:0;font-size:1.15rem;font-weight:800}
+  #pj-aide .a-close{border:0;background:none;color:var(--tx-dim);font-size:22px;cursor:pointer;width:32px;height:32px;border-radius:8px}
+  #pj-aide .a-body{padding:.4rem 1.3rem 1.4rem}
+  #pj-aide h3{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint);margin:1.2rem 0 .45rem}
+  #pj-aide p,#pj-aide li{color:var(--tx-dim)}
+  #pj-aide ul{padding-left:1.2rem;margin:.3rem 0}
+  #pj-aide b{color:var(--tx)}
+{% endraw %}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="pj" class="flex-1 min-h-0">
+  <div class="wrap">
+    <div class="head">
+      <h1>Parcloses et joints</h1>
+      <button type="button" class="help-btn" id="pj-aide-btn" title="Comment ça marche" aria-haspopup="dialog">i</button>
+    </div>
+    <p class="lede">Pour un vitrage donné, les parcloses et les joints qui le tiennent, dans toutes les gammes PVC et
+      aluminium que le wiki documente. Chaque proposition est lue dans le tableau de sa gamme et renvoie à sa page.</p>
+
+    <form id="f" onsubmit="return false" autocomplete="off">
+      <label><span class="f-lab">Vitrage</span><select id="f-vit"></select></label>
+      <label id="w-libre" hidden><span class="f-lab" id="f-libre-lab">Composition</span><input type="text" id="f-libre"></label>
+      <div><span class="f-lab">Gamme</span><div class="seg" id="f-gamme">
+        <button type="button" data-v="" class="on">Toutes</button></div></div>
+      <div class="resume" id="resume" aria-live="polite"></div>
+    </form>
+
+    <section id="out" aria-live="polite"><p class="empty">Chargement…</p></section>
+  </div>
+
+  <dialog id="pj-aide" aria-labelledby="pj-aide-t">
+    <div class="a-head"><h2 id="pj-aide-t">Comment fonctionne le calculateur</h2>
+      <button type="button" class="a-close" id="pj-aide-close" aria-label="Fermer">×</button></div>
+    <div class="a-body">
+      <p>On choisit un vitrage ; le calculateur cherche, dans chaque gamme documentée par le wiki, ce qui le tient :
+        la <b>parclose</b> et son <b>joint</b>, ou, sur certaines gammes aluminium, le <b>profilé d’ouvrant</b> qui
+        correspond à cette épaisseur. <b>Aucune intelligence artificielle</b> : tout est lu dans les tableaux.</p>
+      <h3>S’en servir</h3>
+      <ul>
+        <li>Choisir une <b>composition</b> dans la liste (son épaisseur totale est indiquée), écrire une autre
+          composition (4-16-4, 44.2-16-4…), ou saisir directement une <b>épaisseur</b> en mm.</li>
+        <li>Filtrer par <b>gamme</b> si besoin : PERFORM76, SOLEAL FY, LUMEAL GA, SOLEAL GY, ASKEY…</li>
+      </ul>
+      <h3>Ce que lit chaque gamme</h3>
+      <ul>
+        <li><b>Système 76 Advanced</b> (PVC) : chaque parclose tient une épaisseur A avec un joint de 4 mm, et
+          A + 2 avec un joint de 2 mm, dans une tolérance de +1 / −0,5 mm. Les joints changent selon qu’il s’agit
+          d’un ouvrant, d’un capot alu avec joint EPDM, ou d’un dormant avec compensateur 76570.</li>
+        <li><b>PERFORM76</b> : les parcloses retenues par le cahier technique PROFERM (écarts avec le fabricant : CTR-19).</li>
+        <li><b>SOLEAL FY 55</b> (alu) : la matrice parclose × joint intérieur ; chaque case est l’épaisseur
+          obtenue, « recommandée » quand elle est dans la prise de volume conseillée. Aussi l’élargisseur, la pose de
+          face et l’ouvrant minimal.</li>
+        <li><b>ASKEY, LUMEAL GA, SOLEAL GY</b> : c’est le profilé d’ouvrant qui se choisit par l’épaisseur.</li>
+      </ul>
+      <h3>Lire les résultats</h3>
+      <ul>
+        <li><b>Correspond</b> : l’épaisseur est dans la tolérance ou la plage écrite, ou à ±0,5 mm d’une épaisseur donnée sans tolérance.</li>
+        <li><b>Proche</b> : à moins de 1,5 mm d’une épaisseur donnée sans tolérance ; l’écart est affiché. À vérifier.</li>
+        <li>Quand plusieurs parcloses tiennent la même épaisseur, la source ne dit pas laquelle choisir : elles sont toutes listées.</li>
+      </ul>
+      <h3>Ce qui n’est pas calculable</h3>
+      <p>Les gammes dont les pages ne donnent pas l’épaisseur de vitrage sont listées en bas de page, avec la raison.
+        Quand le wiki sera complété, elles apparaîtront d’elles-mêmes.</p>
+    </div>
+  </dialog>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+{% raw %}
+(function(){
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = (x, d) => x == null ? "–" : Number(x).toLocaleString("fr-FR", {maximumFractionDigits: d == null ? 2 : d});
+const REGISTRES = {INC: "/anomalies/incoherences-internes.md", CTR: "/anomalies/contradictions-entre-sources.md",
+                   VER: "/anomalies/informations-a-verifier.md"};
+const wikiHref = p => "/wiki#" + encodeURI(p);
+const VITRAGES = [
+  ["Double vitrage", ["4-16-4", "4-18-4", "4-20-4", "6-16-4", "6-20-4"]],
+  ["Double vitrage feuilleté", ["33.2-16-4", "44.2-16-4", "44.2-20-4", "44.2-16-44.2"]],
+  ["Triple vitrage", ["4-12-4-12-4", "4-14-4-14-4", "4-16-4-16-4", "4-18-4-18-4", "44.2-14-4-14-4"]]
+];
+const epaisseur = c => c.split("-").reduce((t, p, i) => {
+  const f = /^(\d)(\d)\.(\d)$/.exec(p);
+  return t + (i % 2 === 0 && f ? +f[1] + +f[2] + 0.38 * +f[3] : +p);
+}, 0);
+let gamme = "", timer = null, seq = 0;
+
+$("f-vit").innerHTML = VITRAGES.map(([g, l]) => '<optgroup label="' + esc(g) + '">' +
+  l.map(c => '<option value="' + esc(c) + '">' + esc(c) + ' · ' + fmt(epaisseur(c)) + ' mm</option>').join("") + '</optgroup>').join("") +
+  '<option value="__mm">Épaisseur en mm…</option><option value="__compo">Autre composition…</option>';
+$("f-vit").value = "44.2-16-4";
+
+function syncLibre(){
+  const v = $("f-vit").value, libre = v === "__mm" || v === "__compo";
+  $("w-libre").hidden = !libre;
+  if(libre){
+    $("f-libre-lab").textContent = v === "__mm" ? "Épaisseur (mm)" : "Composition";
+    $("f-libre").placeholder = v === "__mm" ? "28" : "4-16-4";
+    $("f-libre").inputMode = v === "__mm" ? "decimal" : "text";
+    $("f-libre").focus();
+  }
+}
+$("f-vit").addEventListener("change", () => { syncLibre(); relance(); });
+$("f-libre").addEventListener("input", relance);
+$("f-gamme").addEventListener("click", e => {
+  const b = e.target.closest("button[data-v]");
+  if(!b) return;
+  $("f-gamme").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+  gamme = b.dataset.v;
+  relance();
+});
+// Les gammes du filtre viennent du serveur : une gamme ajoutée côté wiki apparaît ici.
+function syncGammes(liste){
+  if($("f-gamme").dataset.pret) return;
+  $("f-gamme").dataset.pret = "1";
+  $("f-gamme").insertAdjacentHTML("beforeend", liste.map(g => '<button type="button" data-v="' + esc(g) + '">' + esc(g) + '</button>').join(""));
+}
+function relance(){ clearTimeout(timer); timer = setTimeout(calcule, 200); }
+
+async function calcule(){
+  const v = $("f-vit").value, libre = $("f-libre").value.trim();
+  const q = new URLSearchParams();
+  if(v === "__mm"){ if(!libre) return; q.set("epaisseur", libre.replace(",", ".")); }
+  else if(v === "__compo"){ if(!libre) return; q.set("vitrage", libre); }
+  else q.set("vitrage", v);
+  if(gamme) q.set("gamme", gamme);
+  const n = ++seq;
+  try {
+    const r = await fetch("/api/parcloses?" + q, {credentials: "include"});
+    if(r.status === 401){ location.href = "/login"; return; }
+    const d = await r.json();
+    if(n !== seq) return;
+    if(!r.ok) throw new Error(typeof d.detail === "string" ? d.detail : "saisie invalide");
+    syncGammes(d.gammes || []);
+    rendu(d);
+  } catch(err){
+    if(n === seq) $("out").innerHTML = '<p class="empty err">' + esc(err.message) + '</p>';
+  }
+}
+
+function rendu(d){
+  const nb = d.groupes.reduce((t, g) => t + g.contextes.reduce((u, c) => u + c.solutions.filter(s => s.statut === "ok").length, 0), 0);
+  $("resume").innerHTML = '<b>' + fmt(d.epaisseur) + ' mm</b><span>' +
+    (d.vitrage ? esc(d.vitrage.composition) + ' · ' + fmt(d.vitrage.verre_mm) + ' mm de verre · ' : "") +
+    nb + ' solution' + (nb > 1 ? "s" : "") + ' dans ' + d.groupes.length + ' système' + (d.groupes.length > 1 ? "s" : "") + '</span>';
+  // Les systèmes qui ont une vraie correspondance d'abord ; ceux qui n'ont que du « proche » ensuite.
+  const nbOk = g => g.contextes.reduce((t, c) => t + c.solutions.filter(s => s.statut === "ok").length, 0);
+  const tries = d.groupes.slice().sort((a, b) => nbOk(b) - nbOk(a));
+  const carte = g => {
+    const ok = nbOk(g), n = g.contextes.reduce((t, c) => t + c.solutions.length, 0);
+    return '<article class="sys"><header class="sys-h"><span class="mat ' + (g.materiau === "PVC" ? "pvc" : "alu") + '">' + esc(g.materiau) + '</span>' +
+      '<h2>' + esc(g.systeme) + '</h2><span class="meta">' + esc(g.fournisseur) + (g.gammes.length ? ' · ' + esc(g.gammes.join(", ")) : "") + '</span>' +
+      '<span class="n">' + (ok ? ok + ' correspondance' + (ok > 1 ? "s" : "") : n + ' proche' + (n > 1 ? "s" : "")) + '</span></header>' +
+      g.contextes.map(c => '<div class="ctx"><h3>' + esc(c.contexte) + '</h3>' + lignes(c.solutions) + '</div>').join("") +
+      '</article>';
+  };
+  const avec = tries.filter(g => nbOk(g) > 0), proches = tries.filter(g => nbOk(g) === 0);
+  const groupes = avec.map(carte).join("") +
+    (proches.length ? '<h2 class="sep">Seulement des propositions proches, à vérifier</h2>' + proches.map(carte).join("") : "");
+  const sans = d.sans_solution.length ? '<div class="box"><h2>Rien à ' + fmt(d.epaisseur) + ' mm</h2><ul>' +
+    d.sans_solution.map(s => '<li>' + esc(s) + '</li>').join("") + '</ul></div>' : "";
+  const nc = d.non_calculables.length ? '<div class="box"><h2>Non calculables avec le wiki actuel</h2><ul>' + d.non_calculables.map(x =>
+    '<li><b>' + esc(x.systeme) + '</b> (' + esc(x.materiau) + ') : ' + esc(x.raison) + ' — <a href="' + wikiHref(x.page) + '">page</a></li>').join("") + '</ul></div>' : "";
+  $("out").innerHTML = (groupes || '<p class="empty">Aucune parclose documentée pour ' + fmt(d.epaisseur) + ' mm.</p>') +
+    '<div class="aside">' + sans + nc + '</div>' +
+    (d.erreurs.length ? '<p class="empty err">Tables illisibles : ' + d.erreurs.map(esc).join(" · ") + '</p>' : "");
+}
+
+// Une ligne = une fiche de montage : chaque élément avec son rôle en toutes lettres (parclose, joint,
+// support de cale…). Les solutions qui ne diffèrent que par la première pièce (deux parcloses de
+// formes différentes, dix profilés d'une même prise de vitrage) partagent une fiche.
+function lignes(sols){
+  const paquets = [];
+  sols.forEach(s => {
+    const reste = s.elements.slice(1).map(e => e.role + "=" + e.valeur + "=" + e.detail).join("|");
+    const cle = [s.statut, s.cible, s.min, s.max, s.recommande, reste, s.source.section, s.image ? s.ref : ""].join("§");
+    const p = paquets.find(p => p.cle === cle);
+    if(p) p.push(s); else { const n = [s]; n.cle = cle; paquets.push(n); }
+  });
+  const ok = paquets.filter(p => p[0].statut === "ok"), proches = paquets.filter(p => p[0].statut !== "ok");
+  return ok.map(fiche).join("") +
+    (proches.length ? '<details class="proches"' + (ok.length ? "" : " open") + '><summary>' + proches.length +
+      ' combinaison' + (proches.length > 1 ? "s" : "") + ' proche' + (proches.length > 1 ? "s" : "") + ', à vérifier</summary>' +
+      proches.map(fiche).join("") + '</details>' : "");
+}
+
+function fiche(paquet){
+  const s = paquet[0];
+  const [tete, ...reste] = s.elements;
+  // la première pièce : une ou plusieurs références, chacune avec son détail
+  const tetes = paquet.map(x => x.elements[0]).filter(Boolean);
+  const premiere = tete ? '<div class="el"><span class="role">' + esc(tete.role) + '</span><span class="val">' +
+    tetes.map((e, i) => (i ? '<span class="ou">ou</span>' : "") + '<b>' + esc(e.valeur) + '</b>' +
+      (e.detail ? '<span class="det">' + esc(e.detail) + '</span>' : "")).join("") + '</span></div>' : "";
+  const autres = reste.map(e => '<div class="el"><span class="role">' + esc(e.role) + '</span><span class="val"><b>' +
+    esc(e.valeur) + '</b>' + (e.detail ? '<span class="det">' + esc(e.detail) + '</span>' : "") + '</span></div>').join("");
+  const etat = s.statut === "ok" ? '<span class="tag t-ok">Correspond</span>'
+    : '<span class="tag t-proche">Proche (' + (s.ecart > 0 ? "+" : "") + fmt(s.ecart) + ' mm)</span>';
+  const admis = s.min != null && s.max != null ? fmt(s.min) + ' à ' + fmt(s.max) + ' mm'
+    : (s.cible != null ? fmt(s.cible) + ' mm' : "");
+  const tol = s.tolerance && s.tolerance !== "plage" ? 'tolérance ' + esc(s.tolerance) + ' mm' : (s.min == null ? "sans tolérance écrite" : "");
+  return '<div class="sol ' + s.statut + '">' +
+    '<div class="coupe' + (s.image ? "" : " vide") + '">' + (s.image ? '<img src="' + esc(s.image) + '" alt="' + esc(s.ref) + '" loading="lazy">' : "") + '</div>' +
+    '<div class="recette">' + premiere + autres + (s.note ? '<p class="note">' + esc(s.note) + '</p>' : "") + '</div>' +
+    '<div class="etat">' + etat + (s.recommande ? '<span class="tag t-reco">Prise de volume recommandée</span>' : "") +
+      '<span class="admis">vitrage admis <b>' + admis + '</b></span>' + (tol ? '<span class="tol">' + tol + '</span>' : "") +
+      '<span class="liens"><a class="src" href="' + wikiHref(s.source.page) + '" title="' + esc(s.source.localisation || "") + '">' + esc(s.source.section) + '</a>' +
+      s.anomalies.map(a => '<a class="anom" href="' + wikiHref(REGISTRES[a.slice(0, 3)] || "") + '">' + esc(a) + '</a>').join("") + '</span></div>' +
+  '</div>';
+}
+
+const aide = $("pj-aide");
+$("pj-aide-btn").onclick = () => aide.showModal();
+$("pj-aide-close").onclick = () => aide.close();
+aide.addEventListener("click", e => { if(e.target === aide) aide.close(); });
+
+calcule();
+})();
+{% endraw %}
+</script>
+{% endblock %}

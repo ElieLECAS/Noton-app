@@ -20,7 +20,7 @@ from app.config import settings
 from app.database import create_db_and_tables, engine, get_session
 from app.logging_config import setup_app_logging
 from app.models.user import UserRead
-from app.routers import admin, auth, chat, conversations, faisabilite, vocal, wiki
+from app.routers import admin, auth, chat, conversations, faisabilite, parcloses, vocal, wiki
 from app.services.auth_service import decode_token, get_user_by_id
 
 setup_app_logging()
@@ -61,6 +61,7 @@ app.include_router(conversations.router)
 app.include_router(vocal.router)
 app.include_router(wiki.router)
 app.include_router(faisabilite.router)
+app.include_router(parcloses.router)
 app.include_router(admin.router)
 
 templates = Jinja2Templates(directory="app/templates")
@@ -163,6 +164,15 @@ async def faisabilite_page(request: Request, session: Session = Depends(get_sess
     if not user:
         return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse("faisabilite.html", {"request": request, "user": user})
+
+
+@app.get("/parcloses", response_class=HTMLResponse)
+async def parcloses_page(request: Request, session: Session = Depends(get_session)):
+    """Le calculateur de parcloses et de joints, toutes gammes : pour un vitrage, quoi monter."""
+    user = _get_authenticated_user(request, session)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+    return templates.TemplateResponse("parcloses.html", {"request": request, "user": user})
 
 
 @app.get("/login", response_class=HTMLResponse)
