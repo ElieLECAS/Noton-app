@@ -3,6 +3,9 @@ type: Procédure
 title: Transformation d'un ouvrant à la française en oscillo-battant, gamme ROTO NX
 description: Procédure PROFERM en cinq étapes pour transformer une menuiserie PVC à la française en oscillo-battant sur quincaillerie ROTO NX, sans changer la quincaillerie d'origine.
 tags: [roto-nx, quincaillerie, of, ob, oscillo-battant, transformation, pvc, sav, atelier]
+systeme: Roto NX
+fournisseur: ROTO
+usage: sav
 status: stable
 sources:
   - resource: raw/roto-nx-transformation-of-en-ob-2026-03.pdf

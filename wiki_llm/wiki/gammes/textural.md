@@ -5,6 +5,8 @@ description: Gamme décorative de PROFERM, cœur PVC KÖMMERLING serti d'alumini
 tags: [textural, pvc, aluminium, decoration, textures]
 gamme: TEXTURAL
 systeme: [70, 76]
+fournisseur: KÖMMERLING
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

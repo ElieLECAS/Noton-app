@@ -3,6 +3,7 @@ type: Équipement
 title: Stores intégrés
 description: Stores vénitiens 16 mm et plissés 20 mm intégrés à la menuiserie PROFERM, avec leurs limites dimensionnelles, encombrements et classes de protection solaire.
 tags: [store, venitien, plisse, protection-solaire, nf-en-14501, parclose]
+usage: chiffrage
 status: draft
 sources:
   - resource: raw/nuancier-stores-2020.pdf

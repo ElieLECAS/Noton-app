@@ -4,6 +4,8 @@ title: Moustiquaires enroulables verticales
 description: Moustiquaires enroulables verticales SOPROFEN sur-mesure pour fenêtres et portes-fenêtres, coffres 48 à 96 mm, guidage brosse, opercules ou zip.
 resource: https://www.soprofen.com
 tags: [moustiquaire, enroulable, soprofen, zip, opercules, somfy, ozroll]
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Moustiquaire enroulable verticale SOPROFEN 2026.pdf

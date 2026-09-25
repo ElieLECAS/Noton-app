@@ -3,6 +3,7 @@ type: Garantie
 title: Garanties par composant
 description: Grille contractuelle des durées de garantie de PROFERM par composant, laquage, plaxage et option bord de mer.
 tags: [garantie, laquage, plaxage, qualicoat, roto, bord-de-mer]
+usage: [chiffrage, sav]
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

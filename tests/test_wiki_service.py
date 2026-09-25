@@ -75,7 +75,9 @@ def test_estimated_tokens_and_stats(real_snapshot):
     )
     assert stats["wiki_chars"] == sum(len(p.raw_text) for p in real_snapshot.concept_pages)
     assert stats["wiki_chars"] > real_snapshot.char_count * 10
-    assert set(stats["lint"]) == {"frontmatter_errors", "not_in_index", "index_dead_links"}
+    assert set(stats["lint"]) == {
+        "frontmatter_errors", "not_in_index", "index_dead_links", "unknown_facets"
+    }
     assert stats["types"]["Document source"] >= 1
     graph = real_snapshot.graph_payload()
     assert all("body" not in n for n in graph["nodes"])
@@ -154,6 +156,36 @@ def test_small_wiki_graph_and_lint(small_wiki: Path):
     node = snap.page_payload("/gammes/alpha.md")
     assert node["outLinks"][1]["missing"] is True
     assert node["sources"][0]["resource"] == "raw/alpha.pdf"
+
+
+def test_real_wiki_facettes_de_navigation(real_snapshot):
+    """Chaque gamme et chaque fournisseur cités ont leur page : aucune entrée fantôme dans la
+    navigation, et les facettes sortent dans le graphe que lit l'interface."""
+    assert real_snapshot.lint["unknown_facets"] == []
+    dormants = real_snapshot.pages["/profiles/perform76-dormants.md"]
+    assert dormants.gamme == ["PERFORM"] and dormants.systeme == ["76"]
+    assert dormants.fournisseur == ["KÖMMERLING"] and dormants.usage == ["atelier"]
+    node = next(n for n in real_snapshot.graph_payload()["nodes"] if n["id"] == dormants.id)
+    assert node["gamme"] == ["PERFORM"] and node["usage"] == ["atelier"]
+    # Le système nomme le système du fournisseur, jamais une profondeur de profilé.
+    systemes = {s for p in real_snapshot.concept_pages for s in p.systeme}
+    assert not systemes & {"55", "65", "100"}
+
+
+def test_facettes_inconnues_au_lint(small_wiki: Path):
+    wiki = small_wiki / "wiki"
+    _write(
+        wiki / "profiles" / "gamma.md",
+        "---\ntype: Profilé\ntitle: Gamma\ngamme: Alpah\nfournisseur: ACME\nusage: [atelier, vente]\n"
+        "---\n\n# Gamma\n",
+    )
+    _write(wiki / "gammes" / "alpha.md", "---\ntype: Gamme\ntitle: Alpha\ngamme: Alpha\n---\n\n# Alpha\n")
+    fautes = load_snapshot(small_wiki).lint["unknown_facets"]
+    assert fautes == [
+        "/profiles/gamma.md — fournisseur « ACME » sans page fournisseur",
+        "/profiles/gamma.md — gamme « Alpah » sans page de gamme",
+        "/profiles/gamma.md — usage « vente » inconnu",
+    ]
 
 
 def test_get_snapshot_reloads_when_a_file_changes(small_wiki: Path, monkeypatch):

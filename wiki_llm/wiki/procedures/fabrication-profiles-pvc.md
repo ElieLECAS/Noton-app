@@ -3,6 +3,8 @@ type: Procédure
 title: Fabrication des profilés PVC, directives profine
 description: Les tolérances, températures et paramètres de débit, renforcement, soudage, ébavurage et pose de joint des profilés de fenêtres en PVC profine, avec les colles de référence.
 tags: [profine, fabrication, debit, renfort, soudage, ebavurage, joint, colle, atelier, pvc]
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

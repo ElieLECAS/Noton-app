@@ -3,6 +3,7 @@ type: Document source
 title: Dépliant général PROFERM, édition juin 2023
 description: Dépliant commercial de 8 pages présentant les quatre gammes en juin 2023, document de référence sur l'état des garanties, des performances thermiques initiales et des modèles de portes.
 tags: [depliant, general, perform, hybride, lumine, textural, garanties]
+gamme: [PERFORM, HYBRIDE, LUMINE, TEXTURAL]
 status: stable
 sources:
   - resource: raw/depliant-general-2023-06.pdf

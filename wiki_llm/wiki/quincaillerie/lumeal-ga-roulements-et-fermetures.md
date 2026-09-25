@@ -4,7 +4,9 @@ title: Roulements et fermetures Technal LUMEAL GA
 description: Chariots de roulement simples, doubles et triples jusqu'à 300 kg, ferrures de verrouillage 1 à 3 points, poignées de tirage et équipements de retard à l'effraction classe RC3 du coulissant minimal LUMEAL GA de Technal.
 tags: [technal, lumeal, lumeal-ga, coulissant, roulettes, ferrures, serrures, poignees, rc3]
 gamme: LUMINE
-systeme: 100
+systeme: LUMEAL GA
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf

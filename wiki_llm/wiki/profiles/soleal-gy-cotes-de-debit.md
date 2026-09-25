@@ -4,7 +4,9 @@ title: Cotes de débit et formules de calcul Technal SOLEAL GY 55
 description: Formules de débit exhaustives, déductions de profilés (dormants, ouvrants, rails alu/inox, boucliers thermiques, chicanes), dimensionnement des vitrages et débits d'angle pour le coulissant SOLEAL GY 55 de TECHNAL.
 tags: [technal, soleal, soleal-gy, debit, formules, coulissant, galandage, vitrage, seuil-pmr]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL GY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf

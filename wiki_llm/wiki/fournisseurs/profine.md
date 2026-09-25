@@ -4,6 +4,7 @@ title: profine
 description: Groupe extrudeur des profilés PVC de PROFERM, propriétaire des marques KÖMMERLING, TROCAL et KBE, et titulaire du DTA du système 76 Advanced.
 resource: https://www.profine-group.com
 tags: [fournisseur, profine, kommerling, trocal, kbe, pvc, systeme-76-advanced]
+fournisseur: profine
 status: stable
 sources:
   - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf

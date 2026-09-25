@@ -4,7 +4,9 @@ title: Dormants et ouvrants SOLEAL FY
 description: Profilés de fenêtres et portes-fenêtres à frappe aluminium TECHNAL SOLEAL FY 55 et FY 65, ouvrants apparents (OA), minimaux (OM) et minimaux chant clippable, avec leurs caractéristiques géométriques et leurs moments d'inertie Ix et Iy.
 tags: [technal, soleal, soleal-fy, frappe, aluminium, dormant, ouvrant, inertie, rpt]
 gamme: LUMINE
-systeme: [55, 65]
+systeme: SOLEAL FY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf

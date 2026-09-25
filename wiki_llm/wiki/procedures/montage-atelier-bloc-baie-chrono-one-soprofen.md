@@ -3,6 +3,9 @@ type: Procédure
 title: Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN
 description: Méthode d'assemblage en atelier du bloc-baie Chrono One SOPROFEN sur dormant de menuiserie — pose de l'adaptateur, clippage du coffre, étanchéité à double filet et fixation des coulisses.
 tags: [procedure, soprofen, bloc-baie, chrono-one, volet-roulant, atelier, assemblage, adaptateur, coulisse]
+systeme: Chrono One
+fournisseur: SOPROFEN
+usage: atelier
 status: stable
 sources:
   - resource: raw/moustiquaires/export_doc_137.zip

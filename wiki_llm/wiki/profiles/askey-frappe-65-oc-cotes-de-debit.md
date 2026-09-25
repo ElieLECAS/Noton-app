@@ -3,8 +3,9 @@ type: Profilé
 title: Cotes de débit ASKEY Frappe 65 Ouvrant Caché
 description: Formules de débit, abaques de coupe et nomenclatures pour les fenêtres, portes-fenêtres, ensembles composés et châssis fixes Frappe 65 OC ASKEY.
 tags: [cotes-de-debit, aluminium, frappe, ouvrant-cache, askey, debit, atelier]
-systeme: 65
 gamme: Frappe 65 Ouvrant Caché
+fournisseur: ASKEY
+usage: atelier
 famille: cotes-de-debit
 status: stable
 sources:

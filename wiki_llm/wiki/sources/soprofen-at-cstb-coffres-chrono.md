@@ -6,6 +6,8 @@ resource: raw/moustiquaires/export_doc_135.zip
 origin: Commission chargée de formuler les Avis Techniques (CSTB / CCFAT) pour SOPROFEN SAS
 last_modified: 2022-02-22
 tags: [source, cstb, avis-technique, soprofen, bloc-baie, chrono-c, chrono-vx2, chrono-one, vrx2, pvc, thermique, aev, inertie]
+systeme: Chrono One
+fournisseur: SOPROFEN
 status: stable
 source_pages:
   - resource: raw/moustiquaires/export_doc_135.zip

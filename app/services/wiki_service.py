@@ -84,6 +84,9 @@ class WikiPage:
     gamme: List[str] = field(default_factory=list)
     systeme: List[str] = field(default_factory=list)
     famille: List[str] = field(default_factory=list)
+    # Facettes de la navigation humaine seulement : le tour de chat ne les lit pas.
+    fournisseur: List[str] = field(default_factory=list)
+    usage: List[str] = field(default_factory=list)
     stale_after: str = ""
     stale: bool = False
     folder: str = "."
@@ -115,6 +118,10 @@ class WikiPage:
             "description": self.description,
             "status": self.status,
             "tags": list(self.tags),
+            "gamme": list(self.gamme),
+            "systeme": list(self.systeme),
+            "fournisseur": list(self.fournisseur),
+            "usage": list(self.usage),
             "staleAfter": self.stale_after,
             "stale": self.stale,
             "folder": self.folder,
@@ -264,6 +271,7 @@ class WikiSnapshot:
                 "frontmatter_errors": self.lint["frontmatter_errors"],
                 "not_in_index": self.lint["not_in_index"],
                 "index_dead_links": self.lint["index_dead_links"],
+                "unknown_facets": self.lint["unknown_facets"],
             },
             "last_call": last_call(),
         }
@@ -360,6 +368,8 @@ def _parse_page(path: Path, wiki_dir: Path) -> WikiPage:
         gamme=wiki_index.normalise(meta.get("gamme")),
         systeme=wiki_index.normalise(meta.get("systeme")),
         famille=wiki_index.normalise(meta.get("famille")),
+        fournisseur=wiki_index.normalise(meta.get("fournisseur")),
+        usage=wiki_index.normalise(meta.get("usage")),
         stale_after=stale_after_str,
         stale=bool(stale_after_str and stale_after_str < date.today().isoformat()),
         folder=folder,
@@ -462,7 +472,28 @@ def _lint(pages: Dict[str, WikiPage]) -> Dict[str, Any]:
         "index_dead_links": sorted(
             t for t in index_links if t not in pages or pages[t].missing
         ),
+        "unknown_facets": _facettes_inconnues(concept),
     }
+
+
+USAGES = ("atelier", "pose", "chiffrage", "sav")
+
+
+def _facettes_inconnues(concept: List[WikiPage]) -> List[str]:
+    """Une valeur de ``gamme`` ou de ``fournisseur`` que ne déclare aucune page de ce type, un
+    ``usage`` hors vocabulaire : la page n'apparaîtrait dans aucune entrée de la navigation, ou
+    dans une entrée à elle seule — une faute de frappe crée une gamme fantôme."""
+    gammes = {g for p in concept if p.type == "Gamme" for g in p.gamme}
+    fournisseurs = {f for p in concept if p.type == "Fournisseur" for f in p.fournisseur}
+    fautes = []
+    for p in concept:
+        fautes += [f"{p.id} — gamme « {g} » sans page de gamme" for g in p.gamme if g not in gammes]
+        fautes += [
+            f"{p.id} — fournisseur « {f} » sans page fournisseur"
+            for f in p.fournisseur if f not in fournisseurs
+        ]
+        fautes += [f"{p.id} — usage « {u} » inconnu" for u in p.usage if u not in USAGES]
+    return sorted(fautes)
 
 
 def load_snapshot(root: Optional[Path] = None, signature: Optional[Tuple] = None) -> WikiSnapshot:

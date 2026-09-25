@@ -6,6 +6,8 @@ resource: raw/moustiquaires/export_doc_133.zip
 origin: SOPROFEN SAS (Mertzwiller)
 last_modified: 2024-01-01
 tags: [source, soprofen, bloc-lx, demi-linteau, volet-roulant, guide-technique, cotes, tablier, motorisation, treuil, renfort]
+systeme: Bloc LX
+fournisseur: SOPROFEN
 status: stable
 source_pages:
   - resource: raw/moustiquaires/export_doc_133.zip

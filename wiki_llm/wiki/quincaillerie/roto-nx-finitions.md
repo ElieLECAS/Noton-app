@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Finitions Roto NX — caches et quincaillerie laquée
 description: Les références de caches de compas et de palier d'angle Roto NX par coloris, les compas, paliers et pivots eux-mêmes disponibles laqués blanc ou titane, et le gabarit de montage du renvoi de fouillot.
 tags: [roto, roto-nx, cache, coloris, laque, quincaillerie, finition, renvoi-de-fouillot]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: [chiffrage, atelier]
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

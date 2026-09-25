@@ -4,7 +4,9 @@ title: Cotes de débit SOLEAL FY
 description: Formules de coupe d'atelier, déductions et cotes de débit des profilés dormants, ouvrants, battements, seuils PMR, parcloses et vitrages pour fenêtres et portes-fenêtres TECHNAL SOLEAL FY 55 et FY 65.
 tags: [technal, soleal, soleal-fy, debit, cotes, atelier, coupe, vitrage, seuil-pmr]
 gamme: LUMINE
-systeme: [55, 65]
+systeme: SOLEAL FY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf

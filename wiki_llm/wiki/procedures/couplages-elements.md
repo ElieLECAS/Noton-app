@@ -3,6 +3,8 @@ type: Procédure
 title: Couplages et contreventements d'éléments, directives profine
 description: Les seuils de largeur au-delà desquels un couplage de fenêtres profine exige un jeu de dilatation, et les distances de vissage des couplages et contreventements.
 tags: [profine, couplage, contreventement, dilatation, vissage, atelier]
+fournisseur: KÖMMERLING
+usage: [atelier, pose]
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

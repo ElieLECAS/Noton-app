@@ -3,6 +3,10 @@ type: Profilé
 title: Dormants PERFORM76
 description: Les cinq dormants PERFORM76 — 76171, 76172, 76177, 76180, 76185 — avec leur aile, leur usage neuf ou rénovation et leurs compatibilités.
 tags: [perform76, dormant, profile, renovation, neuf]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

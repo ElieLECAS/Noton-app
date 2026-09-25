@@ -3,6 +3,7 @@ type: Porte d'entrée
 title: Collection Graphite
 description: Collection de portes d'entrée monoblocs contemporaines en gamme TEXTURAL®, caractérisées par un système breveté indéformable (Ωméga), une isolation Up de 0,36 W/m²K et des décors personnalisés peints à la main.
 tags: [porte-entree, graphite, monobloc, textural, omega, cyclone, up]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf

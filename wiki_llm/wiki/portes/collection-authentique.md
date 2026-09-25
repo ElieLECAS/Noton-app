@@ -4,6 +4,7 @@ title: Collection Authentique
 description: Les sept modèles de portes d'entrée traditionnelles personnalisables de PROFERM, réalisables en PERFORM, HYBRIDE et TEXTURAL.
 tags: [porte-entree, authentique, perform, hybride, textural, ferronnerie]
 gamme: [PERFORM, HYBRIDE, TEXTURAL]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

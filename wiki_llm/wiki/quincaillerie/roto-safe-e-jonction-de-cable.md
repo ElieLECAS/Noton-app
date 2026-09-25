@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Jonction de câble Roto Safe E
 description: Les variantes de jonction de câble qui alimentent une serrure motorisée Roto Safe E entre dormant et ouvrant, avec ou sans bloc d'alimentation intégré.
 tags: [roto, safe-e, eneo, jonction-cable, alimentation, porte-entree, ip67, cablage]
-famille: roto-safe-e
+systeme: Roto Safe E
+fournisseur: ROTO
+usage: pose
 status: stable
 sources:
   - resource: raw/roto-safe-e-jonction-de-cable-2024-11.pdf

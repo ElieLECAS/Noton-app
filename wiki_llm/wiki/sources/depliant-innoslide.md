@@ -3,6 +3,7 @@ type: Document source
 title: Dépliant INNOSLIDE, édition janvier 2024
 description: Dépliant commercial sur le coulissant PVC à frappe INNOSLIDE, existant en version impression (2 planches) et web A4 (4 pages), détaillant la quincaillerie Roto Patio Inowa et les seuils de soudure.
 tags: [depliant, innoslide, coulissant, roto, aluplast]
+gamme: INNOSLIDE
 status: stable
 sources:
   - resource: raw/depliant-innoslide-2024-01.pdf

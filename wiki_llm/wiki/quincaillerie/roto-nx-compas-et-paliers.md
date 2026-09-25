@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Compas, paliers et pivots Roto NX
 description: Les références de commande, capacités de charge et cotes des compas, paliers d'angle et pivots d'angle Roto NX pour profilés PVC en versions apparente P et invisible Designo II.
 tags: [roto, roto-nx, compas, palier, pivot, designo, quincaillerie, reference, charge]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf

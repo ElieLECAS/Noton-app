@@ -3,6 +3,7 @@ type: Porte d'entrée
 title: Panneaux et monoblocs
 description: Les deux modes de fabrication d'une porte PROFERM, les compositions de panneaux, les monoblocs THERMIXEL et THERMALUX, le panneau verrier VERRISSIMA et les 39 modèles de la collection Lumière.
 tags: [porte-entree, panneau, monobloc, thermixel, thermalux, verrissima, up]
+usage: chiffrage
 status: draft
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf

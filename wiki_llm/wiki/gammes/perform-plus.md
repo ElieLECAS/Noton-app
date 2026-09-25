@@ -3,6 +3,10 @@ type: Gamme
 title: PERFORM+
 description: Gamme de fenêtres PVC à ouvrant caché de PROFERM, annonçant 20 % de clair de jour en plus que la PERFORM, sur profilés KÖMMERLING GREENLINE 100 % renforcés.
 tags: [perform-plus, pvc, ouvrant-cache, kommerling, roto-nx]
+gamme: PERFORM+
+systeme: Roto NX
+fournisseur: KÖMMERLING
+usage: chiffrage
 status: draft
 sources:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf

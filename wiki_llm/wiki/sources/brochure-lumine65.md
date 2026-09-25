@@ -4,6 +4,8 @@ title: Brochure LUMINE65, édition février 2025
 description: Brochure commerciale et technique dédiée à la fenêtre à ouvrant caché et au coulissant aluminium LUMINE65.
 resource: https://proferm.net
 tags: [brochure, lumine65, aluminium, qualicoat, ouvrant-cache, acoustique]
+gamme: LUMINE
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: raw/brochure-lumine65-2025-02.pdf

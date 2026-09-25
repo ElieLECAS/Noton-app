@@ -4,7 +4,9 @@ title: Quincaillerie visible et cachée SOLEAL FY
 description: Systèmes de ferrures, paumelles apparentes 2 et 3 lames, paumelles sur pivot, quincaillerie cachée (QC 180°), crémones, serrures et organes de verrouillage pour menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65.
 tags: [technal, soleal, soleal-fy, quincaillerie, paumelle, ferrure, compas, quincaillerie-cachee, qc, roto]
 gamme: LUMINE
-systeme: [55, 65]
+systeme: SOLEAL FY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf

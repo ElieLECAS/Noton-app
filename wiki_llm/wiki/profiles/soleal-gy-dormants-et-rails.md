@@ -4,7 +4,9 @@ title: Profilés dormants, rails et ouvrants Technal SOLEAL GY 55
 description: Architecture technique complète du système coulissant à rupture de pont thermique SOLEAL GY 55 de TECHNAL (dormants 2, 3 et 4 rails, ouvrants 24-28 mm et 29-32 mm, chemins de roulement alu et inox, boucliers thermiques et inerties mécaniques).
 tags: [technal, soleal, soleal-gy, coulissant, galandage, profilés, dormants, rails, inertie, 55mm]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL GY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf

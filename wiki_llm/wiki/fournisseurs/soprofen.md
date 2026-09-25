@@ -4,6 +4,7 @@ title: SOPROFEN
 description: Fabricant français de fermetures, volets roulants, moustiquaires et protections solaires extérieures.
 resource: https://www.soprofen.com
 tags: [fournisseur, soprofen, volet-roulant, moustiquaire, screen, fermeture]
+fournisseur: SOPROFEN
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Moustiquaire enroulable verticale SOPROFEN 2026.pdf

@@ -3,6 +3,7 @@ type: Quincaillerie
 title: Poignées et croisillons
 description: Poignées, béquilles, fausses crémones et croisillons disponibles par gamme et par type de coulissant chez PROFERM.
 tags: [poignee, bequille, croisillon, secustik, technal, fausse-cremone]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

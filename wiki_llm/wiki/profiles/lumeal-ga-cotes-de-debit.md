@@ -4,7 +4,9 @@ title: Cotes de débit Technal LUMEAL GA
 description: Formules de coupe d'atelier, cotes de débit des profilés aluminium, boucliers thermiques et calcul des dimensions de vitrage du coulissant minimal LUMEAL GA de Technal.
 tags: [technal, lumeal, lumeal-ga, coulissant, debit, atelier, vitrage, seuil-pmr, formules]
 gamme: LUMINE
-systeme: 100
+systeme: LUMEAL GA
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf

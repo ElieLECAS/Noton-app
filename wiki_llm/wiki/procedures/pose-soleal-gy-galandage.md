@@ -4,7 +4,9 @@ title: Fabrication, pose et étanchéité du galandage Technal SOLEAL GY 55
 description: Procédure complète d'atelier et de chantier pour les coulissants à galandage et traditionnels SOLEAL GY 55 de TECHNAL (1 à 4 vantaux, caissons de refoulement, chicanes fixes, drainages étagés, talons injectés, seuil PMR et règles NF DTU 36.5).
 tags: [technal, soleal, soleal-gy, galandage, pose, fabrication, drainage, étanchéité, seuil-pmr, dtu-36-5]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL GY
+fournisseur: TECHNAL
+usage: [atelier, pose]
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf

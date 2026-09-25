@@ -4,7 +4,9 @@ title: Profilés dormants et ouvrants Technal LUMEAL GA
 description: Architecture technique, cotes de section et moments d'inertie des profilés aluminium à rupture de pont thermique et ouvrant caché du système de coulissant minimal LUMEAL GA de Technal.
 tags: [technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, dormants, ouvrants, inertie, profilés]
 gamme: LUMINE
-systeme: 100
+systeme: LUMEAL GA
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf

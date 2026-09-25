@@ -3,6 +3,7 @@ type: Vitrage
 title: Vitrages décoratifs
 description: Les neuf vitrages standards décoratifs proposés par PROFERM sur toutes ses menuiseries, et les options de personnalisation.
 tags: [vitrage, decoratif, depoli, chinchilla, listral, antelio]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

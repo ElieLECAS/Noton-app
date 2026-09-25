@@ -3,6 +3,10 @@ type: Profilé
 title: Meneaux PERFORM76
 description: Les quatre meneaux PERFORM76 — 76372, 76373 de dormant, 76301, 76303 d'ouvrant — et les alignements de traverse de soubassement.
 tags: [perform76, meneau, traverse, soubassement, profile]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

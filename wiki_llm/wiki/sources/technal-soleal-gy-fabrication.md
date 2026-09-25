@@ -4,7 +4,8 @@ title: Catalogue de fabrication Technal SOLEAL GY 55
 description: Guide officiel de fabrication et catalogue d'atelier Technal pour le système coulissant et galandage SOLEAL GY 55 (Réf. 5746.003 - 09/2021, 200 pages).
 tags: [technal, soleal, soleal-gy, coulissant, galandage, fabrication, atelier, usinage, drainage, montage]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL GY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-GY-55-Catalogue-fabrication-5746-003-092021-Fr.pdf

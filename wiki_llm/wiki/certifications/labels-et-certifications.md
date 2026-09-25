@@ -3,6 +3,7 @@ type: Certification
 title: Labels et certifications
 description: Labels, certifications officielles et classements normatifs obtenus par PROFERM pour ses gammes et son outil industriel.
 tags: [certification, label, cstb, rc2, origine-france-garantie, qualicoat, ffcp]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

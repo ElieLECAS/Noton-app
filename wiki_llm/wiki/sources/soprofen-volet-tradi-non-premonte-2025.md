@@ -4,6 +4,8 @@ title: Fiche produit Volet traditionnel TRADI NON PRÉMONTÉ SOPROFEN 2025
 description: Fiche produit technique et commerciale de 2 pages dédiée au volet roulant traditionnel non prémonté SOPROFEN (déport sur-mesure pour coffres menuisés et maçonnés, lame grande largeur LA 546 jusqu'à 4500 mm, coulisse Goodnight, Isoflex).
 resource: https://www.soprofen.com
 tags: [source, soprofen, volet-roulant, tradi, tradi-non-premonte, la546, goodnight, somfy, isoflex]
+systeme: TRADI
+fournisseur: SOPROFEN
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI NON PREMONTE 2025 SOPROFEN.pdf

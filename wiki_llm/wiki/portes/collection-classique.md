@@ -3,6 +3,7 @@ type: Porte d'entrée
 title: Collection Classique
 description: Portes d'entrée traditionnelles moulurées en saillie de PROFERM, avec vitrages décoratifs spécifiques (vitrages Diamant Di101 à Di612, petits bois V, plombs et films) et cimaises extérieures.
 tags: [porte-entree, classique, moulures, vitrage-diamant, petits-bois, cimaise]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf

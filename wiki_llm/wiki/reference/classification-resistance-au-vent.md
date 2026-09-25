@@ -3,6 +3,7 @@ type: Référence
 title: Classification de la résistance au vent, EN 12211
 description: Les classes d'essai de pression de vent et de flèche relative normale selon l'EN 12211, et leur combinaison en une classification globale de résistance au vent (A1 à C5, ou Exxxx).
 tags: [norme, en-12211, vent, fleche, classification, statique, reference]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

@@ -4,7 +4,9 @@ title: LUMINE
 description: Gamme de fenêtres aluminium de PROFERM sur profilés TECHNAL, déclinée en LUMINE55 et LUMINE65.
 tags: [aluminium, fenetre, lumine, technal, qualicoat]
 gamme: LUMINE
-systeme: [55, 65]
+systeme: SOLEAL FY
+fournisseur: TECHNAL
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

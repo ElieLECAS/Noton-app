@@ -4,6 +4,8 @@ title: Abaques dimensionnels du système 70
 description: Les limites de largeur, hauteur et poids d'ouvrant admissibles du système 70 Plateforme selon le renfort acier, la couleur du profilé (blanc vs plaxé) et le type d'ouverture.
 tags: [profine, systeme-70, abaque, dimension, limite, blanc, couleur, plaxage, ouvrant]
 systeme: 70
+fournisseur: KÖMMERLING
+usage: [atelier, chiffrage]
 famille: abaques
 status: stable
 sources:

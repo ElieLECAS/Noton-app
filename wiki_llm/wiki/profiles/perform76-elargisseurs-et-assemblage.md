@@ -3,6 +3,10 @@ type: Profilé
 title: Élargisseurs et assemblage PERFORM76
 description: Les quatre élargisseurs PERFORM76, les profils d'assemblage et les trois poteaux d'angle, réservés aux dormants sans aile 76171 et 76172.
 tags: [perform76, elargisseur, poteau-angle, assemblage, renfort, profile]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

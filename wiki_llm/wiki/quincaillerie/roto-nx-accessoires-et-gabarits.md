@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Accessoires et gabarits d'atelier Roto NX
 description: Les références de commande des accessoires de ferrure (anti-fausse manœuvre, loqueteaux, caches) et des gabarits et outillages d'usinage Roto NX.
 tags: [roto, roto-nx, accessoire, gabarit, outillage, atelier, loqueteau, anti-fausse-manoeuvre]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf

@@ -4,7 +4,9 @@ title: Paumelles, serrures et ferme-portes Technal SOLEAL PY 55
 description: Guide technique complet de la quincaillerie pour porte battante et va-et-vient SOLEAL PY 55 de TECHNAL (paumelles en feuillure 130/150 kg, ferme-porte intégré FPI conforme PMR, serrures 1 à multipoints, retard à l'effraction RC2/RC3, ventouses 300 kg et pivots freins de sol).
 tags: [technal, soleal, soleal-py, porte, quincaillerie, paumelles, serrures, ferme-porte-integre, anti-effraction, controle-acces]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL PY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf

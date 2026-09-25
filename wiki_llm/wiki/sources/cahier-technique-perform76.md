@@ -3,6 +3,9 @@ type: Document source
 title: Cahier technique PERFORM76, version 02/09/2026 CC03
 description: Document d'atelier et de chantier de la gamme PERFORM76 — profilés, cotes, références et principes de pose.
 tags: [cahier-technique, perform76, profile, pose, kommerling]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

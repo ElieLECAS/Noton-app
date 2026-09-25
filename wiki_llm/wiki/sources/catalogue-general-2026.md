@@ -4,6 +4,7 @@ title: Catalogue menuiseries PROFERM, édition janvier 2026
 description: Catalogue commercial des quatre gammes de fenêtres PROFERM, du cahier technique, des portes d'entrée et des garanties.
 resource: https://proferm.net/nos-produits/nos-catalogues
 tags: [catalogue, perform, hybride, lumine, textural]
+gamme: [PERFORM, HYBRIDE, LUMINE, TEXTURAL]
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

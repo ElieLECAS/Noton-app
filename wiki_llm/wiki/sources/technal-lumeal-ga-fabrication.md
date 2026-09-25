@@ -4,7 +4,8 @@ title: Catalogues de fabrication et notices de pose Technal LUMEAL GA
 description: Guide technique officiel d'atelier et catalogue de fabrication Technal (Réf. 5074.007 - 01/2021, 214 pages) et notice officielle de pose chantier (Réf. 5850.002 - 07/2018, 18 pages) pour le coulissant minimal LUMEAL GA.
 tags: [technal, lumeal, lumeal-ga, coulissant, fabrication, atelier, usinage, drainage, ferrage, pose, rc3, seuil-pmr]
 gamme: LUMINE
-systeme: 100
+systeme: LUMEAL GA
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf

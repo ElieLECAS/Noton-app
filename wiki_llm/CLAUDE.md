@@ -361,8 +361,10 @@ title: Nom du fournisseur
 description: Une phrase qui résume la page.
 resource: https://site-du-fournisseur.fr
 tags: [aluminium, profilé]
+gamme: PERFORM
 systeme: 76
-gamme: PERFORM76
+fournisseur: KÖMMERLING
+usage: atelier
 famille: dormants
 status: stable
 sources:
@@ -413,9 +415,39 @@ Field notes:
   `42, 51, 60`). It is the reciprocal of the coverage register: the register says where a page of
   PDF went, `source_pages` says where a wiki page came from, and the two are checked against each
   other. It is also what answers « what does the wiki hold about pages 100 to 120 of this manual »
-- `systeme`, `gamme`, `famille` -- the axes a reader and a navigation tool select on:
-  `systeme: 70` or `76`, `gamme: PERFORM76`, `famille: parcloses`. Fill what applies, omit the
-  rest. Adding them afterwards means reopening every page, so they are written at creation
+- `gamme`, `systeme`, `fournisseur`, `usage`, `famille` -- **the axes the human navigation is
+  built from.** The wiki application computes its home page, one dashboard per gamme, per
+  système, per fournisseur and per usage, and every breadcrumb from these fields alone: a page
+  that omits them is invisible to the reader who browses by product, whatever its quality.
+  Nothing of this navigation is ever written into a page body -- no hub page, no link list, no
+  breadcrumb line: it would duplicate the frontmatter, drift from it, and a hub listing every
+  SOLEAL FY title would outrank the real pages in the lexical search. Fill what applies, omit
+  the rest; adding them afterwards means reopening every page, so they are written at creation.
+  All of them accept a list (`gamme: [PERFORM+, HYBRIDE+]`).
+  - `gamme` -- the PROFERM commercial offer the page serves, **spelled exactly as the `gamme`
+    field of its `gammes/` page** (`PERFORM`, `PERFORM+`, `HYBRIDE`, `HYBRIDE+`, `TEXTURAL`,
+    `INNOSLIDE`, `LUMINE`, `Frappe 65 Ouvrant Caché`, `Frappe 65 Ouvrant Visible`,
+    `Coulissant 65 NV`). A PERFORM76 page is `gamme: PERFORM`, `systeme: 76`. A value no gamme
+    page declares is reported by the lint: it would open a dashboard of its own
+  - `systeme` -- the supplier's technical system, named as the supplier names it: `70` and `76`
+    for the profine systems, `SOLEAL FY`, `SOLEAL GY`, `SOLEAL PY`, `LUMEAL GA` for TECHNAL,
+    `Roto NX`, `Roto Patio Inowa`, `Roto Safe E` for ROTO, `Chrono One`, `Chrono PSE²`,
+    `Mono VI`, `Bloc LX`, `TRADI` for SOPROFEN. **Never a profile depth** (`55`, `65`): the depth
+    belongs to the gamme (LUMINE55) and to the tags. Omitted when the system is the gamme itself
+    (ASKEY). A system-wide page (`systeme-76-cotes-de-debit`) has a `systeme` and no `gamme`:
+    the gamme page declares its systems (`gammes/perform.md` → `systeme: [70, 76]`), and the
+    application shows the system's pages in the gamme's dashboard as « commun au système »
+  - `fournisseur` -- whose product the page describes, **spelled exactly as the `fournisseur`
+    field of its `fournisseurs/` page** (`KÖMMERLING`, `TECHNAL`, `ASKEY`, `ROTO`, `SOPROFEN`,
+    `SOMFY`). Every PVC profile page, profine directives included, is `KÖMMERLING`: that is the
+    name PROFERM buys under. Omitted when the source names no maker
+  - `usage` -- **who opens this page first**, from a closed list: `atelier` (débit, usinage,
+    assemblage, références de commande), `pose` (chantier, fixation, étanchéité, câblage),
+    `chiffrage` (choisir, prescrire, deviser : gammes, performances, coloris, garanties,
+    classement AEV), `sav` (réglage, entretien, transformation, réparation). Two values at most;
+    a page useful to everyone (glossaire, registres, fournisseurs, `sources/`) has none
+  - `famille` -- the family of components within a system (`parcloses`, `cotes-de-debit`). Never
+    a system name: `Roto NX` is a `systeme`
 - **`stale_after` -- only for a real expiry**: a DTA's validity, a certification, a tarif, an
   agrément. Never « the document's date plus a year », which once marked 28 pages out of 73 as
   stale and made the lint worthless. No expiry, no field

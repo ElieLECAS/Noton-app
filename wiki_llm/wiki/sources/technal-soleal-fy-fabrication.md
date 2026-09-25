@@ -4,7 +4,8 @@ title: Catalogues de fabrication Technal SOLEAL FY 55 et 55/65 QC
 description: Catalogues techniques d'atelier et notices d'usinage Technal pour la fabrication de la gamme à frappe SOLEAL FY 55 Évolution (DOC-0001186128 Rév. B) et SOLEAL FY 55/65 Quincaillerie Cachée QC (Réf. 6320.003).
 tags: [technal, soleal, soleal-fy, frappe, fabrication, usinage, drainage, sertissage, montage]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL FY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-FY-55-évo-Fab_DOC-0001186128-Rev.B_Fr.pdf

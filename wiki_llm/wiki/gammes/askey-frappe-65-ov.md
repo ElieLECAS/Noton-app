@@ -3,8 +3,9 @@ type: Gamme
 title: Gamme ASKEY Frappe 65 Ouvrant Visible
 description: Système de fenêtre et porte-fenêtre battante aluminium 65 mm traditionnel avec parcloses intérieures clipées et seuil PMR filant (groupe Hydro).
 tags: [gamme, aluminium, frappe, ouvrant-visible, askey, hydro]
-systeme: 65
 gamme: Frappe 65 Ouvrant Visible
+fournisseur: ASKEY
+usage: chiffrage
 status: stable
 sources:
   - resource: a_faire/askey4.pdf

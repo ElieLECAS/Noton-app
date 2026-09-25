@@ -3,6 +3,8 @@ type: Document source
 title: Roto Safe E Eneo CC, notice simplifiée PROFERM
 description: Notice PROFERM de 10 pages du contrôle d'accès 4 en 1 Eneo CC — montage de la serrure, câblage, télécommande, dépannage et entretien.
 tags: [roto, safe-e, eneo-cc, notice]
+systeme: Roto Safe E
+fournisseur: ROTO
 status: stable
 sources:
   - resource: raw/proferm-roto-eneo-cc-notice-simplifiee-2022.pdf

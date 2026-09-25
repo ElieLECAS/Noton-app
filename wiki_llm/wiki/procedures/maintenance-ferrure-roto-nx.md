@@ -3,6 +3,9 @@ type: Procédure
 title: Maintenance d'une ferrure Roto NX
 description: Intervalles, répartition des responsabilités, nettoyage, graissage, contrôle fonctionnel, transport, stockage et mise au rebut d'une ferrure Roto NX, avec le couple de verrouillage maximal de 10 Nm.
 tags: [roto, roto-nx, maintenance, entretien, nettoyage, graissage, sav, responsabilite]
+systeme: Roto NX
+fournisseur: ROTO
+usage: sav
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

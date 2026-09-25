@@ -3,6 +3,7 @@ type: Porte d'entrée
 title: Ouvrants de porte d'entrée
 description: Les trois ouvrants de porte PROFERM — 97, 118 et SOLEAL 100 — avec leurs dimensions, serrures, quincailleries et ce que chacun interdit.
 tags: [porte-entree, ouvrant, soleal, serrure, paumelle, cotes]
+usage: chiffrage
 status: draft
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf

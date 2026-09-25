@@ -4,7 +4,8 @@ title: DTA n° 6/15-2261_V3 et V1, procédé Soleal GY
 description: Document Technique d'Application CSTB du système de fenêtres et portes-fenêtres coulissantes en aluminium à rupture de pont thermique SOLEAL GY de TECHNAL (validité jusqu'au 31 juillet 2029).
 tags: [technal, soleal, soleal-gy, coulissant, dta, cstb, avis-technique, certification]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL GY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/DTA 6_15-2261_V3 SOLEAL GY.pdf

@@ -4,6 +4,8 @@ title: Screen extérieur SCREENAMAX
 description: Store extérieur zippé grandes dimensions SOPROFEN jusqu'à 7 m de large, caissons 85 et 100 mm, technologie anti-flexion à double axe et motorisation solaire Somfy.
 resource: https://www.soprofen.com
 tags: [screen, screenamax, soprofen, protection-solaire, zip, solaire, somfy, grande-largeur]
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf

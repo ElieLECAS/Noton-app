@@ -3,6 +3,9 @@ type: Document source
 title: Dépliant LUMÉAL, édition avril 2026
 description: Dépliant commercial de 2 planches (4 pages A4) sur la baie coulissante LUMÉAL à ouvrant caché, source la plus récente du corpus, détaillant les performances RC3, l'alu bas carbone et le nuancier sans bicoloration.
 tags: [depliant, lumeal, coulissant, technal, rc3, bas-carbone]
+gamme: LUMINE
+systeme: LUMEAL GA
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: raw/depliant-lumeal-2026-04.pdf

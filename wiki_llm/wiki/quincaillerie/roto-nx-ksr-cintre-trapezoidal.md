@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Configurations Roto NX KSR — châssis cintré et trapézoïdal
 description: La quincaillerie oscillo-battante Roto NX KSR pour châssis cintré, plein cintre et trapézoïdal — crémones, compas, verrouilleurs et raccords propres à la géométrie courbe.
 tags: [roto, roto-nx, ksr, cintre, trapezoidal, plein-cintre, quincaillerie, champs-application]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

@@ -4,6 +4,9 @@ title: Volet roulant traditionnel TRADI PRÉMONTÉ
 description: Volet roulant traditionnel SOPROFEN prémonté sur consoles et axe AXIS 50, coulisses Goodnight, lames 37 et 50 mm alu/PVC et solution thermique Isoflex.
 resource: https://www.soprofen.com
 tags: [volet-roulant, tradi, tradi-premonte, soprofen, goodnight, somfy, isoflex, ossature-bois, veranda]
+systeme: TRADI
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf

@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Composants communs Roto NX KSR
 description: Les paliers, pivots, compas OF, têtières et petites pièces qui reviennent à l'identique sur la plupart des configurations de ferrage Roto NX KSR, avec leur référence de commande.
 tags: [roto, roto-nx, ksr, palier, pivot, compas, quincaillerie, reference]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

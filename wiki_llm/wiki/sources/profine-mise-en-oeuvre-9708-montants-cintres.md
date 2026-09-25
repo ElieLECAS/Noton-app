@@ -3,6 +3,7 @@ type: Document source
 title: Mise en œuvre 9708, profine France
 description: Fiche d'une page pour le redressement d'un montant de porte cintré au moyen du profilé acier précontraint 9708.
 tags: [profine, 9708, montant-cintre]
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/profine-mise-en-oeuvre-9708-montants-cintres-2017-07.pdf

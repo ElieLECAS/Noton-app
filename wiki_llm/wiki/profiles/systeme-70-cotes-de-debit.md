@@ -4,6 +4,8 @@ title: Cotes de débit du système 70
 description: Les formules de coupe et les cotes à déduire de la dimension hors tout pour débiter dormants, meneaux, ouvrants, battements et seuils du système 70 Plateforme profine.
 tags: [profine, systeme-70, debit, cote, coupe, dormant, ouvrant, meneau, atelier]
 systeme: 70
+fournisseur: KÖMMERLING
+usage: atelier
 famille: cotes-de-debit
 status: stable
 sources:

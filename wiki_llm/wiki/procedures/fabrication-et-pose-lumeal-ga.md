@@ -4,7 +4,9 @@ title: Fabrication en atelier et pose sur chantier Technal LUMEAL GA
 description: Règles de fabrication en atelier, plans de drainage, injection d'étanchéité Butyl/élastomère, vitrage en portefeuille et mise en œuvre chantier selon le NF DTU 36.5 du coulissant minimal LUMEAL GA de Technal.
 tags: [technal, lumeal, lumeal-ga, coulissant, fabrication, atelier, usinage, drainage, etancheite, pose, dtu-36-5]
 gamme: LUMINE
-systeme: 100
+systeme: LUMEAL GA
+fournisseur: TECHNAL
+usage: [atelier, pose]
 status: stable
 sources:
   - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-fabrication-5074-007-012021-FR.pdf

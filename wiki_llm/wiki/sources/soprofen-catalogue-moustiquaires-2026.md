@@ -6,6 +6,7 @@ resource: raw/moustiquaires/Catalogue moustiquaires SOPROFEN FR.pdf
 origin: SOPROFEN, Société du Groupe Bouyer Leroux
 last_modified: 2026-05-31
 tags: [source, soprofen, moustiquaire, enroulable, plissee, battante, coulissante, cadre-fixe, bouyer-leroux]
+fournisseur: SOPROFEN
 status: stable
 source_pages:
   - resource: raw/moustiquaires/Catalogue moustiquaires SOPROFEN FR.pdf

@@ -4,6 +4,7 @@ title: Fiche produit Screen Extérieur SCREENAMAX SOPROFEN 2025
 description: Fiche produit technique et commerciale de 2 pages dédiée au screen extérieur zip grandes dimensions SCREENAMAX de SOPROFEN (caissons 85 et 100 mm, motorisation solaire Somfy, toiles Alkenz/Mermet/Ferrari).
 resource: https://www.soprofen.com
 tags: [source, soprofen, screen, screenamax, protection-solaire, zip, solaire, somfy]
+fournisseur: SOPROFEN
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Screen Extérieur SCREENAMAX 2025 SOPROFEN FR.pdf

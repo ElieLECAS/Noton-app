@@ -6,6 +6,8 @@ resource: raw/moustiquaires/export_doc_138.zip
 origin: SOPROFEN SAS (Mertzwiller)
 last_modified: 2024-06-25
 tags: [source, soprofen, bloc-baie, chrono-one, monobloc, volet-roulant, atelier, assemblage, coulisse, indexage]
+systeme: Chrono One
+fournisseur: SOPROFEN
 status: stable
 source_pages:
   - resource: raw/moustiquaires/export_doc_138.zip

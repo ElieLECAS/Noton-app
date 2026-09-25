@@ -3,6 +3,8 @@ type: Document source
 title: Catalogue Roto NX pour profils PVC, juin 2023
 description: Catalogue général de commande de 451 pages de la quincaillerie Roto NX sur menuiseries PVC, détaillant l'ensemble des références de pièces, diagrammes de charge et outillages.
 tags: [roto, roto-nx, catalogue, ferrure, reference, pvc, cremone, compas, gache]
+systeme: Roto NX
+fournisseur: ROTO
 status: stable
 sources:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf

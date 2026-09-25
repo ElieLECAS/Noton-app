@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Crémones Roto NX
 description: Les références de commande des crémones Roto NX par fouillot, galet et hauteur de poignée — fixe ou variable, 8, -6, 15 mm, EasyMix ou sortie de tringle — les serrures H100 de porte-fenêtre, et la méthode de lecture des tableaux à en-têtes pictographiques du catalogue.
 tags: [roto, roto-nx, cremone, quincaillerie, reference, pictogramme, easymix, fouillot]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf

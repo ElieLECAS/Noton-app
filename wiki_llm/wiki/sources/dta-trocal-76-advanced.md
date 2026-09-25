@@ -3,6 +3,8 @@ type: Document source
 title: DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED
 description: Document Technique d'Application CSTB de 56 pages du système PVC 76 Advanced de profine, premier document réglementaire du wiki.
 tags: [dta, cstb, profine, trocal, systeme-76-advanced, pose, reglementaire]
+systeme: 76
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf

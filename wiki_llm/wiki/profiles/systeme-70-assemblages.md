@@ -3,6 +3,9 @@ type: Profilé
 title: Assemblages du système 70
 description: Les méthodes d'assemblage autorisées entre dormants, ouvrants et traverses du système 70 Plateforme, et les sets d'assemblage entre chaque dormant et chaque seuil aluminium.
 tags: [systeme-70, e-volution, profine, assemblage, soudure, traverse, meneau, seuil, dormant, ouvrant]
+systeme: 70
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/dtd-6-16-2335-v5-e-volution.pdf

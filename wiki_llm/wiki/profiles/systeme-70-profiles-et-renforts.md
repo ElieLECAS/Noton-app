@@ -3,6 +3,9 @@ type: Profilé
 title: Profilés et renforts du système 70
 description: Les dormants, ouvrants, battements et meneaux du système 70 Plateforme de profine, avec le renfort acier de chaque profilé et ses inerties IG et IW.
 tags: [systeme-70, e-volution, profine, dormant, ouvrant, battement, meneau, renfort, inertie]
+systeme: 70
+fournisseur: KÖMMERLING
+usage: atelier
 status: draft
 sources:
   - resource: raw/profine-mise-en-oeuvre-systeme-70-2023-09.pdf

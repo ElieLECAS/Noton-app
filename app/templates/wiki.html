@@ -344,7 +344,73 @@
   #wiki-shell ::-webkit-scrollbar-thumb:hover{background:var(--tx-faint);background-clip:padding-box}
   #wiki-shell ::-webkit-scrollbar-track{background:transparent}
 
+  /* ---- navigation par produit et par metier ---- */
+  #wiki-shell.view-hub #view-hub{display:block;overflow:auto}
+  #tree-mode{display:flex;gap:2px;margin:0 8px 6px;padding:2px;border-radius:8px;background:var(--bg-sunken);flex:none}
+  #tree-mode button{flex:1;border:0;background:none;border-radius:6px;padding:4px 6px;font-size:12px;
+    font-weight:600;color:var(--tx-dim);cursor:pointer}
+  #tree-mode button.on{background:var(--bg);color:var(--tx);box-shadow:var(--shadow)}
+  #wiki-shell .grp-sub{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--tx-faint);padding:6px 8px 2px}
+  #crumb .cr-l{border:0;background:none;padding:0;font:inherit;cursor:pointer;color:var(--tx-dim);
+    white-space:nowrap}
+  #crumb .cr-l:hover{color:var(--accent);text-decoration:underline}
+
+  #wiki-shell .home-sub{margin:1.1rem 0 .5rem;font-size:.82rem;font-weight:600;color:var(--tx-dim)}
+  #wiki-shell .home-sub:first-of-type{margin-top:0}
+  #wiki-shell .card-m{font-size:.78rem;color:var(--tx-faint)}
+  #wiki-shell .card .card-x{display:-webkit-box}
+  #wiki-shell .card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+  #wiki-shell .card-ico{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;
+    background:var(--accent-soft);color:var(--accent);flex:none}
+  #wiki-shell .card-ico .ico{width:16px;height:16px}
+  #wiki-shell .home-all{margin-top:2.4rem;border-top:1px solid var(--line);padding-top:1rem}
+  #wiki-shell .home-all>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;
+    font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint)}
+  #wiki-shell .home-all>summary::-webkit-details-marker{display:none}
+  #wiki-shell .home-all>summary .tw{transition:transform .13s}
+  #wiki-shell .home-all[open]>summary .tw{transform:rotate(90deg)}
+  #wiki-shell .home-all>summary:hover{color:var(--tx)}
+
+  #wiki-shell .hub-tag{display:inline-flex;align-items:center;gap:4px;padding:1px 9px;border-radius:99px;
+    font-size:11.5px;font-weight:600;background:var(--accent-soft);color:var(--accent);cursor:pointer;
+    text-decoration:none;border:1px solid transparent;white-space:nowrap;line-height:1.6}
+  #wiki-shell .hub-tag:hover{border-color:var(--accent)}
+  #wiki-shell .hub-panel{margin:0 0 2rem;padding:1rem 1.2rem 1.1rem;border:1px solid var(--line);
+    border-radius:14px;background:var(--bg-side)}
+  #wiki-shell .hub-h{display:flex;align-items:baseline;gap:8px;margin:0 0 .4rem;font-size:.74rem;
+    font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-faint)}
+  #wiki-shell .hub-h .n{font-weight:600;opacity:.8;letter-spacing:0;text-transform:none}
+  #wiki-shell .hub-sec{margin-top:.9rem}
+  #wiki-shell .hub-sec:first-of-type{margin-top:.2rem}
+  #wiki-shell .hub-sec-t{display:flex;align-items:center;gap:8px;margin:0 0 .15rem;font-size:.95rem;
+    font-weight:700;color:var(--tx)}
+  #wiki-shell .hub-row{display:grid;grid-template-columns:11rem minmax(0,1fr);gap:.3rem 1rem;
+    padding:.5rem 0;border-top:1px solid var(--line);align-items:baseline}
+  #wiki-shell .hub-sec-t+.hub-row{border-top:0}
+  #wiki-shell .hub-lab{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--tx-dim);display:flex;align-items:center;gap:6px;min-width:0}
+  #wiki-shell .hub-lab .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  #wiki-shell .hub-lab .hub-tag{text-transform:none;letter-spacing:0}
+  #wiki-shell .hub-chips{display:flex;flex-wrap:wrap;gap:6px}
+  #wiki-shell .hub-page{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;
+    border:1px solid var(--line);border-radius:99px;background:var(--bg);color:var(--tx);
+    font-size:13px;line-height:1.35;text-decoration:none;cursor:pointer;max-width:100%;
+    transition:border-color .12s,color .12s}
+  #wiki-shell .hub-page:hover{border-color:var(--accent);color:var(--accent)}
+  #wiki-shell .hub-page .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  #wiki-shell .hub-page .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #wiki-shell .hub-page .flag{font-size:10.5px;font-weight:700;color:#b45309}
+  :root.dark #wiki-shell .hub-page .flag{color:#fcd34d}
+  #wiki-shell .hub-docs{margin-top:.8rem;border-top:1px solid var(--line);padding-top:.6rem}
+  #wiki-shell .hub-docs>summary{cursor:pointer;font-size:.8rem;font-weight:600;color:var(--tx-dim)}
+  #wiki-shell .hub-docs>summary:hover{color:var(--tx)}
+  #wiki-shell .hub-docs .hub-chips{margin-top:.6rem}
+  #wiki-shell .hub-view .hub-panel{background:none;border:0;padding:0}
+  #wiki-shell .hub-empty{font-size:.9rem;color:var(--tx-faint)}
+
   @media(max-width:900px){
+    #wiki-shell .hub-row{grid-template-columns:1fr;gap:.35rem}
     #wiki-sidebar{position:absolute;inset:0 auto 0 0;z-index:25;box-shadow:var(--shadow-lg)}
     #wiki-shell .home{padding:1.6rem 1.2rem 5rem}
     #wiki-shell .home-head h1{font-size:1.6rem}
@@ -375,6 +441,10 @@
       <div id="results" hidden></div>
     </div>
 
+    <div id="tree-mode" role="tablist" aria-label="Classement des pages">
+      <button data-mode="produit" role="tab">Par produit</button>
+      <button data-mode="type" role="tab">Par type</button>
+    </div>
     <nav id="tree"></nav>
 
     <details id="display">
@@ -429,6 +499,8 @@
     </header>
 
     <section class="view" id="view-home"></section>
+
+    <section class="view" id="view-hub"></section>
 
     <section class="view" id="view-page">
       <div class="wd-page">
@@ -673,6 +745,7 @@ wikiFetch("/api/wiki/graph")
     DATA.links = DATA.links || [];
     nodeById = new Map(DATA.nodes.map(n => [n.id, n]));
     computeStats();
+    buildNav();
     buildTree();
     route();
   })
@@ -942,8 +1015,44 @@ function deselect(){
   renderCrumb();
 }
 
-/* ==== arbre de navigation =============================================== */
+/* ==== arbre de navigation ===============================================
+   Deux classements : par produit (gamme, puis systeme ou fournisseur, puis
+   hors gamme) et par type, celui du graphe dont les yeux masquent un lobe. */
+let treeMode = "produit";
+try { if(localStorage.getItem("wiki-tree-mode") === "type") treeMode = "type"; } catch(e){}
+
 function buildTree(){
+  $("tree-mode").querySelectorAll("button").forEach(b => {
+    b.classList.toggle("on", b.dataset.mode === treeMode);
+    b.setAttribute("aria-selected", b.dataset.mode === treeMode);
+  });
+  if(treeMode === "produit") buildProductTree();
+  else buildTypeTree();
+}
+
+$("tree-mode").addEventListener("click", e => {
+  const b = e.target.closest("button[data-mode]");
+  if(!b || b.dataset.mode === treeMode) return;
+  treeMode = b.dataset.mode;
+  try { localStorage.setItem("wiki-tree-mode", treeMode); } catch(e){}
+  buildTree();
+  if(sel) revealInTree(sel);
+});
+
+function buildProductTree(){
+  $("tree").innerHTML = productGroups().map(g =>
+    (g.sub ? '<div class="grp-sub">' + esc(g.sub) + '</div>' : "") +
+    '<section class="grp">' +
+      '<div class="grp-head" role="button" tabindex="0">' +
+        '<span class="tw">' + ICO.chev + '</span>' +
+        '<span class="grp-name">' + esc(g.label) + '</span>' +
+        '<span class="grp-n">' + g.nodes.length + '</span>' +
+      '</div>' +
+      '<div class="grp-list">' + g.nodes.map(pageRow).join("") + '</div>' +
+    '</section>').join("");
+}
+
+function buildTypeTree(){
   const byType = d3.group(DATA.nodes, d => d.type);
   const types = sortTypes([...byType.keys()]);
   $("tree").innerHTML = '<div class="sec-lab">Pages par type</div>' + types.map(t => {
@@ -969,7 +1078,7 @@ const pageRow = n =>
   (n.stale ? '<span class="pg-flag" title="Périmée"></span>' : "") + '</button>';
 
 function paintTree(){
-  $("tree").querySelectorAll(".grp").forEach(g => {
+  $("tree").querySelectorAll(".grp[data-type]").forEach(g => {
     const t = g.dataset.type;
     const off = hidden.has(t);
     g.classList.toggle("hid", off);
@@ -1103,6 +1212,7 @@ function setView(v){
   shell.classList.toggle("view-home", v === "home");
   shell.classList.toggle("view-page", v === "page");
   shell.classList.toggle("view-graph", v === "graph");
+  shell.classList.toggle("view-hub", v === "hub");
   if(v === "graph"){
     if(!graphStarted){ graphStarted = true; render(); }
     else seedPulses();
@@ -1112,6 +1222,7 @@ function setView(v){
 
 function goHome(){
   sel = null;
+  curHub = null;
   gNode.selectAll("g.node").classed("sel", false);
   hover(null);
   $("tree").querySelectorAll(".pg.cur").forEach(el => el.classList.remove("cur"));
@@ -1123,6 +1234,7 @@ function goHome(){
 }
 
 function showGraph(){
+  curHub = null;
   setView("graph");
   writeHash("#graph");
   document.title = "Graphe · " + baseTitle;
@@ -1140,6 +1252,8 @@ function writeHash(want){
 function route(){
   const h = location.hash || "";
   if(h === "#graph"){ showGraph(); return; }
+  const hub = parseHub(h.slice(1));
+  if(hub){ openHub(hub.kind, hub.key); return; }
   const id = hashId();
   if(id){
     if(nodeById.has(id)) openPage(id);
@@ -1150,14 +1264,22 @@ function route(){
 }
 addEventListener("hashchange", () => { if(DATA) route(); });
 
+// Le fil d'Ariane d'une page est celui de sa frontmatter : fournisseur, gamme,
+// systeme, chacun ouvrant son entree. Une page hors gamme se situe par son type.
 function renderCrumb(){
   let rest = "";
-  if(view === "graph") rest = ' <span>/</span> <span class="cr-t">Graphe</span>';
+  const sep = ' <span>/</span> ';
+  if(view === "graph") rest = sep + '<span class="cr-t">Graphe</span>';
+  else if(view === "hub" && curHub){
+    rest = sep + esc(HUB_KIND[curHub.kind]) + sep +
+      '<span class="cr-t">' + esc(hubLabel(curHub.kind, curHub.key)) + '</span>';
+  }
   else if(view === "page" && sel){
     const n = nodeById.get(sel);
-    rest = ' <span>/</span> ' +
-      (n.folder && n.folder !== "." ? esc(n.folder) + ' <span>/</span> ' : "") +
-      '<span class="cr-t">' + esc(n.title) + '</span>';
+    const steps = NAV ? crumbSteps(n).map(([k, v]) =>
+      '<button class="cr-l" data-hub="' + esc(k + "/" + v) + '">' + esc(hubLabel(k, v)) + '</button>') : [];
+    if(!steps.length && n.type) steps.push(esc(TYPE_PLURIEL[n.type] || n.type));
+    rest = sep + steps.map(x => x + sep).join("") + '<span class="cr-t">' + esc(n.title) + '</span>';
   }
   $("crumb").innerHTML = '<button class="cr-home" title="Accueil du wiki">Wiki</button>' + rest;
 }
@@ -1229,16 +1351,27 @@ function renderHome(){
           '<input id="home-search" type="search" placeholder="Rechercher une page, une référence, une gamme…" autocomplete="off">' +
           '<kbd>Ctrl K</kbd></label>' +
       '</header>' +
-      (anomalies.length ? '<section class="home-sec home-anom"><h2>Registres d’anomalies' +
-        '<span class="n">' + anomalies.length + '</span></h2><div class="cards">' +
-        anomalies.map(n => card(n, n.description, null)).join("") + '</div></section>' : "") +
+      '<div class="home-nav">' +
+        (anomalies.length ? '<section class="home-sec home-anom"><h2>Registres d’anomalies' +
+          '<span class="n">' + anomalies.length + '</span></h2><div class="cards">' +
+          anomalies.map(n => card(n, n.description, null)).join("") + '</div></section>' : "") +
+        homeNav() +
+      '</div>' +
+      '<details class="home-all"><summary><span class="tw">' + ICO.chev + '</span>' +
+        'Toutes les pages, par type<span class="n">' + stats.pages + '</span></summary>' +
       secs.map(s => '<section class="home-sec"><h2>' + esc(s.title) + '<span class="n">' + s.items.length +
         '</span></h2><div class="cards">' + s.items.map(i => {
           const n = nodeById.get(i.id) || {id: i.id, title: i.title, type: "À écrire", missing: true, tags: []};
           return card(n, i.desc || n.description || "", i.title);
         }).join("") + '</div></section>').join("") +
       '<p class="home-none wd-empty" hidden>Aucune page ne correspond.</p>' +
+      '</details>' +
     '</div>';
+  // L'index replie reste ouvert si on l'a ouvert soi-meme, recherche videe ou pas.
+  const all = $("view-home").querySelector(".home-all");
+  all.querySelector("summary").addEventListener("click", () => {
+    if(!homeTerms.length) all.dataset.userOpen = all.open ? "0" : "1";
+  });
   const input = $("home-search");
   input.value = q;
   if(q) filterHome(q);
@@ -1285,15 +1418,21 @@ function applyHomeFilter(q, deep){
   const terms = homeTerms;
   const excerpts = new Map((deep || []).map(h => [h.id, h.excerpt || ""]));
   const home = $("view-home");
+  // En recherche, l'accueil devient la liste de toutes les pages, filtree : les
+  // entrees par produit et par metier se retirent, l'index complet s'ouvre.
+  const nav = home.querySelector(".home-nav"), all = home.querySelector(".home-all");
+  if(nav) nav.hidden = terms.length > 0;
+  if(!all) return;
+  all.open = terms.length > 0 || all.dataset.userOpen === "1";
   let any = false;
-  home.querySelectorAll(".card").forEach(c => {
+  all.querySelectorAll(".card").forEach(c => {
     const hay = c.dataset.search || "";
     const hit = !terms.length || terms.every(t => hay.includes(t)) || excerpts.has(c.dataset.id);
     c.hidden = !hit;
     if(hit) any = true;
     cardExcerpt(c, hit ? excerpts.get(c.dataset.id) : "", terms);
   });
-  home.querySelectorAll(".home-sec").forEach(s => {
+  all.querySelectorAll(".home-sec").forEach(s => {
     s.hidden = ![...s.querySelectorAll(".card")].some(c => !c.hidden);
   });
   const none = home.querySelector(".home-none");
@@ -1377,7 +1516,7 @@ $("view-home").addEventListener("input", e => {
 $("view-home").addEventListener("keydown", e => {
   if(e.target.id !== "home-search") return;
   if(e.key === "Enter"){
-    const first = $("view-home").querySelector(".card:not([hidden])");
+    const first = $("view-home").querySelector(".home-all .card:not([hidden])");
     if(first){ e.preventDefault(); openPage(first.dataset.id, false, homeTerms); }
   } else if(e.key === "Escape"){
     e.stopPropagation();
@@ -1385,12 +1524,347 @@ $("view-home").addEventListener("keydown", e => {
   }
 });
 $("view-home").addEventListener("click", e => {
+  if(navClick(e)) return;
   const a = e.target.closest("a.card");
   if(!a) return;
   e.preventDefault();
   if(nodeById.has(a.dataset.id)) openPage(a.dataset.id, false, homeTerms);
   else notice("Page inexistante : " + a.dataset.id);
 });
+
+/* ==== navigation par produit et par metier ==============================
+   Tout se calcule depuis la frontmatter — gamme, systeme, fournisseur, usage.
+   Aucune page du wiki ne porte de liste de liens ni de fil d'Ariane : ils
+   divergeraient de la frontmatter, et une page qui cite tous les titres d'une
+   gamme passerait devant les vraies pages dans la recherche du chat. */
+const USAGES = [
+  {key: "atelier", label: "Atelier et fabrication", desc: "Débit, usinage, assemblage, références de commande."},
+  {key: "pose", label: "Pose et chantier", desc: "Mise en œuvre, fixation, étanchéité, câblage."},
+  {key: "chiffrage", label: "Chiffrage et prescription", desc: "Choisir une gamme, ses performances, ses options, ses garanties."},
+  {key: "sav", label: "SAV et entretien", desc: "Réglage, entretien, transformation, réparation."}
+];
+const USAGE_LABEL = Object.fromEntries(USAGES.map(u => [u.key, u.label]));
+const HUB_KIND = {gamme: "Gamme", systeme: "Système", fournisseur: "Fournisseur", usage: "Métier"};
+const TYPE_PLURIEL = {
+  "Gamme": "Gammes", "Profilé": "Profilés", "Quincaillerie": "Quincaillerie", "Vitrage": "Vitrages",
+  "Équipement": "Équipements", "Porte d'entrée": "Portes d'entrée", "Procédure": "Procédures",
+  "Certification": "Certifications", "Garantie": "Garanties", "Référence": "Référence",
+  "Fournisseur": "Fournisseurs", "Anomalie": "Anomalies", "Document source": "Documents sources"
+};
+// Materiau d'une gamme, d'apres les etiquettes de sa page.
+const MATERIAUX = [["PVC", "PVC"], ["Mixte", "Mixte aluminium et PVC"], ["Aluminium", "Aluminium"], ["Autre", "Autres gammes"]];
+
+const list = (n, k) => (n && n[k]) || [];
+const isSource = n => n.type === "Document source";
+const sysLabel = s => /^\d+$/.test(s) ? "Système " + s : s;
+const hubLabel = (kind, key) => kind === "systeme" ? sysLabel(key)
+  : kind === "usage" ? (USAGE_LABEL[key] || key) : key;
+const byLabel = (a, b) => a.localeCompare(b, "fr", {numeric: true});
+const nbPages = k => k + (k > 1 ? " pages" : " page");
+
+let NAV = null, curHub = null;
+
+function buildNav(){
+  const concept = DATA.nodes.filter(n => !n.reserved && !n.missing);
+  // La page d'une gamme : celle dont le titre EST la gamme (lumine.md, pas
+  // coulissants-aluminium.md qui porte aussi « LUMINE »), sinon la seule.
+  const gammePage = new Map(), fournisseurPage = new Map();
+  concept.forEach(n => {
+    if(n.type === "Gamme") list(n, "gamme").forEach(g => {
+      const cur = gammePage.get(g);
+      if(!cur || (n.title === g && cur.title !== g)) gammePage.set(g, n);
+    });
+    if(n.type === "Fournisseur") list(n, "fournisseur").forEach(f => {
+      if(!fournisseurPage.has(f)) fournisseurPage.set(f, n);
+    });
+  });
+  const gammes = [...gammePage.keys()].sort(byLabel);
+  const systemes = [...new Set(concept.flatMap(n => list(n, "systeme")))].sort(byLabel);
+  const fournisseurs = [...new Set(concept.flatMap(n => list(n, "fournisseur")))].sort(byLabel);
+  NAV = {concept, gammePage, fournisseurPage, gammes, systemes, fournisseurs};
+}
+
+function hubPage(kind, key){
+  const m = kind === "gamme" ? NAV.gammePage : kind === "fournisseur" ? NAV.fournisseurPage : null;
+  return m ? m.get(key) || null : null;
+}
+
+function materiau(page){
+  const t = new Set(list(page, "tags"));
+  if(t.has("pvc") && t.has("aluminium")) return "Mixte";
+  if(t.has("pvc")) return "PVC";
+  if(t.has("aluminium")) return "Aluminium";
+  return "Autre";
+}
+
+// Les pages d'une entree. Une gamme recoit aussi les pages sans gamme des systemes
+// que declare sa page : les cotes de debit du systeme 76 servent a toute gamme en 76.
+function hubMembers(kind, key){
+  const self = hubPage(kind, key);
+  let out;
+  if(kind === "gamme"){
+    const sys = new Set(list(self, "systeme"));
+    out = NAV.concept.filter(n => list(n, "gamme").includes(key) ||
+      (!list(n, "gamme").length && list(n, "systeme").some(s => sys.has(s))));
+  } else {
+    out = NAV.concept.filter(n => list(n, kind).includes(key));
+  }
+  return out.filter(n => n !== self && n.type !== "Anomalie");
+}
+
+// Les systemes d'une page vus depuis une entree. Dans une gamme, une page commune
+// (sans gamme) ne compte que pour les systemes que la gamme declare : les joints
+// des systemes 70 et 76 n'ouvrent pas un « Systeme 70 » dans INNOSLIDE, en 76.
+function systemsIn(kind, key, n){
+  const ss = list(n, "systeme");
+  if(kind !== "gamme" || list(n, "gamme").includes(key)) return ss;
+  const declared = list(hubPage(kind, key), "systeme");
+  return ss.filter(s => declared.includes(s));
+}
+
+// Le produit auquel une page se rattache d'abord : sa gamme, sinon son systeme,
+// sinon son fournisseur. C'est le classement de la barre laterale et du metier.
+function productOf(n){
+  const g = list(n, "gamme")[0];
+  if(g && NAV.gammePage.has(g)) return ["gamme", g];
+  const s = list(n, "systeme")[0];
+  if(s) return ["systeme", s];
+  const f = list(n, "fournisseur")[0];
+  if(f) return ["fournisseur", f];
+  return null;
+}
+const RANG_PRODUIT = {gamme: 0, systeme: 1, fournisseur: 2};
+
+function productGroups(){
+  const groups = new Map();
+  const add = (k, label, sub, n, rank) => {
+    if(!groups.has(k)) groups.set(k, {label, sub: null, subLabel: sub, rank, nodes: []});
+    groups.get(k).nodes.push(n);
+  };
+  NAV.concept.filter(n => !isSource(n) && n.type !== "Anomalie").forEach(n => {
+    const gs = list(n, "gamme").filter(g => NAV.gammePage.has(g));
+    if(gs.length){ gs.forEach(g => add("g:" + g, g, "Gammes", n, 0)); return; }
+    const p = productOf(n);
+    if(p) add(p[0] + ":" + p[1], hubLabel(p[0], p[1]), p[0] === "systeme" ? "Systèmes" : "Fournisseurs", n, RANG_PRODUIT[p[0]]);
+    else add("t:" + n.type, TYPE_PLURIEL[n.type] || n.type, "Hors gamme", n, 3);
+  });
+  const out = [...groups.values()].sort((a, b) => a.rank - b.rank || byLabel(a.label, b.label));
+  let last = null;
+  out.forEach(g => {
+    g.nodes.sort(byTitle);
+    if(g.subLabel !== last){ g.sub = g.subLabel; last = g.subLabel; }
+  });
+  const anomalies = NAV.concept.filter(n => n.type === "Anomalie").sort(byTitle);
+  if(anomalies.length) out.unshift({label: "Registres d’anomalies", sub: null, nodes: anomalies});
+  return out;
+}
+
+/* ---- rendu des entrees ---- */
+// Dans une tuile (deja un lien), l'entree est un span : un <a> ne s'imbrique pas.
+function hubTag(kind, key, inCard){
+  const t = inCard ? "span" : "a";
+  return '<' + t + ' class="hub-tag" data-hub="' + esc(kind + "/" + key) + '"' +
+    (inCard ? ' role="link"' : ' href="#hub/' + esc(kind + "/" + key) + '"') +
+    ' title="' + esc(HUB_KIND[kind] + " · toutes les pages") + '">' + esc(hubLabel(kind, key)) + '</' + t + '>';
+}
+
+function hubChip(n, flag){
+  return '<a class="hub-page" data-id="' + esc(n.id) + '" href="#' + esc(n.id) + '" title="' +
+    esc(n.description || n.title) + '"><span class="dot" style="background:' + color(n.type) + '"></span>' +
+    '<span class="t">' + esc(n.title) + '</span>' + (flag ? '<span class="flag">' + esc(flag) + '</span>' : "") +
+    (n.status === "draft" ? '<span class="flag">brouillon</span>' : "") + '</a>';
+}
+
+function typeRows(nodes){
+  const g = d3.group(nodes, n => n.type);
+  return sortTypes([...g.keys()]).map(t =>
+    '<div class="hub-row"><div class="hub-lab"><span class="dot" style="background:' + color(t) + '"></span>' +
+    esc(TYPE_PLURIEL[t] || t) + '</div><div class="hub-chips">' +
+    g.get(t).slice().sort(byTitle).map(n => hubChip(n)).join("") + '</div></div>').join("");
+}
+
+// Une entree gamme ou fournisseur se lit par systeme, puis par type ; une entree
+// systeme par type ; une entree metier par produit. Les documents sources se
+// replient en bas : ils servent a verifier, pas a trouver.
+function hubBody(kind, key, nodes){
+  const pages = nodes.filter(n => !isSource(n)), docs = nodes.filter(isSource);
+  let html = "";
+  if(!pages.length && !docs.length) return '<p class="hub-empty">Aucune page ne porte encore cette entrée.</p>';
+  if(kind === "usage"){
+    const g = new Map();
+    pages.forEach(n => {
+      const p = productOf(n);
+      const k = p ? p[0] + "/" + p[1] : "";
+      if(!g.has(k)) g.set(k, {p, nodes: []});
+      g.get(k).nodes.push(n);
+    });
+    html = [...g.values()].sort((a, b) =>
+        (a.p ? RANG_PRODUIT[a.p[0]] : 9) - (b.p ? RANG_PRODUIT[b.p[0]] : 9) ||
+        byLabel(a.p ? hubLabel(a.p[0], a.p[1]) : "", b.p ? hubLabel(b.p[0], b.p[1]) : ""))
+      .map(e => '<div class="hub-row"><div class="hub-lab">' +
+        (e.p ? hubTag(e.p[0], e.p[1]) : "Hors gamme") + '</div><div class="hub-chips">' +
+        e.nodes.sort(byTitle).map(n => hubChip(n)).join("") + '</div></div>').join("");
+  } else if(kind === "systeme"){
+    html = typeRows(pages);
+  } else {
+    const ordre = list(hubPage(kind, key), "systeme");
+    const rang = s => s === "" ? 1000 : (ordre.indexOf(s) >= 0 ? ordre.indexOf(s) : 100);
+    const bySys = new Map();
+    pages.forEach(n => {
+      const ss = systemsIn(kind, key, n);
+      (ss.length ? ss : [""]).forEach(s => {
+        if(!bySys.has(s)) bySys.set(s, []);
+        bySys.get(s).push(n);
+      });
+    });
+    const keys = [...bySys.keys()].sort((a, b) => rang(a) - rang(b) || byLabel(a, b));
+    html = keys.map(s => {
+      const titled = s || keys.length > 1;
+      const commun = kind === "gamme" && s && bySys.get(s).some(n => !list(n, "gamme").length);
+      return '<div class="hub-sec">' +
+        (titled ? '<h3 class="hub-sec-t">' + (s ? hubTag("systeme", s) : "Autres pages") +
+          (commun ? '<span class="card-m">pages communes au système incluses</span>' : "") + '</h3>' : "") +
+        typeRows(bySys.get(s)) + '</div>';
+    }).join("");
+  }
+  if(docs.length){
+    html += '<details class="hub-docs"><summary>Documents sources (' + docs.length + ')</summary>' +
+      '<div class="hub-chips">' + docs.sort(byTitle).map(n => hubChip(n)).join("") + '</div></details>';
+  }
+  return html;
+}
+
+// Sur la page d'une gamme ou d'un fournisseur : son tableau de bord, avant le corps.
+function pageHub(n){
+  const kind = n.type === "Gamme" ? "gamme" : n.type === "Fournisseur" ? "fournisseur" : null;
+  if(!kind) return "";
+  const key = list(n, kind).find(k => hubPage(kind, k) === n);
+  if(!key) return "";
+  const nodes = hubMembers(kind, key);
+  const nPages = nodes.filter(x => !isSource(x)).length;
+  return '<section class="hub-panel"><h2 class="hub-h">Toutes les pages ' + esc(key) +
+    '<span class="n">' + nbPages(nPages) + '</span></h2>' +
+    hubBody(kind, key, nodes) + '</section>';
+}
+
+// Les etapes du fil d'Ariane : fournisseur › gamme › systeme, sans repeter la page.
+// Une page de gamme ou de fournisseur couvre plusieurs systemes : elle n'en cite aucun.
+function crumbSteps(n){
+  const steps = [];
+  const f = list(n, "fournisseur")[0], g = list(n, "gamme")[0], s = list(n, "systeme")[0];
+  if(f && hubPage("fournisseur", f) !== n) steps.push(["fournisseur", f]);
+  if(g && hubPage("gamme", g) !== n) steps.push(["gamme", g]);
+  if(s && n.type !== "Gamme" && n.type !== "Fournisseur") steps.push(["systeme", s]);
+  return steps;
+}
+
+/* ---- entree dediee : systeme et metier ; gamme et fournisseur ont leur page ---- */
+function parseHub(h){
+  const m = /^hub\/(gamme|systeme|fournisseur|usage)\/(.+)$/.exec(h || "");
+  if(!m) return null;
+  let key = m[2];
+  try { key = decodeURIComponent(key); } catch(e){}
+  return {kind: m[1], key};
+}
+
+function openHub(kind, key, fromHistory){
+  const page = hubPage(kind, key);
+  if(page){ openPage(page.id, fromHistory); return; }
+  const nodes = hubMembers(kind, key);
+  curHub = {kind, key};
+  sel = null;
+  gNode.selectAll("g.node").classed("sel", false);
+  $("tree").querySelectorAll(".pg.cur").forEach(el => el.classList.remove("cur"));
+  const entry = "hub/" + kind + "/" + key;
+  if(!fromHistory) pushHist(entry);
+  const pages = nodes.filter(n => !isSource(n));
+  const lede = kind === "usage"
+    ? (USAGES.find(u => u.key === key) || {}).desc || ""
+    : [...new Set(pages.flatMap(n => list(n, "fournisseur")))].join(", ");
+  const gammes = kind === "systeme"
+    ? [...new Set(pages.flatMap(n => list(n, "gamme")))].filter(g => NAV.gammePage.has(g)).sort(byLabel) : [];
+  $("view-hub").innerHTML = '<div class="home hub-view">' +
+    '<header class="wiki-doc-head"><div class="wd-badges"><span class="wd-badge">' + esc(HUB_KIND[kind]) + '</span>' +
+      '<span class="wd-pill">' + nbPages(pages.length) + '</span></div>' +
+      '<h1>' + esc(hubLabel(kind, key)) + '</h1>' +
+      (lede ? '<p class="wd-lede">' + esc(lede) + '</p>' : "") +
+      (gammes.length ? '<dl class="wd-meta"><dt>Gammes</dt><dd>' + gammes.map(g => hubTag("gamme", g)).join(" ") + '</dd></dl>' : "") +
+    '</header>' +
+    '<section class="hub-panel">' + hubBody(kind, key, nodes) + '</section></div>';
+  setView("hub");
+  $("view-hub").scrollTop = 0;
+  updateNav();
+  writeHash("#" + entry.split("/").map((p, i) => i < 2 ? p : encodeURIComponent(p)).join("/"));
+  document.title = hubLabel(kind, key) + " · " + baseTitle;
+}
+
+// Un clic sur une entree (data-hub) ou sur une page d'un tableau de bord.
+function navClick(e){
+  const h = e.target.closest("[data-hub]");
+  if(h){
+    e.preventDefault();
+    const hub = parseHub("hub/" + h.dataset.hub);
+    if(hub) openHub(hub.kind, hub.key);
+    return true;
+  }
+  const a = e.target.closest("a.hub-page");
+  if(a){
+    e.preventDefault();
+    openPage(a.dataset.id);
+    return true;
+  }
+  return false;
+}
+$("view-hub").addEventListener("click", navClick);
+
+/* ---- accueil : par gamme, par fournisseur, par metier, hors gamme ---- */
+function homeNav(){
+  const count = (kind, key) => hubMembers(kind, key).filter(n => !isSource(n)).length;
+  const sysOf = (kind, key, nodes) =>
+    [...new Set(nodes.filter(n => !isSource(n)).flatMap(n => systemsIn(kind, key, n)))].sort(byLabel);
+
+  const parMat = new Map(MATERIAUX.map(([k]) => [k, []]));
+  NAV.gammes.forEach(g => parMat.get(materiau(NAV.gammePage.get(g))).push(g));
+  const gammesHtml = MATERIAUX.filter(([k]) => parMat.get(k).length).map(([k, lab]) =>
+    '<p class="home-sub">' + esc(lab) + '</p><div class="cards">' + parMat.get(k).map(g => {
+      const page = NAV.gammePage.get(g), members = hubMembers("gamme", g);
+      const four = list(page, "fournisseur").join(", ");
+      const sys = sysOf("gamme", g, members);
+      return '<a class="card" href="#' + esc(page.id) + '" data-id="' + esc(page.id) + '">' +
+        '<span class="card-t"><span class="dot" style="background:' + color("Gamme") + '"></span>' + esc(g) + '</span>' +
+        (page.description ? '<span class="card-x">' + esc(page.description) + '</span>' : "") +
+        '<span class="card-m">' + (four ? esc(four) + " · " : "") + nbPages(count("gamme", g)) + '</span>' +
+        (sys.length ? '<span class="card-tags">' + sys.map(s => hubTag("systeme", s, true)).join("") + '</span>' : "") +
+      '</a>';
+    }).join("") + '</div>').join("");
+
+  const fournHtml = '<div class="cards">' + NAV.fournisseurs.map(f => {
+    const page = hubPage("fournisseur", f), members = hubMembers("fournisseur", f);
+    const sys = sysOf("fournisseur", f, members);
+    const attrs = page ? ' href="#' + esc(page.id) + '" data-id="' + esc(page.id) + '"'
+                       : ' href="#hub/fournisseur/' + esc(f) + '" data-hub="' + esc("fournisseur/" + f) + '"';
+    return '<a class="card"' + attrs + '>' +
+      '<span class="card-t"><span class="dot" style="background:' + color("Fournisseur") + '"></span>' + esc(f) + '</span>' +
+      '<span class="card-m">' + (count("fournisseur", f) ? nbPages(count("fournisseur", f)) : 'fiche fournisseur') + '</span>' +
+      (sys.length ? '<span class="card-tags">' + sys.map(s => hubTag("systeme", s, true)).join("") + '</span>' : "") +
+    '</a>';
+  }).join("") + '</div>';
+
+  const metierHtml = '<div class="cards">' + USAGES.map(u =>
+    '<a class="card" href="#hub/usage/' + u.key + '" data-hub="usage/' + u.key + '">' +
+      '<span class="card-t">' + esc(u.label) + '</span>' +
+      '<span class="card-x">' + esc(u.desc) + '</span>' +
+      '<span class="card-m">' + nbPages(count("usage", u.key)) + '</span></a>').join("") + '</div>';
+
+  const hors = NAV.concept.filter(n => !isSource(n) && n.type !== "Anomalie" &&
+    !list(n, "gamme").length && !list(n, "systeme").length && !list(n, "fournisseur").length);
+
+  return '<section class="home-sec"><h2>Par gamme<span class="n">' + NAV.gammes.length + '</span></h2>' + gammesHtml + '</section>' +
+    '<section class="home-sec"><h2>Par métier</h2>' + metierHtml + '</section>' +
+    '<section class="home-sec"><h2>Par fournisseur<span class="n">' + NAV.fournisseurs.length + '</span></h2>' + fournHtml + '</section>' +
+    (hors.length ? '<section class="home-sec"><h2>Hors gamme<span class="n">' + hors.length + '</span></h2>' +
+      '<div class="hub-panel">' + typeRows(hors) + '</div></section>' : "");
+}
 
 /* ==== lecture d'une page ================================================ */
 let hist = [], hpos = -1;
@@ -1403,11 +1877,8 @@ function openPage(id, fromHistory, terms){
   if(!n) return;
   sel = id;
   pageTerms = terms || [];
-  if(!fromHistory && hist[hpos] !== id){
-    hist = hist.slice(0, hpos + 1);
-    hist.push(id);
-    hpos = hist.length - 1;
-  }
+  curHub = null;
+  if(!fromHistory) pushHist(id);
   const rec = pageCache.get(id);
   if(rec && rec.error && rec.retry) pageCache.delete(id);
   gNode.selectAll("g.node").classed("sel", d => d.id === id);
@@ -1429,8 +1900,20 @@ function updateNav(){
   $("nav-back").disabled = hpos <= 0;
   $("nav-fwd").disabled = hpos >= hist.length - 1;
 }
-$("nav-back").onclick = () => { if(hpos > 0){ hpos--; openPage(hist[hpos], true); } };
-$("nav-fwd").onclick  = () => { if(hpos < hist.length - 1){ hpos++; openPage(hist[hpos], true); } };
+// L'historique melange pages (« /dossier/page.md ») et entrees (« hub/systeme/X »).
+function openEntry(entry){
+  const hub = parseHub(entry);
+  if(hub) openHub(hub.kind, hub.key, true);
+  else openPage(entry, true);
+}
+function pushHist(entry){
+  if(hist[hpos] === entry) return;
+  hist = hist.slice(0, hpos + 1);
+  hist.push(entry);
+  hpos = hist.length - 1;
+}
+$("nav-back").onclick = () => { if(hpos > 0){ hpos--; openEntry(hist[hpos]); } };
+$("nav-fwd").onclick  = () => { if(hpos < hist.length - 1){ hpos++; openEntry(hist[hpos]); } };
 $("btn-graph").onclick = showGraph;
 $("btn-home").onclick = goHome;
 $("wiki-home-btn").onclick = goHome;
@@ -1439,7 +1922,10 @@ $("btn-locate").onclick = () => {
   showGraph();
   if(id){ focusNode(id); const n = nodeById.get(id); if(n) hover(n); }
 };
-$("crumb").addEventListener("click", e => { if(e.target.closest(".cr-home")) goHome(); });
+$("crumb").addEventListener("click", e => {
+  if(e.target.closest(".cr-home")){ goHome(); return; }
+  navClick(e);
+});
 
 function renderPage(id){
   const n = nodeById.get(id);
@@ -1475,6 +1961,7 @@ function renderPage(id){
       (n.description ? '<p class="wd-lede">' + esc(n.description) + '</p>' : "") +
       meta(n, page) +
     '</header>' +
+    pageHub(n) +
     (body && body.toc ? body.toc : "") +
     '<div class="wiki-doc" id="wiki-body">' + bodyHtml + '</div>' +
     '<footer class="wiki-doc-foot">' +
@@ -1496,6 +1983,10 @@ function renderPage(id){
 // la page (objets {title, resource}) quand elle est chargee, sinon du graphe.
 function meta(n, page){
   const rows = [];
+  [["gamme", "Gamme"], ["systeme", "Système"], ["fournisseur", "Fournisseur"], ["usage", "Métier"]]
+    .forEach(([k, lab]) => {
+      if(list(n, k).length) rows.push([lab, list(n, k).map(v => hubTag(k, v)).join(" ")]);
+    });
   if((n.tags || []).length)
     rows.push(["Étiquettes", n.tags.map(t => '<span class="wd-pill">' + esc(t) + '</span>').join(" ")]);
   const sources = page && Array.isArray(page.sources) ? page.sources : (n.sources || []);
@@ -1703,6 +2194,7 @@ function setupTocSpy(){
 /* Un seul gestionnaire delegue pour la vue page : sommaire, chips, anomalies,
    retroliens. Les liens PDF et externes suivent leur href (nouvel onglet). */
 $("view-page").addEventListener("click", ev => {
+  if(navClick(ev)) return;
   const a = ev.target.closest("a");
   if(!a) return;
   if(a.dataset.toc){

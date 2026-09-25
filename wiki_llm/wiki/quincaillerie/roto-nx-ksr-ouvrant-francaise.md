@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Configurations Roto NX KSR — ouvrant à la française
 description: Les champs d'application, la quincaillerie et le positionnement des gâches de l'ouvrant à la française Roto NX KSR, à un ou deux vantaux, avec ses compas, têtières, verrouilleurs médians et gabarits de montage.
 tags: [roto, roto-nx, ksr, ouvrant-francaise, of, quincaillerie, champs-application]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

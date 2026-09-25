@@ -3,6 +3,10 @@ type: Profilé
 title: Ouvrants et battements PERFORM76
 description: Les quatre ouvrants PERFORM76 — 76272, 76275, 76279, 76281 — droits ou galbés, et les battements associés.
 tags: [perform76, ouvrant, battement, profile, galbe]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

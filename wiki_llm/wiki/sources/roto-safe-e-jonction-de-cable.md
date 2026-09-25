@@ -4,6 +4,8 @@ title: Roto Safe E, jonction de câble
 description: Notice de montage de 41 pages de la jonction de câble Roto Safe E — cotes, perçage, câblage par famille de serrure, dépannage et démontage.
 resource: https://www.roto-frank.com
 tags: [roto, safe-e, jonction-cable, notice]
+systeme: Roto Safe E
+fournisseur: ROTO
 status: stable
 sources:
   - resource: raw/roto-safe-e-jonction-de-cable-2024-11.pdf

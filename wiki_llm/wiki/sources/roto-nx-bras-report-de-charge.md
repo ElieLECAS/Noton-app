@@ -3,6 +3,8 @@ type: Document source
 title: Bras de report de charge ROTO NX
 description: Notice d'une page pour le montage et le réglage du report de charge NT Designo II sur quincaillerie ROTO NX.
 tags: [roto-nx, nt-designo, report-de-charge]
+systeme: Roto NX
+fournisseur: ROTO
 status: stable
 sources:
   - resource: raw/roto-nx-bras-report-de-charge.pdf

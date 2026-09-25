@@ -3,6 +3,7 @@ type: Quincaillerie
 title: Accessoires de porte d'entrée
 description: Bâtons de tirage, heurtoirs, poignées, boutons et boîtes aux lettres des portes PROFERM, avec leurs longueurs et leurs restrictions par ouvrant.
 tags: [porte-entree, baton-de-tirage, heurtoir, poignee, bouton, boite-aux-lettres, inox]
+usage: chiffrage
 status: draft
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf

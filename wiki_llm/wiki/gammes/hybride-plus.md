@@ -3,6 +3,10 @@ type: Gamme
 title: HYBRIDE+
 description: Gamme de fenêtres mixtes aluminium/PVC à ouvrant caché de PROFERM, annonçant 20 % de clair de jour en plus, avec dix coloris extérieurs laqués.
 tags: [hybride-plus, aluminium, pvc, ouvrant-cache, kommerling, roto-nx]
+gamme: HYBRIDE+
+systeme: Roto NX
+fournisseur: KÖMMERLING
+usage: chiffrage
 status: draft
 sources:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf

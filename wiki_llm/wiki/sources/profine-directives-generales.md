@@ -3,6 +3,7 @@ type: Document source
 title: Directives générales profine, version janvier 2023
 description: Manuel de mise en œuvre de 113 pages de profine, qui fixe la terminologie, les tailles d'ouvrants, la méthode de calcul des dimensions d'élément, et les tolérances de fabrication et de montage communes à tous les systèmes.
 tags: [profine, directives, terminologie, mise-en-oeuvre, dimensions, manuel]
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

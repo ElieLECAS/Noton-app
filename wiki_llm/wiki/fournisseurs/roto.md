@@ -3,6 +3,7 @@ type: Fournisseur
 title: ROTO
 description: Fournisseur de la quincaillerie PVC et mixte de PROFERM, à l'origine du Label ROTO Performance et de la garantie 10 ans sur les ferrures.
 tags: [fournisseur, quincaillerie, roto, ferrure, paumelle, rc2]
+fournisseur: ROTO
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

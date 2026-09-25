@@ -3,6 +3,10 @@ type: Profilé
 title: Appuis et seuils PERFORM76
 description: Les sept appuis PERFORM76, le nez d'appui 4319, les quatre seuils aluminium A075 à A343 et les deux compensateurs de rénovation, avec leur affectation par dormant quand elle est connue.
 tags: [perform76, appui, seuil, nez-d-appui, compensateur, rejet-d-eau]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
+usage: [atelier, pose]
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

@@ -4,7 +4,8 @@ title: Catalogue de conception Technal SOLEAL GY 55
 description: Catalogue technique de conception générale Technal pour la gamme de coulissants universels SOLEAL GY 55 (Réf. 5744.005 - 09/2021, 184 pages).
 tags: [technal, soleal, soleal-gy, coulissant, galandage, conception, profilés, inertie, seuil-pmr, 55mm]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL GY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf

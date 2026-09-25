@@ -5,6 +5,8 @@ description: Gamme de fenêtres et portes PVC de PROFERM, déclinée en profilé
 tags: [pvc, fenetre, perform, kommerling]
 gamme: PERFORM
 systeme: [70, 76]
+fournisseur: KÖMMERLING
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

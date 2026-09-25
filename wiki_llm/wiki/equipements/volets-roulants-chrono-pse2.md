@@ -3,6 +3,9 @@ type: Équipement
 title: Volet roulant et BSO bloc-baie CHRONO PSE²
 description: Système bloc-baie haute performance thermique SOPROFEN sous coffre PSE moulé (Uc jusqu'à 0,3 W/m²K) — bi-fonction volet roulant ou Brise-Soleil Orientable (BSO), caissons 300 et 360 mm, accès intérieur ou extérieur, compatible ITE, ITI et MOB.
 tags: [equipement, volet-roulant, bso, chrono-pse2, soprofen, pse, thermique, brise-soleil, mob, ite]
+systeme: Chrono PSE²
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/export_doc_132.zip

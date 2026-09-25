@@ -4,6 +4,7 @@ title: Fiche produit Moustiquaire enroulable verticale SOPROFEN 2026
 description: Fiche produit technique et commerciale de 2 pages dédiée aux moustiquaires enroulables verticales SOPROFEN (MOHO 48, MOHO 54, CA 68 ZIP, CA 96 ZIP).
 resource: https://www.soprofen.com
 tags: [source, soprofen, moustiquaire, enroulable, fiche-produit]
+fournisseur: SOPROFEN
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Moustiquaire enroulable verticale SOPROFEN 2026.pdf

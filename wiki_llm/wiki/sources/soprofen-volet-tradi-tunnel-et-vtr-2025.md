@@ -4,6 +4,8 @@ title: Fiche produit Volet traditionnel TRADI COFFRE TUNNEL et TRADI VTR SOPROFE
 description: Fiche produit technique et commerciale de 2 pages dédiée aux volets roulants traditionnels SOPROFEN pour coffres tunnel et rénovation sur coulisses existantes VTR.
 resource: https://www.soprofen.com
 tags: [source, soprofen, volet-roulant, tradi, coffre-tunnel, vtr, goodnight, somfy, isoflex]
+systeme: TRADI
+fournisseur: SOPROFEN
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR pose sur coulisses existantes 2025 Soprofen.pdf

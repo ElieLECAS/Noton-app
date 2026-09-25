@@ -4,6 +4,7 @@ title: Fiche produit Moustiquaire plissée SOPROFEN 2026
 description: Fiche produit technique et commerciale de 2 pages dédiée aux moustiquaires plissées SOPROFEN (MOPL 29 1V, MOPL 29 2VO, MOPL 29 2VJ, MOPF 29 REV, MOPF 29 1R).
 resource: https://www.soprofen.com
 tags: [source, soprofen, moustiquaire, plissee, fiche-produit]
+fournisseur: SOPROFEN
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Moustiquaire plissée SOPROFEN 2026.pdf

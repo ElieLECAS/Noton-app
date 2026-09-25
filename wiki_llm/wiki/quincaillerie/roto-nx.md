@@ -3,6 +3,9 @@ type: Quincaillerie
 title: Roto NX
 description: Quincaillerie ROTO équipant les gammes PERFORM+ et HYBRIDE+, avec traitement Roto Sil Level 6, système TiltSafe et accès au RC2.
 tags: [roto, roto-nx, tiltsafe, rc2, oscillo-battant, anticorrosion]
+systeme: Roto NX
+fournisseur: ROTO
+usage: chiffrage
 status: draft
 sources:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf

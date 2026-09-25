@@ -3,6 +3,9 @@ type: Quincaillerie
 title: Serrure motorisée
 description: Option de serrure motorisée automatique Safe E Eneo CC pour portes d'entrée PROFERM, avec contrôle d'accès 4 en 1.
 tags: [porte-entree, serrure, motorisation, eneo, sorex, digicode, bluetooth]
+systeme: Roto Safe E
+fournisseur: ROTO
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

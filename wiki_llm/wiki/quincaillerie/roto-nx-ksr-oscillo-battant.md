@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Configurations Roto NX KSR — oscillo-battant
 description: Les champs d'application, la quincaillerie et le positionnement des gâches de l'oscillo-battant Roto NX KSR, sécurité de base et RC1, à un vantail et à deux vantaux — têtière de compas, compas P, verrouilleur médian, crémone de semi-fixe et gabarits de montage.
 tags: [roto, roto-nx, ksr, oscillo-battant, ob, quincaillerie, champs-application, semi-fixe]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

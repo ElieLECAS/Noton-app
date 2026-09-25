@@ -4,7 +4,8 @@ title: F.I.T N° 15 — Évolution Porte PY et Seuil PMR PY1100 Technal
 description: Fiche d'Information Technique officielle Technal détaillant le seuil PMR à rupture de pont thermique PY1100, les pièces d'angle préformées et les procès-verbaux d'essais AEV (33 pages).
 tags: [technal, soleal, soleal-py, seuil-pmr, py1100, aev, cstb, fit]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL PY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SEUIL TECHNAL PY1100 DOC.pdf

@@ -3,6 +3,8 @@ type: Référence
 title: Résistance au vent des volets roulants SOPROFEN
 description: Abaques de résistance au vent des lames PVC et aluminium SOPROFEN (classes V*2 à V*6 selon NF EN 13659) et matrice de prescription par zone géographique, catégorie de terrain et hauteur selon le DTU 34-2.
 tags: [reference, vent, resistance-au-vent, volet-roulant, soprofen, dtu-34-2, nf-en-13659, cstb]
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/export_doc_132.zip

@@ -4,6 +4,8 @@ title: Brochure HYBRIDE, édition mars 2025
 description: Brochure commerciale et technique de 4 pages dédiée à la gamme mixte HYBRIDE sur profilé 72 mm.
 resource: https://proferm.net
 tags: [brochure, hybride, kommerling, coloris]
+gamme: HYBRIDE
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/brochure-hybride-2025-03.pdf

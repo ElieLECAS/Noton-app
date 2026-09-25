@@ -4,7 +4,9 @@ title: Coulissants aluminium
 description: Les quatre coulissants aluminium de PROFERM — SOLÉAL55, GALANDAGE55, LUMÉAL55 et LUMINE65 — avec leurs limites dimensionnelles et quincailleries.
 tags: [aluminium, coulissant, soleal, galandage, lumeal, lumine, technal]
 gamme: LUMINE
-systeme: [55, 65]
+systeme: [SOLEAL GY, LUMEAL GA]
+fournisseur: TECHNAL
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

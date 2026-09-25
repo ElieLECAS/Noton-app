@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Limiteur d'ouverture à positions indexées Roto NX KSR
 description: L'ouvrant à la française Roto NX KSR équipé d'un limiteur d'ouverture à positions indexées, avec ses cotes de montage par largeur en feuillure et par côté paumelle (P, Designo, Designo II).
 tags: [roto, roto-nx, ksr, limiteur-ouverture, paumelle, quincaillerie, champs-application]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

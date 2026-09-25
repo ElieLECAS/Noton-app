@@ -3,6 +3,9 @@ type: Procédure
 title: Report de charge ROTO NX
 description: Montage et réglage du bras de report de charge NT Designo II sur quincaillerie ROTO NX, avec le critère visuel du cercle plein pour la tension du ressort.
 tags: [roto-nx, nt-designo, report-de-charge, quincaillerie, pivot-angle, reglage, atelier]
+systeme: Roto NX
+fournisseur: ROTO
+usage: [atelier, sav]
 status: stable
 sources:
   - resource: raw/roto-nx-bras-report-de-charge.pdf

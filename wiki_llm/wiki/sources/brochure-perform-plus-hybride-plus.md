@@ -3,6 +3,8 @@ type: Document source
 title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
 description: Brochure commerciale de 4 pages présentant les gammes à ouvrant caché PERFORM+ et HYBRIDE+, absentes du catalogue général de 2026.
 tags: [brochure, perform-plus, hybride-plus, ouvrant-cache, nouveautes]
+gamme: [PERFORM+, HYBRIDE+]
+fournisseur: KÖMMERLING
 status: draft
 sources:
   - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf

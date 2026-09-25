@@ -4,7 +4,9 @@ title: INNOSLIDE
 description: Coulissant PVC à frappe de PROFERM sans soulèvement d'ouvrant, rattaché à la gamme PERFORM.
 tags: [pvc, coulissant, innoslide, perform, roto]
 gamme: INNOSLIDE
-systeme: 76
+systeme: [76, Roto Patio Inowa]
+fournisseur: KÖMMERLING
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

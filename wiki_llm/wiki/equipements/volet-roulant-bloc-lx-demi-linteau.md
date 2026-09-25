@@ -3,6 +3,9 @@ type: Équipement
 title: Volet roulant coffre demi-linteau BLOC LX
 description: Volet roulant SOPROFEN pour coffres demi-linteaux en construction neuve — cotes de fabrication, compatibilités coffres préfabriqués (Terreal, Genova, Prefatec, Imerys, Stradal), lames PVC/alu, renforts d'inertie et motorisations.
 tags: [equipement, volet-roulant, bloc-lx, demi-linteau, soprofen, neuf, isolation, renfort, somfy]
+systeme: Bloc LX
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/export_doc_133.zip

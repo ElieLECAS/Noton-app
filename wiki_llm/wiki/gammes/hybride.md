@@ -5,6 +5,8 @@ description: Gamme de menuiseries mixtes de PROFERM associant un profil aluminiu
 tags: [hybride, aluminium, pvc, kommerling, fenetre]
 gamme: HYBRIDE
 systeme: [70, 76]
+fournisseur: KÖMMERLING
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

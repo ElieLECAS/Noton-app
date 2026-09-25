@@ -3,6 +3,8 @@ type: Document source
 title: Mise en œuvre Système 76 Advanced, profine
 description: Manuel de fabrication de 424 pages du système PVC 76 Advanced à joint central de profine, qui porte les cotes de débit, les abaques dimensionnels et les renforts.
 tags: [profine, systeme-76-advanced, joint-central, fabrication, cotes-de-debit, renfort, abaque, manuel]
+systeme: 76
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf

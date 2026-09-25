@@ -3,8 +3,9 @@ type: Profilé
 title: Cotes de débit ASKEY Coulissant 65 NV
 description: Formules de calcul et abaques de débit des profilés aluminium, vitrages et accessoires pour les châssis Coulissant 65 NV ASKEY.
 tags: [cotes-de-debit, aluminium, coulissant, askey, debit, atelier]
-systeme: 65
 gamme: Coulissant 65 NV
+fournisseur: ASKEY
+usage: atelier
 famille: cotes-de-debit
 status: stable
 sources:

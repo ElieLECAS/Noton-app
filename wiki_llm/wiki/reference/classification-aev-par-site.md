@@ -3,6 +3,7 @@ type: Référence
 title: Classification A*E*V* à préconiser par site
 description: La classe A*E*V* minimale à préconiser pour une fenêtre ou une porte extérieure, en France métropolitaine et dans les quatre départements d'outre-mer, selon la région de vent, la catégorie de terrain et la hauteur du bâtiment, avec la résistance mécanique et la réduction pour ouvrage protégé.
 tags: [aev, classification, vent, region-climatique, categorie-de-terrain, dom, resistance-mecanique, nf-en-12210, nf-en-12207, nf-en-12208, reference]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

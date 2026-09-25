@@ -5,6 +5,7 @@ description: Les six portes d'entrée monobloc contemporaines de PROFERM, dispon
 resource: https://www.proferm.net/hexa
 tags: [porte-entree, hexa, monobloc, lumine, hybride]
 gamme: [LUMINE, HYBRIDE]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

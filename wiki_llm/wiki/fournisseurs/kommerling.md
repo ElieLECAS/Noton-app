@@ -3,6 +3,7 @@ type: Fournisseur
 title: KÖMMERLING
 description: Marque PVC du groupe profine sous laquelle PROFERM achète les profilés GREENLINE des gammes PERFORM, HYBRIDE et TEXTURAL.
 tags: [fournisseur, pvc, kommerling, greenline, profine, profile]
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

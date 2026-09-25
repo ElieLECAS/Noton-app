@@ -3,6 +3,9 @@ type: Quincaillerie
 title: Poignée et pivot PERFORM76
 description: Positions de poignée par hauteur d'ouvrant sur PERFORM76, position et réglage du pivot bas par dormant, et charge admissible par ouvrant.
 tags: [perform76, poignee, pivot, charge, reglage, quincaillerie]
+gamme: PERFORM
+systeme: 76
+usage: [atelier, sav]
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

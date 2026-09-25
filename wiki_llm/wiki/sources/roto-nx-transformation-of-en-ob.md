@@ -3,6 +3,8 @@ type: Document source
 title: Transformation OF en OB, gamme ROTO NX
 description: Procédure PROFERM de 2 pages pour transformer un ouvrant à la française en oscillo-battant sur quincaillerie ROTO NX.
 tags: [roto-nx, of, ob, transformation]
+systeme: Roto NX
+fournisseur: ROTO
 status: stable
 sources:
   - resource: raw/roto-nx-transformation-of-en-ob-2026-03.pdf

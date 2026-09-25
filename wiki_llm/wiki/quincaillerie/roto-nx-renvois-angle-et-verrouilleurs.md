@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Renvois d'angle et verrouilleurs Roto NX
 description: Les références de commande, longueurs de branches et types de galets des renvois d'angle et verrouilleurs Roto NX pour menuiseries PVC.
 tags: [roto, roto-nx, renvoi-angle, verrouilleur, prolongateur, galet, quincaillerie, reference]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf

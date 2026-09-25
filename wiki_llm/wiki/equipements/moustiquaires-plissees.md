@@ -4,6 +4,8 @@ title: Moustiquaires plissées
 description: Moustiquaires plissées SOPROFEN extra-fines de 29 mm pour portes et baies vitrées, manœuvres à chenilles ou cordons, plis de 15 mm et seuil bas inclinable.
 resource: https://www.soprofen.com
 tags: [moustiquaire, plissee, soprofen, chenilles, cordons, baie-vitree]
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Moustiquaire plissée SOPROFEN 2026.pdf

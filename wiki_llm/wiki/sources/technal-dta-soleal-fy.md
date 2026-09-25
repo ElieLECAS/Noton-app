@@ -4,7 +4,8 @@ title: DTA n° 6/12-2016_V5, procédé Soleal 55 FYa - FYm
 description: Document Technique d'Application CSTB de 48 pages du système de fenêtres et portes-fenêtres aluminium à frappe SOLEAL 55 de TECHNAL, valide jusqu'au 31 octobre 2026.
 tags: [technal, soleal, soleal-fy, frappe, dta, cstb, avis-technique, certification]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL FY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf

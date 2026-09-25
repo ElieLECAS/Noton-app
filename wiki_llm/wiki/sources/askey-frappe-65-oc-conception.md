@@ -4,8 +4,8 @@ title: Frappe 65 Ouvrant Caché ASKEY - Conception
 description: Manuel technique de conception de la gamme frappe 65 à ouvrant caché ASKEY par Hydro Building Systems France.
 resource: a_faire/askey3.pdf
 tags: [aluminium, frappe, ouvrant-cache, askey, hydro, conception]
-systeme: 65
 gamme: Frappe 65 Ouvrant Caché
+fournisseur: ASKEY
 status: stable
 sources:
   - resource: a_faire/askey3.pdf

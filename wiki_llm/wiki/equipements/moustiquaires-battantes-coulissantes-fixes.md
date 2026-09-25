@@ -4,6 +4,8 @@ title: Moustiquaires battantes, coulissantes et cadres fixes
 description: "Moustiquaires SOPROFEN à cadres en aluminium extrudé pour portes et fenêtres : portes battantes sans seuil, coulissants 2 vantaux et cadres fixes démontables."
 resource: https://www.soprofen.com
 tags: [moustiquaire, battante, coulissante, cadre-fixe, soprofen, sans-seuil]
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Moustiquaire battante Coulissante Cadre fixe SOPROFEN 2026.pdf

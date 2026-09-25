@@ -3,6 +3,9 @@ type: Document source
 title: Dépliant LUMÉAL, édition juin 2023
 description: Dépliant commercial de 4 pages sur la baie coulissante LUMÉAL, édition antérieure de trois ans à celle de 2026, attestant de la constance des performances RC3, AEV et de la garantie Technal 10 ans.
 tags: [depliant, lumeal, coulissant, technal, garanties]
+gamme: LUMINE
+systeme: LUMEAL GA
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: raw/depliant-lumeal-2023-06.pdf

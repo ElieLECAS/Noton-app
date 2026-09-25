@@ -3,6 +3,7 @@ type: Référence
 title: Régions climatiques par département
 description: La ou les régions climatiques (1 à 4) de chaque département français métropolitain, avec le découpage cantonal des départements partagés entre deux régions.
 tags: [region-climatique, departement, canton, vent, reference, nf-en-1991-1-4]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

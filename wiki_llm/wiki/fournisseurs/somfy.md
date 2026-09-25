@@ -3,6 +3,7 @@ type: Fournisseur
 title: SOMFY
 description: Fournisseur des motorisations et de la domotique des volets roulants proposés par PROFERM.
 tags: [fournisseur, somfy, motorisation, volet-roulant, domotique, tahoma]
+fournisseur: SOMFY
 status: draft
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

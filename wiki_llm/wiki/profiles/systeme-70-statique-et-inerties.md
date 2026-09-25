@@ -4,6 +4,8 @@ title: Statique et moments d'inertie du système 70
 description: Règles de calcul statique de flèche au vent, pressions admissibles (400 à 1 600 Pa) et tables des moments d'inertie Iz requis et effectifs pour profilés et renforts du système 70 Plateforme.
 tags: [profine, systeme-70, statique, inertie, iz, vent, aev, fleche, renfort]
 systeme: 70
+fournisseur: KÖMMERLING
+usage: [atelier, chiffrage]
 famille: statique
 status: stable
 sources:

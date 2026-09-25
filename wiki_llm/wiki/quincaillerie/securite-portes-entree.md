@@ -3,6 +3,7 @@ type: Quincaillerie
 title: Sécurité des portes d'entrée
 description: Serrures, paumelles, cylindres et renforts des portes d'entrée PROFERM, définis selon le type d'ouvrant.
 tags: [porte-entree, serrure, paumelle, cylindre, roto, fapim, securite]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

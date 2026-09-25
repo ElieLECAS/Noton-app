@@ -3,6 +3,10 @@ type: Profilé
 title: Tapées et isolation PERFORM76
 description: Les sept tapées de pose PERFORM76 et l'épaisseur d'isolant qu'elles permettent, qui change selon le dormant, avec les appuis et pattes de pose associés.
 tags: [perform76, tapee, isolation, patte-de-pose, appui, clameau]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
+usage: [atelier, pose]
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

@@ -4,7 +4,9 @@ title: Roulements, fermetures et manœuvres Technal SOLEAL GY 55
 description: Guide technique exhaustif de la quincaillerie du coulissant SOLEAL GY 55 de TECHNAL (chariots simples/doubles alu et inox jusqu'à 200 kg, fermetures 1 à 4 points, crémones à clé, organes de manœuvre, poignée réversible TGY3606, fermeture pompier et gâches).
 tags: [technal, soleal, soleal-gy, quincaillerie, roulettes, chariots, serrures, cremona, poignées, gâches]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL GY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-GY-55-Catalogue-conception-5744-005-092021-Fr (1).pdf

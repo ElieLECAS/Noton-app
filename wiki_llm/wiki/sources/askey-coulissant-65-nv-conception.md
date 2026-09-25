@@ -4,8 +4,8 @@ title: Coulissant 65 NV ASKEY - Conception
 description: Manuel technique de conception du système coulissant aluminium 65 NV ASKEY par Hydro Building Systems France.
 resource: a_faire/askey1.pdf
 tags: [aluminium, coulissant, askey, hydro, conception]
-systeme: 65
 gamme: Coulissant 65 NV
+fournisseur: ASKEY
 status: stable
 sources:
   - resource: a_faire/askey1.pdf

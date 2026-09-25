@@ -3,6 +3,9 @@ type: Procédure
 title: Assemblage et pose du coffre demi-linteau Bloc LX SOPROFEN
 description: Procédure technique d'atelier et de chantier pour l'assemblage, l'étanchéité, le renfort d'inertie et la fixation du volet roulant demi-linteau Bloc LX sur dormant de menuiserie.
 tags: [procedure, soprofen, bloc-lx, demi-linteau, bloc-baie, volet-roulant, coulisse, etancheite, inertie]
+systeme: Bloc LX
+fournisseur: SOPROFEN
+usage: [atelier, pose]
 status: stable
 sources:
   - resource: raw/moustiquaires/export_doc_136(1).zip

@@ -3,8 +3,9 @@ type: Gamme
 title: Gamme ASKEY Frappe 65 Ouvrant Caché
 description: Système de fenêtre et porte-fenêtre battante aluminium 65 mm à ouvrant caché, hautes performances AEV et acoustiques (groupe Hydro).
 tags: [gamme, aluminium, frappe, ouvrant-cache, askey, hydro]
-systeme: 65
 gamme: Frappe 65 Ouvrant Caché
+fournisseur: ASKEY
+usage: chiffrage
 status: stable
 sources:
   - resource: a_faire/askey3.pdf

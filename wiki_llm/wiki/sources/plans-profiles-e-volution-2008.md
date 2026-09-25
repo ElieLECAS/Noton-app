@@ -3,6 +3,8 @@ type: Document source
 title: Plans des profilés et manuel de fabrication e.VOLUTION, août 2008
 description: Classeur technique officiel de 395 planches du système KÖMMERLING e.VOLUTION (système F 91), couvrant les plans 1:1, les abaques de débit, les calculs statiques, les directives d'atelier et les systèmes spéciaux (rénovation, basculant, porte, coulissant à déport).
 tags: [profine, kommerling, e-volution, systeme-70, plan, renfort, statique, nv-65, fabrication, atelier]
+systeme: 70
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/profine-plans-profiles-e-volution-2008-08.pdf

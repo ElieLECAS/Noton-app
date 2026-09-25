@@ -6,6 +6,8 @@ resource: raw/moustiquaires/export_doc_132.zip
 origin: SOPROFEN SAS (Mertzwiller) / Groupe Bouyer Leroux
 last_modified: 2022-09-01
 tags: [source, soprofen, bloc-baie, chrono-one, chrono-pse2, mono-vi, bloc-lx, cx14, crx14, crx18, bso, thermique, vent, dtu-34-2]
+systeme: [Chrono One, Chrono PSE², Mono VI, Bloc LX]
+fournisseur: SOPROFEN
 status: stable
 source_pages:
   - resource: raw/moustiquaires/export_doc_132.zip

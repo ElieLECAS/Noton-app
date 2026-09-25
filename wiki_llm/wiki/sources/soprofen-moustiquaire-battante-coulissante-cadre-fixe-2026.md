@@ -4,6 +4,7 @@ title: Fiche produit Moustiquaire battante Coulissante Cadre fixe SOPROFEN 2026
 description: "Fiche produit technique et commerciale de 2 pages dédiée aux moustiquaires SOPROFEN à cadres : battantes sans seuil, coulissantes 2 vantaux et cadres fixes."
 resource: https://www.soprofen.com
 tags: [source, soprofen, moustiquaire, battante, coulissante, cadre-fixe, fiche-produit]
+fournisseur: SOPROFEN
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit Moustiquaire battante Coulissante Cadre fixe SOPROFEN 2026.pdf

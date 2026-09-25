@@ -3,6 +3,9 @@ type: Équipement
 title: Volet roulant inversé bloc-baie MONO VI
 description: Volet roulant bloc-baie SOPROFEN à enroulement extérieur et trappe d'accès affleurante intérieure — coffre compact de 140 mm à clair de jour maximisé, compatible rénovation et ITE, Uc = 0,9 + 0,11/Lc.
 tags: [equipement, volet-roulant, mono-vi, volet-inverse, soprofen, compact, clair-de-jour, ite, renovation]
+systeme: Mono VI
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/export_doc_132.zip

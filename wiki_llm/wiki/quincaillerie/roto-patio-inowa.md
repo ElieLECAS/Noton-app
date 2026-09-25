@@ -3,6 +3,10 @@ type: Quincaillerie
 title: Roto Patio Inowa
 description: Quincaillerie ROTO du coulissant INNOSLIDE, à commande active de tous les points de fermeture, sans soulèvement de l'ouvrant.
 tags: [roto, patio-inowa, innoslide, coulissant, verrouilleur, etancheite]
+gamme: INNOSLIDE
+systeme: Roto Patio Inowa
+fournisseur: ROTO
+usage: atelier
 status: draft
 sources:
   - resource: raw/depliant-innoslide-2024-01.pdf

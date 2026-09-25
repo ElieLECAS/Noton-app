@@ -3,6 +3,7 @@ type: Fournisseur
 title: TECHNAL
 description: Fournisseur des systèmes aluminium et de la quincaillerie des gammes LUMINE, SOLEAL FY/GY/PY et LUMÉAL de PROFERM.
 tags: [fournisseur, aluminium, technal, lumine, soleal, lumeal, bas-carbone]
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

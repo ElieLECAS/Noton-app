@@ -3,6 +3,9 @@ type: Profilé
 title: Abaques dimensionnels du système 76
 description: Les limites de dimension d'ouvrant du système 76 Advanced selon le renfort, la couleur et l'épaisseur de vitrage, et pourquoi un profilé de couleur change la fabrication.
 tags: [systeme-76-advanced, abaque, dimension, renfort, couleur, vitrage, paumelle, poids-ouvrant]
+systeme: 76
+fournisseur: KÖMMERLING
+usage: [atelier, chiffrage]
 status: stable
 sources:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf

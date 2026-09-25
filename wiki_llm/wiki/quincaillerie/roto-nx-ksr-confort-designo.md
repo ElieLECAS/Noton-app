@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Configurations Roto NX KSR — Confort et NT Designo II
 description: La quincaillerie et le positionnement des gâches Roto NX KSR des gammes Confort et NT Designo II, qui emploient leurs propres références de pivot, palier et têtière de compas, distinctes du système P standard.
 tags: [roto, roto-nx, ksr, confort, designo, designo-ii, quincaillerie, champs-application]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

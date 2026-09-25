@@ -3,6 +3,9 @@ type: Profilé
 title: Cotes de débit du système 76
 description: Les cotes à déduire de la dimension hors tout pour débiter dormants, meneaux, ouvrants, battements et seuils du système 76 Advanced à joint central.
 tags: [systeme-76-advanced, cote-de-debit, dormant, ouvrant, meneau, battement, seuil, atelier]
+systeme: 76
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf

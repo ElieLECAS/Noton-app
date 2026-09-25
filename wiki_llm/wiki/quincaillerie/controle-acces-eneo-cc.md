@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Contrôle d'accès 4 en 1 Roto Safe E Eneo CC
 description: Le contrôle d'accès 4 en 1 des portes PROFERM — code PIN, empreinte, Bluetooth et RFID — avec ses caractéristiques électriques, son câblage et sa procédure de réinitialisation.
 tags: [roto, safe-e, eneo-cc, controle-acces, porte-entree, serrure-motorisee, rfid, biometrie, cablage]
-famille: roto-safe-e
+systeme: Roto Safe E
+fournisseur: ROTO
+usage: [chiffrage, pose]
 status: stable
 sources:
   - resource: raw/proferm-roto-eneo-cc-notice-simplifiee-2022.pdf

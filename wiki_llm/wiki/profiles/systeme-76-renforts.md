@@ -3,6 +3,9 @@ type: Profilé
 title: Renforts du système 76
 description: Les renforts acier du système 76 Advanced à joint central, leur épaisseur, leurs inerties IW et IG, et le profilé que chacun équipe.
 tags: [systeme-76-advanced, renfort, acier, inertie, statique, atelier]
+systeme: 76
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf

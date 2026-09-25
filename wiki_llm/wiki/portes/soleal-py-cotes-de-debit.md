@@ -4,7 +4,9 @@ title: Cotes de débit et formules de calcul des portes Technal SOLEAL PY 55
 description: Recueil exhaustif des formules de débit, déductions de profilés (dormants, ouvrants en T/Z, plinthes, traverses FPI, seuils PMR PY1100), dimensionnement des vitrages et formules de coupe des tringles de crémone pour la porte SOLEAL PY 55 de TECHNAL.
 tags: [technal, soleal, soleal-py, porte, debit, formules, seuil-pmr, vitrage, tringles]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL PY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf

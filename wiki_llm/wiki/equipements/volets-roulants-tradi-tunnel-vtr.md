@@ -4,6 +4,9 @@ title: Volet roulant traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR
 description: Volet roulant traditionnel SOPROFEN pour coffres tunnel préfabriqués avec kit de fixation fond de joue et version VTR sur coulisses existantes.
 resource: https://www.soprofen.com
 tags: [volet-roulant, tradi, coffre-tunnel, vtr, soprofen, renovation, goodnight, somfy, isoflex]
+systeme: TRADI
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI pour COFFRE TUNNEL et TRADI VTR pose sur coulisses existantes 2025 Soprofen.pdf

@@ -3,6 +3,8 @@ type: Procédure
 title: Usage, nettoyage et entretien d'une menuiserie profine
 description: Les consignes d'usage de la poignée, de nettoyage du PVC, de l'aluminium, des joints et du vitrage, et l'explication de la condensation extérieure — utile au SAV pour répondre aux réclamations client.
 tags: [profine, usage, nettoyage, entretien, condensation, sav, joint, vitrage]
+fournisseur: KÖMMERLING
+usage: sav
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

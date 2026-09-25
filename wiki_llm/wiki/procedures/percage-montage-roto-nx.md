@@ -3,6 +3,9 @@ type: Procédure
 title: Perçage et montage de la ferrure Roto NX
 description: Les cotes de perçage du dormant et de l'ouvrant pour les paliers et pivots Roto NX, la coupe de la crémone de semi-fixe, la force de traction exigée par poids d'ouvrant, et l'accrochage de l'ouvrant NT Designo II.
 tags: [roto, roto-nx, ksr, percage, gabarit, montage, semi-fixe, atelier]
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

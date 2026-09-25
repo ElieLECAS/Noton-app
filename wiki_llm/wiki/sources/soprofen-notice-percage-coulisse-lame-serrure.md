@@ -6,6 +6,7 @@ resource: raw/moustiquaires/export_doc_134.zip
 origin: SOPROFEN SAS (Mertzwiller)
 last_modified: 2008-03-31
 tags: [source, soprofen, volet-roulant, tirage-direct, lame-serrure, coulisse, percage]
+fournisseur: SOPROFEN
 status: stable
 source_pages:
   - resource: raw/moustiquaires/export_doc_134.zip

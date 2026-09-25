@@ -3,6 +3,8 @@ type: Procédure
 title: Perçage des coulisses pour lame à serrure sur volet à tirage direct
 description: Procédure de traçage, perçage et ajustement des coulisses sur chantier pour le verrouillage des lames finales à serrure (cylindre rond ou ovale) sur volets roulants SOPROFEN à tirage direct.
 tags: [procedure, soprofen, volet-roulant, tirage-direct, serrure, coulisse, percage, chantier]
+fournisseur: SOPROFEN
+usage: pose
 status: stable
 sources:
   - resource: raw/moustiquaires/export_doc_134.zip

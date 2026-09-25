@@ -4,7 +4,8 @@ title: Catalogue de conception Technal SOLEAL PY 55
 description: Catalogue technique officiel de conception système Technal pour la gamme de portes battantes et va-et-vient SOLEAL PY 55 (Réf. 4944.006 - 09/2018, 210 pages).
 tags: [technal, soleal, soleal-py, porte, conception, profilés, ferme-porte-integre, seuil-pmr, anti-pince-doigts, 55mm]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL PY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-PY-55-catalogue-conception-4944-006-092018-FR (1).pdf

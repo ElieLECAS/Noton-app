@@ -3,7 +3,9 @@ type: Quincaillerie
 title: Pièces de fermeture et gâches Roto NX
 description: Les références de commande, profils d'affectation et fonctions de sécurité des gâches et pièces de fermeture Roto NX pour galets E, P et V.
 tags: [roto, roto-nx, gache, securite, galet, rc2, tiltsafe, quincaillerie, reference]
-famille: roto-nx
+systeme: Roto NX
+fournisseur: ROTO
+usage: atelier
 status: stable
 sources:
   - resource: raw/roto-nx-catalogue-pvc-ctl-105-2023-06.pdf

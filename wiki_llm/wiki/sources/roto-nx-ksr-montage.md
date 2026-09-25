@@ -3,6 +3,8 @@ type: Document source
 title: Instructions de montage Roto NX KSR, PVC, novembre 2022
 description: Manuel de ferrage de 124 pages de la quincaillerie Roto NX KSR sur menuiseries PVC, qui apporte au wiki les abaques de charge, les classes de sécurité et la maintenance des ferrures.
 tags: [roto, roto-nx, ksr, ferrure, montage, abaque, pvc, manuel, designo]
+systeme: Roto NX
+fournisseur: ROTO
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

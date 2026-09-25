@@ -4,6 +4,9 @@ title: Volet roulant traditionnel TRADI NON PRÉMONTÉ
 description: Volet roulant traditionnel SOPROFEN pour coffres existants avec déport ajustable, lame grand format LA 546 jusqu'à 4500 mm et isolation Isoflex.
 resource: https://www.soprofen.com
 tags: [volet-roulant, tradi, tradi-non-premonte, soprofen, la546, goodnight, somfy, isoflex, renovation]
+systeme: TRADI
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI NON PREMONTE 2025 SOPROFEN.pdf

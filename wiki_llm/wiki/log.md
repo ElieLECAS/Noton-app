@@ -1,5 +1,22 @@
 # Update Log
 
+## 2026-09-25
+
+* **Update** : facettes de navigation posées sur les 196 pages -- `gamme`, `systeme`,
+  `fournisseur`, `usage` -- d'où l'application tire son accueil par produit et par métier, un
+  tableau de bord par gamme, système, fournisseur et usage, et le fil d'Ariane. Aucun corps de
+  page n'a changé. Règles dans le CLAUDE.md (*Field notes*).
+* **Update** : `systeme` nomme désormais le système du fournisseur, plus la profondeur du profilé
+  -- `55`, `65`, `100` deviennent `SOLEAL FY`, `SOLEAL GY`, `SOLEAL PY`, `LUMEAL GA`, et
+  disparaissent des pages ASKEY où le système est la gamme. Les pages PERFORM76 reçoivent
+  `gamme: PERFORM`, `systeme: 76` ; les pages Roto NX `systeme: Roto NX` au lieu de
+  `famille: roto-nx`. `gammes/perform-plus.md` et `gammes/hybride-plus.md` déclarent
+  `systeme: Roto NX` d'après le tableau de [ROTO](/fournisseurs/roto.md) ;
+  `gammes/lumine.md` déclare `SOLEAL FY` d'après celui de [TECHNAL](/fournisseurs/technal.md).
+* **Note** : `fabrication-frappe-askey-65` et `askey-frappe-quincaillerie-et-equerres` portaient
+  `gamme: Frappe 65`, que ne déclare aucune gamme -- elles portent maintenant les deux gammes
+  OC et OV ; `askey-profils-complementaires` (`gamme: Profilés complémentaires`) les trois.
+
 ## 2026-09-23
 
 * **Update** : [Parcloses et vitrages SOLEAL FY](/profiles/soleal-fy-parcloses-et-vitrage.md) --

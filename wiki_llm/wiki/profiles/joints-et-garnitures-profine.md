@@ -3,6 +3,9 @@ type: Profilé
 title: Joints et garnitures des systèmes profine
 description: Les joints de frappe, de vitrage et centraux des systèmes 76 Advanced et 70 Plateforme, avec leur matière par coloris, et les kits d'assemblage de meneau.
 tags: [profine, joint, garniture, epdm, systeme-76-advanced, systeme-70, meneau, seuil]
+systeme: [70, 76]
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf

@@ -4,8 +4,8 @@ title: Frappe 65 Ouvrant Visible ASKEY - Fabrication
 description: Manuel technique d'atelier et de fabrication de la gamme frappe 65 à ouvrant visible ASKEY par Hydro Building Systems France.
 resource: a_faire/askey4.pdf
 tags: [aluminium, frappe, ouvrant-visible, askey, hydro, fabrication, atelier]
-systeme: 65
 gamme: Frappe 65 Ouvrant Visible
+fournisseur: ASKEY
 status: stable
 sources:
   - resource: a_faire/askey4.pdf

@@ -4,7 +4,9 @@ title: Fabrication et usinage SOLEAL FY
 description: Directives d'atelier, opérations d'usinage, de sertissage, de goupillage, de drainage, d'assemblage d'onglets et de montage de la quincaillerie pour les menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65.
 tags: [technal, soleal, soleal-fy, fabrication, usinage, sertissage, goupillage, drainage, atelier]
 gamme: LUMINE
-systeme: [55, 65]
+systeme: SOLEAL FY
+fournisseur: TECHNAL
+usage: atelier
 status: stable
 sources:
   - resource: wiki_llm/a_faire/DTA 6_12-2016_V5 (1).pdf

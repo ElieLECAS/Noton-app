@@ -3,6 +3,7 @@ type: Porte d'entrée
 title: Collection Contemporain
 description: Les 76 modèles à référence propre de la collection Contemporain, la plus large des six collections de portes d'entrée PROFERM, avec leur composition et leur coloris de présentation.
 tags: [porte-entree, contemporain, modele, reference, catalogue]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf

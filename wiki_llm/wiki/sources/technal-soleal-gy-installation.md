@@ -4,7 +4,8 @@ title: Notice d'installation Technal SOLEAL GY 55
 description: Notice officielle de pose et de mise en œuvre chantier Technal pour le coulissant SOLEAL GY 55 (Réf. 5832.002 / 5832.003 - 05/2018, 18 pages).
 tags: [technal, soleal, soleal-gy, coulissant, pose, chantier, dtu-36-5, calage, fixation]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL GY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-GY-55-notice-installation-5832-002-052018-FR (1).pdf

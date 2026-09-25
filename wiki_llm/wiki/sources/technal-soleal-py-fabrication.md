@@ -4,7 +4,8 @@ title: Catalogue de fabrication Technal SOLEAL PY 55
 description: Guide technique officiel d'atelier et catalogue de fabrication Technal pour les portes à rupture de pont thermique SOLEAL PY 55 (Réf. 4899.007 - 09/2018, 222 pages).
 tags: [technal, soleal, soleal-py, porte, fabrication, atelier, usinage, seuil-pmr, serrure, paumelle]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL PY
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SOLEAL-PY-55-catalogue-fabrication-4899-007-092018-FR.pdf

@@ -3,6 +3,8 @@ type: Procédure
 title: Drainage, décompression et vitrage, directives générales profine
 description: Les cotes de drainage, de décompression et de ventilation communes à tous les systèmes profine, et les règles de calage d'un vitrage isolant, avec la conversion poids de vitre / épaisseur.
 tags: [profine, drainage, decompression, ventilation, vitrage, calage, atelier]
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

@@ -3,6 +3,10 @@ type: Profilé
 title: Parcloses PERFORM76
 description: Les 27 parcloses PERFORM76 d'ouvrant et de dormant, classées par épaisseur de vitrage admissible de 16 à 50 mm, avec sept parcloses complémentaires de famille non établie.
 tags: [perform76, parclose, vitrage, profile, feuillure]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
+usage: atelier
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

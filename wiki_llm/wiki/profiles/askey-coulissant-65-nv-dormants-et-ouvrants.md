@@ -3,8 +3,9 @@ type: Profilé
 title: Profilés dormants et ouvrants ASKEY Coulissant 65 NV
 description: Nomenclatures, dimensions, inerties et compatibilités des profilés aluminium dormants, rails, ouvrants et chicanes du Coulissant 65 NV ASKEY.
 tags: [profilé, aluminium, coulissant, askey, dormant, ouvrant, chicane]
-systeme: 65
 gamme: Coulissant 65 NV
+fournisseur: ASKEY
+usage: atelier
 famille: dormants-et-ouvrants
 status: stable
 sources:

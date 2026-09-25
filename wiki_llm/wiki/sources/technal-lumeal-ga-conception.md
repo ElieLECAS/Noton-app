@@ -4,7 +4,8 @@ title: Catalogue de conception Technal LUMEAL GA
 description: Catalogue technique officiel de conception générale Technal pour la gamme de coulissants minimaux à ouvrant caché LUMEAL GA (Réf. 5156.007 - 01/2021, 94 pages).
 tags: [technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, conception, profilés, inertie, seuil-pmr, rc3]
 gamme: LUMINE
-systeme: 100
+systeme: LUMEAL GA
+fournisseur: TECHNAL
 status: stable
 sources:
   - resource: wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf

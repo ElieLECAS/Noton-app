@@ -3,6 +3,8 @@ type: Document source
 title: Dépliant HYBRIDE, édition juin 2023
 description: Dépliant commercial de 4 pages sur la gamme mixte HYBRIDE, édition historique de juin 2023 confirmant le profilé 72 mm, les ouvrants DROIT et DESIGN, et le nuancier à 9 teintes.
 tags: [depliant, hybride, kommerling, garanties]
+gamme: HYBRIDE
+fournisseur: KÖMMERLING
 status: stable
 sources:
   - resource: raw/depliant-hybride-2023-06.pdf

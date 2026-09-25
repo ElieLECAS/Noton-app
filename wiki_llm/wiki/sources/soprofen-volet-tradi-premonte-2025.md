@@ -4,6 +4,8 @@ title: Fiche produit Volet traditionnel TRADI PRÉMONTÉ SOPROFEN 2025
 description: Fiche produit technique et commerciale de 2 pages dédiée au volet roulant traditionnel prémonté SOPROFEN (plate-forme AXIS 50, coulisse Goodnight, lames alu/PVC 37 et 50 mm, isolation Isoflex).
 resource: https://www.soprofen.com
 tags: [source, soprofen, volet-roulant, tradi, tradi-premonte, goodnight, somfy, isoflex]
+systeme: TRADI
+fournisseur: SOPROFEN
 status: stable
 sources:
   - resource: raw/moustiquaires/Fiche produit volet traditionnel TRADI PREMONTE 2025 SOPROFEN.pdf

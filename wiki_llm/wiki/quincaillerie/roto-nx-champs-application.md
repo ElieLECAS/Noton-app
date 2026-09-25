@@ -3,6 +3,9 @@ type: Quincaillerie
 title: Champs d'application Roto NX
 description: Les largeurs, hauteurs et poids de vantail admissibles de la ferrure Roto NX selon le type d'ouverture et la classe de sécurité, avec la règle qui convertit l'épaisseur de vitrage en poids.
 tags: [roto, roto-nx, abaque, champ-application, poids-vantail, cdr, rc2, designo, chiffrage]
+systeme: Roto NX
+fournisseur: ROTO
+usage: [chiffrage, atelier]
 status: stable
 sources:
   - resource: raw/roto-nx-ksr-montage-pvc-imo-180-2022-11.pdf

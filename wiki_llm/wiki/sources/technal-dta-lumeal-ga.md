@@ -4,7 +4,8 @@ title: DTA n° 6/14-2166_V2, procédé LUMEAL Minimal Ga
 description: Document Technique d'Application CSTB de 36 pages pour le coulissant aluminium à rupture de pont thermique et ouvrant caché LUMEAL Minimal Ga de Technal (valide jusqu'au 31 juillet 2029).
 tags: [technal, lumeal, lumeal-ga, coulissant, ouvrant-cache, dta, cstb, avis-technique, certification]
 gamme: LUMINE
-systeme: 100
+systeme: LUMEAL GA
+fournisseur: TECHNAL
 stale_after: 2029-07-31
 status: stable
 sources:

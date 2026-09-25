@@ -3,6 +3,7 @@ type: Fournisseur
 title: ASKEY
 description: Fournisseur de systèmes aluminium à rupture thermique pour coulissants 65 NV et frappes 65 ouvrants cachés et visibles (groupe Hydro Building Systems France).
 tags: [fournisseur, aluminium, askey, hydro, coulissant, frappe]
+fournisseur: ASKEY
 status: stable
 sources:
   - resource: a_faire/askey1.pdf

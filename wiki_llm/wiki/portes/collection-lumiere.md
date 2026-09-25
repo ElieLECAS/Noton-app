@@ -3,6 +3,7 @@ type: Porte d'entrée
 title: Collection Lumière
 description: Portes d'entrée entièrement vitrées de PROFERM fabriquées en partenariat avec VERRISSIMA, dotées du vitrage haute sécurité SP510 (norme EN 356 classe P5A) et d'œuvres exclusives Métal Art et Cristal Art.
 tags: [porte-entree, lumiere, verrissima, sp510, en-356, p5a, metal-art, cristal-art]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf

@@ -3,6 +3,9 @@ type: Certification
 title: Avis Technique CSTB n° 6/16-2339_V2, coffres Chrono SOPROFEN
 description: Évaluation technique officielle du CSTB pour les coffres blocs-baies PVC Chrono C, Chrono VX2, Chrono VRX2 réno et Chrono ONE de SOPROFEN — domaine d'emploi, performances thermiques Uc/Up, étanchéité à l'air C3/C4, rigidité EI et règles de pose.
 tags: [certification, cstb, avis-technique, soprofen, bloc-baie, chrono-one, chrono-vx2, chrono-c, thermique, aev, inertie]
+systeme: Chrono One
+fournisseur: SOPROFEN
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/moustiquaires/export_doc_135.zip

@@ -3,6 +3,8 @@ type: Procédure
 title: Montage au bâtiment, directives générales profine
 description: Les tolérances de fixation à la maçonnerie, les largeurs de joint de raccordement et la dilatation admissible pour le montage d'une menuiserie profine, avec les entrées d'air autoréglables.
 tags: [profine, montage, fixation, joint, tolerance, dilatation, entree-air, atelier]
+fournisseur: KÖMMERLING
+usage: pose
 status: stable
 sources:
   - resource: raw/profine-directives-generales-2023-01.pdf

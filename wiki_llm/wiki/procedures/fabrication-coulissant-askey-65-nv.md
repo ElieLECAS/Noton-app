@@ -3,8 +3,9 @@ type: Procédure
 title: Procédure de fabrication ASKEY Coulissant 65 NV
 description: Méthode d'atelier pour l'usinage, le poinçonnage, le drainage caché, l'assemblage des dormants coupe droite et le montage des ouvrants du Coulissant 65 NV ASKEY.
 tags: [procédure, atelier, fabrication, coulissant, drainage, usinage, askey]
-systeme: 65
 gamme: Coulissant 65 NV
+fournisseur: ASKEY
+usage: atelier
 status: stable
 sources:
   - resource: a_faire/askey5.pdf

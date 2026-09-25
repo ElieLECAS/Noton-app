@@ -3,6 +3,7 @@ type: Vitrage
 title: Performances des vitrages
 description: Compositions de vitrages thermiques, acoustiques, triples et de sécurité proposées par PROFERM, avec leurs coefficients et gammes compatibles.
 tags: [vitrage, thermique, acoustique, securite, ug, stadip, sp10, triple-vitrage]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-general-2026-01.pdf

@@ -3,8 +3,9 @@ type: Gamme
 title: Gamme ASKEY Coulissant 65 NV
 description: Système coulissant aluminium à rupture de pont thermique de 65 mm pour 2, 3 et 4 vantaux sur 2 rails de la marque ASKEY (Hydro Building Systems).
 tags: [gamme, aluminium, coulissant, askey, hydro]
-systeme: 65
 gamme: Coulissant 65 NV
+fournisseur: ASKEY
+usage: chiffrage
 status: stable
 sources:
   - resource: a_faire/askey1.pdf

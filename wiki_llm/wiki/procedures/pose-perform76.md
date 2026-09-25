@@ -3,6 +3,10 @@ type: Procédure
 title: Pose de la PERFORM76
 description: Les quatre principes de pose de la PERFORM76 — neuf, dépose totale et deux versions rénovation — avec le recouvrement, le drainage et l'interdiction de la mousse polyuréthane.
 tags: [perform76, pose, renovation, neuf, drainage, decompression, chantier]
+gamme: PERFORM
+systeme: 76
+fournisseur: KÖMMERLING
+usage: pose
 status: stable
 sources:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf

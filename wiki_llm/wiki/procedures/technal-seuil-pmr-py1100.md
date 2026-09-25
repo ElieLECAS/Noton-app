@@ -4,7 +4,9 @@ title: Fabrication et mise en œuvre du seuil PMR Technal PY1100
 description: Procédure d'atelier et de chantier pour le seuil à rupture de pont thermique pour personnes à mobilité réduite (PMR) PY1100 de TECHNAL (portes battantes SOLEAL PY 55, gabarit EK7020, pièces d'angle 720028/29, gâche basse PY6000 et règles NF DTU 36.5).
 tags: [technal, soleal, soleal-py, porte, seuil-pmr, py1100, fabrication, etancheite, dtu-36-5]
 gamme: LUMINE
-systeme: 55
+systeme: SOLEAL PY
+fournisseur: TECHNAL
+usage: [atelier, pose]
 status: stable
 sources:
   - resource: wiki_llm/a_faire/SEUIL TECHNAL PY1100 DOC.pdf

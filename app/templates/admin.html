@@ -1023,6 +1023,7 @@ function renderWikiLint(s) {
         wikiLintBlock('Erreurs de frontmatter', lint.frontmatter_errors, 'error', wikiLintText),
         wikiLintBlock("Pages absentes de l'index", lint.not_in_index, 'warn', wikiPageLink),
         wikiLintBlock("Liens morts de l'index", lint.index_dead_links, 'error', wikiPageLink),
+        wikiLintBlock('Facettes de navigation inconnues', lint.unknown_facets, 'warn', wikiLintText),
     ].join('');
 }
 

@@ -3,6 +3,7 @@ type: Porte d'entrée
 title: Collection Éléments
 description: Portes d'entrée contemporaines de PROFERM associant parements laqués et inserts texturés à l'aspect bois naturel et veinage en relief (Chêne graphite, naturel ou blanchi).
 tags: [porte-entree, elements, insert-bois, chene-graphite, chene-naturel, chene-blanchi]
+usage: chiffrage
 status: stable
 sources:
   - resource: raw/catalogue-portes-entree-2024-03.pdf
