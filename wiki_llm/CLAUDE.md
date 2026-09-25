@@ -36,10 +36,30 @@ questions, and arbitrates the judgment calls: a contradiction between two suppli
 
 ### Native Multimodal Ingestion (Zero Script, Zero Data Loss)
 
-**PDFs are ingested natively and multimodally.**
-- **No Python scripts, no PyMuPDF (`fitz`), no OCR tools**: Claude directly inspects and reads each PDF page natively (visual rendering of plates, section cuts, icon tables and drawings, combined with context).
-- **Zero data loss**: every drawing, dimension, tolerance, profile section, catalog reference, abaque curve and workshop procedure is faithfully extracted into structured tables and assertive markdown.
-- **Autonomous Wiki**: the wiki replaces the original PDFs entirely and stands alone as professional technical documentation.
+**PDFs are read as images, page by page. Their text is never extracted.**
+
+- **Render, then look.** Every page of a PDF is rendered to PNG (200 dpi, in the scratchpad) and
+  read as an image. No text extraction of any kind -- no text layer, no `get_text`, no
+  PDF-to-markdown converter, no OCR tool -- not even « to check », not even on a page that looks
+  like plain prose: a text layer mixes the columns of a plate and drops everything drawn. The one
+  script allowed renders pages to PNG and crops those PNG, pixels only -- see *Découper les
+  coupes de profilés*
+- **One PDF at a time, never several at once.** When several PDFs are handed over together, they
+  are queued and taken one after the other: the first is rendered, read, transcribed and logged
+  before the second is opened. Loading every document at once fills the context with pages
+  nobody is transcribing, and the pages read first are the ones forgotten
+- **Page by page, or by batch of a few pages** (about 4 to 8, fewer for dense plates), so the
+  context stays on what is being transcribed. A batch is read, written into the wiki and its
+  register rows moved to `transcrit` before the next batch is rendered. Nothing is kept « in
+  mind » for later: what is not written after its batch is lost
+- **Zero loss.** Every piece of information on a page ends up in the wiki: montage and pose
+  steps, profilés and their cotes, compatibilities and exclusions, warnings in red, footnotes,
+  legends, tables, abaques, and **every schéma**, cropped and shown next to what it illustrates.
+  Each is written out in full sentences and complete tables -- verbose rather than terse. A page
+  of PDF summarised into three bullets is a page lost
+- **Autonomous wiki**: the wiki replaces the original PDFs entirely and stands alone as
+  professional technical documentation, readable by anyone -- see *Written for a professional,
+  understood by anyone*
 
 ## Folder structure
 
@@ -130,6 +150,33 @@ source the subject -- the first is required, the second is what *Two ways of wri
   previous protocol called « a rule in the indicative », and it is how the conditions were lost
 - **No reading-report register**: « on notera que », « il est intéressant de constater », « le
   présent document aborde ». The page states; it does not comment on what it states
+
+### Written for a professional, understood by anyone
+
+The wiki serves the professional -- atelier, pose, chiffrage, SAV -- but a newcomer on their
+first day, an apprentice or a teenager must be able to read any page and understand it. The two
+do not conflict: the professional loses nothing when a term is explained, the newcomer loses
+everything when it is not.
+
+- **Say what the thing is before giving its numbers.** A section opens on one or two plain
+  sentences: what the part is, where it sits in the menuiserie, what it is for -- « La parclose
+  est la baguette qui maintient le vitrage dans son logement ; elle se choisit par l'épaisseur du
+  vitrage. » Then the table
+- **Explain every trade term at its first use on the page**, in a few words or with a link to
+  the [glossaire](/reference/glossaire.md): dormant, ouvrant, parclose, tapée, feuillure, FFO,
+  délignage, recouvrement. A term missing from the glossary is added to it
+- **Spell out abbreviations and units** at their first use: « Uw (coefficient de transmission
+  thermique de la fenêtre, en W/m²K) »
+- **Say how to read each table and each schéma** in the sentence that introduces it: what a row
+  is, what each column measures, what the colours of the drawing mean (« épaisseur de vitrage en
+  bleu, épaisseur de parclose en noir »)
+- **Write steps as actions** someone could follow without having seen it done: one action per
+  step, in order, with the tool, the cote and the warning that goes with it
+- **Explaining is not inventing.** An explanation says what a word means and how to read the
+  data. It never adds a cause, a use or a value that no source gives: a « pourquoi » that the
+  document does not state is still a `VER-` entry, never a helpful sentence
+- **Long is fine; vague is not.** A verbose page that carries every condition beats a short one
+  that a professional has to complete from memory
 
 ### What never appears on an assertive page
 
@@ -267,15 +314,21 @@ were made: what nobody opened never made the list.
 
 When the user adds a new source to `raw/` and asks you to ingest it:
 
-1. **Parcourir le document page par page en vision multimodale.** Visualiser chaque page directement
-   pour identifier son contenu exact. Aucune page n'est qualifiée depuis son titre, sa section ou sa seule couche texte.
+0. **One document at a time.** Several PDFs handed over together are queued: this workflow runs
+   to its end on the first before the second is rendered
+1. **Rendre le document en PNG et le parcourir page par page en vision multimodale**, par lots de
+   quelques pages. Visualiser chaque page pour identifier son contenu exact. Aucune page n'est
+   qualifiée depuis son titre, sa section ou une couche texte -- qui n'est jamais extraite.
 2. **Create the `sources/` card with its coverage register**, one row per page or per contiguous
    range of pages of identical nature, every row in state `à faire`. The union of the rows covers
    page 1 to page N with no gap -- see *The `sources/` card*
 3. Discuss with the user what the document holds and in what order to take it
-4. **Work the register down**, family by family. Create or update the concept pages, one concept
-   per file, each range going to the destination its nature calls for -- see *Everything gets
-   transcribed*
+4. **Work the register down**, family by family, batch by batch: render a few pages, look at
+   them, write everything they carry, move their rows, then render the next batch. Create or
+   update the concept pages, one concept per file, each range going to the destination its
+   nature calls for -- see *Everything gets transcribed*
+4b. **Crop every schéma of the batch** -- profilé, coupe de pose, détail, assemblage -- and put
+    it next to the table or the step it illustrates -- see *Découper les coupes de profilés*
 5. **Search the wiki for every figure you are about to write.** If another page already carries
    it, link to that page instead of copying -- see *One datum, one page*
 6. Connect pages with bundle-relative markdown links, and fill `source_pages` on every page you
@@ -312,9 +365,10 @@ content and 309 have no usable text layer at all. A page holding a plate is neve
 transcribed on the strength of its text layer.
 
 **La lecture est multimodale native, sans script ni outil externe.** L'agent ouvre et visualise
-directement les pages de chaque PDF (rendu visuel haute définition de la planche entière, des schémas,
-coupes et tableaux techniques, doublé de la couche textuelle alignée). Aucun script Python (PyMuPDF, fitz)
-n'est requis : l'inspection visuelle est directe et native.
+directement les pages de chaque PDF rendues en PNG (planche entière, schémas, coupes et tableaux
+techniques). La couche texte n'est jamais lue, pas même en contrôle : l'inspection visuelle est
+directe et native. Seuls le rendu des pages en PNG et la
+découpe des coupes sont scriptés, en pixels -- voir *Découper les coupes de profilés*.
 
 - **Inspection visuelle systématique** : chaque page technique est examinée visuellement pour repérer
   la structure, les tableaux, les cotes en coupe, les renvois et les avertissements.
@@ -536,14 +590,16 @@ not a decision that was taken.
 
 ## Schémas et cotes
 
-A technical drawing cannot be stored as markdown. Extract what it asserts into a table, then
-point back at the drawing. Never redraw a schéma as ASCII art, and never dissolve dimensions
+A technical drawing cannot be stored as markdown. Extract what it asserts into a table, show
+the cropped drawing in that table or right under the step it illustrates, then point back at
+the page. Never redraw a schéma as ASCII art, and never dissolve dimensions
 into prose -- both are unretrievable.
 
 A page is served on its own -- handed over by a navigation tool, or landed on from a citation --
 so every table has to stand on its own:
 
-- **Markdown by default, HTML when markdown cannot express the table.** A table with merged
+- **Markdown by default, HTML as soon as markdown makes the table hard to read.** If a reader
+  would hesitate on which value belongs to which context, the table is written in HTML. A table with merged
   cells, a two-level header or a grouped column band -- the fifteen tables of inertie Iz, the
   abaques grouped by classement au vent, the vitrage matrices of the DTD -- is written in HTML
   with `colspan` and `rowspan` rather than flattened until it loses its structure. Markdown stays
@@ -584,6 +640,42 @@ Profilés dormants de la gamme Série 70, cotes en mm, relevées sur le catalogu
 La feuillure de la référence DOR-70-03 n'est pas cotée sur le schéma -- à vérifier auprès du
 fournisseur.
 ```
+
+## Découper les coupes de profilés
+
+Every reference drawn on a plate -- dormant, ouvrant, parclose, meneau, battement, tapée, appui,
+seuil, élargisseur -- gets its section cut out of the plate and shown in its row of the family's
+`# Cotes` table. A reader recognises a profile by its drawing faster than by its number, and the
+chat application serves the image next to the answer. Established on the 27 parcloses, the five
+dormants and the four ouvrants of the PERFORM76.
+
+1. **Render the pages to PNG**, 200 dpi, into the scratchpad -- never into `wiki/` or `raw/`. If
+   the PDF rendering tool of the session fails, rasterise with a short script
+   (`page.get_pixmap(dpi=200).save(...)`). That script produces pixels and nothing else: it
+   never calls a text-extraction function
+2. **Look at the rendered page** and pick, for each reference, **the plate where it is drawn
+   alone** with its label and its own cotes -- the general information pages rather than the
+   assemblies. The PERFORM76 dormants come from PDF p. 7 (printed p. 4), not from the dormant
+   plates where they are drawn joined to a meneau
+3. **Crop one image per reference**, keeping inside the frame its label (`Dormant 76177`,
+   `Parclose 76526`), its cotes and its annotations (renfort, cache, délignage). Coordinates are
+   read on the displayed image and scaled back to the full-resolution PNG. Never crop two
+   references into one image, never cut a cote in half
+4. **Save** to `wiki/assets/profiles/<gamme+systeme>/<famille>/<famille-singulier>-<reference>.png`
+   -- `assets/profiles/perform76/dormants/dormant-76177.png`. Lowercase, unaccented, the reference
+   written as the source writes it
+5. **Check every crop by eye**: paste them side by side into one contact sheet and look at it.
+   A crop showing the neighbouring profile, a truncated label or a missing cote is redone.
+   The label inside the image must match the reference of the row it goes into
+6. **Add a `Coupe` column, last, right-aligned (`---:`)**, to the `# Cotes` table, one image per
+   row, alt text = the label: `![Dormant 76177](/assets/profiles/perform76/dormants/dormant-76177.png)`.
+   The application checks that the path exists on disk and that the image sits on the row of
+   the reference asked for: an image on the wrong row is served as the wrong profile
+7. **Record in `log.md`** the references cut, the PDF page each came from and the asset folder
+
+A crop is a picture of the source, not a transcription. It never replaces the `# Cotes` table:
+a cote visible on the crop but absent from the table is still to be transcribed, and the table
+remains what the lexical search finds.
 
 ## Références
 
@@ -765,6 +857,9 @@ When the user asks you to lint or audit the wiki:
 - A figure carried by two pages with the same unit -- one of them should be a link
 - More than ~15 bold spans on a page
 - A heading set that does not match the skeleton of the page's `type`
+- A trade term, an abbreviation or a unit used without explanation or glossary link at its first
+  use on the page; a table or a schéma with no sentence saying how to read it
+- A schéma of the source page with no cropped image in the wiki
 - A page written in the reading-report register: fragments where the source argues, a rule cut
   away from the condition that limits it, « on notera que », « le présent document aborde »
 
@@ -813,7 +908,8 @@ Report findings as a numbered list with suggested fixes.
 - Every page must stand alone, because a reader lands on it from a citation. Name the subject in
   full instead of writing « ce profilé » or « cette gamme », and repeat the reference in each
   section rather than leaning on the page title
-- Write the documentation of a professional, in the source's own terms: full sentences where
+- **One PDF at a time, a few pages at a time; never the text layer**
+- Write the documentation of a professional, understood by anyone, in the source's own terms: full sentences where
   the source argues, tables where it tabulates, and no reading-report commentary
 - **Never report a document as ingested while its coverage register still carries an `à faire`.**
   Say how many ranges remain

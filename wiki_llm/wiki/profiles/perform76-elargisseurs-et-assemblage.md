@@ -31,12 +31,12 @@ dormants neufs sans aile. Aucun ne se monte sur un dormant rénovation ni sur le
 
 Les quatre élargisseurs PERFORM76, cotes en mm.
 
-| Élargisseur | Élargissement (mm) | Hauteur (mm) | Renfort acier nominal | Inertie $I_W$ / $I_G$ ($\text{cm}^4$) | Embout droit / biais |
-| --- | --- | --- | --- | --- | --- |
-| 76700 | 15 | 76 | sans renfort | — | — |
-| 76701 | 30 | 76 | V312.Z (1,5 mm) | $I_W = 1,5$ / $I_G = 0,3$ | M302 / M303 |
-| 76702 | 60 | 76 | V314.Z (2,0 mm soudé) | $I_W = 5,7$ / $I_G = 8,4$ | M306 / M307 |
-| 76703 | 120 | 76 | V314.Z × 2 (2,0 mm soudé) | $I_W = 5,7$ / $I_G = 8,4$ | M308 / M309 |
+| Élargisseur | Élargissement (mm) | Hauteur (mm) | Renfort acier nominal | Inertie $I_W$ / $I_G$ ($\text{cm}^4$) | Embout droit / biais | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76700 | 15 | 76 | sans renfort | — | — | ![Élargisseur 76700](/assets/profiles/perform76/elargisseurs/elargisseur-76700.png) |
+| 76701 | 30 | 76 | V312.Z (1,5 mm) | $I_W = 1,5$ / $I_G = 0,3$ | M302 / M303 | ![Élargisseur 76701](/assets/profiles/perform76/elargisseurs/elargisseur-76701.png) |
+| 76702 | 60 | 76 | V314.Z (2,0 mm soudé) | $I_W = 5,7$ / $I_G = 8,4$ | M306 / M307 | ![Élargisseur 76702](/assets/profiles/perform76/elargisseurs/elargisseur-76702.png) |
+| 76703 | 120 | 76 | V314.Z × 2 (2,0 mm soudé) | $I_W = 5,7$ / $I_G = 8,4$ | M308 / M309 | ![Élargisseur 76703](/assets/profiles/perform76/elargisseurs/elargisseur-76703.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19 et raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, reg. 2.1.3 p. 2-3)
 
@@ -47,30 +47,31 @@ Les quatre élargisseurs PERFORM76, cotes en mm.
 
 # Cotes des profils d'assemblage et liaisons de couplage
 
-| Référence | Type | Cotes (mm) | Renfort associé | Inertie $I_W$ ($\text{cm}^4$) |
-| --- | --- | --- | --- | --- |
-| 76606 | profilé de liaison plat (180°) | 4,8 × 17 | sans | — (reprise par dormants) |
-| 76604 | profilé de liaison vertical (180°) | épaisseur 5,5 mm | entretoise | $I_W$ totale accouplement 6,4 à 11,4 |
-| 76605 | profilé de liaison en H (180°) | largeur 48 mm, cote débit +31,5 mm | V330 (2,5 mm) ou V331 (2,5 mm) | $I_W = 5,5$ (V330) ou $10,0$ (V331) |
-| 76608 | profilé de liaison en H lourd (180°) | largeur 48 mm, cote débit +30 mm | V288 (2,0 mm) | $I_W = 20,4$ ($I_W$ totale 26,8 à 33,2) |
-| A250 | profilé contreventement aluminium | largeur 75,2 mm, cote débit +17,6 mm | V264 (jusqu'à 2 aciers) | $I_W = 17,9$ à $35,8$ ($I_W$ totale jusqu'à 74,6) |
-| V477 | renfort d'accouplement extérieur | capot A235 + habillage 93000/93001 | V477 (2,5 mm) | $I_W = 49,3$ ($I_W$ totale jusqu'à 62,1) |
-| 76821 | adaptateur de poteau d'angle | 55,5 / 12 / 12 / 13,5, hors tout 75,5 | — | — |
-| 76822 | clip cornière | 72, décomposé 21 / 7 / 21 | — | — |
+| Référence | Type | Cotes (mm) | Renfort associé | Inertie $I_W$ ($\text{cm}^4$) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 76600 | profil d'assemblage de deux dormants | liaison 4,8 × 17 | - | - | ![Profil 76600](/assets/profiles/perform76/assemblage/profil-76600.png) |
+| 76606 | profilé de liaison plat (180°) | 4,8 × 17 | sans | — (reprise par dormants) | - |
+| 76604 | profilé de liaison vertical (180°) | épaisseur 5,5 mm | entretoise | $I_W$ totale accouplement 6,4 à 11,4 | - |
+| 76605 | profilé de liaison en H (180°) | largeur 48 mm, cote débit +31,5 mm | V330 (2,5 mm) ou V331 (2,5 mm) | $I_W = 5,5$ (V330) ou $10,0$ (V331) | - |
+| 76608 | profilé de liaison en H lourd (180°) | largeur 48 mm, cote débit +30 mm | V288 (2,0 mm) | $I_W = 20,4$ ($I_W$ totale 26,8 à 33,2) | - |
+| A250 | profilé contreventement aluminium | largeur 75,2 mm, cote débit +17,6 mm | V264 (jusqu'à 2 aciers) | $I_W = 17,9$ à $35,8$ ($I_W$ totale jusqu'à 74,6) | - |
+| V477 | renfort d'accouplement extérieur | capot A235 + habillage 93000/93001 | V477 (2,5 mm) | $I_W = 49,3$ ($I_W$ totale jusqu'à 62,1) | - |
+| 76821 | adaptateur de poteau d'angle | 55,5 / 12 / 12 / 13,5, hors tout 75,5 | — | — | ![Adaptateur 76821](/assets/profiles/perform76/assemblage/adaptateur-76821.png) |
+| 76822 | clip cornière | 72, décomposé 21 / 7 / 21 | — | — | ![Clip cornière 76822](/assets/profiles/perform76/assemblage/clip-corniere-76822.png) |
 
-(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, reg. 2.5.2 p. 1-29)
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, reg. 2.5.2 p. 1-29 ; raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 20 pour les coupes)
 
 # Cotes et renforts des poteaux d'angle
 
 Les trois poteaux d'angle PERFORM76, cotes en mm et spécifications de renforcement d'atelier.
 
-| Poteau | Angle | Référence | Dimensions (mm) | Renfort acier | Inertie $I_W$ / $I_G$ ($\text{cm}^4$) | Accessoires et isolants |
-| --- | --- | --- | --- | --- | --- | --- |
-| Poteau d'angle à 90° | 90° | 8355 | 104 × 88 | V263 (2,0 mm soudé) | $I_W = 14,4$ / $I_G = 14,4$ | Embout 90° M344, isolant I040, clameau S081 |
-| Poteau d'angle à 135° | 135° | 8356 | 54 × 88 (onglet 45°, retombée 31) | V262 (2,0 mm) | $I_W = 7,6$ / $I_G = 7,6$ | Isolant I041, clameau S082 |
-| Poteau d'angle variable | 90° à 180° | 8340 + 8341 | 84 × 84 (R42,5) | V265 (2,0 mm tubulaire soudé) | $I_W = 8,7$ / $I_G = 8,7$ | Isolants I042 (8340) et I043 (8341) en blanc uniquement, clameau S081 |
+| Poteau | Angle | Référence | Dimensions (mm) | Renfort acier | Inertie $I_W$ / $I_G$ ($\text{cm}^4$) | Accessoires et isolants | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | ---: |
+| Poteau d'angle à 90° | 90° | 8355 | 104 × 88 | V263 (2,0 mm soudé) | $I_W = 14,4$ / $I_G = 14,4$ | Embout 90° M344, isolant I040, clameau S081 | ![Poteau d'angle à 90° 8355](/assets/profiles/perform76/assemblage/poteau-angle-8355.png) |
+| Poteau d'angle à 135° | 135° | 8356 | 54 × 88 (onglet 45°, retombée 31) | V262 (2,0 mm) | $I_W = 7,6$ / $I_G = 7,6$ | Isolant I041, clameau S082 | ![Poteau d'angle à 135° 8356](/assets/profiles/perform76/assemblage/poteau-angle-8356.png) |
+| Poteau d'angle variable | 90° à 180° | 8340 + 8341 | 84 × 84 (R42,5) | V265 (2,0 mm tubulaire soudé) | $I_W = 8,7$ / $I_G = 8,7$ | Isolants I042 (8340) et I043 (8341) en blanc uniquement, clameau S081 | ![Poteau d'angle variable 8340 + 8341](/assets/profiles/perform76/assemblage/poteau-angle-8340-8341.png) |
 
-(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, reg. 2.1.3 p. 14-15 et reg. 2.5.2 p. 31-40)
+(schéma: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf, reg. 2.1.3 p. 14-15 et reg. 2.5.2 p. 31-40 ; raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 20 pour les coupes)
 
 **Table de débit du poteau d'angle variable 8340 + 8341 (de 90° à 180° par pas de 5°)** :
 - 90° : X = 104,8 mm / Y = 14,8 mm

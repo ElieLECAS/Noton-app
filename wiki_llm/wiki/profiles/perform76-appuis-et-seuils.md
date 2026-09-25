@@ -40,11 +40,11 @@ Les appuis PERFORM76 forment deux groupes qui ne se mélangent pas.
 
 Appuis du premier groupe, cotes en mm. Les trois sont pentés à **3°**.
 
-| Appui | Largeur (mm) | Longueur (mm) | Épaisseur (mm) | Retombée (mm) | Nez d'appui 4319 |
-| --- | --- | --- | --- | --- | --- |
-| 6136 | 67 | 127 | 14 | 3,5 | oui |
-| 6137 | 97 | 157 | 14 | 3,5 | oui |
-| 76768 | 136 | 196 | 14 | 22 | non |
+| Appui | Largeur (mm) | Longueur (mm) | Épaisseur (mm) | Retombée (mm) | Nez d'appui 4319 | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 6136 | 67 | 127 | 14 | 3,5 | oui | ![Appui 6136](/assets/profiles/perform76/appuis/appui-6136.png) |
+| 6137 | 97 | 157 | 14 | 3,5 | oui | ![Appui 6137](/assets/profiles/perform76/appuis/appui-6137.png) |
+| 76768 | 136 | 196 | 14 | 22 | non | ![Appui 76768](/assets/profiles/perform76/appuis/appui-76768.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 13)
 
@@ -63,12 +63,12 @@ Les 20 mm d'écart de hauteur d'about reprennent exactement les 20 mm d'écart d
 
 Appuis du second groupe, cotes en mm.
 
-| Appui | Hauteur (mm) | Décomposition (mm) | Pente | Particularité |
-| --- | --- | --- | --- | --- |
-| 76751 | 30 | 20 / 56 | - | livré non monté |
-| 76752 | 50 | 20 / 56 | - | livré non monté |
-| 76753 | 35 | 21 / 46, sur 76 | - | - |
-| 76758 + 76719 | 15 à 20 | 80 en saillie, dénivelé 3, retombée 5,5, largeur totale 156 | **5°** | ensemble de deux profils |
+| Appui | Hauteur (mm) | Décomposition (mm) | Pente | Particularité | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| 76751 | 30 | 20 / 56 | - | livré non monté | ![Appui 76751](/assets/profiles/perform76/appuis/appui-76751.png) |
+| 76752 | 50 | 20 / 56 | - | livré non monté | ![Appui 76752](/assets/profiles/perform76/appuis/appui-76752.png) |
+| 76753 | 35 | 21 / 46, sur 76 | - | - | ![Appui 76753](/assets/profiles/perform76/appuis/appui-76753.png) |
+| 76758 + 76719 | 15 à 20 | 80 en saillie, dénivelé 3, retombée 5,5, largeur totale 156 | **5°** | ensemble de deux profils | ![Appui 76758 + 76719](/assets/profiles/perform76/appuis/appui-76758.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19 et 21)
 
@@ -85,11 +85,11 @@ du dormant 76171 en pose isolée jusqu'à 155 mm d'isolant — voir
 
 # Cotes du nez d'appui et du seuil
 
-| Référence | Type | Cotes (mm) | Compatibilité |
-| --- | --- | --- | --- |
-| 4319 | nez d'appui | 18 / 8 | appuis 6136 et 6137 uniquement |
-| A076 | seuil aluminium | 76 de large, 10 et 10, about 20 | les cinq dormants |
-| A062 | rejet d'eau | - | s'associe au seuil A076 |
+| Référence | Type | Cotes (mm) | Compatibilité | Coupe |
+| --- | --- | --- | --- | ---: |
+| 4319 | nez d'appui | 18 / 8 | appuis 6136 et 6137 uniquement | ![Nez d'appui 4319](/assets/profiles/perform76/appuis/nez-appui-4319.png) |
+| A076 | seuil aluminium | 76 de large, 10 et 10, about 20 | les cinq dormants | ![Seuil A076 + Rejet d'eau A062](/assets/profiles/perform76/appuis/seuil-a076.png) |
+| A062 | rejet d'eau | - | s'associe au seuil A076 | - |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 13, 19 et 22)
 
@@ -151,10 +151,10 @@ attribue chaque seuil à un dormant précis — entrée **VER-39** du registre
 Les deux compensateurs sont réservés aux dormants rénovation 76177 et 76185. Chacun se monte dans
 deux orientations.
 
-| Compensateur | Cotes (mm) | Usage |
-| --- | --- | --- |
-| 6143 | 19 × 29 | profil rénovation |
-| 6144 | 12 × 16 | profil rénovation |
+| Compensateur | Cotes (mm) | Usage | Coupe |
+| --- | --- | --- | ---: |
+| 6143 | 19 × 29 | profil rénovation | ![Compensateur 6143](/assets/profiles/perform76/compensateurs/compensateur-6143.png) |
+| 6144 | 12 × 16 | profil rénovation | ![Compensateur 6144](/assets/profiles/perform76/compensateurs/compensateur-6144.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 13)
 

@@ -45,12 +45,12 @@ Les quatre se montent sur les cinq dormants, sans restriction. Voir
 Les quatre ouvrants PERFORM76, cotes en mm. Les trois hauteurs sont celles portées sur les
 planches, du dedans vers le dehors.
 
-| Ouvrant | Profil | Épaisseur (mm) | Hauteur 1 (mm) | Hauteur 2 (mm) | Hauteur 3 (mm) |
-| --- | --- | --- | --- | --- | --- |
-| 76281 | droit | 76 | 39 | 49 | 70 |
-| 76275 | galbé | 83 | 39 | 49 | 70 |
-| 76272 | droit | 76 | 79 | 89 | 110 |
-| 76279 | galbé | 83 | 79 | 89 | 110 |
+| Ouvrant | Profil | Épaisseur (mm) | Hauteur 1 (mm) | Hauteur 2 (mm) | Hauteur 3 (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76281 | droit | 76 | 39 | 49 | 70 | ![Ouvrant 76281](/assets/profiles/perform76/ouvrants/ouvrant-76281.png) |
+| 76275 | galbé | 83 | 39 | 49 | 70 | ![Ouvrant 76275](/assets/profiles/perform76/ouvrants/ouvrant-76275.png) |
+| 76272 | droit | 76 | 79 | 89 | 110 | ![Ouvrant 76272](/assets/profiles/perform76/ouvrants/ouvrant-76272.png) |
+| 76279 | galbé | 83 | 79 | 89 | 110 | ![Ouvrant 76279](/assets/profiles/perform76/ouvrants/ouvrant-76279.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 11, 12, 15, 17 et 18)
 
@@ -61,10 +61,10 @@ La finesse des ouvrants porte l'argument de clair de jour de la gamme [1 p. 1].
 Le cahier technique donne les battements comme des **assemblages**, associés à un ouvrant, et non
 comme des profils isolés.
 
-| Assemblage de battement | Ouvrant associé | Largeur hors tout (mm) | Clair intérieur (mm) |
-| --- | --- | --- | --- |
-| 76274 / 76473 / 1547 / 76281 | 76281 | 112 | 60 |
-| 76272 / 76833 / 76272 | 76272 | 226 | 48 |
+| Assemblage de battement | Ouvrant associé | Largeur hors tout (mm) | Clair intérieur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 76274 / 76473 / 1547 / 76281 | 76281 | 112 | 60 | ![Battement 76274 / 76473 / 1547 / 76281](/assets/profiles/perform76/battements/battement-76473.png) |
+| 76272 / 76833 / 76272 | 76272 | 226 | 48 | ![Battement 76272 / 76833 / 76272](/assets/profiles/perform76/battements/battement-76833.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 11)
 

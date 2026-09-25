@@ -32,12 +32,14 @@ le calage à la cale latérale ou au bois.
 Chaque principe n'accepte que certains dormants. Choisir le dormant avant le principe, ou
 l'inverse, mais vérifier la correspondance [1 p. 7 et 8].
 
-| Principe | Dormants compatibles | Constituants |
-| --- | --- | --- |
-| Pose en neuf | 76180 (aile 20 mm), 76171 (sans aile) | compribande, silicone, équerre de fixation, complexe isolant, tapée suivant isolant, maçonnerie crépis fini |
-| Dépose totale | 76171, 76172 (sans aile) | compribande, silicone, cale latérale |
-| Rénovation version 1 | 76177 (aile 40 mm), 76185 (aile 60 mm) | compensation bois, fond de joint, silicone, cale latérale |
-| Rénovation version 2 | 76177, 76185 | mise à niveau bois, fond de joint, silicone, cale latérale |
+| Principe | Dormants compatibles | Constituants | Coupe |
+| --- | --- | --- | ---: |
+| Pose en neuf | 76180 (aile 20 mm), 76171 (sans aile) | compribande, silicone, équerre de fixation, complexe isolant, tapée suivant isolant, maçonnerie crépis fini | ![Pose en neuf](/assets/profiles/perform76/pose/pose-en-neuf.png) |
+| Dépose totale | 76171, 76172 (sans aile) | compribande, silicone, cale latérale | ![Dépose totale](/assets/profiles/perform76/pose/depose-totale.png) |
+| Rénovation version 1 | 76177 (aile 40 mm), 76185 (aile 60 mm) | compensation bois, fond de joint, silicone, cale latérale | ![Pose en rénovation, version 1](/assets/profiles/perform76/pose/renovation-version-1.png) |
+| Rénovation version 2 | 76177, 76185 | mise à niveau bois, fond de joint, silicone, cale latérale | ![Pose en rénovation, version 2](/assets/profiles/perform76/pose/renovation-version-2.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 7 et 8)
 
 Voir [Dormants PERFORM76](/profiles/perform76-dormants.md).
 
@@ -72,15 +74,28 @@ Usinages de drainage et de décompression, en mm, relevés sur le cahier techniq
 
 Position du fraisage sur le dessus du dormant bas, qui dépend du profil :
 
-| Type de profil | Dormants | Fraisage dessus dormant bas (mm) |
-| --- | --- | --- |
-| Neuf, sans aile ou aile de 20 mm | 76171, 76172, 76180 | 49 |
-| Rénovation, aile de 40 ou 60 mm | 76177, 76185 | 43 |
+| Type de profil | Dormants | Fraisage dessus dormant bas (mm) | Coupe |
+| --- | --- | --- | ---: |
+| Neuf, sans aile ou aile de 20 mm | 76171, 76172, 76180 | 49 | ![Drainage et décompression, profil neuf](/assets/profiles/perform76/pose/drainage-neuf.png) |
+| Rénovation, aile de 40 ou 60 mm | 76177, 76185 | 43 | ![Drainage et décompression, profil rénovation](/assets/profiles/perform76/pose/drainage-renovation.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 4)
 
 La décompression combine deux usinages distincts — un fraisage de 25 × 5 mm **et** une découpe de
 100 mm de joint par ouvrant. **Les deux sont nécessaires**, ce ne sont pas des alternatives.
+
+# Cotes de recouvrement de l'ouvrant sur le dormant
+
+Coupes de recouvrement de la PERFORM76, cotes en mm portées sur les deux coupes du cahier
+technique. Les cotes sont identiques en profil neuf et en profil rénovation ; la planche ne les
+légende pas.
+
+| Type de profil | Dormants | Cotes portées (mm) | Détail (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| Neuf, sans aile ou aile de 20 mm | 76171, 76172, 76180 | 4 ; 5 ; 8 ; 17 ; 4 (+1) | 12 ; 13 | ![Recouvrement, profil neuf](/assets/profiles/perform76/pose/recouvrement-neuf.png) |
+| Rénovation, aile de 40 ou 60 mm | 76177, 76185 | 4 ; 5 ; 8 ; 17 ; 4 (+1) | 12 ; 13 | ![Recouvrement, profil rénovation](/assets/profiles/perform76/pose/recouvrement-renovation.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 4)
 
 # Délignage de l'aile, sur le chantier
 

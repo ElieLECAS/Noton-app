@@ -44,16 +44,16 @@ substituent pas :
 
 Épaisseur d'isolation permise par chaque tapée PERFORM76, en mm, selon le dormant support.
 
-| Tapée | Cote propre (mm) | Iso sur 76177 et 76185 (mm) | Iso sur 76180 (mm) | Iso sur 76171 (mm) |
-| --- | --- | --- | --- | --- |
-| sans tapée | - | 65 | 65 | 80 |
-| 6138 | 15 | 80 | 80 | 95 |
-| 6139 | 35 | 100 | 100 | 115 |
-| 6140 | 55 | 120 | 120 | 135 |
-| 6141 | 75 | 140 | 140 | 155 |
-| 6142 | 95 | 160 | 160 | 175 |
-| 76772 | 115 | 180 | 180 | 195 |
-| 76769 | 135 | 200 | 200 | 215 |
+| Tapée | Cote propre (mm) | Iso sur 76177 et 76185 (mm) | Iso sur 76180 (mm) | Iso sur 76171 (mm) | Coupe |
+| --- | --- | --- | --- | --- | ---: |
+| sans tapée | - | 65 | 65 | 80 | - |
+| 6138 | 15 | 80 | 80 | 95 | ![Tapée 6138](/assets/profiles/perform76/tapees/tapee-6138.png) |
+| 6139 | 35 | 100 | 100 | 115 | ![Tapée 6139](/assets/profiles/perform76/tapees/tapee-6139.png) |
+| 6140 | 55 | 120 | 120 | 135 | ![Tapée 6140](/assets/profiles/perform76/tapees/tapee-6140.png) |
+| 6141 | 75 | 140 | 140 | 155 | ![Tapée 6141](/assets/profiles/perform76/tapees/tapee-6141.png) |
+| 6142 | 95 | 160 | 160 | 175 | ![Tapée 6142](/assets/profiles/perform76/tapees/tapee-6142.png) |
+| 76772 | 115 | 180 | 180 | 195 | ![Tapée 76772](/assets/profiles/perform76/tapees/tapee-76772.png) |
+| 76769 | 135 | 200 | 200 | 215 | ![Tapée 76769](/assets/profiles/perform76/tapees/tapee-76769.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14, 16 et 21)
 
@@ -127,16 +127,16 @@ chiffrage d'un projet en isolation renforcée.
 
 # Appuis sur dormants 76177 et 76185
 
-| Épaisseur d'isolation (mm) | Appui |
-| --- | --- |
-| 60 | 6136 |
-| 80 | 6136 |
-| 100 | 6136 |
-| 120 | 6136 |
-| 140 | 6137 |
-| 160 | 6137 |
-| 180 | 76768 |
-| 200 | 76768 |
+| Épaisseur d'isolation (mm) | Appui | Coupe |
+| --- | --- | ---: |
+| 60 | 6136 | - |
+| 80 | 6136 | ![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76177-76185-6138.png) |
+| 100 | 6136 | ![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76177-76185-6139.png) |
+| 120 | 6136 | ![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76177-76185-6140.png) |
+| 140 | 6137 | ![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76177-76185-6141.png) |
+| 160 | 6137 | ![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76177-76185-6142.png) |
+| 180 | 76768 | ![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76177-76185-76772.png) |
+| 200 | 76768 | ![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76177-76185-76769.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14)
 
@@ -151,16 +151,16 @@ Ce tableau part de 60 mm alors que la planche de tapées annonce 65 mm sans tap�
 
 Clameau réf. **CP14GGOM0012**, **sans cale**.
 
-| Épaisseur d'isolation (mm) | Patte de pose | Appui |
-| --- | --- | --- |
-| 60 | NT1939 | 6136 |
-| 80 | NT1939 | 6136 |
-| 100 | NT1943 | 6136 |
-| 120 | NT1945 | 6136 |
-| 140 | NT1947 | 6137 |
-| 160 | NT1949 | 6137 |
-| 180 | NT1951 | 76768 |
-| 200 | NT1953 | 76768 |
+| Épaisseur d'isolation (mm) | Patte de pose | Appui | Coupe |
+| --- | --- | --- | ---: |
+| 60 | NT1939 | 6136 | - |
+| 80 | NT1939 | 6136 | ![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76180-6138.png) |
+| 100 | NT1943 | 6136 | ![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76180-6139.png) |
+| 120 | NT1945 | 6136 | ![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76180-6140.png) |
+| 140 | NT1947 | 6137 | ![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76180-6141.png) |
+| 160 | NT1949 | 6137 | ![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76180-6142.png) |
+| 180 | NT1951 | 76768 | ![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76180-76772.png) |
+| 200 | NT1953 | 76768 | ![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76180-76769.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16)
 
@@ -168,16 +168,16 @@ Clameau réf. **CP14GGOM0012**, **sans cale**.
 
 Clameau réf. **CP14GGOM0012**, cale réf. **CTHNT0030**.
 
-| Épaisseur d'isolation (mm) | Patte de pose | Appui | Cale |
-| --- | --- | --- | --- |
-| 80 | NT1939 | 76758 | **sans cale** |
-| 95 | NT1939 | 76758 | CTHNT0030 |
-| 115 | NT1943 | 76758 | CTHNT0030 |
-| 135 | NT1945 | 76758 | CTHNT0030 |
-| 155 | NT1947 | 76758 | CTHNT0030 |
-| 175 | NT1949 | 6137 | CTHNT0030 |
-| 195 | NT1951 | 76768 | CTHNT0030 |
-| 215 | NT1953 | 76768 | CTHNT0030 |
+| Épaisseur d'isolation (mm) | Patte de pose | Appui | Cale | Coupe |
+| --- | --- | --- | --- | ---: |
+| 80 | NT1939 | 76758 | **sans cale** | ![Isolation 80 mm, sans tapée](/assets/profiles/perform76/isolation/76171-sans-tapee.png) |
+| 95 | NT1939 | 76758 | CTHNT0030 | ![Isolation 95 mm, tapée 6138](/assets/profiles/perform76/isolation/76171-6138.png) |
+| 115 | NT1943 | 76758 | CTHNT0030 | ![Isolation 115 mm, tapée 6139](/assets/profiles/perform76/isolation/76171-6139.png) |
+| 135 | NT1945 | 76758 | CTHNT0030 | ![Isolation 135 mm, tapée 6140](/assets/profiles/perform76/isolation/76171-6140.png) |
+| 155 | NT1947 | 76758 | CTHNT0030 | ![Isolation 155 mm, tapée 6141](/assets/profiles/perform76/isolation/76171-6141.png) |
+| 175 | NT1949 | 6137 | CTHNT0030 | ![Isolation 175 mm, tapée 6142](/assets/profiles/perform76/isolation/76171-6142.png) |
+| 195 | NT1951 | 76768 | CTHNT0030 | ![Isolation 195 mm, tapée 76772](/assets/profiles/perform76/isolation/76171-76772.png) |
+| 215 | NT1953 | 76768 | CTHNT0030 | ![Isolation 215 mm, tapée 76769](/assets/profiles/perform76/isolation/76171-76769.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 21)
 

@@ -130,10 +130,10 @@ recoupent celles déjà notées comme partagées avec le
 Épaisseur de remplissage pour une feuillure de 62 mm, avec joint post-extrudé ou d'épaisseur
 équivalente, en mm.
 
-| Emplacement | Feuillure (mm) | Épaisseur de remplissage (mm) |
-| --- | --- | --- |
-| Ouvrant | 62 | 21 |
-| Dormant | 62 | 28 |
+| Emplacement | Feuillure (mm) | Épaisseur de remplissage (mm) | Coupe |
+| --- | --- | --- | ---: |
+| Ouvrant | 62 | 21 | ![Feuillure ouvrant](/assets/profiles/perform76/pose/feuillure-ouvrant.png) |
+| Dormant | 62 | 28 | ![Feuillure dormant](/assets/profiles/perform76/pose/feuillure-dormant.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
 

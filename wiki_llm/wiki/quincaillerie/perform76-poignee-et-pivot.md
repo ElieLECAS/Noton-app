@@ -57,6 +57,12 @@ poignée au fond de la feuillure quincaillerie.
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 3)
 
+| Schéma | Coupe |
+| --- | ---: |
+| Hauteur poignée suivant hauteur ouvrant, FFO et bas ouvrant | ![Hauteur poignée suivant hauteur ouvrant](/assets/profiles/perform76/pivot/poignee-hauteur.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 3)
+
 La cote depuis le bas de l'ouvrant vaut toujours la cote FFO **plus 20 mm**, sur les neuf lignes.
 
 ## Positions admissibles par hauteur d'ouvrant
@@ -86,13 +92,22 @@ d'alimenter un configurateur** — entrée **INC-05** du registre
 
 Position du pivot bas selon le dormant, en mm.
 
-| Dormant | Position pivot (mm) | Retrait (mm) | Hauteur (mm) |
-| --- | --- | --- | --- |
-| 76171 | 20 | 19,5 | 11 |
-| 76172 | 38 | 19,5 | 11 |
-| 76177 | 37 | 19,5 | 11 |
-| 76180 | 40 | 19,5 | 11 |
-| 76185 | 57 | 19,5 | 11 |
+| Dormant | Position pivot (mm) | Retrait (mm) | Hauteur (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 76171 | 20 | 19,5 | 11 | ![Dormant 76171](/assets/profiles/perform76/pivot/pivot-76171.png) |
+| 76172 | 38 | 19,5 | 11 | ![Dormant 76172](/assets/profiles/perform76/pivot/pivot-76172.png) |
+| 76177 | 37 | 19,5 | 11 | ![Dormant 76177](/assets/profiles/perform76/pivot/pivot-76177.png) |
+| 76180 | 40 | 19,5 | 11 | ![Dormant 76180](/assets/profiles/perform76/pivot/pivot-76180.png) |
+| 76185 | 57 | 19,5 | 11 | ![Dormant 76185](/assets/profiles/perform76/pivot/pivot-76185.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 3)
+
+Le réglage en hauteur du pivot bas se fait à la clé 6 pans de 4 mm, à ± 2 mm, pour une charge de
+100 kg par ouvrant.
+
+| Schéma | Coupe |
+| --- | ---: |
+| Pivot bas, réglage et positionnement | ![Pivot bas réglage et positionnement](/assets/profiles/perform76/pivot/pivot-bas-reglage.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 3)
 

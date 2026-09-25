@@ -39,13 +39,13 @@ neuf ou rénovation, et donc le principe de pose applicable.
 Les cinq dormants PERFORM76, cotes en mm relevées sur les planches du cahier technique. Les
 numéros de page sont ceux imprimés sur le document.
 
-| Dormant | Usage | Aile (mm) | Largeur de face (mm) | Épaisseur (mm) | Chambres |
-| --- | --- | --- | --- | --- | --- |
-| 76171 | neuf, sans aile | - | 74 | 76 | 6 |
-| 76172 | neuf, sans aile | - | 92 | 76 | 6 |
-| 76177 | rénovation | 40 | 51 | 76 | 6 |
-| 76180 | neuf | 20 | 74 | 76 | 6 |
-| 76185 | rénovation | 60 | 51 | 76 | 6 |
+| Dormant | Usage | Aile (mm) | Largeur de face (mm) | Épaisseur (mm) | Chambres | Coupe |
+| --- | --- | --- | --- | --- | --- | ---: |
+| 76171 | neuf, sans aile | - | 74 | 76 | 6 | ![Dormant 76171](/assets/profiles/perform76/dormants/dormant-76171.png) |
+| 76172 | neuf, sans aile | - | 92 | 76 | 6 | ![Dormant 76172](/assets/profiles/perform76/dormants/dormant-76172.png) |
+| 76177 | rénovation | 40 | 51 | 76 | 6 | ![Dormant 76177](/assets/profiles/perform76/dormants/dormant-76177.png) |
+| 76180 | neuf | 20 | 74 | 76 | 6 | ![Dormant 76180](/assets/profiles/perform76/dormants/dormant-76180.png) |
+| 76185 | rénovation | 60 | 51 | 76 | 6 | ![Dormant 76185](/assets/profiles/perform76/dormants/dormant-76185.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 4, 11, 12, 15, 17 et 18)
 
@@ -78,10 +78,10 @@ La position du pivot bas, son retrait et son réglage sont dans
 
 Le délignage de l'aile des dormants rénovation **s'effectue sur le chantier**, pas en atelier.
 
-| Dormant | Aile (mm) | Délignage maxi (mm) | Aile restante (mm) |
-| --- | --- | --- | --- |
-| 76177 | 40 | 20 | 20 |
-| 76185 | 60 | 40 | 20 |
+| Dormant | Aile (mm) | Délignage maxi (mm) | Aile restante (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 76177 | 40 | 20 | 20 | ![Délignage dormant 76177](/assets/profiles/perform76/combinaisons/delignage-76177.png) |
+| 76185 | 60 | 40 | 20 | ![Délignage dormant 76185](/assets/profiles/perform76/combinaisons/delignage-76185.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 11 et 12)
 
@@ -126,13 +126,13 @@ seuil aluminium est le seul profil commun aux cinq. Voir
 Largeurs hors tout des assemblages, en mm. C'est la cote de chiffrage d'un ensemble à deux
 vantaux.
 
-| Dormant | Avec ouvrant 76281 (mm) | Avec ouvrant 76272 (mm) |
-| --- | --- | --- |
-| 76171 | 108 | 148 |
-| 76172 | 126 | 166 |
-| 76177 | 125 | 165 |
-| 76180 | 128 | 168 |
-| 76185 | 145 | 185 |
+| Dormant | Avec ouvrant 76281 (mm) | Avec ouvrant 76272 (mm) | Coupe avec 76281 | Coupe avec 76272 |
+| --- | --- | --- | ---: | ---: |
+| 76171 | 108 | 148 | ![Dormant 76171 + Ouvrant 76281](/assets/profiles/perform76/combinaisons/dormant-76171-ouvrant-76281.png) | ![Dormant 76171 + Ouvrant 76272](/assets/profiles/perform76/combinaisons/dormant-76171-ouvrant-76272.png) |
+| 76172 | 126 | 166 | ![Dormant 76172 + Ouvrant 76281](/assets/profiles/perform76/combinaisons/dormant-76172-ouvrant-76281.png) | ![Dormant 76172 + Ouvrant 76272](/assets/profiles/perform76/combinaisons/dormant-76172-ouvrant-76272.png) |
+| 76177 | 125 | 165 | ![Dormant 76177 + Ouvrant 76281](/assets/profiles/perform76/combinaisons/dormant-76177-ouvrant-76281.png) | ![Dormant 76177 + Ouvrant 76272](/assets/profiles/perform76/combinaisons/dormant-76177-ouvrant-76272.png) |
+| 76180 | 128 | 168 | ![Dormant 76180 + Ouvrant 76281](/assets/profiles/perform76/combinaisons/dormant-76180-ouvrant-76281.png) | ![Dormant 76180 + Ouvrant 76272](/assets/profiles/perform76/combinaisons/dormant-76180-ouvrant-76272.png) |
+| 76185 | 145 | 185 | ![Dormant 76185 + Ouvrant 76281](/assets/profiles/perform76/combinaisons/dormant-76185-ouvrant-76281.png) | ![Dormant 76185 + Ouvrant 76272](/assets/profiles/perform76/combinaisons/dormant-76185-ouvrant-76272.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 11, 12, 15, 17 et 18)
 
@@ -146,13 +146,13 @@ Sur les planches des dormants 76171 et 76172, ces blocs de combinaisons sont tit
 
 # Cotes des combinaisons dormant et meneau
 
-| Dormant | Avec meneau 76372, largeur / clair (mm) | Avec meneau 76373, largeur / clair (mm) |
-| --- | --- | --- |
-| 76171 | 98 / 42 | 124 / 68 |
-| 76172 | 98 / 42 | 124 / 68 |
-| 76177 | 98 / 42 | 124 / 68 |
-| 76180 | 98 / 42 | 124 / 68 |
-| 76185 | 98 / 42 | 124 / 68 |
+| Dormant | Avec meneau 76372, largeur / clair (mm) | Avec meneau 76373, largeur / clair (mm) | Coupe |
+| --- | --- | --- | ---: |
+| 76171 | 98 / 42 | 124 / 68 | ![Dormant 76171 + Meneau 76372 + Meneau 76373](/assets/profiles/perform76/combinaisons/dormant-76171-meneaux.png) |
+| 76172 | 98 / 42 | 124 / 68 | ![Dormant 76172 + Meneau 76372 + Meneau 76373](/assets/profiles/perform76/combinaisons/dormant-76172-meneaux.png) |
+| 76177 | 98 / 42 | 124 / 68 | ![Dormant 76177 + Meneau 76372 + Meneau 76373](/assets/profiles/perform76/combinaisons/dormant-76177-meneaux.png) |
+| 76180 | 98 / 42 | 124 / 68 | ![Dormant 76180 + Meneau 76372 + Meneau 76373](/assets/profiles/perform76/combinaisons/dormant-76180-meneaux.png) |
+| 76185 | 98 / 42 | 124 / 68 | ![Dormant 76185 + Meneau 76372 + Meneau 76373](/assets/profiles/perform76/combinaisons/dormant-76185-meneaux.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 11, 12, 15, 17 et 18)
 

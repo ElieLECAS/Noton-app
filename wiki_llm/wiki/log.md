@@ -2,6 +2,49 @@
 
 ## 2026-09-25
 
+* **Update** : coupes des dormants et ouvrants PERFORM76 découpées sur les planches rendues en
+  PNG (200 dpi) du [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md) et
+  ajoutées en colonne `Coupe` des tables `# Cotes` : 5 dormants (76171, 76172, 76180, 76177,
+  76185) depuis la p. 4 imprimée (PDF p. 7) dans `assets/profiles/perform76/dormants/` →
+  [Dormants PERFORM76](/profiles/perform76-dormants.md) ; 4 ouvrants (76281, 76275, 76272,
+  76279) depuis la p. 11 imprimée (PDF p. 14) dans `assets/profiles/perform76/ouvrants/` →
+  [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md). Chaque
+  coupe garde son étiquette et ses cotes.
+* **Update** : coupes de tous les autres profilés du cahier PERFORM76 découpées selon le
+  protocole *Découper les coupes de profilés*, 34 images en colonne `Coupe` :
+  meneaux 76372, 76373, 76301, 76303 (PDF p. 13) → [Meneaux PERFORM76](/profiles/perform76-meneaux.md) ;
+  battements 76274/76473/1547/76281 et 76272/76833/76272 (PDF p. 14, dessin central de la
+  combinaison, sans étiquette propre sur la planche) →
+  [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) ;
+  appuis 6136, 6137, 76768, nez d'appui 4319 et compensateurs 6143, 6144 (PDF p. 16), appuis
+  76751, 76752, 76753 et seuil A076 + rejet d'eau A062 (PDF p. 22), appui 76758 + 76719 (PDF
+  p. 24, seule planche cotant sa largeur de 156) →
+  [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) ;
+  tapées 6138 à 6142, 76772, 76769 (PDF p. 17, sans l'étiquette « Iso de », propre au dormant) →
+  [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) ;
+  élargisseurs 76700 à 76703 (PDF p. 22), profil 76600, clip cornière 76822, adaptateur 76821,
+  poteaux d'angle 8355, 8356, 8340 + 8341 (PDF p. 23) →
+  [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md),
+  où le profil 76600 reçoit sa ligne dans la table des profils d'assemblage. Pattes de pose
+  NT1939 à NT1953 non découpées : elles ne sont dessinées que montées sur le dormant.
+* **Update** : coupes techniques du cahier PERFORM76 découpées, 60 images :
+  principes de pose (neuf, dépose totale, rénovation V1 et V2, PDF p. 10-11), drainage et
+  recouvrement neuf / rénovation (PDF p. 7) et nouvelle table des cotes de recouvrement de
+  l'ouvrant sur le dormant (4, 5, 8, 17, 4 (+1), détail 12 / 13, non légendées sur la planche) →
+  [Pose de la PERFORM76](/procedures/pose-perform76.md) ; alignement de traverse (PDF p. 12) →
+  [Meneaux PERFORM76](/profiles/perform76-meneaux.md) ; feuillures ouvrant et dormant (PDF p. 8)
+  → [Parcloses PERFORM76](/profiles/perform76-parcloses.md) ; hauteur de poignée, réglage du
+  pivot bas et position du pivot par dormant (PDF p. 6) →
+  [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md) ; délignage 76177
+  et 76185 et combinaisons dormant + meneaux, + ouvrant 76281, + ouvrant 76272 pour les cinq
+  dormants (PDF p. 14, 15, 18, 20, 21 ; les blocs des 76171 et 76172 portent le titre « Dormant
+  76185 », INC-03) → [Dormants PERFORM76](/profiles/perform76-dormants.md) ; coupes d'isolation
+  par épaisseur sur 76177/76185, 76180 et 76171 (PDF p. 17, 19, 24) →
+  [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md), la ligne 60 mm des
+  tables 76177/76185 et 76180 restant sans coupe (la planche dessine 65 mm sans tapée, INC-06) ;
+  coupes verticale et horizontale repérées 1 à 10 (PDF p. 5) et leur légende →
+  [PERFORM](/gammes/perform.md).
+
 * **Update** : facettes de navigation posées sur les 196 pages -- `gamme`, `systeme`,
   `fournisseur`, `usage` -- d'où l'application tire son accueil par produit et par métier, un
   tableau de bord par gamme, système, fournisseur et usage, et le fil d'Ariane. Aucun corps de

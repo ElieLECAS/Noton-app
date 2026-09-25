@@ -43,12 +43,12 @@ Les quatre forment deux couples, appariés par leur clair intérieur :
 Largeurs et décomposition des quatre meneaux PERFORM76, en mm. La décomposition se lit de gauche
 à droite : aile, clair intérieur, aile.
 
-| Meneau | Emplacement | Largeur (mm) | Décomposition (mm) |
-| --- | --- | --- | --- |
-| 76372 | dormant | 98 | 28 / 42 / 28 |
-| 76373 | dormant | 124 | 28 / 68 / 28 |
-| 76301 | ouvrant | 84 | 21 / 42 / 21 |
-| 76303 | ouvrant | 110 | 21 / 68 / 21 |
+| Meneau | Emplacement | Largeur (mm) | Décomposition (mm) | Coupe |
+| --- | --- | --- | --- | ---: |
+| 76372 | dormant | 98 | 28 / 42 / 28 | ![Meneau 76372](/assets/profiles/perform76/meneaux/meneau-76372.png) |
+| 76373 | dormant | 124 | 28 / 68 / 28 | ![Meneau 76373](/assets/profiles/perform76/meneaux/meneau-76373.png) |
+| 76301 | ouvrant | 84 | 21 / 42 / 21 | ![Meneau 76301](/assets/profiles/perform76/meneaux/meneau-76301.png) |
+| 76303 | ouvrant | 110 | 21 / 68 / 21 | ![Meneau 76303](/assets/profiles/perform76/meneaux/meneau-76303.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 10)
 
@@ -107,10 +107,10 @@ Les cotes de débit des deux meneaux de dormant sont dans
 
 # Alignement de la traverse de soubassement
 
-| Principe | Meneaux utilisés | Résultat |
-| --- | --- | --- |
-| Alignement à l'axe de traverse, entre fixe et ouvrant | 76372 sur le fixe, 76301 sur l'ouvrant | axes de traverses alignés |
-| Alignement total avec faux ouvrant | 76301 | vitrages **et** soubassements alignés |
+| Principe | Meneaux utilisés | Résultat | Coupe |
+| --- | --- | --- | ---: |
+| Alignement à l'axe de traverse, entre fixe et ouvrant | 76372 sur le fixe, 76301 sur l'ouvrant | axes de traverses alignés | ![Alignement standard à l'axe traverse entre fixe et ouvrant](/assets/profiles/perform76/pose/alignement-axe-traverse.png) |
+| Alignement total avec faux ouvrant | 76301 | vitrages **et** soubassements alignés | ![Alignement total avec faux ouvrant](/assets/profiles/perform76/pose/alignement-total-faux-ouvrant.png) |
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 9)
 

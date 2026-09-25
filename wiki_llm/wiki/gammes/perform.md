@@ -146,6 +146,33 @@ Les restrictions de fabrication imposées sur la gamme PERFORM sont les suivante
 * **Pas de laquage sur PERFORM76** : le catalogue n'autorise le laquage que sur PERFORM70 sous conditions d'ouverture extérieure ou de cintrage [1 p. 8].
 * **Incompatibilité fausses crémones / serrures** : la fausse crémone décorative ne peut pas être installée sur une porte-fenêtre intégrant une serrure de sécurité [1 p. 7].
 
+# Coupes de la PERFORM76
+
+Coupes verticale et horizontale de la PERFORM76 avec ouvrant droit 76 mm, repérées de 1 à 10 ;
+les loupes montrent l'ouvrant galbé 83 mm à la même place [2 p. 1 et 2].
+
+| Repère | Élément |
+| --- | --- |
+| 1 | système à 3 joints d'étanchéité : 1 joint à frappe sur l'ouvrant, 1 joint central, 1 joint à frappe sur le dormant |
+| 2a | chambre humide, créée par le joint central |
+| 2b | chambre sèche, qui protège la quincaillerie contre l'humidité, la corrosion et l'accès par l'extérieur en cas de tentative d'effraction |
+| 3 | dormant à 6 chambres de 76 mm d'épaisseur |
+| 4 | renfort acier galvanisé tubulaire de 1,5 mm du dormant, qui reçoit la visserie des gâches |
+| 5a | ouvrant droit à 6 chambres, 76 mm d'épaisseur |
+| 5b | ouvrant galbé, 83 mm d'épaisseur |
+| 6 | renfort acier galvanisé de 2 mm de l'ouvrant |
+| 7 | joint de feuillure sous vitrage |
+| 8 | parclose arrondie |
+| 9 | double vitrage de 28 mm (6 mm, 18 gaz argon, 4 mm), intercalaire TGI noir, Ug 1,1 W/m²K |
+| 10 | battement central réduit de 112 mm, battement intérieur et poignée centrée |
+
+| Coupe | Image |
+| --- | ---: |
+| Coupe verticale | ![Coupe verticale PERFORM76](/assets/profiles/perform76/generalites/coupe-verticale.png) |
+| Coupe horizontale | ![Coupe horizontale PERFORM76](/assets/profiles/perform76/generalites/coupe-horizontale.png) |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 2)
+
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 6 à 8, 34 et 35
