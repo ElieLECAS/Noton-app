@@ -7,12 +7,21 @@ gamme: INNOSLIDE
 systeme: Roto Patio Inowa
 fournisseur: ROTO
 usage: atelier
-status: draft
+status: stable
 sources:
+  - resource: raw/depliant-innoslide-2024-01-a4-web.pdf
+    id: depliant-innoslide-2024-01-a4-web
+    title: Dépliant INNOSLIDE, édition janvier 2024, version A4 web
+    last_modified: 2024-01-31
   - resource: raw/depliant-innoslide-2024-01.pdf
     id: depliant-innoslide-2024-01
-    title: Dépliant INNOSLIDE, édition janvier 2024
+    title: Dépliant INNOSLIDE, édition janvier 2024, version impression
     last_modified: 2024-01-31
+source_pages:
+  - resource: raw/depliant-innoslide-2024-01-a4-web.pdf
+    pages: 2-3
+  - resource: raw/depliant-innoslide-2024-01.pdf
+    pages: 2
 generated:
   by: process:claude-code
   at: 2026-09-17T21:15:00Z
@@ -20,99 +29,62 @@ generated:
 
 # Ce qu'est la Roto Patio Inowa
 
-Roto Patio Inowa est la quincaillerie [ROTO](/fournisseurs/roto.md) qui équipe le coulissant
-[INNOSLIDE](/gammes/innoslide.md) [1 p. 2]. C'est elle qui porte l'argument
-central du produit : **l'ouvrant n'a pas à être soulevé** pour coulisser.
+Roto Patio Inowa est la quincaillerie [ROTO](/fournisseurs/roto.md) qui équipe le coulissant PVC à
+frappe [INNOSLIDE](/gammes/innoslide.md) : « Pour assurer une sécurité et une fiabilité optimales,
+notre coulissant INNOSLIDE est équipé de la quincaillerie Roto Patio Inowa » [1 p. 2]. La
+quincaillerie (ou ferrure) est l'ensemble des pièces mécaniques qui permettent à l'ouvrant de
+coulisser, de se fermer et de se verrouiller.
 
-C'est la deuxième gamme de quincaillerie ROTO nommée dans la documentation du wiki, après la
-[Roto NX](/quincaillerie/roto-nx.md) des gammes à ouvrant caché. Le catalogue général ne nomme
-ni l'une ni l'autre.
+# Caractéristiques
 
-# Composants
+## Composants
 
-Relevé du dépliant INNOSLIDE (p. 2).
+Composants de la Roto Patio Inowa présentés avec l'INNOSLIDE ; une ligne par composant, avec la
+légende de la source et sa photo quand elle en a une [1 p. 2]. Un verrouilleur est un point de
+fermeture de la quincaillerie, la gâche la pièce du dormant dans laquelle il vient s'engager.
 
-| Composant | Rôle |
-| --- | --- |
-| Galets K sur roulements à billes | montés sur les verrouilleurs |
-| Verrouilleur médian | point de fermeture intermédiaire |
-| Chariot | guidage et roulement de l'ouvrant |
-| Dispositif anti-basculement | sécurité de manœuvre |
-| Gâches côté dormant | points de fermeture sur le dormant |
-| Renvois d'angle | transmission de la commande |
-| Stabilisateur | tenue de l'ouvrant |
+| Composant | Légende de la source | Image |
+| --- | --- | ---: |
+| Galets K | « Galets K montés sur roulements à billes sur les verrouilleurs » | ![Galets K montés sur roulements à billes sur les verrouilleurs](/assets/quincaillerie/roto-patio-inowa/galets-k.png) |
+| Chariot | « Chariot » | ![Chariot](/assets/quincaillerie/roto-patio-inowa/chariot.png) |
+| Verrouilleur médian | « Verrouilleur médian » | ![Verrouilleur médian](/assets/quincaillerie/roto-patio-inowa/verrouilleur-median.png) |
+| Dispositif anti-basculement | « Et aussi : dispositif anti-basculement » | - |
+| Gâches côté dormant | « gâches côté dormant » | - |
+| Renvois d'angle | « renvois d'angle » | - |
+| Stabilisateur | « & stabilisateur » | - |
 
-Les galets K sont **montés sur roulements à billes**, ce qui est le détail qui explique le
-« très grand confort de coulissement » revendiqué [1 p. 2].
+(schéma: raw/depliant-innoslide-2024-01-a4-web.pdf, p. 2)
 
-# Le principe : commande active de tous les points de fermeture
+Les quatre derniers composants sont cités sans photo ni description.
 
-L'étanchéité repose sur deux éléments [1 p. 2] :
+## Commande active des points de fermeture
 
-- un **joint périphérique**
-- la **commande active de tous les points de fermeture**
+« Le joint périphérique et la commande active de tous les points de fermeture rendent ce
+coulissant hautement étanche et permettent d'obtenir des performances thermiques supérieures aux
+autres baies vitrées » [1 p. 2]. Les performances mesurées du coulissant (classement A\*E\*V, Uw,
+dimensions) sont sur la page [INNOSLIDE](/gammes/innoslide.md).
 
-C'est la combinaison des deux qui, selon le dépliant, rend ce coulissant « hautement étanche » et
-lui donne « des performances thermiques supérieures aux autres baies vitrées ».
+Les fonctions d'amortissement SoftClose et SoftOpen de l'INNOSLIDE sont présentées à part, sans
+être rattachées à la Roto Patio Inowa : voir [INNOSLIDE](/gammes/innoslide.md) [1 p. 2].
 
-Le mécanisme diffère d'un coulissant classique : plutôt que de poser l'ouvrant sur un rail en le
-soulevant, la Roto Patio Inowa tire l'ouvrant contre le joint périphérique par ses points de
-fermeture. D'où le « simple petit mouvement » de la poignée à la place du soulèvement.
+## Poignée
 
-# Ce qu'elle permet au produit
+La poignée du coulissant INNOSLIDE est disponible en blanc, noir ou F9 : voir
+[Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) [1 p. 3].
 
-| Performance de l'INNOSLIDE | Valeur |
-| --- | --- |
-| Classement A\*E\*V | A\*4 / E\*7A / V\*B3 |
-| Uw | 1,3 W/m²K |
-| Épaisseur de vitrage maxi | 41 mm |
-| Dimensions maxi, grain d'orge | H 2 400 × L 3 200 mm |
-| Dimensions maxi, dormant ébavuré | H 2 400 × L 4 200 mm |
+## Garantie
 
-Le coulissant est annoncé « adapté à tous vos projets, même avec de fortes contraintes (vent,
-pluie, bruit - autoroutes, aéroports…) » [1 p. 2].
+La ferrure Roto est garantie 10 ans sur le fonctionnement : voir
+[Garanties par composant](/garanties/garanties-par-composant.md) [1 p. 3].
 
-**À nuancer** : le classement E\*7A / V\*B3 de l'INNOSLIDE reste inférieur à celui des fenêtres
-PERFORM, classées E\*9A / V\*A3. Sur un chantier réellement exposé, l'argument mérite d'être
-vérifié plutôt que repris tel quel. Voir
-[Labels et certifications](/certifications/labels-et-certifications.md).
+# Ce que la source ne donne pas
 
-# Fonctions SoftClose et SoftOpen
-
-| Fonction | Effet | Condition |
-| --- | --- | --- |
-| SoftClose | freine doucement l'ouvrant à la fermeture et le place en position finale | - |
-| SoftOpen | freine brièvement l'ouvrant après l'ouverture et le place en position finale ouverte | à partir de 1 970 mm de largeur |
-
-(schéma: raw/depliant-innoslide-2024-01.pdf, p. 2)
-
-Les deux fonctions protègent le coulissant **et la personne qui le manœuvre** contre les chocs
-incontrôlés.
-
-# Poignée
-
-La poignée est disponible en **blanc, noir ou F9** [1 p. 2]. Le dépliant ne
-donne pas son modèle.
-
-Ce sont les trois mêmes finitions que la poignée TOULON des gammes
-[PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md) — sans que le lien
-soit établi par une source.
-
-# Garantie
-
-La ferrure ROTO est garantie **10 ans sur le fonctionnement** [1 p. 2], valeur
-constante dans toutes les sources du wiki. Voir
-[Garanties par composant](/garanties/garanties-par-composant.md).
-
-# À documenter
-
-Cette page est en `status: draft` : elle repose sur un dépliant commercial de janvier 2024, sans
-abaque de charge, sans référence de ferrage, sans poids maximal d'ouvrant ni dimension minimale.
-À compléter quand une documentation ROTO ou un cahier technique INNOSLIDE sera versé dans `raw/`.
+Aucune référence de ferrage, aucun poids maximal d'ouvrant, aucun champ d'application ni
+diagramme de charge de la Roto Patio Inowa ne figure dans le corpus.
 
 # Citations
 
-[1] Dépliant INNOSLIDE, édition janvier 2024 — `raw/depliant-innoslide-2024-01.pdf`, p. 2
+[1] [Dépliant INNOSLIDE, édition janvier 2024, version A4 web](raw/depliant-innoslide-2024-01-a4-web.pdf), p. 2 et 3
 
 # Voir aussi
 

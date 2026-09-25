@@ -43,32 +43,36 @@ Numéros du PDF. La pagination imprimée redémarre à 1 dans chaque registre.
 | Registre | Pages PDF | Contenu | État | Page du wiki |
 | --- | --- | --- | --- | --- |
 | — | 1 | Table des matières des tomes 1 et 2 | transcrit | [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md) |
-| 2.1.1 | 2-16 | Spécifications du système, système de joints | transcrit | [Joints et garnitures](/profiles/joints-et-garnitures-profine.md) |
-| 2.1.2 | 17-37 | Plans des profilés principaux, renforts et accessoires | transcrit | [Renforts du système 76](/profiles/systeme-76-renforts.md), [Dormants PERFORM76](/profiles/perform76-dormants.md) |
-| 2.1.3 | 38-53 | Plans des profilés complémentaires | transcrit | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
-| 2.2.1 | 54-56 | Types d'ouverture réalisables | transcrit | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
-| 2.2.2 | 57-80 | Plans de combinaison des profilés (seuils, battements, ouvrants) | transcrit | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
-| 2.3.1 | 81-88 | **Cotes de débit** des profilés dormants, ouvrants, meneaux et battements | transcrit | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
-| 2.3.2 | 89-97 | Tableau complet de vitrage : épaisseurs 16 à 50 mm, parcloses, joints G047-G178, cales M137/M138 | transcrit | [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
-| 2.3.3 | 98-117 | **Abaques dimensionnels d'ouvrant** (règles, courbes, bornes de renfort, répartition paumelles p. 100) | transcrit | [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md), [Poignée et pivot](/quincaillerie/perform76-poignee-et-pivot.md) |
-| 2.4.1 | 118-126 | Mise en œuvre des renforts : positions, vis 3,9x13/3,9x16, entraxes 250/300 mm | transcrit | [Renforts du système 76](/profiles/systeme-76-renforts.md) |
-| 2.4.2 | 127-147 | Drainage, décompression, ventilation obligatoire des profilés sombres | transcrit | [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md), [Drainage et vitrage](/procedures/drainage-et-vitrage-generaux.md) |
-| 2.4.3 | 148-166 | Traitement du battement (débits, embouts M462/M285/M288) | transcrit | [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) |
-| 2.4.4 | 167-193 | Meneau et traverse (assemblages T et croix J055/J008/J056/J009, douilles S048-S050) | transcrit | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
-| 2.4.5 | 194-250 | Mise en œuvre du seuil PMR (A076/A077/A343/A075), rejet d'eau A062/A064 | transcrit | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
-| 2.4.6 | 234-248 | Porte-fenêtre avec fixe latéral (seuil filant, pièce J156) | transcrit | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
-| 2.5.1 | 251-259 | Réhausses 76750-76765, élargisseurs 76700-76703, pièces d'appui | transcrit | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
-| 2.5.2 | 260-301 | Accouplement d'éléments verticaux (76606, 76605, 76608, A250, V477, 8355, 8356, 8340) | transcrit | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md), [Couplages d'éléments](/procedures/couplages-elements.md) |
-| 2.6.1 | 302-304 | Châssis cintrés (diamètre mini = 10 × largeur) et trapézoïdaux (angle min 29,5°) | transcrit | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
-| 2.6.2 | 305-394 | AluClip : capots profilés principaux et accessoires | transcrit | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
-| 2.6.3 | 395-408 | AluClip Pro : ouvrant sans renfort acier, capot A072, équerres J079 dès 40 kg | transcrit | [Renforts du système 76](/profiles/systeme-76-renforts.md) |
-| 2.6.5 | 409-424 | AluClip Zero : capot A195, vitrage 36 à 50 mm, collage vitrage dès 40 kg | transcrit | [Renforts du système 76](/profiles/systeme-76-renforts.md), [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
+| 2.1.1 | 2-16 | Spécifications du système, porte d'entrée (dormants 76101 et 76102, ouvrants 76201, 76206 et 76207, battements, meneaux, seuils), système de joints | transcrit | [Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md), [Joints et garnitures](/profiles/joints-et-garnitures-profine.md) |
+| 2.1.2 | 17-37 | Plans des profilés principaux de la fenêtre à joint central, renforts et accessoires par profilé | transcrit | [Renforts et accessoires par profilé du système 76](/profiles/systeme-76-accessoires-par-profile.md), [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md), [Renforts du système 76](/profiles/systeme-76-renforts.md), [Assemblages du système 76](/profiles/systeme-76-assemblages.md) |
+| 2.1.3 | 38-53 | Plans des profilés complémentaires | à faire | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
+| 2.2.1 | 54-56 | Types d'ouverture réalisables | à faire | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
+| 2.2.2 | 57-80 | Plans de combinaison des profilés (seuils, battements, ouvrants) | à faire | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
+| 2.3.1 | 81-88 | **Cotes de débit** des profilés dormants, ouvrants, meneaux et battements | à faire | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
+| 2.3.2 | 89-97 | Tableau complet de vitrage : épaisseurs 16 à 50 mm, parcloses, joints G047-G178, cales M137/M138 | à faire | [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
+| 2.3.3 | 98-117 | **Abaques dimensionnels d'ouvrant** (règles, courbes, bornes de renfort, répartition paumelles p. 100) | à faire | [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md), [Poignée et pivot](/quincaillerie/perform76-poignee-et-pivot.md) |
+| 2.4.1 | 118-126 | Mise en œuvre des renforts : positions, vis 3,9x13/3,9x16, entraxes 250/300 mm | à faire | [Renforts du système 76](/profiles/systeme-76-renforts.md) |
+| 2.4.2 | 127-147 | Drainage, décompression, ventilation obligatoire des profilés sombres | à faire | [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md), [Drainage et vitrage](/procedures/drainage-et-vitrage-generaux.md) |
+| 2.4.3 | 148-166 | Traitement du battement (débits, embouts M462/M285/M288) | à faire | [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) |
+| 2.4.4 | 167-193 | Meneau et traverse (assemblages T et croix J055/J008/J056/J009, douilles S048-S050) | à faire | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| 2.4.5 | 194-250 | Mise en œuvre du seuil PMR (A076/A077/A343/A075), rejet d'eau A062/A064 | à faire | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| 2.4.6 | 234-248 | Porte-fenêtre avec fixe latéral (seuil filant, pièce J156) | à faire | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| 2.5.1 | 251-259 | Réhausses 76750-76765, élargisseurs 76700-76703, pièces d'appui | à faire | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
+| 2.5.2 | 260-301 | Accouplement d'éléments verticaux (76606, 76605, 76608, A250, V477, 8355, 8356, 8340) | à faire | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md), [Couplages d'éléments](/procedures/couplages-elements.md) |
+| 2.6.1 | 302-304 | Châssis cintrés (diamètre mini = 10 × largeur) et trapézoïdaux (angle min 29,5°) | à faire | [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) |
+| 2.6.2 | 305-394 | AluClip : capots profilés principaux et accessoires | à faire | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| 2.6.3 | 395-408 | AluClip Pro : ouvrant sans renfort acier, capot A072, équerres J079 dès 40 kg | à faire | [Renforts du système 76](/profiles/systeme-76-renforts.md) |
+| 2.6.5 | 409-424 | AluClip Zero : capot A195, vitrage 36 à 50 mm, collage vitrage dès 40 kg | à faire | [Renforts du système 76](/profiles/systeme-76-renforts.md), [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
 
 Les registres **2.4.5 et 2.4.6 s'entrelacent** entre les pages 234 et 250. Le registre **2.6.4
 n'existe pas** dans le fichier, et la section **2.7 Cas de pose**, annoncée par la table des
 matières, **est absente**.
 
-**Le registre de couverture est intégral : 424/424 pages couvertes, zéro `à faire`.**
+**Retraitement selon le protocole révisé, interrompu le 25/09/2026 :** les pages PDF 1 à 37
+(registres 2.1.1 et 2.1.2) ont été relues en image et transcrites ; les pages 38 à 424 restent
+`à faire`. Leurs lignes portaient l'état « transcrit » d'une ingestion antérieure, faite sous un
+protocole qui résumait les planches : elles sont à reprendre page par page, en numérotation du
+PDF.
 
 # Anomalies portées par ce document
 

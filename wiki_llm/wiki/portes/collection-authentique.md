@@ -5,7 +5,7 @@ description: Les sept modèles de portes d'entrée traditionnelles personnalisab
 tags: [porte-entree, authentique, perform, hybride, textural, ferronnerie]
 gamme: [PERFORM, HYBRIDE, TEXTURAL]
 usage: chiffrage
-status: stable
+status: draft
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
@@ -21,48 +21,60 @@ generated:
 
 # Définition et modèles
 
-La collection « Authentique » regroupe les portes d'entrée traditionnelles personnalisables à moulures et panneaux décoratifs de PROFERM [1 p. 30]. Elle est disponible sur trois gammes de menuiseries : [PERFORM](/gammes/perform.md) (PVC), [HYBRIDE](/gammes/hybride.md) (mixte alu/PVC) et [TEXTURAL](/gammes/textural.md) (décoratif) [1 p. 30].
+La collection « Authentique » regroupe des portes d'entrée personnalisables de sept modèles
+distincts [1 p. 30]. Elle se fait dans les gammes [PERFORM](/gammes/perform.md) (PVC),
+[HYBRIDE](/gammes/hybride.md) (mixte aluminium et PVC) et [TEXTURAL](/gammes/textural.md)
+(décorative) [1 p. 30]. Ce que la marque en annonce est sur
+[Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md).
 
-La collection est structurée autour de sept modèles de base [1 p. 30] :
+Une ligne par modèle ; le modèle se reconnaît à la photo du panneau.
 
-| Modèle | Agencement des panneaux et vitrages |
-| --- | --- |
-| ADONIS | Trois panneaux vitrés rectangulaires superposés avec petits bois ou grille |
-| ANÉMONE | Panneau plein intégral mouluré, sans vitrage |
-| CHICORÉE | Un grand panneau vitré en partie haute, soubassement plein mouluré |
-| CHICORÉE 2 | Un panneau vitré haut, deux panneaux pleins moulurés superposés en partie basse |
-| CHICORÉE 4 | Deux panneaux vitrés verticaux en partie haute, panneaux pleins bas |
-| DOMINO | Deux panneaux vitrés verticaux en partie haute avec soubassement plein |
-| IRIS | Deux panneaux vitrés verticaux à grille, grand panneau bas avec moulure centrale |
+| Modèle | Photo |
+| --- | ---: |
+| ADONIS | ![ADONIS](/assets/portes/collection-authentique/adonis.png) |
+| ANÉMONE | ![ANÉMONE](/assets/portes/collection-authentique/anemone.png) |
+| CHICORÉE | ![CHICORÉE](/assets/portes/collection-authentique/chicoree.png) |
+| CHICORÉE 2 | ![CHICORÉE 2](/assets/portes/collection-authentique/chicoree-2.png) |
+| CHICORÉE 4 | ![CHICORÉE 4](/assets/portes/collection-authentique/chicoree-4.png) |
+| DOMINO | ![DOMINO](/assets/portes/collection-authentique/domino.png) |
+| IRIS | ![IRIS](/assets/portes/collection-authentique/iris.png) |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 30)
 
+La collection de mars 2024 du catalogue portes découpe l'offre autrement (**CTR-15**).
+
 # Personnalisation et ferronnerie d'art
 
-La conception sur mesure des portes de la Collection Authentique s'articule en quatre étapes de configuration [1 p. 30] :
-1. **Choix du modèle de panneau** parmi les sept modèles.
-2. **Choix de la gamme et des éléments décoratifs** : intégration de petits bois, heurtoir traditionnel, tirant horizontal ou vertical.
-3. **Sécurité et fonctionnalités** : sélection du vitrage décoratif ou retardateur d'effraction, grille de défense en fer forgé, bâton de tirage en inox, ou dispositif **ouvrant dans l'ouvrant**.
-4. **Compositions d'ensemble** : ajout d'une imposte haute ou d'une tierce latérale vitrée ou pleine.
+La porte se compose en quelques étapes [1 p. 30] :
 
-## Atelier de ferronnerie d'art intégré
+1. Choisir le modèle de panneau qui s'adapte au mieux au style et à l'esprit de la maison.
+2. Lui donner du caractère en sélectionnant la gamme et les options : petits bois, heurtoir,
+   tirant…
+3. La rendre plus fonctionnelle et sécurisée en y ajoutant un vitrage, une grille de défense, un
+   bâton de tirage, ou encore un ouvrant dans l'ouvrant…
+4. La compléter avec une tierce (partie latérale fixe) ou une imposte (partie haute fixe).
 
-Toutes les grilles de défense de la Collection Authentique sont **forgées sur mesure au sein de l'atelier de ferronnerie d'art intégré de PROFERM** [1 p. 30].
+Toutes les grilles de défense sont forgées sur mesure dans l'atelier de ferronnerie d'art de
+PROFERM [1 p. 30].
+
+La photo montre le modèle Iris en 2 vantaux avec imposte, petits bois collés et tirants
+horizontaux [1 p. 30] :
+
+![Modèle Iris 2 vantaux avec imposte, petits bois collés et tirants horizontaux](/assets/portes/collection-authentique/iris-2-vantaux-imposte.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 30)
 
 # Configurations de mise en œuvre
 
-Quatre configurations de baie sont réalisables [1 p. 32] :
-* Porte d'entrée vitrée.
-* Porte d'entrée avec ouvrant dans l'ouvrant (*option exclue sur les profilés aluminium*).
-* Porte d'entrée avec imposte.
-* Porte d'entrée avec tierce latérale.
+Quatre configurations sont proposées [1 p. 32] : porte d'entrée vitrée ; porte avec ouvrant dans
+l'ouvrant, **à l'exception des portes en aluminium** ; porte d'entrée avec imposte ; porte
+d'entrée avec tierce.
 
 # Quincaillerie et sécurité
 
-La quincaillerie dépend de l'ouvrant retenu (voir détail sur [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)) [1 p. 32] :
-* Ouvrant PVC 97 : serrure à relevage 5 points à rouleaux, paumelles Roto Solid B Ø 18 mm, cylindre débrayable 3 clés en option.
-* Ouvrant PVC 118 : serrure à crochets, paumelles Roto Solid B Ø 22 mm, cylindre débrayable de sécurité avec 5 clés de série.
-* Armatures métalliques en acier insérées dans l'intégralité du dormant et de l'ouvrant.
+Serrures, paumelles, cylindres et renforts des portes d'entrée selon l'ouvrant (PVC 97, PVC 118,
+aluminium) : voir [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
+[1 p. 32].
 
 # Garanties
 
@@ -80,6 +92,7 @@ Durées de garantie applicables aux composants de la Collection Authentique [1 p
 # Voir aussi
 
 - [Sélection Hexa](/portes/selection-hexa.md)
+- [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md)
 - [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)
 - [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)

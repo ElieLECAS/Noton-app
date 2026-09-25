@@ -21,28 +21,26 @@ generated:
 
 # Définition et principe d'intégration
 
-Les volets roulants PROFERM sont montés **directement assemblés à la menuiserie** en atelier, garantissant la continuité de l'isolation thermique et la rapidité de pose sur chantier [1 p. 28]. Le bloc-baie est adaptable sur l'ensemble des gammes de fenêtres [PERFORM](/gammes/perform.md), [HYBRIDE](/gammes/hybride.md), [LUMINE](/gammes/lumine.md) et [TEXTURAL](/gammes/textural.md).
+Le volet roulant intégré est assemblé à la menuiserie ; il s'adapte sur toutes les menuiseries PROFERM ([PERFORM](/gammes/perform.md), [HYBRIDE](/gammes/hybride.md), [LUMINE](/gammes/lumine.md), [TEXTURAL](/gammes/textural.md)) [1 p. 28]. Ce qui en est annoncé (« LA solution idéale en terme d'isolation thermique et de rapidité de pose ») est sur [Arguments de la marque PROFERM](/commercial/proferm.md).
 
 L'assemblage en usine sur le dormant repose sur le système bloc-baie **Chrono One** conçu par [SOPROFEN](/fournisseurs/soprofen.md), intégrant un adaptateur haut clippé/vissé avec joint de finition adhésif, un emboîtement par basculement verrouillé par vis FPZ-3.9-28-ST, et des coulisses encollées (2 cordons PVC/silicone) clippées sur vis plots VC4/10T (voir [Montage en atelier du volet roulant bloc-baie Chrono One SOPROFEN](/procedures/montage-atelier-bloc-baie-chrono-one-soprofen.md)).
 
 # Caractéristiques techniques du coffre
 
-Dimensions et personnalisation esthétique du coffre de volet roulant [1 p. 28] :
+Le coffre est la boîte qui loge le tablier enroulé au-dessus de la menuiserie. Hauteurs et finitions du coffre du volet roulant intégré ; une ligne par paramètre [1 p. 28].
 
-| Paramètre | Spécification technique | Condition de choix |
+| Paramètre | Valeur | Condition |
 | --- | --- | --- |
-| Hauteur de coffre (petit modèle) | 200 mm | Selon hauteur et enroulement du tablier |
-| Hauteur de coffre (grand modèle) | 230 mm | Selon hauteur et enroulement du tablier |
-| Finition aluminium | Thermolaquage en toutes teintes RAL | Harmonisation avec la menuiserie |
-| Finition PVC | Plaxage dans tous les films de la gamme de fenêtres | Harmonisation avec la menuiserie |
+| Hauteur de coffre | 200 mm | selon la dimension de la menuiserie |
+| Hauteur de coffre | 230 mm | selon la dimension de la menuiserie |
+| Teinte du coffre | toutes les teintes RAL | - |
+| Plaxage du coffre | tous les films proposés dans les gammes de fenêtres | - |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 28)
 
 ## Technologie brevetée GoodNight
 
-L'occultation lumineuse complète du volet roulant repose sur la technologie brevetée **GoodNight** conçue par [SOPROFEN](/fournisseurs/soprofen.md) et intégrée dans les coulisses de guidage [1 p. 28] :
-* Intégration dans la coulisse d'un profilé d'insertion de coloris noir.
-* Montage combiné d'un joint co-extrudé et d'un joint à brosse étanche à la lumière et à l'air.
+L'occultation est obtenue par la technologie brevetée **GoodNight** : intégration dans la coulisse (le rail vertical où glisse le tablier) d'un profilé d'insertion de coloris noir, d'un joint co-extrudé et d'un joint brosse [1 p. 28].
 
 ## Coffres demi-linteau Bloc LX
 
@@ -69,33 +67,37 @@ La tenue sous pression de vent des lames PVC (L37, L50) et aluminium (LA37, LA50
 
 L'équipement des volets fait appel aux solutions motorisées du fabricant [SOMFY](/fournisseurs/somfy.md) [1 p. 28] :
 
-| Type de motorisation | Alimentation | Fonctionnalités de confort | Dispositifs de sécurité |
-| --- | --- | --- | --- |
-| SOMFY® IO RS100 | Réseau électrique 230 V | Moteur bi-vitesse, démarrage et accostage en douceur, fonction « mode discret » silencieuse | Détection d'obstacles avec arrêt immédiat, protection contre le gel |
-| Radio IO Solaire | Panneau photovoltaïque autonome | Sans passage de câble électrique, compatible commandes RTS et TaHoma | Détection d'obstacles, autonomie sur batterie |
-| SOMFY® Filaire | Réseau électrique filaire | Commande individuelle standard d'un seul volet | Déconnexion manuelle |
+| Motorisation | Description | Image |
+| --- | --- | ---: |
+| Moteur SOMFY® IO RS100 | Mouvement maîtrisé : démarrage et arrêt en douceur en fins de courses ; moteur bi-vitesse pour adapter le mouvement des volets. Nouveau confort acoustique : en « mode discret » le volet roulant devient silencieux ; confort acoustique inégalé. Mouvement protecteur : détection d'obstacles et arrêt immédiat ; équipé d'une détection du gel, ce qui évite la détérioration du matériel | ![Moteur SOMFY IO RS100](/assets/equipements/volets-roulants/moteur-somfy-io-rs100.png) |
+| Radio IO solaire | Plus besoin de câblage électrique : un capteur solaire est installé sur le coffre (en rénovation) ou au-dessus de la menuiserie (pour le neuf). Compatible avec toute la gamme des commandes RTS et TaHoma | ![Radio IO solaire](/assets/equipements/volets-roulants/radio-io-solaire.png) |
+| Moteur SOMFY® filaire | Solution plus économique ; la commande filaire permet de contrôler les volets roulants et de gérer leur ouverture et leur fermeture. Le système filaire permet de commander un seul volet | ![Moteur SOMFY filaire](/assets/equipements/volets-roulants/moteur-somfy-filaire.png) |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 28)
 
 ## Implantation du capteur solaire
 
-Le panneau capteur solaire de la motorisation autonome s'implante selon le type de mise en œuvre [1 p. 28] :
-* **En rénovation** : fixé directement sur la face avant du coffre extérieur.
-* **En construction neuve** : positionné au-dessus de la menuiserie en linteau.
+Le capteur solaire de la motorisation radio IO solaire est installé sur le coffre en rénovation, et au-dessus de la menuiserie pour le neuf [1 p. 28].
 
 ## Domotique et gestion centralisée
 
-L'ensemble des volets roulants motorisés en technologie radio est compatible avec le protocole **RADIO IO HOMECONTROL**, autorisant le pilotage individuel ou groupé sur smartphone via le boîtier domotique TaHoma [1 p. 28].
+La technologie RADIO IO HOMECONTROL permet de piloter l'ensemble des équipements depuis un smartphone grâce au boîtier TaHoma. L'ensemble des volets roulants proposés par PROFERM sont compatibles avec cette technologie [1 p. 28].
+
+![Points de commande : boîtier TaHoma, télécommande, commande murale](/assets/equipements/volets-roulants/points-de-commande.png)
 
 # Manœuvres manuelles sans domotique
 
 Trois organes de manœuvre manuelle non motorisée sont disponibles [1 p. 28] :
 
-| Mécanisme manuel | Principe | Restriction d'emploi |
-| --- | --- | --- |
-| Tirage direct | Ressort compensateur intégré à l'axe d'enroulement | Verrouillage bas par lame à serrure nécessitant le perçage des coulisses sur chantier |
-| Sangle | Enrouleur de sangle en applique | **Strictement non disponible en rénovation** |
-| Tringle oscillante | Manivelle et treuil à renvoi d'angle | - |
+| Mécanisme manuel | Restriction d'emploi |
+| --- | --- |
+| Tirage direct | - |
+| Sangle | **non disponible en rénovation** |
+| Tringle oscillante | - |
+
+![Mécanismes manuels sans domotique : tirage direct, sangle, tringle oscillante](/assets/equipements/volets-roulants/mecanismes-manuels.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 28)
 
 Sur les volets à tirage direct équipés d'une lame finale à serrure, la réalisation des lumières de verrouillage en fond de coulisses fait l'objet d'une méthodologie spécifique selon le profil de cylindre (voir [Perçage des coulisses pour lame à serrure sur volet à tirage direct](/procedures/percage-coulisses-lame-serrure-soprofen.md)).
 

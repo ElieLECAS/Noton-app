@@ -65,7 +65,9 @@ Le système 76 Advanced compte **sept dormants**. Les **76173**, de 104 mm, et *
 121 mm, appartiennent au catalogue profine et ne figurent pas au cahier PERFORM76 ; leurs cotes de
 débit sont dans
 [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) et leurs renforts dans
-[Renforts du système 76](/profiles/systeme-76-renforts.md).
+[Renforts du système 76](/profiles/systeme-76-renforts.md). Les capots aluminium des sept
+dormants, les cadres fixes 76101 et 76102 et les coupes de la planche du système sont dans
+[Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md).
 
 # Cotes de fraisage du dormant bas
 

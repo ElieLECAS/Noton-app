@@ -152,7 +152,11 @@ Les combinaisons dormant et meneau donnent les mêmes cotes sur les cinq dormant
 meneau est indépendant du dormant. Voir [Dormants PERFORM76](/profiles/perform76-dormants.md).
 
 Les cotes de débit des deux meneaux de dormant sont dans
-[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md).
+[Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md). Les capots aluminium des
+meneaux et des traverses, la traverse 76300 et la traverse complémentaire 76299 sont dans
+[Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) ; les pièces
+d'assemblage en T et en X dans
+[Assemblages du système 76](/profiles/systeme-76-assemblages.md).
 
 # Alignement de la traverse de soubassement
 

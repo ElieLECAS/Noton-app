@@ -244,6 +244,7 @@ de la commande** [1 p. 12]. Ce n'est pas un réglage de chantier. Voir
 
 # Voir aussi
 
+- [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) — plans de pose types du système 76 (capotage, ITE, monomur, rénovation, seuil PMR)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
 - [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md)
 - [Meneaux PERFORM76](/profiles/perform76-meneaux.md)

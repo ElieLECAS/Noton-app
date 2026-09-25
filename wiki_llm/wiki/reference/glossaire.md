@@ -17,6 +17,10 @@ sources:
     id: dta-6-16-2334-v5
     title: DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED
     last_modified: 2025-06-19
+  - resource: raw/catalogue-general-2026-01.pdf
+    id: catalogue-general-2026
+    title: Catalogue menuiseries PROFERM, édition janvier 2026
+    last_modified: 2026-01-31
 generated:
   by: process:claude-code
   at: 2026-09-18T22:00:00Z
@@ -61,7 +65,21 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Neuf, rénovation | pose dans une maçonnerie neuve, ou pose sur l'ancien dormant bois conservé | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
 | Délignage | recoupe de l'aile d'un dormant pour la raccourcir, faite sur le chantier | [Dormants PERFORM76](/profiles/perform76-dormants.md) |
 | Battement | profil vertical où se rejoignent les deux ouvrants d'une fenêtre à deux vantaux | [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) |
+| Joint de butée | joint contre lequel l'ouvrant vient s'appuyer en fermeture ; sur l'HYBRIDE de 72 mm, périphérique dans le dormant, l'ouvrant et entre les parcloses et le vitrage | [HYBRIDE](/gammes/hybride.md) |
+| Cintrage, cintré | mise en forme courbe d'un profilé ; une menuiserie cintrée a une partie haute arrondie | [Coloris HYBRIDE](/coloris/coloris-hybride.md) |
+| Ouvrant caché | ouvrant dissimulé derrière le dormant, vu de l'extérieur | [PERFORM+](/gammes/perform-plus.md), [LUMINE](/gammes/lumine.md) |
+| Gâche, galet | la gâche est fixée sur le dormant ; le galet, porté par l'ouvrant et entraîné par la crémone, s'y engage pour verrouiller | [Roto NX](/quincaillerie/roto-nx.md) |
+| Fiche | organe de rotation de l'ouvrant ; la PERFORM+ et l'HYBRIDE+ ne se réalisent pas avec des fiches | [PERFORM+](/gammes/perform-plus.md) |
 | Meneau | profil qui divise un dormant (meneau de dormant) ou un ouvrant (meneau d'ouvrant) en plusieurs parties | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| Béquille double | poignée de porte ou de porte-fenêtre, présente des deux côtés, montée sur plaque ou sur rosace avec l'entrée de clé | [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |
+| Rosace | petite pièce ronde ou ovale qui entoure la base d'une poignée ou l'entrée de clé, à la place d'une plaque | [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |
+| Fausse crémone | tige décorative verticale apparente sur l'ouvrant | [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |
+| Croisillon | barrette qui divise visuellement le vitrage en carreaux ; « sans croix » : les barrettes ne se croisent pas | [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |
+| Soubassement | panneau plein en partie basse d'une porte-fenêtre, à la place du vitrage | [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |
+| Semi-fixe | vantail d'une fenêtre à deux vantaux qui ne s'ouvre qu'après l'ouvrant principal | [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |
+| Galandage | coulissant dont les vantaux s'effacent dans l'épaisseur du mur ou de la cloison | [Coulissants aluminium](/gammes/coulissants-aluminium.md) |
+| Monobloc (porte) | porte d'entrée dont l'ouvrant et le panneau ne font qu'un | [Sélection Hexa](/portes/selection-hexa.md) |
+| Imposte, tierce | partie fixe ajoutée au-dessus (imposte) ou à côté (tierce) d'une porte ou d'une fenêtre | [Collection Authentique](/portes/collection-authentique.md) |
 | Traverse | profil horizontal ; la traverse de soubassement sépare le vitrage du soubassement | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
 | Soubassement | partie basse d'une fenêtre ou d'une porte-fenêtre, sous la traverse | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
 | Parclose | baguette clipsée qui maintient le vitrage dans son logement ; elle se choisit par l'épaisseur du vitrage | [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
@@ -74,6 +92,10 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Seuil | profil bas d'une porte-fenêtre, sur lequel on passe | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
 | Rejet d'eau | profil qui écarte l'eau du bas de l'ouvrant | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
 | Compensateur | profil qui comble l'écart entre le dormant rénovation et l'ancien bâti | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| Capot aluminium, AluClip | profil aluminium clippé sur la face extérieure d'un profilé PVC, qui donne un aspect aluminium à l'extérieur de la menuiserie | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
+| Cadre fixe | dormant qui reçoit directement le vitrage, sans ouvrant | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
+| Coupe droite, grugeage | deux préparations du montant qui s'assemble sur un seuil : coupé d'équerre, ou entaillé pour épouser le profil du seuil | [Assemblages du système 76](/profiles/systeme-76-assemblages.md) |
+| Assemblage en T, en X | traverse qui aboutit sur un profilé (T) ou qui en croise un autre (X) | [Assemblages du système 76](/profiles/systeme-76-assemblages.md) |
 | Élargisseur | profil accolé au dormant pour élargir la menuiserie | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
 | Patte de pose, équerre de fixation | pièce métallique qui fixe le dormant au mur à travers l'isolant | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
 | Clameau | pièce d'accrochage de la patte de pose sur le dormant | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
@@ -85,6 +107,16 @@ mobiles, les ouvrants, qui portent le vitrage.
 | Pivot bas | ferrure du bas de l'ouvrant autour de laquelle il tourne et qui porte son poids | [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md) |
 | Coupe verticale, coupe horizontale | dessin de la menuiserie comme tranchée de haut en bas, ou de gauche à droite, vu en bout | toutes les planches |
 | Élévation | dessin de la menuiserie vue de face | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| Pose en applique, en tableau, en tunnel | le dormant fixé contre une face du mur, dans l'épaisseur de la baie contre un épaulement, ou dans l'épaisseur de la baie sans épaulement | [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) |
+| Rejingot | ressaut de la maçonnerie sous l'appui, qui arrête l'eau | [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) |
+| Monomur | mur en blocs isolants porteurs, posé sans doublage | [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) |
+| Bavette | tôle d'aluminium sous la traverse basse qui rejette l'eau au-delà du nu du mur | [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) |
+| Habillage | cornière rapportée qui recouvre le raccord entre menuiserie et mur | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| Fourrure d'épaisseur | autre nom de la tapée PVC dans les documents profine | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| Joint à la pompe | mastic injecté au pistolet dans un angle ou une jonction | [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) |
+| Contre-profilage | usinage de l'extrémité d'un meneau, d'une traverse ou d'un montant à la forme du profilé qui le reçoit (dormant, seuil) | [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) |
+| Entretoise | tube (S048, S049, S050 sur le système 76) logé dans le profilé qui reçoit un meneau, pour que la vis d'assemblage n'écrase pas ses chambres ; il remplace le renfort | [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) |
+| Alvéovis | logement de vis extrudé dans le nez d'une fourrure d'épaisseur, dans lequel se visse la pièce d'appui | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
 
 # Cotes de fabrication
 
@@ -196,9 +228,18 @@ hauteur de chute et le nombre de billes. Voir
 | STADIP | désignation commerciale d'un vitrage feuilleté de sécurité |
 | TGI | type d'intercalaire à bord chaud d'un vitrage isolant ; le vitrage de série PERFORM76 en emploie un de coloris noir |
 | EPDM | élastomère des joints d'étanchéité |
+| TPE | élastomère thermoplastique, matière de joints coextrudés |
 | PCE | second élastomère de joint employé par le système 70 |
 | RPT | rupture de pont thermique |
 | Plaxage | application d'un film décor sur le profilé PVC |
+| Teinté dans la masse | PVC coloré dans toute son épaisseur à l'extrusion, sans couche rapportée ; s'oppose au plaxé et au laqué |
+| Satiné, granité | les deux aspects de laque proposés sur l'aluminium ; le granité a un grain visible |
+| Anodisé, anodisé laqué | l'anodisation traite la surface de l'aluminium ; l'« anodisé laqué contretypé » est une laque qui en reproduit l'aspect |
+| Texture (TEXTURAL) | décor à effet de matière (bois, cuir, carbone, métal) posé sur le profilé |
+| RAL | nuancier normalisé de couleurs, chaque teinte désignée par un code à quatre chiffres (9016 blanc, 7016 gris anthracite) |
+| Face (1 face, 2 faces) | côté de la menuiserie qui reçoit la teinte : 1 face = l'extérieur seul, 2 faces = extérieur et intérieur |
+| Composition vinylique | recette de PVC dont est extrudé un profilé, certifiée sous la marque QB 34 et désignée par un code CSTB |
+| Mousse PE | mousse de polyéthylène, matière des patins G251 et G067 |
 | Laquage | application d'une laque, classée par le label QUALICOAT |
 | Contretypé | teinte réalisée sur mesure pour s'approcher d'une texture donnée |
 | Grain d'orge | finition de soudure d'angle, par opposition à la soudure ébavurée |
@@ -225,6 +266,11 @@ hauteur de chute et le nombre de billes. Voir
 | UFME | Union des Fabricants de Menuiseries Extérieures |
 | SNEP | Syndicat National de l'Extrusion Plastique |
 | PMR | personne à mobilité réduite ; qualifie un seuil surbaissé |
+| ITE | isolation thermique par l'extérieur (enduit sur isolant et/ou bardage) |
+| ETICS | système d'isolation thermique extérieure par enduit sur isolant |
+| FDS | Fiche de Données de Sécurité |
+| DdP | déclaration des performances, exigée pour le marquage CE |
+| CPU | contrôle de production en usine |
 
 Les références internes des documents ROTO suivent trois préfixes : **IMO** pour une instruction
 de montage, **CTL** pour un catalogue, **SUG** pour une notice d'emploi.
@@ -235,6 +281,10 @@ de montage, **CTL** pour un catalogue, **SUG** pour une notice d'emploi.
 | --- | --- |
 | NF DTU 36.5 | mise en œuvre des fenêtres et portes extérieures |
 | NF EN 12207 | classement de la perméabilité à l'air |
+| NF EN 14351-1+A2 | norme produit des fenêtres, dont le contrôle de production en usine (§ 7.3) |
+| NF EN ISO 11600 | classification des mastics (25 E élastomère, 12.5 P plastique) |
+| FD DTU 36.5 P3 | choix des fenêtres en fonction de leur exposition |
+| NF DTU 39 | mise en œuvre des vitrages |
 | NF EN 1627 à 1630 | résistance à l'effraction des fenêtres et portes |
 | EN 356 | résistance du vitrage feuilleté au choc |
 | NF EN 14501 | classement de la protection solaire des stores |

@@ -7,7 +7,7 @@ gamme: HYBRIDE
 systeme: [70, 76]
 fournisseur: KÖMMERLING
 usage: chiffrage
-status: stable
+status: draft
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
@@ -23,11 +23,11 @@ sources:
     last_modified: 2023-06-30
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
-    pages: 1, 4, 9-12, 35
+    pages: 10-12
   - resource: raw/brochure-hybride-2025-03.pdf
-    pages: 1-8
+    pages: 1-3
   - resource: raw/depliant-hybride-2023-06.pdf
-    pages: 1-6
+    pages: 2-3
 generated:
   by: process:gemini-coder
   at: 2026-09-19T16:56:00Z
@@ -35,112 +35,185 @@ generated:
 
 # Définition et déclinaisons
 
-HYBRIDE est la gamme de menuiseries mixtes conçue et fabriquée par PROFERM, commercialisée sous le slogan « la fenêtre écologique » [1 p. 1, 9]. Cette technologie exclusive réunit un profil épais en aluminium serti sur un cœur en PVC GREENLINE® de chez [KÖMMERLING](/fournisseurs/kommerling.md), associant l'esthétique extérieure de l'aluminium aux performances thermiques et acoustiques du PVC [1 p. 4, 10].
+HYBRIDE est la gamme de menuiseries mixtes conçue et fabriquée par PROFERM : un profil épais en
+aluminium serti sur un cœur en PVC GREENLINE® de chez [KÖMMERLING](/fournisseurs/kommerling.md).
+L'extérieur de la menuiserie est en aluminium, l'intérieur en PVC [1 p. 10]. Ce que la marque
+annonce de la gamme (slogan, avantages) est sur [Arguments de vente HYBRIDE](/commercial/hybride.md).
 
-La gamme se décline en deux niveaux de fabrication [1 p. 10] :
-* **HYBRIDE70** (« L'équilibre maîtrisé ») : profilé PVC de 70 mm à l'intérieur, associé à l'aluminium extérieur, conçu pour de hautes performances thermiques et acoustiques durables.
-* **HYBRIDE76** (« L'excellence renforcée ») : profilé PVC de 76 mm à l'intérieur, intégrant une structure renforcée et optimisée pour atteindre les déperditions les plus faibles de la gamme.
+La gamme se décline en deux niveaux, HYBRIDE70 et HYBRIDE76, qui se distinguent par l'épaisseur du
+profilé PVC : « 70 mm à 76 mm d'épaisseur du profilé PVC » [1 p. 10].
 
-*(Note historique SAV : les fabrications antérieures à 2026 reposant sur un profilé de 72 mm sont arbitrées aux entrées [CTR-06](/anomalies/contradictions-entre-sources.md) et [CTR-07](/anomalies/contradictions-entre-sources.md)).*
+![Angle HYBRIDE70, aluminium extérieur et PVC intérieur](/assets/gammes/hybride/angle-hybride70.png)
+
+![Angle HYBRIDE76](/assets/gammes/hybride/angle-hybride76.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 10)
+
+Les fabrications antérieures à 2026 reposent sur un profilé de 72 mm : voir
+[CTR-06](/anomalies/contradictions-entre-sources.md) et
+[CTR-07](/anomalies/contradictions-entre-sources.md).
 
 # Caractéristiques
 
-Évolution de l'épaisseur du profilé et des performances thermiques selon la période de fabrication [1 p. 10, 2 p. 2] :
+Épaisseur du profilé PVC et Uw (coefficient de transmission thermique de la fenêtre complète, en
+W/m²K) selon la période de fabrication ; une ligne par période et par déclinaison [1 p. 10, 2 p. 2].
 
-| Période de fabrication | Déclinaison | Épaisseur du profilé PVC (mm) | Uw minimal (W/m²K) | Source |
+| Période de fabrication | Déclinaison | Épaisseur du profilé PVC (mm) | Uw annoncé « jusqu'à » (W/m²K) | Source |
 | --- | --- | --- | --- | --- |
-| Jusqu'en 2025 | Gamme unique HYBRIDE | 72 | 1,2 | Brochure HYBRIDE mars 2025 [2 p. 2] [CTR-06, CTR-07] |
-| À compter de janvier 2026 | HYBRIDE70 | 70 | 1,2 | Catalogue général janvier 2026 [1 p. 10] |
-| À compter de janvier 2026 | HYBRIDE76 | 76 | 0,8 | Catalogue général janvier 2026 [1 p. 10] |
+| jusqu'en 2025 | gamme unique HYBRIDE | 72 | 1,2 | [2 p. 2, 3 p. 2] (**CTR-06**, **CTR-07**, **CTR-13**) |
+| à partir de janvier 2026 | HYBRIDE70 | 70 | - | [1 p. 10] |
+| à partir de janvier 2026 | HYBRIDE76 | 76 | - | [1 p. 10] |
+| à partir de janvier 2026 | gamme HYBRIDE, déclinaison non précisée | 70 à 76 | 0,8 | [1 p. 10, 11] |
 
-Spécifications structurelles, assemblages et vitrages de la gamme HYBRIDE [1 p. 10-11, 2 p. 2] :
+Le Uw de 0,8 W/m²K est donné pour la gamme, « grâce aux 5 chambres d'isolation », sans dire s'il
+vaut pour l'HYBRIDE70, l'HYBRIDE76 ou les deux [1 p. 10] (**VER-04**).
 
-| Paramètre | Spécification technique | Source |
-| --- | --- | --- |
-| Épaisseur du profilé PVC interne | 70 mm (HYBRIDE70) à 76 mm (HYBRIDE76) | [1 p. 10] |
-| Nombre de chambres d'isolation | 5 chambres d'isolation dans le cœur PVC | [1 p. 10, 2 p. 2] |
-| Épaisseur des parois PVC | 10 à 15 % supérieure à la moyenne du marché | [1 p. 11] |
-| Vitrage de base | Double vitrage 6/18/4, affaiblissement acoustique 31 dB, gaz argon et Warm Edge | [1 p. 10] |
-| Triple vitrage en option | Épaisseur 40 mm (4/14/4/14/4), affaiblissement acoustique 28 dB | [1 p. 10] |
-| Charge admissible sur le pivot | Jusqu'à 130 kg par vantail | [1 p. 10, 2 p. 2] |
-| Joints d'étanchéité | Joints de frappe coextrudés et joints de butée périphériques (dormant, ouvrant, parclose/verre) | [1 p. 10, 2 p. 2] |
+## Caractéristiques principales
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 10 ; raw/brochure-hybride-2025-03.pdf, p. 2)
+Les caractéristiques principales de la gamme HYBRIDE ; une ligne par caractéristique [1 p. 10] :
 
-## Conception technique et drainage
+| Caractéristique | Description |
+| --- | --- |
+| Vitrage haute sécurité et hautes performances thermiques et acoustiques | Vitrage de base : 6/18/4 - isolation 31 dB. Triple vitrage en option : disponible en 40 mm 4/14/4/14/4 - isolation 28 dB. Faible émissivité avec gaz argon et intercalaire Warm Edge |
+| Drainage des eaux invisible | Le drainage s'effectue par la traverse basse |
+| Clair de jour maximal | Grâce à la poignée centrée et le battement réduit |
+| Étanchéité maximale | Grâce aux joints de frappe (ouvrant et dormant). Joints coextrudés : profil blanc = joints gris ; profil couleur = joints noirs |
+| Performance thermique optimale | Grâce aux 5 chambres d'isolation - jusqu'à 0,8 W/m²K |
+| Robustesse de la fenêtre | Grand confort d'utilisation et sécurité renforcée grâce au 70 mm à 76 mm d'épaisseur du profilé PVC |
 
-La menuiserie HYBRIDE intègre un système de **drainage des eaux invisible** qui s'effectue directement par la traverse basse du dormant, sans usinage visible en face avant [1 p. 10]. Le clair de jour est optimisé grâce à une poignée centrée et un battement central réduit [1 p. 10].
+Les notations de vitrage se lisent en millimètres, de l'extérieur vers l'intérieur : 6/18/4 est
+un verre de 6 mm, une lame de gaz de 18 mm et un verre de 4 mm. Le dB (décibel) mesure
+l'affaiblissement acoustique.
 
-Sur le plan de la sécurité et des finitions, l'équipement comprend [1 p. 10] :
-* Armatures métalliques en acier insérées dans les profilés KÖMMERLING® selon les abaques techniques, avec option de renfort total.
-* Mécanisme de ferrure intégrant un rouleau champignon anti-dégondage et anti-effraction, un système anti-fausse manœuvre et un levier de vantail sur le semi-fixe.
-* Crémone de semi-fixe doublant la compression d'étanchéité et la résistance à l'effraction.
-* Assemblage intérieur en coupe d'onglet avec soudure grain d'orge sur la face PVC, cale anti-fatigue et jonc de finition en partie basse de feuillure, et grille d'aération discrète intégrée.
+## Caractéristiques de l'HYBRIDE fabriquée jusqu'en 2025
 
-## Accessoires et quincaillerie
+L'HYBRIDE de gamme unique, sur profilé PVC de 72 mm, portait les avantages suivants, identiques
+en juin 2023 et en mars 2025 ; une ligne par avantage, dans les termes de la source [2 p. 2,
+3 p. 2]. Ils décrivent les menuiseries déjà posées,
+utiles en SAV et en remplacement à l'identique.
 
-La gamme HYBRIDE reçoit un ensemble complet d'équipements de finition [1 p. 11] :
-* **Poignées de fenêtre** : Sécustik® ATLANTA (blanc, aspect inox, caramel, laiton) et Sécustik® TOULON (noir, 7016, aspect inox, blanc).
-* **Portes-fenêtres** : béquilles doubles TOULON sur plaque (noir, 7016, aspect inox, blanc), ATLANTA plaque large (inox, laiton), ATLANTA plaque étroite (inox, blanc, laiton ; noir et 7016 en option), ensembles Sécustik® TOULON et ATLANTA sur rosaces.
-* **Décoration et protection** : fausse crémone décorative (blanc ou fer cémenté, hors portes-fenêtres avec serrure), soubassements moulurés ou plats, moustiquaires à cadre fixe, croisillons (10, 18, 26, 45 mm, laiton 8 mm sans croix, plomb 8 mm sans croix).
+| Caractéristique | Description, jusqu'en 2025 |
+| --- | --- |
+| Clair de jour maximal | Grâce au battement réduit |
+| Profil aluminium extérieur épais | Serti sur le profil PVC pour une menuiserie renforcée |
+| Drainage des eaux invisible | Le drainage s'effectue par la traverse basse |
+| Étanchéité maximale | Joint de butée périphérique dans le dormant, l'ouvrant et entre les parcloses et le vitrage |
+| Robustesse de la fenêtre | Profilé PVC épaisseur 72 mm (**CTR-06**) |
+| Performance thermique optimale | 5 chambres d'isolation, Uw jusqu'à 1,2 W/m²K (**CTR-07**) |
+
+Le battement est le profil vertical où se rejoignent les deux ouvrants d'une fenêtre à deux
+vantaux ; le joint de butée est le joint contre lequel l'ouvrant vient s'appuyer en fermeture
+(voir le [glossaire](/reference/glossaire.md)).
+
+## Sécurité renforcée et finitions
+
+Les équipements de la gamme HYBRIDE sont présentés en deux planches de photos légendées [1 p. 10].
+Sécurité renforcée :
+
+| Équipement | Légende |
+| --- | --- |
+| Profils | Profils KÖMMERLING®. Renfort selon abaques. Renfort total en option |
+| Pivot | Pivot pouvant supporter le poids d'une fenêtre jusqu'à 130 kg |
+| Système sécurité | Rouleau champignon anti-dégondage et anti-effraction |
+| Anti-fausse manœuvre | Système anti-fausse manœuvre et levier de vantail sur le semi-fixe |
+| Câle | Câle anti-fatigue |
+| Crémone du semi-fixe | Compression et sécurité doublée grâce à la crémone du semi-fixe |
+
+![Sécurité renforcée HYBRIDE](/assets/gammes/hybride/securite-renforcee.png)
+
+L'HYBRIDE fabriquée jusqu'en 2025 portait les mêmes équipements, photographiés de même, sous
+quatre légendes, identiques en juin 2023 et en mars 2025 [2 p. 2, 3 p. 2] : « Système sécurité : rouleau champignon anti-dégondage et anti-effraction »,
+« Système anti-fausse manœuvre et anti-fatigue », « Pivot pouvant supporter le poids d'une fenêtre
+jusqu'à 130 kg » et « Compression et sécurité doublée grâce à la crémone du semi-fixe en cas
+d'oscillo-battant » ; « Pour assurer une sécurité optimale, nos menuiseries HYBRIDE sont équipées
+des quincailleries les plus fiables » [2 p. 2].
+
+Finitions élégantes :
+
+| Équipement | Légende |
+| --- | --- |
+| Soudure | Soudure grain d'orge sur la face intérieure. Assemblage en coupe d'onglet |
+| Grille d'aération | Grille d'aération discrète intégrée |
+| Pivot | Pivot symétrique systématique jusqu'à 130 kg |
+| Jonc | Jonc de finition en partie basse du dormant |
+
+![Finitions élégantes HYBRIDE](/assets/gammes/hybride/finitions-elegantes.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 10)
+
+Sur l'HYBRIDE fabriquée jusqu'en 2025, les quatre mêmes finitions sont légendées de même, sauf le
+pivot : « Pivot symétrique systématique », sans charge indiquée [2 p. 2, 3 p. 2].
+
+## Finitions DROIT et DESIGN
+
+La finition extérieure de l'HYBRIDE se choisit entre **DROIT** et **DESIGN** [1 p. 12] ; la loupe
+de chaque coupe montre la forme du profil aluminium.
+
+| Finition | Disponibilité | Coupe |
+| --- | --- | ---: |
+| droit | disponible | ![Finition droit HYBRIDE](/assets/gammes/hybride/finition-droit.png) |
+| design | profil 76 mm design disponible à compter du 2ème trimestre 2026 (**VER-01**) | ![Finition design HYBRIDE](/assets/gammes/hybride/finition-design.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 12)
+
+Les deux mêmes finitions, DROIT et DESIGN, étaient proposées sur l'HYBRIDE de 72 mm, sans
+restriction de disponibilité, en juin 2023 comme en mars 2025 [2 p. 3, 3 p. 3]. Chaque finition y est montrée par une
+loupe sur la forme du profil aluminium (en haut) et une loupe sur la coupe du profilé (en bas) :
+
+![Finitions DROIT et DESIGN de l'HYBRIDE 72 mm, avec coupes](/assets/gammes/hybride/finitions-droit-design-72.png)
+
+(schéma: raw/brochure-hybride-2025-03.pdf, p. 3)
+
+## Accessoires
+
+Les poignées de fenêtre, béquilles de porte-fenêtre, fausses crémones et croisillons de la gamme
+HYBRIDE, avec leurs finitions et leurs images, sont sur
+[Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), avec la moustiquaire et les
+soubassements [1 p. 11]. Les menuiseries HYBRIDE peuvent être équipées de vitrages techniques
+et/ou décoratifs ([Performances des vitrages](/vitrages/performances-vitrages.md),
+[Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)) et de volets roulants et de solutions
+domotiques ([Volets roulants](/equipements/volets-roulants.md)) [1 p. 11].
 
 # Performances
 
-Performances mesurées et certifiées de la menuiserie HYBRIDE :
-
-* **Classement CSTB A\*E\*V** : classée **A\*4 / E\*9A / V\*A3** [1 p. 11, 35].
-* **Performance thermique** : coefficient d'isolation thermique Uw descendant jusqu'à **0,8 W/m²K** en configuration triple vitrage sur profilé 76 mm [1 p. 10, 11].
-* **Performance acoustique** : affaiblissement de 31 dB avec le double vitrage de base 6/18/4, modulable selon les vitrages acoustiques renforcés [1 p. 10, 27].
+- **Classement A\*E\*V** (étanchéité à l'air, à l'eau et résistance au vent) : voir
+  [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 11].
+- **Isolation thermique** : Uw jusqu'à 0,8 W/m²K, grâce aux 5 chambres d'isolation [1 p. 10, 11].
+- **Isolation acoustique** : 31 dB avec le vitrage de base 6/18/4, 28 dB avec le triple vitrage
+  4/14/4/14/4 en option [1 p. 10]. Les vitrages acoustiques sont sur
+  [Performances des vitrages](/vitrages/performances-vitrages.md).
 
 # Dimensions limites
 
-Les limites dimensionnelles de baie sont régies par les contraintes d'armatures du cœur PVC KÖMMERLING® (voir [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md) et [DTA 6/16-2334](/certifications/dta-6-16-2334.md)). La charge maximale admissible par les paumelles est fixée à 130 kg par vantail [1 p. 10].
+Aucune dimension limite de baie n'est donnée pour l'HYBRIDE. Le pivot supporte le poids d'une
+fenêtre jusqu'à 130 kg [1 p. 10].
 
 # Coloris
 
-La menuiserie offre deux niveaux de finition extérieure sur ses capotages aluminium : profil **DROIT** ou profil **DESIGN** [1 p. 12]. Le profil 76 mm en finition design est annoncé disponible à compter du 2ème trimestre 2026 [1 p. 12].
-
-## Extérieur Aluminium
-
-| Finition d'aspect | Teinte | Code / Référence | Régime tarifaire |
-| --- | --- | --- | --- |
-| Laquée brillante | Blanc 9016 | Standard | Couleur standard |
-| Laquée satinée | Rouge 3004 | RAL 3004 satiné | Prix préférentiel (11 coloris) |
-| Laquée satinée | Gris 7016 | RAL 7016 satiné | Prix préférentiel (11 coloris) |
-| Laquée granitée | Gris 2900 | Granité | Prix préférentiel (11 coloris) |
-| Laquée granitée | Gris 7016 | Granité | Prix préférentiel (11 coloris) |
-| Laquée granitée | Gris 7039 | Granité | Prix préférentiel (11 coloris) |
-| Laquée granitée | Gris 7035 | Granité | Prix préférentiel (11 coloris) |
-| Laquée granitée | Noir 2100 | Granité | Prix préférentiel (11 coloris) |
-| Laquée granitée | Noir 9005 | Granité | Prix préférentiel (11 coloris) |
-| Laquée granitée | Marron 8019 | Granité | Prix préférentiel (11 coloris) |
-| Anodisé laqué contretypé | Argent | Anodisé argent contretypé | Prix préférentiel (11 coloris) |
-| Anodisé laqué contretypé | Champagne | Anodisé champagne contretypé | Prix préférentiel (11 coloris) |
-| Autres laquages | Toutes teintes RAL | Finition satinée ou granitée | Option sur mesure |
-
-## Intérieur PVC
-
-* **Teinté dans la masse** : Blanc 9016 (1 ou 2 faces) ou Ivoire proche 9001 (référence 607 KÖMMERLING®, 2 faces uniquement) [1 p. 12].
-* **Laquage sur PVC** : réalisable en toutes teintes RAL en 2 faces identiques, **exclusivement sous condition d'ouverture extérieure** [1 p. 12].
+L'HYBRIDE a un nuancier par face : intérieur PVC teinté dans la masse (blanc 9016, ivoire),
+extérieur aluminium laqué (blanc 9016 brillant standard et onze couleurs à prix préférentiel), et
+un laquage PVC sous condition d'ouverture extérieure. Le nuancier complet est sur
+[Coloris HYBRIDE](/coloris/coloris-hybride.md) [1 p. 12].
 
 # Ce qui n'est pas réalisable
 
-Les restrictions techniques de fabrication s'établissent comme suit :
-
-* **Aucun cintrage réalisable** : le sertissage mécanique d'un profil aluminium épais sur le profilé PVC ne permet pas le passage en cintreuse d'atelier.
-* **Laquage PVC restreint** : le laquage de la face intérieure PVC est interdit en ouverture intérieure standard, et demeure réservé aux ouvertures extérieures [1 p. 12].
-* **Fausses crémones incompatibles avec serrures** : montage impossible sur les portes-fenêtres équipées d'un verrouillage par serrure à clé [1 p. 11].
+- **Laquage** : possible si ouverture extérieure, uniquement sur PVC [1 p. 12] ; « uniquement sur
+  menuiserie PVC en cas de cintrage et/ou ouverture extérieure » [2 p. 3, 3 p. 3] (**VER-49**).
+- **Pas de fausse crémone décorative sur une porte-fenêtre avec serrure** [1 p. 11].
 
 # Citations
 
-[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 9 à 12, et 35
-[2] [Brochure HYBRIDE, édition mars 2025](raw/brochure-hybride-2025-03.pdf), p. 1 à 8
-[3] [Dépliant HYBRIDE, édition juin 2023](raw/depliant-hybride-2023-06.pdf), p. 1 à 6
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 10 à 12
+[2] [Brochure HYBRIDE, édition mars 2025](raw/brochure-hybride-2025-03.pdf), p. 1 à 3
+[3] [Dépliant HYBRIDE, édition juin 2023](raw/depliant-hybride-2023-06.pdf), p. 2 et 3
 
 # Voir aussi
 
 - [PERFORM](/gammes/perform.md)
 - [HYBRIDE+](/gammes/hybride-plus.md)
+- [Coloris HYBRIDE](/coloris/coloris-hybride.md)
+- [Arguments de vente HYBRIDE](/commercial/hybride.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
 - [LUMINE](/gammes/lumine.md)
 - [TEXTURAL](/gammes/textural.md)
 - [KÖMMERLING](/fournisseurs/kommerling.md)

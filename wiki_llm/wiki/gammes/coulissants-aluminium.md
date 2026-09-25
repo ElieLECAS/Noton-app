@@ -7,7 +7,7 @@ gamme: LUMINE
 systeme: [SOLEAL GY, LUMEAL GA]
 fournisseur: TECHNAL
 usage: chiffrage
-status: stable
+status: draft
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
@@ -37,10 +37,21 @@ generated:
 
 PROFERM fabrique quatre gammes de coulissants en aluminium, rattachées à l'offre [LUMINE](/gammes/lumine.md) et développées sur profilés [TECHNAL](/fournisseurs/technal.md) [1 p. 16] :
 
-* **SOLÉAL55** : coulissant aluminium traditionnel sur module de 55 mm à rupture de pont thermique de 20 mm, déclinable de 2 à 8 vantaux sur 2 à 4 rails.
-* **GALANDAGE55** : coulissant à galandage escamotable dans les cloisons, module de 55 mm à rupture de pont thermique de 20 mm, de 1 à 4 vantaux sur 1 à 3 rails.
-* **LUMÉAL55** : baie coulissante à ouvrant caché minimaliste (68 mm et 77 mm d'aluminium visible), procurant un gain de 8 à 14 % de clair de vitrage et une masse d'aluminium réduite de 35 %.
-* **LUMINE65** : coulissant à hautes performances thermiques et acoustiques sur profilé de 65 mm, assurant un clair de jour optimisé.
+* **SOLÉAL55** : coulissant en aluminium composé d'un module de 55 mm d'épaisseur à rupture de pont thermique de 20 mm (coupure isolante entre les faces extérieure et intérieure du profilé) ; 2 à 8 vantaux, 2 à 4 rails possibles.
+* **GALANDAGE55** : coulissant à galandage en aluminium (les vantaux s'effacent dans l'épaisseur du mur ou de la cloison), module de 55 mm à rupture de pont thermique de 20 mm ; 1 à 4 vantaux, jusqu'à 3 rails possibles.
+* **LUMÉAL55** : baie coulissante en aluminium à ouvrant caché ; gain de 8 à 14 % de clair de vitrage suivant son type de pose, masse d'aluminium réduite (-35 %) avec seulement 68 mm et 77 mm d'aluminium visible.
+* **LUMINE65** : coulissant avec un profil de 65 mm.
+
+Ce que la marque annonce de chaque coulissant est sur [Arguments de vente LUMINE](/commercial/lumine.md).
+
+| Coulissant | Photo |
+| --- | ---: |
+| SOLÉAL55 | ![Coulissant SOLÉAL55](/assets/gammes/coulissants-aluminium/soleal55.png) |
+| GALANDAGE55 | ![Coulissant GALANDAGE55](/assets/gammes/coulissants-aluminium/galandage55.png) |
+| LUMÉAL55 | ![Coulissant LUMÉAL55](/assets/gammes/coulissants-aluminium/lumeal55.png) |
+| LUMINE65 | ![Coulissant LUMINE65](/assets/gammes/coulissants-aluminium/lumine65-coulissant.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16)
 
 # Caractéristiques
 
@@ -48,50 +59,61 @@ Spécifications dimensionnelles, thermiques et vitrages des quatre baies couliss
 
 | Modèle | Module (mm) | Rupture de pont thermique (mm) | Type d'ouvrant | Vitrage standard (mm) | Uw minimal (W/m²K) |
 | --- | --- | --- | --- | --- | --- |
-| SOLÉAL55 | 55 | 20 | Apparent | 6 / 14 / 4 | 1,4 |
-| GALANDAGE55 | 55 | 20 | Apparent | 6 / 14 / 4 | 1,4 |
-| LUMÉAL55 (LUMEAL GA) | 100 (2R) / 151 (3R) | 33 (dormant) / 22 (ouvrant) | Caché | 28 (6/18/4) | 1,2 |
-| LUMINE65 | 65 | - | Apparent | 28 (6/18/4), 32 mm possible | 1,6 |
+| SOLÉAL55 | 55 | 20 | - | - | - |
+| GALANDAGE55 | 55 | 20 | - | - | - |
+| LUMÉAL55 (LUMEAL GA) | 100 (2R) / 151 (3R) | 33 (dormant) / 22 (ouvrant) | caché | 28 (6/18/4) | 1,2 |
+| LUMINE65 | 65 | - | - | 28 (6/18/4), 32 mm possible | 1,6 (coulissant 2 vantaux 2 180 × 2 350 mm) |
+
+Le Uw de 1,4 W/m²K « en CV » sur vitrage 6/14/4 est donné pour « les coulissants » sans nom de produit : il n'est rattaché ni au SOLÉAL55 ni au GALANDAGE55 (**INC-02**, **VER-35**) [1 p. 17].
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 16-17 ; wiki_llm/a_faire/LUMEAL-GA-catalogue-conception-5156-007-012021-FR.pdf, p. 4)
 
 ## Équipements communs
 
-Toutes les configurations de coulissants et galandages aluminium bénéficient des aménagements suivants [1 p. 17] :
-* **Drainage invisible** : évacuation des eaux d'infiltration dissimulée sur l'ensemble des châssis.
-* **Accessibilité PMR** : intégration possible d'un seuil encastré dans le sol en construction neuve, ou d'un profil de rampe d'accès adapté en rénovation.
-* **Conformité énergétique** : menuiseries conformes aux exigences RT 2012 et label BBC.
+L'ensemble des configurations possibles se décline en drainage caché. Toutes les menuiseries peuvent être proposées avec un accès PMR (personnes à mobilité réduite) : en neuf, le seuil est encastré dans le sol ; en rénovation, le profil de rampe d'accès est adapté. Les coulissants et galandages sont normés RT 2012 et BBC (réglementation thermique 2012, label bâtiment basse consommation) [1 p. 17].
+
+Les poignées de coulissant, le verrou de sécurité, les croisillons et les soubassements, avec leurs finitions et leurs images, sont sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) [1 p. 17].
 
 # Dimensions limites
 
 ## SOLÉAL55
 
-Largeurs de fabrication par configuration de vantaux et de rails [1 p. 16] :
+Largeur minimale et largeurs maximales du SOLÉAL55 par nombre de vantaux, en millimètres ; une
+ligne par nombre de vantaux [1 p. 16].
 
-| Configuration | Rails | Largeur minimale (mm) | Largeur maximale (mm) |
-| --- | --- | --- | --- |
-| 2 vantaux | 2 rails | 800 | 3 500 |
-| 3 vantaux | 3 rails | 800 | 5 400 |
-| 4 vantaux | 2 rails | 800 | 5 500 |
-| 4 vantaux | 4 rails | 800 | 6 200 |
-| 6 vantaux | 3 rails | 800 | 6 200 (sur demande) |
-| 8 vantaux | 4 rails | 800 | 6 200 (sur demande) |
+| Nombre de vantaux | Largeur minimale (mm) | Largeur maximale (mm) |
+| --- | --- | --- |
+| 2 vantaux | 800 | 3 500 |
+| 3 vantaux | 800 | 5 400 |
+| 4 vantaux | 800 | 5 500 |
+| 6 à 8 vantaux | 800 | 6 200 |
+
+Les configurations dessinées sont : 2 vantaux - 2 rails, 3 vantaux - 3 rails, 4 vantaux - 2 rails,
+4 vantaux - 4 rails, 6 vantaux - 3 rails\* et 8 vantaux - 4 rails\*. \*Tarif et faisabilité sur
+demande [1 p. 16]. Sur les schémas, chaque case bleue est un vantail, les flèches montrent les sens
+de coulissement dessinés.
+
+![Largeurs et configurations du SOLÉAL55](/assets/gammes/coulissants-aluminium/soleal55-configurations.png)
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 16)
 
-Les réalisations en 6 vantaux / 3 rails et 8 vantaux / 4 rails font l'objet d'une tarification et d'une validation de faisabilité spécifiques [1 p. 16].
-
 ## GALANDAGE55
 
-Largeurs de baie admises pour l'intégration en refend ou cloison doublée [1 p. 16] :
+Largeur minimale et largeurs maximales du GALANDAGE55, en millimètres ; une ligne par
+configuration, telle qu'imprimée sous chaque cote [1 p. 16].
 
-| Configuration | Rails | Largeur minimale (mm) | Largeur maximale (mm) |
-| --- | --- | --- | --- |
-| 1 vantail | 1 rail | 800 | 1 800 |
-| 2 vantaux | 1 rail | 800 | 3 200 |
-| 2 vantaux | 2 rails | 800 | 3 600 |
-| 4 vantaux | 2 rails | 800 | 4 200 |
-| 3 vantaux | 3 rails | 800 | 4 800 |
+| Configuration | Largeur minimale (mm) | Largeur maximale (mm) |
+| --- | --- | --- |
+| 1 vantail | 800 | 1 800 |
+| 2 vantaux | 800 | 3 200 |
+| 2 vantaux - 2 rails | 800 | 3 600 |
+| 4 vantaux - 2 rails | 800 | 4 200 |
+| 3 vantaux - 3 rails | 800 | 4 800 |
+
+Les configurations dessinées sont : 1 vantail, 2 vantaux - 1 rail, 2 vantaux - 2 rails, 3 vantaux -
+3 rails et 4 vantaux - 2 rails [1 p. 16].
+
+![Largeurs et configurations du GALANDAGE55](/assets/gammes/coulissants-aluminium/galandage55-configurations.png)
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 16)
 
@@ -118,7 +140,11 @@ Abaques d'encombrement, performances et spécifications du coulissant à ouvrant
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/depliant-lumeal-2026-04.pdf, p. 2)
 
-Configurations réalisables : 2 vantaux / 2 rails, 3 vantaux / 2 ou 3 rails, 4 vantaux / 2 ou 3 rails, 6 vantaux / 3 rails [1 p. 16, 2 p. 2]. La validation technique auprès du bureau d'études PROFERM est requise avant enregistrement de commande.
+Configurations dessinées : 2 vantaux - 2 rails, 3 vantaux - 2 ou 3 rails, 4 vantaux - 2 rails, 6 vantaux - 3 rails [1 p. 16] ; 4 vantaux sur 2 ou 3 rails [2 p. 2]. Se rapprocher d'un technicien PROFERM afin de valider la faisabilité avant de passer commande [1 p. 16].
+
+![Configurations du LUMÉAL55](/assets/gammes/coulissants-aluminium/lumeal55-configurations.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 16)
 
 
 ## LUMINE65
@@ -132,66 +158,61 @@ Limites dimensionnelles et spécifications de profilés du coulissant LUMINE65 [
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 16 ; raw/brochure-lumine65-2025-02.pdf, p. 3)
 
-Spécifications techniques propres au coulissant LUMINE65 [3 p. 3] :
-* **Montant central** : 68 mm d'aluminium visible avec inertie renforcée.
-* **Montant chicane** : 38 mm d'épaisseur pour maximiser le clair de vitrage.
-* **Traverse haute** : brosse linéaire continue d'étanchéité et de finition.
-* **Vitrage** : 28 mm (6/18/4) de série, épaisseur de 32 mm admissible.
-* **Performances acoustiques et thermiques** : affaiblissement acoustique jusqu'à 36 dB, Uw jusqu'à 1,6 W/m²K sur châssis 2 vantaux $2\,180 \times 2\,350 \text{ mm}$.
-* **Classement d'étanchéité certifié** : A\*4 / E\*6A / V\*A3 en 2 vantaux [CTR-11].
-* **Dénomination poignée encastrée** : référencée sous le nom **MLINI** dans la brochure produit (référencée **DEHLI** au catalogue général) [CTR-12].
+Largeur maximale de la baie : 6 m. Se rapprocher d'un technicien PROFERM afin de valider la faisabilité avant de passer commande [1 p. 16].
+
+![Largeurs et configurations du coulissant LUMINE65](/assets/gammes/coulissants-aluminium/lumine65-configurations.png)
+
+Le coulissant LUMINE65 se fait en 2 vantaux - 2 rails ou 4 vantaux - 2 rails, en vitrage 28 mm :
+6 | 18 | 4, 32 mm possible [3 p. 3]. Un rail est la glissière sur laquelle roule un vantail.
+
+Trois avantages sont donnés pour le coulissant LUMINE65, dans ces termes [3 p. 3] :
+
+* **Inertie optimisée au niveau du montant central.**
+* **Clair de jour optimal** : montant central de 68 mm et montant chicane de 38 mm (le clair de jour
+  est la surface de passage de la lumière).
+* **Brosse linéaire d'étanchéité et de finition sur traverse haute.**
+
+Performances du coulissant LUMINE65 [3 p. 3] : Uw jusque 1,6 W/m²K (coulissant 2 vantaux
+2 180 × 2 350 mm) ; performance acoustique jusqu'à 36 dB ; barrière centrale d'étanchéité par
+rupture de pont thermique, dont le classement A\*E\*V est sur
+[Labels et certifications](/certifications/labels-et-certifications.md) (**CTR-11**). La poignée
+encastrée du coulissant LUMINE65 est nommée **MLINI** et dessinée autrement que la DEHLI du
+catalogue général (**CTR-12**) : voir [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md).
 
 # Quincaillerie et poignées
 
-Les coulissants aluminium reçoivent une sélection de poignées et organes de manœuvre adaptée à chaque gamme de profilé [1 p. 17] :
-
-| Modèle de poignée | Type d'organe | SOLÉAL55 et GALANDAGE55 | LUMÉAL55 | LUMINE65 | Finitions disponibles |
-| --- | --- | --- | --- | --- | --- |
-| Sécustik® ATLANTA | Poignée à clé / standard | Oui | Oui | Oui | Blanc, aspect inox, caramel, laiton |
-| Sécustik® TOULON | Poignée standard | Oui | Oui | Oui | Noir, 7016, aspect inox, blanc |
-| SEOUL | Cuvette de tirage | Oui (en option) | Oui (en option) | Oui (en option) | Noir, 7016, aspect inox, blanc |
-| DEHLI | Poignée encastrée | Oui (en option) | Oui (en option) | Oui (en option) | Inox, blanc, noir |
-| SYDNEY | Poignée sur ouvrant principal | Oui (en option) | - | Oui (en option) | Inox, blanc, noir |
-| MILAN | Poignée sur semi-fixe | Oui (en option) | - | Oui (en option) | Inox, blanc, noir |
-| Technal® SHANGHAI | Poignée sur ouvrant principal | Oui (en option) | - | - | Inox, blanc, noir, 7016 |
-| Technal® PEKIN | Poignée sur ouvrant principal | Oui (en option) | - | - | F9, blanc, noir, 7016 |
-| Technal® GRENADE | Poignée sur semi-fixe | Oui (en option) | - | - | Inox, blanc, noir, 7016 |
-| Technal® BERLIN | Poignée béquille | Oui (en option) | Oui (en option) | - | Inox, blanc, noir, 7016 |
-| Technal® ANTIBES | Poignée béquille | Oui (en option) | Oui (en option) | - | Noir, 7016, aspect inox, blanc |
-| Technal® OSAKA | Poignée de tirage | - | Oui (en option) | - | Inox |
-| Technal® KOBE | Bouton de manœuvre | - | Oui | - | Inox |
-| Technal® TOKYO | Poignée droite | - | Oui (en option) | - | Inox |
-| Technal® KYOTO | Poignée inclinée | - | Oui (en option) | - | Inox |
-| Verrou de sécurité | Verrou d'ouvrant en applique | Oui (en option) | - | - | Blanc, noir |
-
-(schéma: raw/catalogue-general-2026-01.pdf, p. 17)
+Les poignées des coulissants dépendent du produit : Sécustik® ATLANTA et TOULON, SEOUL et DEHLI
+pour tous les coulissants ; SYDNEY et MILAN sur LUMINE65 ; SYDNEY, SHANGHAI, PEKIN, MILAN,
+GRENADE, BERLIN et ANTIBES sur SOLÉAL et GALANDAGE ; OSAKA, KOBE, TOKYO, KYOTO, BERLIN et ANTIBES
+sur LUMÉAL. Finitions, options et images de chaque modèle :
+[Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) [1 p. 17].
 
 # Performances et certifications
 
-* **Classement CSTB A\*E\*V** : certifié **A\*4 / E\*6A / V\*B2** pour l'ensemble des coulissants aluminium au catalogue général [1 p. 17]. *(Pour les procès-verbaux spécifiques par produit, le LUMINE65 est classé A\*4 / E\*6A / V\*A3 et le LUMÉAL A\*4 / E\*7A / V\*B3 [CTR-08, CTR-11]).*
+* **Classement CSTB A\*E\*V** : les classements des coulissants aluminium, sans produit nommé et par produit (LUMINE65 : **CTR-11** ; LUMÉAL : **CTR-08**), sont sur [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 17, 3 p. 3].
 * **Déperditions thermiques globales** : Uw jusqu'à 1,4 W/m²K en coulissant standard avec vitrage 6/14/4, Sw = 0,51 et TLw = 0,57 [1 p. 17]. Sur le LUMÉAL55, le coefficient Uw descend à 1,2 W/m²K [1 p. 16].
 * **Garantie ferrure Technal** : couverte par la garantie contractuelle [CTR-09].
 
 # Coloris
 
-Disponibilité des finitions sur SOLÉAL55 et GALANDAGE55 [1 p. 18] :
-* **Blanc 9016 brillant**.
-* **Chêne doré** : disponible en 2 faces uniquement.
-* **Laquage toutes teintes RAL** : finitions satinée ou granitée au choix, et teintes personnalisées sur demande.
+SOLÉAL55, GALANDAGE55 et LUMÉAL55 se font en blanc 9016 brillant, en chêne doré 2 faces
+uniquement, et en laquage toutes teintes RAL (satiné ou granité) ; le coulissant LUMINE65 suit le
+nuancier LUMINE65. Nuancier complet : [Coloris LUMINE](/coloris/coloris-lumine.md) [1 p. 18].
 
-Sur le coulissant à ouvrant caché **LUMÉAL55**, le nuancier dédié exclut formellement la bicoloration (« Pas de bicoloration possible ») et le Chêne doré [2 p. 2, 4 p. 3, CTR-10] :
-* **3 Couleurs extérieures standards** : Blanc 9016 brillant (1 face), Anthracite 7016 satiné (1 et 2 faces), Anthracite 7016 granité (1 et 2 faces).
-* **7 Couleurs extérieures à prix préférentiel** : Rouge 3004 satiné, Gris 7035 granité, Gris 2900 granité, Gris 7039 granité, Noir 2100 granité, Noir 9005 granité, Marron 8019 granité (1 face).
+Le nuancier propre du **LUMÉAL55** diffère du nuancier général : pas de bicoloration, pas de chêne
+doré, trois couleurs extérieures standards et sept à prix préférentiel ; la liste du dépliant est
+retenue (**CTR-10**) [2 p. 2, 4 p. 3] :
+
+* **3 couleurs extérieures standards** : Blanc 9016 brillant (1 face), Anthracite 7016 satiné (1 et 2 faces), Anthracite 7016 granité (1 et 2 faces).
+* **7 couleurs extérieures à prix préférentiel** : Rouge 3004 satiné, Gris 7035 granité, Gris 2900 granité, Gris 7039 granité, Noir 2100 granité, Noir 9005 granité, Marron 8019 granité (1 face).
 * **Laquage sur mesure** : teinte au choix réalisée dans les cabines internes de laquage PROFERM.
-
-Les finitions du coulissant LUMINE65 reprennent les 11 coloris thermolaqués QUALICOAT Classe 2 détaillés sur la page [LUMINE](/gammes/lumine.md) [1 p. 18].
 
 # Ce qui n'est pas réalisable
 
 * **Cintrage et formes hors d'équerre** : incompatibles avec les rails de roulement des chariots coulissants.
-* **Chêne doré en mono-face** : le plaxage chêne doré sur coulissant aluminium est réservé aux configurations 2 faces [1 p. 18].
+* **Chêne doré en 2 faces uniquement** sur SOLÉAL55, GALANDAGE55 et LUMÉAL55 [1 p. 18] ; pas de chêne doré du tout selon le dépliant LUMÉAL (**CTR-10**).
 * **Bicoloration sur LUMÉAL55** : interdite par la fiche produit officielle [2 p. 2].
-* **Grandes baies 6 et 8 vantaux sans étude préalable** : les largeurs supérieures à 5 500 mm en SOLÉAL55 nécessitent une validation de faisabilité [1 p. 16].
+* **SOLÉAL55 en 6 vantaux - 3 rails et 8 vantaux - 4 rails** : tarif et faisabilité sur demande [1 p. 16].
 
 # Citations
 
@@ -204,6 +225,9 @@ Les finitions du coulissant LUMINE65 reprennent les 11 coloris thermolaqués QUA
 # Voir aussi
 
 - [LUMINE](/gammes/lumine.md)
+- [Coloris LUMINE](/coloris/coloris-lumine.md)
+- [Arguments de vente LUMINE](/commercial/lumine.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
 - [Profilés dormants et rails SOLEAL GY 55](/profiles/soleal-gy-dormants-et-rails.md)
 - [Cotes de débit SOLEAL GY 55](/profiles/soleal-gy-cotes-de-debit.md)
 - [Profilés dormants et ouvrants LUMEAL GA](/profiles/lumeal-ga-dormants-et-ouvrants.md)

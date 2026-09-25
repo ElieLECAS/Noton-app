@@ -1,7 +1,7 @@
 ---
 type: Document source
 title: Posters Système 76 Advanced, 2022
-description: Deux planches A0 profine recensant l'intégralité des profilés principaux et complémentaires du système 76 Advanced, avec leurs capots aluminium, renforts acier associés, accessoires et kits d'assemblage.
+description: Deux planches profine recensant l'intégralité des profilés principaux et complémentaires du système 76 Advanced, avec leurs capots aluminium, renforts acier associés, accessoires et kits d'assemblage.
 tags: [poster, profine, systeme-76-advanced, profile, reference, renforts, capotage, parcloses]
 systeme: 76
 fournisseur: KÖMMERLING
@@ -22,131 +22,100 @@ generated:
 
 # Identité
 
-| Élément | Valeur |
-| --- | --- |
-| Éditeur | profine |
-| Édition | 2022 |
-| Format | deux planches **A0**, une page chacune |
-| Nature | **cartes de référence d'atelier**, dessin vectoriel à l'échelle |
+| Élément | Poster des profilés principaux | Poster des profilés complémentaires |
+| --- | --- | --- |
+| Fichier | `raw/poster-systeme-76-advanced-principaux-2022.pdf` | `raw/poster-systeme-76-advanced-complementaires-2022.pdf` |
+| Titre porté | « SYSTÈME 76 ADVANCED — PROFILÉS PRINCIPAUX » | « SYSTÈME 76 ADVANCED — PROFILÉS COMPLÉMENTAIRES » |
+| Éditeur | profine (logo « profine International Profile Group ») | profine |
+| Édition | 2022, référence « PROFINE/70/POSTERPLAN76PCAO/2022 » | 2022, même référence |
+| Pages | 1 | 1 |
+| Format du PDF | page A4 portrait (595 × 842 pt), planche paysage tournée de 90° | idem |
+| Nature | atelier : carte de référence des profilés, dessin vectoriel coté | idem |
 
-Les deux planches recensent en coupe l'intégralité des profilés du **Système 76 Advanced** à joint central : profilés principaux d'un côté, profilés complémentaires de l'autre.
+Les deux posters portent en marge droite la mention « Sous réserve de
+modifications techniques - PROFINE/70/POSTERPLAN76PCAO/2022 ». Le « 70 » de cette référence
+figure sur des posters du système 76, et les deux posters portent la même référence.
 
-# Planche 1 : Profilés principaux (2022)
+Le PDF est une **réduction au format A4** de la planche grand format : les cotes ne se lisent
+qu'à partir d'un rendu à 600 dpi. La planche porte en coupe chaque profilé avec ses cotes, son
+capot aluminium dessiné à gauche et la liste des renforts admis écrite dans sa chambre ; les
+renforts sont dessinés à part, avec leurs inerties ; une colonne de droite porte les tableaux de
+sets d'assemblage.
 
-## 1. Cadres dormants et dormants fixes
-- **76171** ($74 \times 62\text{ mm}$, feuillure 28 mm) : capot alu **A033** ou demi-capot **A385** sur clips **M569**. Renforts : V306.Z, V307.Z, V308, V309.Z, V310, V329.
-- **76172** ($92 \times 62\text{ mm}$) : capot alu **A034**. Renforts : V314.Z, V325, V326.Z.
-- **76173** ($76 \times 62\text{ mm}$) : capot alu **A035**, capot spécial **A073**, **A506T**. Renforts : V306.Z, V307.Z, V308, V309.Z, V310.
-- **76180** (dormant neuf aile 20 mm, $66 \times 62\text{ mm}$) : capot alu **A314**. Renforts : V306.Z, V307.Z, V308, V309.Z, V310.
-- **76177** (dormant rénovation aile 40 mm, $63 \times 62\text{ mm}$) : capot alu **A313**. Renfort : **V291.Z**.
-- **76185** (dormant rénovation aile 60 mm, $63 \times 62\text{ mm}$) : capot alu **A313**. Renfort : **V291.Z**.
-- **76178** (dormant rénovation aile moulurée 60 mm, $93 \times 62\text{ mm}$) : capot alu **A313**, cache rainure **953800**. Renfort : **V291.Z**.
-- **76101** (cadre fixe exclusif $46 \times 62\text{ mm}$) : capot alu **A030**. Renforts : V306.Z, V307.Z, V308, V309.Z, V310, V329.
-- **76102** (cadre fixe exclusif $64 \times 62\text{ mm}$) : capot alu **A031**. Renforts : V314.Z, V325, V326.Z.
+# Registre de couverture
 
-## 2. Meneaux dormants
-- **76372** (meneau dormant 98 mm / 42 mm) : capot alu **A048**. Renforts : V318.Z, V319.
-- **76373** (meneau dormant 124 mm / 68 mm) : capot alu **A346**. Renforts : V322, V323.Z, V324.
+Chaque poster fait une page ; le registre est tenu **par zone de la planche**, lue la planche
+tournée pour que le titre se lise à l'horizontale (titre en haut à gauche, logo en haut à droite).
+Rendu : 600 dpi, lu par tuiles d'environ 1/20 de la planche.
 
-## 3. Cadres ouvrants et traverses d'ouvrant
-- **76281** (ouvrant droit $76 \times 49\text{ mm}$) : capot alu **A042**. Renfort : **V266.Z**.
-- **76275** (ouvrant galbé $76 \times 49\text{ mm}$) : capot alu **A043**, embout **M564**. Renfort : **V266.Z**.
-- **76274** (ouvrant semi-affleurant $76 \times 17\text{ mm}$) : capot alu **A042**. Renfort : **V266.Z**.
-- **76276** (ouvrant semi-affleurant galbé $76 \times 17\text{ mm}$) : capot alu **A043**. Renfort : **V266.Z**.
-- **76271** (ouvrant standard $76 \times 57\text{ mm}$) : capot alu **A072**. Renforts : V306.Z, V307.Z, V308, V309.Z, V310.
-- **76272** (ouvrant porte ouvrant intérieur $76 \times 89\text{ mm}$) : capot alu **A044**. Renforts : V314.Z, V325, V326.Z.
-- **76279** (ouvrant porte ouvrant extérieur $76 \times 89\text{ mm}$) : capot alu **A044**, embout **M164**. Renforts : V314.Z, V325, V326.Z.
-- **76283** (ouvrant de porte lourd ouvrant int.) : capot alu **A039**, profil **T038**, renfort V314.Z/V325.
-- **76201** (ouvrant porte ouvrant ext.) : capot alu **A037**.
-- **76401, 76402** : profilés d'ouvrant spéciaux avec capots **A049, A050**.
-- **76207, 76206** : avec capot **A041**, embout **M335**.
-- **76299** (traverse complémentaire ouvrant 97 mm) : capot alu **A055**, renfort **V323.Z**.
-- **76300** (croisillon ouvrant $76 \times 26\text{ mm}$) : capot alu **A045**, renfort **V312.Z**.
-- **76301** (traverse ouvrant $76 \times 42\text{ mm}$) : capot alu **A069**, renfort **V320.Z**.
-- **76303** (traverse ouvrant $76 \times 68\text{ mm}$) : capot alu **A070**, embouts **M528, M529**, renforts V322, V323.Z, V324.
+## Poster des profilés principaux, page 1
 
-## 4. Battements centraux
-- **76471** (battement extérieur 62 mm) : capot alu **A051**, renfort **V316**.
-- **76472** (battement extérieur 80 mm) : capot alu **A052**, renfort **V317**.
-- **76473** (battement extérieur fin 46 mm) : capot alu **A318**, embouts **M462, M501**, renfort inox extérieur **VSF01**.
-- Embouts battements extérieurs : **Set M285D/L, Set M286D/L, Set M288D/L, Set M289D/L, M106, M107, M108, M109, M110, M111**.
-- Embouts battements intérieurs : **Set M100, Set M102, Set M279, Set M280**.
+| Zone de la planche | Contenu | État | Page du wiki |
+| --- | --- | --- | --- |
+| en-tête | titre « SYSTÈME 76 ADVANCED PROFILÉS PRINCIPAUX », logo profine, filet | sans contenu propre | - |
+| marge droite | mention « Sous réserve de modifications techniques - PROFINE/70/POSTERPLAN76PCAO/2022 » | transcrit | cette fiche, *Identité* |
+| bande 1, pleine largeur | dormants 76171, 76172, 76173, 76180, 76177, 76185, 76178 ; capots A385, A033, A034, A506T, A073, A035, A314, A313 ; clip M569 ; profilé 95 38 00 ; renforts écrits dans les coupes | transcrit | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md), [Renforts du système 76](/profiles/systeme-76-renforts.md) |
+| bandes 2 et 3, à gauche et au centre | ouvrants 76281, 76275, 76274, 76276, 76271, 76272, 76279, 76283 ; capots A042 (deux dessins), A072, A043, A044, A039 ; pièces M564, M463, M164, T038 | transcrit | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
+| bandes 2 et 3, au centre | battements 76471, 76472, 76473 ; capots A051, A052, A318 ; embouts M462, M501 | transcrit | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
+| bandes 2 et 3, au centre | seuils A076 (avec A065 et Z151), A075, A077 ; pièces G067, G255 | transcrit | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| bandes 2 et 3, à droite | meneaux 76372, 76373 ; capots A048, A346 ; embouts Set M285D/L, M286D/L, M288D/L, M289D/L, M106D/L à M111 | transcrit | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
+| bande 3, au centre | joints G049.T, G050.T, G046, G161, G051.T, G051 | transcrit | [Joints et garnitures des systèmes profine](/profiles/joints-et-garnitures-profine.md) |
+| bande 4, au centre | embouts et pièces M175, M179, M261, M163, M178, M162, M177, M165, A066, A067, A068, M323, M342, G026, M136, M161 | transcrit | [Assemblages du système 76](/profiles/systeme-76-assemblages.md) |
+| bandes 4 et 5, à gauche | traverses 76300, 76301, 76303, 76299 ; capots A045, A046, A069, A047, A070, A055 ; pièces M527, M528, M529 | transcrit | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
+| bandes 4 à 6, au centre | cadres fixes 76101, 76102 ; capots A030, A031 | transcrit | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
+| bandes 4 à 6, au centre et à droite | profilés 76201, 76206, 76207, 76401, 76402, 76404 ; capots A037, A073, A040, A041, A049, A050 ; embout M335 ; embouts Set M279, M280, M282, M283, M100 à M105 | transcrit | [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) |
+| bandes 4 à 6, à droite | pièces M682 « cache vis », M488 | transcrit | [Assemblages du système 76](/profiles/systeme-76-assemblages.md) |
+| bandes 5 et 6, pleine largeur | 22 dessins de renforts cotés avec IG et IW : V306.Z à V310, V266.Z, V291.Z, V316, V312.Z, V314.Z, V353, V326.Z, V325, V337/V339 R/L, V322, V323.Z, V260, V333/V335 R/L, V320.Z, V318.Z, V319, V317 | transcrit | [Renforts du système 76](/profiles/systeme-76-renforts.md) |
+| colonne de droite | supports M137, M138, M139 ; huit tableaux de sets et pièces d'assemblage sur seuils A076, A077, A075 et de pièces d'assemblage de traverse | transcrit | [Assemblages du système 76](/profiles/systeme-76-assemblages.md) |
+| coin inférieur droit | M137, J079, rejets A061, A062, A063, A064 avec G060, G056, G229 | transcrit | [Assemblages du système 76](/profiles/systeme-76-assemblages.md) |
 
-## 5. Seuils aluminium et accessoires d'étanchéité
-- Seuils : **A075** ($76 \times 26\text{ mm}$), **A076** ($76 \times 20\text{ mm}$), **A077** ($123 \times 20\text{ mm}$), **A343** ($135 \times 20\text{ mm}$).
-- Accessoires de seuil : cales **Z151**, bouchon **G067**, patin mousse **G255**.
-- Rejets d'eau et embouts : **A062, A064, A066, A067, A068**, embouts **M175, M179, M261, M163, M178, M323, M329, M165, M177, M162, M136, G026, M161**.
-- Cales de vitrage : **M137, M138, M139**.
-- Équerre d'angle de feuillure : **J079**.
+Images découpées : `wiki/assets/profiles/systeme76/` (dossiers `dormants`, `ouvrants`,
+`battements`, `meneaux`, `autres`, `embouts`, `seuils`, `joints`, `accessoires`, `renforts`).
 
-## 6. Sets d'assemblage et pièces mécaniques
-- **Sets sur seuils A076 et A077 sans grugeage** :
-  - pour 76171 : M154 + M170
-  - pour 76172 : M154 + M171
-  - pour 76177 : M154 + M173
-  - pour 76180 : M154 + M174
-  - pour 76372 : M154 + M175
-- **Sets sur seuils A076 et A077 avec grugeage** :
-  - pour 76171, 76172, 76177, 76180, 76372 : **M150 + J064**
-- **Sets sur seuil A075 avec grugeage** : **M150 + J064 + G067**.
-- **Pièces d'assemblage traverse / dormant** : J008, J009, J055, J056, entretoises S048, S049, S050.
-- **Pièces d'assemblage traverse / ouvrant** : J050, J051, J052, J053, J054, J145, J156, J175, J214.
+Sur ce poster, V324 et V329 ne sont pas dessinés ; le 76185 est absent des tableaux de sets
+(**VER-44**).
 
----
+## Poster des profilés complémentaires, page 1
 
-# Planche 2 : Profilés complémentaires (2022)
+| Zone de la planche | Contenu | État | Page du wiki |
+| --- | --- | --- | --- |
+| en-tête | titre « SYSTÈME 76 ADVANCED PROFILÉS COMPLÉMENTAIRES », logo profine, filet | sans contenu propre | - |
+| marge droite | mention « Sous réserve de modifications techniques - PROFINE/70/POSTERPLAN76PCAO/2022 », identique au premier poster | transcrit | cette fiche, *Identité* |
+| colonne de gauche | élargisseurs 76700 à 76703 et variantes 76710, 76711, 76712 « pour capot AluClip » ; capots A120, A121, A124 ; embouts M302, M303, M306 à M309 ; profilés 76708, 76714 ; embouts M310, M311 | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| deuxième colonne | profilés 76704, 76706, 76709, 76713, 76705 ; embouts M304, M305 (deux dessins chacun) | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| deuxième à quatrième colonnes, en haut | profilés de pied de dormant 76754, 76750, 76776, 76751, 76755, 76752, 76764, 76762, 76765, 76763, 76757, 76756, 76761, 76822 ; profilés 76800, 76801, 76802 ; pièces G085, M721 | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| deuxième colonne, au centre | appuis 6136, 6137, 76758, 76768 avec « Embout de remplissage » M780, M781, M782 ; nez d'appui 4319 | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| ligne des tapées | tapées 6138, 6139, 6140, 6141, 6142, 76772, 76769 ; pièces M646, M613 « Patin étanchéité », M298 « patin d'étanchéité pour tapées » | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md), [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| troisième bande, au centre | tapées aluminium A469 à A473, pièces d'appui aluminium A491, A475, A476, A477 | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| deuxième et troisième colonnes, en bas | profilés 76760, 76759, 76767 ; compensateurs 6143, 6144 ; pièce 93051 « vis plot S075 » ; M329 | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| troisième et quatrième bandes, au centre | battements intérieurs 1547, 6129, 6131, 6133, 76833 et embouts 9A82, 9F29, 9F31, 9F33, M664 | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| au centre | profilés de liaison 76605, 76608, 76606, 76604, A054, A250 ; trois coupes d'accouplement sans légende | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| colonne de droite | poteaux d'angle 8355, 8356, 8340, 8341 ; adaptateur 76821 ; A249 ; isolants I040 à I043 ; clameaux S081, S082 ; embout M344 ; trois coupes de montage | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| cinquième bande | accessoires M364T, M343, M459, S048, S049, S050, G176, A256, S073, S074, S075, S076, I032, S080, G084, M500, G251 | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| bande inférieure | 34 parcloses sur deux lignes avec l'épaisseur du remplissage, renvoi « (*) », rehausseur 76570, embout M301 | transcrit | [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) |
+| coin inférieur droit | 12 dessins de renforts cotés : V265, V263, V262, V332, V264, V075, V114, V314.Z, V317, V312.Z, V330, V331 | transcrit | [Renforts du système 76](/profiles/systeme-76-renforts.md) |
 
-## 1. Élargisseurs et réhausses
-- Élargisseurs clippables :
-  - **76700** (15 mm) : capot **A120**, renfort **V312.Z**, embouts **M302/M303**.
-  - **76701** (30 mm) : capot **A121**, renfort **V314.Z**, embouts **M306/M307**.
-  - **76702** (60 mm) : capot **A121**, renfort **V314.Z**, embouts **M308/M309**.
-  - **76703** (120 mm) : capot **A124**, double renfort **V314.Z**, embouts **M310/M311**.
-  - **76714** (grand élargisseur caisson) : double renfort tubulaire **V115**.
-- Réhausses :
-  - **76704** (45 mm), **76706** (45 mm), **76708** (50 mm) : renfort **V114**, embouts **M304/M305**.
-  - **76709** (100 mm), **76710**, **76705** (150 mm) : renforts **V317**.
-
-## 2. Pièces d'appui et fourrures
-- Pièces d'appui PVC : **6136** (67 mm, embout **9F55.1**), **6137** (97 mm, embout **9F56.1**), **76758** (80 mm, embout **AC011**), **76768** (136 mm, embouts **M780, M781, M782**). Nez d'appui **4319**.
-- Profilés d'appui et bavettes associés : 76751, 76752, 76753, 76754, 76755, 76761, 76762, 76763, 76764, 76765, 76766, 76767.
-- Fourrures PVC : **6138** (15 mm), **6139** (35,5 mm), **6140** (55,5 mm), **6141** (75,5 mm), **6142** (95,5 mm), **76772** (115,5 mm), **76769** (135,5 mm). Embout **M646**, patins **M298, M613**.
-- Pièces d'appui et tapées alu :
-  - Appuis alu : **A491** (57 mm), **A475** (97 mm), **A476** (137 mm), **A477** (77 mm). Embout **M643**.
-  - Tapées alu : **A469** (30 mm), **A470** (50 mm), **A471** (70 mm), **A472** (90 mm), **A473** (110 mm).
-
-## 3. Profilés de liaison et poteaux d'angle
-- Liaison plane : **76600** (joint 4,8 mm), adaptateur **76821**, clip cornière **76822**.
-- Liaisons en H : **76605** (renfort **V330**), **76608** (renfort **V288**), **76604, 76606** (renfort **V264**).
-- Poteaux d'angle :
-  - **8355** (angle $90^\circ$) : renfort carré **V263**.
-  - **8356** (angle $135^\circ$) : renfort **V262**.
-  - **8340 + 8341** (angle variable) : renfort cylindrique **V265**.
-  - Jonctions d'angle : **1040, 1041, 1042, 1043**, joints **S081, S082**.
-
-## 4. Parcloses PVC
-- Série droite : 76515 (50), 76509 (48), 76508 (46), 76507 (44), 76506 (42), 76505 (40), 76504 (38), 76503 (36), 2433 (34), 2454 (32), 76516 (30), 76526 (28), 76527 (26), 2453 (20), 2451 (18), 2452 (16).
-- Série carrée contemporaine : 76579 (48), 76578 (46), 76577 (44), 76576 (42), 76575 (40), 76573 (36), 2640 (34), 2638 (32), 2636 (30), 2628 (28), 2626 (26), 2624 (24).
-- Rehausseur de parclose : **76570**.
-
-# Ce qu'elles établissent
-
-1. **La correspondance visuelle univoque entre profilés PVC, capots aluminium et renforts acier**.
-2. **L'intégralité des références d'embouts de finition et kits de liaison mécanique**, confirmant que la nomenclature PROFERM est un sous-ensemble strict du catalogue profine.
-3. **Le partage des profilés complémentaires entre gammes** : les profilés en 6xxx (6136-6142) et 76xxx sont employés sur les deux systèmes.
+Images découpées : `wiki/assets/profiles/systeme76/` (dossiers `elargisseurs`, `rehausses`,
+`liaisons-tapees`, `appuis`, `tapees-pvc`, `tapees-alu`, `battements-interieurs`, `liaisons`,
+`poteaux`, `parcloses`, `accessoires`, `renforts`). Les références déjà illustrées dans
+`assets/profiles/perform76/` (élargisseurs 76700 à 76703, appuis, compensateurs, tapées, poteaux,
+76822, parcloses du cahier) ne sont pas redécoupées.
 
 # Citations
 
-[1] Poster Système 76 Advanced, profilés principaux, 2022 — `raw/poster-systeme-76-advanced-principaux-2022.pdf`
+[1] [Poster Système 76 Advanced, profilés principaux, 2022](raw/poster-systeme-76-advanced-principaux-2022.pdf), p. 1
 
-[2] Poster Système 76 Advanced, profilés complémentaires, 2022 — `raw/poster-systeme-76-advanced-complementaires-2022.pdf`
+[2] [Poster Système 76 Advanced, profilés complémentaires, 2022](raw/poster-systeme-76-advanced-complementaires-2022.pdf), p. 1
 
 # Voir aussi
 
 - [profine](/fournisseurs/profine.md)
 - [KÖMMERLING](/fournisseurs/kommerling.md)
+- [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+- [Assemblages du système 76](/profiles/systeme-76-assemblages.md)
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+- [Renforts du système 76](/profiles/systeme-76-renforts.md)
 - [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
 - [DTA n° 6/16-2334_V5](/sources/dta-trocal-76-advanced.md)
 - [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md)
 - [Posters Gamme 70 KÖMMERLING](/sources/posters-kommerling-70.md)
-

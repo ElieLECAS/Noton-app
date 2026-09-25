@@ -52,6 +52,10 @@ en haut et la hauteur de 76 mm à gauche.
 - À partir de 60 mm d'élargissement, prévoir une fixation à la maçonnerie par console ou équerre.
 - Sur profilés filmés/couleur, percer impérativement un trou de ventilation de **Ø 5 mm à 100 mm des extrémités** de chaque préchambre extérieure pour éviter toute surchauffe thermique.
 
+Les élargisseurs 76701, 76702 et 76703 existent en variante pour capot AluClip sous les
+références **76710, 76711 et 76712**, avec les capots aluminium A120, A121 et A124 — voir
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md#élargisseurs).
+
 # Cotes des profils d'assemblage et liaisons de couplage
 
 | Référence | Type | Cotes (mm) | Renfort associé | Inertie $I_W$ ($\text{cm}^4$) |
@@ -174,6 +178,7 @@ cahier technique, sans que leur famille d'origine soit précisée.
 
 # Voir aussi
 
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
 - [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md)
 - [KÖMMERLING](/fournisseurs/kommerling.md)

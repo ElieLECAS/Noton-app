@@ -2,6 +2,454 @@
 
 ## 2026-09-25
 
+* **Retraitement** du [Dépliant INNOSLIDE, janvier 2024, version impression](/sources/depliant-innoslide.md)
+  (`raw/depliant-innoslide-2024-01.pdf`, 2 planches doubles) : planches rendues en PNG à 150 dpi,
+  lues en image, comparées bloc par bloc à la version A4 web : planche 1 = pages web 4 et 1, planche 2
+  = pages web 2 et 3, même texte, mêmes chiffres, mêmes images. Rien n'est recopié une seconde fois :
+  la fiche porte un second registre (2 `transcrit`, aucune `à faire`) qui renvoie aux pages déjà
+  écrites, et le fichier impression est ajouté aux `sources`/`source_pages` des sept pages
+  concernées. Aucune image nouvelle, aucune anomalie nouvelle. La ligne de fichier en pied
+  (« 2024-01_DEPLIANT INNOSLIDE_IMPRESSION - Client.indd », 10/01/2024) passe dans l'identité.
+
+* **Retraitement** du [Dépliant INNOSLIDE, janvier 2024, version A4 web](/sources/depliant-innoslide.md)
+  (`raw/depliant-innoslide-2024-01-a4-web.pdf`, 4 pages) : pages rendues en PNG à 200 dpi (300 dpi
+  pour les découpes), lues en image, aucune couche texte lue. Fiche réécrite au format du protocole
+  (« Registre de couverture OKF » par élément, « Ce qu'il apporte seul » retirés) : 4 `transcrit`,
+  aucune `à faire`.
+  * **Images** (5) : `assets/gammes/innoslide/coupe-innoslide.png` (p. 2) ;
+    `assets/quincaillerie/roto-patio-inowa/galets-k.png`, `chariot.png`, `verrouilleur-median.png`
+    (p. 2) ; `assets/quincaillerie/poignees/poignee-innoslide.png` (p. 3). Schéma « une partie
+    coulissante et une partie fixe », amortisseurs SoftClose/SoftOpen et les trois pastilles :
+    dessinés comme au catalogue général, liés aux images existantes.
+  * **Erreurs corrigées** (avant → après) : [INNOSLIDE](/gammes/innoslide.md) — « L'INNOSLIDE est
+    motorisé par la cinématique de ferrure Roto Patio Inowa » → « équipé de la quincaillerie Roto
+    Patio Inowa » (rien n'est motorisé) ; « Le verrouillage périphérique actif compresse le vantail
+    mobile directement contre le joint de frappe du dormant, assurant une étanchéité équivalente à une
+    fenêtre à frappe standard » (sans source) → « le joint périphérique et la commande active de tous
+    les points de fermeture rendent le coulissant hautement étanche » ; ligne « Largeur maxi 4 200 |
+    dormant ébavuré » → « dormant ébavuré, ouvrant grain d'orge », hauteur maxi 2 400 portée pour
+    chacune des deux bornes ; citation « Dépliant INNOSLIDE p. 1 à 4 » (fichier impression, 2 pages)
+    → version A4 web p. 2 et 3 ; « Configurations supérieures à 2 vantaux : le mécanisme Inowa est
+    strictement limité à 1 coulissant + 1 fixe » et « Formes cintrées : la compression linéaire et le
+    guidage sur rail interdisent tout cintrage » (sans source, signalés par le retraitement du
+    catalogue général) → retirés, **VER-51**. [Roto Patio Inowa](/quincaillerie/roto-patio-inowa.md)
+    réécrite : rôles des composants inventés (« guidage et roulement de l'ouvrant », « sécurité de
+    manœuvre », « transmission de la commande », « tenue de l'ouvrant ») → légendes de la source ;
+    explication « la Roto Patio Inowa tire l'ouvrant contre le joint périphérique par ses points de
+    fermeture » et paragraphe « À nuancer … mérite d'être vérifié » (sans source, registre interdit)
+    → retirés ; tableau des performances de l'INNOSLIDE (copie) → lien ; rapprochement avec la
+    poignée TOULON « sans que le lien soit établi » → retiré ; SoftClose/SoftOpen, que la source ne
+    rattache pas à la Roto Patio Inowa → lien vers INNOSLIDE ; `status: draft` (motif « repose sur un
+    dépliant ») → `stable` ; citations p. 2 du fichier impression → version A4 web p. 2 et 3.
+  * **Complétés** : [Coloris INNOSLIDE](/coloris/coloris-innoslide.md) (section *dépliant de janvier
+    2024*, 3 lignes, même nuancier) ; [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
+    (ligne « Poignée du coulissant INNOSLIDE, modèle non nommé », blanc, noir ou F9, gamme INNOSLIDE
+    ajoutée) ; [Garanties par composant](/garanties/garanties-par-composant.md) (section *Grille de
+    l'INNOSLIDE de janvier 2024*) ; [Labels et certifications](/certifications/labels-et-certifications.md)
+    (A\*E\*V INNOSLIDE sourcé au dépliant, logos CEKAL, CE, Acotherm, Roto) ;
+    [Arguments de vente INNOSLIDE](/commercial/innoslide.md) (couverture, « Le coulissant, autrement »,
+    avantages, sécurité, poignée, garanties).
+  * **Anomalies** : **VER-51** créée (configurations et formes de l'INNOSLIDE non documentées) ;
+    **VER-15** complétée (crédit « PROFERM - ALUPLAST - ROTO » relu, système 76 non écrit) ; aucune
+    fermée.
+
+* **Retraitement** du [Dépliant HYBRIDE, juin 2023](/sources/depliant-hybride-2023.md)
+  (`raw/depliant-hybride-2023-06.pdf`, 4 pages) : pages rendues en PNG à 200 dpi, lues en image,
+  aucune couche texte lue. Fiche réécrite au format du protocole (« Registre de couverture OKF » et
+  « Ce qu'il établit » retirés) : 4 `transcrit`, aucune `à faire`.
+  * **Images** (9) : `assets/coloris/hybride/2023-*.png`, les neuf couleurs extérieures de 2023 sous
+    leur nom d'alors (« Anthracite 7016 »). Photos de sécurité, de finitions et coupes DROIT/DESIGN :
+    identiques au catalogue général et à la brochure de mars 2025, liées.
+  * **Erreurs corrigées** (avant → après) : [Dépliant HYBRIDE](/sources/depliant-hybride-2023.md) —
+    « 3 joints de butée périphériques » → « joint de butée périphérique dans le dormant, l'ouvrant et
+    entre les parcloses et le vitrage » (aucun nombre dans la source) ; « aérateur discret » → « grille
+    d'aération discrète intégrée » ; logo « Qualicoat » (absent de la page) → retiré, Kömmerling
+    ajouté ; « les deux finitions anodisées … ajoutées dans l'édition 2025 » et « le cintrage et
+    l'ouverture extérieure sont irréalisables en complexe alu/PVC serti et doivent être réalisés sur
+    base PVC » (déductions sans source) → retirés. [HYBRIDE](/gammes/hybride.md) — `source_pages` du
+    dépliant « 1-6 » → « 2-3 » (le PDF a 4 pages), citation « p. 1 à 6 » → « p. 2 et 3 ».
+  * **Complétés** : [Coloris HYBRIDE](/coloris/coloris-hybride.md) (section *Extérieur aluminium,
+    juin 2023*, 9 lignes), [Garanties par composant](/garanties/garanties-par-composant.md) (section
+    *Grille de l'HYBRIDE de juin 2023*), [HYBRIDE](/gammes/hybride.md) (légendes 2023 = 2025),
+    [Arguments de vente HYBRIDE](/commercial/hybride.md), [Labels et certifications](/certifications/labels-et-certifications.md).
+  * **Anomalies** : **CTR-05** complétée (laquage 7 ans sans distinction de couleur en 2023),
+    **CTR-06**, **CTR-07** et **VER-49** complétées (même phrase en juin 2023) ; aucune fermée.
+
+* **Retraitement** de la [Brochure Nouveautés PERFORM+ et HYBRIDE+, mai 2023](/sources/brochure-perform-plus-hybride-plus.md)
+  (`raw/brochure-perform-plus-hybride-plus-2023-05.pdf`, 4 pages) : pages rendues en PNG à 200 dpi,
+  lues en image, aucune couche texte lue. Fiche réécrite au format du protocole (l'ancien « Registre
+  de couverture OKF » par élément et la rubrique « Ce qu'il apporte seul » retirés) : 4 `transcrit`,
+  aucune `à faire`.
+  * **Pages créées** : [Coloris PERFORM+](/coloris/coloris-perform-plus.md), [Coloris HYBRIDE+](/coloris/coloris-hybride-plus.md),
+    [Arguments de vente PERFORM+ et HYBRIDE+](/commercial/perform-plus-et-hybride-plus.md) (une page
+    pour les deux gammes, présentées ensemble par la source).
+  * **Images** (21) : `assets/coloris/perform-plus/` (1), `assets/coloris/hybride-plus/` (11),
+    `assets/quincaillerie/poignees/toulon-decalee.png` (p. 3), `assets/quincaillerie/roto-nx/` (8 :
+    Roto Sil Level 6, pivot symétrique, largeurs OB, gâche, galet, crémone de semi-fixe, TiltSafe,
+    anti-fausse manœuvre, p. 2).
+  * **Pages réécrites** (avant → après) : [PERFORM+](/gammes/perform-plus.md) et [HYBRIDE+](/gammes/hybride-plus.md) —
+    section « Statut incertain : à vérifier avant toute proposition » (coaching) → une phrase et
+    VER-02 ; colonne « Conséquence commerciale » des cinq impossibilités (« paumelles uniquement »,
+    « pas de porte-fenêtre verrouillable », « contrairement à la PERFORM 70 », sans source) → la
+    phrase de la source et cinq exclusions ; « Uw … moins bon que … vendue sur la luminosité, pas sur
+    le thermique » (sans source) → retiré ; « Ces cinq points se vérifient en tout début de projet »,
+    « la brochure les glisse dans une parenthèse » → retirés ; « La présence du Qualimarine …
+    s'explique par l'HYBRIDE+ », « C'est cohérent », « Le laquage à 7 ans mérite attention » →
+    retirés ; grilles de garanties et listes de coloris déplacées vers
+    [Garanties par composant](/garanties/garanties-par-composant.md) (nouvelle section *Grille des
+    gammes PERFORM+ et HYBRIDE+*) et les pages `coloris/` ; slogans et « unique sur le marché » vers
+    la page commerciale ; `source_pages` ajouté. [Roto NX](/quincaillerie/roto-nx.md) — colonne
+    « Rôle » inventée (« empêche la manœuvre incorrecte », « fermeture du semi-fixe ») → légendes
+    de la source avec image ; « C'est la seule gamme de quincaillerie nommée dans toute la
+    documentation versée dans `raw/` » (récit, faux depuis le manuel KSR) → retiré ; « Ce traitement
+    pourrait constituer un argument pour les chantiers en bord de mer », « mérite d'être comprise :
+    elle suggère … C'est vraisemblablement ce que sécurise le système TiltSafe » → retirés ;
+    « comblent trois des quatre manques que cette page signalait », « que la brochure ne mentionnait
+    pas » → formulations assertives ; `source_pages` ajouté.
+  * **Complétés** : [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) (image de
+    la TOULON décalée), [Labels et certifications](/certifications/labels-et-certifications.md) (RC2
+    Roto NX, logos), [glossaire](/reference/glossaire.md) (ouvrant caché, gâche et galet, fiche).
+  * **Anomalies** : **INC-32** créée (phrase inachevée p. 3) ; **VER-02** complétée ; CTR-03 à
+    CTR-05 inchangées, confirmées à la relecture.
+
+* **Retraitement** de la [Brochure HYBRIDE, mars 2025](/sources/brochure-hybride.md)
+  (`raw/brochure-hybride-2025-03.pdf`, 4 pages) : pages rendues en PNG à 200 dpi (marge et logos
+  de la p. 4 à 400 et 500 dpi), lues en image, aucune couche texte lue. Registre réécrit :
+  4 `transcrit`, aucune `à faire`.
+  * **Images** (2) : `assets/gammes/hybride/finitions-droit-design-72.png` (p. 3, avec les loupes
+    de coupe absentes du catalogue), `assets/coloris/hybride/laquage-pvc-cintrage.png` (p. 3).
+    Photos de sécurité et de finitions, pastilles : identiques au catalogue général, liées.
+  * **Erreurs corrigées** (avant → après) : [Brochure HYBRIDE](/sources/brochure-hybride.md) —
+    « Code d'impression 10-32-2225 » → numéro du logo PEFC ; nature « commercial et technique » →
+    « commercial ». [HYBRIDE](/gammes/hybride.md) — `source_pages` de la brochure « 1-8 » → « 1-3 »
+    (le PDF a 4 pages), citation « p. 1 à 8 » → « p. 1 à 3 » ; phrase « les joints de butée
+    périphériques … sont décrits par la brochure » (document sujet) → tableau *Caractéristiques de
+    l'HYBRIDE fabriquée jusqu'en 2025* (6 lignes, mots de la source).
+  * **Complétés** : [HYBRIDE](/gammes/hybride.md) (légendes de sécurité et de finitions 2025, dont
+    « crémone du semi-fixe en cas d'oscillo-battant » et pivot symétrique sans charge ; DROIT et
+    DESIGN en 72 mm ; laquage en cas de cintrage), [Coloris HYBRIDE](/coloris/coloris-hybride.md)
+    (nuancier 2025 identique, laquage), [Arguments de vente HYBRIDE](/commercial/hybride.md)
+    (section mars 2025), [Garanties par composant](/garanties/garanties-par-composant.md) (15 ans
+    structure), [Labels et certifications](/certifications/labels-et-certifications.md),
+    [glossaire](/reference/glossaire.md) (joint de butée, cintrage).
+  * **Anomalies** : **CTR-03** (troisième source à 15 ans), **CTR-06** et **CTR-07** (relus, citation
+    exacte) et **VER-49** (formulation « en cas de cintrage et/ou ouverture extérieure ») complétées,
+    aucune fermée.
+
+* **Retraitement** de la [Brochure LUMINE65, février 2025](/sources/brochure-lumine65.md)
+  (`raw/brochure-lumine65-2025-02.pdf`, 6 pages) : pages rendues en PNG à 200 dpi, lues en image,
+  aucune couche texte lue. Registre réécrit : 6 `transcrit`, aucune `à faire`.
+  * **Images** (4) : `assets/gammes/lumine/lumine65-fenetre-applications.png` et
+    `lumine65-porte-fenetre-applications.png` (p. 4), `assets/quincaillerie/poignees/mlini.png` (p. 3),
+    `assets/coloris/lumine/lumine65-rouge-3004-satine.png` (p. 5). Coupes 90°/45°, ouvrant visible,
+    coupe et configurations du coulissant, poignées ATLANTA, TOULON, SEOUL, SYDNEY, MILAN et béquilles :
+    dessinées comme au catalogue général, liées aux découpes existantes.
+  * **Erreurs corrigées** (avant → après) : [LUMINE](/gammes/lumine.md) — « apport solaire accru » →
+    « apport de lumière naturelle optimisé » ; « évacuation des eaux pluviales totalement invisible en
+    façade » → « Système de drainage des eaux de pluie caché » ; « barrière centrale par rupture de pont
+    thermique éliminant les effets de dilatation thermique du profilé » (deux mentions de la source
+    fondues) → « 3 joints … : pas d'effet de dilatation » et barrière centrale d'étanchéité séparée ;
+    configurations « soufflet, ensembles composés » (sans source) → liste imprimée et 11 schémas découpés ;
+    « optimisé pour le confort thermique et acoustique » → page commerciale ; `status` stable → draft
+    (CTR-03). [Coulissants aluminium](/gammes/coulissants-aluminium.md) — « 68 mm d'aluminium visible
+    avec inertie renforcée » → « Inertie optimisée au niveau du montant central » et « montant central
+    de 68 mm » ; « 38 mm d'épaisseur » → « montant chicane de 38 mm » ; « brosse linéaire continue » →
+    « Brosse linéaire d'étanchéité et de finition sur traverse haute » ; « procès-verbaux spécifiques par
+    produit » (sans source) → lien vers les classements. [Coloris LUMINE](/coloris/coloris-lumine.md) —
+    pastille du rouge 3004 LUMINE65 : granité (catalogue) → satiné (brochure), l'ancienne gardée sous
+    CTR-27. [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) — 7 lignes LUMINE65
+    ajoutées (poignées de porte-fenêtre ATLANTA et TOULON, béquilles ATLANTA plaque étroite et rosace,
+    ATLANTA, SEOUL et MLINI de coulissant), `status` stable → draft.
+    [Garanties par composant](/garanties/garanties-par-composant.md) — parenthèse en italique → phrase
+    Qualicoat dans les mots de la source, section *Grille de la LUMINE65*.
+  * **Complétés** : [Arguments de vente LUMINE](/commercial/lumine.md) (section LUMINE65, p. 1-3, 5-6),
+    [Labels et certifications](/certifications/labels-et-certifications.md) (Conception & Fabrication
+    Hauts-de-France, logos de la p. 5).
+  * **Anomalies** : **CTR-28** créée (finitions de poignées LUMINE65) ; **CTR-12** complétée (photos
+    MLINI et DEHLI différentes) ; **CTR-27** et **VER-50** complétées (relecture en image confirmée).
+
+* **Retraitement complet** du [Catalogue menuiseries PROFERM, janvier 2026](/sources/catalogue-general-2026.md)
+  (`raw/catalogue-general-2026-01.pdf`, 36 pages) : pages rendues en PNG à 200 dpi (400 dpi pour les
+  légendes p. 24 et les schémas de vitrage p. 27), lues en image par lots de 3 à 4, aucune couche
+  texte lue. Registre réécrit en 36 lignes : 34 `transcrit`, 2 `sans contenu propre` (p. 25, 29),
+  aucune `à faire`. Contrôle ponctuel de la brochure LUMINE65 p. 5 (rendue à 150 dpi) pour CTR-27.
+  * **Pages créées** : dossiers `coloris/` et `commercial/` ouverts. [Coloris PERFORM](/coloris/coloris-perform.md),
+    [Coloris INNOSLIDE](/coloris/coloris-innoslide.md), [Coloris HYBRIDE](/coloris/coloris-hybride.md),
+    [Coloris LUMINE](/coloris/coloris-lumine.md), [Coloris TEXTURAL](/coloris/coloris-textural.md),
+    [Coloris Sélection Hexa](/coloris/coloris-selection-hexa.md) ;
+    [Arguments de la marque PROFERM](/commercial/proferm.md), [PERFORM](/commercial/perform.md),
+    [INNOSLIDE](/commercial/innoslide.md), [HYBRIDE](/commercial/hybride.md),
+    [LUMINE](/commercial/lumine.md), [TEXTURAL](/commercial/textural.md),
+    [portes d'entrée](/commercial/portes-d-entree.md).
+  * **Images** : 219 découpes contrôlées sur planche contact — `assets/coloris/{perform,innoslide,hybride,lumine,textural,selection-hexa}/`
+    (102 pastilles), `assets/quincaillerie/{poignees,croisillons,accessoires,portes-entree}/` (43),
+    `assets/gammes/{perform,innoslide,hybride,lumine,coulissants-aluminium,textural}/` (39),
+    `assets/portes/{collection-authentique,selection-hexa}/` (14), `assets/vitrages/{decoratifs,performances}/` (16),
+    `assets/equipements/volets-roulants/` (5). Pages sources : 6-8, 10-12, 14-18, 20-24, 26-28, 30-33.
+  * **Dédoublonnage** : listes de poignées, béquilles, fausses crémones, croisillons, moustiquaire et
+    soubassements retirées de [PERFORM](/gammes/perform.md), [HYBRIDE](/gammes/hybride.md),
+    [LUMINE](/gammes/lumine.md), [TEXTURAL](/gammes/textural.md) et [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+    (tableau de 16 poignées de coulissant) au profit de [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md),
+    réécrite modèle par modèle avec image ; nuanciers retirés des pages gamme au profit de `coloris/` ;
+    slogans et promesses retirés des pages gamme au profit de `commercial/` ; grilles de garanties de
+    [LUMINE](/gammes/lumine.md) et [TEXTURAL](/gammes/textural.md) réduites à une phrase et un lien ;
+    classements A\*E\*V des pages gamme renvoyés à [Labels et certifications](/certifications/labels-et-certifications.md).
+  * **Erreurs corrigées** (avant → après) :
+    [PERFORM](/gammes/perform.md) — chêne doré « Droit et design » → finition non indiquée ; légendes
+    des 10 équipements de série réécrites dans les mots de la source (« Équilibrage de la ferrure »,
+    « Armatures en acier intégrées selon les abaques », « Double la compression d'étanchéité », etc.,
+    sans source → légendes imprimées) ; « niveau le plus élevé du marché français » → page commerciale.
+    [INNOSLIDE](/gammes/innoslide.md) — SoftClose « guide automatiquement en position de verrouillage
+    pour prévenir les claquements » → « freine doucement l'ouvrant lors de la fermeture et le déplace
+    en position finale » ; ligne « 3 201 - 4 200 mm, ouvrant en soudure grain d'orge » → « largeur
+    maxi 4 200, dormant ébavuré » ; bicolore blanc/gris « 2 faces » → blanc intérieur / gris grainé
+    extérieur ; colonne « condition d'essai » (Essai CSTB, pluie battante…) retirée, sans source.
+    [HYBRIDE](/gammes/hybride.md) — Uw HYBRIDE70 « 1,2 [1 p. 10] » → « - » (la p. 10 ne donne que
+    0,8 pour la gamme) ; « Uw 0,8 en triple vitrage sur profilé 76 mm » → « jusqu'à 0,8, grâce aux 5
+    chambres » ; blanc 9016 intérieur « 1 ou 2 faces » → faces non indiquées ; ligne « Autres
+    laquages, toutes teintes RAL, satinée ou granitée, extérieur alu » → laquage « toutes teintes
+    possibles 2 faces identiques, si ouverture extérieure, uniquement sur PVC » (**VER-49**) ;
+    « charge admissible par les paumelles 130 kg » → « pivot 130 kg » ; puces « Aucun cintrage
+    réalisable : le sertissage… » et « sans usinage visible en face avant » retirées, sans source.
+    [LUMINE](/gammes/lumine.md) — Uw 1,5 attribué à la LUMINE55 → gamme, version non précisée ;
+    descriptions des six ouvrants (« lignes droites », « mouluration galbée », « pour dormant
+    rénovation »…) → légendes imprimées ; ATLANTA plaque étroite « blanc, aspect inox » → « inox,
+    blanc ou laiton, noir et 7016 en option » ; « pour oscillo-battant » retiré ; liste des
+    « 9 coloris au prix du blanc » numérotée 1 à 10 retirée (**VER-50**) ; « V\*C3, niveau de rigidité
+    le plus élevé des fenêtres PROFERM » retiré, sans source.
+    [Coulissants aluminium](/gammes/coulissants-aluminium.md) — SOLÉAL55 « 4 vantaux 4 rails 6 200 »
+    → largeurs par nombre de vantaux (4 vantaux 5 500, 6 à 8 vantaux 6 200) ; vitrage 6/14/4 et Uw 1,4
+    attribués au SOLÉAL55 et au GALANDAGE55 → « - » (**INC-02**) ; type d'ouvrant « apparent » retiré ;
+    nuancier « SOLÉAL55 et GALANDAGE55 » → « SOLÉAL55, GALANDAGE55 & LUMÉAL55 » (en-tête de la
+    source) ; OSAKA « en option » → sans mention ; KOBE « inox » → finition non indiquée ; verrou de
+    sécurité limité au SOLÉAL/GALANDAGE → tous coulissants.
+    [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) — « sur les coulissants
+    l'offre s'arrête à trois largeurs standards 10, 18 et 26 mm » → six croisillons aussi sur les
+    coulissants (p. 17).
+    [TEXTURAL](/gammes/textural.md) — « 25 textures exclusives » → 26 ; familles de textures
+    (« Bois sombres », « Cuirs »…) et « Glossy parclose assortie » retirées, sans source ; épaisseurs
+    « profilé intérieur de 70 / 76 mm » → non cotées ; raisons inventées du non-cintrage et de la
+    fausse crémone retirées.
+    [Performances des vitrages](/vitrages/performances-vitrages.md) — « 44.6 Silence : deux verres de
+    4 mm assemblés par six films PVB » → « deux vitrages assemblés avec un film PVB » (les six films
+    sont ceux du SP10) ; STADIP « 44.2 (8,76) », « 28,76 » → épaisseurs portées sur le schéma
+    8,2 / 16 / 4 ; SP10 « 10,28 », « toutes gammes » → 10,3 / 18 / 4, aucune gamme nommée ; triple
+    vitrage « argon ou krypton, warm edge » → « air, argon ou krypton » ; paragraphes « parclose
+    76526 » et « feuillure 24 à 28 mm de la LUMINE » retirés, sans source.
+    [Vitrages décoratifs](/vitrages/vitrages-decoratifs.md) — colonne « aspect et structure »
+    inventée → photo ; Antélio « couche réfléchissante » et intercalaire « noir » retirés.
+    [Volets roulants](/equipements/volets-roulants.md) — « 230 V », « autonomie sur batterie »,
+    « déconnexion manuelle », « ressort compensateur », « enrouleur en applique », « manivelle et treuil »
+    retirés, sans source ; coffre « selon hauteur et enroulement du tablier » → « selon la dimension de
+    la menuiserie » ; capteur solaire « face avant du coffre » → « sur le coffre ».
+    [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) — renforts alu « profils
+    tubulaires alliage alu » → « - » ; descriptions des serrures, gâches et « carte propriétaire »
+    retirées, sans source. [Serrure motorisée](/quincaillerie/serrure-motorisee.md) — « dès que
+    l'ouvrant entre en contact », « RFID », « sans carte électronique déportée » retirés.
+    [Collection Authentique](/portes/collection-authentique.md) et [Sélection Hexa](/portes/selection-hexa.md) —
+    descriptions de panneaux inventées → photos ; « béquille courbe ergonomique », « paumelles à haute
+    résistance » → « poignée VIENNE », « paumelles tubes deux lames » ; Hexa extérieur « Blanc 9016
+    brillant » → « Blanc 9016 ».
+    [Garanties par composant](/garanties/garanties-par-composant.md) — colonne « conditions et
+    périmètre » (CEKAL, « tablier, axe », « hors label ROTO »…) → cas imprimés ; « affiché en
+    couverture » → p. 2. [Labels et certifications](/certifications/labels-et-certifications.md) —
+    Coq Vert « Bpifrance / ADEME, novembre 2023 » → organisme non nommé, novembre 2023 = French Fab ;
+    ROTO « premier fabricant français » → « premier fabricant » ; RC2 « renvois d'angle et galets
+    champignons » → « quincaillerie spécifique » ; colonne des pressions d'eau (600, 300, 250 Pa)
+    retirée, absente de la source.
+  * **Anomalies** : créées **INC-31** (p. 17, « Nos menuiseries PERFORM » sur la page LUMINE),
+    **CTR-27** (rouge 3004 LUMINE65 granité ou satiné), **VER-49** (laquage HYBRIDE), **VER-50**
+    (« 9 coloris au prix du blanc ») ; complétée sans la fermer **VER-14** (TEXTURAL légendée
+    « Profils KÖMMERLING® », p. 23). Statut `draft` posé sur HYBRIDE, Coulissants aluminium,
+    Collection Authentique, Sélection Hexa, Coloris HYBRIDE, Coloris LUMINE.
+  * **Glossaire** : béquille double, rosace, fausse crémone, croisillon, soubassement, semi-fixe,
+    galandage, monobloc, imposte et tierce, teinté dans la masse, satiné et granité, anodisé laqué,
+    texture, RAL, face.
+  * **Restent sans source dans des pages non retraitées** : INNOSLIDE « configurations supérieures
+    à 2 vantaux », « formes cintrées » (aucune citation) ; Coulissants aluminium « cintrage et formes
+    hors d'équerre incompatibles » (aucune citation).
+
+* **Retraitement interrompu** du manuel [Mise en œuvre Système 76 Advanced](/sources/profine-mise-en-oeuvre-76-advanced.md),
+  arrêté à la demande : pages PDF 1 à 37 (registres 2.1.1 et 2.1.2) relues en image et transcrites.
+  Création de [Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md)
+  (PDF 2-14) et de [Renforts et accessoires par profilé du système 76](/profiles/systeme-76-accessoires-par-profile.md)
+  (PDF 19-37) ; compléments sur les renforts, assemblages, profilés principaux et joints du
+  système 76 ; 6 schémas dans `assets/procedures/moe-76-advanced/` ; anomalies INC-26 à INC-30,
+  CTR-26, VER-46 à VER-48. Le registre de la fiche source passe les pages 38 à 424 de
+  « transcrit » à `à faire` : elles venaient d'une ingestion antérieure qui résumait les planches.
+* **Retraitement complet** du [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md) : les
+  60 pages rendues en PNG à 200 dpi (300 à 500 dpi en zoom pour le tableau des fourrures p. 4,
+  les embouts d'élargisseurs p. 21, les embouts cotés p. 23, la coupe p. 25, l'E020545 p. 15),
+  lues en image par lots de 3 à 8, aucune couche texte lue.
+  * **Fiche source réécrite** : l'ancienne fiche (registre « Intégré » page par page, tableaux de
+    renforts, parcloses et tapées recopiés) ne garde que l'identité, la correspondance avec les
+    pages du DTA et un registre de 26 plages en numérotation du PDF (= imprimée), pages 1 à 60 :
+    toutes `transcrit`, aucune `à faire`. Les données recopiées sur l'ancienne fiche vivent sur
+    leurs pages de concept. L'annexe du DTD est celle du DTA à trois différences près (p. 20-23
+    et 25-26), les p. 27 à 60 sont les p. 23 à 56 du DTA.
+  * **Erreurs corrigées** : [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md),
+    tableau des correspondances fourrures / pièces d'appui (DTD p. 4) — 6141.1 : 6136 « X » → « - »,
+    76768 « - » → « X » ; 6142.1 : 6136 « X » → « - », 76768 « - » → « X » ; 76772 et 76769 : 6137
+    « X » → « - », 76768 « - » → « X » ; phrase « les deux plus épaisses (76772 et 76769)
+    n'admettent plus que le 6137 » → « ne correspondent qu'à la pièce d'appui 76768 » ; embouts
+    M780 à M782 « 3 pièces » → « - » (la planche ne porte pas de nombre pour eux) ; « Écart mineur
+    d'arrondi … sans incidence » retiré (commentaire sans source).
+    [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) : « le seuil que le DTD
+    associe à un montage sans contre-profilage du montant » (A075) → « se monte uniquement avec
+    contre-profilage du montant (M150, J064) » (DTD p. 5).
+    [Joints et garnitures](/profiles/joints-et-garnitures-profine.md) : locator de l'assemblage
+    du meneau p. 7 → p. 4. [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md) :
+    « renfort obligatoire, en dormant **et** en ouvrant » → « renfort obligatoire » (le DTD ne
+    parle que de « profilés PVC revêtus d'un capotage aluminium »). [Profilés principaux du
+    système 76](/profiles/systeme-76-profiles-principaux.md) : liste de pages « p. 4, 15, 21 et
+    33 » du DTD retirée de la citation [2] (la p. 33 est le demi-capot, pas un profilé principal).
+  * **Vides comblés** : [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) reçoit les
+    compléments du DTD sous chaque clause — 2.2.2.2 quincaillerie, 2.2.3.1 pièce d'appui et
+    élargisseurs, 2.2.3.1.1 meneau - traverse, 2.2.3.1.2 drainage du dormant (20-200 mm, 600 mm,
+    50 mm, grugeage 25 mm, 9043 et lèvre sur 100 mm), 2.2.3.1.3 fourrures d'épaisseur (300 mm,
+    M298 / M613, embouts), 2.2.3.1.4 seuil PMR (trois cas), 2.2.3.2 rejets d'eau, 2.2.3.2.1
+    battement et élargisseur d'ouvrant, 2.2.3.2.2 traverse intermédiaire, 2.2.3.2.3 drainage de la
+    feuillure à verre (tableau), tableau 1 des 26 compositions vinyliques (28 lignes), codes des
+    compositions de garnitures ; [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md)
+    (cotes des embouts 9F55.1, 9F56.1, AC011, M780-M782 avec coupes) ;
+    [Assemblages du système 76](/profiles/systeme-76-assemblages.md) (section *Nomenclature des
+    accessoires* : 11 figures, 49 références listées, patin M613 134,5 × 34 mm) ;
+    [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+    (table des embouts d'élargisseurs M302 à M311 : largeur et élargisseur) ;
+    [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) (embouts M643 et M646) ;
+    [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md)
+    (assemblage meneau / traverse intermédiaire dormant avec coupe cotée, traverse intermédiaire
+    d'ouvrant J050, traverse complémentaire 76299 — p. 25-26, absentes du DTA ; chaque locator du
+    DTA doublé de la page du DTD) ; glossaire : contre-profilage, entretoise, alvéovis, composition
+    vinylique, mousse PE.
+  * **Anomalies** : INC-25 créée (9F56 / 9F56.1). Complétées sans les fermer : INC-21 (mêmes
+    graphies au DTD p. 3, 5, 15, 45), INC-23 (doublon aussi au DTD p. 30-31 ; le DTD a en plus les
+    p. 25-26), INC-24 (le DTD § 2.2.3.1.2 donne 100 mm au dormant nu, § 2.2.3.3.4 300 mm au
+    capoté), CTR-21 (V323 dessiné dans la 76299, DTD p. 26), VER-29 (même texte au DTD p. 6 ;
+    coupes p. 43).
+  * **Images** : 18 schémas dans `assets/certifications/dtd-6-16-2334/` (p. 21-22 nomenclature,
+    p. 25-26 assemblages) ; 6 coupes dans `assets/profiles/systeme76/` : `appuis/embout-9f55-1`,
+    `embout-9f56-1`, `embout-ac011`, `embouts-m780-m781-m782-76768` (p. 23), `tapees-alu/embout-m643`,
+    `embout-m646` (p. 20). Les planches identiques au DTA sont liées aux images déjà découpées.
+  * `index.md` : description de la fiche DTD réalignée sur son `description`.
+  * **Reprise après interruption** : relecture en image des p. 4 (tableau des fourrures), 6, 23
+    et 49 à 60 contre les pages écrites ; les p. 49 à 60 sont les p. 45 à 56 du DTA, planche pour
+    planche, déjà découpées dans `assets/certifications/dta-6-16-2334/` et liées depuis
+    [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md).
+    Réciprocité registre / `source_pages` : [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+    `source_pages` DTD « 3-5, 12-15 » → « 3-5, 12-15, 21, 33 » (pages citées dans le corps) ;
+    registre de la fiche DTD, colonne « Page du wiki » complétée pour les p. 3 à 10 et 18 à 22 et
+    33-38 (joints, abaques, renforts, assemblages, profilés principaux, parcloses, procédure) ;
+    [Contradictions entre sources](/anomalies/contradictions-entre-sources.md) reçoit le DTD dans
+    `sources` (CTR-21 le cite).
+
+* **Retraitement complet** du [DTA n° 6/16-2334_V5](/sources/dta-trocal-76-advanced.md) : les 56
+  pages rendues en PNG à 200 dpi (400 à 800 dpi en zoom pour les parcloses, les inerties et les
+  références douteuses), lues en image par lots, aucune couche texte lue.
+  * **Registre** refait en numérotation du PDF (identique à la page imprimée), pages 1 à 56 sans
+    trou : 1 page sans contenu propre (table des matières), 55 transcrites, aucune à faire.
+    L'ancien registre déclarait « Intégré » des plages non transcrites (43 planches de méthode,
+    habillages p. 20) et donnait des contenus décalés d'une page (renforts « p. 21 » avec seize
+    renforts au lieu de dix-neuf).
+  * **[DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md) réécrit** clause par clause dans les
+    mots de la source : couverture et avant-propos, versions V4/V5, descripteur, 1.1 à 1.3
+    (13 clauses d'aptitude, durabilité, fabrication, marquage, DE, 5 remarques), 2.1 à 2.9
+    (commercialisation, identification, éléments, capotage, drainage, tapées et appuis alu,
+    renforcement, ferrage, vitrage, dimensions maximales, conception, mise en œuvre 2.4.1 à 2.4.5,
+    entretien, fin de vie, fabrication 2.8.1 à 2.8.7, 16 justificatifs d'essai). Vides comblés :
+    stabilité et limiteurs d'ouverture, sécurité, FDS, zones sismiques, isolation thermique et
+    EO20545, étanchéité, aspects sanitaires, entrée d'air (e-cahier 3376_V3), durabilité, marquage
+    des fenêtres certifiées (image), CPU, commercialisation, identification des profilés,
+    capotage des ouvrants et meneaux, rejet d'eau à 2 joints brosses obligatoire sous seuil,
+    habillages monoparois L\* < 82 interdits en traverse basse, bouchon d'obturation, A477 réservé
+    à la rénovation, ossatures bois et métalliques, ITE (e-cahier 3709_V2, guide ETICS-PSE 2020,
+    jeu de dégondage), mastics (classes, normes), entretien, fin de vie, seuils mixtes Menke/RBB,
+    tableau des essais. Retirés parce que sans source ou hors registre : « PROFERM étant certifié
+    CSTB, ses propres limites peuvent donc dépasser ce tableau », « soit plus de 10 kg d'effort, à
+    anticiper pour une personne âgée », « c'est l'explication technique des restrictions de
+    laquage », « la seule incompatibilité de références énoncée dans tout le corpus », le
+    paragraphe STADIP / CTR-02 (hors DTA) ; les tableaux d'entraxes et de drainage deviennent la
+    prescription 2.2.3.3.4-2.2.3.3.5 transcrite.
+  * **Corrections** : seuil A343, coupe « - » → coupe découpée (p. 14) ; DT100 « bavette » →
+    « bavette alu, dessinée parmi les pièces d'appui alu » avec coupe ; parclose 2638, épaisseur
+    31 (cahier) → 32 sur le DTA, portée en CTR-19 sans changer la valeur retenue ; perform76-parcloses
+    « Le DTD du système donne des épaisseurs différentes » → « le DTD et le DTA ».
+  * **Create** : [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md)
+    (p. 22 à 56 : 21 schémas d'atelier, coupes de principe, couleurs sombres, 11 plans de pose).
+  * **Vides comblés** : [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+    (cotes 21/32 mm du 76171, 25 mm du 76101 et du 76300, 57 mm du 76271, demi-capot A385 sur
+    76180, élargisseur d'ouvrant EO20545, 953800 « cache rainure ») ;
+    [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+    (6 habillages, 4 rejets d'eau, 7 profilés complémentaires, 51 parcloses sur 6 lignes et le
+    rehausseur 76570, 76705 élargisseur de dormant) ; [Renforts du système 76](/profiles/systeme-76-renforts.md)
+    (19 renforts du DTA avec inertie et affectation, V329 et VSF01 dessinés) ;
+    [Joints et garnitures](/profiles/joints-et-garnitures-profine.md) (14 garnitures avec matière) ;
+    [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) (coupes des tapées et
+    appuis alu, DT100) ; [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md)
+    (fourrures d'épaisseur p. 17).
+  * **Anomalies** : INC-21 (EO20545 / E020545), INC-22 (76579 parclose et profilé Pose ITE),
+    INC-23 (p. 26 et 27 identiques), INC-24 (lèvre de joint supprimée sur 100 ou 300 mm), CTR-24
+    (seconde cote des appuis 6136 / 6137, 70/100 contre 67/97), CTR-25 (matière des joints G049 à
+    G051.T : TPE, PVC, EPDM). Complétées sans les fermer : INC-14 (78275 aussi au DTA p. 43),
+    CTR-17, CTR-19 (2638 à 32), CTR-21 (affectation des renforts du DTA), CTR-23 (V291 42 × 30),
+    VER-20, VER-36, VER-39, VER-40, VER-45.
+  * **Images** : 63 schémas dans `assets/certifications/dta-6-16-2334/` (marquage p. 6, puis
+    p. 22 à 56) ; 37 coupes de profilés dans `assets/profiles/systeme76/` : `seuils/seuil-a343`
+    (p. 14), `elargisseurs/elargisseur-ouvrant-eo20545` (p. 16), `tapees-alu/appui-dt100` (p. 18),
+    `parcloses/` 11 parcloses et `rehausseur-76570` (p. 19, rendu 400 dpi), `joints/` 8 joints
+    (p. 19), `habillages/` 6, `rejets/` 3, `accessoires/jonc-1248` et `profil-76579-pose-ite`
+    (p. 20), `renforts/renfort-v329`, `renfort-vsf01`, `renfort-v291-dta` (p. 21). Les profilés
+    déjà dessinés à l'identique dans `assets/` sont liés, pas redécoupés.
+  * Glossaire : pose en applique / tableau / tunnel, rejingot, monomur, bavette, habillage,
+    fourrure d'épaisseur, joint à la pompe, ITE, ETICS, FDS, DdP, CPU, TPE, NF EN 14351-1+A2,
+    NF EN ISO 11600, FD DTU 36.5 P3, NF DTU 39.
+* **Retraitement complet** des [Posters Système 76 Advanced](/sources/posters-systeme-76-advanced.md),
+  l'un après l'autre : chaque poster rendu en PNG à 600 dpi, planche tournée de 90°, lue par
+  tuiles d'environ 1/20 de planche, aucune couche texte lue. Registre refait par zone de planche :
+  poster des profilés principaux 16 zones (15 transcrites, 1 sans contenu propre), poster des
+  profilés complémentaires 15 zones (14 transcrites, 1 sans contenu propre), aucune à faire.
+  * **Fiche source réécrite** : l'ancienne fiche portait des valeurs sans source sur la planche
+    (dormants « 74 × 62 », « 63 × 62 », 76178 « aile moulurée 60 mm, 93 × 62 », 76172 renforts
+    « V314.Z, V325, V326.Z », 76101 « V329 », sets « M154 + M173 pour 76177 », « M150 + J064 pour
+    76171 à 76372 », embouts M285 à M289 « de battements extérieurs », fourrures 6139 « 35,5 »,
+    séries de parcloses « droite / carrée contemporaine »). Les PDF sont des pages A4, pas des
+    planches A0. Le contenu va désormais sur les pages de concept ; la fiche ne garde que
+    l'identité et le registre.
+  * **Create** : [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md)
+    (7 dormants, 2 cadres fixes, 8 ouvrants, 2 meneaux, 4 traverses, 3 battements, 6 autres
+    profilés, 34 capots, embouts) ; [Assemblages du système 76](/profiles/systeme-76-assemblages.md)
+    (8 tableaux de sets et pièces sur seuils A076, A077, A075 et de traverses, rejets d'eau A061 à
+    A064, embouts, supports M137 à M139, J079) ;
+    [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
+    (élargisseurs et variantes AluClip 76710 à 76712, réhausses, 14 profilés de pied de dormant,
+    appuis, tapées PVC et alu, battements intérieurs, liaisons, poteaux d'angle, 34 parcloses,
+    accessoires).
+  * **Vides comblés** sur [Renforts du système 76](/profiles/systeme-76-renforts.md) : sections,
+    épaisseurs et inerties de 32 renforts dessinés (dont V353, V260, V333/V335 R/L, V337/V339 R/L,
+    V332, V330, V331, V264, V075, V114, V262, V263, V265 sans valeur jusqu'ici) ; liste des
+    renforts écrits dans 45 coupes ; épaisseurs d'acier du V323.Z (1,5) et du V322 (2,5) sur le
+    76373 (« - » → valeurs). Sur [Joints et garnitures](/profiles/joints-et-garnitures-profine.md) :
+    coupes et matière (PVC / EPDM) de six joints. Sur
+    [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) : coupes des seuils
+    A075 et A077, seuil A076 avec A065 et Z151, pièces G067 et G255.
+  * **Corrections** : Renforts du système 76, « le 76172 est le seul à recevoir le V325 » →
+    le V325 équipe aussi le cadre fixe 76102 ; « Les épaisseurs d'acier des renforts du meneau
+    76373 ne sont pas reprises » → seule celle du V324 manque.
+  * **Anomalies** : INC-18 (capot A042 à 43,5 et 43 mm), INC-19 (« V291.Z 1 »), INC-20 (inerties
+    du V075 et du V264 sans indice), CTR-21 (renforts de six profilés, poster contre manuel et
+    DTD), CTR-22 (renforts des élargisseurs), CTR-23 (six écarts de cote de 0,1 à 1 mm), VER-43
+    (profilé habillé par six capots), VER-44 (76185 absent des sets sur seuil), VER-45 (parcloses
+    2624 à 2632, 76512, 76513). Complétées sans les fermer : VER-39 (sets sur A075), VER-24 (V317
+    dessiné couché et debout), CTR-19 (valeurs du poster).
+  * **Images** : 279 découpes dans `assets/profiles/systeme76/` (poster des profilés principaux :
+    `dormants`, `ouvrants`, `battements`, `meneaux`, `autres`, `embouts`, `seuils`, `joints`,
+    `accessoires`, `renforts` ; poster des profilés complémentaires : `elargisseurs`, `rehausses`,
+    `liaisons-tapees`, `appuis`, `tapees-pvc`, `tapees-alu`, `battements-interieurs`, `liaisons`,
+    `poteaux`, `parcloses`, `accessoires`, `renforts`), toutes page 1 de leur PDF. Les références
+    déjà illustrées dans `assets/profiles/perform76/` n'ont pas été redécoupées pour le second
+    poster.
+  * Glossaire : ajout de capot aluminium (AluClip), cadre fixe, coupe droite / grugeage,
+    assemblage en T / en X.
 * **Retraitement complet** du [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
   selon le protocole révisé : les 26 pages rendues en PNG à 200 dpi et relues en image par lots,
   aucune couche texte lue.

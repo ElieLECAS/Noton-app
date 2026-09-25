@@ -1,8 +1,8 @@
 ---
 type: Gamme
 title: HYBRIDE+
-description: Gamme de fenêtres mixtes aluminium/PVC à ouvrant caché de PROFERM, annonçant 20 % de clair de jour en plus, avec dix coloris extérieurs laqués.
-tags: [hybride-plus, aluminium, pvc, ouvrant-cache, kommerling, roto-nx]
+description: Gamme de fenêtres mixtes aluminium/PVC à ouvrant caché de PROFERM (mai 2023), profil aluminium renforcé selon abaques serti sur PVC GREENLINE, vitrage collé, Roto NX, 10 coloris extérieurs.
+tags: [hybride-plus, aluminium, pvc, ouvrant-cache, kommerling, roto-nx, vitrage-colle]
 gamme: HYBRIDE+
 systeme: Roto NX
 fournisseur: KÖMMERLING
@@ -13,162 +13,91 @@ sources:
     id: brochure-perform-plus-hybride-plus-2023-05
     title: Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023
     last_modified: 2023-05-31
+source_pages:
+  - resource: raw/brochure-perform-plus-hybride-plus-2023-05.pdf
+    pages: 1-3
 generated:
   by: process:claude-code
-  at: 2026-09-17T20:30:00Z
+  at: 2026-09-25T17:00:00Z
 ---
 
-# Statut incertain : à vérifier avant toute proposition
+# Définition et déclinaisons
 
-**La gamme HYBRIDE+ n'apparaît pas dans le
-[catalogue général de janvier 2026](/sources/catalogue-general-2026.md).** La seule source qui la
-documente est une brochure de **mai 2023**, vieille de plus de trois ans.
+HYBRIDE+ est la gamme de fenêtres mixtes aluminium/PVC à ouvrant caché de PROFERM, présentée comme
+une nouveauté en mai 2023 avec la [PERFORM+](/gammes/perform-plus.md), sa déclinaison PVC, sous le
+nom « HYBRIDE+ — La fenêtre écologique » [1 p. 1, 2]. La gamme allie un profil épais en aluminium
+(renforcé selon abaques) serti sur un profil PVC GREENLINE® de chez
+[KÖMMERLING](/fournisseurs/kommerling.md) ; cette technologie est entièrement et exclusivement
+développée par PROFERM [1 p. 3]. L'extérieur est en aluminium, l'intérieur en PVC. Sur une
+fenêtre à ouvrant caché, le cadre mobile (l'ouvrant) est dissimulé derrière le cadre fixe (le
+dormant) vu de l'extérieur (voir le [glossaire](/reference/glossaire.md)).
 
-Avant de proposer une HYBRIDE+ à un client, établir si la gamme est toujours commercialisée —
-entrée **VER-02** du registre
-[Informations à vérifier](/anomalies/informations-a-verifier.md). C'est la raison du
-`status: draft` de cette page.
+L'HYBRIDE+ n'apparaît pas au catalogue général de janvier 2026 ; son statut commercial est à
+établir (**VER-02**). Ce que la marque annonce de la gamme, dont le gain de clair de jour, est sur
+[Arguments de vente PERFORM+ et HYBRIDE+](/commercial/perform-plus-et-hybride-plus.md).
 
-# Ce qu'est la gamme HYBRIDE+
+# Caractéristiques
 
-HYBRIDE+ est la gamme de fenêtres **mixtes aluminium/PVC à ouvrant caché** de PROFERM, présentée
-comme une nouveauté en mai 2023 sous le même slogan que l'HYBRIDE, « la fenêtre écologique »
-[1 p. 1].
+Une ligne par caractéristique, dans les termes de la source [1 p. 2, 3].
 
-Sa construction reprend celle de l'[HYBRIDE](/gammes/hybride.md) : un **profil épais en
-aluminium, renforcé selon abaques, serti sur un profil PVC GREENLINE® de chez
-[KÖMMERLING](/fournisseurs/kommerling.md)**. Elle est présentée comme **unique sur le marché de la menuiserie** et comme une technologie
-**entièrement et exclusivement développée par PROFERM** [1 p. 3].
-
-Ce qui la distingue de l'HYBRIDE est l'**ouvrant caché**, et le gain de **20 % de clair de jour**
-qui en découle [1 p. 1 et 3].
-
-# Conception et assemblage
-
-L'HYBRIDE+ associe un ouvrant caché, un vitrage collé périphérique et un profil alu serti sur PVC.
-
-| Élément | Caractéristique |
+| Caractéristique | HYBRIDE+ |
 | --- | --- |
-| Type d'ouvrant | Ouvrant caché |
-| Profils | Profil épais en aluminium (renforcé selon abaques) serti sur profil PVC GREENLINE® KÖMMERLING |
-| Assemblage d'angle | Soudure en grain d'orge |
-| Gain de clair de jour | +20 % par rapport aux gammes existantes PERFORM et HYBRIDE |
-| Collage vitrage | Périphérique dans l'ouvrant |
-| Épaisseur vitrage maximale | 28 mm |
-| Isolation thermique | Uw = 1,2 W/m²K (avec vitrage Ug 1,0) |
-| Entrebâillement oscillo-battant | 80 mm ou 140 mm (avec dispositif anti-claquement intégré) |
+| Matière | mixte aluminium/PVC |
+| Ouvrant | caché |
+| Profils | profil épais en aluminium (renforcé selon abaques) serti sur un profil PVC GREENLINE® de chez KÖMMERLING® |
+| Vitrage | collage périphérique du vitrage dans l'ouvrant de la menuiserie ; épaisseur pouvant aller jusqu'à 28 mm |
+| Assemblage | soudure en grain d'orge (finition de soudure d'angle) |
+| Quincaillerie | Roto NX — composants sur [Roto NX](/quincaillerie/roto-nx.md) |
+| Poignée | TOULON, uniquement en poignée décalée — finitions sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) |
 
-Aucune cote de section de profilé ni dimension maximale n'est documentée dans la brochure commerciale.
+« Renforcé selon abaques » : la présence d'un renfort est fixée par les abaques de
+dimensionnement, selon la taille du châssis. Aucune cote de profilé ni dimension de fabrication n'est donnée pour l'HYBRIDE+.
 
+# Performances
 
-# Ce qui n'est pas réalisable
-
-Les cinq restrictions énoncées par la brochure s'appliquent aux deux gammes + (brochure
-PERFORM+/HYBRIDE+, p. 2) :
-
-| Impossible sur HYBRIDE+ | Conséquence commerciale |
-| --- | --- |
-| Ajouter des traverses | pas de partition horizontale du châssis |
-| Poignée centrée | seule la poignée décalée est possible |
-| Serrures sur les portes-fenêtres | pas de porte-fenêtre verrouillable |
-| Réaliser le produit avec des fiches | paumelles uniquement |
-| Cintrer la menuiserie | aucune forme cintrée |
-
-**À vérifier en tout début de projet** : la brochure les glisse dans une parenthèse en petits
-caractères, et une seule d'entre elles suffit à disqualifier la gamme.
-
-# Isolation
-
-L'isolation repose sur le **collage périphérique du vitrage dans l'ouvrant**, avec une épaisseur
-de vitrage jusqu'à 28 mm, pour un **Uw de 1,2 W/m²K avec un vitrage de coefficient Ug 1,0**
-[1 p. 2].
-
-Ce Uw de 1,2 est **moins bon que celui de l'[HYBRIDE](/gammes/hybride.md), annoncée à 0,8 W/m²K**
-au catalogue général. Comme la PERFORM+, l'HYBRIDE+ se vend sur la luminosité, pas sur le
-thermique — le compromis est explicite.
-
-# Sécurité
-
-Quincaillerie **Roto NX**, pouvant répondre à la classe de résistance **RC2 avec oscillo-battant
-en position ouverte** [1 p. 2]. Détail dans
-[Roto NX](/quincaillerie/roto-nx.md).
+- **Thermique** : coefficient Uw (transmission thermique de la fenêtre complète) de 1,2 W/m²K
+  « avec un vitrage 1.0 », obtenu par le collage périphérique du vitrage et son épaisseur
+  jusqu'à 28 mm [1 p. 2].
+- **Effraction** : les quincailleries Roto NX peuvent répondre à la classe de résistance 2 avec
+  oscillo-battant en position ouverte (RC2) ; voir
+  [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 2].
 
 # Coloris
 
-C'est le domaine où l'HYBRIDE+ se sépare nettement de la [PERFORM+](/gammes/perform-plus.md), qui
-n'offre que du blanc.
+L'HYBRIDE+ se fait en blanc 9016 teinté dans la masse à l'intérieur (PVC), et à l'extérieur
+(aluminium) en blanc 9016 brillant laqué standard ou en neuf couleurs laquées, 1 ou 2 faces
+identiques : [Coloris HYBRIDE+](/coloris/coloris-hybride-plus.md) [1 p. 3].
 
-Intérieur PVC [1 p. 3] :
+# Garanties
 
-| Coloris | Type |
-| --- | --- |
-| Blanc 9016 | teinté dans la masse |
+La structure de la menuiserie HYBRIDE+ est garantie jusqu'à 20 ans, sous conditions (**CTR-03**),
+et le laquage 7 ans (**CTR-05**) ; la grille complète est sur
+[Garanties par composant](/garanties/garanties-par-composant.md) [1 p. 2, 3].
 
-Extérieur aluminium, coloris standard :
+# Ce qui n'est pas réalisable
 
-| Coloris | Finition |
-| --- | --- |
-| Blanc 9016 | brillant, laqué |
+« Il n'est pas possible d'ajouter de traverses, de poignée centrée, de serrures sur les
+portes-fenêtres et de réaliser ce produit avec des fiches, ni de le cintrer » : la règle vaut pour
+la PERFORM+ et l'HYBRIDE+ [1 p. 2]. Une traverse est un profil horizontal qui divise le châssis ;
+les fiches sont des organes de rotation de l'ouvrant ; cintrer, c'est donner au châssis une
+forme courbe (voir le [glossaire](/reference/glossaire.md)).
 
-Neuf couleurs extérieures standards supplémentaires, laquées, 1 ou 2 faces identiques (brochure
-PERFORM+/HYBRIDE+, p. 3) :
-
-| Coloris | Finition |
-| --- | --- |
-| Rouge 3004 | satiné |
-| Gris 2900 | granité |
-| Anthracite 7016 | satiné |
-| Anthracite 7016 | granité |
-| Gris 7039 | granité |
-| Gris 7035 | granité |
-| Noir 2100 | granité |
-| Noir 9005 | granité |
-| Marron 8019 | granité |
-
-La palette est **presque identique à celle de l'[HYBRIDE](/gammes/hybride.md)**, à deux
-exceptions près : l'HYBRIDE+ ne propose ni Anodisé argent ni Anodisé champagne, et le **Gris
-7016** de l'HYBRIDE est le même RAL que l'**Anthracite 7016** de l'HYBRIDE+, sous deux
-désignations commerciales.
-
-L'intérieur ne propose pas l'Ivoire disponible sur l'HYBRIDE, ni le laquage 2 faces en toutes
-teintes RAL.
-
-# Poignée
-
-La poignée **TOULON** est la seule proposée, en blanc, noir ou F9, **uniquement en version
-décalée**. Laquage RAL sur demande en option [1 p. 3].
-
-# Garanties annoncées
-
-| Composant | Garantie annoncée |
-| --- | --- |
-| Structure de la menuiserie | jusqu'à 20 ans |
-| Laquage | 7 ans |
-| Ferrure Roto | 10 ans sur le fonctionnement |
-| Vitrage | 10 ans |
-| Volet roulant | 7 ans |
-
-Relevé sur la brochure PERFORM+/HYBRIDE+ (p. 3), sous réserve de conditions à vérifier auprès de
-l'Expert.
-
-**Le laquage à 7 ans mérite attention** : c'est exactement la durée que le catalogue général
-réserve aux **couleurs hors standards** de l'HYBRIDE, les couleurs standards étant à 10 ans
-(catalogue général, p. 35). Ici les neuf couleurs sont pourtant présentées comme standards.
-Entrée **CTR-05** du registre
-[Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+- **Pas de traverse ajoutée.**
+- **Pas de poignée centrée** : la poignée TOULON est « uniquement en poignée décalée » [1 p. 3].
+- **Pas de serrure sur les portes-fenêtres.**
+- **Pas de réalisation avec des fiches.**
+- **Pas de cintrage.**
 
 # Citations
 
-[1] Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023 —
-`raw/brochure-perform-plus-hybride-plus-2023-05.pdf`, p. 1 à 3
-[2] [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md),
-p. 12 et 35
+[1] [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](raw/brochure-perform-plus-hybride-plus-2023-05.pdf), p. 1 à 3
 
 # Voir aussi
 
 - [PERFORM+](/gammes/perform-plus.md)
 - [HYBRIDE](/gammes/hybride.md)
+- [Coloris HYBRIDE+](/coloris/coloris-hybride-plus.md)
+- [Arguments de vente PERFORM+ et HYBRIDE+](/commercial/perform-plus-et-hybride-plus.md)
 - [Roto NX](/quincaillerie/roto-nx.md)
 - [KÖMMERLING](/fournisseurs/kommerling.md)
-- [Contradictions entre sources](/anomalies/contradictions-entre-sources.md)
 - [Brochure Nouveautés PERFORM+ et HYBRIDE+](/sources/brochure-perform-plus-hybride-plus.md)

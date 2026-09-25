@@ -22,37 +22,48 @@ generated:
 
 # Définition et principe de fonctionnement
 
-La serrure motorisée **Safe E Eneo CC** assure la fermeture et le verrouillage électromécanique automatique de la porte d'entrée dès que l'ouvrant entre en contact avec le dormant, depuis l'intérieur comme depuis l'extérieur [1 p. 33].
+La serrure motorisée **Safe E Eneo CC** équipe la porte d'entrée : de l'intérieur comme de
+l'extérieur, la porte se ferme et se verrouille automatiquement [1 p. 33]. Ce que la marque en
+annonce est sur [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md).
 
-# Conditions de mise en œuvre et restrictions
-
-L'intégration de la serrure motorisée est soumise à deux règles d'atelier impératives [1 p. 33] :
-1. **Compatibilité d'ouvrant** : disponible exclusivement sur **ouvrant PVC de 118 mm** ou sur **panneau monobloc** (gamme [Sélection Hexa](/portes/selection-hexa.md)). L'ouvrant PVC de 97 mm est exclu.
-2. **Absence de poignée extérieure** : la porte ne comporte pas de béquille extérieure ; la manœuvre nécessite l'installation d'un bâton de tirage ou l'actionnement direct du cylindre de sécurité.
-
-# Sécurité mécanique et électromécanique
-
-Spécifications du boîtier moteur et du verrouillage combiné [1 p. 33] :
-* **Verrouillage combiné** : ancrage de sécurité simultané par goujon et crochet en acier dans les gâches du dormant.
-* **Secours manuel** : fonction manuelle par clé conservée pour le déverrouillage mécanique en cas de coupure de courant ou de panne secteur.
-* **Alimentation** : transformateur électrique directement intégré au châssis.
-
-# Contrôle d'accès et module Eneo 4 en 1
-
-Le paramétrage des autorisations et des plages d'accès est géré depuis l'application mobile **SOREX** [1 p. 33]. Le module de commande en façade regroupe quatre technologies d'identification [1 p. 33] :
-
-| Mode d'accès | Support d'identification |
-| --- | --- |
-| Clavier codé | Digicode tactile sur boîtier |
-| Biométrie | Lecteur d'empreintes digitales |
-| Sans contact | Lecteur de badges RFID |
-| Sans fil de proximité | Connexion Bluetooth® sécurisée via smartphone |
+![Moteur Safe E Eneo CC et verrouillage combiné](/assets/quincaillerie/portes-entree/safe-e-eneo-cc-moteur-et-verrouillage.png)
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 33)
 
-## Option télécommande radio
+# Conditions de mise en œuvre et restrictions
 
-Une télécommande d'ouverture à distance est disponible en option. Le récepteur radio correspondant est intégré de série directement dans le boîtier moteur Safe E Eneo CC, sans ajout de carte électronique déportée [1 p. 33].
+**Disponible uniquement sur ouvrant de 118 ou sur monobloc** ([Sélection Hexa](/portes/selection-hexa.md)),
+cette serrure ne dispose pas de poignée extérieure. Un bâton de tirage peut être ajouté à la porte,
+ou le cylindre de sécurité simplement gardé [1 p. 33].
+
+# Sécurité
+
+* Verrouillage et déverrouillage électromécanique.
+* Fermeture sécurisée par goujon et crochet.
+* Fonction manuelle avec clé en cas de coupure de courant [1 p. 33].
+
+# Confort et contrôle d'accès
+
+Installation facile (transformateur intégré et application SOREX pour le paramétrage des accès).
+Module de contrôle d'accès Eneo 4 en 1 [1 p. 33] :
+
+| Fonction du module |
+| --- |
+| Digicode |
+| Lecteur d'empreintes |
+| Lecteur de badges |
+| Fonction Bluetooth® pour déverrouillage à proximité |
+
+![Module de contrôle d'accès Eneo 4 en 1](/assets/quincaillerie/portes-entree/module-eneo-4-en-1.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 33)
+
+## Option télécommande
+
+Télécommande en option possible : récepteur radio de la télécommande intégré de série dans le
+boîtier moteur [1 p. 33].
+
+![Télécommande](/assets/quincaillerie/portes-entree/telecommande.png)
 
 # Garanties
 

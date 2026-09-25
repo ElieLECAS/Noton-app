@@ -16,6 +16,9 @@ sources:
     id: dtd-6-16-2334-v5
     title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
     last_modified: 2025-06-19
+source_pages:
+  - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
+    pages: 4, 6-7
 generated:
   by: process:claude-code
   at: 2026-09-18T09:00:00Z
@@ -195,9 +198,12 @@ Le [DTD n° DBV-25-6/16-2334_V5](/sources/dtd-6-16-2334.md) ne raisonne pas en �
 | Prescription du DTD | Ce qu'elle impose |
 | --- | --- |
 | Profilé PVC revêtu d'un film ou d'une laque à L\* < 82 | renfort obligatoire |
-| Profilé PVC revêtu d'un capotage aluminium à L\* < 82 | renfort obligatoire, en dormant **et** en ouvrant |
+| Profilé PVC revêtu d'un capotage aluminium à L\* < 82 | renfort obligatoire |
 | Chambres des profilés à L\* < 82 communiquant avec l'extérieur | décompression par orifices de **Ø 5 mm minimum** |
 | Habillage monoparoi à L\* < 82 ou non défini | **interdit en traverse basse**, quelle que soit la technologie de coloration |
+
+(prescriptions : raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 4, 6 et 7 ; texte complet au
+§ 2.2.3, 2.2.3.4 et 2.4 de [DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md))
 
 **Le critère est réglementaire** : le renforcement d'un profilé
 anthracite est une prescription du Groupe Spécialisé du CSTB, déclenchée par une mesure de clarté,
@@ -279,6 +285,8 @@ visible du classement par couleur.
 
 [1] Mise en œuvre Système 76 Advanced, profine —
 `raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registres 2.3.3, 2.4.2 et 2.6.3
+
+[2] [DTD n° DBV-25-6/16-2334_V5, système 76 Advanced](raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf), p. 4, 6 et 7
 
 # Voir aussi
 

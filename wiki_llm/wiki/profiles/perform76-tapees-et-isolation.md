@@ -17,9 +17,17 @@ sources:
     id: dtd-6-16-2334-v5
     title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
     last_modified: 2025-06-19
+  - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf
+    id: dta-6-16-2334-v5
+    title: DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED
+    last_modified: 2025-06-19
 source_pages:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     pages: 17, 19, 24
+  - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf
+    pages: 17
+  - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
+    pages: 4, 16, 23
 generated:
   by: process:claude-code
   at: 2026-09-17T20:00:00Z
@@ -67,44 +75,75 @@ substituent pas :
 175, 195 et 215 mm.** Une demande à 140 mm sur ce dormant se traite en 135 ou en 155 mm : le
 140 mm appartient au 76180 et aux dormants rénovation.
 
-Le DTD du système donne les mêmes tapées à 0,5 mm près et suffixées **.1** sur quatre d'entre
-elles : 6139.1, 6140.1, 6141.1 et 6142.1 pour 35,5, 55,5, 75,5 et 95,5 mm d'épaisseur propre —
-contre 35, 55, 75 et 95 mm au cahier technique. Écart mineur d'arrondi entre les deux sources,
-sans incidence sur l'isolation obtenue [2 p. 4].
+Dans le DTD et le DTA du système, quatre de ces tapées portent le suffixe **.1** et une épaisseur
+propre supérieure de 0,5 mm : 6139.1, 6140.1, 6141.1 et 6142.1 pour 35,5, 55,5, 75,5 et 95,5 mm,
+76772 et 76769 pour 115,5 et 135,5 mm, contre 35, 55, 75, 95, 115 et 135 mm au cahier technique
+[2 p. 4]. Les sept tapées y sont dessinées sous le nom de **fourrures d'épaisseur PVC** [3 p. 17] [2 p. 16].
+L'isolation obtenue par dormant est celle du tableau ci-dessus, relevée sur le cahier technique.
 
 # Correspondance avec les pièces d'appui
 
-Chaque tapée n'est pas compatible avec chacun des quatre appuis de pièce d'appui du système.
-Correspondance relevée sur le DTD, `X` marquant une compatibilité.
+Une **pièce d'appui** PVC se visse dans les alvéovis (logements de vis) du nez de la tapée ; ses
+chambres doivent correspondre au nez de la tapée, et toutes les tapées n'ont pas de
+correspondance avec les quatre pièces d'appui du système. Le tableau des correspondances des
+chambres des pièces d'appui avec les nez des fourrures d'épaisseur se lit par ligne : une tapée,
+son épaisseur, puis un `X` sous chaque pièce d'appui qui lui correspond ; une case vide (`-`)
+marque l'absence de correspondance.
 
-| Tapée | Épaisseur (mm) | Appui 6137 | Appui 6136 | Appui 76758 | Appui 76768 |
+| Tapée | Épaisseur tapée (mm) | Pièce d'appui 6137 | Pièce d'appui 6136 | Pièce d'appui 76758 | Pièce d'appui 76768 |
 | --- | --- | --- | --- | --- | --- |
 | 6138 | 15 | X | X | X | X |
 | 6139.1 | 35,5 | X | X | X | X |
 | 6140.1 | 55,5 | X | X | X | X |
-| 6141.1 | 75,5 | X | X | X | - |
-| 6142.1 | 95,5 | X | X | - | - |
-| 76772 | 115,5 | X | - | - | - |
-| 76769 | 135,5 | X | - | - | - |
+| 6141.1 | 75,5 | X | - | X | X |
+| 6142.1 | 95,5 | X | - | - | X |
+| 76772 | 115,5 | - | - | - | X |
+| 76769 | 135,5 | - | - | - | X |
 
 (schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 4)
 
-**Plus la tapée est épaisse, moins elle admet d'appuis** : les deux tapées les plus fines
-(6138 et 6139.1) se posent sur les quatre appuis, les deux plus épaisses (76772 et 76769)
-n'admettent plus que le 6137.
+**Les tapées 76772 et 76769 ne correspondent qu'à la pièce d'appui 76768.** La 6141.1 ne
+correspond pas à la 6136 ; la 6142.1 ne correspond qu'aux 6137 et 76768 [2 p. 4].
+
+L'étanchéité pièce d'appui / tapée est assurée par la pièce M298 ou M613 comprimée lors du vissage
+de la pièce d'appui dans les alvéovis de la fourrure d'épaisseur ; les fourrures sont clippées et
+vissées avec un entraxe maximum de 300 mm (DTD § 2.2.3.1.3, sur
+[DTA n° 6/16-2334_V5](/certifications/dta-6-16-2334.md)) [2 p. 4].
 
 # Embouts des pièces d'appui
 
-Chaque appui de pièce d'appui a son propre embout, en PVC expansé, qui obture ses chambres.
+L'obturation des chambres de pièces d'appui, quelle que soit la correspondance entre les parois de
+la pièce d'appui et le nez de la fourrure d'épaisseur, est réalisée par des embouts ajustés en PVC
+expansé [2 p. 4]. Chaque embout est une cale pentée qui suit la pente de la pièce d'appui : il se
+glisse dans les chambres de la pièce d'appui, au droit du nez de la fourrure d'épaisseur. Une ligne
+par pièce d'embout, de gauche à droite sur la planche : sa largeur (cote horizontale), sa longueur
+de 60 mm (profondeur d'insertion), son épaisseur à chaque extrémité de la pente, et, sur les 9F55.1
+et 9F56.1, la feuillure de 4,5 × 9,5 mm taillée sous l'extrémité mince [2 p. 23].
 
-| Appui | Embout | Nombre de pièces |
-| --- | --- | --- |
-| 6136 | 9F55.1 | 1 |
-| 6137 | 9F56.1 | 2 |
-| 76758 | AC011 | 3 |
-| 76768 | M780, M781, M782 | 3 |
+| Pièce d'appui | Embout | Nombre de pièces | Pièce | Largeur (mm) | Longueur (mm) | Épaisseur, extrémité mince (mm) | Épaisseur, extrémité épaisse (mm) | Feuillure (mm) | Coupe |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: |
+| 6136 | 9F55.1 | 1 | unique | 60,8 | 60 | 11,3 | 14,5 | 4,5 × 9,5 | ![Embout 9F55.1 pour 6136](/assets/profiles/systeme76/appuis/embout-9f55-1.png) |
+| 6137 | 9F56.1 | 2 | première | 46 | 60 | 9,7 | 12,1 | 4,5 × 9,5 | ![Embout 9F56.1 pour 6137](/assets/profiles/systeme76/appuis/embout-9f56-1.png) |
+| 6137 | 9F56.1 | 2 | seconde | 42,5 | 60 | 12,3 | 14,5 | - | ![Embout 9F56.1 pour 6137](/assets/profiles/systeme76/appuis/embout-9f56-1.png) |
+| 76758 | AC011 | 3 | première | 23 | 60 | 1,5 | 3,5 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76758 | AC011 | 3 | deuxième | 18,5 | 60 | 3,5 | 5,5 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76758 | AC011 | 3 | troisième | 18,5 | 60 | 5,5 | 7 | - | ![Embout AC011 pour 76758](/assets/profiles/systeme76/appuis/embout-ac011.png) |
+| 76768 | M780 | - | M780 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
+| 76768 | M781 | - | M781 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
+| 76768 | M782 | - | M782 | - | 60 | - | - | - | ![Embouts M780, M781, M782 pour 76768](/assets/profiles/systeme76/appuis/embouts-m780-m781-m782-76768.png) |
 
-(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 4 et 23)
+(schéma: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf, p. 23)
+
+Chaque coupe montre à gauche le dormant, la pièce d'appui vissée sous lui et, hachurées dans ses
+chambres, les pièces d'embout ; à droite, chaque pièce d'embout de profil (la pente) puis de face
+(le rectangle de 60 mm). Les embouts M780, M781 et M782 de la pièce d'appui 76768 sont dessinés en
+trois références distinctes, en PVC expansé (hachure pointillée), avec leur seule longueur de
+60 mm : leur largeur et leurs épaisseurs ne sont pas cotées, et la planche ne porte pas de nombre
+de pièces pour eux. La planche est titrée « Embouts de pièces d'appui (PVC expansé) » ; les légendes
+sont « EMBOUT 9F55.1 POUR 6136 (1 PIECE) », « EMBOUT 9F56.1 POUR 6137 (2 PIECES) », « EMBOUT AC011
+POUR 76758 (3 PIECES) », « M780, M781, M782 EMBOUTS POUR 76768 » [2 p. 23]. Le texte du § 2.2.3.1.3
+ne cite que les 9F55.1, 9F56.1 et AC011 [2 p. 4]. La coupe « Assemblage fourrure et pièce d'appui PVC » écrit l'embout du 6137
+« 9F56 », sans suffixe — entrée **INC-25**.
 
 La cote propre est la hauteur de la tapée, constante quel que soit le dormant. Les cotes de
 montage varient : **35 / 16** sur les dormants rénovation, **35 / 39** sur le 76180, **35 / 45**
@@ -448,10 +487,13 @@ documentées.
 `raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 17, 19 et 24
 
 [2] DTD n° DBV-25-6/16-2334_V5, système 76 Advanced —
-`raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 4 et 23
+`raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 4, 16 et 23
+
+[3] [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](raw/dta-trocal-76-advanced-6-16-2334-v5.pdf)
 
 # Voir aussi
 
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
 - [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md)
 - [Pose de la PERFORM76](/procedures/pose-perform76.md)

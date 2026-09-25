@@ -29,7 +29,7 @@ source_pages:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     pages: 4, 8
   - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf
-    pages: 9
+    pages: 9, 19
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
     pages: 18
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
@@ -82,10 +82,14 @@ Les 17 parcloses d'ouvrant PERFORM76, par épaisseur de vitrage croissante, cote
 Le **48 mm a deux parcloses**, la 76508 de cote 12 et la 76509 de cote 10,8 ; le critère qui les
 départage n'est pas donné.
 
-**Le DTD du système donne des épaisseurs différentes pour trois de ces parcloses** : 76508 à
-46 mm, 2454 à 32 mm et 2433 à 34 mm, contre 48, 31 et 33 mm ici [3 p. 18]. Le cahier technique est
+**Trois de ces parcloses portent une autre épaisseur sur les planches du dossier technique du système** :
+76508 à 46 mm, 2454 à 32 mm et 2433 à 34 mm, contre 48, 31 et 33 mm ici [3 p. 18] [2 p. 19]. Le cahier technique est
 le document produit et reste la valeur retenue — voir la règle de citation. Entrée **CTR-19** du
-registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md).
+registre [Contradictions entre sources](/anomalies/contradictions-entre-sources.md). Le poster
+profine des profilés complémentaires suit le DTD pour la 76508 (46) et la 2433 (34), le cahier
+pour la 2454 (31) ; sa liste complète des parcloses, avec les 76512, 76513 et 2624 à 2632 que la
+PERFORM76 ne porte pas, est dans
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md#parcloses).
 
 **Il n'existe pas de parclose d'ouvrant pour 22 mm ni pour 34 mm** de vitrage : la série saute de
 20 à 24, puis de 33 à 36.
@@ -109,7 +113,8 @@ Les 10 parcloses de dormant PERFORM76, par épaisseur de vitrage croissante, cot
 
 (schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 8)
 
-La série de dormant offre une épaisseur que l'ouvrant n'a pas, **46 mm avec la 76578**. Elle ne
+La parclose de dormant **2638** est à 32 mm, et non 31, sur la planche « Parcloses PVC » du
+système [2 p. 19] — entrée **CTR-19**. La série de dormant offre une épaisseur que l'ouvrant n'a pas, **46 mm avec la 76578**. Elle ne
 couvre ni 16, 18, 20, 24, 26, 33 ni 50 mm.
 
 # Parcloses complémentaires
@@ -117,7 +122,10 @@ couvre ni 16, 18, 20, 24, 26, 33 ni 50 mm.
 Le DTD porte sept références de plus, à la suite immédiate des séries d'ouvrant et de dormant, ni
 étiquetées « ouvrant » ni « dormant » : 1511, 1512, 76513, 76531, 76532, 76533 et 76534, aux
 épaisseurs de vitrage 40, 36, 28, 24, 26, 28 et 36 mm, plus une pièce nommée « rehausseur de
-parclose » sous la référence **76570**, sans épaisseur associée [3 p. 18]. Le profil dessiné
+parclose » sous la référence **76570**, sans épaisseur associée [3 p. 18]. Le DTA les dessine de
+même, en sixième ligne de sa planche de parcloses, avec une troisième ligne de sept autres
+(6146, 6148, 6147, 76512, 76501, 76523, 76524) — liste complète et coupes dans
+[Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md#parcloses-sur-six-lignes-avec-le-rehausseur-76570) [2 p. 19]. Le profil dessiné
 diffère de celui des deux séries précédentes.
 
 **Leur famille d'emploi n'est pas donnée par le document** — entrée **VER-36** du registre
@@ -220,7 +228,7 @@ Elle fixe, pour chaque épaisseur de vitrage (16 à 50 mm), la parclose associé
 `raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 4 et 8
 
 [2] DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED —
-`raw/dta-trocal-76-advanced-6-16-2334-v5.pdf`, p. 9
+`raw/dta-trocal-76-advanced-6-16-2334-v5.pdf`, p. 9 et 19
 
 [3] DTD n° DBV-25-6/16-2334_V5, système 76 Advanced —
 `raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 18
@@ -230,6 +238,7 @@ Elle fixe, pour chaque épaisseur de vitrage (16 à 50 mm), la parclose associé
 
 # Voir aussi
 
+- [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md)
 - [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)
 - [Performances des vitrages](/vitrages/performances-vitrages.md)

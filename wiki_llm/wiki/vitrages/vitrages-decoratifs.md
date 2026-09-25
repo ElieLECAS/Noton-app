@@ -23,30 +23,45 @@ generated:
 
 # Définition et modèles disponibles
 
-Toutes les menuiseries PROFERM peuvent recevoir des vitrages standards décoratifs [1 p. 26]. Neuf modèles sont référencés au catalogue général :
+Un vitrage décoratif est un verre imprimé, dépoli ou à relief qui laisse passer la lumière en
+brouillant plus ou moins la vue. Toutes les menuiseries PROFERM peuvent être équipées de vitrages
+standards décoratifs ; neuf modèles sont présentés [1 p. 26]. Chaque photo montre le verre posé
+devant une figurine : la partie gauche de la figurine est vue sans verre, la partie droite à
+travers le verre. Une ligne par vitrage ; la dernière colonne dit si le modèle figure aussi au
+nuancier des vitrages décoratifs.
 
-| Vitrage | Aspect et structure de surface | Disponibilité au nuancier |
-| --- | --- | --- |
-| Clair | Verre float transparent standard | - |
-| Dépoli | Translucide dépoli satiné uniforme | Présent (sous la mention « Dépoli acide ») |
-| Chinchilla | Texture granitée dense | Présent (sous la mention « Chinchilla clair ») |
-| Delta clair | Relief géométrique végétal sur fond transparent | Présent |
-| Delta mat | Relief géométrique végétal sur fond dépoli | Présent |
-| Listral | Relief strié linéaire régulier | Absent du nuancier [CTR-14] |
-| Mimosa | Motif floral organique fin | Absent du nuancier [CTR-14] |
-| Olivier | Motif imprimé feuillage d'olivier | Présent |
-| Clé de fleur | Motif décoratif floral géométrique | Présent |
+| Vitrage | Disponibilité au nuancier | Photo |
+| --- | --- | ---: |
+| Clair | - | ![Clair](/assets/vitrages/decoratifs/clair.png) |
+| Dépoli | présent (sous la mention « Dépoli acide ») | ![Dépoli](/assets/vitrages/decoratifs/depoli.png) |
+| Chinchilla | présent (sous la mention « Chinchilla clair ») | ![Chinchilla](/assets/vitrages/decoratifs/chinchilla.png) |
+| Delta clair | présent | ![Delta clair](/assets/vitrages/decoratifs/delta-clair.png) |
+| Delta mat | présent | ![Delta mat](/assets/vitrages/decoratifs/delta-mat.png) |
+| Listral | absent du nuancier (**CTR-14**) | ![Listral](/assets/vitrages/decoratifs/listral.png) |
+| Mimosa | absent du nuancier (**CTR-14**) | ![Mimosa](/assets/vitrages/decoratifs/mimosa.png) |
+| Olivier | présent | ![Olivier](/assets/vitrages/decoratifs/olivier.png) |
+| Clé de fleur | présent | ![Clé de fleur](/assets/vitrages/decoratifs/cle-de-fleur.png) |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 26)
 
-*(Note technique : la référence « Imprimé 200 » présente dans le nuancier d'atelier correspond à la face intérieure fixe des panneaux de portes classiques, et non à un verre de vitrage de fenêtre au choix du client).*
+La référence « Imprimé 200 » du nuancier des vitrages est le verre de face intérieure des panneaux
+de portes classiques, pas un vitrage de fenêtre au choix (**CTR-14**).
 
 # Options de vitrage décoratif
 
-Trois options complémentaires s'ajoutent aux vitrages standards [1 p. 26] :
-* **Vitrage Antélio** : vitrage de contrôle solaire à couche réfléchissante.
-* **Vitrages avec plats collés et intercalaires fictifs (duplex)** : pose de plats collés en surface intérieure et extérieure du vitrage, combinée à l'intégration d'un intercalaire fictif noir dans la lame d'air du double vitrage dans l'alignement des plats, reproduisant l'esthétique des petits bois sans division mécanique du verre.
-* **Vitrages spécifiques sur demande** : intégration de compositions décoratives particulières sur étude de faisabilité.
+« Et aussi » [1 p. 26] :
+
+* vitrage Antélio en option ;
+* vitrage avec plats collés et intercalaires fictifs ;
+* autres vitrages sur demande.
+
+Les plats collés sont des baguettes collées sur le verre pour dessiner des petits bois ; les
+intercalaires fictifs, placés entre les deux verres dans l'alignement des plats, complètent
+l'effet. La photo montre deux plats collés et, fléchés, les intercalaires fictifs.
+
+![Plats collés avec intercalaires fictifs](/assets/vitrages/decoratifs/plats-colles-intercalaires-fictifs.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 26)
 
 # Compatibilités par gamme
 

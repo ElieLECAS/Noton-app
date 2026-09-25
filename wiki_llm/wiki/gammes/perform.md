@@ -23,7 +23,7 @@ sources:
     last_modified: 2023-06-30
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
-    pages: 1, 4, 6-8, 34-35
+    pages: 6-8, 34
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
     pages: 4-6
   - resource: raw/depliant-general-2023-06.pdf
@@ -35,65 +35,113 @@ generated:
 
 # Définition et déclinaisons
 
-PERFORM est la gamme de menuiseries en PVC de PROFERM, présentée sous le slogan « la fenêtre ultra-durable » [1 p. 1, 4]. Elle s'adapte à toutes les configurations d'ouverture : à la française, oscillo-battante, à soufflet, en châssis fixe ou en coulissant [1 p. 6]. Le coulissant PVC de la gamme fait l'objet d'une page dédiée : [INNOSLIDE](/gammes/innoslide.md).
+PERFORM est la gamme de menuiseries en PVC de PROFERM : fenêtres et portes, en ouverture à la
+française, oscillo-battante, soufflet, châssis fixe ou coulissant [1 p. 6]. Le coulissant PVC de
+la gamme a sa page : [INNOSLIDE](/gammes/innoslide.md). Ce que la marque annonce de la gamme
+(slogan, avantages) est sur [Arguments de vente PERFORM](/commercial/perform.md).
 
-Toutes les menuiseries PERFORM sont fabriquées à partir de profilés en PVC GREENLINE® fournis par [KÖMMERLING](/fournisseurs/kommerling.md). Ce matériau est garanti sans plomb ni cadmium, intègre du PVC recyclé et est entièrement recyclable [1 p. 4, 6].
+Les menuiseries PERFORM sont conçues avec des profils PVC GREENLINE® de
+[KÖMMERLING](/fournisseurs/kommerling.md) ; elles sont garanties sans plomb ni cadmium, intègrent
+du PVC recyclé et sont entièrement recyclables [1 p. 6].
 
-La gamme se compose de deux déclinaisons distinctes par l'épaisseur de leur profilé [1 p. 6] :
-- **PERFORM70** : profilé de 70 mm d'épaisseur.
-- **PERFORM76** : profilé de 76 mm d'épaisseur.
+La gamme est proposée en deux déclinaisons, qui se distinguent par l'épaisseur du profil
+(sa profondeur, de l'extérieur à l'intérieur) [1 p. 6] :
+
+- **PERFORM70** : profil 70 mm ;
+- **PERFORM76** : profil 76 mm.
 
 # Caractéristiques
 
-Épaisseurs, structure interne et équipements de base des deux déclinaisons PERFORM [1 p. 6-8].
+Épaisseur, structure et Uw (coefficient de transmission thermique de la fenêtre complète, en
+W/m²K : plus il est bas, plus la fenêtre isole) des deux déclinaisons PERFORM ; une ligne par
+déclinaison [1 p. 6-7].
 
-| Déclinaison | Épaisseur du profilé (mm) | Nombre de chambres | Joints d'étanchéité | Uw minimal (W/m²K) |
+| Déclinaison | Épaisseur du profil (mm) | Nombre de chambres | Nombre de joints | Uw annoncé « jusque » (W/m²K) |
 | --- | --- | --- | --- | --- |
 | PERFORM70 | 70 | - | - | 1,3 |
 | PERFORM76 | 76 | 6 | 3 | 0,8 |
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 6)
+(schéma: raw/catalogue-general-2026-01.pdf, p. 6-7)
 
-La PERFORM76 dispose d'un système d'étanchéité et d'isolation reposant sur 3 joints (un joint à frappe sur l'ouvrant, un joint central, un joint à frappe sur le dormant) et 6 chambres d'isolation dans le dormant et l'ouvrant [1 p. 6, 2 p. 4 et 5]. Le joint central sépare la chambre humide extérieure d'une chambre sèche intérieure abritant la quincaillerie [2 p. 4 et 5]. Le nombre de chambres et de joints de la PERFORM70 n'est pas spécifié dans le catalogue général [1 p. 6].
+La PERFORM76 est un profil étanche grâce à ses 3 joints et 6 chambres [1 p. 6] ; le détail des
+joints et des chambres est donné par les coupes du cahier technique, plus bas [2 p. 4 et 5]. Le
+nombre de chambres et de joints de la PERFORM70 n'est pas donné.
 
 ## Équipements de série
 
-La fabrication de la gamme PERFORM intègre dix composants et procédés de série destinés à assurer robustesse, sécurité et finitions [1 p. 6] :
+Dix équipements et procédés de la gamme PERFORM sont repérés de 1 à 10 sur une fenêtre à deux
+vantaux ; le tableau reprend la légende de chaque photo [1 p. 6].
 
-| Repère | Équipement ou procédé | Rôle et spécifications |
-| --- | --- | --- |
-| 1 | Pivot symétrique systématique | Équilibrage de la ferrure sur l'ouvrant et le dormant |
-| 2 | Profils à structure totalement renforcée KÖMMERLING® | Armatures en acier intégrées selon les abaques techniques |
-| 3 | Parclose arrondie ou moulurée | Finition esthétique intérieure au choix |
-| 4 | Pivot haute résistance | Supporte le poids d'une fenêtre jusqu'à 130 kg (charge atelier à 100 kg selon [2 p. 6], voir [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md)) |
-| 5 | Rouleau champignon | Système de sécurité anti-dégondage et retardateur d'effraction |
-| 6 | Sécurité de manœuvre | Système anti-fausse manœuvre couplé à un levier de vantail |
-| 7 | Soudure grain d'orge | Assemblage d'angle en coupe d'onglet avec finition soignée |
-| 8 | Cale anti-fatigue et jonc de finition | Positionnés en partie basse du dormant pour la tenue mécanique et la propreté de feuillure |
-| 9 | Crémone du semi-fixe | Double la compression d'étanchéité et renforce la sécurité sur le vantail secondaire |
-| 10 | Profil PERFORM76 étanche | 3 joints périphériques d'étanchéité et 6 chambres d'isolation thermique |
+| Repère | Équipement ou procédé |
+| --- | --- |
+| 1 | Pivot symétrique systématique |
+| 2 | Profils à structure totalement renforcée KÖMMERLING® |
+| 3 | Parclose arrondie ou moulurée |
+| 4 | Pivot pouvant supporter le poids d'une fenêtre jusqu'à 130 kg |
+| 5 | Système sécurité : rouleau champignon anti-dégondage et anti-effraction |
+| 6 | Système anti-fausse manœuvre et levier de vantail |
+| 7 | Soudure finition grain d'orge. Assemblage en coupe d'onglet |
+| 8 | Câle anti-fatigue et jonc de finition en partie basse du dormant |
+| 9 | Compression et sécurité doublée grâce à la crémone du semi-fixe |
+| 10 | PERFORM76 : profil étanche grâce à ses 3 joints & 6 chambres |
+
+Le pivot du repère 4 est donné pour 130 kg ; le cahier technique PERFORM76 limite l'ouvrant à
+100 kg : voir [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md) [2 p. 6].
+
+Le schéma repère chaque équipement sur la fenêtre (numéros noirs cerclés) :
+
+![Équipements de série PERFORM, repères sur la fenêtre](/assets/gammes/perform/equipements-de-serie-reperes.png)
+
+Les dix photos, dans l'ordre des repères, montrent chaque équipement de près :
+
+![Équipements de série PERFORM, photos 1 à 10](/assets/gammes/perform/equipements-de-serie-photos.png)
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 6)
 
-## Accessoires et quincaillerie
+## Menuiseries sur mesure et cintrage
 
-Les menuiseries PERFORM reçoivent un ensemble d'accessoires de manœuvre et de décoration adaptés aux fenêtres et portes-fenêtres [1 p. 7] :
+PROFERM est doté d'un atelier de cintrage (mise en forme courbe des profilés) et fabrique des
+menuiseries de différentes formes : plein cintre ou cintre surbaissé, œil de bœuf, anse de panier
+ou chapeau de gendarme (à partir d'un gabarit), triangle ou trapèze. **Le cintrage (hors triangle
+et trapèze) n'est possible que pour la PERFORM70** [1 p. 6].
 
-* **Poignées de fenêtre** : modèle Sécustik® ATLANTA disponible en 4 finitions (blanc, aspect inox, caramel, laiton) et modèle Sécustik® TOULON disponible en 4 finitions (noir, 7016, aspect inox, blanc).
-* **Béquilles doubles et rosaces pour portes-fenêtres** : ensemble TOULON sur plaque (noir, 7016, aspect inox, blanc), ATLANTA plaque large (inox, laiton), ATLANTA plaque étroite (inox, blanc, laiton ; noir et 7016 en option), Sécustik® TOULON avec rosace (noir, 7016, aspect inox, blanc), Sécustik® ATLANTA avec rosace (inox, blanc, laiton ; noir et 7016 en option).
-* **Fausses crémones décoratives** : disponibles en blanc ou fer cémenté (non compatibles avec les portes-fenêtres à serrure).
-* **Soubassements** : panneau de soubassement mouluré en option, ou panneau plat.
-* **Moustiquaire** : moustiquaire sur cadre fixe indépendant, maintenant l'utilisation de la fenêtre ouverte, fermée ou en ouvrant battant.
-* **Croisillons intégrés** : croisillons de 10 mm, 18 mm, 26 mm, 45 mm, ou croisillons spéciaux laiton 8 mm sans croix et plomb 8 mm sans croix.
+![Formes de menuiseries sur mesure PERFORM](/assets/gammes/perform/formes-sur-mesure.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 6)
+
+## Finitions DROIT et DESIGN
+
+Les menuiseries PERFORM se choisissent en deux niveaux de finition du profil : **DROIT** ou
+**DESIGN** [1 p. 8]. Les coupes d'angle ci-dessous montrent chaque profil, avec en loupe la forme
+de l'arête côté intérieur. Une ligne par déclinaison et par finition.
+
+| Déclinaison | Finition | Disponibilité | Coupe |
+| --- | --- | --- | ---: |
+| PERFORM70 | droit | disponible | ![Profil 70 mm droit](/assets/gammes/perform/profil-70-droit.png) |
+| PERFORM70 | design | disponible | ![Profil 70 mm design](/assets/gammes/perform/profil-70-design.png) |
+| PERFORM76 | droit | disponible | ![Profil 76 mm droit](/assets/gammes/perform/profil-76-droit.png) |
+| PERFORM76 | design | disponible à compter du 2ème trimestre 2026 (**VER-01**) | - |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 8)
+
+## Accessoires
+
+Les poignées de fenêtre, béquilles de porte-fenêtre, fausses crémones et croisillons de la gamme
+PERFORM, avec leurs finitions et leurs images, sont sur
+[Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), avec la moustiquaire et les
+soubassements [1 p. 7]. Les menuiseries PERFORM peuvent être équipées de vitrages techniques et/ou
+décoratifs ([Performances des vitrages](/vitrages/performances-vitrages.md),
+[Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)) et de volets roulants et de solutions
+domotiques ([Volets roulants](/equipements/volets-roulants.md)) [1 p. 7].
 
 # Performances
 
-La menuiserie PERFORM atteint les performances réglementaires et normatives suivantes :
-
-* **Classement CSTB A\*E\*V** : classée **A\*4 / E\*9A / V\*A3**, soit le niveau d'étanchéité à l'air, à l'eau et au vent le plus élevé du marché français pour la gamme PERFORM70 [1 p. 7, 35].
-* **Isolation thermique** : Uw jusqu'à 1,3 W/m²K pour la déclinaison PERFORM70, et jusqu'à 0,8 W/m²K pour la déclinaison PERFORM76 [1 p. 7].
-* **Sécurité anti-effraction RC2** : la fenêtre PERFORM76 équipée d'un vitrage feuilleté 44/6 collé, d'un ferrage périmétrique et d'une poignée verrouillable Sécustik® est certifiée et labellisée classe **RC2** par CERIBOIS [1 p. 34].
-* **Construction passive** : grâce à son niveau d'isolation thermique, la fenêtre PERFORM76 est éligible, sous certaines conditions de mise en œuvre, aux exigences des maisons passives selon la Fédération Française de la Construction Passive (FFCP) [1 p. 34].
+- **Classement A\*E\*V** (étanchéité à l'air, à l'eau et résistance au vent) de la PERFORM70 :
+  voir [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 7].
+- **Isolation thermique** : Uw jusque 1,3 W/m²K en PERFORM70 et jusque 0,8 W/m²K en PERFORM76
+  [1 p. 7].
+- **Résistance à l'effraction RC2** et **construction passive** de la fenêtre PERFORM76 : voir
+  [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 34].
 
 # Dimensions limites
 
@@ -112,39 +160,17 @@ Ces cotes de baie se combinent avec les contraintes d'inertie et de dimensions d
 
 # Coloris
 
-Les menuiseries PERFORM sont proposées en deux niveaux de finition extérieure : profil **DROIT** ou profil **DESIGN** [1 p. 8]. Le profil 76 mm en finition design est annoncé disponible à compter du 2ème trimestre 2026 [1 p. 8].
-
-## Teintés dans la masse
-
-| Teinte | Référence | Faces traitées |
-| --- | --- | --- |
-| Blanc 9016 | Standard | 1 face ou 2 faces |
-| Ivoire | Proche 9001 (607 Kömmerling®) | 2 faces uniquement |
-
-## Films plaxés
-
-| Finition plaxée | Application | Finition associée |
-| --- | --- | --- |
-| Acajou | 1 face extérieure | Finition design |
-| Chêne irlandais | 1 ou 2 faces | Finition design |
-| Chêne doré | 1 ou 2 faces | Droit et design |
-| Chêne naturel | 2 faces | Finition droit |
-| Siena | 1 ou 2 faces | Finition design |
-| 7016 lisse grainé | 1 ou 2 face(s) | Finition droit |
-
-## Laquage sur PVC
-
-Le laquage des menuiseries en PVC est exclusivement réalisable sur la **PERFORM70**, et uniquement dans deux cas d'application précis [1 p. 8] :
-1. Menuiserie à ouverture extérieure.
-2. Menuiserie cintrée.
+Les menuiseries PERFORM se font en blanc 9016 et ivoire teintés dans la masse, en six plaxés et
+en laqué (PERFORM70 sous conditions) : le nuancier complet, teinte par teinte avec ses faces, sa
+finition et ses restrictions, est sur [Coloris PERFORM](/coloris/coloris-perform.md) [1 p. 8].
 
 # Ce qui n'est pas réalisable
 
-Les restrictions de fabrication imposées sur la gamme PERFORM sont les suivantes :
-
-* **Interdiction de cintrage sur PERFORM76** : l'atelier de cintrage de PROFERM réalise les formes complexes (plein cintre, cintre surbaissé, œil de bœuf, anse de panier ou chapeau de gendarme à partir d'un gabarit). Ce cintrage est **strictement impossible sur la déclinaison PERFORM76**, et n'est autorisé que sur la **PERFORM70** [1 p. 6]. Les formes trapézoïdales et triangulaires ne sont pas cintrées mais fabriquées par coupes et assemblages spécifiques, réalisables sur les deux profilés.
-* **Pas de laquage sur PERFORM76** : le catalogue n'autorise le laquage que sur PERFORM70 sous conditions d'ouverture extérieure ou de cintrage [1 p. 8].
-* **Incompatibilité fausses crémones / serrures** : la fausse crémone décorative ne peut pas être installée sur une porte-fenêtre intégrant une serrure de sécurité [1 p. 7].
+- **Pas de cintrage en PERFORM76** : le cintrage (hors triangle et trapèze) n'est possible que
+  pour la PERFORM70 [1 p. 6].
+- **Laquage** : possible en PERFORM70 si ouverture extérieure ou menuiserie cintrée
+  [1 p. 8].
+- **Pas de fausse crémone décorative sur une porte-fenêtre avec serrure** [1 p. 7].
 
 # Coupes de la PERFORM76
 
@@ -195,13 +221,16 @@ deux loupes montrent l'ouvrant galbé (5b) à la place de l'ouvrant droit.
 
 # Citations
 
-[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 6 à 8, 34 et 35
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 6 à 8 et 34
 [2] [Cahier technique PERFORM76, version 02/09/2026 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf), pages du PDF 4 à 6
 [3] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 3
 
 # Voir aussi
 
 - [PERFORM+](/gammes/perform-plus.md)
+- [Coloris PERFORM](/coloris/coloris-perform.md)
+- [Arguments de vente PERFORM](/commercial/perform.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
 - [INNOSLIDE](/gammes/innoslide.md)
 - [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
 - [Dormants PERFORM76](/profiles/perform76-dormants.md)

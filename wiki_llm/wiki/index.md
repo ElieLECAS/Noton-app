@@ -15,9 +15,9 @@
 # Gammes
 
 * [PERFORM](/gammes/perform.md) - Gamme de fenêtres et portes PVC de PROFERM, déclinée en profilés de 70 et 76 mm sur profilés KÖMMERLING GREENLINE.
-* [PERFORM+](/gammes/perform-plus.md) - Gamme de fenêtres PVC à ouvrant caché de PROFERM, annonçant 20 % de clair de jour en plus que la PERFORM, sur profilés KÖMMERLING GREENLINE 100 % renforcés.
+* [PERFORM+](/gammes/perform-plus.md) - Gamme de fenêtres PVC à ouvrant caché de PROFERM (mai 2023), sur profils KÖMMERLING GREENLINE 100 % renforcés, vitrage collé, quincaillerie Roto NX, blanc 9016 seul.
 * [HYBRIDE](/gammes/hybride.md) - Gamme de menuiseries mixtes de PROFERM associant un profil aluminium extérieur serti sur un cœur PVC KÖMMERLING, en 70 et 76 mm.
-* [HYBRIDE+](/gammes/hybride-plus.md) - Gamme de fenêtres mixtes aluminium/PVC à ouvrant caché de PROFERM, annonçant 20 % de clair de jour en plus, avec dix coloris extérieurs laqués.
+* [HYBRIDE+](/gammes/hybride-plus.md) - Gamme de fenêtres mixtes aluminium/PVC à ouvrant caché de PROFERM (mai 2023), profil aluminium renforcé selon abaques serti sur PVC GREENLINE, vitrage collé, Roto NX, 10 coloris extérieurs.
 * [LUMINE](/gammes/lumine.md) - Gamme de fenêtres aluminium de PROFERM sur profilés TECHNAL, déclinée en LUMINE55 et LUMINE65.
 * [TEXTURAL](/gammes/textural.md) - Gamme décorative de PROFERM, cœur PVC KÖMMERLING serti d'aluminium, personnalisable par textures intérieures et finitions exclusives.
 * [INNOSLIDE](/gammes/innoslide.md) - Coulissant PVC à frappe de PROFERM sans soulèvement d'ouvrant, rattaché à la gamme PERFORM.
@@ -25,6 +25,28 @@
 * [Gamme ASKEY Coulissant 65 NV](/gammes/askey-coulissant-65-nv.md) - Système coulissant aluminium à rupture de pont thermique de 65 mm pour 2, 3 et 4 vantaux sur 2 rails de la marque ASKEY (Hydro Building Systems).
 * [Gamme ASKEY Frappe 65 Ouvrant Caché](/gammes/askey-frappe-65-oc.md) - Système de fenêtre et porte-fenêtre battante aluminium 65 mm à ouvrant caché, hautes performances AEV et acoustiques (groupe Hydro).
 * [Gamme ASKEY Frappe 65 Ouvrant Visible](/gammes/askey-frappe-65-ov.md) - Système de fenêtre et porte-fenêtre battante aluminium 65 mm traditionnel avec parcloses intérieures clipées et seuil PMR filant (groupe Hydro).
+
+# Coloris
+
+* [Coloris PERFORM](/coloris/coloris-perform.md) - Nuancier des menuiseries PVC PERFORM (PERFORM70 et PERFORM76) — teintés dans la masse, plaxés et laqués, avec les faces, la finition de profil et les restrictions de chaque teinte.
+* [Coloris PERFORM+](/coloris/coloris-perform-plus.md) - Nuancier de la gamme PVC à ouvrant caché PERFORM+ — un seul coloris, blanc 9016 teinté dans la masse, intérieur et extérieur.
+* [Coloris INNOSLIDE](/coloris/coloris-innoslide.md) - Nuancier du coulissant PVC à frappe INNOSLIDE — blanc 9016 teinté dans la masse, gris 7016 grainé plaxé en 2 faces ou en extérieur sur intérieur blanc.
+* [Coloris HYBRIDE](/coloris/coloris-hybride.md) - Nuancier des menuiseries mixtes HYBRIDE — intérieur PVC teinté dans la masse, extérieur aluminium laqué (blanc 9016 brillant standard et 11 couleurs à prix préférentiel), laquage PVC sous condition.
+* [Coloris HYBRIDE+](/coloris/coloris-hybride-plus.md) - Nuancier de la gamme mixte à ouvrant caché HYBRIDE+ — intérieur PVC blanc 9016 teinté dans la masse, extérieur aluminium blanc 9016 brillant standard et 9 couleurs laquées 1 ou 2 faces identiques.
+* [Coloris LUMINE](/coloris/coloris-lumine.md) - Nuancier aluminium de la gamme LUMINE — LUMINE55 (anodisé, 4 coloris 1 ou 2 faces, 7 coloris extérieurs), LUMINE65 (11 coloris 1 ou 2 faces) et coulissants SOLÉAL55, GALANDAGE55 et LUMÉAL55.
+* [Coloris TEXTURAL](/coloris/coloris-textural.md) - Textures et coloris de la gamme TEXTURAL — textures intérieures et intérieur et/ou extérieur, laquage RAL extérieur ou 2 faces, 26 textures exclusives intérieures avec la teinte de leur parclose.
+* [Coloris Sélection Hexa](/coloris/coloris-selection-hexa.md) - Coloris des portes d'entrée monobloc Sélection Hexa — blanc 9016 intérieur, gris 7016 intérieur ou extérieur alu, dix teintes en extérieur alu ou hybride.
+
+# Commercial
+
+* [Arguments de la marque PROFERM](/commercial/proferm.md) - Ce que PROFERM annonce de sa marque et de sa fabrication — qualité, sécurité et durabilité, engagement, proximité, fabrication française, slogans des quatre gammes.
+* [Arguments de vente PERFORM](/commercial/perform.md) - Ce que PROFERM annonce de la gamme PVC PERFORM — slogan, présentation, avantages, positionnement au test A*E*V — séparé des valeurs mesurées.
+* [Arguments de vente INNOSLIDE](/commercial/innoslide.md) - Ce que PROFERM annonce du coulissant PVC à frappe INNOSLIDE — ouvrant sans soulèvement, fonctions SoftClose et SoftOpen présentées comme une protection.
+* [Arguments de vente HYBRIDE](/commercial/hybride.md) - Ce que PROFERM annonce de la gamme mixte HYBRIDE — slogan, alliance PVC et aluminium, HYBRIDE70 et HYBRIDE76, épaisseur de parois, avantages — séparé des valeurs mesurées.
+* [Arguments de vente PERFORM+ et HYBRIDE+](/commercial/perform-plus-et-hybride-plus.md) - Ce que PROFERM annonçait en mai 2023 des gammes à ouvrant caché PERFORM+ et HYBRIDE+ — 20 % de clair de jour en plus, avantages, isolation, sécurité, garantie jusqu'à 20 ans — séparé des valeurs mesurées.
+* [Arguments de vente LUMINE](/commercial/lumine.md) - Ce que PROFERM annonce de la gamme aluminium LUMINE et de ses coulissants — slogan, avantages, quincaillerie invisible, laque certifiée CSTB, QUALICOAT classe 2 — séparé des valeurs mesurées.
+* [Arguments de vente TEXTURAL](/commercial/textural.md) - Ce que PROFERM annonce de la gamme décorative TEXTURAL — slogan, TEXTURAL70 et TEXTURAL 76, styles Native, Authentique et Exclusives, battements et poignées personnalisables, avantages.
+* [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md) - Ce que PROFERM annonce de ses portes d'entrée — Collection Authentique, Sélection Hexa, sécurité, serrure motorisée — séparé des caractéristiques techniques.
 
 # Profilés
 
@@ -37,6 +59,10 @@
 * [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) - Les quatre élargisseurs PERFORM76, les profils d'assemblage et les trois poteaux d'angle, réservés aux dormants sans aile 76171 et 76172.
 * [Cotes de débit du système 76](/profiles/systeme-76-cotes-de-debit.md) - Les cotes à déduire de la dimension hors tout pour débiter dormants, meneaux, ouvrants, battements et seuils du système 76 Advanced à joint central.
 * [Renforts du système 76](/profiles/systeme-76-renforts.md) - Les renforts acier du système 76 Advanced à joint central, leur épaisseur, leurs inerties IW et IG, et le profilé que chacun équipe.
+* [Renforts et accessoires par profilé du système 76](/profiles/systeme-76-accessoires-par-profile.md) - La nomenclature des renforts, capots, pièces d'assemblage sur seuil, supports de cale, embouts et gabarits que le manuel profine associe à chaque dormant, ouvrant, battement, meneau et seuil de la fenêtre 76 Advanced à joint central.
+* [Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md) - Les dormants, cadres fixes, ouvrants, meneaux, traverses et battements du système 76 Advanced de profine, avec leurs cotes, leur capot aluminium et leur coupe.
+* [Profilés complémentaires du système 76](/profiles/systeme-76-profiles-complementaires.md) - Les élargisseurs, réhausses, profilés de pied de dormant, appuis, tapées, battements intérieurs, liaisons, poteaux d'angle, parcloses et accessoires du système 76 Advanced de profine, avec leurs cotes et leur coupe.
+* [Assemblages du système 76](/profiles/systeme-76-assemblages.md) - Les sets et pièces d'assemblage des dormants et meneaux du système 76 Advanced sur les seuils aluminium A076, A077 et A075, les pièces d'assemblage des traverses, et les accessoires de rejet d'eau, de calage et d'embout.
 * [Abaques dimensionnels du système 76](/profiles/systeme-76-abaques-dimensionnels.md) - Les limites de dimension d'ouvrant du système 76 Advanced selon le renfort, la couleur et l'épaisseur de vitrage, et pourquoi un profilé de couleur change la fabrication.
 * [Profilés et renforts du système 70](/profiles/systeme-70-profiles-et-renforts.md) - Les dormants, ouvrants, battements et meneaux du système 70 Plateforme de profine, avec le renfort acier de chaque profilé et ses inerties IG et IW.
 * [Cotes de débit du système 70](/profiles/systeme-70-cotes-de-debit.md) - Les formules de coupe et les cotes à déduire de la dimension hors tout pour débiter dormants, meneaux, ouvrants, battements et seuils du système 70 Plateforme profine.
@@ -81,6 +107,7 @@
 # Portes d'entrée
 
 * [Ouvrants de porte d'entrée](/portes/ouvrants-de-porte.md) - Les trois ouvrants de porte PROFERM — 97, 118 et SOLEAL 100 — avec leurs dimensions, serrures, quincailleries et ce que chacun interdit.
+* [Porte d'entrée du système 76 Advanced](/portes/systeme-76-advanced-porte-d-entree.md) - La porte d'entrée PVC du système 76 Advanced de profine — performances, joints, dormants 76101 et 76102, ouvrants 76201, 76206 et 76207, battements, meneaux, seuils — avec la nomenclature des renforts et accessoires de chaque profilé.
 * [Panneaux et monoblocs](/portes/panneaux-et-monoblocs.md) - Les deux modes de fabrication d'une porte PROFERM, les compositions de panneaux, les monoblocs THERMIXEL et THERMALUX, le panneau verrier VERRISSIMA et les 39 modèles de la collection Lumière.
 * [Collection Authentique](/portes/collection-authentique.md) - Les sept modèles de portes d'entrée traditionnelles personnalisables de PROFERM, réalisables en PERFORM, HYBRIDE et TEXTURAL.
 * [Collection Contemporain](/portes/collection-contemporain.md) - Les 76 modèles à référence propre de la collection Contemporain, la plus large des six collections de portes d'entrée PROFERM, avec leur composition et leur coloris de présentation.
@@ -117,7 +144,7 @@
 * [Serrure motorisée](/quincaillerie/serrure-motorisee.md) - Option de serrure motorisée automatique Safe E Eneo CC pour portes d'entrée PROFERM, avec contrôle d'accès 4 en 1.
 * [Contrôle d'accès 4 en 1 Roto Safe E Eneo CC](/quincaillerie/controle-acces-eneo-cc.md) - Le contrôle d'accès 4 en 1 des portes PROFERM — code PIN, empreinte, Bluetooth et RFID — avec ses caractéristiques électriques, son câblage et sa procédure de réinitialisation.
 * [Jonction de câble Roto Safe E](/quincaillerie/roto-safe-e-jonction-de-cable.md) - Les variantes de jonction de câble qui alimentent une serrure motorisée Roto Safe E entre dormant et ouvrant, avec ou sans bloc d'alimentation intégré.
-* [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) - Poignées, béquilles, fausses crémones et croisillons disponibles par gamme et par type de coulissant chez PROFERM.
+* [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) - Poignées de fenêtre et de coulissant, béquilles de porte-fenêtre, fausses crémones, croisillons et petits accessoires des gammes PROFERM, modèle par modèle avec finitions, gammes, restrictions et image.
 * [Quincaillerie visible et cachée SOLEAL FY](/quincaillerie/soleal-fy-quincaillerie-visible-et-cachee.md) - Systèmes de ferrures, paumelles apparentes 2 et 3 lames, paumelles sur pivot, quincaillerie cachée (QC 180°), crémones, serrures et organes de verrouillage pour menuiseries aluminium TECHNAL SOLEAL FY 55 et FY 65.
 * [Roulements, fermetures et manœuvres Technal SOLEAL GY 55](/quincaillerie/soleal-gy-roulements-et-fermetures.md) - Guide technique exhaustif de la quincaillerie du coulissant SOLEAL GY 55 de TECHNAL (chariots simples/doubles alu et inox jusqu'à 200 kg, fermetures 1 à 4 points, crémones à clé, organes de manœuvre, poignée réversible TGY3606, fermeture pompier et gâches).
 * [Paumelles, serrures et ferme-portes Technal SOLEAL PY 55](/quincaillerie/soleal-py-serrures-et-paumelles.md) - Guide technique complet de la quincaillerie pour porte battante et va-et-vient SOLEAL PY 55 de TECHNAL (paumelles en feuillure 130/150 kg, ferme-porte intégré FPI conforme PMR, serrures 1 à multipoints, retard à l'effraction RC2/RC3, ventouses 300 kg et pivots freins de sol).
@@ -133,6 +160,7 @@
 * [Report de charge ROTO NX](/procedures/report-de-charge-roto-nx.md) - Montage et réglage du bras de report de charge NT Designo II sur quincaillerie ROTO NX, avec le critère visuel du cercle plein pour la tension du ressort.
 * [Maintenance d'une ferrure Roto NX](/procedures/maintenance-ferrure-roto-nx.md) - Intervalles, répartition des responsabilités, nettoyage, graissage, contrôle fonctionnel, transport, stockage et mise au rebut d'une ferrure Roto NX, avec le couple de verrouillage maximal de 10 Nm.
 * [Fabrication des profilés PVC](/procedures/fabrication-profiles-pvc.md) - Les tolérances, températures et paramètres de débit, renforcement, soudage, ébavurage et pose de joint des profilés de fenêtres en PVC profine, avec les colles de référence.
+* [Fabrication et assemblage du système 76 Advanced](/procedures/fabrication-systeme-76-advanced.md) - Les schémas d'atelier et les plans de pose du système 76 Advanced de profine — assemblages de fourrure, d'appui, de seuil et de traverse, capotage aluminium, tapées et appuis alu, drainages et décompressions, couleurs sombres, coupes de principe et onze poses types.
 * [Perçage et montage de la ferrure Roto NX](/procedures/percage-montage-roto-nx.md) - Les cotes de perçage du dormant et de l'ouvrant pour les paliers et pivots Roto NX, la coupe de la crémone de semi-fixe, la force de traction exigée par poids d'ouvrant, et l'accrochage de l'ouvrant NT Designo II.
 * [Drainage et vitrage généraux](/procedures/drainage-et-vitrage-generaux.md) - Les cotes de drainage, de décompression et de ventilation communes à tous les systèmes profine, et les règles de calage d'un vitrage isolant, avec la conversion poids de vitre / épaisseur.
 * [Couplages et contreventements d'éléments, directives profine](/procedures/couplages-elements.md) - Les seuils de largeur au-delà desquels un couplage de fenêtres profine exige un jeu de dilatation, et les distances de vissage des couplages et contreventements.
@@ -174,21 +202,21 @@
 * [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md) - Catalogue commercial des quatre gammes de fenêtres PROFERM, du cahier technique, des portes d'entrée et des garanties.
 * [Cahier technique PERFORM76, version 02/09/2026 CC03](/sources/cahier-technique-perform76.md) - Document d'atelier et de chantier de la gamme PERFORM76 — profilés, cotes, références et principes de pose.
 * [Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023](/sources/brochure-perform-plus-hybride-plus.md) - Brochure commerciale de 4 pages présentant les gammes à ouvrant caché PERFORM+ et HYBRIDE+, absentes du catalogue général de 2026.
-* [Brochure HYBRIDE, édition mars 2025](/sources/brochure-hybride.md) - Brochure commerciale de 4 pages consacrée à la gamme HYBRIDE, antérieure de dix mois au catalogue général.
-* [Dépliant INNOSLIDE, édition janvier 2024](/sources/depliant-innoslide.md) - Dépliant commercial de 2 pages sur le coulissant PVC INNOSLIDE, qui donne les hauteurs maximales et nomme la quincaillerie Roto Patio Inowa.
+* [Brochure HYBRIDE, édition mars 2025](/sources/brochure-hybride.md) - Brochure commerciale de 4 pages sur la gamme mixte HYBRIDE de profilé 72 mm — avantages, sécurité, finitions, coloris, garantie de structure.
+* [Dépliant INNOSLIDE, édition janvier 2024](/sources/depliant-innoslide.md) - Dépliant commercial du coulissant PVC à frappe INNOSLIDE, en version A4 web (4 pages) et en version impression (2 planches) — avantages, quincaillerie Roto Patio Inowa, dimensions, coloris, poignée, garanties.
 * [Dépliant LUMÉAL, édition avril 2026](/sources/depliant-lumeal.md) - Dépliant commercial de 2 pages sur la baie coulissante LUMÉAL, source la plus récente du wiki, qui contredit le catalogue sur le classement AEV et les coloris.
-* [Brochure LUMINE65, édition février 2025](/sources/brochure-lumine65.md) - Brochure commerciale de 6 pages sur la fenêtre et le coulissant LUMINE65, source la plus détaillée du corpus sur cette version.
+* [Brochure LUMINE65, édition février 2025](/sources/brochure-lumine65.md) - Brochure commerciale de 6 pages sur la fenêtre à ouvrant caché et le coulissant aluminium LUMINE65 — performances, applications, poignées, coloris, garanties.
 * [Dépliant général PROFERM, édition juin 2023](/sources/depliant-general-2023.md) - Dépliant commercial de 8 pages présentant les quatre gammes en juin 2023, précurseur du catalogue général et point de référence sur l'état des garanties et des performances à cette date.
-* [Dépliant HYBRIDE, édition juin 2023](/sources/depliant-hybride-2023.md) - Dépliant de 4 pages sur la gamme HYBRIDE, édition antérieure de deux ans à la brochure de 2025, aux chiffres techniques identiques.
+* [Dépliant HYBRIDE, édition juin 2023](/sources/depliant-hybride-2023.md) - Dépliant commercial de 4 pages sur la gamme mixte HYBRIDE de profilé 72 mm en juin 2023 — avantages, sécurité, finitions DROIT et DESIGN, nuancier à 9 couleurs extérieures, grille des garanties.
 * [Dépliant LUMÉAL, édition juin 2023](/sources/depliant-lumeal-2023.md) - Dépliant de 4 pages sur la baie coulissante LUMÉAL, édition antérieure de trois ans à celle de 2026 et strictement identique sur le fond.
 * [Catalogue portes d'entrée PROFERM, édition mars 2024](/sources/catalogue-portes-entree.md) - Catalogue de 160 pages sur les portes d'entrée, six collections et un cahier technique de 18 pages, document le plus complet du corpus sur ce poste.
 * [Nuancier stores PROFERM, 2020](/sources/nuancier-stores.md) - Nuancier et fiche technique de 11 pages sur les stores vénitiens et plissés intégrés, seule source du wiki sur cette famille de produits.
 * [Nuancier des vitrages décoratifs PROFERM](/sources/nuancier-vitrages-decoratifs.md) - Nuancier photo de 5 pages montrant sept vitrages décoratifs vus à travers un objet-test, sans date d'édition.
 * [DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED](/sources/dta-trocal-76-advanced.md) - Document Technique d'Application CSTB de 56 pages du système PVC 76 Advanced de profine, premier document réglementaire du wiki.
 * [Directives générales profine, version janvier 2023](/sources/profine-directives-generales.md) - Manuel de mise en œuvre de 113 pages de profine, qui fixe la terminologie, les tailles d'ouvrants, la méthode de calcul des dimensions d'élément, et les tolérances de fabrication et de montage communes à tous les systèmes.
-* [Posters Système 76 Advanced, 2022](/sources/posters-systeme-76-advanced.md) - Deux planches A0 profine recensant les profilés principaux et complémentaires du système 76 Advanced, cartes de référence de tout le système.
+* [Posters Système 76 Advanced, 2022](/sources/posters-systeme-76-advanced.md) - Deux planches profine recensant l'intégralité des profilés principaux et complémentaires du système 76 Advanced, avec leurs capots aluminium, renforts acier associés, accessoires et kits d'assemblage.
 * [Mise en œuvre Système 76 Advanced, profine](/sources/profine-mise-en-oeuvre-76-advanced.md) - Manuel de fabrication de 424 pages du système PVC 76 Advanced à joint central de profine, qui porte les cotes de débit, les abaques dimensionnels et les renforts.
-* [DTD n° DBV-25-6/16-2334_V5, système 76 Advanced](/sources/dtd-6-16-2334.md) - Dossier Technique Détaillé de 60 pages du système 76 Advanced, pièce jointe au DTA, qui porte les prescriptions de fabrication opposables et le critère colorimétrique L* inférieur à 82.
+* [DTD n° DBV-25-6/16-2334_V5, système 76 Advanced](/sources/dtd-6-16-2334.md) - Dossier Technique Détaillé de 60 pages du système 76 Advanced, pièce jointe au DTA 6/16-2334_V5, portant les prescriptions de fabrication opposables, les cotes de profilés, les renforts, parcloses, accessoires et le critère colorimétrique L* < 82.
 * [DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION](/sources/dtd-6-16-2335.md) - Dossier Technique Détaillé de 53 pages d'un second système profine certifié, en références 6xxx, qui correspond à la Gamme 70 de KÖMMERLING.
 * [Posters Gamme 70 KÖMMERLING, mars 2025](/sources/posters-kommerling-70.md) - Deux planches A0 KÖMMERLING recensant les profilés principaux et complémentaires de la Gamme 70, premier inventaire du système 70 mm dans le wiki.
 * [Instructions de montage Roto NX KSR, PVC, novembre 2022](/sources/roto-nx-ksr-montage.md) - Manuel de ferrage de 124 pages de la quincaillerie Roto NX KSR sur menuiseries PVC, qui apporte au wiki les abaques de charge, les classes de sécurité et la maintenance des ferrures.

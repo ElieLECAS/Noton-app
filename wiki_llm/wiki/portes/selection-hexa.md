@@ -6,7 +6,7 @@ resource: https://www.proferm.net/hexa
 tags: [porte-entree, hexa, monobloc, lumine, hybride]
 gamme: [LUMINE, HYBRIDE]
 usage: chiffrage
-status: stable
+status: draft
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
@@ -22,71 +22,68 @@ generated:
 
 # Définition et gammes compatibles
 
-La sélection « Hexa » constitue la ligne de portes d'entrée **monobloc** de style contemporain de PROFERM [1 p. 31]. Elle est réalisable sur deux systèmes de profilés :
-* En aluminium sur la gamme [LUMINE](/gammes/lumine.md).
-* En mixte aluminium extérieur / PVC intérieur sur la gamme [HYBRIDE](/gammes/hybride.md).
+La sélection « Hexa » regroupe six portes d'entrée **monobloc** : le panneau et l'ouvrant ne font
+qu'un, sans panneau rapporté dans un cadre [1 p. 31]. Hexa offre un choix entre l'aluminium et
+l'Hybride (mixte aluminium et PVC), c'est-à-dire les gammes [LUMINE](/gammes/lumine.md) et
+[HYBRIDE](/gammes/hybride.md) [1 p. 31]. Ce que la marque en annonce est sur
+[Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md). La Sélection Hexa est
+absente du catalogue portes de mars 2024 (**CTR-15**).
 
-# Structure et composition du monobloc
+# Composition du monobloc
 
-Le panneau monobloc d'épaisseur totale continue présente la constitution sandwich suivante [1 p. 31] :
+Composition monobloc : mousse haute densité 30 kg/m³, résistance à la compression 300 kPa, plus
+un nid d'abeille de 10 mm [1 p. 31]. Le kg/m³ mesure la masse volumique de la mousse, le kPa la
+pression qu'elle supporte.
 
-| Composant interne | Spécification technique | Performance mécanique |
+| Composant | Valeur | Unité |
 | --- | --- | --- |
-| Âme isolante principale | Mousse isolante haute densité | Masse volumique de 30 kg/m³ |
-| Résistance mécanique | Tenue à la charge | Résistance à la compression de 300 kPa |
-| Renfort structurel | Âme en nid d'abeille | Épaisseur 10 mm |
+| Mousse haute densité, masse volumique | 30 | kg/m³ |
+| Mousse haute densité, résistance à la compression | 300 | kPa |
+| Nid d'abeille, épaisseur | 10 | mm |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 31)
 
 # Les six modèles monoblocs
 
-La collection se compose de six modèles aux lignes contemporaines [1 p. 31] :
+Une ligne par modèle ; « Options » reprend les options réservées à certains modèles [1 p. 31].
 
-| Référence du modèle | Configuration du décor et du vitrage | Options de finition associées |
-| --- | --- | --- |
-| X-115-0 | Panneau plein à rainurages horizontaux réguliers pleine hauteur | - |
-| X-BEN-0 | Deux découpes vitrées cintrées opposées | Cadre inox affleurant 1 ou 2 face(s) |
-| X-ISIDORE | Quatre découpes vitrées carrées alignées verticalement | Cadre inox affleurant 1 ou 2 face(s) |
-| X-6042 | Panneau plein avec trois inserts métalliques inox horizontaux | - |
-| X-JACOB-0 | Large bandeau vitré vertical excentré toute hauteur | Cadre inox affleurant 1 ou 2 face(s) |
-| X-GRANALA | Panneau à moulure contemporaine avec vitrage haut cintré | Petits bois intégrés blancs ou laiton |
+| Modèle | Options | Photo |
+| --- | --- | ---: |
+| X-115-0 | - | ![X-115-0](/assets/portes/selection-hexa/x-115-0.png) |
+| X-BEN-0 | inox autour du vitrage, sur une ou deux faces | ![X-BEN-0](/assets/portes/selection-hexa/x-ben-0.png) |
+| X-ISIDORE | inox autour du vitrage, sur une ou deux faces | ![X-ISIDORE](/assets/portes/selection-hexa/x-isidore.png) |
+| X-6042 | - | ![X-6042](/assets/portes/selection-hexa/x-6042.png) |
+| X-JACOB-0 | inox autour du vitrage, sur une ou deux faces | ![X-JACOB-0](/assets/portes/selection-hexa/x-jacob-0.png) |
+| X-GRANALA | petits bois blancs ou laiton (X-Granala uniquement) | ![X-GRANALA](/assets/portes/selection-hexa/x-granala.png) |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 31)
 
-# Accessoires et quincaillerie dédiés
+Infos complémentaires : www.proferm.net/hexa [1 p. 31].
 
-La gamme Hexa reçoit des accessoires de manœuvre et de rotation spécifiquement coordonnés [1 p. 31] :
-* **Béquille courbe VIENNE** : poignée de manœuvre ergonomique.
-* **Béquille droite ROME** : poignée droite contemporaine avec rosace.
-* **Paumelles tubes deux lames** : paumelles cylindriques à haute résistance mécanique.
+# Accessoires
 
-Sur les modèles en aluminium, le verrouillage est assuré par une serrure à goujons et des paumelles Fapim Tube [1 p. 32]. Sur les modèles en HYBRIDE, la ferrure utilise les paumelles Roto Solid B [1 p. 32].
+Trois accessoires sont présentés pour la sélection Hexa : la poignée VIENNE et la poignée ROME
+(finitions et images sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)), et
+les paumelles tubes deux lames (image sur [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md))
+[1 p. 31].
 
-Toute la sélection Hexa est compatible avec l'option de **serrure motorisée automatique Safe E Eneo CC** [1 p. 33].
+Les serrures, paumelles et cylindres selon l'ouvrant (aluminium : serrure à goujons et paumelles
+Fapim Tube ; HYBRIDE : paumelles Roto Solid B) sont sur
+[Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md) [1 p. 32]. La serrure
+motorisée est disponible sur monobloc : voir [Serrure motorisée](/quincaillerie/serrure-motorisee.md)
+[1 p. 33].
 
-# Coloris et finitions
+# Coloris
 
-Disponibilité des teintes sur la sélection Hexa [1 p. 31] :
-
-| Face | Teinte | Finition |
-| --- | --- | --- |
-| Intérieur | Blanc 9016 | Standard |
-| Intérieur / Extérieur Aluminium | Gris 7016 | Satiné ou Granité |
-| Extérieur Aluminium et Hybride | Blanc 9016 | Brillant |
-| Extérieur Aluminium et Hybride | Rouge 3004 | Satiné |
-| Extérieur Aluminium et Hybride | Gris 2900 | Granité |
-| Extérieur Aluminium et Hybride | Gris 7039 | Granité |
-| Extérieur Aluminium et Hybride | Gris 7035 | Granité |
-| Extérieur Aluminium et Hybride | Marron 8019 | Granité |
-| Extérieur Aluminium et Hybride | Noir 2100 | Granité |
-| Extérieur Aluminium et Hybride | Noir 9005 | Granité |
-| Extérieur Aluminium et Hybride | Gris 7016 | Satiné ou Granité |
+Blanc 9016 à l'intérieur, gris 7016 satiné ou granité à l'intérieur ou à l'extérieur alu, et dix
+teintes en extérieur alu / hybride : voir [Coloris Sélection Hexa](/coloris/coloris-selection-hexa.md)
+[1 p. 31].
 
 # Ce qui n'est pas réalisable
 
-* **Ouvrant dans l'ouvrant** : incompatible avec la structure monobloc et exclu sur profilés aluminium [1 p. 32].
-* **Inox sur X-115-0, X-6042 et X-GRANALA** : le cerclage inox affleurant est réservé aux modèles X-BEN-0, X-ISIDORE et X-JACOB-0 [1 p. 31].
-* **Petits bois sur modèles contemporains vitrés** : l'option petits bois est strictement réservée au modèle X-GRANALA [1 p. 31].
+* **Pas d'ouvrant dans l'ouvrant sur les portes en aluminium** [1 p. 32].
+* **Inox autour du vitrage : sur X-Ben-0, X-Isidore et X-Jacob-0 seulement** [1 p. 31].
+* **Petits bois blancs ou laiton : sur X-Granala uniquement** [1 p. 31].
 
 # Citations
 
@@ -95,6 +92,8 @@ Disponibilité des teintes sur la sélection Hexa [1 p. 31] :
 # Voir aussi
 
 - [Collection Authentique](/portes/collection-authentique.md)
+- [Coloris Sélection Hexa](/coloris/coloris-selection-hexa.md)
+- [Arguments de vente des portes d'entrée](/commercial/portes-d-entree.md)
 - [Sécurité des portes d'entrée](/quincaillerie/securite-portes-entree.md)
 - [Serrure motorisée](/quincaillerie/serrure-motorisee.md)
 - [LUMINE](/gammes/lumine.md)

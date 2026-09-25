@@ -15,7 +15,7 @@ sources:
     last_modified: 2026-01-31
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
-    pages: 1, 4, 19-24, 34-35
+    pages: 20-24, 35
 generated:
   by: process:gemini-coder
   at: 2026-09-19T17:10:00Z
@@ -23,132 +23,113 @@ generated:
 
 # Définition et déclinaisons
 
-TEXTURAL® est la gamme décorative haut de gamme de PROFERM, commercialisée sous le slogan « la fenêtre qui habille votre intérieur » [1 p. 1, 4, 19]. Sa conception technique associe un cœur en PVC GREENLINE® de chez [KÖMMERLING](/fournisseurs/kommerling.md) serti d'un profil extérieur en aluminium, combinant l'esthétique du bois et des matières en face intérieure avec la durabilité et le choix de teintes de l'aluminium en façade extérieure [1 p. 4, 20-21].
+TEXTURAL® est la gamme décorative de PROFERM : une base PVC sertie d'aluminium, avec des textures
+et des effets de matières à l'intérieur et un extérieur en aluminium [1 p. 20, 21, 24]. Les
+profils de la sécurité renforcée sont légendés « Profils KÖMMERLING® » [1 p. 23] (**VER-14**). Ce
+que la marque annonce de la gamme (slogan, styles, avantages) est sur
+[Arguments de vente TEXTURAL](/commercial/textural.md).
 
-La gamme se décline en deux niveaux de fabrication [1 p. 20] :
-* **TEXTURAL70** (« La finesse décorative ») : profilé intérieur de 70 mm d'épaisseur, conçu pour l'harmonie visuelle et le confort thermique.
-* **TEXTURAL 76** (« L'exigence absolue ») : profilé intérieur de 76 mm d'épaisseur avec structure renforcée, assurant des performances d'isolation acoustique et thermique maximales.
+La gamme se décline en TEXTURAL70 et TEXTURAL 76 [1 p. 20]. Le TEXTURAL 76 intègre une structure
+renforcée [1 p. 20]. Les épaisseurs de profil de la TEXTURAL ne sont pas cotées.
+
+![Angle TEXTURAL 76](/assets/gammes/textural/angle-textural76.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 20)
 
 # Caractéristiques
 
-Éléments de structure, finitions d'assemblage et isolation thermique [1 p. 20, 23].
+## Finitions exceptionnelles
 
-| Caractéristique | Spécification technique | Source |
-| --- | --- | --- |
-| Matériau intérieur | PVC KÖMMERLING® habillé de textures décoratives | [1 p. 4, 20] |
-| Matériau extérieur | Profilé aluminium thermolaqué | [1 p. 4, 20] |
-| Épaisseur du profilé intérieur (mm) | 70 (TEXTURAL70) à 76 (TEXTURAL 76) | [1 p. 20] |
-| Coefficient thermique Uw minimal (W/m²K) | 0,8 | [1 p. 23] |
-| Classement d'étanchéité A\*E\*V | A\*4 / E\*9A / V\*A3 | [1 p. 23] |
+La gamme TEXTURAL® dispose de finitions exceptionnelles [1 p. 20] :
 
-(schéma: raw/catalogue-general-2026-01.pdf, p. 20, 23)
+* paumelles invisibles ;
+* battement central design ;
+* parcloses arrondies ;
+* jonctions lisses des angles ;
+* jonc de finition en partie basse dans la feuillure du dormant.
 
-## Finitions de série
+![Jonctions lisses et paumelles invisibles, jonc de finition](/assets/gammes/textural/finitions-jonctions-jonc.png)
 
-La gamme TEXTURAL® intègre de série cinq finitions spécifiques destinées à l'esthétique intérieure et à la durabilité [1 p. 20] :
-* **Paumelles invisibles** : intégrées dans le dormant et l'ouvrant pour une face vue épurée sans ferrures apparentes.
-* **Battement central design** : profil central aminci pour augmenter le clair de vitrage.
-* **Parcloses arrondies** : mouluration soignée en périphérie du vitrage.
-* **Jonctions lisses des angles** : usinage et arasement affleurant des soudures d'angle PVC pour supprimer les cordons visibles.
-* **Jonc de finition en partie basse** : intégré directement dans la feuillure basse du dormant pour la propreté d'aspect.
+(schéma: raw/catalogue-general-2026-01.pdf, p. 20)
 
-## Les trois styles décoratifs
+## Finitions DROIT et DESIGN
 
-L'agencement des menuiseries TEXTURAL® se décline selon trois univers stylistiques [1 p. 21] :
-* **NATIVE** : ligne sobre et épurée, dotée d'une poignée centrée Sécustik® ATLANTA et de profilés ouvrants en finition droite ou design.
-* **AUTHENTIQUE** : esprit traditionnel d'inspiration ferronnerie, équipé d'une fausse crémone décorative.
-* **EXCLUSIVES** : personnalisation avancée reposant sur des textures de matières (cuir, carbone, wengé, glossy).
+La finition extérieure de la TEXTURAL® se choisit entre **DROIT** et **DESIGN** ; le profil 76 mm
+design est annoncé disponible à compter du 2ème trimestre 2026 (**VER-01**) [1 p. 20].
 
-Les battements et les poignées sont personnalisables et coordonnables à la texture intérieure choisie, avec possibilité de gravure personnalisée [1 p. 22].
+![Finitions droit et design TEXTURAL](/assets/gammes/textural/finitions-droit-design.png)
 
-## Quincaillerie et sécurité de série
+(schéma: raw/catalogue-general-2026-01.pdf, p. 20)
 
-La sécurité repose sur l'ossature métallique et les composants de ferrure suivants [1 p. 23] :
-* Profilés KÖMMERLING® renforcés par armatures métalliques selon les abaques, avec option de renfort total.
-* Mécanisme anti-dégondage et anti-effraction par rouleau champignon.
-* Dispositif anti-fausse manœuvre avec levier de vantail.
-* Cale anti-fatigue en traverse basse.
-* Crémone de semi-fixe assurant un doublement de la compression d'étanchéité et de la sécurité.
+## Les trois styles
+
+Trois styles sont proposés [1 p. 21] : **NATIVE**, avec la poignée centrée Sécustik® ATLANTA et
+des profils ouvrants droits ou design ; **AUTHENTIQUE**, avec la fausse crémone décorative ;
+**EXCLUSIVES**, avec des textures uniques (cuir, carbone, wengé, glossy…). Les battements et les
+poignées sont personnalisables [1 p. 22]. Photos et présentation :
+[Arguments de vente TEXTURAL](/commercial/textural.md).
+
+## Sécurité renforcée
+
+Les équipements de sécurité de la TEXTURAL® sont présentés en photos légendées [1 p. 23] :
+
+| Équipement | Légende |
+| --- | --- |
+| Profils | Profils KÖMMERLING®. Renfort selon abaques. Renfort total en option |
+| Système sécurité | Rouleau champignon anti-dégondage et anti-effraction |
+| Anti-fausse manœuvre | Système anti-fausse manœuvre et levier de vantail |
+| Câle | Câle anti-fatigue |
+| Crémone du semi-fixe | Compression et sécurité doublée grâce à la crémone du semi-fixe |
+
+![Sécurité renforcée TEXTURAL](/assets/gammes/textural/securite-renforcee.png)
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 23)
 
 ## Accessoires
 
-Les menuiseries TEXTURAL® sont équipées des mêmes accessoires de manœuvre et de décoration que les gammes PERFORM et HYBRIDE [1 p. 23] :
-* Poignées de fenêtre Sécustik® ATLANTA (blanc, aspect inox, caramel, laiton) et Sécustik® TOULON (noir, 7016, aspect inox, blanc).
-* Béquilles doubles et ensembles avec rosaces pour portes-fenêtres (ATLANTA plaque large/étroite, TOULON sur plaque et sur rosace).
-* Fausses crémones décoratives en blanc ou fer cémenté (sauf sur portes-fenêtres avec serrure).
-* Moustiquaires à cadre fixe, panneaux de soubassement moulurés ou plats, et croisillons intégrés (10 mm, 18 mm, 26 mm, 45 mm, laiton 8 mm sans croix, plomb 8 mm sans croix).
-* Compatibilité avec les volets roulants intégrés GoodNight [1 p. 28].
+Les poignées de fenêtre, béquilles de porte-fenêtre, fausses crémones et croisillons de la gamme
+TEXTURAL®, avec leurs finitions et leurs images, sont sur
+[Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md), avec la moustiquaire et les
+soubassements [1 p. 23]. Les menuiseries TEXTURAL® peuvent être équipées de vitrages techniques
+et/ou décoratifs ([Performances des vitrages](/vitrages/performances-vitrages.md),
+[Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)) et de volets roulants et de solutions
+domotiques ([Volets roulants](/equipements/volets-roulants.md)) [1 p. 23].
 
-# Coloris et finitions extérieures
+# Performances
 
-Les parements extérieurs en aluminium sont livrables en finition profil **DROIT** ou profil **DESIGN** [1 p. 20]. Le profil 76 mm en finition design est annoncé disponible à compter du 2ème trimestre 2026 [1 p. 20].
+- **Classement A\*E\*V** (étanchéité à l'air, à l'eau et résistance au vent) : voir
+  [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 23].
+- **Isolation thermique** : Uw jusque 0,8 W/m²K (Uw : coefficient de transmission thermique de la
+  fenêtre complète), déclinaison non précisée [1 p. 23].
 
-## Textures standards
+# Coloris
 
-Finitions d'aspect bois pour l'intérieur et l'extérieur [1 p. 24] :
-
-| Texture | Application |
-| --- | --- |
-| Blanc cérusé | Intérieur uniquement |
-| Teck de Java | Intérieur uniquement |
-| Chêne naturel | Intérieur uniquement |
-| Chêne doré | Intérieur et / ou extérieur |
-| Chêne irlandais | Intérieur et / ou extérieur |
-
-L'extérieur accepte le thermolaquage en toutes teintes RAL (finitions satinée ou granitée). Le laquage 2 faces en toutes teintes RAL est réalisable à l'intérieur comme à l'extérieur [1 p. 24].
-
-## Textures exclusives (intérieur uniquement)
-
-La collection compte 25 textures exclusives. Les parcloses sont contretypées ou laquées dans le RAL le plus proche de la texture sélectionnée [1 p. 24] :
-
-| Famille de texture | Nom de la texture | Traitement de la parclose |
-| --- | --- | --- |
-| Carbone | Carbone noir | Laquée RAL 9005 |
-| Carbone | Carbone gris clair | Laquée RAL 9006 |
-| Carbone | Carbone gris foncé | Parclose contretypée |
-| Carbone | Carbone argenté | Parclose contretypée |
-| Métaux & striés | Acier strié | Laquée RAL 9006 |
-| Métaux & striés | Doré strié | Parclose contretypée |
-| Métaux & striés | Blanc strié | Parclose contretypée |
-| Métaux & striés | Argenté | Parclose contretypée |
-| Bois sombres | Wengé | Parclose contretypée |
-| Bois sombres | Wengé cuivré | Laquée RAL 8019 |
-| Bois précieux | Teck foncé | Parclose contretypée |
-| Bois précieux | Noyer | Parclose contretypée |
-| Cuirs | Cuir ivoire | Parclose contretypée |
-| Cuirs | Cuir kaki | Parclose contretypée |
-| Cuirs | Cuir marron patiné | Parclose contretypée |
-| Cuirs | Cuir anthracite | Parclose contretypée |
-| Cuirs | Cuir noir | Laquée RAL 9005 |
-| Bois & minéraux | Bois ivoire | Parclose contretypée |
-| Bois & minéraux | Terre de Sienne | Parclose contretypée |
-| Bois & minéraux | Chêne | Parclose contretypée |
-| Bois & minéraux | Hêtre | Parclose contretypée |
-| Matières précieuses | Feuille d'or | Parclose contretypée |
-| Matières précieuses | Feuille d'aluminium | Parclose contretypée |
-| Effets spéciaux | Caméléon | Parclose contretypée |
-| Effets spéciaux | Glossy (RAL 3002, RAL 9005 ou couleur sur mesure) | Parclose assortie |
+Textures intérieures (dont chêne doré et chêne irlandais aussi en extérieur), laquage toutes
+teintes RAL à l'extérieur ou en 2 faces, et vingt-six textures exclusives intérieures avec la
+teinte de leur parclose : voir [Coloris TEXTURAL](/coloris/coloris-textural.md) [1 p. 24].
 
 # Garanties
 
-* Structure de la fenêtre : garantie 15 ans [1 p. 35].
-* Plaxage standard : garantie 10 ans [1 p. 35].
-* **Plaxage TEXTURAL Exclusive** : garantie ramenée à **5 ans** [1 p. 35].
-* Quincaillerie et ferrures ROTO : garantie 10 ans sur le fonctionnement [1 p. 35].
+La structure de la fenêtre TEXTURAL est garantie 15 ans ; le plaxage TEXTURAL Exclusive l'est 5 ans
+au lieu de 10. Grille complète : [Garanties par composant](/garanties/garanties-par-composant.md)
+[1 p. 35].
 
 # Ce qui n'est pas réalisable
 
-* **Cintrage** : la technique de sertissage du parement aluminium sur le profilé PVC texturé ne permet aucun cintrage en atelier.
-* **Fausse crémone sur porte-fenêtre à serrure** : incompatibilité physique entre le boîtier de crémone décorative et le cylindre de serrure [1 p. 23].
+* **Pas de fausse crémone décorative sur une porte-fenêtre avec serrure** [1 p. 23].
+* **Textures exclusives : intérieur uniquement** [1 p. 24].
 
 # Citations
 
-[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 19 à 24, 34 et 35
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 20 à 24 et 35
 
 # Voir aussi
 
 - [PERFORM](/gammes/perform.md)
 - [HYBRIDE](/gammes/hybride.md)
+- [Coloris TEXTURAL](/coloris/coloris-textural.md)
+- [Arguments de vente TEXTURAL](/commercial/textural.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
 - [Collection Authentique](/portes/collection-authentique.md)
 - [Garanties par composant](/garanties/garanties-par-composant.md)
 - [Catalogue menuiseries PROFERM, édition janvier 2026](/sources/catalogue-general-2026.md)

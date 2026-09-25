@@ -7,7 +7,7 @@ gamme: LUMINE
 systeme: SOLEAL FY
 fournisseur: TECHNAL
 usage: chiffrage
-status: stable
+status: draft
 sources:
   - resource: raw/catalogue-general-2026-01.pdf
     id: catalogue-general-2026
@@ -19,9 +19,9 @@ sources:
     last_modified: 2025-02-28
 source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
-    pages: 1, 4, 13-15, 18, 34-35
+    pages: 4, 14-15, 17-18, 35
   - resource: raw/brochure-lumine65-2025-02.pdf
-    pages: 1-5
+    pages: 1-2, 4-5
 generated:
   by: process:gemini-coder
   at: 2026-09-19T17:12:00Z
@@ -29,146 +29,166 @@ generated:
 
 # Définition et déclinaisons
 
-LUMINE est la gamme de menuiseries en aluminium de PROFERM, commercialisée sous le slogan « l'aluminium en mode sublime » [1 p. 1, 4]. Toutes les menuiseries LUMINE sont fabriquées à partir de profilés en aluminium bas carbone fournis par [TECHNAL](/fournisseurs/technal.md), recyclés à 75 % avec de faibles émissions de carbone [1 p. 4, 35].
+LUMINE est la gamme de menuiseries en aluminium de PROFERM. Toutes les menuiseries LUMINE sont fabriquées à partir de matériaux [TECHNAL](/fournisseurs/technal.md) [1 p. 4] ; l'aluminium est annoncé bas carbone [1 p. 15, 35]. Ce que la marque annonce de la gamme (slogan, avantages) est sur [Arguments de vente LUMINE](/commercial/lumine.md).
 
-La gamme se décline en deux versions adaptées à la rénovation et au neuf [1 p. 14, 2 p. 1] :
+La gamme est disponible en deux versions, pour la rénovation comme la construction [1 p. 14, 2 p. 1] :
 * **LUMINE55** : profilé de 55 mm d'épaisseur.
-* **LUMINE65** : profilé de 65 mm d'épaisseur avec joint central, optimisé pour le confort thermique et acoustique.
+* **LUMINE65** : profilé de 65 mm d'épaisseur avec joint central, en fenêtre et en coulissant [2 p. 1].
 
 Les baies coulissantes font l'objet d'une page dédiée : [Coulissants aluminium](/gammes/coulissants-aluminium.md).
 
 # Caractéristiques
 
-Épaisseurs, finitions d'ouvrants et équipements principaux des versions LUMINE [1 p. 14-15, 2 p. 2-3].
+Épaisseurs, ouvrants et équipements des deux versions LUMINE ; une ligne par version. Uw : coefficient de transmission thermique de la fenêtre complète, en W/m²K [1 p. 14-15, 2 p. 2].
 
-| Version | Épaisseur du profilé (mm) | Type d'ouvrant | Quincaillerie invisible | Uw minimal (W/m²K) |
+| Version | Épaisseur du profil (mm) | Ouvrants | Quincaillerie invisible | Uw annoncé « jusque » (W/m²K) |
 | --- | --- | --- | --- | --- |
-| LUMINE55 | 55 | Apparent droit, apparent design ou minimal | Oui, en standard (selon abaques) | 1,5 |
-| LUMINE65 | 65 | Caché monobloc, caché tapées rapportées ou apparent | Non disponible | 1,51 (fenêtre 1 vantail $1\,010 \times 1\,365 \text{ mm}$) |
+| LUMINE55 | 55 | apparent droit, apparent design ou minimal | en standard (selon abaques) | - |
+| LUMINE65 | 65 | caché monobloc, caché à tapées rapportées ou apparent | non disponible | 1,51 (fenêtre 1 vantail 1 010 × 1 365 mm) [2 p. 2] |
+| gamme LUMINE, version non précisée | - | - | - | 1,5 [1 p. 15] |
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 14 ; raw/brochure-lumine65-2025-02.pdf, p. 2)
 
-## Finitions des ouvrants et assemblages
+## Finitions des ouvrants
 
-La gamme LUMINE propose six finitions d'ouvrants adaptées à la destination du chantier [1 p. 14, 2 p. 2, 4] :
+La finition se choisit parmi six ouvrants, trois en LUMINE55 et trois en LUMINE65 ; le tableau
+reprend la légende de chaque coupe, avec la loupe qui montre la forme du profil [1 p. 14].
 
-* **LUMINE55** :
-  1. *Ouvrant apparent droit* : profil 55 mm à lignes droites.
-  2. *Ouvrant apparent design* : profil 55 mm à mouluration galbée.
-  3. *Ouvrant minimal avec chant clippable* : profil 55 mm réduisant la masse vue d'aluminium.
-* **LUMINE65** :
-  4. *Ouvrant caché monobloc - coupe à 90°* : profil 65 mm pour dormant monobloc ou dormant neuf [2 p. 2].
-  5. *Ouvrant caché à tapées rapportées - coupe à 45°* : profil 65 mm en coupe d'onglet pour dormant rénovation [2 p. 2].
-  6. *Ouvrant apparent pour porte-fenêtre avec serrure* : profil 65 mm visible intégrant le boîtier de serrure de porte-fenêtre [1 p. 14, 2 p. 4].
+| Repère | Version | Ouvrant | Coupe |
+| --- | --- | --- | ---: |
+| 1 | LUMINE55 | Ouvrant apparent droit (profil 55 mm apparent droit) | ![Profil 55 mm apparent droit](/assets/gammes/lumine/ouvrant-apparent-droit-55.png) |
+| 2 | LUMINE55 | Ouvrant apparent design (profil 55 mm apparent design) | ![Profil 55 mm apparent design](/assets/gammes/lumine/ouvrant-apparent-design-55.png) |
+| 3 | LUMINE55 | Ouvrant minimal avec chant clippable (profil 55 mm minimal) | ![Profil 55 mm minimal](/assets/gammes/lumine/ouvrant-minimal-55.png) |
+| 4 | LUMINE65 | Ouvrant caché monobloc - coupe à 90° (profil 65 mm ouvrant caché coupe droite) | ![Profil 65 mm ouvrant caché coupe droite](/assets/gammes/lumine/ouvrant-cache-coupe-droite-65.png) |
+| 5 | LUMINE65 | Ouvrant caché à tapées rapportées - coupe à 45° (profil 65 mm ouvrant caché coupe d'onglet) | ![Profil 65 mm ouvrant caché coupe d'onglet](/assets/gammes/lumine/ouvrant-cache-coupe-onglet-65.png) |
+| 6 | LUMINE65 | Ouvrant apparent pour porte-fenêtre avec serrure (profil 65 mm ouvrant visible) | ![Profil 65 mm ouvrant visible](/assets/gammes/lumine/ouvrant-visible-65.png) |
+
+(schéma: raw/catalogue-general-2026-01.pdf, p. 14)
+
+Un ouvrant caché disparaît derrière le dormant vu de l'extérieur ; un ouvrant apparent reste
+visible. La coupe à 90° (coupe droite) et la coupe à 45° (coupe d'onglet) désignent l'angle
+d'assemblage des profilés. Sur la fenêtre LUMINE65, la coupe droite à 90° est « pour dormant
+monobloc ou dormant neuf », la coupe d'onglet à 45° « pour dormant rénovation », et l'ouvrant
+visible « pour porte-fenêtre avec serrure » [2 p. 2, 4]. Le dormant est le cadre fixe de la
+menuiserie ; la pose en neuf se fait dans une maçonnerie neuve, la pose en rénovation sur l'ancien
+dormant conservé (voir le [glossaire](/reference/glossaire.md)).
 
 ## Spécifications de la fenêtre battante LUMINE65
 
-La fenêtre LUMINE65 repose sur trois éléments de conception exclusifs [2 p. 2] :
-* **Vrai ouvrant caché** : disparition totale de la masse de l'ouvrant dans le cadre dormant, procurant une surface vitrée maximale et un apport solaire accru.
-* **Système de drainage d'eau caché** : évacuation des eaux pluviales totalement invisible en façade.
-* **3 joints d'étanchéité renforcés d'un fil interne en kevlar** : barrière centrale par rupture de pont thermique éliminant les effets de dilatation thermique du profilé.
+La fenêtre LUMINE65 offre la possibilité de créer un ouvrant véritablement caché, permettant une
+intégration complète de la masse de l'ouvrant dans le cadre ; cela se traduit par une surface
+vitrée maximale et un apport de lumière naturelle optimisé [2 p. 2]. Trois avantages sont donnés,
+dans ces termes [2 p. 2] :
+
+* **Vrai ouvrant caché** : disparition totale de l'ouvrant.
+* **Système de drainage des eaux de pluie caché.**
+* **3 joints d'étanchéité renforcés d'un fil interne en kevlar** : pas d'effet de dilatation.
+
+La barrière centrale d'étanchéité de la LUMINE65 est obtenue par rupture de pont thermique (coupure
+isolante entre les faces extérieure et intérieure du profilé) [2 p. 2] ; son classement A\*E\*V
+est sur [Labels et certifications](/certifications/labels-et-certifications.md).
 
 ## Quincaillerie invisible
 
-Les menuiseries LUMINE55 intègrent en standard la quincaillerie invisible selon les abaques dimensionnels [1 p. 14] :
-* Paumelles dissimulées dans la structure de feuillure.
-* Poignée TOULON décalée pour affiner la masse vue du montant.
-* Ouverture battante jusqu'à 180°.
+Les menuiseries LUMINE55 sont équipées en standard de la quincaillerie invisible (selon abaques) : les paumelles sont intégrées à la structure de la fenêtre et la poignée TOULON est décalée ; la fenêtre s'ouvre à 180°. **La quincaillerie invisible n'est pas disponible sur la gamme LUMINE65** [1 p. 14].
 
-La quincaillerie invisible n'est pas disponible sur la déclinaison LUMINE65 [1 p. 14].
+![Fenêtre LUMINE55 à quincaillerie invisible](/assets/gammes/lumine/quincaillerie-invisible.png)
 
-## Accessoires et quincaillerie
+(schéma: raw/catalogue-general-2026-01.pdf, p. 14)
 
-Les menuiseries LUMINE reçoivent des accessoires coordonnés pour fenêtres et portes-fenêtres [1 p. 15, 2 p. 4] :
+## Accessoires
 
-* **Poignées de fenêtre** :
-  * Sécustik® ATLANTA : blanc, aspect inox, caramel ou laiton [1 p. 15, 2 p. 4].
-  * Sécustik® TOULON : noir, 7016, aspect inox ou blanc [1 p. 15, 2 p. 4].
-  * Technal® BERLIN (option) : inox, blanc, noir ou 7016 [1 p. 15].
-  * Technal® ANTIBES (option) : noir, 7016, aspect inox ou blanc [1 p. 15].
-* **Béquilles doubles et rosaces pour portes-fenêtres** :
-  * TOULON sur plaque : noir, 7016, aspect inox ou blanc [1 p. 15, 2 p. 4].
-  * ATLANTA plaque étroite : blanc, aspect inox (noir et 7016 en option) [1 p. 15, 2 p. 4].
-  * ATLANTA plaque large : inox ou laiton [1 p. 15].
-  * Sécustik® TOULON avec rosace (pour oscillo-battant) : noir, 7016, aspect inox ou blanc [1 p. 15, 2 p. 4].
-  * Sécustik® ATLANTA avec rosace (pour oscillo-battant) : blanc, aspect inox (noir et 7016 en option) [1 p. 15, 2 p. 4].
-  * Technal® BERLIN avec rosace : inox, blanc, noir ou 7016 [1 p. 15].
-* **Équipements complémentaires** :
-  * Moustiquaire sur cadre fixe (battement préservé).
-  * Soubassements moulurés ou plats.
-  * Croisillons : 10, 18, 26, 45 mm, Laiton 8 mm sans croix, Plomb 8 mm sans croix [1 p. 15].
-  * Volets roulants intégrés assemblés en coffre de 200 mm ou 230 mm [1 p. 28].
+Les poignées de fenêtre, béquilles de porte-fenêtre et croisillons de la gamme LUMINE, avec leurs
+finitions et leurs images, sont sur [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md),
+avec la moustiquaire et les soubassements [1 p. 15]. Les menuiseries LUMINE peuvent être équipées
+de vitrages techniques et/ou décoratifs ([Performances des vitrages](/vitrages/performances-vitrages.md),
+[Vitrages décoratifs](/vitrages/vitrages-decoratifs.md)) et de volets roulants et de solutions
+domotiques ([Volets roulants](/equipements/volets-roulants.md)) [1 p. 15].
 
 # Performances
 
-Performances certifiées de la gamme LUMINE :
-
-* **Classement CSTB A\*E\*V de la fenêtre LUMINE65** : certifiée **A\*4 / E\*9A / V\*C3** [2 p. 2]. La classe de déformation sous vent C3 représente le niveau de rigidité structurelle le plus élevé des fenêtres PROFERM.
-* **Affaiblissement acoustique de la fenêtre LUMINE65** : jusqu'à **40 dB** [2 p. 2].
-* **Performance thermique** :
-  * LUMINE65 : Uw jusqu'à 1,51 W/m²K mesuré sur fenêtre 1 vantail de $1\,010 \times 1\,365 \text{ mm}$ [2 p. 2].
-  * Gamme LUMINE globale : Uw jusqu'à 1,5 W/m²K en double vitrage standard (Sw 0,48, TLw 0,6) [1 p. 15, 17].
-* **Certification CSTB laque 29943** : PROFERM est le seul fabricant bénéficiant de la certification CSTB sur menuiseries aluminium prélaquées [1 p. 15].
+* **Classement A\*E\*V** (air, eau, vent) de la fenêtre LUMINE65 : voir
+  [Labels et certifications](/certifications/labels-et-certifications.md), qui tient les
+  classements de toutes les gammes [2 p. 2].
+* **Affaiblissement acoustique de la fenêtre LUMINE65** : jusqu'à **40 dB** (décibels) [2 p. 2] ;
+  celui du coulissant LUMINE65 est sur [Coulissants aluminium](/gammes/coulissants-aluminium.md).
+* **Performance thermique** : Uw jusque 1,51 W/m²K pour la LUMINE65, mesuré sur fenêtre 1 vantail
+  de 1 010 × 1 365 mm [2 p. 2] ; Uw jusque 1,5 W/m²K pour la gamme LUMINE sans version nommée
+  [1 p. 15] (tableau *Caractéristiques* ci-dessus).
+* **Certification CSTB laque 29943** sur les menuiseries aluminium prélaquées : voir
+  [Labels et certifications](/certifications/labels-et-certifications.md) [1 p. 15].
 
 # Configurations de fenêtres et portes-fenêtres LUMINE65
 
-Châssis réalisables documentés sur la brochure produit [2 p. 4] :
-* **Fenêtres (vitrage 28 mm 6/18/4)** : fixe, 1 vantail, 2 vantaux, ouvrant sur allège, ouvrant sous imposte, fixe latéral + ouvrant, soufflet, ensembles composés.
-* **Portes-fenêtres en ouvrant visible (avec serrure)** : 1 vantail, 2 vantaux, fixe latéral + ouvrant. Vitrage de base 28 mm (6/18/4), vitrage de 32 mm possible sur les configurations à 2 vantaux [2 p. 4].
+Les schémas ci-dessous montrent les châssis réalisables en LUMINE65 : chaque rectangle est un
+vantail (partie ouvrante) ou un fixe ; un rectangle sans trait est un fixe, les traits en triangle
+tracés dans un rectangle marquent un vantail ouvrant et son type d'ouverture. La planche ne
+légende pas les ouvertures dessinées.
 
-# Coloris et régimes tarifaires
+## Fenêtres
 
-## Nuancier LUMINE55
+Applications possibles : fixe, 1 vantail, 2 vantaux, ouvrant sur allège, ouvrant sous imposte,
+fixe latéral + ouvrant. Vitrage 28 mm : 6 | 18 | 4 (verre de 6 mm, lame de 18 mm, verre de 4 mm)
+[2 p. 4].
 
-Disponibilité des finitions sur profilé 55 mm [1 p. 18] :
-* Anodisé argent pur (non laqué) : 2 faces uniquement.
-* 4 teintes en 1 ou 2 face(s) : Blanc 9016 brillant, Gris 7016 (satiné ou granité), Anodisé laqué argent contretypé, Anodisé laqué champagne contretypé.
-* 7 teintes en 1 face extérieure uniquement : Rouge 3004 granité, Gris 2900 granité, Gris 7039 granité, Gris 7035 granité, Noir 2100 granité, Noir 9005 granité, Marron 8019 granité.
-* Laquage toutes teintes RAL sur face intérieure ou 2 faces en option.
+![Applications possibles de la fenêtre LUMINE65](/assets/gammes/lumine/lumine65-fenetre-applications.png)
 
-## Nuancier LUMINE65 et thermolaquage QUALICOAT Classe 2
+Onze schémas sont dessinés : un fixe, quatre vantaux simples à ouvertures différentes, un châssis
+de forme triangulaire, un ouvrant sous imposte (fixe en partie haute) et un ouvrant sur allège
+(fixe en partie basse) ; en seconde rangée, trois châssis à deux éléments côte à côte, dont deux
+à deux vantaux ouvrants et un à un vantail ouvrant et un fixe latéral.
 
-La version LUMINE65 est 100 % thermolaquée en poudre **QUALICOAT Classe 2** [1 p. 18, 2 p. 5] :
-* Garantie d'accroche de la laque : **15 ans** [2 p. 5].
-* Garantie de tenue dans le temps, permanence de la couleur et uniformité du vieillissement : **25 ans** (contre 10 ans en classe 1) [1 p. 18, 2 p. 5].
-* **Régime tarifaire : 9 coloris sont au prix du blanc** [2 p. 5] :
-  1. Blanc 9016 mat
-  2. Rouge 3004 satiné
-  3. Noir 9005 granité
-  4. Noir 2100 granité
-  5. Marron 8019 granité
-  6. Gris 7039 granité
-  7. Gris 7035 granité
-  8. Gris 7016 satiné ou granité
-  9. Gris 2900 granité
-  10. Anodisé laqué champagne (contretypage, au prix du blanc)
-* **Teinte avec plus-value** : Anodisé laqué argent (contretypage, en option avec supplément) [2 p. 5].
+(schéma: raw/brochure-lumine65-2025-02.pdf, p. 4)
+
+## Portes-fenêtres
+
+La porte-fenêtre LUMINE65 se fait en ouvrant visible, pour porte-fenêtre avec serrure
+([Finitions des ouvrants](#finitions-des-ouvrants), repère 6). Applications possibles : 1 vantail,
+2 vantaux, fixe latéral + ouvrant. Vitrage 28 mm : 6 | 18 | 4 - 32 mm possible en deux vantaux
+[2 p. 4].
+
+![Applications possibles de la porte-fenêtre LUMINE65](/assets/gammes/lumine/lumine65-porte-fenetre-applications.png)
+
+Trois schémas : un vantail, deux vantaux, un fixe latéral à gauche et un ouvrant à droite.
+
+(schéma: raw/brochure-lumine65-2025-02.pdf, p. 4)
+
+Les poignées de fenêtre et de porte-fenêtre, les béquilles doubles et les rosaces (pour
+oscillo-battant) de la LUMINE65, avec leurs finitions, sont sur
+[Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md) [2 p. 4].
+
+# Coloris
+
+La LUMINE55 se fait en anodisé argent (2 faces), en quatre coloris 1 ou 2 face(s), en sept coloris
+1 face extérieure et en laquage RAL en option ; la LUMINE65 en onze coloris 1 ou 2 face(s),
+thermolaqués QUALICOAT classe 2. Le nuancier complet, teinte par teinte, est sur
+[Coloris LUMINE](/coloris/coloris-lumine.md) [1 p. 18, 2 p. 5].
 
 # Garanties
 
-* **Garantie structure de la fenêtre** : affichée à **20 ans** sur la brochure LUMINE65 [2 p. 5] (versus 15 ans au catalogue général [CTR-03]).
-* **Laquage Qualicoat Classe 2** : 25 ans (15 ans accroche) [1 p. 35, 2 p. 5].
-* **Vitrages** : 10 ans [1 p. 35, 2 p. 5].
-* **Ferrures ROTO** : 10 ans sur le fonctionnement [1 p. 35, 2 p. 5].
-* **Autres ferrures** : 2 ans [1 p. 35, 2 p. 5].
-* **Motorisations** : 7 ans [1 p. 35, 2 p. 5].
-* **Volets roulants** : 5 ans [1 p. 35, 2 p. 5].
-* **Option bord de mer** : 5 ans (0 à 10 km) et 7 ans (au-delà de 10 km) [1 p. 35, 2 p. 5].
+La garantie de la structure de la fenêtre LUMINE65 est de 20 ou de 15 ans selon le document
+(**CTR-03**) [1 p. 35, 2 p. 5] ; le laquage de la LUMINE65 (QUALICOAT classe 2) est garanti
+25 ans, celui de la LUMINE55 10 ans en couleurs standards et 7 ans hors standards. Grille
+complète : [Garanties par composant](/garanties/garanties-par-composant.md).
 
 # Ce qui n'est pas réalisable
 
 * **Quincaillerie invisible sur LUMINE65** : réservée au module 55 mm [1 p. 14].
-* **Ouvrant caché sur porte-fenêtre à serrure** : l'intégration d'un cylindre à clé impose le profil d'ouvrant apparent de 65 mm [1 p. 14, 2 p. 4].
-* **Bicoloration sur l'anodisé argent pur de LUMINE55** : disponible en 2 faces uniquement [1 p. 18].
+* **Porte-fenêtre avec serrure en LUMINE65** : elle se fait en ouvrant apparent (repère 6) [1 p. 14, 2 p. 4].
+* **Anodisé argent de la LUMINE55** : 2 faces uniquement [1 p. 18].
+* **Sept coloris de la LUMINE55 en 1 face extérieure uniquement** : voir [Coloris LUMINE](/coloris/coloris-lumine.md) [1 p. 18].
 
 # Citations
 
-[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 13 à 15, 18, 34 et 35
-[2] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 1 à 6
+[1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 4, 14, 15, 17, 18 et 35
+[2] [Brochure LUMINE65, édition février 2025](raw/brochure-lumine65-2025-02.pdf), p. 1, 2, 4 et 5
 
 # Voir aussi
 
 - [Coulissants aluminium](/gammes/coulissants-aluminium.md)
+- [Coloris LUMINE](/coloris/coloris-lumine.md)
+- [Arguments de vente LUMINE](/commercial/lumine.md)
+- [Poignées et croisillons](/quincaillerie/poignees-et-croisillons.md)
 - [Brochure LUMINE65](/sources/brochure-lumine65.md)
 - [TECHNAL](/fournisseurs/technal.md)
 - [Labels et certifications](/certifications/labels-et-certifications.md)

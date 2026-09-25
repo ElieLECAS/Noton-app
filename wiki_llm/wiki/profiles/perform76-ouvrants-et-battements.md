@@ -148,6 +148,10 @@ Le **76271, à 78 mm, est le seul ouvrant intermédiaire du système** entre les
 basse et les 110 mm de la paire haute. C'est aussi le seul qui se réalise **sans renfort acier**,
 avec le capot aluminium A072 de la variante AluClip Pro.
 
+Les coupes cotées des huit ouvrants et des trois battements du système, avec leur capot
+aluminium, sont dans
+[Profilés principaux du système 76](/profiles/systeme-76-profiles-principaux.md).
+
 # Compatibilités
 
 | Élément | 76281 | 76275 | 76272 | 76279 |
