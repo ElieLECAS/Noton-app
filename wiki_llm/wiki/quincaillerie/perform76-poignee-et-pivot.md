@@ -18,20 +18,21 @@ sources:
     last_modified: 2023-12-14
 source_pages:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
-    pages: 3
+    pages: 6
   - resource: raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf
     pages: 100
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T21:15:00Z
-verified:
-  by: process:claude-code
-  at: 2026-09-18T22:00:00Z
 ---
+
+La poignée d'une fenêtre PERFORM76 se place à une hauteur qui dépend de la hauteur de l'ouvrant
+(le cadre qui s'ouvre), et l'ouvrant tourne sur un **pivot bas**, la ferrure du bas qui porte son
+poids. Cette page donne où placer l'une et l'autre, et comment régler le pivot.
 
 # Charge admissible sur le pivot bas
 
-La charge admissible sur le pivot bas d'une PERFORM76 est de **100 kg par ouvrant** [1 p. 3].
+La charge admissible sur le pivot bas d'une PERFORM76 est de **100 kg par ouvrant** [1 p. 6].
 
 Le catalogue général annonce 130 kg pour « le poids d'une fenêtre ». Les deux énoncés ne portent
 peut-être pas sur le même objet, et l'écart est de 30 % : **retenir 100 kg pour un
@@ -40,8 +41,12 @@ dimensionnement d'atelier** — entrée **CTR-01** du registre
 
 # Cotes de position de poignée
 
-Position de l'axe de poignée selon la hauteur de l'ouvrant, en mm. **FFO** est la hauteur d'axe de
-poignée au fond de la feuillure quincaillerie.
+Position de l'axe de poignée selon la hauteur de l'ouvrant, en mm. Deux cotes donnent la même
+position, mesurée depuis deux repères différents : **FFO**, la hauteur de l'axe de poignée
+mesurée depuis le **fond de feuillure quincaillerie** (le creux du profilé où se loge la
+ferrure), et la hauteur mesurée depuis le **bas de l'ouvrant**. Une ligne du tableau se lit :
+pour un ouvrant dont la hauteur est comprise entre le minimum et le maximum, l'axe de poignée se
+place à la cote FFO, soit à la cote « bas ouvrant ».
 
 | Hauteur ouvrant mini (mm) | Hauteur ouvrant maxi (mm) | Axe poignée FFO (mm) | Axe poignée depuis bas ouvrant (mm) |
 | --- | --- | --- | --- |
@@ -55,13 +60,15 @@ poignée au fond de la feuillure quincaillerie.
 | 1 601 | 1 800 | 763 | 783 |
 | 1 801 | 2 400 | 1 000 | 1 020 |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 3)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 6)
 
-| Schéma | Coupe |
-| --- | ---: |
-| Hauteur poignée suivant hauteur ouvrant, FFO et bas ouvrant | ![Hauteur poignée suivant hauteur ouvrant](/assets/profiles/perform76/pivot/poignee-hauteur.png) |
+Le schéma montre, en coupe verticale, le bas d'un ouvrant avec sa poignée : les deux flèches
+de cote partent l'une du fond de feuillure quincaillerie (hauteur FFO), l'autre du bas de
+l'ouvrant, et montent jusqu'à l'axe de la poignée.
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 3)
+![Hauteur poignée suivant hauteur ouvrant](/assets/profiles/perform76/pivot/poignee-hauteur.png)
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 6)
 
 La cote depuis le bas de l'ouvrant vaut toujours la cote FFO **plus 20 mm**, sur les neuf lignes.
 
@@ -100,16 +107,30 @@ Position du pivot bas selon le dormant, en mm.
 | 76180 | 40 | 19,5 | 11 | ![Dormant 76180](/assets/profiles/perform76/pivot/pivot-76180.png) |
 | 76185 | 57 | 19,5 | 11 | ![Dormant 76185](/assets/profiles/perform76/pivot/pivot-76185.png) |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 3)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 6)
 
-Le réglage en hauteur du pivot bas se fait à la clé 6 pans de 4 mm, à ± 2 mm, pour une charge de
-100 kg par ouvrant.
+Le retrait se lit sur les coupes de la colonne *Coupe* : la cote de 19,5 mm part du bord de
+l'ouvrant, la position du pivot est la seconde cote horizontale, et la hauteur de 11 mm est
+cotée à droite.
 
-| Schéma | Coupe |
-| --- | ---: |
-| Pivot bas, réglage et positionnement | ![Pivot bas réglage et positionnement](/assets/profiles/perform76/pivot/pivot-bas-reglage.png) |
+## Réglage du pivot bas
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 3)
+Le pivot bas se règle à la **clé 6 pans de 4 mm**, avec une course de **± 2 mm**. La charge
+admissible est de **100 kg par ouvrant** [1 p. 6].
+
+![Pivot bas réglage et positionnement](/assets/profiles/perform76/pivot/pivot-bas-reglage.png)
+
+Le schéma montre l'angle bas d'un ouvrant sur un dormant 76177, vu de face : le vitrage en bleu,
+le pivot dessiné dans l'angle, les traits rouges marquant le contour de l'ouvrant. Quatre cotes
+sont portées autour du pivot : **8 mm** et **19,5 mm** dans le sens horizontal, **12 mm** et
+**8 mm** dans le sens vertical ; la planche ne légende pas leur point de départ. Les flèches rouges verticales indiquent le réglage en hauteur,
+les flèches horizontales, sous le pivot, un réglage latéral.
+
+Les deux vis de réglage sont libellées « Réglage hauteur » sur la planche, y compris celle qui
+porte les flèches horizontales — entrée **INC-17** du registre
+[Incohérences internes](/anomalies/incoherences-internes.md).
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 6)
 
 Le retrait de 19,5 mm et la hauteur de 11 mm sont communs aux cinq dormants : **seule la position
 varie**, de 20 mm sur le 76171 à 57 mm sur le 76185.
@@ -142,7 +163,7 @@ commerciales dans [Poignées et croisillons](/quincaillerie/poignees-et-croisill
 # Citations
 
 [1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
-`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 3
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, page du PDF 6
 
 [2] Mise en œuvre Système 76 Advanced, profine, édition décembre 2023 —
 `raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.3.3, p. 100

@@ -45,6 +45,47 @@ Deux coefficients accompagnent le Uw sur les fiches produit :
 Une valeur annoncée sans son sigle ne se reprend pas : un 1,0 de Uf n'est pas un 1,0 de Uw. Voir
 [Performances des vitrages](/vitrages/performances-vitrages.md).
 
+# Pièces et gestes de la menuiserie
+
+Les mots de base d'une fenêtre PVC, employés sur toutes les pages de profilés et de pose. Une
+fenêtre se compose d'un cadre fixe scellé dans le mur, le dormant, et d'un ou plusieurs cadres
+mobiles, les ouvrants, qui portent le vitrage.
+
+| Terme | Sens | Où il s'emploie |
+| --- | --- | --- |
+| Dormant | cadre fixe de la fenêtre, fixé dans la maçonnerie ; il reçoit l'ouvrant | [Dormants PERFORM76](/profiles/perform76-dormants.md) |
+| Ouvrant | cadre mobile qui s'ouvre, aussi appelé vantail ; il porte le vitrage et la quincaillerie | [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) |
+| Faux ouvrant | partie fixe construite avec les profilés d'un ouvrant, pour que fixe et ouvrant aient la même allure | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| Ouvrant droit, ouvrant galbé | ouvrant à face plane ou à face arrondie ; sur la PERFORM76, 76 mm et 83 mm d'épaisseur | [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) |
+| Aile | rebord du dormant qui vient recouvrir le mur ou l'ancien bâti ; un dormant sans aile se pose dans l'embrasure | [Dormants PERFORM76](/profiles/perform76-dormants.md) |
+| Neuf, rénovation | pose dans une maçonnerie neuve, ou pose sur l'ancien dormant bois conservé | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
+| Délignage | recoupe de l'aile d'un dormant pour la raccourcir, faite sur le chantier | [Dormants PERFORM76](/profiles/perform76-dormants.md) |
+| Battement | profil vertical où se rejoignent les deux ouvrants d'une fenêtre à deux vantaux | [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md) |
+| Meneau | profil qui divise un dormant (meneau de dormant) ou un ouvrant (meneau d'ouvrant) en plusieurs parties | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| Traverse | profil horizontal ; la traverse de soubassement sépare le vitrage du soubassement | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| Soubassement | partie basse d'une fenêtre ou d'une porte-fenêtre, sous la traverse | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| Parclose | baguette clipsée qui maintient le vitrage dans son logement ; elle se choisit par l'épaisseur du vitrage | [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
+| Feuillure | logement en creux du profilé qui reçoit le vitrage ou l'ouvrant | [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
+| Renfort | profil acier glissé dans une chambre du PVC pour le rigidifier | [Renforts du système 76](/profiles/systeme-76-renforts.md) |
+| Chambre | chacun des compartiments creux du profilé PVC ; plus il y en a, plus le profilé isole | [PERFORM](/gammes/perform.md) |
+| Tapée | profil rapporté sur le dormant pour épaissir la menuiserie jusqu'au nu de l'isolant intérieur | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| Appui | profil sous le dormant bas, penté vers l'extérieur, qui rejette l'eau de pluie | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| Nez d'appui | petit profil clipsé au bord de l'appui | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| Seuil | profil bas d'une porte-fenêtre, sur lequel on passe | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| Rejet d'eau | profil qui écarte l'eau du bas de l'ouvrant | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| Compensateur | profil qui comble l'écart entre le dormant rénovation et l'ancien bâti | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| Élargisseur | profil accolé au dormant pour élargir la menuiserie | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
+| Patte de pose, équerre de fixation | pièce métallique qui fixe le dormant au mur à travers l'isolant | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| Clameau | pièce d'accrochage de la patte de pose sur le dormant | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| Cale latérale | cale posée entre le dormant et la maçonnerie pour le positionner avant fixation | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
+| Compribande | bande de mousse imprégnée précomprimée qui gonfle dans le joint entre dormant et maçonnerie | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
+| Fond de joint | cordon placé au fond du joint avant le silicone, pour en régler la profondeur | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
+| Recouvrement | largeur sur laquelle une pièce en recouvre une autre : l'ouvrant sur le dormant, le dormant sur le mur | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
+| Drainage, décompression | usinages qui évacuent l'eau entrée en feuillure et équilibrent la pression d'air | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
+| Pivot bas | ferrure du bas de l'ouvrant autour de laquelle il tourne et qui porte son poids | [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md) |
+| Coupe verticale, coupe horizontale | dessin de la menuiserie comme tranchée de haut en bas, ou de gauche à droite, vu en bout | toutes les planches |
+| Élévation | dessin de la menuiserie vue de face | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+
 # Cotes de fabrication
 
 Vocabulaire fixé par les [directives générales profine](/sources/profine-directives-generales.md)

@@ -667,10 +667,21 @@ dormants and the four ouvrants of the PERFORM76.
 5. **Check every crop by eye**: paste them side by side into one contact sheet and look at it.
    A crop showing the neighbouring profile, a truncated label or a missing cote is redone.
    The label inside the image must match the reference of the row it goes into
-6. **Add a `Coupe` column, last, right-aligned (`---:`)**, to the `# Cotes` table, one image per
-   row, alt text = the label: `![Dormant 76177](/assets/profiles/perform76/dormants/dormant-76177.png)`.
-   The application checks that the path exists on disk and that the image sits on the row of
-   the reference asked for: an image on the wrong row is served as the wrong profile
+6. **Where the image goes depends on what it shows.**
+   - **A reference** (a profilé, a parclose, a tapée, an appui): in a `Coupe` column, last,
+     right-aligned (`---:`), of the `# Cotes` table, one image per row, alt text = the label: `![Dormant 76177](/assets/profiles/perform76/dormants/dormant-76177.png)`.
+     The application checks that the path exists on disk and that the image sits on the row of
+     the reference asked for: an image on the wrong row is served as the wrong profile
+   - **A schéma of pose, montage, assemblage, alignement, drainage, réglage** -- anything that
+     shows how parts go together or how a job is done: **never in a table cell**, where it
+     shrinks to a thumbnail nobody can read. It stands alone as a figure, full width, on its own
+     line: `![Alignement total avec faux ouvrant](/assets/profiles/perform76/pose/alignement-total-faux-ouvrant.png)`.
+     **Above it**, the text that says what the schéma shows and when it applies, in plain words
+     (*Written for a professional, understood by anyone*). **Below it**, how to read it -- what
+     each part of the drawing is, what the colours and repères mean -- then the table of the
+     cotes it carries, if any, and the `(schéma: …)` locator. One schéma, one sub-heading when a
+     section holds several. Reference page: the *Alignement de la traverse de soubassement*
+     section of [Meneaux PERFORM76](/profiles/perform76-meneaux.md)
 7. **Record in `log.md`** the references cut, the PDF page each came from and the asset folder
 
 A crop is a picture of the source, not a transcription. It never replaces the `# Cotes` table:

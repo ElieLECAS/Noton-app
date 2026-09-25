@@ -17,24 +17,26 @@ sources:
     id: dta-6-16-2334-v5
     title: DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED
     last_modified: 2025-06-19
+source_pages:
+  - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
+    pages: 14-22, 24
 generated:
   by: process:claude-code
   at: 2026-09-17T20:00:00Z
-verified:
-  by: process:claude-code
-  at: 2026-09-18T22:00:00Z
 ---
 
 # Deux familles d'appuis, selon le dormant
 
-Les appuis PERFORM76 forment deux groupes qui ne se mélangent pas.
+L'**appui** est le profil posé sous le dormant bas, penté vers l'extérieur, qui rejette l'eau
+de pluie loin du mur ; le **seuil** est son équivalent au bas d'une porte-fenêtre, sur lequel on
+passe. Les appuis PERFORM76 forment deux groupes qui ne se mélangent pas.
 
 | Groupe | Appuis | Dormants |
 | --- | --- | --- |
 | Rénovation et neuf avec aile | 6136, 6137, 76768 | 76177, 76180, 76185 |
 | Neuf sans aile | 76751, 76752, 76753, 76758 + 76719 | 76171, 76172 |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 13, 17, 18 et 19)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16, 20, 21 et 22)
 
 # Cotes des appuis 6136, 6137 et 76768
 
@@ -46,7 +48,7 @@ Appuis du premier groupe, cotes en mm. Les trois sont pentés à **3°**.
 | 6137 | 97 | 157 | 14 | 3,5 | oui | ![Appui 6137](/assets/profiles/perform76/appuis/appui-6137.png) |
 | 76768 | 136 | 196 | 14 | 22 | non | ![Appui 76768](/assets/profiles/perform76/appuis/appui-76768.png) |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 13)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16)
 
 La **hauteur d'about** de ces trois appuis dépend du dormant :
 
@@ -54,10 +56,17 @@ La **hauteur d'about** de ces trois appuis dépend du dormant :
 | --- | --- | --- |
 | 76177 | 40 | 26 |
 | 76185 | 60 | 46 |
+| 76180 | 20 | 6 |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 13)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16, 18, 19 et 24)
 
-Les 20 mm d'écart de hauteur d'about reprennent exactement les 20 mm d'écart d'aile.
+Sur le dormant neuf 76180, les mêmes appuis sont cotés **14** au-dessus et **6** en dessous, sans
+la retombée de 3,5 mm portée sur les dormants rénovation [1 p. 19]. La même cote de 6 mm figure
+sous les appuis 6137 et 76768 de la planche du 76171, où le dormant bas devient un 76180
+[1 p. 24].
+
+Les 20 mm d'écart de hauteur d'about entre 76177 et 76185 reprennent exactement les 20 mm d'écart
+d'aile.
 
 # Cotes des appuis 76751, 76752, 76753 et 76758
 
@@ -70,7 +79,7 @@ Appuis du second groupe, cotes en mm.
 | 76753 | 35 | 21 / 46, sur 76 | - | - | ![Appui 76753](/assets/profiles/perform76/appuis/appui-76753.png) |
 | 76758 + 76719 | 15 à 20 | 80 en saillie, dénivelé 3, retombée 5,5, largeur totale 156 | **5°** | ensemble de deux profils | ![Appui 76758 + 76719](/assets/profiles/perform76/appuis/appui-76758.png) |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19 et 21)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 22 et 24)
 
 **L'ensemble 76758 + 76719 est le seul appui penté à 5°** ; les six autres appuis de la gamme sont
 à 3°.
@@ -91,7 +100,7 @@ du dormant 76171 en pose isolée jusqu'à 155 mm d'isolant — voir
 | A076 | seuil aluminium | 76 de large, 10 et 10, about 20 | les cinq dormants | ![Seuil A076 + Rejet d'eau A062](/assets/profiles/perform76/appuis/seuil-a076.png) |
 | A062 | rejet d'eau | - | s'associe au seuil A076 | - |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 13, 19 et 22)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16 et 22)
 
 Le nez d'appui **4319 ne se monte pas sur le 76768** : il n'est représenté que sur les appuis
 6136 et 6137.
@@ -156,7 +165,28 @@ deux orientations.
 | 6143 | 19 × 29 | profil rénovation | ![Compensateur 6143](/assets/profiles/perform76/compensateurs/compensateur-6143.png) |
 | 6144 | 12 × 16 | profil rénovation | ![Compensateur 6144](/assets/profiles/perform76/compensateurs/compensateur-6144.png) |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 13)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16)
+
+## Montage des compensateurs
+
+Le **compensateur** est un petit profil tubulaire clipsé sous l'aile du dormant rénovation, qui
+comble l'écart avec l'ancien bâti. Chacun se monte dans deux orientations : debout ou couché, ce
+qui donne deux épaisseurs de compensation avec la même pièce.
+
+![Dormant rénovation 76177 + compensateur 6143](/assets/profiles/perform76/compensateurs/montage-76177-6143.png)
+
+![Dormant rénovation 76185 + compensateur 6143](/assets/profiles/perform76/compensateurs/montage-76185-6143.png)
+
+Le compensateur **6143** se monte debout (19 de large, 29 de haut) ou couché (29 de large,
+19 de haut), sur le 76177 comme sur le 76185.
+
+![Dormant rénovation 76177 + compensateur 6144](/assets/profiles/perform76/compensateurs/montage-76177-6144.png)
+
+![Dormant rénovation 76185 + compensateur 6144](/assets/profiles/perform76/compensateurs/montage-76185-6144.png)
+
+Le compensateur **6144** se monte de même, en 12 × 16 ou en 16 × 12.
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16)
 
 # Compatibilités
 
@@ -174,7 +204,7 @@ deux orientations.
 | Compensateur 6143 | non | non | oui | non | oui |
 | Compensateur 6144 | non | non | oui | non | oui |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 11, 12, 13, 15, 17, 18 et 19)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14, 15, 16, 18, 20, 21 et 22)
 
 Le seuil aluminium est le seul profil complémentaire commun aux cinq dormants.
 
@@ -185,7 +215,7 @@ d'isolant, parce que le dormant bas devient alors un 76180 — voir
 # Citations
 
 [1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
-`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 11 à 19, 21 et 22
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 14 à 22 et 24
 
 [2] DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED —
 `raw/dta-trocal-76-advanced-6-16-2334-v5.pdf`, p. 8, 9, 14 et 18

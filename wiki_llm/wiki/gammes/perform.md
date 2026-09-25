@@ -25,7 +25,7 @@ source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 1, 4, 6-8, 34-35
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
-    pages: 1-3
+    pages: 4-6
   - resource: raw/depliant-general-2023-06.pdf
     pages: 3
 generated:
@@ -54,7 +54,7 @@ La gamme se compose de deux déclinaisons distinctes par l'épaisseur de leur pr
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 6)
 
-La PERFORM76 dispose d'un système d'étanchéité et d'isolation reposant sur 3 joints (un joint à frappe sur l'ouvrant, un joint central, un joint à frappe sur le dormant) et 6 chambres d'isolation dans le dormant et l'ouvrant [1 p. 6, 2 p. 1-2]. Le joint central sépare la chambre humide extérieure d'une chambre sèche intérieure abritant la quincaillerie [2 p. 1-2]. Le nombre de chambres et de joints de la PERFORM70 n'est pas spécifié dans le catalogue général [1 p. 6].
+La PERFORM76 dispose d'un système d'étanchéité et d'isolation reposant sur 3 joints (un joint à frappe sur l'ouvrant, un joint central, un joint à frappe sur le dormant) et 6 chambres d'isolation dans le dormant et l'ouvrant [1 p. 6, 2 p. 4 et 5]. Le joint central sépare la chambre humide extérieure d'une chambre sèche intérieure abritant la quincaillerie [2 p. 4 et 5]. Le nombre de chambres et de joints de la PERFORM70 n'est pas spécifié dans le catalogue général [1 p. 6].
 
 ## Équipements de série
 
@@ -65,7 +65,7 @@ La fabrication de la gamme PERFORM intègre dix composants et procédés de sér
 | 1 | Pivot symétrique systématique | Équilibrage de la ferrure sur l'ouvrant et le dormant |
 | 2 | Profils à structure totalement renforcée KÖMMERLING® | Armatures en acier intégrées selon les abaques techniques |
 | 3 | Parclose arrondie ou moulurée | Finition esthétique intérieure au choix |
-| 4 | Pivot haute résistance | Supporte le poids d'une fenêtre jusqu'à 130 kg (charge atelier à 100 kg selon [2 p. 3], voir [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md)) |
+| 4 | Pivot haute résistance | Supporte le poids d'une fenêtre jusqu'à 130 kg (charge atelier à 100 kg selon [2 p. 6], voir [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md)) |
 | 5 | Rouleau champignon | Système de sécurité anti-dégondage et retardateur d'effraction |
 | 6 | Sécurité de manœuvre | Système anti-fausse manœuvre couplé à un levier de vantail |
 | 7 | Soudure grain d'orge | Assemblage d'angle en coupe d'onglet avec finition soignée |
@@ -148,8 +148,10 @@ Les restrictions de fabrication imposées sur la gamme PERFORM sont les suivante
 
 # Coupes de la PERFORM76
 
-Coupes verticale et horizontale de la PERFORM76 avec ouvrant droit 76 mm, repérées de 1 à 10 ;
-les loupes montrent l'ouvrant galbé 83 mm à la même place [2 p. 1 et 2].
+Les deux coupes du cahier technique montrent comment la PERFORM76 est construite : chaque
+élément est repéré par un numéro, de 1 à 10, expliqué dans le tableau ci-dessous. Les coupes
+sont dessinées avec l'ouvrant droit de 76 mm ; les loupes montrent l'ouvrant galbé de 83 mm à la
+même place [2 p. 4 et 5].
 
 | Repère | Élément |
 | --- | --- |
@@ -166,17 +168,35 @@ les loupes montrent l'ouvrant galbé 83 mm à la même place [2 p. 1 et 2].
 | 9 | double vitrage de 28 mm (6 mm, 18 gaz argon, 4 mm), intercalaire TGI noir, Ug 1,1 W/m²K |
 | 10 | battement central réduit de 112 mm, battement intérieur et poignée centrée |
 
-| Coupe | Image |
-| --- | ---: |
-| Coupe verticale | ![Coupe verticale PERFORM76](/assets/profiles/perform76/generalites/coupe-verticale.png) |
-| Coupe horizontale | ![Coupe horizontale PERFORM76](/assets/profiles/perform76/generalites/coupe-horizontale.png) |
+## Coupe verticale
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 2)
+La coupe verticale montre la PERFORM76 comme si on la tranchait de haut en bas, au niveau du
+bas de l'ouvrant : en bas le dormant (repère 3) et son renfort (4), au-dessus l'ouvrant droit
+(5a) et son renfort (6), le vitrage (9) tenu par la parclose (8). Les trois joints (1) ferment le
+passage de l'air et de l'eau ; entre eux, la chambre humide (2a, en bleu) côté extérieur et la
+chambre sèche (2b, en orange) côté intérieur, où se trouve la quincaillerie. La loupe en haut à
+gauche montre à la même place l'ouvrant galbé (5b).
+
+![Coupe verticale PERFORM76](/assets/profiles/perform76/generalites/coupe-verticale.png)
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
+
+## Coupe horizontale
+
+La coupe horizontale tranche la fenêtre à deux vantaux de gauche à droite, au milieu, là où les
+deux ouvrants se rejoignent sur le battement central. On y retrouve les mêmes repères de part et
+d'autre : les deux ouvrants droits (5a), leurs renforts (6), les joints de feuillure sous vitrage
+(7), les parcloses (8), les vitrages (9), et au centre les chambres humide (2a) et sèche (2b). Les
+deux loupes montrent l'ouvrant galbé (5b) à la place de l'ouvrant droit.
+
+![Coupe horizontale PERFORM76](/assets/profiles/perform76/generalites/coupe-horizontale.png)
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
 
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 1, 4, 6 à 8, 34 et 35
-[2] [Cahier technique PERFORM76, version 02/09/2026 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf), p. 1 à 3
+[2] [Cahier technique PERFORM76, version 02/09/2026 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf), pages du PDF 4 à 6
 [3] [Dépliant général PROFERM, édition juin 2023](raw/depliant-general-2023-06.pdf), p. 3
 
 # Voir aussi

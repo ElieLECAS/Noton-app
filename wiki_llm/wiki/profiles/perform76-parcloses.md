@@ -27,7 +27,7 @@ sources:
     last_modified: 2023-12-14
 source_pages:
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
-    pages: 1, 5
+    pages: 4, 8
   - resource: raw/dta-trocal-76-advanced-6-16-2334-v5.pdf
     pages: 9
   - resource: raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf
@@ -37,18 +37,18 @@ source_pages:
 generated:
   by: process:multimodal-direct
   at: 2026-09-19T21:10:00Z
-verified:
-  by: process:claude-code
-  at: 2026-09-18T22:00:00Z
 ---
 
 # Comment choisir une parclose
 
+La **parclose** est la baguette de PVC clipsée sur l'ouvrant ou le dormant, qui maintient le
+vitrage dans sa feuillure. Plus le vitrage est épais, plus la parclose est étroite.
+
 Une parclose PERFORM76 se choisit par **l'épaisseur du vitrage à tenir**. Sur les planches, cette
-épaisseur est cotée en **bleu** et l'épaisseur de la parclose en **noir** [1 p. 5].
+épaisseur est cotée en **bleu** et l'épaisseur de la parclose en **noir** [1 p. 8].
 
 Deux familles séparées, non interchangeables : les parcloses d'**ouvrant** et celles de
-**dormant**. Toutes sont arrondies [1 p. 1].
+**dormant**. Toutes sont arrondies [1 p. 4].
 
 L'ouvrant couvre de 16 à 50 mm de vitrage, le dormant de 28 à 48 mm. **Un vitrage de moins de
 28 mm ne se tient pas en dormant** : aucune parclose de dormant ne descend sous cette épaisseur.
@@ -77,7 +77,7 @@ Les 17 parcloses d'ouvrant PERFORM76, par épaisseur de vitrage croissante, cote
 | 76509 | 48 | 10,8 | ![Parclose 76509](/assets/profiles/perform76/parcloses/parclose-76509.png) |
 | 76515 | 50 | 9,5 | ![Parclose 76515](/assets/profiles/perform76/parcloses/parclose-76515.png) |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 8)
 
 Le **48 mm a deux parcloses**, la 76508 de cote 12 et la 76509 de cote 10,8 ; le critère qui les
 départage n'est pas donné.
@@ -107,7 +107,7 @@ Les 10 parcloses de dormant PERFORM76, par épaisseur de vitrage croissante, cot
 | 76578 | 46 | 12 | ![Parclose 76578](/assets/profiles/perform76/parcloses/parclose-76578.png) |
 | 76579 | 48 | 10,8 | ![Parclose 76579](/assets/profiles/perform76/parcloses/parclose-76579.png) |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 8)
 
 La série de dormant offre une épaisseur que l'ouvrant n'a pas, **46 mm avec la 76578**. Elle ne
 couvre ni 16, 18, 20, 24, 26, 33 ni 50 mm.
@@ -127,15 +127,32 @@ recoupent celles déjà notées comme partagées avec le
 
 # Cotes de la feuillure
 
-Épaisseur de remplissage pour une feuillure de 62 mm, avec joint post-extrudé ou d'épaisseur
-équivalente, en mm.
+La **feuillure** est le logement du profilé qui reçoit le vitrage et sa parclose. Les épaisseurs
+de vitrage des deux tableaux ci-dessus sont valables **pour une feuillure de 62 mm, avec un joint
+post-extrudé ou d'épaisseur équivalente** [1 p. 8] : avec un autre joint, le couple vitrage et
+parclose change. Cotes portées sur les deux coupes, en mm :
 
-| Emplacement | Feuillure (mm) | Épaisseur de remplissage (mm) | Coupe |
-| --- | --- | --- | ---: |
-| Ouvrant | 62 | 21 | ![Feuillure ouvrant](/assets/profiles/perform76/pose/feuillure-ouvrant.png) |
-| Dormant | 62 | 28 | ![Feuillure dormant](/assets/profiles/perform76/pose/feuillure-dormant.png) |
+| Emplacement | Largeur de feuillure (mm) | Cote verticale portée (mm) |
+| --- | --- | --- |
+| Ouvrant | 62 | 21 |
+| Dormant | 62 | 28 |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 5)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 8)
+
+## Feuillure d'ouvrant
+
+![Feuillure ouvrant](/assets/profiles/perform76/pose/feuillure-ouvrant.png)
+
+Coupe de l'ouvrant sans vitrage ni parclose : la cote horizontale de 62 mm mesure la feuillure,
+la cote verticale de 21 mm est portée à droite, au bord de la feuillure.
+
+## Feuillure de dormant
+
+![Feuillure dormant](/assets/profiles/perform76/pose/feuillure-dormant.png)
+
+Même coupe sur le dormant, pour un vitrage fixe : 62 mm de feuillure, cote verticale de 28 mm.
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 8)
 
 # Compatibilités
 
@@ -152,7 +169,7 @@ vitrage est le seul critère. Voir
 # Vitrage de série et limite d'épaisseur
 
 Le double vitrage de série de la PERFORM76 fait **28 mm**, en 6 / 18 argon / 4, avec intercalaire
-**TGI noir**, pour un **Ug de 1,1 W/m²K** [1 p. 1]. Il se tient avec la parclose d'ouvrant
+**TGI noir**, pour un **Ug de 1,1 W/m²K** [1 p. 4]. Il se tient avec la parclose d'ouvrant
 **76526** et la parclose de dormant **2634**.
 
 **L'épaisseur de vitrage du procédé est plafonnée à 50 mm**, double ou triple, par le
@@ -200,7 +217,7 @@ Elle fixe, pour chaque épaisseur de vitrage (16 à 50 mm), la parclose associé
 # Citations
 
 [1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
-`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 1 et 5
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 4 et 8
 
 [2] DTA n° 6/16-2334_V5, procédé TROCAL 76 ADVANCED —
 `raw/dta-trocal-76-advanced-6-16-2334-v5.pdf`, p. 9

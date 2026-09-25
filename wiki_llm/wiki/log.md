@@ -2,6 +2,43 @@
 
 ## 2026-09-25
 
+* **Retraitement complet** du [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md)
+  selon le protocole révisé : les 26 pages rendues en PNG à 200 dpi et relues en image par lots,
+  aucune couche texte lue.
+  * **Registre** refait en numérotation du PDF, pages 1 à 26 sans trou : 7 pages sans contenu
+    propre (couverture, 3 blanches, sommaire, dos), 19 transcrites.
+  * **Renvois corrigés** : les renvois vers ce document étaient en numérotation imprimée alors que
+    l'application ouvre le PDF à la page citée (« p. 9 » ouvrait une page blanche au lieu de la
+    planche d'alignement, PDF 12). Toutes les pages concernées citent désormais la page du PDF ;
+    les registres d'anomalies donnent les deux numéros (CTR-01, CTR-19, INC-03 à INC-06).
+  * **Vides comblés** : coupes cotées des cinq dormants (cote verticale de droite 46, 64, 63, 66,
+    83 ; décomposition 60 + 16) et cotes de toutes les coupes de combinaison par dormant
+    (hors tout, décomposition, cotes sous la coupe) → [Dormants PERFORM76](/profiles/perform76-dormants.md) ;
+    six coupes d'élargissement des meneaux découpées → [Meneaux PERFORM76](/profiles/perform76-meneaux.md) ;
+    hauteur d'about du 76180 (**6 mm**, absente) et coupes de montage des compensateurs →
+    [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) ; tapée par épaisseur
+    d'isolation en colonne, cotes des pattes (70 / 74, 55 / 35, 80 / 35), cote du dormant (16, 39,
+    45) et cote rouge de 6 mm sur le 76171 → [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) ;
+    renfort des élargisseurs 76702 et 76703 « en option » →
+    [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) ;
+    cotes du schéma de réglage du pivot (8, 19,5, 12, 8) →
+    [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md).
+  * **Correction** : la feuillure de 62 mm était donnée avec une « épaisseur de remplissage » de 21
+    (ouvrant) et 28 mm (dormant). La planche dit que les épaisseurs de remplissage des parcloses
+    valent pour une feuillure de 62 mm ; 21 et 28 sont des cotes verticales non légendées →
+    [Parcloses PERFORM76](/profiles/perform76-parcloses.md). Retirés aussi deux énoncés sans source
+    (« c'est le meneau des ensembles à trois vantaux et plus », cote du pivot « depuis le bord »).
+  * **Forme** : chaque schéma de pose, de montage, d'assemblage, d'alignement et de réglage en
+    figure pleine largeur, avec l'explication au-dessus et la lecture en dessous ; les images de
+    référence restent en colonne `Coupe`. Chaque page s'ouvre sur ce qu'est la pièce en mots
+    simples. 142 images, toutes utilisées.
+  * **Glossaire** : section *Pièces et gestes de la menuiserie*, 32 termes →
+    [Glossaire](/reference/glossaire.md).
+  * **Anomalies nouvelles** : **INC-17** (les deux vis du pivot libellées « Réglage hauteur »),
+    **VER-42** (pictogramme d'interdiction non explicité, rénovation version 1). INC-04 et INC-06
+    étendues aux planches p. 18 et p. 16 où elles se répètent.
+  * `verified` retiré des pages réécrites : leurs tableaux sont à relire par un autre passage.
+
 * **Update** : coupes des dormants et ouvrants PERFORM76 découpées sur les planches rendues en
   PNG (200 dpi) du [Cahier technique PERFORM76](/sources/cahier-technique-perform76.md) et
   ajoutées en colonne `Coupe` des tables `# Cotes` : 5 dormants (76171, 76172, 76180, 76177,

@@ -29,42 +29,54 @@ generated:
 
 C'est la source des cotes de profilés, de leurs compatibilités et des principes de pose de la
 gamme [PERFORM76](/gammes/perform.md). Aucune couche texte : toutes ses planches sont
-vectorisées et se lisent en image.
+vectorisées et se lisent en image. Toutes les coupes sont découpées dans
+`wiki/assets/profiles/perform76/` et affichées sur leur page.
 
 **La numérotation imprimée est décalée de 3 par rapport au PDF** : la page imprimée 1 est la 4ᵉ du
-PDF, la page imprimée 6 est blanche. Les citations du wiki emploient le **numéro imprimé**.
+PDF, la page imprimée 6 est blanche. **Depuis le 25/09/2026, les pages du wiki citent ce document
+en numérotation du PDF** — `[1 p. N]` et `(schéma: …, p. N)` — pour que le lien ouvre la bonne
+planche ; les registres d'anomalies donnent les deux numéros. Le registre ci-dessous donne les
+deux.
 
-# Registre de couverture OKF
+# Registre de couverture
 
-| Page imprimée | Page PDF | Élément source | Statut OKF | Fichier cible dans le wiki |
-| :---: | :---: | :--- | :--- | :--- |
-| 1-2 | 4-5 | Généralités : 3 joints, chambre sèche (2b) et humide (2a), dormant 6 chambres 76 mm (renfort tubulaire 1,5 mm), ouvrant droit 76 mm (5a) et galbé 83 mm (5b, renfort 2 mm), battement 112 mm | Intégré | [PERFORM](/gammes/perform.md), [Ouvrants et battements](/profiles/perform76-ouvrants-et-battements.md) |
-| 3 | 6 | Hauteur poignée suivant hauteur ouvrant (tableau des cotes FFO et bas ouvrant), pivot bas réglage 3D (clé 6 pans 4 mm $\pm 2\text{ mm}$), charge 100 kg / ouvrant | Intégré | [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md), [CTR-01](/anomalies/contradictions-entre-sources.md) |
-| 4 | 7 | Cotes des 5 dormants (76171, 76172, 76180, 76177, 76185), recouvrement 8 mm ouvrant/dormant (jeu 4 mm + 1), fraisage drainage 25x5 mm, décompression découpe joint 100 mm | Intégré | [Dormants PERFORM76](/profiles/perform76-dormants.md), [Pose de la PERFORM76](/procedures/pose-perform76.md) |
-| 5 | 8 | 27 parcloses (16 à ouvrant de 16 à 50 mm, 11 à dormant de 28 à 48 mm), feuillure de 62 mm | Intégré | [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
-| 7-8 | 10-11 | Principes de pose neuf (recouvrement mur 35 mm avec tapée, 30 mm sans tapée), dépose totale, rénovation V1 (compensation bois) et V2 (mise à niveau bois) ; proscription absolue mousse PU | Intégré | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
-| 9 | 12 | Alignement soubassement ouvrant/dormant : à l'axe traverse (meneau 76372 dormant / 76301 ouvrant) ou alignement total avec faux ouvrant | Intégré | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
-| 10 | 13 | Meneaux dormants 98 mm (76372) et 124 mm (76373), meneaux ouvrants 84 mm (76301) et 110 mm (76303) et leurs combinaisons d'élargissement (83 à 272 mm) | Intégré | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
-| 11-12 | 14-15 | Planches dormants rénovation 76177 (aile 40 mm, délignage max 20 mm) et 76185 (aile 60 mm, délignage max 40 mm), combinaisons ouvrant droit/galbé, battements 112/226 mm | Intégré | [Dormants PERFORM76](/profiles/perform76-dormants.md) |
-| 13 | 16 | Compensateurs 6143 (19x29 mm) et 6144 (12x16 mm), appuis 6136, 6137, 76768 et nez d'appui 4319 | Intégré | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
-| 14 | 17 | Tapées de pose 6138 à 76769 sur 76177/76185 (isolations 65 à 200 mm) et table d'affectation des appuis 6136, 6137, 76768 | Intégré | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
-| 15-16 | 18-19 | Planche dormant neuf 76180 (aile 20 mm), tapées 6138 à 76769 (iso 65 à 200 mm), clameau CP14GGOM0012, pattes de pose NT1939 à NT1953 | Intégré | [Dormants PERFORM76](/profiles/perform76-dormants.md), [Tapées et isolation](/profiles/perform76-tapees-et-isolation.md) |
-| 17-18 | 20-21 | Planches dormants neufs sans aile 76171 (74 mm) et 76172 (92 mm), seuil alu A076 + rejet A062, appuis 76758+76719 (pente 5°), 76751, 76752 | Intégré | [Dormants PERFORM76](/profiles/perform76-dormants.md), [Appuis et seuils](/profiles/perform76-appuis-et-seuils.md) |
-| 19 | 22 | Élargisseurs 76700 (15 mm), 76701 (30 mm), 76702 (60 mm renforcé V314.Z), 76703 (120 mm renforcé double V314.Z), appuis 76751, 76752, 76753 (35 mm) | Intégré | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
-| 20 | 23 | Profil de liaison 76600 (joint 4,8 mm), clip cornière 76822, adaptateur 76821, poteau d'angle 90° (8355), 135° (8356), angle variable (8340+8341) | Intégré | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
-| 21 | 24 | Tapées 6138 à 76769 et pattes NT1939 à NT1953 sur dormant sans aile 76171 (isolation 80 à 215 mm) | Intégré | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+Numérotation du PDF ; la page imprimée porte un décalage de -3 (page imprimée 1 = page PDF 4).
+Retraitement complet le 25/09/2026 : les 26 pages rendues en PNG à 200 dpi et lues en image, par
+lots, chaque schéma découpé dans `wiki/assets/profiles/perform76/`.
 
-# Ce qu'il apporte seul
-
-- L'intégralité des coupes d'atelier cotées de la gamme PERFORM76, avec les références officielles KÖMMERLING de chaque composant.
-- Les abaques de position de poignée FFO et de pivot bas.
-- Les règles d'usinage de drainage (fraisages de $25 \times 5\text{ mm}$ en traverse basse) et de décompression de feuillure.
-- Les correspondances strictes entre tapées d'isolation, clameaux et références de pattes de pose NT.
-
+| Pages PDF | Page imprimée | Contenu | État | Page du wiki |
+| --- | --- | --- | --- | --- |
+| 1 | - | couverture : titre, vue 3D d'angle de fenêtre, logos Kömmerling et profine, version | sans contenu propre | - |
+| 2 | - | page blanche | sans contenu propre | - |
+| 3 | - | sommaire | sans contenu propre | - |
+| 4 | 1 | généralités : les dix points de conception (joints, chambres, renforts, ouvrants droit et galbé, parclose, vitrage, battement) | transcrit | [PERFORM](/gammes/perform.md) |
+| 5 | 2 | coupes verticale et horizontale repérées 1 à 10 | transcrit | [PERFORM](/gammes/perform.md) |
+| 6 | 3 | hauteur de poignée suivant hauteur d'ouvrant, réglage et position du pivot bas par dormant, charge 100 kg | transcrit | [Poignée et pivot PERFORM76](/quincaillerie/perform76-poignee-et-pivot.md) |
+| 7 | 4 | recouvrement, drainage et décompression, profil neuf et profil rénovation ; coupes cotées des cinq dormants | transcrit | [Pose de la PERFORM76](/procedures/pose-perform76.md), [Dormants PERFORM76](/profiles/perform76-dormants.md) |
+| 8 | 5 | 27 parcloses d'ouvrant et de dormant, feuillure de 62 mm | transcrit | [Parcloses PERFORM76](/profiles/perform76-parcloses.md) |
+| 9 | 6 | page blanche | sans contenu propre | - |
+| 10 | 7 | principes de pose en neuf et dépose totale ; interdiction de la mousse polyuréthane | transcrit | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
+| 11 | 8 | principes de pose en rénovation, versions 1 et 2 | transcrit | [Pose de la PERFORM76](/procedures/pose-perform76.md) |
+| 12 | 9 | alignement de la traverse de soubassement, à l'axe ou total avec faux ouvrant | transcrit | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| 13 | 10 | meneaux de dormant 76372, 76373 et d'ouvrant 76301, 76303 ; élargissements | transcrit | [Meneaux PERFORM76](/profiles/perform76-meneaux.md) |
+| 14 | 11 | planche du dormant rénovation 76177 : ouvrants, combinaisons meneaux, ouvrant 76281, ouvrant 76272, délignage, appuis, seuil | transcrit | [Dormants PERFORM76](/profiles/perform76-dormants.md), [Ouvrants et battements PERFORM76](/profiles/perform76-ouvrants-et-battements.md), [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| 15 | 12 | planche du dormant rénovation 76185, même composition | transcrit | idem |
+| 16 | 13 | compensateurs 6143 et 6144, appuis 6136, 6137, 76768 sur 76177 et 76185, nez d'appui 4319 | transcrit | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| 17 | 14 | tapées sur dormants 76177 et 76185, table d'affectation des appuis | transcrit | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| 18 | 15 | planche du dormant neuf 76180, même composition que p. 14 | transcrit | [Dormants PERFORM76](/profiles/perform76-dormants.md), [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| 19 | 16 | tapées, pattes de pose et appuis sur dormant 76180 | transcrit | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| 20 | 17 | planche du dormant neuf sans aile 76171 : combinaisons, appuis 76758 + 76719, 76751, 76752, seuil | transcrit | [Dormants PERFORM76](/profiles/perform76-dormants.md), [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md) |
+| 21 | 18 | planche du dormant neuf sans aile 76172, même composition | transcrit | idem |
+| 22 | 19 | appuis 76751, 76752, 76753, 76758 + 76719, seuil A076 ; élargisseurs 76700 à 76703 | transcrit | [Appuis et seuils PERFORM76](/profiles/perform76-appuis-et-seuils.md), [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
+| 23 | 20 | profils d'assemblage : 76600, clip cornière 76822, adaptateur 76821, poteaux d'angle 90°, 135° et variable | transcrit | [Élargisseurs et assemblage PERFORM76](/profiles/perform76-elargisseurs-et-assemblage.md) |
+| 24 | 21 | tapées, pattes de pose et appuis sur dormant 76171 | transcrit | [Tapées et isolation PERFORM76](/profiles/perform76-tapees-et-isolation.md) |
+| 25 | - | page blanche encadrée, pied de page seul | sans contenu propre | - |
+| 26 | - | dos de couverture, logo PROFERM | sans contenu propre | - |
 
 # Relecture
 
-Les planches 3, 5, 10, 11, 13, 14, 16, 19, 20 et 21 ont été relues en image le 18/09/2026, cote
+Les planches imprimées 3, 5, 10, 11, 13, 14, 16, 19, 20 et 21 (PDF 6, 8, 13, 14, 16, 17, 19, 22, 23
+et 24) ont été relues en image le 18/09/2026, cote
 par cote. **Une seule correction** : l'appui 76758 + 76719 est penté à **5°** et non à 3°.
 
 # Citations

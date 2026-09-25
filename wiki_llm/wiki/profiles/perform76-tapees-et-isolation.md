@@ -17,15 +17,21 @@ sources:
     id: dtd-6-16-2334-v5
     title: DTD n° DBV-25-6/16-2334_V5, système 76 Advanced
     last_modified: 2025-06-19
+source_pages:
+  - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
+    pages: 17, 19, 24
 generated:
   by: process:claude-code
   at: 2026-09-17T20:00:00Z
-verified:
-  by: process:claude-code
-  at: 2026-09-18T22:00:00Z
 ---
 
 # Une tapée ne donne pas la même isolation selon le dormant
+
+Quand le mur est doublé d'un isolant à l'intérieur, la fenêtre doit arriver jusqu'au nu de cet
+isolant. La **tapée** est le profil PVC rapporté sur le dormant qui prolonge la menuiserie de
+l'épaisseur nécessaire : plus l'isolant est épais, plus la tapée est haute. Cette page donne, pour
+chaque dormant et chaque épaisseur d'isolation, la tapée, la patte de pose et l'appui à monter,
+avec les coupes du cahier technique.
 
 Montée sur un dormant **76171**, une tapée PERFORM76 donne **15 mm d'isolant de plus** que le même
 profil monté sur un 76177, un 76185 ou un 76180. L'épaisseur d'isolation se lit donc dans la
@@ -55,7 +61,7 @@ substituent pas :
 | 76772 | 115 | 180 | 180 | 195 | ![Tapée 76772](/assets/profiles/perform76/tapees/tapee-76772.png) |
 | 76769 | 135 | 200 | 200 | 215 | ![Tapée 76769](/assets/profiles/perform76/tapees/tapee-76769.png) |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14, 16 et 21)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17, 19 et 24)
 
 **Sur un dormant 76171, les seules épaisseurs d'isolation qui existent sont 80, 95, 115, 135, 155,
 175, 195 et 215 mm.** Une demande à 140 mm sur ce dormant se traite en 135 ou en 155 mm : le
@@ -120,69 +126,285 @@ Sur un dormant 76171, **au-delà de 155 mm d'isolant le dormant bas devient un 7
 | 195 | 76768 | **76180, aile de 20 mm** |
 | 215 | 76768 | **76180, aile de 20 mm** |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 21)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
 
 C'est une contrainte de conception : elle change la nomenclature du châssis, et se vérifie au
 chiffrage d'un projet en isolation renforcée.
 
 # Appuis sur dormants 76177 et 76185
 
-| Épaisseur d'isolation (mm) | Appui | Coupe |
-| --- | --- | ---: |
-| 60 | 6136 | - |
-| 80 | 6136 | ![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76177-76185-6138.png) |
-| 100 | 6136 | ![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76177-76185-6139.png) |
-| 120 | 6136 | ![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76177-76185-6140.png) |
-| 140 | 6137 | ![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76177-76185-6141.png) |
-| 160 | 6137 | ![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76177-76185-6142.png) |
-| 180 | 76768 | ![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76177-76185-76772.png) |
-| 200 | 76768 | ![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76177-76185-76769.png) |
+Sur les deux dormants rénovation, l'épaisseur d'isolation choisit la tapée et l'appui (le profil
+penté posé sous le dormant bas, qui rejette l'eau). Une ligne se lit : pour cette épaisseur
+d'isolation, monter cette tapée et cet appui.
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14)
+| Épaisseur d'isolation (mm) | Tapée | Appui |
+| --- | --- | --- |
+| 60 | - | 6136 |
+| 80 | 6138 | 6136 |
+| 100 | 6139 | 6136 |
+| 120 | 6140 | 6136 |
+| 140 | 6141 | 6137 |
+| 160 | 6142 | 6137 |
+| 180 | 76772 | 76768 |
+| 200 | 76769 | 76768 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17)
+
+La colonne *Tapée* est relevée sur la planche des tapées de la même page, où chaque coupe porte
+son épaisseur d'isolation (« Iso de 80 » pour la 6138, et ainsi de suite).
 
 Aucune patte de pose n'est affectée à ces deux dormants rénovation : la fixation suit les
 principes de pose rénovation, décrits dans
 [Pose de la PERFORM76](/procedures/pose-perform76.md).
 
-Ce tableau part de 60 mm alors que la planche de tapées annonce 65 mm sans tapée — entrée
+Ce tableau part de 60 mm alors que la planche de tapées dessine « Iso de 65 » sans tapée — entrée
 **INC-06** du registre [Incohérences internes](/anomalies/incoherences-internes.md).
+
+## Coupes des tapées sur dormants 76177 et 76185
+
+Chaque coupe montre le dormant rénovation vu en tranche et la tapée posée au-dessus. Trois cotes
+sont portées : à gauche une hauteur verticale, en haut la tapée elle-même (35 de large et 16 de
+retour), à droite sa hauteur propre ; l'étiquette verticale « Iso de … » donne l'épaisseur
+d'isolation. Cotes en mm :
+
+| Tapée | Hauteur cotée à gauche (mm) | Largeur de la tapée / retour (mm) | Hauteur propre de la tapée (mm) | Iso de (mm) |
+| --- | --- | --- | --- | --- |
+| sans tapée | 60 | largeur de dormant 51 | - | 65 |
+| 6138 | 75 | 35 / 16 | 15 | 80 |
+| 6139 | 95 | 35 / 16 | 35 | 100 |
+| 6140 | 115 | 35 / 16 | 55 | 120 |
+| 6141 | 135 | 35 / 16 | 75 | 140 |
+| 6142 | 155 | 35 / 16 | 95 | 160 |
+| 76772 | 175 | 35 / 16 | 115 | 180 |
+| 76769 | 195 | 35 / 16 | 135 | 200 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 17)
+
+### Isolation 65 mm, sans tapée
+
+![Isolation 65 mm, sans tapée](/assets/profiles/perform76/isolation/76177-76185-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 65 mm.
+
+### Isolation 80 mm, tapée 6138
+
+![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76177-76185-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 80 mm.
+
+### Isolation 100 mm, tapée 6139
+
+![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76177-76185-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 100 mm.
+
+### Isolation 120 mm, tapée 6140
+
+![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76177-76185-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 120 mm.
+
+### Isolation 140 mm, tapée 6141
+
+![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76177-76185-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 140 mm.
+
+### Isolation 160 mm, tapée 6142
+
+![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76177-76185-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 160 mm.
+
+### Isolation 180 mm, tapée 76772
+
+![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76177-76185-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 180 mm.
+
+### Isolation 200 mm, tapée 76769
+
+![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76177-76185-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 200 mm.
 
 # Appuis et pattes de pose sur dormant 76180
 
-Clameau réf. **CP14GGOM0012**, **sans cale**.
+Sur le dormant neuf 76180, l'épaisseur d'isolation choisit la tapée, la **patte de pose** (la
+pièce métallique qui fixe le dormant au mur à travers l'isolant) et l'appui. La patte s'accroche
+au dormant par le clameau réf. **CP14GGOM0012**, **sans cale**.
 
-| Épaisseur d'isolation (mm) | Patte de pose | Appui | Coupe |
-| --- | --- | --- | ---: |
-| 60 | NT1939 | 6136 | - |
-| 80 | NT1939 | 6136 | ![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76180-6138.png) |
-| 100 | NT1943 | 6136 | ![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76180-6139.png) |
-| 120 | NT1945 | 6136 | ![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76180-6140.png) |
-| 140 | NT1947 | 6137 | ![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76180-6141.png) |
-| 160 | NT1949 | 6137 | ![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76180-6142.png) |
-| 180 | NT1951 | 76768 | ![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76180-76772.png) |
-| 200 | NT1953 | 76768 | ![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76180-76769.png) |
+| Épaisseur d'isolation (mm) | Tapée | Patte de pose | Appui |
+| --- | --- | --- | --- |
+| 60 | - | NT1939 | 6136 |
+| 80 | 6138 | NT1939 | 6136 |
+| 100 | 6139 | NT1943 | 6136 |
+| 120 | 6140 | NT1945 | 6136 |
+| 140 | 6141 | NT1947 | 6137 |
+| 160 | 6142 | NT1949 | 6137 |
+| 180 | 76772 | NT1951 | 76768 |
+| 200 | 76769 | NT1953 | 76768 |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19)
+
+Comme pour les dormants rénovation, le tableau part de 60 mm alors que la coupe sans tapée porte
+« Iso de 65 » (**INC-06**).
+
+## Coupes des tapées et pattes sur dormant 76180
+
+Chaque coupe montre le dormant 76180, la tapée au-dessus et la patte de pose en gris, qui part
+vers la gauche le long de l'isolant ; la patte porte sa référence gravée. En haut, les cotes
+horizontales : la patte, puis la tapée (35), puis le dormant (39, ou 74 sans tapée). À gauche,
+la hauteur, égale à l'épaisseur d'isolation. Cotes en mm :
+
+| Épaisseur d'isolation (mm) | Tapée | Cotes horizontales en haut (mm) | Hauteur propre de la tapée (mm) |
+| --- | --- | --- | --- |
+| 65 | sans tapée | 70 / 74 | - |
+| 80 | 6138 | 55 / 35 / 39 | 15 |
+| 100 | 6139 | 80 / 35 / 39 | 35 |
+| 120 | 6140 | 80 / 35 / 39 | 55 |
+| 140 | 6141 | 80 / 35 / 39 | 75 |
+| 160 | 6142 | 80 / 35 / 39 | 95 |
+| 180 | 76772 | 80 / 35 / 39 | 115 |
+| 200 | 76769 | 80 / 35 / 39 | 135 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19)
+
+### Isolation 65 mm, sans tapée
+
+![Isolation 65 mm, sans tapée](/assets/profiles/perform76/isolation/76180-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 65 mm ; cotes en haut : 70 / 74 mm.
+
+### Isolation 80 mm, tapée 6138
+
+![Isolation 80 mm, tapée 6138](/assets/profiles/perform76/isolation/76180-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 80 mm ; cotes en haut : 55 / 35 / 39 mm.
+
+### Isolation 100 mm, tapée 6139
+
+![Isolation 100 mm, tapée 6139](/assets/profiles/perform76/isolation/76180-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 100 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 120 mm, tapée 6140
+
+![Isolation 120 mm, tapée 6140](/assets/profiles/perform76/isolation/76180-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 120 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 140 mm, tapée 6141
+
+![Isolation 140 mm, tapée 6141](/assets/profiles/perform76/isolation/76180-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 140 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 160 mm, tapée 6142
+
+![Isolation 160 mm, tapée 6142](/assets/profiles/perform76/isolation/76180-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 160 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 180 mm, tapée 76772
+
+![Isolation 180 mm, tapée 76772](/assets/profiles/perform76/isolation/76180-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 180 mm ; cotes en haut : 80 / 35 / 39 mm.
+
+### Isolation 200 mm, tapée 76769
+
+![Isolation 200 mm, tapée 76769](/assets/profiles/perform76/isolation/76180-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 200 mm ; cotes en haut : 80 / 35 / 39 mm.
 
 # Appuis et pattes de pose sur dormant 76171
 
-Clameau réf. **CP14GGOM0012**, cale réf. **CTHNT0030**.
+Sur le dormant neuf sans aile 76171, même principe, avec en plus une **cale** réf.
+**CTHNT0030**, sauf à 80 mm d'isolation. Clameau réf. **CP14GGOM0012**.
 
-| Épaisseur d'isolation (mm) | Patte de pose | Appui | Cale | Coupe |
-| --- | --- | --- | --- | ---: |
-| 80 | NT1939 | 76758 | **sans cale** | ![Isolation 80 mm, sans tapée](/assets/profiles/perform76/isolation/76171-sans-tapee.png) |
-| 95 | NT1939 | 76758 | CTHNT0030 | ![Isolation 95 mm, tapée 6138](/assets/profiles/perform76/isolation/76171-6138.png) |
-| 115 | NT1943 | 76758 | CTHNT0030 | ![Isolation 115 mm, tapée 6139](/assets/profiles/perform76/isolation/76171-6139.png) |
-| 135 | NT1945 | 76758 | CTHNT0030 | ![Isolation 135 mm, tapée 6140](/assets/profiles/perform76/isolation/76171-6140.png) |
-| 155 | NT1947 | 76758 | CTHNT0030 | ![Isolation 155 mm, tapée 6141](/assets/profiles/perform76/isolation/76171-6141.png) |
-| 175 | NT1949 | 6137 | CTHNT0030 | ![Isolation 175 mm, tapée 6142](/assets/profiles/perform76/isolation/76171-6142.png) |
-| 195 | NT1951 | 76768 | CTHNT0030 | ![Isolation 195 mm, tapée 76772](/assets/profiles/perform76/isolation/76171-76772.png) |
-| 215 | NT1953 | 76768 | CTHNT0030 | ![Isolation 215 mm, tapée 76769](/assets/profiles/perform76/isolation/76171-76769.png) |
+| Épaisseur d'isolation (mm) | Tapée | Patte de pose | Appui | Cale |
+| --- | --- | --- | --- | --- |
+| 80 | - | NT1939 | 76758 | **sans cale** |
+| 95 | 6138 | NT1939 | 76758 | CTHNT0030 |
+| 115 | 6139 | NT1943 | 76758 | CTHNT0030 |
+| 135 | 6140 | NT1945 | 76758 | CTHNT0030 |
+| 155 | 6141 | NT1947 | 76758 | CTHNT0030 |
+| 175 | 6142 | NT1949 | 6137 | CTHNT0030 |
+| 195 | 76772 | NT1951 | 76768 | CTHNT0030 |
+| 215 | 76769 | NT1953 | 76768 | CTHNT0030 |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 21)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
 
 Le cas à 80 mm est le seul **sans cale** du tableau. Les trois dernières lignes imposent le
-dormant bas 76180.
+dormant bas 76180 (astérisque de la planche : « Dormant en partie basse 76180 aile de 20 mm »).
+
+## Coupes des tapées et pattes sur dormant 76171
+
+Mêmes coupes que sur le 76180, avec la cote du dormant à 45 mm au lieu de 39 (74 sans tapée), et
+une cote rouge de **6 mm** au pied de la patte sur toutes les coupes sauf celle sans tapée — qui
+est aussi la seule configuration sans cale. Cotes en mm :
+
+| Épaisseur d'isolation (mm) | Tapée | Cotes horizontales en haut (mm) | Hauteur propre de la tapée (mm) | Cote rouge au pied (mm) |
+| --- | --- | --- | --- | --- |
+| 80 | sans tapée | 70 / 74 | - | - |
+| 95 | 6138 | 55 / 35 / 45 | 15 | 6 |
+| 115 | 6139 | 80 / 35 / 45 | 35 | 6 |
+| 135 | 6140 | 80 / 35 / 45 | 55 | 6 |
+| 155 | 6141 | 80 / 35 / 45 | 75 | 6 |
+| 175 | 6142 | 80 / 35 / 45 | 95 | 6 |
+| 195 | 76772 | 80 / 35 / 45 | 115 | 6 |
+| 215 | 76769 | 80 / 35 / 39 | 135 | 6 |
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 24)
+
+### Isolation 80 mm, sans tapée
+
+![Isolation 80 mm, sans tapée](/assets/profiles/perform76/isolation/76171-sans-tapee.png)
+
+Tapée : sans tapée ; épaisseur d'isolation : 80 mm ; cotes en haut : 70 / 74 mm.
+
+### Isolation 95 mm, tapée 6138
+
+![Isolation 95 mm, tapée 6138](/assets/profiles/perform76/isolation/76171-6138.png)
+
+Tapée : 6138 ; épaisseur d'isolation : 95 mm ; cotes en haut : 55 / 35 / 45 mm.
+
+### Isolation 115 mm, tapée 6139
+
+![Isolation 115 mm, tapée 6139](/assets/profiles/perform76/isolation/76171-6139.png)
+
+Tapée : 6139 ; épaisseur d'isolation : 115 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 135 mm, tapée 6140
+
+![Isolation 135 mm, tapée 6140](/assets/profiles/perform76/isolation/76171-6140.png)
+
+Tapée : 6140 ; épaisseur d'isolation : 135 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 155 mm, tapée 6141
+
+![Isolation 155 mm, tapée 6141](/assets/profiles/perform76/isolation/76171-6141.png)
+
+Tapée : 6141 ; épaisseur d'isolation : 155 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 175 mm, tapée 6142
+
+![Isolation 175 mm, tapée 6142](/assets/profiles/perform76/isolation/76171-6142.png)
+
+Tapée : 6142 ; épaisseur d'isolation : 175 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 195 mm, tapée 76772
+
+![Isolation 195 mm, tapée 76772](/assets/profiles/perform76/isolation/76171-76772.png)
+
+Tapée : 76772 ; épaisseur d'isolation : 195 mm ; cotes en haut : 80 / 35 / 45 mm.
+
+### Isolation 215 mm, tapée 76769
+
+![Isolation 215 mm, tapée 76769](/assets/profiles/perform76/isolation/76171-76769.png)
+
+Tapée : 76769 ; épaisseur d'isolation : 215 mm ; cotes en haut : 80 / 35 / 39 mm.
 
 # Compatibilités des pattes de pose
 
@@ -208,7 +430,7 @@ Une ligne par couple patte et dormant : une même patte dessert les deux dormant
 | NT1953 | 76180 | 200 |
 | NT1953 | 76171 | 215 |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 16 et 21)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 19 et 24)
 
 **Aucune épaisseur intermédiaire n'existe** : les valeurs de ce tableau sont les seules
 documentées.
@@ -216,13 +438,14 @@ documentées.
 # Ce que la source ne donne pas
 
 - Aucune **planche de tapées pour le dormant 76172**.
-- Aucune **cote pour les pattes NT1939 à NT1953**, seulement leur affectation.
+- Le **nom des cotes** portées sur les coupes (hauteur de gauche, cote de la patte, cote rouge
+  de 6 mm) : elles sont relevées sans légende.
 - Aucune patte de pose pour les dormants rénovation 76177 et 76185.
 
 # Citations
 
 [1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
-`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 14, 16 et 21
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 17, 19 et 24
 
 [2] DTD n° DBV-25-6/16-2334_V5, système 76 Advanced —
 `raw/dtd-6-16-2334-v5-systeme-76-advanced.pdf`, p. 4 et 23

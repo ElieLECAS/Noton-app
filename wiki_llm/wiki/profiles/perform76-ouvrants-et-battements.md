@@ -21,18 +21,20 @@ sources:
     id: dtd-6-16-2335-v5
     title: DTD n° DBV-24-6/16-2335_V5, système e.XCLUSIVE, e.MOTION, e.VOLUTION
     last_modified: 2025-04-15
+source_pages:
+  - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
+    pages: 4, 14, 15, 18, 20, 21
 generated:
   by: process:claude-code
   at: 2026-09-17T20:00:00Z
-verified:
-  by: process:claude-code
-  at: 2026-09-18T22:00:00Z
 ---
 
 # Les quatre ouvrants
 
-La gamme [PERFORM76](/gammes/perform.md) compte quatre ouvrants, tous à **6 chambres**, avec joint
-de feuillure sous vitrage et renfort acier galvanisé de **2 mm** [1 p. 1].
+L'**ouvrant** est le cadre mobile de la fenêtre, celui qui s'ouvre ; il porte le vitrage et la
+quincaillerie, et vient se fermer contre le dormant, le cadre fixe. La gamme
+[PERFORM76](/gammes/perform.md) compte quatre ouvrants, tous à **6 chambres**, avec joint de
+feuillure sous vitrage et renfort acier galvanisé de **2 mm** [1 p. 4].
 
 Deux axes les distinguent : le profil **droit à 76 mm** ou **galbé à 83 mm** d'épaisseur, et deux
 hauteurs de profil, une paire basse et une paire haute.
@@ -42,8 +44,10 @@ Les quatre se montent sur les cinq dormants, sans restriction. Voir
 
 # Cotes
 
-Les quatre ouvrants PERFORM76, cotes en mm. Les trois hauteurs sont celles portées sur les
-planches, du dedans vers le dehors.
+Les quatre ouvrants PERFORM76, cotes en mm. Chaque coupe montre l'ouvrant en tranche, vitrage
+en haut : l'épaisseur est la cote horizontale du bas (76 mm pour un ouvrant droit, 83 mm pour un
+galbé, dont la face arrondie déborde de 7 mm), les trois hauteurs sont les cotes verticales
+portées sur la planche — la première à gauche, les deux autres à droite.
 
 | Ouvrant | Profil | Épaisseur (mm) | Hauteur 1 (mm) | Hauteur 2 (mm) | Hauteur 3 (mm) | Coupe |
 | --- | --- | --- | --- | --- | --- | ---: |
@@ -52,28 +56,47 @@ planches, du dedans vers le dehors.
 | 76272 | droit | 76 | 79 | 89 | 110 | ![Ouvrant 76272](/assets/profiles/perform76/ouvrants/ouvrant-76272.png) |
 | 76279 | galbé | 83 | 79 | 89 | 110 | ![Ouvrant 76279](/assets/profiles/perform76/ouvrants/ouvrant-76279.png) |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 11, 12, 15, 17 et 18)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14, 15, 18, 20 et 21)
 
-La finesse des ouvrants porte l'argument de clair de jour de la gamme [1 p. 1].
+La finesse des ouvrants apporte un gain de lumière important [1 p. 4].
 
 # Battements
 
-Le cahier technique donne les battements comme des **assemblages**, associés à un ouvrant, et non
-comme des profils isolés.
+Sur une fenêtre à deux vantaux, les deux ouvrants se rejoignent au centre sur le **battement** :
+un ensemble de profils qui ferme le milieu de la fenêtre. Le cahier technique
+donne les battements comme des **assemblages**, associés à un ouvrant, et non comme des profils
+isolés. Largeur hors tout et clair intérieur, en mm :
 
-| Assemblage de battement | Ouvrant associé | Largeur hors tout (mm) | Clair intérieur (mm) | Coupe |
-| --- | --- | --- | --- | ---: |
-| 76274 / 76473 / 1547 / 76281 | 76281 | 112 | 60 | ![Battement 76274 / 76473 / 1547 / 76281](/assets/profiles/perform76/battements/battement-76473.png) |
-| 76272 / 76833 / 76272 | 76272 | 226 | 48 | ![Battement 76272 / 76833 / 76272](/assets/profiles/perform76/battements/battement-76833.png) |
+| Assemblage de battement | Ouvrant associé | Largeur hors tout (mm) | Clair intérieur (mm) |
+| --- | --- | --- | --- |
+| 76274 / 76473 / 1547 / 76281 | 76281 | 112 | 60 |
+| 76272 / 76833 / 76272 | 76272 | 226 | 48 |
 
-(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 11)
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14)
+
+## Battement 76274 / 76473 / 1547 / 76281, avec l'ouvrant 76281
+
+![Battement 76274 / 76473 / 1547 / 76281](/assets/profiles/perform76/battements/battement-76473.png)
+
+Coupe horizontale du centre de la fenêtre : les deux ouvrants 76281 à gauche et à droite, le
+battement au milieu. Au-dessus, la largeur hors tout de **112 mm**, décomposée en 33 / 46 / 33 ;
+sous la coupe, 5 / 60 / 5, soit 70.
+
+## Battement 76272 / 76833 / 76272, avec l'ouvrant 76272
+
+![Battement 76272 / 76833 / 76272](/assets/profiles/perform76/battements/battement-76833.png)
+
+Même coupe avec les ouvrants 76272 : **226 mm** hors tout, décomposés en 73 / 80 / 73 ; sous la
+coupe, 84 / 48 / 52.
+
+(schéma: raw/cahier-technique-perform76-2026-09-02-cc03.pdf, p. 14)
 
 Les largeurs de battement sont **indépendantes du dormant** : 112 mm avec l'ouvrant 76281 et
 226 mm avec l'ouvrant 76272, sur les cinq dormants.
 
 Le **battement central réduit de 112 mm** est la configuration qui porte l'argument de clarté de
 la gamme, avec renfort acier de 2 mm dans l'ouvrant, battement intérieur et poignée centrée
-[1 p. 1]. Le battement de l'ouvrant 76272, à 226 mm, en fait le double.
+[1 p. 4]. Le battement de l'ouvrant 76272, à 226 mm, en fait le double.
 
 ## Ce que sont les références des chaînes d'assemblage
 
@@ -150,7 +173,7 @@ Les meneaux 76301 et 76303 **ne se montent jamais sur un dormant**. Voir
 # Citations
 
 [1] Cahier technique PERFORM76, version 02/09/2026 CC03 —
-`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 1, 10 à 12, 15, 17 et 18
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages du PDF 4, 14, 15, 18, 20 et 21
 
 [2] Mise en œuvre Système 76 Advanced, profine —
 `raw/profine-mise-en-oeuvre-76-advanced-2023-12.pdf`, registre 2.1.2

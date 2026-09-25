@@ -18,7 +18,7 @@ source_pages:
   - resource: raw/catalogue-general-2026-01.pdf
     pages: 10, 27, 34-35
   - resource: raw/cahier-technique-perform76-2026-09-02-cc03.pdf
-    pages: 1, 5
+    pages: 4, 8
 generated:
   by: process:gemini-coder
   at: 2026-09-19T17:15:00Z
@@ -42,7 +42,7 @@ Compositions, intercalaires et coefficients d'isolation des vitrages thermiques 
 
 (schéma: raw/catalogue-general-2026-01.pdf, p. 27)
 
-Sur les menuiseries PVC [PERFORM](/gammes/perform.md), le double vitrage de série est monté avec un intercalaire TGI noir de 18 mm et du gaz argon pour un Ug de 1,1 W/m²K [2 p. 1].
+Sur les menuiseries PVC [PERFORM](/gammes/perform.md), le double vitrage de série est monté avec un intercalaire TGI noir de 18 mm et du gaz argon pour un Ug de 1,1 W/m²K [2 p. 4].
 
 Le triple vitrage 40 mm (4/14/4/14/4) est préconisé pour les parois exposées au nord et à l'est, et permet de respecter les critères de la construction passive selon la FFCP [1 p. 27, 34]. Son affaiblissement acoustique est établi à 28 dB sur la gamme HYBRIDE [1 p. 10].
 
@@ -75,7 +75,7 @@ Les vitrages de sécurité intègrent des films de butyral de polyvinyle (PVB) i
 ## Détail technique du STADIP 44²
 
 Le vitrage STADIP $44^2$ (notation industrielle du 44.2) se compose de deux glaces de 4 mm reliées par deux intercalaires PVB de 0,38 mm, soit une épaisseur feuilletée de 8,76 mm [1 p. 27] :
-* En version $44^2 / 16 / 4$ (épaisseur totale de 28,76 mm), le vitrage s'adapte directement aux parcloses standard de 28 mm des gammes PERFORM, HYBRIDE et TEXTURAL (parclose 76526 sur système 76) [2 p. 5].
+* En version $44^2 / 16 / 4$ (épaisseur totale de 28,76 mm), le vitrage s'adapte directement aux parcloses standard de 28 mm des gammes PERFORM, HYBRIDE et TEXTURAL (parclose 76526 sur système 76) [2 p. 8].
 * En version $44^2 / 12 / 4$ (épaisseur totale de 24,76 mm), le vitrage est adapté aux profondeurs de feuillure de 24 à 28 mm de la gamme aluminium LUMINE.
 
 ## Détail technique du verre SP10 (Classe P5A)
@@ -96,7 +96,7 @@ Les vitrages posés sur l'ensemble des menuiseries PROFERM bénéficient d'une g
 # Citations
 
 [1] [Catalogue menuiseries PROFERM, édition janvier 2026](raw/catalogue-general-2026-01.pdf), p. 10, 27, 34 et 35
-[2] [Cahier technique PERFORM76, version 02/09/2026 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf), p. 1 et 5
+[2] [Cahier technique PERFORM76, version 02/09/2026 CC03](raw/cahier-technique-perform76-2026-09-02-cc03.pdf), pages du PDF 4 et 8
 
 # Voir aussi
 

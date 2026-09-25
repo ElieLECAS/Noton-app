@@ -84,7 +84,7 @@ technique tranche.
 
 | ID | Sujet | Source A | Source B | Valeur à retenir en attendant | Impact |
 | --- | --- | --- | --- | --- | --- |
-| CTR-01 | Charge du pivot bas | Cahier technique PERFORM76, p. 3 : 100 kg par ouvrant sur pivot bas | Catalogue général, p. 6 : jusqu'à 130 kg | **100 kg** — c'est le document technique | Menuiserie surdimensionnée acceptée en commande, risque de rupture |
+| CTR-01 | Charge du pivot bas | Cahier technique PERFORM76, p. 3 (PDF 6) : 100 kg par ouvrant sur pivot bas | Catalogue général, p. 6 : jusqu'à 130 kg | **100 kg** — c'est le document technique | Menuiserie surdimensionnée acceptée en commande, risque de rupture |
 | CTR-02 | Épaisseur de vitrage de sécurité STADIP 44² | Catalogue général, p. 27 : STADIP 44²/16/4 sur PERFORM | Lecture multimodale erronée initiale : la notation vitrière 44² désigne le feuilleté 44.2 (8,76 mm) et non 44 mm. L'épaisseur totale réelle est de 28,76 mm (8,76 + 16 + 4 mm). | **Levée (erreur d'interprétation initiale)** : l'épaisseur réelle de 28,76 mm s'insère directement dans les parcloses standard de 28 mm (parclose 76526) et respecte le domaine d'emploi du DTA plafonné à 50 mm. | Aucune anomalie réelle sur le vitrage ni sur les parcloses. |
 | CTR-03 | Garantie structure | Catalogue général, p. 35 : 15 ans sur la structure de la fenêtre | Brochure PERFORM+/HYBRIDE+, p. 3 **et brochure LUMINE65, p. 5** : 20 ans sur la structure | **aucune** — la valeur ne suit ni la date ni le produit | Engagement contractuel erroné de 5 ans |
 | CTR-04 | Garantie volet roulant | Catalogue général, p. 35 **et brochure LUMINE65** : 5 ans | **Six documents** : brochure PERFORM+/HYBRIDE+, les trois dépliants de juin 2023, dépliant INNOSLIDE, dépliant LUMÉAL 2026 : 7 ans | **aucune** — six sources contre deux, mais rien ne les sépare | Engagement contractuel erroné de 2 ans |
@@ -102,7 +102,7 @@ technique tranche.
 | CTR-16 | Garantie du panneau de porte | Catalogue portes, mars 2024, p. 156 : 7 ans, plaxé 5 ans | Catalogue général, janvier 2026, p. 35 : 10 ans, plaxé 7 ans | **10 ans**, source la plus récente : l'amélioration est postérieure à mars 2024 | Garantie sous-annoncée de 3 ans sur un poste coûteux |
 | CTR-17 | Épaisseur de vitrage maximale du système 76 | Mise en œuvre Système 76 Advanced, profine, registre 2.1.1, p. 1 : « mise en oeuvre de différentes épaisseurs de vitrage ou panneau de remplissage **de 16 à 48 mm** » | DTA n° 6/16-2334_V5, p. 9 : vitrage jusqu'à **50 mm** ; cahier technique PERFORM76, p. 5 : parcloses d'ouvrant jusqu'à **50 mm** | **50 mm**, valeur réglementaire du DTA, qui est la pièce opposable. Le manuel de fabrication donne par ailleurs 36 à 50 mm pour la variante AluClip Zero (registre 2.6.5) : la borne de 48 mm n'est donc pas une limite du système entier | Un vitrage de 50 mm refusé à tort en atelier, ou accepté sans vérifier la parclose |
 | CTR-18 | Champs d'application de la ferrure Roto NX, côté paumelles P, oscillo-battant rectangulaire | Instructions de montage Roto NX KSR, novembre 2022, p. 21 à 27 : HFF mini 290 mm, CDR 1 N jusqu'à 1 400 mm de LFF et 2 600 mm de HFF, CDR 2 jusqu'à 2 400 mm de HFF | Catalogue Roto NX, juin 2023, p. 35 : HFF mini 280 mm, CDR 1 N jusqu'à 1 600 mm de LFF et 2 800 mm de HFF, CDR 2 jusqu'à 2 800 mm de HFF | **Les bornes les plus basses des deux documents**, en attendant l'arbitrage : les deux sont des documents ROTO du même produit, à sept mois d'écart, et aucune règle du wiki ne les départage | Vantail accepté en commande hors du champ d'application réel de la ferrure, sur quatre bornes dont trois en CDR |
-| CTR-19 | Épaisseur de vitrage de trois parcloses PERFORM76 | Cahier technique PERFORM76, p. 5 : 76508 à 48 mm, 2454 à 31 mm, 2433 à 33 mm | DTD n° DBV-25-6/16-2334_V5, p. 18 : 76508 à 46 mm, 2454 à 32 mm, 2433 à 34 mm | **Les valeurs du cahier technique** — c'est le document produit, celui qui fixe la fabrication PERFORM76 | Parclose commandée à l'épaisseur du DTD, en écart de 1 à 2 mm avec le vitrage réellement posé |
+| CTR-19 | Épaisseur de vitrage de trois parcloses PERFORM76 | Cahier technique PERFORM76, p. 5 (PDF 8) : 76508 à 48 mm, 2454 à 31 mm, 2433 à 33 mm | DTD n° DBV-25-6/16-2334_V5, p. 18 : 76508 à 46 mm, 2454 à 32 mm, 2433 à 34 mm | **Les valeurs du cahier technique** — c'est le document produit, celui qui fixe la fabrication PERFORM76 | Parclose commandée à l'épaisseur du DTD, en écart de 1 à 2 mm avec le vitrage réellement posé |
 | CTR-20 | Largeur totale de cinq dormants larges du système 70 | Mise en œuvre Système 70 Plateforme, registre 2.1.2 : 6108 à 105 mm, 6109 à 125, 6110 à 145, 6111 à 165, 6158 à 210 | DTD n° DBV-24-6/16-2335_V5, p. 15 : 6108 à 95 mm, 6109 à 115, 6110 à 135, 6111 à 155, 6158 à 200 | **Les valeurs du classeur de fabrication**, qui sert déjà de référence aux cotes de débit ; l'écart constant de 10 mm sur les cinq références suggère une convention de mesure différente, non énoncée par l'un ou l'autre document | Élargisseur ou pièce d'appui commandé 10 mm trop court ou trop long sur les cinq dormants larges |
 
 # CTR-01 en détail
@@ -111,7 +111,7 @@ Les deux formulations ne portent peut-être pas sur le même objet :
 
 | Source | Formulation exacte | Objet |
 | --- | --- | --- |
-| Cahier technique PERFORM76, p. 3 | « Charge 100 Kg par ouvrant sur pivot bas » | l'ouvrant, sur le pivot bas |
+| Cahier technique PERFORM76, p. 3 (PDF 6) | « Charge 100 Kg par ouvrant sur pivot bas » | l'ouvrant, sur le pivot bas |
 | Catalogue général, p. 6 | « Pivot pouvant supporter le poids d'une fenêtre jusqu'à 130kg » | la fenêtre entière |
 
 Un ouvrant n'est pas une fenêtre, et un pivot bas n'est pas l'ensemble du ferrage : les deux
@@ -258,7 +258,7 @@ côté, et seul le service technique peut trancher.
 [1] Catalogue menuiseries PROFERM, édition janvier 2026 — `raw/catalogue-general-2026-01.pdf`,
 p. 6, 10, 11, 27 et 35
 [2] Cahier technique PERFORM76, version 02/09/2026 CC03 —
-`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, p. 3 et 5
+`raw/cahier-technique-perform76-2026-09-02-cc03.pdf`, pages imprimées 3 et 5 (PDF 6 et 8)
 [3] Brochure Nouveautés PERFORM+ et HYBRIDE+, édition mai 2023 —
 `raw/brochure-perform-plus-hybride-plus-2023-05.pdf`, p. 3
 [4] Brochure HYBRIDE, édition mars 2025 — `raw/brochure-hybride-2025-03.pdf`, p. 2 et 3
